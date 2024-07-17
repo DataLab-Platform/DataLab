@@ -35,7 +35,7 @@ msgstr ""
 
 #: cdl.param:7 of
 msgid "Those datasets are defined in other modules:"
-msgstr ""
+msgstr "Ces jeux de données sont définis dans d'autres modules :"
 
 #: cdl.param:9 of
 msgid ":mod:`cdl.computation.base`"
@@ -66,19 +66,17 @@ msgstr ""
 "précédente :"
 
 #: cdl.param:29 of
-#, fuzzy
 msgid "Introduction to `DataSet` parameters"
-msgstr "Paramètres d'interpolation"
+msgstr "Introduction aux jeux de données `DataSet`"
 
 #: cdl.param:31 of
 msgid ""
 "The datasets listed in the following sections are used to define the "
 "parameters necessary for the various computations and processing "
 "operations available in DataLab."
-msgstr ""
+msgstr "Les jeux de données listés dans les sections suivantes sont utilisés pour définir les paramètres nécessaires aux diverses opérations de calcul et de traitement disponibles dans DataLab."
 
 #: cdl.param:34 of
-#, fuzzy
 msgid ""
 "Each dataset is a subclass of "
 ":py:class:`guidata.dataset.datatypes.DataSet` and thus needs to be "
@@ -92,7 +90,7 @@ msgstr ""
 msgid ""
 "Here is a complete example of how to instantiate a dataset and access its"
 " parameters with the :py:class:`cdl.param.BinningParam` dataset:"
-msgstr ""
+msgstr "Voici un exemple complet de la façon d'instancier un jeu de données et d'accéder à ses paramètres avec le jeu de données :py:class:`cdl.param.BinningParam` :"
 
 #: cdl.computation.image.BinningParam:1 of
 msgid "Binning parameters"
@@ -295,13 +293,13 @@ msgstr ""
 msgid ""
 "Pour instancier un nouveau jeu de données :py:class:`BinningParam`, vous "
 "pouvez utiliser la méthode de classe :py:class:`BinningParam.create()` "
-"comme ceci :"
+"comme ceci :"
 msgstr ""
 
 #: cdl.computation.image.BinningParam:276 of
 msgid ""
 "Vous pouvez également instancier un :py:class:`BinningParam` par défaut "
-"puis initialiser les champs comme ceci :"
+"puis initialiser les champs comme ceci :"
 msgstr ""
 
 #: cdl.param:45 of
@@ -607,7 +605,7 @@ msgstr "Convertir les paramètres de type de données du signal"
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Type de données de destination\\. Type de données de l'image générée. "
-"Sélection unique parmi : 'float32', 'float64', 'complex128'. Par défaut :"
+"Sélection unique parmi : 'float32', 'float64', 'complex128'. Par défaut :"
 " 'float32'."
 msgstr ""
 
@@ -898,7 +896,7 @@ msgstr ""
 #: cdl.computation.signal.WindowingParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
-"Paramètre de forme de la fonction de fenêtrage gaussienne\\. Par défaut :"
+"Paramètre de forme de la fonction de fenêtrage gaussienne\\. Par défaut :"
 " 0.5."
 msgstr ""
 
@@ -1550,7 +1548,7 @@ msgstr "Paramètres d'ajustement logarithmique"
 #: cdl.computation.image.exposure.AdjustLogParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
-"Si vrai, appliquer une transformation logarithmique inverse. Par défaut :"
+"Si vrai, appliquer une transformation logarithmique inverse. Par défaut :"
 " False."
 msgstr ""
 
@@ -2169,7 +2167,7 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Taille du voisinage\\. Taille de la fenêtre glissante utilisée dans "
-"l'algorithme de filtrage maximum/minimum\\. Entier supérieur à 1, unité :"
+"l'algorithme de filtrage maximum/minimum\\. Entier supérieur à 1, unité :"
 " pixels\\. Par défaut : 10."
 msgstr ""
 
@@ -3382,4 +3380,45 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "New instance of :py:class:`Peak2DDetectionParam`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Pour instancier un nouveau jeu de "
+#~ "données :py:class:`BinningParam`, vous pouvez "
+#~ "utiliser la méthode de classe "
+#~ ":py:class:`BinningParam.create()` comme ceci :"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Vous pouvez également instancier un "
+#~ ":py:class:`BinningParam` par défaut puis "
+#~ "initialiser les champs comme ceci :"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Type de données de destination\\. Type"
+#~ " de données de l'image générée. "
+#~ "Sélection unique parmi : 'float32', "
+#~ "'float64', 'complex128'. Par défaut : "
+#~ "'float32'."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Paramètre de forme de la fonction "
+#~ "de fenêtrage gaussienne\\. Par défaut :"
+#~ " 0.5."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Si vrai, appliquer une transformation "
+#~ "logarithmique inverse. Par défaut : "
+#~ "False."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Taille du voisinage\\. Taille de la "
+#~ "fenêtre glissante utilisée dans l'algorithme"
+#~ " de filtrage maximum/minimum\\. Entier "
+#~ "supérieur à 1, unité : pixels\\. "
+#~ "Par défaut : 10."
 #~ msgstr ""

@@ -34,6 +34,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
+    "sphinx.ext.viewcode",
     "sphinx_sitemap",
     "myst_parser",
     "sphinx_design",

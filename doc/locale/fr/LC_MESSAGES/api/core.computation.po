@@ -1301,7 +1301,7 @@ msgstr "Convertir les paramètres du type de données du signal"
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Type de données de destination\\. Type de données de l'image générée. "
-"Sélection unique parmi : 'float32', 'float64', 'complex128'. Par défaut :"
+"Sélection unique parmi : 'float32', 'float64', 'complex128'. Par défaut :"
 " 'float32'."
 msgstr ""
 
@@ -1897,7 +1897,7 @@ msgstr ""
 #: cdl.computation.signal.WindowingParam:23
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
-"Paramètre de forme de la fonction de fenêtrage gaussienne\\. Par défaut :"
+"Paramètre de forme de la fonction de fenêtrage gaussienne\\. Par défaut :"
 " 0.5."
 msgstr ""
 
@@ -3101,7 +3101,7 @@ msgstr "Paramètres d'ajustement logarithmique"
 #: cdl.computation.image.exposure.AdjustLogParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
-"Si vrai, appliquer une transformation logarithmique inverse. Par défaut :"
+"Si vrai, appliquer une transformation logarithmique inverse. Par défaut :"
 " False."
 msgstr ""
 
@@ -3609,7 +3609,7 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Taille du voisinage\\. Taille de la fenêtre glissante utilisée dans "
-"l'algorithme de filtrage maximum/minimum\\. Entier supérieur à 1, unité :"
+"l'algorithme de filtrage maximum/minimum\\. Entier supérieur à 1, unité :"
 " pixels\\. Par défaut : 10."
 msgstr ""
 
@@ -5198,3 +5198,32 @@ msgstr "Détection de taches à l'aide d'OpenCV"
 
 #~ msgid "New instance of :py:class:`BlobOpenCVParam`."
 #~ msgstr ""
+
+#~ msgid ""
+#~ "Type de données de destination\\. Type"
+#~ " de données de l'image générée. "
+#~ "Sélection unique parmi : 'float32', "
+#~ "'float64', 'complex128'. Par défaut : "
+#~ "'float32'."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Paramètre de forme de la fonction "
+#~ "de fenêtrage gaussienne\\. Par défaut :"
+#~ " 0.5."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Si vrai, appliquer une transformation "
+#~ "logarithmique inverse. Par défaut : "
+#~ "False."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Taille du voisinage\\. Taille de la "
+#~ "fenêtre glissante utilisée dans l'algorithme"
+#~ " de filtrage maximum/minimum\\. Entier "
+#~ "supérieur à 1, unité : pixels\\. "
+#~ "Par défaut : 10."
+#~ msgstr ""
+

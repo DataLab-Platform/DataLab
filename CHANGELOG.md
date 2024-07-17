@@ -228,15 +228,15 @@ NumPy 2.0 support has been added with this release.
 🎁 New installer for the stand-alone version on Windows:
 
 * The stand-alone version on Windows is now distributed as an MSI installer (instead
-    of an EXE installer)
+  of an EXE installer)
 * This avoids the false positive detection of the stand-alone version as a
-    potential threat by some antivirus software
+  potential threat by some antivirus software
 * The program will install files and shortcuts:
   * For current user, if the user has no administrator privileges
   * For all users, if the user has administrator privileges
   * Installation directory may be customized
 * MSI installer allows to integrate DataLab's installation seemlessly in an
-    organization's deployment system
+  organization's deployment system
 
 💥 New features and enhancements:
 
@@ -282,13 +282,13 @@ NumPy 2.0 support has been added with this release.
 ⚠️ API changes required for fixing support for multiple signals loading feature:
 
 * Merged `open_object` and `open_objects` methods to `load_from_files` in proxy
-    classes, main window and data panels
+  classes, main window and data panels
 * For consistency's sake: merged `save_object` and `save_objects` into `save_to_files`
 * To sum up, those changes lead to the following situation:
   * `load_from_files`: load a sequence of objects from multiple files
   * `save_to_files`: save a sequence of objects to multiple files (at the moment,
-      it only supports saving a single object to a single file, but it may be extended
-      in the future to support saving multiple objects to a single file)
+    it only supports saving a single object to a single file, but it may be extended
+    in the future to support saving multiple objects to a single file)
 
 🛠️ Bug fixes:
 

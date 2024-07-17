@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 10:32+0200\n"
+"POT-Creation-Date: 2024-07-17 12:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -43,7 +43,9 @@ msgstr "Validation fonctionnelle"
 msgid ""
 "In DataLab, functional validation is based on a classic test strategy "
 "(see :ref:`functional_validation`)."
-msgstr "Dans DataLab, la validation fonctionnelle est basée sur une stratégie de test classique (voir :ref:`functional_validation`)."
+msgstr ""
+"Dans DataLab, la validation fonctionnelle est basée sur une stratégie de "
+"test classique (voir :ref:`functional_validation`)."
 
 #: ../../doc/features/validation/status.rst:16
 msgid "Test coverage is around 90%, with more than 200 tests."
@@ -58,7 +60,10 @@ msgid ""
 "This paragraph provides the validation status of compute functions in "
 "DataLab (this is what we call scientific validation, see "
 ":ref:`scientific_validation`)."
-msgstr "Ce paragraphe fournit l'état de validation des fonctions de calcul dans DataLab (c'est ce que nous appelons validation scientifique, voir :ref:`scientific_validation`)."
+msgstr ""
+"Ce paragraphe fournit l'état de validation des fonctions de calcul dans "
+"DataLab (c'est ce que nous appelons validation scientifique, voir "
+":ref:`scientific_validation`)."
 
 #: ../../doc/features/validation/status.rst:24
 msgid ""
@@ -177,8 +182,8 @@ msgid "Description"
 msgstr "Description"
 
 #: ../../doc/features/validation/status.rst:1
-msgid "Test script"
-msgstr "Script de test"
+msgid "Test function"
+msgstr "Fonction de test"
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`abs <cdl.computation.signal.compute_abs>`"
@@ -190,7 +195,9 @@ msgid "Compute absolute value"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/signals/operation_unit_test.py``"
+msgid ""
+"`test_signal_abs <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L118>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -205,12 +212,24 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
+"`test_signal_addition <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L42>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
 ":py:func:`addition_constant "
 "<cdl.computation.signal.compute_addition_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Add **dst** and a constant value and return a the new result signal object"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_addition_constant <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L86>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -222,6 +241,12 @@ msgid "Convert data type"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_astype <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L142>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`bandwidth_3db <cdl.computation.signal.compute_bandwidth_3db>`"
 msgstr ""
 
@@ -230,7 +255,9 @@ msgid "Compute bandwidth"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/signals/computing_unit_test.py``"
+msgid ""
+"`test_signal_bandwidth_3db <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L27>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -243,7 +270,9 @@ msgid "Compute linear calibration"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/signals/processing_unit_test.py``"
+msgid ""
+"`test_signal_calibration <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L34>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -255,11 +284,23 @@ msgid "Compute maximum data clipping"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_clip <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L113>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`contrast <cdl.computation.signal.compute_contrast>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute contrast"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_contrast <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L58>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -271,6 +312,12 @@ msgid "Compute convolution of two signals"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_convolution <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L126>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`derivative <cdl.computation.signal.compute_derivative>`"
 msgstr ""
 
@@ -279,13 +326,18 @@ msgid "Compute derivative"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_derivative <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L139>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`detrending <cdl.computation.signal.compute_detrending>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-#, fuzzy
 msgid "Detrend data"
-msgstr "Données expérimentales"
+msgstr "Corriger la tendance des données"
 
 #: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
@@ -302,6 +354,12 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
+"`test_signal_difference <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L62>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
 ":py:func:`difference_constant "
 "<cdl.computation.signal.compute_difference_constant>`"
 msgstr ""
@@ -311,11 +369,23 @@ msgid "Subtract a constant value from a signal"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_difference_constant <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L102>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`division <cdl.computation.signal.compute_division>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute division between two signals"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_division <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L78>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -330,12 +400,24 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
+"`test_signal_division_constant <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L110>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
 ":py:func:`dynamic_parameters "
 "<cdl.computation.signal.compute_dynamic_parameters>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR)"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_dynamic_parameters <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L35>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -348,6 +430,12 @@ msgid "Compute exponential"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_exp <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L152>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`fft <cdl.computation.signal.compute_fft>`"
 msgstr ""
 
@@ -357,7 +445,9 @@ msgid "Compute FFT"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/signals/fft1d_unit_test.py``"
+msgid ""
+"`test_signal_fft <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fft1d_unit_test.py#L52>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -377,7 +467,9 @@ msgid "Compute FW at 1/e²"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/signals/fwhm_unit_test.py``"
+msgid ""
+"`test_signal_fw1e2 <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fwhm_unit_test.py#L80>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -390,6 +482,12 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
+"`test_signal_fwhm <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fwhm_unit_test.py#L61>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
 ":py:func:`gaussian_filter "
 "<cdl.computation.signal.compute_gaussian_filter>`"
 msgstr ""
@@ -397,6 +495,12 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute gaussian filter"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_gaussian_filter <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L194>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -416,12 +520,24 @@ msgid "Compute iFFT"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_ifft <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fft1d_unit_test.py#L94>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`im <cdl.computation.signal.compute_im>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute imaginary part"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_im <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L134>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -433,13 +549,18 @@ msgid "Compute integral"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_integral <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L158>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`interpolation <cdl.computation.signal.compute_interpolation>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-#, fuzzy
 msgid "Interpolate data"
-msgstr "Données simulées"
+msgstr "Interpoler les données"
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`log10 <cdl.computation.signal.compute_log10>`"
@@ -447,6 +568,12 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute Log10"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_log10 <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L160>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -461,12 +588,24 @@ msgid "Compute magnitude spectrum"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_magnitude_spectrum <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fft1d_unit_test.py#L102>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`moving_average <cdl.computation.signal.compute_moving_average>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute moving average"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_moving_average <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L205>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -479,11 +618,23 @@ msgid "Compute moving median"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_moving_median <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L230>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`normalize <cdl.computation.signal.compute_normalize>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Normalize data"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_normalize <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L83>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -499,7 +650,9 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/signals/offset_correction_unit_test.py``"
+msgid ""
+"`test_signal_offset_correction <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/offset_correction_unit_test.py#L38>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -520,11 +673,23 @@ msgid "Compute phase spectrum"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_phase_spectrum <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fft1d_unit_test.py#L119>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`power <cdl.computation.signal.compute_power>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute power"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_power <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L176>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -535,6 +700,12 @@ msgstr ""
 msgid ""
 "Multiply **dst** and **src** signals and return **dst** signal modified "
 "in place"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_product <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L52>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -550,12 +721,24 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_product_constant <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L94>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`psd <cdl.computation.signal.compute_psd>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute power spectral density"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_psd <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fft1d_unit_test.py#L137>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -570,7 +753,9 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/images/operation_unit_test.py``"
+msgid ""
+"`test_quadratic_difference <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L74>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -583,13 +768,18 @@ msgid "Compute real part"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_re <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L126>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`resampling <cdl.computation.signal.compute_resampling>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-#, fuzzy
 msgid "Resample data"
-msgstr "Données simulées"
+msgstr "Rééchantillonner les données"
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`reverse_x <cdl.computation.signal.compute_reverse_x>`"
@@ -597,6 +787,12 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Reverse x-axis"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_reverse_x <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L74>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -610,11 +806,23 @@ msgid "Compute sampling rate and period"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_sampling_rate_period <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L49>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`sqrt <cdl.computation.signal.compute_sqrt>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute square root"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_sqrt <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L168>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -625,9 +833,10 @@ msgstr ""
 msgid "Compute statistics on a signal"
 msgstr ""
 
-#: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/common/stat_unit_test.py``"
+msgid ""
+"`test_signal_stats_unit <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/common/stat_unit_test.py#L81>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -639,12 +848,24 @@ msgid "Swap axes"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_swap_axes <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L64>`_"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`wiener <cdl.computation.signal.compute_wiener>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute Wiener filter"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_wiener <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L242>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -665,17 +886,28 @@ msgstr ""
 msgid "Compute x at min/max"
 msgstr ""
 
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"`test_signal_x_at_minmax <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L66>`_"
+msgstr ""
+
 #: ../../doc/features/validation/status.rst:48
 msgid "Image Compute Functions"
 msgstr ""
 
 #: ../../doc/features/validation/status.rst:50
-#, fuzzy
 msgid "Validation status of image compute functions"
-msgstr "Etat de validation de DataLab"
+msgstr "Etat de validation des fonctions de calcul image"
 
 #: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`abs <cdl.computation.image.compute_abs>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_abs <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L176>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -684,6 +916,12 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Add **dst** and **src** images and return **dst** image modified in place"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_addition <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L49>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -697,11 +935,23 @@ msgid "Add **dst** and a constant value and return the new result image object"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_addition_constant <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L130>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`astype <cdl.computation.image.compute_astype>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Convert image data type"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_astype <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L209>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -721,7 +971,9 @@ msgid "Binning function on data"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid "``features/images/binning_unit_test.py``"
+msgid ""
+"`test_binning <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/binning_unit_test.py#L70>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -733,11 +985,19 @@ msgid "Compute Butterworth filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid "``features/images/processing_unit_test.py``"
+msgid ""
+"`test_butterworth <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L561>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`calibration <cdl.computation.image.compute_calibration>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_calibration <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L62>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -749,7 +1009,9 @@ msgid "Compute centroid"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid "``features/images/centroid_unit_test.py``"
+msgid ""
+"`test_image_centroid <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/centroid_unit_test.py#L100>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -761,11 +1023,23 @@ msgid "Apply clipping"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_clip <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L121>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`difference <cdl.computation.image.compute_difference>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute difference between two images"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_difference <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L62>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -781,11 +1055,23 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_difference_constant <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L142>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`division <cdl.computation.image.compute_division>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute division between two images"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_division <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L99>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -796,6 +1082,12 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Divide an image by a constant value and return the new result image object"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_division_constant <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L165>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -813,11 +1105,19 @@ msgid ":py:func:`exp <cdl.computation.image.compute_exp>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_exp <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L222>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`fft <cdl.computation.image.compute_fft>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid "``features/images/fft2d_unit_test.py``"
+msgid ""
+"`test_image_fft <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/fft2d_unit_test.py#L45>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -837,6 +1137,12 @@ msgid "Flip data horizontally"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_fliph <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L268>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`flipv <cdl.computation.image.compute_flipv>`"
 msgstr ""
 
@@ -845,7 +1151,19 @@ msgid "Flip data vertically"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_flipv <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L274>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`gaussian_filter <cdl.computation.image.compute_gaussian_filter>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_gaussian_filter <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L145>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -875,7 +1193,19 @@ msgid "Compute inverse FFT"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_ifft <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/fft2d_unit_test.py#L61>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`im <cdl.computation.image.compute_im>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_im <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L198>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -895,6 +1225,12 @@ msgid "Compute log10"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_log10 <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L234>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`logp1 <cdl.computation.image.compute_logp1>`"
 msgstr ""
 
@@ -904,8 +1240,20 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_image_logp1 <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L246>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`magnitude_spectrum "
 "<cdl.computation.image.compute_magnitude_spectrum>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_magnitude_spectrum <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/fft2d_unit_test.py#L69>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -913,11 +1261,29 @@ msgid ":py:func:`moving_average <cdl.computation.image.compute_moving_average>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_moving_average <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L156>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`moving_median <cdl.computation.image.compute_moving_median>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_moving_median <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L168>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`normalize <cdl.computation.image.compute_normalize>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_normalize <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L90>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -931,11 +1297,19 @@ msgid "Apply offset correction"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid "``features/images/offset_correction_unit_test.py``"
+msgid ""
+"`test_image_offset_correction <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/offset_correction_unit_test.py#L53>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`phase_spectrum <cdl.computation.image.compute_phase_spectrum>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_phase_spectrum <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/fft2d_unit_test.py#L81>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -946,6 +1320,12 @@ msgstr ""
 msgid ""
 "Multiply **dst** and **src** images and return **dst** image modified in "
 "place"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_product <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L86>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -961,7 +1341,19 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_product_constant <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L154>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`psd <cdl.computation.image.compute_psd>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_psd <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/fft2d_unit_test.py#L93>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -987,6 +1379,12 @@ msgid ":py:func:`re <cdl.computation.image.compute_re>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_re <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L187>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`resize <cdl.computation.image.compute_resize>`"
 msgstr ""
 
@@ -999,9 +1397,14 @@ msgid ":py:func:`rotate <cdl.computation.image.compute_rotate>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-#, fuzzy
 msgid "Rotate data"
-msgstr "Données de référence"
+msgstr "Rotation des données"
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_rotate <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L303>`_"
+msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`rotate270 <cdl.computation.image.compute_rotate270>`"
@@ -1012,11 +1415,23 @@ msgid "Rotate data 270°"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_rotate270 <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L297>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`rotate90 <cdl.computation.image.compute_rotate90>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Rotate data 90°"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_rotate90 <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/operation_unit_test.py#L291>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1036,6 +1451,12 @@ msgid "Compute statistics on an image"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_stats_unit <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/common/stat_unit_test.py#L116>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`swap_axes <cdl.computation.image.compute_swap_axes>`"
 msgstr ""
 
@@ -1044,7 +1465,19 @@ msgid "Swap image axes"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_swap_axes <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L81>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`wiener <cdl.computation.image.compute_wiener>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_image_wiener <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L180>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1110,11 +1543,23 @@ msgid "Compute Canny filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_canny <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L442>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`farid <cdl.computation.image.edges.compute_farid>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute Farid filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_farid <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L537>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1126,11 +1571,23 @@ msgid "Compute horizontal Farid filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_farid_h <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L543>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`farid_v <cdl.computation.image.edges.compute_farid_v>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute vertical Farid filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_farid_v <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L549>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1142,11 +1599,23 @@ msgid "Compute Laplace filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_laplace <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L555>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`prewitt <cdl.computation.image.edges.compute_prewitt>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute Prewitt filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_prewitt <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L483>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1158,11 +1627,23 @@ msgid "Compute horizontal Prewitt filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_prewitt_h <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L489>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`prewitt_v <cdl.computation.image.edges.compute_prewitt_v>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute vertical Prewitt filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_prewitt_v <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L495>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1174,11 +1655,23 @@ msgid "Compute Roberts filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_roberts <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L477>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`scharr <cdl.computation.image.edges.compute_scharr>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute Scharr filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_scharr <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L519>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1190,11 +1683,23 @@ msgid "Compute horizontal Scharr filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_scharr_h <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L525>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`scharr_v <cdl.computation.image.edges.compute_scharr_v>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute vertical Scharr filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_scharr_v <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L531>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1206,6 +1711,12 @@ msgid "Compute Sobel filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_sobel <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L501>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`sobel_h <cdl.computation.image.edges.compute_sobel_h>`"
 msgstr ""
 
@@ -1214,11 +1725,23 @@ msgid "Compute horizontal Sobel filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_sobel_h <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L507>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`sobel_v <cdl.computation.image.edges.compute_sobel_v>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute vertical Sobel filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_sobel_v <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L513>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1232,11 +1755,23 @@ msgid "Gamma correction"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_adjust_gamma <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L252>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`adjust_log <cdl.computation.image.exposure.compute_adjust_log>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute log correction"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_adjust_log <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L264>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1251,12 +1786,24 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_adjust_sigmoid <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L276>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`equalize_adapthist "
 "<cdl.computation.image.exposure.compute_equalize_adapthist>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Adaptive histogram equalization"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_equalize_adapthist <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L315>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1271,12 +1818,24 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_equalize_hist <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L303>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`rescale_intensity "
 "<cdl.computation.image.exposure.compute_rescale_intensity>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Rescale image intensity levels"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_rescale_intensity <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L290>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1290,11 +1849,23 @@ msgid "Compute Black Top-Hat"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_black_tophat <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L412>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`closing <cdl.computation.image.morphology.compute_closing>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute morphological closing"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_closing <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L436>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1306,6 +1877,12 @@ msgid "Compute Dilation"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_dilation <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L424>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`erosion <cdl.computation.image.morphology.compute_erosion>`"
 msgstr ""
 
@@ -1314,11 +1891,23 @@ msgid "Compute Erosion"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_erosion <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L418>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`opening <cdl.computation.image.morphology.compute_opening>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute morphological opening"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_opening <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L430>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1333,12 +1922,24 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_white_tophat <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L406>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`denoise_bilateral "
 "<cdl.computation.image.restoration.compute_denoise_bilateral>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute bilateral filter denoising"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_denoise_bilateral <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L344>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1353,12 +1954,24 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_denoise_tophat <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L384>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`denoise_tv "
 "<cdl.computation.image.restoration.compute_denoise_tv>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute Total Variation denoising"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_denoise_tv <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L327>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1372,11 +1985,23 @@ msgid "Compute Wavelet denoising"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_denoise_wavelet <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L361>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`threshold <cdl.computation.image.threshold.compute_threshold>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute the threshold."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_threshold <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L189>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1391,12 +2016,24 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_threshold_isodata <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L210>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`threshold_li "
 "<cdl.computation.image.threshold.compute_threshold_li>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute the threshold using the Li algorithm with default parameters."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_threshold_li <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L216>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1411,6 +2048,12 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_threshold_mean <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L222>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`threshold_minimum "
 "<cdl.computation.image.threshold.compute_threshold_minimum>`"
 msgstr ""
@@ -1421,12 +2064,24 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_threshold_minimum <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L228>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`threshold_otsu "
 "<cdl.computation.image.threshold.compute_threshold_otsu>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute the threshold using the Otsu algorithm with default parameters."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_threshold_otsu <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L234>`_"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1443,12 +2098,24 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+"`test_threshold_triangle <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L240>`_"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`threshold_yen "
 "<cdl.computation.image.threshold.compute_threshold_yen>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute the threshold using the Yen algorithm with default parameters."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"`test_threshold_yen <https://github.com/DataLab-"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/images/processing_unit_test.py#L246>`_"
 msgstr ""
 
 #~ msgid "Validation"
@@ -1589,3 +2256,45 @@ msgstr ""
 #~ ":ref:`run_scientific_validation_tests` pour plus "
 #~ "d'informations sur la façon d'exécuter "
 #~ "les tests de validation."
+
+#~ msgid "Test script"
+#~ msgstr "Script de test"
+
+#~ msgid "``features/signals/operation_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/signals/computing_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/signals/processing_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/signals/fft1d_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/signals/fwhm_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/signals/offset_correction_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/images/operation_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/common/stat_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/images/binning_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/images/processing_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/images/centroid_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/images/fft2d_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/images/offset_correction_unit_test.py``"
+#~ msgstr ""

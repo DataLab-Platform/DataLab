@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 09:07+0200\n"
+"POT-Creation-Date: 2024-07-17 12:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -53,27 +53,37 @@ msgstr "🛠️ Corrections de bugs :"
 msgid ""
 "Requires PlotPy v2.4.1 or later to fix the following issues related to "
 "the contrast adjustment feature:"
-msgstr "PlotPy v2.4.1 ou ultérieur est requis pour corriger les problèmes suivants liés à la fonction d'ajustement de contraste :"
+msgstr ""
+"PlotPy v2.4.1 ou ultérieur est requis pour corriger les problèmes "
+"suivants liés à la fonction d'ajustement de contraste :"
 
 #: ../../CHANGELOG.md:12
 msgid ""
 "A regression was introduced in an earlier version of PlotPy: levels "
 "histogram was no longer removed from contrast adjustment panel when the "
 "associated image was removed from the plot"
-msgstr "Une régression a été introduite dans une version antérieure de PlotPy : l'histogramme des niveaux n'était plus supprimé du panneau d'ajustement de contraste lorsque l'image associée était supprimée du graphique"
+msgstr ""
+"Une régression a été introduite dans une version antérieure de PlotPy : "
+"l'histogramme des niveaux n'était plus supprimé du panneau d'ajustement "
+"de contraste lorsque l'image associée était supprimée du graphique"
 
 #: ../../CHANGELOG.md:14
 msgid ""
 "This is now fixed: when an image is removed, the histogram is removed as "
 "well and the contrast panel is refreshed (which was not the case even "
 "before the regression)"
-msgstr "Cela est maintenant corrigé : lorsque une image est supprimée, l'histogramme est également supprimé et le panneau de contraste est rafraîchi (ce qui n'était pas le cas même avant la régression)"
+msgstr ""
+"Cela est maintenant corrigé : lorsque une image est supprimée, "
+"l'histogramme est également supprimé et le panneau de contraste est "
+"rafraîchi (ce qui n'était pas le cas même avant la régression)"
 
 #: ../../CHANGELOG.md:16
 msgid ""
 "Ignore `AssertionError` in *config_unit_test.py* when executing test "
 "suite on WSL"
-msgstr "Ignorer `AssertionError` dans *config_unit_test.py* lors de l'exécution de la suite de tests sur WSL"
+msgstr ""
+"Ignorer `AssertionError` dans *config_unit_test.py* lors de l'exécution "
+"de la suite de tests sur WSL"
 
 #: ../../CHANGELOG.md:18 ../../CHANGELOG.md:413 ../../CHANGELOG.md:561
 msgid "📚 Documentation:"
@@ -1057,19 +1067,17 @@ msgid "🎁 New installer for the stand-alone version on Windows:"
 msgstr "🎁 Nouvel installeur pour la version autonome sur Windows :"
 
 #: ../../CHANGELOG.md:230
-#, fuzzy
 msgid ""
 "The stand-alone version on Windows is now distributed as an MSI installer"
-" (instead   of an EXE installer)"
+" (instead of an EXE installer)"
 msgstr ""
 "La version autonome sur Windows est désormais distribuée en tant "
 "qu'installeur MSI (au lieu d'un installeur EXE)"
 
 #: ../../CHANGELOG.md:232
-#, fuzzy
 msgid ""
-"This avoids the false positive detection of the stand-alone version as a"
-"   potential threat by some antivirus software"
+"This avoids the false positive detection of the stand-alone version as a "
+"potential threat by some antivirus software"
 msgstr ""
 "Cela évite la détection de faux positifs de la version autonome comme une"
 " menace potentielle par certains logiciels antivirus"
@@ -1095,10 +1103,9 @@ msgid "Installation directory may be customized"
 msgstr "Le répertoire d'installation peut être personnalisé"
 
 #: ../../CHANGELOG.md:238
-#, fuzzy
 msgid ""
 "MSI installer allows to integrate DataLab's installation seemlessly in an"
-"   organization's deployment system"
+" organization's deployment system"
 msgstr ""
 "L'installeur MSI permet d'intégrer l'installation de DataLab de manière "
 "transparente dans le système de déploiement d'une organisation"
@@ -1277,10 +1284,9 @@ msgstr ""
 "chargement de plusieurs signaux :"
 
 #: ../../CHANGELOG.md:284
-#, fuzzy
 msgid ""
 "Merged `open_object` and `open_objects` methods to `load_from_files` in "
-"proxy   classes, main window and data panels"
+"proxy classes, main window and data panels"
 msgstr ""
 "Fusion des méthodes `open_object` et `open_objects` en `load_from_files` "
 "dans les classes proxy, la fenêtre principale et les panneaux de données"
@@ -1304,11 +1310,10 @@ msgstr ""
 "fichiers"
 
 #: ../../CHANGELOG.md:289
-#, fuzzy
 msgid ""
 "`save_to_files`: save a sequence of objects to multiple files (at the "
-"moment,   it only supports saving a single object to a single file, but "
-"it may be extended   in the future to support saving multiple objects to "
+"moment, it only supports saving a single object to a single file, but "
+"it may be extended in the future to support saving multiple objects to "
 "a single file)"
 msgstr ""
 "`save_to_files` : sauvegarde une séquence d'objets dans plusieurs "

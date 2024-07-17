@@ -322,9 +322,8 @@ msgid "Compute function parameter. Defaults to None."
 msgstr "Paramètre de la fonction de calcul. Par défaut, None."
 
 #: cdl.core.remote.RemoteClient.calc:6 cdl.proxy.LocalProxy.calc:6 of
-#, fuzzy
 msgid "unknown function"
-msgstr "Fonction de calcul"
+msgstr "fonction inconnue"
 
 #: cdl.core.baseproxy.BaseProxy.close_application:1 of
 msgid "Close DataLab application"
@@ -511,9 +510,8 @@ msgid "List of selected objects uuids."
 msgstr "Liste des UUID des objets sélectionnés."
 
 #: cdl.core.baseproxy.BaseProxy.get_version:1 of
-#, fuzzy
 msgid "Return DataLab public version."
-msgstr "Renvoie la version de DataLab."
+msgstr "Renvoie la version publique de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.get_version:3 of
 msgid "DataLab version"
