@@ -53,14 +53,54 @@ specified as "remote:port".
 
 .. _processor_methods:
 
-List of compute methods
-^^^^^^^^^^^^^^^^^^^^^^^
+Calling processor methods using proxy objects
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 All the proxy objects provide access to the DataLab computing methods exposed by
 the processor classes:
 
 - :class:`cdl.core.gui.processor.signal.SignalProcessor`
 - :class:`cdl.core.gui.processor.image.ImageProcessor`
+
+.. seealso::
+
+    The list of processor methods is available in tables below.
+
+There are two ways to call a processor method:
+
+1. Using the :meth:`calc` method of the proxy object:
+
+.. code-block:: python
+
+    # Call a method without parameter
+    proxy.calc("compute_average")
+
+    # This is equivalent to:
+    proxy.calc("average")
+
+    # Call a method with parameters
+    p = cdl.param.MovingAverageParam.create(n=30)
+    proxy.calc("compute_moving_average", p)
+
+2. Directly calling the processor method from the proxy object:
+
+.. code-block:: python
+
+    # Call a method without parameter
+    proxy.compute_average()
+
+    # Call a method with parameters
+    p = cdl.param.MovingAverageParam.create(n=30)
+    proxy.compute_moving_average(p)
+
+.. warning::
+
+    The `compute_{name}` methods are not statically defined in the proxy classes (and
+    not even dynamically). They are nevertheless available through the proxy objects
+    thanks to the magic method :meth:`__getattr__` which forwards the call to the
+    :meth:`calc` method. However, this means that the methods are not listed in the
+    proxy classes documentation, and they are not available in the auto-completion
+    feature of your IDE.
 
 Number of compute methods
 *************************

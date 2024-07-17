@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 14:58+0200\n"
+"POT-Creation-Date: 2024-07-17 16:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -35,7 +35,9 @@ msgstr ""
 msgid ""
 "The list of compute methods accessible from the proxy objects is "
 "available in the :ref:`processor_methods` section."
-msgstr "La liste des méthodes de calcul accessibles à partir des objets proxy est disponible dans la section :ref:`processor_methods`."
+msgstr ""
+"La liste des méthodes de calcul accessibles à partir des objets proxy est"
+" disponible dans la section :ref:`processor_methods`."
 
 #: cdl.proxy:11 of
 msgid "Remote proxy"
@@ -756,14 +758,16 @@ msgid "proxy.add_signal(...)"
 msgstr "proxy.add_signal(...)"
 
 #: cdl.proxy:54 of
-msgid "List of compute methods"
-msgstr "Liste des méthodes de calcul"
+msgid "Calling processor methods using proxy objects"
+msgstr "Appel des méthodes de calcul à l'aide d'objets proxy"
 
 #: cdl.proxy:56 of
 msgid ""
 "All the proxy objects provide access to the DataLab computing methods "
 "exposed by the processor classes:"
-msgstr "Tous les objets proxy permettent d'accéder aux méthodes de calcul exposées par les classes de processeur de DataLab :"
+msgstr ""
+"Tous les objets proxy permettent d'accéder aux méthodes de calcul "
+"exposées par les classes de processeur de DataLab :"
 
 #: cdl.proxy:59 of
 msgid ":class:`cdl.core.gui.processor.signal.SignalProcessor`"
@@ -773,7 +777,33 @@ msgstr ""
 msgid ":class:`cdl.core.gui.processor.image.ImageProcessor`"
 msgstr ""
 
-#: cdl.proxy:63 cdl.proxy:65 of
+#: cdl.proxy:64 of
+msgid "The list of processor methods is available in tables below."
+msgstr "La liste des méthodes de calcul est disponible dans les tableaux ci-dessous."
+
+#: cdl.proxy:66 of
+msgid "There are two ways to call a processor method:"
+msgstr "Il existe deux façons d'appeler une méthode de calcul :"
+
+#: cdl.proxy:68 of
+msgid "Using the :meth:`calc` method of the proxy object:"
+msgstr "En utilisant la méthode :meth:`calc` de l'objet proxy :"
+
+#: cdl.proxy:82 of
+msgid "Directly calling the processor method from the proxy object:"
+msgstr "En appelant directement la méthode de calcul du processeur à partir de l'objet proxy :"
+
+#: cdl.proxy:95 of
+msgid ""
+"The `compute_{name}` methods are not statically defined in the proxy "
+"classes (and not even dynamically). They are nevertheless available "
+"through the proxy objects thanks to the magic method :meth:`__getattr__` "
+"which forwards the call to the :meth:`calc` method. However, this means "
+"that the methods are not listed in the proxy classes documentation, and "
+"they are not available in the auto-completion feature of your IDE."
+msgstr "Les méthodes `compute_{name}` ne sont pas définies statiquement dans les classes proxy (et même pas dynamiquement). Elles sont néanmoins disponibles via les objets proxy grâce à la méthode magique :meth:`__getattr__` qui transfère l'appel à la méthode :meth:`calc`. Cependant, cela signifie que les méthodes ne sont pas répertoriées dans la documentation des classes proxy, et elles ne sont pas disponibles dans la fonction d'auto-complétion de votre IDE."
+
+#: cdl.proxy:103 cdl.proxy:105 of
 msgid "Number of compute methods"
 msgstr "Nombre de méthodes de calcul"
 
@@ -790,28 +820,30 @@ msgid "Total"
 msgstr "Total"
 
 #: ../../doc/processor_methods_nb.csv:1
-msgid "60"
+msgid "58"
 msgstr ""
 
 #: ../../doc/processor_methods_nb.csv:1
-msgid "101"
+msgid "99"
 msgstr ""
 
 #: ../../doc/processor_methods_nb.csv:1
-msgid "161"
+msgid "157"
 msgstr ""
 
-#: cdl.proxy:70 of
+#: cdl.proxy:110 of
 msgid "Signal processing"
 msgstr "Traitement du signal"
 
-#: cdl.proxy:72 of
+#: cdl.proxy:112 of
 msgid ""
 "The following table lists the signal processor methods - it is "
 "automatically generated from the source code:"
-msgstr "Le tableau suivant répertorie les méthodes de traitement du signal - il est généré automatiquement à partir du code source :"
+msgstr ""
+"Le tableau suivant répertorie les méthodes de traitement du signal - il "
+"est généré automatiquement à partir du code source :"
 
-#: cdl.proxy:75 of
+#: cdl.proxy:115 of
 msgid "Signal processor methods"
 msgstr "Méthodes de traitement du signal"
 
@@ -824,7 +856,7 @@ msgid "Description"
 msgstr "Description"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_abs`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_abs`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -833,7 +865,7 @@ msgid "Compute absolute value"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -842,7 +874,7 @@ msgid "Compute sum with a constant"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_astype`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_astype`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -852,7 +884,7 @@ msgid "Convert data type"
 msgstr "Type de données invalide"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_average`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_average`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -862,7 +894,7 @@ msgid "Compute average"
 msgstr "Gestionnaire de contexte"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -870,7 +902,7 @@ msgid "Compute band-pass filter"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -878,7 +910,7 @@ msgid "Compute band-stop filter"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -886,7 +918,7 @@ msgid "Compute bandwidth"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_calibration`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_calibration`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -896,7 +928,7 @@ msgid "Compute data linear calibration"
 msgstr "Fermer l'application DataLab"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_clip`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_clip`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -905,7 +937,7 @@ msgid "Compute maximum data clipping"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_contrast`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_contrast`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -914,7 +946,7 @@ msgid "Compute contrast"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_convolution`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_convolution`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -923,7 +955,7 @@ msgid "Compute convolution"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_derivative`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_derivative`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -931,7 +963,7 @@ msgid "Compute derivative"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_detrending`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_detrending`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -939,7 +971,7 @@ msgid "Compute detrending"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_difference`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_difference`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -947,7 +979,7 @@ msgid "Compute difference between two signals"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -956,7 +988,7 @@ msgid "Compute difference with a constant"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_division`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_division`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -964,7 +996,7 @@ msgid "Compute division between two signals"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -973,7 +1005,7 @@ msgid "Compute division by a constant"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -981,7 +1013,7 @@ msgid "Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_exp`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_exp`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -990,7 +1022,7 @@ msgid "Compute Log10"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fft`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fft`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1000,7 +1032,7 @@ msgid "Compute iFFT"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fit`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fit`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1009,7 +1041,7 @@ msgid "Compute fitting curve"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1018,7 +1050,7 @@ msgid "Compute FW at 1/e²"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1027,7 +1059,7 @@ msgid "Compute FWHM"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1036,7 +1068,7 @@ msgid "Compute gaussian filter"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_highpass`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_highpass`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1044,7 +1076,7 @@ msgid "Compute high-pass filter"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_histogram`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_histogram`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1054,7 +1086,7 @@ msgid "Compute histogram"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_ifft`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_ifft`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1064,7 +1096,7 @@ msgid "Compute FFT"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_im`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_im`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1073,7 +1105,7 @@ msgid "Compute imaginary part"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_integral`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_integral`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1081,7 +1113,7 @@ msgid "Compute integral"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1090,15 +1122,15 @@ msgid "Compute interpolation"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_log10`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_log10`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1107,7 +1139,7 @@ msgid "Compute magnitude spectrum"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1116,7 +1148,7 @@ msgid "Compute moving average"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1125,7 +1157,7 @@ msgid "Compute moving median"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1133,25 +1165,7 @@ msgid "Compute multi-Gaussian fitting curve"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_n1`"
-msgstr ""
-
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute n1 function: N(>=2) objects in → 1 object out."
-msgstr ""
-
-#: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_n1n`"
-msgstr ""
-
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute n1n function: N(>=1) objects + 1 object in → N objects out."
-msgstr ""
-
-#: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_normalize`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_normalize`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1161,7 +1175,7 @@ msgid "Normalize data"
 msgstr "Données de l'image"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1171,7 +1185,7 @@ msgid "Compute offset correction"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1179,7 +1193,7 @@ msgid "Detect peaks from data"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1188,7 +1202,7 @@ msgid "Compute phase spectrum"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1196,7 +1210,7 @@ msgid "Compute polynomial fitting curve"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_power`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_power`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1204,7 +1218,7 @@ msgid "Compute power"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_product`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_product`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1214,7 +1228,7 @@ msgid "Compute product"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1223,7 +1237,7 @@ msgid "Compute product with a constant"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_psd`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_psd`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1231,7 +1245,7 @@ msgid "Compute power spectral density"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1239,7 +1253,7 @@ msgid "Compute quadratic difference between two signals"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_re`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_re`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1248,7 +1262,7 @@ msgid "Compute real part"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_resampling`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_resampling`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1256,7 +1270,7 @@ msgid "Compute resampling"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1264,7 +1278,7 @@ msgid "Reverse X axis"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1273,7 +1287,7 @@ msgid "Extract Region Of Interest (ROI) from data"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1281,7 +1295,7 @@ msgid "Compute sampling rate and period (mean and std)"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1289,7 +1303,7 @@ msgid "Compute square root"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_stats`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_stats`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1298,7 +1312,7 @@ msgid "Compute data statistics"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sum`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sum`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1308,7 +1322,7 @@ msgid "Compute sum"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1317,7 +1331,7 @@ msgid "Swap data axes"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_wiener`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_wiener`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1326,7 +1340,7 @@ msgid "Compute Wiener filter"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_windowing`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_windowing`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
@@ -1334,37 +1348,39 @@ msgid "Compute windowing"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
-msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax`"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax`"
 msgstr ""
 
 #: ../../doc/processor_methods_signal.csv:1
 msgid "Compute x at min/max"
 msgstr ""
 
-#: cdl.proxy:81 of
+#: cdl.proxy:121 of
 msgid "Image processing"
 msgstr "Traitement d'image"
 
-#: cdl.proxy:83 of
+#: cdl.proxy:123 of
 msgid ""
 "The following table lists the image processor methods - it is "
 "automatically generated from the source code:"
-msgstr "Le tableau suivant répertorie les méthodes de traitement d'image - il est généré automatiquement à partir du code source :"
+msgstr ""
+"Le tableau suivant répertorie les méthodes de traitement d'image - il est"
+" généré automatiquement à partir du code source :"
 
-#: cdl.proxy:86 of
+#: cdl.proxy:126 of
 msgid "Image processor methods"
 msgstr "Méthodes de traitement d'image"
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_abs`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_abs`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1372,7 +1388,7 @@ msgid "Compute gamma correction"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1381,7 +1397,7 @@ msgid "Compute log correction"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1389,7 +1405,7 @@ msgid "Compute sigmoid correction"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1397,7 +1413,7 @@ msgid "Compute all denoising filters"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_edges`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_edges`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1405,7 +1421,7 @@ msgid "Compute all edges"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1413,7 +1429,7 @@ msgid "Compute all morphology filters"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1421,15 +1437,15 @@ msgid "Compute all threshold algorithms"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_astype`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_astype`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_average`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1437,7 +1453,7 @@ msgid "Compute average profile"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_binning`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_binning`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1445,7 +1461,7 @@ msgid "Binning image"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1453,7 +1469,7 @@ msgid "Compute Black Top-Hat"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1461,7 +1477,7 @@ msgid "Compute blob detection using Difference of Gaussian method"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1469,7 +1485,7 @@ msgid "Compute blob detection using Determinant of Hessian method"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_log`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_log`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1477,7 +1493,7 @@ msgid "Compute blob detection using Laplacian of Gaussian method"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1485,7 +1501,7 @@ msgid "Compute blob detection using OpenCV"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_butterworth`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_butterworth`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1493,11 +1509,11 @@ msgid "Compute Butterworth filter"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_calibration`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_calibration`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_canny`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_canny`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1505,7 +1521,7 @@ msgid "Compute Canny filter"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_centroid`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_centroid`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1513,11 +1529,11 @@ msgid "Compute image centroid"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_clip`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_clip`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_closing`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_closing`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1525,7 +1541,7 @@ msgid "Compute morphological closing"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1534,7 +1550,7 @@ msgid "Compute contour shape fit"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1542,7 +1558,7 @@ msgid "Compute bilateral filter denoising"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1550,7 +1566,7 @@ msgid "Denoise using White Top-Hat"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1558,7 +1574,7 @@ msgid "Compute Total Variation denoising"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1566,7 +1582,7 @@ msgid "Compute Wavelet denoising"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_difference`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_difference`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1574,11 +1590,11 @@ msgid "Compute difference between two images"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_dilation`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_dilation`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1587,7 +1603,7 @@ msgid "Compute Dilation"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_division`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_division`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1595,11 +1611,11 @@ msgid "Compute division between two images"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_division_constant`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_division_constant`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1607,7 +1623,7 @@ msgid "Compute minimum enclosing circle"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1615,7 +1631,7 @@ msgid "Adaptive histogram equalization"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1623,7 +1639,7 @@ msgid "Histogram equalization"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_erosion`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_erosion`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1632,11 +1648,11 @@ msgid "Compute Erosion"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_exp`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_exp`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1644,7 +1660,7 @@ msgid "Compute Farid filter"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid_h`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid_h`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1652,7 +1668,7 @@ msgid "Compute Farid filter (horizontal)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid_v`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid_v`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1660,11 +1676,11 @@ msgid "Compute Farid filter (vertical)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_fft`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fft`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_flatfield`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_flatfield`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1672,7 +1688,7 @@ msgid "Compute flat field correction"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_fliph`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fliph`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1680,7 +1696,7 @@ msgid "Flip data horizontally"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_flipv`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_flipv`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1688,15 +1704,15 @@ msgid "Flip data vertically"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_histogram`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_histogram`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1704,15 +1720,15 @@ msgid "Compute peak detection based on a circle Hough transform"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_ifft`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_ifft`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_im`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_im`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_laplace`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_laplace`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1720,7 +1736,7 @@ msgid "Compute Laplace filter"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1728,11 +1744,11 @@ msgid "Compute profile along a vertical or horizontal line"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_log10`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_log10`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_logp1`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_logp1`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1740,35 +1756,27 @@ msgid "Compute base 10 logarithm"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_moving_average`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_moving_average`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_moving_median`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_moving_median`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_n1`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_normalize`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_n1n`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_normalize`"
-msgstr ""
-
-#: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction`"
-msgstr ""
-
-#: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_opening`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_opening`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1776,7 +1784,7 @@ msgid "Compute morphological opening"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1784,11 +1792,11 @@ msgid "Compute 2D peak detection"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1796,7 +1804,7 @@ msgid "Compute Prewitt filter"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1804,7 +1812,7 @@ msgid "Compute Prewitt filter (horizontal)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1812,15 +1820,15 @@ msgid "Compute Prewitt filter (vertical)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_product`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_product_constant`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product_constant`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_psd`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_psd`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1828,7 +1836,7 @@ msgid "Compute Power Spectral Density (PSD)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1836,7 +1844,7 @@ msgid "Compute quadratic difference between two images"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1844,11 +1852,11 @@ msgid "Compute radial profile"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_re`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_re`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1856,7 +1864,7 @@ msgid "Rescale image intensity levels"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_resize`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_resize`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1864,7 +1872,7 @@ msgid "Resize image"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_roberts`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roberts`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1872,11 +1880,11 @@ msgid "Compute Roberts filter"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1884,7 +1892,7 @@ msgid "Rotate data arbitrarily"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate270`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate270`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1892,7 +1900,7 @@ msgid "Rotate data 270°"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate90`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate90`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1900,7 +1908,7 @@ msgid "Rotate data 90°"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1908,7 +1916,7 @@ msgid "Compute Scharr filter"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1916,7 +1924,7 @@ msgid "Compute Scharr filter (horizontal)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1924,7 +1932,7 @@ msgid "Compute Scharr filter (vertical)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1933,7 +1941,7 @@ msgid "Compute profile along a segment"
 msgstr "Nom de la fonction de calcul"
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1941,7 +1949,7 @@ msgid "Compute Sobel filter"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1949,7 +1957,7 @@ msgid "Compute Sobel filter (horizontal)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1957,19 +1965,19 @@ msgid "Compute Sobel filter (vertical)"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_stats`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_stats`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sum`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sum`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1977,7 +1985,7 @@ msgid "Compute parametric threshold"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1985,7 +1993,7 @@ msgid "Compute threshold using Isodata algorithm"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -1993,7 +2001,7 @@ msgid "Compute threshold using Li algorithm"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -2001,7 +2009,7 @@ msgid "Compute threshold using Mean algorithm"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -2009,7 +2017,7 @@ msgid "Compute threshold using Minimum algorithm"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -2017,7 +2025,7 @@ msgid "Compute threshold using Otsu algorithm"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -2025,7 +2033,7 @@ msgid "Compute threshold using Triangle algorithm"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -2033,7 +2041,7 @@ msgid "Compute threshold using Yen algorithm"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat`"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
@@ -2041,5 +2049,506 @@ msgid "Compute White Top-Hat"
 msgstr ""
 
 #: ../../doc/processor_methods_image.csv:1
-msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_wiener`"
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_wiener`"
 msgstr ""
+
+#~ msgid "List of compute methods"
+#~ msgstr "Liste des méthodes de calcul"
+
+#~ msgid "60"
+#~ msgstr ""
+
+#~ msgid "101"
+#~ msgstr ""
+
+#~ msgid "161"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_abs`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_astype`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_average`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_calibration`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_clip`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_contrast`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_convolution`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_derivative`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_detrending`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_difference`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_division`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_exp`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fft`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fit`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_highpass`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_histogram`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_ifft`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_im`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_integral`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_log10`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_n1`"
+#~ msgstr ""
+
+#~ msgid "Compute n1 function: N(>=2) objects in → 1 object out."
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_n1n`"
+#~ msgstr ""
+
+#~ msgid "Compute n1n function: N(>=1) objects + 1 object in → N objects out."
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_normalize`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_power`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_product`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_psd`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_re`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_resampling`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_stats`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sum`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_wiener`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_windowing`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_abs`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_edges`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_astype`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_average`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_binning`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_log`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_butterworth`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_calibration`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_canny`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_centroid`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_clip`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_closing`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_difference`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_dilation`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_division`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_division_constant`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_erosion`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_exp`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid_h`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid_v`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_fft`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_flatfield`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_fliph`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_flipv`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_histogram`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_ifft`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_im`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_laplace`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_log10`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_logp1`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_moving_average`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_moving_median`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_n1`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_n1n`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_normalize`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_opening`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_product`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_product_constant`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_psd`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_re`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_resize`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_roberts`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate270`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate90`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_stats`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sum`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_wiener`"
+#~ msgstr ""
