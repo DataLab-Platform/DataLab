@@ -40,7 +40,7 @@ class AdjustGammaParam(gds.DataSet):
 
 
 def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
-    """Gamma correction
+    """Gamma correction using :py:func:`skimage.exposure.adjust_gamma`
 
     Args:
         src: input image object
@@ -71,7 +71,7 @@ class AdjustLogParam(gds.DataSet):
 
 
 def compute_adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
-    """Compute log correction
+    """Compute log correction using :py:func:`skimage.exposure.adjust_log`
 
     Args:
         src: input image object
@@ -109,7 +109,7 @@ class AdjustSigmoidParam(gds.DataSet):
 
 
 def compute_adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
-    """Compute sigmoid correction
+    """Compute sigmoid correction using :py:func:`skimage.exposure.adjust_sigmoid`
 
     Args:
         src: input image object
@@ -153,6 +153,7 @@ class RescaleIntensityParam(gds.DataSet):
 
 def compute_rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageObj:
     """Rescale image intensity levels
+    using :py:func:`skimage.exposure.rescale_intensity`
 
     Args:
         src: input image object
@@ -184,7 +185,7 @@ class EqualizeHistParam(gds.DataSet):
 
 
 def compute_equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
-    """Histogram equalization
+    """Histogram equalization using :py:func:`skimage.exposure.equalize_hist`
 
     Args:
         src: input image object
@@ -212,6 +213,7 @@ class EqualizeAdaptHistParam(EqualizeHistParam):
 
 def compute_equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> ImageObj:
     """Adaptive histogram equalization
+    using :py:func:`skimage.exposure.equalize_adapthist`
 
     Args:
         src: input image object

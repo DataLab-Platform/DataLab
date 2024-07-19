@@ -39,7 +39,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
-        """Normalize data"""
+        """Normalize data using :py:func:`cdl.computation.image.compute_normalize`"""
         self.compute_11(
             cpi.compute_normalize,
             param=param,
@@ -49,14 +49,15 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_sum(self) -> None:
-        """Compute sum"""
+        """Compute sum using :py:func:`cdl.computation.image.compute_addition`"""
         self.compute_n1("Σ", cpi.compute_addition, title=_("Sum"))
 
     @qt_try_except()
     def compute_addition_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
-        """Compute sum with a constant"""
+        """Compute sum with a constant using
+        :py:func:`cdl.computation.image.compute_addition_constant`"""
         self.compute_11(
             cpi.compute_addition_constant,
             param,
@@ -67,7 +68,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_average(self) -> None:
-        """Compute average"""
+        """Compute average using :py:func:`cdl.computation.image.compute_addition`
+        and dividing by the number of images"""
 
         def func_objs(new_obj: ImageObj, old_objs: list[ImageObj]) -> None:
             """Finalize average computation"""
@@ -79,14 +81,15 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_product(self) -> None:
-        """Compute product"""
+        """Compute product using :py:func:`cdl.computation.image.compute_product`"""
         self.compute_n1("Π", cpi.compute_product, title=_("Product"))
 
     @qt_try_except()
     def compute_product_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
-        """Compute product with a constant"""
+        """Compute product with a constant using
+        :py:func:`cdl.computation.image.compute_product_constant`"""
         self.compute_11(
             cpi.compute_product_constant,
             param,
@@ -97,32 +100,35 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_logp1(self, param: cdl.param.LogP1Param | None = None) -> None:
-        """Compute base 10 logarithm"""
+        """Compute base 10 logarithm using
+        :py:func:`cdl.computation.image.compute_logp1`"""
         self.compute_11(cpi.compute_logp1, param, cpi.LogP1Param, title="Log10")
 
     @qt_try_except()
     def compute_rotate(self, param: cdl.param.RotateParam | None = None) -> None:
-        """Rotate data arbitrarily"""
+        """Rotate data arbitrarily using
+        :py:func:`cdl.computation.image.compute_rotate`"""
         self.compute_11(cpi.compute_rotate, param, cpi.RotateParam, title="Rotate")
 
     @qt_try_except()
     def compute_rotate90(self) -> None:
-        """Rotate data 90°"""
+        """Rotate data 90° using :py:func:`cdl.computation.image.compute_rotate90`"""
         self.compute_11(cpi.compute_rotate90, title="Rotate90")
 
     @qt_try_except()
     def compute_rotate270(self) -> None:
-        """Rotate data 270°"""
+        """Rotate data 270° using :py:func:`cdl.computation.image.compute_rotate270`"""
         self.compute_11(cpi.compute_rotate270, title="Rotate270")
 
     @qt_try_except()
     def compute_fliph(self) -> None:
-        """Flip data horizontally"""
+        """Flip data horizontally using
+        :py:func:`cdl.computation.image.compute_fliph`"""
         self.compute_11(cpi.compute_fliph, title="HFlip")
 
     @qt_try_except()
     def compute_flipv(self) -> None:
-        """Flip data vertically"""
+        """Flip data vertically using :py:func:`cdl.computation.image.compute_flipv`"""
         self.compute_11(cpi.compute_flipv, title="VFlip")
 
     @qt_try_except()
@@ -200,7 +206,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_resize(self, param: cdl.param.ResizeParam | None = None) -> None:
-        """Resize image"""
+        """Resize image using :py:func:`cdl.computation.image.compute_resize`"""
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         for obj in self.panel.objview.get_sel_objects():
             if obj.data.shape != obj0.data.shape:
@@ -227,7 +233,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_binning(self, param: cdl.param.BinningParam | None = None) -> None:
-        """Binning image"""
+        """Binning image using :py:func:`cdl.computation.image.compute_binning`"""
         edit = param is None
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         input_dtype_str = str(obj0.data.dtype)
@@ -243,7 +249,10 @@ class ImageProcessor(BaseProcessor):
     def compute_roi_extraction(
         self, param: cdl.param.ROIDataParam | None = None
     ) -> None:
-        """Extract Region Of Interest (ROI) from data"""
+        """Extract Region Of Interest (ROI) from data, using:
+
+        - :py:func:`cdl.computation.image.extract_single_roi` for single ROI
+        - :py:func:`cdl.computation.image.extract_multiple_roi` for multiple ROIs"""
         param = self._get_roidataparam(param)
         if param is None or param.is_empty:
             return
@@ -265,7 +274,8 @@ class ImageProcessor(BaseProcessor):
     def compute_line_profile(
         self, param: cdl.param.LineProfileParam | None = None
     ) -> None:
-        """Compute profile along a vertical or horizontal line"""
+        """Compute profile along a vertical or horizontal line
+        using :py:func:`cdl.computation.image.compute_line_profile`"""
         title = _("Profile")
         add_initial_shape = self.has_param_defaults(cdl.param.LineProfileParam)
         edit, param = self.init_param(param, cpi.LineProfileParam, title)
@@ -284,7 +294,8 @@ class ImageProcessor(BaseProcessor):
     def compute_segment_profile(
         self, param: cdl.param.SegmentProfileParam | None = None
     ):
-        """Compute profile along a segment"""
+        """Compute profile along a segment
+        using :py:func:`cdl.computation.image.compute_segment_profile`"""
         title = _("Profile")
         add_initial_shape = self.has_param_defaults(cdl.param.SegmentProfileParam)
         edit, param = self.init_param(param, cpi.SegmentProfileParam, title)
@@ -303,7 +314,8 @@ class ImageProcessor(BaseProcessor):
     def compute_average_profile(
         self, param: cdl.param.AverageProfileParam | None = None
     ) -> None:
-        """Compute average profile"""
+        """Compute average profile
+        using :py:func:`cdl.computation.image.compute_average_profile`"""
         title = _("Average profile")
         add_initial_shape = self.has_param_defaults(cdl.param.AverageProfileParam)
         edit, param = self.init_param(param, cpi.AverageProfileParam, title)
@@ -322,7 +334,8 @@ class ImageProcessor(BaseProcessor):
     def compute_radial_profile(
         self, param: cdl.param.RadialProfileParam | None = None
     ) -> None:
-        """Compute radial profile"""
+        """Compute radial profile
+        using :py:func:`cdl.computation.image.compute_radial_profile`"""
         title = _("Radial profile")
         edit, param = self.init_param(param, cpi.RadialProfileParam, title)
         if edit:
@@ -332,51 +345,52 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_histogram(self, param: cdl.param.HistogramParam | None = None) -> None:
-        """Compute histogram"""
+        """Compute histogram using :py:func:`cdl.computation.image.compute_histogram`"""
         self.compute_11(
             cpi.compute_histogram, param, cpi.HistogramParam, title=_("Histogram")
         )
 
     @qt_try_except()
     def compute_swap_axes(self) -> None:
-        """Swap data axes"""
+        """Swap data axes using :py:func:`cdl.computation.image.compute_swap_axes`"""
         self.compute_11(cpi.compute_swap_axes, title=_("Swap axes"))
 
     @qt_try_except()
     def compute_abs(self) -> None:
-        """Compute absolute value"""
+        """Compute absolute value using :py:func:`cdl.computation.image.compute_abs`"""
         self.compute_11(cpi.compute_abs, title=_("Absolute value"))
 
     @qt_try_except()
     def compute_re(self) -> None:
-        """Compute real part"""
+        """Compute real part using :py:func:`cdl.computation.image.compute_re`"""
         self.compute_11(cpi.compute_re, title=_("Real part"))
 
     @qt_try_except()
     def compute_im(self) -> None:
-        """Compute imaginary part"""
+        """Compute imaginary part using :py:func:`cdl.computation.image.compute_im`"""
         self.compute_11(cpi.compute_im, title=_("Imaginary part"))
 
     @qt_try_except()
     def compute_astype(self, param: cdl.param.DataTypeIParam | None = None) -> None:
-        """Convert data type"""
+        """Convert data type using :py:func:`cdl.computation.image.compute_astype`"""
         self.compute_11(
             cpi.compute_astype, param, cpi.DataTypeIParam, title=_("Convert data type")
         )
 
     @qt_try_except()
     def compute_log10(self) -> None:
-        """Compute Log10"""
+        """Compute Log10 using :py:func:`cdl.computation.image.compute_log10`"""
         self.compute_11(cpi.compute_log10, title="Log10")
 
     @qt_try_except()
     def compute_exp(self) -> None:
-        """Compute Log10"""
+        """Compute Log10 using :py:func:`cdl.computation.image.compute_exp`"""
         self.compute_11(cpi.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
     def compute_difference(self, obj2: ImageObj | None = None) -> None:
-        """Compute difference between two images"""
+        """Compute difference between two images
+        using :py:func:`cdl.computation.image.compute_difference`"""
         self.compute_n1n(
             obj2,
             _("image to subtract"),
@@ -388,7 +402,8 @@ class ImageProcessor(BaseProcessor):
     def compute_difference_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
-        """Compute difference with a constant"""
+        """Compute difference with a constant
+        using :py:func:`cdl.computation.image.compute_difference_constant`"""
         self.compute_11(
             cpi.compute_difference_constant,
             param,
@@ -399,7 +414,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_quadratic_difference(self, obj2: ImageObj | None = None) -> None:
-        """Compute quadratic difference between two images"""
+        """Compute quadratic difference between two images
+        using :py:func:`cdl.computation.image.compute_quadratic_difference`"""
         self.compute_n1n(
             obj2,
             _("image to subtract"),
@@ -409,7 +425,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_division(self, obj2: ImageObj | None = None) -> None:
-        """Compute division between two images"""
+        """Compute division between two images
+        using :py:func:`cdl.computation.image.compute_division`"""
         self.compute_n1n(
             obj2,
             _("divider"),
@@ -421,7 +438,8 @@ class ImageProcessor(BaseProcessor):
     def compute_division_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
-        """Compute division by a constant"""
+        """Compute division by a constant
+        using :py:func:`cdl.computation.image.compute_division_constant`"""
         self.compute_11(
             cpi.compute_division_constant,
             param,
@@ -436,7 +454,8 @@ class ImageProcessor(BaseProcessor):
         obj2: ImageObj | None = None,
         param: cdl.param.FlatFieldParam | None = None,
     ) -> None:
-        """Compute flat field correction"""
+        """Compute flat field correction
+        using :py:func:`cdl.computation.image.compute_flatfield`"""
         edit, param = self.init_param(param, cpi.FlatFieldParam, _("Flat field"))
         if edit:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
@@ -455,7 +474,8 @@ class ImageProcessor(BaseProcessor):
     def compute_calibration(
         self, param: cdl.param.ZCalibrateParam | None = None
     ) -> None:
-        """Compute data linear calibration"""
+        """Compute data linear calibration
+        using :py:func:`cdl.computation.image.compute_calibration`"""
         self.compute_11(
             cpi.compute_calibration,
             param,
@@ -466,7 +486,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_clip(self, param: cpb.ClipParam | None = None) -> None:
-        """Compute maximum data clipping"""
+        """Compute maximum data clipping
+        using :py:func:`cdl.computation.image.compute_clip`"""
         self.compute_11(
             cpi.compute_clip,
             param,
@@ -476,7 +497,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_offset_correction(self, param: ROI2DParam | None = None) -> None:
-        """Compute offset correction"""
+        """Compute offset correction
+        using :py:func:`cdl.computation.image.compute_offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
             dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
@@ -489,7 +511,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_gaussian_filter(self, param: cpb.GaussianParam | None = None) -> None:
-        """Compute gaussian filter"""
+        """Compute gaussian filter
+        using :py:func:`cdl.computation.image.compute_gaussian_filter`"""
         self.compute_11(
             cpi.compute_gaussian_filter, param, cpb.GaussianParam, _("Gaussian filter")
         )
@@ -498,7 +521,8 @@ class ImageProcessor(BaseProcessor):
     def compute_moving_average(
         self, param: cpb.MovingAverageParam | None = None
     ) -> None:
-        """Compute moving average"""
+        """Compute moving average
+        using :py:func:`cdl.computation.image.compute_moving_average`"""
         self.compute_11(
             cpi.compute_moving_average,
             param,
@@ -508,7 +532,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_moving_median(self, param: cpb.MovingMedianParam | None = None) -> None:
-        """Compute moving median"""
+        """Compute moving median
+        using :py:func:`cdl.computation.image.compute_moving_median`"""
         self.compute_11(
             cpi.compute_moving_median,
             param,
@@ -518,19 +543,20 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_wiener(self) -> None:
-        """Compute Wiener filter"""
+        """Compute Wiener filter
+        using :py:func:`cdl.computation.image.compute_wiener`"""
         self.compute_11(cpi.compute_wiener, title=_("Wiener filter"))
 
     @qt_try_except()
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
-        """Compute FFT"""
+        """Compute FFT using :py:func:`cdl.computation.image.compute_fft`"""
         if param is None:
             param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
         self.compute_11(cpi.compute_fft, param, title="FFT", edit=False)
 
     @qt_try_except()
     def compute_ifft(self, param: cdl.param.FFTParam | None = None) -> None:
-        "Compute iFFT" ""
+        """Compute iFFT using :py:func:`cdl.computation.image.compute_ifft`"""
         if param is None:
             param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
         self.compute_11(cpi.compute_ifft, param, title="iFFT", edit=False)
@@ -539,7 +565,8 @@ class ImageProcessor(BaseProcessor):
     def compute_magnitude_spectrum(
         self, param: cdl.param.SpectrumParam | None = None
     ) -> None:
-        """Compute magnitude spectrum"""
+        """Compute magnitude spectrum
+        using :py:func:`cdl.computation.image.compute_magnitude_spectrum`"""
         self.compute_11(
             cpi.compute_magnitude_spectrum,
             param,
@@ -549,19 +576,22 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_phase_spectrum(self) -> None:
-        """Compute phase spectrum"""
+        """Compute phase spectrum
+        using :py:func:`cdl.computation.image.compute_phase_spectrum`"""
         self.compute_11(cpi.compute_phase_spectrum, title="Phase spectrum")
 
     @qt_try_except()
     def compute_psd(self, param: cdl.param.SpectrumParam | None = None) -> None:
-        """Compute Power Spectral Density (PSD)"""
+        """Compute Power Spectral Density (PSD)
+        using :py:func:`cdl.computation.image.compute_psd`"""
         self.compute_11(cpi.compute_psd, param, cpi.SpectrumParam, _("PSD"))
 
     @qt_try_except()
     def compute_butterworth(
         self, param: cdl.param.ButterworthParam | None = None
     ) -> None:
-        """Compute Butterworth filter"""
+        """Compute Butterworth filter
+        using :py:func:`cdl.computation.image.compute_butterworth`"""
         self.compute_11(
             cpi.compute_butterworth,
             param,
@@ -571,7 +601,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_threshold(self, param: cdl.param.ThresholdParam | None = None) -> None:
-        """Compute parametric threshold"""
+        """Compute parametric threshold
+        using :py:func:`cdl.computation.image.threshold.compute_threshold`"""
         self.compute_11(
             cpi_thr.compute_threshold,
             param,
@@ -581,42 +612,58 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_threshold_isodata(self) -> None:
-        """Compute threshold using Isodata algorithm"""
+        """Compute threshold using Isodata algorithm
+        using :py:func:`cdl.computation.image.threshold.compute_threshold_isodata`"""
         self.compute_11(cpi_thr.compute_threshold_isodata, title="ISODATA")
 
     @qt_try_except()
     def compute_threshold_li(self) -> None:
-        """Compute threshold using Li algorithm"""
+        """Compute threshold using Li algorithm
+        using :py:func:`cdl.computation.image.threshold.compute_threshold_li`"""
         self.compute_11(cpi_thr.compute_threshold_li, title="Li")
 
     @qt_try_except()
     def compute_threshold_mean(self) -> None:
-        """Compute threshold using Mean algorithm"""
+        """Compute threshold using Mean algorithm
+        using :py:func:`cdl.computation.image.threshold.compute_threshold_mean`"""
         self.compute_11(cpi_thr.compute_threshold_mean, title=_("Mean"))
 
     @qt_try_except()
     def compute_threshold_minimum(self) -> None:
-        """Compute threshold using Minimum algorithm"""
+        """Compute threshold using Minimum algorithm
+        using :py:func:`cdl.computation.image.threshold.compute_threshold_minimum`"""
         self.compute_11(cpi_thr.compute_threshold_minimum, title=_("Minimum"))
 
     @qt_try_except()
     def compute_threshold_otsu(self) -> None:
-        """Compute threshold using Otsu algorithm"""
+        """Compute threshold using Otsu algorithm
+        using :py:func:`cdl.computation.image.threshold.compute_threshold_otsu`"""
         self.compute_11(cpi_thr.compute_threshold_otsu, title="Otsu")
 
     @qt_try_except()
     def compute_threshold_triangle(self) -> None:
-        """Compute threshold using Triangle algorithm"""
+        """Compute threshold using Triangle algorithm
+        using :py:func:`cdl.computation.image.threshold.compute_threshold_triangle`"""
         self.compute_11(cpi_thr.compute_threshold_triangle, title=_("Triangle"))
 
     @qt_try_except()
     def compute_threshold_yen(self) -> None:
-        """Compute threshold using Yen algorithm"""
+        """Compute threshold using Yen algorithm
+        using :py:func:`cdl.computation.image.threshold.compute_threshold_yen`"""
         self.compute_11(cpi_thr.compute_threshold_yen, title="Yen")
 
     @qt_try_except()
     def compute_all_threshold(self) -> None:
-        """Compute all threshold algorithms"""
+        """Compute all threshold algorithms using the following functions:
+
+        - :py:func:`cdl.computation.image.threshold.compute_threshold_isodata`
+        - :py:func:`cdl.computation.image.threshold.compute_threshold_li`
+        - :py:func:`cdl.computation.image.threshold.compute_threshold_mean`
+        - :py:func:`cdl.computation.image.threshold.compute_threshold_minimum`
+        - :py:func:`cdl.computation.image.threshold.compute_threshold_otsu`
+        - :py:func:`cdl.computation.image.threshold.compute_threshold_triangle`
+        - :py:func:`cdl.computation.image.threshold.compute_threshold_yen`
+        """
         self.compute_1n(
             [
                 cpi_thr.compute_threshold_isodata,
@@ -636,7 +683,8 @@ class ImageProcessor(BaseProcessor):
     def compute_adjust_gamma(
         self, param: cdl.param.AdjustGammaParam | None = None
     ) -> None:
-        """Compute gamma correction"""
+        """Compute gamma correction
+        using :py:func:`cdl.computation.image.exposure.compute_adjust_gamma`"""
         self.compute_11(
             cpi_exp.compute_adjust_gamma,
             param,
@@ -646,7 +694,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_adjust_log(self, param: cdl.param.AdjustLogParam | None = None) -> None:
-        """Compute log correction"""
+        """Compute log correction
+        using :py:func:`cdl.computation.image.exposure.compute_adjust_log`"""
         self.compute_11(
             cpi_exp.compute_adjust_log,
             param,
@@ -659,7 +708,8 @@ class ImageProcessor(BaseProcessor):
         self,
         param: cdl.param.AdjustSigmoidParam | None = None,
     ) -> None:
-        """Compute sigmoid correction"""
+        """Compute sigmoid correction
+        using :py:func:`cdl.computation.image.exposure.compute_adjust_sigmoid`"""
         self.compute_11(
             cpi_exp.compute_adjust_sigmoid,
             param,
@@ -672,7 +722,8 @@ class ImageProcessor(BaseProcessor):
         self,
         param: cdl.param.RescaleIntensityParam | None = None,
     ) -> None:
-        """Rescale image intensity levels"""
+        """Rescale image intensity levels
+        using :py:func`cdl.computation.image.exposure.compute_rescale_intensity`"""
         self.compute_11(
             cpi_exp.compute_rescale_intensity,
             param,
@@ -684,7 +735,8 @@ class ImageProcessor(BaseProcessor):
     def compute_equalize_hist(
         self, param: cdl.param.EqualizeHistParam | None = None
     ) -> None:
-        """Histogram equalization"""
+        """Histogram equalization
+        using :py:func:`cdl.computation.image.exposure.compute_equalize_hist`"""
         self.compute_11(
             cpi_exp.compute_equalize_hist,
             param,
@@ -697,7 +749,8 @@ class ImageProcessor(BaseProcessor):
         self,
         param: cdl.param.EqualizeAdaptHistParam | None = None,
     ) -> None:
-        """Adaptive histogram equalization"""
+        """Adaptive histogram equalization
+        using :py:func:`cdl.computation.image.exposure.compute_equalize_adapthist`"""
         self.compute_11(
             cpi_exp.compute_equalize_adapthist,
             param,
@@ -707,7 +760,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_denoise_tv(self, param: cdl.param.DenoiseTVParam | None = None) -> None:
-        """Compute Total Variation denoising"""
+        """Compute Total Variation denoising
+        using :py:func:`cdl.computation.image.restoration.compute_denoise_tv`"""
         self.compute_11(
             cpi_res.compute_denoise_tv,
             param,
@@ -720,7 +774,8 @@ class ImageProcessor(BaseProcessor):
         self,
         param: cdl.param.DenoiseBilateralParam | None = None,
     ) -> None:
-        """Compute bilateral filter denoising"""
+        """Compute bilateral filter denoising
+        using :py:func:`cdl.computation.image.restoration.compute_denoise_bilateral`"""
         self.compute_11(
             cpi_res.compute_denoise_bilateral,
             param,
@@ -733,7 +788,8 @@ class ImageProcessor(BaseProcessor):
         self,
         param: cdl.param.DenoiseWaveletParam | None = None,
     ) -> None:
-        """Compute Wavelet denoising"""
+        """Compute Wavelet denoising
+        using :py:func:`cdl.computation.image.restoration.compute_denoise_wavelet`"""
         self.compute_11(
             cpi_res.compute_denoise_wavelet,
             param,
@@ -745,7 +801,8 @@ class ImageProcessor(BaseProcessor):
     def compute_denoise_tophat(
         self, param: cdl.param.MorphologyParam | None = None
     ) -> None:
-        """Denoise using White Top-Hat"""
+        """Denoise using White Top-Hat
+        using :py:func:`cdl.computation.image.restoration.compute_denoise_tophat`"""
         self.compute_11(
             cpi_res.compute_denoise_tophat,
             param,
@@ -755,7 +812,13 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_all_denoise(self, params: list | None = None) -> None:
-        """Compute all denoising filters"""
+        """Compute all denoising filters using the following functions:
+
+        - :py:func:`cdl.computation.image.restoration.compute_denoise_tv`
+        - :py:func:`cdl.computation.image.restoration.compute_denoise_bilateral`
+        - :py:func:`cdl.computation.image.restoration.compute_denoise_wavelet`
+        - :py:func:`cdl.computation.image.restoration.compute_denoise_tophat`
+        """
         if params is not None:
             assert len(params) == 4, "Wrong number of parameters (4 expected)"
         funcs = [
@@ -782,7 +845,8 @@ class ImageProcessor(BaseProcessor):
     def compute_white_tophat(
         self, param: cdl.param.MorphologyParam | None = None
     ) -> None:
-        """Compute White Top-Hat"""
+        """Compute White Top-Hat
+        using :py:func:`cdl.computation.image.morphology.compute_white_tophat`"""
         self.compute_11(
             cpi_mor.compute_white_tophat,
             param,
@@ -794,7 +858,8 @@ class ImageProcessor(BaseProcessor):
     def compute_black_tophat(
         self, param: cdl.param.MorphologyParam | None = None
     ) -> None:
-        """Compute Black Top-Hat"""
+        """Compute Black Top-Hat
+        using :py:func:`cdl.computation.image.morphology.compute_black_tophat`"""
         self.compute_11(
             cpi_mor.compute_black_tophat,
             param,
@@ -804,7 +869,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_erosion(self, param: cdl.param.MorphologyParam | None = None) -> None:
-        """Compute Erosion"""
+        """Compute Erosion
+        using :py:func:`cdl.computation.image.morphology.compute_erosion`"""
         self.compute_11(
             cpi_mor.compute_erosion,
             param,
@@ -814,7 +880,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_dilation(self, param: cdl.param.MorphologyParam | None = None) -> None:
-        """Compute Dilation"""
+        """Compute Dilation
+        using :py:func:`cdl.computation.image.morphology.compute_dilation`"""
         self.compute_11(
             cpi_mor.compute_dilation,
             param,
@@ -824,7 +891,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_opening(self, param: cdl.param.MorphologyParam | None = None) -> None:
-        """Compute morphological opening"""
+        """Compute morphological opening
+        using :py:func:`cdl.computation.image.morphology.compute_opening`"""
         self.compute_11(
             cpi_mor.compute_opening,
             param,
@@ -834,7 +902,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_closing(self, param: cdl.param.MorphologyParam | None = None) -> None:
-        """Compute morphological closing"""
+        """Compute morphological closing
+        using :py:func:`cdl.computation.image.morphology.compute_closing`"""
         self.compute_11(
             cpi_mor.compute_closing,
             param,
@@ -846,7 +915,15 @@ class ImageProcessor(BaseProcessor):
     def compute_all_morphology(
         self, param: cdl.param.MorphologyParam | None = None
     ) -> None:
-        """Compute all morphology filters"""
+        """Compute all morphology filters using the following functions:
+
+        - :py:func:`cdl.computation.image.morphology.compute_white_tophat`
+        - :py:func:`cdl.computation.image.morphology.compute_black_tophat`
+        - :py:func:`cdl.computation.image.morphology.compute_erosion`
+        - :py:func:`cdl.computation.image.morphology.compute_dilation`
+        - :py:func:`cdl.computation.image.morphology.compute_opening`
+        - :py:func:`cdl.computation.image.morphology.compute_closing`
+        """
         if param is None:
             param = cpi_mor.MorphologyParam()
             if not param.edit(parent=self.panel.parent()):
@@ -863,7 +940,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_canny(self, param: cdl.param.CannyParam | None = None) -> None:
-        """Compute Canny filter"""
+        """Compute Canny filter
+        using :py:func:`cdl.computation.image.edges.compute_canny`"""
         self.compute_11(
             cpi_edg.compute_canny,
             param,
@@ -873,17 +951,20 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_roberts(self) -> None:
-        """Compute Roberts filter"""
+        """Compute Roberts filter
+        using :py:func:`cdl.computation.image.edges.compute_roberts`"""
         self.compute_11(cpi_edg.compute_roberts, title=_("Roberts filter"))
 
     @qt_try_except()
     def compute_prewitt(self) -> None:
-        """Compute Prewitt filter"""
+        """Compute Prewitt filter
+        using :py:func:`cdl.computation.image.edges.compute_prewitt`"""
         self.compute_11(cpi_edg.compute_prewitt, title=_("Prewitt filter"))
 
     @qt_try_except()
     def compute_prewitt_h(self) -> None:
-        """Compute Prewitt filter (horizontal)"""
+        """Compute Prewitt filter (horizontal)
+        using :py:func:`cdl.computation.image.edges.compute_prewitt_h`"""
         self.compute_11(
             cpi_edg.compute_prewitt_h,
             title=_("Prewitt filter (horizontal)"),
@@ -891,7 +972,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_prewitt_v(self) -> None:
-        """Compute Prewitt filter (vertical)"""
+        """Compute Prewitt filter (vertical)
+        using :py:func:`cdl.computation.image.edges.compute_prewitt_v`"""
         self.compute_11(
             cpi_edg.compute_prewitt_v,
             title=_("Prewitt filter (vertical)"),
@@ -899,12 +981,14 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_sobel(self) -> None:
-        """Compute Sobel filter"""
+        """Compute Sobel filter
+        using :py:func:`cdl.computation.image.edges.compute_sobel`"""
         self.compute_11(cpi_edg.compute_sobel, title=_("Sobel filter"))
 
     @qt_try_except()
     def compute_sobel_h(self) -> None:
-        """Compute Sobel filter (horizontal)"""
+        """Compute Sobel filter (horizontal)
+        using :py:func:`cdl.computation.image.edges.compute_sobel_h`"""
         self.compute_11(
             cpi_edg.compute_sobel_h,
             title=_("Sobel filter (horizontal)"),
@@ -912,7 +996,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_sobel_v(self) -> None:
-        """Compute Sobel filter (vertical)"""
+        """Compute Sobel filter (vertical)
+        using :py:func:`cdl.computation.image.edges.compute_sobel_v`"""
         self.compute_11(
             cpi_edg.compute_sobel_v,
             title=_("Sobel filter (vertical)"),
@@ -920,12 +1005,14 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_scharr(self) -> None:
-        """Compute Scharr filter"""
+        """Compute Scharr filter
+        using :py:func:`cdl.computation.image.edges.compute_scharr`"""
         self.compute_11(cpi_edg.compute_scharr, title=_("Scharr filter"))
 
     @qt_try_except()
     def compute_scharr_h(self) -> None:
-        """Compute Scharr filter (horizontal)"""
+        """Compute Scharr filter (horizontal)
+        using :py:func:`cdl.computation.image.edges.compute_scharr_h`"""
         self.compute_11(
             cpi_edg.compute_scharr_h,
             title=_("Scharr filter (horizontal)"),
@@ -933,7 +1020,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_scharr_v(self) -> None:
-        """Compute Scharr filter (vertical)"""
+        """Compute Scharr filter (vertical)
+        using :py:func:`cdl.computation.image.edges.compute_scharr_v`"""
         self.compute_11(
             cpi_edg.compute_scharr_v,
             title=_("Scharr filter (vertical)"),
@@ -941,12 +1029,14 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_farid(self) -> None:
-        """Compute Farid filter"""
+        """Compute Farid filter
+        using :py:func:`cdl.computation.image.edges.compute_farid`"""
         self.compute_11(cpi_edg.compute_farid, title=_("Farid filter"))
 
     @qt_try_except()
     def compute_farid_h(self) -> None:
-        """Compute Farid filter (horizontal)"""
+        """Compute Farid filter (horizontal)
+        using :py:func:`cdl.computation.image.edges.compute_farid_h`"""
         self.compute_11(
             cpi_edg.compute_farid_h,
             title=_("Farid filter (horizontal)"),
@@ -954,7 +1044,8 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_farid_v(self) -> None:
-        """Compute Farid filter (vertical)"""
+        """Compute Farid filter (vertical)
+        using :py:func:`cdl.computation.image.edges.compute_farid_v`"""
         self.compute_11(
             cpi_edg.compute_farid_v,
             title=_("Farid filter (vertical)"),
@@ -962,12 +1053,29 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_laplace(self) -> None:
-        """Compute Laplace filter"""
+        """Compute Laplace filter
+        using :py:func:`cdl.computation.image.edges.compute_laplace`"""
         self.compute_11(cpi_edg.compute_laplace, title=_("Laplace filter"))
 
     @qt_try_except()
     def compute_all_edges(self) -> None:
-        """Compute all edges"""
+        """Compute all edges filters using the following functions:
+
+        - :py:func:`cdl.computation.image.edges.compute_roberts`
+        - :py:func:`cdl.computation.image.edges.compute_prewitt`
+        - :py:func:`cdl.computation.image.edges.compute_prewitt_h`
+        - :py:func:`cdl.computation.image.edges.compute_prewitt_v`
+        - :py:func:`cdl.computation.image.edges.compute_sobel`
+        - :py:func:`cdl.computation.image.edges.compute_sobel_h`
+        - :py:func:`cdl.computation.image.edges.compute_sobel_v`
+        - :py:func:`cdl.computation.image.edges.compute_scharr`
+        - :py:func:`cdl.computation.image.edges.compute_scharr_h`
+        - :py:func:`cdl.computation.image.edges.compute_scharr_v`
+        - :py:func:`cdl.computation.image.edges.compute_farid`
+        - :py:func:`cdl.computation.image.edges.compute_farid_h`
+        - :py:func:`cdl.computation.image.edges.compute_farid_v`
+        - :py:func:`cdl.computation.image.edges.compute_laplace`
+        """
         funcs = [
             cpi_edg.compute_roberts,
             cpi_edg.compute_prewitt,
@@ -989,17 +1097,20 @@ class ImageProcessor(BaseProcessor):
     # ------Image Computing
     @qt_try_except()
     def compute_stats(self) -> dict[str, ResultProperties]:
-        """Compute data statistics"""
+        """Compute data statistics
+        using :py:func:`cdl.computation.image.compute_stats`"""
         return self.compute_10(cpi.compute_stats, title=_("Statistics"))
 
     @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:
-        """Compute image centroid"""
+        """Compute image centroid
+        using :py:func:`cdl.computation.image.compute_centroid`"""
         return self.compute_10(cpi.compute_centroid, title=_("Centroid"))
 
     @qt_try_except()
     def compute_enclosing_circle(self) -> dict[str, ResultShape]:
-        """Compute minimum enclosing circle"""
+        """Compute minimum enclosing circle
+        using :py:func:`cdl.computation.image.compute_enclosing_circle`"""
         return self.compute_10(
             cpi.compute_enclosing_circle, title=_("Enclosing circle")
         )
@@ -1008,7 +1119,8 @@ class ImageProcessor(BaseProcessor):
     def compute_peak_detection(
         self, param: cdl.param.Peak2DDetectionParam | None = None
     ) -> dict[str, ResultShape]:
-        """Compute 2D peak detection"""
+        """Compute 2D peak detection
+        using :py:func:`cdl.computation.image.compute_peak_detection`"""
         edit, param = self.init_param(
             param, cpi_det.Peak2DDetectionParam, _("Peak detection")
         )
@@ -1056,7 +1168,8 @@ class ImageProcessor(BaseProcessor):
     def compute_contour_shape(
         self, param: cdl.param.ContourShapeParam | None = None
     ) -> dict[str, ResultShape]:
-        """Compute contour shape fit"""
+        """Compute contour shape fit
+        using :py:func:`cdl.computation.image.detection.compute_contour_shape`"""
         edit, param = self.init_param(param, cpi_det.ContourShapeParam, _("Contour"))
         return self.compute_10(
             cpi_det.compute_contour_shape,
@@ -1069,7 +1182,8 @@ class ImageProcessor(BaseProcessor):
     def compute_hough_circle_peaks(
         self, param: cdl.param.HoughCircleParam | None = None
     ) -> dict[str, ResultShape]:
-        """Compute peak detection based on a circle Hough transform"""
+        """Compute peak detection based on a circle Hough transform
+        using :py:func:`cdl.computation.image.compute_hough_circle_peaks`"""
         return self.compute_10(
             cpi.compute_hough_circle_peaks,
             param,
@@ -1081,7 +1195,8 @@ class ImageProcessor(BaseProcessor):
     def compute_blob_dog(
         self, param: cdl.param.BlobDOGParam | None = None
     ) -> dict[str, ResultShape]:
-        """Compute blob detection using Difference of Gaussian method"""
+        """Compute blob detection using Difference of Gaussian method
+        using :py:func:`cdl.computation.image.detection.compute_blob_dog`"""
         return self.compute_10(
             cpi_det.compute_blob_dog,
             param,
@@ -1093,7 +1208,8 @@ class ImageProcessor(BaseProcessor):
     def compute_blob_doh(
         self, param: cdl.param.BlobDOHParam | None = None
     ) -> dict[str, ResultShape]:
-        """Compute blob detection using Determinant of Hessian method"""
+        """Compute blob detection using Determinant of Hessian method
+        using :py:func:`cdl.computation.image.detection.compute_blob_doh`"""
         return self.compute_10(
             cpi_det.compute_blob_doh,
             param,
@@ -1105,7 +1221,8 @@ class ImageProcessor(BaseProcessor):
     def compute_blob_log(
         self, param: cdl.param.BlobLOGParam | None = None
     ) -> dict[str, ResultShape]:
-        """Compute blob detection using Laplacian of Gaussian method"""
+        """Compute blob detection using Laplacian of Gaussian method
+        using :py:func:`cdl.computation.image.detection.compute_blob_log`"""
         return self.compute_10(
             cpi_det.compute_blob_log,
             param,
@@ -1118,7 +1235,8 @@ class ImageProcessor(BaseProcessor):
         self,
         param: cdl.param.BlobOpenCVParam | None = None,
     ) -> dict[str, ResultShape]:
-        """Compute blob detection using OpenCV"""
+        """Compute blob detection using OpenCV
+        using :py:func:`cdl.computation.image.detection.compute_blob_opencv`"""
         return self.compute_10(
             cpi_det.compute_blob_opencv,
             param,
