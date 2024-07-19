@@ -16,7 +16,7 @@
 :py:func:`compute_dynamic_parameters <cdl.computation.signal.compute_dynamic_parameters>`,Compute Dynamic parameters,`test_dynamic_parameters <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L35>`_
 :py:func:`compute_exp <cdl.computation.signal.compute_exp>`,Compute exponential with :py:data:`numpy.exp`,`test_signal_exp <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/operation_unit_test.py#L152>`_
 :py:func:`compute_fft <cdl.computation.signal.compute_fft>`,Compute FFT with :py:func:`cdl.algorithms.signal.fft1d`,`test_signal_fft <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fft1d_unit_test.py#L52>`_
-:py:func:`compute_filter <cdl.computation.signal.compute_filter>`,"Compute frequency filter (low-pass, high-pass, band-pass, band-stop),",N/A
+:py:func:`compute_filter <cdl.computation.signal.compute_filter>`,"Compute frequency filter (low-pass, high-pass, band-pass, band-stop)",N/A
 :py:func:`compute_fw1e2 <cdl.computation.signal.compute_fw1e2>`,Compute FW at 1/e² with :py:func:`cdl.algorithms.signal.fw1e2`,`test_signal_fw1e2 <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fwhm_unit_test.py#L80>`_
 :py:func:`compute_fwhm <cdl.computation.signal.compute_fwhm>`,Compute FWHM with :py:func:`cdl.algorithms.signal.fwhm`,`test_signal_fwhm <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/fwhm_unit_test.py#L61>`_
 :py:func:`compute_gaussian_filter <cdl.computation.signal.compute_gaussian_filter>`,Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`,`test_signal_gaussian_filter <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L194>`_
@@ -46,5 +46,5 @@
 :py:func:`compute_stats <cdl.computation.signal.compute_stats>`,Compute statistics on a signal,`test_signal_stats_unit <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/common/stat_unit_test.py#L81>`_
 :py:func:`compute_swap_axes <cdl.computation.signal.compute_swap_axes>`,Swap axes,`test_signal_swap_axes <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L64>`_
 :py:func:`compute_wiener <cdl.computation.signal.compute_wiener>`,Compute Wiener filter with :py:func:`scipy.signal.wiener`,`test_signal_wiener <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/processing_unit_test.py#L242>`_
-:py:func:`compute_windowing <cdl.computation.signal.compute_windowing>`,"Compute windowing (available methods: hamming, hanning, bartlett, blackman,",N/A
+:py:func:`compute_windowing <cdl.computation.signal.compute_windowing>`,"Compute windowing (available methods: hamming, hanning, bartlett, blackman",N/A
 :py:func:`compute_x_at_minmax <cdl.computation.signal.compute_x_at_minmax>`,Compute x at min/max,`test_signal_x_at_minmax <https://github.com/DataLab-Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L66>`_

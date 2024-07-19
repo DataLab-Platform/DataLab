@@ -249,7 +249,7 @@ class ImageProcessor(BaseProcessor):
     def compute_roi_extraction(
         self, param: cdl.param.ROIDataParam | None = None
     ) -> None:
-        """Extract Region Of Interest (ROI) from data, using:
+        """Extract Region Of Interest (ROI) from data with:
 
         - :py:func:`cdl.computation.image.extract_single_roi` for single ROI
         - :py:func:`cdl.computation.image.extract_multiple_roi` for multiple ROIs"""

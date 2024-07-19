@@ -1,5 +1,5 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_abs`,Compute absolute value with :py:func:`cdl.computation.image.compute_abs`
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant`,Compute sum with a constant using
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant`,Compute sum with a constant 
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma`,Compute gamma correction
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log`,Compute log correction
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid`,Compute sigmoid correction
@@ -42,7 +42,7 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid_v`,Compute Farid filter (vertical)
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fft`,Compute FFT with :py:func:`cdl.computation.image.compute_fft`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_flatfield`,Compute flat field correction
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fliph`,Flip data horizontally using
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fliph`,Flip data horizontally 
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_flipv`,Flip data vertically with :py:func:`cdl.computation.image.compute_flipv`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter`,Compute gaussian filter
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_histogram`,Compute histogram with :py:func:`cdl.computation.image.compute_histogram`
@@ -52,7 +52,7 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_laplace`,Compute Laplace filter
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`,Compute profile along a vertical or horizontal line
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_log10`,Compute Log10 with :py:func:`cdl.computation.image.compute_log10`
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_logp1`,Compute base 10 logarithm using
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_logp1`,Compute base 10 logarithm 
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum`,Compute magnitude spectrum
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_moving_average`,Compute moving average
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_moving_median`,Compute moving median
@@ -65,7 +65,7 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h`,Compute Prewitt filter (horizontal)
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v`,Compute Prewitt filter (vertical)
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product`,Compute product with :py:func:`cdl.computation.image.compute_product`
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product_constant`,Compute product with a constant using
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product_constant`,Compute product with a constant 
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_psd`,Compute Power Spectral Density (PSD)
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference`,Compute quadratic difference between two images
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile`,Compute radial profile
@@ -73,8 +73,8 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity`,Rescale image intensity levels
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_resize`,Resize image with :py:func:`cdl.computation.image.compute_resize`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roberts`,Compute Roberts filter
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`,"Extract Region Of Interest (ROI) from data, using:"
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate`,Rotate data arbitrarily using
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate`,Rotate data arbitrarily 
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate270`,Rotate data 270° with :py:func:`cdl.computation.image.compute_rotate270`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate90`,Rotate data 90° with :py:func:`cdl.computation.image.compute_rotate90`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr`,Compute Scharr filter

@@ -15,6 +15,7 @@ from _pytest.mark import Mark
 import cdl.computation as computation_pkg
 import cdl.tests as tests_pkg
 from cdl import __version__
+from cdl.utils.strings import shorten_docstring
 
 
 def get_compute_functions(package: str) -> list:
@@ -118,7 +119,7 @@ def generate_csv_files() -> None:
                 v_count["total"] += 1
             t_count[submodule] += 1
             t_count["total"] += 1
-            description = docstring.split("\n")[0] if docstring else "-"
+            description = shorten_docstring(docstring)
             test_script = test_link if test_link else "N/A"
             pyfunc_link = f":py:func:`{funcname} <{full_funcname}>`"
             function_rows.append([pyfunc_link, description, test_script])

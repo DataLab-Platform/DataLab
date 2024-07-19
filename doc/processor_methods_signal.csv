@@ -47,7 +47,7 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_re`,Compute real part with :py:func:`cdl.computation.signal.compute_re`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_resampling`,Compute resampling
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x`,Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`
-:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`,"Extract Region Of Interest (ROI) from data, using:"
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period`,Compute sampling rate and period (mean and std)
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt`,Compute square root with :py:func:`cdl.computation.signal.compute_sqrt`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_stats`,Compute data statistics

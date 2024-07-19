@@ -22,6 +22,7 @@ import os.path as osp
 
 from cdl.core.gui.processor.image import ImageProcessor
 from cdl.core.gui.processor.signal import SignalProcessor
+from cdl.utils.strings import shorten_docstring
 
 
 def get_compute_methods(klass: type) -> list[str]:
@@ -54,9 +55,8 @@ def generate_csv_files() -> None:
         methods = get_compute_methods(klass)
         lengths.append(len(methods))
         for name, docstring in methods:
-            description = docstring.split("\n")[0] if docstring else "-"
             pyfunc_link = f":py:func:`~{klass.__module__}.{klass.__name__}.{name}`"
-            rows.append([pyfunc_link, description])
+            rows.append([pyfunc_link, shorten_docstring(docstring)])
         fname = osp.join(osp.dirname(__file__), f"processor_methods_{category}.csv")
         with open(fname, "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)

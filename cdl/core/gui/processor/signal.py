@@ -87,7 +87,7 @@ class SignalProcessor(BaseProcessor):
     def compute_roi_extraction(
         self, param: cdl.param.ROIDataParam | None = None
     ) -> None:
-        """Extract Region Of Interest (ROI) from data, using:
+        """Extract Region Of Interest (ROI) from data with:
 
         - :py:func:`cdl.computation.signal.extract_multiple_roi` for single ROI
         - :py:func:`cdl.computation.signal.extract_single_roi` for multiple ROIs
