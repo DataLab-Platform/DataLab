@@ -340,7 +340,7 @@ def compute_swap_axes(src: SignalObj) -> SignalObj:
 
 
 def compute_abs(src: SignalObj) -> SignalObj:
-    """Compute absolute value using :py:data:`numpy.absolute`
+    """Compute absolute value with :py:data:`numpy.absolute`
 
     Args:
         src: source signal
@@ -352,7 +352,7 @@ def compute_abs(src: SignalObj) -> SignalObj:
 
 
 def compute_re(src: SignalObj) -> SignalObj:
-    """Compute real part using :py:func:`numpy.real`
+    """Compute real part with :py:func:`numpy.real`
 
     Args:
         src: source signal
@@ -364,7 +364,7 @@ def compute_re(src: SignalObj) -> SignalObj:
 
 
 def compute_im(src: SignalObj) -> SignalObj:
-    """Compute imaginary part using :py:func:`numpy.imag`
+    """Compute imaginary part with :py:func:`numpy.imag`
 
     Args:
         src: source signal
@@ -386,7 +386,7 @@ class DataTypeSParam(gds.DataSet):
 
 
 def compute_astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
-    """Convert data type using :py:func:`numpy.astype`
+    """Convert data type with :py:func:`numpy.astype`
 
     Args:
         src: source signal
@@ -401,7 +401,7 @@ def compute_astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
 
 
 def compute_log10(src: SignalObj) -> SignalObj:
-    """Compute Log10 using :py:data:`numpy.log10`
+    """Compute Log10 with :py:data:`numpy.log10`
 
     Args:
         src: source signal
@@ -413,7 +413,7 @@ def compute_log10(src: SignalObj) -> SignalObj:
 
 
 def compute_exp(src: SignalObj) -> SignalObj:
-    """Compute exponential using :py:data:`numpy.exp`
+    """Compute exponential with :py:data:`numpy.exp`
 
     Args:
         src: source signal
@@ -425,7 +425,7 @@ def compute_exp(src: SignalObj) -> SignalObj:
 
 
 def compute_sqrt(src: SignalObj) -> SignalObj:
-    """Compute square root using :py:data:`numpy.sqrt`
+    """Compute square root with :py:data:`numpy.sqrt`
 
     Args:
         src: source signal
@@ -443,7 +443,7 @@ class PowerParam(gds.DataSet):
 
 
 def compute_power(src: SignalObj, p: PowerParam) -> SignalObj:
-    """Compute power using :py:data:`numpy.power`
+    """Compute power with :py:data:`numpy.power`
 
     Args:
         src: source signal
@@ -467,7 +467,7 @@ class PeakDetectionParam(gds.DataSet):
 
 
 def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
-    """Peak detection using :py:func:`cdl.algorithms.signal.peak_indexes`
+    """Peak detection with :py:func:`cdl.algorithms.signal.peak_indexes`
 
     Args:
         src: source signal
@@ -487,7 +487,7 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
 
 
 def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
-    """Normalize data using :py:func:`cdl.algorithms.signal.normalize`
+    """Normalize data with :py:func:`cdl.algorithms.signal.normalize`
 
     Args:
         src: source signal
@@ -503,7 +503,7 @@ def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
 
 
 def compute_derivative(src: SignalObj) -> SignalObj:
-    """Compute derivative using :py:func:`numpy.gradient`
+    """Compute derivative with :py:func:`numpy.gradient`
 
     Args:
         src: source signal
@@ -518,7 +518,7 @@ def compute_derivative(src: SignalObj) -> SignalObj:
 
 
 def compute_integral(src: SignalObj) -> SignalObj:
-    """Compute integral using :py:func:`scipy.integrate.cumulative_trapezoid`
+    """Compute integral with :py:func:`scipy.integrate.cumulative_trapezoid`
 
     Args:
         src: source signal
@@ -561,7 +561,7 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
 
 
 def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
-    """Compute maximum data clipping using :py:func:`numpy.clip`
+    """Compute maximum data clipping with :py:func:`numpy.clip`
 
     Args:
         src: source signal
@@ -591,7 +591,7 @@ def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
 
 
 def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
-    """Compute gaussian filter using :py:func:`scipy.ndimage.gaussian_filter`
+    """Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`
 
     Args:
         src: source signal
@@ -604,7 +604,7 @@ def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
 
 
 def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
-    """Compute moving average using :py:func:`scipy.ndimage.uniform_filter`
+    """Compute moving average with :py:func:`scipy.ndimage.uniform_filter`
 
     Args:
         src: source signal
@@ -617,7 +617,7 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
 
 
 def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
-    """Compute moving median using :py:func:`scipy.ndimage.median_filter`
+    """Compute moving median with :py:func:`scipy.ndimage.median_filter`
 
     Args:
         src: source signal
@@ -630,7 +630,7 @@ def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
 
 
 def compute_wiener(src: SignalObj) -> SignalObj:
-    """Compute Wiener filter using :py:func:`scipy.signal.wiener`
+    """Compute Wiener filter with :py:func:`scipy.signal.wiener`
 
     Args:
         src: source signal
@@ -771,7 +771,7 @@ class BandStopFilterParam(BaseHighLowBandParam):
 
 def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     """Compute frequency filter (low-pass, high-pass, band-pass, band-stop),
-    using :py:func:`scipy.signal.filtfilt`
+    with :py:func:`scipy.signal.filtfilt`
 
     Args:
         src: source signal
@@ -795,7 +795,7 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
 
 
 def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
-    """Compute FFT using :py:func:`cdl.algorithms.signal.fft1d`
+    """Compute FFT with :py:func:`cdl.algorithms.signal.fft1d`
 
     Args:
         src: source signal
@@ -814,7 +814,7 @@ def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
 
 
 def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
-    """Compute iFFT using :py:func:`cdl.algorithms.signal.ifft1d`
+    """Compute iFFT with :py:func:`cdl.algorithms.signal.ifft1d`
 
     Args:
         src: source signal
@@ -836,7 +836,7 @@ def compute_magnitude_spectrum(
     src: SignalObj, p: SpectrumParam | None = None
 ) -> SignalObj:
     """Compute magnitude spectrum
-    using :py:func:`cdl.algorithms.signal.magnitude_spectrum`
+    with :py:func:`cdl.algorithms.signal.magnitude_spectrum`
 
     Args:
         src: source signal
@@ -857,7 +857,7 @@ def compute_magnitude_spectrum(
 
 def compute_phase_spectrum(src: SignalObj) -> SignalObj:
     """Compute phase spectrum
-    using :py:func:`cdl.algorithms.signal.phase_spectrum`
+    with :py:func:`cdl.algorithms.signal.phase_spectrum`
 
     Args:
         src: source signal
@@ -876,7 +876,7 @@ def compute_phase_spectrum(src: SignalObj) -> SignalObj:
 
 def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     """Compute power spectral density
-    using :py:func:`cdl.algorithms.signal.psd`
+    with :py:func:`cdl.algorithms.signal.psd`
 
     Args:
         src: source signal
@@ -903,7 +903,7 @@ class PolynomialFitParam(gds.DataSet):
 
 
 def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
-    """Compute histogram using :py:func:`numpy.histogram`
+    """Compute histogram with :py:func:`numpy.histogram`
 
     Args:
         src: source signal
@@ -965,7 +965,7 @@ class InterpolationParam(gds.DataSet):
 def compute_interpolation(
     src1: SignalObj, src2: SignalObj, p: InterpolationParam
 ) -> SignalObj:
-    """Interpolate data using :py:func:`cdl.algorithms.signal.interpolate`
+    """Interpolate data with :py:func:`cdl.algorithms.signal.interpolate`
 
     Args:
         src1: source signal 1
@@ -1005,7 +1005,7 @@ class ResamplingParam(InterpolationParam):
 
 
 def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
-    """Resample data using :py:func:`cdl.algorithms.signal.interpolate`
+    """Resample data with :py:func:`cdl.algorithms.signal.interpolate`
 
     Args:
         src: source signal
@@ -1040,7 +1040,7 @@ class DetrendingParam(gds.DataSet):
 
 
 def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
-    """Detrend data using :py:func:`scipy.signal.detrend`
+    """Detrend data with :py:func:`scipy.signal.detrend`
 
     Args:
         src: source signal
@@ -1057,7 +1057,7 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
 
 def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute convolution of two signals
-    using :py:func:`scipy.signal.convolve`
+    with :py:func:`scipy.signal.convolve`
 
     Args:
         src1: source signal 1
@@ -1121,7 +1121,7 @@ class WindowingParam(gds.DataSet):
 
 def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
     """Compute windowing (available methods: hamming, hanning, bartlett, blackman,
-    tukey, rectangular) using :py:func:`cdl.algorithms.signal.windowing`
+    tukey, rectangular) with :py:func:`cdl.algorithms.signal.windowing`
 
     Args:
         dst: destination signal
@@ -1243,7 +1243,7 @@ class FWHMParam(gds.DataSet):
 
 
 def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
-    """Compute FWHM using :py:func:`cdl.algorithms.signal.fwhm`
+    """Compute FWHM with :py:func:`cdl.algorithms.signal.fwhm`
 
     Args:
         obj: source signal
@@ -1265,7 +1265,7 @@ def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
 
 
 def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
-    """Compute FW at 1/e² using :py:func:`cdl.algorithms.signal.fw1e2`
+    """Compute FW at 1/e² with :py:func:`cdl.algorithms.signal.fw1e2`
 
     Args:
         obj: source signal
@@ -1300,7 +1300,7 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
 
 
 def compute_bandwidth_3db(obj: SignalObj) -> ResultProperties:
-    """Compute bandwidth at -3 dB using :py:func:`cdl.algorithms.signal.bandwidth`
+    """Compute bandwidth at -3 dB with :py:func:`cdl.algorithms.signal.bandwidth`
 
     Args:
         obj: source signal
@@ -1330,7 +1330,8 @@ class DynamicParam(gds.DataSet):
 
 
 def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultProperties:
-    """Compute Dynamic parameters, using the following functions:
+    """Compute Dynamic parameters
+    using the following functions:
 
     - Freq: :py:func:`cdl.algorithms.signal.sinus_frequency`
     - ENOB: :py:func:`cdl.algorithms.signal.enob`
@@ -1359,7 +1360,8 @@ def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultPropert
 
 
 def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
-    """Compute sampling rate and period, using the following functions:
+    """Compute sampling rate and period
+    using the following functions:
 
     - fs: :py:func:`cdl.algorithms.signal.sampling_rate`
     - T: :py:func:`cdl.algorithms.signal.sampling_period`
@@ -1381,7 +1383,7 @@ def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
 
 
 def compute_contrast(obj: SignalObj) -> ResultProperties:
-    """Compute contrast using :py:func:`cdl.algorithms.signal.contrast`"""
+    """Compute contrast with :py:func:`cdl.algorithms.signal.contrast`"""
     return calc_resultproperties(
         "contrast",
         obj,

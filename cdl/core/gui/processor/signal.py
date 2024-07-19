@@ -32,7 +32,7 @@ class SignalProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_sum(self) -> None:
-        """Compute sum using :py:func:`cdl.computation.signal.compute_addition`"""
+        """Compute sum with :py:func:`cdl.computation.signal.compute_addition`"""
         self.compute_n1("Σ", cps.compute_addition, title=_("Sum"))
 
     @qt_try_except()
@@ -40,7 +40,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute sum with a constant
-        using :py:func:`cdl.computation.signal.compute_addition_constant`"""
+        with :py:func:`cdl.computation.signal.compute_addition_constant`"""
         self.compute_11(
             cps.compute_addition_constant,
             param,
@@ -51,7 +51,7 @@ class SignalProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_average(self) -> None:
-        """Compute average using :py:func:`cdl.computation.signal.compute_addition`
+        """Compute average with :py:func:`cdl.computation.signal.compute_addition`
         and divide by the number of signals"""
 
         def func_objs(new_obj: SignalObj, old_objs: list[SignalObj]) -> None:
@@ -66,7 +66,7 @@ class SignalProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_product(self) -> None:
-        """Compute product using :py:func:`cdl.computation.signal.compute_product`"""
+        """Compute product with :py:func:`cdl.computation.signal.compute_product`"""
         self.compute_n1("Π", cps.compute_product, title=_("Product"))
 
     @qt_try_except()
@@ -74,7 +74,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute product with a constant
-        using :py:func:`cdl.computation.signal.compute_product_constant`"""
+        with :py:func:`cdl.computation.signal.compute_product_constant`"""
         self.compute_11(
             cps.compute_product_constant,
             param,
@@ -104,49 +104,49 @@ class SignalProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_swap_axes(self) -> None:
-        """Swap data axes using :py:func:`cdl.computation.signal.compute_swap_axes`"""
+        """Swap data axes with :py:func:`cdl.computation.signal.compute_swap_axes`"""
         self.compute_11(cps.compute_swap_axes, title=_("Swap axes"))
 
     @qt_try_except()
     def compute_abs(self) -> None:
-        """Compute absolute value using :py:func:`cdl.computation.signal.compute_abs`"""
+        """Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`"""
         self.compute_11(cps.compute_abs, title=_("Absolute value"))
 
     @qt_try_except()
     def compute_re(self) -> None:
-        """Compute real part using :py:func:`cdl.computation.signal.compute_re`"""
+        """Compute real part with :py:func:`cdl.computation.signal.compute_re`"""
         self.compute_11(cps.compute_re, title=_("Real part"))
 
     @qt_try_except()
     def compute_im(self) -> None:
-        """Compute imaginary part using :py:func:`cdl.computation.signal.compute_im`"""
+        """Compute imaginary part with :py:func:`cdl.computation.signal.compute_im`"""
         self.compute_11(cps.compute_im, title=_("Imaginary part"))
 
     @qt_try_except()
     def compute_astype(self, param: cdl.param.DataTypeSParam | None = None) -> None:
-        """Convert data type using :py:func:`cdl.computation.signal.compute_astype`"""
+        """Convert data type with :py:func:`cdl.computation.signal.compute_astype`"""
         self.compute_11(
             cps.compute_astype, param, cps.DataTypeSParam, title=_("Convert data type")
         )
 
     @qt_try_except()
     def compute_log10(self) -> None:
-        """Compute Log10 using :py:func:`cdl.computation.signal.compute_log10`"""
+        """Compute Log10 with :py:func:`cdl.computation.signal.compute_log10`"""
         self.compute_11(cps.compute_log10, title="Log10")
 
     @qt_try_except()
     def compute_exp(self) -> None:
-        """Compute Log10 using :py:func:`cdl.computation.signal.compute_exp`"""
+        """Compute Log10 with :py:func:`cdl.computation.signal.compute_exp`"""
         self.compute_11(cps.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
     def compute_sqrt(self) -> None:
-        """Compute square root using :py:func:`cdl.computation.signal.compute_sqrt`"""
+        """Compute square root with :py:func:`cdl.computation.signal.compute_sqrt`"""
         self.compute_11(cps.compute_sqrt, title=_("Square root"))
 
     @qt_try_except()
     def compute_power(self, param: cps.PowerParam | None = None) -> None:
-        """Compute power using :py:func:`cdl.computation.signal.compute_power`"""
+        """Compute power with :py:func:`cdl.computation.signal.compute_power`"""
         if param is None:
             param = cps.PowerParam()
         self.compute_11(
@@ -156,7 +156,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute difference between two signals
-        using :py:func:`cdl.computation.signal.compute_difference`"""
+        with :py:func:`cdl.computation.signal.compute_difference`"""
         self.compute_n1n(
             obj2,
             _("signal to subtract"),
@@ -169,7 +169,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute difference with a constant
-        using :py:func:`cdl.computation.signal.compute_difference_constant`"""
+        with :py:func:`cdl.computation.signal.compute_difference_constant`"""
         self.compute_11(
             cps.compute_difference_constant,
             param,
@@ -181,7 +181,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_quadratic_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute quadratic difference between two signals
-        using :py:func:`cdl.computation.signal.compute_quadratic_difference`"""
+        with :py:func:`cdl.computation.signal.compute_quadratic_difference`"""
         self.compute_n1n(
             obj2,
             _("signal to subtract"),
@@ -192,7 +192,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_division(self, obj2: SignalObj | None = None) -> None:
         """Compute division between two signals
-        using :py:func:`cdl.computation.signal.compute_division`"""
+        with :py:func:`cdl.computation.signal.compute_division`"""
         self.compute_n1n(
             obj2,
             _("divider"),
@@ -206,7 +206,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute division by a constant
-        using :py:func:`cdl.computation.signal.compute_division_constant`"""
+        with :py:func:`cdl.computation.signal.compute_division_constant`"""
         self.compute_11(
             cps.compute_division_constant,
             param,
@@ -220,7 +220,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.PeakDetectionParam | None = None
     ) -> None:
         """Detect peaks from data
-        using :py:func:`cdl.computation.signal.compute_peak_detection`"""
+        with :py:func:`cdl.computation.signal.compute_peak_detection`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         edit, param = self.init_param(
             param, cps.PeakDetectionParam, _("Peak detection")
@@ -236,13 +236,13 @@ class SignalProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_reverse_x(self) -> None:
-        """Reverse X axis using :py:func:`cdl.computation.signal.compute_reverse_x`"""
+        """Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`"""
         self.compute_11(cps.compute_reverse_x, title=_("Reverse X axis"))
 
     # ------Signal Processing
     @qt_try_except()
     def compute_normalize(self, param: cdl.param.NormalizeParam | None = None) -> None:
-        """Normalize data using :py:func:`cdl.computation.signal.compute_normalize`"""
+        """Normalize data with :py:func:`cdl.computation.signal.compute_normalize`"""
         self.compute_11(
             cps.compute_normalize, param, cps.NormalizeParam, title=_("Normalize")
         )
@@ -250,12 +250,12 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_derivative(self) -> None:
         """Compute derivative
-        using :py:func:`cdl.computation.signal.compute_derivative`"""
+        with :py:func:`cdl.computation.signal.compute_derivative`"""
         self.compute_11(cps.compute_derivative, title=_("Derivative"))
 
     @qt_try_except()
     def compute_integral(self) -> None:
-        """Compute integral using :py:func:`cdl.computation.signal.compute_integral`"""
+        """Compute integral with :py:func:`cdl.computation.signal.compute_integral`"""
         self.compute_11(cps.compute_integral, title=_("Integral"))
 
     @qt_try_except()
@@ -263,7 +263,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.XYCalibrateParam | None = None
     ) -> None:
         """Compute data linear calibration
-        using :py:func:`cdl.computation.signal.compute_calibration`"""
+        with :py:func:`cdl.computation.signal.compute_calibration`"""
         self.compute_11(
             cps.compute_calibration,
             param,
@@ -275,13 +275,13 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_clip(self, param: cpb.ClipParam | None = None) -> None:
         """Compute maximum data clipping
-        using :py:func:`cdl.computation.signal.compute_clip`"""
+        with :py:func:`cdl.computation.signal.compute_clip`"""
         self.compute_11(cps.compute_clip, param, cpb.ClipParam, title=_("Clipping"))
 
     @qt_try_except()
     def compute_offset_correction(self, param: ROI1DParam | None = None) -> None:
         """Compute offset correction
-        using :py:func:`cdl.computation.signal.compute_offset_correction`"""
+        with :py:func:`cdl.computation.signal.compute_offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
             dlg = signalbaseline.SignalBaselineDialog(obj, parent=self.panel.parent())
@@ -295,7 +295,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_gaussian_filter(self, param: cpb.GaussianParam | None = None) -> None:
         """Compute gaussian filter
-        using :py:func:`cdl.computation.signal.compute_gaussian_filter`"""
+        with :py:func:`cdl.computation.signal.compute_gaussian_filter`"""
         self.compute_11(
             cps.compute_gaussian_filter,
             param,
@@ -308,7 +308,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cpb.MovingAverageParam | None = None
     ) -> None:
         """Compute moving average
-        using :py:func:`cdl.computation.signal.compute_moving_average`"""
+        with :py:func:`cdl.computation.signal.compute_moving_average`"""
         self.compute_11(
             cps.compute_moving_average,
             param,
@@ -319,7 +319,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_moving_median(self, param: cpb.MovingMedianParam | None = None) -> None:
         """Compute moving median
-        using :py:func:`cdl.computation.signal.compute_moving_median`"""
+        with :py:func:`cdl.computation.signal.compute_moving_median`"""
         self.compute_11(
             cps.compute_moving_median,
             param,
@@ -330,7 +330,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_wiener(self) -> None:
         """Compute Wiener filter
-        using :py:func:`cdl.computation.signal.compute_wiener`"""
+        with :py:func:`cdl.computation.signal.compute_wiener`"""
         self.compute_11(cps.compute_wiener, title=_("Wiener filter"))
 
     def __freq_filter(
@@ -359,7 +359,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.LowPassFilterParam | None = None
     ) -> None:
         """Compute high-pass filter
-        using :py:func:`cdl.computation.signal.compute_filter`"""
+        with :py:func:`cdl.computation.signal.compute_filter`"""
         self.__freq_filter(param, cdl.param.LowPassFilterParam, _("Low-pass filter"))
 
     @qt_try_except()
@@ -367,7 +367,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.HighPassFilterParam | None = None
     ) -> None:
         """Compute high-pass filter
-        using :py:func:`cdl.computation.signal.compute_filter`"""
+        with :py:func:`cdl.computation.signal.compute_filter`"""
         self.__freq_filter(param, cdl.param.HighPassFilterParam, _("High-pass filter"))
 
     @qt_try_except()
@@ -375,7 +375,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.BandPassFilterParam | None = None
     ) -> None:
         """Compute band-pass filter
-        using :py:func:`cdl.computation.signal.compute_filter`"""
+        with :py:func:`cdl.computation.signal.compute_filter`"""
         self.__freq_filter(param, cdl.param.BandPassFilterParam, _("Band-pass filter"))
 
     @qt_try_except()
@@ -383,19 +383,19 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.BandStopFilterParam | None = None
     ) -> None:
         """Compute band-stop filter
-        using :py:func:`cdl.computation.signal.compute_filter`"""
+        with :py:func:`cdl.computation.signal.compute_filter`"""
         self.__freq_filter(param, cdl.param.BandStopFilterParam, _("Band-stop filter"))
 
     @qt_try_except()
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
-        """Compute FFT using :py:func:`cdl.computation.signal.compute_fft`"""
+        """Compute FFT with :py:func:`cdl.computation.signal.compute_fft`"""
         if param is None:
             param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
         self.compute_11(cps.compute_fft, param, title=_("FFT"), edit=False)
 
     @qt_try_except()
     def compute_ifft(self, param: cdl.param.FFTParam | None = None) -> None:
-        """Compute iFFT using :py:func:`cdl.computation.signal.compute_ifft`"""
+        """Compute iFFT with :py:func:`cdl.computation.signal.compute_ifft`"""
         if param is None:
             param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
         self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
@@ -405,7 +405,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.SpectrumParam | None = None
     ) -> None:
         """Compute magnitude spectrum
-        using :py:func:`cdl.computation.signal.compute_magnitude_spectrum`"""
+        with :py:func:`cdl.computation.signal.compute_magnitude_spectrum`"""
         self.compute_11(
             cps.compute_magnitude_spectrum,
             param,
@@ -416,13 +416,13 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_phase_spectrum(self) -> None:
         """Compute phase spectrum
-        using :py:func:`cdl.computation.signal.compute_phase_spectrum`"""
+        with :py:func:`cdl.computation.signal.compute_phase_spectrum`"""
         self.compute_11(cps.compute_phase_spectrum, title=_("Phase spectrum"))
 
     @qt_try_except()
     def compute_psd(self, param: cdl.param.SpectrumParam | None = None) -> None:
         """Compute power spectral density
-        using :py:func:`cdl.computation.signal.compute_psd`"""
+        with :py:func:`cdl.computation.signal.compute_psd`"""
         self.compute_11(cps.compute_psd, param, cdl.param.SpectrumParam, title=_("PSD"))
 
     @qt_try_except()
@@ -432,7 +432,7 @@ class SignalProcessor(BaseProcessor):
         param: cdl.param.InterpolationParam | None = None,
     ):
         """Compute interpolation
-        using :py:func:`cdl.computation.signal.compute_interpolation`"""
+        with :py:func:`cdl.computation.signal.compute_interpolation`"""
         self.compute_n1n(
             obj2,
             _("signal for X values"),
@@ -445,7 +445,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_resampling(self, param: cdl.param.ResamplingParam | None = None):
         """Compute resampling
-        using :py:func:`cdl.computation.signal.compute_resampling`"""
+        with :py:func:`cdl.computation.signal.compute_resampling`"""
         edit, param = self.init_param(param, cps.ResamplingParam, _("Resampling"))
         if edit:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
@@ -468,7 +468,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_detrending(self, param: cdl.param.DetrendingParam | None = None):
         """Compute detrending
-        using :py:func:`cdl.computation.signal.compute_detrending`"""
+        with :py:func:`cdl.computation.signal.compute_detrending`"""
         self.compute_11(
             cps.compute_detrending,
             param,
@@ -479,7 +479,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_convolution(self, obj2: SignalObj | None = None) -> None:
         """Compute convolution
-        using :py:func:`cdl.computation.signal.compute_convolution`"""
+        with :py:func:`cdl.computation.signal.compute_convolution`"""
         self.compute_n1n(
             obj2,
             _("signal to convolve with"),
@@ -490,7 +490,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_windowing(self, param: cdl.param.WindowingParam | None = None) -> None:
         """Compute windowing
-        using :py:func:`cdl.computation.signal.compute_windowing`"""
+        with :py:func:`cdl.computation.signal.compute_windowing`"""
         self.compute_11(
             cps.compute_windowing,
             param,
@@ -570,18 +570,18 @@ class SignalProcessor(BaseProcessor):
     def compute_fwhm(
         self, param: cdl.param.FWHMParam | None = None
     ) -> dict[str, ResultShape]:
-        """Compute FWHM using :py:func:`cdl.computation.signal.compute_fwhm`"""
+        """Compute FWHM with :py:func:`cdl.computation.signal.compute_fwhm`"""
         return self.compute_10(cps.compute_fwhm, param, cps.FWHMParam, title=_("FWHM"))
 
     @qt_try_except()
     def compute_fw1e2(self) -> dict[str, ResultShape]:
-        """Compute FW at 1/e² using :py:func:`cdl.computation.signal.compute_fw1e2`"""
+        """Compute FW at 1/e² with :py:func:`cdl.computation.signal.compute_fw1e2`"""
         return self.compute_10(cps.compute_fw1e2, title=_("FW") + "1/e²")
 
     @qt_try_except()
     def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics
-        using :py:func:`cdl.computation.signal.compute_stats`"""
+        with :py:func:`cdl.computation.signal.compute_stats`"""
         return self.compute_10(cps.compute_stats, title=_("Statistics"))
 
     @qt_try_except()
@@ -589,26 +589,26 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.HistogramParam | None = None
     ) -> dict[str, ResultShape]:
         """Compute histogram
-        using :py:func:`cdl.computation.signal.compute_histogram`"""
+        with :py:func:`cdl.computation.signal.compute_histogram`"""
         return self.compute_11(
             cps.compute_histogram, param, cps.HistogramParam, title=_("Histogram")
         )
 
     @qt_try_except()
     def compute_contrast(self) -> dict[str, ResultProperties]:
-        """Compute contrast using :py:func:`cdl.computation.signal.compute_contrast`"""
+        """Compute contrast with :py:func:`cdl.computation.signal.compute_contrast`"""
         return self.compute_10(cps.compute_contrast, title=_("Contrast"))
 
     @qt_try_except()
     def compute_x_at_minmax(self) -> dict[str, ResultProperties]:
         """Compute x at min/max
-        using :py:func:`cdl.computation.signal.compute_x_at_minmax`"""
+        with :py:func:`cdl.computation.signal.compute_x_at_minmax`"""
         return self.compute_10(cps.compute_x_at_minmax, title="X @ min,max")
 
     @qt_try_except()
     def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:
         """Compute sampling rate and period (mean and std)
-        using :py:func:`cdl.computation.signal.compute_sampling_rate_period`"""
+        with :py:func:`cdl.computation.signal.compute_sampling_rate_period`"""
         return self.compute_10(
             cps.compute_sampling_rate_period, title=_("Sampling rate and period")
         )
@@ -616,7 +616,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_bandwidth_3db(self) -> None:
         """Compute bandwidth at -3dB
-        using :py:func:`cdl.computation.signal.compute_bandwidth_3db`"""
+        with :py:func:`cdl.computation.signal.compute_bandwidth_3db`"""
         self.compute_10(cps.compute_bandwidth_3db, title=_("Bandwidth"))
 
     @qt_try_except()
@@ -624,7 +624,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cps.DynamicParam | None = None
     ) -> dict[str, ResultProperties]:
         """Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)
-        using :py:func:`cdl.computation.signal.compute_dynamic_parameters`"""
+        with :py:func:`cdl.computation.signal.compute_dynamic_parameters`"""
         return self.compute_10(
             cps.compute_dynamic_parameters,
             param,

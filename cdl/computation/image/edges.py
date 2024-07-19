@@ -65,7 +65,7 @@ class CannyParam(gds.DataSet):
 
 
 def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
-    """Compute Canny filter using :py:func:`skimage.feature.canny`
+    """Compute Canny filter with :py:func:`skimage.feature.canny`
 
     Args:
         src: input image object
@@ -96,7 +96,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
 
 
 def compute_roberts(src: ImageObj) -> ImageObj:
-    """Compute Roberts filter using :py:func:`skimage.filters.roberts`
+    """Compute Roberts filter with :py:func:`skimage.filters.roberts`
 
     Args:
         src: input image object
@@ -108,7 +108,7 @@ def compute_roberts(src: ImageObj) -> ImageObj:
 
 
 def compute_prewitt(src: ImageObj) -> ImageObj:
-    """Compute Prewitt filter using :py:func:`skimage.filters.prewitt`
+    """Compute Prewitt filter with :py:func:`skimage.filters.prewitt`
 
     Args:
         src: input image object
@@ -120,7 +120,7 @@ def compute_prewitt(src: ImageObj) -> ImageObj:
 
 
 def compute_prewitt_h(src: ImageObj) -> ImageObj:
-    """Compute horizontal Prewitt filter using :py:func:`skimage.filters.prewitt_h`
+    """Compute horizontal Prewitt filter with :py:func:`skimage.filters.prewitt_h`
 
     Args:
         src: input image object
@@ -132,7 +132,7 @@ def compute_prewitt_h(src: ImageObj) -> ImageObj:
 
 
 def compute_prewitt_v(src: ImageObj) -> ImageObj:
-    """Compute vertical Prewitt filter using :py:func:`skimage.filters.prewitt_v`
+    """Compute vertical Prewitt filter with :py:func:`skimage.filters.prewitt_v`
 
     Args:
         src: input image object
@@ -144,7 +144,7 @@ def compute_prewitt_v(src: ImageObj) -> ImageObj:
 
 
 def compute_sobel(src: ImageObj) -> ImageObj:
-    """Compute Sobel filter using :py:func:`skimage.filters.sobel`
+    """Compute Sobel filter with :py:func:`skimage.filters.sobel`
 
     Args:
         src: input image object
@@ -156,7 +156,7 @@ def compute_sobel(src: ImageObj) -> ImageObj:
 
 
 def compute_sobel_h(src: ImageObj) -> ImageObj:
-    """Compute horizontal Sobel filter using :py:func:`skimage.filters.sobel_h`
+    """Compute horizontal Sobel filter with :py:func:`skimage.filters.sobel_h`
 
     Args:
         src: input image object
@@ -168,7 +168,7 @@ def compute_sobel_h(src: ImageObj) -> ImageObj:
 
 
 def compute_sobel_v(src: ImageObj) -> ImageObj:
-    """Compute vertical Sobel filter using :py:func:`skimage.filters.sobel_v`
+    """Compute vertical Sobel filter with :py:func:`skimage.filters.sobel_v`
 
     Args:
         src: input image object
@@ -180,7 +180,7 @@ def compute_sobel_v(src: ImageObj) -> ImageObj:
 
 
 def compute_scharr(src: ImageObj) -> ImageObj:
-    """Compute Scharr filter using :py:func:`skimage.filters.scharr`
+    """Compute Scharr filter with :py:func:`skimage.filters.scharr`
 
     Args:
         src: input image object
@@ -192,7 +192,7 @@ def compute_scharr(src: ImageObj) -> ImageObj:
 
 
 def compute_scharr_h(src: ImageObj) -> ImageObj:
-    """Compute horizontal Scharr filter using :py:func:`skimage.filters.scharr_h`
+    """Compute horizontal Scharr filter with :py:func:`skimage.filters.scharr_h`
 
     Args:
         src: input image object
@@ -204,7 +204,7 @@ def compute_scharr_h(src: ImageObj) -> ImageObj:
 
 
 def compute_scharr_v(src: ImageObj) -> ImageObj:
-    """Compute vertical Scharr filter using :py:func:`skimage.filters.scharr_v`
+    """Compute vertical Scharr filter with :py:func:`skimage.filters.scharr_v`
 
     Args:
         src: input image object
@@ -216,7 +216,7 @@ def compute_scharr_v(src: ImageObj) -> ImageObj:
 
 
 def compute_farid(src: ImageObj) -> ImageObj:
-    """Compute Farid filter using :py:func:`skimage.filters.farid`
+    """Compute Farid filter with :py:func:`skimage.filters.farid`
 
     Args:
         src: input image object
@@ -228,7 +228,7 @@ def compute_farid(src: ImageObj) -> ImageObj:
 
 
 def compute_farid_h(src: ImageObj) -> ImageObj:
-    """Compute horizontal Farid filter using :py:func:`skimage.filters.farid_h`
+    """Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`
 
     Args:
         src: input image object
@@ -240,7 +240,7 @@ def compute_farid_h(src: ImageObj) -> ImageObj:
 
 
 def compute_farid_v(src: ImageObj) -> ImageObj:
-    """Compute vertical Farid filter using :py:func:`skimage.filters.farid_v`
+    """Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`
 
     Args:
         src: input image object
@@ -252,7 +252,7 @@ def compute_farid_v(src: ImageObj) -> ImageObj:
 
 
 def compute_laplace(src: ImageObj) -> ImageObj:
-    """Compute Laplace filter using :py:func:`skimage.filters.laplace`
+    """Compute Laplace filter with :py:func:`skimage.filters.laplace`
 
     Args:
         src: input image object

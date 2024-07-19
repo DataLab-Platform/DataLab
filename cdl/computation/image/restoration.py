@@ -60,7 +60,7 @@ class DenoiseTVParam(gds.DataSet):
 
 def compute_denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
     """Compute Total Variation denoising
-    using :py:func:`skimage.restoration.denoise_tv_chambolle`
+    with :py:func:`skimage.restoration.denoise_tv_chambolle`
 
     Args:
         src: input image object
@@ -103,7 +103,7 @@ class DenoiseBilateralParam(gds.DataSet):
 
 def compute_denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageObj:
     """Compute bilateral filter denoising
-    using :py:func:`skimage.restoration.denoise_bilateral`
+    with :py:func:`skimage.restoration.denoise_bilateral`
 
     Args:
         src: input image object
@@ -134,7 +134,7 @@ class DenoiseWaveletParam(gds.DataSet):
 
 def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
     """Compute Wavelet denoising
-    using :py:func:`skimage.restoration.denoise_wavelet`
+    with :py:func:`skimage.restoration.denoise_wavelet`
 
     Args:
         src: input image object
@@ -150,7 +150,7 @@ def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
 
 def compute_denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Denoise using White Top-Hat
-    using :py:func:`skimage.morphology.white_tophat`
+    with :py:func:`skimage.morphology.white_tophat`
 
     Args:
         src: input image object

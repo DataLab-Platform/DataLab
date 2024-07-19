@@ -56,7 +56,7 @@ def compute_peak_detection(
     image: ImageObj, p: Peak2DDetectionParam
 ) -> ResultShape | None:
     """Compute 2D peak detection
-    using :py:func:`cdl.algorithms.image.get_2d_peaks_coords`
+    with :py:func:`cdl.algorithms.image.get_2d_peaks_coords`
 
     Args:
         imageOutput: input image
@@ -91,7 +91,7 @@ class ContourShapeParam(GenericDetectionParam):
 
 def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
     """Compute contour shape fit
-    using :py:func:`cdl.algorithms.image.get_contour_shapes`"""
+    with :py:func:`cdl.algorithms.image.get_contour_shapes`"""
     return calc_resultshape(
         "contour", p.shape, image, alg.get_contour_shapes, p.shape, p.threshold
     )
@@ -153,7 +153,7 @@ class BlobDOGParam(BaseBlobParam):
 
 def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
     """Compute blobs using Difference of Gaussian method
-    using :py:func:`cdl.algorithms.image.find_blobs_dog`
+    with :py:func:`cdl.algorithms.image.find_blobs_dog`
 
     Args:
         imageOutput: input image
@@ -191,7 +191,7 @@ class BlobDOHParam(BaseBlobParam):
 
 def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
     """Compute blobs using Determinant of Hessian method
-    using :py:func:`cdl.algorithms.image.find_blobs_doh`
+    with :py:func:`cdl.algorithms.image.find_blobs_doh`
 
     Args:
         imageOutput: input image
@@ -225,7 +225,7 @@ class BlobLOGParam(BlobDOHParam):
 
 def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
     """Compute blobs using Laplacian of Gaussian method
-    using :py:func:`cdl.algorithms.image.find_blobs_log`
+    with :py:func:`cdl.algorithms.image.find_blobs_log`
 
     Args:
         imageOutput: input image
@@ -387,7 +387,7 @@ class BlobOpenCVParam(gds.DataSet):
 
 def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
     """Compute blobs using OpenCV
-    using :py:func:`cdl.algorithms.image.find_blobs_opencv`
+    with :py:func:`cdl.algorithms.image.find_blobs_opencv`
 
     Args:
         imageOutput: input image
