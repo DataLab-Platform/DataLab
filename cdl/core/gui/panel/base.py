@@ -470,8 +470,6 @@ class BaseDataPanel(AbstractPanel):
         self.objview.add_group_item(group)
         return group
 
-    # TODO: [P2] New feature: move objects up/down
-    # TODO: [P2] New feature: move objects to another group
     def __duplicate_individual_obj(
         self, oid: str, new_group_id: str | None = None, set_current: bool = True
     ) -> None:
@@ -521,10 +519,14 @@ class BaseDataPanel(AbstractPanel):
             obj.metadata.update(self.__metadata_clipboard)
         self.SIG_REFRESH_PLOT.emit("selected", True)
 
-    def remove_object(self) -> None:
-        """Remove signal/image object"""
+    def remove_object(self, force: bool = False) -> None:
+        """Remove signal/image object
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
         sel_groups = self.objview.get_sel_groups()
-        if sel_groups and not execenv.unattended:
+        if sel_groups and not force and not execenv.unattended:
             answer = QW.QMessageBox.warning(
                 self,
                 _("Delete group(s)"),

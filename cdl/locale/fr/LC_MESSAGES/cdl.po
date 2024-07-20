@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-06-21 16:54+0200\n"
+"POT-Creation-Date: 2024-06-28 16:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -764,7 +764,7 @@ msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
 #: cdl\computation\image\morphology.py:29 cdl\core\model\image.py:238
-#: cdl\tests\data.py:421
+#: cdl\tests\data.py:423
 msgid "Radius"
 msgstr "Rayon"
 
@@ -2022,20 +2022,24 @@ msgstr "Redimensionner"
 msgid "Pixel binning"
 msgstr "Binning"
 
+#: cdl\core\gui\docks.py:257
+msgid "Process signal"
+msgstr "Traiter le signal"
+
 #: cdl\core\gui\h5io.py:48
 msgid "Loading data from %s..."
 msgstr "Chargement des données depuis %s..."
 
-#: cdl\core\gui\h5io.py:98
+#: cdl\core\gui\h5io.py:96
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:98 cdl\core\gui\h5io.py:114 cdl\core\gui\main.py:481
+#: cdl\core\gui\h5io.py:96 cdl\core\gui\h5io.py:112 cdl\core\gui\main.py:481
 #: cdl\core\gui\main.py:1361 cdl\plugins.py:173 cdl\widgets\textimport.py:501
 msgid "Warning"
 msgstr "Attention"
 
-#: cdl\core\gui\h5io.py:115
+#: cdl\core\gui\h5io.py:113
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
@@ -2356,7 +2360,7 @@ msgstr "Vérifier les dépendances critiques..."
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:1071 cdl\core\gui\panel\macro.py:195
+#: cdl\core\gui\main.py:1071 cdl\core\gui\panel\macro.py:196
 #: cdl\core\gui\settings.py:261
 msgid "Console"
 msgstr "Console"
@@ -2378,7 +2382,7 @@ msgstr ""
 "données depuis un fichier HDF5 ?"
 
 #: cdl\core\gui\main.py:1374 cdl\core\gui\panel\base.py:736
-#: cdl\core\gui\panel\macro.py:557 cdl\widgets\h5browser.py:618
+#: cdl\core\gui\panel\macro.py:559 cdl\widgets\h5browser.py:618
 msgid "Open"
 msgstr "Ouvrir"
 
@@ -2458,7 +2462,7 @@ msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
-#: cdl\core\gui\panel\base.py:83 cdl\core\model\base.py:400
+#: cdl\core\gui\panel\base.py:83 cdl\core\model\base.py:397
 msgid "Properties"
 msgstr "Propriétés"
 
@@ -2506,7 +2510,7 @@ msgstr "Renommer le groupe"
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
-#: cdl\core\gui\panel\base.py:763 cdl\core\gui\panel\macro.py:537
+#: cdl\core\gui\panel\base.py:763 cdl\core\gui\panel\macro.py:538
 msgid "Save as"
 msgstr "Enregistrer sous"
 
@@ -2520,7 +2524,7 @@ msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
 #: cdl\core\gui\panel\base.py:1068 cdl\core\gui\roieditor.py:210
-#: cdl\core\model\base.py:1067
+#: cdl\core\model\base.py:1079
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
@@ -2589,61 +2593,61 @@ msgstr ""
 "Êtes-vous sûr de vouloir supprimer tous les résultats des objets "
 "sélectionnés ?"
 
-#: cdl\core\gui\panel\macro.py:158
+#: cdl\core\gui\panel\macro.py:159
 msgid "Macro panel"
 msgstr "Panneau des macros"
 
-#: cdl\core\gui\panel\macro.py:164
+#: cdl\core\gui\panel\macro.py:165
 msgid "Python files"
 msgstr "Fichiers Python"
 
-#: cdl\core\gui\panel\macro.py:182
+#: cdl\core\gui\panel\macro.py:183
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
 
-#: cdl\core\gui\panel\macro.py:297
+#: cdl\core\gui\panel\macro.py:298
 #: cdl\tests\features\control\embedded1_unit_test.py:128
 msgid "Run macro"
 msgstr "Exécuter la macro"
 
-#: cdl\core\gui\panel\macro.py:304
+#: cdl\core\gui\panel\macro.py:305
 #: cdl\tests\features\control\embedded1_unit_test.py:129
 msgid "Stop macro"
 msgstr "Arrêter la macro"
 
-#: cdl\core\gui\panel\macro.py:312
+#: cdl\core\gui\panel\macro.py:313
 msgid "New macro"
 msgstr "Nouvelle macro"
 
-#: cdl\core\gui\panel\macro.py:318
+#: cdl\core\gui\panel\macro.py:319
 msgid "Rename macro"
 msgstr "Renommer la macro"
 
-#: cdl\core\gui\panel\macro.py:324
+#: cdl\core\gui\panel\macro.py:325
 msgid "Import macro from file"
 msgstr "Importer la macro depuis un fichier"
 
-#: cdl\core\gui\panel\macro.py:330
+#: cdl\core\gui\panel\macro.py:331
 msgid "Export macro to file"
 msgstr "Exporter la macro vers un fichier"
 
-#: cdl\core\gui\panel\macro.py:336
+#: cdl\core\gui\panel\macro.py:337
 msgid "Remove macro"
 msgstr "Supprimer la macro"
 
-#: cdl\core\gui\panel\macro.py:350
+#: cdl\core\gui\panel\macro.py:351
 msgid "Macro editor toolbar"
 msgstr "Barre d'outils des macros"
 
-#: cdl\core\gui\panel\macro.py:507
+#: cdl\core\gui\panel\macro.py:508
 msgid "Rename"
 msgstr "Renommer"
 
-#: cdl\core\gui\panel\macro.py:508
+#: cdl\core\gui\panel\macro.py:509
 msgid "New title:"
 msgstr "Nouveau titre :"
 
-#: cdl\core\gui\panel\macro.py:580
+#: cdl\core\gui\panel\macro.py:582
 msgid ""
 "When closed, the macro is <u>permanently destroyed</u>, unless it has been "
 "exported first."
@@ -2651,7 +2655,7 @@ msgstr ""
 "Lorsqu'elle est fermée, une macro est <u>détruite de manière définitive</u>, "
 "sauf si elle a été exportée au préalable."
 
-#: cdl\core\gui\panel\macro.py:585
+#: cdl\core\gui\panel\macro.py:587
 msgid "Do you want to continue?"
 msgstr "Souhaitez-vous vraiment continuer ?"
 
@@ -3422,11 +3426,11 @@ msgstr "Tous les fichiers pris en charge"
 msgid "Image I/O formats"
 msgstr "Formats d'entrée/sortie d'images"
 
-#: cdl\core\io\image\formats.py:88
+#: cdl\core\io\image\formats.py:89
 msgid "Text files"
 msgstr "Fichiers texte"
 
-#: cdl\core\io\image\formats.py:137 cdl\core\io\signal\formats.py:120
+#: cdl\core\io\image\formats.py:138 cdl\core\io\signal\formats.py:120
 msgid "MAT-Files"
 msgstr "Fichiers MAT"
 
@@ -3582,7 +3586,7 @@ msgstr "Hauteur de l'image (nombre de lignes)"
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:836 cdl\tests\data.py:420
+#: cdl\core\model\image.py:836 cdl\tests\data.py:422
 msgid "Width"
 msgstr "Largeur"
 
@@ -3699,7 +3703,7 @@ msgstr "Insérer un point"
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: cdl\core\model\signal.py:781 cdl\tests\data.py:279 cdl\tests\data.py:417
+#: cdl\core\model\signal.py:781 cdl\tests\data.py:279 cdl\tests\data.py:419
 #: cdl\widgets\h5browser.py:208
 msgid "Size"
 msgstr "Taille"
@@ -3751,14 +3755,6 @@ msgstr "Fonction polynomiale"
 #: cdl\core\model\signal.py:1001
 msgid "Experimental points"
 msgstr "Points expérimentaux"
-
-#: cdl\patch.py:188
-msgid "Z-Axis logarithmic scale"
-msgstr "Axe Z en échelle logarithmique"
-
-#: cdl\patch.py:368
-msgid "Process signal"
-msgstr "Traiter le signal"
 
 #: cdl\plugins.py:120
 msgid "Registered plugins:"
@@ -3873,15 +3869,15 @@ msgstr "Amplitude de la gaussienne 2D"
 msgid "Attenuation"
 msgstr "Atténuation"
 
-#: cdl\tests\data.py:418
+#: cdl\tests\data.py:420
 msgid "X<sub>center</sub>"
 msgstr "X<sub>centre</sub>"
 
-#: cdl\tests\data.py:419
+#: cdl\tests\data.py:421
 msgid "Y<sub>center</sub>"
 msgstr "Y<sub>centre</sub>"
 
-#: cdl\tests\data.py:422
+#: cdl\tests\data.py:424
 msgid "Intensity"
 msgstr "Intensité"
 

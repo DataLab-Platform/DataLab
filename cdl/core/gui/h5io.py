@@ -82,8 +82,6 @@ class H5InputOutput:
         """Add DataLab object from h5 node"""
         obj = node.get_native_object()
         if obj is None:
-            # TODO: Add a warning message to be shown after all imports?
-            # (e.g. "No supported data available in HDF5 file(s)."
             return
         self.uint32_wng = self.uint32_wng or node.uint32_wng
         if isinstance(obj, SignalObj):

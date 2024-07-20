@@ -25,7 +25,7 @@ from plotpy.builder import make
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
 
-from cdl.algorithms import fit
+from cdl.algorithms.signal import GaussianModel, LorentzianModel, VoigtModel
 from cdl.config import Conf, _
 from cdl.core.model import base
 
@@ -892,9 +892,9 @@ def create_signal_from_param(
             SignalTypes.VOIGT,
         ):
             func, title = {
-                SignalTypes.GAUSS: (fit.GaussianModel.func, _("Gaussian")),
-                SignalTypes.LORENTZ: (fit.LorentzianModel.func, _("Lorentzian")),
-                SignalTypes.VOIGT: (fit.VoigtModel.func, "Voigt"),
+                SignalTypes.GAUSS: (GaussianModel.func, _("Gaussian")),
+                SignalTypes.LORENTZ: (LorentzianModel.func, _("Lorentzian")),
+                SignalTypes.VOIGT: (VoigtModel.func, "Voigt"),
             }[newparam.stype]
             if p is None:
                 p = GaussLorentzVoigtParam(title)

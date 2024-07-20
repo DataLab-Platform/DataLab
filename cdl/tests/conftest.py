@@ -41,7 +41,7 @@ def pytest_report_header(config):
     qtbindings_version = qtpy.PYSIDE_VERSION
     if qtbindings_version is None:
         qtbindings_version = qtpy.PYQT_VERSION
-    return [
+    infolist = [
         f"DataLab {cdl.__version__} [Plugins: {nfstr if nfstr else 'None'}]",
         f"guidata {guidata.__version__}, PlotPy {plotpy.__version__}",
         f"PythonQwt {qwt.__version__}, "
@@ -50,6 +50,11 @@ def pytest_report_header(config):
         f"h5py {h5py.__version__}, "
         f"scikit-image {skimage.__version__}, OpenCV {cv2.__version__}",
     ]
+    for vname in ("CDL_DATA", "PYTHONPATH", "DEBUG"):
+        value = os.environ.get(vname, "")
+        if value:
+            infolist.append(f"{vname}: {value}")
+    return infolist
 
 
 def pytest_configure(config):

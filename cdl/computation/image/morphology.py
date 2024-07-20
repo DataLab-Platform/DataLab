@@ -31,7 +31,7 @@ class MorphologyParam(gds.DataSet):
 
 
 def compute_white_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
-    """Compute White Top-Hat
+    """Compute White Top-Hat with :py:func:`skimage.morphology.white_tophat`
 
     Args:
         src: input image object
@@ -46,7 +46,7 @@ def compute_white_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 
 def compute_black_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
-    """Compute Black Top-Hat
+    """Compute Black Top-Hat with :py:func:`skimage.morphology.black_tophat`
 
     Args:
         src: input image object
@@ -61,7 +61,7 @@ def compute_black_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 
 def compute_erosion(src: ImageObj, p: MorphologyParam) -> ImageObj:
-    """Compute Erosion
+    """Compute Erosion with :py:func:`skimage.morphology.erosion`
 
     Args:
         src: input image object
@@ -76,7 +76,7 @@ def compute_erosion(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 
 def compute_dilation(src: ImageObj, p: MorphologyParam) -> ImageObj:
-    """Compute Dilation
+    """Compute Dilation with :py:func:`skimage.morphology.dilation`
 
     Args:
         src: input image object
@@ -91,7 +91,7 @@ def compute_dilation(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 
 def compute_opening(src: ImageObj, p: MorphologyParam) -> ImageObj:
-    """Compute morphological opening
+    """Compute morphological opening with :py:func:`skimage.morphology.opening`
 
     Args:
         src: input image object
@@ -106,7 +106,7 @@ def compute_opening(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 
 def compute_closing(src: ImageObj, p: MorphologyParam) -> ImageObj:
-    """Compute morphological closing
+    """Compute morphological closing with :py:func:`skimage.morphology.closing`
 
     Args:
         src: input image object

@@ -45,7 +45,7 @@ msgid ""
 "processing features of DataLab:"
 msgstr ""
 "Cet exemple montre comment mesurer des franges de Fabry-Perot à l'aide "
-"des fonctionnalités de traitement d'image de DataLab :"
+"des fonctionnalités de traitement d'image de DataLab :"
 
 #: ../../intro/tutorials/fabry_perot.rst:11
 msgid "Load an image of a Fabry-Perot interferometer"
@@ -81,7 +81,7 @@ msgstr "Sauvegarder l'espace de travail"
 
 #: ../../intro/tutorials/fabry_perot.rst:20
 msgid "First, we open DataLab and load the images:"
-msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images :"
+msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images :"
 
 #: ../../intro/tutorials/fabry_perot.rst:24
 msgid ""
@@ -252,7 +252,7 @@ msgstr ""
 "Si vous souhaitez afficher à nouveau les résultats de calcul, vous pouvez"
 " sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le "
 "menu \"Calcul\", ou le bouton \"Afficher les résultats\" |show_results|, "
-"en dessous de la liste des images :"
+"en dessous de la liste des images :"
 
 #: ../../intro/tutorials/fabry_perot.rst:115
 msgid "show_results"
@@ -401,7 +401,7 @@ msgstr ""
 msgid "To extract the intensity profile along the X axis, we have two options:"
 msgstr ""
 "Pour extraire le profil d'intensité le long de l'axe X, nous avons deux "
-"options :"
+"options :"
 
 #: ../../intro/tutorials/fabry_perot.rst:204
 msgid ""

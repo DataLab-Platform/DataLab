@@ -12,8 +12,13 @@ from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.optimize import curve_fit
 from scipy.special import erf  # pylint: disable=no-name-in-module
 
-from cdl.algorithms import fit
-from cdl.algorithms.signal import sort_frequencies, xpeak
+from cdl.algorithms.signal import (
+    GaussianModel,
+    LorentzianModel,
+    VoigtModel,
+    sort_frequencies,
+    xpeak,
+)
 from cdl.config import _
 from cdl.utils.tests import get_default_test_name
 
@@ -112,7 +117,7 @@ def gaussianfit(x, y, parent=None, name=None):
     dx = np.max(x) - np.min(x)
     dy = np.max(y) - np.min(y)
     sigma = dx * 0.1
-    amp = fit.GaussianModel.get_amp_from_amplitude(dy, sigma)
+    amp = GaussianModel.get_amp_from_amplitude(dy, sigma)
 
     a = FitParam(_("Amplitude"), amp, 0.0, amp * 1.2)
     b = FitParam(_("Base line"), np.min(y), np.min(y) - 0.1 * dy, np.max(y))
@@ -122,7 +127,7 @@ def gaussianfit(x, y, parent=None, name=None):
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return fit.GaussianModel.func(x, *params)
+        return GaussianModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Gaussian fit"), name=name
@@ -140,7 +145,7 @@ def lorentzianfit(x, y, parent=None, name=None):
     dx = np.max(x) - np.min(x)
     dy = np.max(y) - np.min(y)
     sigma = dx * 0.1
-    amp = fit.LorentzianModel.get_amp_from_amplitude(dy, sigma)
+    amp = LorentzianModel.get_amp_from_amplitude(dy, sigma)
 
     a = FitParam(_("Amplitude"), amp, 0.0, amp * 1.2)
     b = FitParam(_("Base line"), np.min(y), np.min(y) - 0.1 * dy, np.max(y))
@@ -150,7 +155,7 @@ def lorentzianfit(x, y, parent=None, name=None):
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return fit.LorentzianModel.func(x, *params)
+        return LorentzianModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Lorentzian fit"), name=name
@@ -168,7 +173,7 @@ def voigtfit(x, y, parent=None, name=None):
     dx = np.max(x) - np.min(x)
     dy = np.max(y) - np.min(y)
     sigma = dx * 0.1
-    amp = fit.VoigtModel.get_amp_from_amplitude(dy, sigma)
+    amp = VoigtModel.get_amp_from_amplitude(dy, sigma)
 
     a = FitParam(_("Amplitude"), amp, 0.0, amp * 1.2)
     b = FitParam(_("Base line"), np.min(y), np.min(y) - 0.1 * dy, np.max(y))
@@ -178,7 +183,7 @@ def voigtfit(x, y, parent=None, name=None):
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return fit.VoigtModel.func(x, *params)
+        return VoigtModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Voigt fit"), name=name

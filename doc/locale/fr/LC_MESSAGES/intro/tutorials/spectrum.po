@@ -37,7 +37,7 @@ msgstr ":octicon:`book;1em;sd-text-info` Traitement d'un spectre"
 
 #: ../../intro/tutorials/spectrum.rst:8
 msgid "This example shows how to process a spectrum with DataLab:"
-msgstr "Cet exemple montre comment traiter un spectre avec DataLab :"
+msgstr "Cet exemple montre comment traiter un spectre avec DataLab :"
 
 #: ../../intro/tutorials/spectrum.rst:10
 msgid "Read the spectrum from a file"

@@ -37,7 +37,7 @@ msgstr ""
 msgid "In particular, we are especially strict about the following guidelines:"
 msgstr ""
 "En particulier, nous sommes particulièrement stricts sur les directives "
-"suivantes :"
+"suivantes :"
 
 #: ../../contributing/guidelines.rst:13
 msgid "Limit all lines to a maximum of 79 characters."
@@ -57,7 +57,7 @@ msgstr "Utiliser des exceptions spécifiques au lieu de :class:`Exception`."
 msgid "To enforce these guidelines, the following tools are mandatory:"
 msgstr ""
 "Pour faire respecter ces directives, les outils suivants sont "
-"obligatoires :"
+"obligatoires :"
 
 #: ../../contributing/guidelines.rst:19
 msgid ""
@@ -121,7 +121,7 @@ msgid ""
 "specific guidelines:"
 msgstr ""
 "En plus des directives de codage génériques, nous avons les directives "
-"spécifiques suivantes :"
+"spécifiques suivantes :"
 
 #: ../../contributing/guidelines.rst:53
 msgid ""

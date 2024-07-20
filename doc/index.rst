@@ -5,12 +5,11 @@ DataLab
     :description: Home of DataLab, the open-source platform for scientific and technical data processing and visualization
     :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Codra, Pierre Raybaut
 
-DataLab is an **open-source platform for scientific and technical data processing
-and visualization** with unique features designed to meet industrial requirements.
-Leveraging the richness of the scientific Python ecosystem [#f1]_, DataLab serves as a
-complementary tool for your signal and image processing workflows. It can be extended
-with your Python code through :bdg-ref-success-line:`Plugins <about_plugins>` or
-directly from :ref:`your IDE <use_cases>` or :ref:`your Jupyter notebooks <use_cases>`.
+DataLab is an **open-source platform for signal and image processing and visualization**
+for research, education and industry. Leveraging the richness of the scientific Python
+ecosystem [#f1]_, DataLab is the ideal complement to your data analysis workflows as it
+can be extended with your Python code through :bdg-ref-success-line:`Plugins <about_plugins>`
+or directly from :ref:`your IDE <use_cases>` or :ref:`your Jupyter notebooks <use_cases>`.
 Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
@@ -45,49 +44,30 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
             :link: intro/index
             :link-type: doc
 
-            Installation, use cases, key strengths, ...
+            Installation, tutorials, use cases...
 
         .. grid-item-card:: :octicon:`tools;1em;sd-text-info`  Features
             :link: features/index
             :link-type: doc
 
-            In-depth description of DataLab features
+            Detailed description
 
         .. grid-item-card:: :octicon:`book;1em;sd-text-info`  API
             :link: api/index
             :link-type: doc
 
-            Reference documentation of DataLab API
+            Reference documentation
 
         .. grid-item-card:: :octicon:`gear;1em;sd-text-info`  Contributing
             :link: contributing/index
             :link-type: doc
 
-            Getting involved in DataLab project
-
-With its user-friendly experience and versatile :ref:`usage_modes`
-(|appmode| Stand-alone, |libmode| Library, |remotemode| Remote), DataLab enables
-efficient development of your data processing and visualization applications while
-benefiting from an industrial-grade technological platform.
-
-.. |appmode| image:: ../resources/DataLab-app.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |libmode| image:: ../resources/DataLab-lib.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |remotemode| image:: ../resources/DataLab-remote.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
+            Getting involved in the project
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center
     :width: 300 px
+    :class: dark-light no-scaled-link
 
     DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_,
     the scientific Python-Qt visualization and graphical user interface stack.

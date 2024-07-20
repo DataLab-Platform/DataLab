@@ -20,7 +20,6 @@ subpackages are available:
 - :mod:`cdl.algorithms.image`: Image processing algorithms
 - :mod:`cdl.algorithms.datatypes`: Data type conversion algorithms
 - :mod:`cdl.algorithms.coordinates`: Coordinate conversion algorithms
-- :mod:`cdl.algorithms.fit`: Fitting algorithms
 
 Signal Processing Algorithms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -46,9 +45,4 @@ Coordinate Conversion Algorithms
 .. automodule:: cdl.algorithms.coordinates
    :members:
 
-Curve Fitting Algorithms
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. automodule:: cdl.algorithms.fit
-   :members:
 """

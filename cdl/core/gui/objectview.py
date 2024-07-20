@@ -286,7 +286,7 @@ class GetObjectDialog(QW.QDialog):
 
     def __current_object_changed(self) -> None:
         """Item selection has changed"""
-        self.__current_object_uuid = self.tree.get_current_item_id()
+        self.__current_object_uuid = self.tree.get_current_item_id(object_only=True)
         self.ok_btn.setEnabled(bool(self.__current_object_uuid))
 
     def get_current_object_uuid(self) -> str:

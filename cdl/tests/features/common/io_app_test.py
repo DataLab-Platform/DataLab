@@ -33,7 +33,7 @@ def __testfunc(
         # os.startfile(tmpdir)
         fnames = get_test_fnames(pattern, in_folder)
         execenv.print("    Opening:")
-        # TODO: This test does not support formats that return multiple objects
+        # TODO: [P3] This test does not support formats that return multiple objects
         # (e.g. SIF files with multiple images). As a consequence, it will not test
         # thoroughly the I/O functionalities for these formats (it will keep only the
         # first object in the list of returned objects)

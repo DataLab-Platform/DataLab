@@ -66,7 +66,7 @@ class PluginTestData(PluginBase):
         if obj is not None:
             noiseparam = test_data.GaussianNoiseParam(_("Noise"))
             self.signalpanel.processor.update_param_defaults(noiseparam)
-            if noiseparam.edit(self.signalpanel):
+            if noiseparam.edit(self.main):
                 test_data.add_gaussian_noise_to_signal(obj, noiseparam)
                 self.proxy.add_object(obj)
 
@@ -85,7 +85,7 @@ class PluginTestData(PluginBase):
         if obj is not None:
             param = test_data.PeakDataParam.create(size=max(obj.data.shape))
             self.imagepanel.processor.update_param_defaults(param)
-            if param.edit(self.imagepanel):
+            if param.edit(self.main):
                 obj.data = test_data.get_peak2d_data(param)
                 self.proxy.add_object(obj)
 
@@ -120,7 +120,7 @@ class PluginTestData(PluginBase):
     def create_ring_image(self) -> None:
         """Create 2D ring image"""
         param = test_data.RingParam(_("Ring"))
-        if param.edit(self.imagepanel):
+        if param.edit(self.main):
             obj = test_data.create_ring_image(param)
             self.proxy.add_object(obj)
 

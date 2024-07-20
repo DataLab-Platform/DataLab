@@ -103,3 +103,39 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
             data: Image array data
         """
         raise NotImplementedError(f"Writing to {filename} is not supported")
+
+
+class MultipleImagesFormatBase(ImageFormatBase):
+    """Base image format object for multiple images (e.g., SIF or SPE).
+
+    Works with read function that returns a NumPy array of 3 dimensions, where
+    the first dimension is the number of images.
+    """
+
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[ImageObj]:
+        """Read list of image objects from file
+
+        Args:
+            filename: File name
+            worker: Callback worker object
+
+        Returns:
+            List of image objects
+        """
+        data = self.read_data(filename)
+        if len(data.shape) == 3:
+            objlist = []
+            for idx in range(data.shape[0]):
+                obj = self.create_object(filename, index=idx)
+                obj.data = data[idx, ::]
+                objlist.append(obj)
+                if worker is not None:
+                    worker.set_progress((idx + 1) / data.shape[0])
+                    if worker.was_canceled():
+                        break
+            return objlist
+        obj = self.create_object(filename)
+        obj.data = data
+        return [obj]

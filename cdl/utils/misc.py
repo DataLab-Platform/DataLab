@@ -74,3 +74,31 @@ def is_version_at_least(version1: str, version2: str) -> bool:
             return False
 
     return len(parts1) >= len(parts2)
+
+
+def compare_versions(version1: str, operator: str, version2: str) -> bool:
+    """Compare module version with the given version.
+
+    Args:
+        version1: Version to compare (e.g., "1.2.3")
+        operator: Comparison operator (e.g., "==", "<", ">", "<=", ">=")
+        version2: Version to compare with (e.g., "1.2.3")
+
+    Returns:
+        True if the comparison is successful, False otherwise.
+    """
+    specs1, specs2 = version1.split("."), version2.split(".")
+    assert len(specs2) <= len(specs1)
+    specs2 = specs2[: len(specs1)]
+    tuple1, tuple2 = tuple(map(int, specs1)), tuple(map(int, specs2))
+    if operator == "==":
+        return tuple1 == tuple2
+    if operator == "<":
+        return tuple1 < tuple2
+    if operator == ">":
+        return tuple1 > tuple2
+    if operator == "<=":
+        return tuple1 <= tuple2
+    if operator == ">=":
+        return tuple1 >= tuple2
+    raise ValueError("Invalid operator")

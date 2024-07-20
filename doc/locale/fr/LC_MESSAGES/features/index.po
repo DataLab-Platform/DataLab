@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-16 14:01+0100\n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,43 +19,60 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../features/index.rst:31
+#: ../../doc/features/index.rst:54
+msgid "Validation:"
+msgstr "Validation :"
+
+#: ../../doc/features/index.rst:72
 msgid "General features:"
-msgstr "Fonctionnalités générales :"
+msgstr "Fonctionnalités générales :"
 
-#: ../../features/index.rst:58
+#: ../../doc/features/index.rst:101
 msgid "Signal processing:"
-msgstr "Traitement du signal :"
+msgstr "Traitement du signal :"
 
-#: ../../features/index.rst:81
+#: ../../doc/features/index.rst:126
 msgid "Image processing:"
-msgstr "Traitement d'image :"
+msgstr "Traitement d'image :"
 
-#: ../../features/index.rst:-1
+#: ../../doc/features/index.rst:-1
 msgid "DataLab features"
 msgstr "Fonctionnalités générales de DataLab"
 
-#: ../../features/index.rst:-1
-msgid "DataLab, features, signal processing, image processing"
-msgstr "DataLab, fonctionnalités, traitement du signal, traitement d'image"
+#: ../../doc/features/index.rst:-1
+msgid "DataLab, features, validation, signal processing, image processing"
+msgstr "DataLab, fonctionnalités, validation, traitement du signal, traitement d'image"
 
-#: ../../features/index.rst:2
+#: ../../doc/features/index.rst:2
 msgid "Features"
 msgstr "Fonctionnalités"
 
-#: ../../features/index.rst:8
+#: ../../doc/features/index.rst:8
 msgid ""
-"DataLab features are detailed in the following sections. The first "
-"section describes the general features of DataLab, then the two following"
-" sections describe the features specific to the signal and image "
-"processing panels."
-msgstr ""
-"Les fonctionnalités de DataLab sont détaillées dans les sections "
-"suivantes. La première section décrit les fonctionnalités générales de "
-"DataLab, puis les deux sections suivantes décrivent les fonctionnalités "
-"spécifiques aux panneaux de traitement du signal et d'image."
+"The following sections describe the features of DataLab, the open-source "
+"scientific data analysis and visualization platform."
+msgstr "Les paragraphes suivants décrivent les fonctionnalités de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques."
 
-#: ../../features/index.rst:12
+#: ../../doc/features/index.rst:11
+msgid ""
+"First, the **validation** section explains why and how DataLab is "
+"validated - that is another singular and fundamental feature of DataLab."
+msgstr "Tout d'abord, le paragraphe **validation** explique pourquoi et comment DataLab est validé - c'est une autre fonctionnalité singulière et fondamentale de DataLab."
+
+#: ../../doc/features/index.rst:14
+msgid ""
+"Then, the **general features** section describes the general features of "
+"DataLab, which concern both the signal and image processing panels."
+msgstr "Ensuite, le paragraphe **fonctionnalités générales** décrit les fonctionnalités générales de DataLab, qui concernent à la fois les panneaux de traitement du signal et d'image."
+
+#: ../../doc/features/index.rst:17
+msgid ""
+"The **signal processing** and **image processing** sections describe the "
+"features specific to the signal and image processing panels, "
+"respectively."
+msgstr "Les paragraphes **traitement du signal** et **traitement d'image** décrivent les fonctionnalités spécifiques aux panneaux de traitement du signal et d'image, respectivement."
+
+#: ../../doc/features/index.rst:22
 msgid ""
 "Before jumping into the details of other parts of the documentation, it "
 "is recommended to start with the :ref:`workspace` page, which describes "
@@ -65,7 +82,7 @@ msgstr ""
 " il est recommandé de commencer par la page :ref:`workspace`, qui décrit "
 "les concepts de base de DataLab."
 
-#: ../../features/index.rst:18
+#: ../../doc/features/index.rst:28
 msgid ""
 "For a synthetic overview of the features of DataLab, please refer to the "
 ":ref:`key_features` page."
@@ -73,11 +90,51 @@ msgstr ""
 "Pour une vue d'ensemble synthétique des fonctionnalités de DataLab, "
 "veuillez vous référer à la page :ref:`key_features`."
 
-#: ../../features/index.rst:22
+#: ../../doc/features/index.rst:32
+msgid "Validation"
+msgstr "Validation"
+
+#: ../../doc/features/index.rst:34
+msgid ""
+"DataLab is a platform for scientific data analysis and visualization. It "
+"may be used in a variety of scientific disciplines, including biology, "
+"physics, and astronomy. The common ground for all these disciplines is "
+"the need to validate the results of computational analysis against "
+"ground-truth data. This is a critical step in the scientific method, and "
+"it is essential for reproducibility and trust in the results. This is "
+"what we call **scientific validation**."
+msgstr "DataLab est une plateforme d'analyse et de visualisation de données scientifiques qui peut être utilisée dans diverses disciplines scientifiques, y compris la biologie, la physique et l'astronomie. Le point commun de toutes ces disciplines est la nécessité de valider les résultats de l'analyse informatique par rapport à des données de référence. Il s'agit d'une étape critique dans la méthode scientifique et elle est essentielle pour la reproductibilité et la confiance dans les résultats. C'est ce que nous appelons la **validation scientifique**."
+
+#: ../../doc/features/index.rst:41
+msgid ""
+"DataLab is also used in industrial applications, where the validation of "
+"the results is essential for guaranteeing the quality of the process but "
+"a wider range of validation is required to ensure that a maximum of use "
+"cases are covered from a functional point of view. This is what we call "
+"**functional validation**."
+msgstr "DataLab est également utilisé dans des applications industrielles, où la validation des résultats est essentielle pour garantir la qualité du processus, mais une gamme plus large de validation est nécessaire pour s'assurer qu'un maximum de cas d'utilisation sont couverts d'un point de vue fonctionnel. C'est ce que nous appelons la **validation fonctionnelle**."
+
+#: ../../doc/features/index.rst:46
+msgid "Thus, DataLab validation may be categorized into two types:"
+msgstr "Ainsi, la validation de DataLab peut être classée en deux types :"
+
+#: ../../doc/features/index.rst:48
+msgid ""
+"**Scientific validation**: ensures that the results of computational "
+"analysis are accurate and reliable."
+msgstr "La **validation scientifique** : garantit que les résultats de l'analyse informatique sont précis et fiables."
+
+#: ../../doc/features/index.rst:51
+msgid ""
+"**Functional validation**: checks that the software behaves as expected "
+"in a variety of use cases (classic automated unit test suite)."
+msgstr "La **validation fonctionnelle** : vérifie que le logiciel se comporte comme prévu dans une variété de cas d'utilisation (suite de tests unitaires automatisés classique)."
+
+#: ../../doc/features/index.rst:63
 msgid "General features"
 msgstr "Fonctionnalités générales"
 
-#: ../../features/index.rst:24
+#: ../../doc/features/index.rst:65
 msgid ""
 "This section describes the general features of DataLab, which concern "
 "both the signal and image processing panels."
@@ -85,15 +142,15 @@ msgstr ""
 "Cette section décrit les fonctionnalités générales de DataLab, qui "
 "concernent à la fois les panneaux de traitement du signal et d'image."
 
-#: ../../features/index.rst:29
+#: ../../doc/features/index.rst:70
 msgid "DataLab main window"
 msgstr "Fenêtre principale de DataLab"
 
-#: ../../features/index.rst:49
+#: ../../doc/features/index.rst:92
 msgid "Signal processing"
 msgstr "Traitement du signal"
 
-#: ../../features/index.rst:51
+#: ../../doc/features/index.rst:94
 msgid ""
 "This section describes the features specific to the signal processing "
 "panel. The signal processing panel is the default panel when DataLab is "
@@ -103,15 +160,15 @@ msgstr ""
 "traitement du signal. Le panneau de traitement du signal est le panneau "
 "par défaut lorsque DataLab est démarré."
 
-#: ../../features/index.rst:56
+#: ../../doc/features/index.rst:99
 msgid "DataLab main window: Signal processing view"
 msgstr "Fenêtre principale de DataLab : vue du traitement du signal"
 
-#: ../../features/index.rst:71
+#: ../../doc/features/index.rst:116
 msgid "Image processing"
 msgstr "Traitement d'image"
 
-#: ../../features/index.rst:73
+#: ../../doc/features/index.rst:118
 msgid ""
 "This section describes the features specific to the image processing "
 "panel. The image processing panel can be selected by clicking on the "
@@ -122,6 +179,6 @@ msgstr ""
 "sélectionné en cliquant sur l'onglet \"Images\" en bas à droite de la "
 "fenêtre principale de DataLab."
 
-#: ../../features/index.rst:79
+#: ../../doc/features/index.rst:124
 msgid "DataLab main window: Image processing view"
 msgstr "Fenêtre principale de DataLab : vue du traitement d'image"

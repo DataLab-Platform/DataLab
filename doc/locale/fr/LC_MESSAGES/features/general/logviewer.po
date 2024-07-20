@@ -44,7 +44,7 @@ msgid ""
 "directory):"
 msgstr ""
 "Pour traiter ce type de situation, DataLab fournit deux types de journaux"
-" de bord (localisés dans votre répertoire utilisateur) :"
+" de bord (localisés dans votre répertoire utilisateur) :"
 
 #: ../../doc/features/general/logviewer.rst:14
 msgid "\"Traceback log\", for Python exceptions"
@@ -87,4 +87,3 @@ msgstr ""
 "page `GitHub Issues`_ sera grandement apprécié, d'autant plus si vous "
 "prenez soin de joindre le contenu des journaux de bord (ainsi que des "
 "informations sur votre configuration, cf. :ref:`ref-to-instviewer`)."
-

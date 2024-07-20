@@ -65,7 +65,7 @@ class CannyParam(gds.DataSet):
 
 
 def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
-    """Compute Canny filter
+    """Compute Canny filter with :py:func:`skimage.feature.canny`
 
     Args:
         src: input image object
@@ -96,7 +96,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
 
 
 def compute_roberts(src: ImageObj) -> ImageObj:
-    """Compute Roberts filter
+    """Compute Roberts filter with :py:func:`skimage.filters.roberts`
 
     Args:
         src: input image object
@@ -108,7 +108,7 @@ def compute_roberts(src: ImageObj) -> ImageObj:
 
 
 def compute_prewitt(src: ImageObj) -> ImageObj:
-    """Compute Prewitt filter
+    """Compute Prewitt filter with :py:func:`skimage.filters.prewitt`
 
     Args:
         src: input image object
@@ -120,7 +120,7 @@ def compute_prewitt(src: ImageObj) -> ImageObj:
 
 
 def compute_prewitt_h(src: ImageObj) -> ImageObj:
-    """Compute horizontal Prewitt filter
+    """Compute horizontal Prewitt filter with :py:func:`skimage.filters.prewitt_h`
 
     Args:
         src: input image object
@@ -132,7 +132,7 @@ def compute_prewitt_h(src: ImageObj) -> ImageObj:
 
 
 def compute_prewitt_v(src: ImageObj) -> ImageObj:
-    """Compute vertical Prewitt filter
+    """Compute vertical Prewitt filter with :py:func:`skimage.filters.prewitt_v`
 
     Args:
         src: input image object
@@ -144,7 +144,7 @@ def compute_prewitt_v(src: ImageObj) -> ImageObj:
 
 
 def compute_sobel(src: ImageObj) -> ImageObj:
-    """Compute Sobel filter
+    """Compute Sobel filter with :py:func:`skimage.filters.sobel`
 
     Args:
         src: input image object
@@ -156,7 +156,7 @@ def compute_sobel(src: ImageObj) -> ImageObj:
 
 
 def compute_sobel_h(src: ImageObj) -> ImageObj:
-    """Compute horizontal Sobel filter
+    """Compute horizontal Sobel filter with :py:func:`skimage.filters.sobel_h`
 
     Args:
         src: input image object
@@ -168,7 +168,7 @@ def compute_sobel_h(src: ImageObj) -> ImageObj:
 
 
 def compute_sobel_v(src: ImageObj) -> ImageObj:
-    """Compute vertical Sobel filter
+    """Compute vertical Sobel filter with :py:func:`skimage.filters.sobel_v`
 
     Args:
         src: input image object
@@ -180,7 +180,7 @@ def compute_sobel_v(src: ImageObj) -> ImageObj:
 
 
 def compute_scharr(src: ImageObj) -> ImageObj:
-    """Compute Scharr filter
+    """Compute Scharr filter with :py:func:`skimage.filters.scharr`
 
     Args:
         src: input image object
@@ -192,7 +192,7 @@ def compute_scharr(src: ImageObj) -> ImageObj:
 
 
 def compute_scharr_h(src: ImageObj) -> ImageObj:
-    """Compute horizontal Scharr filter
+    """Compute horizontal Scharr filter with :py:func:`skimage.filters.scharr_h`
 
     Args:
         src: input image object
@@ -204,7 +204,7 @@ def compute_scharr_h(src: ImageObj) -> ImageObj:
 
 
 def compute_scharr_v(src: ImageObj) -> ImageObj:
-    """Compute vertical Scharr filter
+    """Compute vertical Scharr filter with :py:func:`skimage.filters.scharr_v`
 
     Args:
         src: input image object
@@ -216,7 +216,7 @@ def compute_scharr_v(src: ImageObj) -> ImageObj:
 
 
 def compute_farid(src: ImageObj) -> ImageObj:
-    """Compute Farid filter
+    """Compute Farid filter with :py:func:`skimage.filters.farid`
 
     Args:
         src: input image object
@@ -228,7 +228,7 @@ def compute_farid(src: ImageObj) -> ImageObj:
 
 
 def compute_farid_h(src: ImageObj) -> ImageObj:
-    """Compute horizontal Farid filter
+    """Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`
 
     Args:
         src: input image object
@@ -240,7 +240,7 @@ def compute_farid_h(src: ImageObj) -> ImageObj:
 
 
 def compute_farid_v(src: ImageObj) -> ImageObj:
-    """Compute vertical Farid filter
+    """Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`
 
     Args:
         src: input image object
@@ -252,7 +252,7 @@ def compute_farid_v(src: ImageObj) -> ImageObj:
 
 
 def compute_laplace(src: ImageObj) -> ImageObj:
-    """Compute Laplace filter
+    """Compute Laplace filter with :py:func:`skimage.filters.laplace`
 
     Args:
         src: input image object

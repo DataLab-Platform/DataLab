@@ -37,7 +37,7 @@ msgstr "Paramètres de détection de contours."
 
 #: ../../features/image/contour_detection.rst:17
 msgid "How to use the feature:"
-msgstr "La fonctionnalité s'utilise de la façon suivante :"
+msgstr "La fonctionnalité s'utilise de la façon suivante :"
 
 #: ../../features/image/contour_detection.rst:14
 msgid "Create or open an image in DataLab workspace"
@@ -61,7 +61,7 @@ msgstr "Résultats de la détection de contours (cf. test \"contour_app.py\")"
 
 #: ../../features/image/contour_detection.rst:28
 msgid "Results are shown in a table:"
-msgstr "Les résultats sont affichés dans un tableau :"
+msgstr "Les résultats sont affichés dans un tableau :"
 
 #: ../../features/image/contour_detection.rst:24
 msgid "Each row is associated to a contour"
@@ -89,7 +89,7 @@ msgstr "Exemple de détection de contours."
 
 #: ../../features/image/contour_detection.rst:37
 msgid "The contour detection algorithm works in the following way:"
-msgstr "L'algorithme de détection de contours fonctionne de la manière suivante :"
+msgstr "L'algorithme de détection de contours fonctionne de la manière suivante :"
 
 #: ../../features/image/contour_detection.rst:35
 msgid ""
@@ -113,4 +113,4 @@ msgid ""
 "``cdl.algorithms`` module:"
 msgstr ""
 "La fonctionnalité est basée sur la fonction ``get_contour_shapes`` du "
-"module ``cdl.computation`` :"
+"module ``cdl.computation`` :"

@@ -50,11 +50,10 @@ msgstr ""
 "installation et votre configuration utilisateur."
 
 #: ../../doc/features/general/instviewer.rst:19
-#, fuzzy
 msgid ""
 "The installation and configuration viewer is accessible from the \"?\" "
 "menu in the main window."
-msgstr "Installation et configuration (voir menu \"?\")"
+msgstr "Le visualiseur d'installation et de configuration est accessible depuis le menu \"?\" de la fenêtre principale."
 
 #: ../../doc/features/general/instviewer.rst:23
 msgid "Installation and configuration (see \"?\" menu)"
@@ -84,4 +83,3 @@ msgstr ""
 
 #~ msgid "About your DataLab installation (see \"?\" menu)"
 #~ msgstr "Configuration d'installation de DataLab (voir menu \"?\")"
-

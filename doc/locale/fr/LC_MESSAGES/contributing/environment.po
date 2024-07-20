@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-04 11:50+0200\n"
+"POT-Creation-Date: 2024-06-16 12:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,19 +19,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../contributing/environment.md:1
+#: ../../doc/contributing/environment.md:1
 msgid "Setting up Development Environment"
 msgstr "Mise en place de l'environnement de développement"
 
-#: ../../contributing/environment.md:4
+#: ../../doc/contributing/environment.md:4
 msgid "Getting started with DataLab development is easy."
 msgstr "Démarrer le développement dans le cadre du projet DataLab est facile."
 
-#: ../../contributing/environment.md:6
+#: ../../doc/contributing/environment.md:6
 msgid "Here is what you will need:"
-msgstr "Voici ce dont vous aurez besoin :"
+msgstr "Voici ce dont vous aurez besoin :"
 
-#: ../../contributing/environment.md:8
+#: ../../doc/contributing/environment.md:8
 msgid ""
 "An integrated development environment (IDE) for Python. We recommend "
 "[Spyder](https://www.spyder-ide.org/) or [Visual Studio "
@@ -41,7 +41,7 @@ msgstr ""
 "recommandons [Spyder](https://www.spyder-ide.org/) ou [Visual Studio "
 "Code](https://code.visualstudio.com/), mais tout IDE fera l'affaire."
 
-#: ../../contributing/environment.md:12
+#: ../../doc/contributing/environment.md:12
 msgid ""
 "A Python distribution. We recommend "
 "[WinPython](https://winpython.github.io/), on Windows, or "
@@ -53,27 +53,27 @@ msgstr ""
 "[Anaconda](https://www.anaconda.com/), sur Linux ou Mac. Mais, encore une"
 " fois, n'importe quelle distribution Python fera l'affaire."
 
-#: ../../contributing/environment.md:16
+#: ../../doc/contributing/environment.md:16
 msgid "A clean project structure (see below)."
 msgstr "Une structure de projet propre (voir ci-dessous)."
 
-#: ../../contributing/environment.md:18
+#: ../../doc/contributing/environment.md:18
 msgid "Test data (see below)."
 msgstr "Des données de test (voir ci-dessous)."
 
-#: ../../contributing/environment.md:20
+#: ../../doc/contributing/environment.md:20
 msgid "Environment variables (see below)."
 msgstr "Des variables d'environnement (voir ci-dessous)."
 
-#: ../../contributing/environment.md:22
+#: ../../doc/contributing/environment.md:22
 msgid "Third-party software (see below)."
 msgstr "Des logiciels tiers (voir ci-dessous)."
 
-#: ../../contributing/environment.md:24
+#: ../../doc/contributing/environment.md:24
 msgid "Development Environment"
 msgstr "Environnement de développement"
 
-#: ../../contributing/environment.md:27
+#: ../../doc/contributing/environment.md:27
 msgid ""
 "If you are using [Spyder](https://www.spyder-ide.org/), thank you for "
 "supporting the scientific open-source Python community!"
@@ -81,24 +81,24 @@ msgstr ""
 "Si vous utilisez [Spyder](https://www.spyder-ide.org/), merci de soutenir"
 " la communauté scientifique Python open-source !"
 
-#: ../../contributing/environment.md:30
+#: ../../doc/contributing/environment.md:30
 msgid ""
 "If you are using Visual Studio Code, that's also an excellent choice (for"
 " other reasons). We recommend installing the following extensions:"
 msgstr ""
 "Si vous utilisez Visual Studio Code, c'est aussi un excellent choix (pour"
 " d'autres raisons). Nous recommandons d'installer les extensions "
-"suivantes :"
+"suivantes :"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Extension"
 msgstr "Extension"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Description"
 msgstr "Description"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid ""
 "[gettext](https://marketplace.visualstudio.com/items?itemName=mrorz"
 ".language-gettext)"
@@ -106,11 +106,11 @@ msgstr ""
 "[gettext](https://marketplace.visualstudio.com/items?itemName=mrorz"
 ".language-gettext)"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Gettext syntax highlighting"
 msgstr "Coloration syntaxique Gettext"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid ""
 "[Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python"
 ".vscode-pylance)"
@@ -118,11 +118,11 @@ msgstr ""
 "[Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python"
 ".vscode-pylance)"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Python language server"
 msgstr "Serveur de langage Python"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid ""
 "[Python](https://marketplace.visualstudio.com/items?itemName=ms-"
 "python.python)"
@@ -130,11 +130,11 @@ msgstr ""
 "[Python](https://marketplace.visualstudio.com/items?itemName=ms-"
 "python.python)"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Python extension"
 msgstr "Extension Python"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid ""
 "[reStructuredText Syntax "
 "highlighting](https://marketplace.visualstudio.com/items?itemName=trond-"
@@ -144,19 +144,19 @@ msgstr ""
 "highlighting](https://marketplace.visualstudio.com/items?itemName=trond-"
 "snekvik.simple-rst)"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "reStructuredText syntax highlighting"
 msgstr "Coloration syntaxique reStructuredText"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "[Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)"
 msgstr "[Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Extremely fast Python linter and code formatter"
 msgstr "Linter et formateur de code Python extrêmement rapide"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid ""
 "[Todo "
 "Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly"
@@ -166,51 +166,55 @@ msgstr ""
 "Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly"
 ".todo-tree)"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Todo tree"
 msgstr "Arbre de tâches"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid ""
 "[Insert GUID](https://marketplace.visualstudio.com/items?itemName=heaths"
 ".vscode-guid)"
-msgstr "[Insert GUID](https://marketplace.visualstudio.com/items?itemName=heaths.vscode-guid)"
+msgstr ""
+"[Insert GUID](https://marketplace.visualstudio.com/items?itemName=heaths"
+".vscode-guid)"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Insert GUID"
 msgstr "Insérer un GUID"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid ""
 "[XML "
 "Tools](https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml)"
-msgstr "[XML Tools](https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml)"
+msgstr ""
+"[XML "
+"Tools](https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml)"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "XML Tools"
 msgstr "Outils XML"
 
-#: ../../contributing/environment.md:44
+#: ../../doc/contributing/environment.md:44
 msgid "Python Environment"
 msgstr "Environnement Python"
 
-#: ../../contributing/environment.md:47
+#: ../../doc/contributing/environment.md:47
 msgid "DataLab requires the following :"
-msgstr "DataLab nécessite les éléments suivants :"
+msgstr "DataLab nécessite les éléments suivants :"
 
-#: ../../contributing/environment.md:49
+#: ../../doc/contributing/environment.md:49
 msgid "Python (e.g. WinPython)"
 msgstr "Python (p.ex. WinPython)"
 
-#: ../../contributing/environment.md:51
+#: ../../doc/contributing/environment.md:51
 msgid "Additional Python packages"
 msgstr "Paquets Python supplémentaires"
 
-#: ../../contributing/environment.md:53
+#: ../../doc/contributing/environment.md:53
 msgid "Installing all required packages :"
-msgstr "Installation de tous les paquets requis :"
+msgstr "Installation de tous les paquets requis :"
 
-#: ../../contributing/environment.md:57
+#: ../../doc/contributing/environment.md:57
 msgid ""
 "ℹ️ See [Installation](https://datalab-"
 "platform.com/en/intro/installation.html) for more details on reference "
@@ -220,7 +224,7 @@ msgstr ""
 "platform.com/en/intro/installation.html) pour plus de détails sur les "
 "versions de référence de Python et Qt."
 
-#: ../../contributing/environment.md:60
+#: ../../doc/contributing/environment.md:60
 msgid ""
 "If you are using [WinPython](https://winpython.github.io/), thank you for"
 " supporting the scientific open-source Python community!"
@@ -228,71 +232,71 @@ msgstr ""
 "Si vous utilisez [WinPython](https://winpython.github.io/), merci de "
 "soutenir la communauté scientifique Python open-source !"
 
-#: ../../contributing/environment.md:63
+#: ../../doc/contributing/environment.md:63
 msgid ""
 "The following table lists the currently officially used Python "
 "distributions:"
 msgstr ""
 "Le tableau suivant liste les distributions Python actuellement utilisées "
-"officiellement :"
+"officiellement :"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Python version"
 msgstr "Version de Python"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Status"
 msgstr "Statut"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "WinPython version"
 msgstr "Version de WinPython"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.8"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "OK"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.8.10.0"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.9"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.9.10.0"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.10"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.10.11.1"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.11"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.11.5.0"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.12"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "3.12.0.1"
 msgstr ""
 
-#: ../../contributing/environment.md:73
+#: ../../doc/contributing/environment.md:73
 msgid ""
 "⚠ We strongly recommend using the `.dot` versions of WinPython which are "
 "lightweight and can be customized to your needs (using `pip install -r "
@@ -302,17 +306,17 @@ msgstr ""
 " qui sont légères et peuvent être personnalisées selon vos besoins (en "
 "utilisant `pip install -r requirements.txt`)."
 
-#: ../../contributing/environment.md:76
+#: ../../doc/contributing/environment.md:76
 msgid "✅ We also recommend using a dedicated WinPython instance for DataLab."
 msgstr ""
 "✅ Nous recommandons également d'utiliser une instance WinPython dédiée "
 "pour DataLab."
 
-#: ../../contributing/environment.md:78
+#: ../../doc/contributing/environment.md:78
 msgid "Test data"
 msgstr "Données de test"
 
-#: ../../contributing/environment.md:81
+#: ../../doc/contributing/environment.md:81
 msgid ""
 "DataLab test data are located in different folders, depending on their "
 "nature or origin."
@@ -320,7 +324,7 @@ msgstr ""
 "Les données de test de DataLab sont situées dans différents dossiers, "
 "selon leur nature ou leur origine."
 
-#: ../../contributing/environment.md:83
+#: ../../doc/contributing/environment.md:83
 msgid ""
 "Required data for unit tests are located in \"cdl\\data\\tests\" (public "
 "data)."
@@ -328,7 +332,7 @@ msgstr ""
 "Les données requises pour les tests unitaires sont situées dans "
 "\"cdl\\data\\tests\" (données publiques)"
 
-#: ../../contributing/environment.md:85
+#: ../../doc/contributing/environment.md:85
 msgid ""
 "A second folder %CDL_DATA% (optional) may be defined for additional tests"
 " which are still under development (or for confidential data)."
@@ -337,45 +341,45 @@ msgstr ""
 " supplémentaires qui sont encore en cours de développement (ou pour des "
 "données confidentielles)."
 
-#: ../../contributing/environment.md:88
+#: ../../doc/contributing/environment.md:88
 msgid "Specific environment variables"
 msgstr "Variables d'environnement spécifiques"
 
-#: ../../contributing/environment.md:91
+#: ../../doc/contributing/environment.md:91
 msgid ""
 "Enable the \"debug\" mode (no stdin/stdout redirection towards internal "
 "console):"
 msgstr ""
 "Activer le mode \"debug\" (pas de redirection stdin/stdout vers la "
-"console interne) :"
+"console interne) :"
 
-#: ../../contributing/environment.md:96
+#: ../../doc/contributing/environment.md:96
 msgid ""
 "Building PDF documentation requires LaTeX. On Windows, the following "
 "environment:"
 msgstr ""
 "Générer la documentation PDF nécessite LaTeX. Sur Windows, "
-"l'environnement suivant :"
+"l'environnement suivant :"
 
-#: ../../contributing/environment.md:102
+#: ../../doc/contributing/environment.md:102
 msgid ""
 "Visual Studio Code configuration used in `launch.json` and `tasks.json` "
 "(examples) :"
 msgstr ""
 "La configuration de Visual Studio Code utilisée dans `launch.json` et "
-"`tasks.json` (exemples) :"
+"`tasks.json` (exemples) :"
 
-#: ../../contributing/environment.md:110
+#: ../../doc/contributing/environment.md:110
 msgid "Visual Studio Code `.env` file:"
-msgstr "Fichier `.env` de Visual Studio Code :"
+msgstr "Fichier `.env` de Visual Studio Code :"
 
-#: ../../contributing/environment.md:112
+#: ../../doc/contributing/environment.md:112
 msgid "This file is used to set environment variables for the application."
 msgstr ""
 "Ce fichier est utilisé pour définir les variables d'environnement de "
 "l'application."
 
-#: ../../contributing/environment.md:113
+#: ../../doc/contributing/environment.md:113
 msgid ""
 "It is used to set the `PYTHONPATH` environment variable to the root of "
 "the project."
@@ -383,7 +387,7 @@ msgstr ""
 "Il est utilisé pour définir la variable d'environnement `PYTHONPATH` à la"
 " racine du projet."
 
-#: ../../contributing/environment.md:114
+#: ../../doc/contributing/environment.md:114
 msgid ""
 "This is required to be able to import the project modules from within VS "
 "Code."
@@ -391,7 +395,7 @@ msgstr ""
 "Cela est nécessaire pour pouvoir importer les modules du projet depuis VS"
 " Code."
 
-#: ../../contributing/environment.md:115
+#: ../../doc/contributing/environment.md:115
 msgid ""
 "To create this file, copy the `.env.template` file to `.env` (and "
 "eventually add your own paths)."
@@ -399,83 +403,83 @@ msgstr ""
 "Pour créer ce fichier, copiez le fichier `.env.template` en `.env` (et "
 "ajoutez éventuellement vos propres chemins)."
 
-#: ../../contributing/environment.md:118
+#: ../../doc/contributing/environment.md:118
 msgid "Windows installer"
 msgstr ""
 
-#: ../../contributing/environment.md:121
+#: ../../doc/contributing/environment.md:121
 msgid ""
 "The Windows installer is built using [WiX "
 "Toolset](https://wixtoolset.org/) V4.0.5. Using the WiX Toolset requires "
 "[.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum."
 msgstr ""
 
-#: ../../contributing/environment.md:124
+#: ../../doc/contributing/environment.md:124
 msgid "You may install .NET SDK using `winget`:"
 msgstr ""
 
-#: ../../contributing/environment.md:128
+#: ../../doc/contributing/environment.md:128
 msgid ""
 "Once .NET SDK is installed, the WiX Toolset can be installed and "
 "configured using the following commands:"
 msgstr ""
 
-#: ../../contributing/environment.md:134
+#: ../../doc/contributing/environment.md:134
 msgid "First, you need to generate the installer script from a generic template:"
 msgstr ""
 
-#: ../../contributing/environment.md:138
+#: ../../doc/contributing/environment.md:138
 msgid "Building the installer is done using the following command:"
 msgstr ""
 
-#: ../../contributing/environment.md:142
+#: ../../doc/contributing/environment.md:142
 msgid "Third-party Software"
 msgstr "Logiciels tiers"
 
-#: ../../contributing/environment.md:145
+#: ../../doc/contributing/environment.md:145
 msgid "The following software may be required for maintaining the project:"
-msgstr "Les logiciels suivants peuvent être nécessaires pour maintenir le projet :"
+msgstr "Les logiciels suivants peuvent être nécessaires pour maintenir le projet :"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Software"
 msgstr "Logiciel"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "[gettext](https://mlocati.github.io/articles/gettext-iconv-windows.html)"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Translations"
 msgstr "Traductions"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "[Git](https://git-scm.com/)"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Version control system"
 msgstr "Système de contrôle de version"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "[ImageMagick](https://imagemagick.org/)"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Image manipulation utilities"
 msgstr "Utilitaires de manipulation d'images"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "[Inkscape](https://inkscape.org/)"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "Vector graphics editor"
 msgstr "Editeur de graphiques vectoriels"
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "[MikTeX](https://miktex.org/)"
 msgstr ""
 
-#: ../../contributing/environment.md
+#: ../../doc/contributing/environment.md
 msgid "LaTeX distribution on Windows"
 msgstr "Distribution LaTeX sur Windows"

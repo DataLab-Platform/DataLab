@@ -134,7 +134,7 @@ msgstr "Calcule l'histogramme du signal sélectionné et l'affiche."
 
 #: ../../doc/features/signal/menu_computing.rst:66
 msgid "Parameters are:"
-msgstr "Paramètres :"
+msgstr "Paramètres :"
 
 #: ../../doc/features/signal/menu_computing.rst:72
 #: ../../doc/features/signal/menu_computing.rst:151
@@ -185,7 +185,7 @@ msgid ""
 "one of the following methods:"
 msgstr ""
 "Calcule la largeur à mi-hauteur (LMH) du signal sélectionné, en utilisant"
-" l'une des méthodes suivantes :"
+" l'une des méthodes suivantes :"
 
 #: ../../doc/features/signal/menu_computing.rst:94
 msgid "Method"
@@ -279,7 +279,7 @@ msgid ""
 "signal."
 msgstr ""
 "Crée un signal à partir de la détection automatique des pics de chaque "
-"signal sélectionné :"
+"signal sélectionné :"
 
 #: ../../doc/features/signal/menu_computing.rst:131
 msgid ""
@@ -314,7 +314,7 @@ msgstr "Paramètres dynamiques"
 
 #: ../../doc/features/signal/menu_computing.rst:145
 msgid "Compute the following dynamic parameters on selected signal:"
-msgstr "Calcule les paramètres dynamiques suivants sur le signal sélectionné :"
+msgstr "Calcule les paramètres dynamiques suivants sur le signal sélectionné :"
 
 #: ../../doc/features/signal/menu_computing.rst:153
 msgid "f"
@@ -399,7 +399,7 @@ msgid ""
 " maximum and minimum values:"
 msgstr ""
 "Le contraste est défini comme le rapport de la différence et de la somme "
-"des valeurs maximale et minimale :"
+"des valeurs maximale et minimale :"
 
 #: ../../doc/features/signal/menu_computing.rst:184
 msgid ""

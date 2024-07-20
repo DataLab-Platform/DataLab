@@ -42,7 +42,7 @@ msgid ""
 "propagation axis, using using DataLab:"
 msgstr ""
 "Cet exemple montre comment mesurer la taille d'un faisceau laser le long "
-"de l'axe de propagation, en utilisant DataLab :"
+"de l'axe de propagation, en utilisant DataLab :"
 
 #: ../../intro/tutorials/laser_beam.rst:11
 msgid "Load all the images in a folder"
@@ -90,7 +90,7 @@ msgstr ""
 
 #: ../../intro/tutorials/laser_beam.rst:21
 msgid "First, we open DataLab and load the images:"
-msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images :"
+msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images :"
 
 #: ../../intro/tutorials/laser_beam.rst:25
 msgid ""
@@ -387,7 +387,7 @@ msgstr ""
 "Si vous souhaitez afficher à nouveau les résultats de calcul, vous pouvez"
 " sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le "
 "menu \"Calcul\", ou le bouton \"Afficher les résultats\" |show_results|, "
-"en dessous de la liste des images :"
+"en dessous de la liste des images :"
 
 #: ../../intro/tutorials/laser_beam.rst:181
 msgid "show_results"

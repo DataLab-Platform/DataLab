@@ -25,10 +25,8 @@ def create_image_with_resultproperties():
 def test_resultproperties():
     """Result properties application test"""
     obj1 = test_data.create_sincos_image()
+    obj2 = create_image_with_resultproperties()
     with cdltest_app_context(console=False) as win:
-        # TODO: Move the following line outside the with statement and solve
-        # the "QPixmap: Must construct a QGuiApplication before a QPixmap" error
-        obj2 = create_image_with_resultproperties()
         panel = win.signalpanel
         noiseparam = test_data.GaussianNoiseParam()
         for sigma in np.linspace(0.0, 0.5, 11):

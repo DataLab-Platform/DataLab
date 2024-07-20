@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../doc/features/validation/functional.rst:-1
+msgid ""
+"Validation in DataLab, the open-source scientific data analysis and "
+"visualization platform"
+msgstr "Validation dans DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
+
+#: ../../doc/features/validation/functional.rst:-1
+msgid "DataLab, scientific, data, analysis"
+msgstr "DataLab, scientifique, données, analyse"
+
+#: ../../doc/features/validation/functional.rst:4
+msgid "Functional validation"
+msgstr "Validation fonctionnelle"
+
+#: ../../doc/features/validation/functional.rst:11
+msgid "Strategy"
+msgstr "Stratégie"
+
+#: ../../doc/features/validation/functional.rst:13
+#, python-format
+msgid ""
+"DataLab functional validation is based a classic test strategy, with a "
+"strong emphasis on automated testing. Apart from one or two manual tests "
+"(e.g. load test), all tests are automated (more than 99% of the tests are"
+" automated)."
+msgstr "La validation fonctionnelle de DataLab est basée sur une stratégie de test classique, avec un fort accent sur les tests automatisés. À l'exception d'un ou deux tests manuels (par exemple, un test de charge), tous les tests sont automatisés (plus de 99% des tests sont automatisés)."
+
+#: ../../doc/features/validation/functional.rst:17
+msgid "Writing tests follows the TDD (Test-Driven Development) principle:"
+msgstr "L'écriture des tests suit le principe TDD (Test-Driven Development) :"
+
+#: ../../doc/features/validation/functional.rst:19
+msgid ""
+"When *a new feature is developed*, the developer writes the tests first. "
+"The tests are then executed to ensure that they fail. The developer then "
+"implements the feature, and the tests are executed again to ensure that "
+"they pass."
+msgstr "Losqu'une *nouvelle fonctionnalité* est développée, le développeur écrit d'abord les tests. Les tests sont ensuite exécutés pour s'assurer qu'ils échouent. Le développeur implémente ensuite la fonctionnalité, et les tests sont exécutés à nouveau pour s'assurer qu'ils réussissent."
+
+#: ../../doc/features/validation/functional.rst:23
+msgid ""
+"When *a bug is reported*, the developer writes a test that reproduces the"
+" bug. The test is executed to ensure that it fails. The developer then "
+"fixes the bug, and the test is executed again to ensure that it passes."
+msgstr "Lorsqu'un *bug est signalé*, le développeur écrit un test qui reproduit le bug. Le test est exécuté pour s'assurer qu'il échoue. Le développeur corrige ensuite le bug, et le test est exécuté
+
+#: ../../doc/features/validation/functional.rst:27
+msgid ""
+"Depending on the abstraction level, unit tests and/or application tests "
+"are written. When writing both types of tests, the developer starts with "
+"the unit tests and then writes the application tests."
+msgstr "Selon le niveau d'abstraction, des tests unitaires et/ou des tests d'application sont écrits. Lors de l'écriture des deux types de tests, le développeur commence par les tests unitaires puis écrit les tests d'application."
+
+#: ../../doc/features/validation/functional.rst:32
+msgid "Types of tests"
+msgstr "Types de tests"
+
+#: ../../doc/features/validation/functional.rst:34
+msgid "The functional validation of DataLab is based on two main types of tests:"
+msgstr "La validation fonctionnelle de DataLab repose sur deux types principaux de tests :"
+
+#: ../../doc/features/validation/functional.rst:36
+msgid ""
+"**Unit tests** (test scripts named ``*_unit_test.py``): Test individual "
+"functions or methods. All unit tests are automated."
+msgstr "Les **tests unitaires** (scripts de test nommés ``*_unit_test.py``) : testent les fonctions ou méthodes individuelles. Tous les tests unitaires sont automatisés."
+
+#: ../../doc/features/validation/functional.rst:39
+msgid ""
+"**Application tests** (test scripts named ``*_app_test.py``): Test the "
+"interaction between components (integration tests), or the application as"
+" a whole. All application tests are automated."
+msgstr "Les **tests applicatifs** (scripts de test nommés ``*_app_test.py``) : testent l'interaction entre les composants (tests d'intégration), ou l'application dans son ensemble. Tous les tests applicatifs sont automatisés."
+
+#: ../../doc/features/validation/functional.rst:44
+msgid "Implementation"
+msgstr "Implémentation"
+
+#: ../../doc/features/validation/functional.rst:46
+msgid ""
+"The tests are implemented using the `pytest "
+"<https://docs.pytest.org/en/latest/>`_ framework. Many existing tests may"
+" be derived from to create new tests."
+msgstr "Les tests sont implémentés en utilisant le framework `pytest <https://docs.pytest.org/en/latest/>`_. De nombreux tests existants peuvent être dérivés pour créer de nouveaux tests."
+
+#: ../../doc/features/validation/functional.rst:50
+msgid "Executing tests"
+msgstr "Exécution des tests"
+
+#: ../../doc/features/validation/functional.rst:52
+msgid ""
+"To execute the tests, the developer uses the command line interface. See "
+"section :ref:`run_functional_validation_tests` for more information on "
+"how to run functional validation tests."
+msgstr "Pour exécuter les tests, le développeur utilise l'interface en ligne de commande. Voir la section :ref:`run_functional_validation_tests` pour plus d'informations sur la façon d'exécuter les tests de validation fonctionnelle."

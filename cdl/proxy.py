@@ -7,6 +7,9 @@ Proxy objects (:mod:`cdl.proxy`)
 The :mod:`cdl.proxy` module provides a way to access DataLab features from a proxy
 class.
 
+The list of compute methods accessible from the proxy objects is available in the
+:ref:`processor_methods` section.
+
 Remote proxy
 ^^^^^^^^^^^^
 
@@ -47,6 +50,86 @@ specified as "remote:port".
     between local and remote proxy, keeping the same code inside the context.
 
 .. autofunction:: proxy_context
+
+.. _processor_methods:
+
+Calling processor methods using proxy objects
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+All the proxy objects provide access to the DataLab computing methods exposed by
+the processor classes:
+
+- :class:`cdl.core.gui.processor.signal.SignalProcessor`
+- :class:`cdl.core.gui.processor.image.ImageProcessor`
+
+.. seealso::
+
+    The list of processor methods is available in tables below.
+
+There are two ways to call a processor method:
+
+1. Using the :meth:`calc` method of the proxy object:
+
+.. code-block:: python
+
+    # Call a method without parameter
+    proxy.calc("compute_average")
+
+    # This is equivalent to:
+    proxy.calc("average")
+
+    # Call a method with parameters
+    p = cdl.param.MovingAverageParam.create(n=30)
+    proxy.calc("compute_moving_average", p)
+
+2. Directly calling the processor method from the proxy object:
+
+.. code-block:: python
+
+    # Call a method without parameter
+    proxy.compute_average()
+
+    # Call a method with parameters
+    p = cdl.param.MovingAverageParam.create(n=30)
+    proxy.compute_moving_average(p)
+
+.. warning::
+
+    The `compute_{name}` methods are not statically defined in the proxy classes (and
+    not even dynamically). They are nevertheless available through the proxy objects
+    thanks to the magic method :meth:`__getattr__` which forwards the call to the
+    :meth:`calc` method. However, this means that the methods are not listed in the
+    proxy classes documentation, and they are not available in the auto-completion
+    feature of your IDE.
+
+Number of compute methods
+*************************
+
+.. csv-table:: Number of compute methods
+   :file: ../doc/processor_methods_nb.csv
+   :header: Signal, Image, Total
+
+Signal processing
+*****************
+
+The following table lists the signal processor methods - it is automatically
+generated from the source code:
+
+.. csv-table:: Signal processor methods
+   :file: ../doc/processor_methods_signal.csv
+   :header: Compute method, Description
+   :widths: 40, 60
+
+Image processing
+****************
+
+The following table lists the image processor methods - it is automatically
+generated from the source code:
+
+.. csv-table:: Image processor methods
+    :file: ../doc/processor_methods_image.csv
+    :header: Compute method, Description
+    :widths: 40, 60
 """
 
 from __future__ import annotations
@@ -77,6 +160,11 @@ class RemoteProxy(RemoteClient):
         ConnectionRefusedError: Unable to connect to DataLab
         ValueError: Invalid timeout (must be >= 0.0)
         ValueError: Invalid number of retries (must be >= 1)
+
+    .. note::
+
+        The proxy object also allows to access DataLab computing methods exposed by
+        the processor classes (see :ref:`processor_methods`).
 
     Examples:
         Here is a simple example of how to use RemoteProxy in a Python script
@@ -115,6 +203,11 @@ class LocalProxy(BaseProxy):
 
     Args:
         cdl (CDLMainWindow): CDLMainWindow instance.
+
+    .. note::
+
+        The proxy object also allows to access DataLab computing methods exposed by
+        the processor classes (see :ref:`processor_methods`).
     """
 
     def add_signal(
@@ -180,16 +273,15 @@ class LocalProxy(BaseProxy):
             title, data, xunit, yunit, zunit, xlabel, ylabel, zlabel
         )
 
-    def calc(self, name: str, param: gds.DataSet | None = None) -> gds.DataSet:
+    def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call compute function ``name`` in current panel's processor.
 
         Args:
-            name (str): Compute function name
-            param (guidata.dataset.DataSet | None): Compute function
-            parameter. Defaults to None.
+            name: Compute function name
+            param: Compute function parameter. Defaults to None.
 
-        Returns:
-            guidata.dataset.DataSet: Compute function result
+        Raises:
+            ValueError: unknown function
         """
         return self._cdl.calc(name, param)
 

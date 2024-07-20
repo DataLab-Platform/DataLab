@@ -26,12 +26,33 @@ from cdl.env import execenv
 TST_PATH = []
 
 
+def add_test_path(path: str) -> None:
+    """Appends test data path, after normalizing it and making it absolute.
+    Do nothing if the path is already in the list.
+
+    Args:
+        Path to add to the list of test data paths
+
+    Raises:
+        FileNotFoundError: if the path does not exist
+    """
+    path = osp.abspath(osp.normpath(path))
+    if path not in TST_PATH:
+        if not osp.exists(path):
+            raise FileNotFoundError(f"Test data path does not exist: {path}")
+        TST_PATH.append(path)
+
+
 def add_test_path_from_env(envvar: str) -> None:
     """Appends test data path from environment variable (fails silently)"""
     # Note: this function is used in third-party plugins
     path = os.environ.get(envvar)
     if path:
-        TST_PATH.append(path)
+        add_test_path(path)
+
+
+# Add test data files and folders pointed by `CDL_DATA` environment variable:
+add_test_path_from_env("CDL_DATA")
 
 
 def add_test_module_path(modname: str, relpath: str) -> None:
@@ -43,9 +64,10 @@ def add_test_module_path(modname: str, relpath: str) -> None:
     modname must be the name of an already imported module as found in
     sys.modules
     """
-    TST_PATH.append(get_module_data_path(modname, relpath=relpath))
+    add_test_path(get_module_data_path(modname, relpath=relpath))
 
 
+# Add test data files and folders for the DataLab module:
 add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 
 

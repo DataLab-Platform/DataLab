@@ -37,7 +37,7 @@ and their purpose:
    algorithms
    param
    obj
-   core.computation
+   computation
    proxy
 
 .. toctree::

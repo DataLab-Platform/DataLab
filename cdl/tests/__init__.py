@@ -1,15 +1,21 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-DataLab test suite
-------------------
+Tests (:mod:`cdl.tests`)
+------------------------
 
-.. warning::
+The DataLab test suite is based on the `pytest <https://pytest.org>`_ framework.
 
-    This test suite is based on `guidata.guitest` discovery mechanism.
-    It is not compatible with `pytest` because most of the high level tests
-    have to be executed in a separate process (e.g. scenario tests will fail
-    if executed in the same process as other tests).
+The test suite modules are organized in subpackages according to their purpose.
+The following subpackages are available:
+
+- :mod:`cdl.tests.backbone`: backbone tests
+- :mod:`cdl.tests.features`: feature tests (unit tests and application tests)
+- :mod:`cdl.tests.scenarios`: high-level scenarios tests
+
+.. seealso::
+
+    :ref:`validation` for more information about DataLab's testing strategy.
 """
 
 from __future__ import annotations
@@ -27,8 +33,6 @@ from cdl.core.gui.panel.signal import SignalPanel
 from cdl.env import execenv
 from cdl.utils import qthelpers as qth
 from cdl.utils import tests
-
-# TODO: [P2] Documentation: add more screenshots from tests
 
 
 @contextmanager

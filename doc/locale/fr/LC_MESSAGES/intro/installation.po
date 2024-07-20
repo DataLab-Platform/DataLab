@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 16:14+0200\n"
+"POT-Creation-Date: 2024-07-01 12:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgstr "Installation rapide sur Windows"
 
 #: ../../doc/intro/installation.rst:16
 msgid "Direct download links for the latest version of DataLab:"
-msgstr "Liens de téléchargement directs pour la dernière version de DataLab :"
+msgstr "Liens de téléchargement directs pour la dernière version de DataLab :"
 
 #: ../../doc/intro/installation.rst:18
 msgid "|download_link1|"
@@ -77,7 +77,7 @@ msgstr "Modes d'installation"
 
 #: ../../doc/intro/installation.rst:33
 msgid "DataLab is available in several forms:"
-msgstr "DataLab est disponible sous plusieurs formes :"
+msgstr "DataLab est disponible sous plusieurs formes :"
 
 #: ../../doc/intro/installation.rst:35
 msgid "As a Python package, which can be installed using the :ref:`install_pip`."
@@ -155,7 +155,7 @@ msgid ""
 msgstr ""
 "L'installation de DataLab depuis PyPI avec Qt est aussi simple que "
 "d'exécuter cette commande (vous devrez peut-être utiliser ``pip3`` au "
-"lieu de ``pip`` sur certains systèmes) :"
+"lieu de ``pip`` sur certains systèmes) :"
 
 #: ../../doc/intro/installation.rst:71
 msgid ""
@@ -163,7 +163,7 @@ msgid ""
 "recommended):"
 msgstr ""
 "Ou, si vous préférez, vous pouvez installer DataLab sans la bibliothèque "
-"Qt (non recommandé) :"
+"Qt (non recommandé) :"
 
 #: ../../doc/intro/installation.rst:79
 msgid ""
@@ -172,7 +172,7 @@ msgid ""
 msgstr ""
 "Si vous avez déjà une version antérieure de DataLab installée, vous "
 "pouvez la mettre à jour en exécutant la même commande avec l'option "
-"``--upgrade`` :"
+"``--upgrade`` :"
 
 #: ../../doc/intro/installation.rst:89
 msgid "All-in-one installer"
@@ -309,7 +309,7 @@ msgid ""
 msgstr ""
 "Sur n'importe quel système d'exploitation, l'utilisation de pip et du "
 "paquet Wheel est le moyen le plus simple d'installer DataLab sur une "
-"distribution Python existante :"
+"distribution Python existante :"
 
 #: ../../doc/intro/installation.rst:170
 msgid "Source package"
@@ -321,7 +321,7 @@ msgid ""
 "``pip``:"
 msgstr ""
 "L'installation de DataLab directement depuis le paquet source peut être "
-"effectuée à l'aide de ``pip`` :"
+"effectuée à l'aide de ``pip`` :"
 
 #: ../../doc/intro/installation.rst:180
 msgid ""
@@ -329,7 +329,7 @@ msgid ""
 "command from the root directory of the source package:"
 msgstr ""
 "Ou, si vous préférez, vous pouvez l'installer manuellement en exécutant "
-"la commande suivante depuis le répertoire racine du paquet source :"
+"la commande suivante depuis le répertoire racine du paquet source :"
 
 #: ../../doc/intro/installation.rst:187
 msgid ""
@@ -341,7 +341,7 @@ msgstr ""
 "Enfin, vous pouvez également créer votre propre paquet Wheel et "
 "l'installer à l'aide de ``pip``, en exécutant la commande suivante depuis"
 " le répertoire racine du paquet source (cela nécessite que les paquets "
-"``build`` et ``wheel`` soient installés) :"
+"``build`` et ``wheel`` soient installés) :"
 
 #: ../../doc/intro/installation.rst:200
 msgid "Development version"
@@ -362,7 +362,7 @@ msgid ""
 "following command:"
 msgstr ""
 "La première fois que vous installez DataLab depuis le dépôt Git, entrez "
-"la commande suivante :"
+"la commande suivante :"
 
 #: ../../doc/intro/installation.rst:214
 msgid ""
@@ -374,7 +374,7 @@ msgstr ""
 "Ensuite, si vous souhaitez à un moment donné passer à la dernière version"
 " de DataLab, exécutez simplement la même commande avec les options pour "
 "forcer la réinstallation du paquet sans gérer les dépendances (car cela "
-"réinstallerait toutes les dépendances) :"
+"réinstallerait toutes les dépendances) :"
 
 #: ../../doc/intro/installation.rst:224
 msgid ""
@@ -398,7 +398,7 @@ msgstr ""
 
 #: ../../doc/requirements.rst:1
 msgid "The :mod:`cdl` package requires the following Python modules:"
-msgstr "Le paquet :mod:`cdl` requiert les modules Python suivants :"
+msgstr "Le paquet :mod:`cdl` requiert les modules Python suivants :"
 
 #: ../../doc/requirements.rst:7 ../../doc/requirements.rst:56
 #: ../../doc/requirements.rst:78 ../../doc/requirements.rst:112
@@ -544,7 +544,7 @@ msgid "PlotPy"
 msgstr ""
 
 #: ../../doc/requirements.rst:41
-msgid ">= 2.3"
+msgid ">= 2.4"
 msgstr ""
 
 #: ../../doc/requirements.rst:42
@@ -581,7 +581,7 @@ msgstr "Bibliothèque d'interfaces graphiques Qt pour Python"
 
 #: ../../doc/requirements.rst:50
 msgid "Optional modules for development:"
-msgstr "Modules optionnels pour le développement :"
+msgstr "Modules optionnels pour le développement :"
 
 #: ../../doc/requirements.rst:59
 msgid "ruff"
@@ -625,7 +625,7 @@ msgstr ""
 
 #: ../../doc/requirements.rst:72
 msgid "Optional modules for building the documentation:"
-msgstr "Modules optionnels pour la génération de la documentation :"
+msgstr "Modules optionnels pour la génération de la documentation :"
 
 #: ../../doc/requirements.rst:84
 msgid "sphinx"
@@ -689,7 +689,7 @@ msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
 #: ../../doc/requirements.rst:106
 msgid "Optional modules for running test suite:"
-msgstr "Modules optionnels pour l'exécution de la suite de tests :"
+msgstr "Modules optionnels pour l'exécution de la suite de tests :"
 
 #: ../../doc/requirements.rst:115
 msgid "pytest"
@@ -720,3 +720,5 @@ msgstr "Python 3.11 et PyQt5 sont les références pour la version de production
 #~ msgid ">= 1.21, < 2"
 #~ msgstr ""
 
+#~ msgid ">= 2.3"
+#~ msgstr ""

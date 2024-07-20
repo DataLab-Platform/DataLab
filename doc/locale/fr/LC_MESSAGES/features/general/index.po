@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../features/general/index.rst:8
 msgid "Contents:"
-msgstr "Table des matières :"
+msgstr "Table des matières :"
 
 #: ../../features/general/index.rst:2
 msgid "General features"

@@ -1,9 +1,65 @@
 # Changelog #
 
-See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
-for future and past milestones.
+See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
+
+## DataLab Version 0.16.4 ##
+
+This is a minor maintenance release.
+
+🛠️ Bug fixes:
+
+* Requires PlotPy v2.4.1 or later to fix the following issues related to the contrast adjustment feature:
+  * A regression was introduced in an earlier version of PlotPy: levels histogram was no longer removed from
+    contrast adjustment panel when the associated image was removed from the plot
+  * This is now fixed: when an image is removed, the histogram is removed as well and
+    the contrast panel is refreshed (which was not the case even before the regression)
+* Ignore `AssertionError` in *config_unit_test.py* when executing test suite on WSL
+
+📚 Documentation:
+
+* Fix class reference in `Wrap11Func` documentation
+
+## DataLab Version 0.16.3 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84) - Build issues with V0.16.1: `signal` name conflict, ...
+  * This issue was intended to be fixed in version 0.16.2, but the fix was not complete
+  * Thanks to [@rolandmas](https://github.com/rolandmas) for reporting the issue and for the help in investigating the problem and testing the fix
+* Fixed [Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Test data paths may be added multiple times to `cdl.utils.tests.TST_PATH`
+  * This issue is related to [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)
+  * Adding the test data paths multiple times to `cdl.utils.tests.TST_PATH` was causing the test data to be loaded multiple times, which lead to some tests failing (a simple workaround was added to V0.16.2: this issue is now fixed)
+  * Thanks again to [@rolandmas](https://github.com/rolandmas) for reporting the issue in the context of the Debian packaging
+* Fixed [Issue #86](https://github.com/DataLab-Platform/DataLab/issues/86) - Average of N integer images overflows data type
+* Fixed [Issue #87](https://github.com/DataLab-Platform/DataLab/issues/87) - Image average profile extraction: `AttributeError` when trying to edit profile parameters
+* Fixed [Issue #88](https://github.com/DataLab-Platform/DataLab/issues/88) - Image segment profile: point coordinates inversion
 
 ## DataLab Version 0.16.2 ##
+
+This release requires PlotPy v2.4.0 or later, which brings the following bug fixes and new features:
+
+* New constrast adjustment features and bug fixes:
+  * New layout: the vertical toolbar (which was constrained in a small area on the
+    right side of the panel) is now a horizontal toolbar at the top of the panel,
+    beside the title
+  * New "Set range" button: allows the user to set manually the minimum and maximum
+    values of the histogram range
+  * Fixed histogram update issues when no image was currently selected (even if the
+    an image was displayed and was selected before)
+  * Histogram range was not updated when either the minimum or maximum value was set
+    using the "Minimum value" or "Maximum value" buttons (which have been renamed to
+    "Min." and "Max." in this release)
+  * Histogram range was not updated when the "Set full range" button was clicked, or
+    when the LUT range was modified using the "Scales / LUT range" form in "Properties"
+    group box
+
+* Image view context menu: new "Reverse X axis" feature
+
+ℹ️ Minor new features and enhancements:
+
+* Image file types:
+  * Added native support for reading .SPE, .GEL, .NDPI and .REC image files
+  * Added support for any `imageio`-supported file format through configuration file (entry `imageio_formats` may be customized to complement the default list of supported formats: see [documentation](https://datalab-platform.com/en/features/image/menu_file.html#open-image) for more details)
 
 🛠️ Bug fixes:
 
@@ -11,6 +67,18 @@ for future and past milestones.
   * Fixed logarithmic scale for the magnitude spectrum (computing dB instead of natural logarithm)
   * Fixed PSD computation with logarithmic scale (computing dB instead of natural logarithm)
   * Updated the documentation to explicitly mention that the logarithmic scale is in dB
+
+* Fixed [Issue #82](https://github.com/DataLab-Platform/DataLab/issues/82) - Macros are not renamed in DataLab after exporting them to Python scripts
+
+* `ResultProperties` object can now be added to `SignalObj` or `ImageObj` metadata even outside a Qt event loop (because the label item is no longer created right away)
+
+* Progress bar is now automatically closed as expected when an error occurrs during a long operation (e.g. when opening a file)
+
+* Difference, division, ...: dialog box for the second operand selection was allowing to select a group (only a signal or an image should be selected)
+
+* When doing an operation which involves an object (signal or image) with higher order number than the current object (e.g. when subtracting an image with an image from a group below the current image), the resulting object's title now correctly refers to the order numbers of the objects involved in the operation (e.g., to continue with the subtraction example mentioned above, the resulting object's title was previously referring to the order number before the insertion of the resulting image)
+
+* Added support for additional test data folder thanks to the `CDL_DATA` environment variable (useful for testing purposes, and especially in the context of Debian packaging)
 
 ## DataLab Version 0.16.1 ##
 
@@ -158,16 +226,17 @@ NumPy 2.0 support has been added with this release.
 ## DataLab Version 0.15.0 ##
 
 🎁 New installer for the stand-alone version on Windows:
-  * The stand-alone version on Windows is now distributed as an MSI installer (instead
-    of an EXE installer)
-  * This avoids the false positive detection of the stand-alone version as a
-    potential threat by some antivirus software
-  * The program will install files and shortcuts:
-    * For current user, if the user has no administrator privileges
-    * For all users, if the user has administrator privileges
-    * Installation directory may be customized
-  * MSI installer allows to integrate DataLab's installation seemlessly in an
-    organization's deployment system
+
+* The stand-alone version on Windows is now distributed as an MSI installer (instead
+  of an EXE installer)
+* This avoids the false positive detection of the stand-alone version as a
+  potential threat by some antivirus software
+* The program will install files and shortcuts:
+  * For current user, if the user has no administrator privileges
+  * For all users, if the user has administrator privileges
+  * Installation directory may be customized
+* MSI installer allows to integrate DataLab's installation seemlessly in an
+  organization's deployment system
 
 💥 New features and enhancements:
 
@@ -211,14 +280,15 @@ NumPy 2.0 support has been added with this release.
 ## DataLab Version 0.14.2 ##
 
 ⚠️ API changes required for fixing support for multiple signals loading feature:
-  * Merged `open_object` and `open_objects` methods to `load_from_files` in proxy
-    classes, main window and data panels
-  * For consistency's sake: merged `save_object` and `save_objects` into `save_to_files`
-  * To sum up, those changes lead to the following situation:
-    * `load_from_files`: load a sequence of objects from multiple files
-    * `save_to_files`: save a sequence of objects to multiple files (at the moment,
-      it only supports saving a single object to a single file, but it may be extended
-      in the future to support saving multiple objects to a single file)
+
+* Merged `open_object` and `open_objects` methods to `load_from_files` in proxy
+  classes, main window and data panels
+* For consistency's sake: merged `save_object` and `save_objects` into `save_to_files`
+* To sum up, those changes lead to the following situation:
+  * `load_from_files`: load a sequence of objects from multiple files
+  * `save_to_files`: save a sequence of objects to multiple files (at the moment,
+    it only supports saving a single object to a single file, but it may be extended
+    in the future to support saving multiple objects to a single file)
 
 🛠️ Bug fixes:
 

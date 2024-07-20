@@ -132,7 +132,7 @@ msgstr ""
 
 #: ../../doc/features/image/menu_computing.rst:64
 msgid "Parameters are:"
-msgstr "Paramètres :"
+msgstr "Paramètres :"
 
 #: ../../doc/features/image/menu_computing.rst:70
 msgid "Parameter"

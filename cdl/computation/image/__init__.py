@@ -61,7 +61,7 @@ VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 class Wrap11Func:
     """Wrap a 1 array → 1 array function to produce a 1 image → 1 image function,
     which can be used inside DataLab's infrastructure to perform computations with
-    :class:`cdl.core.gui.processor.signal.ImageProcessor`.
+    :class:`cdl.core.gui.processor.image.ImageProcessor`.
 
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
@@ -72,7 +72,7 @@ class Wrap11Func:
     Example:
 
         >>> import numpy as np
-        >>> from cdl.computation.signal import Wrap11Func
+        >>> from cdl.computation.image import Wrap11Func
         >>> import cdl.obj
         >>> def add_noise(data):
         ...     return data + np.random.random(data.shape)
@@ -96,7 +96,7 @@ class Wrap11Func:
         self.__call__.__func__.__doc__ = self.func.__doc__
 
     def __call__(self, src: ImageObj) -> ImageObj:
-        """Compute the function on the input signal and return the result signal
+        """Compute the function on the input image and return the result image
 
         Args:
             src: input image object
@@ -303,7 +303,7 @@ class FlatFieldParam(BaseProcParam):
 
 
 def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> ImageObj:
-    """Compute flat field correction
+    """Compute flat field correction with :py:func:`cdl.algorithms.image.flatfield`
 
     Args:
         src1: raw data image object
@@ -325,7 +325,8 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
 
 def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
     """
-    Normalize image data depending on its maximum.
+    Normalize image data depending on its maximum,
+    with :py:func:`cdl.algorithms.image.normalize`
 
     Args:
         src: input image object
@@ -345,7 +346,7 @@ class LogP1Param(gds.DataSet):
 
 
 def compute_logp1(src: ImageObj, p: LogP1Param) -> ImageObj:
-    """Compute log10(z+n)
+    """Compute log10(z+n) with :py:data:`numpy.log10`
 
     Args:
         src: input image object
@@ -431,7 +432,7 @@ def rotate_obj_alpha(
 
 
 def compute_rotate(src: ImageObj, p: RotateParam) -> ImageObj:
-    """Rotate data
+    """Rotate data with :py:func:`scipy.ndimage.rotate`
 
     Args:
         src: input image object
@@ -460,7 +461,7 @@ def rotate_obj_90(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
 
 
 def compute_rotate90(src: ImageObj) -> ImageObj:
-    """Rotate data 90°
+    """Rotate data 90° with :py:func:`numpy.rot90`
 
     Args:
         src: input image object
@@ -480,7 +481,7 @@ def rotate_obj_270(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
 
 
 def compute_rotate270(src: ImageObj) -> ImageObj:
-    """Rotate data 270°
+    """Rotate data 270° with :py:func:`numpy.rot90`
 
     Args:
         src: input image object
@@ -502,7 +503,7 @@ def hflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
 
 
 def compute_fliph(src: ImageObj) -> ImageObj:
-    """Flip data horizontally
+    """Flip data horizontally with :py:func:`numpy.fliplr`
 
     Args:
         src: input image object
@@ -523,7 +524,7 @@ def vflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
 
 
 def compute_flipv(src: ImageObj) -> ImageObj:
-    """Flip data vertically
+    """Flip data vertically with :py:func:`numpy.flipud`
 
     Args:
         src: input image object
@@ -586,7 +587,7 @@ class ResizeParam(gds.DataSet):
 
 
 def compute_resize(src: ImageObj, p: ResizeParam) -> ImageObj:
-    """Zooming function
+    """Zooming function with :py:func:`scipy.ndimage.zoom`
 
     Args:
         src: input image object
@@ -644,7 +645,7 @@ class BinningParam(gds.DataSet):
 
 
 def compute_binning(src: ImageObj, param: BinningParam) -> ImageObj:
-    """Binning function on data
+    """Binning function on data with :py:func:`cdl.algorithms.image.binning`
 
     Args:
         src: input image object
@@ -893,6 +894,7 @@ class RadialProfileParam(gds.DataSet):
 
 def compute_radial_profile(src: ImageObj, p: RadialProfileParam) -> SignalObj:
     """Compute radial profile around the centroid
+    with :py:func:`cdl.algorithms.image.get_radial_profile`
 
     Args:
         src: input image object
@@ -916,7 +918,7 @@ def compute_radial_profile(src: ImageObj, p: RadialProfileParam) -> SignalObj:
 
 
 def compute_histogram(src: ImageObj, p: HistogramParam) -> SignalObj:
-    """Compute histogram of the image data
+    """Compute histogram of the image data, with :py:func:`numpy.histogram`
 
     Args:
         src: input image object
@@ -942,7 +944,7 @@ def compute_histogram(src: ImageObj, p: HistogramParam) -> SignalObj:
 
 
 def compute_swap_axes(src: ImageObj) -> ImageObj:
-    """Swap image axes
+    """Swap image axes with :py:func:`numpy.transpose`
 
     Args:
         src: input image object
@@ -957,7 +959,7 @@ def compute_swap_axes(src: ImageObj) -> ImageObj:
 
 
 def compute_abs(src: ImageObj) -> ImageObj:
-    """Compute absolute value
+    """Compute absolute value with :py:data:`numpy.absolute`
 
     Args:
         src: input image object
@@ -965,11 +967,11 @@ def compute_abs(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(np.abs)(src)
+    return Wrap11Func(np.absolute)(src)
 
 
 def compute_re(src: ImageObj) -> ImageObj:
-    """Compute real part
+    """Compute real part with :py:func:`numpy.real`
 
     Args:
         src: input image object
@@ -981,7 +983,7 @@ def compute_re(src: ImageObj) -> ImageObj:
 
 
 def compute_im(src: ImageObj) -> ImageObj:
-    """Compute imaginary part
+    """Compute imaginary part with :py:func:`numpy.imag`
 
     Args:
         src: input image object
@@ -1003,7 +1005,7 @@ class DataTypeIParam(gds.DataSet):
 
 
 def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
-    """Convert image data type
+    """Convert image data type with :py:func:`numpy.astype`
 
     Args:
         src: input image object
@@ -1018,7 +1020,7 @@ def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
 
 
 def compute_log10(src: ImageObj) -> ImageObj:
-    """Compute log10
+    """Compute log10 with :py:data:`numpy.log10`
 
     Args:
         src: input image object
@@ -1030,7 +1032,7 @@ def compute_log10(src: ImageObj) -> ImageObj:
 
 
 def compute_exp(src: ImageObj) -> ImageObj:
-    """Compute exponential
+    """Compute exponential with :py:data:`numpy.exp`
 
     Args:
         src: input image object
@@ -1064,7 +1066,7 @@ def compute_calibration(src: ImageObj, p: ZCalibrateParam) -> ImageObj:
 
 
 def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
-    """Apply clipping
+    """Apply clipping with :py:func:`numpy.clip`
 
     Args:
         src: input image object
@@ -1092,7 +1094,7 @@ def compute_offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:
 
 
 def compute_gaussian_filter(src: ImageObj, p: GaussianParam) -> ImageObj:
-    """Compute gaussian filter
+    """Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`
 
     Args:
         src: input image object
@@ -1105,7 +1107,7 @@ def compute_gaussian_filter(src: ImageObj, p: GaussianParam) -> ImageObj:
 
 
 def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
-    """Compute moving average
+    """Compute moving average with :py:func:`scipy.ndimage.uniform_filter`
 
     Args:
         src: input image object
@@ -1118,7 +1120,7 @@ def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
 
 
 def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
-    """Compute moving median
+    """Compute moving median with :py:func:`scipy.ndimage.median_filter`
 
     Args:
         src: input image object
@@ -1131,7 +1133,7 @@ def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
 
 
 def compute_wiener(src: ImageObj) -> ImageObj:
-    """Compute Wiener filter
+    """Compute Wiener filter with :py:func:`scipy.signal.wiener`
 
     Args:
         src: input image object
@@ -1143,7 +1145,7 @@ def compute_wiener(src: ImageObj) -> ImageObj:
 
 
 def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
-    """Compute FFT
+    """Compute FFT with :py:func:`cdl.algorithms.image.fft2d`
 
     Args:
         src: input image object
@@ -1163,7 +1165,7 @@ def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
 
 
 def compute_ifft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
-    """Compute inverse FFT
+    """Compute inverse FFT with :py:func:`cdl.algorithms.image.ifft2d`
 
     Args:
         src: input image object
@@ -1186,6 +1188,7 @@ def compute_magnitude_spectrum(
     src: ImageObj, p: SpectrumParam | None = None
 ) -> ImageObj:
     """Compute magnitude spectrum
+    with :py:func:`cdl.algorithms.image.magnitude_spectrum`
 
     Args:
         src: input image object
@@ -1204,6 +1207,7 @@ def compute_magnitude_spectrum(
 
 def compute_phase_spectrum(src: ImageObj) -> ImageObj:
     """Compute phase spectrum
+    with :py:func:`cdl.algorithms.image.phase_spectrum`
 
     Args:
         src: input image object
@@ -1219,6 +1223,7 @@ def compute_phase_spectrum(src: ImageObj) -> ImageObj:
 
 def compute_psd(src: ImageObj, p: SpectrumParam | None = None) -> ImageObj:
     """Compute power spectral density
+    with :py:func:`cdl.algorithms.image.psd`
 
     Args:
         src: input image object
@@ -1259,7 +1264,7 @@ class ButterworthParam(gds.DataSet):
 
 
 def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
-    """Compute Butterworth filter
+    """Compute Butterworth filter with :py:func:`skimage.filters.butterworth`
 
     Args:
         src: input image object
@@ -1384,6 +1389,7 @@ def calc_resultshape(
 
 def get_centroid_coords(data: np.ndarray) -> np.ndarray:
     """Return centroid coordinates
+    with :py:func:`cdl.algorithms.image.get_centroid_fourier`
 
     Args:
         data: input data
@@ -1397,6 +1403,7 @@ def get_centroid_coords(data: np.ndarray) -> np.ndarray:
 
 def compute_centroid(image: ImageObj) -> ResultShape | None:
     """Compute centroid
+    with :py:func:`cdl.algorithms.image.get_centroid_fourier`
 
     Args:
         image: input image
@@ -1423,6 +1430,7 @@ def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
 
 def compute_enclosing_circle(image: ImageObj) -> ResultShape | None:
     """Compute minimum enclosing circle
+    with :py:func:`cdl.algorithms.image.get_enclosing_circle`
 
     Args:
         image: input image
@@ -1451,6 +1459,7 @@ def compute_hough_circle_peaks(
     image: ImageObj, p: HoughCircleParam
 ) -> ResultShape | None:
     """Compute Hough circles
+    with :py:func:`cdl.algorithms.image.get_hough_circle_peaks`
 
     Args:
         image: input image

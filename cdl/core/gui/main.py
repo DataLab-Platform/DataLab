@@ -1161,28 +1161,28 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     @remote_controlled
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
-        """Call compute function `name` in current panel's processor
+        """Call compute function ``name`` in current panel's processor.
 
         Args:
-            name (str): function name
-            param (guidata.dataset.DataSet): optional parameters
-             (default: None)
+            name: Compute function name
+            param: Compute function parameter. Defaults to None.
 
         Raises:
             ValueError: unknown function
         """
-        panel = self.tabwidget.currentWidget()
-        if isinstance(panel, base.BaseDataPanel):
-            for funcname in (name, f"compute_{name}"):
-                func = getattr(panel.processor, funcname, None)
-                if func is not None:
-                    break
-            else:
-                raise ValueError(f"Unknown function {funcname}")
-            if param is None:
-                func()
-            else:
-                func(param)
+        panels = [self.tabwidget.currentWidget()]
+        panels.extend(self.panels)
+        for panel in panels:
+            if isinstance(panel, base.BaseDataPanel):
+                for funcname in (name, f"compute_{name}"):
+                    func = getattr(panel.processor, funcname, None)
+                    if func is not None:
+                        if param is None:
+                            func()
+                        else:
+                            func(param)
+                        return
+        raise ValueError(f"Unknown function {name}")
 
     # ------GUI refresh
     def has_objects(self) -> bool:
@@ -1671,6 +1671,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     return False
             elif answer == QW.QMessageBox.Cancel:
                 return False
+        self.hide()  # Avoid showing individual widgets closing one after the other
         for panel in self.panels:
             if panel is not None:
                 panel.close()

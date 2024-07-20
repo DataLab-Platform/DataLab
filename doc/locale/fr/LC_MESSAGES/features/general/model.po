@@ -39,7 +39,7 @@ msgstr "Modèle de données interne"
 msgid "In its internal data model, DataLab stores data using two main classes:"
 msgstr ""
 "Dans son modèle de données interne, DataLab stocke les données à l'aide "
-"de deux classes principales :"
+"de deux classes principales :"
 
 #: ../../features/general/model.rst:12
 msgid ":class:`cdl.obj.SignalObj`, which represents a signal object, and"

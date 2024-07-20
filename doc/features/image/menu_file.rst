@@ -67,12 +67,31 @@ Create a new image from the following supported filetypes:
       - .txt, .csv, .asc
     * - Andor SIF files
       - .sif
+    * - Princeton Instruments SPE files
+      - .spe
+    * - Opticks GEL files
+      - .gel
+    * - Hammamatsu NDPI files
+      - .ndpi
+    * - PCO Camera REC files
+      - .rec
     * - SPIRICON files
       - .scor-data
     * - FXD files
       - .fxd
     * - Bitmap images
       - .bmp
+
+.. note::
+
+    DataLab also supports any image format that can be read by the `imageio` library,
+    provided that the associated plugin(s) are installed (see `imageio documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_)
+    and that the output NumPy array data type and shape are supported by DataLab.
+
+    To add a new file format, you may use the `imageio_formats` entry of DataLab configuration file.
+    This entry is a formatted like the `IMAGEIO_FORMATS` object which represents the natively supported formats:
+
+    .. autodata:: cdl.config.IMAGEIO_FORMATS
 
 Save image
 ^^^^^^^^^^

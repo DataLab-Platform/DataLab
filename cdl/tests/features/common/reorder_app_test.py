@@ -24,7 +24,7 @@ from cdl.utils.tests import get_test_fnames
 def test_reorder():
     """Run signals/images reorder test scenario"""
     with cdl_app_context(exec_loop=True):
-        win = app.create(h5files=get_test_fnames("reorder*"))
+        win = app.create(h5files=[get_test_fnames("reorder*")[0]])
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
 
@@ -65,8 +65,9 @@ def test_reorder():
             group = model.get_object_or_group(group.uuid)
             assert group.number == 2
             # Remove group
+            n_groups = len(model.get_groups())
             model.remove_group(group)
-            assert len(model.get_groups()) == 2
+            assert len(model.get_groups()) == n_groups - 1
 
 
 if __name__ == "__main__":

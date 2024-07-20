@@ -8,18 +8,19 @@
 
 from __future__ import annotations
 
+import abc
 import warnings
 from typing import Literal
 
 import numpy as np
-import scipy.interpolate as spi
-import scipy.optimize as spo
-import scipy.signal as sps
+import scipy.interpolate
+import scipy.optimize
+import scipy.signal
+import scipy.special
 
-from cdl.algorithms import fit
+# MARK: Level adjustment ---------------------------------------------------------------
 
 
-# ----- Misc. functions --------------------------------------------------------
 def normalize(
     yin: np.ndarray,
     parameter: Literal["maximum", "amplitude", "area", "energy", "rms"] = "maximum",
@@ -54,6 +55,9 @@ def normalize(
     if parameter == "rms":
         return yin / np.sqrt(np.mean(yin * yin.conjugate()))
     raise RuntimeError(f"Unsupported parameter {parameter}")
+
+
+# MARK: Fourier analysis ---------------------------------------------------------------
 
 
 def fft1d(
@@ -147,7 +151,7 @@ def psd(
     Returns:
         Power Spectral Density (PSD): X data, Y data (tuple)
     """
-    x1, y1 = sps.welch(y, fs=sampling_rate(x))
+    x1, y1 = scipy.signal.welch(y, fs=sampling_rate(x))
     if log_scale:
         y1 = 10 * np.log10(y1)
     return x1, y1
@@ -167,7 +171,9 @@ def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     return freqs[np.argsort(fourier)]
 
 
-# ----- Peak detection functions -----------------------------------------------
+# MARK: Peak detection -----------------------------------------------------------------
+
+
 def peak_indexes(
     y, thres: float = 0.3, min_dist: int = 1, thres_abs: bool = False
 ) -> np.ndarray:
@@ -281,6 +287,9 @@ def xpeak(x: np.ndarray, y: np.ndarray) -> float:
     return np.average(x, weights=y)
 
 
+# MARK: Interpolation ------------------------------------------------------------------
+
+
 def interpolate(
     x: np.ndarray,
     y: np.ndarray,
@@ -310,22 +319,22 @@ def interpolate(
     elif method == "spline":
         # Spline using 1-D interpolation with SciPy's interpolate package:
         # pylint: disable=unbalanced-tuple-unpacking
-        knots, coeffs, degree = spi.splrep(x, y, s=0)
-        ynew = spi.splev(xnew, (knots, coeffs, degree), der=0)
+        knots, coeffs, degree = scipy.interpolate.splrep(x, y, s=0)
+        ynew = scipy.interpolate.splev(xnew, (knots, coeffs, degree), der=0)
     elif method == "quadratic":
         # Quadratic interpolation using NumPy's polyval function:
         coeffs = np.polyfit(x, y, 2)
         ynew = np.polyval(coeffs, xnew)
     elif method == "cubic":
         # Cubic interpolation using SciPy's Akima1DInterpolator class:
-        interpolator_extrap = spi.Akima1DInterpolator(x, y)
+        interpolator_extrap = scipy.interpolate.Akima1DInterpolator(x, y)
     elif method == "barycentric":
         # Barycentric interpolation using SciPy's BarycentricInterpolator class:
-        interpolator = spi.BarycentricInterpolator(x, y)
+        interpolator = scipy.interpolate.BarycentricInterpolator(x, y)
         ynew = interpolator(xnew)
     elif method == "pchip":
         # PCHIP interpolation using SciPy's PchipInterpolator class:
-        interpolator_extrap = spi.PchipInterpolator(x, y)
+        interpolator_extrap = scipy.interpolate.PchipInterpolator(x, y)
     else:
         raise ValueError(f"Invalid interpolation method {method}")
     if interpolator_extrap is not None:
@@ -334,6 +343,9 @@ def interpolate(
             ynew[xnew < x[0]] = fill_value
             ynew[xnew > x[-1]] = fill_value
     return ynew
+
+
+# MARK: Windowing ----------------------------------------------------------------------
 
 
 def windowing(
@@ -378,33 +390,140 @@ def windowing(
     """
     # Cases without parameters:
     win_func = {
-        "barthann": sps.windows.barthann,
+        "barthann": scipy.signal.windows.barthann,
         "bartlett": np.bartlett,
         "blackman": np.blackman,
-        "blackman-harris": sps.windows.blackmanharris,
-        "bohman": sps.windows.bohman,
-        "boxcar": sps.windows.boxcar,
-        "cosine": sps.windows.cosine,
-        "exponential": sps.windows.exponential,
-        "flat-top": sps.windows.flattop,
+        "blackman-harris": scipy.signal.windows.blackmanharris,
+        "bohman": scipy.signal.windows.bohman,
+        "boxcar": scipy.signal.windows.boxcar,
+        "cosine": scipy.signal.windows.cosine,
+        "exponential": scipy.signal.windows.exponential,
+        "flat-top": scipy.signal.windows.flattop,
         "hamming": np.hamming,
         "hanning": np.hanning,
-        "lanczos": sps.windows.lanczos,
-        "nuttall": sps.windows.nuttall,
-        "parzen": sps.windows.parzen,
+        "lanczos": scipy.signal.windows.lanczos,
+        "nuttall": scipy.signal.windows.nuttall,
+        "parzen": scipy.signal.windows.parzen,
         "rectangular": np.ones,
-        "taylor": sps.windows.taylor,
+        "taylor": scipy.signal.windows.taylor,
     }.get(method)
     if win_func is not None:
         return y * win_func(len(y))
     # Cases with parameters:
     if method == "tukey":
-        return y * sps.windows.tukey(len(y), alpha)
+        return y * scipy.signal.windows.tukey(len(y), alpha)
     if method == "kaiser":
         return y * np.kaiser(len(y), beta)
     if method == "gaussian":
-        return y * sps.windows.gaussian(len(y), sigma)
+        return y * scipy.signal.windows.gaussian(len(y), sigma)
     raise ValueError(f"Invalid window type {method}")
+
+
+# MARK: Curve fitting models -----------------------------------------------------------
+
+
+class FitModel(abc.ABC):
+    """Curve fitting model base class"""
+
+    @classmethod
+    @abc.abstractmethod
+    def func(cls, x, amp, sigma, x0, y0):
+        """Return fitting function"""
+
+    # pylint: disable=unused-argument
+    @classmethod
+    def get_amp_from_amplitude(cls, amplitude, sigma):
+        """Return amp from function amplitude and sigma"""
+        return amplitude
+
+    @classmethod
+    def amplitude(cls, amp, sigma):
+        """Return function amplitude"""
+        return cls.func(0, amp, sigma, 0, 0)
+
+    @classmethod
+    @abc.abstractmethod
+    def fwhm(cls, amp, sigma):
+        """Return function FWHM"""
+
+    @classmethod
+    def half_max_segment(cls, amp, sigma, x0, y0):
+        """Return segment coordinates for y=half-maximum intersection"""
+        hwhm = 0.5 * cls.fwhm(amp, sigma)
+        yhm = 0.5 * cls.amplitude(amp, sigma) + y0
+        return x0 - hwhm, yhm, x0 + hwhm, yhm
+
+
+class GaussianModel(FitModel):
+    """1-dimensional Gaussian fit model"""
+
+    @classmethod
+    def func(cls, x, amp, sigma, x0, y0):
+        """Return fitting function"""
+        return (
+            amp / (sigma * np.sqrt(2 * np.pi)) * np.exp(-0.5 * ((x - x0) / sigma) ** 2)
+            + y0
+        )
+
+    @classmethod
+    def get_amp_from_amplitude(cls, amplitude, sigma):
+        """Return amp from function amplitude and sigma"""
+        return amplitude * (sigma * np.sqrt(2 * np.pi))
+
+    @classmethod
+    def amplitude(cls, amp, sigma):
+        """Return function amplitude"""
+        return amp / (sigma * np.sqrt(2 * np.pi))
+
+    @classmethod
+    def fwhm(cls, amp, sigma):
+        """Return function FWHM"""
+        return 2 * sigma * np.sqrt(2 * np.log(2))
+
+
+class LorentzianModel(FitModel):
+    """1-dimensional Lorentzian fit model"""
+
+    @classmethod
+    def func(cls, x, amp, sigma, x0, y0):
+        """Return fitting function"""
+        return (amp / (sigma * np.pi)) / (1 + ((x - x0) / sigma) ** 2) + y0
+
+    @classmethod
+    def get_amp_from_amplitude(cls, amplitude, sigma):
+        """Return amp from function amplitude and sigma"""
+        return amplitude * (sigma * np.pi)
+
+    @classmethod
+    def amplitude(cls, amp, sigma):
+        """Return function amplitude"""
+        return amp / (sigma * np.pi)
+
+    @classmethod
+    def fwhm(cls, amp, sigma):
+        """Return function FWHM"""
+        return 2 * sigma
+
+
+class VoigtModel(FitModel):
+    """1-dimensional Voigt fit model"""
+
+    @classmethod
+    def func(cls, x, amp, sigma, x0, y0):
+        """Return fitting function"""
+        # pylint: disable=no-member
+        z = (x - x0 + 1j * sigma) / (sigma * np.sqrt(2.0))
+        return y0 + amp * scipy.special.wofz(z).real / (sigma * np.sqrt(2 * np.pi))
+
+    @classmethod
+    def fwhm(cls, amp, sigma):
+        """Return function FWHM"""
+        wg = GaussianModel.fwhm(amp, sigma)
+        wl = LorentzianModel.fwhm(amp, sigma)
+        return 0.5346 * wl + np.sqrt(0.2166 * wl**2 + wg**2)
+
+
+# MARK: Misc. computations -------------------------------------------------------------
 
 
 def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
@@ -463,8 +582,20 @@ def bandwidth(data: np.ndarray, level: float = 3.0) -> float:
     return coords
 
 
-# MARK: ENOB, SINAD, THD, SFDR, SNR
-# ======================================================================================
+def contrast(y: np.ndarray) -> float:
+    """Compute contrast
+
+    Args:
+        y: Input array
+
+    Returns:
+        Contrast
+    """
+    max_, min_ = np.max(y), np.min(y)
+    return (max_ - min_) / (max_ + min_)
+
+
+# MARK: Dynamic parameters -------------------------------------------------------------
 
 
 def sinusoidal_model(
@@ -506,7 +637,9 @@ def sinusoidal_fit(
         return y - sinusoidal_model(x, *fitparams)
 
     # Fit the model to the data
-    fitparams = spo.leastsq(optfunc, [amp, freq, phase_origin, offset], args=(x, y))[0]
+    fitparams = scipy.optimize.leastsq(
+        optfunc, [amp, freq, phase_origin, offset], args=(x, y)
+    )[0]
     y_th = sinusoidal_model(x, *fitparams)
     residuals = np.std(y - y_th)
     return fitparams, residuals
@@ -668,6 +801,36 @@ def snr(
     return 20 * np.log10(powfund / noise)
 
 
+def sampling_period(x: np.ndarray) -> float:
+    """Compute sampling period
+
+    Args:
+        x: X data
+
+    Returns:
+        Sampling period
+    """
+    steps = np.diff(x)
+    if not np.isclose(np.diff(steps).max(), 0, atol=1e-10):
+        warnings.warn("Non-constant sampling signal")
+    return steps[0]
+
+
+def sampling_rate(x: np.ndarray) -> float:
+    """Compute mean sampling rate
+
+    Args:
+        x: X data
+
+    Returns:
+        Sampling rate
+    """
+    return 1.0 / sampling_period(x)
+
+
+# MARK: Pulse computations -------------------------------------------------------------
+
+
 def fwhm(
     data: np.ndarray,
     method: Literal["zero-crossing", "gauss", "lorentz", "voigt"] = "zero-crossing",
@@ -709,10 +872,10 @@ def fwhm(
         return fx[0], hmax, fx[-1], hmax
 
     try:
-        FitModelClass: type[fit.FitModel] = {
-            "gauss": fit.GaussianModel,
-            "lorentz": fit.LorentzianModel,
-            "voigt": fit.VoigtModel,
+        FitModelClass: type[FitModel] = {
+            "gauss": GaussianModel,
+            "lorentz": LorentzianModel,
+            "voigt": VoigtModel,
         }[method]
     except KeyError as exc:
         raise ValueError(f"Invalid method {method}") from exc
@@ -723,7 +886,9 @@ def fwhm(
         return y - FitModelClass.func(x, *params)
 
     amp = FitModelClass.get_amp_from_amplitude(dy, sigma)
-    (amp, sigma, mu, base), _ier = spo.leastsq(func, np.array([amp, sigma, mu, base]))
+    (amp, sigma, mu, base), _ier = scipy.optimize.leastsq(
+        func, np.array([amp, sigma, mu, base])
+    )
     return FitModelClass.half_max_segment(amp, sigma, mu, base)
 
 
@@ -739,56 +904,16 @@ def fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
     x, y = data
     dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
     sigma, mu = dx * 0.1, xpeak(x, y)
-    amp = fit.GaussianModel.get_amp_from_amplitude(dy, sigma)
+    amp = GaussianModel.get_amp_from_amplitude(dy, sigma)
     p_in = np.array([amp, sigma, mu, base])
 
     def func(params):
         """Fitting model function"""
         # pylint: disable=cell-var-from-loop
-        return y - fit.GaussianModel.func(x, *params)
+        return y - GaussianModel.func(x, *params)
 
-    p_out, _ier = spo.leastsq(func, p_in)
+    p_out, _ier = scipy.optimize.leastsq(func, p_in)
     amp, sigma, mu, base = p_out
     hw = 2 * sigma
-    yhm = fit.GaussianModel.amplitude(amp, sigma) / np.e**2 + base
+    yhm = GaussianModel.amplitude(amp, sigma) / np.e**2 + base
     return mu - hw, yhm, mu + hw, yhm
-
-
-def contrast(y: np.ndarray) -> float:
-    """Compute contrast
-
-    Args:
-        y: Input array
-
-    Returns:
-        Contrast
-    """
-    max_, min_ = np.max(y), np.min(y)
-    return (max_ - min_) / (max_ + min_)
-
-
-def sampling_period(x: np.ndarray) -> float:
-    """Compute sampling period
-
-    Args:
-        x: X data
-
-    Returns:
-        Sampling period
-    """
-    steps = np.diff(x)
-    if not np.isclose(np.diff(steps).max(), 0, atol=1e-10):
-        warnings.warn("Non-constant sampling signal")
-    return steps[0]
-
-
-def sampling_rate(x: np.ndarray) -> float:
-    """Compute mean sampling rate
-
-    Args:
-        x: X data
-
-    Returns:
-        Sampling rate
-    """
-    return 1.0 / sampling_period(x)

@@ -13,17 +13,11 @@ user interfaces (thanks to `PlotPyStack`_ libraries).
 
 import os
 
-__version__ = "0.16.2"
+__version__ = "0.16.4"
 __docurl__ = __homeurl__ = "https://datalab-platform.com/"
 __supporturl__ = "https://github.com/DataLab-Platform/DataLab/issues/new/choose"
 
 os.environ["CDL_VERSION"] = __version__
-
-try:
-    import cdl.patch  # analysis:ignore  # noqa: F401
-except ImportError:
-    if not os.environ.get("CDL_DOC"):
-        raise
 
 # Dear (Debian, RPM, ...) package makers, please feel free to customize the
 # following path to module's data (images) and translations:

@@ -41,7 +41,7 @@ msgid ""
 "using three different approaches:"
 msgstr ""
 "Dans ce tutoriel, nous allons montrer comment ajouter vos propres "
-"fonctionnalités à DataLab en utilisant trois approches différentes :"
+"fonctionnalités à DataLab en utilisant trois approches différentes :"
 
 #: ../../intro/tutorials/videos/p2_extensibility.rst:25
 msgid "Macro-commands, using the integrated macro manager"

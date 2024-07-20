@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../index.rst:27
 msgid "Contents:"
-msgstr "Table des matières :"
+msgstr "Table des matières :"
 
 #: ../../features_sig.rst:2
 msgid "Signal processing"

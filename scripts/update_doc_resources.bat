@@ -1,7 +1,7 @@
 @echo off
 REM This script was copied from PythonQwt project
 REM ======================================================
-REM Update validation status
+REM Update statically generated documentation resources
 REM ======================================================
 REM Licensed under the terms of the MIT License
 REM Copyright (c) 2020 Pierre Raybaut
@@ -11,4 +11,6 @@ call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% SetPythonPath
 call %FUNC% UsePython
 cd %SCRIPTPATH%\..
+%PYTHON% doc\update_requirements.py
 %PYTHON% doc\update_validation_status.py
+%PYTHON% doc\update_processor_methods.py
