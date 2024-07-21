@@ -9,13 +9,11 @@
 from __future__ import annotations
 
 import functools
-import importlib
 import os
-from typing import TYPE_CHECKING, Callable, Generator
+from typing import TYPE_CHECKING, Any, Callable, Generator
 from uuid import uuid4
 
 from guidata.configtools import get_icon
-from guidata.io import BaseIOHandler
 from guidata.qthelpers import create_action
 from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
@@ -80,19 +78,20 @@ class HistoryAction(ObjItf):
 
     def __init__(
         self,
-        title: str,
-        func: Callable,
-        args: tuple,
-        kwargs: dict,
-        state: WorkspaceState,
+        title: str | None = None,
+        func: Callable | None = None,
+        args: tuple | None = None,
+        kwargs: dict[str, Any] | None = None,
+        state: WorkspaceState | None = None,
     ) -> None:
         """Create a new action"""
         super().__init__()
-        self.__title = title
-        self.func = func
-        self.args = args
-        self.kwargs = kwargs
-        self.state = state
+        self.__title = "" if title is None else title
+        self.func = lambda: None if func is None else func
+        self.args = () if args is None else args
+        kwargs = {} if kwargs is None else kwargs
+        self.kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        self.state = WorkspaceState() if state is None else state
         self.dtstr: str = get_datetime_str()
         self.uuid: str = str(uuid4())
 
@@ -118,11 +117,11 @@ class HistoryAction(ObjItf):
         for kwname in self.kwargs:
             if kwname.endswith("param"):
                 param = self.kwargs[kwname]
-                if param is not None:
-                    if desc:
-                        desc += os.linesep
-                    desc += str(param)
-                    no_parameters = False
+                # Note: `param` can't be None because we removed None values from kwargs
+                if desc:
+                    desc += os.linesep
+                desc += str(param)
+                no_parameters = False
         if desc or no_parameters:
             return desc
         if len(self.args) >= 2 and isinstance(self.args[1], Callable):
@@ -163,67 +162,37 @@ class HistoryAction(ObjItf):
             self.state.restore(mainwindow)
         self.func(*self.args, **self.kwargs)
 
-    @staticmethod
-    def serialize_func_or_class(obj: Callable | type) -> str:
-        """Serialize a function or a class object
-
-        Args:
-            obj: Object to serialize
-
-        Returns:
-            str: Serialized object
-        """
-        if not obj.__module__.startswith("cdl"):
-            raise ValueError("Only cdl functions and classes can be serialized")
-        if isinstance(obj, type):
-            return f"{obj.__module__}.{obj.__name__}"
-        return f"{obj.__module__}.{obj.__qualname__}"
-
-    @staticmethod
-    def deserialize_func_or_class(obj: str) -> Callable | type:
-        """Deserialize a function or a class object
-
-        Args:
-            obj: Serialized object
-
-        Returns:
-            Callable | type: Deserialized object
-        """
-        module_name, obj_name = obj.rsplit(".", 1)
-        if not module_name.startswith("cdl"):
-            raise ValueError("Only cdl functions and classes can be deserialized")
-        module = importlib.import_module(module_name)
-        return getattr(module, obj_name)
-
-    def serialize(self, writer: BaseIOHandler) -> None:
+    def serialize(self, writer: NativeH5Writer) -> None:
         """Serialize this action
 
         Args:
-            writer (BaseIOHandler): Writer
+            writer: Writer
         """
         with writer.group("func"):
-            writer.write(self.serialize_func_or_class(self.func))
+            writer.write(self.func)
         with writer.group("args"):
             writer.write(self.args)
         with writer.group("kwargs"):
-            writer.write(self.kwargs)
-        self.state.serialize(writer)
+            writer.write_dict(self.kwargs)
+        with writer.group("state"):
+            self.state.serialize(writer)
         with writer.group("dtstr"):
             writer.write(self.dtstr)
 
-    def deserialize(self, reader: BaseIOHandler) -> None:
+    def deserialize(self, reader: NativeH5Reader) -> None:
         """Deserialize this action
 
         Args:
-            reader (BaseIOHandler): Reader
+            reader: Reader
         """
         with reader.group("func"):
-            self.func = self.deserialize_func_or_class(reader.read_any())
+            self.func = reader.read_any()
         with reader.group("args"):
             self.args = reader.read_any()
         with reader.group("kwargs"):
-            self.kwargs = reader.read_any()
-        self.state.deserialize(reader)
+            self.kwargs = reader.read_dict()
+        with reader.group("state"):
+            self.state.deserialize(reader)
         with reader.group("dtstr"):
             self.dtstr = reader.read_any()
 
@@ -255,31 +224,31 @@ class WorkspaceState:
         # informative and is not used to determine if two objects have the same state.
         self.titles: dict[str, list[str]] = {}
 
-    def serialize(self, writer: BaseIOHandler) -> None:
+    def serialize(self, writer: NativeH5Writer) -> None:
         """Serialize this workspace state
 
         Args:
-            writer (BaseIOHandler): Writer
+            writer: Writer
         """
         with writer.group("selection"):
-            writer.write(self.selection)
+            writer.write_dict(self.selection)
         with writer.group("states"):
-            writer.write(self.states)
+            writer.write_dict(self.states)
         with writer.group("titles"):
-            writer.write(self.titles)
+            writer.write_dict(self.titles)
 
-    def deserialize(self, reader: BaseIOHandler) -> None:
+    def deserialize(self, reader: NativeH5Reader) -> None:
         """Deserialize this workspace state
 
         Args:
-            reader (BaseIOHandler): Reader
+            reader: Reader
         """
         with reader.group("selection"):
-            self.selection = reader.read_any()
+            self.selection = reader.read_dict()
         with reader.group("states"):
-            self.states = reader.read_any()
+            self.states = reader.read_dict()
         with reader.group("titles"):
-            self.titles = reader.read_any()
+            self.titles = reader.read_dict()
 
     def get_current_selection(self, mainwindow: CDLMainWindow) -> dict[str, list[int]]:
         """Get the current selection in the workspace
@@ -431,27 +400,33 @@ class HistorySession:
         for action in self.actions[:]:
             action.replay(mainwindow, restore_selection=restore_selection)
 
-    def serialize(self, writer: BaseIOHandler) -> None:
+    def serialize(self, writer: NativeH5Writer) -> None:
         """Serialize this history session
 
         Args:
-            writer (BaseIOHandler): Writer
+            writer: Writer
         """
-        writer.write(self.title)
-        writer.write(self.number)
-        writer.write(self.dtstr)
-        writer.write(self.actions)
+        with writer.group("title"):
+            writer.write(self.title)
+        with writer.group("number"):
+            writer.write(self.number)
+        with writer.group("dtstr"):
+            writer.write(self.dtstr)
+        writer.write_object_list(self.actions, "actions")
 
-    def deserialize(self, reader: BaseIOHandler) -> None:
+    def deserialize(self, reader: NativeH5Reader) -> None:
         """Deserialize this history session
 
         Args:
-            reader (BaseIOHandler): Reader
+            reader: Reader
         """
-        self.title = reader.read_any()
-        self.number = reader.read_any()
-        self.dtstr = reader.read_any()
-        self.actions = reader.read_any()
+        with reader.group("title"):
+            self.title = reader.read_any()
+        with reader.group("number"):
+            self.number = reader.read_any()
+        with reader.group("dtstr"):
+            self.dtstr = reader.read_any()
+        self.actions = reader.read_object_list("actions", HistoryAction)
 
     def remove_action(self, action: HistoryAction) -> None:
         """Remove an action from the history session
@@ -477,6 +452,20 @@ class HistoryTree(QW.QTreeWidget):
         self.setContextMenuPolicy(QC.Qt.CustomContextMenu)
         self.setSelectionMode(QW.QAbstractItemView.ContiguousSelection)
 
+    @staticmethod
+    def action_to_tree_item(action: HistoryAction) -> QW.QTreeWidgetItem:
+        """Convert an action to a tree item
+
+        Args:
+            action: Action to convert
+
+        Returns:
+            QW.QTreeWidgetItem: Tree item
+        """
+        item = QW.QTreeWidgetItem([action.title, action.dtstr, action.description])
+        item.setData(0, QC.Qt.UserRole, action.uuid)
+        return item
+
     def populate_tree(self, history_sessions: list[HistorySession]) -> None:
         """Populate the history tree widget
 
@@ -488,10 +477,7 @@ class HistoryTree(QW.QTreeWidget):
             ritem = QW.QTreeWidgetItem([session.title, session.dtstr])
             self.addTopLevelItem(ritem)
             for action in session.actions:
-                item = QW.QTreeWidgetItem(
-                    [action.title, action.dtstr, action.description]
-                )
-                ritem.addChild(item)
+                ritem.addChild(self.action_to_tree_item(action))
         self.expandAll()
         for col in (0, 1):
             self.resizeColumnToContents(col)
@@ -508,8 +494,7 @@ class HistoryTree(QW.QTreeWidget):
         Args:
             action: Action to add
         """
-        item = QW.QTreeWidgetItem([action.title, action.dtstr, action.description])
-        item.setData(0, QC.Qt.UserRole, action.uuid)
+        item = self.action_to_tree_item(action)
         ritem = self.topLevelItem(self.topLevelItemCount() - 1)
         ritem.addChild(item)
 
@@ -778,7 +763,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     # ------ AbstractPanel interface ---------------------------------------------------
     def create_object(self) -> HistoryAction:
         """Create and return object"""
-        return HistoryAction("", lambda: None, (), {}, WorkspaceState())
+        return HistoryAction()
 
     def add_object(self, obj: HistoryAction) -> None:
         """Add object to panel"""

@@ -305,6 +305,13 @@ class BaseProcessor(QC.QObject):
                 funcs = [funcs] * len(params)
             else:
                 assert len(funcs) == len(params)
+        self.mainwindow.historypanel.add_entry(
+            title,
+            self.compute_1n,
+            funcs,
+            params=params,
+            title=title,
+        )
         self._compute_11_subroutine(funcs, params, title)
 
     def handle_output(
