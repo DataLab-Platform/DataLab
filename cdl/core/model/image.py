@@ -26,6 +26,7 @@ from plotpy.builder import make
 from plotpy.items import AnnotatedCircle, AnnotatedRectangle, MaskedImageItem
 from skimage import draw
 
+from cdl.algorithms.datatypes import clip_astype
 from cdl.algorithms.image import scale_data_to_min_max
 from cdl.config import Conf, _
 from cdl.core.model import base
@@ -495,11 +496,13 @@ class ImageObj(gds.DataSet, base.BaseObj):
 
     def set_data_type(self, dtype: np.dtype) -> None:
         """Change data type.
+        If data type is integer, clip values to the new data type's range, thus avoiding
+        overflow or underflow.
 
         Args:
             Data type
         """
-        self.data = np.array(self.data, dtype=dtype)
+        self.data = clip_astype(self.data, dtype)
 
     def __viewable_data(self) -> np.ndarray:
         """Return viewable data"""

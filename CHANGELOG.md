@@ -2,6 +2,21 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.16.5 ##
+
+🛠️ Bug fixes:
+
+* Overflow and underflow issues in some operations on integer images:
+  * When processing integer images, some features were causing overflow or underflow
+    issues, leading to unexpected results (correct results from a numerical point of
+    view, but not from a mathematical point of view)
+  * This issue only concerned basic operations (addition, subtraction, multiplication,
+    division, and constant operations) - all the other features were already working
+    as expected
+  * This is now fixed by converting the image data to floating point before applying
+    the operation on, and converting it back to integer after the operation
+  * Unit tests have been added to prevent regressions for all these operations
+
 ## DataLab Version 0.16.4 ##
 
 This is a minor maintenance release.
