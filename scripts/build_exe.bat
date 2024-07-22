@@ -29,7 +29,7 @@ set RESPATH=%CLONEDIR%\resources
 for %%s in (16 24 32 48 128 256) do (
   %INKSCAPE_PATH% "%RESPATH%\%LIBNAME%.svg" -o "%RESPATH%\tmp-%%s.png" -w %%s -h %%s
 )
-magick convert "%RESPATH%\tmp-*.png" "%RESPATH%\%LIBNAME%.ico"
+magick "%RESPATH%\tmp-*.png" "%RESPATH%\%LIBNAME%.ico"
 del "%RESPATH%\tmp-*.png"
 
 @REM Building executable
