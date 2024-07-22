@@ -180,7 +180,7 @@ def binning(
     except ValueError as err:
         raise ValueError("Binning is not a multiple of image dimensions") from err
     if operation == "sum":
-        bdata = np.array(bdata, dtype=np.float64).sum(axis=(-1, 1))
+        bdata = np.array(bdata, dtype=float).sum(axis=(-1, 1))
     elif operation == "average":
         bdata = bdata.mean(axis=(-1, 1))
     elif operation == "median":
@@ -211,8 +211,8 @@ def flatfield(
     Returns:
         Flat-field corrected data
     """
-    dtemp = np.array(rawdata, dtype=np.float64, copy=True) * flatdata.mean()
-    dunif = np.array(flatdata, dtype=np.float64, copy=True)
+    dtemp = np.array(rawdata, dtype=float, copy=True) * flatdata.mean()
+    dunif = np.array(flatdata, dtype=float, copy=True)
     dunif[dunif == 0] = 1.0
     dcorr_all = np.array(dtemp / dunif, dtype=rawdata.dtype)
     dcorr = np.array(rawdata, copy=True)
