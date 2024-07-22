@@ -61,7 +61,8 @@ def make_wxs(product_name: str, version: str) -> None:
     # - "0.16.rc2" -> "0.16.0"
     #
     version_msi = re.sub(r"\.post\d+$", ".1", version)
-    version_msi = re.sub(r"\.(dev|alpha|beta|rc|a|b|c)\d+$", ".0", version_msi)
+    version_msi = re.sub(r"\.dev\d+$", ".0", version_msi)
+    version_msi = re.sub(r"(rc|a|b)\d+$", ".0", version_msi)
 
     wix_dir = osp.abspath(osp.dirname(__file__))
     proj_dir = osp.join(wix_dir, os.pardir)
