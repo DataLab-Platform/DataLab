@@ -27,6 +27,16 @@ if TYPE_CHECKING:
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
 
+SIZE = 200
+
+# Signal ROIs:
+SROI1 = [26, 41]
+SROI2 = [125, 146]
+
+# Image ROIs:
+IROI1 = [SIZE // 2, SIZE // 2, SIZE - 25, SIZE]  # Rectangle
+IROI2 = [SIZE // 4, SIZE // 2, SIZE // 2, SIZE // 2]  # Circle
+
 
 def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None):
     """Test all signal features related to ROI"""
@@ -35,14 +45,38 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
     panel.processor.compute_histogram(dlp.HistogramParam())
     panel.remove_object()
     roiparam = dlp.ROIDataParam.create(singleobj=singleobj)
+    obj_nb = len(panel)
+    last_obj = panel[obj_nb]
+    if execenv.unattended:
+        # In unattended mode, we need to set the ROI manually.
+        # On the contrary, in interactive mode, the ROI editor is opened and will
+        # automatically set the ROI from the currently selected object.
+        roiparam.roidata = last_obj.roi
     panel.processor.compute_roi_extraction(roiparam)
-
-
-SIZE = 200
-
-# Image ROIs:
-IROI1 = [SIZE // 2, SIZE // 2, SIZE - 25, SIZE]  # Rectangle
-IROI2 = [SIZE // 4, SIZE // 2, SIZE // 2, SIZE // 2]  # Circle
+    if execenv.unattended and last_obj.roi is not None:
+        orig = last_obj.data
+        if singleobj is None or not singleobj:  # Multiple objects mode
+            assert len(panel) == obj_nb + 2, "Two objects expected"
+            sig1, sig2 = panel[obj_nb + 1], panel[obj_nb + 2]
+            assert sig1.data.size == SROI1[1] - SROI1[0], "Signal 1 size mismatch"
+            assert sig2.data.size == SROI2[1] - SROI2[0], "Signal 2 size mismatch"
+            assert np.all(
+                sig1.data == orig[SROI1[0] : SROI1[1]]
+            ), "Signal 1 data mismatch"
+            assert np.all(
+                sig2.data == orig[SROI2[0] : SROI2[1]]
+            ), "Signal 2 data mismatch"
+        else:
+            assert len(panel) == obj_nb + 1, "One object expected"
+            sig = panel[obj_nb + 1]
+            exp_size = SROI1[1] - SROI1[0] + SROI2[1] - SROI2[0]
+            assert sig.data.size == exp_size, "Signal size mismatch"
+            assert np.all(
+                sig.data[: SROI1[1] - SROI1[0]] == orig[SROI1[0] : SROI1[1]]
+            ), "Signal 1 data mismatch"
+            assert np.all(
+                sig.data[SROI2[0] - SROI2[1] :] == orig[SROI2[0] : SROI2[1]]
+            ), "Signal 2 data mismatch"
 
 
 def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
@@ -54,18 +88,15 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     obj_nb = len(panel)
 
     roiparam = dlp.ROIDataParam.create(singleobj=singleobj)
-    im0 = panel[obj_nb]
-    if im0.roi is None:
-        panel.processor.compute_roi_extraction(roiparam)
-        return
-    with execenv.context(accept_dialogs=True):
-        panel.processor.compute_roi_extraction(roiparam)
-
+    last_obj = panel[obj_nb]
     if execenv.unattended:
-        im0 = panel[obj_nb]
-        if im0.roi is None:
-            return
+        # In unattended mode, we need to set the ROI manually.
+        # On the contrary, in interactive mode, the ROI editor is opened and will
+        # automatically set the ROI from the currently selected object.
+        roiparam.roidata = last_obj.roi
+    panel.processor.compute_roi_extraction(roiparam)
 
+    if execenv.unattended and last_obj.roi is not None:
         # Assertions texts:
         nzroi = "Non-zero values expected in ROI"
         zroi = "Zero values expected outside ROI"
@@ -161,7 +192,7 @@ def test_roi_app(screenshots: bool = False):
         panel.add_object(sig1)
         __run_signal_computations(panel)
         sig2 = create_paracetamol_signal(SIZE)
-        sig2.roi = np.array([[26, 41], [125, 146]], int)
+        sig2.roi = np.array([SROI1, SROI2], int)
         for singleobj in (False, True):
             sig2_i = sig2.copy()
             panel.add_object(sig2_i)
