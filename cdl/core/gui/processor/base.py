@@ -709,8 +709,11 @@ class BaseProcessor(QC.QObject):
                 extract=True, singleobj=param.singleobj
             )
             if param is not None and param.roidata is None:
-                # This only happens in unattended mode (forcing QDialog accept)
-                return None
+                # This only happens in unattended mode (forcing QDialog accept,
+                # using a method that -on some platforms- does not act as an accept
+                # but as a reject)
+                obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+                param.roidata = obj.roi
         return param
 
     @abc.abstractmethod
