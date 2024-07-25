@@ -6,6 +6,18 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Image ROI extraction issues:
+  * Multiple regressions were introduced in version 0.16.0:
+    * Single circular ROI extraction was not working as expected (a rectangular ROI was
+      extracted, with unexpected coordinates)
+    * Multiple circular ROI extraction lead to a rectangular ROI extraction
+    * Multiple ROI extraction was no longer cropping the image to the overall bounding
+      box of the ROIs
+  * These issues are now fixed, and unit tests have been added to prevent regressions:
+    * An independent test algorithm has been implemented to check the correctness of
+      the ROI extraction in all cases mentioned above
+    * Tests cover both single and multiple ROI extraction, with circular and rectangular
+      ROIs
 * Overflow and underflow issues in some operations on integer images:
   * When processing integer images, some features were causing overflow or underflow
     issues, leading to unexpected results (correct results from a numerical point of

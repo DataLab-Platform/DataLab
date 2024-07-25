@@ -253,7 +253,7 @@ class ROI2DParam(gds.DataSet):
     def get_single_roi(self) -> np.ndarray | None:
         """Get single ROI, i.e. after extracting ROI from image"""
         if self.geometry is RoiDataGeometries.CIRCLE:
-            return np.array([(0, self.r, self.xc, self.yc)], int)
+            return np.array([(0, self.r, 2 * self.r, self.r)], int)
         return None
 
     def get_rect_indexes(self) -> tuple[int, int, int, int]:

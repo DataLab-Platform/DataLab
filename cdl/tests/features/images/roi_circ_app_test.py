@@ -10,6 +10,7 @@ Circular ROI test
 import numpy as np
 from skimage import draw
 
+import cdl.param as dlp
 from cdl.env import execenv
 from cdl.obj import RoiDataGeometries, create_image
 from cdl.tests import cdltest_app_context
@@ -45,6 +46,11 @@ def test_roi_circ():
             print_obj_shapes(ima)
             panel.processor.compute_stats()
             panel.processor.compute_centroid()
+        # Extracting ROIs:
+        rparam = dlp.ROIDataParam.create(singleobj=False)
+        for obj_nb in (1, 2):
+            panel.objview.set_current_object(panel[obj_nb])
+            panel.processor.compute_roi_extraction(rparam)
 
 
 if __name__ == "__main__":
