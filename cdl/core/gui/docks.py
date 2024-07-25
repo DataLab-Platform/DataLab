@@ -30,7 +30,7 @@ from guidata.widgets.dockable import DockableWidget
 from plotpy.constants import PlotType
 from plotpy.items import CurveItem
 from plotpy.panels import XCrossSection, YCrossSection
-from plotpy.plot import BasePlot, PlotOptions, PlotWidget
+from plotpy.plot import PlotOptions, PlotWidget
 from plotpy.tools import (
     BasePlotMenuTool,
     CurveStatsTool,
@@ -109,21 +109,21 @@ def get_more_image_stats(
 
     integral = data.sum()
     integral_fmt = r"%.3e " + zunit
-    infos += "<br>∑ = %s" % (integral_fmt % integral)
+    infos += f"<br>∑ = {integral_fmt % integral}"
 
     if xunit == yunit:
         surfacefmt = p.xformat.split()[0] + " " + xunit
         if xunit != "":
             surfacefmt = surfacefmt + "²"
         surface = abs((x1 - x0) * (y1 - y0))
-        infos += "<br>A = %s" % (surfacefmt % surface)
+        infos += f"<br>A = {surfacefmt % surface}"
         if xunit is not None and zunit is not None:
             if surface != 0:
                 density = integral / surface
                 densityfmt = r"%.3e"
                 if xunit and zunit:
                     densityfmt += " " + zunit + "/" + xunit + "²"
-                infos = infos + "<br>ρ = %s" % (densityfmt % density)
+                infos = infos + f"<br>ρ = {densityfmt % density}"
 
     c_i, c_j = get_centroid_fourier(data)
     c_x, c_y = item.get_plot_coordinates(c_j + ix0, c_i + iy0)

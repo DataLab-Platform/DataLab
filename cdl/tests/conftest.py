@@ -32,7 +32,7 @@ execenv.verbose = "quiet"
 INITIAL_CWD = os.getcwd()
 
 
-def pytest_report_header(config):
+def pytest_report_header(config):  # pylint: disable=unused-argument
     """Add additional information to the pytest report header."""
     nfstr = ", ".join(
         f"{plugin.info.name} {plugin.info.version}"
@@ -66,7 +66,7 @@ def pytest_configure(config):
 
 
 @pytest.fixture(autouse=True)
-def reset_cwd(request):
+def reset_cwd(request):  # pylint: disable=unused-argument
     """Reset the current working directory to the initial one after each test."""
     yield
     os.chdir(INITIAL_CWD)
