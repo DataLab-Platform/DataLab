@@ -34,7 +34,8 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
     panel.processor.compute_fw1e2()
     panel.processor.compute_histogram(dlp.HistogramParam())
     panel.remove_object()
-    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(singleobj=singleobj))
+    roiparam = dlp.ROIDataParam.create(singleobj=singleobj)
+    panel.processor.compute_roi_extraction(roiparam)
 
 
 SIZE = 200
@@ -51,7 +52,14 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     panel.processor.compute_histogram(dlp.HistogramParam())
     panel.processor.compute_peak_detection(dlp.Peak2DDetectionParam())
     obj_nb = len(panel)
-    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(singleobj=singleobj))
+
+    roiparam = dlp.ROIDataParam.create(singleobj=singleobj)
+    im0 = panel[obj_nb]
+    if im0.roi is None:
+        panel.processor.compute_roi_extraction(roiparam)
+        return
+    with execenv.context(accept_dialogs=True):
+        panel.processor.compute_roi_extraction(roiparam)
 
     if execenv.unattended:
         im0 = panel[obj_nb]
