@@ -52,17 +52,17 @@ msgid "Test coverage is around 90%, with more than 200 tests."
 msgstr "La couverture de test est d'environ 90%, avec plus de 200 tests."
 
 #: ../../doc/features/validation/status.rst:19
-msgid "Scientific validation"
-msgstr "Validation scientifique"
+msgid "Technical validation"
+msgstr "Validation technique"
 
 #: ../../doc/features/validation/status.rst:21
 msgid ""
 "This paragraph provides the validation status of compute functions in "
-"DataLab (this is what we call scientific validation, see "
+"DataLab (this is what we call technical validation, see "
 ":ref:`scientific_validation`)."
 msgstr ""
 "Ce paragraphe fournit l'état de validation des fonctions de calcul dans "
-"DataLab (c'est ce que nous appelons validation scientifique, voir "
+"DataLab (c'est ce que nous appelons validation technique, voir "
 ":ref:`scientific_validation`)."
 
 #: ../../doc/features/validation/status.rst:24

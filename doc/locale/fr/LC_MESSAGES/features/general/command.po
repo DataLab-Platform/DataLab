@@ -78,20 +78,20 @@ msgstr ""
 "suivante::"
 
 #: ../../doc/features/general/command.rst:71
-msgid "Run scientific validation tests"
-msgstr "Exécuter les tests de validation scientifique"
+msgid "Run technical validation tests"
+msgstr "Exécuter les tests de validation technique"
 
 #: ../../doc/features/general/command.rst:73
 msgid ""
-"Scientific validation tests are directly included in individual unit "
+"Technical validation tests are directly included in individual unit "
 "tests and are disseminated throughout the code. The test functions "
 "including validation tests are marked with the "
 "``@pytest.mark.validation`` decorator."
-msgstr "Les tests de validation scientifique sont directement inclus dans les tests unitaires individuels et sont disséminés dans tout le code. Les fonctions de test incluant des tests de validation sont marquées avec le décorateur ``@pytest.mark.validation``."
+msgstr "Les tests de validation technique sont directement inclus dans les tests unitaires individuels et sont disséminés dans tout le code. Les fonctions de test incluant des tests de validation sont marquées avec le décorateur ``@pytest.mark.validation``."
 
 #: ../../doc/features/general/command.rst:77
-msgid "To execute DataLab scientific validation tests, run the following::"
-msgstr "Pour exécuter les tests de validation scientifique de DataLab, taper la commande suivante::"
+msgid "To execute DataLab technical validation tests, run the following::"
+msgstr "Pour exécuter les tests de validation technique de DataLab, taper la commande suivante::"
 
 #: ../../doc/features/general/command.rst:81
 msgid ""

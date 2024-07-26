@@ -1,13 +1,13 @@
 .. _scientific_validation:
 
-Scientific Validation
+Technical Validation
 =====================
 
 .. meta::
     :description: Validation in DataLab, the open-source scientific data analysis and visualization platform
     :keywords: DataLab, scientific, data, analysis, validation, ground-truth, analytical
 
-DataLab scientific validation is based on two key concepts:
+DataLab technical validation is based on two key concepts:
 **ground-truth data** and **analytical validation**.
 
 Ground-truth data
@@ -40,7 +40,7 @@ In DataLab, analytical validation is implemented using a variety of techniques, 
 Scope
 -----
 
-The scope of scientific validation in DataLab includes all compute functions that
+The scope of technical validation in DataLab includes all compute functions that
 operate on DataLab's signal and image objects (i.e. :class:`cdl.obj.SignalObj` and
 :class:`cdl.obj.ImageObj`).
 
@@ -55,7 +55,7 @@ Implementation
 The tests are implemented using the `pytest <https://docs.pytest.org/en/latest/>`_
 framework.
 
-When writing a new scientific validation test, the following rules should be followed
+When writing a new technical validation test, the following rules should be followed
 regarding the test function:
 
 - The test function should be named:
@@ -74,7 +74,7 @@ regarding the test function:
 
 Following those rules ensures that:
 
-- The tests are easily identified as scientific validation tests.
+- The tests are easily identified as technical validation tests.
 
 - The tests can be executed separately using the command line interface
   (see :ref:`run_scientific_validation_tests`).
@@ -85,10 +85,10 @@ Following those rules ensures that:
 Executing tests
 ---------------
 
-In DataLab, scientific validation tests are disseminated in the test suite of the
+In DataLab, technical validation tests are disseminated in the test suite of the
 project, but they can also be executed separately using the command line interface.
 
 .. seealso::
 
     See paragraph :ref:`run_scientific_validation_tests` for more information on
-    how to run scientific validation tests.
+    how to run technical validation tests.

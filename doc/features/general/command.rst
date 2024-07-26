@@ -67,14 +67,14 @@ To execute DataLab demo, run the following::
 
 .. _run_scientific_validation_tests:
 
-Run scientific validation tests
+Run technical validation tests
 -------------------------------
 
-.. note:: Scientific validation tests are directly included in individual unit tests
+.. note:: Technical validation tests are directly included in individual unit tests
     and are disseminated throughout the code. The test functions including validation
     tests are marked with the ``@pytest.mark.validation`` decorator.
 
-To execute DataLab scientific validation tests, run the following::
+To execute DataLab technical validation tests, run the following::
 
     $ pytest -m validation
 

@@ -102,8 +102,8 @@ msgid ""
 "the need to validate the results of computational analysis against "
 "ground-truth data. This is a critical step in the scientific method, and "
 "it is essential for reproducibility and trust in the results. This is "
-"what we call **scientific validation**."
-msgstr "DataLab est une plateforme d'analyse et de visualisation de données scientifiques qui peut être utilisée dans diverses disciplines scientifiques, y compris la biologie, la physique et l'astronomie. Le point commun de toutes ces disciplines est la nécessité de valider les résultats de l'analyse informatique par rapport à des données de référence. Il s'agit d'une étape critique dans la méthode scientifique et elle est essentielle pour la reproductibilité et la confiance dans les résultats. C'est ce que nous appelons la **validation scientifique**."
+"what we call **technical validation**."
+msgstr "DataLab est une plateforme d'analyse et de visualisation de données scientifiques qui peut être utilisée dans diverses disciplines scientifiques, y compris la biologie, la physique et l'astronomie. Le point commun de toutes ces disciplines est la nécessité de valider les résultats de l'analyse informatique par rapport à des données de référence. Il s'agit d'une étape critique dans la méthode scientifique et elle est essentielle pour la reproductibilité et la confiance dans les résultats. C'est ce que nous appelons la **validation technique**."
 
 #: ../../doc/features/index.rst:41
 msgid ""
@@ -120,9 +120,9 @@ msgstr "Ainsi, la validation de DataLab peut être classée en deux types :"
 
 #: ../../doc/features/index.rst:48
 msgid ""
-"**Scientific validation**: ensures that the results of computational "
+"**Technical validation**: ensures that the results of computational "
 "analysis are accurate and reliable."
-msgstr "La **validation scientifique** : garantit que les résultats de l'analyse informatique sont précis et fiables."
+msgstr "La **validation technique** : garantit que les résultats de l'analyse informatique sont précis et fiables."
 
 #: ../../doc/features/index.rst:51
 msgid ""
