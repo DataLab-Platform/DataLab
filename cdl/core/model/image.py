@@ -248,7 +248,12 @@ class ROI2DParam(gds.DataSet):
         """Get ROI coordinates"""
         if self.geometry is RoiDataGeometries.CIRCLE:
             return self.xc - self.r, self.yc, self.xc + self.r, self.yc
-        return self.xr0, self.yr0, self.xr1, self.yr1
+        x0, y0, x1, y1 = self.xr0, self.yr0, self.xr1, self.yr1
+        x0, x1 = min(x0, x1), max(x0, x1)
+        y0, y1 = min(y0, y1), max(y0, y1)
+        x1 = x1 + 1 if x1 == x0 else x1
+        y1 = y1 + 1 if y1 == y0 else y1
+        return x0, y0, x1, y1
 
     def get_single_roi(self) -> np.ndarray | None:
         """Get single ROI, i.e. after extracting ROI from image"""
@@ -613,7 +618,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         self.update_plot_item_parameters(item)
         item.plot().update_colormap_axis(item)
 
-    def get_roi_param(self, title, *defaults: int) -> gds.DataSet:
+    def get_roi_param(self, title, *defaults: int) -> ROI2DParam:
         """Return ROI parameters dataset.
 
         Args:
