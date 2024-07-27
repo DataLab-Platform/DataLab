@@ -1,0 +1,213 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-27 16:52+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/signal/menu_edit.rst:4
+msgid "Manipulate metadata"
+msgstr "Manipuler les métadonnées"
+
+#: ../../doc/features/signal/menu_edit.rst:6
+msgid "This section describes how to manipulate metadata in DataLab."
+msgstr "Cette section décrit comment manipuler les métadonnées dans DataLab."
+
+#: ../../doc/features/signal/menu_edit.rst:10
+msgid "Screenshot of the \"Edit\" menu."
+msgstr "Capture d'écran du menu \"Édition\"."
+
+#: ../../doc/features/signal/menu_edit.rst:12
+msgid ""
+"The \"Edit\" menu allows you to perform classic editing operations on the"
+" current signal or group of signals (create/rename group, move up/down, "
+"delete signal/group of signals, etc.)."
+msgstr ""
+"Le menu \"Édition\" vous permet d'effectuer des opérations d'édition "
+"classiques sur le signal ou le groupe de signaux actuel (créer/renommer "
+"un groupe, déplacer vers le haut/vers le bas, supprimer le signal/le "
+"groupe de signaux, etc.)."
+
+#: ../../doc/features/signal/menu_edit.rst:16
+msgid ""
+"It also allows you to manipulate metadata associated with the current "
+"signal."
+msgstr ""
+"Il vous permet également de manipuler les métadonnées associées au signal"
+" actuel."
+
+#: ../../doc/features/signal/menu_edit.rst:19
+msgid "Copy/paste metadata"
+msgstr "Copier/coller les métadonnées"
+
+#: ../../doc/features/signal/menu_edit.rst:21
+msgid ""
+"As metadata contains useful information about the signal, it can be "
+"copied and pasted from one signal to another by selecting the \"Copy "
+"metadata\" |metadata_copy| and \"Paste metadata\" |metadata_paste| "
+"actions in the \"Edit\" menu."
+msgstr ""
+"Compte tenu du fait que les métadonnées contiennent des informations "
+"utiles sur le signal, elles peuvent être copiées et collées d'un signal à"
+" un autre en sélectionnant les actions \"Copier les métadonnées\" "
+"|metadata_copy| et \"Coller les métadonnées\" |metadata_paste| dans le "
+"menu \"Édition\"."
+
+#: ../../doc/features/signal/menu_edit.rst:25
+msgid "metadata_copy"
+msgstr ""
+
+#: ../../doc/features/signal/menu_edit.rst:30
+msgid "metadata_paste"
+msgstr ""
+
+#: ../../doc/features/signal/menu_edit.rst:35
+msgid ""
+"This feature allows you to tranfer those information from one signal to "
+"another:"
+msgstr ""
+"Cette fonctionnalité vous permet de transférer ces informations d'un "
+"signal à un autre :"
+
+#: ../../doc/features/signal/menu_edit.rst:37
+msgid ""
+"Region of interests (ROIs): that is a very efficient way to reuse the "
+"same ROIs on different signals and easily compare the results of the "
+"analysis on different signals"
+msgstr ""
+"Régions d'intérêt (ROIs) : c'est un moyen très efficace de réutiliser les"
+" mêmes ROIs sur différents signaux et de comparer facilement les "
+"résultats de l'analyse sur différents signaux"
+
+#: ../../doc/features/signal/menu_edit.rst:39
+msgid ""
+"Computing results, such as peak positions or FHWM intervals (the "
+"relevance of transferring such information depends on the context and is "
+"up to the user to decide)"
+msgstr ""
+"Résultats de calcul, tels que les positions de pics ou les intervalles "
+"FHWM (la pertinence du transfert de ces informations dépend du contexte "
+"et revient à l'utilisateur de décider)"
+
+#: ../../doc/features/signal/menu_edit.rst:41
+msgid "Any other information that you may have added to the metadata of a signal"
+msgstr ""
+"Toute autre information que vous avez pu ajouter aux métadonnées d'un "
+"signal"
+
+#: ../../doc/features/signal/menu_edit.rst:45
+msgid ""
+"Copying metadata from a signal to another will overwrite the metadata of "
+"the destination signal (for the metadata keys that are common to both "
+"signals) or simply add the metadata keys that are not present in the "
+"destination signal."
+msgstr ""
+"Copier les métadonnées d'un signal à un autre écrasera les métadonnées du"
+" signal de destination (pour les clés de métadonnées communes aux deux "
+"signaux) ou ajoutera simplement les clés de métadonnées qui ne sont pas "
+"présentes dans le signal de destination."
+
+#: ../../doc/features/signal/menu_edit.rst:50
+msgid "Import/export metadata"
+msgstr "Importer/exporter les métadonnées"
+
+#: ../../doc/features/signal/menu_edit.rst:52
+msgid ""
+"Metadata can also be imported and exported from/to a JSON file using the "
+"\"Import metadata\" |metadata_import| and \"Export metadata\" "
+"|metadata_export| actions in the \"Edit\" menu. This is exactly the same "
+"as the copy/paste metadata feature (see above for more details on the use"
+" cases of this feature), but it allows you to save the metadata to a file"
+" and then import it back later."
+msgstr ""
+"Les métadonnées peuvent également être importées et exportées depuis/vers"
+" un fichier JSON en utilisant les actions \"Importer les métadonnées\" "
+"|metadata_import| et \"Exporter les métadonnées\" |metadata_export| dans "
+"le menu \"Édition\". C'est exactement la même chose que la fonctionnalité"
+" de copier/coller des métadonnées (voir ci-dessus pour plus de détails "
+"sur les cas d'utilisation de cette fonctionnalité), mais cela vous permet"
+" de sauvegarder les métadonnées dans un fichier et de les importer "
+"ultérieurement."
+
+#: ../../doc/features/signal/menu_edit.rst:58
+msgid "metadata_import"
+msgstr ""
+
+#: ../../doc/features/signal/menu_edit.rst:63
+msgid "metadata_export"
+msgstr ""
+
+#: ../../doc/features/signal/menu_edit.rst:69
+msgid "Delete metadata"
+msgstr "Supprimer les métadonnées"
+
+#: ../../doc/features/signal/menu_edit.rst:71
+msgid ""
+"When deleting metadata using the \"Delete metadata\" |metadata_delete| "
+"action in the \"Edit\" menu, you will be prompted to confirm the deletion"
+" of Region of Interests (ROIs) if they are present in the metadata. After"
+" this eventual confirmation, the metadata will be deleted, meaning that "
+"computing results, ROIs, and any other information associated with the "
+"signal will be lost."
+msgstr ""
+"Lors de la suppression des métadonnées en utilisant l'action \"Supprimer "
+"les métadonnées\" |metadata_delete| dans le menu \"Édition\", vous serez "
+"invité à confirmer la suppression des régions d'intérêt (ROIs) si elles "
+"sont présentes dans les métadonnées. Après cette confirmation éventuelle,"
+" les métadonnées seront supprimées, ce qui signifie que les résultats de "
+"calcul, les ROIs et toute autre information associée au signal seront "
+"perdus."
+
+#: ../../doc/features/signal/menu_edit.rst:77
+msgid "metadata_delete"
+msgstr ""
+
+#: ../../doc/features/signal/menu_edit.rst:83
+msgid "Signal titles"
+msgstr "Titres des signaux"
+
+#: ../../doc/features/signal/menu_edit.rst:85
+msgid ""
+"Signal titles may be considered as metadata from a user point of view, "
+"even if they are not stored in the metadata of the signal (but in an "
+"attribute of the signal object)."
+msgstr "Les titres des signaux peuvent être considérés comme des métadonnées du point de vue de l'utilisateur, même s'ils ne sont pas stockés dans les métadonnées du signal (mais dans un attribut de l'objet signal)."
+
+#: ../../doc/features/signal/menu_edit.rst:88
+msgid "The \"Edit\" menu allows you to:"
+msgstr "Le menu \"Édition\" vous permet de :"
+
+#: ../../doc/features/signal/menu_edit.rst:90
+msgid ""
+"\"Add object title to plot\": this action will add a label on top of the "
+"signal with its title."
+msgstr "\"Ajouter le titre de l'objet au graphique\" : cette action ajoutera une étiquette en haut du signal avec son titre."
+
+#: ../../doc/features/signal/menu_edit.rst:93
+msgid ""
+"\"Copy titles to clipboard\" |copy_titles|: this action will copy the "
+"titles of the selected signals to the clipboard, which might be useful to"
+" paste them in a text editor or in a spreadsheet."
+msgstr "\"Copier les titres dans le presse-papiers\" |copy_titles| : cette action copiera les titres des signaux sélectionnés dans le presse-papiers, ce qui peut être utile pour les coller dans un éditeur de texte ou dans un tableur."
+
+#: ../../doc/features/signal/menu_edit.rst:114
+msgid "copy_titles"
+msgstr ""
+
+#: ../../doc/features/signal/menu_edit.rst:97
+msgid "Example of the content of the clipboard:"
+msgstr "Exemple du contenu du presse-papiers :"

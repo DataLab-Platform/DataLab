@@ -105,6 +105,7 @@ signal processing panel is the default panel when DataLab is started.
    :caption: Signal processing:
 
    signal/menu_file
+   signal/menu_edit
    signal/menu_operations
    signal/menu_processing
    signal/menu_computing
@@ -130,6 +131,7 @@ bottom-right of the DataLab main window.
    :caption: Image processing:
 
    image/menu_file
+   image/menu_edit
    image/menu_operations
    image/menu_processing
    image/menu_computing
