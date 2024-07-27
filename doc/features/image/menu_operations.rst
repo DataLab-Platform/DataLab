@@ -152,7 +152,9 @@ Data type conversion
 --------------------
 
 The "Convert data type" |convert_dtype| action allows you to convert the data type
-of the selected images.
+of the selected images. For integer data types, the conversion is done by clipping
+the values to the new data type range before effectively converting the data type.
+For floating point data types, the conversion is straightforward.
 
 .. |convert_dtype| image:: ../../../cdl/data/icons/operations/convert_dtype.svg
     :width: 24px
@@ -161,7 +163,8 @@ of the selected images.
 
 .. note::
 
-    Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
+    Data type conversion uses the :py:func:`cdl.algorithms.datatypes.clip_astype`
+    function which relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
 Basic mathematical functions

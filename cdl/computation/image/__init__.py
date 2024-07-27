@@ -1010,7 +1010,7 @@ class DataTypeIParam(gds.DataSet):
 
 
 def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
-    """Convert image data type with :py:func:`numpy.astype`
+    """Convert image data type with :py:func:`cdl.algorithms.datatypes.clip_astype`
 
     Args:
         src: input image object
@@ -1019,8 +1019,8 @@ def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "astype", p.dtype_str)
-    dst.data = src.data.astype(p.dtype_str)
+    dst = dst_11(src, "clip_astype", p.dtype_str)
+    dst.data = clip_astype(src.data, p.dtype_str)
     return dst
 
 

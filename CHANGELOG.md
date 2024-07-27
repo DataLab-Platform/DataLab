@@ -6,6 +6,17 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Image data type conversion:
+  * Previously, the data type conversion feature was common to signal and image
+    processing features, i.e. a simple conversion of the data type using NumPy's
+    `astype` method
+  * This was not sufficient for image processing features, in particular for integer
+    images, because even if the result was correct from a numerical point of view,
+    underflow or overflow could be legitimately seen as a bug from a mathematical
+    point of view
+  * The image data type conversion feature now relies on the internal `clip_astype`
+    function, which clips the data to the valid range of the target data type before
+    converting it (in the case of integer images)
 * Image ROI extraction issues:
   * Multiple regressions were introduced in version 0.16.0:
     * Single circular ROI extraction was not working as expected (a rectangular ROI was
