@@ -281,17 +281,32 @@ def test_image_im() -> None:
         check_array_result("Image im", ima2.data, exp)
 
 
+def __get_numpy_info(dtype: np.dtype) -> np.generic:
+    """Get numpy info for a given data type."""
+    if is_integer_dtype(dtype):
+        return np.iinfo(dtype)
+    return np.finfo(dtype)
+
+
 @pytest.mark.validation
 def test_image_astype() -> None:
     """Image type conversion test."""
     execenv.print("*** Testing image type conversion:")
     for ima1 in __iterate_images():
         for dtype_str in cpi.VALID_DTYPES_STRLIST:
-            execenv.print(f"  {ima1.data.dtype} -> {dtype_str}: ", end="")
-            exp = ima1.data.astype(np.dtype(dtype_str))
+            dtype1_str = str(ima1.data.dtype)
+            execenv.print(f"  {dtype1_str} -> {dtype_str}: ", end="")
+            dtype_exp = np.dtype(dtype_str)
+            info_exp = __get_numpy_info(dtype_exp)
+            info_ima1 = __get_numpy_info(ima1.data.dtype)
+            if info_exp.min < info_ima1.min or info_exp.max > info_ima1.max:
+                continue
+            exp = np.clip(ima1.data, info_exp.min, info_exp.max).astype(dtype_exp)
             p = cdl.param.DataTypeIParam.create(dtype_str=dtype_str)
             ima2 = cpi.compute_astype(ima1, p)
-            check_array_result(f"Image astype({dtype_str})", ima2.data, exp)
+            check_array_result(
+                f"Image astype({dtype1_str}->{dtype_str})", ima2.data, exp
+            )
 
 
 @pytest.mark.validation
