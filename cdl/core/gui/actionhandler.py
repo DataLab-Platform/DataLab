@@ -615,6 +615,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.at_least_one,
                 icon_name="division.svg",
             )
+            self.new_action(
+                _("Arithmetic operation") + "...",
+                triggered=self.panel.processor.compute_arithmetic,
+                select_condition=SelectCond.at_least_one,
+                icon_name="arithmetic.svg",
+            )
             with self.new_menu(_("Constant Operations"), icon_name="constant.svg"):
                 self.new_action(
                     _("Add constant"),

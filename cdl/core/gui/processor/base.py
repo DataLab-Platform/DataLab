@@ -25,7 +25,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl import env
-from cdl.algorithms.datatypes import is_complex_dtype, is_integer_dtype
+from cdl.algorithms.datatypes import is_complex_dtype
 from cdl.computation.base import ROIDataParam
 from cdl.config import Conf, _
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
@@ -39,6 +39,7 @@ if TYPE_CHECKING:
     from plotpy.plot import PlotWidget
 
     from cdl.computation.base import (
+        ArithmeticParam,
         ClipParam,
         ConstantParam,
         GaussianParam,
@@ -622,12 +623,12 @@ class BaseProcessor(QC.QObject):
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
-        if param is not None:
-            if edit and not param.edit(parent=self.panel.parent()):
-                return
         if obj2 is None:
             obj2 = self.panel.get_object_with_dialog(_("Select %s") % obj2_name)
             if obj2 is None:
+                return
+        if param is not None:
+            if edit and not param.edit(parent=self.panel.parent()):
                 return
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         # name = func.__name__.replace("compute_", "")
@@ -648,6 +649,11 @@ class BaseProcessor(QC.QObject):
                 self.panel.add_object(new_obj, group_id=group_id)
 
     # ------Data Operations-------------------------------------------------------------
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_arithmetic(self, param: ArithmeticParam | None = None) -> None:
+        """Compute arithmetic operation"""
 
     @abc.abstractmethod
     @qt_try_except()

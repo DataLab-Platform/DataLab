@@ -30,6 +30,7 @@ from skimage import filters
 import cdl.algorithms.image as alg
 from cdl.algorithms.datatypes import clip_astype
 from cdl.computation.base import (
+    ArithmeticParam,
     ClipParam,
     ConstantParam,
     FFTParam,
@@ -248,6 +249,38 @@ def compute_division_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
 # MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
+
+
+def compute_arithmetic(src1: ImageObj, src2: ImageObj, p: ArithmeticParam) -> ImageObj:
+    """Compute arithmetic operation on two images
+
+    Args:
+        src1: input image object
+        src2: input image object
+        p: arithmetic parameters
+
+    Returns:
+        Result image object
+    """
+    initial_dtype = src1.data.dtype
+    title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
+    dst = src1.copy(title=title)
+    o, a, b = p.operator, p.factor, p.constant
+    # Apply operator
+    if o in ("×", "/") and a == 0.0:
+        dst.data = np.ones_like(src1.data) * b
+    elif o == "+":
+        dst.data = np.add(src1.data, src2.data, dtype=float) * a + b
+    elif o == "-":
+        dst.data = np.subtract(src1.data, src2.data, dtype=float) * a + b
+    elif o == "×":
+        dst.data = np.multiply(src1.data, src2.data, dtype=float) * a + b
+    elif o == "/":
+        dst.data = np.divide(src1.data, src2.data, dtype=float) * a + b
+    # Eventually convert to initial data type
+    if p.restore_dtype:
+        dst.data = clip_astype(dst.data, initial_dtype)
+    return dst
 
 
 def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:

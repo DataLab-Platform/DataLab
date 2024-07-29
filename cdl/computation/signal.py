@@ -24,6 +24,7 @@ import scipy.signal as sps
 
 import cdl.algorithms.signal as alg
 from cdl.computation.base import (
+    ArithmeticParam,
     ClipParam,
     ConstantParam,
     FFTParam,
@@ -208,6 +209,43 @@ def compute_division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
 # MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
+
+
+def compute_arithmetic(
+    src1: SignalObj, src2: SignalObj, p: ArithmeticParam
+) -> SignalObj:
+    """Perform arithmetic operation on two signals
+
+    Args:
+        src1: source signal 1
+        src2: source signal 2
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    initial_dtype = src1.xydata.dtype
+    title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
+    dst = src1.copy(title=title)
+    o, a, b = p.operator, p.factor, p.constant
+    if o in ("×", "/") and a == 0.0:
+        dst.y = np.ones_like(src1.y) * b
+    elif p.operator == "+":
+        dst.y = (src1.y + src2.y) * a + b
+    elif p.operator == "-":
+        dst.y = (src1.y - src2.y) * a + b
+    elif p.operator == "×":
+        dst.y = (src1.y * src2.y) * a + b
+    elif p.operator == "/":
+        dst.y = (src1.y / src2.y) * a + b
+    if dst.dy is not None and p.operator in ("+", "-"):
+        dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
+    if dst.dy is not None:
+        dst.dy *= p.factor
+    # Eventually convert to initial data type
+    if p.restore_dtype:
+        dst.xydata = dst.xydata.astype(initial_dtype)
+    return dst
 
 
 def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:

@@ -187,6 +187,40 @@ def test_image_division_constant() -> None:
 
 
 @pytest.mark.validation
+def test_image_arithmetic() -> None:
+    """Image arithmetic test."""
+    execenv.print("*** Testing image arithmetic:")
+    for ima1, ima2 in __iterate_image_couples():
+        dtype1 = ima1.data.dtype
+        p = cdl.param.ArithmeticParam.create()
+        for o in p.operators:
+            p.operator = o
+            for a in (0.0, 1.0, 2.0):
+                p.factor = a
+                for b in (0.0, 1.0, 2.0):
+                    p.constant = b
+                    ima3 = cpi.compute_arithmetic(ima1, ima2, p)
+                    if o in ("×", "/") and a == 0.0:
+                        exp = np.ones_like(ima1.data) * b
+                    elif o == "+":
+                        exp = np.add(ima1.data, ima2.data, dtype=float) * a + b
+                    elif o == "×":
+                        exp = np.multiply(ima1.data, ima2.data, dtype=float) * a + b
+                    elif o == "-":
+                        exp = np.subtract(ima1.data, ima2.data, dtype=float) * a + b
+                    elif o == "/":
+                        exp = np.divide(ima1.data, ima2.data, dtype=float) * a + b
+                    if p.restore_dtype:
+                        if is_integer_dtype(dtype1):
+                            iinfo1 = np.iinfo(dtype1)
+                            exp = np.clip(exp, iinfo1.min, iinfo1.max)
+                        exp = exp.astype(dtype1)
+                    check_array_result(
+                        f"Arithmetic [{p.get_operation()}]", ima3.data, exp
+                    )
+
+
+@pytest.mark.validation
 def test_image_abs() -> None:
     """Image absolute value test."""
     execenv.print("*** Testing image absolute value:")
@@ -350,6 +384,7 @@ if __name__ == "__main__":
     test_image_product_constant()
     test_image_difference_constant()
     test_image_division_constant()
+    test_image_arithmetic()
     test_image_abs()
     test_image_re()
     test_image_im()

@@ -4,6 +4,17 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ## DataLab Version 0.16.5 ##
 
+ℹ️ Minor new features and enhancements:
+
+* Following the bug fix on image data type conversion issues with basic operations, a
+  new "Arithmetic operation" feature has been added to the "Operations" menu for both
+  Signal and Image panels. This feature allows to perform linear operations on signals
+  and images, with the following operations:
+  * Addition: ``obj3 = (obj1 + obj2) * a + b``
+  * Subtraction: ``obj3 = (obj1 - obj2) * a + b``
+  * Multiplication: ``obj3 = (obj1 * obj2) * a + b``
+  * Division: ``obj3 = (obj1 / obj2) * a + b``
+
 🛠️ Bug fixes:
 
 * View in a new window: cross section tools (intensity profiles) stayed disabled

@@ -47,6 +47,8 @@ with the :py:class:`cdl.param.BinningParam` dataset:
 Common parameters
 ^^^^^^^^^^^^^^^^^
 
+.. autodataset:: cdl.param.ArithmeticParam
+    :no-index:
 .. autodataset:: cdl.param.ClipParam
     :no-index:
 .. autodataset:: cdl.param.FFTParam
@@ -200,6 +202,7 @@ Detection parameters
 # flake8: noqa
 
 from cdl.computation.base import (
+    ArithmeticParam,
     ClipParam,
     FFTParam,
     SpectrumParam,

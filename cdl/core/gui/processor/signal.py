@@ -150,6 +150,21 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_arithmetic(
+        self, obj2: SignalObj | None = None, param: cpb.ArithmeticParam | None = None
+    ) -> None:
+        """Compute arithmetic operation between two signals
+        with :py:func:`cdl.computation.signal.compute_arithmetic`"""
+        self.compute_n1n(
+            obj2,
+            _("signal to operate with"),
+            cps.compute_arithmetic,
+            param=param,
+            paramclass=cpb.ArithmeticParam,
+            title=_("Arithmetic"),
+        )
+
+    @qt_try_except()
     def compute_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute difference between two signals
         with :py:func:`cdl.computation.signal.compute_difference`"""
@@ -196,8 +211,7 @@ class SignalProcessor(BaseProcessor):
             title=_("Division"),
         )
 
-    qt_try_except()
-
+    @qt_try_except()
     def compute_division_constant(self, param: cpb.ConstantParam | None = None) -> None:
         """Compute division by a constant
         with :py:func:`cdl.computation.signal.compute_division_constant`"""

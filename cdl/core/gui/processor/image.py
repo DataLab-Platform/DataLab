@@ -384,6 +384,21 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
+    def compute_arithmetic(
+        self, obj2: ImageObj | None = None, param: cpb.ArithmeticParam | None = None
+    ) -> None:
+        """Compute arithmetic operation between two images
+        with :py:func:`cdl.computation.image.compute_arithmetic`"""
+        self.compute_n1n(
+            obj2,
+            _("image to operate with"),
+            cpi.compute_arithmetic,
+            param=param,
+            paramclass=cpb.ArithmeticParam,
+            title=_("Arithmetic"),
+        )
+
+    @qt_try_except()
     def compute_difference(self, obj2: ImageObj | None = None) -> None:
         """Compute difference between two images
         with :py:func:`cdl.computation.image.compute_difference`"""
