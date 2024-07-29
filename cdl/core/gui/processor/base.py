@@ -586,8 +586,6 @@ class BaseProcessor(QC.QObject):
         for src_gid, dst_obj in dst_objs.items():
             if func_objs is not None:
                 func_objs(dst_obj, src_objs[src_gid])
-            if is_integer_dtype(src_dtypes[src_gid]):
-                dst_obj.set_data_type(dtype=src_dtypes[src_gid])
             short_ids = [obj.short_id for obj in src_objs[src_gid]]
             dst_obj.title = f'{name}({", ".join(short_ids)})'
             group_id = dst_gid if dst_gid is not None else src_gid

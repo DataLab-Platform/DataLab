@@ -41,8 +41,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This issue only concerned basic operations (addition, subtraction, multiplication,
     division, and constant operations) - all the other features were already working
     as expected
-  * This is now fixed by converting the image data to floating point before applying
-    the operation on, and converting it back to integer after the operation
+  * This is now fixed as result output are now floating point images
   * Unit tests have been added to prevent regressions for all these operations
 
 ## DataLab Version 0.16.4 ##

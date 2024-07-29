@@ -152,7 +152,7 @@ def compute_addition(dst: ImageObj, src: ImageObj) -> ImageObj:
     Returns:
         Output image object (modified in place)
     """
-    dst.data = clip_astype(np.add(dst.data, src.data, dtype=float), dst.data.dtype)
+    dst.data = np.add(dst.data, src.data, dtype=float)
     return dst
 
 
@@ -166,7 +166,7 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     Returns:
         Output image object (modified in place)
     """
-    dst.data = clip_astype(np.multiply(dst.data, src.data, dtype=float), dst.data.dtype)
+    dst.data = np.multiply(dst.data, src.data, dtype=float)
     return dst
 
 
@@ -184,7 +184,7 @@ def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> Image
     # data type as the input image, for consistency.
     value = np.array(p.value).astype(dtype=src.data.dtype)
     dst = dst_11(src, "+", str(value))
-    dst.data = clip_astype(np.add(src.data, value, dtype=float), src.data.dtype)
+    dst.data = np.add(src.data, value, dtype=float)
     return dst
 
 
@@ -202,7 +202,7 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     # data type as the input image, for consistency.
     value = np.array(p.value).astype(dtype=src.data.dtype)
     dst = dst_11(src, "-", str(value))
-    dst.data = clip_astype(np.subtract(src.data, value, dtype=float), src.data.dtype)
+    dst.data = np.subtract(src.data, value, dtype=float)
     return dst
 
 
@@ -222,7 +222,7 @@ def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageO
     # type conversion ensures that the output image has the same data type as the input
     # image.
     dst = dst_11(src, "×", str(p.value))
-    dst.data = clip_astype(np.multiply(src.data, p.value, dtype=float), src.data.dtype)
+    dst.data = np.multiply(src.data, p.value, dtype=float)
     return dst
 
 
@@ -241,7 +241,7 @@ def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> Image
     # image by a constant value of a different data type. The final data type conversion
     # ensures that the output image has the same data type as the input image.
     dst = dst_11(src, "/", str(p.value))
-    dst.data = clip_astype(np.divide(src.data, p.value, dtype=float), src.data.dtype)
+    dst.data = np.divide(src.data, p.value, dtype=float)
     return dst
 
 
@@ -261,9 +261,7 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object **src1** - **src2** (new object)
     """
     dst = dst_n1n(src1, src2, "-")
-    dst.data = clip_astype(
-        np.subtract(src1.data, src2.data, dtype=float), src1.data.dtype
-    )
+    dst.data = np.subtract(src1.data, src2.data, dtype=float)
     return dst
 
 
@@ -278,9 +276,7 @@ def compute_quadratic_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object (**src1** - **src2**) / sqrt(2.0) (new object)
     """
     dst = dst_n1n(src1, src2, "quadratic_difference")
-    dst.data = clip_astype(
-        np.subtract(src1.data, src2.data, dtype=float) / np.sqrt(2.0), src1.data.dtype
-    )
+    dst.data = np.subtract(src1.data, src2.data, dtype=float) / np.sqrt(2.0)
     return dst
 
 
@@ -295,9 +291,7 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object **src1** / **src2** (new object)
     """
     dst = dst_n1n(src1, src2, "/")
-    dst.data = clip_astype(
-        np.divide(src1.data, src2.data, dtype=float), src1.data.dtype
-    )
+    dst.data = np.divide(src1.data, src2.data, dtype=float)
     return dst
 
 
