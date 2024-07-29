@@ -1,4 +1,4 @@
-.. _ima-menu-edit:
+.. _sig-menu-edit:
 
 Manipulate metadata
 ===================
