@@ -6,6 +6,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* View in a new window: cross section tools (intensity profiles) stayed disabled
+  unless the user selected an image through the item list - this is now fixed
 * Image View: "Show contrast panel" toolbar button was not enabled at startup, and was
   only enabled when at least one image was displayed in the Image View - it is now
   always enabled, as expected

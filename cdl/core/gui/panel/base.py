@@ -920,7 +920,6 @@ class BaseDataPanel(AbstractPanel):
         action_btn = default_toolbar.widgetForAction(edit_ann_action)
         action_btn.setToolButtonStyle(QC.Qt.ToolButtonTextBesideIcon)
         plot = dlg.get_plot()
-        plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
         for item in obj.iterate_shape_items(editable=True):
@@ -1019,6 +1018,7 @@ class BaseDataPanel(AbstractPanel):
                 item.set_readonly(True)
                 plot.add_item(item, z=0)
         plot.set_active_item(item)
+        item.unselect()
         plot.replot()
         return dlg
 
@@ -1073,7 +1073,6 @@ class BaseDataPanel(AbstractPanel):
         if dlg is None:
             return None
         plot = dlg.get_plot()
-        plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
         # pylint: disable=not-callable
