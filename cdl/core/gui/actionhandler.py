@@ -1034,6 +1034,7 @@ class ImageActionHandler(BaseActionHandler):
                 _("Show contrast panel"),
                 icon_name="contrast.png",
                 tip=_("Show or hide contrast adjustment panel"),
+                select_condition=SelectCond.always,
                 toggled=self.panel.toggle_show_contrast,
                 toolbar_pos=-1,
             )

@@ -6,6 +6,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Image View: "Show contrast panel" toolbar button was not enabled at startup, and was
+  only enabled when at least one image was displayed in the Image View - it is now
+  always enabled, as expected
 * Image data type conversion:
   * Previously, the data type conversion feature was common to signal and image
     processing features, i.e. a simple conversion of the data type using NumPy's
