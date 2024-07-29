@@ -61,7 +61,7 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.ROIDataParam
     :no-index:
-.. autodataset:: cdl.param.ConstantOperationParam
+.. autodataset:: cdl.param.ConstantParam
     :no-index:
 
 Signal parameters
@@ -208,7 +208,7 @@ from cdl.computation.base import (
     MovingAverageParam,
     MovingMedianParam,
     ROIDataParam,
-    ConstantOperationParam,
+    ConstantParam,
     NormalizeParam,
 )
 from cdl.computation.image import (

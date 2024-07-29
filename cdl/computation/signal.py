@@ -25,7 +25,7 @@ import scipy.signal as sps
 import cdl.algorithms.signal as alg
 from cdl.computation.base import (
     ClipParam,
-    ConstantOperationParam,
+    ConstantParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
@@ -145,7 +145,7 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_addition_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_addition_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Add **dst** and a constant value and return a the new result signal object
 
     Args:
@@ -160,7 +160,7 @@ def compute_addition_constant(src: SignalObj, p: ConstantOperationParam) -> Sign
     return dst
 
 
-def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_difference_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Subtract a constant value from a signal
 
     Args:
@@ -175,7 +175,7 @@ def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> Si
     return dst
 
 
-def compute_product_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_product_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Multiply **dst** by a constant value and return the new result signal object
 
     Args:
@@ -190,7 +190,7 @@ def compute_product_constant(src: SignalObj, p: ConstantOperationParam) -> Signa
     return dst
 
 
-def compute_division_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Divide a signal by a constant value
 
     Args:

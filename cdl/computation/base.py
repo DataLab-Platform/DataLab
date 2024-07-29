@@ -138,7 +138,7 @@ class SpectrumParam(gds.DataSet):
     log = gds.BoolItem(_("Logarithmic scale"), default=False)
 
 
-class ConstantOperationParam(gds.DataSet):
+class ConstantParam(gds.DataSet):
     """Parameter used to set a constant value to used in operations (sum,
     multiplication, ...)"""
 

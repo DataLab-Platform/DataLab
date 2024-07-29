@@ -40,7 +40,7 @@ if TYPE_CHECKING:
 
     from cdl.computation.base import (
         ClipParam,
-        ConstantOperationParam,
+        ConstantParam,
         GaussianParam,
         MovingAverageParam,
         MovingMedianParam,
@@ -792,22 +792,22 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_addition_constant(self, param: ConstantOperationParam) -> None:
+    def compute_addition_constant(self, param: ConstantParam) -> None:
         """Compute sum with a constant"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_difference_constant(self, param: ConstantOperationParam) -> None:
+    def compute_difference_constant(self, param: ConstantParam) -> None:
         """Compute difference with a constant"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_product_constant(self, param: ConstantOperationParam) -> None:
+    def compute_product_constant(self, param: ConstantParam) -> None:
         """Compute product with a constant"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_division_constant(self, param: ConstantOperationParam) -> None:
+    def compute_division_constant(self, param: ConstantParam) -> None:
         """Compute division by a constant"""
 
     # ------Computing-------------------------------------------------------------------

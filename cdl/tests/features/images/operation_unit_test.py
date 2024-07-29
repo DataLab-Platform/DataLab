@@ -118,13 +118,13 @@ def test_image_division() -> None:
         check_array_result("Image division", ima3.data, exp)
 
 
-def __constparam(value: float) -> cdl.param.ConstantOperationParam:
+def __constparam(value: float) -> cdl.param.ConstantParam:
     """Create a constant parameter."""
-    return cdl.param.ConstantOperationParam.create(value=value)
+    return cdl.param.ConstantParam.create(value=value)
 
 
 def __iterate_image_with_constant() -> (
-    Generator[tuple[cdl.obj.ImageObj, cdl.param.ConstantOperationParam], None, None]
+    Generator[tuple[cdl.obj.ImageObj, cdl.param.ConstantParam], None, None]
 ):
     """Iterate over all possible image and constant couples for testing."""
     size = 128

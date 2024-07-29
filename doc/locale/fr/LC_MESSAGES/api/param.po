@@ -103,7 +103,7 @@ msgid ""
 " l'axe des x. Entier supérieur à 2\\. Par défaut : 2."
 msgstr ""
 
-#: cdl.computation.base.ClipParam cdl.computation.base.ConstantOperationParam
+#: cdl.computation.base.ClipParam cdl.computation.base.ConstantParam
 #: cdl.computation.base.FFTParam cdl.computation.base.GaussianParam
 #: cdl.computation.base.MovingAverageParam
 #: cdl.computation.base.MovingMedianParam cdl.computation.base.NormalizeParam
@@ -316,7 +316,7 @@ msgid "Borne inférieure d'écrêtage\\.  Par défaut : None."
 msgstr ""
 
 #: cdl.computation.base.ClipParam:8 cdl.computation.base.ClipParam:15
-#: cdl.computation.base.ConstantOperationParam:9
+#: cdl.computation.base.ConstantParam:9
 #: cdl.computation.base.GaussianParam:8
 #: cdl.computation.image.ButterworthParam:8
 #: cdl.computation.image.FlatFieldParam:8 cdl.computation.image.GridParam:29
@@ -570,27 +570,27 @@ msgstr ""
 msgid "Return True if there is no ROI"
 msgstr "Retourne True s'il n'y a pas de ROI"
 
-#: cdl.computation.base.ConstantOperationParam:2 of
+#: cdl.computation.base.ConstantParam:2 of
 msgid "Parameter used to set a constant value to used in operations (sum,"
 msgstr ""
 
-#: cdl.computation.base.ConstantOperationParam:2 of
+#: cdl.computation.base.ConstantParam:2 of
 msgid "multiplication, ...)"
 msgstr ""
 
-#: cdl.computation.base.ConstantOperationParam:7
+#: cdl.computation.base.ConstantParam:7
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Constante\\.  Par défaut : None."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`ConstantOperationParam` avec "
+"Renvoie une nouvelle instance de :py:class:`ConstantParam` avec "
 "les champs initialisés aux valeurs données."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "Nouvelle instance de :py:class:`ConstantOperationParam`."
+msgid "Nouvelle instance de :py:class:`ConstantParam`."
 msgstr ""
 
 #: cdl.param:65 of
@@ -2347,11 +2347,11 @@ msgstr ""
 
 #~ msgid ""
 #~ "Returns a new instance of "
-#~ ":py:class:`ConstantOperationParam` with the fields"
+#~ ":py:class:`ConstantParam` with the fields"
 #~ " set to the given values."
 #~ msgstr ""
 
-#~ msgid "New instance of :py:class:`ConstantOperationParam`."
+#~ msgid "New instance of :py:class:`ConstantParam`."
 #~ msgstr ""
 
 #~ msgid ""

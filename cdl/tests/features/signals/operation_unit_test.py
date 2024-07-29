@@ -31,11 +31,11 @@ def __create_two_signals() -> tuple[cdl.obj.SignalObj, cdl.obj.SignalObj]:
 
 
 def __create_one_signal_and_constant() -> (
-    tuple[cdl.obj.SignalObj, cdl.param.ConstantOperationParam]
+    tuple[cdl.obj.SignalObj, cdl.param.ConstantParam]
 ):
     """Create one signal and a constant for testing."""
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=100)
-    param = cdl.param.ConstantOperationParam.create(value=-np.pi)
+    param = cdl.param.ConstantParam.create(value=-np.pi)
     return s1, param
 
 

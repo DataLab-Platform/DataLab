@@ -31,7 +31,7 @@ import cdl.algorithms.image as alg
 from cdl.algorithms.datatypes import clip_astype
 from cdl.computation.base import (
     ClipParam,
-    ConstantOperationParam,
+    ConstantParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
@@ -170,7 +170,7 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     return dst
 
 
-def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_addition_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Add **dst** and a constant value and return the new result image object
 
     Args:
@@ -188,7 +188,7 @@ def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> Image
     return dst
 
 
-def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_difference_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Subtract a constant value from an image and return the new result image object
 
     Args:
@@ -206,7 +206,7 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     return dst
 
 
-def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_product_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Multiply **dst** by a constant value and return the new result image object
 
     Args:
@@ -226,7 +226,7 @@ def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageO
     return dst
 
 
-def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_division_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Divide an image by a constant value and return the new result image object
 
     Args:

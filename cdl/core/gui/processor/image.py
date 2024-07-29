@@ -53,15 +53,13 @@ class ImageProcessor(BaseProcessor):
         self.compute_n1("Σ", cpi.compute_addition, title=_("Sum"))
 
     @qt_try_except()
-    def compute_addition_constant(
-        self, param: cpb.ConstantOperationParam | None = None
-    ) -> None:
+    def compute_addition_constant(self, param: cpb.ConstantParam | None = None) -> None:
         """Compute sum with a constant using
         :py:func:`cdl.computation.image.compute_addition_constant`"""
         self.compute_11(
             cpi.compute_addition_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Add constant"),
             edit=True,
         )
@@ -85,15 +83,13 @@ class ImageProcessor(BaseProcessor):
         self.compute_n1("Π", cpi.compute_product, title=_("Product"))
 
     @qt_try_except()
-    def compute_product_constant(
-        self, param: cpb.ConstantOperationParam | None = None
-    ) -> None:
+    def compute_product_constant(self, param: cpb.ConstantParam | None = None) -> None:
         """Compute product with a constant using
         :py:func:`cdl.computation.image.compute_product_constant`"""
         self.compute_11(
             cpi.compute_product_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Product with constant"),
             edit=True,
         )
@@ -400,14 +396,14 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_difference_constant(
-        self, param: cpb.ConstantOperationParam | None = None
+        self, param: cpb.ConstantParam | None = None
     ) -> None:
         """Compute difference with a constant
         with :py:func:`cdl.computation.image.compute_difference_constant`"""
         self.compute_11(
             cpi.compute_difference_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Difference with constant"),
             edit=True,
         )
@@ -435,15 +431,13 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_division_constant(
-        self, param: cpb.ConstantOperationParam | None = None
-    ) -> None:
+    def compute_division_constant(self, param: cpb.ConstantParam | None = None) -> None:
         """Compute division by a constant
         with :py:func:`cdl.computation.image.compute_division_constant`"""
         self.compute_11(
             cpi.compute_division_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Division by constant"),
             edit=True,
         )

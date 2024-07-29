@@ -76,7 +76,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.compute_quadratic_difference(panel[2])
     panel.delete_metadata()
 
-    const_oper_param = dlp.ConstantOperationParam.create(value=2.0)
+    const_oper_param = dlp.ConstantParam.create(value=2.0)
     for const_oper in (
         panel.processor.compute_addition_constant,
         panel.processor.compute_difference_constant,
@@ -96,7 +96,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((1, 2))
     panel.processor.compute_product()
 
-    param = dlp.ConstantOperationParam()
+    param = dlp.ConstantParam()
     param.value = 2.0
     panel.processor.compute_addition_constant(param)
     panel.processor.compute_difference_constant(param)
