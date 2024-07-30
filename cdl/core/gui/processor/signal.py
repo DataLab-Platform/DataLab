@@ -44,7 +44,6 @@ class SignalProcessor(BaseProcessor):
             param,
             paramclass=cpb.ConstantParam,
             title=_("Sum with constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -76,7 +75,6 @@ class SignalProcessor(BaseProcessor):
             param,
             paramclass=cpb.ConstantParam,
             title=_("Product with constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -143,11 +141,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_power(self, param: cps.PowerParam | None = None) -> None:
         """Compute power with :py:func:`cdl.computation.signal.compute_power`"""
-        if param is None:
-            param = cps.PowerParam()
-        self.compute_11(
-            cps.compute_power, param, cps.PowerParam, title="Power", edit=True
-        )
+        self.compute_11(cps.compute_power, param, cps.PowerParam, title="Power")
 
     @qt_try_except()
     def compute_arithmetic(
@@ -186,7 +180,6 @@ class SignalProcessor(BaseProcessor):
             param,
             paramclass=cpb.ConstantParam,
             title=_("Difference with constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -220,7 +213,6 @@ class SignalProcessor(BaseProcessor):
             param,
             paramclass=cpb.ConstantParam,
             title=_("Division by constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -504,7 +496,6 @@ class SignalProcessor(BaseProcessor):
             param,
             cdl.param.WindowingParam,
             title=_("Windowing"),
-            edit=True,
         )
 
     @qt_try_except()

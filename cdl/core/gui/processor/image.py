@@ -61,7 +61,6 @@ class ImageProcessor(BaseProcessor):
             param,
             paramclass=cpb.ConstantParam,
             title=_("Add constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -91,7 +90,6 @@ class ImageProcessor(BaseProcessor):
             param,
             paramclass=cpb.ConstantParam,
             title=_("Product with constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -420,7 +418,6 @@ class ImageProcessor(BaseProcessor):
             param,
             paramclass=cpb.ConstantParam,
             title=_("Difference with constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -454,7 +451,6 @@ class ImageProcessor(BaseProcessor):
             param,
             paramclass=cpb.ConstantParam,
             title=_("Division by constant"),
-            edit=True,
         )
 
     @qt_try_except()
