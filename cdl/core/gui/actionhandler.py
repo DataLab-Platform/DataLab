@@ -551,6 +551,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.exactly_one,
                 context_menu_pos=-1,
                 context_menu_sep=True,
+                toolbar_pos=-1,
+                toolbar_category=ActionCategory.VIEW_TOOLBAR,
             )
             self.new_action(
                 _("Remove regions of interest"),
@@ -568,7 +570,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.open_separate_view,
                 context_menu_pos=0,
                 context_menu_sep=True,
-                toolbar_pos=-1,
+                toolbar_pos=0,
             )
             self.new_action(
                 _("Edit annotations") + "...",
