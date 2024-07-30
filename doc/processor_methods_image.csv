@@ -7,6 +7,7 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_edges`,Compute all edges filters
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`,Compute all morphology filters
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`,Compute all threshold algorithms
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_arithmetic`,Compute arithmetic operation between two images
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_astype`,Convert data type with :py:func:`cdl.computation.image.compute_astype`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average`,Compute average with :py:func:`cdl.computation.image.compute_addition`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`,Compute average profile

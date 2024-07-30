@@ -1,5 +1,6 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_abs`,Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant`,Compute sum with a constant
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_arithmetic`,Compute arithmetic operation between two signals
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_astype`,Convert data type with :py:func:`cdl.computation.signal.compute_astype`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_average`,Compute average with :py:func:`cdl.computation.signal.compute_addition`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`,Compute band-pass filter
