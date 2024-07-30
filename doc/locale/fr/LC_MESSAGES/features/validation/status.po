@@ -265,7 +265,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 "`test_signal_bandwidth_3db <https://github.com/DataLab-"
-"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L27>`_"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/analysis_unit_test.py#L27>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -310,7 +310,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 "`test_signal_contrast <https://github.com/DataLab-"
-"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L58>`_"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/analysis_unit_test.py#L58>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -429,7 +429,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 "`test_dynamic_parameters <https://github.com/DataLab-"
-"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L35>`_"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/analysis_unit_test.py#L35>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -830,7 +830,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 "`test_signal_sampling_rate_period <https://github.com/DataLab-"
-"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L49>`_"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/analysis_unit_test.py#L49>`_"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -913,7 +913,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 "`test_signal_x_at_minmax <https://github.com/DataLab-"
-"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L66>`_"
+"Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/analysis_unit_test.py#L66>`_"
 msgstr ""
 
 #: ../../doc/features/validation/status.rst:51
@@ -2331,7 +2331,7 @@ msgstr ""
 #~ msgid "``features/signals/operation_unit_test.py``"
 #~ msgstr ""
 
-#~ msgid "``features/signals/computing_unit_test.py``"
+#~ msgid "``features/signals/analysis_unit_test.py``"
 #~ msgstr ""
 
 #~ msgid "``features/signals/processing_unit_test.py``"

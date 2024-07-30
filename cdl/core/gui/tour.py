@@ -748,15 +748,15 @@ class Tour(BaseTour):
             lambda win: win.processing_menu.hide(),
         )
         self.add_step(
-            _("Signal Panel") + " – " + _("Computing menu"),
+            _("Signal Panel") + " – " + _("Analysis menu"),
             _(
-                "The <b>Computing</b> menu regroups 1->0 signal computing actions "
+                "The <b>Analysis</b> menu regroups 1->0 signal computing actions "
                 "(that is, actions that do not modify the signals, but compute "
                 "a result, e.g. scalar values), with optional ROI selection."
             ),
             [win.menuBar()],
-            lambda win: self.popup_menu(win, win.computing_menu),
-            lambda win: win.computing_menu.hide(),
+            lambda win: self.popup_menu(win, win.analysis_menu),
+            lambda win: win.analysis_menu.hide(),
         )
         self.add_step(
             _("Image Panel"),
@@ -830,15 +830,15 @@ class Tour(BaseTour):
             lambda win: win.processing_menu.hide(),
         )
         self.add_step(
-            _("Image Panel") + " – " + _("Computing menu"),
+            _("Image Panel") + " – " + _("Analysis menu"),
             _(
-                "The <b>Computing</b> menu regroups 1->0 image computing actions "
+                "The <b>Analysis</b> menu regroups 1->0 image computing actions "
                 "(that is, actions that do not modify the images, but compute "
                 "a result, e.g. circle coordinates), with optional ROI selection."
             ),
             [win.menuBar()],
-            lambda win: self.popup_menu(win, win.computing_menu),
-            lambda win: win.computing_menu.hide(),
+            lambda win: self.popup_menu(win, win.analysis_menu),
+            lambda win: win.analysis_menu.hide(),
         )
         self.add_step(
             _("Extensions"),

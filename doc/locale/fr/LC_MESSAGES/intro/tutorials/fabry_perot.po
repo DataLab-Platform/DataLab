@@ -172,10 +172,10 @@ msgstr ""
 "frange centrale."
 
 #: ../../intro/tutorials/fabry_perot.rst:70
-msgid "Select the \"Edit regions of interest\" tool in the \"Computing\" menu."
+msgid "Select the \"Edit regions of interest\" tool in the \"Analysis\" menu."
 msgstr ""
 "Sélectionnez l'outil \"Modifier les régions d'intérêt\" dans le menu "
-"\"Calcul\"."
+"Analyse\"."
 
 #: ../../intro/tutorials/fabry_perot.rst:74
 msgid ""
@@ -219,8 +219,8 @@ msgstr ""
 "cercles."
 
 #: ../../intro/tutorials/fabry_perot.rst:93
-msgid "Select the \"Contour detection\" tool in the \"Computing\" menu."
-msgstr "Sélectionnez l'outil \"Détection de contour\" dans le menu \"Calcul\"."
+msgid "Select the \"Contour detection\" tool in the \"Analysis\" menu."
+msgstr "Sélectionnez l'outil \"Détection de contour\" dans le menu Analyse\"."
 
 #: ../../intro/tutorials/fabry_perot.rst:97
 msgid ""
@@ -245,13 +245,13 @@ msgstr "Les cercles ajustés sont affichés sur l'image."
 
 #: ../../intro/tutorials/fabry_perot.rst:109
 msgid ""
-"If you want to show the computing results again, you can select the "
-"\"Show results\" |show_results| entry in the \"Computing\" menu, or the "
+"If you want to show the analysis results again, you can select the "
+"\"Show results\" |show_results| entry in the \"Analysis\" menu, or the "
 "\"Show results\" |show_results| button, below the image list:"
 msgstr ""
-"Si vous souhaitez afficher à nouveau les résultats de calcul, vous pouvez"
+"Si vous souhaitez afficher à nouveau les résultats d'analyse, vous pouvez"
 " sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le "
-"menu \"Calcul\", ou le bouton \"Afficher les résultats\" |show_results|, "
+"menu Analyse\", ou le bouton \"Afficher les résultats\" |show_results|, "
 "en dessous de la liste des images :"
 
 #: ../../intro/tutorials/fabry_perot.rst:115
@@ -386,12 +386,12 @@ msgstr "La ROI est ajoutée à la deuxième image."
 
 #: ../../intro/tutorials/fabry_perot.rst:193
 msgid ""
-"Select the \"Contour detection\" tool in the \"Computing\" menu, with the"
+"Select the \"Contour detection\" tool in the \"Analysis\" menu, with the"
 " same parameters as before (shape \"Circle\"). On this image, there are "
 "two fringes, so four circles are fitted. The \"Results\" dialog opens, "
 "and displays the fitted circle parameters. Click \"OK\"."
 msgstr ""
-"Sélectionnez l'outil \"Détection de contour\" dans le menu \"Calcul\", "
+"Sélectionnez l'outil \"Détection de contour\" dans le menu Analyse\", "
 "avec les mêmes paramètres qu'auparavant (forme \"Cercle\"). Sur cette "
 "image, il y a deux franges, donc quatre cercles sont ajustés. La boîte de"
 " dialogue \"Résultats\" s'ouvre et affiche les paramètres du cercle "
@@ -545,13 +545,13 @@ msgstr ""
 msgid ""
 "Finally, we can save the workspace to a file. The workspace contains all "
 "the images and signals that were loaded or processed in DataLab. It also "
-"contains the computing results, the visualization settings (colormaps, "
+"contains the analysis results, the visualization settings (colormaps, "
 "contrast, etc.), the metadata, and the annotations."
 msgstr ""
 "Enfin, nous pouvons sauvegarder l'espace de travail dans un fichier. "
 "L'espace de travail contient toutes les images et signaux qui ont été "
-"chargés ou traités dans DataLab. Il contient également les résultats de "
-"calcul, les paramètres de visualisation (colormaps, contraste, etc.), les"
+"chargés ou traités dans DataLab. Il contient également les résultats "
+"d'analyse, les paramètres de visualisation (colormaps, contraste, etc.), les"
 " métadonnées et les annotations."
 
 #: ../../intro/tutorials/fabry_perot.rst:281

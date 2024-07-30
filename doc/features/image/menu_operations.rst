@@ -8,7 +8,7 @@ This section describes the operations that can be performed on images.
 .. seealso::
 
     :ref:`ima-menu-processing` for more information on image processing features,
-    or :ref:`ima-menu-computing` for information on computing features on images.
+    or :ref:`ima-menu-analysis` for information on analysis features on images.
 
 .. figure:: /images/shots/i_operation.png
 

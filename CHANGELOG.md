@@ -167,7 +167,7 @@ NumPy 2.0 support has been added with this release.
 * Fixed [Issue #81](https://github.com/DataLab-Platform/DataLab/issues/81) - When opening files, show progress dialog only if necessary
 
 * Fixed [Issue #80](https://github.com/DataLab-Platform/DataLab/issues/80) - Plotting results: support for two use cases
-  * The features of the "Computing" menu produce *results* (scalars): blob detection (circle coordinates), 2D peak detection (point coordinates), etc. Depending on the feature, result tables are displayed in the "Results" dialog box, and the results are also stored in the signal or image metadata: each line of the result table is an individual result, and each column is a property of the result - some results may consist only of a single individual result (e.g., image centroid or curve FHWM), while others may consist of multiple individual results (e.g., blob detection, contour detection, etc.).
+  * The features of the "Analysis" menu produce *results* (scalars): blob detection (circle coordinates), 2D peak detection (point coordinates), etc. Depending on the feature, result tables are displayed in the "Results" dialog box, and the results are also stored in the signal or image metadata: each line of the result table is an individual result, and each column is a property of the result - some results may consist only of a single individual result (e.g., image centroid or curve FHWM), while others may consist of multiple individual results (e.g., blob detection, contour detection, etc.).
   * Before this change, the "Plot results" feature only supported plotting the first individual result of a result table, as a function of the index (of the signal or image objects) or any of the columns of the result table. This was not sufficient for some use cases, where the user wanted to plot multiple individual results of a result table.
   * Now, the "Plot results" feature supports two use cases:
     * "One curve per result title": Plotting the first individual result of a result table, as before
@@ -216,7 +216,7 @@ NumPy 2.0 support has been added with this release.
 * Add support for binary images
 * Signal ROI extraction: added new dialog box to manually edit the ROI lower and upper bounds after defining the ROI graphically
 
-ℹ️ New **Signal** operations, processing and computing features:
+ℹ️ New **Signal** operations, processing and analysis features:
 
 | Menu        | Submenu      |Features                                                 |
 |-------------|--------------|---------------------------------------------------------|
@@ -229,9 +229,9 @@ NumPy 2.0 support has been added with this release.
 | Processing  | Frequency filters | Low-pass, High-pass, Band-pass, Band-stop |
 | Processing  | | Windowing (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-top, ...) |
 | Processing  | Fit | Linear fit, Sinusoidal fit, Exponential fit, CDF fit |
-| Computing   | | FWHM (Zero-crossing method), X value @ min/max, Sampling period/frequency, Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR), -3dB bandwidth, Contrast |
+| Analysis   | | FWHM (Zero-crossing method), X value @ min/max, Sampling period/frequency, Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR), -3dB bandwidth, Contrast |
 
-ℹ️ New **Image** operations, processing and computing features:
+ℹ️ New **Image** operations, processing and analysis features:
 
 | Menu        | Submenu      |Features                                                 |
 |-------------|--------------|---------------------------------------------------------|
@@ -401,7 +401,7 @@ NumPy 2.0 support has been added with this release.
 
 💥 New features:
 
-* New "Histogram" feature in "Computing" menu:
+* New "Histogram" feature in "Analysis" menu:
   * Added histogram computation feature for both signals and images
   * The histogram is computed on the regions of interest (ROI) if any, or on the
     whole signal/image if no ROI is defined
@@ -549,8 +549,8 @@ NumPy 2.0 support has been added with this release.
   * Added "Detrending" feature to signal panel's "Processing" menu
   * Methods available: linear or constant
   * This fixes [Issue #24](https://github.com/DataLab-Platform/DataLab/issues/24) - Add 1D detrending feature
-* 2D computing results:
-  * Before this release, 2D computing results such as contours, blobs, etc. were
+* 2D analysis results:
+  * Before this release, 2D analysis results such as contours, blobs, etc. were
     stored in image metadata dictionary as coordinates (x0, y0, x1, y1, ...) even
     for circles and ellipses (i.e. the coordinates of the bounding rectangles).
   * For convenience, the circle and ellipse coordinates are now stored in image
@@ -558,14 +558,14 @@ NumPy 2.0 support has been added with this release.
   * These results are also shown as such in the "Results" dialog box (either at the
     end of the computing process or when clicking on the "Show results" button).
   * This fixes [Issue #32](https://github.com/DataLab-Platform/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`
-* 1D and 2D computing results:
-  * Additionnaly to the previous enhancement, more computing results are now shown
+* 1D and 2D analysis results:
+  * Additionnaly to the previous enhancement, more analysis results are now shown
     in the "Results" dialog box
-  * This concerns both 1D (FHWM, ...) and 2D computing results (contours, blobs, ...):
+  * This concerns both 1D (FHWM, ...) and 2D analysis results (contours, blobs, ...):
     * Segment results now also show length (L) and center coordinates (Xc, Yc)
     * Circle and ellipse results now also show area (A)
-* Added "Plot results" entry in "Computing" menu:
-  * This feature allows to plot computing results (1D or 2D)
+* Added "Plot results" entry in "Analysis" menu:
+  * This feature allows to plot analysis results (1D or 2D)
   * It creates a new signal with X and Y axes corresponding to user-defined
     parameters (e.g. X = indexes and Y = radius for circle results)
 * Increased default width of the object selection dialog box:
@@ -648,14 +648,14 @@ NumPy 2.0 support has been added with this release.
     regions of interest into a single image object" option enabled, the result is a
     single image with the ROI mask (as if the option was disabled)
   * This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function
-* Computing on circular ROI:
+* Analysis on circular ROI:
   * Before this release, when running computations on a circular ROI,
     the results were unexpected in terms of coordinates (results seemed to be computed
     in a region located above the actual ROI).
   * This was due to a regression introduced in an earlier release.
   * Now, when defining a circular ROI and running computations on it, the results are
     computed on the actual ROI
-  * This fixes [Issue #33](https://github.com/DataLab-Platform/DataLab/issues/33) - Computing on circular ROI: unexpected results
+  * This fixes [Issue #33](https://github.com/DataLab-Platform/DataLab/issues/33) - Analysis on circular ROI: unexpected results
 * Contour detection on ROI:
   * Before this release, when running contour detection on a ROI, some
     contours were detected outside the ROI (it may be due to a limitation of the
@@ -665,12 +665,12 @@ NumPy 2.0 support has been added with this release.
     added to test the contour detection feature on a Fabry-Perot image (thanks to
     [@emarin2642](https://github.com/emarin2642) for the contribution)
   * This fixes [Issue #34](https://github.com/DataLab-Platform/DataLab/issues/34) - Contour detection: unexpected results outside ROI
-* Computing result merging:
+* Analysis result merging:
   * Before this release, when doing a `1->N` computation (sum, average, product) on
-    a group of signals/images, the computing results associated to each signal/image
+    a group of signals/images, the analysis results associated to each signal/image
     were merged into a single result, but only the type of result present in the
     first signal/image was kept.
-  * Now, the computing results associated to each signal/image are merged into a
+  * Now, the analysis results associated to each signal/image are merged into a
     single result, whatever the type of result is.
 * Fixed [Issue #36](https://github.com/DataLab-Platform/DataLab/issues/36) - "Delete all" action enable state is sometimes not refreshed
 * Image X/Y swap: when swapping X and Y axes, the regions of interest (ROI) were not
@@ -756,7 +756,7 @@ bug fix
 
 🛠️ Bug fixes:
 
-* Image contour detection feature ("Computing" menu):
+* Image contour detection feature ("Analysis" menu):
   * The contour detection feature was not taking into account the "shape" parameter
     (circle, ellipse, polygon) when computing the contours. The parameter was stored
     but really used only when calling the feature a second time.
@@ -905,9 +905,9 @@ New features:
   * Drastically improved performance when selecting objects
   * Optimized performance when showing large images
   * Added support for dropping files on signal/image panel
-  * Added "Computing parameters" group box to show last result input parameters
+  * Added "Analysis parameters" group box to show last result input parameters
   * Added "Copy titles to clipboard" feature in "Edit" menu
-  * For every single processing feature (operation, processing and computing menus),
+  * For every single processing feature (operation, processing and analysis menus),
     the entered parameters (dialog boxes) are stored in cache to be used as defaults
     the next time the feature is used
 * Signal processing:

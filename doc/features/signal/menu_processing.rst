@@ -8,7 +8,7 @@ This section describes the signal processing features available in DataLab.
 .. seealso::
 
     :ref:`sig-menu-operations` for more information on operations that can be performed
-    on signals, or :ref:`sig-menu-computing` for information on computing features on
+    on signals, or :ref:`sig-menu-analysis` for information on analysis features on
     signals.
 
 .. figure:: /images/shots/s_processing.png

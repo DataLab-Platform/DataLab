@@ -196,19 +196,19 @@ msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
 #: ../../doc/features/image/menu_view.rst:103
-msgid "Show/hide titles of computing results or annotations."
+msgid "Show/hide titles of analysis results or annotations."
 msgstr ""
-"Affiche/cache les titres des objets graphiques liés aux résultats de "
-"calculs et aux annotations."
+"Affiche/cache les titres des objets graphiques liés aux résultats "
+"d'analyse et aux annotations."
 
 #: ../../doc/features/image/menu_view.rst:105
 msgid ""
 "This option allows you to show or hide the titles of the graphical "
-"objects (e.g., the titles of the computing results or annotations). "
+"objects (e.g., the titles of the analysis results or annotations). "
 "Hiding the titles can be useful when you want to visualize the data "
 "without any distractions, or if there are too many titles and they are "
 "overlapping."
-msgstr "Cette option vous permet d'afficher ou de masquer les titres des objets graphiques (par exemple, les titres des résultats de calculs ou des annotations). Masquer les titres peut être utile lorsque vous voulez visualiser les données sans être perturbé, ou s'il y a trop de titres et qu'ils se chevauchent."
+msgstr "Cette option vous permet d'afficher ou de masquer les titres des objets graphiques (par exemple, les titres des résultats d'analyse ou des annotations). Masquer les titres peut être utile lorsque vous voulez visualiser les données sans être perturbé, ou s'il y a trop de titres et qu'ils se chevauchent."
 
 #~ msgid "See :ref:`ref-to-image-annotations` for more details on annotations."
 #~ msgstr ""

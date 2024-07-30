@@ -8,7 +8,7 @@ This section describes the image processing features available in DataLab.
 .. seealso::
 
     :ref:`ima-menu-operations` for more information on operations that can be performed
-    on images, or :ref:`ima-menu-computing` for information on computing features on
+    on images, or :ref:`ima-menu-analysis` for information on analysis features on
     images.
 
 .. figure:: /images/shots/i_processing.png

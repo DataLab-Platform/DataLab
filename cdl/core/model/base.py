@@ -1279,7 +1279,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """
 
     def iterate_shape_items(self, editable: bool = False):
-        """Iterate over computing items encoded in metadata (if any).
+        """Iterate over shape items encoded in metadata (if any).
 
         Args:
             editable: if True, annotations are editable

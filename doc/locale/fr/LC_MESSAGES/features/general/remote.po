@@ -852,8 +852,8 @@ msgstr ""
 "accédées."
 
 #: cdl.core.gui.processor.signal.SignalProcessor:1 of
-msgid "Object handling signal processing: operations, processing, computing"
-msgstr "Objet de traitement de signal : opérations, traitement, calcul"
+msgid "Object handling signal processing: operations, processing, analysis"
+msgstr "Objet de traitement de signal : opérations, traitement, analyse"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_sum:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_sum:1 of
@@ -1136,8 +1136,8 @@ msgstr ""
 "accédées."
 
 #: cdl.core.gui.processor.image.ImageProcessor:1 of
-msgid "Object handling image processing: operations, processing, computing"
-msgstr "Objet de traitement d'image : opérations, traitement, calcul"
+msgid "Object handling image processing: operations, processing, analysis"
+msgstr "Objet de traitement d'image : opérations, traitement, analyse"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_logp1:1 of
 msgid "Compute base 10 logarithm"

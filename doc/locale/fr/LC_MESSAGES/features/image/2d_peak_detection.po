@@ -42,8 +42,8 @@ msgid "Create or open an image in DataLab workspace"
 msgstr "Créer ou ouvrir une image dans l'espace de travail de DataLab"
 
 #: ../../features/image/2d_peak_detection.rst:15
-msgid "Select \"2d peak detection\" in \"Computing\" menu"
-msgstr "Sélectionner \"Détection de pics 2D\" dans le menu \"Calculs\""
+msgid "Select \"2d peak detection\" in \"Analysis\" menu"
+msgstr "Sélectionner \"Détection de pics 2D\" dans le menu Analyse\""
 
 #: ../../features/image/2d_peak_detection.rst:16
 msgid "Enter parameters \"Neighborhoods size\" and \"Relative threhold\""

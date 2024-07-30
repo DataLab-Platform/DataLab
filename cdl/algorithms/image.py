@@ -220,7 +220,7 @@ def flatfield(
     return dcorr
 
 
-# MARK: Misc. computations -------------------------------------------------------------
+# MARK: Misc. analyses -----------------------------------------------------------------
 
 
 def get_centroid_fourier(data: np.ndarray) -> tuple[float, float]:

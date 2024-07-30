@@ -75,7 +75,7 @@ Signal Image  Feature
 ..     ✓      Restauration (Total Variation, Bilateral, ...)
 ..     ✓      Morphology (erosion, dilation, ...)
 ..     ✓      Edges detection (Roberts, Sobel, ...)
-✓      ✓      Computing on custom ROI
+✓      ✓      Analysis on custom ROI
 ✓      ..     FWHM, FW @ 1/e²
 ✓      ..     Dynamic parameters (ENOB, SNR, ...), Sampling period/Rate
 ..     ✓      Centroid (robust method w/r noise)

@@ -32,12 +32,12 @@ msgstr ""
 #: ../../doc/features/image/menu_operations.rst:10
 msgid ""
 ":ref:`ima-menu-processing` for more information on image processing "
-"features, or :ref:`ima-menu-computing` for information on computing "
+"features, or :ref:`ima-menu-analysis` for information on analysis "
 "features on images."
 msgstr ""
 ":ref:`ima-menu-processing` pour plus d'informations sur les "
-"fonctionnalités de traitement d'image, ou :ref:`ima-menu-computing` pour "
-"des informations sur les fonctionnalités de calcul sur les images."
+"fonctionnalités de traitement d'image, ou :ref:`ima-menu-analysis` pour "
+"des informations sur les fonctionnalités d'analyse des images."
 
 #: ../../doc/features/image/menu_operations.rst:15
 msgid "Screenshot of the \"Operations\" menu."

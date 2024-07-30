@@ -523,7 +523,7 @@ class VoigtModel(FitModel):
         return 0.5346 * wl + np.sqrt(0.2166 * wl**2 + wg**2)
 
 
-# MARK: Misc. computations -------------------------------------------------------------
+# MARK: Misc. analyses -----------------------------------------------------------------
 
 
 def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
@@ -828,7 +828,7 @@ def sampling_rate(x: np.ndarray) -> float:
     return 1.0 / sampling_period(x)
 
 
-# MARK: Pulse computations -------------------------------------------------------------
+# MARK: Pulse analysis -----------------------------------------------------------------
 
 
 def fwhm(

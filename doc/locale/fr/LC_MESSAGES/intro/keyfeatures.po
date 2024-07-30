@@ -276,8 +276,8 @@ msgid "Edges detection (Roberts, Sobel, ...)"
 msgstr "Détection de contours (Roberts, Sobel, ...)"
 
 #: ../../doc/intro/keyfeatures.rst:78
-msgid "Computing on custom ROI"
-msgstr "Calcul sur ROI personnalisé"
+msgid "Analysis on custom ROI"
+msgstr "Analyse sur ROI personnalisée"
 
 #: ../../doc/intro/keyfeatures.rst:79
 msgid "FWHM, FW @ 1/e²"

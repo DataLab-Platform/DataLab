@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-07-29 18:14+0200\n"
+"POT-Creation-Date: 2024-07-30 10:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2325,8 +2325,8 @@ msgid "Processing"
 msgstr "Traitement"
 
 #: cdl\core\gui\main.py:949
-msgid "Computing"
-msgstr "Calculs"
+msgid "Analysis"
+msgstr "Analyse"
 
 #: cdl\core\gui\main.py:950 cdl\core\gui\tour.py:863
 msgid "Plugins"
@@ -2488,8 +2488,8 @@ msgid "Properties"
 msgstr "Propriétés"
 
 #: cdl\core\gui\panel\base.py:107
-msgid "Computing parameters"
-msgstr "Paramètres de calcul"
+msgid "Analysis parameters"
+msgstr "Paramètres d'analyse"
 
 #: cdl\core\gui\panel\base.py:532
 msgid "Delete group(s)"
@@ -2555,8 +2555,9 @@ msgid "Results"
 msgstr "Résultats"
 
 #: cdl\core\gui\panel\base.py:1127
-msgid "Show results obtained from previous computations"
-msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
+msgid "Show results obtained from previous analysis"
+msgstr ""
+"Afficher les résultats obtenus avec des analyses réalisées précédemment"
 
 #: cdl\core\gui\panel\base.py:1133
 msgid "Open a dialog to edit annotations"
@@ -2568,13 +2569,13 @@ msgstr "Aucun résultat disponible pour le moment."
 
 #: cdl\core\gui\panel\base.py:1143
 msgid ""
-"This feature leverages the results of previous computations performed on the "
+"This feature leverages the results of previous analysis performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
-"and choose a computing feature in the <u>Compute</u> menu."
+"and choose a feature in the <u>Analysis</u> menu."
 msgstr ""
-"Cette fonctionnalité exploite les résultats de calculs précédents."
+"Cette fonctionnalité exploite les résultats d'analyse précédents."
 "<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et "
-"choisissez une fonctionnalité de calcul dans le menu <u>Calculer</u>."
+"choisissez une fonctionnalité dans le menu <u>Analyse</u>."
 
 #: cdl\core\gui\panel\base.py:1201
 msgid "Indexes"
@@ -2602,10 +2603,10 @@ msgstr "Axe des Y"
 
 #: cdl\core\gui\panel\base.py:1251
 msgid ""
-"Plot results obtained from previous computations.<br><br>This plot is based "
+"Plot results obtained from previous analyses.<br><br>This plot is based "
 "on results associated with '%s' prefix."
 msgstr ""
-"Tracer les résultats obtenus avec des calculs réalisés précédemment."
+"Tracer les résultats obtenus avec des analyses réalisées précédemment."
 "<br><br>Ce graphique est basé sur les résultats associés au préfixe '%s'."
 
 #: cdl\core\gui\panel\base.py:1305
@@ -3312,16 +3313,16 @@ msgstr ""
 "Le menu <b>Traitement</b> regroupe les actions de traitement de signaux 1->1."
 
 #: cdl\core\gui\tour.py:751 cdl\core\gui\tour.py:833
-msgid "Computing menu"
-msgstr "Menu Calculs"
+msgid "Analysis menu"
+msgstr "Menu Analyse"
 
 #: cdl\core\gui\tour.py:752
 msgid ""
-"The <b>Computing</b> menu regroups 1->0 signal computing actions (that is, "
+"The <b>Analysis</b> menu regroups 1->0 signal computing actions (that is, "
 "actions that do not modify the signals, but compute a result, e.g. scalar "
 "values), with optional ROI selection."
 msgstr ""
-"Le menu <b>Calculs</b> regroupe les actions de calculs de signaux 1->0 "
+"Le menu <b>Analyse</b> regroupe les actions de calculs de signaux 1->0 "
 "(c'est-à-dire les actions qui ne modifient pas les signaux, mais qui "
 "calculent un résultat, par exemple des valeurs scalaires), avec une "
 "sélection optionnelle de ROI."
@@ -3393,11 +3394,11 @@ msgstr ""
 
 #: cdl\core\gui\tour.py:834
 msgid ""
-"The <b>Computing</b> menu regroups 1->0 image computing actions (that is, "
+"The <b>Analysis</b> menu regroups 1->0 image computing actions (that is, "
 "actions that do not modify the images, but compute a result, e.g. circle "
 "coordinates), with optional ROI selection."
 msgstr ""
-"Le menu <b>Calculs</b> regroupe les actions de calculs d'images 1->0 (c'est-"
+"Le menu <b>Analyse</b> regroupe les actions de calculs d'images 1->0 (c'est-"
 "à-dire les actions qui ne modifient pas les images, mais qui calculent un "
 "résultat, par exemple les coordonnées d'un cercle), avec une sélection "
 "optionnelle de ROI."

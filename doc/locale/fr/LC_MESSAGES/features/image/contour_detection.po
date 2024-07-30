@@ -48,8 +48,8 @@ msgid "Eventually create a ROI around the target area"
 msgstr "Créer éventuellement une ROI autour de la zone cible de l'image"
 
 #: ../../features/image/contour_detection.rst:16
-msgid "Select \"Contour detection\" in \"Computing\" menu"
-msgstr "Sélectionner \"Détection de contours\" dans le menu \"Calculs\""
+msgid "Select \"Contour detection\" in \"Analysis\" menu"
+msgstr "Sélectionner \"Détection de contours\" dans le menu Analyse\""
 
 #: ../../features/image/contour_detection.rst:17
 msgid "Enter parameter \"Shape\" (\"Ellipse\", \"Circle\" or \"Polygon\")"

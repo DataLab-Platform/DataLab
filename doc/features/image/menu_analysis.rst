@@ -1,9 +1,9 @@
-.. _ima-menu-computing:
+.. _ima-menu-analysis:
 
-Computing features on Images
+Analysis features on Images
 ============================
 
-This section describes the image computing features available in DataLab.
+This section describes the image analysis features available in DataLab.
 
 .. seealso::
 
@@ -11,20 +11,20 @@ This section describes the image computing features available in DataLab.
     on images, or :ref:`ima-menu-processing` for information on processing features on
     images.
 
-.. figure:: /images/shots/i_computing.png
+.. figure:: /images/shots/i_analysis.png
 
-    Screenshot of the "Computing" menu.
+    Screenshot of the "Analysis" menu.
 
 When the "Image Panel" is selected, the menus and toolbars are updated to
 provide image-related actions.
 
-The "Computing" menu allows you to perform various computations on the current
+The "Analysis" menu allows you to perform various computations on the current
 image or group of images. It also allows you to compute statistics, to compute
 the centroid, to detect peaks, to detect contours, and so on.
 
 .. note::
 
-    In DataLab vocabulary, a "computing" is a feature that computes a scalar
+    In DataLab vocabulary, an "analysis" is a feature that computes a scalar
     result from an image. This result is stored as metadata, and thus attached
     to image. This is different from a "processing" which creates a new image
     from an existing one.
@@ -149,11 +149,11 @@ Blob detection (OpenCV)
 Show results
 ^^^^^^^^^^^^
 
-Show the results of all computations performed on the selected images. This shows the
+Show the results of all analyses performed on the selected images. This shows the
 same table as the one shown after having performed a computation.
 
 Plot results
 ^^^^^^^^^^^^
 
-Plot the results of computations performed on the selected images, with user-defined
+Plot the results of analyses performed on the selected images, with user-defined
 X and Y axes (e.g. plot the contour circle radius as a function of the image number).

@@ -104,7 +104,7 @@ class ObjectProp(QW.QWidget):
         for child in self.properties.children():
             if isinstance(child, QW.QTabWidget):
                 break
-        child.addTab(param_scroll, _("Computing parameters"))
+        child.addTab(param_scroll, _("Analysis parameters"))
 
         vlayout = QW.QVBoxLayout()
         vlayout.addWidget(self.properties)
@@ -1124,7 +1124,7 @@ class BaseDataPanel(AbstractPanel):
         self.__new_objprop_button(
             _("Results"),
             "show_results.svg",
-            _("Show results obtained from previous computations"),
+            _("Show results obtained from previous analysis"),
             self.show_results,
         )
         self.__new_objprop_button(
@@ -1141,10 +1141,10 @@ class BaseDataPanel(AbstractPanel):
                 _("No result currently available for this object."),
                 "",
                 _(
-                    "This feature leverages the results of previous computations "
+                    "This feature leverages the results of previous analysis "
                     "performed on the selected object(s).<br><br>"
                     "To compute results, select one or more objects and choose "
-                    "a computing feature in the <u>Compute</u> menu."
+                    "a feature in the <u>Analysis</u> menu."
                 ),
             ]
         )
@@ -1249,7 +1249,7 @@ class BaseDataPanel(AbstractPanel):
 
                 comment = (
                     _(
-                        "Plot results obtained from previous computations.<br><br>"
+                        "Plot results obtained from previous analyses.<br><br>"
                         "This plot is based on results associated with '%s' prefix."
                     )
                     % category

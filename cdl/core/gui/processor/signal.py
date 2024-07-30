@@ -26,7 +26,7 @@ from cdl.widgets import fitdialog, signalbaseline, signalpeak
 
 
 class SignalProcessor(BaseProcessor):
-    """Object handling signal processing: operations, processing, computing"""
+    """Object handling signal processing: operations, processing, analysis"""
 
     # pylint: disable=duplicate-code
 
@@ -573,7 +573,7 @@ class SignalProcessor(BaseProcessor):
 
                 self.__row_compute_fit(obj, _("Multi-Gaussian fit"), multigaussianfit)
 
-    # ------Signal Computing
+    # ------Signal Analysis
     @qt_try_except()
     def compute_fwhm(
         self, param: cdl.param.FWHMParam | None = None

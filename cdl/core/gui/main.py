@@ -173,7 +173,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.edit_menu: QW.QMenu | None = None
         self.operation_menu: QW.QMenu | None = None
         self.processing_menu: QW.QMenu | None = None
-        self.computing_menu: QW.QMenu | None = None
+        self.analysis_menu: QW.QMenu | None = None
         self.plugins_menu: QW.QMenu | None = None
         self.view_menu: QW.QMenu | None = None
         self.help_menu: QW.QMenu | None = None
@@ -633,7 +633,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     "view",
                     "operation",
                     "processing",
-                    "computing",
+                    "analysis",
                     "help",
                 ):
                     menu = getattr(self, f"{name}_menu")
@@ -946,7 +946,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.edit_menu = self.menuBar().addMenu(_("&Edit"))
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
-        self.computing_menu = self.menuBar().addMenu(_("Computing"))
+        self.analysis_menu = self.menuBar().addMenu(_("Analysis"))
         self.plugins_menu = self.menuBar().addMenu(_("Plugins"))
         self.view_menu = self.menuBar().addMenu(_("&View"))
         configure_menu_about_to_show(self.view_menu, self.__update_view_menu)
@@ -955,7 +955,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.edit_menu,
             self.operation_menu,
             self.processing_menu,
-            self.computing_menu,
+            self.analysis_menu,
             self.plugins_menu,
         ):
             configure_menu_about_to_show(menu, self.__update_generic_menu)
@@ -1231,7 +1231,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.view_menu: ActionCategory.VIEW,
             self.operation_menu: ActionCategory.OPERATION,
             self.processing_menu: ActionCategory.PROCESSING,
-            self.computing_menu: ActionCategory.COMPUTING,
+            self.analysis_menu: ActionCategory.ANALYSIS,
             self.plugins_menu: ActionCategory.PLUGINS,
         }[menu]
         actions = panel.get_category_actions(category)

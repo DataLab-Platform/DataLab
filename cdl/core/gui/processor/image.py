@@ -33,7 +33,7 @@ from cdl.widgets import imagebackground
 
 
 class ImageProcessor(BaseProcessor):
-    """Object handling image processing: operations, processing, computing"""
+    """Object handling image processing: operations, processing, analysis"""
 
     # pylint: disable=duplicate-code
 
@@ -1107,7 +1107,7 @@ class ImageProcessor(BaseProcessor):
         ]
         self.compute_1n(funcs, None, "Edges")
 
-    # ------Image Computing
+    # ------Image Analysis
     @qt_try_except()
     def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics

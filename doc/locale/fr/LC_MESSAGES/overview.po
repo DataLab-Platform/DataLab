@@ -177,8 +177,8 @@ msgid "Interactive multigaussian fit"
 msgstr "Ajustement interactif multi-gaussien"
 
 #: ../../overview.rst:57
-msgid "Computing on custom ROI"
-msgstr "Calculs sur des ROI personnalisées"
+msgid "Analysis on custom ROI"
+msgstr "Analyse sur des ROI personnalisées"
 
 #: ../../overview.rst:58
 msgid "FWHM, FW @ 1/e²"

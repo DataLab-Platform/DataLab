@@ -159,7 +159,7 @@ class Worker:
 
 
 class BaseProcessor(QC.QObject):
-    """Object handling data processing: operations, processing, computing.
+    """Object handling data processing: operations, processing, analysis.
 
     Args:
         panel: panel
@@ -816,7 +816,7 @@ class BaseProcessor(QC.QObject):
     def compute_division_constant(self, param: ConstantParam) -> None:
         """Compute division by a constant"""
 
-    # ------Computing-------------------------------------------------------------------
+    # ------Analysis-------------------------------------------------------------------
 
     def edit_regions_of_interest(
         self,
@@ -824,7 +824,7 @@ class BaseProcessor(QC.QObject):
         singleobj: bool | None = None,
         add_roi: bool = False,
     ) -> ROIDataParam | None:
-        """Define Region Of Interest (ROI) for computing functions.
+        """Define Region Of Interest (ROI).
 
         Args:
             extract: If True, ROI is extracted from data. Defaults to False.

@@ -34,12 +34,12 @@ msgstr ""
 #: ../../doc/features/signal/menu_processing.rst:10
 msgid ""
 ":ref:`sig-menu-operations` for more information on operations that can be"
-" performed on signals, or :ref:`sig-menu-computing` for information on "
-"computing features on signals."
+" performed on signals, or :ref:`sig-menu-analysis` for information on "
+"analysis features on signals."
 msgstr ""
 ":ref:`sig-menu-operations` pour plus d'informations sur les opérations "
-"qui peuvent être effectuées sur les signaux, ou :ref:`sig-menu-computing`"
-" pour des informations sur les fonctionnalités de calcul sur les signaux."
+"qui peuvent être effectuées sur les signaux, ou :ref:`sig-menu-analysis`"
+" pour des informations sur les fonctionnalités d'analyse des signaux."
 
 #: ../../doc/features/signal/menu_processing.rst:16
 msgid "Screenshot of the \"Processing\" menu."

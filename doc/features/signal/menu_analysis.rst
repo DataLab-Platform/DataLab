@@ -1,9 +1,9 @@
-.. _sig-menu-computing:
+.. _sig-menu-analysis:
 
-Computing features on Signals
+Analysis features on Signals
 =============================
 
-This section describes the signal computing features available in DataLab.
+This section describes the signal analysis features available in DataLab.
 
 .. seealso::
 
@@ -11,20 +11,20 @@ This section describes the signal computing features available in DataLab.
     on signals, or :ref:`sig-menu-processing` for information on processing features on
     signals.
 
-.. figure:: /images/shots/s_computing.png
+.. figure:: /images/shots/s_analysis.png
 
-    Screenshot of the "Computing" menu.
+    Screenshot of the "Analysis" menu.
 
 When the "Signal Panel" is selected, the menus and toolbars are updated to
 provide signal-related actions.
 
-The "Computing" menu allows you to perform various computations on the
+The "Analysis" menu allows you to perform various computations on the
 selected signals, such as statistics, full width at half-maximum, or
 full width at 1/e².
 
 .. note::
 
-    In DataLab vocabulary, a "computing" is a feature that computes a scalar
+    In DataLab vocabulary, an "analysis" is a feature that computes a scalar
     result from a signal. This result is stored as metadata, and thus attached
     to signal. This is different from a "processing" which creates a new signal
     from an existing one.
@@ -192,11 +192,11 @@ and minimum values:
 Show results
 ^^^^^^^^^^^^
 
-Show the results of all computations performed on the selected signals. This shows the
+Show the results of all analyses performed on the selected signals. This shows the
 same table as the one shown after having performed a computation.
 
 Plot results
 ^^^^^^^^^^^^
 
-Plot the results of computations performed on the selected signals, with user-defined
+Plot the results of analyses performed on the selected signals, with user-defined
 X and Y axes (e.g. plot the FWHM as a function of the signal index).

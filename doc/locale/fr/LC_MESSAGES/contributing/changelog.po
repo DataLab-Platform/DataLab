@@ -615,7 +615,7 @@ msgstr ""
 
 #: ../../CHANGELOG.md:155
 msgid ""
-"The features of the \"Computing\" menu produce *results* (scalars): blob "
+"The features of the \"Analysis\" menu produce *results* (scalars): blob "
 "detection (circle coordinates), 2D peak detection (point coordinates), "
 "etc. Depending on the feature, result tables are displayed in the "
 "\"Results\" dialog box, and the results are also stored in the signal or "
@@ -625,7 +625,7 @@ msgid ""
 "while others may consist of multiple individual results (e.g., blob "
 "detection, contour detection, etc.)."
 msgstr ""
-"Les fonctionnalités du menu \"Calcul\" produisent des *résultats* "
+"Les fonctionnalités du menu Analyse\" produisent des *résultats* "
 "(scalaires) : détection de taches (coordonnées de cercle), détection de "
 "pics 2D (coordonnées de points), etc. Selon la fonctionnalité, des tables"
 " de résultats sont affichées dans la boîte de dialogue \"Résultats\", et "
@@ -858,10 +858,8 @@ msgstr ""
 "avoir défini le ROI graphiquement"
 
 #: ../../CHANGELOG.md:204
-msgid "ℹ️ New **Signal** operations, processing and computing features:"
-msgstr ""
-"ℹ️ Nouvelles fonctionnalités de traitement, de traitement et de calcul "
-"des **Signaux** :"
+msgid "ℹ️ New **Signal** operations, processing and analysis features:"
+msgstr "ℹ️ Nouvelles fonctionnalités de traitement des **Signaux** :"
 
 #: ../../CHANGELOG.md
 msgid "Menu"
@@ -960,8 +958,8 @@ msgstr ""
 "Ajustement CDF"
 
 #: ../../CHANGELOG.md
-msgid "Computing"
-msgstr "Calcul"
+msgid "Analysis"
+msgstr "Analyse"
 
 #: ../../CHANGELOG.md
 msgid ""
@@ -974,10 +972,8 @@ msgstr ""
 "Largeur de bande -3dB, Contraste"
 
 #: ../../CHANGELOG.md:219
-msgid "ℹ️ New **Image** operations, processing and computing features:"
-msgstr ""
-"ℹ️ Nouvelles fonctionnalités de traitement, de traitement et de calcul "
-"des **Images** :"
+msgid "ℹ️ New **Image** operations, processing and analysis features:"
+msgstr "ℹ️ Nouvelles fonctionnalités de traitement des **Images** :"
 
 #: ../../CHANGELOG.md
 msgid "Exponential"
@@ -1624,8 +1620,8 @@ msgid "DataLab Version 0.14.0"
 msgstr "DataLab Version 0.14.0"
 
 #: ../../CHANGELOG.md:389
-msgid "New \"Histogram\" feature in \"Computing\" menu:"
-msgstr "Nouvelle fonctionnalité \"Histogramme\" dans le menu \"Calculs\" :"
+msgid "New \"Histogram\" feature in \"Analysis\" menu:"
+msgstr "Nouvelle fonctionnalité \"Histogramme\" dans le menu Analyse\" :"
 
 #: ../../CHANGELOG.md:390
 msgid "Added histogram computation feature for both signals and images"
@@ -2263,17 +2259,17 @@ msgstr ""
 " tendance 1D"
 
 #: ../../CHANGELOG.md:537
-msgid "2D computing results:"
-msgstr "Résultats de calcul 2D :"
+msgid "2D analysis results:"
+msgstr "Résultats d'analyse 2D :"
 
 #: ../../CHANGELOG.md:538
 msgid ""
-"Before this release, 2D computing results such as contours, blobs, etc. "
+"Before this release, 2D analysis results such as contours, blobs, etc. "
 "were stored in image metadata dictionary as coordinates (x0, y0, x1, y1, "
 "...) even for circles and ellipses (i.e. the coordinates of the bounding "
 "rectangles)."
 msgstr ""
-"Avant cette version, les résultats de calcul 2D tels que les contours, "
+"Avant cette version, les résultats d'analyse 2D tels que les contours, "
 "les blobs, etc. étaient stockés dans le dictionnaire de métadonnées de "
 "l'image sous forme de coordonnées (x0, y0, x1, y1, ...) même pour les "
 "cercles et les ellipses (c'est-à-dire les coordonnées des rectangles "
@@ -2311,23 +2307,23 @@ msgstr ""
 "x1, ...)`"
 
 #: ../../CHANGELOG.md:546
-msgid "1D and 2D computing results:"
-msgstr "Résultats de calcul 1D et 2D :"
+msgid "1D and 2D analysis results:"
+msgstr "Résultats d'analyse 1D et 2D :"
 
 #: ../../CHANGELOG.md:547
 msgid ""
-"Additionnaly to the previous enhancement, more computing results are now "
+"Additionnaly to the previous enhancement, more analysis results are now "
 "shown in the \"Results\" dialog box"
 msgstr ""
-"En complément de l'amélioration précédente, plus de résultats de calcul "
+"En complément de l'amélioration précédente, plus de résultats d'analyse "
 "sont désormais affichés dans la boîte de dialogue \"Résultats\""
 
 #: ../../CHANGELOG.md:549
 msgid ""
-"This concerns both 1D (FHWM, ...) and 2D computing results (contours, "
+"This concerns both 1D (FHWM, ...) and 2D analysis results (contours, "
 "blobs, ...):"
 msgstr ""
-"Cela concerne à la fois les résultats de calcul 1D (FHWM, ...) et 2D "
+"Cela concerne à la fois les résultats d'analyse 1D (FHWM, ...) et 2D "
 "(contours, blobs, ...) :"
 
 #: ../../CHANGELOG.md:550
@@ -2343,12 +2339,12 @@ msgstr ""
 "l'aire (A)"
 
 #: ../../CHANGELOG.md:552
-msgid "Added \"Plot results\" entry in \"Computing\" menu:"
-msgstr "Ajout de l'entrée \"Tracer les résultats\" dans le menu \"Calculs\" :"
+msgid "Added \"Plot results\" entry in \"Analysis\" menu:"
+msgstr "Ajout de l'entrée \"Tracer les résultats\" dans le menu Analyse\" :"
 
 #: ../../CHANGELOG.md:553
-msgid "This feature allows to plot computing results (1D or 2D)"
-msgstr "Cette fonctionnalité permet de tracer les résultats de calcul (1D ou 2D)"
+msgid "This feature allows to plot analysis results (1D or 2D)"
+msgstr "Cette fonctionnalité permet de tracer les résultats d'analyse (1D ou 2D)"
 
 #: ../../CHANGELOG.md:554
 msgid ""
@@ -2702,8 +2698,8 @@ msgstr ""
 "bascule automatique vers la fonction `extract_single_roi`"
 
 #: ../../CHANGELOG.md:636
-msgid "Computing on circular ROI:"
-msgstr "Calcul sur ROI circulaire :"
+msgid "Analysis on circular ROI:"
+msgstr "Analyse sur ROI circulaire :"
 
 #: ../../CHANGELOG.md:637
 msgid ""
@@ -2731,11 +2727,11 @@ msgstr ""
 #: ../../CHANGELOG.md:643
 msgid ""
 "This fixes [Issue #33](https://github.com/DataLab-"
-"Platform/DataLab/issues/33) - Computing on circular ROI: unexpected "
+"Platform/DataLab/issues/33) - Analysis on circular ROI: unexpected "
 "results"
 msgstr ""
 "Ceci corrige l'[Issue #33](https://github.com/DataLab-"
-"Platform/DataLab/issues/33) - Calcul sur ROI circulaire : résultats "
+"Platform/DataLab/issues/33) - Analyse sur ROI circulaire : résultats "
 "inattendus"
 
 #: ../../CHANGELOG.md:644
@@ -2783,27 +2779,27 @@ msgstr ""
 "inattendus en dehors de la ROI"
 
 #: ../../CHANGELOG.md:653
-msgid "Computing result merging:"
-msgstr "Fusion des résultats de calcul :"
+msgid "Analysis result merging:"
+msgstr "Fusion des résultats d'analyse :"
 
 #: ../../CHANGELOG.md:654
 msgid ""
 "Before this release, when doing a `1->N` computation (sum, average, "
-"product) on a group of signals/images, the computing results associated "
+"product) on a group of signals/images, the analysis results associated "
 "to each signal/image were merged into a single result, but only the type "
 "of result present in the first signal/image was kept."
 msgstr ""
 "Avant cette version, lors d'un calcul `1->N` (somme, moyenne, produit) "
-"sur un groupe de signaux/images, les résultats de calcul associés à "
+"sur un groupe de signaux/images, les résultats d'analyse associés à "
 "chaque signal/image étaient fusionnés en un seul résultat, mais seul le "
 "type de résultat présent dans le premier signal/image était conservé."
 
 #: ../../CHANGELOG.md:658
 msgid ""
-"Now, the computing results associated to each signal/image are merged "
+"Now, the analysis results associated to each signal/image are merged "
 "into a single result, whatever the type of result is."
 msgstr ""
-"A présent, les résultats de calcul associés à chaque signal/image sont "
+"A présent, les résultats d'analyse associés à chaque signal/image sont "
 "fusionnés en un seul résultat, quel que soit le type de résultat."
 
 #: ../../CHANGELOG.md:660
@@ -3119,8 +3115,8 @@ msgstr ""
 "entièrement compatible avec la version du client."
 
 #: ../../CHANGELOG.md:744
-msgid "Image contour detection feature (\"Computing\" menu):"
-msgstr "Fonctionnalité de détection des contours de l'image (menu \"Calculer\") :"
+msgid "Image contour detection feature (\"Analysis\" menu):"
+msgstr "Fonctionnalité de détection des contours de l'image (menu Analyseer\") :"
 
 #: ../../CHANGELOG.md:745
 msgid ""
@@ -3760,7 +3756,7 @@ msgstr ""
 
 #: ../../CHANGELOG.md:893
 msgid ""
-"Added \"Computing parameters\" group box to show last result input "
+"Added \"Analysis parameters\" group box to show last result input "
 "parameters"
 msgstr ""
 "Ajout de la boîte de groupe \"Paramètres de calcul\" pour afficher les "
@@ -3774,12 +3770,12 @@ msgstr ""
 
 #: ../../CHANGELOG.md:895
 msgid ""
-"For every single processing feature (operation, processing and computing "
+"For every single processing feature (operation, processing and analysis "
 "menus), the entered parameters (dialog boxes) are stored in cache to be "
 "used as defaults the next time the feature is used"
 msgstr ""
 "Pour chaque fonctionnalité de traitement individuelle (menus opération, "
-"traitement et calcul), les paramètres saisis (boîtes de dialogue) sont "
+"traitement et analyse), les paramètres saisis (boîtes de dialogue) sont "
 "stockés en cache pour être utilisés par défaut la prochaine fois que la "
 "fonctionnalité est utilisée"
 

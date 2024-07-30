@@ -138,7 +138,7 @@ class ActionCategory(enum.Enum):
     VIEW = enum.auto()
     OPERATION = enum.auto()
     PROCESSING = enum.auto()
-    COMPUTING = enum.auto()
+    ANALYSIS = enum.auto()
     CONTEXT_MENU = enum.auto()
     PANEL_TOOLBAR = enum.auto()
     VIEW_TOOLBAR = enum.auto()
@@ -752,7 +752,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     triggered=self.panel.processor.compute_psd,
                 )
 
-        with self.new_category(ActionCategory.COMPUTING):
+        with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Edit regions of interest..."),
                 triggered=self.panel.processor.edit_regions_of_interest,
@@ -793,7 +793,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
             )
 
-        with self.new_category(ActionCategory.COMPUTING):
+        with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Show results") + "...",
                 triggered=self.panel.show_results,
@@ -936,7 +936,7 @@ class SignalActionHandler(BaseActionHandler):
                 icon_name="resampling.svg",
             )
 
-        with self.new_category(ActionCategory.COMPUTING):
+        with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Full width at half-maximum"),
                 triggered=self.panel.processor.compute_fwhm,
@@ -1326,7 +1326,7 @@ class ImageActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_butterworth,
             )
 
-        with self.new_category(ActionCategory.COMPUTING):
+        with self.new_category(ActionCategory.ANALYSIS):
             # TODO: [P3] Add "Create ROI grid..." action to create a regular grid
             # or ROIs (maybe reuse/derive from `core.gui.processor.image.GridParam`)
             self.new_action(

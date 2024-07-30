@@ -79,7 +79,7 @@ msgstr "Régions d'intérêt (ROIs) : il s'agit d'un moyen très efficace de ré
 
 #: ../../doc/features/image/menu_edit.rst:39
 msgid ""
-"Computing results, such as a centroid position or a contour detection "
+"Analyze results, such as a centroid position or a contour detection "
 "(the relevance of transferring such information depends on the context "
 "and is up to the user to decide)"
 msgstr "Résultats de calcul, tels qu'une position de barycentre ou une détection de contour (la pertinence du transfert de ces informations dépend du contexte et il appartient à l'utilisateur d'en décider)"
@@ -128,9 +128,9 @@ msgid ""
 "action in the \"Edit\" menu, you will be prompted to confirm the deletion"
 " of Region of Interests (ROIs) if they are present in the metadata. After"
 " this eventual confirmation, the metadata will be deleted, meaning that "
-"computing results, ROIs, and any other information associated with the "
+"analysis results, ROIs, and any other information associated with the "
 "image will be lost."
-msgstr "Lors de la suppression des métadonnées en utilisant l'action \"Supprimer les métadonnées\" |metadata_delete| dans le menu \"Édition\", vous serez invité à confirmer la suppression des régions d'intérêt (ROIs) si elles sont présentes dans les métadonnées. Après cette confirmation éventuelle, les métadonnées seront supprimées, ce qui signifie que les résultats de calcul, les ROIs et toute autre information associée à l'image seront perdus."
+msgstr "Lors de la suppression des métadonnées en utilisant l'action \"Supprimer les métadonnées\" |metadata_delete| dans le menu \"Édition\", vous serez invité à confirmer la suppression des régions d'intérêt (ROIs) si elles sont présentes dans les métadonnées. Après cette confirmation éventuelle, les métadonnées seront supprimées, ce qui signifie que les résultats d'analyse, les ROIs et toute autre information associée à l'image seront perdus."
 
 #: ../../doc/features/image/menu_edit.rst:78
 msgid "metadata_delete"

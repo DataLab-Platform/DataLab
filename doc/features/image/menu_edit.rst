@@ -36,7 +36,7 @@ This feature allows you to tranfer those information from one image to another:
 
 - Region of interests (ROIs): that is a very efficient way to reuse the same ROIs on
   different images and easily compare the results of the analysis on different images
-- Computing results, such as a centroid position or a contour detection (the relevance
+- Analyze results, such as a centroid position or a contour detection (the relevance
   of transferring such information depends on the context and is up to the user
   to decide)
 - Any other information that you may have added to the metadata of an image
@@ -72,7 +72,7 @@ Delete metadata
 When deleting metadata using the "Delete metadata" |metadata_delete| action in the
 "Edit" menu, you will be prompted to confirm the deletion of Region of Interests (ROIs)
 if they are present in the metadata. After this eventual confirmation, the metadata
-will be deleted, meaning that computing results, ROIs, and any other information
+will be deleted, meaning that analysis results, ROIs, and any other information
 associated with the image will be lost.
 
 .. |metadata_delete| image:: ../../../cdl/data/icons/metadata_delete.svg
