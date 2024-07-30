@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    role="img"
    focusable="false"
    aria-hidden="true"
    viewBox="0 0 14 14"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    width="100%"
    height="100%"
-   sodipodi:docname="roi.svg">
+   sodipodi:docname="roi.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <metadata
      id="metadata12">
     <rdf:RDF>
@@ -39,20 +39,34 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
      id="namedview8"
      showgrid="false"
      inkscape:zoom="16.857143"
-     inkscape:cx="7.0000001"
-     inkscape:cy="7.0000001"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg2" />
+     inkscape:cx="7.059322"
+     inkscape:cy="7.029661"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <path
-     d="M 10.618644,8.5459999 V 5.4539998 c 0.2905,-0.1035 0.5,-0.378 0.5,-0.7039997 0,-0.4139999 -0.336,-0.75 -0.75,-0.75 -0.326,0 -0.6004999,0.2094995 -0.7039999,0.4999998 h -5.092 c -0.1035,-0.2905004 -0.378,-0.4999998 -0.704,-0.4999998 -0.414,0 -0.75,0.3360001 -0.75,0.75 0,0.3259997 0.2095,0.6004998 0.5,0.7039997 v 3.0920001 c -0.2905,0.1035 -0.5,0.378 -0.5,0.704 0,0.414 0.336,0.75 0.75,0.75 0.326,0 0.6005,-0.2095 0.704,-0.500001 h 5.092 c 0.1035,0.290501 0.3779999,0.500001 0.7039999,0.500001 0.414,0 0.75,-0.336 0.75,-0.75 0,-0.326 -0.2095,-0.6005 -0.5,-0.704 z m -0.9539999,0.454 h -5.092 c -0.075,-0.212 -0.242,-0.3785 -0.454,-0.454 V 5.4539998 c 0.212,-0.075497 0.3785,-0.2419997 0.454,-0.4540003 h 5.092 c 0.0755,0.2120006 0.242,0.3785006 0.4539999,0.4540003 v 3.0920001 c -0.2119999,0.0755 -0.3789999,0.242 -0.4539999,0.454 z"
+     d="M 12.645479,9.4936892 V 4.5063101 c 0.468576,-0.1669449 0.806499,-0.6097118 0.806499,-1.1355474 0,-0.6677795 -0.541966,-1.2097458 -1.209747,-1.2097458 -0.525835,0 -0.968603,0.3379216 -1.135548,0.8064969 H 2.8933159 C 2.7263709,2.4989382 2.2836041,2.1610169 1.7577678,2.1610169 c -0.6677795,0 -1.20974563,0.5419663 -1.20974563,1.2097458 0,0.5258356 0.3379223,0.9686027 0.80649713,1.1355474 V 9.4936892 C 0.88594447,9.6606343 0.54802217,10.103401 0.54802217,10.629237 c 0,0.667781 0.54196613,1.209747 1.20974563,1.209747 0.5258363,0 0.9686031,-0.337923 1.1355481,-0.806499 h 8.2133671 c 0.166945,0.468577 0.609713,0.806499 1.135548,0.806499 0.667781,0 1.209747,-0.541966 1.209747,-1.209747 0,-0.525837 -0.337923,-0.9686027 -0.806499,-1.1355478 z M 11.106683,10.225989 H 2.8933159 C 2.7723413,9.8840343 2.5029712,9.6154705 2.1610165,9.4936892 V 4.5063101 C 2.5029712,4.3845337 2.7715349,4.1159661 2.8933159,3.7740102 h 8.2133671 c 0.121777,0.3419559 0.390345,0.6105194 0.7323,0.7322999 v 4.9873791 c -0.341955,0.1217762 -0.611325,0.3903451 -0.7323,0.7322998 z"
      id="path6"
      inkscape:connector-curvature="0"
-     style="fill:#ff0000" />
+     style="fill:#ff0000;stroke-width:1.61299" />
+  <text
+     xml:space="preserve"
+     style="font-size:5.4578px;line-height:0.85;font-family:'Franklin Gothic Demi Cond';-inkscape-font-specification:'Franklin Gothic Demi Cond';text-align:center;letter-spacing:0px;text-anchor:middle;opacity:1;fill:#4d4d4d;fill-opacity:1;stroke-width:6.33978;stroke-linecap:square"
+     x="7"
+     y="8.8188229"
+     id="text1"><tspan
+       sodipodi:role="line"
+       id="tspan1"
+       x="7.0000005"
+       y="8.8188229"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.4578px;font-family:'Franklin Gothic Medium';-inkscape-font-specification:'Franklin Gothic Medium, ';fill:#4d4d4d;stroke-width:6.33978">ROI</tspan></text>
 </svg>
