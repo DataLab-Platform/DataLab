@@ -1119,7 +1119,7 @@ class BaseObj(metaclass=BaseObjMeta):
         return roidata
 
     @roi.setter
-    def roi(self, roidata: np.ndarray):
+    def roi(self, roidata: np.ndarray | None) -> None:
         """Set object regions of interest array, using a list or ROI dataset params.
 
         Args:
