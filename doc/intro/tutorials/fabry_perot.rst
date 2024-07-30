@@ -73,7 +73,7 @@ Then, let's define a circular region of interest (ROI) around the central fringe
 
 .. figure:: ../../images/tutorials/fabry_perot/05.png
 
-   The "Regions of interest" dialog opens. Click "Add region of interest" and select
+   The "Regions of interest" dialog opens. Click "Add ROI" and select
    a circular ROI. Resize the predefined ROI by dragging the handles. Note that you
    may change the ROI radius while keeping its center fixed by pressing the "Ctrl" key.
    Click "OK" to close the dialog.

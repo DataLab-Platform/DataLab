@@ -39,7 +39,7 @@ from cdl.config import Conf, _
 from cdl.core.model.image import RoiDataGeometries
 
 if TYPE_CHECKING:
-    from plotpy.plot import PlotDialog
+    from plotpy.plot import BasePlot, PlotDialog
 
     from cdl.obj import ImageObj, SignalObj
 
@@ -62,13 +62,13 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         obj: AnyObj,
         extract: bool,
         singleobj: bool | None = None,
-    ):
+    ) -> None:
         super().__init__(parent)
         parent.accepted.connect(self.dialog_accepted)
         self.plot = parent.get_plot()
         self.obj = obj
         self.extract = extract
-        self.__modified = None
+        self.__modified: bool | None = None
 
         self.__data = ROIDataParam.create(singleobj=singleobj)
 
@@ -79,12 +79,14 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
             self.plot.add_item(roi_item)
             self.plot.set_active_item(roi_item)
 
-        self.add_btn = None
-        self.singleobj_btn = None
+        self.remove_all_btn: QW.QPushButton | None = None
+        self.singleobj_btn: QW.QCheckBox | None = None
         self.setup_widget()
 
-        self.update_roi_titles()
-        self.plot.SIG_ITEMS_CHANGED.connect(lambda _plt: self.update_roi_titles())
+        # force update of ROI titles and remove_all_btn state
+        self.items_changed(self.plot)
+
+        self.plot.SIG_ITEMS_CHANGED.connect(self.items_changed)
         self.plot.SIG_ITEM_REMOVED.connect(self.item_removed)
         self.plot.SIG_RANGE_CHANGED.connect(lambda _rng, _min, _max: self.item_moved())
         self.plot.SIG_ANNOTATION_CHANGED.connect(lambda _plt: self.item_moved())
@@ -131,13 +133,23 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         """
         return self.__data, self.modified
 
+    def build_roi_buttons(self) -> list[QW.QPushButton]:
+        """Build ROI buttons"""
+        self.remove_all_btn = QW.QPushButton(
+            get_icon("roi_delete.svg"), _("Remove all ROIs"), self
+        )
+        self.remove_all_btn.clicked.connect(self.remove_all_rois)
+        # Return a vertical bar to separate the buttons in the layout
+        vert_sep = QW.QFrame(self)
+        vert_sep.setFrameShape(QW.QFrame.VLine)
+        vert_sep.setStyleSheet("color: gray")
+        return [vert_sep, self.remove_all_btn]
+
     def setup_widget(self):
         """Setup ROI editor widget"""
-        self.add_btn = QW.QPushButton(
-            get_icon(self.ICON_NAME), _("Add region of interest"), self
-        )
         layout = QW.QHBoxLayout()
-        layout.addWidget(self.add_btn)
+        for btn in self.build_roi_buttons():
+            layout.addWidget(btn)
         if self.extract:
             self.singleobj_btn = QW.QCheckBox(
                 _("Extract all regions of interest into a single %s object")
@@ -161,9 +173,23 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.plot.add_item(roi_item)
         self.plot.set_active_item(roi_item)
 
+    def remove_all_rois(self):
+        """Remove all ROIs"""
+        if QW.QMessageBox.question(
+            self,
+            _("Remove all ROIs"),
+            _("Are you sure you want to remove all ROIs?"),
+        ):
+            self.plot.del_items(self.roi_items)
+
     @abc.abstractmethod
-    def update_roi_titles(self):
+    def update_roi_titles(self) -> None:
         """Update ROI annotation titles"""
+
+    def items_changed(self, _plot: BasePlot) -> None:
+        """Items have changed"""
+        self.update_roi_titles()
+        self.remove_all_btn.setEnabled(len(self.roi_items) > 0)
 
     def item_removed(self, item):
         """Item was removed. Since all items are read-only except ROIs...
@@ -203,6 +229,12 @@ class SignalROIEditor(BaseROIEditor):
     ICON_NAME = "signal_roi_new.svg"
     OBJ_NAME = _("signal")
 
+    def build_roi_buttons(self) -> list[QW.QPushButton]:
+        """Build ROI buttons"""
+        add_btn = QW.QPushButton(get_icon(self.ICON_NAME), _("Add ROI"), self)
+        add_btn.clicked.connect(self.add_roi)
+        return [add_btn] + super().build_roi_buttons()
+
     def setup_widget(self):
         """Setup ROI editor widget"""
         super().setup_widget()
@@ -210,7 +242,6 @@ class SignalROIEditor(BaseROIEditor):
         info_label = make.info_label("BL", info, title=_("Regions of interest"))
         self.plot.add_item(info_label)
         self.info_label = info_label
-        self.add_btn.clicked.connect(self.add_roi)
 
     def add_roi(self):
         """Simply add an ROI"""
@@ -234,26 +265,19 @@ class ImageROIEditor(BaseROIEditor):
     ICON_NAME = "image_roi_new.svg"
     OBJ_NAME = _("image")
 
+    def build_roi_buttons(self) -> list[QW.QPushButton]:
+        """Build ROI buttons"""
+        rect_btn = QW.QPushButton(get_icon("rectangle.png"), _("Rectangular ROI"), self)
+        rect_btn.clicked.connect(lambda: self.add_roi(RoiDataGeometries.RECTANGLE))
+        circ_btn = QW.QPushButton(get_icon("circle.png"), _("Circular ROI"), self)
+        circ_btn.clicked.connect(lambda: self.add_roi(RoiDataGeometries.CIRCLE))
+        return [rect_btn, circ_btn] + super().build_roi_buttons()
+
     def setup_widget(self):
         """Setup ROI editor widget"""
         super().setup_widget()
         item = self.plot.get_items(item_type=IImageItemType)[0]
         item.set_mask_visible(False)
-        menu = QW.QMenu()
-        rectact = create_action(
-            self,
-            _("Rectangular ROI"),
-            self.add_roi,
-            icon=get_icon("rectangle.png"),
-        )
-        circact = create_action(
-            self,
-            _("Circular ROI"),
-            lambda: self.add_roi(RoiDataGeometries.CIRCLE),
-            icon=get_icon("circle.png"),
-        )
-        add_actions(menu, (rectact, circact))
-        self.add_btn.setMenu(menu)
 
     def add_roi(self, geometry: RoiDataGeometries = RoiDataGeometries.RECTANGLE):
         """Add new ROI"""

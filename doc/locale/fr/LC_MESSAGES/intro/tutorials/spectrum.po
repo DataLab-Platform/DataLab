@@ -152,11 +152,11 @@ msgstr ""
 #: ../../intro/tutorials/spectrum.rst:66
 msgid ""
 "The \"Regions of interest\" dialog box is displayed. Click on \"Add "
-"region of interest\" and resize the horizontal window to select the area."
+"ROI\" and resize the horizontal window to select the area."
 " Then, click on \"OK\"."
 msgstr ""
 "La boîte de dialogue \"Régions d'intérêt\" est affichée. Cliquez sur "
-"\"Ajouter une région d'intérêt\" et redimensionnez la fenêtre horizontale"
+"\"Ajouter une ROI\" et redimensionnez la fenêtre horizontale"
 " pour sélectionner la zone. Ensuite, cliquez sur \"OK\"."
 
 #: ../../intro/tutorials/spectrum.rst:71
