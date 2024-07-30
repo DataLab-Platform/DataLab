@@ -9,6 +9,7 @@ import importlib
 import inspect
 import os.path as osp
 import pkgutil
+import re
 
 from _pytest.mark import Mark
 
@@ -56,12 +57,13 @@ def check_for_validation_test(
     endings = [shortname, shortname + "_unit", shortname + "_validation"]
     beginnings = ["test", f"test_{family}", f"test_{family[:3]}", f"test_{family[0]}"]
     names = [f"{beginning}_{ending}" for beginning in beginnings for ending in endings]
+    stable_version = re.sub(r"\.?(post|dev|rc|b|a)\S*", "", __version__)
     for test, path, line_number in validation_tests:
         if test in names:
             # Path relative to the `cdl` package:
             path = osp.relpath(path, start=osp.dirname(osp.join(tests_pkg.__file__)))
             name = "/".join(path.split(osp.sep))
-            link = f"https://github.com/DataLab-Platform/DataLab/blob/v{__version__}/cdl/tests/{name}#L{line_number}"
+            link = f"https://github.com/DataLab-Platform/DataLab/blob/v{stable_version}/cdl/tests/{name}#L{line_number}"
             return f"`{test} <{link}>`_"
     return None
 
