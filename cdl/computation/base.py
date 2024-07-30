@@ -188,8 +188,7 @@ class SpectrumParam(gds.DataSet):
 
 
 class ConstantParam(gds.DataSet):
-    """Parameter used to set a constant value to used in operations (sum,
-    multiplication, ...)"""
+    """Parameter used to set a constant value to used in operations"""
 
     value = gds.FloatItem(_("Constant value"))
 
