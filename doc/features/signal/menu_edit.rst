@@ -22,20 +22,21 @@ As metadata contains useful information about the signal, it can be copied and p
 from one signal to another by selecting the "Copy metadata" |metadata_copy| and
 "Paste metadata" |metadata_paste| actions in the "Edit" menu.
 
-.. |metadata_copy| image:: ../../../cdl/data/icons/metadata_copy.svg
+.. |metadata_copy| image:: ../../../cdl/data/icons/edit/metadata_copy.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |metadata_paste| image:: ../../../cdl/data/icons/metadata_paste.svg
+.. |metadata_paste| image:: ../../../cdl/data/icons/edit/metadata_paste.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
 This feature allows you to tranfer those information from one signal to another:
 
-- Region of interests (ROIs): that is a very efficient way to reuse the same ROIs on
-  different signals and easily compare the results of the analysis on different signals
+- :ref:`Regions Of Interest (ROIs) <sig-roi>`: that is a very efficient way to reuse
+  the same ROI on different signals and easily compare the results of the analysis
+  on those signals
 - Analyze results, such as peak positions or FHWM intervals (the relevance of
   transferring such information depends on the context and is up to the user to decide)
 - Any other information that you may have added to the metadata of a signal
@@ -55,12 +56,12 @@ metadata" |metadata_import| and "Export metadata" |metadata_export| actions in t
 for more details on the use cases of this feature), but it allows you to save the
 metadata to a file and then import it back later.
 
-.. |metadata_import| image:: ../../../cdl/data/icons/metadata_import.svg
+.. |metadata_import| image:: ../../../cdl/data/icons/edit/metadata_import.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |metadata_export| image:: ../../../cdl/data/icons/metadata_export.svg
+.. |metadata_export| image:: ../../../cdl/data/icons/edit/metadata_export.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -74,7 +75,7 @@ if they are present in the metadata. After this eventual confirmation, the metad
 will be deleted, meaning that analysis results, ROIs, and any other information
 associated with the signal will be lost.
 
-.. |metadata_delete| image:: ../../../cdl/data/icons/metadata_delete.svg
+.. |metadata_delete| image:: ../../../cdl/data/icons/edit/metadata_delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -111,7 +112,54 @@ The "Edit" menu allows you to:
         s008: fft(s005)
         s009: fft(s006)
 
-.. |copy_titles| image:: ../../../cdl/data/icons/copy_titles.svg
+.. |copy_titles| image:: ../../../cdl/data/icons/edit/copy_titles.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
+
+.. _sig-roi:
+
+Regions Of Interest (ROI)
+-------------------------
+
+The Regions Of Interest (ROI) are signal areas that are defined by the user to
+perform specific operations, processing, or analysis on them.
+
+ROI are taken into account almost in all computing features in DataLab:
+
+- The "Operations" menu features are done only on the ROI if one is defined (except
+  if the operation changes the number of points, like interpolation or resampling).
+
+- The "Processing" menu actions are performed only on the ROI if one is defined (except
+  if the destination signal data type is different from the source's, like in the
+  Fourier analysis features).
+
+- The "Analysis" menu actions are done only on the ROI if one is defined.
+
+.. note::
+
+    ROI are stored as metadata, and thus attached to signal.
+
+The "Edit" menu allows you to:
+
+- "Edit regions of interest" |roi|: open a dialog box to manage ROI associated with
+  the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is
+  exactly the same as ROI extraction (see below): the ROI is defined by moving the
+  position and adjusting the width of an horizontal range.
+
+.. figure:: /images/shots/s_roi_signal.png
+
+    A signal with an ROI.
+
+- "Remove regions of interest" |roi_delete|: remove all defined ROI for the selected
+  signals.
+
+.. |roi| image:: ../../../cdl/data/icons/edit/roi.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light
+
+.. |roi_delete| image:: ../../../cdl/data/icons/edit/roi_delete.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light

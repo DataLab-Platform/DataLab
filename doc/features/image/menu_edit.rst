@@ -22,20 +22,21 @@ As metadata contains useful information about the image, it can be copied and pa
 from one image to another by selecting the "Copy metadata" |metadata_copy| and
 "Paste metadata" |metadata_paste| actions in the "Edit" menu.
 
-.. |metadata_copy| image:: ../../../cdl/data/icons/metadata_copy.svg
+.. |metadata_copy| image:: ../../../cdl/data/icons/edit/metadata_copy.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |metadata_paste| image:: ../../../cdl/data/icons/metadata_paste.svg
+.. |metadata_paste| image:: ../../../cdl/data/icons/edit/metadata_paste.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
 This feature allows you to tranfer those information from one image to another:
 
-- Region of interests (ROIs): that is a very efficient way to reuse the same ROIs on
-  different images and easily compare the results of the analysis on different images
+- :ref:`Regions Of Interest (ROIs) <ima-roi>`: that is a very efficient way to reuse
+  the same ROI on different images and easily compare the results of the analysis on
+  those images
 - Analyze results, such as a centroid position or a contour detection (the relevance
   of transferring such information depends on the context and is up to the user
   to decide)
@@ -56,12 +57,12 @@ metadata" |metadata_import| and "Export metadata" |metadata_export| actions in t
 for more details on the use cases of this feature), but it allows you to save the
 metadata to a file and then import it back later.
 
-.. |metadata_import| image:: ../../../cdl/data/icons/metadata_import.svg
+.. |metadata_import| image:: ../../../cdl/data/icons/edit/metadata_import.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |metadata_export| image:: ../../../cdl/data/icons/metadata_export.svg
+.. |metadata_export| image:: ../../../cdl/data/icons/edit/metadata_export.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -75,7 +76,7 @@ if they are present in the metadata. After this eventual confirmation, the metad
 will be deleted, meaning that analysis results, ROIs, and any other information
 associated with the image will be lost.
 
-.. |metadata_delete| image:: ../../../cdl/data/icons/metadata_delete.svg
+.. |metadata_delete| image:: ../../../cdl/data/icons/edit/metadata_delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -113,7 +114,54 @@ The "Edit" menu allows you to:
         s008: fft(s005)
         s009: fft(s006)
 
-.. |copy_titles| image:: ../../../cdl/data/icons/copy_titles.svg
+.. |copy_titles| image:: ../../../cdl/data/icons/edit/copy_titles.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
+
+.. _ima-roi:
+
+Regions Of Interest (ROI)
+-------------------------
+
+The Regions Of Interest (ROI) are image areas that are defined by the user to
+perform specific operations, processing, or analysis on them.
+
+ROI are taken into account almost in all computing features in DataLab:
+
+- The "Operations" menu features are done only on the ROI if one is defined (except
+  if the operation changes the data shape - like the resize operation - or the pixel
+  size - like the binning operation).
+
+- The "Processing" menu actions are performed only on the ROI if one is defined (except
+  if the destination signal data type is different from the source's, like in the
+  Fourier analysis features or like the thresholding operations).
+
+- The "Analysis" menu actions are done only on the ROI if one is defined.
+
+.. note::
+
+    ROI are stored as metadata, and thus attached to image.
+
+The "Edit" menu allows you to:
+
+- "Edit regions of interest" |roi|: open a dialog box to manage ROI associated with
+  the selected image (add, remove, move, resize, etc.). The ROI definition dialog is
+  exactly the same as ROI extraction (see below).
+
+.. figure:: /images/shots/i_roi_image.png
+
+    An image with an ROI.
+
+- "Remove regions of interest" |roi_delete|: remove all defined ROI for the selected
+  images.
+
+.. |roi| image:: ../../../cdl/data/icons/edit/roi.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light
+
+.. |roi_delete| image:: ../../../cdl/data/icons/edit/roi_delete.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light

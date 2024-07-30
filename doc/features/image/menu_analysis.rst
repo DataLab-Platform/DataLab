@@ -29,23 +29,6 @@ the centroid, to detect peaks, to detect contours, and so on.
     to image. This is different from a "processing" which creates a new image
     from an existing one.
 
-Edit regions of interest
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-Open a dialog box to setup multiple Region Of Interests (ROI).
-ROI are stored as metadata, and thus attached to image.
-
-ROI definition dialog is exactly the same as ROI extraction (see above).
-
-.. figure:: /images/shots/i_roi_image.png
-
-    An image with ROI.
-
-Remove regions of interest
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Remove all defined ROI for selected object(s).
-
 Statistics
 ^^^^^^^^^^
 

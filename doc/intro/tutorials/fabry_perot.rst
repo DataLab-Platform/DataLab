@@ -158,7 +158,7 @@ Now, let's delete the image metadata (including the annotations) to clean up the
    Select the "Delete metadata" entry in the "Edit" menu, or the |metadata_delete|
    button in the toolbar.
 
-.. |metadata_delete| image:: ../../../cdl/data/icons/metadata_delete.svg
+.. |metadata_delete| image:: ../../../cdl/data/icons/edit/metadata_delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -176,7 +176,7 @@ ROI from the first image to the second image, using the metadata.
     Select the "Copy metadata" entry in the "Edit" menu, or the |metadata_copy|
     button in the toolbar.
 
-.. |metadata_copy| image:: ../../../cdl/data/icons/metadata_copy.svg
+.. |metadata_copy| image:: ../../../cdl/data/icons/edit/metadata_copy.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -186,7 +186,7 @@ ROI from the first image to the second image, using the metadata.
     Select the second image in the "Images" panel, then select the "Paste metadata"
     entry in the "Edit" menu, or the |metadata_paste| button in the toolbar.
 
-.. |metadata_paste| image:: ../../../cdl/data/icons/metadata_paste.svg
+.. |metadata_paste| image:: ../../../cdl/data/icons/edit/metadata_paste.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

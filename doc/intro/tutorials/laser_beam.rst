@@ -147,12 +147,12 @@ the |delete_all| button in the toolbar). We alse clean the intermediate results
 in the "Images" panel by selecting the images obtained during our prototyping
 and deleting them individually (with "Edit > Remove" or the |delete| button).
 
-.. |delete_all| image:: ../../../cdl/data/icons/delete_all.svg
+.. |delete_all| image:: ../../../cdl/data/icons/edit/delete_all.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |delete| image:: ../../../cdl/data/icons/delete.svg
+.. |delete| image:: ../../../cdl/data/icons/edit/delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

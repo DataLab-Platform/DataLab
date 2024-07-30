@@ -29,25 +29,6 @@ full width at 1/e².
     to signal. This is different from a "processing" which creates a new signal
     from an existing one.
 
-Edit regions of interest
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-Open a dialog box to setup multiple Region Of Interests (ROI).
-ROI are stored as metadata, and thus attached to signal.
-
-ROI definition dialog is exactly the same as ROI extraction (see above):
-the ROI is defined by moving the position and adjusting the width of an
-horizontal range.
-
-.. figure:: /images/shots/s_roi_signal.png
-
-    A signal with an ROI.
-
-Remove regions of interest
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Remove all defined ROI for selected object(s).
-
 Statistics
 ^^^^^^^^^^
 

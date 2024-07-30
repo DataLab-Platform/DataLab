@@ -17,6 +17,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     compatible with the source object data type, which excludes thresholding, for
     instance)
   * Analysis features are done on the ROI only, like before
+* As a consequence of previous point, and for clarity, the "Edit Regions of interest"
+  and "Remove all Regions of interest" features have been moved from the old
+  "Computing" (now "Analysis") menu to the "Edit" menu where all metadata-related
+  features are located
 * Following the bug fix on image data type conversion issues with basic operations, a
   new "Arithmetic operation" feature has been added to the "Operations" menu for both
   Signal and Image panels. This feature allows to perform linear operations on signals

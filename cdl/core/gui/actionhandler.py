@@ -543,6 +543,22 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 tip=_("Copy titles of selected objects to clipboard"),
                 triggered=self.panel.copy_titles_to_clipboard,
             )
+            self.new_action(
+                _("Edit regions of interest..."),
+                separator=True,
+                triggered=self.panel.processor.edit_regions_of_interest,
+                icon_name="roi.svg",
+                select_condition=SelectCond.exactly_one,
+                context_menu_pos=-1,
+                context_menu_sep=True,
+            )
+            self.new_action(
+                _("Remove regions of interest"),
+                triggered=self.panel.processor.delete_regions_of_interest,
+                icon_name="roi_delete.svg",
+                select_condition=SelectCond.with_roi,
+                context_menu_pos=-1,
+            )
 
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
@@ -754,23 +770,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
-                _("Edit regions of interest..."),
-                triggered=self.panel.processor.edit_regions_of_interest,
-                icon_name="roi.svg",
-                select_condition=SelectCond.exactly_one,
-                context_menu_pos=-1,
-                context_menu_sep=True,
-            )
-            self.new_action(
-                _("Remove regions of interest"),
-                triggered=self.panel.processor.delete_regions_of_interest,
-                icon_name="roi_delete.svg",
-                select_condition=SelectCond.with_roi,
-                context_menu_pos=-1,
-            )
-            self.new_action(
                 _("Statistics") + "...",
-                separator=True,
                 triggered=self.panel.processor.compute_stats,
                 icon_name="stats.svg",
                 context_menu_pos=-1,
