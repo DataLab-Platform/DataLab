@@ -6,6 +6,17 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ℹ️ Minor new features and enhancements:
 
+* Menu "Computing" was renamed to "Analysis" for both Signal and Image panels, to
+  better reflect the nature of the features in this menu
+* Regions Of Interest (ROIs) are now taken into account everywhere in the application
+  where it makes sense, and not only for the old "Computing" menu (now "Analysis")
+  features. If a signal or an image has an ROI defined:
+  * Operations are done on the ROI only (except if the operation changes the data shape,
+    or the pixel size for images)
+  * Processing features are done on the ROI only (if the destination object data type is
+    compatible with the source object data type, which excludes thresholding, for
+    instance)
+  * Analysis features are done on the ROI only, like before
 * Following the bug fix on image data type conversion issues with basic operations, a
   new "Arithmetic operation" feature has been added to the "Operations" menu for both
   Signal and Image panels. This feature allows to perform linear operations on signals

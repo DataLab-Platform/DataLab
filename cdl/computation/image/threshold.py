@@ -18,7 +18,7 @@ import guidata.dataset as gds
 import skimage.util
 from skimage import filters
 
-from cdl.computation.image import dst_11
+from cdl.computation.image import dst_11, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
 
@@ -89,6 +89,7 @@ def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
     dst.data = skimage.util.img_as_ubyte(data)
     dst.zscalemin, dst.zscalemax = 0, 255  # LUT range
     dst.metadata["colormap"] = "gray"
+    restore_data_outside_roi(dst, src)
     return dst
 
 

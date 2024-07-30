@@ -19,7 +19,7 @@ import pywt
 from skimage import morphology
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 
-from cdl.computation.image import Wrap11Func, dst_11
+from cdl.computation.image import Wrap11Func, dst_11, restore_data_outside_roi
 from cdl.computation.image.morphology import MorphologyParam
 from cdl.config import _
 from cdl.obj import ImageObj
@@ -161,4 +161,5 @@ def compute_denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """
     dst = dst_11(src, "denoise_tophat", f"radius={p.radius}")
     dst.data = src.data - morphology.white_tophat(src.data, morphology.disk(p.radius))
+    restore_data_outside_roi(dst, src)
     return dst

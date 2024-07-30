@@ -18,7 +18,7 @@ import guidata.dataset as gds
 import skimage
 from skimage import feature, filters
 
-from cdl.computation.image import Wrap11Func, dst_11
+from cdl.computation.image import Wrap11Func, dst_11, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
 
@@ -92,6 +92,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
             cval=p.cval,
         )
     )
+    restore_data_outside_roi(dst, src)
     return dst
 
 

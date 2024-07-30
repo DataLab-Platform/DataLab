@@ -52,6 +52,30 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
         # On the contrary, in interactive mode, the ROI editor is opened and will
         # automatically set the ROI from the currently selected object.
         roiparam.roidata = last_obj.roi
+
+    panel.processor.compute_gaussian_filter(dlp.GaussianParam.create(sigma=10.0))
+    if execenv.unattended and last_obj.roi is not None:
+        # Check if the processed data is correct: signal should be the same as the
+        # original data outside the ROI, and should be different inside the ROI.
+        orig = last_obj.data
+        new = panel[obj_nb + 1].data
+        assert not np.any(
+            new[SROI1[0] : SROI1[1]] == orig[SROI1[0] : SROI1[1]]
+        ), "Signal ROI 1 data mismatch"
+        assert not np.any(
+            new[SROI2[0] : SROI2[1]] == orig[SROI2[0] : SROI2[1]]
+        ), "Signal ROI 2 data mismatch"
+        assert np.all(
+            new[: SROI1[0]] == orig[: SROI1[0]]
+        ), "Signal before ROI 1 data mismatch"
+        assert np.all(
+            new[SROI1[1] : SROI2[0]] == orig[SROI1[1] : SROI2[0]]
+        ), "Signal between ROIs data mismatch"
+        assert np.all(
+            new[SROI2[1] :] == orig[SROI2[1] :]
+        ), "Signal after ROI 2 data mismatch"
+    panel.remove_object()
+
     panel.processor.compute_roi_extraction(roiparam)
     if execenv.unattended and last_obj.roi is not None:
         orig = last_obj.data
@@ -94,8 +118,39 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
         # On the contrary, in interactive mode, the ROI editor is opened and will
         # automatically set the ROI from the currently selected object.
         roiparam.roidata = last_obj.roi
-    panel.processor.compute_roi_extraction(roiparam)
 
+    value = 1
+    panel.processor.compute_addition_constant(dlp.ConstantParam.create(value=value))
+    if execenv.unattended and last_obj.roi is not None:
+        # Check if the processed data is correct: image should be the same as the
+        # original data outside the ROI, and should be different inside the ROI.
+        orig = last_obj.data
+        new = panel[obj_nb + 1].data
+        assert np.all(
+            new[IROI1[1] : IROI1[3], IROI1[0] : IROI1[2]]
+            == orig[IROI1[1] : IROI1[3], IROI1[0] : IROI1[2]] + value
+        ), "Image ROI 1 data mismatch"
+        assert np.all(
+            new[IROI2[1] : IROI2[3], IROI2[0] : IROI2[2]]
+            == orig[IROI2[1] : IROI2[3], IROI2[0] : IROI2[2]] + value
+        ), "Image ROI 2 data mismatch"
+        first_col, first_row = min(IROI1[0], IROI2[0]), min(IROI1[1], IROI2[1])
+        last_col, last_row = max(IROI1[2], IROI2[2]), max(IROI1[3], IROI2[3])
+        assert np.all(
+            new[:first_row, :first_col] == orig[:first_row, :first_col]
+        ), "Image before ROIs data mismatch"
+        assert np.all(
+            new[:first_row, last_col:] == orig[:first_row, last_col:]
+        ), "Image after ROIs data mismatch"
+        assert np.all(
+            new[last_row:, :first_col] == orig[last_row:, :first_col]
+        ), "Image before ROIs data mismatch"
+        assert np.all(
+            new[last_row:, last_col:] == orig[last_row:, last_col:]
+        ), "Image after ROIs data mismatch"
+    panel.remove_object()
+
+    panel.processor.compute_roi_extraction(roiparam)
     if execenv.unattended and last_obj.roi is not None:
         # Assertions texts:
         nzroi = "Non-zero values expected in ROI"

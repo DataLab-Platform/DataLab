@@ -45,6 +45,23 @@ from cdl.obj import ResultProperties, ResultShape, ROI1DParam, SignalObj
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
 
 
+def restore_data_outside_roi(dst: SignalObj, src: SignalObj) -> None:
+    """Restore data outside the region of interest, after a computation, only if the
+    source signal has a ROI, if the data types are the same and if the shapes are the
+    same. Otherwise, do nothing.
+
+    Args:
+        dst: destination signal object
+        src: source signal object
+    """
+    if (
+        src.maskdata is not None
+        and dst.xydata.dtype == src.xydata.dtype
+        and dst.xydata.shape == src.xydata.shape
+    ):
+        dst.xydata[src.maskdata] = src.xydata[src.maskdata]
+
+
 class Wrap11Func:
     """Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce
     a 1 signal → 1 signal function, which can be used inside DataLab's infrastructure
@@ -99,6 +116,7 @@ class Wrap11Func:
         dst = dst_11(src, self.func.__name__, suffix)
         x, y = src.get_data()
         dst.set_xydata(x, self.func(y, *self.args, **self.kwargs))
+        restore_data_outside_roi(dst, src)
         return dst
 
 
@@ -127,6 +145,7 @@ def compute_addition(dst: SignalObj, src: SignalObj) -> SignalObj:
     dst.y += np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
         dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -143,6 +162,7 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     dst.y *= np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
         dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -158,6 +178,7 @@ def compute_addition_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """
     dst = dst_11(src, "+", str(p.value))
     dst.y += p.value
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -173,6 +194,7 @@ def compute_difference_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """
     dst = dst_11(src, "-", str(p.value))
     dst.y -= p.value
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -188,6 +210,7 @@ def compute_product_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """
     dst = dst_11(src, "×", str(p.value))
     dst.y *= p.value
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -203,6 +226,7 @@ def compute_division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """
     dst = dst_11(src, "/", str(p.value))
     dst.y /= p.value
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -245,6 +269,7 @@ def compute_arithmetic(
     # Eventually convert to initial data type
     if p.restore_dtype:
         dst.xydata = dst.xydata.astype(initial_dtype)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -266,6 +291,7 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     dst.y = src1.y - src2.y
     if dst.dy is not None:
         dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -291,6 +317,7 @@ def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
         dst.data[src1.data < src2.data] = 0
     if dst.dy is not None:
         dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -308,6 +335,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -492,6 +520,7 @@ def compute_power(src: SignalObj, p: PowerParam) -> SignalObj:
     """
     dst = dst_11(src, "^", str(p.power))
     dst.y = np.power(src.y, p.power)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -537,6 +566,7 @@ def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     dst = dst_11(src, "normalize", f"ref={p.method}")
     x, y = src.get_data()
     dst.set_xydata(x, alg.normalize(y, p.method))
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -552,6 +582,7 @@ def compute_derivative(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "derivative")
     x, y = src.get_data()
     dst.set_xydata(x, np.gradient(y, x))
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -567,6 +598,7 @@ def compute_integral(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "integral")
     x, y = src.get_data()
     dst.set_xydata(x, spt.cumulative_trapezoid(y, x, initial=0.0))
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -595,6 +627,7 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
         dst.set_xydata(p.a * x + p.b, y)
     else:
         dst.set_xydata(x, p.a * y + p.b)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -625,6 +658,7 @@ def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
     dst = dst_11(src, "offset_correction", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
     _roi_x, roi_y = p.get_data(src)
     dst.y -= np.mean(roi_y)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -829,6 +863,7 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     dst = dst_11(src, name, suffix)
     b, a = p.get_filter_params(dst)
     dst.y = sps.filtfilt(b, a, dst.y)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -950,12 +985,7 @@ def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    # Extract data from ROIs:
-    datalist = []
-    for i_roi in src.iterate_roi_indexes():
-        datalist.append(src.get_data(i_roi)[1])
-    data = np.concatenate(datalist)
-
+    data = src.get_masked_view().compressed()
     suffix = p.get_suffix(data)  # Also updates p.lower and p.upper
 
     # Compute histogram:
@@ -1090,6 +1120,7 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     dst = dst_11(src, "detrending", f"method={p.method}")
     x, y = src.get_data()
     dst.set_xydata(x, sps.detrend(y, type=p.method))
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -1109,6 +1140,7 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     _x2, y2 = src2.get_data()
     ynew = np.real(sps.convolve(y1, y2, mode="same"))
     dst.set_xydata(x1, ynew)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -1177,6 +1209,7 @@ def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
         suffix += f", sigma={p.sigma:.3f}"
     dst = dst_11(src, "windowing", suffix)  # type: ignore
     dst.y = alg.windowing(dst.y, p.method, p.alpha)  # type: ignore
+    restore_data_outside_roi(dst, src)
     return dst
 
 
