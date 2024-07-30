@@ -10,7 +10,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   better reflect the nature of the features in this menu
 * Regions Of Interest (ROIs) are now taken into account everywhere in the application
   where it makes sense, and not only for the old "Computing" menu (now "Analysis")
-  features. If a signal or an image has an ROI defined:
+  features. This closes [Issue #93](https://github.com/DataLab-Platform/DataLab/issues/93).
+  If a signal or an image has an ROI defined:
   * Operations are done on the ROI only (except if the operation changes the data shape,
     or the pixel size for images)
   * Processing features are done on the ROI only (if the destination object data type is
