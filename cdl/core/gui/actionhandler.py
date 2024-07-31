@@ -791,6 +791,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("ROI extraction"),
                 triggered=self.panel.processor.compute_roi_extraction,
+                # Icon name is 'signal_roi.svg' or 'image_roi.svg':
                 icon_name=f"{self.OBJECT_STR}_roi.svg",
                 separator=True,
             )
