@@ -226,7 +226,7 @@ class ROIRangeInfo(ObjectInfo):
 class SignalROIEditor(BaseROIEditor):
     """Signal ROI Editor"""
 
-    ICON_NAME = "signal_roi_new.svg"
+    ICON_NAME = "roi_new.svg"
     OBJ_NAME = _("signal")
 
     def build_roi_buttons(self) -> list[QW.QPushButton]:
@@ -262,7 +262,7 @@ class SignalROIEditor(BaseROIEditor):
 class ImageROIEditor(BaseROIEditor):
     """Image ROI Editor"""
 
-    ICON_NAME = "image_roi_new.svg"
+    ICON_NAME = "roi_new.svg"
     OBJ_NAME = _("image")
 
     def build_roi_buttons(self) -> list[QW.QPushButton]:
