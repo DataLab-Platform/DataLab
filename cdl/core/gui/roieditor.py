@@ -28,7 +28,6 @@ import abc
 from typing import TYPE_CHECKING, Union
 
 from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action
 from plotpy.builder import make
 from plotpy.interfaces import IImageItemType
 from plotpy.items import AnnotatedCircle, ObjectInfo

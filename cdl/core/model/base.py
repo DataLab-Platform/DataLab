@@ -873,15 +873,16 @@ def make_roi_item(
         Plot item
     """
     item = func(*coords, title)
+    option += "/" + ("editable" if editable else "readonly")
     if not editable:
         if isinstance(item, AnnotatedShape):
             config_annotated_shape(item, fmt, lbl, "roi", option, cmp=editable)
-        if hasattr(item, "set_style"):
-            # TODO: Remove this `if` statement when upgrading to PlotPy 2.5
-            item.set_style("roi", option)
         item.set_movable(False)
         item.set_resizable(False)
         item.set_readonly(True)
+    if hasattr(item, "set_style"):
+        # TODO: Remove this `if` statement when upgrading to PlotPy 2.5
+        item.set_style("roi", option)
     return item
 
 
