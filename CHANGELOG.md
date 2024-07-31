@@ -35,6 +35,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Fix actions refresh issue in Image View vertical toolbar:
+  * When starting DataLab with the Signal Panel active, switching to the Image View
+    was showing "View in a new window" or "Edit Regions of interest" actions enabled
+    in the vertical toolbar, even if no image was displayed in the Image View
+  * The Image View vertical toolbar is now correctly updated at startup
 * View in a new window: cross section tools (intensity profiles) stayed disabled
   unless the user selected an image through the item list - this is now fixed
 * Image View: "Show contrast panel" toolbar button was not enabled at startup, and was

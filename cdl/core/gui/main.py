@@ -702,7 +702,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.__add_menus()
         if console:
             self.__setup_console()
-        self.__update_actions()
+        self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
@@ -1202,10 +1202,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             if isinstance(panel, base.BaseDataPanel):
                 panel.objview.populate_tree()
 
-    def __update_actions(self) -> None:
-        """Update selection dependent actions"""
+    def __update_actions(self, update_other_data_panel: bool = False) -> None:
+        """Update selection dependent actions
+
+        Args:
+            update_other_data_panel: True to update other data panel actions
+             (i.e. if the current panel is the signal panel, also update the image
+             panel actions, and vice-versa)
+        """
         is_signal = self.tabwidget.currentWidget() is self.signalpanel
         panel = self.signalpanel if is_signal else self.imagepanel
+        other_panel = self.imagepanel if is_signal else self.signalpanel
+        if update_other_data_panel:
+            other_panel.selection_changed()
         panel.selection_changed()
         self.signalpanel_toolbar.setVisible(is_signal)
         self.imagepanel_toolbar.setVisible(not is_signal)
