@@ -30,6 +30,7 @@ from plotpy.items import (
     AnnotatedSegment,
     AnnotatedShape,
     LabelItem,
+    PolygonShape,
 )
 
 from cdl.algorithms import coordinates
@@ -45,7 +46,6 @@ if TYPE_CHECKING:
         CurveItem,
         Marker,
         MaskedImageItem,
-        PolygonShape,
     )
     from plotpy.styles import AnnotationParam, ShapeParam
 
@@ -176,7 +176,12 @@ class ShapeTypes(enum.Enum):
 
 
 def config_annotated_shape(
-    item: AnnotatedShape, fmt: str, lbl: bool, option: str, cmp: bool | None = None
+    item: AnnotatedShape,
+    fmt: str,
+    lbl: bool,
+    section: str,
+    option: str,
+    cmp: bool | None = None,
 ):
     """Configurate annotated shape.
 
@@ -184,6 +189,7 @@ def config_annotated_shape(
         item: Annotated shape item
         fmt: Format string
         lbl: Show label
+        section: Shape style section (e.g. "plot")
         option: Shape style option (e.g. "shape/drag")
         cmp: Show computations
     """
@@ -198,7 +204,7 @@ def config_annotated_shape(
         item.label.labelparam.update_item(item.label)
 
     param.update_item(item)
-    item.set_style("plot", option)
+    item.set_style(section, option)
 
 
 # TODO: [P3] Move this function as a method of plot items in PlotPy
@@ -463,8 +469,8 @@ class ResultProperties(BaseResult):
             if i_row < self.shown_array.shape[0] - 1:
                 text += "<br><br>"
         item = make.label(text, "TL", (0, 0), "TL", title=self.title)
-        font = get_font(PLOTPY_CONF, "plot", "label/properties/font")
-        item.set_style("plot", "label/properties")
+        font = get_font(PLOTPY_CONF, "properties", "label/font")
+        item.set_style("properties", "label")
         item.labelparam.font.update_param(font)
         item.labelparam.update_item(item)
         return item
@@ -725,13 +731,15 @@ class ResultShape(ResultProperties):
         else:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
 
-    def iterate_plot_items(self, fmt: str, lbl: bool, option: str) -> Iterable:
+    def iterate_plot_items(
+        self, fmt: str, lbl: bool, option: Literal["s", "i"]
+    ) -> Iterable:
         """Iterate over metadata shape plot items.
 
         Args:
             fmt: numeric format (e.g. "%.3f")
             lbl: if True, show shape labels
-            option: shape style option (e.g. "shape/drag")
+            option: shape style option ("s" for signal, "i" for image)
 
         Yields:
             Plot item
@@ -740,7 +748,7 @@ class ResultShape(ResultProperties):
             yield self.create_shape_item(coords, fmt, lbl, option)
 
     def create_shape_item(
-        self, coords: np.ndarray, fmt: str, lbl: bool, option: str
+        self, coords: np.ndarray, fmt: str, lbl: bool, option: Literal["s", "i"]
     ) -> (
         AnnotatedPoint
         | Marker
@@ -757,7 +765,7 @@ class ResultShape(ResultProperties):
             coords: shape data
             fmt: numeric format (e.g. "%.3f")
             lbl: if True, show shape labels
-            option: shape style option (e.g. "shape/drag")
+            option: shape style option ("s" for signal, "i" for image)
 
         Returns:
             Plot item
@@ -801,7 +809,7 @@ class ResultShape(ResultProperties):
             print(f"Warning: unsupported item {self.shapetype}", file=sys.stderr)
             return None
         if isinstance(item, AnnotatedShape):
-            config_annotated_shape(item, fmt, lbl, option)
+            config_annotated_shape(item, fmt, lbl, "results", option)
         set_plot_item_editable(item, False)
         return item
 
@@ -842,7 +850,13 @@ class ResultShape(ResultProperties):
 
 
 def make_roi_item(
-    func, coords: list, title: str, fmt: str, lbl: bool, editable: bool, option: str
+    func,
+    coords: list,
+    title: str,
+    fmt: str,
+    lbl: bool,
+    editable: bool,
+    option: Literal["s", "i"],
 ):
     """Make ROI item shape.
 
@@ -853,7 +867,7 @@ def make_roi_item(
         fmt: numeric format (e.g. "%.3f")
         lbl: if True, show shape labels
         editable: if True, make shape editable
-        option: shape style option (e.g. "shape/drag")
+        option: shape style option ("s" for signal, "i" for image)
 
     Returns:
         Plot item
@@ -861,8 +875,10 @@ def make_roi_item(
     item = func(*coords, title)
     if not editable:
         if isinstance(item, AnnotatedShape):
-            config_annotated_shape(item, fmt, lbl, option, cmp=editable)
-            item.set_style("plot", "shape/mask")
+            config_annotated_shape(item, fmt, lbl, "roi", option, cmp=editable)
+        if hasattr(item, "set_style"):
+            # TODO: Remove this `if` statement when upgrading to PlotPy 2.5
+            item.set_style("roi", option)
         item.set_movable(False)
         item.set_resizable(False)
         item.set_readonly(True)
@@ -1294,13 +1310,15 @@ class BaseObj(metaclass=BaseObjMeta):
                 yield from self.iterate_roi_items(fmt=fmt, lbl=lbl, editable=False)
             elif ResultShape.match(key, value):
                 mshape: ResultShape = ResultShape.from_metadata_entry(key, value)
-                option = f"shape/result/{self.PREFIX}"
-                yield from mshape.iterate_plot_items(fmt, lbl, option)
+                yield from mshape.iterate_plot_items(fmt, lbl, self.PREFIX)
         if self.annotations:
             try:
                 for item in json_to_items(self.annotations):
+                    section, option = "annotations", f"{self.PREFIX}/shape"
                     if isinstance(item, AnnotatedShape):
-                        config_annotated_shape(item, fmt, lbl, "shape/annotation")
+                        config_annotated_shape(item, fmt, lbl, section, option)
+                    elif isinstance(item, PolygonShape):
+                        item.set_style(section, option)
                     set_plot_item_editable(item, editable)
                     yield item
             except json.decoder.JSONDecodeError:

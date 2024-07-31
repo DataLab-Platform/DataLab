@@ -510,7 +510,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
             fmt,
             lbl,
             editable,
-            option="shape/drag",
+            option=self.PREFIX,
         )
 
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
@@ -535,7 +535,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
                     fmt,
                     lbl,
                     editable,
-                    option="shape/drag",
+                    option=self.PREFIX,
                 )
 
     @property

@@ -188,9 +188,7 @@ class ImageRoiDataItem:
         else:
             func = make_roi_circle
         title = "ROI" if index is None else f"ROI{index:02d}"
-        return base.make_roi_item(
-            func, coords, title, fmt, lbl, editable, option="shape/drag"
-        )
+        return base.make_roi_item(func, coords, title, fmt, lbl, editable, option="i")
 
 
 class ROI2DParam(gds.DataSet):
