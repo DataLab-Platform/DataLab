@@ -266,9 +266,13 @@ class ImageROIEditor(BaseROIEditor):
 
     def build_roi_buttons(self) -> list[QW.QPushButton]:
         """Build ROI buttons"""
-        rect_btn = QW.QPushButton(get_icon("rectangle.png"), _("Rectangular ROI"), self)
+        rect_btn = QW.QPushButton(
+            get_icon("roi_new_rectangle.svg"), _("Rectangular ROI"), self
+        )
         rect_btn.clicked.connect(lambda: self.add_roi(RoiDataGeometries.RECTANGLE))
-        circ_btn = QW.QPushButton(get_icon("circle.png"), _("Circular ROI"), self)
+        circ_btn = QW.QPushButton(
+            get_icon("roi_new_circle.svg"), _("Circular ROI"), self
+        )
         circ_btn.clicked.connect(lambda: self.add_roi(RoiDataGeometries.CIRCLE))
         return [rect_btn, circ_btn] + super().build_roi_buttons()
 
