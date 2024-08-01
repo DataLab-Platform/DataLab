@@ -217,9 +217,9 @@ def dst_11(
         title = f"{src.short_id}{name}"
     else:
         title = f"{name}({src.short_id})"
-        if suffix is not None:
+        if suffix:  # suffix may be None or an empty string
             title += "|"
-    if suffix is not None:
+    if suffix:  # suffix may be None or an empty string
         title += suffix
     return src.copy(title=title)
 
