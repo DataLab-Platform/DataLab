@@ -838,7 +838,7 @@ class BaseProcessor(QC.QObject):
         Returns:
             ROI data parameters or None if ROI dialog has been canceled.
         """
-        results = self.panel.get_roi_dialog(
+        results = self.panel.get_roi_editor_output(
             extract=extract, singleobj=singleobj, add_roi=add_roi
         )
         if results is None:

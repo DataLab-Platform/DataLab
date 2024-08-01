@@ -1061,7 +1061,7 @@ class BaseDataPanel(AbstractPanel):
         )
         return dlg, obj
 
-    def get_roi_dialog(
+    def get_roi_editor_output(
         self, extract: bool, singleobj: bool, add_roi: bool = False
     ) -> tuple[cdl.computation.base.ROIDataParam, bool] | None:
         """Get ROI data (array) from specific dialog box.
