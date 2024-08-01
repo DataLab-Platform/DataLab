@@ -249,7 +249,8 @@ class BaseDataPanel(AbstractPanel):
     PANEL_STR_ID = ""  # e.g. "signal"
     PARAMCLASS: SignalObj | ImageObj = None  # Replaced in child object
     ANNOTATION_TOOLS = ()
-    DIALOGSIZE = (800, 600)
+    MINDIALOGSIZE = (800, 600)
+    MAXDIALOGSIZE = 0.95  # % of DataLab's main window size
     # Replaced by the right class in child object:
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
@@ -891,8 +892,6 @@ class BaseDataPanel(AbstractPanel):
         )
         if dlg is None:
             return None
-        width, height = self.DIALOGSIZE
-        dlg.resize(width, height)
         mgr = dlg.get_manager()
         toolbar = QW.QToolBar(title, self)
         dlg.button_layout.insertWidget(0, toolbar)
@@ -998,6 +997,14 @@ class BaseDataPanel(AbstractPanel):
             toolbar=toolbar,
         )
         dlg.setWindowIcon(get_icon("DataLab.svg"))
+
+        # Resize the dialog so that it's at least MINDIALOGSIZE (absolute values),
+        # and at most MAXDIALOGSIZE (% of the main window size):
+        minwidth, minheight = self.MINDIALOGSIZE
+        maxwidth = int(self.mainwindow.width() * self.MAXDIALOGSIZE)
+        maxheight = int(self.mainwindow.height() * self.MAXDIALOGSIZE)
+        dlg.resize(min(minwidth, maxwidth), min(minheight, maxheight))
+
         if tools is not None:
             for tool in tools:
                 dlg.get_manager().add_tool(tool)

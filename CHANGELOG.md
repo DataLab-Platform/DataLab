@@ -21,6 +21,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Subtraction: ``obj3 = (obj1 - obj2) * a + b``
   * Multiplication: ``obj3 = (obj1 * obj2) * a + b``
   * Division: ``obj3 = (obj1 / obj2) * a + b``
+* Improved "View in a new window" and "ROI editor" dialog boxes size management: default size won't be larger than DataLab's main window size
 
 🛠️ Bug fixes:
 
