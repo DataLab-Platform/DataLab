@@ -1311,21 +1311,21 @@ class ButterworthParam(gds.DataSet):
 
     cut_off = gds.FloatItem(
         _("Cut-off frequency ratio"),
-        default=0.5,
+        default=0.005,
         min=0.0,
-        max=1.0,
-        help=_("Cut-off frequency ratio (0.0 - 1.0)."),
+        max=0.5,
+        help=_("Cut-off frequency ratio"),
     )
     high_pass = gds.BoolItem(
         _("High-pass filter"),
         default=False,
-        help=_("If True, apply high-pass filter instead of low-pass."),
+        help=_("If True, apply high-pass filter instead of low-pass"),
     )
     order = gds.IntItem(
         _("Order"),
         default=2,
         min=1,
-        help=_("Order of the Butterworth filter."),
+        help=_("Order of the Butterworth filter"),
     )
 
 

@@ -24,6 +24,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Butterworth filter: fix cutoff frequency ratio default value and valid range
 * Fix actions refresh issue in Image View vertical toolbar:
   * When starting DataLab with the Signal Panel active, switching to the Image View was showing "View in a new window" or "Edit Regions of interest" actions enabled in the vertical toolbar, even if no image was displayed in the Image View
   * The Image View vertical toolbar is now correctly updated at startup
