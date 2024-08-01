@@ -880,9 +880,7 @@ def make_roi_item(
         item.set_movable(False)
         item.set_resizable(False)
         item.set_readonly(True)
-    if hasattr(item, "set_style"):
-        # TODO: Remove this `if` statement when upgrading to PlotPy 2.5
-        item.set_style("roi", option)
+    item.set_style("roi", option)
     return item
 
 
