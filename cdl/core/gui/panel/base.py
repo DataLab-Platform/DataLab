@@ -1088,7 +1088,7 @@ class BaseDataPanel(AbstractPanel):
         roi_editor: roieditor.SignalROIEditor | roieditor.ImageROIEditor = (
             self.ROIDIALOGCLASS(dlg, obj, extract, singleobj)
         )
-        dlg.plot_layout.addWidget(roi_editor, 1, 0, 1, 1)
+        dlg.button_layout.insertWidget(0, roi_editor)
         if add_roi:
             roi_editor.add_roi()
         if exec_dialog(dlg):

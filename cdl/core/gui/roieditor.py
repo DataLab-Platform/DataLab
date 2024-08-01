@@ -28,9 +28,11 @@ import abc
 from typing import TYPE_CHECKING, Union
 
 from guidata.configtools import get_icon
+from guidata.qthelpers import create_toolbutton
 from plotpy.builder import make
 from plotpy.interfaces import IImageItemType
 from plotpy.items import AnnotatedCircle, ObjectInfo
+from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl.computation.base import ROIDataParam
@@ -63,6 +65,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         singleobj: bool | None = None,
     ) -> None:
         super().__init__(parent)
+        self.plot_dialog = parent
         parent.accepted.connect(self.dialog_accepted)
         self.plot = parent.get_plot()
         self.obj = obj
@@ -78,8 +81,8 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
             self.plot.add_item(roi_item)
             self.plot.set_active_item(roi_item)
 
-        self.remove_all_btn: QW.QPushButton | None = None
-        self.singleobj_btn: QW.QCheckBox | None = None
+        self.remove_all_btn: QW.QToolButton | None = None
+        self.singleobj_btn: QW.QToolButton | None = None
         self.setup_widget()
 
         # force update of ROI titles and remove_all_btn state
@@ -105,11 +108,10 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     def modified(self, value: bool):
         """Set dialog modified state"""
         self.__modified = value
-        dlg = self.parent()
         if self.extract:
             #  In "extract mode", OK button is enabled when at least one ROI is defined
             value = value and len(self.roi_items) > 0
-        dlg.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(value)
+        self.plot_dialog.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(value)
 
     def dialog_accepted(self):
         """Parent dialog was accepted: updating ROI Editor data"""
@@ -132,12 +134,15 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         """
         return self.__data, self.modified
 
-    def build_roi_buttons(self) -> list[QW.QPushButton]:
+    def build_roi_buttons(self) -> list[QW.QToolButton | QW.QFrame]:
         """Build ROI buttons"""
-        self.remove_all_btn = QW.QPushButton(
-            get_icon("roi_delete.svg"), _("Remove all ROIs"), self
+        self.remove_all_btn = create_toolbutton(
+            self,
+            get_icon("roi_delete.svg"),
+            _("Remove all ROIs"),
+            self.remove_all_rois,
+            autoraise=True,
         )
-        self.remove_all_btn.clicked.connect(self.remove_all_rois)
         # Return a vertical bar to separate the buttons in the layout
         vert_sep = QW.QFrame(self)
         vert_sep.setFrameShape(QW.QFrame.VLine)
@@ -148,6 +153,8 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         """Setup ROI editor widget"""
         layout = QW.QHBoxLayout()
         for btn in self.build_roi_buttons():
+            if isinstance(btn, QW.QToolButton):
+                btn.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
             layout.addWidget(btn)
         if self.extract:
             self.singleobj_btn = QW.QCheckBox(
@@ -228,10 +235,11 @@ class SignalROIEditor(BaseROIEditor):
     ICON_NAME = "signal_roi.svg"
     OBJ_NAME = _("signal")
 
-    def build_roi_buttons(self) -> list[QW.QPushButton]:
+    def build_roi_buttons(self) -> list[QW.QToolButton | QW.QFrame]:
         """Build ROI buttons"""
-        add_btn = QW.QPushButton(get_icon(self.ICON_NAME), _("Add ROI"), self)
-        add_btn.clicked.connect(self.add_roi)
+        add_btn = create_toolbutton(
+            self, get_icon(self.ICON_NAME), _("Add ROI"), self.add_roi, autoraise=True
+        )
         return [add_btn] + super().build_roi_buttons()
 
     def setup_widget(self):
@@ -264,16 +272,22 @@ class ImageROIEditor(BaseROIEditor):
     ICON_NAME = "image_roi.svg"
     OBJ_NAME = _("image")
 
-    def build_roi_buttons(self) -> list[QW.QPushButton]:
+    def build_roi_buttons(self) -> list[QW.QToolButton | QW.QFrame]:
         """Build ROI buttons"""
-        rect_btn = QW.QPushButton(
-            get_icon("roi_new_rectangle.svg"), _("Rectangular ROI"), self
+        rect_btn = create_toolbutton(
+            self,
+            get_icon("roi_new_rectangle.svg"),
+            _("Rectangular ROI"),
+            lambda: self.add_roi(RoiDataGeometries.RECTANGLE),
+            autoraise=True,
         )
-        rect_btn.clicked.connect(lambda: self.add_roi(RoiDataGeometries.RECTANGLE))
-        circ_btn = QW.QPushButton(
-            get_icon("roi_new_circle.svg"), _("Circular ROI"), self
+        circ_btn = create_toolbutton(
+            self,
+            get_icon("roi_new_circle.svg"),
+            _("Circular ROI"),
+            lambda: self.add_roi(RoiDataGeometries.CIRCLE),
+            autoraise=True,
         )
-        circ_btn.clicked.connect(lambda: self.add_roi(RoiDataGeometries.CIRCLE))
         return [rect_btn, circ_btn] + super().build_roi_buttons()
 
     def setup_widget(self):
