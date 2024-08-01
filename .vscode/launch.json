@@ -75,9 +75,10 @@
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
             "python": "${config:python.defaultInterpreterPath}",
-            // "pythonArgs": [
-            //     "-W error::DeprecationWarning",
-            // ],
+            "pythonArgs": [
+                "-W error::DeprecationWarning",
+                "-W error::RuntimeWarning",
+            ],
             "justMyCode": false,
             "args": [
                 "--unattended",

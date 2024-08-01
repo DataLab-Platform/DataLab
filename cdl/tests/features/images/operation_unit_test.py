@@ -199,6 +199,7 @@ def test_image_arithmetic() -> None:
                 p.factor = a
                 for b in (0.0, 1.0, 2.0):
                     p.constant = b
+                    ima2.data = np.clip(ima2.data, 1, None)  # Avoid division by zero
                     ima3 = cpi.compute_arithmetic(ima1, ima2, p)
                     if o in ("×", "/") and a == 0.0:
                         exp = np.ones_like(ima1.data) * b
