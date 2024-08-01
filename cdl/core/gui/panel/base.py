@@ -1076,7 +1076,9 @@ class BaseDataPanel(AbstractPanel):
         """
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
-        dlg, obj = self.create_new_dialog_for_selection(roi_s, "roi_dialog", options)
+        dlg, obj = self.create_new_dialog_for_selection(
+            roi_s, "roi_dialog", options, toolbar=True
+        )
         if dlg is None:
             return None
         plot = dlg.get_plot()

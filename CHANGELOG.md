@@ -22,6 +22,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Multiplication: ``obj3 = (obj1 * obj2) * a + b``
   * Division: ``obj3 = (obj1 / obj2) * a + b``
 * Improved "View in a new window" and "ROI editor" dialog boxes size management: default size won't be larger than DataLab's main window size
+* Added toolbars to the "ROI editor" dialog box for both Signal and Image panels, to allow to zoom in and out, and to reset the zoom level easily
 
 🛠️ Bug fixes:
 
