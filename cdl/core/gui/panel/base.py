@@ -988,6 +988,13 @@ class BaseDataPanel(AbstractPanel):
         if options is not None:
             plot_options = plot_options.copy(options)
 
+        # Resize the dialog so that it's at least MINDIALOGSIZE (absolute values),
+        # and at most MAXDIALOGSIZE (% of the main window size):
+        minwidth, minheight = self.MINDIALOGSIZE
+        maxwidth = int(self.mainwindow.width() * self.MAXDIALOGSIZE)
+        maxheight = int(self.mainwindow.height() * self.MAXDIALOGSIZE)
+        size = min(minwidth, maxwidth), min(minheight, maxheight)
+
         # pylint: disable=not-callable
         dlg = PlotDialog(
             parent=self.parent(),
@@ -995,15 +1002,9 @@ class BaseDataPanel(AbstractPanel):
             edit=edit,
             options=plot_options,
             toolbar=toolbar,
+            size=size,
         )
         dlg.setWindowIcon(get_icon("DataLab.svg"))
-
-        # Resize the dialog so that it's at least MINDIALOGSIZE (absolute values),
-        # and at most MAXDIALOGSIZE (% of the main window size):
-        minwidth, minheight = self.MINDIALOGSIZE
-        maxwidth = int(self.mainwindow.width() * self.MAXDIALOGSIZE)
-        maxheight = int(self.mainwindow.height() * self.MAXDIALOGSIZE)
-        dlg.resize(min(minwidth, maxwidth), min(minheight, maxheight))
 
         if tools is not None:
             for tool in tools:
