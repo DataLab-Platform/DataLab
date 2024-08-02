@@ -4,7 +4,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ## DataLab Version 0.17.0 ##
 
-ℹ️ PlotPy v2.5 is required for this release.
+ℹ️ PlotPy v2.6 is required for this release.
 
 💥 New features and enhancements:
 
