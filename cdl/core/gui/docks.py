@@ -329,15 +329,22 @@ class DockablePlotWidget(DockableWidget):
         title = self.toolbar.windowTitle()
         self.plotwidget.get_manager().add_toolbar(self.toolbar, title)
         #  Customizing widget appearances
+        self.update_color_mode()
         plot = self.plotwidget.get_plot()
-        if not is_dark_mode():
-            for widget in (self.plotwidget, plot, self):
-                widget.setBackgroundRole(QG.QPalette.Window)
-                widget.setAutoFillBackground(True)
-                widget.setPalette(QG.QPalette(QC.Qt.white))
         canvas = plot.canvas()
         canvas.setFrameStyle(canvas.Plain | canvas.NoFrame)
         plot.SIG_ITEMS_CHANGED.connect(self.update_watermark)
+
+    def update_color_mode(self) -> None:
+        """Update plot widget styles according to application color mode"""
+        if is_dark_mode():
+            palette = QApplication.instance().palette()
+        else:
+            palette = QG.QPalette(QC.Qt.white)
+        for widget in (self.plotwidget, self.plotwidget.get_plot(), self):
+            widget.setBackgroundRole(QG.QPalette.Window)
+            widget.setAutoFillBackground(True)
+            widget.setPalette(palette)
 
     def get_plot(self) -> BasePlot:
         """Return plot instance"""
