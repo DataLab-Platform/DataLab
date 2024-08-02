@@ -25,6 +25,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * ROI editor:
   * Added toolbars for both Signal and Image ROI editors, to allow to zoom in and out, and to reset the zoom level easily
   * Rearranged the buttons in the ROI editor dialog box for better ergonomics and consistency with the Annotations editor ("View in a new window" dialog box)
+* Application color theme:
+  * Added support for color theme (auto, light, dark) in the "Settings" dialog box
+  * The color theme is applied without restarting the application
 
 🛠️ Bug fixes:
 

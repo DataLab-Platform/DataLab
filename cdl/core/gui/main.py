@@ -32,6 +32,7 @@ from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
 from plotpy.builder import make
+from plotpy.config import set_plotpy_dark_mode
 from plotpy.constants import PlotType
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -132,13 +133,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Initialize main window"""
         CDLMainWindow.__instance = self
         super().__init__()
-        win32_fix_title_bar_background(self)
         self.setObjectName(APP_NAME)
         self.setWindowIcon(get_icon("DataLab.svg"))
 
         execenv.log(self, "Starting initialization")
-
-        self.__restore_pos_and_size()
 
         self.ready_flag = True
 
@@ -178,6 +176,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.view_menu: QW.QMenu | None = None
         self.help_menu: QW.QMenu | None = None
 
+        self.__update_color_mode()
+
         self.__is_modified = False
         self.set_modified(False)
 
@@ -192,6 +192,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             console = Conf.console.console_enabled.get()
         self.setup(console)
 
+        self.__restore_pos_and_size()
         execenv.log(self, "Initialization done")
 
     # ------API related to XML-RPC remote control
@@ -1589,10 +1590,29 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
               <p>{adv_conf}""",
         )
 
+    def __update_color_mode(self) -> None:
+        """Update color mode"""
+        color_mode = Conf.main.color_mode.get()
+        if color_mode != "auto":
+            set_plotpy_dark_mode(color_mode == "dark")
+            if self.docks is not None:
+                for dock in self.docks.values():
+                    widget = dock.widget()
+                    if isinstance(widget, DockablePlotWidget):
+                        widget.update_color_mode()
+            if self.console is not None:
+                self.console.update_color_mode()
+                self.console.clear()
+            if self.macropanel is not None:
+                self.macropanel.update_color_mode()
+        win32_fix_title_bar_background(self)
+
     def __edit_settings(self) -> None:
         """Edit settings"""
         changed_options = edit_settings(self)
         for option in changed_options:
+            if option == "color_mode":
+                self.__update_color_mode()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()

@@ -94,6 +94,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    color_mode = conf.EnumOption(["auto", "dark", "light"])
     process_isolation_enabled = conf.Option()
     rpc_server_enabled = conf.Option()
     rpc_server_port = conf.Option()
@@ -282,6 +283,7 @@ def initialize():
     # options default values are set when used in the application code.
     #
     # Main section
+    Conf.main.color_mode.get("auto")
     Conf.main.process_isolation_enabled.get(True)
     Conf.main.rpc_server_enabled.get(True)
     Conf.main.traceback_log_path.get(f".{APP_NAME}_traceback.log")

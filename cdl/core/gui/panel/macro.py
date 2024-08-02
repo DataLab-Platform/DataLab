@@ -213,6 +213,13 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
         self.setup_actions()
 
+    def update_color_mode(self) -> None:
+        """Update color mode according to the current theme"""
+        self.console.update_color_mode()
+        self.console.clear()
+        for macro in self.__macros:
+            macro.editor.update_color_mode()
+
     # ------AbstractPanel interface-----------------------------------------------------
     # pylint: disable=unused-argument
     def get_serializable_name(self, obj: Macro) -> str:

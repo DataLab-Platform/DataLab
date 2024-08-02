@@ -93,6 +93,27 @@ class Option:
         CONF.remove_option(self.section, self.option)
 
 
+class EnumOption(Option):
+    """Enum configuration option handler"""
+
+    def __init__(self, choices: list[str | int | float]) -> None:
+        super().__init__()
+        self.choices = choices
+
+    def get(self, default=NoDefault) -> str | int | float:
+        """Get configuration option value"""
+        value = super().get(default)
+        if value not in self.choices:
+            raise ValueError(f"Invalid configuration option value {value}")
+        return value
+
+    def set(self, value: str | int | float) -> None:
+        """Set configuration option value"""
+        if value not in self.choices:
+            raise ValueError(f"Invalid configuration option value {value}")
+        super().set(value)
+
+
 class ConfigPathOption(Option):
     """Configuration file path configuration option handler"""
 
