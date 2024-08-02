@@ -33,7 +33,6 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * Intensity profile / Segment profile extraction:
   * When extracting a profile on an image with a ROI defined, the associated PlotPy feature show a warning message ('UserWarning: Warning: converting a masked element to nan.') but the profile is correctly extracted and displayed, with NaN values where the ROI is not defined.
-  * This warning message will persist until PlotPy v2.5.2 is released
   * NaN values are now removed from the profile before plotting it
 * Simple processing features with a one-to-on mapping with a Python function (e.g. `numpy.absolute`, `numpy.log10`, etc.) and without parameters: fix result object title which was systematically ending with "|" (the character that usually precedes the list of parameters)
 * Butterworth filter: fix cutoff frequency ratio default value and valid range

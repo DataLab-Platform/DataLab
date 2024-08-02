@@ -12,7 +12,6 @@
 
 from __future__ import annotations
 
-import warnings
 from collections.abc import Callable
 from typing import Any, Literal
 
@@ -867,12 +866,7 @@ def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
     p.row2 = min(p.row2, data.shape[0] - 1)
     p.col2 = min(p.col2, data.shape[1] - 1)
     suffix = f"({p.row1}, {p.col1})-({p.row2}, {p.col2})"
-
-    # TODO: Remove the warning catch when upgrading to PlotPy >= 2.5.2
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", UserWarning)
-        x, y = csline(data, p.row1, p.col1, p.row2, p.col2)
-
+    x, y = csline(data, p.row1, p.col1, p.row2, p.col2)
     x, y = x[~np.isnan(y)], y[~np.isnan(y)]  # Remove NaN values
     dst = dst_11_signal(src, "segment_profile", suffix)
     dst.set_xydata(np.array(x, dtype=float), np.array(y, dtype=float))
