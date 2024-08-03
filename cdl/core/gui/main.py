@@ -28,11 +28,12 @@ import guidata.dataset as gds
 import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
+from guidata import qthelpers as guidata_qth
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
+from plotpy import config as plotpy_config
 from plotpy.builder import make
-from plotpy.config import set_plotpy_dark_mode
 from plotpy.constants import PlotType
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -64,7 +65,7 @@ from cdl.env import execenv
 from cdl.plugins import PluginRegistry, discover_plugins
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
-from cdl.utils.misc import go_to_error
+from cdl.utils.misc import compare_versions, go_to_error
 from cdl.utils.qthelpers import (
     add_corner_menu,
     bring_to_front,
@@ -1592,20 +1593,50 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def __update_color_mode(self) -> None:
         """Update color mode"""
-        color_mode = Conf.main.color_mode.get()
-        if color_mode != "auto":
-            set_plotpy_dark_mode(color_mode == "dark")
-            if self.docks is not None:
-                for dock in self.docks.values():
-                    widget = dock.widget()
-                    if isinstance(widget, DockablePlotWidget):
-                        widget.update_color_mode()
-            if self.console is not None:
-                self.console.update_color_mode()
-                self.console.clear()
-            if self.macropanel is not None:
-                self.macropanel.update_color_mode()
-        win32_fix_title_bar_background(self)
+        mode = Conf.main.color_mode.get()
+
+        # Prevent Qt from refreshing the window when changing the color mode:
+        self.setUpdatesEnabled(False)
+
+        # TODO: Simplify when PlotPy and guidata are updated to use the same API
+        # ------------------------------------------------------------------------------
+
+        # In time, we will remove the following block and simply use the following line:
+        # guidata_qth.set_color_mode(mode)
+        if hasattr(guidata_qth, "get_color_mode"):  # 'get...' is intentional
+            # guidata >= 2.6.1
+            guidata_qth.set_color_mode(mode)
+        elif mode == "auto":
+            # guidata < 2.6.1
+            mode = "dark" if guidata_qth.darkdetect.isDark() else "light"
+            guidata_qth.set_dark_mode(mode == "dark")
+
+        # In time, we will remove the following block and simply use the following line:
+        # plotpy_config.set_plotpy_color_mode(mode)
+        if hasattr(plotpy_config, "set_plotpy_color_mode"):
+            # PlotPy >= 3.6.1
+            plotpy_config.set_plotpy_color_mode(mode)
+        else:
+            # PlotPy 3.6.0
+            if mode == "auto":
+                mode = "dark" if guidata_qth.darkdetect.isDark() else "light"
+            plotpy_config.set_plotpy_dark_mode(mode == "dark")
+
+        # ------------------------------------------------------------------------------
+
+        if self.console is not None:
+            self.console.update_color_mode()
+        if self.macropanel is not None:
+            self.macropanel.update_color_mode()
+        if self.docks is not None:
+            for dock in self.docks.values():
+                widget = dock.widget()
+                if isinstance(widget, DockablePlotWidget):
+                    widget.update_color_mode()
+        # win32_fix_title_bar_background(self)
+
+        # Allow Qt to refresh the window:
+        self.setUpdatesEnabled(True)
 
     def __edit_settings(self) -> None:
         """Edit settings"""
