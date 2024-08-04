@@ -1633,7 +1633,6 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 widget = dock.widget()
                 if isinstance(widget, DockablePlotWidget):
                     widget.update_color_mode()
-        # win32_fix_title_bar_background(self)
 
         # Allow Qt to refresh the window:
         self.setUpdatesEnabled(True)
