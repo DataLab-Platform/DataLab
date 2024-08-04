@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING
 
 import scipy.integrate as spt
 from guidata.configtools import get_icon, get_image_file_path
-from guidata.qthelpers import create_action, is_dark_mode
+from guidata.qthelpers import create_action, is_dark_theme
 from guidata.widgets.dockable import DockableWidget
 from plotpy.constants import PlotType
 from plotpy.items import CurveItem
@@ -337,7 +337,7 @@ class DockablePlotWidget(DockableWidget):
 
     def update_color_mode(self) -> None:
         """Update plot widget styles according to application color mode"""
-        if is_dark_mode():
+        if is_dark_theme():
             palette = QApplication.instance().palette()
         else:
             palette = QG.QPalette(QC.Qt.white)

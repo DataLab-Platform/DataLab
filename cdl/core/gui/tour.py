@@ -54,7 +54,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from guidata.configtools import get_icon, get_image_file_path
-from guidata.qthelpers import is_dark_mode
+from guidata.qthelpers import is_dark_theme
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -143,7 +143,7 @@ class Cover(QW.QWidget):
         """
         super().paintEvent(event)
         painter = QG.QPainter(self)
-        painter.setOpacity((0.75 if is_dark_mode() else 0.5) * self.__opacity_factor)
+        painter.setOpacity((0.75 if is_dark_theme() else 0.5) * self.__opacity_factor)
         painter.setBrush(QG.QBrush(QC.Qt.black))
         painter.setPen(QC.Qt.NoPen)
         painter.drawPath(self.__path)
@@ -297,11 +297,11 @@ class StepDialog(QW.QDialog):
             logo.setPixmap(QG.QPixmap(get_image_file_path("DataLab-Banner2-100.png")))
             logo.setAlignment(QC.Qt.AlignCenter)
             self._layout.addWidget(logo)
-        title_color = QC.Qt.lightGray if is_dark_mode() else QC.Qt.darkGray
+        title_color = QC.Qt.lightGray if is_dark_theme() else QC.Qt.darkGray
         title = self.__create_label(self.step.title, 1, title_color, True)
         self._layout.addWidget(title)
         self._layout.addWidget(self.__create_horizontal_line())
-        label_color = QC.Qt.cyan if is_dark_mode() else QC.Qt.darkBlue
+        label_color = QC.Qt.cyan if is_dark_theme() else QC.Qt.darkBlue
         label_dsize = 3 if self.step.step_type == "regular" else 4
         label = self.__create_label(self.step.text, label_dsize, label_color)
         if self.step.step_type == "regular":
