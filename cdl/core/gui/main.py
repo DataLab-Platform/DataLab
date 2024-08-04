@@ -177,7 +177,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.view_menu: QW.QMenu | None = None
         self.help_menu: QW.QMenu | None = None
 
-        self.__update_color_mode()
+        self.__update_color_mode(startup=True)
 
         self.__is_modified = False
         self.set_modified(False)
@@ -1591,9 +1591,17 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
               <p>{adv_conf}""",
         )
 
-    def __update_color_mode(self) -> None:
-        """Update color mode"""
+    def __update_color_mode(self, startup: bool = False) -> None:
+        """Update color mode
+
+        Args:
+            startup: True if method is called during application startup (in that case,
+             color theme is applied only if mode != "auto")
+        """
         mode = Conf.main.color_mode.get()
+        if startup and mode == "auto":
+            guidata_qth.win32_fix_title_bar_background(self)
+            return
 
         # Prevent Qt from refreshing the window when changing the color mode:
         self.setUpdatesEnabled(False)
