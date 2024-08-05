@@ -30,7 +30,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata import qthelpers as guidata_qth
 from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
+from guidata.qthelpers import add_actions, create_action
 from guidata.widgets.console import DockableConsole
 from plotpy import config as plotpy_config
 from plotpy.builder import make
@@ -65,7 +65,7 @@ from cdl.env import execenv
 from cdl.plugins import PluginRegistry, discover_plugins
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
-from cdl.utils.misc import compare_versions, go_to_error
+from cdl.utils.misc import go_to_error
 from cdl.utils.qthelpers import (
     add_corner_menu,
     bring_to_front,
