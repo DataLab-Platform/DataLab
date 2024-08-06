@@ -1606,21 +1606,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         # Prevent Qt from refreshing the window when changing the color mode:
         self.setUpdatesEnabled(False)
 
-        # TODO: Simplify when PlotPy >= 2.6.1 is released
-        # ------------------------------------------------------------------------------
-
-        # In time, we will remove the following block and simply use the following line:
-        # plotpy_config.set_plotpy_color_mode(mode)
-        if hasattr(plotpy_config, "set_plotpy_color_mode"):
-            # PlotPy >= 2.6.1
-            plotpy_config.set_plotpy_color_mode(mode)
-        else:
-            # PlotPy 2.6.0
-            if mode == "auto":
-                mode = "dark" if guidata_qth.darkdetect.isDark() else "light"
-            plotpy_config.set_plotpy_dark_mode(mode == "dark")
-
-        # ------------------------------------------------------------------------------
+        plotpy_config.set_plotpy_color_mode(mode)
 
         if self.console is not None:
             self.console.update_color_mode()
