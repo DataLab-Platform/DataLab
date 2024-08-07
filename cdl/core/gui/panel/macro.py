@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 from guidata.config import CONF
 from guidata.configtools import get_font, get_icon
-from guidata.qthelpers import add_actions, create_action, is_dark_mode
+from guidata.qthelpers import add_actions, create_action
 from guidata.widgets.console.shell import PythonShellWidget
 from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
@@ -175,7 +175,6 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.tabwidget_tb.setOrientation(QC.Qt.Vertical)
 
         self.console = PythonShellWidget(self, read_only=True)
-        self.console.set_light_background(not is_dark_mode())
         self.console.setMaximumBlockCount(5000)
         font = get_font(CONF, "console")
         font.setPointSize(10)
@@ -212,6 +211,12 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.__macros: list[Macro] = []
 
         self.setup_actions()
+
+    def update_color_mode(self) -> None:
+        """Update color mode according to the current theme"""
+        self.console.update_color_mode()
+        for macro in self.__macros:
+            macro.editor.update_color_mode()
 
     # ------AbstractPanel interface-----------------------------------------------------
     # pylint: disable=unused-argument

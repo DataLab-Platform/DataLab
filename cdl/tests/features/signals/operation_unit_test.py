@@ -31,11 +31,11 @@ def __create_two_signals() -> tuple[cdl.obj.SignalObj, cdl.obj.SignalObj]:
 
 
 def __create_one_signal_and_constant() -> (
-    tuple[cdl.obj.SignalObj, cdl.param.ConstantOperationParam]
+    tuple[cdl.obj.SignalObj, cdl.param.ConstantParam]
 ):
     """Create one signal and a constant for testing."""
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=100)
-    param = cdl.param.ConstantOperationParam.create(value=-np.pi)
+    param = cdl.param.ConstantParam.create(value=-np.pi)
     return s1, param
 
 
@@ -182,6 +182,30 @@ def test_signal_power() -> None:
     check_array_result("Power", power_signal.y, s1.y**p.power)
 
 
+@pytest.mark.validation
+def test_signal_arithmetic() -> None:
+    """Arithmetic operations validation test."""
+    s1, s2 = __create_two_signals()
+    p = cdl.param.ArithmeticParam.create()
+    for operator in p.operators:
+        p.operator = operator
+        for factor in (0.0, 1.0, 2.0):
+            p.factor = factor
+            for constant in (0.0, 1.0, 2.0):
+                p.constant = constant
+                s3 = cps.compute_arithmetic(s1, s2, p)
+                if operator == "+":
+                    exp = s1.y + s2.y
+                elif operator == "×":
+                    exp = s1.y * s2.y
+                elif operator == "-":
+                    exp = s1.y - s2.y
+                elif operator == "/":
+                    exp = s1.y / s2.y
+                exp = exp * factor + constant
+                check_array_result(f"Arithmetic [{p.get_operation()}]", s3.y, exp)
+
+
 if __name__ == "__main__":
     test_signal_addition()
     test_signal_product()
@@ -200,3 +224,4 @@ if __name__ == "__main__":
     test_signal_log10()
     test_signal_sqrt()
     test_signal_power()
+    test_signal_arithmetic()

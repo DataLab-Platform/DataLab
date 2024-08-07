@@ -148,12 +148,12 @@
             }
         },
         {
-            "label": "Update validation status",
+            "label": "Update doc resources (statically generated)",
             "type": "shell",
             "command": "cmd",
             "args": [
                 "/c",
-                "update_validation_status.bat"
+                "update_doc_resources.bat"
             ],
             "options": {
                 "cwd": "scripts",

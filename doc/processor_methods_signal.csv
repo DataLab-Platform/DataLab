@@ -1,0 +1,59 @@
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_abs`,Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant`,Compute sum with a constant
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_arithmetic`,Compute arithmetic operation between two signals
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_astype`,Convert data type with :py:func:`cdl.computation.signal.compute_astype`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_average`,Compute average with :py:func:`cdl.computation.signal.compute_addition`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`,Compute band-pass filter
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop`,Compute band-stop filter
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db`,Compute bandwidth at -3dB
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_calibration`,Compute data linear calibration
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_clip`,Compute maximum data clipping
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_contrast`,Compute contrast with :py:func:`cdl.computation.signal.compute_contrast`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_convolution`,Compute convolution
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_derivative`,Compute derivative
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_detrending`,Compute detrending
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_difference`,Compute difference between two signals
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant`,Compute difference with a constant
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_division`,Compute division between two signals
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant`,Compute division by a constant
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters`,"Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)"
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_exp`,Compute Log10 with :py:func:`cdl.computation.signal.compute_exp`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fft`,Compute FFT with :py:func:`cdl.computation.signal.compute_fft`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fit`,Compute fitting curve using an interactive dialog
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2`,Compute FW at 1/e² with :py:func:`cdl.computation.signal.compute_fw1e2`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm`,Compute FWHM with :py:func:`cdl.computation.signal.compute_fwhm`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter`,Compute gaussian filter
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_highpass`,Compute high-pass filter
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_histogram`,Compute histogram
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_ifft`,Compute iFFT with :py:func:`cdl.computation.signal.compute_ifft`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_im`,Compute imaginary part with :py:func:`cdl.computation.signal.compute_im`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_integral`,Compute integral with :py:func:`cdl.computation.signal.compute_integral`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation`,Compute interpolation
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_log10`,Compute Log10 with :py:func:`cdl.computation.signal.compute_log10`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass`,Compute high-pass filter
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum`,Compute magnitude spectrum
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average`,Compute moving average
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median`,Compute moving median
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit`,Compute multi-Gaussian fitting curve using an interactive dialog
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_normalize`,Normalize data with :py:func:`cdl.computation.signal.compute_normalize`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction`,Compute offset correction
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection`,Detect peaks from data
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum`,Compute phase spectrum
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit`,Compute polynomial fitting curve
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_power`,Compute power with :py:func:`cdl.computation.signal.compute_power`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_product`,Compute product with :py:func:`cdl.computation.signal.compute_product`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant`,Compute product with a constant
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_psd`,Compute power spectral density
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference`,Compute quadratic difference between two signals
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_re`,Compute real part with :py:func:`cdl.computation.signal.compute_re`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_resampling`,Compute resampling
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x`,Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period`,Compute sampling rate and period (mean and std)
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt`,Compute square root with :py:func:`cdl.computation.signal.compute_sqrt`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_stats`,Compute data statistics
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sum`,Compute sum with :py:func:`cdl.computation.signal.compute_addition`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes`,Swap data axes with :py:func:`cdl.computation.signal.compute_swap_axes`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_wiener`,Compute Wiener filter
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_windowing`,Compute windowing
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax`,Compute x at min/max

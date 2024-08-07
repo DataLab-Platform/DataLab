@@ -26,6 +26,11 @@ class MainSettings(gds.DataSet):
     """DataLab main settings"""
 
     g0 = gds.BeginGroup(_("Settings for main window and general features"))
+    color_mode = gds.ChoiceItem(
+        _("Color mode"),
+        zip(Conf.main.color_mode.values, Conf.main.color_mode.values),
+        help=_("Color mode for the application"),
+    )
     process_isolation_enabled = gds.BoolItem(
         "",
         _("Process isolation"),
@@ -297,4 +302,5 @@ def edit_settings(parent: QW.QWidget) -> None:
         for vis_defaults in ("ima_defaults",):
             if getattr(paramdict["view"], vis_defaults):
                 changed_options.append(vis_defaults)
+
     return changed_options

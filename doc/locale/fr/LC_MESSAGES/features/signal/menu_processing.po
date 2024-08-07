@@ -34,12 +34,12 @@ msgstr ""
 #: ../../doc/features/signal/menu_processing.rst:10
 msgid ""
 ":ref:`sig-menu-operations` for more information on operations that can be"
-" performed on signals, or :ref:`sig-menu-computing` for information on "
-"computing features on signals."
+" performed on signals, or :ref:`sig-menu-analysis` for information on "
+"analysis features on signals."
 msgstr ""
 ":ref:`sig-menu-operations` pour plus d'informations sur les opérations "
-"qui peuvent être effectuées sur les signaux, ou :ref:`sig-menu-computing`"
-" pour des informations sur les fonctionnalités de calcul sur les signaux."
+"qui peuvent être effectuées sur les signaux, ou :ref:`sig-menu-analysis`"
+" pour des informations sur les fonctionnalités d'analyse des signaux."
 
 #: ../../doc/features/signal/menu_processing.rst:16
 msgid "Screenshot of the \"Processing\" menu."
@@ -134,7 +134,7 @@ msgid ""
 " maximum, amplitude, sum, energy or RMS:"
 msgstr ""
 "Crée un signal à partir de la normalisation de chaque signal sélectionné "
-"par maximum, amplitude, somme, énergie ou RMS :"
+"par maximum, amplitude, somme, énergie ou RMS :"
 
 #: ../../doc/features/signal/menu_processing.rst:68
 msgid "Normalization"
@@ -221,7 +221,7 @@ msgstr "Crée un signal à partir du débruitage de chaque signal sélectionné.
 #: ../../doc/features/signal/menu_processing.rst:97
 #: ../../doc/features/signal/menu_processing.rst:155
 msgid "The following filters are available:"
-msgstr "Les filtres suivants sont disponibles :"
+msgstr "Les filtres suivants sont disponibles :"
 
 #: ../../doc/features/signal/menu_processing.rst:103
 #: ../../doc/features/signal/menu_processing.rst:161
@@ -287,7 +287,7 @@ msgstr ""
 
 #: ../../doc/features/signal/menu_processing.rst:119
 msgid "The following functions are available:"
-msgstr "Les fonctions suivantes sont disponibles :"
+msgstr "Les fonctions suivantes sont disponibles :"
 
 #: ../../doc/features/signal/menu_processing.rst:125
 msgid "Function"
@@ -436,7 +436,7 @@ msgstr "Filtre les fréquences à l'intérieur d'une plage"
 
 #: ../../doc/features/signal/menu_processing.rst:192
 msgid "For each filter, the following methods are available:"
-msgstr "Pour chaque filtre, les méthodes suivantes sont disponibles :"
+msgstr "Pour chaque filtre, les méthodes suivantes sont disponibles :"
 
 #: ../../doc/features/signal/menu_processing.rst:198
 #: ../../doc/features/signal/menu_processing.rst:307
@@ -631,7 +631,7 @@ msgstr ""
 
 #: ../../doc/features/signal/menu_processing.rst:246
 msgid "The following window functions are available:"
-msgstr "Les fonctions de fenêtrage suivantes sont disponibles :"
+msgstr "Les fonctions de fenêtrage suivantes sont disponibles :"
 
 #: ../../doc/features/signal/menu_processing.rst:252
 msgid "Window function"
@@ -804,7 +804,7 @@ msgstr ""
 #: ../../doc/features/signal/menu_processing.rst:299
 #: ../../doc/features/signal/menu_processing.rst:343
 msgid "The following parameters are available:"
-msgstr "Les paramètres suivants sont disponibles :"
+msgstr "Les paramètres suivants sont disponibles :"
 
 #: ../../doc/features/signal/menu_processing.rst:308
 msgid ""
@@ -834,7 +834,7 @@ msgstr ""
 
 #: ../../doc/features/signal/menu_processing.rst:317
 msgid "The following interpolation methods are available:"
-msgstr "Les méthodes d'interpolation suivantes sont disponibles :"
+msgstr "Les méthodes d'interpolation suivantes sont disponibles :"
 
 #: ../../doc/features/signal/menu_processing.rst:326
 msgid ""

@@ -17,7 +17,7 @@ from __future__ import annotations
 import guidata.dataset as gds
 from skimage import exposure
 
-from cdl.computation.image import VALID_DTYPES_STRLIST, dst_11
+from cdl.computation.image import VALID_DTYPES_STRLIST, dst_11, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
 
@@ -40,7 +40,7 @@ class AdjustGammaParam(gds.DataSet):
 
 
 def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
-    """Gamma correction
+    """Gamma correction with :py:func:`skimage.exposure.adjust_gamma`
 
     Args:
         src: input image object
@@ -51,6 +51,7 @@ def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
     """
     dst = dst_11(src, "adjust_gamma", f"gamma={p.gamma}, gain={p.gain}")
     dst.data = exposure.adjust_gamma(src.data, gamma=p.gamma, gain=p.gain)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -71,7 +72,7 @@ class AdjustLogParam(gds.DataSet):
 
 
 def compute_adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
-    """Compute log correction
+    """Compute log correction with :py:func:`skimage.exposure.adjust_log`
 
     Args:
         src: input image object
@@ -82,6 +83,7 @@ def compute_adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
     """
     dst = dst_11(src, "adjust_log", f"gain={p.gain}, inv={p.inv}")
     dst.data = exposure.adjust_log(src.data, gain=p.gain, inv=p.inv)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -109,7 +111,7 @@ class AdjustSigmoidParam(gds.DataSet):
 
 
 def compute_adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
-    """Compute sigmoid correction
+    """Compute sigmoid correction with :py:func:`skimage.exposure.adjust_sigmoid`
 
     Args:
         src: input image object
@@ -124,6 +126,7 @@ def compute_adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
     dst.data = exposure.adjust_sigmoid(
         src.data, cutoff=p.cutoff, gain=p.gain, inv=p.inv
     )
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -153,6 +156,7 @@ class RescaleIntensityParam(gds.DataSet):
 
 def compute_rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageObj:
     """Rescale image intensity levels
+    with :py:func:`skimage.exposure.rescale_intensity`
 
     Args:
         src: input image object
@@ -169,6 +173,7 @@ def compute_rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageO
     dst.data = exposure.rescale_intensity(
         src.data, in_range=p.in_range, out_range=p.out_range
     )
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -184,7 +189,7 @@ class EqualizeHistParam(gds.DataSet):
 
 
 def compute_equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
-    """Histogram equalization
+    """Histogram equalization with :py:func:`skimage.exposure.equalize_hist`
 
     Args:
         src: input image object
@@ -195,6 +200,7 @@ def compute_equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
     """
     dst = dst_11(src, "equalize_hist", f"nbins={p.nbins}")
     dst.data = exposure.equalize_hist(src.data, nbins=p.nbins)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -212,6 +218,7 @@ class EqualizeAdaptHistParam(EqualizeHistParam):
 
 def compute_equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> ImageObj:
     """Adaptive histogram equalization
+    with :py:func:`skimage.exposure.equalize_adapthist`
 
     Args:
         src: input image object
@@ -226,4 +233,5 @@ def compute_equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> Imag
     dst.data = exposure.equalize_adapthist(
         src.data, clip_limit=p.clip_limit, nbins=p.nbins
     )
+    restore_data_outside_roi(dst, src)
     return dst

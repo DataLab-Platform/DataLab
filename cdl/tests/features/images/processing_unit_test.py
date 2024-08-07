@@ -101,6 +101,7 @@ def test_image_normalize() -> None:
         p.method = method_value
         dst = cpi.compute_normalize(src, p)
         title = f"Normalize[method='{p.method}']"
+        exp_min, exp_max = None, None
         if p.method == "maximum":
             exp_min, exp_max = src.data.min() / src.data.max(), 1.0
         elif p.method == "amplitude":

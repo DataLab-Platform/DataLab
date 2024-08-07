@@ -104,7 +104,7 @@ class ObjectProp(QW.QWidget):
         for child in self.properties.children():
             if isinstance(child, QW.QTabWidget):
                 break
-        child.addTab(param_scroll, _("Computing parameters"))
+        child.addTab(param_scroll, _("Analysis parameters"))
 
         vlayout = QW.QVBoxLayout()
         vlayout.addWidget(self.properties)
@@ -249,7 +249,8 @@ class BaseDataPanel(AbstractPanel):
     PANEL_STR_ID = ""  # e.g. "signal"
     PARAMCLASS: SignalObj | ImageObj = None  # Replaced in child object
     ANNOTATION_TOOLS = ()
-    DIALOGSIZE = (800, 600)
+    MINDIALOGSIZE = (800, 600)
+    MAXDIALOGSIZE = 0.95  # % of DataLab's main window size
     # Replaced by the right class in child object:
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
@@ -470,8 +471,6 @@ class BaseDataPanel(AbstractPanel):
         self.objview.add_group_item(group)
         return group
 
-    # TODO: [P2] New feature: move objects up/down
-    # TODO: [P2] New feature: move objects to another group
     def __duplicate_individual_obj(
         self, oid: str, new_group_id: str | None = None, set_current: bool = True
     ) -> None:
@@ -893,8 +892,6 @@ class BaseDataPanel(AbstractPanel):
         )
         if dlg is None:
             return None
-        width, height = self.DIALOGSIZE
-        dlg.resize(width, height)
         mgr = dlg.get_manager()
         toolbar = QW.QToolBar(title, self)
         dlg.button_layout.insertWidget(0, toolbar)
@@ -922,7 +919,6 @@ class BaseDataPanel(AbstractPanel):
         action_btn = default_toolbar.widgetForAction(edit_ann_action)
         action_btn.setToolButtonStyle(QC.Qt.ToolButtonTextBesideIcon)
         plot = dlg.get_plot()
-        plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
         for item in obj.iterate_shape_items(editable=True):
@@ -992,6 +988,13 @@ class BaseDataPanel(AbstractPanel):
         if options is not None:
             plot_options = plot_options.copy(options)
 
+        # Resize the dialog so that it's at least MINDIALOGSIZE (absolute values),
+        # and at most MAXDIALOGSIZE (% of the main window size):
+        minwidth, minheight = self.MINDIALOGSIZE
+        maxwidth = int(self.mainwindow.width() * self.MAXDIALOGSIZE)
+        maxheight = int(self.mainwindow.height() * self.MAXDIALOGSIZE)
+        size = min(minwidth, maxwidth), min(minheight, maxheight)
+
         # pylint: disable=not-callable
         dlg = PlotDialog(
             parent=self.parent(),
@@ -999,8 +1002,10 @@ class BaseDataPanel(AbstractPanel):
             edit=edit,
             options=plot_options,
             toolbar=toolbar,
+            size=size,
         )
         dlg.setWindowIcon(get_icon("DataLab.svg"))
+
         if tools is not None:
             for tool in tools:
                 dlg.get_manager().add_tool(tool)
@@ -1021,6 +1026,7 @@ class BaseDataPanel(AbstractPanel):
                 item.set_readonly(True)
                 plot.add_item(item, z=0)
         plot.set_active_item(item)
+        item.unselect()
         plot.replot()
         return dlg
 
@@ -1056,7 +1062,7 @@ class BaseDataPanel(AbstractPanel):
         )
         return dlg, obj
 
-    def get_roi_dialog(
+    def get_roi_editor_output(
         self, extract: bool, singleobj: bool, add_roi: bool = False
     ) -> tuple[cdl.computation.base.ROIDataParam, bool] | None:
         """Get ROI data (array) from specific dialog box.
@@ -1071,18 +1077,19 @@ class BaseDataPanel(AbstractPanel):
         """
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
-        dlg, obj = self.create_new_dialog_for_selection(roi_s, "roi_dialog", options)
+        dlg, obj = self.create_new_dialog_for_selection(
+            roi_s, "roi_dialog", options, toolbar=True
+        )
         if dlg is None:
             return None
         plot = dlg.get_plot()
-        plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
         # pylint: disable=not-callable
         roi_editor: roieditor.SignalROIEditor | roieditor.ImageROIEditor = (
             self.ROIDIALOGCLASS(dlg, obj, extract, singleobj)
         )
-        dlg.plot_layout.addWidget(roi_editor, 1, 0, 1, 1)
+        dlg.button_layout.insertWidget(0, roi_editor)
         if add_roi:
             roi_editor.add_roi()
         if exec_dialog(dlg):
@@ -1127,7 +1134,7 @@ class BaseDataPanel(AbstractPanel):
         self.__new_objprop_button(
             _("Results"),
             "show_results.svg",
-            _("Show results obtained from previous computations"),
+            _("Show results obtained from previous analysis"),
             self.show_results,
         )
         self.__new_objprop_button(
@@ -1144,10 +1151,10 @@ class BaseDataPanel(AbstractPanel):
                 _("No result currently available for this object."),
                 "",
                 _(
-                    "This feature leverages the results of previous computations "
+                    "This feature leverages the results of previous analysis "
                     "performed on the selected object(s).<br><br>"
                     "To compute results, select one or more objects and choose "
-                    "a computing feature in the <u>Compute</u> menu."
+                    "a feature in the <u>Analysis</u> menu."
                 ),
             ]
         )
@@ -1252,7 +1259,7 @@ class BaseDataPanel(AbstractPanel):
 
                 comment = (
                     _(
-                        "Plot results obtained from previous computations.<br><br>"
+                        "Plot results obtained from previous analyses.<br><br>"
                         "This plot is based on results associated with '%s' prefix."
                     )
                     % category

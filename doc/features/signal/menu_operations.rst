@@ -8,7 +8,7 @@ This section describes the operations that can be performed on signals.
 .. seealso::
 
     :ref:`sig-menu-processing` for more information on signal processing features,
-    or :ref:`sig-menu-computing` for information on computing features on signals.
+    or :ref:`sig-menu-analysis` for information on analysis features on signals.
 
 .. figure:: /images/shots/s_operation.png
 

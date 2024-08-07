@@ -32,12 +32,12 @@ msgstr ""
 #: ../../doc/features/signal/menu_operations.rst:10
 msgid ""
 ":ref:`sig-menu-processing` for more information on signal processing "
-"features, or :ref:`sig-menu-computing` for information on computing "
+"features, or :ref:`sig-menu-analysis` for information on analysis "
 "features on signals."
 msgstr ""
 ":ref:`sig-menu-processing` pour plus d'informations sur les "
-"fonctionnalités de traitement des signaux, ou :ref:`sig-menu-computing` "
-"pour des informations sur les fonctionnalités de calcul sur les signaux."
+"fonctionnalités de traitement des signaux, ou :ref:`sig-menu-analysis` "
+"pour des informations sur les fonctionnalités d'analyse des signaux."
 
 #: ../../doc/features/signal/menu_operations.rst:15
 msgid "Screenshot of the \"Operations\" menu."
@@ -149,7 +149,7 @@ msgid ""
 "selected signal:"
 msgstr ""
 "Crée un signal à partir d'une opération avec une constante sur chaque "
-"signal sélectionné :"
+"signal sélectionné :"
 
 #: ../../doc/features/signal/menu_operations.rst:75
 msgid "|constant_add| Addition"

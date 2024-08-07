@@ -53,7 +53,7 @@ msgid ""
 "handled by a specific module of this package:"
 msgstr ""
 "La fenêtre principale de DataLab est composée de plusieurs parties, "
-"chacune d'elles étant gérée par un module spécifique de ce paquet :"
+"chacune d'elles étant gérée par un module spécifique de ce paquet :"
 
 #: cdl.core.gui:17 of
 msgid ""

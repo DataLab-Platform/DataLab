@@ -47,6 +47,8 @@ with the :py:class:`cdl.param.BinningParam` dataset:
 Common parameters
 ^^^^^^^^^^^^^^^^^
 
+.. autodataset:: cdl.param.ArithmeticParam
+    :no-index:
 .. autodataset:: cdl.param.ClipParam
     :no-index:
 .. autodataset:: cdl.param.FFTParam
@@ -61,7 +63,7 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.ROIDataParam
     :no-index:
-.. autodataset:: cdl.param.ConstantOperationParam
+.. autodataset:: cdl.param.ConstantParam
     :no-index:
 
 Signal parameters
@@ -200,6 +202,7 @@ Detection parameters
 # flake8: noqa
 
 from cdl.computation.base import (
+    ArithmeticParam,
     ClipParam,
     FFTParam,
     SpectrumParam,
@@ -208,7 +211,7 @@ from cdl.computation.base import (
     MovingAverageParam,
     MovingMedianParam,
     ROIDataParam,
-    ConstantOperationParam,
+    ConstantParam,
     NormalizeParam,
 )
 from cdl.computation.image import (

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 09:50+0200\n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,41 +78,44 @@ msgstr ""
 "suivante::"
 
 #: ../../doc/features/general/command.rst:71
-msgid "Run validation tests"
-msgstr "Exécuter les tests de validation"
+msgid "Run technical validation tests"
+msgstr "Exécuter les tests de validation technique"
 
 #: ../../doc/features/general/command.rst:73
 msgid ""
-"Validation tests are directly included in individual unit tests and are "
-"disseminated throughout the code. The test functions including validation"
-" tests are marked with the `@pytest.mark.validation` decorator."
-msgstr "Les tests de validation sont directement inclus dans les tests unitaires individuels et sont disséminés dans tout le code. Les fonctions de test incluant des tests de validation sont marquées avec le décorateur `@pytest.mark.validation`."
+"Technical validation tests are directly included in individual unit "
+"tests and are disseminated throughout the code. The test functions "
+"including validation tests are marked with the "
+"``@pytest.mark.validation`` decorator."
+msgstr "Les tests de validation technique sont directement inclus dans les tests unitaires individuels et sont disséminés dans tout le code. Les fonctions de test incluant des tests de validation sont marquées avec le décorateur ``@pytest.mark.validation``."
 
 #: ../../doc/features/general/command.rst:77
-msgid "To execute DataLab validation tests, run the following::"
-msgstr "Pour exécuter les tests de validation de DataLab, taper la commande suivante::"
+msgid "To execute DataLab technical validation tests, run the following::"
+msgstr "Pour exécuter les tests de validation technique de DataLab, taper la commande suivante::"
 
 #: ../../doc/features/general/command.rst:81
 msgid ""
 "See section :ref:`validation` for more information on DataLab's "
 "validation strategy."
-msgstr "Voir la section :ref:`validation` pour plus d'informations sur la stratégie de validation de DataLab."
+msgstr ""
+"Voir la section :ref:`validation` pour plus d'informations sur la "
+"stratégie de validation de DataLab."
 
-#: ../../doc/features/general/command.rst:84
+#: ../../doc/features/general/command.rst:86
 msgid "Run complete test suite"
 msgstr "Exécuter l'ensemble des tests"
 
-#: ../../doc/features/general/command.rst:86
+#: ../../doc/features/general/command.rst:88
 msgid "To execute all DataLab unit tests, simply run::"
 msgstr ""
 "Pour exécuter l'ensemble des tests unitaires de DataLab, taper la "
 "commande suivante::"
 
-#: ../../doc/features/general/command.rst:91
+#: ../../doc/features/general/command.rst:93
 msgid "Run interactive tests"
 msgstr "Exécuter les tests interactifs"
 
-#: ../../doc/features/general/command.rst:93
+#: ../../doc/features/general/command.rst:95
 msgid "To execute DataLab interactive tests, run the following::"
 msgstr ""
 "Pour exécuter les tests interactifs de DataLab, taper la commande "

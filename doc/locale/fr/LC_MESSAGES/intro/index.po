@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../doc/intro/index.rst:81
 msgid "Contents:"
-msgstr "Sommaire :"
+msgstr "Sommaire :"
 
 #: ../../doc/intro/index.rst:-1
 msgid ""
@@ -249,7 +249,7 @@ msgstr "Tutoriels pour apprendre à utiliser DataLab"
 #~ msgstr ""
 #~ "Quelques exemples concrets et spécifiques "
 #~ "illustrent la nature des travaux pouvant"
-#~ " être réalisés avec DataLab :"
+#~ " être réalisés avec DataLab :"
 
 #~ msgid "Processing of experimental signals acquired on a scientific facility"
 #~ msgstr ""
@@ -274,7 +274,7 @@ msgstr "Tutoriels pour apprendre à utiliser DataLab"
 #~ "modes:"
 #~ msgstr ""
 #~ "Selon l'application, DataLab peut être "
-#~ "utilisé selon trois modes différents :"
+#~ "utilisé selon trois modes différents :"
 
 #~ msgid ""
 #~ "**Stand-alone mode**: DataLab is a "
@@ -368,7 +368,7 @@ msgstr "Tutoriels pour apprendre à utiliser DataLab"
 #~ msgstr "Principales fonctionnalités"
 
 #~ msgid "The main technical features of DataLab include:"
-#~ msgstr "Les principales fonctionnalités techniques de DataLab sont :"
+#~ msgstr "Les principales fonctionnalités techniques de DataLab sont :"
 
 #~ msgid "Support for numerous standard and proprietary data formats"
 #~ msgstr ""
@@ -417,7 +417,7 @@ msgstr "Tutoriels pour apprendre à utiliser DataLab"
 #~ msgstr "Points forts"
 
 #~ msgid "DataLab highlights four key strengths:"
-#~ msgstr "DataLab met en avant quatre points forts :"
+#~ msgstr "DataLab met en avant quatre points forts :"
 
 #~ msgid ""
 #~ "**Extensibility**: The DataLab plugin system"

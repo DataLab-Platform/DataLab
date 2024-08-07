@@ -162,7 +162,7 @@ msgstr "Suggérer un sujet de tutoriel"
 
 #: ../../contributing/index.rst:54
 msgid "Without coding, you can contribute to DataLab project by:"
-msgstr "Sans coder une seule ligne, vous pouvez contribuer au projet DataLab en :"
+msgstr "Sans coder une seule ligne, vous pouvez contribuer au projet DataLab en :"
 
 #: ../../contributing/index.rst:56
 msgid ""
@@ -213,7 +213,7 @@ msgstr ""
 
 #: ../../contributing/index.rst:72
 msgid "Again without coding, you can contribute to DataLab project by:"
-msgstr "Encore une fois sans coder, vous pouvez contribuer au projet DataLab en :"
+msgstr "Encore une fois sans coder, vous pouvez contribuer au projet DataLab en :"
 
 #: ../../contributing/index.rst:74
 msgid "Writing documentation"
@@ -237,7 +237,7 @@ msgstr ""
 
 #: ../../contributing/index.rst:84
 msgid "Even if you are not a developer, you can contribute to the project by:"
-msgstr "Même si vous n'êtes pas développeur, vous pouvez contribuer au projet en :"
+msgstr "Même si vous n'êtes pas développeur, vous pouvez contribuer au projet en :"
 
 #: ../../contributing/index.rst:86
 msgid "Testing new features"
@@ -290,7 +290,7 @@ msgid "See :ref:`contribute_code` section for more information."
 msgstr "Voir la section :ref:`contribute_code` pour plus d'informations."
 
 #~ msgid "Contents:"
-#~ msgstr "Sommaire :"
+#~ msgstr "Sommaire :"
 
 #~ msgid "Development"
 #~ msgstr "Développement"

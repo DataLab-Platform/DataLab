@@ -69,7 +69,7 @@ msgid ""
 "that can be carried out with DataLab:"
 msgstr ""
 "Quelques exemples concrets et spécifiques illustrent la nature des "
-"travaux pouvant être réalisés avec DataLab :"
+"travaux pouvant être réalisés avec DataLab :"
 
 #: ../../doc/intro/introduction.rst:22
 msgid ""
@@ -125,7 +125,7 @@ msgid ""
 "modes:"
 msgstr ""
 "Selon l'application, DataLab peut être utilisé selon trois modes "
-"différents :"
+"différents :"
 
 #: ../../doc/intro/introduction.rst:39
 msgid ""
@@ -176,7 +176,7 @@ msgstr "Cas d'usage"
 msgid "For practical examples of use cases, see the :ref:`tutorials` section:"
 msgstr ""
 "Pour des exemples pratiques de cas d'usage, voir la section "
-":ref:`tutorials` :"
+":ref:`tutorials` :"
 
 #: ../../doc/intro/introduction.rst:72
 msgid ""
@@ -208,7 +208,7 @@ msgstr ""
 msgid "DataLab is a versatile tool that can be used in different contexts:"
 msgstr ""
 "DataLab est un outil polyvalent qui peut être utilisé dans différents "
-"contextes :"
+"contextes :"
 
 #: ../../doc/intro/introduction.rst:88
 msgid "Data processing"
@@ -354,7 +354,7 @@ msgstr "Principales fonctionnalités"
 
 #: ../../doc/intro/introduction.rst:138
 msgid "The main technical features of DataLab include:"
-msgstr "Les principales fonctionnalités techniques de DataLab sont :"
+msgstr "Les principales fonctionnalités techniques de DataLab sont :"
 
 #: ../../doc/intro/introduction.rst:140
 msgid "Support for numerous standard and proprietary data formats"
@@ -406,7 +406,7 @@ msgstr "Points forts"
 
 #: ../../doc/intro/introduction.rst:156
 msgid "To summarize, the four key strengths of DataLab are:"
-msgstr "Pour résumer, les quatre points forts de DataLab sont les suivants :"
+msgstr "Pour résumer, les quatre points forts de DataLab sont les suivants :"
 
 #: ../../doc/intro/introduction.rst:161
 msgid "Extensibility"

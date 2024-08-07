@@ -26,6 +26,55 @@ if TYPE_CHECKING:
     from cdl.obj import ImageObj, SignalObj
 
 
+class ArithmeticParam(gds.DataSet):
+    """Arithmetic parameters"""
+
+    def get_operation(self) -> str:
+        """Return the operation string"""
+        o, a, b = self.operator, self.factor, self.constant
+        b_added = False
+        if a == 0.0:
+            if o in ("+", "-"):
+                txt = "obj3 = obj1"
+            elif b == 0.0:
+                txt = "obj3 = 0"
+            else:
+                txt = f"obj3 = {b}"
+                b_added = True
+        elif a == 1.0:
+            txt = f"obj3 = obj1 {o} obj2"
+        else:
+            txt = f"obj3 = (obj1 {o} obj2) × {a}"
+        if b != 0.0 and not b_added:
+            txt += f" + {b}"
+        return txt
+
+    def update_operation(self, _item, _value):  # pylint: disable=unused-argument
+        """Update the operation item"""
+        self.operation = self.get_operation()
+
+    operators = ("+", "-", "×", "/")
+    operator = gds.ChoiceItem(_("Operator"), list(zip(operators, operators))).set_prop(
+        "display", callback=update_operation
+    )
+    factor = (
+        gds.FloatItem(_("Factor"), default=1.0)
+        .set_pos(col=1)
+        .set_prop("display", callback=update_operation)
+    )
+    constant = (
+        gds.FloatItem(_("Constant"), default=0.0)
+        .set_pos(col=1)
+        .set_prop("display", callback=update_operation)
+    )
+    operation = gds.StringItem(_("Operation"), default="").set_prop(
+        "display", active=False
+    )
+    restore_dtype = gds.BoolItem(
+        _("Convert to `obj1` data type"), label=_("Result"), default=True
+    )
+
+
 class GaussianParam(gds.DataSet):
     """Gaussian filter parameters"""
 
@@ -138,9 +187,8 @@ class SpectrumParam(gds.DataSet):
     log = gds.BoolItem(_("Logarithmic scale"), default=False)
 
 
-class ConstantOperationParam(gds.DataSet):
-    """Parameter used to set a constant value to used in operations (sum,
-    multiplication, ...)"""
+class ConstantParam(gds.DataSet):
+    """Parameter used to set a constant value to used in operations"""
 
     value = gds.FloatItem(_("Constant value"))
 
@@ -169,9 +217,9 @@ def dst_11(
         title = f"{src.short_id}{name}"
     else:
         title = f"{name}({src.short_id})"
-        if suffix is not None:
+        if suffix:  # suffix may be None or an empty string
             title += "|"
-    if suffix is not None:
+    if suffix:  # suffix may be None or an empty string
         title += suffix
     return src.copy(title=title)
 

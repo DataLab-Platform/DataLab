@@ -1,11 +1,11 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Unit tests for signal computing functions
------------------------------------------
+Unit tests for signal analysis features
+---------------------------------------
 
-Features from the "Computing" menu are covered by this test.
-The "Computing" menu contains functions to compute signal properties like
+Features from the "Analysis" menu are covered by this test.
+The "Analysis" menu contains functions to compute signal properties like
 bandwidth, ENOB, etc.
 """
 

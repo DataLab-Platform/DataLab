@@ -264,14 +264,14 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
 
-    opt_params: np.ndarray
+    optp: np.ndarray
 
     def modelfunc(x, a, b, c):
         return a * np.exp(b * x) + c
 
-    opt_params, __ = curve_fit(modelfunc, x, y)
-    oa, ob, oc = opt_params
-    moa, mob, moc = np.maximum(1, opt_params)
+    optp, __ = curve_fit(modelfunc, x, y)  # pylint: disable=unbalanced-tuple-unpacking
+    oa, ob, oc = optp
+    moa, mob, moc = np.maximum(1, optp)
     a_p = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
     b_p = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob)
     c_p = FitParam(_("y0 constant"), oc, -2 * moc, 2 * moc)

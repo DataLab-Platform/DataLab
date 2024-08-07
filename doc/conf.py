@@ -34,6 +34,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
+    "sphinx.ext.viewcode",
     "sphinx_sitemap",
     "myst_parser",
     "sphinx_design",
@@ -57,9 +58,9 @@ html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
-    ann = "DataLab sera présenté à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> et <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
+    ann = "DataLab a été dévoilé à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Tacoma, Etats-Unis) et sera présenté en détails à <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
 else:
-    ann = "DataLab will be presented at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> and <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
+    ann = "DataLab has been introduced at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Tacoma, WA) and will be presented thoroughly at <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
 html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",

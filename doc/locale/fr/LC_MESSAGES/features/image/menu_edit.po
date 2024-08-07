@@ -1,0 +1,306 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-30 15:04+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../doc/features/image/menu_edit.rst:4
+msgid "Manipulate metadata"
+msgstr "Manipuler les métadonnées"
+
+#: ../../doc/features/image/menu_edit.rst:6
+msgid "This section describes how to manipulate metadata in DataLab."
+msgstr "Cette section décrit comment manipuler les métadonnées dans DataLab."
+
+#: ../../doc/features/image/menu_edit.rst:10
+msgid "Screenshot of the \"Edit\" menu."
+msgstr "Capture d'écran du menu \"Édition\"."
+
+#: ../../doc/features/image/menu_edit.rst:12
+msgid ""
+"The \"Edit\" menu allows you to perform classic editing operations on the"
+" current image or group of images (create/rename group, move up/down, "
+"delete image/group of images, etc.)."
+msgstr ""
+"Le menu \"Édition\" vous permet d'effectuer des opérations d'édition "
+"classiques sur l'image ou le groupe d'images actuel (créer/renommer un "
+"groupe, déplacer vers le haut/vers le bas, supprimer l'image/le groupe "
+"d'images, etc.)."
+
+#: ../../doc/features/image/menu_edit.rst:16
+msgid ""
+"It also allows you to manipulate metadata associated with the current "
+"image."
+msgstr ""
+"Il vous permet également de manipuler les métadonnées associées à l'image"
+" actuelle."
+
+#: ../../doc/features/image/menu_edit.rst:19
+msgid "Copy/paste metadata"
+msgstr "Copier/coller les métadonnées"
+
+#: ../../doc/features/image/menu_edit.rst:21
+msgid ""
+"As metadata contains useful information about the image, it can be copied"
+" and pasted from one image to another by selecting the \"Copy metadata\" "
+"|metadata_copy| and \"Paste metadata\" |metadata_paste| actions in the "
+"\"Edit\" menu."
+msgstr ""
+"Compte tenu du fait que les métadonnées contiennent des informations "
+"utiles sur l'image, elles peuvent être copiées et collées d'une image à "
+"une autre en sélectionnant les actions \"Copier les métadonnées\" "
+"|metadata_copy| et \"Coller les métadonnées\" |metadata_paste| dans le "
+"menu \"Édition\"."
+
+#: ../../doc/features/image/menu_edit.rst:25
+msgid "metadata_copy"
+msgstr ""
+
+#: ../../doc/features/image/menu_edit.rst:30
+msgid "metadata_paste"
+msgstr ""
+
+#: ../../doc/features/image/menu_edit.rst:35
+msgid ""
+"This feature allows you to tranfer those information from one image to "
+"another:"
+msgstr ""
+"Cette fonctionnalité vous permet de transférer ces informations d'une "
+"image à une autre :"
+
+#: ../../doc/features/image/menu_edit.rst:37
+msgid ""
+":ref:`Regions Of Interest (ROIs) <ima-roi>`: that is a very efficient way"
+" to reuse the same ROI on different images and easily compare the results"
+" of the analysis on those images"
+msgstr ""
+":ref:`Régions d'intérêt (ROIs) <ima-roi>` : c'est un moyen très efficace "
+"de réutiliser la même ROI sur différentes images et de comparer "
+"facilement les résultats de l'analyse sur ces images"
+
+#: ../../doc/features/image/menu_edit.rst:40
+msgid ""
+"Analyze results, such as a centroid position or a contour detection (the "
+"relevance of transferring such information depends on the context and is "
+"up to the user to decide)"
+msgstr ""
+"Résultats de calcul, tels qu'une position de barycentre ou une détection "
+"de contour (la pertinence du transfert de ces informations dépend du "
+"contexte et il appartient à l'utilisateur d'en décider)"
+
+#: ../../doc/features/image/menu_edit.rst:43
+msgid "Any other information that you may have added to the metadata of an image"
+msgstr ""
+"Toute autre information que vous avez pu ajouter aux métadonnées d'une "
+"image"
+
+#: ../../doc/features/image/menu_edit.rst:47
+msgid ""
+"Copying metadata from an image to another will overwrite the metadata of "
+"the destination image (for the metadata keys that are common to both "
+"images) or simply add the metadata keys that are not present in the "
+"destination image."
+msgstr ""
+"Copier les métadonnées d'une image à une autre écrasera les métadonnées "
+"de l'image de destination (pour les clés de métadonnées communes aux deux"
+" images) ou ajoutera simplement les clés de métadonnées qui ne sont pas "
+"présentes dans l'image de destination."
+
+#: ../../doc/features/image/menu_edit.rst:52
+msgid "Import/export metadata"
+msgstr "Importer/exporter les métadonnées"
+
+#: ../../doc/features/image/menu_edit.rst:54
+msgid ""
+"Metadata can also be imported and exported from/to a JSON file using the "
+"\"Import metadata\" |metadata_import| and \"Export metadata\" "
+"|metadata_export| actions in the \"Edit\" menu. This is exactly the same "
+"as the copy/paste metadata feature (see above for more details on the use"
+" cases of this feature), but it allows you to save the metadata to a file"
+" and then import it back later."
+msgstr ""
+"Les métadonnées peuvent également être importées et exportées depuis/vers"
+" un fichier JSON en utilisant les actions \"Importer les métadonnées\" "
+"|metadata_import| et \"Exporter les métadonnées\" |metadata_export| dans "
+"le menu \"Édition\". C'est exactement la même chose que la fonctionnalité"
+" de copier/coller des métadonnées (voir ci-dessus pour plus de détails "
+"sur les cas d'utilisation de cette fonctionnalité), mais cela vous permet"
+" de sauvegarder les métadonnées dans un fichier et de les importer "
+"ultérieurement."
+
+#: ../../doc/features/image/menu_edit.rst:60
+msgid "metadata_import"
+msgstr ""
+
+#: ../../doc/features/image/menu_edit.rst:65
+msgid "metadata_export"
+msgstr ""
+
+#: ../../doc/features/image/menu_edit.rst:71
+msgid "Delete metadata"
+msgstr "Supprimer les métadonnées"
+
+#: ../../doc/features/image/menu_edit.rst:73
+msgid ""
+"When deleting metadata using the \"Delete metadata\" |metadata_delete| "
+"action in the \"Edit\" menu, you will be prompted to confirm the deletion"
+" of Region of Interests (ROIs) if they are present in the metadata. After"
+" this eventual confirmation, the metadata will be deleted, meaning that "
+"analysis results, ROIs, and any other information associated with the "
+"image will be lost."
+msgstr ""
+"Lors de la suppression des métadonnées en utilisant l'action \"Supprimer "
+"les métadonnées\" |metadata_delete| dans le menu \"Édition\", vous serez "
+"invité à confirmer la suppression des régions d'intérêt (ROIs) si elles "
+"sont présentes dans les métadonnées. Après cette confirmation éventuelle,"
+" les métadonnées seront supprimées, ce qui signifie que les résultats "
+"d'analyse, les ROIs et toute autre information associée à l'image seront "
+"perdus."
+
+#: ../../doc/features/image/menu_edit.rst:79
+msgid "metadata_delete"
+msgstr ""
+
+#: ../../doc/features/image/menu_edit.rst:85
+msgid "Image titles"
+msgstr "Titres des images"
+
+#: ../../doc/features/image/menu_edit.rst:87
+msgid ""
+"Image titles may be considered as metadata from a user point of view, "
+"even if they are not stored in the metadata of the image (but in an "
+"attribute of the image object)."
+msgstr ""
+"Les titres des images peuvent être considérés comme des métadonnées du "
+"point de vue de l'utilisateur, même s'ils ne sont pas stockés dans les "
+"métadonnées de l'image (mais dans un attribut de l'objet image)."
+
+#: ../../doc/features/image/menu_edit.rst:90
+#: ../../doc/features/image/menu_edit.rst:146
+msgid "The \"Edit\" menu allows you to:"
+msgstr "Le menu \"Édition\" vous permet de :"
+
+#: ../../doc/features/image/menu_edit.rst:92
+msgid ""
+"\"Add object title to plot\": this action will add a label on top of the "
+"image with its title, which might be useful in combination with the "
+"\"Distribute on a grid\" operation (see :ref:`ima-menu-operations`) to "
+"easily identify the images."
+msgstr ""
+"\"Ajouter le titre de l'objet au graphique\" : cette action ajoutera une "
+"étiquette en haut de l'image avec son titre, ce qui peut être utile en "
+"combinaison avec l'opération \"Distribuer sur une grille\" (voir :ref"
+":`ima-menu-operations`) pour identifier facilement les images."
+
+#: ../../doc/features/image/menu_edit.rst:96
+msgid ""
+"\"Copy titles to clipboard\" |copy_titles|: this action will copy the "
+"titles of the selected images to the clipboard, which might be useful to "
+"paste them in a text editor or in a spreadsheet."
+msgstr ""
+"\"Copier les titres dans le presse-papiers\" |copy_titles| : cette action"
+" copiera les titres des images sélectionnées dans le presse-papiers, ce "
+"qui peut être utile pour les coller dans un éditeur de texte ou dans un "
+"tableur."
+
+#: ../../doc/features/image/menu_edit.rst:117
+msgid "copy_titles"
+msgstr ""
+
+#: ../../doc/features/image/menu_edit.rst:100
+msgid "Example of the content of the clipboard:"
+msgstr "Exemple du contenu du presse-papiers :"
+
+#: ../../doc/features/image/menu_edit.rst:125
+msgid "Regions Of Interest (ROI)"
+msgstr "Régions d'intérêt (ROI)"
+
+#: ../../doc/features/image/menu_edit.rst:127
+msgid ""
+"The Regions Of Interest (ROI) are image areas that are defined by the "
+"user to perform specific operations, processing, or analysis on them."
+msgstr ""
+"Les régions d'intérêt (ROI) sont des zones d'image définies par "
+"l'utilisateur pour effectuer des opérations spécifiques, des traitements "
+"ou des analyses sur elles."
+
+#: ../../doc/features/image/menu_edit.rst:130
+msgid "ROI are taken into account almost in all computing features in DataLab:"
+msgstr "Les ROI sont prises en compte dans presque toutes les fonctionnalités de calcul de DataLab :"
+
+#: ../../doc/features/image/menu_edit.rst:132
+msgid ""
+"The \"Operations\" menu features are done only on the ROI if one is "
+"defined (except if the operation changes the data shape - like the resize"
+" operation - or the pixel size - like the binning operation)."
+msgstr "Les fonctionnalités du menu \"Opérations\" sont appliquées uniquement sur la ROI si elle est définie (sauf si l'opération modifie la forme des données - comme l'opération de redimensionnement - ou la taille des pixels - comme l'opération de binning)."
+
+#: ../../doc/features/image/menu_edit.rst:136
+msgid ""
+"The \"Processing\" menu actions are performed only on the ROI if one is "
+"defined (except if the destination signal data type is different from the"
+" source's, like in the Fourier analysis features or like the thresholding"
+" operations)."
+msgstr "Les actions du menu \"Traitement\" sont effectuées uniquement sur la ROI si elle est définie (sauf si le type de données du signal de destination est différent de celui de la source, comme dans les fonctionnalités d'analyse de Fourier ou comme dans les opérations de seuillage)."
+
+#: ../../doc/features/image/menu_edit.rst:140
+msgid "The \"Analysis\" menu actions are done only on the ROI if one is defined."
+msgstr "Les actions du menu \"Analyse\" sont effectuées uniquement sur la ROI si elle est définie."
+
+#: ../../doc/features/image/menu_edit.rst:144
+msgid "ROI are stored as metadata, and thus attached to image."
+msgstr ""
+"Les ROI sont stockées en tant que métadonnées et sont donc attachées à "
+"l'image."
+
+#: ../../doc/features/image/menu_edit.rst:148
+msgid ""
+"\"Edit regions of interest\" |roi|: open a dialog box to manage ROI "
+"associated with the selected image (add, remove, move, resize, etc.). The"
+" ROI definition dialog is exactly the same as ROI extraction (see below)."
+msgstr ""
+"\"Modifier les régions d'intérêt\" |roi| : ouvre une boîte de dialogue "
+"pour gérer les ROI associées à l'image sélectionnée (ajouter, supprimer, "
+"déplacer, redimensionner, etc.). La boîte de dialogue de définition des "
+"ROI est exactement la même que l'extraction des ROI (voir ci-dessous)."
+
+#: ../../doc/features/image/menu_edit.rst:159
+msgid "roi"
+msgstr ""
+
+#: ../../doc/features/image/menu_edit.rst:154
+msgid "An image with an ROI."
+msgstr "Une image avec une ROI."
+
+#: ../../doc/features/image/menu_edit.rst:156
+msgid ""
+"\"Remove regions of interest\" |roi_delete|: remove all defined ROI for "
+"the selected images."
+msgstr ""
+"\"Supprimer les régions d'intérêt\" |roi_delete| : supprime toutes les "
+"ROI définies pour les images sélectionnées."
+
+#: ../../doc/features/image/menu_edit.rst:164
+msgid "roi_delete"
+msgstr ""
+
+#~ msgid ""
+#~ "ROI are taken into account everywhere"
+#~ " in the application where it makes"
+#~ " sense:"
+#~ msgstr ""

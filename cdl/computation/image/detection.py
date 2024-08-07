@@ -16,14 +16,7 @@ from __future__ import annotations
 
 import guidata.dataset as gds
 
-from cdl.algorithms.image import (
-    find_blobs_dog,
-    find_blobs_doh,
-    find_blobs_log,
-    find_blobs_opencv,
-    get_2d_peaks_coords,
-    get_contour_shapes,
-)
+import cdl.algorithms.image as alg
 from cdl.computation.image import calc_resultshape
 from cdl.config import _
 from cdl.obj import ImageObj, ResultShape, ShapeTypes
@@ -63,6 +56,7 @@ def compute_peak_detection(
     image: ImageObj, p: Peak2DDetectionParam
 ) -> ResultShape | None:
     """Compute 2D peak detection
+    with :py:func:`cdl.algorithms.image.get_2d_peaks_coords`
 
     Args:
         imageOutput: input image
@@ -72,7 +66,7 @@ def compute_peak_detection(
         Peak coordinates
     """
     return calc_resultshape(
-        "peak", "point", image, get_2d_peaks_coords, p.size, p.threshold
+        "peak", "point", image, alg.get_2d_peaks_coords, p.size, p.threshold
     )
 
 
@@ -96,9 +90,10 @@ class ContourShapeParam(GenericDetectionParam):
 
 
 def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
-    """Compute contour shape fit"""
+    """Compute contour shape fit
+    with :py:func:`cdl.algorithms.image.get_contour_shapes`"""
     return calc_resultshape(
-        "contour", p.shape, image, get_contour_shapes, p.shape, p.threshold
+        "contour", p.shape, image, alg.get_contour_shapes, p.shape, p.threshold
     )
 
 
@@ -158,6 +153,7 @@ class BlobDOGParam(BaseBlobParam):
 
 def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
     """Compute blobs using Difference of Gaussian method
+    with :py:func:`cdl.algorithms.image.find_blobs_dog`
 
     Args:
         imageOutput: input image
@@ -170,7 +166,7 @@ def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
         "blob_dog",
         "circle",
         image,
-        find_blobs_dog,
+        alg.find_blobs_dog,
         p.min_sigma,
         p.max_sigma,
         p.overlap,
@@ -195,6 +191,7 @@ class BlobDOHParam(BaseBlobParam):
 
 def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
     """Compute blobs using Determinant of Hessian method
+    with :py:func:`cdl.algorithms.image.find_blobs_doh`
 
     Args:
         imageOutput: input image
@@ -207,7 +204,7 @@ def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
         "blob_doh",
         "circle",
         image,
-        find_blobs_doh,
+        alg.find_blobs_doh,
         p.min_sigma,
         p.max_sigma,
         p.overlap,
@@ -228,6 +225,7 @@ class BlobLOGParam(BlobDOHParam):
 
 def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
     """Compute blobs using Laplacian of Gaussian method
+    with :py:func:`cdl.algorithms.image.find_blobs_log`
 
     Args:
         imageOutput: input image
@@ -240,7 +238,7 @@ def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
         "blob_log",
         "circle",
         image,
-        find_blobs_log,
+        alg.find_blobs_log,
         p.min_sigma,
         p.max_sigma,
         p.overlap,
@@ -389,6 +387,7 @@ class BlobOpenCVParam(gds.DataSet):
 
 def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
     """Compute blobs using OpenCV
+    with :py:func:`cdl.algorithms.image.find_blobs_opencv`
 
     Args:
         imageOutput: input image
@@ -401,7 +400,7 @@ def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | No
         "blob_opencv",
         "circle",
         image,
-        find_blobs_opencv,
+        alg.find_blobs_opencv,
         p.min_threshold,
         p.max_threshold,
         p.min_repeatability,

@@ -28,9 +28,11 @@ import guidata.dataset as gds
 import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
+from guidata import qthelpers as guidata_qth
 from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
+from guidata.qthelpers import add_actions, create_action
 from guidata.widgets.console import DockableConsole
+from plotpy import config as plotpy_config
 from plotpy.builder import make
 from plotpy.constants import PlotType
 from qtpy import QtCore as QC
@@ -132,13 +134,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Initialize main window"""
         CDLMainWindow.__instance = self
         super().__init__()
-        win32_fix_title_bar_background(self)
         self.setObjectName(APP_NAME)
         self.setWindowIcon(get_icon("DataLab.svg"))
 
         execenv.log(self, "Starting initialization")
-
-        self.__restore_pos_and_size()
 
         self.ready_flag = True
 
@@ -173,10 +172,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.edit_menu: QW.QMenu | None = None
         self.operation_menu: QW.QMenu | None = None
         self.processing_menu: QW.QMenu | None = None
-        self.computing_menu: QW.QMenu | None = None
+        self.analysis_menu: QW.QMenu | None = None
         self.plugins_menu: QW.QMenu | None = None
         self.view_menu: QW.QMenu | None = None
         self.help_menu: QW.QMenu | None = None
+
+        self.__update_color_mode(startup=True)
 
         self.__is_modified = False
         self.set_modified(False)
@@ -192,6 +193,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             console = Conf.console.console_enabled.get()
         self.setup(console)
 
+        self.__restore_pos_and_size()
         execenv.log(self, "Initialization done")
 
     # ------API related to XML-RPC remote control
@@ -491,7 +493,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         if cdl.__version__.replace(".", "").isdigit():
             # This is a stable release
             return
-        if "beta" in cdl.__version__:
+        if "b" in cdl.__version__:
             # This is a beta release
             rel = _(
                 "This software is in the <b>beta stage</b> of its release cycle. "
@@ -633,7 +635,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     "view",
                     "operation",
                     "processing",
-                    "computing",
+                    "analysis",
                     "help",
                 ):
                     menu = getattr(self, f"{name}_menu")
@@ -702,7 +704,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.__add_menus()
         if console:
             self.__setup_console()
-        self.__update_actions()
+        self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
@@ -946,7 +948,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.edit_menu = self.menuBar().addMenu(_("&Edit"))
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
-        self.computing_menu = self.menuBar().addMenu(_("Computing"))
+        self.analysis_menu = self.menuBar().addMenu(_("Analysis"))
         self.plugins_menu = self.menuBar().addMenu(_("Plugins"))
         self.view_menu = self.menuBar().addMenu(_("&View"))
         configure_menu_about_to_show(self.view_menu, self.__update_view_menu)
@@ -955,7 +957,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.edit_menu,
             self.operation_menu,
             self.processing_menu,
-            self.computing_menu,
+            self.analysis_menu,
             self.plugins_menu,
         ):
             configure_menu_about_to_show(menu, self.__update_generic_menu)
@@ -1152,28 +1154,28 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     @remote_controlled
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
-        """Call compute function `name` in current panel's processor
+        """Call compute function ``name`` in current panel's processor.
 
         Args:
-            name (str): function name
-            param (guidata.dataset.DataSet): optional parameters
-             (default: None)
+            name: Compute function name
+            param: Compute function parameter. Defaults to None.
 
         Raises:
             ValueError: unknown function
         """
-        panel = self.tabwidget.currentWidget()
-        if isinstance(panel, base.BaseDataPanel):
-            for funcname in (name, f"compute_{name}"):
-                func = getattr(panel.processor, funcname, None)
-                if func is not None:
-                    break
-            else:
-                raise ValueError(f"Unknown function {funcname}")
-            if param is None:
-                func()
-            else:
-                func(param)
+        panels = [self.tabwidget.currentWidget()]
+        panels.extend(self.panels)
+        for panel in panels:
+            if isinstance(panel, base.BaseDataPanel):
+                for funcname in (name, f"compute_{name}"):
+                    func = getattr(panel.processor, funcname, None)
+                    if func is not None:
+                        if param is None:
+                            func()
+                        else:
+                            func(param)
+                        return
+        raise ValueError(f"Unknown function {name}")
 
     # ------GUI refresh
     def has_objects(self) -> bool:
@@ -1202,10 +1204,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             if isinstance(panel, base.BaseDataPanel):
                 panel.objview.populate_tree()
 
-    def __update_actions(self) -> None:
-        """Update selection dependent actions"""
+    def __update_actions(self, update_other_data_panel: bool = False) -> None:
+        """Update selection dependent actions
+
+        Args:
+            update_other_data_panel: True to update other data panel actions
+             (i.e. if the current panel is the signal panel, also update the image
+             panel actions, and vice-versa)
+        """
         is_signal = self.tabwidget.currentWidget() is self.signalpanel
         panel = self.signalpanel if is_signal else self.imagepanel
+        other_panel = self.imagepanel if is_signal else self.signalpanel
+        if update_other_data_panel:
+            other_panel.selection_changed()
         panel.selection_changed()
         self.signalpanel_toolbar.setVisible(is_signal)
         self.imagepanel_toolbar.setVisible(not is_signal)
@@ -1231,7 +1242,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.view_menu: ActionCategory.VIEW,
             self.operation_menu: ActionCategory.OPERATION,
             self.processing_menu: ActionCategory.PROCESSING,
-            self.computing_menu: ActionCategory.COMPUTING,
+            self.analysis_menu: ActionCategory.ANALYSIS,
             self.plugins_menu: ActionCategory.PLUGINS,
         }[menu]
         actions = panel.get_category_actions(category)
@@ -1580,10 +1591,42 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
               <p>{adv_conf}""",
         )
 
+    def __update_color_mode(self, startup: bool = False) -> None:
+        """Update color mode
+
+        Args:
+            startup: True if method is called during application startup (in that case,
+             color theme is applied only if mode != "auto")
+        """
+        mode = Conf.main.color_mode.get()
+        if startup and mode == "auto":
+            guidata_qth.win32_fix_title_bar_background(self)
+            return
+
+        # Prevent Qt from refreshing the window when changing the color mode:
+        self.setUpdatesEnabled(False)
+
+        plotpy_config.set_plotpy_color_mode(mode)
+
+        if self.console is not None:
+            self.console.update_color_mode()
+        if self.macropanel is not None:
+            self.macropanel.update_color_mode()
+        if self.docks is not None:
+            for dock in self.docks.values():
+                widget = dock.widget()
+                if isinstance(widget, DockablePlotWidget):
+                    widget.update_color_mode()
+
+        # Allow Qt to refresh the window:
+        self.setUpdatesEnabled(True)
+
     def __edit_settings(self) -> None:
         """Edit settings"""
         changed_options = edit_settings(self)
         for option in changed_options:
+            if option == "color_mode":
+                self.__update_color_mode()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()
@@ -1662,6 +1705,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     return False
             elif answer == QW.QMessageBox.Cancel:
                 return False
+        self.hide()  # Avoid showing individual widgets closing one after the other
         for panel in self.panels:
             if panel is not None:
                 panel.close()

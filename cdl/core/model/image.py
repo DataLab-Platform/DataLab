@@ -26,6 +26,7 @@ from plotpy.builder import make
 from plotpy.items import AnnotatedCircle, AnnotatedRectangle, MaskedImageItem
 from skimage import draw
 
+from cdl.algorithms.datatypes import clip_astype
 from cdl.algorithms.image import scale_data_to_min_max
 from cdl.config import Conf, _
 from cdl.core.model import base
@@ -187,9 +188,7 @@ class ImageRoiDataItem:
         else:
             func = make_roi_circle
         title = "ROI" if index is None else f"ROI{index:02d}"
-        return base.make_roi_item(
-            func, coords, title, fmt, lbl, editable, option="shape/drag"
-        )
+        return base.make_roi_item(func, coords, title, fmt, lbl, editable, option="i")
 
 
 class ROI2DParam(gds.DataSet):
@@ -247,12 +246,17 @@ class ROI2DParam(gds.DataSet):
         """Get ROI coordinates"""
         if self.geometry is RoiDataGeometries.CIRCLE:
             return self.xc - self.r, self.yc, self.xc + self.r, self.yc
-        return self.xr0, self.yr0, self.xr1, self.yr1
+        x0, y0, x1, y1 = self.xr0, self.yr0, self.xr1, self.yr1
+        x0, x1 = min(x0, x1), max(x0, x1)
+        y0, y1 = min(y0, y1), max(y0, y1)
+        x1 = x1 + 1 if x1 == x0 else x1
+        y1 = y1 + 1 if y1 == y0 else y1
+        return x0, y0, x1, y1
 
     def get_single_roi(self) -> np.ndarray | None:
         """Get single ROI, i.e. after extracting ROI from image"""
         if self.geometry is RoiDataGeometries.CIRCLE:
-            return np.array([(0, self.r, self.xc, self.yc)], int)
+            return np.array([(0, self.r, 2 * self.r, self.r)], int)
         return None
 
     def get_rect_indexes(self) -> tuple[int, int, int, int]:
@@ -495,11 +499,13 @@ class ImageObj(gds.DataSet, base.BaseObj):
 
     def set_data_type(self, dtype: np.dtype) -> None:
         """Change data type.
+        If data type is integer, clip values to the new data type's range, thus avoiding
+        overflow or underflow.
 
         Args:
             Data type
         """
-        self.data = np.array(self.data, dtype=dtype)
+        self.data = clip_astype(self.data, dtype)
 
     def __viewable_data(self) -> np.ndarray:
         """Return viewable data"""
@@ -610,7 +616,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         self.update_plot_item_parameters(item)
         item.plot().update_colormap_axis(item)
 
-    def get_roi_param(self, title, *defaults: int) -> gds.DataSet:
+    def get_roi_param(self, title, *defaults: int) -> ROI2DParam:
         """Return ROI parameters dataset.
 
         Args:

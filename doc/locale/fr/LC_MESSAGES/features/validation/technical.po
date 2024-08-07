@@ -1,0 +1,227 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../doc/features/validation/technical.rst:-1
+msgid ""
+"Validation in DataLab, the open-source scientific data analysis and "
+"visualization platform"
+msgstr ""
+"Validation dans DataLab, la plateforme open-source d'analyse et de "
+"visualisation de données scientifiques"
+
+#: ../../doc/features/validation/technical.rst:-1
+msgid "DataLab, scientific, data, analysis, validation, ground-truth, analytical"
+msgstr "DataLab, scientifique, données, analyse, validation, analytique"
+
+#: ../../doc/features/validation/technical.rst:4
+msgid "Technical Validation"
+msgstr "Validation technique"
+
+#: ../../doc/features/validation/technical.rst:10
+msgid ""
+"DataLab technical validation is based on two key concepts: **ground-"
+"truth data** and **analytical validation**."
+msgstr "La validation technique de DataLab est basée sur deux concepts clés : les **données de référence** et la **validation analytique**."
+
+#: ../../doc/features/validation/technical.rst:14
+msgid "Ground-truth data"
+msgstr "Données de référence"
+
+#: ../../doc/features/validation/technical.rst:16
+msgid ""
+"Ground-truth data is data that is known to be correct. It is used to "
+"validate the results of computational analysis."
+msgstr ""
+"Les données de référence sont des données connues pour être correctes. "
+"Elles sont utilisées pour valider les résultats de l'analyse "
+"informatique."
+
+#: ../../doc/features/validation/technical.rst:19
+msgid ""
+"In DataLab, ground-truth data may be obtained from a variety of sources, "
+"including:"
+msgstr ""
+"Dans DataLab, les données de référence peuvent être obtenues à partir de "
+"diverses sources, y compris :"
+
+#: ../../doc/features/validation/technical.rst:21
+msgid "Experimental data"
+msgstr "Données expérimentales"
+
+#: ../../doc/features/validation/technical.rst:22
+msgid "Simulated data"
+msgstr "Données simulées"
+
+#: ../../doc/features/validation/technical.rst:23
+msgid "Synthetic data"
+msgstr "Données synthétiques"
+
+#: ../../doc/features/validation/technical.rst:24
+msgid "Data from a trusted source"
+msgstr "Données provenant d'une source de confiance"
+
+#: ../../doc/features/validation/technical.rst:27
+msgid "Analytical validation"
+msgstr "Validation analytique"
+
+#: ../../doc/features/validation/technical.rst:29
+msgid ""
+"Analytical validation is the process of comparing the results of "
+"computational analysis to ground-truth data. This is done to ensure that "
+"the results are accurate and reliable."
+msgstr ""
+"La validation analytique est le processus de comparaison des résultats de"
+" l'analyse informatique avec les données de référence. Cela est fait pour"
+" s'assurer que les résultats sont précis et fiables."
+
+#: ../../doc/features/validation/technical.rst:32
+msgid ""
+"In DataLab, analytical validation is implemented using a variety of "
+"techniques, including:"
+msgstr ""
+"Dans DataLab, la validation analytique est mise en œuvre à l'aide de "
+"diverses techniques, y compris :"
+
+#: ../../doc/features/validation/technical.rst:34
+msgid ""
+"Cross-validation with an analytical model (from a trusted source, e.g. "
+"`SciPy <https://www.scipy.org/>`_ or `NumPy <https://numpy.org/>`_)"
+msgstr ""
+"Validation croisée avec un modèle analytique (provenant d'une source de "
+"confiance, par exemple `SciPy <https://www.scipy.org/>`_ ou `NumPy "
+"<https://numpy.org/>`_)"
+
+#: ../../doc/features/validation/technical.rst:36
+msgid "Statistical analysis"
+msgstr "Analyse statistique"
+
+#: ../../doc/features/validation/technical.rst:37
+msgid "Visual inspection"
+msgstr "Inspection visuelle"
+
+#: ../../doc/features/validation/technical.rst:38
+msgid "Expert review"
+msgstr "Examen par un expert"
+
+#: ../../doc/features/validation/technical.rst:41
+msgid "Scope"
+msgstr "Périmètre"
+
+#: ../../doc/features/validation/technical.rst:43
+msgid ""
+"The scope of technical validation in DataLab includes all compute "
+"functions that operate on DataLab's signal and image objects (i.e. "
+":class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`)."
+msgstr "Le périmètre de la validation technique dans DataLab inclut toutes les fonctions de calcul qui opèrent sur les objets de signal et d'image de DataLab (c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`)."
+
+#: ../../doc/features/validation/technical.rst:47
+msgid ""
+"This includes functions for (all functions are named "
+"``compute_<function_name>``):"
+msgstr "Cela inclut des fonctions pour (toutes les fonctions sont nommées ``compute_<function_name>``) :"
+
+#: ../../doc/features/validation/technical.rst:49
+msgid "Signal processing (:mod:`cdl.computation.signal`)"
+msgstr "Le traitement du signal (:mod:`cdl.computation.signal`)"
+
+#: ../../doc/features/validation/technical.rst:50
+msgid "Image processing (:mod:`cdl.computation.image`)"
+msgstr "Le traitement d'image (:mod:`cdl.computation.image`)"
+
+#: ../../doc/features/validation/technical.rst:53
+msgid "Implementation"
+msgstr "Implémentation"
+
+#: ../../doc/features/validation/technical.rst:55
+msgid ""
+"The tests are implemented using the `pytest "
+"<https://docs.pytest.org/en/latest/>`_ framework."
+msgstr "Les tests sont implémentés en utilisant le cadre `pytest <https://docs.pytest.org/en/latest/>`_."
+
+#: ../../doc/features/validation/technical.rst:58
+msgid ""
+"When writing a new technical validation test, the following rules should"
+" be followed regarding the test function:"
+msgstr "Lors de l'écriture d'un nouveau test de validation technique, les règles suivantes doivent être suivies concernant la fonction de test :"
+
+#: ../../doc/features/validation/technical.rst:61
+msgid "The test function should be named:"
+msgstr "La fonction de test doit être nommée :"
+
+#: ../../doc/features/validation/technical.rst:63
+msgid "``test_signal_<function_name>`` for signal compute functions"
+msgstr "``test_signal_<function_name>`` pour les fonctions de calcul de signal"
+
+#: ../../doc/features/validation/technical.rst:64
+msgid "``test_image_<function_name>`` for image compute functions"
+msgstr "``test_image_<function_name>`` pour les fonctions de calcul d'image"
+
+#: ../../doc/features/validation/technical.rst:68
+msgid ""
+"The ``signal`` or ``image`` prefix is used to indicate the type of object"
+" that the function operates on. It may be omitted if the function "
+"operates exclusively on one type of object (e.g. ``test_adjust_gamma`` is"
+" the test function for the ``compute_adjust_gamma`` function, which "
+"operates on images)."
+msgstr "Le préfixe ``signal`` ou ``image`` est utilisé pour indiquer le type d'objet sur lequel la fonction opère. Il peut être omis si la fonction opère exclusivement sur un type d'objet (par exemple, ``test_adjust_gamma`` est la fonction de test pour la fonction ``compute_adjust_gamma``, qui opère sur des images)."
+
+#: ../../doc/features/validation/technical.rst:73
+msgid ""
+"The test function should be marked with the ``@pytest.mark.validation`` "
+"decorator."
+msgstr "La fonction de test doit être marquée avec le décorateur ``@pytest.mark.validation``."
+
+#: ../../doc/features/validation/technical.rst:75
+msgid "Following those rules ensures that:"
+msgstr "En suivant ces règles, on s'assure que :"
+
+#: ../../doc/features/validation/technical.rst:77
+msgid "The tests are easily identified as technical validation tests."
+msgstr "Les tests sont facilement identifiés comme des tests de validation technique."
+
+#: ../../doc/features/validation/technical.rst:79
+msgid ""
+"The tests can be executed separately using the command line interface "
+"(see :ref:`run_scientific_validation_tests`)."
+msgstr "Les tests peuvent être exécutés séparément à l'aide de l'interface en ligne de commande (voir :ref:`run_scientific_validation_tests`)."
+
+#: ../../doc/features/validation/technical.rst:82
+msgid ""
+"The tests are automatically discovered for synthetizing the validation "
+"status of the compute functions (see :ref:`validation_status`)."
+msgstr "Les tests sont automatiquement découverts pour synthétiser l'état de validation des fonctions de calcul (voir :ref:`validation_status`)."
+
+#: ../../doc/features/validation/technical.rst:86
+msgid "Executing tests"
+msgstr "Exécution des tests"
+
+#: ../../doc/features/validation/technical.rst:88
+msgid ""
+"In DataLab, technical validation tests are disseminated in the test "
+"suite of the project, but they can also be executed separately using the "
+"command line interface."
+msgstr "Dans DataLab, les tests de validation technique sont disséminés dans la suite de tests du projet, mais ils peuvent également être exécutés séparément à l'aide de l'interface en ligne de commande."
+
+#: ../../doc/features/validation/technical.rst:93
+msgid ""
+"See paragraph :ref:`run_scientific_validation_tests` for more information"
+" on how to run technical validation tests."
+msgstr "Voir le paragraphe :ref:`run_scientific_validation_tests` pour plus d'informations sur la façon d'exécuter les tests de validation technique."

@@ -25,7 +25,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl import env
-from cdl.algorithms.datatypes import is_complex_dtype, is_integer_dtype
+from cdl.algorithms.datatypes import is_complex_dtype
 from cdl.computation.base import ROIDataParam
 from cdl.config import Conf, _
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
@@ -39,8 +39,9 @@ if TYPE_CHECKING:
     from plotpy.plot import PlotWidget
 
     from cdl.computation.base import (
+        ArithmeticParam,
         ClipParam,
-        ConstantOperationParam,
+        ConstantParam,
         GaussianParam,
         MovingAverageParam,
         MovingMedianParam,
@@ -167,7 +168,7 @@ def is_pairwise_mode() -> bool:
 
 
 class BaseProcessor(QC.QObject):
-    """Object handling data processing: operations, processing, computing.
+    """Object handling data processing: operations, processing, analysis.
 
     Args:
         panel: panel
@@ -597,8 +598,6 @@ class BaseProcessor(QC.QObject):
                                 dst_obj.roi = src_obj.roi.copy()
                             else:
                                 dst_obj.roi = np.vstack((dst_obj.roi, src_obj.roi))
-                    if is_integer_dtype(src_dtype):
-                        dst_obj.set_data_type(dtype=src_dtype)
                     if func_objs is not None:
                         func_objs(dst_obj, src_objs_pair)
                     short_ids = [obj.short_id for obj in src_objs_pair]
@@ -663,8 +662,6 @@ class BaseProcessor(QC.QObject):
             for src_gid, dst_obj in dst_objs.items():
                 if func_objs is not None:
                     func_objs(dst_obj, src_objs[src_gid])
-                if is_integer_dtype(src_dtypes[src_gid]):
-                    dst_obj.set_data_type(dtype=src_dtypes[src_gid])
                 short_ids = [obj.short_id for obj in src_objs[src_gid]]
                 dst_obj.title = f'{name}({", ".join(short_ids)})'
                 group_id = dst_gid if dst_gid is not None else src_gid
@@ -701,9 +698,6 @@ class BaseProcessor(QC.QObject):
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
-        if param is not None:
-            if edit and not param.edit(parent=self.panel.parent()):
-                return
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
 
@@ -790,6 +784,11 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
+    def compute_arithmetic(self, param: ArithmeticParam | None = None) -> None:
+        """Compute arithmetic operation"""
+
+    @abc.abstractmethod
+    @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
 
@@ -845,9 +844,6 @@ class BaseProcessor(QC.QObject):
             param = self.edit_regions_of_interest(
                 extract=True, singleobj=param.singleobj
             )
-            if param is not None and param.roidata is None:
-                # This only happens in unattended mode (forcing QDialog accept)
-                return None
         return param
 
     @abc.abstractmethod
@@ -934,25 +930,25 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_addition_constant(self, param: ConstantOperationParam) -> None:
+    def compute_addition_constant(self, param: ConstantParam) -> None:
         """Compute sum with a constant"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_difference_constant(self, param: ConstantOperationParam) -> None:
+    def compute_difference_constant(self, param: ConstantParam) -> None:
         """Compute difference with a constant"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_product_constant(self, param: ConstantOperationParam) -> None:
+    def compute_product_constant(self, param: ConstantParam) -> None:
         """Compute product with a constant"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_division_constant(self, param: ConstantOperationParam) -> None:
+    def compute_division_constant(self, param: ConstantParam) -> None:
         """Compute division by a constant"""
 
-    # ------Computing-------------------------------------------------------------------
+    # ------Analysis-------------------------------------------------------------------
 
     def edit_regions_of_interest(
         self,
@@ -960,7 +956,7 @@ class BaseProcessor(QC.QObject):
         singleobj: bool | None = None,
         add_roi: bool = False,
     ) -> ROIDataParam | None:
-        """Define Region Of Interest (ROI) for computing functions.
+        """Define Region Of Interest (ROI).
 
         Args:
             extract: If True, ROI is extracted from data. Defaults to False.
@@ -974,7 +970,7 @@ class BaseProcessor(QC.QObject):
         Returns:
             ROI data parameters or None if ROI dialog has been canceled.
         """
-        results = self.panel.get_roi_dialog(
+        results = self.panel.get_roi_editor_output(
             extract=extract, singleobj=singleobj, add_roi=add_roi
         )
         if results is None:
@@ -985,7 +981,7 @@ class BaseProcessor(QC.QObject):
         if (
             env.execenv.unattended
             or roieditordata.roidata.size == 0
-            or roigroup.edit(parent=self.panel)
+            or roigroup.edit(parent=self.panel.parent())
         ):
             roidata = obj.params_to_roidata(roigroup)
             if modified:

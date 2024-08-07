@@ -56,6 +56,12 @@ Base image processing features
 .. automodule:: cdl.computation.image
    :members:
 
+Threshold features
+~~~~~~~~~~~~~~~~~~
+
+.. automodule:: cdl.computation.image.threshold
+    :members:
+
 Exposure correction features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

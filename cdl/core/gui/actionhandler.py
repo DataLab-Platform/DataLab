@@ -138,7 +138,7 @@ class ActionCategory(enum.Enum):
     VIEW = enum.auto()
     OPERATION = enum.auto()
     PROCESSING = enum.auto()
-    COMPUTING = enum.auto()
+    ANALYSIS = enum.auto()
     CONTEXT_MENU = enum.auto()
     PANEL_TOOLBAR = enum.auto()
     VIEW_TOOLBAR = enum.auto()
@@ -543,6 +543,24 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 tip=_("Copy titles of selected objects to clipboard"),
                 triggered=self.panel.copy_titles_to_clipboard,
             )
+            self.new_action(
+                _("Edit regions of interest..."),
+                separator=True,
+                triggered=self.panel.processor.edit_regions_of_interest,
+                icon_name="roi.svg",
+                select_condition=SelectCond.exactly_one,
+                context_menu_pos=-1,
+                context_menu_sep=True,
+                toolbar_pos=-1,
+                toolbar_category=ActionCategory.VIEW_TOOLBAR,
+            )
+            self.new_action(
+                _("Remove regions of interest"),
+                triggered=self.panel.processor.delete_regions_of_interest,
+                icon_name="roi_delete.svg",
+                select_condition=SelectCond.with_roi,
+                context_menu_pos=-1,
+            )
 
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
@@ -552,7 +570,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.open_separate_view,
                 context_menu_pos=0,
                 context_menu_sep=True,
-                toolbar_pos=-1,
+                toolbar_pos=0,
             )
             self.new_action(
                 _("Edit annotations") + "...",
@@ -614,6 +632,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.processor.compute_division,
                 select_condition=SelectCond.at_least_one,
                 icon_name="division.svg",
+            )
+            self.new_action(
+                _("Arithmetic operation") + "...",
+                triggered=self.panel.processor.compute_arithmetic,
+                select_condition=SelectCond.at_least_one,
+                icon_name="arithmetic.svg",
             )
             with self.new_menu(_("Constant Operations"), icon_name="constant.svg"):
                 self.new_action(
@@ -746,25 +770,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     triggered=self.panel.processor.compute_psd,
                 )
 
-        with self.new_category(ActionCategory.COMPUTING):
-            self.new_action(
-                _("Edit regions of interest..."),
-                triggered=self.panel.processor.edit_regions_of_interest,
-                icon_name="roi.svg",
-                select_condition=SelectCond.exactly_one,
-                context_menu_pos=-1,
-                context_menu_sep=True,
-            )
-            self.new_action(
-                _("Remove regions of interest"),
-                triggered=self.panel.processor.delete_regions_of_interest,
-                icon_name="roi_delete.svg",
-                select_condition=SelectCond.with_roi,
-                context_menu_pos=-1,
-            )
+        with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Statistics") + "...",
-                separator=True,
                 triggered=self.panel.processor.compute_stats,
                 icon_name="stats.svg",
                 context_menu_pos=-1,
@@ -783,11 +791,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("ROI extraction"),
                 triggered=self.panel.processor.compute_roi_extraction,
+                # Icon name is 'signal_roi.svg' or 'image_roi.svg':
                 icon_name=f"{self.OBJECT_STR}_roi.svg",
                 separator=True,
             )
 
-        with self.new_category(ActionCategory.COMPUTING):
+        with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Show results") + "...",
                 triggered=self.panel.show_results,
@@ -930,7 +939,7 @@ class SignalActionHandler(BaseActionHandler):
                 icon_name="resampling.svg",
             )
 
-        with self.new_category(ActionCategory.COMPUTING):
+        with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Full width at half-maximum"),
                 triggered=self.panel.processor.compute_fwhm,
@@ -1034,6 +1043,7 @@ class ImageActionHandler(BaseActionHandler):
                 _("Show contrast panel"),
                 icon_name="contrast.png",
                 tip=_("Show or hide contrast adjustment panel"),
+                select_condition=SelectCond.always,
                 toggled=self.panel.toggle_show_contrast,
                 toolbar_pos=-1,
             )
@@ -1319,7 +1329,7 @@ class ImageActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_butterworth,
             )
 
-        with self.new_category(ActionCategory.COMPUTING):
+        with self.new_category(ActionCategory.ANALYSIS):
             # TODO: [P3] Add "Create ROI grid..." action to create a regular grid
             # or ROIs (maybe reuse/derive from `core.gui.processor.image.GridParam`)
             self.new_action(

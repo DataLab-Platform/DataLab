@@ -35,15 +35,15 @@ msgstr "Paramètres de détection de pics 2D."
 
 #: ../../features/image/2d_peak_detection.rst:19
 msgid "How to use the feature:"
-msgstr "La fonctionnalité s'utilise de la façon suivante :"
+msgstr "La fonctionnalité s'utilise de la façon suivante :"
 
 #: ../../features/image/2d_peak_detection.rst:14
 msgid "Create or open an image in DataLab workspace"
 msgstr "Créer ou ouvrir une image dans l'espace de travail de DataLab"
 
 #: ../../features/image/2d_peak_detection.rst:15
-msgid "Select \"2d peak detection\" in \"Computing\" menu"
-msgstr "Sélectionner \"Détection de pics 2D\" dans le menu \"Calculs\""
+msgid "Select \"2d peak detection\" in \"Analysis\" menu"
+msgstr "Sélectionner \"Détection de pics 2D\" dans le menu Analyse\""
 
 #: ../../features/image/2d_peak_detection.rst:16
 msgid "Enter parameters \"Neighborhoods size\" and \"Relative threhold\""
@@ -66,7 +66,7 @@ msgstr "Résultats d'une détection de pics 2D (voir le test \"peak2d_app.py\")"
 
 #: ../../features/image/2d_peak_detection.rst:28
 msgid "Results are shown in a table:"
-msgstr "Les résultats sont affichés dans un tableau :"
+msgstr "Les résultats sont affichés dans un tableau :"
 
 #: ../../features/image/2d_peak_detection.rst:26
 msgid "Each row is associated to a detected peak"
@@ -88,7 +88,7 @@ msgstr "Exemple de détection de pics 2D."
 
 #: ../../features/image/2d_peak_detection.rst:43
 msgid "The 2d peak detection algorithm works in the following way:"
-msgstr "L'algorithme de détection de pics 2D fonctionne de la manière suivante :"
+msgstr "L'algorithme de détection de pics 2D fonctionne de la manière suivante :"
 
 #: ../../features/image/2d_peak_detection.rst:35
 msgid ""
@@ -135,7 +135,7 @@ msgstr "Les doublons sont éventuellement supprimés"
 
 #: ../../features/image/2d_peak_detection.rst:47
 msgid "The 2d peak detection parameters are the following:"
-msgstr "Les paramètrees de la détection de pics 2D sont les suivants :"
+msgstr "Les paramètrees de la détection de pics 2D sont les suivants :"
 
 #: ../../features/image/2d_peak_detection.rst:46
 msgid "\"Neighborhoods size\": size of the sliding window (see above)"
@@ -149,4 +149,4 @@ msgstr "\"Seuil relatif\": seuil de détection"
 msgid ""
 "Feature is based on ``get_2d_peaks_coords`` function from "
 "``cdl.algorithms`` module:"
-msgstr "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du module ``cdl.algorithms`` :"
+msgstr "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du module ``cdl.algorithms`` :"

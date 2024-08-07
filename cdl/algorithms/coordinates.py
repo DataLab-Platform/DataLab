@@ -39,7 +39,7 @@ def array_circle_to_diameter(data: np.ndarray) -> np.ndarray:
     xc, yc, r = data[:, 0], data[:, 1], data[:, 2]
     x_start = xc - r
     x_end = xc + r
-    result = np.column_stack((x_start, yc, x_end, yc)).astype(np.float64)
+    result = np.column_stack((x_start, yc, x_end, yc)).astype(float)
     return result
 
 
@@ -74,7 +74,7 @@ def array_circle_to_center_radius(data: np.ndarray) -> np.ndarray:
     x0, y0, x1, y1 = data[:, 0], data[:, 1], data[:, 2], data[:, 3]
     xc, yc = (x0 + x1) / 2, (y0 + y1) / 2
     r = np.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2) / 2
-    result = np.column_stack((xc, yc, r)).astype(np.float64)
+    result = np.column_stack((xc, yc, r)).astype(float)
     return result
 
 
@@ -116,7 +116,7 @@ def array_ellipse_to_diameters(data: np.ndarray) -> np.ndarray:
     dxb, dyb = b * np.sin(theta), b * np.cos(theta)
     x0, y0, x1, y1 = xc - dxa, yc - dya, xc + dxa, yc + dya
     x2, y2, x3, y3 = xc - dxb, yc - dyb, xc + dxb, yc + dyb
-    result = np.column_stack((x0, y0, x1, y1, x2, y2, x3, y3)).astype(np.float64)
+    result = np.column_stack((x0, y0, x1, y1, x2, y2, x3, y3)).astype(float)
     return result
 
 
@@ -176,5 +176,5 @@ def array_ellipse_to_center_axes_angle(data: np.ndarray) -> np.ndarray:
     a = np.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2) / 2
     b = np.sqrt((x3 - x2) ** 2 + (y3 - y2) ** 2) / 2
     theta = np.arctan2(y1 - y0, x1 - x0)
-    result = np.column_stack((xc, yc, a, b, theta)).astype(np.float64)
+    result = np.column_stack((xc, yc, a, b, theta)).astype(float)
     return result

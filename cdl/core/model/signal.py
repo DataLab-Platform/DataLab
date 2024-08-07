@@ -21,6 +21,7 @@ import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset, update_dataset
 from guidata.qthelpers import exec_dialog
+from numpy import ma
 from plotpy.builder import make
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
@@ -509,7 +510,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
             fmt,
             lbl,
             editable,
-            option="shape/drag",
+            option=self.PREFIX,
         )
 
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
@@ -534,8 +535,37 @@ class SignalObj(gds.DataSet, base.BaseObj):
                     fmt,
                     lbl,
                     editable,
-                    option="shape/drag",
+                    option=self.PREFIX,
                 )
+
+    @property
+    def maskdata(self) -> np.ndarray:
+        """Return masked data (areas outside defined regions of interest)
+
+        Returns:
+            Masked data
+        """
+        roi_changed = self.roi_has_changed()
+        if self.roi is None:
+            if roi_changed:
+                self._maskdata_cache = None
+        elif roi_changed or self._maskdata_cache is None:
+            mask = np.ones_like(self.xydata, dtype=bool)
+            for roirow in self.roi:
+                mask[:, roirow[0] : roirow[1]] = False
+            self._maskdata_cache = mask
+        return self._maskdata_cache
+
+    def get_masked_view(self) -> ma.MaskedArray:
+        """Return masked view for data
+
+        Returns:
+            Masked view
+        """
+        self.data: np.ndarray
+        view = self.data.view(ma.MaskedArray)
+        view.mask = self.maskdata
+        return view
 
     def add_label_with_title(self, title: str | None = None) -> None:
         """Add label with title annotation

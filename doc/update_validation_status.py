@@ -9,11 +9,14 @@ import importlib
 import inspect
 import os.path as osp
 import pkgutil
+import re
 
 from _pytest.mark import Mark
 
 import cdl.computation as computation_pkg
 import cdl.tests as tests_pkg
+from cdl import __version__
+from cdl.utils.strings import shorten_docstring
 
 
 def get_compute_functions(package: str) -> list:
@@ -47,18 +50,21 @@ def check_for_validation_test(
         validation_tests: List of validation tests
 
     Returns:
-        Path to the validation test file or None if it doesn't exist
+        Text to be included in the CSV file or None if it doesn't exist
     """
     family, funcname = full_function_name.split(".")[-2:]  # "signal" or "image"
     shortname = funcname.replace("compute_", "")
     endings = [shortname, shortname + "_unit", shortname + "_validation"]
     beginnings = ["test", f"test_{family}", f"test_{family[:3]}", f"test_{family[0]}"]
     names = [f"{beginning}_{ending}" for beginning in beginnings for ending in endings]
-    for test, path in validation_tests:
+    stable_version = re.sub(r"\.?(post|dev|rc|b|a)\S*", "", __version__)
+    for test, path, line_number in validation_tests:
         if test in names:
             # Path relative to the `cdl` package:
             path = osp.relpath(path, start=osp.dirname(osp.join(tests_pkg.__file__)))
-            return "/".join(path.split(osp.sep))
+            name = "/".join(path.split(osp.sep))
+            link = f"https://github.com/DataLab-Platform/DataLab/blob/v{stable_version}/cdl/tests/{name}#L{line_number}"
+            return f"`{test} <{link}>`_"
     return None
 
 
@@ -69,7 +75,7 @@ def get_validation_tests(package: str) -> list:
         package: Python package
 
     Returns:
-        List of tuples containing the test name and module path
+        List of tuples containing the test name, module path and line number
     """
     validation_tests = []
     package_path = package.__path__
@@ -82,7 +88,8 @@ def get_validation_tests(package: str) -> list:
                 for mark in obj.pytestmark:
                     if isinstance(mark, Mark) and mark.name == "validation":
                         module_path = inspect.getfile(obj)
-                        validation_tests.append((name, module_path))
+                        line_number = inspect.getsourcelines(obj)[1]
+                        validation_tests.append((name, module_path, line_number))
     return validation_tests
 
 
@@ -93,11 +100,11 @@ def generate_csv_files() -> None:
 
     submodules = {"signal": [], "image": []}
 
-    for module_name, function_name, docstring in compute_functions:
-        if "signal" in module_name:
-            submodules["signal"].append((module_name, function_name, docstring))
-        elif "image" in module_name:
-            submodules["image"].append((module_name, function_name, docstring))
+    for modname, funcname, docstring in compute_functions:
+        if "signal" in modname:
+            submodules["signal"].append((modname, funcname, docstring))
+        elif "image" in modname:
+            submodules["image"].append((modname, funcname, docstring))
 
     statistics_rows = []
 
@@ -106,18 +113,17 @@ def generate_csv_files() -> None:
 
     for submodule, functions in submodules.items():
         function_rows = []
-        for module_name, function_name, docstring in functions:
-            full_function_name = f"{module_name}.{function_name}"
-            test_path = check_for_validation_test(full_function_name, validation_tests)
-            if test_path:
+        for modname, funcname, docstring in functions:
+            full_funcname = f"{modname}.{funcname}"
+            test_link = check_for_validation_test(full_funcname, validation_tests)
+            if test_link:
                 v_count[submodule] += 1
                 v_count["total"] += 1
             t_count[submodule] += 1
             t_count["total"] += 1
-            description = docstring.split("\n")[0] if docstring else "-"
-            test_script = f"``{test_path}``" if test_path else "N/A"
-            short_name = function_name.replace("compute_", "")
-            pyfunc_link = f":py:func:`{short_name} <{full_function_name}>`"
+            description = shorten_docstring(docstring)
+            test_script = test_link if test_link else "N/A"
+            pyfunc_link = f":py:func:`{funcname} <{full_funcname}>`"
             function_rows.append([pyfunc_link, description, test_script])
 
         fname = osp.join(osp.dirname(__file__), f"validation_status_{submodule}.csv")

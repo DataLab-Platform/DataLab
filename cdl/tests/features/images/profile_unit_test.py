@@ -24,6 +24,10 @@ def test_profile_unit():
                 if initial_param:
                     if mode == "line":
                         param = cdl.param.LineProfileParam.create(row=100, col=200)
+                    elif mode == "segment":
+                        param = cdl.param.SegmentProfileParam.create(
+                            row1=10, col1=20, row2=200, col2=300
+                        )
                     else:
                         param = cdl.param.AverageProfileParam.create(
                             row1=10, col1=20, row2=200, col2=300
@@ -41,6 +45,8 @@ def test_profile_unit():
                     mode, param, add_initial_shape=initial_param
                 )
                 dialog.set_obj(obj)
+                if initial_param:
+                    dialog.edit_values()
                 ok = exec_dialog(dialog)
                 execenv.print(f"Returned code: {ok}")
                 execenv.print(f"Param: {param}")

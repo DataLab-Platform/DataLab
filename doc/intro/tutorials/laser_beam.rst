@@ -89,7 +89,7 @@ might be useful to apply a threshold to the images.
 .. figure:: ../../images/tutorials/laser_beam/06.png
 
     After applying a threshold at 35 lsb (with "Processing > Thresholding..."), we can
-    compute a more accurate position of the beam center using "Computing > Centroid".
+    compute a more accurate position of the beam center using "Analysis > Centroid".
 
 .. figure:: ../../images/tutorials/laser_beam/07.png
 
@@ -106,7 +106,7 @@ might be useful to apply a threshold to the images.
 .. figure:: ../../images/tutorials/laser_beam/09.png
 
     If we go back to the first signal, the intensity profile, we can also directly
-    compute the FWHM with "Computing > Full width at half maximum". The "Results"
+    compute the FWHM with "Analysis > Full width at half maximum". The "Results"
     dialog displays a lot of information about the computation, including the
     FWHM value (that is the `L` column, "L" for "Length" because the result shape is
     a segment and FWHM is the length of the segment).
@@ -147,12 +147,12 @@ the |delete_all| button in the toolbar). We alse clean the intermediate results
 in the "Images" panel by selecting the images obtained during our prototyping
 and deleting them individually (with "Edit > Remove" or the |delete| button).
 
-.. |delete_all| image:: ../../../cdl/data/icons/delete_all.svg
+.. |delete_all| image:: ../../../cdl/data/icons/edit/delete_all.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |delete| image:: ../../../cdl/data/icons/delete.svg
+.. |delete| image:: ../../../cdl/data/icons/edit/delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -177,13 +177,13 @@ the whole group "g001").
 
 .. note::
 
-    If you want to show the computing results again, you can select the "Show results"
-    |show_results| entry in the "Computing" menu, or the "Show results" |show_results|
+    If you want to show the analysis results again, you can select the "Show results"
+    |show_results| entry in the "Analysis" menu, or the "Show results" |show_results|
     button, below the image list:
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
+.. |show_results| image:: ../../../cdl/data/icons/analysis/show_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -192,11 +192,11 @@ the whole group "g001").
 
     Finally, we can plot the beam size as a function of the position along the
     propagation axis. To do that, we use the "Plot results" feature |plot_results|
-    in the "Computing" menu. This feature allows to plot result data sets by
+    in the "Analysis" menu. This feature allows to plot result data sets by
     choosing the x and y axes among the result columns. Here, we choose the
     to plot the FWHM values (`L`) as a function of the image index (`Indexes`).
 
-.. |plot_results| image:: ../../../cdl/data/icons/computing/plot_results.svg
+.. |plot_results| image:: ../../../cdl/data/icons/analysis/plot_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -215,7 +215,7 @@ the whole group "g001").
 
 Finally, we can save the workspace to a file |filesave_h5|. The workspace contains
 all the images and signals that were loaded or processed in DataLab. It also contains
-the computing results, the visualization settings (colormaps, contrast, etc.), the
+the analysis results, the visualization settings (colormaps, contrast, etc.), the
 metadata, and the annotations.
 
 .. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg

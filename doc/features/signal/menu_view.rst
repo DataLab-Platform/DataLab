@@ -94,10 +94,10 @@ feature is disabled, or when you want to force a refresh of the plot view.
 Show graphical object titles
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Show/hide titles of computing results or annotations.
+Show/hide titles of analysis results or annotations.
 
 This option allows you to show or hide the titles of the graphical objects
-(e.g., the titles of the computing results or annotations). Hiding the titles
+(e.g., the titles of the analysis results or annotations). Hiding the titles
 can be useful when you want to visualize the data without any distractions,
 or if there are too many titles and they are overlapping.
 

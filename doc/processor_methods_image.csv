@@ -1,0 +1,100 @@
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_abs`,Compute absolute value with :py:func:`cdl.computation.image.compute_abs`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant`,Compute sum with a constant 
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma`,Compute gamma correction
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log`,Compute log correction
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid`,Compute sigmoid correction
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise`,Compute all denoising filters
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_edges`,Compute all edges filters
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`,Compute all morphology filters
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`,Compute all threshold algorithms
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_arithmetic`,Compute arithmetic operation between two images
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_astype`,Convert data type with :py:func:`cdl.computation.image.compute_astype`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average`,Compute average with :py:func:`cdl.computation.image.compute_addition`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`,Compute average profile
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_binning`,Binning image with :py:func:`cdl.computation.image.compute_binning`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat`,Compute Black Top-Hat
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog`,Compute blob detection using Difference of Gaussian method
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh`,Compute blob detection using Determinant of Hessian method
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_log`,Compute blob detection using Laplacian of Gaussian method
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv`,Compute blob detection using OpenCV
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_butterworth`,Compute Butterworth filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_calibration`,Compute data linear calibration
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_canny`,Compute Canny filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_centroid`,Compute image centroid
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_clip`,Compute maximum data clipping
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_closing`,Compute morphological closing
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape`,Compute contour shape fit
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral`,Compute bilateral filter denoising
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat`,Denoise using White Top-Hat
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv`,Compute Total Variation denoising
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet`,Compute Wavelet denoising
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_difference`,Compute difference between two images
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant`,Compute difference with a constant
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_dilation`,Compute Dilation
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_division`,Compute division between two images
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_division_constant`,Compute division by a constant
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle`,Compute minimum enclosing circle
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist`,Adaptive histogram equalization
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist`,Histogram equalization
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_erosion`,Compute Erosion
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_exp`,Compute Log10 with :py:func:`cdl.computation.image.compute_exp`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid`,Compute Farid filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid_h`,Compute Farid filter (horizontal)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid_v`,Compute Farid filter (vertical)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fft`,Compute FFT with :py:func:`cdl.computation.image.compute_fft`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_flatfield`,Compute flat field correction
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fliph`,Flip data horizontally 
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_flipv`,Flip data vertically with :py:func:`cdl.computation.image.compute_flipv`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter`,Compute gaussian filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_histogram`,Compute histogram with :py:func:`cdl.computation.image.compute_histogram`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks`,Compute peak detection based on a circle Hough transform
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_ifft`,Compute iFFT with :py:func:`cdl.computation.image.compute_ifft`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_im`,Compute imaginary part with :py:func:`cdl.computation.image.compute_im`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_laplace`,Compute Laplace filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`,Compute profile along a vertical or horizontal line
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_log10`,Compute Log10 with :py:func:`cdl.computation.image.compute_log10`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_logp1`,Compute base 10 logarithm 
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum`,Compute magnitude spectrum
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_moving_average`,Compute moving average
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_moving_median`,Compute moving median
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_normalize`,Normalize data with :py:func:`cdl.computation.image.compute_normalize`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction`,Compute offset correction
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_opening`,Compute morphological opening
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection`,Compute 2D peak detection
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum`,Compute phase spectrum
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt`,Compute Prewitt filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h`,Compute Prewitt filter (horizontal)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v`,Compute Prewitt filter (vertical)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product`,Compute product with :py:func:`cdl.computation.image.compute_product`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product_constant`,Compute product with a constant 
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_psd`,Compute Power Spectral Density (PSD)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference`,Compute quadratic difference between two images
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile`,Compute radial profile
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_re`,Compute real part with :py:func:`cdl.computation.image.compute_re`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity`,Rescale image intensity levels
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_resize`,Resize image with :py:func:`cdl.computation.image.compute_resize`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roberts`,Compute Roberts filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate`,Rotate data arbitrarily 
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate270`,Rotate data 270° with :py:func:`cdl.computation.image.compute_rotate270`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate90`,Rotate data 90° with :py:func:`cdl.computation.image.compute_rotate90`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr`,Compute Scharr filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h`,Compute Scharr filter (horizontal)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v`,Compute Scharr filter (vertical)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile`,Compute profile along a segment
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel`,Compute Sobel filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h`,Compute Sobel filter (horizontal)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v`,Compute Sobel filter (vertical)
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_stats`,Compute data statistics
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sum`,Compute sum with :py:func:`cdl.computation.image.compute_addition`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes`,Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold`,Compute parametric threshold
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata`,Compute threshold using Isodata algorithm
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li`,Compute threshold using Li algorithm
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean`,Compute threshold using Mean algorithm
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum`,Compute threshold using Minimum algorithm
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu`,Compute threshold using Otsu algorithm
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle`,Compute threshold using Triangle algorithm
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen`,Compute threshold using Yen algorithm
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat`,Compute White Top-Hat
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_wiener`,Compute Wiener filter

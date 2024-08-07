@@ -43,7 +43,7 @@ msgid ""
 "using DataLab:"
 msgstr ""
 "Cet exemple montre comment prototyper une chaîne de traitement d'image "
-"personnalisée en utilisant DataLab :"
+"personnalisée en utilisant DataLab :"
 
 #: ../../intro/tutorials/custom_func.rst:12
 #: ../../intro/tutorials/custom_func.rst:18
@@ -95,7 +95,7 @@ msgstr ""
 
 #: ../../intro/tutorials/custom_func.rst:30
 msgid "Here is the code of the ``weighted_average_denoise`` function::"
-msgstr "Voici le code de la fonction ``weighted_average_denoise`` :"
+msgstr "Voici le code de la fonction ``weighted_average_denoise`` :"
 
 #: ../../intro/tutorials/custom_func.rst:48
 msgid ""
@@ -168,11 +168,11 @@ msgstr ""
 "DataLab crée une nouvelle macro-commande qui n'est pas vide : elle "
 "contient un code d'exemple qui montre comment créer une nouvelle image et"
 " l'ajouter au \"Panneau Image\". Nous pouvons supprimer ce code et le "
-"remplacer par le nôtre :"
+"remplacer par le nôtre :"
 
 #: ../../intro/tutorials/custom_func.rst:121
 msgid "In DataLab, macro-commands are simply Python scripts:"
-msgstr "Dans DataLab, les macro-commandes sont simplement des scripts Python :"
+msgstr "Dans DataLab, les macro-commandes sont simplement des scripts Python :"
 
 #: ../../intro/tutorials/custom_func.rst:123
 msgid ""
@@ -232,7 +232,7 @@ msgstr ""
 "Si vos modules personnalisés ne sont pas installés dans l'environnement "
 "Python de DataLab, et s'ils sont compatibles avec la version Python de "
 "DataLab, vous pouvez préfixer ``sys.path`` avec le chemin vers la "
-"distribution Python qui contient vos modules :"
+"distribution Python qui contient vos modules :"
 
 #: ../../intro/tutorials/custom_func.rst:151
 msgid ""
@@ -258,7 +258,7 @@ msgid ""
 "|libre-camera-flash-on| button:"
 msgstr ""
 "Maintenant, exécutons la macro-commande en cliquant sur le bouton "
-"\"Exécuter la macro\" |libre-camera-flash-on| :"
+"\"Exécuter la macro\" |libre-camera-flash-on| :"
 
 #: ../../intro/tutorials/custom_func.rst:176
 msgid "libre-camera-flash-on"
@@ -290,7 +290,7 @@ msgstr ""
 "Pendant l'exécution de la macro-commande, nous pouvons voir la "
 "progression dans la fenêtre \"Gestionnaire de Macros\" : la sortie "
 "standard du processus est affichée dans la \"Console\" en dessous de "
-"l'éditeur de macro. Nous pouvons voir les messages suivants :"
+"l'éditeur de macro. Nous pouvons voir les messages suivants :"
 
 #: ../../intro/tutorials/custom_func.rst:172
 msgid ""
@@ -357,7 +357,7 @@ msgid ""
 "environment:"
 msgstr ""
 "Le seul prérequis est d'installer un client DataLab dans l'environnement "
-"Python de Spyder :"
+"Python de Spyder :"
 
 #: ../../intro/tutorials/custom_func.rst:202
 msgid ""
@@ -370,7 +370,7 @@ msgstr ""
 "devez garder DataLab et Spyder dans des environnements Python séparés, "
 "vous pouvez installer le `DataLab Simple Client "
 "<https://pypi.org/project/cdlclient/>`_ (``cdl-client``) en utilisant le "
-"gestionnaire de paquets ``pip`` :"
+"gestionnaire de paquets ``pip`` :"
 
 #: ../../intro/tutorials/custom_func.rst:209
 msgid ""
@@ -383,7 +383,7 @@ msgstr ""
 "<https://pypi.org/project/cdl/>`_ (``cdl``) qui inclut le client (mais "
 "aussi d'autres modules, donc nous ne recommandons pas cette méthode si "
 "vous n'avez pas besoin de toutes les fonctionnalités de DataLab dans cet "
-"environnement Python) :"
+"environnement Python) :"
 
 #: ../../intro/tutorials/custom_func.rst:215
 msgid ""
@@ -403,7 +403,7 @@ msgid ""
 " script:"
 msgstr ""
 "Une fois le client installé, nous pouvons démarrer Spyder et créer un "
-"nouveau script Python :"
+"nouveau script Python :"
 
 #: ../../intro/tutorials/custom_func.rst:227
 #: ../../intro/tutorials/custom_func.rst:258
@@ -522,7 +522,7 @@ msgstr ""
 "DataLab qui est plus pratique pour l'utilisateur, l'avantage de créer un "
 "plugin est que nous pouvons tirer parti de l'infrastructure de DataLab, "
 "si nous encapsulons notre fonction de traitement d'une certaine manière "
-"(voir ci-dessous) :"
+"(voir ci-dessous) :"
 
 #: ../../intro/tutorials/custom_func.rst:286
 msgid ""
@@ -584,7 +584,7 @@ msgstr ""
 
 #: ../../intro/tutorials/custom_func.rst:307
 msgid "Here is the plugin code:"
-msgstr "Voici le code du plugin :"
+msgstr "Voici le code du plugin :"
 
 #: ../../intro/tutorials/custom_func.rst:313
 msgid ""

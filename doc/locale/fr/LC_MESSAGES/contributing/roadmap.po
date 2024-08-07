@@ -31,7 +31,7 @@ msgstr "Fonctionnalités ou améliorations"
 
 #: ../../doc/contributing/roadmap.rst:10
 msgid "Add support for data acquisition:"
-msgstr "Ajouter la prise en charge de l'acquisition de données :"
+msgstr "Ajouter la prise en charge de l'acquisition de données :"
 
 #: ../../doc/contributing/roadmap.rst:12
 msgid ""
@@ -62,7 +62,7 @@ msgstr "Une des solutions techniques possibles pourrait être de s'appuyer sur `
 
 #: ../../doc/contributing/roadmap.rst:24
 msgid "Create a DataLab math library:"
-msgstr "Créer une bibliothèque mathématique DataLab :"
+msgstr "Créer une bibliothèque mathématique DataLab :"
 
 #: ../../doc/contributing/roadmap.rst:26
 msgid ""
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Create a Jupyter plugin for interactive data analysis with DataLab:"
 msgstr ""
 "Créer un plugin Jupyter pour l'analyse de données interactive avec "
-"DataLab :"
+"DataLab :"
 
 #: ../../doc/contributing/roadmap.rst:44
 msgid ""
@@ -176,7 +176,7 @@ msgid ""
 "DataLab:"
 msgstr ""
 "Créer un plugin Spyder pour l'analyse de données interactive connectée à "
-"DataLab :"
+"DataLab :"
 
 #: ../../doc/contributing/roadmap.rst:60
 msgid ""
@@ -204,7 +204,7 @@ msgstr ""
 
 #: ../../doc/contributing/roadmap.rst:68
 msgid "Add a Jupyter kernel interface to DataLab:"
-msgstr "Ajouter une interface de noyau Jupyter à DataLab :"
+msgstr "Ajouter une interface de noyau Jupyter à DataLab :"
 
 #: ../../doc/contributing/roadmap.rst:70
 msgid ""
@@ -353,7 +353,7 @@ msgstr "Python 3.11 est la nouvelle référence"
 
 #: ../../doc/contributing/roadmap.rst:132
 msgid "Run computations in a separate process:"
-msgstr "Exécuter les calculs dans un processus séparé :"
+msgstr "Exécuter les calculs dans un processus séparé :"
 
 #: ../../doc/contributing/roadmap.rst:134
 msgid "Execute a \"computing server\" in background, in another process"
@@ -424,7 +424,7 @@ msgstr ""
 
 #: ../../doc/contributing/roadmap.rst:159
 msgid "Add a macro-command system:"
-msgstr "Ajouter un système de macro-commandes :"
+msgstr "Ajouter un système de macro-commandes :"
 
 #: ../../doc/contributing/roadmap.rst:161
 msgid "New embedded Python editor"
@@ -444,7 +444,7 @@ msgstr "Prise en charge de l'enregistrement de macro"
 msgid "Add an xmlrpc server to allow DataLab remote control:"
 msgstr ""
 "Ajouter un serveur xmlrpc pour permettre le contrôle à distance de "
-"DataLab :"
+"DataLab :"
 
 #: ../../doc/contributing/roadmap.rst:167
 msgid ""
@@ -476,7 +476,7 @@ msgstr ""
 #~ "`Issue #25 <https://github.com/DataLab-"
 #~ "Platform/DataLab/issues/25>`_)"
 #~ msgstr ""
-#~ "Réaliser des vidéos de démonstration :"
+#~ "Réaliser des vidéos de démonstration :"
 #~ " système de plugins, fonctionnalités de "
 #~ "contrôle à distance, etc. (voir `Issue"
 #~ " #25 <https://github.com/DataLab-"

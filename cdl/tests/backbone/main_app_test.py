@@ -88,7 +88,7 @@ def test_main_app():
             win.edit_menu,
             win.operation_menu,
             win.processing_menu,
-            win.computing_menu,
+            win.analysis_menu,
             win.view_menu,
             win.help_menu,
         ):

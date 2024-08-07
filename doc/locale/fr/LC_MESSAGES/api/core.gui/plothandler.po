@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 14:00+0200\n"
+"POT-Creation-Date: 2024-06-16 12:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -51,6 +51,7 @@ msgstr "Activer/désactiver l'anti-crénelage"
 #: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item
 #: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot
 #: cdl.core.gui.plothandler.BasePlotHandler.set_auto_refresh
+#: cdl.core.gui.plothandler.BasePlotHandler.set_show_first_only
 #: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot
 #: cdl.core.gui.plothandler.SignalPlotHandler.toggle_anti_aliasing of
 msgid "Parameters"
@@ -59,6 +60,11 @@ msgstr "Paramètres"
 #: cdl.core.gui.plothandler.SignalPlotHandler.toggle_anti_aliasing:3 of
 msgid "if True, enable anti-aliasing"
 msgstr "si True, activer l'anti-crénelage"
+
+#: cdl.core.gui.plothandler.ImagePlotHandler.get_current_plot_options:1
+#: cdl.core.gui.plothandler.SignalPlotHandler.get_current_plot_options:1 of
+msgid "Return standard signal/image plot options"
+msgstr "Renvoyer les options de visualisation standard pour les signaux/images"
 
 #: cdl.core.gui.plothandler.BasePlotHandler.add_shapes:1 of
 msgid ""
@@ -85,11 +91,6 @@ msgstr ""
 "Renvoie l'item associé à l'uuid de l'objet. Si la clé n'est pas trouvée, "
 "la valeur par défaut est renvoyée si elle est donnée, sinon None est "
 "renvoyé."
-
-#: cdl.core.gui.plothandler.BasePlotHandler.get_current_plot_options:1
-#: cdl.core.gui.plothandler.ImagePlotHandler.get_current_plot_options:1 of
-msgid "Return standard signal/image plot options"
-msgstr "Renvoyer les options de visualisation standard pour les signaux/images"
 
 #: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item:1 of
 msgid "Return object associated to plot item"
@@ -169,6 +170,14 @@ msgstr "Définir le mode d'actualisation automatique."
 msgid "if True, refresh plot items automatically"
 msgstr "si True, actualiser les items de visualisation automatiquement"
 
+#: cdl.core.gui.plothandler.BasePlotHandler.set_show_first_only:1 of
+msgid "Set show first only mode."
+msgstr ""
+
+#: cdl.core.gui.plothandler.BasePlotHandler.set_show_first_only:3 of
+msgid "if True, show only the first selected item"
+msgstr ""
+
 #: cdl.core.gui.plothandler.BasePlotHandler.update_item_according_to_ref_item:1
 #: cdl.core.gui.plothandler.ImagePlotHandler.update_item_according_to_ref_item:1
 #: of
@@ -198,3 +207,4 @@ msgstr ""
 #~ "Ces classes gèrent les items de "
 #~ "visualisation PlotPy pour les panneaux "
 #~ "de signaux et d'images."
+

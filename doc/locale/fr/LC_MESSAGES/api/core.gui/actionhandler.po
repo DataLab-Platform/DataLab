@@ -175,9 +175,8 @@ msgid "shortcut. Defaults to None."
 msgstr "raccourci. Par défaut à None."
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_action:10 of
-#, fuzzy
 msgid "icon name. Defaults to None."
-msgstr "icône. Par défaut à None."
+msgstr "nom de l'icône. Par défaut à None."
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_action:11 of
 msgid "tooltip. Defaults to None."
@@ -264,9 +263,8 @@ msgid "Menu title"
 msgstr "Titre du menu"
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:4 of
-#, fuzzy
 msgid "Menu icon name. Defaults to None."
-msgstr "icône. Par défaut à None."
+msgstr "Nom de l'icône du menu. Par défaut à None."
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed:1 of
 msgid "Update actions based on selected objects."
@@ -291,4 +289,3 @@ msgstr ""
 
 #~ msgid "Return type"
 #~ msgstr "Type de retour"
-

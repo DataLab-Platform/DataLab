@@ -19,7 +19,7 @@ import pywt
 from skimage import morphology
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 
-from cdl.computation.image import Wrap11Func, dst_11
+from cdl.computation.image import Wrap11Func, dst_11, restore_data_outside_roi
 from cdl.computation.image.morphology import MorphologyParam
 from cdl.config import _
 from cdl.obj import ImageObj
@@ -60,6 +60,7 @@ class DenoiseTVParam(gds.DataSet):
 
 def compute_denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
     """Compute Total Variation denoising
+    with :py:func:`skimage.restoration.denoise_tv_chambolle`
 
     Args:
         src: input image object
@@ -102,6 +103,7 @@ class DenoiseBilateralParam(gds.DataSet):
 
 def compute_denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageObj:
     """Compute bilateral filter denoising
+    with :py:func:`skimage.restoration.denoise_bilateral`
 
     Args:
         src: input image object
@@ -132,6 +134,7 @@ class DenoiseWaveletParam(gds.DataSet):
 
 def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
     """Compute Wavelet denoising
+    with :py:func:`skimage.restoration.denoise_wavelet`
 
     Args:
         src: input image object
@@ -147,6 +150,7 @@ def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
 
 def compute_denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Denoise using White Top-Hat
+    with :py:func:`skimage.morphology.white_tophat`
 
     Args:
         src: input image object
@@ -157,4 +161,5 @@ def compute_denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """
     dst = dst_11(src, "denoise_tophat", f"radius={p.radius}")
     dst.data = src.data - morphology.white_tophat(src.data, morphology.disk(p.radius))
+    restore_data_outside_roi(dst, src)
     return dst

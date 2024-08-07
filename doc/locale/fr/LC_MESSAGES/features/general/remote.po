@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../doc/features/general/remote.rst:-1
 msgid ""
@@ -154,7 +154,7 @@ msgstr "Fonctionnalités prises en charge"
 
 #: ../../doc/features/general/remote.rst:62
 msgid "Supported features are the following:"
-msgstr "Les fonctionnalités prises en charge sont les suivantes :"
+msgstr "Les fonctionnalités prises en charge sont les suivantes :"
 
 #: ../../doc/features/general/remote.rst:64
 msgid "Switch to signal or image panel"
@@ -210,7 +210,7 @@ msgid ""
 "between your application and DataLab:"
 msgstr ""
 "Quelques exemples sont fournis pour aider à implémenter une telle "
-"communication entre votre application et DataLab :"
+"communication entre votre application et DataLab :"
 
 #: ../../doc/features/general/remote.rst:82
 msgid "See module: ``cdl.tests.remoteclient_app``"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: ../../doc/features/general/remote.rst:101
 msgid "Here is a Python 2.7 reimplementation of this class:"
-msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
+msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
 
 #: ../../doc/features/general/remote.rst:106
 msgid "Connection dialog"
@@ -282,7 +282,7 @@ msgstr ""
 
 #: ../../doc/features/general/remote.rst:116
 msgid "Example of use:"
-msgstr "Exemple d'utilisation :"
+msgstr "Exemple d'utilisation :"
 
 #: ../../doc/features/general/remote.rst:121
 msgid "Public API: remote client"
@@ -303,7 +303,7 @@ msgid ""
 " in a Jupyter notebook:"
 msgstr ""
 "Voici un exemple simple de l'utilisation de RemoteClient dans un script "
-"Python ou dans un notebook Jupyter :"
+"Python ou dans un notebook Jupyter :"
 
 #: cdl.core.remote.RemoteClient.connect:1 of
 msgid "Try to connect to DataLab XML-RPC server."
@@ -356,8 +356,9 @@ msgstr "Nombre de tentatives. Par défaut, 10."
 #: cdl.core.baseproxy.BaseProxy.run_macro
 #: cdl.core.baseproxy.BaseProxy.stop_macro
 #: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.connect
-#: cdl.core.remote.RemoteClient.get_object of
+#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
+#: cdl.core.remote.RemoteClient.connect cdl.core.remote.RemoteClient.get_object
+#: of
 msgid "Raises"
 msgstr "Lève"
 
@@ -430,7 +431,7 @@ msgstr "Libellé Y. Par défaut, None."
 #: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
 #: cdl.core.baseproxy.BaseProxy.get_version
 #: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
+#: cdl.core.remote.RemoteClient.add_signal
 #: cdl.core.remote.RemoteClient.get_object
 #: cdl.core.remote.RemoteClient.get_object_shapes of
 msgid "Returns"
@@ -446,7 +447,7 @@ msgstr "True si le signal a été ajouté avec succès, False sinon"
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids
 #: cdl.core.baseproxy.BaseProxy.get_version
 #: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc of
+#: cdl.core.remote.RemoteClient.add_signal of
 msgid "Return type"
 msgstr "Type de retour"
 
@@ -496,13 +497,13 @@ msgstr ""
 msgid "Compute function name"
 msgstr "Nom de la fonction de calcul"
 
-#: cdl.core.remote.RemoteClient.calc:5 of
+#: cdl.core.remote.RemoteClient.calc:4 of
 msgid "Compute function parameter. Defaults to None."
 msgstr "Paramètre de la fonction de calcul. Par défaut, None."
 
-#: cdl.core.remote.RemoteClient.calc:9 of
-msgid "Compute function result"
-msgstr "Résultat de la fonction de calcul"
+#: cdl.core.remote.RemoteClient.calc:6 of
+msgid "unknown function"
+msgstr ""
 
 #: cdl.core.remote.RemoteClient.get_object:1 of
 msgid "Get object (signal/image) from index."
@@ -689,7 +690,8 @@ msgid "List of selected objects uuids."
 msgstr "Liste des uuids des objets sélectionnés."
 
 #: cdl.core.baseproxy.BaseProxy.get_version:1 of
-msgid "Return DataLab version."
+#, fuzzy
+msgid "Return DataLab public version."
 msgstr "Renvoie la version de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.get_version:3 of
@@ -850,8 +852,8 @@ msgstr ""
 "accédées."
 
 #: cdl.core.gui.processor.signal.SignalProcessor:1 of
-msgid "Object handling signal processing: operations, processing, computing"
-msgstr "Objet de traitement de signal : opérations, traitement, calcul"
+msgid "Object handling signal processing: operations, processing, analysis"
+msgstr "Objet de traitement de signal : opérations, traitement, analyse"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_sum:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_sum:1 of
@@ -972,11 +974,6 @@ msgstr "Calculer l'intégrale"
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_calibration:1 of
 msgid "Compute data linear calibration"
 msgstr "Calculer l'étalonnage linéaire des données"
-
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_threshold:1 of
-msgid "Compute threshold clipping"
-msgstr "Calculer le seuillage des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_clip:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_clip:1 of
@@ -1139,8 +1136,8 @@ msgstr ""
 "accédées."
 
 #: cdl.core.gui.processor.image.ImageProcessor:1 of
-msgid "Object handling image processing: operations, processing, computing"
-msgstr "Objet de traitement d'image : opérations, traitement, calcul"
+msgid "Object handling image processing: operations, processing, analysis"
+msgstr "Objet de traitement d'image : opérations, traitement, analyse"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_logp1:1 of
 msgid "Compute base 10 logarithm"
@@ -1224,6 +1221,51 @@ msgstr ""
 #: cdl.core.gui.processor.image.ImageProcessor.compute_butterworth:1 of
 msgid "Compute Butterworth filter"
 msgstr "Calculer le filtre de Butterworth"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold:1 of
+#, fuzzy
+msgid "Compute parametric threshold"
+msgstr "Calculer le seuillage des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata:1 of
+#, fuzzy
+msgid "Compute threshold using Isodata algorithm"
+msgstr "Calculer le seuillage des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li:1 of
+#, fuzzy
+msgid "Compute threshold using Li algorithm"
+msgstr "Calculer le seuillage des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean:1 of
+#, fuzzy
+msgid "Compute threshold using Mean algorithm"
+msgstr "Calculer le seuillage des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum:1 of
+#, fuzzy
+msgid "Compute threshold using Minimum algorithm"
+msgstr "Calculer le seuillage des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu:1 of
+#, fuzzy
+msgid "Compute threshold using Otsu algorithm"
+msgstr "Calculer le seuillage des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle:1 of
+#, fuzzy
+msgid "Compute threshold using Triangle algorithm"
+msgstr "Calculer le seuillage des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen:1 of
+#, fuzzy
+msgid "Compute threshold using Yen algorithm"
+msgstr "Calculer le seuillage des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold:1 of
+#, fuzzy
+msgid "Compute all threshold algorithms"
+msgstr "Calculer le seuillage des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma:1 of
 msgid "Compute gamma correction"
@@ -1410,3 +1452,6 @@ msgstr "Calculer la détection de taches en utilisant OpenCV"
 
 #~ msgid "COmpure sum with a constant"
 #~ msgstr ""
+
+#~ msgid "Compute function result"
+#~ msgstr "Résultat de la fonction de calcul"

@@ -28,9 +28,11 @@ from plotpy.panels.csection.csitem import compute_line_section as csline
 from skimage import filters
 
 import cdl.algorithms.image as alg
+from cdl.algorithms.datatypes import clip_astype, is_integer_dtype
 from cdl.computation.base import (
+    ArithmeticParam,
     ClipParam,
-    ConstantOperationParam,
+    ConstantParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
@@ -58,10 +60,28 @@ from cdl.obj import (
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 
 
+def restore_data_outside_roi(dst: ImageObj, src: ImageObj) -> None:
+    """Restore data outside the Region Of Interest (ROI) of the input image after a
+    computation, only if the input image has a ROI, if the data types are compatible,
+    and if the shapes are the same.
+    Otherwise, do nothing.
+
+    Args:
+        dst: output image object
+        src: input image object
+    """
+    if (
+        src.maskdata is not None
+        and (dst.data.dtype == src.data.dtype or not is_integer_dtype(dst.data.dtype))
+        and dst.data.shape == src.data.shape
+    ):
+        dst.data[src.maskdata] = src.data[src.maskdata]
+
+
 class Wrap11Func:
     """Wrap a 1 array → 1 array function to produce a 1 image → 1 image function,
     which can be used inside DataLab's infrastructure to perform computations with
-    :class:`cdl.core.gui.processor.signal.ImageProcessor`.
+    :class:`cdl.core.gui.processor.image.ImageProcessor`.
 
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
@@ -72,7 +92,7 @@ class Wrap11Func:
     Example:
 
         >>> import numpy as np
-        >>> from cdl.computation.signal import Wrap11Func
+        >>> from cdl.computation.image import Wrap11Func
         >>> import cdl.obj
         >>> def add_noise(data):
         ...     return data + np.random.random(data.shape)
@@ -96,7 +116,7 @@ class Wrap11Func:
         self.__call__.__func__.__doc__ = self.func.__doc__
 
     def __call__(self, src: ImageObj) -> ImageObj:
-        """Compute the function on the input signal and return the result signal
+        """Compute the function on the input image and return the result image
 
         Args:
             src: input image object
@@ -110,6 +130,7 @@ class Wrap11Func:
         )
         dst = dst_11(src, self.func.__name__, suffix)
         dst.data = self.func(src.data, *self.args, **self.kwargs)
+        restore_data_outside_roi(dst, src)
         return dst
 
 
@@ -151,7 +172,8 @@ def compute_addition(dst: ImageObj, src: ImageObj) -> ImageObj:
     Returns:
         Output image object (modified in place)
     """
-    dst.data += np.array(src.data, dtype=dst.data.dtype)
+    dst.data = np.add(dst.data, src.data, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -165,11 +187,12 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     Returns:
         Output image object (modified in place)
     """
-    dst.data *= np.array(src.data, dtype=dst.data.dtype)
+    dst.data = np.multiply(dst.data, src.data, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_addition_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Add **dst** and a constant value and return the new result image object
 
     Args:
@@ -180,14 +203,15 @@ def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> Image
         Result image object **src** + **p.value** (new object)
     """
     # For the addition of a constant value, we convert the constant value to the same
-    # data type as the input image, to avoid any data type conversion issues.
+    # data type as the input image, for consistency.
     value = np.array(p.value).astype(dtype=src.data.dtype)
     dst = dst_11(src, "+", str(value))
-    dst.data += value
+    dst.data = np.add(src.data, value, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_difference_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Subtract a constant value from an image and return the new result image object
 
     Args:
@@ -198,14 +222,15 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
         Result image object **src** - **p.value** (new object)
     """
     # For the subtraction of a constant value, we convert the constant value to the same
-    # data type as the input image, to avoid any data type conversion issues.
+    # data type as the input image, for consistency.
     value = np.array(p.value).astype(dtype=src.data.dtype)
     dst = dst_11(src, "-", str(value))
-    dst.data -= value
+    dst.data = np.subtract(src.data, value, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_product_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Multiply **dst** by a constant value and return the new result image object
 
     Args:
@@ -221,11 +246,12 @@ def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageO
     # type conversion ensures that the output image has the same data type as the input
     # image.
     dst = dst_11(src, "×", str(p.value))
-    dst.data = np.array(src.data * p.value).astype(dtype=src.data.dtype)
+    dst.data = np.multiply(src.data, p.value, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_division_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Divide an image by a constant value and return the new result image object
 
     Args:
@@ -240,13 +266,47 @@ def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> Image
     # image by a constant value of a different data type. The final data type conversion
     # ensures that the output image has the same data type as the input image.
     dst = dst_11(src, "/", str(p.value))
-    dst.data = np.array(src.data / p.value).astype(dtype=src.data.dtype)
+    dst.data = np.divide(src.data, p.value, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
 # MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
+
+
+def compute_arithmetic(src1: ImageObj, src2: ImageObj, p: ArithmeticParam) -> ImageObj:
+    """Compute arithmetic operation on two images
+
+    Args:
+        src1: input image object
+        src2: input image object
+        p: arithmetic parameters
+
+    Returns:
+        Result image object
+    """
+    initial_dtype = src1.data.dtype
+    title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
+    dst = src1.copy(title=title)
+    o, a, b = p.operator, p.factor, p.constant
+    # Apply operator
+    if o in ("×", "/") and a == 0.0:
+        dst.data = np.ones_like(src1.data) * b
+    elif o == "+":
+        dst.data = np.add(src1.data, src2.data, dtype=float) * a + b
+    elif o == "-":
+        dst.data = np.subtract(src1.data, src2.data, dtype=float) * a + b
+    elif o == "×":
+        dst.data = np.multiply(src1.data, src2.data, dtype=float) * a + b
+    elif o == "/":
+        dst.data = np.divide(src1.data, src2.data, dtype=float) * a + b
+    # Eventually convert to initial data type
+    if p.restore_dtype:
+        dst.data = clip_astype(dst.data, initial_dtype)
+    restore_data_outside_roi(dst, src1)
+    return dst
 
 
 def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
@@ -260,7 +320,8 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object **src1** - **src2** (new object)
     """
     dst = dst_n1n(src1, src2, "-")
-    dst.data = src1.data - src2.data
+    dst.data = np.subtract(src1.data, src2.data, dtype=float)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -275,9 +336,8 @@ def compute_quadratic_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object (**src1** - **src2**) / sqrt(2.0) (new object)
     """
     dst = dst_n1n(src1, src2, "quadratic_difference")
-    dst.data = (src1.data - src2.data) / np.sqrt(2.0)
-    if np.issubdtype(dst.data.dtype, np.unsignedinteger):
-        dst.data[src1.data < src2.data] = 0
+    dst.data = np.subtract(src1.data, src2.data, dtype=float) / np.sqrt(2.0)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -292,7 +352,8 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object **src1** / **src2** (new object)
     """
     dst = dst_n1n(src1, src2, "/")
-    dst.data = src1.data / np.array(src2.data, dtype=src1.data.dtype)
+    dst.data = np.divide(src1.data, src2.data, dtype=float)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -303,7 +364,7 @@ class FlatFieldParam(BaseProcParam):
 
 
 def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> ImageObj:
-    """Compute flat field correction
+    """Compute flat field correction with :py:func:`cdl.algorithms.image.flatfield`
 
     Args:
         src1: raw data image object
@@ -315,6 +376,7 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
     """
     dst = dst_n1n(src1, src2, "flatfield", f"threshold={p.threshold}")
     dst.data = alg.flatfield(src1.data, src2.data, p.threshold)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -325,7 +387,8 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
 
 def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
     """
-    Normalize image data depending on its maximum.
+    Normalize image data depending on its maximum,
+    with :py:func:`cdl.algorithms.image.normalize`
 
     Args:
         src: input image object
@@ -335,6 +398,7 @@ def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
     """
     dst = dst_11(src, "normalize", suffix=f"ref={p.method}")
     dst.data = alg.normalize(src.data, p.method)  # type: ignore
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -345,7 +409,7 @@ class LogP1Param(gds.DataSet):
 
 
 def compute_logp1(src: ImageObj, p: LogP1Param) -> ImageObj:
-    """Compute log10(z+n)
+    """Compute log10(z+n) with :py:data:`numpy.log10`
 
     Args:
         src: input image object
@@ -356,6 +420,7 @@ def compute_logp1(src: ImageObj, p: LogP1Param) -> ImageObj:
     """
     dst = dst_11(src, "log_z_plus_n", f"n={p.n}")
     dst.data = np.log10(src.data + p.n)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -431,7 +496,7 @@ def rotate_obj_alpha(
 
 
 def compute_rotate(src: ImageObj, p: RotateParam) -> ImageObj:
-    """Rotate data
+    """Rotate data with :py:func:`scipy.ndimage.rotate`
 
     Args:
         src: input image object
@@ -460,7 +525,7 @@ def rotate_obj_90(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
 
 
 def compute_rotate90(src: ImageObj) -> ImageObj:
-    """Rotate data 90°
+    """Rotate data 90° with :py:func:`numpy.rot90`
 
     Args:
         src: input image object
@@ -480,7 +545,7 @@ def rotate_obj_270(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
 
 
 def compute_rotate270(src: ImageObj) -> ImageObj:
-    """Rotate data 270°
+    """Rotate data 270° with :py:func:`numpy.rot90`
 
     Args:
         src: input image object
@@ -502,7 +567,7 @@ def hflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
 
 
 def compute_fliph(src: ImageObj) -> ImageObj:
-    """Flip data horizontally
+    """Flip data horizontally with :py:func:`numpy.fliplr`
 
     Args:
         src: input image object
@@ -523,7 +588,7 @@ def vflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
 
 
 def compute_flipv(src: ImageObj) -> ImageObj:
-    """Flip data vertically
+    """Flip data vertically with :py:func:`numpy.flipud`
 
     Args:
         src: input image object
@@ -586,7 +651,7 @@ class ResizeParam(gds.DataSet):
 
 
 def compute_resize(src: ImageObj, p: ResizeParam) -> ImageObj:
-    """Zooming function
+    """Zooming function with :py:func:`scipy.ndimage.zoom`
 
     Args:
         src: input image object
@@ -644,7 +709,7 @@ class BinningParam(gds.DataSet):
 
 
 def compute_binning(src: ImageObj, param: BinningParam) -> ImageObj:
-    """Binning function on data
+    """Binning function on data with :py:func:`cdl.algorithms.image.binning`
 
     Args:
         src: input image object
@@ -686,13 +751,17 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     Returns:
         Output image object
     """
-    x0, y0, x1, y1 = 0, 0, src.data.shape[1], src.data.shape[0]
+    # Initialize x0, y0 with maximum values:
+    y0, x0 = src.data.shape
+    # Initialize x1, y1 with minimum values:
+    y1, x1 = 0, 0
     for p in group.datasets:
         p: ROI2DParam
         x0i, y0i, x1i, y1i = p.get_rect_indexes()
         x0, y0, x1, y1 = min(x0, x0i), min(y0, y0i), max(x1, x1i), max(y1, y1i)
     x0, y0 = max(x0, 0), max(y0, 0)
     x1, y1 = min(x1, src.data.shape[1]), min(y1, src.data.shape[0])
+
     suffix = None
     if len(group.datasets) == 1:
         p = group.datasets[0]
@@ -701,15 +770,11 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     dst.x0 += x0 * src.dx
     dst.y0 += y0 * src.dy
     dst.roi = None
-    if len(group.datasets) == 1:
-        dst.data = src.data.copy()[y0:y1, x0:x1]
-        return dst
-    out = np.zeros_like(src.data)
-    for p in group.datasets:
-        x0i, y0i, x1i, y1i = p.get_rect_indexes()
-        slice1, slice2 = slice(y0i, y1i + 1), slice(x0i, x1i + 1)
-        out[slice1, slice2] = src.data[slice1, slice2]
-    dst.data = out[y0:y1, x0:x1]
+
+    src2 = src.copy()
+    src2.roi = src2.params_to_roidata(group)
+    src2.data[src2.maskdata] = 0
+    dst.data = src2.data[y0:y1, x0:x1]
     return dst
 
 
@@ -802,6 +867,7 @@ def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
     p.col2 = min(p.col2, data.shape[1] - 1)
     suffix = f"({p.row1}, {p.col1})-({p.row2}, {p.col2})"
     x, y = csline(data, p.row1, p.col1, p.row2, p.col2)
+    x, y = x[~np.isnan(y)], y[~np.isnan(y)]  # Remove NaN values
     dst = dst_11_signal(src, "segment_profile", suffix)
     dst.set_xydata(np.array(x, dtype=float), np.array(y, dtype=float))
     return dst
@@ -893,6 +959,7 @@ class RadialProfileParam(gds.DataSet):
 
 def compute_radial_profile(src: ImageObj, p: RadialProfileParam) -> SignalObj:
     """Compute radial profile around the centroid
+    with :py:func:`cdl.algorithms.image.get_radial_profile`
 
     Args:
         src: input image object
@@ -916,7 +983,7 @@ def compute_radial_profile(src: ImageObj, p: RadialProfileParam) -> SignalObj:
 
 
 def compute_histogram(src: ImageObj, p: HistogramParam) -> SignalObj:
-    """Compute histogram of the image data
+    """Compute histogram of the image data, with :py:func:`numpy.histogram`
 
     Args:
         src: input image object
@@ -942,7 +1009,7 @@ def compute_histogram(src: ImageObj, p: HistogramParam) -> SignalObj:
 
 
 def compute_swap_axes(src: ImageObj) -> ImageObj:
-    """Swap image axes
+    """Swap image axes with :py:func:`numpy.transpose`
 
     Args:
         src: input image object
@@ -957,7 +1024,7 @@ def compute_swap_axes(src: ImageObj) -> ImageObj:
 
 
 def compute_abs(src: ImageObj) -> ImageObj:
-    """Compute absolute value
+    """Compute absolute value with :py:data:`numpy.absolute`
 
     Args:
         src: input image object
@@ -965,11 +1032,11 @@ def compute_abs(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(np.abs)(src)
+    return Wrap11Func(np.absolute)(src)
 
 
 def compute_re(src: ImageObj) -> ImageObj:
-    """Compute real part
+    """Compute real part with :py:func:`numpy.real`
 
     Args:
         src: input image object
@@ -981,7 +1048,7 @@ def compute_re(src: ImageObj) -> ImageObj:
 
 
 def compute_im(src: ImageObj) -> ImageObj:
-    """Compute imaginary part
+    """Compute imaginary part with :py:func:`numpy.imag`
 
     Args:
         src: input image object
@@ -1003,7 +1070,7 @@ class DataTypeIParam(gds.DataSet):
 
 
 def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
-    """Convert image data type
+    """Convert image data type with :py:func:`cdl.algorithms.datatypes.clip_astype`
 
     Args:
         src: input image object
@@ -1012,13 +1079,13 @@ def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "astype", p.dtype_str)
-    dst.data = src.data.astype(p.dtype_str)
+    dst = dst_11(src, "clip_astype", p.dtype_str)
+    dst.data = clip_astype(src.data, p.dtype_str)
     return dst
 
 
 def compute_log10(src: ImageObj) -> ImageObj:
-    """Compute log10
+    """Compute log10 with :py:data:`numpy.log10`
 
     Args:
         src: input image object
@@ -1030,7 +1097,7 @@ def compute_log10(src: ImageObj) -> ImageObj:
 
 
 def compute_exp(src: ImageObj) -> ImageObj:
-    """Compute exponential
+    """Compute exponential with :py:data:`numpy.exp`
 
     Args:
         src: input image object
@@ -1060,11 +1127,12 @@ def compute_calibration(src: ImageObj, p: ZCalibrateParam) -> ImageObj:
     """
     dst = dst_11(src, "calibration", f"z={p.a}*z+{p.b}")
     dst.data = p.a * src.data + p.b
+    restore_data_outside_roi(dst, src)
     return dst
 
 
 def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
-    """Apply clipping
+    """Apply clipping with :py:func:`numpy.clip`
 
     Args:
         src: input image object
@@ -1088,11 +1156,12 @@ def compute_offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:
     """
     dst = dst_11(src, "offset_correction", p.get_suffix())
     dst.data = src.data - p.get_data(src).mean()
+    restore_data_outside_roi(dst, src)
     return dst
 
 
 def compute_gaussian_filter(src: ImageObj, p: GaussianParam) -> ImageObj:
-    """Compute gaussian filter
+    """Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`
 
     Args:
         src: input image object
@@ -1105,7 +1174,7 @@ def compute_gaussian_filter(src: ImageObj, p: GaussianParam) -> ImageObj:
 
 
 def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
-    """Compute moving average
+    """Compute moving average with :py:func:`scipy.ndimage.uniform_filter`
 
     Args:
         src: input image object
@@ -1118,7 +1187,7 @@ def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
 
 
 def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
-    """Compute moving median
+    """Compute moving median with :py:func:`scipy.ndimage.median_filter`
 
     Args:
         src: input image object
@@ -1131,7 +1200,7 @@ def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
 
 
 def compute_wiener(src: ImageObj) -> ImageObj:
-    """Compute Wiener filter
+    """Compute Wiener filter with :py:func:`scipy.signal.wiener`
 
     Args:
         src: input image object
@@ -1143,7 +1212,7 @@ def compute_wiener(src: ImageObj) -> ImageObj:
 
 
 def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
-    """Compute FFT
+    """Compute FFT with :py:func:`cdl.algorithms.image.fft2d`
 
     Args:
         src: input image object
@@ -1163,7 +1232,7 @@ def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
 
 
 def compute_ifft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
-    """Compute inverse FFT
+    """Compute inverse FFT with :py:func:`cdl.algorithms.image.ifft2d`
 
     Args:
         src: input image object
@@ -1186,6 +1255,7 @@ def compute_magnitude_spectrum(
     src: ImageObj, p: SpectrumParam | None = None
 ) -> ImageObj:
     """Compute magnitude spectrum
+    with :py:func:`cdl.algorithms.image.magnitude_spectrum`
 
     Args:
         src: input image object
@@ -1204,6 +1274,7 @@ def compute_magnitude_spectrum(
 
 def compute_phase_spectrum(src: ImageObj) -> ImageObj:
     """Compute phase spectrum
+    with :py:func:`cdl.algorithms.image.phase_spectrum`
 
     Args:
         src: input image object
@@ -1219,6 +1290,7 @@ def compute_phase_spectrum(src: ImageObj) -> ImageObj:
 
 def compute_psd(src: ImageObj, p: SpectrumParam | None = None) -> ImageObj:
     """Compute power spectral density
+    with :py:func:`cdl.algorithms.image.psd`
 
     Args:
         src: input image object
@@ -1240,26 +1312,26 @@ class ButterworthParam(gds.DataSet):
 
     cut_off = gds.FloatItem(
         _("Cut-off frequency ratio"),
-        default=0.5,
+        default=0.005,
         min=0.0,
-        max=1.0,
-        help=_("Cut-off frequency ratio (0.0 - 1.0)."),
+        max=0.5,
+        help=_("Cut-off frequency ratio"),
     )
     high_pass = gds.BoolItem(
         _("High-pass filter"),
         default=False,
-        help=_("If True, apply high-pass filter instead of low-pass."),
+        help=_("If True, apply high-pass filter instead of low-pass"),
     )
     order = gds.IntItem(
         _("Order"),
         default=2,
         min=1,
-        help=_("Order of the Butterworth filter."),
+        help=_("Order of the Butterworth filter"),
     )
 
 
 def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
-    """Compute Butterworth filter
+    """Compute Butterworth filter with :py:func:`skimage.filters.butterworth`
 
     Args:
         src: input image object
@@ -1274,6 +1346,7 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
         f"cut_off={p.cut_off:.3f}, order={p.order}, high_pass={p.high_pass}",
     )
     dst.data = filters.butterworth(src.data, p.cut_off, p.high_pass, p.order)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -1384,6 +1457,7 @@ def calc_resultshape(
 
 def get_centroid_coords(data: np.ndarray) -> np.ndarray:
     """Return centroid coordinates
+    with :py:func:`cdl.algorithms.image.get_centroid_fourier`
 
     Args:
         data: input data
@@ -1397,6 +1471,7 @@ def get_centroid_coords(data: np.ndarray) -> np.ndarray:
 
 def compute_centroid(image: ImageObj) -> ResultShape | None:
     """Compute centroid
+    with :py:func:`cdl.algorithms.image.get_centroid_fourier`
 
     Args:
         image: input image
@@ -1423,6 +1498,7 @@ def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
 
 def compute_enclosing_circle(image: ImageObj) -> ResultShape | None:
     """Compute minimum enclosing circle
+    with :py:func:`cdl.algorithms.image.get_enclosing_circle`
 
     Args:
         image: input image
@@ -1451,6 +1527,7 @@ def compute_hough_circle_peaks(
     image: ImageObj, p: HoughCircleParam
 ) -> ResultShape | None:
     """Compute Hough circles
+    with :py:func:`cdl.algorithms.image.get_hough_circle_peaks`
 
     Args:
         image: input image

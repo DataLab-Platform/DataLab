@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"POT-Creation-Date: 2024-07-30 14:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,101 +17,75 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
-#: ../../doc/features/image/menu_computing.rst:4
-msgid "Computing features on Images"
-msgstr "Calculs sur les images"
+#: ../../doc/features/image/menu_analysis.rst:4
+msgid "Analysis features on Images"
+msgstr "Analyse sur les images"
 
-#: ../../doc/features/image/menu_computing.rst:6
-msgid "This section describes the image computing features available in DataLab."
-msgstr "Cette section décrit les fonctionnalités de calcul d'images disponibles dans DataLab."
+#: ../../doc/features/image/menu_analysis.rst:6
+msgid "This section describes the image analysis features available in DataLab."
+msgstr ""
+"Cette section décrit les fonctionnalités d'analyse d'images disponibles "
+"dans DataLab."
 
-#: ../../doc/features/image/menu_computing.rst:10
+#: ../../doc/features/image/menu_analysis.rst:10
 msgid ""
 ":ref:`ima-menu-operations` for more information on operations that can be"
 " performed on images, or :ref:`ima-menu-processing` for information on "
 "processing features on images."
-msgstr ":ref:`ima-menu-operations` pour plus d'informations sur les opérations pouvant être effectuées sur les images, ou :ref:`ima-menu-processing` pour des informations sur les fonctionnalités de traitement des images."
+msgstr ""
+":ref:`ima-menu-operations` pour plus d'informations sur les opérations "
+"pouvant être effectuées sur les images, ou :ref:`ima-menu-processing` "
+"pour des informations sur les fonctionnalités de traitement des images."
 
-#: ../../doc/features/image/menu_computing.rst:16
-msgid "Screenshot of the \"Computing\" menu."
-msgstr "Capture d'écran du menu \"Calculs\"."
+#: ../../doc/features/image/menu_analysis.rst:16
+msgid "Screenshot of the \"Analysis\" menu."
+msgstr "Capture d'écran du menu Analyse\"."
 
-#: ../../doc/features/image/menu_computing.rst:18
+#: ../../doc/features/image/menu_analysis.rst:18
 msgid ""
 "When the \"Image Panel\" is selected, the menus and toolbars are updated "
 "to provide image-related actions."
-msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux images."
+msgstr ""
+"Lorsque le \"Panneau Image\" est sélectionné, les menus et barres "
+"d'outils sont mis à jour pour fournir les actions liées aux images."
 
-#: ../../doc/features/image/menu_computing.rst:21
+#: ../../doc/features/image/menu_analysis.rst:21
 msgid ""
-"The \"Computing\" menu allows you to perform various computations on the "
+"The \"Analysis\" menu allows you to perform various computations on the "
 "current image or group of images. It also allows you to compute "
 "statistics, to compute the centroid, to detect peaks, to detect contours,"
 " and so on."
 msgstr ""
-"Le menu \"Calculs\" permet d'effectuer divers calculs sur l'image "
-"courante ou sur un groupe d'images. Il permet également de calculer des "
+"Le menu Analyse\" permet d'effectuer divers calculs sur l'image courante "
+"ou sur un groupe d'images. Il permet également de calculer des "
 "statistiques, le barycentre, de détecter des pics, des contours, etc."
 
-#: ../../doc/features/image/menu_computing.rst:27
+#: ../../doc/features/image/menu_analysis.rst:27
 msgid ""
-"In DataLab vocabulary, a \"computing\" is a feature that computes a "
+"In DataLab vocabulary, an \"analysis\" is a feature that computes a "
 "scalar result from an image. This result is stored as metadata, and thus "
 "attached to image. This is different from a \"processing\" which creates "
 "a new image from an existing one."
 msgstr ""
-"Dans le vocabulaire de DataLab, un \"calcul\" est une fonction qui "
-"calcule un résultat scalaire à partir d'une image. Ce résultat est stocké"
-" sous la forme de métadonnées, et donc attaché à l'image. C'est différent"
-" d'un \"traitement\" qui crée une nouvelle image à partir d'une image "
-"existante."
+"Dans le vocabulaire de DataLab, une \"analyse\" est une fonctionnalité de"
+" calcul d'un résultat scalaire à partir d'une image. Ce résultat est "
+"stocké sous la forme de métadonnées, et donc attaché à l'image. C'est "
+"différent d'un \"traitement\" qui crée une nouvelle image à partir d'une "
+"image existante."
 
-#: ../../doc/features/image/menu_computing.rst:33
-msgid "Edit regions of interest"
-msgstr "Modifier les régions d'intérêt"
-
-#: ../../doc/features/image/menu_computing.rst:35
-msgid ""
-"Open a dialog box to setup multiple Region Of Interests (ROI). ROI are "
-"stored as metadata, and thus attached to image."
-msgstr ""
-"Ouvre une boîte de dialogue pour définir des régions d'intérêt (ROI) "
-"multiples. Les ROI sont stockées sous la forme de métadonnées ; elles "
-"sont donc attachées à l'image."
-
-#: ../../doc/features/image/menu_computing.rst:38
-msgid "ROI definition dialog is exactly the same as ROI extraction (see above)."
-msgstr ""
-"La boîte de dialogue de définition de ROI est identique à celle utilisée "
-"pour l'extraction de ROI (voir plus haut)."
-
-#: ../../doc/features/image/menu_computing.rst:42
-msgid "An image with ROI."
-msgstr "Une image avec une ROI."
-
-#: ../../doc/features/image/menu_computing.rst:45
-msgid "Remove regions of interest"
-msgstr "Supprimer les régions d'intérêt"
-
-#: ../../doc/features/image/menu_computing.rst:47
-msgid "Remove all defined ROI for selected object(s)."
-msgstr ""
-"Supprimer toutes les ROI définies pour l'objet ou les objets "
-"sélectionné(s)."
-
-#: ../../doc/features/image/menu_computing.rst:50
+#: ../../doc/features/image/menu_analysis.rst:33
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: ../../doc/features/image/menu_computing.rst:52
+#: ../../doc/features/image/menu_analysis.rst:35
 msgid "Compute statistics on selected image and show a summary table."
 msgstr ""
 "Calcule des statistiques sur les images sélectionnées et affiche un "
 "tableau récapitulatif."
 
-#: ../../doc/features/image/menu_computing.rst:56
+#: ../../doc/features/image/menu_analysis.rst:39
 msgid ""
 "Example of statistical summary table: each row is associated to an ROI "
 "(the first row gives the statistics for the whole data)."
@@ -120,61 +94,61 @@ msgstr ""
 "associée à une ROI (à l'exception de la première qui correspond aux "
 "statistiques calculées sur la totalité des données)."
 
-#: ../../doc/features/image/menu_computing.rst:60
+#: ../../doc/features/image/menu_analysis.rst:43
 msgid "Histogram"
 msgstr "Histogramme"
 
-#: ../../doc/features/image/menu_computing.rst:62
+#: ../../doc/features/image/menu_analysis.rst:45
 msgid "Compute histogram of selected image and show it in the Signal Panel."
 msgstr ""
 "Calcule l'histogramme de l'image sélectionnée et l'affiche dans le "
 "panneau Signal."
 
-#: ../../doc/features/image/menu_computing.rst:64
+#: ../../doc/features/image/menu_analysis.rst:47
 msgid "Parameters are:"
-msgstr "Paramètres :"
+msgstr "Paramètres :"
 
-#: ../../doc/features/image/menu_computing.rst:70
+#: ../../doc/features/image/menu_analysis.rst:53
 msgid "Parameter"
 msgstr "Paramètre"
 
-#: ../../doc/features/image/menu_computing.rst:71
+#: ../../doc/features/image/menu_analysis.rst:54
 msgid "Description"
 msgstr "Description"
 
-#: ../../doc/features/image/menu_computing.rst:72
+#: ../../doc/features/image/menu_analysis.rst:55
 msgid "Bins"
 msgstr "Classes"
 
-#: ../../doc/features/image/menu_computing.rst:73
+#: ../../doc/features/image/menu_analysis.rst:56
 msgid "Number of bins"
 msgstr "Nombre de classes"
 
-#: ../../doc/features/image/menu_computing.rst:74
+#: ../../doc/features/image/menu_analysis.rst:57
 msgid "Lower limit"
 msgstr "Limite inférieure"
 
-#: ../../doc/features/image/menu_computing.rst:75
+#: ../../doc/features/image/menu_analysis.rst:58
 msgid "Lower limit of the histogram"
 msgstr "Limite inférieure de l'histogramme"
 
-#: ../../doc/features/image/menu_computing.rst:76
+#: ../../doc/features/image/menu_analysis.rst:59
 msgid "Upper limit"
 msgstr "Limite supérieure"
 
-#: ../../doc/features/image/menu_computing.rst:77
+#: ../../doc/features/image/menu_analysis.rst:60
 msgid "Upper limit of the histogram"
 msgstr "Limite supérieure de l'histogramme"
 
-#: ../../doc/features/image/menu_computing.rst:81
+#: ../../doc/features/image/menu_analysis.rst:64
 msgid "Example of histogram."
 msgstr "Exemple d'histogramme."
 
-#: ../../doc/features/image/menu_computing.rst:84
+#: ../../doc/features/image/menu_analysis.rst:67
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: ../../doc/features/image/menu_computing.rst:86
+#: ../../doc/features/image/menu_analysis.rst:69
 msgid ""
 "Compute image centroid using a Fourier transform method (as discussed by "
 "`Weisshaar et al. <http://www.mnd-umwelttechnik.fh-"
@@ -186,11 +160,11 @@ msgstr ""
 "umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf>`_). Cette méthode "
 "présente l'avantage d'être peu sensible au bruit de fond."
 
-#: ../../doc/features/image/menu_computing.rst:91
+#: ../../doc/features/image/menu_analysis.rst:74
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: ../../doc/features/image/menu_computing.rst:93
+#: ../../doc/features/image/menu_analysis.rst:76
 msgid ""
 "Compute the circle contour enclosing image values above a threshold level"
 " defined as the half-maximum value."
@@ -198,11 +172,11 @@ msgstr ""
 "Calcule le contour circulaire entourant les valeurs de l'image au-delà "
 "d'un seuil (moitié du maximum de l'image)."
 
-#: ../../doc/features/image/menu_computing.rst:97
+#: ../../doc/features/image/menu_analysis.rst:80
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: ../../doc/features/image/menu_computing.rst:99
+#: ../../doc/features/image/menu_analysis.rst:82
 msgid ""
 "Automatically find peaks on image using a minimum-maximum filter "
 "algorithm."
@@ -210,11 +184,11 @@ msgstr ""
 "Détecte automatiquement des pics sur une image en utilisant un algorithme"
 " basé sur des filtres minimum-maximum."
 
-#: ../../doc/features/image/menu_computing.rst:103
+#: ../../doc/features/image/menu_analysis.rst:86
 msgid "Example of 2D peak detection."
 msgstr "Exemple de détection de pics 2D."
 
-#: ../../doc/features/image/menu_computing.rst:106
+#: ../../doc/features/image/menu_analysis.rst:89
 msgid ""
 "See :ref:`ref-to-2d-peak-detection` for more details on algorithm and "
 "associated parameters."
@@ -222,11 +196,11 @@ msgstr ""
 "Voir :ref:`ref-to-2d-peak-detection` pour plus de détails sur "
 "l'algorithme et les paramètres associés."
 
-#: ../../doc/features/image/menu_computing.rst:109
+#: ../../doc/features/image/menu_analysis.rst:92
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: ../../doc/features/image/menu_computing.rst:111
+#: ../../doc/features/image/menu_analysis.rst:94
 msgid ""
 "Automatically extract contours and fit them using a circle or an ellipse,"
 " or directly represent them as a polygon."
@@ -234,11 +208,11 @@ msgstr ""
 "Détecte automatiquement les contours et ajuste ces derniers par des "
 "cercles ou des ellipses, ou les représente directement par des polygones."
 
-#: ../../doc/features/image/menu_computing.rst:116
+#: ../../doc/features/image/menu_analysis.rst:99
 msgid "Example of contour detection."
 msgstr "Exemple de détection de contours."
 
-#: ../../doc/features/image/menu_computing.rst:119
+#: ../../doc/features/image/menu_analysis.rst:102
 msgid ""
 "See :ref:`ref-to-contour-detection` for more details on algorithm and "
 "associated parameters."
@@ -246,7 +220,7 @@ msgstr ""
 "Voir :ref:`ref-to-contour-detection` pour plus de détails sur "
 "l'algorithme et les paramètres associés."
 
-#: ../../doc/features/image/menu_computing.rst:121
+#: ../../doc/features/image/menu_analysis.rst:104
 msgid ""
 "Computed scalar results are systematically stored as metadata. Metadata "
 "is attached to image and serialized with it when exporting current "
@@ -257,11 +231,11 @@ msgstr ""
 " cette dernière par exemple lors de l'export d'une session de DataLab "
 "vers un fichier HDF5."
 
-#: ../../doc/features/image/menu_computing.rst:126
+#: ../../doc/features/image/menu_analysis.rst:109
 msgid "Circle Hough transform"
 msgstr "Transformée de Hough circulaire"
 
-#: ../../doc/features/image/menu_computing.rst:128
+#: ../../doc/features/image/menu_analysis.rst:111
 msgid ""
 "Detect circular shapes using circle Hough transform (implementation based"
 " on `skimage.transform.hough_circle_peaks <https://scikit-"
@@ -272,15 +246,15 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)"
 
-#: ../../doc/features/image/menu_computing.rst:132
+#: ../../doc/features/image/menu_analysis.rst:115
 msgid "Blob detection"
 msgstr "Détection de taches"
 
-#: ../../doc/features/image/menu_computing.rst:136
+#: ../../doc/features/image/menu_analysis.rst:119
 msgid "Blob detection (DOG)"
 msgstr "Détection de taches (DOG)"
 
-#: ../../doc/features/image/menu_computing.rst:135
+#: ../../doc/features/image/menu_analysis.rst:118
 msgid ""
 "Detect blobs using Difference of Gaussian (DOG) method (implementation "
 "based on `skimage.feature.blob_dog <https://scikit-"
@@ -290,11 +264,11 @@ msgstr ""
 "(DOG) (implementation basée sur `skimage.feature.blob_dog <https"
 "://scikit-image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
 
-#: ../../doc/features/image/menu_computing.rst:140
+#: ../../doc/features/image/menu_analysis.rst:123
 msgid "Blob detection (DOH)"
 msgstr "Détection de taches (hessien)"
 
-#: ../../doc/features/image/menu_computing.rst:139
+#: ../../doc/features/image/menu_analysis.rst:122
 msgid ""
 "Detect blobs using Determinant of Hessian (DOH) method (implementation "
 "based on `skimage.feature.blob_doh <https://scikit-"
@@ -304,11 +278,11 @@ msgstr ""
 "(implementation basée sur `skimage.feature.blob_doh <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
 
-#: ../../doc/features/image/menu_computing.rst:144
+#: ../../doc/features/image/menu_analysis.rst:127
 msgid "Blob detection (LOG)"
 msgstr "Détection de taches (LOG)"
 
-#: ../../doc/features/image/menu_computing.rst:143
+#: ../../doc/features/image/menu_analysis.rst:126
 msgid ""
 "Detect blobs using Laplacian of Gaussian (LOG) method (implementation "
 "based on `skimage.feature.blob_log <https://scikit-"
@@ -318,11 +292,11 @@ msgstr ""
 " (implementation basée sur `skimage.feature.blob_log <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
 
-#: ../../doc/features/image/menu_computing.rst:147
+#: ../../doc/features/image/menu_analysis.rst:130
 msgid "Blob detection (OpenCV)"
 msgstr "Détection de taches (OpenCV)"
 
-#: ../../doc/features/image/menu_computing.rst:147
+#: ../../doc/features/image/menu_analysis.rst:130
 msgid ""
 "Detect blobs using OpenCV implementation of `SimpleBlobDetector "
 "<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
@@ -331,30 +305,66 @@ msgstr ""
 "`SimpleBlobDetector "
 "<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
 
-#: ../../doc/features/image/menu_computing.rst:150
+#: ../../doc/features/image/menu_analysis.rst:133
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: ../../doc/features/image/menu_computing.rst:152
+#: ../../doc/features/image/menu_analysis.rst:135
 msgid ""
-"Show the results of all computations performed on the selected images. "
-"This shows the same table as the one shown after having performed a "
+"Show the results of all analyses performed on the selected images. This "
+"shows the same table as the one shown after having performed a "
 "computation."
 msgstr ""
-"Affiche les résultats des calculs effectués sur les images sélectionnées."
-" Cela affiche le même tableau que celui affiché après avoir effectué un "
-"calcul."
+"Affiche les résultats de toutes les analyses effectuées sur les images "
+"sélectionnées. Cela affiche le même tableau que celui affiché après avoir"
+" effectué un calcul."
 
-#: ../../doc/features/image/menu_computing.rst:156
+#: ../../doc/features/image/menu_analysis.rst:139
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
-#: ../../doc/features/image/menu_computing.rst:158
+#: ../../doc/features/image/menu_analysis.rst:141
 msgid ""
-"Plot the results of computations performed on the selected images, with "
-"user-defined X and Y axes (e.g. plot the contour circle radius as a "
-"function of the image number)."
+"Plot the results of analyses performed on the selected images, with user-"
+"defined X and Y axes (e.g. plot the contour circle radius as a function "
+"of the image number)."
 msgstr ""
-"Trace les résultats des calculs effectués sur les images sélectionnées, "
-"avec des axes X et Y définis par l'utilisateur (p.ex. trace le rayon du "
+"Trace les résultats des analyses effectuées sur les images sélectionnées,"
+" avec des axes X et Y définis par l'utilisateur (p.ex. trace le rayon du "
 "cercle de contour en fonction du numéro de l'image)."
+
+#~ msgid "Edit regions of interest"
+#~ msgstr "Modifier les régions d'intérêt"
+
+#~ msgid ""
+#~ "Open a dialog box to setup "
+#~ "multiple Region Of Interests (ROI). ROI"
+#~ " are stored as metadata, and thus "
+#~ "attached to image."
+#~ msgstr ""
+#~ "Ouvre une boîte de dialogue pour "
+#~ "définir des régions d'intérêt (ROI) "
+#~ "multiples. Les ROI sont stockées sous"
+#~ " la forme de métadonnées ; elles "
+#~ "sont donc attachées à l'image."
+
+#~ msgid ""
+#~ "ROI definition dialog is exactly the "
+#~ "same as ROI extraction (see above)."
+#~ msgstr ""
+#~ "La boîte de dialogue de définition "
+#~ "de ROI est identique à celle "
+#~ "utilisée pour l'extraction de ROI (voir"
+#~ " plus haut)."
+
+#~ msgid "An image with ROI."
+#~ msgstr "Une image avec une ROI."
+
+#~ msgid "Remove regions of interest"
+#~ msgstr "Supprimer les régions d'intérêt"
+
+#~ msgid "Remove all defined ROI for selected object(s)."
+#~ msgstr ""
+#~ "Supprimer toutes les ROI définies pour"
+#~ " l'objet ou les objets sélectionné(s)."
+

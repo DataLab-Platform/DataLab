@@ -70,7 +70,7 @@ msgstr ""
 
 #: ../../features/general/h5browser.rst:26
 msgid "The HDF5 browser is fairly simple to use:"
-msgstr "L'explorateur de fichiers HDF5 est très simple à utiliser :"
+msgstr "L'explorateur de fichiers HDF5 est très simple à utiliser :"
 
 #: ../../features/general/h5browser.rst:23
 msgid "On the left panel, select the curve or image data you want to import"

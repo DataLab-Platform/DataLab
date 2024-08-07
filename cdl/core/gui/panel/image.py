@@ -49,7 +49,7 @@ class ImagePanel(BaseDataPanel):
     PANEL_STR = _("Image Panel")
     PANEL_STR_ID = "image"
     PARAMCLASS = ImageObj
-    DIALOGSIZE = (800, 800)
+    MINDIALOGSIZE = (800, 800)
     ANNOTATION_TOOLS = (
         AnnotatedCircleTool,
         AnnotatedSegmentTool,
