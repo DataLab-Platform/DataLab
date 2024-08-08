@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from cdl import app
 from cdl.config import Conf
+from cdl.core.gui.processor.base import is_pairwise_mode
 from cdl.env import execenv
 from cdl.utils.qthelpers import cdl_app_context
 from cdl.utils.tests import get_test_fnames
@@ -36,6 +37,9 @@ def test_single_operand_mode_compute_n1():
         win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
+
+        # Checking the operation mode:
+        assert not is_pairwise_mode()
 
         # Store the number of groups before the operations
         n_groups = len(model.get_groups())
@@ -97,6 +101,9 @@ def test_pairwise_operations_mode_compute_n1():
         win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
+
+        # Checking the operation mode:
+        assert is_pairwise_mode()
 
         # Store the number of groups before the operations
         n_groups = len(model.get_groups())
@@ -172,6 +179,9 @@ def test_single_operand_mode_compute_n1n():
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
 
+        # Checking the operation mode:
+        assert not is_pairwise_mode()
+
         # Store the number of groups before the operations
         n_groups = len(model.get_groups())
 
@@ -244,6 +254,9 @@ def test_pairwise_operations_mode_compute_n1n():
         win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
+
+        # Checking the operation mode:
+        assert is_pairwise_mode()
 
         # Store the number of groups before the operations
         n_groups = len(model.get_groups())
