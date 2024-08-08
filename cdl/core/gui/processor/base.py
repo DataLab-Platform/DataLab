@@ -550,7 +550,17 @@ class BaseProcessor(QC.QObject):
                 set([self.panel.objmodel.get_object_group_id(obj) for obj in objs])
             )
             if len(src_gids) == 1:
-                # In pairwise mode, we need at least two objects from different groups
+                # In pairwise mode, we need at least two objects from different groups.
+                # Warn the user and return.
+                if not env.execenv.unattended:
+                    QW.QMessageBox.warning(
+                        self.panel.parent(),
+                        _("Warning"),
+                        _(
+                            "In pairwise mode, you need to select "
+                            "at least two objects from different groups."
+                        ),
+                    )
                 return
             # [src_objs dictionary] keys: old group id, values: list of old objects
             src_objs: dict[str, list[Obj]] = {}
