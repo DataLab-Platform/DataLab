@@ -164,7 +164,8 @@ def is_pairwise_mode() -> bool:
     Returns:
         bool: True if operation mode is pairwise
     """
-    return Conf.proc.operation_mode.get() == "pairwise"
+    state = Conf.proc.operation_mode.get() == "pairwise"
+    return state
 
 
 class BaseProcessor(QC.QObject):
@@ -714,7 +715,17 @@ class BaseProcessor(QC.QObject):
         if not objs2:
             nb_objects = len(objs) if pairwise else 1
             dlg_title = _("Select %s") % obj2_name
-            objs2 = self.panel.get_objects_with_dialog(dlg_title, nb_objects)
+            if pairwise:
+                dlg_comm = (
+                    f"<u>Note:</u> {_('operation mode is <i>pairwise</i>: ')} "
+                    f"{nb_objects} object(s) expected (i.e. as many as input objects)"
+                )
+            else:
+                dlg_comm = _(
+                    "<u>Note:</u> operation mode is <i>single operand</i>: "
+                    "1 object expected"
+                )
+            objs2 = self.panel.get_objects_with_dialog(dlg_title, dlg_comm, nb_objects)
             if objs2 is None:
                 return
 

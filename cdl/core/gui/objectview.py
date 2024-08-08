@@ -292,6 +292,7 @@ class GetObjectsDialog(QW.QDialog):
         parent: parent widget
         panel: data panel
         title: dialog title
+        comment: optional dialog comment
         nb_objects: number of objects to select (default: 1)
         minimum_size: minimum size (width, height)
     """
@@ -301,8 +302,9 @@ class GetObjectsDialog(QW.QDialog):
         parent: QW.QWidget,
         panel: BaseDataPanel,
         title: str,
+        comment: str = "",
         nb_objects: int = 1,
-        minimum_size: tuple[int, int] = None,
+        minimum_size: tuple[int, int] | None = None,
     ) -> None:
         super().__init__(parent)
         self.__nb_objects = nb_objects
@@ -315,7 +317,15 @@ class GetObjectsDialog(QW.QDialog):
         self.tree.initialize_from(panel.objview)
         self.tree.SIG_ITEM_DOUBLECLICKED.connect(lambda oid: self.accept())
         self.tree.itemSelectionChanged.connect(self.__item_selection_changed)
+        if nb_objects > 1:
+            self.tree.setSelectionMode(QW.QAbstractItemView.ExtendedSelection)
         vlayout.addWidget(self.tree)
+
+        if comment:
+            lbl = QW.QLabel(comment)
+            lbl.setWordWrap(True)
+            vlayout.addSpacing(10)
+            vlayout.addWidget(lbl)
 
         bbox = QW.QDialogButtonBox(QW.QDialogButtonBox.Ok | QW.QDialogButtonBox.Cancel)
         bbox.accepted.connect(self.accept)
@@ -333,8 +343,9 @@ class GetObjectsDialog(QW.QDialog):
 
     def __item_selection_changed(self) -> None:
         """Item selection has changed"""
-        self.__selected_objects = self.tree.get_sel_objects()
-        self.ok_btn.setEnabled(len(self.__selected_objects) == self.__nb_objects)
+        nobj = self.__nb_objects
+        self.__selected_objects = self.tree.get_sel_objects(include_groups=nobj > 1)
+        self.ok_btn.setEnabled(len(self.__selected_objects) == nobj)
 
     def get_selected_objects(self) -> list[SignalObj | ImageObj]:
         """Return selected objects"""

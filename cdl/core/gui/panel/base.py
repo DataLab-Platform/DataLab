@@ -1097,20 +1097,24 @@ class BaseDataPanel(AbstractPanel):
         return None
 
     def get_objects_with_dialog(
-        self, title: str, nb_objects: int, parent: QW.QWidget | None = None
+        self,
+        title: str,
+        comment: str = "",
+        nb_objects: int = 1,
+        parent: QW.QWidget | None = None,
     ) -> SignalObj | ImageObj | None:
         """Get object with dialog box.
 
         Args:
             title: Dialog title
+            comment: Optional dialog comment
             nb_objects: Number of objects to select
             parent: Parent widget
-
         Returns:
             Object(s) (signal(s) or image(s), or None if dialog was canceled)
         """
         parent = self if parent is None else parent
-        dlg = objectview.GetObjectsDialog(parent, self, title, nb_objects)
+        dlg = objectview.GetObjectsDialog(parent, self, title, comment, nb_objects)
         if exec_dialog(dlg):
             return dlg.get_selected_objects()
         return None
