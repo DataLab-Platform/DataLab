@@ -801,7 +801,7 @@ class BaseProcessor(QC.QObject):
                         dst_gname = f"{name}[...]"
                     dst_gid = self.panel.add_group(dst_gname).uuid
                     for i_pair in range(max_i_pair):
-                        args = [src_objs[src_gid]][i_pair], objs2[i_pair]]
+                        args = [src_objs[src_gid][i_pair], objs2[i_pair]]
                         if param is not None:
                             args.append(param)
                         result = self.__exec_func(func, tuple(args), progress)
