@@ -604,10 +604,10 @@ class BaseProcessor(QC.QObject):
         pairwise = is_pairwise_mode()
 
         if pairwise:
-            src_grps, src_gids, src_objs, _nbobj, ok = (
+            src_grps, src_gids, src_objs, _nbobj, valid = (
                 self.__get_src_grps_gids_objs_nbobj_valid()
             )
-            if not ok:
+            if not valid:
                 return
             dst_gname = (
                 f"{name}({','.join([grp.short_id for grp in src_grps])})|pairwise"
@@ -770,6 +770,8 @@ class BaseProcessor(QC.QObject):
             src_grps, src_gids, src_objs, nbobj, valid = (
                 self.__get_src_grps_gids_objs_nbobj_valid()
             )
+            if not valid:
+                return
             if not objs2:
                 objs2 = self.panel.get_objects_with_dialog(
                     dlg_title,
