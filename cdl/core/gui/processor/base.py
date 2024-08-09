@@ -511,6 +511,65 @@ class BaseProcessor(QC.QObject):
                 exec_dialog(dlg)
         return results
 
+    def __get_src_grps_gids_objs_nbobj_valid(self) -> tuple[list, list, dict, int]:
+        """Get source groups, group ids, objects, and number of objects,
+        for pairwise mode, and check if the number of objects is valid.
+
+        Returns:
+            Tuple (source groups, group ids, objects, number of objects, valid)
+        """
+        # In pairwise mode, we need to create a new object for each pair of objects
+        objs = self.panel.objview.get_sel_objects(include_groups=True)
+        objmodel = self.panel.objmodel
+        src_grps = sorted(
+            set([objmodel.get_group_from_object(obj) for obj in objs]),
+            key=lambda x: x.number,
+        )
+        src_gids = [grp.uuid for grp in src_grps]
+
+        # [src_objs dictionary] keys: old group id, values: list of old objects
+        src_objs: dict[str, list[Obj]] = {}
+        for src_gid in src_gids:
+            src_objs[src_gid] = [
+                obj for obj in objs if objmodel.get_object_group_id(obj) == src_gid
+            ]
+
+        nbobj = len(src_objs[src_gids[0]])
+
+        valid = len(src_grps) > 1
+        if not valid:
+            # In pairwise mode, we need selected objects in at least two groups.
+            if env.execenv.unattended:
+                raise ValueError(
+                    "Pairwise mode: objects must be selected in at least two groups"
+                )
+            else:
+                QW.QMessageBox.warning(
+                    self.panel.parent(),
+                    _("Warning"),
+                    _(
+                        "In pairwise mode, you need to select objects "
+                        "in at least two groups."
+                    ),
+                )
+        if valid:
+            valid = all(len(src_objs[src_gid]) == nbobj for src_gid in src_gids)
+            if not valid:
+                if env.execenv.unattended:
+                    raise ValueError(
+                        "Pairwise mode: invalid number of objects in each group"
+                    )
+                else:
+                    QW.QMessageBox.warning(
+                        self.panel.parent(),
+                        _("Warning"),
+                        _(
+                            "In pairwise mode, you need to select "
+                            "the same number of objects in each group."
+                        ),
+                    )
+        return src_grps, src_gids, src_objs, nbobj, valid
+
     def compute_n1(
         self,
         name: str,
@@ -541,44 +600,25 @@ class BaseProcessor(QC.QObject):
                 return
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
-
+        objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode()
 
         if pairwise:
-            # In pairwise mode, we need to create a new object for each pair of objects
-            src_gids = list(
-                set([self.panel.objmodel.get_object_group_id(obj) for obj in objs])
+            src_grps, src_gids, src_objs, _nbobj, ok = (
+                self.__get_src_grps_gids_objs_nbobj_valid()
             )
-            if len(src_gids) == 1:
-                # In pairwise mode, we need at least two objects from different groups.
-                # Warn the user and return.
-                if not env.execenv.unattended:
-                    QW.QMessageBox.warning(
-                        self.panel.parent(),
-                        _("Warning"),
-                        _(
-                            "In pairwise mode, you need to select "
-                            "at least two objects from different groups."
-                        ),
-                    )
+            if not ok:
                 return
-            # [src_objs dictionary] keys: old group id, values: list of old objects
-            src_objs: dict[str, list[Obj]] = {}
-            for src_gid in src_gids:
-                src_objs[src_gid] = [
-                    obj
-                    for obj in objs
-                    if self.panel.objmodel.get_object_group_id(obj) == src_gid
-                ]
-            grps = [self.panel.objmodel.get_group(gid) for gid in src_gids]
-            dst_gname = f"{name}({','.join([grp.short_id for grp in grps])})|pairwise"
+            dst_gname = (
+                f"{name}({','.join([grp.short_id for grp in src_grps])})|pairwise"
+            )
             group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
             if not group_exclusive:
                 # This is not a group exclusive selection
                 dst_gname += "[...]"
             dst_gid = self.panel.add_group(dst_gname).uuid
             n_pairs = len(src_objs[src_gids[0]])
-            max_i_pair = min(n_pairs, max(len(src_objs[grp.uuid]) for grp in grps))
+            max_i_pair = min(n_pairs, max(len(src_objs[grp.uuid]) for grp in src_grps))
             with create_progress_bar(self.panel, title, max_=n_pairs) as progress:
                 for i_pair, src_obj1 in enumerate(src_objs[src_gids[0]][:max_i_pair]):
                     src_obj1: SignalObj | ImageObj
@@ -629,7 +669,7 @@ class BaseProcessor(QC.QObject):
                 for index, src_obj in enumerate(objs):
                     progress.setValue(index + 1)
                     progress.setLabelText(title)
-                    src_gid = self.panel.objmodel.get_object_group_id(src_obj)
+                    src_gid = objmodel.get_object_group_id(src_obj)
                     dst_obj = dst_objs.get(src_gid)
                     if dst_obj is None:
                         src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
@@ -711,7 +751,7 @@ class BaseProcessor(QC.QObject):
             edit, param = self.init_param(param, paramclass, title, comment)
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
-
+        objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode()
 
         if obj2 is None:
@@ -722,48 +762,39 @@ class BaseProcessor(QC.QObject):
         else:
             objs2 = [obj2]
 
-        if not objs2:
-            nb_objects = len(objs) if pairwise else 1
-            dlg_title = _("Select %s") % obj2_name
-            if pairwise:
-                dlg_comm = (
-                    f"<u>Note:</u> {_('operation mode is <i>pairwise</i>: ')} "
-                    f"{nb_objects} object(s) expected (i.e. as many as input objects)"
-                )
-            else:
-                dlg_comm = _(
-                    "<u>Note:</u> operation mode is <i>single operand</i>: "
-                    "1 object expected"
-                )
-            objs2 = self.panel.get_objects_with_dialog(dlg_title, dlg_comm, nb_objects)
-            if objs2 is None:
-                return
+        dlg_title = _("Select %s") % obj2_name
 
         if pairwise:
             group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
-            src_gids = list(
-                set([self.panel.objmodel.get_object_group_id(obj) for obj in objs])
+
+            src_grps, src_gids, src_objs, nbobj, valid = (
+                self.__get_src_grps_gids_objs_nbobj_valid()
             )
-            src_objs: dict[str, list[Obj]] = {}
-            for src_gid in src_gids:
-                src_objs[src_gid] = [
-                    obj
-                    for obj in objs
-                    if self.panel.objmodel.get_object_group_id(obj) == src_gid
-                ]
-            grps = [self.panel.objmodel.get_group(gid) for gid in src_gids]
+            if not objs2:
+                objs2 = self.panel.get_objects_with_dialog(
+                    dlg_title,
+                    _(
+                        "<u>Note:</u> operation mode is <i>pairwise</i>: "
+                        "%s object(s) expected (i.e. as many as in the first group)"
+                    )
+                    % nbobj,
+                    nbobj,
+                )
+                if objs2 is None:
+                    return
+
             name = func.__name__.replace("compute_", "")
             n_pairs = len(src_objs[src_gids[0]])
-            max_i_pair = min(n_pairs, max(len(src_objs[grp.uuid]) for grp in grps))
-            grp2_id = self.panel.objmodel.get_object_group_id(objs2[0])
-            grp2 = self.panel.objmodel.get_group(grp2_id)
+            max_i_pair = min(n_pairs, max(len(src_objs[grp.uuid]) for grp in src_grps))
+            grp2_id = objmodel.get_object_group_id(objs2[0])
+            grp2 = objmodel.get_group(grp2_id)
             with create_progress_bar(self.panel, title, max_=len(src_gids)) as progress:
                 for i_group, src_gid in enumerate(src_gids):
                     progress.setValue(i_group + 1)
                     progress.setLabelText(title)
                     if group_exclusive:
                         # This is a group exclusive selection
-                        src_grp = self.panel.objmodel.get_group(src_gid)
+                        src_grp = objmodel.get_group(src_gid)
                         grp_short_ids = [grp.short_id for grp in (src_grp, grp2)]
                         dst_gname = f"{name}({','.join(grp_short_ids)})|pairwise"
                     else:
@@ -784,6 +815,16 @@ class BaseProcessor(QC.QObject):
                         self.panel.add_object(new_obj, group_id=dst_gid)
 
         else:
+            if not objs2:
+                objs2 = self.panel.get_objects_with_dialog(
+                    dlg_title,
+                    _(
+                        "<u>Note:</u> operation mode is <i>single operand</i>: "
+                        "1 object expected"
+                    ),
+                )
+                if objs2 is None:
+                    return
             obj2 = objs2[0]
             with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
                 for index, obj in enumerate(objs):
@@ -798,7 +839,7 @@ class BaseProcessor(QC.QObject):
                     )
                     if new_obj is None:
                         continue
-                    group_id = self.panel.objmodel.get_object_group_id(obj)
+                    group_id = objmodel.get_object_group_id(obj)
                     self.panel.add_object(new_obj, group_id=group_id)
 
     # ------Data Operations-------------------------------------------------------------

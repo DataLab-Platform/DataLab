@@ -33,7 +33,10 @@ def check_titles(title, titles):
     for actual_title, expected_title in titles:
         execenv.print(f"  {actual_title} == {expected_title}", end=" ")
         assert actual_title == expected_title
-        execenv.print("✓")
+        if actual_title == expected_title:
+            execenv.print("✓")
+        else:
+            execenv.print("✗")
 
 
 def test_single_operand_mode_compute_n1():
