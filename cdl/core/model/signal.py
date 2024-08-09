@@ -214,6 +214,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
         self.regenerate_uuid()
+        self._maskdata_cache = None
 
     def regenerate_uuid(self):
         """Regenerate UUID
