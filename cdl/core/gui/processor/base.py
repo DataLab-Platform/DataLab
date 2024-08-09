@@ -522,7 +522,7 @@ class BaseProcessor(QC.QObject):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
         src_grps = sorted(
-            set([objmodel.get_group_from_object(obj) for obj in objs]),
+            {objmodel.get_group_from_object(obj) for obj in objs},
             key=lambda x: x.number,
         )
         src_gids = [grp.uuid for grp in src_grps]
@@ -543,15 +543,14 @@ class BaseProcessor(QC.QObject):
                 raise ValueError(
                     "Pairwise mode: objects must be selected in at least two groups"
                 )
-            else:
-                QW.QMessageBox.warning(
-                    self.panel.parent(),
-                    _("Warning"),
-                    _(
-                        "In pairwise mode, you need to select objects "
-                        "in at least two groups."
-                    ),
-                )
+            QW.QMessageBox.warning(
+                self.panel.parent(),
+                _("Warning"),
+                _(
+                    "In pairwise mode, you need to select objects "
+                    "in at least two groups."
+                ),
+            )
         if valid:
             valid = all(len(src_objs[src_gid]) == nbobj for src_gid in src_gids)
             if not valid:
@@ -559,15 +558,14 @@ class BaseProcessor(QC.QObject):
                     raise ValueError(
                         "Pairwise mode: invalid number of objects in each group"
                     )
-                else:
-                    QW.QMessageBox.warning(
-                        self.panel.parent(),
-                        _("Warning"),
-                        _(
-                            "In pairwise mode, you need to select "
-                            "the same number of objects in each group."
-                        ),
-                    )
+                QW.QMessageBox.warning(
+                    self.panel.parent(),
+                    _("Warning"),
+                    _(
+                        "In pairwise mode, you need to select "
+                        "the same number of objects in each group."
+                    ),
+                )
         return src_grps, src_gids, src_objs, nbobj, valid
 
     def compute_n1(
@@ -803,7 +801,7 @@ class BaseProcessor(QC.QObject):
                         dst_gname = f"{name}[...]"
                     dst_gid = self.panel.add_group(dst_gname).uuid
                     for i_pair in range(max_i_pair):
-                        args = [src_objs[src_gids[i_group]][i_pair], objs2[i_pair]]
+                        args = [src_objs[src_gid]][i_pair], objs2[i_pair]]
                         if param is not None:
                             args.append(param)
                         result = self.__exec_func(func, tuple(args), progress)
