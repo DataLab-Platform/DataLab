@@ -130,10 +130,11 @@ def test_pairwise_operations_mode_compute_n1():
         assert len(model.get_groups()) == n_groups + 1
         new_group = model.get_group_from_number(n_groups + 1)
         assert len(new_group.get_objects()) == n_objects
+        execenv.print("Σ|pairwise")
         for idx in range(len(groups[0])):
             obj = new_group[idx]
             pfx_orig = ", ".join(obj.short_id for obj in (grp[idx] for grp in groups))
-            execenv.print(f"Σ({pfx_orig})")
+            execenv.print(f"  Σ({pfx_orig})")
             assert obj.title == f"Σ({pfx_orig})"
 
         # Remove new group
@@ -160,9 +161,10 @@ def test_pairwise_operations_mode_compute_n1():
         assert len(model.get_groups()) == n_groups + 1
         new_group = model.get_group_from_number(n_groups + 1)
         assert len(new_group) == 2  # 2 signals were selected
+        execenv.print("Σ|pairwise")
         for idx, obj in enumerate(new_group):
             pfx_orig = ", ".join(obj.short_id for obj in objs[idx::2])
-            execenv.print(f"Σ({pfx_orig})")
+            execenv.print(f"  Σ({pfx_orig})")
             assert obj.title == f"Σ({pfx_orig})"
 
     Conf.proc.operation_mode.set(original_mode)
@@ -287,12 +289,13 @@ def test_pairwise_operations_mode_compute_n1n():
         new_groups = [
             model.get_group_from_number(idx) for idx in (n_groups + 1, n_groups + 2)
         ]
+        execenv.print("Δ|pairwise")
         for i_new_grp, new_grp in enumerate(new_groups):
             assert len(new_grp.get_objects()) == n_objects
             for idx in range(n_objects):
                 obj = new_grp[idx]
                 obj1, obj2 = groups[i_new_grp][idx], group3[idx]
-                execenv.print(f"{obj1.short_id}-{obj2.short_id}")
+                execenv.print(f"  {obj1.short_id}-{obj2.short_id}")
                 assert obj.title == f"{obj1.short_id}-{obj2.short_id}"
 
         # Remove new groups
@@ -324,6 +327,7 @@ def test_pairwise_operations_mode_compute_n1n():
             model.get_group_from_number(idx) for idx in (n_groups + 1, n_groups + 2)
         ]
         i_obj1 = 0
+        execenv.print("Δ|pairwise")
         for i_new_grp, new_grp in enumerate(new_groups):
             assert len(new_grp.get_objects()) == n_objects
             for idx in range(n_objects):
