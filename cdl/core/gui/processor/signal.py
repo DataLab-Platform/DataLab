@@ -180,7 +180,7 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(
             cps.compute_difference_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Difference with constant"),
             edit=True,
         )
