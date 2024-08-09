@@ -27,6 +27,15 @@ from cdl.utils.qthelpers import cdl_app_context
 from cdl.utils.tests import get_test_fnames
 
 
+def check_titles(title, titles):
+    """Check that the title is one of the expected titles"""
+    execenv.print(f"{title}:")
+    for actual_title, expected_title in titles:
+        execenv.print(f"  {actual_title} == {expected_title}", end=" ")
+        assert actual_title == expected_title
+        execenv.print("✓")
+
+
 def test_single_operand_mode_compute_n1():
     """Run single operand mode test scenario
     with compute_n1 operation (e.g. sum)"""
@@ -59,9 +68,11 @@ def test_single_operand_mode_compute_n1():
         assert len(model.get_groups()) == n_groups + 1
         new_group = model.get_group_from_number(n_groups + 1)
         assert len(new_group) == 2
+        titles = []
         for idx, obj in enumerate(new_group):
             pfx_orig = ", ".join(obj.short_id for obj in groups[idx].get_objects())
-            assert obj.title == f"Σ({pfx_orig})"
+            titles.append((obj.title, f"Σ({pfx_orig})"))
+        check_titles(f"Single operand mode Σ[{new_group.title}]", titles)
 
         # Remove new group
         view.select_groups([new_group])
@@ -84,9 +95,11 @@ def test_single_operand_mode_compute_n1():
         # - signal added to group 1: group 1 signal 1 + group 2 signal 1
         # - signal added to group 2: group 1 signal 2 + group 2 signal 2
         assert len(model.get_groups()) == n_groups  # no new group
+        titles = []
         for idx in range(1):
             pfx_orig = ", ".join(obj.short_id for obj in groups[idx][:2])
-            assert groups[idx][-1].title == f"Σ({pfx_orig})"
+            titles.append((groups[idx][-1].title, f"Σ({pfx_orig})"))
+        check_titles(f"Single operand mode Σ[{groups[1].title}]", titles)
 
     Conf.proc.operation_mode.set(original_mode)
 
@@ -130,12 +143,12 @@ def test_pairwise_operations_mode_compute_n1():
         assert len(model.get_groups()) == n_groups + 1
         new_group = model.get_group_from_number(n_groups + 1)
         assert len(new_group.get_objects()) == n_objects
-        execenv.print("Σ|pairwise")
+        titles = []
         for idx in range(len(groups[0])):
             obj = new_group[idx]
             pfx_orig = ", ".join(obj.short_id for obj in (grp[idx] for grp in groups))
-            execenv.print(f"  Σ({pfx_orig})")
-            assert obj.title == f"Σ({pfx_orig})"
+            titles.append((obj.title, f"Σ({pfx_orig})"))
+        check_titles(f"Pairwise operations mode Σ[{new_group.title}]", titles)
 
         # Remove new group
         view.select_groups([new_group])
@@ -161,11 +174,11 @@ def test_pairwise_operations_mode_compute_n1():
         assert len(model.get_groups()) == n_groups + 1
         new_group = model.get_group_from_number(n_groups + 1)
         assert len(new_group) == 2  # 2 signals were selected
-        execenv.print("Σ|pairwise")
+        titles = []
         for idx, obj in enumerate(new_group):
             pfx_orig = ", ".join(obj.short_id for obj in objs[idx::2])
-            execenv.print(f"  Σ({pfx_orig})")
-            assert obj.title == f"Σ({pfx_orig})"
+            titles.append((obj.title, f"Σ({pfx_orig})"))
+        check_titles(f"Pairwise operations mode Σ[{new_group.title}]", titles)
 
     Conf.proc.operation_mode.set(original_mode)
 
@@ -208,10 +221,14 @@ def test_single_operand_mode_compute_n1n():
         assert len(model.get_groups()) == n_groups
         new_objs = []
         for i_group, group in enumerate(groups):
+            titles = []
             for i_obj in range(n_objects[i_group]):
                 obj = group[i_obj + n_objects[i_group]]
-                assert obj.title == f"{group[i_obj].short_id}-{group3[0].short_id}"
+                titles.append(
+                    (obj.title, f"{group[i_obj].short_id}-{group3[0].short_id}")
+                )
                 new_objs.append(obj)
+            check_titles(f"Single operand mode Δ[{group.title}]", titles)
 
         # Remove new signals
         view.select_objects(new_objs)
@@ -239,9 +256,13 @@ def test_single_operand_mode_compute_n1n():
         #   - signal 2: group 2 signal 2 - group 3 signal 1
         assert len(model.get_groups()) == n_groups  # no new group
         for i_group, group in enumerate(groups):
+            titles = []
             for i_obj in range(n_objects[i_group]):
                 obj = group[len(group) - n_objects[i_group] + i_obj]
-                assert obj.title == f"{group[i_obj].short_id}-{group3[0].short_id}"
+                titles.append(
+                    (obj.title, f"{group[i_obj].short_id}-{group3[0].short_id}")
+                )
+            check_titles(f"Single operand mode Δ[{group.title}]", titles)
 
     Conf.proc.operation_mode.set(original_mode)
 
@@ -292,11 +313,12 @@ def test_pairwise_operations_mode_compute_n1n():
         execenv.print("Δ|pairwise")
         for i_new_grp, new_grp in enumerate(new_groups):
             assert len(new_grp.get_objects()) == n_objects
+            titles = []
             for idx in range(n_objects):
                 obj = new_grp[idx]
                 obj1, obj2 = groups[i_new_grp][idx], group3[idx]
-                execenv.print(f"  {obj1.short_id}-{obj2.short_id}")
-                assert obj.title == f"{obj1.short_id}-{obj2.short_id}"
+                titles.append((obj.title, f"{obj1.short_id}-{obj2.short_id}"))
+            check_titles(f"Pairwise operations mode Δ[{new_grp.title}]", titles)
 
         # Remove new groups
         view.select_groups(new_groups)
@@ -330,12 +352,13 @@ def test_pairwise_operations_mode_compute_n1n():
         execenv.print("Δ|pairwise")
         for i_new_grp, new_grp in enumerate(new_groups):
             assert len(new_grp.get_objects()) == n_objects
+            titles = []
             for idx in range(n_objects):
                 obj = new_grp[idx]
                 obj1, obj2 = objs[i_obj1], objs2[idx]
                 i_obj1 += 1
-                execenv.print(f"{obj1.short_id}-{obj2.short_id}")
-                assert obj.title == f"{obj1.short_id}-{obj2.short_id}"
+                titles.append((obj.title, f"{obj1.short_id}-{obj2.short_id}"))
+            check_titles(f"Pairwise operations mode Δ[{new_grp.title}]", titles)
 
     Conf.proc.operation_mode.set(original_mode)
 
