@@ -846,7 +846,9 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_arithmetic(self, param: ArithmeticParam | None = None) -> None:
+    def compute_arithmetic(
+        self, obj2: Obj | None = None, param: ArithmeticParam | None = None
+    ) -> None:
         """Compute arithmetic operation"""
 
     @abc.abstractmethod
