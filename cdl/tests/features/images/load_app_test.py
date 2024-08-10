@@ -7,6 +7,8 @@ Load application test: high number of images
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+from __future__ import annotations
+
 import numpy as np
 import pytest
 
@@ -47,7 +49,7 @@ def create_random_test_data(size: tuple[int, int] | None = None) -> cdl.obj.Imag
 
 
 @pytest.mark.skip("This a load test, not a functional test")
-def test_high_number_of_images():
+def test_high_number_of_images() -> None:
     """Run a test with a high number of images."""
     nb = 30
     execenv.print("Creating images", end="")
