@@ -117,11 +117,10 @@ class ImageRoiDataItem:
             obj: image object
             geometry: ROI geometry
         """
-        width, height = obj.data.shape[1] * obj.dx, obj.data.shape[0] * obj.dy
         frac = 0.2
-        x0, x1 = obj.x0 + frac * width, obj.x0 + (1 - frac) * width
+        x0, x1 = obj.x0 + frac * obj.width, obj.x0 + (1 - frac) * obj.width
         if geometry is RoiDataGeometries.RECTANGLE:
-            y0, y1 = obj.y0 + frac * height, obj.y0 + (1 - frac) * height
+            y0, y1 = obj.y0 + frac * obj.height, obj.y0 + (1 - frac) * obj.height
         else:
             y0 = y1 = obj.yc
         coords = x0, y0, x1, y1
@@ -445,14 +444,24 @@ class ImageObj(gds.DataSet, base.BaseObj):
     _e_tabs = gds.EndTabGroup("all")
 
     @property
+    def width(self) -> float:
+        """Return image width, i.e. number of columns multiplied by pixel size"""
+        return self.data.shape[1] * self.dx
+
+    @property
+    def height(self) -> float:
+        """Return image height, i.e. number of rows multiplied by pixel size"""
+        return self.data.shape[0] * self.dy
+
+    @property
     def xc(self) -> float:
         """Return image center X-axis coordinate"""
-        return self.x0 + 0.5 * self.data.shape[1] * self.dx
+        return self.x0 + 0.5 * self.width
 
     @property
     def yc(self) -> float:
         """Return image center Y-axis coordinate"""
-        return self.y0 + 0.5 * self.data.shape[0] * self.dy
+        return self.y0 + 0.5 * self.height
 
     def get_data(self, roi_index: int | None = None) -> np.ndarray:
         """
