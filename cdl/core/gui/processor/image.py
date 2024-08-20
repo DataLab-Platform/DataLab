@@ -159,20 +159,20 @@ class ImageProcessor(BaseProcessor):
                     # Distributing images over rows
                     sign = np.sign(param.rows)
                     g_row = (g_row + sign) % param.rows
-                    y0 += (obj.dy * obj.data.shape[0] + param.rowspac) * sign
+                    y0 += (obj.height + param.rowspac) * sign
                     if g_row == 0:
                         g_col += 1
-                        x0 += obj.dx * obj.data.shape[1] + param.colspac
+                        x0 += obj.width + param.colspac
                         y0 = y0_0
                 else:
                     # Distributing images over columns
                     sign = np.sign(param.cols)
                     g_col = (g_col + sign) % param.cols
-                    x0 += (obj.dx * obj.data.shape[1] + param.colspac) * sign
+                    x0 += (obj.width + param.colspac) * sign
                     if g_col == 0:
                         g_row += 1
                         x0 = x0_0
-                        y0 += obj.dy * obj.data.shape[0] + param.rowspac
+                        y0 += obj.height + param.rowspac
         self.panel.SIG_REFRESH_PLOT.emit("selected", True)
 
     @qt_try_except()

@@ -562,7 +562,7 @@ def compute_rotate270(src: ImageObj) -> ImageObj:
 # pylint: disable=unused-argument
 def hflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
     """Apply HFlip to coords"""
-    coords[:, ::2] = dst.x0 + dst.dx * dst.data.shape[1] - coords[:, ::2]
+    coords[:, ::2] = dst.x0 + dst.width - coords[:, ::2]
     dst.roi = None
 
 
@@ -583,7 +583,7 @@ def compute_fliph(src: ImageObj) -> ImageObj:
 # pylint: disable=unused-argument
 def vflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
     """Apply VFlip to coords"""
-    coords[:, 1::2] = dst.y0 + dst.dy * dst.data.shape[0] - coords[:, 1::2]
+    coords[:, 1::2] = dst.y0 + dst.height - coords[:, 1::2]
     dst.roi = None
 
 
