@@ -2257,12 +2257,12 @@ msgstr ""
 "ou de la suppression d'un objet"
 
 #: cdl\core\gui\main.py:845
-msgid "Show first only"
-msgstr "Afficher uniquement le premier"
+msgid "Show first object only"
+msgstr "Afficher uniquement le premier objet"
 
 #: cdl\core\gui\main.py:847
-msgid "Show only the first selected object"
-msgstr "Afficher uniquement le premier objet sélectionné"
+msgid "Show only the first selected object (signal or image)"
+msgstr "Afficher uniquement le premier objet sélectionné (signal ou image)"
 
 #: cdl\core\gui\main.py:852
 msgid "Show graphical object titles"

@@ -843,9 +843,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         )
         self.showfirstonly_action = create_action(
             self,
-            _("Show first only"),
+            _("Show first object only"),
             icon=get_icon("show_first.svg"),
-            tip=_("Show only the first selected object"),
+            tip=_("Show only the first selected object (signal or image)"),
             toggled=self.toggle_show_first_only,
         )
         self.showlabel_action = create_action(
