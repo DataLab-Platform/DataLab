@@ -41,13 +41,6 @@ def create_random_test_data(size: tuple[int, int] | None = None) -> cdl.obj.Imag
     return image
 
 
-# TODO: Add an info message box popping up automatically when more than N=20x2000x2000
-# pixels equivalent images are selected (e.g. when selecting a group), to inform the
-# user that in such case it might be appropriate to use the "Show first only" option
-# to avoid performance issues. Add a "Do not show this message again" checkbox to the
-# message box. And eventually enable the option "Show first only" for the user.
-
-
 @pytest.mark.skip("This a load test, not a functional test")
 def test_high_number_of_images() -> None:
     """Run a test with a high number of images."""
@@ -65,8 +58,12 @@ def test_high_number_of_images() -> None:
         for ima in images:
             panel.add_object(ima)
         panel.objview.select_groups()
+
+        # Comment the two following lines to check if DataLab only shows the last image
+        # when they are all superposed
         param = dlp.GridParam.create(cols=10)
         panel.processor.distribute_on_grid(param)
+
         panel.duplicate_object()
 
 

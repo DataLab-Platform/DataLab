@@ -265,6 +265,21 @@ class BasePlotHandler:
         if self.__auto_refresh:
             self.refresh_plot("selected")
 
+    def reduce_shown_oids(self, oids: list[str]) -> list[str]:
+        """Reduce the number of shown objects to visible items only. The base
+        implementation is to show only the first selected item if the option
+        "Show first only" is enabled.
+
+        Args:
+            oids: list of object uuids
+
+        Returns:
+            list[str]: reduced list of object uuids
+        """
+        if self.__show_first_only:
+            return oids[:1]
+        return oids
+
     def refresh_plot(
         self, what: str, update_items: bool = True, force: bool = False
     ) -> None:
@@ -325,8 +340,7 @@ class BasePlotHandler:
         scales_dict = {}
 
         if oids:
-            if self.__show_first_only:
-                oids = oids[:1]
+            oids = self.reduce_shown_oids(oids)
             ref_item = None
             with create_progress_bar(
                 self.panel, _("Creating plot items"), max_=len(oids)
@@ -470,6 +484,51 @@ class ImagePlotHandler(BasePlotHandler):
             item.set_lut_range(ref_item.get_lut_range())
             plot: BasePlot = item.plot()
             plot.update_colormap_axis(item)
+
+    def reduce_shown_oids(self, oids: list[str]) -> list[str]:
+        """Reduce the number of shown objects to visible items only. The base
+        implementation is to show only the first selected item if the option
+        "Show first only" is enabled.
+
+        Args:
+            oids: list of object uuids
+
+        Returns:
+            list[str]: reduced list of object uuids
+        """
+        oids = super().reduce_shown_oids(oids)
+
+        # For Image View, we show only the last image (which is the highest z-order
+        # plot item) if more than one image is selected, if last image has no
+        # transparency and if the other images are all completely covered by the last
+        # image.
+        # TODO: [P4] Enhance this algorithm to handle more complex cases
+        # (not sure it's worth it)
+        if len(oids) > 1:
+            # Get objects associated to the oids
+            objs = self.panel.objmodel.get_objects(oids)
+            # First condition is about the image transparency
+            last_obj = objs[-1]
+            alpha_cond = (
+                last_obj.metadata.get("alpha", 1.0) == 1.0
+                and last_obj.metadata.get("alpha_function", 0) == 0
+            )
+            if alpha_cond:
+                # Second condition is about the image size and position
+                geom_cond = True
+                for obj in objs[:-1]:
+                    geom_cond = (
+                        geom_cond
+                        and last_obj.x0 <= obj.x0
+                        and last_obj.y0 <= obj.y0
+                        and last_obj.x0 + last_obj.width >= obj.x0 + obj.width
+                        and last_obj.y0 + last_obj.height >= obj.y0 + obj.height
+                    )
+                    if not geom_cond:
+                        break
+                if geom_cond:
+                    oids = oids[-1:]
+        return oids
 
     def refresh_plot(
         self, what: str, update_items: bool = True, force: bool = False
