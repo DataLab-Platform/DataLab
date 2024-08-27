@@ -15,6 +15,10 @@ if len(sys.argv) > 1 and sys.argv[1] == "-c":
     exec(sys.argv[2])
     # ----------------------------------------------------------------------------------
 else:
-    from cdl.app import run
+    try:
+        from cdl.app import run
 
-    run()
+        run()
+    except Exception as exc:
+        with open("datalab_error.log", "w") as stream:
+            stream.write(str(exc))
