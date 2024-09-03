@@ -304,8 +304,7 @@ def calc_resultproperties(
         raise ValueError("Values of labeledfuncs must be functions")
 
     res = []
-    roi_nb = 0 if obj.roi is None else obj.roi.shape[0]
-    for i_roi in [None] + list(range(roi_nb)):
+    for i_roi in obj.iterate_roi_indexes():
         data_roi = obj.get_data(i_roi)
         val_roi = -1 if i_roi is None else i_roi
         res.append([val_roi] + [fn(data_roi) for fn in labeledfuncs.values()])

@@ -12,7 +12,7 @@ import abc
 import enum
 import json
 import sys
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Generator, Iterable
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any, Literal
 
@@ -989,10 +989,10 @@ class BaseObj(metaclass=BaseObjMeta):
             if self.data.dtype not in self.VALID_DTYPES:
                 raise TypeError(f"Unsupported data type: {self.data.dtype}")
 
-    def iterate_roi_indexes(self):
-        """Iterate over object ROI indexes ([0] if there is no ROI)"""
+    def iterate_roi_indexes(self) -> Generator[int | None, None, None]:
+        """Iterate over object ROI indexes (if there is no ROI, yield None)"""
         if self.roi is None:
-            yield 0
+            yield None
         else:
             yield from range(len(self.roi))
 

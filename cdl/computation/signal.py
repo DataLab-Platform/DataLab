@@ -1282,7 +1282,7 @@ def calc_resultshape(
                 raise ValueError(
                     "The computation function must return a 1D NumPy array"
                 )
-            results = np.array([i_roi] + results.tolist())
+            results = np.array([0 if i_roi is None else i_roi] + results.tolist())
             res.append(results)
     if res:
         return ResultShape(title, np.vstack(res), shape, add_label=add_label)

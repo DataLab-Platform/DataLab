@@ -1433,7 +1433,7 @@ def calc_resultshape(
                 coords[:, coly] += y0
             coords[:, colx] = obj.dx * coords[:, colx] + obj.x0
             coords[:, coly] = obj.dy * coords[:, coly] + obj.y0
-            idx = np.ones((coords.shape[0], 1)) * i_roi
+            idx = np.ones((coords.shape[0], 1)) * (0 if i_roi is None else i_roi)
             coords = np.hstack([idx, coords])
             res.append(coords)
             num_cols.append(coords.shape[1])
