@@ -109,23 +109,6 @@ class ImageRoiDataItem:
     def __init__(self, data: np.ndarray | list | tuple):
         self._data = data
 
-    @classmethod
-    def from_image(cls, obj: ImageObj, geometry: RoiDataGeometries) -> ImageRoiDataItem:
-        """Construct roi data item from image object: called for making new ROI items
-
-        Args:
-            obj: image object
-            geometry: ROI geometry
-        """
-        frac = 0.2
-        x0, x1 = obj.x0 + frac * obj.width, obj.x0 + (1 - frac) * obj.width
-        if geometry is RoiDataGeometries.RECTANGLE:
-            y0, y1 = obj.y0 + frac * obj.height, obj.y0 + (1 - frac) * obj.height
-        else:
-            y0 = y1 = obj.yc
-        coords = x0, y0, x1, y1
-        return cls(coords)
-
     @property
     def geometry(self) -> RoiDataGeometries:
         """ROI geometry"""
@@ -672,8 +655,14 @@ class ImageObj(gds.DataSet, base.BaseObj):
             editable: if True, ROI is editable
             geometry: ROI geometry
         """
-        roidataitem = ImageRoiDataItem.from_image(self, geometry)
-        return roidataitem.make_roi_item(None, fmt, lbl, editable)
+        frac = 0.2
+        x0, x1 = self.x0 + frac * self.width, self.x0 + (1 - frac) * self.width
+        if geometry is RoiDataGeometries.RECTANGLE:
+            y0, y1 = self.y0 + frac * self.height, self.y0 + (1 - frac) * self.height
+        else:
+            y0 = y1 = self.yc
+        coords = x0, y0, x1, y1
+        return ImageRoiDataItem(coords).make_roi_item(None, fmt, lbl, editable)
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
         """Convert ROI coordinates to indexes.
