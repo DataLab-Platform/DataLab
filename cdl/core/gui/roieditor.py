@@ -158,8 +158,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
             layout.addWidget(btn)
         if self.extract:
             self.singleobj_btn = QW.QCheckBox(
-                _("Extract all regions of interest into a single %s object")
-                % self.OBJ_NAME,
+                _("Extract all ROIs into a single %s object") % self.OBJ_NAME,
                 self,
             )
             layout.addWidget(self.singleobj_btn)

@@ -254,14 +254,13 @@ class ImageProcessor(BaseProcessor):
         group = obj.roidata_to_params(param.roidata)
         if param.singleobj and len(group.datasets) > 1:
             # Extract multiple ROIs into a single object (remove all the ROIs),
-            # if the "Extract all regions of interest into a single image object"
+            # if the "Extract all ROIs into a single image object"
             # option is checked and if there are more than one ROI
             self.compute_11(cpi.extract_multiple_roi, group, title=_("Extract ROI"))
         else:
             # Extract each ROI into a separate object (keep the ROI in the case of
-            # a circular ROI), if the "Extract all regions of interest into a single
-            # image object" option is not checked or if there is only one ROI
-            # (See Issue #31)
+            # a circular ROI), if the "Extract all ROIs into a single image object"
+            # option is not checked or if there is only one ROI (See Issue #31)
             self.compute_1n(cpi.extract_single_roi, group.datasets, "ROI", edit=False)
 
     @qt_try_except()
