@@ -28,7 +28,7 @@ import abc
 from typing import TYPE_CHECKING, Generic, Literal, TypeVar
 
 from guidata.configtools import get_icon
-from guidata.qthelpers import create_toolbutton
+from guidata.qthelpers import add_actions, create_action
 from plotpy.builder import make
 from plotpy.interfaces import IImageItemType
 from plotpy.items import (
@@ -114,7 +114,8 @@ class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEdit
             self.plot.add_item(roi_item)
             self.plot.set_active_item(roi_item)
 
-        self.remove_all_btn: QW.QToolButton | None = None
+        self.toolbar: QW.QToolBar | None = None
+        self.remove_all_action: QW.QAction | None = None
         self.singleobj_btn: QW.QToolButton | None = None
         self.setup_widget()
 
@@ -166,28 +167,23 @@ class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEdit
         """
         return self.__roi, self.modified
 
-    def build_roi_buttons(self) -> list[QW.QToolButton | QW.QFrame]:
-        """Build ROI buttons"""
-        self.remove_all_btn = create_toolbutton(
+    def create_actions(self) -> list[QW.QAction]:
+        """Create actions"""
+        self.remove_all_action = create_action(
             self,
-            get_icon("roi_delete.svg"),
             _("Remove all ROIs"),
-            self.remove_all_rois,
-            autoraise=True,
+            icon=get_icon("roi_delete.svg"),
+            triggered=self.remove_all_rois,
         )
-        # Return a vertical bar to separate the buttons in the layout
-        vert_sep = QW.QFrame(self)
-        vert_sep.setFrameShape(QW.QFrame.VLine)
-        vert_sep.setStyleSheet("color: gray")
-        return [vert_sep, self.remove_all_btn]
+        return [None, self.remove_all_action]
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
         layout = QW.QHBoxLayout()
-        for btn in self.build_roi_buttons():
-            if isinstance(btn, QW.QToolButton):
-                btn.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
-            layout.addWidget(btn)
+        self.toolbar = QW.QToolBar(self)
+        self.toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
+        add_actions(self.toolbar, self.create_actions())
+        layout.addWidget(self.toolbar)
         if self.extract:
             self.singleobj_btn = QW.QCheckBox(
                 _("Extract all ROIs into a single %s object") % self.OBJ_NAME,
@@ -223,7 +219,7 @@ class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEdit
     def items_changed(self, _plot: BasePlot) -> None:
         """Items have changed"""
         self.update_roi_titles()
-        self.remove_all_btn.setEnabled(len(self.roi_items) > 0)
+        self.remove_all_action.setEnabled(len(self.roi_items) > 0)
 
     def item_removed(self, item) -> None:
         """Item was removed. Since all items are read-only except ROIs...
@@ -258,12 +254,15 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI]):
     ICON_NAME = "signal_roi.svg"
     OBJ_NAME = _("signal")
 
-    def build_roi_buttons(self) -> list[QW.QToolButton | QW.QFrame]:
-        """Build ROI buttons"""
-        add_btn = create_toolbutton(
-            self, get_icon(self.ICON_NAME), _("Add ROI"), self.add_roi, autoraise=True
+    def create_actions(self) -> list[QW.QAction]:
+        """Create actions"""
+        add_action = create_action(
+            self,
+            _("Add ROI"),
+            icon=get_icon(self.ICON_NAME),
+            triggered=self.add_roi,
         )
-        return [add_btn] + super().build_roi_buttons()
+        return [add_action] + super().create_actions()
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
@@ -290,23 +289,21 @@ class ImageROIEditor(BaseROIEditor[ImageObj, ImageROI]):
     ICON_NAME = "image_roi.svg"
     OBJ_NAME = _("image")
 
-    def build_roi_buttons(self) -> list[QW.QToolButton | QW.QFrame]:
-        """Build ROI buttons"""
-        rect_btn = create_toolbutton(
+    def create_actions(self) -> list[QW.QAction]:
+        """Create actions"""
+        rect_action = create_action(
             self,
-            get_icon("roi_new_rectangle.svg"),
-            _("Rectangular ROI"),
-            lambda: self.add_roi("rectangle"),
-            autoraise=True,
+            _("Add rectangular ROI"),
+            icon=get_icon("roi_new_rectangle.svg"),
+            triggered=lambda: self.add_roi("rectangle"),
         )
-        circ_btn = create_toolbutton(
+        circ_action = create_action(
             self,
-            get_icon("roi_new_circle.svg"),
-            _("Circular ROI"),
-            lambda: self.add_roi("circle"),
-            autoraise=True,
+            _("Add circular ROI"),
+            icon=get_icon("roi_new_circle.svg"),
+            triggered=lambda: self.add_roi("circle"),
         )
-        return [rect_btn, circ_btn] + super().build_roi_buttons()
+        return [rect_action, circ_action] + super().create_actions()
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
