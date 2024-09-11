@@ -115,7 +115,7 @@ msgstr ""
 #: cdl.core.model.image.ImageObj.make_item
 #: cdl.core.model.image.ImageObj.new_roi_item
 #: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdl.core.model.image.ImageObj.roi_coords_to_indices
 #: cdl.core.model.image.ImageObj.set_data_type
 #: cdl.core.model.image.ImageObj.set_metadata_from
 #: cdl.core.model.image.ImageObj.update_item
@@ -138,7 +138,7 @@ msgstr ""
 #: cdl.core.model.signal.SignalObj.make_item
 #: cdl.core.model.signal.SignalObj.new_roi_item
 #: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indices
 #: cdl.core.model.signal.SignalObj.set_data_type
 #: cdl.core.model.signal.SignalObj.set_xydata
 #: cdl.core.model.signal.SignalObj.update_item
@@ -245,7 +245,7 @@ msgstr ""
 #: cdl.core.model.image.ImageObj.get_masked_view
 #: cdl.core.model.image.ImageObj.make_item
 #: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdl.core.model.image.ImageObj.roi_coords_to_indices
 #: cdl.core.model.image.ROI2DParam.get_data cdl.core.model.image.create_image
 #: cdl.core.model.image.create_image_from_param
 #: cdl.core.model.image.new_image_param
@@ -255,7 +255,7 @@ msgstr ""
 #: cdl.core.model.signal.SignalObj.get_roi_param
 #: cdl.core.model.signal.SignalObj.make_item
 #: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indices
 #: cdl.core.model.signal.create_signal
 #: cdl.core.model.signal.create_signal_from_param
 #: cdl.core.model.signal.new_signal_param cdl.obj.ImageObj.maskdata
@@ -855,29 +855,29 @@ msgstr "Met à jour l'élément de tracé à partir des données."
 msgid "if True, data has changed"
 msgstr "si True, les données ont changé"
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:1
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:1 of
-msgid "Convert ROI coordinates to indexes."
+#: cdl.core.model.image.ImageObj.roi_coords_to_indices:1
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indices:1 of
+msgid "Convert ROI coordinates to indices."
 msgstr "Convertit les coordonnées de la ROI en index."
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:3
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:3 of
+#: cdl.core.model.image.ImageObj.roi_coords_to_indices:3
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indices:3 of
 msgid "coordinates"
 msgstr "coordonnées"
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:5
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:5 of
-msgid "Indexes"
+#: cdl.core.model.image.ImageObj.roi_coords_to_indices:5
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indices:5 of
+msgid "Indices"
 msgstr "Indices"
 
 #: cdl.core.model.signal.SignalObj.get_roi_param:1 of
 msgid ""
-"Return ROI parameters dataset (converting ROI point indexes to "
+"Return ROI parameters dataset (converting ROI point indices to "
 "coordinates)"
 msgstr ""
 
 #: cdl.core.model.signal.SignalObj.get_roi_param:4 of
-msgid "default values (first, last point indexes)"
+msgid "default values (first, last point indices)"
 msgstr ""
 
 #: cdl.core.model.signal.SignalObj.get_roi_param:6 of
@@ -1143,8 +1143,8 @@ msgstr "Itérer sur les formes de résultat de l'objet."
 msgid "Result shape"
 msgstr "Forme résultat"
 
-#: cdl.core.model.base.BaseObj.iterate_roi_indexes:1 of
-msgid "Iterate over object ROI indexes ([0] if there is no ROI)"
+#: cdl.core.model.base.BaseObj.iterate_roi_indices:1 of
+msgid "Iterate over object ROI indices ([0] if there is no ROI)"
 msgstr "Itérer sur les index de ROI de l'objet ([0] s'il n'y a pas de ROI)"
 
 #: cdl.core.model.base.BaseObj.iterate_shape_items:1 of
@@ -2116,9 +2116,9 @@ msgstr "coordonnées"
 msgid "Get single ROI, i.e. after extracting ROI from image"
 msgstr ""
 
-#: cdl.core.model.image.ROI2DParam.get_rect_indexes:1 of
+#: cdl.core.model.image.ROI2DParam.get_rect_indices:1 of
 #, fuzzy
-msgid "Get rectangle indexes"
+msgid "Get rectangle indices"
 msgstr "Forme rectangulaire"
 
 #: cdl.core.model.image.ROI2DParam.get_data:1 of

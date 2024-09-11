@@ -205,19 +205,19 @@ def multigaussian(x, *values, **kwargs):
     return y
 
 
-def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
+def multigaussianfit(x, y, peak_indices, parent=None, name=None):
     """Compute Multi-Gaussian fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
     params = []
-    for index, i0 in enumerate(peak_indexes):
+    for index, i0 in enumerate(peak_indices):
         istart = 0
         iend = len(x) - 1
         if index > 0:
-            istart = (peak_indexes[index - 1] + i0) // 2
-        if index < len(peak_indexes) - 1:
-            iend = (peak_indexes[index + 1] + i0) // 2
+            istart = (peak_indices[index - 1] + i0) // 2
+        if index < len(peak_indices) - 1:
+            iend = (peak_indices[index + 1] + i0) // 2
         dx = 0.5 * (x[iend] - x[istart])
         dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
         stri = f"{index + 1:02d}"
@@ -232,7 +232,7 @@ def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
         )
     )
 
-    kwargs = {"a_x0": x[peak_indexes]}
+    kwargs = {"a_x0": x[peak_indices]}
 
     def fitfunc(xi, params):
         return multigaussian(xi, *params, **kwargs)

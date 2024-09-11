@@ -10,8 +10,8 @@ then open DataLab to show it.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import cdl.param
-from cdl.obj import create_image
+import cdl.obj as dlo
+import cdl.param as dlp
 from cdl.proxy import proxy_context
 from cdl.tests.data import get_test_image
 
@@ -22,15 +22,16 @@ def test_example_app():
     dedicated instance."""
     with proxy_context("local") as proxy:
         data = get_test_image("flower.npy").data
-        image = create_image("Test image with peaks", data)
+        image = dlo.create_image("Test image with peaks", data)
         proxy.add_object(image)
         proxy.compute_roberts()
         data_size = data.shape[0]
         n = data_size // 5
-        m = int(n * 1.25)
-        roidata = [[n, m, data_size - n, data_size - m]]
-        proxy.compute_roi_extraction(cdl.param.ROIDataParam.create(roidata=roidata))
-        param = cdl.param.BlobOpenCVParam.create(
+        roi = dlo.create_image_roi(
+            "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
+        )
+        proxy.compute_roi_extraction(roi)
+        param = dlp.BlobOpenCVParam.create(
             min_dist_between_blobs=0.1,
             filter_by_color=False,
             min_area=500,

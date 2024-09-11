@@ -57,7 +57,7 @@ def create_reference_signal() -> cdl.obj.SignalObj:
     snew = cdl.obj.new_signal_param("Gaussian", stype=cdl.obj.SignalTypes.GAUSS)
     addparam = cdl.obj.GaussLorentzVoigtParam()
     sig = cdl.obj.create_signal_from_param(snew, addparam=addparam, edit=False)
-    sig.roi = np.array([[len(sig.x) // 2, len(sig.x) - 1]], int)
+    sig.roi = cdl.obj.create_signal_roi([len(sig.x) // 2, len(sig.x) - 1], indices=True)
     return sig
 
 
@@ -67,13 +67,13 @@ def create_reference_image() -> cdl.obj.ImageObj:
     addparam = cdl.obj.Gauss2DParam()
     ima = cdl.obj.create_image_from_param(inew, addparam=addparam, edit=False)
     dy, dx = ima.data.shape
-    ima.roi = np.array(
+    ima.roi = cdl.obj.create_image_roi(
+        "rectangle",
         [
             [dx // 2, 0, dx, dy],
             [0, 0, dx // 3, dy // 3],
             [dx // 2, dy // 2, dx, dy],
         ],
-        int,
     )
     return ima
 
@@ -99,7 +99,7 @@ def test_signal_stats_unit() -> None:
     for key, val in ref.items():
         colname = name_map[key]
         assert colname in df
-        assert np.isclose(df[colname][0], val)
+        assert np.isclose(df[colname][0], val), f"Incorrect value for {colname}"
 
     # Given the fact that signal ROI is set to [len(sig.x) // 2, len(sig.x) - 1],
     # we may check the relationship between the results on the whole signal and the ROI:
@@ -139,7 +139,9 @@ def test_image_stats_unit() -> None:
     for key, val in ref.items():
         colname = name_map[key]
         assert colname in df
-        assert np.isclose(df[colname][0], val, rtol=1e-4, atol=1e-5)
+        assert np.isclose(
+            df[colname][0], val, rtol=1e-4, atol=1e-5
+        ), f"Incorrect value for {colname}"
 
     # Given the fact that image ROI is set to
     # [[dx // 2, 0, dx, dy], [0, 0, dx // 3, dy // 3], [dx // 2, dy // 2, dx, dy]],

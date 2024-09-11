@@ -14,7 +14,7 @@ import time
 import warnings
 from collections.abc import Callable
 from multiprocessing.pool import Pool
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any, Generic, Union
 
 import guidata.dataset as gds
 import numpy as np
@@ -26,10 +26,9 @@ from qtpy import QtWidgets as QW
 
 from cdl import env
 from cdl.algorithms.datatypes import is_complex_dtype
-from cdl.computation.base import ROIDataParam
 from cdl.config import Conf, _
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
-from cdl.core.model.base import ResultProperties, ResultShape
+from cdl.core.model.base import ResultProperties, ResultShape, TypeROI
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 
@@ -168,7 +167,7 @@ def is_pairwise_mode() -> bool:
     return state
 
 
-class BaseProcessor(QC.QObject):
+class BaseProcessor(QC.QObject, Generic[TypeROI]):
     """Object handling data processing: operations, processing, analysis.
 
     Args:
@@ -646,7 +645,7 @@ class BaseProcessor(QC.QObject):
                             if dst_obj.roi is None:
                                 dst_obj.roi = src_obj.roi.copy()
                             else:
-                                dst_obj.roi = np.vstack((dst_obj.roi, src_obj.roi))
+                                dst_obj.roi.add_roi(src_obj.roi)
                     if func_objs is not None:
                         func_objs(dst_obj, src_objs_pair)
                     short_ids = [obj.short_id for obj in src_objs_pair]
@@ -695,7 +694,7 @@ class BaseProcessor(QC.QObject):
                         if dst_obj.roi is None:
                             dst_obj.roi = src_obj.roi.copy()
                         else:
-                            dst_obj.roi = np.vstack((dst_obj.roi, src_obj.roi))
+                            dst_obj.roi.add_roi(src_obj.roi)
 
             grps = self.panel.objview.get_sel_groups()
             if grps:
@@ -886,35 +885,6 @@ class BaseProcessor(QC.QObject):
     def compute_division(self, obj2: Obj | list[Obj] | None = None) -> None:
         """Compute division"""
 
-    def _get_roidataparam(self, param: ROIDataParam | None = None) -> ROIDataParam:
-        """Eventually open ROI Editing Dialog, and return ROI editor data.
-
-        Args:
-            param: ROI data parameters.
-                Defaults to None.
-
-        Returns:
-            ROI data parameters.
-        """
-        # Expected behavior:
-        # -----------------
-        # * If param.roidata argument is not None, skip the ROI dialog
-        # * If first selected obj has a ROI, use this ROI as default but open
-        #   ROI Editor dialog anyway
-        # * If multiple objs are selected, then apply the first obj ROI to all
-        if param is None:
-            param = ROIDataParam()
-        if param.roidata is None:
-            param = self.edit_regions_of_interest(
-                extract=True, singleobj=param.singleobj
-            )
-        return param
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_roi_extraction(self, param=None) -> None:
-        """Extract Region Of Interest (ROI) from data"""
-
     @abc.abstractmethod
     @qt_try_except()
     def compute_swap_axes(self) -> None:
@@ -1012,49 +982,83 @@ class BaseProcessor(QC.QObject):
     def compute_division_constant(self, param: ConstantParam) -> None:
         """Compute division by a constant"""
 
+    @qt_try_except()
+    def compute_roi_extraction(self, roi: TypeROI | None = None) -> None:
+        """Extract Region Of Interest (ROI) from data with:
+
+        - :py:func:`cdl.computation.image.extract_single_roi` for single ROI
+        - :py:func:`cdl.computation.image.extract_multiple_roi` for multiple ROIs"""
+        # Expected behavior:
+        # -----------------
+        # * If `roi` is not None or not empty, skip the ROI dialog
+        # * If first selected obj has a ROI, use this ROI as default but open
+        #   ROI Editor dialog anyway
+        # * If multiple objs are selected, then apply the first obj ROI to all
+        if roi is None or roi.is_empty():
+            roi = self.edit_regions_of_interest(extract=True)
+        if roi is None or roi.is_empty():
+            return
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        group = roi.to_params(obj)
+        if roi.singleobj and len(group.datasets) > 1:
+            # Extract multiple ROIs into a single object (remove all the ROIs),
+            # if the "Extract all ROIs into a single image object"
+            # option is checked and if there are more than one ROI
+            self._extract_multiple_roi_in_single_object(group)
+        else:
+            # Extract each ROI into a separate object (keep the ROI in the case of
+            # a circular ROI), if the "Extract all ROIs into a single image object"
+            # option is not checked or if there is only one ROI (See Issue #31)
+            self._extract_each_roi_in_separate_object(group)
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
+        """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def _extract_each_roi_in_separate_object(self, group: gds.DataSetGroup) -> None:
+        """Extract each single Region Of Interest (ROI) from data in a separate
+        object (keep the ROI in the case of a circular ROI, for example)"""
+
     # ------Analysis-------------------------------------------------------------------
 
     def edit_regions_of_interest(
         self,
         extract: bool = False,
-        singleobj: bool | None = None,
-        add_roi: bool = False,
-    ) -> ROIDataParam | None:
+    ) -> TypeROI | None:
         """Define Region Of Interest (ROI).
 
         Args:
             extract: If True, ROI is extracted from data. Defaults to False.
-            singleobj: If True, ROI is extracted from first selected object only.
-             If False, ROI is extracted from all selected objects. If None, ROI is
-             extracted from all selected objects only if they all have the same ROI.
-             Defaults to None.
-            add_roi: If True, add ROI to data immediately after opening the ROI editor.
-             Defaults to False.
 
         Returns:
-            ROI data parameters or None if ROI dialog has been canceled.
+            ROI object or None if ROI dialog has been canceled.
         """
-        results = self.panel.get_roi_editor_output(
-            extract=extract, singleobj=singleobj, add_roi=add_roi
-        )
+        # Expected behavior:
+        # -----------------
+        # * If first selected obj has a ROI, use this ROI as default but open
+        #   ROI Editor dialog anyway
+        # * If multiple objs are selected, then apply the first obj ROI to all
+        results = self.panel.get_roi_editor_output(extract=extract)
         if results is None:
             return None
-        roieditordata, modified = results
+        edited_roi, modified = results
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
-        roigroup = obj.roidata_to_params(roieditordata.roidata)
+        group = edited_roi.to_params(obj)
         if (
-            env.execenv.unattended
-            or roieditordata.roidata.size == 0
-            or roigroup.edit(parent=self.panel.parent())
+            env.execenv.unattended  # Unattended mode (automated unit tests)
+            or edited_roi.is_empty()  # No ROI has been defined
+            or group.edit(parent=self.panel.parent())  # ROI dialog has been accepted
         ):
-            roidata = obj.params_to_roidata(roigroup)
             if modified:
-                roieditordata.roidata = roidata
+                edited_roi = edited_roi.from_params(obj, group)
                 # If ROI has been modified, save ROI (even in "extract mode")
-                obj.roi = roidata
+                obj.roi = edited_roi
                 self.SIG_ADD_SHAPE.emit(obj.uuid)
                 self.panel.selection_changed(update_items=True)
-        return roieditordata
+        return edited_roi
 
     def delete_regions_of_interest(self) -> None:
         """Delete Regions Of Interest"""

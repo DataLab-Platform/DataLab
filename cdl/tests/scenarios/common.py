@@ -195,7 +195,8 @@ def run_signal_computations(
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
-    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(roidata=[[i1, i2]]))
+    roi = dlo.create_signal_roi([i1, i2], indices=True)
+    panel.processor.compute_roi_extraction(roi)
 
     sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
     panel.add_object(sig)
@@ -401,9 +402,10 @@ def run_image_computations(
     panel.processor.compute_resize(param)
 
     n = data_size // 10
-    panel.processor.compute_roi_extraction(
-        dlp.ROIDataParam.create(roidata=[[n, n, data_size - n, data_size - n]])
+    roi = dlo.create_image_roi(
+        "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
     )
+    panel.processor.compute_roi_extraction(roi)
 
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()

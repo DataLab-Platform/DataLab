@@ -2575,7 +2575,7 @@ msgstr ""
 "choisissez une fonctionnalité dans le menu <u>Analyse</u>."
 
 #: cdl\core\gui\panel\base.py:1211
-msgid "Indexes"
+msgid "Indices"
 msgstr "Indices"
 
 #: cdl\core\gui\panel\base.py:1245

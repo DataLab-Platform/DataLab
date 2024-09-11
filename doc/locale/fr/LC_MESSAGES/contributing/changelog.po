@@ -2595,7 +2595,7 @@ msgstr "Cette fonctionnalité permet de tracer les résultats d'analyse (1D ou 2
 #: ../../CHANGELOG.md:471
 msgid ""
 "It creates a new signal with X and Y axes corresponding to user-defined "
-"parameters (e.g. X = indexes and Y = radius for circle results)"
+"parameters (e.g. X = indices and Y = radius for circle results)"
 msgstr ""
 "Cela crée un nouveau signal avec des axes X et Y correspondant à des "
 "paramètres définis par l'utilisateur (par exemple X = index et Y = rayon "

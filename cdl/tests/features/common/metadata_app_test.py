@@ -11,10 +11,8 @@ Metadata application test:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import numpy as np
-
-import cdl.obj
-import cdl.param
+import cdl.obj as dlo
+import cdl.param as dlp
 from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
@@ -27,7 +25,7 @@ from cdl.tests.features.common import roi_app_test
 def __run_signal_computations(panel: SignalPanel):
     """Test all signal features related to ROI"""
     execenv.print("  Signal features")
-    panel.processor.compute_fwhm(cdl.param.FWHMParam())
+    panel.processor.compute_fwhm(dlp.FWHMParam())
     panel.processor.compute_fw1e2()
 
 
@@ -36,7 +34,7 @@ def __run_image_computations(panel: ImagePanel):
     execenv.print("  Image features")
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
-    panel.processor.compute_peak_detection(cdl.param.Peak2DDetectionParam())
+    panel.processor.compute_peak_detection(dlp.Peak2DDetectionParam())
 
 
 def __test_metadata_features(panel: BaseDataPanel):
@@ -62,13 +60,13 @@ def test_metadata_app():
         # === Signal metadata features test ===
         panel = win.signalpanel
         sig = create_paracetamol_signal(size)
-        sig.roi = np.array([[26, 41], [125, 146]], int)
+        sig.roi = dlo.create_signal_roi([[26, 41], [125, 146]], indices=True)
         panel.add_object(sig)
         __run_signal_computations(panel)
         __test_metadata_features(panel)
         # === Image metadata features test ===
         panel = win.imagepanel
-        param = cdl.obj.new_image_param(height=size, width=size)
+        param = dlo.new_image_param(height=size, width=size)
         ima = roi_app_test.create_test_image_with_roi(param)
         panel.add_object(ima)
         __run_image_computations(panel)

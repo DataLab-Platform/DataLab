@@ -13,7 +13,7 @@ import dataclasses
 import os.path as osp
 import re
 import warnings
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generic, Type
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
@@ -30,10 +30,16 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
-import cdl.computation.base
 from cdl.config import APP_NAME, Conf, _
-from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
-from cdl.core.model.base import ResultProperties, ResultShape, items_to_json
+from cdl.core.gui import actionhandler, objectmodel, objectview
+from cdl.core.gui.roieditor import TypeROIEditor
+from cdl.core.model.base import (
+    ResultProperties,
+    ResultShape,
+    TypeObj,
+    TypeROI,
+    items_to_json,
+)
 from cdl.core.model.signal import create_signal
 from cdl.env import execenv
 from cdl.utils.qthelpers import (
@@ -242,12 +248,12 @@ def create_resultdata_dict(objs: list[SignalObj | ImageObj]) -> dict[str, Result
     return rdatadict
 
 
-class BaseDataPanel(AbstractPanel):
+class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     """Object handling the item list, the selected item properties and plot"""
 
     PANEL_STR = ""  # e.g. "Signal Panel"
     PANEL_STR_ID = ""  # e.g. "signal"
-    PARAMCLASS: SignalObj | ImageObj = None  # Replaced in child object
+    PARAMCLASS: TypeObj = None  # Replaced in child object
     ANNOTATION_TOOLS = ()
     MINDIALOGSIZE = (800, 600)
     MAXDIALOGSIZE = 0.95  # % of DataLab's main window size
@@ -256,8 +262,11 @@ class BaseDataPanel(AbstractPanel):
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
     SIG_REFRESH_PLOT = QC.Signal(str, bool)  # Connected to PlotHandler.refresh_plot
     ROIDIALOGOPTIONS = {}
-    # Replaced in child object:
-    ROIDIALOGCLASS: roieditor.SignalROIEditor | roieditor.ImageROIEditor | None = None
+
+    @staticmethod
+    @abc.abstractmethod
+    def get_roieditor_class() -> Type[TypeROIEditor]:
+        """Return ROI editor class"""
 
     @abc.abstractmethod
     def __init__(self, parent: QW.QWidget) -> None:
@@ -273,7 +282,7 @@ class BaseDataPanel(AbstractPanel):
         self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}
         self.context_menu = QW.QMenu()
-        self.__separate_views: dict[QW.QDialog, SignalObj | ImageObj] = {}
+        self.__separate_views: dict[QW.QDialog, TypeObj] = {}
 
     def closeEvent(self, event):
         """Reimplement QMainWindow method"""
@@ -312,9 +321,7 @@ class BaseDataPanel(AbstractPanel):
         """
         self.plothandler.update_resultproperty_from_plot_item(item)
 
-    def serialize_object_to_hdf5(
-        self, obj: SignalObj | ImageObj, writer: NativeH5Writer
-    ) -> None:
+    def serialize_object_to_hdf5(self, obj: TypeObj, writer: NativeH5Writer) -> None:
         """Serialize object to HDF5 file"""
         # Before serializing, update metadata from plot item parameters, in order to
         # save the latest visualization settings:
@@ -354,7 +361,7 @@ class BaseDataPanel(AbstractPanel):
         """Return number of objects"""
         return len(self.objmodel)
 
-    def __getitem__(self, nb: int) -> SignalObj | ImageObj:
+    def __getitem__(self, nb: int) -> TypeObj:
         """Return object from its number (1 to N)"""
         return self.objmodel.get_object_from_number(nb)
 
@@ -362,7 +369,7 @@ class BaseDataPanel(AbstractPanel):
         """Iterate over objects"""
         return iter(self.objmodel)
 
-    def create_object(self) -> SignalObj | ImageObj:
+    def create_object(self) -> TypeObj:
         """Create object (signal or image)
 
         Returns:
@@ -373,7 +380,7 @@ class BaseDataPanel(AbstractPanel):
     @qt_try_except()
     def add_object(
         self,
-        obj: SignalObj | ImageObj,
+        obj: TypeObj,
         group_id: str | None = None,
         set_current: bool = True,
     ) -> None:
@@ -580,7 +587,7 @@ class BaseDataPanel(AbstractPanel):
             keep_roi = False
         sel_objs = self.objview.get_sel_objects(include_groups=True)
         # Check if there are regions of interest first:
-        roi_backup: dict[SignalObj | ImageObj, np.ndarray] = {}
+        roi_backup: dict[TypeObj, np.ndarray] = {}
         if any(obj.roi is not None for obj in sel_objs):
             if keep_roi is None:
                 answer = QW.QMessageBox.warning(
@@ -602,6 +609,8 @@ class BaseDataPanel(AbstractPanel):
         # Delete metadata:
         for index, obj in enumerate(sel_objs):
             obj.reset_metadata_to_defaults()
+            if not keep_roi:
+                obj.invalidate_maskdata_cache()
             if obj in roi_backup:
                 obj.roi = roi_backup[obj]
             if index == 0:
@@ -671,7 +680,7 @@ class BaseDataPanel(AbstractPanel):
         addparam: gds.DataSet | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
-    ) -> SignalObj | ImageObj | None:
+    ) -> TypeObj | None:
         """Create a new object (signal/image).
 
         Args:
@@ -710,7 +719,7 @@ class BaseDataPanel(AbstractPanel):
         self.selection_changed()
         return objs
 
-    def __save_to_file(self, obj: SignalObj | ImageObj, filename: str) -> None:
+    def __save_to_file(self, obj: TypeObj, filename: str) -> None:
         """Save object to file (signal/image).
 
         Args:
@@ -719,9 +728,7 @@ class BaseDataPanel(AbstractPanel):
         """
         self.IO_REGISTRY.write(filename, obj)
 
-    def load_from_files(
-        self, filenames: list[str] | None = None
-    ) -> list[SignalObj | ImageObj]:
+    def load_from_files(self, filenames: list[str] | None = None) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
@@ -862,6 +869,8 @@ class BaseDataPanel(AbstractPanel):
         """The properties 'Apply' button was clicked: update object properties,
         refresh plot and update object view."""
         obj = self.objview.get_current_object()
+        # if obj is not None:  # XXX: Is it necessary?
+        obj.invalidate_maskdata_cache()
         update_dataset(obj, self.objprop.properties.dataset)
         self.objview.update_item(obj.uuid)
         self.SIG_REFRESH_PLOT.emit("selected", True)
@@ -1037,7 +1046,7 @@ class BaseDataPanel(AbstractPanel):
         options: dict[str, any] = None,
         toolbar: bool = False,
         tools: list[GuiTool] = None,
-    ) -> tuple[PlotDialog | None, SignalObj | ImageObj]:
+    ) -> tuple[PlotDialog | None, TypeObj]:
         """Create new pop-up dialog for the currently selected signal/image.
 
         Args:
@@ -1062,18 +1071,15 @@ class BaseDataPanel(AbstractPanel):
         )
         return dlg, obj
 
-    def get_roi_editor_output(
-        self, extract: bool, singleobj: bool, add_roi: bool = False
-    ) -> tuple[cdl.computation.base.ROIDataParam, bool] | None:
+    def get_roi_editor_output(self, extract: bool) -> tuple[TypeROI, bool] | None:
         """Get ROI data (array) from specific dialog box.
 
         Args:
             extract: Extract ROI from data
-            singleobj: Single object
-            add_roi: Add ROI immediately after opening the dialog (default: False)
 
         Returns:
-            ROI data
+            A tuple containing the ROI object and a boolean indicating whether the
+            dialog was accepted or not.
         """
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
@@ -1086,12 +1092,8 @@ class BaseDataPanel(AbstractPanel):
         for item in plot.items:
             item.set_selectable(False)
         # pylint: disable=not-callable
-        roi_editor: roieditor.SignalROIEditor | roieditor.ImageROIEditor = (
-            self.ROIDIALOGCLASS(dlg, obj, extract, singleobj)
-        )
+        roi_editor = self.get_roieditor_class()(dlg, obj, extract)
         dlg.button_layout.insertWidget(0, roi_editor)
-        if add_roi:
-            roi_editor.add_roi()
         if exec_dialog(dlg):
             return roi_editor.get_roieditor_results()
         return None
@@ -1102,7 +1104,7 @@ class BaseDataPanel(AbstractPanel):
         comment: str = "",
         nb_objects: int = 1,
         parent: QW.QWidget | None = None,
-    ) -> SignalObj | ImageObj | None:
+    ) -> TypeObj | None:
         """Get object with dialog box.
 
         Args:
@@ -1212,7 +1214,7 @@ class BaseDataPanel(AbstractPanel):
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
             for category, rdata in rdatadict.items():
-                xchoices = (("indexes", _("Indexes")),)
+                xchoices = (("indices", _("Indices")),)
                 for xlabel in rdata.xlabels:
                     xchoices += ((xlabel, xlabel),)
                 ychoices = xchoices[1:]
@@ -1256,7 +1258,7 @@ class BaseDataPanel(AbstractPanel):
                         ),
                         default=default_kind,
                     )
-                    xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indexes")
+                    xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indices")
                     yaxis = gds.ChoiceItem(
                         _("Y axis"), ychoices, default=ychoices[0][0]
                     )
@@ -1278,7 +1280,7 @@ class BaseDataPanel(AbstractPanel):
                     for title, results in grouped_results.items():  # title
                         x, y = [], []
                         for index, result in enumerate(results):  # object
-                            if param.xaxis == "indexes":
+                            if param.xaxis == "indices":
                                 x.append(index)
                             else:
                                 i_xaxis = rdata.xlabels.index(param.xaxis)
@@ -1292,7 +1294,7 @@ class BaseDataPanel(AbstractPanel):
                             roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
                             for i_roi in roi_idx:  # ROI
                                 mask = result.array[:, 0] == i_roi
-                                if param.xaxis == "indexes":
+                                if param.xaxis == "indices":
                                     x = np.arange(result.array.shape[0])[mask]
                                 else:
                                     i_xaxis = rdata.xlabels.index(param.xaxis)

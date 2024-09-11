@@ -25,33 +25,65 @@ Image ROI editor
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Generic, Literal, TypeVar
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import create_toolbutton
 from plotpy.builder import make
 from plotpy.interfaces import IImageItemType
-from plotpy.items import AnnotatedCircle, ObjectInfo
+from plotpy.items import (
+    AnnotatedCircle,
+    AnnotatedPolygon,
+    AnnotatedRectangle,
+    ObjectInfo,
+    XRangeSelection,
+)
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
-from cdl.computation.base import ROIDataParam
 from cdl.config import Conf, _
-from cdl.core.model.image import RoiDataGeometries
+from cdl.core.model.base import TypeObj, TypeROI
+from cdl.core.model.image import CircularROI, PolygonalROI, RectangularROI
+from cdl.core.model.signal import SegmentROI
+from cdl.obj import ImageObj, ImageROI, SignalObj, SignalROI
 
 if TYPE_CHECKING:
+    from plotpy.items import MaskedImageItem
     from plotpy.plot import BasePlot, PlotDialog
 
-    from cdl.obj import ImageObj, SignalObj
 
-    AnyObj = Union[SignalObj, ImageObj]
+def plot_item_to_single_roi(
+    item: XRangeSelection | AnnotatedRectangle | AnnotatedCircle | AnnotatedPolygon,
+) -> SegmentROI | CircularROI | RectangularROI | PolygonalROI:
+    """Factory function to create a single ROI object from plot item
+
+    Args:
+        item: Plot item
+
+    Returns:
+        Single ROI object
+    """
+    if isinstance(item, XRangeSelection):
+        cls = SegmentROI
+    elif isinstance(item, AnnotatedRectangle):
+        cls = RectangularROI
+    elif isinstance(item, AnnotatedCircle):
+        cls = CircularROI
+    elif isinstance(item, AnnotatedPolygon):
+        cls = PolygonalROI
+    else:
+        raise TypeError(f"Unsupported ROI item type: {type(item)}")
+    return cls.from_plot_item(item)
+
+
+TypeROIEditor = TypeVar("TypeROIEditor", bound="BaseROIEditor")
 
 
 class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
+class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEditorMeta):
     """ROI Editor"""
 
     ICON_NAME = None
@@ -60,9 +92,8 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     def __init__(
         self,
         parent: PlotDialog,
-        obj: AnyObj,
+        obj: TypeObj,
         extract: bool,
-        singleobj: bool | None = None,
     ) -> None:
         super().__init__(parent)
         self.plot_dialog = parent
@@ -72,10 +103,12 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.extract = extract
         self.__modified: bool | None = None
 
-        self.__data = ROIDataParam.create(singleobj=singleobj)
+        self.__roi: TypeROI | None = obj.roi
+        if self.__roi is None:
+            self.__roi = ImageROI()
 
         self.fmt = obj.get_metadata_option("format")
-        self.roi_items = list(obj.iterate_roi_items(self.fmt, True))
+        self.roi_items = list(self.__roi.iterate_roi_items(obj, self.fmt, True))
 
         for roi_item in self.roi_items:
             self.plot.add_item(roi_item)
@@ -105,7 +138,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         return self.__modified
 
     @modified.setter
-    def modified(self, value: bool):
+    def modified(self, value: bool) -> None:
         """Set dialog modified state"""
         self.__modified = value
         if self.extract:
@@ -113,18 +146,17 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
             value = value and len(self.roi_items) > 0
         self.plot_dialog.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(value)
 
-    def dialog_accepted(self):
+    def dialog_accepted(self) -> None:
         """Parent dialog was accepted: updating ROI Editor data"""
-        coords = []
+        self.__roi.empty()
         for roi_item in self.roi_items:
-            coords.append(list(self.get_roi_item_coords(roi_item)))
-        self.__data.roidata = self.obj.roi_coords_to_indexes(coords)
+            self.__roi.add_roi(plot_item_to_single_roi(roi_item))
         if self.singleobj_btn is not None:
             singleobj = self.singleobj_btn.isChecked()
-            self.__data.singleobj = singleobj
+            self.__roi.singleobj = singleobj
             Conf.proc.extract_roi_singleobj.set(singleobj)
 
-    def get_roieditor_results(self) -> tuple[ROIDataParam, bool]:
+    def get_roieditor_results(self) -> tuple[TypeROI, bool]:
         """Get ROI editor results
 
         Returns:
@@ -132,7 +164,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
             ROI modified state is True if the ROI data has been modified within
             the dialog box.
         """
-        return self.__data, self.modified
+        return self.__roi, self.modified
 
     def build_roi_buttons(self) -> list[QW.QToolButton | QW.QFrame]:
         """Build ROI buttons"""
@@ -149,7 +181,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         vert_sep.setStyleSheet("color: gray")
         return [vert_sep, self.remove_all_btn]
 
-    def setup_widget(self):
+    def setup_widget(self) -> None:
         """Setup ROI editor widget"""
         layout = QW.QHBoxLayout()
         for btn in self.build_roi_buttons():
@@ -162,14 +194,11 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
                 self,
             )
             layout.addWidget(self.singleobj_btn)
-            singleobj = self.__data.singleobj
-            if singleobj is None:
-                singleobj = Conf.proc.extract_roi_singleobj.get()
-            self.singleobj_btn.setChecked(singleobj)
+            self.singleobj_btn.setChecked(self.__roi.singleobj)
         layout.addStretch()
         self.setLayout(layout)
 
-    def add_roi_item(self, roi_item):
+    def add_roi_item(self, roi_item) -> None:
         """Add ROI item to plot and refresh titles"""
         self.plot.unselect_all()
         self.roi_items.append(roi_item)
@@ -178,7 +207,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.plot.add_item(roi_item)
         self.plot.set_active_item(roi_item)
 
-    def remove_all_rois(self):
+    def remove_all_rois(self) -> None:
         """Remove all ROIs"""
         if QW.QMessageBox.question(
             self,
@@ -196,7 +225,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.update_roi_titles()
         self.remove_all_btn.setEnabled(len(self.roi_items) > 0)
 
-    def item_removed(self, item):
+    def item_removed(self, item) -> None:
         """Item was removed. Since all items are read-only except ROIs...
         this must be an ROI."""
         assert item in self.roi_items
@@ -204,23 +233,18 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.modified = True
         self.update_roi_titles()
 
-    def item_moved(self):
+    def item_moved(self) -> None:
         """ROI plot item has just been moved"""
         self.modified = True
-
-    @staticmethod
-    @abc.abstractmethod
-    def get_roi_item_coords(roi_item):
-        """Return ROI item coords"""
 
 
 class ROIRangeInfo(ObjectInfo):
     """ObjectInfo for ROI selection"""
 
-    def __init__(self, roi_items):
+    def __init__(self, roi_items) -> None:
         self.roi_items = roi_items
 
-    def get_text(self):
+    def get_text(self) -> str:
         textlist = []
         for index, roi_item in enumerate(self.roi_items):
             x0, x1 = roi_item.get_range()
@@ -228,7 +252,7 @@ class ROIRangeInfo(ObjectInfo):
         return "<br>".join(textlist)
 
 
-class SignalROIEditor(BaseROIEditor):
+class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI]):
     """Signal ROI Editor"""
 
     ICON_NAME = "signal_roi.svg"
@@ -241,7 +265,7 @@ class SignalROIEditor(BaseROIEditor):
         )
         return [add_btn] + super().build_roi_buttons()
 
-    def setup_widget(self):
+    def setup_widget(self) -> None:
         """Setup ROI editor widget"""
         super().setup_widget()
         info = ROIRangeInfo(self.roi_items)
@@ -249,7 +273,7 @@ class SignalROIEditor(BaseROIEditor):
         self.plot.add_item(info_label)
         self.info_label = info_label
 
-    def add_roi(self):
+    def add_roi(self) -> None:
         """Simply add an ROI"""
         roi_item = self.obj.new_roi_item(self.fmt, True, editable=True)
         self.add_roi_item(roi_item)
@@ -259,13 +283,8 @@ class SignalROIEditor(BaseROIEditor):
         super().update_roi_titles()
         self.info_label.update_text()
 
-    @staticmethod
-    def get_roi_item_coords(roi_item):
-        """Return ROI item coords"""
-        return roi_item.get_range()
 
-
-class ImageROIEditor(BaseROIEditor):
+class ImageROIEditor(BaseROIEditor[ImageObj, ImageROI]):
     """Image ROI Editor"""
 
     ICON_NAME = "image_roi.svg"
@@ -277,40 +296,33 @@ class ImageROIEditor(BaseROIEditor):
             self,
             get_icon("roi_new_rectangle.svg"),
             _("Rectangular ROI"),
-            lambda: self.add_roi(RoiDataGeometries.RECTANGLE),
+            lambda: self.add_roi("rectangle"),
             autoraise=True,
         )
         circ_btn = create_toolbutton(
             self,
             get_icon("roi_new_circle.svg"),
             _("Circular ROI"),
-            lambda: self.add_roi(RoiDataGeometries.CIRCLE),
+            lambda: self.add_roi("circle"),
             autoraise=True,
         )
         return [rect_btn, circ_btn] + super().build_roi_buttons()
 
-    def setup_widget(self):
+    def setup_widget(self) -> None:
         """Setup ROI editor widget"""
         super().setup_widget()
-        item = self.plot.get_items(item_type=IImageItemType)[0]
+        item: MaskedImageItem = self.plot.get_items(item_type=IImageItemType)[0]
         item.set_mask_visible(False)
 
-    def add_roi(self, geometry: RoiDataGeometries = RoiDataGeometries.RECTANGLE):
+    def add_roi(self, geometry: Literal["rectangle", "circle"]) -> None:
         """Add new ROI"""
         item = self.obj.new_roi_item(self.fmt, True, editable=True, geometry=geometry)
         self.add_roi_item(item)
 
-    def update_roi_titles(self):
+    def update_roi_titles(self) -> None:
         """Update ROI annotation titles"""
         super().update_roi_titles()
         for index, roi_item in enumerate(self.roi_items):
+            roi_item: AnnotatedRectangle | AnnotatedCircle | AnnotatedPolygon
             roi_item.annotationparam.title = f"ROI{index:02d}"
             roi_item.annotationparam.update_item(roi_item)
-
-    @staticmethod
-    def get_roi_item_coords(roi_item):
-        """Return ROI item coords"""
-        x0, y0, x1, y1 = roi_item.get_rect()
-        if isinstance(roi_item, AnnotatedCircle):
-            y0 = y1 = 0.5 * (y0 + y1)
-        return x0, y0, x1, y1

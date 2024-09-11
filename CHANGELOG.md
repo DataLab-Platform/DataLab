@@ -468,7 +468,7 @@ NumPy 2.0 support has been added with this release.
     * Circle and ellipse results now also show area (A)
 * Added "Plot results" entry in "Analysis" menu:
   * This feature allows to plot analysis results (1D or 2D)
-  * It creates a new signal with X and Y axes corresponding to user-defined parameters (e.g. X = indexes and Y = radius for circle results)
+  * It creates a new signal with X and Y axes corresponding to user-defined parameters (e.g. X = indices and Y = radius for circle results)
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full signal/image/group titles may be more easily readable
 * Delete metadata feature:

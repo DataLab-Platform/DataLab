@@ -170,9 +170,10 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     qt_wait(DELAY2)
 
     n = data_size // 10
-    panel.processor.compute_roi_extraction(
-        dlp.ROIDataParam.create(roidata=[[n, n, data_size - n, data_size - n]])
+    roi = dlo.create_image_roi(
+        "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
     )
+    panel.processor.compute_roi_extraction(roi)
 
 
 def play_demo(win: CDLMainWindow) -> None:

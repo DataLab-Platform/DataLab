@@ -11,6 +11,7 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 
+import guidata.dataset as gds
 import numpy as np
 from guidata.qthelpers import exec_dialog
 
@@ -20,12 +21,12 @@ import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ResultProperties, ResultShape
-from cdl.core.model.signal import ROI1DParam, SignalObj, create_signal
+from cdl.core.model.signal import ROI1DParam, SignalObj, SignalROI, create_signal
 from cdl.utils.qthelpers import qt_try_except
 from cdl.widgets import fitdialog, signalbaseline, signalpeak
 
 
-class SignalProcessor(BaseProcessor):
+class SignalProcessor(BaseProcessor[SignalROI]):
     """Object handling signal processing: operations, processing, analysis"""
 
     # pylint: disable=duplicate-code
@@ -76,25 +77,6 @@ class SignalProcessor(BaseProcessor):
             paramclass=cpb.ConstantParam,
             title=_("Product with constant"),
         )
-
-    @qt_try_except()
-    def compute_roi_extraction(
-        self, param: cdl.param.ROIDataParam | None = None
-    ) -> None:
-        """Extract Region Of Interest (ROI) from data with:
-
-        - :py:func:`cdl.computation.signal.extract_multiple_roi` for single ROI
-        - :py:func:`cdl.computation.signal.extract_single_roi` for multiple ROIs
-        """
-        param = self._get_roidataparam(param)
-        if param is None or param.is_empty:
-            return
-        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
-        group = obj.roidata_to_params(param.roidata)
-        if param.singleobj:
-            self.compute_11(cps.extract_multiple_roi, group, title=_("Extract ROI"))
-        else:
-            self.compute_1n(cps.extract_single_roi, group.datasets, "ROI", edit=False)
 
     @qt_try_except()
     def compute_swap_axes(self) -> None:
@@ -560,7 +542,7 @@ class SignalProcessor(BaseProcessor):
             dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
             if exec_dialog(dlg):
                 # Computing x, y
-                peaks = dlg.get_peak_indexes()
+                peaks = dlg.get_peak_indices()
 
                 def multigaussianfit(x, y, parent=None):
                     """Multi-Gaussian fit dialog function"""
@@ -568,6 +550,17 @@ class SignalProcessor(BaseProcessor):
                     return fitdlgfunc(x, y, peaks, parent=parent)
 
                 self.__row_compute_fit(obj, _("Multi-Gaussian fit"), multigaussianfit)
+
+    @qt_try_except()
+    def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
+        """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
+        self.compute_11(cps.extract_multiple_roi, group, title=_("Extract ROI"))
+
+    @qt_try_except()
+    def _extract_each_roi_in_separate_object(self, group: gds.DataSetGroup) -> None:
+        """Extract each single Region Of Interest (ROI) from data in a separate
+        object (keep the ROI in the case of a circular ROI, for example)"""
+        self.compute_1n(cps.extract_single_roi, group.datasets, "ROI", edit=False)
 
     # ------Signal Analysis
     @qt_try_except()

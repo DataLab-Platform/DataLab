@@ -32,7 +32,7 @@ class ImageBackgroundDialog(PlotDialog):
 
     def __init__(self, image: ImageObj, parent: QWidget | None = None) -> None:
         self.__background: float | None = None
-        self.__indexrange: tuple[int, int, int, int] | None = None
+        self.__rect_coords: tuple[float, float, float, float] | None = None
         self.imageitem: ImageItem | None = None
         self.rectarea: RectangleShape | None = None
         self.comput2d: RangeComputation2d | None = None
@@ -52,9 +52,7 @@ class ImageBackgroundDialog(PlotDialog):
         z: np.ndarray,
     ) -> float:
         """Compute background value"""
-        x0, y0, x1, y1 = self.rectarea.get_rect()
-        ix0, iy0, ix1, iy1 = self.imageitem.get_closest_index_rect(x0, y0, x1, y1)
-        self.__indexrange = ix0, iy0, ix1, iy1
+        self.__rect_coords = self.rectarea.get_rect()
         self.__background = z.mean()
         return self.__background
 
@@ -64,7 +62,7 @@ class ImageBackgroundDialog(PlotDialog):
         self.imageitem = obj.make_item()
         plot = self.get_plot()
         self.rectarea = make.rectangle(
-            obj.x0, obj.y0, obj.xc, obj.yc, _("Background area")
+            obj.x0, obj.y0, obj.xc + obj.dx, obj.yc + obj.dy, _("Background area")
         )
         self.comput2d = make.computation2d(
             self.rectarea,
@@ -82,10 +80,6 @@ class ImageBackgroundDialog(PlotDialog):
         """Get background value"""
         return self.__background
 
-    def get_index_range(self) -> tuple[int, int, int, int]:
-        """Get index range
-
-        Returns:
-            Index range (x0, y0, x1, y1)
-        """
-        return self.__indexrange
+    def get_rect_coords(self) -> tuple[float, float, float, float]:
+        """Get rectangle coordinates"""
+        return self.__rect_coords

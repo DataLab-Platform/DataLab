@@ -194,7 +194,7 @@ the whole group "g001").
     propagation axis. To do that, we use the "Plot results" feature |plot_results|
     in the "Analysis" menu. This feature allows to plot result data sets by
     choosing the x and y axes among the result columns. Here, we choose the
-    to plot the FWHM values (`L`) as a function of the image index (`Indexes`).
+    to plot the FWHM values (`L`) as a function of the image index (`Indices`).
 
 .. |plot_results| image:: ../../../cdl/data/icons/analysis/plot_results.svg
     :width: 24px

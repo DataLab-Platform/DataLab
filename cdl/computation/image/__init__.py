@@ -49,11 +49,9 @@ from cdl.config import _
 from cdl.obj import (
     BaseProcParam,
     ImageObj,
-    ImageRoiDataItem,
     ResultProperties,
     ResultShape,
     ROI2DParam,
-    RoiDataGeometries,
     SignalObj,
 )
 
@@ -752,15 +750,15 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
         Output image object
     """
     # Initialize x0, y0 with maximum values:
-    y0, x0 = src.data.shape
+    y0, x0 = ymax, xmax = src.data.shape
     # Initialize x1, y1 with minimum values:
-    y1, x1 = 0, 0
+    y1, x1 = ymin, xmin = 0, 0
     for p in group.datasets:
         p: ROI2DParam
-        x0i, y0i, x1i, y1i = p.get_rect_indexes()
+        x0i, y0i, x1i, y1i = p.get_bounding_box_indices()
         x0, y0, x1, y1 = min(x0, x0i), min(y0, y0i), max(x1, x1i), max(y1, y1i)
-    x0, y0 = max(x0, 0), max(y0, 0)
-    x1, y1 = min(x1, src.data.shape[1]), min(y1, src.data.shape[0])
+    x0, y0 = max(x0, xmin), max(y0, ymin)
+    x1, y1 = min(x1, xmax), min(y1, ymax)
 
     suffix = None
     if len(group.datasets) == 1:
@@ -772,7 +770,7 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     dst.roi = None
 
     src2 = src.copy()
-    src2.roi = src2.params_to_roidata(group)
+    src2.roi = src2.roi.from_params(src2, group)
     src2.data[src2.maskdata] = 0
     dst.data = src2.data[y0:y1, x0:x1]
     return dst
@@ -790,13 +788,10 @@ def extract_single_roi(src: ImageObj, p: ROI2DParam) -> ImageObj:
     """
     dst = dst_11(src, "extract_single_roi", p.get_suffix())
     dst.data = p.get_data(src).copy()
-    x0, y0, _x1, _y1 = p.get_rect_indexes()
+    dst.roi = p.get_extracted_roi(src)
+    x0, y0, _x1, _y1 = p.get_bounding_box_indices()
     dst.x0 += x0 * src.dx
     dst.y0 += y0 * src.dy
-    dst.roi = None
-    if p.geometry is RoiDataGeometries.CIRCLE:
-        # Circular ROI
-        dst.roi = p.get_single_roi()
     return dst
 
 
@@ -1393,7 +1388,7 @@ def calc_resultshape(
     """
     res = []
     num_cols = []
-    for i_roi in obj.iterate_roi_indexes():
+    for i_roi in obj.iterate_roi_indices():
         data_roi = obj.get_data(i_roi)
         if args is None:
             coords: np.ndarray = func(data_roi)
@@ -1427,12 +1422,12 @@ def calc_resultshape(
             else:
                 # Circle [x0, y0, r] or ellipse coordinates [x0, y0, a, b, theta]
                 colx, coly = 0, 1
-            if obj.roi is not None:
-                x0, y0, _x1, _y1 = ImageRoiDataItem(obj.roi[i_roi]).get_rect()
-                coords[:, colx] += x0
-                coords[:, coly] += y0
             coords[:, colx] = obj.dx * coords[:, colx] + obj.x0
             coords[:, coly] = obj.dy * coords[:, coly] + obj.y0
+            if obj.roi is not None:
+                x0, y0, _x1, _y1 = obj.roi.get_single_roi(i_roi).get_bounding_box(obj)
+                coords[:, colx] += x0
+                coords[:, coly] += y0
             idx = np.ones((coords.shape[0], 1)) * (0 if i_roi is None else i_roi)
             coords = np.hstack([idx, coords])
             res.append(coords)

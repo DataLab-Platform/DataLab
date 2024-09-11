@@ -259,14 +259,10 @@ def get_centroid_fourier(data: np.ndarray) -> tuple[float, float]:
 
     row = (np.arctan(b / a) + rphi) * (rows - 1) / (2 * np.pi) + 1
     col = (np.arctan(d / c) + cphi) * (cols - 1) / (2 * np.pi) + 1
-    try:
-        row = int(row)
-    except ma.MaskError:
-        row = np.nan
-    try:
-        col = int(col)
-    except ma.MaskError:
-        col = np.nan
+
+    row = np.nan if row is np.ma.masked else row
+    col = np.nan if col is np.ma.masked else col
+
     return row, col
 
 

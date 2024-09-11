@@ -61,8 +61,6 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.MovingMedianParam
     :no-index:
-.. autodataset:: cdl.param.ROIDataParam
-    :no-index:
 .. autodataset:: cdl.param.ConstantParam
     :no-index:
 
@@ -210,7 +208,6 @@ from cdl.computation.base import (
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
-    ROIDataParam,
     ConstantParam,
     NormalizeParam,
 )

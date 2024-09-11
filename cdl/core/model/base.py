@@ -14,7 +14,7 @@ import json
 import sys
 from collections.abc import Callable, Generator, Iterable
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Generic, Iterator, Literal, Type, TypeVar
 
 import guidata.dataset as gds
 import numpy as np
@@ -22,6 +22,7 @@ import pandas as pd
 from guidata.configtools import get_font
 from guidata.dataset import update_dataset
 from guidata.io import JSONReader, JSONWriter
+from numpy import ma
 from plotpy.builder import make
 from plotpy.io import load_items, save_items
 from plotpy.items import (
@@ -849,21 +850,17 @@ class ResultShape(ResultProperties):
         )
 
 
-def make_roi_item(
-    func,
-    coords: list,
-    title: str,
+def configure_roi_item(
+    item,
     fmt: str,
     lbl: bool,
     editable: bool,
     option: Literal["s", "i"],
 ):
-    """Make ROI item shape.
+    """Configure ROI plot item.
 
     Args:
-        func: function to create ROI item
-        coords: coordinates
-        title: title
+        item: plot item
         fmt: numeric format (e.g. "%.3f")
         lbl: if True, show shape labels
         editable: if True, make shape editable
@@ -872,7 +869,6 @@ def make_roi_item(
     Returns:
         Plot item
     """
-    item = func(*coords, title)
     option += "/" + ("editable" if editable else "readonly")
     if not editable:
         if isinstance(item, AnnotatedShape):
@@ -919,11 +915,366 @@ def json_to_items(json_str: str | None) -> list:
     return items
 
 
+TypeSingleROI = TypeVar("TypeSingleROI", bound="BaseSingleROI")
+TypeROI = TypeVar("TypeROI", bound="BaseROI")
+TypeROIParam = TypeVar("TypeROIParam", bound="BaseROIParam")
+TypeObj = TypeVar("TypeObj", bound="BaseObj")
+
+
+class BaseROIParamMeta(abc.ABCMeta, gds.DataSetMeta):
+    """Mixed metaclass to avoid conflicts"""
+
+
+class BaseROIParam(
+    gds.DataSet, Generic[TypeObj, TypeSingleROI], metaclass=BaseROIParamMeta
+):
+    """Base class for ROI parameters"""
+
+    @abc.abstractmethod
+    def to_single_roi(self, obj: TypeObj, title: str = "") -> TypeSingleROI:
+        """Convert parameters to single ROI
+
+        Args:
+            obj: object (signal/image)
+            title: ROI title
+
+        Returns:
+            Single ROI
+        """
+
+
+class BaseSingleROI(Generic[TypeObj, TypeROIParam], abc.ABC):
+    """Base class for single ROI
+
+    Args:
+        coords: ROI edge (physical coordinates for signal)
+        indices: if True, coords are indices (pixels) instead of physical coordinates
+        title: ROI title
+    """
+
+    def __init__(self, coords: np.ndarray, indices: bool, title: str = "") -> None:
+        self.coords = np.array(coords, int if indices else float)
+        self.indices = indices
+        self.title = title
+        self.check_coords()
+
+    def __eq__(self, other: BaseSingleROI) -> bool:
+        """Test equality with another single ROI"""
+        return (
+            np.array_equal(self.coords, other.coords) and self.indices == other.indices
+        )
+
+    def get_physical_coords(self, obj: TypeObj) -> np.ndarray:
+        """Return physical coords
+
+        Args:
+            obj: object (signal/image)
+
+        Returns:
+            Physical coords
+        """
+        if self.indices:
+            return obj.indices_to_physical(self.coords)
+        return self.coords
+
+    def get_indices_coords(self, obj: TypeObj) -> np.ndarray:
+        """Return indices coords
+
+        Args:
+            obj: object (signal/image)
+
+        Returns:
+            Indices coords
+        """
+        if self.indices:
+            return self.coords
+        return obj.physical_to_indices(self.coords)
+
+    def set_indices_coords(self, obj: TypeObj, coords: np.ndarray) -> None:
+        """Set indices coords
+
+        Args:
+            obj: object (signal/image)
+            coords: indices coords
+        """
+        if self.indices:
+            self.coords = coords
+        else:
+            self.coords = obj.indices_to_physical(coords)
+
+    @abc.abstractmethod
+    def check_coords(self) -> None:
+        """Check if coords are valid
+
+        Raises:
+            ValueError: invalid coords
+        """
+
+    @abc.abstractmethod
+    def to_mask(self, obj: TypeObj) -> np.ndarray:
+        """Create mask from ROI
+
+        Args:
+            obj: signal or image object
+
+        Returns:
+            Mask (boolean array where True values are inside the ROI)
+        """
+
+    @abc.abstractmethod
+    def to_param(self, obj: TypeObj, title: str | None = None) -> TypeROIParam:
+        """Convert ROI to parameters
+
+        Args:
+            obj: object (signal/image), for physical-indices coordinates conversion
+            title: ROI title
+        """
+
+    @abc.abstractmethod
+    def to_plot_item(self, obj: TypeObj, title: str) -> AbstractShape:
+        """Make ROI plot item from ROI.
+
+        Args:
+            obj: object (signal/image), for physical-indices coordinates conversion
+            title: ROI title
+
+        Returns:
+            Plot item
+        """
+
+    @classmethod
+    @abc.abstractmethod
+    def from_plot_item(cls: Type[TypeSingleROI], item: AbstractShape) -> TypeSingleROI:
+        """Create single ROI from plot item
+
+        Args:
+            item: plot item
+
+        Returns:
+            Single ROI
+        """
+
+    def to_dict(self) -> dict:
+        """Convert ROI to dictionary
+
+        Returns:
+            Dictionary
+        """
+        return {
+            "coords": self.coords,
+            "indices": self.indices,
+            "title": self.title,
+            "type": type(self).__name__,
+        }
+
+    @classmethod
+    def from_dict(cls: Type[TypeSingleROI], dictdata: dict) -> TypeSingleROI:
+        """Convert dictionary to ROI
+
+        Args:
+            dictdata: dictionary
+
+        Returns:
+            ROI
+        """
+        return cls(dictdata["coords"], dictdata["indices"], dictdata["title"])
+
+
+class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):
+    """Abstract base class for ROIs (Regions of Interest)
+
+    Args:
+        singleobj: if True, when extracting data defined by ROIs, only one object
+         is created (default to True). If False, one object is created per single ROI.
+         If None, the value is get from the user configuration
+        inverse: if True, ROI is outside the region of interest
+    """
+
+    PREFIX = ""  # This is overriden in children classes
+
+    def __init__(self, singleobj: bool | None = None, inverse: bool = False) -> None:
+        self.single_rois: list[TypeSingleROI] = []
+        if singleobj is None:
+            singleobj = Conf.proc.extract_roi_singleobj.get()
+        self.singleobj = singleobj
+        self.inverse = inverse
+
+    @staticmethod
+    @abc.abstractmethod
+    def get_compatible_single_roi_classes() -> list[Type[BaseSingleROI]]:
+        """Return compatible single ROI classes"""
+
+    def __len__(self) -> int:
+        """Return number of ROIs"""
+        return len(self.single_rois)
+
+    def __iter__(self) -> Iterator[TypeSingleROI]:
+        """Iterate over single ROIs"""
+        return iter(self.single_rois)
+
+    def get_single_roi(self, index: int) -> TypeSingleROI:
+        """Return single ROI at index
+
+        Args:
+            index: ROI index
+        """
+        return self.single_rois[index]
+
+    def is_empty(self) -> bool:
+        """Return True if no ROI is defined"""
+        return len(self) == 0
+
+    @classmethod
+    def create(cls: Type[BaseROI], single_roi: TypeSingleROI) -> TypeROI:
+        """Create Regions of Interest object from a single ROI.
+
+        Args:
+            single_roi: single ROI
+
+        Returns:
+            Regions of Interest object
+        """
+        roi = cls()
+        roi.add_roi(single_roi)
+        return roi
+
+    def copy(self) -> TypeROI:
+        """Return a copy of ROIs"""
+        return deepcopy(self)
+
+    def empty(self) -> None:
+        """Empty ROIs"""
+        self.single_rois.clear()
+
+    def add_roi(self, roi: TypeSingleROI | TypeROI) -> None:
+        """Add ROI.
+
+        Args:
+            roi: ROI
+
+        Raises:
+            TypeError: if roi type is not supported (not a single ROI or a ROI)
+            ValueError: if `singleobj` or `inverse` values are incompatible
+        """
+        if isinstance(roi, BaseSingleROI):
+            self.single_rois.append(roi)
+        elif isinstance(roi, BaseROI):
+            self.single_rois.extend(roi.single_rois)
+            if roi.singleobj != self.singleobj:
+                raise ValueError("Incompatible `singleobj` values")
+            if roi.inverse != self.inverse:
+                raise ValueError("Incompatible `inverse` values")
+        else:
+            raise TypeError(f"Unsupported ROI type: {type(roi)}")
+
+    @abc.abstractmethod
+    def to_mask(self, obj: TypeObj) -> np.ndarray[bool]:
+        """Create mask from ROI
+
+        Args:
+            obj: signal or image object
+
+        Returns:
+            Mask (boolean array where True values are inside the ROI)
+        """
+
+    def to_params(
+        self, obj: TypeObj, title: str | None = None
+    ) -> TypeROIParam | gds.DataSetGroup:
+        """Convert ROIs to group of parameters
+
+        Args:
+            obj: object (signal/image), for physical to pixel conversion
+            title: group title
+        """
+        return gds.DataSetGroup(
+            [iroi.to_param(obj, f"ROI{idx:02d}") for idx, iroi in enumerate(self)],
+            title=_("Regions of interest") if title is None else title,
+        )
+
+    @classmethod
+    def from_params(
+        cls: Type[BaseROI], obj: TypeObj, params: TypeROIParam | gds.DataSetGroup
+    ) -> TypeROI:
+        """Create ROIs from parameters
+
+        Args:
+            obj: object (signal/image)
+            params: ROI parameters
+
+        Returns:
+            ROIs
+        """
+        roi = cls()
+        if isinstance(params, gds.DataSetGroup):
+            for param in params.datasets:
+                param: TypeROIParam
+                roi.add_roi(param.to_single_roi(obj))
+        else:
+            roi.add_roi(params.to_single_roi(obj))
+        return roi
+
+    def iterate_roi_items(
+        self, obj: TypeObj, fmt: str, lbl: bool, editable: bool = True
+    ) -> Iterator:
+        """Iterate over ROI plot items associated to each single ROI composing
+        the object.
+
+        Args:
+            obj: object (signal/image), for physical-indices coordinates conversion
+            fmt: format string
+            lbl: if True, add label
+            editable: if True, ROI is editable
+
+        Yields:
+            Plot item
+        """
+        for index, single_roi in enumerate(self):
+            title = "ROI" if index is None else f"ROI{index:02d}"
+            roi_item = single_roi.to_plot_item(obj, title)
+            yield configure_roi_item(roi_item, fmt, lbl, editable, option=self.PREFIX)
+
+    def to_dict(self) -> dict:
+        """Convert ROIs to dictionary
+
+        Returns:
+            Dictionary
+        """
+        return {
+            "singleobj": self.singleobj,
+            "inverse": self.inverse,
+            "single_rois": [roi.to_dict() for roi in self.single_rois],
+        }
+
+    @classmethod
+    def from_dict(cls: Type[TypeROI], dictdata: dict) -> TypeROI:
+        """Convert dictionary to ROIs
+
+        Args:
+            dictdata: dictionary
+
+        Returns:
+            ROIs
+        """
+        instance = cls()
+        instance.singleobj = dictdata["singleobj"]
+        instance.inverse = dictdata["inverse"]
+        instance.single_rois = []
+        for single_roi in dictdata["single_rois"]:
+            for single_roi_class in instance.get_compatible_single_roi_classes():
+                if single_roi["type"] == single_roi_class.__name__:
+                    instance.single_rois.append(single_roi_class.from_dict(single_roi))
+                    break
+            else:
+                raise ValueError(f"Unsupported single ROI type: {single_roi['type']}")
+        return instance
+
+
 class BaseObjMeta(abc.ABCMeta, gds.DataSetMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class BaseObj(metaclass=BaseObjMeta):
+class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
     """Object (signal/image) interface"""
 
     PREFIX = ""  # This is overriden in children classes
@@ -940,7 +1291,13 @@ class BaseObj(metaclass=BaseObjMeta):
         self.__onb = 0
         self.__roi_changed: bool | None = None
         self.__metadata_options: dict[str, Any] | None = None
+        self._maskdata_cache: np.ndarray | None = None
         self.reset_metadata_to_defaults()
+
+    @staticmethod
+    @abc.abstractmethod
+    def get_roi_class() -> Type[TypeROI]:
+        """Return ROI class"""
 
     @property
     def number(self) -> int:
@@ -948,7 +1305,7 @@ class BaseObj(metaclass=BaseObjMeta):
         return self.__onb
 
     @number.setter
-    def number(self, onb: int):
+    def number(self, onb: int) -> None:
         """Set object number (used for short ID).
 
         Args:
@@ -957,7 +1314,7 @@ class BaseObj(metaclass=BaseObjMeta):
         self.__onb = onb
 
     @property
-    def short_id(self):
+    def short_id(self) -> str:
         """Short object ID"""
         return f"{self.PREFIX}{self.__onb:03d}"
 
@@ -989,8 +1346,8 @@ class BaseObj(metaclass=BaseObjMeta):
             if self.data.dtype not in self.VALID_DTYPES:
                 raise TypeError(f"Unsupported data type: {self.data.dtype}")
 
-    def iterate_roi_indexes(self) -> Generator[int | None, None, None]:
-        """Iterate over object ROI indexes (if there is no ROI, yield None)"""
+    def iterate_roi_indices(self) -> Generator[int | None, None, None]:
+        """Iterate over object ROI indices (if there is no ROI, yield None)"""
         if self.roi is None:
             yield None
         else:
@@ -1010,7 +1367,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """
 
     @abc.abstractmethod
-    def copy(self, title: str | None = None, dtype: np.dtype | None = None) -> BaseObj:
+    def copy(self, title: str | None = None, dtype: np.dtype | None = None) -> TypeObj:
         """Copy object.
 
         Args:
@@ -1050,59 +1407,25 @@ class BaseObj(metaclass=BaseObjMeta):
         """
 
     @abc.abstractmethod
-    def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
-        """Convert ROI coordinates to indexes.
+    def physical_to_indices(self, coords: list) -> np.ndarray:
+        """Convert coordinates from physical (real world) to (array) indices
 
         Args:
             coords: coordinates
 
         Returns:
-            Indexes
+            Indices
         """
 
     @abc.abstractmethod
-    def get_roi_param(self, title, *defaults: int) -> gds.DataSet:
-        """Return ROI parameters dataset.
+    def indices_to_physical(self, indices: np.ndarray) -> list:
+        """Convert coordinates from (array) indices to physical (real world)
 
         Args:
-            title: title
-            *defaults: default values
-        """
-
-    def roidata_to_params(
-        self, roidata: np.ndarray | list[list[int]]
-    ) -> gds.DataSetGroup:
-        """Convert ROI array data to ROI dataset group.
-
-        Args:
-            roidata: ROI array data (array or list of lists, floating point values
-             are accepted and will be converted to integers)
+            indices: indices
 
         Returns:
-            ROI dataset group
-        """
-        roi_params = []
-        try:
-            data = np.array(roidata, int)
-        except (ValueError, TypeError) as exc:
-            raise TypeError(f"Invalid ROI data: {roidata}") from exc
-        if len(data.shape) != 2 and data.size != 0:
-            raise ValueError(f"Invalid ROI data shape: {data.shape}")
-        for index, parameters in enumerate(data):
-            roi_param = self.get_roi_param(f"ROI{index:02d}", *parameters)
-            roi_params.append(roi_param)
-        group = gds.DataSetGroup(roi_params, title=_("Regions of interest"))
-        return group
-
-    @abc.abstractmethod
-    def params_to_roidata(self, params: gds.DataSetGroup) -> np.ndarray:
-        """Convert ROI dataset group to ROI array data.
-
-        Args:
-            params: ROI dataset group
-
-        Returns:
-            ROI array data
+            Coordinates
         """
 
     def roi_has_changed(self) -> bool:
@@ -1123,29 +1446,61 @@ class BaseObj(metaclass=BaseObjMeta):
         return returned_value
 
     @property
-    def roi(self) -> np.ndarray | None:
-        """Return object regions of interest array (one ROI per line).
+    def roi(self) -> TypeROI | None:
+        """Return object regions of interest object.
 
         Returns:
-            Regions of interest array
+            Regions of interest object
         """
         roidata = self.metadata.get(ROI_KEY)
-        assert roidata is None or isinstance(roidata, np.ndarray)
-        return roidata
+        assert roidata is None or isinstance(roidata, dict)
+        if roidata is None:
+            return None
+        return self.get_roi_class().from_dict(roidata)
 
     @roi.setter
-    def roi(self, roidata: np.ndarray | None) -> None:
-        """Set object regions of interest array, using a list or ROI dataset params.
+    def roi(self, roi: TypeROI | None) -> None:
+        """Set object regions of interest.
 
         Args:
-            roidata: regions of interest array
+            roi: regions of interest object
         """
-        if roidata is None:
+        if roi is None:
             if ROI_KEY in self.metadata:
                 self.metadata.pop(ROI_KEY)
         else:
-            self.metadata[ROI_KEY] = np.array(roidata, int)
+            self.metadata[ROI_KEY] = roi.to_dict()
         self.__roi_changed = True
+
+    @property
+    def maskdata(self) -> np.ndarray:
+        """Return masked data (areas outside defined regions of interest)
+
+        Returns:
+            Masked data
+        """
+        roi_changed = self.roi_has_changed()
+        if self.roi is None:
+            if roi_changed:
+                self._maskdata_cache = None
+        elif roi_changed or self._maskdata_cache is None:
+            self._maskdata_cache = self.roi.to_mask(self)
+        return self._maskdata_cache
+
+    def get_masked_view(self) -> ma.MaskedArray:
+        """Return masked view for data
+
+        Returns:
+            Masked view
+        """
+        self.data: np.ndarray
+        view = self.data.view(ma.MaskedArray)
+        view.mask = self.maskdata
+        return view
+
+    def invalidate_maskdata_cache(self) -> None:
+        """Invalidate mask data cache: force to rebuild it"""
+        self._maskdata_cache = None
 
     def iterate_resultshapes(self) -> Iterable[ResultShape]:
         """Iterate over object result shapes.
@@ -1175,7 +1530,7 @@ class BaseObj(metaclass=BaseObjMeta):
             ):
                 self.metadata.pop(key)
 
-    def update_resultshapes_from(self, other: BaseObj) -> None:
+    def update_resultshapes_from(self, other: TypeObj) -> None:
         """Update geometric shape from another object (merge metadata).
 
         Args:
@@ -1229,19 +1584,6 @@ class BaseObj(metaclass=BaseObjMeta):
             items.append(item)
         if items:
             self.annotations = items_to_json(items)
-
-    @abc.abstractmethod
-    def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
-        """Make plot item representing a Region of Interest.
-
-        Args:
-            fmt: format string
-            lbl: if True, add label
-            editable: if True, ROI is editable
-
-        Yields:
-            Plot item
-        """
 
     def __set_annotations(self, annotations: str | None) -> None:
         """Set object annotations (JSON string describing annotation plot items)
@@ -1306,7 +1648,11 @@ class BaseObj(metaclass=BaseObjMeta):
         lbl = self.get_metadata_option("showlabel")
         for key, value in self.metadata.items():
             if key == ROI_KEY:
-                yield from self.iterate_roi_items(fmt=fmt, lbl=lbl, editable=False)
+                roi = self.roi
+                if roi is not None:
+                    yield from roi.iterate_roi_items(
+                        self, fmt=fmt, lbl=lbl, editable=False
+                    )
             elif ResultShape.match(key, value):
                 mshape: ResultShape = ResultShape.from_metadata_entry(key, value)
                 yield from mshape.iterate_plot_items(fmt, lbl, self.PREFIX)

@@ -103,8 +103,8 @@ def test_image_centroid():
     param = cdl.obj.NewImageParam.create(height=500, width=500)
     image = create_noisygauss_image(param, center=(-2.0, 3.0), add_annotations=True)
     df = cpi.compute_centroid(image).to_dataframe()
-    check_scalar_result("Centroid X", df.x[0], 199)
-    check_scalar_result("Centroid Y", df.y[0], 324)
+    check_scalar_result("Centroid X", df.x[0], 199.5, atol=0.1)
+    check_scalar_result("Centroid Y", df.y[0], 324.4, atol=0.1)
 
 
 if __name__ == "__main__":

@@ -147,11 +147,6 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
         ima.zlabel,
     )
 
-    # Signal and Image ROI extraction test: test adding a default ROI
-    __print_test_result("Adding a default ROI to signal and image")
-    for panel in (win.signalpanel, win.imagepanel):
-        panel.processor.edit_regions_of_interest(add_roi=True)
-
     # Close application
     __print_test_result("Close application")
     win.close_application()

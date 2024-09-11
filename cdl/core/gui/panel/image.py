@@ -8,7 +8,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 from plotpy.tools import (
     AnnotatedCircleTool,
@@ -29,6 +29,7 @@ from cdl.core.io.image import ImageIORegistry
 from cdl.core.model.image import (
     ImageDatatypes,
     ImageObj,
+    ImageROI,
     create_image_from_param,
     new_image_param,
 )
@@ -42,7 +43,7 @@ if TYPE_CHECKING:
     from cdl.core.model.image import NewImageParam
 
 
-class ImagePanel(BaseDataPanel):
+class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
     """Object handling the item list, the selected item properties and plot,
     specialized for Image objects"""
 
@@ -61,9 +62,13 @@ class ImagePanel(BaseDataPanel):
     IO_REGISTRY = ImageIORegistry
     H5_PREFIX = "DataLab_Ima"
     ROIDIALOGOPTIONS = {"show_itemlist": True, "show_contrast": False}
-    ROIDIALOGCLASS = roieditor.ImageROIEditor
 
     # pylint: disable=duplicate-code
+
+    @staticmethod
+    def get_roieditor_class() -> Type[roieditor.ImageROIEditor]:
+        """Return ROI editor class"""
+        return roieditor.ImageROIEditor
 
     def __init__(
         self,
@@ -78,13 +83,6 @@ class ImagePanel(BaseDataPanel):
         self.acthandler = ImageActionHandler(self, panel_toolbar, view_toolbar)
 
     # ------Refreshing GUI--------------------------------------------------------------
-    def properties_changed(self) -> None:
-        """The properties 'Apply' button was clicked: updating signal"""
-        obj = self.objview.get_current_object()
-        if obj is not None:
-            obj.invalidate_maskdata_cache()
-            super().properties_changed()
-
     def plot_lut_changed(self, plot: BasePlot) -> None:
         """The LUT of the plot has changed: updating image objects accordingly
 
@@ -149,19 +147,6 @@ class ImagePanel(BaseDataPanel):
         if add_to_panel:
             self.add_object(image)
         return image
-
-    def delete_metadata(
-        self, refresh_plot: bool = True, keep_roi: bool | None = None
-    ) -> None:
-        """Delete metadata of selected objects
-
-        Args:
-            refresh_plot: Refresh plot. Defaults to True.
-            keep_roi: Keep regions of interest, if any. Defaults to None (ask user).
-        """
-        for obj in self.objview.get_sel_objects(include_groups=True):
-            obj.invalidate_maskdata_cache()
-        super().delete_metadata(refresh_plot, keep_roi)
 
     def toggle_show_contrast(self, state: bool) -> None:
         """Toggle show contrast option"""
