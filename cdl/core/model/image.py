@@ -465,14 +465,46 @@ class RectangularROI(PolygonalROI):
             obj: object (image), for physical-indices coordinates conversion
             title: title
         """
+
+        def info_callback(item: AnnotatedRectangle) -> str:
+            """Return info string for rectangular ROI"""
+            x0, y0, x1, y1 = item.get_rect()
+            if self.indices:
+                x0, y0, x1, y1 = obj.physical_to_indices([x0, y0, x1, y1])
+            x0, y0, dx, dy = self.rect_to_coords(x0, y0, x1, y1)
+            return "<br>".join(
+                [
+                    f"X0, Y0 = {x0:g}, {y0:g}",
+                    f"ΔX x ΔY  = {dx:g} x {dy:g}",
+                ]
+            )
+
         x0, y0, dx, dy = self.get_physical_coords(obj)
         x1, y1 = x0 + dx, y0 + dy
         roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1, title)
+        roi_item.set_info_callback(info_callback)
         param = roi_item.label.labelparam
         param.anchor = "BL"
         param.xc, param.yc = 5, -5
         param.update_item(roi_item.label)
         return roi_item
+
+    @staticmethod
+    def rect_to_coords(
+        x0: int | float, y0: int | float, x1: int | float, y1: int | float
+    ) -> np.ndarray:
+        """Convert rectangle to coordinates
+
+        Args:
+            x0: x0 (top-left corner)
+            y0: y0 (top-left corner)
+            x1: x1 (bottom-right corner)
+            y1: y1 (bottom-right corner)
+
+        Returns:
+            Rectangle coordinates
+        """
+        return np.array([x0, y0, x1 - x0, y1 - y0], dtype=type(x0))
 
     @classmethod
     def from_plot_item(cls: RectangularROI, item: AnnotatedRectangle) -> RectangularROI:
@@ -481,8 +513,8 @@ class RectangularROI(PolygonalROI):
         Args:
             item: plot item
         """
-        x0, y0, x1, y1 = item.get_rect()
-        return cls([x0, y0, x1 - x0, y1 - y0], False, item.annotationparam.title)
+        rect = item.get_rect()
+        return cls(cls.rect_to_coords(*rect), False, item.annotationparam.title)
 
 
 class CircularROI(BaseSingleImageROI):
@@ -625,12 +657,46 @@ class CircularROI(BaseSingleImageROI):
             obj: object (image), for physical-indices coordinates conversion
             title: title
         """
+
+        def info_callback(item: AnnotatedCircle) -> str:
+            """Return info string for circular ROI"""
+            x0, y0, x1, y1 = item.get_rect()
+            if self.indices:
+                x0, y0, x1, y1 = obj.physical_to_indices([x0, y0, x1, y1])
+            xc, yc, r = self.rect_to_coords(x0, y0, x1, y1)
+            return "<br>".join(
+                [
+                    f"Center = {xc:g}, {yc:g}",
+                    f"Radius = {r:g}",
+                ]
+            )
+
         xc, yc, r = self.get_physical_coords(obj)
         item = AnnotatedCircle(xc - r, yc, xc + r, yc)
+        item.set_info_callback(info_callback)
         item.annotationparam.title = title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
         return item
+
+    @staticmethod
+    def rect_to_coords(
+        x0: int | float, y0: int | float, x1: int | float, y1: int | float
+    ) -> np.ndarray:
+        """Convert rectangle to circle coordinates
+
+        Args:
+            x0: x0 (top-left corner)
+            y0: y0 (top-left corner)
+            x1: x1 (bottom-right corner)
+            y1: y1 (bottom-right corner)
+
+        Returns:
+            Circle coordinates
+        """
+        xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
+        r = 0.5 * ((x1 - x0) + (y1 - y0))
+        return np.array([xc, yc, r], dtype=type(x0))
 
     @classmethod
     def from_plot_item(cls: CircularROI, item: AnnotatedCircle) -> CircularROI:
@@ -639,10 +705,8 @@ class CircularROI(BaseSingleImageROI):
         Args:
             item: plot item
         """
-        x0, y0, x1, y1 = item.get_rect()
-        xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
-        r = 0.5 * (x1 - x0)
-        return cls([xc, yc, r], False, item.annotationparam.title)
+        rect = item.get_rect()
+        return cls(cls.rect_to_coords(*rect), False, item.annotationparam.title)
 
 
 class ImageROI(base.BaseROI["ImageObj", BaseSingleImageROI, ROI2DParam]):
@@ -1098,18 +1162,18 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
             geometry: ROI geometry
         """
         frac = 0.2
-        x0, x1 = self.x0 + frac * self.width, self.x0 + (1 - frac) * self.width
-        y0, y1 = self.y0 + frac * self.height, self.y0 + (1 - frac) * self.height
-        x0, y0, x1, y1 = self.indices_to_physical([x0, y0, x1, y1])
+        height, width = self.data.shape
+        x0, x1 = frac * width, (1 - frac) * width
+        y0, y1 = frac * height, (1 - frac) * height
         if geometry == "rectangle":
-            coords = [x0, y0, x1 - x0, y1 - y0]
+            coords = np.array([x0, y0, x1 - x0, y1 - y0], int)
         elif geometry == "circle":
             xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
             r = (x1 - x0) * 0.5
-            coords = [xc, yc, r]
+            coords = np.array([xc, yc, r], int)
         else:
             raise ValueError(f"Unknown ROI geometry: {geometry}")
-        roi = create_image_roi(geometry, coords, indices=False)
+        roi = create_image_roi(geometry, coords, indices=True)
         item = roi.get_single_roi(0).to_plot_item(self, "ROI")
         return base.configure_roi_item(item, fmt, lbl, editable, option="i")
 
