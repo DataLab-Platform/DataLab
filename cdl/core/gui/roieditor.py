@@ -25,7 +25,7 @@ Image ROI editor
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Generic, Literal, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar, Union
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -35,21 +35,26 @@ from plotpy.items import (
     AnnotatedCircle,
     AnnotatedPolygon,
     AnnotatedRectangle,
+    CurveItem,
+    MaskedImageItem,
     ObjectInfo,
     XRangeSelection,
 )
+from plotpy.plot import PlotDialog, PlotManager
+from plotpy.tools import CircleTool, HRangeTool, RectangleTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+import cdl.obj as dlo
 from cdl.config import Conf, _
-from cdl.core.model.base import TypeObj, TypeROI
+from cdl.core.model.base import TypeObj, TypePlotItem, TypeROI, configure_roi_item
 from cdl.core.model.image import CircularROI, PolygonalROI, RectangularROI
 from cdl.core.model.signal import SegmentROI
 from cdl.obj import ImageObj, ImageROI, SignalObj, SignalROI
 
 if TYPE_CHECKING:
-    from plotpy.items import MaskedImageItem
-    from plotpy.plot import BasePlot, PlotDialog
+    from plotpy.plot import BasePlot
+    from plotpy.tools.base import InteractiveTool
 
 
 def plot_item_to_single_roi(
@@ -76,6 +81,109 @@ def plot_item_to_single_roi(
     return cls.from_plot_item(item)
 
 
+ROI_EDITOR_TOOLBAR_ID = "roi_editor_toolbar"
+
+
+def configure_roi_item_in_tool(shape, obj: dlo.SignalObj | dlo.ImageObj) -> None:
+    """Configure ROI item in tool"""
+    fmt = obj.get_metadata_option("format")
+    configure_roi_item(shape, fmt, lbl=True, editable=True, option=obj.PREFIX)
+
+
+TypeROIItem = Union[
+    XRangeSelection, AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon
+]
+
+
+def tool_activate(tool: InteractiveTool) -> None:
+    """Tool activate"""
+    plot = tool.get_active_plot()
+    plot.select_some_items([])  # Deselect all items
+    tool.activate()
+
+
+def tool_setup_shape(shape: TypeROIItem, obj: dlo.SignalObj | dlo.ImageObj) -> None:
+    """Tool setup shape"""
+    shape.setTitle("ROI")
+    configure_roi_item_in_tool(shape, obj)
+
+
+class ROISegmentTool(HRangeTool):
+    """ROI segment tool"""
+
+    TITLE = _("Add ROI")
+    ICON = "signal_roi.svg"
+
+    def __init__(self, manager: PlotManager, obj: dlo.SignalObj) -> None:
+        super().__init__(
+            manager, switch_to_default_tool=True, toolbar_id=ROI_EDITOR_TOOLBAR_ID
+        )
+        self.roi = SegmentROI([0, 1], False)
+        self.obj = obj
+        self.activate = tool_activate
+
+    def create_shape(self) -> XRangeSelection:
+        """Create shape"""
+        shape = self.roi.to_plot_item(self.obj)
+        configure_roi_item_in_tool(shape, self.obj)
+        shape.selected = True
+        return shape
+
+
+class ROIRectangleTool(RectangleTool):
+    """ROI rectangle tool"""
+
+    TITLE = _("Add rectangular ROI")
+    ICON = "roi_new_rectangle.svg"
+
+    def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
+        super().__init__(
+            manager,
+            switch_to_default_tool=True,
+            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            setup_shape_cb=tool_setup_shape,
+        )
+        self.roi = RectangularROI([0, 0, 1, 1], True)
+        self.obj = obj
+        self.activate = tool_activate
+
+    def create_shape(self) -> tuple[AnnotatedRectangle, int, int]:
+        """Create shape"""
+        item = self.roi.to_plot_item(self.obj)
+        return item, 0, 2
+
+    def setup_shape(self, shape: AnnotatedRectangle) -> None:
+        """Setup shape"""
+        tool_setup_shape(shape, self.obj)
+
+
+class ROICircleTool(CircleTool):
+    """ROI circle tool"""
+
+    TITLE = _("Add circular ROI")
+    ICON = "roi_new_circle.svg"
+
+    def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
+        super().__init__(
+            manager,
+            switch_to_default_tool=True,
+            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            setup_shape_cb=tool_setup_shape,
+        )
+        self.roi = CircularROI([0, 0, 1], True)
+        self.obj = obj
+        self.activate = tool_activate
+
+    def create_shape(self) -> tuple[AnnotatedCircle, int, int]:
+        """Create shape"""
+        item = self.roi.to_plot_item(self.obj)
+        return item, 0, 1
+
+    def setup_shape(self, shape: AnnotatedRectangle) -> None:
+        """Setup shape"""
+        tool_setup_shape(shape, self.obj)
+
+
 TypeROIEditor = TypeVar("TypeROIEditor", bound="BaseROIEditor")
 
 
@@ -83,22 +191,28 @@ class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEditorMeta):
+class BaseROIEditor(
+    QW.QWidget, Generic[TypeObj, TypeROI, TypePlotItem], metaclass=BaseROIEditorMeta
+):
     """ROI Editor"""
 
     ICON_NAME = None
     OBJ_NAME = None
+    ROI_ITEM_TYPES = ()
 
     def __init__(
         self,
         parent: PlotDialog,
+        toolbar: QW.QToolBar,
         obj: TypeObj,
         extract: bool,
+        item: TypePlotItem | None = None,
     ) -> None:
         super().__init__(parent)
         self.plot_dialog = parent
         parent.accepted.connect(self.dialog_accepted)
         self.plot = parent.get_plot()
+        self.toolbar = toolbar
         self.obj = obj
         self.extract = extract
         self.__modified: bool | None = None
@@ -107,16 +221,21 @@ class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEdit
         if self.__roi is None:
             self.__roi = ImageROI()
 
-        self.fmt = obj.get_metadata_option("format")
-        self.roi_items = list(self.__roi.iterate_roi_items(obj, self.fmt, True))
+        fmt = obj.get_metadata_option("format")
+        self.roi_items = list(self.__roi.iterate_roi_items(obj, fmt, True))
 
+        self.add_tools_to_plot_dialog()
+        item = obj.make_item() if item is None else item
+        item.set_selectable(False)
+        item.set_readonly(True)
+        self.plot.add_item(item)
         for roi_item in self.roi_items:
             self.plot.add_item(roi_item)
             self.plot.set_active_item(roi_item)
 
-        self.toolbar: QW.QToolBar | None = None
         self.remove_all_action: QW.QAction | None = None
         self.singleobj_btn: QW.QToolButton | None = None
+
         self.setup_widget()
 
         # force update of ROI titles and remove_all_btn state
@@ -131,7 +250,14 @@ class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEdit
         #  when at least one ROI is defined,
         #  whereas in non-extract mode (when editing ROIs) the OK button is by default
         #  disabled (until ROI data is modified)
-        self.modified = extract
+        if extract:
+            self.modified = len(self.roi_items) > 0
+        else:
+            self.modified = False
+
+    @abc.abstractmethod
+    def add_tools_to_plot_dialog(self) -> None:
+        """Add tools to plot dialog"""
 
     @property
     def modified(self) -> bool:
@@ -180,7 +306,6 @@ class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEdit
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
         layout = QW.QHBoxLayout()
-        self.toolbar = QW.QToolBar(self)
         self.toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
         add_actions(self.toolbar, self.create_actions())
         layout.addWidget(self.toolbar)
@@ -193,15 +318,6 @@ class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEdit
             self.singleobj_btn.setChecked(self.__roi.singleobj)
         layout.addStretch()
         self.setLayout(layout)
-
-    def add_roi_item(self, roi_item) -> None:
-        """Add ROI item to plot and refresh titles"""
-        self.plot.unselect_all()
-        self.roi_items.append(roi_item)
-        self.update_roi_titles()
-        self.modified = True
-        self.plot.add_item(roi_item)
-        self.plot.set_active_item(roi_item)
 
     def remove_all_rois(self) -> None:
         """Remove all ROIs"""
@@ -216,18 +332,30 @@ class BaseROIEditor(QW.QWidget, Generic[TypeObj, TypeROI], metaclass=BaseROIEdit
     def update_roi_titles(self) -> None:
         """Update ROI annotation titles"""
 
+    def update_roi_items(self) -> None:
+        """Update ROI items"""
+        old_nb_items = len(self.roi_items)
+        self.roi_items = [
+            item
+            for item in self.plot.get_items()
+            if isinstance(item, self.ROI_ITEM_TYPES)
+        ]
+        self.plot.select_some_items([])
+        self.update_roi_titles()
+        if old_nb_items != len(self.roi_items):
+            self.modified = True
+
     def items_changed(self, _plot: BasePlot) -> None:
         """Items have changed"""
-        self.update_roi_titles()
+        self.update_roi_items()
         self.remove_all_action.setEnabled(len(self.roi_items) > 0)
 
     def item_removed(self, item) -> None:
         """Item was removed. Since all items are read-only except ROIs...
         this must be an ROI."""
         assert item in self.roi_items
-        self.roi_items.remove(item)
+        self.update_roi_items()
         self.modified = True
-        self.update_roi_titles()
 
     def item_moved(self) -> None:
         """ROI plot item has just been moved"""
@@ -248,21 +376,18 @@ class ROIRangeInfo(ObjectInfo):
         return "<br>".join(textlist)
 
 
-class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI]):
+class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem]):
     """Signal ROI Editor"""
 
     ICON_NAME = "signal_roi.svg"
     OBJ_NAME = _("signal")
+    ROI_ITEM_TYPES = (XRangeSelection,)
 
-    def create_actions(self) -> list[QW.QAction]:
-        """Create actions"""
-        add_action = create_action(
-            self,
-            _("Add ROI"),
-            icon=get_icon(self.ICON_NAME),
-            triggered=self.add_roi,
-        )
-        return [add_action] + super().create_actions()
+    def add_tools_to_plot_dialog(self) -> None:
+        """Add tools to plot dialog"""
+        mgr = self.plot_dialog.get_manager()
+        mgr.add_toolbar(self.toolbar, ROI_EDITOR_TOOLBAR_ID)
+        mgr.add_tool(ROISegmentTool, self.obj)
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
@@ -272,49 +397,31 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI]):
         self.plot.add_item(info_label)
         self.info_label = info_label
 
-    def add_roi(self) -> None:
-        """Simply add an ROI"""
-        roi_item = self.obj.new_roi_item(self.fmt, True, editable=True)
-        self.add_roi_item(roi_item)
-
     def update_roi_titles(self):
         """Update ROI annotation titles"""
         super().update_roi_titles()
         self.info_label.update_text()
 
 
-class ImageROIEditor(BaseROIEditor[ImageObj, ImageROI]):
+class ImageROIEditor(BaseROIEditor[ImageObj, ImageROI, MaskedImageItem]):
     """Image ROI Editor"""
 
     ICON_NAME = "image_roi.svg"
     OBJ_NAME = _("image")
+    ROI_ITEM_TYPES = (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon)
 
-    def create_actions(self) -> list[QW.QAction]:
-        """Create actions"""
-        rect_action = create_action(
-            self,
-            _("Add rectangular ROI"),
-            icon=get_icon("roi_new_rectangle.svg"),
-            triggered=lambda: self.add_roi("rectangle"),
-        )
-        circ_action = create_action(
-            self,
-            _("Add circular ROI"),
-            icon=get_icon("roi_new_circle.svg"),
-            triggered=lambda: self.add_roi("circle"),
-        )
-        return [rect_action, circ_action] + super().create_actions()
+    def add_tools_to_plot_dialog(self) -> None:
+        """Add tools to plot dialog"""
+        mgr = self.plot_dialog.get_manager()
+        mgr.add_toolbar(self.toolbar, ROI_EDITOR_TOOLBAR_ID)
+        mgr.add_tool(ROIRectangleTool, self.obj)
+        mgr.add_tool(ROICircleTool, self.obj)
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
         super().setup_widget()
         item: MaskedImageItem = self.plot.get_items(item_type=IImageItemType)[0]
         item.set_mask_visible(False)
-
-    def add_roi(self, geometry: Literal["rectangle", "circle"]) -> None:
-        """Add new ROI"""
-        item = self.obj.new_roi_item(self.fmt, True, editable=True, geometry=geometry)
-        self.add_roi_item(item)
 
     def update_roi_titles(self) -> None:
         """Update ROI annotation titles"""

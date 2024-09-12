@@ -22,7 +22,7 @@ from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset, update_dataset
 from guidata.qthelpers import exec_dialog
 from plotpy.builder import make
-from plotpy.items import XRangeSelection
+from plotpy.items import CurveItem, XRangeSelection
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
 
@@ -31,7 +31,6 @@ from cdl.config import Conf, _
 from cdl.core.model import base
 
 if TYPE_CHECKING:
-    from plotpy.items import CurveItem
     from plotpy.plot import PlotDialog
     from plotpy.styles import CurveParam
 
@@ -198,7 +197,7 @@ class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam]):
         return param
 
     # pylint: disable=unused-argument
-    def to_plot_item(self, obj: SignalObj, title: str) -> XRangeSelection:
+    def to_plot_item(self, obj: SignalObj, title: str | None = None) -> XRangeSelection:
         """Make and return the annnotated segment associated with the ROI
 
         Args:
@@ -312,7 +311,7 @@ def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
         item.update_data()
 
 
-class SignalObj(gds.DataSet, base.BaseObj[SignalROI]):
+class SignalObj(gds.DataSet, base.BaseObj[SignalROI, CurveItem]):
     """Signal object"""
 
     PREFIX = "s"
@@ -562,7 +561,7 @@ class SignalObj(gds.DataSet, base.BaseObj[SignalROI]):
         restore_dataset(item.param.line, self.metadata)
         restore_dataset(item.param.symbol, self.metadata)
 
-    def make_item(self, update_from: CurveItem = None) -> CurveItem:
+    def make_item(self, update_from: CurveItem | None = None) -> CurveItem:
         """Make plot item from data.
 
         Args:
@@ -637,23 +636,6 @@ class SignalObj(gds.DataSet, base.BaseObj[SignalROI]):
         # We take the real part of the x data to avoid `ComplexWarning` warnings
         # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
         return self.x.real[indices]
-
-    def new_roi_item(self, fmt: str, lbl: bool, editable: bool):
-        """Return a new ROI item from scratch
-
-        Args:
-            fmt: format string
-            lbl: if True, add label
-            editable: if True, ROI is editable
-        """
-        # We take the real part of the x data to avoid `ComplexWarning` warnings
-        # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
-        xmin, xmax = self.x.real.min(), self.x.real.max()
-        xdelta = (xmax - xmin) * 0.2
-        coords = xmin + xdelta, xmax - xdelta
-        roi = create_signal_roi(coords, indices=False)
-        item = roi.get_single_roi(0).to_plot_item(self, "ROI")
-        return base.configure_roi_item(item, fmt, lbl, editable, option=self.PREFIX)
 
     def add_label_with_title(self, title: str | None = None) -> None:
         """Add label with title annotation

@@ -889,20 +889,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Returns:
             Instance of PlotDialog
         """
-        title = _("Annotations")
         if oids is None:
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[0]]
+
+        # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
-            oids,
+            title=obj.title if len(oids) == 1 else None,
             edit=True,
-            name="new_window",
+            name=f"{obj.PREFIX}_new_window",
             options={"show_itemlist": edit_annotations},
         )
         if dlg is None:
             return None
+        self.add_plot_items_to_dialog(dlg, oids)
+
         mgr = dlg.get_manager()
-        toolbar = QW.QToolBar(title, self)
+        toolbar = QW.QToolBar(_("Annotations"), self)
         dlg.button_layout.insertWidget(0, toolbar)
         mgr.add_toolbar(toolbar, id(toolbar))
         toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
@@ -964,35 +967,24 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def create_new_dialog(
         self,
-        oids: list[str],
         edit: bool = False,
         toolbar: bool = True,
         title: str | None = None,
-        tools: list[GuiTool] | None = None,
         name: str | None = None,
         options: dict | None = None,
     ) -> PlotDialog | None:
         """Create new pop-up signal/image plot dialog.
 
         Args:
-            oids: Object IDs
             edit: Edit mode
             toolbar: Show toolbar
             title: Dialog title
-            tools: list of tools to add to the toolbar
-            name: Dialog name
+            name: Dialog object name
             options: Plot options
 
         Returns:
-            QDialog instance
+            Plot dialog instance
         """
-        if title is not None or len(oids) == 1:
-            if title is None:
-                title = self.objview.get_sel_objects(include_groups=True)[0].title
-            title = f"{title} - {APP_NAME}"
-        else:
-            title = APP_NAME
-
         plot_options = self.plothandler.get_current_plot_options()
         if options is not None:
             plot_options = plot_options.copy(options)
@@ -1007,22 +999,25 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # pylint: disable=not-callable
         dlg = PlotDialog(
             parent=self.parent(),
-            title=title,
+            title=APP_NAME if title is None else f"{title} - {APP_NAME}",
             edit=edit,
             options=plot_options,
             toolbar=toolbar,
             size=size,
         )
         dlg.setWindowIcon(get_icon("DataLab.svg"))
+        dlg.setObjectName(name)
+        return dlg
 
-        if tools is not None:
-            for tool in tools:
-                dlg.get_manager().add_tool(tool)
-        plot = dlg.get_plot()
+    def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:
+        """Add plot items to dialog
 
+        Args:
+            dlg: Dialog
+            oids: Object IDs
+        """
         objs = self.objmodel.get_objects(oids)
-        dlg.setObjectName(f"{objs[0].PREFIX}_{name}")
-
+        plot = dlg.get_plot()
         with create_progress_bar(
             self, _("Creating plot items"), max_=len(objs)
         ) as progress:
@@ -1052,22 +1047,30 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
         obj = self.objview.get_sel_objects(include_groups=True)[0]
+
+        # Create a new dialog
         dlg = self.create_new_dialog(
-            [obj.uuid],
             edit=True,
             toolbar=True,
             title=f"{roi_s} - {obj.title}",
-            name="roi_dialog",
+            name=f"{obj.PREFIX}_roi_dialog",
             options=options,
         )
         if dlg is None:
             return None
+
+        # Create ROI editor (and add it to the dialog)
+        # pylint: disable=not-callable
+        item = obj.make_item(update_from=self.plothandler[obj.uuid])
+        roi_editor = self.get_roieditor_class()(dlg, obj, extract, item=item)
+        dlg.button_layout.insertWidget(0, roi_editor)
+
+        # Add plot items to the dialog
+        self.add_plot_items_to_dialog(dlg, [obj.uuid])
         plot = dlg.get_plot()
         for item in plot.items:
             item.set_selectable(False)
-        # pylint: disable=not-callable
-        roi_editor = self.get_roieditor_class()(dlg, obj, extract)
-        dlg.button_layout.insertWidget(0, roi_editor)
+
         if exec_dialog(dlg):
             return roi_editor.get_roieditor_results()
         return None

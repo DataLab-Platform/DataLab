@@ -919,6 +919,7 @@ TypeSingleROI = TypeVar("TypeSingleROI", bound="BaseSingleROI")
 TypeROI = TypeVar("TypeROI", bound="BaseROI")
 TypeROIParam = TypeVar("TypeROIParam", bound="BaseROIParam")
 TypeObj = TypeVar("TypeObj", bound="BaseObj")
+TypePlotItem = TypeVar("TypePlotItem", bound="CurveItem | MaskedImageItem")
 
 
 class BaseROIParamMeta(abc.ABCMeta, gds.DataSetMeta):
@@ -952,7 +953,7 @@ class BaseSingleROI(Generic[TypeObj, TypeROIParam], abc.ABC):
         title: ROI title
     """
 
-    def __init__(self, coords: np.ndarray, indices: bool, title: str = "") -> None:
+    def __init__(self, coords: np.ndarray, indices: bool, title: str = "ROI") -> None:
         self.coords = np.array(coords, int if indices else float)
         self.indices = indices
         self.title = title
@@ -1031,7 +1032,7 @@ class BaseSingleROI(Generic[TypeObj, TypeROIParam], abc.ABC):
         """
 
     @abc.abstractmethod
-    def to_plot_item(self, obj: TypeObj, title: str) -> AbstractShape:
+    def to_plot_item(self, obj: TypeObj, title: str | None = None) -> AbstractShape:
         """Make ROI plot item from ROI.
 
         Args:
@@ -1274,7 +1275,7 @@ class BaseObjMeta(abc.ABCMeta, gds.DataSetMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
+class BaseObj(Generic[TypeROI, TypePlotItem], metaclass=BaseObjMeta):
     """Object (signal/image) interface"""
 
     PREFIX = ""  # This is overriden in children classes
@@ -1387,7 +1388,7 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
         """
 
     @abc.abstractmethod
-    def make_item(self, update_from=None):
+    def make_item(self, update_from: TypePlotItem | None = None) -> TypePlotItem:
         """Make plot item from data.
 
         Args:
@@ -1398,7 +1399,7 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
         """
 
     @abc.abstractmethod
-    def update_item(self, item, data_changed: bool = True) -> None:
+    def update_item(self, item: TypePlotItem, data_changed: bool = True) -> None:
         """Update plot item from data.
 
         Args:
@@ -1758,7 +1759,7 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
         """Update metadata view settings from Conf.view"""
         self.metadata.update(self.__get_def_dict())
 
-    def update_plot_item_parameters(self, item: CurveItem | MaskedImageItem) -> None:
+    def update_plot_item_parameters(self, item: TypePlotItem) -> None:
         """Update plot item parameters from object data/metadata
 
         Takes into account a subset of plot item parameters. Those parameters may
@@ -1777,7 +1778,7 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
         if item.selected:
             item.select()
 
-    def update_metadata_from_plot_item(self, item: CurveItem | MaskedImageItem) -> None:
+    def update_metadata_from_plot_item(self, item: TypePlotItem) -> None:
         """Update metadata from plot item.
 
         Takes into account a subset of plot item parameters. Those parameters may

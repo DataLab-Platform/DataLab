@@ -305,12 +305,12 @@ class PolygonalROI(BaseSingleImageROI):
             obj: object (image), for physical-indices coordinates conversion
             title: ROI title
         """
-        param = ROI2DParam(title="ROI" if title is None else title)
+        param = ROI2DParam(title=self.title if title is None else title)
         param.geometry = "polygon"
         param.points = self.get_indices_coords(obj)
         return param
 
-    def to_plot_item(self, obj: ImageObj, title: str) -> AnnotatedPolygon:
+    def to_plot_item(self, obj: ImageObj, title: str | None = None) -> AnnotatedPolygon:
         """Make and return the annnotated polygon associated to ROI
 
         Args:
@@ -318,7 +318,7 @@ class PolygonalROI(BaseSingleImageROI):
             title: title
         """
         item = AnnotatedPolygon(self.get_physical_coords(obj))
-        item.annotationparam.title = title
+        item.annotationparam.title = self.title if title is None else title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
         return item
@@ -453,12 +453,14 @@ class RectangularROI(PolygonalROI):
             obj: object (image), for physical-indices coordinates conversion
             title: ROI title
         """
-        param = ROI2DParam(title="ROI" if title is None else title)
+        param = ROI2DParam(title=self.title if title is None else title)
         param.geometry = "rectangle"
         param.x0, param.y0, param.dx, param.dy = self.get_indices_coords(obj)
         return param
 
-    def to_plot_item(self, obj: ImageObj, title: str) -> AnnotatedRectangle:
+    def to_plot_item(
+        self, obj: ImageObj, title: str | None = None
+    ) -> AnnotatedRectangle:
         """Make and return the annnotated rectangle associated to ROI
 
         Args:
@@ -481,6 +483,7 @@ class RectangularROI(PolygonalROI):
 
         x0, y0, dx, dy = self.get_physical_coords(obj)
         x1, y1 = x0 + dx, y0 + dy
+        title = self.title if title is None else title
         roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1, title)
         roi_item.set_info_callback(info_callback)
         param = roi_item.label.labelparam
@@ -645,12 +648,12 @@ class CircularROI(BaseSingleImageROI):
             obj: object (image), for physical-indices coordinates conversion
             title: ROI title
         """
-        param = ROI2DParam(title="ROI" if title is None else title)
+        param = ROI2DParam(title=self.title if title is None else title)
         param.geometry = "circle"
         param.xc, param.yc, param.r = self.get_indices_coords(obj)
         return param
 
-    def to_plot_item(self, obj: ImageObj, title: str) -> AnnotatedCircle:
+    def to_plot_item(self, obj: ImageObj, title: str | None = None) -> AnnotatedCircle:
         """Make and return the annnotated circle associated to ROI
 
         Args:
@@ -674,7 +677,7 @@ class CircularROI(BaseSingleImageROI):
         xc, yc, r = self.get_physical_coords(obj)
         item = AnnotatedCircle(xc - r, yc, xc + r, yc)
         item.set_info_callback(info_callback)
-        item.annotationparam.title = title
+        item.annotationparam.title = self.title if title is None else title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
         return item
@@ -797,7 +800,7 @@ def create_image_roi(
     return roi
 
 
-class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
+class ImageObj(gds.DataSet, base.BaseObj[ImageROI, MaskedImageItem]):
     """Image object"""
 
     PREFIX = "i"
@@ -1145,37 +1148,6 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
         item.param.label = self.title
         self.update_plot_item_parameters(item)
         item.plot().update_colormap_axis(item)
-
-    def new_roi_item(
-        self,
-        fmt: str,
-        lbl: bool,
-        editable: bool,
-        geometry: Literal["rectangle", "circle"] = "rectangle",
-    ) -> MaskedImageItem:
-        """Return a new ROI item from scratch
-
-        Args:
-            fmt: format string
-            lbl: if True, add label
-            editable: if True, ROI is editable
-            geometry: ROI geometry
-        """
-        frac = 0.2
-        height, width = self.data.shape
-        x0, x1 = frac * width, (1 - frac) * width
-        y0, y1 = frac * height, (1 - frac) * height
-        if geometry == "rectangle":
-            coords = np.array([x0, y0, x1 - x0, y1 - y0], int)
-        elif geometry == "circle":
-            xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
-            r = (x1 - x0) * 0.5
-            coords = np.array([xc, yc, r], int)
-        else:
-            raise ValueError(f"Unknown ROI geometry: {geometry}")
-        roi = create_image_roi(geometry, coords, indices=True)
-        item = roi.get_single_roi(0).to_plot_item(self, "ROI")
-        return base.configure_roi_item(item, fmt, lbl, editable, option="i")
 
     def physical_to_indices(self, coords: list[float]) -> np.ndarray:
         """Convert coordinates from physical (real world) to (array) indices (pixel)
