@@ -1039,38 +1039,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         plot.replot()
         return dlg
 
-    def create_new_dialog_for_selection(
-        self,
-        title: str,
-        name: str,
-        options: dict[str, any] = None,
-        toolbar: bool = False,
-        tools: list[GuiTool] = None,
-    ) -> tuple[PlotDialog | None, TypeObj]:
-        """Create new pop-up dialog for the currently selected signal/image.
-
-        Args:
-            title: Dialog title
-            name: Dialog name
-            options: Plot options
-            toolbar: Show toolbar
-            tools: list of tools to add to the toolbar
-
-        Returns:
-            QDialog instance, selected object
-        """
-        obj = self.objview.get_sel_objects(include_groups=True)[0]
-        dlg = self.create_new_dialog(
-            [obj.uuid],
-            edit=True,
-            toolbar=toolbar,
-            title=f"{title} - {obj.title}",
-            tools=tools,
-            name=name,
-            options=options,
-        )
-        return dlg, obj
-
     def get_roi_editor_output(self, extract: bool) -> tuple[TypeROI, bool] | None:
         """Get ROI data (array) from specific dialog box.
 
@@ -1083,8 +1051,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
-        dlg, obj = self.create_new_dialog_for_selection(
-            roi_s, "roi_dialog", options, toolbar=True
+        obj = self.objview.get_sel_objects(include_groups=True)[0]
+        dlg = self.create_new_dialog(
+            [obj.uuid],
+            edit=True,
+            toolbar=True,
+            title=f"{roi_s} - {obj.title}",
+            name="roi_dialog",
+            options=options,
         )
         if dlg is None:
             return None
