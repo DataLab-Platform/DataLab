@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import numpy as np
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 
@@ -21,12 +22,12 @@ from cdl.config import _, reset
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import (
+    create_multigauss_image,
     create_paracetamol_signal,
     create_peak2d_image,
     create_sincos_image,
     get_test_image,
 )
-from cdl.tests.features.common.roi_app_test import create_test_image_with_roi
 
 if TYPE_CHECKING:
     from cdl.core.gui.main import CDLMainWindow
@@ -143,7 +144,11 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
         panel.processor.compute_rotate(param)
 
     newparam.title = None
-    ima1 = create_test_image_with_roi(newparam)
+    ima1 = create_multigauss_image(newparam)
+    s = data_size
+    ima1.roi = np.array(
+        [[s // 2, s // 2, s - 25, s], [s // 4, s // 2, s // 2, s // 2]], int
+    )
     panel.add_object(ima1)
 
     qt_wait(DELAY2)
