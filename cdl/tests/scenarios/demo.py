@@ -21,12 +21,12 @@ from cdl.config import _, reset
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import (
+    create_multigauss_image,
     create_paracetamol_signal,
     create_peak2d_image,
     create_sincos_image,
     get_test_image,
 )
-from cdl.tests.features.common.roi_app_test import create_test_image_with_roi
 
 if TYPE_CHECKING:
     from cdl.core.gui.main import CDLMainWindow
@@ -143,7 +143,13 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
         panel.processor.compute_rotate(param)
 
     newparam.title = None
-    ima1 = create_test_image_with_roi(newparam)
+    ima1 = create_multigauss_image(newparam)
+    s = data_size
+    roi = dlo.create_image_roi(
+        "rectangle", [s // 2, s // 2, s - 25 - s // 2, s - s // 2]
+    )
+    roi.add_roi(dlo.create_image_roi("circle", [s // 3, s // 2, s // 4]))
+    ima1.roi = roi
     panel.add_object(ima1)
 
     qt_wait(DELAY2)
