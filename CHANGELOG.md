@@ -2,6 +2,24 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.17.1 ##
+
+ℹ️ PlotPy v2.6.2 is required for this release.
+
+💥 New features and enhancements:
+
+* Image View:
+  * Before this release, when selecting a high number of images (e.g. when selecting a group of images), the application was very slow because all the images were displayed in the image view, even if they were all superimposed on the same image
+  * The workaround was to enable the "Show first only" option
+  * Now, to improve performance, if multiple images are selected, only the last image of the selection is displayed in the image view if this last image has no transparency and if the other images are completely covered by this last image
+* Clarification: action "Show first only" was renamed to "Show first object only", and a new icon was added to the action
+* API: added `width` and `height` properties to `ImageObj` class (returns the width and height of the image in physical units)
+* Windows launcher "start.pyw": writing a log file "datalab_error.log" when an exception occurs at startup
+
+🛠️ Bug fixes:
+
+* Changing the color theme now correctly updates all DataLab's user interface components without the need to restart the application
+
 ## DataLab Version 0.17.0 ##
 
 ℹ️ PlotPy v2.6 is required for this release.
