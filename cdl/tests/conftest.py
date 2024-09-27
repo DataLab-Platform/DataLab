@@ -51,7 +51,7 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
     try:
         import cv2  # pylint: disable=import-outside-toplevel
 
-        infolist.append(f", OpenCV {cv2.__version__}")
+        infolist[-1] += f", OpenCV {cv2.__version__}"
     except ImportError:
         pass
     for vname in ("CDL_DATA", "PYTHONPATH", "DEBUG"):
