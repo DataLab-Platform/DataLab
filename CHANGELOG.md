@@ -20,6 +20,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * Changing the color theme now correctly updates all DataLab's user interface components without the need to restart the application
 
+ℹ️ Other changes:
+
+* OpenCV is now an optional dependency:
+  * This change is motivated by the fact that the OpenCV conda package is not maintained on Windows (at least), which leads to an error when installing DataLab with conda
+  * When OpenCV is not installed, only the "OpenCV blob detection" feature won't work, and a warning message will be displayed when trying to use this feature
+
 ## DataLab Version 0.17.0 ##
 
 ℹ️ PlotPy v2.6 is required for this release.
