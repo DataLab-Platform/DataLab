@@ -10,7 +10,6 @@ from __future__ import annotations
 
 from typing import Literal
 
-import cv2
 import numpy as np
 import scipy.ndimage as spi
 import scipy.spatial as spt
@@ -716,6 +715,14 @@ def find_blobs_opencv(
     Returns:
         Coordinates of blobs
     """
+
+    # Note:
+    # Importing OpenCV inside the function in order to eventually raise an ImportError
+    # when the function is called and OpenCV is not installed. This error will be
+    # handled by DataLab and the user will be informed that OpenCV is required to use
+    # this function.
+    import cv2  # pylint: disable=import-outside-toplevel
+
     params = cv2.SimpleBlobDetector_Params()
     if min_threshold is not None:
         params.minThreshold = min_threshold

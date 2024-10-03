@@ -32,6 +32,8 @@ How to install
 
 DataLab is available in several forms:
 
+-   As a :ref:`install_conda`.
+
 -   As a Python package, which can be installed using the :ref:`install_pip`.
 
 -   :bdg-info-line:`Windows` As a stand-alone application, which does not require any
@@ -50,6 +52,19 @@ DataLab is available in several forms:
     Impatient to try the next version of DataLab? You can also install the
     latest development version of DataLab from the master branch of the
     Git repository. See :ref:`install_development` for more information.
+
+.. _install_conda:
+
+Conda package
+^^^^^^^^^^^^^
+
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
+
+To install ``datalab`` package from the `conda-forge` channel (https://anaconda.org/conda-forge/datalab), run the following command:
+
+.. code-block:: console
+
+    $ conda install conda-forge::datalab
 
 .. _install_pip:
 

@@ -190,9 +190,9 @@ msgstr "Cela peut être fait :"
 #: ../../doc/features/general/plugins.rst:69
 msgid ""
 "By installing DataLab in your Python environment (using one of the "
-"following methods: :ref:`install_pip`, :ref:`install_wheel`, or "
+"following methods: :ref:`install_conda`, :ref:`install_pip`, :ref:`install_wheel`, or "
 ":ref:`install_source`),"
-msgstr "En installant DataLab dans votre environnement Python (en utilisant l'une des méthodes suivantes : :ref:`install_pip`, :ref:`install_wheel`, ou :ref:`install_source`),"
+msgstr "En installant DataLab dans votre environnement Python (en utilisant l'une des méthodes suivantes : :ref:`install_conda`, :ref:`install_pip`, :ref:`install_wheel`, ou :ref:`install_source`),"
 
 #: ../../doc/features/general/plugins.rst:72
 msgid "Or by adding the `cdl` package to your Python path manually:"
