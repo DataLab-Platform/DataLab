@@ -22,9 +22,6 @@ The :mod:`cdl` package requires the following Python modules:
     * - scikit-image
       -  >= 0.18
       - Image processing in Python
-    * - opencv-python-headless
-      -  >= 4.5
-      - Wrapper package for OpenCV python bindings.
     * - pandas
       -  >= 1.3
       - Powerful data structures for data analysis, time series, and statistics
@@ -35,10 +32,10 @@ The :mod:`cdl` package requires the following Python modules:
       -  >= 5.5
       - Cross-platform lib for process and system monitoring in Python.
     * - guidata
-      -  >= 3.5
+      -  >= 3.6.2
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
-      -  >= 2.5
+      -  >= 2.6.2
       - Curve and image plotting tools for Python/Qt applications
     * - QtPy
       -  >= 1.9
