@@ -50,6 +50,10 @@ class ImagePanel(BaseDataPanel):
     PANEL_STR_ID = "image"
     PARAMCLASS = ImageObj
     MINDIALOGSIZE = (800, 800)
+
+    # The following tools are used to create annotations on images. The annotation
+    # items are created using PlotPy's default settings. Those appearance settings
+    # may be modified in the configuration (see `cdl.config`).
     ANNOTATION_TOOLS = (
         AnnotatedCircleTool,
         AnnotatedSegmentTool,
@@ -58,6 +62,7 @@ class ImagePanel(BaseDataPanel):
         AnnotatedEllipseTool,
         LabelTool,
     )
+
     IO_REGISTRY = ImageIORegistry
     H5_PREFIX = "DataLab_Ima"
     ROIDIALOGOPTIONS = {"show_itemlist": True, "show_contrast": False}

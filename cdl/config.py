@@ -334,58 +334,19 @@ ROI_SEL_LINE_COLOR = "#9393ff"
 
 PLOTPY_DEFAULTS = {
     "plot": {
+        #
+        # XXX: If needed in the future, add here the default settings for PlotPy:
+        # that will override the PlotPy settings.
+        # That is the right way to customize the PlotPy settings for shapes and
+        # annotations when they are added using tools from the DataLab application
+        # (see `BaseDataPanel.ANNOTATION_TOOLS`).
+        # For example, for shapes:
+        # "shape/drag/line/color": "#00ffff",
+        #
         # Overriding default plot settings from PlotPy
         "marker/curve/text/textcolor": "black",
         "marker/cross/text/textcolor": "black",
         "marker/cross/text/background_alpha": 0.7,
-    },
-    "annotations": {  # Annotated shape style for annotations
-        # Signals:
-        "s/shape/line/style": "SolidLine",
-        "s/shape/line/color": "#ffff00",
-        "s/shape/line/width": 1,
-        "s/shape/fill/style": "SolidPattern",
-        "s/shape/fill/color": MAIN_BG_COLOR,
-        "s/shape/fill/alpha": 0.1,
-        "s/shape/symbol/marker": "Rect",
-        "s/shape/symbol/size": 3,
-        "s/shape/symbol/edgecolor": "#ffff00",
-        "s/shape/symbol/facecolor": "#ffff00",
-        "s/shape/symbol/alpha": 1.0,
-        "s/shape/sel_line/style": "SolidLine",
-        "s/shape/sel_line/color": "#00ff00",
-        "s/shape/sel_line/width": 1,
-        "s/shape/sel_fill/style": "SolidPattern",
-        "s/shape/sel_fill/color": MAIN_BG_COLOR,
-        "s/shape/sel_fill/alpha": 0.1,
-        "s/shape/sel_symbol/marker": "Rect",
-        "s/shape/sel_symbol/size": 9,
-        "s/shape/sel_symbol/edgecolor": "#00aa00",
-        "s/shape/sel_symbol/facecolor": "#00ff00",
-        "s/shape/sel_symbol/alpha": 0.7,
-        # Images:
-        "i/shape/line/style": "SolidLine",
-        "i/shape/line/color": "#ffff00",
-        "i/shape/line/width": 1,
-        "i/shape/fill/style": "SolidPattern",
-        "i/shape/fill/color": MAIN_BG_COLOR,
-        "i/shape/fill/alpha": 0.1,
-        "i/shape/symbol/marker": "Rect",
-        "i/shape/symbol/size": 3,
-        "i/shape/symbol/edgecolor": "#ffff00",
-        "i/shape/symbol/facecolor": "#ffff00",
-        "i/shape/symbol/alpha": 1.0,
-        "i/shape/sel_line/style": "SolidLine",
-        "i/shape/sel_line/color": "#00ff00",
-        "i/shape/sel_line/width": 1,
-        "i/shape/sel_fill/style": "SolidPattern",
-        "i/shape/sel_fill/color": MAIN_BG_COLOR,
-        "i/shape/sel_fill/alpha": 0.1,
-        "i/shape/sel_symbol/marker": "Rect",
-        "i/shape/sel_symbol/size": 9,
-        "i/shape/sel_symbol/edgecolor": "#00aa00",
-        "i/shape/sel_symbol/facecolor": "#00ff00",
-        "i/shape/sel_symbol/alpha": 0.7,
     },
     "results": {  # Annotated shape style for result shapes
         # Signals:
