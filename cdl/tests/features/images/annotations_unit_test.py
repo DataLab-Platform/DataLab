@@ -12,12 +12,27 @@ Annotations unit test:
 # guitest: show
 
 from plotpy.builder import make
+from plotpy.items import AnnotatedShape, PolygonShape
+from plotpy.plot import BasePlot
 from qtpy import QtWidgets as QW
 
 from cdl.core.model.base import ANN_KEY
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
+
+
+def set_annotation_color(annotation: AnnotatedShape, color: str) -> None:
+    """Set annotation color"""
+    shape: PolygonShape = annotation.shape
+    param = shape.shapeparam
+    param.line.color = param.fill.color = color
+    param.fill.alpha = 0.3
+    param.fill.style = "SolidPattern"
+    param.update_item(shape)
+    plot: BasePlot = annotation.plot()
+    if plot is not None:
+        plot.replot()
 
 
 def test_annotations_unit():
@@ -29,14 +44,15 @@ def test_annotations_unit():
         ima1 = test_data.create_multigauss_image()
         ima1.title = "Annotations from items"
         rect = make.annotated_rectangle(100, 100, 200, 200, title="Test")
+        set_annotation_color(rect, "#2222ff")
         circ = make.annotated_circle(300, 300, 400, 400, title="Test")
+        set_annotation_color(circ, "#22ff22")
         elli = make.annotated_ellipse(
             500, 500, 800, 500, 650, 400, 650, 600, title="Test"
         )
         segm = make.annotated_segment(700, 700, 800, 800, title="Test")
         label = make.label("Test", (1000, 1000), (0, 0), "BR")
         ima1.add_annotations_from_items([rect, circ, elli, segm, label])
-        ima1.add_annotations_from_file(test_data.get_test_fnames("annotations.json")[0])
         panel.add_object(ima1)
 
         # Create another image with annotations
