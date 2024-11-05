@@ -59,8 +59,9 @@ Documentation = "https://datalab-platform.com/"
 
 [project.gui-scripts]
 cdl = "cdl.app:run"
-cdl-demo = "cdl.tests.scenarios.demo:run"
-cdl-tests = "cdl.tests:run"
+datalab = "cdl.app:run"
+datalab-demo = "cdl.tests.scenarios.demo:run"
+datalab-tests = "cdl.tests:run"
 
 [project.optional-dependencies]
 qt = ["PyQt5"]
