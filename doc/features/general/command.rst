@@ -5,18 +5,18 @@ Command line features
 
 .. meta::
     :description: DataLab command line features
-    :keywords: command line, cdl, datalab, run, test, demo
+    :keywords: command line, datalab, run, test, demo
 
 Run DataLab
 -----------
 
 To run DataLab from the command line, type the following::
 
-    $ cdl
+    $ datalab
 
 To show help on command line usage, simply run::
 
-    $ cdl --help
+    $ datalab --help
     usage: app.py [-h] [-b path] [-v] [--unattended] [--screenshot] [--delay DELAY] [--xmlrpcport PORT]
                   [--verbose {quiet,minimal,normal}]
                   [h5]
@@ -46,24 +46,24 @@ Open HDF5 file at startup
 
 To open HDF5 files, or even import only a specified HDF5 dataset, use the following::
 
-    $ cdl /path/to/file1.h5
-    $ cdl /path/to/file1.h5,/path/to/dataset1
-    $ cdl /path/to/file1.h5,/path/to/dataset1;/path/to/file2.h5,/path/to/dataset2
+    $ datalab /path/to/file1.h5
+    $ datalab /path/to/file1.h5,/path/to/dataset1
+    $ datalab /path/to/file1.h5,/path/to/dataset1;/path/to/file2.h5,/path/to/dataset2
 
 Open HDF5 browser at startup
 ----------------------------
 
 To open the HDF5 browser at startup, use one of the following commands::
 
-    $ cdl -b /path/to/file1.h5
-    $ cdl --h5browser /path/to/file1.h5
+    $ datalab -b /path/to/file1.h5
+    $ datalab --h5browser /path/to/file1.h5
 
 Run DataLab demo
 ----------------
 
 To execute DataLab demo, run the following::
 
-    $ cdl-demo
+    $ datalab-demo
 
 .. _run_scientific_validation_tests:
 
@@ -94,6 +94,6 @@ Run interactive tests
 
 To execute DataLab interactive tests, run the following::
 
-    $ cdl-tests
+    $ datalab-tests
 
 .. image:: /images/interactive_tests.png
