@@ -180,8 +180,8 @@ def config_annotated_shape(
     item: AnnotatedShape,
     fmt: str,
     lbl: bool,
-    section: str,
-    option: str,
+    section: str | None = None,
+    option: str | None = None,
     cmp: bool | None = None,
 ):
     """Configurate annotated shape.
@@ -205,7 +205,8 @@ def config_annotated_shape(
         item.label.labelparam.update_item(item.label)
 
     param.update_item(item)
-    item.set_style(section, option)
+    if section is not None and option is not None:
+        item.set_style(section, option)
 
 
 # TODO: [P3] Move this function as a method of plot items in PlotPy
@@ -1660,11 +1661,8 @@ class BaseObj(Generic[TypeROI, TypePlotItem], metaclass=BaseObjMeta):
         if self.annotations:
             try:
                 for item in json_to_items(self.annotations):
-                    section, option = "annotations", f"{self.PREFIX}/shape"
                     if isinstance(item, AnnotatedShape):
-                        config_annotated_shape(item, fmt, lbl, section, option)
-                    elif isinstance(item, PolygonShape):
-                        item.set_style(section, option)
+                        config_annotated_shape(item, fmt, lbl)
                     set_plot_item_editable(item, editable)
                     yield item
             except json.decoder.JSONDecodeError:

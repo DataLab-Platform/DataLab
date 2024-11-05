@@ -50,6 +50,10 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
     PANEL_STR = _("Signal Panel")
     PANEL_STR_ID = "signal"
     PARAMCLASS = SignalObj
+
+    # The following tools are used to create annotations on signals. The annotation
+    # items are created using PlotPy's default settings. Those appearance settings
+    # may be modified in the configuration (see `cdl.config`).
     ANNOTATION_TOOLS = (
         LabelTool,
         VCursorTool,
@@ -59,6 +63,7 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         RectangleTool,
         HRangeTool,
     )
+
     IO_REGISTRY = SignalIORegistry
     H5_PREFIX = "DataLab_Sig"
 
