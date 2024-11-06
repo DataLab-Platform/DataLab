@@ -224,15 +224,8 @@ msgstr ""
 "version de l'application)."
 
 #: ../../doc/intro/installation.rst:123
-msgid ""
-"DataLab Windows installer is available for Windows 8, 10 and 11 (main "
-"release, based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 "
-"based release, see file ending with ``-Win7.msi``)."
-msgstr ""
-"L'installeur Windows de DataLab est disponible pour Windows 8, 10 et 11 "
-"(version principale, basée sur Python 3.11) et également pour Windows 7 "
-"SP1 (version basée sur Python 3.8, voir le fichier se terminant par "
-"``-Win7.msi``)."
+msgid "DataLab Windows installer is available for Windows 7 SP1, 8, 10 and 11."
+msgstr "L'installeur Windows de DataLab est disponible pour Windows 7 SP1, 8, 10 et 11."
 
 #: ../../doc/intro/installation.rst:127
 msgid ""
@@ -435,7 +428,7 @@ msgid "Python"
 msgstr "Python"
 
 #: ../../doc/requirements.rst:11
-msgid ">=3.8, <4"
+msgid ">=3.9, <4"
 msgstr ""
 
 #: ../../doc/requirements.rst:12

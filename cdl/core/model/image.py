@@ -73,8 +73,8 @@ class ROI2DParam(base.BaseROIParam["ImageObj", "BaseSingleImageROI"]):
     _cfp = gds.FuncProp(_geometry_prop, lambda x: x != "circle")
     _pfp = gds.FuncProp(_geometry_prop, lambda x: x != "polygon")
 
-    # Do not declare it as a static method: not supported on Python 3.8
-    def _lbl(name: str, index: int):  # pylint: disable=no-self-argument
+    @staticmethod
+    def _lbl(name: str, index: int):
         """Returns name<sub>index</sub>"""
         return f"{name}<sub>{index}</sub>"
 
