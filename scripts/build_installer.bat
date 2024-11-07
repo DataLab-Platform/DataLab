@@ -26,10 +26,6 @@ del "temp.png"
 echo Generating .wxs file for MSI installer...
 %PYTHON% "%WIXPATH%\makewxs.py" %LIBNAME% %VERSION%
 
-@REM Windows 7 SP1 compatibility fix
-echo Copying Wine-based api-ms-win-core-path-l1-1-0.dll to installer folder...
-copy "%WIXPATH%\api-ms-win-core-path-l1-1-0.dll" "%ROOTPATH%\dist\internal\%LIBNAME%" /Y
-
 echo Building MSI installer...
 wix build "%WIXPATH%\%LIBNAME%-%VERSION%.wxs" -ext WixToolset.UI.wixext
 
