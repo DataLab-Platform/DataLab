@@ -876,6 +876,31 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.SIG_REFRESH_PLOT.emit("selected", True)
 
     # ------Plotting data in modal dialogs----------------------------------------------
+    def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:
+        """Add plot items to dialog
+
+        Args:
+            dlg: Dialog
+            oids: Object IDs
+        """
+        objs = self.objmodel.get_objects(oids)
+        plot = dlg.get_plot()
+        with create_progress_bar(
+            self, _("Creating plot items"), max_=len(objs)
+        ) as progress:
+            for index, obj in enumerate(objs):
+                progress.setValue(index + 1)
+                QW.QApplication.processEvents()
+                if progress.wasCanceled():
+                    return None
+                item = obj.make_item(update_from=self.plothandler[obj.uuid])
+                item.set_readonly(True)
+                plot.add_item(item, z=0)
+        plot.set_active_item(item)
+        item.unselect()
+        plot.replot()
+        return dlg
+
     def open_separate_view(
         self, oids: list[str] | None = None, edit_annotations: bool = False
     ) -> PlotDialog | None:
@@ -1009,31 +1034,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         dlg.setObjectName(name)
         return dlg
 
-    def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:
-        """Add plot items to dialog
-
-        Args:
-            dlg: Dialog
-            oids: Object IDs
-        """
-        objs = self.objmodel.get_objects(oids)
-        plot = dlg.get_plot()
-        with create_progress_bar(
-            self, _("Creating plot items"), max_=len(objs)
-        ) as progress:
-            for index, obj in enumerate(objs):
-                progress.setValue(index + 1)
-                QW.QApplication.processEvents()
-                if progress.wasCanceled():
-                    return None
-                item = obj.make_item(update_from=self.plothandler[obj.uuid])
-                item.set_readonly(True)
-                plot.add_item(item, z=0)
-        plot.set_active_item(item)
-        item.unselect()
-        plot.replot()
-        return dlg
-
     def get_roi_editor_output(self, extract: bool) -> tuple[TypeROI, bool] | None:
         """Get ROI data (array) from specific dialog box.
 
@@ -1064,12 +1064,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         item = obj.make_item(update_from=self.plothandler[obj.uuid])
         roi_editor = self.get_roieditor_class()(dlg, obj, extract, item=item)
         dlg.button_layout.insertWidget(0, roi_editor)
-
-        # Add plot items to the dialog
-        self.add_plot_items_to_dialog(dlg, [obj.uuid])
-        plot = dlg.get_plot()
-        for item in plot.items:
-            item.set_selectable(False)
 
         if exec_dialog(dlg):
             return roi_editor.get_roieditor_results()
