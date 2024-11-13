@@ -15,7 +15,7 @@ import abc
 import enum
 import re
 from collections.abc import ByteString, Mapping, Sequence
-from typing import TYPE_CHECKING, Any, Generic, Literal, Type
+from typing import TYPE_CHECKING, Any, Generic, Literal, Type, Union
 from uuid import uuid4
 
 import guidata.dataset as gds
@@ -720,7 +720,8 @@ class ImageROI(
         "ImageObj",
         BaseSingleImageROI,
         ROI2DParam,
-        AnnotatedPolygon | AnnotatedRectangle | AnnotatedCircle,
+        # `Union` is mandatory here for Python 3.9-3.10 compatibility:
+        Union[AnnotatedPolygon, AnnotatedRectangle, AnnotatedCircle],
     ]
 ):
     """Image Regions of Interest
