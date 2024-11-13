@@ -331,10 +331,14 @@ class BaseROIEditor(
 
     def remove_all_rois(self) -> None:
         """Remove all ROIs"""
-        if execenv.unattended or QW.QMessageBox.question(
-            self,
-            _("Remove all ROIs"),
-            _("Are you sure you want to remove all ROIs?"),
+        if (
+            execenv.unattended
+            or QW.QMessageBox.question(
+                self,
+                _("Remove all ROIs"),
+                _("Are you sure you want to remove all ROIs?"),
+            )
+            == QW.QMessageBox.Yes
         ):
             self.plot.del_items(self.roi_items)
 
