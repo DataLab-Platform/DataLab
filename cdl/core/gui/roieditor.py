@@ -25,7 +25,7 @@ Image ROI editor
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Generic, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar, Union
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -422,7 +422,8 @@ class ImageROIEditor(
         ImageObj,
         ImageROI,
         MaskedImageItem,
-        AnnotatedPolygon | AnnotatedRectangle | AnnotatedCircle,
+        # `Union` is mandatory here for Python 3.9-3.10 compatibility:
+        Union[AnnotatedPolygon, AnnotatedRectangle, AnnotatedCircle],
     ]
 ):
     """Image ROI Editor"""
