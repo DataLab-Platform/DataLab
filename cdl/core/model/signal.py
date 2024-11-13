@@ -135,7 +135,7 @@ class ROI1DParam(base.BaseROIParam["SignalObj", "SegmentROI"]):
         return np.array([obj.x[imin:imax], obj.y[imin:imax]])
 
 
-class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam]):
+class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam, XRangeSelection]):
     """Segment ROI
 
     Args:
@@ -223,7 +223,7 @@ class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam]):
         return cls(item.get_range(), False)
 
 
-class SignalROI(base.BaseROI["SignalObj", SegmentROI, ROI1DParam]):
+class SignalROI(base.BaseROI["SignalObj", SegmentROI, ROI1DParam, XRangeSelection]):
     """Signal Regions of Interest
 
     Args:

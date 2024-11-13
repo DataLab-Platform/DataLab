@@ -25,7 +25,7 @@ Image ROI editor
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Generic, TypeVar, Union
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -47,7 +47,13 @@ from qtpy import QtWidgets as QW
 
 import cdl.obj as dlo
 from cdl.config import Conf, _
-from cdl.core.model.base import TypeObj, TypePlotItem, TypeROI, configure_roi_item
+from cdl.core.model.base import (
+    TypeObj,
+    TypePlotItem,
+    TypeROI,
+    TypeROIItem,
+    configure_roi_item,
+)
 from cdl.core.model.image import CircularROI, PolygonalROI, RectangularROI
 from cdl.core.model.signal import SegmentROI
 from cdl.obj import ImageObj, ImageROI, SignalObj, SignalROI
@@ -88,11 +94,6 @@ def configure_roi_item_in_tool(shape, obj: dlo.SignalObj | dlo.ImageObj) -> None
     """Configure ROI item in tool"""
     fmt = obj.get_metadata_option("format")
     configure_roi_item(shape, fmt, lbl=True, editable=True, option=obj.PREFIX)
-
-
-TypeROIItem = Union[
-    XRangeSelection, AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon
-]
 
 
 def tool_activate(tool: InteractiveTool) -> None:
@@ -192,7 +193,9 @@ class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):
 
 
 class BaseROIEditor(
-    QW.QWidget, Generic[TypeObj, TypeROI, TypePlotItem], metaclass=BaseROIEditorMeta
+    QW.QWidget,
+    Generic[TypeObj, TypeROI, TypePlotItem, TypeROIItem],
+    metaclass=BaseROIEditorMeta,
 ):
     """ROI Editor"""
 
@@ -216,12 +219,15 @@ class BaseROIEditor(
         self.extract = extract
         self.__modified: bool | None = None
 
-        self.__roi: TypeROI | None = obj.roi
-        if self.__roi is None:
-            self.__roi = ImageROI()
+        roi = obj.roi
+        if roi is None:
+            roi = self.get_obj_roi_class()()
+        self.__roi: TypeROI = roi
 
         fmt = obj.get_metadata_option("format")
-        self.roi_items = list(self.__roi.iterate_roi_items(obj, fmt, True))
+        self.roi_items: list[TypeROIItem] = list(
+            self.__roi.iterate_roi_items(obj, fmt, True, True)
+        )
 
         self.add_tools_to_plot_dialog()
         item = obj.make_item() if item is None else item
@@ -253,6 +259,10 @@ class BaseROIEditor(
             self.modified = len(self.roi_items) > 0
         else:
             self.modified = False
+
+    @abc.abstractmethod
+    def get_obj_roi_class(self) -> type[TypeROI]:
+        """Get object ROI class"""
 
     @abc.abstractmethod
     def add_tools_to_plot_dialog(self) -> None:
@@ -375,12 +385,16 @@ class ROIRangeInfo(ObjectInfo):
         return "<br>".join(textlist)
 
 
-class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem]):
+class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelection]):
     """Signal ROI Editor"""
 
     ICON_NAME = "signal_roi.svg"
     OBJ_NAME = _("signal")
     ROI_ITEM_TYPES = (XRangeSelection,)
+
+    def get_obj_roi_class(self) -> type[SignalROI]:
+        """Get object ROI class"""
+        return SignalROI
 
     def add_tools_to_plot_dialog(self) -> None:
         """Add tools to plot dialog"""
@@ -402,12 +416,23 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem]):
         self.info_label.update_text()
 
 
-class ImageROIEditor(BaseROIEditor[ImageObj, ImageROI, MaskedImageItem]):
+class ImageROIEditor(
+    BaseROIEditor[
+        ImageObj,
+        ImageROI,
+        MaskedImageItem,
+        AnnotatedPolygon | AnnotatedRectangle | AnnotatedCircle,
+    ]
+):
     """Image ROI Editor"""
 
     ICON_NAME = "image_roi.svg"
     OBJ_NAME = _("image")
     ROI_ITEM_TYPES = (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon)
+
+    def get_obj_roi_class(self) -> type[ImageROI]:
+        """Get object ROI class"""
+        return ImageROI
 
     def add_tools_to_plot_dialog(self) -> None:
         """Add tools to plot dialog"""

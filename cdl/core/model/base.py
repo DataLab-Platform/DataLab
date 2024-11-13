@@ -43,10 +43,12 @@ if TYPE_CHECKING:
         AbstractShape,
         AnnotatedCircle,
         AnnotatedEllipse,
+        AnnotatedPolygon,
         AnnotatedRectangle,
         CurveItem,
         Marker,
         MaskedImageItem,
+        XRangeSelection,
     )
     from plotpy.styles import AnnotationParam, ShapeParam
 
@@ -182,7 +184,7 @@ def config_annotated_shape(
     lbl: bool,
     section: str | None = None,
     option: str | None = None,
-    cmp: bool | None = None,
+    show_computations: bool | None = None,
 ):
     """Configurate annotated shape.
 
@@ -192,13 +194,13 @@ def config_annotated_shape(
         lbl: Show label
         section: Shape style section (e.g. "plot")
         option: Shape style option (e.g. "shape/drag")
-        cmp: Show computations
+        show_computations: Show computations
     """
     param: AnnotationParam = item.annotationparam
     param.format = fmt
     param.show_label = lbl
-    if cmp is not None:
-        param.show_computations = cmp
+    if show_computations is not None:
+        param.show_computations = show_computations
 
     if isinstance(item, AnnotatedSegment):
         item.label.labelparam.anchor = "T"
@@ -921,6 +923,10 @@ TypeROI = TypeVar("TypeROI", bound="BaseROI")
 TypeROIParam = TypeVar("TypeROIParam", bound="BaseROIParam")
 TypeObj = TypeVar("TypeObj", bound="BaseObj")
 TypePlotItem = TypeVar("TypePlotItem", bound="CurveItem | MaskedImageItem")
+TypeROIItem = TypeVar(
+    "TypeROIItem",
+    bound="XRangeSelection | AnnotatedPolygon | AnnotatedRectangle | AnnotatedCircle",
+)
 
 
 class BaseROIParamMeta(abc.ABCMeta, gds.DataSetMeta):
@@ -945,7 +951,7 @@ class BaseROIParam(
         """
 
 
-class BaseSingleROI(Generic[TypeObj, TypeROIParam], abc.ABC):
+class BaseSingleROI(Generic[TypeObj, TypeROIParam, TypeROIItem], abc.ABC):
     """Base class for single ROI
 
     Args:
@@ -1033,7 +1039,7 @@ class BaseSingleROI(Generic[TypeObj, TypeROIParam], abc.ABC):
         """
 
     @abc.abstractmethod
-    def to_plot_item(self, obj: TypeObj, title: str | None = None) -> AbstractShape:
+    def to_plot_item(self, obj: TypeObj, title: str | None = None) -> TypeROIItem:
         """Make ROI plot item from ROI.
 
         Args:
@@ -1082,7 +1088,7 @@ class BaseSingleROI(Generic[TypeObj, TypeROIParam], abc.ABC):
         return cls(dictdata["coords"], dictdata["indices"], dictdata["title"])
 
 
-class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):
+class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam, TypeROIItem], abc.ABC):
     """Abstract base class for ROIs (Regions of Interest)
 
     Args:
@@ -1218,7 +1224,7 @@ class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):
 
     def iterate_roi_items(
         self, obj: TypeObj, fmt: str, lbl: bool, editable: bool = True
-    ) -> Iterator:
+    ) -> Iterator[TypeROIItem]:
         """Iterate over ROI plot items associated to each single ROI composing
         the object.
 

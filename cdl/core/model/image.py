@@ -15,7 +15,7 @@ import abc
 import enum
 import re
 from collections.abc import ByteString, Mapping, Sequence
-from typing import TYPE_CHECKING, Any, Literal, Type
+from typing import TYPE_CHECKING, Any, Generic, Literal, Type
 from uuid import uuid4
 
 import guidata.dataset as gds
@@ -188,7 +188,11 @@ class ROI2DParam(base.BaseROIParam["ImageObj", "BaseSingleImageROI"]):
         return obj.data[y0:y1, x0:x1]
 
 
-class BaseSingleImageROI(base.BaseSingleROI["ImageObj", ROI2DParam], abc.ABC):
+class BaseSingleImageROI(
+    base.BaseSingleROI["ImageObj", ROI2DParam, base.TypeROIItem],
+    Generic[base.TypeROIItem],
+    abc.ABC,
+):
     """Base class for single image ROI
 
     Args:
@@ -225,7 +229,7 @@ class BaseSingleImageROI(base.BaseSingleROI["ImageObj", ROI2DParam], abc.ABC):
         """
 
 
-class PolygonalROI(BaseSingleImageROI):
+class PolygonalROI(BaseSingleImageROI[AnnotatedPolygon]):
     """Polygonal ROI
 
     Args:
@@ -333,7 +337,7 @@ class PolygonalROI(BaseSingleImageROI):
         return cls(item.get_points(), False, item.annotationparam.title)
 
 
-class RectangularROI(PolygonalROI):
+class RectangularROI(BaseSingleImageROI[AnnotatedRectangle]):
     """Rectangular ROI
 
     Args:
@@ -520,7 +524,7 @@ class RectangularROI(PolygonalROI):
         return cls(cls.rect_to_coords(*rect), False, item.annotationparam.title)
 
 
-class CircularROI(BaseSingleImageROI):
+class CircularROI(BaseSingleImageROI[AnnotatedCircle]):
     """Circular ROI
 
     Args:
@@ -712,7 +716,14 @@ class CircularROI(BaseSingleImageROI):
         return cls(cls.rect_to_coords(*rect), False, item.annotationparam.title)
 
 
-class ImageROI(base.BaseROI["ImageObj", BaseSingleImageROI, ROI2DParam]):
+class ImageROI(
+    base.BaseROI[
+        "ImageObj",
+        BaseSingleImageROI,
+        ROI2DParam,
+        AnnotatedPolygon | AnnotatedRectangle | AnnotatedCircle,
+    ]
+):
     """Image Regions of Interest
 
     Args:
