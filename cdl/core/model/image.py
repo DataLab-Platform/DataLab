@@ -321,7 +321,7 @@ class PolygonalROI(BaseSingleImageROI[AnnotatedPolygon]):
             obj: object (image), for physical-indices coordinates conversion
             title: title
         """
-        item = AnnotatedPolygon(self.get_physical_coords(obj))
+        item = AnnotatedPolygon(self.get_physical_coords(obj).reshape(-1, 2))
         item.annotationparam.title = self.title if title is None else title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
@@ -334,7 +334,7 @@ class PolygonalROI(BaseSingleImageROI[AnnotatedPolygon]):
         Args:
             item: plot item
         """
-        return cls(item.get_points(), False, item.annotationparam.title)
+        return cls(item.get_points().flatten(), False, item.annotationparam.title)
 
 
 class RectangularROI(BaseSingleImageROI[AnnotatedRectangle]):

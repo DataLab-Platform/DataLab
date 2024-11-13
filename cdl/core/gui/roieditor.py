@@ -41,7 +41,7 @@ from plotpy.items import (
     XRangeSelection,
 )
 from plotpy.plot import PlotDialog, PlotManager
-from plotpy.tools import CircleTool, HRangeTool, RectangleTool
+from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -181,7 +181,33 @@ class ROICircleTool(CircleTool):
         item = self.roi.to_plot_item(self.obj)
         return item, 0, 1
 
-    def setup_shape(self, shape: AnnotatedRectangle) -> None:
+    def setup_shape(self, shape: AnnotatedCircle) -> None:
+        """Setup shape"""
+        tool_setup_shape(shape, self.obj)
+
+
+class ROIPolygonTool(PolygonTool):
+    """ROI polygon tool"""
+
+    TITLE = _("Add polygonal ROI")
+    ICON = "roi_new_polygon.svg"
+
+    def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
+        super().__init__(
+            manager,
+            switch_to_default_tool=True,
+            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            setup_shape_cb=tool_setup_shape,
+        )
+        self.roi = PolygonalROI([[0, 0], [1, 0], [1, 1], [0, 1]], True)
+        self.obj = obj
+        self.activate = tool_activate
+
+    def create_shape(self) -> tuple[AnnotatedPolygon, int, int]:
+        """Create shape"""
+        return self.roi.to_plot_item(self.obj)
+
+    def setup_shape(self, shape: AnnotatedPolygon) -> None:
         """Setup shape"""
         tool_setup_shape(shape, self.obj)
 
@@ -446,6 +472,7 @@ class ImageROIEditor(
         mgr.add_toolbar(self.toolbar, ROI_EDITOR_TOOLBAR_ID)
         mgr.add_tool(ROIRectangleTool, self.obj)
         mgr.add_tool(ROICircleTool, self.obj)
+        mgr.add_tool(ROIPolygonTool, self.obj)
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""

@@ -99,6 +99,11 @@ def test_create_image_roi() -> None:
             True: [1500, 1500, 500],  # indices [x0, y0, radius]
             False: [1500.5, 1500.5, 500.0],  # physical
         },
+        "polygon": {
+            CLASS_NAME: "PolygonalROI",
+            True: [450, 150, 1300, 350, 1250, 950, 400, 1350],  # indices [x0, y0, ,...]
+            False: [450.5, 150.5, 1300.5, 350.5, 1250.5, 950.5, 400.5, 1350.5],  # phys.
+        },
     }
 
     obj = create_multigauss_image()
@@ -115,14 +120,15 @@ def test_create_image_roi() -> None:
             assert sroi.__class__.__name__ == coords[geometry][CLASS_NAME]
 
             bbox_phys = [float(val) for val in sroi.get_bounding_box(obj)]
-            x0, y0, x1, y1 = obj.physical_to_indices(bbox_phys)
-            if geometry == "rectangle":
-                bbox_ind = [int(xy) for xy in [x0, y0, x1 - x0, y1 - y0]]
-            else:
-                bbox_ind = [
-                    int(xy) for xy in [(x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2]
-                ]
-            assert bbox_ind == coords[geometry][True]
+            if geometry in ("rectangle", "circle"):
+                x0, y0, x1, y1 = obj.physical_to_indices(bbox_phys)
+                if geometry == "rectangle":
+                    coords_from_bbox = [int(xy) for xy in [x0, y0, x1 - x0, y1 - y0]]
+                elif geometry == "circle":
+                    coords_from_bbox = [
+                        int(xy) for xy in [(x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2]
+                    ]
+                assert coords_from_bbox == coords[geometry][True]
 
             cds_phys = [float(val) for val in sroi.get_physical_coords(obj)]
             assert cds_phys == coords[geometry][False]
