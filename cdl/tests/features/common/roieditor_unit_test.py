@@ -48,24 +48,35 @@ def test_image_roi_editor():
     obj.roi = roi
     with qt_app_context(exec_loop=False):
         execenv.print(title)
-        dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
-        roi_editor = cls(dlg, obj, extract=True)
-        dlg.button_layout.insertWidget(0, roi_editor)
-        if exec_dialog(dlg):
-            results = roi_editor.get_roieditor_results()
-            if results is not None:
-                edited_roi, _modified = results
-                assert all(
-                    [
-                        np.array_equal(
-                            sroi1.get_physical_coords(obj),
-                            sroi2.get_physical_coords(obj),
-                        )
-                        for sroi1, sroi2 in zip(
-                            obj.roi.single_rois, edited_roi.single_rois
-                        )
-                    ]
-                ), "Single ROIs are not equal"
+        for extract in (True, False):
+            execenv.print(f"  extract={extract}")
+            dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
+            roi_editor = cls(dlg, obj, extract=extract)
+            dlg.button_layout.insertWidget(0, roi_editor)
+            if not extract:
+                # Clear the ROI
+                roi_editor.remove_all_rois()
+            if exec_dialog(dlg):
+                results = roi_editor.get_roieditor_results()
+                if results is not None:
+                    edited_roi, modified = results
+                    if extract:
+                        # Test that the single ROIs are equal
+                        assert all(
+                            [
+                                np.array_equal(
+                                    sroi1.get_physical_coords(obj),
+                                    sroi2.get_physical_coords(obj),
+                                )
+                                for sroi1, sroi2 in zip(
+                                    obj.roi.single_rois, edited_roi.single_rois
+                                )
+                            ]
+                        ), "Single ROIs are not equal"
+                    else:
+                        # Test the use case where the ROI is cleared
+                        assert modified, "ROI is not modified"
+                        assert edited_roi.is_empty(), "ROI is not cleared"
 
 
 if __name__ == "__main__":

@@ -1053,9 +1053,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             or group.edit(parent=self.panel.parent())  # ROI dialog has been accepted
         ):
             if modified:
-                edited_roi = edited_roi.from_params(obj, group)
                 # If ROI has been modified, save ROI (even in "extract mode")
-                obj.roi = edited_roi
+                if edited_roi.is_empty():
+                    obj.roi = None
+                else:
+                    edited_roi = edited_roi.from_params(obj, group)
+                    obj.roi = edited_roi
                 self.SIG_ADD_SHAPE.emit(obj.uuid)
                 self.panel.selection_changed(update_items=True)
         return edited_roi

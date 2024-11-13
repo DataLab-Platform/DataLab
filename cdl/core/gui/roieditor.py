@@ -56,6 +56,7 @@ from cdl.core.model.base import (
 )
 from cdl.core.model.image import CircularROI, PolygonalROI, RectangularROI
 from cdl.core.model.signal import SegmentROI
+from cdl.env import execenv
 from cdl.obj import ImageObj, ImageROI, SignalObj, SignalROI
 
 if TYPE_CHECKING:
@@ -330,7 +331,7 @@ class BaseROIEditor(
 
     def remove_all_rois(self) -> None:
         """Remove all ROIs"""
-        if QW.QMessageBox.question(
+        if execenv.unattended or QW.QMessageBox.question(
             self,
             _("Remove all ROIs"),
             _("Are you sure you want to remove all ROIs?"),
