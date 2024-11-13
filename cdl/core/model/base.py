@@ -875,7 +875,9 @@ def configure_roi_item(
     option += "/" + ("editable" if editable else "readonly")
     if not editable:
         if isinstance(item, AnnotatedShape):
-            config_annotated_shape(item, fmt, lbl, "roi", option, cmp=editable)
+            config_annotated_shape(
+                item, fmt, lbl, "roi", option, show_computations=editable
+            )
         item.set_movable(False)
         item.set_resizable(False)
         item.set_readonly(True)
