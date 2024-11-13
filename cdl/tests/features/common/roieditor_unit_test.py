@@ -9,7 +9,7 @@ ROI editor unit test
 
 from __future__ import annotations
 
-import qtpy.QtWidgets as QW
+import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 from plotpy.plot import PlotDialog
 
@@ -49,11 +49,25 @@ def test_image_roi_editor():
     with qt_app_context(exec_loop=False):
         execenv.print(title)
         dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
-        editor = cls(dlg, obj, extract=True)
-        dlg.button_layout.insertWidget(0, editor)
-        exec_dialog(dlg)
+        roi_editor = cls(dlg, obj, extract=True)
+        dlg.button_layout.insertWidget(0, roi_editor)
+        if exec_dialog(dlg):
+            results = roi_editor.get_roieditor_results()
+            if results is not None:
+                edited_roi, _modified = results
+                assert all(
+                    [
+                        np.array_equal(
+                            sroi1.get_physical_coords(obj),
+                            sroi2.get_physical_coords(obj),
+                        )
+                        for sroi1, sroi2 in zip(
+                            obj.roi.single_rois, edited_roi.single_rois
+                        )
+                    ]
+                ), "Single ROIs are not equal"
 
 
 if __name__ == "__main__":
-    test_signal_roi_editor()
+    # test_signal_roi_editor()
     test_image_roi_editor()

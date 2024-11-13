@@ -701,8 +701,7 @@ class CircularROI(BaseSingleImageROI[AnnotatedCircle]):
         Returns:
             Circle coordinates
         """
-        xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
-        r = 0.5 * ((x1 - x0) + (y1 - y0))
+        xc, yc, r = 0.5 * (x0 + x1), 0.5 * (y0 + y1), 0.5 * (x1 - x0)
         return np.array([xc, yc, r], dtype=type(x0))
 
     @classmethod
