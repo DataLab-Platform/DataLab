@@ -103,9 +103,10 @@ class ProcSettings(gds.DataSet):
             "<ul><li><b>single</b>: single operand mode</li>"
             "<li><b>pairwise</b>: pairwise operation mode</li></ul>"
             "<br>Computations taking <i>N</i> inputs are the ones where:"
-            "<ul><li>N(>=2) objects in → 1 object out</li>"
-            "<li>N(>=1) objects + 1 object in → N objects out</li></ul>"
-        ),
+            "<ul><li>N(>=2) objects in %s 1 object out</li>"
+            "<li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
+        )
+        % ("→", "→"),
     )
     fft_shift_enabled = gds.BoolItem("", _("FFT shift"))
     extract_roi_singleobj = gds.BoolItem("", _("Extract ROI in single object"))

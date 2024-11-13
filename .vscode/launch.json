@@ -22,7 +22,7 @@
             ],
             "env": {
                 // "DEBUG": "1",
-                "LANG": "en",
+                // "LANG": "en",
                 // "QT_COLOR_MODE": "light",
             }
         },
