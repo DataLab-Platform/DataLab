@@ -31,9 +31,8 @@ def test_signal_roi_editor():
     obj.roi = roi
     with qt_app_context(exec_loop=False):
         execenv.print(title)
-        toolbar = QW.QToolBar()
         dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
-        editor = cls(dlg, toolbar, obj, extract=True)
+        editor = cls(dlg, obj, extract=True)
         dlg.button_layout.insertWidget(0, editor)
         exec_dialog(dlg)
 
@@ -49,9 +48,8 @@ def test_image_roi_editor():
     obj.roi = roi
     with qt_app_context(exec_loop=False):
         execenv.print(title)
-        toolbar = QW.QToolBar()
         dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
-        editor = cls(dlg, toolbar, obj, extract=True)
+        editor = cls(dlg, obj, extract=True)
         dlg.button_layout.insertWidget(0, editor)
         exec_dialog(dlg)
 

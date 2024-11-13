@@ -203,7 +203,6 @@ class BaseROIEditor(
     def __init__(
         self,
         parent: PlotDialog,
-        toolbar: QW.QToolBar,
         obj: TypeObj,
         extract: bool,
         item: TypePlotItem | None = None,
@@ -212,7 +211,7 @@ class BaseROIEditor(
         self.plot_dialog = parent
         parent.accepted.connect(self.dialog_accepted)
         self.plot = parent.get_plot()
-        self.toolbar = toolbar
+        self.toolbar = QW.QToolBar(self)
         self.obj = obj
         self.extract = extract
         self.__modified: bool | None = None
