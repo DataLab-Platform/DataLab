@@ -4,8 +4,38 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ## DataLab Version 0.18.0 ##
 
-ℹ️ PlotPy v2.7 is required for this release.
-ℹ️ Dropped support for Python 3.8
+ℹ️ General information:
+
+* PlotPy v2.7 is required for this release.
+* Dropped support for Python 3.8.
+* Python 3.13 is not supported yet, due to the fact that some dependencies are not compatible with this version.
+
+💥 New features and enhancements:
+
+* New operation mode feature:
+  * Added "Operation mode" feature to the "Processing" tab in the "Settings" dialog box
+  * This feature allows to choose between "single" and "pairwise" operation modes for all basic operations (addition, subtraction, multiplication, division, etc.):
+    * "Single" mode: single operand mode (default mode: the operation is done on each object independently)
+    * "Pairwise" mode: pairwise operand mode (the operation is done on each pair of objects)
+  * This applies to both signals and images, and to computations taking *N* inputs
+  * Computations taking *N* inputs are the ones where:
+    * *N(>=2)* objects in give *N* objects out
+    * *N(>=1)* object(s) + 1 object in give N objects out
+
+* New ROI (Region Of Interest) features:
+  * New polygonal ROI feature
+  * Complete redesign of the ROI editor user interfaces, improving ergonomics and consistency with the rest of the application
+  * Major internal refactoring of the ROI system to make it more robust (more tests) and easier to maintain
+
+* Implemented [Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Launch DataLab using `datalab` instead of `cdl`. Note that the `cdl` command is still available for backward compatibility.
+
+* Implemented [Issue #101](https://github.com/DataLab-Platform/DataLab/issues/101) - Configuration: set default image interpolation to anti-aliasing (`5` instead of `0` for nearest). This change is motivated by the fact that a performance improvement was made in PlotPy v2.7 on Windows, which allows to use anti-aliasing interpolation by default without a significant performance impact.
+
+* Implemented [Issue #100](https://github.com/DataLab-Platform/DataLab/issues/100) - Use the same installer and executable on Windows 7 SP1, 8, 10, 11. Before this change, a specific installer was required for Windows 7 SP1, due to the fact that Python 3.9 and later versions are not supported on this platform. A workaround was implemented to make DataLab work on Windows 7 SP1 with Python 3.9.
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #103](https://github.com/DataLab-Platform/DataLab/issues/103) - `proxy.add_annotations_from_items`: circle shape color seems to be ignored.
 
 ## DataLab Version 0.17.1 ##
 
