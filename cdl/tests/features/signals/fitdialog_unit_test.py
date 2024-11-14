@@ -10,7 +10,7 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 
 from guidata.qthelpers import qt_app_context
 
-from cdl.algorithms.signal import peak_indexes
+from cdl.algorithms.signal import peak_indices
 from cdl.env import execenv
 from cdl.tests.data import GaussianNoiseParam, create_noisy_signal, get_test_signal
 from cdl.utils.tests import get_default_test_name
@@ -22,7 +22,7 @@ def test_fit_dialog():
     with qt_app_context():
         # Multi-gaussian curve fitting test
         s = get_test_signal("paracetamol.txt")
-        peakidx = peak_indexes(s.y)
+        peakidx = peak_indices(s.y)
         execenv.print(
             fdlg.multigaussianfit(s.x, s.y, peakidx, name=get_default_test_name("00"))
         )

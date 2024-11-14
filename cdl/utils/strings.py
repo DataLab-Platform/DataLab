@@ -64,7 +64,5 @@ def shorten_docstring(docstring: str) -> str:
     """
     shorter = docstring.split("\n")[0].strip() if docstring else "-"
     for suffix in (".", ":", ",", "using", "with"):
-        # TODO: Use string.removesuffix() when we drop Python 3.8 support
-        if shorter.endswith(suffix):
-            shorter = shorter[: -len(suffix)]
+        shorter.removesuffix(suffix)
     return shorter

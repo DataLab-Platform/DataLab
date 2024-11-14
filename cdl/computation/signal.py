@@ -534,7 +534,7 @@ class PeakDetectionParam(gds.DataSet):
 
 
 def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
-    """Peak detection with :py:func:`cdl.algorithms.signal.peak_indexes`
+    """Peak detection with :py:func:`cdl.algorithms.signal.peak_indices`
 
     Args:
         src: source signal
@@ -547,8 +547,8 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
         src, "peak_detection", f"threshold={p.threshold}%, min_dist={p.min_dist}pts"
     )
     x, y = src.get_data()
-    indexes = alg.peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
-    dst.set_xydata(x[indexes], y[indexes])
+    indices = alg.peak_indices(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
+    dst.set_xydata(x[indices], y[indices])
     dst.metadata["curvestyle"] = "Sticks"
     return dst
 
@@ -1266,7 +1266,7 @@ def calc_resultshape(
         or a tuple) containing the result of the computation.
     """
     res = []
-    for i_roi in obj.iterate_roi_indexes():
+    for i_roi in obj.iterate_roi_indices():
         data_roi = obj.get_data(i_roi)
         if args is None:
             results: np.ndarray = func(data_roi)
@@ -1282,7 +1282,7 @@ def calc_resultshape(
                 raise ValueError(
                     "The computation function must return a 1D NumPy array"
                 )
-            results = np.array([i_roi] + results.tolist())
+            results = np.array([0 if i_roi is None else i_roi] + results.tolist())
             res.append(results)
     if res:
         return ResultShape(title, np.vstack(res), shape, add_label=add_label)

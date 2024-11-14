@@ -60,9 +60,10 @@ def run_beautiful_scenario(screenshots: bool = False):
         panel.processor.compute_white_tophat(dlp.MorphologyParam())
         panel.processor.compute_denoise_tv(dlp.DenoiseTVParam())
         n = data_size // 3
-        panel.processor.compute_roi_extraction(
-            dlp.ROIDataParam.create(roidata=[[n, n, data_size - n, data_size - n]])
+        roi = dlo.create_image_roi(
+            "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
+        panel.processor.compute_roi_extraction(roi)
         if screenshots:
             win.take_screenshot("i_beautiful")
             win.take_menu_screenshots()

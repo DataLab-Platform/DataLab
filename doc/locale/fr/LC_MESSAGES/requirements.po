@@ -43,7 +43,7 @@ msgid "Python"
 msgstr "Python"
 
 #: ../../doc/requirements.rst:11
-msgid ">=3.8, <4"
+msgid ">=3.9, <4"
 msgstr ""
 
 #: ../../doc/requirements.rst:12

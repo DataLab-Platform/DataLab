@@ -12,7 +12,7 @@ Signal object and related classes
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Generator
+from typing import TYPE_CHECKING, Generator, Type
 from uuid import uuid4
 
 import guidata.dataset as gds
@@ -21,8 +21,8 @@ import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset, update_dataset
 from guidata.qthelpers import exec_dialog
-from numpy import ma
 from plotpy.builder import make
+from plotpy.items import CurveItem, XRangeSelection
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
 
@@ -31,7 +31,6 @@ from cdl.config import Conf, _
 from cdl.core.model import base
 
 if TYPE_CHECKING:
-    from plotpy.items import CurveItem
     from plotpy.plot import PlotDialog
     from plotpy.styles import CurveParam
 
@@ -103,11 +102,25 @@ class CurveStyles:
 CURVESTYLES = CurveStyles()  # This is the unique instance of the CurveStyles class
 
 
-class ROI1DParam(gds.DataSet):
+class ROI1DParam(base.BaseROIParam["SignalObj", "SegmentROI"]):
     """Signal ROI parameters"""
+
+    # Note: in this class, the ROI parameters are stored as X coordinates
 
     xmin = gds.FloatItem(_("First point coordinate"))
     xmax = gds.FloatItem(_("Last point coordinate"))
+
+    def to_single_roi(self, obj: SignalObj, title: str = "") -> SegmentROI:
+        """Convert parameters to single ROI
+
+        Args:
+            obj: signal object
+            title: ROI title
+
+        Returns:
+            Single ROI
+        """
+        return SegmentROI([self.xmin, self.xmax], False, title=title)
 
     def get_data(self, obj: SignalObj) -> np.ndarray:
         """Get signal data in ROI
@@ -120,6 +133,162 @@ class ROI1DParam(gds.DataSet):
         """
         imin, imax = np.searchsorted(obj.x, [self.xmin, self.xmax])
         return np.array([obj.x[imin:imax], obj.y[imin:imax]])
+
+
+class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam, XRangeSelection]):
+    """Segment ROI
+
+    Args:
+        coords: ROI coordinates (xmin, xmax)
+        title: ROI title
+    """
+
+    # Note: in this class, the ROI parameters are stored as X indices
+
+    def check_coords(self) -> None:
+        """Check if coords are valid
+
+        Raises:
+            ValueError: invalid coords
+        """
+        if len(self.coords) != 2:
+            raise ValueError("Invalid ROI segment coords (2 values expected)")
+        if self.coords[0] >= self.coords[1]:
+            raise ValueError("Invalid ROI segment coords (xmin >= xmax)")
+
+    def get_data(self, obj: SignalObj) -> np.ndarray:
+        """Get signal data in ROI
+
+        Args:
+            obj: signal object
+
+        Returns:
+            Data in ROI
+        """
+        imin, imax = self.get_indices_coords(obj)
+        return np.array([obj.x[imin:imax], obj.y[imin:imax]])
+
+    def to_mask(self, obj: SignalObj) -> np.ndarray:
+        """Create mask from ROI
+
+        Args:
+            obj: signal object
+
+        Returns:
+            Mask (boolean array where True values are inside the ROI)
+        """
+
+        mask = np.ones_like(obj.xydata, dtype=bool)
+        imin, imax = self.get_indices_coords(obj)
+        mask[:, imin:imax] = False
+        return mask
+
+    # pylint: disable=unused-argument
+    def to_param(self, obj: SignalObj, title: str | None = None) -> ROI1DParam:
+        """Convert ROI to parameters
+
+        Args:
+            obj: object (signal), for physical-indices coordinates conversion
+            title: ROI title
+        """
+        title = title or self.title
+        param = ROI1DParam(title)
+        param.xmin, param.xmax = self.get_physical_coords(obj)
+        return param
+
+    # pylint: disable=unused-argument
+    def to_plot_item(self, obj: SignalObj, title: str | None = None) -> XRangeSelection:
+        """Make and return the annnotated segment associated with the ROI
+
+        Args:
+            obj: object (signal), for physical-indices coordinates conversion
+            title: title
+        """
+        xmin, xmax = self.get_physical_coords(obj)
+        item = make.range(xmin, xmax)
+        return item
+
+    @classmethod
+    def from_plot_item(cls: SegmentROI, item: XRangeSelection) -> SegmentROI:
+        """Create ROI from plot item
+
+        Args:
+            item: plot item
+
+        Returns:
+            ROI
+        """
+        if not isinstance(item, XRangeSelection):
+            raise TypeError("Invalid plot item type")
+        return cls(item.get_range(), False)
+
+
+class SignalROI(base.BaseROI["SignalObj", SegmentROI, ROI1DParam, XRangeSelection]):
+    """Signal Regions of Interest
+
+    Args:
+        singleobj: if True, when extracting data defined by ROIs, only one object
+         is created (default to True). If False, one object is created per single ROI.
+         If None, the value is get from the user configuration
+        inverse: if True, ROI is outside the region
+    """
+
+    PREFIX = "s"
+
+    @staticmethod
+    def get_compatible_single_roi_classes() -> list[Type[SegmentROI]]:
+        """Return compatible single ROI classes"""
+        return [SegmentROI]
+
+    def to_mask(self, obj: SignalObj) -> np.ndarray[bool]:
+        """Create mask from ROI
+
+        Args:
+            obj: signal object
+
+        Returns:
+            Mask (boolean array where True values are inside the ROI)
+        """
+        mask = np.ones_like(obj.xydata, dtype=bool)
+        for roi in self.single_rois:
+            mask &= roi.to_mask(obj)
+        return mask
+
+
+def create_signal_roi(
+    coords: np.ndarray | list[float, float] | list[list[float, float]],
+    indices: bool = False,
+    singleobj: bool | None = None,
+    inverse: bool = False,
+    title: str = "",
+) -> SignalROI:
+    """Create Signal Regions of Interest (ROI) object.
+    More ROIs can be added to the object after creation, using the `add_roi` method.
+
+    Args:
+        coords: single ROI coordinates `[xmin, xmax]`, or multiple ROIs coordinates
+         `[[xmin1, xmax1], [xmin2, xmax2], ...]` (lists or NumPy arrays)
+        indices: if True, coordinates are indices, if False, they are physical values
+         (default to False for signals)
+        singleobj: if True, when extracting data defined by ROIs, only one object
+         is created (default to True). If False, one object is created per single ROI.
+         If None, the value is get from the user configuration
+        inverse: if True, ROI is outside the region
+        title: title
+
+    Returns:
+        Regions of Interest (ROI) object
+
+    Raises:
+        ValueError: if the number of coordinates is not even
+    """
+    coords = np.array(coords, float)
+    if coords.ndim == 1:
+        coords = coords.reshape(1, -1)
+    roi = SignalROI(singleobj, inverse)
+    for row in coords:
+        roi.add_roi(SegmentROI(row, indices=indices, title=title))
+    return roi
 
 
 def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
@@ -142,7 +311,7 @@ def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
         item.update_data()
 
 
-class SignalObj(gds.DataSet, base.BaseObj):
+class SignalObj(gds.DataSet, base.BaseObj[SignalROI, CurveItem]):
     """Signal object"""
 
     PREFIX = "s"
@@ -214,7 +383,11 @@ class SignalObj(gds.DataSet, base.BaseObj):
         gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
         self.regenerate_uuid()
-        self._maskdata_cache = None
+
+    @staticmethod
+    def get_roi_class() -> Type[SignalROI]:
+        """Return ROI class"""
+        return SignalROI
 
     def regenerate_uuid(self):
         """Regenerate UUID
@@ -353,8 +526,8 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """
         if self.roi is None or roi_index is None:
             return self.x, self.y
-        i1, i2 = self.roi[roi_index, :]
-        return self.x[i1:i2], self.y[i1:i2]
+        single_roi = self.roi.get_single_roi(roi_index)
+        return single_roi.get_data(self)
 
     def update_plot_item_parameters(self, item: CurveItem) -> None:
         """Update plot item parameters from object data/metadata
@@ -388,7 +561,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         restore_dataset(item.param.line, self.metadata)
         restore_dataset(item.param.symbol, self.metadata)
 
-    def make_item(self, update_from: CurveItem = None) -> CurveItem:
+    def make_item(self, update_from: CurveItem | None = None) -> CurveItem:
         """Make plot item from data.
 
         Args:
@@ -439,134 +612,30 @@ class SignalObj(gds.DataSet, base.BaseObj):
         apply_downsampling(item)
         self.update_plot_item_parameters(item)
 
-    def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
-        """Convert ROI coordinates to indexes.
+    def physical_to_indices(self, coords: list[float] | np.ndarray) -> np.ndarray:
+        """Convert coordinates from physical (real world) to (array) indices (pixel)
 
         Args:
             coords: coordinates
 
         Returns:
-            Indexes
+            Indices
         """
-        indexes = np.array(coords, int)
-        for row in range(indexes.shape[0]):
-            for col in range(indexes.shape[1]):
-                x0 = coords[row][col]
-                indexes[row, col] = np.abs(self.x - x0).argmin()
-        return indexes
+        self.x: np.ndarray
+        return np.array([np.abs(self.x - x).argmin() for x in coords])
 
-    def get_roi_param(self, title: str, *defaults: int) -> ROI1DParam:
-        """Return ROI parameters dataset (converting ROI point indexes to coordinates)
+    def indices_to_physical(self, indices: list[int] | np.ndarray) -> np.ndarray:
+        """Convert coordinates from (array) indices to physical (real world)
 
         Args:
-            title: title
-            *defaults: default values (first, last point indexes)
+            indices: indices
 
         Returns:
-            ROI parameters dataset (containing the ROI coordinates: first and last X)
-        """
-        i0, i1 = defaults
-        param = ROI1DParam(title)
-        param.xmin = self.x[i0]
-        param.xmax = self.x[i1]
-        param.set_global_prop("data", unit=self.xunit)
-        return param
-
-    def params_to_roidata(self, params: gds.DataSetGroup) -> np.ndarray:
-        """Convert ROI dataset group to ROI array data.
-
-        Args:
-            params: ROI dataset group
-
-        Returns:
-            ROI array data
-        """
-        roilist = []
-        for roiparam in params.datasets:
-            roiparam: ROI1DParam
-            idx1 = np.searchsorted(self.x, roiparam.xmin)
-            idx2 = np.searchsorted(self.x, roiparam.xmax)
-            roilist.append([idx1, idx2])
-        if len(roilist) == 0:
-            return None
-        return np.array(roilist, int)
-
-    def new_roi_item(self, fmt: str, lbl: bool, editable: bool):
-        """Return a new ROI item from scratch
-
-        Args:
-            fmt: format string
-            lbl: if True, add label
-            editable: if True, ROI is editable
+            Coordinates
         """
         # We take the real part of the x data to avoid `ComplexWarning` warnings
         # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
-        xmin, xmax = self.x.real.min(), self.x.real.max()
-        xdelta = (xmax - xmin) * 0.2
-        coords = xmin + xdelta, xmax - xdelta
-        return base.make_roi_item(
-            lambda x, y, _title: make.range(x, y),
-            coords,
-            "ROI",
-            fmt,
-            lbl,
-            editable,
-            option=self.PREFIX,
-        )
-
-    def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
-        """Make plot item representing a Region of Interest.
-
-        Args:
-            fmt: format string
-            lbl: if True, add label
-            editable: if True, ROI is editable
-
-        Yields:
-            Plot item
-        """
-        if self.roi is not None:
-            # We take the real part of the x data to avoid `ComplexWarning` warnings
-            # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
-            for index, coords in enumerate(self.x.real[self.roi]):
-                yield base.make_roi_item(
-                    lambda x, y, _title: make.range(x, y),
-                    coords,
-                    f"ROI{index:02d}",
-                    fmt,
-                    lbl,
-                    editable,
-                    option=self.PREFIX,
-                )
-
-    @property
-    def maskdata(self) -> np.ndarray:
-        """Return masked data (areas outside defined regions of interest)
-
-        Returns:
-            Masked data
-        """
-        roi_changed = self.roi_has_changed()
-        if self.roi is None:
-            if roi_changed:
-                self._maskdata_cache = None
-        elif roi_changed or self._maskdata_cache is None:
-            mask = np.ones_like(self.xydata, dtype=bool)
-            for roirow in self.roi:
-                mask[:, roirow[0] : roirow[1]] = False
-            self._maskdata_cache = mask
-        return self._maskdata_cache
-
-    def get_masked_view(self) -> ma.MaskedArray:
-        """Return masked view for data
-
-        Returns:
-            Masked view
-        """
-        self.data: np.ndarray
-        view = self.data.view(ma.MaskedArray)
-        view.mask = self.maskdata
-        return view
+        return self.x.real[indices]
 
     def add_label_with_title(self, title: str | None = None) -> None:
         """Add label with title annotation

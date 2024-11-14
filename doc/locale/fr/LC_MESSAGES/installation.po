@@ -50,7 +50,7 @@ msgid "Python"
 msgstr ""
 
 #: ../../install_requires.txt:7
-msgid "3.8"
+msgid "3.9"
 msgstr ""
 
 #: ../../install_requires.txt:8
@@ -130,8 +130,8 @@ msgid "1.9"
 msgstr ""
 
 #: ../../installation.rst:15
-msgid "Python 3.8 is the reference for production release"
-msgstr "Python 3.8 est la référence de la version de production"
+msgid "Python 3.10 is the reference for production release"
+msgstr "Python 3.10 est la référence de la version de production"
 
 #: ../../installation.rst:17
 msgid "Optional modules for development and testing:"

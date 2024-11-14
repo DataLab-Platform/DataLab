@@ -233,11 +233,12 @@ class AbstractHostWindow(AbstractClientWindow):  # pylint: disable=abstract-meth
 
     def import_object(self, panel, title):
         """Import object from DataLab"""
-        self.host.log(f"get_object_with_dialog ({title}):")
-        obj = panel.get_object_with_dialog(title, parent=self.host)
-        if obj is not None:
-            self.host.log(f"  -> {obj.title}:")
-            self.host.log(str(obj))
+        self.host.log(f"get_objects_with_dialog ({title}):")
+        objs = panel.get_objects_with_dialog(title, parent=self.host)
+        if objs is not None:
+            for obj in objs:
+                self.host.log(f"  -> {obj.title}:")
+                self.host.log(str(obj))
         else:
             self.host.log("  -> canceled")
 

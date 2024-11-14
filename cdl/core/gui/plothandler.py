@@ -29,25 +29,26 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Iterator
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Generic, TypeVar
 from weakref import WeakKeyDictionary
 
 import numpy as np
 from plotpy.constants import PlotType
-from plotpy.items import GridItem, LegendBoxItem
+from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedImageItem
 from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
+from cdl.core.model.base import TypeObj, TypePlotItem
+from cdl.core.model.image import ImageObj
+from cdl.core.model.signal import SignalObj
 from cdl.utils.qthelpers import block_signals, create_progress_bar
 
 if TYPE_CHECKING:
-    from plotpy.items import CurveItem, LabelItem, MaskedImageItem
+    from plotpy.items import LabelItem
     from plotpy.plot import BasePlot, PlotWidget
 
     from cdl.core.gui.panel.base import BaseDataPanel
-    from cdl.core.model.image import ImageObj
-    from cdl.core.model.signal import SignalObj
 
 
 def calc_data_hash(obj: SignalObj | ImageObj) -> str:
@@ -55,7 +56,10 @@ def calc_data_hash(obj: SignalObj | ImageObj) -> str:
     return hashlib.sha1(np.ascontiguousarray(obj.data)).hexdigest()
 
 
-class BasePlotHandler:
+TypePlotHandler = TypeVar("TypePlotHandler", bound="BasePlotHandler")
+
+
+class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
     """Object handling plot items associated to objects (signals/images)"""
 
     PLOT_TYPE: PlotType | None = None  # Replaced in subclasses
@@ -70,10 +74,10 @@ class BasePlotHandler:
         self.plot = plotwidget.get_plot()
 
         # Plot items: key = object uuid, value = plot item
-        self.__plotitems: dict[str, CurveItem | MaskedImageItem] = {}
+        self.__plotitems: dict[str, TypePlotItem] = {}
 
         self.__shapeitems = []
-        self.__cached_hashes: WeakKeyDictionary[SignalObj | ImageObj, list[int]] = (
+        self.__cached_hashes: WeakKeyDictionary[TypeObj, list[int]] = (
             WeakKeyDictionary()
         )
         self.__auto_refresh = False
@@ -86,7 +90,7 @@ class BasePlotHandler:
         """Return number of items"""
         return len(self.__plotitems)
 
-    def __getitem__(self, oid: str) -> CurveItem | MaskedImageItem:
+    def __getitem__(self, oid: str) -> TypePlotItem:
         """Return item associated to object uuid"""
         try:
             return self.__plotitems[oid]
@@ -100,17 +104,13 @@ class BasePlotHandler:
             # Item does not exist and auto refresh is enabled: this should not happen
             raise exc
 
-    def get(
-        self, key: str, default: CurveItem | MaskedImageItem | None = None
-    ) -> CurveItem | MaskedImageItem | None:
+    def get(self, key: str, default: TypePlotItem | None = None) -> TypePlotItem | None:
         """Return item associated to object uuid.
         If the key is not found, default is returned if given,
         otherwise None is returned."""
         return self.__plotitems.get(key, default)
 
-    def get_obj_from_item(
-        self, item: CurveItem | MaskedImageItem
-    ) -> SignalObj | ImageObj | None:
+    def get_obj_from_item(self, item: TypePlotItem) -> TypeObj | None:
         """Return object associated to plot item
 
         Args:
@@ -124,11 +124,11 @@ class BasePlotHandler:
                 return obj
         return None
 
-    def __setitem__(self, oid: str, item: CurveItem | MaskedImageItem) -> None:
+    def __setitem__(self, oid: str, item: TypePlotItem) -> None:
         """Set item associated to object uuid"""
         self.__plotitems[oid] = item
 
-    def __iter__(self) -> Iterator[CurveItem | MaskedImageItem]:
+    def __iter__(self) -> Iterator[TypePlotItem]:
         """Return an iterator over plothandler values (plot items)"""
         return iter(self.__plotitems.values())
 
@@ -201,33 +201,33 @@ class BasePlotHandler:
             self.plot.del_items(self.__shapeitems)
         self.__shapeitems = []
 
-    def __add_item_to_plot(self, oid: str) -> CurveItem | MaskedImageItem:
+    def __add_item_to_plot(self, oid: str) -> TypePlotItem:
         """Make plot item and add it to plot.
 
         Args:
-            oid (str): object uuid
+            oid: object uuid
 
         Returns:
-            CurveItem | MaskedImageItem: plot item
+            Plot item
         """
         obj = self.panel.objmodel[oid]
         self.__cached_hashes[obj] = calc_data_hash(obj)
-        item: CurveItem | MaskedImageItem = obj.make_item()
+        item: TypePlotItem = obj.make_item()
         item.set_readonly(True)
         self[oid] = item
         self.plot.add_item(item)
         return item
 
     def __update_item_on_plot(
-        self, oid: str, ref_item: CurveItem | MaskedImageItem, just_show: bool = False
+        self, oid: str, ref_item: TypePlotItem, just_show: bool = False
     ) -> None:
         """Update plot item.
 
         Args:
-            oid (str): object uuid
-            ref_item (CurveItem | MaskedImageItem): reference item
-            just_show (bool | None): if True, only show the item (do not update it,
-                except regarding the reference item). Defaults to False.
+            oid: object uuid
+            ref_item: reference item
+            just_show: if True, only show the item (do not update it, except regarding
+             the reference item). Defaults to False.
         """
         if not just_show:
             obj = self.panel.objmodel[oid]
@@ -240,7 +240,7 @@ class BasePlotHandler:
 
     @staticmethod
     def update_item_according_to_ref_item(
-        item: MaskedImageItem, ref_item: MaskedImageItem
+        item: TypePlotItem, ref_item: TypePlotItem
     ) -> None:  # pylint: disable=unused-argument
         """Update plot item according to reference item"""
         #  For now, nothing to do here: it's only used for images (contrast)
@@ -274,7 +274,7 @@ class BasePlotHandler:
             oids: list of object uuids
 
         Returns:
-            list[str]: reduced list of object uuids
+            Reduced list of object uuids
         """
         if self.__show_first_only:
             return oids[:1]
@@ -449,7 +449,7 @@ class BasePlotHandler:
         )
 
 
-class SignalPlotHandler(BasePlotHandler):
+class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
     """Object handling signal plot items, plot dialogs, plot options"""
 
     PLOT_TYPE = PlotType.CURVE
@@ -470,7 +470,7 @@ class SignalPlotHandler(BasePlotHandler):
         return options
 
 
-class ImagePlotHandler(BasePlotHandler):
+class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
     """Object handling image plot items, plot dialogs, plot options"""
 
     PLOT_TYPE = PlotType.IMAGE
@@ -494,7 +494,7 @@ class ImagePlotHandler(BasePlotHandler):
             oids: list of object uuids
 
         Returns:
-            list[str]: reduced list of object uuids
+            Reduced list of object uuids
         """
         oids = super().reduce_shown_oids(oids)
 

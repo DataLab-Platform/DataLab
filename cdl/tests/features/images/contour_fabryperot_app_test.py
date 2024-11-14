@@ -7,8 +7,6 @@ Contour finding application test with Fabry-Perot images
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import numpy as np
-
 import cdl.obj
 import cdl.param
 from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
@@ -25,7 +23,7 @@ def test_contour_app():
         ima1 = get_test_image("fabry-perot1.jpg")
         ima1.metadata["colormap"] = "gray"
         xc, yc, r = 601.0, 556.0, 457.0
-        roi = np.array([[xc - r, yc, xc + r, yc]], int)
+        roi = cdl.obj.create_image_roi("circle", [xc, yc, r])
         ima1.roi = roi
         panel.add_object(ima1)
         param = cdl.param.ContourShapeParam.create(shape=shape)

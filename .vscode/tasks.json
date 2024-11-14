@@ -289,34 +289,6 @@
             }
         },
         {
-            "label": "Upgrade PlotPyStack packages (Python 3.8)",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "upgrade_stack.bat"
-            ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE_PY38}",
-                    "UNATTENDED": "1"
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
             "label": "Clean Up",
             "type": "shell",
             "command": "cmd",
@@ -635,73 +607,6 @@
                 "gettext - Compile",
                 "Build Python packages",
                 "Create executable",
-                "Create installer"
-            ]
-        },
-        {
-            "label": "Create Windows 7 executable",
-            "type": "shell",
-            "command": "cmd",
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE_PY38}",
-                    "RELEASE": "1",
-                    "UNATTENDED": "1"
-                }
-            },
-            "args": [
-                "/c",
-                "build_exe.bat"
-            ],
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
-            "label": "New Windows 7 release",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "release_win7.bat"
-            ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE_PY38}",
-                    "RELEASE": "1",
-                    "UNATTENDED": "1"
-                }
-            },
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            },
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Clean Up",
-                "Upgrade PlotPyStack packages (Python 3.8)",
-                "Create Windows 7 executable",
                 "Create installer"
             ]
         },

@@ -34,6 +34,11 @@ del "%RESPATH%\tmp-*.png"
 
 @REM Building executable
 pyinstaller %LIBNAME%.spec --noconfirm --clean
+
+@REM Windows 7 SP1 compatibility fix
+copy "%RESPATH%\api-ms-win-core-path-l1-1-0.dll" "dist\%LIBNAME%\_internal" /Y
+
+@REM Zipping executable
 cd dist
 set ZIPNAME=%LIBNAME%-v%VERSION%_exe.zip
 "C:\Program Files\7-Zip\7z.exe" a -mx1 "%ZIPNAME%" %LIBNAME%

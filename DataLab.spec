@@ -7,7 +7,6 @@ from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 all_hidden_imports = collect_submodules('cdl')
 datas = collect_data_files('cdl') + [('cdl\\plugins', 'cdl\\plugins')]
 datas += collect_data_files('guidata') + collect_data_files('plotpy')
-datas += collect_data_files('skimage')
 
 a = Analysis(
     ['cdl\\start.pyw'],

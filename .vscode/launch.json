@@ -22,7 +22,7 @@
             ],
             "env": {
                 // "DEBUG": "1",
-                "LANG": "en",
+                // "LANG": "en",
                 // "QT_COLOR_MODE": "light",
             }
         },
@@ -61,7 +61,7 @@
                 // "1000"
             ],
             "env": {
-                // "DEBUG": "1",
+                "DEBUG": "1",
                 // "TEST_SEGFAULT_ERROR": "1",
                 "LANG": "en",
                 "QT_COLOR_MODE": "light",
@@ -84,7 +84,7 @@
                 "--unattended",
             ],
             "env": {
-                // "DEBUG": "1",
+                "DEBUG": "1",
                 // The `CDL_DATA` environment variable is set here just for checking
                 // that the data path is not added twice to the test data path list:
                 "CDL_DATA": "${workspaceFolder}/cdl/data/tests",

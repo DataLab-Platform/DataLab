@@ -137,9 +137,11 @@ def test_image_offset_correction() -> None:
     """Validation test for the image offset correction processing."""
     src = get_test_image("flower.npy")
     # Defining the ROI that will be used to estimate the offset
-    p = cdl.obj.ROI2DParam.create(xr0=0, yr0=0, xr1=50, yr1=20)
+    p = cdl.obj.ROI2DParam.create(x0=0, y0=0, dx=50, dy=20)
     dst = cpi.compute_offset_correction(src, p)
-    exp = src.data - np.mean(src.data[p.yr0 : p.yr1, p.xr0 : p.xr1])
+    ix0, iy0 = int(p.x0), int(p.y0)
+    ix1, iy1 = int(p.x0 + p.dx), int(p.y0 + p.dy)
+    exp = src.data - np.mean(src.data[iy0:iy1, ix0:ix1])
     check_array_result("OffsetCorrection", dst.data, exp)
 
 

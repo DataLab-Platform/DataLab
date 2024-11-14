@@ -2,6 +2,41 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.18.0 ##
+
+ℹ️ General information:
+
+* PlotPy v2.7 is required for this release.
+* Dropped support for Python 3.8.
+* Python 3.13 is not supported yet, due to the fact that some dependencies are not compatible with this version.
+
+💥 New features and enhancements:
+
+* New operation mode feature:
+  * Added "Operation mode" feature to the "Processing" tab in the "Settings" dialog box
+  * This feature allows to choose between "single" and "pairwise" operation modes for all basic operations (addition, subtraction, multiplication, division, etc.):
+    * "Single" mode: single operand mode (default mode: the operation is done on each object independently)
+    * "Pairwise" mode: pairwise operand mode (the operation is done on each pair of objects)
+  * This applies to both signals and images, and to computations taking *N* inputs
+  * Computations taking *N* inputs are the ones where:
+    * *N(>=2)* objects in give *N* objects out
+    * *N(>=1)* object(s) + 1 object in give N objects out
+
+* New ROI (Region Of Interest) features:
+  * New polygonal ROI feature
+  * Complete redesign of the ROI editor user interfaces, improving ergonomics and consistency with the rest of the application
+  * Major internal refactoring of the ROI system to make it more robust (more tests) and easier to maintain
+
+* Implemented [Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Launch DataLab using `datalab` instead of `cdl`. Note that the `cdl` command is still available for backward compatibility.
+
+* Implemented [Issue #101](https://github.com/DataLab-Platform/DataLab/issues/101) - Configuration: set default image interpolation to anti-aliasing (`5` instead of `0` for nearest). This change is motivated by the fact that a performance improvement was made in PlotPy v2.7 on Windows, which allows to use anti-aliasing interpolation by default without a significant performance impact.
+
+* Implemented [Issue #100](https://github.com/DataLab-Platform/DataLab/issues/100) - Use the same installer and executable on Windows 7 SP1, 8, 10, 11. Before this change, a specific installer was required for Windows 7 SP1, due to the fact that Python 3.9 and later versions are not supported on this platform. A workaround was implemented to make DataLab work on Windows 7 SP1 with Python 3.9.
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #103](https://github.com/DataLab-Platform/DataLab/issues/103) - `proxy.add_annotations_from_items`: circle shape color seems to be ignored.
+
 ## DataLab Version 0.17.1 ##
 
 ℹ️ PlotPy v2.6.2 is required for this release.
@@ -492,7 +527,7 @@ NumPy 2.0 support has been added with this release.
     * Circle and ellipse results now also show area (A)
 * Added "Plot results" entry in "Analysis" menu:
   * This feature allows to plot analysis results (1D or 2D)
-  * It creates a new signal with X and Y axes corresponding to user-defined parameters (e.g. X = indexes and Y = radius for circle results)
+  * It creates a new signal with X and Y axes corresponding to user-defined parameters (e.g. X = indices and Y = radius for circle results)
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full signal/image/group titles may be more easily readable
 * Delete metadata feature:
@@ -544,9 +579,9 @@ NumPy 2.0 support has been added with this release.
 
 * Fixed [Issue #29](https://github.com/DataLab-Platform/DataLab/issues/29) - Polynomial fit error: `QDialog [...] argument 1 has an unexpected type 'SignalProcessor'`
 * Image ROI extraction feature:
-  * Before this release, when extracting a single circular ROI from an image with the "Extract all regions of interest into a single image object" option enabled, the result was a single image without the ROI mask (the ROI mask was only available when extracting ROI with the option disabled)
+  * Before this release, when extracting a single circular ROI from an image with the "Extract all ROIs into a single image object" option enabled, the result was a single image without the ROI mask (the ROI mask was only available when extracting ROI with the option disabled)
   * This was leading to an unexpected behavior, because one could interpret the result (a square image without the ROI mask) as the result of a single rectangular ROI
-  * Now, when extracting a single circular ROI from an image with the "Extract all regions of interest into a single image object" option enabled, the result is a single image with the ROI mask (as if the option was disabled)
+  * Now, when extracting a single circular ROI from an image with the "Extract all ROIs into a single image object" option enabled, the result is a single image with the ROI mask (as if the option was disabled)
   * This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function
 * Analysis on circular ROI:
   * Before this release, when running computations on a circular ROI, the results were unexpected in terms of coordinates (results seemed to be computed in a region located above the actual ROI).
@@ -640,7 +675,7 @@ NumPy 2.0 support has been added with this release.
 🛠️ Bug fixes:
 
 * Region of interest (ROI) extraction feature for images:
-  * ROI extraction was not working properly when the "Extract all regions of interest into a single image object" option was enabled if there was only one defined ROI. The result was an image positioned at the origin (0, 0) instead of the expected position (x0, y0) and the ROI rectangle itself was not removed as expected. This is now fixed (see [Issue #6](https://github.com/DataLab-Platform/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI)
+  * ROI extraction was not working properly when the "Extract all ROIs into a single image object" option was enabled if there was only one defined ROI. The result was an image positioned at the origin (0, 0) instead of the expected position (x0, y0) and the ROI rectangle itself was not removed as expected. This is now fixed (see [Issue #6](https://github.com/DataLab-Platform/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI)
   * ROI rectangles with negative coordinates were not properly handled: ROI extraction was raising a `ValueError` exception, and the image mask was not displayed properly. This is now fixed (see [Issue #7](https://github.com/DataLab-Platform/DataLab/issues/7) - Image ROI extraction: `ValueError: zero-size array to reduction operation minimum which has no identity`)
   * ROI extraction was not taking into account the pixel size (dx, dy) and the origin (x0, y0) of the image. This is now fixed (see [Issue #8](https://github.com/DataLab-Platform/DataLab/issues/8) - Image ROI extraction: take into account pixel size)
 * Macro-command console is now read-only:

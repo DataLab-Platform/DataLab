@@ -174,7 +174,7 @@ def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
 # MARK: Peak detection -----------------------------------------------------------------
 
 
-def peak_indexes(
+def peak_indices(
     y, thres: float = 0.3, min_dist: int = 1, thres_abs: bool = False
 ) -> np.ndarray:
     #  Copyright (c) 2014 Lucas Hermann Negri
@@ -202,7 +202,7 @@ def peak_indexes(
     Returns
     -------
     ndarray
-        Array containing the numeric indexes of the peaks that were detected
+        Array containing the numeric indices of the peaks that were detected
     """
     if isinstance(y, np.ndarray) and np.issubdtype(y.dtype, np.unsignedinteger):
         raise ValueError("y must be signed")
@@ -222,11 +222,11 @@ def peak_indexes(
         return np.array([])
 
     if len(zeros):
-        # compute first order difference of zero indexes
+        # compute first order difference of zero indices
         zeros_diff = np.diff(zeros)
         # check when zeros are not chained together
         (zeros_diff_not_one,) = np.add(np.where(zeros_diff != 1), 1)
-        # make an array of the chained zero indexes
+        # make an array of the chained zero indices
         zero_plateaus = np.split(zeros, zeros_diff_not_one)
 
         # fix if leftmost value in dy is zero
@@ -239,7 +239,7 @@ def peak_indexes(
             dy[zero_plateaus[-1]] = dy[zero_plateaus[-1][0] - 1]
             zero_plateaus.pop(-1)
 
-        # for each chain of zero indexes
+        # for each chain of zero indices
         for plateau in zero_plateaus:
             median = np.median(plateau)
             # set leftmost values to leftmost non zero values
@@ -281,7 +281,7 @@ def xpeak(x: np.ndarray, y: np.ndarray) -> float:
     Returns:
         Peak X-position
     """
-    peaks = peak_indexes(y)
+    peaks = peak_indices(y)
     if peaks.size == 1:
         return x[peaks[0]]
     return np.average(x, weights=y)
@@ -527,13 +527,13 @@ class VoigtModel(FitModel):
 
 
 def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
-    """Find the x indexes where the corresponding y is the closest to zero
+    """Find the x indices where the corresponding y is the closest to zero
 
     Args:
         y: Y data
 
     Returns:
-        Indexes of the points right before or at zero crossing
+        Indices of the points right before or at zero crossing
     """
     xi = np.where((y[:-1] >= 0) & (y[1:] <= 0) | (y[:-1] <= 0) & (y[1:] >= 0))[0]
     return xi
@@ -856,13 +856,13 @@ def fwhm(
     dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
     sigma, mu = dx * 0.1, xpeak(x, y)
     if isinstance(xmin, float):
-        indexes = np.where(x >= xmin)[0]
-        x = x[indexes]
-        y = y[indexes]
+        indices = np.where(x >= xmin)[0]
+        x = x[indices]
+        y = y[indices]
     if isinstance(xmax, float):
-        indexes = np.where(x <= xmax)[0]
-        x = x[indexes]
-        y = y[indexes]
+        indices = np.where(x <= xmax)[0]
+        x = x[indices]
+        y = y[indices]
 
     if method == "zero-crossing":
         hmax = dy * 0.5 + np.min(y)

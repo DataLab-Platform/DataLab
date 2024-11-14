@@ -12,7 +12,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import numpy as np
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 
@@ -146,9 +145,11 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     newparam.title = None
     ima1 = create_multigauss_image(newparam)
     s = data_size
-    ima1.roi = np.array(
-        [[s // 2, s // 2, s - 25, s], [s // 4, s // 2, s // 2, s // 2]], int
+    roi = dlo.create_image_roi(
+        "rectangle", [s // 2, s // 2, s - 25 - s // 2, s - s // 2]
     )
+    roi.add_roi(dlo.create_image_roi("circle", [s // 3, s // 2, s // 4]))
+    ima1.roi = roi
     panel.add_object(ima1)
 
     qt_wait(DELAY2)
@@ -175,9 +176,10 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     qt_wait(DELAY2)
 
     n = data_size // 10
-    panel.processor.compute_roi_extraction(
-        dlp.ROIDataParam.create(roidata=[[n, n, data_size - n, data_size - n]])
+    roi = dlo.create_image_roi(
+        "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
     )
+    panel.processor.compute_roi_extraction(roi)
 
 
 def play_demo(win: CDLMainWindow) -> None:

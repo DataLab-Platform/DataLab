@@ -10,9 +10,8 @@ Annotations application test:
 
 # guitest: show
 
-import numpy as np
-
 from cdl.app import run
+from cdl.obj import create_image_roi
 from cdl.tests import data as test_data
 
 
@@ -20,7 +19,7 @@ def test_annotations_app():
     """Annotations test"""
     obj1 = test_data.create_sincos_image()
     obj2 = test_data.create_annotated_image()
-    obj2.roi = np.array([[10, 10, 60, 400]], int)
+    obj2.roi = create_image_roi("rectangle", [10, 10, 60, 400])
     run(console=False, objects=(obj1, obj2), size=(1200, 550))
 
 

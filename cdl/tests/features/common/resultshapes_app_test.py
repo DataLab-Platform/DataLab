@@ -66,9 +66,8 @@ def __check_roi_merge(
     """
     roi1 = obj1.roi
     roi2 = obj2.roi
-    assert np.all(roi1 == roi2[: len(roi1)])
-    assert np.all(roi1 == roi2[len(roi1) : len(roi1) * 2])
-    assert roi1.shape[0] * 2 == roi2.shape[0]
+    for single_roi2 in roi2:
+        assert roi1.get_single_roi(0) == single_roi2
 
 
 def test_resultshapes():
@@ -76,7 +75,7 @@ def test_resultshapes():
     with cdltest_app_context(console=False) as win:
         obj1 = test_data.create_sincos_image()
         obj2 = create_image_with_resultshapes()
-        obj2.roi = np.array([[10, 10, 60, 400]], int)
+        obj2.roi = cdl.obj.create_image_roi("rectangle", [10, 10, 50, 400])
         panel = win.signalpanel
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)

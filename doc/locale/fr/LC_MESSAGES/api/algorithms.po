@@ -114,7 +114,7 @@ msgstr "Normaliser le tableau d'entrée à un paramètre donné."
 #: cdl.algorithms.signal.find_x_at_value cdl.algorithms.signal.fw1e2
 #: cdl.algorithms.signal.fwhm cdl.algorithms.signal.ifft1d
 #: cdl.algorithms.signal.interpolate cdl.algorithms.signal.magnitude_spectrum
-#: cdl.algorithms.signal.normalize cdl.algorithms.signal.peak_indexes
+#: cdl.algorithms.signal.normalize cdl.algorithms.signal.peak_indices
 #: cdl.algorithms.signal.phase_spectrum cdl.algorithms.signal.psd
 #: cdl.algorithms.signal.sampling_period cdl.algorithms.signal.sampling_rate
 #: cdl.algorithms.signal.sfdr cdl.algorithms.signal.sinad
@@ -163,7 +163,7 @@ msgstr "Paramètre de normalisation. Par défaut : \"maximum\""
 #: cdl.algorithms.signal.find_x_at_value cdl.algorithms.signal.fw1e2
 #: cdl.algorithms.signal.fwhm cdl.algorithms.signal.ifft1d
 #: cdl.algorithms.signal.interpolate cdl.algorithms.signal.magnitude_spectrum
-#: cdl.algorithms.signal.normalize cdl.algorithms.signal.peak_indexes
+#: cdl.algorithms.signal.normalize cdl.algorithms.signal.peak_indices
 #: cdl.algorithms.signal.phase_spectrum cdl.algorithms.signal.psd
 #: cdl.algorithms.signal.sampling_period cdl.algorithms.signal.sampling_rate
 #: cdl.algorithms.signal.sfdr cdl.algorithms.signal.sinad
@@ -246,7 +246,7 @@ msgstr ""
 
 #: cdl.algorithms.coordinates.circle_to_center_radius
 #: cdl.algorithms.coordinates.circle_to_diameter
-#: cdl.algorithms.signal.bandwidth cdl.algorithms.signal.peak_indexes
+#: cdl.algorithms.signal.bandwidth cdl.algorithms.signal.peak_indices
 #: cdl.algorithms.signal.psd of
 msgid "Return type"
 msgstr "Type de retour"
@@ -259,11 +259,11 @@ msgstr "Trier à partir des données X,Y en calculant FFT(y)."
 msgid "Sorted frequencies in ascending order"
 msgstr "Fréquences triées par ordre croissant"
 
-#: cdl.algorithms.signal.peak_indexes:1 of
+#: cdl.algorithms.signal.peak_indices:1 of
 msgid "Peak detection routine."
 msgstr "Routine de détection de pics."
 
-#: cdl.algorithms.signal.peak_indexes:3 of
+#: cdl.algorithms.signal.peak_indices:3 of
 msgid ""
 "Finds the numeric index of the peaks in *y* by taking its first order "
 "difference. By using *thres* and *min_dist* parameters, it is possible to"
@@ -273,11 +273,11 @@ msgstr ""
 "différence d'ordre. En utilisant les paramètres *thres* et *min_dist*, il"
 " est possible de réduire le nombre de pics détectés. *y* doit être signé."
 
-#: cdl.algorithms.signal.peak_indexes:7 of
+#: cdl.algorithms.signal.peak_indices:7 of
 msgid "1D amplitude data to search for peaks."
 msgstr "Données d'amplitude 1D à rechercher pour les pics."
 
-#: cdl.algorithms.signal.peak_indexes:9 of
+#: cdl.algorithms.signal.peak_indices:9 of
 msgid ""
 "Normalized threshold. Only the peaks with amplitude higher than the "
 "threshold will be detected."
@@ -285,7 +285,7 @@ msgstr ""
 "Seuil normalisé. Seuls les pics dont l'amplitude est supérieure au seuil "
 "seront détectés."
 
-#: cdl.algorithms.signal.peak_indexes:12 of
+#: cdl.algorithms.signal.peak_indices:12 of
 msgid ""
 "Minimum distance between each detected peak. The peak with the highest "
 "amplitude is preferred to satisfy this constraint."
@@ -293,7 +293,7 @@ msgstr ""
 "Distance minimale entre chaque pic détecté. Le pic avec l'amplitude la "
 "plus élevée est préféré pour satisfaire cette contrainte."
 
-#: cdl.algorithms.signal.peak_indexes:15 of
+#: cdl.algorithms.signal.peak_indices:15 of
 msgid ""
 "If True, the thres value will be interpreted as an absolute value, "
 "instead of a normalized threshold."
@@ -301,8 +301,8 @@ msgstr ""
 "Si True, la valeur thres sera interprétée comme une valeur absolue, au "
 "lieu d'un seuil normalisé."
 
-#: cdl.algorithms.signal.peak_indexes:19 of
-msgid "Array containing the numeric indexes of the peaks that were detected"
+#: cdl.algorithms.signal.peak_indices:19 of
+msgid "Array containing the numeric indices of the peaks that were detected"
 msgstr "Tableau contenant les index numériques des pics qui ont été détectés"
 
 #: cdl.algorithms.signal.xpeak:1 of
@@ -411,11 +411,11 @@ msgid "1-dimensional Voigt fit model"
 msgstr "Modèle de régression Voigt à 1 dimension"
 
 #: cdl.algorithms.signal.find_nearest_zero_point_idx:1 of
-msgid "Find the x indexes where the corresponding y is the closest to zero"
+msgid "Find the x indices where the corresponding y is the closest to zero"
 msgstr "Rechercher les indices x où le y correspondant est le plus proche de zéro"
 
 #: cdl.algorithms.signal.find_nearest_zero_point_idx:5 of
-msgid "Indexes of the points right before or at zero crossing"
+msgid "Indices of the points right before or at zero crossing"
 msgstr "Indices des points juste avant ou au croisement à zéro"
 
 #: cdl.algorithms.signal.find_x_at_value:1 of

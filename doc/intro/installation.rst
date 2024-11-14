@@ -13,10 +13,9 @@ Installation
         :animate: fade-in
         :icon: zap
 
-        Direct download links for the latest version of DataLab:
+        Direct download link for the latest version of DataLab:
 
         - |download_link1|
-        - |download_link2|
 
 This section provides information on how to install DataLab on your system.
 Once installed, you can start DataLab by running the ``cdl`` command in a terminal,
@@ -120,9 +119,7 @@ application).
 
 .. warning::
 
-    DataLab Windows installer is available for Windows 8, 10 and 11 (main release,
-    based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 based release, see
-    file ending with ``-Win7.msi``).
+    DataLab Windows installer is available for Windows 7 SP1, 8, 10 and 11.
 
     :octicon:`alert;1em;sd-text-warning` On Windows 7 SP1, before running DataLab
     (or any other Python 3 application), you must install Microsoft Update `KB2533623`

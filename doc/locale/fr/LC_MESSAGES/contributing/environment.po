@@ -253,7 +253,7 @@ msgid "WinPython version"
 msgstr "Version de WinPython"
 
 #: ../../doc/contributing/environment.md
-msgid "3.8"
+msgid "3.9"
 msgstr ""
 
 #: ../../doc/contributing/environment.md

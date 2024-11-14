@@ -28,7 +28,7 @@ class MainSettings(gds.DataSet):
     g0 = gds.BeginGroup(_("Settings for main window and general features"))
     color_mode = gds.ChoiceItem(
         _("Color mode"),
-        zip(Conf.main.color_mode.choices, Conf.main.color_mode.choices),
+        zip(Conf.main.color_mode.values, Conf.main.color_mode.values),
         help=_("Color mode for the application"),
     )
     process_isolation_enabled = gds.BoolItem(
@@ -95,6 +95,19 @@ class ProcSettings(gds.DataSet):
     """DataLab processing settings"""
 
     g0 = gds.BeginGroup(_("Settings for computations"))
+    operation_mode = gds.ChoiceItem(
+        _("Operation mode"),
+        zip(Conf.proc.operation_mode.values, Conf.proc.operation_mode.values),
+        help=_(
+            "Operation mode for computations taking <i>N</i> inputs:"
+            "<ul><li><b>single</b>: single operand mode</li>"
+            "<li><b>pairwise</b>: pairwise operation mode</li></ul>"
+            "<br>Computations taking <i>N</i> inputs are the ones where:"
+            "<ul><li>N(>=2) objects in %s 1 object out</li>"
+            "<li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
+        )
+        % ("→", "→"),
+    )
     fft_shift_enabled = gds.BoolItem("", _("FFT shift"))
     extract_roi_singleobj = gds.BoolItem("", _("Extract ROI in single object"))
     ignore_warnings = gds.BoolItem("", _("Ignore warnings"))

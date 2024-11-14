@@ -153,28 +153,6 @@ class HistogramParam(gds.DataSet):
     upper = gds.FloatItem(_("Upper limit"), default=None, check=False)
 
 
-class ROIDataParam(gds.DataSet):
-    """ROI Editor data"""
-
-    roidata = gds.FloatArrayItem(
-        _("ROI data"),
-        help=_(
-            "For convenience, this item accepts a 2D NumPy array, a list of list "
-            "of numbers, or None. In the end, the data is converted to a 2D NumPy "
-            "array of integers (if not None)."
-        ),
-    )
-    singleobj = gds.BoolItem(
-        _("Single object"),
-        help=_("Whether to extract the ROI as a single object or not."),
-    )
-
-    @property
-    def is_empty(self) -> bool:
-        """Return True if there is no ROI"""
-        return self.roidata is None or np.array(self.roidata).size == 0
-
-
 class FFTParam(gds.DataSet):
     """FFT parameters"""
 
@@ -304,8 +282,7 @@ def calc_resultproperties(
         raise ValueError("Values of labeledfuncs must be functions")
 
     res = []
-    roi_nb = 0 if obj.roi is None else obj.roi.shape[0]
-    for i_roi in [None] + list(range(roi_nb)):
+    for i_roi in [None] + list(obj.iterate_roi_indices()):
         data_roi = obj.get_data(i_roi)
         val_roi = -1 if i_roi is None else i_roi
         res.append([val_roi] + [fn(data_roi) for fn in labeledfuncs.values()])

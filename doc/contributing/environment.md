@@ -64,7 +64,6 @@ The following table lists the currently officially used Python distributions:
 
 | Python version | Status       | WinPython version |
 | -------------- | ------------ | ----------------- |
-| 3.8            | OK           | 3.8.10.0          |
 | 3.9            | OK           | 3.9.10.0          |
 | 3.10           | OK           | 3.10.11.1         |
 | 3.11           | OK           | 3.11.5.0          |
@@ -103,7 +102,7 @@ Visual Studio Code configuration used in `launch.json` and `tasks.json`
 (examples) :
 
     @REM Development environment
-    set CDL_PYTHONEXE=C:\C2OIQ-DevCDL\python-3.8.10.amd64\python.exe
+    set CDL_PYTHONEXE=C:\python-3.9.10.amd64\python.exe
     @REM Folder containing additional working test data
     set CDL_DATA=C:\Dev\Projets\CDL_data
 
