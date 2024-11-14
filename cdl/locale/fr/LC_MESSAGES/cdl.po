@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-11-13 18:44+0100\n"
+"POT-Creation-Date: 2024-11-14 15:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1175,7 +1175,7 @@ msgstr "Coller les métadonnées"
 msgid "Paste metadata into selected %s"
 msgstr "Coller les métadonnées dans l'objet %s sélectionné"
 
-#: cdl\core\gui\actionhandler.py:512 cdl\core\gui\panel\base.py:821
+#: cdl\core\gui\actionhandler.py:512 cdl\core\gui\panel\base.py:835
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
@@ -1183,7 +1183,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:520 cdl\core\gui\panel\base.py:844
+#: cdl\core\gui\actionhandler.py:520 cdl\core\gui\panel\base.py:858
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -1432,11 +1432,11 @@ msgstr "Extraction de ROI"
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\actionhandler.py:808 cdl\core\gui\panel\base.py:1244
+#: cdl\core\gui\actionhandler.py:808 cdl\core\gui\panel\base.py:1258
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
-#: cdl\core\gui\actionhandler.py:814 cdl\core\gui\panel\base.py:1291
+#: cdl\core\gui\actionhandler.py:814 cdl\core\gui\panel\base.py:1305
 msgid "Delete results"
 msgstr "Supprimer les résultats"
 
@@ -2379,7 +2379,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1385 cdl\core\gui\panel\base.py:746
+#: cdl\core\gui\main.py:1385 cdl\core\gui\panel\base.py:760
 #: cdl\core\gui\panel\macro.py:564 cdl\widgets\h5browser.py:618
 msgid "Open"
 msgstr "Ouvrir"
@@ -2496,55 +2496,55 @@ msgstr ""
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: cdl\core\gui\panel\base.py:648 cdl\core\gui\panel\base.py:657
+#: cdl\core\gui\panel\base.py:648 cdl\core\gui\panel\base.py:668
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
-#: cdl\core\gui\panel\base.py:657
+#: cdl\core\gui\panel\base.py:667
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:712 cdl\core\gui\panel\base.py:803
+#: cdl\core\gui\panel\base.py:726 cdl\core\gui\panel\base.py:817
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
-#: cdl\core\gui\panel\base.py:773 cdl\core\gui\panel\macro.py:543
+#: cdl\core\gui\panel\base.py:787 cdl\core\gui\panel\macro.py:543
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: cdl\core\gui\panel\base.py:889 cdl\core\gui\plothandler.py:346
+#: cdl\core\gui\panel\base.py:903 cdl\core\gui\plothandler.py:346
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:933 cdl\core\gui\panel\base.py:950
-#: cdl\core\gui\panel\base.py:1118
+#: cdl\core\gui\panel\base.py:947 cdl\core\gui\panel\base.py:964
+#: cdl\core\gui\panel\base.py:1132
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:1047 cdl\core\gui\roieditor.py:440
+#: cdl\core\gui\panel\base.py:1061 cdl\core\gui\roieditor.py:440
 #: cdl\core\model\base.py:1202
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:1112 cdl\core\gui\panel\base.py:1151
+#: cdl\core\gui\panel\base.py:1126 cdl\core\gui\panel\base.py:1165
 #: cdl\core\gui\processor\base.py:503
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1114
+#: cdl\core\gui\panel\base.py:1128
 msgid "Show results obtained from previous analysis"
 msgstr ""
 "Afficher les résultats obtenus avec des analyses réalisées précédemment"
 
-#: cdl\core\gui\panel\base.py:1120
+#: cdl\core\gui\panel\base.py:1134
 msgid "Open a dialog to edit annotations"
 msgstr "Ouvrir une boîte de dialogue pour éditer les annotations"
 
-#: cdl\core\gui\panel\base.py:1128
+#: cdl\core\gui\panel\base.py:1142
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1130
+#: cdl\core\gui\panel\base.py:1144
 msgid ""
 "This feature leverages the results of previous analysis performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
@@ -2554,31 +2554,31 @@ msgstr ""
 "<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et "
 "choisissez une fonctionnalité dans le menu <u>Analyse</u>."
 
-#: cdl\core\gui\panel\base.py:1188
+#: cdl\core\gui\panel\base.py:1202
 msgid "Indices"
 msgstr "Indices"
 
-#: cdl\core\gui\panel\base.py:1222
+#: cdl\core\gui\panel\base.py:1236
 msgid "Plot kind"
 msgstr "Type de graphique"
 
-#: cdl\core\gui\panel\base.py:1226
+#: cdl\core\gui\panel\base.py:1240
 msgid "One curve per object (or ROI) and per result title"
 msgstr "Une courbe par objet (ou ROI) et par titre de résultat"
 
-#: cdl\core\gui\panel\base.py:1228
+#: cdl\core\gui\panel\base.py:1242
 msgid "One curve per result title"
 msgstr "Une courbe par titre de résultat"
 
-#: cdl\core\gui\panel\base.py:1232
+#: cdl\core\gui\panel\base.py:1246
 msgid "X axis"
 msgstr "Axe des X"
 
-#: cdl\core\gui\panel\base.py:1234
+#: cdl\core\gui\panel\base.py:1248
 msgid "Y axis"
 msgstr "Axe des Y"
 
-#: cdl\core\gui\panel\base.py:1238
+#: cdl\core\gui\panel\base.py:1252
 msgid ""
 "Plot results obtained from previous analyses.<br><br>This plot is based on "
 "results associated with '%s' prefix."
@@ -2586,7 +2586,7 @@ msgstr ""
 "Tracer les résultats obtenus avec des analyses réalisées précédemment."
 "<br><br>Ce graphique est basé sur les résultats associés au préfixe '%s'."
 
-#: cdl\core\gui\panel\base.py:1292
+#: cdl\core\gui\panel\base.py:1306
 msgid "Are you sure you want to delete all results of the selected object(s)?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer tous les résultats des objets "
@@ -2687,13 +2687,17 @@ msgstr "Calcul en cours : %s"
 
 #: cdl\core\gui\processor\base.py:548
 msgid "In pairwise mode, you need to select objects in at least two groups."
-msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins deux groupes."
+msgstr ""
+"En mode 'pairwise', vous devez sélectionner des objets dans au moins deux "
+"groupes."
 
 #: cdl\core\gui\processor\base.py:563
 msgid ""
 "In pairwise mode, you need to select the same number of objects in each "
 "group."
-msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
+msgstr ""
+"En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans "
+"chaque groupe."
 
 #: cdl\core\gui\processor\base.py:639 cdl\core\gui\processor\base.py:687
 #: cdl\core\gui\processor\base.py:810 cdl\core\gui\processor\base.py:837
@@ -2708,7 +2712,9 @@ msgstr "Sélectionner %s"
 msgid ""
 "<u>Note:</u> operation mode is <i>pairwise</i>: %s object(s) expected (i.e. "
 "as many as in the first group)"
-msgstr "<u>Note :</u> le mode d'opération est <i>pairwise</i> : %s objet(s) attendu(s) (c'est-à-dire autant que dans le premier groupe)"
+msgstr ""
+"<u>Note :</u> le mode d'opération est <i>pairwise</i> : %s objet(s) "
+"attendu(s) (c'est-à-dire autant que dans le premier groupe)"
 
 #: cdl\core\gui\processor\base.py:820
 msgid "<u>Note:</u> operation mode is <i>single operand</i>: 1 object expected"
@@ -3044,7 +3050,12 @@ msgid ""
 "li></ul><br>Computations taking <i>N</i> inputs are the ones where:"
 "<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object "
 "in %s N objects out</li></ul>"
-msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
+msgstr ""
+"Mode d'opération pour les calculs prenant <i>N</i> entrées:"
+"<ul><li><b>single</b>: mode d'opération avec un seul opérande</"
+"li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs "
+"prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet "
+"en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
 
 #: cdl\core\gui\settings.py:111
 msgid "FFT shift"
