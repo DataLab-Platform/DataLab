@@ -583,13 +583,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             refresh_plot: Refresh plot. Defaults to True.
             keep_roi: Keep regions of interest, if any. Defaults to None (ask user).
         """
-        if execenv.unattended:
-            keep_roi = False
         sel_objs = self.objview.get_sel_objects(include_groups=True)
         # Check if there are regions of interest first:
         roi_backup: dict[TypeObj, np.ndarray] = {}
         if any(obj.roi is not None for obj in sel_objs):
-            if keep_roi is None:
+            if execenv.unattended and keep_roi is None:
+                keep_roi = False
+            elif keep_roi is None:
                 answer = QW.QMessageBox.warning(
                     self,
                     _("Delete metadata"),
