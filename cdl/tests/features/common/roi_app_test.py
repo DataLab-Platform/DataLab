@@ -36,6 +36,15 @@ SROI2 = [125, 146]
 # Image ROIs:
 IROI1 = [SIZE // 2, SIZE // 2, SIZE - 25 - SIZE // 2, SIZE - SIZE // 2]  # Rectangle
 IROI2 = [SIZE // 3, SIZE // 2, SIZE // 4]  # Circle
+IROI3 = [
+    SIZE // 2,
+    SIZE // 2,
+    SIZE // 2,
+    SIZE - SIZE // 4,
+    SIZE - SIZE // 4,
+    SIZE - SIZE // 3,
+]  # Polygon (triangle, that is intentionally inside the rectangle, so that this ROI
+# has no impact on the mask calculations in the tests)
 
 
 def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None):
@@ -162,7 +171,7 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
         roisham = "ROI shape mismatch"
 
         if singleobj is None or not singleobj:  # Multiple objects mode
-            assert len(panel) == obj_nb + 2, "Two objects expected"
+            assert len(panel) == obj_nb + 3, "Three objects expected"
             im1, im2 = panel[obj_nb + 1], panel[obj_nb + 2]
             assert np.all(im1.data != 0), nzroi
             assert im1.data.shape == (IROI1[3], IROI1[2]), roisham
@@ -211,6 +220,7 @@ def create_test_image_with_roi(
     ima.data += 1  # Ensure that the image has non-zero values (for ROI check tests)
     roi = dlo.create_image_roi("rectangle", IROI1)
     roi.add_roi(dlo.create_image_roi("circle", IROI2))
+    roi.add_roi(dlo.create_image_roi("polygon", IROI3))
     ima.roi = roi
     return ima
 
