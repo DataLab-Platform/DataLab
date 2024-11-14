@@ -40,8 +40,8 @@ msgid "Quick install on Windows"
 msgstr "Installation rapide sur Windows"
 
 #: ../../doc/intro/installation.rst:16
-msgid "Direct download links for the latest version of DataLab:"
-msgstr "Liens de téléchargement directs pour la dernière version de DataLab :"
+msgid "Direct download link for the latest version of DataLab:"
+msgstr "Lien de téléchargement direct pour la dernière version de DataLab :"
 
 #: ../../doc/intro/installation.rst:18
 msgid "|download_link1|"

@@ -13,10 +13,9 @@ Installation
         :animate: fade-in
         :icon: zap
 
-        Direct download links for the latest version of DataLab:
+        Direct download link for the latest version of DataLab:
 
         - |download_link1|
-        - |download_link2|
 
 This section provides information on how to install DataLab on your system.
 Once installed, you can start DataLab by running the ``cdl`` command in a terminal,
