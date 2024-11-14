@@ -322,7 +322,7 @@ def initialize():
     Conf.view.sig_def_baseline.get(0.0)
     Conf.view.ima_def_colormap.get("viridis")
     Conf.view.ima_def_invert_colormap.get(False)
-    Conf.view.ima_def_interpolation.get(0)
+    Conf.view.ima_def_interpolation.get(5)
     Conf.view.ima_def_alpha.get(1.0)
     Conf.view.ima_def_alpha_function.get(LUTAlpha.NONE.value)
 
