@@ -1463,8 +1463,11 @@ class BaseObj(Generic[TypeROI, TypePlotItem], metaclass=BaseObjMeta):
             Regions of interest object
         """
         roidata = self.metadata.get(ROI_KEY)
-        assert roidata is None or isinstance(roidata, dict)
         if roidata is None:
+            return None
+        if not isinstance(roidata, dict):
+            # Old or unsupported format: remove it
+            self.metadata.pop(ROI_KEY)
             return None
         return self.get_roi_class().from_dict(roidata)
 
