@@ -649,16 +649,30 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if ok:
             self.add_group(group_name)
 
-    def rename_group(self) -> None:
-        """Rename a group"""
-        # Open a message box to enter the group name
-        group = self.objview.get_sel_groups()[0]
-        group_name, ok = QW.QInputDialog.getText(
-            self, _("Rename group"), _("Group name:"), QW.QLineEdit.Normal, group.title
-        )
-        if ok:
-            group.title = group_name
-            self.objview.update_item(group.uuid)
+    def rename_group(self, new_name: str | None = None) -> None:
+        """Rename a group
+
+        Args:
+            new_name: new group name. Defaults to None (ask user).
+        """
+        sel_groups = self.objview.get_sel_groups()
+        if not sel_groups or len(sel_groups) > 1:
+            # Won't happen in the application, but could happen in tests or using the
+            # API directly
+            raise ValueError("Select one group to rename")
+        group = sel_groups[0]
+        if new_name is None:
+            new_name, ok = QW.QInputDialog.getText(
+                self,
+                _("Rename group"),
+                _("Group name:"),
+                QW.QLineEdit.Normal,
+                group.title,
+            )
+            if not ok:
+                return
+        group.title = new_name
+        self.objview.update_item(group.uuid)
 
     @abc.abstractmethod
     def get_newparam_from_current(
