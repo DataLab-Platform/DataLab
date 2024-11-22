@@ -1426,8 +1426,8 @@ def calc_resultshape(
             coords[:, coly] = obj.dy * coords[:, coly] + obj.y0
             if obj.roi is not None:
                 x0, y0, _x1, _y1 = obj.roi.get_single_roi(i_roi).get_bounding_box(obj)
-                coords[:, colx] += x0
-                coords[:, coly] += y0
+                coords[:, colx] += x0 - obj.x0
+                coords[:, coly] += y0 - obj.y0
             idx = np.ones((coords.shape[0], 1)) * (0 if i_roi is None else i_roi)
             coords = np.hstack([idx, coords])
             res.append(coords)
