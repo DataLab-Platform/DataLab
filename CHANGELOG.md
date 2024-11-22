@@ -2,6 +2,12 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.18.1 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106) - Analysis: coordinate shifted results on images with ROIs and shifted origin
+
 ## DataLab Version 0.18.0 ##
 
 ℹ️ General information:
