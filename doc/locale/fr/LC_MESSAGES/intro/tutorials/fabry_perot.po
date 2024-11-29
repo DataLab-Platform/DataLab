@@ -137,10 +137,10 @@ msgid ""
 msgstr ""
 "Lorsque vous travaillez sur des images spécifiques à une application (par"
 " exemple des images de radiographie X, ou des images de microscopie "
-"optique), il est souvent utile de changer la colormap en une colormap en "
-"niveaux de gris. Si vous voyez une colormap d'image différente de celle "
+"optique), il est souvent utile de changer la palette de couleurs en une palette de couleurs en "
+"niveaux de gris. Si vous voyez une palette de couleurs d'image différente de celle "
 "affichée dans l'image, vous pouvez la modifier en sélectionnant l'image "
-"dans le panneau de visualisation, puis en sélectionnant la colormap dans "
+"dans le panneau de visualisation, puis en sélectionnant la palette de couleurs dans "
 "la barre d'outils verticale à gauche du panneau de visualisation."
 
 #: ../../intro/tutorials/fabry_perot.rst:54
@@ -149,7 +149,7 @@ msgid ""
 "settings by selecting \"Edit > Settings...\" in the menu, or the |libre-"
 "gui-settings| button in the toolbar."
 msgstr ""
-"Ou, encore mieux, vous pouvez modifier la colormap par défaut dans les "
+"Ou, encore mieux, vous pouvez modifier la palette de couleurs par défaut dans les "
 "paramètres de DataLab en sélectionnant \"Edition > Paramètres...\" dans "
 "le menu, ou le bouton |libre-gui-settings| dans la barre d'outils."
 
@@ -160,7 +160,7 @@ msgstr ""
 #: ../../intro/tutorials/fabry_perot.rst:60
 msgid "Select the \"Visualization\" tab, and select the \"gray\" colormap."
 msgstr ""
-"Sélectionnez l'onglet \"Visualisation\", et sélectionnez la colormap "
+"Sélectionnez l'onglet \"Visualisation\", et sélectionnez la palette de couleurs "
 "\"gray\"."
 
 #: ../../intro/tutorials/fabry_perot.rst:66
@@ -313,7 +313,7 @@ msgid ""
 msgstr ""
 "La boîte de dialogue \"Métadonnées\" s'ouvre. Parmi d'autres "
 "informations, elle affiche les annotations (dans un format JSON), des "
-"informations de style (par exemple la colormap), et la ROI."
+"informations de style (par exemple la palette de couleurs), et la ROI."
 
 #: ../../intro/tutorials/fabry_perot.rst:150
 msgid ""
