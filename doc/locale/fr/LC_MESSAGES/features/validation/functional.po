@@ -63,7 +63,7 @@ msgid ""
 "When *a bug is reported*, the developer writes a test that reproduces the"
 " bug. The test is executed to ensure that it fails. The developer then "
 "fixes the bug, and the test is executed again to ensure that it passes."
-msgstr "Lorsqu'un *bug est signalé*, le développeur écrit un test qui reproduit le bug. Le test est exécuté pour s'assurer qu'il échoue. Le développeur corrige ensuite le bug, et le test est exécuté
+msgstr "Lorsqu'un *bug est signalé*, le développeur écrit un test qui reproduit le bug. Le test est exécuté pour s'assurer qu'il échoue. Le développeur corrige ensuite le bug, et le test est exécuté à nouveau pour s'assurer qu'il réussit."
 
 #: ../../doc/features/validation/functional.rst:27
 msgid ""
