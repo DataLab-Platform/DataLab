@@ -126,12 +126,9 @@ msgstr ""
 #: ../../contributing/guidelines.rst:53
 msgid ""
 "Write docstrings for all classes, methods and functions. The docstrings "
-"should follow the `Google style <http://google-"
-"styleguide.googlecode.com/svn/trunk/pyguide.html?showone=Comments#Comments>`_."
+"should follow the `Google style <https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings>`_."
 msgstr ""
-"Écrire des docstrings pour toutes les classes, méthodes et fonctions. Les"
-" docstrings doivent suivre le `style Google <http://google-"
-"styleguide.googlecode.com/svn/trunk/pyguide.html?showone=Comments#Comments>`_."
+"Écrire des docstrings pour toutes les classes, méthodes et fonctions. Les docstrings doivent suivre le `style Google <https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings>`_."
 
 #: ../../contributing/guidelines.rst:56
 msgid ""
