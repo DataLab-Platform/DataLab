@@ -811,7 +811,7 @@ class LineProfileParam(gds.DataSet):
     )
 
 
-def compute_line_profile(src: ImageObj, p: LineProfileParam) -> ImageObj:
+def compute_line_profile(src: ImageObj, p: LineProfileParam) -> SignalObj:
     """Compute horizontal or vertical profile
 
     Args:
@@ -819,7 +819,7 @@ def compute_line_profile(src: ImageObj, p: LineProfileParam) -> ImageObj:
         p: parameters
 
     Returns:
-        Output image object
+        Signal object with the profile
     """
     data = src.get_masked_view()
     p.row = min(p.row, data.shape[0] - 1)
@@ -845,7 +845,7 @@ class SegmentProfileParam(gds.DataSet):
     col2 = gds.IntItem(_("End column"), default=0, min=0)
 
 
-def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
+def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> SignalObj:
     """Compute segment profile
 
     Args:
@@ -853,7 +853,7 @@ def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
         p: parameters
 
     Returns:
-        Output image object
+        Signal object with the segment profile
     """
     data = src.get_masked_view()
     p.row1 = min(p.row1, data.shape[0] - 1)
@@ -881,7 +881,7 @@ class AverageProfileParam(gds.DataSet):
     _hgroup_end = gds.EndGroup(_("Profile rectangular area"))
 
 
-def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
+def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> SignalObj:
     """Compute horizontal or vertical average profile
 
     Args:
@@ -889,7 +889,7 @@ def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
         p: parameters
 
     Returns:
-        Output image object
+        Signal object with the average profile
     """
     data = src.get_masked_view()
     if p.row2 == -1:
@@ -961,7 +961,7 @@ def compute_radial_profile(src: ImageObj, p: RadialProfileParam) -> SignalObj:
         p: parameters
 
     Returns:
-        Output image object
+        Signal object with the radial profile
     """
     data = src.get_masked_view()
     if p.center == "centroid":
@@ -985,7 +985,7 @@ def compute_histogram(src: ImageObj, p: HistogramParam) -> SignalObj:
         p: parameters
 
     Returns:
-        Output signal object
+        Signal object with the histogram
     """
     data = src.get_masked_view().compressed()
     suffix = p.get_suffix(data)  # Also updates p.lower and p.upper
