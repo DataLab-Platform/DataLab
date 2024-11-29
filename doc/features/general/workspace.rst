@@ -13,14 +13,14 @@ Basic concepts
 Working with DataLab is very easy. The user interface is intuitive and
 self-explanatory. The main window is divided into two main areas:
 
-- The right area shows the list of data sets which are currently loaded in
+- The left area shows the list of data sets which are currently loaded in
   DataLab, distibuted over two tabs: **Signals** and **Images**. The user can
   switch between the two tabs by clicking on the corresponding tab: this
   switches the main window to the corresponding panel, as well as the menu
   and toolbar contents. Below the list of data sets, a **Properties** view
   shows information about the currently selected data set.
 
-- The left area shows the visualization of the currently selected data set.
+- The right area shows the visualization of the currently selected data set.
   The visualization is updated automatically when the user selects a new data
   set in the list of data sets.
 
