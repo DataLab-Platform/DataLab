@@ -39,6 +39,22 @@ Features or enhancements
     notebook). The idea here is to create a new package that would contain only the
     mathematical features of DataLab, without the GUI code.
 
+.. note:: The DataLab math library could be an opportunity to reconsider the design
+    of the DataLab processing functions. Currently, the processing functions working
+    on signal and image objects rely on `guidata.dataset.DataSet` objects for input
+    parameters. This is very convenient for the developer because it allows to create
+    a GUI for the processing functions automatically, but it is not very flexible for
+    the user because it forces to instantiate a `DataSet` object with the right
+    parameters before calling the processing function (this can be cumbersome especially
+    when dealing with simple processing functions requiring only a few parameters).
+    Thus, it could be interesting to consider a more flexible and simple design, where
+    the processing parameters would be passed as keyword arguments to the processing
+    functions. The `DataSet` objects could be handled internally by the processing
+    functions (e.g. by calling the `DataSet.create` method with the keyword arguments
+    passed by the user). This would allow to keep the automatic GUI generation feature
+    for the processing functions, but would also allow to call the processing functions
+    directly with keyword arguments, without having to create a `DataSet` object first.
+
 * Create a Jupyter plugin for interactive data analysis with DataLab:
 
   - Using DataLab from a Jupyter notebook is already possible, thanks to the
