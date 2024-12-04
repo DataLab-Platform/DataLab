@@ -141,11 +141,11 @@ msgstr ""
 #: ../../doc/features/general/plugins.rst:47
 msgid ""
 "The `plugins` directory in the user configuration folder (e.g. "
-"`C:\\Users\\JohnDoe\\.DataLab\\plugins` on Windows or "
+"`C:/Users/JohnDoe/.DataLab/plugins` on Windows or "
 "`~/.DataLab/plugins` on Linux)."
 msgstr ""
 "Le répertoire `plugins` dans le dossier de configuration de l'utilisateur"
-" (par exemple `C:\\Users\\JohnDoe\\.DataLab\\plugins` sur Windows ou "
+" (par exemple `C:/Users/JohnDoe/.DataLab/plugins` sur Windows ou "
 "`~/.DataLab/plugins` sur Linux)."
 
 #: ../../doc/features/general/plugins.rst:51

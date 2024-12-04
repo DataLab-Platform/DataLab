@@ -45,7 +45,7 @@ the DataLab installation.
 Special additional locations are available for plugins:
 
 - The `plugins` directory in the user configuration folder
-  (e.g. `C:\Users\JohnDoe\.DataLab\plugins` on Windows
+  (e.g. `C:/Users/JohnDoe/.DataLab/plugins` on Windows
   or `~/.DataLab/plugins` on Linux).
 
 - The `plugins` directory in the same folder as the `DataLab` executable
