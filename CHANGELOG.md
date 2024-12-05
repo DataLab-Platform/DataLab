@@ -7,7 +7,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 🛠️ Bug fixes:
 
 * Fixed [Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106) - Analysis: coordinate shifted results on images with ROIs and shifted origin
+* Fixed [Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107) - Wrong indices when extracting a profile from an image with a ROI
 * Fixed [Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111) - Proxy `add_object` method does not support signal/image metadata (e.g. ROI)
+* Test data plugin / "Create 2D noisy gauss image": fixed amplitude calculation in `cdl.tests.data.create_2d_random` for non-integer data types
+
+📚 Documentation:
+
+* Fixed path separators in plugin directory documentation
+* Corrected left and right area descriptions in workspace documentation
+* Updated Google style link in contributing guidelines
+* Fixed various French translations in the documentation
 
 ## DataLab Version 0.18.0 ##
 
