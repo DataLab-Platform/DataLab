@@ -274,6 +274,17 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
+    def add_object(self, obj: SignalObj | ImageObj) -> bool:
+        """Add object to DataLab.
+
+        Args:
+            obj (SignalObj | ImageObj): Signal or image object
+
+        Returns:
+            bool: True if object was added successfully, False otherwise
+        """
+
+    @abc.abstractmethod
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
 
@@ -735,14 +746,3 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
             filename: Filename.
         """
         return self._cdl.import_macro_from_file(filename)
-
-    # ----- Proxy specific methods ------------------------------------------------
-    # (not available symetrically in AbstractCDLControl)
-
-    @abc.abstractmethod
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
-        """Add object to DataLab.
-
-        Args:
-            obj (SignalObj | ImageObj): Signal or image object
-        """

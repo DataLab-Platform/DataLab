@@ -13,7 +13,7 @@ Created on Fri May 12 12:28:56 2023
 import numpy as np
 
 # DataLab remote control client:
-from cdl.proxy import RemoteProxy
+from cdlclient import SimpleRemoteProxy as RemoteProxy
 
 # %% Connecting to DataLab current session
 

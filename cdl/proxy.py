@@ -273,6 +273,14 @@ class LocalProxy(BaseProxy):
             title, data, xunit, yunit, zunit, xlabel, ylabel, zlabel
         )
 
+    def add_object(self, obj: SignalObj | ImageObj) -> None:
+        """Add object to DataLab.
+
+        Args:
+            obj (SignalObj | ImageObj): Signal or image object
+        """
+        self._cdl.add_object(obj)
+
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call compute function ``name`` in current panel's processor.
 
@@ -334,17 +342,6 @@ class LocalProxy(BaseProxy):
                 If None, current panel is used.
         """
         self._cdl.add_annotations_from_items(items, refresh_plot, panel)
-
-    # ----- Proxy specific methods ------------------------------------------------
-    # (not available symetrically in AbstractCDLControl)
-
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
-        """Add object to DataLab.
-
-        Args:
-            obj (SignalObj | ImageObj): Signal or image object
-        """
-        self._cdl.add_object(obj)
 
 
 @contextmanager
