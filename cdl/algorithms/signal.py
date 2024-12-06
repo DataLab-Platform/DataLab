@@ -549,14 +549,16 @@ def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
         value: Value to find
 
     Returns:
-        X value where the Y value is the closest to the given value
+        An array of x values where the y value is the closest to the given value
+        (empty array if no zero crossing is found)
     """
     leveled_y = y - value
     xi_before = find_nearest_zero_point_idx(leveled_y)
     xi_after = xi_before + 1
 
     if len(xi_before) == 0:
-        return np.array([0.0])
+        # Return an empty array if no zero crossing is found
+        return np.array([])
 
     # linear interpolation
     p = (leveled_y[xi_after] - leveled_y[xi_before]) / (x[xi_after] - x[xi_before])
@@ -565,7 +567,9 @@ def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
     return x0
 
 
-def bandwidth(data: np.ndarray, level: float = 3.0) -> float:
+def bandwidth(
+    data: np.ndarray, level: float = 3.0
+) -> tuple[float, float, float, float]:
     """Compute the bandwidth of the signal at a given level.
 
     Args:
@@ -867,8 +871,10 @@ def fwhm(
     if method == "zero-crossing":
         hmax = dy * 0.5 + np.min(y)
         fx = find_x_at_value(x, y, hmax)
-        if fx.size != 2:
+        if fx.size > 2:
             warnings.warn(f"Ambiguous zero-crossing points (found {fx.size} points)")
+        elif fx.size < 2:
+            raise ValueError("No zero-crossing points found")
         return fx[0], hmax, fx[-1], hmax
 
     try:

@@ -64,9 +64,12 @@ if TYPE_CHECKING:
 
 def fwhm_info(x, y):
     """Return FWHM information string"""
-    with warnings.catch_warnings(record=True) as w:
-        x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
-        wstr = " ⚠️" if w else ""
+    try:
+        with warnings.catch_warnings(record=True) as w:
+            x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
+            wstr = " ⚠️" if w else ""
+    except ValueError:
+        return "🛑"
     return f"{x1 - x0:g}{wstr}"
 
 
