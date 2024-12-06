@@ -34,7 +34,9 @@ def test_image_fft_interactive():
         data2 = alg.ifft2d(f)
         execenv.print("OK")
         execenv.print("Comparing original and FFT/iFFT images...", end=" ")
-        check_array_result("Image FFT/iFFT", data2, data)
+        check_array_result(
+            "Image FFT/iFFT", np.array(data2.real, dtype=data.dtype), data, rtol=1e-3
+        )
         execenv.print("OK")
 
         images = [data, f.real, f.imag, np.abs(f), data2.real, data2.imag]

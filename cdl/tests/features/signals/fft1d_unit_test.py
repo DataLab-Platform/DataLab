@@ -66,7 +66,7 @@ def test_signal_fft() -> None:
 
     # Check that the inverse FFT reconstructs the original signal
     check_array_result("Cosine signal FFT/iFFT X reconstruction", s1.y, ifft.y.real)
-    check_array_result("Cosine signal FFT/iFFT Y reconstruction", s1.x, ifft.x)
+    check_array_result("Cosine signal FFT/iFFT Y reconstruction", s1.x, ifft.x.real)
 
     # Check FFT properties
     mag = np.abs(fft.y)
@@ -112,7 +112,7 @@ def test_signal_magnitude_spectrum() -> None:
     check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
 
     # Check that the magnitude spectrum is correct
-    check_array_result("Cosine signal magnitude spectrum X", mag.x, fft.x)
+    check_array_result("Cosine signal magnitude spectrum X", mag.x, fft.x.real)
     check_array_result("Cosine signal magnitude spectrum Y", mag.y, np.abs(fft.y))
 
 
@@ -129,7 +129,7 @@ def test_signal_phase_spectrum() -> None:
     check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
 
     # Check that the phase spectrum is correct
-    check_array_result("Cosine signal phase spectrum X", phase.x, fft.x)
+    check_array_result("Cosine signal phase spectrum X", phase.x, fft.x.real)
     exp_phase = np.rad2deg(np.angle(fft.y))
     check_array_result("Cosine signal phase spectrum Y", phase.y, exp_phase)
 

@@ -68,7 +68,7 @@ def test_image_calibration() -> None:
     # Test with a = 1 and b = 0: should do nothing
     p.a, p.b = 1.0, 0.0
     dst = cpi.compute_calibration(src, p)
-    exp = src.data
+    exp = np.array(src.data, dtype=float)
     check_array_result("Calibration[identity]", dst.data, exp)
 
     # Testing with random values of a and b
