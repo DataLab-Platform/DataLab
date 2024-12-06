@@ -283,6 +283,7 @@ def check_array_result(
     restxt = f"{title}: {__array_to_str(res)} (expected: {__array_to_str(exp)})"
     execenv.print(restxt)
     assert np.allclose(res, exp, rtol=rtol, atol=atol), restxt
+    assert res.dtype == exp.dtype, restxt
 
 
 def check_scalar_result(

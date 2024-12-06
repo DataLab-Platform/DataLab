@@ -7,6 +7,7 @@ Profile extraction unit test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
@@ -70,7 +71,7 @@ def test_line_profile() -> None:
     sig = cpi.compute_line_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == width
-    exp = ima.data[row, :]
+    exp = np.array(ima.data[row, :], dtype=float)
     check_array_result("Horizontal line profile", sig.y, exp)
 
     # Test vertical line profile
@@ -79,7 +80,7 @@ def test_line_profile() -> None:
     sig = cpi.compute_line_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == height
-    exp = ima.data[:, col]
+    exp = np.array(ima.data[:, col], dtype=float)
     check_array_result("Vertical line profile", sig.y, exp)
 
 
@@ -97,7 +98,7 @@ def test_segment_profile() -> None:
     sig = cpi.compute_segment_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == min(row2, height - 1) - max(row1, 0) + 1
-    exp = ima.data[10:200, 20]
+    exp = np.array(ima.data[10:200, 20], dtype=float)
     check_array_result("Segment profile", sig.y, exp)
 
 
@@ -116,7 +117,7 @@ def test_average_profile() -> None:
     sig = cpi.compute_average_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == col2 - col1 + 1
-    exp = ima.data[row1 : row2 + 1, col1 : col2 + 1].mean(axis=0)
+    exp = np.array(ima.data[row1 : row2 + 1, col1 : col2 + 1].mean(axis=0), dtype=float)
     check_array_result("Horizontal average profile", sig.y, exp)
 
     # Test vertical average profile
@@ -124,12 +125,12 @@ def test_average_profile() -> None:
     sig = cpi.compute_average_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == min(row2, height - 1) - max(row1, 0) + 1
-    exp = ima.data[row1 : row2 + 1, col1 : col2 + 1].mean(axis=1)
+    exp = np.array(ima.data[row1 : row2 + 1, col1 : col2 + 1].mean(axis=1), dtype=float)
     check_array_result("Vertical average profile", sig.y, exp)
 
 
 if __name__ == "__main__":
-    test_profile_unit()
+    # test_profile_unit()
     test_line_profile()
     test_segment_profile()
     test_average_profile()
