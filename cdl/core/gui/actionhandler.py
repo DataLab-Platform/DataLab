@@ -1115,6 +1115,7 @@ class ImageActionHandler(BaseActionHandler):
                 )
                 self.new_action(
                     _("Rotate %s right") % "90°",  # pylint: disable=consider-using-f-string
+                    separator=True,
                     triggered=self.panel.processor.compute_rotate270,
                     icon_name="rotate_right.svg",
                     context_menu_pos=-1,
