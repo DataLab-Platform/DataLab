@@ -164,7 +164,6 @@ msgid ""
 "data set is large. Therefore, you may want to disable the auto-refresh "
 "feature when you are working with large data sets, and enable it again "
 "when you are done. This will avoid unnecessary refreshes."
-msgstr ""
 msgstr "Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du temps pour rafraîchir la visualisation quand les données changent, surtout quand le jeu de données est grand. Par conséquent, vous pouvez désactiver le rafraîchissement automatique quand vous travaillez avec des données volumineuses, et l'activer à nouveau quand vous avez terminé. Cela évitera des rafraîchissements inutiles."
 
 #: ../../doc/features/signal/menu_view.rst:87
