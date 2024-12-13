@@ -4,6 +4,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ## DataLab Version 0.18.1 ##
 
+💥 Enhancements:
+
+* FWHM computation now raises an exception when less than two points are found with zero-crossing method
+* Improved result validation for array-like results by checking the data type of the result
+
 🛠️ Bug fixes:
 
 * Fixed [Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106) - Analysis: coordinate shifted results on images with ROIs and shifted origin
