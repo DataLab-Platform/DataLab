@@ -63,14 +63,13 @@ msgstr ""
 "encore la largeur à 1/e²."
 
 #: ../../doc/features/signal/menu_analysis.rst:27
-#, fuzzy
 msgid ""
 "In DataLab vocabulary, an \"analysis\" is a feature that computes a "
 "scalar result from a signal. This result is stored as metadata, and thus "
 "attached to signal. This is different from a \"processing\" which creates"
 " a new signal from an existing one."
 msgstr ""
-"Dans le vocabulaire de DataLab, un \"calcul\" est une fonctionnalité qui "
+"Dans le vocabulaire de DataLab, un \"analyse\" est une fonctionnalité qui "
 "calcule un résultat scalaire à partir d'un signal. Ce résultat est stocké"
 " sous la forme de métadonnées ; il est donc attaché au signal. Cela "
 "diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un "
@@ -457,4 +456,3 @@ msgstr ""
 #~ msgstr ""
 #~ "Supprimer toutes les ROI définies pour"
 #~ " l'objet ou les objets sélectionné(s)."
-
