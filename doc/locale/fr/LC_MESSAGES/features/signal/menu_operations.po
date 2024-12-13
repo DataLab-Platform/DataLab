@@ -338,7 +338,7 @@ msgstr ""
 msgid ""
 "Based on `numpy.gradient "
 "<https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
-msgstr "Basé sur `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
+msgstr "Basée sur `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
 
 #: ../../doc/features/signal/menu_operations.rst:188
 msgid "|integral| Integral"
@@ -352,7 +352,7 @@ msgstr ""
 msgid ""
 "Based on `scipy.integrate.cumulative_trapezoid "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
-msgstr "Basé sur `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
+msgstr "Basée sur `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
 
 #: ../../doc/features/signal/menu_operations.rst:190
 msgid "|convolution| Convolution"
@@ -366,4 +366,4 @@ msgstr ""
 msgid ""
 "Based on `scipy.signal.convolve "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
-msgstr "Basé sur `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+msgstr "Basée sur `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
