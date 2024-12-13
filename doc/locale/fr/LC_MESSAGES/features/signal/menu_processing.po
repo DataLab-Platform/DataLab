@@ -210,7 +210,7 @@ msgstr ""
 
 #: ../../doc/features/signal/menu_processing.rst:93
 msgid "Noise reduction"
-msgstr "Rédution de bruit"
+msgstr "Réduction de bruit"
 
 #: ../../doc/features/signal/menu_processing.rst:95
 msgid ""
