@@ -200,8 +200,8 @@ msgid ":math:`y_{k} = \\dfrac{y_{k-1}}{c}`"
 msgstr ""
 
 #: ../../doc/features/signal/menu_operations.rst:101
-msgid "Real and imaginary parts"
-msgstr "Parties réelle et imaginaire"
+msgid "Absolute value, real and imaginary parts"
+msgstr "Valeur absolue, parties réelle et imaginaire"
 
 #: ../../doc/features/signal/menu_operations.rst:109
 msgid "|abs| Absolute value"

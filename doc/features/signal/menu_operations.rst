@@ -106,8 +106,8 @@ Create a new signal which is the result of a constant operation on each selected
     :height: 24px
     :class: dark-light no-scaled-link
 
-Real and imaginary parts
-------------------------
+Absolute value, real and imaginary parts
+----------------------------------------
 
 .. list-table::
     :header-rows: 1
