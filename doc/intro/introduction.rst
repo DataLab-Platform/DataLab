@@ -107,7 +107,7 @@ Prototyping a data processing application
 Debugging a data processing application
   DataLab can be used as an advanced debugging tool for your data processing
   applications, independently from the development environment or the language
-  used (Python, C#, C++, ...). All you need is to be able to communicate with
+  used (Python, C#, C++, etc.). All you need is to be able to communicate with
   DataLab via its remote control interface (standard XML-RPC protocol). This
   allows you to send data to DataLab (signals, images or even geometric shapes),
   visualize the data at each step of the processing chain, manipulate them to
