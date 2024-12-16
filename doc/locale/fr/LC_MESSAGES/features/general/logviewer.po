@@ -35,7 +35,7 @@ msgid ""
 "might crash or behave unexpectedly."
 msgstr ""
 "Malgré des efforts considérables en matière de tests (tests unitaires, "
-"couverture de tests, etc.), DataLab peut s'arrêter inopinément ou se "
+"couverture de tests...), DataLab peut s'arrêter inopinément ou se "
 "comporter de façon inattendue."
 
 #: ../../doc/features/general/logviewer.rst:15
