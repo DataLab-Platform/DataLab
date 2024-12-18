@@ -985,7 +985,7 @@ class SignalActionHandler(BaseActionHandler):
                 icon_name="fw1e2.svg",
             )
             self.new_action(
-                _("X values at min/max") + "...",
+                _("X values at min/max"),
                 triggered=self.panel.processor.compute_x_at_minmax,
                 tip=_("Compute X values at signal minimum and maximum"),
             )
