@@ -2,6 +2,12 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.18.2 ##
+
+🛠️ Bug fixes:
+
+* Signal analysis features: fixed duplicate results when no ROI is defined
+
 ## DataLab Version 0.18.1 ##
 
 💥 Enhancements:
