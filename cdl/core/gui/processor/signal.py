@@ -486,6 +486,127 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         )
 
     @qt_try_except()
+    def compute_allan_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute Allan variance
+        with :py:func:`cdl.computation.signal.compute_allan_variance`"""
+        self.compute_11(
+            cps.compute_allan_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Allan variance"),
+        )
+
+    @qt_try_except()
+    def compute_allan_deviation(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute Allan deviation
+        with :py:func:`cdl.computation.signal.compute_allan_deviation`"""
+        self.compute_11(
+            cps.compute_allan_deviation,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Allan deviation"),
+        )
+
+    @qt_try_except()
+    def compute_overlapping_allan_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute overlapping Allan variance
+        with :py:func:`cdl.computation.signal.compute_overlapping_allan_variance`"""
+        self.compute_11(
+            cps.compute_overlapping_allan_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Overlapping Allan variance"),
+        )
+
+    @qt_try_except()
+    def compute_modified_allan_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute modified Allan variance
+        with :py:func:`cdl.computation.signal.compute_modified_allan_variance`"""
+        self.compute_11(
+            cps.compute_modified_allan_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Modified Allan variance"),
+        )
+
+    @qt_try_except()
+    def compute_hadamard_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute Hadamard variance
+        with :py:func:`cdl.computation.signal.compute_hadamard_variance`"""
+        self.compute_11(
+            cps.compute_hadamard_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Hadamard variance"),
+        )
+
+    @qt_try_except()
+    def compute_total_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute total variance
+        with :py:func:`cdl.computation.signal.compute_total_variance`"""
+        self.compute_11(
+            cps.compute_total_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Total variance"),
+        )
+
+    @qt_try_except()
+    def compute_time_deviation(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute time deviation
+        with :py:func:`cdl.computation.signal.compute_time_deviation`"""
+        self.compute_11(
+            cps.compute_time_deviation,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Time deviation"),
+        )
+
+    @qt_try_except()
+    def compute_all_stability(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute all stability analysis features
+        using the following functions:
+
+        - :py:func:`cdl.computation.signal.compute_allan_variance`
+        - :py:func:`cdl.computation.signal.compute_allan_deviation`
+        - :py:func:`cdl.computation.signal.compute_overlapping_allan_variance`
+        - :py:func:`cdl.computation.signal.compute_modified_allan_variance`
+        - :py:func:`cdl.computation.signal.compute_hadamard_variance`
+        - :py:func:`cdl.computation.signal.compute_total_variance`
+        - :py:func:`cdl.computation.signal.compute_time_deviation`
+        """
+        if param is None:
+            param = cps.AllanVarianceParam()
+            if not param.edit(parent=self.panel.parent()):
+                return
+        funcs = [
+            cps.compute_allan_variance,
+            cps.compute_allan_deviation,
+            cps.compute_overlapping_allan_variance,
+            cps.compute_modified_allan_variance,
+            cps.compute_hadamard_variance,
+            cps.compute_total_variance,
+            cps.compute_time_deviation,
+        ]
+        self.compute_1n(funcs, [param] * len(funcs), "Stability", edit=False)
+
+    @qt_try_except()
     def compute_polyfit(
         self, param: cdl.param.PolynomialFitParam | None = None
     ) -> None:

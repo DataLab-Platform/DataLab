@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-25 18:58+0200\n"
+"POT-Creation-Date: 2024-12-22 12:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: ../../doc/features/signal/menu_processing.rst:4
 msgid "Processing Signals"
@@ -38,8 +38,8 @@ msgid ""
 "analysis features on signals."
 msgstr ""
 ":ref:`sig-menu-operations` pour plus d'informations sur les opérations "
-"qui peuvent être effectuées sur les signaux, ou :ref:`sig-menu-analysis`"
-" pour des informations sur les fonctionnalités d'analyse des signaux."
+"qui peuvent être effectuées sur les signaux, ou :ref:`sig-menu-analysis` "
+"pour des informations sur les fonctionnalités d'analyse des signaux."
 
 #: ../../doc/features/signal/menu_processing.rst:16
 msgid "Screenshot of the \"Processing\" menu."
@@ -290,6 +290,7 @@ msgid "The following functions are available:"
 msgstr "Les fonctions suivantes sont disponibles :"
 
 #: ../../doc/features/signal/menu_processing.rst:125
+#: ../../doc/features/signal/menu_processing.rst:377
 msgid "Function"
 msgstr "Fonction"
 
@@ -299,6 +300,7 @@ msgstr "Fonction"
 #: ../../doc/features/signal/menu_processing.rst:306
 #: ../../doc/features/signal/menu_processing.rst:324
 #: ../../doc/features/signal/menu_processing.rst:350
+#: ../../doc/features/signal/menu_processing.rst:378
 msgid "Description"
 msgstr "Description"
 
@@ -359,7 +361,10 @@ msgid ""
 "Optionnal: use logarithmic scale (dB). PSD is estimated using Welch's "
 "method (see `scipy.signal.welch "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
-msgstr "Optionnel : utiliser une échelle logarithmique (dB). La PSD est estimée en utilisant la méthode de Welch (voir `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
+msgstr ""
+"Optionnel : utiliser une échelle logarithmique (dB). La PSD est estimée "
+"en utilisant la méthode de Welch (voir `scipy.signal.welch "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
 
 #: ../../doc/features/signal/menu_processing.rst:143
 msgid ":math:`Y_{k} = PSD(y_{k})` or :math:`10.log_{10}(PSD(y_{k}))` (dB)"
@@ -981,16 +986,105 @@ msgid "Resampling number of points"
 msgstr "Nombre de points de rééchantillonnage"
 
 #: ../../doc/features/signal/menu_processing.rst:367
+msgid "Stability analysis"
+msgstr "Analyse de stabilité"
+
+#: ../../doc/features/signal/menu_processing.rst:369
+msgid ""
+"Create a new signal which is the result of a stability analysis of each "
+"selected signal."
+msgstr "Crée un signal à partir de l'analyse de stabilité de chaque signal "
+
+#: ../../doc/features/signal/menu_processing.rst:371
+msgid "The following stability analysis methods are available:"
+msgstr "Les méthodes d'analyse de stabilité suivantes sont disponibles :"
+
+#: ../../doc/features/signal/menu_processing.rst:379
+msgid "Allan variance"
+msgstr "Variance d'Allan"
+
+#: ../../doc/features/signal/menu_processing.rst:380
+msgid ""
+"Measure of the stability of a signal: defined as the variance of the "
+"difference between two successive measurements as a function of the time "
+"interval between them."
+msgstr "Mesure de la stabilité d'un signal : définie comme la variance de la différence entre deux mesures successives en fonction de l'intervalle de temps entre elles."
+
+#: ../../doc/features/signal/menu_processing.rst:381
+msgid "Allan deviation"
+msgstr "Ecart-type d'Allan"
+
+#: ../../doc/features/signal/menu_processing.rst:382
+msgid "Square root of the Allan variance."
+msgstr "Racine carrée de la variance d'Allan."
+
+#: ../../doc/features/signal/menu_processing.rst:383
+msgid "Overlapping Allan deviation"
+msgstr "Ecart-type d'Allan avec recouvrement"
+
+#: ../../doc/features/signal/menu_processing.rst:384
+msgid ""
+"A more robust version of the Allan variance that overlaps successive "
+"segments to improve statistical confidence."
+msgstr "Une version plus robuste de la variance d'Allan qui recoupe les segments successifs pour améliorer la confiance statistique."
+
+#: ../../doc/features/signal/menu_processing.rst:385
+msgid "Modified Allan variance"
+msgstr "Variance d'Allan modifiée"
+
+#: ../../doc/features/signal/menu_processing.rst:386
+msgid ""
+"A variation of the Allan variance that accounts for phase noise by "
+"introducing a filtering operation."
+msgstr "Une variation de la variance d'Allan qui tient compte du bruit de phase en introduisant une opération de filtrage."
+
+#: ../../doc/features/signal/menu_processing.rst:387
+msgid "Hadamard variance"
+msgstr "Variance de Hadamard"
+
+#: ../../doc/features/signal/menu_processing.rst:388
+msgid ""
+"An alternative to Allan variance, more robust to linear frequency drift "
+"in the signal"
+msgstr "Une alternative à la variance d'Allan, plus robuste aux dérives de fréquence linéaires dans le signal."
+
+#: ../../doc/features/signal/menu_processing.rst:389
+msgid "Total variance"
+msgstr "Variance totale"
+
+#: ../../doc/features/signal/menu_processing.rst:390
+msgid ""
+"Extends the Allan variance concept to cover all possible averaging "
+"intervals."
+msgstr "Etend le concept de variance d'Allan pour couvrir tous les intervalles de moyenne possibles."
+
+#: ../../doc/features/signal/menu_processing.rst:391
+msgid "Time deviation"
+msgstr "Déviation temporelle"
+
+#: ../../doc/features/signal/menu_processing.rst:392
+msgid ""
+"Derived from Allan deviation, quantifies stability in terms of time "
+"rather than frequency."
+msgstr "Dérivée de la déviation d'Allan, quantifie la stabilité en termes de temps plutôt que de fréquence."
+
+#: ../../doc/features/signal/menu_processing.rst:396
+msgid ""
+"The \"All stability features\" option allows to compute all stability "
+"analysis methods at once."
+msgstr "L'option \"Toutes les analyses de stabilité\" permet de calculer toutes les méthodes d'analyse de stabilité en une seule fois."
+
+#: ../../doc/features/signal/menu_processing.rst:400
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../doc/features/signal/menu_processing.rst:369
+#: ../../doc/features/signal/menu_processing.rst:402
 msgid "Create a new signal from a user-defined Region of Interest (ROI)."
 msgstr ""
 "Crée un signal à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../doc/features/signal/menu_processing.rst:373
+#: ../../doc/features/signal/menu_processing.rst:406
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the width of an horizontal range."

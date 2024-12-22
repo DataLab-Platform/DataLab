@@ -89,6 +89,8 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.WindowingParam
     :no-index:
+.. autodataset:: cdl.param.AllanVarianceParam
+    :no-index:
 .. autodataset:: cdl.param.LowPassFilterParam
     :no-index:
 .. autodataset:: cdl.param.HighPassFilterParam
@@ -262,6 +264,7 @@ from cdl.computation.signal import (
     XYCalibrateParam,
     PowerParam,
     WindowingParam,
+    AllanVarianceParam,
     LowPassFilterParam,
     HighPassFilterParam,
     BandPassFilterParam,

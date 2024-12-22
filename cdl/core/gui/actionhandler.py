@@ -938,6 +938,37 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_resampling,
                 icon_name="resampling.svg",
             )
+            with self.new_menu(_("Stability analysis"), icon_name="stability.svg"):
+                self.new_action(
+                    _("Allan variance"),
+                    triggered=self.panel.processor.compute_allan_variance,
+                )
+                self.new_action(
+                    _("Allan deviation"),
+                    triggered=self.panel.processor.compute_allan_deviation,
+                )
+                self.new_action(
+                    _("Modified Allan deviation"),
+                    triggered=self.panel.processor.compute_modified_allan_variance,
+                )
+                self.new_action(
+                    _("Hadamard variance"),
+                    triggered=self.panel.processor.compute_hadamard_variance,
+                )
+                self.new_action(
+                    _("Total variance"),
+                    triggered=self.panel.processor.compute_total_variance,
+                )
+                self.new_action(
+                    _("Time deviation"),
+                    triggered=self.panel.processor.compute_time_deviation,
+                )
+                self.new_action(
+                    _("All stability features") + "...",
+                    triggered=self.panel.processor.compute_all_stability,
+                    separator=True,
+                    tip=_("Compute all stability features"),
+                )
 
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(

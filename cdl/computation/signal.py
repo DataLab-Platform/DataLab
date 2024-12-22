@@ -1227,6 +1227,140 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
     return dst
 
 
+class AllanVarianceParam(gds.DataSet):
+    """Allan variance parameters"""
+
+    max_tau = gds.IntItem("Max τ", default=100, min=1, unit="pts")
+
+
+def compute_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Allan variance with :py:func:`cdl.algorithms.signal.allan_variance`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    avar = alg.allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, avar)
+    return dst
+
+
+def compute_allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Allan deviation with :py:func:`cdl.algorithms.signal.allan_deviation`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "allan_deviation", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    adev = alg.allan_deviation(x, y, tau_values)
+    dst.set_xydata(tau_values, adev)
+    return dst
+
+
+def compute_overlapping_allan_variance(
+    src: SignalObj, p: AllanVarianceParam
+) -> SignalObj:
+    """Compute Overlapping Allan variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "overlapping_allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    oavar = alg.overlapping_allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, oavar)
+    return dst
+
+
+def compute_modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Modified Allan variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "modified_allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    mavar = alg.modified_allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, mavar)
+    return dst
+
+
+def compute_hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Hadamard variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "hadamard_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    hvar = alg.hadamard_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, hvar)
+    return dst
+
+
+def compute_total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Total variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "total_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    tvar = alg.total_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, tvar)
+    return dst
+
+
+def compute_time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Time Deviation (TDEV).
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "time_deviation", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    tdev = alg.time_deviation(x, y, tau_values)
+    dst.set_xydata(tau_values, tdev)
+    return dst
+
+
 # MARK: compute_10 functions -----------------------------------------------------------
 # Functions with 1 input signal and 0 output signals (ResultShape or ResultProperties)
 # --------------------------------------------------------------------------------------

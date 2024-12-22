@@ -363,6 +363,39 @@ The following parameters are available:
     * - Number of points
       - Resampling number of points
 
+Stability analysis
+^^^^^^^^^^^^^^^^^^
+
+Create a new signal which is the result of a stability analysis of each selected signal.
+
+The following stability analysis methods are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Function
+      - Description
+    * - Allan variance
+      - Measure of the stability of a signal: defined as the variance of the difference between two successive measurements as a function of the time interval between them.
+    * - Allan deviation
+      - Square root of the Allan variance.
+    * - Overlapping Allan deviation
+      - A more robust version of the Allan variance that overlaps successive segments to improve statistical confidence.
+    * - Modified Allan variance
+      - A variation of the Allan variance that accounts for phase noise by introducing a filtering operation.
+    * - Hadamard variance
+      - An alternative to Allan variance, more robust to linear frequency drift in the signal
+    * - Total variance
+      - Extends the Allan variance concept to cover all possible averaging intervals.
+    * - Time deviation
+      - Derived from Allan deviation, quantifies stability in terms of time rather than frequency.
+
+.. note::
+
+    The "All stability features" option allows to compute all stability analysis methods at once.
+
+
 ROI extraction
 ^^^^^^^^^^^^^^
 
