@@ -11,5 +11,6 @@ setlocal
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% UsePython
 cd %SCRIPTPATH%\..
+python.exe -m pip install --upgrade pip
 pip install --upgrade PythonQwt guidata PlotPy
 call %FUNC% EndOfScript
