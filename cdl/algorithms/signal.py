@@ -952,18 +952,31 @@ def allan_variance(x: np.ndarray, y: np.ndarray, tau_values: np.ndarray) -> np.n
 
     allan_var = []
     for tau in tau_values:
-        tau_bins = int(tau / dt)  # Number of time steps in a tau
-        if tau_bins <= 1 or tau_bins > len(y) / 2:
-            # Tau too small or too large for data
+        m = int(round(tau / dt))  # Number of time steps in a tau
+        if m < 1:
+            raise ValueError(
+                f"Tau value {tau} is smaller than the sampling interval {dt}"
+            )
+        if m > len(y) // 2:
+            # Tau too large for reliable statistics
             allan_var.append(np.nan)
             continue
 
-        m = int(len(y) / tau_bins)  # Number of tau-sized bins
-        reshaped = y[: m * tau_bins].reshape(m, tau_bins)
+        # Calculate the clusters/bins
+        clusters = y[: len(y) - (len(y) % m)].reshape(-1, m)
+        bin_means = clusters.mean(axis=1)
 
-        avg_values = reshaped.mean(axis=1)
-        diff = np.diff(avg_values)
-        allan_var.append(0.5 * np.mean(diff**2))
+        # Calculate Allan variance using the definition
+        # σ²(τ) = 1/(2(N-1)) Σ(y_(i+1) - y_i)²
+        # where y_i are the bin means
+        squared_diff = np.sum(np.diff(bin_means) ** 2)
+        n = len(bin_means) - 1
+
+        if n > 0:
+            var = squared_diff / (2.0 * n)
+            allan_var.append(var)
+        else:
+            allan_var.append(np.nan)
 
     return np.array(allan_var)
 
