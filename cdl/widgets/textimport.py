@@ -215,10 +215,8 @@ class SignalImportParam(BaseImportParam):
         _("First Column is X"),
         default=True,
         help=_(
-            _(
-                "First column contains the X values\n"
-                "(ignored if there is only one column)"
-            )
+            "First column contains the X values\n"
+            "(ignored if there is only one column)"
         ),
     ).set_pos(col=1)
 
