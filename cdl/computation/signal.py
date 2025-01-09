@@ -1599,7 +1599,15 @@ def compute_contrast(obj: SignalObj) -> ResultProperties:
 
 
 def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
-    """Compute x at min/max"""
+    """
+    Compute the smallest argument at the minima and the smallest argument at the maxima.
+
+    Args:
+        obj: The signal object.
+
+    Returns:
+        An object containing the x-values at the minima and the maxima.
+    """
     return calc_resultproperties(
         "x@min,max",
         obj,

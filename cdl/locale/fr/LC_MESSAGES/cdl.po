@@ -1589,12 +1589,13 @@ msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
 #: cdl\core\gui\actionhandler.py:988
-msgid "X values at min/max"
-msgstr "Valeurs de X aux min/max"
+msgid "Abscissa of the minimum and maximum"
+msgstr "Abscisse du minimum et du maximum"
 
 #: cdl\core\gui\actionhandler.py:990
-msgid "Compute X values at signal minimum and maximum"
-msgstr "Calcule les valeurs de X aux minima et maxima du signal"
+msgid "Compute the smallest argument of the minima and the smallest argument of the "
+"maxima"
+msgstr "Calcule le plus petit argument du minimum et le plus petit argument du maximum"
 
 #: cdl\core\gui\actionhandler.py:993 cdl\core\gui\processor\image.py:1128
 #: cdl\core\gui\processor\image.py:1138 cdl\core\gui\processor\signal.py:213

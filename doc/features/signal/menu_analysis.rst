@@ -97,10 +97,11 @@ Then, compute the full width at 1/e².
     Metadata is attached to signal and serialized with it when exporting
     current session in a HDF5 file.
 
-X values at min/max
-^^^^^^^^^^^^^^^^^^^
+Arguments of the min and max
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Compute the X values at minimum and maximum of selected signal.
+Compute the smallest argument of the minima and the smallest argument of the maxima of
+the selected signal.
 
 Peak detection
 ^^^^^^^^^^^^^^

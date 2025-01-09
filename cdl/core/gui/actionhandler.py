@@ -985,9 +985,12 @@ class SignalActionHandler(BaseActionHandler):
                 icon_name="fw1e2.svg",
             )
             self.new_action(
-                _("X values at min/max"),
+                _("Abscissa of the minimum and maximum"),
                 triggered=self.panel.processor.compute_x_at_minmax,
-                tip=_("Compute X values at signal minimum and maximum"),
+                tip=_(
+                    "Compute the smallest argument of the minima and the smallest "
+                    "argument of the maxima"
+                ),
             )
             self.new_action(
                 _("Peak detection"),

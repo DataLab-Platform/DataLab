@@ -232,12 +232,14 @@ msgstr ""
 " fichier HDF5."
 
 #: ../../doc/features/signal/menu_analysis.rst:101
-msgid "X values at min/max"
-msgstr "Valeurs de X aux min/max"
+msgid "Abscissa of the minimum and maximum"
+msgstr "Abscisse du minimum et du maximum"
 
 #: ../../doc/features/signal/menu_analysis.rst:103
-msgid "Compute the X values at minimum and maximum of selected signal."
-msgstr "Calcule les valeurs de X aux minima et maxima du signal sélectionné."
+msgid "Compute the smallest argument of the minima and the smallest argument of the "
+"maxima of the selected signal."
+msgstr "Calcule le plus petit argument du minimum et le plus petit argument du maximum "
+"du signal sélectionné."
 
 #: ../../doc/features/signal/menu_analysis.rst:106
 msgid "Peak detection"
