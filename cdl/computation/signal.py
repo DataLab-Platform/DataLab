@@ -1481,6 +1481,30 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2, add_label=True)
 
 
+class FindAbscissaParam(gds.DataSet):
+    """Parameter dataset for abscissa finding"""
+
+    y = gds.FloatItem(_("Ordinate"), default=0)
+
+
+def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
+    """
+    Compute the smallest x-value at a given y-value for a signal object.
+
+    Parameters:
+        obj: The signal object containing x and y data.
+        p: The parameter dataset for finding the abscissa.
+
+    Returns:
+         An object containing the x-value.
+    """
+    return calc_resultproperties(
+        f"x|y={p.y}",
+        obj,
+        {"x = %g {.xunit}": lambda xy: alg.find_x_at_value(xy[0], xy[1], p.y)[0]},
+    )
+
+
 def compute_stats(obj: SignalObj) -> ResultProperties:
     """Compute statistics on a signal
 

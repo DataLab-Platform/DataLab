@@ -724,6 +724,18 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         return self.compute_10(cps.compute_x_at_minmax, title="X @ min,max")
 
     @qt_try_except()
+    def compute_x_at_y(
+        self, param: cps.DynamicParam | None = None
+    ) -> dict[str, ResultProperties]:
+        """Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`"""
+        return self.compute_10(
+            cps.compute_x_at_y,
+            param,
+            cps.FindAbscissaParam,
+            title=_("Find abscissa"),
+        )
+
+    @qt_try_except()
     def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:
         """Compute sampling rate and period (mean and std)
         with :py:func:`cdl.computation.signal.compute_sampling_rate_period`"""

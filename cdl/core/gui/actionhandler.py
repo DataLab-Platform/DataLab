@@ -993,6 +993,10 @@ class SignalActionHandler(BaseActionHandler):
                 ),
             )
             self.new_action(
+                _("Abscissa at y=..."),
+                triggered=self.panel.processor.compute_x_at_y,
+            )
+            self.new_action(
                 _("Peak detection"),
                 separator=True,
                 triggered=self.panel.processor.compute_peak_detection,

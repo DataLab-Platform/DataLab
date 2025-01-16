@@ -1597,6 +1597,12 @@ msgid "Compute the smallest argument of the minima and the smallest argument of 
 "maxima"
 msgstr "Calcule le plus petit argument du minimum et le plus petit argument du maximum"
 
+msgid "Abscissa at y=..."
+msgstr "Abscisse pour y=..."
+
+msgid "Find abscissa"
+msgstr "Trouver l'abscisse"
+
 #: cdl\core\gui\actionhandler.py:993 cdl\core\gui\processor\image.py:1128
 #: cdl\core\gui\processor\image.py:1138 cdl\core\gui\processor\signal.py:213
 msgid "Peak detection"
@@ -1666,6 +1672,9 @@ msgstr ""
 #: cdl\core\gui\actionhandler.py:1055 cdl\core\gui\processor\signal.py:474
 msgid "Convolution"
 msgstr "Convolution"
+
+msgid "Find abscissa"
+msgstr "Trouver l'abscisse"
 
 #: cdl\core\gui\actionhandler.py:1066 cdl\core\gui\main.py:1645
 #: cdl\core\gui\roieditor.py:462
