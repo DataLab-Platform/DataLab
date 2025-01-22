@@ -526,17 +526,18 @@ class VoigtModel(FitModel):
 # MARK: Misc. analyses -----------------------------------------------------------------
 
 
-def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
-    """Find the x indices where the corresponding y is the closest to zero
+def find_zero_crossings(y: np.ndarray) -> np.ndarray:
+    """
+    Find the left indices of the zero-crossing intervals in the given array.
 
     Args:
-        y: Y data
+        y: Input array.
 
     Returns:
-        Indices of the points right before or at zero crossing
+        An array of indices where zero-crossings occur.
     """
-    xi = np.where((y[:-1] >= 0) & (y[1:] <= 0) | (y[:-1] <= 0) & (y[1:] >= 0))[0]
-    return xi
+    zero_crossing_indices = np.nonzero(np.diff(np.sign(y)))[0]
+    return zero_crossing_indices
 
 
 def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
@@ -553,17 +554,20 @@ def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
         (empty array if no zero crossing is found)
     """
     leveled_y = y - value
-    xi_before = find_nearest_zero_point_idx(leveled_y)
-    xi_after = xi_before + 1
+    xi_before = find_zero_crossings(leveled_y)
 
     if len(xi_before) == 0:
         # Return an empty array if no zero crossing is found
         return np.array([])
 
+    # if the zero-crossing is exactly on a point, return the point
+    if np.any(leveled_y == 0):
+        return x[np.where(leveled_y == 0)]
+
     # linear interpolation
-    p = (leveled_y[xi_after] - leveled_y[xi_before]) / (x[xi_after] - x[xi_before])
-    ori = leveled_y[xi_after] - p * x[xi_after]
-    x0 = -ori / p  # where the curve cut the absissa
+    xi_after = xi_before + 1
+    slope = (leveled_y[xi_after] - leveled_y[xi_before]) / (x[xi_after] - x[xi_before])
+    x0 = -leveled_y[xi_before] / slope + x[xi_before]
     return x0
 
 
