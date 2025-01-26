@@ -122,7 +122,7 @@ print("All done!")
         """Set code to be executed
 
         Args:
-            code (str): Code to be executed
+            code: Code to be executed
         """
         self.editor.setPlainText(code)
 
@@ -130,7 +130,7 @@ print("All done!")
         """Serialize this macro
 
         Args:
-            writer (BaseIOHandler): Writer
+            writer: Writer
         """
         with writer.group("title"):
             writer.write(self.title)
@@ -141,7 +141,7 @@ print("All done!")
         """Deserialize this macro
 
         Args:
-            reader (BaseIOHandler): Reader
+            reader: Reader
         """
         with reader.group("title"):
             self.title = reader.read_any()
@@ -152,7 +152,7 @@ print("All done!")
         """Save macro to file
 
         Args:
-            filename (str): File name
+            filename: File name
         """
         code = self.FILE_HEADER % self.title + self.get_code()
         with open(filename, "wb") as fdesc:
@@ -162,7 +162,7 @@ print("All done!")
         """Load macro from file
 
         Args:
-            filename (str): File name
+            filename: File name
         """
         with open(filename, "rb") as fdesc:
             code = to_string(fdesc.read()).strip()
@@ -190,7 +190,7 @@ print("All done!")
         """Increment untitled number and return untitled macro title
 
         Returns:
-            str: Untitled macro title
+            Untitled macro title
         """
         global UNTITLED_NB  # pylint: disable=global-statement
         UNTITLED_NB += 1
@@ -201,7 +201,7 @@ print("All done!")
         """Method called when macro's editor modification state changed
 
         Args:
-            state (bool): Modification state
+            state: Modification state
         """
         if state:
             self.MODIFIED.emit()
@@ -211,10 +211,10 @@ print("All done!")
         """Transcode bytes to locale str
 
         Args:
-            bytearr (QByteArray): Byte array
+            bytearr: Byte array
 
         Returns:
-            str: Locale str
+            Locale str
         """
         locale_codec = QC.QTextCodec.codecForLocale()
         return locale_codec.toUnicode(bytearr.data())
@@ -223,7 +223,7 @@ print("All done!")
         """Return standard output str
 
         Returns:
-            str: Standard output str
+            Standard output str
         """
         self.process.setReadChannel(QC.QProcess.StandardOutput)
         bytearr = QC.QByteArray()
@@ -235,7 +235,7 @@ print("All done!")
         """Return standard error str
 
         Returns:
-            str: Standard error str
+            Standard error str
         """
         self.process.setReadChannel(QC.QProcess.StandardError)
         bytearr = QC.QByteArray()
@@ -255,8 +255,8 @@ print("All done!")
         """Print text in console, with line separator
 
         Args:
-            text (str): Text to be printed
-            error (bool | None): Print as error. Defaults to False.
+            text: Text to be printed
+            error: Print as error. Defaults to False.
         """
         msg = f"---({time.ctime()})---[{text}]{os.linesep}"
         if eol_before:
@@ -294,7 +294,7 @@ print("All done!")
         """Is macro running?
 
         Returns:
-            bool: True if macro is running
+            True if macro is running
         """
         if self.process is not None:
             return self.process.state() == QC.QProcess.Running
@@ -307,12 +307,12 @@ print("All done!")
             self.process.kill()
 
     # pylint: disable=unused-argument
-    def finished(self, exit_code, exit_status) -> None:
+    def finished(self, exit_code: int, exit_status: QC.QProcess.ExitStatus) -> None:
         """Process has finished
 
         Args:
-            exit_code (int): Exit code
-            exit_status (QC.QProcess.ExitStatus): Exit status
+            exit_code: Exit code
+            exit_status: Exit status
         """
         self.print(_("# <== '%s' macro has finished") % self.title, eol_before=False)
         self.FINISHED.emit()

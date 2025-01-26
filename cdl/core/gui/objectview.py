@@ -601,7 +601,7 @@ class ObjectView(SimpleObjectTree):
         """Select multiple objects
 
         Args:
-            selection (list): list of objects, object numbers (1 to N) or object uuids
+            selection: list of objects, object numbers (1 to N) or object uuids
         """
         if all(isinstance(obj, int) for obj in selection):
             all_uuids = self.objmodel.get_object_ids()
