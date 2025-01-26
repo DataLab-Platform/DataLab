@@ -263,7 +263,7 @@ class RemoteServer(QC.QThread):
         """Return current panel name.
 
         Returns:
-            str: Panel name (valid values: 'signal', 'image', 'macro')
+            Panel name (valid values: 'signal', 'image', 'macro')
         """
         return self.win.get_current_panel()
 
@@ -272,7 +272,7 @@ class RemoteServer(QC.QThread):
         """Switch to panel.
 
         Args:
-            panel (str): Panel name (valid values: 'signal', 'image', 'macro')
+            panel: Panel name (valid values: 'signal', 'image', 'macro')
         """
         self.SIG_SWITCH_TO_PANEL.emit(panel)
 
@@ -281,7 +281,7 @@ class RemoteServer(QC.QThread):
         """Toggle auto refresh state.
 
         Args:
-            state (bool): True to enable auto refresh, False to disable it
+            state: True to enable auto refresh, False to disable it
         """
         self.SIG_TOGGLE_AUTO_REFRESH.emit(state)
 
@@ -290,7 +290,7 @@ class RemoteServer(QC.QThread):
         """Toggle show titles state.
 
         Args:
-            state (bool): True to enable show titles, False to disable it
+            state: True to enable show titles, False to disable it
         """
         self.SIG_TOGGLE_SHOW_TITLES.emit(state)
 
@@ -304,7 +304,7 @@ class RemoteServer(QC.QThread):
         """Save to a DataLab HDF5 file.
 
         Args:
-            filename (str): HDF5 file name (with extension .h5)
+            filename: HDF5 file name (with extension .h5)
         """
         self.SIG_SAVE_TO_H5.emit(filename)
 
@@ -318,10 +318,9 @@ class RemoteServer(QC.QThread):
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
         Args:
-            h5files (list[str] | None): HDF5 file names. Defaults to None.
-            import_all (bool | None): Import all objects from HDF5 file.
-                Defaults to None.
-            reset_all (bool | None): Reset all application data. Defaults to None.
+            h5files: HDF5 file names. Defaults to None.
+            import_all: Import all objects from HDF5 file. Defaults to None.
+            reset_all: Reset all application data. Defaults to None.
         """
         import_all = True if import_all is None else import_all
         reset_all = False if reset_all is None else reset_all
@@ -332,8 +331,8 @@ class RemoteServer(QC.QThread):
         """Open DataLab HDF5 browser to Import HDF5 file.
 
         Args:
-            filename (str): HDF5 file name
-            reset_all (bool | None): Reset all application data. Defaults to None.
+            filename: HDF5 file name
+            reset_all: Reset all application data. Defaults to None.
         """
         reset_all = False if reset_all is None else reset_all
         self.SIG_IMPORT_H5.emit(filename, reset_all)
@@ -361,16 +360,16 @@ class RemoteServer(QC.QThread):
         """Add signal data to DataLab.
 
         Args:
-            title (str): Signal title
-            xbinary (Binary): X data
-            ybinary (Binary): Y data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
+            title: Signal title
+            xbinary: X data
+            ybinary: Y data
+            xunit: X unit. Defaults to None.
+            yunit: Y unit. Defaults to None.
+            xlabel: X label. Defaults to None.
+            ylabel: Y label. Defaults to None.
 
         Returns:
-            bool: True if successful
+            True if successful
         """
         xdata = rpcbinary_to_array(xbinary)
         ydata = rpcbinary_to_array(ybinary)
@@ -397,17 +396,17 @@ class RemoteServer(QC.QThread):
         """Add image data to DataLab.
 
         Args:
-            title (str): Image title
-            zbinary (Binary): Z data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            zunit (str | None): Z unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
-            zlabel (str | None): Z label. Defaults to None.
+            title: Image title
+            zbinary: Z data
+            xunit: X unit. Defaults to None.
+            yunit: Y unit. Defaults to None.
+            zunit: Z unit. Defaults to None.
+            xlabel: X label. Defaults to None.
+            ylabel: Y label. Defaults to None.
+            zlabel: Z label. Defaults to None.
 
         Returns:
-            bool: True if successful
+            True if successful
         """
         data = rpcbinary_to_array(zbinary)
         image = create_image(title, data)
@@ -428,7 +427,7 @@ class RemoteServer(QC.QThread):
             obj_data: Object data
 
         Returns:
-            bool: True if successful
+            True if successful
         """
         obj = json_to_dataset(obj_data)
         self.SIG_ADD_OBJECT.emit(obj)
@@ -470,8 +469,8 @@ class RemoteServer(QC.QThread):
         Args:
             selection: List of group numbers (1 to N), or list of group uuids,
              or None to select all groups. Defaults to None.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used. Defaults to None.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used. Defaults to None.
         """
         if selection is None:
             self.SIG_SELECT_ALL_GROUPS.emit(panel)
@@ -515,7 +514,7 @@ class RemoteServer(QC.QThread):
         """Return groups titles and lists of inner objects uuids and titles.
 
         Returns:
-            Tuple: groups titles, lists of inner objects uuids and titles
+            Groups titles, lists of inner objects uuids and titles
         """
         return self.win.get_group_titles_with_object_infos()
 
@@ -563,10 +562,10 @@ class RemoteServer(QC.QThread):
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel (str | None): Panel name. Defaults to None.
+            panel: Panel name. Defaults to None.
 
         Returns:
-            list[str]: Object uuids
+            Object uuids
         """
         return self.win.get_object_uuids(panel)
 
@@ -596,10 +595,10 @@ class RemoteServer(QC.QThread):
         """Add object annotations (annotation plot items).
 
         Args:
-            items_json (str): JSON string of annotation items
-            refresh_plot (bool | None): refresh plot. Defaults to True.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            items_json: JSON string of annotation items
+            refresh_plot: refresh plot. Defaults to True.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         items = json_to_items(items_json)
         if items:
@@ -612,10 +611,10 @@ class RemoteServer(QC.QThread):
         """Add a label with object title on the associated plot
 
         Args:
-            title (str | None): Label title. Defaults to None.
-                If None, the title is the object title.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            title: Label title. Defaults to None.
+             If None, the title is the object title.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         self.win.add_label_with_title(title, panel)
 
@@ -624,8 +623,8 @@ class RemoteServer(QC.QThread):
         """Run macro.
 
         Args:
-             number: Number of the macro (starting at 1). Defaults to None (run
-              current macro, or does nothing if there is no macro).
+            number: Number of the macro (starting at 1). Defaults to None (run
+             current macro, or does nothing if there is no macro).
         """
         self.SIG_RUN_MACRO.emit(number_or_title)
 
@@ -724,8 +723,8 @@ class RemoteClient(BaseProxy):
         """Connect to DataLab XML-RPC server.
 
         Args:
-            port (str | None): XML-RPC port to connect to. If not specified,
-                the port is automatically retrieved from DataLab configuration.
+            port: XML-RPC port to connect to. If not specified,
+             the port is automatically retrieved from DataLab configuration.
 
         Raises:
             ConnectionRefusedError: DataLab is currently not running
@@ -759,10 +758,10 @@ class RemoteClient(BaseProxy):
         """Try to connect to DataLab XML-RPC server.
 
         Args:
-            port (str | None): XML-RPC port to connect to. If not specified,
-                the port is automatically retrieved from DataLab configuration.
-            timeout (float | None): Timeout in seconds. Defaults to 5.0.
-            retries (int | None): Number of retries. Defaults to 10.
+            port: XML-RPC port to connect to. If not specified,
+             the port is automatically retrieved from DataLab configuration.
+            timeout: Timeout in seconds. Defaults to 5.0.
+            retries: Number of retries. Defaults to 10.
 
         Raises:
             ConnectionRefusedError: Unable to connect to DataLab
@@ -822,16 +821,16 @@ class RemoteClient(BaseProxy):
         """Add signal data to DataLab.
 
         Args:
-            title (str): Signal title
-            xdata (numpy.ndarray): X data
-            ydata (numpy.ndarray): Y data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
+            title: Signal title
+            xdata: X data
+            ydata: Y data
+            xunit: X unit. Defaults to None.
+            yunit: Y unit. Defaults to None.
+            xlabel: X label. Defaults to None.
+            ylabel: Y label. Defaults to None.
 
         Returns:
-            bool: True if signal was added successfully, False otherwise
+            True if signal was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid xdata dtype
@@ -860,17 +859,17 @@ class RemoteClient(BaseProxy):
         """Add image data to DataLab.
 
         Args:
-            title (str): Image title
-            data (numpy.ndarray): Image data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            zunit (str | None): Z unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
-            zlabel (str | None): Z label. Defaults to None.
+            title: Image title
+            data: Image data
+            xunit: X unit. Defaults to None.
+            yunit: Y unit. Defaults to None.
+            zunit: Z unit. Defaults to None.
+            xlabel: X label. Defaults to None.
+            ylabel: Y label. Defaults to None.
+            zlabel: Z label. Defaults to None.
 
         Returns:
-            bool: True if image was added successfully, False otherwise
+            True if image was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid data dtype
@@ -887,7 +886,7 @@ class RemoteClient(BaseProxy):
         """Add object to DataLab.
 
         Args:
-            obj (SignalObj | ImageObj): Signal or image object
+            obj: Signal or image object
         """
         obj_data = dataset_to_json(obj)
         self._cdl.add_object(obj_data)
@@ -953,10 +952,10 @@ class RemoteClient(BaseProxy):
         """Add object annotations (annotation plot items).
 
         Args:
-            items (list): annotation plot items
-            refresh_plot (bool | None): refresh plot. Defaults to True.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            items: annotation plot items
+            refresh_plot: refresh plot. Defaults to True.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         items_json = items_to_json(items)
         if items_json is not None:

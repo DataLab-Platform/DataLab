@@ -127,13 +127,13 @@ def edit_default_image_settings(
     """Edit default image settings
 
     Args:
-        dataset (guidata.dataset.DataSet): dataset
-        item (DataItem): Data item
-        value (Any): Value
-        parent (QWidget): Parent widget
+        dataset: dataset
+        item: Data item
+        value: Value
+        parent: Parent widget
 
     Returns:
-        bool: True if the settings were edited
+        True if the settings were edited
     """
     param = ImageDefaultSettings(_("Default image visualization settings"))
     ima_def_dict = Conf.view.get_def_dict("ima")
@@ -269,7 +269,7 @@ def edit_settings(parent: QW.QWidget) -> None:
     """Edit DataLab settings
 
     Args:
-        parent (QWidget): Parent widget
+        parent: Parent widget
     """
     paramdict = {
         "main": MainSettings(_("General")),
