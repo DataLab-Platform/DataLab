@@ -323,6 +323,8 @@ class RemoteServer(QC.QThread):
                 Defaults to None.
             reset_all (bool | None): Reset all application data. Defaults to None.
         """
+        import_all = True if import_all is None else import_all
+        reset_all = False if reset_all is None else reset_all
         self.SIG_OPEN_H5.emit(h5files, import_all, reset_all)
 
     @remote_call
@@ -333,6 +335,7 @@ class RemoteServer(QC.QThread):
             filename (str): HDF5 file name
             reset_all (bool | None): Reset all application data. Defaults to None.
         """
+        reset_all = False if reset_all is None else reset_all
         self.SIG_IMPORT_H5.emit(filename, reset_all)
 
     @remote_call
