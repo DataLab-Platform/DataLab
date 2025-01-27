@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-28 16:01+0200\n"
+"POT-Creation-Date: 2025-01-27 11:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: cdl.obj:2 of
 msgid "Object model (:mod:`cdl.obj`)"
@@ -31,7 +31,7 @@ msgstr ""
 "Le module :mod:`cdl.obj` fournit les classes et fonctions nécessaires "
 "pour créer et manipuler des objets signal et image."
 
-#: cdl.obj:11 of
+#: cdl.obj:7 of
 msgid "Those classes and functions are defined in other modules:"
 msgstr "Ces classes et fonctions sont définies dans d'autres modules :"
 
@@ -88,76 +88,7 @@ msgstr ""
 "L'index de la ROI commence à 0 (ou est simplement 0 s'il n'y a pas de "
 "ROI)."
 
-#: cdl.core.io.read_image cdl.core.io.read_images cdl.core.io.read_signal
-#: cdl.core.io.read_signals
-#: cdl.core.model.base.BaseObj.add_annotations_from_file
-#: cdl.core.model.base.BaseObj.add_annotations_from_items
-#: cdl.core.model.base.BaseObj.get_metadata_option
-#: cdl.core.model.base.BaseObj.iterate_shape_items
-#: cdl.core.model.base.BaseObj.restore_attr_from_metadata
-#: cdl.core.model.base.BaseObj.roidata_to_params
-#: cdl.core.model.base.BaseObj.save_attr_to_metadata
-#: cdl.core.model.base.BaseObj.set_metadata_option
-#: cdl.core.model.base.BaseObj.transform_shapes
-#: cdl.core.model.base.BaseObj.update_resultshapes_from
-#: cdl.core.model.base.ResultProperties
-#: cdl.core.model.base.ResultProperties.create_label_item
-#: cdl.core.model.base.ResultProperties.get_label_item
-#: cdl.core.model.base.ResultProperties.update_obj_metadata_from_item
-#: cdl.core.model.base.ResultShape
-#: cdl.core.model.base.ResultShape.create_shape_item
-#: cdl.core.model.base.ResultShape.iterate_plot_items
-#: cdl.core.model.base.ResultShape.transform_coordinates
-#: cdl.core.model.image.ImageObj.add_label_with_title
-#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.get_roi_param
-#: cdl.core.model.image.ImageObj.iterate_roi_items
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.new_roi_item
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indices
-#: cdl.core.model.image.ImageObj.set_data_type
-#: cdl.core.model.image.ImageObj.set_metadata_from
-#: cdl.core.model.image.ImageObj.update_item
-#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item
-#: cdl.core.model.image.ImageObj.update_plot_item_parameters
-#: cdl.core.model.image.ImageRoiDataItem
-#: cdl.core.model.image.ImageRoiDataItem.apply_mask
-#: cdl.core.model.image.ImageRoiDataItem.from_image
-#: cdl.core.model.image.ImageRoiDataItem.get_image_masked_view
-#: cdl.core.model.image.ImageRoiDataItem.make_roi_item
-#: cdl.core.model.image.ROI2DParam.get_data cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.new_image_param
-#: cdl.core.model.signal.ROI1DParam.get_data
-#: cdl.core.model.signal.SignalObj.add_label_with_title
-#: cdl.core.model.signal.SignalObj.copy
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.get_roi_param
-#: cdl.core.model.signal.SignalObj.iterate_roi_items
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.new_roi_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indices
-#: cdl.core.model.signal.SignalObj.set_data_type
-#: cdl.core.model.signal.SignalObj.set_xydata
-#: cdl.core.model.signal.SignalObj.update_item
-#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item
-#: cdl.core.model.signal.SignalObj.update_plot_item_parameters
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param
-#: guidata.dataset.datatypes.DataSet.accept
-#: guidata.dataset.datatypes.DataSet.create
-#: guidata.dataset.datatypes.DataSet.deserialize
-#: guidata.dataset.datatypes.DataSet.edit
-#: guidata.dataset.datatypes.DataSet.get_items
-#: guidata.dataset.datatypes.DataSet.read_config
-#: guidata.dataset.datatypes.DataSet.serialize
-#: guidata.dataset.datatypes.DataSet.set_global_prop
-#: guidata.dataset.datatypes.DataSet.to_string
-#: guidata.dataset.datatypes.DataSet.view
-#: guidata.dataset.datatypes.DataSet.write_config of
+#: cdl.core.model.image.ROI2DParam.get_extracted_roi cdl.obj of
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -232,42 +163,7 @@ msgstr ""
 "Retourne le tableau des résultats affichés, c'est-à-dire incluant le "
 "tableau complémentaire"
 
-#: cdl.core.io.read_image cdl.core.io.read_images cdl.core.io.read_signal
-#: cdl.core.io.read_signals cdl.core.model.base.BaseObj.get_metadata_option
-#: cdl.core.model.base.BaseObj.get_valid_dtypenames
-#: cdl.core.model.base.BaseObj.roi_has_changed
-#: cdl.core.model.base.BaseObj.roidata_to_params
-#: cdl.core.model.base.ResultProperties.create_label_item
-#: cdl.core.model.base.ResultProperties.get_label_item
-#: cdl.core.model.base.ResultShape.create_label_item
-#: cdl.core.model.base.ResultShape.create_shape_item
-#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.get_masked_view
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indices
-#: cdl.core.model.image.ROI2DParam.get_data cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.new_image_param
-#: cdl.core.model.signal.ROI1DParam.get_data
-#: cdl.core.model.signal.SignalObj.copy
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.get_roi_param
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indices
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param cdl.obj.ImageObj.maskdata
-#: cdl.obj.ImageObj.roi cdl.obj.ResultProperties.shown_array
-#: cdl.obj.ResultShape.shown_array cdl.obj.SignalObj.roi
-#: guidata.dataset.datatypes.DataSet.check
-#: guidata.dataset.datatypes.DataSet.create
-#: guidata.dataset.datatypes.DataSet.get_comment
-#: guidata.dataset.datatypes.DataSet.get_icon
-#: guidata.dataset.datatypes.DataSet.get_items
-#: guidata.dataset.datatypes.DataSet.get_title
-#: guidata.dataset.datatypes.DataSet.to_string of
+#: cdl.obj of
 msgid "Returns"
 msgstr "Renvoie"
 
@@ -374,8 +270,7 @@ msgid ""
 " False)"
 msgstr ""
 
-#: cdl.core.model.base.BaseObj.check_data cdl.core.model.base.ResultShape
-#: cdl.core.model.base.ResultShape.check_array of
+#: cdl.obj of
 msgid "Raises"
 msgstr "Lève"
 
@@ -427,24 +322,21 @@ msgstr "si True, affiche les étiquettes de forme"
 
 #: cdl.core.model.base.ResultShape.create_shape_item:6
 #: cdl.core.model.base.ResultShape.iterate_plot_items:5 of
-msgid "shape style option (e.g. \"shape/drag\")"
+#, fuzzy
+msgid "shape style option (\"s\" for signal, \"i\" for image)"
 msgstr "option de style de forme (par exemple \"shape/drag\")"
 
 #: cdl.core.model.base.BaseObj.iterate_resultproperties
 #: cdl.core.model.base.BaseObj.iterate_resultshapes
 #: cdl.core.model.base.BaseObj.iterate_shape_items
-#: cdl.core.model.base.ResultShape.iterate_plot_items
-#: cdl.core.model.image.ImageObj.iterate_roi_items
-#: cdl.core.model.signal.SignalObj.iterate_roi_items of
+#: cdl.core.model.base.ResultShape.iterate_plot_items of
 msgid "Yields"
 msgstr "Produit (`yield`)"
 
 #: cdl.core.model.base.BaseObj.iterate_shape_items:5
 #: cdl.core.model.base.ResultShape.create_shape_item:8
 #: cdl.core.model.base.ResultShape.iterate_plot_items:7
-#: cdl.core.model.image.ImageObj.iterate_roi_items:7
 #: cdl.core.model.image.ImageObj.make_item:5
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:7
 #: cdl.core.model.signal.SignalObj.make_item:5 of
 msgid "Plot item"
 msgstr "Item graphique"
@@ -526,10 +418,13 @@ msgstr "Modèle de signal"
 msgid "Signal object"
 msgstr "Objet signal"
 
-#: cdl.core.model.image.ImageObj:5 cdl.core.model.signal.SignalObj:5
-#: guidata.dataset.datatypes.DataSet.create:3 of
+#: cdl.core.model.image.ImageObj:5 cdl.core.model.image.ImageObj:11
+#: cdl.core.model.image.NewImageParam:5 cdl.core.model.signal.NewSignalParam:5
+#: cdl.core.model.signal.SignalObj:5 cdl.core.model.signal.SignalObj:11
+#: guidata.dataset.datatypes.DataSet.create:3
+#: guidata.dataset.datatypes.DataSet.create:5 of
 #, fuzzy
-msgid "Par défaut : None."
+msgid "Default: None."
 msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.Gauss2DParam cdl.core.model.image.ImageObj
@@ -553,20 +448,16 @@ msgstr "type de données"
 msgid "guidata.dataset.dataitems.StringItem"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj:11 cdl.core.model.signal.SignalObj:11
-#: guidata.dataset.datatypes.DataSet.create:5 of
-#, fuzzy
-msgid "Données\\.  Par défaut : None."
-msgstr "valeurs par défaut"
-
-#: cdl.core.model.image.ImageObj:13 cdl.core.model.signal.SignalObj:13 of
+#: cdl.core.model.image.ImageObj:13 cdl.core.model.image.ROI2DParam:55
+#: cdl.core.model.signal.SignalObj:13 of
 msgid "guidata.dataset.dataitems.FloatArrayItem"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:17 cdl.core.model.signal.SignalObj:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Métadonnées\\.  Par défaut : {}."
-msgstr ""
+#, fuzzy
+msgid "Default: {}."
+msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.ImageObj:19 cdl.core.model.signal.SignalObj:19 of
 msgid "guidata.dataset.dataitems.DictItem"
@@ -574,7 +465,7 @@ msgstr ""
 
 #: cdl.core.model.signal.SignalObj:23
 #: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "Titre du signal\\.  Par défaut : 'Sans titre'."
+msgid "Signal title\\.  Default: 'Untitled'."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:53 cdl.core.model.image.ImageObj:65
@@ -585,7 +476,7 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:19
 #: guidata.dataset.datatypes.DataSet.create:23
 #: guidata.dataset.datatypes.DataSet.create:27 of
-msgid "Titre\\.  Par défaut : ''."
+msgid "Title\\.  Default: ''."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:59 cdl.core.model.image.ImageObj:71
@@ -596,14 +487,16 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:21
 #: guidata.dataset.datatypes.DataSet.create:25
 #: guidata.dataset.datatypes.DataSet.create:29 of
-msgid "Unité\\.  Par défaut : ''."
-msgstr ""
+#, fuzzy
+msgid "Default: ''."
+msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.ImageObj:89 cdl.core.model.signal.SignalObj:53
 #: guidata.dataset.datatypes.DataSet.create:19
 #: guidata.dataset.datatypes.DataSet.create:31 of
-msgid "Par défaut : True."
-msgstr ""
+#, fuzzy
+msgid "Default: True."
+msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.ImageObj:91 cdl.core.model.image.ImageObj:97
 #: cdl.core.model.image.ImageObj:115 cdl.core.model.signal.SignalObj:55
@@ -617,8 +510,9 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:27
 #: guidata.dataset.datatypes.DataSet.create:33
 #: guidata.dataset.datatypes.DataSet.create:39 of
-msgid "Par défaut : False."
-msgstr ""
+#, fuzzy
+msgid "Default: False."
+msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.ImageObj:101 cdl.core.model.image.ImageObj:119
 #: cdl.core.model.image.ImageObj:131 cdl.core.model.signal.SignalObj:65
@@ -628,8 +522,9 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:35
 #: guidata.dataset.datatypes.DataSet.create:41
 #: guidata.dataset.datatypes.DataSet.create:45 of
-msgid "Borne inférieure\\.  Par défaut : None."
-msgstr ""
+#, fuzzy
+msgid "Lower bound\\.  Default: None."
+msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.Gauss2DParam:7 cdl.core.model.image.Gauss2DParam:13
 #: cdl.core.model.image.Gauss2DParam:19 cdl.core.model.image.Gauss2DParam:25
@@ -665,18 +560,25 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:37
 #: guidata.dataset.datatypes.DataSet.create:43
 #: guidata.dataset.datatypes.DataSet.create:47 of
-msgid "Borne supérieure\\.  Par défaut : None."
-msgstr ""
+#, fuzzy
+msgid "Upper bound\\.  Default: None."
+msgstr "valeurs par défaut"
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`SignalObj` avec les champs "
-"initialisés aux valeurs données."
+"Returns a new instance of :py:class:`SignalObj` with the fields set to "
+"the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:34 of
-msgid "Nouvelle instance de :py:class:`SignalObj`."
+msgid "New instance of :py:class:`SignalObj`."
 msgstr ""
+
+#: cdl.core.model.image.ImageObj.get_roi_class:1
+#: cdl.core.model.signal.SignalObj.get_roi_class:1 of
+#, fuzzy
+msgid "Return ROI class"
+msgstr "Renvoie"
 
 #: cdl.core.model.image.ImageObj.regenerate_uuid:1
 #: cdl.core.model.signal.SignalObj.regenerate_uuid:1 of
@@ -701,9 +603,9 @@ msgid "Copy object."
 msgstr "Copie l'objet."
 
 #: cdl.core.model.image.ImageObj.copy:3
-#: cdl.core.model.image.ImageObj.get_roi_param:3
+#: cdl.core.model.image.create_image_roi:16
 #: cdl.core.model.signal.SignalObj.copy:3
-#: cdl.core.model.signal.SignalObj.get_roi_param:3
+#: cdl.core.model.signal.create_signal_roi:12
 #: guidata.dataset.datatypes.DataSet.get_title:3 of
 msgid "title"
 msgstr "titre"
@@ -718,7 +620,6 @@ msgstr "type de données"
 msgid "Copied object"
 msgstr "Objet copié"
 
-#: cdl.core.model.image.ImageObj.set_data_type:1
 #: cdl.core.model.signal.SignalObj.set_data_type:1 of
 msgid "Change data type."
 msgstr "Change le type de données."
@@ -770,7 +671,6 @@ msgstr ""
 "l'`roi_index` sont définis)."
 
 #: cdl.core.model.image.ImageObj.get_data:4
-#: cdl.core.model.image.ImageRoiDataItem.make_roi_item:3
 #: cdl.core.model.signal.SignalObj.get_data:4 of
 msgid "ROI index"
 msgstr "index de la ROI"
@@ -855,93 +755,37 @@ msgstr "Met à jour l'élément de tracé à partir des données."
 msgid "if True, data has changed"
 msgstr "si True, les données ont changé"
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indices:1
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indices:1 of
-msgid "Convert ROI coordinates to indices."
-msgstr "Convertit les coordonnées de la ROI en index."
+#: cdl.core.model.image.ImageObj.physical_to_indices:1
+#: cdl.core.model.signal.SignalObj.physical_to_indices:1 of
+msgid "Convert coordinates from physical (real world) to (array) indices (pixel)"
+msgstr ""
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indices:3
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indices:3 of
+#: cdl.core.model.image.ImageObj.physical_to_indices:3
+#: cdl.core.model.signal.SignalObj.physical_to_indices:3 of
 msgid "coordinates"
 msgstr "coordonnées"
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indices:5
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indices:5 of
+#: cdl.core.model.image.ImageObj.physical_to_indices:5
+#: cdl.core.model.signal.SignalObj.physical_to_indices:5 of
 msgid "Indices"
 msgstr "Indices"
 
-#: cdl.core.model.signal.SignalObj.get_roi_param:1 of
-msgid ""
-"Return ROI parameters dataset (converting ROI point indices to "
-"coordinates)"
+#: cdl.core.model.image.ImageObj.indices_to_physical:1
+#: cdl.core.model.signal.SignalObj.indices_to_physical:1 of
+msgid "Convert coordinates from (array) indices to physical (real world)"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.get_roi_param:4 of
-msgid "default values (first, last point indices)"
-msgstr ""
+#: cdl.core.model.image.ImageObj.indices_to_physical:3
+#: cdl.core.model.signal.SignalObj.indices_to_physical:3 of
+#, fuzzy
+msgid "indices"
+msgstr "Indices"
 
-#: cdl.core.model.signal.SignalObj.get_roi_param:6 of
-msgid "first and last X)"
-msgstr ""
-
-#: cdl.core.model.signal.SignalObj.get_roi_param
-#: cdl.core.model.signal.new_signal_param
-#: guidata.dataset.datatypes.DataSet.check
-#: guidata.dataset.datatypes.DataSet.get_comment
-#: guidata.dataset.datatypes.DataSet.get_icon
-#: guidata.dataset.datatypes.DataSet.get_title
-#: guidata.dataset.datatypes.DataSet.to_string of
-msgid "Return type"
-msgstr "Type de retour"
-
-#: cdl.core.model.image.ImageObj.params_to_roidata:1
-#: cdl.core.model.signal.SignalObj.params_to_roidata:1 of
-msgid "Convert ROI dataset group to ROI array data."
-msgstr "Convertit le groupe de données de la ROI en données de tableau de la ROI."
-
-#: cdl.core.model.base.BaseObj.roidata_to_params:6
-#: cdl.core.model.image.ImageObj.params_to_roidata:3
-#: cdl.core.model.signal.SignalObj.params_to_roidata:3 of
-msgid "ROI dataset group"
-msgstr "groupe de données de la ROI"
-
-#: cdl.core.model.image.ImageObj.params_to_roidata:5
-#: cdl.core.model.signal.SignalObj.params_to_roidata:5 of
-msgid "ROI array data"
-msgstr "données de tableau de la ROI"
-
-#: cdl.core.model.image.ImageObj.new_roi_item:1
-#: cdl.core.model.signal.SignalObj.new_roi_item:1 of
-msgid "Return a new ROI item from scratch"
-msgstr "Renvoyer un nouvel élément ROI à partir de zéro"
-
-#: cdl.core.model.image.ImageObj.iterate_roi_items:3
-#: cdl.core.model.image.ImageObj.new_roi_item:3
-#: cdl.core.model.image.ImageRoiDataItem.make_roi_item:4
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:3
-#: cdl.core.model.signal.SignalObj.new_roi_item:3 of
-msgid "format string"
-msgstr "chaîne de format"
-
-#: cdl.core.model.image.ImageObj.iterate_roi_items:4
-#: cdl.core.model.image.ImageObj.new_roi_item:4
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:4
-#: cdl.core.model.signal.SignalObj.new_roi_item:4 of
-msgid "if True, add label"
-msgstr "si True, ajouter une étiquette"
-
-#: cdl.core.model.image.ImageObj.iterate_roi_items:5
-#: cdl.core.model.image.ImageObj.new_roi_item:5
-#: cdl.core.model.image.ImageRoiDataItem.make_roi_item:6
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:5
-#: cdl.core.model.signal.SignalObj.new_roi_item:5 of
-msgid "if True, ROI is editable"
-msgstr "si True, ROI est modifiable"
-
-#: cdl.core.model.image.ImageObj.iterate_roi_items:1
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:1 of
-msgid "Make plot item representing a Region of Interest."
-msgstr "Créer un élément de tracé représentant une région d'intérêt."
+#: cdl.core.model.image.ImageObj.indices_to_physical:5
+#: cdl.core.model.signal.SignalObj.indices_to_physical:5 of
+#, fuzzy
+msgid "Coordinates"
+msgstr "coordonnées"
 
 #: cdl.core.model.image.ImageObj.add_label_with_title:1
 #: cdl.core.model.signal.SignalObj.add_label_with_title:1 of
@@ -993,6 +837,10 @@ msgstr "Vérifier les valeurs des éléments de l'ensemble de données"
 #: guidata.dataset.datatypes.DataSet.check:3 of
 msgid "list of errors"
 msgstr "liste des erreurs"
+
+#: cdl.obj of
+msgid "Return type"
+msgstr "Type de retour"
 
 #: cdl.core.model.base.BaseObj.check_data:1 of
 msgid "Check if data is valid, raise an exception if that's not the case"
@@ -1078,6 +926,14 @@ msgstr ""
 msgid "_description_"
 msgstr ""
 
+#: cdl.core.model.base.BaseObj.get_masked_view:1 of
+msgid "Return masked view for data"
+msgstr "Retourne une vue masquée des données"
+
+#: cdl.core.model.base.BaseObj.get_masked_view:3 of
+msgid "Masked view"
+msgstr "Vue masquée"
+
 #: cdl.core.model.base.BaseObj.get_metadata_option:1 of
 msgid "Return metadata option value"
 msgstr "Renvoyer la valeur de l'option de métadonnées"
@@ -1103,8 +959,8 @@ msgstr "nom de l'option"
 msgid "Option value"
 msgstr "Valeur de l'option"
 
-#: cdl.core.model.base.BaseObj.get_metadata_option:11
-#: cdl.core.model.base.BaseObj.set_metadata_option:10 of
+#: cdl.core.model.base.BaseObj.get_metadata_option:10
+#: cdl.core.model.base.BaseObj.set_metadata_option:9 of
 msgid "Valid option names:"
 msgstr "Noms d'options valides :"
 
@@ -1125,6 +981,10 @@ msgstr "Obtenir les noms de types de données valides"
 msgid "Valid data type names supported by this class"
 msgstr "Noms de types de données valides pris en charge par cette classe"
 
+#: cdl.core.model.base.BaseObj.invalidate_maskdata_cache:1 of
+msgid "Invalidate mask data cache: force to rebuild it"
+msgstr "Invalider le cache des données masquées : force la reconstruction"
+
 #: cdl.core.model.base.BaseObj.iterate_resultproperties:1 of
 #, fuzzy
 msgid "Iterate over object result properties."
@@ -1144,11 +1004,13 @@ msgid "Result shape"
 msgstr "Forme résultat"
 
 #: cdl.core.model.base.BaseObj.iterate_roi_indices:1 of
-msgid "Iterate over object ROI indices ([0] if there is no ROI)"
+#, fuzzy
+msgid "Iterate over object ROI indices (if there is no ROI, yield None)"
 msgstr "Itérer sur les index de ROI de l'objet ([0] s'il n'y a pas de ROI)"
 
 #: cdl.core.model.base.BaseObj.iterate_shape_items:1 of
-msgid "Iterate over computing items encoded in metadata (if any)."
+#, fuzzy
+msgid "Iterate over shape items encoded in metadata (if any)."
 msgstr ""
 "Itérer sur les éléments de calcul encodés dans les métadonnées (s'il y en"
 " a)."
@@ -1157,6 +1019,17 @@ msgstr ""
 #, fuzzy
 msgid "if True, annotations are editable"
 msgstr "si True, ROI est modifiable"
+
+#: cdl.obj.ImageObj.maskdata:1 cdl.obj.SignalObj.maskdata:1 of
+msgid "Return masked data (areas outside defined regions of interest)"
+msgstr ""
+"Renvoie les données masquées (zones en dehors des régions d'intérêt "
+"définies)"
+
+#: cdl.core.model.image.ImageObj.get_data:6 cdl.obj.ImageObj.maskdata:3
+#: cdl.obj.SignalObj.maskdata:3 of
+msgid "Masked data"
+msgstr "Données masquées"
 
 #: cdl.obj.ImageObj.number:1 cdl.obj.SignalObj.number:1 of
 msgid "Return object number (used for short ID)"
@@ -1199,11 +1072,13 @@ msgid "default value"
 msgstr "valeurs par défaut"
 
 #: cdl.obj.ImageObj.roi:1 cdl.obj.SignalObj.roi:1 of
-msgid "Return object regions of interest array (one ROI per line)."
+#, fuzzy
+msgid "Return object regions of interest object."
 msgstr "Renvoie le tableau des régions d'intérêt de l'objet (une ROI par ligne)."
 
 #: cdl.obj.ImageObj.roi:3 cdl.obj.SignalObj.roi:3 of
-msgid "Regions of interest array"
+#, fuzzy
+msgid "Regions of interest object"
 msgstr "Tableau des régions d'intérêt"
 
 #: cdl.core.model.base.BaseObj.roi_has_changed:1 of
@@ -1225,16 +1100,6 @@ msgstr ""
 #: cdl.core.model.base.BaseObj.roi_has_changed:8 of
 msgid "True if ROI has changed"
 msgstr "True si la ROI a changé"
-
-#: cdl.core.model.base.BaseObj.roidata_to_params:1 of
-msgid "Convert ROI array data to ROI dataset group."
-msgstr "Convertit les données du tableau ROI en groupe de jeu de données ROI."
-
-#: cdl.core.model.base.BaseObj.roidata_to_params:3 of
-msgid ""
-"ROI array data (array or list of lists, floating point values are "
-"accepted and will be converted to integers)"
-msgstr ""
 
 #: cdl.core.model.base.BaseObj.save_attr_to_metadata:1 of
 msgid "Save attribute to metadata"
@@ -1377,6 +1242,50 @@ msgstr "Lire une liste de signaux à partir d'un fichier."
 #: cdl.core.io.read_signals:5 of
 msgid "List of signals."
 msgstr "Liste de signaux."
+
+#: cdl.core.model.signal.create_signal_roi:1 of
+msgid ""
+"Create Signal Regions of Interest (ROI) object. More ROIs can be added to"
+" the object after creation, using the `add_roi` method."
+msgstr ""
+
+#: cdl.core.model.signal.create_signal_roi:4 of
+msgid ""
+"single ROI coordinates `[xmin, xmax]`, or multiple ROIs coordinates "
+"`[[xmin1, xmax1], [xmin2, xmax2], ...]` (lists or NumPy arrays)"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal_roi:6 of
+msgid ""
+"if True, coordinates are indices, if False, they are physical values "
+"(default to False for signals)"
+msgstr ""
+
+#: cdl.core.model.image.ImageROI:3 cdl.core.model.image.create_image_roi:12
+#: cdl.core.model.signal.SignalROI:3 cdl.core.model.signal.create_signal_roi:8
+#: of
+msgid ""
+"if True, when extracting data defined by ROIs, only one object is created"
+" (default to True). If False, one object is created per single ROI. If "
+"None, the value is get from the user configuration"
+msgstr ""
+
+#: cdl.core.model.image.ImageROI:6 cdl.core.model.image.create_image_roi:15
+#: cdl.core.model.signal.SignalROI:6 cdl.core.model.signal.create_signal_roi:11
+#: of
+#, fuzzy
+msgid "if True, ROI is outside the region"
+msgstr "si True, ROI est modifiable"
+
+#: cdl.core.model.image.create_image_roi:18
+#: cdl.core.model.signal.create_signal_roi:14 of
+#, fuzzy
+msgid "Regions of Interest (ROI) object"
+msgstr "Tableau des régions d'intérêt"
+
+#: cdl.core.model.signal.create_signal_roi:16 of
+msgid "if the number of coordinates is not even"
+msgstr ""
 
 #: cdl.core.model.signal.create_signal:1 of
 msgid "Create a new Signal object."
@@ -1552,26 +1461,23 @@ msgstr "Fonction lorentzienne"
 msgid "New signal dataset"
 msgstr "Nouveau jeu de données signal"
 
-#: cdl.core.model.image.NewImageParam:5 cdl.core.model.signal.NewSignalParam:5
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Titre\\.  Par défaut : None."
-msgstr ""
-
 #: cdl.core.model.signal.NewSignalParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
 #, fuzzy
-msgid "Par défaut : -10.0."
+msgid "Default: -10.0."
 msgstr "valeurs par défaut"
 
 #: cdl.core.model.signal.NewSignalParam:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
 #, fuzzy
-msgid "Par défaut : 10.0."
+msgid "Default: 10.0."
 msgstr "valeurs par défaut"
 
 #: cdl.core.model.signal.NewSignalParam:23
 #: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "Taille\\. Nombre de points\\. Entier supérieur à 1\\. Par défaut : 500."
+msgid ""
+"Signal size (total number of points)\\. Integer higher than 1\\. Default:"
+" 500."
 msgstr ""
 
 #: cdl.core.model.image.NewImageParam:13 cdl.core.model.image.NewImageParam:19
@@ -1586,13 +1492,13 @@ msgstr ""
 #: cdl.core.model.signal.NewSignalParam:29
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid ""
-"Sélection unique parmi : SignalTypes.ZEROS, SignalTypes.GAUSS, "
+"Single choice from: SignalTypes.ZEROS, SignalTypes.GAUSS, "
 "SignalTypes.LORENTZ, SignalTypes.VOIGT, SignalTypes.UNIFORMRANDOM, "
 "SignalTypes.NORMALRANDOM, SignalTypes.SINUS, SignalTypes.COSINUS, "
 "SignalTypes.SAWTOOTH, SignalTypes.TRIANGLE, SignalTypes.SQUARE, "
 "SignalTypes.SINC, SignalTypes.STEP, SignalTypes.EXPONENTIAL, "
-"SignalTypes.PULSE, SignalTypes.POLYNOMIAL, SignalTypes.EXPERIMENTAL. Par "
-"défaut : SignalTypes.ZEROS."
+"SignalTypes.PULSE, SignalTypes.POLYNOMIAL, SignalTypes.EXPERIMENTAL. "
+"Default: SignalTypes.ZEROS."
 msgstr ""
 
 #: cdl.core.model.image.NewImageParam:25 cdl.core.model.image.NewImageParam:31
@@ -1603,12 +1509,12 @@ msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`NewSignalParam` avec les "
-"champs initialisés aux valeurs données."
+"Returns a new instance of :py:class:`NewSignalParam` with the fields set "
+"to the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:14 of
-msgid "Nouvelle instance de :py:class:`NewSignalParam`."
+msgid "New instance of :py:class:`NewSignalParam`."
 msgstr ""
 
 #: cdl.core.model.signal.GaussLorentzVoigtParam:1 of
@@ -1620,7 +1526,7 @@ msgstr "Paramètres pour les fonctions gaussiennes et lorentziennes"
 #: guidata.dataset.datatypes.DataSet.create:3
 #: guidata.dataset.datatypes.DataSet.create:5 of
 #, fuzzy
-msgid "Par défaut : 1.0."
+msgid "Default: 1.0."
 msgstr "valeurs par défaut"
 
 #: cdl.core.model.signal.GaussLorentzVoigtParam:11
@@ -1630,30 +1536,32 @@ msgstr "valeurs par défaut"
 #: guidata.dataset.datatypes.DataSet.create:5
 #: guidata.dataset.datatypes.DataSet.create:7 of
 #, fuzzy
-msgid "Par défaut : 0.0."
+msgid "Default: 0.0."
 msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.Gauss2DParam:17
 #: cdl.core.model.signal.GaussLorentzVoigtParam:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "σ\\.  Par défaut : 1.0."
-msgstr ""
+#, fuzzy
+msgid "σ\\.  Default: 1.0."
+msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.Gauss2DParam:29
 #: cdl.core.model.signal.GaussLorentzVoigtParam:23
 #: guidata.dataset.datatypes.DataSet.create:9
 #: guidata.dataset.datatypes.DataSet.create:11 of
-msgid "μ\\.  Par défaut : 0.0."
-msgstr ""
+#, fuzzy
+msgid "μ\\.  Default: 0.0."
+msgstr "valeurs par défaut"
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`GaussLorentzVoigtParam` avec "
-"les champs initialisés aux valeurs données."
+"Returns a new instance of :py:class:`GaussLorentzVoigtParam` with the "
+"fields set to the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:12 of
-msgid "Nouvelle instance de :py:class:`GaussLorentzVoigtParam`."
+msgid "New instance of :py:class:`GaussLorentzVoigtParam`."
 msgstr ""
 
 #: cdl.core.model.signal.StepParam:1 of
@@ -1662,12 +1570,12 @@ msgstr "Paramètres pour la fonction d'étape"
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`StepParam` avec les champs "
-"initialisés aux valeurs données."
+"Returns a new instance of :py:class:`StepParam` with the fields set to "
+"the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:10 of
-msgid "Nouvelle instance de :py:class:`StepParam`."
+msgid "New instance of :py:class:`StepParam`."
 msgstr ""
 
 #: cdl.core.model.signal.PeriodicParam:1 of
@@ -1676,29 +1584,30 @@ msgstr "Paramètres pour les fonctions périodiques"
 
 #: cdl.core.model.signal.PeriodicParam:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Fréquence\\.  Par défaut : 1.0."
-msgstr ""
+#, fuzzy
+msgid "Frequency\\.  Default: 1.0."
+msgstr "valeurs par défaut"
 
 #: cdl.core.model.signal.PeriodicParam:23
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
-"Unité\\.  Sélection unique parmi : FreqUnits.HZ, FreqUnits.KHZ, "
-"FreqUnits.MHZ, FreqUnits.GHZ. Par défaut : FreqUnits.HZ."
+"Single choice from: FreqUnits.HZ, FreqUnits.KHZ, FreqUnits.MHZ, "
+"FreqUnits.GHZ. Default: FreqUnits.HZ."
 msgstr ""
 
 #: cdl.core.model.signal.PeriodicParam:29
 #: guidata.dataset.datatypes.DataSet.create:11 of
-msgid "Flottant, unité : °\\. Par défaut : 0.0."
+msgid "Float, unit: °\\. Default: 0.0."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`PeriodicParam` avec les "
-"champs initialisés aux valeurs données."
+"Returns a new instance of :py:class:`PeriodicParam` with the fields set "
+"to the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:14 of
-msgid "Nouvelle instance de :py:class:`PeriodicParam`."
+msgid "New instance of :py:class:`PeriodicParam`."
 msgstr ""
 
 #: cdl.core.model.signal.PeriodicParam.get_frequency_in_hz:1 of
@@ -1712,22 +1621,45 @@ msgstr "nouveaux paramètres du signal"
 
 #: cdl.core.model.signal.ROI1DParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Coordonnée du premier point\\.  Par défaut : None."
+msgid "First point coordinate\\.  Default: None."
 msgstr ""
 
 #: cdl.core.model.signal.ROI1DParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "Coordonnée du dernier point\\.  Par défaut : None."
+msgid "Last point coordinate\\.  Default: None."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`ROI1DParam` avec les champs "
-"initialisés aux valeurs données."
+"Returns a new instance of :py:class:`ROI1DParam` with the fields set to "
+"the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:8 of
-msgid "Nouvelle instance de :py:class:`ROI1DParam`."
+msgid "New instance of :py:class:`ROI1DParam`."
+msgstr ""
+
+#: cdl.core.model.image.ROI2DParam.to_single_roi:1
+#: cdl.core.model.signal.ROI1DParam.to_single_roi:1 of
+msgid "Convert parameters to single ROI"
+msgstr ""
+
+#: cdl.core.model.signal.ROI1DParam.get_data:3
+#: cdl.core.model.signal.ROI1DParam.to_single_roi:3
+#: cdl.core.model.signal.SignalROI.to_mask:3 of
+#, fuzzy
+msgid "signal object"
+msgstr "Objet signal"
+
+#: cdl.core.model.image.ROI2DParam.to_single_roi:4
+#: cdl.core.model.signal.ROI1DParam.to_single_roi:4 of
+#, fuzzy
+msgid "ROI title"
+msgstr "propriétés à définir"
+
+#: cdl.core.model.image.ROI2DParam.to_single_roi:6
+#: cdl.core.model.signal.ROI1DParam.to_single_roi:6 of
+msgid "Single ROI"
 msgstr ""
 
 #: cdl.core.model.signal.ROI1DParam.get_data:1 of
@@ -1735,17 +1667,32 @@ msgstr ""
 msgid "Get signal data in ROI"
 msgstr "nouvelle instance de jeu de données signal"
 
-#: cdl.core.model.signal.ROI1DParam.get_data:3 of
-#, fuzzy
-msgid "signal object"
-msgstr "Objet signal"
-
 #: cdl.core.model.image.ROI2DParam.get_data:5
 #: cdl.core.model.signal.ROI1DParam.get_data:5 of
 msgid "Data in ROI"
 msgstr ""
 
-#: cdl.obj:57 of
+#: cdl.core.model.signal.SignalROI:1 of
+#, fuzzy
+msgid "Signal Regions of Interest"
+msgstr "Tableau des régions d'intérêt"
+
+#: cdl.core.model.image.ImageROI.get_compatible_single_roi_classes:1
+#: cdl.core.model.signal.SignalROI.get_compatible_single_roi_classes:1 of
+msgid "Return compatible single ROI classes"
+msgstr ""
+
+#: cdl.core.model.image.ImageROI.to_mask:1
+#: cdl.core.model.signal.SignalROI.to_mask:1 of
+msgid "Create mask from ROI"
+msgstr ""
+
+#: cdl.core.model.image.ImageROI.to_mask:5
+#: cdl.core.model.signal.SignalROI.to_mask:5 of
+msgid "Mask (boolean array where True values are inside the ROI)"
+msgstr ""
+
+#: cdl.obj:59 of
 msgid "Image model"
 msgstr "Modèle d'image"
 
@@ -1755,37 +1702,37 @@ msgstr "Objet image"
 
 #: cdl.core.model.image.ImageObj:23 guidata.dataset.datatypes.DataSet.create:9
 #: of
-msgid "X\\ :subscript:`0`\\.  Par défaut : 0.0."
+msgid "X\\ :subscript:`0`\\.  Default: 0.0."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:29 guidata.dataset.datatypes.DataSet.create:11
 #: of
-msgid "Y\\ :subscript:`0`\\.  Par défaut : 0.0."
+msgid "Y\\ :subscript:`0`\\.  Default: 0.0."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:35 guidata.dataset.datatypes.DataSet.create:13
 #: of
-msgid "Δx\\.  Flottant, non nul\\. Par défaut : 1.0."
+msgid "Δx\\.  Float, non zero\\. Default: 1.0."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:41 guidata.dataset.datatypes.DataSet.create:15
 #: of
-msgid "Δy\\.  Flottant, non nul\\. Par défaut : 1.0."
+msgid "Δy\\.  Float, non zero\\. Default: 1.0."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:47 guidata.dataset.datatypes.DataSet.create:17
 #: of
-msgid "Titre de l'image\\.  Par défaut : 'Sans titre'."
+msgid "Image title\\.  Default: 'Untitled'."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`ImageObj` avec les champs "
-"initialisés aux valeurs données."
+"Returns a new instance of :py:class:`ImageObj` with the fields set to the"
+" given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:50 of
-msgid "Nouvelle instance de :py:class:`ImageObj`."
+msgid "New instance of :py:class:`ImageObj`."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.set_metadata_from:1 of
@@ -1802,6 +1749,14 @@ msgstr "objet"
 msgid "Get DICOM template"
 msgstr "Obtenir le modèle DICOM"
 
+#: cdl.obj.ImageObj.width:1 of
+msgid "Return image width, i.e. number of columns multiplied by pixel size"
+msgstr ""
+
+#: cdl.obj.ImageObj.height:1 of
+msgid "Return image height, i.e. number of rows multiplied by pixel size"
+msgstr ""
+
 #: cdl.obj.ImageObj.xc:1 of
 msgid "Return image center X-axis coordinate"
 msgstr "Renvoie la coordonnée X du centre de l'image"
@@ -1810,46 +1765,15 @@ msgstr "Renvoie la coordonnée X du centre de l'image"
 msgid "Return image center Y-axis coordinate"
 msgstr "Renvoie la coordonnée Y du centre de l'image"
 
-#: cdl.core.model.image.ImageObj.get_data:6 cdl.obj.ImageObj.maskdata:3 of
-msgid "Masked data"
-msgstr "Données masquées"
+#: cdl.core.model.image.ImageObj.set_data_type:1 of
+msgid ""
+"Change data type. If data type is integer, clip values to the new data "
+"type's range, thus avoiding overflow or underflow."
+msgstr ""
 
 #: cdl.core.model.image.ImageObj.make_item:3 of
 msgid "update from plot item"
 msgstr "mettre à jour à partir de l'élément de tracé"
-
-#: cdl.core.model.image.ImageObj.get_roi_param:1 of
-msgid "Return ROI parameters dataset."
-msgstr "Renvoie le jeu de données de paramètres de la ROI."
-
-#: cdl.core.model.image.ImageObj.get_roi_param:4 of
-msgid "default values"
-msgstr "valeurs par défaut"
-
-#: cdl.core.model.image.ImageObj.new_roi_item:6
-#: cdl.core.model.image.ImageRoiDataItem.from_image:4
-#: cdl.obj.ImageRoiDataItem.geometry:1 of
-msgid "ROI geometry"
-msgstr "géométrie de la ROI"
-
-#: cdl.obj.ImageObj.maskdata:1 of
-msgid "Return masked data (areas outside defined regions of interest)"
-msgstr ""
-"Renvoie les données masquées (zones en dehors des régions d'intérêt "
-"définies)"
-
-#: cdl.core.model.image.ImageObj.get_masked_view:1
-#: cdl.core.model.image.ImageRoiDataItem.get_image_masked_view:1 of
-msgid "Return masked view for data"
-msgstr "Retourne une vue masquée des données"
-
-#: cdl.core.model.image.ImageObj.get_masked_view:3 of
-msgid "Masked view"
-msgstr "Vue masquée"
-
-#: cdl.core.model.image.ImageObj.invalidate_maskdata_cache:1 of
-msgid "Invalidate mask data cache: force to rebuild it"
-msgstr "Invalider le cache des données masquées : force la reconstruction"
 
 #: cdl.core.model.image.ImageObj.add_label_with_title:3 of
 msgid "title (if None, use image title)"
@@ -1870,6 +1794,35 @@ msgstr "Lire une liste d'images à partir d'un fichier."
 #: cdl.core.io.read_images:5 of
 msgid "List of images."
 msgstr "Liste d'images."
+
+#: cdl.core.model.image.create_image_roi:1 of
+msgid ""
+"Create Image Regions of Interest (ROI) object. More ROIs can be added to "
+"the object after creation, using the `add_roi` method."
+msgstr ""
+
+#: cdl.core.model.image.create_image_roi:4 of
+msgid "ROI type ('rectangle', 'circle', 'polygon')"
+msgstr ""
+
+#: cdl.core.model.image.create_image_roi:5 of
+msgid ""
+"ROI coords (physical coordinates), `[x0, y0, dx, dy]` for a rectangle, "
+"`[xc, yc, r]` for a circle, or `[x0, y0, x1, y1, ...]` for a polygon "
+"(lists or NumPy arrays are accepted). For multiple ROIs, nested lists or "
+"NumPy arrays are accepted but with a common geometry type (e.g. `[[xc1, "
+"yc1, r1], [xc2, yc2, r2], ...]` for circles)."
+msgstr ""
+
+#: cdl.core.model.image.create_image_roi:10 of
+msgid ""
+"if True, coordinates are indices, if False, they are physical values "
+"(default to True for images)"
+msgstr ""
+
+#: cdl.core.model.image.create_image_roi:20 of
+msgid "if ROI type is unknown or if the number of coordinates is invalid"
+msgstr ""
 
 #: cdl.core.model.image.create_image:1 of
 msgid "Create a new Image object"
@@ -1964,41 +1917,41 @@ msgstr "Nouveau jeu de données image"
 #: cdl.core.model.image.NewImageParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
-"Hauteur\\. Hauteur de l'image (nombre de lignes)\\. Entier supérieur à "
-"1\\. Par défaut : None."
+"Image height (total number of rows)\\. Integer higher than 1\\. Default: "
+"None."
 msgstr ""
 
 #: cdl.core.model.image.NewImageParam:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
-"Largeur\\. Largeur de l'image (nombre de colonnes)\\. Entier supérieur à "
-"1\\. Par défaut : None."
+"Image width (total number of columns)\\. Integer higher than 1\\. "
+"Default: None."
 msgstr ""
 
 #: cdl.core.model.image.NewImageParam:23
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
-"Type de données\\.  Sélection unique parmi : ImageDatatypes.UINT8, "
+"Data type\\.  Single choice from: ImageDatatypes.UINT8, "
 "ImageDatatypes.UINT16, ImageDatatypes.INT16, ImageDatatypes.FLOAT32, "
-"ImageDatatypes.FLOAT64. Par défaut : ImageDatatypes.UINT8."
+"ImageDatatypes.FLOAT64. Default: ImageDatatypes.UINT8."
 msgstr ""
 
 #: cdl.core.model.image.NewImageParam:29
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid ""
-"Sélection unique parmi : ImageTypes.ZEROS, ImageTypes.EMPTY, "
-"ImageTypes.GAUSS, ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM. Par "
-"défaut : ImageTypes.ZEROS."
+"Single choice from: ImageTypes.ZEROS, ImageTypes.EMPTY, ImageTypes.GAUSS,"
+" ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM. Default: "
+"ImageTypes.ZEROS."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`NewImageParam` avec les "
-"champs initialisés aux valeurs données."
+"Returns a new instance of :py:class:`NewImageParam` with the fields set "
+"to the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:14 of
-msgid "Nouvelle instance de :py:class:`NewImageParam`."
+msgid "New instance of :py:class:`NewImageParam`."
 msgstr ""
 
 #: cdl.core.model.image.Gauss2DParam:1 of
@@ -2008,43 +1961,39 @@ msgstr "Paramètres gaussiens 2D"
 #: cdl.core.model.image.Gauss2DParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
 #, fuzzy
-msgid "Norm\\.  Par défaut : None."
+msgid "Norm\\.  Default: None."
 msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.Gauss2DParam:11 cdl.core.model.image.Gauss2DParam:35
 #: guidata.dataset.datatypes.DataSet.create:5
 #: guidata.dataset.datatypes.DataSet.create:13 of
 #, fuzzy
-msgid "Par défaut : -10."
+msgid "Default: -10."
 msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.Gauss2DParam:23 cdl.core.model.image.Gauss2DParam:47
 #: guidata.dataset.datatypes.DataSet.create:9
 #: guidata.dataset.datatypes.DataSet.create:17 of
 #, fuzzy
-msgid "Par défaut : 10."
+msgid "Default: 10."
 msgstr "valeurs par défaut"
 
 #: cdl.core.model.image.Gauss2DParam:41 cdl.core.model.image.Gauss2DParam:53
 #: guidata.dataset.datatypes.DataSet.create:15
 #: guidata.dataset.datatypes.DataSet.create:19 of
 #, fuzzy
-msgid "Par défaut : 0."
+msgid "Default: 0."
 msgstr "valeurs par défaut"
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`Gauss2DParam` avec les champs"
-" initialisés aux valeurs données."
+"Returns a new instance of :py:class:`Gauss2DParam` with the fields set to"
+" the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:22 of
-msgid "Nouvelle instance de :py:class:`Gauss2DParam`."
+msgid "New instance of :py:class:`Gauss2DParam`."
 msgstr ""
-
-#: cdl.core.model.image.RoiDataGeometries:1 of
-msgid "ROI data geometry types"
-msgstr "Types de géométrie des données ROI"
 
 #: cdl.core.model.image.ROI2DParam:1 of
 #, fuzzy
@@ -2054,84 +2003,107 @@ msgstr "nouveaux paramètres de l'image"
 #: cdl.core.model.image.ROI2DParam:5 guidata.dataset.datatypes.DataSet.create:3
 #: of
 msgid ""
-"Géométrie\\.  Sélection unique parmi : RoiDataGeometries.RECTANGLE, "
-"RoiDataGeometries.CIRCLE. Par défaut : RoiDataGeometries.RECTANGLE."
+"Single choice from: 'rectangle', 'circle', 'polygon'. Default: "
+"'rectangle'."
 msgstr ""
 
 #: cdl.core.model.image.ROI2DParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "X\\ :subscript:`0`\\.  Entier, unité : pixel\\. Par défaut : None."
+msgid "X\\ :subscript:`0`\\.  Integer, unit: pixels\\. Default: None."
 msgstr ""
 
 #: cdl.core.model.image.ROI2DParam:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Y\\ :subscript:`0`\\.  Entier, unité : pixel\\. Par défaut : None."
+msgid "Y\\ :subscript:`0`\\.  Integer, unit: pixels\\. Default: None."
 msgstr ""
 
 #: cdl.core.model.image.ROI2DParam:23
 #: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "X\\ :subscript:`1`\\.  Entier, unité : pixel\\. Par défaut : None."
+msgid "ΔX\\.  Integer, unit: pixels\\. Default: None."
 msgstr ""
 
 #: cdl.core.model.image.ROI2DParam:29
 #: guidata.dataset.datatypes.DataSet.create:11 of
-msgid "Y\\ :subscript:`1`\\.  Entier, unité : pixel\\. Par défaut : None."
+msgid "ΔY\\.  Integer, unit: pixels\\. Default: None."
 msgstr ""
 
 #: cdl.core.model.image.ROI2DParam:35
 #: guidata.dataset.datatypes.DataSet.create:13 of
-msgid "X\\ :subscript:`C`\\.  Entier, unité : pixel\\. Par défaut : None."
+msgid "X\\ :subscript:`C`\\.  Integer, unit: pixels\\. Default: None."
 msgstr ""
 
 #: cdl.core.model.image.ROI2DParam:41
 #: guidata.dataset.datatypes.DataSet.create:15 of
-msgid "Y\\ :subscript:`C`\\.  Entier, unité : pixel\\. Par défaut : None."
+msgid "Y\\ :subscript:`C`\\.  Integer, unit: pixels\\. Default: None."
 msgstr ""
 
 #: cdl.core.model.image.ROI2DParam:47
 #: guidata.dataset.datatypes.DataSet.create:17 of
-msgid "Rayon\\.  Entier, unité : pixel\\. Par défaut : None."
+msgid "Radius\\.  Integer, unit: pixels\\. Default: None."
+msgstr ""
+
+#: cdl.core.model.image.ROI2DParam:53
+#: guidata.dataset.datatypes.DataSet.create:19 of
+msgid "Coordinates (pixels)\\.  Default: None."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`ROI2DParam` avec les champs "
-"initialisés aux valeurs données."
+"Returns a new instance of :py:class:`ROI2DParam` with the fields set to "
+"the given values."
 msgstr ""
 
-#: guidata.dataset.datatypes.DataSet.create:20 of
-msgid "Nouvelle instance de :py:class:`ROI2DParam`."
+#: guidata.dataset.datatypes.DataSet.create:22 of
+msgid "New instance of :py:class:`ROI2DParam`."
+msgstr ""
+
+#: cdl.core.model.image.ROI2DParam.get_extracted_roi:3
+#: cdl.core.model.image.ROI2DParam.to_single_roi:3 of
+msgid "image object (used for conversion of pixel to physical coordinates)"
 msgstr ""
 
 #: cdl.core.model.image.ROI2DParam.get_suffix:1 of
 msgid "Get suffix text representation for ROI extraction"
 msgstr ""
 
-#: cdl.core.model.image.ROI2DParam.get_coords:1 of
-#, fuzzy
-msgid "Get ROI coordinates"
-msgstr "coordonnées"
-
-#: cdl.core.model.image.ROI2DParam.get_single_roi:1 of
-msgid "Get single ROI, i.e. after extracting ROI from image"
+#: cdl.core.model.image.ROI2DParam.get_extracted_roi:1 of
+msgid "Get extracted ROI, i.e. the remaining ROI after extracting ROI from image."
 msgstr ""
 
-#: cdl.core.model.image.ROI2DParam.get_rect_indices:1 of
+#: cdl.core.model.image.ROI2DParam.get_extracted_roi:5 of
+msgid ""
+"When extracting ROIs from an image to multiple images (i.e. one image per"
+" ROI), this method returns the ROI that has to be kept in the destination"
+" image. This is not necessary for a rectangular ROI: the destination "
+"image is simply a crop of the source image according to the ROI "
+"coordinates. But for a circular ROI or a polygonal ROI, the destination "
+"image is a crop of the source image according to the bounding box of the "
+"ROI. Thus, to avoid any loss of information, a ROI has to be defined for "
+"the destination image: this is the ROI returned by this method. It's "
+"simply the same as the source ROI, but with coordinates adjusted to the "
+"destination image. One may called this ROI the \"extracted ROI\"."
+msgstr ""
+
+#: cdl.core.model.image.ROI2DParam.get_bounding_box_indices:1 of
 #, fuzzy
-msgid "Get rectangle indices"
-msgstr "Forme rectangulaire"
+msgid "Get bounding box (pixel coordinates)"
+msgstr "coordonnées"
 
 #: cdl.core.model.image.ROI2DParam.get_data:1 of
 #, fuzzy
 msgid "Get data in ROI"
 msgstr "Récupère les données y"
 
-#: cdl.core.model.image.ImageRoiDataItem.from_image:3
-#: cdl.core.model.image.ImageRoiDataItem.get_image_masked_view:3
+#: cdl.core.model.image.ImageROI.to_mask:3
 #: cdl.core.model.image.ROI2DParam.get_data:3 of
 #, fuzzy
 msgid "image object"
 msgstr "Objet image"
+
+#: cdl.core.model.image.ImageROI:1 of
+#, fuzzy
+msgid "Image Regions of Interest"
+msgstr "Tableau des régions d'intérêt"
 
 #: cdl.core.model.image.ImageDatatypes:1 of
 msgid "Image data types"
@@ -2164,47 +2136,6 @@ msgstr "Nombre flottant stocké avec 32 bits"
 #: ../../doc/docstring cdl.obj.ImageDatatypes.FLOAT64:1 of
 msgid "Float number stored with 64 bits"
 msgstr "Nombre flottant stocké avec 64 bits"
-
-#: cdl.core.model.image.ImageRoiDataItem:1 of
-msgid "Object representing an image ROI."
-msgstr ""
-
-#: cdl.core.model.image.ImageRoiDataItem:3 of
-#, fuzzy
-msgid "ROI data"
-msgstr "données de tableau de la ROI"
-
-#: cdl.core.model.image.ImageRoiDataItem.from_image:1 of
-msgid "Construct roi data item from image object: called for making new ROI items"
-msgstr ""
-
-#: cdl.core.model.image.ImageRoiDataItem.get_rect:1 of
-#, fuzzy
-msgid "Get rectangle coordinates"
-msgstr "Forme rectangulaire"
-
-#: cdl.core.model.image.ImageRoiDataItem.apply_mask:1 of
-msgid "Apply ROI to data as a mask and return masked array"
-msgstr ""
-
-#: cdl.core.model.image.ImageRoiDataItem.apply_mask:3 of
-#, fuzzy
-msgid "data"
-msgstr "Données"
-
-#: cdl.core.model.image.ImageRoiDataItem.apply_mask:4 of
-msgid "Y/X ratio"
-msgstr ""
-
-#: cdl.core.model.image.ImageRoiDataItem.make_roi_item:1 of
-#, fuzzy
-msgid "Make ROI plot item"
-msgstr "Crée un élément de tracé."
-
-#: cdl.core.model.image.ImageRoiDataItem.make_roi_item:5 of
-#, fuzzy
-msgid "if True, show label"
-msgstr "si True, affiche les étiquettes de forme"
 
 #~ msgid "shape type"
 #~ msgstr "type de forme"
@@ -2510,3 +2441,329 @@ msgstr "si True, affiche les étiquettes de forme"
 
 #~ msgid "New instance of :py:class:`ROI2DParam`."
 #~ msgstr ""
+
+#~ msgid "Données\\.  Par défaut : None."
+#~ msgstr "valeurs par défaut"
+
+#~ msgid "Métadonnées\\.  Par défaut : {}."
+#~ msgstr ""
+
+#~ msgid "Titre du signal\\.  Par défaut : 'Sans titre'."
+#~ msgstr ""
+
+#~ msgid "Titre\\.  Par défaut : ''."
+#~ msgstr ""
+
+#~ msgid "Unité\\.  Par défaut : ''."
+#~ msgstr ""
+
+#~ msgid "Par défaut : True."
+#~ msgstr ""
+
+#~ msgid "Par défaut : False."
+#~ msgstr ""
+
+#~ msgid "Borne inférieure\\.  Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Borne supérieure\\.  Par défaut : None."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`SignalObj` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`SignalObj`."
+#~ msgstr ""
+
+#~ msgid "Convert ROI coordinates to indices."
+#~ msgstr "Convertit les coordonnées de la ROI en index."
+
+#~ msgid ""
+#~ "Return ROI parameters dataset (converting "
+#~ "ROI point indices to coordinates)"
+#~ msgstr ""
+
+#~ msgid "default values (first, last point indices)"
+#~ msgstr ""
+
+#~ msgid "first and last X)"
+#~ msgstr ""
+
+#~ msgid "Convert ROI dataset group to ROI array data."
+#~ msgstr ""
+#~ "Convertit le groupe de données de "
+#~ "la ROI en données de tableau de"
+#~ " la ROI."
+
+#~ msgid "ROI dataset group"
+#~ msgstr "groupe de données de la ROI"
+
+#~ msgid "ROI array data"
+#~ msgstr "données de tableau de la ROI"
+
+#~ msgid "Return a new ROI item from scratch"
+#~ msgstr "Renvoyer un nouvel élément ROI à partir de zéro"
+
+#~ msgid "format string"
+#~ msgstr "chaîne de format"
+
+#~ msgid "if True, add label"
+#~ msgstr "si True, ajouter une étiquette"
+
+#~ msgid "Make plot item representing a Region of Interest."
+#~ msgstr "Créer un élément de tracé représentant une région d'intérêt."
+
+#~ msgid "Convert ROI array data to ROI dataset group."
+#~ msgstr "Convertit les données du tableau ROI en groupe de jeu de données ROI."
+
+#~ msgid ""
+#~ "ROI array data (array or list of"
+#~ " lists, floating point values are "
+#~ "accepted and will be converted to "
+#~ "integers)"
+#~ msgstr ""
+
+#~ msgid "Titre\\.  Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Taille\\. Nombre de points\\. Entier supérieur à 1\\. Par défaut : 500."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Sélection unique parmi : SignalTypes.ZEROS,"
+#~ " SignalTypes.GAUSS, SignalTypes.LORENTZ, "
+#~ "SignalTypes.VOIGT, SignalTypes.UNIFORMRANDOM, "
+#~ "SignalTypes.NORMALRANDOM, SignalTypes.SINUS, "
+#~ "SignalTypes.COSINUS, SignalTypes.SAWTOOTH, "
+#~ "SignalTypes.TRIANGLE, SignalTypes.SQUARE, "
+#~ "SignalTypes.SINC, SignalTypes.STEP, "
+#~ "SignalTypes.EXPONENTIAL, SignalTypes.PULSE, "
+#~ "SignalTypes.POLYNOMIAL, SignalTypes.EXPERIMENTAL. Par "
+#~ "défaut : SignalTypes.ZEROS."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`NewSignalParam` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`NewSignalParam`."
+#~ msgstr ""
+
+#~ msgid "σ\\.  Par défaut : 1.0."
+#~ msgstr ""
+
+#~ msgid "μ\\.  Par défaut : 0.0."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`GaussLorentzVoigtParam` avec les champs"
+#~ " initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`GaussLorentzVoigtParam`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`StepParam` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`StepParam`."
+#~ msgstr ""
+
+#~ msgid "Fréquence\\.  Par défaut : 1.0."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Unité\\.  Sélection unique parmi : "
+#~ "FreqUnits.HZ, FreqUnits.KHZ, FreqUnits.MHZ, "
+#~ "FreqUnits.GHZ. Par défaut : FreqUnits.HZ."
+#~ msgstr ""
+
+#~ msgid "Flottant, unité : °\\. Par défaut : 0.0."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`PeriodicParam` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`PeriodicParam`."
+#~ msgstr ""
+
+#~ msgid "Coordonnée du premier point\\.  Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Coordonnée du dernier point\\.  Par défaut : None."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`ROI1DParam` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`ROI1DParam`."
+#~ msgstr ""
+
+#~ msgid "X\\ :subscript:`0`\\.  Par défaut : 0.0."
+#~ msgstr ""
+
+#~ msgid "Y\\ :subscript:`0`\\.  Par défaut : 0.0."
+#~ msgstr ""
+
+#~ msgid "Δx\\.  Flottant, non nul\\. Par défaut : 1.0."
+#~ msgstr ""
+
+#~ msgid "Δy\\.  Flottant, non nul\\. Par défaut : 1.0."
+#~ msgstr ""
+
+#~ msgid "Titre de l'image\\.  Par défaut : 'Sans titre'."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`ImageObj` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`ImageObj`."
+#~ msgstr ""
+
+#~ msgid "Return ROI parameters dataset."
+#~ msgstr "Renvoie le jeu de données de paramètres de la ROI."
+
+#~ msgid "default values"
+#~ msgstr "valeurs par défaut"
+
+#~ msgid "ROI geometry"
+#~ msgstr "géométrie de la ROI"
+
+#~ msgid ""
+#~ "Hauteur\\. Hauteur de l'image (nombre de"
+#~ " lignes)\\. Entier supérieur à 1\\. "
+#~ "Par défaut : None."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Largeur\\. Largeur de l'image (nombre de"
+#~ " colonnes)\\. Entier supérieur à 1\\. "
+#~ "Par défaut : None."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Type de données\\.  Sélection unique "
+#~ "parmi : ImageDatatypes.UINT8, ImageDatatypes.UINT16,"
+#~ " ImageDatatypes.INT16, ImageDatatypes.FLOAT32, "
+#~ "ImageDatatypes.FLOAT64. Par défaut : "
+#~ "ImageDatatypes.UINT8."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Sélection unique parmi : ImageTypes.ZEROS, "
+#~ "ImageTypes.EMPTY, ImageTypes.GAUSS, "
+#~ "ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM. Par "
+#~ "défaut : ImageTypes.ZEROS."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`NewImageParam` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`NewImageParam`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`Gauss2DParam` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`Gauss2DParam`."
+#~ msgstr ""
+
+#~ msgid "ROI data geometry types"
+#~ msgstr "Types de géométrie des données ROI"
+
+#~ msgid ""
+#~ "Géométrie\\.  Sélection unique parmi : "
+#~ "RoiDataGeometries.RECTANGLE, RoiDataGeometries.CIRCLE. Par"
+#~ " défaut : RoiDataGeometries.RECTANGLE."
+#~ msgstr ""
+
+#~ msgid "X\\ :subscript:`0`\\.  Entier, unité : pixel\\. Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Y\\ :subscript:`0`\\.  Entier, unité : pixel\\. Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "X\\ :subscript:`1`\\.  Entier, unité : pixel\\. Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Y\\ :subscript:`1`\\.  Entier, unité : pixel\\. Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "X\\ :subscript:`C`\\.  Entier, unité : pixel\\. Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Y\\ :subscript:`C`\\.  Entier, unité : pixel\\. Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Rayon\\.  Entier, unité : pixel\\. Par défaut : None."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`ROI2DParam` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`ROI2DParam`."
+#~ msgstr ""
+
+#~ msgid "Get single ROI, i.e. after extracting ROI from image"
+#~ msgstr ""
+
+#~ msgid "Get rectangle indices"
+#~ msgstr "Forme rectangulaire"
+
+#~ msgid "Object representing an image ROI."
+#~ msgstr ""
+
+#~ msgid "ROI data"
+#~ msgstr "données de tableau de la ROI"
+
+#~ msgid ""
+#~ "Construct roi data item from image "
+#~ "object: called for making new ROI "
+#~ "items"
+#~ msgstr ""
+
+#~ msgid "Get rectangle coordinates"
+#~ msgstr "Forme rectangulaire"
+
+#~ msgid "Apply ROI to data as a mask and return masked array"
+#~ msgstr ""
+
+#~ msgid "data"
+#~ msgstr "Données"
+
+#~ msgid "Y/X ratio"
+#~ msgstr ""
+
+#~ msgid "Make ROI plot item"
+#~ msgstr "Crée un élément de tracé."
+
+#~ msgid "if True, show label"
+#~ msgstr "si True, affiche les étiquettes de forme"
+

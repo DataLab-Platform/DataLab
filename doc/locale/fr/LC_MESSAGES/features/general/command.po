@@ -8,21 +8,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 10:32+0200\n"
+"POT-Creation-Date: 2024-12-16 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: ../../doc/features/general/command.rst:-1
 msgid "DataLab command line features"
 msgstr "Options ligne de commande de DataLab"
 
 #: ../../doc/features/general/command.rst:-1
-msgid "command line, cdl, datalab, run, test, demo"
+#, fuzzy
+msgid "command line, datalab, run, test, demo"
 msgstr "ligne de commande, cdl, datalab, exécuter, test, démo"
 
 #: ../../doc/features/general/command.rst:4
@@ -83,15 +84,21 @@ msgstr "Exécuter les tests de validation technique"
 
 #: ../../doc/features/general/command.rst:73
 msgid ""
-"Technical validation tests are directly included in individual unit "
-"tests and are disseminated throughout the code. The test functions "
-"including validation tests are marked with the "
-"``@pytest.mark.validation`` decorator."
-msgstr "Les tests de validation technique sont directement inclus dans les tests unitaires individuels et sont disséminés dans tout le code. Les fonctions de test incluant des tests de validation sont marquées avec le décorateur ``@pytest.mark.validation``."
+"Technical validation tests are directly included in individual unit tests"
+" and are disseminated throughout the code. The test functions including "
+"validation tests are marked with the ``@pytest.mark.validation`` "
+"decorator."
+msgstr ""
+"Les tests de validation technique sont directement inclus dans les tests "
+"unitaires individuels et sont disséminés dans tout le code. Les fonctions"
+" de test incluant des tests de validation sont marquées avec le "
+"décorateur ``@pytest.mark.validation``."
 
 #: ../../doc/features/general/command.rst:77
 msgid "To execute DataLab technical validation tests, run the following::"
-msgstr "Pour exécuter les tests de validation technique de DataLab, taper la commande suivante::"
+msgstr ""
+"Pour exécuter les tests de validation technique de DataLab, taper la "
+"commande suivante::"
 
 #: ../../doc/features/general/command.rst:81
 msgid ""
@@ -144,3 +151,4 @@ msgstr ""
 #~ "échoueront s'ils sont exécutés dans le"
 #~ " même processus que les autres "
 #~ "tests)."
+

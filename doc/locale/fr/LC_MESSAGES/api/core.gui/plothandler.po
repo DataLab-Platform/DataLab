@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-16 12:03+0200\n"
+"POT-Creation-Date: 2024-12-16 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: cdl.core.gui.plothandler:2 of
 msgid "Plot handler"
@@ -48,12 +48,7 @@ msgstr ""
 msgid "Toggle anti-aliasing"
 msgstr "Activer/désactiver l'anti-crénelage"
 
-#: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item
-#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot
-#: cdl.core.gui.plothandler.BasePlotHandler.set_auto_refresh
-#: cdl.core.gui.plothandler.BasePlotHandler.set_show_first_only
-#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot
-#: cdl.core.gui.plothandler.SignalPlotHandler.toggle_anti_aliasing of
+#: cdl.core.gui.plothandler of
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -100,13 +95,31 @@ msgstr "Renvoyer l'objet associé à l'item de visualisation"
 msgid "plot item"
 msgstr "item de visualisation"
 
-#: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item of
+#: cdl.core.gui.plothandler of
 msgid "Returns"
 msgstr "Renvoie"
 
 #: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item:5 of
 msgid "Object associated to plot item"
 msgstr "Objet associé à l'item de visualisation"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.reduce_shown_oids:1
+#: cdl.core.gui.plothandler.ImagePlotHandler.reduce_shown_oids:1 of
+msgid ""
+"Reduce the number of shown objects to visible items only. The base "
+"implementation is to show only the first selected item if the option "
+"\"Show first only\" is enabled."
+msgstr ""
+
+#: cdl.core.gui.plothandler.BasePlotHandler.reduce_shown_oids:5
+#: cdl.core.gui.plothandler.ImagePlotHandler.reduce_shown_oids:5 of
+msgid "list of object uuids"
+msgstr ""
+
+#: cdl.core.gui.plothandler.BasePlotHandler.reduce_shown_oids:7
+#: cdl.core.gui.plothandler.ImagePlotHandler.reduce_shown_oids:7 of
+msgid "Reduced list of object uuids"
+msgstr ""
 
 #: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:1
 #: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:1 of
@@ -144,8 +157,7 @@ msgstr ""
 "si True, forcer l'actualisation même si l'actualisation automatique est "
 "désactivée."
 
-#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot
-#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot of
+#: cdl.core.gui.plothandler of
 msgid "Raises"
 msgstr "Lève"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-30 14:48+0200\n"
+"POT-Creation-Date: 2025-01-27 11:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: ../../doc/features/signal/menu_analysis.rst:4
 msgid "Analysis features on Signals"
@@ -69,10 +69,10 @@ msgid ""
 "attached to signal. This is different from a \"processing\" which creates"
 " a new signal from an existing one."
 msgstr ""
-"Dans le vocabulaire de DataLab, un \"analyse\" est une fonctionnalité qui "
-"calcule un résultat scalaire à partir d'un signal. Ce résultat est stocké"
-" sous la forme de métadonnées ; il est donc attaché au signal. Cela "
-"diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un "
+"Dans le vocabulaire de DataLab, un \"analyse\" est une fonctionnalité qui"
+" calcule un résultat scalaire à partir d'un signal. Ce résultat est "
+"stocké sous la forme de métadonnées ; il est donc attaché au signal. Cela"
+" diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un "
 "signal existant."
 
 #: ../../doc/features/signal/menu_analysis.rst:33
@@ -107,13 +107,13 @@ msgid "Parameters are:"
 msgstr "Paramètres :"
 
 #: ../../doc/features/signal/menu_analysis.rst:53
-#: ../../doc/features/signal/menu_analysis.rst:132
+#: ../../doc/features/signal/menu_analysis.rst:133
 msgid "Parameter"
 msgstr "Paramètre"
 
 #: ../../doc/features/signal/menu_analysis.rst:54
 #: ../../doc/features/signal/menu_analysis.rst:76
-#: ../../doc/features/signal/menu_analysis.rst:133
+#: ../../doc/features/signal/menu_analysis.rst:134
 msgid "Description"
 msgstr "Description"
 
@@ -232,20 +232,22 @@ msgstr ""
 " fichier HDF5."
 
 #: ../../doc/features/signal/menu_analysis.rst:101
-msgid "Abscissa of the minimum and maximum"
+msgid "Arguments of the min and max"
 msgstr "Abscisse du minimum et du maximum"
 
 #: ../../doc/features/signal/menu_analysis.rst:103
-msgid "Compute the smallest argument of the minima and the smallest argument of the "
-"maxima of the selected signal."
-msgstr "Calcule le plus petit argument du minimum et le plus petit argument du maximum "
-"du signal sélectionné."
+msgid ""
+"Compute the smallest argument of the minima and the smallest argument of "
+"the maxima of the selected signal."
+msgstr ""
+"Calcule le plus petit argument du minimum et le plus petit argument du "
+"maximum du signal sélectionné."
 
-#: ../../doc/features/signal/menu_analysis.rst:106
+#: ../../doc/features/signal/menu_analysis.rst:107
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-#: ../../doc/features/signal/menu_analysis.rst:108
+#: ../../doc/features/signal/menu_analysis.rst:109
 msgid ""
 "Create a new signal from semi-automatic peak detection of each selected "
 "signal."
@@ -253,7 +255,7 @@ msgstr ""
 "Crée un signal à partir de la détection automatique des pics de chaque "
 "signal sélectionné :"
 
-#: ../../doc/features/signal/menu_analysis.rst:112
+#: ../../doc/features/signal/menu_analysis.rst:113
 msgid ""
 "Peak detection dialog: threshold is adjustable by moving the horizontal "
 "marker, peaks are detected automatically (see vertical markers with "
@@ -264,83 +266,83 @@ msgstr ""
 "automatiquement (des marqueurs verticaux indiquent les pics détectés avec"
 " leur position)"
 
-#: ../../doc/features/signal/menu_analysis.rst:117
+#: ../../doc/features/signal/menu_analysis.rst:118
 msgid "Sampling rate and period"
 msgstr "Fréquence et période d'échantillonnage"
 
-#: ../../doc/features/signal/menu_analysis.rst:119
+#: ../../doc/features/signal/menu_analysis.rst:120
 msgid "Compute the sampling rate and period of selected signal."
 msgstr ""
 "Calcule la fréquence et la période d'échantillonnage du signal "
 "sélectionné."
 
-#: ../../doc/features/signal/menu_analysis.rst:121
+#: ../../doc/features/signal/menu_analysis.rst:122
 msgid "This feature assumes that the X values are regularly spaced."
 msgstr ""
 "Cette fonctionnalité suppose que les valeurs de X sont régulièrement "
 "espacées."
 
-#: ../../doc/features/signal/menu_analysis.rst:124
+#: ../../doc/features/signal/menu_analysis.rst:125
 msgid "Dynamic parameters"
 msgstr "Paramètres dynamiques"
 
-#: ../../doc/features/signal/menu_analysis.rst:126
+#: ../../doc/features/signal/menu_analysis.rst:127
 msgid "Compute the following dynamic parameters on selected signal:"
 msgstr "Calcule les paramètres dynamiques suivants sur le signal sélectionné :"
 
-#: ../../doc/features/signal/menu_analysis.rst:134
+#: ../../doc/features/signal/menu_analysis.rst:135
 msgid "f"
 msgstr ""
 
-#: ../../doc/features/signal/menu_analysis.rst:135
+#: ../../doc/features/signal/menu_analysis.rst:136
 msgid "Frequency (sinusoidal fit)"
 msgstr "Fréquence (ajustement sinusoïdal)"
 
-#: ../../doc/features/signal/menu_analysis.rst:136
+#: ../../doc/features/signal/menu_analysis.rst:137
 msgid "ENOB"
 msgstr ""
 
-#: ../../doc/features/signal/menu_analysis.rst:137
+#: ../../doc/features/signal/menu_analysis.rst:138
 msgid "Effective Number Of Bits"
 msgstr "Bits effectifs"
 
-#: ../../doc/features/signal/menu_analysis.rst:138
+#: ../../doc/features/signal/menu_analysis.rst:139
 msgid "SNR"
 msgstr ""
 
-#: ../../doc/features/signal/menu_analysis.rst:139
+#: ../../doc/features/signal/menu_analysis.rst:140
 msgid "Signal-to-Noise Ratio"
 msgstr "Rapport signal/bruit"
 
-#: ../../doc/features/signal/menu_analysis.rst:140
+#: ../../doc/features/signal/menu_analysis.rst:141
 msgid "SINAD"
 msgstr ""
 
-#: ../../doc/features/signal/menu_analysis.rst:141
+#: ../../doc/features/signal/menu_analysis.rst:142
 msgid "Signal-to-Noise And Distortion Ratio"
 msgstr "Rapport signal/bruit et distorsion"
 
-#: ../../doc/features/signal/menu_analysis.rst:142
+#: ../../doc/features/signal/menu_analysis.rst:143
 msgid "THD"
 msgstr ""
 
-#: ../../doc/features/signal/menu_analysis.rst:143
+#: ../../doc/features/signal/menu_analysis.rst:144
 msgid "Total Harmonic Distortion"
 msgstr "Distorsion harmonique totale"
 
-#: ../../doc/features/signal/menu_analysis.rst:144
+#: ../../doc/features/signal/menu_analysis.rst:145
 msgid "SFDR"
 msgstr ""
 
-#: ../../doc/features/signal/menu_analysis.rst:145
+#: ../../doc/features/signal/menu_analysis.rst:146
 msgid "Spurious-Free Dynamic Range"
 msgstr "Dynamique sans distorsion"
 
-#: ../../doc/features/signal/menu_analysis.rst:148
+#: ../../doc/features/signal/menu_analysis.rst:149
 msgid "Bandwidth at -3 dB"
 msgstr "Bande passante à -3 dB"
 
-#: ../../doc/features/signal/menu_analysis.rst:150
+#: ../../doc/features/signal/menu_analysis.rst:151
 msgid ""
 "Assuming the signal is a filter response, compute the bandwidth at -3 dB "
 "by finding the frequency range where the signal is above -3 dB."
@@ -349,7 +351,7 @@ msgstr ""
 "la bande passante à -3 dB en trouvant la plage de fréquences où le signal"
 " est supérieur à -3 dB."
 
-#: ../../doc/features/signal/menu_analysis.rst:155
+#: ../../doc/features/signal/menu_analysis.rst:156
 msgid ""
 "This feature assumes that the signal is a filter response, already "
 "expressed in dB."
@@ -357,15 +359,15 @@ msgstr ""
 "Cette fonctionnalité suppose que le signal est une réponse de filtre, "
 "déjà exprimée en dB."
 
-#: ../../doc/features/signal/menu_analysis.rst:158
+#: ../../doc/features/signal/menu_analysis.rst:159
 msgid "Contrast"
 msgstr "Contraste"
 
-#: ../../doc/features/signal/menu_analysis.rst:160
+#: ../../doc/features/signal/menu_analysis.rst:161
 msgid "Compute the contrast of selected signal."
 msgstr "Calcule le contraste du signal sélectionné."
 
-#: ../../doc/features/signal/menu_analysis.rst:162
+#: ../../doc/features/signal/menu_analysis.rst:163
 msgid ""
 "The contrast is defined as the ratio of the difference and the sum of the"
 " maximum and minimum values:"
@@ -373,14 +375,14 @@ msgstr ""
 "Le contraste est défini comme le rapport de la différence et de la somme "
 "des valeurs maximale et minimale :"
 
-#: ../../doc/features/signal/menu_analysis.rst:165
+#: ../../doc/features/signal/menu_analysis.rst:166
 msgid ""
 "\\text{Contrast} = \\dfrac{\\text{max}(y) - "
 "\\text{min}(y)}{\\text{max}(y) + \\text{min}(y)}\n"
 "\n"
 msgstr ""
 
-#: ../../doc/features/signal/menu_analysis.rst:170
+#: ../../doc/features/signal/menu_analysis.rst:171
 msgid ""
 "This feature assumes that the signal is a profile from an image, where "
 "the contrast is meaningful. This justifies the optical definition of "
@@ -390,11 +392,11 @@ msgstr ""
 "image, pour laquelle le contraste a un sens. Cela justifie la définition "
 "optique du contraste."
 
-#: ../../doc/features/signal/menu_analysis.rst:174
+#: ../../doc/features/signal/menu_analysis.rst:175
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: ../../doc/features/signal/menu_analysis.rst:176
+#: ../../doc/features/signal/menu_analysis.rst:177
 msgid ""
 "Show the results of all analyses performed on the selected signals. This "
 "shows the same table as the one shown after having performed a "
@@ -404,11 +406,11 @@ msgstr ""
 "sélectionnés. Cela affiche le même tableau que celui affiché après avoir "
 "effectué un calcul."
 
-#: ../../doc/features/signal/menu_analysis.rst:180
+#: ../../doc/features/signal/menu_analysis.rst:181
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
-#: ../../doc/features/signal/menu_analysis.rst:182
+#: ../../doc/features/signal/menu_analysis.rst:183
 msgid ""
 "Plot the results of analyses performed on the selected signals, with "
 "user-defined X and Y axes (e.g. plot the FWHM as a function of the signal"

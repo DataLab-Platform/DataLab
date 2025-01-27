@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 10:32+0200\n"
+"POT-Creation-Date: 2025-01-27 11:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: cdl.core.gui.main:2 of
 msgid "Main window"
@@ -35,35 +35,7 @@ msgstr ""
 msgid "DataLab main window"
 msgstr "Fenêtre principale de DataLab"
 
-#: cdl.core.gui.main.CDLMainWindow
-#: cdl.core.gui.main.CDLMainWindow.add_annotations_from_items
-#: cdl.core.gui.main.CDLMainWindow.add_image
-#: cdl.core.gui.main.CDLMainWindow.add_label_with_title
-#: cdl.core.gui.main.CDLMainWindow.add_object
-#: cdl.core.gui.main.CDLMainWindow.add_signal
-#: cdl.core.gui.main.CDLMainWindow.browse_h5_files
-#: cdl.core.gui.main.CDLMainWindow.calc
-#: cdl.core.gui.main.CDLMainWindow.delete_metadata
-#: cdl.core.gui.main.CDLMainWindow.get_object
-#: cdl.core.gui.main.CDLMainWindow.get_object_shapes
-#: cdl.core.gui.main.CDLMainWindow.get_object_titles
-#: cdl.core.gui.main.CDLMainWindow.get_object_uuids
-#: cdl.core.gui.main.CDLMainWindow.get_sel_object_uuids
-#: cdl.core.gui.main.CDLMainWindow.import_h5_file
-#: cdl.core.gui.main.CDLMainWindow.import_macro_from_file
-#: cdl.core.gui.main.CDLMainWindow.load_from_files
-#: cdl.core.gui.main.CDLMainWindow.open_h5_files
-#: cdl.core.gui.main.CDLMainWindow.run_macro
-#: cdl.core.gui.main.CDLMainWindow.save_to_h5_file
-#: cdl.core.gui.main.CDLMainWindow.select_groups
-#: cdl.core.gui.main.CDLMainWindow.select_objects
-#: cdl.core.gui.main.CDLMainWindow.set_current_panel
-#: cdl.core.gui.main.CDLMainWindow.set_process_isolation_enabled
-#: cdl.core.gui.main.CDLMainWindow.setup
-#: cdl.core.gui.main.CDLMainWindow.stop_macro
-#: cdl.core.gui.main.CDLMainWindow.toggle_auto_refresh
-#: cdl.core.gui.main.CDLMainWindow.toggle_show_first_only
-#: cdl.core.gui.main.CDLMainWindow.toggle_show_titles of
+#: cdl.core.gui.main of
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -91,40 +63,16 @@ msgstr ""
 "Retourne les titres des groupes et les listes des uuids et titres des "
 "objets internes."
 
-#: cdl.core.gui.main.CDLMainWindow.add_image
-#: cdl.core.gui.main.CDLMainWindow.add_signal
-#: cdl.core.gui.main.CDLMainWindow.browse_h5_files
-#: cdl.core.gui.main.CDLMainWindow.close_properly
-#: cdl.core.gui.main.CDLMainWindow.confirm_memory_state
-#: cdl.core.gui.main.CDLMainWindow.get_current_panel
-#: cdl.core.gui.main.CDLMainWindow.get_group_titles_with_object_infos
-#: cdl.core.gui.main.CDLMainWindow.get_object
-#: cdl.core.gui.main.CDLMainWindow.get_object_shapes
-#: cdl.core.gui.main.CDLMainWindow.get_object_titles
-#: cdl.core.gui.main.CDLMainWindow.get_object_uuids
-#: cdl.core.gui.main.CDLMainWindow.get_sel_object_uuids
-#: cdl.core.gui.main.CDLMainWindow.get_version
-#: cdl.core.gui.main.CDLMainWindow.import_h5_file
-#: cdl.core.gui.main.CDLMainWindow.open_h5_files
-#: cdl.core.gui.main.CDLMainWindow.panels of
+#: cdl.core.gui.main of
 msgid "Returns"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.get_group_titles_with_object_infos:3 of
-msgid "groups titles, lists of inner objects uuids and titles"
+#, fuzzy
+msgid "Groups titles, lists of inner objects uuids and titles"
 msgstr ""
-
-#: cdl.core.gui.main.CDLMainWindow.add_image
-#: cdl.core.gui.main.CDLMainWindow.add_signal
-#: cdl.core.gui.main.CDLMainWindow.close_properly
-#: cdl.core.gui.main.CDLMainWindow.confirm_memory_state
-#: cdl.core.gui.main.CDLMainWindow.get_current_panel
-#: cdl.core.gui.main.CDLMainWindow.get_group_titles_with_object_infos
-#: cdl.core.gui.main.CDLMainWindow.get_object_uuids
-#: cdl.core.gui.main.CDLMainWindow.get_version
-#: cdl.core.gui.main.CDLMainWindow.panels of
-msgid "Return type"
-msgstr ""
+"Retourne les titres des groupes et les listes des uuids et titres des "
+"objets internes."
 
 #: cdl.core.gui.main.CDLMainWindow.get_object_titles:1 of
 msgid ""
@@ -142,19 +90,12 @@ msgstr ""
 msgid "List of object titles"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image
-#: cdl.core.gui.main.CDLMainWindow.add_signal
-#: cdl.core.gui.main.CDLMainWindow.calc
-#: cdl.core.gui.main.CDLMainWindow.get_object
-#: cdl.core.gui.main.CDLMainWindow.get_object_titles
-#: cdl.core.gui.main.CDLMainWindow.get_object_uuids
-#: cdl.core.gui.main.CDLMainWindow.save_to_h5_file
-#: cdl.core.gui.main.CDLMainWindow.set_current_panel of
+#: cdl.core.gui.main of
 msgid "Raises"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.get_object_titles:9
-#: cdl.core.gui.main.CDLMainWindow.get_object_uuids:11 of
+#: cdl.core.gui.main.CDLMainWindow.get_object_uuids:9 of
 msgid "if panel is unknown"
 msgstr ""
 
@@ -192,16 +133,16 @@ msgid ""
 " by group number and object index in group."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_annotations_from_items:7
-#: cdl.core.gui.main.CDLMainWindow.add_label_with_title:6
+#: cdl.core.gui.main.CDLMainWindow.add_annotations_from_items:5
+#: cdl.core.gui.main.CDLMainWindow.add_label_with_title:5
 #: cdl.core.gui.main.CDLMainWindow.get_object_uuids:4 of
 msgid ""
 "panel name (valid values: \"signal\", \"image\"). If None, current panel "
 "is used."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.get_object_uuids:8 of
-msgid "list of object uuids"
+#: cdl.core.gui.main.CDLMainWindow.get_object_uuids:7 of
+msgid "List of object uuids"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.get_sel_object_uuids:1 of
@@ -269,7 +210,7 @@ msgstr ""
 msgid "annotation plot items"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_annotations_from_items:5 of
+#: cdl.core.gui.main.CDLMainWindow.add_annotations_from_items:4 of
 msgid "refresh plot. Defaults to True."
 msgstr ""
 
@@ -314,7 +255,7 @@ msgid "Return the tuple of implemented panels (signal, image)"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.panels:3 of
-msgid "tuple of panels"
+msgid "Tuple of panels"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.confirm_memory_state:1 of
@@ -365,16 +306,23 @@ msgstr ""
 msgid "Return current panel name"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.get_current_panel:3
-#: cdl.core.gui.main.CDLMainWindow.set_current_panel:3 of
-msgid "panel name (valid values: \"signal\", \"image\", \"macro\")"
+#: cdl.core.gui.main.CDLMainWindow.get_current_panel:3 of
+msgid "\"signal\", \"image\", \"macro\")"
+msgstr ""
+
+#: cdl.core.gui.main of
+msgid "Return type"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.set_current_panel:1 of
 msgid "Switch to panel."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.set_current_panel:6 of
+#: cdl.core.gui.main.CDLMainWindow.set_current_panel:3 of
+msgid "panel name (valid values: \"signal\", \"image\", \"macro\")"
+msgstr ""
+
+#: cdl.core.gui.main.CDLMainWindow.set_current_panel:5 of
 msgid "unknown panel"
 msgstr ""
 
@@ -436,7 +384,7 @@ msgstr ""
 msgid "HDF5 filename. If None, a file dialog is opened."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.save_to_h5_file:6 of
+#: cdl.core.gui.main.CDLMainWindow.save_to_h5_file:5 of
 msgid "if filename is invalid or file cannot be saved."
 msgstr ""
 
@@ -452,15 +400,9 @@ msgstr ""
 msgid "Import all datasets from HDF5 files"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.browse_h5_files:5
-#: cdl.core.gui.main.CDLMainWindow.open_h5_files:6 of
+#: cdl.core.gui.main.CDLMainWindow.browse_h5_files:4
+#: cdl.core.gui.main.CDLMainWindow.open_h5_files:5 of
 msgid "Reset all application data before importing"
-msgstr ""
-
-#: cdl.core.gui.main.CDLMainWindow.browse_h5_files:8
-#: cdl.core.gui.main.CDLMainWindow.import_h5_file:9
-#: cdl.core.gui.main.CDLMainWindow.open_h5_files:9 of
-msgid "None"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.browse_h5_files:1 of
@@ -479,11 +421,11 @@ msgstr ""
 msgid "HDF5 filename (optionally with dataset name,"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.import_h5_file:5 of
+#: cdl.core.gui.main.CDLMainWindow.import_h5_file:4 of
 msgid "\")"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.import_h5_file:6 of
+#: cdl.core.gui.main.CDLMainWindow.import_h5_file:5 of
 msgid "Delete all DataLab signals/images before importing data"
 msgstr ""
 
@@ -527,43 +469,43 @@ msgstr ""
 msgid "Signal title"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_signal:5 of
+#: cdl.core.gui.main.CDLMainWindow.add_signal:4 of
 msgid "X data"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_signal:7 of
+#: cdl.core.gui.main.CDLMainWindow.add_signal:5 of
 msgid "Y data"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:7
-#: cdl.core.gui.main.CDLMainWindow.add_signal:9 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:5
+#: cdl.core.gui.main.CDLMainWindow.add_signal:6 of
 msgid "X unit. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:9
-#: cdl.core.gui.main.CDLMainWindow.add_signal:11 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:6
+#: cdl.core.gui.main.CDLMainWindow.add_signal:7 of
 msgid "Y unit. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:13
-#: cdl.core.gui.main.CDLMainWindow.add_signal:13 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:8
+#: cdl.core.gui.main.CDLMainWindow.add_signal:8 of
 msgid "X label. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:15
-#: cdl.core.gui.main.CDLMainWindow.add_signal:15 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:9
+#: cdl.core.gui.main.CDLMainWindow.add_signal:9 of
 msgid "Y label. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_signal:18 of
+#: cdl.core.gui.main.CDLMainWindow.add_signal:11 of
 msgid "True if signal was added successfully, False otherwise"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_signal:21 of
+#: cdl.core.gui.main.CDLMainWindow.add_signal:13 of
 msgid "Invalid xdata dtype"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_signal:22 of
+#: cdl.core.gui.main.CDLMainWindow.add_signal:14 of
 msgid "Invalid ydata dtype"
 msgstr ""
 
@@ -575,23 +517,23 @@ msgstr ""
 msgid "Image title"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:5 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:4 of
 msgid "Image data"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:11 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:7 of
 msgid "Z unit. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:17 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:10 of
 msgid "Z label. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:20 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:12 of
 msgid "True if image was added successfully, False otherwise"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.add_image:23 of
+#: cdl.core.gui.main.CDLMainWindow.add_image:14 of
 msgid "Invalid data dtype"
 msgstr ""
 
@@ -639,5 +581,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Return DataLab version."
+#~ msgstr ""
+
+#~ msgid "groups titles, lists of inner objects uuids and titles"
+#~ msgstr ""
+
+#~ msgid "list of object uuids"
+#~ msgstr ""
+
+#~ msgid "tuple of panels"
+#~ msgstr ""
+
+#~ msgid "None"
 #~ msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 09:27+0200\n"
+"POT-Creation-Date: 2025-01-27 11:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: cdl.algorithms:2 of
 msgid "Algorithms (:mod:`cdl.algorithms`)"
@@ -84,44 +84,7 @@ msgstr "Algorithmes de traitement du signal"
 msgid "Normalize input array to a given parameter."
 msgstr "Normaliser le tableau d'entrée à un paramètre donné."
 
-#: cdl.algorithms.coordinates.array_circle_to_center_radius
-#: cdl.algorithms.coordinates.array_circle_to_diameter
-#: cdl.algorithms.coordinates.array_ellipse_to_center_axes_angle
-#: cdl.algorithms.coordinates.array_ellipse_to_diameters
-#: cdl.algorithms.coordinates.circle_to_center_radius
-#: cdl.algorithms.coordinates.circle_to_diameter
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle
-#: cdl.algorithms.coordinates.ellipse_to_diameters
-#: cdl.algorithms.datatypes.is_complex_dtype
-#: cdl.algorithms.datatypes.is_integer_dtype cdl.algorithms.image.binning
-#: cdl.algorithms.image.distance_matrix cdl.algorithms.image.fft2d
-#: cdl.algorithms.image.find_blobs_dog cdl.algorithms.image.find_blobs_doh
-#: cdl.algorithms.image.find_blobs_log cdl.algorithms.image.find_blobs_opencv
-#: cdl.algorithms.image.flatfield cdl.algorithms.image.get_2d_peaks_coords
-#: cdl.algorithms.image.get_absolute_level
-#: cdl.algorithms.image.get_centroid_fourier
-#: cdl.algorithms.image.get_contour_shapes
-#: cdl.algorithms.image.get_enclosing_circle
-#: cdl.algorithms.image.get_hough_circle_peaks
-#: cdl.algorithms.image.get_radial_profile cdl.algorithms.image.ifft2d
-#: cdl.algorithms.image.magnitude_spectrum cdl.algorithms.image.normalize
-#: cdl.algorithms.image.phase_spectrum cdl.algorithms.image.psd
-#: cdl.algorithms.image.remove_overlapping_disks
-#: cdl.algorithms.image.scale_data_to_min_max cdl.algorithms.signal.bandwidth
-#: cdl.algorithms.signal.contrast cdl.algorithms.signal.enob
-#: cdl.algorithms.signal.fft1d
-#: cdl.algorithms.signal.find_nearest_zero_point_idx
-#: cdl.algorithms.signal.find_x_at_value cdl.algorithms.signal.fw1e2
-#: cdl.algorithms.signal.fwhm cdl.algorithms.signal.ifft1d
-#: cdl.algorithms.signal.interpolate cdl.algorithms.signal.magnitude_spectrum
-#: cdl.algorithms.signal.normalize cdl.algorithms.signal.peak_indices
-#: cdl.algorithms.signal.phase_spectrum cdl.algorithms.signal.psd
-#: cdl.algorithms.signal.sampling_period cdl.algorithms.signal.sampling_rate
-#: cdl.algorithms.signal.sfdr cdl.algorithms.signal.sinad
-#: cdl.algorithms.signal.sinus_frequency cdl.algorithms.signal.sinusoidal_fit
-#: cdl.algorithms.signal.snr cdl.algorithms.signal.sort_frequencies
-#: cdl.algorithms.signal.thd cdl.algorithms.signal.windowing
-#: cdl.algorithms.signal.xpeak of
+#: cdl.algorithms of
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -133,44 +96,7 @@ msgstr "Tableau d'entrée"
 msgid "Normalization parameter. Defaults to \"maximum\""
 msgstr "Paramètre de normalisation. Par défaut : \"maximum\""
 
-#: cdl.algorithms.coordinates.array_circle_to_center_radius
-#: cdl.algorithms.coordinates.array_circle_to_diameter
-#: cdl.algorithms.coordinates.array_ellipse_to_center_axes_angle
-#: cdl.algorithms.coordinates.array_ellipse_to_diameters
-#: cdl.algorithms.coordinates.circle_to_center_radius
-#: cdl.algorithms.coordinates.circle_to_diameter
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle
-#: cdl.algorithms.coordinates.ellipse_to_diameters
-#: cdl.algorithms.datatypes.is_complex_dtype
-#: cdl.algorithms.datatypes.is_integer_dtype cdl.algorithms.image.binning
-#: cdl.algorithms.image.distance_matrix cdl.algorithms.image.fft2d
-#: cdl.algorithms.image.find_blobs_dog cdl.algorithms.image.find_blobs_doh
-#: cdl.algorithms.image.find_blobs_log cdl.algorithms.image.find_blobs_opencv
-#: cdl.algorithms.image.flatfield cdl.algorithms.image.get_2d_peaks_coords
-#: cdl.algorithms.image.get_absolute_level
-#: cdl.algorithms.image.get_centroid_fourier
-#: cdl.algorithms.image.get_contour_shapes
-#: cdl.algorithms.image.get_enclosing_circle
-#: cdl.algorithms.image.get_hough_circle_peaks
-#: cdl.algorithms.image.get_radial_profile cdl.algorithms.image.ifft2d
-#: cdl.algorithms.image.magnitude_spectrum cdl.algorithms.image.normalize
-#: cdl.algorithms.image.phase_spectrum cdl.algorithms.image.psd
-#: cdl.algorithms.image.remove_overlapping_disks
-#: cdl.algorithms.image.scale_data_to_min_max cdl.algorithms.signal.bandwidth
-#: cdl.algorithms.signal.contrast cdl.algorithms.signal.enob
-#: cdl.algorithms.signal.fft1d
-#: cdl.algorithms.signal.find_nearest_zero_point_idx
-#: cdl.algorithms.signal.find_x_at_value cdl.algorithms.signal.fw1e2
-#: cdl.algorithms.signal.fwhm cdl.algorithms.signal.ifft1d
-#: cdl.algorithms.signal.interpolate cdl.algorithms.signal.magnitude_spectrum
-#: cdl.algorithms.signal.normalize cdl.algorithms.signal.peak_indices
-#: cdl.algorithms.signal.phase_spectrum cdl.algorithms.signal.psd
-#: cdl.algorithms.signal.sampling_period cdl.algorithms.signal.sampling_rate
-#: cdl.algorithms.signal.sfdr cdl.algorithms.signal.sinad
-#: cdl.algorithms.signal.sinus_frequency cdl.algorithms.signal.sinusoidal_fit
-#: cdl.algorithms.signal.snr cdl.algorithms.signal.sort_frequencies
-#: cdl.algorithms.signal.thd cdl.algorithms.signal.windowing
-#: cdl.algorithms.signal.xpeak of
+#: cdl.algorithms of
 msgid "Returns"
 msgstr "Retourne"
 
@@ -193,10 +119,8 @@ msgstr "Calculer la FFT sur les données X,Y."
 msgid "X data"
 msgstr "Données X"
 
-#: cdl.algorithms.signal.fft1d:4
-#: cdl.algorithms.signal.find_nearest_zero_point_idx:3
-#: cdl.algorithms.signal.find_x_at_value:5 cdl.algorithms.signal.ifft1d:4
-#: cdl.algorithms.signal.interpolate:4
+#: cdl.algorithms.signal.fft1d:4 cdl.algorithms.signal.find_x_at_value:5
+#: cdl.algorithms.signal.ifft1d:4 cdl.algorithms.signal.interpolate:4
 #: cdl.algorithms.signal.magnitude_spectrum:4
 #: cdl.algorithms.signal.phase_spectrum:4 cdl.algorithms.signal.psd:4
 #: cdl.algorithms.signal.sinusoidal_fit:4
@@ -244,10 +168,7 @@ msgstr ""
 "Calculer la densité spectrale de puissance (PSD), en utilisant la méthode"
 " de Welch."
 
-#: cdl.algorithms.coordinates.circle_to_center_radius
-#: cdl.algorithms.coordinates.circle_to_diameter
-#: cdl.algorithms.signal.bandwidth cdl.algorithms.signal.peak_indices
-#: cdl.algorithms.signal.psd of
+#: cdl.algorithms of
 msgid "Return type"
 msgstr "Type de retour"
 
@@ -410,13 +331,18 @@ msgstr "Modèle de régression lorentzien à 1 dimension"
 msgid "1-dimensional Voigt fit model"
 msgstr "Modèle de régression Voigt à 1 dimension"
 
-#: cdl.algorithms.signal.find_nearest_zero_point_idx:1 of
-msgid "Find the x indices where the corresponding y is the closest to zero"
-msgstr "Rechercher les indices x où le y correspondant est le plus proche de zéro"
+#: cdl.algorithms.signal.find_zero_crossings:1 of
+msgid "Find the left indices of the zero-crossing intervals in the given array."
+msgstr ""
 
-#: cdl.algorithms.signal.find_nearest_zero_point_idx:5 of
-msgid "Indices of the points right before or at zero crossing"
-msgstr "Indices des points juste avant ou au croisement à zéro"
+#: cdl.algorithms.signal.find_zero_crossings:3 of
+#, fuzzy
+msgid "Input array."
+msgstr "Tableau d'entrée"
+
+#: cdl.algorithms.signal.find_zero_crossings:5 of
+msgid "An array of indices where zero-crossings occur."
+msgstr ""
 
 #: cdl.algorithms.signal.find_x_at_value:1 of
 msgid ""
@@ -432,7 +358,10 @@ msgid "Value to find"
 msgstr "Valeur à rechercher"
 
 #: cdl.algorithms.signal.find_x_at_value:8 of
-msgid "X value where the Y value is the closest to the given value"
+#, fuzzy
+msgid ""
+"An array of x values where the y value is the closest to the given value "
+"(empty array if no zero crossing is found)"
 msgstr "Valeur X où la valeur Y est la plus proche de la valeur donnée"
 
 #: cdl.algorithms.signal.bandwidth:1 of
@@ -618,6 +547,113 @@ msgstr ""
 msgid "FW at 1/e² segment coordinates"
 msgstr "Coordonnées du segment LMH à 1/e²"
 
+#: cdl.algorithms.signal.allan_variance:1 of
+msgid ""
+"Calculate the Allan variance for given time and measurement values at "
+"specified tau values."
+msgstr ""
+
+#: cdl.algorithms.signal.allan_deviation:4
+#: cdl.algorithms.signal.allan_variance:4
+#: cdl.algorithms.signal.hadamard_variance:3
+#: cdl.algorithms.signal.modified_allan_variance:3
+#: cdl.algorithms.signal.overlapping_allan_variance:3
+#: cdl.algorithms.signal.time_deviation:3
+#: cdl.algorithms.signal.total_variance:3 of
+#, fuzzy
+msgid "Time array"
+msgstr "Tableau d'entrée"
+
+#: cdl.algorithms.signal.allan_deviation:5
+#: cdl.algorithms.signal.allan_variance:5
+#: cdl.algorithms.signal.hadamard_variance:4
+#: cdl.algorithms.signal.modified_allan_variance:4
+#: cdl.algorithms.signal.overlapping_allan_variance:4
+#: cdl.algorithms.signal.time_deviation:4
+#: cdl.algorithms.signal.total_variance:4 of
+msgid "Measured values array"
+msgstr ""
+
+#: cdl.algorithms.signal.allan_deviation:6
+#: cdl.algorithms.signal.allan_variance:6
+#: cdl.algorithms.signal.overlapping_allan_variance:5 of
+msgid "Allan deviation time values"
+msgstr ""
+
+#: cdl.algorithms.signal.allan_variance:8 of
+msgid "Allan variance values"
+msgstr ""
+
+#: cdl.algorithms.signal.allan_deviation:1 of
+msgid ""
+"Calculate the Allan deviation for given time and measurement values at "
+"specified tau values."
+msgstr ""
+
+#: cdl.algorithms.signal.allan_deviation:8 of
+msgid "Allan deviation values"
+msgstr ""
+
+#: cdl.algorithms.signal.overlapping_allan_variance:1 of
+msgid ""
+"Calculate the Overlapping Allan variance for given time and measurement "
+"values."
+msgstr ""
+
+#: cdl.algorithms.signal.overlapping_allan_variance:7 of
+msgid "Overlapping Allan variance values"
+msgstr ""
+
+#: cdl.algorithms.signal.modified_allan_variance:1 of
+msgid ""
+"Calculate the Modified Allan variance for given time and measurement "
+"values."
+msgstr ""
+
+#: cdl.algorithms.signal.modified_allan_variance:5 of
+msgid "Modified Allan deviation time values"
+msgstr ""
+
+#: cdl.algorithms.signal.modified_allan_variance:7 of
+msgid "Modified Allan variance values"
+msgstr ""
+
+#: cdl.algorithms.signal.hadamard_variance:1 of
+msgid "Calculate the Hadamard variance for given time and measurement values."
+msgstr ""
+
+#: cdl.algorithms.signal.hadamard_variance:5 of
+msgid "Hadamard deviation time values"
+msgstr ""
+
+#: cdl.algorithms.signal.hadamard_variance:7 of
+msgid "Hadamard variance values"
+msgstr ""
+
+#: cdl.algorithms.signal.total_variance:1 of
+msgid "Calculate the Total variance for given time and measurement values."
+msgstr ""
+
+#: cdl.algorithms.signal.total_variance:5 of
+msgid "Total variance time values"
+msgstr ""
+
+#: cdl.algorithms.signal.total_variance:7 of
+msgid "Total variance values"
+msgstr ""
+
+#: cdl.algorithms.signal.time_deviation:1 of
+msgid "Calculate the Time Deviation (TDEV) for given time and measurement values."
+msgstr ""
+
+#: cdl.algorithms.signal.time_deviation:5 of
+msgid "Time deviation time values"
+msgstr ""
+
+#: cdl.algorithms.signal.time_deviation:7 of
+msgid "Time deviation values"
+msgstr ""
+
 #: cdl.algorithms:30 of
 msgid "Image Processing Algorithms"
 msgstr "Algorithmes de traitement d'image"
@@ -791,7 +827,7 @@ msgstr "Niveau relatif (par défaut : 0.5)"
 msgid "A tuple (x, y, radius)"
 msgstr "Un tuple (x, y, rayon)"
 
-#: cdl.algorithms.image.get_enclosing_circle of
+#: cdl.algorithms of
 msgid "Raises"
 msgstr "Lève"
 
@@ -1115,6 +1151,26 @@ msgstr "Retourne True si le type de données est un type complexe"
 msgid "True if data type is a complex type"
 msgstr "True si le type de données est un type complexe"
 
+#: cdl.algorithms.datatypes.clip_astype:1 of
+msgid ""
+"Convert array to a new data type, after having clipped values to the new "
+"data type's range if it is an integer type. If data type is not integer, "
+"this is equivalent to ``data.astype(dtype)``."
+msgstr ""
+
+#: cdl.algorithms.datatypes.clip_astype:5 of
+msgid "Array to convert"
+msgstr ""
+
+#: cdl.algorithms.datatypes.clip_astype:6 of
+#, fuzzy
+msgid "Data type to convert to"
+msgstr "Type de données à vérifier"
+
+#: cdl.algorithms.datatypes.clip_astype:8 of
+msgid "Array converted to new data type"
+msgstr ""
+
 #: cdl.algorithms:42 of
 msgid "Coordinate Conversion Algorithms"
 msgstr "Algorithmes de conversion de coordonnées"
@@ -1305,3 +1361,13 @@ msgstr ""
 
 #~ msgid "Curve Fitting Algorithms"
 #~ msgstr "Algorithmes de régression"
+
+#~ msgid "Find the x indices where the corresponding y is the closest to zero"
+#~ msgstr ""
+#~ "Rechercher les indices x où le y"
+#~ " correspondant est le plus proche de"
+#~ " zéro"
+
+#~ msgid "Indices of the points right before or at zero crossing"
+#~ msgstr "Indices des points juste avant ou au croisement à zéro"
+

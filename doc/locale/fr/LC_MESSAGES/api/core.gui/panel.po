@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 21:42+0200\n"
+"POT-Creation-Date: 2025-01-08 16:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: cdl.core.gui.panel:2 of
 msgid "Panel"
@@ -197,55 +197,7 @@ msgstr ""
 msgid "Return result data dictionary"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.add_annotations_from_items
-#: cdl.core.gui.panel.base.BaseDataPanel.add_label_with_title
-#: cdl.core.gui.panel.base.BaseDataPanel.add_object
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection
-#: cdl.core.gui.panel.base.BaseDataPanel.delete_metadata
-#: cdl.core.gui.panel.base.BaseDataPanel.export_metadata_from_file
-#: cdl.core.gui.panel.base.BaseDataPanel.get_newparam_from_current
-#: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog
-#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog
-#: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files
-#: cdl.core.gui.panel.base.BaseDataPanel.import_metadata_from_file
-#: cdl.core.gui.panel.base.BaseDataPanel.load_from_files
-#: cdl.core.gui.panel.base.BaseDataPanel.new_object
-#: cdl.core.gui.panel.base.BaseDataPanel.open_separate_view
-#: cdl.core.gui.panel.base.BaseDataPanel.plot_item_moved
-#: cdl.core.gui.panel.base.BaseDataPanel.remove_object
-#: cdl.core.gui.panel.base.BaseDataPanel.save_to_files
-#: cdl.core.gui.panel.base.BaseDataPanel.selection_changed
-#: cdl.core.gui.panel.base.create_resultdata_dict
-#: cdl.core.gui.panel.image.ImagePanel.delete_metadata
-#: cdl.core.gui.panel.image.ImagePanel.get_newparam_from_current
-#: cdl.core.gui.panel.image.ImagePanel.new_object
-#: cdl.core.gui.panel.image.ImagePanel.plot_lut_changed
-#: cdl.core.gui.panel.macro.MacroPanel
-#: cdl.core.gui.panel.macro.MacroPanel.add_object
-#: cdl.core.gui.panel.macro.MacroPanel.deserialize_from_hdf5
-#: cdl.core.gui.panel.macro.MacroPanel.export_macro_to_file
-#: cdl.core.gui.panel.macro.MacroPanel.get_macro
-#: cdl.core.gui.panel.macro.MacroPanel.get_number_from_macro
-#: cdl.core.gui.panel.macro.MacroPanel.get_number_from_title
-#: cdl.core.gui.panel.macro.MacroPanel.import_macro_from_file
-#: cdl.core.gui.panel.macro.MacroPanel.macro_name_changed
-#: cdl.core.gui.panel.macro.MacroPanel.macro_state_changed
-#: cdl.core.gui.panel.macro.MacroPanel.remove_macro
-#: cdl.core.gui.panel.macro.MacroPanel.rename_macro
-#: cdl.core.gui.panel.macro.MacroPanel.run_macro
-#: cdl.core.gui.panel.macro.MacroPanel.serialize_to_hdf5
-#: cdl.core.gui.panel.macro.MacroPanel.stop_macro
-#: cdl.core.gui.panel.macro.MacroTabs
-#: cdl.core.gui.panel.macro.MacroTabs.add_tab
-#: cdl.core.gui.panel.macro.MacroTabs.get_widget
-#: cdl.core.gui.panel.macro.MacroTabs.remove_tab
-#: cdl.core.gui.panel.macro.MacroTabs.set_current_number
-#: cdl.core.gui.panel.macro.MacroTabs.set_tab_title
-#: cdl.core.gui.panel.signal.SignalPanel.get_newparam_from_current
-#: cdl.core.gui.panel.signal.SignalPanel.new_object
-#: cdl.core.gui.panel.signal.SignalPanel.toggle_anti_aliasing
-#: guidata.dataset.datatypes.DataSet.create of
+#: cdl.core.gui.panel of
 msgid "Parameters"
 msgstr ""
 
@@ -253,31 +205,7 @@ msgstr ""
 msgid "List of objects"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection
-#: cdl.core.gui.panel.base.BaseDataPanel.create_object
-#: cdl.core.gui.panel.base.BaseDataPanel.get_newparam_from_current
-#: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog
-#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog
-#: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files
-#: cdl.core.gui.panel.base.BaseDataPanel.load_from_files
-#: cdl.core.gui.panel.base.BaseDataPanel.new_object
-#: cdl.core.gui.panel.base.BaseDataPanel.open_separate_view
-#: cdl.core.gui.panel.base.create_resultdata_dict
-#: cdl.core.gui.panel.image.ImagePanel.get_newparam_from_current
-#: cdl.core.gui.panel.image.ImagePanel.new_object
-#: cdl.core.gui.panel.macro.MacroPanel.add_macro
-#: cdl.core.gui.panel.macro.MacroPanel.create_object
-#: cdl.core.gui.panel.macro.MacroPanel.get_macro
-#: cdl.core.gui.panel.macro.MacroPanel.get_number_from_macro
-#: cdl.core.gui.panel.macro.MacroPanel.get_number_from_title
-#: cdl.core.gui.panel.macro.MacroPanel.import_macro_from_file
-#: cdl.core.gui.panel.macro.MacroTabs.add_tab
-#: cdl.core.gui.panel.macro.MacroTabs.get_current_number
-#: cdl.core.gui.panel.macro.MacroTabs.get_widget
-#: cdl.core.gui.panel.signal.SignalPanel.get_newparam_from_current
-#: cdl.core.gui.panel.signal.SignalPanel.new_object
-#: guidata.dataset.datatypes.DataSet.create of
+#: cdl.core.gui.panel of
 msgid "Returns"
 msgstr ""
 
@@ -285,14 +213,18 @@ msgstr ""
 msgid "keys are result categories, values are ResultData"
 msgstr ""
 
-#: cdl.core.gui.panel.base.create_resultdata_dict
-#: cdl.core.gui.panel.macro.MacroTabs.add_tab
-#: cdl.core.gui.panel.macro.MacroTabs.get_current_number of
+#: cdl.core.gui.panel of
 msgid "Return type"
 msgstr ""
 
 #: cdl.core.gui.panel.base.BaseDataPanel:1 of
 msgid "Object handling the item list, the selected item properties and plot"
+msgstr ""
+
+#: cdl.core.gui.panel.base.BaseDataPanel.get_roieditor_class:1
+#: cdl.core.gui.panel.image.ImagePanel.get_roieditor_class:1
+#: cdl.core.gui.panel.signal.SignalPanel.get_roieditor_class:1 of
+msgid "Return ROI editor class"
 msgstr ""
 
 #: cdl.core.gui.panel.base.BaseDataPanel.closeEvent:1 of
@@ -388,18 +320,15 @@ msgstr ""
 msgid "Confirm before removing all objects"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.delete_metadata:1
-#: cdl.core.gui.panel.image.ImagePanel.delete_metadata:1 of
+#: cdl.core.gui.panel.base.BaseDataPanel.delete_metadata:1 of
 msgid "Delete metadata of selected objects"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.delete_metadata:3
-#: cdl.core.gui.panel.image.ImagePanel.delete_metadata:3 of
+#: cdl.core.gui.panel.base.BaseDataPanel.delete_metadata:3 of
 msgid "Refresh plot. Defaults to True."
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.delete_metadata:4
-#: cdl.core.gui.panel.image.ImagePanel.delete_metadata:4 of
+#: cdl.core.gui.panel.base.BaseDataPanel.delete_metadata:4 of
 msgid "Keep regions of interest, if any. Defaults to None (ask user)."
 msgstr ""
 
@@ -429,6 +358,10 @@ msgstr ""
 
 #: cdl.core.gui.panel.base.BaseDataPanel.rename_group:1 of
 msgid "Rename a group"
+msgstr ""
+
+#: cdl.core.gui.panel.base.BaseDataPanel.rename_group:3 of
+msgid "new group name. Defaults to None (ask user)."
 msgstr ""
 
 #: cdl.core.gui.panel.base.BaseDataPanel.get_newparam_from_current:1
@@ -546,6 +479,18 @@ msgid ""
 "refresh plot and update object view."
 msgstr ""
 
+#: cdl.core.gui.panel.base.BaseDataPanel.add_plot_items_to_dialog:1 of
+msgid "Add plot items to dialog"
+msgstr ""
+
+#: cdl.core.gui.panel.base.BaseDataPanel.add_plot_items_to_dialog:3 of
+msgid "Dialog"
+msgstr ""
+
+#: cdl.core.gui.panel.base.BaseDataPanel.add_plot_items_to_dialog:4 of
+msgid "Object IDs"
+msgstr ""
+
 #: cdl.core.gui.panel.base.BaseDataPanel.open_separate_view:1 of
 msgid "Open separate view for visualizing selected objects"
 msgstr ""
@@ -571,83 +516,64 @@ msgid "Create new pop-up signal/image plot dialog."
 msgstr ""
 
 #: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:3 of
-msgid "Object IDs"
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:4 of
 msgid "Edit mode"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:5
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:6 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:4 of
 msgid "Show toolbar"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:6
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:3
-#: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog:3 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:5
+#: cdl.core.gui.panel.base.BaseDataPanel.get_objects_with_dialog:3 of
 msgid "Dialog title"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:7
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:7 of
-msgid "list of tools to add to the toolbar"
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:6 of
+msgid "Dialog object name"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:8
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:4 of
-msgid "Dialog name"
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:9
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:5 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:7 of
 msgid "Plot options"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:11 of
-msgid "QDialog instance"
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:9 of
+msgid "Plot dialog instance"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:1 of
-msgid "Create new pop-up dialog for the currently selected signal/image."
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:9 of
-msgid "QDialog instance, selected object"
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog:1 of
+#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_editor_output:1 of
 msgid "Get ROI data (array) from specific dialog box."
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog:3 of
+#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_editor_output:3 of
 msgid "Extract ROI from data"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog:4 of
-msgid "Single object"
+#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_editor_output:5 of
+msgid ""
+"A tuple containing the ROI object and a boolean indicating whether the "
+"dialog was accepted or not."
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog:5 of
-msgid "Add ROI immediately after opening the dialog (default: False)"
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog:7 of
-msgid "ROI data"
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog:1 of
+#: cdl.core.gui.panel.base.BaseDataPanel.get_objects_with_dialog:1 of
 msgid "Get object with dialog box."
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog:4
+#: cdl.core.gui.panel.base.BaseDataPanel.get_objects_with_dialog:4 of
+msgid "Optional dialog comment"
+msgstr ""
+
+#: cdl.core.gui.panel.base.BaseDataPanel.get_objects_with_dialog:5 of
+msgid "Number of objects to select"
+msgstr ""
+
+#: cdl.core.gui.panel.base.BaseDataPanel.get_objects_with_dialog:6
 #: cdl.core.gui.panel.macro.MacroPanel:3 cdl.core.gui.panel.macro.MacroTabs:3
 #: of
 msgid "Parent widget"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog:6 of
-msgid "Object (signal or image, or None if dialog was canceled)"
+#: cdl.core.gui.panel.base.BaseDataPanel.get_objects_with_dialog:8 of
+msgid "Object(s) (signal(s) or image(s), or None if dialog was canceled)"
 msgstr ""
 
 #: cdl.core.gui.panel.base.BaseDataPanel.add_objprop_buttons:1 of
@@ -688,9 +614,11 @@ msgstr ""
 msgid "Signal object"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj:5 cdl.core.model.signal.SignalObj:5
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Par défaut : None."
+#: cdl.core.model.image.ImageObj:5 cdl.core.model.image.ImageObj:11
+#: cdl.core.model.signal.SignalObj:5 cdl.core.model.signal.SignalObj:11
+#: guidata.dataset.datatypes.DataSet.create:3
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "Default: None."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj cdl.core.model.signal.SignalObj of
@@ -707,18 +635,13 @@ msgstr ""
 msgid "guidata.dataset.dataitems.StringItem"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj:11 cdl.core.model.signal.SignalObj:11
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "Données\\.  Par défaut : None."
-msgstr ""
-
 #: cdl.core.model.image.ImageObj:13 cdl.core.model.signal.SignalObj:13 of
 msgid "guidata.dataset.dataitems.FloatArrayItem"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:17 cdl.core.model.signal.SignalObj:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Métadonnées\\.  Par défaut : {}."
+msgid "Default: {}."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:19 cdl.core.model.signal.SignalObj:19 of
@@ -727,7 +650,7 @@ msgstr ""
 
 #: cdl.core.model.signal.SignalObj:23
 #: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "Titre du signal\\.  Par défaut : 'Sans titre'."
+msgid "Signal title\\.  Default: 'Untitled'."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:53 cdl.core.model.image.ImageObj:65
@@ -738,7 +661,7 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:19
 #: guidata.dataset.datatypes.DataSet.create:23
 #: guidata.dataset.datatypes.DataSet.create:27 of
-msgid "Titre\\.  Par défaut : ''."
+msgid "Title\\.  Default: ''."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:59 cdl.core.model.image.ImageObj:71
@@ -749,13 +672,13 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:21
 #: guidata.dataset.datatypes.DataSet.create:25
 #: guidata.dataset.datatypes.DataSet.create:29 of
-msgid "Unité\\.  Par défaut : ''."
+msgid "Default: ''."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:89 cdl.core.model.signal.SignalObj:53
 #: guidata.dataset.datatypes.DataSet.create:19
 #: guidata.dataset.datatypes.DataSet.create:31 of
-msgid "Par défaut : True."
+msgid "Default: True."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:91 cdl.core.model.image.ImageObj:97
@@ -770,7 +693,7 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:27
 #: guidata.dataset.datatypes.DataSet.create:33
 #: guidata.dataset.datatypes.DataSet.create:39 of
-msgid "Par défaut : False."
+msgid "Default: False."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:101 cdl.core.model.image.ImageObj:119
@@ -781,7 +704,7 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:35
 #: guidata.dataset.datatypes.DataSet.create:41
 #: guidata.dataset.datatypes.DataSet.create:45 of
-msgid "Borne inférieure\\.  Par défaut : None."
+msgid "Lower bound\\.  Default: None."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:25 cdl.core.model.image.ImageObj:31
@@ -802,17 +725,17 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:37
 #: guidata.dataset.datatypes.DataSet.create:43
 #: guidata.dataset.datatypes.DataSet.create:47 of
-msgid "Borne supérieure\\.  Par défaut : None."
+msgid "Upper bound\\.  Default: None."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`SignalObj` avec les champs "
-"initialisés aux valeurs données."
+"Returns a new instance of :py:class:`SignalObj` with the fields set to "
+"the given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:34 of
-msgid "Nouvelle instance de :py:class:`SignalObj`."
+msgid "New instance of :py:class:`SignalObj`."
 msgstr ""
 
 #: cdl.core.gui.panel.image.ImagePanel.get_newparam_from_current:6
@@ -858,41 +781,37 @@ msgstr ""
 
 #: cdl.core.model.image.ImageObj:23 guidata.dataset.datatypes.DataSet.create:9
 #: of
-msgid "X\\ :subscript:`0`\\.  Par défaut : 0.0."
+msgid "X\\ :subscript:`0`\\.  Default: 0.0."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:29 guidata.dataset.datatypes.DataSet.create:11
 #: of
-msgid "Y\\ :subscript:`0`\\.  Par défaut : 0.0."
+msgid "Y\\ :subscript:`0`\\.  Default: 0.0."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:35 guidata.dataset.datatypes.DataSet.create:13
 #: of
-msgid "Δx\\.  Flottant, non nul\\. Par défaut : 1.0."
+msgid "Δx\\.  Float, non zero\\. Default: 1.0."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:41 guidata.dataset.datatypes.DataSet.create:15
 #: of
-msgid "Δy\\.  Flottant, non nul\\. Par défaut : 1.0."
+msgid "Δy\\.  Float, non zero\\. Default: 1.0."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:47 guidata.dataset.datatypes.DataSet.create:17
 #: of
-msgid "Titre de l'image\\.  Par défaut : 'Sans titre'."
+msgid "Image title\\.  Default: 'Untitled'."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Renvoie une nouvelle instance de :py:class:`ImageObj` avec les champs "
-"initialisés aux valeurs données."
+"Returns a new instance of :py:class:`ImageObj` with the fields set to the"
+" given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:50 of
-msgid "Nouvelle instance de :py:class:`ImageObj`."
-msgstr ""
-
-#: cdl.core.gui.panel.image.ImagePanel.properties_changed:1 of
-msgid "The properties 'Apply' button was clicked: updating signal"
+msgid "New instance of :py:class:`ImageObj`."
 msgstr ""
 
 #: cdl.core.gui.panel.image.ImagePanel.plot_lut_changed:1 of
@@ -980,6 +899,10 @@ msgstr ""
 
 #: cdl.core.gui.panel.macro.MacroPanel:1 of
 msgid "Macro Panel widget"
+msgstr ""
+
+#: cdl.core.gui.panel.macro.MacroPanel.update_color_mode:1 of
+msgid "Update color mode according to the current theme"
 msgstr ""
 
 #: cdl.core.gui.panel.macro.MacroPanel.serialize_to_hdf5:3 of
@@ -1104,7 +1027,7 @@ msgstr ""
 msgid "Filename. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.panel.macro.MacroPanel.export_macro_to_file of
+#: cdl.core.gui.panel of
 msgid "Raises"
 msgstr ""
 
@@ -1192,3 +1115,97 @@ msgstr ""
 
 #~ msgid "New instance of :py:class:`ImageObj`."
 #~ msgstr ""
+
+#~ msgid "list of tools to add to the toolbar"
+#~ msgstr ""
+
+#~ msgid "Dialog name"
+#~ msgstr ""
+
+#~ msgid "QDialog instance"
+#~ msgstr ""
+
+#~ msgid "Create new pop-up dialog for the currently selected signal/image."
+#~ msgstr ""
+
+#~ msgid "QDialog instance, selected object"
+#~ msgstr ""
+
+#~ msgid "Single object"
+#~ msgstr ""
+
+#~ msgid "Add ROI immediately after opening the dialog (default: False)"
+#~ msgstr ""
+
+#~ msgid "ROI data"
+#~ msgstr ""
+
+#~ msgid "Object (signal or image, or None if dialog was canceled)"
+#~ msgstr ""
+
+#~ msgid "Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Données\\.  Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Métadonnées\\.  Par défaut : {}."
+#~ msgstr ""
+
+#~ msgid "Titre du signal\\.  Par défaut : 'Sans titre'."
+#~ msgstr ""
+
+#~ msgid "Titre\\.  Par défaut : ''."
+#~ msgstr ""
+
+#~ msgid "Unité\\.  Par défaut : ''."
+#~ msgstr ""
+
+#~ msgid "Par défaut : True."
+#~ msgstr ""
+
+#~ msgid "Par défaut : False."
+#~ msgstr ""
+
+#~ msgid "Borne inférieure\\.  Par défaut : None."
+#~ msgstr ""
+
+#~ msgid "Borne supérieure\\.  Par défaut : None."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`SignalObj` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`SignalObj`."
+#~ msgstr ""
+
+#~ msgid "X\\ :subscript:`0`\\.  Par défaut : 0.0."
+#~ msgstr ""
+
+#~ msgid "Y\\ :subscript:`0`\\.  Par défaut : 0.0."
+#~ msgstr ""
+
+#~ msgid "Δx\\.  Flottant, non nul\\. Par défaut : 1.0."
+#~ msgstr ""
+
+#~ msgid "Δy\\.  Flottant, non nul\\. Par défaut : 1.0."
+#~ msgstr ""
+
+#~ msgid "Titre de l'image\\.  Par défaut : 'Sans titre'."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Renvoie une nouvelle instance de "
+#~ ":py:class:`ImageObj` avec les champs "
+#~ "initialisés aux valeurs données."
+#~ msgstr ""
+
+#~ msgid "Nouvelle instance de :py:class:`ImageObj`."
+#~ msgstr ""
+
+#~ msgid "The properties 'Apply' button was clicked: updating signal"
+#~ msgstr ""
+

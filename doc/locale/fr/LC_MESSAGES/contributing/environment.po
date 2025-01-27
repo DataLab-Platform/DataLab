@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-16 12:03+0200\n"
+"POT-Creation-Date: 2024-12-16 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: ../../doc/contributing/environment.md:1
 msgid "Setting up Development Environment"
@@ -261,14 +261,6 @@ msgid "OK"
 msgstr ""
 
 #: ../../doc/contributing/environment.md
-msgid "3.8.10.0"
-msgstr ""
-
-#: ../../doc/contributing/environment.md
-msgid "3.9"
-msgstr ""
-
-#: ../../doc/contributing/environment.md
 msgid "3.9.10.0"
 msgstr ""
 
@@ -296,7 +288,7 @@ msgstr ""
 msgid "3.12.0.1"
 msgstr ""
 
-#: ../../doc/contributing/environment.md:73
+#: ../../doc/contributing/environment.md:72
 msgid ""
 "⚠ We strongly recommend using the `.dot` versions of WinPython which are "
 "lightweight and can be customized to your needs (using `pip install -r "
@@ -306,17 +298,17 @@ msgstr ""
 " qui sont légères et peuvent être personnalisées selon vos besoins (en "
 "utilisant `pip install -r requirements.txt`)."
 
-#: ../../doc/contributing/environment.md:76
+#: ../../doc/contributing/environment.md:75
 msgid "✅ We also recommend using a dedicated WinPython instance for DataLab."
 msgstr ""
 "✅ Nous recommandons également d'utiliser une instance WinPython dédiée "
 "pour DataLab."
 
-#: ../../doc/contributing/environment.md:78
+#: ../../doc/contributing/environment.md:77
 msgid "Test data"
 msgstr "Données de test"
 
-#: ../../doc/contributing/environment.md:81
+#: ../../doc/contributing/environment.md:80
 msgid ""
 "DataLab test data are located in different folders, depending on their "
 "nature or origin."
@@ -324,7 +316,7 @@ msgstr ""
 "Les données de test de DataLab sont situées dans différents dossiers, "
 "selon leur nature ou leur origine."
 
-#: ../../doc/contributing/environment.md:83
+#: ../../doc/contributing/environment.md:82
 msgid ""
 "Required data for unit tests are located in \"cdl\\data\\tests\" (public "
 "data)."
@@ -332,7 +324,7 @@ msgstr ""
 "Les données requises pour les tests unitaires sont situées dans "
 "\"cdl\\data\\tests\" (données publiques)"
 
-#: ../../doc/contributing/environment.md:85
+#: ../../doc/contributing/environment.md:84
 msgid ""
 "A second folder %CDL_DATA% (optional) may be defined for additional tests"
 " which are still under development (or for confidential data)."
@@ -341,11 +333,11 @@ msgstr ""
 " supplémentaires qui sont encore en cours de développement (ou pour des "
 "données confidentielles)."
 
-#: ../../doc/contributing/environment.md:88
+#: ../../doc/contributing/environment.md:87
 msgid "Specific environment variables"
 msgstr "Variables d'environnement spécifiques"
 
-#: ../../doc/contributing/environment.md:91
+#: ../../doc/contributing/environment.md:90
 msgid ""
 "Enable the \"debug\" mode (no stdin/stdout redirection towards internal "
 "console):"
@@ -353,7 +345,7 @@ msgstr ""
 "Activer le mode \"debug\" (pas de redirection stdin/stdout vers la "
 "console interne) :"
 
-#: ../../doc/contributing/environment.md:96
+#: ../../doc/contributing/environment.md:95
 msgid ""
 "Building PDF documentation requires LaTeX. On Windows, the following "
 "environment:"
@@ -361,7 +353,7 @@ msgstr ""
 "Générer la documentation PDF nécessite LaTeX. Sur Windows, "
 "l'environnement suivant :"
 
-#: ../../doc/contributing/environment.md:102
+#: ../../doc/contributing/environment.md:101
 msgid ""
 "Visual Studio Code configuration used in `launch.json` and `tasks.json` "
 "(examples) :"
@@ -369,17 +361,17 @@ msgstr ""
 "La configuration de Visual Studio Code utilisée dans `launch.json` et "
 "`tasks.json` (exemples) :"
 
-#: ../../doc/contributing/environment.md:110
+#: ../../doc/contributing/environment.md:109
 msgid "Visual Studio Code `.env` file:"
 msgstr "Fichier `.env` de Visual Studio Code :"
 
-#: ../../doc/contributing/environment.md:112
+#: ../../doc/contributing/environment.md:111
 msgid "This file is used to set environment variables for the application."
 msgstr ""
 "Ce fichier est utilisé pour définir les variables d'environnement de "
 "l'application."
 
-#: ../../doc/contributing/environment.md:113
+#: ../../doc/contributing/environment.md:112
 msgid ""
 "It is used to set the `PYTHONPATH` environment variable to the root of "
 "the project."
@@ -387,7 +379,7 @@ msgstr ""
 "Il est utilisé pour définir la variable d'environnement `PYTHONPATH` à la"
 " racine du projet."
 
-#: ../../doc/contributing/environment.md:114
+#: ../../doc/contributing/environment.md:113
 msgid ""
 "This is required to be able to import the project modules from within VS "
 "Code."
@@ -395,7 +387,7 @@ msgstr ""
 "Cela est nécessaire pour pouvoir importer les modules du projet depuis VS"
 " Code."
 
-#: ../../doc/contributing/environment.md:115
+#: ../../doc/contributing/environment.md:114
 msgid ""
 "To create this file, copy the `.env.template` file to `.env` (and "
 "eventually add your own paths)."
@@ -403,40 +395,40 @@ msgstr ""
 "Pour créer ce fichier, copiez le fichier `.env.template` en `.env` (et "
 "ajoutez éventuellement vos propres chemins)."
 
-#: ../../doc/contributing/environment.md:118
+#: ../../doc/contributing/environment.md:117
 msgid "Windows installer"
 msgstr ""
 
-#: ../../doc/contributing/environment.md:121
+#: ../../doc/contributing/environment.md:120
 msgid ""
 "The Windows installer is built using [WiX "
 "Toolset](https://wixtoolset.org/) V4.0.5. Using the WiX Toolset requires "
 "[.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum."
 msgstr ""
 
-#: ../../doc/contributing/environment.md:124
+#: ../../doc/contributing/environment.md:123
 msgid "You may install .NET SDK using `winget`:"
 msgstr ""
 
-#: ../../doc/contributing/environment.md:128
+#: ../../doc/contributing/environment.md:127
 msgid ""
 "Once .NET SDK is installed, the WiX Toolset can be installed and "
 "configured using the following commands:"
 msgstr ""
 
-#: ../../doc/contributing/environment.md:134
+#: ../../doc/contributing/environment.md:133
 msgid "First, you need to generate the installer script from a generic template:"
 msgstr ""
 
-#: ../../doc/contributing/environment.md:138
+#: ../../doc/contributing/environment.md:137
 msgid "Building the installer is done using the following command:"
 msgstr ""
 
-#: ../../doc/contributing/environment.md:142
+#: ../../doc/contributing/environment.md:141
 msgid "Third-party Software"
 msgstr "Logiciels tiers"
 
-#: ../../doc/contributing/environment.md:145
+#: ../../doc/contributing/environment.md:144
 msgid "The following software may be required for maintaining the project:"
 msgstr "Les logiciels suivants peuvent être nécessaires pour maintenir le projet :"
 
@@ -483,3 +475,7 @@ msgstr ""
 #: ../../doc/contributing/environment.md
 msgid "LaTeX distribution on Windows"
 msgstr "Distribution LaTeX sur Windows"
+
+#~ msgid "3.8.10.0"
+#~ msgstr ""
+
