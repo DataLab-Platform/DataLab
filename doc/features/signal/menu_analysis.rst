@@ -103,6 +103,13 @@ Arguments of the min and max
 Compute the smallest argument of the minima and the smallest argument of the maxima of
 the selected signal.
 
+Abscissa at y=...
+^^^^^^^^^^^^^^^^^
+
+Compute the abscissa at a given ordinate value for the selected signal.
+If there is no solution, the displayed result is NaN.
+If there are multiple solutions, the displayed result is the smallest value.
+
 Peak detection
 ^^^^^^^^^^^^^^
 
