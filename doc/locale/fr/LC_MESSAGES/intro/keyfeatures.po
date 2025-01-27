@@ -164,8 +164,8 @@ msgid "Remote control from a third-party application"
 msgstr "Contrôle à distance depuis une application tierce"
 
 #: ../../doc/intro/keyfeatures.rst:49
-msgid "Sum, average, difference, product, ..."
-msgstr "Somme, moyenne, différence, produit, ..."
+msgid "Sum, average, difference, product..."
+msgstr "Somme, moyenne, différence, produit..."
 
 #: ../../doc/intro/keyfeatures.rst:50
 msgid "Operations with a constant"
@@ -188,16 +188,16 @@ msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
 #: ../../doc/intro/keyfeatures.rst:55
-msgid "Rotation (flip, rotate), resize, ..."
-msgstr "Rotation (retournement, rotation), redimensionnement, ..."
+msgid "Rotation (flip, rotate), resize..."
+msgstr "Rotation (retournement, rotation), redimensionnement..."
 
 #: ../../doc/intro/keyfeatures.rst:57
 msgid "Pixel binning"
 msgstr "Binning de pixels"
 
 #: ../../doc/intro/keyfeatures.rst:58
-msgid "Square root, power, logarithm, exponential, ..."
-msgstr "Racine carrée, puissance, logarithme, exponentielle, ..."
+msgid "Square root, power, logarithm, exponential..."
+msgstr "Racine carrée, puissance, logarithme, exponentielle..."
 
 #: ../../doc/intro/keyfeatures.rst:59
 msgid "Derivative, integral"
@@ -216,8 +216,8 @@ msgid "Reverse X-axis"
 msgstr "Inversion de l'axe X"
 
 #: ../../doc/intro/keyfeatures.rst:63
-msgid "Thresholding (manual, Otsu, ...)"
-msgstr "Seuillage (manuel, Otsu, ...)"
+msgid "Thresholding (manual, Otsu...)"
+msgstr "Seuillage (manuel, Otsu...)"
 
 #: ../../doc/intro/keyfeatures.rst:64
 msgid "Gaussian filter, Wiener filter"
@@ -240,8 +240,8 @@ msgid "Detrending"
 msgstr "Elimination de tendance"
 
 #: ../../doc/intro/keyfeatures.rst:69
-msgid "Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF, ..."
-msgstr "Ajustement interactif : Gauss, Lorentz, Voigt, polynôme, CDF, ..."
+msgid "Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF..."
+msgstr "Ajustement interactif : Gauss, Lorentz, Voigt, polynôme, CDF..."
 
 #: ../../doc/intro/keyfeatures.rst:70
 msgid "Interactive multigaussian fit"
@@ -252,28 +252,28 @@ msgid "Frequency filters (low-pass, high-pass, band-pass, band-stop)"
 msgstr "Filtres fréquentiels (passe-bas, passe-haut, passe-bande, coupe-bande)"
 
 #: ../../doc/intro/keyfeatures.rst:72
-msgid "Windowing (Hamming, Hanning, ...)"
-msgstr "Fenêtrage (Hamming, Hanning, ...)"
+msgid "Windowing (Hamming, Hanning...)"
+msgstr "Fenêtrage (Hamming, Hanning...)"
 
 #: ../../doc/intro/keyfeatures.rst:73
 msgid "Butterworth filter"
 msgstr "Filtre de Butterworth"
 
 #: ../../doc/intro/keyfeatures.rst:74
-msgid "Exposure correction (gamma, log, ...)"
-msgstr "Correction d'exposition (gamma, log, ...)"
+msgid "Exposure correction (gamma, log...)"
+msgstr "Correction d'exposition (gamma, log...)"
 
 #: ../../doc/intro/keyfeatures.rst:75
-msgid "Restauration (Total Variation, Bilateral, ...)"
-msgstr "Restauration (variation totale, bilatérale, ...)"
+msgid "Restauration (Total Variation, Bilateral...)"
+msgstr "Restauration (variation totale, bilatérale...)"
 
 #: ../../doc/intro/keyfeatures.rst:76
-msgid "Morphology (erosion, dilation, ...)"
-msgstr "Morphologie (érosion, dilatation, ...)"
+msgid "Morphology (erosion, dilation...)"
+msgstr "Morphologie (érosion, dilatation...)"
 
 #: ../../doc/intro/keyfeatures.rst:77
-msgid "Edges detection (Roberts, Sobel, ...)"
-msgstr "Détection de contours (Roberts, Sobel, ...)"
+msgid "Edges detection (Roberts, Sobel...)"
+msgstr "Détection de contours (Roberts, Sobel...)"
 
 #: ../../doc/intro/keyfeatures.rst:78
 msgid "Analysis on custom ROI"
@@ -284,8 +284,8 @@ msgid "FWHM, FW @ 1/e²"
 msgstr "FWHM, FW @ 1/e²"
 
 #: ../../doc/intro/keyfeatures.rst:80
-msgid "Dynamic parameters (ENOB, SNR, ...), Sampling period/Rate"
-msgstr "Paramètres dynamiques (ENOB, SNR, ...), Période/Taux d'échantillonnage"
+msgid "Dynamic parameters (ENOB, SNR...), Sampling period/Rate"
+msgstr "Paramètres dynamiques (ENOB, SNR...), Période/Taux d'échantillonnage"
 
 #: ../../doc/intro/keyfeatures.rst:81
 msgid "Centroid (robust method w/r noise)"
@@ -308,8 +308,8 @@ msgid "Circle Hough transform"
 msgstr "Transformée de Hough circulaire"
 
 #: ../../doc/intro/keyfeatures.rst:86
-msgid "Blob detection (OpenCV, Laplacian of Gaussian, ...)"
-msgstr "Détection de taches (OpenCV, Laplacien de Gauss, ...)"
+msgid "Blob detection (OpenCV, Laplacian of Gaussian...)"
+msgstr "Détection de taches (OpenCV, Laplacien de Gauss...)"
 
 #~ msgid "X/Y raw/averaged profiles"
 #~ msgstr "Profils X/Y bruts/moyennés"

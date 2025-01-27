@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-27 11:30+0100\n"
+"POT-Creation-Date: 2025-01-27 16:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1104,11 +1104,10 @@ msgstr ""
 
 #: ../../CHANGELOG.md:211
 msgid ""
-"Difference, division, ...: dialog box for the second operand selection "
-"was allowing to select a group (only a signal or an image should be "
-"selected)"
+"Difference, division...: dialog box for the second operand selection was "
+"allowing to select a group (only a signal or an image should be selected)"
 msgstr ""
-"Soustraction, division, ... : la boîte de dialogue pour la sélection du "
+"Soustraction, division... : la boîte de dialogue pour la sélection du "
 "second opérande permettait de sélectionner un groupe (seul un signal ou "
 "une image devrait être sélectionné)"
 
@@ -1372,12 +1371,11 @@ msgstr ""
 "dans la barre d'outils verticale du panneau de visualisation"
 
 #: ../../CHANGELOG.md:265
-msgid ""
-"Clarified the \"Annotations\" management (new buttons, toolbar action, "
-"...)"
+#, fuzzy
+msgid "Clarified the \"Annotations\" management (new buttons, toolbar action...)"
 msgstr ""
 "Clarification de la gestion des \"Annotations\" (nouveaux boutons, action"
-" de la barre d'outils, ...)"
+" de la barre d'outils...)"
 
 #: ../../CHANGELOG.md:267
 msgid "New validation process for signal and image features:"
@@ -1586,10 +1584,10 @@ msgstr "Passe-bas, Passe-haut, Passe-bande, Coupure de bande"
 #: ../../CHANGELOG.md
 msgid ""
 "Windowing (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-"
-"top, ...)"
+"top...)"
 msgstr ""
 "Fenêtrage (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-"
-"top, ...)"
+"top...)"
 
 #: ../../CHANGELOG.md
 msgid "Fit"
@@ -2963,12 +2961,13 @@ msgstr ""
 "sont désormais affichés dans la boîte de dialogue \"Résultats\""
 
 #: ../../CHANGELOG.md:553
+#, fuzzy
 msgid ""
-"This concerns both 1D (FHWM, ...) and 2D analysis results (contours, "
-"blobs, ...):"
+"This concerns both 1D (FHWM...) and 2D analysis results (contours, "
+"blobs...):"
 msgstr ""
-"Cela concerne à la fois les résultats d'analyse 1D (FHWM, ...) et 2D "
-"(contours, blobs, ...) :"
+"Cela concerne à la fois les résultats d'analyse 1D (FHWM...) et 2D "
+"(contours, blobs...) :"
 
 #: ../../CHANGELOG.md:554
 msgid "Segment results now also show length (L) and center coordinates (Xc, Yc)"
@@ -4439,11 +4438,11 @@ msgstr "Traitement d'image :"
 
 #: ../../CHANGELOG.md:783
 msgid ""
-"Added pixel binning operation (X/Y binning factors, operation: sum, mean,"
-" ...)"
+"Added pixel binning operation (X/Y binning factors, operation: sum, "
+"mean...)"
 msgstr ""
 "Ajout de l'opération de binning de pixels (facteurs de binning X/Y, "
-"opération : somme, moyenne, ...)"
+"opération : somme, moyenne...)"
 
 #: ../../CHANGELOG.md:784
 msgid ""

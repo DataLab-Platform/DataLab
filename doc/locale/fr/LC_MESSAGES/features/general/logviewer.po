@@ -31,7 +31,7 @@ msgstr "Journaux de bord"
 
 #: ../../doc/features/general/logviewer.rst:10
 msgid ""
-"Despite countless efforts (unit testing, test coverage, ...), DataLab "
+"Despite countless efforts (unit testing, test coverage...), DataLab "
 "might crash or behave unexpectedly."
 msgstr ""
 "Malgré des efforts considérables en matière de tests (tests unitaires, "

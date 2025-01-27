@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:05+0100\n"
+"POT-Creation-Date: 2025-01-27 16:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -145,8 +145,8 @@ msgstr ""
 
 #: cdl.core.gui.panel.base.AbstractPanel:4 of
 msgid ""
-"A panel handle an object list (objects are signals, images, macros, ...)."
-" Each object must implement ``cdl.core.gui.ObjItf`` interface"
+"A panel handle an object list (objects are signals, images, macros...). "
+"Each object must implement ``cdl.core.gui.ObjItf`` interface"
 msgstr ""
 
 #: cdl.core.gui.panel.base.AbstractPanel.get_serializable_name:1
@@ -1207,5 +1207,19 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "The properties 'Apply' button was clicked: updating signal"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A panel handle an object list "
+#~ "(objects are signals, images, macros...). "
+#~ "Each object must implement "
+#~ "``cdl.core.gui.ObjItf`` interface"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A panel handle an object list "
+#~ "(objects are signals, images, macros, "
+#~ "...). Each object must implement "
+#~ "``cdl.core.gui.ObjItf`` interface"
 #~ msgstr ""
 

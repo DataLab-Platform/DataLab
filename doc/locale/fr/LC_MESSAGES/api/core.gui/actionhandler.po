@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"POT-Creation-Date: 2024-12-16 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,13 +17,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.16.0\n"
 
 #: cdl.core.gui.actionhandler:2 of
 msgid "Action handler"
 msgstr "Gestionnaire d'actions"
 
 #: cdl.core.gui.actionhandler:4 of
+#, fuzzy
 msgid ""
 "The :mod:`cdl.core.gui.actionhandler` module handles all application "
 "actions (menus, toolbars, context menu). These actions point to DataLab "
@@ -79,10 +80,11 @@ msgid "Handler classes"
 msgstr "Classes de gestion"
 
 #: cdl.core.gui.actionhandler.SignalActionHandler:1 of
+#, fuzzy
 msgid "Object handling signal panel GUI interactions: actions, menus, ..."
 msgstr ""
-"Objet gérant les interactions GUI du panneau de signaux : actions, menus,"
-" ..."
+"Objet gérant les interactions GUI du panneau de signaux : actions, "
+"menus..."
 
 #: cdl.core.gui.actionhandler.ImageActionHandler.create_first_actions:1
 #: cdl.core.gui.actionhandler.SignalActionHandler.create_first_actions:1 of
@@ -99,12 +101,7 @@ msgstr "Créer des actions qui sont ajoutées aux menus à la fin"
 msgid "Add action to list of actions."
 msgstr "Ajouter une action à la liste des actions."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.add_action
-#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_category
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu
-#: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed of
+#: cdl.core.gui.actionhandler of
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -231,7 +228,7 @@ msgstr ""
 "ActionCategory.VIEW_TOOLBAR si la catégorie actuelle est "
 "ActionCategory.VIEW, sinon à ActionCategory.PANEL_TOOLBAR."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action of
+#: cdl.core.gui.actionhandler of
 msgid "Returns"
 msgstr "Renvoie"
 
@@ -289,3 +286,4 @@ msgstr ""
 
 #~ msgid "Return type"
 #~ msgstr "Type de retour"
+

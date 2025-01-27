@@ -152,7 +152,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     """Object defining DataLab panel interface,
     based on a vertical QSplitter widget
 
-    A panel handle an object list (objects are signals, images, macros, ...).
+    A panel handle an object list (objects are signals, images, macros...).
     Each object must implement ``cdl.core.gui.ObjItf`` interface
     """
 
@@ -774,9 +774,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = self.objview.get_sel_objects(include_groups=True)
         if filenames is None:  # pragma: no cover
             filenames = [None] * len(objs)
-        assert len(filenames) == len(
-            objs
-        ), "Number of filenames must match number of objects"
+        assert len(filenames) == len(objs), (
+            "Number of filenames must match number of objects"
+        )
         for index, obj in enumerate(objs):
             filename = filenames[index]
             if filename is None:

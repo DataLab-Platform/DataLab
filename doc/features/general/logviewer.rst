@@ -7,7 +7,7 @@ Log viewer
   :description: DataLab's log viewer
   :keywords: DataLab, log, viewer, crash, bug, report
 
-Despite countless efforts (unit testing, test coverage, ...),
+Despite countless efforts (unit testing, test coverage...),
 DataLab might crash or behave unexpectedly.
 
 For those situations, DataLab provides two logs (located in your home directory):

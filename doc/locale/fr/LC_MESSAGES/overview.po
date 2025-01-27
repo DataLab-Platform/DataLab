@@ -125,8 +125,8 @@ msgid "Remote control from a third-party application"
 msgstr "Contrôle à distance depuis une application tierce"
 
 #: ../../overview.rst:44
-msgid "Sum, average, difference, product, ..."
-msgstr "Somme, moyenne, différence, produit, ..."
+msgid "Sum, average, difference, product..."
+msgstr "Somme, moyenne, différence, produit..."
 
 #: ../../overview.rst:45
 msgid "ROI extraction, Swap X/Y axes"
@@ -137,8 +137,8 @@ msgid "Semi-automatic multi-peak detection"
 msgstr "Détection de pics semi-automatique"
 
 #: ../../overview.rst:47
-msgid "Rotation (flip, rotate), resize, ..."
-msgstr "Rotation, redimensionnement, ..."
+msgid "Rotation (flip, rotate), resize..."
+msgstr "Rotation, redimensionnement..."
 
 #: ../../overview.rst:48
 msgid "Flat-field correction"

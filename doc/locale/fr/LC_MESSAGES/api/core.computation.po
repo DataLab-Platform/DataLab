@@ -854,7 +854,7 @@ msgid "Parameter used to set a constant value to used in operations (sum,"
 msgstr ""
 
 #: cdl.computation.base.ConstantParam:2 of
-msgid "multiplication, ...)"
+msgid "multiplication...)"
 msgstr ""
 
 #: cdl.computation.base.ConstantParam:6

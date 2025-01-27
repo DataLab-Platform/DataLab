@@ -208,7 +208,7 @@ This release requires PlotPy v2.4.0 or later, which brings the following bug fix
 
 * Progress bar is now automatically closed as expected when an error occurrs during a long operation (e.g. when opening a file)
 
-* Difference, division, ...: dialog box for the second operand selection was allowing to select a group (only a signal or an image should be selected)
+* Difference, division...: dialog box for the second operand selection was allowing to select a group (only a signal or an image should be selected)
 
 * When doing an operation which involves an object (signal or image) with higher order number than the current object (e.g. when subtracting an image with an image from a group below the current image), the resulting object's title now correctly refers to the order numbers of the objects involved in the operation (e.g., to continue with the subtraction example mentioned above, the resulting object's title was previously referring to the order number before the insertion of the resulting image)
 
@@ -262,7 +262,7 @@ NumPy 2.0 support has been added with this release.
   * The menu bar and toolbars have been reorganized to make the application more intuitive and easier to use
   * Operations and processing features have been regrouped in submenus
   * All visualization-related actions are now grouped in the plot view vertical toolbar
-  * Clarified the "Annotations" management (new buttons, toolbar action, ...)
+  * Clarified the "Annotations" management (new buttons, toolbar action...)
 
 * New validation process for signal and image features:
   * Before this release, DataLab's validation process was exclusively done from the programmer's point of view, by writing unit tests and integration tests, thus ensuring that the code was working as expected (i.e. that no exception was raised and that the behavior was correct)
@@ -297,7 +297,7 @@ NumPy 2.0 support has been added with this release.
 | Processing  | Level Adjustment | Offset correction |
 | Processing  | Fourier analysis | Power spectrum, Phase spectrum, Magnitude spectrum, Power spectral density |
 | Processing  | Frequency filters | Low-pass, High-pass, Band-pass, Band-stop |
-| Processing  | | Windowing (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-top, ...) |
+| Processing  | | Windowing (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-top...) |
 | Processing  | Fit | Linear fit, Sinusoidal fit, Exponential fit, CDF fit |
 | Analysis   | | FWHM (Zero-crossing method), X value @ min/max, Sampling period/frequency, Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR), -3dB bandwidth, Contrast |
 
@@ -550,7 +550,7 @@ NumPy 2.0 support has been added with this release.
   * This fixes [Issue #32](https://github.com/DataLab-Platform/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`
 * 1D and 2D analysis results:
   * Additionnaly to the previous enhancement, more analysis results are now shown in the "Results" dialog box
-  * This concerns both 1D (FHWM, ...) and 2D analysis results (contours, blobs, ...):
+  * This concerns both 1D (FHWM...) and 2D analysis results (contours, blobs...):
     * Segment results now also show length (L) and center coordinates (Xc, Yc)
     * Circle and ellipse results now also show area (A)
 * Added "Plot results" entry in "Analysis" menu:
@@ -780,7 +780,7 @@ New features:
 * Signal processing:
   * Added support for optional FFT shift (see Settings dialog box)
 * Image processing:
-  * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
+  * Added pixel binning operation (X/Y binning factors, operation: sum, mean...)
   * Added "Distribute on a grid" and "Reset image positions" in operation menu
   * Added Butterworth filter
   * Added exposure processing features:

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-01-27 14:10+0100\n"
+"POT-Creation-Date: 2025-01-27 16:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1525,8 +1525,7 @@ msgstr "Fenêtrage"
 #: cdl\core\gui\actionhandler.py:922
 msgid "Apply a window function (or apodization): Hanning, Hamming, ..."
 msgstr ""
-"Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, "
-"Hamming, ..."
+"Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, Hamming..."
 
 #: cdl\core\gui\actionhandler.py:927 cdl\core\gui\processor\signal.py:463
 msgid "Detrending"
@@ -1629,8 +1628,9 @@ msgid "Dynamic parameters"
 msgstr "Paramètres dynamiques"
 
 #: cdl\core\gui\actionhandler.py:1017
+#, fuzzy
 msgid "Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."
-msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD, ..."
+msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD..."
 
 #: cdl\core\gui\actionhandler.py:1020
 msgid "Bandwidth at -3dB"
@@ -3481,11 +3481,11 @@ msgstr ""
 #: cdl\core\gui\tour.py:814
 msgid ""
 "The <b>Operations</b> menu is focused on arithmetic operations, data type "
-"conversions, pixel binning resize, intensity profiles, ..."
+"conversions, pixel binning resize, intensity profiles..."
 msgstr ""
 "Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les "
 "conversions de type de données, le redimensionnement par binning de pixels, "
-"les profils d'intensité, ..."
+"les profils d'intensité..."
 
 #: cdl\core\gui\tour.py:824
 msgid ""

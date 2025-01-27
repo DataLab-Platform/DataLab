@@ -92,7 +92,7 @@ Companion tool for scientific/technical work
   allows you to visualize and process data, and to share your results with your
   colleagues. It can easily be adapted to your needs through the addition of
   plugins, and it may even be used together with your every day tools (e.g.,
-  Visual Studio Code, Spyder, ... or Jupyter notebooks).
+  Visual Studio Code, Spyder... or Jupyter notebooks).
 
   :octicon:`book;1em;sd-text-info` See our :bdg-ref-success-line:`Tutorials <tutorials>`
   for practical examples of use in a scientific/technical context.
@@ -120,7 +120,7 @@ Debugging a data processing application
 .. note::
 
     DataLab can also be controlled from your familiar development environment
-    (e.g., Visual Studio Code, Spyder, ...) or from a Jupyter notebook, in order
+    (e.g., Visual Studio Code, Spyder...) or from a Jupyter notebook, in order
     to perform calculations using your processing functions while leveraging the
     advanced features of DataLab. :octicon:`book;1em;sd-text-info`
     See the tutorials :ref:`tutorial_custom_func` or :ref:`tutorial_spyder`

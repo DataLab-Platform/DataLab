@@ -421,7 +421,7 @@ msgid "Add preferences dialog box"
 msgstr "Ajouter une boîte de dialogue de préférences"
 
 #: ../../doc/contributing/roadmap.rst:161
-msgid "Add new image processing features: denoising, ..."
+msgid "Add new image processing features: denoising..."
 msgstr ""
 "Ajouter de nouvelles fonctionnalités de traitement d'images : débruitage,"
 " ..."
