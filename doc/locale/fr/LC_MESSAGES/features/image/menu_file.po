@@ -411,16 +411,3 @@ msgstr ""
 "La troisième étape montre une représentation graphique des données "
 "importées. Vous pouvez utiliser le bouton « Terminer » pour importer les "
 "données dans l'espace de travail de DataLab."
-
-#~ msgid "Built-in immutable sequence."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If no argument is given, the "
-#~ "constructor returns an empty tuple. If"
-#~ " iterable is specified the tuple is"
-#~ " initialized from iterable's items."
-#~ msgstr ""
-
-#~ msgid "If the argument is a tuple, the return value is the same object."
-#~ msgstr ""

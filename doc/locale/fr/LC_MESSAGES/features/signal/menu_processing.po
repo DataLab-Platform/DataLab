@@ -1092,35 +1092,3 @@ msgstr ""
 "Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
 "définie en ajustant la position et la largeur de l'échelle horizontale de"
 " sélection."
-
-#~ msgid ""
-#~ "FFT and inverse FFT are performed "
-#~ "using frequency shifting if the option"
-#~ " is enabled in DataLab settings."
-#~ msgstr ""
-
-#~ msgid "Thresholding"
-#~ msgstr "Seuillage"
-
-#~ msgid ""
-#~ "Create a new signal which is the"
-#~ " result of thresholding each selected "
-#~ "signal."
-#~ msgstr "Crée un signal à partir du seuillage de chaque signal sélectionné."
-
-#~ msgid ":math:`y_{1}[i]=\\dfrac{1}{M}\\sum_{j=0}^{M-1}y_{0}[i+j]`"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "`scipy.signal.medfilt "
-#~ "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_"
-#~ msgstr ""
-
-#~ msgid ":math:`y_{1} = |FFT(y_{0})|`"
-#~ msgstr ""
-
-#~ msgid ":math:`Y_{k} = PSD(y_{k})`"
-#~ msgstr ""
-
-#~ msgid ":math:`Y_{k} = PSD(y_{k})` (in dB: :math:`10.log_{10}(Y_{k})`)"
-#~ msgstr ""

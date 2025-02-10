@@ -191,15 +191,3 @@ msgstr "Barycentre (robuste p/r au bruit)"
 #: ../../overview.rst:60
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
-
-#~ msgid "Signal processing"
-#~ msgstr "Traitement du signal"
-
-#~ msgid "Image processing"
-#~ msgstr "Traitement d'image"
-
-#~ msgid "Signal and image visualization in DataLab"
-#~ msgstr "Visualisation de signaux et d'images dans DataLab"
-
-#~ msgid "Remote control from an IDE (e.g. Spyder, or Jupyter)"
-#~ msgstr "Contrôle à distance depuis un IDE (par exemple Spyder ou Jupyter)"

@@ -261,13 +261,3 @@ msgstr ""
 #: cdl.core.gui.objectview.ObjectView.move_down:1 of
 msgid "Move selected objects/groups down"
 msgstr ""
-
-#~ msgid "Object view (:mod:`cdl.core.gui.objectview`)"
-#~ msgstr "Vue des objets (:mod:`cdl.core.gui.objectview`)"
-
-#~ msgid "Get object dialog box"
-#~ msgstr ""
-
-#~ msgid "Return current object uuid"
-#~ msgstr ""
-

@@ -291,9 +291,3 @@ msgstr "Contribuer au code"
 #: ../../doc/contributing/index.rst:113
 msgid "See :ref:`contribute_code` section for more information."
 msgstr "Voir la section :ref:`contribute_code` pour plus d'informations."
-
-#~ msgid "Contents:"
-#~ msgstr "Sommaire :"
-
-#~ msgid "Development"
-#~ msgstr "Développement"

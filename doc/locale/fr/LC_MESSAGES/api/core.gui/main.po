@@ -561,37 +561,3 @@ msgstr ""
 #: cdl.core.gui.main.CDLMainWindow.close_properly:3 of
 msgid "True if closed properly, False otherwise"
 msgstr ""
-
-#~ msgid "Main window (:mod:`cdl.core.gui.main`)"
-#~ msgstr "Fenêtre principale (:mod:`cdl.core.gui.main`)"
-
-#~ msgid "Open object from file in current panel (signal/image)"
-#~ msgstr ""
-
-#~ msgid "HDF5 filename"
-#~ msgstr ""
-
-#~ msgid "Call compute function `name` in current panel's processor"
-#~ msgstr ""
-
-#~ msgid "function name"
-#~ msgstr ""
-
-#~ msgid "optional parameters (default: None)"
-#~ msgstr ""
-
-#~ msgid "Return DataLab version."
-#~ msgstr ""
-
-#~ msgid "groups titles, lists of inner objects uuids and titles"
-#~ msgstr ""
-
-#~ msgid "list of object uuids"
-#~ msgstr ""
-
-#~ msgid "tuple of panels"
-#~ msgstr ""
-
-#~ msgid "None"
-#~ msgstr ""
-

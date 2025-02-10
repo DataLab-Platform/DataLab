@@ -475,7 +475,3 @@ msgstr ""
 #: ../../doc/contributing/environment.md
 msgid "LaTeX distribution on Windows"
 msgstr "Distribution LaTeX sur Windows"
-
-#~ msgid "3.8.10.0"
-#~ msgstr ""
-

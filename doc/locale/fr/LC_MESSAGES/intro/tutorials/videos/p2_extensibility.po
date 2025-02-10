@@ -85,6 +85,3 @@ msgstr ""
 "Le second point commun est qu'ils utilisent tous du code Python et des "
 "objets proxy compatibles, de sorte que le même code peut être au moins "
 "partiellement réutilisé dans les trois approches."
-
-#~ msgid "Part 2: Add your own features"
-#~ msgstr "Partie 2 : Ajouter vos propres fonctionnalités"

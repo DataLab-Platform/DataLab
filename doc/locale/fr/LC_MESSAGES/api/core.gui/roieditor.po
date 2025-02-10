@@ -66,16 +66,3 @@ msgstr "Editeur de ROI d'image"
 #: cdl.core.gui.roieditor.ImageROIEditor:1 of
 msgid "Image ROI Editor"
 msgstr "Editeur de ROI d'image"
-
-#~ msgid "ROI editor (:mod:`cdl.core.gui.roieditor`)"
-#~ msgstr "Editeur de ROI (:mod:`cdl.core.gui.roieditor`)"
-
-#~ msgid "Simply add an ROI"
-#~ msgstr "Ajouter simplement une ROI"
-
-#~ msgid "Return ROI item coords"
-#~ msgstr "Retourner les coordonnées de l'élément ROI"
-
-#~ msgid "Add new ROI"
-#~ msgstr "Ajouter une nouvelle ROI"
-

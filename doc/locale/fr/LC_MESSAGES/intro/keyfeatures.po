@@ -310,15 +310,3 @@ msgstr "Transformée de Hough circulaire"
 #: ../../doc/intro/keyfeatures.rst:86
 msgid "Blob detection (OpenCV, Laplacian of Gaussian...)"
 msgstr "Détection de taches (OpenCV, Laplacien de Gauss...)"
-
-#~ msgid "X/Y raw/averaged profiles"
-#~ msgstr "Profils X/Y bruts/moyennés"
-
-#~ msgid "Thresholding, clipping"
-#~ msgstr "Seuillage, rognage"
-
-#~ msgid "FFT, inverse FFT"
-#~ msgstr "FFT, FFT inverse"
-
-#~ msgid "Operation with a constant"
-#~ msgstr ""

@@ -109,6 +109,3 @@ msgid ""
 msgstr ""
 "Objets proxy pour accéder à l'interface DataLab à partir d'un script "
 "Python ou d'une application distante"
-
-#~ msgid "Contents:"
-#~ msgstr "Table des matières :"

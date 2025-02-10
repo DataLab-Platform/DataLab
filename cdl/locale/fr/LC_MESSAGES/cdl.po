@@ -4668,30 +4668,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 #: cdl\widgets\wizard.py:270
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
-#~ msgid "ROI data"
-#~ msgstr "Données de la ROI"
-
-#~ msgid ""
-#~ "For convenience, this item accepts a 2D NumPy array, a list of list of "
-#~ "numbers, or None. In the end, the data is converted to a 2D NumPy array "
-#~ "of integers (if not None)."
-#~ msgstr ""
-#~ "Pour plus de commodité, cet élément accepte un tableau NumPy 2D, une "
-#~ "liste de listes de nombres, ou None. En fin de compte, les données sont "
-#~ "converties en un tableau NumPy 2D d'entiers (si non nul)."
-
-#~ msgid "Single object"
-#~ msgstr "Objet unique"
-
-#~ msgid "Whether to extract the ROI as a single object or not."
-#~ msgstr "Extrait la ROI comme un objet unique ou non."
-
-#~ msgid "Rectangle"
-#~ msgstr "Rectangle"
-
-#~ msgid "Bottom right corner"
-#~ msgstr "Coin inférieur droit"
-
-#~ msgid "Cut-off frequency ratio (0.0 - 1.0)."
-#~ msgstr "Fréquence de coupure relative (0.0 - 1.0)."

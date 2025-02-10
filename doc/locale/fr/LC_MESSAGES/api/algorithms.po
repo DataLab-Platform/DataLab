@@ -1355,19 +1355,3 @@ msgid "Ellipse X/Y diameters coordinates, in the form of a 2D array (N, 8)"
 msgstr ""
 "Coordonnées de diamètres X/Y de l'ellipse, sous la forme d'un tableau 2D "
 "(N, 8)"
-
-#~ msgid ":mod:`cdl.algorithms.signal`: Fitting algorithms"
-#~ msgstr ":mod:`cdl.algorithms.signal` : Algorithmes de régression"
-
-#~ msgid "Curve Fitting Algorithms"
-#~ msgstr "Algorithmes de régression"
-
-#~ msgid "Find the x indices where the corresponding y is the closest to zero"
-#~ msgstr ""
-#~ "Rechercher les indices x où le y"
-#~ " correspondant est le plus proche de"
-#~ " zéro"
-
-#~ msgid "Indices of the points right before or at zero crossing"
-#~ msgstr "Indices des points juste avant ou au croisement à zéro"
-

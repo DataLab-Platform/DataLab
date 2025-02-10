@@ -297,12 +297,3 @@ msgstr ""
 #: ../../doc/features/signal/menu_edit.rst:162
 msgid "roi_delete"
 msgstr ""
-
-#~ msgid ""
-#~ "ROI are taken into account everywhere"
-#~ " in the application where it makes"
-#~ " sense:"
-#~ msgstr ""
-
-#~ msgid "ROI are taken into account almost everywhere in DataLab:"
-#~ msgstr ""

@@ -101,7 +101,3 @@ msgstr "Mettre à jour la visibilité du filigrane"
 #: cdl.core.gui.docks.DockablePlotWidget.visibility_changed:1 of
 msgid "DockWidget visibility has changed"
 msgstr "La visibilité du DockWidget a changé"
-
-#~ msgid "Docks (:mod:`cdl.core.gui.docks`)"
-#~ msgstr "Docks (:mod:`cdl.core.gui.docks`)"
-

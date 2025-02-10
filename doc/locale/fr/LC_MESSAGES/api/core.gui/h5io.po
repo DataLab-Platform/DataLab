@@ -62,6 +62,3 @@ msgstr "Importer des fichiers HDF5"
 #: cdl.core.gui.h5io.H5InputOutput.import_dataset_from_file:1 of
 msgid "Import dataset from HDF5 file"
 msgstr "Importer un jeu de données depuis un fichier HDF5"
-
-#~ msgid "HDF5 I/O (:mod:`cdl.core.gui.h5io`)"
-#~ msgstr "E/S HDF5 (:mod:`cdl.core.gui.h5io`)"

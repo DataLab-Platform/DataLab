@@ -298,9 +298,3 @@ msgstr ""
 #: ../../doc/features/image/menu_edit.rst:164
 msgid "roi_delete"
 msgstr ""
-
-#~ msgid ""
-#~ "ROI are taken into account everywhere"
-#~ " in the application where it makes"
-#~ " sense:"
-#~ msgstr ""

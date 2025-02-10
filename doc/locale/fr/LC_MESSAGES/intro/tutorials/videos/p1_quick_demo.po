@@ -54,6 +54,3 @@ msgstr ""
 "rapide du logiciel. Pour une description plus détaillée des "
 "fonctionnalités, veuillez regarder les autres vidéos ou lire la "
 "documentation."
-
-#~ msgid "Part 1: Quick demo"
-#~ msgstr "Partie 1 : démo rapide"

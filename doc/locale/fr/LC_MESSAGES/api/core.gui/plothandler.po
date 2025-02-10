@@ -210,13 +210,3 @@ msgid "Object handling image plot items, plot dialogs, plot options"
 msgstr ""
 "Objet gérant les items de visualisation d'images, les dialogues de "
 "visualisation et les options de visualisation"
-
-#~ msgid "Plot handler (:mod:`cdl.core.gui.plothandler`)"
-#~ msgstr "Gestionnaire de visualisation (:mod:`cdl.core.gui.plothandler`)"
-
-#~ msgid "These classes handle PlotPy plot items for signal and image panels."
-#~ msgstr ""
-#~ "Ces classes gèrent les items de "
-#~ "visualisation PlotPy pour les panneaux "
-#~ "de signaux et d'images."
-

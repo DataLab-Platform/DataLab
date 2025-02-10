@@ -69,17 +69,3 @@ msgstr ""
 "page `GitHub Issues`_ sera grandement apprécié, d'autant plus si vous "
 "prenez soin de joindre les informations ci-dessus (ainsi que les journaux"
 " d'historique, cf. :ref:`ref-to-logviewer`)."
-
-#~ msgid "About DataLab installation"
-#~ msgstr "Configuration d'installation de DataLab"
-
-#~ msgid ""
-#~ "That is why DataLab provides the "
-#~ "dialog box \"About DataLab installation\"."
-#~ msgstr ""
-#~ "C'est pourquoi DataLab fournit la boîte"
-#~ " de dialogue \"Configuration d'installation "
-#~ "de DataLab\"."
-
-#~ msgid "About your DataLab installation (see \"?\" menu)"
-#~ msgstr "Configuration d'installation de DataLab (voir menu \"?\")"

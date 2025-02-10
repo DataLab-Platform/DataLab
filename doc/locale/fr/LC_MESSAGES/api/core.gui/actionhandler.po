@@ -280,10 +280,3 @@ msgid "Object handling image panel GUI interactions: actions, menus, ..."
 msgstr ""
 "Objet gérant les interactions GUI du panneau d'images : actions, menus, "
 "..."
-
-#~ msgid "Action handler (:mod:`cdl.core.gui.actionhandler`)"
-#~ msgstr "Gestionnaire d'actions (:mod:`cdl.core.gui.actionhandler`)"
-
-#~ msgid "Return type"
-#~ msgstr "Type de retour"
-
