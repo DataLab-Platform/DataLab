@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-27 11:16+0100\n"
+"POT-Creation-Date: 2025-02-14 11:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.16.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: cdl.param:2 of
 msgid "Parameters (:mod:`cdl.param`)"
@@ -285,9 +285,8 @@ msgid ""
 msgstr ""
 
 #: cdl.param of
-#, fuzzy
 msgid "Parameters"
-msgstr "Paramètres FFT"
+msgstr "Paramètres"
 
 #: cdl.param of
 msgid "Returns"
@@ -314,9 +313,8 @@ msgid "Common parameters"
 msgstr "Paramètres communs"
 
 #: cdl.computation.base.ArithmeticParam:1 of
-#, fuzzy
 msgid "Arithmetic parameters"
-msgstr "Paramètres des images"
+msgstr "Paramètres arithmétiques"
 
 #: cdl.computation.base.ArithmeticParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -502,9 +500,8 @@ msgid "New instance of :py:class:`FFTParam`."
 msgstr ""
 
 #: cdl.computation.base.SpectrumParam:1 of
-#, fuzzy
 msgid "Spectrum parameters"
-msgstr "Paramètres FFT"
+msgstr "Paramètres de spectre"
 
 #: cdl.computation.base.SpectrumParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -852,9 +849,8 @@ msgid "New instance of :py:class:`DetrendingParam`."
 msgstr ""
 
 #: cdl.computation.signal.PowerParam:1 of
-#, fuzzy
 msgid "Power parameters"
-msgstr "Paramètres de grille"
+msgstr "Paramètres de puissance"
 
 #: cdl.computation.signal.PowerParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -872,9 +868,8 @@ msgid "New instance of :py:class:`PowerParam`."
 msgstr ""
 
 #: cdl.computation.signal.WindowingParam:1 of
-#, fuzzy
 msgid "Windowing parameters"
-msgstr "Paramètres de binning"
+msgstr "Paramètres de fenêtrage"
 
 #: cdl.computation.signal.WindowingParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -911,9 +906,8 @@ msgid "New instance of :py:class:`WindowingParam`."
 msgstr ""
 
 #: cdl.computation.signal.AllanVarianceParam:1 of
-#, fuzzy
 msgid "Allan variance parameters"
-msgstr "Paramètres de base des images"
+msgstr "Paramètres de variance d'Allan"
 
 #: cdl.computation.signal.AllanVarianceParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -931,9 +925,8 @@ msgid "New instance of :py:class:`AllanVarianceParam`."
 msgstr ""
 
 #: cdl.computation.signal.LowPassFilterParam:1 of
-#, fuzzy
 msgid "Low-pass filter parameters"
-msgstr "Paramètres de filtre gaussien"
+msgstr "Paramètres de filtre passe-bas"
 
 #: cdl.computation.signal.BandPassFilterParam:6
 #: cdl.computation.signal.BandStopFilterParam:6
@@ -1002,9 +995,8 @@ msgid "New instance of :py:class:`LowPassFilterParam`."
 msgstr ""
 
 #: cdl.computation.signal.HighPassFilterParam:1 of
-#, fuzzy
 msgid "High-pass filter parameters"
-msgstr "Paramètres de filtre gaussien"
+msgstr "Paramètres de filtre passe-haut"
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -1017,9 +1009,8 @@ msgid "New instance of :py:class:`HighPassFilterParam`."
 msgstr ""
 
 #: cdl.computation.signal.BandPassFilterParam:1 of
-#, fuzzy
 msgid "Band-pass filter parameters"
-msgstr "Paramètres de filtre Canny"
+msgstr "Paramètres de filtre passe-bande"
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -1032,9 +1023,8 @@ msgid "New instance of :py:class:`BandPassFilterParam`."
 msgstr ""
 
 #: cdl.computation.signal.BandStopFilterParam:1 of
-#, fuzzy
 msgid "Band-stop filter parameters"
-msgstr "Paramètres de filtre Canny"
+msgstr "Paramètres de filtre coupe-bande"
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -1275,9 +1265,8 @@ msgid "New instance of :py:class:`LineProfileParam`."
 msgstr ""
 
 #: cdl.computation.image.SegmentProfileParam:1 of
-#, fuzzy
 msgid "Segment profile parameters"
-msgstr "Paramètres de profil radial"
+msgstr "Paramètres de profil de segment"
 
 #: cdl.computation.image.SegmentProfileParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -1461,9 +1450,8 @@ msgid "Threshold parameters"
 msgstr "Paramètres de seuillage"
 
 #: cdl.computation.image.threshold.ThresholdParam:1 of
-#, fuzzy
 msgid "Histogram threshold parameters"
-msgstr "Paramètres de seuillage"
+msgstr "Paramètres de seuillage d'histogramme"
 
 #: cdl.computation.image.threshold.ThresholdParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
