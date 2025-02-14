@@ -335,6 +335,12 @@ def test_image_fliph() -> None:
 
 
 @pytest.mark.validation
+def test_image_flipd() -> None:
+    """Image diagonal flip test."""
+    __generic_flip_check(cpi.compute_swap_axes, np.transpose)
+
+
+@pytest.mark.validation
 def test_image_flipv() -> None:
     """Image vertical flip test."""
     __generic_flip_check(cpi.compute_flipv, np.flipud)

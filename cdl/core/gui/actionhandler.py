@@ -1108,6 +1108,12 @@ class ImageActionHandler(BaseActionHandler):
                     context_menu_sep=True,
                 )
                 self.new_action(
+                    _("Flip diagonally"),
+                    triggered=self.panel.processor.compute_swap_axes,
+                    icon_name="swap_x_y.svg",
+                    context_menu_pos=-1,
+                )
+                self.new_action(
                     _("Flip vertically"),
                     triggered=self.panel.processor.compute_flipv,
                     icon_name="flip_vertically.svg",

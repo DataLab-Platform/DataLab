@@ -226,9 +226,9 @@ and :math:`\overline{z_{f}}` is the flat field image average value:
 Flip or rotation
 ^^^^^^^^^^^^^^^^
 
-Create a new image by flipping or rotating the selected image.
-The image may be flipped horizontally or vertically or may be rotated by 90°, 270° or
-any user-defined value.
+Create a new image by flipping or rotating the data of the selected image.
+The image may be flipped horizontally, vertically, or diagonally (transposition).
+It may be rotated by 90°, 270° or any user-defined value.
 
 Intensity profiles
 ^^^^^^^^^^^^^^^^^^
