@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-02-14 11:55+0100\n"
+"POT-Creation-Date: 2025-02-14 14:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1697,8 +1697,8 @@ msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
 #: cdl\core\gui\actionhandler.py:1102
-msgid "Rotation"
-msgstr "Rotation"
+msgid "Flip or rotation"
+msgstr "Symétrie ou rotation"
 
 #: cdl\core\gui\actionhandler.py:1104
 msgid "Flip horizontally"
@@ -1717,8 +1717,8 @@ msgid "Rotate %s left"
 msgstr "Rotation inverse de %s"
 
 #: cdl\core\gui\actionhandler.py:1130
-msgid "Rotate arbitrarily..."
-msgstr "Rotation arbitraire..."
+msgid "Rotate by..."
+msgstr "Rotation de..."
 
 #: cdl\core\gui\actionhandler.py:1134
 msgid "Intensity profiles"

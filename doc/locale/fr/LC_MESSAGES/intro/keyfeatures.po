@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-13 17:51+0200\n"
+"POT-Creation-Date: 2025-02-14 14:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../../doc/intro/keyfeatures.rst:-1
 msgid ""
@@ -47,7 +47,11 @@ msgid ""
 "DataLab supports dark and light mode depending on your platform settings "
 "(this is handled by the `guidata`_ package, and may be overridden by "
 "setting the `QT_COLOR_MODE` environment variable to `dark` or `light`)."
-msgstr "DataLab prend en charge le mode sombre et le mode clair en fonction des paramètres de votre plateforme (cela est géré par le paquet `guidata`_ et peut être remplacé en définissant la variable d'environnement `QT_COLOR_MODE` sur `dark` ou `light`)."
+msgstr ""
+"DataLab prend en charge le mode sombre et le mode clair en fonction des "
+"paramètres de votre plateforme (cela est géré par le paquet `guidata`_ et"
+" peut être remplacé en définissant la variable d'environnement "
+"`QT_COLOR_MODE` sur `dark` ou `light`)."
 
 #: ../../doc/intro/keyfeatures.rst:21
 msgid "Data visualization"
@@ -188,8 +192,8 @@ msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
 #: ../../doc/intro/keyfeatures.rst:55
-msgid "Rotation (flip, rotate), resize..."
-msgstr "Rotation (retournement, rotation), redimensionnement..."
+msgid "Flip, rotation, scaling..."
+msgstr "Symétrie, rotation, redimensionnement..."
 
 #: ../../doc/intro/keyfeatures.rst:57
 msgid "Pixel binning"
@@ -229,7 +233,9 @@ msgstr "Moyenne mobile, médiane mobile"
 
 #: ../../doc/intro/keyfeatures.rst:66
 msgid "FFT, inverse FFT, Power/Phase/Magnitude spectrum, Power Spectral Density"
-msgstr "FFT, FFT inverse, spectre de puissance/phase/magnitude, densité spectrale de puissance"
+msgstr ""
+"FFT, FFT inverse, spectre de puissance/phase/magnitude, densité spectrale"
+" de puissance"
 
 #: ../../doc/intro/keyfeatures.rst:67
 msgid "Interpolation, resampling"

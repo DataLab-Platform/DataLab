@@ -1099,7 +1099,7 @@ class ImageActionHandler(BaseActionHandler):
                 select_condition=SelectCond.at_least_one,
             )
 
-            with self.new_menu(_("Rotation"), icon_name="rotate_right.svg"):
+            with self.new_menu(_("Flip or rotation"), icon_name="rotate_right.svg"):
                 self.new_action(
                     _("Flip horizontally"),
                     triggered=self.panel.processor.compute_fliph,
@@ -1127,7 +1127,7 @@ class ImageActionHandler(BaseActionHandler):
                     context_menu_pos=-1,
                 )
                 self.new_action(
-                    _("Rotate arbitrarily..."),
+                    _("Rotate by..."),
                     triggered=self.panel.processor.compute_rotate,
                 )
 
