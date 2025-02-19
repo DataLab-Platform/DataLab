@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-02-19 11:07+0100\n"
+"POT-Creation-Date: 2025-02-19 11:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3907,8 +3907,8 @@ msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
 msgid "Question"
 msgstr "Question"
 
-#: cdl\plugins\cdl_testdata.py:44 cdl\plugins\cdl_testdata.py:137
-#: cdl\plugins\cdl_testdata.py:152
+#: cdl\plugins\cdl_testdata.py:44 cdl\plugins\cdl_testdata.py:139
+#: cdl\plugins\cdl_testdata.py:154
 msgid "Test data"
 msgstr "Données de test"
 
@@ -3924,51 +3924,51 @@ msgstr "Ajouter du bruit"
 msgid "Noise"
 msgstr "Bruit"
 
-#: cdl\plugins\cdl_testdata.py:122
+#: cdl\plugins\cdl_testdata.py:124
 msgid "Ring"
 msgstr "Anneau"
 
-#: cdl\plugins\cdl_testdata.py:138
+#: cdl\plugins\cdl_testdata.py:140
 msgid "Add noise to signal"
 msgstr "Ajouter du bruit au signal"
 
-#: cdl\plugins\cdl_testdata.py:140
+#: cdl\plugins\cdl_testdata.py:142
 msgid "Load spectrum of paracetamol"
 msgstr "Charger le spectre du paracétamol"
 
-#: cdl\plugins\cdl_testdata.py:146
+#: cdl\plugins\cdl_testdata.py:148
 msgid "Create noisy signal"
 msgstr "Créer un signal bruité"
 
-#: cdl\plugins\cdl_testdata.py:153
+#: cdl\plugins\cdl_testdata.py:155
 msgid "Add noise to image"
 msgstr "Ajouter du bruit à l'image"
 
-#: cdl\plugins\cdl_testdata.py:156
+#: cdl\plugins\cdl_testdata.py:158
 msgid "Create image with peaks"
 msgstr "Créer une image avec des pics"
 
-#: cdl\plugins\cdl_testdata.py:162
+#: cdl\plugins\cdl_testdata.py:164
 msgid "Create 2D sin cos image"
 msgstr "Créer une image 2D sin cos"
 
-#: cdl\plugins\cdl_testdata.py:167
+#: cdl\plugins\cdl_testdata.py:169
 msgid "Create 2D noisy gauss image"
 msgstr "Créer une image 2D gaussienne bruitée"
 
-#: cdl\plugins\cdl_testdata.py:172
+#: cdl\plugins\cdl_testdata.py:174
 msgid "Create 2D multi gauss image"
 msgstr "Créer une image 2D multi-gaussienne"
 
-#: cdl\plugins\cdl_testdata.py:177
+#: cdl\plugins\cdl_testdata.py:179
 msgid "Create annotated image"
 msgstr "Créer une image annotée"
 
-#: cdl\plugins\cdl_testdata.py:182
+#: cdl\plugins\cdl_testdata.py:184
 msgid "Create 2D step image"
 msgstr "Créer une image 2D échelon"
 
-#: cdl\plugins\cdl_testdata.py:187
+#: cdl\plugins\cdl_testdata.py:189
 msgid "Create ring image"
 msgstr "Créer une image avec un anneau"
 
