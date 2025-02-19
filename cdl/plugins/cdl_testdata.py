@@ -98,7 +98,9 @@ class PluginTestData(PluginBase):
 
     def create_noisygauss_image(self) -> None:
         """Create 2D noisy gauss image"""
-        newparam = self.edit_new_image_parameters(hide_image_type=True)
+        newparam = self.edit_new_image_parameters(
+            hide_image_height=True, hide_image_type=True
+        )
         if newparam is not None:
             obj = test_data.create_noisygauss_image(newparam, add_annotations=False)
             self.proxy.add_object(obj)

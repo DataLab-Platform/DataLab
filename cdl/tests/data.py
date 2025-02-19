@@ -544,7 +544,7 @@ def create_noisygauss_image(
     p = __set_default_size_dtype(p)
     p.title = "Test image (noisy 2D Gaussian)" if p.title is None else p.title
     dtype = p.dtype.value
-    size = max(p.height, p.width)
+    size = p.width
     obj = cdl.obj.create_image_from_param(p)
     if center is None:
         # Default center
@@ -556,11 +556,6 @@ def create_noisygauss_image(
         obj.data += create_2d_random(size, dtype, level)
     if add_annotations:
         obj.add_annotations_from_file(get_test_fnames("annotations.json")[0])
-    if p.height != p.width:
-        if p.height > p.width:
-            obj.data = obj.data[:, p.width // 2 : -p.width // 2]
-        else:
-            obj.data = obj.data[p.height // 2 : -p.height // 2, :]
     return obj
 
 

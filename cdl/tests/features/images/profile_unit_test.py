@@ -16,7 +16,7 @@ import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
 from cdl.env import execenv
-from cdl.tests.data import create_noisygauss_image
+from cdl.tests.data import create_noisygauss_image, create_sincos_image
 from cdl.utils.tests import check_array_result
 
 
@@ -63,7 +63,7 @@ def test_line_profile() -> None:
     width, height = 256, 128
     dtype = dlo.ImageDatatypes.UINT16
     newparam = dlo.NewImageParam.create(dtype=dtype, height=height, width=width)
-    ima = create_noisygauss_image(newparam, center=(0.0, 0.0), add_annotations=False)
+    ima = create_sincos_image(newparam)
 
     # Test horizontal line profile
     row = 100
@@ -90,7 +90,7 @@ def test_segment_profile() -> None:
     width, height = 256, 128
     dtype = dlo.ImageDatatypes.UINT16
     newparam = dlo.NewImageParam.create(dtype=dtype, height=height, width=width)
-    ima = create_noisygauss_image(newparam, center=(0.0, 0.0), add_annotations=False)
+    ima = create_sincos_image(newparam)
 
     # Test segment profile
     row1, col1, row2, col2 = 10, 20, 200, 20
@@ -108,7 +108,7 @@ def test_average_profile() -> None:
     width, height = 256, 128
     dtype = dlo.ImageDatatypes.UINT16
     newparam = dlo.NewImageParam.create(dtype=dtype, height=height, width=width)
-    ima = create_noisygauss_image(newparam, center=(0.0, 0.0), add_annotations=False)
+    ima = create_sincos_image(newparam)
     row1, col1, row2, col2 = 10, 20, 200, 230
     param = dlp.AverageProfileParam.create(row1=row1, col1=col1, row2=row2, col2=col2)
 
