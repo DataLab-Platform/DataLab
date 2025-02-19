@@ -224,6 +224,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self,
         title: str | None = None,
         shape: tuple[int, int] | None = None,
+        hide_image_height: bool = False,
         hide_image_type: bool = True,
         hide_image_dtype: bool = False,
     ) -> NewImageParam | None:
@@ -232,6 +233,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         Args:
             title: title of the new image
             shape: shape of the new image (default: None, get from current image)
+            hide_image_height: hide image heigth parameter (default: False)
             hide_image_type: hide image type parameter (default: True)
             hide_image_dtype: hide image data type parameter (default: False)
 
@@ -241,6 +243,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         newparam = self.imagepanel.get_newparam_from_current(title=title)
         if shape is not None:
             newparam.width, newparam.height = shape
+        newparam.hide_image_height = hide_image_height
         newparam.hide_image_type = hide_image_type
         newparam.hide_image_dtype = hide_image_dtype
         if newparam.edit(self.main):

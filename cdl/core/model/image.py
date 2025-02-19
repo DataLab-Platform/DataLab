@@ -915,7 +915,7 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI, MaskedImageItem]):
     metadata = gds.DictItem(_("Metadata"), default={})
     _e_datag = gds.EndGroup(_("Data"))
 
-    _dxdyg = gds.BeginGroup(f'{_("Origin")} / {_("Pixel spacing")}')
+    _dxdyg = gds.BeginGroup(f"{_('Origin')} / {_('Pixel spacing')}")
     _origin = gds.BeginGroup(_("Origin"))
     x0 = gds.FloatItem("X<sub>0</sub>", default=0.0)
     y0 = gds.FloatItem("Y<sub>0</sub>", default=0.0).set_pos(col=1)
@@ -924,9 +924,9 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI, MaskedImageItem]):
     dx = gds.FloatItem("Δx", default=1.0, nonzero=True)
     dy = gds.FloatItem("Δy", default=1.0, nonzero=True).set_pos(col=1)
     _e_pixel_spacing = gds.EndGroup(_("Pixel spacing"))
-    _e_dxdyg = gds.EndGroup(f'{_("Origin")} / {_("Pixel spacing")}')
+    _e_dxdyg = gds.EndGroup(f"{_('Origin')} / {_('Pixel spacing')}")
 
-    _unitsg = gds.BeginGroup(f'{_("Titles")} / {_("Units")}')
+    _unitsg = gds.BeginGroup(f"{_('Titles')} / {_('Units')}")
     title = gds.StringItem(_("Image title"), default=_("Untitled"))
     _tabs_u = gds.BeginTabGroup("units")
     _unitsx = gds.BeginGroup(_("X-axis"))
@@ -942,7 +942,7 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI, MaskedImageItem]):
     zunit = gds.StringItem(_("Unit"), default="")
     _e_unitsz = gds.EndGroup(_("Z-axis"))
     _e_tabs_u = gds.EndTabGroup("units")
-    _e_unitsg = gds.EndGroup(f'{_("Titles")} / {_("Units")}')
+    _e_unitsg = gds.EndGroup(f"{_('Titles')} / {_('Units')}")
 
     _scalesg = gds.BeginGroup(_("Scales"))
     _prop_autoscale = gds.GetAttrProp("autoscale")
@@ -1298,16 +1298,15 @@ class ImageTypes(base.Choices):
 class NewImageParam(gds.DataSet):
     """New image dataset"""
 
+    hide_image_height = False
     hide_image_dtype = False
     hide_image_type = False
 
     title = gds.StringItem(_("Title"))
     height = gds.IntItem(
-        _("Height"), help=_("Image height (total number of rows)"), min=1
-    )
-    width = gds.IntItem(
-        _("Width"), help=_("Image width (total number of columns)"), min=1
-    )
+        _("Height"), help=_("Image height: number of rows"), min=1
+    ).set_prop("display", hide=gds.GetAttrProp("hide_image_height"))
+    width = gds.IntItem(_("Width"), help=_("Image width: number of columns"), min=1)
     dtype = gds.ChoiceItem(_("Data type"), ImageDatatypes.get_choices()).set_prop(
         "display", hide=gds.GetAttrProp("hide_image_dtype")
     )

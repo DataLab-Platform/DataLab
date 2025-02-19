@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-27 11:16+0100\n"
+"POT-Creation-Date: 2025-02-19 11:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.16.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: cdl.obj:2 of
 msgid "Object model (:mod:`cdl.obj`)"
@@ -433,9 +433,8 @@ msgstr "valeurs par défaut"
 #: cdl.core.model.signal.NewSignalParam cdl.core.model.signal.PeriodicParam
 #: cdl.core.model.signal.ROI1DParam cdl.core.model.signal.SignalObj
 #: cdl.core.model.signal.StepParam of
-#, fuzzy
 msgid "type"
-msgstr "type de données"
+msgstr "type"
 
 #: cdl.core.model.image.ImageObj:7 cdl.core.model.image.ImageObj:49
 #: cdl.core.model.image.ImageObj:55 cdl.core.model.image.ImageObj:61
@@ -455,7 +454,7 @@ msgstr ""
 
 #: cdl.core.model.image.ImageObj:17 cdl.core.model.signal.SignalObj:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Default: {}."
 msgstr "valeurs par défaut"
 
@@ -1916,17 +1915,13 @@ msgstr "Nouveau jeu de données image"
 
 #: cdl.core.model.image.NewImageParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Image height (total number of rows)\\. Integer higher than 1\\. Default: "
-"None."
-msgstr ""
+msgid "Image height: number of rows\\. Integer higher than 1\\. Default: None."
+msgstr "Hauteur de l'image : nombre de lignes. Entier supérieur à 1. Par défaut : None."
 
 #: cdl.core.model.image.NewImageParam:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
-msgid ""
-"Image width (total number of columns)\\. Integer higher than 1\\. "
-"Default: None."
-msgstr ""
+msgid "Image width: number of columns\\. Integer higher than 1\\. Default: None."
+msgstr "Largeur de l'image : nombre de colonnes. Entier supérieur à 1. Par défaut : None."
 
 #: cdl.core.model.image.NewImageParam:23
 #: guidata.dataset.datatypes.DataSet.create:9 of

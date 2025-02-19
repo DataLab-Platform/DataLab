@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-02-14 14:59+0100\n"
+"POT-Creation-Date: 2025-02-19 11:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -225,7 +225,7 @@ msgstr "Nombre de pixels (Y)"
 msgid "Number of adjacent pixels to be combined together along Y-axis."
 msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 
-#: cdl\computation\image\__init__.py:698 cdl\core\model\image.py:1311
+#: cdl\computation\image\__init__.py:698 cdl\core\model\image.py:1310
 #: cdl\widgets\textimport.py:209 cdl\widgets\textimport.py:230
 msgid "Data type"
 msgstr "Type de données"
@@ -1048,7 +1048,6 @@ msgstr ""
 "Borne X supérieure (vide pour aucune limite, c'est-à-dire la fin du signal)"
 
 #: cdl\computation\signal.py:1487
-#, fuzzy
 msgid "Ordinate"
 msgstr "Coordonnées"
 
@@ -1628,7 +1627,6 @@ msgid "Dynamic parameters"
 msgstr "Paramètres dynamiques"
 
 #: cdl\core\gui\actionhandler.py:1017
-#, fuzzy
 msgid "Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."
 msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD..."
 
@@ -3182,7 +3180,7 @@ msgstr "Nombre max. de points"
 msgid "Maximum number of points for downsampling"
 msgstr "Nombre maximum de points pour le sous-échantillonnage"
 
-#: cdl\core\gui\settings.py:177 cdl\core\model\image.py:1443
+#: cdl\core\gui\settings.py:177 cdl\core\model\image.py:1442
 msgid "Image"
 msgstr "Image"
 
@@ -3655,7 +3653,7 @@ msgid "Image title"
 msgstr "Titre de l'image"
 
 #: cdl\core\model\image.py:933 cdl\core\model\image.py:937
-#: cdl\core\model\image.py:941 cdl\core\model\image.py:1304
+#: cdl\core\model\image.py:941 cdl\core\model\image.py:1305
 #: cdl\core\model\signal.py:336 cdl\core\model\signal.py:340
 #: cdl\core\model\signal.py:877 cdl\widgets\textimport.py:656
 #: cdl\widgets\textimport.py:666
@@ -3711,32 +3709,32 @@ msgstr "aléatoire (loi uniforme)"
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
-#: cdl\core\model\image.py:1306
+#: cdl\core\model\image.py:1307
 msgid "Height"
 msgstr "Hauteur"
 
-#: cdl\core\model\image.py:1306
-msgid "Image height (total number of rows)"
-msgstr "Hauteur de l'image (nombre de lignes)"
+#: cdl\core\model\image.py:1307
+msgid "Image height: number of rows"
+msgstr "Hauteur de l'image : nombre de lignes"
 
 #: cdl\core\model\image.py:1309
-msgid "Image width (total number of columns)"
-msgstr "Largeur de l'image (nombre de colonnes)"
+msgid "Image width: number of columns"
+msgstr "Largeur de l'image : nombre de colonnes"
 
 #: cdl\core\model\image.py:1309 cdl\tests\data.py:423
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:1314 cdl\core\model\signal.py:883
+#: cdl\core\model\image.py:1313 cdl\core\model\signal.py:883
 #: cdl\widgets\h5browser.py:208
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:1319
+#: cdl\core\model\image.py:1318
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:1415
+#: cdl\core\model\image.py:1414
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 

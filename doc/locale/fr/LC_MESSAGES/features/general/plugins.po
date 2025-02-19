@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-15 16:48+0200\n"
+"POT-Creation-Date: 2025-02-19 10:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../../doc/features/general/plugins.rst:-1
 msgid ""
@@ -141,8 +141,8 @@ msgstr ""
 #: ../../doc/features/general/plugins.rst:47
 msgid ""
 "The `plugins` directory in the user configuration folder (e.g. "
-"`C:/Users/JohnDoe/.DataLab/plugins` on Windows or "
-"`~/.DataLab/plugins` on Linux)."
+"`C:/Users/JohnDoe/.DataLab/plugins` on Windows or `~/.DataLab/plugins` on"
+" Linux)."
 msgstr ""
 "Le répertoire `plugins` dans le dossier de configuration de l'utilisateur"
 " (par exemple `C:/Users/JohnDoe/.DataLab/plugins` sur Windows ou "
@@ -173,7 +173,10 @@ msgstr "Comment développer un plugin ?"
 msgid ""
 "To develop a plugin, you may start by deriving from one of the example "
 "plugins (see below) and modify it to suit your needs."
-msgstr "Pour développer un plugin, vous pouvez commencer par dériver de l'un des exemples de plugins (voir ci-dessous) et le modifier pour répondre à vos besoins."
+msgstr ""
+"Pour développer un plugin, vous pouvez commencer par dériver de l'un des "
+"exemples de plugins (voir ci-dessous) et le modifier pour répondre à vos "
+"besoins."
 
 #: ../../doc/features/general/plugins.rst:63
 msgid ""
@@ -181,7 +184,11 @@ msgid ""
 " (preferably with an IDE like `Spyder <https://www.spyder-ide.org/>`_) "
 "and take advantage of the code completion, you can add the `cdl` package "
 "to your Python path."
-msgstr "Si vous souhaitez coder un plugin dans votre environnement de développement Python habituel (de préférence avec un IDE comme `Spyder <https://www.spyder-ide.org/>`_) et profiter de la complétion de code, vous pouvez ajouter le package `cdl` à votre chemin Python."
+msgstr ""
+"Si vous souhaitez coder un plugin dans votre environnement de "
+"développement Python habituel (de préférence avec un IDE comme `Spyder "
+"<https://www.spyder-ide.org/>`_) et profiter de la complétion de code, "
+"vous pouvez ajouter le package `cdl` à votre chemin Python."
 
 #: ../../doc/features/general/plugins.rst:67
 msgid "This can be done:"
@@ -190,9 +197,12 @@ msgstr "Cela peut être fait :"
 #: ../../doc/features/general/plugins.rst:69
 msgid ""
 "By installing DataLab in your Python environment (using one of the "
-"following methods: :ref:`install_conda`, :ref:`install_pip`, :ref:`install_wheel`, or "
-":ref:`install_source`),"
-msgstr "En installant DataLab dans votre environnement Python (en utilisant l'une des méthodes suivantes : :ref:`install_conda`, :ref:`install_pip`, :ref:`install_wheel`, ou :ref:`install_source`),"
+"following methods: :ref:`install_conda`, :ref:`install_pip`, "
+":ref:`install_wheel`, or :ref:`install_source`),"
+msgstr ""
+"En installant DataLab dans votre environnement Python (en utilisant l'une"
+" des méthodes suivantes : :ref:`install_conda`, :ref:`install_pip`, "
+":ref:`install_wheel`, ou :ref:`install_source`),"
 
 #: ../../doc/features/general/plugins.rst:72
 msgid "Or by adding the `cdl` package to your Python path manually:"
@@ -202,7 +212,9 @@ msgstr "Ou en ajoutant le package `cdl` à votre chemin Python manuellement :"
 msgid ""
 "Download the DataLab source code from the `PyPI page "
 "<https://pypi.org/project/cdl/>`_,"
-msgstr "Téléchargez le code source de DataLab depuis la page `PyPI <https://pypi.org/project/cdl/>`_,"
+msgstr ""
+"Téléchargez le code source de DataLab depuis la page `PyPI "
+"<https://pypi.org/project/cdl/>`_,"
 
 #: ../../doc/features/general/plugins.rst:75
 msgid "Unzip the source code to a folder on your computer,"
@@ -212,7 +224,9 @@ msgstr "Décompressez le code source dans un dossier sur votre ordinateur,"
 msgid ""
 "Add the `cdl` package to your Python path (e.g. by using the *PYTHONPATH "
 "Manager* in Spyder)."
-msgstr "Ajoutez le package `cdl` à votre chemin Python (par exemple en utilisant le *Gestionnaire de PYTHONPATH* dans Spyder)."
+msgstr ""
+"Ajoutez le package `cdl` à votre chemin Python (par exemple en utilisant "
+"le *Gestionnaire de PYTHONPATH* dans Spyder)."
 
 #: ../../doc/features/general/plugins.rst:80
 msgid ""
@@ -221,7 +235,12 @@ msgid ""
 "development environment to test your plugin. You will need to run DataLab"
 " from the command line or from the shortcut created during the "
 "installation."
-msgstr "Même si vous avez correctement installé le package `cdl` dans votre environnement Python, vous ne pourrez pas exécuter l'application DataLab depuis votre environnement de développement pour tester votre plugin. Vous devrez exécuter DataLab à partir de la ligne de commande ou du raccourci créé lors de l'installation."
+msgstr ""
+"Même si vous avez correctement installé le package `cdl` dans votre "
+"environnement Python, vous ne pourrez pas exécuter l'application DataLab "
+"depuis votre environnement de développement pour tester votre plugin. "
+"Vous devrez exécuter DataLab à partir de la ligne de commande ou du "
+"raccourci créé lors de l'installation."
 
 #: ../../doc/features/general/plugins.rst:86
 msgid "Example: processing plugin"
@@ -335,9 +354,7 @@ msgstr ""
 "Retourne les informations sur les plugins (noms, versions, descriptions) "
 "au format html"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters
-#: cdl.plugins.PluginBase.edit_new_signal_parameters
-#: cdl.plugins.PluginRegistry.get_plugin_infos of
+#: ../../doc/features/general/plugins.rst
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -399,9 +416,7 @@ msgstr ""
 msgid "hide signal type parameter (default: True)"
 msgstr "masquer le paramètre de type de signal (par défaut : True)"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters
-#: cdl.plugins.PluginBase.edit_new_signal_parameters
-#: cdl.plugins.discover_plugins cdl.plugins.get_available_plugins of
+#: ../../doc/features/general/plugins.rst
 msgid "Returns"
 msgstr "Retourne"
 
@@ -424,14 +439,18 @@ msgstr ""
 "l'image actuelle)"
 
 #: cdl.plugins.PluginBase.edit_new_image_parameters:5 of
+msgid "hide image heigth parameter (default: False)"
+msgstr "masquer le paramètre de la hauteur de l'image (par défaut : False)"
+
+#: cdl.plugins.PluginBase.edit_new_image_parameters:6 of
 msgid "hide image type parameter (default: True)"
 msgstr "masquer le paramètre de type d'image (par défaut : True)"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:6 of
+#: cdl.plugins.PluginBase.edit_new_image_parameters:7 of
 msgid "hide image data type parameter (default: False)"
 msgstr "masquer le paramètre de type de données d'image (par défaut : False)"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:8 of
+#: cdl.plugins.PluginBase.edit_new_image_parameters:9 of
 msgid "New image parameter dataset (or None if canceled)"
 msgstr "Nouveau jeu de paramètres d'image (ou None si annulé)"
 
