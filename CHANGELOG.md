@@ -8,6 +8,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * Signal analysis features: fixed duplicate results when no ROI is defined
 * Fixed [Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113) - Call to `RemoteClient.open_h5_files` (and `import_h5_file`) fails without passing the optional arguments
+* Fixed [Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116) - `KeyError` exception when trying to remove a group after opening an HDF5 file
 
 ## DataLab Version 0.18.1 ##
 
