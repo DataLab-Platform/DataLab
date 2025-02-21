@@ -136,14 +136,15 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
         """Remove plot item associated to object uuid"""
         try:
             item = self.__plotitems.pop(oid)
-        except KeyError as exc:
+        except KeyError:
             # Item does not exist: this may happen when "auto refresh" is disabled
             # (object has been added to model but the corresponding plot item has not
-            # been created yet)
-            if not self.__auto_refresh:
-                return
-            # Item does not exist and auto refresh is enabled: this should not happen
-            raise exc
+            # been created yet).
+            # This may also happen after opening a project, then immediately selecting
+            # a group containing more than one object: plot item would have been created
+            # only for the first object in group, and this exception would be raised
+            # for the second one (which does not have a plot item yet).
+            return
         self.plot.del_item(item)
 
     def clear(self) -> None:
