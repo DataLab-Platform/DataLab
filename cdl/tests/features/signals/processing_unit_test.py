@@ -236,7 +236,8 @@ def test_signal_moving_median() -> None:
     noisy_image = image + 0.4 * np.random.random(image.shape)
     for mode in ("reflect", "constant", "nearest", "mirror", "wrap"):
         print(f"Testing MovingMedian[mode={mode}]", flush=True, end="")
-        filtered_image = spi.median_filter(noisy_image, size=10, mode=mode)
+        out = spi.median_filter(noisy_image, size=15, mode=mode)
+        y = np.array(out)
         print("...done", flush=True)
     # src = get_test_signal("paracetamol.txt")
     # p = cdl.param.MovingMedianParam.create(n=15)
