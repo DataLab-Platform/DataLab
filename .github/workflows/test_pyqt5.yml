@@ -37,7 +37,6 @@ jobs:
         python -m pip install flake8 pytest
         pip install PyQt5
         pip install .
-        pip install scipy==1.14.1 --force-reinstall
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names

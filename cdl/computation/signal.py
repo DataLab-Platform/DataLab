@@ -115,9 +115,6 @@ class Wrap11Func:
         )
         dst = dst_11(src, self.func.__name__, suffix)
         x, y = src.get_data()
-        if self.func.__name__ == "median_filter":
-            print(f"x: {x}", flush=True)
-            print(f"y: {y}", flush=True)
         dst.set_xydata(x, self.func(y, *self.args, **self.kwargs))
         restore_data_outside_roi(dst, src)
         return dst
