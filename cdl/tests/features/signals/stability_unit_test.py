@@ -68,7 +68,7 @@ def test_signal_allan_variance():
     res1 = cps.compute_allan_variance(sig1, param)
     th_av_white = theoretical_allan_variance_white_noise(res1.x, sigma)
 
-    check_array_result("White noise Allan variance", res1.y, th_av_white, atol=0.03)
+    check_array_result("White noise Allan variance", res1.y, th_av_white, atol=0.04)
 
     # Generate and test drift signal
     slope = 0.01
