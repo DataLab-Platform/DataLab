@@ -232,14 +232,12 @@ def test_signal_moving_average() -> None:
 def test_signal_moving_median() -> None:
     """Validation test for the signal moving median processing."""
     src = get_test_signal("paracetamol.txt")
-    _x, y = src.get_data()
-    size, mode = 15, "mirror"
-    print(f"y.shape={y.shape}", flush=True)
-    print(f"y.min={y.min()}, y.max={y.max()}", flush=True)
-    print(f"y={repr(y)}", flush=True)
-    print(f"Testing median_filter[size={size},mode={mode}]", flush=True, end="")
-    yout = spi.median_filter(y, size=size, mode=mode)
-    print("...done", flush=True)
+    p = cdl.param.MovingMedianParam.create(n=15)
+    for mode in p.modes:
+        p.mode = mode
+        dst = cps.compute_moving_median(src, p)
+        exp = spi.median_filter(src.data, size=p.n, mode=p.mode)
+        check_array_result(f"MovingMed[n={p.n},mode={p.mode}]", dst.data, exp, rtol=0.1)
 
 
 @pytest.mark.validation
