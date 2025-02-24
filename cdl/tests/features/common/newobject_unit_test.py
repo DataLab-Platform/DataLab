@@ -115,11 +115,12 @@ def _test_image_data(itype: ImageTypes, image: ImageObj) -> None:
     Tests the data of an image based on its type.
 
     Args:
-    itype (ImageTypes): The type of the image.
-    image (Image): The image object containing the data to be tested.
+        itype: The type of the image.
+        image: The image object containing the data to be tested.
 
     Raises:
-    AssertionError: If the image data does not match the expected values for the given image type.
+        AssertionError: If the image data does not match the expected values
+         for the given image type.
     """
     if itype == ImageTypes.ZEROS:
         assert (image.data == 0).all()
