@@ -3,7 +3,7 @@
 
 # Inspired from https://pytest-qt.readthedocs.io/en/latest/troubleshooting.html#github-actions
 
-name: Python package
+name: Install and Test on Ubuntu 22.04 and PyQt5
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
     env:
       DISPLAY: ':99.0'
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
