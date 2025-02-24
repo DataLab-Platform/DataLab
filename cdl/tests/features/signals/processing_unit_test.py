@@ -231,22 +231,19 @@ def test_signal_moving_average() -> None:
 @pytest.mark.validation
 def test_signal_moving_median() -> None:
     """Validation test for the signal moving median processing."""
-    np.random.seed(42)  # For reproducibility
-    image = np.zeros((9044,))
-    noisy_image = image + 0.4 * np.random.random(image.shape)
-    for mode in ("reflect", "constant", "nearest", "mirror", "wrap"):
-        print(f"Testing MovingMedian[mode={mode}]", flush=True, end="")
-        out = spi.median_filter(noisy_image, size=15, mode=mode)
-        y = np.array(out)
+    src = get_test_signal("paracetamol.txt")
+    p = cdl.param.MovingMedianParam.create(n=15)
+    for mode in p.modes:
+        p.mode = mode
+        print(f"Testing MovingMedian[n={p.n},mode={p.mode}]", flush=True, end="")
+        x, y = src.get_data()
+        yout = spi.median_filter(y, size=p.n, mode=p.mode)
+        x = np.array(x)
+        y = np.array(yout)
         print("...done", flush=True)
-    # src = get_test_signal("paracetamol.txt")
-    # p = cdl.param.MovingMedianParam.create(n=15)
-    # for mode in p.modes:
-    #     p.mode = mode
-    #     print(f"Testing MovingMedian[n={p.n},mode={p.mode}]", flush=True)
-    #     dst = cps.compute_moving_median(src, p)
-    #     exp = spi.median_filter(src.data, size=p.n, mode=p.mode)
-    #     check_array_result(f"MovingMed[n={p.n},mode={p.mode}]", dst.data, exp, rtol=0.1)
+        # dst = cps.compute_moving_median(src, p)
+        # exp = spi.median_filter(src.data, size=p.n, mode=p.mode)
+        # check_array_result(f"MovingMed[n={p.n},mode={p.mode}]", dst.data, exp, rtol=0.1)
 
 
 @pytest.mark.validation
