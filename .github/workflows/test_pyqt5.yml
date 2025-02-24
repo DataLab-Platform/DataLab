@@ -3,7 +3,7 @@
 
 # Inspired from https://pytest-qt.readthedocs.io/en/latest/troubleshooting.html#github-actions
 
-name: Install and Test on Ubuntu 22.04 and PyQt5
+name: Install and Test on Ubuntu (latest) with PyQt5
 
 on:
   push:
@@ -17,11 +17,11 @@ jobs:
     env:
       DISPLAY: ':99.0'
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.12"]
+        python-version: ["3.9", "3.13"]
 
     steps:
     - uses: actions/checkout@v4
