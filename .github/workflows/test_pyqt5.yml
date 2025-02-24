@@ -38,8 +38,6 @@ jobs:
         pip install PyQt5
         pip install .
     - name: Lint with Ruff
-      run: |
-        run: ruff check --output-format=github .
+      run: ruff check --output-format=github .
     - name: Test with pytest
-      run: |
-        pytest -v --tb=long
+      run: pytest -v --tb=long
