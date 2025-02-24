@@ -235,6 +235,7 @@ def test_signal_moving_median() -> None:
     p = cdl.param.MovingMedianParam.create(n=15)
     for mode in p.modes:
         p.mode = mode
+        print(f"Testing MovingMedian[n={p.n},mode={p.mode}]", flush=True)
         dst = cps.compute_moving_median(src, p)
         exp = spi.median_filter(src.data, size=p.n, mode=p.mode)
         check_array_result(f"MovingMed[n={p.n},mode={p.mode}]", dst.data, exp, rtol=0.1)
