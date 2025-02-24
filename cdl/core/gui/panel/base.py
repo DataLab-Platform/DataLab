@@ -56,7 +56,6 @@ if TYPE_CHECKING:
     from typing import Callable
 
     from plotpy.items import CurveItem, LabelItem, MaskedImageItem
-    from plotpy.tools.base import GuiTool
 
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
