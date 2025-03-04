@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-02-19 15:21+0100\n"
+"POT-Creation-Date: 2025-03-04 15:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1155,7 +1155,7 @@ msgstr "Supprimer"
 msgid "Remove selected %s"
 msgstr "Supprimer l'objet %s sélectionné"
 
-#: cdl\core\gui\actionhandler.py:487 cdl\core\gui\panel\base.py:570
+#: cdl\core\gui\actionhandler.py:487 cdl\core\gui\panel\base.py:569
 msgid "Delete all"
 msgstr "Supprimer tout"
 
@@ -1179,7 +1179,7 @@ msgstr "Coller les métadonnées"
 msgid "Paste metadata into selected %s"
 msgstr "Coller les métadonnées dans l'objet %s sélectionné"
 
-#: cdl\core\gui\actionhandler.py:512 cdl\core\gui\panel\base.py:835
+#: cdl\core\gui\actionhandler.py:512 cdl\core\gui\panel\base.py:834
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
@@ -1187,7 +1187,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:520 cdl\core\gui\panel\base.py:858
+#: cdl\core\gui\actionhandler.py:520 cdl\core\gui\panel\base.py:857
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -1436,11 +1436,11 @@ msgstr "Extraction de ROI"
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\actionhandler.py:808 cdl\core\gui\panel\base.py:1258
+#: cdl\core\gui\actionhandler.py:808 cdl\core\gui\panel\base.py:1257
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
-#: cdl\core\gui\actionhandler.py:814 cdl\core\gui\panel\base.py:1305
+#: cdl\core\gui\actionhandler.py:814 cdl\core\gui\panel\base.py:1304
 msgid "Delete results"
 msgstr "Supprimer les résultats"
 
@@ -2430,7 +2430,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1382 cdl\core\gui\panel\base.py:760
+#: cdl\core\gui\main.py:1382 cdl\core\gui\panel\base.py:759
 #: cdl\core\gui\panel\macro.py:564 cdl\widgets\h5browser.py:618
 msgid "Open"
 msgstr "Ouvrir"
@@ -2511,31 +2511,31 @@ msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
-#: cdl\core\gui\panel\base.py:89 cdl\core\model\base.py:407
+#: cdl\core\gui\panel\base.py:88 cdl\core\model\base.py:407
 msgid "Properties"
 msgstr "Propriétés"
 
-#: cdl\core\gui\panel\base.py:113
+#: cdl\core\gui\panel\base.py:112
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
 
-#: cdl\core\gui\panel\base.py:540
+#: cdl\core\gui\panel\base.py:539
 msgid "Delete group(s)"
 msgstr "Supprimer le(s) groupe(s)"
 
-#: cdl\core\gui\panel\base.py:541
+#: cdl\core\gui\panel\base.py:540
 msgid "Are you sure you want to delete the selected group(s)?"
 msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
 
-#: cdl\core\gui\panel\base.py:571
+#: cdl\core\gui\panel\base.py:570
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: cdl\core\gui\panel\base.py:595
+#: cdl\core\gui\panel\base.py:594
 msgid "Delete metadata"
 msgstr "Supprimer les métadonnées"
 
-#: cdl\core\gui\panel\base.py:596
+#: cdl\core\gui\panel\base.py:595
 msgid ""
 "Some selected objects have regions of interest.<br>Do you want to delete "
 "them as well?"
@@ -2543,59 +2543,59 @@ msgstr ""
 "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous "
 "les supprimer également ?"
 
-#: cdl\core\gui\panel\base.py:648
+#: cdl\core\gui\panel\base.py:647
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: cdl\core\gui\panel\base.py:648 cdl\core\gui\panel\base.py:668
+#: cdl\core\gui\panel\base.py:647 cdl\core\gui\panel\base.py:667
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
-#: cdl\core\gui\panel\base.py:667
+#: cdl\core\gui\panel\base.py:666
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:726 cdl\core\gui\panel\base.py:817
+#: cdl\core\gui\panel\base.py:725 cdl\core\gui\panel\base.py:816
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
-#: cdl\core\gui\panel\base.py:787 cdl\core\gui\panel\macro.py:543
+#: cdl\core\gui\panel\base.py:786 cdl\core\gui\panel\macro.py:543
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: cdl\core\gui\panel\base.py:903 cdl\core\gui\plothandler.py:346
+#: cdl\core\gui\panel\base.py:902 cdl\core\gui\plothandler.py:347
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:947 cdl\core\gui\panel\base.py:964
-#: cdl\core\gui\panel\base.py:1132
+#: cdl\core\gui\panel\base.py:946 cdl\core\gui\panel\base.py:963
+#: cdl\core\gui\panel\base.py:1131
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:1061 cdl\core\gui\roieditor.py:440
+#: cdl\core\gui\panel\base.py:1060 cdl\core\gui\roieditor.py:440
 #: cdl\core\model\base.py:1202
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:1126 cdl\core\gui\panel\base.py:1165
+#: cdl\core\gui\panel\base.py:1125 cdl\core\gui\panel\base.py:1164
 #: cdl\core\gui\processor\base.py:503
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1128
+#: cdl\core\gui\panel\base.py:1127
 msgid "Show results obtained from previous analysis"
 msgstr ""
 "Afficher les résultats obtenus avec des analyses réalisées précédemment"
 
-#: cdl\core\gui\panel\base.py:1134
+#: cdl\core\gui\panel\base.py:1133
 msgid "Open a dialog to edit annotations"
 msgstr "Ouvrir une boîte de dialogue pour éditer les annotations"
 
-#: cdl\core\gui\panel\base.py:1142
+#: cdl\core\gui\panel\base.py:1141
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1144
+#: cdl\core\gui\panel\base.py:1143
 msgid ""
 "This feature leverages the results of previous analysis performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
@@ -2605,31 +2605,31 @@ msgstr ""
 "<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et "
 "choisissez une fonctionnalité dans le menu <u>Analyse</u>."
 
-#: cdl\core\gui\panel\base.py:1202
+#: cdl\core\gui\panel\base.py:1201
 msgid "Indices"
 msgstr "Indices"
 
-#: cdl\core\gui\panel\base.py:1236
+#: cdl\core\gui\panel\base.py:1235
 msgid "Plot kind"
 msgstr "Type de graphique"
 
-#: cdl\core\gui\panel\base.py:1240
+#: cdl\core\gui\panel\base.py:1239
 msgid "One curve per object (or ROI) and per result title"
 msgstr "Une courbe par objet (ou ROI) et par titre de résultat"
 
-#: cdl\core\gui\panel\base.py:1242
+#: cdl\core\gui\panel\base.py:1241
 msgid "One curve per result title"
 msgstr "Une courbe par titre de résultat"
 
-#: cdl\core\gui\panel\base.py:1246
+#: cdl\core\gui\panel\base.py:1245
 msgid "X axis"
 msgstr "Axe des X"
 
-#: cdl\core\gui\panel\base.py:1248
+#: cdl\core\gui\panel\base.py:1247
 msgid "Y axis"
 msgstr "Axe des Y"
 
-#: cdl\core\gui\panel\base.py:1252
+#: cdl\core\gui\panel\base.py:1251
 msgid ""
 "Plot results obtained from previous analyses.<br><br>This plot is based on "
 "results associated with '%s' prefix."
@@ -2637,7 +2637,7 @@ msgstr ""
 "Tracer les résultats obtenus avec des analyses réalisées précédemment."
 "<br><br>Ce graphique est basé sur les résultats associés au préfixe '%s'."
 
-#: cdl\core\gui\panel\base.py:1306
+#: cdl\core\gui\panel\base.py:1305
 msgid "Are you sure you want to delete all results of the selected object(s)?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer tous les résultats des objets "
@@ -2709,7 +2709,7 @@ msgstr ""
 msgid "Do you want to continue?"
 msgstr "Souhaitez-vous vraiment continuer ?"
 
-#: cdl\core\gui\plothandler.py:180
+#: cdl\core\gui\plothandler.py:181
 msgid "Creating geometric shapes"
 msgstr "Création des formes géométriques"
 
