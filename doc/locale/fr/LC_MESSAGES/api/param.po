@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-14 11:53+0100\n"
+"POT-Creation-Date: 2025-03-05 15:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -111,7 +111,8 @@ msgstr ""
 
 #: cdl.computation.base.ArithmeticParam cdl.computation.base.ClipParam
 #: cdl.computation.base.ConstantParam cdl.computation.base.FFTParam
-#: cdl.computation.base.GaussianParam cdl.computation.base.MovingAverageParam
+#: cdl.computation.base.GaussianParam cdl.computation.base.HistogramParam
+#: cdl.computation.base.MovingAverageParam
 #: cdl.computation.base.MovingMedianParam cdl.computation.base.NormalizeParam
 #: cdl.computation.base.SpectrumParam cdl.computation.image.AverageProfileParam
 #: cdl.computation.image.BinningParam cdl.computation.image.ButterworthParam
@@ -144,6 +145,7 @@ msgstr ""
 #: cdl.computation.signal.BandStopFilterParam
 #: cdl.computation.signal.DataTypeSParam cdl.computation.signal.DetrendingParam
 #: cdl.computation.signal.DynamicParam cdl.computation.signal.FWHMParam
+#: cdl.computation.signal.FindAbscissaParam
 #: cdl.computation.signal.HighPassFilterParam
 #: cdl.computation.signal.InterpolationParam
 #: cdl.computation.signal.LowPassFilterParam
@@ -154,6 +156,7 @@ msgstr ""
 msgid "type"
 msgstr ""
 
+#: cdl.computation.base.HistogramParam:8
 #: cdl.computation.base.MovingAverageParam:8
 #: cdl.computation.base.MovingMedianParam:8
 #: cdl.computation.image.AverageProfileParam:15
@@ -332,7 +335,8 @@ msgstr ""
 #: cdl.computation.base.ArithmeticParam:15
 #: cdl.computation.base.ArithmeticParam:22 cdl.computation.base.ClipParam:8
 #: cdl.computation.base.ClipParam:15 cdl.computation.base.ConstantParam:8
-#: cdl.computation.base.GaussianParam:8
+#: cdl.computation.base.GaussianParam:8 cdl.computation.base.HistogramParam:15
+#: cdl.computation.base.HistogramParam:22
 #: cdl.computation.image.ButterworthParam:8
 #: cdl.computation.image.FlatFieldParam:8 cdl.computation.image.GridParam:29
 #: cdl.computation.image.GridParam:36 cdl.computation.image.LogP1Param:8
@@ -392,6 +396,7 @@ msgstr ""
 #: cdl.computation.signal.BandStopFilterParam:43
 #: cdl.computation.signal.DynamicParam:8 cdl.computation.signal.FWHMParam:15
 #: cdl.computation.signal.FWHMParam:22
+#: cdl.computation.signal.FindAbscissaParam:8
 #: cdl.computation.signal.HighPassFilterParam:22
 #: cdl.computation.signal.HighPassFilterParam:29
 #: cdl.computation.signal.HighPassFilterParam:36
@@ -480,6 +485,25 @@ msgstr ""
 msgid "New instance of :py:class:`ClipParam`."
 msgstr ""
 
+#: cdl.computation.base.ConstantParam:1 of
+msgid "Parameter used to set a constant value to used in operations"
+msgstr ""
+
+#: cdl.computation.base.ConstantParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Constant value\\.  Default: None."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`ConstantParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`ConstantParam`."
+msgstr ""
+
 #: cdl.computation.base.FFTParam:1 of
 msgid "FFT parameters"
 msgstr "Paramètres FFT"
@@ -499,25 +523,6 @@ msgstr ""
 msgid "New instance of :py:class:`FFTParam`."
 msgstr ""
 
-#: cdl.computation.base.SpectrumParam:1 of
-msgid "Spectrum parameters"
-msgstr "Paramètres de spectre"
-
-#: cdl.computation.base.SpectrumParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Default: False."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`SpectrumParam` with the fields set "
-"to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`SpectrumParam`."
-msgstr ""
-
 #: cdl.computation.base.GaussianParam:1 of
 msgid "Gaussian filter parameters"
 msgstr "Paramètres de filtre gaussien"
@@ -535,6 +540,46 @@ msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:6 of
 msgid "New instance of :py:class:`GaussianParam`."
+msgstr ""
+
+#: cdl.computation.base.HistogramParam:1 of
+#, fuzzy
+msgid "Histogram parameters"
+msgstr "Paramètres de seuillage d'histogramme"
+
+#: cdl.computation.base.HistogramParam:6
+#: cdl.computation.image.threshold.ThresholdParam:13
+#: guidata.dataset.datatypes.DataSet.create:3
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "Number of bins\\.  Integer higher than 1\\. Default: 256."
+msgstr ""
+
+#: cdl.computation.base.HistogramParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "Lower limit\\.  Default: None."
+msgstr ""
+
+#: cdl.computation.base.HistogramParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "Upper limit\\.  Default: None."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`HistogramParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:10 of
+msgid "New instance of :py:class:`HistogramParam`."
+msgstr ""
+
+#: cdl.computation.base.HistogramParam.get_suffix:1 of
+msgid "Return suffix for the histogram computation"
+msgstr ""
+
+#: cdl.computation.base.HistogramParam.get_suffix:3 of
+msgid "data array"
 msgstr ""
 
 #: cdl.computation.base.MovingAverageParam:1 of
@@ -595,85 +640,6 @@ msgstr ""
 msgid "New instance of :py:class:`MovingMedianParam`."
 msgstr ""
 
-#: cdl.computation.base.ConstantParam:1 of
-msgid "Parameter used to set a constant value to used in operations"
-msgstr ""
-
-#: cdl.computation.base.ConstantParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Constant value\\.  Default: None."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`ConstantParam` with the fields set "
-"to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`ConstantParam`."
-msgstr ""
-
-#: cdl.param:65 of
-msgid "Signal parameters"
-msgstr "Paramètres des signaux"
-
-#: cdl.computation.signal.DataTypeSParam:1 of
-msgid "Convert signal data type parameters"
-msgstr "Convertir les paramètres de type de données du signal"
-
-#: cdl.computation.signal.DataTypeSParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Destination data type\\. Output image data type. Single choice from: "
-"'float32', 'float64', 'complex128'. Default: 'float32'."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`DataTypeSParam` with the fields set "
-"to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`DataTypeSParam`."
-msgstr ""
-
-#: cdl.computation.signal.FWHMParam:1 of
-msgid "FWHM parameters"
-msgstr "Paramètres de LMH"
-
-#: cdl.computation.signal.FWHMParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Single choice from: 'zero-crossing', 'gauss', 'lorentz', 'voigt'. "
-"Default: 'zero-crossing'."
-msgstr ""
-
-#: cdl.computation.signal.FWHMParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"X\\ :subscript:`MIN`\\. Lower x boundary (empty for no limit, i.e. Start "
-"of the signal)\\. Default: None."
-msgstr ""
-
-#: cdl.computation.signal.FWHMParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid ""
-"X\\ :subscript:`MAX`\\. Upper x boundary (empty for no limit, i.e. End of"
-" the signal)\\. Default: None."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`FWHMParam` with the fields set to "
-"the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:10 of
-msgid "New instance of :py:class:`FWHMParam`."
-msgstr ""
-
 #: cdl.computation.base.NormalizeParam:1 of
 msgid "Normalize parameters"
 msgstr "Paramètres de normalisation"
@@ -695,215 +661,28 @@ msgstr ""
 msgid "New instance of :py:class:`NormalizeParam`."
 msgstr ""
 
-#: cdl.computation.image.detection.Peak2DDetectionParam:1
-#: cdl.computation.signal.PeakDetectionParam:1 of
-msgid "Peak detection parameters"
-msgstr "Paramètres de détection de pics"
+#: cdl.computation.base.SpectrumParam:1 of
+msgid "Spectrum parameters"
+msgstr "Paramètres de spectre"
 
-#: cdl.computation.signal.PeakDetectionParam:6
+#: cdl.computation.base.SpectrumParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Integer between 0 and 100, unit: %\\. Default: 30."
-msgstr ""
-
-#: cdl.computation.signal.PeakDetectionParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "Minimum distance\\.  Integer higher than 1, unit: points\\. Default: 1."
+msgid "Default: False."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Returns a new instance of :py:class:`PeakDetectionParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:8 of
-msgid "New instance of :py:class:`PeakDetectionParam`."
-msgstr ""
-
-#: cdl.computation.signal.PolynomialFitParam:1 of
-msgid "Polynomial fitting parameters"
-msgstr "Paramètres de régression polynomiale"
-
-#: cdl.computation.signal.PolynomialFitParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Integer between 1 and 10\\. Default: 3."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`PolynomialFitParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`PolynomialFitParam`."
-msgstr ""
-
-#: cdl.computation.signal.XYCalibrateParam:1 of
-msgid "Signal calibration parameters"
-msgstr "Paramètres de calibration du signal"
-
-#: cdl.computation.signal.XYCalibrateParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Calibrate\\.  Single choice from: 'x', 'y'. Default: 'y'."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`XYCalibrateParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:10 of
-msgid "New instance of :py:class:`XYCalibrateParam`."
-msgstr ""
-
-#: cdl.computation.signal.InterpolationParam:1 of
-msgid "Interpolation parameters"
-msgstr "Paramètres d'interpolation"
-
-#: cdl.computation.signal.InterpolationParam:6
-#: cdl.computation.signal.ResamplingParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Interpolation method\\.  Single choice from: 'linear', 'spline', "
-"'quadratic', 'cubic', 'barycentric', 'pchip'. Default: 'linear'."
-msgstr ""
-
-#: cdl.computation.signal.InterpolationParam:13
-#: cdl.computation.signal.ResamplingParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Value to use for points outside the interpolation domain (used only with "
-"linear, cubic and pchip methods). Default: None."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`InterpolationParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:8 of
-msgid "New instance of :py:class:`InterpolationParam`."
-msgstr ""
-
-#: cdl.computation.signal.ResamplingParam:1 of
-msgid "Resample parameters"
-msgstr "Paramètres de rééchantillonnage"
-
-#: cdl.computation.signal.ResamplingParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "X\\ :subscript:`min`\\.  Default: None."
-msgstr ""
-
-#: cdl.computation.signal.ResamplingParam:27
-#: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "X\\ :subscript:`max`\\.  Default: None."
-msgstr ""
-
-#: cdl.computation.signal.ResamplingParam:34
-#: guidata.dataset.datatypes.DataSet.create:11 of
-msgid "Single choice from: 'dx', 'nbpts'. Default: 'nbpts'."
-msgstr ""
-
-#: cdl.computation.signal.ResamplingParam:41
-#: guidata.dataset.datatypes.DataSet.create:13 of
-msgid "ΔX\\.  Default: None."
-msgstr ""
-
-#: cdl.computation.signal.ResamplingParam:48
-#: guidata.dataset.datatypes.DataSet.create:15 of
-msgid "Number of points\\.  Default: None."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`ResamplingParam` with the fields set"
-" to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:18 of
-msgid "New instance of :py:class:`ResamplingParam`."
-msgstr ""
-
-#: cdl.computation.signal.DetrendingParam:1 of
-msgid "Detrending parameters"
-msgstr "Elimination de tendance"
-
-#: cdl.computation.signal.DetrendingParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Detrending method\\.  Single choice from: 'linear', 'constant'. Default: "
-"'linear'."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`DetrendingParam` with the fields set"
-" to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`DetrendingParam`."
-msgstr ""
-
-#: cdl.computation.signal.PowerParam:1 of
-msgid "Power parameters"
-msgstr "Paramètres de puissance"
-
-#: cdl.computation.signal.PowerParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Default: 2.0."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`PowerParam` with the fields set to "
-"the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`PowerParam`."
-msgstr ""
-
-#: cdl.computation.signal.WindowingParam:1 of
-msgid "Windowing parameters"
-msgstr "Paramètres de fenêtrage"
-
-#: cdl.computation.signal.WindowingParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Single choice from: 'barthann', 'bartlett', 'blackman', 'blackman-"
-"harris', 'bohman', 'boxcar', 'cosine', 'exponential', 'flat-top', "
-"'gaussian', 'hamming', 'hanning', 'kaiser', 'lanczos', 'nuttall', "
-"'parzen', 'rectangular', 'taylor', 'tukey'. Default: 'hamming'."
-msgstr ""
-
-#: cdl.computation.signal.WindowingParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "Shape parameter of the tukey windowing function\\. Default: 0.5."
-msgstr ""
-
-#: cdl.computation.signal.WindowingParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Shape parameter of the kaiser windowing function\\. Default: 14.0."
-msgstr ""
-
-#: cdl.computation.signal.WindowingParam:27
-#: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "Shape parameter of the gaussian windowing function\\. Default: 0.5."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`WindowingParam` with the fields set "
+"Returns a new instance of :py:class:`SpectrumParam` with the fields set "
 "to the given values."
 msgstr ""
 
-#: guidata.dataset.datatypes.DataSet.create:12 of
-msgid "New instance of :py:class:`WindowingParam`."
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`SpectrumParam`."
 msgstr ""
+
+#: cdl.param:69 of
+msgid "Signal parameters"
+msgstr "Paramètres des signaux"
 
 #: cdl.computation.signal.AllanVarianceParam:1 of
 msgid "Allan variance parameters"
@@ -924,9 +703,9 @@ msgstr ""
 msgid "New instance of :py:class:`AllanVarianceParam`."
 msgstr ""
 
-#: cdl.computation.signal.LowPassFilterParam:1 of
-msgid "Low-pass filter parameters"
-msgstr "Paramètres de filtre passe-bas"
+#: cdl.computation.signal.BandPassFilterParam:1 of
+msgid "Band-pass filter parameters"
+msgstr "Paramètres de filtre passe-bande"
 
 #: cdl.computation.signal.BandPassFilterParam:6
 #: cdl.computation.signal.BandStopFilterParam:6
@@ -986,34 +765,6 @@ msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Returns a new instance of :py:class:`LowPassFilterParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:16 of
-msgid "New instance of :py:class:`LowPassFilterParam`."
-msgstr ""
-
-#: cdl.computation.signal.HighPassFilterParam:1 of
-msgid "High-pass filter parameters"
-msgstr "Paramètres de filtre passe-haut"
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`HighPassFilterParam` with the fields"
-" set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:16 of
-msgid "New instance of :py:class:`HighPassFilterParam`."
-msgstr ""
-
-#: cdl.computation.signal.BandPassFilterParam:1 of
-msgid "Band-pass filter parameters"
-msgstr "Paramètres de filtre passe-bande"
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
 "Returns a new instance of :py:class:`BandPassFilterParam` with the fields"
 " set to the given values."
 msgstr ""
@@ -1034,6 +785,48 @@ msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:16 of
 msgid "New instance of :py:class:`BandStopFilterParam`."
+msgstr ""
+
+#: cdl.computation.signal.DataTypeSParam:1 of
+msgid "Convert signal data type parameters"
+msgstr "Convertir les paramètres de type de données du signal"
+
+#: cdl.computation.signal.DataTypeSParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Destination data type\\. Output image data type. Single choice from: "
+"'float32', 'float64', 'complex128'. Default: 'float32'."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`DataTypeSParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`DataTypeSParam`."
+msgstr ""
+
+#: cdl.computation.signal.DetrendingParam:1 of
+msgid "Detrending parameters"
+msgstr "Elimination de tendance"
+
+#: cdl.computation.signal.DetrendingParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Detrending method\\.  Single choice from: 'linear', 'constant'. Default: "
+"'linear'."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`DetrendingParam` with the fields set"
+" to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`DetrendingParam`."
 msgstr ""
 
 #: cdl.computation.signal.DynamicParam:1 of
@@ -1067,13 +860,325 @@ msgstr ""
 msgid "New instance of :py:class:`DynamicParam`."
 msgstr ""
 
-#: cdl.param:103 of
+#: cdl.computation.signal.FindAbscissaParam:1 of
+msgid "Parameter dataset for abscissa finding"
+msgstr ""
+
+#: cdl.computation.signal.FindAbscissaParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Ordinate\\.  Default: 0."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`FindAbscissaParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`FindAbscissaParam`."
+msgstr ""
+
+#: cdl.computation.signal.FWHMParam:1 of
+msgid "FWHM parameters"
+msgstr "Paramètres de LMH"
+
+#: cdl.computation.signal.FWHMParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Single choice from: 'zero-crossing', 'gauss', 'lorentz', 'voigt'. "
+"Default: 'zero-crossing'."
+msgstr ""
+
+#: cdl.computation.signal.FWHMParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"X\\ :subscript:`MIN`\\. Lower x boundary (empty for no limit, i.e. Start "
+"of the signal)\\. Default: None."
+msgstr ""
+
+#: cdl.computation.signal.FWHMParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid ""
+"X\\ :subscript:`MAX`\\. Upper x boundary (empty for no limit, i.e. End of"
+" the signal)\\. Default: None."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`FWHMParam` with the fields set to "
+"the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:10 of
+msgid "New instance of :py:class:`FWHMParam`."
+msgstr ""
+
+#: cdl.computation.signal.HighPassFilterParam:1 of
+msgid "High-pass filter parameters"
+msgstr "Paramètres de filtre passe-haut"
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`HighPassFilterParam` with the fields"
+" set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:16 of
+msgid "New instance of :py:class:`HighPassFilterParam`."
+msgstr ""
+
+#: cdl.computation.signal.InterpolationParam:1 of
+msgid "Interpolation parameters"
+msgstr "Paramètres d'interpolation"
+
+#: cdl.computation.signal.InterpolationParam:6
+#: cdl.computation.signal.ResamplingParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Interpolation method\\.  Single choice from: 'linear', 'spline', "
+"'quadratic', 'cubic', 'barycentric', 'pchip'. Default: 'linear'."
+msgstr ""
+
+#: cdl.computation.signal.InterpolationParam:13
+#: cdl.computation.signal.ResamplingParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"Value to use for points outside the interpolation domain (used only with "
+"linear, cubic and pchip methods). Default: None."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`InterpolationParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:8 of
+msgid "New instance of :py:class:`InterpolationParam`."
+msgstr ""
+
+#: cdl.computation.signal.LowPassFilterParam:1 of
+msgid "Low-pass filter parameters"
+msgstr "Paramètres de filtre passe-bas"
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`LowPassFilterParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:16 of
+msgid "New instance of :py:class:`LowPassFilterParam`."
+msgstr ""
+
+#: cdl.computation.image.detection.Peak2DDetectionParam:1
+#: cdl.computation.signal.PeakDetectionParam:1 of
+msgid "Peak detection parameters"
+msgstr "Paramètres de détection de pics"
+
+#: cdl.computation.signal.PeakDetectionParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Integer between 0 and 100, unit: %\\. Default: 30."
+msgstr ""
+
+#: cdl.computation.signal.PeakDetectionParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "Minimum distance\\.  Integer higher than 1, unit: points\\. Default: 1."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`PeakDetectionParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:8 of
+msgid "New instance of :py:class:`PeakDetectionParam`."
+msgstr ""
+
+#: cdl.computation.signal.PolynomialFitParam:1 of
+msgid "Polynomial fitting parameters"
+msgstr "Paramètres de régression polynomiale"
+
+#: cdl.computation.signal.PolynomialFitParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Integer between 1 and 10\\. Default: 3."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`PolynomialFitParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`PolynomialFitParam`."
+msgstr ""
+
+#: cdl.computation.signal.PowerParam:1 of
+msgid "Power parameters"
+msgstr "Paramètres de puissance"
+
+#: cdl.computation.signal.PowerParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Default: 2.0."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`PowerParam` with the fields set to "
+"the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`PowerParam`."
+msgstr ""
+
+#: cdl.computation.signal.ResamplingParam:1 of
+msgid "Resample parameters"
+msgstr "Paramètres de rééchantillonnage"
+
+#: cdl.computation.signal.ResamplingParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "X\\ :subscript:`min`\\.  Default: None."
+msgstr ""
+
+#: cdl.computation.signal.ResamplingParam:27
+#: guidata.dataset.datatypes.DataSet.create:9 of
+msgid "X\\ :subscript:`max`\\.  Default: None."
+msgstr ""
+
+#: cdl.computation.signal.ResamplingParam:34
+#: guidata.dataset.datatypes.DataSet.create:11 of
+msgid "Single choice from: 'dx', 'nbpts'. Default: 'nbpts'."
+msgstr ""
+
+#: cdl.computation.signal.ResamplingParam:41
+#: guidata.dataset.datatypes.DataSet.create:13 of
+msgid "ΔX\\.  Default: None."
+msgstr ""
+
+#: cdl.computation.signal.ResamplingParam:48
+#: guidata.dataset.datatypes.DataSet.create:15 of
+msgid "Number of points\\.  Default: None."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`ResamplingParam` with the fields set"
+" to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:18 of
+msgid "New instance of :py:class:`ResamplingParam`."
+msgstr ""
+
+#: cdl.computation.signal.WindowingParam:1 of
+msgid "Windowing parameters"
+msgstr "Paramètres de fenêtrage"
+
+#: cdl.computation.signal.WindowingParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Single choice from: 'barthann', 'bartlett', 'blackman', 'blackman-"
+"harris', 'bohman', 'boxcar', 'cosine', 'exponential', 'flat-top', "
+"'gaussian', 'hamming', 'hanning', 'kaiser', 'lanczos', 'nuttall', "
+"'parzen', 'rectangular', 'taylor', 'tukey'. Default: 'hamming'."
+msgstr ""
+
+#: cdl.computation.signal.WindowingParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "Shape parameter of the tukey windowing function\\. Default: 0.5."
+msgstr ""
+
+#: cdl.computation.signal.WindowingParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "Shape parameter of the kaiser windowing function\\. Default: 14.0."
+msgstr ""
+
+#: cdl.computation.signal.WindowingParam:27
+#: guidata.dataset.datatypes.DataSet.create:9 of
+msgid "Shape parameter of the gaussian windowing function\\. Default: 0.5."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`WindowingParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:12 of
+msgid "New instance of :py:class:`WindowingParam`."
+msgstr ""
+
+#: cdl.computation.signal.XYCalibrateParam:1 of
+msgid "Signal calibration parameters"
+msgstr "Paramètres de calibration du signal"
+
+#: cdl.computation.signal.XYCalibrateParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Calibrate\\.  Single choice from: 'x', 'y'. Default: 'y'."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`XYCalibrateParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:10 of
+msgid "New instance of :py:class:`XYCalibrateParam`."
+msgstr ""
+
+#: cdl.param:107 of
 msgid "Image parameters"
 msgstr "Paramètres des images"
 
-#: cdl.param:106 of
+#: cdl.param:110 of
 msgid "Base image parameters"
 msgstr "Paramètres de base des images"
+
+#: cdl.computation.image.AverageProfileParam:1 of
+msgid "Average horizontal or vertical profile parameters"
+msgstr "Paramètres de profil horizontal ou vertical moyen"
+
+#: cdl.computation.image.AverageProfileParam:6
+#: cdl.computation.image.LineProfileParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Single choice from: 'horizontal', 'vertical'. Default: 'horizontal'."
+msgstr ""
+
+#: cdl.computation.image.AverageProfileParam:13
+#: cdl.computation.image.LineProfileParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "Integer higher than 0\\. Default: 0."
+msgstr ""
+
+#: cdl.computation.image.AverageProfileParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "Integer higher than -1\\. Default: -1."
+msgstr ""
+
+#: cdl.computation.image.AverageProfileParam:27
+#: guidata.dataset.datatypes.DataSet.create:9 of
+msgid "Column 1\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+#: cdl.computation.image.AverageProfileParam:34
+#: guidata.dataset.datatypes.DataSet.create:11 of
+msgid "Column 2\\.  Integer higher than -1\\. Default: -1."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`AverageProfileParam` with the fields"
+" set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:14 of
+msgid "New instance of :py:class:`AverageProfileParam`."
+msgstr ""
 
 #: cdl.computation.image.ButterworthParam:1 of
 msgid "Butterworth filter parameters"
@@ -1214,6 +1319,25 @@ msgstr ""
 msgid "New instance of :py:class:`HoughCircleParam`."
 msgstr ""
 
+#: cdl.computation.image.LineProfileParam:1 of
+msgid "Horizontal or vertical profile parameters"
+msgstr "Paramètres de profil horizontal ou vertical"
+
+#: cdl.computation.image.LineProfileParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "Column\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`LineProfileParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:10 of
+msgid "New instance of :py:class:`LineProfileParam`."
+msgstr ""
+
 #: cdl.computation.image.LogP1Param:1 of
 msgid "Log10 parameters"
 msgstr "Paramètres de log10"
@@ -1231,100 +1355,6 @@ msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:6 of
 msgid "New instance of :py:class:`LogP1Param`."
-msgstr ""
-
-#: cdl.computation.image.LineProfileParam:1 of
-msgid "Horizontal or vertical profile parameters"
-msgstr "Paramètres de profil horizontal ou vertical"
-
-#: cdl.computation.image.AverageProfileParam:6
-#: cdl.computation.image.LineProfileParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Single choice from: 'horizontal', 'vertical'. Default: 'horizontal'."
-msgstr ""
-
-#: cdl.computation.image.AverageProfileParam:13
-#: cdl.computation.image.LineProfileParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "Integer higher than 0\\. Default: 0."
-msgstr ""
-
-#: cdl.computation.image.LineProfileParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Column\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`LineProfileParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:10 of
-msgid "New instance of :py:class:`LineProfileParam`."
-msgstr ""
-
-#: cdl.computation.image.SegmentProfileParam:1 of
-msgid "Segment profile parameters"
-msgstr "Paramètres de profil de segment"
-
-#: cdl.computation.image.SegmentProfileParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Start row\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-#: cdl.computation.image.SegmentProfileParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "Start column\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-#: cdl.computation.image.SegmentProfileParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "End row\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-#: cdl.computation.image.SegmentProfileParam:27
-#: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "End column\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`SegmentProfileParam` with the fields"
-" set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:12 of
-msgid "New instance of :py:class:`SegmentProfileParam`."
-msgstr ""
-
-#: cdl.computation.image.AverageProfileParam:1 of
-msgid "Average horizontal or vertical profile parameters"
-msgstr "Paramètres de profil horizontal ou vertical moyen"
-
-#: cdl.computation.image.AverageProfileParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Integer higher than -1\\. Default: -1."
-msgstr ""
-
-#: cdl.computation.image.AverageProfileParam:27
-#: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "Column 1\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-#: cdl.computation.image.AverageProfileParam:34
-#: guidata.dataset.datatypes.DataSet.create:11 of
-msgid "Column 2\\.  Integer higher than -1\\. Default: -1."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`AverageProfileParam` with the fields"
-" set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:14 of
-msgid "New instance of :py:class:`AverageProfileParam`."
 msgstr ""
 
 #: cdl.computation.image.RadialProfileParam:1 of
@@ -1431,6 +1461,40 @@ msgstr ""
 msgid "New instance of :py:class:`RotateParam`."
 msgstr ""
 
+#: cdl.computation.image.SegmentProfileParam:1 of
+msgid "Segment profile parameters"
+msgstr "Paramètres de profil de segment"
+
+#: cdl.computation.image.SegmentProfileParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Start row\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+#: cdl.computation.image.SegmentProfileParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "Start column\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+#: cdl.computation.image.SegmentProfileParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "End row\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+#: cdl.computation.image.SegmentProfileParam:27
+#: guidata.dataset.datatypes.DataSet.create:9 of
+msgid "End column\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`SegmentProfileParam` with the fields"
+" set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:12 of
+msgid "New instance of :py:class:`SegmentProfileParam`."
+msgstr ""
+
 #: cdl.computation.image.ZCalibrateParam:1 of
 msgid "Image linear calibration parameters"
 msgstr "Paramètres de calibration linéaire de l'image"
@@ -1445,413 +1509,7 @@ msgstr ""
 msgid "New instance of :py:class:`ZCalibrateParam`."
 msgstr ""
 
-#: cdl.param:138 of
-msgid "Threshold parameters"
-msgstr "Paramètres de seuillage"
-
-#: cdl.computation.image.threshold.ThresholdParam:1 of
-msgid "Histogram threshold parameters"
-msgstr "Paramètres de seuillage d'histogramme"
-
-#: cdl.computation.image.threshold.ThresholdParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Threshold method\\.  Single choice from: 'manual', 'isodata', 'li', "
-"'mean', 'minimum', 'otsu', 'triangle', 'yen'. Default: 'manual'."
-msgstr ""
-
-#: cdl.computation.image.threshold.ThresholdParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "Number of bins\\.  Integer higher than 1\\. Default: 256."
-msgstr ""
-
-#: cdl.computation.image.threshold.ThresholdParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Threshold value\\.  Default: 0.0."
-msgstr ""
-
-#: cdl.computation.image.threshold.ThresholdParam:27
-#: guidata.dataset.datatypes.DataSet.create:9 of
-msgid "Single choice from: '>', '<'. Default: '>'."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`ThresholdParam` with the fields set "
-"to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:12 of
-msgid "New instance of :py:class:`ThresholdParam`."
-msgstr ""
-
-#: cdl.param:144 of
-msgid "Exposure correction parameters"
-msgstr "Paramètres de correction d'exposition"
-
-#: cdl.computation.image.exposure.AdjustGammaParam:1 of
-msgid "Gamma adjustment parameters"
-msgstr "Paramètres d'ajustement gamma"
-
-#: cdl.computation.image.exposure.AdjustGammaParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Gamma correction factor (higher values give more contrast). Float higher "
-"than 0.0\\. Default: 1.0."
-msgstr ""
-
-#: cdl.computation.image.exposure.AdjustGammaParam:13
-#: cdl.computation.image.exposure.AdjustLogParam:6
-#: guidata.dataset.datatypes.DataSet.create:3
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Gain factor (higher values give more contrast). Float higher than 0.0\\. "
-"Default: 1.0."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`AdjustGammaParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:8 of
-msgid "New instance of :py:class:`AdjustGammaParam`."
-msgstr ""
-
-#: cdl.computation.image.exposure.AdjustLogParam:1 of
-msgid "Logarithmic adjustment parameters"
-msgstr "Paramètres d'ajustement logarithmique"
-
-#: cdl.computation.image.exposure.AdjustLogParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "If true, apply inverse logarithmic transformation. Default: False."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`AdjustLogParam` with the fields set "
-"to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:8 of
-msgid "New instance of :py:class:`AdjustLogParam`."
-msgstr ""
-
-#: cdl.computation.image.exposure.AdjustSigmoidParam:1 of
-msgid "Sigmoid adjustment parameters"
-msgstr "Paramètres d'ajustement sigmoïde"
-
-#: cdl.computation.image.exposure.AdjustSigmoidParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Cutoff value (higher values give more contrast). Float between 0.0 and "
-"1.0\\. Default: 0.5."
-msgstr ""
-
-#: cdl.computation.image.exposure.AdjustSigmoidParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Gain factor (higher values give more contrast). Float higher than 0.0\\. "
-"Default: 10.0."
-msgstr ""
-
-#: cdl.computation.image.exposure.AdjustSigmoidParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "If true, apply inverse sigmoid transformation. Default: False."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`AdjustSigmoidParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:10 of
-msgid "New instance of :py:class:`AdjustSigmoidParam`."
-msgstr ""
-
-#: cdl.computation.image.exposure.EqualizeAdaptHistParam:1 of
-msgid "Adaptive histogram equalization parameters"
-msgstr "Paramètres d'égalisation d'histogramme adaptatif"
-
-#: cdl.computation.image.exposure.EqualizeAdaptHistParam:6
-#: cdl.computation.image.exposure.EqualizeHistParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Number of bins\\. Number of bins for image histogram. Integer higher than"
-" 1\\. Default: 256."
-msgstr ""
-
-#: cdl.computation.image.exposure.EqualizeAdaptHistParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Clipping limit\\. Clipping limit (higher values give more contrast). "
-"Float between 0.0 and 1.0\\. Default: 0.01."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`EqualizeAdaptHistParam` with the "
-"fields set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:8 of
-msgid "New instance of :py:class:`EqualizeAdaptHistParam`."
-msgstr ""
-
-#: cdl.computation.image.exposure.EqualizeHistParam:1 of
-msgid "Histogram equalization parameters"
-msgstr "Paramètres d'égalisation d'histogramme"
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`EqualizeHistParam` with the fields "
-"set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`EqualizeHistParam`."
-msgstr ""
-
-#: cdl.computation.image.exposure.RescaleIntensityParam:1 of
-msgid "Intensity rescaling parameters"
-msgstr "Paramètres de rééchelonnement d'intensité"
-
-#: cdl.computation.image.exposure.RescaleIntensityParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Input range\\. Min and max intensity values of input image ('image' "
-"refers to input image min/max levels, 'dtype' refers to input image data "
-"type range). Single choice from: 'image', 'dtype', 'float32', 'float64', "
-"'complex128', 'uint8', 'int16', 'uint16', 'int32'. Default: 'image'."
-msgstr ""
-
-#: cdl.computation.image.exposure.RescaleIntensityParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Output range\\. Min and max intensity values of output image  ('image' "
-"refers to input image min/max levels, 'dtype' refers to input image data "
-"type range).. Single choice from: 'image', 'dtype', 'float32', 'float64',"
-" 'complex128', 'uint8', 'int16', 'uint16', 'int32'. Default: 'dtype'."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`RescaleIntensityParam` with the "
-"fields set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:8 of
-msgid "New instance of :py:class:`RescaleIntensityParam`."
-msgstr ""
-
-#: cdl.param:160 of
-msgid "Restoration parameters"
-msgstr "Paramètres de restauration"
-
-#: cdl.computation.image.restoration.DenoiseBilateralParam:1 of
-msgid "Bilateral filter denoising parameters"
-msgstr "Paramètres de débruitage par filtre bilatéral"
-
-#: cdl.computation.image.restoration.DenoiseBilateralParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"σ\\ :subscript:`spatial`\\. Standard deviation for range distance. A "
-"larger value results in averaging of pixels with larger spatial "
-"differences. Float higher than 0, non zero, unit: pixels\\. Default: 1.0."
-msgstr ""
-
-#: cdl.computation.image.restoration.DenoiseBilateralParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Single choice from: 'constant', 'edge', 'symmetric', 'reflect', 'wrap'. "
-"Default: 'constant'."
-msgstr ""
-
-#: cdl.computation.image.restoration.DenoiseBilateralParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid ""
-"Used in conjunction with mode 'constant', the value outside the image "
-"boundaries. Default: 0."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`DenoiseBilateralParam` with the "
-"fields set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:10 of
-msgid "New instance of :py:class:`DenoiseBilateralParam`."
-msgstr ""
-
-#: cdl.computation.image.restoration.DenoiseTVParam:1 of
-msgid "Total Variation denoising parameters"
-msgstr "Paramètres de débruitage par variation totale"
-
-#: cdl.computation.image.restoration.DenoiseTVParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Denoising weight\\. The greater weight, the more denoising (at the "
-"expense of fidelity to input). Float higher than 0, non zero\\. Default: "
-"0.1."
-msgstr ""
-
-#: cdl.computation.image.restoration.DenoiseTVParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Epsilon\\. Relative difference of the value of the cost function that "
-"determines the stop criterion. The algorithm stops when: (e_(n-1) - e_n) "
-"< eps \\* e_0\\. Float higher than 0, non zero\\. Default: 0.0002."
-msgstr ""
-
-#: cdl.computation.image.restoration.DenoiseTVParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid ""
-"Max. iterations\\. Maximal number of iterations used for the "
-"optimization\\. Integer higher than 0, non zero\\. Default: 200."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`DenoiseTVParam` with the fields set "
-"to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:10 of
-msgid "New instance of :py:class:`DenoiseTVParam`."
-msgstr ""
-
-#: cdl.computation.image.restoration.DenoiseWaveletParam:1 of
-msgid "Wavelet denoising parameters"
-msgstr "Paramètres de débruitage par ondelettes"
-
-#: cdl.computation.image.restoration.DenoiseWaveletParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Single choice from: 'bior1.1', 'bior1.3', 'bior1.5', 'bior2.2', "
-"'bior2.4', 'bior2.6', 'bior2.8', 'bior3.1', 'bior3.3', 'bior3.5', "
-"'bior3.7', 'bior3.9', 'bior4.4', 'bior5.5', 'bior6.8', 'cgau1', 'cgau2', "
-"'cgau3', 'cgau4', 'cgau5', 'cgau6', 'cgau7', 'cgau8', 'cmor', 'coif1', "
-"'coif2', 'coif3', 'coif4', 'coif5', 'coif6', 'coif7', 'coif8', 'coif9', "
-"'coif10', 'coif11', 'coif12', 'coif13', 'coif14', 'coif15', 'coif16', "
-"'coif17', 'db1', 'db2', 'db3', 'db4', 'db5', 'db6', 'db7', 'db8', 'db9', "
-"'db10', 'db11', 'db12', 'db13', 'db14', 'db15', 'db16', 'db17', 'db18', "
-"'db19', 'db20', 'db21', 'db22', 'db23', 'db24', 'db25', 'db26', 'db27', "
-"'db28', 'db29', 'db30', 'db31', 'db32', 'db33', 'db34', 'db35', 'db36', "
-"'db37', 'db38', 'dmey', 'fbsp', 'gaus1', 'gaus2', 'gaus3', 'gaus4', "
-"'gaus5', 'gaus6', 'gaus7', 'gaus8', 'haar', 'mexh', 'morl', 'rbio1.1', "
-"'rbio1.3', 'rbio1.5', 'rbio2.2', 'rbio2.4', 'rbio2.6', 'rbio2.8', "
-"'rbio3.1', 'rbio3.3', 'rbio3.5', 'rbio3.7', 'rbio3.9', 'rbio4.4', "
-"'rbio5.5', 'rbio6.8', 'shan', 'sym2', 'sym3', 'sym4', 'sym5', 'sym6', "
-"'sym7', 'sym8', 'sym9', 'sym10', 'sym11', 'sym12', 'sym13', 'sym14', "
-"'sym15', 'sym16', 'sym17', 'sym18', 'sym19', 'sym20'. Default: 'sym9'."
-msgstr ""
-
-#: cdl.computation.image.restoration.DenoiseWaveletParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid "Single choice from: 'soft', 'hard'. Default: 'soft'."
-msgstr ""
-
-#: cdl.computation.image.restoration.DenoiseWaveletParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid "Single choice from: 'BayesShrink', 'VisuShrink'. Default: 'VisuShrink'."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`DenoiseWaveletParam` with the fields"
-" set to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:10 of
-msgid "New instance of :py:class:`DenoiseWaveletParam`."
-msgstr ""
-
-#: cdl.param:170 of
-msgid "Morphological parameters"
-msgstr "Paramètres morphologiques"
-
-#: cdl.computation.image.morphology.MorphologyParam:1 of
-msgid "White Top-Hat parameters"
-msgstr "Paramètres de White Top-Hat"
-
-#: cdl.computation.image.morphology.MorphologyParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid "Footprint (disk) radius. Integer higher than 1\\. Default: 1."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`MorphologyParam` with the fields set"
-" to the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`MorphologyParam`."
-msgstr ""
-
-#: cdl.param:176 of
-msgid "Edge detection parameters"
-msgstr "Paramètres de détection de contours"
-
-#: cdl.computation.image.edges.CannyParam:1 of
-msgid "Canny filter parameters"
-msgstr "Paramètres de filtre Canny"
-
-#: cdl.computation.image.edges.CannyParam:6
-#: guidata.dataset.datatypes.DataSet.create:3 of
-msgid ""
-"Standard deviation of the gaussian filter. Float higher than 0, non zero,"
-" unit: pixels\\. Default: 1.0."
-msgstr ""
-
-#: cdl.computation.image.edges.CannyParam:13
-#: guidata.dataset.datatypes.DataSet.create:5 of
-msgid ""
-"Lower bound for hysteresis thresholding (linking edges). Float higher "
-"than 0\\. Default: 0.1."
-msgstr ""
-
-#: cdl.computation.image.edges.CannyParam:20
-#: guidata.dataset.datatypes.DataSet.create:7 of
-msgid ""
-"Upper bound for hysteresis thresholding (linking edges). Float higher "
-"than 0\\. Default: 0.9."
-msgstr ""
-
-#: cdl.computation.image.edges.CannyParam:27
-#: guidata.dataset.datatypes.DataSet.create:9 of
-msgid ""
-"If true then treat low_threshold and high_threshold as quantiles of the "
-"edge magnitude image, rather than absolute edge magnitude values. If true"
-" then the thresholds must be in the range [0, 1]. Default: True."
-msgstr ""
-
-#: cdl.computation.image.edges.CannyParam:34
-#: guidata.dataset.datatypes.DataSet.create:11 of
-msgid ""
-"Single choice from: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'. "
-"Default: 'constant'."
-msgstr ""
-
-#: cdl.computation.image.edges.CannyParam:41
-#: guidata.dataset.datatypes.DataSet.create:13 of
-msgid "Value to fill past edges of input if mode is constant. Default: 0.0."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:1 of
-msgid ""
-"Returns a new instance of :py:class:`CannyParam` with the fields set to "
-"the given values."
-msgstr ""
-
-#: guidata.dataset.datatypes.DataSet.create:16 of
-msgid "New instance of :py:class:`CannyParam`."
-msgstr ""
-
-#: cdl.param:182 of
+#: cdl.param:142 of
 msgid "Detection parameters"
 msgstr "Paramètres de détection"
 
@@ -2133,3 +1791,405 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:10 of
 msgid "New instance of :py:class:`Peak2DDetectionParam`."
 msgstr ""
+
+#: cdl.param:158 of
+msgid "Edge detection parameters"
+msgstr "Paramètres de détection de contours"
+
+#: cdl.computation.image.edges.CannyParam:1 of
+msgid "Canny filter parameters"
+msgstr "Paramètres de filtre Canny"
+
+#: cdl.computation.image.edges.CannyParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Standard deviation of the gaussian filter. Float higher than 0, non zero,"
+" unit: pixels\\. Default: 1.0."
+msgstr ""
+
+#: cdl.computation.image.edges.CannyParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"Lower bound for hysteresis thresholding (linking edges). Float higher "
+"than 0\\. Default: 0.1."
+msgstr ""
+
+#: cdl.computation.image.edges.CannyParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid ""
+"Upper bound for hysteresis thresholding (linking edges). Float higher "
+"than 0\\. Default: 0.9."
+msgstr ""
+
+#: cdl.computation.image.edges.CannyParam:27
+#: guidata.dataset.datatypes.DataSet.create:9 of
+msgid ""
+"If true then treat low_threshold and high_threshold as quantiles of the "
+"edge magnitude image, rather than absolute edge magnitude values. If true"
+" then the thresholds must be in the range [0, 1]. Default: True."
+msgstr ""
+
+#: cdl.computation.image.edges.CannyParam:34
+#: guidata.dataset.datatypes.DataSet.create:11 of
+msgid ""
+"Single choice from: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'. "
+"Default: 'constant'."
+msgstr ""
+
+#: cdl.computation.image.edges.CannyParam:41
+#: guidata.dataset.datatypes.DataSet.create:13 of
+msgid "Value to fill past edges of input if mode is constant. Default: 0.0."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`CannyParam` with the fields set to "
+"the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:16 of
+msgid "New instance of :py:class:`CannyParam`."
+msgstr ""
+
+#: cdl.param:164 of
+msgid "Exposure correction parameters"
+msgstr "Paramètres de correction d'exposition"
+
+#: cdl.computation.image.exposure.AdjustGammaParam:1 of
+msgid "Gamma adjustment parameters"
+msgstr "Paramètres d'ajustement gamma"
+
+#: cdl.computation.image.exposure.AdjustGammaParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Gamma correction factor (higher values give more contrast). Float higher "
+"than 0.0\\. Default: 1.0."
+msgstr ""
+
+#: cdl.computation.image.exposure.AdjustGammaParam:13
+#: cdl.computation.image.exposure.AdjustLogParam:6
+#: guidata.dataset.datatypes.DataSet.create:3
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"Gain factor (higher values give more contrast). Float higher than 0.0\\. "
+"Default: 1.0."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`AdjustGammaParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:8 of
+msgid "New instance of :py:class:`AdjustGammaParam`."
+msgstr ""
+
+#: cdl.computation.image.exposure.AdjustLogParam:1 of
+msgid "Logarithmic adjustment parameters"
+msgstr "Paramètres d'ajustement logarithmique"
+
+#: cdl.computation.image.exposure.AdjustLogParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "If true, apply inverse logarithmic transformation. Default: False."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`AdjustLogParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:8 of
+msgid "New instance of :py:class:`AdjustLogParam`."
+msgstr ""
+
+#: cdl.computation.image.exposure.AdjustSigmoidParam:1 of
+msgid "Sigmoid adjustment parameters"
+msgstr "Paramètres d'ajustement sigmoïde"
+
+#: cdl.computation.image.exposure.AdjustSigmoidParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Cutoff value (higher values give more contrast). Float between 0.0 and "
+"1.0\\. Default: 0.5."
+msgstr ""
+
+#: cdl.computation.image.exposure.AdjustSigmoidParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"Gain factor (higher values give more contrast). Float higher than 0.0\\. "
+"Default: 10.0."
+msgstr ""
+
+#: cdl.computation.image.exposure.AdjustSigmoidParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "If true, apply inverse sigmoid transformation. Default: False."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`AdjustSigmoidParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:10 of
+msgid "New instance of :py:class:`AdjustSigmoidParam`."
+msgstr ""
+
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam:1 of
+msgid "Adaptive histogram equalization parameters"
+msgstr "Paramètres d'égalisation d'histogramme adaptatif"
+
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam:6
+#: cdl.computation.image.exposure.EqualizeHistParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Number of bins\\. Number of bins for image histogram. Integer higher than"
+" 1\\. Default: 256."
+msgstr ""
+
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"Clipping limit\\. Clipping limit (higher values give more contrast). "
+"Float between 0.0 and 1.0\\. Default: 0.01."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`EqualizeAdaptHistParam` with the "
+"fields set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:8 of
+msgid "New instance of :py:class:`EqualizeAdaptHistParam`."
+msgstr ""
+
+#: cdl.computation.image.exposure.EqualizeHistParam:1 of
+msgid "Histogram equalization parameters"
+msgstr "Paramètres d'égalisation d'histogramme"
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`EqualizeHistParam` with the fields "
+"set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`EqualizeHistParam`."
+msgstr ""
+
+#: cdl.computation.image.exposure.RescaleIntensityParam:1 of
+msgid "Intensity rescaling parameters"
+msgstr "Paramètres de rééchelonnement d'intensité"
+
+#: cdl.computation.image.exposure.RescaleIntensityParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Input range\\. Min and max intensity values of input image ('image' "
+"refers to input image min/max levels, 'dtype' refers to input image data "
+"type range). Single choice from: 'image', 'dtype', 'float32', 'float64', "
+"'complex128', 'uint8', 'int16', 'uint16', 'int32'. Default: 'image'."
+msgstr ""
+
+#: cdl.computation.image.exposure.RescaleIntensityParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"Output range\\. Min and max intensity values of output image  ('image' "
+"refers to input image min/max levels, 'dtype' refers to input image data "
+"type range).. Single choice from: 'image', 'dtype', 'float32', 'float64',"
+" 'complex128', 'uint8', 'int16', 'uint16', 'int32'. Default: 'dtype'."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`RescaleIntensityParam` with the "
+"fields set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:8 of
+msgid "New instance of :py:class:`RescaleIntensityParam`."
+msgstr ""
+
+#: cdl.param:180 of
+msgid "Morphological parameters"
+msgstr "Paramètres morphologiques"
+
+#: cdl.computation.image.morphology.MorphologyParam:1 of
+msgid "White Top-Hat parameters"
+msgstr "Paramètres de White Top-Hat"
+
+#: cdl.computation.image.morphology.MorphologyParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Footprint (disk) radius. Integer higher than 1\\. Default: 1."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`MorphologyParam` with the fields set"
+" to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`MorphologyParam`."
+msgstr ""
+
+#: cdl.param:186 of
+msgid "Restoration parameters"
+msgstr "Paramètres de restauration"
+
+#: cdl.computation.image.restoration.DenoiseBilateralParam:1 of
+msgid "Bilateral filter denoising parameters"
+msgstr "Paramètres de débruitage par filtre bilatéral"
+
+#: cdl.computation.image.restoration.DenoiseBilateralParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"σ\\ :subscript:`spatial`\\. Standard deviation for range distance. A "
+"larger value results in averaging of pixels with larger spatial "
+"differences. Float higher than 0, non zero, unit: pixels\\. Default: 1.0."
+msgstr ""
+
+#: cdl.computation.image.restoration.DenoiseBilateralParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"Single choice from: 'constant', 'edge', 'symmetric', 'reflect', 'wrap'. "
+"Default: 'constant'."
+msgstr ""
+
+#: cdl.computation.image.restoration.DenoiseBilateralParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid ""
+"Used in conjunction with mode 'constant', the value outside the image "
+"boundaries. Default: 0."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`DenoiseBilateralParam` with the "
+"fields set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:10 of
+msgid "New instance of :py:class:`DenoiseBilateralParam`."
+msgstr ""
+
+#: cdl.computation.image.restoration.DenoiseTVParam:1 of
+msgid "Total Variation denoising parameters"
+msgstr "Paramètres de débruitage par variation totale"
+
+#: cdl.computation.image.restoration.DenoiseTVParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Denoising weight\\. The greater weight, the more denoising (at the "
+"expense of fidelity to input). Float higher than 0, non zero\\. Default: "
+"0.1."
+msgstr ""
+
+#: cdl.computation.image.restoration.DenoiseTVParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid ""
+"Epsilon\\. Relative difference of the value of the cost function that "
+"determines the stop criterion. The algorithm stops when: (e_(n-1) - e_n) "
+"< eps \\* e_0\\. Float higher than 0, non zero\\. Default: 0.0002."
+msgstr ""
+
+#: cdl.computation.image.restoration.DenoiseTVParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid ""
+"Max. iterations\\. Maximal number of iterations used for the "
+"optimization\\. Integer higher than 0, non zero\\. Default: 200."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`DenoiseTVParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:10 of
+msgid "New instance of :py:class:`DenoiseTVParam`."
+msgstr ""
+
+#: cdl.computation.image.restoration.DenoiseWaveletParam:1 of
+msgid "Wavelet denoising parameters"
+msgstr "Paramètres de débruitage par ondelettes"
+
+#: cdl.computation.image.restoration.DenoiseWaveletParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Single choice from: 'bior1.1', 'bior1.3', 'bior1.5', 'bior2.2', "
+"'bior2.4', 'bior2.6', 'bior2.8', 'bior3.1', 'bior3.3', 'bior3.5', "
+"'bior3.7', 'bior3.9', 'bior4.4', 'bior5.5', 'bior6.8', 'cgau1', 'cgau2', "
+"'cgau3', 'cgau4', 'cgau5', 'cgau6', 'cgau7', 'cgau8', 'cmor', 'coif1', "
+"'coif2', 'coif3', 'coif4', 'coif5', 'coif6', 'coif7', 'coif8', 'coif9', "
+"'coif10', 'coif11', 'coif12', 'coif13', 'coif14', 'coif15', 'coif16', "
+"'coif17', 'db1', 'db2', 'db3', 'db4', 'db5', 'db6', 'db7', 'db8', 'db9', "
+"'db10', 'db11', 'db12', 'db13', 'db14', 'db15', 'db16', 'db17', 'db18', "
+"'db19', 'db20', 'db21', 'db22', 'db23', 'db24', 'db25', 'db26', 'db27', "
+"'db28', 'db29', 'db30', 'db31', 'db32', 'db33', 'db34', 'db35', 'db36', "
+"'db37', 'db38', 'dmey', 'fbsp', 'gaus1', 'gaus2', 'gaus3', 'gaus4', "
+"'gaus5', 'gaus6', 'gaus7', 'gaus8', 'haar', 'mexh', 'morl', 'rbio1.1', "
+"'rbio1.3', 'rbio1.5', 'rbio2.2', 'rbio2.4', 'rbio2.6', 'rbio2.8', "
+"'rbio3.1', 'rbio3.3', 'rbio3.5', 'rbio3.7', 'rbio3.9', 'rbio4.4', "
+"'rbio5.5', 'rbio6.8', 'shan', 'sym2', 'sym3', 'sym4', 'sym5', 'sym6', "
+"'sym7', 'sym8', 'sym9', 'sym10', 'sym11', 'sym12', 'sym13', 'sym14', "
+"'sym15', 'sym16', 'sym17', 'sym18', 'sym19', 'sym20'. Default: 'sym9'."
+msgstr ""
+
+#: cdl.computation.image.restoration.DenoiseWaveletParam:13
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "Single choice from: 'soft', 'hard'. Default: 'soft'."
+msgstr ""
+
+#: cdl.computation.image.restoration.DenoiseWaveletParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "Single choice from: 'BayesShrink', 'VisuShrink'. Default: 'VisuShrink'."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`DenoiseWaveletParam` with the fields"
+" set to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:10 of
+msgid "New instance of :py:class:`DenoiseWaveletParam`."
+msgstr ""
+
+#: cdl.param:196 of
+msgid "Threshold parameters"
+msgstr "Paramètres de seuillage"
+
+#: cdl.computation.image.threshold.ThresholdParam:1 of
+msgid "Histogram threshold parameters"
+msgstr "Paramètres de seuillage d'histogramme"
+
+#: cdl.computation.image.threshold.ThresholdParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid ""
+"Threshold method\\.  Single choice from: 'manual', 'isodata', 'li', "
+"'mean', 'minimum', 'otsu', 'triangle', 'yen'. Default: 'manual'."
+msgstr ""
+
+#: cdl.computation.image.threshold.ThresholdParam:20
+#: guidata.dataset.datatypes.DataSet.create:7 of
+msgid "Threshold value\\.  Default: 0.0."
+msgstr ""
+
+#: cdl.computation.image.threshold.ThresholdParam:27
+#: guidata.dataset.datatypes.DataSet.create:9 of
+msgid "Single choice from: '>', '<'. Default: '>'."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`ThresholdParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:12 of
+msgid "New instance of :py:class:`ThresholdParam`."
+msgstr ""
+

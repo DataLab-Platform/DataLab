@@ -51,55 +51,59 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.ClipParam
     :no-index:
+.. autodataset:: cdl.param.ConstantParam
+    :no-index:
 .. autodataset:: cdl.param.FFTParam
     :no-index:
-.. autodataset:: cdl.param.SpectrumParam
-    :no-index:
 .. autodataset:: cdl.param.GaussianParam
+    :no-index:
+.. autodataset:: cdl.param.HistogramParam
     :no-index:
 .. autodataset:: cdl.param.MovingAverageParam
     :no-index:
 .. autodataset:: cdl.param.MovingMedianParam
     :no-index:
-.. autodataset:: cdl.param.ConstantParam
+.. autodataset:: cdl.param.NormalizeParam
+    :no-index:
+.. autodataset:: cdl.param.SpectrumParam
     :no-index:
 
 Signal parameters
 ^^^^^^^^^^^^^^^^^
 
-.. autodataset:: cdl.param.DataTypeSParam
-    :no-index:
-.. autodataset:: cdl.param.FWHMParam
-    :no-index:
-.. autodataset:: cdl.param.NormalizeParam
-    :no-index:
-.. autodataset:: cdl.param.PeakDetectionParam
-    :no-index:
-.. autodataset:: cdl.param.PolynomialFitParam
-    :no-index:
-.. autodataset:: cdl.param.XYCalibrateParam
-    :no-index:
-.. autodataset:: cdl.param.InterpolationParam
-    :no-index:
-.. autodataset:: cdl.param.ResamplingParam
-    :no-index:
-.. autodataset:: cdl.param.DetrendingParam
-    :no-index:
-.. autodataset:: cdl.param.PowerParam
-    :no-index:
-.. autodataset:: cdl.param.WindowingParam
-    :no-index:
 .. autodataset:: cdl.param.AllanVarianceParam
-    :no-index:
-.. autodataset:: cdl.param.LowPassFilterParam
-    :no-index:
-.. autodataset:: cdl.param.HighPassFilterParam
     :no-index:
 .. autodataset:: cdl.param.BandPassFilterParam
     :no-index:
 .. autodataset:: cdl.param.BandStopFilterParam
     :no-index:
+.. autodataset:: cdl.param.DataTypeSParam
+    :no-index:
+.. autodataset:: cdl.param.DetrendingParam
+    :no-index:
 .. autodataset:: cdl.param.DynamicParam
+    :no-index:
+.. autodataset:: cdl.param.FindAbscissaParam
+    :no-index:
+.. autodataset:: cdl.param.FWHMParam
+    :no-index:
+.. autodataset:: cdl.param.HighPassFilterParam
+    :no-index:
+.. autodataset:: cdl.param.InterpolationParam
+    :no-index:
+.. autodataset:: cdl.param.LowPassFilterParam
+    :no-index:
+.. autodataset:: cdl.param.PeakDetectionParam
+    :no-index:
+.. autodataset:: cdl.param.PolynomialFitParam
+    :no-index:
+.. autodataset:: cdl.param.PowerParam
+    :no-index:
+.. autodataset:: cdl.param.ResamplingParam
+    :no-index:
+.. autodataset:: cdl.param.WindowingParam
+    :no-index:
+.. autodataset:: cdl.param.XYCalibrateParam
     :no-index:
 
 Image parameters
@@ -108,6 +112,8 @@ Image parameters
 Base image parameters
 ~~~~~~~~~~~~~~~~~~~~~
 
+.. autodataset:: cdl.param.AverageProfileParam
+    :no-index:
 .. autodataset:: cdl.param.BinningParam
     :no-index:
 .. autodataset:: cdl.param.ButterworthParam
@@ -120,13 +126,9 @@ Base image parameters
     :no-index:
 .. autodataset:: cdl.param.HoughCircleParam
     :no-index:
-.. autodataset:: cdl.param.LogP1Param
-    :no-index:
 .. autodataset:: cdl.param.LineProfileParam
     :no-index:
-.. autodataset:: cdl.param.SegmentProfileParam
-    :no-index:
-.. autodataset:: cdl.param.AverageProfileParam
+.. autodataset:: cdl.param.LogP1Param
     :no-index:
 .. autodataset:: cdl.param.RadialProfileParam
     :no-index:
@@ -134,13 +136,31 @@ Base image parameters
     :no-index:
 .. autodataset:: cdl.param.RotateParam
     :no-index:
+.. autodataset:: cdl.param.SegmentProfileParam
+    :no-index:
 .. autodataset:: cdl.param.ZCalibrateParam
     :no-index:
 
-Threshold parameters
+Detection parameters
 ~~~~~~~~~~~~~~~~~~~~
 
-.. autodataset:: cdl.param.ThresholdParam
+.. autodataset:: cdl.param.BlobDOGParam
+    :no-index:
+.. autodataset:: cdl.param.BlobDOHParam
+    :no-index:
+.. autodataset:: cdl.param.BlobLOGParam
+    :no-index:
+.. autodataset:: cdl.param.BlobOpenCVParam
+    :no-index:
+.. autodataset:: cdl.param.ContourShapeParam
+    :no-index:
+.. autodataset:: cdl.param.Peak2DDetectionParam
+    :no-index:
+
+Edge detection parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autodataset:: cdl.param.CannyParam
     :no-index:
 
 Exposure correction parameters
@@ -159,6 +179,12 @@ Exposure correction parameters
 .. autodataset:: cdl.param.RescaleIntensityParam
     :no-index:
 
+Morphological parameters
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autodataset:: cdl.param.MorphologyParam
+    :no-index:
+
 Restoration parameters
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -169,32 +195,10 @@ Restoration parameters
 .. autodataset:: cdl.param.DenoiseWaveletParam
     :no-index:
 
-Morphological parameters
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. autodataset:: cdl.param.MorphologyParam
-    :no-index:
-
-Edge detection parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. autodataset:: cdl.param.CannyParam
-    :no-index:
-
-Detection parameters
+Threshold parameters
 ~~~~~~~~~~~~~~~~~~~~
 
-.. autodataset:: cdl.param.BlobDOGParam
-    :no-index:
-.. autodataset:: cdl.param.BlobDOHParam
-    :no-index:
-.. autodataset:: cdl.param.BlobLOGParam
-    :no-index:
-.. autodataset:: cdl.param.BlobOpenCVParam
-    :no-index:
-.. autodataset:: cdl.param.ContourShapeParam
-    :no-index:
-.. autodataset:: cdl.param.Peak2DDetectionParam
+.. autodataset:: cdl.param.ThresholdParam
     :no-index:
 """
 
@@ -204,14 +208,14 @@ Detection parameters
 from cdl.computation.base import (
     ArithmeticParam,
     ClipParam,
+    ConstantParam,
     FFTParam,
-    SpectrumParam,
     GaussianParam,
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
-    ConstantParam,
     NormalizeParam,
+    SpectrumParam,
 )
 from cdl.computation.image import (
     AverageProfileParam,
@@ -221,12 +225,12 @@ from cdl.computation.image import (
     FlatFieldParam,
     GridParam,
     HoughCircleParam,
-    LogP1Param,
     LineProfileParam,
-    SegmentProfileParam,
+    LogP1Param,
     RadialProfileParam,
     ResizeParam,
     RotateParam,
+    SegmentProfileParam,
     ZCalibrateParam,
 )
 from cdl.computation.image.detection import (
@@ -238,7 +242,6 @@ from cdl.computation.image.detection import (
     Peak2DDetectionParam,
 )
 from cdl.computation.image.edges import CannyParam
-from cdl.computation.image.threshold import ThresholdParam
 from cdl.computation.image.exposure import (
     AdjustGammaParam,
     AdjustLogParam,
@@ -253,21 +256,23 @@ from cdl.computation.image.restoration import (
     DenoiseTVParam,
     DenoiseWaveletParam,
 )
+from cdl.computation.image.threshold import ThresholdParam
 from cdl.computation.signal import (
-    DataTypeSParam,
-    DetrendingParam,
-    FWHMParam,
-    InterpolationParam,
-    PeakDetectionParam,
-    PolynomialFitParam,
-    ResamplingParam,
-    XYCalibrateParam,
-    PowerParam,
-    WindowingParam,
     AllanVarianceParam,
-    LowPassFilterParam,
-    HighPassFilterParam,
     BandPassFilterParam,
     BandStopFilterParam,
+    DataTypeSParam,
+    DetrendingParam,
     DynamicParam,
+    FindAbscissaParam,
+    FWHMParam,
+    HighPassFilterParam,
+    InterpolationParam,
+    LowPassFilterParam,
+    PeakDetectionParam,
+    PolynomialFitParam,
+    PowerParam,
+    ResamplingParam,
+    WindowingParam,
+    XYCalibrateParam,
 )
