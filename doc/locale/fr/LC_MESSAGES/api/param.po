@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-05 15:33+0100\n"
+"POT-Creation-Date: 2025-03-05 15:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -141,6 +141,7 @@ msgstr ""
 #: cdl.computation.image.restoration.DenoiseWaveletParam
 #: cdl.computation.image.threshold.ThresholdParam
 #: cdl.computation.signal.AllanVarianceParam
+#: cdl.computation.signal.AngleUnitParam
 #: cdl.computation.signal.BandPassFilterParam
 #: cdl.computation.signal.BandStopFilterParam
 #: cdl.computation.signal.DataTypeSParam cdl.computation.signal.DetrendingParam
@@ -230,6 +231,7 @@ msgstr ""
 #: cdl.computation.image.restoration.DenoiseWaveletParam:22
 #: cdl.computation.image.threshold.ThresholdParam:8
 #: cdl.computation.image.threshold.ThresholdParam:29
+#: cdl.computation.signal.AngleUnitParam:8
 #: cdl.computation.signal.BandPassFilterParam:8
 #: cdl.computation.signal.BandStopFilterParam:8
 #: cdl.computation.signal.DataTypeSParam:8
@@ -543,9 +545,8 @@ msgid "New instance of :py:class:`GaussianParam`."
 msgstr ""
 
 #: cdl.computation.base.HistogramParam:1 of
-#, fuzzy
 msgid "Histogram parameters"
-msgstr "Paramètres de seuillage d'histogramme"
+msgstr ""
 
 #: cdl.computation.base.HistogramParam:6
 #: cdl.computation.image.threshold.ThresholdParam:13
@@ -701,6 +702,25 @@ msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:6 of
 msgid "New instance of :py:class:`AllanVarianceParam`."
+msgstr ""
+
+#: cdl.computation.signal.AngleUnitParam:1 of
+msgid "Choice of angle unit."
+msgstr ""
+
+#: cdl.computation.signal.AngleUnitParam:6
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Angle unit\\.  Single choice from: 'radian', 'degree'. Default: 'radian'."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`AngleUnitParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`AngleUnitParam`."
 msgstr ""
 
 #: cdl.computation.signal.BandPassFilterParam:1 of
@@ -1131,11 +1151,11 @@ msgstr ""
 msgid "New instance of :py:class:`XYCalibrateParam`."
 msgstr ""
 
-#: cdl.param:107 of
+#: cdl.param:109 of
 msgid "Image parameters"
 msgstr "Paramètres des images"
 
-#: cdl.param:110 of
+#: cdl.param:112 of
 msgid "Base image parameters"
 msgstr "Paramètres de base des images"
 
@@ -1509,7 +1529,7 @@ msgstr ""
 msgid "New instance of :py:class:`ZCalibrateParam`."
 msgstr ""
 
-#: cdl.param:142 of
+#: cdl.param:144 of
 msgid "Detection parameters"
 msgstr "Paramètres de détection"
 
@@ -1792,7 +1812,7 @@ msgstr ""
 msgid "New instance of :py:class:`Peak2DDetectionParam`."
 msgstr ""
 
-#: cdl.param:158 of
+#: cdl.param:160 of
 msgid "Edge detection parameters"
 msgstr "Paramètres de détection de contours"
 
@@ -1851,7 +1871,7 @@ msgstr ""
 msgid "New instance of :py:class:`CannyParam`."
 msgstr ""
 
-#: cdl.param:164 of
+#: cdl.param:166 of
 msgid "Exposure correction parameters"
 msgstr "Paramètres de correction d'exposition"
 
@@ -2012,7 +2032,7 @@ msgstr ""
 msgid "New instance of :py:class:`RescaleIntensityParam`."
 msgstr ""
 
-#: cdl.param:180 of
+#: cdl.param:182 of
 msgid "Morphological parameters"
 msgstr "Paramètres morphologiques"
 
@@ -2035,7 +2055,7 @@ msgstr ""
 msgid "New instance of :py:class:`MorphologyParam`."
 msgstr ""
 
-#: cdl.param:186 of
+#: cdl.param:188 of
 msgid "Restoration parameters"
 msgstr "Paramètres de restauration"
 
@@ -2158,7 +2178,7 @@ msgstr ""
 msgid "New instance of :py:class:`DenoiseWaveletParam`."
 msgstr ""
 
-#: cdl.param:196 of
+#: cdl.param:198 of
 msgid "Threshold parameters"
 msgstr "Paramètres de seuillage"
 
@@ -2192,4 +2212,3 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create:12 of
 msgid "New instance of :py:class:`ThresholdParam`."
 msgstr ""
-

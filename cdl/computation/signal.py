@@ -22,6 +22,7 @@ import scipy.integrate as spt
 import scipy.ndimage as spi
 import scipy.signal as sps
 
+import cdl.algorithms.coordinates
 import cdl.algorithms.signal as alg
 from cdl.computation.base import (
     ArithmeticParam,
@@ -1224,6 +1225,52 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
     """
     dst = dst_11(src, "reverse_x")
     dst.y = dst.y[::-1]
+    return dst
+
+
+class AngleUnitParam(gds.DataSet):
+    """Choice of angle unit."""
+
+    units = (
+        ("radian", _("Radian")),
+        ("degree", _("Degree")),
+    )
+    unit = gds.ChoiceItem(_("Angle unit"), units, default="radian")
+
+
+def compute_cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+    """Convert cartesian coordinates to polar coordinates with
+    :py:func:`cdl.algorithms.coordinates.cartesian2polar`.
+
+    Args:
+        src: Source signal.
+        p: Parameters.
+
+    Returns:
+        Result signal object.
+    """
+    dst = dst_11(src, "Polar coordinates", f"unit={p.unit}")
+    x, y = src.get_data()
+    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, p.unit)
+    dst.set_xydata(r, theta)
+    return dst
+
+
+def compute_polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+    """Convert polar coordinates to cartesian coordinates with
+    :py:func:`cdl.algorithms.coordinates.polar2cartesian`.
+
+    Args:
+        src: Source signal.
+        p: Parameters.
+
+    Returns:
+        Result signal object.
+    """
+    dst = dst_11(src, "Cartesian coordinates", f"unit={p.unit}")
+    r, theta = src.get_data()
+    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, p.unit)
+    dst.set_xydata(x, y)
     return dst
 
 

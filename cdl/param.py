@@ -73,6 +73,8 @@ Signal parameters
 
 .. autodataset:: cdl.param.AllanVarianceParam
     :no-index:
+.. autodataset:: cdl.param.AngleUnitParam
+    :no-index:
 .. autodataset:: cdl.param.BandPassFilterParam
     :no-index:
 .. autodataset:: cdl.param.BandStopFilterParam
@@ -259,6 +261,7 @@ from cdl.computation.image.restoration import (
 from cdl.computation.image.threshold import ThresholdParam
 from cdl.computation.signal import (
     AllanVarianceParam,
+    AngleUnitParam,
     BandPassFilterParam,
     BandStopFilterParam,
     DataTypeSParam,
