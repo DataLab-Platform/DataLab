@@ -52,6 +52,7 @@ def read_csv_by_chunks(
     fname_or_fileobj: str | TextIO,
     nlines: int | None = None,
     worker: CallbackWorker | None = None,
+    decimal: str = ".",
     delimiter: str | None = None,
     header: int | None = "infer",
     skiprows: int | None = None,
@@ -69,6 +70,7 @@ def read_csv_by_chunks(
          text stream is not efficient, especially if one already has access to the
          initial text content from which the text stream was made)
         worker: Callback worker object
+        decimal: Decimal character
         delimiter: Delimiter
         header: Header line
         skiprows: Skip rows
@@ -89,6 +91,7 @@ def read_csv_by_chunks(
     chunks = []
     for chunk in pd.read_csv(
         fname_or_fileobj,
+        decimal=decimal,
         delimiter=delimiter,
         header=header,
         skiprows=skiprows,
@@ -130,39 +133,47 @@ def read_csv(
     skiprows = None
 
     # First attempt: no header (try to read with different delimiters)
-    for delimiter in (",", ";", "\t", " "):
-        try:
-            df = pd.read_csv(
-                filename,
-                dtype=float,
-                delimiter=delimiter,
-                header=None,
-                comment="#",
-                nrows=1000,  # Read only the first 1000 lines
-            )
-            read_without_header = True
+    for decimal in (".", ","):
+        for delimiter in (",", ";", "\t", " "):
+            try:
+                df = pd.read_csv(
+                    filename,
+                    dtype=float,
+                    decimal=decimal,
+                    delimiter=delimiter,
+                    header=None,
+                    comment="#",
+                    nrows=1000,  # Read only the first 1000 lines
+                )
+                read_without_header = True
+                break
+            except (pd.errors.ParserError, ValueError):
+                df = None
+        if df is not None:
             break
-        except (pd.errors.ParserError, ValueError):
-            df = None
 
     # Second attempt: with header
     if df is None:
-        for delimiter in (",", ";", "\t", " "):
-            # Headers are generally in the first 10 lines, so we try to skip the
-            # minimum number of lines before reading the data:
-            for skiprows in range(20):
-                try:
-                    df = pd.read_csv(
-                        filename,
-                        dtype=float,
-                        delimiter=delimiter,
-                        skiprows=skiprows,
-                        comment="#",
-                        nrows=1000,  # Read only the first 1000 lines
-                    )
+        for decimal in (".", ","):
+            for delimiter in (",", ";", "\t", " "):
+                # Headers are generally in the first 10 lines, so we try to skip the
+                # minimum number of lines before reading the data:
+                for skiprows in range(20):
+                    try:
+                        df = pd.read_csv(
+                            filename,
+                            dtype=float,
+                            decimal=decimal,
+                            delimiter=delimiter,
+                            skiprows=skiprows,
+                            comment="#",
+                            nrows=1000,  # Read only the first 1000 lines
+                        )
+                        break
+                    except (pd.errors.ParserError, ValueError):
+                        df = None
+                if df is not None:
                     break
-                except (pd.errors.ParserError, ValueError):
-                    df = None
             if df is not None:
                 break
 
@@ -203,6 +214,7 @@ def read_csv(
     df = read_csv_by_chunks(
         filename,
         worker=worker,
+        decimal=decimal,
         delimiter=delimiter,
         header=None if read_without_header else "infer",
         skiprows=skiprows,

@@ -17,9 +17,14 @@ from cdl.widgets.textimport import TextImportWizard
 
 def file_to_clipboard(filename: str) -> None:
     """Copy file content to clipboard"""
-    with open(filename, "r", encoding="utf-8") as file:
-        text = file.read()
-    QW.QApplication.clipboard().setText(text)
+    for encoding in ("utf-8", "latin-1"):
+        try:
+            with open(filename, "r", encoding=encoding) as file:
+                text = file.read()
+            QW.QApplication.clipboard().setText(text)
+            return
+        except UnicodeDecodeError:
+            pass
 
 
 def test_import_wizard():
