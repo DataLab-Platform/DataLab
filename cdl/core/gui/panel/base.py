@@ -524,7 +524,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=lambda obj: obj.short_id, reverse=True):
             obj.metadata.update(self.__metadata_clipboard)
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        self.SIG_REFRESH_PLOT.emit("existing", True)
 
     def remove_object(self, force: bool = False) -> None:
         """Remove signal/image object
