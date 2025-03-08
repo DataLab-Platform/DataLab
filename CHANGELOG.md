@@ -6,8 +6,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
-* Text and CSV files: ignore encoding errors when reading files in both open feature and import wizard, hence allowing to read files with special characters without raising an exception
-* Fixed [Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124) - Text files: support locale decimal separator (different than `.`)
+* Text and CSV files:
+  * Enhance text file reading by detecting data headers (using a list of typical headers from scientific instruments) and by allowing to skip the header when reading the file
+  * Ignore encoding errors when reading files in both open feature and import wizard, hence allowing to read files with special characters without raising an exception
+  * Fixed [Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124) - Text files: support locale decimal separator (different than `.`)
 * Signal analysis features: fixed duplicate results when no ROI is defined
 * Fixed [Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113) - Call to `RemoteClient.open_h5_files` (and `import_h5_file`) fails without passing the optional arguments
 * Fixed [Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116) - `KeyError` exception when trying to remove a group after opening an HDF5 file

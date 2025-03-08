@@ -14,7 +14,7 @@ from typing import TextIO
 import numpy as np
 import pandas as pd
 
-from cdl.utils.io import count_lines
+from cdl.utils.io import count_lines, read_first_n_lines
 from cdl.utils.qthelpers import CallbackWorker
 
 
@@ -109,6 +109,25 @@ def read_csv_by_chunks(
     return pd.concat(chunks)
 
 
+DATA_HEADERS = [
+    "#DATA",  # Generic
+    "START_OF_DATA",  # Various logging devices
+    ">>>>>Begin Spectral Data<<<<<",  # Ocean Optics
+    ">>>Begin Data<<<",  # Ocean Optics (alternative)
+    ">>>Begin Spectrum Data<<<",  # Avantes
+    "# Data Start",  # Andor, Horiba, Mass Spectrometry (Agilent, Thermo Fisher, ...)
+    ">DATA START<",  # Mass Spectrometry, Chromatography
+    "BEGIN DATA",  # Mass Spectrometry, Chromatography
+    "<Data>",  # Mass Spectrometry (XML-based)
+    "##Start Data",  # Bruker (X-ray, Raman, FTIR)
+    "[DataStart]",  # PerkinElmer (FTIR, UV-Vis)
+    "BEGIN SPECTRUM",  # PerkinElmer
+    "%% Data Start %%",  # LabVIEW, MATLAB
+    "---Begin Data---",  # General scientific instruments
+    "===DATA START===",  # Industrial/scientific devices
+]
+
+
 def read_csv(
     filename: str,
     worker: CallbackWorker | None = None,
@@ -133,7 +152,17 @@ def read_csv(
 
     skiprows = None
 
+    # Begin by reading the first 100 lines to search for a line that could mark the
+    # beginning of the data after it (e.g., a line '#DATA' or other).
+    first_100_lines = read_first_n_lines(filename, n=100).splitlines()
+    for data_header in DATA_HEADERS:
+        if data_header in first_100_lines:
+            # Skip the lines before the data header
+            skiprows = first_100_lines.index(data_header) + 1
+            break
+
     # First attempt: no header (try to read with different delimiters)
+    read_without_header = True
     for decimal in (".", ","):
         for delimiter in (",", ";", "\t", " "):
             try:
@@ -146,8 +175,8 @@ def read_csv(
                     comment="#",
                     nrows=1000,  # Read only the first 1000 lines
                     encoding_errors="ignore",
+                    skiprows=skiprows,
                 )
-                read_without_header = True
                 break
             except (pd.errors.ParserError, ValueError):
                 df = None

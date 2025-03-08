@@ -18,9 +18,14 @@ def count_lines(filename: str) -> int:
     Returns:
         The number of lines in the file
     """
-    with open(filename, "r", encoding="utf-8") as file:
-        line_count = sum(1 for line in file)
-    return line_count
+    for encoding in ("utf-8", "utf-8-sig", "latin-1"):
+        try:
+            with open(filename, "r", encoding=encoding) as file:
+                line_count = sum(1 for line in file)
+            return line_count
+        except UnicodeDecodeError:
+            pass
+    raise IOError(f"Cannot read file {filename}")
 
 
 def read_first_n_lines(filename: str, n: int = 100000) -> str:
@@ -33,6 +38,11 @@ def read_first_n_lines(filename: str, n: int = 100000) -> str:
     Returns:
         The first n lines of the file
     """
-    with open(filename, "r", encoding="utf-8") as file:
-        lines = list(islice(file, n))
-    return "".join(lines)
+    for encoding in ("utf-8", "utf-8-sig", "latin-1"):
+        try:
+            with open(filename, "r", encoding=encoding) as file:
+                lines = list(islice(file, n))
+            return "".join(lines)
+        except UnicodeDecodeError:
+            pass
+    raise IOError(f"Cannot read file {filename}")
