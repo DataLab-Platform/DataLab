@@ -615,7 +615,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if index == 0:
                 self.selection_changed()
         if refresh_plot:
-            self.SIG_REFRESH_PLOT.emit("selected", True)
+            self.SIG_REFRESH_PLOT.emit("existing", True)
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True

@@ -10,6 +10,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Image ROI features:
+  * Fixed [Issue #122](https://github.com/DataLab-Platform/DataLab/issues/122) - Image masks are not refreshed when removing metadata except for the active image
 * Text and CSV files:
   * Enhance text file reading by detecting data headers (using a list of typical headers from scientific instruments) and by allowing to skip the header when reading the file
   * Ignore encoding errors when reading files in both open feature and import wizard, hence allowing to read files with special characters without raising an exception

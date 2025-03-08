@@ -313,7 +313,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
                     item.hide()
         elif what == "existing":
             # Refresh existing objects
-            oids = self.__plotitems.keys()
+            oids = list(self.__plotitems.keys())
         elif what == "all":
             # Refresh all objects
             oids = self.panel.objmodel.get_object_ids()
@@ -341,7 +341,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
         scales_dict = {}
 
         if oids:
-            oids = self.reduce_shown_oids(oids)
+            if what != "existing":
+                oids = self.reduce_shown_oids(oids)
             ref_item = None
             with create_progress_bar(
                 self.panel, _("Creating plot items"), max_=len(oids)
