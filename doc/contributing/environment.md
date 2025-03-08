@@ -67,7 +67,8 @@ The following table lists the currently officially used Python distributions:
 | 3.9            | OK           | 3.9.10.0          |
 | 3.10           | OK           | 3.10.11.1         |
 | 3.11           | OK           | 3.11.5.0          |
-| 3.12           | OK           | 3.12.0.1          |
+| 3.12           | OK           | 3.12.3.0          |
+| 3.13           | OK           | 3.13.2.0          |
 
 ⚠ We strongly recommend using the `.dot` versions of WinPython which are lightweight
 and can be customized to your needs (using `pip install -r requirements.txt`).

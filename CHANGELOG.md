@@ -4,6 +4,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ## DataLab Version 0.18.2 ##
 
+ℹ️ General information:
+
+* Python 3.13 is now supported, since the availability of the scikit-image V0.25 (see [Issue #104](https://github.com/DataLab-Platform/DataLab/issues/104) - Python 3.13: `KeyError: 'area_bbox'`)
+
 🛠️ Bug fixes:
 
 * Text and CSV files:
