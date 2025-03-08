@@ -98,6 +98,7 @@ def read_csv_by_chunks(
         nrows=nrows,
         comment=comment,
         chunksize=chunksize,
+        encoding_errors="ignore",
     ):
         chunks.append(chunk)
         # Compute the progression based on the number of lines read so far
@@ -144,6 +145,7 @@ def read_csv(
                     header=None,
                     comment="#",
                     nrows=1000,  # Read only the first 1000 lines
+                    encoding_errors="ignore",
                 )
                 read_without_header = True
                 break
@@ -168,6 +170,7 @@ def read_csv(
                             skiprows=skiprows,
                             comment="#",
                             nrows=1000,  # Read only the first 1000 lines
+                            encoding_errors="ignore",
                         )
                         break
                     except (pd.errors.ParserError, ValueError):
