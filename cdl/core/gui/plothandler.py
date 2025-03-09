@@ -549,7 +549,10 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one
              item is selected). Defaults to True.
-            force: if True, force refresh even if auto refresh is disabled.
+            force: if True, force refresh even if auto refresh is disabled,
+             and refresh all items associated to objects (even the hidden ones, e.g.
+             when selecting multiple images of the same size and position). Defaults
+             to False.
 
         Raises:
             ValueError: if `what` is not a valid value

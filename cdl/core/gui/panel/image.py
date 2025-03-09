@@ -156,4 +156,4 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
     def toggle_show_contrast(self, state: bool) -> None:
         """Toggle show contrast option"""
         Conf.view.show_contrast.set(state)
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        self.refresh_plot("selected", True, False)

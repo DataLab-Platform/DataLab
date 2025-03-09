@@ -259,7 +259,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     # Replaced by the right class in child object:
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
-    SIG_REFRESH_PLOT = QC.Signal(str, bool)  # Connected to PlotHandler.refresh_plot
+    SIG_REFRESH_PLOT = QC.Signal(
+        str, bool, bool
+    )  # Connected to PlotHandler.refresh_plot
     ROIDIALOGOPTIONS = {}
 
     @staticmethod
@@ -428,7 +430,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.objmodel.clear()
         self.plothandler.clear()
         self.objview.populate_tree()
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        self.refresh_plot("selected", True, False)
         super().remove_all_objects()
 
     # ---- Signal/Image Panel API ------------------------------------------------------
@@ -448,6 +450,37 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.addWidget(self.objview)
         self.addWidget(self.objprop)
         self.add_objprop_buttons()
+
+    def refresh_plot(
+        self, what: str, update_items: bool = True, force: bool = False
+    ) -> None:
+        """Refresh plot. This method simply emits the signal SIG_REFRESH_PLOT which is
+        connected to the method `PlotHandler.refresh_plot`.
+
+        Args:
+            what: string describing the objects to refresh.
+             Valid values are "selected" (refresh the selected objects),
+             "all" (refresh all objects), "existing" (refresh existing plot items),
+             or an object uuid.
+            update_items: if True, update the items.
+             If False, only show the items (do not update them, except if the
+             option "Use reference item LUT range" is enabled and more than one
+             item is selected). Defaults to True.
+            force: if True, force refresh even if auto refresh is disabled,
+             and refresh all items associated to objects (even the hidden ones, e.g.
+             when selecting multiple images of the same size and position). Defaults
+             to False.
+
+        Raises:
+            ValueError: if `what` is not a valid value
+        """
+        if what not in ("selected", "all", "existing") and not isinstance(what, str):
+            raise ValueError(f"Invalid value for 'what': {what}")
+        self.SIG_REFRESH_PLOT.emit(what, update_items, force)
+
+    def manual_refresh(self) -> None:
+        """Manual refresh"""
+        self.refresh_plot("selected", True, True)
 
     def get_category_actions(
         self, category: actionhandler.ActionCategory
@@ -636,13 +669,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         for obj in self.objview.get_sel_objects(include_groups=True):
             obj.add_annotations_from_items(items)
         if refresh_plot:
-            self.SIG_REFRESH_PLOT.emit("selected", True)
+            self.refresh_plot("selected", True, False)
 
     def update_metadata_view_settings(self) -> None:
         """Update metadata view settings"""
         for obj in self.objmodel:
             obj.update_metadata_view_settings()
-        self.SIG_REFRESH_PLOT.emit("all", True)
+        self.refresh_plot("all", True, False)
 
     def copy_titles_to_clipboard(self) -> None:
         """Copy object titles to clipboard (for reproducibility)"""
@@ -848,7 +881,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 handler = JSONHandler(filename)
                 handler.load()
                 obj.metadata = handler.get_json_dict()
-            self.SIG_REFRESH_PLOT.emit("selected", True)
+            self.refresh_plot("selected", True, False)
 
     def export_metadata_from_file(self, filename: str | None = None) -> None:
         """Export metadata to file (JSON).
@@ -883,7 +916,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         selected_groups = self.objview.get_sel_groups()
         self.objprop.update_properties_from(self.objview.get_current_object())
         self.acthandler.selected_objects_changed(selected_groups, selected_objects)
-        self.SIG_REFRESH_PLOT.emit("selected", update_items)
+        self.refresh_plot("selected", update_items, False)
 
     def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: update object properties,
@@ -893,7 +926,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj.invalidate_maskdata_cache()
         update_dataset(obj, self.objprop.properties.dataset)
         self.objview.update_item(obj.uuid)
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        self.refresh_plot("selected", True, False)
 
     # ------Plotting data in modal dialogs----------------------------------------------
     def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:
@@ -1005,10 +1038,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.selection_changed(update_items=True)
         self.__separate_views.pop(dlg)
         dlg.deleteLater()
-
-    def manual_refresh(self) -> None:
-        """Manual refresh"""
-        self.plothandler.refresh_plot("selected", True, force=True)
 
     def create_new_dialog(
         self,
@@ -1319,7 +1348,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 objs = self.objview.get_sel_objects(include_groups=True)
                 for obj in objs:
                     obj.delete_results()
-                self.SIG_REFRESH_PLOT.emit("selected", True)
+                self.refresh_plot("selected", True, False)
         else:
             self.__show_no_result_warning()
 
@@ -1333,4 +1362,4 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             obj.add_label_with_title(title=title)
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        self.refresh_plot("selected", True, False)

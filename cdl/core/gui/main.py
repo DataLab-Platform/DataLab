@@ -1282,7 +1282,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         for datapanel in (self.signalpanel, self.imagepanel):
             for obj in datapanel.objmodel:
                 obj.set_metadata_option("showlabel", state)
-            datapanel.SIG_REFRESH_PLOT.emit("selected", True)
+            datapanel.refresh_plot("selected", True, False)
 
     @remote_controlled
     def toggle_auto_refresh(self, state: bool) -> None:
@@ -1624,7 +1624,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     if isinstance(widget, DockablePlotWidget):
                         widget.update_toolbar_position()
             if option.startswith("sig_autodownsampling"):
-                self.signalpanel.SIG_REFRESH_PLOT.emit("existing", True)
+                self.signalpanel.refresh_plot("existing", True, False)
             if option == "ima_defaults" and len(self.imagepanel) > 0:
                 answer = QW.QMessageBox.question(
                     self,
