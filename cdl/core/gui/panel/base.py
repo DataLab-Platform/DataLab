@@ -524,7 +524,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=lambda obj: obj.short_id, reverse=True):
             obj.metadata.update(self.__metadata_clipboard)
-        self.SIG_REFRESH_PLOT.emit("existing", True)
+        # We have to do a manual refresh in order to force the plot handler to update
+        # all plot items, even the ones that are not visible (otherwise, image masks
+        # would not be updated after pasting the metadata: see issue #123)
+        self.manual_refresh()
 
     def remove_object(self, force: bool = False) -> None:
         """Remove signal/image object
@@ -615,7 +618,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if index == 0:
                 self.selection_changed()
         if refresh_plot:
-            self.SIG_REFRESH_PLOT.emit("existing", True)
+            # We have to do a manual refresh in order to force the plot handler to
+            # update all plot items, even the ones that are not visible (otherwise,
+            # image masks would remained visible after deleting the ROI for example:
+            # see issue #122)
+            self.manual_refresh()
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True
