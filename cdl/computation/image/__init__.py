@@ -49,6 +49,7 @@ from cdl.config import _
 from cdl.obj import (
     BaseProcParam,
     ImageObj,
+    ImageROI,
     ResultProperties,
     ResultShape,
     ROI2DParam,
@@ -770,7 +771,7 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     dst.roi = None
 
     src2 = src.copy()
-    src2.roi = src2.roi.from_params(src2, group)
+    src2.roi = ImageROI.from_params(src2, group)
     src2.data[src2.maskdata] = 0
     dst.data = src2.data[y0:y1, x0:x1]
     return dst
