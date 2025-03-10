@@ -178,7 +178,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
                         g_row += 1
                         x0 = x0_0
                         y0 += obj.height + param.rowspac
-        self.panel.SIG_REFRESH_PLOT.emit("selected", True)
+        self.panel.refresh_plot("selected", True, False)
 
     @qt_try_except()
     def reset_positions(self) -> None:
@@ -201,7 +201,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
                     coords[:, 1::2] += delta_y0
 
                 obj.transform_shapes(None, translate_coords)
-        self.panel.SIG_REFRESH_PLOT.emit("selected", True)
+        self.panel.refresh_plot("selected", True, False)
 
     @qt_try_except()
     def compute_resize(self, param: cdl.param.ResizeParam | None = None) -> None:
@@ -1160,7 +1160,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
                         coords.append([x0, y0, dx, dy])
                     obj.roi = create_image_roi("rectangle", coords, indices=True)
                     self.SIG_ADD_SHAPE.emit(obj.uuid)
-                    self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
+                    self.panel.refresh_plot(obj.uuid, True, False)
         return results
 
     @qt_try_except()

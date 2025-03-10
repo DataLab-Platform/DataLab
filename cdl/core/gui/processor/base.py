@@ -489,7 +489,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
-                    self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
+                    self.panel.refresh_plot(obj.uuid, True, False)
                 for i_row_res in range(result.array.shape[0]):
                     ylabel = f"{result.title}({obj.short_id})"
                     i_roi = int(result.array[i_row_res, 0])
@@ -1053,12 +1053,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             or group.edit(parent=self.panel.parent())  # ROI dialog has been accepted
         ):
             if modified:
-                # If ROI has been modified, save ROI (even in "extract mode")
+                # If ROI has been modified, save ROI (not in "extract mode")
                 if edited_roi.is_empty():
                     obj.roi = None
                 else:
                     edited_roi = edited_roi.from_params(obj, group)
-                    obj.roi = edited_roi
+                    if not extract:
+                        obj.roi = edited_roi
                 self.SIG_ADD_SHAPE.emit(obj.uuid)
                 self.panel.selection_changed(update_items=True)
         return edited_roi

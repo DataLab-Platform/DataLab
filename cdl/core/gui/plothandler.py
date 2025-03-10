@@ -295,7 +295,10 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one
              item is selected). Defaults to True.
-            force: if True, force refresh even if auto refresh is disabled.
+            force: if True, force refresh even if auto refresh is disabled,
+             and refresh all items associated to objects (even the hidden ones, e.g.
+             when selecting multiple images of the same size and position). Defaults
+             to False.
 
         Raises:
             ValueError: if `what` is not a valid value
@@ -313,7 +316,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
                     item.hide()
         elif what == "existing":
             # Refresh existing objects
-            oids = self.__plotitems.keys()
+            oids = list(self.__plotitems.keys())
         elif what == "all":
             # Refresh all objects
             oids = self.panel.objmodel.get_object_ids()
@@ -341,7 +344,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
         scales_dict = {}
 
         if oids:
-            oids = self.reduce_shown_oids(oids)
+            if what != "existing" and not force:
+                oids = self.reduce_shown_oids(oids)
             ref_item = None
             with create_progress_bar(
                 self.panel, _("Creating plot items"), max_=len(oids)
@@ -545,7 +549,10 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one
              item is selected). Defaults to True.
-            force: if True, force refresh even if auto refresh is disabled.
+            force: if True, force refresh even if auto refresh is disabled,
+             and refresh all items associated to objects (even the hidden ones, e.g.
+             when selecting multiple images of the same size and position). Defaults
+             to False.
 
         Raises:
             ValueError: if `what` is not a valid value

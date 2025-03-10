@@ -96,6 +96,8 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.setColumnCount(1)
         self.setAlternatingRowColors(True)
         self.itemDoubleClicked.connect(self.item_double_clicked)
+        self.header().setSectionResizeMode(QW.QHeaderView.Interactive)
+        self.itemChanged.connect(lambda item: self.resizeColumnToContents(0))
 
     def __str__(self) -> str:
         """Return string representation"""
@@ -246,6 +248,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         group_item.setExpanded(True)
         for obj in group:
             self.__add_to_group_item(obj, group_item)
+        self.resizeColumnToContents(0)
 
     def add_object_item(
         self, obj: SignalObj | ImageObj, group_id: str, set_current: bool = True
@@ -255,6 +258,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.__add_to_group_item(obj, group_item)
         if set_current:
             self.set_current_item_id(obj.uuid)
+        self.resizeColumnToContents(0)
 
     def update_item(self, uuid: str) -> None:
         """Update item"""
