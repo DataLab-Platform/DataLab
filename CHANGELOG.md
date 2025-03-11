@@ -11,6 +11,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 🛠️ Bug fixes:
 
 * Fixed [Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128) - Support long object titles in Signal and Image panels
+* Fixed [Issue #133](https://github.com/DataLab-Platform/DataLab/issues/133) - Remove specific analysis results from metadata clipboard during copy operation
 * Image ROI features:
   * Fixed [Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120) - ROI extraction on multiple images: defined ROI should not be saved in the first selected object. The design choice is to save the defined ROI neither in the first nor in any of the selected objects: the ROI is only used for the extraction, and is not saved in any object
   * Fixed [Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121) - `AttributeError` when extracting multiple ROIs on a single image, if more than one image is selected
