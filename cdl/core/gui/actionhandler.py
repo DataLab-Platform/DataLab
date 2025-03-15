@@ -548,7 +548,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
                 triggered=self.panel.processor.edit_regions_of_interest,
                 icon_name="roi.svg",
-                select_condition=SelectCond.exactly_one,
                 context_menu_pos=-1,
                 context_menu_sep=True,
                 toolbar_pos=-1,

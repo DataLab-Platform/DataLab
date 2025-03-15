@@ -15,6 +15,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This is now fixed: the "One curve per result title" mode now takes into account the ROI defined on the objects, and plots the selected result for each object (signal or image) and for each ROI defined on the object
 * Fixed [Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128) - Support long object titles in Signal and Image panels
 * Fixed [Issue #133](https://github.com/DataLab-Platform/DataLab/issues/133) - Remove specific analysis results from metadata clipboard during copy operation
+* Fixed [Issue #135](https://github.com/DataLab-Platform/DataLab/issues/135) - Allow to edit ROI on multiple signals or images at once
+  * Before this fix, the ROI editor was disabled when multiple signals or images were selected
+  * This is now fixed: the ROI editor is now enabled when multiple signals or images are selected, and the ROI is applied to all selected signals or images (only the ROI of the first selected signal or image is taken into account)
+  * This new behavior is consistent with the ROI extraction feature, which allows to extract the ROI on multiple signals or images at once, based on the ROI defined on the first selected signal or image
 * Image ROI features:
   * Fixed [Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120) - ROI extraction on multiple images: defined ROI should not be saved in the first selected object. The design choice is to save the defined ROI neither in the first nor in any of the selected objects: the ROI is only used for the extraction, and is not saved in any object
   * Fixed [Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121) - `AttributeError` when extracting multiple ROIs on a single image, if more than one image is selected

@@ -1045,7 +1045,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         if results is None:
             return None
         edited_roi, modified = results
-        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        objs = self.panel.objview.get_sel_objects(include_groups=True)
+        obj = objs[0]
         group = edited_roi.to_params(obj)
         if (
             env.execenv.unattended  # Unattended mode (automated unit tests)
@@ -1059,9 +1060,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 else:
                     edited_roi = edited_roi.from_params(obj, group)
                     if not extract:
-                        obj.roi = edited_roi
+                        for obj_i in objs:
+                            obj_i.roi = edited_roi
                 self.SIG_ADD_SHAPE.emit(obj.uuid)
-                self.panel.selection_changed(update_items=True)
+                # self.panel.selection_changed(update_items=True)
+                self.panel.manual_refresh()
         return edited_roi
 
     def delete_regions_of_interest(self) -> None:

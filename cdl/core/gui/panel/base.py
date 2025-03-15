@@ -1088,6 +1088,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj = self.objview.get_sel_objects(include_groups=True)[0]
 
         # Create a new dialog
+
         dlg = self.create_new_dialog(
             edit=True,
             toolbar=True,
@@ -1099,9 +1100,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             return None
 
         # Create ROI editor (and add it to the dialog)
-        # pylint: disable=not-callable
+
+        if obj.uuid not in self.plothandler:
+            # This happens for example when opening an already saved workspace with
+            # multiple images, and if the user tries to edit the ROI of a group of
+            # images without having selected any object yet. In this case, only the
+            # last image is actually plotted (because if the other have the same size
+            # and position, they are hidden), and the plot item of the first image is
+            # not created yet. The `obj.uuid` is precisely the uuid of the first image.
+            self.plothandler.refresh_plot("selected", True, True)
         item = obj.make_item(update_from=self.plothandler[obj.uuid])
+
+        # pylint: disable=not-callable
         roi_editor = self.get_roieditor_class()(dlg, obj, extract, item=item)
+
         dlg.button_layout.insertWidget(0, roi_editor)
 
         if exec_dialog(dlg):
