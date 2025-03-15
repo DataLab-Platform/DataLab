@@ -624,6 +624,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     src_dtype = src_obj1.data.dtype
                     dst_dtype = complex if is_complex_dtype(src_dtype) else float
                     dst_obj = src_obj1.copy(dtype=dst_dtype)
+                    dst_obj.delete_results()  # Remove any previous results
                     src_objs_pair = [src_obj1]
                     for src_gid in src_gids[1:]:
                         src_obj = src_objs[src_gid][i_pair]
@@ -672,6 +673,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                         src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
                         dst_dtype = complex if is_complex_dtype(src_dtype) else float
                         dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
+                        dst_obj.delete_results()  # Remove any previous results
                         dst_obj.roi = None
                         src_objs[src_gid] = [src_obj]
                     else:

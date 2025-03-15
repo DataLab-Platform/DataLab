@@ -251,6 +251,7 @@ def compute_arithmetic(
     initial_dtype = src1.xydata.dtype
     title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
     dst = src1.copy(title=title)
+    dst.delete_results()  # Remove any previous results
     o, a, b = p.operator, p.factor, p.constant
     if o in ("×", "/") and a == 0.0:
         dst.y = np.ones_like(src1.y) * b

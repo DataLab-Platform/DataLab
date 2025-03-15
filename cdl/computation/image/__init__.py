@@ -289,6 +289,7 @@ def compute_arithmetic(src1: ImageObj, src2: ImageObj, p: ArithmeticParam) -> Im
     initial_dtype = src1.data.dtype
     title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
     dst = src1.copy(title=title)
+    dst.delete_results()  # Remove any previous results
     o, a, b = p.operator, p.factor, p.constant
     # Apply operator
     if o in ("×", "/") and a == 0.0:
