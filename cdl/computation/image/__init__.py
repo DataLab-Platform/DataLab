@@ -1424,6 +1424,7 @@ def calc_resultshape(
             )
 
         if coords.size:
+            coords = np.array(coords, dtype=float)
             if coords.shape[1] % 2 == 0:
                 # Coordinates are in the form [x0, y0, x1, y1, ...]
                 colx, coly = slice(None, None, 2), slice(1, None, 2)
