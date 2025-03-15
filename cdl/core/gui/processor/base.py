@@ -756,6 +756,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
+        if param is not None:
+            if edit and not param.edit(parent=self.panel.parent()):
+                return
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
