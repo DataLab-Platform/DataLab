@@ -46,7 +46,6 @@ sitemap_locales = ["en", "fr"]
 sitemap_filename = "../sitemap.xml"
 
 # -- Options for HTML output -------------------------------------------------
-
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/DataLab-Title.svg"
 html_title = project
@@ -84,23 +83,20 @@ html_theme_options = {
 html_static_path = ["_static"]
 
 # -- Options for LaTeX output ------------------------------------------------
-
 latex_logo = "_static/DataLab-Frontpage.png"
 
 # -- Options for sphinx-intl package -----------------------------------------
-
 locale_dirs = ["locale/"]  # path is example but recommended.
-gettext_compact = False  # optional.
+gettext_compact = False
+gettext_location = False
 
 # -- Options for autodoc extension -------------------------------------------
-
 autodoc_default_options = {
     "members": True,
     "member-order": "bysource",
 }
 
 # -- Options for intersphinx extension ---------------------------------------
-
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "qwt": ("https://pythonqwt.readthedocs.io/en/latest/", None),

@@ -1,0 +1,227 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-14 18:43+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+msgid "Git Workflow"
+msgstr "Workflow Git"
+
+msgid ""
+"This document describes the Git workflow used in the DataLab project, "
+"based on a ``main`` branch, a ``develop`` branch, and feature-specific "
+"branches. It also defines how bug fixes are managed."
+msgstr ""
+"Ce document décrit le workflow Git utilisé dans le projet DataLab, basé "
+"sur une branche ``main``, une branche ``develop`` et des branches "
+"spécifiques aux fonctionnalités. Il définit également comment les "
+"correctifs de bogues sont gérés."
+
+msgid ""
+"This workflow is a simplified version of the `Gitflow Workflow "
+"<https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-"
+"workflow>`_. It has been adapted to suit the needs of the DataLab project"
+" at the current stage of development. In the near future, we may consider"
+" adopting a more complex workflow, e.g. by adding release branches."
+msgstr ""
+"Ce workflow est une version simplifiée du `Gitflow Workflow "
+"<https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-"
+"workflow>`_. Il a été adapté pour répondre aux besoins du projet DataLab "
+"à l'étape actuelle de développement. À l'avenir, nous pourrions envisager"
+" d'adopter un workflow plus complexe, par exemple en ajoutant des "
+"branches de publication."
+
+msgid "Branching Model"
+msgstr "Modèle de branches"
+
+msgid "Main Branches"
+msgstr "Branches principales"
+
+msgid "``main``: Represents the stable, production-ready version of the project."
+msgstr ""
+"``main`` : Représente la version stable et prête pour la production du "
+"projet."
+
+msgid "``develop``: Used for ongoing development and integration of new features."
+msgstr ""
+"``develop`` : Utilisé pour le développement continu et l'intégration de "
+"nouvelles fonctionnalités."
+
+msgid "Feature Branches"
+msgstr "Branches de fonctionnalités"
+
+msgid "``develop/feature_name``: Used for the development of new features."
+msgstr ""
+"``develop/feature_name`` : Utilisé pour le développement de nouvelles "
+"fonctionnalités."
+
+msgid "Created from ``develop``."
+msgstr "Créé à partir de ``develop``."
+
+msgid "Merged back into ``develop`` once completed."
+msgstr "Fusionné de nouveau dans ``develop`` une fois terminé."
+
+msgid "Deleted after merging."
+msgstr "Supprimé après la fusion."
+
+msgid "Bug Fix Branches"
+msgstr "Branches de correction d'anomalies"
+
+msgid "``fix/xxx``: Used for general bug fixes that are not urgent."
+msgstr ""
+"``fix/xxx`` : Utilisé pour les corrections générales d'anomalies qui ne "
+"sont pas urgentes."
+
+msgid "``hotfix/xxx``: Used for urgent production-critical fixes."
+msgstr ""
+"``hotfix/xxx`` : Utilisé pour les corrections urgentes critiques pour la "
+"production."
+
+msgid "Created from ``main``."
+msgstr "Créé à partir de ``main``."
+
+msgid "Merged back into ``main``."
+msgstr "Fusionné de nouveau dans ``main``."
+
+msgid "The fix is then cherry-picked into ``develop``."
+msgstr "La correction est ensuite sélectionnée dans ``develop``."
+
+msgid ""
+"Hotfixes (high-priority fixes) will be integrated in the next maintenance"
+" release (X.Y.Z -> Z+1), while fixes (low-priority fixes) will be "
+"integrated in the next feature release (X.Y -> Y+1)."
+msgstr ""
+"Les correctifs urgents (correctifs de haute priorité) seront intégrés "
+"dans la prochaine version de maintenance (X.Y.Z -> Z+1), tandis que les "
+"correctifs (correctifs de basse priorité) seront intégrés dans la "
+"prochaine version de fonctionnalité (X.Y -> Y+1)."
+
+msgid "Workflow for New Features"
+msgstr "Workflow pour les nouvelles fonctionnalités"
+
+msgid "Create a new feature branch from ``develop``:"
+msgstr "Créer une nouvelle branche de fonctionnalité à partir de ``develop`` :"
+
+msgid "Develop the feature and commit changes."
+msgstr "Développer la fonctionnalité et valider les modifications."
+
+msgid "Merge the feature branch back into ``develop``:"
+msgstr "Fusionner la branche de fonctionnalité de nouveau dans ``develop`` :"
+
+msgid "Delete the feature branch:"
+msgstr "Supprimer la branche de fonctionnalité :"
+
+msgid ""
+"Do not leave feature branches unmerged for too long. Regularly rebase "
+"them on ``develop`` to minimize conflicts."
+msgstr ""
+"Ne pas laisser les branches de fonctionnalités non fusionnées trop "
+"longtemps. Les réorganiser régulièrement sur ``develop`` pour minimiser "
+"les conflits."
+
+msgid "Workflow for Regular Bug Fixes"
+msgstr "Workflow pour les corrections d'anomalies régulières"
+
+msgid "Create a bug fix branch from ``develop``:"
+msgstr "Créer une branche de correction d'anomalie à partir de ``develop`` :"
+
+msgid "Apply the fix and commit changes."
+msgstr "Appliquer la correction et valider les modifications."
+
+msgid "Merge the fix branch back into ``develop``:"
+msgstr "Fusionner la branche de correction de nouveau dans ``develop`` :"
+
+msgid "Delete the fix branch:"
+msgstr "Supprimer la branche de correction :"
+
+msgid ""
+"Do not create a ``fix/xxx`` branch from a ``develop/feature_name`` "
+"branch. Always branch from ``develop`` to ensure fixes are correctly "
+"propagated."
+msgstr ""
+"Ne pas créer une branche ``fix/xxx`` à partir d'une branche "
+"``develop/feature_name``. Toujours créer une branche à partir de "
+"``develop`` pour garantir que les corrections sont correctement "
+"propagées."
+
+msgid "Workflow for Critical Hotfixes"
+msgstr "Workflow pour les correctifs urgents"
+
+msgid "Create a hotfix branch from ``main``:"
+msgstr "Créer une branche de correctif urgent à partir de ``main`` :"
+
+msgid "Merge the fix back into ``main``:"
+msgstr "Fusionner le correctif de nouveau dans ``main`` :"
+
+msgid "Cherry-pick the fix into ``develop``:"
+msgstr "Faire un cherry-pick du correctif dans ``develop`` :"
+
+msgid "Delete the hotfix branch:"
+msgstr "Supprimer la branche de correctif urgent :"
+
+msgid ""
+"Do not merge ``fix/xxx`` or ``hotfix/xxx`` directly into ``main`` without"
+" following the workflow. Ensure hotfixes are cherry-picked into "
+"``develop`` to avoid losing fixes in future releases."
+msgstr ""
+"Ne pas fusionner ``fix/xxx`` ou ``hotfix/xxx`` directement dans ``main`` "
+"sans suivre le workflow. Assurez-vous que les correctifs urgents ont fait"
+" l'objet de cherry-pick dans ``develop`` pour éviter de perdre des "
+"correctifs dans les futures versions."
+
+msgid "Best Practices"
+msgstr "Bonnes pratiques"
+
+msgid "Regularly **rebase feature branches** on ``develop`` to stay up to date:"
+msgstr ""
+"Réorganiser régulièrement les branches de fonctionnalités sur ``develop``"
+" pour rester à jour :"
+
+msgid "Avoid long-lived branches to minimize merge conflicts."
+msgstr "Éviter les branches de longue durée pour minimiser les conflits de fusion."
+
+msgid "Ensure bug fixes in ``main`` are **always cherry-picked** to ``develop``."
+msgstr ""
+"S'assurer que les corrections d'anomalies dans ``main`` sont **font "
+"toujours l'objet d'un cherry-pick** dans ``develop``."
+
+msgid ""
+"Clearly differentiate between ``fix/xxx`` (non-urgent fixes) and "
+"``hotfix/xxx`` (critical production fixes)."
+msgstr ""
+"Différencier clairement entre ``fix/xxx`` (correctifs non urgents) et "
+"``hotfix/xxx`` (correctifs critiques pour la production)."
+
+msgid "Takeaway"
+msgstr "Conclusion"
+
+msgid ""
+"This workflow ensures a structured yet flexible development process while"
+" keeping ``main`` stable and ``develop`` always updated with the latest "
+"changes."
+msgstr ""
+"Ce workflow garantit un processus de développement structuré mais "
+"flexible tout en maintenant ``main`` stable et ``develop`` toujours à "
+"jour avec les dernières modifications."
+
+msgid ""
+"It also ensures that bug fixes are correctly managed and propagated "
+"across branches."
+msgstr ""
+"Il garantit également que les corrections d'anomalies sont correctement "
+"gérées et propagées entre les branches."
