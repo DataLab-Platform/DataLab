@@ -535,12 +535,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def copy_metadata(self) -> None:
         """Copy object metadata"""
-        obj = self.objview.get_sel_objects()[0]
-        self.__metadata_clipboard = obj.metadata.copy()
-        # Remove all analysis results because they are specific to the object:
-        for key, value in obj.metadata.items():
-            if ResultShape.match(key, value):
-                self.__metadata_clipboard.pop(key)
+        obj_cpy = self.objview.get_sel_objects()[0].copy()
+        obj_cpy.delete_results()  # Remove all object-specific analysis results
+        self.__metadata_clipboard = obj_cpy.metadata
 
     def paste_metadata(self) -> None:
         """Paste metadata to selected object(s)"""
