@@ -34,6 +34,8 @@ from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview
 from cdl.core.gui.roieditor import TypeROIEditor
 from cdl.core.model.base import (
+    ANN_KEY,
+    ROI_KEY,
     ResultProperties,
     ResultShape,
     TypeObj,
@@ -245,6 +247,18 @@ def create_resultdata_dict(objs: list[SignalObj | ImageObj]) -> dict[str, Result
                     ylabel += f"|ROI{i_roi}"
                 rdata.ylabels.append(ylabel)
     return rdatadict
+
+
+class PasteMetadataParam(gds.DataSet):
+    """Paste metadata parameters"""
+
+    keep_roi = gds.BoolItem(_("Regions of interest"), default=True)
+    keep_resultshapes = gds.BoolItem(_("Result shapes"), default=False).set_pos(col=1)
+    keep_annotations = gds.BoolItem(_("Annotations"), default=True)
+    keep_resultproperties = gds.BoolItem(_("Result properties"), default=False).set_pos(
+        col=1
+    )
+    keep_other = gds.BoolItem(_("Other metadata"), default=True)
 
 
 class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
@@ -535,15 +549,60 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def copy_metadata(self) -> None:
         """Copy object metadata"""
-        obj_cpy = self.objview.get_sel_objects()[0].copy()
-        obj_cpy.delete_results()  # Remove all object-specific analysis results
-        self.__metadata_clipboard = obj_cpy.metadata
+        obj = self.objview.get_sel_objects()[0]
+        self.__metadata_clipboard = obj.metadata.copy()
+        new_pref = obj.short_id + "_"
+        for key, value in obj.metadata.items():
+            if ResultShape.match(key, value):
+                mshape = ResultShape.from_metadata_entry(key, value)
+                if not re.match(obj.PREFIX + r"[0-9]{3}[\s]*", mshape.title):
+                    # Handling additional result (e.g. diameter)
+                    for a_key, a_value in obj.metadata.items():
+                        if isinstance(a_key, str) and a_key.startswith(mshape.title):
+                            self.__metadata_clipboard.pop(a_key)
+                            self.__metadata_clipboard[new_pref + a_key] = a_value
+                    mshape.title = new_pref + mshape.title
+                    # Handling result shape
+                    self.__metadata_clipboard.pop(key)
+                    self.__metadata_clipboard[mshape.key] = value
 
-    def paste_metadata(self) -> None:
+    def paste_metadata(self, param: PasteMetadataParam | None = None) -> None:
         """Paste metadata to selected object(s)"""
+        if param is None:
+            param = PasteMetadataParam(
+                _("Paste metadata"),
+                comment=_(
+                    "Select what to keep from the clipboard.<br><br>"
+                    "Result shapes and annotations, if kept, will be merged with "
+                    "existing ones. <u>All other metadata will be replaced</u>."
+                ),
+            )
+            if not param.edit(parent=self.parent()):
+                return
+        metadata = {}
+        if param.keep_roi and ROI_KEY in self.__metadata_clipboard:
+            metadata[ROI_KEY] = self.__metadata_clipboard[ROI_KEY]
+        if param.keep_annotations and ANN_KEY in self.__metadata_clipboard:
+            metadata[ANN_KEY] = self.__metadata_clipboard[ANN_KEY]
+        if param.keep_resultshapes:
+            for key, value in self.__metadata_clipboard.items():
+                if ResultShape.match(key, value):
+                    metadata[key] = value
+        if param.keep_resultproperties:
+            for key, value in self.__metadata_clipboard.items():
+                if ResultProperties.match(key, value):
+                    metadata[key] = value
+        if param.keep_other:
+            for key, value in self.__metadata_clipboard.items():
+                if (
+                    not ResultShape.match(key, value)
+                    and not ResultProperties.match(key, value)
+                    and key not in (ROI_KEY, ANN_KEY)
+                ):
+                    metadata[key] = value
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=lambda obj: obj.short_id, reverse=True):
-            obj.metadata.update(self.__metadata_clipboard)
+            obj.update_metadata_from(metadata)
         # We have to do a manual refresh in order to force the plot handler to update
         # all plot items, even the ones that are not visible (otherwise, image masks
         # would not be updated after pasting the metadata: see issue #123)
@@ -1324,8 +1383,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                                     x.append(index)
                                 else:
                                     i_xaxis = rdata.xlabels.index(param.xaxis)
-                                    x.append(float(result.shown_array[mask, i_xaxis]))
-                                y.append(float(result.shown_array[mask, i_yaxis]))
+                                    x.append(result.shown_array[mask, i_xaxis][0])
+                                y.append(result.shown_array[mask, i_yaxis][0])
                             self.__add_result_signal(
                                 x, y, f"{title}{roi_suffix}", param.xaxis, param.yaxis
                             )

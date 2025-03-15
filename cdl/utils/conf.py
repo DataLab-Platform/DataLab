@@ -9,6 +9,8 @@ from __future__ import annotations
 import os
 import os.path as osp
 import warnings
+from collections.abc import Generator
+from contextlib import contextmanager
 from typing import Any
 
 from guidata.userconfig import NoDefault, UserConfig
@@ -95,6 +97,18 @@ class Option:
         """Remove configuration option"""
         # No use case for this method yet (quite dangerous!)
         CONF.remove_option(self.section, self.option)
+
+    @contextmanager
+    def temp(self, value: Any) -> Generator[None, None, None]:
+        """Temporarily set configuration option value
+
+        Args:
+            value: new value
+        """
+        old_value = self.get()
+        self.set(value)
+        yield
+        self.set(old_value)
 
 
 class ConfigPathOption(Option):

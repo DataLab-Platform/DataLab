@@ -684,12 +684,15 @@ class ResultShape(ResultProperties):
             return super().create_label_item(obj)
         return None
 
-    def merge_with(self, obj: BaseObj, other_obj: BaseObj | None = None):
-        """Merge object resultshape with another's: obj <-- other_obj
-        or simply merge this resultshape with obj if other_obj is None"""
-        if other_obj is None:
-            other_obj = obj
-        other_value = other_obj.metadata.get(self.key)
+    def merge_with(self, obj: BaseObj, other_metadata: dict[str, Any]) -> None:
+        """Merge object resultshape with another's metadata (obj <-- other obj's
+        metadata)
+
+        Args:
+            obj: object (signal/image)
+            other_metadata: other object metadata
+        """
+        other_value = other_metadata.get(self.key)
         if other_value is not None:
             other = ResultShape.from_metadata_entry(self.key, other_value)
             assert other is not None
@@ -708,7 +711,7 @@ class ResultShape(ResultProperties):
                 self.array = new_array
             else:
                 self.array = np.vstack([self.array, other_array])
-        self.add_to(obj)
+            self.add_to(obj)
 
     def transform_coordinates(self, func: Callable[[np.ndarray], None]) -> None:
         """Transform shape coordinates.
@@ -1556,7 +1559,7 @@ class BaseObj(Generic[TypeROI, TypePlotItem], metaclass=BaseObjMeta):
         # and we will have to add it to this object manually.
         for mshape in self.iterate_resultshapes():
             assert mshape is not None
-            mshape.merge_with(self, other)
+            mshape.merge_with(self, other.metadata)
         # Iterating on `other` object result shapes to find result shapes that are
         # not present in this object, and add them to this object.
         for mshape in other.iterate_resultshapes():
@@ -1687,6 +1690,35 @@ class BaseObj(Generic[TypeROI, TypePlotItem], metaclass=BaseObjMeta):
                 # Metadata entry is a metadata shape or a ROI
                 self.metadata.pop(key)
         self.annotations = None
+
+    def update_metadata_from(self, other_metadata: dict[str, Any]) -> None:
+        """Update metadata from another object's metadata (merge result shapes and
+        annotations, and update the rest of the metadata).
+
+        Args:
+            other_metadata: other object metadata
+        """
+        other_metadata = other_metadata.copy()
+        # Merge result shapes
+        for mshape in self.iterate_resultshapes():
+            assert mshape is not None
+            mshape.merge_with(self, other_metadata)
+        for key, value in other_metadata.copy().items():
+            if ResultShape.match(key, value):
+                mshape = ResultShape.from_metadata_entry(key, value)
+                assert mshape is not None
+                if mshape.key not in self.metadata:
+                    mshape.add_to(self)
+                other_metadata.pop(key)
+        # Merge annotations
+        if ANN_KEY in other_metadata and ANN_KEY in self.metadata:
+            other_ann = json_to_items(other_metadata[ANN_KEY])
+            self_ann = json_to_items(self.metadata[ANN_KEY])
+            self_ann.extend(other_ann)
+            self.metadata[ANN_KEY] = items_to_json(self_ann)
+            other_metadata.pop(ANN_KEY)
+        # Updating the rest of the metadata
+        self.metadata.update(other_metadata)
 
     def get_metadata_option(self, name: str) -> Any:
         """Return metadata option value

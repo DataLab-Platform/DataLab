@@ -9,6 +9,6 @@ call %FUNC% GetVersion CDL_VERSION
 
 set BUILDDIR=%SCRIPTPATH%\..\build\gettext
 cd %SCRIPTPATH%\..\doc
-@REM sphinx-build . %BUILDDIR% -b gettext
-@REM sphinx-intl update -p %BUILDDIR% -l fr --no-obsolete -w 0
+sphinx-build . %BUILDDIR% -b gettext
+sphinx-intl update -p %BUILDDIR% -l fr --no-obsolete -w 0
 call %~dp0gettext rescan

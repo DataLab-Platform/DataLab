@@ -624,7 +624,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     src_dtype = src_obj1.data.dtype
                     dst_dtype = complex if is_complex_dtype(src_dtype) else float
                     dst_obj = src_obj1.copy(dtype=dst_dtype)
-                    dst_obj.delete_results()  # Remove any previous results
+                    if not Conf.proc.keep_results.get():
+                        dst_obj.delete_results()  # Remove any previous results
                     src_objs_pair = [src_obj1]
                     for src_gid in src_gids[1:]:
                         src_obj = src_objs[src_gid][i_pair]
@@ -641,12 +642,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                         )
                         if dst_obj is None:
                             break
-                        dst_obj.update_resultshapes_from(src_obj)
+                        if Conf.proc.keep_results.get():
+                            dst_obj.update_resultshapes_from(src_obj)
                         if src_obj.roi is not None:
                             if dst_obj.roi is None:
                                 dst_obj.roi = src_obj.roi.copy()
                             else:
-                                dst_obj.roi.add_roi(src_obj.roi)
+                                roi = dst_obj.roi
+                                roi.add_roi(src_obj.roi)
+                                dst_obj.roi = roi
                     if func_objs is not None:
                         func_objs(dst_obj, src_objs_pair)
                     short_ids = [obj.short_id for obj in src_objs_pair]
@@ -673,7 +677,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                         src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
                         dst_dtype = complex if is_complex_dtype(src_dtype) else float
                         dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
-                        dst_obj.delete_results()  # Remove any previous results
+                        if not Conf.proc.keep_results.get():
+                            dst_obj.delete_results()  # Remove any previous results
                         dst_obj.roi = None
                         src_objs[src_gid] = [src_obj]
                     else:
@@ -691,12 +696,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                         if dst_obj is None:
                             break
                         dst_objs[src_gid] = dst_obj
-                        dst_obj.update_resultshapes_from(src_obj)
+                        if Conf.proc.keep_results.get():
+                            dst_obj.update_resultshapes_from(src_obj)
                     if src_obj.roi is not None:
                         if dst_obj.roi is None:
                             dst_obj.roi = src_obj.roi.copy()
                         else:
-                            dst_obj.roi.add_roi(src_obj.roi)
+                            roi = dst_obj.roi
+                            roi.add_roi(src_obj.roi)
+                            dst_obj.roi = roi
 
             grps = self.panel.objview.get_sel_groups()
             if grps:

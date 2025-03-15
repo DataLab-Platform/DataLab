@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-15 12:07+0100\n"
+"POT-Creation-Date: 2025-03-15 19:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1832,6 +1832,31 @@ msgstr "Propriétés"
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
 
+msgid "Regions of interest"
+msgstr "Régions d'intérêt"
+
+msgid "Result shapes"
+msgstr "Résultats graphiques"
+
+msgid "Annotations"
+msgstr "Annotations"
+
+msgid "Result properties"
+msgstr "Résultats numériques"
+
+msgid "Other metadata"
+msgstr "Autres métadonnées"
+
+msgid ""
+"Select what to keep from the clipboard.<br><br>Result shapes and "
+"annotations, if kept, will be merged with existing ones. <u>All other "
+"metadata will be replaced</u>."
+msgstr ""
+"Sélectionnez ce que vous souhaitez conserver dans le presse-papier."
+"<br><br>Les formes graphiques et les annotations, si conservées, seront "
+"fusionnées avec celles existantes. <u>Toutes les autres métadonnées seront "
+"remplacées</u>."
+
 msgid "Delete group(s)"
 msgstr "Supprimer le(s) groupe(s)"
 
@@ -1868,12 +1893,6 @@ msgstr "Enregistrer sous"
 
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
-
-msgid "Annotations"
-msgstr "Annotations"
-
-msgid "Regions of interest"
-msgstr "Régions d'intérêt"
 
 msgid "Results"
 msgstr "Résultats"
@@ -2299,6 +2318,9 @@ msgstr "Décalage FFT"
 
 msgid "Extract ROI in single object"
 msgstr "Extraire les ROI dans un seul objet"
+
+msgid "Keep results after computation"
+msgstr "Conserver les résultats après le calcul"
 
 msgid "Ignore warnings"
 msgstr "Ignorer les avertissements"
