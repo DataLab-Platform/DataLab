@@ -161,6 +161,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: extract each ROI in a separate signal or image
     extract_roi_singleobj = conf.Option()
 
+    # Keep analysis results after processing:
+    # - True: keep analysis results (dangerous because results may not be valid anymore)
+    # - False: do not keep analysis results (default)
+    keep_results = conf.Option()
+
     # FFT shift enabled state for signal/image processing:
     # - True: FFT shift is enabled (default)
     # - False: FFT shift is disabled
@@ -309,6 +314,7 @@ def initialize():
     Conf.proc.operation_mode.get("single")
     Conf.proc.fft_shift_enabled.get(True)
     Conf.proc.extract_roi_singleobj.get(False)
+    Conf.proc.keep_results.get(False)
     Conf.proc.ignore_warnings.get(False)
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")

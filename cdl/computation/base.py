@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING
 import guidata.dataset as gds
 import numpy as np
 
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.obj import ResultProperties, create_signal
 
 if TYPE_CHECKING:
@@ -199,7 +199,10 @@ def dst_11(
             title += "|"
     if suffix:  # suffix may be None or an empty string
         title += suffix
-    return src.copy(title=title)
+    dst = src.copy(title=title)
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
+    return dst
 
 
 def dst_n1n(
@@ -225,7 +228,10 @@ def dst_n1n(
         title = f"{name}({src1.short_id}, {src2.short_id})"
     if suffix is not None:
         title += "|" + suffix
-    return src1.copy(title=title)
+    dst = src1.copy(title=title)
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
+    return dst
 
 
 def new_signal_result(

@@ -110,6 +110,7 @@ class ProcSettings(gds.DataSet):
     )
     fft_shift_enabled = gds.BoolItem("", _("FFT shift"))
     extract_roi_singleobj = gds.BoolItem("", _("Extract ROI in single object"))
+    keep_results = gds.BoolItem("", _("Keep results after computation"))
     ignore_warnings = gds.BoolItem("", _("Ignore warnings"))
     _g0 = gds.EndGroup("")
 

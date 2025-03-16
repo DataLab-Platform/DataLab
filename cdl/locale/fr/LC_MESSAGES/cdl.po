@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-15 11:59+0100\n"
+"POT-Creation-Date: 2025-03-15 19:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1122,7 +1122,8 @@ msgstr "Fenêtrage"
 
 msgid "Apply a window function (or apodization): Hanning, Hamming, ..."
 msgstr ""
-"Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, Hamming..."
+"Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, "
+"Hamming, ..."
 
 msgid "Detrending"
 msgstr "Elimination de tendance"
@@ -1172,8 +1173,8 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-msgid "Abscissa of the minimum and maximum"
-msgstr "Abscisse du minimum et du maximum"
+msgid "X values at min/max"
+msgstr "Valeurs de X aux min/max"
 
 msgid ""
 "Compute the smallest argument of the minima and the smallest argument of the "
@@ -1257,9 +1258,6 @@ msgstr "Symétrie ou rotation"
 
 msgid "Flip horizontally"
 msgstr "Symétrie horizontale"
-
-msgid "Flip diagonally"
-msgstr "Symétrie diagonale"
 
 msgid "Flip vertically"
 msgstr "Symétrie verticale"
@@ -1871,6 +1869,31 @@ msgstr "Propriétés"
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
 
+msgid "Regions of interest"
+msgstr "Régions d'intérêt"
+
+msgid "Result shapes"
+msgstr "Résultats graphiques"
+
+msgid "Annotations"
+msgstr "Annotations"
+
+msgid "Result properties"
+msgstr "Résultats numériques"
+
+msgid "Other metadata"
+msgstr "Autres métadonnées"
+
+msgid ""
+"Select what to keep from the clipboard.<br><br>Result shapes and "
+"annotations, if kept, will be merged with existing ones. <u>All other "
+"metadata will be replaced</u>."
+msgstr ""
+"Sélectionnez ce que vous souhaitez conserver dans le presse-papier."
+"<br><br>Les formes graphiques et les annotations, si conservées, seront "
+"fusionnées avec celles existantes. <u>Toutes les autres métadonnées seront "
+"remplacées</u>."
+
 msgid "Delete group(s)"
 msgstr "Supprimer le(s) groupe(s)"
 
@@ -1960,6 +1983,13 @@ msgid ""
 msgstr ""
 "Tracer les résultats obtenus avec des analyses réalisées précédemment."
 "<br><br>Ce graphique est basé sur les résultats associés au préfixe '%s'."
+
+msgid ""
+"All objects associated with results must have the same regions of interest "
+"(ROIs) to plot results together."
+msgstr ""
+"Tous les objets associés aux résultats doivent avoir les mêmes ROIs pour "
+"tracer les résultats ensemble."
 
 msgid "Are you sure you want to delete all results of the selected object(s)?"
 msgstr ""
@@ -2340,6 +2370,9 @@ msgstr "Décalage FFT"
 
 msgid "Extract ROI in single object"
 msgstr "Extraire les ROI dans un seul objet"
+
+msgid "Keep results after computation"
+msgstr "Conserver les résultats après le calcul"
 
 msgid "Ignore warnings"
 msgstr "Ignorer les avertissements"
@@ -3323,7 +3356,7 @@ msgid "Column delimiter character"
 msgstr "Caractère délimiteur de colonne"
 
 msgid "Decimal"
-msgstr ""
+msgstr "Décimal"
 
 msgid "Comma"
 msgstr "Virgule"
@@ -3385,6 +3418,8 @@ msgid ""
 "First column contains the X values\n"
 "(ignored if there is only one column)"
 msgstr ""
+"La première colonne contient les valeurs des X\n"
+"(ignoré s'il n'y a qu'une seule colonne)"
 
 msgid "Raw Data"
 msgstr "Données brutes"

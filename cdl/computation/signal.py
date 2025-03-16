@@ -39,27 +39,31 @@ from cdl.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.obj import ResultProperties, ResultShape, ROI1DParam, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
 
 
 def restore_data_outside_roi(dst: SignalObj, src: SignalObj) -> None:
-    """Restore data outside the region of interest, after a computation, only if the
-    source signal has a ROI, if the data types are the same and if the shapes are the
-    same. Otherwise, do nothing.
+    """Restore data outside the Region Of Interest (ROI) of the input signal
+    after a computation, only if the input signal has a ROI,
+    and if the output signal has the same ROI as the input signal,
+    and if the data types are the same,
+    and if the shapes are the same.
+    Otherwise, do nothing.
 
     Args:
         dst: destination signal object
         src: source signal object
     """
-    if (
-        src.maskdata is not None
-        and dst.xydata.dtype == src.xydata.dtype
-        and dst.xydata.shape == src.xydata.shape
-    ):
-        dst.xydata[src.maskdata] = src.xydata[src.maskdata]
+    if src.maskdata is not None and dst.maskdata is not None:
+        if (
+            np.array_equal(src.maskdata, dst.maskdata)
+            and dst.xydata.dtype == src.xydata.dtype
+            and dst.xydata.shape == src.xydata.shape
+        ):
+            dst.xydata[src.maskdata] = src.xydata[src.maskdata]
 
 
 class Wrap11Func:
@@ -251,6 +255,8 @@ def compute_arithmetic(
     initial_dtype = src1.xydata.dtype
     title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
     dst = src1.copy(title=title)
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
     o, a, b = p.operator, p.factor, p.constant
     if o in ("×", "/") and a == 0.0:
         dst.y = np.ones_like(src1.y) * b

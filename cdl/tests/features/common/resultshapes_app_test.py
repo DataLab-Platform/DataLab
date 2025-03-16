@@ -15,6 +15,7 @@ import numpy as np
 
 import cdl.obj
 import cdl.param
+from cdl.config import Conf
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
 
@@ -91,15 +92,16 @@ def test_resultshapes():
             panel.add_object(obj)
         panel.show_results()
         panel.plot_results()
-        # Test merging result shapes (duplicate obj, then compute average):
-        for panel in (win.signalpanel, win.imagepanel):
-            panel.objview.select_objects((2,))
-            panel.duplicate_object()
-            panel.objview.select_objects((2, len(panel)))
-            panel.processor.compute_average()
-            __check_resultshapes_merge(panel[2], panel[len(panel)])
-            if panel is win.imagepanel:
-                __check_roi_merge(panel[2], panel[len(panel)])
+        with Conf.proc.keep_results.temp(True):
+            # Test merging result shapes (duplicate obj, then compute average):
+            for panel in (win.signalpanel, win.imagepanel):
+                panel.objview.select_objects((2,))
+                panel.duplicate_object()
+                panel.objview.select_objects((2, len(panel)))
+                panel.processor.compute_average()
+                __check_resultshapes_merge(panel[2], panel[len(panel)])
+                if panel is win.imagepanel:
+                    __check_roi_merge(panel[2], panel[len(panel)])
 
 
 if __name__ == "__main__":

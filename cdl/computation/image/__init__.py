@@ -45,7 +45,7 @@ from cdl.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.obj import (
     BaseProcParam,
     ImageObj,
@@ -60,8 +60,10 @@ VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 
 
 def restore_data_outside_roi(dst: ImageObj, src: ImageObj) -> None:
-    """Restore data outside the Region Of Interest (ROI) of the input image after a
-    computation, only if the input image has a ROI, if the data types are compatible,
+    """Restore data outside the Region Of Interest (ROI) of the input image
+    after a computation, only if the input image has a ROI,
+    and if the output image has the same ROI as the input image,
+    and if the data types are compatible,
     and if the shapes are the same.
     Otherwise, do nothing.
 
@@ -69,12 +71,15 @@ def restore_data_outside_roi(dst: ImageObj, src: ImageObj) -> None:
         dst: output image object
         src: input image object
     """
-    if (
-        src.maskdata is not None
-        and (dst.data.dtype == src.data.dtype or not is_integer_dtype(dst.data.dtype))
-        and dst.data.shape == src.data.shape
-    ):
-        dst.data[src.maskdata] = src.data[src.maskdata]
+    if src.maskdata is not None and dst.maskdata is not None:
+        if (
+            np.array_equal(src.maskdata, dst.maskdata)
+            and (
+                dst.data.dtype == src.data.dtype or not is_integer_dtype(dst.data.dtype)
+            )
+            and dst.data.shape == src.data.shape
+        ):
+            dst.data[src.maskdata] = src.data[src.maskdata]
 
 
 class Wrap11Func:
@@ -289,6 +294,8 @@ def compute_arithmetic(src1: ImageObj, src2: ImageObj, p: ArithmeticParam) -> Im
     initial_dtype = src1.data.dtype
     title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
     dst = src1.copy(title=title)
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
     o, a, b = p.operator, p.factor, p.constant
     # Apply operator
     if o in ("×", "/") and a == 0.0:
@@ -1417,6 +1424,7 @@ def calc_resultshape(
             )
 
         if coords.size:
+            coords = np.array(coords, dtype=float)
             if coords.shape[1] % 2 == 0:
                 # Coordinates are in the form [x0, y0, x1, y1, ...]
                 colx, coly = slice(None, None, 2), slice(1, None, 2)
