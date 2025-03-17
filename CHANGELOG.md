@@ -16,6 +16,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Fixed [Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138) - Image colormaps were no longer stored in metadata (and serialized in HDF5 files) since PlotPy v2.6.3 (this commit, specifically: [PlotPyStack/PlotPy@a37af8a](https://github.com/PlotPyStack/PlotPy/commit/a37af8ae8392e5e3655e5c34b67a7cd1544ea845))
 * Fixed [Issue #137](https://github.com/DataLab-Platform/DataLab/issues/137) - Arithmetic operations and signal interpolation: dialog box with parameters is not displayed
 * Fixed [Issue #136](https://github.com/DataLab-Platform/DataLab/issues/136) - When processing a signal or an image, the analysis result is kept from original object
   * Before this fix, when processing a signal or an image (e.g. when applying a filter, a threshold, etc.), the analysis result was kept from the original object, and was not updated with the new data. Thus the analysis result was not meaningful anymore, and was misleading the user.
