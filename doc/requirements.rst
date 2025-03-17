@@ -17,7 +17,7 @@ The :mod:`cdl` package requires the following Python modules:
       -  >= 2.7
       - Curve and image plotting tools for Python/Qt applications
     * - SciPy
-      - >=1.5
+      -  >= 1.5, < 1.15.0
       - Fundamental algorithms for scientific computing in Python
     * - scikit-image
       -  >= 0.18
@@ -30,7 +30,7 @@ The :mod:`cdl` package requires the following Python modules:
       - PyWavelets, wavelet transform module
     * - psutil
       -  >= 5.7
-      - Cross-platform lib for process and system monitoring in Python.
+      - Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7.
     * - PyQt5
       - >=5.11
       - Python bindings for the Qt cross platform application toolkit
