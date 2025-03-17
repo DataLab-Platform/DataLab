@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-27 11:30+0100\n"
+"POT-Creation-Date: 2025-03-05 15:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.16.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: cdl.core.gui.processor:2 of
 msgid "Processor"
@@ -650,6 +650,18 @@ msgstr ""
 msgid "Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`"
 msgstr ""
 
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_cartesian2polar:1 of
+msgid ""
+"Convert cartesian to polar coordinates with "
+":py:func:`cdl.computation.signal.compute_cartesian2polar`"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_polar2cartesian:1 of
+msgid ""
+"Convert polar to cartesian coordinates with "
+":py:func:`cdl.computation.signal.compute_polar2cartesian`."
+msgstr ""
+
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_normalize:1 of
 msgid "Normalize data with :py:func:`cdl.computation.signal.compute_normalize`"
 msgstr ""
@@ -905,7 +917,7 @@ msgid ""
 msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_y:1 of
-msgid "Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`"
+msgid "Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`."
 msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period:1
@@ -1041,7 +1053,7 @@ msgid "Compute histogram with :py:func:`cdl.computation.image.compute_histogram`
 msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes:1 of
-msgid "Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`"
+msgid "Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`."
 msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_abs:1 of

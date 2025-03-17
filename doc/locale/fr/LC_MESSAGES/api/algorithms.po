@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-27 11:30+0100\n"
+"POT-Creation-Date: 2025-03-05 18:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.16.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: cdl.algorithms:2 of
 msgid "Algorithms (:mod:`cdl.algorithms`)"
@@ -1355,3 +1355,42 @@ msgid "Ellipse X/Y diameters coordinates, in the form of a 2D array (N, 8)"
 msgstr ""
 "Coordonnées de diamètres X/Y de l'ellipse, sous la forme d'un tableau 2D "
 "(N, 8)"
+
+#: cdl.algorithms.coordinates.cartesian2polar:1 of
+msgid "Convert Cartesian coordinates to polar coordinates."
+msgstr "Convertit les coordonnées de diamètre X du cercle en centre et rayon"
+
+#: cdl.algorithms.coordinates.cartesian2polar:3 of
+msgid "Cartesian x-coordinate."
+msgstr ""
+
+#: cdl.algorithms.coordinates.cartesian2polar:4 of
+msgid "Cartesian y-coordinate."
+msgstr ""
+
+#: cdl.algorithms.coordinates.cartesian2polar:5
+#: cdl.algorithms.coordinates.polar2cartesian:5 of
+msgid "Unit of the angle ('rad' or 'deg')."
+msgstr ""
+
+#: cdl.algorithms.coordinates.cartesian2polar:7 of
+msgid "Polar coordinates (r, theta) where r is the radius and theta is the angle."
+msgstr ""
+
+#: cdl.algorithms.coordinates.polar2cartesian:1 of
+msgid "Convert polar coordinates to Cartesian coordinates."
+msgstr ""
+
+#: cdl.algorithms.coordinates.polar2cartesian:3 of
+msgid "Polar radius."
+msgstr ""
+
+#: cdl.algorithms.coordinates.polar2cartesian:4 of
+msgid "Polar angle."
+msgstr ""
+
+#: cdl.algorithms.coordinates.polar2cartesian:7 of
+msgid ""
+"Cartesian coordinates (x, y) where x is the x-coordinate and y is the "
+"y-coordinate."
+msgstr ""

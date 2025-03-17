@@ -178,3 +178,44 @@ def array_ellipse_to_center_axes_angle(data: np.ndarray) -> np.ndarray:
     theta = np.arctan2(y1 - y0, x1 - x0)
     result = np.column_stack((xc, yc, a, b, theta)).astype(float)
     return result
+
+
+def cartesian2polar(
+    x: np.ndarray, y: np.ndarray, unit: str = "rad"
+) -> tuple[np.ndarray, np.ndarray]:
+    """Convert Cartesian coordinates to polar coordinates.
+
+    Args:
+        x: Cartesian x-coordinate.
+        y: Cartesian y-coordinate.
+        unit: Unit of the angle ('rad' or 'deg').
+
+    Returns:
+        Polar coordinates (r, theta) where r is the radius and theta is the angle.
+    """
+    r = np.sqrt(x**2 + y**2)
+    theta = np.arctan2(y, x)
+    if unit == "deg":
+        theta = np.rad2deg(theta)
+    return r, theta
+
+
+def polar2cartesian(
+    r: np.ndarray, theta: np.ndarray, unit: str = "rad"
+) -> tuple[np.ndarray, np.ndarray]:
+    """Convert polar coordinates to Cartesian coordinates.
+
+    Args:
+        r: Polar radius.
+        theta: Polar angle.
+        unit: Unit of the angle ('rad' or 'deg').
+
+    Returns:
+        Cartesian coordinates (x, y) where x is the x-coordinate and y is the
+        y-coordinate.
+    """
+    if unit == "deg":
+        theta = np.deg2rad(theta)
+    x = r * np.cos(theta)
+    y = r * np.sin(theta)
+    return x, y

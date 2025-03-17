@@ -51,6 +51,16 @@ Reverse X-axis
 
 Create a new signal which is the result of reversing X data.
 
+Convert to Cartesian coordinates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new signal which is the result of converting polar coordinates to Cartesian coordinates.
+
+Convert to polar coordinates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new signal which is the result of converting Cartesian coordinates to polar coordinates.
+
 Level adjustment
 ^^^^^^^^^^^^^^^^
 

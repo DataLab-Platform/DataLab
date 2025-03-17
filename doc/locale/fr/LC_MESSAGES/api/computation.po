@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-14 11:53+0100\n"
+"POT-Creation-Date: 2025-03-05 15:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -128,6 +128,7 @@ msgstr ""
 #: cdl.computation.image.restoration.DenoiseWaveletParam
 #: cdl.computation.image.threshold.ThresholdParam
 #: cdl.computation.signal.AllanVarianceParam
+#: cdl.computation.signal.AngleUnitParam
 #: cdl.computation.signal.BandPassFilterParam
 #: cdl.computation.signal.BandStopFilterParam
 #: cdl.computation.signal.BaseHighLowBandParam
@@ -164,6 +165,7 @@ msgstr ""
 #: cdl.computation.image.restoration.DenoiseWaveletParam:19
 #: cdl.computation.image.threshold.ThresholdParam:7
 #: cdl.computation.image.threshold.ThresholdParam:25
+#: cdl.computation.signal.AngleUnitParam:7
 #: cdl.computation.signal.BandPassFilterParam:7
 #: cdl.computation.signal.BandStopFilterParam:7
 #: cdl.computation.signal.BaseHighLowBandParam:7
@@ -1625,6 +1627,52 @@ msgstr ""
 
 #: cdl.computation.signal.compute_reverse_x:1 of
 msgid "Reverse x-axis"
+msgstr ""
+
+#: cdl.computation.signal.AngleUnitParam:1 of
+msgid "Choice of angle unit."
+msgstr ""
+
+#: cdl.computation.signal.AngleUnitParam:5
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "Angle unit\\.  Single choice from: 'radian', 'degree'. Default: 'radian'."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid ""
+"Returns a new instance of :py:class:`AngleUnitParam` with the fields set "
+"to the given values."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:6 of
+msgid "New instance of :py:class:`AngleUnitParam`."
+msgstr ""
+
+#: cdl.computation.signal.compute_cartesian2polar:1 of
+msgid ""
+"Convert cartesian coordinates to polar coordinates with "
+":py:func:`cdl.algorithms.coordinates.cartesian2polar`."
+msgstr ""
+
+#: cdl.computation.signal.compute_cartesian2polar:4
+#: cdl.computation.signal.compute_polar2cartesian:4 of
+msgid "Source signal."
+msgstr ""
+
+#: cdl.computation.signal.compute_cartesian2polar:5
+#: cdl.computation.signal.compute_polar2cartesian:5 of
+msgid "Parameters."
+msgstr ""
+
+#: cdl.computation.signal.compute_cartesian2polar:7
+#: cdl.computation.signal.compute_polar2cartesian:7 of
+msgid "Result signal object."
+msgstr ""
+
+#: cdl.computation.signal.compute_polar2cartesian:1 of
+msgid ""
+"Convert polar coordinates to cartesian coordinates with "
+":py:func:`cdl.algorithms.coordinates.polar2cartesian`."
 msgstr ""
 
 #: cdl.computation.signal.AllanVarianceParam:1 of

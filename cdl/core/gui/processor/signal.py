@@ -226,6 +226,32 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         """Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`"""
         self.compute_11(cps.compute_reverse_x, title=_("Reverse X axis"))
 
+    @qt_try_except()
+    def compute_cartesian2polar(
+        self, param: cdl.param.AngleUnitParam | None = None
+    ) -> None:
+        """Convert cartesian to polar coordinates
+        with :py:func:`cdl.computation.signal.compute_cartesian2polar`"""
+        self.compute_11(
+            cps.compute_cartesian2polar,
+            param,
+            cps.AngleUnitParam,
+            title=_("Cartesian to Polar"),
+        )
+
+    @qt_try_except()
+    def compute_polar2cartesian(
+        self, param: cdl.param.AngleUnitParam | None = None
+    ) -> None:
+        """Convert polar to cartesian coordinates
+        with :py:func:`cdl.computation.signal.compute_polar2cartesian`."""
+        self.compute_11(
+            cps.compute_polar2cartesian,
+            param,
+            cps.AngleUnitParam,
+            title=_("Polar to Cartesian"),
+        )
+
     # ------Signal Processing
     @qt_try_except()
     def compute_normalize(self, param: cdl.param.NormalizeParam | None = None) -> None:
@@ -725,9 +751,9 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_x_at_y(
-        self, param: cps.DynamicParam | None = None
+        self, param: cps.FindAbscissaParam | None = None
     ) -> dict[str, ResultProperties]:
-        """Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`"""
+        """Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`."""
         return self.compute_10(
             cps.compute_x_at_y,
             param,

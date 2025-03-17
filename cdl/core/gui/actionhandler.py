@@ -867,6 +867,15 @@ class SignalActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_reverse_x,
                     icon_name="reverse_signal_x.svg",
                 )
+                self.new_action(
+                    _("Convert to Cartesian coordinates"),
+                    triggered=self.panel.processor.compute_polar2cartesian,
+                )
+                self.new_action(
+                    _("Convert to polar coordinates"),
+                    triggered=self.panel.processor.compute_cartesian2polar,
+                )
+
             with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
                 self.new_action(
                     _("Low-pass filter"),
