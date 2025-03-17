@@ -1237,11 +1237,8 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
 class AngleUnitParam(gds.DataSet):
     """Choice of angle unit."""
 
-    units = (
-        ("radian", _("Radian")),
-        ("degree", _("Degree")),
-    )
-    unit = gds.ChoiceItem(_("Angle unit"), units, default="radian")
+    units = (("rad", _("Radian")), ("deg", _("Degree")))
+    unit = gds.ChoiceItem(_("Angle unit"), units, default="rad")
 
 
 def compute_cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
