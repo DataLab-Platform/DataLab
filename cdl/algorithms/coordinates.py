@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 import numpy as np
 
 
@@ -181,7 +183,7 @@ def array_ellipse_to_center_axes_angle(data: np.ndarray) -> np.ndarray:
 
 
 def cartesian2polar(
-    x: np.ndarray, y: np.ndarray, unit: str = "rad"
+    x: np.ndarray, y: np.ndarray, unit: Literal["rad", "deg"] = "rad"
 ) -> tuple[np.ndarray, np.ndarray]:
     """Convert Cartesian coordinates to polar coordinates.
 
@@ -193,6 +195,8 @@ def cartesian2polar(
     Returns:
         Polar coordinates (r, theta) where r is the radius and theta is the angle.
     """
+    assert x.shape == y.shape, "x and y must have the same shape"
+    assert unit in ["rad", "deg"], "unit must be 'rad' or 'deg'"
     r = np.sqrt(x**2 + y**2)
     theta = np.arctan2(y, x)
     if unit == "deg":
@@ -201,7 +205,7 @@ def cartesian2polar(
 
 
 def polar2cartesian(
-    r: np.ndarray, theta: np.ndarray, unit: str = "rad"
+    r: np.ndarray, theta: np.ndarray, unit: Literal["rad", "deg"] = "rad"
 ) -> tuple[np.ndarray, np.ndarray]:
     """Convert polar coordinates to Cartesian coordinates.
 
@@ -214,6 +218,8 @@ def polar2cartesian(
         Cartesian coordinates (x, y) where x is the x-coordinate and y is the
         y-coordinate.
     """
+    assert r.shape == theta.shape, "r and theta must have the same shape"
+    assert unit in ["rad", "deg"], "unit must be 'rad' or 'deg'"
     if unit == "deg":
         theta = np.deg2rad(theta)
     x = r * np.cos(theta)
