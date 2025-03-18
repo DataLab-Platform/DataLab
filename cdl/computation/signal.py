@@ -1269,6 +1269,12 @@ def compute_polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
 
     Returns:
         Result signal object.
+
+    .. note::
+
+        This function assumes that the x-axis represents the radius and the y-axis
+        represents the angle. Negative values are not allowed for the radius, and will
+        be clipped to 0 (a warning will be raised).
     """
     dst = dst_11(src, "Cartesian coordinates", f"unit={p.unit}")
     r, theta = src.get_data()

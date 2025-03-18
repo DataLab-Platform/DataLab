@@ -56,6 +56,13 @@ Convert to Cartesian coordinates
 
 Create a new signal which is the result of converting polar coordinates to Cartesian coordinates.
 
+.. note::
+
+    This function assumes that the x-axis represents the radius and the y-axis
+    represents the angle. Negative values are not allowed for the radius, and will
+    be clipped to 0 (a warning will be raised).
+
+
 Convert to polar coordinates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

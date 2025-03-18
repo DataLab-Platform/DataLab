@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import Literal
 
 import numpy as np
@@ -217,9 +218,18 @@ def polar2cartesian(
     Returns:
         Cartesian coordinates (x, y) where x is the x-coordinate and y is the
         y-coordinate.
+
+    .. note::
+
+        Negative radius values are not supported. They will be set to 0.
     """
     assert r.shape == theta.shape, "r and theta must have the same shape"
     assert unit in ["rad", "deg"], "unit must be 'rad' or 'deg'"
+    if np.any(r < 0):
+        warnings.warn(
+            "Negative radius values are not supported. They will be set to 0."
+        )
+        r = np.maximum(r, 0)
     if unit == "deg":
         theta = np.deg2rad(theta)
     x = r * np.cos(theta)
