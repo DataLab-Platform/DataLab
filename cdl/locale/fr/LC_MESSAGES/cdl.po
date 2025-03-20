@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-15 19:25+0100\n"
+"POT-Creation-Date: 2025-03-20 14:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1945,12 +1945,6 @@ msgstr "Enregistrer sous"
 
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
-
-msgid "Annotations"
-msgstr "Annotations"
-
-msgid "Regions of interest"
-msgstr "Régions d'intérêt"
 
 msgid "Results"
 msgstr "Résultats"

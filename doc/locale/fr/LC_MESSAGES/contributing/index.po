@@ -8,286 +8,125 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-13 18:41+0100\n"
+"POT-Creation-Date: 2025-03-20 16:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: ../../doc/contributing/index.rst:-1
-msgid ""
-"Contribute to DataLab project, the open-source scientific data analysis "
-"platform"
-msgstr ""
-"Contribuer au projet DataLab, la plateforme open-source d'analyse de "
-"données scientifiques"
+msgid "Contribute to DataLab project, the open-source scientific data analysis platform"
+msgstr "Contribuer au projet DataLab, la plateforme open-source d'analyse de données scientifiques"
 
-#: ../../doc/contributing/index.rst:-1
-msgid ""
-"DataLab, contribute, open-source, scientific, data, analysis, platform, "
-"signal processing, image processing"
-msgstr ""
-"DataLab, contribuer, open-source, scientifique, données, analyse, "
-"plateforme, traitement du signal, traitement d'images"
+msgid "DataLab, contribute, open-source, scientific, data, analysis, platform, signal processing, image processing"
+msgstr "DataLab, contribuer, open-source, scientifique, données, analyse, plateforme, traitement du signal, traitement d'images"
 
-#: ../../doc/contributing/index.rst:2
 msgid "Contributing"
 msgstr "Contribuer"
 
-#: ../../doc/contributing/index.rst:8
-msgid ""
-"DataLab is **your** platform. If you want it to be improved, you **can** "
-"contribute to the project, whether you are a developer or not."
-msgstr ""
-"DataLab est **votre** plateforme. Si vous souhaitez qu'elle s'améliore, "
-"vous **pouvez** contribuer au projet, que vous soyez développeur ou non."
+msgid "DataLab is **your** platform. If you want it to be improved, you **can** contribute to the project, whether you are a developer or not."
+msgstr "DataLab est **votre** plateforme. Si vous souhaitez qu'elle s'améliore, vous **pouvez** contribuer au projet, que vous soyez développeur ou non."
 
-#: ../../doc/contributing/index.rst:11
-msgid ""
-"There are many ways to contribute to DataLab project, depending on how "
-"much time you have, your experience with open source projects, and your "
-"skills."
-msgstr ""
-"Il existe de nombreuses façons de contribuer au projet DataLab, en "
-"fonction du temps dont vous disposez, de votre expérience avec les "
-"projets open source et de vos compétences."
+msgid "There are many ways to contribute to DataLab project, depending on how much time you have, your experience with open source projects, and your skills."
+msgstr "Il existe de nombreuses façons de contribuer au projet DataLab, en fonction du temps dont vous disposez, de votre expérience avec les projets open source et de vos compétences."
 
-#: ../../doc/contributing/index.rst:15
 msgid "Share your ideas and experiences"
 msgstr "Partagez vos idées et vos expériences"
 
-#: ../../doc/contributing/index.rst:19 ../../doc/contributing/index.rst:66
 msgid ":octicon:`info;1em;sd-text-info` :bdg-success-line:`No coding required`"
 msgstr ":octicon:`info;1em;sd-text-info` :bdg-success-line:`Aucun codage requis`"
 
-#: ../../doc/contributing/index.rst:21
-msgid ""
-"Besides the classic bug reports and feature requests, you can share your "
-"ideas and experiences for improving DataLab. In particular, we are very "
-"interested in your feedback on the documentation and tutorials. Moreover,"
-" if you have a use case that you would like to share with the community, "
-"please let us know."
-msgstr ""
-"Outre les rapports d'anomalies classiques et les demandes de "
-"fonctionnalités, vous pouvez partager vos idées et vos expériences pour "
-"améliorer DataLab. En particulier, nous sommes très intéressés par vos "
-"commentaires sur la documentation et les tutoriels. De plus, si vous avez"
-" un cas d'utilisation que vous souhaitez partager avec la communauté, "
-"faites-le nous savoir."
+msgid "Besides the classic bug reports and feature requests, you can share your ideas and experiences for improving DataLab. In particular, we are very interested in your feedback on the documentation and tutorials. Moreover, if you have a use case that you would like to share with the community, please let us know."
+msgstr "Outre les rapports d'anomalies classiques et les demandes de fonctionnalités, vous pouvez partager vos idées et vos expériences pour améliorer DataLab. En particulier, nous sommes très intéressés par vos commentaires sur la documentation et les tutoriels. De plus, si vous avez un cas d'utilisation que vous souhaitez partager avec la communauté, faites-le nous savoir."
 
-#: ../../doc/contributing/index.rst:31
-msgid ""
-"<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
-"sd-octicon-bug sd-text-info\" viewBox=\"0 0 16 16\" aria-"
-"hidden=\"true\"><path d=\"M4.72.22a.75.75 0 0 1 1.06 0l1 .999a3.488 3.488"
-" 0 0 1 2.441 0l.999-1a.748.748 0 0 1 1.265.332.75.75 0 0 "
-"1-.205.729l-.775.776c.616.63.995 1.493.995 2.444v.327c0 "
-".1-.009.197-.025.292.408.14.764.392 1.029.722l1.968-.787a.75.75 0 0 1 "
-".556 1.392L13 7.258V9h2.25a.75.75 0 0 1 0 1.5H13v.5c0 .409-.049.806-.141 "
-"1.186l2.17.868a.75.75 0 0 1-.557 1.392l-2.184-.873A4.997 4.997 0 0 1 8 "
-"16a4.997 4.997 0 0 1-4.288-2.427l-2.183.873a.75.75 0 0 "
-"1-.558-1.392l2.17-.868A5.036 5.036 0 0 1 3 11v-.5H.75a.75.75 0 0 1 "
-"0-1.5H3V7.258L.971 6.446a.75.75 0 0 1 "
-".558-1.392l1.967.787c.265-.33.62-.583 1.03-.722a1.677 1.677 0 0 "
-"1-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72 1.28a.75.75 0 0 1 "
-"0-1.06Zm.53 6.28a.75.75 0 0 0-.75.75V11a3.5 3.5 0 1 0 7 0V7.25a.75.75 0 0"
-" 0-.75-.75ZM6.173 5h3.654A.172.172 0 0 0 10 4.827V4.5a2 2 0 1 0-4 "
-"0v.327c0 .096.077.173.173.173Z\"></path></svg> Bugs"
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-bug sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M4.72.22a.75.75 0 0 1 1.06 0l1 .999a3.488 3.488 0 0 1 2.441 0l.999-1a.748.748 0 0 1 1.265.332.75.75 0 0 1-.205.729l-.775.776c.616.63.995 1.493.995 2.444v.327c0 .1-.009.197-.025.292.408.14.764.392 1.029.722l1.968-.787a.75.75 0 0 1 .556 1.392L13 7.258V9h2.25a.75.75 0 0 1 0 1.5H13v.5c0 .409-.049.806-.141 1.186l2.17.868a.75.75 0 0 1-.557 1.392l-2.184-.873A4.997 4.997 0 0 1 8 16a4.997 4.997 0 0 1-4.288-2.427l-2.183.873a.75.75 0 0 1-.558-1.392l2.17-.868A5.036 5.036 0 0 1 3 11v-.5H.75a.75.75 0 0 1 0-1.5H3V7.258L.971 6.446a.75.75 0 0 1 .558-1.392l1.967.787c.265-.33.62-.583 1.03-.722a1.677 1.677 0 0 1-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72 1.28a.75.75 0 0 1 0-1.06Zm.53 6.28a.75.75 0 0 0-.75.75V11a3.5 3.5 0 1 0 7 0V7.25a.75.75 0 0 0-.75-.75ZM6.173 5h3.654A.172.172 0 0 0 10 4.827V4.5a2 2 0 1 0-4 0v.327c0 .096.077.173.173.173Z\"></path></svg> Bugs"
 msgstr "Anomalies"
 
-#: ../../doc/contributing/index.rst:34
 msgid "Reporting a bug"
 msgstr "Signaler une anomalie"
 
-#: ../../doc/contributing/index.rst:36
-msgid ""
-"<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
-"sd-octicon-light-bulb sd-text-info\" viewBox=\"0 0 16 16\" aria-"
-"hidden=\"true\"><path d=\"M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 "
-"1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 "
-"1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 "
-"0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 "
-"2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 "
-"3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751"
-" 0 0 "
-"1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304"
-" 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0"
-" 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75"
-" 0 0 1-.75-.75Z\"></path></svg> Enhancements"
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-light-bulb sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z\"></path></svg> Enhancements"
 msgstr "Améliorations"
 
-#: ../../doc/contributing/index.rst:39
 msgid "Suggesting an enhancement"
 msgstr "Suggérer une amélioration"
 
-#: ../../doc/contributing/index.rst:41
-msgid ""
-"<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
-"sd-octicon-book sd-text-info\" viewBox=\"0 0 16 16\" aria-"
-"hidden=\"true\"><path d=\"M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 "
-"2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 "
-".75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 "
-"0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 "
-"5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25"
-" 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 "
-"4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 "
-"0 0-2.25 2.25Z\"></path></svg> Documentation"
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-book sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z\"></path></svg> Documentation"
 msgstr "Documentation"
 
-#: ../../doc/contributing/index.rst:44
 msgid "Suggesting a documentation topic"
 msgstr "Suggérer un sujet de documentation"
 
-#: ../../doc/contributing/index.rst:46
-msgid ""
-"<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
-"sd-octicon-mortar-board sd-text-info\" viewBox=\"0 0 16 16\" aria-"
-"hidden=\"true\"><path d=\"M7.693 1.066a.747.747 0 0 1 .614 0l7.25 "
-"3.25a.75.75 0 0 1 0 1.368L13 6.831v2.794c0 1.024-.81 1.749-1.66 "
-"2.173-.893.447-2.075.702-3.34.702-.278 0-.55-.012-.816-.036a.75.75 0 0 1 "
-".133-1.494c.22.02.45.03.683.03 1.082 0 2.025-.221 "
-"2.67-.543.69-.345.83-.682.83-.832V7.503L8.307 8.934a.747.747 0 0 1-.614 "
-"0L4 7.28v1.663c.296.105.575.275.812.512.438.438.688 1.059.688 "
-"1.796v3a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75v-"
-"3c0-.737.25-1.358.688-1.796.237-.237.516-.407.812-.512V6.606L.443 "
-"5.684a.75.75 0 0 1 0-1.368ZM2.583 5 8 7.428 13.416 5 8 2.572ZM2.5 "
-"11.25v2.25H4v-2.25c0-.388-.125-.611-.25-.735a.697.697 0 0 "
-"0-.5-.203.707.707 0 0 0-.5.203c-.125.124-.25.347-.25.735Z\"></path></svg>"
-" Tutorial"
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-mortar-board sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M7.693 1.066a.747.747 0 0 1 .614 0l7.25 3.25a.75.75 0 0 1 0 1.368L13 6.831v2.794c0 1.024-.81 1.749-1.66 2.173-.893.447-2.075.702-3.34.702-.278 0-.55-.012-.816-.036a.75.75 0 0 1 .133-1.494c.22.02.45.03.683.03 1.082 0 2.025-.221 2.67-.543.69-.345.83-.682.83-.832V7.503L8.307 8.934a.747.747 0 0 1-.614 0L4 7.28v1.663c.296.105.575.275.812.512.438.438.688 1.059.688 1.796v3a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75v-3c0-.737.25-1.358.688-1.796.237-.237.516-.407.812-.512V6.606L.443 5.684a.75.75 0 0 1 0-1.368ZM2.583 5 8 7.428 13.416 5 8 2.572ZM2.5 11.25v2.25H4v-2.25c0-.388-.125-.611-.25-.735a.697.697 0 0 0-.5-.203.707.707 0 0 0-.5.203c-.125.124-.25.347-.25.735Z\"></path></svg> Tutorial"
 msgstr "Tutoriel"
 
-#: ../../doc/contributing/index.rst:49
 msgid "Suggesting a tutorial topic"
 msgstr "Suggérer un sujet de tutoriel"
 
-#: ../../doc/contributing/index.rst:54
 msgid "Without coding, you can contribute to DataLab project by:"
 msgstr "Sans coder une seule ligne, vous pouvez contribuer au projet DataLab en :"
 
-#: ../../doc/contributing/index.rst:56
-msgid ""
-"`Reporting a bug <https://github.com/DataLab-"
-"Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
-msgstr ""
-"`Signaler une anomalie <https://github.com/DataLab-"
-"Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
+msgid "`Reporting a bug <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
+msgstr "`Signaler une anomalie <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
 
-#: ../../doc/contributing/index.rst:57
-msgid ""
-"`Suggesting an enhancement <https://github.com/DataLab-"
-"Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
-msgstr ""
-"`Suggérer une amélioration <https://github.com/DataLab-"
-"Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
+msgid "`Suggesting an enhancement <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
+msgstr "`Suggérer une amélioration <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
 
-#: ../../doc/contributing/index.rst:58
-msgid ""
-"`Suggesting a documentation topic <https://github.com/DataLab-"
-"Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
-msgstr ""
-"`Suggérer un sujet de documentation <https://github.com/DataLab-"
-"Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
+msgid "`Suggesting a documentation topic <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
+msgstr "`Suggérer un sujet de documentation <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
 
-#: ../../doc/contributing/index.rst:59
-msgid ""
-"`Suggesting a tutorial topic <https://github.com/DataLab-"
-"Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
-msgstr ""
-"`Suggérer un sujet de tutoriel <https://github.com/DataLab-"
-"Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
+msgid "`Suggesting a tutorial topic <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
+msgstr "`Suggérer un sujet de tutoriel <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
 
-#: ../../doc/contributing/index.rst:62
 msgid "Share your scientific/technical knowledge"
 msgstr "Partagez vos connaissances scientifiques/techniques"
 
-#: ../../doc/contributing/index.rst:68
-msgid ""
-"Your technical or scientific knowledge is also very valuable to us, as "
-"you may directly contribute to the documentation or tutorials. Or, "
-"better, if you want to write a tutorial, we will be happy to help you."
-msgstr ""
-"Vos connaissances techniques ou scientifiques sont également très "
-"précieuses pour nous, car vous pouvez contribuer directement à la "
-"documentation ou aux tutoriels. Ou, mieux encore, si vous souhaitez "
-"rédiger un tutoriel, nous serons heureux de vous aider."
+msgid "Your technical or scientific knowledge is also very valuable to us, as you may directly contribute to the documentation or tutorials. Or, better, if you want to write a tutorial, we will be happy to help you."
+msgstr "Vos connaissances techniques ou scientifiques sont également très précieuses pour nous, car vous pouvez contribuer directement à la documentation ou aux tutoriels. Ou, mieux encore, si vous souhaitez rédiger un tutoriel, nous serons heureux de vous aider."
 
-#: ../../doc/contributing/index.rst:72
 msgid "Again without coding, you can contribute to DataLab project by:"
 msgstr "Encore une fois sans coder, vous pouvez contribuer au projet DataLab en :"
 
-#: ../../doc/contributing/index.rst:74
 msgid "Writing documentation"
 msgstr "Ecrire de la documentation"
 
-#: ../../doc/contributing/index.rst:75
 msgid "Writing a tutorial"
 msgstr "Ecrire un tutoriel"
 
-#: ../../doc/contributing/index.rst:78
 msgid "Contribute to new features"
 msgstr "Contribuer aux nouvelles fonctionnalités"
 
-#: ../../doc/contributing/index.rst:82
-msgid ""
-":octicon:`info;1em;sd-text-info` :bdg-info-line:`Coding (beginner)` :bdg-"
-"warning-line:`Coding (advanced)`"
-msgstr ""
-":octicon:`info;1em;sd-text-info` :bdg-info-line:`Codage (débutant)` :bdg-"
-"warning-line:`Codage (avancé)`"
+msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Coding (beginner)` :bdg-warning-line:`Coding (advanced)`"
+msgstr ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Codage (débutant)` :bdg-warning-line:`Codage (avancé)`"
 
-#: ../../doc/contributing/index.rst:84
 msgid "Even if you are not a developer, you can contribute to the project by:"
 msgstr "Même si vous n'êtes pas développeur, vous pouvez contribuer au projet en :"
 
-#: ../../doc/contributing/index.rst:86
 msgid "Testing new features"
 msgstr "Testant de nouvelles fonctionnalités"
 
-#: ../../doc/contributing/index.rst:87
 msgid "Writing and submitting new Plugins"
 msgstr "Ecrivant et soumettant de nouveaux plugins"
 
-#: ../../doc/contributing/index.rst:88
 msgid "Writing and submitting macro-commands"
 msgstr "Ecivant et soumettant des macro-commandes"
 
-#: ../../doc/contributing/index.rst:91
 msgid "Develop new features"
 msgstr "Développer de nouvelles fonctionnalités"
 
-#: ../../doc/contributing/index.rst:95
 msgid ":octicon:`info;1em;sd-text-info` :bdg-warning-line:`Coding (advanced)`"
 msgstr ":octicon:`info;1em;sd-text-info` :bdg-warning-line:`Codage (avancé)`"
 
-#: ../../doc/contributing/index.rst:97
-msgid ""
-"If you are a developer, you can contribute to the core of the project by "
-"fixing bugs or implementing new features."
-msgstr ""
-"Si vous êtes développeur, vous pouvez contribuer au cœur du projet en "
-"corrigeant des anomalies ou en implémentant de nouvelles fonctionnalités."
+msgid "If you are a developer, you can contribute to the core of the project by fixing bugs or implementing new features."
+msgstr "Si vous êtes développeur, vous pouvez contribuer au cœur du projet en corrigeant des anomalies ou en implémentant de nouvelles fonctionnalités."
 
-#: ../../doc/contributing/index.rst:105
-msgid ""
-"<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
-"sd-octicon-terminal sd-text-info\" viewBox=\"0 0 16 16\" aria-"
-"hidden=\"true\"><path d=\"M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 "
-"1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 "
-"13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 "
-"0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 "
-"1-.22.53l-2.25 2.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 "
-".215-.734L5.44 8 3.72 6.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 "
-".734.215l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-"
-"3a.75.75 0 0 1 0-1.5Z\"></path></svg> Code"
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-terminal sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 1-.22.53l-2.25 2.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L5.44 8 3.72 6.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5Z\"></path></svg> Code"
 msgstr "Code"
 
-#: ../../doc/contributing/index.rst:109
 msgid "Contributing to the code"
 msgstr "Contribuer au code"
 
-#: ../../doc/contributing/index.rst:113
 msgid "See :ref:`contribute_code` section for more information."
 msgstr "Voir la section :ref:`contribute_code` pour plus d'informations."

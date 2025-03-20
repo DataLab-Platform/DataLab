@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"POT-Creation-Date: 2025-03-20 16:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,22 +17,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: ../../doc/features/general/settings.rst:-1
-msgid ""
-"Settings of DataLab, the open-source scientific data analysis and "
-"visualization platform"
+msgid "Settings of DataLab, the open-source scientific data analysis and visualization platform"
 msgstr "Préférences de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
 
-#: ../../doc/features/general/settings.rst:-1
 msgid "DataLab, settings, scientific, data, analysis, visualization, platform"
 msgstr "DataLab, préférences, scientifique, données, analyse, visualisation, plateforme"
 
-#: ../../doc/features/general/settings.rst:4
 msgid "Settings"
 msgstr "Préférences"
 
-#: ../../doc/features/general/settings.rst:12
 msgid "Screenshot of the \"Settings\" dialog box."
 msgstr "Capture d'écran de la boîte de dialogue \"Préférences\"."

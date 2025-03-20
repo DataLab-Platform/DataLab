@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-05 18:05+0100\n"
+"POT-Creation-Date: 2025-03-20 14:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,1378 +19,833 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: cdl.algorithms:2 of
 msgid "Algorithms (:mod:`cdl.algorithms`)"
 msgstr "Algorithmes (:mod:`cdl.algorithms`)"
 
-#: cdl.algorithms:4 of
-msgid ""
-"This package contains the algorithms used by the DataLab project. Those "
-"algorithms operate directly on NumPy arrays and are designed to be used "
-"in the DataLab pipeline, but can be used independently as well."
-msgstr ""
-"Ce paquet contient les algorithmes utilisés par le projet DataLab. Ces "
-"algorithmes opèrent directement sur des tableaux NumPy et sont conçus "
-"pour être utilisés dans le pipeline DataLab, mais peuvent également être "
-"utilisés indépendamment."
+msgid "This package contains the algorithms used by the DataLab project. Those algorithms operate directly on NumPy arrays and are designed to be used in the DataLab pipeline, but can be used independently as well."
+msgstr "Ce paquet contient les algorithmes utilisés par le projet DataLab. Ces algorithmes opèrent directement sur des tableaux NumPy et sont conçus pour être utilisés dans le pipeline DataLab, mais peuvent également être utilisés indépendamment."
 
-#: cdl.algorithms:10 of
-msgid ""
-"The :mod:`cdl.algorithms` package is the main entry point for the DataLab"
-" algorithms when manipulating NumPy arrays. See the "
-":mod:`cdl.computation` package for algorithms that operate directly on "
-"DataLab objects (i.e. :class:`cdl.obj.SignalObj` and "
-":class:`cdl.obj.ImageObj`)."
-msgstr ""
-"Le module :mod:`cdl.algorithms` est le point d'entrée principal pour les "
-"algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le "
-"module :mod:`cdl.computation` pour les algorithmes qui opèrent "
-"directement sur les objets DataLab (c'est-à-dire "
-":class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`)."
+msgid "The :mod:`cdl.algorithms` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`cdl.computation` package for algorithms that operate directly on DataLab objects (i.e. :class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`)."
+msgstr "Le module :mod:`cdl.algorithms` est le point d'entrée principal pour les algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le module :mod:`cdl.computation` pour les algorithmes qui opèrent directement sur les objets DataLab (c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`)."
 
-#: cdl.algorithms:15 of
-msgid ""
-"The algorithms are organized in subpackages according to their purpose. "
-"The following subpackages are available:"
-msgstr ""
-"Les algorithmes sont organisés en sous-paquets en fonction de leur "
-"objectif. Les sous-paquets suivants sont disponibles :"
+msgid "The algorithms are organized in subpackages according to their purpose. The following subpackages are available:"
+msgstr "Les algorithmes sont organisés en sous-paquets en fonction de leur objectif. Les sous-paquets suivants sont disponibles :"
 
-#: cdl.algorithms:18 of
 msgid ":mod:`cdl.algorithms.signal`: Signal processing algorithms"
 msgstr ":mod:`cdl.algorithms.signal` : Algorithmes de traitement du signal"
 
-#: cdl.algorithms:19 of
 msgid ":mod:`cdl.algorithms.image`: Image processing algorithms"
 msgstr ":mod:`cdl.algorithms.image` : Algorithmes de traitement d'image"
 
-#: cdl.algorithms:20 of
 msgid ":mod:`cdl.algorithms.datatypes`: Data type conversion algorithms"
-msgstr ""
-":mod:`cdl.algorithms.datatypes` : Algorithmes de conversion de type de "
-"données"
+msgstr ":mod:`cdl.algorithms.datatypes` : Algorithmes de conversion de type de données"
 
-#: cdl.algorithms:21 of
 msgid ":mod:`cdl.algorithms.coordinates`: Coordinate conversion algorithms"
-msgstr ""
-":mod:`cdl.algorithms.coordinates` : Algorithmes de conversion de "
-"coordonnées"
+msgstr ":mod:`cdl.algorithms.coordinates` : Algorithmes de conversion de coordonnées"
 
-#: cdl.algorithms:24 of
 msgid "Signal Processing Algorithms"
 msgstr "Algorithmes de traitement du signal"
 
-#: cdl.algorithms.image.normalize:1 cdl.algorithms.signal.normalize:1 of
 msgid "Normalize input array to a given parameter."
 msgstr "Normaliser le tableau d'entrée à un paramètre donné."
 
-#: cdl.algorithms of
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: cdl.algorithms.signal.contrast:3 cdl.algorithms.signal.normalize:3 of
 msgid "Input array"
 msgstr "Tableau d'entrée"
 
-#: cdl.algorithms.signal.normalize:4 of
 msgid "Normalization parameter. Defaults to \"maximum\""
 msgstr "Paramètre de normalisation. Par défaut : \"maximum\""
 
-#: cdl.algorithms of
 msgid "Returns"
 msgstr "Retourne"
 
-#: cdl.algorithms.image.normalize:6 cdl.algorithms.signal.normalize:6 of
 msgid "Normalized array"
 msgstr "Tableau normalisé"
 
-#: cdl.algorithms.signal.fft1d:1 of
 msgid "Compute FFT on X,Y data."
 msgstr "Calculer la FFT sur les données X,Y."
 
-#: cdl.algorithms.signal.fft1d:3 cdl.algorithms.signal.find_x_at_value:4
-#: cdl.algorithms.signal.ifft1d:3 cdl.algorithms.signal.interpolate:3
-#: cdl.algorithms.signal.magnitude_spectrum:3
-#: cdl.algorithms.signal.phase_spectrum:3 cdl.algorithms.signal.psd:3
-#: cdl.algorithms.signal.sampling_period:3
-#: cdl.algorithms.signal.sampling_rate:3 cdl.algorithms.signal.sinusoidal_fit:3
-#: cdl.algorithms.signal.sort_frequencies:3 cdl.algorithms.signal.windowing:3
-#: cdl.algorithms.signal.xpeak:3 of
 msgid "X data"
 msgstr "Données X"
 
-#: cdl.algorithms.signal.fft1d:4 cdl.algorithms.signal.find_x_at_value:5
-#: cdl.algorithms.signal.ifft1d:4 cdl.algorithms.signal.interpolate:4
-#: cdl.algorithms.signal.magnitude_spectrum:4
-#: cdl.algorithms.signal.phase_spectrum:4 cdl.algorithms.signal.psd:4
-#: cdl.algorithms.signal.sinusoidal_fit:4
-#: cdl.algorithms.signal.sort_frequencies:4 cdl.algorithms.signal.windowing:4
-#: cdl.algorithms.signal.xpeak:4 of
 msgid "Y data"
 msgstr "Données Y"
 
-#: cdl.algorithms.signal.fft1d:5 cdl.algorithms.signal.ifft1d:5 of
 msgid "Shift the zero frequency to the center of the spectrum. Defaults to True."
 msgstr "Décaler la fréquence nulle vers le centre du spectre. Par défaut : True."
 
-#: cdl.algorithms.signal.fft1d:7 cdl.algorithms.signal.ifft1d:7
-#: cdl.algorithms.signal.psd:7 of
 msgid "X data, Y data (tuple)"
 msgstr "Données X, Y (tuple)"
 
-#: cdl.algorithms.signal.ifft1d:1 of
 msgid "Compute iFFT on X,Y data."
 msgstr "Calculer la iFFT sur les données X,Y."
 
-#: cdl.algorithms.signal.magnitude_spectrum:1 of
 msgid "Compute magnitude spectrum."
 msgstr "Calculer le spectre de magnitude."
 
-#: cdl.algorithms.signal.magnitude_spectrum:5 cdl.algorithms.signal.psd:5 of
 msgid "Use log scale. Defaults to False."
 msgstr "Utiliser une échelle logarithmique. Par défaut : False."
 
-#: cdl.algorithms.signal.magnitude_spectrum:7 of
 msgid "Magnitude spectrum (X data, Y data)"
 msgstr "Spectre de magnitude (données X, Y)"
 
-#: cdl.algorithms.signal.phase_spectrum:1 of
 msgid "Compute phase spectrum."
 msgstr "Calculer le spectre de phase."
 
-#: cdl.algorithms.signal.phase_spectrum:6 of
 msgid "Phase spectrum in degrees (X data, Y data)"
 msgstr "Spectre de phase en degrés (données X, Y)"
 
-#: cdl.algorithms.signal.psd:1 of
 msgid "Compute Power Spectral Density (PSD), using the Welch method."
-msgstr ""
-"Calculer la densité spectrale de puissance (PSD), en utilisant la méthode"
-" de Welch."
+msgstr "Calculer la densité spectrale de puissance (PSD), en utilisant la méthode de Welch."
 
-#: cdl.algorithms of
 msgid "Return type"
 msgstr "Type de retour"
 
-#: cdl.algorithms.signal.sort_frequencies:1 of
 msgid "Sort from X,Y data by computing FFT(y)."
 msgstr "Trier à partir des données X,Y en calculant FFT(y)."
 
-#: cdl.algorithms.signal.sort_frequencies:6 of
 msgid "Sorted frequencies in ascending order"
 msgstr "Fréquences triées par ordre croissant"
 
-#: cdl.algorithms.signal.peak_indices:1 of
 msgid "Peak detection routine."
 msgstr "Routine de détection de pics."
 
-#: cdl.algorithms.signal.peak_indices:3 of
-msgid ""
-"Finds the numeric index of the peaks in *y* by taking its first order "
-"difference. By using *thres* and *min_dist* parameters, it is possible to"
-" reduce the number of detected peaks. *y* must be signed."
-msgstr ""
-"Recherche l'index numérique des pics dans *y* en prenant sa première "
-"différence d'ordre. En utilisant les paramètres *thres* et *min_dist*, il"
-" est possible de réduire le nombre de pics détectés. *y* doit être signé."
+msgid "Finds the numeric index of the peaks in *y* by taking its first order difference. By using *thres* and *min_dist* parameters, it is possible to reduce the number of detected peaks. *y* must be signed."
+msgstr "Recherche l'index numérique des pics dans *y* en prenant sa première différence d'ordre. En utilisant les paramètres *thres* et *min_dist*, il est possible de réduire le nombre de pics détectés. *y* doit être signé."
 
-#: cdl.algorithms.signal.peak_indices:7 of
 msgid "1D amplitude data to search for peaks."
 msgstr "Données d'amplitude 1D à rechercher pour les pics."
 
-#: cdl.algorithms.signal.peak_indices:9 of
-msgid ""
-"Normalized threshold. Only the peaks with amplitude higher than the "
-"threshold will be detected."
-msgstr ""
-"Seuil normalisé. Seuls les pics dont l'amplitude est supérieure au seuil "
-"seront détectés."
+msgid "Normalized threshold. Only the peaks with amplitude higher than the threshold will be detected."
+msgstr "Seuil normalisé. Seuls les pics dont l'amplitude est supérieure au seuil seront détectés."
 
-#: cdl.algorithms.signal.peak_indices:12 of
-msgid ""
-"Minimum distance between each detected peak. The peak with the highest "
-"amplitude is preferred to satisfy this constraint."
-msgstr ""
-"Distance minimale entre chaque pic détecté. Le pic avec l'amplitude la "
-"plus élevée est préféré pour satisfaire cette contrainte."
+msgid "Minimum distance between each detected peak. The peak with the highest amplitude is preferred to satisfy this constraint."
+msgstr "Distance minimale entre chaque pic détecté. Le pic avec l'amplitude la plus élevée est préféré pour satisfaire cette contrainte."
 
-#: cdl.algorithms.signal.peak_indices:15 of
-msgid ""
-"If True, the thres value will be interpreted as an absolute value, "
-"instead of a normalized threshold."
-msgstr ""
-"Si True, la valeur thres sera interprétée comme une valeur absolue, au "
-"lieu d'un seuil normalisé."
+msgid "If True, the thres value will be interpreted as an absolute value, instead of a normalized threshold."
+msgstr "Si True, la valeur thres sera interprétée comme une valeur absolue, au lieu d'un seuil normalisé."
 
-#: cdl.algorithms.signal.peak_indices:19 of
 msgid "Array containing the numeric indices of the peaks that were detected"
 msgstr "Tableau contenant les index numériques des pics qui ont été détectés"
 
-#: cdl.algorithms.signal.xpeak:1 of
 msgid "Return default peak X-position (assuming a single peak)."
 msgstr "Retourne la position X du pic par défaut (en supposant un seul pic)."
 
-#: cdl.algorithms.signal.xpeak:6 of
 msgid "Peak X-position"
 msgstr "Position X du pic"
 
-#: cdl.algorithms.signal.interpolate:1 of
 msgid "Interpolate data."
 msgstr "Interpoler les données."
 
-#: cdl.algorithms.signal.interpolate:5 of
 msgid "New X data"
 msgstr "Nouvelles données X"
 
-#: cdl.algorithms.signal.interpolate:6 of
 msgid "Interpolation method"
 msgstr "Méthode d'interpolation"
 
-#: cdl.algorithms.signal.interpolate:7 of
-msgid ""
-"Fill value. Defaults to None. This value is used to fill in for requested"
-" points outside of the X data range. It is only used if the method "
-"argument is 'linear', 'cubic' or 'pchip'."
-msgstr ""
-"Valeur de remplissage. Par défaut : None. Cette valeur est utilisée pour "
-"remplir les points demandés en dehors de la plage de données X. Elle "
-"n'est utilisée que si l'argument de méthode est 'linear', 'cubic' ou "
-"'pchip'."
+msgid "Fill value. Defaults to None. This value is used to fill in for requested points outside of the X data range. It is only used if the method argument is 'linear', 'cubic' or 'pchip'."
+msgstr "Valeur de remplissage. Par défaut : None. Cette valeur est utilisée pour remplir les points demandés en dehors de la plage de données X. Elle n'est utilisée que si l'argument de méthode est 'linear', 'cubic' ou 'pchip'."
 
-#: cdl.algorithms.signal.interpolate:12 of
 msgid "Interpolated Y data"
 msgstr "Données Y interpolées"
 
-#: cdl.algorithms.signal.windowing:1 of
 msgid "Apply windowing to the input data."
 msgstr "Appliquer une fenêtre aux données d'entrée."
 
-#: cdl.algorithms.signal.windowing:5 of
 msgid "Windowing function. Defaults to \"hamming\"."
 msgstr "Fonction de fenêtrage. Par défaut : \"hamming\"."
 
-#: cdl.algorithms.signal.windowing:6 of
 msgid "Tukey window parameter. Defaults to 0.5."
 msgstr "Paramètre de la fenêtre de Tukey. Par défaut : 0.5."
 
-#: cdl.algorithms.signal.windowing:7 of
 msgid "Kaiser window parameter. Defaults to 14.0."
 msgstr "Paramètre de la fenêtre de Kaiser. Par défaut : 14.0."
 
-#: cdl.algorithms.signal.windowing:8 of
 msgid "Gaussian window parameter. Defaults to 7.0."
 msgstr "Paramètre de la fenêtre gaussienne. Par défaut : 7.0."
 
-#: cdl.algorithms.signal.windowing:10 of
 msgid "Windowed Y data"
 msgstr "Données Y fenêtrées"
 
-#: cdl.algorithms.signal.FitModel:1 of
 msgid "Curve fitting model base class"
 msgstr "Classe de base du modèle de régression"
 
-#: cdl.algorithms.signal.FitModel.func:1
-#: cdl.algorithms.signal.GaussianModel.func:1
-#: cdl.algorithms.signal.LorentzianModel.func:1
-#: cdl.algorithms.signal.VoigtModel.func:1 of
 msgid "Return fitting function"
 msgstr "Retourne la fonction de régression"
 
-#: cdl.algorithms.signal.FitModel.get_amp_from_amplitude:1
-#: cdl.algorithms.signal.GaussianModel.get_amp_from_amplitude:1
-#: cdl.algorithms.signal.LorentzianModel.get_amp_from_amplitude:1 of
 msgid "Return amp from function amplitude and sigma"
 msgstr "Retourne amp à partir de l'amplitude de la fonction et de sigma"
 
-#: cdl.algorithms.signal.FitModel.amplitude:1
-#: cdl.algorithms.signal.GaussianModel.amplitude:1
-#: cdl.algorithms.signal.LorentzianModel.amplitude:1 of
 msgid "Return function amplitude"
 msgstr "Retourne l'amplitude de la fonction"
 
-#: cdl.algorithms.signal.FitModel.fwhm:1
-#: cdl.algorithms.signal.GaussianModel.fwhm:1
-#: cdl.algorithms.signal.LorentzianModel.fwhm:1
-#: cdl.algorithms.signal.VoigtModel.fwhm:1 of
 msgid "Return function FWHM"
 msgstr "Retourne la LMH de la fonction"
 
-#: cdl.algorithms.signal.FitModel.half_max_segment:1 of
 msgid "Return segment coordinates for y=half-maximum intersection"
 msgstr "Retourne les coordonnées du segment pour l'intersection y=half-maximum"
 
-#: cdl.algorithms.signal.GaussianModel:1 of
 msgid "1-dimensional Gaussian fit model"
 msgstr "Modèle de régression gaussien à 1 dimension"
 
-#: cdl.algorithms.signal.LorentzianModel:1 of
 msgid "1-dimensional Lorentzian fit model"
 msgstr "Modèle de régression lorentzien à 1 dimension"
 
-#: cdl.algorithms.signal.VoigtModel:1 of
 msgid "1-dimensional Voigt fit model"
 msgstr "Modèle de régression Voigt à 1 dimension"
 
-#: cdl.algorithms.signal.find_zero_crossings:1 of
 msgid "Find the left indices of the zero-crossing intervals in the given array."
 msgstr ""
 
-#: cdl.algorithms.signal.find_zero_crossings:3 of
-#, fuzzy
 msgid "Input array."
-msgstr "Tableau d'entrée"
+msgstr "Tableau d'entrée."
 
-#: cdl.algorithms.signal.find_zero_crossings:5 of
 msgid "An array of indices where zero-crossings occur."
 msgstr ""
 
-#: cdl.algorithms.signal.find_x_at_value:1 of
-msgid ""
-"Find the x value where the y value is the closest to the given value "
-"using linear interpolation to deduce the precise x value."
-msgstr ""
-"Rechercher la valeur x où la valeur y est la plus proche de la valeur "
-"donnée en utilisant une interpolation linéaire pour déduire la valeur x "
-"précise."
+msgid "Find the x value where the y value is the closest to the given value using linear interpolation to deduce the precise x value."
+msgstr "Rechercher la valeur x où la valeur y est la plus proche de la valeur donnée en utilisant une interpolation linéaire pour déduire la valeur x précise."
 
-#: cdl.algorithms.signal.find_x_at_value:6 of
 msgid "Value to find"
 msgstr "Valeur à rechercher"
 
-#: cdl.algorithms.signal.find_x_at_value:8 of
-#, fuzzy
-msgid ""
-"An array of x values where the y value is the closest to the given value "
-"(empty array if no zero crossing is found)"
-msgstr "Valeur X où la valeur Y est la plus proche de la valeur donnée"
+msgid "An array of x values where the y value is the closest to the given value (empty array if no zero crossing is found)"
+msgstr "Valeur X où la valeur Y est la plus proche de la valeur donnée (tableau vide si aucun zéro n'est trouvé)"
 
-#: cdl.algorithms.signal.bandwidth:1 of
 msgid "Compute the bandwidth of the signal at a given level."
 msgstr "Calculer la largeur de bande du signal à un niveau donné."
 
-#: cdl.algorithms.signal.bandwidth:3 cdl.algorithms.signal.fw1e2:3
-#: cdl.algorithms.signal.fwhm:3 of
 msgid "X,Y data"
 msgstr "Données X,Y"
 
-#: cdl.algorithms.signal.bandwidth:4 of
 msgid "Level in dB at which the bandwidth is computed. Defaults to 3.0."
 msgstr "Niveau en dB auquel la largeur de bande est calculée. Par défaut : 3.0."
 
-#: cdl.algorithms.signal.bandwidth:6 of
 msgid "segment coordinates"
 msgstr "coordonnées du segment"
 
-#: cdl.algorithms.signal.contrast:1 of
 msgid "Compute contrast"
 msgstr "Calculer le contraste"
 
-#: cdl.algorithms.signal.contrast:5 of
 msgid "Contrast"
 msgstr "Contraste"
 
-#: cdl.algorithms.signal.sinusoidal_model:1 of
 msgid "Sinusoidal model function."
 msgstr "Fonction de modèle sinusoïdal."
 
-#: cdl.algorithms.signal.sinusoidal_fit:1 of
 msgid "Fit a sinusoidal model to the input data."
 msgstr "Adapter un modèle sinusoïdal aux données d'entrée."
 
-#: cdl.algorithms.signal.sinusoidal_fit:6 of
-msgid ""
-"A tuple containing the fit parameters (amplitude, frequency, phase, "
-"offset) and the residuals"
-msgstr ""
-"Un tuple contenant les paramètres d'ajustement (amplitude, fréquence, "
-"phase, décalage) et les résidus"
+msgid "A tuple containing the fit parameters (amplitude, frequency, phase, offset) and the residuals"
+msgstr "Un tuple contenant les paramètres d'ajustement (amplitude, fréquence, phase, décalage) et les résidus"
 
-#: cdl.algorithms.signal.sinus_frequency:1 of
 msgid "Compute the frequency of a sinusoidal signal."
 msgstr "Calculer la fréquence d'un signal sinusoïdal."
 
-#: cdl.algorithms.signal.enob:3 cdl.algorithms.signal.sfdr:3
-#: cdl.algorithms.signal.sinad:3 cdl.algorithms.signal.sinus_frequency:3
-#: cdl.algorithms.signal.snr:3 cdl.algorithms.signal.thd:3 of
 msgid "x signal data"
 msgstr "données x du signal"
 
-#: cdl.algorithms.signal.enob:4 cdl.algorithms.signal.sfdr:4
-#: cdl.algorithms.signal.sinad:4 cdl.algorithms.signal.sinus_frequency:4
-#: cdl.algorithms.signal.snr:4 cdl.algorithms.signal.thd:4 of
 msgid "y signal data"
 msgstr "données y du signal"
 
-#: cdl.algorithms.signal.sinus_frequency:6 of
 msgid "Frequency of the sinusoidal signal"
 msgstr "Fréquence du signal sinusoïdal"
 
-#: cdl.algorithms.signal.enob:1 of
 msgid "Compute Effective Number of Bits (ENOB)."
 msgstr "Calculer le nombre effectif de bits (ENOB)."
 
-#: cdl.algorithms.signal.enob:5 cdl.algorithms.signal.sfdr:5
-#: cdl.algorithms.signal.sinad:5 cdl.algorithms.signal.snr:5
-#: cdl.algorithms.signal.thd:5 of
 msgid "Full scale(V). Defaults to 1.0."
 msgstr "Pleine échelle (V). Par défaut : 1.0."
 
-#: cdl.algorithms.signal.enob:7 of
 msgid "Effective Number of Bits (ENOB)"
 msgstr "Nombre effectif de bits (ENOB)"
 
-#: cdl.algorithms.signal.sinad:1 of
 msgid "Compute Signal-to-Noise and Distortion Ratio (SINAD)."
 msgstr "Calculer le rapport signal/bruit et distorsion (SINAD)."
 
-#: cdl.algorithms.signal.sfdr:6 cdl.algorithms.signal.sinad:6
-#: cdl.algorithms.signal.snr:6 cdl.algorithms.signal.thd:6 of
-msgid ""
-"Unit of the input data. Valid values are 'dBc' and 'dBFS'. Defaults to "
-"'dBc'."
-msgstr ""
-"Unité des données d'entrée. Les valeurs valides sont 'dBc' et 'dBFS'. Par"
-" défaut : 'dBc'."
+msgid "Unit of the input data. Valid values are 'dBc' and 'dBFS'. Defaults to 'dBc'."
+msgstr "Unité des données d'entrée. Les valeurs valides sont 'dBc' et 'dBFS'. Par défaut : 'dBc'."
 
-#: cdl.algorithms.signal.sinad:9 of
 msgid "Signal-to-Noise and Distortion Ratio (SINAD)"
 msgstr "Rapport signal/bruit et distorsion (SINAD)"
 
-#: cdl.algorithms.signal.thd:1 of
 msgid "Compute Total Harmonic Distortion (THD)."
 msgstr "Calculer la distorsion harmonique totale (THD)."
 
-#: cdl.algorithms.signal.thd:8 of
 msgid "Number of harmonics to consider. Defaults to 5."
 msgstr "Nombre d'harmoniques à considérer. Par défaut : 5."
 
-#: cdl.algorithms.signal.thd:10 of
 msgid "Total Harmonic Distortion (THD)"
 msgstr "Distorsion harmonique totale (THD)"
 
-#: cdl.algorithms.signal.sfdr:1 of
 msgid "Compute Spurious-Free Dynamic Range (SFDR)."
 msgstr "Calculer la plage dynamique sans spurious (SFDR)."
 
-#: cdl.algorithms.signal.sfdr:9 of
 msgid "Spurious-Free Dynamic Range (SFDR)"
 msgstr "Plage dynamique sans spurious (SFDR)"
 
-#: cdl.algorithms.signal.snr:1 of
 msgid "Compute Signal-to-Noise Ratio (SNR)."
 msgstr "Calculer le rapport signal/bruit (SNR)."
 
-#: cdl.algorithms.signal.snr:9 of
 msgid "Signal-to-Noise Ratio (SNR)"
 msgstr "Rapport signal/bruit (SNR)"
 
-#: cdl.algorithms.signal.sampling_period:1 of
 msgid "Compute sampling period"
 msgstr "Calculer la période d'échantillonnage"
 
-#: cdl.algorithms.signal.sampling_period:5 of
 msgid "Sampling period"
 msgstr "Période d'échantillonnage"
 
-#: cdl.algorithms.signal.sampling_rate:1 of
 msgid "Compute mean sampling rate"
 msgstr "Calculer le taux d'échantillonnage moyen"
 
-#: cdl.algorithms.signal.sampling_rate:5 of
 msgid "Sampling rate"
 msgstr "Taux d'échantillonnage"
 
-#: cdl.algorithms.signal.fwhm:1 of
 msgid "Compute Full Width at Half Maximum (FWHM) of the input data"
 msgstr "Calculer la largeur totale à mi-hauteur (FWHM) des données d'entrée"
 
-#: cdl.algorithms.signal.fwhm:4 of
-msgid ""
-"Calculation method. Two types of methods are supported: a zero-crossing "
-"method and fitting methods (based on various models: Gauss, Lorentz, "
-"Voigt). Defaults to \"zero-crossing\"."
-msgstr ""
-"Méthode de calcul. Deux types de méthodes sont pris en charge : une "
-"méthode de croisement à zéro et des méthodes d'ajustement (basées sur "
-"divers modèles : Gauss, Lorentz, Voigt). Par défaut : \"zero-crossing\"."
+msgid "Calculation method. Two types of methods are supported: a zero-crossing method and fitting methods (based on various models: Gauss, Lorentz, Voigt). Defaults to \"zero-crossing\"."
+msgstr "Méthode de calcul. Deux types de méthodes sont pris en charge : une méthode de croisement à zéro et des méthodes d'ajustement (basées sur divers modèles : Gauss, Lorentz, Voigt). Par défaut : \"zero-crossing\"."
 
-#: cdl.algorithms.signal.fwhm:7 of
-msgid ""
-"Lower X bound for the fitting. Defaults to None (no lower bound, i.e. the"
-" fitting starts from the first point)."
-msgstr ""
-"Borne X inférieure pour l'ajustement. Par défaut : None (pas de borne "
-"inférieure, c'est-à-dire que l'ajustement commence à partir du premier "
-"point)."
+msgid "Lower X bound for the fitting. Defaults to None (no lower bound, i.e. the fitting starts from the first point)."
+msgstr "Borne X inférieure pour l'ajustement. Par défaut : None (pas de borne inférieure, c'est-à-dire que l'ajustement commence à partir du premier point)."
 
-#: cdl.algorithms.signal.fwhm:9 of
-msgid ""
-"Upper X bound for the fitting. Defaults to None (no upper bound, i.e. the"
-" fitting ends at the last point)"
-msgstr ""
-"Borne X supérieure pour l'ajustement. Par défaut : None (pas de borne "
-"supérieure, c'est-à-dire que l'ajustement se termine au dernier point)"
+msgid "Upper X bound for the fitting. Defaults to None (no upper bound, i.e. the fitting ends at the last point)"
+msgstr "Borne X supérieure pour l'ajustement. Par défaut : None (pas de borne supérieure, c'est-à-dire que l'ajustement se termine au dernier point)"
 
-#: cdl.algorithms.signal.fwhm:12 of
 msgid "FWHM segment coordinates"
 msgstr "Coordonnées du segment LMH"
 
-#: cdl.algorithms.signal.fw1e2:1 of
-msgid ""
-"Compute Full Width at 1/e� of the input data (using a Gaussian model "
-"fitting)."
-msgstr ""
-"Calculer la largeur totale à 1/e² des données d'entrée (en utilisant un "
-"ajustement de modèle gaussien)."
+msgid "Compute Full Width at 1/e� of the input data (using a Gaussian model fitting)."
+msgstr "Calculer la largeur totale à 1/e² des données d'entrée (en utilisant un ajustement de modèle gaussien)."
 
-#: cdl.algorithms.signal.fw1e2:5 of
 msgid "FW at 1/e² segment coordinates"
 msgstr "Coordonnées du segment LMH à 1/e²"
 
-#: cdl.algorithms.signal.allan_variance:1 of
-msgid ""
-"Calculate the Allan variance for given time and measurement values at "
-"specified tau values."
+msgid "Calculate the Allan variance for given time and measurement values at specified tau values."
 msgstr ""
 
-#: cdl.algorithms.signal.allan_deviation:4
-#: cdl.algorithms.signal.allan_variance:4
-#: cdl.algorithms.signal.hadamard_variance:3
-#: cdl.algorithms.signal.modified_allan_variance:3
-#: cdl.algorithms.signal.overlapping_allan_variance:3
-#: cdl.algorithms.signal.time_deviation:3
-#: cdl.algorithms.signal.total_variance:3 of
-#, fuzzy
 msgid "Time array"
-msgstr "Tableau d'entrée"
+msgstr "Tableau des temps"
 
-#: cdl.algorithms.signal.allan_deviation:5
-#: cdl.algorithms.signal.allan_variance:5
-#: cdl.algorithms.signal.hadamard_variance:4
-#: cdl.algorithms.signal.modified_allan_variance:4
-#: cdl.algorithms.signal.overlapping_allan_variance:4
-#: cdl.algorithms.signal.time_deviation:4
-#: cdl.algorithms.signal.total_variance:4 of
 msgid "Measured values array"
 msgstr ""
 
-#: cdl.algorithms.signal.allan_deviation:6
-#: cdl.algorithms.signal.allan_variance:6
-#: cdl.algorithms.signal.overlapping_allan_variance:5 of
 msgid "Allan deviation time values"
 msgstr ""
 
-#: cdl.algorithms.signal.allan_variance:8 of
 msgid "Allan variance values"
 msgstr ""
 
-#: cdl.algorithms.signal.allan_deviation:1 of
-msgid ""
-"Calculate the Allan deviation for given time and measurement values at "
-"specified tau values."
+msgid "Calculate the Allan deviation for given time and measurement values at specified tau values."
 msgstr ""
 
-#: cdl.algorithms.signal.allan_deviation:8 of
 msgid "Allan deviation values"
 msgstr ""
 
-#: cdl.algorithms.signal.overlapping_allan_variance:1 of
-msgid ""
-"Calculate the Overlapping Allan variance for given time and measurement "
-"values."
+msgid "Calculate the Overlapping Allan variance for given time and measurement values."
 msgstr ""
 
-#: cdl.algorithms.signal.overlapping_allan_variance:7 of
 msgid "Overlapping Allan variance values"
 msgstr ""
 
-#: cdl.algorithms.signal.modified_allan_variance:1 of
-msgid ""
-"Calculate the Modified Allan variance for given time and measurement "
-"values."
+msgid "Calculate the Modified Allan variance for given time and measurement values."
 msgstr ""
 
-#: cdl.algorithms.signal.modified_allan_variance:5 of
 msgid "Modified Allan deviation time values"
 msgstr ""
 
-#: cdl.algorithms.signal.modified_allan_variance:7 of
 msgid "Modified Allan variance values"
 msgstr ""
 
-#: cdl.algorithms.signal.hadamard_variance:1 of
 msgid "Calculate the Hadamard variance for given time and measurement values."
 msgstr ""
 
-#: cdl.algorithms.signal.hadamard_variance:5 of
 msgid "Hadamard deviation time values"
 msgstr ""
 
-#: cdl.algorithms.signal.hadamard_variance:7 of
 msgid "Hadamard variance values"
 msgstr ""
 
-#: cdl.algorithms.signal.total_variance:1 of
 msgid "Calculate the Total variance for given time and measurement values."
 msgstr ""
 
-#: cdl.algorithms.signal.total_variance:5 of
 msgid "Total variance time values"
 msgstr ""
 
-#: cdl.algorithms.signal.total_variance:7 of
 msgid "Total variance values"
 msgstr ""
 
-#: cdl.algorithms.signal.time_deviation:1 of
 msgid "Calculate the Time Deviation (TDEV) for given time and measurement values."
 msgstr ""
 
-#: cdl.algorithms.signal.time_deviation:5 of
 msgid "Time deviation time values"
 msgstr ""
 
-#: cdl.algorithms.signal.time_deviation:7 of
 msgid "Time deviation values"
 msgstr ""
 
-#: cdl.algorithms:30 of
 msgid "Image Processing Algorithms"
 msgstr "Algorithmes de traitement d'image"
 
-#: cdl.algorithms.image.scale_data_to_min_max:1 of
 msgid "Scale array `data` to fit [zmin, zmax] dynamic range"
-msgstr ""
-"Mettre à l'échelle le tableau `data` pour s'adapter à la plage dynamique "
-"[zmin, zmax]"
+msgstr "Mettre à l'échelle le tableau `data` pour s'adapter à la plage dynamique [zmin, zmax]"
 
-#: cdl.algorithms.image.binning:3 cdl.algorithms.image.fft2d:3
-#: cdl.algorithms.image.get_2d_peaks_coords:9
-#: cdl.algorithms.image.get_absolute_level:3
-#: cdl.algorithms.image.get_centroid_fourier:3
-#: cdl.algorithms.image.get_contour_shapes:4
-#: cdl.algorithms.image.get_enclosing_circle:4
-#: cdl.algorithms.image.get_hough_circle_peaks:3 cdl.algorithms.image.ifft2d:3
-#: cdl.algorithms.image.magnitude_spectrum:3 cdl.algorithms.image.normalize:3
-#: cdl.algorithms.image.phase_spectrum:3 cdl.algorithms.image.psd:3
-#: cdl.algorithms.image.scale_data_to_min_max:3 of
 msgid "Input data"
 msgstr "Données d'entrée"
 
-#: cdl.algorithms.image.scale_data_to_min_max:4 of
 msgid "Minimum value of output data"
 msgstr "Valeur minimale des données de sortie"
 
-#: cdl.algorithms.image.scale_data_to_min_max:5 of
 msgid "Maximum value of output data"
 msgstr "Valeur maximale des données de sortie"
 
-#: cdl.algorithms.image.scale_data_to_min_max:7 of
 msgid "Scaled data"
 msgstr "Données mises à l'échelle"
 
-#: cdl.algorithms.image.normalize:4 of
 msgid "Normalization parameter (default: \"maximum\")"
 msgstr "Paramètre de normalisation (par défaut : \"maximum\")"
 
-#: cdl.algorithms.image.fft2d:1 of
 msgid "Compute FFT of complex array `z`"
 msgstr "Calculer la FFT du tableau complexe `z`"
 
-#: cdl.algorithms.image.fft2d:4 cdl.algorithms.image.ifft2d:4 of
 msgid "Shift zero frequency to center (default: True)"
 msgstr "Décaler la fréquence nulle vers le centre (par défaut : True)"
 
-#: cdl.algorithms.image.fft2d:6 of
 msgid "FFT of input data"
 msgstr "FFT des données d'entrée"
 
-#: cdl.algorithms.image.ifft2d:1 of
 msgid "Compute inverse FFT of complex array `z`"
 msgstr "Calculer la FFT inverse du tableau complexe `z`"
 
-#: cdl.algorithms.image.ifft2d:6 of
 msgid "Inverse FFT of input data"
 msgstr "FFT inverse des données d'entrée"
 
-#: cdl.algorithms.image.magnitude_spectrum:1 of
 msgid "Compute magnitude spectrum of complex array `z`"
 msgstr "Calculer le spectre de magnitude du tableau complexe `z`"
 
-#: cdl.algorithms.image.magnitude_spectrum:4 cdl.algorithms.image.psd:4 of
 msgid "Use log scale (default: False)"
 msgstr "Utiliser une échelle logarithmique (par défaut : False)"
 
-#: cdl.algorithms.image.magnitude_spectrum:6 of
 msgid "Magnitude spectrum of input data"
 msgstr "Spectre de magnitude des données d'entrée"
 
-#: cdl.algorithms.image.phase_spectrum:1 of
 msgid "Compute phase spectrum of complex array `z`"
 msgstr "Calculer le spectre de phase du tableau complexe `z`"
 
-#: cdl.algorithms.image.phase_spectrum:5 of
 msgid "Phase spectrum of input data (in degrees)"
 msgstr "Spectre de phase des données d'entrée (en degrés)"
 
-#: cdl.algorithms.image.psd:1 of
 msgid "Compute power spectral density of complex array `z`"
 msgstr "Calculer la densité spectrale de puissance du tableau complexe `z`"
 
-#: cdl.algorithms.image.psd:6 of
 msgid "Power spectral density of input data"
 msgstr "Densité spectrale de puissance des données d'entrée"
 
-#: cdl.algorithms.image.binning:1 of
 msgid "Perform image pixel binning"
 msgstr "Effectuer le binning des pixels de l'image"
 
-#: cdl.algorithms.image.binning:4 of
 msgid "Binning size along x (number of pixels to bin together)"
 msgstr "Binning le long de x (nombre de pixels à biner ensemble)"
 
-#: cdl.algorithms.image.binning:5 of
 msgid "Binning size along y (number of pixels to bin together)"
 msgstr "Binning le long de y (nombre de pixels à biner ensemble)"
 
-#: cdl.algorithms.image.binning:6 of
 msgid "Binning operation"
 msgstr "Opération de binning"
 
-#: cdl.algorithms.image.binning:7 of
 msgid "Output data type (default: None, i.e. same as input)"
-msgstr ""
-"Type de données de sortie (par défaut : None, c'est-à-dire identique à "
-"l'entrée)"
+msgstr "Type de données de sortie (par défaut : None, c'est-à-dire identique à l'entrée)"
 
-#: cdl.algorithms.image.binning:9 of
 msgid "Binned data"
 msgstr "Données binnées"
 
-#: cdl.algorithms.image.flatfield:1 of
 msgid "Compute flat-field correction"
 msgstr "Calculer la correction du champ plat"
 
-#: cdl.algorithms.image.flatfield:3 of
 msgid "Raw data"
 msgstr "Données brutes"
 
-#: cdl.algorithms.image.flatfield:4 of
 msgid "Flat-field data"
 msgstr "Données de champ plat"
 
-#: cdl.algorithms.image.flatfield:5 of
 msgid "Threshold for flat-field correction (default: None)"
 msgstr "Seuil de correction du champ plat (par défaut : None)"
 
-#: cdl.algorithms.image.flatfield:7 of
 msgid "Flat-field corrected data"
 msgstr "Données corrigées du champ plat"
 
-#: cdl.algorithms.image.get_centroid_fourier:1 of
 msgid "Return image centroid using Fourier algorithm"
-msgstr ""
-"Retourne le centre de gravité de l'image en utilisant l'algorithme de "
-"Fourier"
+msgstr "Retourne le centre de gravité de l'image en utilisant l'algorithme de Fourier"
 
-#: cdl.algorithms.image.get_centroid_fourier:5 of
 msgid "Centroid coordinates (row, col)"
 msgstr "Coordonnées du centre de gravité (ligne, colonne)"
 
-#: cdl.algorithms.image.get_absolute_level:1 of
 msgid "Return absolute level"
 msgstr "Retourne le niveau absolu"
 
-#: cdl.algorithms.image.get_absolute_level:4 of
 msgid "Relative level (0.0 to 1.0)"
 msgstr "Niveau relatif (0.0 à 1.0)"
 
-#: cdl.algorithms.image.get_absolute_level:6 of
 msgid "Absolute level"
 msgstr "Niveau absolu"
 
-#: cdl.algorithms.image.get_enclosing_circle:1 of
-msgid ""
-"Return (x, y, radius) for the circle contour enclosing image values above"
-" threshold relative level (.5 means FWHM)"
-msgstr ""
-"Retourne (x, y, rayon) pour le contour du cercle contenant les valeurs "
-"d'image au-dessus du niveau relatif du seuil (.5 signifie FWHM)"
+msgid "Return (x, y, radius) for the circle contour enclosing image values above threshold relative level (.5 means FWHM)"
+msgstr "Retourne (x, y, rayon) pour le contour du cercle contenant les valeurs d'image au-dessus du niveau relatif du seuil (.5 signifie FWHM)"
 
-#: cdl.algorithms.image.get_2d_peaks_coords:11
-#: cdl.algorithms.image.get_contour_shapes:6
-#: cdl.algorithms.image.get_enclosing_circle:5 of
 msgid "Relative level (default: 0.5)"
 msgstr "Niveau relatif (par défaut : 0.5)"
 
-#: cdl.algorithms.image.get_enclosing_circle:7 of
 msgid "A tuple (x, y, radius)"
 msgstr "Un tuple (x, y, rayon)"
 
-#: cdl.algorithms of
 msgid "Raises"
 msgstr "Lève"
 
-#: cdl.algorithms.image.get_enclosing_circle:9 of
 msgid "No contour was found"
 msgstr "Aucun contour n'a été trouvé"
 
-#: cdl.algorithms.image.get_radial_profile:1 of
 msgid "Return radial profile of image data"
 msgstr "Retourne le profil radial des données d'image"
 
-#: cdl.algorithms.image.get_radial_profile:3 of
 msgid "Input data (2D array)"
 msgstr "Tableau d'entrée (2D)"
 
-#: cdl.algorithms.image.get_radial_profile:4 of
 msgid "Coordinates of the center of the profile (x, y)"
 msgstr "Coordonnées du centre du profil (x, y)"
 
-#: cdl.algorithms.image.get_radial_profile:6 of
-msgid ""
-"Radial profile (X, Y) where X is the distance from the center (1D array) "
-"and Y is the average value of pixels at this distance (1D array)"
-msgstr ""
-"Profil radial (X, Y) où X est la distance du centre (tableau 1D) et Y est"
-" la valeur moyenne des pixels à cette distance (tableau 1D)"
+msgid "Radial profile (X, Y) where X is the distance from the center (1D array) and Y is the average value of pixels at this distance (1D array)"
+msgstr "Profil radial (X, Y) où X est la distance du centre (tableau 1D) et Y est la valeur moyenne des pixels à cette distance (tableau 1D)"
 
-#: cdl.algorithms.image.distance_matrix:1 of
 msgid "Return distance matrix from coords"
 msgstr "Retourne la matrice de distance à partir des coordonnées"
 
-#: cdl.algorithms.image.distance_matrix:3 of
 msgid "List of coordinates"
 msgstr "Liste des coordonnées"
 
-#: cdl.algorithms.image.distance_matrix:5 of
 msgid "Distance matrix"
 msgstr "Matrice de distance"
 
-#: cdl.algorithms.image.get_2d_peaks_coords:1 of
 msgid "Detect peaks in image data, return coordinates."
 msgstr "Détecte les pics dans les données d'image, retourne les coordonnées."
 
-#: cdl.algorithms.image.get_2d_peaks_coords:3 of
-msgid ""
-"If neighborhoods size is None, default value is the highest value between"
-" 50 pixels and the 1/40th of the smallest image dimension."
-msgstr ""
-"Si la taille du voisinage est None, la valeur par défaut est la plus "
-"élevée entre 50 pixels et le 1/40ème de la plus petite dimension de "
-"l'image."
+msgid "If neighborhoods size is None, default value is the highest value between 50 pixels and the 1/40th of the smallest image dimension."
+msgstr "Si la taille du voisinage est None, la valeur par défaut est la plus élevée entre 50 pixels et le 1/40ème de la plus petite dimension de l'image."
 
-#: cdl.algorithms.image.get_2d_peaks_coords:6 of
-msgid ""
-"Detection threshold level is relative to difference between data maximum "
-"and minimum values."
-msgstr ""
-"Le niveau de seuil de détection est relatif à la différence entre les "
-"valeurs maximales et minimales des données."
+msgid "Detection threshold level is relative to difference between data maximum and minimum values."
+msgstr "Le niveau de seuil de détection est relatif à la différence entre les valeurs maximales et minimales des données."
 
-#: cdl.algorithms.image.get_2d_peaks_coords:10 of
 msgid "Neighborhood size (default: None)"
 msgstr "Taille du voisinage (par défaut : None)"
 
-#: cdl.algorithms.image.get_2d_peaks_coords:13 of
 msgid "Coordinates of peaks"
 msgstr "Coordonnées des pics"
 
-#: cdl.algorithms.image.get_contour_shapes:1 of
-msgid ""
-"Find iso-valued contours in a 2D array, above relative level (.5 means "
-"FWHM), then fit contours with shape ('ellipse' or 'circle')"
-msgstr ""
-"Trouve les contours de valeur iso dans un tableau 2D, au-dessus du niveau"
-" relatif (.5 signifie FWHM), puis ajuste les contours avec la forme "
-"('ellipse' ou 'cercle')"
+msgid "Find iso-valued contours in a 2D array, above relative level (.5 means FWHM), then fit contours with shape ('ellipse' or 'circle')"
+msgstr "Trouve les contours de valeur iso dans un tableau 2D, au-dessus du niveau relatif (.5 signifie FWHM), puis ajuste les contours avec la forme ('ellipse' ou 'cercle')"
 
-#: cdl.algorithms.image.get_contour_shapes:5 of
 msgid "Shape to fit. Default is 'ellipse'"
 msgstr "Forme à ajuster. Par défaut : 'ellipse'"
 
-#: cdl.algorithms.image.get_contour_shapes:8 of
 msgid "Coordinates of shapes"
 msgstr "Coordonnées des formes"
 
-#: cdl.algorithms.image.get_hough_circle_peaks:1 of
-msgid ""
-"Detect peaks in image from circle Hough transform, return circle "
-"coordinates."
-msgstr ""
-"Détecte les pics dans l'image à partir de la transformée de Hough du "
-"cercle, retourne les coordonnées du cercle."
+msgid "Detect peaks in image from circle Hough transform, return circle coordinates."
+msgstr "Détecte les pics dans l'image à partir de la transformée de Hough du cercle, retourne les coordonnées du cercle."
 
-#: cdl.algorithms.image.get_hough_circle_peaks:4 of
 msgid "Minimum radius (default: None)"
 msgstr "Rayon minimum (par défaut : None)"
 
-#: cdl.algorithms.image.get_hough_circle_peaks:5 of
 msgid "Maximum radius (default: None)"
 msgstr "Rayon maximum (par défaut : None)"
 
-#: cdl.algorithms.image.get_hough_circle_peaks:6 of
 msgid "Number of radii (default: None)"
 msgstr "Nombre de rayons (par défaut : None)"
 
-#: cdl.algorithms.image.get_hough_circle_peaks:7 of
 msgid "Minimum distance between circles (default: 1)"
 msgstr "Distance minimale entre les cercles (par défaut : 1)"
 
-#: cdl.algorithms.image.get_hough_circle_peaks:9 of
 msgid "Coordinates of circles"
 msgstr "Coordonnées des cercles"
 
-#: cdl.algorithms.image.find_blobs_dog:1 of
-msgid ""
-"Finds blobs in the given grayscale image using the Difference of "
-"Gaussians (DoG) method."
-msgstr ""
-"Recherche les taches dans l'image en niveaux de gris donnée en utilisant "
-"la méthode de différence de Gauss (DoG)."
+msgid "Finds blobs in the given grayscale image using the Difference of Gaussians (DoG) method."
+msgstr "Recherche les taches dans l'image en niveaux de gris donnée en utilisant la méthode de différence de Gauss (DoG)."
 
-#: cdl.algorithms.image.find_blobs_dog:4 cdl.algorithms.image.find_blobs_doh:4
-#: cdl.algorithms.image.find_blobs_log:4
-#: cdl.algorithms.image.find_blobs_opencv:3 of
 msgid "The grayscale input image."
 msgstr "L'image d'entrée en niveaux de gris."
 
-#: cdl.algorithms.image.find_blobs_dog:5 cdl.algorithms.image.find_blobs_doh:5
-#: cdl.algorithms.image.find_blobs_log:5 of
 msgid "The minimum blob radius in pixels."
 msgstr "Le rayon minimum de la tache en pixels."
 
-#: cdl.algorithms.image.find_blobs_dog:6 cdl.algorithms.image.find_blobs_doh:6
-#: cdl.algorithms.image.find_blobs_log:6 of
 msgid "The maximum blob radius in pixels."
 msgstr "Le rayon maximum de la tache en pixels."
 
-#: cdl.algorithms.image.find_blobs_dog:7 cdl.algorithms.image.find_blobs_doh:7
-#: cdl.algorithms.image.find_blobs_log:7 of
-msgid ""
-"The minimum overlap between two blobs in pixels. For instance, if two "
-"blobs are detected with radii of 10 and 12 respectively, and the "
-"``overlap`` is set to 0.5, then the area of the smaller blob will be "
-"ignored and only the area of the larger blob will be returned."
-msgstr ""
-"Le chevauchement minimum entre deux taches en pixels. Par exemple, si "
-"deux taches sont détectées avec des rayons de 10 et 12 respectivement, et"
-" que le chevauchement est défini sur 0,5, alors la zone de la plus petite"
-" tache sera ignorée et seule la zone de la plus grande tache sera "
-"retournée."
+msgid "The minimum overlap between two blobs in pixels. For instance, if two blobs are detected with radii of 10 and 12 respectively, and the ``overlap`` is set to 0.5, then the area of the smaller blob will be ignored and only the area of the larger blob will be returned."
+msgstr "Le chevauchement minimum entre deux taches en pixels. Par exemple, si deux taches sont détectées avec des rayons de 10 et 12 respectivement, et que le chevauchement est défini sur 0,5, alors la zone de la plus petite tache sera ignorée et seule la zone de la plus grande tache sera retournée."
 
-#: cdl.algorithms.image.find_blobs_dog:11
-#: cdl.algorithms.image.find_blobs_doh:13
-#: cdl.algorithms.image.find_blobs_log:13 of
-msgid ""
-"The absolute lower bound for scale space maxima. Local maxima smaller "
-"than ``threshold_rel`` are ignored. Reduce this to detect blobs with less"
-" intensities."
-msgstr ""
-"La limite inférieure absolue pour les maxima de l'espace d'échelle. Les "
-"maxima locaux plus petits que ``threshold_rel`` sont ignorés. Réduisez "
-"ceci pour détecter les taches avec moins d'intensité."
+msgid "The absolute lower bound for scale space maxima. Local maxima smaller than ``threshold_rel`` are ignored. Reduce this to detect blobs with less intensities."
+msgstr "La limite inférieure absolue pour les maxima de l'espace d'échelle. Les maxima locaux plus petits que ``threshold_rel`` sont ignorés. Réduisez ceci pour détecter les taches avec moins d'intensité."
 
-#: cdl.algorithms.image.find_blobs_dog:14
-#: cdl.algorithms.image.find_blobs_log:16 of
-msgid ""
-"If ``True``, exclude blobs from detection if they are too close to the "
-"border of the image. Border size is ``min_sigma``."
-msgstr ""
-"Si ``True``, exclure les taches de la détection si elles sont trop "
-"proches du bord de l'image. La taille de la bordure est ``min_sigma``."
+msgid "If ``True``, exclude blobs from detection if they are too close to the border of the image. Border size is ``min_sigma``."
+msgstr "Si ``True``, exclure les taches de la détection si elles sont trop proches du bord de l'image. La taille de la bordure est ``min_sigma``."
 
-#: cdl.algorithms.image.find_blobs_dog:17
-#: cdl.algorithms.image.find_blobs_doh:17
-#: cdl.algorithms.image.find_blobs_log:19
-#: cdl.algorithms.image.find_blobs_opencv:24 of
 msgid "Coordinates of blobs"
 msgstr "Coordonnées des taches"
 
-#: cdl.algorithms.image.find_blobs_doh:1 of
-msgid ""
-"Finds blobs in the given grayscale image using the Determinant of Hessian"
-" (DoH) method."
-msgstr ""
-"Recherche les taches dans l'image en niveaux de gris donnée en utilisant "
-"la méthode du déterminant de Hessian (DoH)."
+msgid "Finds blobs in the given grayscale image using the Determinant of Hessian (DoH) method."
+msgstr "Recherche les taches dans l'image en niveaux de gris donnée en utilisant la méthode du déterminant de Hessian (DoH)."
 
-#: cdl.algorithms.image.find_blobs_doh:11
-#: cdl.algorithms.image.find_blobs_log:11 of
-msgid ""
-"If ``True``, the radius of each blob is returned as ``sqrt(sigma)`` for "
-"each detected blob."
-msgstr ""
-"Si ``True``, le rayon de chaque tache est retourné comme ``sqrt(sigma)`` "
-"pour chaque tache détectée."
+msgid "If ``True``, the radius of each blob is returned as ``sqrt(sigma)`` for each detected blob."
+msgstr "Si ``True``, le rayon de chaque tache est retourné comme ``sqrt(sigma)`` pour chaque tache détectée."
 
-#: cdl.algorithms.image.find_blobs_log:1 of
-msgid ""
-"Finds blobs in the given grayscale image using the Laplacian of Gaussian "
-"(LoG) method."
-msgstr ""
-"Recherche les taches dans l'image en niveaux de gris donnée en utilisant "
-"la méthode du Laplacien de Gauss (LoG)."
+msgid "Finds blobs in the given grayscale image using the Laplacian of Gaussian (LoG) method."
+msgstr "Recherche les taches dans l'image en niveaux de gris donnée en utilisant la méthode du Laplacien de Gauss (LoG)."
 
-#: cdl.algorithms.image.remove_overlapping_disks:1 of
 msgid "Remove overlapping disks among coordinates"
 msgstr "Supprimer les disques qui se chevauchent parmi les coordonnées"
 
-#: cdl.algorithms.image.remove_overlapping_disks:3 of
 msgid "The coordinates of the disks"
 msgstr "Les coordonnées des disques"
 
-#: cdl.algorithms.image.remove_overlapping_disks:5 of
 msgid "The coordinates of the disks with overlapping disks removed"
 msgstr "Les coordonnées des disques avec les disques qui se chevauchent supprimés"
 
-#: cdl.algorithms.image.find_blobs_opencv:1 of
-msgid ""
-"Finds blobs in the given grayscale image using OpenCV's "
-"SimpleBlobDetector."
-msgstr ""
-"Recherche les taches dans l'image en niveaux de gris donnée en utilisant "
-"le détecteur de taches simples d'OpenCV."
+msgid "Finds blobs in the given grayscale image using OpenCV's SimpleBlobDetector."
+msgstr "Recherche les taches dans l'image en niveaux de gris donnée en utilisant le détecteur de taches simples d'OpenCV."
 
-#: cdl.algorithms.image.find_blobs_opencv:4 of
 msgid "The minimum blob intensity."
 msgstr "L'intensité minimale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:5 of
 msgid "The maximum blob intensity."
 msgstr "L'intensité maximale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:6 of
 msgid "The minimum number of times a blob is detected before it is reported."
-msgstr ""
-"Le nombre minimum de fois qu'une tache est détectée avant qu'elle ne soit"
-" signalée."
+msgstr "Le nombre minimum de fois qu'une tache est détectée avant qu'elle ne soit signalée."
 
-#: cdl.algorithms.image.find_blobs_opencv:8 of
 msgid "The minimum distance between blobs."
 msgstr "La distance minimale entre les taches."
 
-#: cdl.algorithms.image.find_blobs_opencv:9 of
 msgid "If ``True``, blobs are filtered by color."
 msgstr "Si ``True``, les taches sont filtrées par couleur."
 
-#: cdl.algorithms.image.find_blobs_opencv:10 of
 msgid "The color of the blobs to filter by."
 msgstr "La couleur des taches à filtrer par."
 
-#: cdl.algorithms.image.find_blobs_opencv:11 of
 msgid "If ``True``, blobs are filtered by area."
 msgstr "Si ``True``, les taches sont filtrées par zone."
 
-#: cdl.algorithms.image.find_blobs_opencv:12 of
 msgid "The minimum blob area."
 msgstr "La zone minimale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:13 of
 msgid "The maximum blob area."
 msgstr "La zone maximale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:14 of
 msgid "If ``True``, blobs are filtered by circularity."
 msgstr "Si ``True``, les taches sont filtrées par circularité."
 
-#: cdl.algorithms.image.find_blobs_opencv:15 of
 msgid "The minimum blob circularity."
 msgstr "La circularité minimale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:16 of
 msgid "The maximum blob circularity."
 msgstr "La circularité maximale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:17 of
 msgid "If ``True``, blobs are filtered by inertia."
 msgstr "Si ``True``, les taches sont filtrées par inertie."
 
-#: cdl.algorithms.image.find_blobs_opencv:18 of
 msgid "The minimum blob inertia ratio."
 msgstr "Le rapport d'inertie minimale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:19 of
 msgid "The maximum blob inertia ratio."
 msgstr "Le rapport d'inertie maximale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:20 of
 msgid "If ``True``, blobs are filtered by convexity."
 msgstr "Si ``True``, les taches sont filtrées par convexité."
 
-#: cdl.algorithms.image.find_blobs_opencv:21 of
 msgid "The minimum blob convexity."
 msgstr "La convexité minimale de la tache."
 
-#: cdl.algorithms.image.find_blobs_opencv:22 of
 msgid "The maximum blob convexity."
 msgstr "La convexité maximale de la tache."
 
-#: cdl.algorithms:36 of
 msgid "Data Type Conversion Algorithms"
 msgstr "Algorithmes de conversion de type de données"
 
-#: cdl.algorithms.datatypes.is_integer_dtype:1 of
 msgid "Return True if data type is an integer type"
 msgstr "Retourne True si le type de données est un type entier"
 
-#: cdl.algorithms.datatypes.is_complex_dtype:3
-#: cdl.algorithms.datatypes.is_integer_dtype:3 of
 msgid "Data type to check"
 msgstr "Type de données à vérifier"
 
-#: cdl.algorithms.datatypes.is_integer_dtype:5 of
 msgid "True if data type is an integer type"
 msgstr "True si le type de données est un type entier"
 
-#: cdl.algorithms.datatypes.is_complex_dtype:1 of
 msgid "Return True if data type is a complex type"
 msgstr "Retourne True si le type de données est un type complexe"
 
-#: cdl.algorithms.datatypes.is_complex_dtype:5 of
 msgid "True if data type is a complex type"
 msgstr "True si le type de données est un type complexe"
 
-#: cdl.algorithms.datatypes.clip_astype:1 of
-msgid ""
-"Convert array to a new data type, after having clipped values to the new "
-"data type's range if it is an integer type. If data type is not integer, "
-"this is equivalent to ``data.astype(dtype)``."
+msgid "Convert array to a new data type, after having clipped values to the new data type's range if it is an integer type. If data type is not integer, this is equivalent to ``data.astype(dtype)``."
 msgstr ""
 
-#: cdl.algorithms.datatypes.clip_astype:5 of
 msgid "Array to convert"
 msgstr ""
 
-#: cdl.algorithms.datatypes.clip_astype:6 of
-#, fuzzy
 msgid "Data type to convert to"
-msgstr "Type de données à vérifier"
+msgstr "Type de données après conversion"
 
-#: cdl.algorithms.datatypes.clip_astype:8 of
 msgid "Array converted to new data type"
 msgstr ""
 
-#: cdl.algorithms:42 of
 msgid "Coordinate Conversion Algorithms"
 msgstr "Algorithmes de conversion de coordonnées"
 
-#: cdl.algorithms.coordinates.circle_to_diameter:1 of
 msgid "Convert circle center and radius to X diameter coordinates"
 msgstr "Convertit le centre et le rayon du cercle en coordonnées de diamètre X"
 
-#: cdl.algorithms.coordinates.circle_to_diameter:3 of
 msgid "Circle center X coordinate"
 msgstr "Abscisse du centre du cercle"
 
-#: cdl.algorithms.coordinates.circle_to_diameter:4 of
 msgid "Circle center Y coordinate"
 msgstr "Ordonnée du centre du cercle"
 
-#: cdl.algorithms.coordinates.circle_to_diameter:5 of
 msgid "Circle radius"
 msgstr "Rayon du cercle"
 
-#: cdl.algorithms.coordinates.circle_to_diameter:7 of
 msgid "Circle X diameter coordinates"
 msgstr "Coordonnées de diamètre X du cercle"
 
-#: cdl.algorithms.coordinates.array_circle_to_diameter:1 of
 msgid "Convert circle center and radius to X diameter coordinates (array version)"
-msgstr ""
-"Convertit le centre et le rayon du cercle en coordonnées de diamètre X "
-"(version tableau)"
+msgstr "Convertit le centre et le rayon du cercle en coordonnées de diamètre X (version tableau)"
 
-#: cdl.algorithms.coordinates.array_circle_to_center_radius:5
-#: cdl.algorithms.coordinates.array_circle_to_diameter:3 of
 msgid "Circle center and radius, in the form of a 2D array (N, 3)"
 msgstr "Centre et rayon du cercle, sous la forme d'un tableau 2D (N, 3)"
 
-#: cdl.algorithms.coordinates.array_circle_to_center_radius:3
-#: cdl.algorithms.coordinates.array_circle_to_diameter:5 of
 msgid "Circle X diameter coordinates, in the form of a 2D array (N, 4)"
 msgstr "Coordonnées de diamètre X du cercle, sous la forme d'un tableau 2D (N, 4)"
 
-#: cdl.algorithms.coordinates.circle_to_center_radius:1 of
 msgid "Convert circle X diameter coordinates to center and radius"
 msgstr "Convertit les coordonnées de diamètre X du cercle en centre et rayon"
 
-#: cdl.algorithms.coordinates.circle_to_center_radius:3 of
 msgid "Diameter start X coordinate"
 msgstr "Abscisse de début de diamètre du cercle"
 
-#: cdl.algorithms.coordinates.circle_to_center_radius:4 of
 msgid "Diameter start Y coordinate"
 msgstr "Ordonnée de début de diamètre du cercle"
 
-#: cdl.algorithms.coordinates.circle_to_center_radius:5 of
 msgid "Diameter end X coordinate"
 msgstr "Abscisse de fin de diamètre du cercle"
 
-#: cdl.algorithms.coordinates.circle_to_center_radius:6 of
 msgid "Diameter end Y coordinate"
 msgstr "Ordonnée de fin de diamètre du cercle"
 
-#: cdl.algorithms.coordinates.circle_to_center_radius:8 of
 msgid "Circle center and radius"
 msgstr "Centre et rayon du cercle"
 
-#: cdl.algorithms.coordinates.array_circle_to_center_radius:1 of
 msgid "Convert circle X diameter coordinates to center and radius (array version)"
-msgstr ""
-"Convertit les coordonnées de diamètre X du cercle en centre et rayon "
-"(version tableau)"
+msgstr "Convertit les coordonnées de diamètre X du cercle en centre et rayon (version tableau)"
 
-#: cdl.algorithms.coordinates.ellipse_to_diameters:1 of
 msgid "Convert ellipse center, axes and angle to X/Y diameters coordinates"
-msgstr ""
-"Convertit le centre, les axes et l'angle de l'ellipse en coordonnées de "
-"diamètres X/Y"
+msgstr "Convertit le centre, les axes et l'angle de l'ellipse en coordonnées de diamètres X/Y"
 
-#: cdl.algorithms.coordinates.ellipse_to_diameters:3 of
 msgid "Ellipse center X coordinate"
 msgstr "Abscisse du centre de l'ellipse"
 
-#: cdl.algorithms.coordinates.ellipse_to_diameters:4 of
 msgid "Ellipse center Y coordinate"
 msgstr "Ordonnée du centre de l'ellipse"
 
-#: cdl.algorithms.coordinates.ellipse_to_diameters:5 of
 msgid "Ellipse half larger axis"
 msgstr "Demi grand axe de l'ellipse"
 
-#: cdl.algorithms.coordinates.ellipse_to_diameters:6 of
 msgid "Ellipse half smaller axis"
 msgstr "Demi petit axe de l'ellipse"
 
-#: cdl.algorithms.coordinates.ellipse_to_diameters:7 of
 msgid "Ellipse angle"
 msgstr "Angle de l'ellipse"
 
-#: cdl.algorithms.coordinates.ellipse_to_diameters:9 of
 msgid "Ellipse X/Y diameters (major/minor axes) coordinates"
 msgstr "Coordonnées des diamètres X/Y (grands/petits axes) de l'ellipse"
 
-#: cdl.algorithms.coordinates.array_ellipse_to_diameters:1 of
-msgid ""
-"Convert ellipse center, axes and angle to X/Y diameters coordinates "
-"(array version)"
-msgstr ""
-"Convertit le centre, les axes et l'angle de l'ellipse en coordonnées de "
-"diamètres X/Y (version tableau)"
+msgid "Convert ellipse center, axes and angle to X/Y diameters coordinates (array version)"
+msgstr "Convertit le centre, les axes et l'angle de l'ellipse en coordonnées de diamètres X/Y (version tableau)"
 
-#: cdl.algorithms.coordinates.array_ellipse_to_center_axes_angle:6
-#: cdl.algorithms.coordinates.array_ellipse_to_diameters:4 of
 msgid "Ellipse center, axes and angle, in the form of a 2D array (N, 5)"
 msgstr "Centre, axes et angle de l'ellipse, sous la forme d'un tableau 2D (N, 5)"
 
-#: cdl.algorithms.coordinates.array_ellipse_to_diameters:6 of
-msgid ""
-"Ellipse X/Y diameters (major/minor axes) coordinates,  in the form of a "
-"2D array (N, 8)"
-msgstr ""
-"Coordonnées des diamètres X/Y de l'ellipse (grands/petits axes), sous la "
-"forme d'un tableau 2D (N, 8)"
+msgid "Ellipse X/Y diameters (major/minor axes) coordinates,  in the form of a 2D array (N, 8)"
+msgstr "Coordonnées des diamètres X/Y de l'ellipse (grands/petits axes), sous la forme d'un tableau 2D (N, 8)"
 
-#: cdl.algorithms.coordinates.array_ellipse_to_diameters:8 of
 msgid "Ellipse X/Y diameters (major/minor axes) coordinates,"
 msgstr "Coordonnées des diamètres X/Y (grands/petits axes) de l'ellipse,"
 
-#: cdl.algorithms.coordinates.array_ellipse_to_diameters:9 of
 msgid "in the form of a 2D array (N, 8)"
 msgstr "sous la forme d'un tableau 2D (N, 8)"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:1 of
 msgid "Convert ellipse X/Y diameters coordinates to center, axes and angle"
-msgstr ""
-"Convertit les coordonnées de diamètres X/Y de l'ellipse en centre, axes "
-"et angle"
+msgstr "Convertit les coordonnées de diamètres X/Y de l'ellipse en centre, axes et angle"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:3 of
 msgid "major axis start X coordinate"
 msgstr "abscisse de début du grand axe"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:4 of
 msgid "major axis start Y coordinate"
 msgstr "ordonnée de début du grand axe"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:5 of
 msgid "major axis end X coordinate"
 msgstr "abscisse de fin du grand axe"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:6 of
 msgid "major axis end Y coordinate"
 msgstr "ordonnée de fin du grand axe"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:7 of
 msgid "minor axis start X coordinate"
 msgstr "abscisse de début du petit axe"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:8 of
 msgid "minor axis start Y coordinate"
 msgstr "ordonnée de début du petit axe"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:9 of
 msgid "minor axis end X coordinate"
 msgstr "abscisse de fin du petit axe"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:10 of
 msgid "minor axis end Y coordinate"
 msgstr "ordonnée de fin du petit axe"
 
-#: cdl.algorithms.coordinates.ellipse_to_center_axes_angle:12 of
 msgid "Ellipse center, axes and angle"
 msgstr "Centre, axes et angle de l'ellipse"
 
-#: cdl.algorithms.coordinates.array_ellipse_to_center_axes_angle:1 of
-msgid ""
-"Convert ellipse X/Y diameters coordinates to center, axes and angle "
-"(array version)"
-msgstr ""
-"Convertit les coordonnées de diamètres X/Y de l'ellipse en centre, axes "
-"et angle (version tableau)"
+msgid "Convert ellipse X/Y diameters coordinates to center, axes and angle (array version)"
+msgstr "Convertit les coordonnées de diamètres X/Y de l'ellipse en centre, axes et angle (version tableau)"
 
-#: cdl.algorithms.coordinates.array_ellipse_to_center_axes_angle:4 of
 msgid "Ellipse X/Y diameters coordinates, in the form of a 2D array (N, 8)"
-msgstr ""
-"Coordonnées de diamètres X/Y de l'ellipse, sous la forme d'un tableau 2D "
-"(N, 8)"
+msgstr "Coordonnées de diamètres X/Y de l'ellipse, sous la forme d'un tableau 2D (N, 8)"
 
-#: cdl.algorithms.coordinates.cartesian2polar:1 of
 msgid "Convert Cartesian coordinates to polar coordinates."
 msgstr "Convertit les coordonnées de diamètre X du cercle en centre et rayon"
 
-#: cdl.algorithms.coordinates.cartesian2polar:3 of
 msgid "Cartesian x-coordinate."
 msgstr ""
 
-#: cdl.algorithms.coordinates.cartesian2polar:4 of
 msgid "Cartesian y-coordinate."
 msgstr ""
 
-#: cdl.algorithms.coordinates.cartesian2polar:5
-#: cdl.algorithms.coordinates.polar2cartesian:5 of
 msgid "Unit of the angle ('rad' or 'deg')."
 msgstr ""
 
-#: cdl.algorithms.coordinates.cartesian2polar:7 of
 msgid "Polar coordinates (r, theta) where r is the radius and theta is the angle."
 msgstr ""
 
-#: cdl.algorithms.coordinates.polar2cartesian:1 of
 msgid "Convert polar coordinates to Cartesian coordinates."
 msgstr ""
 
-#: cdl.algorithms.coordinates.polar2cartesian:3 of
 msgid "Polar radius."
 msgstr ""
 
-#: cdl.algorithms.coordinates.polar2cartesian:4 of
 msgid "Polar angle."
 msgstr ""
 
-#: cdl.algorithms.coordinates.polar2cartesian:7 of
-msgid ""
-"Cartesian coordinates (x, y) where x is the x-coordinate and y is the "
-"y-coordinate."
+msgid "Cartesian coordinates (x, y) where x is the x-coordinate and y is the y-coordinate."
+msgstr ""
+
+msgid "Negative radius values are not supported. They will be set to 0."
 msgstr ""

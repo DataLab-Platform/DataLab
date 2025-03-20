@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-21 16:49+0200\n"
+"POT-Creation-Date: 2025-03-20 16:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,353 +17,245 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: ../../doc/features/signal/menu_operations.rst:4
 msgid "Operations on Signals"
 msgstr "Opérations sur les signaux"
 
-#: ../../doc/features/signal/menu_operations.rst:6
 msgid "This section describes the operations that can be performed on signals."
-msgstr ""
-"Cette section décrit les opérations qui peuvent être effectuées sur les "
-"signaux."
+msgstr "Cette section décrit les opérations qui peuvent être effectuées sur les signaux."
 
-#: ../../doc/features/signal/menu_operations.rst:10
-msgid ""
-":ref:`sig-menu-processing` for more information on signal processing "
-"features, or :ref:`sig-menu-analysis` for information on analysis "
-"features on signals."
-msgstr ""
-":ref:`sig-menu-processing` pour plus d'informations sur les "
-"fonctionnalités de traitement des signaux, ou :ref:`sig-menu-analysis` "
-"pour des informations sur les fonctionnalités d'analyse des signaux."
+msgid ":ref:`sig-menu-processing` for more information on signal processing features, or :ref:`sig-menu-analysis` for information on analysis features on signals."
+msgstr ":ref:`sig-menu-processing` pour plus d'informations sur les fonctionnalités de traitement des signaux, ou :ref:`sig-menu-analysis` pour des informations sur les fonctionnalités d'analyse des signaux."
 
-#: ../../doc/features/signal/menu_operations.rst:15
 msgid "Screenshot of the \"Operations\" menu."
 msgstr "Capture d'écran du menu \"Opérations\"."
 
-#: ../../doc/features/signal/menu_operations.rst:17
-msgid ""
-"When the \"Signal Panel\" is selected, the menus and toolbars are updated"
-" to provide signal-related actions."
-msgstr ""
-"Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres "
-"d'outils sont mis à jour pour fournir les actions liées aux signaux."
+msgid "When the \"Signal Panel\" is selected, the menus and toolbars are updated to provide signal-related actions."
+msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux signaux."
 
-#: ../../doc/features/signal/menu_operations.rst:20
-msgid ""
-"The \"Operations\" menu allows you to perform various operations on the "
-"selected signals, such as arithmetic operations, peak detection, or "
-"convolution."
-msgstr ""
-"Le menu \"Opérations\" permet d'effectuer diverses opérations sur les "
-"signaux sélectionnés, telles que des opérations arithmétiques, la "
-"détection de pics, ou encore la convolution."
+msgid "The \"Operations\" menu allows you to perform various operations on the selected signals, such as arithmetic operations, peak detection, or convolution."
+msgstr "Le menu \"Opérations\" permet d'effectuer diverses opérations sur les signaux sélectionnés, telles que des opérations arithmétiques, la détection de pics, ou encore la convolution."
 
-#: ../../doc/features/signal/menu_operations.rst:25
 msgid "Basic arithmetic operations"
 msgstr "Opérations arithmétiques de base"
 
-#: ../../doc/features/signal/menu_operations.rst:31
-#: ../../doc/features/signal/menu_operations.rst:73
-#: ../../doc/features/signal/menu_operations.rst:107
-#: ../../doc/features/signal/menu_operations.rst:184
 msgid "Operation"
 msgstr "Opération"
 
-#: ../../doc/features/signal/menu_operations.rst:32
-#: ../../doc/features/signal/menu_operations.rst:74
-#: ../../doc/features/signal/menu_operations.rst:108
-#: ../../doc/features/signal/menu_operations.rst:151
 msgid "Description"
 msgstr "Description"
 
-#: ../../doc/features/signal/menu_operations.rst:33
 msgid "|sum| Sum"
 msgstr "|sum| Somme"
 
-#: ../../doc/features/signal/menu_operations.rst:44
 msgid "sum"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:34
 msgid ":math:`y_{M} = \\sum_{k=0}^{M-1}{y_{k}}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:35
 msgid "|average| Average"
 msgstr "|average| Moyenne"
 
-#: ../../doc/features/signal/menu_operations.rst:48
 msgid "average"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:36
 msgid ":math:`y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:37
 msgid "|difference| Difference"
 msgstr "|difference| Différence"
 
-#: ../../doc/features/signal/menu_operations.rst:52
 msgid "difference"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:38
+#, python-brace-format
 msgid ":math:`y_{2} = y_{1} - y_{0}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:39
 msgid "|product| Product"
 msgstr "|product| Produit"
 
-#: ../../doc/features/signal/menu_operations.rst:56
 msgid "product"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:40
 msgid ":math:`y_{M} = \\prod_{k=0}^{M-1}{y_{k}}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:41
 msgid "|division| Division"
 msgstr "|division| Division"
 
-#: ../../doc/features/signal/menu_operations.rst:60
 msgid "division"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:42
 msgid ":math:`y_{2} = \\dfrac{y_{1}}{y_{0}}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:65
 msgid "Operations with a constant"
 msgstr "Opérations avec une constante"
 
-#: ../../doc/features/signal/menu_operations.rst:67
-msgid ""
-"Create a new signal which is the result of a constant operation on each "
-"selected signal:"
-msgstr ""
-"Crée un signal à partir d'une opération avec une constante sur chaque "
-"signal sélectionné :"
+msgid "Create a new signal which is the result of a constant operation on each selected signal:"
+msgstr "Crée un signal à partir d'une opération avec une constante sur chaque signal sélectionné :"
 
-#: ../../doc/features/signal/menu_operations.rst:75
 msgid "|constant_add| Addition"
 msgstr "|constant_add| Addition"
 
-#: ../../doc/features/signal/menu_operations.rst:84
 msgid "constant_add"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:76
+#, python-brace-format
 msgid ":math:`y_{k} = y_{k-1} + c`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:77
 msgid "|constant_substract| Subtraction"
 msgstr "|constant_substract| Soustraction"
 
-#: ../../doc/features/signal/menu_operations.rst:88
 msgid "constant_substract"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:78
+#, python-brace-format
 msgid ":math:`y_{k} = y_{k-1} - c`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:79
 msgid "|constant_multiply| Multiplication"
 msgstr "|constant_multiply| Multiplication"
 
-#: ../../doc/features/signal/menu_operations.rst:92
 msgid "constant_multiply"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:80
+#, python-brace-format
 msgid ":math:`y_{k} = y_{k-1} \\times c`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:81
 msgid "|constant_divide| Division"
 msgstr "|constant_divide| Division"
 
-#: ../../doc/features/signal/menu_operations.rst:96
 msgid "constant_divide"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:82
 msgid ":math:`y_{k} = \\dfrac{y_{k-1}}{c}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:101
 msgid "Absolute value, real and imaginary parts"
 msgstr "Valeur absolue, parties réelle et imaginaire"
 
-#: ../../doc/features/signal/menu_operations.rst:109
 msgid "|abs| Absolute value"
 msgstr "|abs| Valeur absolue"
 
-#: ../../doc/features/signal/menu_operations.rst:116
 msgid "abs"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:110
+#, python-brace-format
 msgid ":math:`y_{k} = |y_{k-1}|`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:111
 msgid "|re| Real part"
 msgstr "|re| Partie réelle"
 
-#: ../../doc/features/signal/menu_operations.rst:120
 msgid "re"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:112
+#, python-brace-format
 msgid ":math:`y_{k} = \\Re(y_{k-1})`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:113
 msgid "|im| Imaginary part"
 msgstr "|im| Partie imaginaire"
 
-#: ../../doc/features/signal/menu_operations.rst:124
 msgid "im"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:114
+#, python-brace-format
 msgid ":math:`y_{k} = \\Im(y_{k-1})`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:129
 msgid "Data type conversion"
 msgstr "Conversion du type de données"
 
-#: ../../doc/features/signal/menu_operations.rst:131
-msgid ""
-"The \"Convert data type\" |convert_dtype| action allows you to convert "
-"the data type of the selected signals."
+msgid "The \"Convert data type\" |convert_dtype| action allows you to convert the data type of the selected signals."
 msgstr "L'action \"Convertir le type de données\" |convert_dtype| permet de convertir le type de données des signaux sélectionnés."
 
-#: ../../doc/features/signal/menu_operations.rst:134
 msgid "convert_dtype"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:140
-msgid ""
-"Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
-"with the default parameters (`casting='unsafe'`)."
-msgstr ""
-"La conversion du type de données utilise la fonction "
-":py:func:`numpy.ndarray.astype` avec les paramètres par défaut "
-"(`casting='unsafe'`)."
+msgid "Data type conversion relies on :py:func:`numpy.ndarray.astype` function with the default parameters (`casting='unsafe'`)."
+msgstr "La conversion du type de données utilise la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
 
-#: ../../doc/features/signal/menu_operations.rst:144
 msgid "Basic mathematical functions"
 msgstr "Fonctions mathématiques de base"
 
-#: ../../doc/features/signal/menu_operations.rst:150
 msgid "Function"
 msgstr "Fonction"
 
-#: ../../doc/features/signal/menu_operations.rst:152
 msgid "|exp| Exponential"
 msgstr "|exp| Exponentielle"
 
-#: ../../doc/features/signal/menu_operations.rst:161
 msgid "exp"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:153
+#, python-brace-format
 msgid ":math:`y_{k} = \\exp(y_{k-1})`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:154
 msgid "|log10| Logarithm (base 10)"
 msgstr "|log10| Logarithme (base 10)"
 
-#: ../../doc/features/signal/menu_operations.rst:165
 msgid "log10"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:155
+#, python-brace-format
 msgid ":math:`y_{k} = \\log_{10}(y_{k-1})`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:156
 msgid "|power| Power"
 msgstr "|power| Puissance"
 
-#: ../../doc/features/signal/menu_operations.rst:169
 msgid "power"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:157
+#, python-brace-format
 msgid ":math:`y_{k} = y_{k-1}^{n}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:158
 msgid "|sqrt| Square root"
 msgstr "|sqrt| Racine carrée"
 
-#: ../../doc/features/signal/menu_operations.rst:173
 msgid "sqrt"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:159
 msgid ":math:`y_{k} = \\sqrt{y_{k-1}}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:178
 msgid "Other mathematical operations"
 msgstr "Autres opérations mathématiques"
 
-#: ../../doc/features/signal/menu_operations.rst:185
 msgid "Implementation"
 msgstr "Implémentation"
 
-#: ../../doc/features/signal/menu_operations.rst:186
 msgid "|derivative| Derivative"
 msgstr "|derivative| Dérivée"
 
-#: ../../doc/features/signal/menu_operations.rst:193
 msgid "derivative"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:187
-msgid ""
-"Based on `numpy.gradient "
-"<https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
+msgid "Based on `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
 msgstr "Basée sur `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
 
-#: ../../doc/features/signal/menu_operations.rst:188
 msgid "|integral| Integral"
 msgstr "|integral| Intégrale"
 
-#: ../../doc/features/signal/menu_operations.rst:197
 msgid "integral"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:189
-msgid ""
-"Based on `scipy.integrate.cumulative_trapezoid "
-"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
+msgid "Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
 msgstr "Basée sur `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
 
-#: ../../doc/features/signal/menu_operations.rst:190
 msgid "|convolution| Convolution"
 msgstr "|convolution| Convolution"
 
-#: ../../doc/features/signal/menu_operations.rst:201
 msgid "convolution"
 msgstr ""
 
-#: ../../doc/features/signal/menu_operations.rst:191
-msgid ""
-"Based on `scipy.signal.convolve "
-"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+msgid "Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
 msgstr "Basée sur `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"

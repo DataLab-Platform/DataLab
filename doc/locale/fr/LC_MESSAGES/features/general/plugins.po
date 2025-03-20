@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-19 10:16+0100\n"
+"POT-Creation-Date: 2025-03-20 16:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,471 +17,242 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: ../../doc/features/general/plugins.rst:-1
-msgid ""
-"Plugin system for DataLab, the open-source scientific data analysis and "
-"visualization platform"
-msgstr ""
-"Systeme de plugins de DataLab, la plateforme open-source d'analyse et de "
-"visualisation de données scientifiques"
+msgid "Plugin system for DataLab, the open-source scientific data analysis and visualization platform"
+msgstr "Systeme de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
 
-#: ../../doc/features/general/plugins.rst:-1
-msgid ""
-"DataLab, plugin, processing, input/output, HDF5, file format, data "
-"analysis, visualization, scientific, open-source, platform"
-msgstr ""
-"DataLab, plugin, traitement, entrée/sortie, HDF5, format de fichier, "
-"analyse de données, visualisation, scientifique, open-source, plateforme"
+msgid "DataLab, plugin, processing, input/output, HDF5, file format, data analysis, visualization, scientific, open-source, platform"
+msgstr "DataLab, plugin, traitement, entrée/sortie, HDF5, format de fichier, analyse de données, visualisation, scientifique, open-source, plateforme"
 
-#: ../../doc/features/general/plugins.rst:4
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ../../doc/features/general/plugins.rst:10
-msgid ""
-"DataLab is a modular application. It is possible to add new features to "
-"DataLab by writing plugins. A plugin is a Python module that is loaded at"
-" startup by DataLab. A plugin may add new features to DataLab, or modify "
-"existing features."
-msgstr ""
-"DataLab est une application modulaire. Il est possible d'ajouter de "
-"nouvelles fonctionnalités à DataLab en écrivant des plugins. Un plugin "
-"est un module Python qui est chargé au démarrage par DataLab. Un plugin "
-"peut ajouter de nouvelles fonctionnalités à DataLab, ou modifier des "
-"fonctionnalités existantes."
+msgid "DataLab is a modular application. It is possible to add new features to DataLab by writing plugins. A plugin is a Python module that is loaded at startup by DataLab. A plugin may add new features to DataLab, or modify existing features."
+msgstr "DataLab est une application modulaire. Il est possible d'ajouter de nouvelles fonctionnalités à DataLab en écrivant des plugins. Un plugin est un module Python qui est chargé au démarrage par DataLab. Un plugin peut ajouter de nouvelles fonctionnalités à DataLab, ou modifier des fonctionnalités existantes."
 
-#: ../../doc/features/general/plugins.rst:14
 msgid "The plugin system currently supports the following features:"
-msgstr ""
-"Le système de plugins prend actuellement en charge les fonctionnalités "
-"suivantes :"
+msgstr "Le système de plugins prend actuellement en charge les fonctionnalités suivantes :"
 
-#: ../../doc/features/general/plugins.rst:16
-msgid ""
-"Processing features: add new processing tasks to the DataLab processing "
-"system, including specific graphical user interfaces."
-msgstr ""
-"Fonctionnalités de traitement : ajouter de nouvelles tâches de traitement"
-" au système de traitement DataLab, y compris des interfaces graphiques "
-"spécifiques."
+msgid "Processing features: add new processing tasks to the DataLab processing system, including specific graphical user interfaces."
+msgstr "Fonctionnalités de traitement : ajouter de nouvelles tâches de traitement au système de traitement DataLab, y compris des interfaces graphiques spécifiques."
 
-#: ../../doc/features/general/plugins.rst:18
-msgid ""
-"Input/output features: add new file formats to the DataLab file I/O "
-"system."
-msgstr ""
-"Entrée/sortie : ajouter de nouveaux formats de fichiers au système "
-"d'entrée/sortie de DataLab."
+msgid "Input/output features: add new file formats to the DataLab file I/O system."
+msgstr "Entrée/sortie : ajouter de nouveaux formats de fichiers au système d'entrée/sortie de DataLab."
 
-#: ../../doc/features/general/plugins.rst:19
 msgid "HDF5 features: add new HDF5 file formats to the DataLab HDF5 I/O system."
-msgstr ""
-"Fonctionnalités HDF5 : ajouter de nouveaux formats de fichiers HDF5 au "
-"système d'entrée/sortie HDF5 de DataLab."
+msgstr "Fonctionnalités HDF5 : ajouter de nouveaux formats de fichiers HDF5 au système d'entrée/sortie HDF5 de DataLab."
 
-#: ../../doc/features/general/plugins.rst:22
 msgid "What is a plugin?"
 msgstr "Qu'est-ce qu'un plugin ?"
 
-#: ../../doc/features/general/plugins.rst:24
-msgid ""
-"A plugin is a Python module that is loaded at startup by DataLab. A "
-"plugin may add new features to DataLab, or modify existing features."
-msgstr ""
-"Un plugin est un module Python qui est chargé au démarrage par DataLab. "
-"Un plugin peut ajouter de nouvelles fonctionnalités à DataLab, ou "
-"modifier des fonctionnalités existantes."
+msgid "A plugin is a Python module that is loaded at startup by DataLab. A plugin may add new features to DataLab, or modify existing features."
+msgstr "Un plugin est un module Python qui est chargé au démarrage par DataLab. Un plugin peut ajouter de nouvelles fonctionnalités à DataLab, ou modifier des fonctionnalités existantes."
 
-#: ../../doc/features/general/plugins.rst:27
-msgid ""
-"A plugin is a Python module which file name starts with ``cdl_``, and "
-"which contains a class derived from the :class:`cdl.plugins.PluginBase` "
-"class. The name of the class is not important, as long as it is derived "
-"from :class:`cdl.plugins.PluginBase` and has a ``PLUGIN_INFO`` attribute "
-"that is an instance of the :class:`cdl.plugins.PluginInfo` class. The "
-"``PLUGIN_INFO`` attribute is used by DataLab to retrieve information "
-"about the plugin."
-msgstr ""
-"Un plugin est un module Python dont le nom de fichier commence par "
-"``cdl_`` et qui contient une classe dérivée de la classe "
-":class:`cdl.plugins.PluginBase`. Le nom de la classe n'est pas important,"
-" tant qu'elle est dérivée de :class:`cdl.plugins.PluginBase` et qu'elle "
-"dispose d'un attribut ``PLUGIN_INFO`` qui est une instance de la classe "
-":class:`cdl.plugins.PluginInfo`. L'attribut ``PLUGIN_INFO`` est utilisé "
-"par DataLab pour récupérer des informations sur le plugin."
+msgid "A plugin is a Python module which file name starts with ``cdl_``, and which contains a class derived from the :class:`cdl.plugins.PluginBase` class. The name of the class is not important, as long as it is derived from :class:`cdl.plugins.PluginBase` and has a ``PLUGIN_INFO`` attribute that is an instance of the :class:`cdl.plugins.PluginInfo` class. The ``PLUGIN_INFO`` attribute is used by DataLab to retrieve information about the plugin."
+msgstr "Un plugin est un module Python dont le nom de fichier commence par ``cdl_`` et qui contient une classe dérivée de la classe :class:`cdl.plugins.PluginBase`. Le nom de la classe n'est pas important, tant qu'elle est dérivée de :class:`cdl.plugins.PluginBase` et qu'elle dispose d'un attribut ``PLUGIN_INFO`` qui est une instance de la classe :class:`cdl.plugins.PluginInfo`. L'attribut ``PLUGIN_INFO`` est utilisé par DataLab pour récupérer des informations sur le plugin."
 
-#: ../../doc/features/general/plugins.rst:36
-msgid ""
-"DataLab's plugin discovery mechanism will only load plugins that are "
-"defined in Python files which names start with ``cdl_`` (e.g. "
-"``cdl_myplugin.py``)."
-msgstr ""
-"Le mécanisme de découverte de plugins de DataLab ne chargera que les "
-"plugins définis dans des fichiers Python dont les noms commencent par "
-"``cdl_`` (par exemple ``cdl_monplugin.py``)."
+msgid "DataLab's plugin discovery mechanism will only load plugins that are defined in Python files which names start with ``cdl_`` (e.g. ``cdl_myplugin.py``)."
+msgstr "Le mécanisme de découverte de plugins de DataLab ne chargera que les plugins définis dans des fichiers Python dont les noms commencent par ``cdl_`` (par exemple ``cdl_monplugin.py``)."
 
-#: ../../doc/features/general/plugins.rst:40
 msgid "Where to put a plugin?"
 msgstr "Où est positionné un plugin ?"
 
-#: ../../doc/features/general/plugins.rst:42
-msgid ""
-"As plugins are Python modules, they can be put anywhere in the Python "
-"path of the DataLab installation."
-msgstr ""
-"Etant donné que les plugins sont des modules Python, ils peuvent être "
-"placés n'importe où dans le chemin Python de l'installation de DataLab."
+msgid "As plugins are Python modules, they can be put anywhere in the Python path of the DataLab installation."
+msgstr "Etant donné que les plugins sont des modules Python, ils peuvent être placés n'importe où dans le chemin Python de l'installation de DataLab."
 
-#: ../../doc/features/general/plugins.rst:45
 msgid "Special additional locations are available for plugins:"
-msgstr ""
-"Des emplacements supplémentaires spéciaux sont disponibles pour les "
-"plugins :"
+msgstr "Des emplacements supplémentaires spéciaux sont disponibles pour les plugins :"
 
-#: ../../doc/features/general/plugins.rst:47
-msgid ""
-"The `plugins` directory in the user configuration folder (e.g. "
-"`C:/Users/JohnDoe/.DataLab/plugins` on Windows or `~/.DataLab/plugins` on"
-" Linux)."
-msgstr ""
-"Le répertoire `plugins` dans le dossier de configuration de l'utilisateur"
-" (par exemple `C:/Users/JohnDoe/.DataLab/plugins` sur Windows ou "
-"`~/.DataLab/plugins` sur Linux)."
+msgid "The `plugins` directory in the user configuration folder (e.g. `C:/Users/JohnDoe/.DataLab/plugins` on Windows or `~/.DataLab/plugins` on Linux)."
+msgstr "Le répertoire `plugins` dans le dossier de configuration de l'utilisateur (par exemple `C:/Users/JohnDoe/.DataLab/plugins` sur Windows ou `~/.DataLab/plugins` sur Linux)."
 
-#: ../../doc/features/general/plugins.rst:51
-msgid ""
-"The `plugins` directory in the same folder as the `DataLab` executable in"
-" case of a standalone installation."
-msgstr ""
-"Le répertoire `plugins` dans le même dossier que l'exécutable `DataLab` "
-"en cas d'installation autonome."
+msgid "The `plugins` directory in the same folder as the `DataLab` executable in case of a standalone installation."
+msgstr "Le répertoire `plugins` dans le même dossier que l'exécutable `DataLab` en cas d'installation autonome."
 
-#: ../../doc/features/general/plugins.rst:54
-msgid ""
-"The `plugins` directory in the `cdl` package in case for internal plugins"
-" only (i.e. it is not recommended to put your own plugins there)."
-msgstr ""
-"Le répertoire `plugins` dans le package `cdl` en cas de plugins internes "
-"uniquement (c'est-à-dire qu'il n'est pas recommandé d'y placer vos "
-"propres plugins)."
+msgid "The `plugins` directory in the `cdl` package in case for internal plugins only (i.e. it is not recommended to put your own plugins there)."
+msgstr "Le répertoire `plugins` dans le package `cdl` en cas de plugins internes uniquement (c'est-à-dire qu'il n'est pas recommandé d'y placer vos propres plugins)."
 
-#: ../../doc/features/general/plugins.rst:58
 msgid "How to develop a plugin?"
 msgstr "Comment développer un plugin ?"
 
-#: ../../doc/features/general/plugins.rst:60
-msgid ""
-"To develop a plugin, you may start by deriving from one of the example "
-"plugins (see below) and modify it to suit your needs."
-msgstr ""
-"Pour développer un plugin, vous pouvez commencer par dériver de l'un des "
-"exemples de plugins (voir ci-dessous) et le modifier pour répondre à vos "
-"besoins."
+msgid "To develop a plugin, you may start by deriving from one of the example plugins (see below) and modify it to suit your needs."
+msgstr "Pour développer un plugin, vous pouvez commencer par dériver de l'un des exemples de plugins (voir ci-dessous) et le modifier pour répondre à vos besoins."
 
-#: ../../doc/features/general/plugins.rst:63
-msgid ""
-"If you want to code a plugin in your usual Python development environment"
-" (preferably with an IDE like `Spyder <https://www.spyder-ide.org/>`_) "
-"and take advantage of the code completion, you can add the `cdl` package "
-"to your Python path."
-msgstr ""
-"Si vous souhaitez coder un plugin dans votre environnement de "
-"développement Python habituel (de préférence avec un IDE comme `Spyder "
-"<https://www.spyder-ide.org/>`_) et profiter de la complétion de code, "
-"vous pouvez ajouter le package `cdl` à votre chemin Python."
+msgid "If you want to code a plugin in your usual Python development environment (preferably with an IDE like `Spyder <https://www.spyder-ide.org/>`_) and take advantage of the code completion, you can add the `cdl` package to your Python path."
+msgstr "Si vous souhaitez coder un plugin dans votre environnement de développement Python habituel (de préférence avec un IDE comme `Spyder <https://www.spyder-ide.org/>`_) et profiter de la complétion de code, vous pouvez ajouter le package `cdl` à votre chemin Python."
 
-#: ../../doc/features/general/plugins.rst:67
 msgid "This can be done:"
 msgstr "Cela peut être fait :"
 
-#: ../../doc/features/general/plugins.rst:69
-msgid ""
-"By installing DataLab in your Python environment (using one of the "
-"following methods: :ref:`install_conda`, :ref:`install_pip`, "
-":ref:`install_wheel`, or :ref:`install_source`),"
-msgstr ""
-"En installant DataLab dans votre environnement Python (en utilisant l'une"
-" des méthodes suivantes : :ref:`install_conda`, :ref:`install_pip`, "
-":ref:`install_wheel`, ou :ref:`install_source`),"
+msgid "By installing DataLab in your Python environment (using one of the following methods: :ref:`install_conda`, :ref:`install_pip`, :ref:`install_wheel`, or :ref:`install_source`),"
+msgstr "En installant DataLab dans votre environnement Python (en utilisant l'une des méthodes suivantes : :ref:`install_conda`, :ref:`install_pip`, :ref:`install_wheel`, ou :ref:`install_source`),"
 
-#: ../../doc/features/general/plugins.rst:72
 msgid "Or by adding the `cdl` package to your Python path manually:"
 msgstr "Ou en ajoutant le package `cdl` à votre chemin Python manuellement :"
 
-#: ../../doc/features/general/plugins.rst:74
-msgid ""
-"Download the DataLab source code from the `PyPI page "
-"<https://pypi.org/project/cdl/>`_,"
-msgstr ""
-"Téléchargez le code source de DataLab depuis la page `PyPI "
-"<https://pypi.org/project/cdl/>`_,"
+msgid "Download the DataLab source code from the `PyPI page <https://pypi.org/project/cdl/>`_,"
+msgstr "Téléchargez le code source de DataLab depuis la page `PyPI <https://pypi.org/project/cdl/>`_,"
 
-#: ../../doc/features/general/plugins.rst:75
 msgid "Unzip the source code to a folder on your computer,"
 msgstr "Décompressez le code source dans un dossier sur votre ordinateur,"
 
-#: ../../doc/features/general/plugins.rst:76
-msgid ""
-"Add the `cdl` package to your Python path (e.g. by using the *PYTHONPATH "
-"Manager* in Spyder)."
-msgstr ""
-"Ajoutez le package `cdl` à votre chemin Python (par exemple en utilisant "
-"le *Gestionnaire de PYTHONPATH* dans Spyder)."
+msgid "Add the `cdl` package to your Python path (e.g. by using the *PYTHONPATH Manager* in Spyder)."
+msgstr "Ajoutez le package `cdl` à votre chemin Python (par exemple en utilisant le *Gestionnaire de PYTHONPATH* dans Spyder)."
 
-#: ../../doc/features/general/plugins.rst:80
-msgid ""
-"Even if you have installed the `cdl` package properly in your Python "
-"environment, you won't be able to run the DataLab application from your "
-"development environment to test your plugin. You will need to run DataLab"
-" from the command line or from the shortcut created during the "
-"installation."
-msgstr ""
-"Même si vous avez correctement installé le package `cdl` dans votre "
-"environnement Python, vous ne pourrez pas exécuter l'application DataLab "
-"depuis votre environnement de développement pour tester votre plugin. "
-"Vous devrez exécuter DataLab à partir de la ligne de commande ou du "
-"raccourci créé lors de l'installation."
+msgid "Even if you have installed the `cdl` package properly in your Python environment, you won't be able to run the DataLab application from your development environment to test your plugin. You will need to run DataLab from the command line or from the shortcut created during the installation."
+msgstr "Même si vous avez correctement installé le package `cdl` dans votre environnement Python, vous ne pourrez pas exécuter l'application DataLab depuis votre environnement de développement pour tester votre plugin. Vous devrez exécuter DataLab à partir de la ligne de commande ou du raccourci créé lors de l'installation."
 
-#: ../../doc/features/general/plugins.rst:86
 msgid "Example: processing plugin"
 msgstr "Exemple : plugin de traitement"
 
-#: ../../doc/features/general/plugins.rst:88
 msgid "Here is a simple example of a plugin that adds a new features to DataLab."
-msgstr ""
-"Voici un exemple simple d'un plugin qui ajoute une nouvelle "
-"fonctionnalité à DataLab."
+msgstr "Voici un exemple simple d'un plugin qui ajoute une nouvelle fonctionnalité à DataLab."
 
-#: ../../doc/features/general/plugins.rst:93
 msgid "Example: input/output plugin"
 msgstr "Exemple : plugin d'entrée/sortie"
 
-#: ../../doc/features/general/plugins.rst:95
-msgid ""
-"Here is a simple example of a plugin that adds a new file formats to "
-"DataLab."
-msgstr ""
-"Voici un exemple simple d'un plugin qui ajoute de nouveaux formats de "
-"fichiers à DataLab."
+msgid "Here is a simple example of a plugin that adds a new file formats to DataLab."
+msgstr "Voici un exemple simple d'un plugin qui ajoute de nouveaux formats de fichiers à DataLab."
 
-#: ../../doc/features/general/plugins.rst:100
 msgid "Other examples"
 msgstr "Autres exemples"
 
-#: ../../doc/features/general/plugins.rst:102
-msgid ""
-"Other examples of plugins can be found in the `plugins/examples` "
-"directory of the DataLab source code (explore `here on GitHub "
-"<https://github.com/DataLab-"
-"Platform/DataLab/tree/main/plugins/examples>`_)."
-msgstr ""
-"D'autres exemples de plugins peuvent être trouvés dans le répertoire "
-"`plugins/examples` du code source de DataLab (explorez `ici sur GitHub "
-"<https://github.com/DataLab-"
-"Platform/DataLab/tree/main/plugins/examples>`_)."
+msgid "Other examples of plugins can be found in the `plugins/examples` directory of the DataLab source code (explore `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
+msgstr "D'autres exemples de plugins peuvent être trouvés dans le répertoire `plugins/examples` du code source de DataLab (explorez `ici sur GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
 
-#: ../../doc/features/general/plugins.rst:106
 msgid "Public API"
 msgstr "API publique"
 
-#: cdl.plugins:2 of
 msgid "DataLab plugin system"
 msgstr "Système de plugins de DataLab"
 
-#: cdl.plugins:4 of
-msgid ""
-"DataLab plugin system provides a way to extend the application with new "
-"functionalities."
-msgstr ""
-"Le système de plugins de DataLab fournit un moyen d'étendre l'application"
-" avec de nouvelles fonctionnalités."
+msgid "DataLab plugin system provides a way to extend the application with new functionalities."
+msgstr "Le système de plugins de DataLab fournit un moyen d'étendre l'application avec de nouvelles fonctionnalités."
 
-#: cdl.plugins:7 of
 msgid "Plugins are Python modules that relies on two classes:"
 msgstr "Les plugins sont des modules Python qui reposent sur deux classes :"
 
-#: cdl.plugins:9 of
 msgid ":class:`PluginInfo`, which stores information about the plugin"
 msgstr ":class:`PluginInfo`, qui stocke des informations sur le plugin"
 
-#: cdl.plugins:10 of
 msgid ":class:`PluginBase`, which is the base class for all plugins"
 msgstr ":class:`PluginBase`, qui est la classe de base pour tous les plugins"
 
-#: cdl.plugins:12 of
-msgid ""
-"Plugins may also extends DataLab I/O features by providing new image or "
-"signal formats. To do so, they must provide a subclass of "
-":class:`ImageFormatBase` or :class:`SignalFormatBase`, in which format "
-"infos are defined using the :class:`FormatInfo` class."
-msgstr ""
-"Les plugins peuvent également étendre les fonctionnalités d'entrée/sortie"
-" de DataLab en fournissant de nouveaux formats d'image ou de signal. Pour"
-" ce faire, ils doivent fournir une sous-classe de "
-":class:`ImageFormatBase` ou :class:`SignalFormatBase`, dans laquelle les "
-"informations de format sont définies à l'aide de la classe "
-":class:`FormatInfo`."
+msgid "Plugins may also extends DataLab I/O features by providing new image or signal formats. To do so, they must provide a subclass of :class:`ImageFormatBase` or :class:`SignalFormatBase`, in which format infos are defined using the :class:`FormatInfo` class."
+msgstr "Les plugins peuvent également étendre les fonctionnalités d'entrée/sortie de DataLab en fournissant de nouveaux formats d'image ou de signal. Pour ce faire, ils doivent fournir une sous-classe de :class:`ImageFormatBase` ou :class:`SignalFormatBase`, dans laquelle les informations de format sont définies à l'aide de la classe :class:`FormatInfo`."
 
-#: cdl.plugins.PluginRegistry:1 of
 msgid "Metaclass for registering plugins"
 msgstr "Métaclasse pour l'enregistrement des plugins"
 
-#: cdl.plugins.PluginRegistry.get_plugin_classes:1 of
 msgid "Return plugin classes"
 msgstr "Retourne les classes de plugins"
 
-#: cdl.plugins.PluginRegistry.get_plugins:1 of
 msgid "Return plugin instances"
 msgstr "Retourne les instances de plugins"
 
-#: cdl.plugins.PluginRegistry.get_plugin:1 of
 msgid "Return plugin instance"
 msgstr "Retourne l'instance de plugin"
 
-#: cdl.plugins.PluginBase.register:1
-#: cdl.plugins.PluginRegistry.register_plugin:1 of
 msgid "Register plugin"
 msgstr "Enregistrer le plugin"
 
-#: cdl.plugins.PluginBase.unregister:1
-#: cdl.plugins.PluginRegistry.unregister_plugin:1 of
 msgid "Unregister plugin"
 msgstr "Désenregistrer le plugin"
 
-#: cdl.plugins.PluginRegistry.get_plugin_infos:1 of
 msgid "Return plugin infos (names, versions, descriptions) in html format"
-msgstr ""
-"Retourne les informations sur les plugins (noms, versions, descriptions) "
-"au format html"
+msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
 
-#: ../../doc/features/general/plugins.rst
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: cdl.plugins.PluginRegistry.get_plugin_infos:3 of
 msgid "return html formatted text (default: True)"
 msgstr "retourner du texte formaté en html (par défaut : True)"
 
-#: cdl.plugins.PluginInfo:1 of
 msgid "Plugin info"
 msgstr "Informations sur le plugin"
 
-#: cdl.plugins.PluginBaseMeta:1 of
 msgid "Mixed metaclass to avoid conflicts"
 msgstr "Métaclasse mixte pour éviter les conflits"
 
-#: cdl.plugins.PluginBase:1 of
 msgid "Plugin base class"
 msgstr "Classe de base du plugin"
 
-#: cdl.plugins.PluginBase.signalpanel:1 of
 msgid "Return signal panel"
 msgstr "Retourne le panneau de signal"
 
-#: cdl.plugins.PluginBase.imagepanel:1 of
 msgid "Return image panel"
 msgstr "Retourne le panneau d'image"
 
-#: cdl.plugins.PluginBase.show_warning:1 of
 msgid "Show warning message"
 msgstr "Afficher un message d'avertissement"
 
-#: cdl.plugins.PluginBase.show_error:1 of
 msgid "Show error message"
 msgstr "Afficher un message d'erreur"
 
-#: cdl.plugins.PluginBase.show_info:1 of
 msgid "Show info message"
 msgstr "Afficher un message d'information"
 
-#: cdl.plugins.PluginBase.ask_yesno:1 of
 msgid "Ask yes/no question"
 msgstr "Poser une question oui/non"
 
-#: cdl.plugins.PluginBase.edit_new_signal_parameters:1 of
 msgid "Create and edit new signal parameter dataset"
 msgstr "Créer et éditer un nouveau jeu de paramètres de signal"
 
-#: cdl.plugins.PluginBase.edit_new_signal_parameters:3 of
 msgid "title of the new signal"
 msgstr "titre du nouveau signal"
 
-#: cdl.plugins.PluginBase.edit_new_signal_parameters:4 of
 msgid "size of the new signal (default: None, get from current signal)"
-msgstr ""
-"taille du nouveau signal (par défaut : None, obtenue à partir du signal "
-"actuel)"
+msgstr "taille du nouveau signal (par défaut : None, obtenue à partir du signal actuel)"
 
-#: cdl.plugins.PluginBase.edit_new_signal_parameters:5 of
 msgid "hide signal type parameter (default: True)"
 msgstr "masquer le paramètre de type de signal (par défaut : True)"
 
-#: ../../doc/features/general/plugins.rst
 msgid "Returns"
 msgstr "Retourne"
 
-#: cdl.plugins.PluginBase.edit_new_signal_parameters:7 of
 msgid "New signal parameter dataset (or None if canceled)"
 msgstr "Nouveau jeu de paramètres de signal (ou None si annulé)"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:1 of
 msgid "Create and edit new image parameter dataset"
 msgstr "Créer et éditer un nouveau jeu de paramètres d'image"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:3 of
 msgid "title of the new image"
 msgstr "titre de la nouvelle image"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:4 of
 msgid "shape of the new image (default: None, get from current image)"
-msgstr ""
-"dimensions de la nouvelle image (par défaut : None, obtenues à partir de "
-"l'image actuelle)"
+msgstr "dimensions de la nouvelle image (par défaut : None, obtenues à partir de l'image actuelle)"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:5 of
 msgid "hide image heigth parameter (default: False)"
 msgstr "masquer le paramètre de la hauteur de l'image (par défaut : False)"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:6 of
 msgid "hide image type parameter (default: True)"
 msgstr "masquer le paramètre de type d'image (par défaut : True)"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:7 of
 msgid "hide image data type parameter (default: False)"
 msgstr "masquer le paramètre de type de données d'image (par défaut : False)"
 
-#: cdl.plugins.PluginBase.edit_new_image_parameters:9 of
 msgid "New image parameter dataset (or None if canceled)"
 msgstr "Nouveau jeu de paramètres d'image (ou None si annulé)"
 
-#: cdl.plugins.PluginBase.is_registered:1 of
 msgid "Return True if plugin is registered"
 msgstr "Retourne True si le plugin est enregistré"
 
-#: cdl.plugins.PluginBase.register_hooks:1 of
 msgid "Register plugin hooks"
 msgstr "Enregistrer les hooks du plugin"
 
-#: cdl.plugins.PluginBase.unregister_hooks:1 of
 msgid "Unregister plugin hooks"
 msgstr "Désenregistrer les hooks du plugin"
 
-#: cdl.plugins.PluginBase.create_actions:1 of
 msgid "Create actions"
 msgstr "Créer des actions"
 
-#: cdl.plugins.discover_plugins:1 of
 msgid "Discover plugins using naming convention"
 msgstr "Découvrir les plugins en utilisant la convention de nommage"
 
-#: cdl.plugins.discover_plugins:3 of
 msgid "List of discovered plugins (as classes)"
 msgstr "Liste des plugins découverts (en tant que classes)"
 
-#: cdl.plugins.get_available_plugins:1 of
 msgid "Instantiate and get available plugins"
 msgstr "Instancier et obtenir les plugins disponibles"
 
-#: cdl.plugins.get_available_plugins:3 of
 msgid "List of available plugins (as instances)"
 msgstr "Liste des plugins disponibles (en tant qu'instances)"
