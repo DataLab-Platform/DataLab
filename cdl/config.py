@@ -133,6 +133,10 @@ class IOSection(conf.Section, metaclass=conf.SectionMeta):
 
     # HDF5 file format options
     # ------------------------
+    # When opening an HDF5 file, ask user for confirmation if the current workspace
+    # has to be cleared before loading the file:
+    h5_clear_workspace = conf.Option()  # True: clear workspace, False: do not clear
+    h5_clear_workspace_ask = conf.Option()  # True: ask user, False: do not ask
     # Signal or image title when importing from HDF5 file:
     # - True: use HDF5 full dataset path in signal or image title
     # - False: use HDF5 dataset name in signal or image title
@@ -307,6 +311,8 @@ def initialize():
     Conf.console.external_editor_path.get("code")
     Conf.console.external_editor_args.get("-g {path}:{line_number}")
     # IO section
+    Conf.io.h5_clear_workspace.get(False)
+    Conf.io.h5_clear_workspace_ask.get(True)
     Conf.io.h5_fullpath_in_title.get(False)
     Conf.io.h5_fname_in_title.get(True)
     Conf.io.imageio_formats.get(())

@@ -86,6 +86,8 @@ class IOSettings(gds.DataSet):
     """DataLab I/O settings"""
 
     g0 = gds.BeginGroup(_("Settings for I/O operations"))
+    h5_clear_workspace = gds.BoolItem("", _("Clear workspace before loading HDF5 file"))
+    h5_clear_workspace_ask = gds.BoolItem("", _("Ask before clearing workspace"))
     h5_fullpath_in_title = gds.BoolItem("", _("HDF5 full path in title"))
     h5_fname_in_title = gds.BoolItem("", _("HDF5 file name in title"))
     _g0 = gds.EndGroup("")

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-23 12:02+0100\n"
+"POT-Creation-Date: 2025-03-23 14:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -833,17 +833,17 @@ msgstr "Enregistrer l'objet %s sélectionné"
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
 
+msgid "Rename"
+msgstr "Renommer"
+
+msgid "Edit title of selected %s or group"
+msgstr "Modifier le titre de l'objet %s ou du groupe sélectionné"
+
 msgid "New group..."
 msgstr "Nouveau groupe..."
 
 msgid "Create a new group"
 msgstr "Créer un nouveau groupe"
-
-msgid "Rename group..."
-msgstr "Renommer groupe..."
-
-msgid "Rename selected group"
-msgstr "Renommer le groupe sélectionné"
 
 msgid "Move up"
 msgstr "Déplacer vers le haut"
@@ -1810,11 +1810,16 @@ msgid "Save"
 msgstr "Enregistrer"
 
 msgid ""
-"Do you want to remove all signals and images before importing data from HDF5 "
-"files?"
-msgstr ""
-"Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
-"données depuis un fichier HDF5 ?"
+"Do you want to clear current workspace (signals and images) before importing "
+"data from HDF5 files?<br><br>Choosing to ignore this message will prevent it "
+"from being displayed again, and will use the current setting (%s)."
+msgstr "Souhaitez-vous effacer l'espace de travail actuel (signaux et images) avant d'importer des données depuis des fichiers HDF5 ?<br><br>Ignorer ce message empêchera son affichage ultérieur, et utilisera le réglage actuel (%s)."
+
+msgid "No"
+msgstr "Non"
+
+msgid "Yes"
+msgstr "Oui"
 
 msgid "Open"
 msgstr "Ouvrir"
@@ -1934,6 +1939,12 @@ msgstr "Nouveau groupe"
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
+msgid "Rename object"
+msgstr "Renommer l'objet"
+
+msgid "Object name:"
+msgstr "Nom de l'objet :"
+
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
@@ -2037,9 +2048,6 @@ msgstr "Supprimer la macro"
 
 msgid "Macro editor toolbar"
 msgstr "Barre d'outils des macros"
-
-msgid "Rename"
-msgstr "Renommer"
 
 msgid "New title:"
 msgstr "Nouveau titre :"
@@ -2363,6 +2371,12 @@ msgstr "Arguments de l'éditeur externe"
 
 msgid "Settings for I/O operations"
 msgstr "Réglages des opérations d'entrée/sortie"
+
+msgid "Clear workspace before loading HDF5 file"
+msgstr "Effacer l'espace de travail avant de charger un fichier HDF5"
+
+msgid "Ask before clearing workspace"
+msgstr "Demander avant d'effacer l'espace de travail"
 
 msgid "HDF5 full path in title"
 msgstr "Chemin complet du fichier HDF5 dans le titre"

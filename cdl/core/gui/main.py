@@ -1362,19 +1362,25 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         if not self.confirm_memory_state():
             return
         if reset_all is None:
-            reset_all = False
-            if self.has_objects():
+            reset_all = Conf.io.h5_clear_workspace.get()
+            if self.has_objects() and Conf.io.h5_clear_workspace_ask.get():
                 answer = QW.QMessageBox.question(
                     self,
                     _("Warning"),
                     _(
-                        "Do you want to remove all signals and images "
-                        "before importing data from HDF5 files?"
-                    ),
-                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                        "Do you want to clear current workspace (signals and images) "
+                        "before importing data from HDF5 files?<br><br>"
+                        "Choosing to ignore this message will prevent it "
+                        "from being displayed again, and will use the "
+                        "current setting (%s)."
+                    )
+                    % (_("Yes") if reset_all else _("No")),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Ignore,
                 )
                 if answer == QW.QMessageBox.Yes:
                     reset_all = True
+                elif answer == QW.QMessageBox.Ignore:
+                    Conf.io.h5_clear_workspace_ask.set(False)
         if h5files is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
