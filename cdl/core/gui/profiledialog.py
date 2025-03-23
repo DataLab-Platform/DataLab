@@ -192,10 +192,22 @@ class ProfileExtractionDialog(PlotDialog):
         self.shape_to_param()
         self.update_cs_panels_state()
 
+    def __physical_to_indices(self, coords: list[float]) -> tuple[int, int]:
+        """Physical to indices
+
+        Args:
+            coords: Coordinates
+
+        Returns:
+            Tuple of indices
+        """
+        assert self.__obj is not None
+        return self.__obj.physical_to_indices(coords, clip=True)
+
     def shape_to_param(self) -> None:
         """Shape to param"""
         assert self.__obj is not None
-        p2i = self.__obj.physical_to_indices
+        p2i = self.__physical_to_indices
         p = self.param
         if isinstance(self.shape, AnnotatedPoint):
             assert isinstance(p, cdl.param.LineProfileParam)
