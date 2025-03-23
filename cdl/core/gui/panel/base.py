@@ -737,30 +737,49 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if ok:
             self.add_group(group_name)
 
-    def rename_group(self, new_name: str | None = None) -> None:
-        """Rename a group
+    def rename_selected_object_or_group(self, new_name: str | None = None) -> None:
+        """Rename selected object or group
 
         Args:
-            new_name: new group name. Defaults to None (ask user).
+            new_name: new name (default: None, i.e. ask user)
         """
+        sel_objects = self.objview.get_sel_objects(include_groups=False)
         sel_groups = self.objview.get_sel_groups()
-        if not sel_groups or len(sel_groups) > 1:
+        if (not sel_objects and not sel_groups) or len(sel_objects) + len(
+            sel_groups
+        ) > 1:
             # Won't happen in the application, but could happen in tests or using the
             # API directly
-            raise ValueError("Select one group to rename")
-        group = sel_groups[0]
-        if new_name is None:
-            new_name, ok = QW.QInputDialog.getText(
-                self,
-                _("Rename group"),
-                _("Group name:"),
-                QW.QLineEdit.Normal,
-                group.title,
-            )
-            if not ok:
-                return
-        group.title = new_name
-        self.objview.update_item(group.uuid)
+            raise ValueError("Select one object or group to rename")
+        if sel_objects:
+            obj = sel_objects[0]
+            if new_name is None:
+                new_name, ok = QW.QInputDialog.getText(
+                    self,
+                    _("Rename object"),
+                    _("Object name:"),
+                    QW.QLineEdit.Normal,
+                    obj.title,
+                )
+                if not ok:
+                    return
+            obj.title = new_name
+            self.objview.update_item(obj.uuid)
+            self.objprop.update_properties_from(obj)
+        elif sel_groups:
+            group = sel_groups[0]
+            if new_name is None:
+                new_name, ok = QW.QInputDialog.getText(
+                    self,
+                    _("Rename group"),
+                    _("Group name:"),
+                    QW.QLineEdit.Normal,
+                    group.title,
+                )
+                if not ok:
+                    return
+            group.title = new_name
+            self.objview.update_item(group.uuid)
 
     @abc.abstractmethod
     def get_newparam_from_current(

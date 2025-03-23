@@ -95,6 +95,14 @@ class SelectCond:
         return len(selected_groups) == 1
 
     @staticmethod
+    def exactly_one_group_or_one_object(
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalObj | ImageObj],
+    ) -> bool:
+        """Exactly one group or one signal or image is selected"""
+        return len(selected_groups) == 1 or len(selected_objects) == 1
+
+    @staticmethod
     # pylint: disable=unused-argument
     def at_least_one_group_or_one_object(
         sel_groups: list[ObjectGroup],
@@ -427,20 +435,20 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.EDIT):
             self.new_action(
+                _("Rename"),
+                icon_name="rename.svg",
+                shortcut="F2",
+                tip=_("Edit title of selected %s or group") % self.OBJECT_STR,
+                triggered=self.panel.rename_selected_object_or_group,
+                select_condition=SelectCond.exactly_one_group_or_one_object,
+                context_menu_pos=-1,
+            )
+            self.new_action(
                 _("New group..."),
                 icon_name="new_group.svg",
                 tip=_("Create a new group"),
                 triggered=self.panel.new_group,
                 select_condition=SelectCond.always,
-                context_menu_pos=-1,
-                toolbar_pos=-1,
-            )
-            self.new_action(
-                _("Rename group..."),
-                icon_name="rename_group.svg",
-                tip=_("Rename selected group"),
-                triggered=self.panel.rename_group,
-                select_condition=SelectCond.exactly_one_group,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
             )

@@ -38,7 +38,7 @@ def test_main_app():
         panel.add_group("Group 2")
         # Rename group
         panel.objview.select_groups([2])
-        panel.rename_group("Group xxx")
+        panel.rename_selected_object_or_group("Group xxx")
         panel.remove_object(force=True)
 
         # Add signals to signal panel

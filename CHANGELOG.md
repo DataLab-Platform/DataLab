@@ -6,6 +6,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Object and group title renaming:
+  * Removed "Rename group" feature from the "Edit" menu and context menu
+  * Added "Rename object" feature to the "Edit" menu and context menu, with F2 shortcut, to rename the title of the selected object or group
+  * This closes [Issue #148](https://github.com/DataLab-Platform/DataLab/issues/148) - Rename signal/image/group title by pressing F2
 * Region of Interest editor:
   * Regrouped the graphical actions (new rectangular ROI, new circular ROI, new polygonal ROI) in a single menu "Graphical ROI"
   * Added new "Coordinate-based ROI" menu to create a ROI using manual input of the coordinates:
