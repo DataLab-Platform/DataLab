@@ -8,6 +8,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * Region of Interest editor:
   * Regrouped the graphical actions (new rectangular ROI, new circular ROI, new polygonal ROI) in a single menu "Graphical ROI"
+  * Added new "Coordinate-based ROI" menu to create a ROI using manual input of the coordinates:
+    * For signals, the ROI is defined by the start and end coordinates
+    * For images:
+      * The rectangular ROI is defined by the top-left and bottom-right coordinates
+      * The circular ROI is defined by the center and radius coordinates
+      * The polygonal ROI is not supported yet
+    * This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates
 
 🛠️ Bug fixes:
 

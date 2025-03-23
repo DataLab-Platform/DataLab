@@ -97,5 +97,5 @@ def test_image_roi_editor() -> None:
 
 
 if __name__ == "__main__":
-    # test_signal_roi_editor()
+    test_signal_roi_editor()
     test_image_roi_editor()

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-23 11:25+0100\n"
+"POT-Creation-Date: 2025-03-23 12:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2272,6 +2272,9 @@ msgstr "ROI polygonale"
 
 msgid "Graphical ROI"
 msgstr "ROI graphique"
+
+msgid "Coordinate-based ROI"
+msgstr "ROI par coordonnées"
 
 msgid "Remove all"
 msgstr "Supprimer tout"
