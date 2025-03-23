@@ -88,9 +88,6 @@ def plot_item_to_single_roi(
     return cls.from_plot_item(item)
 
 
-ROI_EDITOR_TOOLBAR_ID = "roi_editor_toolbar"
-
-
 def configure_roi_item_in_tool(shape, obj: dlo.SignalObj | dlo.ImageObj) -> None:
     """Configure ROI item in tool"""
     fmt = obj.get_metadata_option("format")
@@ -113,13 +110,11 @@ def tool_setup_shape(shape: TypeROIItem, obj: dlo.SignalObj | dlo.ImageObj) -> N
 class ROISegmentTool(HRangeTool):
     """ROI segment tool"""
 
-    TITLE = _("Add ROI")
+    TITLE = _("Range ROI")
     ICON = "signal_roi.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.SignalObj) -> None:
-        super().__init__(
-            manager, switch_to_default_tool=True, toolbar_id=ROI_EDITOR_TOOLBAR_ID
-        )
+        super().__init__(manager, switch_to_default_tool=True, toolbar_id=None)
         self.roi = SegmentROI([0, 1], False)
         self.obj = obj
         self.activate = tool_activate
@@ -135,14 +130,14 @@ class ROISegmentTool(HRangeTool):
 class ROIRectangleTool(RectangleTool):
     """ROI rectangle tool"""
 
-    TITLE = _("Add rectangular ROI")
+    TITLE = _("Rectangular ROI")
     ICON = "roi_new_rectangle.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
             switch_to_default_tool=True,
-            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = RectangularROI([0, 0, 1, 1], True)
@@ -162,14 +157,14 @@ class ROIRectangleTool(RectangleTool):
 class ROICircleTool(CircleTool):
     """ROI circle tool"""
 
-    TITLE = _("Add circular ROI")
+    TITLE = _("Circular ROI")
     ICON = "roi_new_circle.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
             switch_to_default_tool=True,
-            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = CircularROI([0, 0, 1], True)
@@ -189,14 +184,14 @@ class ROICircleTool(CircleTool):
 class ROIPolygonTool(PolygonTool):
     """ROI polygon tool"""
 
-    TITLE = _("Add polygonal ROI")
+    TITLE = _("Polygonal ROI")
     ICON = "roi_new_polygon.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
             switch_to_default_tool=True,
-            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = PolygonalROI([[0, 0], [1, 0], [1, 1], [0, 1]], True)
@@ -245,6 +240,7 @@ class BaseROIEditor(
         self.obj = obj
         self.extract = extract
         self.__modified: bool | None = None
+        self._tools: list[InteractiveTool] = []
 
         roi = obj.roi
         if roi is None:
@@ -331,19 +327,28 @@ class BaseROIEditor(
 
     def create_actions(self) -> list[QW.QAction]:
         """Create actions"""
+        g_menu = QW.QMenu(_("Graphical ROI"))
+        for tool in self._tools:
+            g_menu.addAction(tool.action)
+        g_menu_act = QW.QAction(get_icon("roi_graphical.svg"), _("Graphical ROI"), self)
+        g_menu_act.setMenu(g_menu)
         self.remove_all_action = create_action(
             self,
-            _("Remove all ROIs"),
+            _("Remove all"),
             icon=get_icon("roi_delete.svg"),
             triggered=self.remove_all_rois,
         )
-        return [None, self.remove_all_action]
+        return [g_menu_act, None, self.remove_all_action]
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
         layout = QW.QHBoxLayout()
         self.toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
         add_actions(self.toolbar, self.create_actions())
+        for action in self.toolbar.actions():
+            if action.menu() is not None:
+                widget = self.toolbar.widgetForAction(action)
+                widget.setPopupMode(QW.QToolButton.ToolButtonPopupMode.InstantPopup)
         layout.addWidget(self.toolbar)
         if self.extract:
             self.singleobj_btn = QW.QCheckBox(
@@ -430,8 +435,8 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
     def add_tools_to_plot_dialog(self) -> None:
         """Add tools to plot dialog"""
         mgr = self.plot_dialog.get_manager()
-        mgr.add_toolbar(self.toolbar, ROI_EDITOR_TOOLBAR_ID)
-        mgr.add_tool(ROISegmentTool, self.obj)
+        segm_tool = mgr.add_tool(ROISegmentTool, self.obj)
+        self._tools.append(segm_tool)
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
@@ -469,10 +474,10 @@ class ImageROIEditor(
     def add_tools_to_plot_dialog(self) -> None:
         """Add tools to plot dialog"""
         mgr = self.plot_dialog.get_manager()
-        mgr.add_toolbar(self.toolbar, ROI_EDITOR_TOOLBAR_ID)
-        mgr.add_tool(ROIRectangleTool, self.obj)
-        mgr.add_tool(ROICircleTool, self.obj)
-        mgr.add_tool(ROIPolygonTool, self.obj)
+        rect_tool = mgr.add_tool(ROIRectangleTool, self.obj)
+        circ_tool = mgr.add_tool(ROICircleTool, self.obj)
+        poly_tool = mgr.add_tool(ROIPolygonTool, self.obj)
+        self._tools.extend([rect_tool, circ_tool, poly_tool])
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-20 14:46+0100\n"
+"POT-Creation-Date: 2025-03-23 11:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2258,23 +2258,29 @@ msgstr "Modifier les paramètres du profil"
 msgid "Reset selection"
 msgstr "Réinitialiser la sélection"
 
-msgid "Add ROI"
-msgstr "Ajouter une ROI"
+msgid "Range ROI"
+msgstr "Intervalle ROI"
 
-msgid "Add rectangular ROI"
-msgstr "Ajouter une ROI rectangulaire"
+msgid "Rectangular ROI"
+msgstr "ROI rectangulaire"
 
-msgid "Add circular ROI"
-msgstr "Ajouter une ROI circulaire"
+msgid "Circular ROI"
+msgstr "ROI circulaire"
 
-msgid "Add polygonal ROI"
-msgstr "Ajouter une ROI polygonale"
+msgid "Polygonal ROI"
+msgstr "ROI polygonale"
 
-msgid "Remove all ROIs"
-msgstr "Supprimer toutes les ROI"
+msgid "Graphical ROI"
+msgstr "ROI graphique"
+
+msgid "Remove all"
+msgstr "Supprimer tout"
 
 msgid "Extract all ROIs into a single %s object"
 msgstr "Extraire toutes les ROI dans un seul objet %s"
+
+msgid "Remove all ROIs"
+msgstr "Supprimer toutes les ROI"
 
 msgid "Are you sure you want to remove all ROIs?"
 msgstr "Êtes-vous sûr de vouloir supprimer toutes les ROI ?"
