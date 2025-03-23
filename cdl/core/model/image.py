@@ -1160,11 +1160,14 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI, MaskedImageItem]):
         self.update_plot_item_parameters(item)
         item.plot().update_colormap_axis(item)
 
-    def physical_to_indices(self, coords: list[float]) -> np.ndarray:
+    def physical_to_indices(
+        self, coords: list[float], clip: bool = False
+    ) -> np.ndarray:
         """Convert coordinates from physical (real world) to (array) indices (pixel)
 
         Args:
             coords: coordinates
+            clip: if True, clip values to image boundaries
 
         Returns:
             Indices
@@ -1178,6 +1181,9 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI, MaskedImageItem]):
             indices[:, ::2] /= self.dx
             indices[:, 1::2] -= self.y0 + 0.5 * self.dy
             indices[:, 1::2] /= self.dy
+        if clip:
+            indices[:, ::2] = np.clip(indices[:, ::2], 0, self.data.shape[1] - 1)
+            indices[:, 1::2] = np.clip(indices[:, 1::2], 0, self.data.shape[0] - 1)
         if ndim == 1:
             indices = indices.flatten()
         return np.array(indices, int)

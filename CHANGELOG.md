@@ -2,6 +2,12 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.18.3 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144) - Average profile extraction: `ValueError` when selection rectangle is larger than the image
+
 ## DataLab Version 0.18.2 ##
 
 ℹ️ General information:
