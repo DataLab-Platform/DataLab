@@ -521,10 +521,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
-    def add_group(self, title: str) -> objectmodel.ObjectGroup:
-        """Add group"""
+    def add_group(self, title: str, select: bool = False) -> objectmodel.ObjectGroup:
+        """Add group
+
+        Args:
+            title: group title
+            select: if True, select the group in the tree view. Defaults to False.
+
+        Returns:
+            Created group object
+        """
         group = self.objmodel.add_group(title)
         self.objview.add_group_item(group)
+        if select:
+            self.objview.select_groups([group])
         return group
 
     def __duplicate_individual_obj(
