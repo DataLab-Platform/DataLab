@@ -3,7 +3,7 @@ DataLab
 
 .. meta::
     :description: Home of DataLab, the open-source platform for scientific and technical data processing and visualization
-    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Codra, Pierre Raybaut
+    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, CODRA, Pierre Raybaut
 
 DataLab is an **open-source platform for signal and image processing and visualization**
 for research, education and industry. Leveraging the richness of the scientific Python
@@ -64,6 +64,35 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
             Getting involved in the project
 
+DataLab has been funded, chronologically, by the following takeholders:
+
+.. list-table::
+    :header-rows: 0
+
+    * - |cea_logo|
+      - `CEA <https://www.cea.fr>`_, the French Alternative Energies and Atomic Energy Commission, is the major investor in DataLab, and is the main contributor to the project.
+
+    * - |codra_logo|
+      - `CODRA`_, a software editor and engineering company, has supported DataLab open-source journey since its inception, through financial and technical contributions.
+
+    * - |nlnet_logo|
+      - `NLnet Foundation <https://nlnet.nl>`_, as part of the NGI0 Commons Fund, backed by the European Commission, has funded the redesign of DataLab's core architecture.
+
+.. |cea_logo| image:: images/logos/cea.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link
+
+.. |codra_logo| image:: images/logos/codra.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link
+
+.. |nlnet_logo| image:: images/logos/nlnet.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link
+
 .. figure:: _static/plotpy-stack-powered.png
     :align: center
     :width: 300 px
@@ -83,7 +112,7 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
         api/index
         contributing/index
 
-    .. note:: DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is
+    .. note:: DataLab was created by `CODRA`_/`Pierre Raybaut`_ in 2023. It is
             developed and maintained by DataLab Platform Developers.
 
 .. rubric:: Footnotes
@@ -99,5 +128,5 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 .. _OpenCV: https://opencv.org/
 .. _PyWavelets: https://pywavelets.readthedocs.io/
 .. _PlotPyStack: https://github.com/PlotPyStack
-.. _Codra: https://codra.net/
+.. _CODRA: https://codra.net/
 .. _Pierre Raybaut: https://github.com/PierreRaybaut/
