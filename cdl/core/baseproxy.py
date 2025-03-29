@@ -379,13 +379,17 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
             panel: panel name (valid values: "signal", "image").
              If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
             List of object uuids
@@ -682,13 +686,17 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         return self._cdl.get_object_titles(panel)
 
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
             panel: panel name (valid values: "signal", "image").
              If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
             List of object uuids
@@ -696,7 +704,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         Raises:
             ValueError: if panel not found
         """
-        return self._cdl.get_object_uuids(panel)
+        return self._cdl.get_object_uuids(panel, group)
 
     def add_label_with_title(
         self, title: str | None = None, panel: str | None = None

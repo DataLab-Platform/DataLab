@@ -557,17 +557,22 @@ class RemoteServer(QC.QThread):
         return dataset_to_json(obj)
 
     @remote_call
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) list for current panel.
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
+        """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel: Panel name. Defaults to None.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
             Object uuids
         """
-        return self.win.get_object_uuids(panel)
+        return self.win.get_object_uuids(panel, group)
 
     @remote_call
     def get_object_shapes(

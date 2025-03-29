@@ -272,6 +272,23 @@ class ObjectModel:
                 return group
         raise IndexError(f"Group with number {number} not found")
 
+    def get_group_from_title(self, title: str) -> ObjectGroup:
+        """Return group from its title.
+
+        Args:
+            title: group title
+
+        Returns:
+            Group
+
+        Raises:
+            KeyError: if group with title not found
+        """
+        for group in self._groups:
+            if group.title == title:
+                return group
+        raise KeyError(f"Group with title '{title}' not found")
+
     def get_group_from_object(self, obj: SignalObj | ImageObj) -> ObjectGroup:
         """Return group containing object
 

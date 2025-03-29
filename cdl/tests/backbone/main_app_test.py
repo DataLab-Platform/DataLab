@@ -34,7 +34,7 @@ def test_main_app():
         panel = win.signalpanel
 
         # Create new groups
-        panel.add_group("Group 1")
+        grp1 = panel.add_group("Group 1")
         panel.add_group("Group 2")
         # Rename group
         panel.objview.select_groups([2])
@@ -53,6 +53,10 @@ def test_main_app():
 
         # Get object uuids
         uuids = win.get_object_uuids()
+        uuids2 = win.get_object_uuids(group=1)
+        uuids3 = win.get_object_uuids(group="Group 1")
+        uuids4 = win.get_object_uuids(group=grp1.uuid)
+        assert uuids == uuids2 == uuids3 == uuids4, "Group UUIDs should be the same"
         execenv.print(f"Object uuids:{os.linesep}{uuids}")
 
         # Testing `get_object`

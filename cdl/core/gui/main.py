@@ -306,13 +306,17 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         raise TypeError(f"Invalid index_id_title type: {type(nb_id_title)}")
 
     @remote_controlled
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
             panel: panel name (valid values: "signal", "image").
              If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
             List of object uuids
@@ -320,7 +324,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Raises:
             ValueError: if panel is unknown
         """
-        return self.__get_datapanel(panel).objmodel.get_object_ids()
+        objmodel = self.__get_datapanel(panel).objmodel
+        if group is None:
+            return objmodel.get_object_ids()
+        if isinstance(group, int):
+            grp = objmodel.get_group_from_number(group)
+        else:
+            try:
+                grp = objmodel.get_group(group)
+            except KeyError:
+                grp = objmodel.get_group_from_title(group)
+        if grp is None:
+            raise KeyError(f"Invalid group index, id or title: {group}")
+        return grp.get_object_ids()
 
     @remote_controlled
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
