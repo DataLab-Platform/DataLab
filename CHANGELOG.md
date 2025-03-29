@@ -27,6 +27,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Fixed [Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Image analysis: mask `nan` values when computing statistics, for example
 * Fixed [Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144) - Average profile extraction: `ValueError` when selection rectangle is larger than the image
 
 ## DataLab Version 0.18.2 ##
