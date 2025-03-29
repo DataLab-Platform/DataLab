@@ -22,6 +22,7 @@ import guidata.dataset as gds
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
+from numpy import ma
 from plotpy.builder import make
 from plotpy.items import (
     AnnotatedCircle,
@@ -1009,7 +1010,9 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI, MaskedImageItem]):
             Masked data
         """
         if self.roi is None or roi_index is None:
-            return self.data
+            view = self.data.view(ma.MaskedArray)
+            view.mask = np.isnan(self.data)
+            return view
         single_roi = self.roi.get_single_roi(roi_index)
         x0, y0, x1, y1 = self.physical_to_indices(single_roi.get_bounding_box(self))
         return self.get_masked_view()[y0:y1, x0:x1]
