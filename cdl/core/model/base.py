@@ -1511,7 +1511,7 @@ class BaseObj(Generic[TypeROI, TypePlotItem], metaclass=BaseObjMeta):
         """
         self.data: np.ndarray
         view = self.data.view(ma.MaskedArray)
-        view.mask = self.maskdata
+        view.mask = self.maskdata | np.isnan(self.data)
         return view
 
     def invalidate_maskdata_cache(self) -> None:
