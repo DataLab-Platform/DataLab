@@ -885,7 +885,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not directory:
             return []
         # Get all files in the directory:
-        relfnames = sorted(glob.glob("**/*.*", root_dir=directory, recursive=True))
+        relfnames = sorted(
+            osp.relpath(path, start=directory)
+            for path in glob.glob(osp.join(directory, "**", "*.*"), recursive=True)
+        )
+        # When Python 3.9 will be dropped, we can use (support for `root_dir` is added):
+        # relfnames = sorted(glob.glob("**/*.*", root_dir=directory, recursive=True))
         filenames = [osp.join(directory, fname) for fname in relfnames]
         return self.load_from_files(filenames, ignore_unknown=True)
 
