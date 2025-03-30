@@ -84,6 +84,11 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         self.compute_11(cps.compute_swap_axes, title=_("Swap axes"))
 
     @qt_try_except()
+    def compute_inverse(self) -> None:
+        """Compute inverse"""
+        self.compute_11(cps.compute_inverse, title=_("Inverse"))
+
+    @qt_try_except()
     def compute_abs(self) -> None:
         """Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`"""
         self.compute_11(cps.compute_abs, title=_("Absolute value"))

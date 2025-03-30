@@ -641,6 +641,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon_name="division.svg",
             )
             self.new_action(
+                _("Inverse"),
+                triggered=self.panel.processor.compute_inverse,
+                select_condition=SelectCond.at_least_one,
+                icon_name="inverse.svg",
+            )
+            self.new_action(
                 _("Arithmetic operation") + "...",
                 triggered=self.panel.processor.compute_arithmetic,
                 select_condition=SelectCond.at_least_one,

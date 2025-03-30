@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import warnings
 from collections.abc import Callable
 from typing import Any, Literal
 
@@ -1023,6 +1024,24 @@ def compute_swap_axes(src: ImageObj) -> ImageObj:
     dst = Wrap11Func(np.transpose)(src)
     # TODO: [P2] Instead of removing geometric shapes, apply swap
     dst.remove_all_shapes()
+    return dst
+
+
+def compute_inverse(src: ImageObj) -> ImageObj:
+    """Compute the inverse of an image and return the new result image object
+
+    Args:
+        src: input image object
+
+    Returns:
+        Result image object 1 / **src** (new object)
+    """
+    dst = dst_11(src, "inverse")
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        dst.data = np.reciprocal(src.data, dtype=float)
+        dst.data[np.isinf(dst.data)] = np.nan
+    restore_data_outside_roi(dst, src)
     return dst
 
 

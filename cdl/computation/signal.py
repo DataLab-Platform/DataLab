@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import warnings
 from collections.abc import Callable
 from enum import Enum
 from typing import Any, Literal
@@ -409,6 +410,28 @@ def compute_swap_axes(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "swap_axes")
     x, y = src.get_data()
     dst.set_xydata(y, x)
+    return dst
+
+
+def compute_inverse(src: SignalObj) -> SignalObj:
+    """Compute inverse with :py:data:`numpy.invert`
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "invert")
+    x, y = src.get_data()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        dst.set_xydata(x, np.reciprocal(y))
+        dst.y[np.isinf(dst.y)] = np.nan
+    if dst.dy is not None:
+        dst.dy = dst.y * src.dy / (src.y**2)
+        dst.dy[np.isinf(dst.dy)] = np.nan
+    restore_data_outside_roi(dst, src)
     return dst
 
 

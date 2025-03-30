@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:17+0100\n"
+"POT-Creation-Date: 2025-03-30 11:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 msgid "Operations on Signals"
 msgstr "Opérations sur les signaux"
@@ -90,6 +90,15 @@ msgid "division"
 msgstr ""
 
 msgid ":math:`y_{2} = \\dfrac{y_{1}}{y_{0}}`"
+msgstr ""
+
+msgid "|inverse| Inverse"
+msgstr "|inverse| Inverse"
+
+msgid "inverse"
+msgstr ""
+
+msgid ":math:`y_{2} = \\dfrac{1}{y_{1}}`"
 msgstr ""
 
 msgid "Operations with a constant"

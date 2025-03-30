@@ -330,6 +330,11 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         self.compute_11(cpi.compute_swap_axes, title=_("Swap axes"))
 
     @qt_try_except()
+    def compute_inverse(self) -> None:
+        """Compute inverse"""
+        self.compute_11(cpi.compute_inverse, title=_("Inverse"))
+
+    @qt_try_except()
     def compute_abs(self) -> None:
         """Compute absolute value with :py:func:`cdl.computation.image.compute_abs`"""
         self.compute_11(cpi.compute_abs, title=_("Absolute value"))

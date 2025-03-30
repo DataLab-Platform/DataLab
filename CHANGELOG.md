@@ -6,6 +6,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Add `1/x` operation to the "Operations" menu for both Signal and Image panels:
+  * This feature relies on the `numpy.reciprocal` function, and handles the case where the denominator is zero by catching warnings and replacing the `np.inf` values with `np.nan` values
+  * Add `compute_inverse` method for image and signal processors
+  * This closes [Issue #143] - New feature: `1/x` for signals and images
 * Public API (local or remote):
   * Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:
     * Method was added to the following classes: `AbstractCDLControl`, `BaseDataPanel` and `RemoteClient`

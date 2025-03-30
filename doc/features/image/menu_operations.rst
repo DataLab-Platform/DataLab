@@ -42,6 +42,8 @@ Basic arithmetic operations
       - :math:`z_{M} = \prod_{k=0}^{M-1}{z_{k}}`
     * - |division| Division
       - :math:`z_{2} = \dfrac{z_{1}}{z_{0}}`
+    * - |inverse| Inverse
+      - :math:`z_{2} = \dfrac{1}{z_{1}}`
 
 .. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
     :width: 24px
@@ -69,6 +71,11 @@ Basic arithmetic operations
     :class: dark-light no-scaled-link
 
 .. |division| image:: ../../../cdl/data/icons/operations/division.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |inverse| image:: ../../../cdl/data/icons/operations/inverse.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
