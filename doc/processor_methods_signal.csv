@@ -10,6 +10,7 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop`,Compute band-stop filter
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db`,Compute bandwidth at -3dB
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_calibration`,Compute data linear calibration
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_cartesian2polar`,Convert cartesian to polar coordinates
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_clip`,Compute maximum data clipping
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_contrast`,Compute contrast with :py:func:`cdl.computation.signal.compute_contrast`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_convolution`,Compute convolution
@@ -33,6 +34,7 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_im`,Compute imaginary part with :py:func:`cdl.computation.signal.compute_im`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_integral`,Compute integral with :py:func:`cdl.computation.signal.compute_integral`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation`,Compute interpolation
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_inverse`,Compute inverse
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_log10`,Compute Log10 with :py:func:`cdl.computation.signal.compute_log10`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass`,Compute high-pass filter
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum`,Compute magnitude spectrum
@@ -45,6 +47,7 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_overlapping_allan_variance`,Compute overlapping Allan variance
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection`,Detect peaks from data
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum`,Compute phase spectrum
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_polar2cartesian`,Convert polar to cartesian coordinates
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit`,Compute polynomial fitting curve
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_power`,Compute power with :py:func:`cdl.computation.signal.compute_power`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_product`,Compute product with :py:func:`cdl.computation.signal.compute_product`
@@ -65,3 +68,4 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_wiener`,Compute Wiener filter
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_windowing`,Compute windowing
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax`,Compute x at min/max
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_y`,Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`
