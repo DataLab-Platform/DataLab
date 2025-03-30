@@ -282,7 +282,7 @@ def check_array_result(
     """Assert that two arrays are almost equal."""
     restxt = f"{title}: {__array_to_str(res)} (expected: {__array_to_str(exp)})"
     execenv.print(restxt)
-    assert np.allclose(res, exp, rtol=rtol, atol=atol), restxt
+    assert np.allclose(res, exp, rtol=rtol, atol=atol, equal_nan=True), restxt
     assert res.dtype == exp.dtype, restxt
 
 

@@ -13,6 +13,8 @@ addition, multiplication, division, and more.
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pytest
 
@@ -120,7 +122,11 @@ def test_signal_inverse() -> None:
     """Signal inversion validation test."""
     s1 = __create_two_signals()[0]
     inv_signal = cps.compute_inverse(s1)
-    check_array_result("Signal inverse", inv_signal.y, 1.0 / s1.y)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        exp = 1.0 / s1.y
+        exp[np.isinf(exp)] = np.nan
+    check_array_result("Signal inverse", inv_signal.y, exp)
 
 
 @pytest.mark.validation

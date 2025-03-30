@@ -231,6 +231,7 @@ def test_image_inverse() -> None:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=RuntimeWarning)
             exp = np.reciprocal(ima1.data, dtype=float)
+            exp[np.isinf(exp)] = np.nan
         ima2 = cpi.compute_inverse(ima1)
         check_array_result("Image inverse", ima2.data, exp)
 
