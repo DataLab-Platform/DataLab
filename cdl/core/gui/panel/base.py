@@ -962,8 +962,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Returns:
             None
         """
+        dirnames = [fname for fname in filenames if osp.isdir(fname)]
         h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
-        other_fnames = sorted(list(set(filenames) - set(h5_fnames)))
+        other_fnames = sorted(list(set(filenames) - set(h5_fnames) - set(dirnames)))
+        if dirnames:
+            for dirname in dirnames:
+                self.load_from_directory(dirname)
         if h5_fnames:
             self.mainwindow.open_h5_files(h5_fnames, import_all=True)
         if other_fnames:
