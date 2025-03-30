@@ -25,7 +25,7 @@ Image ROI editor
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Generic, TypeVar, Union
+from typing import TYPE_CHECKING, Generic, Literal, TypeVar, Union
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -88,9 +88,6 @@ def plot_item_to_single_roi(
     return cls.from_plot_item(item)
 
 
-ROI_EDITOR_TOOLBAR_ID = "roi_editor_toolbar"
-
-
 def configure_roi_item_in_tool(shape, obj: dlo.SignalObj | dlo.ImageObj) -> None:
     """Configure ROI item in tool"""
     fmt = obj.get_metadata_option("format")
@@ -113,13 +110,11 @@ def tool_setup_shape(shape: TypeROIItem, obj: dlo.SignalObj | dlo.ImageObj) -> N
 class ROISegmentTool(HRangeTool):
     """ROI segment tool"""
 
-    TITLE = _("Add ROI")
+    TITLE = _("Range ROI")
     ICON = "signal_roi.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.SignalObj) -> None:
-        super().__init__(
-            manager, switch_to_default_tool=True, toolbar_id=ROI_EDITOR_TOOLBAR_ID
-        )
+        super().__init__(manager, switch_to_default_tool=True, toolbar_id=None)
         self.roi = SegmentROI([0, 1], False)
         self.obj = obj
         self.activate = tool_activate
@@ -128,21 +123,20 @@ class ROISegmentTool(HRangeTool):
         """Create shape"""
         shape = self.roi.to_plot_item(self.obj)
         configure_roi_item_in_tool(shape, self.obj)
-        shape.selected = True
         return shape
 
 
 class ROIRectangleTool(RectangleTool):
     """ROI rectangle tool"""
 
-    TITLE = _("Add rectangular ROI")
+    TITLE = _("Rectangular ROI")
     ICON = "roi_new_rectangle.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
             switch_to_default_tool=True,
-            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = RectangularROI([0, 0, 1, 1], True)
@@ -162,14 +156,14 @@ class ROIRectangleTool(RectangleTool):
 class ROICircleTool(CircleTool):
     """ROI circle tool"""
 
-    TITLE = _("Add circular ROI")
+    TITLE = _("Circular ROI")
     ICON = "roi_new_circle.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
             switch_to_default_tool=True,
-            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = CircularROI([0, 0, 1], True)
@@ -189,14 +183,14 @@ class ROICircleTool(CircleTool):
 class ROIPolygonTool(PolygonTool):
     """ROI polygon tool"""
 
-    TITLE = _("Add polygonal ROI")
+    TITLE = _("Polygonal ROI")
     ICON = "roi_new_polygon.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
             switch_to_default_tool=True,
-            toolbar_id=ROI_EDITOR_TOOLBAR_ID,
+            toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = PolygonalROI([[0, 0], [1, 0], [1, 1], [0, 1]], True)
@@ -245,6 +239,7 @@ class BaseROIEditor(
         self.obj = obj
         self.extract = extract
         self.__modified: bool | None = None
+        self._tools: list[InteractiveTool] = []
 
         roi = obj.roi
         if roi is None:
@@ -329,21 +324,50 @@ class BaseROIEditor(
         """
         return self.__roi, self.modified
 
+    def create_coordinate_based_roi_actions(self) -> list[QW.QAction]:
+        """Create coordinate-based ROI actions"""
+        return []
+
+    def __new_action_menu(
+        self, title: str, icon: str, actions: list[QW.QAction]
+    ) -> QW.QAction:
+        """Create a new action menu"""
+        menu = QW.QMenu(title)
+        for action in actions:
+            menu.addAction(action)
+        action = QW.QAction(get_icon(icon), title, self)
+        action.setMenu(menu)
+        return action
+
     def create_actions(self) -> list[QW.QAction]:
         """Create actions"""
+        g_menu_act = self.__new_action_menu(
+            _("Graphical ROI"),
+            "roi_graphical.svg",
+            [tool.action for tool in self._tools],
+        )
+        c_menu_act = self.__new_action_menu(
+            _("Coordinate-based ROI"),
+            "roi_coordinate.svg",
+            self.create_coordinate_based_roi_actions(),
+        )
         self.remove_all_action = create_action(
             self,
-            _("Remove all ROIs"),
+            _("Remove all"),
             icon=get_icon("roi_delete.svg"),
             triggered=self.remove_all_rois,
         )
-        return [None, self.remove_all_action]
+        return [g_menu_act, c_menu_act, None, self.remove_all_action]
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
         layout = QW.QHBoxLayout()
         self.toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
         add_actions(self.toolbar, self.create_actions())
+        for action in self.toolbar.actions():
+            if action.menu() is not None:
+                widget = self.toolbar.widgetForAction(action)
+                widget.setPopupMode(QW.QToolButton.ToolButtonPopupMode.InstantPopup)
         layout.addWidget(self.toolbar)
         if self.extract:
             self.singleobj_btn = QW.QCheckBox(
@@ -430,8 +454,28 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
     def add_tools_to_plot_dialog(self) -> None:
         """Add tools to plot dialog"""
         mgr = self.plot_dialog.get_manager()
-        mgr.add_toolbar(self.toolbar, ROI_EDITOR_TOOLBAR_ID)
-        mgr.add_tool(ROISegmentTool, self.obj)
+        segm_tool = mgr.add_tool(ROISegmentTool, self.obj)
+        self._tools.append(segm_tool)
+
+    def manually_add_roi(self) -> None:
+        """Manually add segment ROI"""
+        param = dlo.ROI1DParam()
+        if param.edit(parent=self):
+            segment_roi: SegmentROI = param.to_single_roi(self.obj)
+            shape = segment_roi.to_plot_item(self.obj)
+            configure_roi_item_in_tool(shape, self.obj)
+            self.plot.add_item(shape)
+            self.plot.set_active_item(shape)
+
+    def create_coordinate_based_roi_actions(self) -> list[QW.QAction]:
+        """Create coordinate-based ROI actions"""
+        segcoord_act = create_action(
+            self,
+            _("Range ROI"),
+            icon=get_icon("signal_roi.svg"),
+            triggered=self.manually_add_roi,
+        )
+        return [segcoord_act]
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""
@@ -469,10 +513,42 @@ class ImageROIEditor(
     def add_tools_to_plot_dialog(self) -> None:
         """Add tools to plot dialog"""
         mgr = self.plot_dialog.get_manager()
-        mgr.add_toolbar(self.toolbar, ROI_EDITOR_TOOLBAR_ID)
-        mgr.add_tool(ROIRectangleTool, self.obj)
-        mgr.add_tool(ROICircleTool, self.obj)
-        mgr.add_tool(ROIPolygonTool, self.obj)
+        rect_tool = mgr.add_tool(ROIRectangleTool, self.obj)
+        circ_tool = mgr.add_tool(ROICircleTool, self.obj)
+        poly_tool = mgr.add_tool(ROIPolygonTool, self.obj)
+        self._tools.extend([rect_tool, circ_tool, poly_tool])
+
+    def manually_add_roi(
+        self, roi_type: Literal["rectangle", "circle", "polygon"]
+    ) -> None:
+        """Manually add image ROI"""
+        assert roi_type in ("rectangle", "circle", "polygon")
+        if roi_type == "polygon":
+            raise NotImplementedError("Manual polygonal ROI creation is not supported")
+        param = dlo.ROI2DParam()
+        param.geometry = roi_type
+        if param.edit(parent=self):
+            roi: RectangularROI | CircularROI = param.to_single_roi(self.obj)
+            shape = roi.to_plot_item(self.obj)
+            configure_roi_item_in_tool(shape, self.obj)
+            self.plot.add_item(shape)
+            self.plot.set_active_item(shape)
+
+    def create_coordinate_based_roi_actions(self) -> list[QW.QAction]:
+        """Create coordinate-based ROI actions"""
+        rectcoord_act = create_action(
+            self,
+            _("Rectangular ROI"),
+            icon=get_icon("roi_new_rectangle.svg"),
+            triggered=lambda: self.manually_add_roi("rectangle"),
+        )
+        circcoord_act = create_action(
+            self,
+            _("Circular ROI"),
+            icon=get_icon("roi_new_circle.svg"),
+            triggered=lambda: self.manually_add_roi("circle"),
+        )
+        return [rectcoord_act, circcoord_act]
 
     def setup_widget(self) -> None:
         """Setup ROI editor widget"""

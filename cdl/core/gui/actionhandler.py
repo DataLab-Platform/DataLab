@@ -95,6 +95,14 @@ class SelectCond:
         return len(selected_groups) == 1
 
     @staticmethod
+    def exactly_one_group_or_one_object(
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalObj | ImageObj],
+    ) -> bool:
+        """Exactly one group or one signal or image is selected"""
+        return len(selected_groups) == 1 or len(selected_objects) == 1
+
+    @staticmethod
     # pylint: disable=unused-argument
     def at_least_one_group_or_one_object(
         sel_groups: list[ObjectGroup],
@@ -408,6 +416,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
+                _("Open from directory..."),
+                icon_name="fileopen_directory.svg",
+                tip=_("Open %s objects from directory") % self.OBJECT_STR,
+                triggered=self.panel.load_from_directory,
+                select_condition=SelectCond.always,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Save %s...") % self.OBJECT_STR,
                 # icon: filesave_signal.svg or filesave_image.svg
                 icon_name=f"filesave_{self.__class__.__name__[:3].lower()}.svg",
@@ -427,20 +443,20 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.EDIT):
             self.new_action(
+                _("Rename"),
+                icon_name="rename.svg",
+                shortcut="F2",
+                tip=_("Edit title of selected %s or group") % self.OBJECT_STR,
+                triggered=self.panel.rename_selected_object_or_group,
+                select_condition=SelectCond.exactly_one_group_or_one_object,
+                context_menu_pos=-1,
+            )
+            self.new_action(
                 _("New group..."),
                 icon_name="new_group.svg",
                 tip=_("Create a new group"),
                 triggered=self.panel.new_group,
                 select_condition=SelectCond.always,
-                context_menu_pos=-1,
-                toolbar_pos=-1,
-            )
-            self.new_action(
-                _("Rename group..."),
-                icon_name="rename_group.svg",
-                tip=_("Rename selected group"),
-                triggered=self.panel.rename_group,
-                select_condition=SelectCond.exactly_one_group,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
             )
@@ -631,6 +647,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.processor.compute_division,
                 select_condition=SelectCond.at_least_one,
                 icon_name="division.svg",
+            )
+            self.new_action(
+                _("Inverse"),
+                triggered=self.panel.processor.compute_inverse,
+                select_condition=SelectCond.at_least_one,
+                icon_name="inverse.svg",
             )
             self.new_action(
                 _("Arithmetic operation") + "...",
@@ -867,6 +889,15 @@ class SignalActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_reverse_x,
                     icon_name="reverse_signal_x.svg",
                 )
+                self.new_action(
+                    _("Convert to Cartesian coordinates"),
+                    triggered=self.panel.processor.compute_polar2cartesian,
+                )
+                self.new_action(
+                    _("Convert to polar coordinates"),
+                    triggered=self.panel.processor.compute_cartesian2polar,
+                )
+
             with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
                 self.new_action(
                     _("Low-pass filter"),
@@ -937,6 +968,37 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_resampling,
                 icon_name="resampling.svg",
             )
+            with self.new_menu(_("Stability analysis"), icon_name="stability.svg"):
+                self.new_action(
+                    _("Allan variance"),
+                    triggered=self.panel.processor.compute_allan_variance,
+                )
+                self.new_action(
+                    _("Allan deviation"),
+                    triggered=self.panel.processor.compute_allan_deviation,
+                )
+                self.new_action(
+                    _("Modified Allan deviation"),
+                    triggered=self.panel.processor.compute_modified_allan_variance,
+                )
+                self.new_action(
+                    _("Hadamard variance"),
+                    triggered=self.panel.processor.compute_hadamard_variance,
+                )
+                self.new_action(
+                    _("Total variance"),
+                    triggered=self.panel.processor.compute_total_variance,
+                )
+                self.new_action(
+                    _("Time deviation"),
+                    triggered=self.panel.processor.compute_time_deviation,
+                )
+                self.new_action(
+                    _("All stability features") + "...",
+                    triggered=self.panel.processor.compute_all_stability,
+                    separator=True,
+                    tip=_("Compute all stability features"),
+                )
 
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
@@ -953,9 +1015,16 @@ class SignalActionHandler(BaseActionHandler):
                 icon_name="fw1e2.svg",
             )
             self.new_action(
-                _("X values at min/max") + "...",
+                _("Abscissa of the minimum and maximum"),
                 triggered=self.panel.processor.compute_x_at_minmax,
-                tip=_("Compute X values at signal minimum and maximum"),
+                tip=_(
+                    "Compute the smallest argument of the minima and the smallest "
+                    "argument of the maxima"
+                ),
+            )
+            self.new_action(
+                _("Abscissa at y=..."),
+                triggered=self.panel.processor.compute_x_at_y,
             )
             self.new_action(
                 _("Peak detection"),
@@ -1060,13 +1129,19 @@ class ImageActionHandler(BaseActionHandler):
                 select_condition=SelectCond.at_least_one,
             )
 
-            with self.new_menu(_("Rotation"), icon_name="rotate_right.svg"):
+            with self.new_menu(_("Flip or rotation"), icon_name="rotate_right.svg"):
                 self.new_action(
                     _("Flip horizontally"),
                     triggered=self.panel.processor.compute_fliph,
                     icon_name="flip_horizontally.svg",
                     context_menu_pos=-1,
                     context_menu_sep=True,
+                )
+                self.new_action(
+                    _("Flip diagonally"),
+                    triggered=self.panel.processor.compute_swap_axes,
+                    icon_name="swap_x_y.svg",
+                    context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Flip vertically"),
@@ -1076,6 +1151,7 @@ class ImageActionHandler(BaseActionHandler):
                 )
                 self.new_action(
                     _("Rotate %s right") % "90°",  # pylint: disable=consider-using-f-string
+                    separator=True,
                     triggered=self.panel.processor.compute_rotate270,
                     icon_name="rotate_right.svg",
                     context_menu_pos=-1,
@@ -1087,7 +1163,7 @@ class ImageActionHandler(BaseActionHandler):
                     context_menu_pos=-1,
                 )
                 self.new_action(
-                    _("Rotate arbitrarily..."),
+                    _("Rotate by..."),
                     triggered=self.panel.processor.compute_rotate,
                 )
 

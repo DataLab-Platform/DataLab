@@ -306,13 +306,17 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         raise TypeError(f"Invalid index_id_title type: {type(nb_id_title)}")
 
     @remote_controlled
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
             panel: panel name (valid values: "signal", "image").
              If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
             List of object uuids
@@ -320,7 +324,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Raises:
             ValueError: if panel is unknown
         """
-        return self.__get_datapanel(panel).objmodel.get_object_ids()
+        objmodel = self.__get_datapanel(panel).objmodel
+        if group is None:
+            return objmodel.get_object_ids()
+        if isinstance(group, int):
+            grp = objmodel.get_group_from_number(group)
+        else:
+            try:
+                grp = objmodel.get_group(group)
+            except KeyError:
+                grp = objmodel.get_group_from_title(group)
+        if grp is None:
+            raise KeyError(f"Invalid group index, id or title: {group}")
+        return grp.get_object_ids()
 
     @remote_controlled
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
@@ -334,6 +350,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         panel = self.__get_current_basedatapanel()
         return panel.objview.get_sel_object_uuids(include_groups)
+
+    @remote_controlled
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
+        """
+        self.__get_datapanel(panel).add_group(title, select)
 
     @remote_controlled
     def select_objects(
@@ -1362,19 +1391,25 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         if not self.confirm_memory_state():
             return
         if reset_all is None:
-            reset_all = False
-            if self.has_objects():
+            reset_all = Conf.io.h5_clear_workspace.get()
+            if self.has_objects() and Conf.io.h5_clear_workspace_ask.get():
                 answer = QW.QMessageBox.question(
                     self,
                     _("Warning"),
                     _(
-                        "Do you want to remove all signals and images "
-                        "before importing data from HDF5 files?"
-                    ),
-                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                        "Do you want to clear current workspace (signals and images) "
+                        "before importing data from HDF5 files?<br><br>"
+                        "Choosing to ignore this message will prevent it "
+                        "from being displayed again, and will use the "
+                        "current setting (%s)."
+                    )
+                    % (_("Yes") if reset_all else _("No")),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Ignore,
                 )
                 if answer == QW.QMessageBox.Yes:
                     reset_all = True
+                elif answer == QW.QMessageBox.Ignore:
+                    Conf.io.h5_clear_workspace_ask.set(False)
         if h5files is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
@@ -1457,6 +1492,16 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         panel = self.__get_current_basedatapanel()
         panel.load_from_files(filenames)
+
+    @remote_controlled
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+        panel = self.__get_current_basedatapanel()
+        panel.load_from_directory(path)
 
     # ------Other methods related to AbstractCDLControl interface
     def get_version(self) -> str:

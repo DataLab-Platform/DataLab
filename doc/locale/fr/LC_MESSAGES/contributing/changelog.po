@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 14:04+0100\n"
+"POT-Creation-Date: 2025-03-24 14:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -16,13 +16,85 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "Changelog"
 msgstr "Historique des modifications"
 
 msgid "See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones."
 msgstr "Voir la page de la [feuille de route](https://datalab-platform.com/fr/contributing/roadmap.html) de DataLab pour les jalons futurs et passés."
+
+#, fuzzy
+msgid "DataLab Version 0.19.0"
+msgstr "DataLab Version 0.9.0"
+
+msgid "💥 New features and enhancements:"
+msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "When opening an HDF5 file, the confirmation dialog box asking if current workspace should be cleared has a new possible answer \"Ignore\":"
+msgstr ""
+
+msgid "Choosing \"Ignore\" will prevent the confirmation dialog box from being displayed again, and will choose the current setting (i.e. clear or not the workspace) for all subsequent file openings"
+msgstr ""
+
+msgid "Added a new \"Clear workspace before loading HDF5 file\" option in the \"Settings\" dialog box, to allow the user to change the current setting (i.e. clear or not the workspace) for all subsequent file openings"
+msgstr ""
+
+msgid "Added a new \"Ask before clearing workspace\" option in the \"Settings\" dialog box, to allow the user to disable or re-enable the confirmation dialog box asking if current workspace should be cleared when opening an HDF5 file"
+msgstr ""
+
+#, fuzzy
+msgid "This closes [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146) - Ask before clearing workspace when opening HDF5 file: add \"Ignore\" option to prevent dialog from being displayed again"
+msgstr "Correction de l'[Issue #81](https://github.com/DataLab-Platform/DataLab/issues/81) - Lors de l'ouverture de fichiers, afficher la boîte de dialogue de progression uniquement si nécessaire"
+
+msgid "Object and group title renaming:"
+msgstr ""
+
+msgid "Removed \"Rename group\" feature from the \"Edit\" menu and context menu"
+msgstr ""
+
+msgid "Added \"Rename object\" feature to the \"Edit\" menu and context menu, with F2 shortcut, to rename the title of the selected object or group"
+msgstr ""
+
+#, fuzzy
+msgid "This closes [Issue #148](https://github.com/DataLab-Platform/DataLab/issues/148) - Rename signal/image/group title by pressing F2"
+msgstr "Ceci corrige l'[Issue #21](https://github.com/DataLab-Platform/DataLab/issues/21) - Ajout de la fonctionnalité de rééchantillonnage 1D"
+
+#, fuzzy
+msgid "Region of Interest editor:"
+msgstr "Nouvelles fonctionnalités de ROI (Région d'intérêt) :"
+
+msgid "Regrouped the graphical actions (new rectangular ROI, new circular ROI, new polygonal ROI) in a single menu \"Graphical ROI\""
+msgstr ""
+
+msgid "Added new \"Coordinate-based ROI\" menu to create a ROI using manual input of the coordinates:"
+msgstr ""
+
+msgid "For signals, the ROI is defined by the start and end coordinates"
+msgstr ""
+
+msgid "For images:"
+msgstr ""
+
+msgid "The rectangular ROI is defined by the top-left and bottom-right coordinates"
+msgstr ""
+
+msgid "The circular ROI is defined by the center and radius coordinates"
+msgstr ""
+
+msgid "The polygonal ROI is not supported yet"
+msgstr ""
+
+#, fuzzy
+msgid "This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates"
+msgstr "Ceci corrige l'[Issue #24](https://github.com/DataLab-Platform/DataLab/issues/24) - Ajout de la fonctionnalité d'élimination de tendance 1D"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Corrections de bugs :"
+
+#, fuzzy
+msgid "Fixed [Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144) - Average profile extraction: `ValueError` when selection rectangle is larger than the image"
+msgstr "Correction de l'[Issue #87](https://github.com/DataLab-Platform/DataLab/issues/87) - Extraction du profil moyen de l'image : `AttributeError` lors de la tentative de modification des paramètres du profil"
 
 msgid "DataLab Version 0.18.2"
 msgstr "DataLab Version 0.18.2"
@@ -44,9 +116,6 @@ msgstr "Avant ce changement, lors de l'application d'une fonction de traitement 
 
 msgid "This new option allows to keep the analysis results after applying a processing feature on a signal or an image. Even if the analysis results are not updated, they might be relevant in some use cases (e.g. when using the 2D peak detection feature on an image, and then applying a filter on the image, or summing two images, etc.)"
 msgstr "Cette nouvelle option permet de conserver les résultats de l'analyse après l'application d'une fonction de traitement sur un signal ou une image. Même si les résultats de l'analyse ne sont pas mis à jour, ils peuvent être pertinents dans certains cas d'utilisation (par exemple lors de l'utilisation de la fonction de détection de pics 2D sur une image, puis de l'application d'un filtre sur l'image, ou de la sommation de deux images, etc.)"
-
-msgid "🛠️ Bug fixes:"
-msgstr "🛠️ Corrections de bugs :"
 
 msgid "Fixed [Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138) - Image colormaps were no longer stored in metadata (and serialized in HDF5 files) since PlotPy v2.6.3 (this commit, specifically: [PlotPyStack/PlotPy@a37af8a](https://github.com/PlotPyStack/PlotPy/commit/a37af8ae8392e5e3655e5c34b67a7cd1544ea845))"
 msgstr "Correction de l'[Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138) - Les cartes de couleurs d'image n'étaient plus stockées dans les métadonnées (et sérialisées dans les fichiers HDF5) depuis PlotPy v2.6.3 (ce commit, en particulier : [PlotPyStack/PlotPy@a37af8a](https://github.com/PlotPyStack/PlotPy/commit/a37af8ae8392e5e3655e5c34b67a7cd1544ea845))"
@@ -173,9 +242,6 @@ msgstr "Prise en charge de Python 3.8 abandonnée."
 
 msgid "Python 3.13 is not supported yet, due to the fact that some dependencies are not compatible with this version."
 msgstr "Python 3.13 n'est pas encore pris en charge, car certaines dépendances ne sont pas compatibles avec cette version."
-
-msgid "💥 New features and enhancements:"
-msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
 msgid "New operation mode feature:"
 msgstr "Nouvelle fonctionnalité de mode d'opération :"
@@ -625,7 +691,6 @@ msgstr "Les fonctionnalités d'opérations et de traitement ont été regroupée
 msgid "All visualization-related actions are now grouped in the plot view vertical toolbar"
 msgstr "Toutes les actions liées à la visualisation sont désormais regroupées dans la barre d'outils verticale du panneau de visualisation"
 
-#, fuzzy
 msgid "Clarified the \"Annotations\" management (new buttons, toolbar action...)"
 msgstr "Clarification de la gestion des \"Annotations\" (nouveaux boutons, action de la barre d'outils...)"
 
@@ -1328,7 +1393,6 @@ msgstr "Résultats d'analyse 1D et 2D :"
 msgid "Additionnaly to the previous enhancement, more analysis results are now shown in the \"Results\" dialog box"
 msgstr "En complément de l'amélioration précédente, plus de résultats d'analyse sont désormais affichés dans la boîte de dialogue \"Résultats\""
 
-#, fuzzy
 msgid "This concerns both 1D (FHWM...) and 2D analysis results (contours, blobs...):"
 msgstr "Cela concerne à la fois les résultats d'analyse 1D (FHWM...) et 2D (contours, blobs...) :"
 

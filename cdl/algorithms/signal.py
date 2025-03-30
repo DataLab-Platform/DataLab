@@ -526,17 +526,18 @@ class VoigtModel(FitModel):
 # MARK: Misc. analyses -----------------------------------------------------------------
 
 
-def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
-    """Find the x indices where the corresponding y is the closest to zero
+def find_zero_crossings(y: np.ndarray) -> np.ndarray:
+    """
+    Find the left indices of the zero-crossing intervals in the given array.
 
     Args:
-        y: Y data
+        y: Input array.
 
     Returns:
-        Indices of the points right before or at zero crossing
+        An array of indices where zero-crossings occur.
     """
-    xi = np.where((y[:-1] >= 0) & (y[1:] <= 0) | (y[:-1] <= 0) & (y[1:] >= 0))[0]
-    return xi
+    zero_crossing_indices = np.nonzero(np.diff(np.sign(y)))[0]
+    return zero_crossing_indices
 
 
 def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
@@ -553,17 +554,20 @@ def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
         (empty array if no zero crossing is found)
     """
     leveled_y = y - value
-    xi_before = find_nearest_zero_point_idx(leveled_y)
-    xi_after = xi_before + 1
+    xi_before = find_zero_crossings(leveled_y)
 
     if len(xi_before) == 0:
         # Return an empty array if no zero crossing is found
         return np.array([])
 
+    # if the zero-crossing is exactly on a point, return the point
+    if np.any(leveled_y == 0):
+        return x[np.where(leveled_y == 0)]
+
     # linear interpolation
-    p = (leveled_y[xi_after] - leveled_y[xi_before]) / (x[xi_after] - x[xi_before])
-    ori = leveled_y[xi_after] - p * x[xi_after]
-    x0 = -ori / p  # where the curve cut the absissa
+    xi_after = xi_before + 1
+    slope = (leveled_y[xi_after] - leveled_y[xi_before]) / (x[xi_after] - x[xi_before])
+    x0 = -leveled_y[xi_before] / slope + x[xi_before]
     return x0
 
 
@@ -923,3 +927,245 @@ def fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
     hw = 2 * sigma
     yhm = GaussianModel.amplitude(amp, sigma) / np.e**2 + base
     return mu - hw, yhm, mu + hw, yhm
+
+
+# MARK: Stability analysis -------------------------------------------------------------
+
+
+def allan_variance(x: np.ndarray, y: np.ndarray, tau_values: np.ndarray) -> np.ndarray:
+    """
+    Calculate the Allan variance for given time and measurement values at specified
+    tau values.
+
+    Args:
+        x: Time array
+        y: Measured values array
+        tau_values: Allan deviation time values
+
+    Returns:
+        Allan variance values
+    """
+    if len(x) != len(y):
+        raise ValueError(
+            "Time array (x) and measured values array (y) " "must have the same length."
+        )
+
+    dt = np.mean(np.diff(x))  # Time step size
+    if not np.allclose(np.diff(x), dt):
+        raise ValueError("Time values (x) must be equally spaced.")
+
+    allan_var = []
+    for tau in tau_values:
+        m = int(round(tau / dt))  # Number of time steps in a tau
+        if m < 1:
+            raise ValueError(
+                f"Tau value {tau} is smaller than the sampling interval {dt}"
+            )
+        if m > len(y) // 2:
+            # Tau too large for reliable statistics
+            allan_var.append(np.nan)
+            continue
+
+        # Calculate the clusters/bins
+        clusters = y[: len(y) - (len(y) % m)].reshape(-1, m)
+        bin_means = clusters.mean(axis=1)
+
+        # Calculate Allan variance using the definition
+        # σ²(τ) = 1/(2(N-1)) Σ(y_(i+1) - y_i)²
+        # where y_i are the bin means
+        squared_diff = np.sum(np.diff(bin_means) ** 2)
+        n = len(bin_means) - 1
+
+        if n > 0:
+            var = squared_diff / (2.0 * n)
+            allan_var.append(var)
+        else:
+            allan_var.append(np.nan)
+
+    return np.array(allan_var)
+
+
+def allan_deviation(x: np.ndarray, y: np.ndarray, tau_values: np.ndarray) -> np.ndarray:
+    """
+    Calculate the Allan deviation for given time and measurement values at specified
+    tau values.
+
+    Args:
+        x: Time array
+        y: Measured values array
+        tau_values: Allan deviation time values
+
+    Returns:
+        Allan deviation values
+    """
+    return np.sqrt(allan_variance(x, y, tau_values))
+
+
+def overlapping_allan_variance(
+    x: np.ndarray, y: np.ndarray, tau_values: np.ndarray
+) -> np.ndarray:
+    """
+    Calculate the Overlapping Allan variance for given time and measurement values.
+
+    Args:
+        x: Time array
+        y: Measured values array
+        tau_values: Allan deviation time values
+
+    Returns:
+        Overlapping Allan variance values
+    """
+    if len(x) != len(y):
+        raise ValueError(
+            "Time array (x) and measured values array (y) must have the same length."
+        )
+
+    dt = np.mean(np.diff(x))  # Time step size
+    if not np.allclose(np.diff(x), dt):
+        raise ValueError("Time values (x) must be equally spaced.")
+
+    overlapping_var = []
+    for tau in tau_values:
+        tau_bins = int(tau / dt)
+        if tau_bins <= 1 or tau_bins > len(y) / 2:
+            overlapping_var.append(np.nan)
+            continue
+
+        m = len(y) - tau_bins  # Number of overlapping segments
+        avg_values = [np.mean(y[i : i + tau_bins]) for i in range(m)]
+        diff = np.diff(avg_values)
+        overlapping_var.append(0.5 * np.mean(np.array(diff) ** 2))
+
+    return np.array(overlapping_var)
+
+
+def modified_allan_variance(
+    x: np.ndarray, y: np.ndarray, tau_values: np.ndarray
+) -> np.ndarray:
+    """
+    Calculate the Modified Allan variance for given time and measurement values.
+
+    Args:
+        x: Time array
+        y: Measured values array
+        tau_values: Modified Allan deviation time values
+
+    Returns:
+        Modified Allan variance values
+    """
+    if len(x) != len(y):
+        raise ValueError(
+            "Time array (x) and measured values array (y) must have the same length."
+        )
+
+    dt = np.mean(np.diff(x))
+    if not np.allclose(np.diff(x), dt):
+        raise ValueError("Time values (x) must be equally spaced.")
+
+    mod_allan_var = []
+    for tau in tau_values:
+        tau_bins = int(tau / dt)
+        if tau_bins <= 1 or tau_bins > len(y) / 2:
+            mod_allan_var.append(np.nan)
+            continue
+
+        m = int(len(y) / tau_bins)
+        reshaped = y[: m * tau_bins].reshape(m, tau_bins)
+
+        avg_values = reshaped.mean(axis=1)
+        squared_diff = (np.diff(avg_values)) ** 2
+        mod_allan_var.append(np.mean(squared_diff) / (2 * (tau_bins**2)))
+
+    return np.array(mod_allan_var)
+
+
+def hadamard_variance(
+    x: np.ndarray, y: np.ndarray, tau_values: np.ndarray
+) -> np.ndarray:
+    """
+    Calculate the Hadamard variance for given time and measurement values.
+
+    Args:
+        x: Time array
+        y: Measured values array
+        tau_values: Hadamard deviation time values
+
+    Returns:
+        Hadamard variance values
+    """
+    if len(x) != len(y):
+        raise ValueError(
+            "Time array (x) and measured values array (y) must have the same length."
+        )
+
+    dt = np.mean(np.diff(x))
+    if not np.allclose(np.diff(x), dt):
+        raise ValueError("Time values (x) must be equally spaced.")
+
+    hadamard_var = []
+    for tau in tau_values:
+        tau_bins = int(tau / dt)
+        if tau_bins <= 1 or tau_bins > len(y) / 3:
+            hadamard_var.append(np.nan)
+            continue
+
+        m = len(y) - 2 * tau_bins
+        avg_values = [np.mean(y[i : i + tau_bins]) for i in range(m)]
+        diff = np.diff(avg_values, n=2)  # Second differences
+        hadamard_var.append(np.mean(diff**2) / 6)
+
+    return np.array(hadamard_var)
+
+
+def total_variance(x: np.ndarray, y: np.ndarray, tau_values: np.ndarray) -> np.ndarray:
+    """
+    Calculate the Total variance for given time and measurement values.
+
+    Args:
+        x: Time array
+        y: Measured values array
+        tau_values: Total variance time values
+
+    Returns:
+        Total variance values
+    """
+    if len(x) != len(y):
+        raise ValueError(
+            "Time array (x) and measured values array (y) must have the same length."
+        )
+
+    dt = np.mean(np.diff(x))
+    if not np.allclose(np.diff(x), dt):
+        raise ValueError("Time values (x) must be equally spaced.")
+
+    total_var = []
+    for tau in tau_values:
+        tau_bins = int(tau / dt)
+        if tau_bins <= 1 or tau_bins > len(y) / 2:
+            total_var.append(np.nan)
+            continue
+
+        m = int(len(y) / tau_bins)
+        reshaped = y[: m * tau_bins].reshape(m, tau_bins)
+
+        avg_values = reshaped.mean(axis=1)
+        squared_diff = np.diff(avg_values) ** 2
+        total_var.append(np.mean(squared_diff))
+
+    return np.array(total_var)
+
+
+def time_deviation(x: np.ndarray, y: np.ndarray, tau_values: np.ndarray) -> np.ndarray:
+    """
+    Calculate the Time Deviation (TDEV) for given time and measurement values.
+
+    Args:
+        x: Time array
+        y: Measured values array
+        tau_values: Time deviation time values
+
+    Returns:
+        Time deviation values
+    """
+    allan_var = allan_variance(x, y, tau_values)
+    return np.sqrt(allan_var) * tau_values

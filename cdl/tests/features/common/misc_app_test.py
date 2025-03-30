@@ -13,6 +13,7 @@ we put it here...
 
 from __future__ import annotations
 
+import os.path as osp
 from typing import TYPE_CHECKING, Any
 
 import cdl.obj
@@ -118,6 +119,11 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
     __print_test_result("Open object")
     fname = get_test_fnames("*.csv")[0]
     win.load_from_files([fname])
+
+    # Open directory
+    __print_test_result("Open directory (signals)")
+    path = osp.dirname(get_test_fnames("curve_formats/*.*")[0])
+    win.signalpanel.load_from_directory(path)
 
     # Open objects from signal panel
     __print_test_result("Open objects from signal panel")

@@ -13,6 +13,8 @@ addition, multiplication, division, and more.
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pytest
 
@@ -116,6 +118,18 @@ def test_signal_division_constant() -> None:
 
 
 @pytest.mark.validation
+def test_signal_inverse() -> None:
+    """Signal inversion validation test."""
+    s1 = __create_two_signals()[0]
+    inv_signal = cps.compute_inverse(s1)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        exp = 1.0 / s1.y
+        exp[np.isinf(exp)] = np.nan
+    check_array_result("Signal inverse", inv_signal.y, exp)
+
+
+@pytest.mark.validation
 def test_signal_abs() -> None:
     """Absolute value validation test."""
     s1 = __create_two_signals()[0]
@@ -216,6 +230,7 @@ if __name__ == "__main__":
     test_signal_product_constant()
     test_signal_difference_constant()
     test_signal_division_constant()
+    test_signal_inverse()
     test_signal_abs()
     test_signal_re()
     test_signal_im()

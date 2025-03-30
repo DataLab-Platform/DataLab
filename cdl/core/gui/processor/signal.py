@@ -84,6 +84,11 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         self.compute_11(cps.compute_swap_axes, title=_("Swap axes"))
 
     @qt_try_except()
+    def compute_inverse(self) -> None:
+        """Compute inverse"""
+        self.compute_11(cps.compute_inverse, title=_("Inverse"))
+
+    @qt_try_except()
     def compute_abs(self) -> None:
         """Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`"""
         self.compute_11(cps.compute_abs, title=_("Absolute value"))
@@ -225,6 +230,32 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     def compute_reverse_x(self) -> None:
         """Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`"""
         self.compute_11(cps.compute_reverse_x, title=_("Reverse X axis"))
+
+    @qt_try_except()
+    def compute_cartesian2polar(
+        self, param: cdl.param.AngleUnitParam | None = None
+    ) -> None:
+        """Convert cartesian to polar coordinates
+        with :py:func:`cdl.computation.signal.compute_cartesian2polar`"""
+        self.compute_11(
+            cps.compute_cartesian2polar,
+            param,
+            cps.AngleUnitParam,
+            title=_("Cartesian to Polar"),
+        )
+
+    @qt_try_except()
+    def compute_polar2cartesian(
+        self, param: cdl.param.AngleUnitParam | None = None
+    ) -> None:
+        """Convert polar to cartesian coordinates
+        with :py:func:`cdl.computation.signal.compute_polar2cartesian`."""
+        self.compute_11(
+            cps.compute_polar2cartesian,
+            param,
+            cps.AngleUnitParam,
+            title=_("Polar to Cartesian"),
+        )
 
     # ------Signal Processing
     @qt_try_except()
@@ -486,6 +517,127 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         )
 
     @qt_try_except()
+    def compute_allan_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute Allan variance
+        with :py:func:`cdl.computation.signal.compute_allan_variance`"""
+        self.compute_11(
+            cps.compute_allan_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Allan variance"),
+        )
+
+    @qt_try_except()
+    def compute_allan_deviation(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute Allan deviation
+        with :py:func:`cdl.computation.signal.compute_allan_deviation`"""
+        self.compute_11(
+            cps.compute_allan_deviation,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Allan deviation"),
+        )
+
+    @qt_try_except()
+    def compute_overlapping_allan_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute overlapping Allan variance
+        with :py:func:`cdl.computation.signal.compute_overlapping_allan_variance`"""
+        self.compute_11(
+            cps.compute_overlapping_allan_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Overlapping Allan variance"),
+        )
+
+    @qt_try_except()
+    def compute_modified_allan_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute modified Allan variance
+        with :py:func:`cdl.computation.signal.compute_modified_allan_variance`"""
+        self.compute_11(
+            cps.compute_modified_allan_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Modified Allan variance"),
+        )
+
+    @qt_try_except()
+    def compute_hadamard_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute Hadamard variance
+        with :py:func:`cdl.computation.signal.compute_hadamard_variance`"""
+        self.compute_11(
+            cps.compute_hadamard_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Hadamard variance"),
+        )
+
+    @qt_try_except()
+    def compute_total_variance(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute total variance
+        with :py:func:`cdl.computation.signal.compute_total_variance`"""
+        self.compute_11(
+            cps.compute_total_variance,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Total variance"),
+        )
+
+    @qt_try_except()
+    def compute_time_deviation(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute time deviation
+        with :py:func:`cdl.computation.signal.compute_time_deviation`"""
+        self.compute_11(
+            cps.compute_time_deviation,
+            param,
+            cps.AllanVarianceParam,
+            title=_("Time deviation"),
+        )
+
+    @qt_try_except()
+    def compute_all_stability(
+        self, param: cdl.param.AllanVarianceParam | None = None
+    ) -> None:
+        """Compute all stability analysis features
+        using the following functions:
+
+        - :py:func:`cdl.computation.signal.compute_allan_variance`
+        - :py:func:`cdl.computation.signal.compute_allan_deviation`
+        - :py:func:`cdl.computation.signal.compute_overlapping_allan_variance`
+        - :py:func:`cdl.computation.signal.compute_modified_allan_variance`
+        - :py:func:`cdl.computation.signal.compute_hadamard_variance`
+        - :py:func:`cdl.computation.signal.compute_total_variance`
+        - :py:func:`cdl.computation.signal.compute_time_deviation`
+        """
+        if param is None:
+            param = cps.AllanVarianceParam()
+            if not param.edit(parent=self.panel.parent()):
+                return
+        funcs = [
+            cps.compute_allan_variance,
+            cps.compute_allan_deviation,
+            cps.compute_overlapping_allan_variance,
+            cps.compute_modified_allan_variance,
+            cps.compute_hadamard_variance,
+            cps.compute_total_variance,
+            cps.compute_time_deviation,
+        ]
+        self.compute_1n(funcs, [param] * len(funcs), "Stability", edit=False)
+
+    @qt_try_except()
     def compute_polyfit(
         self, param: cdl.param.PolynomialFitParam | None = None
     ) -> None:
@@ -601,6 +753,18 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         """Compute x at min/max
         with :py:func:`cdl.computation.signal.compute_x_at_minmax`"""
         return self.compute_10(cps.compute_x_at_minmax, title="X @ min,max")
+
+    @qt_try_except()
+    def compute_x_at_y(
+        self, param: cps.FindAbscissaParam | None = None
+    ) -> dict[str, ResultProperties]:
+        """Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`."""
+        return self.compute_10(
+            cps.compute_x_at_y,
+            param,
+            cps.FindAbscissaParam,
+            title=_("Find abscissa"),
+        )
 
     @qt_try_except()
     def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:

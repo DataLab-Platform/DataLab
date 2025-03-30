@@ -72,9 +72,22 @@ def test_signal_x_at_minmax() -> None:
     check_scalar_result("X@Ymax", df["X@Ymax"][0], 5.184, rtol=0.001)
 
 
+@pytest.mark.validation
+def test_signal_x_at_y() -> None:
+    """Validation test for the abscissa finding computation."""
+    newparam = cdl.obj.new_signal_param(stype=cdl.obj.SignalTypes.STEP)
+    obj = cdl.obj.create_signal_from_param(newparam)
+    if obj is None:
+        raise ValueError("Failed to create test signal")
+    param = cps.FindAbscissaParam.create(y=0.5)
+    df = cps.compute_x_at_y(obj, param).to_dataframe()
+    check_scalar_result("x|y=0.5", df["x"][0], 0.0)
+
+
 if __name__ == "__main__":
     test_signal_bandwidth_3db()
     test_dynamic_parameters()
     test_signal_sampling_rate_period()
     test_signal_contrast()
     test_signal_x_at_minmax()
+    test_signal_x_at_y()

@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import warnings
 from collections.abc import Callable
 from enum import Enum
 from typing import Any, Literal
@@ -22,6 +23,7 @@ import scipy.integrate as spt
 import scipy.ndimage as spi
 import scipy.signal as sps
 
+import cdl.algorithms.coordinates
 import cdl.algorithms.signal as alg
 from cdl.computation.base import (
     ArithmeticParam,
@@ -408,6 +410,28 @@ def compute_swap_axes(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "swap_axes")
     x, y = src.get_data()
     dst.set_xydata(y, x)
+    return dst
+
+
+def compute_inverse(src: SignalObj) -> SignalObj:
+    """Compute inverse with :py:data:`numpy.invert`
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "invert")
+    x, y = src.get_data()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        dst.set_xydata(x, np.reciprocal(y))
+        dst.y[np.isinf(dst.y)] = np.nan
+    if dst.dy is not None:
+        dst.dy = dst.y * src.dy / (src.y**2)
+        dst.dy[np.isinf(dst.dy)] = np.nan
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -1233,6 +1257,189 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
     return dst
 
 
+class AngleUnitParam(gds.DataSet):
+    """Choice of angle unit."""
+
+    units = (("rad", _("Radian")), ("deg", _("Degree")))
+    unit = gds.ChoiceItem(_("Angle unit"), units, default="rad")
+
+
+def compute_cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+    """Convert cartesian coordinates to polar coordinates with
+    :py:func:`cdl.algorithms.coordinates.cartesian2polar`.
+
+    Args:
+        src: Source signal.
+        p: Parameters.
+
+    Returns:
+        Result signal object.
+    """
+    dst = dst_11(src, "Polar coordinates", f"unit={p.unit}")
+    x, y = src.get_data()
+    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, p.unit)
+    dst.set_xydata(r, theta)
+    return dst
+
+
+def compute_polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+    """Convert polar coordinates to cartesian coordinates with
+    :py:func:`cdl.algorithms.coordinates.polar2cartesian`.
+
+    Args:
+        src: Source signal.
+        p: Parameters.
+
+    Returns:
+        Result signal object.
+
+    .. note::
+
+        This function assumes that the x-axis represents the radius and the y-axis
+        represents the angle. Negative values are not allowed for the radius, and will
+        be clipped to 0 (a warning will be raised).
+    """
+    dst = dst_11(src, "Cartesian coordinates", f"unit={p.unit}")
+    r, theta = src.get_data()
+    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, p.unit)
+    dst.set_xydata(x, y)
+    return dst
+
+
+class AllanVarianceParam(gds.DataSet):
+    """Allan variance parameters"""
+
+    max_tau = gds.IntItem("Max τ", default=100, min=1, unit="pts")
+
+
+def compute_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Allan variance with :py:func:`cdl.algorithms.signal.allan_variance`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    avar = alg.allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, avar)
+    return dst
+
+
+def compute_allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Allan deviation with :py:func:`cdl.algorithms.signal.allan_deviation`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "allan_deviation", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    adev = alg.allan_deviation(x, y, tau_values)
+    dst.set_xydata(tau_values, adev)
+    return dst
+
+
+def compute_overlapping_allan_variance(
+    src: SignalObj, p: AllanVarianceParam
+) -> SignalObj:
+    """Compute Overlapping Allan variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "overlapping_allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    oavar = alg.overlapping_allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, oavar)
+    return dst
+
+
+def compute_modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Modified Allan variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "modified_allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    mavar = alg.modified_allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, mavar)
+    return dst
+
+
+def compute_hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Hadamard variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "hadamard_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    hvar = alg.hadamard_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, hvar)
+    return dst
+
+
+def compute_total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Total variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "total_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    tvar = alg.total_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, tvar)
+    return dst
+
+
+def compute_time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Time Deviation (TDEV).
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "time_deviation", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    tdev = alg.time_deviation(x, y, tau_values)
+    dst.set_xydata(tau_values, tdev)
+    return dst
+
+
 # MARK: compute_10 functions -----------------------------------------------------------
 # Functions with 1 input signal and 0 output signals (ResultShape or ResultProperties)
 # --------------------------------------------------------------------------------------
@@ -1353,6 +1560,47 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2, add_label=True)
 
 
+class FindAbscissaParam(gds.DataSet):
+    """Parameter dataset for abscissa finding"""
+
+    y = gds.FloatItem(_("Ordinate"), default=0)
+
+
+def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
+    """
+    Compute the smallest x-value at a given y-value for a signal object.
+
+    Args:
+        obj: The signal object containing x and y data.
+        p: The parameter dataset for finding the abscissa.
+
+    Returns:
+         An object containing the x-value.
+    """
+
+    def __compute_x_at_y(x: np.ndarray, y: np.ndarray, value: float) -> float:
+        """Compute the x-value at a given y-value for a signal object.
+
+        Args:
+            x: The x-values of the signal object.
+            y: The y-values of the signal object.
+            value: The y-value to find the x-value for.
+
+        Returns:
+            The x-value at the given y-value.
+        """
+        values = alg.find_x_at_value(x, y, value)
+        if values.size:
+            return values[0]
+        return np.nan
+
+    return calc_resultproperties(
+        f"x|y={p.y}",
+        obj,
+        {"x = %g {.xunit}": lambda xy: __compute_x_at_y(xy[0], xy[1], p.y)},
+    )
+
+
 def compute_stats(obj: SignalObj) -> ResultProperties:
     """Compute statistics on a signal
 
@@ -1471,7 +1719,15 @@ def compute_contrast(obj: SignalObj) -> ResultProperties:
 
 
 def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
-    """Compute x at min/max"""
+    """
+    Compute the smallest argument at the minima and the smallest argument at the maxima.
+
+    Args:
+        obj: The signal object.
+
+    Returns:
+        An object containing the x-values at the minima and the maxima.
+    """
     return calc_resultproperties(
         "x@min,max",
         obj,

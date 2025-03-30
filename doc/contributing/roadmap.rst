@@ -158,7 +158,7 @@ DataLab 0.9
 
 * Add preferences dialog box
 
-* Add new image processing features: denoising, ...
+* Add new image processing features: denoising...
 
 * Image processing results: added support for polygon shapes (e.g. for
   contour detection)

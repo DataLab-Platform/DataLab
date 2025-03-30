@@ -905,6 +905,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
     @abc.abstractmethod
     @qt_try_except()
+    def compute_inverse(self) -> None:
+        """Compute inverse"""
+
+    @abc.abstractmethod
+    @qt_try_except()
     def compute_abs(self) -> None:
         """Compute absolute value"""
 

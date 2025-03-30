@@ -42,6 +42,8 @@ Basic arithmetic operations
       - :math:`z_{M} = \prod_{k=0}^{M-1}{z_{k}}`
     * - |division| Division
       - :math:`z_{2} = \dfrac{z_{1}}{z_{0}}`
+    * - |inverse| Inverse
+      - :math:`z_{2} = \dfrac{1}{z_{1}}`
 
 .. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
     :width: 24px
@@ -69,6 +71,11 @@ Basic arithmetic operations
     :class: dark-light no-scaled-link
 
 .. |division| image:: ../../../cdl/data/icons/operations/division.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |inverse| image:: ../../../cdl/data/icons/operations/inverse.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -223,11 +230,12 @@ and :math:`\overline{z_{f}}` is the flat field image average value:
     Raw image and flat field image are supposedly already
     corrected by performing a dark frame subtraction.
 
-Rotation
-^^^^^^^^
+Flip or rotation
+^^^^^^^^^^^^^^^^
 
-Create a new image which is the result of rotating (90°, 270° or
-arbitrary angle) or flipping (horizontally or vertically) data.
+Create a new image by flipping or rotating the data of the selected image.
+The image may be flipped horizontally, vertically, or diagonally (transposition).
+It may be rotated by 90°, 270° or any user-defined value.
 
 Intensity profiles
 ^^^^^^^^^^^^^^^^^^

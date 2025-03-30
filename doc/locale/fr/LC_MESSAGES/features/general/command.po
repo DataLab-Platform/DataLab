@@ -8,139 +8,71 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 10:32+0200\n"
+"POT-Creation-Date: 2025-03-20 16:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: ../../doc/features/general/command.rst:-1
 msgid "DataLab command line features"
 msgstr "Options ligne de commande de DataLab"
 
-#: ../../doc/features/general/command.rst:-1
-msgid "command line, cdl, datalab, run, test, demo"
-msgstr "ligne de commande, cdl, datalab, exécuter, test, démo"
+msgid "command line, datalab, run, test, demo"
+msgstr "ligne de commande, datalab, exécuter, test, démo"
 
-#: ../../doc/features/general/command.rst:4
 msgid "Command line features"
-msgstr "Ligne de commande"
+msgstr "Fonctionnalités de la ligne de commande"
 
-#: ../../doc/features/general/command.rst:11
 msgid "Run DataLab"
 msgstr "Exécuter DataLab"
 
-#: ../../doc/features/general/command.rst:13
 msgid "To run DataLab from the command line, type the following::"
-msgstr ""
-"Pour exécuter DataLab depuis la ligne de commande, taper la commande "
-"suivante::"
+msgstr "Pour exécuter DataLab depuis la ligne de commande, taper la commande suivante::"
 
-#: ../../doc/features/general/command.rst:17
 msgid "To show help on command line usage, simply run::"
-msgstr ""
-"Pour afficher l'aide de l'utilisation en ligne de commande, taper "
-"simplement::"
+msgstr "Pour afficher l'aide de l'utilisation en ligne de commande, taper simplement::"
 
-#: ../../doc/features/general/command.rst:45
 msgid "Open HDF5 file at startup"
 msgstr "Ouvrir un fichier HDF5 au démarrage"
 
-#: ../../doc/features/general/command.rst:47
-msgid ""
-"To open HDF5 files, or even import only a specified HDF5 dataset, use the"
-" following::"
-msgstr ""
-"Pour ouvrir des fichiers HDF5, en important éventuellement un dataset "
-"précis du fichier HDF5, utiliser l'une des commmandes suivantes::"
+msgid "To open HDF5 files, or even import only a specified HDF5 dataset, use the following::"
+msgstr "Pour ouvrir des fichiers HDF5, en important éventuellement un dataset précis du fichier HDF5, utiliser l'une des commmandes suivantes::"
 
-#: ../../doc/features/general/command.rst:54
 msgid "Open HDF5 browser at startup"
 msgstr "Ouvrir l'explorateur de fichiers HDF5 au démarrage"
 
-#: ../../doc/features/general/command.rst:56
 msgid "To open the HDF5 browser at startup, use one of the following commands::"
-msgstr ""
-"Pour ouvrir l'explorateur de fichiers HDF5 au démarrage, utiliser l'une "
-"des commandes suivantes::"
+msgstr "Pour ouvrir l'explorateur de fichiers HDF5 au démarrage, utiliser l'une des commandes suivantes::"
 
-#: ../../doc/features/general/command.rst:62
 msgid "Run DataLab demo"
 msgstr "Mode démonstration de DataLab"
 
-#: ../../doc/features/general/command.rst:64
 msgid "To execute DataLab demo, run the following::"
-msgstr ""
-"Pour exécuter le mode de démonstration de DataLab, taper la commande "
-"suivante::"
+msgstr "Pour exécuter le mode de démonstration de DataLab, taper la commande suivante::"
 
-#: ../../doc/features/general/command.rst:71
 msgid "Run technical validation tests"
 msgstr "Exécuter les tests de validation technique"
 
-#: ../../doc/features/general/command.rst:73
-msgid ""
-"Technical validation tests are directly included in individual unit "
-"tests and are disseminated throughout the code. The test functions "
-"including validation tests are marked with the "
-"``@pytest.mark.validation`` decorator."
+msgid "Technical validation tests are directly included in individual unit tests and are disseminated throughout the code. The test functions including validation tests are marked with the ``@pytest.mark.validation`` decorator."
 msgstr "Les tests de validation technique sont directement inclus dans les tests unitaires individuels et sont disséminés dans tout le code. Les fonctions de test incluant des tests de validation sont marquées avec le décorateur ``@pytest.mark.validation``."
 
-#: ../../doc/features/general/command.rst:77
 msgid "To execute DataLab technical validation tests, run the following::"
 msgstr "Pour exécuter les tests de validation technique de DataLab, taper la commande suivante::"
 
-#: ../../doc/features/general/command.rst:81
-msgid ""
-"See section :ref:`validation` for more information on DataLab's "
-"validation strategy."
-msgstr ""
-"Voir la section :ref:`validation` pour plus d'informations sur la "
-"stratégie de validation de DataLab."
+msgid "See section :ref:`validation` for more information on DataLab's validation strategy."
+msgstr "Voir la section :ref:`validation` pour plus d'informations sur la stratégie de validation de DataLab."
 
-#: ../../doc/features/general/command.rst:86
 msgid "Run complete test suite"
 msgstr "Exécuter l'ensemble des tests"
 
-#: ../../doc/features/general/command.rst:88
 msgid "To execute all DataLab unit tests, simply run::"
-msgstr ""
-"Pour exécuter l'ensemble des tests unitaires de DataLab, taper la "
-"commande suivante::"
+msgstr "Pour exécuter l'ensemble des tests unitaires de DataLab, taper la commande suivante::"
 
-#: ../../doc/features/general/command.rst:93
 msgid "Run interactive tests"
 msgstr "Exécuter les tests interactifs"
 
-#: ../../doc/features/general/command.rst:95
 msgid "To execute DataLab interactive tests, run the following::"
-msgstr ""
-"Pour exécuter les tests interactifs de DataLab, taper la commande "
-"suivante::"
-
-#~ msgid "Run unit tests"
-#~ msgstr "Exécuter les tests unitaires"
-
-#~ msgid ""
-#~ "This test suite is based on "
-#~ "`guidata.guitest` discovery mechanism. It is"
-#~ " not compatible with `pytest` because "
-#~ "most of the high level tests have"
-#~ " to be executed in a separate "
-#~ "process (e.g. scenario tests will fail"
-#~ " if executed in the same process "
-#~ "as other tests)."
-#~ msgstr ""
-#~ "Cette suite de tests est basée sur"
-#~ " le mécanisme de découverte de "
-#~ "`guidata.guitest`. Elle n'est pas compatible"
-#~ " avec `pytest` car la plupart des "
-#~ "tests de haut niveau doivent être "
-#~ "exécutés dans un processus séparé (par"
-#~ " exemple, les tests de scénario "
-#~ "échoueront s'ils sont exécutés dans le"
-#~ " même processus que les autres "
-#~ "tests)."
+msgstr "Pour exécuter les tests interactifs de DataLab, taper la commande suivante::"

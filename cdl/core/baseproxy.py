@@ -212,6 +212,14 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+
+    @abc.abstractmethod
     def add_signal(
         self,
         title: str,
@@ -281,6 +289,18 @@ class AbstractCDLControl(abc.ABC):
 
         Returns:
             True if object was added successfully, False otherwise
+        """
+
+    @abc.abstractmethod
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
         """
 
     @abc.abstractmethod
@@ -379,13 +399,17 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
             panel: panel name (valid values: "signal", "image").
              If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
             List of object uuids
@@ -607,6 +631,14 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         self._cdl.load_from_files(filenames)
 
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+        self._cdl.load_from_directory(path)
+
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
 
@@ -617,6 +649,18 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
             List of selected objects uuids.
         """
         return self._cdl.get_sel_object_uuids(include_groups)
+
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
+        """
+        self._cdl.add_group(title, panel, select)
 
     def select_objects(
         self,
@@ -682,13 +726,17 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         return self._cdl.get_object_titles(panel)
 
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
             panel: panel name (valid values: "signal", "image").
              If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
             List of object uuids
@@ -696,7 +744,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         Raises:
             ValueError: if panel not found
         """
-        return self._cdl.get_object_uuids(panel)
+        return self._cdl.get_object_uuids(panel, group)
 
     def add_label_with_title(
         self, title: str | None = None, panel: str | None = None

@@ -275,7 +275,7 @@ def run_signal_computations(
 def run_image_computations(
     win: CDLMainWindow, data_size: int = 150, all_types: bool = True
 ) -> None:
-    """Testing signal features"""
+    """Test image features"""
     win.set_current_panel("image")
     panel = win.imagepanel
 

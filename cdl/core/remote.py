@@ -143,7 +143,9 @@ class RemoteServer(QC.QThread):
     SIG_CLOSE_APP = QC.Signal()
     SIG_RAISE_WINDOW = QC.Signal()
     SIG_ADD_OBJECT = QC.Signal(object)
+    SIG_ADD_GROUP = QC.Signal(str, str, bool)
     SIG_LOAD_FROM_FILES = QC.Signal(list)
+    SIG_LOAD_FROM_DIRECTORY = QC.Signal(str)
     SIG_SELECT_OBJECTS = QC.Signal(list, str)
     SIG_SELECT_GROUPS = QC.Signal(list, str)
     SIG_SELECT_ALL_GROUPS = QC.Signal(str)
@@ -171,7 +173,9 @@ class RemoteServer(QC.QThread):
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_RAISE_WINDOW.connect(win.raise_window)
         self.SIG_ADD_OBJECT.connect(win.add_object)
+        self.SIG_ADD_GROUP.connect(win.add_group)
         self.SIG_LOAD_FROM_FILES.connect(win.load_from_files)
+        self.SIG_LOAD_FROM_DIRECTORY.connect(win.load_from_directory)
         self.SIG_SELECT_OBJECTS.connect(win.select_objects)
         self.SIG_SELECT_GROUPS.connect(win.select_groups)
         self.SIG_SELECT_ALL_GROUPS.connect(lambda panel: win.select_groups(None, panel))
@@ -347,6 +351,15 @@ class RemoteServer(QC.QThread):
         self.SIG_LOAD_FROM_FILES.emit(filenames)
 
     @remote_call
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+        self.SIG_LOAD_FROM_DIRECTORY.emit(path)
+
+    @remote_call
     def add_signal(
         self,
         title: str,
@@ -444,6 +457,19 @@ class RemoteServer(QC.QThread):
             List of selected objects uuids.
         """
         return self.win.get_sel_object_uuids(include_groups)
+
+    @remote_call
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
+        """
+        self.SIG_ADD_GROUP.emit(title, panel, select)
 
     @remote_call
     def select_objects(
@@ -557,17 +583,22 @@ class RemoteServer(QC.QThread):
         return dataset_to_json(obj)
 
     @remote_call
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) list for current panel.
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
+        """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel: Panel name. Defaults to None.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
             Object uuids
         """
-        return self.win.get_object_uuids(panel)
+        return self.win.get_object_uuids(panel, group)
 
     @remote_call
     def get_object_shapes(

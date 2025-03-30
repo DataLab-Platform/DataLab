@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-16 12:03+0200\n"
+"POT-Creation-Date: 2025-03-24 15:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,1052 +17,979 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: cdl.core.gui.processor:2 of
 msgid "Processor"
 msgstr "Processeur"
 
-#: cdl.core.gui.processor:4 of
-msgid ""
-"The :mod:`cdl.core.gui.processor` package provides the **processor "
-"objects** for signals and images."
-msgstr ""
-"Le paquet :mod:`cdl.core.gui.processor` fournit les **objets processeur**"
-" pour les signaux et les images."
+msgid "The :mod:`cdl.core.gui.processor` package provides the **processor objects** for signals and images."
+msgstr "Le paquet :mod:`cdl.core.gui.processor` fournit les **objets processeur** pour les signaux et les images."
 
-#: cdl.core.gui.processor:7 of
-msgid ""
-"Processor objects are the bridge between the computation modules (in "
-":mod:`cdl.computation`) and the GUI modules (in :mod:`cdl.core.gui`). "
-"They are used to call the computation functions and to update the GUI "
-"from inside the data panel objects."
-msgstr ""
-"Les objets processeur sont le pont entre les modules de calcul (dans "
-":mod:`cdl.computation`) et les modules GUI (dans :mod:`cdl.core.gui`). "
-"Ils sont utilisés pour appeler les fonctions de calcul et pour mettre à "
-"jour l'interface utilisateur depuis l'intérieur des objets de panneau de "
-"données."
+msgid "Processor objects are the bridge between the computation modules (in :mod:`cdl.computation`) and the GUI modules (in :mod:`cdl.core.gui`). They are used to call the computation functions and to update the GUI from inside the data panel objects."
+msgstr "Les objets processeur sont le pont entre les modules de calcul (dans :mod:`cdl.computation`) et les modules GUI (dans :mod:`cdl.core.gui`). Ils sont utilisés pour appeler les fonctions de calcul et pour mettre à jour l'interface utilisateur depuis l'intérieur des objets de panneau de données."
 
-#: cdl.core.gui.processor:12 of
-msgid ""
-"When implementing a processing feature in DataLab, the steps are usually "
-"the following:"
-msgstr ""
-"Lors de la mise en œuvre d'une fonction de traitement dans DataLab, les "
-"étapes sont généralement les suivantes :"
+msgid "When implementing a processing feature in DataLab, the steps are usually the following:"
+msgstr "Lors de la mise en œuvre d'une fonction de traitement dans DataLab, les étapes sont généralement les suivantes :"
 
-#: cdl.core.gui.processor:14 of
-msgid ""
-"Add an action in the :mod:`cdl.core.gui.actionhandler` module to trigger "
-"the processing feature from the GUI (e.g. a menu item or a toolbar "
-"button)."
-msgstr ""
-"Ajout d'une action dans le module :mod:`cdl.core.gui.actionhandler` pour "
-"déclencher la fonction de traitement depuis l'interface utilisateur (par "
-"exemple, un élément de menu ou un bouton de barre d'outils)."
+msgid "Add an action in the :mod:`cdl.core.gui.actionhandler` module to trigger the processing feature from the GUI (e.g. a menu item or a toolbar button)."
+msgstr "Ajout d'une action dans le module :mod:`cdl.core.gui.actionhandler` pour déclencher la fonction de traitement depuis l'interface utilisateur (par exemple, un élément de menu ou un bouton de barre d'outils)."
 
-#: cdl.core.gui.processor:17 of
-msgid ""
-"Implement the computation function in the :mod:`cdl.computation` module "
-"(that would eventually call the algorithm from the :mod:`cdl.algorithms` "
-"module)."
-msgstr ""
-"Implémentation de la fonction de calcul dans le module "
-":mod:`cdl.computation` (qui appellerait éventuellement l'algorithme du "
-"module :mod:`cdl.algorithms`)."
+msgid "Implement the computation function in the :mod:`cdl.computation` module (that would eventually call the algorithm from the :mod:`cdl.algorithms` module)."
+msgstr "Implémentation de la fonction de calcul dans le module :mod:`cdl.computation` (qui appellerait éventuellement l'algorithme du module :mod:`cdl.algorithms`)."
 
-#: cdl.core.gui.processor:20 of
-msgid ""
-"Implement the processor object method in this package to call the "
-"computation function and eventually update the GUI."
-msgstr ""
-"Implémentation de la méthode de l'objet processeur dans ce paquet pour "
-"appeler la fonction de calcul et éventuellement mettre à jour l'interface"
-" utilisateur."
+msgid "Implement the processor object method in this package to call the computation function and eventually update the GUI."
+msgstr "Implémentation de la méthode de l'objet processeur dans ce paquet pour appeler la fonction de calcul et éventuellement mettre à jour l'interface utilisateur."
 
-#: cdl.core.gui.processor:23 of
-msgid ""
-"The processor objects are organized in submodules according to their "
-"purpose."
-msgstr ""
-"Les objets processeur sont organisés en sous-modules en fonction de leur "
-"objectif."
+msgid "The processor objects are organized in submodules according to their purpose."
+msgstr "Les objets processeur sont organisés en sous-modules en fonction de leur objectif."
 
-#: cdl.core.gui.processor:25 of
 msgid "The following submodules are available:"
 msgstr "Les sous-modules suivants sont disponibles :"
 
-#: cdl.core.gui.processor:27 of
 msgid ":mod:`cdl.core.gui.processor.base`: Common processing features"
 msgstr ":mod:`cdl.core.gui.processor.base`: Fonctions de traitement communes"
 
-#: cdl.core.gui.processor:28 of
 msgid ":mod:`cdl.core.gui.processor.signal`: Signal processing features"
 msgstr ":mod:`cdl.core.gui.processor.signal`: Fonctions de traitement de signaux"
 
-#: cdl.core.gui.processor:29 of
 msgid ":mod:`cdl.core.gui.processor.image`: Image processing features"
 msgstr ":mod:`cdl.core.gui.processor.image`: Fonctions de traitement d'images"
 
-#: cdl.core.gui.processor:32 of
 msgid "Common features"
 msgstr "Fonctions communes"
 
-#: cdl.core.gui.processor.base.Worker:1 of
 msgid "Multiprocessing worker, to run long-running tasks in a separate process"
-msgstr ""
-"Travailleur de traitement parallèle, pour exécuter des tâches de longue "
-"durée dans un processus séparé"
+msgstr "Travailleur de traitement parallèle, pour exécuter des tâches de longue durée dans un processus séparé"
 
-#: cdl.core.gui.processor.base.Worker.create_pool:1 of
 msgid "Create multiprocessing pool"
 msgstr "Créer un pool de traitement parallèle"
 
-#: cdl.core.gui.processor.base.Worker.terminate_pool:1 of
 msgid "Terminate multiprocessing pool."
 msgstr "Terminer le pool de traitement parallèle."
 
-#: cdl.core.gui.processor.base.BaseProcessor
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10
-#: cdl.core.gui.processor.base.BaseProcessor.compute_11
-#: cdl.core.gui.processor.base.BaseProcessor.compute_1n
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n
-#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output
-#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults
-#: cdl.core.gui.processor.base.BaseProcessor.init_param
-#: cdl.core.gui.processor.base.BaseProcessor.set_process_isolation_enabled
-#: cdl.core.gui.processor.base.BaseProcessor.update_param_defaults
-#: cdl.core.gui.processor.base.Worker.run
-#: cdl.core.gui.processor.base.Worker.terminate_pool of
 msgid "Parameters"
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.terminate_pool:3 of
 msgid "wait for all tasks to finish. Defaults to False."
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.restart_pool:1 of
 msgid "Terminate and recreate the pool"
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.run:1 of
 msgid "Run computation."
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.run:3 of
 msgid "function to run"
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.run:4 of
 msgid "arguments"
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.close:1 of
 msgid "Close worker: close pool properly and wait for all tasks to finish"
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.is_computation_finished:1 of
 msgid "Return True if computation is finished."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10
-#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output
-#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults
-#: cdl.core.gui.processor.base.BaseProcessor.init_param
-#: cdl.core.gui.processor.base.Worker.get_result
-#: cdl.core.gui.processor.base.Worker.is_computation_finished of
 msgid "Returns"
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.is_computation_finished:3 of
 msgid "True if computation is finished"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output
-#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults
-#: cdl.core.gui.processor.base.Worker.get_result
-#: cdl.core.gui.processor.base.Worker.is_computation_finished of
 msgid "Return type"
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.get_result:1 of
 msgid "Return computation result."
 msgstr ""
 
-#: cdl.core.gui.processor.base.Worker.get_result:3 of
 msgid "computation result"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor:1 of
-msgid "Object handling data processing: operations, processing, computing."
+msgid "Return True if operation mode is pairwise."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor:3 of
+msgid "True if operation mode is pairwise"
+msgstr ""
+
+msgid "Object handling data processing: operations, processing, analysis."
+msgstr ""
+
 msgid "panel"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor:4 of
 msgid "plot widget"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.close:1 of
 msgid "Close processor properly"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.set_process_isolation_enabled:1 of
 msgid "Set process isolation enabled."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.set_process_isolation_enabled:3 of
 msgid "enabled"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults:1 of
 msgid "Return True if parameter defaults are available."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_11:5
-#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults:3
-#: cdl.core.gui.processor.base.BaseProcessor.init_param:4 of
 msgid "parameter class"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults:5 of
 msgid "True if parameter defaults are available"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.update_param_defaults:1 of
 msgid "Update parameter defaults."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.update_param_defaults:3 of
 msgid "parameters"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.init_param:1 of
 msgid "Initialize processing parameters."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_11:4
-#: cdl.core.gui.processor.base.BaseProcessor.init_param:3 of
 msgid "parameter"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_11:6
-#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:5
-#: cdl.core.gui.processor.base.BaseProcessor.init_param:5 of
 msgid "title"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_11:7
-#: cdl.core.gui.processor.base.BaseProcessor.init_param:6 of
 msgid "comment"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.init_param:8 of
-msgid ""
-"Tuple (edit, param) where edit is True if parameters have been edited, "
-"False otherwise."
+msgid "Tuple (edit, param) where edit is True if parameters have been edited, False otherwise."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_11:1 of
 msgid "Compute 11 function: 1 object in → 1 object out."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_11:3 of
 msgid "function"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_11:8
-#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:6 of
 msgid "edit parameters"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:1 of
 msgid "Compute 1n function: 1 object in → n objects out."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:3 of
 msgid "list of functions"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:4 of
 msgid "list of parameters"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output:1 of
-msgid ""
-"Handle computation output: if error, display error message, if warning, "
-"display warning message."
+msgid "Handle computation output: if error, display error message, if warning, display warning message."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output:4 of
 msgid "computation output"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output:5 of
 msgid "context (e.g. \"Computing: Gaussian filter\")"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output:6 of
 msgid "progress dialog"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output:8 of
 msgid "a signal or image object, or a result shape object,  or None if error"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output:10 of
 msgid "a signal or image object, or a result shape object,"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output:11 of
 msgid "or None if error"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:1 of
-msgid ""
-"Compute 10 function: 1 object in → 0 object out (the result of this "
-"method is stored in original object's metadata)."
+msgid "Compute 10 function: 1 object in → 0 object out (the result of this method is stored in original object's metadata)."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:4
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:4
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:7 of
 msgid "function to execute"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:5
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:5
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:8 of
 msgid "parameters. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:6
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:6
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:9 of
 msgid "parameters class. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:7
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:7
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:10 of
 msgid "title of progress bar. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:8
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:8
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:11 of
 msgid "comment. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:9
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:10
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:12 of
 msgid "if True, edit parameters. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:11 of
 msgid "object uuid, values: ResultShape or  ResultProperties objects)"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:13 of
 msgid "object uuid, values: ResultShape or"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:14 of
 msgid "ResultProperties objects)"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:1 of
 msgid "Compute n1 function: N(>=2) objects in → 1 object out."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:3 of
 msgid "name of function"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:9 of
 msgid "function to execute on objects. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:1 of
 msgid "Compute n1n function: N(>=1) objects + 1 object in → N objects out."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:3 of
 msgid "Examples: subtract, divide"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:5 of
-msgid "second object"
+msgid "second object (or list of objects in case of pairwise operation mode)"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:6 of
 msgid "name of second object"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_sum:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_sum:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_sum:1 of
+msgid "Compute arithmetic operation"
+msgstr ""
+
 msgid "Compute sum"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_normalize:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_normalize:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_normalize:1 of
 msgid "Normalize data"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_average:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_average:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_average:1 of
 msgid "Compute average"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_product:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_product:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_product:1 of
 msgid "Compute product"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_difference:1 of
 msgid "Compute difference"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_quadratic_difference:1 of
 msgid "Compute quadratic difference"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_division:1 of
 msgid "Compute division"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_roi_extraction:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction:1 of
-msgid "Extract Region Of Interest (ROI) from data"
-msgstr ""
-
-#: cdl.core.gui.processor.base.BaseProcessor.compute_swap_axes:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes:1 of
 msgid "Swap data axes"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_abs:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_abs:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_abs:1 of
 msgid "Compute absolute value"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_re:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_re:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_re:1 of
 msgid "Compute real part"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_im:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_im:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_im:1 of
 msgid "Compute imaginary part"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_astype:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_astype:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_astype:1 of
 msgid "Convert data type"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_log10:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_exp:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_log10:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_exp:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_log10:1 of
 msgid "Compute Log10"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_exp:1 of
 msgid "Compute exponential"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_calibration:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_calibration:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_calibration:1 of
 msgid "Compute data linear calibration"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_clip:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_clip:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_clip:1 of
 msgid "Compute maximum data clipping"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_gaussian_filter:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter:1 of
 msgid "Compute gaussian filter"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_moving_average:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_moving_average:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average:1 of
 msgid "Compute moving average"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_moving_median:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_moving_median:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median:1 of
 msgid "Compute moving median"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_wiener:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_wiener:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_wiener:1 of
 msgid "Compute Wiener filter"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_fft:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_ifft:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_fft:1 of
 msgid "Compute iFFT"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_ifft:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_fft:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_ifft:1 of
 msgid "Compute FFT"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_addition_constant:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant:1 of
 msgid "Compute sum with a constant"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_difference_constant:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant:1
-#: of
 msgid "Compute difference with a constant"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_product_constant:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_product_constant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant:1 of
 msgid "Compute product with a constant"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_division_constant:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_division_constant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant:1 of
 msgid "Compute division by a constant"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:1 of
-msgid "Define Region Of Interest (ROI) for computing functions."
+msgid "Extract Region Of Interest (ROI) from data with:"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:3 of
+msgid ":py:func:`cdl.computation.image.extract_single_roi` for single ROI"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.extract_multiple_roi` for multiple ROIs"
+msgstr ""
+
+msgid "Define Region Of Interest (ROI)."
+msgstr ""
+
 msgid "If True, ROI is extracted from data. Defaults to False."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:4 of
-msgid ""
-"If True, ROI is extracted from first selected object only. If False, ROI "
-"is extracted from all selected objects. If None, ROI is extracted from "
-"all selected objects only if they all have the same ROI. Defaults to "
-"None."
+msgid "ROI object or None if ROI dialog has been canceled."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:8 of
-msgid ""
-"If True, add ROI to data immediately after opening the ROI editor. "
-"Defaults to False."
-msgstr ""
-
-#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:11 of
-msgid "ROI data parameters or None if ROI dialog has been canceled."
-msgstr ""
-
-#: cdl.core.gui.processor.base.BaseProcessor.delete_regions_of_interest:1 of
 msgid "Delete Regions Of Interest"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_stats:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_stats:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_stats:1 of
 msgid "Compute data statistics"
 msgstr ""
 
-#: cdl.core.gui.processor:37 of
 msgid "Signal processing features"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor:1 of
-msgid "Object handling signal processing: operations, processing, computing"
+msgid "Object handling signal processing: operations, processing, analysis"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt:1 of
-msgid "Compute square root"
+msgid "Compute sum with :py:func:`cdl.computation.signal.compute_addition`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_power:1 of
-msgid "Compute power"
+msgid "Compute sum with a constant with :py:func:`cdl.computation.signal.compute_addition_constant`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_difference:1 of
-msgid "Compute difference between two signals"
+msgid "Compute average with :py:func:`cdl.computation.signal.compute_addition` and divide by the number of signals"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference:1
-#: of
-msgid "Compute quadratic difference between two signals"
+msgid "Compute product with :py:func:`cdl.computation.signal.compute_product`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_division:1 of
-msgid "Compute division between two signals"
+msgid "Compute product with a constant with :py:func:`cdl.computation.signal.compute_product_constant`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection:1 of
-msgid "Detect peaks from data"
+msgid "Swap data axes with :py:func:`cdl.computation.signal.compute_swap_axes`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x:1 of
-msgid "Reverse X axis"
+msgid "Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_derivative:1 of
-msgid "Compute derivative"
+msgid "Compute real part with :py:func:`cdl.computation.signal.compute_re`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_integral:1 of
-msgid "Compute integral"
+msgid "Compute imaginary part with :py:func:`cdl.computation.signal.compute_im`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction:1 of
-msgid "Compute offset correction"
+msgid "Convert data type with :py:func:`cdl.computation.signal.compute_astype`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_highpass:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass:1 of
-msgid "Compute high-pass filter"
+msgid "Compute Log10 with :py:func:`cdl.computation.signal.compute_log10`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass:1 of
-msgid "Compute band-pass filter"
+msgid "Compute Log10 with :py:func:`cdl.computation.signal.compute_exp`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop:1 of
-msgid "Compute band-stop filter"
+msgid "Compute square root with :py:func:`cdl.computation.signal.compute_sqrt`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum:1
-#: of
-msgid "Compute magnitude spectrum"
+msgid "Compute power with :py:func:`cdl.computation.signal.compute_power`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum:1 of
-msgid "Compute phase spectrum"
+msgid "Compute arithmetic operation between two signals with :py:func:`cdl.computation.signal.compute_arithmetic`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_psd:1 of
-msgid "Compute power spectral density"
+msgid "Compute difference between two signals with :py:func:`cdl.computation.signal.compute_difference`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation:1 of
-msgid "Compute interpolation"
+msgid "Compute difference with a constant with :py:func:`cdl.computation.signal.compute_difference_constant`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_resampling:1 of
-msgid "Compute resampling"
+msgid "Compute quadratic difference between two signals with :py:func:`cdl.computation.signal.compute_quadratic_difference`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_detrending:1 of
-msgid "Compute detrending"
+msgid "Compute division between two signals with :py:func:`cdl.computation.signal.compute_division`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_convolution:1 of
-msgid "Compute convolution"
+msgid "Compute division by a constant with :py:func:`cdl.computation.signal.compute_division_constant`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_windowing:1 of
-msgid "Compute windowing"
+msgid "Detect peaks from data with :py:func:`cdl.computation.signal.compute_peak_detection`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_fit:1 of
-msgid "Compute fitting curve"
+msgid "Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit:1 of
+msgid "Convert cartesian to polar coordinates with :py:func:`cdl.computation.signal.compute_cartesian2polar`"
+msgstr ""
+
+msgid "Convert polar to cartesian coordinates with :py:func:`cdl.computation.signal.compute_polar2cartesian`."
+msgstr ""
+
+msgid "Normalize data with :py:func:`cdl.computation.signal.compute_normalize`"
+msgstr ""
+
+msgid "Compute derivative with :py:func:`cdl.computation.signal.compute_derivative`"
+msgstr ""
+
+msgid "Compute integral with :py:func:`cdl.computation.signal.compute_integral`"
+msgstr ""
+
+msgid "Compute data linear calibration with :py:func:`cdl.computation.signal.compute_calibration`"
+msgstr ""
+
+msgid "Compute maximum data clipping with :py:func:`cdl.computation.signal.compute_clip`"
+msgstr ""
+
+msgid "Compute offset correction with :py:func:`cdl.computation.signal.compute_offset_correction`"
+msgstr ""
+
+msgid "Compute gaussian filter with :py:func:`cdl.computation.signal.compute_gaussian_filter`"
+msgstr ""
+
+msgid "Compute moving average with :py:func:`cdl.computation.signal.compute_moving_average`"
+msgstr ""
+
+msgid "Compute moving median with :py:func:`cdl.computation.signal.compute_moving_median`"
+msgstr ""
+
+msgid "Compute Wiener filter with :py:func:`cdl.computation.signal.compute_wiener`"
+msgstr ""
+
+msgid "Compute high-pass filter with :py:func:`cdl.computation.signal.compute_filter`"
+msgstr ""
+
+msgid "Compute band-pass filter with :py:func:`cdl.computation.signal.compute_filter`"
+msgstr ""
+
+msgid "Compute band-stop filter with :py:func:`cdl.computation.signal.compute_filter`"
+msgstr ""
+
+msgid "Compute FFT with :py:func:`cdl.computation.signal.compute_fft`"
+msgstr ""
+
+msgid "Compute iFFT with :py:func:`cdl.computation.signal.compute_ifft`"
+msgstr ""
+
+msgid "Compute magnitude spectrum with :py:func:`cdl.computation.signal.compute_magnitude_spectrum`"
+msgstr ""
+
+msgid "Compute phase spectrum with :py:func:`cdl.computation.signal.compute_phase_spectrum`"
+msgstr ""
+
+msgid "Compute power spectral density with :py:func:`cdl.computation.signal.compute_psd`"
+msgstr ""
+
+msgid "Compute interpolation with :py:func:`cdl.computation.signal.compute_interpolation`"
+msgstr ""
+
+msgid "Compute resampling with :py:func:`cdl.computation.signal.compute_resampling`"
+msgstr ""
+
+msgid "Compute detrending with :py:func:`cdl.computation.signal.compute_detrending`"
+msgstr ""
+
+msgid "Compute convolution with :py:func:`cdl.computation.signal.compute_convolution`"
+msgstr ""
+
+msgid "Compute windowing with :py:func:`cdl.computation.signal.compute_windowing`"
+msgstr ""
+
+msgid "Compute Allan variance with :py:func:`cdl.computation.signal.compute_allan_variance`"
+msgstr ""
+
+msgid "Compute Allan deviation with :py:func:`cdl.computation.signal.compute_allan_deviation`"
+msgstr ""
+
+msgid "Compute overlapping Allan variance with :py:func:`cdl.computation.signal.compute_overlapping_allan_variance`"
+msgstr ""
+
+msgid "Compute modified Allan variance with :py:func:`cdl.computation.signal.compute_modified_allan_variance`"
+msgstr ""
+
+msgid "Compute Hadamard variance with :py:func:`cdl.computation.signal.compute_hadamard_variance`"
+msgstr ""
+
+msgid "Compute total variance with :py:func:`cdl.computation.signal.compute_total_variance`"
+msgstr ""
+
+msgid "Compute time deviation with :py:func:`cdl.computation.signal.compute_time_deviation`"
+msgstr ""
+
+msgid "Compute all stability analysis features using the following functions:"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.signal.compute_allan_variance`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.signal.compute_allan_deviation`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.signal.compute_overlapping_allan_variance`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.signal.compute_modified_allan_variance`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.signal.compute_hadamard_variance`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.signal.compute_total_variance`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.signal.compute_time_deviation`"
+msgstr ""
+
 msgid "Compute polynomial fitting curve"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit:1 of
-msgid "Compute multi-Gaussian fitting curve"
+msgid "Compute fitting curve using an interactive dialog"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm:1 of
-msgid "Compute FWHM"
+msgid "Title of the dialog"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2:1 of
-msgid "Compute FW at 1/e²"
+msgid "Fitting dialog function"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_histogram:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_histogram:1 of
-msgid "Compute histogram"
+msgid "Compute multi-Gaussian fitting curve using an interactive dialog"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_contrast:1 of
-msgid "Compute contrast"
+msgid "Compute FWHM with :py:func:`cdl.computation.signal.compute_fwhm`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax:1 of
-msgid "Compute x at min/max"
+msgid "Compute FW at 1/e² with :py:func:`cdl.computation.signal.compute_fw1e2`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period:1
-#: of
-msgid "Compute sampling rate and period (mean and std)"
+msgid "Compute data statistics with :py:func:`cdl.computation.signal.compute_stats`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db:1 of
-msgid "Compute bandwidth"
+msgid "Compute histogram with :py:func:`cdl.computation.signal.compute_histogram`"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters:1
-#: of
-msgid "Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)"
+msgid "Compute contrast with :py:func:`cdl.computation.signal.compute_contrast`"
 msgstr ""
 
-#: cdl.core.gui.processor:42 of
+msgid "Compute x at min/max with :py:func:`cdl.computation.signal.compute_x_at_minmax`"
+msgstr ""
+
+msgid "Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`."
+msgstr ""
+
+msgid "Compute sampling rate and period (mean and std) with :py:func:`cdl.computation.signal.compute_sampling_rate_period`"
+msgstr ""
+
+msgid "Compute bandwidth at -3dB with :py:func:`cdl.computation.signal.compute_bandwidth_3db`"
+msgstr ""
+
+msgid "Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR) with :py:func:`cdl.computation.signal.compute_dynamic_parameters`"
+msgstr ""
+
 msgid "Image processing features"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor:1 of
-msgid "Object handling image processing: operations, processing, computing"
+msgid "Object handling image processing: operations, processing, analysis"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_logp1:1 of
-msgid "Compute base 10 logarithm"
+msgid "Normalize data with :py:func:`cdl.computation.image.compute_normalize`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate:1 of
-msgid "Rotate data arbitrarily"
+msgid "Compute sum with :py:func:`cdl.computation.image.compute_addition`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate90:1 of
-msgid "Rotate data 90°"
+msgid "Compute sum with a constant using :py:func:`cdl.computation.image.compute_addition_constant`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate270:1 of
-msgid "Rotate data 270°"
+msgid "Compute average with :py:func:`cdl.computation.image.compute_addition` and dividing by the number of images"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_fliph:1 of
-msgid "Flip data horizontally"
+msgid "Compute product with :py:func:`cdl.computation.image.compute_product`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_flipv:1 of
-msgid "Flip data vertically"
+msgid "Compute product with a constant using :py:func:`cdl.computation.image.compute_product_constant`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.distribute_on_grid:1 of
+msgid "Compute base 10 logarithm using :py:func:`cdl.computation.image.compute_logp1`"
+msgstr ""
+
+msgid "Rotate data arbitrarily using :py:func:`cdl.computation.image.compute_rotate`"
+msgstr ""
+
+msgid "Rotate data 90° with :py:func:`cdl.computation.image.compute_rotate90`"
+msgstr ""
+
+msgid "Rotate data 270° with :py:func:`cdl.computation.image.compute_rotate270`"
+msgstr ""
+
+msgid "Flip data horizontally using :py:func:`cdl.computation.image.compute_fliph`"
+msgstr ""
+
+msgid "Flip data vertically with :py:func:`cdl.computation.image.compute_flipv`"
+msgstr ""
+
 msgid "Distribute images on a grid"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.reset_positions:1 of
 msgid "Reset image positions"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_resize:1 of
-msgid "Resize image"
+msgid "Resize image with :py:func:`cdl.computation.image.compute_resize`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_binning:1 of
-msgid "Binning image"
+msgid "Binning image with :py:func:`cdl.computation.image.compute_binning`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_line_profile:1 of
-msgid "Compute profile along a vertical or horizontal line"
+msgid "Compute profile along a vertical or horizontal line with :py:func:`cdl.computation.image.compute_line_profile`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile:1 of
-msgid "Compute profile along a segment"
+msgid "Compute profile along a segment with :py:func:`cdl.computation.image.compute_segment_profile`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_average_profile:1 of
-msgid "Compute average profile"
+msgid "Compute average profile with :py:func:`cdl.computation.image.compute_average_profile`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile:1 of
-msgid "Compute radial profile"
+msgid "Compute radial profile with :py:func:`cdl.computation.image.compute_radial_profile`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_difference:1 of
-msgid "Compute difference between two images"
+msgid "Compute histogram with :py:func:`cdl.computation.image.compute_histogram`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference:1
-#: of
-msgid "Compute quadratic difference between two images"
+msgid "Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`."
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_division:1 of
-msgid "Compute division between two images"
+msgid "Compute absolute value with :py:func:`cdl.computation.image.compute_abs`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_flatfield:1 of
-msgid "Compute flat field correction"
+msgid "Compute real part with :py:func:`cdl.computation.image.compute_re`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_psd:1 of
-msgid "Compute Power Spectral Density (PSD)"
+msgid "Compute imaginary part with :py:func:`cdl.computation.image.compute_im`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_butterworth:1 of
-msgid "Compute Butterworth filter"
+msgid "Convert data type with :py:func:`cdl.computation.image.compute_astype`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold:1 of
-msgid "Compute parametric threshold"
+msgid "Compute Log10 with :py:func:`cdl.computation.image.compute_log10`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata:1 of
-msgid "Compute threshold using Isodata algorithm"
+msgid "Compute Log10 with :py:func:`cdl.computation.image.compute_exp`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li:1 of
-msgid "Compute threshold using Li algorithm"
+msgid "Compute arithmetic operation between two images with :py:func:`cdl.computation.image.compute_arithmetic`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean:1 of
-msgid "Compute threshold using Mean algorithm"
+msgid "Compute difference between two images with :py:func:`cdl.computation.image.compute_difference`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum:1 of
-msgid "Compute threshold using Minimum algorithm"
+msgid "Compute difference with a constant with :py:func:`cdl.computation.image.compute_difference_constant`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu:1 of
-msgid "Compute threshold using Otsu algorithm"
+msgid "Compute quadratic difference between two images with :py:func:`cdl.computation.image.compute_quadratic_difference`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle:1 of
-msgid "Compute threshold using Triangle algorithm"
+msgid "Compute division between two images with :py:func:`cdl.computation.image.compute_division`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen:1 of
-msgid "Compute threshold using Yen algorithm"
+msgid "Compute division by a constant with :py:func:`cdl.computation.image.compute_division_constant`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold:1 of
-msgid "Compute all threshold algorithms"
+msgid "Compute flat field correction with :py:func:`cdl.computation.image.compute_flatfield`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma:1 of
-msgid "Compute gamma correction"
+msgid "Compute data linear calibration with :py:func:`cdl.computation.image.compute_calibration`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log:1 of
-msgid "Compute log correction"
+msgid "Compute maximum data clipping with :py:func:`cdl.computation.image.compute_clip`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid:1 of
-msgid "Compute sigmoid correction"
+msgid "Compute offset correction with :py:func:`cdl.computation.image.compute_offset_correction`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity:1 of
-msgid "Rescale image intensity levels"
+msgid "Compute gaussian filter with :py:func:`cdl.computation.image.compute_gaussian_filter`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist:1 of
-msgid "Histogram equalization"
+msgid "Compute moving average with :py:func:`cdl.computation.image.compute_moving_average`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist:1 of
-msgid "Adaptive histogram equalization"
+msgid "Compute moving median with :py:func:`cdl.computation.image.compute_moving_median`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv:1 of
-msgid "Compute Total Variation denoising"
+msgid "Compute Wiener filter with :py:func:`cdl.computation.image.compute_wiener`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral:1 of
-msgid "Compute bilateral filter denoising"
+msgid "Compute FFT with :py:func:`cdl.computation.image.compute_fft`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet:1 of
-msgid "Compute Wavelet denoising"
+msgid "Compute iFFT with :py:func:`cdl.computation.image.compute_ifft`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat:1 of
-msgid "Denoise using White Top-Hat"
+msgid "Compute magnitude spectrum with :py:func:`cdl.computation.image.compute_magnitude_spectrum`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise:1 of
-msgid "Compute all denoising filters"
+msgid "Compute phase spectrum with :py:func:`cdl.computation.image.compute_phase_spectrum`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat:1 of
-msgid "Compute White Top-Hat"
+msgid "Compute Power Spectral Density (PSD) with :py:func:`cdl.computation.image.compute_psd`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat:1 of
-msgid "Compute Black Top-Hat"
+msgid "Compute Butterworth filter with :py:func:`cdl.computation.image.compute_butterworth`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_erosion:1 of
-msgid "Compute Erosion"
+msgid "Compute parametric threshold with :py:func:`cdl.computation.image.threshold.compute_threshold`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_dilation:1 of
-msgid "Compute Dilation"
+msgid "Compute threshold using Isodata algorithm with :py:func:`cdl.computation.image.threshold.compute_threshold_isodata`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_opening:1 of
-msgid "Compute morphological opening"
+msgid "Compute threshold using Li algorithm with :py:func:`cdl.computation.image.threshold.compute_threshold_li`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_closing:1 of
-msgid "Compute morphological closing"
+msgid "Compute threshold using Mean algorithm with :py:func:`cdl.computation.image.threshold.compute_threshold_mean`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology:1 of
-msgid "Compute all morphology filters"
+msgid "Compute threshold using Minimum algorithm with :py:func:`cdl.computation.image.threshold.compute_threshold_minimum`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_canny:1 of
-msgid "Compute Canny filter"
+msgid "Compute threshold using Otsu algorithm with :py:func:`cdl.computation.image.threshold.compute_threshold_otsu`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_roberts:1 of
-msgid "Compute Roberts filter"
+msgid "Compute threshold using Triangle algorithm with :py:func:`cdl.computation.image.threshold.compute_threshold_triangle`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt:1 of
-msgid "Compute Prewitt filter"
+msgid "Compute threshold using Yen algorithm with :py:func:`cdl.computation.image.threshold.compute_threshold_yen`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h:1 of
-msgid "Compute Prewitt filter (horizontal)"
+msgid "Compute all threshold algorithms using the following functions:"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v:1 of
-msgid "Compute Prewitt filter (vertical)"
+msgid ":py:func:`cdl.computation.image.threshold.compute_threshold_isodata`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel:1 of
-msgid "Compute Sobel filter"
+msgid ":py:func:`cdl.computation.image.threshold.compute_threshold_li`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h:1 of
-msgid "Compute Sobel filter (horizontal)"
+msgid ":py:func:`cdl.computation.image.threshold.compute_threshold_mean`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v:1 of
-msgid "Compute Sobel filter (vertical)"
+msgid ":py:func:`cdl.computation.image.threshold.compute_threshold_minimum`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr:1 of
-msgid "Compute Scharr filter"
+msgid ":py:func:`cdl.computation.image.threshold.compute_threshold_otsu`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h:1 of
-msgid "Compute Scharr filter (horizontal)"
+msgid ":py:func:`cdl.computation.image.threshold.compute_threshold_triangle`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v:1 of
-msgid "Compute Scharr filter (vertical)"
+msgid ":py:func:`cdl.computation.image.threshold.compute_threshold_yen`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_farid:1 of
-msgid "Compute Farid filter"
+msgid "Compute gamma correction with :py:func:`cdl.computation.image.exposure.compute_adjust_gamma`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_farid_h:1 of
-msgid "Compute Farid filter (horizontal)"
+msgid "Compute log correction with :py:func:`cdl.computation.image.exposure.compute_adjust_log`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_farid_v:1 of
-msgid "Compute Farid filter (vertical)"
+msgid "Compute sigmoid correction with :py:func:`cdl.computation.image.exposure.compute_adjust_sigmoid`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_laplace:1 of
-msgid "Compute Laplace filter"
+msgid "Rescale image intensity levels with :py:func`cdl.computation.image.exposure.compute_rescale_intensity`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_all_edges:1 of
-msgid "Compute all edges"
+msgid "Histogram equalization with :py:func:`cdl.computation.image.exposure.compute_equalize_hist`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_centroid:1 of
-msgid "Compute image centroid"
+msgid "Adaptive histogram equalization with :py:func:`cdl.computation.image.exposure.compute_equalize_adapthist`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle:1 of
-msgid "Compute minimum enclosing circle"
+msgid "Compute Total Variation denoising with :py:func:`cdl.computation.image.restoration.compute_denoise_tv`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection:1 of
-msgid "Compute 2D peak detection"
+msgid "Compute bilateral filter denoising with :py:func:`cdl.computation.image.restoration.compute_denoise_bilateral`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape:1 of
-msgid "Compute contour shape fit"
+msgid "Compute Wavelet denoising with :py:func:`cdl.computation.image.restoration.compute_denoise_wavelet`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks:1 of
-msgid "Compute peak detection based on a circle Hough transform"
+msgid "Denoise using White Top-Hat with :py:func:`cdl.computation.image.restoration.compute_denoise_tophat`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog:1 of
-msgid "Compute blob detection using Difference of Gaussian method"
+msgid "Compute all denoising filters using the following functions:"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh:1 of
-msgid "Compute blob detection using Determinant of Hessian method"
+msgid ":py:func:`cdl.computation.image.restoration.compute_denoise_tv`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_log:1 of
-msgid "Compute blob detection using Laplacian of Gaussian method"
+msgid ":py:func:`cdl.computation.image.restoration.compute_denoise_bilateral`"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv:1 of
-msgid "Compute blob detection using OpenCV"
+msgid ":py:func:`cdl.computation.image.restoration.compute_denoise_wavelet`"
 msgstr ""
 
-#~ msgid "Processor (:mod:`cdl.core.gui.processor`)"
-#~ msgstr "Processeur (:mod:`cdl.core.gui.processor`)"
+msgid ":py:func:`cdl.computation.image.restoration.compute_denoise_tophat`"
+msgstr ""
+
+msgid "Compute White Top-Hat with :py:func:`cdl.computation.image.morphology.compute_white_tophat`"
+msgstr ""
+
+msgid "Compute Black Top-Hat with :py:func:`cdl.computation.image.morphology.compute_black_tophat`"
+msgstr ""
+
+msgid "Compute Erosion with :py:func:`cdl.computation.image.morphology.compute_erosion`"
+msgstr ""
+
+msgid "Compute Dilation with :py:func:`cdl.computation.image.morphology.compute_dilation`"
+msgstr ""
+
+msgid "Compute morphological opening with :py:func:`cdl.computation.image.morphology.compute_opening`"
+msgstr ""
+
+msgid "Compute morphological closing with :py:func:`cdl.computation.image.morphology.compute_closing`"
+msgstr ""
+
+msgid "Compute all morphology filters using the following functions:"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.morphology.compute_white_tophat`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.morphology.compute_black_tophat`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.morphology.compute_erosion`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.morphology.compute_dilation`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.morphology.compute_opening`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.morphology.compute_closing`"
+msgstr ""
+
+msgid "Compute Canny filter with :py:func:`cdl.computation.image.edges.compute_canny`"
+msgstr ""
+
+msgid "Compute Roberts filter with :py:func:`cdl.computation.image.edges.compute_roberts`"
+msgstr ""
+
+msgid "Compute Prewitt filter with :py:func:`cdl.computation.image.edges.compute_prewitt`"
+msgstr ""
+
+msgid "Compute Prewitt filter (horizontal) with :py:func:`cdl.computation.image.edges.compute_prewitt_h`"
+msgstr ""
+
+msgid "Compute Prewitt filter (vertical) with :py:func:`cdl.computation.image.edges.compute_prewitt_v`"
+msgstr ""
+
+msgid "Compute Sobel filter with :py:func:`cdl.computation.image.edges.compute_sobel`"
+msgstr ""
+
+msgid "Compute Sobel filter (horizontal) with :py:func:`cdl.computation.image.edges.compute_sobel_h`"
+msgstr ""
+
+msgid "Compute Sobel filter (vertical) with :py:func:`cdl.computation.image.edges.compute_sobel_v`"
+msgstr ""
+
+msgid "Compute Scharr filter with :py:func:`cdl.computation.image.edges.compute_scharr`"
+msgstr ""
+
+msgid "Compute Scharr filter (horizontal) with :py:func:`cdl.computation.image.edges.compute_scharr_h`"
+msgstr ""
+
+msgid "Compute Scharr filter (vertical) with :py:func:`cdl.computation.image.edges.compute_scharr_v`"
+msgstr ""
+
+msgid "Compute Farid filter with :py:func:`cdl.computation.image.edges.compute_farid`"
+msgstr ""
+
+msgid "Compute Farid filter (horizontal) with :py:func:`cdl.computation.image.edges.compute_farid_h`"
+msgstr ""
+
+msgid "Compute Farid filter (vertical) with :py:func:`cdl.computation.image.edges.compute_farid_v`"
+msgstr ""
+
+msgid "Compute Laplace filter with :py:func:`cdl.computation.image.edges.compute_laplace`"
+msgstr ""
+
+msgid "Compute all edges filters using the following functions:"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_roberts`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_prewitt`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_prewitt_h`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_prewitt_v`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_sobel`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_sobel_h`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_sobel_v`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_scharr`"
+msgstr ""
 
-#~ msgid "a signal or image object, or a numpy array, or None if error"
-#~ msgstr ""
+msgid ":py:func:`cdl.computation.image.edges.compute_scharr_h`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_scharr_v`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_farid`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_farid_h`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_farid_v`"
+msgstr ""
+
+msgid ":py:func:`cdl.computation.image.edges.compute_laplace`"
+msgstr ""
+
+msgid "Compute data statistics with :py:func:`cdl.computation.image.compute_stats`"
+msgstr ""
 
-#~ msgid ""
-#~ "shape type (if None, use `param.shape`"
-#~ " which must be a string and a"
-#~ " valid `ShapeTypes` member name, modulo "
-#~ "case)"
-#~ msgstr ""
+msgid "Compute image centroid with :py:func:`cdl.computation.image.compute_centroid`"
+msgstr ""
+
+msgid "Compute minimum enclosing circle with :py:func:`cdl.computation.image.compute_enclosing_circle`"
+msgstr ""
+
+msgid "Compute 2D peak detection with :py:func:`cdl.computation.image.compute_peak_detection`"
+msgstr ""
+
+msgid "Compute contour shape fit with :py:func:`cdl.computation.image.detection.compute_contour_shape`"
+msgstr ""
+
+msgid "Compute peak detection based on a circle Hough transform with :py:func:`cdl.computation.image.compute_hough_circle_peaks`"
+msgstr ""
 
-#~ msgid "object uuid, values: ResultShape objects)"
-#~ msgstr ""
+msgid "Compute blob detection using Difference of Gaussian method with :py:func:`cdl.computation.image.detection.compute_blob_dog`"
+msgstr ""
 
-#~ msgid "ROI data parameters."
-#~ msgstr ""
+msgid "Compute blob detection using Determinant of Hessian method with :py:func:`cdl.computation.image.detection.compute_blob_doh`"
+msgstr ""
 
-#~ msgid "Compute profile"
-#~ msgstr ""
+msgid "Compute blob detection using Laplacian of Gaussian method with :py:func:`cdl.computation.image.detection.compute_blob_log`"
+msgstr ""
 
-#~ msgid "Compute threshold clipping"
-#~ msgstr ""
+msgid "Compute blob detection using OpenCV with :py:func:`cdl.computation.image.detection.compute_blob_opencv`"
+msgstr ""

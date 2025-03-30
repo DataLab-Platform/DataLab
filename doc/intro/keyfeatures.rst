@@ -46,42 +46,42 @@ Signal Image  Feature
 ✓      ✓      Process isolation for running computations
 ✓      ✓      Remote control from Jupyter, Spyder or any IDE
 ✓      ✓      Remote control from a third-party application
-✓      ✓      Sum, average, difference, product, ...
+✓      ✓      Sum, average, difference, product...
 ✓      ✓      Operations with a constant
 ✓      ✓      ROI extraction, Swap X/Y axes
 ✓      ..     Semi-automatic multi-peak detection
 ✓      ..     Convolution
 ..     ✓      Flat-field correction
-..     ✓      Rotation (flip, rotate), resize, ...
+..     ✓      Flip, rotation, scaling...
 ..     ✓      Intensity profiles (line, average, radial)
 ..     ✓      Pixel binning
-✓      ✓      Square root, power, logarithm, exponential, ...
+✓      ✓      Square root, power, logarithm, exponential...
 ✓      ..     Derivative, integral
 ✓      ✓      Linear calibration
 ✓      ✓      Normalization, Clipping, Offset correction
 ✓      ..     Reverse X-axis
-..     ✓      Thresholding (manual, Otsu, ...)
+..     ✓      Thresholding (manual, Otsu...)
 ✓      ✓      Gaussian filter, Wiener filter
 ✓      ✓      Moving average, moving median
 ✓      ✓      FFT, inverse FFT, Power/Phase/Magnitude spectrum, Power Spectral Density
 ✓      ..     Interpolation, resampling
 ✓      ..     Detrending
-✓      ..     Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF, ...
+✓      ..     Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF...
 ✓      ..     Interactive multigaussian fit
 ✓      ..     Frequency filters (low-pass, high-pass, band-pass, band-stop)
-✓      ..     Windowing (Hamming, Hanning, ...)
+✓      ..     Windowing (Hamming, Hanning...)
 ..     ✓      Butterworth filter
-..     ✓      Exposure correction (gamma, log, ...)
-..     ✓      Restauration (Total Variation, Bilateral, ...)
-..     ✓      Morphology (erosion, dilation, ...)
-..     ✓      Edges detection (Roberts, Sobel, ...)
+..     ✓      Exposure correction (gamma, log...)
+..     ✓      Restauration (Total Variation, Bilateral...)
+..     ✓      Morphology (erosion, dilation...)
+..     ✓      Edges detection (Roberts, Sobel...)
 ✓      ✓      Analysis on custom ROI
 ✓      ..     FWHM, FW @ 1/e²
-✓      ..     Dynamic parameters (ENOB, SNR, ...), Sampling period/Rate
+✓      ..     Dynamic parameters (ENOB, SNR...), Sampling period/Rate
 ..     ✓      Centroid (robust method w/r noise)
 ..     ✓      Minimum enclosing circle center
 ..     ✓      2D peak detection
 ..     ✓      Contour detection
 ..     ✓      Circle Hough transform
-..     ✓      Blob detection (OpenCV, Laplacian of Gaussian, ...)
+..     ✓      Blob detection (OpenCV, Laplacian of Gaussian...)
 ====== ====== ===================================================

@@ -813,7 +813,7 @@ class Tour(BaseTour):
             _("Image Panel") + " – " + _("Operations menu"),
             _(
                 "The <b>Operations</b> menu is focused on arithmetic operations, "
-                "data type conversions, pixel binning resize, intensity profiles, ..."
+                "data type conversions, pixel binning resize, intensity profiles..."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.operation_menu),

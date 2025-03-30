@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import abc
 import dataclasses
+import glob
 import os.path as osp
 import re
 import warnings
@@ -28,7 +29,12 @@ from plotpy.plot import PlotDialog
 from plotpy.tools import ActionTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
+from qtpy.compat import (
+    getexistingdirectory,
+    getopenfilename,
+    getopenfilenames,
+    getsavefilename,
+)
 
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview
@@ -153,7 +159,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     """Object defining DataLab panel interface,
     based on a vertical QSplitter widget
 
-    A panel handle an object list (objects are signals, images, macros, ...).
+    A panel handle an object list (objects are signals, images, macros...).
     Each object must implement ``cdl.core.gui.ObjItf`` interface
     """
 
@@ -521,10 +527,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
-    def add_group(self, title: str) -> objectmodel.ObjectGroup:
-        """Add group"""
+    def add_group(self, title: str, select: bool = False) -> objectmodel.ObjectGroup:
+        """Add group
+
+        Args:
+            title: group title
+            select: if True, select the group in the tree view. Defaults to False.
+
+        Returns:
+            Created group object
+        """
         group = self.objmodel.add_group(title)
         self.objview.add_group_item(group)
+        if select:
+            self.objview.select_groups([group])
         return group
 
     def __duplicate_individual_obj(
@@ -737,30 +753,49 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if ok:
             self.add_group(group_name)
 
-    def rename_group(self, new_name: str | None = None) -> None:
-        """Rename a group
+    def rename_selected_object_or_group(self, new_name: str | None = None) -> None:
+        """Rename selected object or group
 
         Args:
-            new_name: new group name. Defaults to None (ask user).
+            new_name: new name (default: None, i.e. ask user)
         """
+        sel_objects = self.objview.get_sel_objects(include_groups=False)
         sel_groups = self.objview.get_sel_groups()
-        if not sel_groups or len(sel_groups) > 1:
+        if (not sel_objects and not sel_groups) or len(sel_objects) + len(
+            sel_groups
+        ) > 1:
             # Won't happen in the application, but could happen in tests or using the
             # API directly
-            raise ValueError("Select one group to rename")
-        group = sel_groups[0]
-        if new_name is None:
-            new_name, ok = QW.QInputDialog.getText(
-                self,
-                _("Rename group"),
-                _("Group name:"),
-                QW.QLineEdit.Normal,
-                group.title,
-            )
-            if not ok:
-                return
-        group.title = new_name
-        self.objview.update_item(group.uuid)
+            raise ValueError("Select one object or group to rename")
+        if sel_objects:
+            obj = sel_objects[0]
+            if new_name is None:
+                new_name, ok = QW.QInputDialog.getText(
+                    self,
+                    _("Rename object"),
+                    _("Object name:"),
+                    QW.QLineEdit.Normal,
+                    obj.title,
+                )
+                if not ok:
+                    return
+            obj.title = new_name
+            self.objview.update_item(obj.uuid)
+            self.objprop.update_properties_from(obj)
+        elif sel_groups:
+            group = sel_groups[0]
+            if new_name is None:
+                new_name, ok = QW.QInputDialog.getText(
+                    self,
+                    _("Rename group"),
+                    _("Group name:"),
+                    QW.QLineEdit.Normal,
+                    group.title,
+                )
+                if not ok:
+                    return
+            group.title = new_name
+            self.objview.update_item(group.uuid)
 
     @abc.abstractmethod
     def get_newparam_from_current(
@@ -830,11 +865,43 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         self.IO_REGISTRY.write(filename, obj)
 
-    def load_from_files(self, filenames: list[str] | None = None) -> list[TypeObj]:
+    def load_from_directory(self, directory: str | None = None) -> list[TypeObj]:
+        """Open objects from directory (signals or images, depending on the panel),
+        add them to DataLab and return them.
+        If the directory is not specified, ask the user to select a directory.
+
+        Args:
+            directory: directory name
+
+        Returns:
+            list of new objects
+        """
+        if not self.mainwindow.confirm_memory_state():
+            return []
+        if directory is None:  # pragma: no cover
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                directory = getexistingdirectory(self, _("Open"), basedir)
+        if not directory:
+            return []
+        # Get all files in the directory:
+        relfnames = sorted(
+            osp.relpath(path, start=directory)
+            for path in glob.glob(osp.join(directory, "**", "*.*"), recursive=True)
+        )
+        # When Python 3.9 will be dropped, we can use (support for `root_dir` is added):
+        # relfnames = sorted(glob.glob("**/*.*", root_dir=directory, recursive=True))
+        filenames = [osp.join(directory, fname) for fname in relfnames]
+        return self.load_from_files(filenames, ignore_unknown=True)
+
+    def load_from_files(
+        self, filenames: list[str] | None = None, ignore_unknown: bool = False
+    ) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
             filenames: File names
+            ignore_unknown: if True, ignore unknown file types (default: False)
 
         Returns:
             list of new objects
@@ -850,7 +917,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         for filename in filenames:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
-                objs += self.__load_from_file(filename)
+                try:
+                    objs += self.__load_from_file(filename)
+                except NotImplementedError as exc:
+                    if ignore_unknown:
+                        # Ignore unknown file types
+                        pass
+                    else:
+                        raise exc
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:
@@ -888,8 +962,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Returns:
             None
         """
+        dirnames = [fname for fname in filenames if osp.isdir(fname)]
         h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
-        other_fnames = sorted(list(set(filenames) - set(h5_fnames)))
+        other_fnames = sorted(list(set(filenames) - set(h5_fnames) - set(dirnames)))
+        if dirnames:
+            for dirname in dirnames:
+                self.load_from_directory(dirname)
         if h5_fnames:
             self.mainwindow.open_h5_files(h5_fnames, import_all=True)
         if other_fnames:

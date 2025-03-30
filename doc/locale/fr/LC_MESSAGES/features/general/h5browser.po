@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-05 14:02+0100\n"
+"POT-Creation-Date: 2025-03-20 16:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -13,86 +13,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: ../../features/general/h5browser.rst:-1
-msgid ""
-"HDF5 Browser in DataLab, the open-source scientific data analysis and "
-"visualization platform"
-msgstr ""
-"Explorateur HDF5 dans DataLab, la plateforme open-source d'analyse et de "
-"visualisation de données scientifiques"
+msgid "HDF5 Browser in DataLab, the open-source scientific data analysis and visualization platform"
+msgstr "Explorateur HDF5 dans DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
 
-#: ../../features/general/h5browser.rst:-1
-msgid ""
-"DataLab, workspace, HDF5, browser, scientific, data, analysis, "
-"visualization, platform"
-msgstr ""
-"DataLab, espace de travail, HDF5, explorateur, scientifique, données, "
-"analyse, visualisation, plateforme"
+msgid "DataLab, workspace, HDF5, browser, scientific, data, analysis, visualization, platform"
+msgstr "DataLab, espace de travail, HDF5, explorateur, scientifique, données, analyse, visualisation, plateforme"
 
-#: ../../features/general/h5browser.rst:4
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-#: ../../features/general/h5browser.rst:10
-msgid ""
-"The \"HDF5 Browser\" is a modal dialog box allowing to import almost any "
-"1D and 2D data into DataLab workspace (and eventually metadata)."
-msgstr ""
-"L'explorateur HDF5 est une boîte de dialogue modale permettant d'importer"
-" presque n'importe quelles données à 1 ou 2 dimensions dans l'espace de "
-"travail de DataLab. Dans certains cas, des métadonnées sont également "
-"importées."
+msgid "The \"HDF5 Browser\" is a modal dialog box allowing to import almost any 1D and 2D data into DataLab workspace (and eventually metadata)."
+msgstr "L'explorateur HDF5 est une boîte de dialogue modale permettant d'importer presque n'importe quelles données à 1 ou 2 dimensions dans l'espace de travail de DataLab. Dans certains cas, des métadonnées sont également importées."
 
-#: ../../features/general/h5browser.rst:15
-msgid ""
-"Compatible curve or image data are displayed in a hierarchical view on "
-"the left panel, as well as other scalar data (scalar values are just "
-"shown for context purpose and may not be imported into DataLab "
-"workspace)."
-msgstr ""
-"Les données de type courbe ou image sont affichées sous la forme d'une "
-"vue hiérarchique dans le panneau de gauche, de même que les données "
-"scalaires (les valeurs scalaires sont simplement affichées à titre "
-"d'informations contextuelles et ne peuvent pas être importées dans "
-"l'espace de travail de DataLab)."
+msgid "Compatible curve or image data are displayed in a hierarchical view on the left panel, as well as other scalar data (scalar values are just shown for context purpose and may not be imported into DataLab workspace)."
+msgstr "Les données de type courbe ou image sont affichées sous la forme d'une vue hiérarchique dans le panneau de gauche, de même que les données scalaires (les valeurs scalaires sont simplement affichées à titre d'informations contextuelles et ne peuvent pas être importées dans l'espace de travail de DataLab)."
 
-#: ../../features/general/h5browser.rst:19
-msgid ""
-"The right panel displays the selected curve or image data. It also shows "
-"information on \"Group\" (path, description, etc.) and \"Attributes\" "
-"(names and values)."
-msgstr ""
-"Le panneau de droite affiche les données de courbe ou d'image "
-"sélectionnées. Il affiche également des informations sur le \"Groupe\" "
-"(chemin, description, etc.) et les \"Attributs\" (noms et valeurs)."
+msgid "The right panel displays the selected curve or image data. It also shows information on \"Group\" (path, description, etc.) and \"Attributes\" (names and values)."
+msgstr "Le panneau de droite affiche les données de courbe ou d'image sélectionnées. Il affiche également des informations sur le \"Groupe\" (chemin, description, etc.) et les \"Attributs\" (noms et valeurs)."
 
-#: ../../features/general/h5browser.rst:26
 msgid "The HDF5 browser is fairly simple to use:"
 msgstr "L'explorateur de fichiers HDF5 est très simple à utiliser :"
 
-#: ../../features/general/h5browser.rst:23
 msgid "On the left panel, select the curve or image data you want to import"
 msgstr "Dans le panneau de gauche, sélectionner la courbe ou l'image à importer"
 
-#: ../../features/general/h5browser.rst:24
 msgid "Selected data is plotted on the right panel"
-msgstr ""
-"Les données sélectionnées peuvent être visualisées graphiquement dans le "
-"panneau de droite"
+msgstr "Les données sélectionnées peuvent être visualisées graphiquement dans le panneau de droite"
 
-#: ../../features/general/h5browser.rst:25
 msgid "Click on \"Check all\" if you want to import all compatible data"
 msgstr "Cliquer sur \"Cocher tout\" pour importer toutes les données compatibles"
 
-#: ../../features/general/h5browser.rst:26
 msgid "Then validate by clicking on \"OK\""
 msgstr "Valider ensuite en cliquant sur \"OK\""
 
-#: ../../features/general/h5browser.rst:29
-msgid ""
-"The HDF5 browser may be used to explore multiple HDF5 files at once, thus"
-" allowing to import data from different files into the same DataLab "
-"workspace."
+msgid "The HDF5 browser may be used to explore multiple HDF5 files at once, thus allowing to import data from different files into the same DataLab workspace."
 msgstr "L'explorateur HDF5 peut être utilisé pour explorer plusieurs fichiers HDF5 à la fois, permettant ainsi d'importer des données de différents fichiers dans le même espace de travail de DataLab."

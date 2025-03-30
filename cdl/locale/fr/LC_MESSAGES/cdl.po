@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-15 19:25+0100\n"
+"POT-Creation-Date: 2025-03-30 15:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -764,6 +764,12 @@ msgstr "Paramètre de forme de la fonction de fenêtrage de Kaiser"
 msgid "Shape parameter of the Gaussian windowing function"
 msgstr "Paramètre de forme de la fonction de fenêtrage gaussienne"
 
+msgid "Radian"
+msgstr "Radian"
+
+msgid "Angle unit"
+msgstr "Unité de l'angle"
+
 msgid "Zero-crossing"
 msgstr "Passage par zéro"
 
@@ -783,6 +789,9 @@ msgstr ""
 msgid "Upper X boundary (empty for no limit, i.e. end of the signal)"
 msgstr ""
 "Borne X supérieure (vide pour aucune limite, c'est-à-dire la fin du signal)"
+
+msgid "Ordinate"
+msgstr "Coordonnées"
 
 msgid "Full scale"
 msgstr "Pleine échelle"
@@ -815,6 +824,12 @@ msgstr "Ouvrir un objet %s..."
 msgid "Open %s"
 msgstr "Ouvrir un objet %s"
 
+msgid "Open from directory..."
+msgstr "Ouvrir depuis le répertoire..."
+
+msgid "Open %s objects from directory"
+msgstr "Ouvrir des objets %s depuis le répertoire"
+
 msgid "Save %s..."
 msgstr "Enregistrer un objet %s..."
 
@@ -824,17 +839,17 @@ msgstr "Enregistrer l'objet %s sélectionné"
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
 
+msgid "Rename"
+msgstr "Renommer"
+
+msgid "Edit title of selected %s or group"
+msgstr "Modifier le titre de l'objet %s ou du groupe sélectionné"
+
 msgid "New group..."
 msgstr "Nouveau groupe..."
 
 msgid "Create a new group"
 msgstr "Créer un nouveau groupe"
-
-msgid "Rename group..."
-msgstr "Renommer groupe..."
-
-msgid "Rename selected group"
-msgstr "Renommer le groupe sélectionné"
 
 msgid "Move up"
 msgstr "Déplacer vers le haut"
@@ -1077,6 +1092,12 @@ msgstr "Intégrale"
 msgid "Reverse X-axis"
 msgstr "Inverser l'axe des X"
 
+msgid "Convert to Cartesian coordinates"
+msgstr "Convertir en coordonnées cartésiennes"
+
+msgid "Convert to polar coordinates"
+msgstr "Convertir en coordonnées polaires"
+
 msgid "Frequency filters"
 msgstr "Filtres fréquentiels"
 
@@ -1131,6 +1152,33 @@ msgstr "Interpolation"
 msgid "Resampling"
 msgstr "Rééchantillonnage"
 
+msgid "Stability analysis"
+msgstr "Analyse de stabilité"
+
+msgid "Allan variance"
+msgstr "Variance d'Allan"
+
+msgid "Allan deviation"
+msgstr "Ecart-type d'Allan"
+
+msgid "Modified Allan deviation"
+msgstr "Ecart-type d'Allan modifié"
+
+msgid "Hadamard variance"
+msgstr "Variance de Hadamard"
+
+msgid "Total variance"
+msgstr "Variance totale"
+
+msgid "Time deviation"
+msgstr "Ecart-type temporel"
+
+msgid "All stability features"
+msgstr "Toutes les analyses de stabilité"
+
+msgid "Compute all stability features"
+msgstr "Calcule toutes les analyses de stabilité"
+
 msgid "Full width at half-maximum"
 msgstr "Largeur à mi-hauteur"
 
@@ -1143,11 +1191,18 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-msgid "X values at min/max"
-msgstr "Valeurs de X aux min/max"
+msgid "Abscissa of the minimum and maximum"
+msgstr "Abscisse du minimum et du maximum"
 
-msgid "Compute X values at signal minimum and maximum"
-msgstr "Calcule les valeurs de X aux minima et maxima du signal"
+msgid ""
+"Compute the smallest argument of the minima and the smallest argument of the "
+"maxima"
+msgstr ""
+"Calcule le plus petit argument du minimum et le plus petit argument du "
+"maximum"
+
+msgid "Abscissa at y=..."
+msgstr "Abscisse pour y=..."
 
 msgid "Peak detection"
 msgstr "Détection de pics"
@@ -1164,7 +1219,7 @@ msgid "Dynamic parameters"
 msgstr "Paramètres dynamiques"
 
 msgid "Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."
-msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD, ..."
+msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD..."
 
 msgid "Bandwidth at -3dB"
 msgstr "Bande passante à -3dB"
@@ -1216,11 +1271,14 @@ msgstr "Afficher ou cacher le panneau de réglage du contraste"
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
-msgid "Rotation"
-msgstr "Rotation"
+msgid "Flip or rotation"
+msgstr "Symétrie ou rotation"
 
 msgid "Flip horizontally"
 msgstr "Symétrie horizontale"
+
+msgid "Flip diagonally"
+msgstr "Symétrie diagonale"
 
 msgid "Flip vertically"
 msgstr "Symétrie verticale"
@@ -1231,8 +1289,8 @@ msgstr "Rotation directe de %s"
 msgid "Rotate %s left"
 msgstr "Rotation inverse de %s"
 
-msgid "Rotate arbitrarily..."
-msgstr "Rotation arbitraire..."
+msgid "Rotate by..."
+msgstr "Rotation de..."
 
 msgid "Intensity profiles"
 msgstr "Profils d'intensité"
@@ -1758,11 +1816,19 @@ msgid "Save"
 msgstr "Enregistrer"
 
 msgid ""
-"Do you want to remove all signals and images before importing data from HDF5 "
-"files?"
+"Do you want to clear current workspace (signals and images) before importing "
+"data from HDF5 files?<br><br>Choosing to ignore this message will prevent it "
+"from being displayed again, and will use the current setting (%s)."
 msgstr ""
-"Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
-"données depuis un fichier HDF5 ?"
+"Souhaitez-vous effacer l'espace de travail actuel (signaux et images) avant "
+"d'importer des données depuis des fichiers HDF5 ?<br><br>Ignorer ce message "
+"empêchera son affichage ultérieur, et utilisera le réglage actuel (%s)."
+
+msgid "No"
+msgstr "Non"
+
+msgid "Yes"
+msgstr "Oui"
 
 msgid "Open"
 msgstr "Ouvrir"
@@ -1882,6 +1948,12 @@ msgstr "Nouveau groupe"
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
+msgid "Rename object"
+msgstr "Renommer l'objet"
+
+msgid "Object name:"
+msgstr "Nom de l'objet :"
+
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
@@ -1985,9 +2057,6 @@ msgstr "Supprimer la macro"
 
 msgid "Macro editor toolbar"
 msgstr "Barre d'outils des macros"
-
-msgid "Rename"
-msgstr "Renommer"
 
 msgid "New title:"
 msgstr "Nouveau titre :"
@@ -2167,6 +2236,12 @@ msgstr "signal à soustraire"
 msgid "Reverse X axis"
 msgstr "Inverser l'axe des X"
 
+msgid "Cartesian to Polar"
+msgstr "De cartésien à polaire"
+
+msgid "Polar to Cartesian"
+msgstr "De polaire à cartésien"
+
 msgid "iFFT"
 msgstr "iFFT"
 
@@ -2176,11 +2251,20 @@ msgstr "signal pour les valeurs X"
 msgid "signal to convolve with"
 msgstr "signal à convoluer"
 
+msgid "Overlapping Allan variance"
+msgstr ""
+
+msgid "Modified Allan variance"
+msgstr ""
+
 msgid "FWHM"
 msgstr "LMH"
 
 msgid "FW"
 msgstr "LH"
+
+msgid "Find abscissa"
+msgstr "Trouver l'abscisse"
 
 msgid "Bandwidth"
 msgstr "Bande passante"
@@ -2191,23 +2275,32 @@ msgstr "Modifier les paramètres du profil"
 msgid "Reset selection"
 msgstr "Réinitialiser la sélection"
 
-msgid "Add ROI"
-msgstr "Ajouter une ROI"
+msgid "Range ROI"
+msgstr "Intervalle ROI"
 
-msgid "Add rectangular ROI"
-msgstr "Ajouter une ROI rectangulaire"
+msgid "Rectangular ROI"
+msgstr "ROI rectangulaire"
 
-msgid "Add circular ROI"
-msgstr "Ajouter une ROI circulaire"
+msgid "Circular ROI"
+msgstr "ROI circulaire"
 
-msgid "Add polygonal ROI"
-msgstr "Ajouter une ROI polygonale"
+msgid "Polygonal ROI"
+msgstr "ROI polygonale"
 
-msgid "Remove all ROIs"
-msgstr "Supprimer toutes les ROI"
+msgid "Graphical ROI"
+msgstr "ROI graphique"
+
+msgid "Coordinate-based ROI"
+msgstr "ROI par coordonnées"
+
+msgid "Remove all"
+msgstr "Supprimer tout"
 
 msgid "Extract all ROIs into a single %s object"
 msgstr "Extraire toutes les ROI dans un seul objet %s"
+
+msgid "Remove all ROIs"
+msgstr "Supprimer toutes les ROI"
 
 msgid "Are you sure you want to remove all ROIs?"
 msgstr "Êtes-vous sûr de vouloir supprimer toutes les ROI ?"
@@ -2287,6 +2380,12 @@ msgstr "Arguments de l'éditeur externe"
 
 msgid "Settings for I/O operations"
 msgstr "Réglages des opérations d'entrée/sortie"
+
+msgid "Clear workspace before loading HDF5 file"
+msgstr "Effacer l'espace de travail avant de charger un fichier HDF5"
+
+msgid "Ask before clearing workspace"
+msgstr "Demander avant d'effacer l'espace de travail"
 
 msgid "HDF5 full path in title"
 msgstr "Chemin complet du fichier HDF5 dans le titre"
@@ -2615,11 +2714,11 @@ msgstr ""
 
 msgid ""
 "The <b>Operations</b> menu is focused on arithmetic operations, data type "
-"conversions, pixel binning resize, intensity profiles, ..."
+"conversions, pixel binning resize, intensity profiles..."
 msgstr ""
 "Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les "
 "conversions de type de données, le redimensionnement par binning de pixels, "
-"les profils d'intensité, ..."
+"les profils d'intensité..."
 
 msgid ""
 "The <b>Processing</b> menu regroups 1->1 image processing actions (that is, "
@@ -2788,11 +2887,11 @@ msgstr "aléatoire (loi normale)"
 msgid "Height"
 msgstr "Hauteur"
 
-msgid "Image height (total number of rows)"
-msgstr "Hauteur de l'image (nombre de lignes)"
+msgid "Image height: number of rows"
+msgstr "Hauteur de l'image : nombre de lignes"
 
-msgid "Image width (total number of columns)"
-msgstr "Largeur de l'image (nombre de colonnes)"
+msgid "Image width: number of columns"
+msgstr "Largeur de l'image : nombre de colonnes"
 
 msgid "Width"
 msgstr "Largeur"

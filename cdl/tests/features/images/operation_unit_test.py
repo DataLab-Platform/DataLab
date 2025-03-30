@@ -13,6 +13,7 @@ addition, multiplication, division, and more.
 
 from __future__ import annotations
 
+import warnings
 from typing import Generator
 
 import numpy as np
@@ -77,7 +78,7 @@ def test_image_difference() -> None:
 
 
 @pytest.mark.validation
-def test_quadratic_difference() -> None:
+def test_image_quadratic_difference() -> None:
     """Quadratic difference test."""
     execenv.print("*** Testing quadratic difference:")
     for ima1, ima2 in __iterate_image_couples():
@@ -222,6 +223,20 @@ def test_image_arithmetic() -> None:
 
 
 @pytest.mark.validation
+def test_image_inverse() -> None:
+    """Image inverse test."""
+    execenv.print("*** Testing image inverse:")
+    for ima1 in __iterate_images():
+        execenv.print(f"  1/({ima1.data.dtype}): ", end="")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            exp = np.reciprocal(ima1.data, dtype=float)
+            exp[np.isinf(exp)] = np.nan
+        ima2 = cpi.compute_inverse(ima1)
+        check_array_result("Image inverse", ima2.data, exp)
+
+
+@pytest.mark.validation
 def test_image_abs() -> None:
     """Image absolute value test."""
     execenv.print("*** Testing image absolute value:")
@@ -335,6 +350,12 @@ def test_image_fliph() -> None:
 
 
 @pytest.mark.validation
+def test_image_flipd() -> None:
+    """Image diagonal flip test."""
+    __generic_flip_check(cpi.compute_swap_axes, np.transpose)
+
+
+@pytest.mark.validation
 def test_image_flipv() -> None:
     """Image vertical flip test."""
     __generic_flip_check(cpi.compute_flipv, np.flipud)
@@ -380,12 +401,13 @@ if __name__ == "__main__":
     test_image_product()
     test_image_division()
     test_image_difference()
-    test_quadratic_difference()
+    test_image_quadratic_difference()
     test_image_addition_constant()
     test_image_product_constant()
     test_image_difference_constant()
     test_image_division_constant()
     test_image_arithmetic()
+    test_image_inverse()
     test_image_abs()
     test_image_re()
     test_image_im()

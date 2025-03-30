@@ -73,28 +73,59 @@ def iterate_image_creation(
             continue
         if verbose:
             execenv.print(f"    {itype.value}")
-        for dtype in ImageDatatypes:
-            if verbose:
-                execenv.print(f"      {dtype.value}")
-            newparam = new_image_param(
-                itype=itype, dtype=dtype, width=data_size, height=data_size
-            )
-            if itype == ImageTypes.GAUSS:
-                addparam = Gauss2DParam()
-                addparam.x0 = addparam.y0 = 3
-                addparam.sigma = 5
-            elif itype == ImageTypes.UNIFORMRANDOM:
-                addparam = UniformRandomParam()
-                addparam.set_from_datatype(dtype.value)
-            elif itype == ImageTypes.NORMALRANDOM:
-                addparam = NormalRandomParam()
-                addparam.set_from_datatype(dtype.value)
-            else:
-                addparam = None
-            image = create_image_from_param(newparam, addparam=addparam)
-            if itype == ImageTypes.ZEROS:
-                assert (image.data == 0).all()
-            yield image
+        yield from _iterate_image_datatypes(itype, data_size, verbose)
+
+
+def _iterate_image_datatypes(
+    itype: ImageTypes, data_size: int, verbose: bool
+) -> Generator[ImageObj | None, None, None]:
+    for dtype in ImageDatatypes:
+        if verbose:
+            execenv.print(f"      {dtype.value}")
+        newparam = new_image_param(
+            itype=itype, dtype=dtype, width=data_size, height=data_size
+        )
+        addparam = _get_additional_param(itype, dtype)
+        image = create_image_from_param(newparam, addparam=addparam)
+        if image is not None:
+            _test_image_data(itype, image)
+        yield image
+
+
+def _get_additional_param(
+    itype: ImageTypes, dtype: ImageDatatypes
+) -> Gauss2DParam | UniformRandomParam | NormalRandomParam | None:
+    if itype == ImageTypes.GAUSS:
+        addparam = Gauss2DParam()
+        addparam.x0 = addparam.y0 = 3
+        addparam.sigma = 5
+    elif itype == ImageTypes.UNIFORMRANDOM:
+        addparam = UniformRandomParam()
+        addparam.set_from_datatype(dtype.value)
+    elif itype == ImageTypes.NORMALRANDOM:
+        addparam = NormalRandomParam()
+        addparam.set_from_datatype(dtype.value)
+    else:
+        addparam = None
+    return addparam
+
+
+def _test_image_data(itype: ImageTypes, image: ImageObj) -> None:
+    """
+    Tests the data of an image based on its type.
+
+    Args:
+        itype: The type of the image.
+        image: The image object containing the data to be tested.
+
+    Raises:
+        AssertionError: If the image data does not match the expected values
+         for the given image type.
+    """
+    if itype == ImageTypes.ZEROS:
+        assert (image.data == 0).all()
+    else:
+        assert image.data is not None
 
 
 def all_combinations_test():

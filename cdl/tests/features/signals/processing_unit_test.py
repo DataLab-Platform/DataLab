@@ -24,6 +24,7 @@ import pytest
 import scipy.ndimage as spi
 import scipy.signal as sps
 
+import cdl.algorithms.coordinates
 import cdl.computation.signal as cps
 import cdl.obj
 import cdl.param
@@ -78,6 +79,76 @@ def test_signal_reverse_x() -> None:
     dst = cps.compute_reverse_x(src)
     exp = src.data[::-1]
     check_array_result("ReverseX", dst.data, exp)
+
+
+def test_cartesian2polar() -> None:
+    """Unit test for the cartesian to polar conversion."""
+    title = "Cartesian2Polar"
+    x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+
+    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, "rad")
+    exp_r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
+    exp_theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
+    check_array_result(f"{title}|r", r, exp_r)
+    check_array_result(f"{title}|theta", theta, exp_theta)
+
+    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, unit="deg")
+    exp_theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
+    check_array_result(f"{title}|r", r, exp_r)
+    check_array_result(f"{title}|theta", theta, exp_theta)
+
+
+def test_polar2cartesian() -> None:
+    """Unit test for the polar to cartesian conversion."""
+    title = "Polar2Cartesian"
+    r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
+    theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
+
+    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, "rad")
+    exp_x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    exp_y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    check_array_result(f"{title}|x", x, exp_x)
+    check_array_result(f"{title}|y", y, exp_y)
+
+    theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
+    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, unit="deg")
+    check_array_result(f"{title}|x", x, exp_x)
+    check_array_result(f"{title}|y", y, exp_y)
+
+
+@pytest.mark.validation
+def test_signal_cartesian2polar() -> None:
+    """Validation test for the signal cartesian to polar processing."""
+    title = "Cartesian2Polar"
+    p = cdl.param.AngleUnitParam()
+    x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    src = cdl.obj.create_signal("test", x, y)
+
+    for p.unit, _unit_name in cdl.param.AngleUnitParam.units:
+        dst1 = cps.compute_cartesian2polar(src, p)
+        dst2 = cps.compute_polar2cartesian(dst1, p)
+        check_array_result(f"{title}|x", dst2.x, x)
+        check_array_result(f"{title}|y", dst2.y, y)
+
+
+@pytest.mark.validation
+def test_signal_polar2cartesian() -> None:
+    """Validation test for the signal polar to cartesian processing."""
+    title = "Polar2Cartesian"
+    p = cdl.param.AngleUnitParam()
+    r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
+
+    angles_deg = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
+    angles_rad = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
+    for p.unit, _unit_name in cdl.param.AngleUnitParam.units:
+        theta = angles_rad if p.unit == "rad" else angles_deg
+        src = cdl.obj.create_signal("test", r, theta)
+        dst1 = cps.compute_polar2cartesian(src, p)
+        dst2 = cps.compute_cartesian2polar(dst1, p)
+        check_array_result(f"{title}|x", dst2.x, r)
+        check_array_result(f"{title}|y", dst2.y, theta)
 
 
 @pytest.mark.validation
@@ -252,6 +323,10 @@ def test_signal_wiener() -> None:
 if __name__ == "__main__":
     test_signal_calibration()
     test_signal_swap_axes()
+    test_cartesian2polar()
+    test_polar2cartesian()
+    test_signal_cartesian2polar()
+    test_signal_polar2cartesian()
     test_signal_reverse_x()
     test_signal_normalize()
     test_signal_clip()

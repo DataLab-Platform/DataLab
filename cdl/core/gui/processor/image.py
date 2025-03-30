@@ -326,8 +326,13 @@ class ImageProcessor(BaseProcessor[ImageROI]):
 
     @qt_try_except()
     def compute_swap_axes(self) -> None:
-        """Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`"""
+        """Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`."""
         self.compute_11(cpi.compute_swap_axes, title=_("Swap axes"))
+
+    @qt_try_except()
+    def compute_inverse(self) -> None:
+        """Compute inverse"""
+        self.compute_11(cpi.compute_inverse, title=_("Inverse"))
 
     @qt_try_except()
     def compute_abs(self) -> None:

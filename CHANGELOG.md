@@ -2,7 +2,43 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
-## DataLab Version 0.18.3 ##
+## DataLab Version 0.19.0 ##
+
+💥 New features and enhancements:
+
+* New "Open from directory" feature:
+  * This feature allows to open multiple files from a directory at once, recursively (only the files with the supported extensions by the current panel are opened)
+  * Add "Open from directory" action to the "File" menu for both Signal and Image panels
+  * Add support for folders when dropping files in the Signal and Image panels
+* Add `1/x` operation to the "Operations" menu for both Signal and Image panels:
+  * This feature relies on the `numpy.reciprocal` function, and handles the case where the denominator is zero by catching warnings and replacing the `np.inf` values with `np.nan` values
+  * Add `compute_inverse` method for image and signal processors
+  * This closes [Issue #143] - New feature: `1/x` for signals and images
+* Public API (local or remote):
+  * Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:
+    * Method was added to the following classes: `AbstractCDLControl`, `BaseDataPanel` and `RemoteClient`
+    * This closes the following issues:
+      * [Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `BaseDataPanel.add_group`: add `select` argument
+      * [Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Remote proxy / Public API: add `add_group` method
+  * `AbstractCDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))
+* When opening an HDF5 file, the confirmation dialog box asking if current workspace should be cleared has a new possible answer "Ignore":
+  * Choosing "Ignore" will prevent the confirmation dialog box from being displayed again, and will choose the current setting (i.e. clear or not the workspace) for all subsequent file openings
+  * Added a new "Clear workspace before loading HDF5 file" option in the "Settings" dialog box, to allow the user to change the current setting (i.e. clear or not the workspace) for all subsequent file openings
+  * Added a new "Ask before clearing workspace" option in the "Settings" dialog box, to allow the user to disable or re-enable the confirmation dialog box asking if current workspace should be cleared when opening an HDF5 file
+  * This closes [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146) - Ask before clearing workspace when opening HDF5 file: add "Ignore" option to prevent dialog from being displayed again
+* Object and group title renaming:
+  * Removed "Rename group" feature from the "Edit" menu and context menu
+  * Added "Rename object" feature to the "Edit" menu and context menu, with F2 shortcut, to rename the title of the selected object or group
+  * This closes [Issue #148](https://github.com/DataLab-Platform/DataLab/issues/148) - Rename signal/image/group title by pressing F2
+* Region of Interest editor:
+  * Regrouped the graphical actions (new rectangular ROI, new circular ROI, new polygonal ROI) in a single menu "Graphical ROI"
+  * Added new "Coordinate-based ROI" menu to create a ROI using manual input of the coordinates:
+    * For signals, the ROI is defined by the start and end coordinates
+    * For images:
+      * The rectangular ROI is defined by the top-left and bottom-right coordinates
+      * The circular ROI is defined by the center and radius coordinates
+      * The polygonal ROI is not supported yet
+    * This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates
 
 🛠️ Bug fixes:
 
@@ -249,7 +285,7 @@ This release requires PlotPy v2.4.0 or later, which brings the following bug fix
 
 * Progress bar is now automatically closed as expected when an error occurrs during a long operation (e.g. when opening a file)
 
-* Difference, division, ...: dialog box for the second operand selection was allowing to select a group (only a signal or an image should be selected)
+* Difference, division...: dialog box for the second operand selection was allowing to select a group (only a signal or an image should be selected)
 
 * When doing an operation which involves an object (signal or image) with higher order number than the current object (e.g. when subtracting an image with an image from a group below the current image), the resulting object's title now correctly refers to the order numbers of the objects involved in the operation (e.g., to continue with the subtraction example mentioned above, the resulting object's title was previously referring to the order number before the insertion of the resulting image)
 
@@ -303,7 +339,7 @@ NumPy 2.0 support has been added with this release.
   * The menu bar and toolbars have been reorganized to make the application more intuitive and easier to use
   * Operations and processing features have been regrouped in submenus
   * All visualization-related actions are now grouped in the plot view vertical toolbar
-  * Clarified the "Annotations" management (new buttons, toolbar action, ...)
+  * Clarified the "Annotations" management (new buttons, toolbar action...)
 
 * New validation process for signal and image features:
   * Before this release, DataLab's validation process was exclusively done from the programmer's point of view, by writing unit tests and integration tests, thus ensuring that the code was working as expected (i.e. that no exception was raised and that the behavior was correct)
@@ -338,7 +374,7 @@ NumPy 2.0 support has been added with this release.
 | Processing  | Level Adjustment | Offset correction |
 | Processing  | Fourier analysis | Power spectrum, Phase spectrum, Magnitude spectrum, Power spectral density |
 | Processing  | Frequency filters | Low-pass, High-pass, Band-pass, Band-stop |
-| Processing  | | Windowing (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-top, ...) |
+| Processing  | | Windowing (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-top...) |
 | Processing  | Fit | Linear fit, Sinusoidal fit, Exponential fit, CDF fit |
 | Analysis   | | FWHM (Zero-crossing method), X value @ min/max, Sampling period/frequency, Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR), -3dB bandwidth, Contrast |
 
@@ -591,7 +627,7 @@ NumPy 2.0 support has been added with this release.
   * This fixes [Issue #32](https://github.com/DataLab-Platform/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`
 * 1D and 2D analysis results:
   * Additionnaly to the previous enhancement, more analysis results are now shown in the "Results" dialog box
-  * This concerns both 1D (FHWM, ...) and 2D analysis results (contours, blobs, ...):
+  * This concerns both 1D (FHWM...) and 2D analysis results (contours, blobs...):
     * Segment results now also show length (L) and center coordinates (Xc, Yc)
     * Circle and ellipse results now also show area (A)
 * Added "Plot results" entry in "Analysis" menu:
@@ -821,7 +857,7 @@ New features:
 * Signal processing:
   * Added support for optional FFT shift (see Settings dialog box)
 * Image processing:
-  * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
+  * Added pixel binning operation (X/Y binning factors, operation: sum, mean...)
   * Added "Distribute on a grid" and "Reset image positions" in operation menu
   * Added Butterworth filter
   * Added exposure processing features:
