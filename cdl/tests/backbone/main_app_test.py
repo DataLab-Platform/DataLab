@@ -36,6 +36,13 @@ def test_main_app():
         # Create new groups
         grp1 = panel.add_group("Group 1")
         panel.add_group("Group 2")
+        # Add group using different levels of the API
+        panel.add_group("Group 3", select=True)
+        panel.remove_object(force=True)
+        win.add_group("Group 4", select=True)
+        panel.remove_object(force=True)
+        win.add_group("Group 5", panel="signal", select=True)
+        panel.remove_object(force=True)
         # Rename group
         panel.objview.select_groups([2])
         panel.rename_selected_object_or_group("Group xxx")

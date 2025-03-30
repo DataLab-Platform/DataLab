@@ -352,6 +352,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         return panel.objview.get_sel_object_uuids(include_groups)
 
     @remote_controlled
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
+        """
+        self.__get_datapanel(panel).add_group(title, select)
+
+    @remote_controlled
     def select_objects(
         self,
         selection: list[int | str],

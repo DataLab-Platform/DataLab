@@ -143,6 +143,7 @@ class RemoteServer(QC.QThread):
     SIG_CLOSE_APP = QC.Signal()
     SIG_RAISE_WINDOW = QC.Signal()
     SIG_ADD_OBJECT = QC.Signal(object)
+    SIG_ADD_GROUP = QC.Signal(str, str, bool)
     SIG_LOAD_FROM_FILES = QC.Signal(list)
     SIG_SELECT_OBJECTS = QC.Signal(list, str)
     SIG_SELECT_GROUPS = QC.Signal(list, str)
@@ -171,6 +172,7 @@ class RemoteServer(QC.QThread):
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_RAISE_WINDOW.connect(win.raise_window)
         self.SIG_ADD_OBJECT.connect(win.add_object)
+        self.SIG_ADD_GROUP.connect(win.add_group)
         self.SIG_LOAD_FROM_FILES.connect(win.load_from_files)
         self.SIG_SELECT_OBJECTS.connect(win.select_objects)
         self.SIG_SELECT_GROUPS.connect(win.select_groups)
@@ -444,6 +446,19 @@ class RemoteServer(QC.QThread):
             List of selected objects uuids.
         """
         return self.win.get_sel_object_uuids(include_groups)
+
+    @remote_call
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
+        """
+        self.SIG_ADD_GROUP.emit(title, panel, select)
 
     @remote_call
     def select_objects(

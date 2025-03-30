@@ -7,7 +7,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 💥 New features and enhancements:
 
 * Public API (local or remote):
-  * `BaseDataPanel.add_group`: add `select` argument (default `False`) to select the group after creation (this closes [Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131))
+  * Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:
+    * Method was added to the following classes: `AbstractCDLControl`, `BaseDataPanel` and `RemoteClient`
+    * This closes the following issues:
+      * [Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `BaseDataPanel.add_group`: add `select` argument
+      * [Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Remote proxy / Public API: add `add_group` method
   * `AbstractCDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))
 * When opening an HDF5 file, the confirmation dialog box asking if current workspace should be cleared has a new possible answer "Ignore":
   * Choosing "Ignore" will prevent the confirmation dialog box from being displayed again, and will choose the current setting (i.e. clear or not the workspace) for all subsequent file openings
