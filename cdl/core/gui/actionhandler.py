@@ -416,6 +416,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
+                _("Open from directory..."),
+                icon_name="fileopen_directory.svg",
+                tip=_("Open %s objects from directory") % self.OBJECT_STR,
+                triggered=self.panel.load_from_directory,
+                select_condition=SelectCond.always,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Save %s...") % self.OBJECT_STR,
                 # icon: filesave_signal.svg or filesave_image.svg
                 icon_name=f"filesave_{self.__class__.__name__[:3].lower()}.svg",

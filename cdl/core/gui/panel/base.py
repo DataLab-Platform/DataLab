@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import abc
 import dataclasses
+import glob
 import os.path as osp
 import re
 import warnings
@@ -28,7 +29,12 @@ from plotpy.plot import PlotDialog
 from plotpy.tools import ActionTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
+from qtpy.compat import (
+    getexistingdirectory,
+    getopenfilename,
+    getopenfilenames,
+    getsavefilename,
+)
 
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview
@@ -859,11 +865,38 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         self.IO_REGISTRY.write(filename, obj)
 
-    def load_from_files(self, filenames: list[str] | None = None) -> list[TypeObj]:
+    def load_from_directory(self, directory: str | None = None) -> list[TypeObj]:
+        """Open objects from directory (signals or images, depending on the panel),
+        add them to DataLab and return them.
+        If the directory is not specified, ask the user to select a directory.
+
+        Args:
+            directory: directory name
+
+        Returns:
+            list of new objects
+        """
+        if not self.mainwindow.confirm_memory_state():
+            return []
+        if directory is None:  # pragma: no cover
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                directory = getexistingdirectory(self, _("Open"), basedir)
+        if not directory:
+            return []
+        # Get all files in the directory:
+        relfnames = sorted(glob.glob("**/*.*", root_dir=directory, recursive=True))
+        filenames = [osp.join(directory, fname) for fname in relfnames]
+        return self.load_from_files(filenames, ignore_unknown=True)
+
+    def load_from_files(
+        self, filenames: list[str] | None = None, ignore_unknown: bool = False
+    ) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
             filenames: File names
+            ignore_unknown: if True, ignore unknown file types (default: False)
 
         Returns:
             list of new objects
@@ -879,7 +912,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         for filename in filenames:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
-                objs += self.__load_from_file(filename)
+                try:
+                    objs += self.__load_from_file(filename)
+                except NotImplementedError as exc:
+                    if ignore_unknown:
+                        # Ignore unknown file types
+                        pass
+                    else:
+                        raise exc
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:

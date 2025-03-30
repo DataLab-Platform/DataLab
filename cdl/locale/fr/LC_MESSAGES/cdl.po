@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-23 14:48+0100\n"
+"POT-Creation-Date: 2025-03-30 15:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -823,6 +823,12 @@ msgstr "Ouvrir un objet %s..."
 
 msgid "Open %s"
 msgstr "Ouvrir un objet %s"
+
+msgid "Open from directory..."
+msgstr "Ouvrir depuis le répertoire..."
+
+msgid "Open %s objects from directory"
+msgstr "Ouvrir des objets %s depuis le répertoire"
 
 msgid "Save %s..."
 msgstr "Enregistrer un objet %s..."
@@ -1813,7 +1819,10 @@ msgid ""
 "Do you want to clear current workspace (signals and images) before importing "
 "data from HDF5 files?<br><br>Choosing to ignore this message will prevent it "
 "from being displayed again, and will use the current setting (%s)."
-msgstr "Souhaitez-vous effacer l'espace de travail actuel (signaux et images) avant d'importer des données depuis des fichiers HDF5 ?<br><br>Ignorer ce message empêchera son affichage ultérieur, et utilisera le réglage actuel (%s)."
+msgstr ""
+"Souhaitez-vous effacer l'espace de travail actuel (signaux et images) avant "
+"d'importer des données depuis des fichiers HDF5 ?<br><br>Ignorer ce message "
+"empêchera son affichage ultérieur, et utilisera le réglage actuel (%s)."
 
 msgid "No"
 msgstr "Non"

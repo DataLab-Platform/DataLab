@@ -212,6 +212,14 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+
+    @abc.abstractmethod
     def add_signal(
         self,
         title: str,
@@ -622,6 +630,14 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
             filenames: list of file names
         """
         self._cdl.load_from_files(filenames)
+
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+        self._cdl.load_from_directory(path)
 
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.

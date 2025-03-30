@@ -6,6 +6,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Add "Open from directory" action to the "File" menu for both Signal and Image panels
 * Add `1/x` operation to the "Operations" menu for both Signal and Image panels:
   * This feature relies on the `numpy.reciprocal` function, and handles the case where the denominator is zero by catching warnings and replacing the `np.inf` values with `np.nan` values
   * Add `compute_inverse` method for image and signal processors

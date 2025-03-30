@@ -1493,6 +1493,16 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         panel = self.__get_current_basedatapanel()
         panel.load_from_files(filenames)
 
+    @remote_controlled
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+        panel = self.__get_current_basedatapanel()
+        panel.load_from_directory(path)
+
     # ------Other methods related to AbstractCDLControl interface
     def get_version(self) -> str:
         """Return DataLab public version.
