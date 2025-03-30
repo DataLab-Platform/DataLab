@@ -78,7 +78,7 @@ def test_image_difference() -> None:
 
 
 @pytest.mark.validation
-def test_quadratic_difference() -> None:
+def test_image_quadratic_difference() -> None:
     """Quadratic difference test."""
     execenv.print("*** Testing quadratic difference:")
     for ima1, ima2 in __iterate_image_couples():
