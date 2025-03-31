@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:42+0100\n"
+"POT-Creation-Date: 2025-03-31 09:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -77,6 +77,18 @@ msgid "refresh plot. Defaults to True."
 msgstr ""
 
 msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
+msgstr ""
+
+msgid "Add group to DataLab."
+msgstr ""
+
+msgid "Group title"
+msgstr ""
+
+msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
+msgstr ""
+
+msgid "Select the group after creation. Defaults to False."
 msgstr ""
 
 msgid "Add image data to DataLab."
@@ -250,6 +262,9 @@ msgstr ""
 msgid "Get object (signal/image) uuid list for current panel. Objects are sorted by group number and object index in group."
 msgstr ""
 
+msgid "Group number, or group id, or group title. Defaults to None (all groups)."
+msgstr ""
+
 msgid "List of object uuids"
 msgstr ""
 
@@ -290,6 +305,12 @@ msgid "Filename."
 msgstr ""
 
 msgid "Return True if connected to DataLab XML-RPC server."
+msgstr ""
+
+msgid "Open objects from directory in current panel (signals/images)."
+msgstr ""
+
+msgid "directory path"
 msgstr ""
 
 msgid "Open objects from files in current panel (signals/images)."
@@ -452,13 +473,13 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-msgid "67"
+msgid "71"
 msgstr ""
 
-msgid "100"
+msgid "101"
 msgstr ""
 
-msgid "167"
+msgid "172"
 msgstr ""
 
 msgid "Signal processing"
@@ -546,6 +567,12 @@ msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_calibrat
 msgstr ""
 
 msgid "Compute data linear calibration"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_cartesian2polar`"
+msgstr ""
+
+msgid "Convert cartesian to polar coordinates"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_clip`"
@@ -686,6 +713,12 @@ msgstr ""
 msgid "Compute interpolation"
 msgstr ""
 
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_inverse`"
+msgstr ""
+
+msgid "Compute inverse"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_log10`"
 msgstr ""
 
@@ -753,6 +786,12 @@ msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_phase_sp
 msgstr ""
 
 msgid "Compute phase spectrum"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_polar2cartesian`"
+msgstr ""
+
+msgid "Convert polar to cartesian coordinates"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit`"
@@ -873,6 +912,12 @@ msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_min
 msgstr ""
 
 msgid "Compute x at min/max"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_y`"
+msgstr ""
+
+msgid "Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`"
 msgstr ""
 
 msgid "Image processing"
@@ -1176,6 +1221,9 @@ msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_im`"
 msgstr ""
 
 msgid "Compute imaginary part with :py:func:`cdl.computation.image.compute_im`"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_inverse`"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_laplace`"

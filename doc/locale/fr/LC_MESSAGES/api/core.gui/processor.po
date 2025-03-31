@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 15:54+0100\n"
+"POT-Creation-Date: 2025-03-31 15:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -275,6 +275,9 @@ msgid "Compute division"
 msgstr ""
 
 msgid "Swap data axes"
+msgstr ""
+
+msgid "Compute inverse"
 msgstr ""
 
 msgid "Compute absolute value"
@@ -993,3 +996,4 @@ msgstr ""
 
 msgid "Compute blob detection using OpenCV with :py:func:`cdl.computation.image.detection.compute_blob_opencv`"
 msgstr ""
+

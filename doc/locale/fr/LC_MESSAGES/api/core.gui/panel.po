@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 14:55+0100\n"
+"POT-Creation-Date: 2025-03-31 09:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -232,6 +232,15 @@ msgstr ""
 msgid "Add group"
 msgstr ""
 
+msgid "group title"
+msgstr ""
+
+msgid "if True, select the group in the tree view. Defaults to False."
+msgstr ""
+
+msgid "Created group object"
+msgstr ""
+
 msgid "Duplication signal/image object"
 msgstr ""
 
@@ -313,13 +322,22 @@ msgstr ""
 msgid "Set current object title"
 msgstr ""
 
+msgid "Open objects from directory (signals or images, depending on the panel), add them to DataLab and return them. If the directory is not specified, ask the user to select a directory."
+msgstr ""
+
+msgid "directory name"
+msgstr ""
+
+msgid "list of new objects"
+msgstr ""
+
 msgid "Open objects from file (signals/images), add them to DataLab and return them."
 msgstr ""
 
 msgid "File names"
 msgstr ""
 
-msgid "list of new objects"
+msgid "if True, ignore unknown file types (default: False)"
 msgstr ""
 
 msgid "Save selected objects to files (signal/image)."

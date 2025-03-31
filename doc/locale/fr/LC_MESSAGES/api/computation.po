@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 14:15+0100\n"
+"POT-Creation-Date: 2025-03-31 15:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -426,6 +426,9 @@ msgid "Signal with single region of interest"
 msgstr ""
 
 msgid "Swap axes"
+msgstr ""
+
+msgid "Compute inverse with :py:data:`numpy.invert`"
 msgstr ""
 
 msgid "Compute absolute value with :py:data:`numpy.absolute`"
@@ -1329,6 +1332,12 @@ msgid "Signal object with the histogram"
 msgstr ""
 
 msgid "Swap image axes with :py:func:`numpy.transpose`"
+msgstr ""
+
+msgid "Compute the inverse of an image and return the new result image object"
+msgstr ""
+
+msgid "Result image object 1 / **src** (new object)"
 msgstr ""
 
 msgid "Convert image data type parameters"
