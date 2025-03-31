@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 15:00+0200\n"
+"POT-Creation-Date: 2025-03-31 15:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -714,6 +714,21 @@ msgid "New instance of :py:class:`DetrendingParam`."
 msgstr ""
 
 msgid "Detrend data with :py:func:`scipy.signal.detrend`"
+msgstr ""
+
+msgid "Simulate the X-Y mode of an oscilloscope."
+msgstr ""
+
+msgid "Use the first signal as the X-axis and the second signal as the Y-axis."
+msgstr ""
+
+msgid "First input signal (X-axis)."
+msgstr ""
+
+msgid "Second input signal (Y-axis)."
+msgstr ""
+
+msgid "A signal object representing the X-Y mode."
 msgstr ""
 
 msgid "Compute convolution of two signals with :py:func:`scipy.signal.convolve`"
@@ -2017,3 +2032,4 @@ msgstr ""
 
 msgid "Compute blobs using OpenCV with :py:func:`cdl.algorithms.image.find_blobs_opencv`"
 msgstr ""
+

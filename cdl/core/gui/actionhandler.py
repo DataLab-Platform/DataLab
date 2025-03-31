@@ -999,6 +999,11 @@ class SignalActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Compute all stability features"),
                 )
+            self.new_action(
+                _("X-Y Mode"),
+                triggered=self.panel.processor.compute_XY_mode,
+                separator=True,
+            )
 
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
