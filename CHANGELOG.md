@@ -6,6 +6,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Image operation features ("Operations" menu):
+  * Renamed "Rotation" submenu to "Flip or rotation"
+  * New "Flip diagonally" feature
+* Signal processing features ("Processing" menu):
+  * New "Convert to Cartesian coordinates" feature
+  * New "Convert to polar coordinates" feature
+* Signal analysis features ("Analysis" menu):
+  * Renamed "X values at min/max" to "Abscissa of the minimum and maximum"
+  * New "Abscissa at y=..." feature
 * New "Open from directory" feature:
   * This feature allows to open multiple files from a directory at once, recursively (only the files with the supported extensions by the current panel are opened)
   * Add "Open from directory" action to the "File" menu for both Signal and Image panels
@@ -13,7 +22,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Add `1/x` operation to the "Operations" menu for both Signal and Image panels:
   * This feature relies on the `numpy.reciprocal` function, and handles the case where the denominator is zero by catching warnings and replacing the `np.inf` values with `np.nan` values
   * Add `compute_inverse` method for image and signal processors
-  * This closes [Issue #143] - New feature: `1/x` for signals and images
+  * This closes [Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - New feature: `1/x` for signals and images
 * Public API (local or remote):
   * Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:
     * Method was added to the following classes: `AbstractCDLControl`, `BaseDataPanel` and `RemoteClient`
