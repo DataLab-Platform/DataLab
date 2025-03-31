@@ -947,7 +947,7 @@ def allan_variance(x: np.ndarray, y: np.ndarray, tau_values: np.ndarray) -> np.n
     """
     if len(x) != len(y):
         raise ValueError(
-            "Time array (x) and measured values array (y) " "must have the same length."
+            "Time array (x) and measured values array (y) must have the same length."
         )
 
     dt = np.mean(np.diff(x))  # Time step size

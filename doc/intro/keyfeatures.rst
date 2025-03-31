@@ -48,6 +48,8 @@ Signal Image  Feature
 ✓      ✓      Remote control from a third-party application
 ✓      ✓      Sum, average, difference, product...
 ✓      ✓      Operations with a constant
+✓      ✓      Square root, power, logarithm, exponential...
+✓      ..     Derivative, integral
 ✓      ✓      ROI extraction, Swap X/Y axes
 ✓      ..     Semi-automatic multi-peak detection
 ✓      ..     Convolution
@@ -55,8 +57,6 @@ Signal Image  Feature
 ..     ✓      Flip, rotation, scaling...
 ..     ✓      Intensity profiles (line, average, radial)
 ..     ✓      Pixel binning
-✓      ✓      Square root, power, logarithm, exponential...
-✓      ..     Derivative, integral
 ✓      ✓      Linear calibration
 ✓      ✓      Normalization, Clipping, Offset correction
 ✓      ..     Reverse X-axis
@@ -66,6 +66,7 @@ Signal Image  Feature
 ✓      ✓      FFT, inverse FFT, Power/Phase/Magnitude spectrum, Power Spectral Density
 ✓      ..     Interpolation, resampling
 ✓      ..     Detrending
+✓      ..     X-Y mode
 ✓      ..     Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF...
 ✓      ..     Interactive multigaussian fit
 ✓      ..     Frequency filters (low-pass, high-pass, band-pass, band-stop)

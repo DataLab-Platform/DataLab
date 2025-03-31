@@ -495,6 +495,16 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         )
 
     @qt_try_except()
+    def compute_XY_mode(self, obj2: SignalObj | None = None) -> None:
+        """Compute XY mode with :py:func:`cdl.computation.signal.compute_XY_mode.`"""
+        self.compute_n1n(
+            obj2,
+            _("Y-signal of the X-Y mode"),
+            cps.compute_XY_mode,
+            title=_("X-Y Mode"),
+        )
+
+    @qt_try_except()
     def compute_convolution(self, obj2: SignalObj | None = None) -> None:
         """Compute convolution
         with :py:func:`cdl.computation.signal.compute_convolution`"""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:17+0100\n"
+"POT-Creation-Date: 2025-03-31 15:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -669,6 +669,12 @@ msgstr "Dérivée de la déviation d'Allan, quantifie la stabilité en termes de
 
 msgid "The \"All stability features\" option allows to compute all stability analysis methods at once."
 msgstr "L'option \"Toutes les analyses de stabilité\" permet de calculer toutes les méthodes d'analyse de stabilité en une seule fois."
+
+msgid "X-Y Mode"
+msgstr "Mode XY"
+
+msgid "Simulate the X-Y mode of an oscilloscope."
+msgstr "Simuler le mode XY d'un oscilloscope."
 
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
