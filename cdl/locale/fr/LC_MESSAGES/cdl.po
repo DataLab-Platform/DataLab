@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-30 15:59+0200\n"
+"POT-Creation-Date: 2025-03-31 16:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1179,6 +1179,9 @@ msgstr "Toutes les analyses de stabilité"
 msgid "Compute all stability features"
 msgstr "Calcule toutes les analyses de stabilité"
 
+msgid "X-Y Mode"
+msgstr "Mode XY"
+
 msgid "Full width at half-maximum"
 msgstr "Largeur à mi-hauteur"
 
@@ -2247,6 +2250,9 @@ msgstr "iFFT"
 
 msgid "signal for X values"
 msgstr "signal pour les valeurs X"
+
+msgid "Y-signal of the X-Y mode"
+msgstr "Signal de l'axe des ordonnées du mode X-Y"
 
 msgid "signal to convolve with"
 msgstr "signal à convoluer"

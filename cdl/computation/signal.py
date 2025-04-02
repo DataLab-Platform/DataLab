@@ -1154,6 +1154,32 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     return dst
 
 
+def compute_XY_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
+    """Simulate the X-Y mode of an oscilloscope.
+
+    Use the first signal as the X-axis and the second signal as the Y-axis.
+
+    Args:
+        src1: First input signal (X-axis).
+        src2: Second input signal (Y-axis).
+
+    Returns:
+        A signal object representing the X-Y mode.
+    """
+    dst = dst_n1n(src1, src2, "", "X-Y Mode")
+    p = ResamplingParam()
+    p.xmin = max(src1.x[0], src2.x[0])
+    p.xmax = min(src1.x[-1], src2.x[-1])
+    p.mode = "nbpts"
+    p.nbpts = min(src1.x.size, src2.x.size)
+    _, y1 = compute_resampling(src1, p).get_data()
+    _, y2 = compute_resampling(src2, p).get_data()
+    dst.set_xydata(y1, y2)
+    dst.title = f"{src2.short_id} = f({src1.short_id})"
+    restore_data_outside_roi(dst, src1)
+    return dst
+
+
 def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute convolution of two signals
     with :py:func:`scipy.signal.convolve`

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 15:54+0100\n"
+"POT-Creation-Date: 2025-03-31 15:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -277,6 +277,9 @@ msgstr ""
 msgid "Swap data axes"
 msgstr ""
 
+msgid "Compute inverse"
+msgstr ""
+
 msgid "Compute absolute value"
 msgstr ""
 
@@ -494,6 +497,9 @@ msgid "Compute resampling with :py:func:`cdl.computation.signal.compute_resampli
 msgstr ""
 
 msgid "Compute detrending with :py:func:`cdl.computation.signal.compute_detrending`"
+msgstr ""
+
+msgid "Compute XY mode with :py:func:`cdl.computation.signal.compute_XY_mode.`"
 msgstr ""
 
 msgid "Compute convolution with :py:func:`cdl.computation.signal.compute_convolution`"
@@ -993,3 +999,4 @@ msgstr ""
 
 msgid "Compute blob detection using OpenCV with :py:func:`cdl.computation.image.detection.compute_blob_opencv`"
 msgstr ""
+

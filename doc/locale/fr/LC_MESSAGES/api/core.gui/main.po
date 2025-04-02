@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 16:19+0100\n"
+"POT-Creation-Date: 2025-03-31 09:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -92,6 +92,9 @@ msgstr ""
 msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
 msgstr ""
 
+msgid "Group number, or group id, or group title. Defaults to None (all groups)."
+msgstr ""
+
 msgid "List of object uuids"
 msgstr ""
 
@@ -102,6 +105,18 @@ msgid "If True, also return objects from selected groups."
 msgstr ""
 
 msgid "List of selected objects uuids."
+msgstr ""
+
+msgid "Add group to DataLab."
+msgstr ""
+
+msgid "Group title"
+msgstr ""
+
+msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
+msgstr ""
+
+msgid "Select the group after creation. Defaults to False."
 msgstr ""
 
 msgid "Select objects in current panel."
@@ -311,6 +326,12 @@ msgstr ""
 msgid "list of filenames"
 msgstr ""
 
+msgid "Open objects from directory in current panel (signals/images)."
+msgstr ""
+
+msgid "directory path"
+msgstr ""
+
 msgid "Return DataLab public version."
 msgstr ""
 
@@ -394,3 +415,4 @@ msgstr ""
 
 msgid "True if closed properly, False otherwise"
 msgstr ""
+

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:21+0100\n"
+"POT-Creation-Date: 2025-03-31 15:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -287,6 +287,22 @@ msgstr "rafraîchir le tracé. Par défaut, True."
 msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
 msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé."
 
+#, fuzzy
+msgid "Add group to DataLab."
+msgstr "Ajouter un objet à DataLab."
+
+#, fuzzy
+msgid "Group title"
+msgstr "Titre de l'image"
+
+#, fuzzy
+msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
+msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé. Par défaut, None."
+
+#, fuzzy
+msgid "Select the group after creation. Defaults to False."
+msgstr "Conserver la ROI. Par défaut, False."
+
 msgid "Add a label with object title on the associated plot"
 msgstr "Ajouter une étiquette avec le titre de l'objet sur le tracé associé"
 
@@ -344,6 +360,10 @@ msgstr "si le panneau n'est pas trouvé"
 msgid "Get object (signal/image) uuid list for current panel. Objects are sorted by group number and object index in group."
 msgstr "Obtenir la liste des uuids des objets (signal/image) pour le panneau en cours. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
 
+#, fuzzy
+msgid "Group number, or group id, or group title. Defaults to None (all groups)."
+msgstr "Numéro de macro, ou titre de macro. Par défaut, None (macro en cours)."
+
 msgid "List of object uuids"
 msgstr "Liste des uuid des objets"
 
@@ -382,6 +402,13 @@ msgstr "Importer une macro à partir d'un fichier"
 
 msgid "Filename."
 msgstr "Nom du fichier."
+
+#, fuzzy
+msgid "Open objects from directory in current panel (signals/images)."
+msgstr "Ouvrir des objets à partir de fichiers dans le panneau en cours "
+
+msgid "directory path"
+msgstr ""
 
 msgid "Open objects from files in current panel (signals/images)."
 msgstr "Ouvrir des objets à partir de fichiers dans le panneau en cours "
@@ -483,6 +510,9 @@ msgid "Compute product with a constant with :py:func:`cdl.computation.signal.com
 msgstr ""
 
 msgid "Swap data axes with :py:func:`cdl.computation.signal.compute_swap_axes`"
+msgstr ""
+
+msgid "Compute inverse"
 msgstr ""
 
 msgid "Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`"
@@ -600,6 +630,9 @@ msgid "Compute resampling with :py:func:`cdl.computation.signal.compute_resampli
 msgstr ""
 
 msgid "Compute detrending with :py:func:`cdl.computation.signal.compute_detrending`"
+msgstr ""
+
+msgid "Compute XY mode with :py:func:`cdl.computation.signal.compute_XY_mode.`"
 msgstr ""
 
 msgid "Compute convolution with :py:func:`cdl.computation.signal.compute_convolution`"
@@ -1105,3 +1138,4 @@ msgstr "Calculer la détection de taches en utilisant la méthode du Laplacien d
 
 msgid "Compute blob detection using OpenCV with :py:func:`cdl.computation.image.detection.compute_blob_opencv`"
 msgstr ""
+

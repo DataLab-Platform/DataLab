@@ -413,6 +413,11 @@ The following stability analysis methods are available:
     The "All stability features" option allows to compute all stability analysis methods at once.
 
 
+X-Y Mode
+^^^^^^^^
+
+Simulate the X-Y mode of an oscilloscope.
+
 ROI extraction
 ^^^^^^^^^^^^^^
 
