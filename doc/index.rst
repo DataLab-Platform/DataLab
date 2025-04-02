@@ -73,7 +73,7 @@ DataLab has been funded, chronologically, by the following takeholders:
       - `CEA <https://www.cea.fr>`_, the French Alternative Energies and Atomic Energy Commission, is the major investor in DataLab, and is the main contributor to the project.
 
     * - |codra_logo|
-      - `CODRA`_, a software editor and engineering company, has supported DataLab open-source journey since its inception, through financial and technical contributions (see `here <https://codra.net/en/offer/software-engineering/datalab/>`_).
+      - `CODRA`_, a software engineering and editor firm, has supported DataLab open-source journey since its inception (see `here <https://codra.net/en/offer/software-engineering/datalab/>`_).
 
     * - |nlnet_logo|
       - `NLnet Foundation <https://nlnet.nl>`_, as part of the NGI0 Commons Fund, backed by the European Commission, has funded the `redesign of DataLab's core architecture <https://nlnet.nl/project/DataLab/>`_.
