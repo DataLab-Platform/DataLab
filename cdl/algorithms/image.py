@@ -32,8 +32,11 @@ def scale_data_to_min_max(
     Returns:
         Scaled data
     """
-    dmin = data.min()
-    dmax = data.max()
+    dmin, dmax = np.nanmin(data), np.nanmax(data)
+    if dmin == dmax:
+        raise ValueError("Input data has no dynamic range")
+    if dmin == zmin and dmax == zmax:
+        return data
     fdata = np.array(data, dtype=float)
     fdata -= dmin
     fdata *= float(zmax - zmin) / (dmax - dmin)
@@ -55,16 +58,16 @@ def normalize(
         Normalized array
     """
     if parameter == "maximum":
-        return scale_data_to_min_max(data, data.min() / data.max(), 1.0)
+        return scale_data_to_min_max(data, np.nanmin(data) / np.nanmax(data), 1.0)
     if parameter == "amplitude":
         return scale_data_to_min_max(data, 0.0, 1.0)
     fdata = np.array(data, dtype=float)
     if parameter == "area":
-        return fdata / fdata.sum()
+        return fdata / np.nansum(fdata)
     if parameter == "energy":
-        return fdata / np.sqrt(np.sum(fdata * fdata.conjugate()))
+        return fdata / np.sqrt(np.nansum(fdata * fdata.conjugate()))
     if parameter == "rms":
-        return fdata / np.sqrt(np.mean(fdata * fdata.conjugate()))
+        return fdata / np.sqrt(np.nanmean(fdata * fdata.conjugate()))
     raise ValueError(f"Unsupported parameter {parameter}")
 
 
@@ -210,7 +213,7 @@ def flatfield(
     Returns:
         Flat-field corrected data
     """
-    dtemp = np.array(rawdata, dtype=float, copy=True) * flatdata.mean()
+    dtemp = np.array(rawdata, dtype=float, copy=True) * np.nanmean(flatdata)
     dunif = np.array(flatdata, dtype=float, copy=True)
     dunif[dunif == 0] = 1.0
     dcorr_all = np.array(dtemp / dunif, dtype=rawdata.dtype)
@@ -245,10 +248,10 @@ def get_centroid_fourier(data: np.ndarray) -> tuple[float, float]:
     sin_b = np.sin((j - 1) * 2 * np.pi / (cols - 1)).T
     cos_b = np.cos((j - 1) * 2 * np.pi / (cols - 1)).T
 
-    a = (cos_a * data).sum()
-    b = (sin_a * data).sum()
-    c = (data * cos_b).sum()
-    d = (data * sin_b).sum()
+    a = np.nansum((cos_a * data))
+    b = np.nansum((sin_a * data))
+    c = np.nansum((data * cos_b))
+    d = np.nansum((data * sin_b))
 
     rphi = (0 if b > 0 else 2 * np.pi) if a > 0 else np.pi
     cphi = (0 if d > 0 else 2 * np.pi) if c > 0 else np.pi

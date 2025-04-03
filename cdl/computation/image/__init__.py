@@ -1177,7 +1177,7 @@ def compute_offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "offset_correction", p.get_suffix())
-    dst.data = src.data - p.get_data(src).mean()
+    dst.data = src.data - np.nanmean(p.get_data(src))
     restore_data_outside_roi(dst, src)
     return dst
 
