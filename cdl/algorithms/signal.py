@@ -36,24 +36,24 @@ def normalize(
     """
     axis = len(yin.shape) - 1
     if parameter == "maximum":
-        maximum = np.max(yin, axis)
+        maximum = np.nanmax(yin, axis)
         if axis == 1:
             maximum = maximum.reshape((len(maximum), 1))
         maxarray = np.tile(maximum, yin.shape[axis]).reshape(yin.shape)
         return yin / maxarray
     if parameter == "amplitude":
         ytemp = np.array(yin, copy=True)
-        minimum = np.min(yin, axis)
+        minimum = np.nanmin(yin, axis)
         if axis == 1:
             minimum = minimum.reshape((len(minimum), 1))
         ytemp -= minimum
         return normalize(ytemp, parameter="maximum")
     if parameter == "area":
-        return yin / yin.sum()
+        return yin / np.nansum(yin)
     if parameter == "energy":
-        return yin / np.sqrt(np.sum(yin * yin.conjugate()))
+        return yin / np.sqrt(np.nansum(yin * yin.conjugate()))
     if parameter == "rms":
-        return yin / np.sqrt(np.mean(yin * yin.conjugate()))
+        return yin / np.sqrt(np.nanmean(yin * yin.conjugate()))
     raise RuntimeError(f"Unsupported parameter {parameter}")
 
 
