@@ -92,6 +92,7 @@ def test_image_normalize() -> None:
     """Validation test for the image normalization processing."""
     src = get_test_image("flower.npy")
     src.data = np.array(src.data, dtype=float)
+    src.data[20:30, 20:30] = np.nan  # Adding NaN values to the image
     p = cdl.param.NormalizeParam()
 
     # Given the fact that the normalization methods implementations are
@@ -103,20 +104,23 @@ def test_image_normalize() -> None:
         title = f"Normalize[method='{p.method}']"
         exp_min, exp_max = None, None
         if p.method == "maximum":
-            exp_min, exp_max = src.data.min() / src.data.max(), 1.0
+            exp_min, exp_max = np.nanmin(src.data) / np.nanmax(src.data), 1.0
         elif p.method == "amplitude":
             exp_min, exp_max = 0.0, 1.0
         elif p.method == "area":
-            area = src.data.sum()
-            exp_min, exp_max = src.data.min() / area, src.data.max() / area
+            area = np.nansum(src.data)
+            exp_min, exp_max = np.nanmin(src.data) / area, np.nanmax(src.data) / area
         elif p.method == "energy":
-            energy = np.sqrt(np.sum(np.abs(src.data) ** 2))
-            exp_min, exp_max = src.data.min() / energy, src.data.max() / energy
+            energy = np.sqrt(np.nansum(np.abs(src.data) ** 2))
+            exp_min, exp_max = (
+                np.nanmin(src.data) / energy,
+                np.nanmax(src.data) / energy,
+            )
         elif p.method == "rms":
-            rms = np.sqrt(np.mean(np.abs(src.data) ** 2))
-            exp_min, exp_max = src.data.min() / rms, src.data.max() / rms
-        check_scalar_result(f"{title}|min", dst.data.min(), exp_min)
-        check_scalar_result(f"{title}|max", dst.data.max(), exp_max)
+            rms = np.sqrt(np.nanmean(np.abs(src.data) ** 2))
+            exp_min, exp_max = np.nanmin(src.data) / rms, np.nanmax(src.data) / rms
+        check_scalar_result(f"{title}|min", np.nanmin(dst.data), exp_min)
+        check_scalar_result(f"{title}|max", np.nanmax(dst.data), exp_max)
 
 
 @pytest.mark.validation
