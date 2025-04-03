@@ -23,6 +23,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING
 
+import numpy as np
 import scipy.integrate as spt
 from guidata.configtools import get_icon, get_image_file_path
 from guidata.qthelpers import create_action, is_dark_theme
@@ -110,7 +111,7 @@ def get_more_image_stats(
     p: BaseImageParam = item.param
     xunit, yunit, zunit = p.get_units()
 
-    integral = data.sum()
+    integral = np.nansum(data)
     integral_fmt = r"%.3e " + zunit
     infos += f"<br>∑ = {integral_fmt % integral}"
 
