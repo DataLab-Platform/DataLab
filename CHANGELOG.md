@@ -7,6 +7,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 🛠️ Bug fixes:
 
 * Fixed [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignore `nan` values for image normalization, flatfield correction, offset correction, and centroid computation
+* Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)
 
 ## DataLab Version 0.19.0 ##
 
