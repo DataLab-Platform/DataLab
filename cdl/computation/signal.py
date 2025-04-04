@@ -1170,6 +1170,7 @@ def compute_XY_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
     p = ResamplingParam()
     p.xmin = max(src1.x[0], src2.x[0])
     p.xmax = min(src1.x[-1], src2.x[-1])
+    assert p.xmin < p.xmax, "X-Y mode: No overlap between signals."
     p.mode = "nbpts"
     p.nbpts = min(src1.x.size, src2.x.size)
     _, y1 = compute_resampling(src1, p).get_data()
@@ -1637,14 +1638,14 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
         Result properties object
     """
     statfuncs = {
-        "min(y) = %g {.yunit}": lambda xy: xy[1].min(),
-        "max(y) = %g {.yunit}": lambda xy: xy[1].max(),
-        "<y> = %g {.yunit}": lambda xy: xy[1].mean(),
-        "median(y) = %g {.yunit}": lambda xy: np.median(xy[1]),
-        "σ(y) = %g {.yunit}": lambda xy: xy[1].std(),
-        "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
-        "peak-to-peak(y) = %g {.yunit}": lambda xy: np.ptp(xy[1]),
-        "Σ(y) = %g {.yunit}": lambda xy: xy[1].sum(),
+        "min(y) = %g {.yunit}": lambda xy: np.nanmin(xy[1]),
+        "max(y) = %g {.yunit}": lambda xy: np.nanmax(xy[1]),
+        "<y> = %g {.yunit}": lambda xy: np.nanmean(xy[1]),
+        "median(y) = %g {.yunit}": lambda xy: np.nanmedian(xy[1]),
+        "σ(y) = %g {.yunit}": lambda xy: np.nanstd(xy[1]),
+        "<y>/σ(y)": lambda xy: np.nanmean(xy[1]) / np.nanstd(xy[1]),
+        "peak-to-peak(y) = %g {.yunit}": lambda xy: np.nanmax(xy[1]) - np.nanmin(xy[1]),
+        "Σ(y) = %g {.yunit}": lambda xy: np.nansum(xy[1]),
         "∫ydx": lambda xy: spt.trapezoid(xy[1], xy[0]),
     }
     return calc_resultproperties("stats", obj, statfuncs)

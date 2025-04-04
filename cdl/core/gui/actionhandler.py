@@ -1003,6 +1003,7 @@ class SignalActionHandler(BaseActionHandler):
                 _("X-Y Mode"),
                 triggered=self.panel.processor.compute_XY_mode,
                 separator=True,
+                tip=_("Plot one signal as a fonction of the other one"),
             )
 
         with self.new_category(ActionCategory.ANALYSIS):

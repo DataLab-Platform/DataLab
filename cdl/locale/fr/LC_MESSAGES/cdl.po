@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-31 16:00+0200\n"
+"POT-Creation-Date: 2025-04-03 14:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1181,6 +1181,9 @@ msgstr "Calcule toutes les analyses de stabilité"
 
 msgid "X-Y Mode"
 msgstr "Mode XY"
+
+msgid "Plot one signal as a fonction of the other one"
+msgstr "Tracer un signal en fonction de l'autre"
 
 msgid "Full width at half-maximum"
 msgstr "Largeur à mi-hauteur"

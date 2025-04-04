@@ -23,6 +23,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING
 
+import numpy as np
 import scipy.integrate as spt
 from guidata.configtools import get_icon, get_image_file_path
 from guidata.qthelpers import create_action, is_dark_theme
@@ -74,10 +75,10 @@ def fwhm_info(x, y):
 
 
 CURVESTATSTOOL_LABELFUNCS = (
-    ("%g &lt; x &lt; %g", lambda *args: (args[0].min(), args[0].max())),
-    ("%g &lt; y &lt; %g", lambda *args: (args[1].min(), args[1].max())),
-    ("&lt;y&gt;=%g", lambda *args: args[1].mean()),
-    ("σ(y)=%g", lambda *args: args[1].std()),
+    ("%g &lt; x &lt; %g", lambda *args: (np.nanmin(args[0]), np.nanmax(args[0]))),
+    ("%g &lt; y &lt; %g", lambda *args: (np.nanmin(args[1]), np.nanmax(args[1]))),
+    ("&lt;y&gt;=%g", lambda *args: np.nanmean(args[1])),
+    ("σ(y)=%g", lambda *args: np.nanstd(args[1])),
     ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
     ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
     ("FWHM = %s", fwhm_info),
@@ -110,7 +111,7 @@ def get_more_image_stats(
     p: BaseImageParam = item.param
     xunit, yunit, zunit = p.get_units()
 
-    integral = data.sum()
+    integral = np.nansum(data)
     integral_fmt = r"%.3e " + zunit
     infos += f"<br>∑ = {integral_fmt % integral}"
 
