@@ -326,6 +326,29 @@ def test_signal_wiener() -> None:
 
 
 @pytest.mark.validation
+def test_signal_resampling() -> None:
+    """Validation test for the signal resampling processing."""
+    src1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
+    x1, y1 = src1.xydata
+    p1 = cdl.param.ResamplingParam.create(
+        xmin=src1.x[0], xmax=src1.x[-1], nbpts=src1.x.size
+    )
+    dst1 = cps.compute_resampling(src1, p1)
+    dst1x, dst1y = dst1.xydata
+    check_array_result("x1new", dst1x, x1)
+    check_array_result("y1new", dst1y, y1)
+
+    src2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=9)
+    p2 = cdl.param.ResamplingParam.create(
+        xmin=src1.x[0], xmax=src1.x[-1], nbpts=src1.x.size
+    )
+    dst2 = cps.compute_resampling(src2, p2)
+    dst2x, dst2y = dst2.xydata
+    check_array_result("x2new", dst2x, x1)
+    check_array_result("y2new", dst2y, y1)
+
+
+@pytest.mark.validation
 def test_signal_XY_mode() -> None:
     """Validation test for the signal X-Y mode processing."""
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=5)
@@ -363,4 +386,5 @@ if __name__ == "__main__":
     test_signal_moving_average()
     test_signal_moving_median()
     test_signal_wiener()
+    test_signal_resampling()
     test_signal_XY_mode()
