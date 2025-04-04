@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 09:56+0200\n"
+"POT-Creation-Date: 2025-04-04 16:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "Changelog"
 msgstr "Historique des modifications"
@@ -24,11 +24,26 @@ msgstr "Historique des modifications"
 msgid "See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones."
 msgstr "Voir la page de la [feuille de route](https://datalab-platform.com/fr/contributing/roadmap.html) de DataLab pour les jalons futurs et passés."
 
-msgid "DataLab Version 0.19.0"
-msgstr "DataLab Version 0.19.0"
+msgid "DataLab Version 0.20.0"
+msgstr "DataLab Version 0.20.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "DataLab Version 0.19.1"
+msgstr "DataLab Version 0.19.1"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Corrections de bugs :"
+
+msgid "Fixed [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignore `nan` values for image normalization, flatfield correction, offset correction, and centroid computation"
+msgstr "Correction de l'[Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignorer les valeurs `nan` pour la normalisation d'image, la correction de champ plat, la correction de décalage et le calcul du centroïde"
+
+msgid "Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)"
+msgstr "Correction de l'[Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignorer les valeurs `nan` pour la normalisation du signal et les calculs de statistiques (à la fois le résultat d'analyse et l'outil interactif)"
+
+msgid "DataLab Version 0.19.0"
+msgstr "DataLab Version 0.19.0"
 
 msgid "Image operation features (\"Operations\" menu):"
 msgstr "Fonctionnalités d'opération sur les images (menu \"Opérations\") :"
@@ -155,9 +170,6 @@ msgstr "La ROI polygonale n'est pas encore prise en charge"
 
 msgid "This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates"
 msgstr "Ceci clotûre le ticket [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - Éditeur de ROI : ajouter la saisie manuelle des coordonnées"
-
-msgid "🛠️ Bug fixes:"
-msgstr "🛠️ Corrections de bugs :"
 
 msgid "Fixed [Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Image analysis: mask `nan` values when computing statistics, for example"
 msgstr "Correction de l'[Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Analyse d'image : masque des valeurs `nan` lors du calcul des statistiques, par exemple"
