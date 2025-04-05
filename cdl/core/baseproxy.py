@@ -285,7 +285,7 @@ class AbstractCDLControl(abc.ABC):
         """Add object to DataLab.
 
         Args:
-            obj (SignalObj | ImageObj): Signal or image object
+            obj: Signal or image object
 
         Returns:
             True if object was added successfully, False otherwise
@@ -359,7 +359,7 @@ class AbstractCDLControl(abc.ABC):
         """Return groups titles and lists of inner objects uuids and titles.
 
         Returns:
-            Tuple: groups titles, lists of inner objects uuids and titles
+            Groups titles, lists of inner objects uuids and titles
         """
 
     @abc.abstractmethod

@@ -154,7 +154,7 @@ class RemoteProxy(RemoteClient):
     process than the proxy.
 
     Args:
-        autoconnect (bool): Automatically connect to DataLab XML-RPC server.
+        autoconnect: Automatically connect to DataLab XML-RPC server.
 
     Raises:
         ConnectionRefusedError: Unable to connect to DataLab
@@ -223,16 +223,16 @@ class LocalProxy(BaseProxy):
         """Add signal data to DataLab.
 
         Args:
-            title (str): Signal title
-            xdata (numpy.ndarray): X data
-            ydata (numpy.ndarray): Y data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
+            title: Signal title
+            xdata: X data
+            ydata: Y data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
 
         Returns:
-            bool: True if signal was added successfully, False otherwise
+            True if signal was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid xdata dtype
@@ -254,17 +254,17 @@ class LocalProxy(BaseProxy):
         """Add image data to DataLab.
 
         Args:
-            title (str): Image title
-            data (numpy.ndarray): Image data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            zunit (str | None): Z unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
-            zlabel (str | None): Z label. Defaults to None.
+            title: Image title
+            data: Image data
+            xunit: X unit. Defaults to None.
+            yunit: Y unit. Defaults to None.
+            zunit: Z unit. Defaults to None.
+            xlabel: X label. Defaults to None.
+            ylabel: Y label. Defaults to None.
+            zlabel: Z label. Defaults to None.
 
         Returns:
-            bool: True if image was added successfully, False otherwise
+            True if image was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid data dtype
@@ -286,7 +286,7 @@ class LocalProxy(BaseProxy):
 
         Args:
             name: Compute function name
-            param: Compute function parameter. Defaults to None.
+            param: Compute function parameter. Defaults to None
 
         Raises:
             ValueError: unknown function
@@ -302,8 +302,8 @@ class LocalProxy(BaseProxy):
 
         Args:
             nb_id_title: Object number, or object id, or object title.
-             Defaults to None (current object).
-            panel: Panel name. Defaults to None (current panel).
+             Defaults to None (current object)
+            panel: Panel name. Defaults to None (current panel)
 
         Returns:
             Object
@@ -322,8 +322,8 @@ class LocalProxy(BaseProxy):
 
         Args:
             nb_id_title: Object number, or object id, or object title.
-             Defaults to None (current object).
-            panel: Panel name. Defaults to None (current panel).
+             Defaults to None (current object)
+            panel: Panel name. Defaults to None (current panel)
 
         Returns:
             List of plot item shapes
@@ -336,10 +336,10 @@ class LocalProxy(BaseProxy):
         """Add object annotations (annotation plot items).
 
         Args:
-            items (list): annotation plot items
-            refresh_plot (bool | None): refresh plot. Defaults to True.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            itemsTrue: annotation plot items
+            refresh_plotTrue: refresh plot. Defaults to True
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used
         """
         self._cdl.add_annotations_from_items(items, refresh_plot, panel)
 
@@ -349,11 +349,11 @@ def proxy_context(what: str) -> Generator[LocalProxy | RemoteProxy, None, None]:
     """Context manager handling CDL proxy creation and destruction.
 
     Args:
-        what (str): proxy type ("local" or "remote")
+        what: proxy type ("local" or "remote")
          For remote proxy, the port can be specified as "remote:port"
 
     Yields:
-        Generator[LocalProxy | RemoteProxy, None, None]: proxy
+        proxy
             LocalProxy if what == "local"
             RemoteProxy if what == "remote" or "remote:port"
 
