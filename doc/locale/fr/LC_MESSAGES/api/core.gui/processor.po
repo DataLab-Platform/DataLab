@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 15:59+0200\n"
+"POT-Creation-Date: 2025-04-05 10:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 msgid "Processor"
 msgstr "Processeur"
@@ -239,6 +239,15 @@ msgid "function to execute on objects. Defaults to None."
 msgstr ""
 
 msgid "Compute n1n function: N(>=1) objects + 1 object in → N objects out."
+msgstr ""
+
+msgid "In pairwise mode, the function is executed on each pair of objects, so the logic is different:"
+msgstr ""
+
+msgid "N(>=1) objects + N objects in → N objects out"
+msgstr ""
+
+msgid "In other words, the `n1n` function in single operand mode becomes a `nnn` function in pairwise mode."
 msgstr ""
 
 msgid "Examples: subtract, divide"

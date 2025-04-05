@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-04 16:13+0200\n"
+"POT-Creation-Date: 2025-04-05 10:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 msgid "Changelog"
 msgstr "Historique des modifications"
@@ -36,6 +36,21 @@ msgstr "DataLab Version 0.19.1"
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
 
+msgid "Pairwise operation mode:"
+msgstr "Mode d'opération pairwise :"
+
+msgid "Fixed an unexpected behavior when using the pairwise operation mode with functions that take a single second operand (e.g. for images: difference, division, arithmetic operations, and flatfield correction)"
+msgstr "Correction d'un comportement inattendu lors de l'utilisation du mode d'opération pairwise avec des fonctions qui prennent un seul second opérande (par exemple pour les images : différence, division, opérations arithmétiques et correction de champ plat)"
+
+msgid "If only one set of operands was selected in a single group, a warning message was displayed \"In pairwise mode, you need to select objects in at least two groups.\", which is correct for functions that are symmetric (e.g. addition, multiplication, etc.), but not for functions that are not symmetric (e.g. difference, division, etc.)."
+msgstr "Si un seul ensemble d'opérandes était sélectionné dans un seul groupe, un message d'avertissement était affiché \"En mode pairwise, vous devez sélectionner des objets dans au moins deux groupes. \", ce qui est correct pour les fonctions qui sont symétriques (par exemple addition, multiplication, etc.), mais pas pour les fonctions qui ne le sont pas (par exemple différence, division, etc.)."
+
+msgid "This is now fixed: the warning message is only displayed for functions that are symmetric (e.g. addition, multiplication, etc.)."
+msgstr "Ceci est maintenant corrigé : le message d'avertissement n'est affiché que pour les fonctions qui sont symétriques (par exemple addition, multiplication, etc.)."
+
+msgid "This closes [Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157) - Pairwise operation mode: unexpected behavior with functions that take a single second operand"
+msgstr "Ceci corrige l'[Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157) - Mode d'opération pairwise : comportement inattendu avec des fonctions qui prennent un seul second opérande"
+
 msgid "Fixed [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignore `nan` values for image normalization, flatfield correction, offset correction, and centroid computation"
 msgstr "Correction de l'[Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignorer les valeurs `nan` pour la normalisation d'image, la correction de champ plat, la correction de décalage et le calcul du centroïde"
 
@@ -44,6 +59,9 @@ msgstr "Correction de l'[Issue #153](https://github.com/DataLab-Platform/DataLab
 
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"
+
+msgid "💥 New features and enhancements:"
+msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
 msgid "Image operation features (\"Operations\" menu):"
 msgstr "Fonctionnalités d'opération sur les images (menu \"Opérations\") :"
@@ -170,6 +188,9 @@ msgstr "La ROI polygonale n'est pas encore prise en charge"
 
 msgid "This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates"
 msgstr "Ceci clotûre le ticket [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - Éditeur de ROI : ajouter la saisie manuelle des coordonnées"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Corrections de bugs :"
 
 msgid "Fixed [Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Image analysis: mask `nan` values when computing statistics, for example"
 msgstr "Correction de l'[Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Analyse d'image : masque des valeurs `nan` lors du calcul des statistiques, par exemple"

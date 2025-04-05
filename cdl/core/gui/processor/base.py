@@ -510,9 +510,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 exec_dialog(dlg)
         return results
 
-    def __get_src_grps_gids_objs_nbobj_valid(self) -> tuple[list, list, dict, int]:
-        """Get source groups, group ids, objects, and number of objects,
-        for pairwise mode, and check if the number of objects is valid.
+    def __get_src_grps_gids_objs_nbobj_valid(
+        self, min_group_nb: int
+    ) -> tuple[list, list, dict, int]:
+        """In pairwise mode only: get source groups, group ids, objects,
+        and number of objects. Check if the number of objects is valid.
+
+        Args:
+            min_group_nb: minimum number of groups (typically, 2 for `n1` functions
+            and 1 for `n1n` functions)
 
         Returns:
             Tuple (source groups, group ids, objects, number of objects, valid)
@@ -535,7 +541,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         nbobj = len(src_objs[src_gids[0]])
 
-        valid = len(src_grps) > 1
+        valid = len(src_grps) >= min_group_nb
         if not valid:
             # In pairwise mode, we need selected objects in at least two groups.
             if env.execenv.unattended:
@@ -602,7 +608,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         if pairwise:
             src_grps, src_gids, src_objs, _nbobj, valid = (
-                self.__get_src_grps_gids_objs_nbobj_valid()
+                self.__get_src_grps_gids_objs_nbobj_valid(min_group_nb=2)
             )
             if not valid:
                 return
@@ -742,6 +748,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
     ) -> None:
         """Compute n1n function: N(>=1) objects + 1 object in → N objects out.
 
+        .. note::
+
+            In pairwise mode, the function is executed on each pair of objects,
+            so the logic is different:
+
+                N(>=1) objects + N objects in → N objects out
+
+            In other words, the `n1n` function in single operand mode becomes a
+            `nnn` function in pairwise mode.
+
         Examples: subtract, divide
 
         Args:
@@ -778,7 +794,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
 
             src_grps, src_gids, src_objs, nbobj, valid = (
-                self.__get_src_grps_gids_objs_nbobj_valid()
+                self.__get_src_grps_gids_objs_nbobj_valid(min_group_nb=1)
             )
             if not valid:
                 return
