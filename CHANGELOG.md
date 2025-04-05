@@ -6,6 +6,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Pairwise operation mode:
+  * Fixed an unexpected behavior when using the pairwise operation mode with functions that take a single second operand (e.g. for images: difference, division, arithmetic operations, and flatfield correction)
+  * If only one set of operands was selected in a single group, a warning message was displayed "In pairwise mode, you need to select objects in at least two groups.", which is correct for functions that are symmetric (e.g. addition, multiplication, etc.), but not for functions that are not symmetric (e.g. difference, division, etc.).
+  * This is now fixed: the warning message is only displayed for functions that are symmetric (e.g. addition, multiplication, etc.).
+  * This closes [Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157) - Pairwise operation mode: unexpected behavior with functions that take a single second operand
 * Fixed [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignore `nan` values for image normalization, flatfield correction, offset correction, and centroid computation
 * Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)
 
