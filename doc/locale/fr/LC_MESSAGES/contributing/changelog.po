@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-05 11:54+0200\n"
+"POT-Creation-Date: 2025-04-05 12:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -56,6 +56,24 @@ msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
 
 msgid "New \"X-Y mode\" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)"
 msgstr "Nouvelle fonctionnalité \"Mode X-Y\" : cette fonctionnalité simule le comportement du mode X-Y d'un oscilloscope, c'est-à-dire qu'elle permet de tracer un signal en fonction d'un autre signal (par exemple X en fonction de Y)"
+
+msgid "Public API (local or remote):"
+msgstr "API publique (locale ou distante) :"
+
+msgid "Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:"
+msgstr "Ajout des arguments `group_id` et `set_current` aux méthodes `add_signal`, `add_image` et `add_object` :"
+
+msgid "This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes"
+msgstr "Cela concerne les classes `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` et `CDLMainWindow`"
+
+msgid "`group_id` argument allows to specify the group ID where the signal or image should be added (if not specified, the signal or image is added to the current group)"
+msgstr "L'argument `group_id` permet de spécifier l'identifiant du groupe où le signal ou l'image doit être ajouté (s'il n'est pas spécifié, le signal ou l'image est ajouté au groupe actuel)"
+
+msgid "`set_current` argument allows to specify if the signal or image should be set as current after being added (default is `True`)"
+msgstr "L'argument `set_current` permet de spécifier si le signal ou l'image doit être défini comme actuel après avoir été ajouté (la valeur par défaut est `True`)"
+
+msgid "This closes [Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - Public API: add a keyword `group_id` to `add_signal` and `add_image`"
+msgstr "Ceci corrige l'[Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - API publique : ajouter un mot-clé `group_id` à `add_signal` et `add_image`"
 
 msgid "DataLab Version 0.19.1"
 msgstr "DataLab Version 0.19.1"
@@ -134,9 +152,6 @@ msgstr "Ajout de la méthode `compute_inverse` pour les processeurs d'image et d
 
 msgid "This closes [Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - New feature: `1/x` for signals and images"
 msgstr "Ceci corrige l'[Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - Nouvelle fonctionnalité : `1/x` pour les signaux et les images"
-
-msgid "Public API (local or remote):"
-msgstr "API publique (locale ou distante) :"
 
 msgid "Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:"
 msgstr "Ajout de la méthode `add_group` avec les arguments `title` et `select` pour créer un nouveau groupe dans un panneau de données (par exemple, panneau Signal ou Image) et éventuellement le sélectionner après sa création :"

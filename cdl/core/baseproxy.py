@@ -229,6 +229,8 @@ class AbstractCDLControl(abc.ABC):
         yunit: str | None = None,
         xlabel: str | None = None,
         ylabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
@@ -236,10 +238,12 @@ class AbstractCDLControl(abc.ABC):
             title: Signal title
             xdata: X data
             ydata: Y data
-            xunit: X unit. Defaults to None.
-            yunit: Y unit. Defaults to None.
-            xlabel: X label. Defaults to None.
-            ylabel: Y label. Defaults to None.
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            group_id: group id in which to add the signal. Defaults to ""
+            set_current: if True, set the added signal as current
 
         Returns:
             True if signal was added successfully, False otherwise
@@ -260,18 +264,22 @@ class AbstractCDLControl(abc.ABC):
         xlabel: str | None = None,
         ylabel: str | None = None,
         zlabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab.
 
         Args:
             title: Image title
             data: Image data
-            xunit: X unit. Defaults to None.
-            yunit: Y unit. Defaults to None.
-            zunit: Z unit. Defaults to None.
-            xlabel: X label. Defaults to None.
-            ylabel: Y label. Defaults to None.
-            zlabel: Z label. Defaults to None.
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            zunit: Z unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            zlabel: Z label. Defaults to None
+            group_id: group id in which to add the image. Defaults to ""
+            set_current: if True, set the added image as current
 
         Returns:
             True if image was added successfully, False otherwise
@@ -281,11 +289,18 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def add_object(self, obj: SignalObj | ImageObj) -> bool:
+    def add_object(
+        self,
+        obj: SignalObj | ImageObj,
+        group_id: str = "",
+        set_current: bool = True,
+    ) -> None:
         """Add object to DataLab.
 
         Args:
             obj: Signal or image object
+            group_id: group id in which to add the object. Defaults to ""
+            set_current: if True, set the added object as current
 
         Returns:
             True if object was added successfully, False otherwise

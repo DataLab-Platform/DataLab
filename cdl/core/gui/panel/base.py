@@ -412,7 +412,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         Args:
             obj: SignalObj or ImageObj object
-            group_id: group id
+            group_id: group id to which the object belongs. If None or empty string,
+             the object is added to the current group.
             set_current: if True, set the added object as current
         """
         if obj in self.objmodel:
@@ -422,7 +423,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 f"The same object cannot be added twice: "
                 f"please use a copy of the object."
             )
-        if group_id is None:
+        if group_id is None or group_id == "":
             group_id = self.objview.get_current_group_id()
             if group_id is None:
                 groups = self.objmodel.get_groups()

@@ -138,6 +138,18 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
     win.add_signal(
         sig.title, sig.x, sig.y, sig.xunit, sig.yunit, sig.xlabel, sig.ylabel
     )
+    gp2 = win.signalpanel.add_group("group2")
+    win.add_signal(
+        sig.title,
+        sig.x,
+        sig.y,
+        sig.xunit,
+        sig.yunit,
+        sig.xlabel,
+        sig.ylabel,
+        group_id=gp2.uuid,
+        set_current=False,
+    )
 
     # Add image
     __print_test_result("Add image")
@@ -151,6 +163,19 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
         ima.xlabel,
         ima.ylabel,
         ima.zlabel,
+    )
+    gp3 = win.imagepanel.add_group("group3")
+    win.add_image(
+        ima.title,
+        ima.data,
+        ima.xunit,
+        ima.yunit,
+        ima.zunit,
+        ima.xlabel,
+        ima.ylabel,
+        ima.zlabel,
+        group_id=gp3.uuid,
+        set_current=False,
     )
 
     # Close application

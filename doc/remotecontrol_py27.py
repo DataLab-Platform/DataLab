@@ -104,13 +104,24 @@ class RemoteClient(object):
         self.serverproxy.load_from_files(filenames)
 
     def add_signal(
-        self, title, xdata, ydata, xunit=None, yunit=None, xlabel=None, ylabel=None
+        self,
+        title,
+        xdata,
+        ydata,
+        xunit=None,
+        yunit=None,
+        xlabel=None,
+        ylabel=None,
+        group_id="",
+        set_current=True,
     ):
         """Add signal data to DataLab"""
         xbinary = array_to_rpcbinary(xdata)
         ybinary = array_to_rpcbinary(ydata)
         p = self.serverproxy
-        return p.add_signal(title, xbinary, ybinary, xunit, yunit, xlabel, ylabel)
+        return p.add_signal(
+            title, xbinary, ybinary, xunit, yunit, xlabel, ylabel, group_id, set_current
+        )
 
     def add_image(
         self,
@@ -122,11 +133,24 @@ class RemoteClient(object):
         xlabel=None,
         ylabel=None,
         zlabel=None,
+        group_id="",
+        set_current=True,
     ):
         """Add image data to DataLab"""
         zbinary = array_to_rpcbinary(data)
         p = self.serverproxy
-        return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
+        return p.add_image(
+            title,
+            zbinary,
+            xunit,
+            yunit,
+            zunit,
+            xlabel,
+            ylabel,
+            zlabel,
+            group_id,
+            set_current,
+        )
 
     def get_object_titles(self, panel=None):
         """Get object (signal/image) list for current panel"""

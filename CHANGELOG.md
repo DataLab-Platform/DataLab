@@ -15,6 +15,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Added the "Select tool" to editor's toolbar, to allow the user to switch between the "Select" and "Draw" tools easily without having to use the plot toolbar on the top of the window
 * Signal processing features ("Processing" menu):
   * New "X-Y mode" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)
+* Public API (local or remote):
+  * Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:
+    * This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes
+    * `group_id` argument allows to specify the group ID where the signal or image should be added (if not specified, the signal or image is added to the current group)
+    * `set_current` argument allows to specify if the signal or image should be set as current after being added (default is `True`)
+    * This closes [Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - Public API: add a keyword `group_id` to `add_signal` and `add_image`
 
 ## DataLab Version 0.19.1 ##
 

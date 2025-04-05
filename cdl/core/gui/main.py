@@ -1469,17 +1469,21 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     # This method is intentionally *not* remote controlled
     # (see TODO regarding RemoteClient.add_object method)
     #  @remote_controlled
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
+    def add_object(
+        self, obj: SignalObj | ImageObj, group_id: str = "", set_current=True
+    ) -> None:
         """Add object - signal or image
 
         Args:
             obj: object to add (signal or image)
+            group_id: group ID (optional)
+            set_current: True to set the object as current object
         """
         if self.confirm_memory_state():
             if isinstance(obj, SignalObj):
-                self.signalpanel.add_object(obj)
+                self.signalpanel.add_object(obj, group_id, set_current)
             elif isinstance(obj, ImageObj):
-                self.imagepanel.add_object(obj)
+                self.imagepanel.add_object(obj, group_id, set_current)
             else:
                 raise TypeError(f"Unsupported object type {type(obj)}")
 
@@ -1529,6 +1533,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         yunit: str | None = None,
         xlabel: str | None = None,
         ylabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
@@ -1536,10 +1542,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             title: Signal title
             xdata: X data
             ydata: Y data
-            xunit: X unit. Defaults to None.
-            yunit: Y unit. Defaults to None.
-            xlabel: X label. Defaults to None.
-            ylabel: Y label. Defaults to None.
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            group_id: group id in which to add the signal. Defaults to ""
+            set_current: if True, set the added signal as current
 
         Returns:
             True if signal was added successfully, False otherwise
@@ -1555,7 +1563,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             units=(xunit, yunit),
             labels=(xlabel, ylabel),
         )
-        self.add_object(obj)
+        self.add_object(obj, group_id, set_current)
         return True
 
     def add_image(
@@ -1568,18 +1576,22 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         xlabel: str | None = None,
         ylabel: str | None = None,
         zlabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab.
 
         Args:
             title: Image title
             data: Image data
-            xunit: X unit. Defaults to None.
-            yunit: Y unit. Defaults to None.
-            zunit: Z unit. Defaults to None.
-            xlabel: X label. Defaults to None.
-            ylabel: Y label. Defaults to None.
-            zlabel: Z label. Defaults to None.
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            zunit: Z unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            zlabel: Z label. Defaults to None
+            group_id: group id in which to add the image. Defaults to ""
+            set_current: if True, set the added image as current
 
         Returns:
             True if image was added successfully, False otherwise
@@ -1593,7 +1605,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             units=(xunit, yunit, zunit),
             labels=(xlabel, ylabel, zlabel),
         )
-        self.add_object(obj)
+        self.add_object(obj, group_id, set_current)
         return True
 
     # ------?

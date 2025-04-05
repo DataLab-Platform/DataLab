@@ -219,6 +219,8 @@ class LocalProxy(BaseProxy):
         yunit: str | None = None,
         xlabel: str | None = None,
         ylabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
@@ -230,6 +232,8 @@ class LocalProxy(BaseProxy):
             yunit: Y unit. Defaults to None
             xlabel: X label. Defaults to None
             ylabel: Y label. Defaults to None
+            group_id: group id in which to add the signal. Defaults to ""
+            set_current: if True, set the added signal as current
 
         Returns:
             True if signal was added successfully, False otherwise
@@ -238,7 +242,9 @@ class LocalProxy(BaseProxy):
             ValueError: Invalid xdata dtype
             ValueError: Invalid ydata dtype
         """
-        return self._cdl.add_signal(title, xdata, ydata, xunit, yunit, xlabel, ylabel)
+        return self._cdl.add_signal(
+            title, xdata, ydata, xunit, yunit, xlabel, ylabel, group_id, set_current
+        )
 
     def add_image(
         self,
@@ -250,18 +256,22 @@ class LocalProxy(BaseProxy):
         xlabel: str | None = None,
         ylabel: str | None = None,
         zlabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab.
 
         Args:
             title: Image title
             data: Image data
-            xunit: X unit. Defaults to None.
-            yunit: Y unit. Defaults to None.
-            zunit: Z unit. Defaults to None.
-            xlabel: X label. Defaults to None.
-            ylabel: Y label. Defaults to None.
-            zlabel: Z label. Defaults to None.
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            zunit: Z unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            zlabel: Z label. Defaults to None
+            group_id: group id in which to add the image. Defaults to ""
+            set_current: if True, set the added image as current
 
         Returns:
             True if image was added successfully, False otherwise
@@ -270,16 +280,32 @@ class LocalProxy(BaseProxy):
             ValueError: Invalid data dtype
         """
         return self._cdl.add_image(
-            title, data, xunit, yunit, zunit, xlabel, ylabel, zlabel
+            title,
+            data,
+            xunit,
+            yunit,
+            zunit,
+            xlabel,
+            ylabel,
+            zlabel,
+            group_id,
+            set_current,
         )
 
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
+    def add_object(
+        self,
+        obj: SignalObj | ImageObj,
+        group_id: str = "",
+        set_current: bool = True,
+    ) -> None:
         """Add object to DataLab.
 
         Args:
-            obj (SignalObj | ImageObj): Signal or image object
+            obj: Signal or image object
+            group_id: group id in which to add the object. Defaults to ""
+            set_current: if True, set the added object as current
         """
-        self._cdl.add_object(obj)
+        self._cdl.add_object(obj, group_id, set_current)
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call compute function ``name`` in current panel's processor.

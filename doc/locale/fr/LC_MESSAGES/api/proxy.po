@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 09:43+0200\n"
+"POT-Creation-Date: 2025-04-05 12:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 msgid "Proxy objects (:mod:`cdl.proxy`)"
 msgstr ""
@@ -100,22 +100,28 @@ msgstr ""
 msgid "Image data"
 msgstr ""
 
-msgid "X unit. Defaults to None."
+msgid "X unit. Defaults to None"
 msgstr ""
 
-msgid "Y unit. Defaults to None."
+msgid "Y unit. Defaults to None"
 msgstr ""
 
-msgid "Z unit. Defaults to None."
+msgid "Z unit. Defaults to None"
 msgstr ""
 
-msgid "X label. Defaults to None."
+msgid "X label. Defaults to None"
 msgstr ""
 
-msgid "Y label. Defaults to None."
+msgid "Y label. Defaults to None"
 msgstr ""
 
-msgid "Z label. Defaults to None."
+msgid "Z label. Defaults to None"
+msgstr ""
+
+msgid "group id in which to add the image. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added image as current"
 msgstr ""
 
 msgid "Returns"
@@ -139,6 +145,12 @@ msgstr ""
 msgid "Signal or image object"
 msgstr ""
 
+msgid "group id in which to add the object. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added object as current"
+msgstr ""
+
 msgid "Add signal data to DataLab."
 msgstr ""
 
@@ -149,6 +161,12 @@ msgid "X data"
 msgstr ""
 
 msgid "Y data"
+msgstr ""
+
+msgid "group id in which to add the signal. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added signal as current"
 msgstr ""
 
 msgid "True if signal was added successfully, False otherwise"
@@ -397,6 +415,21 @@ msgstr ""
 msgid "CDLMainWindow instance."
 msgstr ""
 
+msgid "Compute function parameter. Defaults to None"
+msgstr ""
+
+msgid "Object number, or object id, or object title. Defaults to None (current object)"
+msgstr ""
+
+msgid "Panel name. Defaults to None (current panel)"
+msgstr ""
+
+msgid "refresh plot. Defaults to True"
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used"
+msgstr ""
+
 msgid "Proxy context manager"
 msgstr ""
 
@@ -416,9 +449,6 @@ msgid "proxy type (\"local\" or \"remote\") For remote proxy, the port can be sp
 msgstr ""
 
 msgid "Yields"
-msgstr ""
-
-msgid "*Generator[LocalProxy | RemoteProxy, None, None]* --"
 msgstr ""
 
 msgid "proxy"
