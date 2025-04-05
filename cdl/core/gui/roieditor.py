@@ -41,7 +41,7 @@ from plotpy.items import (
     XRangeSelection,
 )
 from plotpy.plot import PlotDialog, PlotManager
-from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool
+from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool, SelectTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -94,11 +94,10 @@ def configure_roi_item_in_tool(shape, obj: dlo.SignalObj | dlo.ImageObj) -> None
     configure_roi_item(shape, fmt, lbl=True, editable=True, option=obj.PREFIX)
 
 
-def tool_activate(tool: InteractiveTool) -> None:
-    """Tool activate"""
+def tool_deselect_items(tool: InteractiveTool) -> None:
+    """Deselect all items in plot associated with the tool"""
     plot = tool.get_active_plot()
     plot.select_some_items([])  # Deselect all items
-    tool.activate()
 
 
 def tool_setup_shape(shape: TypeROIItem, obj: dlo.SignalObj | dlo.ImageObj) -> None:
@@ -114,10 +113,14 @@ class ROISegmentTool(HRangeTool):
     ICON = "signal_roi.svg"
 
     def __init__(self, manager: PlotManager, obj: dlo.SignalObj) -> None:
-        super().__init__(manager, switch_to_default_tool=True, toolbar_id=None)
+        super().__init__(manager, switch_to_default_tool=False, toolbar_id=None)
         self.roi = SegmentROI([0, 1], False)
         self.obj = obj
-        self.activate = tool_activate
+
+    def activate(self):
+        """Activate tool"""
+        tool_deselect_items(self)
+        super().activate()
 
     def create_shape(self) -> XRangeSelection:
         """Create shape"""
@@ -135,13 +138,17 @@ class ROIRectangleTool(RectangleTool):
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
-            switch_to_default_tool=True,
+            switch_to_default_tool=False,
             toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = RectangularROI([0, 0, 1, 1], True)
         self.obj = obj
-        self.activate = tool_activate
+
+    def activate(self):
+        """Activate tool"""
+        tool_deselect_items(self)
+        super().activate()
 
     def create_shape(self) -> tuple[AnnotatedRectangle, int, int]:
         """Create shape"""
@@ -162,13 +169,17 @@ class ROICircleTool(CircleTool):
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
-            switch_to_default_tool=True,
+            switch_to_default_tool=False,
             toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = CircularROI([0, 0, 1], True)
         self.obj = obj
-        self.activate = tool_activate
+
+    def activate(self):
+        """Activate tool"""
+        tool_deselect_items(self)
+        super().activate()
 
     def create_shape(self) -> tuple[AnnotatedCircle, int, int]:
         """Create shape"""
@@ -189,13 +200,17 @@ class ROIPolygonTool(PolygonTool):
     def __init__(self, manager: PlotManager, obj: dlo.ImageObj) -> None:
         super().__init__(
             manager,
-            switch_to_default_tool=True,
+            switch_to_default_tool=False,
             toolbar_id=None,
             setup_shape_cb=tool_setup_shape,
         )
         self.roi = PolygonalROI([[0, 0], [1, 0], [1, 1], [0, 1]], True)
         self.obj = obj
-        self.activate = tool_activate
+
+    def activate(self):
+        """Activate tool"""
+        tool_deselect_items(self)
+        super().activate()
 
     def create_shape(self) -> tuple[AnnotatedPolygon, int, int]:
         """Create shape"""
@@ -251,6 +266,9 @@ class BaseROIEditor(
             self.__roi.iterate_roi_items(obj, fmt, True, True)
         )
 
+        mgr = self.plot_dialog.get_manager()
+        select_tool = mgr.get_tool(SelectTool)
+        add_actions(self.toolbar, [select_tool.action])
         self.add_tools_to_plot_dialog()
         item = obj.make_item() if item is None else item
         item.set_selectable(False)
@@ -371,7 +389,7 @@ class BaseROIEditor(
         layout.addWidget(self.toolbar)
         if self.extract:
             self.singleobj_btn = QW.QCheckBox(
-                _("Extract all ROIs into a single %s object") % self.OBJ_NAME,
+                _("Extract all ROIs\ninto a single %s") % self.OBJ_NAME,
                 self,
             )
             layout.addWidget(self.singleobj_btn)
@@ -456,6 +474,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
         mgr = self.plot_dialog.get_manager()
         segm_tool = mgr.add_tool(ROISegmentTool, self.obj)
         self._tools.append(segm_tool)
+        segm_tool.activate()
 
     def manually_add_roi(self) -> None:
         """Manually add segment ROI"""
@@ -517,6 +536,7 @@ class ImageROIEditor(
         circ_tool = mgr.add_tool(ROICircleTool, self.obj)
         poly_tool = mgr.add_tool(ROIPolygonTool, self.obj)
         self._tools.extend([rect_tool, circ_tool, poly_tool])
+        rect_tool.activate()
 
     def manually_add_roi(
         self, roi_type: Literal["rectangle", "circle", "polygon"]

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-05 10:44+0200\n"
+"POT-Creation-Date: 2025-04-05 11:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,27 @@ msgstr "DataLab Version 0.20.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Region of Interest (ROI) editor:"
+msgstr "Éditeur de région d'intérêt (ROI) :"
+
+msgid "This concerns the \"Edit Regions of Interest\" feature for both signals and images"
+msgstr "Cela concerne la fonctionnalité \"Éditer les régions d'intérêt\" pour les signaux et les images"
+
+msgid "New behavior:"
+msgstr "Nouveau comportement :"
+
+msgid "Signals: the range ROI selection tool is now active by default, and the user can select right away the range of the signal to be used as a ROI"
+msgstr "Signaux : l'outil de sélection de la plage ROI est désormais actif par défaut, et l'utilisateur peut sélectionner immédiatement la plage du signal à utiliser comme ROI"
+
+msgid "Images: the rectangular ROI selection tool is now active by default, and the user can select right away the rectangular ROI to be used as a ROI"
+msgstr "Images : l'outil de sélection de la ROI rectangulaire est désormais actif par défaut, et l'utilisateur peut sélectionner immédiatement la ROI rectangulaire à utiliser comme ROI"
+
+msgid "This closes [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - ROI editor: activate ROI selection tool by default, so that the user can select right away the area to be used as a ROI"
+msgstr "Ceci clotûre le ticket [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - Éditeur de ROI : activer l'outil de sélection de ROI par défaut, afin que l'utilisateur puisse sélectionner immédiatement la zone à utiliser comme ROI"
+
+msgid "Added the \"Select tool\" to editor's toolbar, to allow the user to switch between the \"Select\" and \"Draw\" tools easily without having to use the plot toolbar on the top of the window"
+msgstr "Ajout de l'outil \"Sélectionner\" à la barre d'outils de l'éditeur, pour permettre à l'utilisateur de basculer facilement entre les outils \"Sélectionner\" et \"Dessiner\" sans avoir à utiliser la barre d'outils de tracé en haut de la fenêtre"
 
 msgid "Signal processing features (\"Processing\" menu):"
 msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"

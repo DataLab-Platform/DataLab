@@ -6,6 +6,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Region of Interest (ROI) editor:
+  * This concerns the "Edit Regions of Interest" feature for both signals and images
+  * New behavior:
+    * Signals: the range ROI selection tool is now active by default, and the user can select right away the range of the signal to be used as a ROI
+    * Images: the rectangular ROI selection tool is now active by default, and the user can select right away the rectangular ROI to be used as a ROI
+    * This closes [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - ROI editor: activate ROI selection tool by default, so that the user can select right away the area to be used as a ROI
+  * Added the "Select tool" to editor's toolbar, to allow the user to switch between the "Select" and "Draw" tools easily without having to use the plot toolbar on the top of the window
 * Signal processing features ("Processing" menu):
   * New "X-Y mode" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)
 
