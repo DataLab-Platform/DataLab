@@ -6,6 +6,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Signal processing features ("Processing" menu):
+  * New "X-Y mode" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)
+
 ## DataLab Version 0.19.1 ##
 
 🛠️ Bug fixes:

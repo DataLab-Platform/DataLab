@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-05 10:33+0200\n"
+"POT-Creation-Date: 2025-04-05 10:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,12 @@ msgstr "DataLab Version 0.20.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Signal processing features (\"Processing\" menu):"
+msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
+
+msgid "New \"X-Y mode\" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)"
+msgstr "Nouvelle fonctionnalité \"Mode X-Y\" : cette fonctionnalité simule le comportement du mode X-Y d'un oscilloscope, c'est-à-dire qu'elle permet de tracer un signal en fonction d'un autre signal (par exemple X en fonction de Y)"
 
 msgid "DataLab Version 0.19.1"
 msgstr "DataLab Version 0.19.1"
@@ -60,9 +66,6 @@ msgstr "Correction de l'[Issue #153](https://github.com/DataLab-Platform/DataLab
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"
 
-msgid "💥 New features and enhancements:"
-msgstr "💥 Nouvelles fonctionnalités et améliorations :"
-
 msgid "Image operation features (\"Operations\" menu):"
 msgstr "Fonctionnalités d'opération sur les images (menu \"Opérations\") :"
 
@@ -71,9 +74,6 @@ msgstr "Renommage du sous-menu \"Rotation\" en \"Symétrie ou rotation\""
 
 msgid "New \"Flip diagonally\" feature"
 msgstr "Nouvelle fonctionnalité \"Symétrie diagonale\""
-
-msgid "Signal processing features (\"Processing\" menu):"
-msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
 
 msgid "New \"Convert to Cartesian coordinates\" feature"
 msgstr "Nouvelle fonctionnalité \"Convertir en coordonnées cartésiennes\""
@@ -188,9 +188,6 @@ msgstr "La ROI polygonale n'est pas encore prise en charge"
 
 msgid "This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates"
 msgstr "Ceci clotûre le ticket [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - Éditeur de ROI : ajouter la saisie manuelle des coordonnées"
-
-msgid "🛠️ Bug fixes:"
-msgstr "🛠️ Corrections de bugs :"
 
 msgid "Fixed [Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Image analysis: mask `nan` values when computing statistics, for example"
 msgstr "Correction de l'[Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Analyse d'image : masque des valeurs `nan` lors du calcul des statistiques, par exemple"
