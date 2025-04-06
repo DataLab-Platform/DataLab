@@ -26,6 +26,11 @@ class MainSettings(gds.DataSet):
     """DataLab main settings"""
 
     g0 = gds.BeginGroup(_("Settings for main window and general features"))
+    color_mode = gds.ChoiceItem(
+        _("Color mode"),
+        zip(Conf.main.color_mode.values, Conf.main.color_mode.values),
+        help=_("Color mode for the application"),
+    )
     process_isolation_enabled = gds.BoolItem(
         "",
         _("Process isolation"),
@@ -81,6 +86,8 @@ class IOSettings(gds.DataSet):
     """DataLab I/O settings"""
 
     g0 = gds.BeginGroup(_("Settings for I/O operations"))
+    h5_clear_workspace = gds.BoolItem("", _("Clear workspace before loading HDF5 file"))
+    h5_clear_workspace_ask = gds.BoolItem("", _("Ask before clearing workspace"))
     h5_fullpath_in_title = gds.BoolItem("", _("HDF5 full path in title"))
     h5_fname_in_title = gds.BoolItem("", _("HDF5 file name in title"))
     _g0 = gds.EndGroup("")
@@ -90,8 +97,22 @@ class ProcSettings(gds.DataSet):
     """DataLab processing settings"""
 
     g0 = gds.BeginGroup(_("Settings for computations"))
+    operation_mode = gds.ChoiceItem(
+        _("Operation mode"),
+        zip(Conf.proc.operation_mode.values, Conf.proc.operation_mode.values),
+        help=_(
+            "Operation mode for computations taking <i>N</i> inputs:"
+            "<ul><li><b>single</b>: single operand mode</li>"
+            "<li><b>pairwise</b>: pairwise operation mode</li></ul>"
+            "<br>Computations taking <i>N</i> inputs are the ones where:"
+            "<ul><li>N(>=2) objects in %s 1 object out</li>"
+            "<li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
+        )
+        % ("→", "→"),
+    )
     fft_shift_enabled = gds.BoolItem("", _("FFT shift"))
     extract_roi_singleobj = gds.BoolItem("", _("Extract ROI in single object"))
+    keep_results = gds.BoolItem("", _("Keep results after computation"))
     ignore_warnings = gds.BoolItem("", _("Ignore warnings"))
     _g0 = gds.EndGroup("")
 
@@ -109,13 +130,13 @@ def edit_default_image_settings(
     """Edit default image settings
 
     Args:
-        dataset (guidata.dataset.DataSet): dataset
-        item (DataItem): Data item
-        value (Any): Value
-        parent (QWidget): Parent widget
+        dataset: dataset
+        item: Data item
+        value: Value
+        parent: Parent widget
 
     Returns:
-        bool: True if the settings were edited
+        True if the settings were edited
     """
     param = ImageDefaultSettings(_("Default image visualization settings"))
     ima_def_dict = Conf.view.get_def_dict("ima")
@@ -251,7 +272,7 @@ def edit_settings(parent: QW.QWidget) -> None:
     """Edit DataLab settings
 
     Args:
-        parent (QWidget): Parent widget
+        parent: Parent widget
     """
     paramdict = {
         "main": MainSettings(_("General")),
@@ -297,4 +318,5 @@ def edit_settings(parent: QW.QWidget) -> None:
         for vis_defaults in ("ima_defaults",):
             if getattr(paramdict["view"], vis_defaults):
                 changed_options.append(vis_defaults)
+
     return changed_options

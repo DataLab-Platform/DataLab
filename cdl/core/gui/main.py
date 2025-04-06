@@ -28,9 +28,11 @@ import guidata.dataset as gds
 import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
+from guidata import qthelpers as guidata_qth
 from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
+from guidata.qthelpers import add_actions, create_action
 from guidata.widgets.console import DockableConsole
+from plotpy import config as plotpy_config
 from plotpy.builder import make
 from plotpy.constants import PlotType
 from qtpy import QtCore as QC
@@ -132,13 +134,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Initialize main window"""
         CDLMainWindow.__instance = self
         super().__init__()
-        win32_fix_title_bar_background(self)
         self.setObjectName(APP_NAME)
         self.setWindowIcon(get_icon("DataLab.svg"))
 
         execenv.log(self, "Starting initialization")
-
-        self.__restore_pos_and_size()
 
         self.ready_flag = True
 
@@ -174,10 +173,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.edit_menu: QW.QMenu | None = None
         self.operation_menu: QW.QMenu | None = None
         self.processing_menu: QW.QMenu | None = None
-        self.computing_menu: QW.QMenu | None = None
+        self.analysis_menu: QW.QMenu | None = None
         self.plugins_menu: QW.QMenu | None = None
         self.view_menu: QW.QMenu | None = None
         self.help_menu: QW.QMenu | None = None
+
+        self.__update_color_mode(startup=True)
 
         self.__is_modified = False
         self.set_modified(False)
@@ -193,6 +194,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             console = Conf.console.console_enabled.get()
         self.setup(console)
 
+        self.__restore_pos_and_size()
         execenv.log(self, "Initialization done")
 
     # ------API related to XML-RPC remote control
@@ -241,7 +243,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Return groups titles and lists of inner objects uuids and titles.
 
         Returns:
-            Tuple: groups titles, lists of inner objects uuids and titles
+            Groups titles, lists of inner objects uuids and titles
         """
         panel = self.__get_current_basedatapanel()
         return panel.objmodel.get_group_titles_with_object_infos()
@@ -305,21 +307,37 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         raise TypeError(f"Invalid index_id_title type: {type(nb_id_title)}")
 
     @remote_controlled
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
-            list[str]: list of object uuids
+            List of object uuids
 
         Raises:
             ValueError: if panel is unknown
         """
-        return self.__get_datapanel(panel).objmodel.get_object_ids()
+        objmodel = self.__get_datapanel(panel).objmodel
+        if group is None:
+            return objmodel.get_object_ids()
+        if isinstance(group, int):
+            grp = objmodel.get_group_from_number(group)
+        else:
+            try:
+                grp = objmodel.get_group(group)
+            except KeyError:
+                grp = objmodel.get_group_from_title(group)
+        if grp is None:
+            raise KeyError(f"Invalid group index, id or title: {group}")
+        return grp.get_object_ids()
 
     @remote_controlled
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
@@ -333,6 +351,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         panel = self.__get_current_basedatapanel()
         return panel.objview.get_sel_object_uuids(include_groups)
+
+    @remote_controlled
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
+        """
+        self.__get_datapanel(panel).add_group(title, select)
 
     @remote_controlled
     def select_objects(
@@ -359,8 +390,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Args:
             selection: List of group numbers (1 to N), or list of group uuids,
              or None to select all groups. Defaults to None.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used. Defaults to None.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used. Defaults to None.
         """
         panel = self.__get_datapanel(panel)
         panel.objview.select_groups(selection)
@@ -404,10 +435,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Add object annotations (annotation plot items).
 
         Args:
-            items (list): annotation plot items
-            refresh_plot (bool | None): refresh plot. Defaults to True.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            items: annotation plot items
+            refresh_plot: refresh plot. Defaults to True.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         panel = self.__get_datapanel(panel)
         panel.add_annotations_from_items(items, refresh_plot)
@@ -419,10 +450,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Add a label with object title on the associated plot
 
         Args:
-            title (str | None): Label title. Defaults to None.
-                If None, the title is the object title.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            title: Label title. Defaults to None.
+             If None, the title is the object title.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         self.__get_datapanel(panel).add_label_with_title(title)
 
@@ -473,7 +504,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Check memory warning state and eventually show a warning dialog
 
         Returns:
-            bool: True if memory state is ok
+            True if memory state is ok
         """
         if not env.execenv.unattended and self.__memory_warning:
             threshold = Conf.main.available_memory_threshold.get()
@@ -492,7 +523,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         if cdl.__version__.replace(".", "").isdigit():
             # This is a stable release
             return
-        if "beta" in cdl.__version__:
+        if "b" in cdl.__version__:
             # This is a beta release
             rel = _(
                 "This software is in the <b>beta stage</b> of its release cycle. "
@@ -634,7 +665,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     "view",
                     "operation",
                     "processing",
-                    "computing",
+                    "analysis",
                     "help",
                 ):
                     menu = getattr(self, f"{name}_menu")
@@ -703,7 +734,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.__add_menus()
         if console:
             self.__setup_console()
-        self.__update_actions()
+        self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
         self.__add_history_panel()
         self.__configure_panels()
@@ -843,9 +874,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         )
         self.showfirstonly_action = create_action(
             self,
-            _("Show first only"),
+            _("Show first object only"),
             icon=get_icon("show_first.svg"),
-            tip=_("Show only the first selected object"),
+            tip=_("Show only the first selected object (signal or image)"),
             toggled=self.toggle_show_first_only,
         )
         self.showlabel_action = create_action(
@@ -948,7 +979,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.edit_menu = self.menuBar().addMenu(_("&Edit"))
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
-        self.computing_menu = self.menuBar().addMenu(_("Computing"))
+        self.analysis_menu = self.menuBar().addMenu(_("Analysis"))
         self.plugins_menu = self.menuBar().addMenu(_("Plugins"))
         self.view_menu = self.menuBar().addMenu(_("&View"))
         configure_menu_about_to_show(self.view_menu, self.__update_view_menu)
@@ -957,7 +988,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.edit_menu,
             self.operation_menu,
             self.processing_menu,
-            self.computing_menu,
+            self.analysis_menu,
             self.plugins_menu,
         ):
             configure_menu_about_to_show(menu, self.__update_generic_menu)
@@ -1113,7 +1144,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Enable/disable process isolation
 
         Args:
-            state (bool): True to enable process isolation
+            state: True to enable process isolation
         """
         for processor in (self.imagepanel.processor, self.signalpanel.processor):
             processor.set_process_isolation_enabled(state)
@@ -1124,7 +1155,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Return current panel name
 
         Returns:
-            str: panel name (valid values: "signal", "image", "macro")
+            Panel name (valid values: "signal", "image", "macro")
         """
         panel = self.tabwidget.currentWidget()
         dock = self.docks[panel]
@@ -1139,7 +1170,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Switch to panel.
 
         Args:
-            panel (str): panel name (valid values: "signal", "image", "macro")
+            panel: panel name (valid values: "signal", "image", "macro")
 
         Raises:
             ValueError: unknown panel
@@ -1211,10 +1242,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             if isinstance(panel, base.BaseDataPanel):
                 panel.objview.populate_tree()
 
-    def __update_actions(self) -> None:
-        """Update selection dependent actions"""
+    def __update_actions(self, update_other_data_panel: bool = False) -> None:
+        """Update selection dependent actions
+
+        Args:
+            update_other_data_panel: True to update other data panel actions
+             (i.e. if the current panel is the signal panel, also update the image
+             panel actions, and vice-versa)
+        """
         is_signal = self.tabwidget.currentWidget() is self.signalpanel
         panel = self.signalpanel if is_signal else self.imagepanel
+        other_panel = self.imagepanel if is_signal else self.signalpanel
+        if update_other_data_panel:
+            other_panel.selection_changed()
         panel.selection_changed()
         self.signalpanel_toolbar.setVisible(is_signal)
         self.imagepanel_toolbar.setVisible(not is_signal)
@@ -1240,7 +1280,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.view_menu: ActionCategory.VIEW,
             self.operation_menu: ActionCategory.OPERATION,
             self.processing_menu: ActionCategory.PROCESSING,
-            self.computing_menu: ActionCategory.COMPUTING,
+            self.analysis_menu: ActionCategory.ANALYSIS,
             self.plugins_menu: ActionCategory.PLUGINS,
         }[menu]
         actions = panel.get_category_actions(category)
@@ -1280,7 +1320,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         for datapanel in (self.signalpanel, self.imagepanel):
             for obj in datapanel.objmodel:
                 obj.set_metadata_option("showlabel", state)
-            datapanel.SIG_REFRESH_PLOT.emit("selected", True)
+            datapanel.refresh_plot("selected", True, False)
 
     @remote_controlled
     def toggle_auto_refresh(self, state: bool) -> None:
@@ -1327,7 +1367,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Save to a DataLab HDF5 file
 
         Args:
-            filename (str): HDF5 filename. If None, a file dialog is opened.
+            filename: HDF5 filename. If None, a file dialog is opened.
 
         Raises:
             IOError: if filename is invalid or file cannot be saved.
@@ -1354,28 +1394,31 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
         Args:
             h5files: HDF5 filenames (optionally with dataset name, separated by ":")
-            import_all (bool): Import all datasets from HDF5 files
-            reset_all (bool): Reset all application data before importing
-
-        Returns:
-            None
+            import_all: Import all datasets from HDF5 files
+            reset_all: Reset all application data before importing
         """
         if not self.confirm_memory_state():
             return
         if reset_all is None:
-            reset_all = False
-            if self.has_objects():
+            reset_all = Conf.io.h5_clear_workspace.get()
+            if self.has_objects() and Conf.io.h5_clear_workspace_ask.get():
                 answer = QW.QMessageBox.question(
                     self,
                     _("Warning"),
                     _(
-                        "Do you want to remove all signals and images "
-                        "before importing data from HDF5 files?"
-                    ),
-                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                        "Do you want to clear current workspace (signals and images) "
+                        "before importing data from HDF5 files?<br><br>"
+                        "Choosing to ignore this message will prevent it "
+                        "from being displayed again, and will use the "
+                        "current setting (%s)."
+                    )
+                    % (_("Yes") if reset_all else _("No")),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Ignore,
                 )
                 if answer == QW.QMessageBox.Yes:
                     reset_all = True
+                elif answer == QW.QMessageBox.Ignore:
+                    Conf.io.h5_clear_workspace_ask.set(False)
         if h5files is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
@@ -1412,11 +1455,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Browse HDF5 files
 
         Args:
-            filenames (list): HDF5 filenames
-            reset_all (bool): Reset all application data before importing
-
-        Returns:
-            None
+            filenames: HDF5 filenames
+            reset_all: Reset all application data before importing
         """
         for filename in filenames:
             self.__check_h5file(filename, "load")
@@ -1427,12 +1467,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Import HDF5 file into DataLab
 
         Args:
-            filename (str): HDF5 filename (optionally with dataset name,
+            filename: HDF5 filename (optionally with dataset name,
             separated by ":")
-            reset_all (bool): Delete all DataLab signals/images before importing data
-
-        Returns:
-            None
+            reset_all: Delete all DataLab signals/images before importing data
         """
         with qth.qt_try_loadsave_file(self, filename, "load"):
             filename = self.__check_h5file(filename, "load")
@@ -1441,17 +1478,21 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     # This method is intentionally *not* remote controlled
     # (see TODO regarding RemoteClient.add_object method)
     #  @remote_controlled
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
+    def add_object(
+        self, obj: SignalObj | ImageObj, group_id: str = "", set_current=True
+    ) -> None:
         """Add object - signal or image
 
         Args:
-            obj (SignalObj or ImageObj): object to add (signal or image)
+            obj: object to add (signal or image)
+            group_id: group ID (optional)
+            set_current: True to set the object as current object
         """
         if self.confirm_memory_state():
             if isinstance(obj, SignalObj):
-                self.signalpanel.add_object(obj)
+                self.signalpanel.add_object(obj, group_id, set_current)
             elif isinstance(obj, ImageObj):
-                self.imagepanel.add_object(obj)
+                self.imagepanel.add_object(obj, group_id, set_current)
             else:
                 raise TypeError(f"Unsupported object type {type(obj)}")
 
@@ -1465,12 +1506,22 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         panel = self.__get_current_basedatapanel()
         panel.load_from_files(filenames)
 
+    @remote_controlled
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+        panel = self.__get_current_basedatapanel()
+        panel.load_from_directory(path)
+
     # ------Other methods related to AbstractCDLControl interface
     def get_version(self) -> str:
         """Return DataLab public version.
 
         Returns:
-            str: DataLab version
+            DataLab version
         """
         return cdl.__version__
 
@@ -1491,20 +1542,24 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         yunit: str | None = None,
         xlabel: str | None = None,
         ylabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
         Args:
-            title (str): Signal title
-            xdata (numpy.ndarray): X data
-            ydata (numpy.ndarray): Y data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
+            title: Signal title
+            xdata: X data
+            ydata: Y data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            group_id: group id in which to add the signal. Defaults to ""
+            set_current: if True, set the added signal as current
 
         Returns:
-            bool: True if signal was added successfully, False otherwise
+            True if signal was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid xdata dtype
@@ -1517,7 +1572,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             units=(xunit, yunit),
             labels=(xlabel, ylabel),
         )
-        self.add_object(obj)
+        self.add_object(obj, group_id, set_current)
         return True
 
     def add_image(
@@ -1530,21 +1585,25 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         xlabel: str | None = None,
         ylabel: str | None = None,
         zlabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab.
 
         Args:
-            title (str): Image title
-            data (numpy.ndarray): Image data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            zunit (str | None): Z unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
-            zlabel (str | None): Z label. Defaults to None.
+            title: Image title
+            data: Image data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            zunit: Z unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            zlabel: Z label. Defaults to None
+            group_id: group id in which to add the image. Defaults to ""
+            set_current: if True, set the added image as current
 
         Returns:
-            bool: True if image was added successfully, False otherwise
+            True if image was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid data dtype
@@ -1555,7 +1614,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             units=(xunit, yunit, zunit),
             labels=(xlabel, ylabel, zlabel),
         )
-        self.add_object(obj)
+        self.add_object(obj, group_id, set_current)
         return True
 
     # ------?
@@ -1589,17 +1648,49 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
               <p>{adv_conf}""",
         )
 
+    def __update_color_mode(self, startup: bool = False) -> None:
+        """Update color mode
+
+        Args:
+            startup: True if method is called during application startup (in that case,
+             color theme is applied only if mode != "auto")
+        """
+        mode = Conf.main.color_mode.get()
+        if startup and mode == "auto":
+            guidata_qth.win32_fix_title_bar_background(self)
+            return
+
+        # Prevent Qt from refreshing the window when changing the color mode:
+        self.setUpdatesEnabled(False)
+
+        plotpy_config.set_plotpy_color_mode(mode)
+
+        if self.console is not None:
+            self.console.update_color_mode()
+        if self.macropanel is not None:
+            self.macropanel.update_color_mode()
+        if self.docks is not None:
+            for dock in self.docks.values():
+                widget = dock.widget()
+                if isinstance(widget, DockablePlotWidget):
+                    widget.update_color_mode()
+
+        # Allow Qt to refresh the window:
+        self.setUpdatesEnabled(True)
+
     def __edit_settings(self) -> None:
         """Edit settings"""
         changed_options = edit_settings(self)
         for option in changed_options:
+            if option == "color_mode":
+                self.__update_color_mode()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()
                     if isinstance(widget, DockablePlotWidget):
                         widget.update_toolbar_position()
             if option.startswith("sig_autodownsampling"):
-                self.signalpanel.SIG_REFRESH_PLOT.emit("existing", True)
+                self.signalpanel.refresh_plot("existing", True, False)
             if option == "ima_defaults" and len(self.imagepanel) > 0:
                 answer = QW.QMessageBox.question(
                     self,
@@ -1653,7 +1744,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Close properly
 
         Returns:
-            bool: True if closed properly, False otherwise
+            True if closed properly, False otherwise
         """
         if not env.execenv.unattended and self.__is_modified:
             answer = QW.QMessageBox.warning(

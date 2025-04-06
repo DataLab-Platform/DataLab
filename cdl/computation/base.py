@@ -17,13 +17,62 @@ from typing import TYPE_CHECKING
 import guidata.dataset as gds
 import numpy as np
 
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.obj import ResultProperties, create_signal
 
 if TYPE_CHECKING:
     from typing import Callable
 
     from cdl.obj import ImageObj, SignalObj
+
+
+class ArithmeticParam(gds.DataSet):
+    """Arithmetic parameters"""
+
+    def get_operation(self) -> str:
+        """Return the operation string"""
+        o, a, b = self.operator, self.factor, self.constant
+        b_added = False
+        if a == 0.0:
+            if o in ("+", "-"):
+                txt = "obj3 = obj1"
+            elif b == 0.0:
+                txt = "obj3 = 0"
+            else:
+                txt = f"obj3 = {b}"
+                b_added = True
+        elif a == 1.0:
+            txt = f"obj3 = obj1 {o} obj2"
+        else:
+            txt = f"obj3 = (obj1 {o} obj2) × {a}"
+        if b != 0.0 and not b_added:
+            txt += f" + {b}"
+        return txt
+
+    def update_operation(self, _item, _value):  # pylint: disable=unused-argument
+        """Update the operation item"""
+        self.operation = self.get_operation()
+
+    operators = ("+", "-", "×", "/")
+    operator = gds.ChoiceItem(_("Operator"), list(zip(operators, operators))).set_prop(
+        "display", callback=update_operation
+    )
+    factor = (
+        gds.FloatItem(_("Factor"), default=1.0)
+        .set_pos(col=1)
+        .set_prop("display", callback=update_operation)
+    )
+    constant = (
+        gds.FloatItem(_("Constant"), default=0.0)
+        .set_pos(col=1)
+        .set_prop("display", callback=update_operation)
+    )
+    operation = gds.StringItem(_("Operation"), default="").set_prop(
+        "display", active=False
+    )
+    restore_dtype = gds.BoolItem(
+        _("Convert to `obj1` data type"), label=_("Result"), default=True
+    )
 
 
 class GaussianParam(gds.DataSet):
@@ -104,28 +153,6 @@ class HistogramParam(gds.DataSet):
     upper = gds.FloatItem(_("Upper limit"), default=None, check=False)
 
 
-class ROIDataParam(gds.DataSet):
-    """ROI Editor data"""
-
-    roidata = gds.FloatArrayItem(
-        _("ROI data"),
-        help=_(
-            "For convenience, this item accepts a 2D NumPy array, a list of list "
-            "of numbers, or None. In the end, the data is converted to a 2D NumPy "
-            "array of integers (if not None)."
-        ),
-    )
-    singleobj = gds.BoolItem(
-        _("Single object"),
-        help=_("Whether to extract the ROI as a single object or not."),
-    )
-
-    @property
-    def is_empty(self) -> bool:
-        """Return True if there is no ROI"""
-        return self.roidata is None or np.array(self.roidata).size == 0
-
-
 class FFTParam(gds.DataSet):
     """FFT parameters"""
 
@@ -138,9 +165,8 @@ class SpectrumParam(gds.DataSet):
     log = gds.BoolItem(_("Logarithmic scale"), default=False)
 
 
-class ConstantOperationParam(gds.DataSet):
-    """Parameter used to set a constant value to used in operations (sum,
-    multiplication, ...)"""
+class ConstantParam(gds.DataSet):
+    """Parameter used to set a constant value to used in operations"""
 
     value = gds.FloatItem(_("Constant value"))
 
@@ -169,11 +195,14 @@ def dst_11(
         title = f"{src.short_id}{name}"
     else:
         title = f"{name}({src.short_id})"
-        if suffix is not None:
+        if suffix:  # suffix may be None or an empty string
             title += "|"
-    if suffix is not None:
+    if suffix:  # suffix may be None or an empty string
         title += suffix
-    return src.copy(title=title)
+    dst = src.copy(title=title)
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
+    return dst
 
 
 def dst_n1n(
@@ -199,7 +228,10 @@ def dst_n1n(
         title = f"{name}({src1.short_id}, {src2.short_id})"
     if suffix is not None:
         title += "|" + suffix
-    return src1.copy(title=title)
+    dst = src1.copy(title=title)
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
+    return dst
 
 
 def new_signal_result(
@@ -256,8 +288,10 @@ def calc_resultproperties(
         raise ValueError("Values of labeledfuncs must be functions")
 
     res = []
-    roi_nb = 0 if obj.roi is None else obj.roi.shape[0]
-    for i_roi in [None] + list(range(roi_nb)):
+    roi_indices = list(obj.iterate_roi_indices())
+    if roi_indices[0] is not None:
+        roi_indices.insert(0, None)
+    for i_roi in roi_indices:
         data_roi = obj.get_data(i_roi)
         val_roi = -1 if i_roi is None else i_roi
         res.append([val_roi] + [fn(data_roi) for fn in labeledfuncs.values()])

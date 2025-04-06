@@ -8,7 +8,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 from plotpy.tools import (
     HCursorTool,
@@ -30,6 +30,7 @@ from cdl.core.io.signal import SignalIORegistry
 from cdl.core.model.signal import (
     CURVESTYLES,
     SignalObj,
+    SignalROI,
     create_signal_from_param,
     new_signal_param,
 )
@@ -42,13 +43,17 @@ if TYPE_CHECKING:
     from cdl.core.model.signal import NewSignalParam
 
 
-class SignalPanel(BaseDataPanel):
+class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]):
     """Object handling the item list, the selected item properties and plot,
     specialized for Signal objects"""
 
     PANEL_STR = _("Signal Panel")
     PANEL_STR_ID = "signal"
     PARAMCLASS = SignalObj
+
+    # The following tools are used to create annotations on signals. The annotation
+    # items are created using PlotPy's default settings. Those appearance settings
+    # may be modified in the configuration (see `cdl.config`).
     ANNOTATION_TOOLS = (
         LabelTool,
         VCursorTool,
@@ -58,11 +63,16 @@ class SignalPanel(BaseDataPanel):
         RectangleTool,
         HRangeTool,
     )
+
     IO_REGISTRY = SignalIORegistry
     H5_PREFIX = "DataLab_Sig"
-    ROIDIALOGCLASS = roieditor.SignalROIEditor
 
     # pylint: disable=duplicate-code
+
+    @staticmethod
+    def get_roieditor_class() -> Type[roieditor.SignalROIEditor]:
+        """Return ROI editor class"""
+        return roieditor.SignalROIEditor
 
     def __init__(
         self,

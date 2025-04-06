@@ -13,7 +13,7 @@ DataLab provides a "Contour Detection" feature which is based on
 How to use the feature:
   - Create or open an image in DataLab workspace
   - Eventually create a ROI around the target area
-  - Select "Contour detection" in "Computing" menu
+  - Select "Contour detection" in "Analysis" menu
   - Enter parameter "Shape" ("Ellipse", "Circle" or "Polygon")
 
 .. figure:: /images/contour_detection/contour_app_results.png

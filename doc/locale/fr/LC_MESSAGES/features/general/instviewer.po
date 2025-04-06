@@ -8,78 +8,35 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"POT-Creation-Date: 2025-03-20 16:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: ../../doc/features/general/instviewer.rst:-1
 msgid "DataLab's installation and configuration viewer"
 msgstr "Visualiseur d'installation et de configuration de DataLab"
 
-#: ../../doc/features/general/instviewer.rst:-1
 msgid "installation, configuration, viewer, DataLab"
 msgstr "installation, configuration, visualiseur, DataLab"
 
-#: ../../doc/features/general/instviewer.rst:4
 msgid "Installation and configuration viewer"
 msgstr "Installation et configuration"
 
-#: ../../doc/features/general/instviewer.rst:10
-msgid ""
-"Because of the multiple ways of installing DataLab on your machine, "
-"understanding why the application behaves unexpectedly without any "
-"information on your configuration could be very challenging."
-msgstr ""
-"En raison des multiples façons d'installer DataLab sur votre machine, "
-"comprendre l'origine d'un dysfontionnement de l'application sans "
-"information sur votre configuration peut s'avérer très difficile."
+msgid "Because of the multiple ways of installing DataLab on your machine, understanding why the application behaves unexpectedly without any information on your configuration could be very challenging."
+msgstr "En raison des multiples façons d'installer DataLab sur votre machine, comprendre l'origine d'un dysfontionnement de l'application sans information sur votre configuration peut s'avérer très difficile."
 
-#: ../../doc/features/general/instviewer.rst:14
-msgid ""
-"That is why DataLab provides the dialog box \"Installation and "
-"configuration\" which gathers all the information about your installation"
-" and configuration."
-msgstr ""
-"C'est pourquoi DataLab fournit la boîte de dialogue \"Installation et "
-"configuration\" qui rassemble toutes les informations sur votre "
-"installation et votre configuration utilisateur."
+msgid "That is why DataLab provides the dialog box \"Installation and configuration\" which gathers all the information about your installation and configuration."
+msgstr "C'est pourquoi DataLab fournit la boîte de dialogue \"Installation et configuration\" qui rassemble toutes les informations sur votre installation et votre configuration utilisateur."
 
-#: ../../doc/features/general/instviewer.rst:19
-msgid ""
-"The installation and configuration viewer is accessible from the \"?\" "
-"menu in the main window."
+msgid "The installation and configuration viewer is accessible from the \"?\" menu in the main window."
 msgstr "Le visualiseur d'installation et de configuration est accessible depuis le menu \"?\" de la fenêtre principale."
 
-#: ../../doc/features/general/instviewer.rst:23
 msgid "Installation and configuration (see \"?\" menu)"
 msgstr "Installation et configuration (voir menu \"?\")"
 
-#: ../../doc/features/general/instviewer.rst:25
-msgid ""
-"Reporting unexpected behavior or any other bug on `GitHub Issues`_ will "
-"be greatly appreciated, especially if above contents are attached to the "
-"report (as well log files, see :ref:`ref-to-logviewer`)."
-msgstr ""
-"Signaler un comportement inattendu ou tout autre type d'anomalie sur la "
-"page `GitHub Issues`_ sera grandement apprécié, d'autant plus si vous "
-"prenez soin de joindre les informations ci-dessus (ainsi que les journaux"
-" d'historique, cf. :ref:`ref-to-logviewer`)."
-
-#~ msgid "About DataLab installation"
-#~ msgstr "Configuration d'installation de DataLab"
-
-#~ msgid ""
-#~ "That is why DataLab provides the "
-#~ "dialog box \"About DataLab installation\"."
-#~ msgstr ""
-#~ "C'est pourquoi DataLab fournit la boîte"
-#~ " de dialogue \"Configuration d'installation "
-#~ "de DataLab\"."
-
-#~ msgid "About your DataLab installation (see \"?\" menu)"
-#~ msgstr "Configuration d'installation de DataLab (voir menu \"?\")"
+msgid "Reporting unexpected behavior or any other bug on `GitHub Issues`_ will be greatly appreciated, especially if above contents are attached to the report (as well log files, see :ref:`ref-to-logviewer`)."
+msgstr "Signaler un comportement inattendu ou tout autre type d'anomalie sur la page `GitHub Issues`_ sera grandement apprécié, d'autant plus si vous prenez soin de joindre les informations ci-dessus (ainsi que les journaux d'historique, cf. :ref:`ref-to-logviewer`)."

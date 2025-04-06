@@ -38,7 +38,7 @@ in a variety of scientific disciplines, including biology, physics, and astronom
 common ground for all these disciplines is the need to validate the results of
 computational analysis against ground-truth data. This is a critical step in the
 scientific method, and it is essential for reproducibility and trust in the results.
-This is what we call **scientific validation**.
+This is what we call **technical validation**.
 
 DataLab is also used in industrial applications, where the validation of the results
 is essential for guaranteeing the quality of the process but a wider range of validation
@@ -47,7 +47,7 @@ of view. This is what we call **functional validation**.
 
 Thus, DataLab validation may be categorized into two types:
 
-- **Scientific validation**: ensures that the results of computational analysis
+- **Technical validation**: ensures that the results of computational analysis
   are accurate and reliable.
 
 - **Functional validation**: checks that the software behaves as expected in a
@@ -57,7 +57,7 @@ Thus, DataLab validation may be categorized into two types:
    :maxdepth: 1
    :caption: Validation:
 
-   validation/scientific
+   validation/technical
    validation/functional
    validation/status
 
@@ -105,9 +105,10 @@ signal processing panel is the default panel when DataLab is started.
    :caption: Signal processing:
 
    signal/menu_file
+   signal/menu_edit
    signal/menu_operations
    signal/menu_processing
-   signal/menu_computing
+   signal/menu_analysis
    signal/menu_view
 
 .. raw:: latex
@@ -130,9 +131,10 @@ bottom-right of the DataLab main window.
    :caption: Image processing:
 
    image/menu_file
+   image/menu_edit
    image/menu_operations
    image/menu_processing
-   image/menu_computing
+   image/menu_analysis
    image/menu_view
    image/2d_peak_detection
    image/contour_detection

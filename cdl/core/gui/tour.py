@@ -54,7 +54,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from guidata.configtools import get_icon, get_image_file_path
-from guidata.qthelpers import is_dark_mode
+from guidata.qthelpers import is_dark_theme
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -143,7 +143,7 @@ class Cover(QW.QWidget):
         """
         super().paintEvent(event)
         painter = QG.QPainter(self)
-        painter.setOpacity((0.75 if is_dark_mode() else 0.5) * self.__opacity_factor)
+        painter.setOpacity((0.75 if is_dark_theme() else 0.5) * self.__opacity_factor)
         painter.setBrush(QG.QBrush(QC.Qt.black))
         painter.setPen(QC.Qt.NoPen)
         painter.drawPath(self.__path)
@@ -297,11 +297,11 @@ class StepDialog(QW.QDialog):
             logo.setPixmap(QG.QPixmap(get_image_file_path("DataLab-Banner2-100.png")))
             logo.setAlignment(QC.Qt.AlignCenter)
             self._layout.addWidget(logo)
-        title_color = QC.Qt.lightGray if is_dark_mode() else QC.Qt.darkGray
+        title_color = QC.Qt.lightGray if is_dark_theme() else QC.Qt.darkGray
         title = self.__create_label(self.step.title, 1, title_color, True)
         self._layout.addWidget(title)
         self._layout.addWidget(self.__create_horizontal_line())
-        label_color = QC.Qt.cyan if is_dark_mode() else QC.Qt.darkBlue
+        label_color = QC.Qt.cyan if is_dark_theme() else QC.Qt.darkBlue
         label_dsize = 3 if self.step.step_type == "regular" else 4
         label = self.__create_label(self.step.text, label_dsize, label_color)
         if self.step.step_type == "regular":
@@ -748,15 +748,15 @@ class Tour(BaseTour):
             lambda win: win.processing_menu.hide(),
         )
         self.add_step(
-            _("Signal Panel") + " – " + _("Computing menu"),
+            _("Signal Panel") + " – " + _("Analysis menu"),
             _(
-                "The <b>Computing</b> menu regroups 1->0 signal computing actions "
+                "The <b>Analysis</b> menu regroups 1->0 signal computing actions "
                 "(that is, actions that do not modify the signals, but compute "
                 "a result, e.g. scalar values), with optional ROI selection."
             ),
             [win.menuBar()],
-            lambda win: self.popup_menu(win, win.computing_menu),
-            lambda win: win.computing_menu.hide(),
+            lambda win: self.popup_menu(win, win.analysis_menu),
+            lambda win: win.analysis_menu.hide(),
         )
         self.add_step(
             _("Image Panel"),
@@ -813,7 +813,7 @@ class Tour(BaseTour):
             _("Image Panel") + " – " + _("Operations menu"),
             _(
                 "The <b>Operations</b> menu is focused on arithmetic operations, "
-                "data type conversions, pixel binning resize, intensity profiles, ..."
+                "data type conversions, pixel binning resize, intensity profiles..."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.operation_menu),
@@ -830,15 +830,15 @@ class Tour(BaseTour):
             lambda win: win.processing_menu.hide(),
         )
         self.add_step(
-            _("Image Panel") + " – " + _("Computing menu"),
+            _("Image Panel") + " – " + _("Analysis menu"),
             _(
-                "The <b>Computing</b> menu regroups 1->0 image computing actions "
+                "The <b>Analysis</b> menu regroups 1->0 image computing actions "
                 "(that is, actions that do not modify the images, but compute "
                 "a result, e.g. circle coordinates), with optional ROI selection."
             ),
             [win.menuBar()],
-            lambda win: self.popup_menu(win, win.computing_menu),
-            lambda win: win.computing_menu.hide(),
+            lambda win: self.popup_menu(win, win.analysis_menu),
+            lambda win: win.analysis_menu.hide(),
         )
         self.add_step(
             _("Extensions"),

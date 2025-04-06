@@ -68,7 +68,7 @@ def test_image_calibration() -> None:
     # Test with a = 1 and b = 0: should do nothing
     p.a, p.b = 1.0, 0.0
     dst = cpi.compute_calibration(src, p)
-    exp = src.data
+    exp = np.array(src.data, dtype=float)
     check_array_result("Calibration[identity]", dst.data, exp)
 
     # Testing with random values of a and b
@@ -92,6 +92,7 @@ def test_image_normalize() -> None:
     """Validation test for the image normalization processing."""
     src = get_test_image("flower.npy")
     src.data = np.array(src.data, dtype=float)
+    src.data[20:30, 20:30] = np.nan  # Adding NaN values to the image
     p = cdl.param.NormalizeParam()
 
     # Given the fact that the normalization methods implementations are
@@ -101,21 +102,25 @@ def test_image_normalize() -> None:
         p.method = method_value
         dst = cpi.compute_normalize(src, p)
         title = f"Normalize[method='{p.method}']"
+        exp_min, exp_max = None, None
         if p.method == "maximum":
-            exp_min, exp_max = src.data.min() / src.data.max(), 1.0
+            exp_min, exp_max = np.nanmin(src.data) / np.nanmax(src.data), 1.0
         elif p.method == "amplitude":
             exp_min, exp_max = 0.0, 1.0
         elif p.method == "area":
-            area = src.data.sum()
-            exp_min, exp_max = src.data.min() / area, src.data.max() / area
+            area = np.nansum(src.data)
+            exp_min, exp_max = np.nanmin(src.data) / area, np.nanmax(src.data) / area
         elif p.method == "energy":
-            energy = np.sqrt(np.sum(np.abs(src.data) ** 2))
-            exp_min, exp_max = src.data.min() / energy, src.data.max() / energy
+            energy = np.sqrt(np.nansum(np.abs(src.data) ** 2))
+            exp_min, exp_max = (
+                np.nanmin(src.data) / energy,
+                np.nanmax(src.data) / energy,
+            )
         elif p.method == "rms":
-            rms = np.sqrt(np.mean(np.abs(src.data) ** 2))
-            exp_min, exp_max = src.data.min() / rms, src.data.max() / rms
-        check_scalar_result(f"{title}|min", dst.data.min(), exp_min)
-        check_scalar_result(f"{title}|max", dst.data.max(), exp_max)
+            rms = np.sqrt(np.nanmean(np.abs(src.data) ** 2))
+            exp_min, exp_max = np.nanmin(src.data) / rms, np.nanmax(src.data) / rms
+        check_scalar_result(f"{title}|min", np.nanmin(dst.data), exp_min)
+        check_scalar_result(f"{title}|max", np.nanmax(dst.data), exp_max)
 
 
 @pytest.mark.validation
@@ -136,9 +141,11 @@ def test_image_offset_correction() -> None:
     """Validation test for the image offset correction processing."""
     src = get_test_image("flower.npy")
     # Defining the ROI that will be used to estimate the offset
-    p = cdl.obj.ROI2DParam.create(xr0=0, yr0=0, xr1=50, yr1=20)
+    p = cdl.obj.ROI2DParam.create(x0=0, y0=0, dx=50, dy=20)
     dst = cpi.compute_offset_correction(src, p)
-    exp = src.data - np.mean(src.data[p.yr0 : p.yr1, p.xr0 : p.xr1])
+    ix0, iy0 = int(p.x0), int(p.y0)
+    ix1, iy1 = int(p.x0 + p.dx), int(p.y0 + p.dy)
+    exp = src.data - np.mean(src.data[iy0:iy1, ix0:ix1])
     check_array_result("OffsetCorrection", dst.data, exp)
 
 

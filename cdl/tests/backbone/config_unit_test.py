@@ -83,13 +83,20 @@ def apply_conf(conf, name):
     CONF.save()
 
 
+def is_wsl() -> bool:
+    """Return True if running on Windows Subsystem for Linux (WSL)"""
+    if os.name == "posix":
+        return "WSL" in os.uname().release  # pylint: disable=no-member
+    return False
+
+
 def assert_in_interval(val1, val2, interval, context):
     """Raise an AssertionError if val1 is in [val2-interval/2,val2+interval/2]"""
     itv1, itv2 = val2 - 0.5 * interval, val2 + 0.5 * interval
     try:
         assert itv1 <= val1 <= itv2
     except AssertionError as exc:
-        if os.name == "posix" and "WSL" in os.uname().release:
+        if is_wsl():
             # Ignore if executing the test on WSL: position of windows is not reliable
             # on WSL (e.g. Gnome) and the test will fail
             pass

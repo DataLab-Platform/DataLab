@@ -15,10 +15,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
-import numpy as np
 import qtpy.QtCore as QC
 from guidata.configtools import get_icon
-from plotpy.coords import axes_to_canvas
 from plotpy.interfaces import ICurveItemType
 from plotpy.items import AnnotatedPoint, AnnotatedRectangle, AnnotatedSegment
 from plotpy.panels.csection.cswidget import LineCrossSection
@@ -57,6 +55,7 @@ class ProfileExtractionDialog(PlotDialog):
         parent: QWidget | None = None,
         add_initial_shape: bool = False,
     ) -> None:
+        self.__obj: ImageObj | None = None
         self.__default_curve_color: str | None = None
         assert mode in ("line", "segment", "rectangle")
         self.mode = mode
@@ -193,42 +192,56 @@ class ProfileExtractionDialog(PlotDialog):
         self.shape_to_param()
         self.update_cs_panels_state()
 
+    def __physical_to_indices(self, coords: list[float]) -> tuple[int, int]:
+        """Physical to indices
+
+        Args:
+            coords: Coordinates
+
+        Returns:
+            Tuple of indices
+        """
+        assert self.__obj is not None
+        return self.__obj.physical_to_indices(coords, clip=True)
+
     def shape_to_param(self) -> None:
         """Shape to param"""
+        assert self.__obj is not None
+        p2i = self.__physical_to_indices
         p = self.param
         if isinstance(self.shape, AnnotatedPoint):
             assert isinstance(p, cdl.param.LineProfileParam)
-            x, y = self.shape.get_pos()
-            p.row, p.col = int(np.round(y)), int(np.round(x))
+            p.col, p.row = p2i(self.shape.get_pos())
         elif isinstance(self.shape, AnnotatedSegment):
             assert isinstance(p, cdl.param.SegmentProfileParam)
-            x1, y1, x2, y2 = self.shape.get_rect()
-            p.row1, p.row2 = int(np.round(y1)), int(np.round(y2))
-            p.col1, p.col2 = int(np.round(x1)), int(np.round(x2))
+            p.col1, p.row1, p.col2, p.row2 = p2i(self.shape.get_rect())
             if p.col1 > p.col2:
                 p.col1, p.col2 = p.col2, p.col1
                 p.row1, p.row2 = p.row2, p.row1
         else:
             assert isinstance(p, cdl.param.AverageProfileParam)
-            x1, y1, x2, y2 = self.shape.get_rect()
-            p.row1, p.row2 = int(np.round(y1)), int(np.round(y2))
-            p.col1, p.col2 = int(np.round(x1)), int(np.round(x2))
+            p.col1, p.row1, p.col2, p.row2 = p2i(self.shape.get_rect())
             if p.col1 > p.col2:
                 p.col1, p.col2 = p.col2, p.col1
                 p.row1, p.row2 = p.row2, p.row1
 
     def param_to_shape(self) -> None:
         """Param to shape"""
+        assert self.__obj is not None
+        i2p = self.__obj.indices_to_physical
         p = self.param
         if isinstance(self.shape, AnnotatedPoint):
             assert isinstance(p, cdl.param.LineProfileParam)
-            self.shape.set_pos(p.col, p.row)
+            x, y = i2p([p.col, p.row])
+            self.shape.set_pos(x, y)
         elif isinstance(self.shape, AnnotatedSegment):
             assert isinstance(p, cdl.param.SegmentProfileParam)
-            self.shape.set_rect(p.col1, p.row1, p.col2, p.row2)
+            x1, y1, x2, y2 = i2p([p.col1, p.row1, p.col2, p.row2])
+            self.shape.set_rect(x1, y1, x2, y2)
         else:
             assert isinstance(p, cdl.param.AverageProfileParam)
-            self.shape.set_rect(p.col1, p.row1, p.col2, p.row2)
+            x1, y1, x2, y2 = i2p([p.col1, p.row1, p.col2, p.row2])
+            self.shape.set_rect(x1, y1, x2, y2)
 
     def edit_values(self) -> None:
         """Edit values"""
@@ -250,6 +263,7 @@ class ProfileExtractionDialog(PlotDialog):
         Args:
             obj: Image object
         """
+        self.__obj = obj
         item = obj.make_item()
         item.set_readonly(True)
         item.set_resizable(False)
@@ -262,21 +276,10 @@ class ProfileExtractionDialog(PlotDialog):
         if self.__add_initial_shape:
             plot = self.get_plot()
             self.show()  # To be able to convert axes to canvas coordinates
-            if self.mode == "line":
-                p0 = QC.QPointF(*axes_to_canvas(item, self.param.col, self.param.row))
-                p1 = p0
-            elif self.mode == "segment":
-                x1, y1 = self.param.col1, self.param.row1
-                x2, y2 = self.param.col2, self.param.row2
-                p0 = QC.QPointF(*axes_to_canvas(item, x1, y1))
-                p1 = QC.QPointF(*axes_to_canvas(item, x2, y2))
-            else:
-                x1, x2 = sorted([self.param.col1, self.param.col2])
-                y1, y2 = sorted([self.param.row1, self.param.row2])
-                p0 = QC.QPointF(*axes_to_canvas(item, x1, y1))
-                p1 = QC.QPointF(*axes_to_canvas(item, x2, y2))
-            self.cstool.add_shape_to_plot(plot, p0, p1)
+            p0 = QC.QPointF(0.0, 0.0)
+            self.cstool.add_shape_to_plot(plot, p0, p0)
             self.shape = self.cstool.get_last_final_shape()
+            self.param_to_shape()
             self.param_btn.setEnabled(True)
             self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(True)
         else:

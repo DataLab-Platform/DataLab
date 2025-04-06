@@ -104,7 +104,7 @@ Now, let's detect the blobs on the image.
 
 .. figure:: ../../images/tutorials/blobs/10.png
 
-    Click on "Computing > Blob detection > Blob detection (OpenCV)".
+    Click on "Analysis > Blob detection > Blob detection (OpenCV)".
 
 .. figure:: ../../images/tutorials/blobs/11.png
 
@@ -118,13 +118,13 @@ Now, let's detect the blobs on the image.
 
 .. note::
 
-    If you want to show the computing results again, you can select the "Show results"
-    |show_results| entry in the "Computing" menu, or the "Show results" |show_results|
+    If you want to show the analysis results again, you can select the "Show results"
+    |show_results| entry in the "Analysis" menu, or the "Show results" |show_results|
     button, below the image list:
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
+.. |show_results| image:: ../../../cdl/data/icons/analysis/show_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

@@ -168,36 +168,42 @@ class BaseImportParam(gds.DataSet):
         ],
         help=_("Column delimiter character"),
     )
+    decimal_choice = gds.ChoiceItem(
+        _("Decimal"),
+        [(".", _("Point")), (",", _("Comma"))],
+        help=_("Decimal separator character"),
+        default=".",
+    ).set_pos(col=1)
     comment_char = gds.StringItem(
         _("Comments"),
         default="#",
         help=_("Character that indicates a comment line"),
-    ).set_pos(col=1)
+    ).set_pos(col=2)
     skip_rows = gds.IntItem(
         _("Rows to Skip"),
         default=0,
         help=_(
             "Number of rows to skip at the beginning of the file (including comments)"
         ),
-    ).set_pos(col=2)
+    )
     max_rows = gds.IntItem(
         _("Max. nb of rows"),
         default=None,
         min=1,
         check=False,
         help=_("Maximum number of rows to import"),
-    )
+    ).set_pos(col=1)
     header = gds.ChoiceItem(
         _("Header"),
         ((None, _("None")), ("infer", _("Infer")), (0, _("First row"))),
         default="infer",
         help=_("Row index to use as the column names"),
-    ).set_pos(col=1)
+    ).set_pos(col=2)
     transpose = gds.BoolItem(
         _("Transpose"),
         default=False,
         help=_("Transpose the data (swap rows and columns)"),
-    ).set_pos(col=2)
+    )
 
 
 class SignalImportParam(BaseImportParam):
@@ -210,17 +216,15 @@ class SignalImportParam(BaseImportParam):
         list(zip(VALID_DTYPES_STRLIST, VALID_DTYPES_STRLIST)),
         help=_("Output signal data type."),
         default="float64",
-    )
+    ).set_pos(col=1)
     first_col_is_x = gds.BoolItem(
         _("First Column is X"),
         default=True,
         help=_(
-            _(
-                "First column contains the X values\n"
-                "(ignored if there is only one column)"
-            )
+            "First column contains the X values\n"
+            "(ignored if there is only one column)"
         ),
-    ).set_pos(col=1)
+    ).set_pos(col=2)
 
 
 class ImageImportParam(BaseImportParam):
@@ -233,7 +237,7 @@ class ImageImportParam(BaseImportParam):
         list(zip(VALID_DTYPES_STRLIST, VALID_DTYPES_STRLIST)),
         help=_("Output image data type."),
         default="uint16",
-    )
+    ).set_pos(col=1)
 
 
 class ArrayModel(QC.QAbstractTableModel):
@@ -397,6 +401,7 @@ def str_to_dataframe(
             textstream,
             nlines,
             worker=worker,
+            decimal=param.decimal_choice,
             delimiter=param.delimiter_choice,
             skiprows=param.skip_rows,
             nrows=param.max_rows,

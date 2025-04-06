@@ -26,11 +26,12 @@ def test_image_background_selection():
             # For more details about the why of the delay, see the comment in
             # cdl\tests\features\image\offset_correction_unit_test.py
             exec_dialog(dlg)
-    execenv.print(f"background: {dlg.get_background()}")
-    execenv.print(f"index range: {dlg.get_index_range()}")
-    # Check background value:
-    x0, y0, x1, y1 = dlg.get_index_range()
-    assert np.isclose(img.data[y0:y1, x0:x1].mean(), dlg.get_background())
+        execenv.print(f"background: {dlg.get_background()}")
+        execenv.print(f"rect coords: {dlg.get_rect_coords()}")
+        # Check background value:
+        x0, y0, x1, y1 = dlg.get_rect_coords()
+        ix0, iy0, ix1, iy1 = dlg.imageitem.get_closest_index_rect(x0, y0, x1, y1)
+        assert np.isclose(img.data[iy0:iy1, ix0:ix1].mean(), dlg.get_background())
 
 
 if __name__ == "__main__":

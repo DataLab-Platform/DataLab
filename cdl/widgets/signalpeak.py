@@ -15,7 +15,7 @@ from plotpy.plot import PlotDialog
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
-from cdl.algorithms.signal import peak_indexes
+from cdl.algorithms.signal import peak_indices
 from cdl.config import _
 from cdl.core.model.signal import CURVESTYLES
 
@@ -81,7 +81,7 @@ class SignalPeakDetectionDialog(PlotDialog):
     def __init__(self, signal: SignalObj, parent: QWidget | None = None) -> None:
         self.__curve_styles = CURVESTYLES.style_generator()
         self.peaks = None
-        self.peak_indexes = None
+        self.peak_indices = None
         self.in_curve = None
         self.in_threshold = None
         self.in_threshold_cursor = None
@@ -132,9 +132,9 @@ class SignalPeakDetectionDialog(PlotDialog):
         """Return peaks coordinates"""
         return self.peaks
 
-    def get_peak_indexes(self) -> list[int]:
-        """Return peak indexes"""
-        return self.peak_indexes
+    def get_peak_indices(self) -> list[int]:
+        """Return peak indices"""
+        return self.peak_indices
 
     def get_threshold(self) -> float:
         """Return relative threshold"""
@@ -149,13 +149,13 @@ class SignalPeakDetectionDialog(PlotDialog):
         """Compute peak detection"""
         x, y = self.__signal.xydata
         plot = self.get_plot()
-        self.peak_indexes = peak_indexes(
+        self.peak_indices = peak_indices(
             y,
             thres=self.in_threshold,
             min_dist=self.min_distance,
             thres_abs=True,
         )
-        self.peaks = [(x[index], y[index]) for index in self.peak_indexes]
+        self.peaks = [(x[index], y[index]) for index in self.peak_indices]
         markers = [
             make.marker(
                 pos,

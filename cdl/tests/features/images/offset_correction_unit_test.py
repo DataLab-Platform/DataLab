@@ -35,12 +35,13 @@ def test_image_offset_correction_interactive() -> None:
             # On Linux, the delay is required to ensure that the dialog is displayed
             # because the `QApplication.processEvents()` do not trigger the drawing
             # event on the dialog as expected. So, the `RangeComputation2d` is not
-            # drawn, the background value is not computed, and `get_index_range()`
+            # drawn, the background value is not computed, and `get_rect_coords()`
             # returns `None` which causes the test to fail.
             ok = exec_dialog(dlg)
         if ok:
             param = ROI2DParam()
-            param.xr0, param.yr0, param.xr1, param.yr1 = dlg.get_index_range()
+            ix0, iy0, ix1, iy1 = i1.physical_to_indices(dlg.get_rect_coords())
+            param.x0, param.y0, param.dx, param.dy = ix0, iy0, ix1 - ix0, iy1 - iy0
             i2 = cpi.compute_offset_correction(i1, param)
             i3 = cpi.compute_clip(i2, cdl.param.ClipParam.create(lower=0))
             view_images_side_by_side(
@@ -54,11 +55,12 @@ def test_image_offset_correction_interactive() -> None:
 def test_image_offset_correction() -> None:
     """Image offset correction validation test."""
     i1 = create_noisygauss_image()
-    param = ROI2DParam.create(xr0=0, yr0=0, xr1=10, yr1=10)
+    param = ROI2DParam.create(x0=0, y0=0, dx=10, dy=10)
     i2 = cpi.compute_offset_correction(i1, param)
 
     # Check that the offset correction has been applied
-    x0, y0, x1, y1 = param.xr0, param.yr0, param.xr1, param.yr1
+    x0, y0 = param.x0, param.y0
+    x1, y1 = x0 + param.dx, y0 + param.dy
     offset = np.mean(i1.data[y0:y1, x0:x1])
     assert np.allclose(i2.data, i1.data - offset), "Offset correction failed"
 

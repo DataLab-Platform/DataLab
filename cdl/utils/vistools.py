@@ -34,7 +34,7 @@ def get_name_title(name, title):
     return name, title
 
 
-def create_curve_dialog(name=None, title=None, xlabel=None, ylabel=None):
+def create_curve_dialog(name=None, title=None, xlabel=None, ylabel=None, size=None):
     """Create Curve Dialog"""
     name, title = get_name_title(name, title)
     win = PlotDialog(
@@ -43,6 +43,7 @@ def create_curve_dialog(name=None, title=None, xlabel=None, ylabel=None):
         toolbar=True,
         title=title,
         options=PlotOptions(type="curve", xlabel=xlabel, ylabel=ylabel),
+        size=(800, 600) if size is None else size,
     )
     win.setObjectName(name)
     return win
@@ -78,7 +79,7 @@ def view_curves(data_or_datalist, name=None, title=None, xlabel=None, ylabel=Non
     view_curve_items(items, name=name, title=title, xlabel=xlabel, ylabel=ylabel)
 
 
-def create_image_dialog(name=None, title=None, xlabel=None, ylabel=None):
+def create_image_dialog(name=None, title=None, xlabel=None, ylabel=None, size=None):
     """Create Image Dialog"""
     name, title = get_name_title(name, title)
     win = PlotDialog(
@@ -87,6 +88,7 @@ def create_image_dialog(name=None, title=None, xlabel=None, ylabel=None):
         toolbar=True,
         title=title,
         options=PlotOptions(type="image", xlabel=xlabel, ylabel=ylabel),
+        size=(800, 600) if size is None else size,
     )
     win.setObjectName(name)
     for toolklass in (

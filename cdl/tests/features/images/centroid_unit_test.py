@@ -25,7 +25,7 @@ from numpy import ma
 from plotpy.builder import make
 
 import cdl.computation.image as cpi
-import cdl.obj
+import cdl.obj as dlo
 from cdl.algorithms.image import get_centroid_fourier
 from cdl.config import _
 from cdl.env import execenv
@@ -97,14 +97,27 @@ def test_centroid_graphically():
             compare_centroid_funcs(data.view(ma.MaskedArray))
 
 
+def __check_centroid(image, expected_x, expected_y):
+    """Check centroid computation"""
+    df = cpi.compute_centroid(image).to_dataframe()
+    check_scalar_result("Centroid X", df.x[0], expected_x, atol=1.0)
+    check_scalar_result("Centroid Y", df.y[0], expected_y, atol=1.0)
+
+
 @pytest.mark.validation
 def test_image_centroid():
     """Test centroid computation"""
-    param = cdl.obj.NewImageParam.create(height=500, width=500)
+    param = dlo.NewImageParam.create(height=500, width=500)
     image = create_noisygauss_image(param, center=(-2.0, 3.0), add_annotations=True)
-    df = cpi.compute_centroid(image).to_dataframe()
-    check_scalar_result("Centroid X", df.x[0], 199)
-    check_scalar_result("Centroid Y", df.y[0], 324)
+    circle_roi = dlo.create_image_roi("circle", [200, 325, 10])
+    for roi, x0, y0 in (
+        (None, 0, 0),
+        (None, 100, 100),
+        (circle_roi, 0, 0),
+        (circle_roi, 100, 100),  # Test for regression like #106
+    ):
+        image.roi, image.x0, image.y0 = roi, x0, y0
+        __check_centroid(image, 200.0 + x0, 325.0 + y0)
 
 
 if __name__ == "__main__":

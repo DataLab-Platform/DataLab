@@ -8,41 +8,29 @@ The :mod:`cdl` package requires the following Python modules:
       - Version
       - Summary
     * - Python
-      - >=3.8, <4
+      - >=3.9, <4
       - Python programming language
-    * - h5py
-      -  >= 3.0
-      - Read and write HDF5 files from Python
-    * - NumPy
-      -  >= 1.21
-      - Fundamental package for array computing in Python
+    * - guidata
+      -  >= 3.7
+      - Automatic GUI generation for easy dataset editing and display
+    * - PlotPy
+      -  >= 2.7
+      - Curve and image plotting tools for Python/Qt applications
     * - SciPy
-      -  >= 1.7
+      -  >= 1.5, < 1.15.0
       - Fundamental algorithms for scientific computing in Python
     * - scikit-image
       -  >= 0.18
       - Image processing in Python
-    * - opencv-python-headless
-      -  >= 4.5
-      - Wrapper package for OpenCV python bindings.
     * - pandas
-      -  >= 1.3
+      -  >= 1.2
       - Powerful data structures for data analysis, time series, and statistics
     * - PyWavelets
       -  >= 1.1
       - PyWavelets, wavelet transform module
     * - psutil
-      -  >= 5.5
-      - Cross-platform lib for process and system monitoring in Python.
-    * - guidata
-      -  >= 3.5
-      - Automatic GUI generation for easy dataset editing and display
-    * - PlotPy
-      -  >= 2.4
-      - Curve and image plotting tools for Python/Qt applications
-    * - QtPy
-      -  >= 1.9
-      - Provides an abstraction layer on top of the various Qt bindings (PyQt5/6 and PySide2/6).
+      -  >= 5.7
+      - Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7.
     * - PyQt5
       - >=5.11
       - Python bindings for the Qt cross platform application toolkit

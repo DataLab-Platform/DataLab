@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
@@ -27,13 +29,16 @@ from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
 from cdl.core.model.base import ResultProperties, ResultShape
-from cdl.core.model.image import ImageObj, ROI2DParam, RoiDataGeometries
+from cdl.core.model.image import ImageObj, ImageROI, ROI2DParam, create_image_roi
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets import imagebackground
 
+if TYPE_CHECKING:
+    import guidata.dataset as gds
 
-class ImageProcessor(BaseProcessor):
-    """Object handling image processing: operations, processing, computing"""
+
+class ImageProcessor(BaseProcessor[ImageROI]):
+    """Object handling image processing: operations, processing, analysis"""
 
     # pylint: disable=duplicate-code
 
@@ -53,17 +58,14 @@ class ImageProcessor(BaseProcessor):
         self.compute_n1("Σ", cpi.compute_addition, title=_("Sum"))
 
     @qt_try_except()
-    def compute_addition_constant(
-        self, param: cpb.ConstantOperationParam | None = None
-    ) -> None:
+    def compute_addition_constant(self, param: cpb.ConstantParam | None = None) -> None:
         """Compute sum with a constant using
         :py:func:`cdl.computation.image.compute_addition_constant`"""
         self.compute_11(
             cpi.compute_addition_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Add constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -85,17 +87,14 @@ class ImageProcessor(BaseProcessor):
         self.compute_n1("Π", cpi.compute_product, title=_("Product"))
 
     @qt_try_except()
-    def compute_product_constant(
-        self, param: cpb.ConstantOperationParam | None = None
-    ) -> None:
+    def compute_product_constant(self, param: cpb.ConstantParam | None = None) -> None:
         """Compute product with a constant using
         :py:func:`cdl.computation.image.compute_product_constant`"""
         self.compute_11(
             cpi.compute_product_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Product with constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -165,21 +164,21 @@ class ImageProcessor(BaseProcessor):
                     # Distributing images over rows
                     sign = np.sign(param.rows)
                     g_row = (g_row + sign) % param.rows
-                    y0 += (obj.dy * obj.data.shape[0] + param.rowspac) * sign
+                    y0 += (obj.height + param.rowspac) * sign
                     if g_row == 0:
                         g_col += 1
-                        x0 += obj.dx * obj.data.shape[1] + param.colspac
+                        x0 += obj.width + param.colspac
                         y0 = y0_0
                 else:
                     # Distributing images over columns
                     sign = np.sign(param.cols)
                     g_col = (g_col + sign) % param.cols
-                    x0 += (obj.dx * obj.data.shape[1] + param.colspac) * sign
+                    x0 += (obj.width + param.colspac) * sign
                     if g_col == 0:
                         g_row += 1
                         x0 = x0_0
-                        y0 += obj.dy * obj.data.shape[0] + param.rowspac
-        self.panel.SIG_REFRESH_PLOT.emit("selected", True)
+                        y0 += obj.height + param.rowspac
+        self.panel.refresh_plot("selected", True, False)
 
     @qt_try_except()
     def reset_positions(self) -> None:
@@ -202,7 +201,7 @@ class ImageProcessor(BaseProcessor):
                     coords[:, 1::2] += delta_y0
 
                 obj.transform_shapes(None, translate_coords)
-        self.panel.SIG_REFRESH_PLOT.emit("selected", True)
+        self.panel.refresh_plot("selected", True, False)
 
     @qt_try_except()
     def compute_resize(self, param: cdl.param.ResizeParam | None = None) -> None:
@@ -244,31 +243,6 @@ class ImageProcessor(BaseProcessor):
         if param.dtype_str is None:
             param.dtype_str = input_dtype_str
         self.compute_11(cpi.compute_binning, param, title=title, edit=edit)
-
-    @qt_try_except()
-    def compute_roi_extraction(
-        self, param: cdl.param.ROIDataParam | None = None
-    ) -> None:
-        """Extract Region Of Interest (ROI) from data with:
-
-        - :py:func:`cdl.computation.image.extract_single_roi` for single ROI
-        - :py:func:`cdl.computation.image.extract_multiple_roi` for multiple ROIs"""
-        param = self._get_roidataparam(param)
-        if param is None or param.is_empty:
-            return
-        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
-        group = obj.roidata_to_params(param.roidata)
-        if param.singleobj and len(group.datasets) > 1:
-            # Extract multiple ROIs into a single object (remove all the ROIs),
-            # if the "Extract all regions of interest into a single image object"
-            # option is checked and if there are more than one ROI
-            self.compute_11(cpi.extract_multiple_roi, group, title=_("Extract ROI"))
-        else:
-            # Extract each ROI into a separate object (keep the ROI in the case of
-            # a circular ROI), if the "Extract all regions of interest into a single
-            # image object" option is not checked or if there is only one ROI
-            # (See Issue #31)
-            self.compute_1n(cpi.extract_single_roi, group.datasets, "ROI", edit=False)
 
     @qt_try_except()
     def compute_line_profile(
@@ -352,8 +326,13 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_swap_axes(self) -> None:
-        """Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`"""
+        """Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`."""
         self.compute_11(cpi.compute_swap_axes, title=_("Swap axes"))
+
+    @qt_try_except()
+    def compute_inverse(self) -> None:
+        """Compute inverse"""
+        self.compute_11(cpi.compute_inverse, title=_("Inverse"))
 
     @qt_try_except()
     def compute_abs(self) -> None:
@@ -388,7 +367,22 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
-    def compute_difference(self, obj2: ImageObj | None = None) -> None:
+    def compute_arithmetic(
+        self, obj2: ImageObj | None = None, param: cpb.ArithmeticParam | None = None
+    ) -> None:
+        """Compute arithmetic operation between two images
+        with :py:func:`cdl.computation.image.compute_arithmetic`"""
+        self.compute_n1n(
+            obj2,
+            _("image to operate with"),
+            cpi.compute_arithmetic,
+            param=param,
+            paramclass=cpb.ArithmeticParam,
+            title=_("Arithmetic"),
+        )
+
+    @qt_try_except()
+    def compute_difference(self, obj2: ImageObj | list[ImageObj] | None = None) -> None:
         """Compute difference between two images
         with :py:func:`cdl.computation.image.compute_difference`"""
         self.compute_n1n(
@@ -400,20 +394,21 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_difference_constant(
-        self, param: cpb.ConstantOperationParam | None = None
+        self, param: cpb.ConstantParam | None = None
     ) -> None:
         """Compute difference with a constant
         with :py:func:`cdl.computation.image.compute_difference_constant`"""
         self.compute_11(
             cpi.compute_difference_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Difference with constant"),
-            edit=True,
         )
 
     @qt_try_except()
-    def compute_quadratic_difference(self, obj2: ImageObj | None = None) -> None:
+    def compute_quadratic_difference(
+        self, obj2: ImageObj | list[ImageObj] | None = None
+    ) -> None:
         """Compute quadratic difference between two images
         with :py:func:`cdl.computation.image.compute_quadratic_difference`"""
         self.compute_n1n(
@@ -424,7 +419,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_division(self, obj2: ImageObj | None = None) -> None:
+    def compute_division(self, obj2: ImageObj | list[ImageObj] | None = None) -> None:
         """Compute division between two images
         with :py:func:`cdl.computation.image.compute_division`"""
         self.compute_n1n(
@@ -435,17 +430,14 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_division_constant(
-        self, param: cpb.ConstantOperationParam | None = None
-    ) -> None:
+    def compute_division_constant(self, param: cpb.ConstantParam | None = None) -> None:
         """Compute division by a constant
         with :py:func:`cdl.computation.image.compute_division_constant`"""
         self.compute_11(
             cpi.compute_division_constant,
             param,
-            paramclass=cpb.ConstantOperationParam,
+            paramclass=cpb.ConstantParam,
             title=_("Division by constant"),
-            edit=True,
         )
 
     @qt_try_except()
@@ -503,8 +495,9 @@ class ImageProcessor(BaseProcessor):
         if param is None:
             dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
             if exec_dialog(dlg):
-                param = ROI2DParam.create(geometry=RoiDataGeometries.RECTANGLE)
-                param.xr0, param.yr0, param.xr1, param.yr1 = dlg.get_index_range()
+                param = ROI2DParam.create(geometry="rectangle")
+                x0, y0, x1, y1 = dlg.get_rect_coords()
+                param.x0, param.y0, param.dx, param.dy = x0, y0, x1 - x0, y1 - y0
             else:
                 return
         self.compute_11(cpi.compute_offset_correction, param)
@@ -1098,7 +1091,18 @@ class ImageProcessor(BaseProcessor):
         ]
         self.compute_1n(funcs, None, "Edges")
 
-    # ------Image Computing
+    @qt_try_except()
+    def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
+        """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
+        self.compute_11(cpi.extract_multiple_roi, group, title=_("Extract ROI"))
+
+    @qt_try_except()
+    def _extract_each_roi_in_separate_object(self, group: gds.DataSetGroup) -> None:
+        """Extract each single Region Of Interest (ROI) from data in a separate
+        object (keep the ROI in the case of a circular ROI, for example)"""
+        self.compute_1n(cpi.extract_single_roi, group.datasets, "ROI", edit=False)
+
+    # ------Image Analysis
     @qt_try_except()
     def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics
@@ -1153,19 +1157,15 @@ class ImageProcessor(BaseProcessor):
                     assert dist_min > 0
                     radius = int(0.5 * dist_min / np.sqrt(2) - 1)
                     assert radius >= 1
-                    roicoords = []
                     ymax, xmax = obj.data.shape
+                    coords = []
                     for x, y in result.raw_data:
-                        coords = [
-                            max(x - radius, 0),
-                            max(y - radius, 0),
-                            min(x + radius, xmax),
-                            min(y + radius, ymax),
-                        ]
-                        roicoords.append(coords)
-                    obj.roi = np.array(roicoords, int)
+                        x0, y0 = max(x - radius, 0), max(y - radius, 0)
+                        dx, dy = min(x + radius, xmax) - x0, min(y + radius, ymax) - y0
+                        coords.append([x0, y0, dx, dy])
+                    obj.roi = create_image_roi("rectangle", coords, indices=True)
                     self.SIG_ADD_SHAPE.emit(obj.uuid)
-                    self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
+                    self.panel.refresh_plot(obj.uuid, True, False)
         return results
 
     @qt_try_except()

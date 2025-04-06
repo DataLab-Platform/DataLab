@@ -14,7 +14,7 @@ from typing import TextIO
 import numpy as np
 import pandas as pd
 
-from cdl.utils.io import count_lines
+from cdl.utils.io import count_lines, read_first_n_lines
 from cdl.utils.qthelpers import CallbackWorker
 
 
@@ -52,6 +52,7 @@ def read_csv_by_chunks(
     fname_or_fileobj: str | TextIO,
     nlines: int | None = None,
     worker: CallbackWorker | None = None,
+    decimal: str = ".",
     delimiter: str | None = None,
     header: int | None = "infer",
     skiprows: int | None = None,
@@ -69,6 +70,7 @@ def read_csv_by_chunks(
          text stream is not efficient, especially if one already has access to the
          initial text content from which the text stream was made)
         worker: Callback worker object
+        decimal: Decimal character
         delimiter: Delimiter
         header: Header line
         skiprows: Skip rows
@@ -89,12 +91,14 @@ def read_csv_by_chunks(
     chunks = []
     for chunk in pd.read_csv(
         fname_or_fileobj,
+        decimal=decimal,
         delimiter=delimiter,
         header=header,
         skiprows=skiprows,
         nrows=nrows,
         comment=comment,
         chunksize=chunksize,
+        encoding_errors="ignore",
     ):
         chunks.append(chunk)
         # Compute the progression based on the number of lines read so far
@@ -103,6 +107,25 @@ def read_csv_by_chunks(
             if worker.was_canceled():
                 break
     return pd.concat(chunks)
+
+
+DATA_HEADERS = [
+    "#DATA",  # Generic
+    "START_OF_DATA",  # Various logging devices
+    ">>>>>Begin Spectral Data<<<<<",  # Ocean Optics
+    ">>>Begin Data<<<",  # Ocean Optics (alternative)
+    ">>>Begin Spectrum Data<<<",  # Avantes
+    "# Data Start",  # Andor, Horiba, Mass Spectrometry (Agilent, Thermo Fisher, ...)
+    ">DATA START<",  # Mass Spectrometry, Chromatography
+    "BEGIN DATA",  # Mass Spectrometry, Chromatography
+    "<Data>",  # Mass Spectrometry (XML-based)
+    "##Start Data",  # Bruker (X-ray, Raman, FTIR)
+    "[DataStart]",  # PerkinElmer (FTIR, UV-Vis)
+    "BEGIN SPECTRUM",  # PerkinElmer
+    "%% Data Start %%",  # LabVIEW, MATLAB
+    "---Begin Data---",  # General scientific instruments
+    "===DATA START===",  # Industrial/scientific devices
+]
 
 
 def read_csv(
@@ -129,40 +152,60 @@ def read_csv(
 
     skiprows = None
 
-    # First attempt: no header (try to read with different delimiters)
-    for delimiter in (",", ";", "\t", " "):
-        try:
-            df = pd.read_csv(
-                filename,
-                dtype=float,
-                delimiter=delimiter,
-                header=None,
-                comment="#",
-                nrows=1000,  # Read only the first 1000 lines
-            )
-            read_without_header = True
+    # Begin by reading the first 100 lines to search for a line that could mark the
+    # beginning of the data after it (e.g., a line '#DATA' or other).
+    first_100_lines = read_first_n_lines(filename, n=100).splitlines()
+    for data_header in DATA_HEADERS:
+        if data_header in first_100_lines:
+            # Skip the lines before the data header
+            skiprows = first_100_lines.index(data_header) + 1
             break
-        except (pd.errors.ParserError, ValueError):
-            df = None
+
+    # First attempt: no header (try to read with different delimiters)
+    read_without_header = True
+    for decimal in (".", ","):
+        for delimiter in (",", ";", "\t", " "):
+            try:
+                df = pd.read_csv(
+                    filename,
+                    dtype=float,
+                    decimal=decimal,
+                    delimiter=delimiter,
+                    header=None,
+                    comment="#",
+                    nrows=1000,  # Read only the first 1000 lines
+                    encoding_errors="ignore",
+                    skiprows=skiprows,
+                )
+                break
+            except (pd.errors.ParserError, ValueError):
+                df = None
+        if df is not None:
+            break
 
     # Second attempt: with header
     if df is None:
-        for delimiter in (",", ";", "\t", " "):
-            # Headers are generally in the first 10 lines, so we try to skip the
-            # minimum number of lines before reading the data:
-            for skiprows in range(20):
-                try:
-                    df = pd.read_csv(
-                        filename,
-                        dtype=float,
-                        delimiter=delimiter,
-                        skiprows=skiprows,
-                        comment="#",
-                        nrows=1000,  # Read only the first 1000 lines
-                    )
+        for decimal in (".", ","):
+            for delimiter in (",", ";", "\t", " "):
+                # Headers are generally in the first 10 lines, so we try to skip the
+                # minimum number of lines before reading the data:
+                for skiprows in range(20):
+                    try:
+                        df = pd.read_csv(
+                            filename,
+                            dtype=float,
+                            decimal=decimal,
+                            delimiter=delimiter,
+                            skiprows=skiprows,
+                            comment="#",
+                            nrows=1000,  # Read only the first 1000 lines
+                            encoding_errors="ignore",
+                        )
+                        break
+                    except (pd.errors.ParserError, ValueError):
+                        df = None
+                if df is not None:
                     break
-                except (pd.errors.ParserError, ValueError):
-                    df = None
             if df is not None:
                 break
 
@@ -203,6 +246,7 @@ def read_csv(
     df = read_csv_by_chunks(
         filename,
         worker=worker,
+        decimal=decimal,
         delimiter=delimiter,
         header=None if read_without_header else "infer",
         skiprows=skiprows,

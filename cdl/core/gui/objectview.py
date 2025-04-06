@@ -23,7 +23,7 @@ Simple object tree
 Get object dialog
 -----------------
 
-.. autoclass:: GetObjectDialog
+.. autoclass:: GetObjectsDialog
 
 Object view
 -----------
@@ -96,6 +96,8 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.setColumnCount(1)
         self.setAlternatingRowColors(True)
         self.itemDoubleClicked.connect(self.item_double_clicked)
+        self.header().setSectionResizeMode(QW.QHeaderView.Interactive)
+        self.itemChanged.connect(lambda item: self.resizeColumnToContents(0))
 
     def __str__(self) -> str:
         """Return string representation"""
@@ -156,6 +158,50 @@ class SimpleObjectTree(QW.QTreeWidget):
             return selected_item.data(0, QC.Qt.UserRole)
         return selected_item.parent().data(0, QC.Qt.UserRole)
 
+    def get_sel_group_items(self) -> list[QW.QTreeWidgetItem]:
+        """Return selected group items"""
+        return [item for item in self.selectedItems() if item.parent() is None]
+
+    def get_sel_group_uuids(self) -> list[str]:
+        """Return selected group uuids"""
+        return [item.data(0, QC.Qt.UserRole) for item in self.get_sel_group_items()]
+
+    def get_sel_object_items(self) -> list[QW.QTreeWidgetItem]:
+        """Return selected object items"""
+        return [item for item in self.selectedItems() if item.parent() is not None]
+
+    def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
+        """Return selected objects uuids.
+
+        Args:
+            include_groups: If True, also return objects from selected groups.
+
+        Returns:
+            List of selected objects uuids.
+        """
+        sel_items = self.get_sel_object_items()
+        if not sel_items:
+            cur_item = self.currentItem()
+            if cur_item is not None and cur_item.parent() is not None:
+                sel_items = [cur_item]
+        uuids = [item.data(0, QC.Qt.UserRole) for item in sel_items]
+        if include_groups:
+            for group_id in self.get_sel_group_uuids():
+                uuids.extend(self.objmodel.get_group_object_ids(group_id))
+        return uuids
+
+    def get_sel_objects(
+        self, include_groups: bool = False
+    ) -> list[SignalObj | ImageObj]:
+        """Return selected objects.
+
+        If include_groups is True, also return objects from selected groups."""
+        return [self.objmodel[oid] for oid in self.get_sel_object_uuids(include_groups)]
+
+    def get_sel_groups(self) -> list[ObjectGroup]:
+        """Return selected groups"""
+        return self.objmodel.get_groups(self.get_sel_group_uuids())
+
     @staticmethod
     def __update_item(
         item: QW.QTreeWidgetItem, obj: SignalObj | ImageObj | ObjectGroup
@@ -202,6 +248,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         group_item.setExpanded(True)
         for obj in group:
             self.__add_to_group_item(obj, group_item)
+        self.resizeColumnToContents(0)
 
     def add_object_item(
         self, obj: SignalObj | ImageObj, group_id: str, set_current: bool = True
@@ -211,6 +258,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.__add_to_group_item(obj, group_item)
         if set_current:
             self.set_current_item_id(obj.uuid)
+        self.resizeColumnToContents(0)
 
     def update_item(self, uuid: str) -> None:
         """Update item"""
@@ -241,13 +289,15 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.SIG_CONTEXT_MENU.emit(event.globalPos())
 
 
-class GetObjectDialog(QW.QDialog):
-    """Get object dialog box
+class GetObjectsDialog(QW.QDialog):
+    """Dialog box showing groups and objects (signals or images) to select one, or more.
 
     Args:
         parent: parent widget
         panel: data panel
         title: dialog title
+        comment: optional dialog comment
+        nb_objects: number of objects to select (default: 1)
         minimum_size: minimum size (width, height)
     """
 
@@ -256,10 +306,13 @@ class GetObjectDialog(QW.QDialog):
         parent: QW.QWidget,
         panel: BaseDataPanel,
         title: str,
-        minimum_size: tuple[int, int] = None,
+        comment: str = "",
+        nb_objects: int = 1,
+        minimum_size: tuple[int, int] | None = None,
     ) -> None:
         super().__init__(parent)
-        self.__current_object_uuid: str | None = None
+        self.__nb_objects = nb_objects
+        self.__selected_objects: list[SignalObj | ImageObj] = []
         self.setWindowTitle(title)
         vlayout = QW.QVBoxLayout()
         self.setLayout(vlayout)
@@ -267,8 +320,16 @@ class GetObjectDialog(QW.QDialog):
         self.tree = SimpleObjectTree(parent, panel.objmodel)
         self.tree.initialize_from(panel.objview)
         self.tree.SIG_ITEM_DOUBLECLICKED.connect(lambda oid: self.accept())
-        self.tree.itemSelectionChanged.connect(self.__current_object_changed)
+        self.tree.itemSelectionChanged.connect(self.__item_selection_changed)
+        if nb_objects > 1:
+            self.tree.setSelectionMode(QW.QAbstractItemView.ExtendedSelection)
         vlayout.addWidget(self.tree)
+
+        if comment:
+            lbl = QW.QLabel(comment)
+            lbl.setWordWrap(True)
+            vlayout.addSpacing(10)
+            vlayout.addWidget(lbl)
 
         bbox = QW.QDialogButtonBox(QW.QDialogButtonBox.Ok | QW.QDialogButtonBox.Cancel)
         bbox.accepted.connect(self.accept)
@@ -277,21 +338,22 @@ class GetObjectDialog(QW.QDialog):
         vlayout.addSpacing(10)
         vlayout.addWidget(bbox)
         # Update OK button state:
-        self.__current_object_changed()
+        self.__item_selection_changed()
 
         if minimum_size is not None:
             self.setMinimumSize(*minimum_size)
         else:
             self.setMinimumWidth(400)
 
-    def __current_object_changed(self) -> None:
+    def __item_selection_changed(self) -> None:
         """Item selection has changed"""
-        self.__current_object_uuid = self.tree.get_current_item_id(object_only=True)
-        self.ok_btn.setEnabled(bool(self.__current_object_uuid))
+        nobj = self.__nb_objects
+        self.__selected_objects = self.tree.get_sel_objects(include_groups=nobj > 1)
+        self.ok_btn.setEnabled(len(self.__selected_objects) == nobj)
 
-    def get_current_object_uuid(self) -> str:
-        """Return current object uuid"""
-        return self.__current_object_uuid
+    def get_selected_objects(self) -> list[SignalObj | ImageObj]:
+        """Return selected objects"""
+        return self.__selected_objects
 
 
 class ObjectView(SimpleObjectTree):
@@ -511,50 +573,6 @@ class ObjectView(SimpleObjectTree):
         """Set current object"""
         self.set_current_item_id(obj.uuid)
 
-    def get_sel_group_items(self) -> list[QW.QTreeWidgetItem]:
-        """Return selected group items"""
-        return [item for item in self.selectedItems() if item.parent() is None]
-
-    def get_sel_group_uuids(self) -> list[str]:
-        """Return selected group uuids"""
-        return [item.data(0, QC.Qt.UserRole) for item in self.get_sel_group_items()]
-
-    def get_sel_object_items(self) -> list[QW.QTreeWidgetItem]:
-        """Return selected object items"""
-        return [item for item in self.selectedItems() if item.parent() is not None]
-
-    def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
-        """Return selected objects uuids.
-
-        Args:
-            include_groups: If True, also return objects from selected groups.
-
-        Returns:
-            List of selected objects uuids.
-        """
-        sel_items = self.get_sel_object_items()
-        if not sel_items:
-            cur_item = self.currentItem()
-            if cur_item is not None and cur_item.parent() is not None:
-                sel_items = [cur_item]
-        uuids = [item.data(0, QC.Qt.UserRole) for item in sel_items]
-        if include_groups:
-            for group_id in self.get_sel_group_uuids():
-                uuids.extend(self.objmodel.get_group_object_ids(group_id))
-        return uuids
-
-    def get_sel_objects(
-        self, include_groups: bool = False
-    ) -> list[SignalObj | ImageObj]:
-        """Return selected objects.
-
-        If include_groups is True, also return objects from selected groups."""
-        return [self.objmodel[oid] for oid in self.get_sel_object_uuids(include_groups)]
-
-    def get_sel_groups(self) -> list[ObjectGroup]:
-        """Return selected groups"""
-        return self.objmodel.get_groups(self.get_sel_group_uuids())
-
     def item_selection_changed(self) -> None:
         """Refreshing the selection of objects and groups, emitting the
         SIG_SELECTION_CHANGED signal which triggers the update of the
@@ -587,7 +605,7 @@ class ObjectView(SimpleObjectTree):
         """Select multiple objects
 
         Args:
-            selection (list): list of objects, object numbers (1 to N) or object uuids
+            selection: list of objects, object numbers (1 to N) or object uuids
         """
         if all(isinstance(obj, int) for obj in selection):
             all_uuids = self.objmodel.get_object_ids()

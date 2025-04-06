@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 12:05+0200\n"
+"POT-Creation-Date: 2025-03-20 16:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,331 +17,188 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: ../../doc/requirements.rst:1
 msgid "The :mod:`cdl` package requires the following Python modules:"
 msgstr "Le paquet :mod:`cdl` nécessite les modules Python suivants :"
 
-#: ../../doc/requirements.rst:7 ../../doc/requirements.rst:56
-#: ../../doc/requirements.rst:78 ../../doc/requirements.rst:112
 msgid "Name"
 msgstr "Nom"
 
-#: ../../doc/requirements.rst:8 ../../doc/requirements.rst:57
-#: ../../doc/requirements.rst:79 ../../doc/requirements.rst:113
 msgid "Version"
 msgstr "Version"
 
-#: ../../doc/requirements.rst:9 ../../doc/requirements.rst:58
-#: ../../doc/requirements.rst:80 ../../doc/requirements.rst:114
 msgid "Summary"
 msgstr "Description"
 
-#: ../../doc/requirements.rst:10
 msgid "Python"
 msgstr "Python"
 
-#: ../../doc/requirements.rst:11
-msgid ">=3.8, <4"
+msgid ">=3.9, <4"
 msgstr ""
 
-#: ../../doc/requirements.rst:12
 msgid "Python programming language"
 msgstr "Langage de programmation Python"
 
-#: ../../doc/requirements.rst:13
-msgid "h5py"
-msgstr ""
-
-#: ../../doc/requirements.rst:14
-msgid ">= 3.0"
-msgstr ""
-
-#: ../../doc/requirements.rst:15
-msgid "Read and write HDF5 files from Python"
-msgstr "Ecriture et lecture de fichiers HDF5 depuis Python"
-
-#: ../../doc/requirements.rst:16
-msgid "NumPy"
-msgstr ""
-
-#: ../../doc/requirements.rst:17
-msgid ">= 1.21"
-msgstr ""
-
-#: ../../doc/requirements.rst:18
-msgid "Fundamental package for array computing in Python"
-msgstr "Calcul de tableaux et algèbre linéaire en Python"
-
-#: ../../doc/requirements.rst:19
-msgid "SciPy"
-msgstr ""
-
-#: ../../doc/requirements.rst:20
-msgid ">= 1.7"
-msgstr ""
-
-#: ../../doc/requirements.rst:21
-msgid "Fundamental algorithms for scientific computing in Python"
-msgstr "Algorithmes fondamentaux pour le calcul scientifique en Python"
-
-#: ../../doc/requirements.rst:22
-msgid "scikit-image"
-msgstr ""
-
-#: ../../doc/requirements.rst:23
-msgid ">= 0.18"
-msgstr ""
-
-#: ../../doc/requirements.rst:24
-msgid "Image processing in Python"
-msgstr "Traitement d'images en Python"
-
-#: ../../doc/requirements.rst:25
-msgid "opencv-python-headless"
-msgstr ""
-
-#: ../../doc/requirements.rst:26
-msgid ">= 4.5"
-msgstr ""
-
-#: ../../doc/requirements.rst:27
-msgid "Wrapper package for OpenCV python bindings."
-msgstr "Interface Python pour la bibliothèque OpenCV."
-
-#: ../../doc/requirements.rst:28
-msgid "pandas"
-msgstr ""
-
-#: ../../doc/requirements.rst:29
-msgid ">= 1.3"
-msgstr ""
-
-#: ../../doc/requirements.rst:30
-msgid "Powerful data structures for data analysis, time series, and statistics"
-msgstr "Analyse de données, séries temporelles et statistiques"
-
-#: ../../doc/requirements.rst:31
-msgid "PyWavelets"
-msgstr ""
-
-#: ../../doc/requirements.rst:32
-msgid ">= 1.1"
-msgstr ""
-
-#: ../../doc/requirements.rst:33
-msgid "PyWavelets, wavelet transform module"
-msgstr "PyWavelets, module de transformation en ondelettes"
-
-#: ../../doc/requirements.rst:34
-msgid "psutil"
-msgstr ""
-
-#: ../../doc/requirements.rst:35
-msgid ">= 5.5"
-msgstr ""
-
-#: ../../doc/requirements.rst:36
-msgid "Cross-platform lib for process and system monitoring in Python."
-msgstr ""
-"Bibliothèque multiplateforme pour la surveillance des processus et du "
-"système en Python."
-
-#: ../../doc/requirements.rst:37
 msgid "guidata"
 msgstr ""
 
-#: ../../doc/requirements.rst:38
-msgid ">= 3.5"
+msgid ">= 3.7"
 msgstr ""
 
-#: ../../doc/requirements.rst:39
 msgid "Automatic GUI generation for easy dataset editing and display"
-msgstr ""
-"Génération automatique d'interface graphique pour l'édition et "
-"l'affichage de jeux de données"
+msgstr "Génération automatique d'interface graphique pour l'édition et l'affichage de jeux de données"
 
-#: ../../doc/requirements.rst:40
 msgid "PlotPy"
 msgstr ""
 
-#: ../../doc/requirements.rst:41
-msgid ">= 2.4"
+msgid ">= 2.7"
 msgstr ""
 
-#: ../../doc/requirements.rst:42
 msgid "Curve and image plotting tools for Python/Qt applications"
 msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 
-#: ../../doc/requirements.rst:43
-msgid "QtPy"
+msgid "SciPy"
 msgstr ""
 
-#: ../../doc/requirements.rst:44
-msgid ">= 1.9"
+msgid ">= 1.5, < 1.15.0"
 msgstr ""
 
-#: ../../doc/requirements.rst:45
-msgid ""
-"Provides an abstraction layer on top of the various Qt bindings (PyQt5/6 "
-"and PySide2/6)."
-msgstr ""
-"Couche d'abstraction pour les différentes bibliothèques Qt (PyQt5/6 et "
-"PySide2/6)."
+msgid "Fundamental algorithms for scientific computing in Python"
+msgstr "Algorithmes fondamentaux pour le calcul scientifique en Python"
 
-#: ../../doc/requirements.rst:46 ../../doc/requirements.rst:81
+msgid "scikit-image"
+msgstr ""
+
+msgid ">= 0.18"
+msgstr ""
+
+msgid "Image processing in Python"
+msgstr "Traitement d'images en Python"
+
+msgid "pandas"
+msgstr ""
+
+msgid ">= 1.2"
+msgstr ""
+
+msgid "Powerful data structures for data analysis, time series, and statistics"
+msgstr "Analyse de données, séries temporelles et statistiques"
+
+msgid "PyWavelets"
+msgstr ""
+
+msgid ">= 1.1"
+msgstr ""
+
+msgid "PyWavelets, wavelet transform module"
+msgstr "PyWavelets, module de transformation en ondelettes"
+
+msgid "psutil"
+msgstr ""
+
+msgid ">= 5.7"
+msgstr ""
+
+#, fuzzy
+msgid "Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7."
+msgstr "Bibliothèque multiplateforme pour la surveillance des processus et du système en Python."
+
 msgid "PyQt5"
 msgstr ""
 
-#: ../../doc/requirements.rst:47
 msgid ">=5.11"
 msgstr ""
 
-#: ../../doc/requirements.rst:48 ../../doc/requirements.rst:83
 msgid "Python bindings for the Qt cross platform application toolkit"
 msgstr "Paquet Python pour la bibliothèque d'interfaces graphiques Qt"
 
-#: ../../doc/requirements.rst:50
 msgid "Optional modules for development:"
 msgstr "Modules optionnels pour le développement :"
 
-#: ../../doc/requirements.rst:59
 msgid "ruff"
 msgstr ""
 
-#: ../../doc/requirements.rst:61
 msgid "An extremely fast Python linter and code formatter, written in Rust."
-msgstr ""
-"Analyseur de code et formateur de code Python extrêmement rapide, écrit "
-"en Rust."
+msgstr "Analyseur de code et formateur de code Python extrêmement rapide, écrit en Rust."
 
-#: ../../doc/requirements.rst:62
 msgid "pylint"
 msgstr ""
 
-#: ../../doc/requirements.rst:64
 msgid "python code static checker"
 msgstr "Analyseur statique de code Python"
 
-#: ../../doc/requirements.rst:65
 msgid "Coverage"
 msgstr ""
 
-#: ../../doc/requirements.rst:67
 msgid "Code coverage measurement for Python"
 msgstr "Mesure de la couverture de code pour Python"
 
-#: ../../doc/requirements.rst:68
 msgid "pyinstaller"
 msgstr ""
 
-#: ../../doc/requirements.rst:69
 msgid ">=6.0"
 msgstr ""
 
-#: ../../doc/requirements.rst:70
-msgid ""
-"PyInstaller bundles a Python application and all its dependencies into a "
-"single package."
-msgstr ""
-"PyInstaller regroupe une application Python et toutes ses dépendances "
-"dans un seul paquet."
+msgid "PyInstaller bundles a Python application and all its dependencies into a single package."
+msgstr "PyInstaller regroupe une application Python et toutes ses dépendances dans un seul paquet."
 
-#: ../../doc/requirements.rst:72
 msgid "Optional modules for building the documentation:"
 msgstr "Modules optionnels pour construire la documentation :"
 
-#: ../../doc/requirements.rst:84
 msgid "sphinx"
 msgstr ""
 
-#: ../../doc/requirements.rst:86
 msgid "Python documentation generator"
 msgstr "Générateur de documentation Python"
 
-#: ../../doc/requirements.rst:87
 msgid "sphinx_intl"
 msgstr ""
 
-#: ../../doc/requirements.rst:89
 msgid "Sphinx utility that make it easy to translate and to apply translation."
-msgstr ""
-"Utilitaire Sphinx qui facilite la traduction et l'application de la "
-"traduction."
+msgstr "Utilitaire Sphinx qui facilite la traduction et l'application de la traduction."
 
-#: ../../doc/requirements.rst:90
 msgid "sphinx-sitemap"
 msgstr ""
 
-#: ../../doc/requirements.rst:92
 msgid "Sitemap generator for Sphinx"
 msgstr "Générateur de plan de site pour Sphinx"
 
-#: ../../doc/requirements.rst:93
 msgid "myst_parser"
 msgstr ""
 
-#: ../../doc/requirements.rst:95
 msgid "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
 msgstr "Un analyseur étendu compatible [CommonMark](https://spec.commonmark.org/),"
 
-#: ../../doc/requirements.rst:96
 msgid "sphinx_design"
 msgstr ""
 
-#: ../../doc/requirements.rst:98
-msgid ""
-"A sphinx extension for designing beautiful, view size responsive web "
-"components."
-msgstr ""
-"Une extension sphinx pour concevoir des composants web soignés et adaptés"
-" à la taille de l'écran."
+msgid "A sphinx extension for designing beautiful, view size responsive web components."
+msgstr "Une extension sphinx pour concevoir des composants web soignés et adaptés à la taille de l'écran."
 
-#: ../../doc/requirements.rst:99
 msgid "sphinx-copybutton"
 msgstr ""
 
-#: ../../doc/requirements.rst:101
 msgid "Add a copy button to each of your code cells."
 msgstr "Extension Sphinx pour ajouter un bouton de copie aux cellules de code."
 
-#: ../../doc/requirements.rst:102
 msgid "pydata-sphinx-theme"
 msgstr ""
 
-#: ../../doc/requirements.rst:104
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
-#: ../../doc/requirements.rst:106
 msgid "Optional modules for running test suite:"
 msgstr "Modules optionnels pour exécuter la suite de tests :"
 
-#: ../../doc/requirements.rst:115
 msgid "pytest"
 msgstr ""
 
-#: ../../doc/requirements.rst:117
 msgid "pytest: simple powerful testing with Python"
 msgstr "pytest : tests simples et puissants avec Python"
 
-#: ../../doc/requirements.rst:118
 msgid "pytest-xvfb"
 msgstr ""
 
-#: ../../doc/requirements.rst:120
 msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
 msgstr "Un plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
-
-#~ msgid ">= 3.4"
-#~ msgstr ""
-
-#~ msgid ">= 1.21"
-#~ msgstr ""
-
-#~ msgid ">= 1.21, < 2"
-#~ msgstr ""
-
-#~ msgid ">= 2.3"
-#~ msgstr ""

@@ -34,7 +34,7 @@ class SignalBaselineDialog(PlotDialog):
     def __init__(self, signal: SignalObj, parent: QWidget | None = None) -> None:
         self.__curve_styles = CURVESTYLES.style_generator()
         self.__baseline: float | None = None
-        self.__indexrange: tuple[int, int] | None = None
+        self.__x_range: tuple[float, float] = [np.nan, np.nan]
         self.curve: CurveItem | None = None
         self.cursor: Marker | None = None
         self.xrange: XRangeSelection | None = None
@@ -67,10 +67,10 @@ class SignalBaselineDialog(PlotDialog):
     # pylint: disable=unused-argument
     def xrange_changed(self, item: XRangeSelection, xmin: float, xmax: float) -> None:
         """X range changed"""
-        imin, imax = np.searchsorted(self.__signal.x, sorted([xmin, xmax]))
+        self.__x_range = sorted([xmin, xmax])
+        imin, imax = np.searchsorted(self.__signal.x, self.__x_range)
         if imin == imax:
             return
-        self.__indexrange = imin, imax
         self.cursor.set_pos(0, np.mean(self.__signal.y[imin:imax]))
         plot = self.get_plot()
         plot.replot()
@@ -83,11 +83,6 @@ class SignalBaselineDialog(PlotDialog):
         """Get baseline"""
         return self.__baseline
 
-    def get_index_range(self) -> tuple[int, int]:
-        """Get index range"""
-        return self.__indexrange
-
     def get_x_range(self) -> tuple[float, float]:
         """Get x range"""
-        x = self.__signal.x
-        return x[self.__indexrange[0]], x[self.__indexrange[1]]
+        return self.__x_range

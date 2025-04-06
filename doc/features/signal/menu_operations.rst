@@ -8,7 +8,7 @@ This section describes the operations that can be performed on signals.
 .. seealso::
 
     :ref:`sig-menu-processing` for more information on signal processing features,
-    or :ref:`sig-menu-computing` for information on computing features on signals.
+    or :ref:`sig-menu-analysis` for information on analysis features on signals.
 
 .. figure:: /images/shots/s_operation.png
 
@@ -40,6 +40,8 @@ Basic arithmetic operations
       - :math:`y_{M} = \prod_{k=0}^{M-1}{y_{k}}`
     * - |division| Division
       - :math:`y_{2} = \dfrac{y_{1}}{y_{0}}`
+    * - |inverse| Inverse
+      - :math:`y_{2} = \dfrac{1}{y_{1}}`
 
 .. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
     :width: 24px
@@ -62,6 +64,11 @@ Basic arithmetic operations
     :class: dark-light no-scaled-link
 
 .. |division| image:: ../../../cdl/data/icons/operations/division.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |inverse| image:: ../../../cdl/data/icons/operations/inverse.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -106,8 +113,8 @@ Create a new signal which is the result of a constant operation on each selected
     :height: 24px
     :class: dark-light no-scaled-link
 
-Real and imaginary parts
-------------------------
+Absolute value, real and imaginary parts
+----------------------------------------
 
 .. list-table::
     :header-rows: 1

@@ -23,14 +23,15 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING
 
+import numpy as np
 import scipy.integrate as spt
 from guidata.configtools import get_icon, get_image_file_path
-from guidata.qthelpers import create_action, is_dark_mode
+from guidata.qthelpers import create_action, is_dark_theme
 from guidata.widgets.dockable import DockableWidget
 from plotpy.constants import PlotType
 from plotpy.items import CurveItem
 from plotpy.panels import XCrossSection, YCrossSection
-from plotpy.plot import BasePlot, PlotOptions, PlotWidget
+from plotpy.plot import PlotOptions, PlotWidget
 from plotpy.tools import (
     BasePlotMenuTool,
     CurveStatsTool,
@@ -64,17 +65,20 @@ if TYPE_CHECKING:
 
 def fwhm_info(x, y):
     """Return FWHM information string"""
-    with warnings.catch_warnings(record=True) as w:
-        x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
-        wstr = " ⚠️" if w else ""
+    try:
+        with warnings.catch_warnings(record=True) as w:
+            x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
+            wstr = " ⚠️" if w else ""
+    except ValueError:
+        return "🛑"
     return f"{x1 - x0:g}{wstr}"
 
 
 CURVESTATSTOOL_LABELFUNCS = (
-    ("%g &lt; x &lt; %g", lambda *args: (args[0].min(), args[0].max())),
-    ("%g &lt; y &lt; %g", lambda *args: (args[1].min(), args[1].max())),
-    ("&lt;y&gt;=%g", lambda *args: args[1].mean()),
-    ("σ(y)=%g", lambda *args: args[1].std()),
+    ("%g &lt; x &lt; %g", lambda *args: (np.nanmin(args[0]), np.nanmax(args[0]))),
+    ("%g &lt; y &lt; %g", lambda *args: (np.nanmin(args[1]), np.nanmax(args[1]))),
+    ("&lt;y&gt;=%g", lambda *args: np.nanmean(args[1])),
+    ("σ(y)=%g", lambda *args: np.nanstd(args[1])),
     ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
     ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
     ("FWHM = %s", fwhm_info),
@@ -107,23 +111,23 @@ def get_more_image_stats(
     p: BaseImageParam = item.param
     xunit, yunit, zunit = p.get_units()
 
-    integral = data.sum()
+    integral = np.nansum(data)
     integral_fmt = r"%.3e " + zunit
-    infos += "<br>∑ = %s" % (integral_fmt % integral)
+    infos += f"<br>∑ = {integral_fmt % integral}"
 
     if xunit == yunit:
         surfacefmt = p.xformat.split()[0] + " " + xunit
         if xunit != "":
             surfacefmt = surfacefmt + "²"
         surface = abs((x1 - x0) * (y1 - y0))
-        infos += "<br>A = %s" % (surfacefmt % surface)
+        infos += f"<br>A = {surfacefmt % surface}"
         if xunit is not None and zunit is not None:
             if surface != 0:
                 density = integral / surface
                 densityfmt = r"%.3e"
                 if xunit and zunit:
                     densityfmt += " " + zunit + "/" + xunit + "²"
-                infos = infos + "<br>ρ = %s" % (densityfmt % density)
+                infos = infos + f"<br>ρ = {densityfmt % density}"
 
     c_i, c_j = get_centroid_fourier(data)
     c_x, c_y = item.get_plot_coordinates(c_j + ix0, c_i + iy0)
@@ -329,15 +333,22 @@ class DockablePlotWidget(DockableWidget):
         title = self.toolbar.windowTitle()
         self.plotwidget.get_manager().add_toolbar(self.toolbar, title)
         #  Customizing widget appearances
+        self.update_color_mode()
         plot = self.plotwidget.get_plot()
-        if not is_dark_mode():
-            for widget in (self.plotwidget, plot, self):
-                widget.setBackgroundRole(QG.QPalette.Window)
-                widget.setAutoFillBackground(True)
-                widget.setPalette(QG.QPalette(QC.Qt.white))
         canvas = plot.canvas()
         canvas.setFrameStyle(canvas.Plain | canvas.NoFrame)
         plot.SIG_ITEMS_CHANGED.connect(self.update_watermark)
+
+    def update_color_mode(self) -> None:
+        """Update plot widget styles according to application color mode"""
+        if is_dark_theme():
+            palette = QApplication.instance().palette()
+        else:
+            palette = QG.QPalette(QC.Qt.white)
+        for widget in (self.plotwidget, self.plotwidget.get_plot(), self):
+            widget.setBackgroundRole(QG.QPalette.Window)
+            widget.setAutoFillBackground(True)
+            widget.setPalette(palette)
 
     def get_plot(self) -> BasePlot:
         """Return plot instance"""

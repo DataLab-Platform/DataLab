@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   role="img"
+   focusable="false"
+   aria-hidden="true"
+   viewBox="0 0 14 14"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="arithmetic.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs12">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath26">
+      <g
+         id="g27">
+        <rect
+           x="21.696568"
+           y="20.771685"
+           width="310.60657"
+           height="141.1848"
+           id="rect26"
+           style="stroke-width:1.76481" />
+      </g>
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath24">
+      <g
+         id="g25">
+        <rect
+           x="21.696568"
+           y="20.771685"
+           width="310.60657"
+           height="141.1848"
+           id="rect24"
+           style="stroke-width:1.76481" />
+      </g>
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath23">
+      <g
+         id="g24">
+        <rect
+           x="21.696568"
+           y="20.771685"
+           width="310.60657"
+           height="141.1848"
+           id="rect23"
+           style="stroke-width:1.76481" />
+      </g>
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath22">
+      <g
+         id="g23">
+        <rect
+           x="21.696568"
+           y="20.771685"
+           width="310.60657"
+           height="141.1848"
+           id="rect22"
+           style="stroke-width:1.76481" />
+      </g>
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview10"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="29.714286"
+     inkscape:cx="14.016827"
+     inkscape:cy="7.6899038"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <path
+     d="m 13.397525,2.5065169 v 9.4917741 c 0,0.652558 -0.677388,1.186471 -1.505303,1.186471 H 2.107775 c -0.8279149,0 -1.50529969,-0.533913 -1.50529969,-1.186471 V 2.5065169 c 0,-0.6525599 0.67738479,-1.1864715 1.50529969,-1.1864715 h 9.784447 c 0.827915,0 1.505303,0.5339116 1.505303,1.1864715 z"
+     id="path2-7"
+     style="fill:#f99090;fill-opacity:1;stroke-width:1.15748" />
+  <g
+     id="g1">
+    <path
+       style="font-size:9.67284px;line-height:0.85;font-family:Verdana;-inkscape-font-specification:Verdana;text-align:center;letter-spacing:0px;text-anchor:middle;stroke-width:0.59545"
+       d="M 9.3347975,6.4402321 H 6.3876041 v -0.854875 h 2.9471934 z"
+       id="text1"
+       transform="scale(1.3085968,0.76417733)"
+       aria-label="&#10;-" />
+    <path
+       style="font-size:6.22887px;line-height:0.85;font-family:Verdana;-inkscape-font-specification:Verdana;text-align:center;letter-spacing:0px;text-anchor:middle;stroke-width:0.479304"
+       d="M 9.2196623,10.8616 7.0389496,16.518679 H 6.5127804 L 8.6843688,10.8616 Z"
+       id="text1-4"
+       transform="scale(1.3077616,0.76466536)"
+       aria-label="/" />
+    <path
+       style="font-size:7.39177px;line-height:0.85;font-family:Verdana;-inkscape-font-specification:Verdana;text-align:center;letter-spacing:0px;text-anchor:middle;stroke-width:0.455029"
+       d="M 6.6853853,4.883579 H 4.7183372 V 6.8506271 H 4.1191996 V 4.883579 H 2.1521515 V 4.3060969 H 4.1191996 V 2.3390488 h 0.5991376 v 1.9670481 h 1.9670481 z"
+       id="text1-0"
+       aria-label="+" />
+    <path
+       style="font-size:7.39177px;line-height:0.85;font-family:Verdana;-inkscape-font-specification:Verdana;text-align:center;letter-spacing:0px;text-anchor:middle;stroke-width:0.455029"
+       d="M 6.3894258,12.484144 H 5.5340306 L 4.3898943,10.935771 3.2385395,12.484144 H 2.448111 L 4.0217495,10.473785 2.4625481,8.4525978 H 3.3179433 L 4.454861,9.9757067 5.595388,8.4525978 H 6.3894258 L 4.8049595,10.437692 Z"
+       id="text1-5"
+       aria-label="x" />
+  </g>
+</svg>

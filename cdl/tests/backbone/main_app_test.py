@@ -31,8 +31,24 @@ def test_main_app():
         except ValueError:
             pass
 
-        # Add signals to signal panel
         panel = win.signalpanel
+
+        # Create new groups
+        grp1 = panel.add_group("Group 1")
+        panel.add_group("Group 2")
+        # Add group using different levels of the API
+        panel.add_group("Group 3", select=True)
+        panel.remove_object(force=True)
+        win.add_group("Group 4", select=True)
+        panel.remove_object(force=True)
+        win.add_group("Group 5", panel="signal", select=True)
+        panel.remove_object(force=True)
+        # Rename group
+        panel.objview.select_groups([2])
+        panel.rename_selected_object_or_group("Group xxx")
+        panel.remove_object(force=True)
+
+        # Add signals to signal panel
         sig1 = create_paracetamol_signal(500)
         panel.add_object(sig1)
         panel.processor.compute_derivative()
@@ -44,6 +60,10 @@ def test_main_app():
 
         # Get object uuids
         uuids = win.get_object_uuids()
+        uuids2 = win.get_object_uuids(group=1)
+        uuids3 = win.get_object_uuids(group="Group 1")
+        uuids4 = win.get_object_uuids(group=grp1.uuid)
+        assert uuids == uuids2 == uuids3 == uuids4, "Group UUIDs should be the same"
         execenv.print(f"Object uuids:{os.linesep}{uuids}")
 
         # Testing `get_object`
@@ -88,7 +108,7 @@ def test_main_app():
             win.edit_menu,
             win.operation_menu,
             win.processing_menu,
-            win.computing_menu,
+            win.analysis_menu,
             win.view_menu,
             win.help_menu,
         ):

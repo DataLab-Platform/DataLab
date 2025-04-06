@@ -12,7 +12,7 @@ minimum-maximum filter algorithm.
 
 How to use the feature:
   - Create or open an image in DataLab workspace
-  - Select "2d peak detection" in "Computing" menu
+  - Select "2d peak detection" in "Analysis" menu
   - Enter parameters "Neighborhoods size" and "Relative threhold"
   - Check "Create regions of interest" if you want a ROI defined for each
     detected peak (this may become useful when using another computation

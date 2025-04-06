@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 16:16+0200\n"
+"POT-Creation-Date: 2025-04-05 12:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,2538 +17,1503 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
-#: cdl.proxy:2 of
 msgid "Proxy objects (:mod:`cdl.proxy`)"
-msgstr "Objets proxy (:mod:`cdl.proxy`)"
-
-#: cdl.proxy:4 of
-msgid ""
-"The :mod:`cdl.proxy` module provides a way to access DataLab features "
-"from a proxy class."
 msgstr ""
-"Le module :mod:`cdl.proxy` fournit un moyen d'accéder aux fonctionnalités"
-" de DataLab à partir d'une classe proxy."
 
-#: cdl.proxy:7 of
-msgid ""
-"The list of compute methods accessible from the proxy objects is "
-"available in the :ref:`processor_methods` section."
+msgid "The :mod:`cdl.proxy` module provides a way to access DataLab features from a proxy class."
 msgstr ""
-"La liste des méthodes de calcul accessibles à partir des objets proxy est"
-" disponible dans la section :ref:`processor_methods`."
 
-#: cdl.proxy:11 of
+msgid "The list of compute methods accessible from the proxy objects is available in the :ref:`processor_methods` section."
+msgstr ""
+
 msgid "Remote proxy"
-msgstr "Proxy distant"
-
-#: cdl.proxy:13 of
-msgid ""
-"The remote proxy is used when DataLab is started from a different process"
-" than the proxy. In this case, the proxy connects to DataLab XML-RPC "
-"server."
 msgstr ""
-"Le proxy distant est utilisé lorsque DataLab est démarré à partir d'un "
-"processus différent du proxy. Dans ce cas, le proxy se connecte au "
-"serveur XML-RPC de DataLab."
 
-#: cdl.proxy.RemoteProxy:1 of
+msgid "The remote proxy is used when DataLab is started from a different process than the proxy. In this case, the proxy connects to DataLab XML-RPC server."
+msgstr ""
+
 msgid "DataLab remote proxy class."
-msgstr "Classe proxy distant DataLab."
-
-#: cdl.proxy.RemoteProxy:3 of
-msgid ""
-"This class provides access to DataLab features from a proxy class. This "
-"is the remote version of proxy, which is used when DataLab is started "
-"from a different process than the proxy."
 msgstr ""
-"Cette classe fournit un accès aux fonctionnalités de DataLab à partir "
-"d'une classe proxy. Il s'agit de la version distante du proxy, qui est "
-"utilisée lorsque DataLab est démarré à partir d'un processus différent du"
-" proxy."
 
-#: cdl.core.baseproxy.BaseProxy.add_label_with_title
-#: cdl.core.baseproxy.BaseProxy.delete_metadata
-#: cdl.core.baseproxy.BaseProxy.get_object_titles
-#: cdl.core.baseproxy.BaseProxy.get_object_uuids
-#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
-#: cdl.core.baseproxy.BaseProxy.import_h5_file
-#: cdl.core.baseproxy.BaseProxy.import_macro_from_file
-#: cdl.core.baseproxy.BaseProxy.load_from_files
-#: cdl.core.baseproxy.BaseProxy.open_h5_files
-#: cdl.core.baseproxy.BaseProxy.run_macro
-#: cdl.core.baseproxy.BaseProxy.save_to_h5_file
-#: cdl.core.baseproxy.BaseProxy.select_groups
-#: cdl.core.baseproxy.BaseProxy.select_objects
-#: cdl.core.baseproxy.BaseProxy.set_current_panel
-#: cdl.core.baseproxy.BaseProxy.stop_macro
-#: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh
-#: cdl.core.baseproxy.BaseProxy.toggle_show_titles
-#: cdl.core.remote.RemoteClient.add_annotations_from_items
-#: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_object
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
-#: cdl.core.remote.RemoteClient.connect cdl.core.remote.RemoteClient.get_object
-#: cdl.core.remote.RemoteClient.get_object_shapes cdl.proxy.LocalProxy
-#: cdl.proxy.LocalProxy.add_annotations_from_items
-#: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_object
-#: cdl.proxy.LocalProxy.add_signal cdl.proxy.LocalProxy.calc
-#: cdl.proxy.LocalProxy.get_object cdl.proxy.LocalProxy.get_object_shapes
-#: cdl.proxy.RemoteProxy cdl.proxy.proxy_context of
+msgid "This class provides access to DataLab features from a proxy class. This is the remote version of proxy, which is used when DataLab is started from a different process than the proxy."
+msgstr ""
+
 msgid "Parameters"
-msgstr "Paramètres"
+msgstr ""
 
-#: cdl.proxy.RemoteProxy:7 of
 msgid "Automatically connect to DataLab XML-RPC server."
-msgstr "Connexion automatique au serveur XML-RPC de DataLab."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_object_titles
-#: cdl.core.baseproxy.BaseProxy.get_object_uuids
-#: cdl.core.baseproxy.BaseProxy.run_macro
-#: cdl.core.baseproxy.BaseProxy.stop_macro
-#: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
-#: cdl.core.remote.RemoteClient.connect cdl.core.remote.RemoteClient.get_object
-#: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_signal
-#: cdl.proxy.LocalProxy.calc cdl.proxy.LocalProxy.get_object
-#: cdl.proxy.RemoteProxy of
 msgid "Raises"
-msgstr "Lève"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.connect:11 cdl.proxy.RemoteProxy:10 of
 msgid "Unable to connect to DataLab"
-msgstr "Impossible de se connecter à DataLab"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.connect:12 cdl.proxy.RemoteProxy:11 of
 msgid "Invalid timeout (must be >= 0.0)"
-msgstr "Délai d'attente invalide (doit être >= 0.0)"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.connect:13 cdl.proxy.RemoteProxy:12 of
 msgid "Invalid number of retries (must be >= 1)"
-msgstr "Nombre de tentatives invalide (doit être >= 1)"
-
-#: cdl.proxy.LocalProxy:12 cdl.proxy.RemoteProxy:16 of
-msgid ""
-"The proxy object also allows to access DataLab computing methods exposed "
-"by the processor classes (see :ref:`processor_methods`)."
 msgstr ""
 
-#: cdl.proxy.RemoteProxy:20 of
+msgid "The proxy object also allows to access DataLab computing methods exposed by the processor classes (see :ref:`processor_methods`)."
+msgstr ""
+
 msgid "Examples"
-msgstr "Exemples"
-
-#: cdl.proxy.RemoteProxy:21 of
-msgid ""
-"Here is a simple example of how to use RemoteProxy in a Python script or "
-"in a Jupyter notebook:"
 msgstr ""
-"Voici un exemple simple de l'utilisation de RemoteProxy dans un script "
-"Python ou dans un notebook Jupyter :"
 
-#: cdl.core.remote.RemoteClient.add_annotations_from_items:1
-#: cdl.proxy.LocalProxy.add_annotations_from_items:1 of
+msgid "Here is a simple example of how to use RemoteProxy in a Python script or in a Jupyter notebook:"
+msgstr ""
+
 msgid "Add object annotations (annotation plot items)."
-msgstr "Ajouter des annotations d'objet (éléments de tracé d'annotation)."
-
-#: cdl.core.remote.RemoteClient.add_annotations_from_items:3
-#: cdl.proxy.LocalProxy.add_annotations_from_items:3 of
-msgid "annotation plot items"
-msgstr "éléments de tracé d'annotation"
-
-#: cdl.core.remote.RemoteClient.add_annotations_from_items:5
-#: cdl.proxy.LocalProxy.add_annotations_from_items:5 of
-msgid "refresh plot. Defaults to True."
-msgstr "rafraîchir le tracé. Par défaut, True."
-
-#: cdl.core.baseproxy.BaseProxy.add_label_with_title:6
-#: cdl.core.baseproxy.BaseProxy.get_object_uuids:4
-#: cdl.core.remote.RemoteClient.add_annotations_from_items:7
-#: cdl.proxy.LocalProxy.add_annotations_from_items:7 of
-msgid ""
-"panel name (valid values: \"signal\", \"image\"). If None, current panel "
-"is used."
 msgstr ""
-"nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le "
-"panneau actuel est utilisé."
 
-#: cdl.core.remote.RemoteClient.add_image:1 cdl.proxy.LocalProxy.add_image:1 of
+msgid "annotation plot items"
+msgstr ""
+
+msgid "refresh plot. Defaults to True."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
+msgstr ""
+
+msgid "Add group to DataLab."
+msgstr ""
+
+msgid "Group title"
+msgstr ""
+
+msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
+msgstr ""
+
+msgid "Select the group after creation. Defaults to False."
+msgstr ""
+
 msgid "Add image data to DataLab."
-msgstr "Ajouter des données d'image à DataLab."
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:3 cdl.proxy.LocalProxy.add_image:3 of
 msgid "Image title"
-msgstr "Titre de l'image"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:5 cdl.proxy.LocalProxy.add_image:5 of
 msgid "Image data"
-msgstr "Données de l'image"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:7
-#: cdl.core.remote.RemoteClient.add_signal:9 cdl.proxy.LocalProxy.add_image:7
-#: cdl.proxy.LocalProxy.add_signal:9 of
-msgid "X unit. Defaults to None."
-msgstr "Unité X. Par défaut, None."
+msgid "X unit. Defaults to None"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:9
-#: cdl.core.remote.RemoteClient.add_signal:11 cdl.proxy.LocalProxy.add_image:9
-#: cdl.proxy.LocalProxy.add_signal:11 of
-msgid "Y unit. Defaults to None."
-msgstr "Unité Y. Par défaut, None."
+msgid "Y unit. Defaults to None"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:11 cdl.proxy.LocalProxy.add_image:11
-#: of
-msgid "Z unit. Defaults to None."
-msgstr "Unité Z. Par défaut, None."
+msgid "Z unit. Defaults to None"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:13
-#: cdl.core.remote.RemoteClient.add_signal:13 cdl.proxy.LocalProxy.add_image:13
-#: cdl.proxy.LocalProxy.add_signal:13 of
-msgid "X label. Defaults to None."
-msgstr "Libellé X. Par défaut, None."
+msgid "X label. Defaults to None"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:15
-#: cdl.core.remote.RemoteClient.add_signal:15 cdl.proxy.LocalProxy.add_image:15
-#: cdl.proxy.LocalProxy.add_signal:15 of
-msgid "Y label. Defaults to None."
-msgstr "Libellé Y. Par défaut, None."
+msgid "Y label. Defaults to None"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:17 cdl.proxy.LocalProxy.add_image:17
-#: of
-msgid "Z label. Defaults to None."
-msgstr "Libellé Z. Par défaut, None."
+msgid "Z label. Defaults to None"
+msgstr ""
 
-#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh
-#: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
-#: cdl.core.baseproxy.BaseProxy.get_current_panel
-#: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos
-#: cdl.core.baseproxy.BaseProxy.get_object_titles
-#: cdl.core.baseproxy.BaseProxy.get_object_uuids
-#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
-#: cdl.core.baseproxy.BaseProxy.get_version
-#: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal
-#: cdl.core.remote.RemoteClient.get_object
-#: cdl.core.remote.RemoteClient.get_object_shapes
-#: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_signal
-#: cdl.proxy.LocalProxy.get_object cdl.proxy.LocalProxy.get_object_shapes of
+msgid "group id in which to add the image. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added image as current"
+msgstr ""
+
 msgid "Returns"
-msgstr "Renvoie"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image:20 cdl.proxy.LocalProxy.add_image:20
-#: of
 msgid "True if image was added successfully, False otherwise"
-msgstr "Vrai si l'image a été ajoutée avec succès, Faux sinon"
+msgstr ""
 
-#: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
-#: cdl.core.baseproxy.BaseProxy.get_current_panel
-#: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos
-#: cdl.core.baseproxy.BaseProxy.get_object_uuids
-#: cdl.core.baseproxy.BaseProxy.get_version
-#: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.proxy.LocalProxy.add_image
-#: cdl.proxy.LocalProxy.add_signal of
-msgid "Return type"
-msgstr "Type de retour"
-
-#: cdl.core.remote.RemoteClient.add_image:23 cdl.proxy.LocalProxy.add_image:23
-#: of
 msgid "Invalid data dtype"
-msgstr "Type de données invalide"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.add_label_with_title:1 of
 msgid "Add a label with object title on the associated plot"
-msgstr "Ajouter une étiquette avec le titre de l'objet sur le tracé associé"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.add_label_with_title:3 of
 msgid "Label title. Defaults to None. If None, the title is the object title."
 msgstr ""
-"Titre de l'étiquette. Par défaut, None. Si None, le titre est le titre de"
-" l'objet."
 
-#: cdl.core.remote.RemoteClient.add_object:1 cdl.proxy.LocalProxy.add_object:1
-#: of
 msgid "Add object to DataLab."
-msgstr "Ajouter un objet à DataLab."
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_object:3 cdl.proxy.LocalProxy.add_object:3
-#: of
 msgid "Signal or image object"
-msgstr "Objet signal ou image"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_signal:1 cdl.proxy.LocalProxy.add_signal:1
-#: of
+msgid "group id in which to add the object. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added object as current"
+msgstr ""
+
 msgid "Add signal data to DataLab."
-msgstr "Ajouter des données de signal à DataLab."
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_signal:3 cdl.proxy.LocalProxy.add_signal:3
-#: of
 msgid "Signal title"
-msgstr "Titre du signal"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_signal:5 cdl.proxy.LocalProxy.add_signal:5
-#: of
 msgid "X data"
-msgstr "Données X"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_signal:7 cdl.proxy.LocalProxy.add_signal:7
-#: of
 msgid "Y data"
-msgstr "Données Y"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_signal:18
-#: cdl.proxy.LocalProxy.add_signal:18 of
+msgid "group id in which to add the signal. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added signal as current"
+msgstr ""
+
 msgid "True if signal was added successfully, False otherwise"
-msgstr "Vrai si le signal a été ajouté avec succès, Faux sinon"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_signal:21
-#: cdl.proxy.LocalProxy.add_signal:21 of
 msgid "Invalid xdata dtype"
-msgstr "Type de données xdata invalide"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_signal:22
-#: cdl.proxy.LocalProxy.add_signal:22 of
 msgid "Invalid ydata dtype"
-msgstr "Type de données ydata invalide"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.calc:1 cdl.proxy.LocalProxy.calc:1 of
 msgid "Call compute function ``name`` in current panel's processor."
 msgstr ""
-"Appeler la fonction de calcul ``name`` dans le processeur du panneau "
-"actuel."
 
-#: cdl.core.remote.RemoteClient.calc:3 cdl.proxy.LocalProxy.calc:3 of
 msgid "Compute function name"
-msgstr "Nom de la fonction de calcul"
-
-#: cdl.core.remote.RemoteClient.calc:4 cdl.proxy.LocalProxy.calc:4 of
-msgid "Compute function parameter. Defaults to None."
-msgstr "Paramètre de la fonction de calcul. Par défaut, None."
-
-#: cdl.core.remote.RemoteClient.calc:6 cdl.proxy.LocalProxy.calc:6 of
-msgid "unknown function"
-msgstr "fonction inconnue"
-
-#: cdl.core.baseproxy.BaseProxy.close_application:1 of
-msgid "Close DataLab application"
-msgstr "Fermer l'application DataLab"
-
-#: cdl.core.remote.RemoteClient.connect:1 of
-msgid "Try to connect to DataLab XML-RPC server."
-msgstr "Tentative de connexion au serveur XML-RPC de DataLab."
-
-#: cdl.core.remote.RemoteClient.connect:3 of
-msgid ""
-"XML-RPC port to connect to. If not specified, the port is automatically "
-"retrieved from DataLab configuration."
 msgstr ""
-"Port XML-RPC auquel se connecter. S'il n'est pas spécifié, le port est "
-"récupéré automatiquement à partir de la configuration de DataLab."
 
-#: cdl.core.remote.RemoteClient.connect:6 of
+msgid "Compute function parameter. Defaults to None."
+msgstr ""
+
+msgid "unknown function"
+msgstr ""
+
+msgid "Close DataLab application"
+msgstr ""
+
+msgid "Try to connect to DataLab XML-RPC server."
+msgstr ""
+
+msgid "XML-RPC port to connect to. If not specified, the port is automatically retrieved from DataLab configuration."
+msgstr ""
+
 msgid "Timeout in seconds. Defaults to 5.0."
-msgstr "Délai d'attente en secondes. Par défaut, 5.0."
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.connect:8 of
 msgid "Number of retries. Defaults to 10."
-msgstr "Nombre de tentatives. Par défaut, 10."
+msgstr ""
 
-#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:1 of
 msgid "Return a context manager to temporarily disable auto refresh."
 msgstr ""
-"Renvoie un gestionnaire de contexte pour désactiver temporairement le "
-"rafraîchissement automatique."
 
-#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:3 of
 msgid "Context manager"
-msgstr "Gestionnaire de contexte"
+msgstr ""
 
-#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:6
-#: cdl.proxy.proxy_context:14 of
 msgid "Example"
-msgstr "Exemple"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.delete_metadata:1 of
 msgid "Delete metadata of selected objects"
-msgstr "Supprimer les métadonnées des objets sélectionnés"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.delete_metadata:3 of
 msgid "Refresh plot. Defaults to True."
-msgstr "Actualiser le tracé. Par défaut, True."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.delete_metadata:4 of
 msgid "Keep ROI. Defaults to False."
-msgstr "Conserver la ROI. Par défaut, False."
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.disconnect:1 of
 msgid "Disconnect from DataLab XML-RPC server."
-msgstr "Déconnexion du serveur XML-RPC de DataLab."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_current_panel:1 of
 msgid "Return current panel name."
-msgstr "Renvoie le nom du panneau actuel."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_current_panel:3
-#: cdl.core.baseproxy.BaseProxy.set_current_panel:3 of
-msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
-msgstr "Nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\")"
+msgid "\"signal\", \"image\", \"macro\"))"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:1 of
+msgid "Return type"
+msgstr ""
+
 msgid "Return groups titles and lists of inner objects uuids and titles."
 msgstr ""
-"Renvoie les titres des groupes et les listes des UUID et des titres des "
-"objets internes."
 
-#: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:3 of
 msgid "groups titles, lists of inner objects uuids and titles"
-msgstr "titres des groupes, listes des UUID et des titres des objets internes"
-
-#: cdl.core.remote.RemoteClient.get_method_list:1 of
-msgid "Return list of available methods."
-msgstr "Renvoie la liste des méthodes disponibles."
-
-#: cdl.core.remote.RemoteClient.get_object:1 cdl.proxy.LocalProxy.get_object:1
-#: of
-msgid "Get object (signal/image) from index."
-msgstr "Obtenir l'objet (signal/image) à partir de l'index."
-
-#: cdl.core.remote.RemoteClient.get_object:3
-#: cdl.core.remote.RemoteClient.get_object_shapes:3
-#: cdl.proxy.LocalProxy.get_object:3 cdl.proxy.LocalProxy.get_object_shapes:3
-#: of
-msgid ""
-"Object number, or object id, or object title. Defaults to None (current "
-"object)."
 msgstr ""
-"Numéro de l'objet, ou ID de l'objet, ou titre de l'objet. Par défaut, "
-"None (objet actuel)."
 
-#: cdl.core.remote.RemoteClient.get_object:5
-#: cdl.core.remote.RemoteClient.get_object_shapes:5
-#: cdl.proxy.LocalProxy.get_object:5 cdl.proxy.LocalProxy.get_object_shapes:5
-#: of
+msgid "Return list of available methods."
+msgstr ""
+
+msgid "Get object (signal/image) from index."
+msgstr ""
+
+msgid "Object number, or object id, or object title. Defaults to None (current object)."
+msgstr ""
+
 msgid "Panel name. Defaults to None (current panel)."
-msgstr "Nom du panneau. Par défaut, None (panneau actuel)."
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.get_object:7 cdl.proxy.LocalProxy.get_object:7
-#: of
 msgid "Object"
-msgstr "Objet"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.get_object:9 cdl.proxy.LocalProxy.get_object:9
-#: of
 msgid "if object not found"
-msgstr "si l'objet n'est pas trouvé"
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.get_object_shapes:1
-#: cdl.proxy.LocalProxy.get_object_shapes:1 of
 msgid "Get plot item shapes associated to object (signal/image)."
 msgstr ""
-"Obtenir les formes des éléments de tracé associées à l'objet "
-"(signal/image)."
 
-#: cdl.core.remote.RemoteClient.get_object_shapes:7
-#: cdl.proxy.LocalProxy.get_object_shapes:7 of
 msgid "List of plot item shapes"
-msgstr "Liste des formes des éléments de tracé"
-
-#: cdl.core.baseproxy.BaseProxy.get_object_titles:1 of
-msgid ""
-"Get object (signal/image) list for current panel. Objects are sorted by "
-"group number and object index in group."
 msgstr ""
-"Obtenir la liste des objets (signal/image) pour le panneau actuel. Les "
-"objets sont triés par numéro de groupe et index d'objet dans le groupe."
 
-#: cdl.core.baseproxy.BaseProxy.get_object_titles:4 of
-msgid ""
-"panel name (valid values: \"signal\", \"image\", \"macro\"). If None, "
-"current data panel is used (i.e. signal or image panel)."
+msgid "Get object (signal/image) list for current panel. Objects are sorted by group number and object index in group."
 msgstr ""
-"nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\"). Si "
-"None, le panneau de données actuel est utilisé (c'est-à-dire le panneau "
-"signal ou image)."
 
-#: cdl.core.baseproxy.BaseProxy.get_object_titles:7 of
+msgid "panel name (valid values: \"signal\", \"image\", \"macro\"). If None, current data panel is used (i.e. signal or image panel)."
+msgstr ""
+
 msgid "List of object titles"
-msgstr "Liste des titres des objets"
-
-#: cdl.core.baseproxy.BaseProxy.get_object_titles:9
-#: cdl.core.baseproxy.BaseProxy.get_object_uuids:11 of
-msgid "if panel not found"
-msgstr "si le panneau n'est pas trouvé"
-
-#: cdl.core.baseproxy.BaseProxy.get_object_uuids:1 of
-msgid ""
-"Get object (signal/image) uuid list for current panel. Objects are sorted"
-" by group number and object index in group."
 msgstr ""
-"Obtenir la liste des UUID des objets (signal/image) pour le panneau "
-"actuel. Les objets sont triés par numéro de groupe et index d'objet dans "
-"le groupe."
 
-#: cdl.core.baseproxy.BaseProxy.get_object_uuids:8 of
-msgid "list of object uuids"
-msgstr "liste des UUID des objets"
+msgid "if panel not found"
+msgstr ""
 
-#: cdl.core.baseproxy.AbstractCDLControl.get_public_methods:1 of
+msgid "Get object (signal/image) uuid list for current panel. Objects are sorted by group number and object index in group."
+msgstr ""
+
+msgid "Group number, or group id, or group title. Defaults to None (all groups)."
+msgstr ""
+
+msgid "List of object uuids"
+msgstr ""
+
 msgid "Return all public methods of the class, except itself."
 msgstr ""
-"Renvoie toutes les méthodes publiques de la classe, à l'exception de "
-"celle-ci."
 
-#: cdl.core.baseproxy.AbstractCDLControl.get_public_methods:3 of
 msgid "List of public methods"
-msgstr "Liste des méthodes publiques"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:1 of
 msgid "Return selected objects uuids."
-msgstr "Renvoie les UUID des objets sélectionnés."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:3 of
 msgid "If True, also return objects from selected groups."
-msgstr "Si True, renvoie également les objets des groupes sélectionnés."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:5 of
 msgid "List of selected objects uuids."
-msgstr "Liste des UUID des objets sélectionnés."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_version:1 of
 msgid "Return DataLab public version."
-msgstr "Renvoie la version publique de DataLab."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.get_version:3 of
 msgid "DataLab version"
-msgstr "Version de DataLab"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.import_h5_file:1 of
 msgid "Open DataLab HDF5 browser to Import HDF5 file."
-msgstr "Ouvrir le navigateur DataLab HDF5 pour importer un fichier HDF5."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.import_h5_file:3
-#: cdl.core.baseproxy.BaseProxy.save_to_h5_file:3 of
 msgid "HDF5 file name"
-msgstr "Nom du fichier HDF5"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.import_h5_file:5
-#: cdl.core.baseproxy.BaseProxy.open_h5_files:8 of
 msgid "Reset all application data. Defaults to None."
-msgstr "Réinitialiser toutes les données de l'application. Par défaut, None."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.import_macro_from_file:1 of
 msgid "Import macro from file"
-msgstr "Importer une macro à partir d'un fichier"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.import_macro_from_file:3 of
 msgid "Filename."
-msgstr "Nom de fichier."
+msgstr ""
 
-#: cdl.core.remote.RemoteClient.is_connected:1 of
 msgid "Return True if connected to DataLab XML-RPC server."
-msgstr "Renvoie True si connecté au serveur XML-RPC de DataLab."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.load_from_files:1 of
+msgid "Open objects from directory in current panel (signals/images)."
+msgstr ""
+
+msgid "directory path"
+msgstr ""
+
 msgid "Open objects from files in current panel (signals/images)."
 msgstr ""
-"Ouvrir des objets à partir de fichiers dans le panneau actuel "
-"(signaux/images)."
 
-#: cdl.core.baseproxy.BaseProxy.load_from_files:3 of
 msgid "list of file names"
-msgstr "liste de noms de fichiers"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.open_h5_files:1 of
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
 msgstr ""
-"Ouvrir un fichier HDF5 DataLab ou importer à partir de tout autre fichier"
-" HDF5."
 
-#: cdl.core.baseproxy.BaseProxy.open_h5_files:3 of
 msgid "List of HDF5 files to open. Defaults to None."
-msgstr "Liste des fichiers HDF5 à ouvrir. Par défaut, None."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.open_h5_files:5 of
 msgid "Import all objects from HDF5 files. Defaults to None."
-msgstr "Importer tous les objets à partir des fichiers HDF5. Par défaut, None."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.raise_window:1 of
 msgid "Raise DataLab window"
-msgstr "Afficher la fenêtre DataLab"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.reset_all:1 of
 msgid "Reset all application data"
-msgstr "Réinitialiser toutes les données de l'application"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.run_macro:1 of
 msgid "Run macro."
-msgstr "Exécute la macro."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.run_macro:3
-#: cdl.core.baseproxy.BaseProxy.stop_macro:3 of
 msgid "Macro number, or macro title. Defaults to None (current macro)."
-msgstr "Numéro de macro, ou titre de macro. Par défaut, None (macro actuelle)."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.run_macro:6
-#: cdl.core.baseproxy.BaseProxy.stop_macro:6 of
 msgid "if macro not found"
-msgstr "si la macro n'est pas trouvée"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.save_to_h5_file:1 of
 msgid "Save to a DataLab HDF5 file."
-msgstr "Enregistrer dans un fichier HDF5 DataLab."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.select_groups:1 of
 msgid "Select groups in current panel."
-msgstr "Sélectionner des groupes dans le panneau actuel."
-
-#: cdl.core.baseproxy.BaseProxy.select_groups:3 of
-msgid ""
-"List of group numbers (1 to N), or list of group uuids, or None to select"
-" all groups. Defaults to None."
 msgstr ""
-"Liste de numéros de groupe (1 à N), ou liste d'UUID de groupe, ou None "
-"pour sélectionner tous les groupes. Par défaut, None."
 
-#: cdl.core.baseproxy.BaseProxy.select_groups:5
-#: cdl.core.baseproxy.BaseProxy.select_objects:4 of
-msgid ""
-"panel name (valid values: \"signal\", \"image\"). If None, current panel "
-"is used. Defaults to None."
+msgid "List of group numbers (1 to N), or list of group uuids, or None to select all groups. Defaults to None."
 msgstr ""
-"nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le "
-"panneau actuel est utilisé. Par défaut, None."
 
-#: cdl.core.baseproxy.BaseProxy.select_objects:1 of
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used. Defaults to None."
+msgstr ""
+
 msgid "Select objects in current panel."
-msgstr "Sélectionner des objets dans le panneau actuel."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.select_objects:3 of
 msgid "List of object numbers (1 to N) or uuids to select"
-msgstr "Liste de numéros d'objet (1 à N) ou d'UUID à sélectionner"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.set_current_panel:1 of
 msgid "Switch to panel."
-msgstr "Passer au panneau."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.stop_macro:1 of
+msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
+msgstr ""
+
 msgid "Stop macro."
-msgstr "Arrête la macro."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh:1 of
 msgid "Toggle auto refresh state."
-msgstr "Basculer l'état de rafraîchissement automatique."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh:3 of
 msgid "Auto refresh state"
-msgstr "État de rafraîchissement automatique"
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.toggle_show_titles:1 of
 msgid "Toggle show titles state."
-msgstr "Basculer l'état d'affichage des titres."
+msgstr ""
 
-#: cdl.core.baseproxy.BaseProxy.toggle_show_titles:3 of
 msgid "Show titles state"
-msgstr "État d'affichage des titres"
+msgstr ""
 
-#: cdl.proxy:21 of
 msgid "Local proxy"
-msgstr "Proxy local"
-
-#: cdl.proxy:23 of
-msgid ""
-"The local proxy is used when DataLab is started from the same process as "
-"the proxy. In this case, the proxy is directly connected to DataLab main "
-"window instance. The typical use case is high-level scripting."
 msgstr ""
-"Le proxy local est utilisé lorsque DataLab est démarré à partir du même "
-"processus que le proxy. Dans ce cas, le proxy est directement connecté à "
-"l'instance de la fenêtre principale de DataLab. Le cas d'utilisation "
-"typique est le script de haut niveau."
 
-#: cdl.proxy.LocalProxy:1 of
+msgid "The local proxy is used when DataLab is started from the same process as the proxy. In this case, the proxy is directly connected to DataLab main window instance. The typical use case is high-level scripting."
+msgstr ""
+
 msgid "DataLab local proxy class."
-msgstr "Classe de proxy local DataLab."
-
-#: cdl.proxy.LocalProxy:3 of
-msgid ""
-"This class provides access to DataLab features from a proxy class. This "
-"is the local version of proxy, which is used when DataLab is started from"
-" the same process as the proxy."
 msgstr ""
-"Cette classe permet d'accéder aux fonctionnalités de DataLab à partir "
-"d'une classe proxy. Il s'agit de la version locale du proxy, utilisée "
-"lorsque DataLab est démarré à partir du même processus que le proxy."
 
-#: cdl.proxy.LocalProxy:7 of
+msgid "This class provides access to DataLab features from a proxy class. This is the local version of proxy, which is used when DataLab is started from the same process as the proxy."
+msgstr ""
+
 msgid "CDLMainWindow instance."
-msgstr "Instance de CDLMainWindow."
+msgstr ""
 
-#: cdl.proxy:32 of
+msgid "Compute function parameter. Defaults to None"
+msgstr ""
+
+msgid "Object number, or object id, or object title. Defaults to None (current object)"
+msgstr ""
+
+msgid "Panel name. Defaults to None (current panel)"
+msgstr ""
+
+msgid "refresh plot. Defaults to True"
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used"
+msgstr ""
+
 msgid "Proxy context manager"
-msgstr "Gestionnaire de contexte proxy"
-
-#: cdl.proxy:34 of
-msgid ""
-"The proxy context manager is a convenient way to handle proxy creation "
-"and destruction. It is used as follows:"
 msgstr ""
-"Le gestionnaire de contexte proxy est un moyen pratique de gérer la "
-"création et la destruction du proxy. Il est utilisé comme suit :"
 
-#: cdl.proxy:42 of
-msgid ""
-"The proxy type can be \"local\" or \"remote\". For remote proxy, the port"
-" can be specified as \"remote:port\"."
+msgid "The proxy context manager is a convenient way to handle proxy creation and destruction. It is used as follows:"
 msgstr ""
-"Le type de proxy peut être \"local\" ou \"remote\". Pour un proxy "
-"distant, le port peut être spécifié comme \"remote:port\"."
 
-#: cdl.proxy:45 of
-msgid ""
-"The proxy context manager allows to use the proxy in various contexts "
-"(Python script, Jupyter notebook, etc.). It also allows to switch "
-"seamlessly between local and remote proxy, keeping the same code inside "
-"the context."
+msgid "The proxy type can be \"local\" or \"remote\". For remote proxy, the port can be specified as \"remote:port\"."
 msgstr ""
-"Le gestionnaire de contexte proxy permet d'utiliser le proxy dans "
-"différents contextes (script Python, notebook Jupyter, etc.). Il permet "
-"également de passer sans heurts du proxy local au proxy distant, en "
-"conservant le même code à l'intérieur du contexte."
 
-#: cdl.proxy.proxy_context:1 of
+msgid "The proxy context manager allows to use the proxy in various contexts (Python script, Jupyter notebook, etc.). It also allows to switch seamlessly between local and remote proxy, keeping the same code inside the context."
+msgstr ""
+
 msgid "Context manager handling CDL proxy creation and destruction."
 msgstr ""
-"Gestionnaire de contexte gérant la création et la destruction du proxy "
-"CDL."
 
-#: cdl.proxy.proxy_context:3 of
-msgid ""
-"proxy type (\"local\" or \"remote\") For remote proxy, the port can be "
-"specified as \"remote:port\""
+msgid "proxy type (\"local\" or \"remote\") For remote proxy, the port can be specified as \"remote:port\""
 msgstr ""
-"type de proxy (\"local\" ou \"remote\"). Pour un proxy distant, le port "
-"peut être spécifié comme \"remote:port\"."
 
-#: cdl.proxy.proxy_context of
 msgid "Yields"
-msgstr "Renvoie"
+msgstr ""
 
-#: cdl.proxy.proxy_context:7 of
-msgid "*Generator[LocalProxy | RemoteProxy, None, None]* --"
-msgstr "*Générateur[LocalProxy | RemoteProxy, None, None]* --"
-
-#: cdl.proxy.proxy_context:11 of
 msgid "proxy"
-msgstr "proxy"
-
-#: cdl.proxy.proxy_context:10 of
-msgid ""
-"LocalProxy if what == \"local\" RemoteProxy if what == \"remote\" or "
-"\"remote:port\""
 msgstr ""
-"LocalProxy si what == \"local\", RemoteProxy si what == \"remote\" ou "
-"\"remote:port\""
 
-#: cdl.proxy.proxy_context:15 of
+msgid "LocalProxy if what == \"local\" RemoteProxy if what == \"remote\" or \"remote:port\""
+msgstr ""
+
 msgid "with proxy_context(\"local\") as proxy:"
-msgstr "avec proxy_context(\"local\") en tant que proxy :"
-
-#: cdl.proxy.proxy_context:16 of
-msgid "proxy.add_signal(...)"
-msgstr "proxy.add_signal(...)"
-
-#: cdl.proxy:54 of
-msgid "Calling processor methods using proxy objects"
-msgstr "Appel des méthodes de calcul à l'aide d'objets proxy"
-
-#: cdl.proxy:56 of
-msgid ""
-"All the proxy objects provide access to the DataLab computing methods "
-"exposed by the processor classes:"
 msgstr ""
-"Tous les objets proxy permettent d'accéder aux méthodes de calcul "
-"exposées par les classes de processeur de DataLab :"
 
-#: cdl.proxy:59 of
+msgid "proxy.add_signal(...)"
+msgstr ""
+
+msgid "Calling processor methods using proxy objects"
+msgstr ""
+
+msgid "All the proxy objects provide access to the DataLab computing methods exposed by the processor classes:"
+msgstr ""
+
 msgid ":class:`cdl.core.gui.processor.signal.SignalProcessor`"
 msgstr ""
 
-#: cdl.proxy:60 of
 msgid ":class:`cdl.core.gui.processor.image.ImageProcessor`"
 msgstr ""
 
-#: cdl.proxy:64 of
 msgid "The list of processor methods is available in tables below."
-msgstr "La liste des méthodes de calcul est disponible dans les tableaux ci-dessous."
+msgstr ""
 
-#: cdl.proxy:66 of
 msgid "There are two ways to call a processor method:"
-msgstr "Il existe deux façons d'appeler une méthode de calcul :"
+msgstr ""
 
-#: cdl.proxy:68 of
 msgid "Using the :meth:`calc` method of the proxy object:"
-msgstr "En utilisant la méthode :meth:`calc` de l'objet proxy :"
+msgstr ""
 
-#: cdl.proxy:82 of
 msgid "Directly calling the processor method from the proxy object:"
-msgstr "En appelant directement la méthode de calcul du processeur à partir de l'objet proxy :"
+msgstr ""
 
-#: cdl.proxy:95 of
-msgid ""
-"The `compute_{name}` methods are not statically defined in the proxy "
-"classes (and not even dynamically). They are nevertheless available "
-"through the proxy objects thanks to the magic method :meth:`__getattr__` "
-"which forwards the call to the :meth:`calc` method. However, this means "
-"that the methods are not listed in the proxy classes documentation, and "
-"they are not available in the auto-completion feature of your IDE."
-msgstr "Les méthodes `compute_{name}` ne sont pas définies statiquement dans les classes proxy (et même pas dynamiquement). Elles sont néanmoins disponibles via les objets proxy grâce à la méthode magique :meth:`__getattr__` qui transfère l'appel à la méthode :meth:`calc`. Cependant, cela signifie que les méthodes ne sont pas répertoriées dans la documentation des classes proxy, et elles ne sont pas disponibles dans la fonction d'auto-complétion de votre IDE."
+#, python-brace-format
+msgid "The `compute_{name}` methods are not statically defined in the proxy classes (and not even dynamically). They are nevertheless available through the proxy objects thanks to the magic method :meth:`__getattr__` which forwards the call to the :meth:`calc` method. However, this means that the methods are not listed in the proxy classes documentation, and they are not available in the auto-completion feature of your IDE."
+msgstr ""
 
-#: cdl.proxy:103 cdl.proxy:105 of
 msgid "Number of compute methods"
-msgstr "Nombre de méthodes de calcul"
+msgstr ""
 
-#: cdl.proxy:1 of
 msgid "Signal"
-msgstr "Signal"
+msgstr ""
 
-#: cdl.proxy:1 of
 msgid "Image"
-msgstr "Image"
+msgstr ""
 
-#: cdl.proxy:1 of
 msgid "Total"
-msgstr "Total"
-
-#: ../../doc/processor_methods_nb.csv:1
-msgid "58"
 msgstr ""
 
-#: ../../doc/processor_methods_nb.csv:1
-msgid "99"
+msgid "71"
 msgstr ""
 
-#: ../../doc/processor_methods_nb.csv:1
-msgid "157"
+msgid "101"
 msgstr ""
 
-#: cdl.proxy:110 of
+msgid "172"
+msgstr ""
+
 msgid "Signal processing"
-msgstr "Traitement du signal"
-
-#: cdl.proxy:112 of
-msgid ""
-"The following table lists the signal processor methods - it is "
-"automatically generated from the source code:"
 msgstr ""
-"Le tableau suivant répertorie les méthodes de traitement du signal - il "
-"est généré automatiquement à partir du code source :"
 
-#: cdl.proxy:115 of
+msgid "The following table lists the signal processor methods - it is automatically generated from the source code:"
+msgstr ""
+
 msgid "Signal processor methods"
-msgstr "Méthodes de traitement du signal"
+msgstr ""
 
-#: cdl.proxy:1 of
 msgid "Compute method"
-msgstr "Méthode de calcul"
+msgstr ""
 
-#: cdl.proxy:1 of
 msgid "Description"
-msgstr "Description"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_abs`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute absolute value"
+msgid "Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute sum with a constant"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_all_stability`"
+msgstr ""
+
+msgid "Compute all stability analysis features"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_allan_deviation`"
+msgstr ""
+
+msgid "Compute Allan deviation"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_allan_variance`"
+msgstr ""
+
+msgid "Compute Allan variance"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_arithmetic`"
+msgstr ""
+
+msgid "Compute arithmetic operation between two signals"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_astype`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Convert data type"
-msgstr "Type de données invalide"
+msgid "Convert data type with :py:func:`cdl.computation.signal.compute_astype`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_average`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute average"
-msgstr "Gestionnaire de contexte"
+msgid "Compute average with :py:func:`cdl.computation.signal.compute_addition`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute band-pass filter"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute band-stop filter"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute bandwidth"
+msgid "Compute bandwidth at -3dB"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_calibration`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
 msgid "Compute data linear calibration"
-msgstr "Fermer l'application DataLab"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_cartesian2polar`"
+msgstr ""
+
+msgid "Convert cartesian to polar coordinates"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_clip`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute maximum data clipping"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_contrast`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute contrast"
-msgstr "Nom de la fonction de calcul"
+msgid "Compute contrast with :py:func:`cdl.computation.signal.compute_contrast`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_convolution`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
 msgid "Compute convolution"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_derivative`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute derivative"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_detrending`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute detrending"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_difference`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute difference between two signals"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute difference with a constant"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_division`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute division between two signals"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute division by a constant"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_exp`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute Log10"
+msgid "Compute Log10 with :py:func:`cdl.computation.signal.compute_exp`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fft`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute iFFT"
-msgstr "Nom de la fonction de calcul"
+msgid "Compute FFT with :py:func:`cdl.computation.signal.compute_fft`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fit`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute fitting curve"
-msgstr "Nom de la fonction de calcul"
+msgid "Compute fitting curve using an interactive dialog"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute FW at 1/e²"
-msgstr "Nom de la fonction de calcul"
+msgid "Compute FW at 1/e² with :py:func:`cdl.computation.signal.compute_fw1e2`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute FWHM"
-msgstr "Nom de la fonction de calcul"
+msgid "Compute FWHM with :py:func:`cdl.computation.signal.compute_fwhm`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute gaussian filter"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_hadamard_variance`"
+msgstr ""
+
+msgid "Compute Hadamard variance"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_highpass`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute high-pass filter"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_histogram`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
 msgid "Compute histogram"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_ifft`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute FFT"
-msgstr "Nom de la fonction de calcul"
+msgid "Compute iFFT with :py:func:`cdl.computation.signal.compute_ifft`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_im`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute imaginary part"
+msgid "Compute imaginary part with :py:func:`cdl.computation.signal.compute_im`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_integral`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute integral"
+msgid "Compute integral with :py:func:`cdl.computation.signal.compute_integral`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
 msgid "Compute interpolation"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_inverse`"
+msgstr ""
+
+msgid "Compute inverse"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_log10`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid "Compute Log10 with :py:func:`cdl.computation.signal.compute_log10`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute magnitude spectrum"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_modified_allan_variance`"
+msgstr ""
+
+msgid "Compute modified Allan variance"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute moving average"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute moving median"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute multi-Gaussian fitting curve"
+msgid "Compute multi-Gaussian fitting curve using an interactive dialog"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_normalize`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Normalize data"
-msgstr "Données de l'image"
+msgid "Normalize data with :py:func:`cdl.computation.signal.compute_normalize`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
 msgid "Compute offset correction"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_overlapping_allan_variance`"
+msgstr ""
+
+msgid "Compute overlapping Allan variance"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Detect peaks from data"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute phase spectrum"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_polar2cartesian`"
+msgstr ""
+
+msgid "Convert polar to cartesian coordinates"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute polynomial fitting curve"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_power`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute power"
+msgid "Compute power with :py:func:`cdl.computation.signal.compute_power`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_product`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute product"
-msgstr "Nom de la fonction de calcul"
+msgid "Compute product with :py:func:`cdl.computation.signal.compute_product`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute product with a constant"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_psd`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute power spectral density"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute quadratic difference between two signals"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_re`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute real part"
+msgid "Compute real part with :py:func:`cdl.computation.signal.compute_re`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_resampling`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute resampling"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Reverse X axis"
+msgid "Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Extract Region Of Interest (ROI) from data"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute sampling rate and period (mean and std)"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Compute square root"
+msgid "Compute square root with :py:func:`cdl.computation.signal.compute_sqrt`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_stats`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute data statistics"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sum`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-#, fuzzy
-msgid "Compute sum"
-msgstr "Nom de la fonction de calcul"
+msgid "Compute sum with :py:func:`cdl.computation.signal.compute_addition`"
+msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
-msgid "Swap data axes"
+msgid "Swap data axes with :py:func:`cdl.computation.signal.compute_swap_axes`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_time_deviation`"
+msgstr ""
+
+msgid "Compute time deviation"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_total_variance`"
+msgstr ""
+
+msgid "Compute total variance"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_wiener`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute Wiener filter"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_windowing`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute windowing"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax`"
 msgstr ""
 
-#: ../../doc/processor_methods_signal.csv:1
 msgid "Compute x at min/max"
 msgstr ""
 
-#: cdl.proxy:121 of
-msgid "Image processing"
-msgstr "Traitement d'image"
-
-#: cdl.proxy:123 of
-msgid ""
-"The following table lists the image processor methods - it is "
-"automatically generated from the source code:"
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_y`"
 msgstr ""
-"Le tableau suivant répertorie les méthodes de traitement d'image - il est"
-" généré automatiquement à partir du code source :"
 
-#: cdl.proxy:126 of
+msgid "Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`"
+msgstr ""
+
+msgid "Image processing"
+msgstr ""
+
+msgid "The following table lists the image processor methods - it is automatically generated from the source code:"
+msgstr ""
+
 msgid "Image processor methods"
-msgstr "Méthodes de traitement d'image"
+msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_abs`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute absolute value with :py:func:`cdl.computation.image.compute_abs`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute gamma correction"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#, fuzzy
 msgid "Compute log correction"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute sigmoid correction"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute all denoising filters"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_edges`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-msgid "Compute all edges"
+msgid "Compute all edges filters"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute all morphology filters"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute all threshold algorithms"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_arithmetic`"
+msgstr ""
+
+msgid "Compute arithmetic operation between two images"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_astype`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Convert data type with :py:func:`cdl.computation.image.compute_astype`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute average with :py:func:`cdl.computation.image.compute_addition`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute average profile"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_binning`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-msgid "Binning image"
+msgid "Binning image with :py:func:`cdl.computation.image.compute_binning`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Black Top-Hat"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute blob detection using Difference of Gaussian method"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute blob detection using Determinant of Hessian method"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_log`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute blob detection using Laplacian of Gaussian method"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute blob detection using OpenCV"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_butterworth`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Butterworth filter"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_calibration`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_canny`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Canny filter"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_centroid`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute image centroid"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_clip`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_closing`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute morphological closing"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#, fuzzy
 msgid "Compute contour shape fit"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute bilateral filter denoising"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Denoise using White Top-Hat"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Total Variation denoising"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Wavelet denoising"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_difference`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute difference between two images"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_dilation`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#, fuzzy
 msgid "Compute Dilation"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_division`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute division between two images"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_division_constant`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute minimum enclosing circle"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Adaptive histogram equalization"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Histogram equalization"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_erosion`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#, fuzzy
 msgid "Compute Erosion"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_exp`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute Log10 with :py:func:`cdl.computation.image.compute_exp`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Farid filter"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid_h`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Farid filter (horizontal)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_farid_v`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Farid filter (vertical)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fft`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute FFT with :py:func:`cdl.computation.image.compute_fft`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_flatfield`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute flat field correction"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_fliph`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Flip data horizontally"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_flipv`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-msgid "Flip data vertically"
+msgid "Flip data vertically with :py:func:`cdl.computation.image.compute_flipv`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_histogram`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute histogram with :py:func:`cdl.computation.image.compute_histogram`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute peak detection based on a circle Hough transform"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_ifft`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute iFFT with :py:func:`cdl.computation.image.compute_ifft`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_im`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute imaginary part with :py:func:`cdl.computation.image.compute_im`"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_inverse`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_laplace`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Laplace filter"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute profile along a vertical or horizontal line"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_log10`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute Log10 with :py:func:`cdl.computation.image.compute_log10`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_logp1`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute base 10 logarithm"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_moving_average`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_moving_median`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_normalize`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Normalize data with :py:func:`cdl.computation.image.compute_normalize`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_opening`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute morphological opening"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute 2D peak detection"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Prewitt filter"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Prewitt filter (horizontal)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Prewitt filter (vertical)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute product with :py:func:`cdl.computation.image.compute_product`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_product_constant`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_psd`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Power Spectral Density (PSD)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute quadratic difference between two images"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute radial profile"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_re`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute real part with :py:func:`cdl.computation.image.compute_re`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Rescale image intensity levels"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_resize`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-msgid "Resize image"
+msgid "Resize image with :py:func:`cdl.computation.image.compute_resize`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roberts`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Roberts filter"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Rotate data arbitrarily"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate270`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-msgid "Rotate data 270°"
+msgid "Rotate data 270° with :py:func:`cdl.computation.image.compute_rotate270`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_rotate90`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-msgid "Rotate data 90°"
+msgid "Rotate data 90° with :py:func:`cdl.computation.image.compute_rotate90`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Scharr filter"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Scharr filter (horizontal)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Scharr filter (vertical)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
-#, fuzzy
 msgid "Compute profile along a segment"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Sobel filter"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Sobel filter (horizontal)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute Sobel filter (vertical)"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_stats`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sum`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Compute sum with :py:func:`cdl.computation.image.compute_addition`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
+msgid "Swap data axes with :py:func:`cdl.computation.image.compute_swap_axes`"
+msgstr ""
+
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute parametric threshold"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute threshold using Isodata algorithm"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute threshold using Li algorithm"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute threshold using Mean algorithm"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute threshold using Minimum algorithm"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute threshold using Otsu algorithm"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute threshold using Triangle algorithm"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute threshold using Yen algorithm"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat`"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid "Compute White Top-Hat"
 msgstr ""
 
-#: ../../doc/processor_methods_image.csv:1
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_wiener`"
 msgstr ""
 
-#~ msgid "List of compute methods"
-#~ msgstr "Liste des méthodes de calcul"
-
-#~ msgid "60"
-#~ msgstr ""
-
-#~ msgid "101"
-#~ msgstr ""
-
-#~ msgid "161"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_abs`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_astype`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_average`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_calibration`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_clip`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_contrast`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_convolution`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_derivative`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_detrending`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_difference`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_division`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_exp`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fft`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fit`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_highpass`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_histogram`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_ifft`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_im`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_integral`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_log10`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_n1`"
-#~ msgstr ""
-
-#~ msgid "Compute n1 function: N(>=2) objects in → 1 object out."
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_n1n`"
-#~ msgstr ""
-
-#~ msgid "Compute n1n function: N(>=1) objects + 1 object in → N objects out."
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_normalize`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_power`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_product`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_psd`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_re`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_resampling`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_stats`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_sum`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_wiener`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_windowing`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_abs`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_edges`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_astype`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_average`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_binning`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_log`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_butterworth`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_calibration`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_canny`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_centroid`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_clip`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_closing`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_difference`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_dilation`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_division`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_division_constant`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_erosion`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_exp`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid_h`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_farid_v`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_fft`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_flatfield`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_fliph`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_flipv`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_histogram`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_ifft`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_im`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_laplace`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_log10`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_logp1`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_moving_average`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_moving_median`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_n1`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_n1n`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_normalize`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_opening`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_product`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_product_constant`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_psd`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_re`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_resize`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_roberts`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate270`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_rotate90`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_stats`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_sum`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`cdl.core.gui.processor.image.ImageProcessor.compute_wiener`"
-#~ msgstr ""

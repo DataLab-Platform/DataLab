@@ -13,10 +13,9 @@ Installation
         :animate: fade-in
         :icon: zap
 
-        Direct download links for the latest version of DataLab:
+        Direct download link for the latest version of DataLab:
 
         - |download_link1|
-        - |download_link2|
 
 This section provides information on how to install DataLab on your system.
 Once installed, you can start DataLab by running the ``cdl`` command in a terminal,
@@ -31,6 +30,8 @@ How to install
 --------------
 
 DataLab is available in several forms:
+
+-   As a :ref:`install_conda`.
 
 -   As a Python package, which can be installed using the :ref:`install_pip`.
 
@@ -50,6 +51,19 @@ DataLab is available in several forms:
     Impatient to try the next version of DataLab? You can also install the
     latest development version of DataLab from the master branch of the
     Git repository. See :ref:`install_development` for more information.
+
+.. _install_conda:
+
+Conda package
+^^^^^^^^^^^^^
+
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
+
+To install ``datalab`` package from the `conda-forge` channel (https://anaconda.org/conda-forge/datalab), run the following command:
+
+.. code-block:: console
+
+    $ conda install conda-forge::datalab
 
 .. _install_pip:
 
@@ -105,9 +119,7 @@ application).
 
 .. warning::
 
-    DataLab Windows installer is available for Windows 8, 10 and 11 (main release,
-    based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 based release, see
-    file ending with ``-Win7.msi``).
+    DataLab Windows installer is available for Windows 7 SP1, 8, 10 and 11.
 
     :octicon:`alert;1em;sd-text-warning` On Windows 7 SP1, before running DataLab
     (or any other Python 3 application), you must install Microsoft Update `KB2533623`

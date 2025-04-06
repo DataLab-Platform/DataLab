@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import warnings
 from collections.abc import Callable
 from typing import Any, Literal
 
@@ -28,9 +29,11 @@ from plotpy.panels.csection.csitem import compute_line_section as csline
 from skimage import filters
 
 import cdl.algorithms.image as alg
+from cdl.algorithms.datatypes import clip_astype, is_integer_dtype
 from cdl.computation.base import (
+    ArithmeticParam,
     ClipParam,
-    ConstantOperationParam,
+    ConstantParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
@@ -43,19 +46,41 @@ from cdl.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.obj import (
     BaseProcParam,
     ImageObj,
-    ImageRoiDataItem,
+    ImageROI,
     ResultProperties,
     ResultShape,
     ROI2DParam,
-    RoiDataGeometries,
     SignalObj,
 )
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
+
+
+def restore_data_outside_roi(dst: ImageObj, src: ImageObj) -> None:
+    """Restore data outside the Region Of Interest (ROI) of the input image
+    after a computation, only if the input image has a ROI,
+    and if the output image has the same ROI as the input image,
+    and if the data types are compatible,
+    and if the shapes are the same.
+    Otherwise, do nothing.
+
+    Args:
+        dst: output image object
+        src: input image object
+    """
+    if src.maskdata is not None and dst.maskdata is not None:
+        if (
+            np.array_equal(src.maskdata, dst.maskdata)
+            and (
+                dst.data.dtype == src.data.dtype or not is_integer_dtype(dst.data.dtype)
+            )
+            and dst.data.shape == src.data.shape
+        ):
+            dst.data[src.maskdata] = src.data[src.maskdata]
 
 
 class Wrap11Func:
@@ -110,6 +135,7 @@ class Wrap11Func:
         )
         dst = dst_11(src, self.func.__name__, suffix)
         dst.data = self.func(src.data, *self.args, **self.kwargs)
+        restore_data_outside_roi(dst, src)
         return dst
 
 
@@ -151,7 +177,8 @@ def compute_addition(dst: ImageObj, src: ImageObj) -> ImageObj:
     Returns:
         Output image object (modified in place)
     """
-    dst.data += np.array(src.data, dtype=dst.data.dtype)
+    dst.data = np.add(dst.data, src.data, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -165,11 +192,12 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     Returns:
         Output image object (modified in place)
     """
-    dst.data *= np.array(src.data, dtype=dst.data.dtype)
+    dst.data = np.multiply(dst.data, src.data, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_addition_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Add **dst** and a constant value and return the new result image object
 
     Args:
@@ -180,14 +208,15 @@ def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> Image
         Result image object **src** + **p.value** (new object)
     """
     # For the addition of a constant value, we convert the constant value to the same
-    # data type as the input image, to avoid any data type conversion issues.
+    # data type as the input image, for consistency.
     value = np.array(p.value).astype(dtype=src.data.dtype)
     dst = dst_11(src, "+", str(value))
-    dst.data += value
+    dst.data = np.add(src.data, value, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_difference_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Subtract a constant value from an image and return the new result image object
 
     Args:
@@ -198,14 +227,15 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
         Result image object **src** - **p.value** (new object)
     """
     # For the subtraction of a constant value, we convert the constant value to the same
-    # data type as the input image, to avoid any data type conversion issues.
+    # data type as the input image, for consistency.
     value = np.array(p.value).astype(dtype=src.data.dtype)
     dst = dst_11(src, "-", str(value))
-    dst.data -= value
+    dst.data = np.subtract(src.data, value, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_product_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Multiply **dst** by a constant value and return the new result image object
 
     Args:
@@ -221,11 +251,12 @@ def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageO
     # type conversion ensures that the output image has the same data type as the input
     # image.
     dst = dst_11(src, "×", str(p.value))
-    dst.data = np.array(src.data * p.value).astype(dtype=src.data.dtype)
+    dst.data = np.multiply(src.data, p.value, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_division_constant(src: ImageObj, p: ConstantParam) -> ImageObj:
     """Divide an image by a constant value and return the new result image object
 
     Args:
@@ -240,13 +271,49 @@ def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> Image
     # image by a constant value of a different data type. The final data type conversion
     # ensures that the output image has the same data type as the input image.
     dst = dst_11(src, "/", str(p.value))
-    dst.data = np.array(src.data / p.value).astype(dtype=src.data.dtype)
+    dst.data = np.divide(src.data, p.value, dtype=float)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
 # MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
+
+
+def compute_arithmetic(src1: ImageObj, src2: ImageObj, p: ArithmeticParam) -> ImageObj:
+    """Compute arithmetic operation on two images
+
+    Args:
+        src1: input image object
+        src2: input image object
+        p: arithmetic parameters
+
+    Returns:
+        Result image object
+    """
+    initial_dtype = src1.data.dtype
+    title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
+    dst = src1.copy(title=title)
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
+    o, a, b = p.operator, p.factor, p.constant
+    # Apply operator
+    if o in ("×", "/") and a == 0.0:
+        dst.data = np.ones_like(src1.data) * b
+    elif o == "+":
+        dst.data = np.add(src1.data, src2.data, dtype=float) * a + b
+    elif o == "-":
+        dst.data = np.subtract(src1.data, src2.data, dtype=float) * a + b
+    elif o == "×":
+        dst.data = np.multiply(src1.data, src2.data, dtype=float) * a + b
+    elif o == "/":
+        dst.data = np.divide(src1.data, src2.data, dtype=float) * a + b
+    # Eventually convert to initial data type
+    if p.restore_dtype:
+        dst.data = clip_astype(dst.data, initial_dtype)
+    restore_data_outside_roi(dst, src1)
+    return dst
 
 
 def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
@@ -260,7 +327,8 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object **src1** - **src2** (new object)
     """
     dst = dst_n1n(src1, src2, "-")
-    dst.data = src1.data - src2.data
+    dst.data = np.subtract(src1.data, src2.data, dtype=float)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -275,9 +343,8 @@ def compute_quadratic_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object (**src1** - **src2**) / sqrt(2.0) (new object)
     """
     dst = dst_n1n(src1, src2, "quadratic_difference")
-    dst.data = (src1.data - src2.data) / np.sqrt(2.0)
-    if np.issubdtype(dst.data.dtype, np.unsignedinteger):
-        dst.data[src1.data < src2.data] = 0
+    dst.data = np.subtract(src1.data, src2.data, dtype=float) / np.sqrt(2.0)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -292,7 +359,8 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object **src1** / **src2** (new object)
     """
     dst = dst_n1n(src1, src2, "/")
-    dst.data = src1.data / np.array(src2.data, dtype=src1.data.dtype)
+    dst.data = np.divide(src1.data, src2.data, dtype=float)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -315,6 +383,7 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
     """
     dst = dst_n1n(src1, src2, "flatfield", f"threshold={p.threshold}")
     dst.data = alg.flatfield(src1.data, src2.data, p.threshold)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -336,6 +405,7 @@ def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
     """
     dst = dst_11(src, "normalize", suffix=f"ref={p.method}")
     dst.data = alg.normalize(src.data, p.method)  # type: ignore
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -357,6 +427,7 @@ def compute_logp1(src: ImageObj, p: LogP1Param) -> ImageObj:
     """
     dst = dst_11(src, "log_z_plus_n", f"n={p.n}")
     dst.data = np.log10(src.data + p.n)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -498,7 +569,7 @@ def compute_rotate270(src: ImageObj) -> ImageObj:
 # pylint: disable=unused-argument
 def hflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
     """Apply HFlip to coords"""
-    coords[:, ::2] = dst.x0 + dst.dx * dst.data.shape[1] - coords[:, ::2]
+    coords[:, ::2] = dst.x0 + dst.width - coords[:, ::2]
     dst.roi = None
 
 
@@ -519,7 +590,7 @@ def compute_fliph(src: ImageObj) -> ImageObj:
 # pylint: disable=unused-argument
 def vflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
     """Apply VFlip to coords"""
-    coords[:, 1::2] = dst.y0 + dst.dy * dst.data.shape[0] - coords[:, 1::2]
+    coords[:, 1::2] = dst.y0 + dst.height - coords[:, 1::2]
     dst.roi = None
 
 
@@ -687,13 +758,17 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     Returns:
         Output image object
     """
-    x0, y0, x1, y1 = 0, 0, src.data.shape[1], src.data.shape[0]
+    # Initialize x0, y0 with maximum values:
+    y0, x0 = ymax, xmax = src.data.shape
+    # Initialize x1, y1 with minimum values:
+    y1, x1 = ymin, xmin = 0, 0
     for p in group.datasets:
         p: ROI2DParam
-        x0i, y0i, x1i, y1i = p.get_rect_indexes()
+        x0i, y0i, x1i, y1i = p.get_bounding_box_indices()
         x0, y0, x1, y1 = min(x0, x0i), min(y0, y0i), max(x1, x1i), max(y1, y1i)
-    x0, y0 = max(x0, 0), max(y0, 0)
-    x1, y1 = min(x1, src.data.shape[1]), min(y1, src.data.shape[0])
+    x0, y0 = max(x0, xmin), max(y0, ymin)
+    x1, y1 = min(x1, xmax), min(y1, ymax)
+
     suffix = None
     if len(group.datasets) == 1:
         p = group.datasets[0]
@@ -702,15 +777,11 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     dst.x0 += x0 * src.dx
     dst.y0 += y0 * src.dy
     dst.roi = None
-    if len(group.datasets) == 1:
-        dst.data = src.data.copy()[y0:y1, x0:x1]
-        return dst
-    out = np.zeros_like(src.data)
-    for p in group.datasets:
-        x0i, y0i, x1i, y1i = p.get_rect_indexes()
-        slice1, slice2 = slice(y0i, y1i + 1), slice(x0i, x1i + 1)
-        out[slice1, slice2] = src.data[slice1, slice2]
-    dst.data = out[y0:y1, x0:x1]
+
+    src2 = src.copy()
+    src2.roi = ImageROI.from_params(src2, group)
+    src2.data[src2.maskdata] = 0
+    dst.data = src2.data[y0:y1, x0:x1]
     return dst
 
 
@@ -726,13 +797,10 @@ def extract_single_roi(src: ImageObj, p: ROI2DParam) -> ImageObj:
     """
     dst = dst_11(src, "extract_single_roi", p.get_suffix())
     dst.data = p.get_data(src).copy()
-    x0, y0, _x1, _y1 = p.get_rect_indexes()
+    dst.roi = p.get_extracted_roi(src)
+    x0, y0, _x1, _y1 = p.get_bounding_box_indices()
     dst.x0 += x0 * src.dx
     dst.y0 += y0 * src.dy
-    dst.roi = None
-    if p.geometry is RoiDataGeometries.CIRCLE:
-        # Circular ROI
-        dst.roi = p.get_single_roi()
     return dst
 
 
@@ -752,7 +820,7 @@ class LineProfileParam(gds.DataSet):
     )
 
 
-def compute_line_profile(src: ImageObj, p: LineProfileParam) -> ImageObj:
+def compute_line_profile(src: ImageObj, p: LineProfileParam) -> SignalObj:
     """Compute horizontal or vertical profile
 
     Args:
@@ -760,7 +828,7 @@ def compute_line_profile(src: ImageObj, p: LineProfileParam) -> ImageObj:
         p: parameters
 
     Returns:
-        Output image object
+        Signal object with the profile
     """
     data = src.get_masked_view()
     p.row = min(p.row, data.shape[0] - 1)
@@ -786,7 +854,7 @@ class SegmentProfileParam(gds.DataSet):
     col2 = gds.IntItem(_("End column"), default=0, min=0)
 
 
-def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
+def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> SignalObj:
     """Compute segment profile
 
     Args:
@@ -794,7 +862,7 @@ def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
         p: parameters
 
     Returns:
-        Output image object
+        Signal object with the segment profile
     """
     data = src.get_masked_view()
     p.row1 = min(p.row1, data.shape[0] - 1)
@@ -803,6 +871,7 @@ def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
     p.col2 = min(p.col2, data.shape[1] - 1)
     suffix = f"({p.row1}, {p.col1})-({p.row2}, {p.col2})"
     x, y = csline(data, p.row1, p.col1, p.row2, p.col2)
+    x, y = x[~np.isnan(y)], y[~np.isnan(y)]  # Remove NaN values
     dst = dst_11_signal(src, "segment_profile", suffix)
     dst.set_xydata(np.array(x, dtype=float), np.array(y, dtype=float))
     return dst
@@ -821,7 +890,7 @@ class AverageProfileParam(gds.DataSet):
     _hgroup_end = gds.EndGroup(_("Profile rectangular area"))
 
 
-def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
+def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> SignalObj:
     """Compute horizontal or vertical average profile
 
     Args:
@@ -829,7 +898,7 @@ def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
         p: parameters
 
     Returns:
-        Output image object
+        Signal object with the average profile
     """
     data = src.get_masked_view()
     if p.row2 == -1:
@@ -901,7 +970,7 @@ def compute_radial_profile(src: ImageObj, p: RadialProfileParam) -> SignalObj:
         p: parameters
 
     Returns:
-        Output image object
+        Signal object with the radial profile
     """
     data = src.get_masked_view()
     if p.center == "centroid":
@@ -925,7 +994,7 @@ def compute_histogram(src: ImageObj, p: HistogramParam) -> SignalObj:
         p: parameters
 
     Returns:
-        Output signal object
+        Signal object with the histogram
     """
     data = src.get_masked_view().compressed()
     suffix = p.get_suffix(data)  # Also updates p.lower and p.upper
@@ -955,6 +1024,24 @@ def compute_swap_axes(src: ImageObj) -> ImageObj:
     dst = Wrap11Func(np.transpose)(src)
     # TODO: [P2] Instead of removing geometric shapes, apply swap
     dst.remove_all_shapes()
+    return dst
+
+
+def compute_inverse(src: ImageObj) -> ImageObj:
+    """Compute the inverse of an image and return the new result image object
+
+    Args:
+        src: input image object
+
+    Returns:
+        Result image object 1 / **src** (new object)
+    """
+    dst = dst_11(src, "inverse")
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        dst.data = np.reciprocal(src.data, dtype=float)
+        dst.data[np.isinf(dst.data)] = np.nan
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -1005,7 +1092,7 @@ class DataTypeIParam(gds.DataSet):
 
 
 def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
-    """Convert image data type with :py:func:`numpy.astype`
+    """Convert image data type with :py:func:`cdl.algorithms.datatypes.clip_astype`
 
     Args:
         src: input image object
@@ -1014,8 +1101,8 @@ def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "astype", p.dtype_str)
-    dst.data = src.data.astype(p.dtype_str)
+    dst = dst_11(src, "clip_astype", p.dtype_str)
+    dst.data = clip_astype(src.data, p.dtype_str)
     return dst
 
 
@@ -1062,6 +1149,7 @@ def compute_calibration(src: ImageObj, p: ZCalibrateParam) -> ImageObj:
     """
     dst = dst_11(src, "calibration", f"z={p.a}*z+{p.b}")
     dst.data = p.a * src.data + p.b
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -1089,7 +1177,8 @@ def compute_offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "offset_correction", p.get_suffix())
-    dst.data = src.data - p.get_data(src).mean()
+    dst.data = src.data - np.nanmean(p.get_data(src))
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -1245,21 +1334,21 @@ class ButterworthParam(gds.DataSet):
 
     cut_off = gds.FloatItem(
         _("Cut-off frequency ratio"),
-        default=0.5,
+        default=0.005,
         min=0.0,
-        max=1.0,
-        help=_("Cut-off frequency ratio (0.0 - 1.0)."),
+        max=0.5,
+        help=_("Cut-off frequency ratio"),
     )
     high_pass = gds.BoolItem(
         _("High-pass filter"),
         default=False,
-        help=_("If True, apply high-pass filter instead of low-pass."),
+        help=_("If True, apply high-pass filter instead of low-pass"),
     )
     order = gds.IntItem(
         _("Order"),
         default=2,
         min=1,
-        help=_("Order of the Butterworth filter."),
+        help=_("Order of the Butterworth filter"),
     )
 
 
@@ -1279,6 +1368,7 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
         f"cut_off={p.cut_off:.3f}, order={p.order}, high_pass={p.high_pass}",
     )
     dst.data = filters.butterworth(src.data, p.cut_off, p.high_pass, p.order)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -1325,7 +1415,7 @@ def calc_resultshape(
     """
     res = []
     num_cols = []
-    for i_roi in obj.iterate_roi_indexes():
+    for i_roi in obj.iterate_roi_indices():
         data_roi = obj.get_data(i_roi)
         if args is None:
             coords: np.ndarray = func(data_roi)
@@ -1353,19 +1443,20 @@ def calc_resultshape(
             )
 
         if coords.size:
+            coords = np.array(coords, dtype=float)
             if coords.shape[1] % 2 == 0:
                 # Coordinates are in the form [x0, y0, x1, y1, ...]
                 colx, coly = slice(None, None, 2), slice(1, None, 2)
             else:
                 # Circle [x0, y0, r] or ellipse coordinates [x0, y0, a, b, theta]
                 colx, coly = 0, 1
-            if obj.roi is not None:
-                x0, y0, _x1, _y1 = ImageRoiDataItem(obj.roi[i_roi]).get_rect()
-                coords[:, colx] += x0
-                coords[:, coly] += y0
             coords[:, colx] = obj.dx * coords[:, colx] + obj.x0
             coords[:, coly] = obj.dy * coords[:, coly] + obj.y0
-            idx = np.ones((coords.shape[0], 1)) * i_roi
+            if obj.roi is not None:
+                x0, y0, _x1, _y1 = obj.roi.get_single_roi(i_roi).get_bounding_box(obj)
+                coords[:, colx] += x0 - obj.x0
+                coords[:, coly] += y0 - obj.y0
+            idx = np.ones((coords.shape[0], 1)) * (0 if i_roi is None else i_roi)
             coords = np.hstack([idx, coords])
             res.append(coords)
             num_cols.append(coords.shape[1])

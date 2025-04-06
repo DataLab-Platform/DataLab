@@ -142,8 +142,10 @@ class RemoteServer(QC.QThread):
     SIG_SERVER_PORT = QC.Signal(int)
     SIG_CLOSE_APP = QC.Signal()
     SIG_RAISE_WINDOW = QC.Signal()
-    SIG_ADD_OBJECT = QC.Signal(object)
+    SIG_ADD_OBJECT = QC.Signal(object, str, bool)
+    SIG_ADD_GROUP = QC.Signal(str, str, bool)
     SIG_LOAD_FROM_FILES = QC.Signal(list)
+    SIG_LOAD_FROM_DIRECTORY = QC.Signal(str)
     SIG_SELECT_OBJECTS = QC.Signal(list, str)
     SIG_SELECT_GROUPS = QC.Signal(list, str)
     SIG_SELECT_ALL_GROUPS = QC.Signal(str)
@@ -171,7 +173,9 @@ class RemoteServer(QC.QThread):
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_RAISE_WINDOW.connect(win.raise_window)
         self.SIG_ADD_OBJECT.connect(win.add_object)
+        self.SIG_ADD_GROUP.connect(win.add_group)
         self.SIG_LOAD_FROM_FILES.connect(win.load_from_files)
+        self.SIG_LOAD_FROM_DIRECTORY.connect(win.load_from_directory)
         self.SIG_SELECT_OBJECTS.connect(win.select_objects)
         self.SIG_SELECT_GROUPS.connect(win.select_groups)
         self.SIG_SELECT_ALL_GROUPS.connect(lambda panel: win.select_groups(None, panel))
@@ -263,7 +267,7 @@ class RemoteServer(QC.QThread):
         """Return current panel name.
 
         Returns:
-            str: Panel name (valid values: 'signal', 'image', 'macro')
+            Panel name (valid values: 'signal', 'image', 'macro')
         """
         return self.win.get_current_panel()
 
@@ -272,7 +276,7 @@ class RemoteServer(QC.QThread):
         """Switch to panel.
 
         Args:
-            panel (str): Panel name (valid values: 'signal', 'image', 'macro')
+            panel: Panel name (valid values: 'signal', 'image', 'macro')
         """
         self.SIG_SWITCH_TO_PANEL.emit(panel)
 
@@ -281,7 +285,7 @@ class RemoteServer(QC.QThread):
         """Toggle auto refresh state.
 
         Args:
-            state (bool): True to enable auto refresh, False to disable it
+            state: True to enable auto refresh, False to disable it
         """
         self.SIG_TOGGLE_AUTO_REFRESH.emit(state)
 
@@ -290,7 +294,7 @@ class RemoteServer(QC.QThread):
         """Toggle show titles state.
 
         Args:
-            state (bool): True to enable show titles, False to disable it
+            state: True to enable show titles, False to disable it
         """
         self.SIG_TOGGLE_SHOW_TITLES.emit(state)
 
@@ -304,7 +308,7 @@ class RemoteServer(QC.QThread):
         """Save to a DataLab HDF5 file.
 
         Args:
-            filename (str): HDF5 file name (with extension .h5)
+            filename: HDF5 file name (with extension .h5)
         """
         self.SIG_SAVE_TO_H5.emit(filename)
 
@@ -318,11 +322,12 @@ class RemoteServer(QC.QThread):
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
         Args:
-            h5files (list[str] | None): HDF5 file names. Defaults to None.
-            import_all (bool | None): Import all objects from HDF5 file.
-                Defaults to None.
-            reset_all (bool | None): Reset all application data. Defaults to None.
+            h5files: HDF5 file names. Defaults to None.
+            import_all: Import all objects from HDF5 file. Defaults to None.
+            reset_all: Reset all application data. Defaults to None.
         """
+        import_all = True if import_all is None else import_all
+        reset_all = False if reset_all is None else reset_all
         self.SIG_OPEN_H5.emit(h5files, import_all, reset_all)
 
     @remote_call
@@ -330,9 +335,10 @@ class RemoteServer(QC.QThread):
         """Open DataLab HDF5 browser to Import HDF5 file.
 
         Args:
-            filename (str): HDF5 file name
-            reset_all (bool | None): Reset all application data. Defaults to None.
+            filename: HDF5 file name
+            reset_all: Reset all application data. Defaults to None.
         """
+        reset_all = False if reset_all is None else reset_all
         self.SIG_IMPORT_H5.emit(filename, reset_all)
 
     @remote_call
@@ -345,6 +351,15 @@ class RemoteServer(QC.QThread):
         self.SIG_LOAD_FROM_FILES.emit(filenames)
 
     @remote_call
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+        self.SIG_LOAD_FROM_DIRECTORY.emit(path)
+
+    @remote_call
     def add_signal(
         self,
         title: str,
@@ -354,20 +369,24 @@ class RemoteServer(QC.QThread):
         yunit: str | None = None,
         xlabel: str | None = None,
         ylabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
         Args:
-            title (str): Signal title
-            xbinary (Binary): X data
-            ybinary (Binary): Y data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
+            title: Signal title
+            xbinary: X data
+            ybinary: Y data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            group_id: group id in which to add the signal. Defaults to ""
+            set_current: if True, set the added signal as current
 
         Returns:
-            bool: True if successful
+            True if successful
         """
         xdata = rpcbinary_to_array(xbinary)
         ydata = rpcbinary_to_array(ybinary)
@@ -376,7 +395,7 @@ class RemoteServer(QC.QThread):
         signal.yunit = yunit
         signal.xlabel = xlabel
         signal.ylabel = ylabel
-        self.SIG_ADD_OBJECT.emit(signal)
+        self.SIG_ADD_OBJECT.emit(signal, group_id, set_current)
         return True
 
     @remote_call
@@ -390,21 +409,25 @@ class RemoteServer(QC.QThread):
         xlabel: str | None = None,
         ylabel: str | None = None,
         zlabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab.
 
         Args:
-            title (str): Image title
-            zbinary (Binary): Z data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            zunit (str | None): Z unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
-            zlabel (str | None): Z label. Defaults to None.
+            title: Image title
+            zbinary: Z data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            zunit: Z unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            zlabel: Z label. Defaults to None
+            group_id: group id in which to add the image. Defaults to ""
+            set_current: if True, set the added image as current
 
         Returns:
-            bool: True if successful
+            True if successful
         """
         data = rpcbinary_to_array(zbinary)
         image = create_image(title, data)
@@ -414,7 +437,25 @@ class RemoteServer(QC.QThread):
         image.xlabel = xlabel
         image.ylabel = ylabel
         image.zlabel = zlabel
-        self.SIG_ADD_OBJECT.emit(image)
+        self.SIG_ADD_OBJECT.emit(image, group_id, set_current)
+        return True
+
+    @remote_call
+    def add_object(
+        self, obj_data: list[str], group_id: str = "", set_current: bool = True
+    ) -> bool:
+        """Add object to DataLab.
+
+        Args:
+            obj_data: Object data
+            group_id: Group id in which to add the object. Defaults to ""
+            set_current: if True, set the added object as current
+
+        Returns:
+            True if successful
+        """
+        obj = json_to_dataset(obj_data)
+        self.SIG_ADD_OBJECT.emit(obj, group_id, set_current)
         return True
 
     @remote_call
@@ -428,6 +469,19 @@ class RemoteServer(QC.QThread):
             List of selected objects uuids.
         """
         return self.win.get_sel_object_uuids(include_groups)
+
+    @remote_call
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
+        """
+        self.SIG_ADD_GROUP.emit(title, panel, select)
 
     @remote_call
     def select_objects(
@@ -453,8 +507,8 @@ class RemoteServer(QC.QThread):
         Args:
             selection: List of group numbers (1 to N), or list of group uuids,
              or None to select all groups. Defaults to None.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used. Defaults to None.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used. Defaults to None.
         """
         if selection is None:
             self.SIG_SELECT_ALL_GROUPS.emit(panel)
@@ -498,7 +552,7 @@ class RemoteServer(QC.QThread):
         """Return groups titles and lists of inner objects uuids and titles.
 
         Returns:
-            Tuple: groups titles, lists of inner objects uuids and titles
+            Groups titles, lists of inner objects uuids and titles
         """
         return self.win.get_group_titles_with_object_infos()
 
@@ -541,17 +595,22 @@ class RemoteServer(QC.QThread):
         return dataset_to_json(obj)
 
     @remote_call
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) list for current panel.
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
+        """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel (str | None): Panel name. Defaults to None.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
-            list[str]: Object uuids
+            Object uuids
         """
-        return self.win.get_object_uuids(panel)
+        return self.win.get_object_uuids(panel, group)
 
     @remote_call
     def get_object_shapes(
@@ -579,10 +638,10 @@ class RemoteServer(QC.QThread):
         """Add object annotations (annotation plot items).
 
         Args:
-            items_json (str): JSON string of annotation items
-            refresh_plot (bool | None): refresh plot. Defaults to True.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            items_json: JSON string of annotation items
+            refresh_plot: refresh plot. Defaults to True.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         items = json_to_items(items_json)
         if items:
@@ -595,10 +654,10 @@ class RemoteServer(QC.QThread):
         """Add a label with object title on the associated plot
 
         Args:
-            title (str | None): Label title. Defaults to None.
-                If None, the title is the object title.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            title: Label title. Defaults to None.
+             If None, the title is the object title.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         self.win.add_label_with_title(title, panel)
 
@@ -607,8 +666,8 @@ class RemoteServer(QC.QThread):
         """Run macro.
 
         Args:
-             number: Number of the macro (starting at 1). Defaults to None (run
-              current macro, or does nothing if there is no macro).
+            number: Number of the macro (starting at 1). Defaults to None (run
+             current macro, or does nothing if there is no macro).
         """
         self.SIG_RUN_MACRO.emit(number_or_title)
 
@@ -707,8 +766,8 @@ class RemoteClient(BaseProxy):
         """Connect to DataLab XML-RPC server.
 
         Args:
-            port (str | None): XML-RPC port to connect to. If not specified,
-                the port is automatically retrieved from DataLab configuration.
+            port: XML-RPC port to connect to. If not specified,
+             the port is automatically retrieved from DataLab configuration.
 
         Raises:
             ConnectionRefusedError: DataLab is currently not running
@@ -742,10 +801,10 @@ class RemoteClient(BaseProxy):
         """Try to connect to DataLab XML-RPC server.
 
         Args:
-            port (str | None): XML-RPC port to connect to. If not specified,
-                the port is automatically retrieved from DataLab configuration.
-            timeout (float | None): Timeout in seconds. Defaults to 5.0.
-            retries (int | None): Number of retries. Defaults to 10.
+            port: XML-RPC port to connect to. If not specified,
+             the port is automatically retrieved from DataLab configuration.
+            timeout: Timeout in seconds. Defaults to 5.0.
+            retries: Number of retries. Defaults to 10.
 
         Raises:
             ConnectionRefusedError: Unable to connect to DataLab
@@ -801,20 +860,24 @@ class RemoteClient(BaseProxy):
         yunit: str | None = None,
         xlabel: str | None = None,
         ylabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
         Args:
-            title (str): Signal title
-            xdata (numpy.ndarray): X data
-            ydata (numpy.ndarray): Y data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
+            title: Signal title
+            xdata: X data
+            ydata: Y data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            group_id: group id in which to add the signal. Defaults to ""
+            set_current: if True, set the added signal as current
 
         Returns:
-            bool: True if signal was added successfully, False otherwise
+            True if signal was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid xdata dtype
@@ -826,7 +889,7 @@ class RemoteClient(BaseProxy):
         xbinary = array_to_rpcbinary(xdata)
         ybinary = array_to_rpcbinary(ydata)
         return self._cdl.add_signal(
-            title, xbinary, ybinary, xunit, yunit, xlabel, ylabel
+            title, xbinary, ybinary, xunit, yunit, xlabel, ylabel, group_id, set_current
         )
 
     def add_image(
@@ -839,21 +902,25 @@ class RemoteClient(BaseProxy):
         xlabel: str | None = None,
         ylabel: str | None = None,
         zlabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab.
 
         Args:
-            title (str): Image title
-            data (numpy.ndarray): Image data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            zunit (str | None): Z unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
-            zlabel (str | None): Z label. Defaults to None.
+            title: Image title
+            data: Image data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            zunit: Z unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            zlabel: Z label. Defaults to None
+            group_id: group id in which to add the image. Defaults to ""
+            set_current: if True, set the added image as current
 
         Returns:
-            bool: True if image was added successfully, False otherwise
+            True if image was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid data dtype
@@ -863,8 +930,33 @@ class RemoteClient(BaseProxy):
         obj.check_data()
         zbinary = array_to_rpcbinary(data)
         return self._cdl.add_image(
-            title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel
+            title,
+            zbinary,
+            xunit,
+            yunit,
+            zunit,
+            xlabel,
+            ylabel,
+            zlabel,
+            group_id,
+            set_current,
         )
+
+    def add_object(
+        self,
+        obj: SignalObj | ImageObj,
+        group_id: str = "",
+        set_current: bool = True,
+    ) -> None:
+        """Add object to DataLab.
+
+        Args:
+            obj: Signal or image object
+            group_id: group id in which to add the object. Defaults to ""
+            set_current: if True, set the added object as current
+        """
+        obj_data = dataset_to_json(obj)
+        self._cdl.add_object(obj_data, group_id, set_current)
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call compute function ``name`` in current panel's processor.
@@ -927,52 +1019,11 @@ class RemoteClient(BaseProxy):
         """Add object annotations (annotation plot items).
 
         Args:
-            items (list): annotation plot items
-            refresh_plot (bool | None): refresh plot. Defaults to True.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            items: annotation plot items
+            refresh_plot: refresh plot. Defaults to True.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         items_json = items_to_json(items)
         if items_json is not None:
             self._cdl.add_annotations_from_items(items_json, refresh_plot, panel)
-
-    # ----- Proxy specific methods ------------------------------------------------
-    # (not available symetrically in AbstractCDLControl)
-
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
-        """Add object to DataLab.
-
-        Args:
-            obj (SignalObj | ImageObj): Signal or image object
-        """
-
-        # TODO [P1]: Would it be better to use directly a remote "add_object" method?
-        #     This would require to implement the add_object method in the
-        #     XML-RPC server. And first of all, to check if performance is
-        #     really better or not. This is equivalent to comparing the performance
-        #     between JSON transfer (using "json_to_dataset") and binary transfer
-        #     (using "array_to_rpcbinary") through XML-RPC.
-        #
-        #     If it is better, then here is what should be done:
-        #     - Implement add_object method in AbstractCDLProcessor instead of in
-        #       BaseProxy
-        #     - Implement add_object method in XML-RPC server
-        #     - Remove add_object method from BaseProxy
-        #     - Rewrite add_object method in LocalProxy and RemoteClient to use
-        #       the remote method
-
-        if isinstance(obj, SignalObj):
-            self.add_signal(
-                obj.title, obj.x, obj.y, obj.xunit, obj.yunit, obj.xlabel, obj.ylabel
-            )
-        elif isinstance(obj, ImageObj):
-            self.add_image(
-                obj.title,
-                obj.data,
-                obj.xunit,
-                obj.yunit,
-                obj.zunit,
-                obj.xlabel,
-                obj.ylabel,
-                obj.zlabel,
-            )

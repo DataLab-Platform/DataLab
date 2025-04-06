@@ -13,6 +13,7 @@ we put it here...
 
 from __future__ import annotations
 
+import os.path as osp
 from typing import TYPE_CHECKING, Any
 
 import cdl.obj
@@ -119,6 +120,11 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
     fname = get_test_fnames("*.csv")[0]
     win.load_from_files([fname])
 
+    # Open directory
+    __print_test_result("Open directory (signals)")
+    path = osp.dirname(get_test_fnames("curve_formats/*.*")[0])
+    win.signalpanel.load_from_directory(path)
+
     # Open objects from signal panel
     __print_test_result("Open objects from signal panel")
     win.signalpanel.load_from_files(get_test_fnames("curve_formats/*.*"))
@@ -131,6 +137,18 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
     __print_test_result("Add signal")
     win.add_signal(
         sig.title, sig.x, sig.y, sig.xunit, sig.yunit, sig.xlabel, sig.ylabel
+    )
+    gp2 = win.signalpanel.add_group("group2")
+    win.add_signal(
+        sig.title,
+        sig.x,
+        sig.y,
+        sig.xunit,
+        sig.yunit,
+        sig.xlabel,
+        sig.ylabel,
+        group_id=gp2.uuid,
+        set_current=False,
     )
 
     # Add image
@@ -146,11 +164,19 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
         ima.ylabel,
         ima.zlabel,
     )
-
-    # Signal and Image ROI extraction test: test adding a default ROI
-    __print_test_result("Adding a default ROI to signal and image")
-    for panel in (win.signalpanel, win.imagepanel):
-        panel.processor.edit_regions_of_interest(add_roi=True)
+    gp3 = win.imagepanel.add_group("group3")
+    win.add_image(
+        ima.title,
+        ima.data,
+        ima.xunit,
+        ima.yunit,
+        ima.zunit,
+        ima.xlabel,
+        ima.ylabel,
+        ima.zlabel,
+        group_id=gp3.uuid,
+        set_current=False,
+    )
 
     # Close application
     __print_test_result("Close application")

@@ -13,6 +13,8 @@ addition, multiplication, division, and more.
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pytest
 
@@ -31,11 +33,11 @@ def __create_two_signals() -> tuple[cdl.obj.SignalObj, cdl.obj.SignalObj]:
 
 
 def __create_one_signal_and_constant() -> (
-    tuple[cdl.obj.SignalObj, cdl.param.ConstantOperationParam]
+    tuple[cdl.obj.SignalObj, cdl.param.ConstantParam]
 ):
     """Create one signal and a constant for testing."""
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=100)
-    param = cdl.param.ConstantOperationParam.create(value=-np.pi)
+    param = cdl.param.ConstantParam.create(value=-np.pi)
     return s1, param
 
 
@@ -116,6 +118,18 @@ def test_signal_division_constant() -> None:
 
 
 @pytest.mark.validation
+def test_signal_inverse() -> None:
+    """Signal inversion validation test."""
+    s1 = __create_two_signals()[0]
+    inv_signal = cps.compute_inverse(s1)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        exp = 1.0 / s1.y
+        exp[np.isinf(exp)] = np.nan
+    check_array_result("Signal inverse", inv_signal.y, exp)
+
+
+@pytest.mark.validation
 def test_signal_abs() -> None:
     """Absolute value validation test."""
     s1 = __create_two_signals()[0]
@@ -182,6 +196,30 @@ def test_signal_power() -> None:
     check_array_result("Power", power_signal.y, s1.y**p.power)
 
 
+@pytest.mark.validation
+def test_signal_arithmetic() -> None:
+    """Arithmetic operations validation test."""
+    s1, s2 = __create_two_signals()
+    p = cdl.param.ArithmeticParam.create()
+    for operator in p.operators:
+        p.operator = operator
+        for factor in (0.0, 1.0, 2.0):
+            p.factor = factor
+            for constant in (0.0, 1.0, 2.0):
+                p.constant = constant
+                s3 = cps.compute_arithmetic(s1, s2, p)
+                if operator == "+":
+                    exp = s1.y + s2.y
+                elif operator == "×":
+                    exp = s1.y * s2.y
+                elif operator == "-":
+                    exp = s1.y - s2.y
+                elif operator == "/":
+                    exp = s1.y / s2.y
+                exp = exp * factor + constant
+                check_array_result(f"Arithmetic [{p.get_operation()}]", s3.y, exp)
+
+
 if __name__ == "__main__":
     test_signal_addition()
     test_signal_product()
@@ -192,6 +230,7 @@ if __name__ == "__main__":
     test_signal_product_constant()
     test_signal_difference_constant()
     test_signal_division_constant()
+    test_signal_inverse()
     test_signal_abs()
     test_signal_re()
     test_signal_im()
@@ -200,3 +239,4 @@ if __name__ == "__main__":
     test_signal_log10()
     test_signal_sqrt()
     test_signal_power()
+    test_signal_arithmetic()

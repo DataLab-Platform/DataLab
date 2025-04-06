@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import warnings
 from collections.abc import Callable
 from enum import Enum
 from typing import Any, Literal
@@ -22,10 +23,12 @@ import scipy.integrate as spt
 import scipy.ndimage as spi
 import scipy.signal as sps
 
+import cdl.algorithms.coordinates
 import cdl.algorithms.signal as alg
 from cdl.computation.base import (
+    ArithmeticParam,
     ClipParam,
-    ConstantOperationParam,
+    ConstantParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
@@ -38,10 +41,31 @@ from cdl.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.obj import ResultProperties, ResultShape, ROI1DParam, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
+
+
+def restore_data_outside_roi(dst: SignalObj, src: SignalObj) -> None:
+    """Restore data outside the Region Of Interest (ROI) of the input signal
+    after a computation, only if the input signal has a ROI,
+    and if the output signal has the same ROI as the input signal,
+    and if the data types are the same,
+    and if the shapes are the same.
+    Otherwise, do nothing.
+
+    Args:
+        dst: destination signal object
+        src: source signal object
+    """
+    if src.maskdata is not None and dst.maskdata is not None:
+        if (
+            np.array_equal(src.maskdata, dst.maskdata)
+            and dst.xydata.dtype == src.xydata.dtype
+            and dst.xydata.shape == src.xydata.shape
+        ):
+            dst.xydata[src.maskdata] = src.xydata[src.maskdata]
 
 
 class Wrap11Func:
@@ -98,6 +122,7 @@ class Wrap11Func:
         dst = dst_11(src, self.func.__name__, suffix)
         x, y = src.get_data()
         dst.set_xydata(x, self.func(y, *self.args, **self.kwargs))
+        restore_data_outside_roi(dst, src)
         return dst
 
 
@@ -126,6 +151,7 @@ def compute_addition(dst: SignalObj, src: SignalObj) -> SignalObj:
     dst.y += np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
         dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -142,10 +168,11 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     dst.y *= np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
         dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_addition_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_addition_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Add **dst** and a constant value and return a the new result signal object
 
     Args:
@@ -157,10 +184,11 @@ def compute_addition_constant(src: SignalObj, p: ConstantOperationParam) -> Sign
     """
     dst = dst_11(src, "+", str(p.value))
     dst.y += p.value
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_difference_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Subtract a constant value from a signal
 
     Args:
@@ -172,10 +200,11 @@ def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> Si
     """
     dst = dst_11(src, "-", str(p.value))
     dst.y -= p.value
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_product_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_product_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Multiply **dst** by a constant value and return the new result signal object
 
     Args:
@@ -187,10 +216,11 @@ def compute_product_constant(src: SignalObj, p: ConstantOperationParam) -> Signa
     """
     dst = dst_11(src, "×", str(p.value))
     dst.y *= p.value
+    restore_data_outside_roi(dst, src)
     return dst
 
 
-def compute_division_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Divide a signal by a constant value
 
     Args:
@@ -202,12 +232,53 @@ def compute_division_constant(src: SignalObj, p: ConstantOperationParam) -> Sign
     """
     dst = dst_11(src, "/", str(p.value))
     dst.y /= p.value
+    restore_data_outside_roi(dst, src)
     return dst
 
 
 # MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
+
+
+def compute_arithmetic(
+    src1: SignalObj, src2: SignalObj, p: ArithmeticParam
+) -> SignalObj:
+    """Perform arithmetic operation on two signals
+
+    Args:
+        src1: source signal 1
+        src2: source signal 2
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    initial_dtype = src1.xydata.dtype
+    title = p.operation.replace("obj1", src1.short_id).replace("obj2", src2.short_id)
+    dst = src1.copy(title=title)
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
+    o, a, b = p.operator, p.factor, p.constant
+    if o in ("×", "/") and a == 0.0:
+        dst.y = np.ones_like(src1.y) * b
+    elif p.operator == "+":
+        dst.y = (src1.y + src2.y) * a + b
+    elif p.operator == "-":
+        dst.y = (src1.y - src2.y) * a + b
+    elif p.operator == "×":
+        dst.y = (src1.y * src2.y) * a + b
+    elif p.operator == "/":
+        dst.y = (src1.y / src2.y) * a + b
+    if dst.dy is not None and p.operator in ("+", "-"):
+        dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
+    if dst.dy is not None:
+        dst.dy *= p.factor
+    # Eventually convert to initial data type
+    if p.restore_dtype:
+        dst.xydata = dst.xydata.astype(initial_dtype)
+    restore_data_outside_roi(dst, src1)
+    return dst
 
 
 def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
@@ -228,6 +299,7 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     dst.y = src1.y - src2.y
     if dst.dy is not None:
         dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -253,6 +325,7 @@ def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
         dst.data[src1.data < src2.data] = 0
     if dst.dy is not None:
         dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -270,6 +343,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -336,6 +410,28 @@ def compute_swap_axes(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "swap_axes")
     x, y = src.get_data()
     dst.set_xydata(y, x)
+    return dst
+
+
+def compute_inverse(src: SignalObj) -> SignalObj:
+    """Compute inverse with :py:data:`numpy.invert`
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "invert")
+    x, y = src.get_data()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        dst.set_xydata(x, np.reciprocal(y))
+        dst.y[np.isinf(dst.y)] = np.nan
+    if dst.dy is not None:
+        dst.dy = dst.y * src.dy / (src.y**2)
+        dst.dy[np.isinf(dst.dy)] = np.nan
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -454,6 +550,7 @@ def compute_power(src: SignalObj, p: PowerParam) -> SignalObj:
     """
     dst = dst_11(src, "^", str(p.power))
     dst.y = np.power(src.y, p.power)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -467,7 +564,7 @@ class PeakDetectionParam(gds.DataSet):
 
 
 def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
-    """Peak detection with :py:func:`cdl.algorithms.signal.peak_indexes`
+    """Peak detection with :py:func:`cdl.algorithms.signal.peak_indices`
 
     Args:
         src: source signal
@@ -480,8 +577,8 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
         src, "peak_detection", f"threshold={p.threshold}%, min_dist={p.min_dist}pts"
     )
     x, y = src.get_data()
-    indexes = alg.peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
-    dst.set_xydata(x[indexes], y[indexes])
+    indices = alg.peak_indices(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
+    dst.set_xydata(x[indices], y[indices])
     dst.metadata["curvestyle"] = "Sticks"
     return dst
 
@@ -499,6 +596,7 @@ def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     dst = dst_11(src, "normalize", f"ref={p.method}")
     x, y = src.get_data()
     dst.set_xydata(x, alg.normalize(y, p.method))
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -514,6 +612,7 @@ def compute_derivative(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "derivative")
     x, y = src.get_data()
     dst.set_xydata(x, np.gradient(y, x))
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -529,6 +628,7 @@ def compute_integral(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "integral")
     x, y = src.get_data()
     dst.set_xydata(x, spt.cumulative_trapezoid(y, x, initial=0.0))
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -557,6 +657,7 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
         dst.set_xydata(p.a * x + p.b, y)
     else:
         dst.set_xydata(x, p.a * y + p.b)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -587,6 +688,7 @@ def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
     dst = dst_11(src, "offset_correction", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
     _roi_x, roi_y = p.get_data(src)
     dst.y -= np.mean(roi_y)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -791,6 +893,7 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     dst = dst_11(src, name, suffix)
     b, a = p.get_filter_params(dst)
     dst.y = sps.filtfilt(b, a, dst.y)
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -912,12 +1015,7 @@ def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    # Extract data from ROIs:
-    datalist = []
-    for i_roi in src.iterate_roi_indexes():
-        datalist.append(src.get_data(i_roi)[1])
-    data = np.concatenate(datalist)
-
+    data = src.get_masked_view().compressed()
     suffix = p.get_suffix(data)  # Also updates p.lower and p.upper
 
     # Compute histogram:
@@ -1052,6 +1150,34 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     dst = dst_11(src, "detrending", f"method={p.method}")
     x, y = src.get_data()
     dst.set_xydata(x, sps.detrend(y, type=p.method))
+    restore_data_outside_roi(dst, src)
+    return dst
+
+
+def compute_XY_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
+    """Simulate the X-Y mode of an oscilloscope.
+
+    Use the first signal as the X-axis and the second signal as the Y-axis.
+
+    Args:
+        src1: First input signal (X-axis).
+        src2: Second input signal (Y-axis).
+
+    Returns:
+        A signal object representing the X-Y mode.
+    """
+    dst = dst_n1n(src1, src2, "", "X-Y Mode")
+    p = ResamplingParam()
+    p.xmin = max(src1.x[0], src2.x[0])
+    p.xmax = min(src1.x[-1], src2.x[-1])
+    assert p.xmin < p.xmax, "X-Y mode: No overlap between signals."
+    p.mode = "nbpts"
+    p.nbpts = min(src1.x.size, src2.x.size)
+    _, y1 = compute_resampling(src1, p).get_data()
+    _, y2 = compute_resampling(src2, p).get_data()
+    dst.set_xydata(y1, y2)
+    dst.title = f"{src2.short_id} = f({src1.short_id})"
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -1071,6 +1197,7 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     _x2, y2 = src2.get_data()
     ynew = np.real(sps.convolve(y1, y2, mode="same"))
     dst.set_xydata(x1, ynew)
+    restore_data_outside_roi(dst, src1)
     return dst
 
 
@@ -1139,6 +1266,7 @@ def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
         suffix += f", sigma={p.sigma:.3f}"
     dst = dst_11(src, "windowing", suffix)  # type: ignore
     dst.y = alg.windowing(dst.y, p.method, p.alpha)  # type: ignore
+    restore_data_outside_roi(dst, src)
     return dst
 
 
@@ -1153,6 +1281,189 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
     """
     dst = dst_11(src, "reverse_x")
     dst.y = dst.y[::-1]
+    return dst
+
+
+class AngleUnitParam(gds.DataSet):
+    """Choice of angle unit."""
+
+    units = (("rad", _("Radian")), ("deg", _("Degree")))
+    unit = gds.ChoiceItem(_("Angle unit"), units, default="rad")
+
+
+def compute_cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+    """Convert cartesian coordinates to polar coordinates with
+    :py:func:`cdl.algorithms.coordinates.cartesian2polar`.
+
+    Args:
+        src: Source signal.
+        p: Parameters.
+
+    Returns:
+        Result signal object.
+    """
+    dst = dst_11(src, "Polar coordinates", f"unit={p.unit}")
+    x, y = src.get_data()
+    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, p.unit)
+    dst.set_xydata(r, theta)
+    return dst
+
+
+def compute_polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+    """Convert polar coordinates to cartesian coordinates with
+    :py:func:`cdl.algorithms.coordinates.polar2cartesian`.
+
+    Args:
+        src: Source signal.
+        p: Parameters.
+
+    Returns:
+        Result signal object.
+
+    .. note::
+
+        This function assumes that the x-axis represents the radius and the y-axis
+        represents the angle. Negative values are not allowed for the radius, and will
+        be clipped to 0 (a warning will be raised).
+    """
+    dst = dst_11(src, "Cartesian coordinates", f"unit={p.unit}")
+    r, theta = src.get_data()
+    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, p.unit)
+    dst.set_xydata(x, y)
+    return dst
+
+
+class AllanVarianceParam(gds.DataSet):
+    """Allan variance parameters"""
+
+    max_tau = gds.IntItem("Max τ", default=100, min=1, unit="pts")
+
+
+def compute_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Allan variance with :py:func:`cdl.algorithms.signal.allan_variance`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    avar = alg.allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, avar)
+    return dst
+
+
+def compute_allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Allan deviation with :py:func:`cdl.algorithms.signal.allan_deviation`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "allan_deviation", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    adev = alg.allan_deviation(x, y, tau_values)
+    dst.set_xydata(tau_values, adev)
+    return dst
+
+
+def compute_overlapping_allan_variance(
+    src: SignalObj, p: AllanVarianceParam
+) -> SignalObj:
+    """Compute Overlapping Allan variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "overlapping_allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    oavar = alg.overlapping_allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, oavar)
+    return dst
+
+
+def compute_modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Modified Allan variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "modified_allan_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    mavar = alg.modified_allan_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, mavar)
+    return dst
+
+
+def compute_hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Hadamard variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "hadamard_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    hvar = alg.hadamard_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, hvar)
+    return dst
+
+
+def compute_total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Total variance.
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "total_variance", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    tvar = alg.total_variance(x, y, tau_values)
+    dst.set_xydata(tau_values, tvar)
+    return dst
+
+
+def compute_time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+    """Compute Time Deviation (TDEV).
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "time_deviation", f"max_tau={p.max_tau}")
+    x, y = src.get_data()
+    tau_values = np.arange(1, p.max_tau + 1)
+    tdev = alg.time_deviation(x, y, tau_values)
+    dst.set_xydata(tau_values, tdev)
     return dst
 
 
@@ -1195,7 +1506,7 @@ def calc_resultshape(
         or a tuple) containing the result of the computation.
     """
     res = []
-    for i_roi in obj.iterate_roi_indexes():
+    for i_roi in obj.iterate_roi_indices():
         data_roi = obj.get_data(i_roi)
         if args is None:
             results: np.ndarray = func(data_roi)
@@ -1211,7 +1522,7 @@ def calc_resultshape(
                 raise ValueError(
                     "The computation function must return a 1D NumPy array"
                 )
-            results = np.array([i_roi] + results.tolist())
+            results = np.array([0 if i_roi is None else i_roi] + results.tolist())
             res.append(results)
     if res:
         return ResultShape(title, np.vstack(res), shape, add_label=add_label)
@@ -1276,6 +1587,47 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2, add_label=True)
 
 
+class FindAbscissaParam(gds.DataSet):
+    """Parameter dataset for abscissa finding"""
+
+    y = gds.FloatItem(_("Ordinate"), default=0)
+
+
+def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
+    """
+    Compute the smallest x-value at a given y-value for a signal object.
+
+    Args:
+        obj: The signal object containing x and y data.
+        p: The parameter dataset for finding the abscissa.
+
+    Returns:
+         An object containing the x-value.
+    """
+
+    def __compute_x_at_y(x: np.ndarray, y: np.ndarray, value: float) -> float:
+        """Compute the x-value at a given y-value for a signal object.
+
+        Args:
+            x: The x-values of the signal object.
+            y: The y-values of the signal object.
+            value: The y-value to find the x-value for.
+
+        Returns:
+            The x-value at the given y-value.
+        """
+        values = alg.find_x_at_value(x, y, value)
+        if values.size:
+            return values[0]
+        return np.nan
+
+    return calc_resultproperties(
+        f"x|y={p.y}",
+        obj,
+        {"x = %g {.xunit}": lambda xy: __compute_x_at_y(xy[0], xy[1], p.y)},
+    )
+
+
 def compute_stats(obj: SignalObj) -> ResultProperties:
     """Compute statistics on a signal
 
@@ -1286,14 +1638,14 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
         Result properties object
     """
     statfuncs = {
-        "min(y) = %g {.yunit}": lambda xy: xy[1].min(),
-        "max(y) = %g {.yunit}": lambda xy: xy[1].max(),
-        "<y> = %g {.yunit}": lambda xy: xy[1].mean(),
-        "median(y) = %g {.yunit}": lambda xy: np.median(xy[1]),
-        "σ(y) = %g {.yunit}": lambda xy: xy[1].std(),
-        "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
-        "peak-to-peak(y) = %g {.yunit}": lambda xy: np.ptp(xy[1]),
-        "Σ(y) = %g {.yunit}": lambda xy: xy[1].sum(),
+        "min(y) = %g {.yunit}": lambda xy: np.nanmin(xy[1]),
+        "max(y) = %g {.yunit}": lambda xy: np.nanmax(xy[1]),
+        "<y> = %g {.yunit}": lambda xy: np.nanmean(xy[1]),
+        "median(y) = %g {.yunit}": lambda xy: np.nanmedian(xy[1]),
+        "σ(y) = %g {.yunit}": lambda xy: np.nanstd(xy[1]),
+        "<y>/σ(y)": lambda xy: np.nanmean(xy[1]) / np.nanstd(xy[1]),
+        "peak-to-peak(y) = %g {.yunit}": lambda xy: np.nanmax(xy[1]) - np.nanmin(xy[1]),
+        "Σ(y) = %g {.yunit}": lambda xy: np.nansum(xy[1]),
         "∫ydx": lambda xy: spt.trapezoid(xy[1], xy[0]),
     }
     return calc_resultproperties("stats", obj, statfuncs)
@@ -1394,7 +1746,15 @@ def compute_contrast(obj: SignalObj) -> ResultProperties:
 
 
 def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
-    """Compute x at min/max"""
+    """
+    Compute the smallest argument at the minima and the smallest argument at the maxima.
+
+    Args:
+        obj: The signal object.
+
+    Returns:
+        An object containing the x-values at the minima and the maxima.
+    """
     return calc_resultproperties(
         "x@min,max",
         obj,

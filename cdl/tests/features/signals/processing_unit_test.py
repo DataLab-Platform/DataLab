@@ -24,9 +24,11 @@ import pytest
 import scipy.ndimage as spi
 import scipy.signal as sps
 
+import cdl.algorithms.coordinates
 import cdl.computation.signal as cps
 import cdl.obj
 import cdl.param
+import cdl.tests.data as ctd
 from cdl.tests.data import get_test_signal
 from cdl.utils.tests import check_array_result, check_scalar_result
 
@@ -80,11 +82,82 @@ def test_signal_reverse_x() -> None:
     check_array_result("ReverseX", dst.data, exp)
 
 
+def test_cartesian2polar() -> None:
+    """Unit test for the cartesian to polar conversion."""
+    title = "Cartesian2Polar"
+    x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+
+    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, "rad")
+    exp_r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
+    exp_theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
+    check_array_result(f"{title}|r", r, exp_r)
+    check_array_result(f"{title}|theta", theta, exp_theta)
+
+    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, unit="deg")
+    exp_theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
+    check_array_result(f"{title}|r", r, exp_r)
+    check_array_result(f"{title}|theta", theta, exp_theta)
+
+
+def test_polar2cartesian() -> None:
+    """Unit test for the polar to cartesian conversion."""
+    title = "Polar2Cartesian"
+    r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
+    theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
+
+    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, "rad")
+    exp_x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    exp_y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    check_array_result(f"{title}|x", x, exp_x)
+    check_array_result(f"{title}|y", y, exp_y)
+
+    theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
+    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, unit="deg")
+    check_array_result(f"{title}|x", x, exp_x)
+    check_array_result(f"{title}|y", y, exp_y)
+
+
+@pytest.mark.validation
+def test_signal_cartesian2polar() -> None:
+    """Validation test for the signal cartesian to polar processing."""
+    title = "Cartesian2Polar"
+    p = cdl.param.AngleUnitParam()
+    x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+    src = cdl.obj.create_signal("test", x, y)
+
+    for p.unit, _unit_name in cdl.param.AngleUnitParam.units:
+        dst1 = cps.compute_cartesian2polar(src, p)
+        dst2 = cps.compute_polar2cartesian(dst1, p)
+        check_array_result(f"{title}|x", dst2.x, x)
+        check_array_result(f"{title}|y", dst2.y, y)
+
+
+@pytest.mark.validation
+def test_signal_polar2cartesian() -> None:
+    """Validation test for the signal polar to cartesian processing."""
+    title = "Polar2Cartesian"
+    p = cdl.param.AngleUnitParam()
+    r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
+
+    angles_deg = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
+    angles_rad = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
+    for p.unit, _unit_name in cdl.param.AngleUnitParam.units:
+        theta = angles_rad if p.unit == "rad" else angles_deg
+        src = cdl.obj.create_signal("test", r, theta)
+        dst1 = cps.compute_polar2cartesian(src, p)
+        dst2 = cps.compute_cartesian2polar(dst1, p)
+        check_array_result(f"{title}|x", dst2.x, r)
+        check_array_result(f"{title}|y", dst2.y, theta)
+
+
 @pytest.mark.validation
 def test_signal_normalize() -> None:
     """Validation test for the signal normalization processing."""
     src = get_test_signal("paracetamol.txt")
     p = cdl.param.NormalizeParam()
+    src.y[10:15] = np.nan  # Adding some NaN values to the signal
 
     # Given the fact that the normalization methods implementations are
     # straightforward, we do not need to compare arrays with each other,
@@ -93,21 +166,25 @@ def test_signal_normalize() -> None:
         p.method = method_value
         dst = cps.compute_normalize(src, p)
         title = f"Normalize[method='{p.method}']"
+        exp_min, exp_max = None, None
         if p.method == "maximum":
-            exp_min, exp_max = src.data.min() / src.data.max(), 1.0
+            exp_min, exp_max = np.nanmin(src.data) / np.nanmax(src.data), 1.0
         elif p.method == "amplitude":
             exp_min, exp_max = 0.0, 1.0
         elif p.method == "area":
-            area = src.data.sum()
-            exp_min, exp_max = src.data.min() / area, src.data.max() / area
+            area = np.nansum(src.data)
+            exp_min, exp_max = np.nanmin(src.data) / area, np.nanmax(src.data) / area
         elif p.method == "energy":
-            energy = np.sqrt(np.sum(np.abs(src.data) ** 2))
-            exp_min, exp_max = src.data.min() / energy, src.data.max() / energy
+            energy = np.sqrt(np.nansum(np.abs(src.data) ** 2))
+            exp_min, exp_max = (
+                np.nanmin(src.data) / energy,
+                np.nanmax(src.data) / energy,
+            )
         elif p.method == "rms":
-            rms = np.sqrt(np.mean(np.abs(src.data) ** 2))
-            exp_min, exp_max = src.data.min() / rms, src.data.max() / rms
-        check_scalar_result(f"{title}|min", dst.data.min(), exp_min)
-        check_scalar_result(f"{title}|max", dst.data.max(), exp_max)
+            rms = np.sqrt(np.nanmean(np.abs(src.data) ** 2))
+            exp_min, exp_max = np.nanmin(src.data) / rms, np.nanmax(src.data) / rms
+        check_scalar_result(f"{title}|min", np.nanmin(dst.data), exp_min)
+        check_scalar_result(f"{title}|max", np.nanmax(dst.data), exp_max)
 
 
 @pytest.mark.validation
@@ -248,9 +325,56 @@ def test_signal_wiener() -> None:
     check_array_result("Wiener", dst.data, exp)
 
 
+@pytest.mark.validation
+def test_signal_resampling() -> None:
+    """Validation test for the signal resampling processing."""
+    src1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
+    x1, y1 = src1.xydata
+    p1 = cdl.param.ResamplingParam.create(
+        xmin=src1.x[0], xmax=src1.x[-1], nbpts=src1.x.size
+    )
+    dst1 = cps.compute_resampling(src1, p1)
+    dst1x, dst1y = dst1.xydata
+    check_array_result("x1new", dst1x, x1)
+    check_array_result("y1new", dst1y, y1)
+
+    src2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=9)
+    p2 = cdl.param.ResamplingParam.create(
+        xmin=src1.x[0], xmax=src1.x[-1], nbpts=src1.x.size
+    )
+    dst2 = cps.compute_resampling(src2, p2)
+    dst2x, dst2y = dst2.xydata
+    check_array_result("x2new", dst2x, x1)
+    check_array_result("y2new", dst2y, y1)
+
+
+@pytest.mark.validation
+def test_signal_XY_mode() -> None:
+    """Validation test for the signal X-Y mode processing."""
+    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=5)
+    s2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
+    dst = cps.compute_XY_mode(s1, s2)
+    x, y = dst.xydata
+    check_array_result("XYMode", x, s1.y)
+    check_array_result("XYMode", y, s2.y)
+    check_array_result("XYMode", x**2 + y**2, np.ones_like(x))
+
+    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=9)
+    s2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
+    dst = cps.compute_XY_mode(s1, s2)
+    x, y = dst.xydata
+    check_array_result("XYMode2", x, s1.y[::2])
+    check_array_result("XYMode2", y, s2.y)
+    check_array_result("XYMode2", x**2 + y**2, np.ones_like(x))
+
+
 if __name__ == "__main__":
     test_signal_calibration()
     test_signal_swap_axes()
+    test_cartesian2polar()
+    test_polar2cartesian()
+    test_signal_cartesian2polar()
+    test_signal_polar2cartesian()
     test_signal_reverse_x()
     test_signal_normalize()
     test_signal_clip()
@@ -262,3 +386,5 @@ if __name__ == "__main__":
     test_signal_moving_average()
     test_signal_moving_median()
     test_signal_wiener()
+    test_signal_resampling()
+    test_signal_XY_mode()

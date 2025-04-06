@@ -272,6 +272,40 @@ class ObjectModel:
                 return group
         raise IndexError(f"Group with number {number} not found")
 
+    def get_group_from_title(self, title: str) -> ObjectGroup:
+        """Return group from its title.
+
+        Args:
+            title: group title
+
+        Returns:
+            Group
+
+        Raises:
+            KeyError: if group with title not found
+        """
+        for group in self._groups:
+            if group.title == title:
+                return group
+        raise KeyError(f"Group with title '{title}' not found")
+
+    def get_group_from_object(self, obj: SignalObj | ImageObj) -> ObjectGroup:
+        """Return group containing object
+
+        Args:
+            obj: object to find group for
+
+        Returns:
+            Group
+
+        Raises:
+            KeyError: if object not found in any group
+        """
+        for group in self._groups:
+            if obj in group:
+                return group
+        raise KeyError(f"Object with uuid '{obj.uuid}' not found in any group")
+
     def get_groups(self, uuids: list[str] | None = None) -> list[ObjectGroup]:
         """Return groups"""
         if uuids is None:
@@ -289,11 +323,18 @@ class ObjectModel:
         return group
 
     def get_object_group_id(self, obj: SignalObj | ImageObj) -> str | None:
-        """Return group id of object"""
-        for group in self._groups:
-            if obj in group:
-                return group.uuid
-        return None
+        """Return group id of object
+
+        Args:
+            obj: object to get group id from
+
+        Returns:
+            group id or None if object is not in any group
+        """
+        try:
+            return self.get_group_from_object(obj).uuid
+        except KeyError:
+            return None
 
     def get_group_object_ids(self, group_id: str) -> list[str]:
         """Return object ids in group"""

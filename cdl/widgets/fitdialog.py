@@ -205,19 +205,19 @@ def multigaussian(x, *values, **kwargs):
     return y
 
 
-def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
+def multigaussianfit(x, y, peak_indices, parent=None, name=None):
     """Compute Multi-Gaussian fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
     params = []
-    for index, i0 in enumerate(peak_indexes):
+    for index, i0 in enumerate(peak_indices):
         istart = 0
         iend = len(x) - 1
         if index > 0:
-            istart = (peak_indexes[index - 1] + i0) // 2
-        if index < len(peak_indexes) - 1:
-            iend = (peak_indexes[index + 1] + i0) // 2
+            istart = (peak_indices[index - 1] + i0) // 2
+        if index < len(peak_indices) - 1:
+            iend = (peak_indices[index + 1] + i0) // 2
         dx = 0.5 * (x[iend] - x[istart])
         dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
         stri = f"{index + 1:02d}"
@@ -232,7 +232,7 @@ def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
         )
     )
 
-    kwargs = {"a_x0": x[peak_indexes]}
+    kwargs = {"a_x0": x[peak_indices]}
 
     def fitfunc(xi, params):
         return multigaussian(xi, *params, **kwargs)
@@ -264,14 +264,14 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
 
-    opt_params: np.ndarray
+    optp: np.ndarray
 
     def modelfunc(x, a, b, c):
         return a * np.exp(b * x) + c
 
-    opt_params, __ = curve_fit(modelfunc, x, y)
-    oa, ob, oc = opt_params
-    moa, mob, moc = np.maximum(1, opt_params)
+    optp, __ = curve_fit(modelfunc, x, y)  # pylint: disable=unbalanced-tuple-unpacking
+    oa, ob, oc = optp
+    moa, mob, moc = np.maximum(1, optp)
     a_p = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
     b_p = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob)
     c_p = FitParam(_("y0 constant"), oc, -2 * moc, 2 * moc)

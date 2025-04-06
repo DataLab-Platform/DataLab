@@ -15,11 +15,11 @@ In DataLab, functional validation is based on a classic test strategy (see
 
 Test coverage is around 90%, with more than 200 tests.
 
-Scientific validation
+Technical validation
 ---------------------
 
 This paragraph provides the validation status of compute functions in DataLab (this is
-what we call scientific validation, see :ref:`scientific_validation`).
+what we call technical validation, see :ref:`scientific_validation`).
 
 .. note:: This is a work in progress: the tables below are updated continuously as new
     functions are validated or test code is adapted (the tables are generated from the

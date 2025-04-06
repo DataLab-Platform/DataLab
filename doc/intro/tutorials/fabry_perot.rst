@@ -69,11 +69,11 @@ Then, let's define a circular region of interest (ROI) around the central fringe
 
 .. figure:: ../../images/tutorials/fabry_perot/04.png
 
-   Select the "Edit regions of interest" tool in the "Computing" menu.
+   Select the "Edit regions of interest" tool in the "Analysis" menu.
 
 .. figure:: ../../images/tutorials/fabry_perot/05.png
 
-   The "Regions of interest" dialog opens. Click "Add region of interest" and select
+   The "Regions of interest" dialog opens. Click "Add ROI" and select
    a circular ROI. Resize the predefined ROI by dragging the handles. Note that you
    may change the ROI radius while keeping its center fixed by pressing the "Ctrl" key.
    Click "OK" to close the dialog.
@@ -92,7 +92,7 @@ Now, let's detect the contours in the ROI and fit them to circles.
 
 .. figure:: ../../images/tutorials/fabry_perot/08.png
 
-   Select the "Contour detection" tool in the "Computing" menu.
+   Select the "Contour detection" tool in the "Analysis" menu.
 
 .. figure:: ../../images/tutorials/fabry_perot/09.png
 
@@ -108,13 +108,13 @@ Now, let's detect the contours in the ROI and fit them to circles.
 
 .. note::
 
-    If you want to show the computing results again, you can select the "Show results"
-    |show_results| entry in the "Computing" menu, or the "Show results" |show_results|
+    If you want to show the analysis results again, you can select the "Show results"
+    |show_results| entry in the "Analysis" menu, or the "Show results" |show_results|
     button, below the image list:
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
+.. |show_results| image:: ../../../cdl/data/icons/analysis/show_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -158,7 +158,7 @@ Now, let's delete the image metadata (including the annotations) to clean up the
    Select the "Delete metadata" entry in the "Edit" menu, or the |metadata_delete|
    button in the toolbar.
 
-.. |metadata_delete| image:: ../../../cdl/data/icons/metadata_delete.svg
+.. |metadata_delete| image:: ../../../cdl/data/icons/edit/metadata_delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -176,7 +176,7 @@ ROI from the first image to the second image, using the metadata.
     Select the "Copy metadata" entry in the "Edit" menu, or the |metadata_copy|
     button in the toolbar.
 
-.. |metadata_copy| image:: ../../../cdl/data/icons/metadata_copy.svg
+.. |metadata_copy| image:: ../../../cdl/data/icons/edit/metadata_copy.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -186,7 +186,7 @@ ROI from the first image to the second image, using the metadata.
     Select the second image in the "Images" panel, then select the "Paste metadata"
     entry in the "Edit" menu, or the |metadata_paste| button in the toolbar.
 
-.. |metadata_paste| image:: ../../../cdl/data/icons/metadata_paste.svg
+.. |metadata_paste| image:: ../../../cdl/data/icons/edit/metadata_paste.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -197,7 +197,7 @@ ROI from the first image to the second image, using the metadata.
 
 .. figure:: ../../images/tutorials/fabry_perot/22.png
 
-    Select the "Contour detection" tool in the "Computing" menu, with the same
+    Select the "Contour detection" tool in the "Analysis" menu, with the same
     parameters as before (shape "Circle"). On this image, there are two fringes,
     so four circles are fitted. The "Results" dialog opens, and displays the
     fitted circle parameters. Click "OK".
@@ -281,7 +281,7 @@ profile to transfer the profile to the "Signals" panel.
     this panel to display the profile.
 
 Finally, we can save the workspace to a file. The workspace contains all the images
-and signals that were loaded or processed in DataLab. It also contains the computing
+and signals that were loaded or processed in DataLab. It also contains the analysis
 results, the visualization settings (colormaps, contrast, etc.), the metadata, and
 the annotations.
 

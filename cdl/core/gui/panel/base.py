@@ -10,10 +10,11 @@ from __future__ import annotations
 
 import abc
 import dataclasses
+import glob
 import os.path as osp
 import re
 import warnings
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generic, Type
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
@@ -28,12 +29,25 @@ from plotpy.plot import PlotDialog
 from plotpy.tools import ActionTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
+from qtpy.compat import (
+    getexistingdirectory,
+    getopenfilename,
+    getopenfilenames,
+    getsavefilename,
+)
 
-import cdl.computation.base
 from cdl.config import APP_NAME, Conf, _
-from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
-from cdl.core.model.base import ResultProperties, ResultShape, items_to_json
+from cdl.core.gui import actionhandler, objectmodel, objectview
+from cdl.core.gui.roieditor import TypeROIEditor
+from cdl.core.model.base import (
+    ANN_KEY,
+    ROI_KEY,
+    ResultProperties,
+    ResultShape,
+    TypeObj,
+    TypeROI,
+    items_to_json,
+)
 from cdl.core.model.signal import create_signal
 from cdl.env import execenv
 from cdl.utils.qthelpers import (
@@ -50,7 +64,6 @@ if TYPE_CHECKING:
     from typing import Callable
 
     from plotpy.items import CurveItem, LabelItem, MaskedImageItem
-    from plotpy.tools.base import GuiTool
 
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
@@ -104,7 +117,7 @@ class ObjectProp(QW.QWidget):
         for child in self.properties.children():
             if isinstance(child, QW.QTabWidget):
                 break
-        child.addTab(param_scroll, _("Computing parameters"))
+        child.addTab(param_scroll, _("Analysis parameters"))
 
         vlayout = QW.QVBoxLayout()
         vlayout.addWidget(self.properties)
@@ -146,7 +159,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     """Object defining DataLab panel interface,
     based on a vertical QSplitter widget
 
-    A panel handle an object list (objects are signals, images, macros, ...).
+    A panel handle an object list (objects are signals, images, macros...).
     Each object must implement ``cdl.core.gui.ObjItf`` interface
     """
 
@@ -242,21 +255,39 @@ def create_resultdata_dict(objs: list[SignalObj | ImageObj]) -> dict[str, Result
     return rdatadict
 
 
-class BaseDataPanel(AbstractPanel):
+class PasteMetadataParam(gds.DataSet):
+    """Paste metadata parameters"""
+
+    keep_roi = gds.BoolItem(_("Regions of interest"), default=True)
+    keep_resultshapes = gds.BoolItem(_("Result shapes"), default=False).set_pos(col=1)
+    keep_annotations = gds.BoolItem(_("Annotations"), default=True)
+    keep_resultproperties = gds.BoolItem(_("Result properties"), default=False).set_pos(
+        col=1
+    )
+    keep_other = gds.BoolItem(_("Other metadata"), default=True)
+
+
+class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     """Object handling the item list, the selected item properties and plot"""
 
     PANEL_STR = ""  # e.g. "Signal Panel"
     PANEL_STR_ID = ""  # e.g. "signal"
-    PARAMCLASS: SignalObj | ImageObj = None  # Replaced in child object
+    PARAMCLASS: TypeObj = None  # Replaced in child object
     ANNOTATION_TOOLS = ()
-    DIALOGSIZE = (800, 600)
+    MINDIALOGSIZE = (800, 600)
+    MAXDIALOGSIZE = 0.95  # % of DataLab's main window size
     # Replaced by the right class in child object:
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
-    SIG_REFRESH_PLOT = QC.Signal(str, bool)  # Connected to PlotHandler.refresh_plot
+    SIG_REFRESH_PLOT = QC.Signal(
+        str, bool, bool
+    )  # Connected to PlotHandler.refresh_plot
     ROIDIALOGOPTIONS = {}
-    # Replaced in child object:
-    ROIDIALOGCLASS: roieditor.SignalROIEditor | roieditor.ImageROIEditor | None = None
+
+    @staticmethod
+    @abc.abstractmethod
+    def get_roieditor_class() -> Type[TypeROIEditor]:
+        """Return ROI editor class"""
 
     @abc.abstractmethod
     def __init__(self, parent: QW.QWidget) -> None:
@@ -272,7 +303,7 @@ class BaseDataPanel(AbstractPanel):
         self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}
         self.context_menu = QW.QMenu()
-        self.__separate_views: dict[QW.QDialog, SignalObj | ImageObj] = {}
+        self.__separate_views: dict[QW.QDialog, TypeObj] = {}
 
     def closeEvent(self, event):
         """Reimplement QMainWindow method"""
@@ -287,6 +318,9 @@ class BaseDataPanel(AbstractPanel):
         # Find the object corresponding to the plot item
         obj = self.plothandler.get_obj_from_item(item)
         if obj is not None:
+            # Ensure that item's parameters are up-to-date:
+            item.param.update_param(item)
+            # Update object metadata from plot item parameters
             obj.update_metadata_from_plot_item(item)
             if obj is self.objview.get_current_object():
                 self.objprop.update_properties_from(obj)
@@ -311,9 +345,7 @@ class BaseDataPanel(AbstractPanel):
         """
         self.plothandler.update_resultproperty_from_plot_item(item)
 
-    def serialize_object_to_hdf5(
-        self, obj: SignalObj | ImageObj, writer: NativeH5Writer
-    ) -> None:
+    def serialize_object_to_hdf5(self, obj: TypeObj, writer: NativeH5Writer) -> None:
         """Serialize object to HDF5 file"""
         # Before serializing, update metadata from plot item parameters, in order to
         # save the latest visualization settings:
@@ -353,7 +385,7 @@ class BaseDataPanel(AbstractPanel):
         """Return number of objects"""
         return len(self.objmodel)
 
-    def __getitem__(self, nb: int) -> SignalObj | ImageObj:
+    def __getitem__(self, nb: int) -> TypeObj:
         """Return object from its number (1 to N)"""
         return self.objmodel.get_object_from_number(nb)
 
@@ -361,7 +393,7 @@ class BaseDataPanel(AbstractPanel):
         """Iterate over objects"""
         return iter(self.objmodel)
 
-    def create_object(self) -> SignalObj | ImageObj:
+    def create_object(self) -> TypeObj:
         """Create object (signal or image)
 
         Returns:
@@ -372,7 +404,7 @@ class BaseDataPanel(AbstractPanel):
     @qt_try_except()
     def add_object(
         self,
-        obj: SignalObj | ImageObj,
+        obj: TypeObj,
         group_id: str | None = None,
         set_current: bool = True,
     ) -> None:
@@ -380,7 +412,8 @@ class BaseDataPanel(AbstractPanel):
 
         Args:
             obj: SignalObj or ImageObj object
-            group_id: group id
+            group_id: group id to which the object belongs. If None or empty string,
+             the object is added to the current group.
             set_current: if True, set the added object as current
         """
         if obj in self.objmodel:
@@ -390,7 +423,7 @@ class BaseDataPanel(AbstractPanel):
                 f"The same object cannot be added twice: "
                 f"please use a copy of the object."
             )
-        if group_id is None:
+        if group_id is None or group_id == "":
             group_id = self.objview.get_current_group_id()
             if group_id is None:
                 groups = self.objmodel.get_groups()
@@ -421,7 +454,7 @@ class BaseDataPanel(AbstractPanel):
         self.objmodel.clear()
         self.plothandler.clear()
         self.objview.populate_tree()
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        self.refresh_plot("selected", True, False)
         super().remove_all_objects()
 
     # ---- Signal/Image Panel API ------------------------------------------------------
@@ -441,6 +474,37 @@ class BaseDataPanel(AbstractPanel):
         self.addWidget(self.objview)
         self.addWidget(self.objprop)
         self.add_objprop_buttons()
+
+    def refresh_plot(
+        self, what: str, update_items: bool = True, force: bool = False
+    ) -> None:
+        """Refresh plot. This method simply emits the signal SIG_REFRESH_PLOT which is
+        connected to the method `PlotHandler.refresh_plot`.
+
+        Args:
+            what: string describing the objects to refresh.
+             Valid values are "selected" (refresh the selected objects),
+             "all" (refresh all objects), "existing" (refresh existing plot items),
+             or an object uuid.
+            update_items: if True, update the items.
+             If False, only show the items (do not update them, except if the
+             option "Use reference item LUT range" is enabled and more than one
+             item is selected). Defaults to True.
+            force: if True, force refresh even if auto refresh is disabled,
+             and refresh all items associated to objects (even the hidden ones, e.g.
+             when selecting multiple images of the same size and position). Defaults
+             to False.
+
+        Raises:
+            ValueError: if `what` is not a valid value
+        """
+        if what not in ("selected", "all", "existing") and not isinstance(what, str):
+            raise ValueError(f"Invalid value for 'what': {what}")
+        self.SIG_REFRESH_PLOT.emit(what, update_items, force)
+
+    def manual_refresh(self) -> None:
+        """Manual refresh"""
+        self.refresh_plot("selected", True, True)
 
     def get_category_actions(
         self, category: actionhandler.ActionCategory
@@ -464,10 +528,20 @@ class BaseDataPanel(AbstractPanel):
         menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
-    def add_group(self, title: str) -> objectmodel.ObjectGroup:
-        """Add group"""
+    def add_group(self, title: str, select: bool = False) -> objectmodel.ObjectGroup:
+        """Add group
+
+        Args:
+            title: group title
+            select: if True, select the group in the tree view. Defaults to False.
+
+        Returns:
+            Created group object
+        """
         group = self.objmodel.add_group(title)
         self.objview.add_group_item(group)
+        if select:
+            self.objview.select_groups([group])
         return group
 
     def __duplicate_individual_obj(
@@ -512,12 +586,47 @@ class BaseDataPanel(AbstractPanel):
                     self.__metadata_clipboard.pop(key)
                     self.__metadata_clipboard[mshape.key] = value
 
-    def paste_metadata(self) -> None:
+    def paste_metadata(self, param: PasteMetadataParam | None = None) -> None:
         """Paste metadata to selected object(s)"""
+        if param is None:
+            param = PasteMetadataParam(
+                _("Paste metadata"),
+                comment=_(
+                    "Select what to keep from the clipboard.<br><br>"
+                    "Result shapes and annotations, if kept, will be merged with "
+                    "existing ones. <u>All other metadata will be replaced</u>."
+                ),
+            )
+            if not param.edit(parent=self.parent()):
+                return
+        metadata = {}
+        if param.keep_roi and ROI_KEY in self.__metadata_clipboard:
+            metadata[ROI_KEY] = self.__metadata_clipboard[ROI_KEY]
+        if param.keep_annotations and ANN_KEY in self.__metadata_clipboard:
+            metadata[ANN_KEY] = self.__metadata_clipboard[ANN_KEY]
+        if param.keep_resultshapes:
+            for key, value in self.__metadata_clipboard.items():
+                if ResultShape.match(key, value):
+                    metadata[key] = value
+        if param.keep_resultproperties:
+            for key, value in self.__metadata_clipboard.items():
+                if ResultProperties.match(key, value):
+                    metadata[key] = value
+        if param.keep_other:
+            for key, value in self.__metadata_clipboard.items():
+                if (
+                    not ResultShape.match(key, value)
+                    and not ResultProperties.match(key, value)
+                    and key not in (ROI_KEY, ANN_KEY)
+                ):
+                    metadata[key] = value
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=lambda obj: obj.short_id, reverse=True):
-            obj.metadata.update(self.__metadata_clipboard)
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+            obj.update_metadata_from(metadata)
+        # We have to do a manual refresh in order to force the plot handler to update
+        # all plot items, even the ones that are not visible (otherwise, image masks
+        # would not be updated after pasting the metadata: see issue #123)
+        self.manual_refresh()
 
     def remove_object(self, force: bool = False) -> None:
         """Remove signal/image object
@@ -575,13 +684,13 @@ class BaseDataPanel(AbstractPanel):
             refresh_plot: Refresh plot. Defaults to True.
             keep_roi: Keep regions of interest, if any. Defaults to None (ask user).
         """
-        if execenv.unattended:
-            keep_roi = False
         sel_objs = self.objview.get_sel_objects(include_groups=True)
         # Check if there are regions of interest first:
-        roi_backup: dict[SignalObj | ImageObj, np.ndarray] = {}
+        roi_backup: dict[TypeObj, np.ndarray] = {}
         if any(obj.roi is not None for obj in sel_objs):
-            if keep_roi is None:
+            if execenv.unattended and keep_roi is None:
+                keep_roi = False
+            elif keep_roi is None:
                 answer = QW.QMessageBox.warning(
                     self,
                     _("Delete metadata"),
@@ -601,12 +710,18 @@ class BaseDataPanel(AbstractPanel):
         # Delete metadata:
         for index, obj in enumerate(sel_objs):
             obj.reset_metadata_to_defaults()
+            if not keep_roi:
+                obj.invalidate_maskdata_cache()
             if obj in roi_backup:
                 obj.roi = roi_backup[obj]
             if index == 0:
                 self.selection_changed()
         if refresh_plot:
-            self.SIG_REFRESH_PLOT.emit("selected", True)
+            # We have to do a manual refresh in order to force the plot handler to
+            # update all plot items, even the ones that are not visible (otherwise,
+            # image masks would remained visible after deleting the ROI for example:
+            # see issue #122)
+            self.manual_refresh()
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True
@@ -620,13 +735,13 @@ class BaseDataPanel(AbstractPanel):
         for obj in self.objview.get_sel_objects(include_groups=True):
             obj.add_annotations_from_items(items)
         if refresh_plot:
-            self.SIG_REFRESH_PLOT.emit("selected", True)
+            self.refresh_plot("selected", True, False)
 
     def update_metadata_view_settings(self) -> None:
         """Update metadata view settings"""
         for obj in self.objmodel:
             obj.update_metadata_view_settings()
-        self.SIG_REFRESH_PLOT.emit("all", True)
+        self.refresh_plot("all", True, False)
 
     def copy_titles_to_clipboard(self) -> None:
         """Copy object titles to clipboard (for reproducibility)"""
@@ -639,15 +754,48 @@ class BaseDataPanel(AbstractPanel):
         if ok:
             self.add_group(group_name)
 
-    def rename_group(self) -> None:
-        """Rename a group"""
-        # Open a message box to enter the group name
-        group = self.objview.get_sel_groups()[0]
-        group_name, ok = QW.QInputDialog.getText(
-            self, _("Rename group"), _("Group name:"), QW.QLineEdit.Normal, group.title
-        )
-        if ok:
-            group.title = group_name
+    def rename_selected_object_or_group(self, new_name: str | None = None) -> None:
+        """Rename selected object or group
+
+        Args:
+            new_name: new name (default: None, i.e. ask user)
+        """
+        sel_objects = self.objview.get_sel_objects(include_groups=False)
+        sel_groups = self.objview.get_sel_groups()
+        if (not sel_objects and not sel_groups) or len(sel_objects) + len(
+            sel_groups
+        ) > 1:
+            # Won't happen in the application, but could happen in tests or using the
+            # API directly
+            raise ValueError("Select one object or group to rename")
+        if sel_objects:
+            obj = sel_objects[0]
+            if new_name is None:
+                new_name, ok = QW.QInputDialog.getText(
+                    self,
+                    _("Rename object"),
+                    _("Object name:"),
+                    QW.QLineEdit.Normal,
+                    obj.title,
+                )
+                if not ok:
+                    return
+            obj.title = new_name
+            self.objview.update_item(obj.uuid)
+            self.objprop.update_properties_from(obj)
+        elif sel_groups:
+            group = sel_groups[0]
+            if new_name is None:
+                new_name, ok = QW.QInputDialog.getText(
+                    self,
+                    _("Rename group"),
+                    _("Group name:"),
+                    QW.QLineEdit.Normal,
+                    group.title,
+                )
+                if not ok:
+                    return
+            group.title = new_name
             self.objview.update_item(group.uuid)
 
     @abc.abstractmethod
@@ -670,7 +818,7 @@ class BaseDataPanel(AbstractPanel):
         addparam: gds.DataSet | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
-    ) -> SignalObj | ImageObj | None:
+    ) -> TypeObj | None:
         """Create a new object (signal/image).
 
         Args:
@@ -709,7 +857,7 @@ class BaseDataPanel(AbstractPanel):
         self.selection_changed()
         return objs
 
-    def __save_to_file(self, obj: SignalObj | ImageObj, filename: str) -> None:
+    def __save_to_file(self, obj: TypeObj, filename: str) -> None:
         """Save object to file (signal/image).
 
         Args:
@@ -718,13 +866,43 @@ class BaseDataPanel(AbstractPanel):
         """
         self.IO_REGISTRY.write(filename, obj)
 
+    def load_from_directory(self, directory: str | None = None) -> list[TypeObj]:
+        """Open objects from directory (signals or images, depending on the panel),
+        add them to DataLab and return them.
+        If the directory is not specified, ask the user to select a directory.
+
+        Args:
+            directory: directory name
+
+        Returns:
+            list of new objects
+        """
+        if not self.mainwindow.confirm_memory_state():
+            return []
+        if directory is None:  # pragma: no cover
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                directory = getexistingdirectory(self, _("Open"), basedir)
+        if not directory:
+            return []
+        # Get all files in the directory:
+        relfnames = sorted(
+            osp.relpath(path, start=directory)
+            for path in glob.glob(osp.join(directory, "**", "*.*"), recursive=True)
+        )
+        # When Python 3.9 will be dropped, we can use (support for `root_dir` is added):
+        # relfnames = sorted(glob.glob("**/*.*", root_dir=directory, recursive=True))
+        filenames = [osp.join(directory, fname) for fname in relfnames]
+        return self.load_from_files(filenames, ignore_unknown=True)
+
     def load_from_files(
-        self, filenames: list[str] | None = None
-    ) -> list[SignalObj | ImageObj]:
+        self, filenames: list[str] | None = None, ignore_unknown: bool = False
+    ) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
             filenames: File names
+            ignore_unknown: if True, ignore unknown file types (default: False)
 
         Returns:
             list of new objects
@@ -740,7 +918,14 @@ class BaseDataPanel(AbstractPanel):
         for filename in filenames:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
-                objs += self.__load_from_file(filename)
+                try:
+                    objs += self.__load_from_file(filename)
+                except NotImplementedError as exc:
+                    if ignore_unknown:
+                        # Ignore unknown file types
+                        pass
+                    else:
+                        raise exc
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:
@@ -778,8 +963,12 @@ class BaseDataPanel(AbstractPanel):
         Returns:
             None
         """
+        dirnames = [fname for fname in filenames if osp.isdir(fname)]
         h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
-        other_fnames = sorted(list(set(filenames) - set(h5_fnames)))
+        other_fnames = sorted(list(set(filenames) - set(h5_fnames) - set(dirnames)))
+        if dirnames:
+            for dirname in dirnames:
+                self.load_from_directory(dirname)
         if h5_fnames:
             self.mainwindow.open_h5_files(h5_fnames, import_all=True)
         if other_fnames:
@@ -820,7 +1009,7 @@ class BaseDataPanel(AbstractPanel):
                 handler = JSONHandler(filename)
                 handler.load()
                 obj.metadata = handler.get_json_dict()
-            self.SIG_REFRESH_PLOT.emit("selected", True)
+            self.refresh_plot("selected", True, False)
 
     def export_metadata_from_file(self, filename: str | None = None) -> None:
         """Export metadata to file (JSON).
@@ -855,17 +1044,44 @@ class BaseDataPanel(AbstractPanel):
         selected_groups = self.objview.get_sel_groups()
         self.objprop.update_properties_from(self.objview.get_current_object())
         self.acthandler.selected_objects_changed(selected_groups, selected_objects)
-        self.SIG_REFRESH_PLOT.emit("selected", update_items)
+        self.refresh_plot("selected", update_items, False)
 
     def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: update object properties,
         refresh plot and update object view."""
         obj = self.objview.get_current_object()
+        # if obj is not None:  # XXX: Is it necessary?
+        obj.invalidate_maskdata_cache()
         update_dataset(obj, self.objprop.properties.dataset)
         self.objview.update_item(obj.uuid)
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        self.refresh_plot("selected", True, False)
 
     # ------Plotting data in modal dialogs----------------------------------------------
+    def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:
+        """Add plot items to dialog
+
+        Args:
+            dlg: Dialog
+            oids: Object IDs
+        """
+        objs = self.objmodel.get_objects(oids)
+        plot = dlg.get_plot()
+        with create_progress_bar(
+            self, _("Creating plot items"), max_=len(objs)
+        ) as progress:
+            for index, obj in enumerate(objs):
+                progress.setValue(index + 1)
+                QW.QApplication.processEvents()
+                if progress.wasCanceled():
+                    return None
+                item = obj.make_item(update_from=self.plothandler[obj.uuid])
+                item.set_readonly(True)
+                plot.add_item(item, z=0)
+        plot.set_active_item(item)
+        item.unselect()
+        plot.replot()
+        return dlg
+
     def open_separate_view(
         self, oids: list[str] | None = None, edit_annotations: bool = False
     ) -> PlotDialog | None:
@@ -879,22 +1095,23 @@ class BaseDataPanel(AbstractPanel):
         Returns:
             Instance of PlotDialog
         """
-        title = _("Annotations")
         if oids is None:
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[0]]
+
+        # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
-            oids,
+            title=obj.title if len(oids) == 1 else None,
             edit=True,
-            name="new_window",
+            name=f"{obj.PREFIX}_new_window",
             options={"show_itemlist": edit_annotations},
         )
         if dlg is None:
             return None
-        width, height = self.DIALOGSIZE
-        dlg.resize(width, height)
+        self.add_plot_items_to_dialog(dlg, oids)
+
         mgr = dlg.get_manager()
-        toolbar = QW.QToolBar(title, self)
+        toolbar = QW.QToolBar(_("Annotations"), self)
         dlg.button_layout.insertWidget(0, toolbar)
         mgr.add_toolbar(toolbar, id(toolbar))
         toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
@@ -920,7 +1137,6 @@ class BaseDataPanel(AbstractPanel):
         action_btn = default_toolbar.widgetForAction(edit_ann_action)
         action_btn.setToolButtonStyle(QC.Qt.ToolButtonTextBesideIcon)
         plot = dlg.get_plot()
-        plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
         for item in obj.iterate_shape_items(editable=True):
@@ -951,159 +1167,118 @@ class BaseDataPanel(AbstractPanel):
         self.__separate_views.pop(dlg)
         dlg.deleteLater()
 
-    def manual_refresh(self) -> None:
-        """Manual refresh"""
-        self.plothandler.refresh_plot("selected", True, force=True)
-
     def create_new_dialog(
         self,
-        oids: list[str],
         edit: bool = False,
         toolbar: bool = True,
         title: str | None = None,
-        tools: list[GuiTool] | None = None,
         name: str | None = None,
         options: dict | None = None,
     ) -> PlotDialog | None:
         """Create new pop-up signal/image plot dialog.
 
         Args:
-            oids: Object IDs
             edit: Edit mode
             toolbar: Show toolbar
             title: Dialog title
-            tools: list of tools to add to the toolbar
-            name: Dialog name
+            name: Dialog object name
             options: Plot options
 
         Returns:
-            QDialog instance
+            Plot dialog instance
         """
-        if title is not None or len(oids) == 1:
-            if title is None:
-                title = self.objview.get_sel_objects(include_groups=True)[0].title
-            title = f"{title} - {APP_NAME}"
-        else:
-            title = APP_NAME
-
         plot_options = self.plothandler.get_current_plot_options()
         if options is not None:
             plot_options = plot_options.copy(options)
 
+        # Resize the dialog so that it's at least MINDIALOGSIZE (absolute values),
+        # and at most MAXDIALOGSIZE (% of the main window size):
+        minwidth, minheight = self.MINDIALOGSIZE
+        maxwidth = int(self.mainwindow.width() * self.MAXDIALOGSIZE)
+        maxheight = int(self.mainwindow.height() * self.MAXDIALOGSIZE)
+        size = min(minwidth, maxwidth), min(minheight, maxheight)
+
         # pylint: disable=not-callable
         dlg = PlotDialog(
             parent=self.parent(),
-            title=title,
+            title=APP_NAME if title is None else f"{title} - {APP_NAME}",
             edit=edit,
             options=plot_options,
             toolbar=toolbar,
+            size=size,
         )
         dlg.setWindowIcon(get_icon("DataLab.svg"))
-        if tools is not None:
-            for tool in tools:
-                dlg.get_manager().add_tool(tool)
-        plot = dlg.get_plot()
-
-        objs = self.objmodel.get_objects(oids)
-        dlg.setObjectName(f"{objs[0].PREFIX}_{name}")
-
-        with create_progress_bar(
-            self, _("Creating plot items"), max_=len(objs)
-        ) as progress:
-            for index, obj in enumerate(objs):
-                progress.setValue(index + 1)
-                QW.QApplication.processEvents()
-                if progress.wasCanceled():
-                    return None
-                item = obj.make_item(update_from=self.plothandler[obj.uuid])
-                item.set_readonly(True)
-                plot.add_item(item, z=0)
-        plot.set_active_item(item)
-        plot.replot()
+        dlg.setObjectName(name)
         return dlg
 
-    def create_new_dialog_for_selection(
-        self,
-        title: str,
-        name: str,
-        options: dict[str, any] = None,
-        toolbar: bool = False,
-        tools: list[GuiTool] = None,
-    ) -> tuple[PlotDialog | None, SignalObj | ImageObj]:
-        """Create new pop-up dialog for the currently selected signal/image.
-
-        Args:
-            title: Dialog title
-            name: Dialog name
-            options: Plot options
-            toolbar: Show toolbar
-            tools: list of tools to add to the toolbar
-
-        Returns:
-            QDialog instance, selected object
-        """
-        obj = self.objview.get_sel_objects(include_groups=True)[0]
-        dlg = self.create_new_dialog(
-            [obj.uuid],
-            edit=True,
-            toolbar=toolbar,
-            title=f"{title} - {obj.title}",
-            tools=tools,
-            name=name,
-            options=options,
-        )
-        return dlg, obj
-
-    def get_roi_dialog(
-        self, extract: bool, singleobj: bool, add_roi: bool = False
-    ) -> tuple[cdl.computation.base.ROIDataParam, bool] | None:
+    def get_roi_editor_output(self, extract: bool) -> tuple[TypeROI, bool] | None:
         """Get ROI data (array) from specific dialog box.
 
         Args:
             extract: Extract ROI from data
-            singleobj: Single object
-            add_roi: Add ROI immediately after opening the dialog (default: False)
 
         Returns:
-            ROI data
+            A tuple containing the ROI object and a boolean indicating whether the
+            dialog was accepted or not.
         """
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
-        dlg, obj = self.create_new_dialog_for_selection(roi_s, "roi_dialog", options)
+        obj = self.objview.get_sel_objects(include_groups=True)[0]
+
+        # Create a new dialog
+
+        dlg = self.create_new_dialog(
+            edit=True,
+            toolbar=True,
+            title=f"{roi_s} - {obj.title}",
+            name=f"{obj.PREFIX}_roi_dialog",
+            options=options,
+        )
         if dlg is None:
             return None
-        plot = dlg.get_plot()
-        plot.unselect_all()
-        for item in plot.items:
-            item.set_selectable(False)
+
+        # Create ROI editor (and add it to the dialog)
+
+        if obj.uuid not in self.plothandler:
+            # This happens for example when opening an already saved workspace with
+            # multiple images, and if the user tries to edit the ROI of a group of
+            # images without having selected any object yet. In this case, only the
+            # last image is actually plotted (because if the other have the same size
+            # and position, they are hidden), and the plot item of the first image is
+            # not created yet. The `obj.uuid` is precisely the uuid of the first image.
+            self.plothandler.refresh_plot("selected", True, True)
+        item = obj.make_item(update_from=self.plothandler[obj.uuid])
+
         # pylint: disable=not-callable
-        roi_editor: roieditor.SignalROIEditor | roieditor.ImageROIEditor = (
-            self.ROIDIALOGCLASS(dlg, obj, extract, singleobj)
-        )
-        dlg.plot_layout.addWidget(roi_editor, 1, 0, 1, 1)
-        if add_roi:
-            roi_editor.add_roi()
+        roi_editor = self.get_roieditor_class()(dlg, obj, extract, item=item)
+
+        dlg.button_layout.insertWidget(0, roi_editor)
+
         if exec_dialog(dlg):
             return roi_editor.get_roieditor_results()
         return None
 
-    def get_object_with_dialog(
-        self, title: str, parent: QW.QWidget | None = None
-    ) -> SignalObj | ImageObj | None:
+    def get_objects_with_dialog(
+        self,
+        title: str,
+        comment: str = "",
+        nb_objects: int = 1,
+        parent: QW.QWidget | None = None,
+    ) -> TypeObj | None:
         """Get object with dialog box.
 
         Args:
             title: Dialog title
+            comment: Optional dialog comment
+            nb_objects: Number of objects to select
             parent: Parent widget
-
         Returns:
-            Object (signal or image, or None if dialog was canceled)
+            Object(s) (signal(s) or image(s), or None if dialog was canceled)
         """
         parent = self if parent is None else parent
-        dlg = objectview.GetObjectDialog(parent, self, title)
+        dlg = objectview.GetObjectsDialog(parent, self, title, comment, nb_objects)
         if exec_dialog(dlg):
-            obj_uuid = dlg.get_current_object_uuid()
-            return self.objmodel[obj_uuid]
+            return dlg.get_selected_objects()
         return None
 
     def __new_objprop_button(
@@ -1125,7 +1300,7 @@ class BaseDataPanel(AbstractPanel):
         self.__new_objprop_button(
             _("Results"),
             "show_results.svg",
-            _("Show results obtained from previous computations"),
+            _("Show results obtained from previous analysis"),
             self.show_results,
         )
         self.__new_objprop_button(
@@ -1142,10 +1317,10 @@ class BaseDataPanel(AbstractPanel):
                 _("No result currently available for this object."),
                 "",
                 _(
-                    "This feature leverages the results of previous computations "
+                    "This feature leverages the results of previous analysis "
                     "performed on the selected object(s).<br><br>"
                     "To compute results, select one or more objects and choose "
-                    "a computing feature in the <u>Compute</u> menu."
+                    "a feature in the <u>Analysis</u> menu."
                 ),
             ]
         )
@@ -1199,7 +1374,7 @@ class BaseDataPanel(AbstractPanel):
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
             for category, rdata in rdatadict.items():
-                xchoices = (("indexes", _("Indexes")),)
+                xchoices = (("indices", _("Indices")),)
                 for xlabel in rdata.xlabels:
                     xchoices += ((xlabel, xlabel),)
                 ychoices = xchoices[1:]
@@ -1243,14 +1418,14 @@ class BaseDataPanel(AbstractPanel):
                         ),
                         default=default_kind,
                     )
-                    xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indexes")
+                    xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indices")
                     yaxis = gds.ChoiceItem(
                         _("Y axis"), ychoices, default=ychoices[0][0]
                     )
 
                 comment = (
                     _(
-                        "Plot results obtained from previous computations.<br><br>"
+                        "Plot results obtained from previous analyses.<br><br>"
                         "This plot is based on results associated with '%s' prefix."
                     )
                     % category
@@ -1261,33 +1436,56 @@ class BaseDataPanel(AbstractPanel):
 
                 i_yaxis = rdata.xlabels.index(param.yaxis)
                 if param.kind == "one_curve_per_title":
-                    # One curve per result title:
-                    for title, results in grouped_results.items():  # title
-                        x, y = [], []
-                        for index, result in enumerate(results):  # object
-                            if param.xaxis == "indexes":
-                                x.append(index)
-                            else:
-                                i_xaxis = rdata.xlabels.index(param.xaxis)
-                                x.append(result.shown_array[0][i_xaxis])
-                            y.append(result.shown_array[0][i_yaxis])
-                        self.__add_result_signal(x, y, title, param.xaxis, param.yaxis)
+                    # One curve per ROI (if any) and per result title
+                    # ------------------------------------------------------------------
+                    # Begin by checking if all results have the same number of ROIs:
+                    # for simplicity, let's check the number of unique ROI indices.
+                    all_roi_indexes = [
+                        np.unique(result.array[:, 0]) for result in rdata.results
+                    ]
+                    # Check if all roi_indexes are the same:
+                    if len(set(map(tuple, all_roi_indexes))) > 1:
+                        QW.QMessageBox.warning(
+                            self,
+                            _("Plot results"),
+                            _(
+                                "All objects associated with results must have the "
+                                "same regions of interest (ROIs) to plot results "
+                                "together."
+                            ),
+                        )
+                        return
+                    for i_roi in all_roi_indexes[0]:
+                        roi_suffix = f"|ROI{int(i_roi+1)}" if i_roi >= 0 else ""
+                        for title, results in grouped_results.items():  # title
+                            x, y = [], []
+                            for index, result in enumerate(results):
+                                mask = result.array[:, 0] == i_roi
+                                if param.xaxis == "indices":
+                                    x.append(index)
+                                else:
+                                    i_xaxis = rdata.xlabels.index(param.xaxis)
+                                    x.append(result.shown_array[mask, i_xaxis][0])
+                                y.append(result.shown_array[mask, i_yaxis][0])
+                            self.__add_result_signal(
+                                x, y, f"{title}{roi_suffix}", param.xaxis, param.yaxis
+                            )
                 else:
-                    # One curve per result title, per object and per ROI:
+                    # One curve per result title, per object and per ROI
+                    # ------------------------------------------------------------------
                     for title, results in grouped_results.items():  # title
                         for index, result in enumerate(results):  # object
                             roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
                             for i_roi in roi_idx:  # ROI
+                                roi_suffix = f"|ROI{int(i_roi+1)}" if i_roi >= 0 else ""
                                 mask = result.array[:, 0] == i_roi
-                                if param.xaxis == "indexes":
+                                if param.xaxis == "indices":
                                     x = np.arange(result.array.shape[0])[mask]
                                 else:
                                     i_xaxis = rdata.xlabels.index(param.xaxis)
                                     x = result.shown_array[mask, i_xaxis]
                                 y = result.shown_array[mask, i_yaxis]
-                                stitle = f"{title} ({objs[index].short_id})"
-                                if len(roi_idx) > 1:
-                                    stitle += f"|ROI{i_roi}"
+                                stitle = f"{title} ({objs[index].short_id}){roi_suffix}"
                                 self.__add_result_signal(
                                     x, y, stitle, param.xaxis, param.yaxis
                                 )
@@ -1313,7 +1511,7 @@ class BaseDataPanel(AbstractPanel):
                 objs = self.objview.get_sel_objects(include_groups=True)
                 for obj in objs:
                     obj.delete_results()
-                self.SIG_REFRESH_PLOT.emit("selected", True)
+                self.refresh_plot("selected", True, False)
         else:
             self.__show_no_result_warning()
 
@@ -1327,4 +1525,4 @@ class BaseDataPanel(AbstractPanel):
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             obj.add_label_with_title(title=title)
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        self.refresh_plot("selected", True, False)

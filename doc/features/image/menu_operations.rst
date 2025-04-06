@@ -8,7 +8,7 @@ This section describes the operations that can be performed on images.
 .. seealso::
 
     :ref:`ima-menu-processing` for more information on image processing features,
-    or :ref:`ima-menu-computing` for information on computing features on images.
+    or :ref:`ima-menu-analysis` for information on analysis features on images.
 
 .. figure:: /images/shots/i_operation.png
 
@@ -42,6 +42,8 @@ Basic arithmetic operations
       - :math:`z_{M} = \prod_{k=0}^{M-1}{z_{k}}`
     * - |division| Division
       - :math:`z_{2} = \dfrac{z_{1}}{z_{0}}`
+    * - |inverse| Inverse
+      - :math:`z_{2} = \dfrac{1}{z_{1}}`
 
 .. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
     :width: 24px
@@ -69,6 +71,11 @@ Basic arithmetic operations
     :class: dark-light no-scaled-link
 
 .. |division| image:: ../../../cdl/data/icons/operations/division.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |inverse| image:: ../../../cdl/data/icons/operations/inverse.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -152,7 +159,9 @@ Data type conversion
 --------------------
 
 The "Convert data type" |convert_dtype| action allows you to convert the data type
-of the selected images.
+of the selected images. For integer data types, the conversion is done by clipping
+the values to the new data type range before effectively converting the data type.
+For floating point data types, the conversion is straightforward.
 
 .. |convert_dtype| image:: ../../../cdl/data/icons/operations/convert_dtype.svg
     :width: 24px
@@ -161,7 +170,8 @@ of the selected images.
 
 .. note::
 
-    Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
+    Data type conversion uses the :py:func:`cdl.algorithms.datatypes.clip_astype`
+    function which relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
 Basic mathematical functions
@@ -220,11 +230,12 @@ and :math:`\overline{z_{f}}` is the flat field image average value:
     Raw image and flat field image are supposedly already
     corrected by performing a dark frame subtraction.
 
-Rotation
-^^^^^^^^
+Flip or rotation
+^^^^^^^^^^^^^^^^
 
-Create a new image which is the result of rotating (90°, 270° or
-arbitrary angle) or flipping (horizontally or vertically) data.
+Create a new image by flipping or rotating the data of the selected image.
+The image may be flipped horizontally, vertically, or diagonally (transposition).
+It may be rotated by 90°, 270° or any user-defined value.
 
 Intensity profiles
 ^^^^^^^^^^^^^^^^^^

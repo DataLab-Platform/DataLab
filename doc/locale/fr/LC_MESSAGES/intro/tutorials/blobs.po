@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-12 17:49+0100\n"
+"POT-Creation-Date: 2025-03-20 16:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,267 +17,112 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: ../../intro/tutorials/blobs.rst:4
 msgid ":octicon:`book;1em;sd-text-info` Detecting blobs on an image"
 msgstr ":octicon:`book;1em;sd-text-info` Détection de taches sur une image"
 
-#: ../../intro/tutorials/blobs.rst:6
-msgid ""
-"This example shows how to detect blobs on an image with DataLab, and also"
-" covers other features such as the plugin system:"
-msgstr ""
-"Cet exemple montre comment détecter des taches sur une image avec "
-"DataLab, et couvre également d'autres fonctionnalités telles que le "
-"système de plugins :"
+msgid "This example shows how to detect blobs on an image with DataLab, and also covers other features such as the plugin system:"
+msgstr "Cet exemple montre comment détecter des taches sur une image avec DataLab, et couvre également d'autres fonctionnalités telles que le système de plugins :"
 
-#: ../../intro/tutorials/blobs.rst:9
 msgid "Add a new plugin to DataLab"
 msgstr "Ajouter un nouveau plugin à DataLab"
 
-#: ../../intro/tutorials/blobs.rst:10
 msgid "Denoise an image"
 msgstr "Débruitage d'une image"
 
-#: ../../intro/tutorials/blobs.rst:11
 msgid "Detect blobs on an image"
 msgstr "Détecter des taches sur une image"
 
-#: ../../intro/tutorials/blobs.rst:12
 msgid "Save the workspace to a file"
 msgstr "Enregistrer l'espace de travail dans un fichier"
 
-#: ../../intro/tutorials/blobs.rst:14
-msgid ""
-"First, we open DataLab, and open the settings dialog (using \"File > "
-"Settings...\", or the |libre-gui-settings| icon in the toolbar)."
-msgstr ""
-"Tout d'abord, nous ouvrons DataLab, et ouvrons la boîte de dialogue des "
-"paramètres (en utilisant \"Fichier > Paramètres...\", ou l'icône |libre-"
-"gui-settings| dans la barre d'outils)."
+msgid "First, we open DataLab, and open the settings dialog (using \"File > Settings...\", or the |libre-gui-settings| icon in the toolbar)."
+msgstr "Tout d'abord, nous ouvrons DataLab, et ouvrons la boîte de dialogue des paramètres (en utilisant \"Fichier > Paramètres...\", ou l'icône |libre-gui-settings| dans la barre d'outils)."
 
-#: ../../intro/tutorials/blobs.rst:17
 msgid "libre-gui-settings"
 msgstr ""
 
-#: ../../intro/tutorials/blobs.rst:23
-msgid ""
-"In the \"General\" tab, we can see the \"Plugins path\" field. This is "
-"the path where DataLab will look for plugins. We can add a new plugin by "
-"copying/pasting the plugin file in this directory."
-msgstr ""
-"Dans l'onglet \"Général\", nous pouvons voir le champ \"Chemin des "
-"plugins\". C'est le chemin où DataLab recherchera les plugins. Nous "
-"pouvons ajouter un nouveau plugin en copiant/collant le fichier du plugin"
-" dans ce répertoire."
+msgid "In the \"General\" tab, we can see the \"Plugins path\" field. This is the path where DataLab will look for plugins. We can add a new plugin by copying/pasting the plugin file in this directory."
+msgstr "Dans l'onglet \"Général\", nous pouvons voir le champ \"Chemin des plugins\". C'est le chemin où DataLab recherchera les plugins. Nous pouvons ajouter un nouveau plugin en copiant/collant le fichier du plugin dans ce répertoire."
 
-#: ../../intro/tutorials/blobs.rst:29
 msgid "The plugin system is described in the :ref:`about_plugins` section."
 msgstr "Le système de plugins est décrit dans la section :ref:`about_plugins`."
 
-#: ../../intro/tutorials/blobs.rst:31
-msgid ""
-"Let's add the `cdl_example_imageproc.py` plugin to DataLab (this is an "
-"example plugin that is shipped with DataLab source package, or may be "
-"downloaded from `here on GitHub <https://github.com/DataLab-"
-"Platform/DataLab/tree/main/plugins/examples>`_)."
-msgstr ""
-"Ajoutons le plugin `cdl_example_imageproc.py` à DataLab (c'est un plugin "
-"d'exemple qui est livré avec le package source de DataLab, ou peut être "
-"téléchargé `ici sur GitHub <https://github.com/DataLab-"
-"Platform/DataLab/tree/main/plugins/examples>`_)."
+msgid "Let's add the `cdl_example_imageproc.py` plugin to DataLab (this is an example plugin that is shipped with DataLab source package, or may be downloaded from `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
+msgstr "Ajoutons le plugin `cdl_example_imageproc.py` à DataLab (c'est un plugin d'exemple qui est livré avec le package source de DataLab, ou peut être téléchargé `ici sur GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
 
-#: ../../intro/tutorials/blobs.rst:34
-msgid ""
-"If we close and reopen DataLab, we can see that the plugin is now "
-"available in the \"Plugins\" menu: there is a new \"Extract blobs "
-"(example)\" entry."
-msgstr ""
-"Si nous fermons et rouvrons DataLab, nous pouvons voir que le plugin est "
-"maintenant disponible dans le menu \"Plugins\" : il y a une nouvelle "
-"entrée \"Extract blobs (example)\"."
+msgid "If we close and reopen DataLab, we can see that the plugin is now available in the \"Plugins\" menu: there is a new \"Extract blobs (example)\" entry."
+msgstr "Si nous fermons et rouvrons DataLab, nous pouvons voir que le plugin est maintenant disponible dans le menu \"Plugins\" : il y a une nouvelle entrée \"Extract blobs (example)\"."
 
-#: ../../intro/tutorials/blobs.rst:39
 msgid "The \"About DataLab\" dialog shows the list of available plugins."
-msgstr ""
-"La boîte de dialogue \"À propos de DataLab\" affiche la liste des plugins"
-" disponibles."
+msgstr "La boîte de dialogue \"À propos de DataLab\" affiche la liste des plugins disponibles."
 
-#: ../../intro/tutorials/blobs.rst:43
 msgid "Let's click on \"Extract blobs (example) > Generate test image\""
 msgstr "Cliquons sur \"Extract blobs (example) > Generate test image\""
 
-#: ../../intro/tutorials/blobs.rst:45
-msgid ""
-"For information, the image is generated by the plugin using the following"
-" code::"
-msgstr ""
-"Pour information, l'image est générée par le plugin en utilisant le code "
-"suivant::"
+msgid "For information, the image is generated by the plugin using the following code::"
+msgstr "Pour information, l'image est générée par le plugin en utilisant le code suivant::"
 
-#: ../../intro/tutorials/blobs.rst:67
-msgid ""
-"The plugin has generated a test image, and added it to the \"Images\" "
-"panel. The image shows a few blobs, with a central dark disk, and a noisy"
-" background."
-msgstr ""
-"Le plugin a généré une image de test, et l'a ajoutée au panneau "
-"\"Images\". L'image montre quelques taches, avec un disque sombre "
-"central, et un fond bruité."
+msgid "The plugin has generated a test image, and added it to the \"Images\" panel. The image shows a few blobs, with a central dark disk, and a noisy background."
+msgstr "Le plugin a généré une image de test, et l'a ajoutée au panneau \"Images\". L'image montre quelques taches, avec un disque sombre central, et un fond bruité."
 
-#: ../../intro/tutorials/blobs.rst:70
-msgid ""
-"The plugin has other features, such as denoising the image, and detecting"
-" blobs on the image, but we won't cover them here: we will use the same "
-"DataLab native features as the plugin, manually."
-msgstr ""
-"Ce plugin a d'autres fonctionnalités, telles que le débruitage de "
-"l'image, et la détection de taches sur l'image, mais nous ne les "
-"couvrirons pas ici : nous utiliserons les mêmes fonctionnalités natives "
-"de DataLab que le plugin, manuellement."
+msgid "The plugin has other features, such as denoising the image, and detecting blobs on the image, but we won't cover them here: we will use the same DataLab native features as the plugin, manually."
+msgstr "Ce plugin a d'autres fonctionnalités, telles que le débruitage de l'image, et la détection de taches sur l'image, mais nous ne les couvrirons pas ici : nous utiliserons les mêmes fonctionnalités natives de DataLab que le plugin, manuellement."
 
-#: ../../intro/tutorials/blobs.rst:74
-msgid ""
-"The image is a bit noisy, and also quite large. Let's reduce the size of "
-"the image while denoising it a bit by binning the image by a factor of 2."
-msgstr ""
-"L'image est un peu bruitée, et aussi assez grande. Réduisons la taille de"
-" l'image tout en la débruitant un peu en la binarisant par un facteur de "
-"2."
+msgid "The image is a bit noisy, and also quite large. Let's reduce the size of the image while denoising it a bit by binning the image by a factor of 2."
+msgstr "L'image est un peu bruitée, et aussi assez grande. Réduisons la taille de l'image tout en la débruitant un peu en la binarisant par un facteur de 2."
 
-#: ../../intro/tutorials/blobs.rst:79
 msgid "Click on \"Operations > Pixel binning\"."
 msgstr "Cliquons sur \"Opérations > Pixel binning\"."
 
-#: ../../intro/tutorials/blobs.rst:83
-msgid ""
-"The \"Binning\" dialog opens. Set the binning factor to 2, and click on "
-"\"OK\"."
-msgstr ""
-"La boîte de dialogue \"Binning\" s'ouvre. Réglez le facteur de binning à "
-"2, et cliquez sur \"OK\"."
+msgid "The \"Binning\" dialog opens. Set the binning factor to 2, and click on \"OK\"."
+msgstr "La boîte de dialogue \"Binning\" s'ouvre. Réglez le facteur de binning à 2, et cliquez sur \"OK\"."
 
-#: ../../intro/tutorials/blobs.rst:87
-msgid ""
-"The binned image is added to the \"Images\" panel. It is now easier to "
-"see the blobs (even if they were already quite visible on the original "
-"image: this is just an example), and the image will be faster to process."
-msgstr ""
-"L'image binnée est ajoutée au panneau \"Images\". Il est maintenant plus "
-"facile de voir les taches (même si elles étaient déjà assez visibles sur "
-"l'image d'origine : c'est juste un exemple), et l'image sera plus rapide "
-"à traiter."
+msgid "The binned image is added to the \"Images\" panel. It is now easier to see the blobs (even if they were already quite visible on the original image: this is just an example), and the image will be faster to process."
+msgstr "L'image binnée est ajoutée au panneau \"Images\". Il est maintenant plus facile de voir les taches (même si elles étaient déjà assez visibles sur l'image d'origine : c'est juste un exemple), et l'image sera plus rapide à traiter."
 
-#: ../../intro/tutorials/blobs.rst:92
 msgid "Let's apply a moving median filter to the image, to denoise it a bit more."
-msgstr ""
-"Appliquons un filtre médian mobile à l'image, pour la débruiter un peu "
-"plus."
+msgstr "Appliquons un filtre médian mobile à l'image, pour la débruiter un peu plus."
 
-#: ../../intro/tutorials/blobs.rst:96
-msgid ""
-"Click on \"Processing > Moving median\" entry, and set the window size to"
-" ``5``."
-msgstr ""
-"Cliquons sur l'entrée \"Processing > Moving median\", et réglez la taille"
-" de la fenêtre sur ``5``."
+msgid "Click on \"Processing > Moving median\" entry, and set the window size to ``5``."
+msgstr "Cliquons sur l'entrée \"Processing > Moving median\", et réglez la taille de la fenêtre sur ``5``."
 
-#: ../../intro/tutorials/blobs.rst:100
-msgid ""
-"The filtered image is added to the \"Images\" panel. Denoising is quite "
-"efficient."
-msgstr ""
-"L'image filtrée est ajoutée au panneau \"Images\". Le débruitage est "
-"assez efficace."
+msgid "The filtered image is added to the \"Images\" panel. Denoising is quite efficient."
+msgstr "L'image filtrée est ajoutée au panneau \"Images\". Le débruitage est assez efficace."
 
-#: ../../intro/tutorials/blobs.rst:102
 msgid "Now, let's detect the blobs on the image."
 msgstr "A présent, détectons les taches sur l'image."
 
-#: ../../intro/tutorials/blobs.rst:106
-msgid "Click on \"Computing > Blob detection > Blob detection (OpenCV)\"."
-msgstr "Cliquons sur \"Computing > Blob detection > Blob detection (OpenCV)\"."
+msgid "Click on \"Analysis > Blob detection > Blob detection (OpenCV)\"."
+msgstr "Cliquons sur \"Analysis > Blob detection > Blob detection (OpenCV)\"."
 
-#: ../../intro/tutorials/blobs.rst:110
-msgid ""
-"The \"Blob detection (OpenCV)\" dialog opens. Set the parameters as shown"
-" on the screenshot, and click on \"OK\"."
-msgstr ""
-"La boîte de dialogue \"Blob detection (OpenCV)\" s'ouvre. Réglez les "
-"paramètres comme indiqué sur la capture d'écran, et cliquez sur \"OK\"."
+msgid "The \"Blob detection (OpenCV)\" dialog opens. Set the parameters as shown on the screenshot, and click on \"OK\"."
+msgstr "La boîte de dialogue \"Blob detection (OpenCV)\" s'ouvre. Réglez les paramètres comme indiqué sur la capture d'écran, et cliquez sur \"OK\"."
 
-#: ../../intro/tutorials/blobs.rst:115
-msgid ""
-"The \"Results\" dialog opens, showing the detected blobs: one line per "
-"blob, with the blob coordinates and radius."
-msgstr ""
-"La boîte de dialogue \"Résultats\" s'ouvre, montrant les taches détectées"
-" : une ligne par tache, avec les coordonnées et le rayon de la tache."
+msgid "The \"Results\" dialog opens, showing the detected blobs: one line per blob, with the blob coordinates and radius."
+msgstr "La boîte de dialogue \"Résultats\" s'ouvre, montrant les taches détectées : une ligne par tache, avec les coordonnées et le rayon de la tache."
 
-#: ../../intro/tutorials/blobs.rst:120
-msgid ""
-"If you want to show the computing results again, you can select the "
-"\"Show results\" |show_results| entry in the \"Computing\" menu, or the "
-"\"Show results\" |show_results| button, below the image list:"
-msgstr ""
-"Si vous souhaitez afficher à nouveau les résultats de calcul, vous pouvez"
-" sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le "
-"menu \"Calcul\", ou le bouton \"Afficher les résultats\" |show_results|, "
-"en dessous de la liste des images :"
+msgid "If you want to show the analysis results again, you can select the \"Show results\" |show_results| entry in the \"Analysis\" menu, or the \"Show results\" |show_results| button, below the image list:"
+msgstr "Si vous souhaitez afficher à nouveau les résultats d'analyse, vous pouvez sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le menu Analyse\", ou le bouton \"Afficher les résultats\" |show_results|, en dessous de la liste des images :"
 
-#: ../../intro/tutorials/blobs.rst:126
 msgid "show_results"
 msgstr ""
 
-#: ../../intro/tutorials/blobs.rst:132
-msgid ""
-"The detected blobs are also added to the image metadata, and can be seen "
-"in the visualization panel on the left."
-msgstr ""
-"Les taches détectées sont également ajoutées aux métadonnées de l'image, "
-"et peuvent être vues dans le panneau de visualisation à gauche."
+msgid "The detected blobs are also added to the image metadata, and can be seen in the visualization panel on the left."
+msgstr "Les taches détectées sont également ajoutées aux métadonnées de l'image, et peuvent être vues dans le panneau de visualisation à gauche."
 
-#: ../../intro/tutorials/blobs.rst:135
-msgid ""
-"Finally, we can save the workspace to a file. The workspace contains all "
-"the images that were loaded in DataLab, as well as the processing "
-"results. It also contains the visualization settings (colormaps, "
-"contrast, etc.), the metadata, and the annotations. To save the "
-"workspace, click on \"File > Save to HDF5 file...\", or the |filesave_h5|"
-" button in the toolbar."
-msgstr ""
-"Enfin, nous pouvons enregistrer l'espace de travail dans un fichier. "
-"L'espace de travail contient toutes les images qui ont été chargées dans "
-"DataLab, ainsi que les résultats de traitement. Il contient également les"
-" paramètres de visualisation (palettes de couleurs, contraste, etc.), les"
-" métadonnées et les annotations. Pour enregistrer l'espace de travail, "
-"cliquez sur \"Fichier > Enregistrer dans un fichier HDF5...\", ou sur le "
-"bouton |filesave_h5| dans la barre d'outils."
+msgid "Finally, we can save the workspace to a file. The workspace contains all the images that were loaded in DataLab, as well as the processing results. It also contains the visualization settings (colormaps, contrast, etc.), the metadata, and the annotations. To save the workspace, click on \"File > Save to HDF5 file...\", or the |filesave_h5| button in the toolbar."
+msgstr "Enfin, nous pouvons enregistrer l'espace de travail dans un fichier. L'espace de travail contient toutes les images qui ont été chargées dans DataLab, ainsi que les résultats de traitement. Il contient également les paramètres de visualisation (palettes de couleurs, contraste, etc.), les métadonnées et les annotations. Pour enregistrer l'espace de travail, cliquez sur \"Fichier > Enregistrer dans un fichier HDF5...\", ou sur le bouton |filesave_h5| dans la barre d'outils."
 
-#: ../../intro/tutorials/blobs.rst:141
 msgid "filesave_h5"
 msgstr ""
 
-#: ../../intro/tutorials/blobs.rst:145
-msgid ""
-"If you want to load the workspace again, you can use the \"File > Open "
-"HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the "
-"whole workspace, or the \"File > Browse HDF5 file...\" (or the "
-"|h5browser| button in the toolbar) to load only a selection of data sets "
-"from the workspace."
-msgstr ""
-"Si vous souhaitez charger à nouveau l'espace de travail, vous pouvez "
-"utiliser \"Fichier > Ouvrir un fichier HDF5...\" (ou le bouton "
-"|fileopen_h5| dans la barre d'outils) pour charger l'ensemble de l'espace"
-" de travail, ou \"Fichier > Parcourir un fichier HDF5...\" (ou le bouton "
-"|h5browser| dans la barre d'outils) pour charger uniquement une sélection"
-" d'ensembles de données de l'espace de travail."
+msgid "If you want to load the workspace again, you can use the \"File > Open HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the \"File > Browse HDF5 file...\" (or the |h5browser| button in the toolbar) to load only a selection of data sets from the workspace."
+msgstr "Si vous souhaitez charger à nouveau l'espace de travail, vous pouvez utiliser \"Fichier > Ouvrir un fichier HDF5...\" (ou le bouton |fileopen_h5| dans la barre d'outils) pour charger l'ensemble de l'espace de travail, ou \"Fichier > Parcourir un fichier HDF5...\" (ou le bouton |h5browser| dans la barre d'outils) pour charger uniquement une sélection d'ensembles de données de l'espace de travail."
 
-#: ../../intro/tutorials/blobs.rst:150
 msgid "fileopen_h5"
 msgstr ""
 
-#: ../../intro/tutorials/blobs.rst:154
 msgid "h5browser"
 msgstr ""

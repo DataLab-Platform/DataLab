@@ -46,6 +46,7 @@ Signal model
     :inherited-members:
 .. autofunction:: cdl.obj.read_signal
 .. autofunction:: cdl.obj.read_signals
+.. autofunction:: cdl.obj.create_signal_roi
 .. autofunction:: cdl.obj.create_signal
 .. autofunction:: cdl.obj.create_signal_from_param
 .. autofunction:: cdl.obj.new_signal_param
@@ -55,6 +56,7 @@ Signal model
 .. autodataset:: cdl.obj.StepParam
 .. autodataset:: cdl.obj.PeriodicParam
 .. autodataset:: cdl.obj.ROI1DParam
+.. autoclass:: cdl.obj.SignalROI
 
 Image model
 ^^^^^^^^^^^
@@ -64,16 +66,16 @@ Image model
     :inherited-members:
 .. autofunction:: cdl.obj.read_image
 .. autofunction:: cdl.obj.read_images
+.. autofunction:: cdl.obj.create_image_roi
 .. autofunction:: cdl.obj.create_image
 .. autofunction:: cdl.obj.create_image_from_param
 .. autofunction:: cdl.obj.new_image_param
 .. autoclass:: cdl.obj.ImageTypes
 .. autodataset:: cdl.obj.NewImageParam
 .. autodataset:: cdl.obj.Gauss2DParam
-.. autoclass:: cdl.obj.RoiDataGeometries
 .. autodataset:: cdl.obj.ROI2DParam
+.. autoclass:: cdl.obj.ImageROI
 .. autoclass:: cdl.obj.ImageDatatypes
-.. autoclass:: cdl.obj.ImageRoiDataItem
 """
 
 # pylint:disable=unused-import
@@ -92,11 +94,11 @@ from cdl.core.model.image import (
     Gauss2DParam,
     ImageDatatypes,
     ImageObj,
-    ImageRoiDataItem,
+    ImageROI,
     ImageTypes,
     NewImageParam,
-    RoiDataGeometries,
     ROI2DParam,
+    create_image_roi,
     create_image,
     create_image_from_param,
     new_image_param,
@@ -108,8 +110,10 @@ from cdl.core.model.signal import (
     SignalObj,
     SignalTypes,
     ROI1DParam,
+    create_signal_roi,
     StepParam,
     create_signal,
     create_signal_from_param,
     new_signal_param,
+    SignalROI,
 )

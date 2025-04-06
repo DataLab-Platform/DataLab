@@ -11,10 +11,11 @@ Image object and related classes
 
 from __future__ import annotations
 
+import abc
 import enum
 import re
-from collections.abc import ByteString, Iterator, Mapping, Sequence
-from typing import TYPE_CHECKING, Any
+from collections.abc import ByteString, Mapping, Sequence
+from typing import TYPE_CHECKING, Any, Generic, Literal, Type, Union
 from uuid import uuid4
 
 import guidata.dataset as gds
@@ -23,52 +24,21 @@ from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from numpy import ma
 from plotpy.builder import make
-from plotpy.items import AnnotatedCircle, AnnotatedRectangle, MaskedImageItem
+from plotpy.items import (
+    AnnotatedCircle,
+    AnnotatedPolygon,
+    AnnotatedRectangle,
+    MaskedImageItem,
+)
 from skimage import draw
 
+from cdl.algorithms.datatypes import clip_astype
 from cdl.algorithms.image import scale_data_to_min_max
 from cdl.config import Conf, _
 from cdl.core.model import base
 
 if TYPE_CHECKING:
     from qtpy import QtWidgets as QW
-
-
-def make_roi_rectangle(
-    x0: int, y0: int, x1: int, y1: int, title: str
-) -> AnnotatedRectangle:
-    """Make and return the annnotated rectangle associated to ROI
-
-    Args:
-        x0: top left corner X coordinate
-        y0: top left corner Y coordinate
-        x1: bottom right corner X coordinate
-        y1: bottom right corner Y coordinate
-        title: title
-    """
-    roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1, title)
-    param = roi_item.label.labelparam
-    param.anchor = "BL"
-    param.xc, param.yc = 5, -5
-    param.update_item(roi_item.label)
-    return roi_item
-
-
-def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str) -> AnnotatedCircle:
-    """Make and return the annnotated circle associated to ROI
-
-    Args:
-        x0: top left corner X coordinate
-        y0: top left corner Y coordinate
-        x1: bottom right corner X coordinate
-        y1: bottom right corner Y coordinate
-        title: title
-    """
-    item = AnnotatedCircle(x0, y0, x1, y1)
-    item.annotationparam.title = title
-    item.annotationparam.update_item(item)
-    item.set_style("plot", "shape/drag")
-    return item
 
 
 def to_builtin(obj) -> str | int | float | list | dict | np.ndarray | None:
@@ -91,178 +61,118 @@ def to_builtin(obj) -> str | int | float | list | dict | np.ndarray | None:
     return None
 
 
-class RoiDataGeometries(base.Choices):
-    """ROI data geometry types"""
-
-    RECTANGLE = _("Rectangle")
-    CIRCLE = _("Circle")
-
-
-class ImageRoiDataItem:
-    """Object representing an image ROI.
-
-    Args:
-        data: ROI data
-    """
-
-    def __init__(self, data: np.ndarray | list | tuple):
-        self._data = data
-
-    @classmethod
-    def from_image(cls, obj: ImageObj, geometry: RoiDataGeometries) -> ImageRoiDataItem:
-        """Construct roi data item from image object: called for making new ROI items
-
-        Args:
-            obj: image object
-            geometry: ROI geometry
-        """
-        width, height = obj.data.shape[1] * obj.dx, obj.data.shape[0] * obj.dy
-        frac = 0.2
-        x0, x1 = obj.x0 + frac * width, obj.x0 + (1 - frac) * width
-        if geometry is RoiDataGeometries.RECTANGLE:
-            y0, y1 = obj.y0 + frac * height, obj.y0 + (1 - frac) * height
-        else:
-            y0 = y1 = obj.yc
-        coords = x0, y0, x1, y1
-        return cls(coords)
-
-    @property
-    def geometry(self) -> RoiDataGeometries:
-        """ROI geometry"""
-        _x0, y0, _x1, y1 = self._data
-        if y0 == y1:
-            return RoiDataGeometries.CIRCLE
-        return RoiDataGeometries.RECTANGLE
-
-    def get_rect(self) -> tuple[int, int, int, int]:
-        """Get rectangle coordinates"""
-        x0, y0, x1, y1 = self._data
-        if self.geometry is RoiDataGeometries.CIRCLE:
-            radius = int(round(0.5 * (x1 - x0)))
-            y0 -= radius
-            y1 += radius
-        return x0, y0, x1, y1
-
-    def get_image_masked_view(self, obj: ImageObj) -> np.ndarray:
-        """Return masked view for data
-
-        Args:
-            obj: image object
-        """
-        x0, y0, x1, y1 = self.get_rect()
-        return obj.get_masked_view()[y0:y1, x0:x1]
-
-    def apply_mask(self, data: np.ndarray, yxratio: float) -> np.ndarray:
-        """Apply ROI to data as a mask and return masked array
-
-        Args:
-            data: data
-            yxratio: Y/X ratio
-        """
-        roi_mask = np.ones_like(data, dtype=bool)
-        x0, y0, x1, y1 = self.get_rect()
-        if self.geometry is RoiDataGeometries.RECTANGLE:
-            roi_mask[max(y0, 0) : y1, max(x0, 0) : x1] = False
-        else:
-            xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
-            radius = 0.5 * (x1 - x0)
-            rr, cc = draw.ellipse(yc, xc, radius / yxratio, radius, shape=data.shape)
-            roi_mask[rr, cc] = False
-        return roi_mask
-
-    def make_roi_item(
-        self, index: int | None, fmt: str, lbl: bool, editable: bool = True
-    ):
-        """Make ROI plot item
-
-        Args:
-            index: ROI index
-            fmt: format string
-            lbl: if True, show label
-            editable: if True, ROI is editable
-        """
-        coords = self._data
-        if self.geometry is RoiDataGeometries.RECTANGLE:
-            func = make_roi_rectangle
-        else:
-            func = make_roi_circle
-        title = "ROI" if index is None else f"ROI{index:02d}"
-        return base.make_roi_item(
-            func, coords, title, fmt, lbl, editable, option="shape/drag"
-        )
-
-
-class ROI2DParam(gds.DataSet):
+class ROI2DParam(base.BaseROIParam["ImageObj", "BaseSingleImageROI"]):
     """Image ROI parameters"""
 
-    _geometry_prop = gds.GetAttrProp("geometry")
-    _rfp = gds.FuncProp(_geometry_prop, lambda x: x is RoiDataGeometries.RECTANGLE)
-    _cfp = gds.FuncProp(_geometry_prop, lambda x: x is RoiDataGeometries.CIRCLE)
+    # Note: the ROI coordinates are expressed in pixel coordinates (integers)
+    # => That is the only way to handle ROI parametrization for image objects.
+    #    Otherwise, we would have to ask the user to systematically provide the
+    #    physical coordinates: that would be cumbersome and error-prone.
 
-    # Do not declare it as a static method: not supported on Python 3.8
+    _geometry_prop = gds.GetAttrProp("geometry")
+    _rfp = gds.FuncProp(_geometry_prop, lambda x: x != "rectangle")
+    _cfp = gds.FuncProp(_geometry_prop, lambda x: x != "circle")
+    _pfp = gds.FuncProp(_geometry_prop, lambda x: x != "polygon")
+
+    # Do not declare it as a static method: not supported by Python 3.9
     def _lbl(name: str, index: int):  # pylint: disable=no-self-argument
         """Returns name<sub>index</sub>"""
         return f"{name}<sub>{index}</sub>"
 
-    geometry = gds.ChoiceItem(_("Geometry"), RoiDataGeometries.get_choices()).set_prop(
-        "display", store=_geometry_prop, hide=True
-    )
+    _ut = "pixels"
+
+    geometries = ("rectangle", "circle", "polygon")
+    geometry = gds.ChoiceItem(
+        _("Geometry"), list(zip(geometries, geometries)), default="rectangle"
+    ).set_prop("display", store=_geometry_prop, hide=True)
 
     # Parameters for rectangular ROI geometry:
-    _tlcorner = gds.BeginGroup(_("Top left corner")).set_prop("display", hide=_cfp)
-    xr0 = gds.IntItem(_lbl("X", 0), unit="pixel").set_prop("display", hide=_cfp)
-    yr0 = (
-        gds.IntItem(_lbl("Y", 0), unit="pixel")
-        .set_pos(1)
-        .set_prop("display", hide=_cfp)
-    )
+    _tlcorner = gds.BeginGroup(_("Top left corner")).set_prop("display", hide=_rfp)
+    x0 = gds.IntItem(_lbl("X", 0), unit=_ut).set_prop("display", hide=_rfp)
+    y0 = gds.IntItem(_lbl("Y", 0), unit=_ut).set_pos(1).set_prop("display", hide=_rfp)
     _e_tlcorner = gds.EndGroup(_("Top left corner"))
-    _brcorner = gds.BeginGroup(_("Bottom right corner")).set_prop("display", hide=_cfp)
-    xr1 = gds.IntItem(_lbl("X", 1), unit="pixel").set_prop("display", hide=_cfp)
-    yr1 = (
-        gds.IntItem(_lbl("Y", 1), unit="pixel")
-        .set_pos(1)
-        .set_prop("display", hide=_cfp)
-    )
-    _e_brcorner = gds.EndGroup(_("Bottom right corner"))
+    dx = gds.IntItem("ΔX", unit=_ut).set_prop("display", hide=_rfp)
+    dy = gds.IntItem("ΔY", unit=_ut).set_pos(1).set_prop("display", hide=_rfp)
 
     # Parameters for circular ROI geometry:
-    _cgroup = gds.BeginGroup(_("Center coordinates")).set_prop("display", hide=_rfp)
-    xc = gds.IntItem(_lbl("X", "C"), unit="pixel").set_prop("display", hide=_rfp)
-    yc = (
-        gds.IntItem(_lbl("Y", "C"), unit="pixel")
-        .set_pos(1)
-        .set_prop("display", hide=_rfp)
-    )
+    _cgroup = gds.BeginGroup(_("Center coordinates")).set_prop("display", hide=_cfp)
+    xc = gds.IntItem(_lbl("X", "C"), unit=_ut).set_prop("display", hide=_cfp)
+    yc = gds.IntItem(_lbl("Y", "C"), unit=_ut).set_pos(1).set_prop("display", hide=_cfp)
     _e_cgroup = gds.EndGroup(_("Center coordinates"))
-    r = gds.IntItem(_("Radius"), unit="pixel").set_prop("display", hide=_rfp)
+    r = gds.IntItem(_("Radius"), unit=_ut).set_prop("display", hide=_cfp)
+
+    # Parameters for polygonal ROI geometry:
+    points = gds.FloatArrayItem(_("Coordinates") + f" ({_ut})").set_prop(
+        "display", hide=_pfp
+    )
+
+    def to_single_roi(
+        self, obj: ImageObj, title: str = ""
+    ) -> PolygonalROI | RectangularROI | CircularROI:
+        """Convert parameters to single ROI
+
+        Args:
+            obj: image object (used for conversion of pixel to physical coordinates)
+            title: ROI title
+
+        Returns:
+            Single ROI
+        """
+        if self.geometry == "rectangle":
+            return RectangularROI.from_param(obj, self)
+        if self.geometry == "circle":
+            return CircularROI.from_param(obj, self)
+        if self.geometry == "polygon":
+            return PolygonalROI.from_param(obj, self)
+        raise ValueError(f"Unknown ROI geometry type: {self.geometry}")
 
     def get_suffix(self) -> str:
         """Get suffix text representation for ROI extraction"""
-        if self.geometry is RoiDataGeometries.CIRCLE:
+        if self.geometry == "rectangle":
+            return f"x0={self.x0},y0={self.y0},dx={self.dx},dy={self.dy}"
+        if self.geometry == "circle":
             return f"xc={self.xc},yc={self.yc},r={self.r}"
-        return f"x={self.xr0}:{self.xr1},y={self.yr0}:{self.yr1}"
+        if self.geometry == "polygon":
+            return "polygon"
+        raise ValueError(f"Unknown ROI geometry type: {self.geometry}")
 
-    def get_coords(self) -> tuple[int, int, int, int]:
-        """Get ROI coordinates"""
-        if self.geometry is RoiDataGeometries.CIRCLE:
-            return self.xc - self.r, self.yc, self.xc + self.r, self.yc
-        return self.xr0, self.yr0, self.xr1, self.yr1
+    def get_extracted_roi(self, obj: ImageObj) -> ImageROI | None:
+        """Get extracted ROI, i.e. the remaining ROI after extracting ROI from image.
 
-    def get_single_roi(self) -> np.ndarray | None:
-        """Get single ROI, i.e. after extracting ROI from image"""
-        if self.geometry is RoiDataGeometries.CIRCLE:
-            return np.array([(0, self.r, self.xc, self.yc)], int)
-        return None
+        Args:
+            obj: image object (used for conversion of pixel to physical coordinates)
 
-    def get_rect_indexes(self) -> tuple[int, int, int, int]:
-        """Get rectangle indexes"""
-        if self.geometry is RoiDataGeometries.CIRCLE:
+        When extracting ROIs from an image to multiple images (i.e. one image per ROI),
+        this method returns the ROI that has to be kept in the destination image. This
+        is not necessary for a rectangular ROI: the destination image is simply a crop
+        of the source image according to the ROI coordinates. But for a circular ROI or
+        a polygonal ROI, the destination image is a crop of the source image according
+        to the bounding box of the ROI. Thus, to avoid any loss of information, a ROI
+        has to be defined for the destination image: this is the ROI returned by this
+        method. It's simply the same as the source ROI, but with coordinates adjusted
+        to the destination image. One may called this ROI the "extracted ROI".
+        """
+        if self.geometry == "rectangle":
+            return None
+        single_roi = self.to_single_roi(obj)
+        x0, y0, _x1, _y1 = self.get_bounding_box_indices()
+        single_roi.translate(obj, -x0, -y0)
+        roi = ImageROI()
+        roi.add_roi(single_roi)
+        return roi
+
+    def get_bounding_box_indices(self) -> tuple[int, int, int, int]:
+        """Get bounding box (pixel coordinates)"""
+        if self.geometry == "circle":
             x0, y0 = self.xc - self.r, self.yc - self.r
             x1, y1 = self.xc + self.r, self.yc + self.r
+        elif self.geometry == "rectangle":
+            x0, y0, x1, y1 = self.x0, self.y0, self.x0 + self.dx, self.y0 + self.dy
         else:
-            x0, y0, x1, y1 = self.xr0, self.yr0, self.xr1, self.yr1
-        return max(0, x0), max(0, y0), x1, y1
+            self.points: np.ndarray
+            x0, y0 = self.points[::2].min(), self.points[1::2].min()
+            x1, y1 = self.points[::2].max(), self.points[1::2].max()
+        return x0, y0, x1, y1
 
     def get_data(self, obj: ImageObj) -> np.ndarray:
         """Get data in ROI
@@ -273,12 +183,636 @@ class ROI2DParam(gds.DataSet):
         Returns:
             Data in ROI
         """
-        x0, y0, x1, y1 = self.get_rect_indexes()
+        x0, y0, x1, y1 = self.get_bounding_box_indices()
+        x0, y0 = max(0, x0), max(0, y0)
         x1, y1 = min(obj.data.shape[1], x1), min(obj.data.shape[0], y1)
         return obj.data[y0:y1, x0:x1]
 
 
-class ImageObj(gds.DataSet, base.BaseObj):
+class BaseSingleImageROI(
+    base.BaseSingleROI["ImageObj", ROI2DParam, base.TypeROIItem],
+    Generic[base.TypeROIItem],
+    abc.ABC,
+):
+    """Base class for single image ROI
+
+    Args:
+        coords: ROI edge coordinates (floats)
+        title: ROI title
+
+    .. note::
+
+        The image ROI coords are expressed in physical coordinates (floats). The
+        conversion to pixel coordinates is done in :class:`cdl.obj.ImageObj`
+        (see :meth:`cdl.obj.ImageObj.physical_to_indices`). Most of the time,
+        the physical coordinates are the same as the pixel coordinates, but this
+        is not always the case (e.g. after image binning), so it's better to keep the
+        physical coordinates in the ROI object: this will help reusing the ROI with
+        different images (e.g. with different pixel sizes).
+    """
+
+    @abc.abstractmethod
+    def get_bounding_box(self, obj: ImageObj) -> tuple[float, float, float, float]:
+        """Get bounding box (physical coordinates)
+
+        Args:
+            obj: image object
+        """
+
+    @abc.abstractmethod
+    def translate(self, obj: ImageObj, dx: int, dy: int) -> None:
+        """Translate ROI
+
+        Args:
+            obj: image object
+            dx: translation along X-axis
+            dy: translation along Y-axis
+        """
+
+
+class PolygonalROI(BaseSingleImageROI[AnnotatedPolygon]):
+    """Polygonal ROI
+
+    Args:
+        coords: ROI edge coordinates
+        title: title
+
+    Raises:
+        ValueError: if number of coordinates is odd
+
+    .. note:: The image ROI coords are expressed in physical coordinates (floats)
+    """
+
+    def check_coords(self) -> None:
+        """Check if coords are valid
+
+        Raises:
+            ValueError: invalid coords
+        """
+        if len(self.coords) % 2 != 0:
+            raise ValueError("Edge indices must be pairs of X, Y values")
+
+    # pylint: disable=unused-argument
+    @classmethod
+    def from_param(cls: PolygonalROI, obj: ImageObj, param: ROI2DParam) -> PolygonalROI:
+        """Create ROI from parameters
+
+        Args:
+            obj: image object
+            param: parameters
+        """
+        indices = True  # ROI coordinates are in pixel coordinates in `ROI2DParam`
+        return cls(param.points, indices=indices, title=param.get_title())
+
+    def get_bounding_box(self, obj: ImageObj) -> tuple[float, float, float, float]:
+        """Get bounding box (physical coordinates)
+
+        Args:
+            obj: image object
+        """
+        coords = self.get_physical_coords(obj)
+        x_edges, y_edges = coords[::2], coords[1::2]
+        return min(x_edges), min(y_edges), max(x_edges), max(y_edges)
+
+    def translate(self, obj: ImageObj, dx: int, dy: int) -> None:
+        """Translate ROI
+
+        Args:
+            obj: image object
+            dx: translation along X-axis
+            dy: translation along Y-axis
+        """
+        coords = self.get_indices_coords(obj)
+        coords[::2] += int(dx)
+        coords[1::2] += int(dy)
+        self.set_indices_coords(obj, coords)
+
+    def to_mask(self, obj: ImageObj) -> np.ndarray:
+        """Create mask from ROI
+
+        Args:
+            obj: image object
+
+        Returns:
+            Mask (boolean array where True values are inside the ROI)
+        """
+        roi_mask = np.ones_like(obj.data, dtype=bool)
+        indices = self.get_indices_coords(obj)
+        rows, cols = indices[1::2], indices[::2]
+        rr, cc = draw.polygon(rows, cols, shape=obj.data.shape)
+        roi_mask[rr, cc] = False
+        return roi_mask
+
+    def to_param(self, obj: ImageObj, title: str | None = None) -> ROI2DParam:
+        """Convert ROI to parameters
+
+        Args:
+            obj: object (image), for physical-indices coordinates conversion
+            title: ROI title
+        """
+        param = ROI2DParam(title=self.title if title is None else title)
+        param.geometry = "polygon"
+        param.points = self.get_indices_coords(obj)
+        return param
+
+    def to_plot_item(self, obj: ImageObj, title: str | None = None) -> AnnotatedPolygon:
+        """Make and return the annnotated polygon associated to ROI
+
+        Args:
+            obj: object (image), for physical-indices coordinates conversion
+            title: title
+        """
+        item = AnnotatedPolygon(self.get_physical_coords(obj).reshape(-1, 2))
+        item.annotationparam.title = self.title if title is None else title
+        item.annotationparam.update_item(item)
+        item.set_style("plot", "shape/drag")
+        return item
+
+    @classmethod
+    def from_plot_item(cls: PolygonalROI, item: AnnotatedPolygon) -> PolygonalROI:
+        """Create ROI from plot item
+
+        Args:
+            item: plot item
+        """
+        return cls(item.get_points().flatten(), False, item.annotationparam.title)
+
+
+class RectangularROI(BaseSingleImageROI[AnnotatedRectangle]):
+    """Rectangular ROI
+
+    Args:
+        coords: ROI edge coordinates (x0, y0, dx, dy)
+        title: title
+
+    .. note:: The image ROI coords are expressed in physical coordinates (floats)
+    """
+
+    def check_coords(self) -> None:
+        """Check if coords are valid
+
+        Raises:
+            ValueError: invalid coords
+        """
+        if len(self.coords) != 4:
+            raise ValueError("Rectangle ROI requires 4 coordinates")
+
+    @classmethod
+    def from_param(
+        cls: RectangularROI, obj: ImageObj, param: ROI2DParam
+    ) -> RectangularROI:
+        """Create ROI from parameters
+
+        Args:
+            obj: image object
+            param: parameters
+        """
+        ix0, iy0, ix1, iy1 = param.get_bounding_box_indices()
+        coords = [ix0, iy0, ix1 - ix0, iy1 - iy0]
+        indices = True  # ROI coordinates are in pixel coordinates in `ROI2DParam`
+        return cls(coords, indices=indices, title=param.get_title())
+
+    def get_bounding_box(self, obj: ImageObj) -> tuple[float, float, float, float]:
+        """Get bounding box (physical coordinates)
+
+        Args:
+            obj: image object
+        """
+        x0, y0, dx, dy = self.get_physical_coords(obj)
+        return x0, y0, x0 + dx, y0 + dy
+
+    def translate(self, obj: ImageObj, dx: int, dy: int) -> None:
+        """Translate ROI
+
+        Args:
+            obj: image object
+            dx: translation along X-axis
+            dy: translation along Y-axis
+        """
+        coords = self.get_indices_coords(obj)
+        coords[0] += int(dx)
+        coords[1] += int(dy)
+        self.set_indices_coords(obj, coords)
+
+    def get_physical_coords(self, obj: ImageObj) -> np.ndarray:
+        """Return physical coords
+
+        Args:
+            obj: image object
+
+        Returns:
+            Physical coords
+        """
+        if self.indices:
+            ix0, iy0, idx, idy = self.coords
+            x0, y0, x1, y1 = obj.indices_to_physical([ix0, iy0, ix0 + idx, iy0 + idy])
+            return [x0, y0, x1 - x0, y1 - y0]
+        return self.coords
+
+    def get_indices_coords(self, obj: ImageObj) -> np.ndarray:
+        """Return indices coords
+
+        Args:
+            obj: image object
+
+        Returns:
+            Indices coords
+        """
+        if self.indices:
+            return self.coords
+        ix0, iy0, ix1, iy1 = obj.physical_to_indices(self.get_bounding_box(obj))
+        return [ix0, iy0, ix1 - ix0, iy1 - iy0]
+
+    def set_indices_coords(self, obj: ImageObj, coords: np.ndarray) -> None:
+        """Set indices coords
+
+        Args:
+            obj: object (signal/image)
+            coords: indices coords
+        """
+        if self.indices:
+            self.coords = coords
+        else:
+            ix0, iy0, idx, idy = coords
+            x0, y0, x1, y1 = obj.indices_to_physical([ix0, iy0, ix0 + idx, iy0 + idy])
+            self.coords = [x0, y0, x1 - x0, y1 - y0]
+
+    def to_mask(self, obj: ImageObj) -> np.ndarray:
+        """Create mask from ROI
+
+        Args:
+            obj: image object
+
+        Returns:
+            Mask (boolean array where True values are inside the ROI)
+        """
+        roi_mask = np.ones_like(obj.data, dtype=bool)
+        x0, y0, dx, dy = self.get_indices_coords(obj)
+        roi_mask[max(y0, 0) : y0 + dy, max(x0, 0) : x0 + dx] = False
+        return roi_mask
+
+    def to_param(self, obj: ImageObj, title: str | None = None) -> ROI2DParam:
+        """Convert ROI to parameters
+
+        Args:
+            obj: object (image), for physical-indices coordinates conversion
+            title: ROI title
+        """
+        param = ROI2DParam(title=self.title if title is None else title)
+        param.geometry = "rectangle"
+        param.x0, param.y0, param.dx, param.dy = self.get_indices_coords(obj)
+        return param
+
+    def to_plot_item(
+        self, obj: ImageObj, title: str | None = None
+    ) -> AnnotatedRectangle:
+        """Make and return the annnotated rectangle associated to ROI
+
+        Args:
+            obj: object (image), for physical-indices coordinates conversion
+            title: title
+        """
+
+        def info_callback(item: AnnotatedRectangle) -> str:
+            """Return info string for rectangular ROI"""
+            x0, y0, x1, y1 = item.get_rect()
+            if self.indices:
+                x0, y0, x1, y1 = obj.physical_to_indices([x0, y0, x1, y1])
+            x0, y0, dx, dy = self.rect_to_coords(x0, y0, x1, y1)
+            return "<br>".join(
+                [
+                    f"X0, Y0 = {x0:g}, {y0:g}",
+                    f"ΔX x ΔY  = {dx:g} x {dy:g}",
+                ]
+            )
+
+        x0, y0, dx, dy = self.get_physical_coords(obj)
+        x1, y1 = x0 + dx, y0 + dy
+        title = self.title if title is None else title
+        roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1, title)
+        roi_item.set_info_callback(info_callback)
+        param = roi_item.label.labelparam
+        param.anchor = "BL"
+        param.xc, param.yc = 5, -5
+        param.update_item(roi_item.label)
+        return roi_item
+
+    @staticmethod
+    def rect_to_coords(
+        x0: int | float, y0: int | float, x1: int | float, y1: int | float
+    ) -> np.ndarray:
+        """Convert rectangle to coordinates
+
+        Args:
+            x0: x0 (top-left corner)
+            y0: y0 (top-left corner)
+            x1: x1 (bottom-right corner)
+            y1: y1 (bottom-right corner)
+
+        Returns:
+            Rectangle coordinates
+        """
+        return np.array([x0, y0, x1 - x0, y1 - y0], dtype=type(x0))
+
+    @classmethod
+    def from_plot_item(cls: RectangularROI, item: AnnotatedRectangle) -> RectangularROI:
+        """Create ROI from plot item
+
+        Args:
+            item: plot item
+        """
+        rect = item.get_rect()
+        return cls(cls.rect_to_coords(*rect), False, item.annotationparam.title)
+
+
+class CircularROI(BaseSingleImageROI[AnnotatedCircle]):
+    """Circular ROI
+
+    Args:
+        coords: ROI edge coordinates (xc, yc, r)
+        title: title
+
+    .. note:: The image ROI coords are expressed in physical coordinates (floats)
+    """
+
+    # pylint: disable=unused-argument
+    @classmethod
+    def from_param(cls: CircularROI, obj: ImageObj, param: ROI2DParam) -> CircularROI:
+        """Create ROI from parameters
+
+        Args:
+            obj: image object
+            param: parameters
+        """
+        ix0, iy0, ix1, iy1 = param.get_bounding_box_indices()
+        ixc, iyc = (ix0 + ix1) * 0.5, (iy0 + iy1) * 0.5
+        ir = (ix1 - ix0) * 0.5
+        indices = True  # ROI coordinates are in pixel coordinates in `ROI2DParam`
+        return cls([ixc, iyc, ir], indices=indices, title=param.get_title())
+
+    def check_coords(self) -> None:
+        """Check if coords are valid
+
+        Raises:
+            ValueError: invalid coords
+        """
+        if len(self.coords) != 3:
+            raise ValueError("Circle ROI requires 3 coordinates")
+
+    def get_bounding_box(self, obj: ImageObj) -> tuple[float, float, float, float]:
+        """Get bounding box (physical coordinates)
+
+        Args:
+            obj: image object
+        """
+        xc, yc, r = self.get_physical_coords(obj)
+        return xc - r, yc - r, xc + r, yc + r
+
+    def translate(self, obj: ImageObj, dx: int, dy: int) -> None:
+        """Translate ROI
+
+        Args:
+            obj: image object
+            dx: translation along X-axis
+            dy: translation along Y-axis
+        """
+        coords = self.get_indices_coords(obj)
+        coords[0] += int(dx)
+        coords[1] += int(dy)
+        self.set_indices_coords(obj, coords)
+
+    def get_physical_coords(self, obj: ImageObj) -> np.ndarray:
+        """Return physical coords
+
+        Args:
+            obj: image object
+
+        Returns:
+            Physical coords
+        """
+        if self.indices:
+            ixc, iyc, ir = self.coords
+            x0, y0, x1, y1 = obj.indices_to_physical(
+                [ixc - ir, iyc - ir, ixc + ir, iyc + ir]
+            )
+            return [0.5 * (x0 + x1), 0.5 * (y0 + y1), 0.5 * (x1 - x0)]
+        return self.coords
+
+    def get_indices_coords(self, obj: ImageObj) -> np.ndarray:
+        """Return indices coords
+
+        Args:
+            obj: image object
+
+        Returns:
+            Indices coords
+        """
+        if self.indices:
+            return self.coords
+        ix0, iy0, ix1, iy1 = obj.physical_to_indices(self.get_bounding_box(obj))
+        ixc, iyc = int((ix0 + ix1) * 0.5), int((iy0 + iy1) * 0.5)
+        ir = int((ix1 - ix0) * 0.5)
+        return [ixc, iyc, ir]
+
+    def set_indices_coords(self, obj: ImageObj, coords: np.ndarray) -> None:
+        """Set indices coords
+
+        Args:
+            obj: object (signal/image)
+            coords: indices coords
+        """
+        if self.indices:
+            self.coords = coords
+        else:
+            ixc, iyc, ir = coords
+            x0, y0, x1, y1 = obj.indices_to_physical(
+                [ixc - ir, iyc - ir, ixc + ir, iyc + ir]
+            )
+            self.coords = [0.5 * (x0 + x1), 0.5 * (y0 + y1), 0.5 * (x1 - x0)]
+
+    def to_mask(self, obj: ImageObj) -> np.ndarray:
+        """Create mask from ROI
+
+        Args:
+            obj: image object
+
+        Returns:
+            Mask (boolean array where True values are inside the ROI)
+        """
+        roi_mask = np.ones_like(obj.data, dtype=bool)
+        ixc, iyc, ir = self.get_indices_coords(obj)
+        yxratio = obj.dy / obj.dx
+        rr, cc = draw.ellipse(iyc, ixc, ir / yxratio, ir, shape=obj.data.shape)
+        roi_mask[rr, cc] = False
+        return roi_mask
+
+    def to_param(self, obj: ImageObj, title: str | None = None) -> ROI2DParam:
+        """Convert ROI to parameters
+
+        Args:
+            obj: object (image), for physical-indices coordinates conversion
+            title: ROI title
+        """
+        param = ROI2DParam(title=self.title if title is None else title)
+        param.geometry = "circle"
+        param.xc, param.yc, param.r = self.get_indices_coords(obj)
+        return param
+
+    def to_plot_item(self, obj: ImageObj, title: str | None = None) -> AnnotatedCircle:
+        """Make and return the annnotated circle associated to ROI
+
+        Args:
+            obj: object (image), for physical-indices coordinates conversion
+            title: title
+        """
+
+        def info_callback(item: AnnotatedCircle) -> str:
+            """Return info string for circular ROI"""
+            x0, y0, x1, y1 = item.get_rect()
+            if self.indices:
+                x0, y0, x1, y1 = obj.physical_to_indices([x0, y0, x1, y1])
+            xc, yc, r = self.rect_to_coords(x0, y0, x1, y1)
+            return "<br>".join(
+                [
+                    f"Center = {xc:g}, {yc:g}",
+                    f"Radius = {r:g}",
+                ]
+            )
+
+        xc, yc, r = self.get_physical_coords(obj)
+        item = AnnotatedCircle(xc - r, yc, xc + r, yc)
+        item.set_info_callback(info_callback)
+        item.annotationparam.title = self.title if title is None else title
+        item.annotationparam.update_item(item)
+        item.set_style("plot", "shape/drag")
+        return item
+
+    @staticmethod
+    def rect_to_coords(
+        x0: int | float, y0: int | float, x1: int | float, y1: int | float
+    ) -> np.ndarray:
+        """Convert rectangle to circle coordinates
+
+        Args:
+            x0: x0 (top-left corner)
+            y0: y0 (top-left corner)
+            x1: x1 (bottom-right corner)
+            y1: y1 (bottom-right corner)
+
+        Returns:
+            Circle coordinates
+        """
+        xc, yc, r = 0.5 * (x0 + x1), 0.5 * (y0 + y1), 0.5 * (x1 - x0)
+        return np.array([xc, yc, r], dtype=type(x0))
+
+    @classmethod
+    def from_plot_item(cls: CircularROI, item: AnnotatedCircle) -> CircularROI:
+        """Create ROI from plot item
+
+        Args:
+            item: plot item
+        """
+        rect = item.get_rect()
+        return cls(cls.rect_to_coords(*rect), False, item.annotationparam.title)
+
+
+class ImageROI(
+    base.BaseROI[
+        "ImageObj",
+        BaseSingleImageROI,
+        ROI2DParam,
+        # `Union` is mandatory here for Python 3.9-3.10 compatibility:
+        Union[AnnotatedPolygon, AnnotatedRectangle, AnnotatedCircle],
+    ]
+):
+    """Image Regions of Interest
+
+    Args:
+        singleobj: if True, when extracting data defined by ROIs, only one object
+         is created (default to True). If False, one object is created per single ROI.
+         If None, the value is get from the user configuration
+        inverse: if True, ROI is outside the region
+    """
+
+    PREFIX = "i"
+
+    @staticmethod
+    def get_compatible_single_roi_classes() -> list[Type[BaseSingleImageROI]]:
+        """Return compatible single ROI classes"""
+        return [RectangularROI, CircularROI, PolygonalROI]
+
+    def to_mask(self, obj: ImageObj) -> np.ndarray[bool]:
+        """Create mask from ROI
+
+        Args:
+            obj: image object
+
+        Returns:
+            Mask (boolean array where True values are inside the ROI)
+        """
+        mask = np.ones_like(obj.data, dtype=bool)
+        for roi in self.single_rois:
+            mask &= roi.to_mask(obj)
+        return mask
+
+
+def create_image_roi(
+    geometry: Literal["rectangle", "circle", "polygon"],
+    coords: np.ndarray | list[float] | list[list[float]],
+    indices: bool = True,
+    singleobj: bool | None = None,
+    inverse: bool = False,
+    title: str = "",
+) -> ImageROI:
+    """Create Image Regions of Interest (ROI) object.
+    More ROIs can be added to the object after creation, using the `add_roi` method.
+
+    Args:
+        geometry: ROI type ('rectangle', 'circle', 'polygon')
+        coords: ROI coords (physical coordinates), `[x0, y0, dx, dy]` for a rectangle,
+         `[xc, yc, r]` for a circle, or `[x0, y0, x1, y1, ...]` for a polygon (lists or
+         NumPy arrays are accepted). For multiple ROIs, nested lists or NumPy arrays are
+         accepted but with a common geometry type (e.g.
+         `[[xc1, yc1, r1], [xc2, yc2, r2], ...]` for circles).
+        indices: if True, coordinates are indices, if False, they are physical values
+         (default to True for images)
+        singleobj: if True, when extracting data defined by ROIs, only one object
+         is created (default to True). If False, one object is created per single ROI.
+         If None, the value is get from the user configuration
+        inverse: if True, ROI is outside the region
+        title: title
+
+    Returns:
+        Regions of Interest (ROI) object
+
+    Raises:
+        ValueError: if ROI type is unknown or if the number of coordinates is invalid
+    """
+    coords = np.array(coords, float)
+    if coords.ndim == 1:
+        coords = coords.reshape(1, -1)
+    roi = ImageROI(singleobj, inverse)
+    if geometry == "rectangle":
+        if coords.shape[1] != 4:
+            raise ValueError("Rectangle ROI requires 4 coordinates")
+        for row in coords:
+            roi.add_roi(RectangularROI(row, indices, title))
+    elif geometry == "circle":
+        if coords.shape[1] != 3:
+            raise ValueError("Circle ROI requires 3 coordinates")
+        for row in coords:
+            roi.add_roi(CircularROI(row, indices, title))
+    elif geometry == "polygon":
+        if coords.shape[1] % 2 != 0:
+            raise ValueError("Polygon ROI requires pairs of X, Y coordinates")
+        for row in coords:
+            roi.add_roi(PolygonalROI(row, indices, title))
+    else:
+        raise ValueError(f"Unknown ROI type: {geometry}")
+    return roi
+
+
+class ImageObj(gds.DataSet, base.BaseObj[ImageROI, MaskedImageItem]):
     """Image object"""
 
     PREFIX = "i"
@@ -306,7 +840,11 @@ class ImageObj(gds.DataSet, base.BaseObj):
         base.BaseObj.__init__(self)
         self.regenerate_uuid()
         self._dicom_template = None
-        self._maskdata_cache = None
+
+    @staticmethod
+    def get_roi_class() -> Type[ImageROI]:
+        """Return ROI class"""
+        return ImageROI
 
     def regenerate_uuid(self):
         """Regenerate UUID
@@ -378,7 +916,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
     metadata = gds.DictItem(_("Metadata"), default={})
     _e_datag = gds.EndGroup(_("Data"))
 
-    _dxdyg = gds.BeginGroup(f'{_("Origin")} / {_("Pixel spacing")}')
+    _dxdyg = gds.BeginGroup(f"{_('Origin')} / {_('Pixel spacing')}")
     _origin = gds.BeginGroup(_("Origin"))
     x0 = gds.FloatItem("X<sub>0</sub>", default=0.0)
     y0 = gds.FloatItem("Y<sub>0</sub>", default=0.0).set_pos(col=1)
@@ -387,9 +925,9 @@ class ImageObj(gds.DataSet, base.BaseObj):
     dx = gds.FloatItem("Δx", default=1.0, nonzero=True)
     dy = gds.FloatItem("Δy", default=1.0, nonzero=True).set_pos(col=1)
     _e_pixel_spacing = gds.EndGroup(_("Pixel spacing"))
-    _e_dxdyg = gds.EndGroup(f'{_("Origin")} / {_("Pixel spacing")}')
+    _e_dxdyg = gds.EndGroup(f"{_('Origin')} / {_('Pixel spacing')}")
 
-    _unitsg = gds.BeginGroup(f'{_("Titles")} / {_("Units")}')
+    _unitsg = gds.BeginGroup(f"{_('Titles')} / {_('Units')}")
     title = gds.StringItem(_("Image title"), default=_("Untitled"))
     _tabs_u = gds.BeginTabGroup("units")
     _unitsx = gds.BeginGroup(_("X-axis"))
@@ -405,7 +943,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
     zunit = gds.StringItem(_("Unit"), default="")
     _e_unitsz = gds.EndGroup(_("Z-axis"))
     _e_tabs_u = gds.EndTabGroup("units")
-    _e_unitsg = gds.EndGroup(f'{_("Titles")} / {_("Units")}')
+    _e_unitsg = gds.EndGroup(f"{_('Titles')} / {_('Units')}")
 
     _scalesg = gds.BeginGroup(_("Scales"))
     _prop_autoscale = gds.GetAttrProp("autoscale")
@@ -441,14 +979,24 @@ class ImageObj(gds.DataSet, base.BaseObj):
     _e_tabs = gds.EndTabGroup("all")
 
     @property
+    def width(self) -> float:
+        """Return image width, i.e. number of columns multiplied by pixel size"""
+        return self.data.shape[1] * self.dx
+
+    @property
+    def height(self) -> float:
+        """Return image height, i.e. number of rows multiplied by pixel size"""
+        return self.data.shape[0] * self.dy
+
+    @property
     def xc(self) -> float:
         """Return image center X-axis coordinate"""
-        return self.x0 + 0.5 * self.data.shape[1] * self.dx
+        return self.x0 + 0.5 * self.width
 
     @property
     def yc(self) -> float:
         """Return image center Y-axis coordinate"""
-        return self.y0 + 0.5 * self.data.shape[0] * self.dy
+        return self.y0 + 0.5 * self.height
 
     def get_data(self, roi_index: int | None = None) -> np.ndarray:
         """
@@ -462,9 +1010,12 @@ class ImageObj(gds.DataSet, base.BaseObj):
             Masked data
         """
         if self.roi is None or roi_index is None:
-            return self.data
-        roidataitem = ImageRoiDataItem(self.roi[roi_index])
-        return roidataitem.get_image_masked_view(self)
+            view = self.data.view(ma.MaskedArray)
+            view.mask = np.isnan(self.data)
+            return view
+        single_roi = self.roi.get_single_roi(roi_index)
+        x0, y0, x1, y1 = self.physical_to_indices(single_roi.get_bounding_box(self))
+        return self.get_masked_view()[y0:y1, x0:x1]
 
     def copy(self, title: str | None = None, dtype: np.dtype | None = None) -> ImageObj:
         """Copy object.
@@ -495,11 +1046,13 @@ class ImageObj(gds.DataSet, base.BaseObj):
 
     def set_data_type(self, dtype: np.dtype) -> None:
         """Change data type.
+        If data type is integer, clip values to the new data type's range, thus avoiding
+        overflow or underflow.
 
         Args:
             Data type
         """
-        self.data = np.array(self.data, dtype=dtype)
+        self.data = clip_astype(self.data, dtype)
 
     def __viewable_data(self) -> np.ndarray:
         """Return viewable data"""
@@ -610,128 +1163,57 @@ class ImageObj(gds.DataSet, base.BaseObj):
         self.update_plot_item_parameters(item)
         item.plot().update_colormap_axis(item)
 
-    def get_roi_param(self, title, *defaults: int) -> gds.DataSet:
-        """Return ROI parameters dataset.
-
-        Args:
-            title: title
-            *defaults: default values
-        """
-        roidataitem = ImageRoiDataItem(defaults)
-        xd0, yd0, xd1, yd1 = defaults
-        param = ROI2DParam(title)
-        param.geometry = roidataitem.geometry
-        if roidataitem.geometry is RoiDataGeometries.RECTANGLE:
-            param.xr0, param.yr0, param.xr1, param.yr1 = xd0, yd0, xd1, yd1
-        else:
-            param.xc = int(0.5 * (xd0 + xd1))
-            param.yc = yd0
-            param.r = int(0.5 * (xd1 - xd0))
-        return param
-
-    def params_to_roidata(self, params: gds.DataSetGroup) -> np.ndarray | None:
-        """Convert ROI dataset group to ROI array data.
-
-        Args:
-            params: ROI dataset group
-
-        Returns:
-            ROI array data
-        """
-        roilist = []
-        for roiparam in params.datasets:
-            roiparam: ROI2DParam
-            roilist.append(roiparam.get_coords())
-        if len(roilist) == 0:
-            return None
-        return np.array(roilist, int)
-
-    def new_roi_item(
-        self, fmt: str, lbl: bool, editable: bool, geometry: RoiDataGeometries
-    ) -> MaskedImageItem:
-        """Return a new ROI item from scratch
-
-        Args:
-            fmt: format string
-            lbl: if True, add label
-            editable: if True, ROI is editable
-            geometry: ROI geometry
-        """
-        roidataitem = ImageRoiDataItem.from_image(self, geometry)
-        return roidataitem.make_roi_item(None, fmt, lbl, editable)
-
-    def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
-        """Convert ROI coordinates to indexes.
+    def physical_to_indices(
+        self, coords: list[float], clip: bool = False
+    ) -> np.ndarray:
+        """Convert coordinates from physical (real world) to (array) indices (pixel)
 
         Args:
             coords: coordinates
+            clip: if True, clip values to image boundaries
 
         Returns:
-            Indexes
+            Indices
         """
-        indexes = np.array(coords)
-        if indexes.size > 0:
-            indexes[:, ::2] -= self.x0 + 0.5 * self.dx
-            indexes[:, ::2] /= self.dx
-            indexes[:, 1::2] -= self.y0 + 0.5 * self.dy
-            indexes[:, 1::2] /= self.dy
-        return np.array(indexes, int)
+        indices = np.array(coords, float)
+        ndim = indices.ndim
+        if ndim == 1:
+            indices = indices.reshape(1, -1)
+        if indices.size > 0:
+            indices[:, ::2] -= self.x0 + 0.5 * self.dx
+            indices[:, ::2] /= self.dx
+            indices[:, 1::2] -= self.y0 + 0.5 * self.dy
+            indices[:, 1::2] /= self.dy
+        if clip:
+            indices[:, ::2] = np.clip(indices[:, ::2], 0, self.data.shape[1] - 1)
+            indices[:, 1::2] = np.clip(indices[:, 1::2], 0, self.data.shape[0] - 1)
+        if ndim == 1:
+            indices = indices.flatten()
+        return np.array(indices, int)
 
-    def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True) -> Iterator:
-        """Make plot item representing a Region of Interest.
+    def indices_to_physical(
+        self, indices: list[float | int] | np.ndarray
+    ) -> np.ndarray:
+        """Convert coordinates from (array) indices to physical (real world)
 
         Args:
-            fmt: format string
-            lbl: if True, add label
-            editable: if True, ROI is editable
-
-        Yields:
-            Plot item
-        """
-        if self.roi is not None:
-            roicoords = np.array(self.roi, float)
-            roicoords[:, ::2] *= self.dx
-            roicoords[:, ::2] += self.x0 - 0.5 * self.dx
-            roicoords[:, 1::2] *= self.dy
-            roicoords[:, 1::2] += self.y0 - 0.5 * self.dy
-            for index, coords in enumerate(roicoords):
-                roidataitem = ImageRoiDataItem(coords)
-                yield roidataitem.make_roi_item(index, fmt, lbl, editable)
-
-    @property
-    def maskdata(self) -> np.ndarray:
-        """Return masked data (areas outside defined regions of interest)
+            indices: indices
 
         Returns:
-            Masked data
+            Coordinates
         """
-        roi_changed = self.roi_has_changed()
-        if self.roi is None:
-            if roi_changed:
-                self._maskdata_cache = None
-        elif roi_changed or self._maskdata_cache is None:
-            mask = np.ones_like(self.data, dtype=bool)
-            for roirow in self.roi:
-                roidataitem = ImageRoiDataItem(roirow)
-                roi_mask = roidataitem.apply_mask(self.data, yxratio=self.dy / self.dx)
-                mask &= roi_mask
-            self._maskdata_cache = mask
-        return self._maskdata_cache
-
-    def get_masked_view(self) -> ma.MaskedArray:
-        """Return masked view for data
-
-        Returns:
-            Masked view
-        """
-        self.data: np.ndarray
-        view = self.data.view(ma.MaskedArray)
-        view.mask = self.maskdata
-        return view
-
-    def invalidate_maskdata_cache(self) -> None:
-        """Invalidate mask data cache: force to rebuild it"""
-        self._maskdata_cache = None
+        coords = np.array(indices, float)
+        ndim = coords.ndim
+        if ndim == 1:
+            coords = coords.reshape(1, -1)
+        if coords.size > 0:
+            coords[:, ::2] *= self.dx
+            coords[:, ::2] += self.x0 + 0.5 * self.dx
+            coords[:, 1::2] *= self.dy
+            coords[:, 1::2] += self.y0 + 0.5 * self.dy
+        if ndim == 1:
+            coords = coords.flatten()
+        return coords
 
     def add_label_with_title(self, title: str | None = None) -> None:
         """Add label with title annotation
@@ -825,16 +1307,15 @@ class ImageTypes(base.Choices):
 class NewImageParam(gds.DataSet):
     """New image dataset"""
 
+    hide_image_height = False
     hide_image_dtype = False
     hide_image_type = False
 
     title = gds.StringItem(_("Title"))
     height = gds.IntItem(
-        _("Height"), help=_("Image height (total number of rows)"), min=1
-    )
-    width = gds.IntItem(
-        _("Width"), help=_("Image width (total number of columns)"), min=1
-    )
+        _("Height"), help=_("Image height: number of rows"), min=1
+    ).set_prop("display", hide=gds.GetAttrProp("hide_image_height"))
+    width = gds.IntItem(_("Width"), help=_("Image width: number of columns"), min=1)
     dtype = gds.ChoiceItem(_("Data type"), ImageDatatypes.get_choices()).set_prop(
         "display", hide=gds.GetAttrProp("hide_image_dtype")
     )

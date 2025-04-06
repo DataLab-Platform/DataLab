@@ -64,7 +64,7 @@ spectrum using the "ROI extraction" feature from the "Operations" menu.
 
 .. figure:: ../../images/tutorials/spectrum/07.png
 
-    The "Regions of interest" dialog box is displayed. Click on "Add region of interest"
+    The "Regions of interest" dialog box is displayed. Click on "Add ROI"
     and resize the horizontal window to select the area. Then, click on "OK".
 
 .. figure:: ../../images/tutorials/spectrum/08.png

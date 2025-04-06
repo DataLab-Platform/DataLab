@@ -45,7 +45,7 @@ the DataLab installation.
 Special additional locations are available for plugins:
 
 - The `plugins` directory in the user configuration folder
-  (e.g. `C:\Users\JohnDoe\.DataLab\plugins` on Windows
+  (e.g. `C:/Users/JohnDoe/.DataLab/plugins` on Windows
   or `~/.DataLab/plugins` on Linux).
 
 - The `plugins` directory in the same folder as the `DataLab` executable
@@ -67,7 +67,7 @@ code completion, you can add the `cdl` package to your Python path.
 This can be done:
 
 - By installing DataLab in your Python environment (using one of the following methods:
-  :ref:`install_pip`, :ref:`install_wheel`, or :ref:`install_source`),
+  :ref:`install_conda`, :ref:`install_pip`, :ref:`install_wheel`, or :ref:`install_source`),
 
 - Or by adding the `cdl` package to your Python path manually:
 

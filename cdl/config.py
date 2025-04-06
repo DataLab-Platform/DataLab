@@ -94,6 +94,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    color_mode = conf.EnumOption(["auto", "dark", "light"], default="auto")
     process_isolation_enabled = conf.Option()
     rpc_server_enabled = conf.Option()
     rpc_server_port = conf.Option()
@@ -132,6 +133,10 @@ class IOSection(conf.Section, metaclass=conf.SectionMeta):
 
     # HDF5 file format options
     # ------------------------
+    # When opening an HDF5 file, ask user for confirmation if the current workspace
+    # has to be cleared before loading the file:
+    h5_clear_workspace = conf.Option()  # True: clear workspace, False: do not clear
+    h5_clear_workspace_ask = conf.Option()  # True: ask user, False: do not ask
     # Signal or image title when importing from HDF5 file:
     # - True: use HDF5 full dataset path in signal or image title
     # - False: use HDF5 dataset name in signal or image title
@@ -150,10 +155,20 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    # Operation mode:
+    # - "single": single operand mode
+    # - "pairwise": pairwise operation mode
+    operation_mode = conf.EnumOption(["single", "pairwise"], default="single")
+
     # ROI extraction strategy:
     # - True: extract all ROIs in a single signal or image
     # - False: extract each ROI in a separate signal or image
     extract_roi_singleobj = conf.Option()
+
+    # Keep analysis results after processing:
+    # - True: keep analysis results (dangerous because results may not be valid anymore)
+    # - False: do not keep analysis results (default)
+    keep_results = conf.Option()
 
     # FFT shift enabled state for signal/image processing:
     # - True: FFT shift is enabled (default)
@@ -282,6 +297,7 @@ def initialize():
     # options default values are set when used in the application code.
     #
     # Main section
+    Conf.main.color_mode.get("auto")
     Conf.main.process_isolation_enabled.get(True)
     Conf.main.rpc_server_enabled.get(True)
     Conf.main.traceback_log_path.get(f".{APP_NAME}_traceback.log")
@@ -295,12 +311,16 @@ def initialize():
     Conf.console.external_editor_path.get("code")
     Conf.console.external_editor_args.get("-g {path}:{line_number}")
     # IO section
+    Conf.io.h5_clear_workspace.get(False)
+    Conf.io.h5_clear_workspace_ask.get(True)
     Conf.io.h5_fullpath_in_title.get(False)
     Conf.io.h5_fname_in_title.get(True)
     Conf.io.imageio_formats.get(())
     # Proc section
+    Conf.proc.operation_mode.get("single")
     Conf.proc.fft_shift_enabled.get(True)
     Conf.proc.extract_roi_singleobj.get(False)
+    Conf.proc.keep_results.get(False)
     Conf.proc.ignore_warnings.get(False)
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
@@ -314,7 +334,7 @@ def initialize():
     Conf.view.sig_def_baseline.get(0.0)
     Conf.view.ima_def_colormap.get("viridis")
     Conf.view.ima_def_invert_colormap.get(False)
-    Conf.view.ima_def_interpolation.get(0)
+    Conf.view.ima_def_interpolation.get(5)
     Conf.view.ima_def_alpha.get(1.0)
     Conf.view.ima_def_alpha_function.get(LUTAlpha.NONE.value)
 
@@ -327,136 +347,190 @@ def reset():
 
 initialize()
 
+ROI_LINE_COLOR = "#5555ff"
+ROI_SEL_LINE_COLOR = "#9393ff"
 
 PLOTPY_DEFAULTS = {
     "plot": {
-        # "antialiasing": False,
-        # "title/font/size": 12,
-        # "title/font/bold": False,
-        # "marker/curve/text/font/size": 8,
-        # "marker/curve/text/font/family": "default",
-        # "marker/curve/text/font/bold": False,
-        # "marker/curve/text/font/italic": False,
+        #
+        # XXX: If needed in the future, add here the default settings for PlotPy:
+        # that will override the PlotPy settings.
+        # That is the right way to customize the PlotPy settings for shapes and
+        # annotations when they are added using tools from the DataLab application
+        # (see `BaseDataPanel.ANNOTATION_TOOLS`).
+        # For example, for shapes:
+        # "shape/drag/line/color": "#00ffff",
+        #
+        # Overriding default plot settings from PlotPy
         "marker/curve/text/textcolor": "black",
-        # "marker/curve/text/background_color": "#ffffff",
-        # "marker/curve/text/background_alpha": 0.8,
-        # "marker/cross/text/font/family": "default",
-        # "marker/cross/text/font/size": 8,
-        # "marker/cross/text/font/bold": False,
-        # "marker/cross/text/font/italic": False,
         "marker/cross/text/textcolor": "black",
-        # "marker/cross/text/background_color": "#ffffff",
         "marker/cross/text/background_alpha": 0.7,
-        # "marker/cross/line/style": "DashLine",
-        # "marker/cross/line/color": "yellow",
-        # "marker/cross/line/width": 1,
-        # "marker/cursor/text/font/size": 8,
-        # "marker/cursor/text/font/family": "default",
-        # "marker/cursor/text/font/bold": False,
-        # "marker/cursor/text/font/italic": False,
-        # "marker/cursor/text/textcolor": "#ff9393",
-        # "marker/cursor/text/background_color": "#ffffff",
-        # "marker/cursor/text/background_alpha": 0.8,
-        "shape/drag/symbol/marker": "NoSymbol",
-        "shape/mask/symbol/size": 5,
-        "shape/mask/sel_symbol/size": 8,
-        # -----------------------------------------------------------------------------
-        # Annotated shape style for annotations:
-        "shape/annotation/line/style": "SolidLine",
-        "shape/annotation/line/color": "#ffff00",
-        "shape/annotation/line/width": 1,
-        "shape/annotation/fill/style": "SolidPattern",
-        "shape/annotation/fill/color": MAIN_BG_COLOR,
-        "shape/annotation/fill/alpha": 0.1,
-        "shape/annotation/symbol/marker": "Rect",
-        "shape/annotation/symbol/size": 3,
-        "shape/annotation/symbol/edgecolor": "#ffff00",
-        "shape/annotation/symbol/facecolor": "#ffff00",
-        "shape/annotation/symbol/alpha": 1.0,
-        "shape/annotation/sel_line/style": "SolidLine",
-        "shape/annotation/sel_line/color": "#00ff00",
-        "shape/annotation/sel_line/width": 1,
-        "shape/annotation/sel_fill/style": "SolidPattern",
-        "shape/annotation/sel_fill/color": MAIN_BG_COLOR,
-        "shape/annotation/sel_fill/alpha": 0.1,
-        "shape/annotation/sel_symbol/marker": "Rect",
-        "shape/annotation/sel_symbol/size": 9,
-        "shape/annotation/sel_symbol/edgecolor": "#00aa00",
-        "shape/annotation/sel_symbol/facecolor": "#00ff00",
-        "shape/annotation/sel_symbol/alpha": 0.7,
-        # -----------------------------------------------------------------------------
-        # Annotated shape style for result shapes / signals:
-        "shape/result/s/line/style": "SolidLine",
-        "shape/result/s/line/color": MAIN_FG_COLOR,
-        "shape/result/s/line/width": 1,
-        "shape/result/s/fill/style": "SolidPattern",
-        "shape/result/s/fill/color": MAIN_BG_COLOR,
-        "shape/result/s/fill/alpha": 0.1,
-        "shape/result/s/symbol/marker": "XCross",
-        "shape/result/s/symbol/size": 7,
-        "shape/result/s/symbol/edgecolor": MAIN_FG_COLOR,
-        "shape/result/s/symbol/facecolor": MAIN_FG_COLOR,
-        "shape/result/s/symbol/alpha": 1.0,
-        "shape/result/s/sel_line/style": "SolidLine",
-        "shape/result/s/sel_line/color": "#00ff00",
-        "shape/result/s/sel_line/width": 1,
-        "shape/result/s/sel_fill/style": "SolidPattern",
-        "shape/result/s/sel_fill/color": MAIN_BG_COLOR,
-        "shape/result/s/sel_fill/alpha": 0.1,
-        "shape/result/s/sel_symbol/marker": "Rect",
-        "shape/result/s/sel_symbol/size": 9,
-        "shape/result/s/sel_symbol/edgecolor": "#00aa00",
-        "shape/result/s/sel_symbol/facecolor": "#00ff00",
-        "shape/result/s/sel_symbol/alpha": 0.7,
-        # -----------------------------------------------------------------------------
-        # Annotated shape style for result shapes / images:
-        "shape/result/i/line/style": "SolidLine",
-        "shape/result/i/line/color": "#ffff00",
-        "shape/result/i/line/width": 1,
-        "shape/result/i/fill/style": "SolidPattern",
-        "shape/result/i/fill/color": MAIN_BG_COLOR,
-        "shape/result/i/fill/alpha": 0.1,
-        "shape/result/i/symbol/marker": "Rect",
-        "shape/result/i/symbol/size": 3,
-        "shape/result/i/symbol/edgecolor": "#ffff00",
-        "shape/result/i/symbol/facecolor": "#ffff00",
-        "shape/result/i/symbol/alpha": 1.0,
-        "shape/result/i/sel_line/style": "SolidLine",
-        "shape/result/i/sel_line/color": "#00ff00",
-        "shape/result/i/sel_line/width": 1,
-        "shape/result/i/sel_fill/style": "SolidPattern",
-        "shape/result/i/sel_fill/color": MAIN_BG_COLOR,
-        "shape/result/i/sel_fill/alpha": 0.1,
-        "shape/result/i/sel_symbol/marker": "Rect",
-        "shape/result/i/sel_symbol/size": 9,
-        "shape/result/i/sel_symbol/edgecolor": "#00aa00",
-        "shape/result/i/sel_symbol/facecolor": "#00ff00",
-        "shape/result/i/sel_symbol/alpha": 0.7,
-        # -----------------------------------------------------------------------------
-        # Style for result properties labels:
-        "label/properties/symbol/marker": "NoSymbol",
-        "label/properties/symbol/size": 0,
-        "label/properties/symbol/edgecolor": MAIN_BG_COLOR,
-        "label/properties/symbol/facecolor": MAIN_BG_COLOR,
-        "label/properties/border/style": "SolidLine",
-        "label/properties/border/color": "#cbcbcb",
-        "label/properties/border/width": 1,
-        "label/properties/font/size": 8,
-        "label/properties/font/family/nt": ["Cascadia Code", "Consolas", "Courier New"],
-        "label/properties/font/family/posix": "Bitstream Vera Sans Mono",
-        "label/properties/font/family/mac": "Monaco",
-        "label/properties/font/bold": False,
-        "label/properties/font/italic": False,
-        "label/properties/color": MAIN_FG_COLOR,
-        "label/properties/bgcolor": MAIN_BG_COLOR,
-        "label/properties/bgalpha": 0.8,
-        "label/properties/anchor": "L",
-        "label/properties/xc": 0,
-        "label/properties/yc": 0,
-        "label/properties/abspos": True,
-        "label/properties/absg": "L",
-        "label/properties/xg": 0.0,
-        "label/properties/yg": 0.0,
+    },
+    "results": {  # Annotated shape style for result shapes
+        # Signals:
+        "s/line/style": "SolidLine",
+        "s/line/color": MAIN_FG_COLOR,
+        "s/line/width": 1,
+        "s/fill/style": "SolidPattern",
+        "s/fill/color": MAIN_BG_COLOR,
+        "s/fill/alpha": 0.1,
+        "s/symbol/marker": "XCross",
+        "s/symbol/size": 7,
+        "s/symbol/edgecolor": MAIN_FG_COLOR,
+        "s/symbol/facecolor": MAIN_FG_COLOR,
+        "s/symbol/alpha": 1.0,
+        "s/sel_line/style": "SolidLine",
+        "s/sel_line/color": "#00ff00",
+        "s/sel_line/width": 1,
+        "s/sel_fill/style": "SolidPattern",
+        "s/sel_fill/color": MAIN_BG_COLOR,
+        "s/sel_fill/alpha": 0.1,
+        "s/sel_symbol/marker": "Rect",
+        "s/sel_symbol/size": 9,
+        "s/sel_symbol/edgecolor": "#00aa00",
+        "s/sel_symbol/facecolor": "#00ff00",
+        "s/sel_symbol/alpha": 0.7,
+        # Images:
+        "i/line/style": "SolidLine",
+        "i/line/color": "#ffff00",
+        "i/line/width": 1,
+        "i/fill/style": "SolidPattern",
+        "i/fill/color": MAIN_BG_COLOR,
+        "i/fill/alpha": 0.1,
+        "i/symbol/marker": "Rect",
+        "i/symbol/size": 3,
+        "i/symbol/edgecolor": "#ffff00",
+        "i/symbol/facecolor": "#ffff00",
+        "i/symbol/alpha": 1.0,
+        "i/sel_line/style": "SolidLine",
+        "i/sel_line/color": "#00ff00",
+        "i/sel_line/width": 1,
+        "i/sel_fill/style": "SolidPattern",
+        "i/sel_fill/color": MAIN_BG_COLOR,
+        "i/sel_fill/alpha": 0.1,
+        "i/sel_symbol/marker": "Rect",
+        "i/sel_symbol/size": 9,
+        "i/sel_symbol/edgecolor": "#00aa00",
+        "i/sel_symbol/facecolor": "#00ff00",
+        "i/sel_symbol/alpha": 0.7,
+    },
+    "properties": {  # Style for result properties labels
+        "label/symbol/marker": "NoSymbol",
+        "label/symbol/size": 0,
+        "label/symbol/edgecolor": MAIN_BG_COLOR,
+        "label/symbol/facecolor": MAIN_BG_COLOR,
+        "label/border/style": "SolidLine",
+        "label/border/color": "#cbcbcb",
+        "label/border/width": 1,
+        "label/font/size": 8,
+        "label/font/family/nt": ["Cascadia Code", "Consolas", "Courier New"],
+        "label/font/family/posix": "Bitstream Vera Sans Mono",
+        "label/font/family/mac": "Monaco",
+        "label/font/bold": False,
+        "label/font/italic": False,
+        "label/color": MAIN_FG_COLOR,
+        "label/bgcolor": MAIN_BG_COLOR,
+        "label/bgalpha": 0.8,
+        "label/anchor": "L",
+        "label/xc": 0,
+        "label/yc": 0,
+        "label/abspos": True,
+        "label/absg": "L",
+        "label/xg": 0.0,
+        "label/yg": 0.0,
+    },
+    "roi": {  # Shape style for ROI
+        # Signals:
+        # - Editable ROI (ROI editor):
+        "s/editable/line/style": "SolidLine",
+        "s/editable/line/color": "#ffff00",
+        "s/editable/line/width": 1,
+        "s/editable/fill/style": "SolidPattern",
+        "s/editable/fill/color": MAIN_BG_COLOR,
+        "s/editable/fill/alpha": 0.1,
+        "s/editable/symbol/marker": "Rect",
+        "s/editable/symbol/size": 3,
+        "s/editable/symbol/edgecolor": "#ffff00",
+        "s/editable/symbol/facecolor": "#ffff00",
+        "s/editable/symbol/alpha": 1.0,
+        "s/editable/sel_line/style": "SolidLine",
+        "s/editable/sel_line/color": "#00ff00",
+        "s/editable/sel_line/width": 1,
+        "s/editable/sel_fill/style": "SolidPattern",
+        "s/editable/sel_fill/color": MAIN_BG_COLOR,
+        "s/editable/sel_fill/alpha": 0.1,
+        "s/editable/sel_symbol/marker": "Rect",
+        "s/editable/sel_symbol/size": 9,
+        "s/editable/sel_symbol/edgecolor": "#00aa00",
+        "s/editable/sel_symbol/facecolor": "#00ff00",
+        "s/editable/sel_symbol/alpha": 0.7,
+        # - Readonly ROI (plot):
+        "s/readonly/line/style": "SolidLine",
+        "s/readonly/line/color": ROI_LINE_COLOR,
+        "s/readonly/line/width": 1,
+        "s/readonly/sel_line/style": "SolidLine",
+        "s/readonly/sel_line/color": ROI_SEL_LINE_COLOR,
+        "s/readonly/sel_line/width": 2,
+        "s/readonly/fill": ROI_LINE_COLOR,
+        "s/readonly/shade": 0.15,
+        "s/readonly/symbol/marker": "Ellipse",
+        "s/readonly/symbol/size": 7,
+        "s/readonly/symbol/edgecolor": MAIN_BG_COLOR,
+        "s/readonly/symbol/facecolor": ROI_LINE_COLOR,
+        "s/readonly/symbol/alpha": 1.0,
+        "s/readonly/sel_symbol/marker": "Ellipse",
+        "s/readonly/sel_symbol/size": 9,
+        "s/readonly/sel_symbol/edgecolor": MAIN_BG_COLOR,
+        "s/readonly/sel_symbol/facecolor": ROI_SEL_LINE_COLOR,
+        "s/readonly/sel_symbol/alpha": 0.9,
+        "s/readonly/multi/color": "#806060",
+        # Images:
+        # - Editable ROI (ROI editor):
+        "i/editable/line/style": "SolidLine",
+        "i/editable/line/color": "#ffff00",
+        "i/editable/line/width": 1,
+        "i/editable/fill/style": "SolidPattern",
+        "i/editable/fill/color": MAIN_BG_COLOR,
+        "i/editable/fill/alpha": 0.1,
+        "i/editable/symbol/marker": "Rect",
+        "i/editable/symbol/size": 3,
+        "i/editable/symbol/edgecolor": "#ffff00",
+        "i/editable/symbol/facecolor": "#ffff00",
+        "i/editable/symbol/alpha": 1.0,
+        "i/editable/sel_line/style": "SolidLine",
+        "i/editable/sel_line/color": "#00ff00",
+        "i/editable/sel_line/width": 1,
+        "i/editable/sel_fill/style": "SolidPattern",
+        "i/editable/sel_fill/color": MAIN_BG_COLOR,
+        "i/editable/sel_fill/alpha": 0.1,
+        "i/editable/sel_symbol/marker": "Rect",
+        "i/editable/sel_symbol/size": 9,
+        "i/editable/sel_symbol/edgecolor": "#00aa00",
+        "i/editable/sel_symbol/facecolor": "#00ff00",
+        "i/editable/sel_symbol/alpha": 0.7,
+        # - Readonly ROI (plot):
+        "i/readonly/line/style": "DotLine",
+        "i/readonly/line/color": ROI_LINE_COLOR,
+        "i/readonly/line/width": 1,
+        "i/readonly/fill/style": "SolidPattern",
+        "i/readonly/fill/color": MAIN_BG_COLOR,
+        "i/readonly/fill/alpha": 0.1,
+        "i/readonly/symbol/marker": "NoSymbol",
+        "i/readonly/symbol/size": 5,
+        "i/readonly/symbol/edgecolor": ROI_LINE_COLOR,
+        "i/readonly/symbol/facecolor": ROI_LINE_COLOR,
+        "i/readonly/symbol/alpha": 0.6,
+        "i/readonly/sel_line/style": "DotLine",
+        "i/readonly/sel_line/color": "#0000ff",
+        "i/readonly/sel_line/width": 1,
+        "i/readonly/sel_fill/style": "SolidPattern",
+        "i/readonly/sel_fill/color": MAIN_BG_COLOR,
+        "i/readonly/sel_fill/alpha": 0.1,
+        "i/readonly/sel_symbol/marker": "Rect",
+        "i/readonly/sel_symbol/size": 8,
+        "i/readonly/sel_symbol/edgecolor": "#0000aa",
+        "i/readonly/sel_symbol/facecolor": "#0000ff",
+        "i/readonly/sel_symbol/alpha": 0.7,
     },
 }
 

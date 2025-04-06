@@ -7,6 +7,7 @@ Signal base line selection unit test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.env import execenv
@@ -23,9 +24,9 @@ def test_signal_baseline_selection():
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
         exec_dialog(dlg)
     execenv.print(f"baseline: {dlg.get_baseline()}")
-    execenv.print(f"index range: {dlg.get_index_range()}")
+    execenv.print(f"X range: {dlg.get_x_range()}")
     # Check baseline value:
-    i0, i1 = dlg.get_index_range()
+    i0, i1 = np.searchsorted(sig.x, dlg.get_x_range())
     assert dlg.get_baseline() == sig.data[i0:i1].mean()
 
 

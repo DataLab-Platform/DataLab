@@ -29,11 +29,16 @@ set RESPATH=%CLONEDIR%\resources
 for %%s in (16 24 32 48 128 256) do (
   %INKSCAPE_PATH% "%RESPATH%\%LIBNAME%.svg" -o "%RESPATH%\tmp-%%s.png" -w %%s -h %%s
 )
-magick convert "%RESPATH%\tmp-*.png" "%RESPATH%\%LIBNAME%.ico"
+magick "%RESPATH%\tmp-*.png" "%RESPATH%\%LIBNAME%.ico"
 del "%RESPATH%\tmp-*.png"
 
 @REM Building executable
 pyinstaller %LIBNAME%.spec --noconfirm --clean
+
+@REM Windows 7 SP1 compatibility fix
+copy "%RESPATH%\api-ms-win-core-path-l1-1-0.dll" "dist\%LIBNAME%\_internal" /Y
+
+@REM Zipping executable
 cd dist
 set ZIPNAME=%LIBNAME%-v%VERSION%_exe.zip
 "C:\Program Files\7-Zip\7z.exe" a -mx1 "%ZIPNAME%" %LIBNAME%

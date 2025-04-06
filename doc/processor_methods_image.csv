@@ -7,6 +7,7 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_edges`,Compute all edges filters
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`,Compute all morphology filters
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`,Compute all threshold algorithms
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_arithmetic`,Compute arithmetic operation between two images
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_astype`,Convert data type with :py:func:`cdl.computation.image.compute_astype`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average`,Compute average with :py:func:`cdl.computation.image.compute_addition`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`,Compute average profile
@@ -49,6 +50,7 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks`,Compute peak detection based on a circle Hough transform
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_ifft`,Compute iFFT with :py:func:`cdl.computation.image.compute_ifft`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_im`,Compute imaginary part with :py:func:`cdl.computation.image.compute_im`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_inverse`,Compute inverse
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_laplace`,Compute Laplace filter
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`,Compute profile along a vertical or horizontal line
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_log10`,Compute Log10 with :py:func:`cdl.computation.image.compute_log10`

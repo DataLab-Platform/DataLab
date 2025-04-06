@@ -11,6 +11,7 @@ setlocal
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% UsePython
 cd %SCRIPTPATH%\..
+python.exe -m pip install --upgrade pip
 pip install --upgrade -r requirements.txt
 pip list > pip_list.txt
 call %FUNC% EndOfScript

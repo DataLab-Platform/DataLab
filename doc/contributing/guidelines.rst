@@ -51,7 +51,7 @@ In addition to the generic coding guidelines, we have the following specific
 guidelines:
 
 - Write docstrings for all classes, methods and functions. The docstrings
-  should follow the `Google style <http://google-styleguide.googlecode.com/svn/trunk/pyguide.html?showone=Comments#Comments>`_.
+  should follow the `Google style <https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings>`_.
 
 - Add typing annotations for all functions and methods. The annotations should
   use the future syntax (``from __future__ import annotations``)

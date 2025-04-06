@@ -87,7 +87,7 @@ class AbstractCDLControl(abc.ABC):
         """Return all public methods of the class, except itself.
 
         Returns:
-            list[str]: List of public methods
+            List of public methods
         """
         return [
             method
@@ -101,7 +101,7 @@ class AbstractCDLControl(abc.ABC):
         """Return DataLab public version.
 
         Returns:
-            str: DataLab version
+            DataLab version
         """
 
     @abc.abstractmethod
@@ -117,7 +117,7 @@ class AbstractCDLControl(abc.ABC):
         """Return current panel name.
 
         Returns:
-            str: Panel name (valid values: "signal", "image", "macro"))
+            Panel name (valid values: "signal", "image", "macro"))
         """
 
     @abc.abstractmethod
@@ -125,7 +125,7 @@ class AbstractCDLControl(abc.ABC):
         """Switch to panel.
 
         Args:
-            panel (str): Panel name (valid values: "signal", "image", "macro"))
+            panel: Panel name (valid values: "signal", "image", "macro"))
         """
 
     @abc.abstractmethod
@@ -137,7 +137,7 @@ class AbstractCDLControl(abc.ABC):
         """Toggle auto refresh state.
 
         Args:
-            state (bool): Auto refresh state
+            state: Auto refresh state
         """
 
     # Returns a context manager to temporarily disable autorefresh
@@ -168,7 +168,7 @@ class AbstractCDLControl(abc.ABC):
         """Toggle show titles state.
 
         Args:
-            state (bool): Show titles state
+            state: Show titles state
         """
 
     @abc.abstractmethod
@@ -176,7 +176,7 @@ class AbstractCDLControl(abc.ABC):
         """Save to a DataLab HDF5 file.
 
         Args:
-            filename (str): HDF5 file name
+            filename: HDF5 file name
         """
 
     @abc.abstractmethod
@@ -189,10 +189,9 @@ class AbstractCDLControl(abc.ABC):
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
         Args:
-            h5files (list[str] | None): List of HDF5 files to open. Defaults to None.
-            import_all (bool | None): Import all objects from HDF5 files.
-                Defaults to None.
-            reset_all (bool | None): Reset all application data. Defaults to None.
+            h5files: List of HDF5 files to open. Defaults to None.
+            import_all: Import all objects from HDF5 files. Defaults to None.
+            reset_all: Reset all application data. Defaults to None.
         """
 
     @abc.abstractmethod
@@ -200,8 +199,8 @@ class AbstractCDLControl(abc.ABC):
         """Open DataLab HDF5 browser to Import HDF5 file.
 
         Args:
-            filename (str): HDF5 file name
-            reset_all (bool | None): Reset all application data. Defaults to None.
+            filename: HDF5 file name
+            reset_all: Reset all application data. Defaults to None.
         """
 
     @abc.abstractmethod
@@ -210,6 +209,14 @@ class AbstractCDLControl(abc.ABC):
 
         Args:
             filenames: list of file names
+        """
+
+    @abc.abstractmethod
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
         """
 
     @abc.abstractmethod
@@ -222,20 +229,24 @@ class AbstractCDLControl(abc.ABC):
         yunit: str | None = None,
         xlabel: str | None = None,
         ylabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
         Args:
-            title (str): Signal title
-            xdata (numpy.ndarray): X data
-            ydata (numpy.ndarray): Y data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
+            title: Signal title
+            xdata: X data
+            ydata: Y data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            group_id: group id in which to add the signal. Defaults to ""
+            set_current: if True, set the added signal as current
 
         Returns:
-            bool: True if signal was added successfully, False otherwise
+            True if signal was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid xdata dtype
@@ -253,24 +264,58 @@ class AbstractCDLControl(abc.ABC):
         xlabel: str | None = None,
         ylabel: str | None = None,
         zlabel: str | None = None,
+        group_id: str = "",
+        set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab.
 
         Args:
-            title (str): Image title
-            data (numpy.ndarray): Image data
-            xunit (str | None): X unit. Defaults to None.
-            yunit (str | None): Y unit. Defaults to None.
-            zunit (str | None): Z unit. Defaults to None.
-            xlabel (str | None): X label. Defaults to None.
-            ylabel (str | None): Y label. Defaults to None.
-            zlabel (str | None): Z label. Defaults to None.
+            title: Image title
+            data: Image data
+            xunit: X unit. Defaults to None
+            yunit: Y unit. Defaults to None
+            zunit: Z unit. Defaults to None
+            xlabel: X label. Defaults to None
+            ylabel: Y label. Defaults to None
+            zlabel: Z label. Defaults to None
+            group_id: group id in which to add the image. Defaults to ""
+            set_current: if True, set the added image as current
 
         Returns:
-            bool: True if image was added successfully, False otherwise
+            True if image was added successfully, False otherwise
 
         Raises:
             ValueError: Invalid data dtype
+        """
+
+    @abc.abstractmethod
+    def add_object(
+        self,
+        obj: SignalObj | ImageObj,
+        group_id: str = "",
+        set_current: bool = True,
+    ) -> None:
+        """Add object to DataLab.
+
+        Args:
+            obj: Signal or image object
+            group_id: group id in which to add the object. Defaults to ""
+            set_current: if True, set the added object as current
+
+        Returns:
+            True if object was added successfully, False otherwise
+        """
+
+    @abc.abstractmethod
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
         """
 
     @abc.abstractmethod
@@ -307,8 +352,8 @@ class AbstractCDLControl(abc.ABC):
         Args:
             selection: List of group numbers (1 to N), or list of group uuids,
              or None to select all groups. Defaults to None.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used. Defaults to None.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used. Defaults to None.
         """
 
     @abc.abstractmethod
@@ -329,7 +374,7 @@ class AbstractCDLControl(abc.ABC):
         """Return groups titles and lists of inner objects uuids and titles.
 
         Returns:
-            Tuple: groups titles, lists of inner objects uuids and titles
+            Groups titles, lists of inner objects uuids and titles
         """
 
     @abc.abstractmethod
@@ -369,16 +414,20 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
-            list[str]: list of object uuids
+            List of object uuids
 
         Raises:
             ValueError: if panel not found
@@ -408,10 +457,10 @@ class AbstractCDLControl(abc.ABC):
         """Add object annotations (annotation plot items).
 
         Args:
-            items (list): annotation plot items
-            refresh_plot (bool | None): refresh plot. Defaults to True.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            items: annotation plot items
+            refresh_plot: refresh plot. Defaults to True.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
 
     @abc.abstractmethod
@@ -421,10 +470,10 @@ class AbstractCDLControl(abc.ABC):
         """Add a label with object title on the associated plot
 
         Args:
-            title (str | None): Label title. Defaults to None.
-                If None, the title is the object title.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            title: Label title. Defaults to None.
+             If None, the title is the object title.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
 
     @abc.abstractmethod
@@ -432,8 +481,8 @@ class AbstractCDLControl(abc.ABC):
         """Run macro.
 
         Args:
-             number: Number of the macro (starting at 1). Defaults to None (run
-              current macro, or does nothing if there is no macro).
+            number: Number of the macro (starting at 1). Defaults to None (run
+             current macro, or does nothing if there is no macro).
         """
 
     @abc.abstractmethod
@@ -469,7 +518,7 @@ class AbstractCDLControl(abc.ABC):
         """Return compute function ``name`` in current panel's processor.
 
         Args:
-            name (str): Compute function name
+            name: Compute function name
 
         Returns:
             Callable: Compute function
@@ -482,11 +531,10 @@ class AbstractCDLControl(abc.ABC):
             """Compute function.
 
             Args:
-                param (guidata.dataset.DataSet | None): Compute function
-                 parameter. Defaults to None.
+                param: Compute function parameter. Defaults to None.
 
             Returns:
-                guidata.dataset.DataSet: Compute function result
+                Compute function result
             """
             return self.calc(name, param)
 
@@ -499,9 +547,8 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
     """Common base class for DataLab proxies
 
     Args:
-        cdl (CDLMainWindow | ServerProxy | None): CDLMainWindow instance or
-            ServerProxy instance. If None, then the proxy implementation will
-            have to set it later (e.g. see RemoteClient).
+        cdl: CDLMainWindow instance or ServerProxy instance. If None, then the proxy
+         implementation will have to set it later (e.g. see RemoteClient).
     """
 
     def __init__(self, cdl: CDLMainWindow | ServerProxy | None = None) -> None:
@@ -511,7 +558,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Return DataLab public version.
 
         Returns:
-            str: DataLab version
+            DataLab version
         """
         return self._cdl.get_version()
 
@@ -527,7 +574,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Return current panel name.
 
         Returns:
-            str: Panel name (valid values: "signal", "image", "macro"))
+            Panel name (valid values: "signal", "image", "macro"))
         """
         return self._cdl.get_current_panel()
 
@@ -535,7 +582,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Switch to panel.
 
         Args:
-            panel (str): Panel name (valid values: "signal", "image", "macro"))
+            panel: Panel name (valid values: "signal", "image", "macro"))
         """
         self._cdl.set_current_panel(panel)
 
@@ -547,7 +594,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Toggle auto refresh state.
 
         Args:
-            state (bool): Auto refresh state
+            state: Auto refresh state
         """
         self._cdl.toggle_auto_refresh(state)
 
@@ -555,7 +602,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Toggle show titles state.
 
         Args:
-            state (bool): Show titles state
+            state: Show titles state
         """
         self._cdl.toggle_show_titles(state)
 
@@ -563,7 +610,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Save to a DataLab HDF5 file.
 
         Args:
-            filename (str): HDF5 file name
+            filename: HDF5 file name
         """
         self._cdl.save_to_h5_file(filename)
 
@@ -576,10 +623,9 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
         Args:
-            h5files (list[str] | None): List of HDF5 files to open. Defaults to None.
-            import_all (bool | None): Import all objects from HDF5 files.
-                Defaults to None.
-            reset_all (bool | None): Reset all application data. Defaults to None.
+            h5files: List of HDF5 files to open. Defaults to None.
+            import_all: Import all objects from HDF5 files. Defaults to None.
+            reset_all: Reset all application data. Defaults to None.
         """
         self._cdl.open_h5_files(h5files, import_all, reset_all)
 
@@ -587,8 +633,8 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Open DataLab HDF5 browser to Import HDF5 file.
 
         Args:
-            filename (str): HDF5 file name
-            reset_all (bool | None): Reset all application data. Defaults to None.
+            filename: HDF5 file name
+            reset_all: Reset all application data. Defaults to None.
         """
         self._cdl.import_h5_file(filename, reset_all)
 
@@ -600,6 +646,14 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         self._cdl.load_from_files(filenames)
 
+    def load_from_directory(self, path: str) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+        """
+        self._cdl.load_from_directory(path)
+
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
 
@@ -610,6 +664,18 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
             List of selected objects uuids.
         """
         return self._cdl.get_sel_object_uuids(include_groups)
+
+    def add_group(
+        self, title: str, panel: str | None = None, select: bool = False
+    ) -> None:
+        """Add group to DataLab.
+
+        Args:
+            title: Group title
+            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            select: Select the group after creation. Defaults to False.
+        """
+        self._cdl.add_group(title, panel, select)
 
     def select_objects(
         self,
@@ -633,8 +699,8 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         Args:
             selection: List of group numbers (1 to N), or list of group uuids,
              or None to select all groups. Defaults to None.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used. Defaults to None.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used. Defaults to None.
         """
         self._cdl.select_groups(selection, panel)
 
@@ -675,21 +741,25 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         return self._cdl.get_object_titles(panel)
 
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+    def get_object_uuids(
+        self, panel: str | None = None, group: int | str | None = None
+    ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
+            group: Group number, or group id, or group title.
+             Defaults to None (all groups).
 
         Returns:
-            list[str]: list of object uuids
+            List of object uuids
 
         Raises:
             ValueError: if panel not found
         """
-        return self._cdl.get_object_uuids(panel)
+        return self._cdl.get_object_uuids(panel, group)
 
     def add_label_with_title(
         self, title: str | None = None, panel: str | None = None
@@ -697,10 +767,10 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """Add a label with object title on the associated plot
 
         Args:
-            title (str | None): Label title. Defaults to None.
-                If None, the title is the object title.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            title: Label title. Defaults to None.
+             If None, the title is the object title.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
         """
         self._cdl.add_label_with_title(title, panel)
 
@@ -735,14 +805,3 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
             filename: Filename.
         """
         return self._cdl.import_macro_from_file(filename)
-
-    # ----- Proxy specific methods ------------------------------------------------
-    # (not available symetrically in AbstractCDLControl)
-
-    @abc.abstractmethod
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
-        """Add object to DataLab.
-
-        Args:
-            obj (SignalObj | ImageObj): Signal or image object
-        """

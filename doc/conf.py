@@ -20,11 +20,7 @@ release = cdl.__version__
 rst_prolog = f"""
 .. |download_link1| raw:: html
 
-    <a href="https://github.com/DataLab-Platform/DataLab/releases/download/v{release}/DataLab-{release}.msi">DataLab {release} | Windows 8, 10, 11</a>
-
-.. |download_link2| raw:: html
-
-    <a href="https://github.com/DataLab-Platform/DataLab/releases/download/v{release}/DataLab-{release}-Win7.msi">DataLab {release} | Windows 7 SP1</a>
+    <a href="https://github.com/DataLab-Platform/DataLab/releases/download/v{release}/DataLab-{release}.msi">DataLab {release} | Windows 7 SP1, 8, 10, 11</a>
 """  # noqa: E501
 
 # -- General configuration ---------------------------------------------------
@@ -50,7 +46,6 @@ sitemap_locales = ["en", "fr"]
 sitemap_filename = "../sitemap.xml"
 
 # -- Options for HTML output -------------------------------------------------
-
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/DataLab-Title.svg"
 html_title = project
@@ -58,9 +53,9 @@ html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
-    ann = "DataLab a été dévoilé à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Tacoma, Etats-Unis) et sera présenté en détails à <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
+    ann = "DataLab a été dévoilé à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Etats-Unis) et présenté en détails à <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>, puis à <a href='https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK'>Open Source Experience 2024</a> ! 🚀"  # noqa: E501
 else:
-    ann = "DataLab has been introduced at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Tacoma, WA) and will be presented thoroughly at <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
+    ann = "DataLab has been introduced at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Tacoma, WA) and presented thoroughly at <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
 html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
@@ -88,23 +83,20 @@ html_theme_options = {
 html_static_path = ["_static"]
 
 # -- Options for LaTeX output ------------------------------------------------
-
 latex_logo = "_static/DataLab-Frontpage.png"
 
 # -- Options for sphinx-intl package -----------------------------------------
-
 locale_dirs = ["locale/"]  # path is example but recommended.
-gettext_compact = False  # optional.
+gettext_compact = False
+gettext_location = False
 
 # -- Options for autodoc extension -------------------------------------------
-
 autodoc_default_options = {
     "members": True,
     "member-order": "bysource",
 }
 
 # -- Options for intersphinx extension ---------------------------------------
-
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "qwt": ("https://pythonqwt.readthedocs.io/en/latest/", None),
