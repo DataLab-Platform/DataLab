@@ -1080,7 +1080,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             return None
         edited_roi, modified = results
         objs = self.panel.objview.get_sel_objects(include_groups=True)
-        obj = objs[0]
+        obj = objs[-1]
         group = edited_roi.to_params(obj)
         if (
             env.execenv.unattended  # Unattended mode (automated unit tests)
