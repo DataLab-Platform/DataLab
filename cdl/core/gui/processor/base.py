@@ -1099,7 +1099,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                             obj_i.roi = edited_roi
                 self.SIG_ADD_SHAPE.emit(obj.uuid)
                 # self.panel.selection_changed(update_items=True)
-                self.panel.manual_refresh()
+                self.panel.refresh_plot(
+                    "selected",
+                    update_items=True,
+                    only_visible=False,
+                    only_existing=True,
+                )
         return edited_roi
 
     def delete_regions_of_interest(self) -> None:

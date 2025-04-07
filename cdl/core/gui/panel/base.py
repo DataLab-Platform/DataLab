@@ -280,7 +280,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
     SIG_REFRESH_PLOT = QC.Signal(
-        str, bool, bool
+        str, bool, bool, bool, bool
     )  # Connected to PlotHandler.refresh_plot
     ROIDIALOGOPTIONS = {}
 
@@ -475,10 +475,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.add_objprop_buttons()
 
     def refresh_plot(
-        self, what: str, update_items: bool = True, force: bool = False
+        self,
+        what: str,
+        update_items: bool = True,
+        force: bool = False,
+        only_visible: bool = True,
+        only_existing: bool = False,
     ) -> None:
-        """Refresh plot. This method simply emits the signal SIG_REFRESH_PLOT which is
-        connected to the method `PlotHandler.refresh_plot`.
+        """Refresh plot.
 
         Args:
             what: string describing the objects to refresh.
@@ -489,17 +493,26 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one
              item is selected). Defaults to True.
-            force: if True, force refresh even if auto refresh is disabled,
-             and refresh all items associated to objects (even the hidden ones, e.g.
-             when selecting multiple images of the same size and position). Defaults
-             to False.
+            force: if True, force refresh even if auto refresh is disabled.
+             Defaults to False.
+            only_visible: if True, only refresh visible items. Defaults to True.
+             Visible items are the ones that are not hidden by other items or the items
+             except the first one if the option "Show first only" is enabled.
+             This is useful for images, where the last image is the one that is shown.
+             If False, all items are refreshed.
+            only_existing: if True, only refresh existing items. Defaults to False.
+             Existing items are the ones that have already been created and are
+             associated to the object uuid. If False, create new items for the
+             objects that do not have an item yet.
 
         Raises:
             ValueError: if `what` is not a valid value
         """
         if what not in ("selected", "all", "existing") and not isinstance(what, str):
             raise ValueError(f"Invalid value for 'what': {what}")
-        self.SIG_REFRESH_PLOT.emit(what, update_items, force)
+        self.SIG_REFRESH_PLOT.emit(
+            what, update_items, force, only_visible, only_existing
+        )
 
     def manual_refresh(self) -> None:
         """Manual refresh"""
@@ -622,10 +635,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=lambda obj: obj.short_id, reverse=True):
             obj.update_metadata_from(metadata)
-        # We have to do a manual refresh in order to force the plot handler to update
+        # We have to do a special refresh in order to force the plot handler to update
         # all plot items, even the ones that are not visible (otherwise, image masks
         # would not be updated after pasting the metadata: see issue #123)
-        self.manual_refresh()
+        self.refresh_plot(
+            "selected", update_items=True, only_visible=False, only_existing=True
+        )
 
     def remove_object(self, force: bool = False) -> None:
         """Remove signal/image object
@@ -716,11 +731,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if index == 0:
                 self.selection_changed()
         if refresh_plot:
-            # We have to do a manual refresh in order to force the plot handler to
+            # We have to do a special refresh in order to force the plot handler to
             # update all plot items, even the ones that are not visible (otherwise,
             # image masks would remained visible after deleting the ROI for example:
             # see issue #122)
-            self.manual_refresh()
+            self.refresh_plot(
+                "selected", update_items=True, only_visible=False, only_existing=True
+            )
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True

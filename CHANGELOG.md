@@ -16,6 +16,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - When editing ROI of a list of images, the first image of the selection is shown (instead of the last as in the image panel)
 * Fixed [Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - When selecting multiple images just after opening an HDF5 file, the "View in a new window" feature does not work (`KeyError` exception)
 * Fixed [Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - When selecting multiple images and clearing ROI in ROI editor, only the first image is affected
+* Fixed [Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Refresh image items only if necessary (when editing ROI, pasting/deleting metadata)
 
 ## DataLab Version 0.19.0 ##
 
