@@ -1080,7 +1080,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             return None
         edited_roi, modified = results
         objs = self.panel.objview.get_sel_objects(include_groups=True)
-        obj = objs[0]
+        obj = objs[-1]
         group = edited_roi.to_params(obj)
         if (
             env.execenv.unattended  # Unattended mode (automated unit tests)
@@ -1090,7 +1090,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             if modified:
                 # If ROI has been modified, save ROI (not in "extract mode")
                 if edited_roi.is_empty():
-                    obj.roi = None
+                    for obj_i in objs:
+                        obj_i.roi = None
                 else:
                     edited_roi = edited_roi.from_params(obj, group)
                     if not extract:
