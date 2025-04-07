@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 12:23+0200\n"
+"POT-Creation-Date: 2025-04-07 18:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -102,8 +102,11 @@ msgstr "Correction de l'[Issue #152](https://github.com/DataLab-Platform/DataLab
 msgid "Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)"
 msgstr "Correction de l'[Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignorer les valeurs `nan` pour la normalisation du signal et les calculs de statistiques (à la fois le résultat d'analyse et l'outil interactif)"
 
-msgid "Fixed [Issue #155](https://github.com/DataLab-Platform/DataLab/issues/155) - Image visualization: `TypeError` when enabling the \"Base-10 logarithmic Z axis\" tool (this issue has been fixed upstream in PlotPy and requires PlotPy v2.7.3 or later)"
-msgstr "Correction de l'[Issue #155](https://github.com/DataLab-Platform/DataLab/issues/155) - Visualisation d'image : `TypeError` lors de l'activation de l'outil \"Axe Z logarithmique en base 10\" (ce problème a été corrigé en amont dans PlotPy et nécessite PlotPy v2.7.3 ou version ultérieure)"
+msgid "Fixed [Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - When editing ROI of a list of images, the first image of the selection is shown (instead of the last as in the image panel)"
+msgstr "Correction de l'[Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - Lors de l'édition de la ROI d'une liste d'images, la première image de la sélection est affichée (au lieu de la dernière comme dans le panneau d'image)"
+
+msgid "Fixed [Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - When selecting multiple images just after opening an HDF5 file, the \"View in a new window\" feature does not work (`KeyError` exception)"
+msgstr "Correction de l'[Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - Lors de la sélection de plusieurs images juste après l'ouverture d'un fichier HDF5, la fonctionnalité \"Afficher dans une nouvelle fenêtre\" ne fonctionne pas (exception `KeyError`)"
 
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"

@@ -33,7 +33,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This closes [Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157) - Pairwise operation mode: unexpected behavior with functions that take a single second operand
 * Fixed [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignore `nan` values for image normalization, flatfield correction, offset correction, and centroid computation
 * Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)
-* Fixed [Issue #155](https://github.com/DataLab-Platform/DataLab/issues/155) - Image visualization: `TypeError` when enabling the "Base-10 logarithmic Z axis" tool (this issue has been fixed upstream in PlotPy and requires PlotPy v2.7.3 or later)
+* Fixed [Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - When editing ROI of a list of images, the first image of the selection is shown (instead of the last as in the image panel)
+* Fixed [Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - When selecting multiple images just after opening an HDF5 file, the "View in a new window" feature does not work (`KeyError` exception)
 
 ## DataLab Version 0.19.0 ##
 
