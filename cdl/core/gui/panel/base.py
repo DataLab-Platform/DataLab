@@ -1098,6 +1098,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[0]]
 
+        if not all([oid in self.plothandler for oid in oids]):
+            # This happens for example when opening an already saved workspace with
+            # multiple images, and if the user tries to view in a new window a group of
+            # images without having selected any object yet. In this case, only the
+            # last image is actually plotted (because if the other have the same size
+            # and position, they are hidden), and the plot item of every other image is
+            # not created yet. So we need to refresh the plot to create the plot item of
+            # those images.
+            self.plothandler.refresh_plot("selected", True, True)
+
         # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
             title=obj.title if len(oids) == 1 else None,
