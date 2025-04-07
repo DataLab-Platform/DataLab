@@ -1090,7 +1090,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             if modified:
                 # If ROI has been modified, save ROI (not in "extract mode")
                 if edited_roi.is_empty():
-                    obj.roi = None
+                    for obj_i in objs:
+                        obj_i.roi = None
                 else:
                     edited_roi = edited_roi.from_params(obj, group)
                     if not extract:

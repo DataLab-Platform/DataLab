@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 18:11+0200\n"
+"POT-Creation-Date: 2025-04-07 18:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -56,6 +56,9 @@ msgstr "Correction de l'[Issue #158](https://github.com/DataLab-Platform/DataLab
 
 msgid "Fixed [Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - When selecting multiple images just after opening an HDF5 file, the \"View in a new window\" feature does not work (`KeyError` exception)"
 msgstr "Correction de l'[Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - Lors de la sélection de plusieurs images juste après l'ouverture d'un fichier HDF5, la fonctionnalité \"Afficher dans une nouvelle fenêtre\" ne fonctionne pas (exception `KeyError`)"
+
+msgid "Fixed [Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - When selecting multiple images and clearing ROI in ROI editor, only the first image is affected"
+msgstr "Correction de l'[Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - Lors de la sélection de plusieurs images et de l'effacement de la ROI dans l'éditeur de ROI, seule la première image est affectée"
 
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"
