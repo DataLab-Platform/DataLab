@@ -11,6 +11,7 @@ from __future__ import annotations
 import abc
 import dataclasses
 import glob
+import os
 import os.path as osp
 import re
 import warnings
@@ -854,11 +855,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj.title = title
         self.objview.update_item(obj.uuid)
 
-    def __load_from_file(self, filename: str) -> list[SignalObj] | list[ImageObj]:
+    def __load_from_file(
+        self, filename: str, create_group: bool = True, add_objects: bool = True
+    ) -> list[SignalObj] | list[ImageObj]:
         """Open objects from file (signal/image), add them to DataLab and return them.
 
         Args:
             filename: file name
+            create_group: if True, create a new group if more than one object is loaded.
+             Defaults to True. If False, all objects are added to the current group.
+            add_objects: if True, add objects to the panel. Defaults to True.
 
         Returns:
             New object or list of new objects
@@ -866,11 +872,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
         objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
         group_id = None
-        if len(objs) > 1:
+        if len(objs) > 1 and create_group:
+            # Create a new group if more than one object is loaded
             group_id = self.add_group(osp.basename(filename)).uuid
         for obj in objs:
-            obj.metadata["source"] = filename
-            self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
+            if add_objects:
+                self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
         self.selection_changed()
         return objs
 
@@ -902,24 +909,55 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
-        # Get all files in the directory:
-        relfnames = sorted(
-            osp.relpath(path, start=directory)
-            for path in glob.glob(osp.join(directory, "**", "*.*"), recursive=True)
-        )
-        # When Python 3.9 will be dropped, we can use (support for `root_dir` is added):
-        # relfnames = sorted(glob.glob("**/*.*", root_dir=directory, recursive=True))
-        filenames = [osp.join(directory, fname) for fname in relfnames]
-        return self.load_from_files(filenames, ignore_unknown=True)
+        folders = [
+            path
+            for path in glob.glob(osp.join(directory, "**"), recursive=True)
+            if osp.isdir(path) and len(os.listdir(path)) > 0
+        ]
+        objs = []
+        with create_progress_bar(
+            self, _("Scanning directory"), max_=len(folders) - 1
+        ) as progress:
+            # Iterate over all subfolders in the directory:
+            for i_path, path in enumerate(folders):
+                progress.setValue(i_path + 1)
+                if progress.wasCanceled():
+                    break
+                path = osp.normpath(path)
+                fnames = [
+                    osp.join(path, fname)
+                    for fname in os.listdir(path)
+                    if osp.isfile(osp.join(path, fname))
+                ]
+                new_objs = self.load_from_files(
+                    fnames,
+                    create_group=False,
+                    add_objects=False,
+                    ignore_errors=True,
+                )
+                if new_objs:
+                    objs += new_objs
+                    grp = self.add_group(osp.relpath(path, directory))
+                    for obj in new_objs:
+                        self.add_object(obj, group_id=grp.uuid, set_current=False)
+        return objs
 
     def load_from_files(
-        self, filenames: list[str] | None = None, ignore_unknown: bool = False
+        self,
+        filenames: list[str] | None = None,
+        create_group: bool = False,
+        add_objects: bool = True,
+        ignore_errors: bool = False,
     ) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
             filenames: File names
-            ignore_unknown: if True, ignore unknown file types (default: False)
+            create_group: if True, create a new group if more than one object is loaded
+             for a single file. Defaults to False: all objects are added to the current
+             group.
+            add_objects: if True, add objects to the panel. Defaults to True.
+            ignore_errors: if True, ignore errors when loading files. Defaults to False.
 
         Returns:
             list of new objects
@@ -936,9 +974,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 try:
-                    objs += self.__load_from_file(filename)
-                except NotImplementedError as exc:
-                    if ignore_unknown:
+                    objs += self.__load_from_file(
+                        filename, create_group=create_group, add_objects=add_objects
+                    )
+                except Exception as exc:  # pylint: disable=broad-except
+                    if ignore_errors:
                         # Ignore unknown file types
                         pass
                     else:
@@ -1114,7 +1154,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         if oids is None:
             oids = self.objview.get_sel_object_uuids(include_groups=True)
-        obj = self.objmodel[oids[0]]
+        obj = self.objmodel[oids[-1]]  # last selected object
 
         if not all([oid in self.plothandler for oid in oids]):
             # This happens for example when opening an already saved workspace with
@@ -1124,14 +1164,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # and position, they are hidden), and the plot item of every other image is
             # not created yet. So we need to refresh the plot to create the plot item of
             # those images.
-            self.plothandler.refresh_plot("selected", True, True)
+            self.plothandler.refresh_plot(
+                "selected", update_items=True, force=True, only_visible=False
+            )
 
         # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
             title=obj.title if len(oids) == 1 else None,
             edit=True,
             name=f"{obj.PREFIX}_new_window",
-            options={"show_itemlist": edit_annotations},
         )
         if dlg is None:
             return None
@@ -1170,6 +1211,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             plot.add_item(item)
         self.__separate_views[dlg] = obj
         toggle_annotations(edit_annotations)
+        if len(oids) > 1:
+            # If multiple objects are displayed, show the item list panel
+            # (otherwise, it is hidden by default to lighten the dialog, except
+            # if `edit_annotations` is True):
+            plot.manager.get_itemlist_panel().show()
         if edit_annotations:
             edit_ann_action.setChecked(True)
         dlg.show()
