@@ -855,7 +855,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.objview.update_item(obj.uuid)
 
     def __load_from_file(
-        self, filename: str, create_group: bool = True
+        self, filename: str, create_group: bool = True, add_objects: bool = True
     ) -> list[SignalObj] | list[ImageObj]:
         """Open objects from file (signal/image), add them to DataLab and return them.
 
@@ -863,6 +863,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filename: file name
             create_group: if True, create a new group if more than one object is loaded.
              Defaults to True. If False, all objects are added to the current group.
+            add_objects: if True, add objects to the panel. Defaults to True.
 
         Returns:
             New object or list of new objects
@@ -875,7 +876,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             group_id = self.add_group(osp.basename(filename)).uuid
         for obj in objs:
             obj.metadata["source"] = filename
-            self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
+            if add_objects:
+                self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
         self.selection_changed()
         return objs
 
@@ -907,29 +909,44 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
+        folders = [
+            path
+            for path in glob.glob(osp.join(directory, "**"), recursive=True)
+            if osp.isdir(path) and len(os.listdir(path)) > 0
+        ]
         objs = []
-        # Iterate over all subfolders in the directory:
-        for path in glob.glob(osp.join(directory, "**"), recursive=True):
-            if osp.isdir(path) and len(os.listdir(path)) > 0:
+        with create_progress_bar(
+            self, _("Scanning directory"), max_=len(folders) - 1
+        ) as progress:
+            # Iterate over all subfolders in the directory:
+            for i_path, path in enumerate(folders):
+                progress.setValue(i_path + 1)
+                if progress.wasCanceled():
+                    break
                 path = osp.normpath(path)
-                self.add_group(osp.basename(path), select=True)
                 fnames = [
                     osp.join(path, fname)
                     for fname in os.listdir(path)
                     if osp.isfile(osp.join(path, fname))
                 ]
                 new_objs = self.load_from_files(
-                    fnames, create_group=False, ignore_errors=True
+                    fnames,
+                    create_group=False,
+                    add_objects=False,
+                    ignore_errors=True,
                 )
-                objs += new_objs
-                if len(new_objs) == 0:
-                    self.remove_object(force=True)  # Remove empty group
+                if new_objs:
+                    objs += new_objs
+                    grp = self.add_group(osp.basename(path))
+                    for obj in new_objs:
+                        self.add_object(obj, group_id=grp.uuid, set_current=False)
         return objs
 
     def load_from_files(
         self,
         filenames: list[str] | None = None,
         create_group: bool = False,
+        add_objects: bool = True,
         ignore_errors: bool = False,
     ) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
@@ -939,6 +956,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             create_group: if True, create a new group if more than one object is loaded
              for a single file. Defaults to False: all objects are added to the current
              group.
+            add_objects: if True, add objects to the panel. Defaults to True.
             ignore_errors: if True, ignore errors when loading files. Defaults to False.
 
         Returns:
@@ -956,7 +974,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 try:
-                    objs += self.__load_from_file(filename, create_group=create_group)
+                    objs += self.__load_from_file(
+                        filename, create_group=create_group, add_objects=add_objects
+                    )
                 except Exception as exc:  # pylint: disable=broad-except
                     if ignore_errors:
                         # Ignore unknown file types
