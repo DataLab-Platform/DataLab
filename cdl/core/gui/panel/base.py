@@ -1113,7 +1113,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         if oids is None:
             oids = self.objview.get_sel_object_uuids(include_groups=True)
-        obj = self.objmodel[oids[0]]
+        obj = self.objmodel[oids[-1]]  # last selected object
 
         if not all([oid in self.plothandler for oid in oids]):
             # This happens for example when opening an already saved workspace with
@@ -1123,7 +1123,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # and position, they are hidden), and the plot item of every other image is
             # not created yet. So we need to refresh the plot to create the plot item of
             # those images.
-            self.plothandler.refresh_plot("selected", True, True)
+            self.plothandler.refresh_plot(
+                "selected", update_items=True, force=True, only_visible=False
+            )
 
         # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
