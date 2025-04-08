@@ -11,6 +11,7 @@ from __future__ import annotations
 import abc
 import dataclasses
 import glob
+import os
 import os.path as osp
 import re
 import warnings
@@ -853,11 +854,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj.title = title
         self.objview.update_item(obj.uuid)
 
-    def __load_from_file(self, filename: str) -> list[SignalObj] | list[ImageObj]:
+    def __load_from_file(
+        self, filename: str, create_group: bool = True
+    ) -> list[SignalObj] | list[ImageObj]:
         """Open objects from file (signal/image), add them to DataLab and return them.
 
         Args:
             filename: file name
+            create_group: if True, create a new group if more than one object is loaded.
+             Defaults to True. If False, all objects are added to the current group.
 
         Returns:
             New object or list of new objects
@@ -865,7 +870,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
         objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
         group_id = None
-        if len(objs) > 1:
+        if len(objs) > 1 and create_group:
+            # Create a new group if more than one object is loaded
             group_id = self.add_group(osp.basename(filename)).uuid
         for obj in objs:
             obj.metadata["source"] = filename
@@ -901,23 +907,38 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
-        # Get all files in the directory:
-        relfnames = sorted(
-            osp.relpath(path, start=directory)
-            for path in glob.glob(osp.join(directory, "**", "*.*"), recursive=True)
-        )
-        # When Python 3.9 will be dropped, we can use (support for `root_dir` is added):
-        # relfnames = sorted(glob.glob("**/*.*", root_dir=directory, recursive=True))
-        filenames = [osp.join(directory, fname) for fname in relfnames]
-        return self.load_from_files(filenames, ignore_unknown=True)
+        objs = []
+        # Iterate over all subfolders in the directory:
+        for path in glob.glob(osp.join(directory, "**"), recursive=True):
+            if osp.isdir(path) and len(os.listdir(path)) > 0:
+                path = osp.normpath(path)
+                self.add_group(osp.basename(path), select=True)
+                fnames = [
+                    osp.join(path, fname)
+                    for fname in os.listdir(path)
+                    if osp.isfile(osp.join(path, fname))
+                ]
+                new_objs = self.load_from_files(
+                    fnames, create_group=False, ignore_unknown=True
+                )
+                objs += new_objs
+                if len(new_objs) == 0:
+                    self.remove_object(force=True)  # Remove empty group
+        return objs
 
     def load_from_files(
-        self, filenames: list[str] | None = None, ignore_unknown: bool = False
+        self,
+        filenames: list[str] | None = None,
+        create_group: bool = False,
+        ignore_unknown: bool = False,
     ) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
             filenames: File names
+            create_group: if True, create a new group if more than one object is loaded
+             for a single file. Defaults to False: all objects are added to the current
+             group.
             ignore_unknown: if True, ignore unknown file types (default: False)
 
         Returns:
@@ -935,7 +956,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 try:
-                    objs += self.__load_from_file(filename)
+                    objs += self.__load_from_file(filename, create_group=create_group)
                 except NotImplementedError as exc:
                     if ignore_unknown:
                         # Ignore unknown file types

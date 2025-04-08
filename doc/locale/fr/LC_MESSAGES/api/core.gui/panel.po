@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 19:11+0200\n"
+"POT-Creation-Date: 2025-04-08 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -341,6 +341,9 @@ msgid "Open objects from file (signals/images), add them to DataLab and return t
 msgstr ""
 
 msgid "File names"
+msgstr ""
+
+msgid "if True, create a new group if more than one object is loaded for a single file. Defaults to False: all objects are added to the current group."
 msgstr ""
 
 msgid "if True, ignore unknown file types (default: False)"
