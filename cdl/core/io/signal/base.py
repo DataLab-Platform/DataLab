@@ -9,6 +9,7 @@ DataLab signal I/O registry
 from __future__ import annotations
 
 import abc
+import os.path as osp
 
 import numpy as np
 
@@ -16,7 +17,6 @@ from cdl.config import _
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import CallbackWorker
-from cdl.utils.strings import reduce_path
 
 
 class SignalIORegistry(BaseIORegistry):
@@ -47,10 +47,10 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
         Returns:
             Signal object
         """
-        name = reduce_path(filename)
+        name = osp.basename(filename)
         if index is not None:
             name += f" {index:02d}"
-        return create_signal(name)
+        return create_signal(name, metadata={"source": filename})
 
     def create_signal(
         self, xydata: np.ndarray, filename: str, index: int | None = None

@@ -875,7 +875,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Create a new group if more than one object is loaded
             group_id = self.add_group(osp.basename(filename)).uuid
         for obj in objs:
-            obj.metadata["source"] = filename
             if add_objects:
                 self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
         self.selection_changed()

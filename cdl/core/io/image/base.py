@@ -7,6 +7,7 @@ DataLab image I/O registry
 from __future__ import annotations
 
 import abc
+import os.path as osp
 
 import numpy as np
 
@@ -14,7 +15,6 @@ from cdl.config import _
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.model.image import ImageObj, create_image
 from cdl.utils.qthelpers import CallbackWorker
-from cdl.utils.strings import reduce_path
 
 
 class ImageIORegistry(BaseIORegistry):
@@ -43,10 +43,10 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
         Returns:
             Image object
         """
-        name = reduce_path(filename)
+        name = osp.basename(filename)
         if index is not None:
             name += f" {index:02d}"
-        return create_image(name)
+        return create_image(name, metadata={"source": filename})
 
     def read(
         self, filename: str, worker: CallbackWorker | None = None
