@@ -1132,7 +1132,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             title=obj.title if len(oids) == 1 else None,
             edit=True,
             name=f"{obj.PREFIX}_new_window",
-            options={"show_itemlist": edit_annotations},
         )
         if dlg is None:
             return None
@@ -1171,6 +1170,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             plot.add_item(item)
         self.__separate_views[dlg] = obj
         toggle_annotations(edit_annotations)
+        if len(oids) > 1:
+            # If multiple objects are displayed, show the item list panel
+            # (otherwise, it is hidden by default to lighten the dialog, except
+            # if `edit_annotations` is True):
+            plot.manager.get_itemlist_panel().show()
         if edit_annotations:
             edit_ann_action.setChecked(True)
         dlg.show()

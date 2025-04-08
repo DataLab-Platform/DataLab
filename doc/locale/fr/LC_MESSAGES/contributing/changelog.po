@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 19:11+0200\n"
+"POT-Creation-Date: 2025-04-08 09:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -62,6 +62,9 @@ msgstr "Correction de l'[Issue #160](https://github.com/DataLab-Platform/DataLab
 
 msgid "Fixed [Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Refresh image items only if necessary (when editing ROI, pasting/deleting metadata)"
 msgstr "Correction de l'[Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Rafraîchir les items d'image uniquement si nécessaire (lors de l'édition de la ROI, du collage/de la suppression de métadonnées)"
+
+msgid "Fixed [Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - View in a new window: when displaying multiple images, the item list panel should be visible"
+msgstr "Correction de l'[Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - Afficher dans une nouvelle fenêtre : lors de l'affichage de plusieurs images, le panneau de liste d'items doit être visible"
 
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"
