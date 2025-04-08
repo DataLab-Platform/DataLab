@@ -919,7 +919,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     if osp.isfile(osp.join(path, fname))
                 ]
                 new_objs = self.load_from_files(
-                    fnames, create_group=False, ignore_unknown=True
+                    fnames, create_group=False, ignore_errors=True
                 )
                 objs += new_objs
                 if len(new_objs) == 0:
@@ -930,7 +930,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self,
         filenames: list[str] | None = None,
         create_group: bool = False,
-        ignore_unknown: bool = False,
+        ignore_errors: bool = False,
     ) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
@@ -939,7 +939,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             create_group: if True, create a new group if more than one object is loaded
              for a single file. Defaults to False: all objects are added to the current
              group.
-            ignore_unknown: if True, ignore unknown file types (default: False)
+            ignore_errors: if True, ignore errors when loading files. Defaults to False.
 
         Returns:
             list of new objects
@@ -957,8 +957,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 Conf.main.base_dir.set(filename)
                 try:
                     objs += self.__load_from_file(filename, create_group=create_group)
-                except NotImplementedError as exc:
-                    if ignore_unknown:
+                except Exception as exc:  # pylint: disable=broad-except
+                    if ignore_errors:
                         # Ignore unknown file types
                         pass
                     else:

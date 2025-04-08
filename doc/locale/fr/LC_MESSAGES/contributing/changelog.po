@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-08 10:13+0200\n"
+"POT-Creation-Date: 2025-04-08 10:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -67,6 +67,10 @@ msgid "Fixed [Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162
 msgstr "Correction de l'[Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - Afficher dans une nouvelle fenêtre : lors de l'affichage de plusieurs images, le panneau de liste d'items doit être visible"
 
 msgid "Fixed [Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Open from directory: expected one group per folder when loading multiple files"
+msgstr "Ceci corrige l'[Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Ouvrir depuis le répertoire : un groupe par dossier attendu lors du chargement de plusieurs fichiers"
+
+#, fuzzy
+msgid "Fixed [Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164) - Open from directory: unsupported files should be ignored when loading files recursively, to avoid warning popup dialog boxes"
 msgstr "Ceci corrige l'[Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Ouvrir depuis le répertoire : un groupe par dossier attendu lors du chargement de plusieurs fichiers"
 
 msgid "DataLab Version 0.19.0"
@@ -2208,3 +2212,4 @@ msgstr "Symétrie (verticale/horizontale)"
 
 msgid "Console: added configurable external editor (default: VSCode) to follow the traceback links to the source code"
 msgstr "Console : ajout d'un éditeur externe configurable (par défaut : VSCode) pour suivre les liens de poursuite vers le code source"
+
