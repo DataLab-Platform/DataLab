@@ -1119,20 +1119,16 @@ msgid "Compute contour shape fit with :py:func:`cdl.computation.image.detection.
 msgstr ""
 
 msgid "Compute peak detection based on a circle Hough transform with :py:func:`cdl.computation.image.compute_hough_circle_peaks`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Compute blob detection using Difference of Gaussian method with :py:func:`cdl.computation.image.detection.compute_blob_dog`"
-msgstr "Calculer la détection de taches en utilisant la méthode de différence de Gaussienne"
+msgstr ""
 
-#, fuzzy
 msgid "Compute blob detection using Determinant of Hessian method with :py:func:`cdl.computation.image.detection.compute_blob_doh`"
-msgstr "Calculer la détection de taches en utilisant la méthode du déterminant de Hessian"
+msgstr ""
 
-#, fuzzy
 msgid "Compute blob detection using Laplacian of Gaussian method with :py:func:`cdl.computation.image.detection.compute_blob_log`"
-msgstr "Calculer la détection de taches en utilisant la méthode du Laplacien de Gaussienne"
+msgstr ""
 
 msgid "Compute blob detection using OpenCV with :py:func:`cdl.computation.image.detection.compute_blob_opencv`"
 msgstr ""
-
