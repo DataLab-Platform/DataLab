@@ -63,7 +63,7 @@ msgid "[NLnet Foundation](https://nlnet.nl/), as part of the NGI0 Commons Fund b
 msgstr "La [Fondation NLnet](https://nlnet.nl/), dans le cadre du NGI0 Commons Fund soutenu par la Commission européenne, a financé la [refonte de l'architecture de base de DataLab](https://nlnet.nl/project/DataLab/) - une refonte majeure prévue pour la version 2.0 (décembre 2025) :<br>• L'objectif est de découpler le modèle de données, le calcul et l'E/S de l'interface utilisateur<br>• Cela permettra à DataLab d'être utilisé comme bibliothèque dans d'autres logiciels"
 
 msgid "🚀 Planned Milestones"
-msgstr "🚀 Jalons plannifiés"
+msgstr "🚀 Jalons planifiés"
 
 msgid "ℹ️ The following tasks are planned for future releases of DataLab. The timeline and specific details may change based on user feedback, funding availability, and other factors."
 msgstr "ℹ️ Les tâches suivantes sont prévues pour les futures versions de DataLab. Le calendrier et les détails spécifiques peuvent changer en fonction des retours des utilisateurs, de la disponibilité du financement et d'autres facteurs."
