@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:21+0100\n"
+"POT-Creation-Date: 2025-04-10 19:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,191 +20,422 @@ msgstr ""
 msgid "Roadmap"
 msgstr "Feuille de route"
 
-msgid "Future milestones"
-msgstr "Jalons futurs"
+msgid "This document outlines the current and future development plans for DataLab:"
+msgstr "Ce document décrit les plans de développement actuels et futurs de DataLab :"
 
-msgid "Features or enhancements"
-msgstr "Fonctionnalités ou améliorations"
+msgid "It includes information about [funding sources](#funding), [planned milestones](#planned-milestones), and [future evolution](#future-milestones)."
+msgstr "Il contient des informations sur les [sources de financement](#funding), les [jalons prévus](#planned-milestones) et l'[évolution future](#future-milestones)."
 
-msgid "Add support for data acquisition:"
-msgstr "Ajouter la prise en charge de l'acquisition de données :"
+msgid "It also provides a summary of [past milestones](#past-milestones) to give context to the project's evolution."
+msgstr "Il fournit également un résumé des [jalons passés](#past-milestones) pour donner un contexte à l'évolution du projet."
 
-msgid "It would be nice to be able to acquire data from various sources (e.g. a camera, a digitizer, a spectrometer, etc.) directly from DataLab"
-msgstr "Il serait intéressant de pouvoir acquérir des données de diverses sources (par exemple, une caméra, un numériseur, un spectromètre, etc.) directement depuis DataLab"
+msgid "📈 Funding"
+msgstr "📈 Financement"
 
-msgid "This would allow to use DataLab as a data acquisition software, and to process the acquired data immediately after"
-msgstr "Cela permettrait d'utiliser DataLab comme logiciel d'acquisition de données, et de traiter les données acquises immédiatement après"
+msgid "ℹ️ As an open-source project, DataLab relies on the support of various organizations and grants to fund its development and maintenance. The project's roadmap is shaped by the needs and priorities of its users, as well as the availability of resources. Funded work is prioritized and scheduled accordingly, while community contributions are welcomed and encouraged."
+msgstr "ℹ️ En tant que projet open-source, DataLab s'appuie sur le soutien de diverses organisations et subventions pour financer son développement et sa maintenance. La feuille de route du projet est façonnée par les besoins et les priorités de ses utilisateurs, ainsi que par la disponibilité des ressources. Le travail financé est priorisé et programmé en conséquence, tandis que les contributions de la communauté sont les bienvenues et encouragées."
 
-msgid "Although there is currently no design for this feature, it could be implemented by creating a new plugin family, and by defining a common API for data acquisition plugins"
-msgstr "Bien qu'il n'y ait actuellement pas de conception pour cette fonctionnalité, elle pourrait être implémentée en créant une nouvelle famille de plugins, et en définissant une API commune pour les plugins d'acquisition de données"
+msgid "From the project’s inception in 2023, the development of DataLab has been funded by the following grants and organizations:"
+msgstr "Depuis le début du projet en 2023, le développement de DataLab a été financé par les subventions et organisations suivantes :"
 
-msgid "One of the possible technical solutions could be to rely on `PyMoDAQ <https://pymodaq.cnrs.fr/>`_, a Python package for data acquisition, which is already compatible with various hardware devices - *how about a collaboration with the PyMoDAQ developers?*"
-msgstr "Une des solutions techniques possibles pourrait être de s'appuyer sur `PyMoDAQ <https://pymodaq.cnrs.fr/>`_, un paquet Python pour l'acquisition de données, qui est déjà compatible avec divers dispositifs matériels - *et si on collaborait avec les développeurs de PyMoDAQ ?*"
+msgid "Funding"
+msgstr "Financement"
 
-msgid "Create a DataLab math library:"
-msgstr "Créer une bibliothèque mathématique DataLab :"
+msgid "Description"
+msgstr "Description"
 
-msgid "This library would be a Python package, and would contain all the mathematical functions and algorithms used in DataLab: - A low-level algorithms API operating on NumPy arrays - The base non-GUI data model of DataLab (e.g. signals, images) - A high-level computing API operating on DataLab objects (e.g. signals, images)"
-msgstr "Cette bibliothèque serait un paquet Python, et contiendrait toutes les fonctions et algorithmes mathématiques utilisés dans DataLab : - Une API d'algorithmes de bas niveau opérant sur des tableaux NumPy - Le modèle de données non-GUI de base de DataLab (par exemple, signaux, images) - Une API de calcul de haut niveau opérant sur les objets DataLab (par exemple, signaux, images)"
+msgid "<a href=\"https://www.cea.fr/\" target=\"_blank\"><img src=\"../_images/cea.svg\" alt=\"CEA\" width=\"50\"/></a>"
+msgstr ""
 
-msgid "It would be used by DataLab itself, but could also be used by third-party software (e.g. Jupyter notebooks, Spyder, Visual Studio Code, etc.)"
-msgstr "Elle serait utilisée par DataLab lui-même, mais pourrait également être utilisée par des logiciels tiers (par exemple, des notebooks Jupyter, Spyder, Visual Studio Code, etc.)"
+msgid "[CEA](https://www.cea.fr/) - French Alternative Energies and Atomic Energy Commission:<br>• DataLab was initially created for analyzing data from CEA's Laser Megajoule (LMJ) facility<br>• Interfaced with the LMJ control system, DataLab is used to process and visualize signals and images acquired with plasma diagnostics (devices such as cameras, digitizers, spectrometers, etc.)<br>• It is also used for R&D activities around the LMJ facility (e.g., metrology, data analysis, etc.)<br>• CEA is the major investor in DataLab and the main contributor to the project: CEA scientists and engineers are actively involved in the roadmap"
+msgstr "[CEA](https://www.cea.fr/) - Commissariat à l'énergie atomique et aux énergies alternatives :<br>• DataLab a été initialement créé pour analyser les données de la structure Laser Mégajoule (LMJ) du CEA<br>• Interfacé avec le système de contrôle du LMJ, DataLab est utilisé pour traiter et visualiser les signaux et images acquis avec des diagnostics plasmas (appareils tels que caméras, numériseurs, spectromètres, etc.)<br>• Il est également utilisé pour des activités de R&D autour de l'installation LMJ (métrologie, analyse de données, etc.)<br>• Le CEA est le principal investisseur dans DataLab et le principal contributeur au projet : les ingénieurs du CEA participent activement à la feuille de route"
 
-msgid "Finally, this library would be a good way to share DataLab's mathematical features with the scientific community: a collection of algorithms and functions that are well-tested, well-documented, and easy to use"
-msgstr "Enfin, cette bibliothèque serait un bon moyen de partager les fonctionnalités mathématiques de DataLab avec la communauté scientifique : une collection d'algorithmes et de fonctions bien testés, bien documentés et faciles à utiliser"
+msgid "<a href=\"https://codra.net/en/offer/software-engineering/datalab/\" target=\"_blank\"><img src=\"../_images/codra.svg\" alt=\"CODRA\" width=\"50\"/></a>"
+msgstr ""
 
-msgid "*Note*: it is already possible to use DataLab's processing features from outside DataLab by importing the `cdl` Python package, but this package also contains the GUI code, which is not always needed (e.g. when using DataLab from a Jupyter notebook). The idea here is to create a new package that would contain only the mathematical features of DataLab, without the GUI code."
-msgstr "*Remarque* : il est déjà possible d'utiliser les fonctionnalités de traitement de DataLab depuis l'extérieur de DataLab en important le paquet `cdl`, mais ce paquet contient également le code GUI, qui n'est pas toujours nécessaire (par exemple, lors de l'utilisation de DataLab à partir d'un notebook Jupyter). L'idée ici est de créer un nouveau paquet qui ne contiendrait que les fonctionnalités mathématiques de DataLab, sans le code GUI."
+msgid "[CODRA](https://codra.net/), a software engineering company and software publisher, has supported DataLab’s open-source journey since its inception:<br>• Open-source project management and communication (social media, website, etc.)<br>• Conferences and events: [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), [Open Source Experience 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), etc.<br>• Documentation: tutorials, videos, and more"
+msgstr "[CODRA](https://codra.net/), société d’ingénierie en informatique et éditeur de logiciels, soutient le projet open source DataLab depuis sa création :<br>• Gestion de projet open source et communication (réseaux sociaux, site web, etc.)<br>• Conférences et événements : [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), [Open Source Experience 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), etc.<br>• Documentation : tutoriels, vidéos, et bien plus"
 
-msgid "The DataLab math library could be an opportunity to reconsider the design of the DataLab processing functions. Currently, the processing functions working on signal and image objects rely on `guidata.dataset.DataSet` objects for input parameters. This is very convenient for the developer because it allows to create a GUI for the processing functions automatically, but it is not very flexible for the user because it forces to instantiate a `DataSet` object with the right parameters before calling the processing function (this can be cumbersome especially when dealing with simple processing functions requiring only a few parameters). Thus, it could be interesting to consider a more flexible and simple design, where the processing parameters would be passed as keyword arguments to the processing functions. The `DataSet` objects could be handled internally by the processing functions (e.g. by calling the `DataSet.create` method with the keyword arguments passed by the user). This would allow to keep the automatic GUI generation feature for the processing functions, but would also allow to call the processing functions directly with keyword arguments, without having to create a `DataSet` object first."
-msgstr "La bibliothèque mathématique DataLab pourrait être l'occasion de reconsidérer la conception des fonctions de traitement de DataLab. Actuellement, les fonctions de traitement travaillant sur des objets de signaux et d'images reposent sur des objets `guidata.dataset.DataSet` pour les paramètres d'entrée. C'est très pratique pour le développeur car cela permet de créer automatiquement une interface graphique pour les fonctions de traitement, mais ce n'est pas très flexible pour l'utilisateur car cela oblige à instancier un objet `DataSet` avec les bons paramètres avant d'appeler la fonction de traitement (ce qui peut être fastidieux surtout lorsqu'il s'agit de fonctions de traitement simples nécessitant seulement quelques paramètres). Ainsi, il pourrait être intéressant de considérer une conception plus flexible et simple, où les paramètres de traitement seraient passés en tant qu'arguments de mot-clé aux fonctions de traitement. Les objets `DataSet` pourraient être gérés en interne par les fonctions de traitement (par exemple, en appelant la méthode `DataSet.create` avec les arguments de mot-clé passés par l'utilisateur). Cela permettrait de conserver la fonctionnalité de génération automatique de l'interface graphique pour les fonctions de traitement, mais permettrait également d'appeler directement les fonctions de traitement avec des arguments de mot-clé, sans avoir à créer d'objet `DataSet` au préalable."
+msgid "<a href=\"https://nlnet.nl/\" target=\"_blank\"><img src=\"../_images/nlnet.svg\" alt=\"NLnet\" width=\"50\"/></a>"
+msgstr ""
 
-msgid "Create a Jupyter plugin for interactive data analysis with DataLab:"
-msgstr "Créer un plugin Jupyter pour l'analyse de données interactive avec DataLab :"
+msgid "[NLnet Foundation](https://nlnet.nl/), as part of the NGI0 Commons Fund backed by the European Commission, funded the [redesign of DataLab’s core architecture](https://nlnet.nl/project/DataLab/) — a major overhaul scheduled for inclusion in the 2.0 release (December 2025):<br>• The goal is to decouple the data model, computation, and I/O from the UI<br>• This will enable DataLab to be used as a library in other software"
+msgstr "La [Fondation NLnet](https://nlnet.nl/), dans le cadre du NGI0 Commons Fund soutenu par la Commission européenne, a financé la [refonte de l'architecture de base de DataLab](https://nlnet.nl/project/DataLab/) - une refonte majeure prévue pour la version 2.0 (décembre 2025) :<br>• L'objectif est de découpler le modèle de données, le calcul et l'E/S de l'interface utilisateur<br>• Cela permettra à DataLab d'être utilisé comme bibliothèque dans d'autres logiciels"
 
-msgid "Using DataLab from a Jupyter notebook is already possible, thanks to the remote control features (see :ref:`ref-to-remote-control`), but it would be nice to have a dedicated plugin"
-msgstr "Il est déjà possible d'utiliser DataLab à partir d'un notebook Jupyter, grâce aux fonctionnalités de contrôle à distance (voir :ref:`ref-to-remote-control`), mais il serait utile d'avoir un plugin dédié"
+msgid "🚀 Planned Milestones"
+msgstr "🚀 Jalons plannifiés"
 
-msgid "This plugin would allow to use DataLab as a Jupyter kernel, and to display DataLab numerical results in Jupyter notebooks or the other way around (e.g. display Jupyter results in DataLab)"
-msgstr "Ce plugin permettrait d'utiliser DataLab comme noyau Jupyter, et d'afficher les résultats numériques de DataLab dans des notebooks Jupyter ou vice versa (par exemple, afficher les résultats de Jupyter dans DataLab)"
+msgid "ℹ️ The following tasks are planned for future releases of DataLab. The timeline and specific details may change based on user feedback, funding availability, and other factors."
+msgstr "ℹ️ Les tâches suivantes sont prévues pour les futures versions de DataLab. Le calendrier et les détails spécifiques peuvent changer en fonction des retours des utilisateurs, de la disponibilité du financement et d'autres facteurs."
 
-msgid "This plugin would also allow to use DataLab's processing features from Jupyter notebooks"
-msgstr "Ce plugin permettrait également d'utiliser les fonctionnalités de traitement de DataLab à partir de notebooks Jupyter"
+msgid "This section outlines the planned features and enhancements for DataLab, along with their expected release dates."
+msgstr "Cette section décrit les fonctionnalités et améliorations prévues pour DataLab, ainsi que leurs dates de sortie prévues."
 
-msgid "A typical use case could also consist in using DataLab for manipulating signals or images efficiently, and using Jupyter for custom data analysis based on specific / home-made algorithms"
-msgstr "Un cas d'utilisation typique pourrait également consister à utiliser DataLab pour manipuler des signaux ou des images de manière efficace, et à utiliser Jupyter pour l'analyse de données personnalisée basée sur des algorithmes spécifiques / faits maison"
+msgid "Those features and enhancements are funded by the following organizations (see [Funding](#funding) for more details):"
+msgstr "Ces fonctionnalités et améliorations sont financées par les organisations suivantes (voir [Financement](#funding) pour plus de détails) :"
 
-msgid "This plugin could be implemented by using the Jupyter kernel interface (see above)"
-msgstr "Ce plugin pourrait être implémenté en utilisant l'interface du noyau Jupyter (voir ci-dessus)"
+msgid "[CEA](https://www.cea.fr/): French Alternative Energies and Atomic Energy Commission"
+msgstr "[CEA](https://www.cea.fr/): Commissariat à l'énergie atomique et aux énergies alternatives"
 
-msgid "Create a Spyder plugin for interactive data analysis connected with DataLab:"
-msgstr "Créer un plugin Spyder pour l'analyse de données interactive connectée à DataLab :"
+msgid "[CODRA](https://codra.net/en/): software engineering company and software publisher"
+msgstr "[CODRA](https://codra.net/en/): société d'ingénierie en informatique et éditeur de logiciels"
 
-msgid "This is exactly the same use case as for the Jupyter plugin, but for Spyder"
-msgstr "Il s'agit exactement du même cas d'utilisation que pour le plugin Jupyter, mais pour Spyder"
+msgid "[NLnet](https://nlnet.nl/): NLnet Foundation, as part of the NGI0 Commons Fund"
+msgstr "[NLnet](https://nlnet.nl/): Fondation NLnet, dans le cadre du NGI0 Commons Fund"
 
-msgid "This plugin could also be implemented by using the Jupyter kernel interface (see above)"
-msgstr "Ce plugin pourrait également être implémenté en utilisant l'interface du noyau Jupyter (voir ci-dessus)"
+msgid "⚠️ *Note: The milestones and dates presented below are indicative and subject to change.*"
+msgstr "⚠️ *Remarque : Les jalons et dates présentés ci-dessous sont indicatifs et susceptibles de changer.*"
 
-msgid "Add support for time series (see `Issue #27 <https://github.com/DataLab-Platform/DataLab/issues/27>`_)"
-msgstr "Ajouter la prise en charge des séries temporelles (voir `Issue #27 <https://github.com/DataLab-Platform/DataLab/issues/27>`_)"
+msgid "Milestone"
+msgstr "Jalon"
 
-msgid "Add a Jupyter kernel interface to DataLab:"
-msgstr "Ajouter une interface de noyau Jupyter à DataLab :"
+msgid "📅 [2.0](https://github.com/DataLab-Platform/DataLab/milestone/12) 2025/12"
+msgstr ""
 
-msgid "This would allow to use DataLab from other software, such as Jupyter notebooks, Spyder or Visual Studio Code"
-msgstr "Cela permettrait d'utiliser DataLab à partir d'autres logiciels, tels que des notebooks Jupyter, Spyder ou Visual Studio Code"
+msgid "This release introduces the [redesign of DataLab’s core architecture](https://nlnet.nl/project/DataLab/):<br>• Core: decoupling data model, computation & I/O from UI<br>• Validation: full migration of test infra, automated & manual testing<br>• Docs & Training: installation guides, API docs, user manuals, onboarding materials"
+msgstr "Cette version introduit la [refonte de l'architecture de base de DataLab](https://nlnet.nl/project/DataLab/) :<br>• Noyau : découplage du modèle de données, du calcul et de l'E/S de l'interface utilisateur<br>• Validation : migration complète de l'infrastructure de test, tests automatisés et manuels<br>• Documentation et formation : guides d'installation, documentation API, manuels d'utilisation, matériel d'intégration"
 
-msgid "This would also allow to share data between DataLab and other software (e.g. display DataLab numerical results in Jupyter notebooks or the other way around, display Jupyter results in DataLab, etc.)"
-msgstr "Cela permettrait également de partager des données entre DataLab et d'autres logiciels (par exemple, afficher les résultats numériques de DataLab dans des notebooks Jupyter ou vice versa, afficher les résultats de Jupyter dans DataLab, etc.)"
+msgid "📅 [1.0](https://github.com/DataLab-Platform/DataLab/milestone/1)<br>2025/09"
+msgstr ""
 
-msgid "After a first and quick look, it seems that the Jupyter kernel interface is not straightforward to implement, so that it may not be worth the effort (the communication between DataLab and Jupyter is currently already possible thanks to the remote control features)"
-msgstr "Après un premier examen rapide, il semble que l'interface du noyau Jupyter ne soit pas simple à implémenter, de sorte qu'il peut ne pas être utile de s'y atteler (la communication entre DataLab et Jupyter est actuellement déjà possible grâce aux fonctionnalités de contrôle à distance)"
+msgid "This release consolidates the features introduced in the V0.x series, and also integrates:<br>• Common: Fourier tools, noise generation, multi-file saving, ...<br>• Image: background subtraction, local smoothing , filtering, sub-image extraction, resampling, ...<br>• Signal: new formats (.SIG, .IMA), signal generators, curve fitting, advanced filtering, ..."
+msgstr "Cette version consolide les fonctionnalités introduites dans la série V0.x, et intègre également :<br>• Commun : outils de Fourier, génération de bruit, sauvegarde multi-fichiers, ...<br>• Image : soustraction de fond, lissage local, filtrage, extraction de sous-image, rééchantillonnage, ...<br>• Signal : nouveaux formats (.SIG, .IMA), générateurs de signaux, ajustement de courbes, filtrage avancé, ..."
 
-msgid "Maintenance"
-msgstr "Maintenance"
+msgid "🏗️ Future Milestones"
+msgstr "🏗️ Jalons futurs"
 
-msgid "2024: switch to gRPC for remote control (instead of XML-RPC), if there is a need for a more efficient communication protocol (see `Issue #18 <https://github.com/DataLab-Platform/DataLab/issues/18>`_)"
-msgstr "2024 : passer à gRPC pour le contrôle à distance (au lieu de XML-RPC), s'il y a besoin d'un protocole de communication plus efficace (voir `Issue #18 <https://github.com/DataLab-Platform/DataLab/issues/18>`_)"
+msgid "ℹ️ The following tasks are long-term goals for DataLab. They are not scheduled for any specific release and may evolve over time based on user needs and project direction."
+msgstr "ℹ️ Les tâches suivantes sont des objectifs à long terme pour DataLab. Elles ne sont pas programmées pour une version spécifique et peuvent évoluer au fil du temps en fonction des besoins des utilisateurs et de l'orientation du projet."
 
-msgid "2025: drop PyQt5 support (end-of-life: mid-2025), and switch to PyQt6 ; this should be straightforward, thanks to the `qtpy` compatibility layer and to the fact that `PlotPyStack` is already compatible with PyQt6)"
-msgstr "2025 : abandonner le support de PyQt5 (fin de vie : mi-2025), et passer à PyQt6 ; cela devrait être simple, grâce à la couche de compatibilité `qtpy` et au fait que `PlotPyStack` est déjà compatible avec PyQt6)"
+msgid "The following table summarizes the future evolutions and maintenance plans for DataLab that are detailed in the sections below."
+msgstr "Le tableau suivant résume les évolutions futures et les plans de maintenance de DataLab qui sont détaillés dans les sections ci-dessous."
 
-msgid "Other tasks"
-msgstr "Autres tâches"
+msgid "Milestone type"
+msgstr "Type de jalon"
 
-msgid "Create a DataLab plugin template (see `Issue #26 <https://github.com/DataLab-Platform/DataLab/issues/26>`_)"
-msgstr "Créer un modèle de plugin DataLab (voir `Issue #26 <https://github.com/DataLab-Platform/DataLab/issues/26>`_)"
+msgid "🔄 Future Evolutions"
+msgstr "🔄 Evolutions futures"
 
-msgid "Past milestones"
-msgstr "Jalons passés"
+msgid "• Support for data acquisition<br>• Web frontend<br>• Support for time series<br>• Database connectors<br>• Jupyter plugin for interactive data analysis<br>• Spyder plugin for interactive data analysis<br>• Jupyter kernel interface for DataLab"
+msgstr "• Prise en charge de l'acquisition de données<br>• Interface Web<br>• Prise en charge des séries temporelles<br>• Connecteurs de base de données<br>• Plugin Jupyter pour l'analyse de données interactive<br>• Plugin Spyder pour l'analyse de données interactive<br>• Interface de noyau Jupyter pour DataLab"
 
-msgid "DataLab 0.11"
-msgstr "DataLab 0.11"
+msgid "🛠️ Maintenance"
+msgstr "🛠️ Maintenance"
 
-msgid "Add a drag-and-drop feature to the signal and image panels, to allow reordering signals and images (see `Issue #17 <https://github.com/DataLab-Platform/DataLab/issues/17>`_)"
-msgstr "Ajouter une fonctionnalité de glisser-déposer aux panneaux de signaux et d'images, pour permettre de réorganiser les signaux et les images (voir `Issue #17 <https://github.com/DataLab-Platform/DataLab/issues/17>`_)"
+msgid "• Transition to gRPC for remote control<br>• Drop Qt5 support and migrate to Qt6"
+msgstr "• Passer à gRPC pour le contrôle à distance<br>• Abandonner la prise en charge de Qt5 et migrer vers Qt6"
 
-msgid "Add \"Move up\" and \"Move down\" buttons to the signal and image panels, to allow reordering signals and images (see `Issue #22 <https://github.com/DataLab-Platform/DataLab/issues/22>`_)"
-msgstr "Ajouter des boutons \"Monter\" et \"Descendre\" aux panneaux de signaux et d'images, pour permettre de réorganiser les signaux et les images (voir `Issue #22 <https://github.com/DataLab-Platform/DataLab/issues/22>`_)"
+msgid "🧱 Other Tasks"
+msgstr "🧱 Autres tâches"
 
-msgid "Add 1D convolution, interpolation, resampling and detrending features"
-msgstr "Ajouter des fonctionnalités de convolution 1D, d'interpolation, de rééchantillonnage et d'élimination des tendances"
+msgid "• Create a DataLab plugin template"
+msgstr "• Créer un modèle de plugin DataLab"
 
-msgid "DataLab 0.10"
-msgstr "DataLab 0.10"
+msgid "🔄 Support for Data Acquisition"
+msgstr "🔄 Prise en charge de l'acquisition de données"
 
-msgid "Develop a very simple DataLab plugin to demonstrate the plugin system"
-msgstr "Développer un plugin DataLab très simple pour démontrer le système de plugins"
+msgid "Adding support for data acquisition would be a major step forward in making DataLab not only a platform for signal and image processing, but also a **versatile tool for real-time experimental workflows**. The idea would be to allow users to acquire data directly from various hardware devices (e.g., cameras, digitizers, spectrometers, etc.) **within DataLab itself**."
+msgstr "Ajouter la prise en charge de l'acquisition de données serait une avancée majeure pour faire de DataLab non seulement une plateforme de traitement des signaux et des images, mais aussi un **outil polyvalent pour les flux de travail expérimentaux en temps réel**. L'idée serait de permettre aux utilisateurs d'acquérir des données directement à partir de divers appareils matériels (caméras, numériseurs, spectromètres, etc.) **au sein même de DataLab**."
 
-msgid "Serialize curve and image styles in HDF5 files"
-msgstr "Sérialiser les styles de courbes et d'images dans les fichiers HDF5"
+msgid "Such a feature would enable **seamless integration between acquisition and analysis**, allowing users to process and visualize data immediately after it is captured, without needing to switch tools or export/import files."
+msgstr "Une telle fonctionnalité permettrait une **intégration transparente entre l'acquisition et l'analyse**, permettant aux utilisateurs de traiter et de visualiser les données immédiatement après leur capture, sans avoir à changer d'outil ou à exporter/importer des fichiers."
 
-msgid "Add an \"Auto-refresh\" global option, to be able to disable the automatic refresh of the main window when doing multiple processing steps, thus improving performance"
-msgstr "Ajouter une option globale \"Rafraîchissement automatique\", pour pouvoir désactiver le rafraîchissement automatique de la fenêtre principale lors de l'exécution de plusieurs étapes de traitement, améliorant ainsi les performances"
+msgid "While no formal design has been established yet, a viable approach could be to:"
+msgstr "Bien qu'aucun travail de conception formel n'ait encore été établi, une approche viable pourrait être de :"
 
-msgid "Improve curve readability (e.g. avoid dashed lines, use contrasted colors, and use anti-aliasing)"
-msgstr "Améliorer la lisibilité des courbes (par exemple, éviter les lignes en pointillés, utiliser des couleurs contrastées et utiliser l'anti-crénelage)"
+msgid "Introduce a **new plugin family dedicated to data acquisition**, following the modular architecture of DataLab;"
+msgstr "Introduire une **nouvelle famille de plugins dédiée à l'acquisition de données**, suivant l'architecture modulaire de DataLab ;"
 
-msgid "DataLab 0.9"
-msgstr "DataLab 0.9"
+msgid "Define a **generic API for acquisition plugins**, ensuring flexibility and compatibility across device types;"
+msgstr "Définir une **API générique pour les plugins d'acquisition**, garantissant flexibilité et compatibilité entre les types de dispositifs ;"
 
-msgid "Python 3.11 is the new reference"
-msgstr "Python 3.11 est la nouvelle référence"
+msgid "**Leverage existing solutions** such as [PyMoDAQ](https://pymodaq.cnrs.fr/), a Python-based data acquisition framework already compatible with a wide range of laboratory instruments."
+msgstr "**Tirer parti des solutions existantes** telles que [PyMoDAQ](https://pymodaq.cnrs.fr/), un cadre d'acquisition de données basé sur Python déjà compatible avec un large éventail d'instruments de laboratoire."
 
-msgid "Run computations in a separate process:"
-msgstr "Exécuter les calculs dans un processus séparé :"
+msgid "A potential **collaboration with the PyMoDAQ development team** could be explored, to benefit from their ecosystem and avoid duplicating efforts. This would also help foster interoperability and promote open standards in the Python scientific instrumentation community."
+msgstr "Une **collaboration potentielle avec l'équipe de développement de PyMoDAQ** pourrait être envisagée, pour bénéficier de leur écosystème et éviter de dupliquer les efforts. Cela aiderait également à favoriser l'interopérabilité et à promouvoir des normes ouvertes dans la communauté d'instrumentation scientifique Python."
 
-msgid "Execute a \"computing server\" in background, in another process"
-msgstr "Exécuter un \"serveur de calcul\" en arrière-plan, dans un autre processus"
+msgid "🌐 Web Frontend"
+msgstr "🌐 Interface Web"
 
-msgid "For each computation, send serialized data and computing function to the server and wait for the result"
-msgstr "Pour chaque calcul, envoyer les données sérialisées et la fonction de calcul au serveur et attendre le résultat"
+msgid "As DataLab's modular architecture evolves, a natural next step is to provide a **web-based frontend** to complement the existing desktop application."
+msgstr "À mesure que l'architecture modulaire de DataLab évolue, une étape naturelle consiste à fournir une **interface Web** pour compléter l'application de bureau existante."
 
-msgid "It is then possible to stop any computation at any time by killing the server process and restarting it (eventually after incrementing the communication port number)"
-msgstr "Il est alors possible d'arrêter n'importe quel calcul à tout moment en tuant le processus du serveur et en le redémarrant (éventuellement après avoir incrémenté le numéro de port de communication)"
+msgid "A web frontend would allow users to:"
+msgstr "Une interface Web permettrait aux utilisateurs de :"
 
-msgid "Optimize image displaying performance"
-msgstr "Optimiser les performances d'affichage des images"
+msgid "**Run DataLab remotely** (e.g. from a server or cloud platform) and access it via a browser;"
+msgstr "**Exécuter DataLab à distance** (par exemple, depuis un serveur ou une plateforme cloud) et y accéder via un navigateur ;"
 
-msgid "Add preferences dialog box"
-msgstr "Ajouter une boîte de dialogue de préférences"
+msgid "Perform processing and visualization tasks without needing a local Python environment;"
+msgstr "Effectuer des tâches de traitement et de visualisation sans avoir besoin d'un environnement Python local ;"
 
-msgid "Add new image processing features: denoising..."
-msgstr "Ajouter de nouvelles fonctionnalités de traitement d'images : débruitage, ..."
+msgid "Facilitate **collaborative data analysis**, sharing sessions or results with colleagues;"
+msgstr "Faciliter l'**analyse de données collaborative**, le partage de sessions ou de résultats avec des collègues ;"
 
-msgid "Image processing results: added support for polygon shapes (e.g. for contour detection)"
-msgstr "Résultats du traitement d'images : ajout de la prise en charge des formes polygonales (par exemple, pour la détection des contours)"
+msgid "Integrate with JupyterHub, dashboards, or lab management tools for centralized usage."
+msgstr "Intégrer JupyterHub, des tableaux de bord ou des outils de gestion de laboratoire pour une utilisation centralisée."
 
-msgid "New plugin system: API for third-party extensions"
-msgstr "Nouveau système de plugins : API pour les extensions tierces"
+msgid "This frontend could be built on top of the upcoming `DataLab-core` library, exposing its features through a web interface — possibly leveraging tools like **JupyterLab extensions**, **Panel**, or **Dash**, depending on the chosen stack."
+msgstr "Cette interface pourrait être construite sur la bibliothèque `DataLab-core` à venir, exposant ses fonctionnalités via une interface Web - en s'appuyant éventuellement sur des outils tels que les **extensions JupyterLab**, **Panel** ou **Dash**, selon la pile choisie."
 
-msgid "Objective #1: a plugin must be manageable using a single Python script, which includes an extension of `ImageProcessor`, `ActionHandler` and new file format support"
-msgstr "Objectif n°1 : un plugin doit être gérable à l'aide d'un seul script Python, qui inclut une extension de `ImageProcessor`, `ActionHandler` et une nouvelle prise en charge du format de fichier"
+msgid "While still exploratory, this direction would increase **accessibility, portability, and scalability** of DataLab, especially in academic, industrial, and cloud-based environments."
+msgstr "Bien que toujours exploratoire, cette direction augmenterait l'**accessibilité, la portabilité et l'évolutivité** de DataLab, en particulier dans les environnements académiques, industriels et basés sur le cloud."
 
-msgid "Objective #2: plugins must be simply stored in a folder wich defaults to the user directory (same folder as \".DataLab.ini\" configuration file)"
-msgstr "Objectif n°2 : les plugins doivent simplement être stockés dans un dossier qui est par défaut le répertoire de l'utilisateur (même dossier que le fichier de configuration \".DataLab.ini\")"
+msgid "⏱️ Support for Time Series"
+msgstr "⏱️ Prise en charge des séries temporelles"
 
-msgid "Add a macro-command system:"
-msgstr "Ajouter un système de macro-commandes :"
+msgid "DataLab currently focuses on generic signal and image processing, but many use cases — especially in scientific instrumentation and experimental physics — involve **time series data**."
+msgstr "DataLab se concentre actuellement sur le traitement générique des signaux et des images, mais de nombreux cas d'utilisation - en particulier dans l'instrumentation scientifique et la physique expérimentale - impliquent des **données de séries temporelles**."
 
-msgid "New embedded Python editor"
-msgstr "Nouvel éditeur Python intégré"
+msgid "Adding dedicated support for time series would make it easier to:"
+msgstr "Ajouter une prise en charge dédiée des séries temporelles faciliterait :"
 
-msgid "Scripts using the same API as high-level applicative test scenarios"
-msgstr "Scripts utilisant la même API que les scénarios de test applicatifs de haut niveau"
+msgid "Handle signals with associated timestamps or non-uniform sampling;"
+msgstr "Prendre en charge des signaux avec des horodatages associés ou un échantillonnage non uniforme ;"
 
-msgid "Support for macro recording"
-msgstr "Prise en charge de l'enregistrement de macro"
+msgid "Perform time-aware processing and visualization (e.g., event alignment, time-based filtering, resampling);"
+msgstr "Effectuer un traitement et une visualisation sensibles au temps (alignement d'événements, filtrage basé sur le temps, rééchantillonnage) ;"
 
-msgid "Add an xmlrpc server to allow DataLab remote control:"
-msgstr "Ajouter un serveur xmlrpc pour permettre le contrôle à distance de DataLab :"
+msgid "Integrate with external systems generating time-indexed data."
+msgstr "Intégrer des systèmes externes générant des données indexées dans le temps."
 
-msgid "Controlling DataLab main features (open a signal or an image, open a HDF5 file, etc.) and processing features (run a computation, etc.)"
-msgstr "Contrôle des principales fonctionnalités de DataLab (ouvrir un signal ou une image, ouvrir un fichier HDF5, etc.) et des fonctionnalités de traitement (exécuter un calcul, etc.)"
+msgid "This feature is tracked in [Issue #27](https://github.com/DataLab-Platform/DataLab/issues/27), where potential use cases and design considerations are discussed."
+msgstr "Cette fonctionnalité est tracée par l'[Issue #27](https://github.com/DataLab-Platform/DataLab/issues/27), où les cas d'utilisation potentiels et les considérations de conception sont discutés."
 
-msgid "Take control of DataLab from a third-party software"
-msgstr "Prendre le contrôle de DataLab à partir d'un logiciel tiers"
+msgid "Introducing robust time series handling would broaden DataLab’s applicability in domains such as data logging, slow control, and real-time monitoring."
+msgstr "Introduire une gestion robuste des séries temporelles élargirait l'applicabilité de DataLab dans des domaines tels que l'enregistrement de données, le contrôle lent et la surveillance en temps réel."
 
-msgid "Run interactive calculations from an IDE (e.g. Spyder or Visual Studio Code)"
-msgstr "Exécuter des calculs interactifs à partir d'un IDE (par exemple Spyder ou Visual Studio Code)"
+msgid "🗃️ Database Connectors"
+msgstr "🗃️ Connecteurs de base de données"
+
+msgid "Currently, DataLab operates primarily on files and in-memory data structures. Adding **connectors to databases** would significantly extend its capabilities, especially for users dealing with large, structured, or historical datasets."
+msgstr "Actuellement, DataLab fonctionne principalement sur des fichiers et des structures de données en mémoire. L'ajout de **connecteurs aux bases de données** étendrait considérablement ses capacités, en particulier pour les utilisateurs traitant de grands ensembles de données structurées ou historiques."
+
+msgid "This feature would allow DataLab to:"
+msgstr "Cette fonctionnalité permettrait à DataLab de :"
+
+msgid "**Query and load data** from SQL or NoSQL databases (e.g. PostgreSQL, SQLite, MongoDB, etc.);"
+msgstr "**Interroger et charger des données** à partir de bases de données SQL ou NoSQL (PostgreSQL, SQLite, MongoDB, etc.) ;"
+
+msgid "Support metadata-driven workflows, where experiments or datasets are referenced from a database;"
+msgstr "Prendre en charge des flux de travail pilotés par les métadonnées, où les expériences ou ensembles de données sont référencés à partir d'une base de données ;"
+
+msgid "**Store analysis results** or annotations back into a database for traceability and reproducibility;"
+msgstr "**Stocker les résultats d'analyse** ou les annotations dans une base de données pour la traçabilité et la reproductibilité ;"
+
+msgid "Facilitate integration into lab information management systems (LIMS) or enterprise data infrastructures."
+msgstr "Faciliter l'intégration dans les systèmes de gestion de l'information de laboratoire (LIMS) ou les infrastructures de données d'entreprise."
+
+msgid "The design could include:"
+msgstr "Le design pourrait inclure :"
+
+msgid "A **plugin-based system** for supporting various database backends;"
+msgstr "Un **système basé sur des plugins** pour prendre en charge divers backends de base de données ;"
+
+msgid "A simple configuration interface for connection settings and query management;"
+msgstr "Une interface de configuration simple pour les paramètres de connexion et la gestion des requêtes ;"
+
+msgid "Integration with pandas or SQLAlchemy for flexible data exchange."
+msgstr "Intégration avec pandas ou SQLAlchemy pour un échange de données flexible."
+
+msgid "This evolution would help bridge the gap between **data acquisition, analysis, and long-term storage**, enabling more robust scientific data workflows."
+msgstr "Cette évolution aiderait à combler le fossé entre **l'acquisition de données, l'analyse et le stockage à long terme**, permettant des flux de travail scientifiques plus robustes."
+
+msgid "📓 Jupyter Plugin for Interactive Data Analysis"
+msgstr "📓 Plugin Jupyter pour l'analyse de données interactive"
+
+#, python-brace-format
+msgid "Although DataLab can already be remotely controlled from a Jupyter notebook — thanks to its existing remote control capabilities (see {ref}`ref-to-remote-control`) — the user experience could be greatly enhanced by developing a **dedicated Jupyter plugin**."
+msgstr "Bien que DataLab puisse déjà être contrôlé à distance depuis un notebook Jupyter - grâce à ses capacités de contrôle à distance existantes (voir {ref}`ref-to-remote-control`) - l'expérience utilisateur pourrait être considérablement améliorée en développant un **plugin Jupyter dédié**."
+
+msgid "This plugin would provide a **tighter integration** between Jupyter and DataLab, offering the following features:"
+msgstr "Ce plugin offrirait une **intégration plus étroite** entre Jupyter et DataLab, offrant les fonctionnalités suivantes :"
+
+msgid "Use DataLab as a **Jupyter kernel**, enabling direct access to its processing capabilities from within a notebook;"
+msgstr "Utiliser DataLab comme un **noyau Jupyter**, permettant un accès direct à ses capacités de traitement depuis un notebook ;"
+
+msgid "**Display numerical results from DataLab in Jupyter**, and vice versa — for example, importing results computed in a Jupyter notebook into the DataLab interface;"
+msgstr "**Afficher les résultats numériques de DataLab dans Jupyter**, et vice versa - par exemple, importer des résultats calculés dans un notebook Jupyter dans l'interface DataLab ;"
+
+msgid "Allow **interactive data manipulation**: use DataLab for efficient signal and image operations, and Jupyter for custom or home-made data analysis routines;"
+msgstr "Autoriser la **manipulation interactive des données** : utiliser DataLab pour des opérations efficaces sur les signaux et les images, et Jupyter pour des routines d'analyse de données personnalisées ou faites maison ;"
+
+msgid "Bridge scripting and GUI workflows, making DataLab more attractive for scientific users familiar with Jupyter environments."
+msgstr "Créer un pont entre les flux de travail de script et d'interface graphique, rendant DataLab plus attrayant pour les utilisateurs scientifiques familiers avec les environnements Jupyter."
+
+msgid "Technically, this plugin could rely on the **Jupyter kernel interface** to expose DataLab's capabilities in an interactive programming context."
+msgstr "Techniquement, ce plugin pourrait s'appuyer sur l'**interface de noyau Jupyter** pour exposer les capacités de DataLab dans un contexte de programmation interactive."
+
+msgid "Such integration would reinforce DataLab’s role in the scientific Python ecosystem and facilitate reproducible, notebook-driven analysis workflows."
+msgstr "Une telle intégration renforcerait le rôle de DataLab dans l'écosystème scientifique Python et faciliterait les flux de travail d'analyse pilotés par des notebooks reproductibles."
+
+msgid "🧩 Spyder Plugin for Interactive Data Analysis"
+msgstr "🧩 Plugin Spyder pour l'analyse de données interactive"
+
+msgid "A plugin for the [Spyder IDE](https://www.spyder-ide.org/) would address the **same use cases as the Jupyter plugin**, providing seamless integration between DataLab and Spyder’s interactive environment."
+msgstr "Un plugin pour l'[IDE Spyder](https://www.spyder-ide.org/) répondrait aux **mêmes cas d'utilisation que le plugin Jupyter**, offrant une intégration transparente entre DataLab et l'environnement interactif de Spyder."
+
+msgid "This plugin would allow users to:"
+msgstr "Ce plugin permettrait aux utilisateurs de :"
+
+msgid "Interact with DataLab directly from Spyder;"
+msgstr "Interagir avec DataLab directement depuis Spyder ;"
+
+msgid "Visualize or send data between the DataLab GUI and the Spyder console;"
+msgstr "Visualiser ou envoyer des données entre l'interface DataLab et la console Spyder ;"
+
+msgid "Use DataLab’s processing capabilities in real time while scripting custom analysis workflows in Spyder."
+msgstr "Utiliser les capacités de traitement de DataLab en temps réel tout en scriptant des flux de travail d'analyse personnalisés dans Spyder."
+
+#, python-brace-format
+msgid "As with the Jupyter integration, this plugin could be implemented by leveraging the **Jupyter kernel interface** (see {ref}`ref-to-remote-control`), which Spyder already supports internally."
+msgstr "Comme pour l'intégration Jupyter, ce plugin pourrait être mis en œuvre en s'appuyant sur l'**interface de noyau Jupyter** (voir {ref}`ref-to-remote-control`), que Spyder prend déjà en charge en interne."
+
+msgid "Such a plugin would enhance DataLab's usability for scientists and engineers who prefer Spyder’s integrated development environment for exploratory analysis."
+msgstr "Un tel plugin améliorerait l'utilisabilité de DataLab pour les scientifiques et les ingénieurs qui préfèrent l'environnement de développement intégré de Spyder pour l'analyse exploratoire."
+
+msgid "🧠 Jupyter Kernel Interface for DataLab"
+msgstr "🧠 Interface de noyau Jupyter pour DataLab"
+
+msgid "Implementing a native **Jupyter kernel interface** for DataLab would provide a more integrated way to use it from other environments such as **Jupyter notebooks, Spyder, or Visual Studio Code**."
+msgstr "Mettre en œuvre une interface de **noyau Jupyter** native pour DataLab fournirait un moyen plus intégré de l'utiliser à partir d'autres environnements tels que **Jupyter notebooks, Spyder ou Visual Studio Code**."
+
+msgid "This interface would allow:"
+msgstr "Cette interface permettrait :"
+
+msgid "Direct control of DataLab from third-party tools that support Jupyter kernels;"
+msgstr "Contrôle direct de DataLab à partir d'outils tiers qui prennent en charge les noyaux Jupyter ;"
+
+msgid "**Two-way data exchange**: e.g., displaying DataLab results inside a notebook, or visualizing Jupyter-generated data inside the DataLab GUI;"
+msgstr "**Échange de données bidirectionnel** : par exemple, afficher les résultats de DataLab dans un notebook, ou visualiser les données générées par Jupyter dans l'interface DataLab ;"
+
+msgid "Tighter integration into scripting workflows and IDEs beyond simple remote control."
+msgstr "Intégration plus étroite dans les flux de travail de script et les IDE au-delà d'un simple contrôle à distance."
+
+#, python-brace-format
+msgid "However, based on initial exploration, implementing a full Jupyter kernel may be **non-trivial and potentially time-consuming**. Given that remote control already enables communication between DataLab and Jupyter (see {ref}`ref-to-remote-control`), the added value of a full kernel integration should be carefully evaluated against its complexity and maintenance cost."
+msgstr "Cependant, sur la base d'explorations initiales, la mise en œuvre d'un noyau Jupyter complet peut être **non triviale et potentiellement chronophage**. Étant donné que le contrôle à distance permet déjà la communication entre DataLab et Jupyter (voir {ref}`ref-to-remote-control`), la valeur ajoutée d'une intégration complète du noyau doit être soigneusement évaluée par rapport à sa complexité et à son coût de maintenance."
+
+msgid "This option remains open for discussion depending on user demand and development resources."
+msgstr "Cette option reste ouverte à la discussion en fonction de la demande des utilisateurs et des ressources de développement."
+
+msgid "🛠️ Maintenance Plan"
+msgstr "🛠️ Plan de maintenance"
+
+msgid "🔄 2026: Transition to gRPC for Remote Control"
+msgstr "🔄 2026 : Passer à gRPC pour le contrôle à distance"
+
+msgid "DataLab currently relies on XML-RPC for remote control, which may become a limitation for more advanced or high-performance use cases. If the need arises for a more **efficient, robust, and extensible communication protocol**, a switch to **gRPC** is under consideration."
+msgstr "DataLab s'appuie actuellement sur XML-RPC pour le contrôle à distance, ce qui peut devenir une limitation pour des cas d'utilisation plus avancés ou haute performance. Si le besoin se fait sentir pour un protocole de communication plus **efficace, robuste et extensible**, un passage à **gRPC** est envisagé."
+
+msgid "This improvement is tracked in [Issue #18](https://github.com/DataLab-Platform/DataLab/issues/18)."
+msgstr "Cette amélioration est tracée par l'[Issue #18](https://github.com/DataLab-Platform/DataLab/issues/18)."
+
+msgid "🚫 2025: Drop Qt5 Support and Migrate to Qt6"
+msgstr "🚫 2025 : Abandonner la prise en charge de Qt5 et migrer vers Qt6"
+
+msgid "With the **end-of-life of Qt5 scheduled for mid-2025**, DataLab will fully migrate to **Qt6**. This transition is expected to be **straightforward**, thanks to:"
+msgstr "Avec la **fin de vie de Qt5 prévue pour mi-2025**, DataLab migrera entièrement vers **Qt6**. Cette transition devrait être **simple**, grâce à :"
+
+msgid "The use of the `qtpy` abstraction layer;"
+msgstr "L'utilisation de la couche d'abstraction `qtpy` ;"
+
+msgid "The fact that the `PlotPyStack` library is already compatible with Qt6."
+msgstr "La bibliothèque `PlotPyStack` est déjà compatible avec Qt6."
+
+msgid "This change will ensure compatibility with future versions of Qt and modern Python environments."
+msgstr "Ce changement garantira la compatibilité avec les futures versions de Qt et les environnements Python modernes."
+
+msgid "🧩 Create a DataLab Plugin Template"
+msgstr "🧩 Créer un modèle de plugin DataLab"
+
+msgid "To encourage community contributions and facilitate the development of extensions, a **template for creating DataLab plugins** is planned."
+msgstr "Pour encourager les contributions de la communauté et faciliter le développement d'extensions, un **modèle pour créer des plugins DataLab** est prévu."
+
+msgid "This template would:"
+msgstr "Ce modèle permettrait :"
+
+msgid "Provide a ready-to-use scaffold with best practices;"
+msgstr "Fournir une structure prête à l'emploi avec les meilleures pratiques ;"
+
+msgid "Help new developers quickly understand the plugin architecture;"
+msgstr "Aider les nouveaux développeurs à comprendre rapidement l'architecture des plugins ;"
+
+msgid "Promote consistency and modularity across third-party plugins."
+msgstr "Promouvoir la cohérence et la modularité entre les plugins tiers."
+
+msgid "The task is tracked in [Issue #26](https://github.com/DataLab-Platform/DataLab/issues/26)."
+msgstr "Cette tâche est tracée par l'[Issue #26](https://github.com/DataLab-Platform/DataLab/issues/26)."
+
+msgid "🏆 Past Milestones"
+msgstr "🏆 Jalons passés"
+
+msgid "From version 0.9 to 0.19, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images."
+msgstr "De la version 0.9 à 0.19, DataLab a connu un développement et des améliorations significatifs. Le projet a évolué d'un simple outil d'analyse de données à une plateforme puissante pour le traitement et la visualisation des signaux et des images."
+
+msgid "Those enhancements have been made possible thanks to the support of the following organizations (see [Funding](#funding) for more details):"
+msgstr "Ces améliorations ont été rendues possibles grâce au soutien des organisations suivantes (voir [Financement](#funding) pour plus de détails) :"
+
+msgid "The following table summarizes the major past milestones of DataLab, including the release dates and a brief description of the features or enhancements introduced in each version."
+msgstr "Le tableau suivant résume les principaux jalons passés de DataLab, y compris les dates de publication et une brève description des fonctionnalités ou améliorations introduites dans chaque version."
+
+msgid "[0.19](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.19.0)<br>2025/04"
+msgstr ""
+
+msgid "• Open all signals or images from a folder (recursively)<br>• ROI editor: add options to create ROIs from coordinates"
+msgstr "• Ouvrir tous les signaux ou images d'un dossier (récursivement)<br>• Éditeur de ROI : ajouter des options pour créer des ROI à partir de coordonnées"
+
+msgid "[0.18](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.18.0)<br>2024/11"
+msgstr ""
+
+msgid "• New pairwise operand mode (the operation is done on each pair of signals/images)<br>• New polygonal ROI feature<br>• Support Windows 7 SP1 to Windows 11 with a single installer"
+msgstr "• Nouveau mode d'opérande par paires (l'opération est effectuée sur chaque paire de signaux/images)<br>• Nouvelle fonctionnalité de ROI polygonal<br>• Prise en charge de Windows 7 SP1 à Windows 11 avec un seul installateur"
+
+msgid "[0.17](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.17.0)<br>2024/08"
+msgstr ""
+
+msgid "• Introduce ROI support across all processing features<br>• Add arithmetic operations on signals and images<br>• New Ubuntu package for native installation on Linux<br>• New Conda package for all platforms (Windows, Linux, MacOS)"
+msgstr "• Introduire la prise en charge des ROI dans toutes les fonctionnalités de traitement<br>• Ajouter des opérations arithmétiques sur les signaux et les images<br>• Nouveau package Ubuntu pour une installation native sur Linux<br>• Nouveau package Conda pour toutes les plateformes (Windows, Linux, MacOS)"
+
+msgid "[0.16](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.16.0)<br>2024/06"
+msgstr ""
+
+msgid "• New validation process for signal and image features<br>• Add support for binary images (unlocking new processing features)"
+msgstr "• Nouveau processus de validation pour les fonctionnalités de signal et d'image<br>• Ajouter la prise en charge des images binaires (déverrouillage de nouvelles fonctionnalités de traitement)"
+
+msgid "[0.15](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.15.0)<br>2024/04"
+msgstr ""
+
+msgid "• New MSI installer for the stand-alone version on Windows<br>• Add support for large text/CSV files (> 1 GB)<br>• Add auto downsampling feature"
+msgstr "• Nouvel installateur MSI pour la version autonome sur Windows<br>• Ajouter la prise en charge de fichiers texte/CSV volumineux (> 1 Go)<br>• Ajouter une fonctionnalité de sous-échantillonnage automatique"
+
+msgid "[0.14](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.14.0)<br>2024/03"
+msgstr ""
+
+msgid "• HDF5 browser: multiple file support, detailed info on groups and attributes<br>• New Debian package for native installation on Linux"
+msgstr "• Navigateur HDF5 : prise en charge de plusieurs fichiers, informations détaillées sur les groupes et les attributs<br>• Nouveau package Debian pour une installation native sur Linux"
+
+msgid "[0.12](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.12.0)<br>2024/02"
+msgstr ""
+
+msgid "• Add a tour and demo feature<br>• Add tutorials to the documentation<br>• Add a Text file import assistant"
+msgstr "• Ajouter une visite et une fonctionnalité de démonstration<br>• Ajouter des tutoriels à la documentation<br>• Ajouter un assistant d'importation de fichiers texte"
+
+msgid "[0.11](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.11.0)<br>2024/01"
+msgstr ""
+
+msgid "• Add features for reordering signals and images (e.g. drag-and-drop)<br>• Add 1D convolution, interpolation, resampling and detrending features"
+msgstr "• Ajouter des fonctionnalités pour réorganiser les signaux et les images (par exemple, glisser-déposer)<br>• Ajouter des fonctionnalités de convolution 1D, d'interpolation, de rééchantillonnage et de désajustement"
+
+msgid "[0.10](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.10.0)<br>2023-12"
+msgstr ""
+
+msgid "• Develop a very simple DataLab plugin to demonstrate the plugin system<br>• Allow to disable the automatic refresh when doing multiple processing steps<br>• Serialize curve and image styles in HDF5 files<br>• Improve curve readability"
+msgstr "• Développer un plugin DataLab très simple pour démontrer le système de plugins<br>• Permettre de désactiver le rafraîchissement automatique lors de plusieurs étapes de traitement<br>• Sérialiser les styles de courbe et d'image dans des fichiers HDF5<br>• Améliorer la lisibilité des courbes"
+
+msgid "[0.9](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.9.0)<br>2023-11"
+msgstr ""
+
+msgid "• Run computations in a separate process<br>• Add a plugin system: API for third-party extensions<br>• Add a macro-command system<br>• Add an XML-RPC server to allow DataLab remote control"
+msgstr "• Exécuter des calculs dans un processus séparé<br>• Ajouter un système de plugin : API pour les extensions tierces<br>• Ajouter un système de macro-commande<br>• Ajouter un serveur XML-RPC pour permettre le contrôle à distance de DataLab"
