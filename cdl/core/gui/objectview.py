@@ -215,7 +215,7 @@ class SimpleObjectTree(QW.QTreeWidget):
     def populate_tree(self) -> None:
         """Populate tree with objects"""
         uuid = self.get_current_item_id()
-        with block_signals(widget=self, enable=True):
+        with block_signals(widget=self):
             self.clear()
         for group in self.objmodel.get_groups():
             self.add_group_item(group)

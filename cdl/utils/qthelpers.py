@@ -415,9 +415,21 @@ def save_restore_stds() -> Generator[None, None, None]:
 
 
 @contextmanager
-def block_signals(widget: QW.QWidget, enable: bool) -> Generator[None, None, None]:
+def block_signals(
+    widget: QW.QWidget, enable: bool = True
+) -> Generator[None, None, None]:
     """Eventually block/unblock widget Qt signals before/after doing some things
-    (enable: True if feature is enabled)"""
+
+    Args:
+        widget: Widget to block/unblock signals
+        enable: Whether to block/unblock signals (default: True). This is useful
+         to avoid blocking signals when not needed without having to handle it by
+         adding an `if` statement which would require to duplicate the code that is
+         inside the `with` statement in the `else` branch.
+
+    Returns:
+        Context manager
+    """
     if enable:
         widget.blockSignals(True)
     try:

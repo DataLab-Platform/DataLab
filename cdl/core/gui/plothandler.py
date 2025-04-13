@@ -176,7 +176,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
                 # Performance optimization: block `plotpy.plot.BasePlot` signals, add
                 # all items except the last one, unblock signals, then add the last one
                 # (this avoids some unnecessary refresh process by PlotPy)
-                with block_signals(self.plot, True):
+                with block_signals(self.plot):
                     with create_progress_bar(
                         self.panel, _("Creating geometric shapes"), max_=len(items) - 1
                     ) as progress:
