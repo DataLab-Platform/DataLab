@@ -1029,8 +1029,12 @@ class SignalActionHandler(BaseActionHandler):
                 ),
             )
             self.new_action(
-                _("Abscissa at y=..."),
+                _("First abscissa at y=..."),
                 triggered=self.panel.processor.compute_x_at_y,
+                tip=_(
+                    "Compute the first abscissa at a given y value "
+                    "(linear interpolation)"
+                ),
             )
             self.new_action(
                 _("Peak detection"),

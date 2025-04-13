@@ -540,8 +540,37 @@ def find_zero_crossings(y: np.ndarray) -> np.ndarray:
     return zero_crossing_indices
 
 
+def find_first_x_at_y_value(x: np.ndarray, y: np.ndarray, y_value: float) -> float:
+    """Find the first x value where the signal reaches a given y value (interpolated).
+
+    Args:
+        x: x signal data
+        y: y signal data (possibly non-monotonic)
+        y_value: the y value to find the corresponding x value for
+
+    Returns:
+        The first interpolated x value at the given y, or `nan` if not found
+    """
+    if y_value < np.nanmin(y) or y_value > np.nanmax(y):
+        return np.nan  # out of bounds
+
+    for i in range(len(y) - 1):
+        y1, y2 = y[i], y[i + 1]
+        if np.isnan(y1) or np.isnan(y2):
+            continue  # skip bad segments
+
+        if (y1 <= y_value <= y2) or (y2 <= y_value <= y1):
+            x1, x2 = x[i], x[i + 1]
+            if y1 == y2:
+                return x1  # flat segment, arbitrary choice
+            # Linear interpolation
+            return x1 + (y_value - y1) * (x2 - x1) / (y2 - y1)
+
+    return np.nan  # not found
+
+
 def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
-    """Find the x value where the y value is the closest to the given value using
+    """Find the x values where the y value is the closest to the given value using
     linear interpolation to deduce the precise x value.
 
     Args:

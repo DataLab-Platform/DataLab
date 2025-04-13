@@ -1604,27 +1604,10 @@ def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
     Returns:
          An object containing the x-value.
     """
-
-    def __compute_x_at_y(x: np.ndarray, y: np.ndarray, value: float) -> float:
-        """Compute the x-value at a given y-value for a signal object.
-
-        Args:
-            x: The x-values of the signal object.
-            y: The y-values of the signal object.
-            value: The y-value to find the x-value for.
-
-        Returns:
-            The x-value at the given y-value.
-        """
-        values = alg.find_x_at_value(x, y, value)
-        if values.size:
-            return values[0]
-        return np.nan
-
     return calc_resultproperties(
         f"x|y={p.y}",
         obj,
-        {"x = %g {.xunit}": lambda xy: __compute_x_at_y(xy[0], xy[1], p.y)},
+        {"x = %g {.xunit}": lambda xy: alg.find_first_x_at_y_value(xy[0], xy[1], p.y)},
     )
 
 
