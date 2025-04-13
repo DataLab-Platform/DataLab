@@ -3369,15 +3369,13 @@ msgid "Select Y value with cursor"
 msgstr "Sélectionner la valeur Y avec le curseur"
 
 msgid "Apply"
-msgstr ""
+msgstr "Appliquer"
 
-#, fuzzy
 msgid "Apply cursor position"
-msgstr "Position de la barre d'outils des graphiques"
+msgstr "Appliquer la position du curseur"
 
-#, fuzzy
 msgid "Cursor position"
-msgstr "Position du centre"
+msgstr "Position du curseur"
 
 msgid "Minimum distance:"
 msgstr "Distance minimale :"
