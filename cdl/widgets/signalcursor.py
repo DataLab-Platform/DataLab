@@ -108,6 +108,7 @@ class SignalCursorDialog(PlotDialog):
         plot.set_antialiasing(True)
 
         xcursor = make.xcursor(np.mean(obj.x), np.mean(obj.y), "X = %g, Y = %g")
+        xcursor.set_selectable(False)
         param = xcursor.markerparam
         param.symbol.facecolor = "blue"
         param.symbol.edgecolor = "cyan"
