@@ -3356,6 +3356,12 @@ msgstr "Les journaux de bord sont vides."
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"
 
+msgid "Select X value with cursor"
+msgstr "Sélectionner la valeur X avec le curseur"
+
+msgid "Select Y value with cursor"
+msgstr "Sélectionner la valeur Y avec le curseur"
+
 msgid "Minimum distance:"
 msgstr "Distance minimale :"
 

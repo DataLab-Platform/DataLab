@@ -23,7 +23,7 @@ from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.signal import ROI1DParam, SignalObj, SignalROI, create_signal
 from cdl.utils.qthelpers import qt_try_except
-from cdl.widgets import fitdialog, signalbaseline, signalpeak
+from cdl.widgets import fitdialog, signalbaseline, signalcursor, signalpeak
 
 
 class SignalProcessor(BaseProcessor[SignalROI]):
@@ -769,12 +769,17 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         self, param: cps.FindAbscissaParam | None = None
     ) -> dict[str, ResultProperties]:
         """Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`."""
-        return self.compute_10(
-            cps.compute_x_at_y,
-            param,
-            cps.FindAbscissaParam,
-            title=_("Find abscissa"),
-        )
+        if param is None:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg = signalcursor.SignalCursorDialog(
+                obj, cursor_orientation="horizontal", parent=self.panel.parent()
+            )
+            if exec_dialog(dlg):
+                param = cps.FindAbscissaParam()
+                param.y = dlg.get_y_value()
+            else:
+                return
+        return self.compute_10(cps.compute_x_at_y, param)
 
     @qt_try_except()
     def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:
