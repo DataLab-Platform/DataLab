@@ -1611,6 +1611,30 @@ def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
     )
 
 
+class FindOrdinateParam(gds.DataSet):
+    """Parameter dataset for ordinate finding"""
+
+    x = gds.FloatItem(_("Abscissa"), default=0)
+
+
+def compute_y_at_x(obj: SignalObj, p: FindOrdinateParam) -> ResultProperties:
+    """
+    Compute the smallest y-value at a given x-value for a signal object.
+
+    Args:
+        obj: The signal object containing x and y data.
+        p: The parameter dataset for finding the ordinate.
+
+    Returns:
+         An object containing the y-value.
+    """
+    return calc_resultproperties(
+        f"y|x={p.x}",
+        obj,
+        {"y = %g {.yunit}": lambda xy: alg.find_y_at_x_value(xy[0], xy[1], p.x)},
+    )
+
+
 def compute_stats(obj: SignalObj) -> ResultProperties:
     """Compute statistics on a signal
 

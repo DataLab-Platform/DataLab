@@ -569,6 +569,31 @@ def find_first_x_at_y_value(x: np.ndarray, y: np.ndarray, y_value: float) -> flo
     return np.nan  # not found
 
 
+def find_y_at_x_value(x: np.ndarray, y: np.ndarray, x_value: float) -> float:
+    """Find the y value at a given x value using linear interpolation.
+
+    Args:
+        x: Monotonic X data
+        y: Y data (may contain NaNs)
+        x_value: The x value to find the corresponding y value for
+
+    Returns:
+        The interpolated y value at the given x, or `nan` if not computable
+    """
+    if np.isnan(x_value):
+        return np.nan
+
+    # Filter out NaNs
+    valid = ~(np.isnan(x) | np.isnan(y))
+    x_valid = x[valid]
+    y_valid = y[valid]
+
+    if len(x_valid) == 0 or x_value < x_valid[0] or x_value > x_valid[-1]:
+        return np.nan
+
+    return float(np.interp(x_value, x_valid, y_valid))
+
+
 def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
     """Find the x values where the y value is the closest to the given value using
     linear interpolation to deduce the precise x value.

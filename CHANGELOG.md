@@ -15,6 +15,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Added the "Select tool" to editor's toolbar, to allow the user to switch between the "Select" and "Draw" tools easily without having to use the plot toolbar on the top of the window
 * Signal processing features ("Processing" menu):
   * New "X-Y mode" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)
+  * New abscissa and ordinate find features:
+    * "First abscissa at y=..." feature: this feature allows to find the first abscissa value of a signal at a given y value (e.g. the abscissa value of a signal at y=0)
+    * "Ordinate at x=..." feature: this feature allows to find the ordinate value of a signal at a given x value (e.g. the ordinate value of a signal at x=0)
+    * Each feature has its own dialog box, which allows to set the y or x value to be used for the search with a slider or a text box
+    * This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)
 * Public API (local or remote):
   * Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:
     * This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes

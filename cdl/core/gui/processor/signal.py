@@ -782,6 +782,23 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         return self.compute_10(cps.compute_x_at_y, param)
 
     @qt_try_except()
+    def compute_y_at_x(
+        self, param: cps.FindOrdinateParam | None = None
+    ) -> dict[str, ResultProperties]:
+        """Compute y at x with :py:func:`cdl.computation.signal.compute_y_at_x`."""
+        if param is None:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg = signalcursor.SignalCursorDialog(
+                obj, cursor_orientation="vertical", parent=self.panel.parent()
+            )
+            if exec_dialog(dlg):
+                param = cps.FindOrdinateParam()
+                param.x = dlg.get_x_value()
+            else:
+                return
+        return self.compute_10(cps.compute_y_at_x, param)
+
+    @qt_try_except()
     def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:
         """Compute sampling rate and period (mean and std)
         with :py:func:`cdl.computation.signal.compute_sampling_rate_period`"""

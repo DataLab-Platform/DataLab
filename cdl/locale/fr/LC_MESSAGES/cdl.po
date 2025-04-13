@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-04-13 10:06+0200\n"
+"POT-Creation-Date: 2025-04-13 11:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -793,6 +793,9 @@ msgstr ""
 msgid "Ordinate"
 msgstr "Coordonnées"
 
+msgid "Abscissa"
+msgstr "Abscisse"
+
 msgid "Full scale"
 msgstr "Pleine échelle"
 
@@ -1213,6 +1216,12 @@ msgstr "Première abscisse à y=..."
 msgid "Compute the first abscissa at a given y value (linear interpolation)"
 msgstr ""
 "Calcule la première abscisse à une valeur y donnée (interpolation linéaire)"
+
+msgid "Ordinate at x=..."
+msgstr "Ordonnée à x=..."
+
+msgid "Compute the ordinate at a given x value (linear interpolation)"
+msgstr "Calcule l'ordonnée à une valeur x donnée (interpolation linéaire)"
 
 msgid "Peak detection"
 msgstr "Détection de pics"
@@ -2278,9 +2287,6 @@ msgstr "LMH"
 
 msgid "FW"
 msgstr "LH"
-
-msgid "Find abscissa"
-msgstr "Trouver l'abscisse"
 
 msgid "Bandwidth"
 msgstr "Bande passante"
@@ -3361,6 +3367,17 @@ msgstr "Sélectionner la valeur X avec le curseur"
 
 msgid "Select Y value with cursor"
 msgstr "Sélectionner la valeur Y avec le curseur"
+
+msgid "Apply"
+msgstr ""
+
+#, fuzzy
+msgid "Apply cursor position"
+msgstr "Position de la barre d'outils des graphiques"
+
+#, fuzzy
+msgid "Cursor position"
+msgstr "Position du centre"
 
 msgid "Minimum distance:"
 msgstr "Distance minimale :"

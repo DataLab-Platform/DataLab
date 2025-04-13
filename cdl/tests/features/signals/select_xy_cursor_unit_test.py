@@ -10,6 +10,7 @@ Signal horizontal or vertical cursor selection unit test.
 from typing import Literal
 
 import numpy as np
+import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.algorithms.signal import find_first_x_at_y_value
@@ -18,10 +19,11 @@ from cdl.tests.data import create_paracetamol_signal
 from cdl.widgets.signalcursor import SignalCursorDialog
 
 
+@pytest.mark.parametrize("cursor_orientation", ["horizontal", "vertical"])
 def test_signal_cursor_selection(
     cursor_orientation: Literal["horizontal", "vertical"],
 ) -> None:
-    """Signal cursor selection unit test."""
+    """Parametrized signal cursor selection unit test."""
     sig = create_paracetamol_signal()
     with qt_app_context():
         dlg = SignalCursorDialog(signal=sig, cursor_orientation=cursor_orientation)

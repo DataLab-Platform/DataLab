@@ -84,6 +84,20 @@ def test_signal_x_at_y() -> None:
     check_scalar_result("x|y=0.5", df["x"][0], 0.0)
 
 
+@pytest.mark.validation
+def test_signal_y_at_x() -> None:
+    """Validation test for the ordinate finding computation."""
+    newparam = cdl.obj.new_signal_param(
+        stype=cdl.obj.SignalTypes.TRIANGLE, xmin=0.0, xmax=10.0, size=101
+    )
+    obj = cdl.obj.create_signal_from_param(newparam)
+    if obj is None:
+        raise ValueError("Failed to create test signal")
+    param = cps.FindOrdinateParam.create(x=2.5)
+    df = cps.compute_y_at_x(obj, param).to_dataframe()
+    check_scalar_result("y|x=0.5", df["y"][0], 1.0)
+
+
 if __name__ == "__main__":
     test_signal_bandwidth_3db()
     test_dynamic_parameters()
@@ -91,3 +105,4 @@ if __name__ == "__main__":
     test_signal_contrast()
     test_signal_x_at_minmax()
     test_signal_x_at_y()
+    test_signal_y_at_x()

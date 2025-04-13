@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-08 11:05+0200\n"
+"POT-Creation-Date: 2025-04-13 11:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -56,6 +56,21 @@ msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
 
 msgid "New \"X-Y mode\" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)"
 msgstr "Nouvelle fonctionnalité \"Mode X-Y\" : cette fonctionnalité simule le comportement du mode X-Y d'un oscilloscope, c'est-à-dire qu'elle permet de tracer un signal en fonction d'un autre signal (par exemple X en fonction de Y)"
+
+msgid "New abscissa and ordinate find features:"
+msgstr "Nouvelles fonctionnalités de recherche d'abscisse et d'ordonnée :"
+
+msgid "\"First abscissa at y=...\" feature: this feature allows to find the first abscissa value of a signal at a given y value (e.g. the abscissa value of a signal at y=0)"
+msgstr "Fonctionnalité \"Abscisse à y=...\" : cette fonctionnalité permet de trouver la première valeur d'abscisse d'un signal à une valeur y donnée (par exemple, la valeur d'abscisse d'un signal à y=0)"
+
+msgid "\"Ordinate at x=...\" feature: this feature allows to find the ordinate value of a signal at a given x value (e.g. the ordinate value of a signal at x=0)"
+msgstr "Fonctionnalité \"Ordonnée à x=...\" : cette fonctionnalité permet de trouver la valeur d'ordonnée d'un signal à une valeur x donnée (par exemple, la valeur d'ordonnée d'un signal à x=0)"
+
+msgid "Each feature has its own dialog box, which allows to set the y or x value to be used for the search with a slider or a text box"
+msgstr "Chaque fonctionnalité a sa propre boîte de dialogue, qui permet de définir la valeur y ou x à utiliser pour la recherche avec un curseur ou une zone de texte"
+
+msgid "This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
+msgstr "Ceci clotûre les tickets [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) et [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
 
 msgid "Public API (local or remote):"
 msgstr "API publique (locale ou distante) :"
@@ -129,9 +144,6 @@ msgstr "Correction de l'[Issue #165](https://github.com/DataLab-Platform/DataLab
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"
 
-msgid "💥 New features and enhancements:"
-msgstr "💥 Nouvelles fonctionnalités et améliorations :"
-
 msgid "Image operation features (\"Operations\" menu):"
 msgstr "Fonctionnalités d'opération sur les images (menu \"Opérations\") :"
 
@@ -140,9 +152,6 @@ msgstr "Renommage du sous-menu \"Rotation\" en \"Symétrie ou rotation\""
 
 msgid "New \"Flip diagonally\" feature"
 msgstr "Nouvelle fonctionnalité \"Symétrie diagonale\""
-
-msgid "Signal processing features (\"Processing\" menu):"
-msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
 
 msgid "New \"Convert to Cartesian coordinates\" feature"
 msgstr "Nouvelle fonctionnalité \"Convertir en coordonnées cartésiennes\""
@@ -182,9 +191,6 @@ msgstr "Ajout de la méthode `compute_inverse` pour les processeurs d'image et d
 
 msgid "This closes [Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - New feature: `1/x` for signals and images"
 msgstr "Ceci corrige l'[Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - Nouvelle fonctionnalité : `1/x` pour les signaux et les images"
-
-msgid "Public API (local or remote):"
-msgstr "API publique (locale ou distante) :"
 
 msgid "Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:"
 msgstr "Ajout de la méthode `add_group` avec les arguments `title` et `select` pour créer un nouveau groupe dans un panneau de données (par exemple, panneau Signal ou Image) et éventuellement le sélectionner après sa création :"
@@ -257,9 +263,6 @@ msgstr "La ROI polygonale n'est pas encore prise en charge"
 
 msgid "This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates"
 msgstr "Ceci clotûre le ticket [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - Éditeur de ROI : ajouter la saisie manuelle des coordonnées"
-
-msgid "🛠️ Bug fixes:"
-msgstr "🛠️ Corrections de bugs :"
 
 msgid "Fixed [Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Image analysis: mask `nan` values when computing statistics, for example"
 msgstr "Correction de l'[Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Analyse d'image : masque des valeurs `nan` lors du calcul des statistiques, par exemple"
