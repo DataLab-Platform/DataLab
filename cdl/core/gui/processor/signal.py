@@ -23,7 +23,13 @@ from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.signal import ROI1DParam, SignalObj, SignalROI, create_signal
 from cdl.utils.qthelpers import qt_try_except
-from cdl.widgets import fitdialog, signalbaseline, signalcursor, signalpeak
+from cdl.widgets import (
+    fitdialog,
+    signalbaseline,
+    signalcursor,
+    signaldeltax,
+    signalpeak,
+)
 
 
 class SignalProcessor(BaseProcessor[SignalROI]):
@@ -738,6 +744,22 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         return self.compute_10(cps.compute_fw1e2, title=_("FW") + "1/e²")
 
     @qt_try_except()
+    def compute_full_width_at_y(
+        self, param: cdl.param.OrdinateParam | None = None
+    ) -> dict[str, ResultShape]:
+        """Compute full width at a given y
+        with :py:func:`cdl.computation.signal.compute_full_width_at_y`"""
+        if param is None:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.panel.parent())
+            if exec_dialog(dlg):
+                param = cps.OrdinateParam()
+                param.y = dlg.get_y_value()
+            else:
+                return
+        return self.compute_10(cps.compute_full_width_at_y, param)
+
+    @qt_try_except()
     def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics
         with :py:func:`cdl.computation.signal.compute_stats`"""
@@ -766,7 +788,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_x_at_y(
-        self, param: cps.FindAbscissaParam | None = None
+        self, param: cps.OrdinateParam | None = None
     ) -> dict[str, ResultProperties]:
         """Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`."""
         if param is None:
@@ -775,7 +797,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 obj, cursor_orientation="horizontal", parent=self.panel.parent()
             )
             if exec_dialog(dlg):
-                param = cps.FindAbscissaParam()
+                param = cps.OrdinateParam()
                 param.y = dlg.get_y_value()
             else:
                 return
@@ -783,7 +805,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_y_at_x(
-        self, param: cps.FindOrdinateParam | None = None
+        self, param: cps.AbscissaParam | None = None
     ) -> dict[str, ResultProperties]:
         """Compute y at x with :py:func:`cdl.computation.signal.compute_y_at_x`."""
         if param is None:
@@ -792,7 +814,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 obj, cursor_orientation="vertical", parent=self.panel.parent()
             )
             if exec_dialog(dlg):
-                param = cps.FindOrdinateParam()
+                param = cps.AbscissaParam()
                 param.x = dlg.get_x_value()
             else:
                 return

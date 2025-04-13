@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 11:52+0200\n"
+"POT-Creation-Date: 2025-04-13 19:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -71,6 +71,18 @@ msgstr "Chaque fonctionnalité a sa propre boîte de dialogue, qui permet de dé
 
 msgid "This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
 msgstr "Ceci clotûre les tickets [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) et [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
+
+msgid "New full width at given y feature:"
+msgstr "Nouvelle fonctionnalité de calcul de largeur à un y donné :"
+
+msgid "The \"Full width at y=...\" feature allows to find the full width of a signal at a given y value (e.g. the full width of a signal at y=0)"
+msgstr "La fonctionnalité \"Largeur à y=...\" permet de calculer la largeur d'un signal à une valeur y donnée"
+
+msgid "A specific dialog box allows to set the y value to be used for the search with a slider or a text box"
+msgstr "Une boîte de dialogue spécifique permet de définir la valeur y à utiliser avec un curseur ou une zone de texte"
+
+msgid "This closes [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+msgstr "Ceci clotûre le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
 msgid "Public API (local or remote):"
 msgstr "API publique (locale ou distante) :"

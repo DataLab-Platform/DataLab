@@ -1587,13 +1587,29 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2, add_label=True)
 
 
-class FindAbscissaParam(gds.DataSet):
-    """Parameter dataset for abscissa finding"""
+class OrdinateParam(gds.DataSet):
+    """Ordinate parameter"""
 
     y = gds.FloatItem(_("Ordinate"), default=0)
 
 
-def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
+def compute_full_width_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
+    """
+    Compute full width at a given y value for a signal object.
+
+    Args:
+        obj: The signal object containing x and y data.
+        p: The ordinate parameter dataset
+
+    Returns:
+        Segment coordinates
+    """
+    return calc_resultshape(
+        "∆X", "segment", obj, alg.full_width_at_y, p.y, add_label=True
+    )
+
+
+def compute_x_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
     """
     Compute the smallest x-value at a given y-value for a signal object.
 
@@ -1611,13 +1627,13 @@ def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
     )
 
 
-class FindOrdinateParam(gds.DataSet):
-    """Parameter dataset for ordinate finding"""
+class AbscissaParam(gds.DataSet):
+    """Abscissa parameter"""
 
     x = gds.FloatItem(_("Abscissa"), default=0)
 
 
-def compute_y_at_x(obj: SignalObj, p: FindOrdinateParam) -> ResultProperties:
+def compute_y_at_x(obj: SignalObj, p: AbscissaParam) -> ResultProperties:
     """
     Compute the smallest y-value at a given x-value for a signal object.
 

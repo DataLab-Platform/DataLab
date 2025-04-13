@@ -79,7 +79,7 @@ def test_signal_x_at_y() -> None:
     obj = cdl.obj.create_signal_from_param(newparam)
     if obj is None:
         raise ValueError("Failed to create test signal")
-    param = cps.FindAbscissaParam.create(y=0.5)
+    param = cps.OrdinateParam.create(y=0.5)
     df = cps.compute_x_at_y(obj, param).to_dataframe()
     check_scalar_result("x|y=0.5", df["x"][0], 0.0)
 
@@ -93,7 +93,7 @@ def test_signal_y_at_x() -> None:
     obj = cdl.obj.create_signal_from_param(newparam)
     if obj is None:
         raise ValueError("Failed to create test signal")
-    param = cps.FindOrdinateParam.create(x=2.5)
+    param = cps.AbscissaParam.create(x=2.5)
     df = cps.compute_y_at_x(obj, param).to_dataframe()
     check_scalar_result("y|x=0.5", df["y"][0], 1.0)
 

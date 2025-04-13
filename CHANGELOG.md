@@ -20,6 +20,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * "Ordinate at x=..." feature: this feature allows to find the ordinate value of a signal at a given x value (e.g. the ordinate value of a signal at x=0)
     * Each feature has its own dialog box, which allows to set the y or x value to be used for the search with a slider or a text box
     * This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)
+  * New full width at given y feature:
+    * The "Full width at y=..." feature allows to find the full width of a signal at a given y value (e.g. the full width of a signal at y=0)
+    * A specific dialog box allows to set the y value to be used for the search with a slider or a text box
+    * This closes [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)
 * Public API (local or remote):
   * Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:
     * This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes

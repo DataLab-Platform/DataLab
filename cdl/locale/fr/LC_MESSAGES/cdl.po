@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-04-13 15:15+0200\n"
+"POT-Creation-Date: 2025-04-13 19:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1199,6 +1199,12 @@ msgstr "Largeur à "
 
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
+
+msgid "Full width at y=..."
+msgstr "Largeur à y=..."
+
+msgid "Compute the full width at a given y value"
+msgstr "Calcule la largeur à une valeur y donnée"
 
 msgid "Abscissa of the minimum and maximum"
 msgstr "Abscisse du minimum et du maximum"

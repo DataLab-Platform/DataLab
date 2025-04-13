@@ -1021,6 +1021,11 @@ class SignalActionHandler(BaseActionHandler):
                 icon_name="fw1e2.svg",
             )
             self.new_action(
+                _("Full width at y=..."),
+                triggered=self.panel.processor.compute_full_width_at_y,
+                tip=_("Compute the full width at a given y value"),
+            )
+            self.new_action(
                 _("Abscissa of the minimum and maximum"),
                 triggered=self.panel.processor.compute_x_at_minmax,
                 tip=_(

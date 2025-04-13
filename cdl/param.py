@@ -85,7 +85,9 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.DynamicParam
     :no-index:
-.. autodataset:: cdl.param.FindAbscissaParam
+.. autodataset:: cdl.param.AbscissaParam
+    :no-index:
+.. autodataset:: cdl.param.OrdinateParam
     :no-index:
 .. autodataset:: cdl.param.FWHMParam
     :no-index:
@@ -261,13 +263,14 @@ from cdl.computation.image.restoration import (
 from cdl.computation.image.threshold import ThresholdParam
 from cdl.computation.signal import (
     AllanVarianceParam,
+    AbscissaParam,
     AngleUnitParam,
     BandPassFilterParam,
     BandStopFilterParam,
     DataTypeSParam,
     DetrendingParam,
     DynamicParam,
-    FindAbscissaParam,
+    OrdinateParam,
     FWHMParam,
     HighPassFilterParam,
     InterpolationParam,

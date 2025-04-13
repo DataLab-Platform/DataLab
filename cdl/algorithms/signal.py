@@ -893,6 +893,25 @@ def sampling_rate(x: np.ndarray) -> float:
 # MARK: Pulse analysis -----------------------------------------------------------------
 
 
+def full_width_at_y(
+    data: np.ndarray, level: float
+) -> tuple[float, float, float, float]:
+    """Compute the full width at a given y level using zero-crossing method.
+
+    Args:
+        data: X,Y data
+        level: The Y level at which to compute the width
+
+    Returns:
+        Full width segment coordinates
+    """
+    x, y = data
+    crossings = find_x_at_value(x, y, level)
+    if crossings.size < 2:
+        raise ValueError("Not enough zero-crossing points found")
+    return crossings[0], level, crossings[-1], level
+
+
 def fwhm(
     data: np.ndarray,
     method: Literal["zero-crossing", "gauss", "lorentz", "voigt"] = "zero-crossing",

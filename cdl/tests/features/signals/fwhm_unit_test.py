@@ -1,12 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Unit tests for signal computing functions
------------------------------------------
-
-Features from the "Computing" menu are covered by this test.
-The "Computing" menu contains functions to compute signal properties like
-bandwidth, ENOB, etc.
+Unit tests for full width computing features
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -86,7 +81,18 @@ def test_signal_fw1e2() -> None:
     cdl.utils.tests.check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
 
 
+@pytest.mark.validation
+def test_signal_full_width_at_y() -> None:
+    """Validation test for the full width at y computation."""
+    obj = cdltd.get_test_signal("fwhm.txt")
+    real_fwhm = 2.675  # Manual validation
+    param = cdl.param.OrdinateParam.create(y=0.5)
+    df = cps.compute_full_width_at_y(obj, param).to_dataframe()
+    cdl.utils.tests.check_scalar_result("∆X", df.L[0], real_fwhm, rtol=0.05)
+
+
 if __name__ == "__main__":
     test_signal_fwhm_interactive()
     test_signal_fwhm()
     test_signal_fw1e2()
+    test_signal_full_width_at_y()
