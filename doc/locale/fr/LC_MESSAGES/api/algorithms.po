@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 14:15+0100\n"
+"POT-Creation-Date: 2025-04-14 10:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -197,22 +197,52 @@ msgid "1-dimensional Voigt fit model"
 msgstr "Modèle de régression Voigt à 1 dimension"
 
 msgid "Find the left indices of the zero-crossing intervals in the given array."
-msgstr ""
+msgstr "Recherche les indices de gauche des intervalles de passage par zéro dans le tableau donné."
 
 msgid "Input array."
 msgstr "Tableau d'entrée."
 
 msgid "An array of indices where zero-crossings occur."
-msgstr ""
+msgstr "Un tableau d'indices où les passages par zéro se produisent."
 
-msgid "Find the x value where the y value is the closest to the given value using linear interpolation to deduce the precise x value."
-msgstr "Rechercher la valeur x où la valeur y est la plus proche de la valeur donnée en utilisant une interpolation linéaire pour déduire la valeur x précise."
+msgid "Find the first x value where the signal reaches a given y value (interpolated)."
+msgstr "Trouver la première valeur x où le signal atteint une valeur y donnée (interpolée)."
+
+msgid "x signal data"
+msgstr "données x du signal"
+
+msgid "y signal data (possibly non-monotonic)"
+msgstr "données y du signal (possiblement non monotoniques)"
+
+msgid "the y value to find the corresponding x value for"
+msgstr "la valeur y pour laquelle trouver la valeur x correspondante"
+
+msgid "The first interpolated x value at the given y, or `nan` if not found"
+msgstr "la première valeur x interpolée à la valeur y donnée, ou `nan` si non trouvée"
+
+msgid "Find the y value at a given x value using linear interpolation."
+msgstr "Rechercher la valeur y à une valeur x donnée en utilisant une interpolation linéaire."
+
+msgid "Monotonic X data"
+msgstr "Données X (fonction monotone)"
+
+msgid "Y data (may contain NaNs)"
+msgstr "Données Y (peut contenir des NaNs)"
+
+msgid "The x value to find the corresponding y value for"
+msgstr "La valeur x pour laquelle trouver la valeur y correspondante"
+
+msgid "The interpolated y value at the given x, or `nan` if not computable"
+msgstr "La valeur y interpolée à la valeur x donnée, ou `nan` si non calculable"
+
+msgid "Find the x values where the y value is the closest to the given value using linear interpolation to deduce the precise x value."
+msgstr "Trouver les valeurs x où la valeur y est la plus proche de la valeur donnée en utilisant une interpolation linéaire pour déduire la valeur x précise."
 
 msgid "Value to find"
 msgstr "Valeur à rechercher"
 
 msgid "An array of x values where the y value is the closest to the given value (empty array if no zero crossing is found)"
-msgstr "Valeur X où la valeur Y est la plus proche de la valeur donnée (tableau vide si aucun zéro n'est trouvé)"
+msgstr "Valeur X où la valeur Y est la plus proche de la valeur donnée (tableau vide si aucun passage par zéro n'est trouvé)"
 
 msgid "Compute the bandwidth of the signal at a given level."
 msgstr "Calculer la largeur de bande du signal à un niveau donné."
@@ -243,9 +273,6 @@ msgstr "Un tuple contenant les paramètres d'ajustement (amplitude, fréquence, 
 
 msgid "Compute the frequency of a sinusoidal signal."
 msgstr "Calculer la fréquence d'un signal sinusoïdal."
-
-msgid "x signal data"
-msgstr "données x du signal"
 
 msgid "y signal data"
 msgstr "données y du signal"
@@ -304,11 +331,20 @@ msgstr "Calculer le taux d'échantillonnage moyen"
 msgid "Sampling rate"
 msgstr "Taux d'échantillonnage"
 
+msgid "Compute the full width at a given y level using zero-crossing method."
+msgstr "Calculer la largeur totale à un niveau y donné en utilisant la méthode du passage par zéro."
+
+msgid "The Y level at which to compute the width"
+msgstr "Niveau Y auquel calculer la largeur"
+
+msgid "Full width segment coordinates"
+msgstr "Coordonnées du segment de largeur totale"
+
 msgid "Compute Full Width at Half Maximum (FWHM) of the input data"
 msgstr "Calculer la largeur totale à mi-hauteur (FWHM) des données d'entrée"
 
 msgid "Calculation method. Two types of methods are supported: a zero-crossing method and fitting methods (based on various models: Gauss, Lorentz, Voigt). Defaults to \"zero-crossing\"."
-msgstr "Méthode de calcul. Deux types de méthodes sont pris en charge : une méthode de croisement à zéro et des méthodes d'ajustement (basées sur divers modèles : Gauss, Lorentz, Voigt). Par défaut : \"zero-crossing\"."
+msgstr "Méthode de calcul. Deux types de méthodes sont pris en charge : une méthode du passage par zéro et des méthodes d'ajustement (basées sur divers modèles : Gauss, Lorentz, Voigt). Par défaut : \"zero-crossing\"."
 
 msgid "Lower X bound for the fitting. Defaults to None (no lower bound, i.e. the fitting starts from the first point)."
 msgstr "Borne X inférieure pour l'ajustement. Par défaut : None (pas de borne inférieure, c'est-à-dire que l'ajustement commence à partir du premier point)."
@@ -326,67 +362,67 @@ msgid "FW at 1/e² segment coordinates"
 msgstr "Coordonnées du segment LMH à 1/e²"
 
 msgid "Calculate the Allan variance for given time and measurement values at specified tau values."
-msgstr ""
+msgstr "Calculer la variance d'Allan pour les valeurs de temps et de mesure données aux valeurs tau spécifiées."
 
 msgid "Time array"
 msgstr "Tableau des temps"
 
 msgid "Measured values array"
-msgstr ""
+msgstr "Tableau des valeurs mesurées"
 
 msgid "Allan deviation time values"
-msgstr ""
+msgstr "Valeurs de temps de la déviation d'Allan"
 
 msgid "Allan variance values"
-msgstr ""
+msgstr "Valeurs de variance d'Allan"
 
 msgid "Calculate the Allan deviation for given time and measurement values at specified tau values."
-msgstr ""
+msgstr "Calculer la déviation d'Allan pour les valeurs de temps et de mesure données aux valeurs tau spécifiées."
 
 msgid "Allan deviation values"
-msgstr ""
+msgstr "Valeurs de déviation d'Allan"
 
 msgid "Calculate the Overlapping Allan variance for given time and measurement values."
-msgstr ""
+msgstr "Calculer la variance d'Allan chevauchante pour les valeurs de temps et de mesure données."
 
 msgid "Overlapping Allan variance values"
-msgstr ""
+msgstr "Valeurs de variance d'Allan chevauchante"
 
 msgid "Calculate the Modified Allan variance for given time and measurement values."
-msgstr ""
+msgstr "Calculer la variance d'Allan modifiée pour les valeurs de temps et de mesure données."
 
 msgid "Modified Allan deviation time values"
-msgstr ""
+msgstr "Valeurs de temps de la déviation d'Allan modifiée"
 
 msgid "Modified Allan variance values"
-msgstr ""
+msgstr "Valeurs de variance d'Allan modifiée"
 
 msgid "Calculate the Hadamard variance for given time and measurement values."
-msgstr ""
+msgstr "Calculer la variance d'Hadamard pour les valeurs de temps et de mesure données."
 
 msgid "Hadamard deviation time values"
-msgstr ""
+msgstr "Valeurs de temps de la déviation d'Hadamard"
 
 msgid "Hadamard variance values"
-msgstr ""
+msgstr "Valeurs de variance d'Hadamard"
 
 msgid "Calculate the Total variance for given time and measurement values."
-msgstr ""
+msgstr "Calculer la variance totale pour les valeurs de temps et de mesure données."
 
 msgid "Total variance time values"
-msgstr ""
+msgstr "Valeurs de temps de la variance totale"
 
 msgid "Total variance values"
-msgstr ""
+msgstr "Valeurs de variance totale"
 
 msgid "Calculate the Time Deviation (TDEV) for given time and measurement values."
-msgstr ""
+msgstr "Calculer la déviation temporelle (TDEV) pour les valeurs de temps et de mesure données."
 
 msgid "Time deviation time values"
-msgstr ""
+msgstr "Valeurs de temps de la déviation temporelle"
 
 msgid "Time deviation values"
-msgstr ""
+msgstr "Valeurs de déviation temporelle"
 
 msgid "Image Processing Algorithms"
 msgstr "Algorithmes de traitement d'image"
@@ -689,16 +725,16 @@ msgid "True if data type is a complex type"
 msgstr "True si le type de données est un type complexe"
 
 msgid "Convert array to a new data type, after having clipped values to the new data type's range if it is an integer type. If data type is not integer, this is equivalent to ``data.astype(dtype)``."
-msgstr ""
+msgstr "Convertit le tableau en un nouveau type de données, après avoir coupé les valeurs à la plage du nouveau type de données si c'est un type entier. Si le type de données n'est pas entier, cela équivaut à ``data.astype(dtype)``."
 
 msgid "Array to convert"
-msgstr ""
+msgstr "Tableau à convertir"
 
 msgid "Data type to convert to"
 msgstr "Type de données après conversion"
 
 msgid "Array converted to new data type"
-msgstr ""
+msgstr "Tableau converti au nouveau type de données"
 
 msgid "Coordinate Conversion Algorithms"
 msgstr "Algorithmes de conversion de coordonnées"
@@ -824,28 +860,28 @@ msgid "Convert Cartesian coordinates to polar coordinates."
 msgstr "Convertit les coordonnées de diamètre X du cercle en centre et rayon"
 
 msgid "Cartesian x-coordinate."
-msgstr ""
+msgstr "Coordonnée x cartésienne."
 
 msgid "Cartesian y-coordinate."
-msgstr ""
+msgstr "Coordonnée y cartésienne."
 
 msgid "Unit of the angle ('rad' or 'deg')."
-msgstr ""
+msgstr "Unité de l'angle ('rad' ou 'deg')."
 
 msgid "Polar coordinates (r, theta) where r is the radius and theta is the angle."
-msgstr ""
+msgstr "Coordonnées polaires (r, theta) où r est le rayon et theta est l'angle."
 
 msgid "Convert polar coordinates to Cartesian coordinates."
-msgstr ""
+msgstr "Convertit les coordonnées polaires en coordonnées cartésiennes."
 
 msgid "Polar radius."
-msgstr ""
+msgstr "Rayon polaire."
 
 msgid "Polar angle."
-msgstr ""
+msgstr "Angle polaire."
 
 msgid "Cartesian coordinates (x, y) where x is the x-coordinate and y is the y-coordinate."
-msgstr ""
+msgstr "Coordonnées cartésiennes (x, y) où x est la coordonnée x et y est la coordonnée y."
 
 msgid "Negative radius values are not supported. They will be set to 0."
-msgstr ""
+msgstr "Les valeurs de rayon négatives ne sont pas prises en charge. Elles seront définies sur 0."

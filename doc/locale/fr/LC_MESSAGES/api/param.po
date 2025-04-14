@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 14:15+0100\n"
+"POT-Creation-Date: 2025-04-14 10:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -376,16 +376,30 @@ msgstr ""
 msgid "New instance of :py:class:`DynamicParam`."
 msgstr ""
 
-msgid "Parameter dataset for abscissa finding"
+#, fuzzy
+msgid "Abscissa parameter"
+msgstr "Paramètres des signaux"
+
+msgid "Abscissa\\.  Default: 0."
 msgstr ""
+
+msgid "Returns a new instance of :py:class:`AbscissaParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`AbscissaParam`."
+msgstr ""
+
+#, fuzzy
+msgid "Ordinate parameter"
+msgstr "Paramètres de rotation"
 
 msgid "Ordinate\\.  Default: 0."
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`FindAbscissaParam` with the fields set to the given values."
+msgid "Returns a new instance of :py:class:`OrdinateParam` with the fields set to the given values."
 msgstr ""
 
-msgid "New instance of :py:class:`FindAbscissaParam`."
+msgid "New instance of :py:class:`OrdinateParam`."
 msgstr ""
 
 msgid "FWHM parameters"

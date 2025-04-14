@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-05 12:29+0200\n"
+"POT-Creation-Date: 2025-04-14 10:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "How to remote control DataLab, the open-source scientific data analysis and visualization platform"
 msgstr "Comment contrôler à distance DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
@@ -731,6 +731,9 @@ msgstr ""
 msgid "Compute FW at 1/e² with :py:func:`cdl.computation.signal.compute_fw1e2`"
 msgstr ""
 
+msgid "Compute full width at a given y with :py:func:`cdl.computation.signal.compute_full_width_at_y`"
+msgstr ""
+
 msgid "Compute data statistics with :py:func:`cdl.computation.signal.compute_stats`"
 msgstr ""
 
@@ -745,6 +748,10 @@ msgstr ""
 
 msgid "Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`."
 msgstr ""
+
+#, fuzzy
+msgid "Compute y at x with :py:func:`cdl.computation.signal.compute_y_at_x`."
+msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Compute sampling rate and period (mean and std) with :py:func:`cdl.computation.signal.compute_sampling_rate_period`"
 msgstr ""
