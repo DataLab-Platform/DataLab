@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-08 11:05+0200\n"
+"POT-Creation-Date: 2025-04-19 14:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -24,11 +24,20 @@ msgstr "Historique des modifications"
 msgid "See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones."
 msgstr "Voir la page de la [feuille de route](https://datalab-platform.com/fr/contributing/roadmap.html) de DataLab pour les jalons futurs et passés."
 
-msgid "DataLab Version 0.19.1"
-msgstr "DataLab Version 0.19.1"
+msgid "DataLab Version 0.19.2"
+msgstr "DataLab Version 0.19.2"
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "Fixed [Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Signal / Fourier analysis: magnitude spectrum feature does not work as expected with logarithmic scale enabled"
+msgstr "Correction de l'[Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Analyse de signal / Fourier : la fonction de spectre de magnitude ne fonctionne pas comme prévu avec l'échelle logarithmique activée"
+
+msgid "Fixed [Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Average profile visualization: empty profile is displayed when the target rectangular area is outside the image area (this has been fixed upstream, in PlotPy v2.7.4, and so requires the latest version of PlotPy)"
+msgstr "Correction de l'[Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Visualisation du profil moyen : le profil vide est affiché lorsque la zone rectangulaire cible est en dehors de la zone de l'image (ceci a été corrigé en amont, dans PlotPy v2.7.4, et nécessite donc la dernière version de PlotPy)"
+
+msgid "DataLab Version 0.19.1"
+msgstr "DataLab Version 0.19.1"
 
 msgid "Pairwise operation mode:"
 msgstr "Mode d'opération pairwise :"
