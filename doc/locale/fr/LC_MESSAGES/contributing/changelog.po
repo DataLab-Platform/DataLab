@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 19:50+0200\n"
+"POT-Creation-Date: 2025-04-19 14:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -102,11 +102,20 @@ msgstr "L'argument `set_current` permet de spécifier si le signal ou l'image do
 msgid "This closes [Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - Public API: add a keyword `group_id` to `add_signal` and `add_image`"
 msgstr "Ceci corrige l'[Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - API publique : ajouter un mot-clé `group_id` à `add_signal` et `add_image`"
 
-msgid "DataLab Version 0.19.1"
-msgstr "DataLab Version 0.19.1"
+msgid "DataLab Version 0.19.2"
+msgstr "DataLab Version 0.19.2"
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "Fixed [Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Signal / Fourier analysis: magnitude spectrum feature does not work as expected with logarithmic scale enabled"
+msgstr "Correction de l'[Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Analyse de signal / Fourier : la fonction de spectre de magnitude ne fonctionne pas comme prévu avec l'échelle logarithmique activée"
+
+msgid "Fixed [Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Average profile visualization: empty profile is displayed when the target rectangular area is outside the image area (this has been fixed upstream, in PlotPy v2.7.4, and so requires the latest version of PlotPy)"
+msgstr "Correction de l'[Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Visualisation du profil moyen : le profil vide est affiché lorsque la zone rectangulaire cible est en dehors de la zone de l'image (ceci a été corrigé en amont, dans PlotPy v2.7.4, et nécessite donc la dernière version de PlotPy)"
+
+msgid "DataLab Version 0.19.1"
+msgstr "DataLab Version 0.19.1"
 
 msgid "Pairwise operation mode:"
 msgstr "Mode d'opération pairwise :"
@@ -156,6 +165,9 @@ msgstr "Correction de l'[Issue #165](https://github.com/DataLab-Platform/DataLab
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"
 
+msgid "💥 New features and enhancements:"
+msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
 msgid "Image operation features (\"Operations\" menu):"
 msgstr "Fonctionnalités d'opération sur les images (menu \"Opérations\") :"
 
@@ -164,6 +176,9 @@ msgstr "Renommage du sous-menu \"Rotation\" en \"Symétrie ou rotation\""
 
 msgid "New \"Flip diagonally\" feature"
 msgstr "Nouvelle fonctionnalité \"Symétrie diagonale\""
+
+msgid "Signal processing features (\"Processing\" menu):"
+msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
 
 msgid "New \"Convert to Cartesian coordinates\" feature"
 msgstr "Nouvelle fonctionnalité \"Convertir en coordonnées cartésiennes\""
@@ -203,6 +218,9 @@ msgstr "Ajout de la méthode `compute_inverse` pour les processeurs d'image et d
 
 msgid "This closes [Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - New feature: `1/x` for signals and images"
 msgstr "Ceci corrige l'[Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - Nouvelle fonctionnalité : `1/x` pour les signaux et les images"
+
+msgid "Public API (local or remote):"
+msgstr "API publique (locale ou distante) :"
 
 msgid "Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:"
 msgstr "Ajout de la méthode `add_group` avec les arguments `title` et `select` pour créer un nouveau groupe dans un panneau de données (par exemple, panneau Signal ou Image) et éventuellement le sélectionner après sa création :"

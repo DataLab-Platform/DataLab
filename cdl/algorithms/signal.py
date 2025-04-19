@@ -119,7 +119,8 @@ def magnitude_spectrum(
     x1, y1 = fft1d(x, y)
     if log_scale:
         y_mag = 20 * np.log10(np.abs(y1))
-    y_mag = np.abs(y1)
+    else:
+        y_mag = np.abs(y1)
     return x1, y_mag
 
 
