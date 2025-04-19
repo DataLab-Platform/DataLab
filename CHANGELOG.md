@@ -2,6 +2,12 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.19.2 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Average profile visualization: empty profile is displayed when the target rectangular area is outside the image area (this has been fixed upstream, in PlotPy v2.7.4, and so requires the latest version of PlotPy)
+
 ## DataLab Version 0.19.1 ##
 
 🛠️ Bug fixes:
