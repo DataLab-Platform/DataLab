@@ -411,6 +411,20 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         self.__freq_filter(param, cdl.param.BandStopFilterParam, _("Band-stop filter"))
 
     @qt_try_except()
+    def compute_zero_padding(
+        self, param: cdl.param.ZeroPadding1DParam | None = None
+    ) -> None:
+        """Compute zero padding
+        with :py:func:`cdl.computation.signal.compute_zero_padding`"""
+        edit, param = self.init_param(param, cps.ZeroPadding1DParam, _("Zero padding"))
+        if edit:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            param.update_from_signal(obj)
+        self.compute_11(
+            cps.compute_zero_padding, param, title=_("Zero padding"), edit=edit
+        )
+
+    @qt_try_except()
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute FFT with :py:func:`cdl.computation.signal.compute_fft`"""
         if param is None:

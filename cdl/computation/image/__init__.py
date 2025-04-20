@@ -1233,6 +1233,75 @@ def compute_wiener(src: ImageObj) -> ImageObj:
     return Wrap11Func(sps.wiener)(src)
 
 
+class ZeroPadding2DParam(gds.DataSet):
+    """Zero padding parameters for 2D images"""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.__obj: ImageObj | None = None
+
+    def update_from_image(self, obj: ImageObj) -> None:
+        """Update parameters from image"""
+        self.__obj = obj
+        # self.choice_callback(None, self.strategy)
+
+    def choice_callback(self, item, value):
+        """Callback to update padding values"""
+        if self.__obj is None:
+            return
+        rows, cols = self.__obj.data.shape
+        if value == "next_pow2":
+            self.rows = 2 ** int(np.ceil(np.log2(rows))) - rows
+            self.cols = 2 ** int(np.ceil(np.log2(cols))) - cols
+        elif value == "multiple_of_64":
+            self.rows = (64 - rows % 64) if rows % 64 != 0 else 0
+            self.cols = (64 - cols % 64) if cols % 64 != 0 else 0
+
+    strategies = ("next_pow2", "multiple_of_64", "custom")
+    _prop = gds.GetAttrProp("strategy")
+    strategy = gds.ChoiceItem(
+        _("Padding strategy"), zip(strategies, strategies), default=strategies[0]
+    ).set_prop("display", store=_prop, callback=choice_callback)
+
+    _func_prop = gds.FuncProp(_prop, lambda x: x == "custom")
+    rows = gds.IntItem(_("Rows to add"), min=0).set_prop("display", active=_func_prop)
+    cols = gds.IntItem(_("Columns to add"), min=0).set_prop(
+        "display", active=_func_prop
+    )
+
+    positions = ("bottom-right", "centered")
+    position = gds.ChoiceItem(
+        _("Padding position"), zip(positions, positions), default=positions[0]
+    )
+
+
+def compute_zero_padding(src: ImageObj, p: ZeroPadding2DParam) -> ImageObj:
+    """
+    Compute zero padding for an image using `cdl.algorithms.image.zero_padding`.
+
+    Args:
+        src: source image object
+        p: parameters
+
+    Returns:
+        New padded image object
+    """
+    if p.strategy == "custom":
+        suffix = f"rows={p.rows}, cols={p.cols}"
+    else:
+        suffix = f"strategy={p.strategy}"
+    suffix += f", position={p.position}"
+    dst = dst_11(src, "zero_padding", suffix)
+    result = alg.zero_padding(
+        src.data,
+        rows=p.rows,
+        cols=p.cols,
+        position=p.position,
+    )
+    dst.data = result
+    return dst
+
+
 def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """Compute FFT with :py:func:`cdl.algorithms.image.fft2d`
 

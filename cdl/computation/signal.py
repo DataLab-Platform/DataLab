@@ -897,6 +897,59 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     return dst
 
 
+class ZeroPadding1DParam(gds.DataSet):
+    """Zero padding parameters"""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.__obj: SignalObj | None = None
+
+    def update_from_signal(self, obj: SignalObj) -> None:
+        """Update parameters from signal"""
+        self.__obj = obj
+        # self.choice_callback(None, self.strategy)
+
+    def choice_callback(self, item, value):
+        """Callback for choice item"""
+        size = self.__obj.x.size
+        if value == "next_pow2":
+            self.n = 2 ** np.ceil(np.log2(size)).astype(int) - size
+        elif value == "double":
+            self.n = size
+        elif value == "triple":
+            self.n = 2 * size
+
+    strategies = ("next_pow2", "double", "triple", "custom")
+    _prop = gds.GetAttrProp("strategy")
+    strategy = gds.ChoiceItem(
+        _("Strategy"), zip(strategies, strategies), default=strategies[0]
+    ).set_prop("display", store=_prop, callback=choice_callback)
+    _func_prop = gds.FuncProp(_prop, lambda x: x == "custom")
+    n = gds.IntItem(
+        _("Number of points"), min=1, help=_("Number of points to add")
+    ).set_prop("display", active=_func_prop)
+
+
+def compute_zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
+    """Compute zero padding with :py:func:`cdl.algorithms.signal.zero_padding`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    if p.strategy == "custom":
+        suffix = f"n={p.n}"
+    else:
+        suffix = f"strategy={p.strategy}"
+    dst = dst_11(src, "zero_padding", suffix)
+    x, y = src.get_data()
+    dst.set_xydata(*alg.zero_padding(x, y, p.n))
+    return dst
+
+
 def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """Compute FFT with :py:func:`cdl.algorithms.signal.fft1d`
 

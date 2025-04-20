@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-19 14:24+0200\n"
+"POT-Creation-Date: 2025-04-20 20:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,36 @@ msgstr "DataLab Version 0.20.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Fourier analysis features (\"Processing\" menu):"
+msgstr "Fonctionnalités d'analyse de Fourier (menu \"Traitement\") :"
+
+msgid "New \"Zero padding\" feature"
+msgstr "Nouvelle fonctionnalité \"Complément de zéros\""
+
+msgid "Implementation for signals:"
+msgstr "Implémentation pour les signaux :"
+
+msgid "Choose a zero padding strategy (Next power of 2, Double the length, Triple the length, Custom length)"
+msgstr "Choisissez une stratégie de complément de zéros (prochain multiple de 2, double la longueur, triple la longueur, longueur personnalisée)"
+
+msgid "Or manually set the zero padding length (if \"Custom length\" is selected)"
+msgstr "Ou définissez manuellement la longueur de complément de zéros (si \"Longueur personnalisée\" est sélectionnée)"
+
+msgid "Implementation for images:"
+msgstr "Implémentation pour les images :"
+
+msgid "Choose a zero padding strategy (Next power of 2, Next multiple of 64, Custom length)"
+msgstr "Choisissez une stratégie de complément de zéros (prochain multiple de 2, prochain multiple de 64, longueur personnalisée)"
+
+msgid "Or manually set the zero padding row and column lengths (if \"Custom length\" is selected)"
+msgstr "Ou définissez manuellement les longueurs de ligne et de colonne de complément de zéros (si \"Longueur personnalisée\" est sélectionnée)"
+
+msgid "Set the position of the zero padding (bottom-right, centered)"
+msgstr "Définir la position du complément de zéros (en bas à droite, centré)"
+
+msgid "This closes [Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Fourier analysis: add zero padding feature for signals and images"
+msgstr "Ceci corrige l'[Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Analyse de Fourier : ajouter la fonctionnalité de complément de zéros pour les signaux et les images"
 
 msgid "Region of Interest (ROI) editor:"
 msgstr "Éditeur de région d'intérêt (ROI) :"
@@ -165,9 +195,6 @@ msgstr "Correction de l'[Issue #165](https://github.com/DataLab-Platform/DataLab
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"
 
-msgid "💥 New features and enhancements:"
-msgstr "💥 Nouvelles fonctionnalités et améliorations :"
-
 msgid "Image operation features (\"Operations\" menu):"
 msgstr "Fonctionnalités d'opération sur les images (menu \"Opérations\") :"
 
@@ -176,9 +203,6 @@ msgstr "Renommage du sous-menu \"Rotation\" en \"Symétrie ou rotation\""
 
 msgid "New \"Flip diagonally\" feature"
 msgstr "Nouvelle fonctionnalité \"Symétrie diagonale\""
-
-msgid "Signal processing features (\"Processing\" menu):"
-msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
 
 msgid "New \"Convert to Cartesian coordinates\" feature"
 msgstr "Nouvelle fonctionnalité \"Convertir en coordonnées cartésiennes\""
@@ -218,9 +242,6 @@ msgstr "Ajout de la méthode `compute_inverse` pour les processeurs d'image et d
 
 msgid "This closes [Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - New feature: `1/x` for signals and images"
 msgstr "Ceci corrige l'[Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - Nouvelle fonctionnalité : `1/x` pour les signaux et les images"
-
-msgid "Public API (local or remote):"
-msgstr "API publique (locale ou distante) :"
 
 msgid "Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:"
 msgstr "Ajout de la méthode `add_group` avec les arguments `title` et `select` pour créer un nouveau groupe dans un panneau de données (par exemple, panneau Signal ou Image) et éventuellement le sélectionner après sa création :"

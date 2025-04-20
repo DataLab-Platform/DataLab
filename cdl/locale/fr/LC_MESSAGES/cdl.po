@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-04-13 19:50+0200\n"
+"POT-Creation-Date: 2025-04-20 20:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -246,6 +246,18 @@ msgstr "Coups"
 
 msgid "Destination data type"
 msgstr "Type de données de destination"
+
+msgid "Padding strategy"
+msgstr "Stratégie de complément de zéros"
+
+msgid "Rows to add"
+msgstr "Lignes à ajouter"
+
+msgid "Columns to add"
+msgstr "Colonnes à ajouter"
+
+msgid "Padding position"
+msgstr "Position du complément de zéros"
 
 msgid "Frequency"
 msgstr "Fréquence"
@@ -694,6 +706,15 @@ msgstr "Ondulation de la bande passante"
 msgid "Stopband attenuation"
 msgstr "Atténuation de la bande d'arrêt"
 
+msgid "Strategy"
+msgstr "Stratégie"
+
+msgid "Number of points to add"
+msgstr "Nombre de points à ajouter"
+
+msgid "Number of points"
+msgstr "Nombre de points"
+
 msgid "Degree"
 msgstr "Degré"
 
@@ -733,9 +754,6 @@ msgstr "X<sub>min</sub>"
 
 msgid "X<sub>max</sub>"
 msgstr "X<sub>max</sub>"
-
-msgid "Number of points"
-msgstr "Nombre de points"
 
 msgid "Detrending method"
 msgstr "Méthode d'élimation de la tendance"
@@ -1043,6 +1061,13 @@ msgstr "Filtre de Wiener"
 
 msgid "Fourier analysis"
 msgstr "Analyse de Fourier"
+
+msgid "Zero padding"
+msgstr "Complément de zéros"
+
+msgid "Zero padding is used to increase the frequency resolution of the FFT"
+msgstr ""
+"Le complément de zéros est utilisé pour augmenter la résolution de la FFT"
 
 msgid "FFT"
 msgstr "FFT"

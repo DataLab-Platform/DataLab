@@ -6,6 +6,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Fourier analysis features ("Processing" menu):
+  * New "Zero padding" feature
+  * Implementation for signals:
+    * Choose a zero padding strategy (Next power of 2, Double the length, Triple the length, Custom length)
+    * Or manually set the zero padding length (if "Custom length" is selected)
+  * Implementation for images:
+    * Choose a zero padding strategy (Next power of 2, Next multiple of 64, Custom length)
+    * Or manually set the zero padding row and column lengths (if "Custom length" is selected)
+    * Set the position of the zero padding (bottom-right, centered)
+  * This closes [Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Fourier analysis: add zero padding feature for signals and images
 * Region of Interest (ROI) editor:
   * This concerns the "Edit Regions of Interest" feature for both signals and images
   * New behavior:

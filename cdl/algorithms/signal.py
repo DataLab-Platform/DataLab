@@ -60,6 +60,24 @@ def normalize(
 # MARK: Fourier analysis ---------------------------------------------------------------
 
 
+def zero_padding(x: np.ndarray, y: np.ndarray, n: int) -> tuple[np.ndarray, np.ndarray]:
+    """Append n zeros at the end of the signal.
+
+    Args:
+        x: X data
+        y: Y data
+        n: Number of zeros to append
+
+    Returns:
+        X data, Y data (tuple)
+    """
+    if n < 1:
+        raise ValueError("Number of zeros to append must be greater than 0")
+    x1 = np.linspace(x[0], x[-1] + n * (x[1] - x[0]), len(y) + n)
+    y1 = np.append(y, np.zeros(n))
+    return x1, y1
+
+
 def fft1d(
     x: np.ndarray, y: np.ndarray, shift: bool = True
 ) -> tuple[np.ndarray, np.ndarray]:

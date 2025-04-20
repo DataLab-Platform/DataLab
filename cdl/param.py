@@ -109,6 +109,8 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.XYCalibrateParam
     :no-index:
+.. autodataset:: cdl.param.ZeroPadding1DParam
+    :no-index:
 
 Image parameters
 ^^^^^^^^^^^^^^^^
@@ -143,6 +145,8 @@ Base image parameters
 .. autodataset:: cdl.param.SegmentProfileParam
     :no-index:
 .. autodataset:: cdl.param.ZCalibrateParam
+    :no-index:
+.. autodataset:: cdl.param.ZeroPadding2DParam
     :no-index:
 
 Detection parameters
@@ -236,6 +240,7 @@ from cdl.computation.image import (
     RotateParam,
     SegmentProfileParam,
     ZCalibrateParam,
+    ZeroPadding2DParam,
 )
 from cdl.computation.image.detection import (
     BlobDOGParam,
@@ -281,4 +286,5 @@ from cdl.computation.signal import (
     ResamplingParam,
     WindowingParam,
     XYCalibrateParam,
+    ZeroPadding1DParam,
 )

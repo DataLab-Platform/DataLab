@@ -131,6 +131,44 @@ The following filters are available:
 Fourier analysis
 ^^^^^^^^^^^^^^^^
 
+Zero padding
+~~~~~~~~~~~~
+
+Create a new signal which is the result of zero padding of each selected signal.
+
+The following parameters are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - Strategy
+      - Zero padding strategy (see below)
+    * - Number of points
+      - Custom length (if `strategy` is "custom")
+
+Zero padding strategy refers to the method used to increase the length of the signal, and it can be one of the following:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Strategy
+      - Description
+    * - next_pow2
+      - Next power of 2 (e.g. 1024 → 2048)
+    * - double
+      - Double the length (e.g. 1024 → 2048)
+    * - triple
+      - Triple the length (e.g. 1024 → 3072)
+    * - custom
+      - Custom length (user-defined)
+
+FFT related functions
+~~~~~~~~~~~~~~~~~~~~~
+
 Create a new signal which is the result of a Fourier analysis of each selected signal.
 
 The following functions are available:

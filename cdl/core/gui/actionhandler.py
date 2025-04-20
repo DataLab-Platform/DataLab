@@ -769,6 +769,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 )
             with self.new_menu(_("Fourier analysis"), icon_name="fourier.svg"):
                 self.new_action(
+                    _("Zero padding"),
+                    triggered=self.panel.processor.compute_zero_padding,
+                    tip=_(
+                        "Zero padding is used to increase the frequency resolution "
+                        "of the FFT"
+                    ),
+                )
+                self.new_action(
                     _("FFT"),
                     triggered=self.panel.processor.compute_fft,
                     tip=_("Warning: only real part is plotted"),

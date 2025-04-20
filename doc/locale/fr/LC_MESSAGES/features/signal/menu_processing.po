@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 15:59+0200\n"
+"POT-Creation-Date: 2025-04-20 20:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 msgid "Processing Signals"
 msgstr "Traitement des signaux"
@@ -186,6 +186,60 @@ msgstr ""
 msgid "Fourier analysis"
 msgstr "Analyse de Fourier"
 
+msgid "Zero padding"
+msgstr "Complément de zéro"
+
+msgid "Create a new signal which is the result of zero padding of each selected signal."
+msgstr "Crée un signal à partir du complément de zéro de chaque signal sélectionné."
+
+msgid "The following parameters are available:"
+msgstr "Les paramètres suivants sont disponibles :"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Strategy"
+msgstr "Stratégie"
+
+msgid "Zero padding strategy (see below)"
+msgstr "Stratégie de complément de zéro (voir ci-dessous)"
+
+msgid "Number of points"
+msgstr "Nombre de points"
+
+msgid "Custom length (if `strategy` is \"custom\")"
+msgstr "Longueur personnalisée (si `strategy` est \"custom\")"
+
+msgid "Zero padding strategy refers to the method used to increase the length of the signal, and it can be one of the following:"
+msgstr "La stratégie de complément de zéro fait référence à la méthode utilisée pour augmenter la longueur du signal, et elle peut être l'une des suivantes :"
+
+msgid "next_pow2"
+msgstr ""
+
+msgid "Next power of 2 (e.g. 1024 → 2048)"
+msgstr "Puissance de 2 supérieure (e.g. 1024 → 2048)"
+
+msgid "double"
+msgstr ""
+
+msgid "Double the length (e.g. 1024 → 2048)"
+msgstr "Double la longueur (e.g. 1024 → 2048)"
+
+msgid "triple"
+msgstr ""
+
+msgid "Triple the length (e.g. 1024 → 3072)"
+msgstr "Triple la longueur (e.g. 1024 → 3072)"
+
+msgid "custom"
+msgstr ""
+
+msgid "Custom length (user-defined)"
+msgstr "Longueur personnalisée (définie par l'utilisateur)"
+
+msgid "FFT related functions"
+msgstr "Fonctions liées à la FFT"
+
 msgid "Create a new signal which is the result of a Fourier analysis of each selected signal."
 msgstr "Crée un signal à partir de l'analyse de Fourier de chaque signal sélectionné."
 
@@ -194,9 +248,6 @@ msgstr "Les fonctions suivantes sont disponibles :"
 
 msgid "Function"
 msgstr "Fonction"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "FFT"
 msgstr "FFT"
@@ -523,9 +574,6 @@ msgstr "Elimination de tendance"
 msgid "Create a new signal which is the detrending of each selected signal. This features is based on SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function."
 msgstr "Crée un signal à partir de l'élimination de tendance de chaque signal. Cette fonctionnalité est basée sur la fonction `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ de SciPy."
 
-msgid "The following parameters are available:"
-msgstr "Les paramètres suivants sont disponibles :"
-
 msgid "Detrending method: 'linear' or 'constant'. See SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function."
 msgstr "Méthode d'élimination de tendance : 'linéaire' ou 'constante'. Voir la fonction `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ de SciPy."
 
@@ -609,9 +657,6 @@ msgstr "Pas"
 
 msgid "Resampling step size"
 msgstr "Pas de rééchantillonnage"
-
-msgid "Number of points"
-msgstr "Nombre de points"
 
 msgid "Resampling number of points"
 msgstr "Nombre de points de rééchantillonnage"
