@@ -470,7 +470,8 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     def compute_resampling(self, param: cdl.param.ResamplingParam | None = None):
         """Compute resampling
         with :py:func:`cdl.computation.signal.compute_resampling`"""
-        edit, param = self.init_param(param, cps.ResamplingParam, _("Resampling"))
+        title = _("Resampling")
+        edit, param = self.init_param(param, cps.ResamplingParam, title)
         if edit:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             if param.xmin is None:
@@ -481,13 +482,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 param.dx = obj.x[1] - obj.x[0]
             if param.nbpts is None:
                 param.nbpts = len(obj.x)
-        self.compute_11(
-            cps.compute_resampling,
-            param,
-            cps.ResamplingParam,
-            title=_("Resampling"),
-            edit=edit,
-        )
+        self.compute_11(cps.compute_resampling, param, title=title, edit=edit)
 
     @qt_try_except()
     def compute_detrending(self, param: cdl.param.DetrendingParam | None = None):
