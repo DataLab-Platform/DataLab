@@ -257,6 +257,17 @@ def test_signal_integral() -> None:
 
 
 @pytest.mark.validation
+def test_signal_detrending() -> None:
+    """Validation test for the signal detrending processing."""
+    src = get_test_signal("paracetamol.txt")
+    for method in cdl.param.DetrendingParam.methods:
+        p = cdl.param.DetrendingParam.create(method=method)
+        dst = cps.compute_detrending(src, p)
+        exp = sps.detrend(src.data, type=p.method)
+        check_array_result(f"Detrending [method={p.method}]", dst.data, exp)
+
+
+@pytest.mark.validation
 def test_signal_offset_correction() -> None:
     """Validation test for the signal offset correction processing."""
     src = get_test_signal("paracetamol.txt")
