@@ -1243,7 +1243,7 @@ class ZeroPadding2DParam(gds.DataSet):
     def update_from_image(self, obj: ImageObj) -> None:
         """Update parameters from image"""
         self.__obj = obj
-        # self.choice_callback(None, self.strategy)
+        self.choice_callback(None, self.strategy)
 
     def choice_callback(self, item, value):
         """Callback to update padding values"""
@@ -1260,7 +1260,7 @@ class ZeroPadding2DParam(gds.DataSet):
     strategies = ("next_pow2", "multiple_of_64", "custom")
     _prop = gds.GetAttrProp("strategy")
     strategy = gds.ChoiceItem(
-        _("Padding strategy"), zip(strategies, strategies), default=strategies[0]
+        _("Padding strategy"), zip(strategies, strategies), default=strategies[-1]
     ).set_prop("display", store=_prop, callback=choice_callback)
 
     _func_prop = gds.FuncProp(_prop, lambda x: x == "custom")
@@ -1269,7 +1269,7 @@ class ZeroPadding2DParam(gds.DataSet):
         "display", active=_func_prop
     )
 
-    positions = ("bottom-right", "centered")
+    positions = ("bottom-right", "center")
     position = gds.ChoiceItem(
         _("Padding position"), zip(positions, positions), default=positions[0]
     )

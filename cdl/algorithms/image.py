@@ -78,7 +78,7 @@ def zero_padding(
     image: np.ndarray,
     rows: int = 0,
     cols: int = 0,
-    position: Literal["bottom-right", "centered"] = "bottom-right",
+    position: Literal["bottom-right", "center"] = "bottom-right",
 ) -> np.ndarray:
     """
     Zero-pad a 2D image by adding rows and/or columns.
@@ -89,7 +89,7 @@ def zero_padding(
         cols: Number of columns to add in total (default: 0)
         position: Padding placement strategy:
             - "bottom-right": all padding is added to the bottom and right
-            - "centered": padding is split equally on top/bottom and left/right
+            - "center": padding is split equally on top/bottom and left/right
 
     Returns:
         The padded 2D image as a NumPy array.
@@ -104,7 +104,7 @@ def zero_padding(
 
     if position == "bottom-right":
         pad_width = ((0, rows), (0, cols))
-    elif position == "centered":
+    elif position == "center":
         pad_width = (
             (rows // 2, rows - rows // 2),
             (cols // 2, cols - cols // 2),

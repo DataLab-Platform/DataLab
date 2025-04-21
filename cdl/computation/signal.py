@@ -907,7 +907,7 @@ class ZeroPadding1DParam(gds.DataSet):
     def update_from_signal(self, obj: SignalObj) -> None:
         """Update parameters from signal"""
         self.__obj = obj
-        # self.choice_callback(None, self.strategy)
+        self.choice_callback(None, self.strategy)
 
     def choice_callback(self, item, value):
         """Callback for choice item"""
@@ -922,7 +922,7 @@ class ZeroPadding1DParam(gds.DataSet):
     strategies = ("next_pow2", "double", "triple", "custom")
     _prop = gds.GetAttrProp("strategy")
     strategy = gds.ChoiceItem(
-        _("Strategy"), zip(strategies, strategies), default=strategies[0]
+        _("Strategy"), zip(strategies, strategies), default=strategies[-1]
     ).set_prop("display", store=_prop, callback=choice_callback)
     _func_prop = gds.FuncProp(_prop, lambda x: x == "custom")
     n = gds.IntItem(
