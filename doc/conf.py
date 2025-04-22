@@ -3,6 +3,8 @@
 # pylint: skip-file
 
 import os
+import os.path as osp
+import shutil
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
@@ -10,6 +12,49 @@ sys.path.insert(0, os.path.abspath(".."))
 import cdl
 
 os.environ["CDL_DOC"] = "1"
+
+
+# -- Copy CHANGELOG.md to doc/contributing folder ------------------------
+#
+# Note: An alternative to this could be to create a 'contributing/changelog.rst' file
+# containing the following:
+#
+# .. include:: ../../CHANGELOG.md
+#    :parser: myst_parser.sphinx_
+#
+# But, due to the on-the-fly parsing of the markdown file, this alternative approach
+# is not compatible with the internationalization process of the documentation (see
+# https://github.com/DataLab-Platform/DataLab/issues/108). That is why we copy the
+# CHANGELOG.md file to the doc/contributing folder and remove it after the build.
+
+
+def copy_changelog(app):
+    """Copy CHANGELOG.md to doc/contributing folder."""
+    docpath = osp.abspath(osp.dirname(__file__))
+    dest_fname = osp.join(docpath, "contributing", "changelog.md")
+    if osp.exists(dest_fname):
+        os.remove(dest_fname)
+    shutil.copyfile(osp.join(docpath, "..", "CHANGELOG.md"), dest_fname)
+    app.env.temp_changelog_path = dest_fname
+
+
+def cleanup_changelog(app, exception):
+    """Remove CHANGELOG.md from doc/contributing folder."""
+    try:
+        path = getattr(app.env, "temp_changelog_path", None)
+        if path and osp.exists(path):
+            os.remove(path)
+    except Exception as exc:
+        print(f"Warning: failed to remove {path}: {exc}")
+    finally:
+        del app.env.temp_changelog_path
+
+
+def setup(app):
+    """Setup function for Sphinx."""
+    app.connect("builder-inited", copy_changelog)
+    app.connect("build-finished", cleanup_changelog)
+
 
 # -- Project information -----------------------------------------------------
 

@@ -74,6 +74,47 @@ def normalize(
 # MARK: Fourier analysis ---------------------------------------------------------------
 
 
+def zero_padding(
+    image: np.ndarray,
+    rows: int = 0,
+    cols: int = 0,
+    position: Literal["bottom-right", "center"] = "bottom-right",
+) -> np.ndarray:
+    """
+    Zero-pad a 2D image by adding rows and/or columns.
+
+    Args:
+        image: 2D input image (grayscale)
+        rows: Number of rows to add in total (default: 0)
+        cols: Number of columns to add in total (default: 0)
+        position: Padding placement strategy:
+            - "bottom-right": all padding is added to the bottom and right
+            - "center": padding is split equally on top/bottom and left/right
+
+    Returns:
+        The padded 2D image as a NumPy array.
+
+    Raises:
+        ValueError: If the input is not a 2D array or if padding values are negative.
+    """
+    if rows < 0 or cols < 0:
+        raise ValueError("Padding values must be non-negative")
+    if image.ndim != 2:
+        raise ValueError("Only 2D grayscale images are supported")
+
+    if position == "bottom-right":
+        pad_width = ((0, rows), (0, cols))
+    elif position == "center":
+        pad_width = (
+            (rows // 2, rows - rows // 2),
+            (cols // 2, cols - cols // 2),
+        )
+    else:
+        raise ValueError(f"Unsupported padding_position: {position}")
+
+    return np.pad(image, pad_width, mode="constant")
+
+
 def fft2d(z: np.ndarray, shift: bool = True) -> np.ndarray:
     """Compute FFT of complex array `z`
 

@@ -6,6 +6,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Fourier analysis features ("Processing" menu):
+  * New "Zero padding" feature
+  * Implementation for signals:
+    * Choose a zero padding strategy (Next power of 2, Double the length, Triple the length, Custom length)
+    * Or manually set the zero padding length (if "Custom length" is selected)
+  * Implementation for images:
+    * Choose a zero padding strategy (Next power of 2, Next multiple of 64, Custom length)
+    * Or manually set the zero padding row and column lengths (if "Custom length" is selected)
+    * Set the position of the zero padding (bottom-right, centered)
+  * This closes [Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Fourier analysis: add zero padding feature for signals and images
 * Region of Interest (ROI) editor:
   * This concerns the "Edit Regions of Interest" feature for both signals and images
   * New behavior:
@@ -15,12 +25,28 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Added the "Select tool" to editor's toolbar, to allow the user to switch between the "Select" and "Draw" tools easily without having to use the plot toolbar on the top of the window
 * Signal processing features ("Processing" menu):
   * New "X-Y mode" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)
+  * New abscissa and ordinate find features:
+    * "First abscissa at y=..." feature: this feature allows to find the first abscissa value of a signal at a given y value (e.g. the abscissa value of a signal at y=0)
+    * "Ordinate at x=..." feature: this feature allows to find the ordinate value of a signal at a given x value (e.g. the ordinate value of a signal at x=0)
+    * Each feature has its own dialog box, which allows to set the y or x value to be used for the search with a slider or a text box
+    * This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)
+  * New full width at given y feature:
+    * The "Full width at y=..." feature allows to find the full width of a signal at a given y value (e.g. the full width of a signal at y=0)
+    * A specific dialog box allows to set the y value to be used for the search with a slider or a text box
+    * This closes [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)
 * Public API (local or remote):
   * Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:
     * This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes
     * `group_id` argument allows to specify the group ID where the signal or image should be added (if not specified, the signal or image is added to the current group)
     * `set_current` argument allows to specify if the signal or image should be set as current after being added (default is `True`)
     * This closes [Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - Public API: add a keyword `group_id` to `add_signal` and `add_image`
+
+## DataLab Version 0.19.2 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Signal / Fourier analysis: magnitude spectrum feature does not work as expected with logarithmic scale enabled
+* Fixed [Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Average profile visualization: empty profile is displayed when the target rectangular area is outside the image area (this has been fixed upstream, in PlotPy v2.7.4, and so requires the latest version of PlotPy)
 
 ## DataLab Version 0.19.1 ##
 
@@ -33,6 +59,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This closes [Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157) - Pairwise operation mode: unexpected behavior with functions that take a single second operand
 * Fixed [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignore `nan` values for image normalization, flatfield correction, offset correction, and centroid computation
 * Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)
+* Fixed [Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - When editing ROI of a list of images, the first image of the selection is shown (instead of the last as in the image panel)
+* Fixed [Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - When selecting multiple images just after opening an HDF5 file, the "View in a new window" feature does not work (`KeyError` exception)
+* Fixed [Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - When selecting multiple images and clearing ROI in ROI editor, only the first image is affected
+* Fixed [Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Refresh image items only if necessary (when editing ROI, pasting/deleting metadata)
+* Fixed [Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - View in a new window: when displaying multiple images, the item list panel should be visible
+* Fixed [Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Open from directory: expected one group per folder when loading multiple files
+* Fixed [Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164) - Open from directory: unsupported files should be ignored when loading files recursively, to avoid warning popup dialog boxes
+* Fixed [Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165) - When opening a file, the default signal/image title must be set to the file name, instead of the relative path to the file name
 
 ## DataLab Version 0.19.0 ##
 

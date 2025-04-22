@@ -541,6 +541,20 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         self.compute_11(cpi.compute_wiener, title=_("Wiener filter"))
 
     @qt_try_except()
+    def compute_zero_padding(
+        self, param: cdl.param.ZeroPadding2DParam | None = None
+    ) -> None:
+        """Compute zero padding
+        with :py:func:`cdl.computation.image.compute_zero_padding`"""
+        edit, param = self.init_param(param, cpi.ZeroPadding2DParam, _("Zero padding"))
+        if edit:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            param.update_from_image(obj)
+        self.compute_11(
+            cpi.compute_zero_padding, param, title=_("Zero padding"), edit=edit
+        )
+
+    @qt_try_except()
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute FFT with :py:func:`cdl.computation.image.compute_fft`"""
         if param is None:

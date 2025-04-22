@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 15:59+0200\n"
+"POT-Creation-Date: 2025-04-14 10:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -881,28 +881,55 @@ msgstr ""
 msgid "Compute FW at 1/e² with :py:func:`cdl.algorithms.signal.fw1e2`"
 msgstr ""
 
-msgid "Parameter dataset for abscissa finding"
+msgid "Ordinate parameter"
 msgstr ""
 
 msgid "Ordinate\\.  Default: 0."
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`FindAbscissaParam` with the fields set to the given values."
+msgid "Returns a new instance of :py:class:`OrdinateParam` with the fields set to the given values."
 msgstr ""
 
-msgid "New instance of :py:class:`FindAbscissaParam`."
+msgid "New instance of :py:class:`OrdinateParam`."
 msgstr ""
 
-msgid "Compute the smallest x-value at a given y-value for a signal object."
+msgid "Compute full width at a given y value for a signal object."
 msgstr ""
 
 msgid "The signal object containing x and y data."
+msgstr ""
+
+msgid "The ordinate parameter dataset"
+msgstr ""
+
+msgid "Compute the smallest x-value at a given y-value for a signal object."
 msgstr ""
 
 msgid "The parameter dataset for finding the abscissa."
 msgstr ""
 
 msgid "An object containing the x-value."
+msgstr ""
+
+msgid "Abscissa parameter"
+msgstr ""
+
+msgid "Abscissa\\.  Default: 0."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`AbscissaParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`AbscissaParam`."
+msgstr ""
+
+msgid "Compute the smallest y-value at a given x-value for a signal object."
+msgstr ""
+
+msgid "The parameter dataset for finding the ordinate."
+msgstr ""
+
+msgid "An object containing the y-value."
 msgstr ""
 
 msgid "Compute statistics on a signal"

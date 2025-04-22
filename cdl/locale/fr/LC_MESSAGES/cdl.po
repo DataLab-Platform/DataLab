@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-04-05 11:49+0200\n"
+"POT-Creation-Date: 2025-04-20 20:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -246,6 +246,18 @@ msgstr "Coups"
 
 msgid "Destination data type"
 msgstr "Type de données de destination"
+
+msgid "Padding strategy"
+msgstr "Stratégie de complément de zéros"
+
+msgid "Rows to add"
+msgstr "Lignes à ajouter"
+
+msgid "Columns to add"
+msgstr "Colonnes à ajouter"
+
+msgid "Padding position"
+msgstr "Position du complément de zéros"
 
 msgid "Frequency"
 msgstr "Fréquence"
@@ -694,6 +706,15 @@ msgstr "Ondulation de la bande passante"
 msgid "Stopband attenuation"
 msgstr "Atténuation de la bande d'arrêt"
 
+msgid "Strategy"
+msgstr "Stratégie"
+
+msgid "Number of points to add"
+msgstr "Nombre de points à ajouter"
+
+msgid "Number of points"
+msgstr "Nombre de points"
+
 msgid "Degree"
 msgstr "Degré"
 
@@ -733,9 +754,6 @@ msgstr "X<sub>min</sub>"
 
 msgid "X<sub>max</sub>"
 msgstr "X<sub>max</sub>"
-
-msgid "Number of points"
-msgstr "Nombre de points"
 
 msgid "Detrending method"
 msgstr "Méthode d'élimation de la tendance"
@@ -792,6 +810,9 @@ msgstr ""
 
 msgid "Ordinate"
 msgstr "Coordonnées"
+
+msgid "Abscissa"
+msgstr "Abscisse"
 
 msgid "Full scale"
 msgstr "Pleine échelle"
@@ -1041,6 +1062,13 @@ msgstr "Filtre de Wiener"
 msgid "Fourier analysis"
 msgstr "Analyse de Fourier"
 
+msgid "Zero padding"
+msgstr "Complément de zéros"
+
+msgid "Zero padding is used to increase the frequency resolution of the FFT"
+msgstr ""
+"Le complément de zéros est utilisé pour augmenter la résolution de la FFT"
+
 msgid "FFT"
 msgstr "FFT"
 
@@ -1197,6 +1225,12 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
+msgid "Full width at y=..."
+msgstr "Largeur à y=..."
+
+msgid "Compute the full width at a given y value"
+msgstr "Calcule la largeur à une valeur y donnée"
+
 msgid "Abscissa of the minimum and maximum"
 msgstr "Abscisse du minimum et du maximum"
 
@@ -1207,8 +1241,18 @@ msgstr ""
 "Calcule le plus petit argument du minimum et le plus petit argument du "
 "maximum"
 
-msgid "Abscissa at y=..."
-msgstr "Abscisse pour y=..."
+msgid "First abscissa at y=..."
+msgstr "Première abscisse à y=..."
+
+msgid "Compute the first abscissa at a given y value (linear interpolation)"
+msgstr ""
+"Calcule la première abscisse à une valeur y donnée (interpolation linéaire)"
+
+msgid "Ordinate at x=..."
+msgstr "Ordonnée à x=..."
+
+msgid "Compute the ordinate at a given x value (linear interpolation)"
+msgstr "Calcule l'ordonnée à une valeur x donnée (interpolation linéaire)"
 
 msgid "Peak detection"
 msgstr "Détection de pics"
@@ -1966,6 +2010,9 @@ msgstr "Renommer le groupe"
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
+msgid "Scanning directory"
+msgstr "Analyse du répertoire"
+
 msgid "Save as"
 msgstr "Enregistrer sous"
 
@@ -2272,9 +2319,6 @@ msgstr "LMH"
 msgid "FW"
 msgstr "LH"
 
-msgid "Find abscissa"
-msgstr "Trouver l'abscisse"
-
 msgid "Bandwidth"
 msgstr "Bande passante"
 
@@ -2305,8 +2349,12 @@ msgstr "ROI par coordonnées"
 msgid "Remove all"
 msgstr "Supprimer tout"
 
-msgid "Extract all ROIs\ninto a single %s"
-msgstr "Extraire toutes les ROI\ndans un seul objet %s"
+msgid ""
+"Extract all ROIs\n"
+"into a single %s"
+msgstr ""
+"Extraire toutes les ROI\n"
+"dans un seul objet %s"
 
 msgid "Remove all ROIs"
 msgstr "Supprimer toutes les ROI"
@@ -2399,8 +2447,24 @@ msgstr "Demander avant d'effacer l'espace de travail"
 msgid "HDF5 full path in title"
 msgstr "Chemin complet du fichier HDF5 dans le titre"
 
+msgid ""
+"If enabled, the full path of the HDF5 data set will be used as the title for "
+"the signal/image object.<br>If disabled, only the name of the data set will "
+"be used as the title."
+msgstr ""
+"Si activé, le chemin complet du fichier HDF5 sera utilisé comme titre de "
+"l'objet signal/image.<br>Si désactivé, seul le nom du fichier HDF5 sera "
+"utilisé comme titre."
+
 msgid "HDF5 file name in title"
 msgstr "Nom du fichier HDF5 dans le titre"
+
+msgid ""
+"If enabled, the name of the HDF5 file will be used as a suffix in the title "
+"of the signal/image object."
+msgstr ""
+"Si activé, le nom du fichier HDF5 sera utilisé comme suffixe dans le titre "
+"de l'objet signal/image."
 
 msgid "Settings for computations"
 msgstr "Réglages des calculs"
@@ -2424,14 +2488,45 @@ msgstr ""
 msgid "FFT shift"
 msgstr "Décalage FFT"
 
+msgid ""
+"Enable FFT shift to center the zero-frequency component in the frequency "
+"spectrum for easier visualization and analysis."
+msgstr ""
+"Activer le décalage FFT pour centrer la composante de fréquence nulle dans "
+"le spectre de fréquence pour une visualisation et une analyse plus faciles."
+
 msgid "Extract ROI in single object"
 msgstr "Extraire les ROI dans un seul objet"
+
+msgid ""
+"If enabled, multiple ROIs will be extracted into a single object.<br>If "
+"disabled, each ROI will be extracted into a separate object."
+msgstr ""
+"Si activé, plusieurs ROI seront extraites dans un seul objet.<br>Si "
+"désactivé, chaque ROI sera extraite dans un objet séparé."
 
 msgid "Keep results after computation"
 msgstr "Conserver les résultats après le calcul"
 
+msgid ""
+"If enabled, the results of a previous analysis will be kept in object's "
+"metadata after the computation.<br>If disabled, the results will be removed "
+"from the object's metadata.<br><br>This option is disabled by default "
+"because keeping analysis results may be confusing as those results could be "
+"outdated following the computation."
+msgstr ""
+"Si activé, les résultats d'une analyse précédente seront conservés dans les "
+"métadonnées de l'objet après le calcul.<br>Si désactivé, les résultats "
+"seront supprimés des métadonnées de l'objet.<br><br>Cette option est "
+"désactivée par défaut car la conservation des résultats d'analyse peut "
+"prêter à confusion, car ces résultats pourraient être obsolètes suite au "
+"calcul."
+
 msgid "Ignore warnings"
 msgstr "Ignorer les avertissements"
+
+msgid "Ignore warnings during computations"
+msgstr "Ignorer les avertissements lors des calculs"
 
 msgid "Default image visualization settings"
 msgstr "Réglages d'affichage d'images par défaut"
@@ -3344,6 +3439,21 @@ msgstr "Les journaux de bord sont vides."
 
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"
+
+msgid "Select X value with cursor"
+msgstr "Sélectionner la valeur X avec le curseur"
+
+msgid "Select Y value with cursor"
+msgstr "Sélectionner la valeur Y avec le curseur"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Apply cursor position"
+msgstr "Appliquer la position du curseur"
+
+msgid "Cursor position"
+msgstr "Position du curseur"
 
 msgid "Minimum distance:"
 msgstr "Distance minimale :"

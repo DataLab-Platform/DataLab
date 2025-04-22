@@ -108,6 +108,46 @@ The following filters are available:
 Fourier analysis
 ^^^^^^^^^^^^^^^^
 
+Zero padding
+~~~~~~~~~~~~
+
+Create a new image which is the result of zero padding on each selected image.
+
+The following parameters are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - Strategy
+      - Zero padding strategy (see below)
+    * - Rows
+      - Number of rows to add (if `strategy` is 'custom')
+    * - Columns
+      - Number of columns to add (if `strategy` is 'custom')
+    * - Position
+      - Position of the added zeros: 'bottom-right', 'centered'
+
+Zero padding strategy refers to the method used to add zeros to the image, and it can be one of the following:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Strategy
+      - Description
+    * - next_pow2
+      - Next power of 2 (e.g. 512, 1024, ...)
+    * - multiple_of_64
+      - Next multiple of 64 (e.g. 512, 576, ...)
+    * - custom
+      - Custom size (user-defined)
+
+FFT related functions
+~~~~~~~~~~~~~~~~~~~~~
+
 Create a new image which is the result of a Fourier analysis on each selected image.
 
 The following functions are available:

@@ -88,8 +88,23 @@ class IOSettings(gds.DataSet):
     g0 = gds.BeginGroup(_("Settings for I/O operations"))
     h5_clear_workspace = gds.BoolItem("", _("Clear workspace before loading HDF5 file"))
     h5_clear_workspace_ask = gds.BoolItem("", _("Ask before clearing workspace"))
-    h5_fullpath_in_title = gds.BoolItem("", _("HDF5 full path in title"))
-    h5_fname_in_title = gds.BoolItem("", _("HDF5 file name in title"))
+    h5_fullpath_in_title = gds.BoolItem(
+        "",
+        _("HDF5 full path in title"),
+        help=_(
+            "If enabled, the full path of the HDF5 data set will be used as the title "
+            "for the signal/image object.<br>"
+            "If disabled, only the name of the data set will be used as the title."
+        ),
+    )
+    h5_fname_in_title = gds.BoolItem(
+        "",
+        _("HDF5 file name in title"),
+        help=_(
+            "If enabled, the name of the HDF5 file will be used as a suffix in the "
+            "title of the signal/image object."
+        ),
+    )
     _g0 = gds.EndGroup("")
 
 
@@ -110,10 +125,38 @@ class ProcSettings(gds.DataSet):
         )
         % ("→", "→"),
     )
-    fft_shift_enabled = gds.BoolItem("", _("FFT shift"))
-    extract_roi_singleobj = gds.BoolItem("", _("Extract ROI in single object"))
-    keep_results = gds.BoolItem("", _("Keep results after computation"))
-    ignore_warnings = gds.BoolItem("", _("Ignore warnings"))
+    fft_shift_enabled = gds.BoolItem(
+        "",
+        _("FFT shift"),
+        help=_(
+            "Enable FFT shift to center the zero-frequency component in the frequency "
+            "spectrum for easier visualization and analysis."
+        ),
+    )
+    extract_roi_singleobj = gds.BoolItem(
+        "",
+        _("Extract ROI in single object"),
+        help=_(
+            "If enabled, multiple ROIs will be extracted into a single object.<br>"
+            "If disabled, each ROI will be extracted into a separate object."
+        ),
+    )
+    keep_results = gds.BoolItem(
+        "",
+        _("Keep results after computation"),
+        help=_(
+            "If enabled, the results of a previous analysis will be kept in object's "
+            "metadata after the computation.<br>"
+            "If disabled, the results will be removed from the object's metadata."
+            "<br><br>"
+            "This option is disabled by default because keeping analysis results may "
+            "be confusing as those results could be outdated following the "
+            "computation."
+        ),
+    )
+    ignore_warnings = gds.BoolItem(
+        "", _("Ignore warnings"), help=_("Ignore warnings during computations")
+    )
     _g0 = gds.EndGroup("")
 
 

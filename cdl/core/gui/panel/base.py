@@ -11,6 +11,7 @@ from __future__ import annotations
 import abc
 import dataclasses
 import glob
+import os
 import os.path as osp
 import re
 import warnings
@@ -280,7 +281,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
     SIG_REFRESH_PLOT = QC.Signal(
-        str, bool, bool
+        str, bool, bool, bool, bool
     )  # Connected to PlotHandler.refresh_plot
     ROIDIALOGOPTIONS = {}
 
@@ -476,10 +477,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.add_objprop_buttons()
 
     def refresh_plot(
-        self, what: str, update_items: bool = True, force: bool = False
+        self,
+        what: str,
+        update_items: bool = True,
+        force: bool = False,
+        only_visible: bool = True,
+        only_existing: bool = False,
     ) -> None:
-        """Refresh plot. This method simply emits the signal SIG_REFRESH_PLOT which is
-        connected to the method `PlotHandler.refresh_plot`.
+        """Refresh plot.
 
         Args:
             what: string describing the objects to refresh.
@@ -490,17 +495,26 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one
              item is selected). Defaults to True.
-            force: if True, force refresh even if auto refresh is disabled,
-             and refresh all items associated to objects (even the hidden ones, e.g.
-             when selecting multiple images of the same size and position). Defaults
-             to False.
+            force: if True, force refresh even if auto refresh is disabled.
+             Defaults to False.
+            only_visible: if True, only refresh visible items. Defaults to True.
+             Visible items are the ones that are not hidden by other items or the items
+             except the first one if the option "Show first only" is enabled.
+             This is useful for images, where the last image is the one that is shown.
+             If False, all items are refreshed.
+            only_existing: if True, only refresh existing items. Defaults to False.
+             Existing items are the ones that have already been created and are
+             associated to the object uuid. If False, create new items for the
+             objects that do not have an item yet.
 
         Raises:
             ValueError: if `what` is not a valid value
         """
         if what not in ("selected", "all", "existing") and not isinstance(what, str):
             raise ValueError(f"Invalid value for 'what': {what}")
-        self.SIG_REFRESH_PLOT.emit(what, update_items, force)
+        self.SIG_REFRESH_PLOT.emit(
+            what, update_items, force, only_visible, only_existing
+        )
 
     def manual_refresh(self) -> None:
         """Manual refresh"""
@@ -623,10 +637,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=lambda obj: obj.short_id, reverse=True):
             obj.update_metadata_from(metadata)
-        # We have to do a manual refresh in order to force the plot handler to update
+        # We have to do a special refresh in order to force the plot handler to update
         # all plot items, even the ones that are not visible (otherwise, image masks
         # would not be updated after pasting the metadata: see issue #123)
-        self.manual_refresh()
+        self.refresh_plot(
+            "selected", update_items=True, only_visible=False, only_existing=True
+        )
 
     def remove_object(self, force: bool = False) -> None:
         """Remove signal/image object
@@ -717,11 +733,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if index == 0:
                 self.selection_changed()
         if refresh_plot:
-            # We have to do a manual refresh in order to force the plot handler to
+            # We have to do a special refresh in order to force the plot handler to
             # update all plot items, even the ones that are not visible (otherwise,
             # image masks would remained visible after deleting the ROI for example:
             # see issue #122)
-            self.manual_refresh()
+            self.refresh_plot(
+                "selected", update_items=True, only_visible=False, only_existing=True
+            )
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True
@@ -837,11 +855,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj.title = title
         self.objview.update_item(obj.uuid)
 
-    def __load_from_file(self, filename: str) -> list[SignalObj] | list[ImageObj]:
+    def __load_from_file(
+        self, filename: str, create_group: bool = True, add_objects: bool = True
+    ) -> list[SignalObj] | list[ImageObj]:
         """Open objects from file (signal/image), add them to DataLab and return them.
 
         Args:
             filename: file name
+            create_group: if True, create a new group if more than one object is loaded.
+             Defaults to True. If False, all objects are added to the current group.
+            add_objects: if True, add objects to the panel. Defaults to True.
 
         Returns:
             New object or list of new objects
@@ -849,11 +872,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
         objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
         group_id = None
-        if len(objs) > 1:
+        if len(objs) > 1 and create_group:
+            # Create a new group if more than one object is loaded
             group_id = self.add_group(osp.basename(filename)).uuid
         for obj in objs:
-            obj.metadata["source"] = filename
-            self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
+            if add_objects:
+                self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
         self.selection_changed()
         return objs
 
@@ -885,24 +909,55 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
-        # Get all files in the directory:
-        relfnames = sorted(
-            osp.relpath(path, start=directory)
-            for path in glob.glob(osp.join(directory, "**", "*.*"), recursive=True)
-        )
-        # When Python 3.9 will be dropped, we can use (support for `root_dir` is added):
-        # relfnames = sorted(glob.glob("**/*.*", root_dir=directory, recursive=True))
-        filenames = [osp.join(directory, fname) for fname in relfnames]
-        return self.load_from_files(filenames, ignore_unknown=True)
+        folders = [
+            path
+            for path in glob.glob(osp.join(directory, "**"), recursive=True)
+            if osp.isdir(path) and len(os.listdir(path)) > 0
+        ]
+        objs = []
+        with create_progress_bar(
+            self, _("Scanning directory"), max_=len(folders) - 1
+        ) as progress:
+            # Iterate over all subfolders in the directory:
+            for i_path, path in enumerate(folders):
+                progress.setValue(i_path + 1)
+                if progress.wasCanceled():
+                    break
+                path = osp.normpath(path)
+                fnames = [
+                    osp.join(path, fname)
+                    for fname in os.listdir(path)
+                    if osp.isfile(osp.join(path, fname))
+                ]
+                new_objs = self.load_from_files(
+                    fnames,
+                    create_group=False,
+                    add_objects=False,
+                    ignore_errors=True,
+                )
+                if new_objs:
+                    objs += new_objs
+                    grp = self.add_group(osp.relpath(path, directory))
+                    for obj in new_objs:
+                        self.add_object(obj, group_id=grp.uuid, set_current=False)
+        return objs
 
     def load_from_files(
-        self, filenames: list[str] | None = None, ignore_unknown: bool = False
+        self,
+        filenames: list[str] | None = None,
+        create_group: bool = False,
+        add_objects: bool = True,
+        ignore_errors: bool = False,
     ) -> list[TypeObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
             filenames: File names
-            ignore_unknown: if True, ignore unknown file types (default: False)
+            create_group: if True, create a new group if more than one object is loaded
+             for a single file. Defaults to False: all objects are added to the current
+             group.
+            add_objects: if True, add objects to the panel. Defaults to True.
+            ignore_errors: if True, ignore errors when loading files. Defaults to False.
 
         Returns:
             list of new objects
@@ -919,9 +974,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 try:
-                    objs += self.__load_from_file(filename)
-                except NotImplementedError as exc:
-                    if ignore_unknown:
+                    objs += self.__load_from_file(
+                        filename, create_group=create_group, add_objects=add_objects
+                    )
+                except Exception as exc:  # pylint: disable=broad-except
+                    if ignore_errors:
                         # Ignore unknown file types
                         pass
                     else:
@@ -1097,14 +1154,25 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         if oids is None:
             oids = self.objview.get_sel_object_uuids(include_groups=True)
-        obj = self.objmodel[oids[0]]
+        obj = self.objmodel[oids[-1]]  # last selected object
+
+        if not all([oid in self.plothandler for oid in oids]):
+            # This happens for example when opening an already saved workspace with
+            # multiple images, and if the user tries to view in a new window a group of
+            # images without having selected any object yet. In this case, only the
+            # last image is actually plotted (because if the other have the same size
+            # and position, they are hidden), and the plot item of every other image is
+            # not created yet. So we need to refresh the plot to create the plot item of
+            # those images.
+            self.plothandler.refresh_plot(
+                "selected", update_items=True, force=True, only_visible=False
+            )
 
         # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
             title=obj.title if len(oids) == 1 else None,
             edit=True,
             name=f"{obj.PREFIX}_new_window",
-            options={"show_itemlist": edit_annotations},
         )
         if dlg is None:
             return None
@@ -1143,6 +1211,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             plot.add_item(item)
         self.__separate_views[dlg] = obj
         toggle_annotations(edit_annotations)
+        if len(oids) > 1:
+            # If multiple objects are displayed, show the item list panel
+            # (otherwise, it is hidden by default to lighten the dialog, except
+            # if `edit_annotations` is True):
+            plot.manager.get_itemlist_panel().show()
         if edit_annotations:
             edit_ann_action.setChecked(True)
         dlg.show()
@@ -1223,7 +1296,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
-        obj = self.objview.get_sel_objects(include_groups=True)[0]
+        obj = self.objview.get_sel_objects(include_groups=True)[-1]
 
         # Create a new dialog
 
@@ -1239,14 +1312,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Create ROI editor (and add it to the dialog)
 
-        if obj.uuid not in self.plothandler:
-            # This happens for example when opening an already saved workspace with
-            # multiple images, and if the user tries to edit the ROI of a group of
-            # images without having selected any object yet. In this case, only the
-            # last image is actually plotted (because if the other have the same size
-            # and position, they are hidden), and the plot item of the first image is
-            # not created yet. The `obj.uuid` is precisely the uuid of the first image.
-            self.plothandler.refresh_plot("selected", True, True)
         item = obj.make_item(update_from=self.plothandler[obj.uuid])
 
         # pylint: disable=not-callable

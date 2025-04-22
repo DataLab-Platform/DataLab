@@ -769,6 +769,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 )
             with self.new_menu(_("Fourier analysis"), icon_name="fourier.svg"):
                 self.new_action(
+                    _("Zero padding"),
+                    triggered=self.panel.processor.compute_zero_padding,
+                    tip=_(
+                        "Zero padding is used to increase the frequency resolution "
+                        "of the FFT"
+                    ),
+                )
+                self.new_action(
                     _("FFT"),
                     triggered=self.panel.processor.compute_fft,
                     tip=_("Warning: only real part is plotted"),
@@ -1021,6 +1029,11 @@ class SignalActionHandler(BaseActionHandler):
                 icon_name="fw1e2.svg",
             )
             self.new_action(
+                _("Full width at y=..."),
+                triggered=self.panel.processor.compute_full_width_at_y,
+                tip=_("Compute the full width at a given y value"),
+            )
+            self.new_action(
                 _("Abscissa of the minimum and maximum"),
                 triggered=self.panel.processor.compute_x_at_minmax,
                 tip=_(
@@ -1029,8 +1042,19 @@ class SignalActionHandler(BaseActionHandler):
                 ),
             )
             self.new_action(
-                _("Abscissa at y=..."),
+                _("First abscissa at y=..."),
                 triggered=self.panel.processor.compute_x_at_y,
+                tip=_(
+                    "Compute the first abscissa at a given y value "
+                    "(linear interpolation)"
+                ),
+            )
+            self.new_action(
+                _("Ordinate at x=..."),
+                triggered=self.panel.processor.compute_y_at_x,
+                tip=_(
+                    "Compute the ordinate at a given x value " "(linear interpolation)"
+                ),
             )
             self.new_action(
                 _("Peak detection"),

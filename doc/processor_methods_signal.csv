@@ -1,3 +1,4 @@
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_XY_mode`,Compute XY mode with :py:func:`cdl.computation.signal.compute_XY_mode.`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_abs`,Compute absolute value with :py:func:`cdl.computation.signal.compute_abs`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant`,Compute sum with a constant
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_all_stability`,Compute all stability analysis features
@@ -24,6 +25,7 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_exp`,Compute Log10 with :py:func:`cdl.computation.signal.compute_exp`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fft`,Compute FFT with :py:func:`cdl.computation.signal.compute_fft`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fit`,Compute fitting curve using an interactive dialog
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_full_width_at_y`,Compute full width at a given y
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2`,Compute FW at 1/e² with :py:func:`cdl.computation.signal.compute_fw1e2`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm`,Compute FWHM with :py:func:`cdl.computation.signal.compute_fwhm`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter`,Compute gaussian filter
@@ -69,3 +71,5 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_windowing`,Compute windowing
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax`,Compute x at min/max
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_y`,Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_y_at_x`,Compute y at x with :py:func:`cdl.computation.signal.compute_y_at_x`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_zero_padding`,Compute zero padding

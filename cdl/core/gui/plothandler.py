@@ -99,7 +99,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
             # (object has been added to model but the corresponding plot item has not
             # been created yet)
             if not self.__auto_refresh:
-                self.refresh_plot("selected", True, force=True)
+                self.refresh_plot(oid, True, force=True, only_visible=False)
                 return self.__plotitems[oid]
             # Item does not exist and auto refresh is enabled: this should not happen
             raise exc
@@ -176,7 +176,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
                 # Performance optimization: block `plotpy.plot.BasePlot` signals, add
                 # all items except the last one, unblock signals, then add the last one
                 # (this avoids some unnecessary refresh process by PlotPy)
-                with block_signals(self.plot, True):
+                with block_signals(self.plot):
                     with create_progress_bar(
                         self.panel, _("Creating geometric shapes"), max_=len(items) - 1
                     ) as progress:
@@ -282,7 +282,12 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
         return oids
 
     def refresh_plot(
-        self, what: str, update_items: bool = True, force: bool = False
+        self,
+        what: str,
+        update_items: bool = True,
+        force: bool = False,
+        only_visible: bool = True,
+        only_existing: bool = False,
     ) -> None:
         """Refresh plot.
 
@@ -295,10 +300,17 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one
              item is selected). Defaults to True.
-            force: if True, force refresh even if auto refresh is disabled,
-             and refresh all items associated to objects (even the hidden ones, e.g.
-             when selecting multiple images of the same size and position). Defaults
-             to False.
+            force: if True, force refresh even if auto refresh is disabled.
+             Defaults to False.
+            only_visible: if True, only refresh visible items. Defaults to True.
+             Visible items are the ones that are not hidden by other items or the items
+             except the first one if the option "Show first only" is enabled.
+             This is useful for images, where the last image is the one that is shown.
+             If False, all items are refreshed.
+            only_existing: if True, only refresh existing items. Defaults to False.
+             Existing items are the ones that have already been created and are
+             associated to the object uuid. If False, create new items for the
+             objects that do not have an item yet.
 
         Raises:
             ValueError: if `what` is not a valid value
@@ -344,7 +356,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
         scales_dict = {}
 
         if oids:
-            if what != "existing" and not force:
+            if what != "existing" and only_visible:
+                # Remove hidden items from the list of objects to refresh
                 oids = self.reduce_shown_oids(oids)
             ref_item = None
             with create_progress_bar(
@@ -377,6 +390,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):
                     # Update or add item to plot
                     item = self.get(oid)
                     if item is None:
+                        if only_existing:
+                            continue
                         item = self.__add_item_to_plot(oid)
                     else:
                         self.__update_item_on_plot(
@@ -536,7 +551,12 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
         return oids
 
     def refresh_plot(
-        self, what: str, update_items: bool = True, force: bool = False
+        self,
+        what: str,
+        update_items: bool = True,
+        force: bool = False,
+        only_visible: bool = True,
+        only_existing: bool = False,
     ) -> None:
         """Refresh plot.
 
@@ -549,15 +569,28 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one
              item is selected). Defaults to True.
-            force: if True, force refresh even if auto refresh is disabled,
-             and refresh all items associated to objects (even the hidden ones, e.g.
-             when selecting multiple images of the same size and position). Defaults
-             to False.
+            force: if True, force refresh even if auto refresh is disabled.
+             Defaults to False.
+            only_visible: if True, only refresh visible items. Defaults to True.
+             Visible items are the ones that are not hidden by other items or the items
+             except the first one if the option "Show first only" is enabled.
+             This is useful for images, where the last image is the one that is shown.
+             If False, all items are refreshed.
+            only_existing: if True, only refresh existing items. Defaults to False.
+             Existing items are the ones that have already been created and are
+             associated to the object uuid. If False, create new items for the
+             objects that do not have an item yet.
 
         Raises:
             ValueError: if `what` is not a valid value
         """
-        super().refresh_plot(what=what, update_items=update_items, force=force)
+        super().refresh_plot(
+            what=what,
+            update_items=update_items,
+            force=force,
+            only_visible=only_visible,
+            only_existing=only_existing,
+        )
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
     def cleanup_dataview(self) -> None:

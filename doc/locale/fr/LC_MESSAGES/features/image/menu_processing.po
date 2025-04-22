@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:12+0100\n"
+"POT-Creation-Date: 2025-04-20 20:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 msgid "Processing Images"
 msgstr "Traitement des images"
@@ -161,6 +161,66 @@ msgstr ""
 msgid "Fourier analysis"
 msgstr "Analyse de Fourier"
 
+msgid "Zero padding"
+msgstr "Complément de zéros"
+
+msgid "Create a new image which is the result of zero padding on each selected image."
+msgstr "Crée une image à partir du résultat d'un complément de zéros sur chaque image sélectionnée."
+
+msgid "The following parameters are available:"
+msgstr "Les paramètres suivants sont disponibles :"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Strategy"
+msgstr "Stratégie"
+
+msgid "Zero padding strategy (see below)"
+msgstr "Stratégie de complément de zéros (voir ci-dessous)"
+
+msgid "Rows"
+msgstr "Lignes"
+
+msgid "Number of rows to add (if `strategy` is 'custom')"
+msgstr "Nombre de lignes à ajouter (si `strategy` est 'custom')"
+
+msgid "Columns"
+msgstr "Colonnes"
+
+msgid "Number of columns to add (if `strategy` is 'custom')"
+msgstr "Nombre de colonnes à ajouter (si `strategy` est 'custom')"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Position of the added zeros: 'bottom-right', 'centered'"
+msgstr "Position des zéros ajoutés : 'bottom-right', 'centered'"
+
+msgid "Zero padding strategy refers to the method used to add zeros to the image, and it can be one of the following:"
+msgstr "Les stratégies de complément de zéros font référence à la méthode utilisée pour ajouter des zéros à l'image, et peuvent être l'une des suivantes :"
+
+msgid "next_pow2"
+msgstr ""
+
+msgid "Next power of 2 (e.g. 512, 1024, ...)"
+msgstr "Puissance de 2 supérieure (ex. : 512, 1024, ...)"
+
+msgid "multiple_of_64"
+msgstr ""
+
+msgid "Next multiple of 64 (e.g. 512, 576, ...)"
+msgstr "Multiple de 64 supérieur (ex. : 512, 576, ...)"
+
+msgid "custom"
+msgstr ""
+
+msgid "Custom size (user-defined)"
+msgstr "Taille personnalisée (définie par l'utilisateur)"
+
+msgid "FFT related functions"
+msgstr "Fonctions liées à la FFT"
+
 msgid "Create a new image which is the result of a Fourier analysis on each selected image."
 msgstr "Crée une image à partir du résultat d'une analyse de Fourier sur chaque image sélectionnée."
 
@@ -169,9 +229,6 @@ msgstr "Les fonctions suivantes sont disponibles :"
 
 msgid "Function"
 msgstr "Fonction"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "FFT"
 msgstr "FFT"

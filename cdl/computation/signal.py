@@ -897,6 +897,59 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     return dst
 
 
+class ZeroPadding1DParam(gds.DataSet):
+    """Zero padding parameters"""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.__obj: SignalObj | None = None
+
+    def update_from_signal(self, obj: SignalObj) -> None:
+        """Update parameters from signal"""
+        self.__obj = obj
+        self.choice_callback(None, self.strategy)
+
+    def choice_callback(self, item, value):
+        """Callback for choice item"""
+        size = self.__obj.x.size
+        if value == "next_pow2":
+            self.n = 2 ** np.ceil(np.log2(size)).astype(int) - size
+        elif value == "double":
+            self.n = size
+        elif value == "triple":
+            self.n = 2 * size
+
+    strategies = ("next_pow2", "double", "triple", "custom")
+    _prop = gds.GetAttrProp("strategy")
+    strategy = gds.ChoiceItem(
+        _("Strategy"), zip(strategies, strategies), default=strategies[-1]
+    ).set_prop("display", store=_prop, callback=choice_callback)
+    _func_prop = gds.FuncProp(_prop, lambda x: x == "custom")
+    n = gds.IntItem(
+        _("Number of points"), min=1, help=_("Number of points to add")
+    ).set_prop("display", active=_func_prop)
+
+
+def compute_zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
+    """Compute zero padding with :py:func:`cdl.algorithms.signal.zero_padding`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    if p.strategy == "custom":
+        suffix = f"n={p.n}"
+    else:
+        suffix = f"strategy={p.strategy}"
+    dst = dst_11(src, "zero_padding", suffix)
+    x, y = src.get_data()
+    dst.set_xydata(*alg.zero_padding(x, y, p.n))
+    return dst
+
+
 def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """Compute FFT with :py:func:`cdl.algorithms.signal.fft1d`
 
@@ -1587,13 +1640,29 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2, add_label=True)
 
 
-class FindAbscissaParam(gds.DataSet):
-    """Parameter dataset for abscissa finding"""
+class OrdinateParam(gds.DataSet):
+    """Ordinate parameter"""
 
     y = gds.FloatItem(_("Ordinate"), default=0)
 
 
-def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
+def compute_full_width_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
+    """
+    Compute full width at a given y value for a signal object.
+
+    Args:
+        obj: The signal object containing x and y data.
+        p: The ordinate parameter dataset
+
+    Returns:
+        Segment coordinates
+    """
+    return calc_resultshape(
+        "∆X", "segment", obj, alg.full_width_at_y, p.y, add_label=True
+    )
+
+
+def compute_x_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
     """
     Compute the smallest x-value at a given y-value for a signal object.
 
@@ -1604,27 +1673,34 @@ def compute_x_at_y(obj: SignalObj, p: FindAbscissaParam) -> ResultProperties:
     Returns:
          An object containing the x-value.
     """
-
-    def __compute_x_at_y(x: np.ndarray, y: np.ndarray, value: float) -> float:
-        """Compute the x-value at a given y-value for a signal object.
-
-        Args:
-            x: The x-values of the signal object.
-            y: The y-values of the signal object.
-            value: The y-value to find the x-value for.
-
-        Returns:
-            The x-value at the given y-value.
-        """
-        values = alg.find_x_at_value(x, y, value)
-        if values.size:
-            return values[0]
-        return np.nan
-
     return calc_resultproperties(
         f"x|y={p.y}",
         obj,
-        {"x = %g {.xunit}": lambda xy: __compute_x_at_y(xy[0], xy[1], p.y)},
+        {"x = %g {.xunit}": lambda xy: alg.find_first_x_at_y_value(xy[0], xy[1], p.y)},
+    )
+
+
+class AbscissaParam(gds.DataSet):
+    """Abscissa parameter"""
+
+    x = gds.FloatItem(_("Abscissa"), default=0)
+
+
+def compute_y_at_x(obj: SignalObj, p: AbscissaParam) -> ResultProperties:
+    """
+    Compute the smallest y-value at a given x-value for a signal object.
+
+    Args:
+        obj: The signal object containing x and y data.
+        p: The parameter dataset for finding the ordinate.
+
+    Returns:
+         An object containing the y-value.
+    """
+    return calc_resultproperties(
+        f"y|x={p.x}",
+        obj,
+        {"y = %g {.yunit}": lambda xy: alg.find_y_at_x_value(xy[0], xy[1], p.x)},
     )
 
 

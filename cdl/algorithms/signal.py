@@ -60,6 +60,24 @@ def normalize(
 # MARK: Fourier analysis ---------------------------------------------------------------
 
 
+def zero_padding(x: np.ndarray, y: np.ndarray, n: int) -> tuple[np.ndarray, np.ndarray]:
+    """Append n zeros at the end of the signal.
+
+    Args:
+        x: X data
+        y: Y data
+        n: Number of zeros to append
+
+    Returns:
+        X data, Y data (tuple)
+    """
+    if n < 1:
+        raise ValueError("Number of zeros to append must be greater than 0")
+    x1 = np.linspace(x[0], x[-1] + n * (x[1] - x[0]), len(y) + n)
+    y1 = np.append(y, np.zeros(n))
+    return x1, y1
+
+
 def fft1d(
     x: np.ndarray, y: np.ndarray, shift: bool = True
 ) -> tuple[np.ndarray, np.ndarray]:
@@ -119,7 +137,8 @@ def magnitude_spectrum(
     x1, y1 = fft1d(x, y)
     if log_scale:
         y_mag = 20 * np.log10(np.abs(y1))
-    y_mag = np.abs(y1)
+    else:
+        y_mag = np.abs(y1)
     return x1, y_mag
 
 
@@ -540,8 +559,62 @@ def find_zero_crossings(y: np.ndarray) -> np.ndarray:
     return zero_crossing_indices
 
 
+def find_first_x_at_y_value(x: np.ndarray, y: np.ndarray, y_value: float) -> float:
+    """Find the first x value where the signal reaches a given y value (interpolated).
+
+    Args:
+        x: x signal data
+        y: y signal data (possibly non-monotonic)
+        y_value: the y value to find the corresponding x value for
+
+    Returns:
+        The first interpolated x value at the given y, or `nan` if not found
+    """
+    if y_value < np.nanmin(y) or y_value > np.nanmax(y):
+        return np.nan  # out of bounds
+
+    for i in range(len(y) - 1):
+        y1, y2 = y[i], y[i + 1]
+        if np.isnan(y1) or np.isnan(y2):
+            continue  # skip bad segments
+
+        if (y1 <= y_value <= y2) or (y2 <= y_value <= y1):
+            x1, x2 = x[i], x[i + 1]
+            if y1 == y2:
+                return x1  # flat segment, arbitrary choice
+            # Linear interpolation
+            return x1 + (y_value - y1) * (x2 - x1) / (y2 - y1)
+
+    return np.nan  # not found
+
+
+def find_y_at_x_value(x: np.ndarray, y: np.ndarray, x_value: float) -> float:
+    """Find the y value at a given x value using linear interpolation.
+
+    Args:
+        x: Monotonic X data
+        y: Y data (may contain NaNs)
+        x_value: The x value to find the corresponding y value for
+
+    Returns:
+        The interpolated y value at the given x, or `nan` if not computable
+    """
+    if np.isnan(x_value):
+        return np.nan
+
+    # Filter out NaNs
+    valid = ~(np.isnan(x) | np.isnan(y))
+    x_valid = x[valid]
+    y_valid = y[valid]
+
+    if len(x_valid) == 0 or x_value < x_valid[0] or x_value > x_valid[-1]:
+        return np.nan
+
+    return float(np.interp(x_value, x_valid, y_valid))
+
+
 def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
-    """Find the x value where the y value is the closest to the given value using
+    """Find the x values where the y value is the closest to the given value using
     linear interpolation to deduce the precise x value.
 
     Args:
@@ -837,6 +910,25 @@ def sampling_rate(x: np.ndarray) -> float:
 
 
 # MARK: Pulse analysis -----------------------------------------------------------------
+
+
+def full_width_at_y(
+    data: np.ndarray, level: float
+) -> tuple[float, float, float, float]:
+    """Compute the full width at a given y level using zero-crossing method.
+
+    Args:
+        data: X,Y data
+        level: The Y level at which to compute the width
+
+    Returns:
+        Full width segment coordinates
+    """
+    x, y = data
+    crossings = find_x_at_value(x, y, level)
+    if crossings.size < 2:
+        raise ValueError("Not enough zero-crossing points found")
+    return crossings[0], level, crossings[-1], level
 
 
 def fwhm(

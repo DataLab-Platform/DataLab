@@ -23,7 +23,13 @@ from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.signal import ROI1DParam, SignalObj, SignalROI, create_signal
 from cdl.utils.qthelpers import qt_try_except
-from cdl.widgets import fitdialog, signalbaseline, signalpeak
+from cdl.widgets import (
+    fitdialog,
+    signalbaseline,
+    signalcursor,
+    signaldeltax,
+    signalpeak,
+)
 
 
 class SignalProcessor(BaseProcessor[SignalROI]):
@@ -405,6 +411,20 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         self.__freq_filter(param, cdl.param.BandStopFilterParam, _("Band-stop filter"))
 
     @qt_try_except()
+    def compute_zero_padding(
+        self, param: cdl.param.ZeroPadding1DParam | None = None
+    ) -> None:
+        """Compute zero padding
+        with :py:func:`cdl.computation.signal.compute_zero_padding`"""
+        edit, param = self.init_param(param, cps.ZeroPadding1DParam, _("Zero padding"))
+        if edit:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            param.update_from_signal(obj)
+        self.compute_11(
+            cps.compute_zero_padding, param, title=_("Zero padding"), edit=edit
+        )
+
+    @qt_try_except()
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute FFT with :py:func:`cdl.computation.signal.compute_fft`"""
         if param is None:
@@ -464,7 +484,8 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     def compute_resampling(self, param: cdl.param.ResamplingParam | None = None):
         """Compute resampling
         with :py:func:`cdl.computation.signal.compute_resampling`"""
-        edit, param = self.init_param(param, cps.ResamplingParam, _("Resampling"))
+        title = _("Resampling")
+        edit, param = self.init_param(param, cps.ResamplingParam, title)
         if edit:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             if param.xmin is None:
@@ -475,13 +496,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 param.dx = obj.x[1] - obj.x[0]
             if param.nbpts is None:
                 param.nbpts = len(obj.x)
-        self.compute_11(
-            cps.compute_resampling,
-            param,
-            cps.ResamplingParam,
-            title=_("Resampling"),
-            edit=edit,
-        )
+        self.compute_11(cps.compute_resampling, param, title=title, edit=edit)
 
     @qt_try_except()
     def compute_detrending(self, param: cdl.param.DetrendingParam | None = None):
@@ -738,6 +753,22 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         return self.compute_10(cps.compute_fw1e2, title=_("FW") + "1/e²")
 
     @qt_try_except()
+    def compute_full_width_at_y(
+        self, param: cdl.param.OrdinateParam | None = None
+    ) -> dict[str, ResultShape]:
+        """Compute full width at a given y
+        with :py:func:`cdl.computation.signal.compute_full_width_at_y`"""
+        if param is None:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.panel.parent())
+            if exec_dialog(dlg):
+                param = cps.OrdinateParam()
+                param.y = dlg.get_y_value()
+            else:
+                return
+        return self.compute_10(cps.compute_full_width_at_y, param)
+
+    @qt_try_except()
     def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics
         with :py:func:`cdl.computation.signal.compute_stats`"""
@@ -766,15 +797,37 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_x_at_y(
-        self, param: cps.FindAbscissaParam | None = None
+        self, param: cps.OrdinateParam | None = None
     ) -> dict[str, ResultProperties]:
         """Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`."""
-        return self.compute_10(
-            cps.compute_x_at_y,
-            param,
-            cps.FindAbscissaParam,
-            title=_("Find abscissa"),
-        )
+        if param is None:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg = signalcursor.SignalCursorDialog(
+                obj, cursor_orientation="horizontal", parent=self.panel.parent()
+            )
+            if exec_dialog(dlg):
+                param = cps.OrdinateParam()
+                param.y = dlg.get_y_value()
+            else:
+                return
+        return self.compute_10(cps.compute_x_at_y, param)
+
+    @qt_try_except()
+    def compute_y_at_x(
+        self, param: cps.AbscissaParam | None = None
+    ) -> dict[str, ResultProperties]:
+        """Compute y at x with :py:func:`cdl.computation.signal.compute_y_at_x`."""
+        if param is None:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg = signalcursor.SignalCursorDialog(
+                obj, cursor_orientation="vertical", parent=self.panel.parent()
+            )
+            if exec_dialog(dlg):
+                param = cps.AbscissaParam()
+                param.x = dlg.get_x_value()
+            else:
+                return
+        return self.compute_10(cps.compute_y_at_x, param)
 
     @qt_try_except()
     def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:

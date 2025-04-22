@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-05 12:33+0200\n"
+"POT-Creation-Date: 2025-04-20 20:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,36 @@ msgstr "DataLab Version 0.20.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Fourier analysis features (\"Processing\" menu):"
+msgstr "Fonctionnalités d'analyse de Fourier (menu \"Traitement\") :"
+
+msgid "New \"Zero padding\" feature"
+msgstr "Nouvelle fonctionnalité \"Complément de zéros\""
+
+msgid "Implementation for signals:"
+msgstr "Implémentation pour les signaux :"
+
+msgid "Choose a zero padding strategy (Next power of 2, Double the length, Triple the length, Custom length)"
+msgstr "Choisissez une stratégie de complément de zéros (prochain multiple de 2, double la longueur, triple la longueur, longueur personnalisée)"
+
+msgid "Or manually set the zero padding length (if \"Custom length\" is selected)"
+msgstr "Ou définissez manuellement la longueur de complément de zéros (si \"Longueur personnalisée\" est sélectionnée)"
+
+msgid "Implementation for images:"
+msgstr "Implémentation pour les images :"
+
+msgid "Choose a zero padding strategy (Next power of 2, Next multiple of 64, Custom length)"
+msgstr "Choisissez une stratégie de complément de zéros (prochain multiple de 2, prochain multiple de 64, longueur personnalisée)"
+
+msgid "Or manually set the zero padding row and column lengths (if \"Custom length\" is selected)"
+msgstr "Ou définissez manuellement les longueurs de ligne et de colonne de complément de zéros (si \"Longueur personnalisée\" est sélectionnée)"
+
+msgid "Set the position of the zero padding (bottom-right, centered)"
+msgstr "Définir la position du complément de zéros (en bas à droite, centré)"
+
+msgid "This closes [Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Fourier analysis: add zero padding feature for signals and images"
+msgstr "Ceci corrige l'[Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Analyse de Fourier : ajouter la fonctionnalité de complément de zéros pour les signaux et les images"
 
 msgid "Region of Interest (ROI) editor:"
 msgstr "Éditeur de région d'intérêt (ROI) :"
@@ -57,6 +87,33 @@ msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
 msgid "New \"X-Y mode\" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)"
 msgstr "Nouvelle fonctionnalité \"Mode X-Y\" : cette fonctionnalité simule le comportement du mode X-Y d'un oscilloscope, c'est-à-dire qu'elle permet de tracer un signal en fonction d'un autre signal (par exemple X en fonction de Y)"
 
+msgid "New abscissa and ordinate find features:"
+msgstr "Nouvelles fonctionnalités de recherche d'abscisse et d'ordonnée :"
+
+msgid "\"First abscissa at y=...\" feature: this feature allows to find the first abscissa value of a signal at a given y value (e.g. the abscissa value of a signal at y=0)"
+msgstr "Fonctionnalité \"Abscisse à y=...\" : cette fonctionnalité permet de trouver la première valeur d'abscisse d'un signal à une valeur y donnée (par exemple, la valeur d'abscisse d'un signal à y=0)"
+
+msgid "\"Ordinate at x=...\" feature: this feature allows to find the ordinate value of a signal at a given x value (e.g. the ordinate value of a signal at x=0)"
+msgstr "Fonctionnalité \"Ordonnée à x=...\" : cette fonctionnalité permet de trouver la valeur d'ordonnée d'un signal à une valeur x donnée (par exemple, la valeur d'ordonnée d'un signal à x=0)"
+
+msgid "Each feature has its own dialog box, which allows to set the y or x value to be used for the search with a slider or a text box"
+msgstr "Chaque fonctionnalité a sa propre boîte de dialogue, qui permet de définir la valeur y ou x à utiliser pour la recherche avec un curseur ou une zone de texte"
+
+msgid "This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
+msgstr "Ceci clotûre les tickets [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) et [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
+
+msgid "New full width at given y feature:"
+msgstr "Nouvelle fonctionnalité de calcul de largeur à un y donné :"
+
+msgid "The \"Full width at y=...\" feature allows to find the full width of a signal at a given y value (e.g. the full width of a signal at y=0)"
+msgstr "La fonctionnalité \"Largeur à y=...\" permet de calculer la largeur d'un signal à une valeur y donnée"
+
+msgid "A specific dialog box allows to set the y value to be used for the search with a slider or a text box"
+msgstr "Une boîte de dialogue spécifique permet de définir la valeur y à utiliser avec un curseur ou une zone de texte"
+
+msgid "This closes [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+msgstr "Ceci clotûre le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+
 msgid "Public API (local or remote):"
 msgstr "API publique (locale ou distante) :"
 
@@ -75,11 +132,20 @@ msgstr "L'argument `set_current` permet de spécifier si le signal ou l'image do
 msgid "This closes [Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - Public API: add a keyword `group_id` to `add_signal` and `add_image`"
 msgstr "Ceci corrige l'[Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - API publique : ajouter un mot-clé `group_id` à `add_signal` et `add_image`"
 
-msgid "DataLab Version 0.19.1"
-msgstr "DataLab Version 0.19.1"
+msgid "DataLab Version 0.19.2"
+msgstr "DataLab Version 0.19.2"
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "Fixed [Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Signal / Fourier analysis: magnitude spectrum feature does not work as expected with logarithmic scale enabled"
+msgstr "Correction de l'[Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Analyse de signal / Fourier : la fonction de spectre de magnitude ne fonctionne pas comme prévu avec l'échelle logarithmique activée"
+
+msgid "Fixed [Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Average profile visualization: empty profile is displayed when the target rectangular area is outside the image area (this has been fixed upstream, in PlotPy v2.7.4, and so requires the latest version of PlotPy)"
+msgstr "Correction de l'[Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Visualisation du profil moyen : le profil vide est affiché lorsque la zone rectangulaire cible est en dehors de la zone de l'image (ceci a été corrigé en amont, dans PlotPy v2.7.4, et nécessite donc la dernière version de PlotPy)"
+
+msgid "DataLab Version 0.19.1"
+msgstr "DataLab Version 0.19.1"
 
 msgid "Pairwise operation mode:"
 msgstr "Mode d'opération pairwise :"
@@ -101,6 +167,30 @@ msgstr "Correction de l'[Issue #152](https://github.com/DataLab-Platform/DataLab
 
 msgid "Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)"
 msgstr "Correction de l'[Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignorer les valeurs `nan` pour la normalisation du signal et les calculs de statistiques (à la fois le résultat d'analyse et l'outil interactif)"
+
+msgid "Fixed [Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - When editing ROI of a list of images, the first image of the selection is shown (instead of the last as in the image panel)"
+msgstr "Correction de l'[Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - Lors de l'édition de la ROI d'une liste d'images, la première image de la sélection est affichée (au lieu de la dernière comme dans le panneau d'image)"
+
+msgid "Fixed [Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - When selecting multiple images just after opening an HDF5 file, the \"View in a new window\" feature does not work (`KeyError` exception)"
+msgstr "Correction de l'[Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - Lors de la sélection de plusieurs images juste après l'ouverture d'un fichier HDF5, la fonctionnalité \"Afficher dans une nouvelle fenêtre\" ne fonctionne pas (exception `KeyError`)"
+
+msgid "Fixed [Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - When selecting multiple images and clearing ROI in ROI editor, only the first image is affected"
+msgstr "Correction de l'[Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - Lors de la sélection de plusieurs images et de l'effacement de la ROI dans l'éditeur de ROI, seule la première image est affectée"
+
+msgid "Fixed [Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Refresh image items only if necessary (when editing ROI, pasting/deleting metadata)"
+msgstr "Correction de l'[Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Rafraîchir les items d'image uniquement si nécessaire (lors de l'édition de la ROI, du collage/de la suppression de métadonnées)"
+
+msgid "Fixed [Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - View in a new window: when displaying multiple images, the item list panel should be visible"
+msgstr "Correction de l'[Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - Afficher dans une nouvelle fenêtre : lors de l'affichage de plusieurs images, le panneau de liste d'items doit être visible"
+
+msgid "Fixed [Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Open from directory: expected one group per folder when loading multiple files"
+msgstr "Ceci corrige l'[Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Ouvrir depuis le répertoire : un groupe par dossier attendu lors du chargement de plusieurs fichiers"
+
+msgid "Fixed [Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164) - Open from directory: unsupported files should be ignored when loading files recursively, to avoid warning popup dialog boxes"
+msgstr "Ceci corrige l'[Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164) - Ouvrir depuis le répertoire : les fichiers non pris en charge doivent être ignorés lors du chargement de fichiers de manière récursive, pour éviter les boîtes de dialogue d'avertissement"
+
+msgid "Fixed [Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165) - When opening a file, the default signal/image title must be set to the file name, instead of the relative path to the file name"
+msgstr "Correction de l'[Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165) - Lors de l'ouverture d'un fichier, le titre par défaut du signal/image doit être défini sur le nom du fichier, au lieu du chemin relatif au nom du fichier"
 
 msgid "DataLab Version 0.19.0"
 msgstr "DataLab Version 0.19.0"

@@ -99,3 +99,4 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen`,Compute threshold using Yen algorithm
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat`,Compute White Top-Hat
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_wiener`,Compute Wiener filter
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_zero_padding`,Compute zero padding

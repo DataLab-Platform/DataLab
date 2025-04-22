@@ -50,6 +50,48 @@ def test_signal_fft_interactive() -> None:
 
 
 @pytest.mark.validation
+def test_signal_zero_padding() -> None:
+    """1D FFT zero padding validation test."""
+    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=1000)
+
+    # Validate zero padding with custom length
+    param = cdl.param.ZeroPadding1DParam.create(n=250)
+    assert param.strategy == "custom", (
+        f"Wrong default strategy: {param.strategy} (expected 'custom')"
+    )
+    s2 = cps.compute_zero_padding(s1, param)
+    len1 = len(s1.y)
+    exp_len2 = len1 + param.n
+    execenv.print("Validating zero padding with custom length...", end=" ")
+    assert len(s2.y) == exp_len2, f"Wrong length: {len(s2.y)} (expected {exp_len2})"
+    assert np.all(s2.x[:len1] == s1.x[:len1]), "Altered X data in original signal area"
+    assert np.all(s2.y[:len1] == s1.y[:len1]), "Altered Y data in original signal area"
+    assert np.all(s2.y[len1:] == 0), "Non-zero data in zero-padded area"
+    execenv.print("OK")
+    step1 = s1.x[1] - s1.x[0]
+    check_array_result(
+        "Zero padding X data",
+        s2.x[len1:],
+        np.arange(
+            s1.x[len1 - 1] + step1, s1.x[len1 - 1] + step1 * (param.n + 1), step1
+        ),
+    )
+
+    # Validate zero padding with strategies other than custom length
+    for strategy, expected_length in (
+        ("next_pow2", 24),
+        ("double", 1000),
+        ("triple", 2000),
+    ):
+        param = cdl.param.ZeroPadding1DParam.create(strategy=strategy)
+        param.update_from_signal(s1)
+        assert param.n == expected_length, (
+            f"Wrong length for '{param.strategy}' strategy: {param.n}"
+            f" (expected {expected_length})"
+        )
+
+
+@pytest.mark.validation
 def test_signal_fft() -> None:
     """1D FFT validation test."""
     freq = 50.0
@@ -158,6 +200,7 @@ def test_signal_psd() -> None:
 
 if __name__ == "__main__":
     test_signal_fft_interactive()
+    test_signal_zero_padding()
     test_signal_fft()
     test_signal_magnitude_spectrum()
     test_signal_phase_spectrum()

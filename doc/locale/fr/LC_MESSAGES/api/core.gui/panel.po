@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-05 12:29+0200\n"
+"POT-Creation-Date: 2025-04-14 10:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "Panel"
 msgstr "Panneau"
@@ -202,7 +202,7 @@ msgstr ""
 msgid "Setup panel"
 msgstr ""
 
-msgid "Refresh plot. This method simply emits the signal SIG_REFRESH_PLOT which is connected to the method `PlotHandler.refresh_plot`."
+msgid "Refresh plot."
 msgstr ""
 
 msgid "string describing the objects to refresh. Valid values are \"selected\" (refresh the selected objects), \"all\" (refresh all objects), \"existing\" (refresh existing plot items), or an object uuid."
@@ -211,7 +211,13 @@ msgstr ""
 msgid "if True, update the items. If False, only show the items (do not update them, except if the option \"Use reference item LUT range\" is enabled and more than one item is selected). Defaults to True."
 msgstr ""
 
-msgid "if True, force refresh even if auto refresh is disabled, and refresh all items associated to objects (even the hidden ones, e.g. when selecting multiple images of the same size and position). Defaults to False."
+msgid "if True, force refresh even if auto refresh is disabled. Defaults to False."
+msgstr ""
+
+msgid "if True, only refresh visible items. Defaults to True. Visible items are the ones that are not hidden by other items or the items except the first one if the option \"Show first only\" is enabled. This is useful for images, where the last image is the one that is shown. If False, all items are refreshed."
+msgstr ""
+
+msgid "if True, only refresh existing items. Defaults to False. Existing items are the ones that have already been created and are associated to the object uuid. If False, create new items for the objects that do not have an item yet."
 msgstr ""
 
 msgid "Raises"
@@ -337,7 +343,13 @@ msgstr ""
 msgid "File names"
 msgstr ""
 
-msgid "if True, ignore unknown file types (default: False)"
+msgid "if True, create a new group if more than one object is loaded for a single file. Defaults to False: all objects are added to the current group."
+msgstr ""
+
+msgid "if True, add objects to the panel. Defaults to True."
+msgstr ""
+
+msgid "if True, ignore errors when loading files. Defaults to False."
 msgstr ""
 
 msgid "Save selected objects to files (signal/image)."
