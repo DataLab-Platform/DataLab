@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Any, Callable, Generator
 from uuid import uuid4
 
 from guidata.configtools import get_icon
-from guidata.qthelpers import create_action
+from guidata.qthelpers import add_actions, create_action
 from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -87,7 +87,19 @@ class HistoryAction(ObjItf):
         """Create a new action"""
         super().__init__()
         self.__title = "" if title is None else title
-        self.func = lambda: None if func is None else func
+        if func is None:
+
+            def default_func():
+                """Default function"""
+                # This function is used to create a default action when the
+                # function is not provided.
+                pass
+
+            func = default_func
+        else:
+            if not callable(func):
+                raise TypeError("func must be callable")
+            self.func = func
         self.args = () if args is None else args
         kwargs = {} if kwargs is None else kwargs
         self.kwargs = {k: v for k, v in kwargs.items() if v is not None}
@@ -151,15 +163,20 @@ class HistoryAction(ObjItf):
         """
         self.state.restore(mainwindow)
 
-    def replay(self, mainwindow: CDLMainWindow, restore_selection: bool) -> None:
+    def replay(
+        self, mainwindow: CDLMainWindow, restore_selection: bool, edit: bool
+    ) -> None:
         """Replay the action
 
         Args:
             mainwindow: DataLab's main window
             restore_selection: True to restore the workspace selection before replaying
+            edit: if True, always open the dialog boxes to edit parameters, if False,
+             use the parameters passed when creating the action
         """
         if restore_selection:
             self.state.restore(mainwindow)
+        self.kwargs["edit"] = edit
         self.func(*self.args, **self.kwargs)
 
     def serialize(self, writer: NativeH5Writer) -> None:
@@ -300,6 +317,8 @@ class WorkspaceState:
         # To check this, we have to try to restore the selection (without restoring it)
         # and compare the current selection with the saved selection in terms of
         # position in the list of objects and of data shape.
+        if self.states == {}:
+            return True
         current_states: dict[str, list[str]] = {}
         selection = self.selection
         if not restore_selection:
@@ -326,6 +345,8 @@ class WorkspaceState:
             ValueError: If the current workspace state is not compatible with the
              saved state
         """
+        if self.selection == {}:
+            return
         if not self.is_current_state_compatible(mainwindow, False):
             raise ValueError(
                 "Current workspace state is not compatible with saved state"
@@ -390,15 +411,19 @@ class HistorySession:
         if self.actions:
             self.actions[0].restore(mainwindow)
 
-    def replay(self, mainwindow: CDLMainWindow, restore_selection: bool) -> None:
+    def replay(
+        self, mainwindow: CDLMainWindow, restore_selection: bool, edit: bool
+    ) -> None:
         """Replay the history session
 
         Args:
             mainwindow: DataLab's main window
             restore_selection: True to restore the workspace selection before replaying
+            edit: if True, always open the dialog boxes to edit parameters, if False,
+             use the parameters passed when creating the action
         """
         for action in self.actions[:]:
-            action.replay(mainwindow, restore_selection=restore_selection)
+            action.replay(mainwindow, restore_selection=restore_selection, edit=edit)
 
     def serialize(self, writer: NativeH5Writer) -> None:
         """Serialize this history session
@@ -574,6 +599,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.setWindowIcon(get_icon("history.svg"))
         self.setOrientation(QC.Qt.Vertical)
 
+        self.__edit_mode = False
         self.__menu_actions: list[QW.QAction] = self.__create_menu_actions()
 
         self.mainwindow = parent
@@ -582,8 +608,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.tree.itemDoubleClicked.connect(self.replay_restore_actions)
 
         toolbar = QW.QToolBar(self)
-        for action in self.__menu_actions:
-            toolbar.addAction(action)
+        add_actions(toolbar, self.__menu_actions)
         widget = QW.QWidget(self)
         layout = QW.QVBoxLayout()
         layout.addWidget(toolbar)
@@ -602,6 +627,13 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         Returns:
             list[QW.QAction]: List of menu actions
         """
+        edit_action = create_action(
+            self,
+            _("Edit mode"),
+            toggled=self.toggle_edit_mode,
+            icon=get_icon("edit.svg"),
+        )
+        edit_action.setChecked(self.__edit_mode)
         return [
             create_action(
                 self,
@@ -623,6 +655,8 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
                 self.replay_restore_actions,
                 icon=get_icon("restore_and_replay.svg"),
             ),
+            edit_action,
+            None,
             create_action(
                 self,
                 _("Delete"),
@@ -631,6 +665,14 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             ),
         ]
 
+    def toggle_edit_mode(self, checked: bool) -> None:
+        """Toggle edit mode
+
+        Args:
+            checked: True if the edit mode is checked, False otherwise
+        """
+        self.__edit_mode = checked
+
     def show_context_menu(self, pos: QC.QPoint) -> None:
         """Show the context menu
 
@@ -638,8 +680,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             pos: Position of the context menu
         """
         menu = QW.QMenu()
-        for action in self.__menu_actions:
-            menu.addAction(action)
+        add_actions(menu, self.__menu_actions)
         menu.exec_(self.tree.mapToGlobal(pos))
 
     def get_action_from_uuid(self, uuid: str) -> HistoryAction:
@@ -675,7 +716,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
                 return
             if replay:
                 session_or_action.replay(
-                    self.mainwindow, restore_selection=restore_selection
+                    self.mainwindow,
+                    restore_selection=restore_selection,
+                    edit=self.__edit_mode,
                 )
             elif restore_selection:
                 session_or_action.restore(self.mainwindow)
@@ -746,17 +789,26 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.__history_sessions.append(session)
         self.tree.populate_tree(self.__history_sessions)
 
-    def add_entry(self, action_title: str, func: Callable, *args, **kwargs) -> None:
+    def add_entry(
+        self, action_title: str, func: Callable, save_state=True, *args, **kwargs
+    ) -> None:
         """Add an entry to the current history list
 
         Args:
             action_title: Title of the history action
             func: Function to call
+            save_state: True to save the current workspace state before adding the
+             action (default: True). If False, the action is added without saving the
+             state: this is useful when the action is not related to the current
+             workspace state (e.g. when creating a new object).
             args: Function arguments
             kwargs: Function keyword arguments
         """
-        state = WorkspaceState()
-        state.save(self.mainwindow)
+        if save_state:
+            state = WorkspaceState()
+            state.save(self.mainwindow)
+        else:
+            state = None
         obj = HistoryAction(action_title, func, args, kwargs, state)
         self.add_object(obj)
 

@@ -150,6 +150,13 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         if image is None:
             return None
         if add_to_panel:
+            self.mainwindow.historypanel.add_entry(
+                _("New image"),
+                self.new_object,
+                save_state=False,
+                newparam=newparam,
+                addparam=addparam,
+            )
             self.add_object(image)
         return image
 

@@ -599,6 +599,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         comment: str | None = None,
         func_objs: Callable | None = None,
         edit: bool | None = None,
+        pairwise: bool | None = None,
     ) -> None:
         """Compute n1 function: N(>=2) objects in → 1 object out.
 
@@ -611,6 +612,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment: comment. Defaults to None.
             func_objs: function to execute on objects. Defaults to None.
             edit: if True, edit parameters. Defaults to None.
+            pairwise: if None, use current operation mode. If True, use pairwise mode.
+             If False, use single operand mode. Defaults to None.
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
@@ -618,9 +621,20 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             if edit and not param.edit(parent=self.panel.parent()):
                 return
 
+        self.mainwindow.historypanel.add_entry(
+            name,
+            self.compute_n1,
+            func,
+            param=param,
+            title=title,
+            comment=comment,
+            func_objs=func_objs,
+            pairwise=pairwise,
+        )
+
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
-        pairwise = is_pairwise_mode()
+        pairwise = is_pairwise_mode() if pairwise is None else pairwise
 
         if pairwise:
             src_grps, src_gids, src_objs, _nbobj, valid = (
@@ -676,7 +690,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     if func_objs is not None:
                         func_objs(dst_obj, src_objs_pair)
                     short_ids = [obj.short_id for obj in src_objs_pair]
-                    dst_obj.title = f'{name}({", ".join(short_ids)})'
+                    dst_obj.title = f"{name}({', '.join(short_ids)})"
                     self.panel.add_object(dst_obj, group_id=dst_gid)
 
         else:
@@ -743,7 +757,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 if func_objs is not None:
                     func_objs(dst_obj, src_objs[src_gid])
                 short_ids = [obj.short_id for obj in src_objs[src_gid]]
-                dst_obj.title = f'{name}({", ".join(short_ids)})'
+                dst_obj.title = f"{name}({', '.join(short_ids)})"
                 group_id = dst_gid if dst_gid is not None else src_gid
                 self.panel.add_object(dst_obj, group_id=group_id)
 
@@ -753,7 +767,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
     def compute_n1n(
         self,
-        obj2: Obj | list[Obj] | None,
+        obj2: Obj | list[Obj] | int | list[int] | None,
         obj2_name: str,
         func: Callable,
         param: gds.DataSet | None = None,
@@ -761,6 +775,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        pairwise: bool | None = None,
     ) -> None:
         """Compute n1n function: N(>=1) objects + 1 object in → N objects out.
 
@@ -777,7 +792,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         Examples: subtract, divide
 
         Args:
-            obj2: second object (or list of objects in case of pairwise operation mode)
+            obj2: second object (or list of objects in case of pairwise operation mode).
+             Takes objects as well as object numbers as input.
             obj2_name: name of second object
             func: function to execute
             param: parameters. Defaults to None.
@@ -785,6 +801,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             title: title of progress bar. Defaults to None.
             comment: comment. Defaults to None.
             edit: if True, edit parameters. Defaults to None.
+            pairwise: if None, use current operation mode. If True, use pairwise mode.
+             If False, use single operand mode. Defaults to None.
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
@@ -794,7 +812,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
-        pairwise = is_pairwise_mode()
+        pairwise = is_pairwise_mode() if pairwise is None else pairwise
 
         if obj2 is None:
             objs2 = []
@@ -803,6 +821,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             assert pairwise
         else:
             objs2 = [obj2]
+        if all(isinstance(obj, int) for obj in objs2):
+            # If obj2 is a list of object numbers, convert to objects
+            objs2 = [objmodel.get_object_from_number(obj) for obj in objs2]
 
         dlg_title = _("Select %s") % obj2_name
 
@@ -826,6 +847,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 )
                 if objs2 is None:
                     return
+
+            objs2: list[Obj]
+            self.mainwindow.historypanel.add_entry(
+                title,
+                self.compute_n1n,
+                [obj.number for obj in objs2],
+                obj2_name,
+                func,
+                param=param,
+                title=title,
+                comment=comment,
+                pairwise=True,
+            )
 
             name = func.__name__.replace("compute_", "")
             n_pairs = len(src_objs[src_gids[0]])
@@ -869,7 +903,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 )
                 if objs2 is None:
                     return
+
             obj2 = objs2[0]
+
+            self.mainwindow.historypanel.add_entry(
+                title,
+                self.compute_n1n,
+                obj2.number,
+                obj2_name,
+                func,
+                param=param,
+                title=title,
+                comment=comment,
+                pairwise=False,
+            )
+
             with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
                 for index, obj in enumerate(objs):
                     progress.setValue(index + 1)
