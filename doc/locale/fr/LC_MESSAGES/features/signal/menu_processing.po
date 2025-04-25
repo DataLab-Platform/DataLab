@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:17+0100\n"
+"POT-Creation-Date: 2025-04-25 19:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -228,6 +228,9 @@ msgstr ":math:`y_{1} = |FFT(y_{0})|` ou :math:`20.log_{10}(|FFT(y_{0})|)` (dB)"
 
 msgid "Phase spectrum"
 msgstr "Spectre de phase"
+
+msgid "Phase of the FFT expressed in degrees, using `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_ function"
+msgstr "Phase de la FFT exprimée en degrés, utilisant la fonction `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_"
 
 #, python-brace-format
 msgid ":math:`y_{1} = \\angle FFT(y_{0})`"

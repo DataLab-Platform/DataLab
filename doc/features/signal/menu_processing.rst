@@ -152,7 +152,7 @@ The following functions are available:
       - Optionnal: use logarithmic scale (dB)
       - :math:`y_{1} = |FFT(y_{0})|` or :math:`20.log_{10}(|FFT(y_{0})|)` (dB)
     * - Phase spectrum
-      -
+      - Phase of the FFT expressed in degrees, using `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_ function
       - :math:`y_{1} = \angle FFT(y_{0})`
     * - Power spectral density (PSD)
       - Optionnal: use logarithmic scale (dB). PSD is estimated using Welch's method

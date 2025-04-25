@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-25 19:20+0200\n"
+"POT-Creation-Date: 2025-04-25 19:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,9 @@ msgstr "DataLab Version 0.19.2"
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "Fixed [Issue #173](https://github.com/DataLab-Platform/DataLab/issues/173) - Phase spectrum: add unit (degree) and function reference (`numpy.angle`) to the documentation"
+msgstr "Correction de l'[Issue #173](https://github.com/DataLab-Platform/DataLab/issues/173) - Spectre de phase : ajouter l'unité (degré) et la référence de fonction (`numpy.angle`) à la documentation"
 
 msgid "Fixed [Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177) - \"Open from directory\" feature: unexpected group name (a group named \".\" is created instead of the root folder name)"
 msgstr "Correction de l'[Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177) - Fonctionnalité \"Ouvrir depuis le répertoire\" : nom de groupe inattendu (un groupe nommé \".\" est créé au lieu du nom du dossier racine)"
