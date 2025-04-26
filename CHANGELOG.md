@@ -6,6 +6,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Fixed [Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172) - Image profiles: when moving/resizing image, profile plots are not refreshed (fixed in PlotPy v2.7.4)
 * Fixed [Issue #173](https://github.com/DataLab-Platform/DataLab/issues/173) - Phase spectrum: add unit (degree) and function reference (`numpy.angle`) to the documentation
 * Fixed [Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177) - "Open from directory" feature: unexpected group name (a group named "." is created instead of the root folder name)
 * Fixed [Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Signal / Fourier analysis: magnitude spectrum feature does not work as expected with logarithmic scale enabled
