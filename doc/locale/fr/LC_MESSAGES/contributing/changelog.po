@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-26 10:37+0200\n"
+"POT-Creation-Date: 2025-04-26 11:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -39,11 +39,14 @@ msgstr "Nouvelle fonctionnalité \"Copier tout\" dans la boîte de dialogue de l
 msgid "New \"Export\" button in the array editor dialog box, to export the data in a CSV file, including row and column headers"
 msgstr "Nouvelle fonctionnalité \"Exporter\" dans la boîte de dialogue de l'éditeur de tableau, pour exporter les données dans un fichier CSV, y compris les en-têtes de ligne et de colonne"
 
+msgid "New \"Paste\" button in the array editor dialog box, to paste the data from the clipboard into the array editor (this feature is not available for read-only data, such as analysis results)"
+msgstr "Nouvelle fonctionnalité \"Coller\" dans la boîte de dialogue de l'éditeur de tableau, pour coller les données du presse-papiers dans l'éditeur de tableau (cette fonctionnalité n'est pas disponible pour les données en lecture seule, telles que les résultats d'analyse)"
+
 msgid "The features above require guidata v3.9.0 or later"
 msgstr "Les fonctionnalités ci-dessus nécessitent guidata v3.9.0 ou une version ultérieure"
 
-msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174) and [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175)"
-msgstr "Ceci clotûre les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174) et [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175)"
+msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
+msgstr "Ceci clotûre les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 
 msgid "Fourier analysis features (\"Processing\" menu):"
 msgstr "Fonctionnalités d'analyse de Fourier (menu \"Traitement\") :"

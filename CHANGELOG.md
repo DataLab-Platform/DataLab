@@ -9,8 +9,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Array editor (results, signal and image data, ...):
   * New "Copy all" button in the array editor dialog box, to copy all the data in the clipboard, including row and column headers
   * New "Export" button in the array editor dialog box, to export the data in a CSV file, including row and column headers
+  * New "Paste" button in the array editor dialog box, to paste the data from the clipboard into the array editor (this feature is not available for read-only data, such as analysis results)
   * The features above require guidata v3.9.0 or later
-  * This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174) and [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175)
+  * This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) and [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)
 * Fourier analysis features ("Processing" menu):
   * New "Zero padding" feature
   * Implementation for signals:
