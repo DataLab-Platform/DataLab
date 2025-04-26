@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-26 11:17+0200\n"
+"POT-Creation-Date: 2025-04-26 15:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -30,6 +30,15 @@ msgstr "DataLab Version 0.20.0"
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
+msgid "ANDOR SIF Images:"
+msgstr "Images ANDOR SIF :"
+
+msgid "Added support for background images in ANDOR SIF files"
+msgstr "Ajout de la prise en charge des images de fond dans les fichiers ANDOR SIF"
+
+msgid "This closes [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Add support for ANDOR SIF files with background image"
+msgstr "Ceci clotûre le ticket [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Ajout de la prise en charge des fichiers ANDOR SIF avec image de fond"
+
 msgid "Array editor (results, signal and image data, ...):"
 msgstr "Éditeur de tableau (résultats, données de signal et d'image, ...)"
 
@@ -45,7 +54,8 @@ msgstr "Nouvelle fonctionnalité \"Coller\" dans la boîte de dialogue de l'édi
 msgid "The features above require guidata v3.9.0 or later"
 msgstr "Les fonctionnalités ci-dessus nécessitent guidata v3.9.0 ou une version ultérieure"
 
-msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
+#, fuzzy
+msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) and [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 msgstr "Ceci clotûre les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 
 msgid "Fourier analysis features (\"Processing\" menu):"

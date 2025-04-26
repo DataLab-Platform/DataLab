@@ -6,6 +6,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* ANDOR SIF Images:
+  * Added support for background images in ANDOR SIF files
+  * This closes [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Add support for ANDOR SIF files with background image
 * Array editor (results, signal and image data, ...):
   * New "Copy all" button in the array editor dialog box, to copy all the data in the clipboard, including row and column headers
   * New "Export" button in the array editor dialog box, to export the data in a CSV file, including row and column headers
