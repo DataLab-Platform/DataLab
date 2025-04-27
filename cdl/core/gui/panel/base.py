@@ -971,7 +971,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 )
                 if new_objs:
                     objs += new_objs
-                    grp = self.add_group(osp.relpath(path, directory))
+                    grp_name = osp.relpath(path, directory)
+                    if grp_name == ".":
+                        grp_name = osp.basename(path)
+                    grp = self.add_group(grp_name)
                     for obj in new_objs:
                         self.add_object(obj, group_id=grp.uuid, set_current=False)
         return objs
