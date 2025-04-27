@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import functools
+import inspect
 import os
 from typing import TYPE_CHECKING, Any, Callable, Generator
 from uuid import uuid4
@@ -53,7 +54,13 @@ def add_to_history(kwargs_names: list[str] = [], title: str | None = None):
             self: BaseDataPanel | BaseProcessor = args[0]
             history: HistoryPanel = self.mainwindow.historypanel
             histkwargs = {k: kwargs[k] for k in kwargs_names if k in kwargs}
-            history.add_entry(kwargs.get("title", title), func, *args, **histkwargs)
+            history.add_entry(
+                kwargs.get("title", title),
+                kwargs.get("save_state", True),
+                func,
+                *args,
+                **histkwargs,
+            )
             return func(*args, **kwargs)
 
         return method_wrapper
@@ -75,6 +82,8 @@ class HistoryAction(ObjItf):
         kwargs: Function keyword arguments
         state: State of the workspace before the action
     """
+
+    FUNC_EDIT_MODE = "edit"  # Name of the function parameter to enable edit mode
 
     def __init__(
         self,
@@ -176,7 +185,9 @@ class HistoryAction(ObjItf):
         """
         if restore_selection:
             self.state.restore(mainwindow)
-        self.kwargs["edit"] = edit
+        sig = inspect.signature(self.func)
+        if self.FUNC_EDIT_MODE in sig.parameters:
+            self.kwargs[self.FUNC_EDIT_MODE] = edit
         self.func(*self.args, **self.kwargs)
 
     def serialize(self, writer: NativeH5Writer) -> None:
@@ -599,6 +610,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.setWindowIcon(get_icon("history.svg"))
         self.setOrientation(QC.Qt.Vertical)
 
+        self.__record_mode = False
         self.__edit_mode = False
         self.__menu_actions: list[QW.QAction] = self.__create_menu_actions()
 
@@ -631,10 +643,19 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             self,
             _("Edit mode"),
             toggled=self.toggle_edit_mode,
-            icon=get_icon("edit.svg"),
+            icon=get_icon("edit_mode.svg"),
         )
         edit_action.setChecked(self.__edit_mode)
+        record_action = create_action(
+            self,
+            _("Record mode"),
+            toggled=self.toggle_record_mode,
+            icon=get_icon("record.svg"),
+        )
+        record_action.setChecked(self.__record_mode)
         return [
+            record_action,
+            None,
             create_action(
                 self,
                 _("Replay"),
@@ -672,6 +693,14 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             checked: True if the edit mode is checked, False otherwise
         """
         self.__edit_mode = checked
+
+    def toggle_record_mode(self, checked: bool) -> None:
+        """Toggle record mode
+
+        Args:
+            checked: True if the record mode is checked, False otherwise
+        """
+        self.__record_mode = checked
 
     def show_context_menu(self, pos: QC.QPoint) -> None:
         """Show the context menu
@@ -790,20 +819,34 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.tree.populate_tree(self.__history_sessions)
 
     def add_entry(
-        self, action_title: str, func: Callable, save_state=True, *args, **kwargs
+        self,
+        action_title: str,
+        save_state: bool,
+        func: Callable,
+        *args,
+        **kwargs,
     ) -> None:
         """Add an entry to the current history list
 
         Args:
             action_title: Title of the history action
+            save_state: If True, the current workspace state is saved before adding the
+             action (this is the most common case). If False, the action is added
+             without saving the state: this may be useful when the action is not
+             related to the current workspace state (e.g. when creating a new object).
             func: Function to call
-            save_state: True to save the current workspace state before adding the
-             action (default: True). If False, the action is added without saving the
-             state: this is useful when the action is not related to the current
-             workspace state (e.g. when creating a new object).
             args: Function arguments
             kwargs: Function keyword arguments
+
+        .. warning::
+
+            Action will **not** be added to history if *record mode* is disabled.
         """
+        assert isinstance(action_title, str), "action_title must be a string"
+        assert isinstance(save_state, bool), "save_state must be a boolean"
+        assert callable(func), "func must be callable"
+        if not self.__record_mode:
+            return
         if save_state:
             state = WorkspaceState()
             state.save(self.mainwindow)

@@ -1363,21 +1363,34 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         return filename
 
     @remote_controlled
-    def save_to_h5_file(self, filename=None) -> None:
+    def save_to_h5_file(
+        self,
+        filename: str | None = None,
+        edit: bool = False,
+    ) -> None:
         """Save to a DataLab HDF5 file
 
         Args:
             filename: HDF5 filename. If None, a file dialog is opened.
+            edit: Turn on the *edit mode* (ask the user to confirm the filename)
 
         Raises:
             IOError: if filename is invalid or file cannot be saved.
         """
-        if filename is None:
+        if filename is None or edit:
             basedir = Conf.main.base_dir.get()
+            if edit and filename is not None:
+                basedir = filename
             with qth.save_restore_stds():
                 filename, _fl = getsavefilename(self, _("Save"), basedir, "HDF5 (*.h5)")
             if not filename:
                 return
+        self.historypanel.add_entry(
+            _("Save to HDF5 file"),
+            False,
+            self.save_to_h5_file,
+            filename=filename,
+        )
         with qth.qt_try_loadsave_file(self, filename, "save"):
             filename = self.__check_h5file(filename, "save")
             self.h5inputoutput.save_file(filename)
@@ -1386,16 +1399,18 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     @remote_controlled
     def open_h5_files(
         self,
-        h5files: list[str] | None = None,
+        filenames: list[str] | None = None,
         import_all: bool | None = None,
         reset_all: bool | None = None,
+        edit: bool = False,
     ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
         Args:
-            h5files: HDF5 filenames (optionally with dataset name, separated by ":")
+            filenames: HDF5 filenames (optionally with dataset name, separated by ":")
             import_all: Import all datasets from HDF5 files
             reset_all: Reset all application data before importing
+            edit: Turn on the *edit mode* (ask the user to confirm the filename)
         """
         if not self.confirm_memory_state():
             return
@@ -1419,16 +1434,36 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     reset_all = True
                 elif answer == QW.QMessageBox.Ignore:
                     Conf.io.h5_clear_workspace_ask.set(False)
-        if h5files is None:
+        if filenames is None or edit:
             basedir = Conf.main.base_dir.get()
+            if edit and filenames is not None:
+                # ⚠️ QFileDialog.getOpenFileNames does not support multiple
+                # file preselection (only single file preselection is supported).
+                # So until we eventually use an alternative to QFileDialog, we have
+                # to limit the number of preselected files to 1.
+                basedir = filenames[0]
             with qth.save_restore_stds():
-                h5files, _fl = getopenfilenames(
+                filenames, _fl = getopenfilenames(
                     self, _("Open"), basedir, _("HDF5 files (*.h5 *.hdf5)")
                 )
-        if not h5files:
+        if not filenames:
             return
+
+        # Add to history
+        action_title = _("Open HDF5 file")
+        if len(filenames) > 1:
+            action_title = _("Open %d HDF5 files") % len(filenames)
+        self.historypanel.add_entry(
+            action_title,
+            False,
+            self.open_h5_files,
+            h5files=filenames,
+            import_all=import_all,
+            reset_all=reset_all,
+        )
+
         filenames, dsetnames = [], []
-        for fname_with_dset in h5files:
+        for fname_with_dset in filenames:
             if "," in fname_with_dset:
                 filename, dsetname = fname_with_dset.split(",")
                 dsetnames.append(dsetname)

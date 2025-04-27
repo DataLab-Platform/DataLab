@@ -139,8 +139,8 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         if add_to_panel:
             self.mainwindow.historypanel.add_entry(
                 _("New signal"),
+                False,
                 self.new_object,
-                save_state=False,
                 newparam=newparam,
                 addparam=addparam,
             )

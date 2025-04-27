@@ -281,6 +281,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 return
         self.mainwindow.historypanel.add_entry(
             title,
+            True,
             self.compute_11,
             func,
             param=param,
@@ -317,6 +318,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 assert len(funcs) == len(params)
         self.mainwindow.historypanel.add_entry(
             title,
+            True,
             self.compute_1n,
             funcs,
             params=params,
@@ -623,6 +625,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         self.mainwindow.historypanel.add_entry(
             name,
+            True,
             self.compute_n1,
             func,
             param=param,
@@ -851,6 +854,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             objs2: list[Obj]
             self.mainwindow.historypanel.add_entry(
                 title,
+                True,
                 self.compute_n1n,
                 [obj.number for obj in objs2],
                 obj2_name,
@@ -908,6 +912,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
             self.mainwindow.historypanel.add_entry(
                 title,
+                True,
                 self.compute_n1n,
                 obj2.number,
                 obj2_name,
