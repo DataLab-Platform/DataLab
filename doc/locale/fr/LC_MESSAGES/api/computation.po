@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 10:27+0200\n"
+"POT-Creation-Date: 2025-04-28 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -624,6 +624,30 @@ msgid "New instance of :py:class:`BandStopFilterParam`."
 msgstr ""
 
 msgid "Compute frequency filter (low-pass, high-pass, band-pass, band-stop), with :py:func:`scipy.signal.filtfilt`"
+msgstr ""
+
+msgid "Zero padding parameters"
+msgstr ""
+
+msgid "Single choice from: 'next_pow2', 'double', 'triple', 'custom'. Default: 'custom'."
+msgstr ""
+
+msgid "Number of points\\. Number of points to add\\. Integer higher than 1\\. Default: None."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ZeroPadding1DParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ZeroPadding1DParam`."
+msgstr ""
+
+msgid "Update parameters from signal"
+msgstr ""
+
+msgid "Callback for choice item"
+msgstr ""
+
+msgid "Compute zero padding with :py:func:`cdl.algorithms.signal.zero_padding`"
 msgstr ""
 
 msgid "Compute FFT with :py:func:`cdl.algorithms.signal.fft1d`"
@@ -1358,9 +1382,6 @@ msgstr ""
 msgid "Update parameters from image"
 msgstr ""
 
-msgid "Callback for choice item"
-msgstr ""
-
 msgid "Compute radial profile around the centroid with :py:func:`cdl.algorithms.image.get_radial_profile`"
 msgstr ""
 
@@ -1416,6 +1437,39 @@ msgid "Apply clipping with :py:func:`numpy.clip`"
 msgstr ""
 
 msgid "Apply offset correction"
+msgstr ""
+
+msgid "Zero padding parameters for 2D images"
+msgstr ""
+
+msgid "Padding strategy\\.  Single choice from: 'next_pow2', 'multiple_of_64', 'custom'. Default: 'custom'."
+msgstr ""
+
+msgid "Rows to add\\.  Integer higher than 0\\. Default: None."
+msgstr ""
+
+msgid "Columns to add\\.  Integer higher than 0\\. Default: None."
+msgstr ""
+
+msgid "Padding position\\.  Single choice from: 'bottom-right', 'center'. Default: 'bottom-right'."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ZeroPadding2DParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ZeroPadding2DParam`."
+msgstr ""
+
+msgid "Callback to update padding values"
+msgstr ""
+
+msgid "Compute zero padding for an image using `cdl.algorithms.image.zero_padding`."
+msgstr ""
+
+msgid "source image object"
+msgstr ""
+
+msgid "New padded image object"
 msgstr ""
 
 msgid "Compute FFT with :py:func:`cdl.algorithms.image.fft2d`"
