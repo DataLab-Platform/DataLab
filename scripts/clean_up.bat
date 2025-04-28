@@ -32,6 +32,16 @@ del /s /q *.orig 1>nul 2>&1
 
 @REM Removing localization template files
 if exist doc\locale\pot ( rmdir /s /q doc\locale\pot )
+del /s /q %MODNAME%\locale\%MODNAME%.pot 1>nul 2>&1
+
+@REM Removing files related to documentation generation
+del /q doc/contributing/changelog.md 1>nul 2>&1
+
+@REM Removing generated PDF documentation files
+del /q %MODNAME%\data\doc\%LIBNAME%*.pdf 1>nul 2>&1
+
+@REM Log files
+del /s /q *.log 1>nul 2>&1
 
 @REM Removing files/directories related to Coverage and pytest
 if exist .coverage ( del /q .coverage )
@@ -46,4 +56,4 @@ if exist wix\bin ( rmdir /s /q wix\bin )
 if exist wix\obj ( rmdir /s /q wix\obj )
 if exist wix\*.bmp ( del /q wix\*.bmp )
 if exist wix\*.wixpdb ( del /q wix\*.wixpdb )
-if exist wix\%LIBNAME%.wxs ( del /q wix\%LIBNAME%.wxs )
+del /q wix\%LIBNAME%*.wxs 1>nul 2>&1
