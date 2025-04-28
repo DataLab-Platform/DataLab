@@ -25,6 +25,11 @@ del /s /q *.pyc 1>nul 2>&1
 del /s /q *.pyo 1>nul 2>&1
 FOR /d /r %%d IN ("__pycache__") DO @IF EXIST "%%d" rd /s /q "%%d"
 
+@REM Removing version control backup files
+del /s /q *~ 1>nul 2>&1
+del /s /q *.bak 1>nul 2>&1
+del /s /q *.orig 1>nul 2>&1
+
 @REM Removing localization template files
 if exist doc\locale\pot ( rmdir /s /q doc\locale\pot )
 
@@ -32,7 +37,7 @@ if exist doc\locale\pot ( rmdir /s /q doc\locale\pot )
 if exist .coverage ( del /q .coverage )
 if exist coverage.xml ( del /q coverage.xml )
 if exist htmlcov ( rmdir /s /q htmlcov )
-del /q .coverage.* 1>nul 2>&1
+del /s /q .coverage.* 1>nul 2>&1
 if exist sitecustomize.py ( del /q sitecustomize.py )
 if exist .pytest_cache ( rmdir /s /q .pytest_cache )
 
