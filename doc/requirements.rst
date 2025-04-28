@@ -14,7 +14,7 @@ The :mod:`cdl` package requires the following Python modules:
       -  >= 3.7
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
-      -  >= 2.7
+      -  >= 2.7.4
       - Curve and image plotting tools for Python/Qt applications
     * - SciPy
       -  >= 1.5, < 1.15.0
