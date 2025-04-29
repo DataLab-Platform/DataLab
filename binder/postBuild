@@ -21,4 +21,4 @@ cp binder/xfce4-panel.xml ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/
 cp binder/xfce4-desktop.xml ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/
 
 # For nbgitpuller
-jupyter serverextension enable --py nbgitpuller --sys-prefix
+jupyter server extension enable --py nbgitpuller --sys-prefix
