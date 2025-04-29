@@ -5,7 +5,7 @@ dependencies:
   - nbgitpuller
   - pip
   - pip:
-      - jupyter-desktop-server
+      - jupyter-remote-desktop-proxy
       - PyQt5
       - guidata
       - PlotPy
