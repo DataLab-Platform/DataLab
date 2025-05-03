@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 10:27+0200\n"
+"POT-Creation-Date: 2025-04-28 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -64,8 +64,8 @@ msgstr "Retourne"
 msgid "Normalized array"
 msgstr "Tableau normalisé"
 
-msgid "Compute FFT on X,Y data."
-msgstr "Calculer la FFT sur les données X,Y."
+msgid "Append n zeros at the end of the signal."
+msgstr "Ajouter n zéros à la fin du signal."
 
 msgid "X data"
 msgstr "Données X"
@@ -73,11 +73,17 @@ msgstr "Données X"
 msgid "Y data"
 msgstr "Données Y"
 
-msgid "Shift the zero frequency to the center of the spectrum. Defaults to True."
-msgstr "Décaler la fréquence nulle vers le centre du spectre. Par défaut : True."
+msgid "Number of zeros to append"
+msgstr "Nombre de zéros à ajouter"
 
 msgid "X data, Y data (tuple)"
 msgstr "Données X, Y (tuple)"
+
+msgid "Compute FFT on X,Y data."
+msgstr "Calculer la FFT sur les données X,Y."
+
+msgid "Shift the zero frequency to the center of the spectrum. Defaults to True."
+msgstr "Décaler la fréquence nulle vers le centre du spectre. Par défaut : True."
 
 msgid "Compute iFFT on X,Y data."
 msgstr "Calculer la iFFT sur les données X,Y."
@@ -445,6 +451,30 @@ msgstr "Données mises à l'échelle"
 msgid "Normalization parameter (default: \"maximum\")"
 msgstr "Paramètre de normalisation (par défaut : \"maximum\")"
 
+msgid "Zero-pad a 2D image by adding rows and/or columns."
+msgstr "Complément de zéros à une image 2D en ajoutant des lignes et/ou des colonnes."
+
+msgid "2D input image (grayscale)"
+msgstr "Image 2D d'entrée (niveau de gris)"
+
+msgid "Number of rows to add in total (default: 0)"
+msgstr "Nombre de lignes à ajouter au total (par défaut : 0)"
+
+msgid "Number of columns to add in total (default: 0)"
+msgstr "Nombre de colonnes à ajouter au total (par défaut : 0)"
+
+msgid "Padding placement strategy: - \"bottom-right\": all padding is added to the bottom and right - \"center\": padding is split equally on top/bottom and left/right"
+msgstr "Stratégie de complément de zéros : - \"bas-droite\" : tout le complément est ajouté en bas et à droite - \"centre\" : le complément est divisé également en haut/en bas et à gauche/à droite"
+
+msgid "The padded 2D image as a NumPy array."
+msgstr "L'image 2D complétée sous forme de tableau NumPy."
+
+msgid "Raises"
+msgstr "Lève"
+
+msgid "If the input is not a 2D array or if padding values are negative."
+msgstr "Si l'entrée n'est pas un tableau 2D ou si les valeurs de complément sont négatives."
+
 msgid "Compute FFT of complex array `z`"
 msgstr "Calculer la FFT du tableau complexe `z`"
 
@@ -537,9 +567,6 @@ msgstr "Niveau relatif (par défaut : 0.5)"
 
 msgid "A tuple (x, y, radius)"
 msgstr "Un tuple (x, y, rayon)"
-
-msgid "Raises"
-msgstr "Lève"
 
 msgid "No contour was found"
 msgstr "Aucun contour n'a été trouvé"

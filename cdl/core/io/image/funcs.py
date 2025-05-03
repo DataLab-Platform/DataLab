@@ -226,6 +226,30 @@ class SIFFile:
             sif_file.seek(self.m_offset)
             block = sif_file.read(self.width * self.height * self.stacksize * 4)
             data = np.frombuffer(block, dtype=np.float32)
+            # If there is a background image, it will be stored just after the signal
+            # data. The background image is the same size as the signal data.
+            # To read the background image, we need to search for the next line starting
+            # with "Counts" and read the data from there.
+            while True:
+                line = sif_file.readline()
+                if not line:
+                    break
+                if line.startswith(b"Counts"):
+                    # Data starts 4 lines after the "Counts" line
+                    for _ in range(4):
+                        line = sif_file.readline()
+                    # Read the background image data
+                    background_data = sif_file.read(self.width * self.height * 4)
+                    background = np.frombuffer(background_data, dtype=np.float32)
+                    # Check if the background data is the same size as the signal data
+                    if background.size != data.size:
+                        # This is not a background image: not supported format
+                        break
+                    # Add the background data to the signal data, as an additional frame
+                    data = np.concatenate((data, background))
+                    # Update the stack size to include the background image
+                    self.stacksize += 1
+                    break
         return data.reshape(self.stacksize, self.height, self.width)
 
 

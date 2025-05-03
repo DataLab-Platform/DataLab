@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 10:27+0200\n"
+"POT-Creation-Date: 2025-04-28 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -484,6 +484,9 @@ msgstr ""
 msgid "Compute band-stop filter with :py:func:`cdl.computation.signal.compute_filter`"
 msgstr ""
 
+msgid "Compute zero padding with :py:func:`cdl.computation.signal.compute_zero_padding`"
+msgstr ""
+
 msgid "Compute FFT with :py:func:`cdl.computation.signal.compute_fft`"
 msgstr ""
 
@@ -743,6 +746,9 @@ msgid "Compute moving median with :py:func:`cdl.computation.image.compute_moving
 msgstr ""
 
 msgid "Compute Wiener filter with :py:func:`cdl.computation.image.compute_wiener`"
+msgstr ""
+
+msgid "Compute zero padding with :py:func:`cdl.computation.image.compute_zero_padding`"
 msgstr ""
 
 msgid "Compute FFT with :py:func:`cdl.computation.image.compute_fft`"

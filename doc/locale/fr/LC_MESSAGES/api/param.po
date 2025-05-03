@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 10:27+0200\n"
+"POT-Creation-Date: 2025-04-28 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -549,6 +549,27 @@ msgstr ""
 msgid "New instance of :py:class:`XYCalibrateParam`."
 msgstr ""
 
+msgid "Zero padding parameters"
+msgstr "Paramètres de complément de zéros"
+
+msgid "Single choice from: 'next_pow2', 'double', 'triple', 'custom'. Default: 'custom'."
+msgstr "Choix unique parmi : 'next_pow2', 'double', 'triple', 'custom'."
+
+msgid "Number of points\\. Number of points to add\\. Integer higher than 1\\. Default: None."
+msgstr "Nombre de points\\. Nombre de points à ajouter\\. Entier supérieur à 1\\. Par défaut : Aucun."
+
+msgid "Returns a new instance of :py:class:`ZeroPadding1DParam` with the fields set to the given values."
+msgstr "Retourne une nouvelle instance de :py:class:`ZeroPadding1DParam` avec les champs définis sur les valeurs données."
+
+msgid "New instance of :py:class:`ZeroPadding1DParam`."
+msgstr "Nouvelle instance de :py:class:`ZeroPadding1DParam`."
+
+msgid "Update parameters from signal"
+msgstr "Mettre à jour les paramètres à partir du signal"
+
+msgid "Callback for choice item"
+msgstr "Callback pour l'item de choix"
+
 msgid "Image parameters"
 msgstr "Paramètres des images"
 
@@ -702,9 +723,6 @@ msgstr ""
 msgid "Update parameters from image"
 msgstr "Mettre à jour les paramètres à partir de l'image"
 
-msgid "Callback for choice item"
-msgstr "Callback pour l'item de choix"
-
 msgid "Resize parameters"
 msgstr "Paramètres de redimensionnement"
 
@@ -770,6 +788,30 @@ msgstr ""
 
 msgid "New instance of :py:class:`ZCalibrateParam`."
 msgstr ""
+
+msgid "Zero padding parameters for 2D images"
+msgstr "Paramètres de complément de zéros pour les images 2D"
+
+msgid "Padding strategy\\.  Single choice from: 'next_pow2', 'multiple_of_64', 'custom'. Default: 'custom'."
+msgstr "Stratégie de complément de zéros\\.  Choix unique parmi : 'next_pow2', 'multiple_of_64', 'custom'."
+
+msgid "Rows to add\\.  Integer higher than 0\\. Default: None."
+msgstr "Lignes à ajouter\\.  Entier supérieur à 0\\. Par défaut : Aucun."
+
+msgid "Columns to add\\.  Integer higher than 0\\. Default: None."
+msgstr "Colonnes à ajouter\\.  Entier supérieur à 0\\. Par défaut : Aucun."
+
+msgid "Padding position\\.  Single choice from: 'bottom-right', 'center'. Default: 'bottom-right'."
+msgstr "Position de complément de zéros\\.  Choix unique parmi : 'bottom-right', 'center'."
+
+msgid "Returns a new instance of :py:class:`ZeroPadding2DParam` with the fields set to the given values."
+msgstr "Retourne une nouvelle instance de :py:class:`ZeroPadding2DParam` avec les champs définis sur les valeurs données."
+
+msgid "New instance of :py:class:`ZeroPadding2DParam`."
+msgstr "Nouvelle instance de :py:class:`ZeroPadding2DParam`."
+
+msgid "Callback to update padding values"
+msgstr "Callback pour mettre à jour les valeurs de complément de zéros"
 
 msgid "Detection parameters"
 msgstr "Paramètres de détection"
@@ -1115,4 +1157,3 @@ msgstr ""
 
 msgid "New instance of :py:class:`ThresholdParam`."
 msgstr ""
-
