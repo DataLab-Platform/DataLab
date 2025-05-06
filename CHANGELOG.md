@@ -2,6 +2,21 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.21.0 ##
+
+💥 New features and enhancements:
+
+* Generic processing types refactoring:
+  * Refactored the naming convention of core `BaseProcessor` methods implementing generic data processing patterns (e.g. one input ➝ one output, n inputs ➝ one output, etc.)
+  * New method names are now based on their input/output signature for better clarity and extensibility:
+    * `compute_1_to_1`: transforms each selected object independently
+    * `compute_1_to_0`: performs a measurement or analysis without generating a new object
+    * `compute_1_to_n`: generates multiple outputs from a single input (e.g. ROI extraction)
+    * `compute_n_to_1`: combines multiple inputs into a single output (e.g. sum, mean); supports pairwise mode
+    * `compute_2_to_1`: applies a binary operation between an object and a second operand (object or constant); supports pairwise mode
+  * These methods are internal and used by advanced developers (e.g. plugin authors); hence, **no backward compatibility is maintained**
+  * This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types
+
 ## DataLab Version 0.20.0 ##
 
 💥 New features and enhancements:

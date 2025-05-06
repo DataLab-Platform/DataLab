@@ -17,7 +17,11 @@ from __future__ import annotations
 import guidata.dataset as gds
 from skimage import exposure
 
-from cdl.computation.image import VALID_DTYPES_STRLIST, dst_11, restore_data_outside_roi
+from cdl.computation.image import (
+    VALID_DTYPES_STRLIST,
+    dst_1_to_1,
+    restore_data_outside_roi,
+)
 from cdl.config import _
 from cdl.obj import ImageObj
 
@@ -49,7 +53,7 @@ def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "adjust_gamma", f"gamma={p.gamma}, gain={p.gain}")
+    dst = dst_1_to_1(src, "adjust_gamma", f"gamma={p.gamma}, gain={p.gain}")
     dst.data = exposure.adjust_gamma(src.data, gamma=p.gamma, gain=p.gain)
     restore_data_outside_roi(dst, src)
     return dst
@@ -81,7 +85,7 @@ def compute_adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "adjust_log", f"gain={p.gain}, inv={p.inv}")
+    dst = dst_1_to_1(src, "adjust_log", f"gain={p.gain}, inv={p.inv}")
     dst.data = exposure.adjust_log(src.data, gain=p.gain, inv=p.inv)
     restore_data_outside_roi(dst, src)
     return dst
@@ -120,7 +124,7 @@ def compute_adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(
+    dst = dst_1_to_1(
         src, "adjust_sigmoid", f"cutoff={p.cutoff}, gain={p.gain}, inv={p.inv}"
     )
     dst.data = exposure.adjust_sigmoid(
@@ -165,7 +169,7 @@ def compute_rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageO
     Returns:
         Output image object
     """
-    dst = dst_11(
+    dst = dst_1_to_1(
         src,
         "rescale_intensity",
         f"in_range={p.in_range}, out_range={p.out_range}",
@@ -198,7 +202,7 @@ def compute_equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "equalize_hist", f"nbins={p.nbins}")
+    dst = dst_1_to_1(src, "equalize_hist", f"nbins={p.nbins}")
     dst.data = exposure.equalize_hist(src.data, nbins=p.nbins)
     restore_data_outside_roi(dst, src)
     return dst
@@ -227,7 +231,7 @@ def compute_equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> Imag
     Returns:
         Output image object
     """
-    dst = dst_11(
+    dst = dst_1_to_1(
         src, "equalize_adapthist", f"nbins={p.nbins}, clip_limit={p.clip_limit}"
     )
     dst.data = exposure.equalize_adapthist(
