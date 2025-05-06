@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 10:27+0200\n"
+"POT-Creation-Date: 2025-04-28 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -632,6 +632,10 @@ msgstr ""
 msgid "Compute band-stop filter with :py:func:`cdl.computation.signal.compute_filter`"
 msgstr ""
 
+#, fuzzy
+msgid "Compute zero padding with :py:func:`cdl.computation.signal.compute_zero_padding`"
+msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+
 msgid "Compute FFT with :py:func:`cdl.computation.signal.compute_fft`"
 msgstr ""
 
@@ -896,6 +900,10 @@ msgstr ""
 
 msgid "Compute Wiener filter with :py:func:`cdl.computation.image.compute_wiener`"
 msgstr ""
+
+#, fuzzy
+msgid "Compute zero padding with :py:func:`cdl.computation.image.compute_zero_padding`"
+msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Compute FFT with :py:func:`cdl.computation.image.compute_fft`"
 msgstr ""
@@ -1166,3 +1174,4 @@ msgstr ""
 
 msgid "Compute blob detection using OpenCV with :py:func:`cdl.computation.image.detection.compute_blob_opencv`"
 msgstr ""
+

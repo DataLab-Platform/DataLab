@@ -18,7 +18,7 @@ import guidata.dataset as gds
 import skimage
 from skimage import feature, filters
 
-from cdl.computation.image import Wrap11Func, dst_11, restore_data_outside_roi
+from cdl.computation.image import Wrap1to1Func, dst_1_to_1, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
 
@@ -74,7 +74,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(
+    dst = dst_1_to_1(
         src,
         "canny",
         f"sigma={p.sigma}, low_threshold={p.low_threshold}, "
@@ -105,7 +105,7 @@ def compute_roberts(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.roberts)(src)
+    return Wrap1to1Func(filters.roberts)(src)
 
 
 def compute_prewitt(src: ImageObj) -> ImageObj:
@@ -117,7 +117,7 @@ def compute_prewitt(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.prewitt)(src)
+    return Wrap1to1Func(filters.prewitt)(src)
 
 
 def compute_prewitt_h(src: ImageObj) -> ImageObj:
@@ -129,7 +129,7 @@ def compute_prewitt_h(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.prewitt_h)(src)
+    return Wrap1to1Func(filters.prewitt_h)(src)
 
 
 def compute_prewitt_v(src: ImageObj) -> ImageObj:
@@ -141,7 +141,7 @@ def compute_prewitt_v(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.prewitt_v)(src)
+    return Wrap1to1Func(filters.prewitt_v)(src)
 
 
 def compute_sobel(src: ImageObj) -> ImageObj:
@@ -153,7 +153,7 @@ def compute_sobel(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.sobel)(src)
+    return Wrap1to1Func(filters.sobel)(src)
 
 
 def compute_sobel_h(src: ImageObj) -> ImageObj:
@@ -165,7 +165,7 @@ def compute_sobel_h(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.sobel_h)(src)
+    return Wrap1to1Func(filters.sobel_h)(src)
 
 
 def compute_sobel_v(src: ImageObj) -> ImageObj:
@@ -177,7 +177,7 @@ def compute_sobel_v(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.sobel_v)(src)
+    return Wrap1to1Func(filters.sobel_v)(src)
 
 
 def compute_scharr(src: ImageObj) -> ImageObj:
@@ -189,7 +189,7 @@ def compute_scharr(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.scharr)(src)
+    return Wrap1to1Func(filters.scharr)(src)
 
 
 def compute_scharr_h(src: ImageObj) -> ImageObj:
@@ -201,7 +201,7 @@ def compute_scharr_h(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.scharr_h)(src)
+    return Wrap1to1Func(filters.scharr_h)(src)
 
 
 def compute_scharr_v(src: ImageObj) -> ImageObj:
@@ -213,7 +213,7 @@ def compute_scharr_v(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.scharr_v)(src)
+    return Wrap1to1Func(filters.scharr_v)(src)
 
 
 def compute_farid(src: ImageObj) -> ImageObj:
@@ -225,7 +225,7 @@ def compute_farid(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.farid)(src)
+    return Wrap1to1Func(filters.farid)(src)
 
 
 def compute_farid_h(src: ImageObj) -> ImageObj:
@@ -237,7 +237,7 @@ def compute_farid_h(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.farid_h)(src)
+    return Wrap1to1Func(filters.farid_h)(src)
 
 
 def compute_farid_v(src: ImageObj) -> ImageObj:
@@ -249,7 +249,7 @@ def compute_farid_v(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.farid_v)(src)
+    return Wrap1to1Func(filters.farid_v)(src)
 
 
 def compute_laplace(src: ImageObj) -> ImageObj:
@@ -261,4 +261,4 @@ def compute_laplace(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(filters.laplace)(src)
+    return Wrap1to1Func(filters.laplace)(src)

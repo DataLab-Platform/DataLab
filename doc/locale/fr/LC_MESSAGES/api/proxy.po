@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-05 12:29+0200\n"
+"POT-Creation-Date: 2025-04-28 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "Proxy objects (:mod:`cdl.proxy`)"
 msgstr ""
@@ -503,13 +503,13 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-msgid "71"
+msgid "75"
 msgstr ""
 
-msgid "101"
+msgid "102"
 msgstr ""
 
-msgid "172"
+msgid "177"
 msgstr ""
 
 msgid "Signal processing"
@@ -525,6 +525,12 @@ msgid "Compute method"
 msgstr ""
 
 msgid "Description"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_XY_mode`"
+msgstr ""
+
+msgid "Compute XY mode with :py:func:`cdl.computation.signal.compute_XY_mode.`"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_abs`"
@@ -681,6 +687,12 @@ msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fit`"
 msgstr ""
 
 msgid "Compute fitting curve using an interactive dialog"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_full_width_at_y`"
+msgstr ""
+
+msgid "Compute full width at a given y"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2`"
@@ -948,6 +960,18 @@ msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_y`"
 msgstr ""
 
 msgid "Compute x at y with :py:func:`cdl.computation.signal.compute_x_at_y`"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_y_at_x`"
+msgstr ""
+
+msgid "Compute y at x with :py:func:`cdl.computation.signal.compute_y_at_x`"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_zero_padding`"
+msgstr ""
+
+msgid "Compute zero padding"
 msgstr ""
 
 msgid "Image processing"
@@ -1515,5 +1539,8 @@ msgid "Compute White Top-Hat"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_wiener`"
+msgstr ""
+
+msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_zero_padding`"
 msgstr ""
 

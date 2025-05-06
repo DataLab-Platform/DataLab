@@ -230,7 +230,7 @@ def set_plot_item_editable(
 
 class BaseResult(abc.ABC):
     """Base class for results, i.e. objects returned by computation functions
-    used by :py:class`cdl.core.gui.processor.base.BaseProcessor.compute_10` method.
+    used by :py:class`cdl.core.gui.processor.base.BaseProcessor.compute_1_to_0` method.
 
     Args:
         title: result title
@@ -595,7 +595,7 @@ class ResultShape(ResultProperties):
         if self.shapetype is ShapeTypes.POLYGON:
             labels = []
             for i in range(0, self.array.shape[1] - 1, 2):
-                labels += [f"x{i//2}", f"y{i//2}"]
+                labels += [f"x{i // 2}", f"y{i // 2}"]
             return tuple(labels)
         try:
             return {

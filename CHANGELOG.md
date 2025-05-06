@@ -2,10 +2,34 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.21.0 ##
+
+💥 New features and enhancements:
+
+* Generic processing types refactoring:
+  * Refactored the naming convention of core `BaseProcessor` methods implementing generic data processing patterns (e.g. one input ➝ one output, n inputs ➝ one output, etc.)
+  * New method names are now based on their input/output signature for better clarity and extensibility:
+    * `compute_1_to_1`: transforms each selected object independently
+    * `compute_1_to_0`: performs a measurement or analysis without generating a new object
+    * `compute_1_to_n`: generates multiple outputs from a single input (e.g. ROI extraction)
+    * `compute_n_to_1`: combines multiple inputs into a single output (e.g. sum, mean); supports pairwise mode
+    * `compute_2_to_1`: applies a binary operation between an object and a second operand (object or constant); supports pairwise mode
+  * These methods are internal and used by advanced developers (e.g. plugin authors); hence, **no backward compatibility is maintained**
+  * This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types
+
 ## DataLab Version 0.20.0 ##
 
 💥 New features and enhancements:
 
+* ANDOR SIF Images:
+  * Added support for background images in ANDOR SIF files
+  * This closes [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Add support for ANDOR SIF files with background image
+* Array editor (results, signal and image data, ...):
+  * New "Copy all" button in the array editor dialog box, to copy all the data in the clipboard, including row and column headers
+  * New "Export" button in the array editor dialog box, to export the data in a CSV file, including row and column headers
+  * New "Paste" button in the array editor dialog box, to paste the data from the clipboard into the array editor (this feature is not available for read-only data, such as analysis results)
+  * The features above require guidata v3.9.0 or later
+  * This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) and [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)
 * Fourier analysis features ("Processing" menu):
   * New "Zero padding" feature
   * Implementation for signals:
