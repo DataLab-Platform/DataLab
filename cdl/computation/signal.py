@@ -37,7 +37,7 @@ from cdl.computation.base import (
     NormalizeParam,
     SpectrumParam,
     calc_resultproperties,
-    dst_1_to_1,
+    dst_11,
     dst_n1n,
     new_signal_result,
 )
@@ -68,7 +68,7 @@ def restore_data_outside_roi(dst: SignalObj, src: SignalObj) -> None:
             dst.xydata[src.maskdata] = src.xydata[src.maskdata]
 
 
-class Wrap1to1Func:
+class Wrap11Func:
     """Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce
     a 1 signal → 1 signal function, which can be used inside DataLab's infrastructure
     to perform computations with :class:`cdl.core.gui.processor.signal.SignalProcessor`.
@@ -82,11 +82,11 @@ class Wrap1to1Func:
     Example:
 
         >>> import numpy as np
-        >>> from cdl.computation.signal import Wrap1to1Func
+        >>> from cdl.computation.signal import Wrap11Func
         >>> import cdl.obj
         >>> def square(y):
         ...     return y**2
-        >>> compute_square = Wrap1to1Func(square)
+        >>> compute_square = Wrap11Func(square)
         >>> x = np.linspace(0, 10, 100)
         >>> y = np.sin(x)
         >>> sig0 = cdl.obj.create_signal("Example", x, y)
@@ -119,14 +119,14 @@ class Wrap1to1Func:
             [str(arg) for arg in self.args]
             + [f"{k}={v}" for k, v in self.kwargs.items() if v is not None]
         )
-        dst = dst_1_to_1(src, self.func.__name__, suffix)
+        dst = dst_11(src, self.func.__name__, suffix)
         x, y = src.get_data()
         dst.set_xydata(x, self.func(y, *self.args, **self.kwargs))
         restore_data_outside_roi(dst, src)
         return dst
 
 
-# MARK: compute_n_to_1 functions -------------------------------------------------------
+# MARK: compute_n1 functions -----------------------------------------------------------
 # Functions with N input signals and 1 output signal
 # --------------------------------------------------------------------------------------
 # Those functions are perfoming a computation on N input signals and return a single
@@ -182,7 +182,7 @@ def compute_addition_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     Returns:
         Result signal object **src** + **p.value** (new object)
     """
-    dst = dst_1_to_1(src, "+", str(p.value))
+    dst = dst_11(src, "+", str(p.value))
     dst.y += p.value
     restore_data_outside_roi(dst, src)
     return dst
@@ -198,7 +198,7 @@ def compute_difference_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     Returns:
         Result signal object **src** - **p.value** (new object)
     """
-    dst = dst_1_to_1(src, "-", str(p.value))
+    dst = dst_11(src, "-", str(p.value))
     dst.y -= p.value
     restore_data_outside_roi(dst, src)
     return dst
@@ -214,7 +214,7 @@ def compute_product_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     Returns:
         Result signal object **src** * **p.value** (new object)
     """
-    dst = dst_1_to_1(src, "×", str(p.value))
+    dst = dst_11(src, "×", str(p.value))
     dst.y *= p.value
     restore_data_outside_roi(dst, src)
     return dst
@@ -230,13 +230,13 @@ def compute_division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     Returns:
         Result signal object **src** / **p.value** (new object)
     """
-    dst = dst_1_to_1(src, "/", str(p.value))
+    dst = dst_11(src, "/", str(p.value))
     dst.y /= p.value
     restore_data_outside_roi(dst, src)
     return dst
 
 
-# MARK: compute_2_to_1 functions -------------------------------------------------------
+# MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
 
@@ -347,7 +347,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-# MARK: compute_1_to_1 functions -------------------------------------------------------
+# MARK: compute_11 functions -----------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
 
@@ -366,7 +366,7 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     if len(group.datasets) == 1:
         p: ROI1DParam = group.datasets[0]
         suffix = f"{p.xmin:.3g}≤x≤{p.xmax:.3g}"
-    dst = dst_1_to_1(src, "extract_multiple_roi", suffix)
+    dst = dst_11(src, "extract_multiple_roi", suffix)
     x, y = src.get_data()
     xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
     for p in group.datasets:
@@ -390,7 +390,7 @@ def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
     Returns:
         Signal with single region of interest
     """
-    dst = dst_1_to_1(src, "extract_single_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
+    dst = dst_11(src, "extract_single_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
     x, y = p.get_data(src).copy()
     dst.set_xydata(x, y)
     # TODO: [P2] Instead of removing geometric shapes, apply roi extract
@@ -407,7 +407,7 @@ def compute_swap_axes(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "swap_axes")
+    dst = dst_11(src, "swap_axes")
     x, y = src.get_data()
     dst.set_xydata(y, x)
     return dst
@@ -422,7 +422,7 @@ def compute_inverse(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "invert")
+    dst = dst_11(src, "invert")
     x, y = src.get_data()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
@@ -444,7 +444,7 @@ def compute_abs(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(np.absolute)(src)
+    return Wrap11Func(np.absolute)(src)
 
 
 def compute_re(src: SignalObj) -> SignalObj:
@@ -456,7 +456,7 @@ def compute_re(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(np.real)(src)
+    return Wrap11Func(np.real)(src)
 
 
 def compute_im(src: SignalObj) -> SignalObj:
@@ -468,7 +468,7 @@ def compute_im(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(np.imag)(src)
+    return Wrap11Func(np.imag)(src)
 
 
 class DataTypeSParam(gds.DataSet):
@@ -491,7 +491,7 @@ def compute_astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "astype", f"dtype={p.dtype_str}")
+    dst = dst_11(src, "astype", f"dtype={p.dtype_str}")
     dst.xydata = src.xydata.astype(p.dtype_str)
     return dst
 
@@ -505,7 +505,7 @@ def compute_log10(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(np.log10)(src)
+    return Wrap11Func(np.log10)(src)
 
 
 def compute_exp(src: SignalObj) -> SignalObj:
@@ -517,7 +517,7 @@ def compute_exp(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(np.exp)(src)
+    return Wrap11Func(np.exp)(src)
 
 
 def compute_sqrt(src: SignalObj) -> SignalObj:
@@ -529,7 +529,7 @@ def compute_sqrt(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(np.sqrt)(src)
+    return Wrap11Func(np.sqrt)(src)
 
 
 class PowerParam(gds.DataSet):
@@ -548,7 +548,7 @@ def compute_power(src: SignalObj, p: PowerParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "^", str(p.power))
+    dst = dst_11(src, "^", str(p.power))
     dst.y = np.power(src.y, p.power)
     restore_data_outside_roi(dst, src)
     return dst
@@ -573,7 +573,7 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(
+    dst = dst_11(
         src, "peak_detection", f"threshold={p.threshold}%, min_dist={p.min_dist}pts"
     )
     x, y = src.get_data()
@@ -593,7 +593,7 @@ def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "normalize", f"ref={p.method}")
+    dst = dst_11(src, "normalize", f"ref={p.method}")
     x, y = src.get_data()
     dst.set_xydata(x, alg.normalize(y, p.method))
     restore_data_outside_roi(dst, src)
@@ -609,7 +609,7 @@ def compute_derivative(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "derivative")
+    dst = dst_11(src, "derivative")
     x, y = src.get_data()
     dst.set_xydata(x, np.gradient(y, x))
     restore_data_outside_roi(dst, src)
@@ -625,7 +625,7 @@ def compute_integral(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "integral")
+    dst = dst_11(src, "integral")
     x, y = src.get_data()
     dst.set_xydata(x, spt.cumulative_trapezoid(y, x, initial=0.0))
     restore_data_outside_roi(dst, src)
@@ -651,7 +651,7 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "calibration", f"{p.axis}={p.a}*{p.axis}+{p.b}")
+    dst = dst_11(src, "calibration", f"{p.axis}={p.a}*{p.axis}+{p.b}")
     x, y = src.get_data()
     if p.axis == "x":
         dst.set_xydata(p.a * x + p.b, y)
@@ -671,7 +671,7 @@ def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(np.clip, a_min=p.lower, a_max=p.upper)(src)
+    return Wrap11Func(np.clip, a_min=p.lower, a_max=p.upper)(src)
 
 
 def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
@@ -685,7 +685,7 @@ def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "offset_correction", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
+    dst = dst_11(src, "offset_correction", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
     _roi_x, roi_y = p.get_data(src)
     dst.y -= np.mean(roi_y)
     restore_data_outside_roi(dst, src)
@@ -702,7 +702,7 @@ def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(spi.gaussian_filter, sigma=p.sigma)(src)
+    return Wrap11Func(spi.gaussian_filter, sigma=p.sigma)(src)
 
 
 def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
@@ -715,7 +715,7 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(spi.uniform_filter, size=p.n, mode=p.mode)(src)
+    return Wrap11Func(spi.uniform_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
@@ -728,7 +728,7 @@ def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(spi.median_filter, size=p.n, mode=p.mode)(src)
+    return Wrap11Func(spi.median_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_wiener(src: SignalObj) -> SignalObj:
@@ -740,7 +740,7 @@ def compute_wiener(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap1to1Func(sps.wiener)(src)
+    return Wrap11Func(sps.wiener)(src)
 
 
 class FilterType(Enum):
@@ -890,7 +890,7 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
         suffix += f", cutoff={p.f_cut1:.2f}"
     else:
         suffix += f", cutoff={p.f_cut0:.2f}:{p.f_cut1:.2f}"
-    dst = dst_1_to_1(src, name, suffix)
+    dst = dst_11(src, name, suffix)
     b, a = p.get_filter_params(dst)
     dst.y = sps.filtfilt(b, a, dst.y)
     restore_data_outside_roi(dst, src)
@@ -944,7 +944,7 @@ def compute_zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
         suffix = f"n={p.n}"
     else:
         suffix = f"strategy={p.strategy}"
-    dst = dst_1_to_1(src, "zero_padding", suffix)
+    dst = dst_11(src, "zero_padding", suffix)
     x, y = src.get_data()
     dst.set_xydata(*alg.zero_padding(x, y, p.n))
     return dst
@@ -960,7 +960,7 @@ def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "fft")
+    dst = dst_11(src, "fft")
     x, y = src.get_data()
     dst.set_xydata(*alg.fft1d(x, y, shift=True if p is None else p.shift))
     dst.save_attr_to_metadata("xunit", "Hz" if dst.xunit == "s" else "")
@@ -979,7 +979,7 @@ def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "ifft")
+    dst = dst_11(src, "ifft")
     x, y = src.get_data()
     dst.set_xydata(*alg.ifft1d(x, y, shift=True if p is None else p.shift))
     dst.restore_attr_from_metadata("xunit", "s" if src.xunit == "Hz" else "")
@@ -1001,7 +1001,7 @@ def compute_magnitude_spectrum(
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "magnitude_spectrum")
+    dst = dst_11(src, "magnitude_spectrum")
     x, y = src.get_data()
     log_scale = p is not None and p.log
     dst.set_xydata(*alg.magnitude_spectrum(x, y, log_scale=log_scale))
@@ -1021,7 +1021,7 @@ def compute_phase_spectrum(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "phase_spectrum")
+    dst = dst_11(src, "phase_spectrum")
     x, y = src.get_data()
     dst.set_xydata(*alg.phase_spectrum(x, y))
     dst.xlabel = _("Frequency")
@@ -1041,7 +1041,7 @@ def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "psd")
+    dst = dst_11(src, "psd")
     x, y = src.get_data()
     log_scale = p is not None and p.log
     psd_x, psd_y = alg.psd(x, y, log_scale=log_scale)
@@ -1076,8 +1076,8 @@ def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
     x = (bin_edges[:-1] + bin_edges[1:]) / 2
 
     # Note: we use the `new_signal_result` function to create the result signal object
-    # because the `dst_1_to_1` would copy the source signal, which is not what we want
-    # here (we want a brand new signal object).
+    # because the `dst_11` would copy the source signal, which is not what we want here
+    # (we want a brand new signal object).
     dst = new_signal_result(
         src,
         "histogram",
@@ -1172,7 +1172,7 @@ def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
         suffix += f", dx={p.dx:.3f}"
     else:
         suffix += f", nbpts={p.nbpts:d}"
-    dst = dst_1_to_1(src, "resample", suffix)
+    dst = dst_11(src, "resample", suffix)
     x, y = src.get_data()
     if p.mode == "dx":
         xnew = np.arange(p.xmin, p.xmax, p.dx)
@@ -1200,7 +1200,7 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "detrending", f"method={p.method}")
+    dst = dst_11(src, "detrending", f"method={p.method}")
     x, y = src.get_data()
     dst.set_xydata(x, sps.detrend(y, type=p.method))
     restore_data_outside_roi(dst, src)
@@ -1317,7 +1317,7 @@ def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
         suffix += f", beta={p.beta:.3f}"
     elif p.method == "gaussian":
         suffix += f", sigma={p.sigma:.3f}"
-    dst = dst_1_to_1(src, "windowing", suffix)  # type: ignore
+    dst = dst_11(src, "windowing", suffix)  # type: ignore
     dst.y = alg.windowing(dst.y, p.method, p.alpha)  # type: ignore
     restore_data_outside_roi(dst, src)
     return dst
@@ -1332,7 +1332,7 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "reverse_x")
+    dst = dst_11(src, "reverse_x")
     dst.y = dst.y[::-1]
     return dst
 
@@ -1355,7 +1355,7 @@ def compute_cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     Returns:
         Result signal object.
     """
-    dst = dst_1_to_1(src, "Polar coordinates", f"unit={p.unit}")
+    dst = dst_11(src, "Polar coordinates", f"unit={p.unit}")
     x, y = src.get_data()
     r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, p.unit)
     dst.set_xydata(r, theta)
@@ -1379,7 +1379,7 @@ def compute_polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
         represents the angle. Negative values are not allowed for the radius, and will
         be clipped to 0 (a warning will be raised).
     """
-    dst = dst_1_to_1(src, "Cartesian coordinates", f"unit={p.unit}")
+    dst = dst_11(src, "Cartesian coordinates", f"unit={p.unit}")
     r, theta = src.get_data()
     x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, p.unit)
     dst.set_xydata(x, y)
@@ -1402,7 +1402,7 @@ def compute_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "allan_variance", f"max_tau={p.max_tau}")
+    dst = dst_11(src, "allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
     avar = alg.allan_variance(x, y, tau_values)
@@ -1420,7 +1420,7 @@ def compute_allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "allan_deviation", f"max_tau={p.max_tau}")
+    dst = dst_11(src, "allan_deviation", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
     adev = alg.allan_deviation(x, y, tau_values)
@@ -1440,7 +1440,7 @@ def compute_overlapping_allan_variance(
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "overlapping_allan_variance", f"max_tau={p.max_tau}")
+    dst = dst_11(src, "overlapping_allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
     oavar = alg.overlapping_allan_variance(x, y, tau_values)
@@ -1458,7 +1458,7 @@ def compute_modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> Si
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "modified_allan_variance", f"max_tau={p.max_tau}")
+    dst = dst_11(src, "modified_allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
     mavar = alg.modified_allan_variance(x, y, tau_values)
@@ -1476,7 +1476,7 @@ def compute_hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalOb
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "hadamard_variance", f"max_tau={p.max_tau}")
+    dst = dst_11(src, "hadamard_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
     hvar = alg.hadamard_variance(x, y, tau_values)
@@ -1494,7 +1494,7 @@ def compute_total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "total_variance", f"max_tau={p.max_tau}")
+    dst = dst_11(src, "total_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
     tvar = alg.total_variance(x, y, tau_values)
@@ -1512,7 +1512,7 @@ def compute_time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_1_to_1(src, "time_deviation", f"max_tau={p.max_tau}")
+    dst = dst_11(src, "time_deviation", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
     tdev = alg.time_deviation(x, y, tau_values)
@@ -1520,7 +1520,7 @@ def compute_time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     return dst
 
 
-# MARK: compute_1_to_0 functions -------------------------------------------------------
+# MARK: compute_10 functions -----------------------------------------------------------
 # Functions with 1 input signal and 0 output signals (ResultShape or ResultProperties)
 # --------------------------------------------------------------------------------------
 

@@ -25,14 +25,14 @@ def add_noise_to_signal(
     src: dlo.SignalObj, p: test_data.GaussianNoiseParam
 ) -> dlo.SignalObj:
     """Add gaussian noise to signal"""
-    dst = cpsig.dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
+    dst = cpsig.dst_11(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
     test_data.add_gaussian_noise_to_signal(dst, p)
     return dst
 
 
 def add_noise_to_image(src: dlo.ImageObj, p: dlo.NormalRandomParam) -> dlo.ImageObj:
     """Add gaussian noise to image"""
-    dst = cpima.dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
+    dst = cpima.dst_11(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
     test_data.add_gaussian_noise_to_image(dst, p)
     return dst
 
@@ -49,7 +49,7 @@ class PluginTestData(PluginBase):
     # Signal processing features ------------------------------------------------
     def add_noise_to_signal(self) -> None:
         """Add noise to signal"""
-        self.signalpanel.processor.compute_1_to_1(
+        self.signalpanel.processor.compute_11(
             add_noise_to_signal,
             paramclass=test_data.GaussianNoiseParam,
             title=_("Add noise"),
@@ -73,7 +73,7 @@ class PluginTestData(PluginBase):
     # Image processing features ------------------------------------------------
     def add_noise_to_image(self) -> None:
         """Add noise to image"""
-        self.imagepanel.processor.compute_1_to_1(
+        self.imagepanel.processor.compute_11(
             add_noise_to_image,
             paramclass=dlo.NormalRandomParam,
             title=_("Add noise"),

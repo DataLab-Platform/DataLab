@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-05-06 17:21+0200\n"
+"POT-Creation-Date: 2025-04-20 20:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2141,6 +2141,9 @@ msgstr ""
 "mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-"
 "vous que le calcul est correct, en vérifiant les données et les paramètres."
 
+msgid "Parameters"
+msgstr "Paramètres"
+
 msgid "Computing: %s"
 msgstr "Calcul en cours : %s"
 
@@ -2155,9 +2158,6 @@ msgid ""
 msgstr ""
 "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans "
 "chaque groupe."
-
-msgid "Parameters"
-msgstr "Paramètres"
 
 msgid "Calculating: %s"
 msgstr "Calcul : %s"

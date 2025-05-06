@@ -51,17 +51,13 @@ def test_catcher():
             panel = win.signalpanel
             sig = test_data.create_paracetamol_signal()
             panel.add_object(sig)
-            panel.processor.compute_1_to_1(comp_no_error, title="Test no error")
-            panel.processor.compute_1_to_1(comp_error, title="Test error")
+            panel.processor.compute_11(comp_no_error, title="Test no error")
+            panel.processor.compute_11(comp_error, title="Test error")
             Conf.proc.ignore_warnings.set(True)
-            panel.processor.compute_1_to_1(comp_warning, title="Test warning (ignored)")
+            panel.processor.compute_11(comp_warning, title="Test warning (ignored)")
             Conf.proc.ignore_warnings.set(False)
-            panel.processor.compute_1_to_1(
-                comp_warning, title="Test warning (not ignored)"
-            )
-            panel.processor.compute_1_to_1(
-                comp_warning_error, title="Test warning + error"
-            )
+            panel.processor.compute_11(comp_warning, title="Test warning (not ignored)")
+            panel.processor.compute_11(comp_warning_error, title="Test warning + error")
 
 
 if __name__ == "__main__":

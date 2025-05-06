@@ -254,6 +254,60 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             self.update_param_defaults(param)
         return edit, param
 
+    def compute_11(
+        self,
+        func: Callable,
+        param: gds.DataSet | None = None,
+        paramclass: gds.DataSet | None = None,
+        title: str | None = None,
+        comment: str | None = None,
+        edit: bool | None = None,
+    ) -> None:
+        """Compute 11 function: 1 object in → 1 object out.
+
+        Args:
+            func: function
+            param: parameter
+            paramclass: parameter class
+            title: title
+            comment: comment
+            edit: edit parameters
+        """
+        if (edit is None or param is None) and paramclass is not None:
+            edit, param = self.init_param(param, paramclass, title, comment)
+        if param is not None:
+            if edit and not param.edit(parent=self.panel.parent()):
+                return
+        self._compute_11_subroutine([func], [param], title)
+
+    def compute_1n(
+        self,
+        funcs: list[Callable] | Callable,
+        params: list | None = None,
+        title: str | None = None,
+        edit: bool | None = None,
+    ) -> None:
+        """Compute 1n function: 1 object in → n objects out.
+
+        Args:
+            funcs: list of functions
+            params: list of parameters
+            title: title
+            edit: edit parameters
+        """
+        if params is None:
+            assert not isinstance(funcs, Callable)
+            params = [None] * len(funcs)
+        else:
+            group = gds.DataSetGroup(params, title=_("Parameters"))
+            if edit and not group.edit(parent=self.panel.parent()):
+                return
+            if isinstance(funcs, Callable):
+                funcs = [funcs] * len(params)
+            else:
+                assert len(funcs) == len(params)
+        self._compute_11_subroutine(funcs, params, title)
+
     def handle_output(
         self, compout: CompOut, context: str, progress: QW.QProgressDialog
     ) -> SignalObj | ImageObj | ResultShape | ResultProperties | None:
@@ -314,10 +368,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 return self.worker.get_result()
         return None
 
-    def _compute_1_to_1_subroutine(
+    def _compute_11_subroutine(
         self, funcs: list[Callable], params: list, title: str
     ) -> None:
-        """Generic subroutine for 1-to-1 processing.
+        """Compute 11 subroutine: used by compute 11 and compute 1n methods.
 
         Args:
             funcs: list of functions to execute
@@ -372,6 +426,89 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         # Select newly created groups, if any
         for group_id in new_gids.values():
             self.panel.objview.set_current_item_id(group_id, extend=True)
+
+    def compute_10(
+        self,
+        func: Callable,
+        param: gds.DataSet | None = None,
+        paramclass: gds.DataSet | None = None,
+        title: str | None = None,
+        comment: str | None = None,
+        edit: bool | None = None,
+    ) -> dict[str, ResultShape | ResultProperties]:
+        """Compute 10 function: 1 object in → 0 object out
+        (the result of this method is stored in original object's metadata).
+
+        Args:
+            func: function to execute
+            param: parameters. Defaults to None.
+            paramclass: parameters class. Defaults to None.
+            title: title of progress bar. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: if True, edit parameters. Defaults to None.
+
+        Returns:
+            Dictionary of results (keys: object uuid, values: ResultShape or
+             ResultProperties objects)
+        """
+        if (edit is None or param is None) and paramclass is not None:
+            edit, param = self.init_param(param, paramclass, title, comment)
+        if param is not None:
+            if edit and not param.edit(parent=self.panel.parent()):
+                return None
+        objs = self.panel.objview.get_sel_objects(include_groups=True)
+        current_obj = self.panel.objview.get_current_object()
+        title = func.__name__.replace("compute_", "") if title is None else title
+        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+            results: dict[str, ResultShape | ResultProperties] = {}
+            xlabels = None
+            ylabels = []
+            for idx, obj in enumerate(objs):
+                pvalue = idx + 1
+                pvalue = 0 if pvalue == 1 else pvalue
+                progress.setValue(pvalue)
+                args = (obj,) if param is None else (obj, param)
+
+                # Execute function
+                compout = self.__exec_func(func, args, progress)
+                if compout is None:
+                    break
+                result = self.handle_output(
+                    compout, _("Computing: %s") % title, progress
+                )
+                if result is None:
+                    continue
+
+                # Add result shape to object's metadata
+                result.add_to(obj)
+                if param is not None:
+                    obj.metadata[f"{result.title}Param"] = str(param)
+
+                results[obj.uuid] = result
+                xlabels = result.headers
+                if obj is current_obj:
+                    self.panel.selection_changed(update_items=True)
+                else:
+                    self.panel.refresh_plot(obj.uuid, True, False)
+                for i_row_res in range(result.array.shape[0]):
+                    ylabel = f"{result.title}({obj.short_id})"
+                    i_roi = int(result.array[i_row_res, 0])
+                    if i_roi >= 0:
+                        ylabel += f"|ROI{i_roi}"
+                    ylabels.append(ylabel)
+        if results:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                dlg = ArrayEditor(self.panel.parent())
+                title = _("Results")
+                res = np.vstack([result.shown_array for result in results.values()])
+                dlg.setup_and_check(
+                    res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
+                )
+                dlg.setObjectName(f"{objs[0].PREFIX}_results")
+                dlg.resize(750, 300)
+                exec_dialog(dlg)
+        return results
 
     def __get_src_grps_gids_objs_nbobj_valid(
         self, min_group_nb: int
@@ -436,174 +573,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 )
         return src_grps, src_gids, src_objs, nbobj, valid
 
-    def compute_1_to_1(
-        self,
-        func: Callable,
-        param: gds.DataSet | None = None,
-        paramclass: gds.DataSet | None = None,
-        title: str | None = None,
-        comment: str | None = None,
-        edit: bool | None = None,
-    ) -> None:
-        """Generic processing method: 1 object in → 1 object out.
-
-        Applies a function independently to each selected object in the active panel.
-        The result of each computation is a new object appended to the same panel.
-
-        Args:
-            func: Function to execute.
-            param: Optional parameter instance.
-            paramclass: Optional parameter class for editing.
-            title: Optional progress bar title.
-            comment: Optional comment for parameter dialog.
-            edit: Whether to open the parameter editor before execution.
-
-        .. note::
-            With k selected objects, the method produces k outputs (one per input).
-
-        .. note::
-            This method does not support pairwise mode.
-        """
-        if (edit is None or param is None) and paramclass is not None:
-            edit, param = self.init_param(param, paramclass, title, comment)
-        if param is not None:
-            if edit and not param.edit(parent=self.panel.parent()):
-                return
-        self._compute_1_to_1_subroutine([func], [param], title)
-
-    def compute_1_to_n(
-        self,
-        funcs: list[Callable] | Callable,
-        params: list | None = None,
-        title: str | None = None,
-        edit: bool | None = None,
-    ) -> None:
-        """Generic processing method: 1 object in → n objects out.
-
-        Applies one or more functions to each selected object, generating multiple
-        outputs per object. The resulting objects are appended to the active panel.
-
-        Args:
-            funcs: Single function or list of functions to apply.
-            params: List of parameter instances corresponding to each function.
-            title: Optional progress bar title.
-            edit: Whether to open the parameter editor before execution.
-
-        .. note::
-            With k selected objects and n outputs per function,
-            the method produces k × n outputs.
-
-        .. note::
-            This method does not support pairwise mode.
-        """
-        if params is None:
-            assert not isinstance(funcs, Callable)
-            params = [None] * len(funcs)
-        else:
-            group = gds.DataSetGroup(params, title=_("Parameters"))
-            if edit and not group.edit(parent=self.panel.parent()):
-                return
-            if isinstance(funcs, Callable):
-                funcs = [funcs] * len(params)
-            else:
-                assert len(funcs) == len(params)
-        self._compute_1_to_1_subroutine(funcs, params, title)
-
-    def compute_1_to_0(
-        self,
-        func: Callable,
-        param: gds.DataSet | None = None,
-        paramclass: gds.DataSet | None = None,
-        title: str | None = None,
-        comment: str | None = None,
-        edit: bool | None = None,
-    ) -> dict[str, ResultShape | ResultProperties]:
-        """Generic processing method: 1 object in → no object out.
-
-        Applies a function to each selected object, returning metadata or measurement
-        results (e.g. peak coordinates, statistical properties) without generating
-        new objects. Results are stored in the object's metadata and returned as a
-        dictionary.
-
-        Args:
-            func: Function to execute.
-            param: Optional parameter instance.
-            paramclass: Optional parameter class for editing.
-            title: Optional progress bar title.
-            comment: Optional comment for parameter dialog.
-            edit: Whether to open the parameter editor before execution.
-
-        Returns:
-            Dictionary mapping each object UUID to a ResultShape or ResultProperties
-            instance.
-
-        .. note::
-            With k selected objects, the method performs k analyses and produces
-            no output objects.
-
-        .. note::
-            This method does not support pairwise mode.
-        """
-        if (edit is None or param is None) and paramclass is not None:
-            edit, param = self.init_param(param, paramclass, title, comment)
-        if param is not None:
-            if edit and not param.edit(parent=self.panel.parent()):
-                return None
-        objs = self.panel.objview.get_sel_objects(include_groups=True)
-        current_obj = self.panel.objview.get_current_object()
-        title = func.__name__.replace("compute_", "") if title is None else title
-        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            results: dict[str, ResultShape | ResultProperties] = {}
-            xlabels = None
-            ylabels = []
-            for idx, obj in enumerate(objs):
-                pvalue = idx + 1
-                pvalue = 0 if pvalue == 1 else pvalue
-                progress.setValue(pvalue)
-                args = (obj,) if param is None else (obj, param)
-
-                # Execute function
-                compout = self.__exec_func(func, args, progress)
-                if compout is None:
-                    break
-                result = self.handle_output(
-                    compout, _("Computing: %s") % title, progress
-                )
-                if result is None:
-                    continue
-
-                # Add result shape to object's metadata
-                result.add_to(obj)
-                if param is not None:
-                    obj.metadata[f"{result.title}Param"] = str(param)
-
-                results[obj.uuid] = result
-                xlabels = result.headers
-                if obj is current_obj:
-                    self.panel.selection_changed(update_items=True)
-                else:
-                    self.panel.refresh_plot(obj.uuid, True, False)
-                for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.title}({obj.short_id})"
-                    i_roi = int(result.array[i_row_res, 0])
-                    if i_roi >= 0:
-                        ylabel += f"|ROI{i_roi}"
-                    ylabels.append(ylabel)
-        if results:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", RuntimeWarning)
-                dlg = ArrayEditor(self.panel.parent())
-                title = _("Results")
-                res = np.vstack([result.shown_array for result in results.values()])
-                dlg.setup_and_check(
-                    res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
-                )
-                dlg.setObjectName(f"{objs[0].PREFIX}_results")
-                dlg.resize(750, 300)
-                exec_dialog(dlg)
-        return results
-
-    def compute_n_to_1(
+    def compute_n1(
         self,
         name: str,
         func: Callable,
@@ -614,27 +584,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         func_objs: Callable | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Generic processing method: n objects in → 1 object out.
-
-        Aggregates multiple selected objects into a single result using the provided
-        function. In pairwise mode, applies the function to object pairs (grouped by
-        index) and generates one output per pair.
+        """Compute n1 function: N(>=2) objects in → 1 object out.
 
         Args:
-            name: Operation name (used for object titles).
-            func: Function to apply to object(s).
-            param: Optional parameter instance.
-            paramclass: Optional parameter class for editing.
-            title: Optional progress bar title.
-            comment: Optional comment for parameter dialog.
-            func_objs: Optional post-processing callback for result objects.
-            edit: Whether to open the parameter editor before execution.
-
-        .. note::
-            With n selected objects:
-
-            - in default mode, produces 1 output.
-            - in pairwise mode, produces n outputs (one per pair).
+            name: name of function
+            func: function to execute
+            param: parameters. Defaults to None.
+            paramclass: parameters class. Defaults to None.
+            title: title of progress bar. Defaults to None.
+            comment: comment. Defaults to None.
+            func_objs: function to execute on objects. Defaults to None.
+            edit: if True, edit parameters. Defaults to None.
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
@@ -700,7 +660,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     if func_objs is not None:
                         func_objs(dst_obj, src_objs_pair)
                     short_ids = [obj.short_id for obj in src_objs_pair]
-                    dst_obj.title = f"{name}({', '.join(short_ids)})"
+                    dst_obj.title = f'{name}({", ".join(short_ids)})'
                     self.panel.add_object(dst_obj, group_id=dst_gid)
 
         else:
@@ -767,7 +727,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 if func_objs is not None:
                     func_objs(dst_obj, src_objs[src_gid])
                 short_ids = [obj.short_id for obj in src_objs[src_gid]]
-                dst_obj.title = f"{name}({', '.join(short_ids)})"
+                dst_obj.title = f'{name}({", ".join(short_ids)})'
                 group_id = dst_gid if dst_gid is not None else src_gid
                 self.panel.add_object(dst_obj, group_id=group_id)
 
@@ -775,7 +735,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         if dst_gid is not None:
             self.panel.objview.set_current_item_id(dst_gid)
 
-    def compute_2_to_1(
+    def compute_n1n(
         self,
         obj2: Obj | list[Obj] | None,
         obj2_name: str,
@@ -786,28 +746,29 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         comment: str | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Generic processing method: binary operation 1+1 → 1.
-
-        Applies a binary function between each selected object and a second operand.
-        Supports both single operand mode (same operand for all objects)
-        and pairwise mode (one-to-one matching between two object lists).
-
-        Args:
-            obj2: Second operand (single object or list for pairwise mode).
-            obj2_name: Display name for the second operand (used in selection dialog).
-            func: Function to apply.
-            param: Optional parameter instance.
-            paramclass: Optional parameter class for editing.
-            title: Optional progress bar title.
-            comment: Optional comment for parameter dialog.
-            edit: Whether to open the parameter editor before execution.
+        """Compute n1n function: N(>=1) objects + 1 object in → N objects out.
 
         .. note::
-            With k selected objects:
 
-            - in single operand mode and 1 secondary object: produces k outputs.
-            - in pairwise mode with k secondary objects: produces k outputs
-              (one per pair).
+            In pairwise mode, the function is executed on each pair of objects,
+            so the logic is different:
+
+                N(>=1) objects + N objects in → N objects out
+
+            In other words, the `n1n` function in single operand mode becomes a
+            `nnn` function in pairwise mode.
+
+        Examples: subtract, divide
+
+        Args:
+            obj2: second object (or list of objects in case of pairwise operation mode)
+            obj2_name: name of second object
+            func: function to execute
+            param: parameters. Defaults to None.
+            paramclass: parameters class. Defaults to None.
+            title: title of progress bar. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: if True, edit parameters. Defaults to None.
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)

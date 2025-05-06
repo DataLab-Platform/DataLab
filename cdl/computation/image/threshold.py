@@ -18,7 +18,7 @@ import guidata.dataset as gds
 import skimage.util
 from skimage import filters
 
-from cdl.computation.image import dst_1_to_1, restore_data_outside_roi
+from cdl.computation.image import dst_11, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
 
@@ -84,7 +84,7 @@ def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
         func = getattr(filters, f"threshold_{p.method}")
         args = [] if p.method in ("li", "mean") else [p.bins]
         threshold = func(src.data, *args)
-    dst = dst_1_to_1(src, "threshold", suffix)
+    dst = dst_11(src, "threshold", suffix)
     data = src.data > threshold if p.operation == ">" else src.data < threshold
     dst.data = skimage.util.img_as_ubyte(data)
     dst.zscalemin, dst.zscalemax = 0, 255  # LUT range

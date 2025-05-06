@@ -174,11 +174,11 @@ class ConstantParam(gds.DataSet):
 # MARK: Helper functions for creating result objects -----------------------------------
 
 
-def dst_1_to_1(
+def dst_11(
     src: SignalObj | ImageObj, name: str, suffix: str | None = None
 ) -> SignalObj | ImageObj:
     """Create a result object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_1_to_1` method
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
 
     Args:
         src: source signal or image object
@@ -212,7 +212,7 @@ def dst_n1n(
     suffix: str | None = None,
 ) -> SignalObj | ImageObj:
     """Create a result  object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_2_to_1` method
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
 
     Args:
         src1: input signal or image object
@@ -241,9 +241,9 @@ def new_signal_result(
     units: tuple[str, str] | None = None,
     labels: tuple[str, str] | None = None,
 ) -> SignalObj:
-    """Create new signal object as a result of a `compute_1_to_1` function
+    """Create new signal object as a result of a compute_11 function
 
-    As opposed to the `dst_1_to_1` functions, this function creates a new signal object
+    As opposed to the `dst_11` functions, this function creates a new signal object
     without copying the original object metadata, except for the "source" entry.
 
     Args:

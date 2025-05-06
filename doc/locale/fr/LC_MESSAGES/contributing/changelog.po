@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 17:21+0200\n"
+"POT-Creation-Date: 2025-04-26 15:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -24,44 +24,11 @@ msgstr "Historique des modifications"
 msgid "See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones."
 msgstr "Voir la page de la [feuille de route](https://datalab-platform.com/fr/contributing/roadmap.html) de DataLab pour les jalons futurs et passés."
 
-msgid "DataLab Version 0.21.0"
-msgstr "DataLab Version 0.21.0"
+msgid "DataLab Version 0.20.0"
+msgstr "DataLab Version 0.20.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
-
-msgid "Generic processing types refactoring:"
-msgstr "Refactorisation des types de traitement génériques :"
-
-msgid "Refactored the naming convention of core `BaseProcessor` methods implementing generic data processing patterns (e.g. one input ➝ one output, n inputs ➝ one output, etc.)"
-msgstr "Refactorisation de la convention de nommage des méthodes `BaseProcessor` de base implémentant des modèles de traitement de données génériques (par exemple, une entrée ➝ une sortie, n entrées ➝ une sortie, etc.)"
-
-msgid "New method names are now based on their input/output signature for better clarity and extensibility:"
-msgstr "Les nouveaux noms de méthodes sont désormais basés sur leur signature d'entrée/sortie pour une meilleure clarté et extensibilité :"
-
-msgid "`compute_1_to_1`: transforms each selected object independently"
-msgstr "``compute_1_to_1`` : transforme chaque objet sélectionné indépendamment"
-
-msgid "`compute_1_to_0`: performs a measurement or analysis without generating a new object"
-msgstr "``compute_1_to_0`` : effectue une mesure ou une analyse sans générer un nouvel objet"
-
-msgid "`compute_1_to_n`: generates multiple outputs from a single input (e.g. ROI extraction)"
-msgstr "``compute_1_to_n`` : génère plusieurs sorties à partir d'une seule entrée (par exemple, extraction de ROI)"
-
-msgid "`compute_n_to_1`: combines multiple inputs into a single output (e.g. sum, mean); supports pairwise mode"
-msgstr "``compute_n_to_1`` : combine plusieurs entrées en une seule sortie (par exemple, somme, moyenne) ; prend en charge le mode pairwise"
-
-msgid "`compute_2_to_1`: applies a binary operation between an object and a second operand (object or constant); supports pairwise mode"
-msgstr "``compute_2_to_1`` : applique une opération binaire entre un objet et un second opérande (objet ou constante) ; prend en charge le mode pairwise"
-
-msgid "These methods are internal and used by advanced developers (e.g. plugin authors); hence, **no backward compatibility is maintained**"
-msgstr "Ces méthodes sont internes et utilisées par des développeurs avancés (par exemple, auteurs de plugins) ; par conséquent, **aucune compatibilité ascendante n'est maintenue**"
-
-msgid "This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types"
-msgstr "Ceci corrige l'[Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationaliser les noms de méthodes `BaseProcessor` pour les types de traitement de base"
-
-msgid "DataLab Version 0.20.0"
-msgstr "DataLab Version 0.20.0"
 
 msgid "ANDOR SIF Images:"
 msgstr "Images ANDOR SIF :"
