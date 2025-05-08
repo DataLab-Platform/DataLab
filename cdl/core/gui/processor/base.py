@@ -451,7 +451,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         The result of each computation is a new object appended to the same panel.
 
         Args:
-            func: Function to execute.
+            func: Function to execute, that takes either `(dst_obj, src_obj)` or
+             `(dst_obj, src_obj, param)` as arguments, where `dst_obj` is the output
+             object, `src_obj` is the input object, and `param` is an optional
+             parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
@@ -484,7 +487,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         outputs per object. The resulting objects are appended to the active panel.
 
         Args:
-            funcs: Single function or list of functions to apply.
+            funcs: Single function or list of functions to apply. Each function takes
+             either `(dst_obj, src_obj)` or `(dst_obj, src_obj, param)` as arguments,
+             where `dst_obj` is the output object, `src_obj` is the input object,
+             and `param` is an optional parameter set.
             params: List of parameter instances corresponding to each function.
             title: Optional progress bar title.
             edit: Whether to open the parameter editor before execution.
@@ -526,7 +532,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         dictionary.
 
         Args:
-            func: Function to execute.
+            func: Function to execute, that takes either `(obj)` or `(obj, param)` as
+             arguments, where `obj` is the input object and `param` is an optional
+             parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
@@ -622,7 +630,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         Args:
             name: Operation name (used for object titles).
-            func: Function to apply to object(s).
+            func: Function to apply, that takes either `(dst_obj, src_obj)` or
+             `(dst_obj, src_obj, param)` as arguments, where `dst_obj` is the output
+             object, `src_obj` is the input object, and `param` is an optional
+             parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
@@ -795,7 +806,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         Args:
             obj2: Second operand (single object or list for pairwise mode).
             obj2_name: Display name for the second operand (used in selection dialog).
-            func: Function to apply.
+            func: Function to apply, that takes either `(dst_obj, src_obj1, src_obj2)`
+             or `(dst_obj, src_obj1, src_obj2, param)` as arguments, where
+             `dst_obj` is the output object, `src_obj1` is the first input object,
+             `src_obj2` is the second input object (operand), and `param` is an
+             optional parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
