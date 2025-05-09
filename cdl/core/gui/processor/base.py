@@ -612,7 +612,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
     def compute_n_to_1(
         self,
-        name: str,
         func: Callable,
         param: gds.DataSet | None = None,
         paramclass: gds.DataSet | None = None,
@@ -627,7 +626,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         index) and generates one output per pair.
 
         Args:
-            name: Operation name (used for object titles).
             func: Function to apply, that takes either `(dst_obj, src_obj_list)` or
              `(dst_obj, src_obj_list, param)` as arguments, where `dst_obj` is the
              output object, `src_obj_list` is the input object list,
@@ -653,6 +651,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode()
+        name = func.__name__.replace("compute_", "")
 
         if pairwise:
             src_grps, src_gids, src_objs, _nbobj, valid = (

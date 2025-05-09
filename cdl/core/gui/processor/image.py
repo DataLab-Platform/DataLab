@@ -55,7 +55,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum with :py:func:`cdl.computation.image.compute_addition`"""
-        self.compute_n_to_1("Σ", cpi.compute_addition, title=_("Sum"))
+        self.compute_n_to_1(cpi.compute_addition, title=_("Sum"))
 
     @qt_try_except()
     def compute_addition_constant(self, param: cpb.ConstantParam | None = None) -> None:
@@ -72,12 +72,12 @@ class ImageProcessor(BaseProcessor[ImageROI]):
     def compute_average(self) -> None:
         """Compute average with :py:func:`cdl.computation.image.compute_addition`
         and dividing by the number of images"""
-        self.compute_n_to_1("µ", cpi.compute_average, title=_("Average"))
+        self.compute_n_to_1(cpi.compute_average, title=_("Average"))
 
     @qt_try_except()
     def compute_product(self) -> None:
         """Compute product with :py:func:`cdl.computation.image.compute_product`"""
-        self.compute_n_to_1("Π", cpi.compute_product, title=_("Product"))
+        self.compute_n_to_1(cpi.compute_product, title=_("Product"))
 
     @qt_try_except()
     def compute_product_constant(self, param: cpb.ConstantParam | None = None) -> None:

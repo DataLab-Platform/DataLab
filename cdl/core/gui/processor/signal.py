@@ -40,7 +40,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum with :py:func:`cdl.computation.signal.compute_addition`"""
-        self.compute_n_to_1("Σ", cps.compute_addition, title=_("Sum"))
+        self.compute_n_to_1(cps.compute_addition, title=_("Sum"))
 
     @qt_try_except()
     def compute_addition_constant(self, param: cpb.ConstantParam | None = None) -> None:
@@ -57,12 +57,12 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     def compute_average(self) -> None:
         """Compute average with :py:func:`cdl.computation.signal.compute_addition`
         and divide by the number of signals"""
-        self.compute_n_to_1("µ", cps.compute_average, title=_("Average"))
+        self.compute_n_to_1(cps.compute_average, title=_("Average"))
 
     @qt_try_except()
     def compute_product(self) -> None:
         """Compute product with :py:func:`cdl.computation.signal.compute_product`"""
-        self.compute_n_to_1("Π", cps.compute_product, title=_("Product"))
+        self.compute_n_to_1(cps.compute_product, title=_("Product"))
 
     @qt_try_except()
     def compute_product_constant(self, param: cpb.ConstantParam | None = None) -> None:
