@@ -168,8 +168,8 @@ def is_pairwise_mode() -> bool:
 
 
 @dataclass
-class ProcessingFeature:
-    """Processing feature dataclass.
+class ComputingFeature:
+    """Computing feature dataclass.
 
     Args:
         pattern: pattern
@@ -204,7 +204,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
     SIG_ADD_SHAPE = QC.Signal(str)
     PARAM_DEFAULTS: dict[str, gds.DataSet] = {}
-    PROCESSING_REGISTRY: dict[str, ProcessingFeature] = {}
+    COMPUTING_REGISTRY: dict[str, ComputingFeature] = {}
 
     def __init__(self, panel: SignalPanel | ImagePanel, plotwidget: PlotWidget):
         super().__init__()
@@ -945,7 +945,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment: comment. Defaults to None.
             edit: whether to edit parameters. Defaults to None.
         """
-        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
             pattern="1_to_1",
             function=function,
             title=title,
@@ -981,7 +981,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment: comment. Defaults to None.
             edit: whether to edit parameters. Defaults to None.
         """
-        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
             pattern="1_to_0",
             function=function,
             title=title,
@@ -993,7 +993,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
     @classmethod
     def register_1_to_n(cls, name, functions, title, icon_name=None, edit=None):
-        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
             pattern="1_to_n",
             functions=functions,
             title=title,
@@ -1027,7 +1027,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment: comment. Defaults to None.
             edit: whether to edit parameters. Defaults to None.
         """
-        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
             pattern="n_to_1",
             function=function,
             title=title,
@@ -1065,7 +1065,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             edit: whether to edit parameters. Defaults to None.
             obj2_name: name of the second object. Defaults to None.
         """
-        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
             pattern="2_to_1",
             function=function,
             title=title,
@@ -1090,7 +1090,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             args: arguments
             kwargs: keyword arguments
         """
-        entry = self.PROCESSING_REGISTRY[name]
+        entry = self.COMPUTING_REGISTRY[name]
         compute_method = getattr(self, f"compute_{entry.pattern}")
         return compute_method(
             entry.function,

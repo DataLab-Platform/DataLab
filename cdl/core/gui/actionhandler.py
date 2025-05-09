@@ -320,7 +320,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         Returns:
             New action
         """
-        feature = BaseProcessor.PROCESSING_REGISTRY[feature_name]
+        feature = BaseProcessor.COMPUTING_REGISTRY[feature_name]
         if feature.pattern == "n_to_1":
             condition = SelectCond.at_least_two
         else:
