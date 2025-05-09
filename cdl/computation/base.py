@@ -177,7 +177,13 @@ def dst_1_to_1(
     src: SignalObj | ImageObj, name: str, suffix: str | None = None
 ) -> SignalObj | ImageObj:
     """Create a result object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_1_to_1` method
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_1_to_1` method.
+
+    .. note::
+
+        Data of the result object is copied from the source object (`src`).
+        This initial data is usually replaced by the processing function, but it may
+        also be used to initialize the result object as part of the processing function.
 
     Args:
         src: source signal or image object
@@ -265,6 +271,12 @@ def dst_2_to_1(
 ) -> SignalObj | ImageObj:
     """Create a result  object, as returned by the callback function of the
     :func:`cdl.core.gui.processor.base.BaseProcessor.compute_2_to_1` method
+
+    .. note::
+
+        Data of the result object is copied from the first source object (`src1`).
+        This initial data is usually replaced by the processing function, but it may
+        also be used to initialize the result object as part of the processing function.
 
     Args:
         src1: input signal or image object
