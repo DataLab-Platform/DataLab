@@ -578,7 +578,7 @@ msgstr ""
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_average`"
 msgstr ""
 
-msgid "Compute average with :py:func:`cdl.computation.signal.compute_addition`"
+msgid "Compute average with :py:func:`cdl.computation.signal.compute_sum`"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`"
@@ -917,7 +917,7 @@ msgstr ""
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sum`"
 msgstr ""
 
-msgid "Compute sum with :py:func:`cdl.computation.signal.compute_addition`"
+msgid "Compute sum with :py:func:`cdl.computation.signal.compute_sum`"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes`"
@@ -1049,7 +1049,7 @@ msgstr ""
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average`"
 msgstr ""
 
-msgid "Compute average with :py:func:`cdl.computation.image.compute_addition`"
+msgid "Compute average with :py:func:`cdl.computation.image.compute_sum`"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`"
@@ -1475,7 +1475,7 @@ msgstr ""
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_sum`"
 msgstr ""
 
-msgid "Compute sum with :py:func:`cdl.computation.image.compute_addition`"
+msgid "Compute sum with :py:func:`cdl.computation.image.compute_sum`"
 msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes`"
@@ -1543,4 +1543,3 @@ msgstr ""
 
 msgid ":py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_zero_padding`"
 msgstr ""
-

@@ -6,7 +6,7 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_allan_variance`,Compute Allan variance
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_arithmetic`,Compute arithmetic operation between two signals
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_astype`,Convert data type with :py:func:`cdl.computation.signal.compute_astype`
-:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_average`,Compute average with :py:func:`cdl.computation.signal.compute_addition`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_average`,Compute average with :py:func:`cdl.computation.signal.compute_sum`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass`,Compute band-pass filter
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop`,Compute band-stop filter
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db`,Compute bandwidth at -3dB
@@ -59,11 +59,11 @@
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_re`,Compute real part with :py:func:`cdl.computation.signal.compute_re`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_resampling`,Compute resampling
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x`,Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`
-:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period`,Compute sampling rate and period (mean and std)
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt`,Compute square root with :py:func:`cdl.computation.signal.compute_sqrt`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_stats`,Compute data statistics
-:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sum`,Compute sum with :py:func:`cdl.computation.signal.compute_addition`
+:py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_sum`,Compute sum with :py:func:`cdl.computation.signal.compute_sum`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes`,Swap data axes with :py:func:`cdl.computation.signal.compute_swap_axes`
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_time_deviation`,Compute time deviation
 :py:func:`~cdl.core.gui.processor.signal.SignalProcessor.compute_total_variance`,Compute total variance

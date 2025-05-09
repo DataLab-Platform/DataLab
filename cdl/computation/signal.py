@@ -139,7 +139,7 @@ class Wrap1to1Func:
 # the modified object from the worker processes.
 
 
-def compute_addition(src_list: list[SignalObj]) -> SignalObj:
+def compute_sum(src_list: list[SignalObj]) -> SignalObj:
     """Add **src** signals and return a new result signal object
 
     Args:

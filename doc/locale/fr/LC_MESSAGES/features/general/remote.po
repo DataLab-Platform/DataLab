@@ -518,13 +518,13 @@ msgstr "Lorsque vous travaillez avec des signaux, les méthodes de :class:`cdl.c
 msgid "Object handling signal processing: operations, processing, analysis"
 msgstr "Objet de traitement de signal : opérations, traitement, analyse"
 
-msgid "Compute sum with :py:func:`cdl.computation.signal.compute_addition`"
+msgid "Compute sum with :py:func:`cdl.computation.signal.compute_sum`"
 msgstr ""
 
 msgid "Compute sum with a constant with :py:func:`cdl.computation.signal.compute_addition_constant`"
 msgstr ""
 
-msgid "Compute average with :py:func:`cdl.computation.signal.compute_addition` and divide by the number of signals"
+msgid "Compute average with :py:func:`cdl.computation.signal.compute_sum` and divide by the number of signals"
 msgstr ""
 
 msgid "Compute product with :py:func:`cdl.computation.signal.compute_product`"
@@ -778,13 +778,13 @@ msgstr "Objet de traitement d'image : opérations, traitement, analyse"
 msgid "Normalize data with :py:func:`cdl.computation.image.compute_normalize`"
 msgstr ""
 
-msgid "Compute sum with :py:func:`cdl.computation.image.compute_addition`"
+msgid "Compute sum with :py:func:`cdl.computation.image.compute_sum`"
 msgstr ""
 
 msgid "Compute sum with a constant using :py:func:`cdl.computation.image.compute_addition_constant`"
 msgstr ""
 
-msgid "Compute average with :py:func:`cdl.computation.image.compute_addition` and dividing by the number of images"
+msgid "Compute average with :py:func:`cdl.computation.image.compute_sum` and dividing by the number of images"
 msgstr ""
 
 msgid "Compute product with :py:func:`cdl.computation.image.compute_product`"
@@ -1174,4 +1174,3 @@ msgstr ""
 
 msgid "Compute blob detection using OpenCV with :py:func:`cdl.computation.image.detection.compute_blob_opencv`"
 msgstr ""
-

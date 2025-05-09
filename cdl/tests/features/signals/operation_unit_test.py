@@ -53,16 +53,16 @@ def __create_one_signal_and_constant() -> tuple[
 
 
 @pytest.mark.validation
-def test_signal_addition() -> None:
-    """Signal addition test."""
+def test_signal_sum() -> None:
+    """Signal sum test."""
     slist = __create_n_signals()
     n = len(slist)
-    s3 = cps.compute_addition(slist)
+    s3 = cps.compute_sum(slist)
     res = s3.y
     exp = np.zeros_like(s3.y)
     for s in slist:
         exp += s.y
-    check_array_result(f"Signal addition ({n} signals)", res, exp)
+    check_array_result(f"Sum of {n} signals", res, exp)
 
 
 @pytest.mark.validation
@@ -76,7 +76,7 @@ def test_signal_average() -> None:
     for s in slist:
         exp += s.y
     exp /= n
-    check_array_result(f"Signal average ({n} signals)", res, exp)
+    check_array_result(f"Average of {n} signals", res, exp)
 
 
 @pytest.mark.validation
@@ -89,7 +89,7 @@ def test_signal_product() -> None:
     exp = np.ones_like(s3.y)
     for s in slist:
         exp *= s.y
-    check_array_result(f"Signal multiplication ({n} signals)", res, exp)
+    check_array_result(f"Product of {n} signals", res, exp)
 
 
 @pytest.mark.validation

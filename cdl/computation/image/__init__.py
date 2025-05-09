@@ -168,7 +168,7 @@ def dst_1_to_1_signal(src: ImageObj, name: str, suffix: str | None = None) -> Si
 # the modified object from the worker processes.
 
 
-def compute_addition(src_list: list[ImageObj]) -> ImageObj:
+def compute_sum(src_list: list[ImageObj]) -> ImageObj:
     """Add images in the list and return the result image object
 
     Args:

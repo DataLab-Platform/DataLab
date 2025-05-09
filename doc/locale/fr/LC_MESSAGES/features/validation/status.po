@@ -136,7 +136,7 @@ msgstr ""
 msgid "`test_signal_abs <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/signals/operation_unit_test.py#L132>`_"
 msgstr ""
 
-msgid ":py:func:`compute_addition <cdl.computation.signal.compute_addition>`"
+msgid ":py:func:`compute_sum <cdl.computation.signal.compute_sum>`"
 msgstr ""
 
 msgid "Add **dst** and **src** signals and return **dst** signal modified in place"
@@ -688,7 +688,7 @@ msgstr ""
 msgid "`test_image_abs <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/images/operation_unit_test.py#L239>`_"
 msgstr ""
 
-msgid ":py:func:`compute_addition <cdl.computation.image.compute_addition>`"
+msgid ":py:func:`compute_sum <cdl.computation.image.compute_sum>`"
 msgstr ""
 
 msgid "Add **dst** and **src** images and return **dst** image modified in place"
@@ -1467,4 +1467,3 @@ msgstr ""
 
 msgid "`test_threshold_yen <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/images/processing_unit_test.py#L253>`_"
 msgstr ""
-
