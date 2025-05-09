@@ -252,7 +252,7 @@ def test_signal_arithmetic() -> None:
 
 
 if __name__ == "__main__":
-    test_signal_addition()
+    test_signal_sum()
     test_signal_average()
     test_signal_product()
     test_signal_difference()

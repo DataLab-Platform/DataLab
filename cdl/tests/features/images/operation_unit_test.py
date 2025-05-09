@@ -448,7 +448,7 @@ def test_image_rotate() -> None:
 
 
 if __name__ == "__main__":
-    test_image_addition()
+    test_image_sum()
     test_image_average()
     test_image_product()
     test_image_division()
