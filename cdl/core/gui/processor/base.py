@@ -25,7 +25,6 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl import env
-from cdl.algorithms.datatypes import is_complex_dtype
 from cdl.config import Conf, _
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.model.base import ResultProperties, ResultShape, TypeROI
