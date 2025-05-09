@@ -38,7 +38,7 @@ from cdl.computation.base import (
     SpectrumParam,
     calc_resultproperties,
     dst_1_to_1,
-    dst_n1n,
+    dst_2_to_1,
     dst_n_to_1,
     new_signal_result,
 )
@@ -317,7 +317,7 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object **src1** - **src2**
     """
-    dst = dst_n1n(src1, src2, "-")
+    dst = dst_2_to_1(src1, src2, "-")
     dst.y = src1.y - src2.y
     if dst.dy is not None:
         dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
@@ -339,7 +339,7 @@ def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object (**src1** - **src2**) / sqrt(2.0)
     """
-    dst = dst_n1n(src1, src2, "quadratic_difference")
+    dst = dst_2_to_1(src1, src2, "quadratic_difference")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, (y1 - np.array(y2, dtype=y1.dtype)) / np.sqrt(2.0))
@@ -361,7 +361,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object **src1** / **src2**
     """
-    dst = dst_n1n(src1, src2, "/")
+    dst = dst_2_to_1(src1, src2, "/")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
@@ -1151,7 +1151,7 @@ def compute_interpolation(
     suffix = f"method={p.method}"
     if p.fill_value is not None and p.method in ("linear", "cubic", "pchip"):
         suffix += f", fill_value={p.fill_value}"
-    dst = dst_n1n(src1, src2, "interpolation", suffix)
+    dst = dst_2_to_1(src1, src2, "interpolation", suffix)
     x1, y1 = src1.get_data()
     xnew, _y2 = src2.get_data()
     ynew = alg.interpolate(x1, y1, xnew, p.method, p.fill_value)
@@ -1241,7 +1241,7 @@ def compute_XY_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         A signal object representing the X-Y mode.
     """
-    dst = dst_n1n(src1, src2, "", "X-Y Mode")
+    dst = dst_2_to_1(src1, src2, "", "X-Y Mode")
     p = ResamplingParam()
     p.xmin = max(src1.x[0], src2.x[0])
     p.xmax = min(src1.x[-1], src2.x[-1])
@@ -1267,7 +1267,7 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_n1n(src1, src2, "⊛")
+    dst = dst_2_to_1(src1, src2, "⊛")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     ynew = np.real(sps.convolve(y1, y2, mode="same"))

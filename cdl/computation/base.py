@@ -257,7 +257,7 @@ def dst_n_to_1(
     return dst
 
 
-def dst_n1n(
+def dst_2_to_1(
     src1: SignalObj | ImageObj,
     src2: SignalObj | ImageObj,
     name: str,

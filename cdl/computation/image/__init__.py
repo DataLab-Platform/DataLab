@@ -43,7 +43,7 @@ from cdl.computation.base import (
     SpectrumParam,
     calc_resultproperties,
     dst_1_to_1,
-    dst_n1n,
+    dst_2_to_1,
     dst_n_to_1,
     new_signal_result,
 )
@@ -346,7 +346,7 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
     Returns:
         Result image object **src1** - **src2** (new object)
     """
-    dst = dst_n1n(src1, src2, "-")
+    dst = dst_2_to_1(src1, src2, "-")
     dst.data = np.subtract(src1.data, src2.data, dtype=float)
     restore_data_outside_roi(dst, src1)
     return dst
@@ -362,7 +362,7 @@ def compute_quadratic_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
     Returns:
         Result image object (**src1** - **src2**) / sqrt(2.0) (new object)
     """
-    dst = dst_n1n(src1, src2, "quadratic_difference")
+    dst = dst_2_to_1(src1, src2, "quadratic_difference")
     dst.data = np.subtract(src1.data, src2.data, dtype=float) / np.sqrt(2.0)
     restore_data_outside_roi(dst, src1)
     return dst
@@ -378,7 +378,7 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
     Returns:
         Result image object **src1** / **src2** (new object)
     """
-    dst = dst_n1n(src1, src2, "/")
+    dst = dst_2_to_1(src1, src2, "/")
     dst.data = np.divide(src1.data, src2.data, dtype=float)
     restore_data_outside_roi(dst, src1)
     return dst
@@ -401,7 +401,7 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
     Returns:
         Output image object
     """
-    dst = dst_n1n(src1, src2, "flatfield", f"threshold={p.threshold}")
+    dst = dst_2_to_1(src1, src2, "flatfield", f"threshold={p.threshold}")
     dst.data = alg.flatfield(src1.data, src2.data, p.threshold)
     restore_data_outside_roi(dst, src1)
     return dst
