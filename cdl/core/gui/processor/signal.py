@@ -57,16 +57,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     def compute_average(self) -> None:
         """Compute average with :py:func:`cdl.computation.signal.compute_addition`
         and divide by the number of signals"""
-
-        def func_objs(new_obj: SignalObj, old_objs: list[SignalObj]) -> None:
-            """Finalize average computation"""
-            new_obj.data = new_obj.data / float(len(old_objs))
-            if new_obj.dy is not None:
-                new_obj.dy = new_obj.dy / float(len(old_objs))
-
-        self.compute_n_to_1(
-            "μ", cps.compute_addition, func_objs=func_objs, title=_("Average")
-        )
+        self.compute_n_to_1("µ", cps.compute_average, title=_("Average"))
 
     @qt_try_except()
     def compute_product(self) -> None:

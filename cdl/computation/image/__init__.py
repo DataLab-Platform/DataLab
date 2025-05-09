@@ -44,6 +44,7 @@ from cdl.computation.base import (
     calc_resultproperties,
     dst_1_to_1,
     dst_n1n,
+    dst_n_to_1,
     new_signal_result,
 )
 from cdl.config import Conf, _
@@ -167,33 +168,52 @@ def dst_1_to_1_signal(src: ImageObj, name: str, suffix: str | None = None) -> Si
 # the modified object from the worker processes.
 
 
-def compute_addition(dst: ImageObj, src: ImageObj) -> ImageObj:
-    """Add **dst** and **src** images and return **dst** image modified in place
+def compute_addition(src_list: list[ImageObj]) -> ImageObj:
+    """Add images in the list and return the result image object
 
     Args:
-        dst: output image object
-        src: input image object
+        src_list: list of input image objects
 
     Returns:
         Output image object (modified in place)
     """
-    dst.data = np.add(dst.data, src.data, dtype=float)
-    restore_data_outside_roi(dst, src)
+    dst = dst_n_to_1(src_list, "Σ")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.data = np.add(dst.data, src.data, dtype=float)
+    restore_data_outside_roi(dst, src_list[0])
     return dst
 
 
-def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
-    """Multiply **dst** and **src** images and return **dst** image modified in place
+def compute_average(src_list: list[ImageObj]) -> ImageObj:
+    """Compute the average of images in the list and return the result image object
 
     Args:
-        dst: output image object
-        src: input image object
+        src_list: list of input image objects
 
     Returns:
         Output image object (modified in place)
     """
-    dst.data = np.multiply(dst.data, src.data, dtype=float)
-    restore_data_outside_roi(dst, src)
+    dst = dst_n_to_1(src_list, "µ")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.data = np.add(dst.data, src.data, dtype=float)
+    dst.data /= len(src_list)
+    restore_data_outside_roi(dst, src_list[0])
+    return dst
+
+
+def compute_product(src_list: list[ImageObj]) -> ImageObj:
+    """Multiply images in the list and return the result image object
+
+    Args:
+        src_list: list of input image objects
+
+    Returns:
+        Output image object (modified in place)
+    """
+    dst = dst_n_to_1(src_list, "Π")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.data = np.multiply(dst.data, src.data, dtype=float)
+    restore_data_outside_roi(dst, src_list[0])
     return dst
 
 

@@ -17,13 +17,12 @@ from typing import TYPE_CHECKING
 import guidata.dataset as gds
 import numpy as np
 
+from cdl.algorithms.datatypes import is_complex_dtype
 from cdl.config import Conf, _
-from cdl.obj import ResultProperties, create_signal
+from cdl.obj import ImageObj, ResultProperties, SignalObj, create_signal
 
 if TYPE_CHECKING:
     from typing import Callable
-
-    from cdl.obj import ImageObj, SignalObj
 
 
 class ArithmeticParam(gds.DataSet):
@@ -202,6 +201,59 @@ def dst_1_to_1(
     dst = src.copy(title=title)
     if not Conf.proc.keep_results.get():
         dst.delete_results()  # Remove any previous results
+    return dst
+
+
+def dst_n_to_1(
+    src_list: list[SignalObj | ImageObj],
+    name: str,
+    suffix: str | None = None,
+) -> SignalObj | ImageObj:
+    """Create a result object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n_to_1` method
+
+    .. note::
+
+        Data of the result object is copied from the first source object
+        (`src_list[0]`). This initial data is usually replaced by the processing
+        function, but it may also be used to initialize the result object as part
+        of the processing function.
+
+    Args:
+        src_list: list of input signal or image objects
+        name: name of the processing function
+        suffix: suffix to add to the title
+
+    Returns:
+        Result signal or image object
+    """
+    if not isinstance(src_list, list) or len(src_list) <= 1:
+        raise ValueError("src_list must be a list of at least 2 objects")
+    all_sigs = all([isinstance(obj, SignalObj) for obj in src_list])
+    all_imgs = all([isinstance(obj, ImageObj) for obj in src_list])
+    if not (all_sigs or all_imgs):
+        raise ValueError("src_list must be a list of SignalObj or ImageObj objects")
+    title = f"{name}({', '.join([obj.short_id for obj in src_list])})"
+    if suffix:  # suffix may be None or an empty string
+        title += "|" + suffix
+    if any([is_complex_dtype(obj.data.dtype) for obj in src_list]):
+        dst_dtype = complex
+    else:
+        dst_dtype = float
+    dst = src_list[0].copy(title=title, dtype=dst_dtype)
+    dst.roi = None
+    if not Conf.proc.keep_results.get():
+        dst.delete_results()  # Remove any previous results
+    for src_obj in src_list:
+        if Conf.proc.keep_results.get():
+            dst.update_resultshapes_from(src_obj)
+        if src_obj.roi is not None:
+            if dst.roi is None:
+                dst.roi = src_obj.roi.copy()
+            else:
+                roi = dst.roi
+                roi.add_roi(src_obj.roi)
+                dst.roi = roi
     return dst
 
 

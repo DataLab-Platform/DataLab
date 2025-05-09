@@ -158,6 +158,7 @@ def create_periodic_signal(
     size: int = 10000,
     xmin: float = -10.0,
     xmax: float = 10.0,
+    a: float = 1.0,
 ) -> cdl.obj.SignalObj:
     """Create a periodic signal
 
@@ -167,12 +168,13 @@ def create_periodic_signal(
         size: Size of the signal. Defaults to 10000.
         xmin: Minimum value of the signal. Defaults to None.
         xmax: Maximum value of the signal. Defaults to None.
+        a: Amplitude of the signal. Defaults to 1.0.
 
     Returns:
         Signal object
     """
     newparam = cdl.obj.new_signal_param(stype=shape, size=size, xmin=xmin, xmax=xmax)
-    addparam = cdl.obj.PeriodicParam.create(freq=freq)
+    addparam = cdl.obj.PeriodicParam.create(freq=freq, a=a)
     return cdl.obj.create_signal_from_param(newparam, addparam)
 
 

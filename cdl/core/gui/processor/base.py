@@ -619,7 +619,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         paramclass: gds.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
-        func_objs: Callable | None = None,
         edit: bool | None = None,
     ) -> None:
         """Generic processing method: n objects in → 1 object out.
@@ -630,15 +629,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         Args:
             name: Operation name (used for object titles).
-            func: Function to apply, that takes either `(dst_obj, src_obj)` or
-             `(dst_obj, src_obj, param)` as arguments, where `dst_obj` is the output
-             object, `src_obj` is the input object, and `param` is an optional
-             parameter set.
+            func: Function to apply, that takes either `(dst_obj, src_obj_list)` or
+             `(dst_obj, src_obj_list, param)` as arguments, where `dst_obj` is the
+             output object, `src_obj_list` is the input object list,
+             and `param` is an optional parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
-            func_objs: Optional post-processing callback for result objects.
             edit: Whether to open the parameter editor before execution.
 
         .. note::
@@ -678,90 +676,29 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     src_obj1: SignalObj | ImageObj
                     progress.setValue(i_pair + 1)
                     progress.setLabelText(title)
-                    src_dtype = src_obj1.data.dtype
-                    dst_dtype = complex if is_complex_dtype(src_dtype) else float
-                    dst_obj = src_obj1.copy(dtype=dst_dtype)
-                    if not Conf.proc.keep_results.get():
-                        dst_obj.delete_results()  # Remove any previous results
                     src_objs_pair = [src_obj1]
                     for src_gid in src_gids[1:]:
                         src_obj = src_objs[src_gid][i_pair]
                         src_objs_pair.append(src_obj)
-                        if param is None:
-                            args = (dst_obj, src_obj)
-                        else:
-                            args = (dst_obj, src_obj, param)
-                        result = self.__exec_func(func, args, progress)
-                        if result is None:
-                            break
-                        dst_obj = self.handle_output(
-                            result, _("Calculating: %s") % title, progress
-                        )
-                        if dst_obj is None:
-                            break
-                        if Conf.proc.keep_results.get():
-                            dst_obj.update_resultshapes_from(src_obj)
-                        if src_obj.roi is not None:
-                            if dst_obj.roi is None:
-                                dst_obj.roi = src_obj.roi.copy()
-                            else:
-                                roi = dst_obj.roi
-                                roi.add_roi(src_obj.roi)
-                                dst_obj.roi = roi
-                    if func_objs is not None:
-                        func_objs(dst_obj, src_objs_pair)
-                    short_ids = [obj.short_id for obj in src_objs_pair]
-                    dst_obj.title = f"{name}({', '.join(short_ids)})"
-                    self.panel.add_object(dst_obj, group_id=dst_gid)
+                    if param is None:
+                        args = (src_objs_pair,)
+                    else:
+                        args = (src_objs_pair, param)
+                    result = self.__exec_func(func, args, progress)
+                    if result is None:
+                        break
+                    new_obj = self.handle_output(
+                        result, _("Calculating: %s") % title, progress
+                    )
+                    if new_obj is None:
+                        break
+                    self.panel.add_object(new_obj, group_id=dst_gid)
 
         else:
             # In single operand mode, we create a single object for all selected objects
 
-            # [new_objs dictionary] keys: old group id, values: new object
-            dst_objs: dict[str, Obj] = {}
-            # [src_dtypes dictionary] keys: old group id, values: old data type
-            src_dtypes: dict[str, np.dtype] = {}
             # [src_objs dictionary] keys: old group id, values: list of old objects
             src_objs: dict[str, list[Obj]] = {}
-
-            with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-                for index, src_obj in enumerate(objs):
-                    progress.setValue(index + 1)
-                    progress.setLabelText(title)
-                    src_gid = objmodel.get_object_group_id(src_obj)
-                    dst_obj = dst_objs.get(src_gid)
-                    if dst_obj is None:
-                        src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
-                        dst_dtype = complex if is_complex_dtype(src_dtype) else float
-                        dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
-                        if not Conf.proc.keep_results.get():
-                            dst_obj.delete_results()  # Remove any previous results
-                        dst_obj.roi = None
-                        src_objs[src_gid] = [src_obj]
-                    else:
-                        src_objs[src_gid].append(src_obj)
-                        if param is None:
-                            args = (dst_obj, src_obj)
-                        else:
-                            args = (dst_obj, src_obj, param)
-                        result = self.__exec_func(func, args, progress)
-                        if result is None:
-                            break
-                        dst_obj = self.handle_output(
-                            result, _("Calculating: %s") % title, progress
-                        )
-                        if dst_obj is None:
-                            break
-                        dst_objs[src_gid] = dst_obj
-                        if Conf.proc.keep_results.get():
-                            dst_obj.update_resultshapes_from(src_obj)
-                    if src_obj.roi is not None:
-                        if dst_obj.roi is None:
-                            dst_obj.roi = src_obj.roi.copy()
-                        else:
-                            roi = dst_obj.roi
-                            roi.add_roi(src_obj.roi)
-                            dst_obj.roi = roi
 
             grps = self.panel.objview.get_sel_groups()
             if grps:
@@ -774,13 +711,28 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 # No group is selected: use each object's group
                 dst_gid = None
 
-            for src_gid, dst_obj in dst_objs.items():
-                if func_objs is not None:
-                    func_objs(dst_obj, src_objs[src_gid])
-                short_ids = [obj.short_id for obj in src_objs[src_gid]]
-                dst_obj.title = f"{name}({', '.join(short_ids)})"
-                group_id = dst_gid if dst_gid is not None else src_gid
-                self.panel.add_object(dst_obj, group_id=group_id)
+            for src_obj in objs:
+                src_gid = objmodel.get_object_group_id(src_obj)
+                src_objs.setdefault(src_gid, []).append(src_obj)
+
+            with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+                progress.setValue(0)
+                progress.setLabelText(title)
+                for src_gid, src_obj_list in src_objs.items():
+                    if param is None:
+                        args = (src_obj_list,)
+                    else:
+                        args = (src_obj_list, param)
+                    result = self.__exec_func(func, args, progress)
+                    if result is None:
+                        break
+                    new_obj = self.handle_output(
+                        result, _("Calculating: %s") % title, progress
+                    )
+                    if new_obj is None:
+                        break
+                    group_id = dst_gid if dst_gid is not None else src_gid
+                    self.panel.add_object(new_obj, group_id=group_id)
 
         # Select newly created group, if any
         if dst_gid is not None:

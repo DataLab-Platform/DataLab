@@ -72,14 +72,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
     def compute_average(self) -> None:
         """Compute average with :py:func:`cdl.computation.image.compute_addition`
         and dividing by the number of images"""
-
-        def func_objs(new_obj: ImageObj, old_objs: list[ImageObj]) -> None:
-            """Finalize average computation"""
-            new_obj.data = new_obj.data / float(len(old_objs))
-
-        self.compute_n_to_1(
-            "μ", cpi.compute_addition, func_objs=func_objs, title=_("Average")
-        )
+        self.compute_n_to_1("µ", cpi.compute_average, title=_("Average"))
 
     @qt_try_except()
     def compute_product(self) -> None:

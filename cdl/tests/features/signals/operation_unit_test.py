@@ -32,9 +32,20 @@ def __create_two_signals() -> tuple[cdl.obj.SignalObj, cdl.obj.SignalObj]:
     return s1, s2
 
 
-def __create_one_signal_and_constant() -> (
-    tuple[cdl.obj.SignalObj, cdl.param.ConstantParam]
-):
+def __create_n_signals(n: int = 100) -> list[cdl.obj.SignalObj]:
+    """Create a list of N different signals for testing."""
+    signals = []
+    for i in range(n):
+        s = ctd.create_periodic_signal(
+            cdl.obj.SignalTypes.COSINUS, freq=50.0 + i, size=100, a=(i + 1) * 0.1
+        )
+        signals.append(s)
+    return signals
+
+
+def __create_one_signal_and_constant() -> tuple[
+    cdl.obj.SignalObj, cdl.param.ConstantParam
+]:
     """Create one signal and a constant for testing."""
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=100)
     param = cdl.param.ConstantParam.create(value=-np.pi)
@@ -44,21 +55,41 @@ def __create_one_signal_and_constant() -> (
 @pytest.mark.validation
 def test_signal_addition() -> None:
     """Signal addition test."""
-    s1, s2 = __create_two_signals()
-    exp = s1.y + s2.y
-    cps.compute_addition(s1, s2)
-    res = s1.y
-    check_array_result("Signal addition", res, exp)
+    slist = __create_n_signals()
+    n = len(slist)
+    s3 = cps.compute_addition(slist)
+    res = s3.y
+    exp = np.zeros_like(s3.y)
+    for s in slist:
+        exp += s.y
+    check_array_result(f"Signal addition ({n} signals)", res, exp)
+
+
+@pytest.mark.validation
+def test_signal_average() -> None:
+    """Signal average test."""
+    slist = __create_n_signals()
+    n = len(slist)
+    s3 = cps.compute_average(slist)
+    res = s3.y
+    exp = np.zeros_like(s3.y)
+    for s in slist:
+        exp += s.y
+    exp /= n
+    check_array_result(f"Signal average ({n} signals)", res, exp)
 
 
 @pytest.mark.validation
 def test_signal_product() -> None:
     """Signal multiplication test."""
-    s1, s2 = __create_two_signals()
-    exp = s1.y * s2.y
-    cps.compute_product(s1, s2)
-    res = s1.y
-    check_array_result("Signal multiplication", res, exp)
+    slist = __create_n_signals()
+    n = len(slist)
+    s3 = cps.compute_product(slist)
+    res = s3.y
+    exp = np.ones_like(s3.y)
+    for s in slist:
+        exp *= s.y
+    check_array_result(f"Signal multiplication ({n} signals)", res, exp)
 
 
 @pytest.mark.validation
@@ -222,6 +253,7 @@ def test_signal_arithmetic() -> None:
 
 if __name__ == "__main__":
     test_signal_addition()
+    test_signal_average()
     test_signal_product()
     test_signal_difference()
     test_signal_quadratic_difference()

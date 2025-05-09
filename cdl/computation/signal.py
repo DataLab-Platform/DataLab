@@ -39,6 +39,7 @@ from cdl.computation.base import (
     calc_resultproperties,
     dst_1_to_1,
     dst_n1n,
+    dst_n_to_1,
     new_signal_result,
 )
 from cdl.config import Conf, _
@@ -138,37 +139,58 @@ class Wrap1to1Func:
 # the modified object from the worker processes.
 
 
-def compute_addition(dst: SignalObj, src: SignalObj) -> SignalObj:
-    """Add **dst** and **src** signals and return **dst** signal modified in place
+def compute_addition(src_list: list[SignalObj]) -> SignalObj:
+    """Add **src** signals and return a new result signal object
 
     Args:
-        dst: destination signal
-        src: source signal
+        src_list: list of source signals
 
     Returns:
         Modified **dst** signal (modified in place)
     """
-    dst.y += np.array(src.y, dtype=dst.y.dtype)
-    if dst.dy is not None:
-        dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
-    restore_data_outside_roi(dst, src)
+    dst = dst_n_to_1(src_list, "Σ")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.y += np.array(src.y, dtype=dst.y.dtype)
+        if dst.dy is not None:
+            dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+    restore_data_outside_roi(dst, src_list[0])
     return dst
 
 
-def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
-    """Multiply **dst** and **src** signals and return **dst** signal modified in place
+def compute_average(src_list: list[SignalObj]) -> SignalObj:
+    """Average **src** signals and return a new result signal object
 
     Args:
-        dst: destination signal
-        src: source signal
+        src_list: list of source signals
 
     Returns:
         Modified **dst** signal (modified in place)
     """
-    dst.y *= np.array(src.y, dtype=dst.y.dtype)
-    if dst.dy is not None:
-        dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
-    restore_data_outside_roi(dst, src)
+    dst = dst_n_to_1(src_list, "µ")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.y += np.array(src.y, dtype=dst.y.dtype)
+        if dst.dy is not None:
+            dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+    dst.y /= len(src_list)
+    restore_data_outside_roi(dst, src_list[0])
+    return dst
+
+
+def compute_product(src_list: list[SignalObj]) -> SignalObj:
+    """Multiply **dst** by **src** signals and return a new result signal object
+
+    Args:
+        src_list: list of source signals
+
+    Returns:
+        Modified **dst** signal (modified in place)
+    """
+    dst = dst_n_to_1(src_list, "Π")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.y *= np.array(src.y, dtype=dst.y.dtype)
+        if dst.dy is not None:
+            dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+    restore_data_outside_roi(dst, src_list[0])
     return dst
 
 

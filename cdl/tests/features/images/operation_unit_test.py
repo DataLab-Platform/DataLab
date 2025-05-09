@@ -39,9 +39,9 @@ def __iterate_images() -> Generator[cdl.obj.ImageObj, None, None]:
         yield create_noisygauss_image(param, level=0.0)
 
 
-def __iterate_image_couples() -> (
-    Generator[tuple[cdl.obj.ImageObj, cdl.obj.ImageObj], None, None]
-):
+def __iterate_image_couples() -> Generator[
+    tuple[cdl.obj.ImageObj, cdl.obj.ImageObj], None, None
+]:
     """Iterate over all possible image couples for testing."""
     size = 128
     for dtype1 in cdl.obj.ImageDatatypes:
@@ -53,6 +53,20 @@ def __iterate_image_couples() -> (
             yield ima1, ima2
 
 
+def __create_n_images(n: int = 100) -> list[cdl.obj.ImageObj]:
+    """Create a list of N different images for testing."""
+    images = []
+    for i in range(n):
+        param = cdl.obj.NewImageParam.create(
+            dtype=cdl.obj.ImageDatatypes.FLOAT32,
+            height=128,
+            width=128,
+        )
+        img = create_noisygauss_image(param, level=(i + 1) * 0.1)
+        images.append(img)
+    return images
+
+
 @pytest.mark.validation
 def test_image_addition() -> None:
     """Image addition test."""
@@ -61,8 +75,37 @@ def test_image_addition() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  {dtype1} += {dtype2}: ", end="")
         exp = ima1.data.astype(float) + ima2.data.astype(float)
-        cpi.compute_addition(ima2, ima1)
-        check_array_result("Image addition", ima2.data, exp)
+        ima3 = cpi.compute_addition([ima1, ima2])
+        check_array_result("Image addition", ima3.data, exp)
+    imalist = __create_n_images()
+    n = len(imalist)
+    ima3 = cpi.compute_addition(imalist)
+    res = ima3.data
+    exp = np.zeros_like(ima3.data)
+    for ima in imalist:
+        exp += ima.data
+    check_array_result(f"  Addition of {n} images", res, exp)
+
+
+@pytest.mark.validation
+def test_image_average() -> None:
+    """Image average test."""
+    execenv.print("*** Testing image average:")
+    for ima1, ima2 in __iterate_image_couples():
+        dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
+        execenv.print(f"  µ({dtype1},{dtype2}): ", end="")
+        exp = (ima1.data.astype(float) + ima2.data.astype(float)) / 2.0
+        ima3 = cpi.compute_average([ima1, ima2])
+        check_array_result("Image average", ima3.data, exp)
+    imalist = __create_n_images()
+    n = len(imalist)
+    ima3 = cpi.compute_average(imalist)
+    res = ima3.data
+    exp = np.zeros_like(ima3.data)
+    for ima in imalist:
+        exp += ima.data
+    exp /= n
+    check_array_result(f"  Average of {n} images", res, exp)
 
 
 @pytest.mark.validation
@@ -97,8 +140,16 @@ def test_image_product() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  {dtype1} *= {dtype2}: ", end="")
         exp = ima1.data.astype(float) * ima2.data.astype(float)
-        cpi.compute_product(ima2, ima1)
-        check_array_result("Image multiplication", ima2.data, exp)
+        ima3 = cpi.compute_product([ima1, ima2])
+        check_array_result("Image multiplication", ima3.data, exp)
+    imalist = __create_n_images()
+    n = len(imalist)
+    ima3 = cpi.compute_product(imalist)
+    res = ima3.data
+    exp = np.ones_like(ima3.data)
+    for ima in imalist:
+        exp *= ima.data
+    check_array_result(f"  Multiplication of {n} images", res, exp)
 
 
 @pytest.mark.validation
@@ -124,9 +175,9 @@ def __constparam(value: float) -> cdl.param.ConstantParam:
     return cdl.param.ConstantParam.create(value=value)
 
 
-def __iterate_image_with_constant() -> (
-    Generator[tuple[cdl.obj.ImageObj, cdl.param.ConstantParam], None, None]
-):
+def __iterate_image_with_constant() -> Generator[
+    tuple[cdl.obj.ImageObj, cdl.param.ConstantParam], None, None
+]:
     """Iterate over all possible image and constant couples for testing."""
     size = 128
     for dtype in cdl.obj.ImageDatatypes:
@@ -398,6 +449,7 @@ def test_image_rotate() -> None:
 
 if __name__ == "__main__":
     test_image_addition()
+    test_image_average()
     test_image_product()
     test_image_division()
     test_image_difference()
