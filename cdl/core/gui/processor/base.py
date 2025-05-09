@@ -13,8 +13,9 @@ import multiprocessing
 import time
 import warnings
 from collections.abc import Callable
+from dataclasses import dataclass
 from multiprocessing.pool import Pool
-from typing import TYPE_CHECKING, Any, Generic, Union
+from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional, Union
 
 import guidata.dataset as gds
 import numpy as np
@@ -166,6 +167,33 @@ def is_pairwise_mode() -> bool:
     return state
 
 
+@dataclass
+class ProcessingFeature:
+    """Processing feature dataclass.
+
+    Args:
+        pattern: pattern
+        function: function
+        functions: list of functions
+        paramclass: parameter class
+        title: title
+        icon_name: icon name
+        comment: comment
+        edit: whether to edit parameters
+        obj2_name: name of the second object
+    """
+
+    pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
+    function: Optional[Callable] = None
+    functions: Optional[list[Callable]] = None
+    paramclass: Optional[type] = None
+    title: Optional[str] = None
+    icon_name: Optional[str] = None
+    comment: Optional[str] = None
+    edit: Optional[bool] = None
+    obj2_name: Optional[str] = None
+
+
 class BaseProcessor(QC.QObject, Generic[TypeROI]):
     """Object handling data processing: operations, processing, analysis.
 
@@ -176,6 +204,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
     SIG_ADD_SHAPE = QC.Signal(str)
     PARAM_DEFAULTS: dict[str, gds.DataSet] = {}
+    PROCESSING_REGISTRY: dict[str, ProcessingFeature] = {}
 
     def __init__(self, panel: SignalPanel | ImagePanel, plotwidget: PlotWidget):
         super().__init__()
@@ -183,6 +212,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         self.plotwidget = plotwidget
         self.worker: Worker | None = None
         self.set_process_isolation_enabled(Conf.main.process_isolation_enabled.get())
+        self.register_computations()
 
     def close(self):
         """Close processor properly"""
@@ -204,6 +234,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             if self.worker is not None:
                 self.worker.terminate_pool()
                 self.worker = None
+
+    @classmethod
+    @abc.abstractmethod
+    def register_computations(cls) -> None:
+        """Register signal computations"""
+        # This method is used to register the computation functions in the
+        # `PROCESSING_REGISTRY` dictionary. It is called in processor constructor.
 
     def has_param_defaults(self, paramclass: type[gds.DataSet]) -> bool:
         """Return True if parameter defaults are available.
@@ -873,6 +910,197 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                         continue
                     group_id = objmodel.get_object_group_id(obj)
                     self.panel.add_object(new_obj, group_id=group_id)
+
+    @classmethod
+    def register_1_to_1(
+        cls,
+        name,
+        function,
+        title,
+        paramclass=None,
+        icon_name=None,
+        comment=None,
+        edit=None,
+    ):
+        """Register a 1-to-1 processing function.
+
+        The registration mechanism is used to centralize the processing functions,
+        so that they can be easily accessed and categorized. The functions are
+        registered in the `PROCESSING_REGISTRY` dictionary, which is a class attribute.
+        The functions are registered with a specific pattern, which indicates the
+        type of processing they perform. The pattern is used to determine how the
+        function should be called and what parameters should be passed to it.
+
+        The `register_1_to_1` method is used to register a function that takes one
+        object as input and produces one object as output. The function is called
+        with the input object and an optional parameter set. The result of the
+        function is returned.
+
+        Args:
+            name: name of the function
+            function: function to register
+            title: title of the function
+            paramclass: parameter class. Defaults to None.
+            icon_name: icon name. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: whether to edit parameters. Defaults to None.
+        """
+        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+            pattern="1_to_1",
+            function=function,
+            title=title,
+            paramclass=paramclass,
+            icon_name=icon_name,
+            comment=comment,
+            edit=edit,
+        )
+
+    @classmethod
+    def register_1_to_0(
+        cls,
+        name,
+        function,
+        title,
+        paramclass=None,
+        icon_name=None,
+        comment=None,
+        edit=None,
+    ):
+        """Register a 1-to-0 processing function.
+
+        The function takes one object as input and produces no output.
+        The function is called with the input object and an optional parameter set.
+        The result of the function is returned.
+
+        Args:
+            name: name of the function
+            function: function to register
+            title: title of the function
+            paramclass: parameter class. Defaults to None.
+            icon_name: icon name. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: whether to edit parameters. Defaults to None.
+        """
+        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+            pattern="1_to_0",
+            function=function,
+            title=title,
+            paramclass=paramclass,
+            icon_name=icon_name,
+            comment=comment,
+            edit=edit,
+        )
+
+    @classmethod
+    def register_1_to_n(cls, name, functions, title, icon_name=None, edit=None):
+        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+            pattern="1_to_n",
+            functions=functions,
+            title=title,
+            icon_name=icon_name,
+            edit=edit,
+        )
+
+    @classmethod
+    def register_n_to_1(
+        cls,
+        name,
+        function,
+        title,
+        paramclass=None,
+        icon_name=None,
+        comment=None,
+        edit=None,
+    ):
+        """Register a n-to-1 processing function.
+
+        The function takes multiple objects as input and produces one object as output.
+        The function is called with the input objects and an optional parameter set.
+        The result of the function is returned.
+
+        Args:
+            name: name of the function
+            function: function to register
+            title: title of the function
+            paramclass: parameter class. Defaults to None.
+            icon_name: icon name. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: whether to edit parameters. Defaults to None.
+        """
+        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+            pattern="n_to_1",
+            function=function,
+            title=title,
+            paramclass=paramclass,
+            icon_name=icon_name,
+            comment=comment,
+            edit=edit,
+        )
+
+    @classmethod
+    def register_2_to_1(
+        cls,
+        name,
+        function,
+        title,
+        paramclass=None,
+        icon_name=None,
+        comment=None,
+        edit=None,
+        obj2_name=None,
+    ):
+        """Register a 2-to-1 processing function.
+
+        The function takes two objects as input and produces one object as output.
+        The function is called with the input objects and an optional parameter set.
+        The result of the function is returned.
+
+        Args:
+            name: name of the function
+            function: function to register
+            title: title of the function
+            paramclass: parameter class. Defaults to None.
+            icon_name: icon name. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: whether to edit parameters. Defaults to None.
+            obj2_name: name of the second object. Defaults to None.
+        """
+        cls.PROCESSING_REGISTRY[name] = ProcessingFeature(
+            pattern="2_to_1",
+            function=function,
+            title=title,
+            paramclass=paramclass,
+            icon_name=icon_name,
+            comment=comment,
+            edit=edit,
+            obj2_name=obj2_name,
+        )
+
+    @qt_try_except()
+    def compute(self, name, *args, **kwargs):
+        """Compute a processing function.
+
+        This method is used to compute a processing function. It retrieves the
+        function from the registry and calls it with the given arguments. The
+        function is called with the appropriate parameters, depending on the
+        pattern of the function.
+
+        Args:
+            name: name of the function
+            args: arguments
+            kwargs: keyword arguments
+        """
+        entry = self.PROCESSING_REGISTRY[name]
+        compute_method = getattr(self, f"compute_{entry.pattern}")
+        return compute_method(
+            entry.function,
+            *args,
+            paramclass=entry.paramclass,
+            title=entry.title,
+            comment=entry.comment,
+            edit=entry.edit,
+            **kwargs,
+        )
 
     # ------Data Operations-------------------------------------------------------------
 

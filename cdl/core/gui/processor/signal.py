@@ -37,10 +37,18 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     # pylint: disable=duplicate-code
 
-    @qt_try_except()
-    def compute_sum(self) -> None:
-        """Compute sum with :py:func:`cdl.computation.signal.compute_sum`"""
-        self.compute_n_to_1(cps.compute_sum, title=_("Sum"))
+    @classmethod
+    def register_computations(cls) -> None:
+        """Register signal computations"""
+        for name, func, title, icon_name in (
+            ("Σ", cps.compute_sum, _("Sum"), "sum.svg"),
+            ("Π", cps.compute_product, _("Product"), "product.svg"),
+            ("µ", cps.compute_average, _("Average"), "average.svg"),
+        ):
+            cls.register_n_to_1(name, func, title, icon_name=icon_name)
+        # TODO: Check if validation process has to be adapted to the new registering
+        # mechanism: is it currently relying on the scanning of "compute_*" methods
+        # of SignalProcessor? If that's so, it must be changed.
 
     @qt_try_except()
     def compute_addition_constant(self, param: cpb.ConstantParam | None = None) -> None:
@@ -52,17 +60,6 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             paramclass=cpb.ConstantParam,
             title=_("Sum with constant"),
         )
-
-    @qt_try_except()
-    def compute_average(self) -> None:
-        """Compute average with :py:func:`cdl.computation.signal.compute_sum`
-        and divide by the number of signals"""
-        self.compute_n_to_1(cps.compute_average, title=_("Average"))
-
-    @qt_try_except()
-    def compute_product(self) -> None:
-        """Compute product with :py:func:`cdl.computation.signal.compute_product`"""
-        self.compute_n_to_1(cps.compute_product, title=_("Product"))
 
     @qt_try_except()
     def compute_product_constant(self, param: cpb.ConstantParam | None = None) -> None:

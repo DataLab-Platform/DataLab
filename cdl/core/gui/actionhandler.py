@@ -46,6 +46,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
+from cdl.core.gui.processor.base import BaseProcessor
 from cdl.widgets import fitdialog
 
 if TYPE_CHECKING:
@@ -309,6 +310,27 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     toolbar_category = ActionCategory.PANEL_TOOLBAR
             self.add_to_action_list(action, toolbar_category, toolbar_pos, toolbar_sep)
         return action
+
+    def action_for(self, feature_name: str) -> QW.QAction:
+        """Create action for a feature.
+
+        Args:
+            feature_name: feature name
+
+        Returns:
+            New action
+        """
+        feature = BaseProcessor.PROCESSING_REGISTRY[feature_name]
+        if feature.pattern == "n_to_1":
+            condition = SelectCond.at_least_two
+        else:
+            condition = SelectCond.at_least_one
+        return self.new_action(
+            feature.title,
+            triggered=lambda: self.panel.processor.compute(feature_name),
+            select_condition=condition,
+            icon_name=feature.icon_name,
+        )
 
     def add_to_action_list(
         self,
@@ -612,18 +634,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 self.add_to_action_list(main.showlabel_action, cat, -1)
 
         with self.new_category(ActionCategory.OPERATION):
-            self.new_action(
-                _("Sum"),
-                triggered=self.panel.processor.compute_sum,
-                select_condition=SelectCond.at_least_two,
-                icon_name="sum.svg",
-            )
-            self.new_action(
-                _("Average"),
-                triggered=self.panel.processor.compute_average,
-                select_condition=SelectCond.at_least_two,
-                icon_name="average.svg",
-            )
+            self.action_for("Σ")
+            self.action_for("µ")
             self.new_action(
                 _("Difference"),
                 triggered=self.panel.processor.compute_difference,
@@ -636,12 +648,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.at_least_one,
                 icon_name="quadratic_difference.svg",
             )
-            self.new_action(
-                _("Product"),
-                triggered=self.panel.processor.compute_product,
-                select_condition=SelectCond.at_least_two,
-                icon_name="product.svg",
-            )
+            self.action_for("Π")
             self.new_action(
                 _("Division"),
                 triggered=self.panel.processor.compute_division,
@@ -1052,9 +1059,7 @@ class SignalActionHandler(BaseActionHandler):
             self.new_action(
                 _("Ordinate at x=..."),
                 triggered=self.panel.processor.compute_y_at_x,
-                tip=_(
-                    "Compute the ordinate at a given x value " "(linear interpolation)"
-                ),
+                tip=_("Compute the ordinate at a given x value (linear interpolation)"),
             )
             self.new_action(
                 _("Peak detection"),
