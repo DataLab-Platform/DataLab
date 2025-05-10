@@ -37,15 +37,25 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     # pylint: disable=duplicate-code
 
-    @classmethod
-    def register_computations(cls) -> None:
+    def register_computations(self) -> None:
         """Register signal computations"""
-        for name, func, title, icon_name in (
-            ("Σ", cps.compute_sum, _("Sum"), "sum.svg"),
-            ("Π", cps.compute_product, _("Product"), "product.svg"),
-            ("µ", cps.compute_average, _("Average"), "average.svg"),
-        ):
-            cls.register_n_to_1(name, func, title, icon_name=icon_name)
+        self.register_n_to_1(cps.compute_sum, _("Sum"), icon_name="sum.svg")
+        self.register_n_to_1(cps.compute_product, _("Product"), icon_name="product.svg")
+        self.register_n_to_1(cps.compute_average, _("Average"), icon_name="average.svg")
+        self.register_1_to_1(
+            cps.compute_normalize,
+            _("Normalize"),
+            paramclass=cpb.NormalizeParam,
+            icon_name="normalize.svg",
+        )
+        self.register_2_to_1(
+            cps.compute_difference,
+            _("Difference"),
+            icon_name="difference.svg",
+            obj2_name=_("signal to subtract"),
+        )
+        self.register_1_to_0(cps.compute_stats, _("Statistics"), icon_name="stats.svg")
+        self.register_1_to_n(cps.compute_extract_roi, "ROI", icon_name="roi.svg")
         # TODO: Check if validation process has to be adapted to the new registering
         # mechanism: is it currently relying on the scanning of "compute_*" methods
         # of SignalProcessor? If that's so, it must be changed.
@@ -137,19 +147,6 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             param=param,
             paramclass=cpb.ArithmeticParam,
             title=_("Arithmetic"),
-        )
-
-    @qt_try_except()
-    def compute_difference(
-        self, obj2: SignalObj | list[SignalObj] | None = None
-    ) -> None:
-        """Compute difference between two signals
-        with :py:func:`cdl.computation.signal.compute_difference`"""
-        self.compute_2_to_1(
-            obj2,
-            _("signal to subtract"),
-            cps.compute_difference,
-            title=_("Difference"),
         )
 
     @qt_try_except()
@@ -252,13 +249,6 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         )
 
     # ------Signal Processing
-    @qt_try_except()
-    def compute_normalize(self, param: cdl.param.NormalizeParam | None = None) -> None:
-        """Normalize data with :py:func:`cdl.computation.signal.compute_normalize`"""
-        self.compute_1_to_1(
-            cps.compute_normalize, param, cps.NormalizeParam, title=_("Normalize")
-        )
-
     @qt_try_except()
     def compute_derivative(self) -> None:
         """Compute derivative
@@ -650,7 +640,9 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             cps.compute_total_variance,
             cps.compute_time_deviation,
         ]
-        self.compute_1_to_n(funcs, [param] * len(funcs), "Stability", edit=False)
+        self.compute_multiple_1_to_1(
+            funcs, [param] * len(funcs), "Stability", edit=False
+        )
 
     @qt_try_except()
     def compute_polyfit(
@@ -721,13 +713,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     @qt_try_except()
     def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
-        self.compute_1_to_1(cps.extract_multiple_roi, group, title=_("Extract ROI"))
-
-    @qt_try_except()
-    def _extract_each_roi_in_separate_object(self, group: gds.DataSetGroup) -> None:
-        """Extract each single Region Of Interest (ROI) from data in a separate
-        object (keep the ROI in the case of a circular ROI, for example)"""
-        self.compute_1_to_n(cps.extract_single_roi, group.datasets, "ROI", edit=False)
+        self.compute_1_to_1(cps.compute_extract_rois, group, title=_("Extract ROI"))
 
     # ------Signal Analysis
     @qt_try_except()
@@ -759,12 +745,6 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             else:
                 return
         return self.compute_1_to_0(cps.compute_full_width_at_y, param)
-
-    @qt_try_except()
-    def compute_stats(self) -> dict[str, ResultProperties]:
-        """Compute data statistics
-        with :py:func:`cdl.computation.signal.compute_stats`"""
-        return self.compute_1_to_0(cps.compute_stats, title=_("Statistics"))
 
     @qt_try_except()
     def compute_histogram(

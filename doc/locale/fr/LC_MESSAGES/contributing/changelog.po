@@ -1850,8 +1850,8 @@ msgstr "Cela conduisait à un comportement inattendu, car on pouvait interpréte
 msgid "Now, when extracting a single circular ROI from an image with the \"Extract all ROIs into a single image object\" option enabled, the result is a single image with the ROI mask (as if the option was disabled)"
 msgstr "A présent, lors de l'extraction d'une seule ROI circulaire d'une image avec l'option \"Extraire toutes les ROI dans un seul objet d'image\" activée, le résultat est une seule image avec le masque de ROI (comme si l'option était désactivée)"
 
-msgid "This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function"
-msgstr "Ceci corrige l'[Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Extraction d'une seule ROI circulaire : bascule automatique vers la fonction `extract_single_roi`"
+msgid "This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `compute_extract_roi` function"
+msgstr "Ceci corrige l'[Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Extraction d'une seule ROI circulaire : bascule automatique vers la fonction `compute_extract_roi`"
 
 msgid "Analysis on circular ROI:"
 msgstr "Analyse sur ROI circulaire :"

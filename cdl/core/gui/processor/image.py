@@ -28,7 +28,7 @@ from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
-from cdl.core.model.base import ResultProperties, ResultShape
+from cdl.core.model.base import ResultShape
 from cdl.core.model.image import ImageObj, ImageROI, ROI2DParam, create_image_roi
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets import imagebackground
@@ -42,28 +42,28 @@ class ImageProcessor(BaseProcessor[ImageROI]):
 
     # pylint: disable=duplicate-code
 
-    @classmethod
-    def register_computations(cls) -> None:
+    def register_computations(self) -> None:
         """Register signal computations"""
-        for name, func, title, icon_name in (
-            ("Σ", cpi.compute_sum, _("Sum"), "sum.svg"),
-            ("Π", cpi.compute_product, _("Product"), "product.svg"),
-            ("µ", cpi.compute_average, _("Average"), "average.svg"),
-        ):
-            cls.register_n_to_1(name, func, title, icon_name=icon_name)
+        self.register_n_to_1(cpi.compute_sum, _("Sum"), icon_name="sum.svg")
+        self.register_n_to_1(cpi.compute_product, _("Product"), icon_name="product.svg")
+        self.register_n_to_1(cpi.compute_average, _("Average"), icon_name="average.svg")
+        self.register_1_to_1(
+            cpi.compute_normalize,
+            _("Normalize"),
+            paramclass=cpb.NormalizeParam,
+            icon_name="normalize.svg",
+        )
+        self.register_2_to_1(
+            cpi.compute_difference,
+            _("Difference"),
+            icon_name="difference.svg",
+            obj2_name=_("image to subtract"),
+        )
+        self.register_1_to_0(cpi.compute_stats, _("Statistics"), icon_name="stats.svg")
+        self.register_1_to_n(cpi.compute_extract_roi, "ROI", icon_name="roi.svg")
         # TODO: Check if validation process has to be adapted to the new registering
         # mechanism: is it currently relying on the scanning of "compute_*" methods
         # of ImageProcessor? If that's so, it must be changed.
-
-    @qt_try_except()
-    def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
-        """Normalize data with :py:func:`cdl.computation.image.compute_normalize`"""
-        self.compute_1_to_1(
-            cpi.compute_normalize,
-            param=param,
-            paramclass=cpb.NormalizeParam,
-            title=_("Normalize"),
-        )
 
     @qt_try_except()
     def compute_addition_constant(self, param: cpb.ConstantParam | None = None) -> None:
@@ -372,17 +372,6 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         )
 
     @qt_try_except()
-    def compute_difference(self, obj2: ImageObj | list[ImageObj] | None = None) -> None:
-        """Compute difference between two images
-        with :py:func:`cdl.computation.image.compute_difference`"""
-        self.compute_2_to_1(
-            obj2,
-            _("image to subtract"),
-            cpi.compute_difference,
-            title=_("Difference"),
-        )
-
-    @qt_try_except()
     def compute_difference_constant(
         self, param: cpb.ConstantParam | None = None
     ) -> None:
@@ -662,7 +651,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         - :py:func:`cdl.computation.image.threshold.compute_threshold_triangle`
         - :py:func:`cdl.computation.image.threshold.compute_threshold_yen`
         """
-        self.compute_1_to_n(
+        self.compute_multiple_1_to_1(
             [
                 cpi_thr.compute_threshold_isodata,
                 cpi_thr.compute_threshold_li,
@@ -838,7 +827,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
                 param = paramclass(title)
                 self.update_param_defaults(param)
                 params.append(param)
-        self.compute_1_to_n(funcs, params, "Denoise", edit=edit)
+        self.compute_multiple_1_to_1(funcs, params, "Denoise", edit=edit)
 
     @qt_try_except()
     def compute_white_tophat(
@@ -936,7 +925,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             cpi_mor.compute_opening,
             cpi_mor.compute_closing,
         ]
-        self.compute_1_to_n(funcs, [param] * len(funcs), "Morph", edit=False)
+        self.compute_multiple_1_to_1(funcs, [param] * len(funcs), "Morph", edit=False)
 
     @qt_try_except()
     def compute_canny(self, param: cdl.param.CannyParam | None = None) -> None:
@@ -1093,26 +1082,14 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             cpi_edg.compute_farid_v,
             cpi_edg.compute_laplace,
         ]
-        self.compute_1_to_n(funcs, None, "Edges")
+        self.compute_multiple_1_to_1(funcs, None, "Edges")
 
     @qt_try_except()
     def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
-        self.compute_1_to_1(cpi.extract_multiple_roi, group, title=_("Extract ROI"))
-
-    @qt_try_except()
-    def _extract_each_roi_in_separate_object(self, group: gds.DataSetGroup) -> None:
-        """Extract each single Region Of Interest (ROI) from data in a separate
-        object (keep the ROI in the case of a circular ROI, for example)"""
-        self.compute_1_to_n(cpi.extract_single_roi, group.datasets, "ROI", edit=False)
+        self.compute_1_to_1(cpi.compute_extract_rois, group, title=_("Extract ROI"))
 
     # ------Image Analysis
-    @qt_try_except()
-    def compute_stats(self) -> dict[str, ResultProperties]:
-        """Compute data statistics
-        with :py:func:`cdl.computation.image.compute_stats`"""
-        return self.compute_1_to_0(cpi.compute_stats, title=_("Statistics"))
-
     @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:
         """Compute image centroid

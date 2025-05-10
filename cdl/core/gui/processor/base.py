@@ -12,7 +12,6 @@ import abc
 import multiprocessing
 import time
 import warnings
-from collections.abc import Callable
 from dataclasses import dataclass
 from multiprocessing.pool import Pool
 from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional, Union
@@ -44,7 +43,6 @@ if TYPE_CHECKING:
         GaussianParam,
         MovingAverageParam,
         MovingMedianParam,
-        NormalizeParam,
     )
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
@@ -174,24 +172,35 @@ class ComputingFeature:
     Args:
         pattern: pattern
         function: function
-        functions: list of functions
         paramclass: parameter class
         title: title
         icon_name: icon name
         comment: comment
-        edit: whether to edit parameters
         obj2_name: name of the second object
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
     function: Optional[Callable] = None
-    functions: Optional[list[Callable]] = None
     paramclass: Optional[type] = None
     title: Optional[str] = None
     icon_name: Optional[str] = None
     comment: Optional[str] = None
-    edit: Optional[bool] = None
     obj2_name: Optional[str] = None
+
+    @property
+    def name(self) -> str:
+        if self.function is None:
+            raise ValueError(
+                "ComputingFeature must have a 'function' to derive its name."
+            )
+        return self.function.__name__.removeprefix("compute_")
+
+    @property
+    def action_title(self) -> str:
+        title = self.title
+        if self.paramclass is not None or self.pattern == "1_to_0":
+            title += "..."
+        return title
 
 
 class BaseProcessor(QC.QObject, Generic[TypeROI]):
@@ -204,7 +213,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
     SIG_ADD_SHAPE = QC.Signal(str)
     PARAM_DEFAULTS: dict[str, gds.DataSet] = {}
-    COMPUTING_REGISTRY: dict[str, ComputingFeature] = {}
 
     def __init__(self, panel: SignalPanel | ImagePanel, plotwidget: PlotWidget):
         super().__init__()
@@ -212,6 +220,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         self.plotwidget = plotwidget
         self.worker: Worker | None = None
         self.set_process_isolation_enabled(Conf.main.process_isolation_enabled.get())
+        self._computing_registry: dict[str, ComputingFeature] = {}
         self.register_computations()
 
     def close(self):
@@ -235,12 +244,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 self.worker.terminate_pool()
                 self.worker = None
 
-    @classmethod
     @abc.abstractmethod
-    def register_computations(cls) -> None:
+    def register_computations(self) -> None:
         """Register signal computations"""
         # This method is used to register the computation functions in the
-        # `PROCESSING_REGISTRY` dictionary. It is called in processor constructor.
+        # computing registry. It is called in the constructor of the
+        # BaseProcessor class, so it must be implemented in the derived classes.
 
     def has_param_defaults(self, paramclass: type[gds.DataSet]) -> bool:
         """Return True if parameter defaults are available.
@@ -510,21 +519,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 return
         self._compute_1_to_1_subroutine([func], [param], title)
 
-    def compute_1_to_n(
+    def compute_multiple_1_to_1(
         self,
-        funcs: list[Callable] | Callable,
-        params: list | None = None,
+        funcs: list[Callable],
+        params: list[gds.DataSet] | None = None,
         title: str | None = None,
         edit: bool | None = None,
     ) -> None:
         """Generic processing method: 1 object in → n objects out.
 
-        Applies one or more functions to each selected object, generating multiple
+        Applies multiple functions to each selected object, generating multiple
         outputs per object. The resulting objects are appended to the active panel.
 
         Args:
-            funcs: Single function or list of functions to apply. Each function takes
-             either `(dst_obj, src_obj)` or `(dst_obj, src_obj, param)` as arguments,
+            funcs: List of functions to apply. Each function takes either
+             `(dst_obj, src_obj)` or `(dst_obj, src_obj, param)` as arguments,
              where `dst_obj` is the output object, `src_obj` is the input object,
              and `param` is an optional parameter set.
             params: List of parameter instances corresponding to each function.
@@ -539,17 +548,50 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             This method does not support pairwise mode.
         """
         if params is None:
-            assert not isinstance(funcs, Callable)
             params = [None] * len(funcs)
         else:
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if edit and not group.edit(parent=self.panel.parent()):
                 return
-            if isinstance(funcs, Callable):
-                funcs = [funcs] * len(params)
-            else:
-                assert len(funcs) == len(params)
+            if len(funcs) != len(params):
+                raise ValueError("Number of functions must match number of parameters")
         self._compute_1_to_1_subroutine(funcs, params, title)
+
+    def compute_1_to_n(
+        self,
+        func: Callable,
+        params: list[gds.DataSet],
+        title: str | None = None,
+        edit: bool | None = None,
+    ) -> None:
+        """Generic processing method: 1 object in → n objects out.
+
+        Applies a single function to each selected object, with n different parameters
+        set, thus generating n outputs per object. The resulting objects are appended to
+        the active panel.
+
+        Args:
+            func: Single function to apply, that takes either `(dst_obj, src_obj)`
+             or `(dst_obj, src_obj, param)` as arguments,
+             where `dst_obj` is the output object, `src_obj` is the input object,
+             and `param` is an optional parameter set.
+            params: List of parameter instances.
+            title: Optional progress bar title.
+            edit: Whether to open the parameter editor before execution.
+
+        .. note::
+            With k selected objects and n parameter sets,
+            the method produces k × n outputs.
+
+        .. note::
+            This method does not support pairwise mode.
+        """
+        assert params is not None
+        if edit:
+            group = gds.DataSetGroup(params, title=_("Parameters"))
+            if not group.edit(parent=self.panel.parent()):
+                return
+        self._compute_1_to_1_subroutine([func] * len(params), params, title)
 
     def compute_1_to_0(
         self,
@@ -911,17 +953,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     group_id = objmodel.get_object_group_id(obj)
                     self.panel.add_object(new_obj, group_id=group_id)
 
-    @classmethod
     def register_1_to_1(
-        cls,
-        name,
-        function,
-        title,
-        paramclass=None,
-        icon_name=None,
-        comment=None,
-        edit=None,
-    ):
+        self,
+        function: Callable,
+        title: str,
+        paramclass: gds.DataSet | None = None,
+        icon_name: str | None = None,
+        comment: str | None = None,
+    ) -> ComputingFeature:
         """Register a 1-to-1 processing function.
 
         The registration mechanism is used to centralize the processing functions,
@@ -937,35 +976,34 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         function is returned.
 
         Args:
-            name: name of the function
             function: function to register
             title: title of the function
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
-            edit: whether to edit parameters. Defaults to None.
+
+        Returns:
+            Registered feature.
         """
-        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
+        feature = ComputingFeature(
             pattern="1_to_1",
             function=function,
             title=title,
             paramclass=paramclass,
             icon_name=icon_name,
             comment=comment,
-            edit=edit,
         )
+        self._computing_registry[feature.name] = feature
+        return feature
 
-    @classmethod
     def register_1_to_0(
-        cls,
-        name,
-        function,
-        title,
-        paramclass=None,
-        icon_name=None,
-        comment=None,
-        edit=None,
-    ):
+        self,
+        function: Callable,
+        title: str,
+        paramclass: gds.DataSet | None = None,
+        icon_name: str | None = None,
+        comment: str | None = None,
+    ) -> ComputingFeature:
         """Register a 1-to-0 processing function.
 
         The function takes one object as input and produces no output.
@@ -973,45 +1011,60 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         The result of the function is returned.
 
         Args:
-            name: name of the function
             function: function to register
             title: title of the function
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
-            edit: whether to edit parameters. Defaults to None.
+
+        Returns:
+            Registered feature.
         """
-        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
+        feature = ComputingFeature(
             pattern="1_to_0",
             function=function,
             title=title,
             paramclass=paramclass,
             icon_name=icon_name,
             comment=comment,
-            edit=edit,
         )
+        self._computing_registry[feature.name] = feature
+        return feature
 
-    @classmethod
-    def register_1_to_n(cls, name, functions, title, icon_name=None, edit=None):
-        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
+    def register_1_to_n(
+        self, function: Callable, title: str, icon_name: str | None = None
+    ) -> ComputingFeature:
+        """Register a 1-to-n processing function.
+
+        The function takes one object as input and produces multiple objects as output.
+        The function is called with the input object and an optional parameter set.
+        The result of the function is returned.
+
+        Args:
+            function: function to register
+            title: title of the function
+            icon_name: icon name. Defaults to None.
+
+        Returns:
+            Registered feature.
+        """
+        feature = ComputingFeature(
             pattern="1_to_n",
-            functions=functions,
+            function=function,
             title=title,
             icon_name=icon_name,
-            edit=edit,
         )
+        self._computing_registry[feature.name] = feature
+        return feature
 
-    @classmethod
     def register_n_to_1(
-        cls,
-        name,
-        function,
-        title,
-        paramclass=None,
-        icon_name=None,
-        comment=None,
-        edit=None,
-    ):
+        self,
+        function: Callable,
+        title: str,
+        paramclass: gds.DataSet | None = None,
+        icon_name: str | None = None,
+        comment: str | None = None,
+    ) -> ComputingFeature:
         """Register a n-to-1 processing function.
 
         The function takes multiple objects as input and produces one object as output.
@@ -1019,36 +1072,35 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         The result of the function is returned.
 
         Args:
-            name: name of the function
             function: function to register
             title: title of the function
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
-            edit: whether to edit parameters. Defaults to None.
+
+        Returns:
+            Registered feature.
         """
-        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
+        feature = ComputingFeature(
             pattern="n_to_1",
             function=function,
             title=title,
             paramclass=paramclass,
             icon_name=icon_name,
             comment=comment,
-            edit=edit,
         )
+        self._computing_registry[feature.name] = feature
+        return feature
 
-    @classmethod
     def register_2_to_1(
-        cls,
-        name,
-        function,
-        title,
-        paramclass=None,
-        icon_name=None,
-        comment=None,
-        edit=None,
-        obj2_name=None,
-    ):
+        self,
+        function: Callable,
+        title: str,
+        paramclass: gds.DataSet | None = None,
+        icon_name: str | None = None,
+        comment: str | None = None,
+        obj2_name: str | None = None,
+    ) -> ComputingFeature:
         """Register a 2-to-1 processing function.
 
         The function takes two objects as input and produces one object as output.
@@ -1056,51 +1108,97 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         The result of the function is returned.
 
         Args:
-            name: name of the function
             function: function to register
             title: title of the function
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
-            edit: whether to edit parameters. Defaults to None.
             obj2_name: name of the second object. Defaults to None.
+
+        Returns:
+            Registered feature.
         """
-        cls.COMPUTING_REGISTRY[name] = ComputingFeature(
+        feature = ComputingFeature(
             pattern="2_to_1",
             function=function,
             title=title,
             paramclass=paramclass,
             icon_name=icon_name,
             comment=comment,
-            edit=edit,
             obj2_name=obj2_name,
         )
+        self._computing_registry[feature.name] = feature
+        return feature
+
+    def get_computing_feature(self, name: str) -> ComputingFeature:
+        """Get a computing feature by name."""
+        try:
+            return self.panel.processor._computing_registry[name]
+        except KeyError:
+            raise ValueError(f"Unknown computing feature: {name}")
 
     @qt_try_except()
-    def compute(self, name, *args, **kwargs):
-        """Compute a processing function.
+    def compute(
+        self, key: str | Callable | ComputingFeature, *args, **kwargs
+    ) -> dict[str, ResultShape | ResultProperties] | None:
+        """Generic compute dispatcher for all patterns using the central registry.
 
-        This method is used to compute a processing function. It retrieves the
-        function from the registry and calls it with the given arguments. The
-        function is called with the appropriate parameters, depending on the
-        pattern of the function.
+        This method is a generic dispatcher for all compute methods.
+        It uses the central registry to find the appropriate compute method
+        based on the pattern.
 
         Args:
-            name: name of the function
-            args: arguments
-            kwargs: keyword arguments
+            key: The key to look up in the registry. It can be a string, a callable,
+             or a ComputingFeature instance.
+            *args: Positional arguments to pass to the compute method.
+            **kwargs: Keyword arguments to pass to the compute method.
+
+        Returns:
+            The result of the computation or None.
         """
-        entry = self.COMPUTING_REGISTRY[name]
-        compute_method = getattr(self, f"compute_{entry.pattern}")
-        return compute_method(
-            entry.function,
-            *args,
-            paramclass=entry.paramclass,
-            title=entry.title,
-            comment=entry.comment,
-            edit=entry.edit,
-            **kwargs,
-        )
+        if not isinstance(key, ComputingFeature):
+            feature = self.get_computing_feature(key)
+        else:
+            feature = key
+
+        pattern = feature.pattern
+        compute_method = getattr(self, f"compute_{pattern}")
+
+        if pattern in {"1_to_1", "1_to_0", "n_to_1"}:
+            return compute_method(
+                feature.function,
+                *args,
+                param=kwargs.get("param"),
+                paramclass=feature.paramclass,
+                title=feature.title,
+                comment=feature.comment,
+                edit=kwargs.get("edit"),
+                **kwargs,
+            )
+        elif pattern == "2_to_1":
+            obj2 = kwargs.pop("obj2", args[0] if args else None)
+            remaining_args = args[1:] if args else []
+            return compute_method(
+                obj2=obj2,
+                obj2_name=feature.obj2_name or _("Second operand"),
+                func=feature.function,
+                param=kwargs.get("param"),
+                paramclass=feature.paramclass,
+                title=feature.title,
+                comment=feature.comment,
+                edit=kwargs.get("edit"),
+                *remaining_args,
+                **kwargs,
+            )
+        elif pattern == "1_to_n":
+            return compute_method(
+                feature.function,
+                params=kwargs.get("params"),
+                title=feature.title,
+                edit=kwargs.get("edit"),
+            )
+        else:
+            raise ValueError(f"Unsupported compute pattern: {pattern}")
 
     # ------Data Operations-------------------------------------------------------------
 
@@ -1110,31 +1208,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         self, obj2: Obj | None = None, param: ArithmeticParam | None = None
     ) -> None:
         """Compute arithmetic operation"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_sum(self) -> None:
-        """Compute sum"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_normalize(self, param: NormalizeParam | None = None) -> None:
-        """Normalize data"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_average(self) -> None:
-        """Compute average"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_product(self) -> None:
-        """Compute product"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_difference(self, obj2: Obj | list[Obj] | None = None) -> None:
-        """Compute difference"""
 
     @abc.abstractmethod
     @qt_try_except()
@@ -1252,8 +1325,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
     def compute_roi_extraction(self, roi: TypeROI | None = None) -> None:
         """Extract Region Of Interest (ROI) from data with:
 
-        - :py:func:`cdl.computation.image.extract_single_roi` for single ROI
-        - :py:func:`cdl.computation.image.extract_multiple_roi` for multiple ROIs"""
+        - :py:func:`cdl.computation.image.compute_extract_roi` for single ROI
+        - :py:func:`cdl.computation.image.compute_extract_rois` for multiple ROIs"""
         # Expected behavior:
         # -----------------
         # * If `roi` is not None or not empty, skip the ROI dialog
@@ -1275,18 +1348,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             # Extract each ROI into a separate object (keep the ROI in the case of
             # a circular ROI), if the "Extract all ROIs into a single image object"
             # option is not checked or if there is only one ROI (See Issue #31)
-            self._extract_each_roi_in_separate_object(group)
+            self.compute("extract_roi", params=group.datasets, edit=False)
 
     @abc.abstractmethod
     @qt_try_except()
     def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def _extract_each_roi_in_separate_object(self, group: gds.DataSetGroup) -> None:
-        """Extract each single Region Of Interest (ROI) from data in a separate
-        object (keep the ROI in the case of a circular ROI, for example)"""
 
     # ------Analysis-------------------------------------------------------------------
 
@@ -1345,8 +1412,3 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             if obj.roi is not None:
                 obj.roi = None
                 self.panel.selection_changed(update_items=True)
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_stats(self) -> dict[str, ResultShape]:
-        """Compute data statistics"""

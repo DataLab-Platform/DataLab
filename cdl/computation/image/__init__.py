@@ -768,7 +768,7 @@ def compute_binning(src: ImageObj, param: BinningParam) -> ImageObj:
     return dst
 
 
-def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
+def compute_extract_rois(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     """Extract multiple regions of interest from data
 
     Args:
@@ -793,7 +793,7 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     if len(group.datasets) == 1:
         p = group.datasets[0]
         suffix = p.get_suffix()
-    dst = dst_1_to_1(src, "extract_multiple_roi", suffix)
+    dst = dst_1_to_1(src, "extract_rois", suffix)
     dst.x0 += x0 * src.dx
     dst.y0 += y0 * src.dy
     dst.roi = None
@@ -805,7 +805,7 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     return dst
 
 
-def extract_single_roi(src: ImageObj, p: ROI2DParam) -> ImageObj:
+def compute_extract_roi(src: ImageObj, p: ROI2DParam) -> ImageObj:
     """Extract single ROI
 
     Args:
@@ -815,7 +815,7 @@ def extract_single_roi(src: ImageObj, p: ROI2DParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_1_to_1(src, "extract_single_roi", p.get_suffix())
+    dst = dst_1_to_1(src, "extract_roi", p.get_suffix())
     dst.data = p.get_data(src).copy()
     dst.roi = p.get_extracted_roi(src)
     x0, y0, _x1, _y1 = p.get_bounding_box_indices()

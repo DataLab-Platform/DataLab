@@ -374,7 +374,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
 # --------------------------------------------------------------------------------------
 
 
-def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
+def compute_extract_rois(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     """Extract multiple regions of interest from data
 
     Args:
@@ -388,7 +388,7 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     if len(group.datasets) == 1:
         p: ROI1DParam = group.datasets[0]
         suffix = f"{p.xmin:.3g}≤x≤{p.xmax:.3g}"
-    dst = dst_1_to_1(src, "extract_multiple_roi", suffix)
+    dst = dst_1_to_1(src, "compute_extract_rois", suffix)
     x, y = src.get_data()
     xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
     for p in group.datasets:
@@ -402,7 +402,7 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     return dst
 
 
-def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
+def compute_extract_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
     """Extract single region of interest from data
 
     Args:
@@ -412,7 +412,7 @@ def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
     Returns:
         Signal with single region of interest
     """
-    dst = dst_1_to_1(src, "extract_single_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
+    dst = dst_1_to_1(src, "compute_extract_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
     x, y = p.get_data(src).copy()
     dst.set_xydata(x, y)
     # TODO: [P2] Instead of removing geometric shapes, apply roi extract

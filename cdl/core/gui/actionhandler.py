@@ -46,7 +46,6 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
-from cdl.core.gui.processor.base import BaseProcessor
 from cdl.widgets import fitdialog
 
 if TYPE_CHECKING:
@@ -311,25 +310,50 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.add_to_action_list(action, toolbar_category, toolbar_pos, toolbar_sep)
         return action
 
-    def action_for(self, feature_name: str) -> QW.QAction:
+    def action_for(
+        self,
+        feature_name: str,
+        context_menu_pos: int | None = None,
+        context_menu_sep: bool = False,
+        toolbar_pos: int | None = None,
+        toolbar_sep: bool = False,
+        toolbar_category: ActionCategory | None = None,
+    ) -> QW.QAction:
         """Create action for a feature.
 
         Args:
-            feature_name: feature name
+            feature: computing feature name
+            context_menu_pos: add action to context menu at this position.
+            context_menu_pos: add action to context menu at this position.
+             Defaults to None.
+            context_menu_sep: add separator before action in context menu
+             (or after if context_menu_pos is positive). Defaults to False.
+            toolbar_pos: add action to toolbar at this position. Defaults to None.
+            toolbar_sep: add separator before action in toolbar
+             (or after if toolbar_pos is positive). Defaults to False.
+            toolbar_category: toolbar category. Defaults to None.
+             If toolbar_pos is not None, this specifies the category of the toolbar.
+             If None, defaults to ActionCategory.VIEW_TOOLBAR if the current category
+             is ActionCategory.VIEW, else to ActionCategory.PANEL_TOOLBAR.
 
         Returns:
             New action
         """
-        feature = BaseProcessor.COMPUTING_REGISTRY[feature_name]
+        feature = self.panel.processor.get_computing_feature(feature_name)
         if feature.pattern == "n_to_1":
             condition = SelectCond.at_least_two
         else:
             condition = SelectCond.at_least_one
         return self.new_action(
-            feature.title,
-            triggered=lambda: self.panel.processor.compute(feature_name),
+            feature.action_title,
+            triggered=lambda: self.panel.processor.compute(feature.name),
             select_condition=condition,
             icon_name=feature.icon_name,
+            context_menu_pos=context_menu_pos,
+            context_menu_sep=context_menu_sep,
+            toolbar_pos=toolbar_pos,
+            toolbar_sep=toolbar_sep,
+            toolbar_category=toolbar_category,
         )
 
     def add_to_action_list(
@@ -634,21 +658,16 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 self.add_to_action_list(main.showlabel_action, cat, -1)
 
         with self.new_category(ActionCategory.OPERATION):
-            self.action_for("Σ")
-            self.action_for("µ")
-            self.new_action(
-                _("Difference"),
-                triggered=self.panel.processor.compute_difference,
-                select_condition=SelectCond.at_least_one,
-                icon_name="difference.svg",
-            )
+            self.action_for("sum")
+            self.action_for("average")
+            self.action_for("difference")
             self.new_action(
                 _("Quadratic difference"),
                 triggered=self.panel.processor.compute_quadratic_difference,
                 select_condition=SelectCond.at_least_one,
                 icon_name="quadratic_difference.svg",
             )
-            self.action_for("Π")
+            self.action_for("product")
             self.new_action(
                 _("Division"),
                 triggered=self.panel.processor.compute_division,
@@ -741,11 +760,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     icon_name="swap_x_y.svg",
                 )
             with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
-                self.new_action(
-                    _("Normalize"),
-                    triggered=self.panel.processor.compute_normalize,
-                    icon_name="normalize.svg",
-                )
+                self.action_for("normalize")
                 self.new_action(
                     _("Clipping"),
                     triggered=self.panel.processor.compute_clip,
@@ -807,13 +822,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 )
 
         with self.new_category(ActionCategory.ANALYSIS):
-            self.new_action(
-                _("Statistics") + "...",
-                triggered=self.panel.processor.compute_stats,
-                icon_name="stats.svg",
-                context_menu_pos=-1,
-                context_menu_sep=True,
-            )
+            self.action_for("stats", context_menu_pos=-1, context_menu_sep=True)
             self.new_action(
                 _("Histogram") + "...",
                 triggered=self.panel.processor.compute_histogram,
