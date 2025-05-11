@@ -53,7 +53,7 @@ def check_for_validation_test(
         Text to be included in the CSV file or None if it doesn't exist
     """
     family, funcname = full_function_name.split(".")[-2:]  # "signal" or "image"
-    shortname = funcname.replace("compute_", "")
+    shortname = funcname.removeprefix("compute_")
     endings = [shortname, shortname + "_unit", shortname + "_validation"]
     beginnings = ["test", f"test_{family}", f"test_{family[:3]}", f"test_{family[0]}"]
     names = [f"{beginning}_{ending}" for beginning in beginnings for ending in endings]
