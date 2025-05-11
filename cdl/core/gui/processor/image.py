@@ -43,7 +43,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
     # pylint: disable=duplicate-code
 
     def register_computations(self) -> None:
-        """Register signal computations"""
+        """Register image computations"""
 
         # TODO: Check if validation process has to be adapted to the new registering
         # mechanism: is it currently relying on the scanning of "compute_*" methods
@@ -189,6 +189,13 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             icon_name="normalize.svg",
         )
         self.register_1_to_1(cpi.compute_clip, _("Clipping"), cpi.ClipParam, "clip.svg")
+        self.register_1_to_1(
+            cpi.compute_offset_correction,
+            _("Offset correction"),
+            ROI2DParam,
+            comment=_("Evaluate and subtract the offset value from the data"),
+            icon_name="offset_correction.svg",
+        )
         # Noise reduction
         self.register_1_to_1(
             cpi.compute_gaussian_filter, _("Gaussian filter"), cpb.GaussianParam
@@ -653,7 +660,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
                 param.x0, param.y0, param.dx, param.dy = x0, y0, x1 - x0, y1 - y0
             else:
                 return
-        self.compute_1_to_1(cpi.compute_offset_correction, param)
+        self.compute("offset_correction", param)
 
     @qt_try_except()
     def compute_all_threshold(self) -> None:
