@@ -20,6 +20,8 @@ A high-level test scenario producing beautiful screenshots.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show,skip
 
+import cdl.computation.image as cpi
+import cdl.computation.signal as cps
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.tests import cdltest_app_context
@@ -34,14 +36,14 @@ def run_beautiful_scenario(screenshots: bool = False):
         newparam = dlo.new_signal_param(stype=dlo.SignalTypes.LORENTZ)
         sig = dlo.create_signal_from_param(newparam)
         panel.add_object(sig)
-        panel.processor.compute_fft()
-        panel.processor.compute_wiener()
-        panel.processor.compute_derivative()
-        panel.processor.compute_integral()
+        panel.processor.compute(cps.compute_fft)
+        panel.processor.compute(cps.compute_wiener)
+        panel.processor.compute(cps.compute_derivative)
+        panel.processor.compute(cps.compute_integral)
         param = dlp.GaussianParam()
-        panel.processor.compute_gaussian_filter(param)
-        panel.processor.compute_fft()
-        panel.processor.compute_derivative()
+        panel.processor.compute(cps.compute_gaussian_filter, param)
+        panel.processor.compute(cps.compute_fft)
+        panel.processor.compute(cps.compute_derivative)
         if screenshots:
             win.statusBar().hide()
             win.take_screenshot("s_beautiful")
