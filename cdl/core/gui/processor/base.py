@@ -1147,14 +1147,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         Args:
             feature: ComputingFeature instance to add.
         """
-        self.computing_registry[feature.name] = feature
+        self.computing_registry[feature.function] = feature
 
-    def get_computing_feature(self, name: str) -> ComputingFeature:
-        """Get a computing feature by name."""
+    def get_computing_feature(
+        self, function_or_name: Callable | str
+    ) -> ComputingFeature:
+        """Get a computing feature by name or function.
+
+        Args:
+            function_or_name: Name of the feature or the function itself.
+
+        Returns:
+            Computing feature instance.
+        """
         try:
-            return self.panel.processor.computing_registry[name]
-        except KeyError as exc:
-            raise ValueError(f"Unknown computing feature: {name}") from exc
+            return self.computing_registry[function_or_name]
+        except KeyError:
+            for _func, feature in self.computing_registry.items():
+                if feature.name == function_or_name:
+                    return feature
+            raise ValueError(f"Unknown computing feature: {function_or_name}")
 
     @qt_try_except()
     def compute(

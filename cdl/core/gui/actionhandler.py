@@ -312,7 +312,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     def action_for(
         self,
-        feature_name: str,
+        function_or_name: Callable | str,
         position: int | None = None,
         separator: bool = False,
         context_menu_pos: int | None = None,
@@ -324,7 +324,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Create action for a feature.
 
         Args:
-            feature: computing feature name
+            function_or_name: function or name of the feature
             position: add action to menu at this position. Defaults to None.
             separator: add separator before action in menu
             context_menu_pos: add action to context menu at this position.
@@ -343,7 +343,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         Returns:
             New action
         """
-        feature = self.panel.processor.get_computing_feature(feature_name)
+        feature = self.panel.processor.get_computing_feature(function_or_name)
         if feature.pattern == "n_to_1":
             condition = SelectCond.at_least_two
         else:
@@ -352,7 +352,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             feature.action_title,
             position=position,
             separator=separator,
-            triggered=lambda: self.panel.processor.compute(feature.name),
+            triggered=lambda: self.panel.processor.compute(feature.function),
             select_condition=condition,
             icon_name=feature.icon_name,
             tip=feature.comment,

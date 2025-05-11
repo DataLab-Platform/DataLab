@@ -12,6 +12,7 @@ covered by other tests.
 
 import os
 
+import cdl.computation.signal as cps
 from cdl.env import execenv
 from cdl.param import MovingMedianParam
 from cdl.tests import cdltest_app_context
@@ -51,8 +52,8 @@ def test_main_app():
         # Add signals to signal panel
         sig1 = create_paracetamol_signal(500)
         panel.add_object(sig1)
-        panel.processor.compute_derivative()
-        panel.processor.compute_wiener()
+        panel.processor.compute(cps.compute_derivative)
+        panel.processor.compute(cps.compute_wiener)
 
         # Get object titles
         titles = win.get_object_titles()
