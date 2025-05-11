@@ -970,13 +970,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
     ) -> ComputingFeature:
         """Register a 1-to-1 processing function.
 
-        The registration mechanism is used to centralize the processing functions,
-        so that they can be easily accessed and categorized. The functions are
-        registered in the `PROCESSING_REGISTRY` dictionary, which is a class attribute.
-        The functions are registered with a specific pattern, which indicates the
-        type of processing they perform. The pattern is used to determine how the
-        function should be called and what parameters should be passed to it.
-
         The `register_1_to_1` method is used to register a function that takes one
         object as input and produces one object as output. The function is called
         with the input object and an optional parameter set. The result of the
@@ -1002,7 +995,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment=comment,
             edit=edit,
         )
-        self.computing_registry[feature.name] = feature
+        self.add_computing_feature(feature)
         return feature
 
     def register_1_to_0(
@@ -1040,7 +1033,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment=comment,
             edit=edit,
         )
-        self.computing_registry[feature.name] = feature
+        self.add_computing_feature(feature)
         return feature
 
     def register_1_to_n(
@@ -1066,7 +1059,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             title=title,
             icon_name=icon_name,
         )
-        self.computing_registry[feature.name] = feature
+        self.add_computing_feature(feature)
         return feature
 
     def register_n_to_1(
@@ -1104,7 +1097,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment=comment,
             edit=edit,
         )
-        self.computing_registry[feature.name] = feature
+        self.add_computing_feature(feature)
         return feature
 
     def register_2_to_1(
@@ -1145,8 +1138,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             edit=edit,
             obj2_name=obj2_name,
         )
-        self.computing_registry[feature.name] = feature
+        self.add_computing_feature(feature)
         return feature
+
+    def add_computing_feature(self, feature: ComputingFeature) -> None:
+        """Add a computing feature to the registry.
+
+        Args:
+            feature: ComputingFeature instance to add.
+        """
+        self.computing_registry[feature.name] = feature
 
     def get_computing_feature(self, name: str) -> ComputingFeature:
         """Get a computing feature by name."""
