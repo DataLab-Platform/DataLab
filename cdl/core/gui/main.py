@@ -1192,18 +1192,25 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Raises:
             ValueError: unknown function
         """
+        name = name.removeprefix("compute_")
         panels = [self.tabwidget.currentWidget()]
         panels.extend(self.panels)
         for panel in panels:
             if isinstance(panel, base.BaseDataPanel):
-                for funcname in (name, f"compute_{name}"):
-                    func = getattr(panel.processor, funcname, None)
-                    if func is not None:
-                        if param is None:
-                            func()
-                        else:
-                            func(param)
-                        return
+                panel: base.BaseDataPanel
+                try:
+                    feature = panel.processor.get_computing_feature(name)
+                    panel.processor.compute(param)
+                    return
+                except ValueError:
+                    for funcname in (name, f"compute_{name}"):
+                        func = getattr(panel.processor, funcname, None)
+                        if func is not None:
+                            if param is None:
+                                func()
+                            else:
+                                func(param)
+                            return
         raise ValueError(f"Unknown function {name}")
 
     # ------GUI refresh

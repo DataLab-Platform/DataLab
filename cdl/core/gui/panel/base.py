@@ -997,9 +997,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = self.objview.get_sel_objects(include_groups=True)
         if filenames is None:  # pragma: no cover
             filenames = [None] * len(objs)
-        assert len(filenames) == len(
-            objs
-        ), "Number of filenames must match number of objects"
+        assert len(filenames) == len(objs), (
+            "Number of filenames must match number of objects"
+        )
         for index, obj in enumerate(objs):
             filename = filenames[index]
             if filename is None:
@@ -1159,7 +1159,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[-1]]  # last selected object
 
-        if not all([oid in self.plothandler for oid in oids]):
+        if not all(oid in self.plothandler for oid in oids):
             # This happens for example when opening an already saved workspace with
             # multiple images, and if the user tries to view in a new window a group of
             # images without having selected any object yet. In this case, only the
@@ -1524,7 +1524,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         )
                         return
                     for i_roi in all_roi_indexes[0]:
-                        roi_suffix = f"|ROI{int(i_roi+1)}" if i_roi >= 0 else ""
+                        roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
                         for title, results in grouped_results.items():  # title
                             x, y = [], []
                             for index, result in enumerate(results):
@@ -1545,7 +1545,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         for index, result in enumerate(results):  # object
                             roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
                             for i_roi in roi_idx:  # ROI
-                                roi_suffix = f"|ROI{int(i_roi+1)}" if i_roi >= 0 else ""
+                                roi_suffix = (
+                                    f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
+                                )
                                 mask = result.array[:, 0] == i_roi
                                 if param.xaxis == "indices":
                                     x = np.arange(result.array.shape[0])[mask]

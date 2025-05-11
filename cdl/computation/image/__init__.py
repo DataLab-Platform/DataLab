@@ -389,6 +389,10 @@ class FlatFieldParam(BaseProcParam):
 
     threshold = gds.FloatItem(_("Threshold"), default=0.0)
 
+    def update_from_obj(self, obj: ImageObj) -> None:
+        """Update parameters from image"""
+        self.set_from_datatype(obj.data.dtype)
+
 
 def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> ImageObj:
     """Compute flat field correction with :py:func:`cdl.algorithms.image.flatfield`
@@ -951,7 +955,7 @@ class RadialProfileParam(gds.DataSet):
         super().__init__(*args, **kwargs)
         self.__obj: ImageObj | None = None
 
-    def update_from_image(self, obj: ImageObj) -> None:
+    def update_from_obj(self, obj: ImageObj) -> None:
         """Update parameters from image"""
         self.__obj = obj
         self.x0 = obj.xc
@@ -1260,7 +1264,7 @@ class ZeroPadding2DParam(gds.DataSet):
         super().__init__(*args, **kwargs)
         self.__obj: ImageObj | None = None
 
-    def update_from_image(self, obj: ImageObj) -> None:
+    def update_from_obj(self, obj: ImageObj) -> None:
         """Update parameters from image"""
         self.__obj = obj
         self.choice_callback(None, self.strategy)

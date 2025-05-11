@@ -828,7 +828,7 @@ class BaseHighLowBandParam(gds.DataSet):
         fs = float(obj.x.size - 1) / (obj.x[-1] - obj.x[0])
         return fs / 2.0
 
-    def update_from_signal(self, obj: SignalObj) -> None:
+    def update_from_obj(self, obj: SignalObj) -> None:
         """Update the filter parameters from a signal object
 
         Args:
@@ -919,6 +919,58 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     return dst
 
 
+def compute_lowpass(src: SignalObj, p: LowPassFilterParam) -> SignalObj:
+    """Compute low-pass filter with :py:func:`scipy.signal.filtfilt`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    return compute_filter(src, p)
+
+
+def compute_highpass(src: SignalObj, p: HighPassFilterParam) -> SignalObj:
+    """Compute high-pass filter with :py:func:`scipy.signal.filtfilt`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    return compute_filter(src, p)
+
+
+def compute_bandpass(src: SignalObj, p: BandPassFilterParam) -> SignalObj:
+    """Compute band-pass filter with :py:func:`scipy.signal.filtfilt`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    return compute_filter(src, p)
+
+
+def compute_bandstop(src: SignalObj, p: BandStopFilterParam) -> SignalObj:
+    """Compute band-stop filter with :py:func:`scipy.signal.filtfilt`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    return compute_filter(src, p)
+
+
 class ZeroPadding1DParam(gds.DataSet):
     """Zero padding parameters"""
 
@@ -926,12 +978,12 @@ class ZeroPadding1DParam(gds.DataSet):
         super().__init__(*args, **kwargs)
         self.__obj: SignalObj | None = None
 
-    def update_from_signal(self, obj: SignalObj) -> None:
+    def update_from_obj(self, obj: SignalObj) -> None:
         """Update parameters from signal"""
         self.__obj = obj
         self.choice_callback(None, self.strategy)
 
-    def choice_callback(self, item, value):
+    def choice_callback(self, item, value):  # pylint: disable=unused-argument
         """Callback for choice item"""
         size = self.__obj.x.size
         if value == "next_pow2":
@@ -1176,6 +1228,17 @@ class ResamplingParam(InterpolationParam):
         "display", active=gds.FuncProp(_prop, lambda x: x == "nbpts")
     )
 
+    def update_from_obj(self, obj: SignalObj) -> None:
+        """Update parameters from a signal object."""
+        if self.xmin is None:
+            self.xmin = obj.x[0]
+        if self.xmax is None:
+            self.xmax = obj.x[-1]
+        if self.dx is None:
+            self.dx = obj.x[1] - obj.x[0]
+        if self.nbpts is None:
+            self.nbpts = len(obj.x)
+
 
 def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
     """Resample data with :py:func:`cdl.algorithms.signal.interpolate`
@@ -1229,7 +1292,7 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     return dst
 
 
-def compute_XY_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
+def compute_xy_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Simulate the X-Y mode of an oscilloscope.
 
     Use the first signal as the X-axis and the second signal as the Y-axis.

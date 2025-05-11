@@ -166,7 +166,7 @@ def run_signal_computations(
         for method_value, _method_name in paramclass.methods:
             panel.objview.set_current_object(sig1)
             param = paramclass.create(method=method_value)
-            param.update_from_signal(sig1)  # Use default cut-off frequencies
+            param.update_from_obj(sig1)  # Use default cut-off frequencies
             filter_func(param)
 
     # Test windowing methods

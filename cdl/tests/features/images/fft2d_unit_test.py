@@ -103,7 +103,7 @@ def test_image_zero_padding() -> None:
         ("multiple_of_64", (56, 20)),
     ):
         param = cdl.param.ZeroPadding2DParam.create(strategy=strategy)
-        param.update_from_image(ima4)
+        param.update_from_obj(ima4)
         assert param.rows == exp_rows, (
             f"Wrong row number for '{param.strategy}' strategy: {param.rows}"
             f" (expected {exp_rows})"

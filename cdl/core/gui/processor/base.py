@@ -36,14 +36,6 @@ if TYPE_CHECKING:
 
     from plotpy.plot import PlotWidget
 
-    from cdl.computation.base import (
-        ArithmeticParam,
-        ClipParam,
-        ConstantParam,
-        GaussianParam,
-        MovingAverageParam,
-        MovingMedianParam,
-    )
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
     from cdl.core.model.image import ImageObj
@@ -176,6 +168,7 @@ class ComputingFeature:
         title: title
         icon_name: icon name
         comment: comment
+        edit: whether to edit the parameters
         obj2_name: name of the second object
     """
 
@@ -185,10 +178,14 @@ class ComputingFeature:
     title: Optional[str] = None
     icon_name: Optional[str] = None
     comment: Optional[str] = None
+    edit: Optional[bool] = None
     obj2_name: Optional[str] = None
 
     @property
     def name(self) -> str:
+        """Return the name of the computing feature.
+        The name is derived from the function name by removing the prefix
+        'compute_'."""
         if self.function is None:
             raise ValueError(
                 "ComputingFeature must have a 'function' to derive its name."
@@ -197,8 +194,11 @@ class ComputingFeature:
 
     @property
     def action_title(self) -> str:
+        """Return the action title of the computing feature."""
         title = self.title
-        if self.paramclass is not None or self.pattern == "1_to_0":
+        if (
+            self.paramclass is not None and (self.edit is None or self.edit)
+        ) or self.pattern == "1_to_0":
             title += "..."
         return title
 
@@ -220,7 +220,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         self.plotwidget = plotwidget
         self.worker: Worker | None = None
         self.set_process_isolation_enabled(Conf.main.process_isolation_enabled.get())
-        self._computing_registry: dict[str, ComputingFeature] = {}
+        self.computing_registry: dict[str, ComputingFeature] = {}
         self.register_computations()
 
     def close(self):
@@ -297,6 +297,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         if edit:
             param = paramclass(title, comment)
             self.update_param_defaults(param)
+            if hasattr(param, "update_from_obj"):
+                obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+                param.update_from_obj(obj)
         return edit, param
 
     def handle_output(
@@ -513,7 +516,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             This method does not support pairwise mode.
         """
         if (edit is None or param is None) and paramclass is not None:
+            old_edit = edit
             edit, param = self.init_param(param, paramclass, title, comment)
+            if old_edit is not None:
+                edit = old_edit
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
@@ -960,6 +966,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         paramclass: gds.DataSet | None = None,
         icon_name: str | None = None,
         comment: str | None = None,
+        edit: bool | None = None,
     ) -> ComputingFeature:
         """Register a 1-to-1 processing function.
 
@@ -981,6 +988,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
+            edit: whether to open the parameter editor before execution.
 
         Returns:
             Registered feature.
@@ -992,8 +1000,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             paramclass=paramclass,
             icon_name=icon_name,
             comment=comment,
+            edit=edit,
         )
-        self._computing_registry[feature.name] = feature
+        self.computing_registry[feature.name] = feature
         return feature
 
     def register_1_to_0(
@@ -1003,6 +1012,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         paramclass: gds.DataSet | None = None,
         icon_name: str | None = None,
         comment: str | None = None,
+        edit: bool | None = None,
     ) -> ComputingFeature:
         """Register a 1-to-0 processing function.
 
@@ -1016,6 +1026,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
+            edit: whether to open the parameter editor before execution.
 
         Returns:
             Registered feature.
@@ -1027,8 +1038,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             paramclass=paramclass,
             icon_name=icon_name,
             comment=comment,
+            edit=edit,
         )
-        self._computing_registry[feature.name] = feature
+        self.computing_registry[feature.name] = feature
         return feature
 
     def register_1_to_n(
@@ -1054,7 +1066,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             title=title,
             icon_name=icon_name,
         )
-        self._computing_registry[feature.name] = feature
+        self.computing_registry[feature.name] = feature
         return feature
 
     def register_n_to_1(
@@ -1064,6 +1076,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         paramclass: gds.DataSet | None = None,
         icon_name: str | None = None,
         comment: str | None = None,
+        edit: bool | None = None,
     ) -> ComputingFeature:
         """Register a n-to-1 processing function.
 
@@ -1077,6 +1090,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
+            edit: whether to open the parameter editor before execution.
 
         Returns:
             Registered feature.
@@ -1088,8 +1102,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             paramclass=paramclass,
             icon_name=icon_name,
             comment=comment,
+            edit=edit,
         )
-        self._computing_registry[feature.name] = feature
+        self.computing_registry[feature.name] = feature
         return feature
 
     def register_2_to_1(
@@ -1099,6 +1114,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         paramclass: gds.DataSet | None = None,
         icon_name: str | None = None,
         comment: str | None = None,
+        edit: bool | None = None,
         obj2_name: str | None = None,
     ) -> ComputingFeature:
         """Register a 2-to-1 processing function.
@@ -1113,6 +1129,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
+            edit: whether to open the parameter editor before execution.
             obj2_name: name of the second object. Defaults to None.
 
         Returns:
@@ -1125,17 +1142,18 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             paramclass=paramclass,
             icon_name=icon_name,
             comment=comment,
+            edit=edit,
             obj2_name=obj2_name,
         )
-        self._computing_registry[feature.name] = feature
+        self.computing_registry[feature.name] = feature
         return feature
 
     def get_computing_feature(self, name: str) -> ComputingFeature:
         """Get a computing feature by name."""
         try:
-            return self.panel.processor._computing_registry[name]
-        except KeyError:
-            raise ValueError(f"Unknown computing feature: {name}")
+            return self.panel.processor.computing_registry[name]
+        except KeyError as exc:
+            raise ValueError(f"Unknown computing feature: {name}") from exc
 
     @qt_try_except()
     def compute(
@@ -1161,165 +1179,49 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         else:
             feature = key
 
+        # Some keyword parameters may be overridden
+        edit = kwargs.pop("edit", feature.edit)
+        title = kwargs.pop("title", feature.title)
+        comment = kwargs.pop("comment", feature.comment)
+
         pattern = feature.pattern
-        compute_method = getattr(self, f"compute_{pattern}")
 
         if pattern in {"1_to_1", "1_to_0", "n_to_1"}:
+            compute_method = getattr(self, f"compute_{pattern}")
             return compute_method(
                 feature.function,
                 *args,
-                param=kwargs.get("param"),
                 paramclass=feature.paramclass,
-                title=feature.title,
-                comment=feature.comment,
-                edit=kwargs.get("edit"),
+                title=title,
+                comment=comment,
+                edit=edit,
                 **kwargs,
             )
-        elif pattern == "2_to_1":
+        if pattern == "2_to_1":
             obj2 = kwargs.pop("obj2", args[0] if args else None)
             remaining_args = args[1:] if args else []
-            return compute_method(
+            return self.compute_2_to_1(
                 obj2=obj2,
                 obj2_name=feature.obj2_name or _("Second operand"),
                 func=feature.function,
                 param=kwargs.get("param"),
                 paramclass=feature.paramclass,
-                title=feature.title,
-                comment=feature.comment,
-                edit=kwargs.get("edit"),
+                title=title,
+                comment=comment,
+                edit=edit,
                 *remaining_args,
                 **kwargs,
             )
-        elif pattern == "1_to_n":
-            return compute_method(
+        if pattern == "1_to_n":
+            return self.compute_1_to_n(
                 feature.function,
                 params=kwargs.get("params"),
-                title=feature.title,
-                edit=kwargs.get("edit"),
+                title=title,
+                edit=edit,
             )
-        else:
-            raise ValueError(f"Unsupported compute pattern: {pattern}")
-
-    # ------Data Operations-------------------------------------------------------------
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_arithmetic(
-        self, obj2: Obj | None = None, param: ArithmeticParam | None = None
-    ) -> None:
-        """Compute arithmetic operation"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_quadratic_difference(self, obj2: Obj | list[Obj] | None = None) -> None:
-        """Compute quadratic difference"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_division(self, obj2: Obj | list[Obj] | None = None) -> None:
-        """Compute division"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_swap_axes(self) -> None:
-        """Swap data axes"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_inverse(self) -> None:
-        """Compute inverse"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_abs(self) -> None:
-        """Compute absolute value"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_re(self) -> None:
-        """Compute real part"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_im(self) -> None:
-        """Compute imaginary part"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_astype(self) -> None:
-        """Convert data type"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_log10(self) -> None:
-        """Compute Log10"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_exp(self) -> None:
-        """Compute exponential"""
+        raise ValueError(f"Unsupported compute pattern: {pattern}")
 
     # ------Data Processing-------------------------------------------------------------
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_calibration(self, param=None) -> None:
-        """Compute data linear calibration"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_clip(self, param: ClipParam | None = None) -> None:
-        """Compute maximum data clipping"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_gaussian_filter(self, param: GaussianParam | None = None) -> None:
-        """Compute gaussian filter"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_moving_average(self, param: MovingAverageParam | None = None) -> None:
-        """Compute moving average"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_moving_median(self, param: MovingMedianParam | None = None) -> None:
-        """Compute moving median"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_wiener(self) -> None:
-        """Compute Wiener filter"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_fft(self) -> None:
-        """Compute iFFT"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_ifft(self) -> None:
-        """Compute FFT"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_addition_constant(self, param: ConstantParam) -> None:
-        """Compute sum with a constant"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_difference_constant(self, param: ConstantParam) -> None:
-        """Compute difference with a constant"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_product_constant(self, param: ConstantParam) -> None:
-        """Compute product with a constant"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_division_constant(self, param: ConstantParam) -> None:
-        """Compute division by a constant"""
 
     @qt_try_except()
     def compute_roi_extraction(self, roi: TypeROI | None = None) -> None:

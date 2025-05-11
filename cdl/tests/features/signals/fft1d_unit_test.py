@@ -84,7 +84,7 @@ def test_signal_zero_padding() -> None:
         ("triple", 2000),
     ):
         param = cdl.param.ZeroPadding1DParam.create(strategy=strategy)
-        param.update_from_signal(s1)
+        param.update_from_obj(s1)
         assert param.n == expected_length, (
             f"Wrong length for '{param.strategy}' strategy: {param.n}"
             f" (expected {expected_length})"

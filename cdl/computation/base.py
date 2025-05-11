@@ -157,6 +157,10 @@ class FFTParam(gds.DataSet):
 
     shift = gds.BoolItem(_("Shift"), help=_("Shift zero frequency to center"))
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.shift = Conf.proc.fft_shift_enabled.get()
+
 
 class SpectrumParam(gds.DataSet):
     """Spectrum parameters"""
@@ -235,14 +239,14 @@ def dst_n_to_1(
     """
     if not isinstance(src_list, list) or len(src_list) <= 1:
         raise ValueError("src_list must be a list of at least 2 objects")
-    all_sigs = all([isinstance(obj, SignalObj) for obj in src_list])
-    all_imgs = all([isinstance(obj, ImageObj) for obj in src_list])
+    all_sigs = all(isinstance(obj, SignalObj) for obj in src_list)
+    all_imgs = all(isinstance(obj, ImageObj) for obj in src_list)
     if not (all_sigs or all_imgs):
         raise ValueError("src_list must be a list of SignalObj or ImageObj objects")
     title = f"{name}({', '.join([obj.short_id for obj in src_list])})"
     if suffix:  # suffix may be None or an empty string
         title += "|" + suffix
-    if any([is_complex_dtype(obj.data.dtype) for obj in src_list]):
+    if any(is_complex_dtype(obj.data.dtype) for obj in src_list):
         dst_dtype = complex
     else:
         dst_dtype = float

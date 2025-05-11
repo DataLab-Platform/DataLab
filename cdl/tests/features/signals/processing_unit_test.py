@@ -364,7 +364,7 @@ def test_signal_XY_mode() -> None:
     """Validation test for the signal X-Y mode processing."""
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=5)
     s2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
-    dst = cps.compute_XY_mode(s1, s2)
+    dst = cps.compute_xy_mode(s1, s2)
     x, y = dst.xydata
     check_array_result("XYMode", x, s1.y)
     check_array_result("XYMode", y, s2.y)
@@ -372,7 +372,7 @@ def test_signal_XY_mode() -> None:
 
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=9)
     s2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
-    dst = cps.compute_XY_mode(s1, s2)
+    dst = cps.compute_xy_mode(s1, s2)
     x, y = dst.xydata
     check_array_result("XYMode2", x, s1.y[::2])
     check_array_result("XYMode2", y, s2.y)
