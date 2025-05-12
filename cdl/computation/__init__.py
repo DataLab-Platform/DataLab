@@ -91,3 +91,82 @@ Detection features
 .. automodule:: cdl.computation.image.detection
     :members:
 """
+
+from __future__ import annotations
+
+import functools
+import importlib
+import inspect
+import os.path as osp
+import pkgutil
+from types import ModuleType
+from typing import Callable
+
+# Marker attribute used by @computation_function and introspection
+COMPUTATION_MARKER = "_is_datalab_computation"
+
+
+def computation_function(
+    func: Callable | None = None,
+    *,
+    name: str | None = None,
+    description: str | None = None,
+) -> Callable:
+    """Decorator to mark a function as a DataLab computation function.
+
+    Args:
+        name: Optional name to override the function name.
+        description: Optional docstring override or additional description.
+
+    Returns:
+        The wrapped function, tagged with a marker attribute.
+    """
+
+    def decorator(f: Callable) -> Callable:
+        """Decorator to mark a function as a DataLab computation function.
+        This decorator adds a marker attribute to the function, allowing
+        it to be identified as a computation function.
+        It also allows for optional name and description overrides.
+        The function can be used as a decorator or as a standalone function.
+        """
+
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            return f(*args, **kwargs)
+
+        setattr(wrapper, COMPUTATION_MARKER, True)
+        wrapper._computation_name = name or f.__name__
+        wrapper._computation_description = description or f.__doc__
+        return wrapper
+
+    return decorator if func is None else decorator(func)
+
+
+def find_computation_functions(
+    module: ModuleType | None = None,
+) -> list[tuple[str, Callable]]:
+    """Find all computation functions in the `cdl.computation` package.
+
+    This function uses introspection to locate all functions decorated with
+    `@computation_function` in the `cdl.computation` package and its subpackages.
+
+    Args:
+        module: Optional module to search in. If None, the current module is used.
+
+    Returns:
+        A list of tuples, each containing the function name and the function object.
+    """
+    functions = []
+    if module is None:
+        path = [osp.dirname(__file__)]
+    else:
+        path = module.__path__
+    for _, modname, _ in pkgutil.walk_packages(path=path, prefix=__name__ + "."):
+        try:
+            module = importlib.import_module(modname)
+        except Exception:
+            continue
+        for name, obj in inspect.getmembers(module, inspect.isfunction):
+            if getattr(obj, COMPUTATION_MARKER, False):
+                functions.append((modname, name, obj.__doc__))
+    return functions

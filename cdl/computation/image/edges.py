@@ -18,6 +18,7 @@ import guidata.dataset as gds
 import skimage
 from skimage import feature, filters
 
+from cdl.computation import computation_function
 from cdl.computation.image import Wrap1to1Func, dst_1_to_1, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
@@ -64,6 +65,7 @@ class CannyParam(gds.DataSet):
     )
 
 
+@computation_function
 def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
     """Compute Canny filter with :py:func:`skimage.feature.canny`
 
@@ -96,6 +98,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
     return dst
 
 
+@computation_function
 def compute_roberts(src: ImageObj) -> ImageObj:
     """Compute Roberts filter with :py:func:`skimage.filters.roberts`
 
@@ -108,6 +111,7 @@ def compute_roberts(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.roberts)(src)
 
 
+@computation_function
 def compute_prewitt(src: ImageObj) -> ImageObj:
     """Compute Prewitt filter with :py:func:`skimage.filters.prewitt`
 
@@ -120,6 +124,7 @@ def compute_prewitt(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.prewitt)(src)
 
 
+@computation_function
 def compute_prewitt_h(src: ImageObj) -> ImageObj:
     """Compute horizontal Prewitt filter with :py:func:`skimage.filters.prewitt_h`
 
@@ -132,6 +137,7 @@ def compute_prewitt_h(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.prewitt_h)(src)
 
 
+@computation_function
 def compute_prewitt_v(src: ImageObj) -> ImageObj:
     """Compute vertical Prewitt filter with :py:func:`skimage.filters.prewitt_v`
 
@@ -144,6 +150,7 @@ def compute_prewitt_v(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.prewitt_v)(src)
 
 
+@computation_function
 def compute_sobel(src: ImageObj) -> ImageObj:
     """Compute Sobel filter with :py:func:`skimage.filters.sobel`
 
@@ -156,6 +163,7 @@ def compute_sobel(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.sobel)(src)
 
 
+@computation_function
 def compute_sobel_h(src: ImageObj) -> ImageObj:
     """Compute horizontal Sobel filter with :py:func:`skimage.filters.sobel_h`
 
@@ -168,6 +176,7 @@ def compute_sobel_h(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.sobel_h)(src)
 
 
+@computation_function
 def compute_sobel_v(src: ImageObj) -> ImageObj:
     """Compute vertical Sobel filter with :py:func:`skimage.filters.sobel_v`
 
@@ -180,6 +189,7 @@ def compute_sobel_v(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.sobel_v)(src)
 
 
+@computation_function
 def compute_scharr(src: ImageObj) -> ImageObj:
     """Compute Scharr filter with :py:func:`skimage.filters.scharr`
 
@@ -192,6 +202,7 @@ def compute_scharr(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.scharr)(src)
 
 
+@computation_function
 def compute_scharr_h(src: ImageObj) -> ImageObj:
     """Compute horizontal Scharr filter with :py:func:`skimage.filters.scharr_h`
 
@@ -204,6 +215,7 @@ def compute_scharr_h(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.scharr_h)(src)
 
 
+@computation_function
 def compute_scharr_v(src: ImageObj) -> ImageObj:
     """Compute vertical Scharr filter with :py:func:`skimage.filters.scharr_v`
 
@@ -216,6 +228,7 @@ def compute_scharr_v(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.scharr_v)(src)
 
 
+@computation_function
 def compute_farid(src: ImageObj) -> ImageObj:
     """Compute Farid filter with :py:func:`skimage.filters.farid`
 
@@ -228,6 +241,7 @@ def compute_farid(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.farid)(src)
 
 
+@computation_function
 def compute_farid_h(src: ImageObj) -> ImageObj:
     """Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`
 
@@ -240,6 +254,7 @@ def compute_farid_h(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.farid_h)(src)
 
 
+@computation_function
 def compute_farid_v(src: ImageObj) -> ImageObj:
     """Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`
 
@@ -252,6 +267,7 @@ def compute_farid_v(src: ImageObj) -> ImageObj:
     return Wrap1to1Func(filters.farid_v)(src)
 
 
+@computation_function
 def compute_laplace(src: ImageObj) -> ImageObj:
     """Compute Laplace filter with :py:func:`skimage.filters.laplace`
 

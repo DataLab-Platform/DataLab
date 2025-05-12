@@ -17,6 +17,7 @@ from __future__ import annotations
 import guidata.dataset as gds
 
 import cdl.algorithms.image as alg
+from cdl.computation import computation_function
 from cdl.computation.image import calc_resultshape
 from cdl.config import _
 from cdl.obj import ImageObj, ResultShape, ShapeTypes
@@ -52,6 +53,7 @@ class Peak2DDetectionParam(GenericDetectionParam):
     create_rois = gds.BoolItem(_("Create regions of interest"), default=True)
 
 
+@computation_function
 def compute_peak_detection(
     image: ImageObj, p: Peak2DDetectionParam
 ) -> ResultShape | None:
@@ -89,6 +91,7 @@ class ContourShapeParam(GenericDetectionParam):
     shape = gds.ChoiceItem(_("Shape"), shapes, default="ellipse")
 
 
+@computation_function
 def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
     """Compute contour shape fit
     with :py:func:`cdl.algorithms.image.get_contour_shapes`"""
@@ -151,6 +154,7 @@ class BlobDOGParam(BaseBlobParam):
     )
 
 
+@computation_function
 def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
     """Compute blobs using Difference of Gaussian method
     with :py:func:`cdl.algorithms.image.find_blobs_dog`
@@ -189,6 +193,7 @@ class BlobDOHParam(BaseBlobParam):
     )
 
 
+@computation_function
 def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
     """Compute blobs using Determinant of Hessian method
     with :py:func:`cdl.algorithms.image.find_blobs_doh`
@@ -223,6 +228,7 @@ class BlobLOGParam(BlobDOHParam):
     )
 
 
+@computation_function
 def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
     """Compute blobs using Laplacian of Gaussian method
     with :py:func:`cdl.algorithms.image.find_blobs_log`
@@ -385,6 +391,7 @@ class BlobOpenCVParam(gds.DataSet):
     ).set_prop("display", active=_prop_conv)
 
 
+@computation_function
 def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
     """Compute blobs using OpenCV
     with :py:func:`cdl.algorithms.image.find_blobs_opencv`
