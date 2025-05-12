@@ -23,16 +23,16 @@ def test_blobs():
         # Testing blob detection
         # ======================
         for paramclass, compute_method, name in (
-            (cdl.param.BlobDOGParam, proc.compute_blob_dog, "BlobDOG"),
-            (cdl.param.BlobDOHParam, proc.compute_blob_doh, "BlobDOH"),
-            (cdl.param.BlobLOGParam, proc.compute_blob_log, "BlobLOG"),
-            (cdl.param.BlobOpenCVParam, proc.compute_blob_opencv, "BlobOpenCV"),
+            (cdl.param.BlobDOGParam, "blob_dog", "BlobDOG"),
+            (cdl.param.BlobDOHParam, "blob_doh", "BlobDOH"),
+            (cdl.param.BlobLOGParam, "blob_log", "BlobLOG"),
+            (cdl.param.BlobOpenCVParam, "blob_opencv", "BlobOpenCV"),
         ):
             param = paramclass()
             image = create_image(name, data)
             image.add_label_with_title()
             panel.add_object(image)
-            compute_method(param)
+            proc.compute(compute_method, param)
 
         # Testing distribute_on_grid and reset_positions
         # ==============================================

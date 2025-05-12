@@ -27,12 +27,12 @@ def test_stat_app():
         panel = win.signalpanel
         panel.add_object(create_reference_signal())
         take_plotwidget_screenshot(panel, "stat_test")
-        panel.processor.compute_stats()
+        panel.processor.compute("stats")
         # === Image statistics test ===
         panel = win.imagepanel
         panel.add_object(create_reference_image())
         take_plotwidget_screenshot(panel, "stat_test")
-        panel.processor.compute_stats()
+        panel.processor.compute("stats")
 
 
 if __name__ == "__main__":

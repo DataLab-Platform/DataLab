@@ -60,8 +60,10 @@ class ExtractBlobs(cdl.plugins.PluginBase):
         """Preprocess image"""
         panel = self.imagepanel
         param = cdl.param.BinningParam.create(sx=2, sy=2)
-        panel.processor.compute_binning(param)
-        panel.processor.compute_moving_median(cdl.param.MovingMedianParam.create(n=5))
+        panel.processor.compute("binning", param)
+        panel.processor.compute(
+            "moving_median", cdl.param.MovingMedianParam.create(n=5)
+        )
 
     def detect_blobs(self) -> None:
         """Detect circular blobs"""
@@ -73,7 +75,7 @@ class ExtractBlobs(cdl.plugins.PluginBase):
         param.filter_by_circularity = True
         param.min_circularity = 0.8
         param.max_circularity = 1.0
-        panel.processor.compute_blob_opencv(param)
+        panel.processor.compute("blob_opencv", param)
 
     def create_actions(self) -> None:
         """Create actions"""

@@ -49,9 +49,9 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
 
     sig = create_paracetamol_signal()
     panel.add_object(sig)
-    panel.processor.compute(cps.compute_derivative)
+    panel.processor.compute(cps.derivative)
     panel.processor.compute(
-        cps.compute_moving_average, cdl.param.MovingAverageParam.create(n=5)
+        cps.moving_average, cdl.param.MovingAverageParam.create(n=5)
     )
 
     __print_test_result("`SimpleObjectTree.__str__` method", objview)

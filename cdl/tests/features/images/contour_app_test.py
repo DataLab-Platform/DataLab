@@ -25,13 +25,13 @@ def test_contour_app():
             ima1.metadata["colormap"] = "gray"
             panel.add_object(ima1)
             param = cdl.param.ContourShapeParam.create(shape=shape)
-            panel.processor.compute_contour_shape(param)
+            panel.processor.compute("contour_shape", param)
             take_plotwidget_screenshot(panel, "contour_test")
             ima2 = create_test_image_with_roi(newparam)
             ima2.metadata["colormap"] = "gray"
             panel.add_object(ima2)
             panel.processor.edit_regions_of_interest()
-            panel.processor.compute_contour_shape(param)
+            panel.processor.compute("contour_shape", param)
             if not execenv.unattended:
                 break
 

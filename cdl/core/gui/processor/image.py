@@ -44,130 +44,123 @@ class ImageProcessor(BaseProcessor[ImageROI]):
 
     def register_computations(self) -> None:
         """Register image computations"""
-
-        # TODO: Check if validation process has to be adapted to the new registering
-        # mechanism: is it currently relying on the scanning of "compute_*" methods
-        # of ImageProcessor? If that's so, it must be changed.
-
         # MARK: OPERATION
-        self.register_n_to_1(cpi.compute_sum, _("Sum"), icon_name="sum.svg")
-        self.register_n_to_1(cpi.compute_average, _("Average"), icon_name="average.svg")
+        self.register_n_to_1(cpi.sum, _("Sum"), icon_name="sum.svg")
+        self.register_n_to_1(cpi.average, _("Average"), icon_name="average.svg")
         self.register_2_to_1(
-            cpi.compute_difference,
+            cpi.difference,
             _("Difference"),
             icon_name="difference.svg",
             obj2_name=_("image to subtract"),
         )
         self.register_2_to_1(
-            cpi.compute_quadratic_difference,
+            cpi.quadratic_difference,
             _("Quadratic Difference"),
             icon_name="quadratic_difference.svg",
             obj2_name=_("image to subtract"),
         )
-        self.register_n_to_1(cpi.compute_product, _("Product"), icon_name="product.svg")
+        self.register_n_to_1(cpi.product, _("Product"), icon_name="product.svg")
         self.register_2_to_1(
-            cpi.compute_division,
+            cpi.division,
             _("Division"),
             icon_name="division.svg",
             obj2_name=_("divider"),
         )
-        self.register_1_to_1(cpi.compute_inverse, _("Inverse"), icon_name="inverse.svg")
+        self.register_1_to_1(cpi.inverse, _("Inverse"), icon_name="inverse.svg")
         self.register_2_to_1(
-            cpi.compute_arithmetic,
+            cpi.arithmetic,
             _("Arithmetic"),
             paramclass=cpb.ArithmeticParam,
             icon_name="arithmetic.svg",
             obj2_name=_("signal to operate with"),
         )
         self.register_1_to_1(
-            cpi.compute_addition_constant,
+            cpi.addition_constant,
             _("Add constant"),
             paramclass=cpb.ConstantParam,
             icon_name="constant_add.svg",
         )
         self.register_1_to_1(
-            cpi.compute_difference_constant,
+            cpi.difference_constant,
             _("Subtract constant"),
             paramclass=cpb.ConstantParam,
             icon_name="constant_subtract.svg",
         )
         self.register_1_to_1(
-            cpi.compute_product_constant,
+            cpi.product_constant,
             _("Multiply by constant"),
             paramclass=cpb.ConstantParam,
             icon_name="constant_multiply.svg",
         )
         self.register_1_to_1(
-            cpi.compute_division_constant,
+            cpi.division_constant,
             _("Divide by constant"),
             paramclass=cpb.ConstantParam,
             icon_name="constant_divide.svg",
         )
-        self.register_1_to_1(cpi.compute_abs, _("Absolute value"), icon_name="abs.svg")
-        self.register_1_to_1(cpi.compute_re, _("Real part"), icon_name="re.svg")
-        self.register_1_to_1(cpi.compute_im, _("Imaginary part"), icon_name="im.svg")
+        self.register_1_to_1(cpi.abs, _("Absolute value"), icon_name="abs.svg")
+        self.register_1_to_1(cpi.re, _("Real part"), icon_name="re.svg")
+        self.register_1_to_1(cpi.im, _("Imaginary part"), icon_name="im.svg")
         self.register_1_to_1(
-            cpi.compute_astype,
+            cpi.astype,
             _("Convert data type"),
             paramclass=cdl.param.DataTypeSParam,
             icon_name="convert_dtype.svg",
         )
-        self.register_1_to_1(cpi.compute_exp, _("Exponential"), icon_name="exp.svg")
-        self.register_1_to_1(
-            cpi.compute_log10, _("Logarithm (base 10)"), icon_name="log10.svg"
-        )
-        self.register_1_to_1(cpi.compute_logp1, "Log10(z+n)")
+        self.register_1_to_1(cpi.exp, _("Exponential"), icon_name="exp.svg")
+        self.register_1_to_1(cpi.log10, _("Logarithm (base 10)"), icon_name="log10.svg")
+        self.register_1_to_1(cpi.logp1, "Log10(z+n)")
         self.register_2_to_1(
-            cpi.compute_flatfield,
+            cpi.flatfield,
             _("Flat-field correction"),
             cpi.FlatFieldParam,
             obj2_name=_("flat field image"),
         )
         # Flip or rotation
         self.register_1_to_1(
-            cpi.compute_fliph, _("Flip horizontally"), icon_name="flip_horizontally.svg"
+            cpi.fliph, _("Flip horizontally"), icon_name="flip_horizontally.svg"
         )
         self.register_1_to_1(
-            cpi.compute_swap_axes, _("Flip diagonally"), icon_name="swap_x_y.svg"
+            cpi.swap_axes, _("Flip diagonally"), icon_name="swap_x_y.svg"
         )
         self.register_1_to_1(
-            cpi.compute_flipv, _("Flip vertically"), icon_name="flip_vertically.svg"
+            cpi.flipv, _("Flip vertically"), icon_name="flip_vertically.svg"
         )
         self.register_1_to_1(
-            cpi.compute_rotate270,
+            cpi.rotate270,
             _("Rotate %s right") % "90°",
             icon_name="rotate_right.svg",
         )
         self.register_1_to_1(
-            cpi.compute_rotate90,
+            cpi.rotate90,
             _("Rotate %s left") % "90°",
             icon_name="rotate_left.svg",
         )
-        self.register_1_to_1(cpi.compute_rotate, _("Rotate by..."), cpi.RotateParam)
+        self.register_1_to_1(cpi.rotate, _("Rotate by..."), cpi.RotateParam)
         # Intensity profiles
         self.register_1_to_1(
-            cpi.compute_line_profile,
+            cpi.line_profile,
             _("Line profile"),
             cpi.LineProfileParam,
             icon_name="profile.svg",
             edit=False,
         )
         self.register_1_to_1(
-            cpi.compute_segment_profile,
+            cpi.segment_profile,
             _("Segment profile"),
             cpi.SegmentProfileParam,
             icon_name="profile_segment.svg",
             edit=False,
         )
         self.register_1_to_1(
-            cpi.compute_average_profile,
+            cpi.average_profile,
             _("Average profile"),
             cpi.AverageProfileParam,
             icon_name="profile_average.svg",
             edit=False,
         )
         self.register_1_to_1(
-            cpi.compute_radial_profile,
+            cpi.radial_profile,
             _("Radial profile"),
             cpi.RadialProfileParam,
             icon_name="profile_radial.svg",
@@ -176,21 +169,21 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         # MARK: PROCESSING
         # Axis transformation
         self.register_1_to_1(
-            cpi.compute_calibration, _("Linear calibration"), cpi.ZCalibrateParam
+            cpi.calibration, _("Linear calibration"), cpi.ZCalibrateParam
         )
         self.register_1_to_1(
-            cpi.compute_swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg"
+            cpi.swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg"
         )
         # Level adjustment
         self.register_1_to_1(
-            cpi.compute_normalize,
+            cpi.normalize,
             _("Normalize"),
             paramclass=cpb.NormalizeParam,
             icon_name="normalize.svg",
         )
-        self.register_1_to_1(cpi.compute_clip, _("Clipping"), cpi.ClipParam, "clip.svg")
+        self.register_1_to_1(cpi.clip, _("Clipping"), cpi.ClipParam, "clip.svg")
         self.register_1_to_1(
-            cpi.compute_offset_correction,
+            cpi.offset_correction,
             _("Offset correction"),
             ROI2DParam,
             comment=_("Evaluate and subtract the offset value from the data"),
@@ -198,18 +191,18 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         )
         # Noise reduction
         self.register_1_to_1(
-            cpi.compute_gaussian_filter, _("Gaussian filter"), cpb.GaussianParam
+            cpi.gaussian_filter, _("Gaussian filter"), cpb.GaussianParam
         )
         self.register_1_to_1(
-            cpi.compute_moving_average, _("Moving average"), cpb.MovingAverageParam
+            cpi.moving_average, _("Moving average"), cpb.MovingAverageParam
         )
         self.register_1_to_1(
-            cpi.compute_moving_median, _("Moving median"), cpb.MovingMedianParam
+            cpi.moving_median, _("Moving median"), cpb.MovingMedianParam
         )
-        self.register_1_to_1(cpi.compute_wiener, _("Wiener filter"))
+        self.register_1_to_1(cpi.wiener, _("Wiener filter"))
         # Fourier analysis
         self.register_1_to_1(
-            cpi.compute_zero_padding,
+            cpi.zero_padding,
             _("Zero padding"),
             cpi.ZeroPadding2DParam,
             comment=_(
@@ -217,7 +210,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             ),
         )
         self.register_1_to_1(
-            cpi.compute_fft,
+            cpi.fft,
             _("FFT"),
             cpb.FFTParam,
             comment=_(
@@ -228,7 +221,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             edit=False,
         )
         self.register_1_to_1(
-            cpi.compute_ifft,
+            cpi.ifft,
             _("Inverse FFT"),
             cpb.FFTParam,
             comment=_(
@@ -239,7 +232,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             edit=False,
         )
         self.register_1_to_1(
-            cpi.compute_magnitude_spectrum,
+            cpi.magnitude_spectrum,
             _("Magnitude spectrum"),
             paramclass=cdl.param.SpectrumParam,
             comment=_(
@@ -248,7 +241,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             ),
         )
         self.register_1_to_1(
-            cpi.compute_phase_spectrum,
+            cpi.phase_spectrum,
             _("Phase spectrum"),
             comment=_(
                 "Phase spectrum is the angle of the FFT result. "
@@ -256,7 +249,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             ),
         )
         self.register_1_to_1(
-            cpi.compute_psd,
+            cpi.psd,
             _("Power spectral density"),
             paramclass=cdl.param.SpectrumParam,
             comment=_(
@@ -266,7 +259,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         )
         # Thresholding
         self.register_1_to_1(
-            cpi_thr.compute_threshold,
+            cpi_thr.threshold,
             _("Parametric thresholding"),
             cpi_thr.ThresholdParam,
             comment=_(
@@ -274,186 +267,182 @@ class ImageProcessor(BaseProcessor[ImageROI]):
                 "and a threshold value."
             ),
         )
-        self.register_1_to_1(
-            cpi_thr.compute_threshold_isodata, _("ISODATA thresholding")
-        )
-        self.register_1_to_1(cpi_thr.compute_threshold_li, _("Li thresholding"))
-        self.register_1_to_1(cpi_thr.compute_threshold_mean, _("Mean thresholding"))
-        self.register_1_to_1(
-            cpi_thr.compute_threshold_minimum, _("Minimum thresholding")
-        )
-        self.register_1_to_1(cpi_thr.compute_threshold_otsu, _("Otsu thresholding"))
-        self.register_1_to_1(
-            cpi_thr.compute_threshold_triangle, _("Triangle thresholding")
-        )
-        self.register_1_to_1(cpi_thr.compute_threshold_yen, _("Li thresholding"))
+        self.register_1_to_1(cpi_thr.threshold_isodata, _("ISODATA thresholding"))
+        self.register_1_to_1(cpi_thr.threshold_li, _("Li thresholding"))
+        self.register_1_to_1(cpi_thr.threshold_mean, _("Mean thresholding"))
+        self.register_1_to_1(cpi_thr.threshold_minimum, _("Minimum thresholding"))
+        self.register_1_to_1(cpi_thr.threshold_otsu, _("Otsu thresholding"))
+        self.register_1_to_1(cpi_thr.threshold_triangle, _("Triangle thresholding"))
+        self.register_1_to_1(cpi_thr.threshold_yen, _("Li thresholding"))
         # Exposure
         self.register_1_to_1(
-            cpi_exp.compute_adjust_gamma,
+            cpi_exp.adjust_gamma,
             _("Gamma correction"),
             cpi_exp.AdjustGammaParam,
         )
         self.register_1_to_1(
-            cpi_exp.compute_adjust_log,
+            cpi_exp.adjust_log,
             _("Logarithmic correction"),
             cpi_exp.AdjustLogParam,
         )
         self.register_1_to_1(
-            cpi_exp.compute_adjust_sigmoid,
+            cpi_exp.adjust_sigmoid,
             _("Sigmoid correction"),
             cpi_exp.AdjustSigmoidParam,
         )
         self.register_1_to_1(
-            cpi_exp.compute_equalize_hist,
+            cpi_exp.equalize_hist,
             _("Histogram equalization"),
             cpi_exp.EqualizeHistParam,
         )
         self.register_1_to_1(
-            cpi_exp.compute_equalize_adapthist,
+            cpi_exp.equalize_adapthist,
             _("Adaptive histogram equalization"),
             cpi_exp.EqualizeAdaptHistParam,
         )
         self.register_1_to_1(
-            cpi_exp.compute_rescale_intensity,
+            cpi_exp.rescale_intensity,
             _("Intensity rescaling"),
             cpi_exp.RescaleIntensityParam,
         )
         # Restoration
         self.register_1_to_1(
-            cpi_res.compute_denoise_tv,
+            cpi_res.denoise_tv,
             _("Total variation denoising"),
             cpi_res.DenoiseTVParam,
         )
         self.register_1_to_1(
-            cpi_res.compute_denoise_bilateral,
+            cpi_res.denoise_bilateral,
             _("Bilateral filter denoising"),
             cpi_res.DenoiseBilateralParam,
         )
         self.register_1_to_1(
-            cpi_res.compute_denoise_wavelet,
+            cpi_res.denoise_wavelet,
             _("Wavelet denoising"),
             cpi_res.DenoiseWaveletParam,
         )
         self.register_1_to_1(
-            cpi_res.compute_denoise_tophat,
+            cpi_res.denoise_tophat,
             _("White Top-hat denoising"),
             cpi_res.MorphologyParam,
         )
         # Morphology
         self.register_1_to_1(
-            cpi_mor.compute_white_tophat,
+            cpi_mor.white_tophat,
             _("White Top-Hat (disk)"),
             cpi_mor.MorphologyParam,
         )
         self.register_1_to_1(
-            cpi_mor.compute_black_tophat,
+            cpi_mor.black_tophat,
             _("Black Top-Hat (disk)"),
             cpi_mor.MorphologyParam,
         )
         self.register_1_to_1(
-            cpi_mor.compute_erosion,
+            cpi_mor.erosion,
             _("Erosion (disk)"),
             cpi_mor.MorphologyParam,
         )
         self.register_1_to_1(
-            cpi_mor.compute_dilation,
+            cpi_mor.dilation,
             _("Dilation (disk)"),
             cpi_mor.MorphologyParam,
         )
         self.register_1_to_1(
-            cpi_mor.compute_opening,
+            cpi_mor.opening,
             _("Opening (disk)"),
             cpi_mor.MorphologyParam,
         )
         self.register_1_to_1(
-            cpi_mor.compute_closing,
+            cpi_mor.closing,
             _("Closing (disk)"),
             cpi_mor.MorphologyParam,
         )
         # Edges
-        self.register_1_to_1(cpi_edg.compute_roberts, _("Roberts filter"))
-        self.register_1_to_1(cpi_edg.compute_prewitt, _("Prewitt filter"))
-        self.register_1_to_1(
-            cpi_edg.compute_prewitt_h, _("Prewitt filter (horizontal)")
-        )
-        self.register_1_to_1(cpi_edg.compute_prewitt_v, _("Prewitt filter (vertical)"))
-        self.register_1_to_1(cpi_edg.compute_sobel, _("Sobel filter"))
-        self.register_1_to_1(cpi_edg.compute_sobel_h, _("Sobel filter (horizontal)"))
-        self.register_1_to_1(cpi_edg.compute_sobel_v, _("Sobel filter (vertical)"))
-        self.register_1_to_1(cpi_edg.compute_scharr, _("Scharr filter"))
-        self.register_1_to_1(cpi_edg.compute_scharr_h, _("Scharr filter (horizontal)"))
-        self.register_1_to_1(cpi_edg.compute_scharr_v, _("Scharr filter (vertical)"))
-        self.register_1_to_1(cpi_edg.compute_farid, _("Farid filter"))
-        self.register_1_to_1(cpi_edg.compute_farid_h, _("Farid filter (horizontal)"))
-        self.register_1_to_1(cpi_edg.compute_farid_v, _("Farid filter (vertical)"))
-        self.register_1_to_1(cpi_edg.compute_laplace, _("Laplace filter"))
-        self.register_1_to_1(
-            cpi_edg.compute_canny, _("Canny filter"), cpi_edg.CannyParam
-        )
+        self.register_1_to_1(cpi_edg.roberts, _("Roberts filter"))
+        self.register_1_to_1(cpi_edg.prewitt, _("Prewitt filter"))
+        self.register_1_to_1(cpi_edg.prewitt_h, _("Prewitt filter (horizontal)"))
+        self.register_1_to_1(cpi_edg.prewitt_v, _("Prewitt filter (vertical)"))
+        self.register_1_to_1(cpi_edg.sobel, _("Sobel filter"))
+        self.register_1_to_1(cpi_edg.sobel_h, _("Sobel filter (horizontal)"))
+        self.register_1_to_1(cpi_edg.sobel_v, _("Sobel filter (vertical)"))
+        self.register_1_to_1(cpi_edg.scharr, _("Scharr filter"))
+        self.register_1_to_1(cpi_edg.scharr_h, _("Scharr filter (horizontal)"))
+        self.register_1_to_1(cpi_edg.scharr_v, _("Scharr filter (vertical)"))
+        self.register_1_to_1(cpi_edg.farid, _("Farid filter"))
+        self.register_1_to_1(cpi_edg.farid_h, _("Farid filter (horizontal)"))
+        self.register_1_to_1(cpi_edg.farid_v, _("Farid filter (vertical)"))
+        self.register_1_to_1(cpi_edg.laplace, _("Laplace filter"))
+        self.register_1_to_1(cpi_edg.canny, _("Canny filter"), cpi_edg.CannyParam)
         # Other processing
         self.register_1_to_1(
-            cpi.compute_butterworth, _("Butterworth filter"), cpi.ButterworthParam
+            cpi.butterworth, _("Butterworth filter"), cpi.ButterworthParam
         )
-        self.register_1_to_n(cpi.compute_extract_roi, "ROI", icon_name="roi.svg")
+        self.register_1_to_n(cpi.extract_roi, "ROI", icon_name="roi.svg")
         self.register_1_to_1(
-            cpi.compute_resize, _("Resize"), cpi.ResizeParam, icon_name="resize.svg"
+            cpi.resize, _("Resize"), cpi.ResizeParam, icon_name="resize.svg"
         )
         self.register_1_to_1(
-            cpi.compute_binning,
+            cpi.binning,
             _("Pixel binning"),
             cpi.BinningParam,
             icon_name="binning.svg",
         )
 
         # MARK: ANALYSIS
-        self.register_1_to_0(cpi.compute_stats, _("Statistics"), icon_name="stats.svg")
+        self.register_1_to_0(cpi.stats, _("Statistics"), icon_name="stats.svg")
         self.register_1_to_1(
-            cpi.compute_histogram,
+            cpi.histogram,
             _("Histogram"),
             paramclass=cpi.HistogramParam,
             icon_name="histogram.svg",
         )
         self.register_1_to_0(
-            cpi.compute_centroid, _("Centroid"), comment=_("Compute image centroid")
+            cpi.centroid, _("Centroid"), comment=_("Compute image centroid")
         )
         self.register_1_to_0(
-            cpi.compute_enclosing_circle,
+            cpi.enclosing_circle,
             _("Minimum enclosing circle center"),
             comment=_("Compute smallest enclosing circle center"),
         )
         self.register_1_to_0(
-            cpi_det.compute_contour_shape,
+            cpi_det.contour_shape,
             _("Contour detection"),
             cpi_det.ContourShapeParam,
             comment=_("Compute contour shape fit"),
         )
         self.register_1_to_0(
-            cpi.compute_hough_circle_peaks,
+            cpi_det.peak_detection,
+            _("Peak detection"),
+            cpi_det.Peak2DDetectionParam,
+            comment=_("Detect peaks in the image"),
+        )
+        self.register_1_to_0(
+            cpi.hough_circle_peaks,
             _("Circle Hough transform"),
             cpi.HoughCircleParam,
             comment=_("Detect circular shapes using circle Hough transform"),
         )
         # Blob detection
         self.register_1_to_0(
-            cpi_det.compute_blob_dog,
+            cpi_det.blob_dog,
             _("Blob detection (DOG)"),
             cpi_det.BlobDOGParam,
             comment=_("Detect blobs using Difference of Gaussian (DOG) method"),
         )
         self.register_1_to_0(
-            cpi_det.compute_blob_doh,
+            cpi_det.blob_doh,
             _("Blob detection (DOH)"),
             cpi_det.BlobDOHParam,
             comment=_("Detect blobs using Difference of Gaussian (DOH) method"),
         )
         self.register_1_to_0(
-            cpi_det.compute_blob_log,
+            cpi_det.blob_log,
             _("Blob detection (LOG)"),
             cpi_det.BlobLOGParam,
             comment=_("Detect blobs using Laplacian of Gaussian (LOG) method"),
         )
         self.register_1_to_0(
-            cpi_det.compute_blob_opencv,
+            cpi_det.blob_opencv,
             _("Blob detection (OpenCV)"),
             cpi_det.BlobOpenCVParam,
             comment=_("Detect blobs using OpenCV SimpleBlobDetector"),
@@ -461,7 +450,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
 
     @qt_try_except()
     def compute_resize(self, param: cdl.param.ResizeParam | None = None) -> None:
-        """Resize image with :py:func:`cdl.computation.image.compute_resize`"""
+        """Resize image with :py:func:`cdl.computation.image.resize`"""
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         for obj in self.panel.objview.get_sel_objects():
             if obj.data.shape != obj0.data.shape:
@@ -488,7 +477,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
 
     @qt_try_except()
     def compute_binning(self, param: cdl.param.BinningParam | None = None) -> None:
-        """Binning image with :py:func:`cdl.computation.image.compute_binning`"""
+        """Binning image with :py:func:`cdl.computation.image.binning`"""
         edit = param is None
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         input_dtype_str = str(obj0.data.dtype)
@@ -505,7 +494,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         self, param: cdl.param.LineProfileParam | None = None
     ) -> None:
         """Compute profile along a vertical or horizontal line
-        with :py:func:`cdl.computation.image.compute_line_profile`"""
+        with :py:func:`cdl.computation.image.line_profile`"""
         title = _("Profile")
         add_initial_shape = self.has_param_defaults(cdl.param.LineProfileParam)
         edit, param = self.init_param(param, cpi.LineProfileParam, title)
@@ -525,7 +514,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         self, param: cdl.param.SegmentProfileParam | None = None
     ):
         """Compute profile along a segment
-        with :py:func:`cdl.computation.image.compute_segment_profile`"""
+        with :py:func:`cdl.computation.image.segment_profile`"""
         title = _("Profile")
         add_initial_shape = self.has_param_defaults(cdl.param.SegmentProfileParam)
         edit, param = self.init_param(param, cpi.SegmentProfileParam, title)
@@ -545,7 +534,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         self, param: cdl.param.AverageProfileParam | None = None
     ) -> None:
         """Compute average profile
-        with :py:func:`cdl.computation.image.compute_average_profile`"""
+        with :py:func:`cdl.computation.image.average_profile`"""
         title = _("Average profile")
         add_initial_shape = self.has_param_defaults(cdl.param.AverageProfileParam)
         edit, param = self.init_param(param, cpi.AverageProfileParam, title)
@@ -565,7 +554,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         self, param: cdl.param.RadialProfileParam | None = None
     ) -> None:
         """Compute radial profile
-        with :py:func:`cdl.computation.image.compute_radial_profile`"""
+        with :py:func:`cdl.computation.image.radial_profile`"""
         title = _("Radial profile")
         edit, param = self.init_param(param, cpi.RadialProfileParam, title)
         if edit:
@@ -650,7 +639,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
     @qt_try_except()
     def compute_offset_correction(self, param: ROI2DParam | None = None) -> None:
         """Compute offset correction
-        with :py:func:`cdl.computation.image.compute_offset_correction`"""
+        with :py:func:`cdl.computation.image.offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
             dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
@@ -667,23 +656,23 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         """Compute all threshold algorithms
         using the following functions:
 
-        - :py:func:`cdl.computation.image.threshold.compute_threshold_isodata`
-        - :py:func:`cdl.computation.image.threshold.compute_threshold_li`
-        - :py:func:`cdl.computation.image.threshold.compute_threshold_mean`
-        - :py:func:`cdl.computation.image.threshold.compute_threshold_minimum`
-        - :py:func:`cdl.computation.image.threshold.compute_threshold_otsu`
-        - :py:func:`cdl.computation.image.threshold.compute_threshold_triangle`
-        - :py:func:`cdl.computation.image.threshold.compute_threshold_yen`
+        - :py:func:`cdl.computation.image.threshold.threshold_isodata`
+        - :py:func:`cdl.computation.image.threshold.threshold_li`
+        - :py:func:`cdl.computation.image.threshold.threshold_mean`
+        - :py:func:`cdl.computation.image.threshold.threshold_minimum`
+        - :py:func:`cdl.computation.image.threshold.threshold_otsu`
+        - :py:func:`cdl.computation.image.threshold.threshold_triangle`
+        - :py:func:`cdl.computation.image.threshold.threshold_yen`
         """
         self.compute_multiple_1_to_1(
             [
-                cpi_thr.compute_threshold_isodata,
-                cpi_thr.compute_threshold_li,
-                cpi_thr.compute_threshold_mean,
-                cpi_thr.compute_threshold_minimum,
-                cpi_thr.compute_threshold_otsu,
-                cpi_thr.compute_threshold_triangle,
-                cpi_thr.compute_threshold_yen,
+                cpi_thr.threshold_isodata,
+                cpi_thr.threshold_li,
+                cpi_thr.threshold_mean,
+                cpi_thr.threshold_minimum,
+                cpi_thr.threshold_otsu,
+                cpi_thr.threshold_triangle,
+                cpi_thr.threshold_yen,
             ],
             None,
             "Threshold",
@@ -695,18 +684,18 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         """Compute all denoising filters
         using the following functions:
 
-        - :py:func:`cdl.computation.image.restoration.compute_denoise_tv`
-        - :py:func:`cdl.computation.image.restoration.compute_denoise_bilateral`
-        - :py:func:`cdl.computation.image.restoration.compute_denoise_wavelet`
-        - :py:func:`cdl.computation.image.restoration.compute_denoise_tophat`
+        - :py:func:`cdl.computation.image.restoration.denoise_tv`
+        - :py:func:`cdl.computation.image.restoration.denoise_bilateral`
+        - :py:func:`cdl.computation.image.restoration.denoise_wavelet`
+        - :py:func:`cdl.computation.image.restoration.denoise_tophat`
         """
         if params is not None:
             assert len(params) == 4, "Wrong number of parameters (4 expected)"
         funcs = [
-            cpi_res.compute_denoise_tv,
-            cpi_res.compute_denoise_bilateral,
-            cpi_res.compute_denoise_wavelet,
-            cpi_res.compute_denoise_tophat,
+            cpi_res.denoise_tv,
+            cpi_res.denoise_bilateral,
+            cpi_res.denoise_wavelet,
+            cpi_res.denoise_tophat,
         ]
         edit = params is None
         if edit:
@@ -729,24 +718,24 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         """Compute all morphology filters
         using the following functions:
 
-        - :py:func:`cdl.computation.image.morphology.compute_white_tophat`
-        - :py:func:`cdl.computation.image.morphology.compute_black_tophat`
-        - :py:func:`cdl.computation.image.morphology.compute_erosion`
-        - :py:func:`cdl.computation.image.morphology.compute_dilation`
-        - :py:func:`cdl.computation.image.morphology.compute_opening`
-        - :py:func:`cdl.computation.image.morphology.compute_closing`
+        - :py:func:`cdl.computation.image.morphology.white_tophat`
+        - :py:func:`cdl.computation.image.morphology.black_tophat`
+        - :py:func:`cdl.computation.image.morphology.erosion`
+        - :py:func:`cdl.computation.image.morphology.dilation`
+        - :py:func:`cdl.computation.image.morphology.opening`
+        - :py:func:`cdl.computation.image.morphology.closing`
         """
         if param is None:
             param = cpi_mor.MorphologyParam()
             if not param.edit(parent=self.panel.parent()):
                 return
         funcs = [
-            cpi_mor.compute_white_tophat,
-            cpi_mor.compute_black_tophat,
-            cpi_mor.compute_erosion,
-            cpi_mor.compute_dilation,
-            cpi_mor.compute_opening,
-            cpi_mor.compute_closing,
+            cpi_mor.white_tophat,
+            cpi_mor.black_tophat,
+            cpi_mor.erosion,
+            cpi_mor.dilation,
+            cpi_mor.opening,
+            cpi_mor.closing,
         ]
         self.compute_multiple_1_to_1(funcs, [param] * len(funcs), "Morph", edit=False)
 
@@ -755,43 +744,43 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         """Compute all edges filters
         using the following functions:
 
-        - :py:func:`cdl.computation.image.edges.compute_roberts`
-        - :py:func:`cdl.computation.image.edges.compute_prewitt`
-        - :py:func:`cdl.computation.image.edges.compute_prewitt_h`
-        - :py:func:`cdl.computation.image.edges.compute_prewitt_v`
-        - :py:func:`cdl.computation.image.edges.compute_sobel`
-        - :py:func:`cdl.computation.image.edges.compute_sobel_h`
-        - :py:func:`cdl.computation.image.edges.compute_sobel_v`
-        - :py:func:`cdl.computation.image.edges.compute_scharr`
-        - :py:func:`cdl.computation.image.edges.compute_scharr_h`
-        - :py:func:`cdl.computation.image.edges.compute_scharr_v`
-        - :py:func:`cdl.computation.image.edges.compute_farid`
-        - :py:func:`cdl.computation.image.edges.compute_farid_h`
-        - :py:func:`cdl.computation.image.edges.compute_farid_v`
-        - :py:func:`cdl.computation.image.edges.compute_laplace`
+        - :py:func:`cdl.computation.image.edges.roberts`
+        - :py:func:`cdl.computation.image.edges.prewitt`
+        - :py:func:`cdl.computation.image.edges.prewitt_h`
+        - :py:func:`cdl.computation.image.edges.prewitt_v`
+        - :py:func:`cdl.computation.image.edges.sobel`
+        - :py:func:`cdl.computation.image.edges.sobel_h`
+        - :py:func:`cdl.computation.image.edges.sobel_v`
+        - :py:func:`cdl.computation.image.edges.scharr`
+        - :py:func:`cdl.computation.image.edges.scharr_h`
+        - :py:func:`cdl.computation.image.edges.scharr_v`
+        - :py:func:`cdl.computation.image.edges.farid`
+        - :py:func:`cdl.computation.image.edges.farid_h`
+        - :py:func:`cdl.computation.image.edges.farid_v`
+        - :py:func:`cdl.computation.image.edges.laplace`
         """
         funcs = [
-            cpi_edg.compute_roberts,
-            cpi_edg.compute_prewitt,
-            cpi_edg.compute_prewitt_h,
-            cpi_edg.compute_prewitt_v,
-            cpi_edg.compute_sobel,
-            cpi_edg.compute_sobel_h,
-            cpi_edg.compute_sobel_v,
-            cpi_edg.compute_scharr,
-            cpi_edg.compute_scharr_h,
-            cpi_edg.compute_scharr_v,
-            cpi_edg.compute_farid,
-            cpi_edg.compute_farid_h,
-            cpi_edg.compute_farid_v,
-            cpi_edg.compute_laplace,
+            cpi_edg.roberts,
+            cpi_edg.prewitt,
+            cpi_edg.prewitt_h,
+            cpi_edg.prewitt_v,
+            cpi_edg.sobel,
+            cpi_edg.sobel_h,
+            cpi_edg.sobel_v,
+            cpi_edg.scharr,
+            cpi_edg.scharr_h,
+            cpi_edg.scharr_v,
+            cpi_edg.farid,
+            cpi_edg.farid_h,
+            cpi_edg.farid_v,
+            cpi_edg.laplace,
         ]
         self.compute_multiple_1_to_1(funcs, None, "Edges")
 
     @qt_try_except()
     def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
-        self.compute_1_to_1(cpi.compute_extract_rois, group, title=_("Extract ROI"))
+        self.compute_1_to_1(cpi.extract_rois, group, title=_("Extract ROI"))
 
     # ------Image Analysis
     @qt_try_except()
@@ -799,7 +788,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         self, param: cdl.param.Peak2DDetectionParam | None = None
     ) -> dict[str, ResultShape]:
         """Compute 2D peak detection
-        with :py:func:`cdl.computation.image.compute_peak_detection`"""
+        with :py:func:`cdl.computation.image.peak_detection`"""
         edit, param = self.init_param(
             param, cpi_det.Peak2DDetectionParam, _("Peak detection")
         )
@@ -807,12 +796,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             data = self.panel.objview.get_sel_objects(include_groups=True)[0].data
             param.size = max(min(data.shape) // 40, 50)
 
-        results = self.compute_1_to_0(
-            cpi_det.compute_peak_detection,
-            param,
-            edit=edit,
-            title=_("Peak detection"),
-        )
+        results = self.compute("peak_detection", param, edit=edit)
         if results is not None and param.create_rois and len(results.items()) > 1:
             with create_progress_bar(
                 self.panel, _("Create regions of interest"), max_=len(results)

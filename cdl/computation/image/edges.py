@@ -66,7 +66,7 @@ class CannyParam(gds.DataSet):
 
 
 @computation_function
-def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
+def canny(src: ImageObj, p: CannyParam) -> ImageObj:
     """Compute Canny filter with :py:func:`skimage.feature.canny`
 
     Args:
@@ -99,7 +99,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
 
 
 @computation_function
-def compute_roberts(src: ImageObj) -> ImageObj:
+def roberts(src: ImageObj) -> ImageObj:
     """Compute Roberts filter with :py:func:`skimage.filters.roberts`
 
     Args:
@@ -112,7 +112,7 @@ def compute_roberts(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_prewitt(src: ImageObj) -> ImageObj:
+def prewitt(src: ImageObj) -> ImageObj:
     """Compute Prewitt filter with :py:func:`skimage.filters.prewitt`
 
     Args:
@@ -125,7 +125,7 @@ def compute_prewitt(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_prewitt_h(src: ImageObj) -> ImageObj:
+def prewitt_h(src: ImageObj) -> ImageObj:
     """Compute horizontal Prewitt filter with :py:func:`skimage.filters.prewitt_h`
 
     Args:
@@ -138,7 +138,7 @@ def compute_prewitt_h(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_prewitt_v(src: ImageObj) -> ImageObj:
+def prewitt_v(src: ImageObj) -> ImageObj:
     """Compute vertical Prewitt filter with :py:func:`skimage.filters.prewitt_v`
 
     Args:
@@ -151,7 +151,7 @@ def compute_prewitt_v(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_sobel(src: ImageObj) -> ImageObj:
+def sobel(src: ImageObj) -> ImageObj:
     """Compute Sobel filter with :py:func:`skimage.filters.sobel`
 
     Args:
@@ -164,7 +164,7 @@ def compute_sobel(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_sobel_h(src: ImageObj) -> ImageObj:
+def sobel_h(src: ImageObj) -> ImageObj:
     """Compute horizontal Sobel filter with :py:func:`skimage.filters.sobel_h`
 
     Args:
@@ -177,7 +177,7 @@ def compute_sobel_h(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_sobel_v(src: ImageObj) -> ImageObj:
+def sobel_v(src: ImageObj) -> ImageObj:
     """Compute vertical Sobel filter with :py:func:`skimage.filters.sobel_v`
 
     Args:
@@ -190,7 +190,7 @@ def compute_sobel_v(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_scharr(src: ImageObj) -> ImageObj:
+def scharr(src: ImageObj) -> ImageObj:
     """Compute Scharr filter with :py:func:`skimage.filters.scharr`
 
     Args:
@@ -203,7 +203,7 @@ def compute_scharr(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_scharr_h(src: ImageObj) -> ImageObj:
+def scharr_h(src: ImageObj) -> ImageObj:
     """Compute horizontal Scharr filter with :py:func:`skimage.filters.scharr_h`
 
     Args:
@@ -216,7 +216,7 @@ def compute_scharr_h(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_scharr_v(src: ImageObj) -> ImageObj:
+def scharr_v(src: ImageObj) -> ImageObj:
     """Compute vertical Scharr filter with :py:func:`skimage.filters.scharr_v`
 
     Args:
@@ -229,7 +229,7 @@ def compute_scharr_v(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_farid(src: ImageObj) -> ImageObj:
+def farid(src: ImageObj) -> ImageObj:
     """Compute Farid filter with :py:func:`skimage.filters.farid`
 
     Args:
@@ -242,7 +242,7 @@ def compute_farid(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_farid_h(src: ImageObj) -> ImageObj:
+def farid_h(src: ImageObj) -> ImageObj:
     """Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`
 
     Args:
@@ -255,7 +255,7 @@ def compute_farid_h(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_farid_v(src: ImageObj) -> ImageObj:
+def farid_v(src: ImageObj) -> ImageObj:
     """Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`
 
     Args:
@@ -268,7 +268,7 @@ def compute_farid_v(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def compute_laplace(src: ImageObj) -> ImageObj:
+def laplace(src: ImageObj) -> ImageObj:
     """Compute Laplace filter with :py:func:`skimage.filters.laplace`
 
     Args:

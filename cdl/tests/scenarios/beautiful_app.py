@@ -20,8 +20,6 @@ A high-level test scenario producing beautiful screenshots.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show,skip
 
-import cdl.computation.image as cpi
-import cdl.computation.signal as cps
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.tests import cdltest_app_context
@@ -36,14 +34,14 @@ def run_beautiful_scenario(screenshots: bool = False):
         newparam = dlo.new_signal_param(stype=dlo.SignalTypes.LORENTZ)
         sig = dlo.create_signal_from_param(newparam)
         panel.add_object(sig)
-        panel.processor.compute(cps.compute_fft)
-        panel.processor.compute(cps.compute_wiener)
-        panel.processor.compute(cps.compute_derivative)
-        panel.processor.compute(cps.compute_integral)
+        panel.processor.compute("fft")
+        panel.processor.compute("wiener")
+        panel.processor.compute("derivative")
+        panel.processor.compute("integral")
         param = dlp.GaussianParam()
-        panel.processor.compute(cps.compute_gaussian_filter, param)
-        panel.processor.compute(cps.compute_fft)
-        panel.processor.compute(cps.compute_derivative)
+        panel.processor.compute("gaussian_filter", param)
+        panel.processor.compute("fft")
+        panel.processor.compute("derivative")
         if screenshots:
             win.statusBar().hide()
             win.take_screenshot("s_beautiful")
@@ -55,12 +53,12 @@ def run_beautiful_scenario(screenshots: bool = False):
         ima = dlo.create_image_from_param(newparam)
         ima.metadata["colormap"] = "jet"
         panel.add_object(ima)
-        panel.processor.compute_equalize_hist(dlp.EqualizeHistParam())
-        panel.processor.compute_equalize_adapthist(dlp.EqualizeAdaptHistParam())
-        panel.processor.compute_denoise_tv(dlp.DenoiseTVParam())
-        panel.processor.compute_denoise_wavelet(dlp.DenoiseWaveletParam())
-        panel.processor.compute_white_tophat(dlp.MorphologyParam())
-        panel.processor.compute_denoise_tv(dlp.DenoiseTVParam())
+        panel.processor.compute("equalize_hist", dlp.EqualizeHistParam())
+        panel.processor.compute("equalize_adapthist", dlp.EqualizeAdaptHistParam())
+        panel.processor.compute("denoise_tv", dlp.DenoiseTVParam())
+        panel.processor.compute("denoise_wavelet", dlp.DenoiseWaveletParam())
+        panel.processor.compute("white_tophat", dlp.MorphologyParam())
+        panel.processor.compute("denoise_tv", dlp.DenoiseTVParam())
         n = data_size // 3
         roi = dlo.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]

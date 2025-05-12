@@ -191,14 +191,12 @@ class ComputingFeature:
 
     @property
     def name(self) -> str:
-        """Return the name of the computing feature.
-        The name is derived from the function name by removing the prefix
-        'compute_'."""
+        """Return the name of the computing feature."""
         if self.function is None:
             raise ValueError(
                 "ComputingFeature must have a 'function' to derive its name."
             )
-        return self.function.__name__.removeprefix("compute_")
+        return self.function.__name__
 
     @property
     def action_title(self) -> str:
@@ -389,7 +387,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         ) as progress:
             for i_row, obj in enumerate(objs):
                 for i_param, (param, func) in enumerate(zip(params, funcs)):
-                    name = func.__name__.removeprefix("compute_")
+                    name = func.__name__
                     i_title = f"{title} ({i_row + 1}/{len(objs)})"
                     progress.setLabelText(i_title)
                     pvalue = (i_row + 1) * (i_param + 1)
@@ -651,7 +649,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 return None
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         current_obj = self.panel.objview.get_current_object()
-        title = func.__name__.removeprefix("compute_") if title is None else title
+        title = func.__name__ if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             results: dict[str, ResultShape | ResultProperties] = {}
             xlabels = None
@@ -744,7 +742,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode()
-        name = func.__name__.removeprefix("compute_")
+        name = func.__name__
 
         if pairwise:
             src_grps, src_gids, src_objs, _nbobj, valid = (
@@ -908,7 +906,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 if objs2 is None:
                     return
 
-            name = func.__name__.removeprefix("compute_")
+            name = func.__name__
             n_pairs = len(src_objs[src_gids[0]])
             max_i_pair = min(n_pairs, max(len(src_objs[grp.uuid]) for grp in src_grps))
             grp2_id = objmodel.get_object_group_id(objs2[0])

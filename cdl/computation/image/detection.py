@@ -54,9 +54,7 @@ class Peak2DDetectionParam(GenericDetectionParam):
 
 
 @computation_function
-def compute_peak_detection(
-    image: ImageObj, p: Peak2DDetectionParam
-) -> ResultShape | None:
+def peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> ResultShape | None:
     """Compute 2D peak detection
     with :py:func:`cdl.algorithms.image.get_2d_peaks_coords`
 
@@ -92,7 +90,7 @@ class ContourShapeParam(GenericDetectionParam):
 
 
 @computation_function
-def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
+def contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
     """Compute contour shape fit
     with :py:func:`cdl.algorithms.image.get_contour_shapes`"""
     return calc_resultshape(
@@ -155,7 +153,7 @@ class BlobDOGParam(BaseBlobParam):
 
 
 @computation_function
-def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
+def blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
     """Compute blobs using Difference of Gaussian method
     with :py:func:`cdl.algorithms.image.find_blobs_dog`
 
@@ -194,7 +192,7 @@ class BlobDOHParam(BaseBlobParam):
 
 
 @computation_function
-def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
+def blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
     """Compute blobs using Determinant of Hessian method
     with :py:func:`cdl.algorithms.image.find_blobs_doh`
 
@@ -229,7 +227,7 @@ class BlobLOGParam(BlobDOHParam):
 
 
 @computation_function
-def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
+def blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
     """Compute blobs using Laplacian of Gaussian method
     with :py:func:`cdl.algorithms.image.find_blobs_log`
 
@@ -392,7 +390,7 @@ class BlobOpenCVParam(gds.DataSet):
 
 
 @computation_function
-def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
+def blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
     """Compute blobs using OpenCV
     with :py:func:`cdl.algorithms.image.find_blobs_opencv`
 

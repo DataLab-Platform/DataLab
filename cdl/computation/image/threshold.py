@@ -57,7 +57,7 @@ class ThresholdParam(gds.DataSet):
 
 
 @computation_function
-def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
+def threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
     """Compute the threshold, using one of the available algorithms:
 
     - Manual: a fixed threshold value
@@ -96,7 +96,7 @@ def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
 
 
 @computation_function
-def compute_threshold_isodata(src: ImageObj) -> ImageObj:
+def threshold_isodata(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Isodata algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_isodata`
 
@@ -106,11 +106,11 @@ def compute_threshold_isodata(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="isodata"))
+    return threshold(src, ThresholdParam.create(method="isodata"))
 
 
 @computation_function
-def compute_threshold_li(src: ImageObj) -> ImageObj:
+def threshold_li(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Li algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_li`
 
@@ -120,11 +120,11 @@ def compute_threshold_li(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="li"))
+    return threshold(src, ThresholdParam.create(method="li"))
 
 
 @computation_function
-def compute_threshold_mean(src: ImageObj) -> ImageObj:
+def threshold_mean(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Mean algorithm,
     see :py:func:`skimage.filters.threshold_mean`
 
@@ -134,11 +134,11 @@ def compute_threshold_mean(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="mean"))
+    return threshold(src, ThresholdParam.create(method="mean"))
 
 
 @computation_function
-def compute_threshold_minimum(src: ImageObj) -> ImageObj:
+def threshold_minimum(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Minimum algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_minimum`
 
@@ -148,11 +148,11 @@ def compute_threshold_minimum(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="minimum"))
+    return threshold(src, ThresholdParam.create(method="minimum"))
 
 
 @computation_function
-def compute_threshold_otsu(src: ImageObj) -> ImageObj:
+def threshold_otsu(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Otsu algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_otsu`
 
@@ -162,11 +162,11 @@ def compute_threshold_otsu(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="otsu"))
+    return threshold(src, ThresholdParam.create(method="otsu"))
 
 
 @computation_function
-def compute_threshold_triangle(src: ImageObj) -> ImageObj:
+def threshold_triangle(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Triangle algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_triangle`
 
@@ -176,11 +176,11 @@ def compute_threshold_triangle(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="triangle"))
+    return threshold(src, ThresholdParam.create(method="triangle"))
 
 
 @computation_function
-def compute_threshold_yen(src: ImageObj) -> ImageObj:
+def threshold_yen(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Yen algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_yen`
 
@@ -190,4 +190,4 @@ def compute_threshold_yen(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="yen"))
+    return threshold(src, ThresholdParam.create(method="yen"))

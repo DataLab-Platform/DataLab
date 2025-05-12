@@ -61,7 +61,7 @@ def test_single_operand_mode_compute_n1():
         view.select_groups(groups)
 
         # Perform a sum operation
-        panel.processor.compute_sum()
+        panel.processor.compute("sum")
 
         # Default operation mode is single operand mode, so the sum operation
         # is applied to the selected groups, and we should have a new group
@@ -90,7 +90,7 @@ def test_single_operand_mode_compute_n1():
         view.select_objects(objs)
 
         # Perform a sum operation
-        panel.processor.compute_sum()
+        panel.processor.compute("sum")
 
         # Default operation mode is single operand mode, so the sum operation
         # is applied to the selected signals, and we should have a new resulting
@@ -135,7 +135,7 @@ def test_pairwise_operations_mode_compute_n1():
         assert all(len(group) == n_objects for group in groups)
 
         # Perform a sum operation
-        panel.processor.compute_sum()
+        panel.processor.compute("sum")
 
         # Operation mode is now pairwise, so the sum operation is applied to the
         # selected groups, and we should have a new group with as many signals as
@@ -166,7 +166,7 @@ def test_pairwise_operations_mode_compute_n1():
         view.select_objects(objs)
 
         # Perform a sum operation
-        panel.processor.compute_sum()
+        panel.processor.compute("sum")
 
         # Operation mode is now pairwise, so the sum operation is applied to the
         # selected signals, and we should have a new group with as many signals as
@@ -210,7 +210,7 @@ def test_single_operand_mode_compute_n1n():
 
         # Perform a difference operation with the first signal of the third group
         group3 = model.get_group_from_number(3)
-        panel.processor.compute_difference(group3[0])
+        panel.processor.compute("difference", group3[0])
 
         # Default operation mode is single operand mode, so we should have new signals
         # in each selected group being the difference between the original signals and
@@ -247,7 +247,7 @@ def test_single_operand_mode_compute_n1n():
         n_objects = [2, 2]
 
         # Perform a difference operation with the first signal of the third group
-        panel.processor.compute_difference(group3[0])
+        panel.processor.compute("difference", group3[0])
 
         # Default operation mode is single operand mode, so we should have new signals
         # being the difference between the original signals and the selected signal:
@@ -300,7 +300,7 @@ def test_pairwise_operations_mode_compute_n1n():
         # Perform a difference operation with the third group
         group3 = model.get_group_from_number(3)
         assert len(group3) == n_objects
-        panel.processor.compute_difference(group3.get_objects())
+        panel.processor.compute("difference", group3.get_objects())
 
         # Operation mode is now pairwise, so the difference operation is applied to the
         # selected groups, and we should have a new group with as many signals as the
@@ -338,7 +338,7 @@ def test_pairwise_operations_mode_compute_n1n():
 
         # Perform a difference operation with two signals from the third group
         objs2 = group3[:2]
-        panel.processor.compute_difference(objs2)
+        panel.processor.compute("difference", objs2)
 
         # Operation mode is now pairwise, so the difference operation is applied to the
         # selected signals, and we should have a new group with as many signals as the

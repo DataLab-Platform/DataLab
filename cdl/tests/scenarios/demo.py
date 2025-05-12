@@ -58,20 +58,20 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     # compute_common_operations(panel)
     panel.objview.select_objects((1, 2))
     qt_wait(DELAY1)
-    panel.processor.compute_sum()
+    panel.processor.compute("sum")
     qt_wait(DELAY1)
 
-    panel.processor.compute_normalize()
-    panel.processor.compute_derivative()
-    panel.processor.compute_integral()
+    panel.processor.compute("normalize")
+    panel.processor.compute("derivative")
+    panel.processor.compute("integral")
 
     panel.objview.set_current_object(sig1)
     qt_wait(DELAY1)
-    panel.processor.compute_detrending()
+    panel.processor.compute("detrending")
     sig3 = panel.objview.get_current_object()
 
     param = dlp.PeakDetectionParam()
-    panel.processor.compute_peak_detection(param)
+    panel.processor.compute("peak_detection", param)
     sig4 = panel.objview.get_current_object()
     panel.objview.select_objects([sig3, sig4])
 
@@ -86,8 +86,8 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     )
     panel.add_object(sig)
 
-    panel.processor.compute_fwhm()
-    panel.processor.compute_fw1e2()
+    panel.processor.compute("fwhm")
+    panel.processor.compute("fw1e2")
 
     qt_wait(DELAY2)
 
@@ -119,11 +119,11 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     panel.add_object(ima2)
 
     panel.objview.select_objects((1, 2))
-    panel.processor.compute_sum()
+    panel.processor.compute("sum")
     qt_wait(DELAY2)
     # compute_common_operations(panel)
 
-    panel.processor.compute_histogram()
+    panel.processor.compute("histogram")
     qt_wait(DELAY2)
 
     newparam.title = None
@@ -132,15 +132,15 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
 
     qt_wait(DELAY3)
 
-    panel.processor.compute_rotate90()
-    panel.processor.compute_rotate270()
-    panel.processor.compute_fliph()
-    panel.processor.compute_flipv()
+    panel.processor.compute("rotate90")
+    panel.processor.compute("rotate270")
+    panel.processor.compute("flip_h")
+    panel.processor.compute("flip_v")
 
     param = dlp.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
-        panel.processor.compute_rotate(param)
+        panel.processor.compute("rotate", param)
 
     newparam.title = None
     ima1 = create_multigauss_image(newparam)
@@ -154,11 +154,11 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
 
     qt_wait(DELAY2)
 
-    panel.processor.compute_centroid()
+    panel.processor.compute("centroid")
 
     qt_wait(DELAY1)
 
-    panel.processor.compute_enclosing_circle()
+    panel.processor.compute("enclosing_circle")
 
     qt_wait(DELAY2)
 
@@ -166,12 +166,12 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     ima = create_peak2d_image(newparam)
     panel.add_object(ima)
     param = dlp.Peak2DDetectionParam.create(create_rois=True)
-    panel.processor.compute_peak_detection(param)
+    panel.processor.compute("peak_detection", param)
 
     qt_wait(DELAY2)
 
     param = dlp.ContourShapeParam()
-    panel.processor.compute_contour_shape(param)
+    panel.processor.compute("contour_shape", param)
 
     qt_wait(DELAY2)
 

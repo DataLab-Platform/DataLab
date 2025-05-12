@@ -22,7 +22,7 @@ def test_peak2d():
         ima = create_peak2d_image()
         panel.add_object(ima)
         param = cdl.param.Peak2DDetectionParam.create(create_rois=True)
-        panel.processor.compute_peak_detection(param)
+        panel.processor.compute("peak_detection", param)
         win.toggle_show_titles(False)
         take_plotwidget_screenshot(panel, "peak2d_test")
 

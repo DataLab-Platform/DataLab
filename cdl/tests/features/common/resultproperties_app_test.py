@@ -33,8 +33,8 @@ def test_resultproperties():
             noiseparam.sigma = sigma
             sig = test_data.create_noisy_signal(noiseparam=noiseparam)
             panel.add_object(sig)
-            panel.processor.compute_dynamic_parameters()
-            panel.processor.compute_contrast()
+            panel.processor.compute("dynamic_parameters")
+            panel.processor.compute("contrast")
         panel.objview.selectAll()
         panel.show_results()
         panel.plot_results()

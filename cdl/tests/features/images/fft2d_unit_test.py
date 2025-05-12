@@ -58,7 +58,7 @@ def test_image_zero_padding() -> None:
 
     # Validate the zero padding with bottom-right position
     param.position = "bottom-right"
-    ima2 = cpi.compute_zero_padding(ima1, param)
+    ima2 = cpi.zero_padding(ima1, param)
     sh1, sh2 = ima1.data.shape, ima2.data.shape
     exp_sh2 = (sh1[0] + rows, sh1[1] + cols)
     execenv.print("Validating zero padding for bottom-right position...", end=" ")
@@ -73,7 +73,7 @@ def test_image_zero_padding() -> None:
 
     # Validate the zero padding with center position
     param.position = "center"
-    ima3 = cpi.compute_zero_padding(ima1, param)
+    ima3 = cpi.zero_padding(ima1, param)
     sh3 = ima3.data.shape
     exp_sh3 = (sh1[0] + rows, sh1[1] + cols)
     execenv.print("Validating zero padding for center position...", end=" ")
@@ -118,8 +118,8 @@ def test_image_zero_padding() -> None:
 def test_image_fft() -> None:
     """2D FFT validation test."""
     ima1 = ctd.create_checkerboard()
-    fft = cpi.compute_fft(ima1)
-    ifft = cpi.compute_ifft(fft)
+    fft = cpi.fft(ima1)
+    ifft = cpi.ifft(fft)
 
     # Check that the inverse FFT reconstructs the original image
     check_array_result("Checkerboard image FFT/iFFT", ifft.data.real, ima1.data)
@@ -142,8 +142,8 @@ def test_image_ifft() -> None:
 def test_image_magnitude_spectrum() -> None:
     """2D magnitude spectrum validation test."""
     ima1 = ctd.create_checkerboard()
-    fft = cpi.compute_fft(ima1)
-    mag = cpi.compute_magnitude_spectrum(ima1)
+    fft = cpi.fft(ima1)
+    mag = cpi.magnitude_spectrum(ima1)
 
     # Check that the magnitude spectrum is correct
     exp = np.abs(fft.data)
@@ -154,8 +154,8 @@ def test_image_magnitude_spectrum() -> None:
 def test_image_phase_spectrum() -> None:
     """2D phase spectrum validation test."""
     ima1 = ctd.create_checkerboard()
-    fft = cpi.compute_fft(ima1)
-    phase = cpi.compute_phase_spectrum(ima1)
+    fft = cpi.fft(ima1)
+    phase = cpi.phase_spectrum(ima1)
 
     # Check that the phase spectrum is correct
     exp = np.rad2deg(np.angle(fft.data))
@@ -166,10 +166,10 @@ def test_image_phase_spectrum() -> None:
 def test_image_psd() -> None:
     """2D Power Spectral Density validation test."""
     ima1 = ctd.create_checkerboard()
-    psd = cpi.compute_psd(ima1)
+    psd = cpi.psd(ima1)
 
     # Check that the PSD is correct
-    exp = np.abs(cpi.compute_fft(ima1).data) ** 2
+    exp = np.abs(cpi.fft(ima1).data) ** 2
     check_array_result("Checkerboard image PSD", psd.data, exp)
 
 

@@ -37,7 +37,7 @@ def test_image_average():
             obj.data = data
             panel.add_object(obj)
         panel.objview.select_groups([0])
-        panel.processor.compute_average()
+        panel.processor.compute("average")
         res_data = panel.objview.get_sel_objects(include_groups=True)[0].data
     exp_data = np.array(data, dtype=float)
     check_array_result("Average", res_data, exp_data)
