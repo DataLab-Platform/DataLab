@@ -142,6 +142,18 @@ def computation_function(
     return decorator if func is None else decorator(func)
 
 
+def is_computation_function(function: Callable) -> bool:
+    """Check if a function is a DataLab computation function.
+
+    Args:
+        function: The function to check.
+
+    Returns:
+        True if the function is a DataLab computation function, False otherwise.
+    """
+    return getattr(function, COMPUTATION_MARKER, False)
+
+
 def find_computation_functions(
     module: ModuleType | None = None,
 ) -> list[tuple[str, Callable]]:
@@ -167,6 +179,6 @@ def find_computation_functions(
         except Exception:
             continue
         for name, obj in inspect.getmembers(module, inspect.isfunction):
-            if getattr(obj, COMPUTATION_MARKER, False):
+            if is_computation_function(obj):
                 functions.append((modname, name, obj.__doc__))
     return functions

@@ -25,6 +25,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl import env
+from cdl.computation import is_computation_function
 from cdl.config import Conf, _
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.model.base import ResultProperties, ResultShape, TypeROI
@@ -180,6 +181,13 @@ class ComputingFeature:
     comment: Optional[str] = None
     edit: Optional[bool] = None
     obj2_name: Optional[str] = None
+
+    def __post_init__(self):
+        """Validate the function after initialization."""
+        if self.function is not None and not is_computation_function(self.function):
+            raise ValueError(
+                f"'{self.function.__name__}' is not a valid computation function."
+            )
 
     @property
     def name(self) -> str:
