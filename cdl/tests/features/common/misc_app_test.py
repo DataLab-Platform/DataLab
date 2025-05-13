@@ -16,7 +16,7 @@ from __future__ import annotations
 import os.path as osp
 from typing import TYPE_CHECKING, Any
 
-import cdl.obj
+import cdl.computation.signal as cps
 import cdl.param
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
@@ -49,8 +49,10 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
 
     sig = create_paracetamol_signal()
     panel.add_object(sig)
-    panel.processor.compute_derivative()
-    panel.processor.compute_moving_average(cdl.param.MovingAverageParam.create(n=5))
+    panel.processor.run_feature(cps.derivative)
+    panel.processor.run_feature(
+        cps.moving_average, cdl.param.MovingAverageParam.create(n=5)
+    )
 
     __print_test_result("`SimpleObjectTree.__str__` method", objview)
 

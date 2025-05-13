@@ -17,6 +17,7 @@ from __future__ import annotations
 import guidata.dataset as gds
 
 import cdl.algorithms.image as alg
+from cdl.computation import computation_function
 from cdl.computation.image import calc_resultshape
 from cdl.config import _
 from cdl.obj import ImageObj, ResultShape, ShapeTypes
@@ -52,9 +53,8 @@ class Peak2DDetectionParam(GenericDetectionParam):
     create_rois = gds.BoolItem(_("Create regions of interest"), default=True)
 
 
-def compute_peak_detection(
-    image: ImageObj, p: Peak2DDetectionParam
-) -> ResultShape | None:
+@computation_function
+def peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> ResultShape | None:
     """Compute 2D peak detection
     with :py:func:`cdl.algorithms.image.get_2d_peaks_coords`
 
@@ -89,7 +89,8 @@ class ContourShapeParam(GenericDetectionParam):
     shape = gds.ChoiceItem(_("Shape"), shapes, default="ellipse")
 
 
-def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
+@computation_function
+def contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
     """Compute contour shape fit
     with :py:func:`cdl.algorithms.image.get_contour_shapes`"""
     return calc_resultshape(
@@ -151,7 +152,8 @@ class BlobDOGParam(BaseBlobParam):
     )
 
 
-def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
+@computation_function
+def blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
     """Compute blobs using Difference of Gaussian method
     with :py:func:`cdl.algorithms.image.find_blobs_dog`
 
@@ -189,7 +191,8 @@ class BlobDOHParam(BaseBlobParam):
     )
 
 
-def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
+@computation_function
+def blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
     """Compute blobs using Determinant of Hessian method
     with :py:func:`cdl.algorithms.image.find_blobs_doh`
 
@@ -223,7 +226,8 @@ class BlobLOGParam(BlobDOHParam):
     )
 
 
-def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
+@computation_function
+def blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
     """Compute blobs using Laplacian of Gaussian method
     with :py:func:`cdl.algorithms.image.find_blobs_log`
 
@@ -385,7 +389,8 @@ class BlobOpenCVParam(gds.DataSet):
     ).set_prop("display", active=_prop_conv)
 
 
-def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
+@computation_function
+def blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
     """Compute blobs using OpenCV
     with :py:func:`cdl.algorithms.image.find_blobs_opencv`
 

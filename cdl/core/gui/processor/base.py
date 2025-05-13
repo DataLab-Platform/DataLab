@@ -12,9 +12,9 @@ import abc
 import multiprocessing
 import time
 import warnings
-from collections.abc import Callable
+from dataclasses import dataclass
 from multiprocessing.pool import Pool
-from typing import TYPE_CHECKING, Any, Generic, Union
+from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional, Union
 
 import guidata.dataset as gds
 import numpy as np
@@ -25,7 +25,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl import env
-from cdl.algorithms.datatypes import is_complex_dtype
+from cdl.computation import is_computation_function
 from cdl.config import Conf, _
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.model.base import ResultProperties, ResultShape, TypeROI
@@ -37,15 +37,6 @@ if TYPE_CHECKING:
 
     from plotpy.plot import PlotWidget
 
-    from cdl.computation.base import (
-        ArithmeticParam,
-        ClipParam,
-        ConstantParam,
-        GaussianParam,
-        MovingAverageParam,
-        MovingMedianParam,
-        NormalizeParam,
-    )
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
     from cdl.core.model.image import ImageObj
@@ -167,6 +158,57 @@ def is_pairwise_mode() -> bool:
     return state
 
 
+@dataclass
+class ComputingFeature:
+    """Computing feature dataclass.
+
+    Args:
+        pattern: pattern
+        function: function
+        paramclass: parameter class
+        title: title
+        icon_name: icon name
+        comment: comment
+        edit: whether to edit the parameters
+        obj2_name: name of the second object
+    """
+
+    pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
+    function: Optional[Callable] = None
+    paramclass: Optional[type] = None
+    title: Optional[str] = None
+    icon_name: Optional[str] = None
+    comment: Optional[str] = None
+    edit: Optional[bool] = None
+    obj2_name: Optional[str] = None
+
+    def __post_init__(self):
+        """Validate the function after initialization."""
+        if self.function is not None and not is_computation_function(self.function):
+            raise ValueError(
+                f"'{self.function.__name__}' is not a valid computation function."
+            )
+
+    @property
+    def name(self) -> str:
+        """Return the name of the computing feature."""
+        if self.function is None:
+            raise ValueError(
+                "ComputingFeature must have a 'function' to derive its name."
+            )
+        return self.function.__name__
+
+    @property
+    def action_title(self) -> str:
+        """Return the action title of the computing feature."""
+        title = self.title
+        if (
+            self.paramclass is not None and (self.edit is None or self.edit)
+        ) or self.pattern == "1_to_0":
+            title += "..."
+        return title
+
+
 class BaseProcessor(QC.QObject, Generic[TypeROI]):
     """Object handling data processing: operations, processing, analysis.
 
@@ -185,6 +227,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         self.plotwidget = plotwidget
         self.worker: Worker | None = None
         self.set_process_isolation_enabled(Conf.main.process_isolation_enabled.get())
+        self.computing_registry: dict[str, ComputingFeature] = {}
+        self.register_computations()
 
     def close(self):
         """Close processor properly"""
@@ -206,6 +250,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             if self.worker is not None:
                 self.worker.terminate_pool()
                 self.worker = None
+
+    @abc.abstractmethod
+    def register_computations(self) -> None:
+        """Register signal computations"""
+        # This method is used to register the computation functions in the
+        # computing registry. It is called in the constructor of the
+        # BaseProcessor class, so it must be implemented in the derived classes.
 
     def has_param_defaults(self, paramclass: type[gds.DataSet]) -> bool:
         """Return True if parameter defaults are available.
@@ -253,6 +304,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         if edit:
             param = paramclass(title, comment)
             self.update_param_defaults(param)
+            if hasattr(param, "update_from_obj"):
+                obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+                param.update_from_obj(obj)
         return edit, param
 
     def handle_output(
@@ -334,7 +388,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         ) as progress:
             for i_row, obj in enumerate(objs):
                 for i_param, (param, func) in enumerate(zip(params, funcs)):
-                    name = func.__name__.replace("compute_", "")
+                    name = func.__name__
                     i_title = f"{title} ({i_row + 1}/{len(objs)})"
                     progress.setLabelText(i_title)
                     pvalue = (i_row + 1) * (i_param + 1)
@@ -452,7 +506,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         The result of each computation is a new object appended to the same panel.
 
         Args:
-            func: Function to execute.
+            func: Function to execute, that takes either `(dst_obj, src_obj)` or
+             `(dst_obj, src_obj, param)` as arguments, where `dst_obj` is the output
+             object, `src_obj` is the input object, and `param` is an optional
+             parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
@@ -466,35 +523,32 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             This method does not support pairwise mode.
         """
         if (edit is None or param is None) and paramclass is not None:
+            old_edit = edit
             edit, param = self.init_param(param, paramclass, title, comment)
+            if old_edit is not None:
+                edit = old_edit
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
-        self.mainwindow.historypanel.add_entry(
-            title,
-            True,
-            self.compute_1_to_1,
-            func,
-            param=param,
-            title=title,
-            comment=comment,
-        )
         self._compute_1_to_1_subroutine([func], [param], title)
 
-    def compute_1_to_n(
+    def compute_multiple_1_to_1(
         self,
-        funcs: list[Callable] | Callable,
-        params: list | None = None,
+        funcs: list[Callable],
+        params: list[gds.DataSet] | None = None,
         title: str | None = None,
         edit: bool | None = None,
     ) -> None:
         """Generic processing method: 1 object in → n objects out.
 
-        Applies one or more functions to each selected object, generating multiple
+        Applies multiple functions to each selected object, generating multiple
         outputs per object. The resulting objects are appended to the active panel.
 
         Args:
-            funcs: Single function or list of functions to apply.
+            funcs: List of functions to apply. Each function takes either
+             `(dst_obj, src_obj)` or `(dst_obj, src_obj, param)` as arguments,
+             where `dst_obj` is the output object, `src_obj` is the input object,
+             and `param` is an optional parameter set.
             params: List of parameter instances corresponding to each function.
             title: Optional progress bar title.
             edit: Whether to open the parameter editor before execution.
@@ -507,25 +561,58 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             This method does not support pairwise mode.
         """
         if params is None:
-            assert not isinstance(funcs, Callable)
             params = [None] * len(funcs)
         else:
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if edit and not group.edit(parent=self.panel.parent()):
                 return
-            if isinstance(funcs, Callable):
-                funcs = [funcs] * len(params)
-            else:
-                assert len(funcs) == len(params)
+            if len(funcs) != len(params):
+                raise ValueError("Number of functions must match number of parameters")
+        self._compute_1_to_1_subroutine(funcs, params, title)
+
+    def compute_1_to_n(
+        self,
+        func: Callable,
+        params: list[gds.DataSet],
+        title: str | None = None,
+        edit: bool | None = None,
+    ) -> None:
+        """Generic processing method: 1 object in → n objects out.
+
+        Applies a single function to each selected object, with n different parameters
+        set, thus generating n outputs per object. The resulting objects are appended to
+        the active panel.
+
+        Args:
+            func: Single function to apply, that takes either `(dst_obj, src_obj)`
+             or `(dst_obj, src_obj, param)` as arguments,
+             where `dst_obj` is the output object, `src_obj` is the input object,
+             and `param` is an optional parameter set.
+            params: List of parameter instances.
+            title: Optional progress bar title.
+            edit: Whether to open the parameter editor before execution.
+
+        .. note::
+            With k selected objects and n parameter sets,
+            the method produces k × n outputs.
+
+        .. note::
+            This method does not support pairwise mode.
+        """
+        assert params is not None
+        if edit:
+            group = gds.DataSetGroup(params, title=_("Parameters"))
+            if not group.edit(parent=self.panel.parent()):
+                return
         self.mainwindow.historypanel.add_entry(
             title,
             True,
             self.compute_1_to_n,
-            funcs,
+            func,
             params=params,
             title=title,
         )
-        self._compute_1_to_1_subroutine(funcs, params, title)
+        self._compute_1_to_1_subroutine([func] * len(params), params, title)
 
     def compute_1_to_0(
         self,
@@ -544,7 +631,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         dictionary.
 
         Args:
-            func: Function to execute.
+            func: Function to execute, that takes either `(obj)` or `(obj, param)` as
+             arguments, where `obj` is the input object and `param` is an optional
+             parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
@@ -569,7 +658,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 return None
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         current_obj = self.panel.objview.get_current_object()
-        title = func.__name__.replace("compute_", "") if title is None else title
+        title = func.__name__ if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             results: dict[str, ResultShape | ResultProperties] = {}
             xlabels = None
@@ -623,13 +712,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
     def compute_n_to_1(
         self,
-        name: str,
         func: Callable,
         param: gds.DataSet | None = None,
         paramclass: gds.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
-        func_objs: Callable | None = None,
         edit: bool | None = None,
         pairwise: bool | None = None,
     ) -> None:
@@ -640,13 +727,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         index) and generates one output per pair.
 
         Args:
-            name: Operation name (used for object titles).
-            func: Function to apply to object(s).
+            func: Function to apply, that takes either `(dst_obj, src_obj_list)` or
+             `(dst_obj, src_obj_list, param)` as arguments, where `dst_obj` is the
+             output object, `src_obj_list` is the input object list,
+             and `param` is an optional parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
-            func_objs: Optional post-processing callback for result objects.
             edit: Whether to open the parameter editor before execution.
             pairwise: if None, use current operation mode. If True, use pairwise mode.
              If False, use single operand mode. Defaults to None.
@@ -663,6 +751,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             if edit and not param.edit(parent=self.panel.parent()):
                 return
 
+        objs = self.panel.objview.get_sel_objects(include_groups=True)
+        objmodel = self.panel.objmodel
+        pairwise = is_pairwise_mode() if pairwise is None else pairwise
+        name = func.__name__
+
         self.mainwindow.historypanel.add_entry(
             name,
             True,
@@ -671,13 +764,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             param=param,
             title=title,
             comment=comment,
-            func_objs=func_objs,
             pairwise=pairwise,
         )
-
-        objs = self.panel.objview.get_sel_objects(include_groups=True)
-        objmodel = self.panel.objmodel
-        pairwise = is_pairwise_mode() if pairwise is None else pairwise
 
         if pairwise:
             src_grps, src_gids, src_objs, _nbobj, valid = (
@@ -700,90 +788,29 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     src_obj1: SignalObj | ImageObj
                     progress.setValue(i_pair + 1)
                     progress.setLabelText(title)
-                    src_dtype = src_obj1.data.dtype
-                    dst_dtype = complex if is_complex_dtype(src_dtype) else float
-                    dst_obj = src_obj1.copy(dtype=dst_dtype)
-                    if not Conf.proc.keep_results.get():
-                        dst_obj.delete_results()  # Remove any previous results
                     src_objs_pair = [src_obj1]
                     for src_gid in src_gids[1:]:
                         src_obj = src_objs[src_gid][i_pair]
                         src_objs_pair.append(src_obj)
-                        if param is None:
-                            args = (dst_obj, src_obj)
-                        else:
-                            args = (dst_obj, src_obj, param)
-                        result = self.__exec_func(func, args, progress)
-                        if result is None:
-                            break
-                        dst_obj = self.handle_output(
-                            result, _("Calculating: %s") % title, progress
-                        )
-                        if dst_obj is None:
-                            break
-                        if Conf.proc.keep_results.get():
-                            dst_obj.update_resultshapes_from(src_obj)
-                        if src_obj.roi is not None:
-                            if dst_obj.roi is None:
-                                dst_obj.roi = src_obj.roi.copy()
-                            else:
-                                roi = dst_obj.roi
-                                roi.add_roi(src_obj.roi)
-                                dst_obj.roi = roi
-                    if func_objs is not None:
-                        func_objs(dst_obj, src_objs_pair)
-                    short_ids = [obj.short_id for obj in src_objs_pair]
-                    dst_obj.title = f"{name}({', '.join(short_ids)})"
-                    self.panel.add_object(dst_obj, group_id=dst_gid)
+                    if param is None:
+                        args = (src_objs_pair,)
+                    else:
+                        args = (src_objs_pair, param)
+                    result = self.__exec_func(func, args, progress)
+                    if result is None:
+                        break
+                    new_obj = self.handle_output(
+                        result, _("Calculating: %s") % title, progress
+                    )
+                    if new_obj is None:
+                        break
+                    self.panel.add_object(new_obj, group_id=dst_gid)
 
         else:
             # In single operand mode, we create a single object for all selected objects
 
-            # [new_objs dictionary] keys: old group id, values: new object
-            dst_objs: dict[str, Obj] = {}
-            # [src_dtypes dictionary] keys: old group id, values: old data type
-            src_dtypes: dict[str, np.dtype] = {}
             # [src_objs dictionary] keys: old group id, values: list of old objects
             src_objs: dict[str, list[Obj]] = {}
-
-            with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-                for index, src_obj in enumerate(objs):
-                    progress.setValue(index + 1)
-                    progress.setLabelText(title)
-                    src_gid = objmodel.get_object_group_id(src_obj)
-                    dst_obj = dst_objs.get(src_gid)
-                    if dst_obj is None:
-                        src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
-                        dst_dtype = complex if is_complex_dtype(src_dtype) else float
-                        dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
-                        if not Conf.proc.keep_results.get():
-                            dst_obj.delete_results()  # Remove any previous results
-                        dst_obj.roi = None
-                        src_objs[src_gid] = [src_obj]
-                    else:
-                        src_objs[src_gid].append(src_obj)
-                        if param is None:
-                            args = (dst_obj, src_obj)
-                        else:
-                            args = (dst_obj, src_obj, param)
-                        result = self.__exec_func(func, args, progress)
-                        if result is None:
-                            break
-                        dst_obj = self.handle_output(
-                            result, _("Calculating: %s") % title, progress
-                        )
-                        if dst_obj is None:
-                            break
-                        dst_objs[src_gid] = dst_obj
-                        if Conf.proc.keep_results.get():
-                            dst_obj.update_resultshapes_from(src_obj)
-                    if src_obj.roi is not None:
-                        if dst_obj.roi is None:
-                            dst_obj.roi = src_obj.roi.copy()
-                        else:
-                            roi = dst_obj.roi
-                            roi.add_roi(src_obj.roi)
-                            dst_obj.roi = roi
 
             grps = self.panel.objview.get_sel_groups()
             if grps:
@@ -796,13 +823,28 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 # No group is selected: use each object's group
                 dst_gid = None
 
-            for src_gid, dst_obj in dst_objs.items():
-                if func_objs is not None:
-                    func_objs(dst_obj, src_objs[src_gid])
-                short_ids = [obj.short_id for obj in src_objs[src_gid]]
-                dst_obj.title = f"{name}({', '.join(short_ids)})"
-                group_id = dst_gid if dst_gid is not None else src_gid
-                self.panel.add_object(dst_obj, group_id=group_id)
+            for src_obj in objs:
+                src_gid = objmodel.get_object_group_id(src_obj)
+                src_objs.setdefault(src_gid, []).append(src_obj)
+
+            with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+                progress.setValue(0)
+                progress.setLabelText(title)
+                for src_gid, src_obj_list in src_objs.items():
+                    if param is None:
+                        args = (src_obj_list,)
+                    else:
+                        args = (src_obj_list, param)
+                    result = self.__exec_func(func, args, progress)
+                    if result is None:
+                        break
+                    new_obj = self.handle_output(
+                        result, _("Calculating: %s") % title, progress
+                    )
+                    if new_obj is None:
+                        break
+                    group_id = dst_gid if dst_gid is not None else src_gid
+                    self.panel.add_object(new_obj, group_id=group_id)
 
         # Select newly created group, if any
         if dst_gid is not None:
@@ -829,7 +871,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         Args:
             obj2: Second operand (single object or list for pairwise mode).
             obj2_name: Display name for the second operand (used in selection dialog).
-            func: Function to apply.
+            func: Function to apply, that takes either `(dst_obj, src_obj1, src_obj2)`
+             or `(dst_obj, src_obj1, src_obj2, param)` as arguments, where
+             `dst_obj` is the output object, `src_obj1` is the first input object,
+             `src_obj2` is the second input object (operand), and `param` is an
+             optional parameter set.
             param: Optional parameter instance.
             paramclass: Optional parameter class for editing.
             title: Optional progress bar title.
@@ -903,7 +949,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 pairwise=True,
             )
 
-            name = func.__name__.replace("compute_", "")
+            name = func.__name__
             n_pairs = len(src_objs[src_gids[0]])
             max_i_pair = min(n_pairs, max(len(src_objs[grp.uuid]) for grp in src_grps))
             grp2_id = objmodel.get_object_group_id(objs2[0])
@@ -945,7 +991,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                 )
                 if objs2 is None:
                     return
-
             obj2 = objs2[0]
 
             self.mainwindow.historypanel.add_entry(
@@ -977,158 +1022,310 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     group_id = objmodel.get_object_group_id(obj)
                     self.panel.add_object(new_obj, group_id=group_id)
 
-    # ------Data Operations-------------------------------------------------------------
+    def register_1_to_1(
+        self,
+        function: Callable,
+        title: str,
+        paramclass: gds.DataSet | None = None,
+        icon_name: str | None = None,
+        comment: str | None = None,
+        edit: bool | None = None,
+    ) -> ComputingFeature:
+        """Register a 1-to-1 processing function.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_arithmetic(
-        self, obj2: Obj | None = None, param: ArithmeticParam | None = None
-    ) -> None:
-        """Compute arithmetic operation"""
+        The `register_1_to_1` method is used to register a function that takes one
+        object as input and produces one object as output. The function is called
+        with the input object and an optional parameter set. The result of the
+        function is returned.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_sum(self) -> None:
-        """Compute sum"""
+        Args:
+            function: function to register
+            title: title of the function
+            paramclass: parameter class. Defaults to None.
+            icon_name: icon name. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: whether to open the parameter editor before execution.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_normalize(self, param: NormalizeParam | None = None) -> None:
-        """Normalize data"""
+        Returns:
+            Registered feature.
+        """
+        feature = ComputingFeature(
+            pattern="1_to_1",
+            function=function,
+            title=title,
+            paramclass=paramclass,
+            icon_name=icon_name,
+            comment=comment,
+            edit=edit,
+        )
+        self.add_feature(feature)
+        return feature
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_average(self) -> None:
-        """Compute average"""
+    def register_1_to_0(
+        self,
+        function: Callable,
+        title: str,
+        paramclass: gds.DataSet | None = None,
+        icon_name: str | None = None,
+        comment: str | None = None,
+        edit: bool | None = None,
+    ) -> ComputingFeature:
+        """Register a 1-to-0 processing function.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_product(self) -> None:
-        """Compute product"""
+        The function takes one object as input and produces no output.
+        The function is called with the input object and an optional parameter set.
+        The result of the function is returned.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_difference(self, obj2: Obj | list[Obj] | None = None) -> None:
-        """Compute difference"""
+        Args:
+            function: function to register
+            title: title of the function
+            paramclass: parameter class. Defaults to None.
+            icon_name: icon name. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: whether to open the parameter editor before execution.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_quadratic_difference(self, obj2: Obj | list[Obj] | None = None) -> None:
-        """Compute quadratic difference"""
+        Returns:
+            Registered feature.
+        """
+        feature = ComputingFeature(
+            pattern="1_to_0",
+            function=function,
+            title=title,
+            paramclass=paramclass,
+            icon_name=icon_name,
+            comment=comment,
+            edit=edit,
+        )
+        self.add_feature(feature)
+        return feature
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_division(self, obj2: Obj | list[Obj] | None = None) -> None:
-        """Compute division"""
+    def register_1_to_n(
+        self, function: Callable, title: str, icon_name: str | None = None
+    ) -> ComputingFeature:
+        """Register a 1-to-n processing function.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_swap_axes(self) -> None:
-        """Swap data axes"""
+        The function takes one object as input and produces multiple objects as output.
+        The function is called with the input object and an optional parameter set.
+        The result of the function is returned.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_inverse(self) -> None:
-        """Compute inverse"""
+        Args:
+            function: function to register
+            title: title of the function
+            icon_name: icon name. Defaults to None.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_abs(self) -> None:
-        """Compute absolute value"""
+        Returns:
+            Registered feature.
+        """
+        feature = ComputingFeature(
+            pattern="1_to_n",
+            function=function,
+            title=title,
+            icon_name=icon_name,
+        )
+        self.add_feature(feature)
+        return feature
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_re(self) -> None:
-        """Compute real part"""
+    def register_n_to_1(
+        self,
+        function: Callable,
+        title: str,
+        paramclass: gds.DataSet | None = None,
+        icon_name: str | None = None,
+        comment: str | None = None,
+        edit: bool | None = None,
+    ) -> ComputingFeature:
+        """Register a n-to-1 processing function.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_im(self) -> None:
-        """Compute imaginary part"""
+        The function takes multiple objects as input and produces one object as output.
+        The function is called with the input objects and an optional parameter set.
+        The result of the function is returned.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_astype(self) -> None:
-        """Convert data type"""
+        Args:
+            function: function to register
+            title: title of the function
+            paramclass: parameter class. Defaults to None.
+            icon_name: icon name. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: whether to open the parameter editor before execution.
 
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_log10(self) -> None:
-        """Compute Log10"""
+        Returns:
+            Registered feature.
+        """
+        feature = ComputingFeature(
+            pattern="n_to_1",
+            function=function,
+            title=title,
+            paramclass=paramclass,
+            icon_name=icon_name,
+            comment=comment,
+            edit=edit,
+        )
+        self.add_feature(feature)
+        return feature
 
-    @abc.abstractmethod
+    def register_2_to_1(
+        self,
+        function: Callable,
+        title: str,
+        paramclass: gds.DataSet | None = None,
+        icon_name: str | None = None,
+        comment: str | None = None,
+        edit: bool | None = None,
+        obj2_name: str | None = None,
+    ) -> ComputingFeature:
+        """Register a 2-to-1 processing function.
+
+        The function takes two objects as input and produces one object as output.
+        The function is called with the input objects and an optional parameter set.
+        The result of the function is returned.
+
+        Args:
+            function: function to register
+            title: title of the function
+            paramclass: parameter class. Defaults to None.
+            icon_name: icon name. Defaults to None.
+            comment: comment. Defaults to None.
+            edit: whether to open the parameter editor before execution.
+            obj2_name: name of the second object. Defaults to None.
+
+        Returns:
+            Registered feature.
+        """
+        feature = ComputingFeature(
+            pattern="2_to_1",
+            function=function,
+            title=title,
+            paramclass=paramclass,
+            icon_name=icon_name,
+            comment=comment,
+            edit=edit,
+            obj2_name=obj2_name,
+        )
+        self.add_feature(feature)
+        return feature
+
+    def add_feature(self, feature: ComputingFeature) -> None:
+        """Add a computing feature to the registry.
+
+        Args:
+            feature: ComputingFeature instance to add.
+        """
+        self.computing_registry[feature.function] = feature
+
+    def get_feature(self, function_or_name: Callable | str) -> ComputingFeature:
+        """Get a computing feature by name or function.
+
+        Args:
+            function_or_name: Name of the feature or the function itself.
+
+        Returns:
+            Computing feature instance.
+        """
+        try:
+            return self.computing_registry[function_or_name]
+        except KeyError as exc:
+            for _func, feature in self.computing_registry.items():
+                if feature.name == function_or_name:
+                    return feature
+            raise ValueError(f"Unknown computing feature: {function_or_name}") from exc
+
     @qt_try_except()
-    def compute_exp(self) -> None:
-        """Compute exponential"""
+    def run_feature(
+        self, key: str | Callable | ComputingFeature, *args, **kwargs
+    ) -> dict[str, ResultShape | ResultProperties] | None:
+        """Run a computing feature that has been previously registered.
+
+        This method is a generic dispatcher for all compute methods.
+        It uses the central registry to find the appropriate compute method
+        based on the pattern (`1_to_1`, `1_to_0`, `n_to_1`, `2_to_1`, `1_to_n`).
+        It then calls the appropriate compute method with the provided arguments.
+
+        Depending on the pattern, this method can take different arguments:
+
+        .. code-block:: python
+
+            import cdl.computation.signal as cps
+            import cdl.param
+
+            # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
+            # (example with computation functions from `cdl.computation.signal`)
+            compute(cps.normalize)
+            param = cdl.param.MovingAverageParam(n=3)
+            compute(cps.moving_average, param)
+            compute(computation_function, param, edit=False)
+
+            # For pattern `2_to_1`:
+            compute(cps.difference, obj2)
+            param = cdl.param.InterpolationParam(method="cubic")
+            compute(cps.interpolation, obj2, param)
+
+            # For pattern `1_to_n`:
+            group = roi.to_params(obj)
+            compute(cps.extract_roi, params=group.datasets)
+
+        Args:
+            key: The key to look up in the registry. It can be a string, a callable,
+             or a ComputingFeature instance.
+            *args: Positional arguments to pass to the compute method.
+            **kwargs: Keyword arguments to pass to the compute method.
+
+        Returns:
+            The result of the computation or None.
+        """
+        if not isinstance(key, ComputingFeature):
+            feature = self.get_feature(key)
+        else:
+            feature = key
+
+        # Some keyword parameters may be overridden
+        edit = kwargs.pop("edit", feature.edit)
+        title = kwargs.pop("title", feature.title)
+        comment = kwargs.pop("comment", feature.comment)
+
+        pattern = feature.pattern
+
+        if pattern in {"1_to_1", "1_to_0", "n_to_1"}:
+            compute_method = getattr(self, f"compute_{pattern}")
+            param = kwargs.pop("param", args[0] if args else None)
+            return compute_method(
+                feature.function,
+                param=param,
+                paramclass=feature.paramclass,
+                title=title,
+                comment=comment,
+                edit=edit,
+            )
+        if pattern == "2_to_1":
+            obj2 = kwargs.pop("obj2", args[0] if args else None)
+            param = kwargs.pop("param", args[1] if args and len(args) > 1 else None)
+            return self.compute_2_to_1(
+                obj2,
+                feature.obj2_name or _("Second operand"),
+                feature.function,
+                param=param,
+                paramclass=feature.paramclass,
+                title=title,
+                comment=comment,
+                edit=edit,
+            )
+        if pattern == "1_to_n":
+            params = kwargs.get("params", args[0] if args else [])
+            return self.compute_1_to_n(
+                feature.function,
+                params=params,
+                title=title,
+                edit=edit,
+            )
+        raise ValueError(f"Unsupported compute pattern: {pattern}")
 
     # ------Data Processing-------------------------------------------------------------
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_calibration(self, param=None) -> None:
-        """Compute data linear calibration"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_clip(self, param: ClipParam | None = None) -> None:
-        """Compute maximum data clipping"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_gaussian_filter(self, param: GaussianParam | None = None) -> None:
-        """Compute gaussian filter"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_moving_average(self, param: MovingAverageParam | None = None) -> None:
-        """Compute moving average"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_moving_median(self, param: MovingMedianParam | None = None) -> None:
-        """Compute moving median"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_wiener(self) -> None:
-        """Compute Wiener filter"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_fft(self) -> None:
-        """Compute iFFT"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_ifft(self) -> None:
-        """Compute FFT"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_addition_constant(self, param: ConstantParam) -> None:
-        """Compute sum with a constant"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_difference_constant(self, param: ConstantParam) -> None:
-        """Compute difference with a constant"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_product_constant(self, param: ConstantParam) -> None:
-        """Compute product with a constant"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_division_constant(self, param: ConstantParam) -> None:
-        """Compute division by a constant"""
 
     @qt_try_except()
     def compute_roi_extraction(self, roi: TypeROI | None = None) -> None:
         """Extract Region Of Interest (ROI) from data with:
 
-        - :py:func:`cdl.computation.image.extract_single_roi` for single ROI
-        - :py:func:`cdl.computation.image.extract_multiple_roi` for multiple ROIs"""
+        - :py:func:`cdl.computation.image.compute_extract_roi` for single ROI
+        - :py:func:`cdl.computation.image.compute_extract_rois` for multiple ROIs"""
         # Expected behavior:
         # -----------------
         # * If `roi` is not None or not empty, skip the ROI dialog
@@ -1150,18 +1347,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             # Extract each ROI into a separate object (keep the ROI in the case of
             # a circular ROI), if the "Extract all ROIs into a single image object"
             # option is not checked or if there is only one ROI (See Issue #31)
-            self._extract_each_roi_in_separate_object(group)
+            self.run_feature("extract_roi", params=group.datasets, edit=False)
 
     @abc.abstractmethod
     @qt_try_except()
     def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def _extract_each_roi_in_separate_object(self, group: gds.DataSetGroup) -> None:
-        """Extract each single Region Of Interest (ROI) from data in a separate
-        object (keep the ROI in the case of a circular ROI, for example)"""
 
     # ------Analysis-------------------------------------------------------------------
 
@@ -1220,8 +1411,3 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             if obj.roi is not None:
                 obj.roi = None
                 self.panel.selection_changed(update_items=True)
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_stats(self) -> dict[str, ResultShape]:
-        """Compute data statistics"""

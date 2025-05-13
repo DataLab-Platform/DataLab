@@ -40,7 +40,6 @@ class SignalDeltaXDialog(PlotDialog):
     def __init__(
         self,
         signal: SignalObj,
-        y: float | None = None,
         parent: QWidget | None = None,
     ) -> None:
         self.__curve_styles = CURVESTYLES.style_generator()

@@ -25,6 +25,7 @@ import scipy.signal as sps
 
 import cdl.algorithms.coordinates
 import cdl.algorithms.signal as alg
+from cdl.computation import computation_function
 from cdl.computation.base import (
     ArithmeticParam,
     ClipParam,
@@ -38,7 +39,8 @@ from cdl.computation.base import (
     SpectrumParam,
     calc_resultproperties,
     dst_1_to_1,
-    dst_n1n,
+    dst_2_to_1,
+    dst_n_to_1,
     new_signal_result,
 )
 from cdl.config import Conf, _
@@ -126,7 +128,7 @@ class Wrap1to1Func:
         return dst
 
 
-# MARK: compute_n_to_1 functions -------------------------------------------------------
+# MARK: n_to_1 functions -------------------------------------------------------
 # Functions with N input signals and 1 output signal
 # --------------------------------------------------------------------------------------
 # Those functions are perfoming a computation on N input signals and return a single
@@ -138,41 +140,66 @@ class Wrap1to1Func:
 # the modified object from the worker processes.
 
 
-def compute_addition(dst: SignalObj, src: SignalObj) -> SignalObj:
-    """Add **dst** and **src** signals and return **dst** signal modified in place
+@computation_function
+def addition(src_list: list[SignalObj]) -> SignalObj:
+    """Add **src** signals and return a new result signal object
 
     Args:
-        dst: destination signal
-        src: source signal
+        src_list: list of source signals
 
     Returns:
         Modified **dst** signal (modified in place)
     """
-    dst.y += np.array(src.y, dtype=dst.y.dtype)
-    if dst.dy is not None:
-        dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
-    restore_data_outside_roi(dst, src)
+    dst = dst_n_to_1(src_list, "Σ")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.y += np.array(src.y, dtype=dst.y.dtype)
+        if dst.dy is not None:
+            dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+    restore_data_outside_roi(dst, src_list[0])
     return dst
 
 
-def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
-    """Multiply **dst** and **src** signals and return **dst** signal modified in place
+@computation_function
+def average(src_list: list[SignalObj]) -> SignalObj:
+    """Average **src** signals and return a new result signal object
 
     Args:
-        dst: destination signal
-        src: source signal
+        src_list: list of source signals
 
     Returns:
         Modified **dst** signal (modified in place)
     """
-    dst.y *= np.array(src.y, dtype=dst.y.dtype)
-    if dst.dy is not None:
-        dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
-    restore_data_outside_roi(dst, src)
+    dst = dst_n_to_1(src_list, "µ")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.y += np.array(src.y, dtype=dst.y.dtype)
+        if dst.dy is not None:
+            dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+    dst.y /= len(src_list)
+    restore_data_outside_roi(dst, src_list[0])
     return dst
 
 
-def compute_addition_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
+@computation_function
+def product(src_list: list[SignalObj]) -> SignalObj:
+    """Multiply **dst** by **src** signals and return a new result signal object
+
+    Args:
+        src_list: list of source signals
+
+    Returns:
+        Modified **dst** signal (modified in place)
+    """
+    dst = dst_n_to_1(src_list, "Π")  # `dst` data is initialized to `src_list[0]` data
+    for src in src_list[1:]:
+        dst.y *= np.array(src.y, dtype=dst.y.dtype)
+        if dst.dy is not None:
+            dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+    restore_data_outside_roi(dst, src_list[0])
+    return dst
+
+
+@computation_function
+def addition_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Add **dst** and a constant value and return a the new result signal object
 
     Args:
@@ -188,7 +215,8 @@ def compute_addition_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     return dst
 
 
-def compute_difference_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
+@computation_function
+def difference_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Subtract a constant value from a signal
 
     Args:
@@ -204,7 +232,8 @@ def compute_difference_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     return dst
 
 
-def compute_product_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
+@computation_function
+def product_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Multiply **dst** by a constant value and return the new result signal object
 
     Args:
@@ -220,7 +249,8 @@ def compute_product_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     return dst
 
 
-def compute_division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
+@computation_function
+def division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     """Divide a signal by a constant value
 
     Args:
@@ -236,14 +266,13 @@ def compute_division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     return dst
 
 
-# MARK: compute_2_to_1 functions -------------------------------------------------------
+# MARK: 2_to_1 functions -------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
 
 
-def compute_arithmetic(
-    src1: SignalObj, src2: SignalObj, p: ArithmeticParam
-) -> SignalObj:
+@computation_function
+def arithmetic(src1: SignalObj, src2: SignalObj, p: ArithmeticParam) -> SignalObj:
     """Perform arithmetic operation on two signals
 
     Args:
@@ -281,7 +310,8 @@ def compute_arithmetic(
     return dst
 
 
-def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
+@computation_function
+def difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute difference between two signals
 
     .. note::
@@ -295,7 +325,7 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object **src1** - **src2**
     """
-    dst = dst_n1n(src1, src2, "-")
+    dst = dst_2_to_1(src1, src2, "-")
     dst.y = src1.y - src2.y
     if dst.dy is not None:
         dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
@@ -303,7 +333,8 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
+@computation_function
+def quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute quadratic difference between two signals
 
     .. note::
@@ -317,7 +348,7 @@ def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object (**src1** - **src2**) / sqrt(2.0)
     """
-    dst = dst_n1n(src1, src2, "quadratic_difference")
+    dst = dst_2_to_1(src1, src2, "quadratic_difference")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, (y1 - np.array(y2, dtype=y1.dtype)) / np.sqrt(2.0))
@@ -329,7 +360,8 @@ def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
+@computation_function
+def division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute division between two signals
 
     Args:
@@ -339,7 +371,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object **src1** / **src2**
     """
-    dst = dst_n1n(src1, src2, "/")
+    dst = dst_2_to_1(src1, src2, "/")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
@@ -347,12 +379,13 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-# MARK: compute_1_to_1 functions -------------------------------------------------------
+# MARK: 1_to_1 functions -------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
 
 
-def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
+@computation_function
+def extract_rois(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     """Extract multiple regions of interest from data
 
     Args:
@@ -366,7 +399,7 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     if len(group.datasets) == 1:
         p: ROI1DParam = group.datasets[0]
         suffix = f"{p.xmin:.3g}≤x≤{p.xmax:.3g}"
-    dst = dst_1_to_1(src, "extract_multiple_roi", suffix)
+    dst = dst_1_to_1(src, "extract_rois", suffix)
     x, y = src.get_data()
     xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
     for p in group.datasets:
@@ -380,7 +413,8 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     return dst
 
 
-def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
+@computation_function
+def extract_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
     """Extract single region of interest from data
 
     Args:
@@ -390,7 +424,7 @@ def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
     Returns:
         Signal with single region of interest
     """
-    dst = dst_1_to_1(src, "extract_single_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
+    dst = dst_1_to_1(src, "extract_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
     x, y = p.get_data(src).copy()
     dst.set_xydata(x, y)
     # TODO: [P2] Instead of removing geometric shapes, apply roi extract
@@ -398,7 +432,8 @@ def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
     return dst
 
 
-def compute_swap_axes(src: SignalObj) -> SignalObj:
+@computation_function
+def swap_axes(src: SignalObj) -> SignalObj:
     """Swap axes
 
     Args:
@@ -413,7 +448,8 @@ def compute_swap_axes(src: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_inverse(src: SignalObj) -> SignalObj:
+@computation_function
+def inverse(src: SignalObj) -> SignalObj:
     """Compute inverse with :py:data:`numpy.invert`
 
     Args:
@@ -435,7 +471,8 @@ def compute_inverse(src: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_abs(src: SignalObj) -> SignalObj:
+@computation_function
+def absolute(src: SignalObj) -> SignalObj:
     """Compute absolute value with :py:data:`numpy.absolute`
 
     Args:
@@ -447,7 +484,8 @@ def compute_abs(src: SignalObj) -> SignalObj:
     return Wrap1to1Func(np.absolute)(src)
 
 
-def compute_re(src: SignalObj) -> SignalObj:
+@computation_function
+def real(src: SignalObj) -> SignalObj:
     """Compute real part with :py:func:`numpy.real`
 
     Args:
@@ -459,7 +497,8 @@ def compute_re(src: SignalObj) -> SignalObj:
     return Wrap1to1Func(np.real)(src)
 
 
-def compute_im(src: SignalObj) -> SignalObj:
+@computation_function
+def imag(src: SignalObj) -> SignalObj:
     """Compute imaginary part with :py:func:`numpy.imag`
 
     Args:
@@ -481,7 +520,8 @@ class DataTypeSParam(gds.DataSet):
     )
 
 
-def compute_astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
+@computation_function
+def astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
     """Convert data type with :py:func:`numpy.astype`
 
     Args:
@@ -496,7 +536,8 @@ def compute_astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
     return dst
 
 
-def compute_log10(src: SignalObj) -> SignalObj:
+@computation_function
+def log10(src: SignalObj) -> SignalObj:
     """Compute Log10 with :py:data:`numpy.log10`
 
     Args:
@@ -508,7 +549,8 @@ def compute_log10(src: SignalObj) -> SignalObj:
     return Wrap1to1Func(np.log10)(src)
 
 
-def compute_exp(src: SignalObj) -> SignalObj:
+@computation_function
+def exp(src: SignalObj) -> SignalObj:
     """Compute exponential with :py:data:`numpy.exp`
 
     Args:
@@ -520,7 +562,8 @@ def compute_exp(src: SignalObj) -> SignalObj:
     return Wrap1to1Func(np.exp)(src)
 
 
-def compute_sqrt(src: SignalObj) -> SignalObj:
+@computation_function
+def sqrt(src: SignalObj) -> SignalObj:
     """Compute square root with :py:data:`numpy.sqrt`
 
     Args:
@@ -538,7 +581,8 @@ class PowerParam(gds.DataSet):
     power = gds.FloatItem(_("Power"), default=2.0)
 
 
-def compute_power(src: SignalObj, p: PowerParam) -> SignalObj:
+@computation_function
+def power(src: SignalObj, p: PowerParam) -> SignalObj:
     """Compute power with :py:data:`numpy.power`
 
     Args:
@@ -563,7 +607,8 @@ class PeakDetectionParam(gds.DataSet):
     min_dist = gds.IntItem(_("Minimum distance"), default=1, min=1, unit="points")
 
 
-def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
+@computation_function
+def peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     """Peak detection with :py:func:`cdl.algorithms.signal.peak_indices`
 
     Args:
@@ -583,7 +628,8 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     return dst
 
 
-def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
+@computation_function
+def normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """Normalize data with :py:func:`cdl.algorithms.signal.normalize`
 
     Args:
@@ -600,7 +646,8 @@ def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     return dst
 
 
-def compute_derivative(src: SignalObj) -> SignalObj:
+@computation_function
+def derivative(src: SignalObj) -> SignalObj:
     """Compute derivative with :py:func:`numpy.gradient`
 
     Args:
@@ -616,7 +663,8 @@ def compute_derivative(src: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_integral(src: SignalObj) -> SignalObj:
+@computation_function
+def integral(src: SignalObj) -> SignalObj:
     """Compute integral with :py:func:`scipy.integrate.cumulative_trapezoid`
 
     Args:
@@ -641,7 +689,8 @@ class XYCalibrateParam(gds.DataSet):
     b = gds.FloatItem("b", default=0.0)
 
 
-def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
+@computation_function
+def calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
     """Compute linear calibration
 
     Args:
@@ -661,7 +710,8 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
     return dst
 
 
-def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
+@computation_function
+def clip(src: SignalObj, p: ClipParam) -> SignalObj:
     """Compute maximum data clipping with :py:func:`numpy.clip`
 
     Args:
@@ -674,7 +724,8 @@ def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     return Wrap1to1Func(np.clip, a_min=p.lower, a_max=p.upper)(src)
 
 
-def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
+@computation_function
+def offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
     """Correct offset: subtract the mean value of the signal in the specified range
     (baseline correction)
 
@@ -692,7 +743,8 @@ def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
     return dst
 
 
-def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
+@computation_function
+def gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     """Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`
 
     Args:
@@ -705,7 +757,8 @@ def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     return Wrap1to1Func(spi.gaussian_filter, sigma=p.sigma)(src)
 
 
-def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
+@computation_function
+def moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     """Compute moving average with :py:func:`scipy.ndimage.uniform_filter`
 
     Args:
@@ -718,7 +771,8 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     return Wrap1to1Func(spi.uniform_filter, size=p.n, mode=p.mode)(src)
 
 
-def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
+@computation_function
+def moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
     """Compute moving median with :py:func:`scipy.ndimage.median_filter`
 
     Args:
@@ -731,7 +785,8 @@ def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
     return Wrap1to1Func(spi.median_filter, size=p.n, mode=p.mode)(src)
 
 
-def compute_wiener(src: SignalObj) -> SignalObj:
+@computation_function
+def wiener(src: SignalObj) -> SignalObj:
     """Compute Wiener filter with :py:func:`scipy.signal.wiener`
 
     Args:
@@ -806,7 +861,7 @@ class BaseHighLowBandParam(gds.DataSet):
         fs = float(obj.x.size - 1) / (obj.x[-1] - obj.x[0])
         return fs / 2.0
 
-    def update_from_signal(self, obj: SignalObj) -> None:
+    def update_from_obj(self, obj: SignalObj) -> None:
         """Update the filter parameters from a signal object
 
         Args:
@@ -871,7 +926,7 @@ class BandStopFilterParam(BaseHighLowBandParam):
     TYPE = FilterType.BANDSTOP
 
 
-def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
+def frequency_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     """Compute frequency filter (low-pass, high-pass, band-pass, band-stop),
     with :py:func:`scipy.signal.filtfilt`
 
@@ -897,6 +952,62 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     return dst
 
 
+@computation_function
+def lowpass(src: SignalObj, p: LowPassFilterParam) -> SignalObj:
+    """Compute low-pass filter with :py:func:`scipy.signal.filtfilt`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    return frequency_filter(src, p)
+
+
+@computation_function
+def highpass(src: SignalObj, p: HighPassFilterParam) -> SignalObj:
+    """Compute high-pass filter with :py:func:`scipy.signal.filtfilt`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    return frequency_filter(src, p)
+
+
+@computation_function
+def bandpass(src: SignalObj, p: BandPassFilterParam) -> SignalObj:
+    """Compute band-pass filter with :py:func:`scipy.signal.filtfilt`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    return frequency_filter(src, p)
+
+
+@computation_function
+def bandstop(src: SignalObj, p: BandStopFilterParam) -> SignalObj:
+    """Compute band-stop filter with :py:func:`scipy.signal.filtfilt`
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    return frequency_filter(src, p)
+
+
 class ZeroPadding1DParam(gds.DataSet):
     """Zero padding parameters"""
 
@@ -904,12 +1015,12 @@ class ZeroPadding1DParam(gds.DataSet):
         super().__init__(*args, **kwargs)
         self.__obj: SignalObj | None = None
 
-    def update_from_signal(self, obj: SignalObj) -> None:
+    def update_from_obj(self, obj: SignalObj) -> None:
         """Update parameters from signal"""
         self.__obj = obj
         self.choice_callback(None, self.strategy)
 
-    def choice_callback(self, item, value):
+    def choice_callback(self, item, value):  # pylint: disable=unused-argument
         """Callback for choice item"""
         size = self.__obj.x.size
         if value == "next_pow2":
@@ -930,7 +1041,8 @@ class ZeroPadding1DParam(gds.DataSet):
     ).set_prop("display", active=_func_prop)
 
 
-def compute_zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
+@computation_function
+def zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
     """Compute zero padding with :py:func:`cdl.algorithms.signal.zero_padding`
 
     Args:
@@ -950,7 +1062,8 @@ def compute_zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
     return dst
 
 
-def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
+@computation_function
+def fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """Compute FFT with :py:func:`cdl.algorithms.signal.fft1d`
 
     Args:
@@ -969,7 +1082,8 @@ def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     return dst
 
 
-def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
+@computation_function
+def ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """Compute iFFT with :py:func:`cdl.algorithms.signal.ifft1d`
 
     Args:
@@ -988,9 +1102,8 @@ def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     return dst
 
 
-def compute_magnitude_spectrum(
-    src: SignalObj, p: SpectrumParam | None = None
-) -> SignalObj:
+@computation_function
+def magnitude_spectrum(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     """Compute magnitude spectrum
     with :py:func:`cdl.algorithms.signal.magnitude_spectrum`
 
@@ -1011,7 +1124,8 @@ def compute_magnitude_spectrum(
     return dst
 
 
-def compute_phase_spectrum(src: SignalObj) -> SignalObj:
+@computation_function
+def phase_spectrum(src: SignalObj) -> SignalObj:
     """Compute phase spectrum
     with :py:func:`cdl.algorithms.signal.phase_spectrum`
 
@@ -1030,7 +1144,8 @@ def compute_phase_spectrum(src: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
+@computation_function
+def psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     """Compute power spectral density
     with :py:func:`cdl.algorithms.signal.psd`
 
@@ -1058,7 +1173,8 @@ class PolynomialFitParam(gds.DataSet):
     degree = gds.IntItem(_("Degree"), 3, min=1, max=10, slider=True)
 
 
-def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
+@computation_function
+def histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
     """Compute histogram with :py:func:`numpy.histogram`
 
     Args:
@@ -1113,9 +1229,8 @@ class InterpolationParam(gds.DataSet):
     )
 
 
-def compute_interpolation(
-    src1: SignalObj, src2: SignalObj, p: InterpolationParam
-) -> SignalObj:
+@computation_function
+def interpolation(src1: SignalObj, src2: SignalObj, p: InterpolationParam) -> SignalObj:
     """Interpolate data with :py:func:`cdl.algorithms.signal.interpolate`
 
     Args:
@@ -1129,7 +1244,7 @@ def compute_interpolation(
     suffix = f"method={p.method}"
     if p.fill_value is not None and p.method in ("linear", "cubic", "pchip"):
         suffix += f", fill_value={p.fill_value}"
-    dst = dst_n1n(src1, src2, "interpolation", suffix)
+    dst = dst_2_to_1(src1, src2, "interpolation", suffix)
     x1, y1 = src1.get_data()
     xnew, _y2 = src2.get_data()
     ynew = alg.interpolate(x1, y1, xnew, p.method, p.fill_value)
@@ -1154,8 +1269,20 @@ class ResamplingParam(InterpolationParam):
         "display", active=gds.FuncProp(_prop, lambda x: x == "nbpts")
     )
 
+    def update_from_obj(self, obj: SignalObj) -> None:
+        """Update parameters from a signal object."""
+        if self.xmin is None:
+            self.xmin = obj.x[0]
+        if self.xmax is None:
+            self.xmax = obj.x[-1]
+        if self.dx is None:
+            self.dx = obj.x[1] - obj.x[0]
+        if self.nbpts is None:
+            self.nbpts = len(obj.x)
 
-def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
+
+@computation_function
+def resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
     """Resample data with :py:func:`cdl.algorithms.signal.interpolate`
 
     Args:
@@ -1190,7 +1317,8 @@ class DetrendingParam(gds.DataSet):
     method = gds.ChoiceItem(_("Detrending method"), methods, default="linear")
 
 
-def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
+@computation_function
+def detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     """Detrend data with :py:func:`scipy.signal.detrend`
 
     Args:
@@ -1207,7 +1335,8 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     return dst
 
 
-def compute_XY_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
+@computation_function
+def xy_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Simulate the X-Y mode of an oscilloscope.
 
     Use the first signal as the X-axis and the second signal as the Y-axis.
@@ -1219,22 +1348,23 @@ def compute_XY_mode(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         A signal object representing the X-Y mode.
     """
-    dst = dst_n1n(src1, src2, "", "X-Y Mode")
+    dst = dst_2_to_1(src1, src2, "", "X-Y Mode")
     p = ResamplingParam()
     p.xmin = max(src1.x[0], src2.x[0])
     p.xmax = min(src1.x[-1], src2.x[-1])
     assert p.xmin < p.xmax, "X-Y mode: No overlap between signals."
     p.mode = "nbpts"
     p.nbpts = min(src1.x.size, src2.x.size)
-    _, y1 = compute_resampling(src1, p).get_data()
-    _, y2 = compute_resampling(src2, p).get_data()
+    _, y1 = resampling(src1, p).get_data()
+    _, y2 = resampling(src2, p).get_data()
     dst.set_xydata(y1, y2)
     dst.title = f"{src2.short_id} = f({src1.short_id})"
     restore_data_outside_roi(dst, src1)
     return dst
 
 
-def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
+@computation_function
+def convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute convolution of two signals
     with :py:func:`scipy.signal.convolve`
 
@@ -1245,7 +1375,7 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_n1n(src1, src2, "⊛")
+    dst = dst_2_to_1(src1, src2, "⊛")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     ynew = np.real(sps.convolve(y1, y2, mode="same"))
@@ -1299,7 +1429,8 @@ class WindowingParam(gds.DataSet):
     ).set_prop("display", active=gds.FuncProp(_meth_prop, lambda x: x == "gaussian"))
 
 
-def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
+@computation_function
+def windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
     """Compute windowing (available methods: hamming, hanning, bartlett, blackman,
     tukey, rectangular) with :py:func:`cdl.algorithms.signal.windowing`
 
@@ -1323,7 +1454,8 @@ def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
     return dst
 
 
-def compute_reverse_x(src: SignalObj) -> SignalObj:
+@computation_function
+def reverse_x(src: SignalObj) -> SignalObj:
     """Reverse x-axis
 
     Args:
@@ -1344,9 +1476,10 @@ class AngleUnitParam(gds.DataSet):
     unit = gds.ChoiceItem(_("Angle unit"), units, default="rad")
 
 
-def compute_cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+@computation_function
+def to_polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """Convert cartesian coordinates to polar coordinates with
-    :py:func:`cdl.algorithms.coordinates.cartesian2polar`.
+    :py:func:`cdl.algorithms.coordinates.to_polar`.
 
     Args:
         src: Source signal.
@@ -1357,14 +1490,15 @@ def compute_cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "Polar coordinates", f"unit={p.unit}")
     x, y = src.get_data()
-    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, p.unit)
+    r, theta = cdl.algorithms.coordinates.to_polar(x, y, p.unit)
     dst.set_xydata(r, theta)
     return dst
 
 
-def compute_polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+@computation_function
+def to_cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """Convert polar coordinates to cartesian coordinates with
-    :py:func:`cdl.algorithms.coordinates.polar2cartesian`.
+    :py:func:`cdl.algorithms.coordinates.to_cartesian`.
 
     Args:
         src: Source signal.
@@ -1381,7 +1515,7 @@ def compute_polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "Cartesian coordinates", f"unit={p.unit}")
     r, theta = src.get_data()
-    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, p.unit)
+    x, y = cdl.algorithms.coordinates.to_cartesian(r, theta, p.unit)
     dst.set_xydata(x, y)
     return dst
 
@@ -1392,7 +1526,8 @@ class AllanVarianceParam(gds.DataSet):
     max_tau = gds.IntItem("Max τ", default=100, min=1, unit="pts")
 
 
-def compute_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+@computation_function
+def allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     """Compute Allan variance with :py:func:`cdl.algorithms.signal.allan_variance`
 
     Args:
@@ -1410,7 +1545,8 @@ def compute_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     return dst
 
 
-def compute_allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+@computation_function
+def allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     """Compute Allan deviation with :py:func:`cdl.algorithms.signal.allan_deviation`
 
     Args:
@@ -1428,9 +1564,8 @@ def compute_allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     return dst
 
 
-def compute_overlapping_allan_variance(
-    src: SignalObj, p: AllanVarianceParam
-) -> SignalObj:
+@computation_function
+def overlapping_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     """Compute Overlapping Allan variance.
 
     Args:
@@ -1448,7 +1583,8 @@ def compute_overlapping_allan_variance(
     return dst
 
 
-def compute_modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+@computation_function
+def modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     """Compute Modified Allan variance.
 
     Args:
@@ -1466,7 +1602,8 @@ def compute_modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> Si
     return dst
 
 
-def compute_hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+@computation_function
+def hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     """Compute Hadamard variance.
 
     Args:
@@ -1484,7 +1621,8 @@ def compute_hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalOb
     return dst
 
 
-def compute_total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+@computation_function
+def total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     """Compute Total variance.
 
     Args:
@@ -1502,7 +1640,8 @@ def compute_total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     return dst
 
 
-def compute_time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
+@computation_function
+def time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     """Compute Time Deviation (TDEV).
 
     Args:
@@ -1606,7 +1745,8 @@ class FWHMParam(gds.DataSet):
     )
 
 
-def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
+@computation_function
+def fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
     """Compute FWHM with :py:func:`cdl.algorithms.signal.fwhm`
 
     Args:
@@ -1628,7 +1768,8 @@ def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
     )
 
 
-def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
+@computation_function
+def fw1e2(obj: SignalObj) -> ResultShape | None:
     """Compute FW at 1/e² with :py:func:`cdl.algorithms.signal.fw1e2`
 
     Args:
@@ -1646,7 +1787,8 @@ class OrdinateParam(gds.DataSet):
     y = gds.FloatItem(_("Ordinate"), default=0)
 
 
-def compute_full_width_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
+@computation_function
+def full_width_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
     """
     Compute full width at a given y value for a signal object.
 
@@ -1662,7 +1804,8 @@ def compute_full_width_at_y(obj: SignalObj, p: OrdinateParam) -> ResultPropertie
     )
 
 
-def compute_x_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
+@computation_function
+def x_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
     """
     Compute the smallest x-value at a given y-value for a signal object.
 
@@ -1686,7 +1829,8 @@ class AbscissaParam(gds.DataSet):
     x = gds.FloatItem(_("Abscissa"), default=0)
 
 
-def compute_y_at_x(obj: SignalObj, p: AbscissaParam) -> ResultProperties:
+@computation_function
+def y_at_x(obj: SignalObj, p: AbscissaParam) -> ResultProperties:
     """
     Compute the smallest y-value at a given x-value for a signal object.
 
@@ -1704,7 +1848,8 @@ def compute_y_at_x(obj: SignalObj, p: AbscissaParam) -> ResultProperties:
     )
 
 
-def compute_stats(obj: SignalObj) -> ResultProperties:
+@computation_function
+def stats(obj: SignalObj) -> ResultProperties:
     """Compute statistics on a signal
 
     Args:
@@ -1727,7 +1872,8 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
     return calc_resultproperties("stats", obj, statfuncs)
 
 
-def compute_bandwidth_3db(obj: SignalObj) -> ResultProperties:
+@computation_function
+def bandwidth_3db(obj: SignalObj) -> ResultProperties:
     """Compute bandwidth at -3 dB with :py:func:`cdl.algorithms.signal.bandwidth`
 
     Args:
@@ -1757,7 +1903,8 @@ class DynamicParam(gds.DataSet):
     )
 
 
-def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultProperties:
+@computation_function
+def dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultProperties:
     """Compute Dynamic parameters
     using the following functions:
 
@@ -1787,7 +1934,8 @@ def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultPropert
     return calc_resultproperties("ADC", src, funcs)
 
 
-def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
+@computation_function
+def sampling_rate_period(obj: SignalObj) -> ResultProperties:
     """Compute sampling rate and period
     using the following functions:
 
@@ -1810,7 +1958,8 @@ def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
     )
 
 
-def compute_contrast(obj: SignalObj) -> ResultProperties:
+@computation_function
+def contrast(obj: SignalObj) -> ResultProperties:
     """Compute contrast with :py:func:`cdl.algorithms.signal.contrast`"""
     return calc_resultproperties(
         "contrast",
@@ -1821,7 +1970,8 @@ def compute_contrast(obj: SignalObj) -> ResultProperties:
     )
 
 
-def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
+@computation_function
+def x_at_minmax(obj: SignalObj) -> ResultProperties:
     """
     Compute the smallest argument at the minima and the smallest argument at the maxima.
 

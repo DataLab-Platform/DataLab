@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import guidata.dataset as gds
 import pywt
-from skimage import morphology
-from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
+from skimage import morphology, restoration
 
+from cdl.computation import computation_function
 from cdl.computation.image import Wrap1to1Func, dst_1_to_1, restore_data_outside_roi
 from cdl.computation.image.morphology import MorphologyParam
 from cdl.config import _
@@ -58,7 +58,8 @@ class DenoiseTVParam(gds.DataSet):
     )
 
 
-def compute_denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
+@computation_function
+def denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
     """Compute Total Variation denoising
     with :py:func:`skimage.restoration.denoise_tv_chambolle`
 
@@ -70,7 +71,10 @@ def compute_denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
         Output image object
     """
     return Wrap1to1Func(
-        denoise_tv_chambolle, weight=p.weight, eps=p.eps, max_num_iter=p.max_num_iter
+        restoration.denoise_tv_chambolle,
+        weight=p.weight,
+        eps=p.eps,
+        max_num_iter=p.max_num_iter,
     )(src)
 
 
@@ -101,7 +105,8 @@ class DenoiseBilateralParam(gds.DataSet):
     )
 
 
-def compute_denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageObj:
+@computation_function
+def denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageObj:
     """Compute bilateral filter denoising
     with :py:func:`skimage.restoration.denoise_bilateral`
 
@@ -113,7 +118,10 @@ def compute_denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageO
         Output image object
     """
     return Wrap1to1Func(
-        denoise_bilateral, sigma_spatial=p.sigma_spatial, mode=p.mode, cval=p.cval
+        restoration.denoise_bilateral,
+        sigma_spatial=p.sigma_spatial,
+        mode=p.mode,
+        cval=p.cval,
     )(src)
 
 
@@ -132,7 +140,8 @@ class DenoiseWaveletParam(gds.DataSet):
     )
 
 
-def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
+@computation_function
+def denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
     """Compute Wavelet denoising
     with :py:func:`skimage.restoration.denoise_wavelet`
 
@@ -144,11 +153,12 @@ def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
         Output image object
     """
     return Wrap1to1Func(
-        denoise_wavelet, wavelet=p.wavelet, mode=p.mode, method=p.method
+        restoration.denoise_wavelet, wavelet=p.wavelet, mode=p.mode, method=p.method
     )(src)
 
 
-def compute_denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
+@computation_function
+def denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Denoise using White Top-Hat
     with :py:func:`skimage.morphology.white_tophat`
 

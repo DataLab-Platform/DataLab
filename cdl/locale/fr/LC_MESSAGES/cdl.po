@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-05-06 17:21+0200\n"
+"POT-Creation-Date: 2025-05-13 14:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -969,74 +969,14 @@ msgid "Refresh plot, even if auto-refresh is enabled"
 msgstr ""
 "Rafraîchit le graphique, même si le rafraîchissement automatique est activé"
 
-msgid "Sum"
-msgstr "Addition"
-
-msgid "Average"
-msgstr "Moyenne"
-
-msgid "Difference"
-msgstr "Soustraction"
-
-msgid "Quadratic difference"
-msgstr "Soustraction quadratique"
-
-msgid "Product"
-msgstr "Produit"
-
-msgid "Division"
-msgstr "Division"
-
-msgid "Arithmetic operation"
-msgstr "Opération arithmétique"
-
 msgid "Constant Operations"
 msgstr "Opérations avec une constante"
-
-msgid "Add constant"
-msgstr "Additionner une constante"
-
-msgid "Substract constant"
-msgstr "Soustraire une constante"
-
-msgid "Multiply by constant"
-msgstr "Multiplier par une constante"
-
-msgid "Divide by constant"
-msgstr "Diviser par une constante"
-
-msgid "Absolute value"
-msgstr "Valeur absolue"
-
-msgid "Real part"
-msgstr "Partie réelle"
-
-msgid "Imaginary part"
-msgstr "Partie imaginaire"
-
-msgid "Convert data type"
-msgstr "Convertir le type de données"
-
-msgid "Logarithm (base 10)"
-msgstr "Logarithme (base 10)"
 
 msgid "Axis transformation"
 msgstr "Transformation des axes"
 
-msgid "Linear calibration"
-msgstr "Étalonnage linéaire"
-
-msgid "Swap X/Y axes"
-msgstr "Permuter les axes X/Y"
-
 msgid "Level adjustment"
 msgstr "Ajustement de niveau"
-
-msgid "Normalize"
-msgstr "Normaliser"
-
-msgid "Clipping"
-msgstr "Écrêtage"
 
 msgid "Offset correction"
 msgstr "Soustraction d'offset"
@@ -1047,51 +987,8 @@ msgstr "Évaluer et soustraire la valeur d'offset des données"
 msgid "Noise reduction"
 msgstr "Réduction de bruit"
 
-msgid "Gaussian filter"
-msgstr "Filtre gaussien"
-
-msgid "Moving average"
-msgstr "Moyenne mobile"
-
-msgid "Moving median"
-msgstr "Médiane mobile"
-
-msgid "Wiener filter"
-msgstr "Filtre de Wiener"
-
 msgid "Fourier analysis"
 msgstr "Analyse de Fourier"
-
-msgid "Zero padding"
-msgstr "Complément de zéros"
-
-msgid "Zero padding is used to increase the frequency resolution of the FFT"
-msgstr ""
-"Le complément de zéros est utilisé pour augmenter la résolution de la FFT"
-
-msgid "FFT"
-msgstr "FFT"
-
-msgid "Warning: only real part is plotted"
-msgstr "Attention : seulement la partie réelles sera tracée"
-
-msgid "Inverse FFT"
-msgstr "FFT inverse"
-
-msgid "Magnitude spectrum"
-msgstr "Spectre d'amplitude"
-
-msgid "Phase spectrum"
-msgstr "Spectre de phase"
-
-msgid "Power spectral density"
-msgstr "Densité spectrale de puissance"
-
-msgid "Statistics"
-msgstr "Statistiques"
-
-msgid "Histogram"
-msgstr "Histogramme"
 
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
@@ -1108,35 +1005,8 @@ msgstr "Supprimer les résultats"
 msgid "signal"
 msgstr "signal"
 
-msgid "Square root"
-msgstr "Racine carrée"
-
-msgid "Derivative"
-msgstr "Dérivée"
-
-msgid "Integral"
-msgstr "Intégrale"
-
-msgid "Reverse X-axis"
-msgstr "Inverser l'axe des X"
-
-msgid "Convert to Cartesian coordinates"
-msgstr "Convertir en coordonnées cartésiennes"
-
-msgid "Convert to polar coordinates"
-msgstr "Convertir en coordonnées polaires"
-
 msgid "Frequency filters"
 msgstr "Filtres fréquentiels"
-
-msgid "Low-pass filter"
-msgstr "Filtre passe-bas"
-
-msgid "Band-pass filter"
-msgstr "Filtre passe-bande"
-
-msgid "Band-stop filter"
-msgstr "Filtre coupe-bande"
 
 msgid "Fitting"
 msgstr "Ajustement"
@@ -1163,43 +1033,8 @@ msgid "Cumulative distribution function fit, related to Error function (erf)"
 msgstr ""
 "Fonction de distribution cumulative (CDF), liée à la fonction d'erreur (erf)"
 
-msgid "Windowing"
-msgstr "Fenêtrage"
-
-msgid "Apply a window function (or apodization): Hanning, Hamming, ..."
-msgstr ""
-"Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, "
-"Hamming, ..."
-
-msgid "Detrending"
-msgstr "Elimination de tendance"
-
-msgid "Interpolation"
-msgstr "Interpolation"
-
-msgid "Resampling"
-msgstr "Rééchantillonnage"
-
 msgid "Stability analysis"
 msgstr "Analyse de stabilité"
-
-msgid "Allan variance"
-msgstr "Variance d'Allan"
-
-msgid "Allan deviation"
-msgstr "Ecart-type d'Allan"
-
-msgid "Modified Allan deviation"
-msgstr "Ecart-type d'Allan modifié"
-
-msgid "Hadamard variance"
-msgstr "Variance de Hadamard"
-
-msgid "Total variance"
-msgstr "Variance totale"
-
-msgid "Time deviation"
-msgstr "Ecart-type temporel"
 
 msgid "All stability features"
 msgstr "Toutes les analyses de stabilité"
@@ -1207,39 +1042,11 @@ msgstr "Toutes les analyses de stabilité"
 msgid "Compute all stability features"
 msgstr "Calcule toutes les analyses de stabilité"
 
-msgid "X-Y Mode"
-msgstr "Mode XY"
-
-msgid "Plot one signal as a fonction of the other one"
-msgstr "Tracer un signal en fonction de l'autre"
-
-msgid "Full width at half-maximum"
-msgstr "Largeur à mi-hauteur"
-
-msgid "Compute Full Width at Half-Maximum (FWHM)"
-msgstr "Calcule la largeur à mi-hauteur (LMH)"
-
-msgid "Full width at"
-msgstr "Largeur à "
-
-msgid "Compute Full Width at Maximum"
-msgstr "Calcule la largeur à maximum"
-
 msgid "Full width at y=..."
 msgstr "Largeur à y=..."
 
 msgid "Compute the full width at a given y value"
 msgstr "Calcule la largeur à une valeur y donnée"
-
-msgid "Abscissa of the minimum and maximum"
-msgstr "Abscisse du minimum et du maximum"
-
-msgid ""
-"Compute the smallest argument of the minima and the smallest argument of the "
-"maxima"
-msgstr ""
-"Calcule le plus petit argument du minimum et le plus petit argument du "
-"maximum"
 
 msgid "First abscissa at y=..."
 msgstr "Première abscisse à y=..."
@@ -1257,39 +1064,6 @@ msgstr "Calcule l'ordonnée à une valeur x donnée (interpolation linéaire)"
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-msgid "Sampling rate and period"
-msgstr "Fréquence et période d'échantillonnage"
-
-msgid "Compute sampling rate and period for a constant sampling signal"
-msgstr ""
-"Calcule la fréquence et la période d'échantillonnage pour un signal à pas "
-"constant"
-
-msgid "Dynamic parameters"
-msgstr "Paramètres dynamiques"
-
-msgid "Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."
-msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD..."
-
-msgid "Bandwidth at -3dB"
-msgstr "Bande passante à -3dB"
-
-msgid ""
-"Compute bandwidth at -3dB assuming a low-pass filter already expressed in dB"
-msgstr ""
-"Calcule la bande passante à -3dB en supposant un filtre passe-bas déjà "
-"exprimé en dB"
-
-msgid "Contrast"
-msgstr "Contraste"
-
-msgid ""
-"Compute contrast of a signal, i.e. (max-min)/(max+min), e.g. for an image "
-"profile"
-msgstr ""
-"Calcule le contraste d'un signal, c'est-à-dire (max-min)/(max+min), p.ex. "
-"pour un profil d'image"
-
 msgid "Curve anti-aliasing"
 msgstr "Anticrénelage des courbes"
 
@@ -1306,9 +1080,6 @@ msgstr ""
 "Les styles de courbes sont parcourus dans une liste de styles prédéfinis.\n"
 "Cette action réinitialise la liste à son état initial."
 
-msgid "Convolution"
-msgstr "Convolution"
-
 msgid "image"
 msgstr "image"
 
@@ -1318,29 +1089,8 @@ msgstr "Afficher le panneau de contraste"
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
-msgid "Flat-field correction"
-msgstr "Correction de champ plat"
-
 msgid "Flip or rotation"
 msgstr "Symétrie ou rotation"
-
-msgid "Flip horizontally"
-msgstr "Symétrie horizontale"
-
-msgid "Flip diagonally"
-msgstr "Symétrie diagonale"
-
-msgid "Flip vertically"
-msgstr "Symétrie verticale"
-
-msgid "Rotate %s right"
-msgstr "Rotation directe de %s"
-
-msgid "Rotate %s left"
-msgstr "Rotation inverse de %s"
-
-msgid "Rotate by..."
-msgstr "Rotation de..."
 
 msgid "Intensity profiles"
 msgstr "Profils d'intensité"
@@ -1378,30 +1128,6 @@ msgstr "Réinitialiser les positions des images"
 msgid "Thresholding"
 msgstr "Seuillage"
 
-msgid "Parametric thresholding"
-msgstr "Seuillage paramétrique"
-
-msgid "ISODATA thresholding"
-msgstr "Seuillage ISODATA"
-
-msgid "Li thresholding"
-msgstr "Seuillage Li"
-
-msgid "Mean thresholding"
-msgstr "Seuillage moyen"
-
-msgid "Minimum thresholding"
-msgstr "Seuillage minimum"
-
-msgid "Otsu thresholding"
-msgstr "Seuillage Otsu"
-
-msgid "Triangle thresholding"
-msgstr "Seuillage Triangle"
-
-msgid "Yen thresholding"
-msgstr "Seuillage Yen"
-
 msgid "All thresholding methods"
 msgstr "Toutes les méthodes de seuillage"
 
@@ -1411,38 +1137,8 @@ msgstr "Appliquer toutes les méthodes de seuillage"
 msgid "Exposure"
 msgstr "Exposition"
 
-msgid "Gamma correction"
-msgstr "Correction gamma"
-
-msgid "Logarithmic correction"
-msgstr "Correction logarithmique"
-
-msgid "Sigmoid correction"
-msgstr "Correction sigmoïde"
-
-msgid "Histogram equalization"
-msgstr "Egalisation d'histogramme"
-
-msgid "Adaptive histogram equalization"
-msgstr "Egalisation d'histogramme adaptative"
-
-msgid "Intensity rescaling"
-msgstr "Ajustement des niveaux"
-
 msgid "Restoration"
 msgstr "Restauration"
-
-msgid "Total variation denoising"
-msgstr "Filtrage variationnel (débruitage)"
-
-msgid "Bilateral filter denoising"
-msgstr "Filtrage bilatéral (débruitage)"
-
-msgid "Wavelet denoising"
-msgstr "Débruitage par ondelettes"
-
-msgid "White Top-Hat denoising"
-msgstr "Débruitage Top-Hat"
 
 msgid "All denoising methods"
 msgstr "Tous les débruitages"
@@ -1453,24 +1149,6 @@ msgstr "Appliquer tous les débruitages"
 msgid "Morphology"
 msgstr "Morphologie"
 
-msgid "White Top-Hat (disk)"
-msgstr "Top-Hat (disque)"
-
-msgid "Black Top-Hat (disk)"
-msgstr "Top-Hat dual (disque)"
-
-msgid "Erosion (disk)"
-msgstr "Erosion (disque)"
-
-msgid "Dilation (disk)"
-msgstr "Dilatation (disque)"
-
-msgid "Opening (disk)"
-msgstr "Ouverture (disque)"
-
-msgid "Closing (disk)"
-msgstr "Fermeture (disque)"
-
 msgid "All morphological operations"
 msgstr "Toutes les opérations morphologiques"
 
@@ -1480,71 +1158,11 @@ msgstr "Appliquer toutes les opérations morphologiques"
 msgid "Edges"
 msgstr "Contours"
 
-msgid "Roberts filter"
-msgstr "Filtre de Roberts"
-
-msgid "Prewitt filter"
-msgstr "Filtre de Prewitt"
-
-msgid "Prewitt filter (horizontal)"
-msgstr "Filtre de Prewitt (horizontal)"
-
-msgid "Prewitt filter (vertical)"
-msgstr "Filtre de Prewitt (vertical)"
-
-msgid "Sobel filter"
-msgstr "Filtre de Sobel"
-
-msgid "Sobel filter (horizontal)"
-msgstr "Filtre de Sobel (horizontal)"
-
-msgid "Sobel filter (vertical)"
-msgstr "Filtre de Sobel (vertical)"
-
-msgid "Scharr filter"
-msgstr "Filtre de Scharr"
-
-msgid "Scharr filter (horizontal)"
-msgstr "Filtre de Scharr (horizontal)"
-
-msgid "Scharr filter (vertical)"
-msgstr "Filtre de Scharr (vertical)"
-
-msgid "Farid filter"
-msgstr "Filtre de Farid"
-
-msgid "Farid filter (horizontal)"
-msgstr "Filtre de Farid (horizontal)"
-
-msgid "Farid filter (vertical)"
-msgstr "Filtre de Farid (vertical)"
-
-msgid "Laplace filter"
-msgstr "Filtre de Laplace"
-
 msgid "All edges filters"
 msgstr "Tous les filtres de contours"
 
 msgid "Compute all edges filters"
 msgstr "Calcule tous les filtres de contours"
-
-msgid "Canny filter"
-msgstr "Filtre de Canny"
-
-msgid "Butterworth filter"
-msgstr "Filtre de Butterworth"
-
-msgid "Centroid"
-msgstr "Barycentre"
-
-msgid "Compute image centroid"
-msgstr "Calcule le barycentre de l'image"
-
-msgid "Minimum enclosing circle center"
-msgstr "Centre du cercle minimum"
-
-msgid "Compute smallest enclosing circle center"
-msgstr "Calcule le centre du cercle minimum"
 
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
@@ -1552,45 +1170,8 @@ msgstr "Détection de pics 2D"
 msgid "Compute automatic 2D peak detection"
 msgstr "Détection automatique de pics 2D"
 
-msgid "Contour detection"
-msgstr "Détection de contours"
-
-msgid "Compute contour shape fit"
-msgstr "Ajustement d'une forme géométrique à un contour"
-
-msgid "Circle Hough transform"
-msgstr "Transformée de Hough circulaire"
-
-msgid "Detect circular shapes using circle Hough transform"
-msgstr "Détection de formes circulaires à partir d'une tranformée de Hough"
-
 msgid "Blob detection"
 msgstr "Détection de taches"
-
-msgid "Blob detection (DOG)"
-msgstr "Détection de taches (gaussien)"
-
-msgid "Detect blobs using Difference of Gaussian (DOG) method"
-msgstr "Détection de taches basée sur la méthode du discriminant gaussien"
-
-msgid "Blob detection (DOH)"
-msgstr "Détection de taches (hessien)"
-
-msgid "Detect blobs using Determinant of Hessian (DOH) method"
-msgstr "Détection de taches basée sur la méthode du discriminant hessien"
-
-msgid "Blob detection (LOG)"
-msgstr "Détection de taches (LOG)"
-
-msgid "Detect blobs using Laplacian of Gaussian (LOG) method"
-msgstr ""
-"Détection de taches basée sur la méthode du laplacien de gaussien (LOG)"
-
-msgid "Blob detection (OpenCV)"
-msgstr "Détection de taches (OpenCV)"
-
-msgid "Detect blobs using OpenCV SimpleBlobDetector"
-msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
 msgid "Resize"
 msgstr "Redimensionner"
@@ -2175,11 +1756,354 @@ msgstr ""
 msgid "<u>Note:</u> operation mode is <i>single operand</i>: 1 object expected"
 msgstr "<u>Note :</u> le mode d'opération est <i>single</i> : 1 objet attendu"
 
-msgid "Product with constant"
-msgstr "Produit par une constante"
+msgid "Second operand"
+msgstr "Second opérande"
 
-msgid "Distribute on grid"
-msgstr "Distribuer sur grille"
+msgid "Sum"
+msgstr "Addition"
+
+msgid "Average"
+msgstr "Moyenne"
+
+msgid "Difference"
+msgstr "Soustraction"
+
+msgid "image to subtract"
+msgstr "image à soustraire"
+
+msgid "Quadratic Difference"
+msgstr "Différence quadratique"
+
+msgid "Product"
+msgstr "Produit"
+
+msgid "Division"
+msgstr "Division"
+
+msgid "divider"
+msgstr "le diviseur"
+
+msgid "Arithmetic"
+msgstr "Arithmétique"
+
+msgid "signal to operate with"
+msgstr "signal opérande"
+
+msgid "Add constant"
+msgstr "Additionner une constante"
+
+msgid "Subtract constant"
+msgstr "Soustraire une constante"
+
+msgid "Multiply by constant"
+msgstr "Multiplier par une constante"
+
+msgid "Divide by constant"
+msgstr "Diviser par une constante"
+
+msgid "Absolute value"
+msgstr "Valeur absolue"
+
+msgid "Real part"
+msgstr "Partie réelle"
+
+msgid "Imaginary part"
+msgstr "Partie imaginaire"
+
+msgid "Convert data type"
+msgstr "Convertir le type de données"
+
+msgid "Logarithm (base 10)"
+msgstr "Logarithme (base 10)"
+
+msgid "Flat-field correction"
+msgstr "Correction de champ plat"
+
+msgid "flat field image"
+msgstr "l'image de champ plat"
+
+msgid "Flip horizontally"
+msgstr "Symétrie horizontale"
+
+msgid "Flip diagonally"
+msgstr "Symétrie diagonale"
+
+msgid "Flip vertically"
+msgstr "Symétrie verticale"
+
+msgid "Rotate %s right"
+msgstr "Rotation directe de %s"
+
+msgid "Rotate %s left"
+msgstr "Rotation inverse de %s"
+
+msgid "Rotate by..."
+msgstr "Rotation de..."
+
+msgid "Line profile"
+msgstr "Profil rectiligne"
+
+msgid "Segment profile"
+msgstr "Profil le long d'un segment"
+
+msgid "Average profile"
+msgstr "Profil moyen"
+
+msgid "Radial profile"
+msgstr "Profil radial"
+
+msgid "Linear calibration"
+msgstr "Étalonnage linéaire"
+
+msgid "Swap X/Y axes"
+msgstr "Permuter les axes X/Y"
+
+msgid "Normalize"
+msgstr "Normaliser"
+
+msgid "Clipping"
+msgstr "Écrêtage"
+
+msgid "Gaussian filter"
+msgstr "Filtre gaussien"
+
+msgid "Moving average"
+msgstr "Moyenne mobile"
+
+msgid "Moving median"
+msgstr "Médiane mobile"
+
+msgid "Wiener filter"
+msgstr "Filtre de Wiener"
+
+msgid "Zero padding"
+msgstr "Complément de zéros"
+
+msgid "Zero padding is used to increase the frequency resolution of the FFT"
+msgstr ""
+"Le complément de zéros est utilisé pour augmenter la résolution de la FFT"
+
+msgid "FFT"
+msgstr "FFT"
+
+msgid ""
+"Fast Fourier Transform (FFT) is an estimation of the Discrete Fourier "
+"Transform (DFT). Results are complex numbers, but only the real part is "
+"plotted."
+msgstr ""
+
+msgid "Inverse FFT"
+msgstr "FFT inverse"
+
+msgid ""
+"Inverse Fast Fourier Transform (IFFT) is an estimation of the Inverse "
+"Discrete Fourier Transform (IDFT). Results are complex numbers, but only the "
+"real part is plotted."
+msgstr ""
+
+msgid "Magnitude spectrum"
+msgstr "Spectre d'amplitude"
+
+msgid ""
+"Magnitude spectrum is the absolute value of the FFT result. It is a measure "
+"of the amplitude of the frequency components."
+msgstr ""
+
+msgid "Phase spectrum"
+msgstr "Spectre de phase"
+
+msgid ""
+"Phase spectrum is the angle of the FFT result. It is a measure of the phase "
+"of the frequency components."
+msgstr ""
+
+msgid "Power spectral density"
+msgstr "Densité spectrale de puissance"
+
+msgid ""
+"Power spectral density (PSD) is the square of the magnitude spectrum. It is "
+"a measure of the power of the frequency components."
+msgstr ""
+
+msgid "Parametric thresholding"
+msgstr "Seuillage paramétrique"
+
+msgid ""
+"Parametric thresholding allows to select a thresholding method and a "
+"threshold value."
+msgstr ""
+
+msgid "ISODATA thresholding"
+msgstr "Seuillage ISODATA"
+
+msgid "Li thresholding"
+msgstr "Seuillage Li"
+
+msgid "Mean thresholding"
+msgstr "Seuillage moyen"
+
+msgid "Minimum thresholding"
+msgstr "Seuillage minimum"
+
+msgid "Otsu thresholding"
+msgstr "Seuillage Otsu"
+
+msgid "Triangle thresholding"
+msgstr "Seuillage Triangle"
+
+msgid "Gamma correction"
+msgstr "Correction gamma"
+
+msgid "Logarithmic correction"
+msgstr "Correction logarithmique"
+
+msgid "Sigmoid correction"
+msgstr "Correction sigmoïde"
+
+msgid "Histogram equalization"
+msgstr "Egalisation d'histogramme"
+
+msgid "Adaptive histogram equalization"
+msgstr "Egalisation d'histogramme adaptative"
+
+msgid "Intensity rescaling"
+msgstr "Ajustement des niveaux"
+
+msgid "Total variation denoising"
+msgstr "Filtrage variationnel (débruitage)"
+
+msgid "Bilateral filter denoising"
+msgstr "Filtrage bilatéral (débruitage)"
+
+msgid "Wavelet denoising"
+msgstr "Débruitage par ondelettes"
+
+msgid "White Top-hat denoising"
+msgstr "Débruitage Top-Hat"
+
+msgid "White Top-Hat (disk)"
+msgstr "Top-Hat (disque)"
+
+msgid "Black Top-Hat (disk)"
+msgstr "Top-Hat dual (disque)"
+
+msgid "Erosion (disk)"
+msgstr "Erosion (disque)"
+
+msgid "Dilation (disk)"
+msgstr "Dilatation (disque)"
+
+msgid "Opening (disk)"
+msgstr "Ouverture (disque)"
+
+msgid "Closing (disk)"
+msgstr "Fermeture (disque)"
+
+msgid "Roberts filter"
+msgstr "Filtre de Roberts"
+
+msgid "Prewitt filter"
+msgstr "Filtre de Prewitt"
+
+msgid "Prewitt filter (horizontal)"
+msgstr "Filtre de Prewitt (horizontal)"
+
+msgid "Prewitt filter (vertical)"
+msgstr "Filtre de Prewitt (vertical)"
+
+msgid "Sobel filter"
+msgstr "Filtre de Sobel"
+
+msgid "Sobel filter (horizontal)"
+msgstr "Filtre de Sobel (horizontal)"
+
+msgid "Sobel filter (vertical)"
+msgstr "Filtre de Sobel (vertical)"
+
+msgid "Scharr filter"
+msgstr "Filtre de Scharr"
+
+msgid "Scharr filter (horizontal)"
+msgstr "Filtre de Scharr (horizontal)"
+
+msgid "Scharr filter (vertical)"
+msgstr "Filtre de Scharr (vertical)"
+
+msgid "Farid filter"
+msgstr "Filtre de Farid"
+
+msgid "Farid filter (horizontal)"
+msgstr "Filtre de Farid (horizontal)"
+
+msgid "Farid filter (vertical)"
+msgstr "Filtre de Farid (vertical)"
+
+msgid "Laplace filter"
+msgstr "Filtre de Laplace"
+
+msgid "Canny filter"
+msgstr "Filtre de Canny"
+
+msgid "Butterworth filter"
+msgstr "Filtre de Butterworth"
+
+msgid "Statistics"
+msgstr "Statistiques"
+
+msgid "Histogram"
+msgstr "Histogramme"
+
+msgid "Compute image centroid"
+msgstr "Calcule le barycentre de l'image"
+
+msgid "Centroid"
+msgstr "Barycentre"
+
+msgid "Minimum enclosing circle center"
+msgstr "Centre du cercle minimum"
+
+msgid "Compute smallest enclosing circle center"
+msgstr "Calcule le centre du cercle minimum"
+
+msgid "Contour detection"
+msgstr "Détection de contours"
+
+msgid "Compute contour shape fit"
+msgstr "Ajustement d'une forme géométrique à un contour"
+
+msgid "Detect peaks in the image"
+msgstr "Détection de pics dans l'image"
+
+msgid "Circle Hough transform"
+msgstr "Transformée de Hough circulaire"
+
+msgid "Detect circular shapes using circle Hough transform"
+msgstr "Détection de formes circulaires à partir d'une tranformée de Hough"
+
+msgid "Blob detection (DOG)"
+msgstr "Détection de taches (gaussien)"
+
+msgid "Detect blobs using Difference of Gaussian (DOG) method"
+msgstr "Détection de taches basée sur la méthode du discriminant gaussien"
+
+msgid "Blob detection (DOH)"
+msgstr "Détection de taches (hessien)"
+
+msgid "Detect blobs using Difference of Gaussian (DOH) method"
+msgstr "Détection de taches basée sur la méthode du hessien gaussien"
+
+msgid "Blob detection (LOG)"
+msgstr "Détection de taches (LOG)"
+
+msgid "Detect blobs using Laplacian of Gaussian (LOG) method"
+msgstr ""
+"Détection de taches basée sur la méthode du laplacien de gaussien (LOG)"
+
+msgid "Blob detection (OpenCV)"
+msgstr "Détection de taches (OpenCV)"
+
+msgid "Detect blobs using OpenCV SimpleBlobDetector"
+msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
 msgid "Warning:"
 msgstr "Attention :"
@@ -2196,131 +2120,149 @@ msgstr "Binning"
 msgid "Profile"
 msgstr "Profil"
 
-msgid "Average profile"
-msgstr "Profil moyen"
-
-msgid "Radial profile"
-msgstr "Profil radial"
-
-msgid "Swap axes"
-msgstr "Permuter les axes"
-
-msgid "image to operate with"
-msgstr "image opérande"
-
-msgid "Arithmetic"
-msgstr "Arithmétique"
-
-msgid "image to subtract"
-msgstr "image à soustraire"
-
-msgid "Difference with constant"
-msgstr "Différence par une constante"
-
-msgid "divider"
-msgstr "le diviseur"
-
-msgid "Division by constant"
-msgstr "Division par une constante"
-
-msgid "Flat field"
-msgstr "Correction de champ plat"
-
-msgid "flat field image"
-msgstr "l'image de champ plat"
-
-msgid "Flat field correction"
-msgstr "Correction de champ plat"
-
-msgid "PSD"
-msgstr "DSP"
-
-msgid "Parametric threshold"
-msgstr "Seuillage paramétrique"
-
-msgid "Log correction"
-msgstr "Correction logarithmique"
-
-msgid "Rescale intensity"
-msgstr "Ajuster les niveaux"
+msgid "Distribute on grid"
+msgstr "Distribuer sur grille"
 
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
 
-msgid "White Top-Hat"
-msgstr "Top-Hat"
-
-msgid "Black Top-Hat"
-msgstr "Top-Hat dual"
-
-msgid "Erosion"
-msgstr "Erosion"
-
-msgid "Dilation"
-msgstr "Dilatation"
-
-msgid "Opening"
-msgstr "Ouverture"
-
-msgid "Closing"
-msgstr "Fermeture"
-
 msgid "Extract ROI"
 msgstr "Extraire une ROI"
-
-msgid "Enclosing circle"
-msgstr "Cercle minimum"
-
-msgid "Contour"
-msgstr "Contour"
-
-msgid "Hough circles"
-msgstr "Cercles de Hough"
-
-msgid "Sum with constant"
-msgstr "Addition avec une constante"
-
-msgid "signal to operate with"
-msgstr "signal opérande"
 
 msgid "signal to subtract"
 msgstr "signal à soustraire"
 
-msgid "Reverse X axis"
-msgstr "Inverser l'axe des X"
+msgid "Square root"
+msgstr "Racine carrée"
 
-msgid "Cartesian to Polar"
-msgstr "De cartésien à polaire"
+msgid "Derivative"
+msgstr "Dérivée"
 
-msgid "Polar to Cartesian"
-msgstr "De polaire à cartésien"
+msgid "Integral"
+msgstr "Intégrale"
 
-msgid "iFFT"
-msgstr "iFFT"
-
-msgid "signal for X values"
-msgstr "signal pour les valeurs X"
-
-msgid "Y-signal of the X-Y mode"
-msgstr "Signal de l'axe des ordonnées du mode X-Y"
+msgid "Convolution"
+msgstr "Convolution"
 
 msgid "signal to convolve with"
 msgstr "signal à convoluer"
 
-msgid "Overlapping Allan variance"
+msgid "Reverse X-axis"
+msgstr "Inverser l'axe des X"
+
+msgid "Convert to polar coordinates"
+msgstr "Convertir en coordonnées polaires"
+
+msgid "Convert to cartesian coordinates"
+msgstr "Convertir en coordonnées cartésiennes"
+
+msgid "Low-pass filter"
+msgstr "Filtre passe-bas"
+
+msgid "Band-pass filter"
+msgstr "Filtre passe-bande"
+
+msgid "Band-stop filter"
+msgstr "Filtre coupe-bande"
+
+msgid "Windowing"
+msgstr "Fenêtrage"
+
+msgid "Apply a window function (or apodization): Hanning, Hamming, ..."
 msgstr ""
+"Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, "
+"Hamming, ..."
+
+msgid "Detrending"
+msgstr "Elimination de tendance"
+
+msgid "Interpolation"
+msgstr "Interpolation"
+
+msgid "signal for X values"
+msgstr "signal pour les valeurs X"
+
+msgid "Resampling"
+msgstr "Rééchantillonnage"
+
+msgid "Allan variance"
+msgstr "Variance d'Allan"
+
+msgid "Allan deviation"
+msgstr "Ecart-type d'Allan"
+
+msgid "Overlapping Allan variance"
+msgstr "Variance d’Allan avec recouvrement"
 
 msgid "Modified Allan variance"
+msgstr "Variance d'Allan modifiée"
+
+msgid "Hadamard variance"
+msgstr "Variance de Hadamard"
+
+msgid "Total variance"
+msgstr "Variance totale"
+
+msgid "Time deviation"
+msgstr "Ecart-type temporel"
+
+msgid "X-Y mode"
+msgstr "Mode X-Y"
+
+msgid "Y-signal of the X-Y mode"
+msgstr "Signal de l'axe des ordonnées du mode X-Y"
+
+msgid "Plot one signal as a fonction of the other one"
+msgstr "Tracer un signal en fonction de l'autre"
+
+msgid "Full width at half-maximum"
+msgstr "Largeur à mi-hauteur"
+
+msgid "Full width at"
+msgstr "Largeur à "
+
+msgid "Abscissa of the minimum and maximum"
+msgstr "Abscisse du minimum et du maximum"
+
+msgid ""
+"Compute the smallest argument of the minima and the smallest argument of the "
+"maxima"
 msgstr ""
+"Calcule le plus petit argument du minimum et le plus petit argument du "
+"maximum"
 
-msgid "FWHM"
-msgstr "LMH"
+msgid "Sampling rate and period"
+msgstr "Fréquence et période d'échantillonnage"
 
-msgid "FW"
-msgstr "LH"
+msgid "Compute sampling rate and period for a constant sampling signal"
+msgstr ""
+"Calcule la fréquence et la période d'échantillonnage pour un signal à pas "
+"constant"
 
-msgid "Bandwidth"
-msgstr "Bande passante"
+msgid "Dynamic parameters"
+msgstr "Paramètres dynamiques"
+
+msgid "Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."
+msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD..."
+
+msgid "Bandwidth at -3dB"
+msgstr "Bande passante à -3dB"
+
+msgid ""
+"Compute bandwidth at -3dB assuming a low-pass filter already expressed in dB"
+msgstr ""
+"Calcule la bande passante à -3dB en supposant un filtre passe-bas déjà "
+"exprimé en dB"
+
+msgid "Contrast"
+msgstr "Contraste"
+
+msgid ""
+"Compute contrast of a signal, i.e. (max-min)/(max+min), e.g. for an image "
+"profile"
+msgstr ""
+"Calcule le contraste d'un signal, c'est-à-dire (max-min)/(max+min), p.ex. "
+"pour un profil d'image"
 
 msgid "Edit profile parameters"
 msgstr "Modifier les paramètres du profil"
@@ -3740,3 +3682,108 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
+#~ msgid "Arithmetic operation"
+#~ msgstr "Opération arithmétique"
+
+#~ msgid "Warning: only real part is plotted"
+#~ msgstr "Attention : seulement la partie réelles sera tracée"
+
+#~ msgid "Modified Allan deviation"
+#~ msgstr "Ecart-type d'Allan modifié"
+
+#~ msgid "Compute Full Width at Half-Maximum (FWHM)"
+#~ msgstr "Calcule la largeur à mi-hauteur (LMH)"
+
+#~ msgid "Compute Full Width at Maximum"
+#~ msgstr "Calcule la largeur à maximum"
+
+#~ msgid "Yen thresholding"
+#~ msgstr "Seuillage Yen"
+
+#~ msgid "Detect blobs using Determinant of Hessian (DOH) method"
+#~ msgstr "Détection de taches basée sur la méthode du discriminant hessien"
+
+#~ msgid "Product with constant"
+#~ msgstr "Produit par une constante"
+
+#~ msgid "Swap axes"
+#~ msgstr "Permuter les axes"
+
+#~ msgid "image to operate with"
+#~ msgstr "image opérande"
+
+#~ msgid "Difference with constant"
+#~ msgstr "Différence par une constante"
+
+#~ msgid "Division by constant"
+#~ msgstr "Division par une constante"
+
+#~ msgid "Flat field"
+#~ msgstr "Correction de champ plat"
+
+#~ msgid "Flat field correction"
+#~ msgstr "Correction de champ plat"
+
+#~ msgid "PSD"
+#~ msgstr "DSP"
+
+#~ msgid "Parametric threshold"
+#~ msgstr "Seuillage paramétrique"
+
+#~ msgid "Log correction"
+#~ msgstr "Correction logarithmique"
+
+#~ msgid "Rescale intensity"
+#~ msgstr "Ajuster les niveaux"
+
+#~ msgid "White Top-Hat"
+#~ msgstr "Top-Hat"
+
+#~ msgid "Black Top-Hat"
+#~ msgstr "Top-Hat dual"
+
+#~ msgid "Erosion"
+#~ msgstr "Erosion"
+
+#~ msgid "Dilation"
+#~ msgstr "Dilatation"
+
+#~ msgid "Opening"
+#~ msgstr "Ouverture"
+
+#~ msgid "Closing"
+#~ msgstr "Fermeture"
+
+#~ msgid "Enclosing circle"
+#~ msgstr "Cercle minimum"
+
+#~ msgid "Contour"
+#~ msgstr "Contour"
+
+#~ msgid "Hough circles"
+#~ msgstr "Cercles de Hough"
+
+#~ msgid "Sum with constant"
+#~ msgstr "Addition avec une constante"
+
+#~ msgid "Reverse X axis"
+#~ msgstr "Inverser l'axe des X"
+
+#~ msgid "Cartesian to Polar"
+#~ msgstr "De cartésien à polaire"
+
+#~ msgid "Polar to Cartesian"
+#~ msgstr "De polaire à cartésien"
+
+#~ msgid "iFFT"
+#~ msgstr "iFFT"
+
+#~ msgid "FWHM"
+#~ msgstr "LMH"
+
+#~ msgid "FW"
+#~ msgstr "LH"
+
+#~ msgid "Bandwidth"
+#~ msgstr "Bande passante"

@@ -40,7 +40,7 @@ def guifit(
     winpos=None,
     parent=None,
     name=None,
-):
+):  # pylint: disable=too-many-positional-arguments
     """GUI-based curve fitting tool"""
     win = FitDialog(
         edit=True,

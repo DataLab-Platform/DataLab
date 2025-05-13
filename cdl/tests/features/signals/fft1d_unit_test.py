@@ -59,7 +59,7 @@ def test_signal_zero_padding() -> None:
     assert param.strategy == "custom", (
         f"Wrong default strategy: {param.strategy} (expected 'custom')"
     )
-    s2 = cps.compute_zero_padding(s1, param)
+    s2 = cps.zero_padding(s1, param)
     len1 = len(s1.y)
     exp_len2 = len1 + param.n
     execenv.print("Validating zero padding with custom length...", end=" ")
@@ -84,7 +84,7 @@ def test_signal_zero_padding() -> None:
         ("triple", 2000),
     ):
         param = cdl.param.ZeroPadding1DParam.create(strategy=strategy)
-        param.update_from_signal(s1)
+        param.update_from_obj(s1)
         assert param.n == expected_length, (
             f"Wrong length for '{param.strategy}' strategy: {param.n}"
             f" (expected {expected_length})"
@@ -103,8 +103,8 @@ def test_signal_fft() -> None:
     s1 = ctd.create_periodic_signal(
         cdl.obj.SignalTypes.COSINUS, freq=freq, size=size, xmin=xmin
     )
-    fft = cps.compute_fft(s1)
-    ifft = cps.compute_ifft(fft)
+    fft = cps.fft(s1)
+    ifft = cps.ifft(fft)
 
     # Check that the inverse FFT reconstructs the original signal
     check_array_result("Cosine signal FFT/iFFT X reconstruction", s1.y, ifft.y.real)
@@ -148,8 +148,8 @@ def test_signal_magnitude_spectrum() -> None:
     size = 10000
 
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
-    fft = cps.compute_fft(s1)
-    mag = cps.compute_magnitude_spectrum(s1)
+    fft = cps.fft(s1)
+    mag = cps.magnitude_spectrum(s1)
     fpk1 = fft.x[np.argmax(mag.y[: size // 2])]
     check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
 
@@ -165,8 +165,8 @@ def test_signal_phase_spectrum() -> None:
     size = 10000
 
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
-    fft = cps.compute_fft(s1)
-    phase = cps.compute_phase_spectrum(s1)
+    fft = cps.fft(s1)
+    phase = cps.phase_spectrum(s1)
     fpk1 = fft.x[np.argmax(phase.y[: size // 2])]
     check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
 
@@ -186,7 +186,7 @@ def test_signal_psd() -> None:
     param = cdl.param.SpectrumParam()
     for log_scale in (False, True):
         param.log = log_scale
-        psd = cps.compute_psd(s1, param)
+        psd = cps.psd(s1, param)
 
         # Check that the PSD is correct (Welch's method is used by default)
         exp_x, exp_y = sps.welch(s1.y, fs=1.0 / (s1.x[1] - s1.x[0]))

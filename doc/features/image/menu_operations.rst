@@ -93,7 +93,7 @@ Create a new image which is the result of a constant operation on each selected 
       - Equation
     * - |constant_add| Addition
       - :math:`z_{k} = z_{k-1} + conv(c)`
-    * - |constant_substract| Subtraction
+    * - |constant_subtract| Subtraction
       - :math:`z_{k} = z_{k-1} - conv(c)`
     * - |constant_multiply| Multiplication
       - :math:`z_{k} = conv(z_{k-1} \times c)`
@@ -105,7 +105,7 @@ Create a new image which is the result of a constant operation on each selected 
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |constant_substract| image:: ../../../cdl/data/icons/operations/constant_substract.svg
+.. |constant_subtract| image:: ../../../cdl/data/icons/operations/constant_subtract.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

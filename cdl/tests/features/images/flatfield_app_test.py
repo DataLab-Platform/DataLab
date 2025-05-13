@@ -40,7 +40,7 @@ def test_flatfield():
         panel.objview.select_objects([ima0])
         ffp = FlatFieldParam()
         ffp.threshold = 80
-        panel.processor.compute_flatfield(ima1, ffp)
+        panel.processor.run_feature("flatfield", ima1, ffp)
 
 
 if __name__ == "__main__":

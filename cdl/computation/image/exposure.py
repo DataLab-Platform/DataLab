@@ -17,6 +17,7 @@ from __future__ import annotations
 import guidata.dataset as gds
 from skimage import exposure
 
+from cdl.computation import computation_function
 from cdl.computation.image import (
     VALID_DTYPES_STRLIST,
     dst_1_to_1,
@@ -43,7 +44,8 @@ class AdjustGammaParam(gds.DataSet):
     )
 
 
-def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
+@computation_function
+def adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
     """Gamma correction with :py:func:`skimage.exposure.adjust_gamma`
 
     Args:
@@ -75,7 +77,8 @@ class AdjustLogParam(gds.DataSet):
     )
 
 
-def compute_adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
+@computation_function
+def adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
     """Compute log correction with :py:func:`skimage.exposure.adjust_log`
 
     Args:
@@ -114,7 +117,8 @@ class AdjustSigmoidParam(gds.DataSet):
     )
 
 
-def compute_adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
+@computation_function
+def adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
     """Compute sigmoid correction with :py:func:`skimage.exposure.adjust_sigmoid`
 
     Args:
@@ -158,7 +162,8 @@ class RescaleIntensityParam(gds.DataSet):
     )
 
 
-def compute_rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageObj:
+@computation_function
+def rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageObj:
     """Rescale image intensity levels
     with :py:func:`skimage.exposure.rescale_intensity`
 
@@ -192,7 +197,8 @@ class EqualizeHistParam(gds.DataSet):
     )
 
 
-def compute_equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
+@computation_function
+def equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
     """Histogram equalization with :py:func:`skimage.exposure.equalize_hist`
 
     Args:
@@ -220,7 +226,8 @@ class EqualizeAdaptHistParam(EqualizeHistParam):
     )
 
 
-def compute_equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> ImageObj:
+@computation_function
+def equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> ImageObj:
     """Adaptive histogram equalization
     with :py:func:`skimage.exposure.equalize_adapthist`
 

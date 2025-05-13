@@ -17,6 +17,7 @@ from __future__ import annotations
 import guidata.dataset as gds
 from skimage import morphology
 
+from cdl.computation import computation_function
 from cdl.computation.image import dst_1_to_1, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
@@ -30,7 +31,8 @@ class MorphologyParam(gds.DataSet):
     )
 
 
-def compute_white_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
+@computation_function
+def white_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute White Top-Hat with :py:func:`skimage.morphology.white_tophat`
 
     Args:
@@ -46,7 +48,8 @@ def compute_white_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     return dst
 
 
-def compute_black_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
+@computation_function
+def black_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Black Top-Hat with :py:func:`skimage.morphology.black_tophat`
 
     Args:
@@ -62,7 +65,8 @@ def compute_black_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     return dst
 
 
-def compute_erosion(src: ImageObj, p: MorphologyParam) -> ImageObj:
+@computation_function
+def erosion(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Erosion with :py:func:`skimage.morphology.erosion`
 
     Args:
@@ -78,7 +82,8 @@ def compute_erosion(src: ImageObj, p: MorphologyParam) -> ImageObj:
     return dst
 
 
-def compute_dilation(src: ImageObj, p: MorphologyParam) -> ImageObj:
+@computation_function
+def dilation(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Dilation with :py:func:`skimage.morphology.dilation`
 
     Args:
@@ -94,7 +99,8 @@ def compute_dilation(src: ImageObj, p: MorphologyParam) -> ImageObj:
     return dst
 
 
-def compute_opening(src: ImageObj, p: MorphologyParam) -> ImageObj:
+@computation_function
+def opening(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute morphological opening with :py:func:`skimage.morphology.opening`
 
     Args:
@@ -110,7 +116,8 @@ def compute_opening(src: ImageObj, p: MorphologyParam) -> ImageObj:
     return dst
 
 
-def compute_closing(src: ImageObj, p: MorphologyParam) -> ImageObj:
+@computation_function
+def closing(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute morphological closing with :py:func:`skimage.morphology.closing`
 
     Args:

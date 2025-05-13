@@ -129,10 +129,10 @@ msgstr ""
 msgid ":math:`z_{k} = z_{k-1} + conv(c)`"
 msgstr ""
 
-msgid "|constant_substract| Subtraction"
-msgstr "|constant_substract| Soustraction"
+msgid "|constant_subtract| Subtraction"
+msgstr "|constant_subtract| Soustraction"
 
-msgid "constant_substract"
+msgid "constant_subtract"
 msgstr ""
 
 #, python-brace-format
@@ -167,7 +167,7 @@ msgstr "Parties réelles et imaginaires"
 msgid "|abs| Absolute value"
 msgstr "|abs| Valeur absolue"
 
-msgid "abs"
+msgid "absolute"
 msgstr ""
 
 #, python-brace-format

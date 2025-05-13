@@ -86,7 +86,7 @@ Create a new signal which is the result of a constant operation on each selected
       - Description
     * - |constant_add| Addition
       - :math:`y_{k} = y_{k-1} + c`
-    * - |constant_substract| Subtraction
+    * - |constant_subtract| Subtraction
       - :math:`y_{k} = y_{k-1} - c`
     * - |constant_multiply| Multiplication
       - :math:`y_{k} = y_{k-1} \times c`
@@ -98,7 +98,7 @@ Create a new signal which is the result of a constant operation on each selected
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |constant_substract| image:: ../../../cdl/data/icons/operations/constant_substract.svg
+.. |constant_subtract| image:: ../../../cdl/data/icons/operations/constant_subtract.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

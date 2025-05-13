@@ -6,6 +6,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Computation functions refactoring:
+  * Added new `@computation_function` decorator to mark and register computation functions
+  * Renamed computation functions to remove redundant "compute_" prefix (e.g., `compute_fft` ➝ `fft`)
+  * Added infrastructure for discovering computation functions via introspection
+  * Improved function naming in coordinate transformations (e.g., `to_polar` ➝ `to_polar`)
+  * Added type hints and improved documentation across computation modules
+  * These changes improve code organization and maintainability while making the API more intuitive
+  * Internal changes only - **no backward compatibility is maintained** for plugin developers
+
 * Generic processing types refactoring:
   * Refactored the naming convention of core `BaseProcessor` methods implementing generic data processing patterns (e.g. one input ➝ one output, n inputs ➝ one output, etc.)
   * New method names are now based on their input/output signature for better clarity and extensibility:
@@ -789,7 +798,7 @@ NumPy 2.0 support has been added with this release.
   * Before this release, when extracting a single circular ROI from an image with the "Extract all ROIs into a single image object" option enabled, the result was a single image without the ROI mask (the ROI mask was only available when extracting ROI with the option disabled)
   * This was leading to an unexpected behavior, because one could interpret the result (a square image without the ROI mask) as the result of a single rectangular ROI
   * Now, when extracting a single circular ROI from an image with the "Extract all ROIs into a single image object" option enabled, the result is a single image with the ROI mask (as if the option was disabled)
-  * This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function
+  * This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `compute_extract_roi` function
 * Analysis on circular ROI:
   * Before this release, when running computations on a circular ROI, the results were unexpected in terms of coordinates (results seemed to be computed in a region located above the actual ROI).
   * This was due to a regression introduced in an earlier release.

@@ -26,7 +26,7 @@ from cdl.utils.vistools import view_curve_items
 def __test_fwhm_interactive(obj: cdl.obj.SignalObj, method: str) -> None:
     """Interactive test for the full width at half maximum computation."""
     param = cdl.param.FWHMParam.create(method=method)
-    df = cps.compute_fwhm(obj, param).to_dataframe()
+    df = cps.fwhm(obj, param).to_dataframe()
     view_curve_items(
         [
             obj.make_item(),
@@ -65,11 +65,11 @@ def test_signal_fwhm() -> None:
         ("zero-crossing", real_fwhm),
     ):
         param = cdl.param.FWHMParam.create(method=method)
-        df = cps.compute_fwhm(obj, param).to_dataframe()
+        df = cps.fwhm(obj, param).to_dataframe()
         cdl.utils.tests.check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
     obj = cdltd.create_paracetamol_signal()
     with pytest.warns(UserWarning):
-        cps.compute_fwhm(obj, cdl.param.FWHMParam.create(method="zero-crossing"))
+        cps.fwhm(obj, cdl.param.FWHMParam.create(method="zero-crossing"))
 
 
 @pytest.mark.validation
@@ -77,7 +77,7 @@ def test_signal_fw1e2() -> None:
     """Validation test for the full width at 1/e^2 maximum computation."""
     obj = cdltd.get_test_signal("fw1e2.txt")
     exp = 4.06  # Manual validation
-    df = cps.compute_fw1e2(obj).to_dataframe()
+    df = cps.fw1e2(obj).to_dataframe()
     cdl.utils.tests.check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
 
 
@@ -87,7 +87,7 @@ def test_signal_full_width_at_y() -> None:
     obj = cdltd.get_test_signal("fwhm.txt")
     real_fwhm = 2.675  # Manual validation
     param = cdl.param.OrdinateParam.create(y=0.5)
-    df = cps.compute_full_width_at_y(obj, param).to_dataframe()
+    df = cps.full_width_at_y(obj, param).to_dataframe()
     cdl.utils.tests.check_scalar_result("∆X", df.L[0], real_fwhm, rtol=0.05)
 
 

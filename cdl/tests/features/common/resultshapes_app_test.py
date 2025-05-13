@@ -81,8 +81,8 @@ def test_resultshapes():
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)
             panel.add_object(sig)
-            panel.processor.compute_fwhm(cdl.param.FWHMParam())
-            panel.processor.compute_fw1e2()
+            panel.processor.run_feature("fwhm", cdl.param.FWHMParam())
+            panel.processor.run_feature("fw1e2")
         panel.objview.select_objects((1, 2))
         panel.show_results()
         panel.plot_results()
@@ -98,7 +98,7 @@ def test_resultshapes():
                 panel.objview.select_objects((2,))
                 panel.duplicate_object()
                 panel.objview.select_objects((2, len(panel)))
-                panel.processor.compute_average()
+                panel.processor.run_feature("average")
                 __check_resultshapes_merge(panel[2], panel[len(panel)])
                 if panel is win.imagepanel:
                     __check_roi_merge(panel[2], panel[len(panel)])

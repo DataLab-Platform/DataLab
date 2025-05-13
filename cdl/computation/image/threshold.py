@@ -18,6 +18,7 @@ import guidata.dataset as gds
 import skimage.util
 from skimage import filters
 
+from cdl.computation import computation_function
 from cdl.computation.image import dst_1_to_1, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
@@ -55,7 +56,8 @@ class ThresholdParam(gds.DataSet):
     )
 
 
-def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
+@computation_function
+def threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
     """Compute the threshold, using one of the available algorithms:
 
     - Manual: a fixed threshold value
@@ -76,16 +78,16 @@ def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
     """
     if p.method == "manual":
         suffix = f"value={p.value}"
-        threshold = p.value
+        value = p.value
     else:
         suffix = f"method={p.method}"
         if p.method not in ("li", "mean"):
             suffix += f", nbins={p.bins}"
         func = getattr(filters, f"threshold_{p.method}")
         args = [] if p.method in ("li", "mean") else [p.bins]
-        threshold = func(src.data, *args)
+        value = func(src.data, *args)
     dst = dst_1_to_1(src, "threshold", suffix)
-    data = src.data > threshold if p.operation == ">" else src.data < threshold
+    data = src.data > value if p.operation == ">" else src.data < value
     dst.data = skimage.util.img_as_ubyte(data)
     dst.zscalemin, dst.zscalemax = 0, 255  # LUT range
     dst.metadata["colormap"] = "gray"
@@ -93,7 +95,8 @@ def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
     return dst
 
 
-def compute_threshold_isodata(src: ImageObj) -> ImageObj:
+@computation_function
+def threshold_isodata(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Isodata algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_isodata`
 
@@ -103,10 +106,11 @@ def compute_threshold_isodata(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="isodata"))
+    return threshold(src, ThresholdParam.create(method="isodata"))
 
 
-def compute_threshold_li(src: ImageObj) -> ImageObj:
+@computation_function
+def threshold_li(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Li algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_li`
 
@@ -116,10 +120,11 @@ def compute_threshold_li(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="li"))
+    return threshold(src, ThresholdParam.create(method="li"))
 
 
-def compute_threshold_mean(src: ImageObj) -> ImageObj:
+@computation_function
+def threshold_mean(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Mean algorithm,
     see :py:func:`skimage.filters.threshold_mean`
 
@@ -129,10 +134,11 @@ def compute_threshold_mean(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="mean"))
+    return threshold(src, ThresholdParam.create(method="mean"))
 
 
-def compute_threshold_minimum(src: ImageObj) -> ImageObj:
+@computation_function
+def threshold_minimum(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Minimum algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_minimum`
 
@@ -142,10 +148,11 @@ def compute_threshold_minimum(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="minimum"))
+    return threshold(src, ThresholdParam.create(method="minimum"))
 
 
-def compute_threshold_otsu(src: ImageObj) -> ImageObj:
+@computation_function
+def threshold_otsu(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Otsu algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_otsu`
 
@@ -155,10 +162,11 @@ def compute_threshold_otsu(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="otsu"))
+    return threshold(src, ThresholdParam.create(method="otsu"))
 
 
-def compute_threshold_triangle(src: ImageObj) -> ImageObj:
+@computation_function
+def threshold_triangle(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Triangle algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_triangle`
 
@@ -168,10 +176,11 @@ def compute_threshold_triangle(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="triangle"))
+    return threshold(src, ThresholdParam.create(method="triangle"))
 
 
-def compute_threshold_yen(src: ImageObj) -> ImageObj:
+@computation_function
+def threshold_yen(src: ImageObj) -> ImageObj:
     """Compute the threshold using the Yen algorithm with default parameters,
     see :py:func:`skimage.filters.threshold_yen`
 
@@ -181,4 +190,4 @@ def compute_threshold_yen(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return compute_threshold(src, ThresholdParam.create(method="yen"))
+    return threshold(src, ThresholdParam.create(method="yen"))

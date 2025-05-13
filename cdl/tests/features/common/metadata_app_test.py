@@ -11,6 +11,9 @@ Metadata application test:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+import cdl.computation.image as cpi
+import cdl.computation.image.detection as cpi_det
+import cdl.computation.signal as cps
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.core.gui.panel.base import BaseDataPanel
@@ -25,16 +28,16 @@ from cdl.tests.features.common import roi_app_test
 def __run_signal_computations(panel: SignalPanel):
     """Test all signal features related to ROI"""
     execenv.print("  Signal features")
-    panel.processor.compute_fwhm(dlp.FWHMParam())
-    panel.processor.compute_fw1e2()
+    panel.processor.run_feature(cps.fwhm, dlp.FWHMParam())
+    panel.processor.run_feature(cps.fw1e2)
 
 
 def __run_image_computations(panel: ImagePanel):
     """Test all image features related to ROI"""
     execenv.print("  Image features")
-    panel.processor.compute_centroid()
-    panel.processor.compute_enclosing_circle()
-    panel.processor.compute_peak_detection(dlp.Peak2DDetectionParam())
+    panel.processor.run_feature(cpi.centroid)
+    panel.processor.run_feature(cpi.enclosing_circle)
+    panel.processor.run_feature(cpi_det.peak_detection, dlp.Peak2DDetectionParam())
 
 
 def __test_metadata_features(panel: BaseDataPanel):

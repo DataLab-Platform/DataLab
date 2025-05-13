@@ -32,9 +32,20 @@ def __create_two_signals() -> tuple[cdl.obj.SignalObj, cdl.obj.SignalObj]:
     return s1, s2
 
 
-def __create_one_signal_and_constant() -> (
-    tuple[cdl.obj.SignalObj, cdl.param.ConstantParam]
-):
+def __create_n_signals(n: int = 100) -> list[cdl.obj.SignalObj]:
+    """Create a list of N different signals for testing."""
+    signals = []
+    for i in range(n):
+        s = ctd.create_periodic_signal(
+            cdl.obj.SignalTypes.COSINUS, freq=50.0 + i, size=100, a=(i + 1) * 0.1
+        )
+        signals.append(s)
+    return signals
+
+
+def __create_one_signal_and_constant() -> tuple[
+    cdl.obj.SignalObj, cdl.param.ConstantParam
+]:
     """Create one signal and a constant for testing."""
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=100)
     param = cdl.param.ConstantParam.create(value=-np.pi)
@@ -44,28 +55,48 @@ def __create_one_signal_and_constant() -> (
 @pytest.mark.validation
 def test_signal_addition() -> None:
     """Signal addition test."""
-    s1, s2 = __create_two_signals()
-    exp = s1.y + s2.y
-    cps.compute_addition(s1, s2)
-    res = s1.y
-    check_array_result("Signal addition", res, exp)
+    slist = __create_n_signals()
+    n = len(slist)
+    s3 = cps.addition(slist)
+    res = s3.y
+    exp = np.zeros_like(s3.y)
+    for s in slist:
+        exp += s.y
+    check_array_result(f"Addition of {n} signals", res, exp)
+
+
+@pytest.mark.validation
+def test_signal_average() -> None:
+    """Signal average test."""
+    slist = __create_n_signals()
+    n = len(slist)
+    s3 = cps.average(slist)
+    res = s3.y
+    exp = np.zeros_like(s3.y)
+    for s in slist:
+        exp += s.y
+    exp /= n
+    check_array_result(f"Average of {n} signals", res, exp)
 
 
 @pytest.mark.validation
 def test_signal_product() -> None:
     """Signal multiplication test."""
-    s1, s2 = __create_two_signals()
-    exp = s1.y * s2.y
-    cps.compute_product(s1, s2)
-    res = s1.y
-    check_array_result("Signal multiplication", res, exp)
+    slist = __create_n_signals()
+    n = len(slist)
+    s3 = cps.product(slist)
+    res = s3.y
+    exp = np.ones_like(s3.y)
+    for s in slist:
+        exp *= s.y
+    check_array_result(f"Product of {n} signals", res, exp)
 
 
 @pytest.mark.validation
 def test_signal_difference() -> None:
     """Signal difference test."""
     s1, s2 = __create_two_signals()
-    s3 = cps.compute_difference(s1, s2)
+    s3 = cps.difference(s1, s2)
     check_array_result("Signal difference", s3.y, s1.y - s2.y)
 
 
@@ -73,7 +104,7 @@ def test_signal_difference() -> None:
 def test_signal_quadratic_difference() -> None:
     """Signal quadratic difference validation test."""
     s1, s2 = __create_two_signals()
-    s3 = cps.compute_quadratic_difference(s1, s2)
+    s3 = cps.quadratic_difference(s1, s2)
     check_array_result("Signal quadratic difference", s3.y, (s1.y - s2.y) / np.sqrt(2))
 
 
@@ -81,7 +112,7 @@ def test_signal_quadratic_difference() -> None:
 def test_signal_division() -> None:
     """Signal division test."""
     s1, s2 = __create_two_signals()
-    s3 = cps.compute_division(s1, s2)
+    s3 = cps.division(s1, s2)
     check_array_result("Signal division", s3.y, s1.y / s2.y)
 
 
@@ -89,7 +120,7 @@ def test_signal_division() -> None:
 def test_signal_addition_constant() -> None:
     """Signal addition with constant test."""
     s1, param = __create_one_signal_and_constant()
-    s2 = cps.compute_addition_constant(s1, param)
+    s2 = cps.addition_constant(s1, param)
     check_array_result("Signal addition with constant", s2.y, s1.y + param.value)
 
 
@@ -97,7 +128,7 @@ def test_signal_addition_constant() -> None:
 def test_signal_product_constant() -> None:
     """Signal multiplication by constant test."""
     s1, param = __create_one_signal_and_constant()
-    s2 = cps.compute_product_constant(s1, param)
+    s2 = cps.product_constant(s1, param)
     check_array_result("Signal multiplication by constant", s2.y, s1.y * param.value)
 
 
@@ -105,7 +136,7 @@ def test_signal_product_constant() -> None:
 def test_signal_difference_constant() -> None:
     """Signal difference with constant test."""
     s1, param = __create_one_signal_and_constant()
-    s2 = cps.compute_difference_constant(s1, param)
+    s2 = cps.difference_constant(s1, param)
     check_array_result("Signal difference with constant", s2.y, s1.y - param.value)
 
 
@@ -113,7 +144,7 @@ def test_signal_difference_constant() -> None:
 def test_signal_division_constant() -> None:
     """Signal division by constant test."""
     s1, param = __create_one_signal_and_constant()
-    s2 = cps.compute_division_constant(s1, param)
+    s2 = cps.division_constant(s1, param)
     check_array_result("Signal division by constant", s2.y, s1.y / param.value)
 
 
@@ -121,7 +152,7 @@ def test_signal_division_constant() -> None:
 def test_signal_inverse() -> None:
     """Signal inversion validation test."""
     s1 = __create_two_signals()[0]
-    inv_signal = cps.compute_inverse(s1)
+    inv_signal = cps.inverse(s1)
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
         exp = 1.0 / s1.y
@@ -130,26 +161,26 @@ def test_signal_inverse() -> None:
 
 
 @pytest.mark.validation
-def test_signal_abs() -> None:
+def test_signal_absolute() -> None:
     """Absolute value validation test."""
     s1 = __create_two_signals()[0]
-    abs_signal = cps.compute_abs(s1)
+    abs_signal = cps.absolute(s1)
     check_array_result("Absolute value", abs_signal.y, np.abs(s1.y))
 
 
 @pytest.mark.validation
-def test_signal_re() -> None:
+def test_signal_real() -> None:
     """Real part validation test."""
     s1 = __create_two_signals()[0]
-    re_signal = cps.compute_re(s1)
+    re_signal = cps.real(s1)
     check_array_result("Real part", re_signal.y, np.real(s1.y))
 
 
 @pytest.mark.validation
-def test_signal_im() -> None:
+def test_signal_imag() -> None:
     """Imaginary part validation test."""
     s1 = __create_two_signals()[0]
-    im_signal = cps.compute_im(s1)
+    im_signal = cps.imag(s1)
     check_array_result("Imaginary part", im_signal.y, np.imag(s1.y))
 
 
@@ -159,7 +190,7 @@ def test_signal_astype() -> None:
     s1 = __create_two_signals()[0]
     for dtype_str in cps.VALID_DTYPES_STRLIST:
         p = cdl.param.DataTypeSParam.create(dtype_str=dtype_str)
-        astype_signal = cps.compute_astype(s1, p)
+        astype_signal = cps.astype(s1, p)
         assert astype_signal.y.dtype == np.dtype(dtype_str)
 
 
@@ -167,7 +198,7 @@ def test_signal_astype() -> None:
 def test_signal_exp() -> None:
     """Exponential validation test."""
     s1 = __create_two_signals()[0]
-    exp_signal = cps.compute_exp(s1)
+    exp_signal = cps.exp(s1)
     check_array_result("Exponential", exp_signal.y, np.exp(s1.y))
 
 
@@ -175,7 +206,7 @@ def test_signal_exp() -> None:
 def test_signal_log10() -> None:
     """Logarithm base 10 validation test."""
     s1 = __create_two_signals()[0]
-    log10_signal = cps.compute_log10(cps.compute_exp(s1))
+    log10_signal = cps.log10(cps.exp(s1))
     check_array_result("Logarithm base 10", log10_signal.y, np.log10(np.exp(s1.y)))
 
 
@@ -183,7 +214,7 @@ def test_signal_log10() -> None:
 def test_signal_sqrt() -> None:
     """Square root validation test."""
     s1 = ctd.get_test_signal("paracetamol.txt")
-    sqrt_signal = cps.compute_sqrt(s1)
+    sqrt_signal = cps.sqrt(s1)
     check_array_result("Square root", sqrt_signal.y, np.sqrt(s1.y))
 
 
@@ -192,7 +223,7 @@ def test_signal_power() -> None:
     """Power validation test."""
     s1 = ctd.get_test_signal("paracetamol.txt")
     p = cdl.param.PowerParam.create(power=2.0)
-    power_signal = cps.compute_power(s1, p)
+    power_signal = cps.power(s1, p)
     check_array_result("Power", power_signal.y, s1.y**p.power)
 
 
@@ -207,7 +238,7 @@ def test_signal_arithmetic() -> None:
             p.factor = factor
             for constant in (0.0, 1.0, 2.0):
                 p.constant = constant
-                s3 = cps.compute_arithmetic(s1, s2, p)
+                s3 = cps.arithmetic(s1, s2, p)
                 if operator == "+":
                     exp = s1.y + s2.y
                 elif operator == "×":
@@ -222,6 +253,7 @@ def test_signal_arithmetic() -> None:
 
 if __name__ == "__main__":
     test_signal_addition()
+    test_signal_average()
     test_signal_product()
     test_signal_difference()
     test_signal_quadratic_difference()
@@ -231,9 +263,9 @@ if __name__ == "__main__":
     test_signal_difference_constant()
     test_signal_division_constant()
     test_signal_inverse()
-    test_signal_abs()
-    test_signal_re()
-    test_signal_im()
+    test_signal_absolute()
+    test_signal_real()
+    test_signal_imag()
     test_signal_astype()
     test_signal_exp()
     test_signal_log10()

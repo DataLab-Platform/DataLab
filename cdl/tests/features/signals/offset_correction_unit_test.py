@@ -29,7 +29,7 @@ def test_signal_offset_correction_interactive() -> None:
         if exec_dialog(dlg):
             param = ROI1DParam()
             param.xmin, param.xmax = dlg.get_x_range()
-            s2 = cps.compute_offset_correction(s1, param)
+            s2 = cps.offset_correction(s1, param)
             view_curve_items(
                 [s1.make_item(), s2.make_item()], title="Signal offset correction"
             )
@@ -40,7 +40,7 @@ def test_signal_offset_correction() -> None:
     """Signal offset correction validation test."""
     s1 = create_paracetamol_signal()
     param = ROI1DParam.create(xmin=10.0, xmax=12.0)
-    s2 = cps.compute_offset_correction(s1, param)
+    s2 = cps.offset_correction(s1, param)
 
     # Check that the offset correction has been applied
     imin, imax = np.searchsorted(s1.x, [param.xmin, param.xmax])

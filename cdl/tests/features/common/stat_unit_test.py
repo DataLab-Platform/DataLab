@@ -82,7 +82,7 @@ def create_reference_image() -> cdl.obj.ImageObj:
 def test_signal_stats_unit() -> None:
     """Validate computed statistics for signals"""
     obj = create_reference_signal()
-    res = cps.compute_stats(obj)
+    res = cps.stats(obj)
     df = res.to_dataframe()
     ref = get_analytical_stats(obj.xydata)
     name_map = {
@@ -122,7 +122,7 @@ def test_image_stats_unit() -> None:
     # (this warning is due to the fact that the 2nd ROI has zero sum of pixel values,
     # hence the mean/std is NaN)
     with np.errstate(invalid="ignore"):
-        res = cpi.compute_stats(obj)
+        res = cpi.stats(obj)
 
     df = res.to_dataframe()
     ref = get_analytical_stats(obj.data)
@@ -139,9 +139,9 @@ def test_image_stats_unit() -> None:
     for key, val in ref.items():
         colname = name_map[key]
         assert colname in df
-        assert np.isclose(
-            df[colname][0], val, rtol=1e-4, atol=1e-5
-        ), f"Incorrect value for {colname}"
+        assert np.isclose(df[colname][0], val, rtol=1e-4, atol=1e-5), (
+            f"Incorrect value for {colname}"
+        )
 
     # Given the fact that image ROI is set to
     # [[dx // 2, 0, dx, dy], [0, 0, dx // 3, dy // 3], [dx // 2, dy // 2, dx, dy]],

@@ -357,6 +357,7 @@ class RectangularROI(BaseSingleImageROI[AnnotatedRectangle]):
         if len(self.coords) != 4:
             raise ValueError("Rectangle ROI requires 4 coordinates")
 
+    # pylint: disable=unused-argument
     @classmethod
     def from_param(
         cls: RectangularROI, obj: ImageObj, param: ROI2DParam

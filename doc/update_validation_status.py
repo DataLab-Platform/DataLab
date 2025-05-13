@@ -13,31 +13,10 @@ import re
 
 from _pytest.mark import Mark
 
-import cdl.computation as computation_pkg
+import cdl.computation
 import cdl.tests as tests_pkg
 from cdl import __version__
 from cdl.utils.strings import shorten_docstring
-
-
-def get_compute_functions(package: str) -> list:
-    """Retrieve list of `compute_` functions from a package and its submodules
-
-    Args:
-        package: Python package
-
-    Returns:
-        List of tuples containing the module name, function name, and docstring
-    """
-    compute_functions = []
-    package_path = package.__path__
-    for _, module_name, _ in pkgutil.walk_packages(
-        package_path, package.__name__ + "."
-    ):
-        module = importlib.import_module(module_name)
-        for name, obj in inspect.getmembers(module, inspect.isfunction):
-            if name.startswith("compute_"):
-                compute_functions.append((module_name, name, obj.__doc__))
-    return compute_functions
 
 
 def check_for_validation_test(
@@ -53,7 +32,7 @@ def check_for_validation_test(
         Text to be included in the CSV file or None if it doesn't exist
     """
     family, funcname = full_function_name.split(".")[-2:]  # "signal" or "image"
-    shortname = funcname.replace("compute_", "")
+    shortname = funcname.removeprefix("compute_")
     endings = [shortname, shortname + "_unit", shortname + "_validation"]
     beginnings = ["test", f"test_{family}", f"test_{family[:3]}", f"test_{family[0]}"]
     names = [f"{beginning}_{ending}" for beginning in beginnings for ending in endings]
@@ -95,7 +74,7 @@ def get_validation_tests(package: str) -> list:
 
 def generate_csv_files() -> None:
     """Generate CSV files containing the validation status of compute functions"""
-    compute_functions = get_compute_functions(computation_pkg)
+    compute_functions = cdl.computation.find_computation_functions(cdl.computation)
     validation_tests = get_validation_tests(tests_pkg)
 
     submodules = {"signal": [], "image": []}

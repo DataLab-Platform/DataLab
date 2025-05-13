@@ -49,9 +49,9 @@ IROI3 = [
 
 def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None):
     """Test all signal features related to ROI"""
-    panel.processor.compute_fwhm(dlp.FWHMParam())
-    panel.processor.compute_fw1e2()
-    panel.processor.compute_histogram(dlp.HistogramParam())
+    panel.processor.run_feature("fwhm", dlp.FWHMParam())
+    panel.processor.run_feature("fw1e2")
+    panel.processor.run_feature("histogram", dlp.HistogramParam())
     panel.remove_object()
     obj_nb = len(panel)
     last_obj = panel[obj_nb]
@@ -63,27 +63,27 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
         if last_obj.roi is not None:
             roi.single_rois = last_obj.roi.single_rois
 
-    panel.processor.compute_gaussian_filter(dlp.GaussianParam.create(sigma=10.0))
+    panel.processor.run_feature("gaussian_filter", dlp.GaussianParam.create(sigma=10.0))
     if execenv.unattended and last_obj.roi is not None and not last_obj.roi.is_empty():
         # Check if the processed data is correct: signal should be the same as the
         # original data outside the ROI, and should be different inside the ROI.
         orig = last_obj.data
         new = panel[obj_nb + 1].data
-        assert not np.any(
-            new[SROI1[0] : SROI1[1]] == orig[SROI1[0] : SROI1[1]]
-        ), "Signal ROI 1 data mismatch"
-        assert not np.any(
-            new[SROI2[0] : SROI2[1]] == orig[SROI2[0] : SROI2[1]]
-        ), "Signal ROI 2 data mismatch"
-        assert np.all(
-            new[: SROI1[0]] == orig[: SROI1[0]]
-        ), "Signal before ROI 1 data mismatch"
-        assert np.all(
-            new[SROI1[1] : SROI2[0]] == orig[SROI1[1] : SROI2[0]]
-        ), "Signal between ROIs data mismatch"
-        assert np.all(
-            new[SROI2[1] :] == orig[SROI2[1] :]
-        ), "Signal after ROI 2 data mismatch"
+        assert not np.any(new[SROI1[0] : SROI1[1]] == orig[SROI1[0] : SROI1[1]]), (
+            "Signal ROI 1 data mismatch"
+        )
+        assert not np.any(new[SROI2[0] : SROI2[1]] == orig[SROI2[0] : SROI2[1]]), (
+            "Signal ROI 2 data mismatch"
+        )
+        assert np.all(new[: SROI1[0]] == orig[: SROI1[0]]), (
+            "Signal before ROI 1 data mismatch"
+        )
+        assert np.all(new[SROI1[1] : SROI2[0]] == orig[SROI1[1] : SROI2[0]]), (
+            "Signal between ROIs data mismatch"
+        )
+        assert np.all(new[SROI2[1] :] == orig[SROI2[1] :]), (
+            "Signal after ROI 2 data mismatch"
+        )
     panel.remove_object()
 
     panel.processor.compute_roi_extraction(roi)
@@ -115,10 +115,10 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
 
 def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     """Test all image features related to ROI"""
-    panel.processor.compute_centroid()
-    panel.processor.compute_enclosing_circle()
-    panel.processor.compute_histogram(dlp.HistogramParam())
-    panel.processor.compute_peak_detection(dlp.Peak2DDetectionParam())
+    panel.processor.run_feature("centroid")
+    panel.processor.run_feature("enclosing_circle")
+    panel.processor.run_feature("histogram", dlp.HistogramParam())
+    panel.processor.run_feature("peak_detection", dlp.Peak2DDetectionParam())
     obj_nb = len(panel)
     last_obj = panel[obj_nb]
     roi = dlo.ImageROI(singleobj=singleobj)
@@ -130,7 +130,9 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
             roi.single_rois = last_obj.roi.single_rois
 
     value = 1
-    panel.processor.compute_addition_constant(dlp.ConstantParam.create(value=value))
+    panel.processor.run_feature(
+        "addition_constant", dlp.ConstantParam.create(value=value)
+    )
     if execenv.unattended and last_obj.roi is not None and not last_obj.roi.is_empty():
         # Check if the processed data is correct: image should be the same as the
         # original data outside the ROI, and should be different inside the ROI.
@@ -152,15 +154,15 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
         assert np.all(
             new[:first_row, :first_col] == np.array(orig[:first_row, :first_col], float)
         ), "Image before ROIs data mismatch"
-        assert np.all(
-            new[:first_row, last_col:] == orig[:first_row, last_col:]
-        ), "Image after ROIs data mismatch"
-        assert np.all(
-            new[last_row:, :first_col] == orig[last_row:, :first_col]
-        ), "Image before ROIs data mismatch"
-        assert np.all(
-            new[last_row:, last_col:] == orig[last_row:, last_col:]
-        ), "Image after ROIs data mismatch"
+        assert np.all(new[:first_row, last_col:] == orig[:first_row, last_col:]), (
+            "Image after ROIs data mismatch"
+        )
+        assert np.all(new[last_row:, :first_col] == orig[last_row:, :first_col]), (
+            "Image before ROIs data mismatch"
+        )
+        assert np.all(new[last_row:, last_col:] == orig[last_row:, last_col:]), (
+            "Image after ROIs data mismatch"
+        )
     panel.remove_object()
 
     panel.processor.compute_roi_extraction(roi)

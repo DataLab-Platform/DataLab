@@ -24,7 +24,7 @@ def test_example_app():
         data = get_test_image("flower.npy").data
         image = dlo.create_image("Test image with peaks", data)
         proxy.add_object(image)
-        proxy.compute_roberts()
+        proxy.calc("roberts")
         data_size = data.shape[0]
         n = data_size // 5
         roi = dlo.create_image_roi(
@@ -39,7 +39,7 @@ def test_example_app():
             filter_by_circularity=True,
             min_circularity=0.2,
         )
-        proxy.compute_blob_opencv(param)
+        proxy.calc("blob_opencv", param)
 
 
 if __name__ == "__main__":

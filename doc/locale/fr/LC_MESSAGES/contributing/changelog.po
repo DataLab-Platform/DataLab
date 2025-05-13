@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 17:21+0200\n"
+"POT-Creation-Date: 2025-05-13 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,30 @@ msgstr "DataLab Version 0.21.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Computation functions refactoring:"
+msgstr "Refactorisation des fonctions de calcul :"
+
+msgid "Added new `@computation_function` decorator to mark and register computation functions"
+msgstr "Ajout d'un nouveau décorateur `@computation_function` pour marquer et enregistrer les fonctions de calcul"
+
+msgid "Renamed computation functions to remove redundant \"compute_\" prefix (e.g., `compute_fft` ➝ `fft`)"
+msgstr "Renommé les fonctions de calcul pour supprimer le préfixe redondant \"compute_\" (par exemple, `compute_fft` ➝ `fft`)"
+
+msgid "Added infrastructure for discovering computation functions via introspection"
+msgstr "Ajout d'une infrastructure pour découvrir les fonctions de calcul via l'introspection"
+
+msgid "Improved function naming in coordinate transformations (e.g., `to_polar` ➝ `to_polar`)"
+msgstr "Amélioration de la nomination des fonctions dans les transformations de coordonnées (par exemple, `to_polar` ➝ `to_polar`)"
+
+msgid "Added type hints and improved documentation across computation modules"
+msgstr "Ajout de types d'indices et amélioration de la documentation dans les modules de calcul"
+
+msgid "These changes improve code organization and maintainability while making the API more intuitive"
+msgstr "Ces changements améliorent l'organisation et la maintenabilité du code tout en rendant l'API plus intuitive"
+
+msgid "Internal changes only - **no backward compatibility is maintained** for plugin developers"
+msgstr "Changements internes uniquement - **aucune compatibilité ascendante n'est maintenue** pour les développeurs de plugins"
 
 msgid "Generic processing types refactoring:"
 msgstr "Refactorisation des types de traitement génériques :"
@@ -1850,8 +1874,8 @@ msgstr "Cela conduisait à un comportement inattendu, car on pouvait interpréte
 msgid "Now, when extracting a single circular ROI from an image with the \"Extract all ROIs into a single image object\" option enabled, the result is a single image with the ROI mask (as if the option was disabled)"
 msgstr "A présent, lors de l'extraction d'une seule ROI circulaire d'une image avec l'option \"Extraire toutes les ROI dans un seul objet d'image\" activée, le résultat est une seule image avec le masque de ROI (comme si l'option était désactivée)"
 
-msgid "This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function"
-msgstr "Ceci corrige l'[Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Extraction d'une seule ROI circulaire : bascule automatique vers la fonction `extract_single_roi`"
+msgid "This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `compute_extract_roi` function"
+msgstr "Ceci corrige l'[Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Extraction d'une seule ROI circulaire : bascule automatique vers la fonction `compute_extract_roi`"
 
 msgid "Analysis on circular ROI:"
 msgstr "Analyse sur ROI circulaire :"

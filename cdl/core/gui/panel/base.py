@@ -1006,7 +1006,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if filenames is None or edit:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
             if edit and filenames is not None:
-                # ⚠️ QFileDialog.getOpenFileNames does not support multiple
+                # ?? QFileDialog.getOpenFileNames does not support multiple
                 # file preselection (only single file preselection is supported).
                 # So until we eventually use an alternative to QFileDialog, we have
                 # to limit the number of preselected files to 1.
@@ -1234,7 +1234,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[-1]]  # last selected object
 
-        if not all([oid in self.plothandler for oid in oids]):
+        if not all(oid in self.plothandler for oid in oids):
             # This happens for example when opening an already saved workspace with
             # multiple images, and if the user tries to view in a new window a group of
             # images without having selected any object yet. In this case, only the

@@ -18,8 +18,8 @@ def test_fft1d_app():
         newparam = new_signal_param(stype=SignalTypes.COSINUS, size=10000)
         s1 = create_signal_from_param(newparam)
         panel.add_object(s1)
-        panel.processor.compute_fft()
-        panel.processor.compute_ifft()
+        panel.processor.run_feature("fft")
+        panel.processor.run_feature("ifft")
 
 
 if __name__ == "__main__":

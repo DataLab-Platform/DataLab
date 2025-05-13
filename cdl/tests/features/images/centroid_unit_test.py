@@ -59,7 +59,7 @@ def get_centroid_with_cv2(data):
 
 def add_xcursor(items, x, y, title):
     """Added X cursor to plot"""
-    label = "  " + f'{_("Centroid")}[{title}] (x=%s, y=%s)'
+    label = "  " + f"{_('Centroid')}[{title}] (x=%s, y=%s)"
     execenv.print(label % (x, y))
     cursor = make.xcursor(x, y, label=label)
     cursor.setTitle(title)
@@ -99,7 +99,7 @@ def test_centroid_graphically():
 
 def __check_centroid(image, expected_x, expected_y):
     """Check centroid computation"""
-    df = cpi.compute_centroid(image).to_dataframe()
+    df = cpi.centroid(image).to_dataframe()
     check_scalar_result("Centroid X", df.x[0], expected_x, atol=1.0)
     check_scalar_result("Centroid Y", df.y[0], expected_y, atol=1.0)
 
