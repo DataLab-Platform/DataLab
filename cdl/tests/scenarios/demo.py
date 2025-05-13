@@ -134,8 +134,8 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
 
     panel.processor.compute("rotate90")
     panel.processor.compute("rotate270")
-    panel.processor.compute("flip_h")
-    panel.processor.compute("flip_v")
+    panel.processor.compute("fliph")
+    panel.processor.compute("flipv")
 
     param = dlp.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
