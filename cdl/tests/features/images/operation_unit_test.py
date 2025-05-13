@@ -242,6 +242,7 @@ def test_image_division_constant() -> None:
 def test_image_arithmetic() -> None:
     """Image arithmetic test."""
     execenv.print("*** Testing image arithmetic:")
+    # pylint: disable=too-many-nested-blocks
     for ima1, ima2 in __iterate_image_couples():
         dtype1 = ima1.data.dtype
         p = cdl.param.ArithmeticParam.create()

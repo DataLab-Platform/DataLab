@@ -50,7 +50,7 @@ def test_create_signal_roi() -> None:
 
     # ROI coordinates: for each ROI type, the coordinates are given for indices=True
     # and indices=False (physical coordinates)
-    coords = {
+    roi_coords = {
         "segment": {
             CLASS_NAME: "SegmentROI",
             True: [50, 100],  # indices [x0, dx]
@@ -63,19 +63,19 @@ def test_create_signal_roi() -> None:
     for indices in (True, False):
         execenv.print("indices:", indices)
 
-        for geometry in coords:
+        for geometry, coords in roi_coords.items():
             execenv.print("  geometry:", geometry)
 
-            roi = create_signal_roi(coords[geometry][indices], indices=indices)
+            roi = create_signal_roi(coords[indices], indices=indices)
 
             sroi = roi.get_single_roi(0)
-            assert sroi.__class__.__name__ == coords[geometry][CLASS_NAME]
+            assert sroi.__class__.__name__ == coords[CLASS_NAME]
 
             cds_ind = [int(val) for val in sroi.get_indices_coords(obj)]
-            assert cds_ind == coords[geometry][True]
+            assert cds_ind == coords[True]
 
             cds_phys = [float(val) for val in sroi.get_physical_coords(obj)]
-            assert cds_phys == coords[geometry][False]
+            assert cds_phys == coords[False]
 
             execenv.print("    get_physical_coords:", cds_phys)
             execenv.print("    get_indices_coords: ", cds_ind)
@@ -88,7 +88,7 @@ def test_create_image_roi() -> None:
 
     # ROI coordinates: for each ROI type, the coordinates are given for indices=True
     # and indices=False (physical coordinates)
-    coords = {
+    roi_coords = {
         "rectangle": {
             CLASS_NAME: "RectangularROI",
             True: [500, 750, 1000, 1250],  # indices [x0, y0, dx, dy]
@@ -111,29 +111,29 @@ def test_create_image_roi() -> None:
     for indices in (True, False):
         execenv.print("indices:", indices)
 
-        for geometry in coords:
+        for geometry, coords in roi_coords.items():
             execenv.print("  geometry:", geometry)
 
-            roi = create_image_roi(geometry, coords[geometry][indices], indices=indices)
+            roi = create_image_roi(geometry, coords[indices], indices=indices)
 
             sroi = roi.get_single_roi(0)
-            assert sroi.__class__.__name__ == coords[geometry][CLASS_NAME]
+            assert sroi.__class__.__name__ == coords[CLASS_NAME]
 
             bbox_phys = [float(val) for val in sroi.get_bounding_box(obj)]
             if geometry in ("rectangle", "circle"):
                 x0, y0, x1, y1 = obj.physical_to_indices(bbox_phys)
                 if geometry == "rectangle":
                     coords_from_bbox = [int(xy) for xy in [x0, y0, x1 - x0, y1 - y0]]
-                elif geometry == "circle":
+                else:
                     coords_from_bbox = [
                         int(xy) for xy in [(x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2]
                     ]
-                assert coords_from_bbox == coords[geometry][True]
+                assert coords_from_bbox == coords[True]
 
             cds_phys = [float(val) for val in sroi.get_physical_coords(obj)]
-            assert cds_phys == coords[geometry][False]
+            assert cds_phys == coords[False]
             cds_ind = [int(val) for val in sroi.get_indices_coords(obj)]
-            assert cds_ind == coords[geometry][True]
+            assert cds_ind == coords[True]
 
             execenv.print("    get_bounding_box:   ", bbox_phys)
             execenv.print("    get_physical_coords:", cds_phys)

@@ -78,16 +78,16 @@ def threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
     """
     if p.method == "manual":
         suffix = f"value={p.value}"
-        threshold = p.value
+        value = p.value
     else:
         suffix = f"method={p.method}"
         if p.method not in ("li", "mean"):
             suffix += f", nbins={p.bins}"
         func = getattr(filters, f"threshold_{p.method}")
         args = [] if p.method in ("li", "mean") else [p.bins]
-        threshold = func(src.data, *args)
+        value = func(src.data, *args)
     dst = dst_1_to_1(src, "threshold", suffix)
-    data = src.data > threshold if p.operation == ">" else src.data < threshold
+    data = src.data > value if p.operation == ">" else src.data < value
     dst.data = skimage.util.img_as_ubyte(data)
     dst.zscalemin, dst.zscalemax = 0, 255  # LUT range
     dst.metadata["colormap"] = "gray"

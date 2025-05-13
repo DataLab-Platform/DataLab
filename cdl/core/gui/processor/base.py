@@ -1168,11 +1168,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         """
         try:
             return self.computing_registry[function_or_name]
-        except KeyError:
+        except KeyError as exc:
             for _func, feature in self.computing_registry.items():
                 if feature.name == function_or_name:
                     return feature
-            raise ValueError(f"Unknown computing feature: {function_or_name}")
+            raise ValueError(f"Unknown computing feature: {function_or_name}") from exc
 
     @qt_try_except()
     def compute(

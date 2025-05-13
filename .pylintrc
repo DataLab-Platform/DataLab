@@ -11,6 +11,7 @@ disable=wrong-import-order
 
 [DESIGN]
 max-args=10  # default: 5
+max-positional-arguments=11  # default: 5
 max-attributes=12  # default: 7
 max-branches=20  # default: 12
 max-locals=20  # default: 15

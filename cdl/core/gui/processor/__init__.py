@@ -31,18 +31,21 @@ Generic processing types
 -------------------------
 
 To support consistent processing workflows, the :class:`BaseProcessor` class defines
-five generic processing methods, each corresponding to a fundamental input/output pattern.
-These methods are tightly integrated with the GUI logic: the input objects are taken
-from the current selection in the active panel (Signal or Image), and the output objects
-are automatically appended to the same panel.
+five generic processing methods, each corresponding to a fundamental input/output
+pattern. These methods are tightly integrated with the GUI logic: the input objects
+are taken from the current selection in the active panel (Signal or Image), and the
+output objects are automatically appended to the same panel.
 
 Descriptions:
 
 - ``compute_1_to_1``: Applies an independent transformation to each selected object.
 - ``compute_1_to_0``: Runs an analysis or measurement producing metadata or scalar data.
-- ``compute_1_to_n``: Produces multiple output objects from a single input (e.g. ROI extraction).
-- ``compute_n_to_1``: Aggregates multiple objects into one (e.g. sum, average); supports pairwise mode.
-- ``compute_2_to_1``: Applies a binary operation with a second operand (object or constant); supports pairwise mode.
+- ``compute_1_to_n``: Produces multiple output objects from a single input
+  (e.g. ROI extraction).
+- ``compute_n_to_1``: Aggregates multiple objects into one (e.g. sum, average);
+  supports pairwise mode.
+- ``compute_2_to_1``: Applies a binary operation with a second operand
+  (object or constant); supports pairwise mode.
 
 .. list-table::
     :header-rows: 1
@@ -76,5 +79,6 @@ These methods are for internal or advanced use (e.g. plugin or macro authors) an
 will evolve without backward compatibility guarantees.
 
 Future developments (such as a visual pipeline editor) may require generalizing
-this model to support additional sources and destinations beyond the current panel-based selection/output logic.
+this model to support additional sources and destinations beyond the current
+panel-based selection/output logic.
 """  # noqa: E501

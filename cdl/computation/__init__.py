@@ -135,6 +135,7 @@ def computation_function(
             return f(*args, **kwargs)
 
         setattr(wrapper, COMPUTATION_MARKER, True)
+        # pylint: disable=protected-access
         wrapper._computation_name = name or f.__name__
         wrapper._computation_description = description or f.__doc__
         return wrapper
@@ -176,7 +177,7 @@ def find_computation_functions(
     for _, modname, _ in pkgutil.walk_packages(path=path, prefix=__name__ + "."):
         try:
             module = importlib.import_module(modname)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             continue
         for name, obj in inspect.getmembers(module, inspect.isfunction):
             if is_computation_function(obj):

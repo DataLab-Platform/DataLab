@@ -70,6 +70,7 @@ def test_image_roi_editor() -> None:
                     edited_roi, modified = results
                     if extract:
                         # Test that the single ROIs are equal
+                        # pylint: disable=use-a-generator
                         assert all(
                             [
                                 np.array_equal(
