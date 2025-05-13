@@ -164,7 +164,7 @@ def test_signal_inverse() -> None:
 def test_signal_abs() -> None:
     """Absolute value validation test."""
     s1 = __create_two_signals()[0]
-    abs_signal = cps.abs(s1)
+    abs_signal = cps.absolute(s1)
     check_array_result("Absolute value", abs_signal.y, np.abs(s1.y))
 
 

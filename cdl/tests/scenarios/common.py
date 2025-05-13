@@ -43,7 +43,7 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     panel.processor.compute("wiener")
     panel.processor.compute("fft")
     panel.processor.compute("ifft")
-    panel.processor.compute("abs")
+    panel.processor.compute("absolute")
     panel.processor.compute("magnitude_spectrum")
     panel.processor.compute("phase_spectrum")
     panel.processor.compute("psd")
@@ -314,7 +314,9 @@ def run_image_computations(
     # Test exposure methods
     ima2 = create_sincos_image(newparam)
     panel.add_object(ima2)
-    panel.processor.compute("abs")  # Avoid neg. values for skimage correction methods
+    panel.processor.compute(
+        "absolute"
+    )  # Avoid neg. values for skimage correction methods
     param = dlp.AdjustGammaParam.create(gamma=0.5)
     panel.processor.compute("adjust_gamma", param)
     param = dlp.AdjustLogParam.create(gain=0.5)

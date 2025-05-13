@@ -167,7 +167,7 @@ msgstr "Parties réelles et imaginaires"
 msgid "|abs| Absolute value"
 msgstr "|abs| Valeur absolue"
 
-msgid "abs"
+msgid "absolute"
 msgstr ""
 
 #, python-brace-format

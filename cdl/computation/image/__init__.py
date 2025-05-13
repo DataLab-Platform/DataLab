@@ -1101,7 +1101,7 @@ def inverse(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def abs(src: ImageObj) -> ImageObj:
+def absolute(src: ImageObj) -> ImageObj:
     """Compute absolute value with :py:data:`numpy.absolute`
 
     Args:

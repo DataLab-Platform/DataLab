@@ -679,7 +679,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 self.action_for("difference_constant")
                 self.action_for("product_constant")
                 self.action_for("division_constant")
-            self.action_for("abs", separator=True)
+            self.action_for("absolute", separator=True)
             self.action_for("real")
             self.action_for("imag")
             self.action_for("astype", separator=True)

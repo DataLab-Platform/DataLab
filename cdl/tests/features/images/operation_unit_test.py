@@ -294,7 +294,7 @@ def test_image_abs() -> None:
     for ima1 in __iterate_images():
         execenv.print(f"  abs({ima1.data.dtype}): ", end="")
         exp = np.abs(ima1.data)
-        ima2 = cpi.abs(ima1)
+        ima2 = cpi.absolute(ima1)
         check_array_result("Image abs", ima2.data, exp)
 
 

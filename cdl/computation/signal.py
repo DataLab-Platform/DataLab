@@ -472,7 +472,7 @@ def inverse(src: SignalObj) -> SignalObj:
 
 
 @computation_function
-def abs(src: SignalObj) -> SignalObj:
+def absolute(src: SignalObj) -> SignalObj:
     """Compute absolute value with :py:data:`numpy.absolute`
 
     Args:
