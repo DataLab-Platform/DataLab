@@ -926,8 +926,7 @@ class BandStopFilterParam(BaseHighLowBandParam):
     TYPE = FilterType.BANDSTOP
 
 
-@computation_function
-def freqfilter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
+def frequency_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     """Compute frequency filter (low-pass, high-pass, band-pass, band-stop),
     with :py:func:`scipy.signal.filtfilt`
 
@@ -964,7 +963,7 @@ def lowpass(src: SignalObj, p: LowPassFilterParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return freqfilter(src, p)
+    return frequency_filter(src, p)
 
 
 @computation_function
@@ -978,7 +977,7 @@ def highpass(src: SignalObj, p: HighPassFilterParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return freqfilter(src, p)
+    return frequency_filter(src, p)
 
 
 @computation_function
@@ -992,7 +991,7 @@ def bandpass(src: SignalObj, p: BandPassFilterParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return freqfilter(src, p)
+    return frequency_filter(src, p)
 
 
 @computation_function
@@ -1006,7 +1005,7 @@ def bandstop(src: SignalObj, p: BandStopFilterParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return freqfilter(src, p)
+    return frequency_filter(src, p)
 
 
 class ZeroPadding1DParam(gds.DataSet):
