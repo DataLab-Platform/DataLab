@@ -505,7 +505,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 """Polynomial fit dialog function"""
                 return dlgfunc(x, y, param.degree, parent=parent)
 
-            self.fit(txt, polynomialfit)
+            self.compute_fit(txt, polynomialfit)
 
     def __row_compute_fit(
         self, obj: SignalObj, name: str, fitdlgfunc: Callable
