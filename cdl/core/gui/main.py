@@ -1199,7 +1199,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             if isinstance(panel, base.BaseDataPanel):
                 panel: base.BaseDataPanel
                 try:
-                    feature = panel.processor.get_computing_feature(name)
+                    feature = panel.processor.get_feature(name)
                     panel.processor.run_feature(feature, param)
                     return
                 except ValueError:

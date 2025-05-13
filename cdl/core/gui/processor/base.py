@@ -1001,7 +1001,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment=comment,
             edit=edit,
         )
-        self.add_computing_feature(feature)
+        self.add_feature(feature)
         return feature
 
     def register_1_to_0(
@@ -1039,7 +1039,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment=comment,
             edit=edit,
         )
-        self.add_computing_feature(feature)
+        self.add_feature(feature)
         return feature
 
     def register_1_to_n(
@@ -1065,7 +1065,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             title=title,
             icon_name=icon_name,
         )
-        self.add_computing_feature(feature)
+        self.add_feature(feature)
         return feature
 
     def register_n_to_1(
@@ -1103,7 +1103,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             comment=comment,
             edit=edit,
         )
-        self.add_computing_feature(feature)
+        self.add_feature(feature)
         return feature
 
     def register_2_to_1(
@@ -1144,10 +1144,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             edit=edit,
             obj2_name=obj2_name,
         )
-        self.add_computing_feature(feature)
+        self.add_feature(feature)
         return feature
 
-    def add_computing_feature(self, feature: ComputingFeature) -> None:
+    def add_feature(self, feature: ComputingFeature) -> None:
         """Add a computing feature to the registry.
 
         Args:
@@ -1155,9 +1155,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         """
         self.computing_registry[feature.function] = feature
 
-    def get_computing_feature(
-        self, function_or_name: Callable | str
-    ) -> ComputingFeature:
+    def get_feature(self, function_or_name: Callable | str) -> ComputingFeature:
         """Get a computing feature by name or function.
 
         Args:
@@ -1218,7 +1216,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             The result of the computation or None.
         """
         if not isinstance(key, ComputingFeature):
-            feature = self.get_computing_feature(key)
+            feature = self.get_feature(key)
         else:
             feature = key
 

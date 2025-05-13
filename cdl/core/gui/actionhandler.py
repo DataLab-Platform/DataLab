@@ -343,7 +343,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         Returns:
             New action
         """
-        feature = self.panel.processor.get_computing_feature(function_or_name)
+        feature = self.panel.processor.get_feature(function_or_name)
         if feature.pattern == "n_to_1":
             condition = SelectCond.at_least_two
         else:
