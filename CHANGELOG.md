@@ -6,6 +6,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Computation functions refactoring:
+  * Added new `@computation_function` decorator to mark and register computation functions
+  * Renamed computation functions to remove redundant "compute_" prefix (e.g., `compute_fft` ➝ `fft`)
+  * Added infrastructure for discovering computation functions via introspection
+  * Improved function naming in coordinate transformations (e.g., `cartesian2polar` ➝ `to_polar`)
+  * Added type hints and improved documentation across computation modules
+  * These changes improve code organization and maintainability while making the API more intuitive
+  * Internal changes only - **no backward compatibility is maintained** for plugin developers
+
 * Generic processing types refactoring:
   * Refactored the naming convention of core `BaseProcessor` methods implementing generic data processing patterns (e.g. one input ➝ one output, n inputs ➝ one output, etc.)
   * New method names are now based on their input/output signature for better clarity and extensibility:
