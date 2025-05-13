@@ -1114,7 +1114,7 @@ def abs(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def re(src: ImageObj) -> ImageObj:
+def real(src: ImageObj) -> ImageObj:
     """Compute real part with :py:func:`numpy.real`
 
     Args:
@@ -1127,7 +1127,7 @@ def re(src: ImageObj) -> ImageObj:
 
 
 @computation_function
-def im(src: ImageObj) -> ImageObj:
+def imag(src: ImageObj) -> ImageObj:
     """Compute imaginary part with :py:func:`numpy.imag`
 
     Args:

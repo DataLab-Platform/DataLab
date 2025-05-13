@@ -99,8 +99,8 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             icon_name="constant_divide.svg",
         )
         self.register_1_to_1(cpi.abs, _("Absolute value"), icon_name="abs.svg")
-        self.register_1_to_1(cpi.re, _("Real part"), icon_name="re.svg")
-        self.register_1_to_1(cpi.im, _("Imaginary part"), icon_name="im.svg")
+        self.register_1_to_1(cpi.real, _("Real part"), icon_name="re.svg")
+        self.register_1_to_1(cpi.imag, _("Imaginary part"), icon_name="im.svg")
         self.register_1_to_1(
             cpi.astype,
             _("Convert data type"),

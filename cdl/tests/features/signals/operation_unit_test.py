@@ -172,7 +172,7 @@ def test_signal_abs() -> None:
 def test_signal_re() -> None:
     """Real part validation test."""
     s1 = __create_two_signals()[0]
-    re_signal = cps.re(s1)
+    re_signal = cps.real(s1)
     check_array_result("Real part", re_signal.y, np.real(s1.y))
 
 
@@ -180,7 +180,7 @@ def test_signal_re() -> None:
 def test_signal_im() -> None:
     """Imaginary part validation test."""
     s1 = __create_two_signals()[0]
-    im_signal = cps.im(s1)
+    im_signal = cps.imag(s1)
     check_array_result("Imaginary part", im_signal.y, np.imag(s1.y))
 
 

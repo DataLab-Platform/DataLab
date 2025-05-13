@@ -485,7 +485,7 @@ def abs(src: SignalObj) -> SignalObj:
 
 
 @computation_function
-def re(src: SignalObj) -> SignalObj:
+def real(src: SignalObj) -> SignalObj:
     """Compute real part with :py:func:`numpy.real`
 
     Args:
@@ -498,7 +498,7 @@ def re(src: SignalObj) -> SignalObj:
 
 
 @computation_function
-def im(src: SignalObj) -> SignalObj:
+def imag(src: SignalObj) -> SignalObj:
     """Compute imaginary part with :py:func:`numpy.imag`
 
     Args:

@@ -305,7 +305,7 @@ def test_image_re() -> None:
     for ima1 in __iterate_images():
         execenv.print(f"  re({ima1.data.dtype}): ", end="")
         exp = np.real(ima1.data)
-        ima2 = cpi.re(ima1)
+        ima2 = cpi.real(ima1)
         check_array_result("Image re", ima2.data, exp)
 
 
@@ -316,7 +316,7 @@ def test_image_im() -> None:
     for ima1 in __iterate_images():
         execenv.print(f"  im({ima1.data.dtype}): ", end="")
         exp = np.imag(ima1.data)
-        ima2 = cpi.im(ima1)
+        ima2 = cpi.imag(ima1)
         check_array_result("Image im", ima2.data, exp)
 
 

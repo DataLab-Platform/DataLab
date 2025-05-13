@@ -94,8 +94,8 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             icon_name="constant_divide.svg",
         )
         self.register_1_to_1(cps.abs, _("Absolute value"), icon_name="abs.svg")
-        self.register_1_to_1(cps.re, _("Real part"), icon_name="re.svg")
-        self.register_1_to_1(cps.im, _("Imaginary part"), icon_name="im.svg")
+        self.register_1_to_1(cps.real, _("Real part"), icon_name="re.svg")
+        self.register_1_to_1(cps.imag, _("Imaginary part"), icon_name="im.svg")
         self.register_1_to_1(
             cps.astype,
             _("Convert data type"),
