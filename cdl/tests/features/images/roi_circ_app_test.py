@@ -52,12 +52,12 @@ def test_roi_circ():
             ima = create_test_image_with_roi(geometry)
             panel.add_object(ima)
             print_obj_shapes(ima)
-            panel.processor.compute("stats")
-            panel.processor.compute("centroid")
+            panel.processor.run_feature("stats")
+            panel.processor.run_feature("centroid")
         # Extracting ROIs:
         for obj_nb in (1, 2):
             panel.objview.set_current_object(panel[obj_nb])
-            panel.processor.compute("roi_extraction")
+            panel.processor.run_feature("roi_extraction")
 
 
 if __name__ == "__main__":

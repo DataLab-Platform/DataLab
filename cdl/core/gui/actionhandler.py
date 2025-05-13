@@ -352,7 +352,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             feature.action_title,
             position=position,
             separator=separator,
-            triggered=lambda: self.panel.processor.compute(feature.function),
+            triggered=lambda: self.panel.processor.run_feature(feature.function),
             select_condition=condition,
             icon_name=feature.icon_name,
             tip=feature.comment,

@@ -49,8 +49,8 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
 
     sig = create_paracetamol_signal()
     panel.add_object(sig)
-    panel.processor.compute(cps.derivative)
-    panel.processor.compute(
+    panel.processor.run_feature(cps.derivative)
+    panel.processor.run_feature(
         cps.moving_average, cdl.param.MovingAverageParam.create(n=5)
     )
 

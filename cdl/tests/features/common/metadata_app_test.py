@@ -28,16 +28,16 @@ from cdl.tests.features.common import roi_app_test
 def __run_signal_computations(panel: SignalPanel):
     """Test all signal features related to ROI"""
     execenv.print("  Signal features")
-    panel.processor.compute(cps.fwhm, dlp.FWHMParam())
-    panel.processor.compute(cps.fw1e2)
+    panel.processor.run_feature(cps.fwhm, dlp.FWHMParam())
+    panel.processor.run_feature(cps.fw1e2)
 
 
 def __run_image_computations(panel: ImagePanel):
     """Test all image features related to ROI"""
     execenv.print("  Image features")
-    panel.processor.compute(cpi.centroid)
-    panel.processor.compute(cpi.enclosing_circle)
-    panel.processor.compute(cpi_det.peak_detection, dlp.Peak2DDetectionParam())
+    panel.processor.run_feature(cpi.centroid)
+    panel.processor.run_feature(cpi.enclosing_circle)
+    panel.processor.run_feature(cpi_det.peak_detection, dlp.Peak2DDetectionParam())
 
 
 def __test_metadata_features(panel: BaseDataPanel):

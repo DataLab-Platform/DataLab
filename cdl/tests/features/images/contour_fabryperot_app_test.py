@@ -27,22 +27,22 @@ def test_contour_app():
         ima1.roi = roi
         panel.add_object(ima1)
         param = cdl.param.ContourShapeParam.create(shape=shape)
-        panel.processor.compute("contour_shape", param)
+        panel.processor.run_feature("contour_shape", param)
         take_plotwidget_screenshot(panel, "contour_fabryperot_test")
 
         ima2 = get_test_image("fabry-perot2.jpg")
         ima2.metadata["colormap"] = "gray"
         ima2.roi = roi
         panel.add_object(ima2)
-        panel.processor.compute("contour_shape", param)
+        panel.processor.run_feature("contour_shape", param)
 
         param = cdl.param.LineProfileParam.create(direction="horizontal", row=554)
-        panel.processor.compute("line_profile", param)
+        panel.processor.run_feature("line_profile", param)
 
         param = cdl.param.AverageProfileParam.create(
             direction="horizontal", row1=550, row2=560
         )
-        panel.processor.compute("average_profile", param)
+        panel.processor.run_feature("average_profile", param)
 
 
 if __name__ == "__main__":

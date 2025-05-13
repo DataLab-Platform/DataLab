@@ -32,7 +32,7 @@ def test_blobs():
             image = create_image(name, data)
             image.add_label_with_title()
             panel.add_object(image)
-            proc.compute(compute_method, param)
+            proc.run_feature(compute_method, param)
 
         # Testing distribute_on_grid and reset_positions
         # ==============================================

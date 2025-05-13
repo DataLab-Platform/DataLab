@@ -18,8 +18,8 @@ def test_fft2d_app():
         newparam = new_image_param(itype=ImageTypes.GAUSS, width=100, height=100)
         i1 = create_image_from_param(newparam)
         panel.add_object(i1)
-        panel.processor.compute("fft")
-        panel.processor.compute("ifft")
+        panel.processor.run_feature("fft")
+        panel.processor.run_feature("ifft")
 
 
 if __name__ == "__main__":

@@ -438,7 +438,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 param.xmin, param.xmax = dlg.get_x_range()
             else:
                 return
-        self.compute("offset_correction", param)
+        self.run_feature("offset_correction", param)
 
     @qt_try_except()
     def compute_all_stability(
@@ -489,7 +489,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 param.min_dist = dlg.get_min_dist()
             else:
                 return
-        self.compute("peak_detection", param)
+        self.run_feature("peak_detection", param)
 
     @qt_try_except()
     def compute_polyfit(
@@ -578,7 +578,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 param.y = dlg.get_y_value()
             else:
                 return None
-        return self.compute("full_width_at_y", param)
+        return self.run_feature("full_width_at_y", param)
 
     @qt_try_except()
     def compute_x_at_y(
@@ -595,7 +595,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 param.y = dlg.get_y_value()
             else:
                 return None
-        return self.compute("x_at_y", param)
+        return self.run_feature("x_at_y", param)
 
     @qt_try_except()
     def compute_y_at_x(
@@ -612,4 +612,4 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 param.x = dlg.get_x_value()
             else:
                 return None
-        return self.compute("y_at_x", param)
+        return self.run_feature("y_at_x", param)

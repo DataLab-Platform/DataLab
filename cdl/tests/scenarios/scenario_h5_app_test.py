@@ -41,13 +41,13 @@ def test_scenario_h5():
             panel = win.signalpanel
             sig1 = create_paracetamol_signal()
             panel.add_object(sig1)
-            panel.processor.compute("derivative")
+            panel.processor.run_feature("derivative")
             # === Creating two test images
             panel = win.imagepanel
             ima1 = create_noisygauss_image(add_annotations=True)
             panel.add_object(ima1)
             param = ClipParam.create(upper=ima1.data.mean())
-            panel.processor.compute("clip", param)
+            panel.processor.run_feature("clip", param)
             # === Creating a macro
             scode = scenario_mac_app_test.add_macro_sample(win, 0).get_code()
             scenario_mac_app_test.add_macro_sample(win, 1)

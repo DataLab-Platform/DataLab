@@ -52,8 +52,8 @@ def test_main_app():
         # Add signals to signal panel
         sig1 = create_paracetamol_signal(500)
         panel.add_object(sig1)
-        panel.processor.compute(cps.derivative)
-        panel.processor.compute(cps.wiener)
+        panel.processor.run_feature(cps.derivative)
+        panel.processor.run_feature(cps.wiener)
 
         # Get object titles
         titles = win.get_object_titles()

@@ -1175,10 +1175,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             raise ValueError(f"Unknown computing feature: {function_or_name}") from exc
 
     @qt_try_except()
-    def compute(
+    def run_feature(
         self, key: str | Callable | ComputingFeature, *args, **kwargs
     ) -> dict[str, ResultShape | ResultProperties] | None:
-        """Generic compute dispatcher for all patterns using the central registry.
+        """Run a computing feature that has been previously registered.
 
         This method is a generic dispatcher for all compute methods.
         It uses the central registry to find the appropriate compute method
@@ -1292,7 +1292,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             # Extract each ROI into a separate object (keep the ROI in the case of
             # a circular ROI), if the "Extract all ROIs into a single image object"
             # option is not checked or if there is only one ROI (See Issue #31)
-            self.compute("extract_roi", params=group.datasets, edit=False)
+            self.run_feature("extract_roi", params=group.datasets, edit=False)
 
     @abc.abstractmethod
     @qt_try_except()

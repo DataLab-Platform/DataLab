@@ -473,7 +473,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             if not exec_dialog(dlg):
                 return
             param.zoom = dlg.get_zoom()
-        self.compute("resize", param, title=_("Resize"), edit=edit)
+        self.run_feature("resize", param, title=_("Resize"), edit=edit)
 
     @qt_try_except()
     def compute_binning(self, param: cdl.param.BinningParam | None = None) -> None:
@@ -487,7 +487,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             param.dtype_str = input_dtype_str
         if param.dtype_str is None:
             param.dtype_str = input_dtype_str
-        self.compute("binning", param, title=title, edit=edit)
+        self.run_feature("binning", param, title=title, edit=edit)
 
     @qt_try_except()
     def compute_line_profile(
@@ -507,7 +507,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             dlg.set_obj(obj)
             if not exec_dialog(dlg):
                 return
-        self.compute("line_profile", param, title=title, edit=False)
+        self.run_feature("line_profile", param, title=title, edit=False)
 
     @qt_try_except()
     def compute_segment_profile(
@@ -527,7 +527,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             dlg.set_obj(obj)
             if not exec_dialog(dlg):
                 return
-        self.compute("segment_profile", param, title=title, edit=False)
+        self.run_feature("segment_profile", param, title=title, edit=False)
 
     @qt_try_except()
     def compute_average_profile(
@@ -547,7 +547,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             dlg.set_obj(obj)
             if not exec_dialog(dlg):
                 return
-        self.compute("average_profile", param, title=title, edit=False)
+        self.run_feature("average_profile", param, title=title, edit=False)
 
     @qt_try_except()
     def compute_radial_profile(
@@ -560,7 +560,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         if edit:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             param.update_from_obj(obj)
-        self.compute("radial_profile", param, title=title, edit=edit)
+        self.run_feature("radial_profile", param, title=title, edit=edit)
 
     @qt_try_except()
     def distribute_on_grid(self, param: cdl.param.GridParam | None = None) -> None:
@@ -649,7 +649,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
                 param.x0, param.y0, param.dx, param.dy = x0, y0, x1 - x0, y1 - y0
             else:
                 return
-        self.compute("offset_correction", param)
+        self.run_feature("offset_correction", param)
 
     @qt_try_except()
     def compute_all_threshold(self) -> None:
@@ -796,7 +796,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
             data = self.panel.objview.get_sel_objects(include_groups=True)[0].data
             param.size = max(min(data.shape) // 40, 50)
 
-        results = self.compute("peak_detection", param, edit=edit)
+        results = self.run_feature("peak_detection", param, edit=edit)
         if results is not None and param.create_rois and len(results.items()) > 1:
             with create_progress_bar(
                 self.panel, _("Create regions of interest"), max_=len(results)

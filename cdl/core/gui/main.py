@@ -1200,7 +1200,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 panel: base.BaseDataPanel
                 try:
                     feature = panel.processor.get_computing_feature(name)
-                    panel.processor.compute(feature, param)
+                    panel.processor.run_feature(feature, param)
                     return
                 except ValueError:
                     for funcname in (name, f"compute_{name}"):
