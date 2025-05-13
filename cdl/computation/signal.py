@@ -1477,9 +1477,9 @@ class AngleUnitParam(gds.DataSet):
 
 
 @computation_function
-def cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+def to_polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """Convert cartesian coordinates to polar coordinates with
-    :py:func:`cdl.algorithms.coordinates.cartesian2polar`.
+    :py:func:`cdl.algorithms.coordinates.to_polar`.
 
     Args:
         src: Source signal.
@@ -1490,15 +1490,15 @@ def cartesian2polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "Polar coordinates", f"unit={p.unit}")
     x, y = src.get_data()
-    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, p.unit)
+    r, theta = cdl.algorithms.coordinates.to_polar(x, y, p.unit)
     dst.set_xydata(r, theta)
     return dst
 
 
 @computation_function
-def polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
+def to_cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """Convert polar coordinates to cartesian coordinates with
-    :py:func:`cdl.algorithms.coordinates.polar2cartesian`.
+    :py:func:`cdl.algorithms.coordinates.to_cartesian`.
 
     Args:
         src: Source signal.
@@ -1515,7 +1515,7 @@ def polar2cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "Cartesian coordinates", f"unit={p.unit}")
     r, theta = src.get_data()
-    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, p.unit)
+    x, y = cdl.algorithms.coordinates.to_cartesian(r, theta, p.unit)
     dst.set_xydata(x, y)
     return dst
 

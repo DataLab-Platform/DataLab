@@ -183,7 +183,7 @@ def array_ellipse_to_center_axes_angle(data: np.ndarray) -> np.ndarray:
     return result
 
 
-def cartesian2polar(
+def to_polar(
     x: np.ndarray, y: np.ndarray, unit: Literal["rad", "deg"] = "rad"
 ) -> tuple[np.ndarray, np.ndarray]:
     """Convert Cartesian coordinates to polar coordinates.
@@ -205,7 +205,7 @@ def cartesian2polar(
     return r, theta
 
 
-def polar2cartesian(
+def to_cartesian(
     r: np.ndarray, theta: np.ndarray, unit: Literal["rad", "deg"] = "rad"
 ) -> tuple[np.ndarray, np.ndarray]:
     """Convert polar coordinates to Cartesian coordinates.

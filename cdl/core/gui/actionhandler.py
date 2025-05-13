@@ -782,8 +782,8 @@ class SignalActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Axis transformation")):
                 self.action_for("reverse_x")
-                self.action_for("polar2cartesian")
-                self.action_for("cartesian2polar")
+                self.action_for("to_cartesian")
+                self.action_for("to_polar")
             with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
                 self.action_for("lowpass")
                 self.action_for("highpass")

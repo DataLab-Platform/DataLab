@@ -88,13 +88,13 @@ def test_cartesian2polar() -> None:
     x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
 
-    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, "rad")
+    r, theta = cdl.algorithms.coordinates.to_polar(x, y, "rad")
     exp_r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
     exp_theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
     check_array_result(f"{title}|r", r, exp_r)
     check_array_result(f"{title}|theta", theta, exp_theta)
 
-    r, theta = cdl.algorithms.coordinates.cartesian2polar(x, y, unit="deg")
+    r, theta = cdl.algorithms.coordinates.to_polar(x, y, unit="deg")
     exp_theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
     check_array_result(f"{title}|r", r, exp_r)
     check_array_result(f"{title}|theta", theta, exp_theta)
@@ -106,14 +106,14 @@ def test_polar2cartesian() -> None:
     r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
     theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
 
-    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, "rad")
+    x, y = cdl.algorithms.coordinates.to_cartesian(r, theta, "rad")
     exp_x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     exp_y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     check_array_result(f"{title}|x", x, exp_x)
     check_array_result(f"{title}|y", y, exp_y)
 
     theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
-    x, y = cdl.algorithms.coordinates.polar2cartesian(r, theta, unit="deg")
+    x, y = cdl.algorithms.coordinates.to_cartesian(r, theta, unit="deg")
     check_array_result(f"{title}|x", x, exp_x)
     check_array_result(f"{title}|y", y, exp_y)
 
@@ -128,8 +128,8 @@ def test_signal_cartesian2polar() -> None:
     src = cdl.obj.create_signal("test", x, y)
 
     for p.unit, _unit_name in cdl.param.AngleUnitParam.units:
-        dst1 = cps.cartesian2polar(src, p)
-        dst2 = cps.polar2cartesian(dst1, p)
+        dst1 = cps.to_polar(src, p)
+        dst2 = cps.to_cartesian(dst1, p)
         check_array_result(f"{title}|x", dst2.x, x)
         check_array_result(f"{title}|y", dst2.y, y)
 
@@ -146,8 +146,8 @@ def test_signal_polar2cartesian() -> None:
     for p.unit, _unit_name in cdl.param.AngleUnitParam.units:
         theta = angles_rad if p.unit == "rad" else angles_deg
         src = cdl.obj.create_signal("test", r, theta)
-        dst1 = cps.polar2cartesian(src, p)
-        dst2 = cps.cartesian2polar(dst1, p)
+        dst1 = cps.to_cartesian(src, p)
+        dst2 = cps.to_polar(dst1, p)
         check_array_result(f"{title}|x", dst2.x, r)
         check_array_result(f"{title}|y", dst2.y, theta)
 

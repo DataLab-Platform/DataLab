@@ -128,12 +128,12 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             cps.reverse_x, _("Reverse X-axis"), icon_name="reverse_signal_x.svg"
         )
         self.register_1_to_1(
-            cps.cartesian2polar,
+            cps.to_polar,
             _("Convert to polar coordinates"),
             paramclass=cdl.param.AngleUnitParam,
         )
         self.register_1_to_1(
-            cps.polar2cartesian,
+            cps.to_cartesian,
             _("Convert to cartesian coordinates"),
             paramclass=cdl.param.AngleUnitParam,
         )
