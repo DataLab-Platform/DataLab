@@ -1182,7 +1182,31 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         This method is a generic dispatcher for all compute methods.
         It uses the central registry to find the appropriate compute method
-        based on the pattern.
+        based on the pattern (`1_to_1`, `1_to_0`, `n_to_1`, `2_to_1`, `1_to_n`).
+        It then calls the appropriate compute method with the provided arguments.
+
+        Depending on the pattern, this method can take different arguments:
+
+        .. code-block:: python
+
+            import cdl.computation.signal as cps
+            import cdl.param
+
+            # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
+            # (example with computation functions from `cdl.computation.signal`)
+            compute(cps.normalize)
+            param = cdl.param.MovingAverageParam(n=3)
+            compute(cps.moving_average, param)
+            compute(computation_function, param, edit=False)
+
+            # For pattern `2_to_1`:
+            compute(cps.difference, obj2)
+            param = cdl.param.InterpolationParam(method="cubic")
+            compute(cps.interpolation, obj2, param)
+
+            # For pattern `1_to_n`:
+            group = roi.to_params(obj)
+            compute(cps.extract_roi, params=group.datasets)
 
         Args:
             key: The key to look up in the registry. It can be a string, a callable,
@@ -1207,34 +1231,33 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         if pattern in {"1_to_1", "1_to_0", "n_to_1"}:
             compute_method = getattr(self, f"compute_{pattern}")
+            param = kwargs.pop("param", args[0] if args else None)
             return compute_method(
                 feature.function,
-                *args,
+                param=param,
                 paramclass=feature.paramclass,
                 title=title,
                 comment=comment,
                 edit=edit,
-                **kwargs,
             )
         if pattern == "2_to_1":
             obj2 = kwargs.pop("obj2", args[0] if args else None)
-            remaining_args = args[1:] if args else []
+            param = kwargs.pop("param", args[1] if args and len(args) > 1 else None)
             return self.compute_2_to_1(
-                obj2=obj2,
-                obj2_name=feature.obj2_name or _("Second operand"),
-                func=feature.function,
-                param=kwargs.get("param"),
+                obj2,
+                feature.obj2_name or _("Second operand"),
+                feature.function,
+                param=param,
                 paramclass=feature.paramclass,
                 title=title,
                 comment=comment,
                 edit=edit,
-                *remaining_args,
-                **kwargs,
             )
         if pattern == "1_to_n":
+            params = kwargs.get("params", args[0] if args else [])
             return self.compute_1_to_n(
                 feature.function,
-                params=kwargs.get("params"),
+                params=params,
                 title=title,
                 edit=edit,
             )
