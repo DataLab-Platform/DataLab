@@ -57,7 +57,7 @@ def test_signal_sum() -> None:
     """Signal sum test."""
     slist = __create_n_signals()
     n = len(slist)
-    s3 = cps.sum(slist)
+    s3 = cps.addition(slist)
     res = s3.y
     exp = np.zeros_like(s3.y)
     for s in slist:

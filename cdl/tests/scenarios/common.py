@@ -90,9 +90,9 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.remove_object()
 
     panel.objview.select_objects((1, 2))
-    panel.processor.compute("sum")
+    panel.processor.compute("addition")
     panel.objview.select_objects((1, 2))
-    panel.processor.compute("sum")
+    panel.processor.compute("addition")
     panel.objview.select_objects((1, 2))
     panel.processor.compute("product")
 

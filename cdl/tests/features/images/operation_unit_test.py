@@ -75,11 +75,11 @@ def test_image_sum() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  {dtype1} += {dtype2}: ", end="")
         exp = ima1.data.astype(float) + ima2.data.astype(float)
-        ima3 = cpi.sum([ima1, ima2])
+        ima3 = cpi.addition([ima1, ima2])
         check_array_result("Image sum", ima3.data, exp)
     imalist = __create_n_images()
     n = len(imalist)
-    ima3 = cpi.sum(imalist)
+    ima3 = cpi.addition(imalist)
     res = ima3.data
     exp = np.zeros_like(ima3.data)
     for ima in imalist:

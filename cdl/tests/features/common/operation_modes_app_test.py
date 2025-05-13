@@ -61,7 +61,7 @@ def test_single_operand_mode_compute_n1():
         view.select_groups(groups)
 
         # Perform a sum operation
-        panel.processor.compute("sum")
+        panel.processor.compute("addition")
 
         # Default operation mode is single operand mode, so the sum operation
         # is applied to the selected groups, and we should have a new group
@@ -90,7 +90,7 @@ def test_single_operand_mode_compute_n1():
         view.select_objects(objs)
 
         # Perform a sum operation
-        panel.processor.compute("sum")
+        panel.processor.compute("addition")
 
         # Default operation mode is single operand mode, so the sum operation
         # is applied to the selected signals, and we should have a new resulting
@@ -135,7 +135,7 @@ def test_pairwise_operations_mode_compute_n1():
         assert all(len(group) == n_objects for group in groups)
 
         # Perform a sum operation
-        panel.processor.compute("sum")
+        panel.processor.compute("addition")
 
         # Operation mode is now pairwise, so the sum operation is applied to the
         # selected groups, and we should have a new group with as many signals as
@@ -166,7 +166,7 @@ def test_pairwise_operations_mode_compute_n1():
         view.select_objects(objs)
 
         # Perform a sum operation
-        panel.processor.compute("sum")
+        panel.processor.compute("addition")
 
         # Operation mode is now pairwise, so the sum operation is applied to the
         # selected signals, and we should have a new group with as many signals as

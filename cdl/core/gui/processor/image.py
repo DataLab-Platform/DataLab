@@ -45,7 +45,7 @@ class ImageProcessor(BaseProcessor[ImageROI]):
     def register_computations(self) -> None:
         """Register image computations"""
         # MARK: OPERATION
-        self.register_n_to_1(cpi.sum, _("Sum"), icon_name="sum.svg")
+        self.register_n_to_1(cpi.addition, _("Sum"), icon_name="sum.svg")
         self.register_n_to_1(cpi.average, _("Average"), icon_name="average.svg")
         self.register_2_to_1(
             cpi.difference,

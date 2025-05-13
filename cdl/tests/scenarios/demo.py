@@ -58,7 +58,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     # compute_common_operations(panel)
     panel.objview.select_objects((1, 2))
     qt_wait(DELAY1)
-    panel.processor.compute("sum")
+    panel.processor.compute("addition")
     qt_wait(DELAY1)
 
     panel.processor.compute("normalize")
@@ -119,7 +119,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     panel.add_object(ima2)
 
     panel.objview.select_objects((1, 2))
-    panel.processor.compute("sum")
+    panel.processor.compute("addition")
     qt_wait(DELAY2)
     # compute_common_operations(panel)
 

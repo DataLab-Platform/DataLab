@@ -141,7 +141,7 @@ class Wrap1to1Func:
 
 
 @computation_function
-def sum(src_list: list[SignalObj]) -> SignalObj:
+def addition(src_list: list[SignalObj]) -> SignalObj:
     """Add **src** signals and return a new result signal object
 
     Args:

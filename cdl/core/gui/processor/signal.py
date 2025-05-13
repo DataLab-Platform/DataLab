@@ -40,7 +40,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     def register_computations(self) -> None:
         """Register signal computations"""
         # MARK: OPERATION
-        self.register_n_to_1(cps.sum, _("Sum"), icon_name="sum.svg")
+        self.register_n_to_1(cps.addition, _("Sum"), icon_name="sum.svg")
         self.register_n_to_1(cps.average, _("Average"), icon_name="average.svg")
         self.register_2_to_1(
             cps.difference,
