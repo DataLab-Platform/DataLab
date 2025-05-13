@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:09+0100\n"
+"POT-Creation-Date: 2025-05-13 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -196,7 +196,8 @@ msgstr "Notre fonction sera exécutée dans un processus séparé, nous pouvons 
 msgid "Warnings and errors will be handled by DataLab, so we don't need to handle them ourselves."
 msgstr "Les avertissements et les erreurs seront gérés par DataLab, nous n'avons donc pas besoin de les gérer nous-mêmes."
 
-msgid "The most significant change is that we need to define a function that will be operating on DataLab's native image objects (:class:`cdl.obj.ImageObj`), instead of operating on NumPy arrays. So we need to find a way to call our custom function ``weighted_average_denoise`` with a :class:`cdl.obj.ImageObj` as input and output. To avoid writing a lot of boilerplate code, we can use the function wrapper provided by DataLab: :class:`cdl.computation.image.Wrap11Func`."
+#, fuzzy
+msgid "The most significant change is that we need to define a function that will be operating on DataLab's native image objects (:class:`cdl.obj.ImageObj`), instead of operating on NumPy arrays. So we need to find a way to call our custom function ``weighted_average_denoise`` with a :class:`cdl.obj.ImageObj` as input and output. To avoid writing a lot of boilerplate code, we can use the function wrapper provided by DataLab: :class:`cdl.computation.image.Wrap1to1Func`."
 msgstr "Le changement le plus significatif est que nous devons définir une fonction qui fonctionnera sur les objets d'image natifs de DataLab (:class:`cdl.obj.ImageObj`), au lieu de fonctionner sur des tableaux NumPy. Nous devons donc trouver un moyen d'appeler notre fonction personnalisée ``weighted_average_denoise`` avec un :class:`cdl.obj.ImageObj` en entrée et en sortie. Pour éviter d'écrire beaucoup de code de base, nous pouvons utiliser l'enveloppe de fonction fournie par DataLab : :class:`cdl.computation.image.Wrap11Func`."
 
 msgid "Besides we need to define a class that describes our plugin, which must inherit from :class:`cdl.plugins.PluginBase` and name the Python script that contains the plugin code with a name that starts with ``cdl_`` (e.g. ``cdl_custom_func.py``), so that DataLab can discover it at startup."
@@ -216,3 +217,4 @@ msgstr "Nous redémarrons DataLab et nous pouvons voir que le plugin a été cha
 
 msgid "We generate again our test image using (see the first steps of the tutorial), and we process it using the plugin: \"Plugins > My custom filters > Weighted average denoise\"."
 msgstr "Nous générons à nouveau notre image de test en utilisant (voir les premières étapes du tutoriel), et nous la traitons en utilisant le plugin : \"Plugins > My custom filters > Weighted average denoise\"."
+

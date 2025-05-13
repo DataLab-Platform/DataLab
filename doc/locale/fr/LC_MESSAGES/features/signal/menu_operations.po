@@ -117,10 +117,10 @@ msgstr ""
 msgid ":math:`y_{k} = y_{k-1} + c`"
 msgstr ""
 
-msgid "|constant_substract| Subtraction"
-msgstr "|constant_substract| Soustraction"
+msgid "|constant_subtract| Subtraction"
+msgstr "|constant_subtract| Soustraction"
 
-msgid "constant_substract"
+msgid "constant_subtract"
 msgstr ""
 
 #, python-brace-format
