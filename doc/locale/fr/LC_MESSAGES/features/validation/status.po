@@ -208,13 +208,13 @@ msgstr ""
 msgid "`test_signal_calibration <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/signals/processing_unit_test.py#L36>`_"
 msgstr ""
 
-msgid ":py:func:`compute_cartesian2polar <cdl.computation.signal.compute_cartesian2polar>`"
+msgid ":py:func:`compute_to_polar <cdl.computation.signal.compute_to_polar>`"
 msgstr ""
 
 msgid "Convert cartesian coordinates to polar coordinates"
 msgstr ""
 
-msgid "`test_signal_cartesian2polar <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/signals/processing_unit_test.py#L121>`_"
+msgid "`test_signal_to_polar <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/signals/processing_unit_test.py#L121>`_"
 msgstr ""
 
 msgid ":py:func:`compute_clip <cdl.computation.signal.compute_clip>`"
@@ -502,13 +502,13 @@ msgstr ""
 msgid "`test_signal_phase_spectrum <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/signals/fft1d_unit_test.py#L161>`_"
 msgstr ""
 
-msgid ":py:func:`compute_polar2cartesian <cdl.computation.signal.compute_polar2cartesian>`"
+msgid ":py:func:`compute_to_cartesian <cdl.computation.signal.compute_to_cartesian>`"
 msgstr ""
 
 msgid "Convert polar coordinates to cartesian coordinates"
 msgstr ""
 
-msgid "`test_signal_polar2cartesian <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/signals/processing_unit_test.py#L137>`_"
+msgid "`test_signal_to_cartesian <https://github.com/DataLab-Platform/DataLab/blob/v0.20.0/cdl/tests/features/signals/processing_unit_test.py#L137>`_"
 msgstr ""
 
 msgid ":py:func:`compute_power <cdl.computation.signal.compute_power>`"

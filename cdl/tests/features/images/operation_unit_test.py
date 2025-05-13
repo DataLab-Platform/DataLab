@@ -68,15 +68,15 @@ def __create_n_images(n: int = 100) -> list[cdl.obj.ImageObj]:
 
 
 @pytest.mark.validation
-def test_image_sum() -> None:
-    """Image sum test."""
-    execenv.print("*** Testing image sum:")
+def test_image_addition() -> None:
+    """Image addition test."""
+    execenv.print("*** Testing image addition:")
     for ima1, ima2 in __iterate_image_couples():
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  {dtype1} += {dtype2}: ", end="")
         exp = ima1.data.astype(float) + ima2.data.astype(float)
         ima3 = cpi.addition([ima1, ima2])
-        check_array_result("Image sum", ima3.data, exp)
+        check_array_result("Image addition", ima3.data, exp)
     imalist = __create_n_images()
     n = len(imalist)
     ima3 = cpi.addition(imalist)
@@ -84,7 +84,7 @@ def test_image_sum() -> None:
     exp = np.zeros_like(ima3.data)
     for ima in imalist:
         exp += ima.data
-    check_array_result(f"  Sum of {n} images", res, exp)
+    check_array_result(f"  Addition of {n} images", res, exp)
 
 
 @pytest.mark.validation
@@ -289,36 +289,36 @@ def test_image_inverse() -> None:
 
 
 @pytest.mark.validation
-def test_image_abs() -> None:
+def test_image_absolute() -> None:
     """Image absolute value test."""
     execenv.print("*** Testing image absolute value:")
     for ima1 in __iterate_images():
         execenv.print(f"  abs({ima1.data.dtype}): ", end="")
         exp = np.abs(ima1.data)
         ima2 = cpi.absolute(ima1)
-        check_array_result("Image abs", ima2.data, exp)
+        check_array_result("Absolute value", ima2.data, exp)
 
 
 @pytest.mark.validation
-def test_image_re() -> None:
+def test_image_real() -> None:
     """Image real part test."""
     execenv.print("*** Testing image real part:")
     for ima1 in __iterate_images():
         execenv.print(f"  re({ima1.data.dtype}): ", end="")
         exp = np.real(ima1.data)
         ima2 = cpi.real(ima1)
-        check_array_result("Image re", ima2.data, exp)
+        check_array_result("Real part", ima2.data, exp)
 
 
 @pytest.mark.validation
-def test_image_im() -> None:
+def test_image_imag() -> None:
     """Image imaginary part test."""
     execenv.print("*** Testing image imaginary part:")
     for ima1 in __iterate_images():
         execenv.print(f"  im({ima1.data.dtype}): ", end="")
         exp = np.imag(ima1.data)
         ima2 = cpi.imag(ima1)
-        check_array_result("Image im", ima2.data, exp)
+        check_array_result("Imaginary part", ima2.data, exp)
 
 
 def __get_numpy_info(dtype: np.dtype) -> np.generic:
@@ -449,7 +449,7 @@ def test_image_rotate() -> None:
 
 
 if __name__ == "__main__":
-    test_image_sum()
+    test_image_addition()
     test_image_average()
     test_image_product()
     test_image_division()
@@ -461,9 +461,9 @@ if __name__ == "__main__":
     test_image_division_constant()
     test_image_arithmetic()
     test_image_inverse()
-    test_image_abs()
-    test_image_re()
-    test_image_im()
+    test_image_absolute()
+    test_image_real()
+    test_image_imag()
     test_image_astype()
     test_image_exp()
     test_image_log10()

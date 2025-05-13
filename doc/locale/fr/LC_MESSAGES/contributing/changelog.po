@@ -42,8 +42,8 @@ msgstr "Renommé les fonctions de calcul pour supprimer le préfixe redondant \"
 msgid "Added infrastructure for discovering computation functions via introspection"
 msgstr "Ajout d'une infrastructure pour découvrir les fonctions de calcul via l'introspection"
 
-msgid "Improved function naming in coordinate transformations (e.g., `cartesian2polar` ➝ `to_polar`)"
-msgstr "Amélioration de la nomination des fonctions dans les transformations de coordonnées (par exemple, `cartesian2polar` ➝ `to_polar`)"
+msgid "Improved function naming in coordinate transformations (e.g., `to_polar` ➝ `to_polar`)"
+msgstr "Amélioration de la nomination des fonctions dans les transformations de coordonnées (par exemple, `to_polar` ➝ `to_polar`)"
 
 msgid "Added type hints and improved documentation across computation modules"
 msgstr "Ajout de types d'indices et amélioration de la documentation dans les modules de calcul"

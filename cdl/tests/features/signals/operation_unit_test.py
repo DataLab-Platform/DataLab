@@ -53,8 +53,8 @@ def __create_one_signal_and_constant() -> tuple[
 
 
 @pytest.mark.validation
-def test_signal_sum() -> None:
-    """Signal sum test."""
+def test_signal_addition() -> None:
+    """Signal addition test."""
     slist = __create_n_signals()
     n = len(slist)
     s3 = cps.addition(slist)
@@ -62,7 +62,7 @@ def test_signal_sum() -> None:
     exp = np.zeros_like(s3.y)
     for s in slist:
         exp += s.y
-    check_array_result(f"Sum of {n} signals", res, exp)
+    check_array_result(f"Addition of {n} signals", res, exp)
 
 
 @pytest.mark.validation
@@ -161,7 +161,7 @@ def test_signal_inverse() -> None:
 
 
 @pytest.mark.validation
-def test_signal_abs() -> None:
+def test_signal_absolute() -> None:
     """Absolute value validation test."""
     s1 = __create_two_signals()[0]
     abs_signal = cps.absolute(s1)
@@ -169,7 +169,7 @@ def test_signal_abs() -> None:
 
 
 @pytest.mark.validation
-def test_signal_re() -> None:
+def test_signal_real() -> None:
     """Real part validation test."""
     s1 = __create_two_signals()[0]
     re_signal = cps.real(s1)
@@ -177,7 +177,7 @@ def test_signal_re() -> None:
 
 
 @pytest.mark.validation
-def test_signal_im() -> None:
+def test_signal_imag() -> None:
     """Imaginary part validation test."""
     s1 = __create_two_signals()[0]
     im_signal = cps.imag(s1)
@@ -252,7 +252,7 @@ def test_signal_arithmetic() -> None:
 
 
 if __name__ == "__main__":
-    test_signal_sum()
+    test_signal_addition()
     test_signal_average()
     test_signal_product()
     test_signal_difference()
@@ -263,9 +263,9 @@ if __name__ == "__main__":
     test_signal_difference_constant()
     test_signal_division_constant()
     test_signal_inverse()
-    test_signal_abs()
-    test_signal_re()
-    test_signal_im()
+    test_signal_absolute()
+    test_signal_real()
+    test_signal_imag()
     test_signal_astype()
     test_signal_exp()
     test_signal_log10()

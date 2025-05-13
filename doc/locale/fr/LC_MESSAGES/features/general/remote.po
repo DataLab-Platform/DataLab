@@ -587,10 +587,10 @@ msgstr ""
 msgid "Reverse X axis with :py:func:`cdl.computation.signal.compute_reverse_x`"
 msgstr ""
 
-msgid "Convert cartesian to polar coordinates with :py:func:`cdl.computation.signal.compute_cartesian2polar`"
+msgid "Convert cartesian to polar coordinates with :py:func:`cdl.computation.signal.compute_to_polar`"
 msgstr ""
 
-msgid "Convert polar to cartesian coordinates with :py:func:`cdl.computation.signal.compute_polar2cartesian`."
+msgid "Convert polar to cartesian coordinates with :py:func:`cdl.computation.signal.compute_to_cartesian`."
 msgstr ""
 
 msgid "Normalize data with :py:func:`cdl.computation.signal.compute_normalize`"

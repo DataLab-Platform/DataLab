@@ -10,7 +10,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Added new `@computation_function` decorator to mark and register computation functions
   * Renamed computation functions to remove redundant "compute_" prefix (e.g., `compute_fft` ➝ `fft`)
   * Added infrastructure for discovering computation functions via introspection
-  * Improved function naming in coordinate transformations (e.g., `cartesian2polar` ➝ `to_polar`)
+  * Improved function naming in coordinate transformations (e.g., `to_polar` ➝ `to_polar`)
   * Added type hints and improved documentation across computation modules
   * These changes improve code organization and maintainability while making the API more intuitive
   * Internal changes only - **no backward compatibility is maintained** for plugin developers

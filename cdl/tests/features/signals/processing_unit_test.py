@@ -82,7 +82,7 @@ def test_signal_reverse_x() -> None:
     check_array_result("ReverseX", dst.data, exp)
 
 
-def test_cartesian2polar() -> None:
+def test_to_polar() -> None:
     """Unit test for the cartesian to polar conversion."""
     title = "Cartesian2Polar"
     x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
@@ -100,7 +100,7 @@ def test_cartesian2polar() -> None:
     check_array_result(f"{title}|theta", theta, exp_theta)
 
 
-def test_polar2cartesian() -> None:
+def test_to_cartesian() -> None:
     """Unit test for the polar to cartesian conversion."""
     title = "Polar2Cartesian"
     r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
@@ -119,7 +119,7 @@ def test_polar2cartesian() -> None:
 
 
 @pytest.mark.validation
-def test_signal_cartesian2polar() -> None:
+def test_signal_to_polar() -> None:
     """Validation test for the signal cartesian to polar processing."""
     title = "Cartesian2Polar"
     p = cdl.param.AngleUnitParam()
@@ -135,7 +135,7 @@ def test_signal_cartesian2polar() -> None:
 
 
 @pytest.mark.validation
-def test_signal_polar2cartesian() -> None:
+def test_signal_to_cartesian() -> None:
     """Validation test for the signal polar to cartesian processing."""
     title = "Polar2Cartesian"
     p = cdl.param.AngleUnitParam()
@@ -382,10 +382,10 @@ def test_signal_XY_mode() -> None:
 if __name__ == "__main__":
     test_signal_calibration()
     test_signal_swap_axes()
-    test_cartesian2polar()
-    test_polar2cartesian()
-    test_signal_cartesian2polar()
-    test_signal_polar2cartesian()
+    test_to_polar()
+    test_to_cartesian()
+    test_signal_to_polar()
+    test_signal_to_cartesian()
     test_signal_reverse_x()
     test_signal_normalize()
     test_signal_clip()
