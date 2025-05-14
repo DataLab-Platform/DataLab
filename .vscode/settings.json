@@ -25,4 +25,7 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit",
     },
+    "[restructuredtext]": {
+        "editor.wordWrap": "on"
+    },
 }
