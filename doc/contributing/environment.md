@@ -99,7 +99,7 @@ Building PDF documentation requires LaTeX. On Windows, the following environment
     @REM Example with MiKTeX :
     set PATH=C:\\Apps\\miktex-portable\\texmfs\\install\\miktex\\bin\\x64;%PATH%
 
-Visual Studio Code configuration used in `launch.json` and `tasks.json`
+Visual Studio Code configuration used in `launch.json` and/or `tasks.json`
 (examples) :
 
     @REM Development environment
