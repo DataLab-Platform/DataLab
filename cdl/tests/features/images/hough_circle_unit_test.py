@@ -13,10 +13,10 @@ from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 from skimage.feature import canny
 
-from cdl.algorithms.image import get_hough_circle_peaks
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
 from cdl.utils.vistools import view_image_items
+from sigima.algorithms.image import get_hough_circle_peaks
 
 
 def __exec_hough_circle_test(data):

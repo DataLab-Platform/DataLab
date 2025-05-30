@@ -10,7 +10,7 @@ Arithmetic parameters unit test.
 from guidata.qthelpers import qt_app_context
 
 from cdl.env import execenv
-from cdl.param import ArithmeticParam
+from sigima.param import ArithmeticParam
 
 
 def test_arithmetic_param_interactive():

@@ -13,8 +13,8 @@ import re
 
 from _pytest.mark import Mark
 
-import cdl.computation
 import cdl.tests as tests_pkg
+import sigima.computation
 from cdl import __version__
 from cdl.utils.strings import shorten_docstring
 
@@ -74,7 +74,9 @@ def get_validation_tests(package: str) -> list:
 
 def generate_csv_files() -> None:
     """Generate CSV files containing the validation status of compute functions"""
-    compute_functions = cdl.computation.find_computation_functions(cdl.computation)
+    compute_functions = sigima.computation.find_computation_functions(
+        sigima.computation
+    )
     validation_tests = get_validation_tests(tests_pkg)
 
     submodules = {"signal": [], "image": []}

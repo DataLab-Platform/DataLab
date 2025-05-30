@@ -14,8 +14,8 @@ import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
-import cdl.computation.image as cpi
-import cdl.param
+import sigima.image.exposure
+import sigima.param
 from cdl.env import execenv
 from cdl.obj import ROI2DParam
 from cdl.tests.data import create_noisygauss_image
@@ -42,8 +42,8 @@ def test_image_offset_correction_interactive() -> None:
             param = ROI2DParam()
             ix0, iy0, ix1, iy1 = i1.physical_to_indices(dlg.get_rect_coords())
             param.x0, param.y0, param.dx, param.dy = ix0, iy0, ix1 - ix0, iy1 - iy0
-            i2 = cpi.offset_correction(i1, param)
-            i3 = cpi.clip(i2, cdl.param.ClipParam.create(lower=0))
+            i2 = sigima.image.exposure.offset_correction(i1, param)
+            i3 = sigima.image.exposure.clip(i2, sigima.param.ClipParam.create(lower=0))
             view_images_side_by_side(
                 [i1.make_item(), i3.make_item()],
                 titles=["Original image", "Corrected image"],
@@ -56,7 +56,7 @@ def test_image_offset_correction() -> None:
     """Image offset correction validation test."""
     i1 = create_noisygauss_image()
     param = ROI2DParam.create(x0=0, y0=0, dx=10, dy=10)
-    i2 = cpi.offset_correction(i1, param)
+    i2 = sigima.image.exposure.offset_correction(i1, param)
 
     # Check that the offset correction has been applied
     x0, y0 = param.x0, param.y0

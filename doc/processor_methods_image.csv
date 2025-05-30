@@ -3,12 +3,12 @@
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology`,Compute all morphology filters
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold`,Compute all threshold algorithms
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_average_profile`,Compute average profile
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_binning`,Binning image with :py:func:`cdl.computation.image.binning`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_binning`,Binning image with :py:func:`sigima.image.binning`
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_line_profile`,Compute profile along a vertical or horizontal line
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_multiple_1_to_1`,Generic processing method: 1 object in → n objects out
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction`,Compute offset correction
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection`,Compute 2D peak detection
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile`,Compute radial profile
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_resize`,Resize image with :py:func:`cdl.computation.image.resize`
-:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_resize`,Resize image with :py:func:`sigima.image.resize`
+:py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data
 :py:func:`~cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile`,Compute profile along a segment

@@ -10,7 +10,10 @@ Threshold computation module
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.computation.param module.
+# - All `guidata.dataset.DataSet` parameter classes must also be imported
+#   in the `sigima.param` module.
+# - All functions decorated by `computation_function` must be imported in the upper
+#   level `sigima.image` module.
 
 from __future__ import annotations
 
@@ -18,10 +21,11 @@ import guidata.dataset as gds
 import skimage.util
 from skimage import filters
 
-from cdl.computation import computation_function
-from cdl.computation.image import dst_1_to_1, restore_data_outside_roi
 from cdl.config import _
 from cdl.obj import ImageObj
+from sigima import computation_function
+from sigima.base import dst_1_to_1
+from sigima.image.base import restore_data_outside_roi
 
 
 class ThresholdParam(gds.DataSet):

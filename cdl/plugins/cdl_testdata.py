@@ -10,10 +10,10 @@ and some actions to test DataLab functionalities.
 
 import cdl.obj as dlo
 import cdl.tests.data as test_data
-from cdl.computation import image as cpima
-from cdl.computation import signal as cpsig
 from cdl.config import _
 from cdl.plugins import PluginBase, PluginInfo
+from sigima import image as si
+from sigima import signal as ss
 
 # ------------------------------------------------------------------------------
 # All computation functions must be defined as global functions, otherwise
@@ -25,14 +25,14 @@ def add_noise_to_signal(
     src: dlo.SignalObj, p: test_data.GaussianNoiseParam
 ) -> dlo.SignalObj:
     """Add gaussian noise to signal"""
-    dst = cpsig.dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
+    dst = ss.dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
     test_data.add_gaussian_noise_to_signal(dst, p)
     return dst
 
 
 def add_noise_to_image(src: dlo.ImageObj, p: dlo.NormalRandomParam) -> dlo.ImageObj:
     """Add gaussian noise to image"""
-    dst = cpima.dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
+    dst = si.dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
     test_data.add_gaussian_noise_to_image(dst, p)
     return dst
 

@@ -52,10 +52,10 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QApplication, QMainWindow
 
-from cdl.algorithms.image import get_centroid_fourier
-from cdl.algorithms.signal import fwhm
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.model.signal import create_signal
+from sigima.algorithms.image import get_centroid_fourier
+from sigima.algorithms.signal import fwhm
 
 if TYPE_CHECKING:
     from plotpy.items.image.base import BaseImageItem

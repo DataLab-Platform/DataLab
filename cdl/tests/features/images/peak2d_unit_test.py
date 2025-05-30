@@ -13,10 +13,10 @@ import time
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
-from cdl.algorithms.image import get_2d_peaks_coords
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
 from cdl.utils.vistools import view_image_items
+from sigima.algorithms.image import get_2d_peaks_coords
 
 
 def exec_image_peak_detection_func(data):

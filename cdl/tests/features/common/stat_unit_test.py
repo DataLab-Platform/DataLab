@@ -18,9 +18,9 @@ import numpy as np
 import pytest
 import scipy.integrate as spt
 
-import cdl.computation.image as cpi
-import cdl.computation.signal as cps
 import cdl.obj
+import sigima.image.measurement as si
+import sigima.signal as ss
 
 
 def get_analytical_stats(data: np.ndarray) -> dict[str, float]:
@@ -82,7 +82,7 @@ def create_reference_image() -> cdl.obj.ImageObj:
 def test_signal_stats_unit() -> None:
     """Validate computed statistics for signals"""
     obj = create_reference_signal()
-    res = cps.stats(obj)
+    res = ss.stats(obj)
     df = res.to_dataframe()
     ref = get_analytical_stats(obj.xydata)
     name_map = {
@@ -122,7 +122,7 @@ def test_image_stats_unit() -> None:
     # (this warning is due to the fact that the 2nd ROI has zero sum of pixel values,
     # hence the mean/std is NaN)
     with np.errstate(invalid="ignore"):
-        res = cpi.stats(obj)
+        res = si.stats(obj)
 
     df = res.to_dataframe()
     ref = get_analytical_stats(obj.data)

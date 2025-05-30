@@ -12,15 +12,15 @@ from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.optimize import curve_fit
 from scipy.special import erf  # pylint: disable=no-name-in-module
 
-from cdl.algorithms.signal import (
+from cdl.config import _
+from cdl.utils.tests import get_default_test_name
+from sigima.algorithms.signal import (
     GaussianModel,
     LorentzianModel,
     VoigtModel,
     sort_frequencies,
     xpeak,
 )
-from cdl.config import _
-from cdl.utils.tests import get_default_test_name
 
 
 def guifit(

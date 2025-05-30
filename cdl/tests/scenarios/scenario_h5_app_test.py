@@ -25,12 +25,12 @@ This scenario executes the following steps:
 import os.path as osp
 
 from cdl.env import execenv
-from cdl.param import ClipParam
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_noisygauss_image, create_paracetamol_signal
 from cdl.tests.scenarios import scenario_mac_app_test
 from cdl.utils.strings import save_html_diff
 from cdl.utils.tests import CDLTemporaryDirectory
+from sigima.param import ClipParam
 
 
 def test_scenario_h5():

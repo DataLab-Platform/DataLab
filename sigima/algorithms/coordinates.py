@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Coordinates Algorithms (see parent package :mod:`cdl.algorithms`)
+.. Coordinates Algorithms (see parent package :mod:`sigima.algorithms`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

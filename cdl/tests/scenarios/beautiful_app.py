@@ -21,7 +21,7 @@ A high-level test scenario producing beautiful screenshots.
 # guitest: show,skip
 
 import cdl.obj as dlo
-import cdl.param as dlp
+import sigima.param as sp
 from cdl.tests import cdltest_app_context
 
 
@@ -38,7 +38,7 @@ def run_beautiful_scenario(screenshots: bool = False):
         panel.processor.run_feature("wiener")
         panel.processor.run_feature("derivative")
         panel.processor.run_feature("integral")
-        param = dlp.GaussianParam()
+        param = sp.GaussianParam()
         panel.processor.run_feature("gaussian_filter", param)
         panel.processor.run_feature("fft")
         panel.processor.run_feature("derivative")
@@ -53,12 +53,12 @@ def run_beautiful_scenario(screenshots: bool = False):
         ima = dlo.create_image_from_param(newparam)
         ima.metadata["colormap"] = "jet"
         panel.add_object(ima)
-        panel.processor.run_feature("equalize_hist", dlp.EqualizeHistParam())
-        panel.processor.run_feature("equalize_adapthist", dlp.EqualizeAdaptHistParam())
-        panel.processor.run_feature("denoise_tv", dlp.DenoiseTVParam())
-        panel.processor.run_feature("denoise_wavelet", dlp.DenoiseWaveletParam())
-        panel.processor.run_feature("white_tophat", dlp.MorphologyParam())
-        panel.processor.run_feature("denoise_tv", dlp.DenoiseTVParam())
+        panel.processor.run_feature("equalize_hist", sp.EqualizeHistParam())
+        panel.processor.run_feature("equalize_adapthist", sp.EqualizeAdaptHistParam())
+        panel.processor.run_feature("denoise_tv", sp.DenoiseTVParam())
+        panel.processor.run_feature("denoise_wavelet", sp.DenoiseWaveletParam())
+        panel.processor.run_feature("white_tophat", sp.MorphologyParam())
+        panel.processor.run_feature("denoise_tv", sp.DenoiseTVParam())
         n = data_size // 3
         roi = dlo.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]

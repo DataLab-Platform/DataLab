@@ -15,9 +15,9 @@ import guidata.dataset as gds
 import numpy as np
 from guidata.qthelpers import exec_dialog
 
-import cdl.computation.base as cpb
-import cdl.computation.signal as cps
-import cdl.param
+import sigima.base as sb
+import sigima.param
+import sigima.signal as ss
 from cdl.config import _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ResultProperties, ResultShape
@@ -40,77 +40,75 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     def register_computations(self) -> None:
         """Register signal computations"""
         # MARK: OPERATION
-        self.register_n_to_1(cps.addition, _("Sum"), icon_name="sum.svg")
-        self.register_n_to_1(cps.average, _("Average"), icon_name="average.svg")
+        self.register_n_to_1(ss.addition, _("Sum"), icon_name="sum.svg")
+        self.register_n_to_1(ss.average, _("Average"), icon_name="average.svg")
         self.register_2_to_1(
-            cps.difference,
+            ss.difference,
             _("Difference"),
             icon_name="difference.svg",
             obj2_name=_("signal to subtract"),
         )
         self.register_2_to_1(
-            cps.quadratic_difference,
+            ss.quadratic_difference,
             _("Quadratic Difference"),
             icon_name="quadratic_difference.svg",
             obj2_name=_("signal to subtract"),
         )
-        self.register_n_to_1(cps.product, _("Product"), icon_name="product.svg")
+        self.register_n_to_1(ss.product, _("Product"), icon_name="product.svg")
         self.register_2_to_1(
-            cps.division,
+            ss.division,
             _("Division"),
             icon_name="division.svg",
             obj2_name=_("divider"),
         )
-        self.register_1_to_1(cps.inverse, _("Inverse"), icon_name="inverse.svg")
+        self.register_1_to_1(ss.inverse, _("Inverse"), icon_name="inverse.svg")
         self.register_2_to_1(
-            cps.arithmetic,
+            ss.arithmetic,
             _("Arithmetic"),
-            paramclass=cpb.ArithmeticParam,
+            paramclass=sb.ArithmeticParam,
             icon_name="arithmetic.svg",
             obj2_name=_("signal to operate with"),
         )
         self.register_1_to_1(
-            cps.addition_constant,
+            ss.addition_constant,
             _("Add constant"),
-            paramclass=cpb.ConstantParam,
+            paramclass=sb.ConstantParam,
             icon_name="constant_add.svg",
         )
         self.register_1_to_1(
-            cps.difference_constant,
+            ss.difference_constant,
             _("Subtract constant"),
-            paramclass=cpb.ConstantParam,
+            paramclass=sb.ConstantParam,
             icon_name="constant_subtract.svg",
         )
         self.register_1_to_1(
-            cps.product_constant,
+            ss.product_constant,
             _("Multiply by constant"),
-            paramclass=cpb.ConstantParam,
+            paramclass=sb.ConstantParam,
             icon_name="constant_multiply.svg",
         )
         self.register_1_to_1(
-            cps.division_constant,
+            ss.division_constant,
             _("Divide by constant"),
-            paramclass=cpb.ConstantParam,
+            paramclass=sb.ConstantParam,
             icon_name="constant_divide.svg",
         )
-        self.register_1_to_1(cps.absolute, _("Absolute value"), icon_name="abs.svg")
-        self.register_1_to_1(cps.real, _("Real part"), icon_name="re.svg")
-        self.register_1_to_1(cps.imag, _("Imaginary part"), icon_name="im.svg")
+        self.register_1_to_1(ss.absolute, _("Absolute value"), icon_name="abs.svg")
+        self.register_1_to_1(ss.real, _("Real part"), icon_name="re.svg")
+        self.register_1_to_1(ss.imag, _("Imaginary part"), icon_name="im.svg")
         self.register_1_to_1(
-            cps.astype,
+            ss.astype,
             _("Convert data type"),
-            paramclass=cdl.param.DataTypeSParam,
+            paramclass=sigima.param.DataTypeSParam,
             icon_name="convert_dtype.svg",
         )
-        self.register_1_to_1(cps.exp, _("Exponential"), icon_name="exp.svg")
-        self.register_1_to_1(cps.log10, _("Logarithm (base 10)"), icon_name="log10.svg")
-        self.register_1_to_1(cps.sqrt, _("Square root"), icon_name="sqrt.svg")
-        self.register_1_to_1(
-            cps.derivative, _("Derivative"), icon_name="derivative.svg"
-        )
-        self.register_1_to_1(cps.integral, _("Integral"), icon_name="integral.svg")
+        self.register_1_to_1(ss.exp, _("Exponential"), icon_name="exp.svg")
+        self.register_1_to_1(ss.log10, _("Logarithm (base 10)"), icon_name="log10.svg")
+        self.register_1_to_1(ss.sqrt, _("Square root"), icon_name="sqrt.svg")
+        self.register_1_to_1(ss.derivative, _("Derivative"), icon_name="derivative.svg")
+        self.register_1_to_1(ss.integral, _("Integral"), icon_name="integral.svg")
         self.register_2_to_1(
-            cps.convolution,
+            ss.convolution,
             _("Convolution"),
             icon_name="convolution.svg",
             obj2_name=_("signal to convolve with"),
@@ -119,59 +117,53 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         # MARK: PROCESSING
         # Axis transformation
         self.register_1_to_1(
-            cps.calibration, _("Linear calibration"), cps.XYCalibrateParam
+            ss.calibration, _("Linear calibration"), ss.XYCalibrateParam
+        )
+        self.register_1_to_1(ss.swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg")
+        self.register_1_to_1(
+            ss.reverse_x, _("Reverse X-axis"), icon_name="reverse_signal_x.svg"
         )
         self.register_1_to_1(
-            cps.swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg"
-        )
-        self.register_1_to_1(
-            cps.reverse_x, _("Reverse X-axis"), icon_name="reverse_signal_x.svg"
-        )
-        self.register_1_to_1(
-            cps.to_polar,
+            ss.to_polar,
             _("Convert to polar coordinates"),
-            paramclass=cdl.param.AngleUnitParam,
+            paramclass=sigima.param.AngleUnitParam,
         )
         self.register_1_to_1(
-            cps.to_cartesian,
+            ss.to_cartesian,
             _("Convert to cartesian coordinates"),
-            paramclass=cdl.param.AngleUnitParam,
+            paramclass=sigima.param.AngleUnitParam,
         )
         # Level adjustment
         self.register_1_to_1(
-            cps.normalize, _("Normalize"), cpb.NormalizeParam, "normalize.svg"
+            ss.normalize, _("Normalize"), sb.NormalizeParam, "normalize.svg"
         )
-        self.register_1_to_1(cps.clip, _("Clipping"), cpb.ClipParam, "clip.svg")
+        self.register_1_to_1(ss.clip, _("Clipping"), sb.ClipParam, "clip.svg")
         self.register_1_to_1(
-            cps.offset_correction,
+            ss.offset_correction,
             _("Offset correction"),
             icon_name="offset_correction.svg",
             comment=_("Evaluate and subtract the offset value from the data"),
         )
         # Noise reduction
+        self.register_1_to_1(ss.gaussian_filter, _("Gaussian filter"), sb.GaussianParam)
         self.register_1_to_1(
-            cps.gaussian_filter, _("Gaussian filter"), cpb.GaussianParam
+            ss.moving_average, _("Moving average"), sb.MovingAverageParam
         )
-        self.register_1_to_1(
-            cps.moving_average, _("Moving average"), cpb.MovingAverageParam
-        )
-        self.register_1_to_1(
-            cps.moving_median, _("Moving median"), cpb.MovingMedianParam
-        )
-        self.register_1_to_1(cps.wiener, _("Wiener filter"))
+        self.register_1_to_1(ss.moving_median, _("Moving median"), sb.MovingMedianParam)
+        self.register_1_to_1(ss.wiener, _("Wiener filter"))
         # Fourier analysis
         self.register_1_to_1(
-            cps.zero_padding,
+            ss.zero_padding,
             _("Zero padding"),
-            cps.ZeroPadding1DParam,
+            ss.ZeroPadding1DParam,
             comment=_(
                 "Zero padding is used to increase the frequency resolution of the FFT"
             ),
         )
         self.register_1_to_1(
-            cps.fft,
+            ss.fft,
             _("FFT"),
-            cpb.FFTParam,
+            sb.FFTParam,
             comment=_(
                 "Fast Fourier Transform (FFT) is an estimation of the "
                 "Discrete Fourier Transform (DFT). "
@@ -180,9 +172,9 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             edit=False,
         )
         self.register_1_to_1(
-            cps.ifft,
+            ss.ifft,
             _("Inverse FFT"),
-            cpb.FFTParam,
+            sb.FFTParam,
             comment=_(
                 "Inverse Fast Fourier Transform (IFFT) is an estimation of the "
                 "Inverse Discrete Fourier Transform (IDFT). "
@@ -191,16 +183,16 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             edit=False,
         )
         self.register_1_to_1(
-            cps.magnitude_spectrum,
+            ss.magnitude_spectrum,
             _("Magnitude spectrum"),
-            paramclass=cdl.param.SpectrumParam,
+            paramclass=sigima.param.SpectrumParam,
             comment=_(
                 "Magnitude spectrum is the absolute value of the FFT result. "
                 "It is a measure of the amplitude of the frequency components."
             ),
         )
         self.register_1_to_1(
-            cps.phase_spectrum,
+            ss.phase_spectrum,
             _("Phase spectrum"),
             comment=_(
                 "Phase spectrum is the angle of the FFT result. "
@@ -208,9 +200,9 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             ),
         )
         self.register_1_to_1(
-            cps.psd,
+            ss.psd,
             _("Power spectral density"),
-            paramclass=cdl.param.SpectrumParam,
+            paramclass=sigima.param.SpectrumParam,
             comment=_(
                 "Power spectral density (PSD) is the square of the magnitude spectrum. "
                 "It is a measure of the power of the frequency components."
@@ -218,178 +210,178 @@ class SignalProcessor(BaseProcessor[SignalROI]):
         )
 
         self.register_1_to_1(
-            cps.power,
+            ss.power,
             _("Power"),
-            paramclass=cdl.param.PowerParam,
+            paramclass=sigima.param.PowerParam,
             icon_name="power.svg",
         )
         self.register_1_to_1(
-            cps.peak_detection,
+            ss.peak_detection,
             _("Peak detection"),
-            paramclass=cdl.param.PeakDetectionParam,
+            paramclass=sigima.param.PeakDetectionParam,
             icon_name="peak_detect.svg",
         )
         # Frequency filters
         self.register_1_to_1(
-            cps.lowpass,
+            ss.lowpass,
             _("Low-pass filter"),
-            cdl.param.LowPassFilterParam,
+            sigima.param.LowPassFilterParam,
             "lowpass.svg",
         )
         self.register_1_to_1(
-            cps.highpass,
+            ss.highpass,
             _("High-pass filter"),
-            cdl.param.HighPassFilterParam,
+            sigima.param.HighPassFilterParam,
             "highpass.svg",
         )
         self.register_1_to_1(
-            cps.bandpass,
+            ss.bandpass,
             _("Band-pass filter"),
-            cdl.param.BandPassFilterParam,
+            sigima.param.BandPassFilterParam,
             "bandpass.svg",
         )
         self.register_1_to_1(
-            cps.bandstop,
+            ss.bandstop,
             _("Band-stop filter"),
-            cdl.param.BandStopFilterParam,
+            sigima.param.BandStopFilterParam,
             "bandstop.svg",
         )
         # Other processing
         self.register_1_to_1(
-            cps.windowing,
+            ss.windowing,
             _("Windowing"),
-            paramclass=cdl.param.WindowingParam,
+            paramclass=sigima.param.WindowingParam,
             icon_name="windowing.svg",
             comment=_(
                 "Apply a window function (or apodization): Hanning, Hamming, ..."
             ),
         )
         self.register_1_to_1(
-            cps.detrending,
+            ss.detrending,
             _("Detrending"),
-            cps.DetrendingParam,
+            ss.DetrendingParam,
             icon_name="detrending.svg",
         )
         self.register_2_to_1(
-            cps.interpolation,
+            ss.interpolation,
             _("Interpolation"),
-            paramclass=cdl.param.InterpolationParam,
+            paramclass=sigima.param.InterpolationParam,
             obj2_name=_("signal for X values"),
             icon_name="interpolation.svg",
         )
 
         self.register_1_to_1(
-            cps.resampling,
+            ss.resampling,
             _("Resampling"),
-            cps.ResamplingParam,
+            ss.ResamplingParam,
             icon_name="resampling.svg",
         )
         # Stability analysis
         self.register_1_to_1(
-            cps.allan_variance,
+            ss.allan_variance,
             _("Allan variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.allan_deviation,
+            ss.allan_deviation,
             _("Allan deviation"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.overlapping_allan_variance,
+            ss.overlapping_allan_variance,
             _("Overlapping Allan variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.modified_allan_variance,
+            ss.modified_allan_variance,
             _("Modified Allan variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.hadamard_variance,
+            ss.hadamard_variance,
             _("Hadamard variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.modified_allan_variance,
+            ss.modified_allan_variance,
             _("Modified Allan variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.hadamard_variance,
+            ss.hadamard_variance,
             _("Hadamard variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.modified_allan_variance,
+            ss.modified_allan_variance,
             _("Modified Allan variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.hadamard_variance,
+            ss.hadamard_variance,
             _("Hadamard variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.total_variance,
+            ss.total_variance,
             _("Total variance"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            cps.time_deviation,
+            ss.time_deviation,
             _("Time deviation"),
-            paramclass=cdl.param.AllanVarianceParam,
+            paramclass=sigima.param.AllanVarianceParam,
         )
         # Other processing
         self.register_2_to_1(
-            cps.xy_mode,
+            ss.xy_mode,
             _("X-Y mode"),
             obj2_name=_("Y-signal of the X-Y mode"),
             comment=_("Plot one signal as a fonction of the other one"),
         )
-        self.register_1_to_n(cps.extract_roi, "ROI", icon_name="roi.svg")
+        self.register_1_to_n(ss.extract_roi, "ROI", icon_name="roi.svg")
 
         # MARK: ANALYSIS
-        self.register_1_to_0(cps.stats, _("Statistics"), icon_name="stats.svg")
+        self.register_1_to_0(ss.stats, _("Statistics"), icon_name="stats.svg")
         self.register_1_to_1(
-            cps.histogram,
+            ss.histogram,
             _("Histogram"),
-            paramclass=cps.HistogramParam,
+            paramclass=ss.HistogramParam,
             icon_name="histogram.svg",
         )
         self.register_1_to_0(
-            cps.fwhm,
+            ss.fwhm,
             _("Full width at half-maximum"),
-            paramclass=cps.FWHMParam,
+            paramclass=ss.FWHMParam,
             icon_name="fwhm.svg",
         )
         self.register_1_to_0(
-            cps.fw1e2,
+            ss.fw1e2,
             _("Full width at") + " 1/e²",
             icon_name="fw1e2.svg",
         )
         self.register_1_to_0(
-            cps.full_width_at_y,
+            ss.full_width_at_y,
             _("Full width at y=..."),
-            paramclass=cps.OrdinateParam,
+            paramclass=ss.OrdinateParam,
             comment=_("Compute the full width at a given y value"),
         )
         self.register_1_to_0(
-            cps.x_at_y,
+            ss.x_at_y,
             _("First abscissa at y=..."),
-            paramclass=cps.OrdinateParam,
+            paramclass=ss.OrdinateParam,
             comment=_(
                 "Compute the first abscissa at a given y value (linear interpolation)"
             ),
         )
         self.register_1_to_0(
-            cps.y_at_x,
+            ss.y_at_x,
             _("Ordinate at x=..."),
-            paramclass=cps.AbscissaParam,
+            paramclass=ss.AbscissaParam,
             comment=_("Compute the ordinate at a given x value (linear interpolation)"),
         )
         self.register_1_to_0(
-            cps.x_at_minmax,
+            ss.x_at_minmax,
             _("Abscissa of the minimum and maximum"),
             comment=_(
                 "Compute the smallest argument of the minima and the smallest "
@@ -397,20 +389,20 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             ),
         )
         self.register_1_to_0(
-            cps.sampling_rate_period,
+            ss.sampling_rate_period,
             _("Sampling rate and period"),
             comment=_(
                 "Compute sampling rate and period for a constant sampling signal"
             ),
         )
         self.register_1_to_0(
-            cps.dynamic_parameters,
+            ss.dynamic_parameters,
             _("Dynamic parameters"),
-            paramclass=cps.DynamicParam,
+            paramclass=ss.DynamicParam,
             comment=_("Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."),
         )
         self.register_1_to_0(
-            cps.bandwidth_3db,
+            ss.bandwidth_3db,
             _("Bandwidth at -3dB"),
             comment=_(
                 "Compute bandwidth at -3dB assuming a low-pass filter "
@@ -418,7 +410,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
             ),
         )
         self.register_1_to_0(
-            cps.contrast,
+            ss.contrast,
             _("Contrast"),
             comment=_(
                 "Compute contrast of a signal, i.e. (max-min)/(max+min), "
@@ -429,7 +421,7 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     @qt_try_except()
     def compute_offset_correction(self, param: ROI1DParam | None = None) -> None:
         """Compute offset correction
-        with :py:func:`cdl.computation.signal.offset_correction`"""
+        with :py:func:`sigima.signal.offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
             dlg = signalbaseline.SignalBaselineDialog(obj, parent=self.panel.parent())
@@ -442,31 +434,31 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_all_stability(
-        self, param: cdl.param.AllanVarianceParam | None = None
+        self, param: sigima.param.AllanVarianceParam | None = None
     ) -> None:
         """Compute all stability analysis features
         using the following functions:
 
-        - :py:func:`cdl.computation.signal.allan_variance`
-        - :py:func:`cdl.computation.signal.allan_deviation`
-        - :py:func:`cdl.computation.signal.overlapping_allan_variance`
-        - :py:func:`cdl.computation.signal.modified_allan_variance`
-        - :py:func:`cdl.computation.signal.hadamard_variance`
-        - :py:func:`cdl.computation.signal.total_variance`
-        - :py:func:`cdl.computation.signal.time_deviation`
+        - :py:func:`sigima.signal.allan_variance`
+        - :py:func:`sigima.signal.allan_deviation`
+        - :py:func:`sigima.signal.overlapping_allan_variance`
+        - :py:func:`sigima.signal.modified_allan_variance`
+        - :py:func:`sigima.signal.hadamard_variance`
+        - :py:func:`sigima.signal.total_variance`
+        - :py:func:`sigima.signal.time_deviation`
         """
         if param is None:
-            param = cps.AllanVarianceParam()
+            param = ss.AllanVarianceParam()
             if not param.edit(parent=self.panel.parent()):
                 return
         funcs = [
-            cps.allan_variance,
-            cps.allan_deviation,
-            cps.overlapping_allan_variance,
-            cps.modified_allan_variance,
-            cps.hadamard_variance,
-            cps.total_variance,
-            cps.time_deviation,
+            ss.allan_variance,
+            ss.allan_deviation,
+            ss.overlapping_allan_variance,
+            ss.modified_allan_variance,
+            ss.hadamard_variance,
+            ss.total_variance,
+            ss.time_deviation,
         ]
         self.compute_multiple_1_to_1(
             funcs, [param] * len(funcs), "Stability", edit=False
@@ -474,14 +466,12 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_peak_detection(
-        self, param: cdl.param.PeakDetectionParam | None = None
+        self, param: sigima.param.PeakDetectionParam | None = None
     ) -> None:
         """Detect peaks from data
-        with :py:func:`cdl.computation.signal.peak_detection`"""
+        with :py:func:`sigima.signal.peak_detection`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
-        edit, param = self.init_param(
-            param, cps.PeakDetectionParam, _("Peak detection")
-        )
+        edit, param = self.init_param(param, ss.PeakDetectionParam, _("Peak detection"))
         if edit:
             dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel.parent())
             if exec_dialog(dlg):
@@ -493,11 +483,11 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_polyfit(
-        self, param: cdl.param.PolynomialFitParam | None = None
+        self, param: sigima.param.PolynomialFitParam | None = None
     ) -> None:
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
-        edit, param = self.init_param(param, cps.PolynomialFitParam, txt)
+        edit, param = self.init_param(param, ss.PolynomialFitParam, txt)
         if not edit or param.edit(self.panel.parent()):
             dlgfunc = fitdialog.polynomialfit
 
@@ -560,21 +550,21 @@ class SignalProcessor(BaseProcessor[SignalROI]):
     @qt_try_except()
     def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
-        self.compute_1_to_1(cps.extract_rois, group, title=_("Extract ROI"))
+        self.compute_1_to_1(ss.extract_rois, group, title=_("Extract ROI"))
 
     # ------Signal Analysis
 
     @qt_try_except()
     def compute_full_width_at_y(
-        self, param: cdl.param.OrdinateParam | None = None
+        self, param: sigima.param.OrdinateParam | None = None
     ) -> dict[str, ResultShape] | None:
         """Compute full width at a given y
-        with :py:func:`cdl.computation.signal.full_width_at_y`"""
+        with :py:func:`sigima.signal.full_width_at_y`"""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.panel.parent())
             if exec_dialog(dlg):
-                param = cps.OrdinateParam()
+                param = ss.OrdinateParam()
                 param.y = dlg.get_y_value()
             else:
                 return None
@@ -582,16 +572,16 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_x_at_y(
-        self, param: cps.OrdinateParam | None = None
+        self, param: ss.OrdinateParam | None = None
     ) -> dict[str, ResultProperties] | None:
-        """Compute x at y with :py:func:`cdl.computation.signal.x_at_y`."""
+        """Compute x at y with :py:func:`sigima.signal.x_at_y`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signalcursor.SignalCursorDialog(
                 obj, cursor_orientation="horizontal", parent=self.panel.parent()
             )
             if exec_dialog(dlg):
-                param = cps.OrdinateParam()
+                param = ss.OrdinateParam()
                 param.y = dlg.get_y_value()
             else:
                 return None
@@ -599,16 +589,16 @@ class SignalProcessor(BaseProcessor[SignalROI]):
 
     @qt_try_except()
     def compute_y_at_x(
-        self, param: cps.AbscissaParam | None = None
+        self, param: ss.AbscissaParam | None = None
     ) -> dict[str, ResultProperties] | None:
-        """Compute y at x with :py:func:`cdl.computation.signal.y_at_x`."""
+        """Compute y at x with :py:func:`sigima.signal.y_at_x`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signalcursor.SignalCursorDialog(
                 obj, cursor_orientation="vertical", parent=self.panel.parent()
             )
             if exec_dialog(dlg):
-                param = cps.AbscissaParam()
+                param = ss.AbscissaParam()
                 param.x = dlg.get_x_value()
             else:
                 return None

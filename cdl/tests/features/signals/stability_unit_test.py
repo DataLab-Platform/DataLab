@@ -13,8 +13,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import cdl.computation.signal as cps
-import cdl.param
+import sigima.param
+import sigima.signal as ss
 from cdl.obj import create_signal
 from cdl.utils.tests import check_array_result
 
@@ -61,11 +61,11 @@ def test_signal_allan_variance():
     sig1 = create_signal("White Noise Test", time_white, values_white)
 
     # Define Allan variance parameters
-    param = cdl.param.AllanVarianceParam()
+    param = sigima.param.AllanVarianceParam()
     param.max_tau = max(tau_values)
 
     # Compute Allan variance using the high-level function
-    res1 = cps.allan_variance(sig1, param)
+    res1 = ss.allan_variance(sig1, param)
     th_av_white = theoretical_allan_variance_white_noise(res1.x, sigma)
 
     check_array_result("White noise Allan variance", res1.y, th_av_white, atol=0.04)
@@ -76,7 +76,7 @@ def test_signal_allan_variance():
     sig2 = create_signal("Drift Test", time, values)
 
     # Compute Allan variance using the high-level function
-    res2 = cps.allan_variance(sig2, param)
+    res2 = ss.allan_variance(sig2, param)
     th_av_drift = theoretical_allan_variance_drift(res2.x, slope)
 
     check_array_result("Drift Allan variance", res2.y, th_av_drift, atol=0.01)
@@ -95,11 +95,11 @@ def test_signal_allan_deviation():
     sig1 = create_signal("White Noise Test", time_white, values_white)
 
     # Define Allan variance parameters
-    param = cdl.param.AllanVarianceParam()
+    param = sigima.param.AllanVarianceParam()
     param.max_tau = max(tau_values)
 
     # Compute Allan deviation using the high-level function
-    res1 = cps.allan_deviation(sig1, param)
+    res1 = ss.allan_deviation(sig1, param)
     th_av_white = theoretical_allan_variance_white_noise(res1.x, sigma)
 
     check_array_result(
@@ -112,7 +112,7 @@ def test_signal_allan_deviation():
     sig2 = create_signal("Drift Test", time, values)
 
     # Compute Allan deviation using the high-level function
-    res2 = cps.allan_deviation(sig2, param)
+    res2 = ss.allan_deviation(sig2, param)
     th_av_drift = theoretical_allan_variance_drift(res2.x, slope)
 
     check_array_result("Drift Allan deviation", res2.y, np.sqrt(th_av_drift), atol=0.01)

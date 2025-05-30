@@ -11,7 +11,7 @@ then open DataLab to show it.
 # guitest: show
 
 import cdl.obj as dlo
-import cdl.param as dlp
+import sigima.param as sp
 from cdl.proxy import proxy_context
 from cdl.tests.data import get_test_image
 
@@ -31,7 +31,7 @@ def test_example_app():
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
         proxy.compute_roi_extraction(roi)
-        param = dlp.BlobOpenCVParam.create(
+        param = sp.BlobOpenCVParam.create(
             min_dist_between_blobs=0.1,
             filter_by_color=False,
             min_area=500,

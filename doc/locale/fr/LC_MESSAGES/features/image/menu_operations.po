@@ -203,8 +203,8 @@ msgstr "L'action \"Convertir le type de données\" |convert_dtype| permet de con
 msgid "convert_dtype"
 msgstr ""
 
-msgid "Data type conversion uses the :py:func:`cdl.algorithms.datatypes.clip_astype` function which relies on :py:func:`numpy.ndarray.astype` function with the default parameters (`casting='unsafe'`)."
-msgstr "La conversion du type de données utilise la fonction :py:func:`cdl.algorithms.datatypes.clip_astype` qui repose sur la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
+msgid "Data type conversion uses the :py:func:`sigima.algorithms.datatypes.clip_astype` function which relies on :py:func:`numpy.ndarray.astype` function with the default parameters (`casting='unsafe'`)."
+msgstr "La conversion du type de données utilise la fonction :py:func:`sigima.algorithms.datatypes.clip_astype` qui repose sur la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
 
 msgid "Basic mathematical functions"
 msgstr "Fonctions mathématiques de base"

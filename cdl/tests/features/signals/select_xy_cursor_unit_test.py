@@ -13,10 +13,10 @@ import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
-from cdl.algorithms.signal import find_first_x_at_y_value
 from cdl.env import execenv
 from cdl.tests.data import create_paracetamol_signal
 from cdl.widgets.signalcursor import SignalCursorDialog
+from sigima.algorithms.signal import find_first_x_at_y_value
 
 
 @pytest.mark.parametrize("cursor_orientation", ["horizontal", "vertical"])

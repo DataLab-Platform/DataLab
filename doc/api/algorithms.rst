@@ -1,1 +1,1 @@
-.. automodule:: cdl.algorithms
+.. automodule:: sigima.algorithms

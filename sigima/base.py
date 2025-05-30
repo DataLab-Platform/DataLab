@@ -1,14 +1,14 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Common computation objects (see parent package :mod:`cdl.computation`)
+.. Common computation objects (see parent package :mod:`sigima.computation`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.computation.param module.
+# All dataset classes must also be imported in the sigima.param module.
 
 from __future__ import annotations
 
@@ -17,9 +17,9 @@ from typing import TYPE_CHECKING
 import guidata.dataset as gds
 import numpy as np
 
-from cdl.algorithms.datatypes import is_complex_dtype
 from cdl.config import Conf, _
 from cdl.obj import ImageObj, ResultProperties, SignalObj, create_signal
+from sigima.algorithms.datatypes import is_complex_dtype
 
 if TYPE_CHECKING:
     from typing import Callable

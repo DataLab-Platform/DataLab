@@ -15,16 +15,16 @@ and their purpose:
     * - Submodule
       - Purpose
 
-    * - :mod:`cdl.algorithms`
+    * - :mod:`sigima.algorithms`
       - Algorithms for data analysis, which operates on NumPy arrays
 
-    * - :mod:`cdl.param`
+    * - :mod:`sigima.param`
       - Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)
 
     * - :mod:`cdl.obj`
       - Convenience module to access the DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`) and related functions
 
-    * - :mod:`cdl.computation`
+    * - :mod:`sigima.computation`
       - Computation functions, which operate on DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`)
 
     * - :mod:`cdl.proxy`

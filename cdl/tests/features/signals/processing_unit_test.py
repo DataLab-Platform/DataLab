@@ -24,11 +24,11 @@ import pytest
 import scipy.ndimage as spi
 import scipy.signal as sps
 
-import cdl.algorithms.coordinates
-import cdl.computation.signal as cps
 import cdl.obj
-import cdl.param
 import cdl.tests.data as ctd
+import sigima.algorithms.coordinates
+import sigima.param
+import sigima.signal as ss
 from cdl.tests.data import get_test_signal
 from cdl.utils.tests import check_array_result, check_scalar_result
 
@@ -37,13 +37,13 @@ from cdl.utils.tests import check_array_result, check_scalar_result
 def test_signal_calibration() -> None:
     """Validation test for the signal calibration processing."""
     src = get_test_signal("paracetamol.txt")
-    p = cdl.param.XYCalibrateParam()
+    p = sigima.param.XYCalibrateParam()
 
     # Test with a = 1 and b = 0: should do nothing
     p.a, p.b = 1.0, 0.0
     for axis, _taxis in p.axes:
         p.axis = axis
-        dst = cps.calibration(src, p)
+        dst = ss.calibration(src, p)
         exp = src.xydata
         check_array_result("Calibration[identity]", dst.xydata, exp)
 
@@ -56,7 +56,7 @@ def test_signal_calibration() -> None:
             exp_x1 = p.a * exp_x1 + p.b
         else:
             exp_y1 = p.a * exp_y1 + p.b
-        dst = cps.calibration(src, p)
+        dst = ss.calibration(src, p)
         res_x1, res_y1 = dst.xydata
         title = f"Calibration[{axis},a={p.a},b={p.b}]"
         check_array_result(f"{title}.x", res_x1, exp_x1)
@@ -67,7 +67,7 @@ def test_signal_calibration() -> None:
 def test_signal_swap_axes() -> None:
     """Validation test for the signal axes swapping processing."""
     src = get_test_signal("paracetamol.txt")
-    dst = cps.swap_axes(src)
+    dst = ss.swap_axes(src)
     exp_y, exp_x = src.xydata
     check_array_result("SwapAxes|x", dst.x, exp_x)
     check_array_result("SwapAxes|y", dst.y, exp_y)
@@ -77,7 +77,7 @@ def test_signal_swap_axes() -> None:
 def test_signal_reverse_x() -> None:
     """Validation test for the signal reverse x processing."""
     src = get_test_signal("paracetamol.txt")
-    dst = cps.reverse_x(src)
+    dst = ss.reverse_x(src)
     exp = src.data[::-1]
     check_array_result("ReverseX", dst.data, exp)
 
@@ -88,13 +88,13 @@ def test_to_polar() -> None:
     x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
 
-    r, theta = cdl.algorithms.coordinates.to_polar(x, y, "rad")
+    r, theta = sigima.algorithms.coordinates.to_polar(x, y, "rad")
     exp_r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
     exp_theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
     check_array_result(f"{title}|r", r, exp_r)
     check_array_result(f"{title}|theta", theta, exp_theta)
 
-    r, theta = cdl.algorithms.coordinates.to_polar(x, y, unit="deg")
+    r, theta = sigima.algorithms.coordinates.to_polar(x, y, unit="deg")
     exp_theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
     check_array_result(f"{title}|r", r, exp_r)
     check_array_result(f"{title}|theta", theta, exp_theta)
@@ -106,14 +106,14 @@ def test_to_cartesian() -> None:
     r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
     theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
 
-    x, y = cdl.algorithms.coordinates.to_cartesian(r, theta, "rad")
+    x, y = sigima.algorithms.coordinates.to_cartesian(r, theta, "rad")
     exp_x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     exp_y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     check_array_result(f"{title}|x", x, exp_x)
     check_array_result(f"{title}|y", y, exp_y)
 
     theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
-    x, y = cdl.algorithms.coordinates.to_cartesian(r, theta, unit="deg")
+    x, y = sigima.algorithms.coordinates.to_cartesian(r, theta, unit="deg")
     check_array_result(f"{title}|x", x, exp_x)
     check_array_result(f"{title}|y", y, exp_y)
 
@@ -122,14 +122,14 @@ def test_to_cartesian() -> None:
 def test_signal_to_polar() -> None:
     """Validation test for the signal cartesian to polar processing."""
     title = "Cartesian2Polar"
-    p = cdl.param.AngleUnitParam()
+    p = sigima.param.AngleUnitParam()
     x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     src = cdl.obj.create_signal("test", x, y)
 
-    for p.unit, _unit_name in cdl.param.AngleUnitParam.units:
-        dst1 = cps.to_polar(src, p)
-        dst2 = cps.to_cartesian(dst1, p)
+    for p.unit, _unit_name in sigima.param.AngleUnitParam.units:
+        dst1 = ss.to_polar(src, p)
+        dst2 = ss.to_cartesian(dst1, p)
         check_array_result(f"{title}|x", dst2.x, x)
         check_array_result(f"{title}|y", dst2.y, y)
 
@@ -138,16 +138,16 @@ def test_signal_to_polar() -> None:
 def test_signal_to_cartesian() -> None:
     """Validation test for the signal polar to cartesian processing."""
     title = "Polar2Cartesian"
-    p = cdl.param.AngleUnitParam()
+    p = sigima.param.AngleUnitParam()
     r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
 
     angles_deg = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
     angles_rad = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
-    for p.unit, _unit_name in cdl.param.AngleUnitParam.units:
+    for p.unit, _unit_name in sigima.param.AngleUnitParam.units:
         theta = angles_rad if p.unit == "rad" else angles_deg
         src = cdl.obj.create_signal("test", r, theta)
-        dst1 = cps.to_cartesian(src, p)
-        dst2 = cps.to_polar(dst1, p)
+        dst1 = ss.to_cartesian(src, p)
+        dst2 = ss.to_polar(dst1, p)
         check_array_result(f"{title}|x", dst2.x, r)
         check_array_result(f"{title}|y", dst2.y, theta)
 
@@ -156,7 +156,7 @@ def test_signal_to_cartesian() -> None:
 def test_signal_normalize() -> None:
     """Validation test for the signal normalization processing."""
     src = get_test_signal("paracetamol.txt")
-    p = cdl.param.NormalizeParam()
+    p = sigima.param.NormalizeParam()
     src.y[10:15] = np.nan  # Adding some NaN values to the signal
 
     # Given the fact that the normalization methods implementations are
@@ -164,7 +164,7 @@ def test_signal_normalize() -> None:
     # we simply need to check if some properties are satisfied.
     for method_value, _method_name in p.methods:
         p.method = method_value
-        dst = cps.normalize(src, p)
+        dst = ss.normalize(src, p)
         title = f"Normalize[method='{p.method}']"
         exp_min, exp_max = None, None
         if p.method == "maximum":
@@ -191,11 +191,11 @@ def test_signal_normalize() -> None:
 def test_signal_clip() -> None:
     """Validation test for the signal clipping processing."""
     src = get_test_signal("paracetamol.txt")
-    p = cdl.param.ClipParam()
+    p = sigima.param.ClipParam()
 
     for lower, upper in ((float("-inf"), float("inf")), (250.0, 500.0)):
         p.lower, p.upper = lower, upper
-        dst = cps.clip(src, p)
+        dst = ss.clip(src, p)
         exp = np.clip(src.data, p.lower, p.upper)
         check_array_result(f"Clip[{lower},{upper}]", dst.data, exp)
 
@@ -208,7 +208,7 @@ def test_signal_convolution() -> None:
     addparam = cdl.obj.GaussLorentzVoigtParam.create(sigma=10.0)
     src2 = cdl.obj.create_signal_from_param(snew, addparam=addparam, edit=False)
 
-    dst = cps.convolution(src1, src2)
+    dst = ss.convolution(src1, src2)
     exp = np.convolve(src1.data, src2.data, mode="same")
     check_array_result("Convolution", dst.data, exp)
 
@@ -217,7 +217,7 @@ def test_signal_convolution() -> None:
 def test_signal_derivative() -> None:
     """Validation test for the signal derivative processing."""
     src = get_test_signal("paracetamol.txt")
-    dst = cps.derivative(src)
+    dst = ss.derivative(src)
     x, y = src.xydata
 
     # Compute the derivative using a simple finite difference:
@@ -239,13 +239,13 @@ def test_signal_integral() -> None:
     src.data /= np.max(src.data)
 
     # Check the integral of the derivative:
-    dst = cps.integral(cps.derivative(src))
+    dst = ss.integral(ss.derivative(src))
     # The integral of the derivative should be the original signal, up to a constant:
     dst.y += src.y[0]
 
     check_array_result("Integral[Derivative]", dst.y, src.y, atol=0.05)
 
-    dst = cps.integral(src)
+    dst = ss.integral(src)
     x, y = src.xydata
 
     # Compute the integral using a simple trapezoidal rule:
@@ -260,9 +260,9 @@ def test_signal_integral() -> None:
 def test_signal_detrending() -> None:
     """Validation test for the signal detrending processing."""
     src = get_test_signal("paracetamol.txt")
-    for method_value, _method_name in cdl.param.DetrendingParam.methods:
-        p = cdl.param.DetrendingParam.create(method=method_value)
-        dst = cps.detrending(src, p)
+    for method_value, _method_name in sigima.param.DetrendingParam.methods:
+        p = sigima.param.DetrendingParam.create(method=method_value)
+        dst = ss.detrending(src, p)
         exp = sps.detrend(src.data, type=p.method)
         check_array_result(f"Detrending [method={p.method}]", dst.data, exp)
 
@@ -274,7 +274,7 @@ def test_signal_offset_correction() -> None:
     # Defining the ROI that will be used to estimate the offset
     imin, imax = 0, 20
     p = cdl.obj.ROI1DParam.create(xmin=src.x[imin], xmax=src.x[imax])
-    dst = cps.offset_correction(src, p)
+    dst = ss.offset_correction(src, p)
     exp = src.data - np.mean(src.data[imin:imax])
     check_array_result("OffsetCorrection", dst.data, exp)
 
@@ -284,8 +284,8 @@ def test_signal_gaussian_filter() -> None:
     """Validation test for the signal Gaussian filter processing."""
     src = get_test_signal("paracetamol.txt")
     for sigma in (10.0, 50.0):
-        p = cdl.param.GaussianParam.create(sigma=sigma)
-        dst = cps.gaussian_filter(src, p)
+        p = sigima.param.GaussianParam.create(sigma=sigma)
+        dst = ss.gaussian_filter(src, p)
         exp = spi.gaussian_filter(src.data, sigma=sigma)
         check_array_result(f"GaussianFilter[sigma={sigma}]", dst.data, exp)
 
@@ -294,10 +294,10 @@ def test_signal_gaussian_filter() -> None:
 def test_signal_moving_average() -> None:
     """Validation test for the signal moving average processing."""
     src = get_test_signal("paracetamol.txt")
-    p = cdl.param.MovingAverageParam.create(n=30)
+    p = sigima.param.MovingAverageParam.create(n=30)
     for mode in p.modes:
         p.mode = mode
-        dst = cps.moving_average(src, p)
+        dst = ss.moving_average(src, p)
         exp = spi.uniform_filter(src.data, size=p.n, mode=p.mode)
 
         # Implementation note:
@@ -319,10 +319,10 @@ def test_signal_moving_average() -> None:
 def test_signal_moving_median() -> None:
     """Validation test for the signal moving median processing."""
     src = get_test_signal("paracetamol.txt")
-    p = cdl.param.MovingMedianParam.create(n=15)
+    p = sigima.param.MovingMedianParam.create(n=15)
     for mode in p.modes:
         p.mode = mode
-        dst = cps.moving_median(src, p)
+        dst = ss.moving_median(src, p)
         exp = spi.median_filter(src.data, size=p.n, mode=p.mode)
         check_array_result(f"MovingMed[n={p.n},mode={p.mode}]", dst.data, exp, rtol=0.1)
 
@@ -331,7 +331,7 @@ def test_signal_moving_median() -> None:
 def test_signal_wiener() -> None:
     """Validation test for the signal Wiener filter processing."""
     src = get_test_signal("paracetamol.txt")
-    dst = cps.wiener(src)
+    dst = ss.wiener(src)
     exp = sps.wiener(src.data)
     check_array_result("Wiener", dst.data, exp)
 
@@ -341,19 +341,19 @@ def test_signal_resampling() -> None:
     """Validation test for the signal resampling processing."""
     src1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
     x1, y1 = src1.xydata
-    p1 = cdl.param.ResamplingParam.create(
+    p1 = sigima.param.ResamplingParam.create(
         xmin=src1.x[0], xmax=src1.x[-1], nbpts=src1.x.size
     )
-    dst1 = cps.resampling(src1, p1)
+    dst1 = ss.resampling(src1, p1)
     dst1x, dst1y = dst1.xydata
     check_array_result("x1new", dst1x, x1)
     check_array_result("y1new", dst1y, y1)
 
     src2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=9)
-    p2 = cdl.param.ResamplingParam.create(
+    p2 = sigima.param.ResamplingParam.create(
         xmin=src1.x[0], xmax=src1.x[-1], nbpts=src1.x.size
     )
-    dst2 = cps.resampling(src2, p2)
+    dst2 = ss.resampling(src2, p2)
     dst2x, dst2y = dst2.xydata
     check_array_result("x2new", dst2x, x1)
     check_array_result("y2new", dst2y, y1)
@@ -364,7 +364,7 @@ def test_signal_XY_mode() -> None:
     """Validation test for the signal X-Y mode processing."""
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=5)
     s2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
-    dst = cps.xy_mode(s1, s2)
+    dst = ss.xy_mode(s1, s2)
     x, y = dst.xydata
     check_array_result("XYMode", x, s1.y)
     check_array_result("XYMode", y, s2.y)
@@ -372,7 +372,7 @@ def test_signal_XY_mode() -> None:
 
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=9)
     s2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=50.0, size=5)
-    dst = cps.xy_mode(s1, s2)
+    dst = ss.xy_mode(s1, s2)
     x, y = dst.xydata
     check_array_result("XYMode2", x, s1.y[::2])
     check_array_result("XYMode2", y, s2.y)

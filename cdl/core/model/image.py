@@ -32,10 +32,10 @@ from plotpy.items import (
 )
 from skimage import draw
 
-from cdl.algorithms.datatypes import clip_astype
-from cdl.algorithms.image import scale_data_to_min_max
 from cdl.config import Conf, _
 from cdl.core.model import base
+from sigima.algorithms.datatypes import clip_astype
+from sigima.algorithms.image import scale_data_to_min_max
 
 if TYPE_CHECKING:
     from qtpy import QtWidgets as QW

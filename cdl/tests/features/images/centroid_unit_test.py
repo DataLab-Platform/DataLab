@@ -24,9 +24,8 @@ from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
-import cdl.computation.image as cpi
 import cdl.obj as dlo
-from cdl.algorithms.image import get_centroid_fourier
+import sigima.image.measurement as si
 from cdl.config import _
 from cdl.env import execenv
 from cdl.tests.data import (
@@ -35,6 +34,7 @@ from cdl.tests.data import (
 )
 from cdl.utils.tests import check_scalar_result
 from cdl.utils.vistools import view_image_items
+from sigima.algorithms.image import get_centroid_fourier
 
 
 def get_centroid_from_moments(data):
@@ -99,7 +99,7 @@ def test_centroid_graphically():
 
 def __check_centroid(image, expected_x, expected_y):
     """Check centroid computation"""
-    df = cpi.centroid(image).to_dataframe()
+    df = si.centroid(image).to_dataframe()
     check_scalar_result("Centroid X", df.x[0], expected_x, atol=1.0)
     check_scalar_result("Centroid Y", df.y[0], expected_y, atol=1.0)
 

@@ -37,13 +37,13 @@ msgstr "Sous-module"
 msgid "Purpose"
 msgstr "Contenu"
 
-msgid ":mod:`cdl.algorithms`"
+msgid ":mod:`sigima.algorithms`"
 msgstr ""
 
 msgid "Algorithms for data analysis, which operates on NumPy arrays"
 msgstr "Algorithmes pour l'analyse de données, qui opèrent sur des tableaux NumPy"
 
-msgid ":mod:`cdl.param`"
+msgid ":mod:`sigima.param`"
 msgstr ""
 
 msgid "Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Convenience module to access the DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`) and related functions"
 msgstr "Module de commodité pour accéder aux objets DataLab (:class:`cdl.obj.SignalObj` ou :class:`cdl.obj.ImageObj`) et fonctions associées"
 
-msgid ":mod:`cdl.computation`"
+msgid ":mod:`sigima.computation`"
 msgstr ""
 
 msgid "Computation functions, which operate on DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`)"

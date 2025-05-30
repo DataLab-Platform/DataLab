@@ -15,10 +15,10 @@ from plotpy.plot import PlotDialog
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from cdl.algorithms.signal import find_first_x_at_y_value
 from cdl.config import _
 from cdl.core.model.signal import CURVESTYLES
 from cdl.utils.qthelpers import block_signals
+from sigima.algorithms.signal import find_first_x_at_y_value
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker

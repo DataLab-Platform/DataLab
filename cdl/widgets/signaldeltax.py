@@ -18,9 +18,9 @@ from plotpy.plot import PlotDialog
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from cdl.algorithms.signal import full_width_at_y
 from cdl.config import _
 from cdl.core.model.signal import CURVESTYLES
+from sigima.algorithms.signal import full_width_at_y
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection

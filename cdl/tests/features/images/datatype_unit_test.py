@@ -13,8 +13,8 @@ from __future__ import annotations
 import numpy as np
 
 import cdl.obj
-from cdl.algorithms.datatypes import clip_astype, is_integer_dtype
 from cdl.env import execenv
+from sigima.algorithms.datatypes import clip_astype, is_integer_dtype
 
 
 def get_integer_datatypes() -> list[cdl.obj.ImageDatatypes]:

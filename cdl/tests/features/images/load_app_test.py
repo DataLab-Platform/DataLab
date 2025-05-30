@@ -13,7 +13,7 @@ import numpy as np
 import pytest
 
 import cdl.obj
-import cdl.param as dlp
+import sigima.param as sp
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 
@@ -61,7 +61,7 @@ def test_high_number_of_images() -> None:
 
         # Comment the two following lines to check if DataLab only shows the last image
         # when they are all superposed
-        param = dlp.GridParam.create(cols=10)
+        param = sp.GridParam.create(cols=10)
         panel.processor.distribute_on_grid(param)
 
         panel.duplicate_object()

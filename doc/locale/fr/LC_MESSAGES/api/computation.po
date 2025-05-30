@@ -19,31 +19,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Computation (:mod:`cdl.computation`)"
+msgid "Computation (:mod:`sigima.computation`)"
 msgstr ""
 
 msgid "This package contains the computation functions used by the DataLab project. Those functions operate directly on DataLab objects (i.e. :class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`) and are designed to be used in the DataLab pipeline, but can be used independently as well."
 msgstr ""
 
-msgid "The :mod:`cdl.computation` package is the main entry point for the DataLab computation functions when manipulating DataLab objects. See the :mod:`cdl.algorithms` package for algorithms that operate directly on NumPy arrays."
+msgid "The :mod:`sigima.computation` package is the main entry point for the DataLab computation functions when manipulating DataLab objects. See the :mod:`sigima.algorithms` package for algorithms that operate directly on NumPy arrays."
 msgstr ""
 
-msgid "Each computation module defines a set of computation objects, that is, functions that implement processing features and classes that implement the corresponding parameters (in the form of :py:class:`guidata.dataset.datatypes.Dataset` subclasses). The computation functions takes a DataLab object (e.g. :class:`cdl.obj.SignalObj`) and a parameter object (e.g. :py:class:`cdl.param.MovingAverageParam`) as input and return a DataLab object as output (the result of the computation). The parameter object is used to configure the computation function (e.g. the size of the moving average window)."
+msgid "Each computation module defines a set of computation objects, that is, functions that implement processing features and classes that implement the corresponding parameters (in the form of :py:class:`guidata.dataset.datatypes.Dataset` subclasses). The computation functions takes a DataLab object (e.g. :class:`cdl.obj.SignalObj`) and a parameter object (e.g. :py:class:`sigima.param.MovingAverageParam`) as input and return a DataLab object as output (the result of the computation). The parameter object is used to configure the computation function (e.g. the size of the moving average window)."
 msgstr ""
 
-msgid "In DataLab overall architecture, the purpose of this package is to provide the computation functions that are used by the :mod:`cdl.core.gui.processor` module, based on the algorithms defined in the :mod:`cdl.algorithms` module and on the data model defined in the :mod:`cdl.obj` (or :mod:`cdl.core.model`) module."
+msgid "In DataLab overall architecture, the purpose of this package is to provide the computation functions that are used by the :mod:`cdl.core.gui.processor` module, based on the algorithms defined in the :mod:`sigima.algorithms` module and on the data model defined in the :mod:`cdl.obj` (or :mod:`cdl.core.model`) module."
 msgstr ""
 
 msgid "The computation modules are organized in subpackages according to their purpose. The following subpackages are available:"
 msgstr ""
 
-msgid ":mod:`cdl.computation.base`: Common processing features"
+msgid ":mod:`sigima.base`: Common processing features"
 msgstr ""
 
-msgid ":mod:`cdl.computation.signal`: Signal processing features"
+msgid ":mod:`sigima.signal`: Signal processing features"
 msgstr ""
 
-msgid ":mod:`cdl.computation.image`: Image processing features"
+msgid ":mod:`sigima.image`: Image processing features"
 msgstr ""
 
 msgid "Common processing features"
@@ -494,10 +494,10 @@ msgstr ""
 msgid "New instance of :py:class:`PeakDetectionParam`."
 msgstr ""
 
-msgid "Peak detection with :py:func:`cdl.algorithms.signal.peak_indices`"
+msgid "Peak detection with :py:func:`sigima.algorithms.signal.peak_indices`"
 msgstr ""
 
-msgid "Normalize data with :py:func:`cdl.algorithms.signal.normalize`"
+msgid "Normalize data with :py:func:`sigima.algorithms.signal.normalize`"
 msgstr ""
 
 msgid "Compute derivative with :py:func:`numpy.gradient`"
@@ -647,22 +647,22 @@ msgstr ""
 msgid "Callback for choice item"
 msgstr ""
 
-msgid "Compute zero padding with :py:func:`cdl.algorithms.signal.zero_padding`"
+msgid "Compute zero padding with :py:func:`sigima.algorithms.signal.zero_padding`"
 msgstr ""
 
-msgid "Compute FFT with :py:func:`cdl.algorithms.signal.fft1d`"
+msgid "Compute FFT with :py:func:`sigima.algorithms.signal.fft1d`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`cdl.algorithms.signal.ifft1d`"
+msgid "Compute iFFT with :py:func:`sigima.algorithms.signal.ifft1d`"
 msgstr ""
 
-msgid "Compute magnitude spectrum with :py:func:`cdl.algorithms.signal.magnitude_spectrum`"
+msgid "Compute magnitude spectrum with :py:func:`sigima.algorithms.signal.magnitude_spectrum`"
 msgstr ""
 
-msgid "Compute phase spectrum with :py:func:`cdl.algorithms.signal.phase_spectrum`"
+msgid "Compute phase spectrum with :py:func:`sigima.algorithms.signal.phase_spectrum`"
 msgstr ""
 
-msgid "Compute power spectral density with :py:func:`cdl.algorithms.signal.psd`"
+msgid "Compute power spectral density with :py:func:`sigima.algorithms.signal.psd`"
 msgstr ""
 
 msgid "Polynomial fitting parameters"
@@ -695,7 +695,7 @@ msgstr ""
 msgid "New instance of :py:class:`InterpolationParam`."
 msgstr ""
 
-msgid "Interpolate data with :py:func:`cdl.algorithms.signal.interpolate`"
+msgid "Interpolate data with :py:func:`sigima.algorithms.signal.interpolate`"
 msgstr ""
 
 msgid "Resample parameters"
@@ -722,7 +722,7 @@ msgstr ""
 msgid "New instance of :py:class:`ResamplingParam`."
 msgstr ""
 
-msgid "Resample data with :py:func:`cdl.algorithms.signal.interpolate`"
+msgid "Resample data with :py:func:`sigima.algorithms.signal.interpolate`"
 msgstr ""
 
 msgid "Detrending parameters"
@@ -779,7 +779,7 @@ msgstr ""
 msgid "New instance of :py:class:`WindowingParam`."
 msgstr ""
 
-msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman, tukey, rectangular) with :py:func:`cdl.algorithms.signal.windowing`"
+msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman, tukey, rectangular) with :py:func:`sigima.algorithms.signal.windowing`"
 msgstr ""
 
 msgid "Reverse x-axis"
@@ -797,7 +797,7 @@ msgstr ""
 msgid "New instance of :py:class:`AngleUnitParam`."
 msgstr ""
 
-msgid "Convert cartesian coordinates to polar coordinates with :py:func:`cdl.algorithms.coordinates.to_polar`."
+msgid "Convert cartesian coordinates to polar coordinates with :py:func:`sigima.algorithms.coordinates.to_polar`."
 msgstr ""
 
 msgid "Source signal."
@@ -809,7 +809,7 @@ msgstr ""
 msgid "Result signal object."
 msgstr ""
 
-msgid "Convert polar coordinates to cartesian coordinates with :py:func:`cdl.algorithms.coordinates.to_cartesian`."
+msgid "Convert polar coordinates to cartesian coordinates with :py:func:`sigima.algorithms.coordinates.to_cartesian`."
 msgstr ""
 
 msgid "This function assumes that the x-axis represents the radius and the y-axis represents the angle. Negative values are not allowed for the radius, and will be clipped to 0 (a warning will be raised)."
@@ -827,10 +827,10 @@ msgstr ""
 msgid "New instance of :py:class:`AllanVarianceParam`."
 msgstr ""
 
-msgid "Compute Allan variance with :py:func:`cdl.algorithms.signal.allan_variance`"
+msgid "Compute Allan variance with :py:func:`sigima.algorithms.signal.allan_variance`"
 msgstr ""
 
-msgid "Compute Allan deviation with :py:func:`cdl.algorithms.signal.allan_deviation`"
+msgid "Compute Allan deviation with :py:func:`sigima.algorithms.signal.allan_deviation`"
 msgstr ""
 
 msgid "Compute Overlapping Allan variance."
@@ -896,13 +896,13 @@ msgstr ""
 msgid "New instance of :py:class:`FWHMParam`."
 msgstr ""
 
-msgid "Compute FWHM with :py:func:`cdl.algorithms.signal.fwhm`"
+msgid "Compute FWHM with :py:func:`sigima.algorithms.signal.fwhm`"
 msgstr ""
 
 msgid "Segment coordinates"
 msgstr ""
 
-msgid "Compute FW at 1/e² with :py:func:`cdl.algorithms.signal.fw1e2`"
+msgid "Compute FW at 1/e² with :py:func:`sigima.algorithms.signal.fw1e2`"
 msgstr ""
 
 msgid "Ordinate parameter"
@@ -959,7 +959,7 @@ msgstr ""
 msgid "Compute statistics on a signal"
 msgstr ""
 
-msgid "Compute bandwidth at -3 dB with :py:func:`cdl.algorithms.signal.bandwidth`"
+msgid "Compute bandwidth at -3 dB with :py:func:`sigima.algorithms.signal.bandwidth`"
 msgstr ""
 
 msgid "Result properties with bandwidth"
@@ -986,22 +986,22 @@ msgstr ""
 msgid "Compute Dynamic parameters using the following functions:"
 msgstr ""
 
-msgid "Freq: :py:func:`cdl.algorithms.signal.sinus_frequency`"
+msgid "Freq: :py:func:`sigima.algorithms.signal.sinus_frequency`"
 msgstr ""
 
-msgid "ENOB: :py:func:`cdl.algorithms.signal.enob`"
+msgid "ENOB: :py:func:`sigima.algorithms.signal.enob`"
 msgstr ""
 
-msgid "SNR: :py:func:`cdl.algorithms.signal.snr`"
+msgid "SNR: :py:func:`sigima.algorithms.signal.snr`"
 msgstr ""
 
-msgid "SINAD: :py:func:`cdl.algorithms.signal.sinad`"
+msgid "SINAD: :py:func:`sigima.algorithms.signal.sinad`"
 msgstr ""
 
-msgid "THD: :py:func:`cdl.algorithms.signal.thd`"
+msgid "THD: :py:func:`sigima.algorithms.signal.thd`"
 msgstr ""
 
-msgid "SFDR: :py:func:`cdl.algorithms.signal.sfdr`"
+msgid "SFDR: :py:func:`sigima.algorithms.signal.sfdr`"
 msgstr ""
 
 msgid "Result properties with ENOB, SNR, SINAD, THD, SFDR"
@@ -1010,16 +1010,16 @@ msgstr ""
 msgid "Compute sampling rate and period using the following functions:"
 msgstr ""
 
-msgid "fs: :py:func:`cdl.algorithms.signal.sampling_rate`"
+msgid "fs: :py:func:`sigima.algorithms.signal.sampling_rate`"
 msgstr ""
 
-msgid "T: :py:func:`cdl.algorithms.signal.sampling_period`"
+msgid "T: :py:func:`sigima.algorithms.signal.sampling_period`"
 msgstr ""
 
 msgid "Result properties with sampling rate and period"
 msgstr ""
 
-msgid "Compute contrast with :py:func:`cdl.algorithms.signal.contrast`"
+msgid "Compute contrast with :py:func:`sigima.algorithms.signal.contrast`"
 msgstr ""
 
 msgid "Compute the smallest argument at the minima and the smallest argument at the maxima."
@@ -1121,7 +1121,7 @@ msgstr ""
 msgid "New instance of :py:class:`FlatFieldParam`."
 msgstr ""
 
-msgid "Compute flat field correction with :py:func:`cdl.algorithms.image.flatfield`"
+msgid "Compute flat field correction with :py:func:`sigima.algorithms.image.flatfield`"
 msgstr ""
 
 msgid "raw data image object"
@@ -1136,7 +1136,7 @@ msgstr ""
 msgid "Output image object"
 msgstr ""
 
-msgid "Normalize image data depending on its maximum, with :py:func:`cdl.algorithms.image.normalize`"
+msgid "Normalize image data depending on its maximum, with :py:func:`sigima.algorithms.image.normalize`"
 msgstr ""
 
 msgid "Log10 parameters"
@@ -1280,7 +1280,7 @@ msgstr ""
 msgid "New instance of :py:class:`BinningParam`."
 msgstr ""
 
-msgid "Binning function on data with :py:func:`cdl.algorithms.image.binning`"
+msgid "Binning function on data with :py:func:`sigima.algorithms.image.binning`"
 msgstr ""
 
 msgid "parameters defining the regions of interest"
@@ -1382,7 +1382,7 @@ msgstr ""
 msgid "Update parameters from image"
 msgstr ""
 
-msgid "Compute radial profile around the centroid with :py:func:`cdl.algorithms.image.get_radial_profile`"
+msgid "Compute radial profile around the centroid with :py:func:`sigima.algorithms.image.get_radial_profile`"
 msgstr ""
 
 msgid "Signal object with the radial profile"
@@ -1415,7 +1415,7 @@ msgstr ""
 msgid "New instance of :py:class:`DataTypeIParam`."
 msgstr ""
 
-msgid "Convert image data type with :py:func:`cdl.algorithms.datatypes.clip_astype`"
+msgid "Convert image data type with :py:func:`sigima.algorithms.datatypes.clip_astype`"
 msgstr ""
 
 msgid "Compute log10 with :py:data:`numpy.log10`"
@@ -1463,7 +1463,7 @@ msgstr ""
 msgid "Callback to update padding values"
 msgstr ""
 
-msgid "Compute zero padding for an image using `cdl.algorithms.image.zero_padding`."
+msgid "Compute zero padding for an image using `sigima.algorithms.image.zero_padding`."
 msgstr ""
 
 msgid "source image object"
@@ -1472,19 +1472,19 @@ msgstr ""
 msgid "New padded image object"
 msgstr ""
 
-msgid "Compute FFT with :py:func:`cdl.algorithms.image.fft2d`"
+msgid "Compute FFT with :py:func:`sigima.algorithms.image.fft2d`"
 msgstr ""
 
-msgid "Compute inverse FFT with :py:func:`cdl.algorithms.image.ifft2d`"
+msgid "Compute inverse FFT with :py:func:`sigima.algorithms.image.ifft2d`"
 msgstr ""
 
-msgid "Compute magnitude spectrum with :py:func:`cdl.algorithms.image.magnitude_spectrum`"
+msgid "Compute magnitude spectrum with :py:func:`sigima.algorithms.image.magnitude_spectrum`"
 msgstr ""
 
-msgid "Compute phase spectrum with :py:func:`cdl.algorithms.image.phase_spectrum`"
+msgid "Compute phase spectrum with :py:func:`sigima.algorithms.image.phase_spectrum`"
 msgstr ""
 
-msgid "Compute power spectral density with :py:func:`cdl.algorithms.image.psd`"
+msgid "Compute power spectral density with :py:func:`sigima.algorithms.image.psd`"
 msgstr ""
 
 msgid "Butterworth filter parameters"
@@ -1514,7 +1514,7 @@ msgstr ""
 msgid "Moreover, the computation function must return a single value or a NumPy array containing the result of the computation. This array contains the coordinates of points, polygons, circles or ellipses in the form [[x, y], ...], or [[x0, y0, x1, y1, ...], ...], or [[x0, y0, r], ...], or [[x0, y0, a, b, theta], ...]."
 msgstr ""
 
-msgid "Return centroid coordinates with :py:func:`cdl.algorithms.image.get_centroid_fourier`"
+msgid "Return centroid coordinates with :py:func:`sigima.algorithms.image.get_centroid_fourier`"
 msgstr ""
 
 msgid "input data"
@@ -1523,7 +1523,7 @@ msgstr ""
 msgid "Centroid coordinates"
 msgstr ""
 
-msgid "Compute centroid with :py:func:`cdl.algorithms.image.get_centroid_fourier`"
+msgid "Compute centroid with :py:func:`sigima.algorithms.image.get_centroid_fourier`"
 msgstr ""
 
 msgid "input image"
@@ -1535,7 +1535,7 @@ msgstr ""
 msgid "Diameter coords"
 msgstr ""
 
-msgid "Compute minimum enclosing circle with :py:func:`cdl.algorithms.image.get_enclosing_circle`"
+msgid "Compute minimum enclosing circle with :py:func:`sigima.algorithms.image.get_enclosing_circle`"
 msgstr ""
 
 msgid "Circle Hough transform parameters"
@@ -1556,7 +1556,7 @@ msgstr ""
 msgid "New instance of :py:class:`HoughCircleParam`."
 msgstr ""
 
-msgid "Compute Hough circles with :py:func:`cdl.algorithms.image.get_hough_circle_peaks`"
+msgid "Compute Hough circles with :py:func:`sigima.algorithms.image.get_hough_circle_peaks`"
 msgstr ""
 
 msgid "Circle coordinates"
@@ -1961,7 +1961,7 @@ msgstr ""
 msgid "New instance of :py:class:`Peak2DDetectionParam`."
 msgstr ""
 
-msgid "Compute 2D peak detection with :py:func:`cdl.algorithms.image.get_2d_peaks_coords`"
+msgid "Compute 2D peak detection with :py:func:`sigima.algorithms.image.get_2d_peaks_coords`"
 msgstr ""
 
 msgid "Peak coordinates"
@@ -1979,7 +1979,7 @@ msgstr ""
 msgid "New instance of :py:class:`ContourShapeParam`."
 msgstr ""
 
-msgid "Compute contour shape fit with :py:func:`cdl.algorithms.image.get_contour_shapes`"
+msgid "Compute contour shape fit with :py:func:`sigima.algorithms.image.get_contour_shapes`"
 msgstr ""
 
 msgid "Base class for blob detection parameters"
@@ -2015,7 +2015,7 @@ msgstr ""
 msgid "New instance of :py:class:`BlobDOGParam`."
 msgstr ""
 
-msgid "Compute blobs using Difference of Gaussian method with :py:func:`cdl.algorithms.image.find_blobs_dog`"
+msgid "Compute blobs using Difference of Gaussian method with :py:func:`sigima.algorithms.image.find_blobs_dog`"
 msgstr ""
 
 msgid "Blobs coordinates"
@@ -2033,7 +2033,7 @@ msgstr ""
 msgid "New instance of :py:class:`BlobDOHParam`."
 msgstr ""
 
-msgid "Compute blobs using Determinant of Hessian method with :py:func:`cdl.algorithms.image.find_blobs_doh`"
+msgid "Compute blobs using Determinant of Hessian method with :py:func:`sigima.algorithms.image.find_blobs_doh`"
 msgstr ""
 
 msgid "Blob detection using Laplacian of Gaussian method"
@@ -2045,7 +2045,7 @@ msgstr ""
 msgid "New instance of :py:class:`BlobLOGParam`."
 msgstr ""
 
-msgid "Compute blobs using Laplacian of Gaussian method with :py:func:`cdl.algorithms.image.find_blobs_log`"
+msgid "Compute blobs using Laplacian of Gaussian method with :py:func:`sigima.algorithms.image.find_blobs_log`"
 msgstr ""
 
 msgid "Blob detection using OpenCV"
@@ -2111,5 +2111,5 @@ msgstr ""
 msgid "New instance of :py:class:`BlobOpenCVParam`."
 msgstr ""
 
-msgid "Compute blobs using OpenCV with :py:func:`cdl.algorithms.image.find_blobs_opencv`"
+msgid "Compute blobs using OpenCV with :py:func:`sigima.algorithms.image.find_blobs_opencv`"
 msgstr ""

@@ -34,9 +34,9 @@ from plotpy.items import (
     PolygonShape,
 )
 
-from cdl.algorithms import coordinates
-from cdl.algorithms.datatypes import is_integer_dtype
 from cdl.config import PLOTPY_CONF, Conf, _
+from sigima.algorithms import coordinates
+from sigima.algorithms.datatypes import is_integer_dtype
 
 if TYPE_CHECKING:
     from plotpy.items import (

@@ -15,9 +15,9 @@ from plotpy.plot import PlotDialog
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
-from cdl.algorithms.signal import peak_indices
 from cdl.config import _
 from cdl.core.model.signal import CURVESTYLES
+from sigima.algorithms.signal import peak_indices
 
 if TYPE_CHECKING:
     from plotpy.items import Marker
@@ -174,7 +174,7 @@ class SignalPeakDetectionDialog(PlotDialog):
         for item in self.co_markers:
             plot.add_item(item)
         positions = [str(marker.get_pos()[0]) for marker in markers]
-        prefix = f'<b>{_("Peaks:")}</b><br>'
+        prefix = f"<b>{_('Peaks:')}</b><br>"
         self.co_results.set_text(prefix + "<br>".join(positions))
 
     def hcursor_changed(self, marker: Marker) -> None:

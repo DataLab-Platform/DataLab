@@ -1,1 +1,1 @@
-.. automodule:: cdl.computation
+.. automodule:: sigima.computation

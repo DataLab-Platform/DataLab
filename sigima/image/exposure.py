@@ -4,27 +4,45 @@
 Exposure computation module
 ---------------------------
 
+This module provides tools for adjusting and analyzing image exposure and contrast.
+
+Main features include:
+- Histogram computation and equalization
+- Contrast adjustment and normalization
+- Logarithmic and gamma correction
+
+Exposure processing improves the visual quality and interpretability of images,
+especially under variable lighting conditions.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.computation.param module.
+# - All `guidata.dataset.DataSet` parameter classes must also be imported
+#   in the `sigima.param` module.
+# - All functions decorated by `computation_function` must be imported in the upper
+#   level `sigima.image` module.
 
 from __future__ import annotations
 
 import guidata.dataset as gds
+import numpy as np
 from skimage import exposure
 
-from cdl.computation import computation_function
-from cdl.computation.image import (
-    VALID_DTYPES_STRLIST,
-    dst_1_to_1,
-    restore_data_outside_roi,
-)
+import sigima.algorithms.image as alg
 from cdl.config import _
-from cdl.obj import ImageObj
+from cdl.obj import BaseProcParam, ImageObj, ROI2DParam, SignalObj
+from sigima import computation_function
+from sigima.base import (
+    ClipParam,
+    HistogramParam,
+    NormalizeParam,
+    dst_1_to_1,
+    dst_2_to_1,
+    new_signal_result,
+)
+from sigima.image.base import Wrap1to1Func, restore_data_outside_roi
 
 
 class AdjustGammaParam(gds.DataSet):
@@ -141,7 +159,7 @@ def adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
 class RescaleIntensityParam(gds.DataSet):
     """Intensity rescaling parameters"""
 
-    _dtype_list = ["image", "dtype"] + VALID_DTYPES_STRLIST
+    _dtype_list = ["image", "dtype"] + ImageObj.get_valid_dtypenames()
     in_range = gds.ChoiceItem(
         _("Input range"),
         list(zip(_dtype_list, _dtype_list)),
@@ -244,5 +262,138 @@ def equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> ImageObj:
     dst.data = exposure.equalize_adapthist(
         src.data, clip_limit=p.clip_limit, nbins=p.nbins
     )
+    restore_data_outside_roi(dst, src)
+    return dst
+
+
+class FlatFieldParam(BaseProcParam):
+    """Flat-field parameters"""
+
+    threshold = gds.FloatItem(_("Threshold"), default=0.0)
+
+    def update_from_obj(self, obj: ImageObj) -> None:
+        """Update parameters from image"""
+        self.set_from_datatype(obj.data.dtype)
+
+
+@computation_function
+def flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> ImageObj:
+    """Compute flat field correction with :py:func:`sigima.algorithms.image.flatfield`
+
+    Args:
+        src1: raw data image object
+        src2: flat field image object
+        p: flat field parameters
+
+    Returns:
+        Output image object
+    """
+    dst = dst_2_to_1(src1, src2, "flatfield", f"threshold={p.threshold}")
+    dst.data = alg.flatfield(src1.data, src2.data, p.threshold)
+    restore_data_outside_roi(dst, src1)
+    return dst
+
+
+# MARK: compute_1_to_1 functions -------------------------------------------------------
+# Functions with 1 input image and 1 output image
+# --------------------------------------------------------------------------------------
+
+
+@computation_function
+def normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
+    """
+    Normalize image data depending on its maximum,
+    with :py:func:`sigima.algorithms.image.normalize`
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    dst = dst_1_to_1(src, "normalize", suffix=f"ref={p.method}")
+    dst.data = alg.normalize(src.data, p.method)  # type: ignore
+    restore_data_outside_roi(dst, src)
+    return dst
+
+
+@computation_function
+def histogram(src: ImageObj, p: HistogramParam) -> SignalObj:
+    """Compute histogram of the image data, with :py:func:`numpy.histogram`
+
+    Args:
+        src: input image object
+        p: parameters
+
+    Returns:
+        Signal object with the histogram
+    """
+    data = src.get_masked_view().compressed()
+    suffix = p.get_suffix(data)  # Also updates p.lower and p.upper
+    y, bin_edges = np.histogram(data, bins=p.bins, range=(p.lower, p.upper))
+    x = (bin_edges[:-1] + bin_edges[1:]) / 2
+    dst = new_signal_result(
+        src,
+        "histogram",
+        suffix=suffix,
+        units=(src.zunit, ""),
+        labels=(src.zlabel, _("Counts")),
+    )
+    dst.set_xydata(x, y)
+    dst.metadata["shade"] = 0.5
+    return dst
+
+
+class ZCalibrateParam(gds.DataSet):
+    """Image linear calibration parameters"""
+
+    a = gds.FloatItem("a", default=1.0)
+    b = gds.FloatItem("b", default=0.0)
+
+
+@computation_function
+def calibration(src: ImageObj, p: ZCalibrateParam) -> ImageObj:
+    """Compute linear calibration
+
+    Args:
+        src: input image object
+        p: calibration parameters
+
+    Returns:
+        Output image object
+    """
+    dst = dst_1_to_1(src, "calibration", f"z={p.a}*z+{p.b}")
+    dst.data = p.a * src.data + p.b
+    restore_data_outside_roi(dst, src)
+    return dst
+
+
+@computation_function
+def clip(src: ImageObj, p: ClipParam) -> ImageObj:
+    """Apply clipping with :py:func:`numpy.clip`
+
+    Args:
+        src: input image object
+        p: parameters
+
+    Returns:
+        Output image object
+    """
+    return Wrap1to1Func(np.clip, a_min=p.lower, a_max=p.upper)(src)
+
+
+@computation_function
+def offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:
+    """Apply offset correction
+
+    Args:
+        src: input image object
+        p: parameters
+
+    Returns:
+        Output image object
+    """
+    dst = dst_1_to_1(src, "offset_correction", p.get_suffix())
+    dst.data = src.data - np.nanmean(p.get_data(src))
     restore_data_outside_roi(dst, src)
     return dst

@@ -16,12 +16,12 @@ from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
-import cdl.computation.image as cpi
-import cdl.param
-from cdl.algorithms.image import BINNING_OPERATIONS, binning
+import sigima.image.geometry as si
+import sigima.param
 from cdl.env import execenv
 from cdl.tests.data import get_test_image
 from cdl.utils.vistools import view_image_items
+from sigima.algorithms.image import BINNING_OPERATIONS, binning
 
 
 def compare_binning_images(data: ma.MaskedArray) -> None:
@@ -88,7 +88,7 @@ def test_binning() -> None:
     src.data = data = np.array(src.data[:500, :500], dtype=float)
     ny, nx = data.shape
 
-    p = cdl.param.BinningParam()
+    p = sigima.param.BinningParam()
     for operation in p.operations:
         p.operation = operation
         for sx in range(1, 3):
@@ -96,7 +96,7 @@ def test_binning() -> None:
                 p.sx = sx
                 p.sy = sy
                 rdata = data[: ny - (ny % sy), : nx - (nx % sx)]
-                dst = cpi.binning(src, p)
+                dst = si.binning(src, p)
                 bdata = dst.data
                 assert bdata.shape == (data.shape[0] // sy, data.shape[1] // sx)
                 assert bdata.dtype == data.dtype
@@ -112,7 +112,7 @@ def test_binning() -> None:
         src.data = data = np.array(src.data[:500, :500], dtype=src_dtype)
         for dtype_str in p.dtypes:
             p.dtype_str = dtype_str
-            dst = cpi.binning(src, p)
+            dst = si.binning(src, p)
             bdata = dst.data
             if dtype_str == "dtype":
                 assert bdata.dtype is data.dtype

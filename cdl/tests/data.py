@@ -17,9 +17,9 @@ import guidata.dataset as gds
 import numpy as np
 
 import cdl.obj
-from cdl.algorithms.datatypes import is_integer_dtype
 from cdl.config import _
 from cdl.utils.tests import get_test_fnames
+from sigima.algorithms.datatypes import is_integer_dtype
 
 
 def get_test_signal(filename: str) -> cdl.obj.SignalObj:

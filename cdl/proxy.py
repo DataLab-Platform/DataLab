@@ -79,7 +79,7 @@ There are two ways to call a processor method:
     proxy.calc("average")
 
     # Call a method with parameters
-    p = cdl.param.MovingAverageParam.create(n=30)
+    p = sigima.param.MovingAverageParam.create(n=30)
     proxy.calc("compute_moving_average", p)
 
 2. Directly calling the processor method from the proxy object:
@@ -90,7 +90,7 @@ There are two ways to call a processor method:
     proxy.compute_average()
 
     # Call a method with parameters
-    p = cdl.param.MovingAverageParam.create(n=30)
+    p = sigima.param.MovingAverageParam.create(n=30)
     proxy.compute_moving_average(p)
 
 .. warning::

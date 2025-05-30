@@ -10,7 +10,10 @@ Restoration computation module
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.computation.param module.
+# - All `guidata.dataset.DataSet` parameter classes must also be imported
+#   in the `sigima.param` module.
+# - All functions decorated by `computation_function` must be imported in the upper
+#   level `sigima.image` module.
 
 from __future__ import annotations
 
@@ -18,11 +21,12 @@ import guidata.dataset as gds
 import pywt
 from skimage import morphology, restoration
 
-from cdl.computation import computation_function
-from cdl.computation.image import Wrap1to1Func, dst_1_to_1, restore_data_outside_roi
-from cdl.computation.image.morphology import MorphologyParam
 from cdl.config import _
 from cdl.obj import ImageObj
+from sigima import computation_function
+from sigima.base import dst_1_to_1
+from sigima.image.base import Wrap1to1Func, restore_data_outside_roi
+from sigima.image.morphology import MorphologyParam
 
 
 class DenoiseTVParam(gds.DataSet):

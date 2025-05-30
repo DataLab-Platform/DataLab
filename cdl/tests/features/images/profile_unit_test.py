@@ -11,9 +11,8 @@ import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
-import cdl.computation.image as cpi
 import cdl.obj as dlo
-import cdl.param as dlp
+import sigima.image.extraction
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
 from cdl.env import execenv
 from cdl.tests.data import create_noisygauss_image, create_sincos_image
@@ -28,22 +27,24 @@ def test_profile_unit():
             for initial_param in (True, False):
                 if initial_param:
                     if mode == "line":
-                        param = dlp.LineProfileParam.create(row=100, col=200)
+                        param = sigima.image.extraction.LineProfileParam.create(
+                            row=100, col=200
+                        )
                     elif mode == "segment":
-                        param = dlp.SegmentProfileParam.create(
+                        param = sigima.image.extraction.SegmentProfileParam.create(
                             row1=10, col1=20, row2=200, col2=300
                         )
                     else:
-                        param = dlp.AverageProfileParam.create(
+                        param = sigima.image.extraction.AverageProfileParam.create(
                             row1=10, col1=20, row2=200, col2=300
                         )
                 else:
                     if mode == "line":
-                        param = dlp.LineProfileParam()
+                        param = sigima.image.extraction.LineProfileParam()
                     elif mode == "segment":
-                        param = dlp.SegmentProfileParam()
+                        param = sigima.image.extraction.SegmentProfileParam()
                     else:
-                        param = dlp.AverageProfileParam()
+                        param = sigima.image.extraction.AverageProfileParam()
                 execenv.print("-" * 80)
                 execenv.print(f"Testing mode: {mode} - initial_param: {initial_param}")
                 dialog = ProfileExtractionDialog(
@@ -67,8 +68,10 @@ def test_line_profile() -> None:
 
     # Test horizontal line profile
     row = 100
-    param = dlp.LineProfileParam.create(row=row, direction="horizontal")
-    sig = cpi.line_profile(ima, param)
+    param = sigima.image.extraction.LineProfileParam.create(
+        row=row, direction="horizontal"
+    )
+    sig = sigima.image.extraction.line_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == width
     exp = np.array(ima.data[row, :], dtype=float)
@@ -76,8 +79,10 @@ def test_line_profile() -> None:
 
     # Test vertical line profile
     col = 50
-    param = dlp.LineProfileParam.create(col=col, direction="vertical")
-    sig = cpi.line_profile(ima, param)
+    param = sigima.image.extraction.LineProfileParam.create(
+        col=col, direction="vertical"
+    )
+    sig = sigima.image.extraction.line_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == height
     exp = np.array(ima.data[:, col], dtype=float)
@@ -94,8 +99,10 @@ def test_segment_profile() -> None:
 
     # Test segment profile
     row1, col1, row2, col2 = 10, 20, 200, 20
-    param = dlp.SegmentProfileParam.create(row1=row1, col1=col1, row2=row2, col2=col2)
-    sig = cpi.segment_profile(ima, param)
+    param = sigima.image.extraction.SegmentProfileParam.create(
+        row1=row1, col1=col1, row2=row2, col2=col2
+    )
+    sig = sigima.image.extraction.segment_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == min(row2, height - 1) - max(row1, 0) + 1
     exp = np.array(ima.data[10:200, 20], dtype=float)
@@ -110,11 +117,13 @@ def test_average_profile() -> None:
     newparam = dlo.NewImageParam.create(dtype=dtype, height=height, width=width)
     ima = create_sincos_image(newparam)
     row1, col1, row2, col2 = 10, 20, 200, 230
-    param = dlp.AverageProfileParam.create(row1=row1, col1=col1, row2=row2, col2=col2)
+    param = sigima.image.extraction.AverageProfileParam.create(
+        row1=row1, col1=col1, row2=row2, col2=col2
+    )
 
     # Test horizontal average profile
     param.direction = "horizontal"
-    sig = cpi.average_profile(ima, param)
+    sig = sigima.image.extraction.average_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == col2 - col1 + 1
     exp = np.array(ima.data[row1 : row2 + 1, col1 : col2 + 1].mean(axis=0), dtype=float)
@@ -122,7 +131,7 @@ def test_average_profile() -> None:
 
     # Test vertical average profile
     param.direction = "vertical"
-    sig = cpi.average_profile(ima, param)
+    sig = sigima.image.extraction.average_profile(ima, param)
     assert sig is not None
     assert len(sig.y) == min(row2, height - 1) - max(row1, 0) + 1
     exp = np.array(ima.data[row1 : row2 + 1, col1 : col2 + 1].mean(axis=1), dtype=float)

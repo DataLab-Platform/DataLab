@@ -12,7 +12,11 @@ from __future__ import annotations
 import numpy as np
 
 import cdl.obj as dlo
-import cdl.param as dlp
+import sigima.image.exposure
+import sigima.image.filtering
+import sigima.image.geometry
+import sigima.image.mathops
+import sigima.param as sp
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
@@ -37,9 +41,9 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     Requires that one signal or image has been added at index."""
     assert len(panel) >= number - 1
     panel.objview.select_objects((number,))
-    panel.processor.run_feature("gaussian_filter", dlp.GaussianParam())
-    panel.processor.run_feature("moving_average", dlp.MovingAverageParam())
-    panel.processor.run_feature("moving_median", dlp.MovingMedianParam())
+    panel.processor.run_feature("gaussian_filter", sp.GaussianParam())
+    panel.processor.run_feature("moving_average", sp.MovingAverageParam())
+    panel.processor.run_feature("moving_median", sp.MovingMedianParam())
     panel.processor.run_feature("wiener")
     panel.processor.run_feature("fft")
     panel.processor.run_feature("ifft")
@@ -53,7 +57,7 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     panel.processor.run_feature("imag")
     panel.remove_object()
     panel.processor.run_feature(
-        "astype", dlp.DataTypeIParam.create(dtype_str="float64")
+        "astype", sigima.image.mathops.DataTypeIParam.create(dtype_str="float64")
     )
     panel.processor.run_feature("log10")
     panel.processor.run_feature("exp")
@@ -78,7 +82,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.run_feature("quadratic_difference", panel[2])
     panel.delete_metadata()
 
-    const_oper_param = dlp.ConstantParam.create(value=2.0)
+    const_oper_param = sp.ConstantParam.create(value=2.0)
     for const_oper in (
         "addition_constant",
         "difference_constant",
@@ -98,7 +102,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((1, 2))
     panel.processor.run_feature("product")
 
-    param = dlp.ConstantParam()
+    param = sp.ConstantParam()
     param.value = 2.0
     panel.processor.run_feature("addition_constant", param)
     panel.processor.run_feature("difference_constant", param)
@@ -106,11 +110,11 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.run_feature("division_constant", param)
 
     obj = panel.objmodel.get_groups()[0][-1]
-    param = dlp.ClipParam()  # Clipping before division...
+    param = sp.ClipParam()  # Clipping before division...
     param.upper = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.run_feature("clip", param)
 
-    param = dlp.NormalizeParam()
+    param = sp.NormalizeParam()
     for method_value, _method_name in param.methods:
         param.method = method_value
         panel.processor.run_feature("normalize", param)
@@ -154,16 +158,16 @@ def run_signal_computations(
 
     # Signal specific operations
     panel.processor.run_feature("sqrt")
-    panel.processor.run_feature("power", dlp.PowerParam.create(power=2))
+    panel.processor.run_feature("power", sp.PowerParam.create(power=2))
     panel.processor.run_feature("reverse_x")
     panel.processor.run_feature("reverse_x")
 
     # Test filter methods
     for filter_func_name, paramclass in (
-        ("lowpass", dlp.LowPassFilterParam),
-        ("highpass", dlp.HighPassFilterParam),
-        ("bandpass", dlp.BandPassFilterParam),
-        ("bandstop", dlp.BandStopFilterParam),
+        ("lowpass", sp.LowPassFilterParam),
+        ("highpass", sp.HighPassFilterParam),
+        ("bandpass", sp.BandPassFilterParam),
+        ("bandstop", sp.BandStopFilterParam),
     ):
         for method_value, _method_name in paramclass.methods:
             panel.objview.set_current_object(sig1)
@@ -174,7 +178,7 @@ def run_signal_computations(
     # Test windowing methods
     noiseobj2 = noiseobj1.copy()
     win.add_object(noiseobj2)
-    param = dlp.WindowingParam()
+    param = sp.WindowingParam()
     for method_value, _method_name in param.methods:
         panel.objview.set_current_object(noiseobj2)
         param.method = method_value
@@ -182,13 +186,13 @@ def run_signal_computations(
 
     win.add_object(sig1.copy())
 
-    param = dlp.XYCalibrateParam.create(a=1.2, b=0.1)
+    param = sp.XYCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.run_feature("calibration", param)
 
     panel.processor.run_feature("derivative")
     panel.processor.run_feature("integral")
 
-    param = dlp.PeakDetectionParam()
+    param = sp.PeakDetectionParam()
     panel.processor.compute_peak_detection(param)
 
     panel.processor.compute_multigaussianfit()
@@ -202,7 +206,7 @@ def run_signal_computations(
 
     sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
     panel.add_object(sig)
-    param = dlp.PolynomialFitParam()
+    param = sp.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
     for fittitle, fitfunc in (
         (_("Gaussian fit"), fitdialog.gaussianfit),
@@ -222,7 +226,7 @@ def run_signal_computations(
     )
     panel.add_object(sig)
 
-    param = dlp.FWHMParam()
+    param = sp.FWHMParam()
     for method_value, _method_name in param.methods:
         param.method = method_value
         panel.processor.run_feature("fwhm", param)
@@ -236,18 +240,18 @@ def run_signal_computations(
 
     # Test interpolation
     # pylint: disable=protected-access
-    for method_choice_tuple in dlp.InterpolationParam.methods:
+    for method_choice_tuple in sp.InterpolationParam.methods:
         method = method_choice_tuple[0]
         for fill_value in (None, 0.0):
             panel.objview.set_current_object(sig1)
-            param = dlp.InterpolationParam.create(method=method, fill_value=fill_value)
+            param = sp.InterpolationParam.create(method=method, fill_value=fill_value)
             panel.processor.run_feature("interpolation", sig2, param)
 
     # Test resampling
     xmin, xmax = x[0], x[-1]
     for mode, dx, nbpts in (("dx", 0.1, 10), ("nbpts", 0.0, 100)):
         panel.objview.set_current_object(sig1)
-        param = dlp.ResamplingParam.create(
+        param = sp.ResamplingParam.create(
             xmin=xmin, xmax=xmax, mode=mode, dx=dx, nbpts=nbpts
         )
         panel.processor.run_feature("resampling", param)
@@ -260,13 +264,13 @@ def run_signal_computations(
     # Test detrending
     panel.objview.set_current_object(sig1)
     # pylint: disable=protected-access
-    for method_choice_tuple in dlp.DetrendingParam.methods:
-        param = dlp.DetrendingParam.create(method=method_choice_tuple[0])
+    for method_choice_tuple in sp.DetrendingParam.methods:
+        param = sp.DetrendingParam.create(method=method_choice_tuple[0])
         panel.processor.run_feature("detrending", param)
 
     # Test histogram
     panel.objview.set_current_object(sig1)
-    param = dlp.HistogramParam.create(bins=100)
+    param = sp.HistogramParam.create(bins=100)
     panel.processor.run_feature("histogram", param)
 
     # Test bandwidth and dynamic parameters
@@ -304,13 +308,13 @@ def run_image_computations(
     compute_common_operations(panel)
 
     # Test denoising methods
-    param = dlp.ZCalibrateParam.create(a=1.2, b=0.1)
+    param = sigima.image.exposure.ZCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.run_feature("calibration", param)
-    param = dlp.DenoiseTVParam()
+    param = sp.DenoiseTVParam()
     panel.processor.run_feature("denoise_tv", param)
-    param = dlp.DenoiseBilateralParam()
+    param = sp.DenoiseBilateralParam()
     panel.processor.run_feature("denoise_bilateral", param)
-    param = dlp.DenoiseWaveletParam()
+    param = sp.DenoiseWaveletParam()
     panel.processor.run_feature("denoise_wavelet", param)
 
     # Test exposure methods
@@ -319,21 +323,21 @@ def run_image_computations(
     panel.processor.run_feature(
         "absolute"
     )  # Avoid neg. values for skimage correction methods
-    param = dlp.AdjustGammaParam.create(gamma=0.5)
+    param = sp.AdjustGammaParam.create(gamma=0.5)
     panel.processor.run_feature("adjust_gamma", param)
-    param = dlp.AdjustLogParam.create(gain=0.5)
+    param = sp.AdjustLogParam.create(gain=0.5)
     panel.processor.run_feature("adjust_log", param)
-    param = dlp.AdjustSigmoidParam.create(gain=0.5)
+    param = sp.AdjustSigmoidParam.create(gain=0.5)
     panel.processor.run_feature("adjust_sigmoid", param)
-    param = dlp.EqualizeHistParam()
+    param = sp.EqualizeHistParam()
     panel.processor.run_feature("equalize_hist", param)
-    param = dlp.EqualizeAdaptHistParam()
+    param = sp.EqualizeAdaptHistParam()
     panel.processor.run_feature("equalize_adapthist", param)
-    param = dlp.RescaleIntensityParam()
+    param = sp.RescaleIntensityParam()
     panel.processor.run_feature("rescale_intensity", param)
 
     # Test morphology methods
-    param = dlp.MorphologyParam.create(radius=10)
+    param = sp.MorphologyParam.create(radius=10)
     panel.processor.run_feature("denoise_tophat", param)
     panel.processor.run_feature("white_tophat", param)
     panel.processor.run_feature("black_tophat", param)
@@ -343,19 +347,19 @@ def run_image_computations(
     panel.processor.run_feature("opening", param)
     panel.processor.run_feature("closing", param)
 
-    param = dlp.ButterworthParam.create(order=2, cut_off=0.5)
+    param = sigima.image.filtering.ButterworthParam.create(order=2, cut_off=0.5)
     panel.processor.run_feature("butterworth", param)
 
-    param = dlp.CannyParam()
+    param = sp.CannyParam()
     panel.processor.run_feature("canny", param)
 
     # Test threshold methods
     ima2 = create_sincos_image(newparam)
     panel.add_object(ima2)
-    param = dlp.ThresholdParam()
+    param = sp.ThresholdParam()
     for method_value, _method_name in param.methods:
         panel.objview.set_current_object(ima2)
-        param = dlp.ThresholdParam.create(method=method_value)
+        param = sp.ThresholdParam.create(method=method_value)
         if method_value == "manual":
             param.value = (ima2.data.max() - ima2.data.min()) * 0.5 + ima2.data.min()
         panel.processor.run_feature("threshold", param)
@@ -392,7 +396,7 @@ def run_image_computations(
     ):
         panel.processor.run_feature(func_name)
 
-    param = dlp.LogP1Param.create(n=1)
+    param = sigima.image.mathops.LogP1Param.create(n=1)
     panel.processor.run_feature("logp1", param)
 
     panel.processor.run_feature("rotate90")
@@ -400,12 +404,12 @@ def run_image_computations(
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = dlp.RotateParam.create(angle=5.0)
+    param = sigima.image.geometry.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 
-    param = dlp.ResizeParam.create(zoom=1.3)
+    param = sigima.image.geometry.ResizeParam.create(zoom=1.3)
     panel.processor.run_feature("resize", param)
 
     n = data_size // 10
@@ -419,16 +423,16 @@ def run_image_computations(
 
     ima = create_peak2d_image(newparam)
     panel.add_object(ima)
-    param = dlp.Peak2DDetectionParam.create(create_rois=True)
+    param = sp.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.compute_peak_detection(param)
 
-    param = dlp.ContourShapeParam()
+    param = sp.ContourShapeParam()
     panel.processor.run_feature("contour_shape", param)
 
-    param = dlp.BinningParam.create(sx=2, sy=2, operation="average")
+    param = sigima.image.geometry.BinningParam.create(sx=2, sy=2, operation="average")
     panel.processor.run_feature("binning", param)
 
     # Test histogram
     panel.objview.set_current_object(ima)
-    param = dlp.HistogramParam.create(bins=100)
+    param = sp.HistogramParam.create(bins=100)
     panel.processor.run_feature("histogram", param)

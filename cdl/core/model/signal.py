@@ -26,9 +26,9 @@ from plotpy.items import CurveItem, XRangeSelection
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
 
-from cdl.algorithms.signal import GaussianModel, LorentzianModel, VoigtModel
 from cdl.config import Conf, _
 from cdl.core.model import base
+from sigima.algorithms.signal import GaussianModel, LorentzianModel, VoigtModel
 
 if TYPE_CHECKING:
     from plotpy.plot import PlotDialog

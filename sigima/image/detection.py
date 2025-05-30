@@ -1,26 +1,38 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Blob detection computation module
----------------------------------
+Detection computation module
+----------------------------
 
+This module provides algorithms for detecting objects or patterns in images,
+such as blobs, peaks, or custom structures.
+
+Main features include:
+- Blob and peak detection algorithms
+- Support for object localization and counting
+
+Detection algorithms are fundamental for many image analysis pipelines,
+enabling automated extraction of regions or features of interest.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.computation.param module.
+# - All `guidata.dataset.DataSet` parameter classes must also be imported
+#   in the `sigima.param` module.
+# - All functions decorated by `computation_function` must be imported in the upper
+#   level `sigima.image` module.
 
 from __future__ import annotations
 
 import guidata.dataset as gds
 
-import cdl.algorithms.image as alg
-from cdl.computation import computation_function
-from cdl.computation.image import calc_resultshape
+import sigima.algorithms.image as alg
 from cdl.config import _
 from cdl.obj import ImageObj, ResultShape, ShapeTypes
+from sigima import computation_function
+from sigima.image.base import calc_resultshape
 
 
 class GenericDetectionParam(gds.DataSet):
@@ -56,7 +68,7 @@ class Peak2DDetectionParam(GenericDetectionParam):
 @computation_function
 def peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> ResultShape | None:
     """Compute 2D peak detection
-    with :py:func:`cdl.algorithms.image.get_2d_peaks_coords`
+    with :py:func:`sigima.algorithms.image.get_2d_peaks_coords`
 
     Args:
         imageOutput: input image
@@ -92,7 +104,7 @@ class ContourShapeParam(GenericDetectionParam):
 @computation_function
 def contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
     """Compute contour shape fit
-    with :py:func:`cdl.algorithms.image.get_contour_shapes`"""
+    with :py:func:`sigima.algorithms.image.get_contour_shapes`"""
     return calc_resultshape(
         "contour", p.shape, image, alg.get_contour_shapes, p.shape, p.threshold
     )
@@ -155,7 +167,7 @@ class BlobDOGParam(BaseBlobParam):
 @computation_function
 def blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
     """Compute blobs using Difference of Gaussian method
-    with :py:func:`cdl.algorithms.image.find_blobs_dog`
+    with :py:func:`sigima.algorithms.image.find_blobs_dog`
 
     Args:
         imageOutput: input image
@@ -194,7 +206,7 @@ class BlobDOHParam(BaseBlobParam):
 @computation_function
 def blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
     """Compute blobs using Determinant of Hessian method
-    with :py:func:`cdl.algorithms.image.find_blobs_doh`
+    with :py:func:`sigima.algorithms.image.find_blobs_doh`
 
     Args:
         imageOutput: input image
@@ -229,7 +241,7 @@ class BlobLOGParam(BlobDOHParam):
 @computation_function
 def blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
     """Compute blobs using Laplacian of Gaussian method
-    with :py:func:`cdl.algorithms.image.find_blobs_log`
+    with :py:func:`sigima.algorithms.image.find_blobs_log`
 
     Args:
         imageOutput: input image
@@ -392,7 +404,7 @@ class BlobOpenCVParam(gds.DataSet):
 @computation_function
 def blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
     """Compute blobs using OpenCV
-    with :py:func:`cdl.algorithms.image.find_blobs_opencv`
+    with :py:func:`sigima.algorithms.image.find_blobs_opencv`
 
     Args:
         imageOutput: input image
@@ -424,4 +436,40 @@ def blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
         p.filter_by_convexity,
         p.min_convexity,
         p.max_convexity,
+    )
+
+
+class HoughCircleParam(gds.DataSet):
+    """Circle Hough transform parameters"""
+
+    min_radius = gds.IntItem(
+        _("Radius<sub>min</sub>"), unit="pixels", min=0, nonzero=True
+    )
+    max_radius = gds.IntItem(
+        _("Radius<sub>max</sub>"), unit="pixels", min=0, nonzero=True
+    )
+    min_distance = gds.IntItem(_("Minimal distance"), min=0)
+
+
+@computation_function
+def hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> ResultShape | None:
+    """Compute Hough circles
+    with :py:func:`sigima.algorithms.image.get_hough_circle_peaks`
+
+    Args:
+        image: input image
+        p: parameters
+
+    Returns:
+        Circle coordinates
+    """
+    return calc_resultshape(
+        "hough_circle_peak",
+        "circle",
+        image,
+        alg.get_hough_circle_peaks,
+        p.min_radius,
+        p.max_radius,
+        None,
+        p.min_distance,
     )

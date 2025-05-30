@@ -15,11 +15,11 @@ import pytest
 import scipy.signal as sps
 from guidata.qthelpers import qt_app_context
 
-import cdl.algorithms.signal as alg
-import cdl.computation.signal as cps
 import cdl.obj
-import cdl.param
 import cdl.tests.data as ctd
+import sigima.algorithms.signal as alg
+import sigima.param
+import sigima.signal as ss
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result
 from cdl.utils.vistools import view_curves
@@ -55,11 +55,11 @@ def test_signal_zero_padding() -> None:
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=1000)
 
     # Validate zero padding with custom length
-    param = cdl.param.ZeroPadding1DParam.create(n=250)
+    param = sigima.param.ZeroPadding1DParam.create(n=250)
     assert param.strategy == "custom", (
         f"Wrong default strategy: {param.strategy} (expected 'custom')"
     )
-    s2 = cps.zero_padding(s1, param)
+    s2 = ss.zero_padding(s1, param)
     len1 = len(s1.y)
     exp_len2 = len1 + param.n
     execenv.print("Validating zero padding with custom length...", end=" ")
@@ -83,7 +83,7 @@ def test_signal_zero_padding() -> None:
         ("double", 1000),
         ("triple", 2000),
     ):
-        param = cdl.param.ZeroPadding1DParam.create(strategy=strategy)
+        param = sigima.param.ZeroPadding1DParam.create(strategy=strategy)
         param.update_from_obj(s1)
         assert param.n == expected_length, (
             f"Wrong length for '{param.strategy}' strategy: {param.n}"
@@ -103,8 +103,8 @@ def test_signal_fft() -> None:
     s1 = ctd.create_periodic_signal(
         cdl.obj.SignalTypes.COSINUS, freq=freq, size=size, xmin=xmin
     )
-    fft = cps.fft(s1)
-    ifft = cps.ifft(fft)
+    fft = ss.fft(s1)
+    ifft = ss.ifft(fft)
 
     # Check that the inverse FFT reconstructs the original signal
     check_array_result("Cosine signal FFT/iFFT X reconstruction", s1.y, ifft.y.real)
@@ -148,8 +148,8 @@ def test_signal_magnitude_spectrum() -> None:
     size = 10000
 
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
-    fft = cps.fft(s1)
-    mag = cps.magnitude_spectrum(s1)
+    fft = ss.fft(s1)
+    mag = ss.magnitude_spectrum(s1)
     fpk1 = fft.x[np.argmax(mag.y[: size // 2])]
     check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
 
@@ -165,8 +165,8 @@ def test_signal_phase_spectrum() -> None:
     size = 10000
 
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
-    fft = cps.fft(s1)
-    phase = cps.phase_spectrum(s1)
+    fft = ss.fft(s1)
+    phase = ss.phase_spectrum(s1)
     fpk1 = fft.x[np.argmax(phase.y[: size // 2])]
     check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
 
@@ -183,10 +183,10 @@ def test_signal_psd() -> None:
     size = 10000
 
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
-    param = cdl.param.SpectrumParam()
+    param = sigima.param.SpectrumParam()
     for log_scale in (False, True):
         param.log = log_scale
-        psd = cps.psd(s1, param)
+        psd = ss.psd(s1, param)
 
         # Check that the PSD is correct (Welch's method is used by default)
         exp_x, exp_y = sps.welch(s1.y, fs=1.0 / (s1.x[1] - s1.x[0]))

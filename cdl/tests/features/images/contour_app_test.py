@@ -8,7 +8,7 @@ Contour finding application test
 # guitest: show
 
 import cdl.obj
-import cdl.param
+import sigima.param
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
 from cdl.tests.data import create_multigauss_image
@@ -24,7 +24,7 @@ def test_contour_app():
             ima1 = create_multigauss_image(newparam)
             ima1.metadata["colormap"] = "gray"
             panel.add_object(ima1)
-            param = cdl.param.ContourShapeParam.create(shape=shape)
+            param = sigima.param.ContourShapeParam.create(shape=shape)
             panel.processor.run_feature("contour_shape", param)
             take_plotwidget_screenshot(panel, "contour_test")
             ima2 = create_test_image_with_roi(newparam)

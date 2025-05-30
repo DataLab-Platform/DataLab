@@ -1,1 +1,1 @@
-.. automodule:: cdl.param
+.. automodule:: sigima.param

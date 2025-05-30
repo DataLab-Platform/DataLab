@@ -16,7 +16,8 @@ from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 
 import cdl.obj as dlo
-import cdl.param as dlp
+import sigima.image.geometry
+import sigima.param as sp
 from cdl.config import _, reset
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
@@ -70,7 +71,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     panel.processor.run_feature("detrending")
     sig3 = panel.objview.get_current_object()
 
-    param = dlp.PeakDetectionParam()
+    param = sp.PeakDetectionParam()
     panel.processor.run_feature("peak_detection", param)
     sig4 = panel.objview.get_current_object()
     panel.objview.select_objects([sig3, sig4])
@@ -137,7 +138,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = dlp.RotateParam.create(angle=5.0)
+    param = sigima.image.geometry.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
@@ -165,12 +166,12 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     newparam.title = None
     ima = create_peak2d_image(newparam)
     panel.add_object(ima)
-    param = dlp.Peak2DDetectionParam.create(create_rois=True)
+    param = sp.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.run_feature("peak_detection", param)
 
     qt_wait(DELAY2)
 
-    param = dlp.ContourShapeParam()
+    param = sp.ContourShapeParam()
     panel.processor.run_feature("contour_shape", param)
 
     qt_wait(DELAY2)

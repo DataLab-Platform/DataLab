@@ -13,11 +13,11 @@ Testing enclsoing circle function on various test images.
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
-from cdl.algorithms.image import get_centroid_fourier, get_enclosing_circle
 from cdl.config import _
 from cdl.env import execenv
 from cdl.tests.data import get_laser_spot_data
 from cdl.utils.vistools import view_image_items
+from sigima.algorithms.image import get_centroid_fourier, get_enclosing_circle
 
 
 def __enclosingcircle_test(data):

@@ -25,12 +25,12 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl import env
-from cdl.computation import is_computation_function
 from cdl.config import Conf, _
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.model.base import ResultProperties, ResultShape, TypeROI
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
+from sigima import is_computation_function
 
 if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
@@ -1187,24 +1187,24 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
 
         .. code-block:: python
 
-            import cdl.computation.signal as cps
-            import cdl.param
+            import sigima.signal as ss
+            import sigima.param
 
             # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
-            # (example with computation functions from `cdl.computation.signal`)
-            compute(cps.normalize)
-            param = cdl.param.MovingAverageParam(n=3)
-            compute(cps.moving_average, param)
+            # (example with computation functions from `sigima.signal`)
+            compute(ss.normalize)
+            param = sigima.param.MovingAverageParam(n=3)
+            compute(ss.moving_average, param)
             compute(computation_function, param, edit=False)
 
             # For pattern `2_to_1`:
-            compute(cps.difference, obj2)
-            param = cdl.param.InterpolationParam(method="cubic")
-            compute(cps.interpolation, obj2, param)
+            compute(ss.difference, obj2)
+            param = sigima.param.InterpolationParam(method="cubic")
+            compute(ss.interpolation, obj2, param)
 
             # For pattern `1_to_n`:
             group = roi.to_params(obj)
-            compute(cps.extract_roi, params=group.datasets)
+            compute(ss.extract_roi, params=group.datasets)
 
         Args:
             key: The key to look up in the registry. It can be a string, a callable,
@@ -1267,8 +1267,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
     def compute_roi_extraction(self, roi: TypeROI | None = None) -> None:
         """Extract Region Of Interest (ROI) from data with:
 
-        - :py:func:`cdl.computation.image.compute_extract_roi` for single ROI
-        - :py:func:`cdl.computation.image.compute_extract_rois` for multiple ROIs"""
+        - :py:func:`sigima.image.compute_extract_roi` for single ROI
+        - :py:func:`sigima.image.compute_extract_rois` for multiple ROIs"""
         # Expected behavior:
         # -----------------
         # * If `roi` is not None or not empty, skip the ROI dialog

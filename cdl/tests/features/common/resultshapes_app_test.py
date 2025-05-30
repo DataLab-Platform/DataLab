@@ -14,7 +14,7 @@ from __future__ import annotations
 import numpy as np
 
 import cdl.obj
-import cdl.param
+import sigima.param
 from cdl.config import Conf
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
@@ -81,7 +81,7 @@ def test_resultshapes():
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)
             panel.add_object(sig)
-            panel.processor.run_feature("fwhm", cdl.param.FWHMParam())
+            panel.processor.run_feature("fwhm", sigima.param.FWHMParam())
             panel.processor.run_feature("fw1e2")
         panel.objview.select_objects((1, 2))
         panel.show_results()
