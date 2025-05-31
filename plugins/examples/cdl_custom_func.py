@@ -18,10 +18,8 @@ It is part of the DataLab custom function tutorial.
 import numpy as np
 import scipy.ndimage as spi
 
-import cdl.obj
 import cdl.plugins
 import sigima.image.base as si
-import sigima.param
 
 
 def weighted_average_denoise(data: np.ndarray) -> np.ndarray:

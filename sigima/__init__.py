@@ -8,6 +8,18 @@ Scientific computing engine for 1D signals and 2D images,
 part of the DataLab open-source platform.
 """
 
+# TODO: Move functions below to a separate module?
+# TODO: Remove all dependencies on `cdl` package on all modules
+# TODO: Reduce need for `Conf` to a minimum, then create a local `sigima.conf` module
+# TODO: Add local translations for the `sigima` package
+# TODO: Add `pytest` infrastructure for the `sigima` package
+# TODO: Migrate the `cdl.core.model.image` module
+# TODO: In `cdl` package: rename `BaseObj`, `ImageObj`, `SignalObj` to `PlotBaseObj`,
+#       `PlotImageObj`, `PlotSignalObj`, then add the GUI-related methods and properties
+# TODO: Migrate the I/O functions from `cdl` to `sigima.io` module
+# TODO: Implement a I/O plugin system similar to the `cdl.plugins` module
+# TODO: Implement a computation plugin system similar to the `cdl.plugins` module
+
 import functools
 import importlib
 import inspect

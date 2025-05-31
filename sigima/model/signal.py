@@ -11,96 +11,21 @@ Signal object and related classes
 
 from __future__ import annotations
 
-from contextlib import contextmanager
-from typing import TYPE_CHECKING, Generator, Type
+from typing import Type
 from uuid import uuid4
 
 import guidata.dataset as gds
 import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
-from guidata.dataset import restore_dataset, update_dataset
-from guidata.qthelpers import exec_dialog
-from plotpy.builder import make
-from plotpy.items import CurveItem, XRangeSelection
-from plotpy.tools import EditPointTool
-from qtpy import QtWidgets as QW
 
-from cdl.config import Conf, _
+from cdl.config import _
 from cdl.core.model import base
-from sigima.model.signal import create_signal_from_param as create_signal_headless
-from sigima.model.signal import get_next_signal_number
+from sigima.algorithms.signal import GaussianModel, LorentzianModel, VoigtModel
 
-if TYPE_CHECKING:
-    from plotpy.plot import PlotDialog
-    from plotpy.styles import CurveParam
+# class CurveStyles:
 
-
-class CurveStyles:
-    """Object to manage curve styles"""
-
-    #: Curve colors
-    COLORS = (
-        "#1f77b4",  # muted blue
-        "#ff7f0e",  # safety orange
-        "#2ca02c",  # cooked asparagus green
-        "#d62728",  # brick red
-        "#9467bd",  # muted purple
-        "#8c564b",  # chestnut brown
-        "#e377c2",  # raspberry yogurt pink
-        "#7f7f7f",  # gray
-        "#bcbd22",  # curry yellow-green
-        "#17becf",  # blue-teal
-    )
-    #: Curve line styles
-    LINESTYLES = ("SolidLine", "DashLine", "DashDotLine", "DashDotDotLine")
-
-    def __init__(self) -> None:
-        self.__suspend = False
-        self.curve_style = self.style_generator()
-
-    @staticmethod
-    def style_generator() -> Generator[tuple[str, str], None, None]:
-        """Cycling through curve styles"""
-        while True:
-            for linestyle in CurveStyles.LINESTYLES:
-                for color in CurveStyles.COLORS:
-                    yield (color, linestyle)
-
-    def apply_style(self, param: CurveParam) -> None:
-        """Apply style to curve"""
-        if self.__suspend:
-            # Suspend mode: always apply the first style
-            color, linestyle = CurveStyles.COLORS[0], CurveStyles.LINESTYLES[0]
-        else:
-            color, linestyle = next(self.curve_style)
-        param.line.color = color
-        param.line.style = linestyle
-        param.symbol.marker = "NoSymbol"
-
-    def reset_styles(self) -> None:
-        """Reset styles"""
-        self.curve_style = self.style_generator()
-
-    @contextmanager
-    def alternative(
-        self, other_style_generator: Generator[tuple[str, str], None, None]
-    ) -> Generator[None, None, None]:
-        """Use an alternative style generator"""
-        old_style_generator = self.curve_style
-        self.curve_style = other_style_generator
-        yield
-        self.curve_style = old_style_generator
-
-    @contextmanager
-    def suspend(self) -> Generator[None, None, None]:
-        """Suspend style generator"""
-        self.__suspend = True
-        yield
-        self.__suspend = False
-
-
-CURVESTYLES = CurveStyles()  # This is the unique instance of the CurveStyles class
+# CURVESTYLES = CurveStyles()  # This is the unique instance of the CurveStyles class
 
 
 class ROI1DParam(base.BaseROIParam["SignalObj", "SegmentROI"]):
@@ -136,7 +61,7 @@ class ROI1DParam(base.BaseROIParam["SignalObj", "SegmentROI"]):
         return np.array([obj.x[imin:imax], obj.y[imin:imax]])
 
 
-class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam, XRangeSelection]):
+class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam]):
     """Segment ROI
 
     Args:
@@ -197,34 +122,13 @@ class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam, XRangeSelection]):
         param.xmin, param.xmax = self.get_physical_coords(obj)
         return param
 
-    # pylint: disable=unused-argument
-    def to_plot_item(self, obj: SignalObj, title: str | None = None) -> XRangeSelection:
-        """Make and return the annnotated segment associated with the ROI
+    # def to_plot_item(self, obj: SignalObj, title: str | None = None)
 
-        Args:
-            obj: object (signal), for physical-indices coordinates conversion
-            title: title
-        """
-        xmin, xmax = self.get_physical_coords(obj)
-        item = make.range(xmin, xmax)
-        return item
-
-    @classmethod
-    def from_plot_item(cls: SegmentROI, item: XRangeSelection) -> SegmentROI:
-        """Create ROI from plot item
-
-        Args:
-            item: plot item
-
-        Returns:
-            ROI
-        """
-        if not isinstance(item, XRangeSelection):
-            raise TypeError("Invalid plot item type")
-        return cls(item.get_range(), False)
+    # @classmethod
+    # def from_plot_item(cls: SegmentROI, item: XRangeSelection) -> SegmentROI:
 
 
-class SignalROI(base.BaseROI["SignalObj", SegmentROI, ROI1DParam, XRangeSelection]):
+class SignalROI(base.BaseROI["SignalObj", SegmentROI, ROI1DParam]):
     """Signal Regions of Interest
 
     Args:
@@ -292,32 +196,15 @@ def create_signal_roi(
     return roi
 
 
-def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
-    """Apply downsampling to curve item
-
-    Args:
-        item: curve item
-        do_not_update: if True, do not update the item even if the downsampling
-         parameters have changed
-    """
-    old_use_dsamp = item.param.use_dsamp
-    item.param.use_dsamp = False
-    if Conf.view.sig_autodownsampling.get():
-        nbpoints = item.get_data()[0].size
-        maxpoints = Conf.view.sig_autodownsampling_maxpoints.get()
-        if nbpoints > 5 * maxpoints:
-            item.param.use_dsamp = True
-            item.param.dsamp_factor = nbpoints // maxpoints
-    if not do_not_update and old_use_dsamp != item.param.use_dsamp:
-        item.update_data()
+# def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
 
 
-class SignalObj(gds.DataSet, base.BaseObj[SignalROI, CurveItem]):
+class SignalObj(gds.DataSet, base.BaseObj[SignalROI]):
     """Signal object"""
 
     PREFIX = "s"
-    CONF_FMT = Conf.view.sig_format
-    DEFAULT_FMT = "g"
+    # CONF_FMT = Conf.view.sig_format
+    # DEFAULT_FMT = "g"
     VALID_DTYPES = (np.float32, np.float64, np.complex128)
 
     uuid = gds.StringItem("UUID").set_prop("display", hide=True)
@@ -530,89 +417,6 @@ class SignalObj(gds.DataSet, base.BaseObj[SignalROI, CurveItem]):
         single_roi = self.roi.get_single_roi(roi_index)
         return single_roi.get_data(self)
 
-    def update_plot_item_parameters(self, item: CurveItem) -> None:
-        """Update plot item parameters from object data/metadata
-
-        Takes into account a subset of plot item parameters. Those parameters may
-        have been overriden by object metadata entries or other object data. The goal
-        is to update the plot item accordingly.
-
-        This is *almost* the inverse operation of `update_metadata_from_plot_item`.
-
-        Args:
-            item: plot item
-        """
-        update_dataset(item.param.line, self.metadata)
-        update_dataset(item.param.symbol, self.metadata)
-        super().update_plot_item_parameters(item)
-
-    def update_metadata_from_plot_item(self, item: CurveItem) -> None:
-        """Update metadata from plot item.
-
-        Takes into account a subset of plot item parameters. Those parameters may
-        have been modified by the user through the plot item GUI. The goal is to
-        update the metadata accordingly.
-
-        This is *almost* the inverse operation of `update_plot_item_parameters`.
-
-        Args:
-            item: plot item
-        """
-        super().update_metadata_from_plot_item(item)
-        restore_dataset(item.param.line, self.metadata)
-        restore_dataset(item.param.symbol, self.metadata)
-
-    def make_item(self, update_from: CurveItem | None = None) -> CurveItem:
-        """Make plot item from data.
-
-        Args:
-            update_from: plot item to update from
-
-        Returns:
-            Plot item
-        """
-        if len(self.xydata) in (2, 3, 4):
-            if len(self.xydata) == 2:  # x, y signal
-                x, y = self.xydata
-                item = make.mcurve(x.real, y.real, label=self.title)
-            elif len(self.xydata) == 3:  # x, y, dy error bar signal
-                x, y, dy = self.xydata
-                item = make.merror(x.real, y.real, dy.real, label=self.title)
-            elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
-                x, y, dx, dy = self.xydata
-                item = make.merror(x.real, y.real, dx.real, dy.real, label=self.title)
-            CURVESTYLES.apply_style(item.param)
-            apply_downsampling(item, do_not_update=True)
-        else:
-            raise RuntimeError("data not supported")
-        if update_from is None:
-            self.update_plot_item_parameters(item)
-        else:
-            update_dataset(item.param, update_from.param)
-            item.update_params()
-        return item
-
-    def update_item(self, item: CurveItem, data_changed: bool = True) -> None:
-        """Update plot item from data.
-
-        Args:
-            item: plot item
-            data_changed: if True, data has changed
-        """
-        if data_changed:
-            if len(self.xydata) == 2:  # x, y signal
-                x, y = self.xydata
-                item.set_data(x.real, y.real)
-            elif len(self.xydata) == 3:  # x, y, dy error bar signal
-                x, y, dy = self.xydata
-                item.set_data(x.real, y.real, dy=dy.real)
-            elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
-                x, y, dx, dy = self.xydata
-                item.set_data(x.real, y.real, dx.real, dy.real)
-        item.param.label = self.title
-        apply_downsampling(item)
-        self.update_plot_item_parameters(item)
-
     def physical_to_indices(self, coords: list[float] | np.ndarray) -> np.ndarray:
         """Convert coordinates from physical (real world) to (array) indices (pixel)
 
@@ -638,16 +442,15 @@ class SignalObj(gds.DataSet, base.BaseObj[SignalROI, CurveItem]):
         # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
         return self.x.real[indices]
 
-    def add_label_with_title(self, title: str | None = None) -> None:
-        """Add label with title annotation
+    # def update_plot_item_parameters(self, item: CurveItem) -> None:
 
-        Args:
-            title: title (if None, use signal title)
-        """
-        title = self.title if title is None else title
-        if title:
-            label = make.label(title, "TL", (0, 0), "TL")
-            self.add_annotations_from_items([label])
+    # def update_metadata_from_plot_item(self, item: CurveItem) -> None:
+
+    # def make_item(self, update_from: CurveItem | None = None) -> CurveItem:
+
+    # def update_item(self, item: CurveItem, data_changed: bool = True) -> None:
+
+    # def add_label_with_title(self, title: str | None = None) -> None:
 
 
 def create_signal(
@@ -805,69 +608,7 @@ class PolyParam(gds.DataSet):
     a5 = gds.FloatItem("a5", default=0.0).set_pos(col=1)
 
 
-class ExperSignalParam(gds.DataSet):
-    """Parameters for experimental signal"""
-
-    size = gds.IntItem("Size", default=5).set_prop("display", hide=True)
-    xyarray = gds.FloatArrayItem(
-        "XY Values",
-        format="%g",
-    )
-    xmin = gds.FloatItem("Min", default=0).set_prop("display", hide=True)
-    xmax = gds.FloatItem("Max", default=1).set_prop("display", hide=True)
-
-    def edit_curve(self, *args) -> None:  # pylint: disable=unused-argument
-        """Edit experimental curve"""
-        win: PlotDialog = make.dialog(
-            wintitle=_("Select one point then press OK to accept"),
-            edit=True,
-            type="curve",
-        )
-        edit_tool = win.manager.add_tool(
-            EditPointTool, title=_("Edit experimental curve")
-        )
-        edit_tool.activate()
-        plot = win.manager.get_plot()
-        x, y = self.xyarray[:, 0], self.xyarray[:, 1]
-        curve = make.mcurve(x, y, "-+")
-        plot.add_item(curve)
-        plot.set_active_item(curve)
-
-        insert_btn = QW.QPushButton(_("Insert point"), win)
-        insert_btn.clicked.connect(edit_tool.trigger_insert_point_at_selection)
-        win.button_layout.insertWidget(0, insert_btn)
-
-        exec_dialog(win)
-
-        new_x, new_y = curve.get_data()
-        self.xmax = new_x.max()
-        self.xmin = new_x.min()
-        self.size = new_x.size
-        self.xyarray = np.vstack((new_x, new_y)).T
-
-    btn_curve_edit = gds.ButtonItem(
-        "Edit curve", callback=edit_curve, icon="signal.svg"
-    )
-
-    def setup_array(
-        self,
-        size: int | None = None,
-        xmin: float | None = None,
-        xmax: float | None = None,
-    ) -> None:
-        """Setup the xyarray from size, xmin and xmax (use the current values is not
-        provided)
-
-        Args:
-            size: xyarray size (default: None)
-            xmin: X min (default: None)
-            xmax: X max (default: None)
-        """
-        self.size = size or self.size
-        self.xmin = xmin or self.xmin
-        self.xmax = xmax or self.xmax
-        x_arr = np.linspace(self.xmin, self.xmax, self.size)  # type: ignore
-        self.xyarray = np.vstack((x_arr, x_arr)).T
+# class ExperSignalParam(gds.DataSet):
 
 
 class NewSignalParam(gds.DataSet):
@@ -934,81 +675,152 @@ def triangle_func(xarr: np.ndarray) -> np.ndarray:
     return sps.sawtooth(xarr, width=0.5)
 
 
+def get_next_signal_number() -> int:
+    """Get the next signal number.
+
+    This function is used to keep track of the number of signals created.
+    It is typically used to generate unique titles for new signals.
+
+    Returns:
+        int: new signal number
+    """
+    global SIG_NB  # pylint: disable=global-statement
+    SIG_NB += 1
+    return SIG_NB
+
+
 def create_signal_from_param(
-    base_param: NewSignalParam | None = None,
+    base_param: NewSignalParam,
     extra_param: gds.DataSet | None = None,
-    edit: bool = False,
-    parent: QW.QWidget | None = None,
-) -> SignalObj | None:
+) -> SignalObj:
     """Create a new Signal object from parameters.
 
     Args:
-        base_param: base signal parameters (NewSignalParam)
-        extra_param: additional parameters (e.g., GaussLorentzVoigtParam,
-         PeriodicParam, etc.)
-        edit: Open a dialog box to edit parameters (default: False)
-        parent: parent widget
+        base_param: new signal parameters
+        extra_param: additional parameters (optional)
 
     Returns:
-        Signal object or None if canceled
+        Signal object
 
     Raises:
-        ValueError: if base_param is None and edit is False
+        ValueError: if `extra_param` is required but not provided
+        NotImplementedError: if the signal type is not supported
     """
-    if base_param is None:
-        base_param = NewSignalParam()
-        if not base_param.edit(parent=parent):
-            return None
-    elif edit:
-        if not base_param.edit(parent=parent):
-            return None
-
     incr_sig_nb = not base_param.title
     prefix = base_param.stype.name.lower()
     if incr_sig_nb:
         base_param.title = f"{base_param.title} {get_next_signal_number():d}"
 
-    if base_param.stype == SignalTypes.EXPERIMENTAL:
-        p2 = ExperSignalParam("Experimental points")
-        p2.setup_array(size=base_param.size, xmin=base_param.xmin, xmax=base_param.xmax)
-        if edit and not p2.edit(parent=parent):
-            return None
-        signal = create_signal(base_param.title)
-        signal.xydata = p2.xyarray.T
-        if signal.title == DEFAULT_TITLE:
-            signal.title = f"{prefix}(npts={p2.size})"
-        return signal
+    ep = extra_param
+    signal = create_signal(base_param.title)
+    xarr = np.linspace(base_param.xmin, base_param.xmax, base_param.size)
+    title = base_param.title or DEFAULT_TITLE
 
-    param_classes = {
-        SignalTypes.UNIFORMRANDOM: base.UniformRandomParam,
-        SignalTypes.NORMALRANDOM: base.NormalRandomParam,
-        SignalTypes.GAUSS: GaussLorentzVoigtParam,
-        SignalTypes.LORENTZ: GaussLorentzVoigtParam,
-        SignalTypes.VOIGT: GaussLorentzVoigtParam,
-        SignalTypes.SINUS: PeriodicParam,
-        SignalTypes.COSINUS: PeriodicParam,
-        SignalTypes.SAWTOOTH: PeriodicParam,
-        SignalTypes.TRIANGLE: PeriodicParam,
-        SignalTypes.SQUARE: PeriodicParam,
-        SignalTypes.SINC: PeriodicParam,
-        SignalTypes.STEP: StepParam,
-        SignalTypes.EXPONENTIAL: ExponentialParam,
-        SignalTypes.PULSE: PulseParam,
-        SignalTypes.POLYNOMIAL: PolyParam,
-    }
-    if base_param.stype in param_classes:
-        if extra_param is None:
-            extra_param = param_classes[base_param.stype]()
-        if edit and not extra_param.edit(parent=parent):
-            return None
+    if base_param.stype == SignalTypes.ZEROS:
+        yarr = np.zeros(base_param.size)
 
-    try:
-        signal = create_signal_headless(base_param, extra_param)
-    except Exception as exc:
-        if parent is not None:
-            QW.QMessageBox.warning(parent, _("Error"), str(exc))
-        else:
-            raise ValueError("Error creating signal: {exc}") from exc
-        return None
+    elif base_param.stype == SignalTypes.UNIFORMRANDOM:
+        if ep is None:
+            raise ValueError("extra_param (UniformRandomParam) required.")
+        assert isinstance(ep, base.UniformRandomParam)
+        rng = np.random.default_rng(ep.seed)
+        yarr = rng.random((base_param.size,)) * (ep.vmax - ep.vmin) + ep.vmin
+        title = f"{prefix}(vmin={ep.vmin:.3g},vmax={ep.vmax:.3g})"
 
+    elif base_param.stype == SignalTypes.NORMALRANDOM:
+        if ep is None:
+            raise ValueError("extra_param (NormalRandomParam) required.")
+        assert isinstance(ep, base.NormalRandomParam)
+        rng = np.random.default_rng(ep.seed)
+        yarr = rng.normal(ep.mu, ep.sigma, size=(base_param.size,))
+        title = f"{prefix}(mu={ep.mu:.3g},sigma={ep.sigma:.3g})"
+
+    elif base_param.stype in (
+        SignalTypes.GAUSS,
+        SignalTypes.LORENTZ,
+        SignalTypes.VOIGT,
+    ):
+        if ep is None:
+            raise ValueError("extra_param (GaussLorentzVoigtParam) required.")
+        assert isinstance(ep, GaussLorentzVoigtParam)
+        func = {
+            SignalTypes.GAUSS: GaussianModel.func,
+            SignalTypes.LORENTZ: LorentzianModel.func,
+            SignalTypes.VOIGT: VoigtModel.func,
+        }[base_param.stype]
+        yarr = func(xarr, ep.a, ep.sigma, ep.mu, ep.ymin)
+        title = (
+            f"{prefix}(a={ep.a:.3g},sigma={ep.sigma:.3g},"
+            f"mu={ep.mu:.3g},ymin={ep.ymin:.3g})"
+        )
+
+    elif base_param.stype in (
+        SignalTypes.SINUS,
+        SignalTypes.COSINUS,
+        SignalTypes.SAWTOOTH,
+        SignalTypes.TRIANGLE,
+        SignalTypes.SQUARE,
+        SignalTypes.SINC,
+    ):
+        if ep is None:
+            raise ValueError("extra_param (PeriodicParam) required.")
+        assert isinstance(ep, PeriodicParam)
+        func = {
+            SignalTypes.SINUS: np.sin,
+            SignalTypes.COSINUS: np.cos,
+            SignalTypes.SAWTOOTH: sps.sawtooth,
+            SignalTypes.TRIANGLE: triangle_func,
+            SignalTypes.SQUARE: sps.square,
+            SignalTypes.SINC: np.sinc,
+        }[base_param.stype]
+        freq = ep.get_frequency_in_hz()
+        yarr = ep.a * func(2 * np.pi * freq * xarr + np.deg2rad(ep.phase)) + ep.ymin
+        title = (
+            f"{prefix}(f={ep.freq:.3g} {ep.freq_unit.value}),"
+            f"a={ep.a:.3g},ymin={ep.ymin:.3g},phase={ep.phase:.3g}°)"
+        )
+
+    elif base_param.stype == SignalTypes.STEP:
+        if ep is None:
+            raise ValueError("extra_param (StepParam) required.")
+        assert isinstance(ep, StepParam)
+        yarr = np.ones_like(xarr) * ep.a1
+        yarr[xarr > ep.x0] = ep.a2
+        title = f"{prefix}(a1={ep.a1:.3g},a2={ep.a2:.3g},x0={ep.x0:.3g})"
+
+    elif base_param.stype == SignalTypes.EXPONENTIAL:
+        if ep is None:
+            raise ValueError("extra_param (ExponentialParam) required.")
+        assert isinstance(ep, ExponentialParam)
+        yarr = ep.a * np.exp(ep.exponent * xarr) + ep.offset
+        title = f"{prefix}(a={ep.a:.3g},k={ep.exponent:.3g},y0={ep.offset:.3g})"
+
+    elif base_param.stype == SignalTypes.PULSE:
+        if ep is None:
+            raise ValueError("extra_param (PulseParam) required.")
+        assert isinstance(ep, PulseParam)
+        yarr = np.full_like(xarr, ep.offset)
+        yarr[(xarr >= ep.start) & (xarr <= ep.stop)] += ep.amp
+        title = (
+            f"{prefix}(start={ep.start:.3g},stop={ep.stop:.3g},offset={ep.offset:.3g})"
+        )
+
+    elif base_param.stype == SignalTypes.POLYNOMIAL:
+        if ep is None:
+            raise ValueError("extra_param (PolyParam) required.")
+        assert isinstance(ep, PolyParam)
+        yarr = np.polyval([ep.a5, ep.a4, ep.a3, ep.a2, ep.a1, ep.a0], xarr)
+        title = (
+            f"{prefix}(a0={ep.a0:.3g},a1={ep.a1:.3g},a2={ep.a2:.3g},"
+            f"a3={ep.a3:.3g},a4={ep.a4:.3g},a5={ep.a5:.3g})"
+        )
+
+    else:
+        raise NotImplementedError(
+            f"Signal type '{base_param.stype}' is not implemented."
+        )
+
+    signal.set_xydata(xarr, yarr)
+    if signal.title == DEFAULT_TITLE:
+        signal.title = title
     return signal
