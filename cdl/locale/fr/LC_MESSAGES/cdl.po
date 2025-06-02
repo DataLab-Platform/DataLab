@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
 "POT-Creation-Date: 2025-05-22 20:24+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
-"Last-Translator: Pierre Raybaut <p.raybaut@codra.fr>\n"
+"Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
 "Language-Team: DataLab Platform Developers <p.raybaut@codra.fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -1698,25 +1698,25 @@ msgid "Magnitude spectrum"
 msgstr "Spectre d'amplitude"
 
 msgid "Magnitude spectrum is the absolute value of the FFT result. It is a measure of the amplitude of the frequency components."
-msgstr ""
+msgstr "Le spectre d'amplitude est la valeur absolue du résultat de la transformée de Fourier rapide. Il mesure l'amplitude des composantes fréquentielles."
 
 msgid "Phase spectrum"
 msgstr "Spectre de phase"
 
 msgid "Phase spectrum is the angle of the FFT result. It is a measure of the phase of the frequency components."
-msgstr ""
+msgstr "Le spectre de phase est l'angle du résultat de la transformée de Fourier rapide. Il mesure la phase des composantes fréquentielles."
 
 msgid "Power spectral density"
 msgstr "Densité spectrale de puissance"
 
 msgid "Power spectral density (PSD) is the square of the magnitude spectrum. It is a measure of the power of the frequency components."
-msgstr ""
+msgstr "La densité spectrale de puissance est le carré du spectre d'amplitude. Elle mesure la puissance des composantes fréquentielles."
 
 msgid "Parametric thresholding"
 msgstr "Seuillage paramétrique"
 
 msgid "Parametric thresholding allows to select a thresholding method and a threshold value."
-msgstr ""
+msgstr "Le seuillage paramétrique permet de sélectionner une méthode de seuillage et une valeur de seuil."
 
 msgid "ISODATA thresholding"
 msgstr "Seuillage ISODATA"
