@@ -14,7 +14,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -43,7 +43,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -74,7 +74,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -102,7 +102,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -130,7 +130,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -158,7 +158,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -187,7 +187,7 @@
                 "cwd": "scripts",
                 "env": {
                     // "DEBUG": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -215,7 +215,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -243,7 +243,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -271,7 +271,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -319,7 +319,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
@@ -349,7 +349,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1",
                 }
             },
@@ -378,7 +378,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
@@ -409,7 +409,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
@@ -440,7 +440,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
@@ -471,7 +471,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
@@ -506,7 +506,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "UNATTENDED": "1"
                 }
@@ -540,7 +540,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
@@ -578,7 +578,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
@@ -618,7 +618,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                 }
             },
             "group": {
