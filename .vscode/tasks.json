@@ -93,31 +93,26 @@
         },
         {
             "label": "Run Ruff",
-            "type": "shell",
-            "command": "cmd",
+            "command": "ruff",
             "args": [
-                "/c",
-                "run_ruff.bat",
+                "check",
             ],
             "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                }
+                "cwd": "${workspaceFolder}"
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
+                "clear": true,
                 "echo": true,
-                "reveal": "always",
                 "focus": false,
                 "panel": "dedicated",
+                "reveal": "always",
                 "showReuseMessage": true,
-                "clear": true
-            }
+            },
+            "type": "shell"
         },
         {
             "label": "Run Coverage",
