@@ -56,6 +56,9 @@ Optional modules for development:
     * - pyinstaller
       - >=6.0
       - PyInstaller bundles a Python application and all its dependencies into a single package.
+    * - toml-to-requirements
+      - ==0.3.0
+      - Convert a pyproject.toml file to a requirements.txt file
 
 Optional modules for building the documentation:
 

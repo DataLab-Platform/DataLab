@@ -115,6 +115,32 @@
             "type": "shell"
         },
         {
+            "label": "Update requirements.txt",
+            "command": "toml-to-req",
+            "args": [
+                "--toml-file",
+                "pyproject.toml",
+                "--optional-lists",
+                "qt,opencv,dev,doc,test",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell"
+        },
+        {
             "label": "Run Coverage",
             "type": "shell",
             "command": "cmd",
