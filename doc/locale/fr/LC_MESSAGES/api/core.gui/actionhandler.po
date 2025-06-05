@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 14:55+0100\n"
+"POT-Creation-Date: 2025-05-16 10:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -73,11 +73,48 @@ msgstr "Créer des actions qui sont ajoutées aux menus en premier lieu"
 msgid "Create actions that are added to the menus in the end"
 msgstr "Créer des actions qui sont ajoutées aux menus à la fin"
 
-msgid "Add action to list of actions."
-msgstr "Ajouter une action à la liste des actions."
+msgid "Create action for a feature."
+msgstr ""
 
 msgid "Parameters"
 msgstr "Paramètres"
+
+msgid "function or name of the feature"
+msgstr ""
+
+msgid "add action to menu at this position. Defaults to None."
+msgstr "ajouter l'action au menu à cette position. Par défaut à None."
+
+msgid "add separator before action in menu"
+msgstr ""
+
+#, fuzzy
+msgid "add action to context menu at this position."
+msgstr "ajouter l'action au menu contextuel à cette position. Par défaut à None."
+
+msgid "add action to context menu at this position. Defaults to None."
+msgstr "ajouter l'action au menu contextuel à cette position. Par défaut à None."
+
+msgid "add separator before action in context menu (or after if context_menu_pos is positive). Defaults to False."
+msgstr "ajouter un séparateur avant l'action dans le menu contextuel (ou après si context_menu_pos est positif). Par défaut à False."
+
+msgid "add action to toolbar at this position. Defaults to None."
+msgstr "ajouter l'action à la barre d'outils à cette position. Par défaut à None."
+
+msgid "add separator before action in toolbar (or after if toolbar_pos is positive). Defaults to False."
+msgstr "ajouter un séparateur avant l'action dans la barre d'outils (ou après si toolbar_pos est positif). Par défaut à False."
+
+msgid "toolbar category. Defaults to None. If toolbar_pos is not None, this specifies the category of the toolbar. If None, defaults to ActionCategory.VIEW_TOOLBAR if the current category is ActionCategory.VIEW, else to ActionCategory.PANEL_TOOLBAR."
+msgstr "catégorie de la barre d'outils. Par défaut à None. S'il n'est pas None, cela spécifie la catégorie de la barre d'outils. Si None, par défaut à ActionCategory.VIEW_TOOLBAR si la catégorie actuelle est ActionCategory.VIEW, sinon à ActionCategory.PANEL_TOOLBAR."
+
+msgid "Returns"
+msgstr "Renvoie"
+
+msgid "New action"
+msgstr "Nouvelle action"
+
+msgid "Add action to list of actions."
+msgstr "Ajouter une action à la liste des actions."
 
 msgid "action to add"
 msgstr "action à ajouter"
@@ -103,9 +140,6 @@ msgstr "Créer une nouvelle action et l'ajouter à la liste des actions."
 msgid "action title"
 msgstr "titre de l'action"
 
-msgid "add action to menu at this position. Defaults to None."
-msgstr "ajouter l'action au menu à cette position. Par défaut à None."
-
 msgid "triggered callback. Defaults to None."
 msgstr "callback déclenché. Par défaut à None."
 
@@ -123,27 +157,6 @@ msgstr "info-bulle. Par défaut à None."
 
 msgid "selection condition. Defaults to None. If str, must be the name of a method of SelectCond, i.e. one of \"always\", \"exactly_one\", \"exactly_one_group\", \"at_least_one_group_or_one_object\", \"at_least_one\", \"at_least_two\", \"with_roi\"."
 msgstr "condition de sélection. Par défaut à None. Si str, doit être le nom d'une méthode de SelectCond, c'est-à-dire l'une des valeurs suivantes : \"always\", \"exactly_one\", \"exactly_one_group\", \"at_least_one_group_or_one_object\", \"at_least_one\", \"at_least_two\", \"with_roi\"."
-
-msgid "add action to context menu at this position. Defaults to None."
-msgstr "ajouter l'action au menu contextuel à cette position. Par défaut à None."
-
-msgid "add separator before action in context menu (or after if context_menu_pos is positive). Defaults to False."
-msgstr "ajouter un séparateur avant l'action dans le menu contextuel (ou après si context_menu_pos est positif). Par défaut à False."
-
-msgid "add action to toolbar at this position. Defaults to None."
-msgstr "ajouter l'action à la barre d'outils à cette position. Par défaut à None."
-
-msgid "add separator before action in toolbar (or after if toolbar_pos is positive). Defaults to False."
-msgstr "ajouter un séparateur avant l'action dans la barre d'outils (ou après si toolbar_pos est positif). Par défaut à False."
-
-msgid "toolbar category. Defaults to None. If toolbar_pos is not None, this specifies the category of the toolbar. If None, defaults to ActionCategory.VIEW_TOOLBAR if the current category is ActionCategory.VIEW, else to ActionCategory.PANEL_TOOLBAR."
-msgstr "catégorie de la barre d'outils. Par défaut à None. S'il n'est pas None, cela spécifie la catégorie de la barre d'outils. Si None, par défaut à ActionCategory.VIEW_TOOLBAR si la catégorie actuelle est ActionCategory.VIEW, sinon à ActionCategory.PANEL_TOOLBAR."
-
-msgid "Returns"
-msgstr "Renvoie"
-
-msgid "New action"
-msgstr "Nouvelle action"
 
 msgid "Context manager for creating a new menu."
 msgstr "Gestionnaire de contexte pour créer un nouveau menu."
@@ -174,3 +187,4 @@ msgstr "objets sélectionnés"
 
 msgid "Object handling image panel GUI interactions: actions, menus, ..."
 msgstr "Objet gérant les interactions GUI du panneau d'images : actions, menus, ..."
+
