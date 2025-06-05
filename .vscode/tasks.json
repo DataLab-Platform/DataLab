@@ -82,65 +82,53 @@
             "type": "shell"
         },
         {
-            "label": "gettext - Scan",
-            "type": "shell",
-            "command": "cmd",
+            "label": "Preprocess internationalization",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "/c",
-                "gettext_scan.bat"
+                "scripts/internationalization_preprocess.py"
             ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                }
-            },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
             },
             "presentation": {
                 "echo": true,
-                "reveal": "always",
                 "focus": false,
                 "panel": "shared",
+                "reveal": "always",
                 "showReuseMessage": true,
                 "clear": false
-            }
+            },
+            "type": "shell",
         },
         {
-            "label": "gettext - Compile",
-            "type": "shell",
-            "command": "cmd",
+            "label": "Postprocess internationalization",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "/c",
-                "gettext.bat",
-                "compile"
+                "scripts/internationalization_postprocess.py"
             ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                }
-            },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
             },
             "presentation": {
                 "echo": true,
-                "reveal": "always",
                 "focus": false,
                 "panel": "shared",
+                "reveal": "always",
                 "showReuseMessage": true,
                 "clear": false
-            }
+            },
+            "type": "shell"
         },
         {
             "label": "Run pytest",
-            "type": "shell",
             "command": "cmd",
             "args": [
                 "/c",
@@ -165,7 +153,8 @@
                 "panel": "dedicated",
                 "showReuseMessage": true,
                 "clear": true
-            }
+            },
+            "type": "shell",
         },
         {
             "label": "Update requirements.txt",

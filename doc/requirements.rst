@@ -44,20 +44,26 @@ Optional modules for development:
     * - Name
       - Version
       - Summary
-    * - ruff
-      - 
-      - An extremely fast Python linter and code formatter, written in Rust.
-    * - pylint
-      - 
-      - python code static checker
+    * - babel
+      -  == 2.17.0
+      - Internationalization utilities
     * - Coverage
       - 
       - Code coverage measurement for Python
     * - pyinstaller
       - >=6.0
       - PyInstaller bundles a Python application and all its dependencies into a single package.
+    * - pylint
+      - 
+      - python code static checker
+    * - python-dotenv
+      -  == 1.1.0
+      - Read key-value pairs from a .env file and set them as environment variables
+    * - ruff
+      - 
+      - An extremely fast Python linter and code formatter, written in Rust.
     * - toml-to-requirements
-      - ==0.3.0
+      - 
       - Convert a pyproject.toml file to a requirements.txt file
 
 Optional modules for building the documentation:

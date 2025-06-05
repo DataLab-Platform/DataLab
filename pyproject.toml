@@ -63,7 +63,15 @@ datalab-tests = "cdl.tests:run"
 [project.optional-dependencies]
 qt = ["PyQt5"]
 opencv = ["opencv-python-headless >= 4.5"]
-dev = ["ruff", "pylint", "Coverage", "pyinstaller>=6.0", "toml-to-requirements==0.3.0"]
+dev = [
+    "babel == 2.17.0",
+    "Coverage",
+    "pyinstaller>=6.0",
+    "pylint",
+    "python-dotenv == 1.1.0",
+    "ruff",
+    "toml-to-requirements"
+]
 doc = [
     "PyQt5",
     "sphinx",
