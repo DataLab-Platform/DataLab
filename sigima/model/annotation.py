@@ -54,7 +54,7 @@ The following annotation types are supported:
         a minor axis.
     * - Image
       - :class:`sigima.model.annotation.Polygon`
-      - A polygon annotation for an image, defined by a list of points.
+      - A polygon annotation for an image, defined by an arbitrary number of points.
 
 The base class `Annotation` provides the common interface for all annotations, which
 includes the following methods:
@@ -110,7 +110,15 @@ typically include the position and size of the annotation:
       - `text`: The text of the annotation, `x`, `y`: Center coordinates, `major_axis`:
         Length of the major axis, `minor_axis`: Length of the minor axis.
 
-The `Annotation.get_points()` method returns a list of points that depend on the type
+.. note::
+
+    The internal `.points` attribute is a NumPy array of shape (N, 2). The `.points`
+    property returns a direct reference (not a copy): it can be mutated in-place for
+    efficient transformations (e.g., affine transforms). To mutate with validation, use
+    `.apply_func(func)`. All annotation serialization/deserialization is robust and
+    interoperable with lists and arrays.
+
+The `Annotation.get_points()` method returns an array of points that depend on the type
 of annotation:
 
 .. list-table::
@@ -120,47 +128,48 @@ of annotation:
     * - Annotation type
       - Points returned by `get_points()`
     * - Label, XCursor, Point
-      - A single point [(x, y)] representing the annotation position.
+      - A single point `array([(x, y)])` representing the annotation position.
     * - VCursor
-      - A single point [(x, 0)] representing the cursor position.
+      - A single point `array([(x, 0)])` representing the cursor position.
     * - HCursor
-      - A single point [(0, y)] representing the cursor position.
+      - A single point `array([(0, y)])` representing the cursor position.
     * - Range
-      - Two points [(x1, 0), (x2, 0)] representing the start and end of the range.
+      - Two points `array([(x1, 0), (x2, 0)])` representing the start and end of the
+        range.
     * - Line
-      - Two points [(x1, y1), (x2, y2)] representing the start and end of the line.
+      - Two points `array([(x1, y1), (x2, y2)])` representing the start and end of the
+        line.
     * - Rectangle
-      - Two points [(x1, y1), (x2, y2)] representing the top-left and bottom-right
-        corners of the rectangle.
+      - Two points `array([(x1, y1), (x2, y2)])` representing the top-left and
+        bottom-right corners of the rectangle.
     * - Circle, Ellipse
-      - Two points [(x1, y1), (x2, y2)] representing the top-left and bottom-right
-        corners of the bounding box of the circle or ellipse.
+      - Two points `array([(x1, y1), (x2, y2)])` representing the top-left and
+        bottom-right corners of the bounding box of the circle or ellipse.
     * - Polygon
-      - A list of points [(x1, y1), (x2, y2), ...] representing the vertices of
+      - A list of points `array([(x1, y1), (x2, y2), ...])` representing the vertices of
         the polygon.
 """
-
-# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-# pylint: disable=duplicate-code
 
 from __future__ import annotations
 
 import abc
 from typing import Any, Callable, ClassVar, Self, Type
 
+import numpy as np
+
 # --------------------------------------------------------------------------------------
 # MARK: Registry / decorator
 
 
 class AnnotationRegistry:
-    """Registry for annotation types."""
+    """Registry for annotation types"""
 
     _registry: ClassVar[dict[str, Type[Annotation]]] = {}
 
     @classmethod
     def register(cls, name: str, annotation_cls: Type[Annotation]) -> None:
         """
-        Register an annotation class.
+        Register an annotation class
 
         Args:
             name: Name of the annotation type.
@@ -171,7 +180,7 @@ class AnnotationRegistry:
     @classmethod
     def get(cls, name: str) -> Type[Annotation]:
         """
-        Get an annotation class by name.
+        Get an annotation class by name
 
         Args:
             name: Name of the annotation type.
@@ -232,8 +241,12 @@ class Annotation(abc.ABC):
     Base class for all annotations.
 
     Args:
-        points: List of (x, y) tuples defining the annotation position(s)
+        points: List of (x, y) tuples or (N,2) ndarray defining the annotation position(s)
         text: Optional annotation text
+
+    Note:
+        The `.points` property returns a direct reference to the internal array.
+        To apply validated transforms, use `.apply_func(func)`.
     """
 
     STRUCTURE_VERSION: ClassVar[int] = 1
@@ -241,19 +254,23 @@ class Annotation(abc.ABC):
     REQUIRE_MIN_N_POINTS: ClassVar[int] = 0
 
     def __init__(
-        self, points: list[tuple[float, float]] | None = None, text: str = ""
+        self,
+        points: list[tuple[float, float]] | np.ndarray | None = None,
+        text: str = "",
     ) -> None:
         """
         Initialize an annotation.
 
         Args:
-            points: List of (x, y) tuples defining the annotation position(s)
+            points: List of (x, y) tuples or (N,2) ndarray defining the annotation
+             position(s)
             text: Optional annotation text
         """
         if points is None:
             points = []
-        self.check_points(points)
-        self._points: list[tuple[float, float]] = points
+        arr = np.array(points, dtype=float).reshape((-1, 2))
+        self.check_points(arr)
+        self._points: np.ndarray = arr
         self._text: str = text
 
     @property
@@ -267,39 +284,42 @@ class Annotation(abc.ABC):
         return type(self).__name__
 
     @property
-    def points(self) -> list[tuple[float, float]]:
+    def points(self) -> np.ndarray:
         """
         Get the points defining the annotation.
 
         Returns:
-            List of (x, y) tuples
+            NumPy ndarray of shape (N, 2). This is a direct reference and can be mutated
+            in-place, but you are responsible for preserving validity!
         """
-        return self._points.copy()
+        return self._points
 
     @points.setter
-    def points(self, pts: list[tuple[float, float]]) -> None:
+    def points(self, pts: list[tuple[float, float]] | np.ndarray) -> None:
         """
         Set the points defining the annotation, with validation.
 
         Args:
-            pts: List of (x, y) tuples
-
-        Raises:
-            ValueError: If points are invalid for this annotation type
+            pts: List of (x, y) tuples or ndarray
         """
-        self.check_points(pts)
-        self._points = pts
+        arr = np.array(pts, dtype=float).reshape((-1, 2))
+        self.check_points(arr)
+        self._points = arr
 
-    def check_points(self, points: list[tuple[float, float]]) -> None:
+    def check_points(self, points: np.ndarray) -> None:
         """
         Validate the points for this annotation type.
 
         Args:
-            points: List of (x, y) tuples
+            points: ndarray of shape (N,2)
 
         Raises:
             ValueError: If points are invalid for this annotation type
         """
+        if not (
+            isinstance(points, np.ndarray) and points.ndim == 2 and points.shape[1] == 2
+        ):
+            raise ValueError("points must be a 2D array with shape (N, 2)")
         n_ex, n_min = self.REQUIRE_EXACTLY_N_POINTS, self.REQUIRE_MIN_N_POINTS
         if n_ex > 0 and len(points) != n_ex:
             raise ValueError(f"{self.type_name} annotation requires {n_ex} points.")
@@ -308,30 +328,29 @@ class Annotation(abc.ABC):
                 f"{self.type_name} annotation requires at least {n_min} points."
             )
 
-    def get_points(self) -> list[tuple[float, float]]:
+    def get_points(self) -> np.ndarray:
         """
         Return the points defining the annotation.
 
         Returns:
-            List of (x, y) tuples
+            ndarray of shape (N, 2)
         """
         return self.points
 
-    def set_points(self, points: list[tuple[float, float]]) -> None:
-        """
-        Set the points defining the annotation, with validation.
+    def set_points(self, points: list[tuple[float, float]] | np.ndarray) -> None:
+        """Set the points defining the annotation, with validation
 
         Args:
-            points: List of (x, y) tuples
+            points: List of (x, y) tuples or ndarray
 
         Raises:
             ValueError: If points are invalid for this annotation type
         """
-        self.points = points  # calls setter, which validates
+        self.points = points
 
     def get_text(self) -> str:
         """
-        Get the annotation text.
+        Get the annotation text
 
         Returns:
             The annotation text
@@ -340,7 +359,7 @@ class Annotation(abc.ABC):
 
     def set_text(self, value: str) -> None:
         """
-        Set the annotation text.
+        Set the annotation text
 
         Args:
             value: The new annotation text
@@ -357,7 +376,7 @@ class Annotation(abc.ABC):
         return {
             "version": self.STRUCTURE_VERSION,
             "type": self.type_name,
-            "points": self.get_points(),
+            "points": self.get_points().tolist(),
             "text": self.get_text(),
         }
 
@@ -377,23 +396,28 @@ class Annotation(abc.ABC):
         )
         if "points" not in json_dict or not isinstance(json_dict["points"], list):
             raise ValueError("Missing or invalid 'points' in JSON data")
-        points = json_dict["points"]
-        if not all(isinstance(coord, (int, float)) for coord in points[0]):
-            raise ValueError("Invalid point coordinates in JSON data")
+        arr = np.array(json_dict["points"], dtype=float).reshape((-1, 2))
         version = json_dict.get("version", 1)
         if version != 1:
             raise ValueError(f"Unsupported annotation version: {version}")
-        instance = cls(text=json_dict.get("text", ""))
-        instance.set_points(json_dict["points"])
+        instance = cls(points=arr, text=json_dict.get("text", ""))
         return instance
 
-    def __repr__(self) -> str:
+    def apply_func(self, func: Callable[[np.ndarray], np.ndarray]) -> None:
         """
-        Return a string representation for debugging.
+        Apply a transformation function to the points array in place (with validation).
 
-        Returns:
-            String representation of the annotation.
+        Args:
+            func: Function that operates on an (N, 2) ndarray (inplace)
+
+        Raises:
+            ValueError: If the transformed points are not valid for this annotation type
         """
+        func(self._points)
+        self.check_points(self._points)
+
+    def __repr__(self) -> str:
+        """Return a string representation for debugging"""
         cname = self.__class__.__name__
         return f"<{cname} points={self.points!r} text={self._text!r}>"
 
@@ -405,7 +429,7 @@ class Annotation(abc.ABC):
 @annotation_type("Label")
 class Label(Annotation):
     """
-    A simple label annotation for a signal or image.
+    A simple label annotation for a signal or image
 
     Args:
         x: X position of the label
@@ -420,8 +444,8 @@ class Label(Annotation):
 
     @property
     def x(self) -> float:
-        """X position of the label."""
-        return self.points[0][0]
+        """X position of the label"""
+        return self.points[0, 0]
 
     @x.setter
     def x(self, value: float) -> None:
@@ -429,8 +453,8 @@ class Label(Annotation):
 
     @property
     def y(self) -> float:
-        """Y position of the label."""
-        return self.points[0][1]
+        """Y position of the label"""
+        return self.points[0, 1]
 
     @y.setter
     def y(self, value: float) -> None:
@@ -440,11 +464,11 @@ class Label(Annotation):
 @annotation_type("VCursor")
 class VCursor(Annotation):
     """
-    A vertical cursor annotation for a signal.
+    A vertical cursor annotation for a signal
 
     Args:
-        x: X position of the vertical cursor.
-        text: Optional annotation text.
+        x: X position of the vertical cursor
+        text: Optional annotation text
     """
 
     REQUIRE_EXACTLY_N_POINTS: ClassVar[int] = 1
@@ -454,8 +478,8 @@ class VCursor(Annotation):
 
     @property
     def x(self) -> float:
-        """X position of the vertical cursor."""
-        return self.points[0][0]
+        """X position of the vertical cursor"""
+        return self.points[0, 0]
 
     @x.setter
     def x(self, value: float) -> None:
@@ -465,7 +489,7 @@ class VCursor(Annotation):
 @annotation_type("HCursor")
 class HCursor(Annotation):
     """
-    A horizontal cursor annotation for a signal.
+    A horizontal cursor annotation for a signal
 
     Args:
         y: Y position of the horizontal cursor
@@ -479,8 +503,8 @@ class HCursor(Annotation):
 
     @property
     def y(self) -> float:
-        """Y position of the horizontal cursor."""
-        return self.points[0][1]
+        """Y position of the horizontal cursor"""
+        return self.points[0, 1]
 
     @y.setter
     def y(self, value: float) -> None:
@@ -490,7 +514,7 @@ class HCursor(Annotation):
 @annotation_type("XCursor")
 class XCursor(Annotation):
     """
-    A cross cursor annotation for a signal.
+    A cross cursor annotation for a signal
 
     Args:
         x: X position of the cross cursor
@@ -505,8 +529,8 @@ class XCursor(Annotation):
 
     @property
     def x(self) -> float:
-        """X position of the cross cursor."""
-        return self.points[0][0]
+        """X position of the cross cursor"""
+        return self.points[0, 0]
 
     @x.setter
     def x(self, value: float) -> None:
@@ -514,8 +538,8 @@ class XCursor(Annotation):
 
     @property
     def y(self) -> float:
-        """Y position of the cross cursor."""
-        return self.points[0][1]
+        """Y position of the cross cursor"""
+        return self.points[0, 1]
 
     @y.setter
     def y(self, value: float) -> None:
@@ -525,7 +549,7 @@ class XCursor(Annotation):
 @annotation_type("Range")
 class Range(Annotation):
     """
-    A horizontal range annotation for a signal.
+    A horizontal range annotation for a signal
 
     Args:
         x1: Start X position
@@ -540,8 +564,8 @@ class Range(Annotation):
 
     @property
     def x1(self) -> float:
-        """Start X position of the range."""
-        return self.points[0][0]
+        """Start X position of the range"""
+        return self.points[0, 0]
 
     @x1.setter
     def x1(self, value: float) -> None:
@@ -549,8 +573,8 @@ class Range(Annotation):
 
     @property
     def x2(self) -> float:
-        """End X position of the range."""
-        return self.points[1][0]
+        """End X position of the range"""
+        return self.points[1, 0]
 
     @x2.setter
     def x2(self, value: float) -> None:
@@ -560,7 +584,7 @@ class Range(Annotation):
 @annotation_type("Line")
 class Line(Annotation):
     """
-    A line annotation for a signal or image.
+    A line annotation for a signal or image
 
     Args:
         x1: Start X coordinate
@@ -584,8 +608,8 @@ class Line(Annotation):
 
     @property
     def x1(self) -> float:
-        """Start X coordinate of the line."""
-        return self.points[0][0]
+        """Start X coordinate of the line"""
+        return self.points[0, 0]
 
     @x1.setter
     def x1(self, value: float) -> None:
@@ -593,8 +617,8 @@ class Line(Annotation):
 
     @property
     def y1(self) -> float:
-        """Start Y coordinate of the line."""
-        return self.points[0][1]
+        """Start Y coordinate of the line"""
+        return self.points[0, 1]
 
     @y1.setter
     def y1(self, value: float) -> None:
@@ -602,8 +626,8 @@ class Line(Annotation):
 
     @property
     def x2(self) -> float:
-        """End X coordinate of the line."""
-        return self.points[1][0]
+        """End X coordinate of the line"""
+        return self.points[1, 0]
 
     @x2.setter
     def x2(self, value: float) -> None:
@@ -611,8 +635,8 @@ class Line(Annotation):
 
     @property
     def y2(self) -> float:
-        """End Y coordinate of the line."""
-        return self.points[1][1]
+        """End Y coordinate of the line"""
+        return self.points[1, 1]
 
     @y2.setter
     def y2(self, value: float) -> None:
@@ -622,7 +646,7 @@ class Line(Annotation):
 @annotation_type("Rectangle")
 class Rectangle(Annotation):
     """
-    A rectangle annotation for a signal or image.
+    A rectangle annotation for a signal or image
 
     Args:
         x1: Top-left X coordinate
@@ -646,8 +670,8 @@ class Rectangle(Annotation):
 
     @property
     def x1(self) -> float:
-        """Top-left X coordinate of the rectangle."""
-        return self.points[0][0]
+        """Top-left X coordinate of the rectangle"""
+        return self.points[0, 0]
 
     @x1.setter
     def x1(self, value: float) -> None:
@@ -655,8 +679,8 @@ class Rectangle(Annotation):
 
     @property
     def y1(self) -> float:
-        """Top-left Y coordinate of the rectangle."""
-        return self.points[0][1]
+        """Top-left Y coordinate of the rectangle"""
+        return self.points[0, 1]
 
     @y1.setter
     def y1(self, value: float) -> None:
@@ -664,8 +688,8 @@ class Rectangle(Annotation):
 
     @property
     def x2(self) -> float:
-        """Bottom-right X coordinate of the rectangle."""
-        return self.points[1][0]
+        """Bottom-right X coordinate of the rectangle"""
+        return self.points[1, 0]
 
     @x2.setter
     def x2(self, value: float) -> None:
@@ -673,8 +697,8 @@ class Rectangle(Annotation):
 
     @property
     def y2(self) -> float:
-        """Bottom-right Y coordinate of the rectangle."""
-        return self.points[1][1]
+        """Bottom-right Y coordinate of the rectangle"""
+        return self.points[1, 1]
 
     @y2.setter
     def y2(self, value: float) -> None:
@@ -684,7 +708,7 @@ class Rectangle(Annotation):
 @annotation_type("Point")
 class Point(Annotation):
     """
-    A point annotation for an image.
+    A point annotation for an image
 
     Args:
         x: X coordinate
@@ -699,8 +723,8 @@ class Point(Annotation):
 
     @property
     def x(self) -> float:
-        """X coordinate of the point."""
-        return self.points[0][0]
+        """X coordinate of the point"""
+        return self.points[0, 0]
 
     @x.setter
     def x(self, value: float) -> None:
@@ -708,8 +732,8 @@ class Point(Annotation):
 
     @property
     def y(self) -> float:
-        """Y coordinate of the point."""
-        return self.points[0][1]
+        """Y coordinate of the point"""
+        return self.points[0, 1]
 
     @y.setter
     def y(self, value: float) -> None:
@@ -719,7 +743,7 @@ class Point(Annotation):
 @annotation_type("Circle")
 class Circle(Annotation):
     """
-    A circle annotation for an image.
+    A circle annotation for an image
 
     Args:
         x: Center X coordinate
@@ -739,8 +763,8 @@ class Circle(Annotation):
 
     @property
     def x(self) -> float:
-        """Center X coordinate of the circle."""
-        return (self.points[0][0] + self.points[1][0]) / 2
+        """X coordinate of the circle center"""
+        return (self.points[0, 0] + self.points[1, 0]) / 2
 
     @x.setter
     def x(self, value: float) -> None:
@@ -753,8 +777,8 @@ class Circle(Annotation):
 
     @property
     def y(self) -> float:
-        """Center Y coordinate of the circle."""
-        return (self.points[0][1] + self.points[1][1]) / 2
+        """Y coordinate of the circle center"""
+        return (self.points[0, 1] + self.points[1, 1]) / 2
 
     @y.setter
     def y(self, value: float) -> None:
@@ -767,8 +791,8 @@ class Circle(Annotation):
 
     @property
     def radius(self) -> float:
-        """Radius of the circle."""
-        return (self.points[1][0] - self.points[0][0]) / 2
+        """Radius of the circle"""
+        return (self.points[1, 0] - self.points[0, 0]) / 2
 
     @radius.setter
     def radius(self, value: float) -> None:
@@ -780,7 +804,7 @@ class Circle(Annotation):
 @annotation_type("Ellipse")
 class Ellipse(Annotation):
     """
-    An ellipse annotation for an image.
+    An ellipse annotation for an image
 
     Args:
         x: Center X coordinate
@@ -810,8 +834,8 @@ class Ellipse(Annotation):
 
     @property
     def x(self) -> float:
-        """Center X coordinate of the ellipse."""
-        return (self.points[0][0] + self.points[1][0]) / 2
+        """X coordinate of the ellipse center"""
+        return (self.points[0, 0] + self.points[1, 0]) / 2
 
     @x.setter
     def x(self, value: float) -> None:
@@ -824,8 +848,8 @@ class Ellipse(Annotation):
 
     @property
     def y(self) -> float:
-        """Center Y coordinate of the ellipse."""
-        return (self.points[0][1] + self.points[1][1]) / 2
+        """Y coordinate of the ellipse center"""
+        return (self.points[0, 1] + self.points[1, 1]) / 2
 
     @y.setter
     def y(self, value: float) -> None:
@@ -838,8 +862,8 @@ class Ellipse(Annotation):
 
     @property
     def major_semi_axis(self) -> float:
-        """Length of the major semi-axis."""
-        return abs(self.points[1][0] - self.points[0][0]) / 2
+        """Length of the major semi-axis of the ellipse"""
+        return abs(self.points[1, 0] - self.points[0, 0]) / 2
 
     @major_semi_axis.setter
     def major_semi_axis(self, value: float) -> None:
@@ -852,8 +876,8 @@ class Ellipse(Annotation):
 
     @property
     def minor_semi_axis(self) -> float:
-        """Length of the minor semi-axis."""
-        return abs(self.points[1][1] - self.points[0][1]) / 2
+        """Length of the minor semi-axis of the ellipse"""
+        return abs(self.points[1, 1] - self.points[0, 1]) / 2
 
     @minor_semi_axis.setter
     def minor_semi_axis(self, value: float) -> None:
@@ -868,7 +892,7 @@ class Ellipse(Annotation):
 @annotation_type("Polygon")
 class Polygon(Annotation):
     """
-    A polygon annotation for an image.
+    A polygon annotation for an image
 
     Args:
         points: List of (x, y) tuples defining the vertices of the polygon
