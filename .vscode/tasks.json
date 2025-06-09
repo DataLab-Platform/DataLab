@@ -62,34 +62,35 @@
         },
         {
             "label": "Run Pylint",
-            "type": "shell",
-            "command": "cmd",
+            "command": "pylint",
             "args": [
-                "/c",
-                "run_pylint.bat",
+                "cdl",
+                "--disable=duplicate-code",
                 "--disable=fixme",
-                "--disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements,too-many-public-methods,too-many-lines,too-many-instance-attributes",
-                "--disable=R0801",
+                "--disable=too-many-arguments",
+                "--disable=too-many-branches",
+                "--disable=too-many-instance-attributes",
+                "--disable=too-many-lines",
+                "--disable=too-many-locals",
+                "--disable=too-many-public-methods",
+                "--disable=too-many-statements"
             ],
             "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                }
+                "cwd": "${workspaceFolder}"
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
+                "clear": true,
                 "echo": true,
-                "reveal": "always",
                 "focus": false,
                 "panel": "dedicated",
-                "showReuseMessage": true,
-                "clear": true
-            }
+                "reveal": "always",
+                "showReuseMessage": true
+            },
+            "type": "shell"
         },
         {
             "label": "Run Ruff",
