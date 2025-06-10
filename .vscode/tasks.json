@@ -4,6 +4,61 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Run Ruff",
+            "command": "ruff",
+            "args": [
+                "check",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell"
+        },
+        {
+            "label": "Run Pylint",
+            "command": "pylint",
+            "args": [
+                "cdl",
+                "--disable=duplicate-code",
+                "--disable=fixme",
+                "--disable=too-many-arguments",
+                "--disable=too-many-branches",
+                "--disable=too-many-instance-attributes",
+                "--disable=too-many-lines",
+                "--disable=too-many-locals",
+                "--disable=too-many-public-methods",
+                "--disable=too-many-statements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true
+            },
+            "type": "shell"
+        },
+        {
             "label": "gettext - Scan",
             "type": "shell",
             "command": "cmd",
@@ -61,59 +116,33 @@
             }
         },
         {
-            "label": "Run Pylint",
-            "command": "pylint",
+            "label": "Run pytest",
+            "type": "shell",
+            "command": "cmd",
             "args": [
-                "cdl",
-                "--disable=duplicate-code",
-                "--disable=fixme",
-                "--disable=too-many-arguments",
-                "--disable=too-many-branches",
-                "--disable=too-many-instance-attributes",
-                "--disable=too-many-lines",
-                "--disable=too-many-locals",
-                "--disable=too-many-public-methods",
-                "--disable=too-many-statements"
+                "/c",
+                "run_pytest.bat"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "scripts",
+                "env": {
+                    // "DEBUG": "1",
+                    "PYTHON": "${command:python.interpreterPath}",
+                    "UNATTENDED": "1"
+                }
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": true
             },
             "presentation": {
-                "clear": true,
                 "echo": true,
+                "reveal": "always",
                 "focus": false,
                 "panel": "dedicated",
-                "reveal": "always",
-                "showReuseMessage": true
-            },
-            "type": "shell"
-        },
-        {
-            "label": "Run Ruff",
-            "command": "ruff",
-            "args": [
-                "check",
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "clear": true,
-                "echo": true,
-                "focus": false,
-                "panel": "dedicated",
-                "reveal": "always",
                 "showReuseMessage": true,
-            },
-            "type": "shell"
+                "clear": true
+            }
         },
         {
             "label": "Update requirements.txt",
@@ -180,35 +209,6 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "dedicated",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
-            "label": "Run pytest",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "run_pytest.bat"
-            ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    // "DEBUG": "1",
                     "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
