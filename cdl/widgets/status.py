@@ -100,9 +100,9 @@ class MemoryStatus(BaseStatus):
         memok = mem.available > self.__threshold
         self.SIG_MEMORY_ALARM.emit(not memok)
         txtlist = [
-            f"%s {mem.available//(1024**2)} MB" % _("Memory available:"),
-            f"%s {mem.used//(1024**2)} MB" % _("Memory used:"),
-            f"%s {self.__threshold//(1024**2)} MB" % _("Alarm threshold:"),
+            f"%s {mem.available // (1024**2)} MB" % _("Memory available:"),
+            f"%s {mem.used // (1024**2)} MB" % _("Memory used:"),
+            f"%s {self.__threshold // (1024**2)} MB" % _("Alarm threshold:"),
         ]
         txt = os.linesep.join(txtlist)
         self.setToolTip(txt)

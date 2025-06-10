@@ -209,9 +209,9 @@ class FormatInfo:
         """Return string representation of format info"""
         return f"""{self.name}:
     Extensions: {self.extensions}
-    Readable:   {'Yes' if self.readable else 'No'}
-    Writeable:  {'Yes' if self.writeable else 'No'}
-    Requires:   {', '.join(self.requires) if self.requires else 'None'}"""
+    Readable:   {"Yes" if self.readable else "No"}
+    Writeable:  {"Yes" if self.writeable else "No"}
+    Requires:   {", ".join(self.requires) if self.requires else "None"}"""
 
 
 class FormatBase:

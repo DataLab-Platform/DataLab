@@ -290,7 +290,9 @@ def write_csv(
     if len(ylabels) == 1:
         ylabels = ["Y"] if not ylabels[0] else ylabels
     elif ylabels:
-        ylabels = [f"Y{i+1}" if not label else label for i, label in enumerate(ylabels)]
+        ylabels = [
+            f"Y{i + 1}" if not label else label for i, label in enumerate(ylabels)
+        ]
         if yunits:
             ylabels = [
                 f"{label} ({unit})" if unit else label

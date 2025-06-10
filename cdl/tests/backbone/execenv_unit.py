@@ -83,9 +83,9 @@ def test_cli():
                 args = []  # Default value is False
             execenvdict = get_subprocess_execenv_dict(args)
             assert_two_dicts_are_equal(execenvdict, execenv.to_dict(), (argname,))
-            assert (
-                execenvdict[argname] is val
-            ), f"execenvdict[{argname}] = {execenvdict[argname]} != {val}"
+            assert execenvdict[argname] is val, (
+                f"execenvdict[{argname}] = {execenvdict[argname]} != {val}"
+            )
         execenv.print()
     # Testing integer arguments
     execenv.print("  Testing integer arguments:")
@@ -228,9 +228,9 @@ def test_envvar():
             remove_all_cdl_envvars()
             if value is not None:
                 setattr(execenv, attrname, value)
-            assert (
-                os.environ.get(envvar) in envvals
-            ), f"os.environ[{envvar}] = {os.environ.get(envvar)} != {envvals}"
+            assert os.environ.get(envvar) in envvals, (
+                f"os.environ[{envvar}] = {os.environ.get(envvar)} != {envvals}"
+            )
             print(" [env->attr]", end="")
             remove_all_cdl_envvars()
             for envval in envvals:
