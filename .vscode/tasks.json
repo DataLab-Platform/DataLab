@@ -4,7 +4,30 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run Ruff",
+            "label": "Run Ruff Formatter",
+            "command": "ruff",
+            "args": [
+                "format"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true
+            },
+            "type": "shell"
+        },
+        {
+            "label": "Run Ruff Linter",
             "command": "ruff",
             "args": [
                 "check",
