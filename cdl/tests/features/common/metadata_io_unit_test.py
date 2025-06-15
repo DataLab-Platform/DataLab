@@ -15,18 +15,11 @@ Metadata import/export unit test:
 
 import os.path as osp
 
-from cdl.config import Conf
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
 from cdl.utils import tests
 from cdl.utils.tests import compare_metadata
-
-
-def get_metadata_param_number_after_reset():
-    """Return metadata parameters number after reset"""
-    def_ima_nb = len(Conf.view.get_def_dict("ima"))
-    return def_ima_nb + 2  # +2 for metadata options (see BaseObj.get_metadata_option)
 
 
 def test_metadata_io_unit():
@@ -43,7 +36,10 @@ def test_metadata_io_unit():
                 orig_metadata = ima.metadata.copy()
                 panel.export_metadata_from_file(fname)
                 panel.delete_metadata()
-                assert len(ima.metadata) == get_metadata_param_number_after_reset()
+
+                # The +1 is for the "number" metadata option which has no default:
+                assert len(ima.metadata) == len(ima.get_metadata_options_defaults()) + 1
+
                 panel.import_metadata_from_file(fname)
                 execenv.print("Check metadata export <--> import features:")
                 compare_metadata(orig_metadata, ima.metadata)
