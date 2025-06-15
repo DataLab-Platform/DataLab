@@ -413,19 +413,20 @@ def create_checkerboard(p: NewImageParam | None = None, num_checkers=8) -> Image
 
 
 def create_2dstep_image(
-    p: NewImageParam | None = None,
+    p: NewImageParam | None = None, extra_param: gds.DataSet | None = None
 ) -> ImageObj:
     """Creating 2D step image
 
     Args:
         p: Image parameters. Defaults to None.
+        extra_param: Extra parameters for the image creation
 
     Returns:
         Image object
     """
     p = __set_default_size_dtype(p)
     p.title = "Test image (2D step)" if p.title is None else p.title
-    obj = create_image(p)
+    obj = create_image_from_param(p, extra_param=extra_param)
     obj.data = create_2d_steps_data(p.height, p.height // 10, p.dtype.value)
     return obj
 

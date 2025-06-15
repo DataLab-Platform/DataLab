@@ -507,8 +507,6 @@ class SignalTypes(base.Choices):
     PULSE = _("pulse")
     #: Polynomial function
     POLYNOMIAL = _("polynomial")
-    #: Experimental function
-    EXPERIMENTAL = _("experimental")
 
 
 class GaussLorentzVoigtParam(gds.DataSet):

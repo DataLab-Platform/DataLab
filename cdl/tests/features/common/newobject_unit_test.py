@@ -40,6 +40,29 @@ def iterate_signal_creation(
             extra_param = model.UniformRandomParam()
         elif stype == model.SignalTypes.NORMALRANDOM:
             extra_param = model.NormalRandomParam()
+        elif stype in (
+            model.SignalTypes.GAUSS,
+            model.SignalTypes.LORENTZ,
+            model.SignalTypes.VOIGT,
+        ):
+            extra_param = model.GaussLorentzVoigtParam()
+        elif stype in (
+            model.SignalTypes.SINUS,
+            model.SignalTypes.COSINUS,
+            model.SignalTypes.SAWTOOTH,
+            model.SignalTypes.TRIANGLE,
+            model.SignalTypes.SQUARE,
+            model.SignalTypes.SINC,
+        ):
+            extra_param = model.PeriodicParam()
+        elif stype == model.SignalTypes.STEP:
+            extra_param = model.StepParam()
+        elif stype == model.SignalTypes.EXPONENTIAL:
+            extra_param = model.ExponentialParam()
+        elif stype == model.SignalTypes.PULSE:
+            extra_param = model.PulseParam()
+        elif stype == model.SignalTypes.POLYNOMIAL:
+            extra_param = model.PolyParam()
         else:
             extra_param = None
         signal = model.create_signal_from_param(base_param, extra_param=extra_param)
