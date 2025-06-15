@@ -21,7 +21,13 @@ import sigima_.param
 import sigima_.signal as ss
 from cdl.tests.data import get_test_signal
 from cdl.utils.tests import check_scalar_result
-from sigima_ import NewSignalParam, SignalTypes, create_signal_from_param
+from sigima_ import (
+    NewSignalParam,
+    PeriodicParam,
+    SignalTypes,
+    StepParam,
+    create_signal_from_param,
+)
 
 
 @pytest.mark.validation
@@ -86,7 +92,8 @@ def test_signal_x_at_minmax() -> None:
 def test_signal_x_at_y() -> None:
     """Validation test for the abscissa finding computation."""
     newparam = NewSignalParam.create(stype=SignalTypes.STEP)
-    obj = create_signal_from_param(newparam)
+    extra_param = StepParam()
+    obj = create_signal_from_param(newparam, extra_param=extra_param)
     if obj is None:
         raise ValueError("Failed to create test signal")
     param = ss.OrdinateParam.create(y=0.5)
@@ -102,7 +109,8 @@ def test_signal_y_at_x() -> None:
     newparam = NewSignalParam.create(
         stype=SignalTypes.TRIANGLE, xmin=0.0, xmax=10.0, size=101
     )
-    obj = create_signal_from_param(newparam)
+    extra_param = PeriodicParam()
+    obj = create_signal_from_param(newparam, extra_param=extra_param)
     if obj is None:
         raise ValueError("Failed to create test signal")
     param = ss.AbscissaParam.create(x=2.5)
