@@ -213,7 +213,7 @@ def test_signal_convolution() -> None:
     src1 = get_test_signal("paracetamol.txt")
     snew = NewSignalParam.create(title="Gaussian", stype=SignalTypes.GAUSS)
     extra_param = GaussLorentzVoigtParam.create(sigma=10.0)
-    src2 = create_signal_from_param(snew, extra_param == extra_param)
+    src2 = create_signal_from_param(snew, extra_param=extra_param)
 
     dst = ss.convolution(src1, src2)
     exp = np.convolve(src1.data, src2.data, mode="same")
