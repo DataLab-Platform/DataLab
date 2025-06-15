@@ -318,7 +318,7 @@ def run_image_computations(
     panel.processor.run_feature("denoise_wavelet", param)
 
     # Test exposure methods
-    ima2 = create_sincos_image(newparam)
+    ima2 = create_sincos_image(newparam, extra_param=addparam)
     panel.add_object(ima2)
     panel.processor.run_feature(
         "absolute"
@@ -354,7 +354,7 @@ def run_image_computations(
     panel.processor.run_feature("canny", param)
 
     # Test threshold methods
-    ima2 = create_sincos_image(newparam)
+    ima2 = create_sincos_image(newparam, extra_param=addparam)
     panel.add_object(ima2)
     param = sp.ThresholdParam()
     for method_value, _method_name in param.methods:
@@ -376,7 +376,7 @@ def run_image_computations(
         panel.processor.run_feature(func_name)
 
     # Test edge detection methods
-    ima2 = create_sincos_image(newparam)
+    ima2 = create_sincos_image(newparam, extra_param=addparam)
     panel.add_object(ima2)
     for func_name in (
         "roberts",
@@ -421,7 +421,7 @@ def run_image_computations(
     panel.processor.run_feature("centroid")
     panel.processor.run_feature("enclosing_circle")
 
-    ima = create_peak2d_image(newparam)
+    ima = create_peak2d_image(newparam, extra_param=addparam)
     panel.add_object(ima)
     param = sp.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.compute_peak_detection(param)

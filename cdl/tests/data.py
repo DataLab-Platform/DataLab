@@ -494,19 +494,20 @@ def create_ring_image(p: RingParam | None = None) -> ImageObj:
 
 
 def create_peak2d_image(
-    p: NewImageParam | None = None,
+    p: NewImageParam | None = None, extra_param: gds.DataSet | None = None
 ) -> ImageObj:
     """Creating 2D peak image
 
     Args:
-        p: Image parameters. Defaults to None.
+        p: Image parameters. Defaults to None
+        extra_param: Extra parameters for the image creation
 
     Returns:
         Image object
     """
     p = __set_default_size_dtype(p)
     p.title = "Test image (2D peaks)" if p.title is None else p.title
-    obj = create_image(p)
+    obj = create_image_from_param(p, extra_param=extra_param)
     param = PeakDataParam()
     if p.height is not None and p.width is not None:
         param.size = max(p.height, p.width)
@@ -515,12 +516,13 @@ def create_peak2d_image(
 
 
 def create_sincos_image(
-    p: NewImageParam | None = None,
+    p: NewImageParam | None = None, extra_param: gds.DataSet | None = None
 ) -> ImageObj:
     """Creating test image (sin(x)+cos(y))
 
     Args:
-        p: Image parameters. Defaults to None.
+        p: Image parameters. Defaults to None
+        extra_param: Extra parameters
 
     Returns:
         Image object
@@ -530,7 +532,7 @@ def create_sincos_image(
     dtype = p.dtype.value
     x, y = np.meshgrid(np.linspace(0, 10, p.width), np.linspace(0, 10, p.height))
     raw_data = 0.5 * (np.sin(x) + np.cos(y)) + 0.5
-    obj = create_image(p)
+    obj = create_image_from_param(p, extra_param=extra_param)
     if np.issubdtype(dtype, np.floating):
         obj.data = raw_data
         return obj
@@ -538,6 +540,20 @@ def create_sincos_image(
     dmax = np.iinfo(dtype).max * 0.95
     obj.data = np.array(raw_data * (dmax - dmin) + dmin, dtype=dtype)
     return obj
+
+
+def add_annotations_from_file(obj: SignalObj | ImageObj, filename: str) -> None:
+    """Add annotations from a file to a Signal or Image object
+
+    Args:
+        obj: Signal or Image object to which annotations will be added
+        filename: Filename containing annotations
+    """
+    with open(filename, "r", encoding="utf-8") as file:
+        json_str = file.read()
+    if obj.annotations:
+        json_str = obj.annotations[:-1] + "," + json_str[1:]
+    obj.annotations = json_str
 
 
 def create_noisygauss_image(
@@ -571,7 +587,7 @@ def create_noisygauss_image(
     if level:
         obj.data += create_2d_random(size, dtype, level)
     if add_annotations:
-        obj.add_annotations_from_file(get_test_fnames("annotations.json")[0])
+        add_annotations_from_file(obj, get_test_fnames("annotations.json")[0])
     return obj
 
 
@@ -608,7 +624,7 @@ def create_annotated_image(title: str | None = None) -> ImageObj:
     data = create_2d_gaussian(600, np.uint16, x0=2.0, y0=3.0)
     title = "Test image (with metadata)" if title is None else title
     image = create_image(title, data)
-    image.add_annotations_from_file(get_test_fnames("annotations.json")[0])
+    add_annotations_from_file(image, get_test_fnames("annotations.json")[0])
     return image
 
 
