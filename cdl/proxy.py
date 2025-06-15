@@ -59,8 +59,8 @@ Calling processor methods using proxy objects
 All the proxy objects provide access to the DataLab computing methods exposed by
 the processor classes:
 
-- :class:`cdl.core.gui.processor.signal.SignalProcessor`
-- :class:`cdl.core.gui.processor.image.ImageProcessor`
+- :class:`cdl.gui.processor.signal.SignalProcessor`
+- :class:`cdl.gui.processor.image.ImageProcessor`
 
 .. seealso::
 
@@ -79,7 +79,7 @@ There are two ways to call a processor method:
     proxy.calc("average")
 
     # Call a method with parameters
-    p = sigima.param.MovingAverageParam.create(n=30)
+    p = sigima_.param.MovingAverageParam.create(n=30)
     proxy.calc("compute_moving_average", p)
 
 2. Directly calling the processor method from the proxy object:
@@ -90,7 +90,7 @@ There are two ways to call a processor method:
     proxy.compute_average()
 
     # Call a method with parameters
-    p = sigima.param.MovingAverageParam.create(n=30)
+    p = sigima_.param.MovingAverageParam.create(n=30)
     proxy.compute_moving_average(p)
 
 .. warning::
@@ -140,10 +140,10 @@ from contextlib import contextmanager
 import guidata.dataset as gds
 import numpy as np
 
-from cdl.core.baseproxy import BaseProxy
-from cdl.core.remote import RemoteClient
-from cdl.obj import ImageObj, SignalObj
+from cdl.baseproxy import BaseProxy
+from cdl.remote import RemoteClient
 from cdl.utils import qthelpers as qth
+from sigima_ import ImageObj, SignalObj
 
 
 class RemoteProxy(RemoteClient):
@@ -293,10 +293,7 @@ class LocalProxy(BaseProxy):
         )
 
     def add_object(
-        self,
-        obj: SignalObj | ImageObj,
-        group_id: str = "",
-        set_current: bool = True,
+        self, obj: SignalObj | ImageObj, group_id: str = "", set_current: bool = True
     ) -> None:
         """Add object to DataLab.
 
@@ -320,9 +317,7 @@ class LocalProxy(BaseProxy):
         return self._cdl.calc(name, param)
 
     def get_object(
-        self,
-        nb_id_title: int | str | None = None,
-        panel: str | None = None,
+        self, nb_id_title: int | str | None = None, panel: str | None = None
     ) -> SignalObj | ImageObj:
         """Get object (signal/image) from index.
 
@@ -393,7 +388,7 @@ def proxy_context(what: str) -> Generator[LocalProxy | RemoteProxy, None, None]:
         port = int(what.split(":")[1].strip())
     if what == "local":
         # pylint: disable=import-outside-toplevel, cyclic-import
-        from cdl.core.gui.main import CDLMainWindow
+        from cdl.gui.main import CDLMainWindow
 
         with qth.cdl_app_context(exec_loop=True):
             try:

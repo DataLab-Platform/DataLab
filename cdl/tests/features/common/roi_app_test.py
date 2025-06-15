@@ -17,15 +17,23 @@ from typing import TYPE_CHECKING
 import numpy as np
 from skimage import draw
 
-import cdl.obj as dlo
-import sigima.param as sp
+import sigima_.param as sp
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
+from sigima_ import (
+    ImageObj,
+    ImageROI,
+    NewImageParam,
+    SignalObj,
+    SignalROI,
+    create_image_roi,
+    create_signal_roi,
+)
 
 if TYPE_CHECKING:
-    from cdl.core.gui.panel.image import ImagePanel
-    from cdl.core.gui.panel.signal import SignalPanel
+    from cdl.gui.panel.image import ImagePanel
+    from cdl.gui.panel.signal import SignalPanel
 
 SIZE = 200
 
@@ -55,7 +63,7 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
     panel.remove_object()
     obj_nb = len(panel)
     last_obj = panel[obj_nb]
-    roi = dlo.SignalROI(singleobj=singleobj)
+    roi = SignalROI(singleobj=singleobj)
     if execenv.unattended:
         # In unattended mode, we need to set the ROI manually.
         # On the contrary, in interactive mode, the ROI editor is opened and will
@@ -121,7 +129,7 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     panel.processor.run_feature("peak_detection", sp.Peak2DDetectionParam())
     obj_nb = len(panel)
     last_obj = panel[obj_nb]
-    roi = dlo.ImageROI(singleobj=singleobj)
+    roi = ImageROI(singleobj=singleobj)
     if execenv.unattended:
         # In unattended mode, we need to set the ROI manually.
         # On the contrary, in interactive mode, the ROI editor is opened and will
@@ -207,9 +215,7 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
             assert np.all(im.data[~mask] == 0), zroi
 
 
-def create_test_image_with_roi(
-    newimageparam: dlo.NewImageParam,
-) -> dlo.ImageObj:
+def create_test_image_with_roi(newimageparam: NewImageParam) -> ImageObj:
     """Create test image with ROIs
 
     Args:
@@ -220,9 +226,9 @@ def create_test_image_with_roi(
     """
     ima = create_multigauss_image(newimageparam)
     ima.data += 1  # Ensure that the image has non-zero values (for ROI check tests)
-    roi = dlo.create_image_roi("rectangle", IROI1)
-    roi.add_roi(dlo.create_image_roi("circle", IROI2))
-    roi.add_roi(dlo.create_image_roi("polygon", IROI3))
+    roi = create_image_roi("rectangle", IROI1)
+    roi.add_roi(create_image_roi("circle", IROI2))
+    roi.add_roi(create_image_roi("polygon", IROI3))
     ima.roi = roi
     return ima
 
@@ -244,12 +250,12 @@ def array_1d_to_str(arr: np.ndarray) -> str:
 def print_obj_shapes(obj):
     """Print object and associated ROI array shapes"""
     execenv.print(f"  Accessing object '{obj.title}':")
-    func = array_1d_to_str if isinstance(obj, dlo.SignalObj) else array_2d_to_str
+    func = array_1d_to_str if isinstance(obj, SignalObj) else array_2d_to_str
     execenv.print(f"    data: {func(obj.data)}")
     if obj.roi is not None:
         for idx in range(len(obj.roi)):
             roi_data = obj.get_data(idx)
-            if isinstance(obj, dlo.SignalObj):
+            if isinstance(obj, SignalObj):
                 roi_data = roi_data[1]  # y data
             execenv.print(f"    ROI[{idx}]: {func(roi_data)}")
 
@@ -264,7 +270,7 @@ def test_roi_app(screenshots: bool = False):
         panel.add_object(sig1)
         __run_signal_computations(panel)
         sig2 = create_paracetamol_signal(SIZE)
-        sig2.roi = dlo.create_signal_roi([SROI1, SROI2], indices=True)
+        sig2.roi = create_signal_roi([SROI1, SROI2], indices=True)
         for singleobj in (False, True):
             sig2_i = sig2.copy()
             panel.add_object(sig2_i)
@@ -276,7 +282,7 @@ def test_roi_app(screenshots: bool = False):
             __run_signal_computations(panel, singleobj=singleobj)
         # === Image ROI extraction test ===
         panel = win.imagepanel
-        param = dlo.new_image_param(height=SIZE, width=SIZE)
+        param = NewImageParam.create(height=SIZE, width=SIZE)
         ima1 = create_multigauss_image(param)
         panel.add_object(ima1)
         __run_image_computations(panel)

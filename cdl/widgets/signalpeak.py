@@ -15,15 +15,16 @@ from plotpy.plot import PlotDialog
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+from cdl.adapters_plotpy.factories import create_adapter_from_object
+from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from cdl.core.model.signal import CURVESTYLES
-from sigima.algorithms.signal import peak_indices
+from sigima_.algorithms.signal import peak_indices
 
 if TYPE_CHECKING:
     from plotpy.items import Marker
     from qtpy.QtWidgets import QWidget
 
-    from cdl.obj import SignalObj
+    from sigima_ import SignalObj
 
 
 class DistanceSlider(QW.QWidget):
@@ -109,7 +110,7 @@ class SignalPeakDetectionDialog(PlotDialog):
         """Setup dialog box"""
         obj = self.__signal
         with CURVESTYLES.alternative(self.__curve_styles):
-            self.in_curve = obj.make_item()
+            self.in_curve = create_adapter_from_object(obj).make_item()
         plot = self.get_plot()
         plot.set_antialiasing(True)
         plot.add_item(self.in_curve)

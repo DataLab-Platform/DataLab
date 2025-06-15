@@ -4,7 +4,7 @@
 Custom curve and image stats tool unit test.
 
 PlotPy's statistics tools (`plotpy.tools.CurveStatsTool` and
-`plotpy.tools.ImageStatsTool` are customized in `cdl.core.gui.docks` module).
+`plotpy.tools.ImageStatsTool` are customized in `cdl.gui.docks` module).
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -20,22 +20,23 @@ from plotpy.tests.unit.utils import drag_mouse
 from plotpy.tools import CurveStatsTool, ImageStatsTool
 from qtpy import QtWidgets as QW
 
-import cdl.obj
-from cdl.core.gui.docks import DataLabPlotWidget
+from cdl.adapters_plotpy.factories import create_adapter_from_object
+from cdl.gui.docks import DataLabPlotWidget
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
 from cdl.utils.misc import compare_versions
+from sigima_ import ImageObj, SignalObj
 
 
 def simulate_stats_tool(
     plot_type: PlotType,
-    obj: cdl.obj.SignalObj | cdl.obj.ImageObj,
+    obj: SignalObj | ImageObj,
     x_path: np.ndarray,
     y_path: np.ndarray,
 ) -> None:
     """Simulate stats tool with a custom signal or image."""
     widget = DataLabPlotWidget(plot_type)
     plot = widget.get_plot()
-    item = obj.make_item()
+    item = create_adapter_from_object(obj).make_item()
     plot.add_item(item)
     plot.set_active_item(item)
     item.unselect()

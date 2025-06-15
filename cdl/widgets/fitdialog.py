@@ -14,7 +14,7 @@ from scipy.special import erf  # pylint: disable=no-name-in-module
 
 from cdl.config import _
 from cdl.utils.tests import get_default_test_name
-from sigima.algorithms.signal import (
+from sigima_.algorithms.signal import (
     GaussianModel,
     LorentzianModel,
     VoigtModel,

@@ -18,10 +18,10 @@ uint8.
 
 import numpy as np
 
-import cdl.obj
 import cdl.tests.data as ctd
 from cdl.tests import cdltest_app_context
 from cdl.utils.tests import check_array_result
+from sigima_ import model
 
 
 def test_image_average():
@@ -29,11 +29,11 @@ def test_image_average():
     with cdltest_app_context() as win:
         panel = win.imagepanel
         N, size = 10, 256
-        dtype = cdl.obj.ImageDatatypes.UINT8
-        p = cdl.obj.NewImageParam.create(height=size, width=size, dtype=dtype)
+        dtype = model.ImageDatatypes.UINT8
+        p = model.NewImageParam.create(height=size, width=size, dtype=dtype)
         data = ctd.create_2d_gaussian(size, np.dtype(dtype.value))
         for _idx in range(N):
-            obj = cdl.obj.create_image_from_param(p)
+            obj = model.create_image(p)
             obj.data = data
             panel.add_object(obj)
         panel.objview.select_groups([0])

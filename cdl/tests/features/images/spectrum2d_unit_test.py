@@ -10,7 +10,7 @@ Image spectrum unit test.
 
 from guidata.qthelpers import qt_app_context
 
-import sigima.algorithms.image as alg
+import sigima_.algorithms.image as alg
 from cdl.tests.data import get_test_image
 from cdl.utils.vistools import view_images_side_by_side
 

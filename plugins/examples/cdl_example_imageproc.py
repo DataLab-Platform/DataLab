@@ -21,7 +21,7 @@ import skimage.draw
 
 import cdl.obj
 import cdl.plugins
-import sigima.param
+import sigima_.param
 
 
 class ExtractBlobs(cdl.plugins.PluginBase):
@@ -59,16 +59,16 @@ class ExtractBlobs(cdl.plugins.PluginBase):
     def preprocess(self) -> None:
         """Preprocess image"""
         panel = self.imagepanel
-        param = sigima.param.BinningParam.create(sx=2, sy=2)
+        param = sigima_.param.BinningParam.create(sx=2, sy=2)
         panel.processor.run_feature("binning", param)
         panel.processor.run_feature(
-            "moving_median", sigima.param.MovingMedianParam.create(n=5)
+            "moving_median", sigima_.param.MovingMedianParam.create(n=5)
         )
 
     def detect_blobs(self) -> None:
         """Detect circular blobs"""
         panel = self.imagepanel
-        param = sigima.param.BlobOpenCVParam()
+        param = sigima_.param.BlobOpenCVParam()
         param.filter_by_color = False
         param.min_area = 600.0
         param.max_area = 6000.0

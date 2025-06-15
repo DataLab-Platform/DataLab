@@ -19,29 +19,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Algorithms (:mod:`sigima.algorithms`)"
-msgstr "Algorithmes (:mod:`sigima.algorithms`)"
+msgid "Algorithms (:mod:`sigima_.algorithms`)"
+msgstr "Algorithmes (:mod:`sigima_.algorithms`)"
 
 msgid "This package contains the algorithms used by the DataLab project. Those algorithms operate directly on NumPy arrays and are designed to be used in the DataLab pipeline, but can be used independently as well."
 msgstr "Ce paquet contient les algorithmes utilisés par le projet DataLab. Ces algorithmes opèrent directement sur des tableaux NumPy et sont conçus pour être utilisés dans le pipeline DataLab, mais peuvent également être utilisés indépendamment."
 
-msgid "The :mod:`sigima.algorithms` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima.computation` package for algorithms that operate directly on DataLab objects (i.e. :class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`)."
-msgstr "Le module :mod:`sigima.algorithms` est le point d'entrée principal pour les algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le module :mod:`sigima.computation` pour les algorithmes qui opèrent directement sur les objets DataLab (c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`)."
+msgid "The :mod:`sigima_.algorithms` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima_.computation` package for algorithms that operate directly on DataLab objects (i.e. :class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`)."
+msgstr "Le module :mod:`sigima_.algorithms` est le point d'entrée principal pour les algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le module :mod:`sigima_.computation` pour les algorithmes qui opèrent directement sur les objets DataLab (c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`)."
 
 msgid "The algorithms are organized in subpackages according to their purpose. The following subpackages are available:"
 msgstr "Les algorithmes sont organisés en sous-paquets en fonction de leur objectif. Les sous-paquets suivants sont disponibles :"
 
-msgid ":mod:`sigima.algorithms.signal`: Signal processing algorithms"
-msgstr ":mod:`sigima.algorithms.signal` : Algorithmes de traitement du signal"
+msgid ":mod:`sigima_.algorithms.signal`: Signal processing algorithms"
+msgstr ":mod:`sigima_.algorithms.signal` : Algorithmes de traitement du signal"
 
-msgid ":mod:`sigima.algorithms.image`: Image processing algorithms"
-msgstr ":mod:`sigima.algorithms.image` : Algorithmes de traitement d'image"
+msgid ":mod:`sigima_.algorithms.image`: Image processing algorithms"
+msgstr ":mod:`sigima_.algorithms.image` : Algorithmes de traitement d'image"
 
-msgid ":mod:`sigima.algorithms.datatypes`: Data type conversion algorithms"
-msgstr ":mod:`sigima.algorithms.datatypes` : Algorithmes de conversion de type de données"
+msgid ":mod:`sigima_.algorithms.datatypes`: Data type conversion algorithms"
+msgstr ":mod:`sigima_.algorithms.datatypes` : Algorithmes de conversion de type de données"
 
-msgid ":mod:`sigima.algorithms.coordinates`: Coordinate conversion algorithms"
-msgstr ":mod:`sigima.algorithms.coordinates` : Algorithmes de conversion de coordonnées"
+msgid ":mod:`sigima_.algorithms.coordinates`: Coordinate conversion algorithms"
+msgstr ":mod:`sigima_.algorithms.coordinates` : Algorithmes de conversion de coordonnées"
 
 msgid "Signal Processing Algorithms"
 msgstr "Algorithmes de traitement du signal"

@@ -22,8 +22,8 @@ msgstr ""
 msgid "ROI editor"
 msgstr "Editeur de ROI"
 
-msgid "The :mod:`cdl.core.gui.roieditor` module provides the ROI editor widgets for signals and images."
-msgstr "Le module :mod:`cdl.core.gui.roieditor` fournit les widgets de l'éditeur de ROI pour les signaux et les images."
+msgid "The :mod:`cdl.gui.roieditor` module provides the ROI editor widgets for signals and images."
+msgstr "Le module :mod:`cdl.gui.roieditor` fournit les widgets de l'éditeur de ROI pour les signaux et les images."
 
 msgid "Signal ROI editor"
 msgstr "Editeur de ROI de signal"
@@ -57,4 +57,3 @@ msgstr "Editeur de ROI d'image"
 
 msgid "Manually add image ROI"
 msgstr ""
-

@@ -15,16 +15,17 @@ from plotpy.plot import PlotDialog
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+from cdl.adapters_plotpy.factories import create_adapter_from_object
+from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from cdl.core.model.signal import CURVESTYLES
 from cdl.utils.qthelpers import block_signals
-from sigima.algorithms.signal import find_first_x_at_y_value
+from sigima_.algorithms.signal import find_first_x_at_y_value
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker
     from qtpy.QtWidgets import QWidget
 
-    from cdl.obj import SignalObj
+    from sigima_ import SignalObj
 
 
 class SignalCursorDialog(PlotDialog):
@@ -103,7 +104,7 @@ class SignalCursorDialog(PlotDialog):
 
         obj = self.__signal
         with CURVESTYLES.alternative(self.__curve_styles):
-            self.curve = obj.make_item()
+            self.curve = create_adapter_from_object(obj).make_item()
         plot = self.get_plot()
         plot.set_antialiasing(True)
 

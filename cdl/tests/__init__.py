@@ -27,10 +27,10 @@ from contextlib import contextmanager
 from guidata.guitest import run_testlauncher
 
 import cdl.config  # Loading icons
-from cdl.core.gui.main import CDLMainWindow
-from cdl.core.gui.panel.image import ImagePanel
-from cdl.core.gui.panel.signal import SignalPanel
 from cdl.env import execenv
+from cdl.gui.main import CDLMainWindow
+from cdl.gui.panel.image import ImagePanel
+from cdl.gui.panel.signal import SignalPanel
 from cdl.utils import qthelpers as qth
 from cdl.utils import tests
 

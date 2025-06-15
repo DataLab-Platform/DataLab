@@ -12,9 +12,13 @@ from __future__ import annotations
 import numpy as np
 from guidata.qthelpers import qt_app_context
 
-from cdl.core.gui.roieditor import plot_item_to_single_roi
+from cdl.adapters_plotpy.converters import (
+    plotitem_to_singleroi,
+)
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
-from cdl.obj import (
+from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
+from sigima_ import (
     ImageObj,
     ImageROI,
     SignalObj,
@@ -22,7 +26,6 @@ from cdl.obj import (
     create_image_roi,
     create_signal_roi,
 )
-from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
 
 CLASS_NAME = "class_name"
 
@@ -37,8 +40,8 @@ def __conversion_methods(roi: SignalROI | ImageROI, obj: SignalObj | ImageObj) -
     execenv.print("    test `to_plot_item` and `from_plot_item` methods: ", end="")
     single_roi = roi.get_single_roi(0)
     with qt_app_context(exec_loop=False):
-        plot_item = single_roi.to_plot_item(obj)
-        sroi_new = plot_item_to_single_roi(plot_item)
+        plot_item = create_adapter_from_object(single_roi).to_plot_item(obj)
+        sroi_new = plotitem_to_singleroi(plot_item)
         orig_coords = [float(val) for val in single_roi.get_physical_coords(obj)]
         new_coords = [float(val) for val in sroi_new.get_physical_coords(obj)]
         execenv.print(f"{orig_coords} --> {new_coords}")

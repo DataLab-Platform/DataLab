@@ -1,2 +1,2 @@
-.. automodule:: cdl.core.gui.objectview
+.. automodule:: cdl.gui.objectview
     :no-members:

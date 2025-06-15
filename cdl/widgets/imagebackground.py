@@ -13,13 +13,14 @@ from guidata.configtools import get_icon
 from plotpy.builder import make
 from plotpy.plot import PlotDialog
 
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.config import _
 
 if TYPE_CHECKING:
     from plotpy.items import ImageItem, RangeComputation2d, RectangleShape
     from qtpy.QtWidgets import QWidget
 
-    from cdl.obj import ImageObj
+    from sigima_ import ImageObj
 
 
 class ImageBackgroundDialog(PlotDialog):
@@ -59,7 +60,7 @@ class ImageBackgroundDialog(PlotDialog):
     def __setup_dialog(self) -> None:
         """Setup dialog box"""
         obj = self.__image
-        self.imageitem = obj.make_item()
+        self.imageitem = create_adapter_from_object(obj).make_item()
         plot = self.get_plot()
         self.rectarea = make.rectangle(
             obj.x0, obj.y0, obj.xc + obj.dx, obj.yc + obj.dy, _("Background area")

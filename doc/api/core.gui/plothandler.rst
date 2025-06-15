@@ -1,2 +1,2 @@
-.. automodule:: cdl.core.gui.plothandler
+.. automodule:: cdl.gui.plothandler
     :no-members:

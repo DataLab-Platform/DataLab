@@ -16,17 +16,17 @@ from plotpy.coords import axes_to_canvas
 from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
 
-import cdl.obj
-from cdl.core.gui.docks import profile_to_signal
+from cdl.gui.docks import profile_to_signal
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image
+from sigima_ import NewImageParam
 
 
 def test_image_tools_app():
     """Run image tools test scenario"""
     with cdltest_app_context() as win:
         panel = win.imagepanel
-        newparam = cdl.obj.new_image_param(height=200, width=200)
+        newparam = NewImageParam.create(height=200, width=200)
         ima = create_multigauss_image(newparam)
         panel.add_object(ima)
         panel.set_current_object_title(f"Test image for {osp.basename(__file__)}")

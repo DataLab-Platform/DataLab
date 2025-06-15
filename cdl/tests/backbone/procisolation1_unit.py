@@ -22,10 +22,11 @@ from guidata.qthelpers import qt_app_context
 from plotpy.plot import PlotWindow
 from qtpy import QtWidgets as QW
 
-import cdl.obj
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests.data import create_2d_random, create_noisygauss_image
 from cdl.utils.qthelpers import create_progress_bar
+from sigima_ import ImageDatatypes, NewImageParam
 
 POOL: Pool | None = None
 
@@ -92,11 +93,11 @@ def test_multiprocessing1(iterations: int = 4) -> None:
         win = PlotWindow(title="Multiprocessing test", icon="datalab.svg", toolbar=True)
         win.resize(800, 600)
         win.show()
-        param = cdl.obj.new_image_param(
-            height=1000, width=1000, dtype=cdl.obj.ImageDatatypes.UINT16
+        param = NewImageParam.create(
+            height=1000, width=1000, dtype=ImageDatatypes.UINT16
         )
         image = create_noisygauss_image(param, add_annotations=True)
-        win.get_plot().add_item(image.make_item())
+        win.get_plot().add_item(create_adapter_from_object(image).make_item())
         worker = Worker()
         with create_progress_bar(win, "Computing", max_=iterations) as progress:
             for index in range(iterations):
@@ -115,7 +116,9 @@ def test_multiprocessing1(iterations: int = 4) -> None:
                         image.data = worker.get_result()
                     except Exception as exc:  # pylint: disable=broad-except
                         execenv.print(f"Intercepted exception: {exc}")
-                    win.get_plot().add_item(image.make_item())
+                    win.get_plot().add_item(
+                        create_adapter_from_object(image).make_item()
+                    )
                 else:
                     break
         worker.terminate_pool()

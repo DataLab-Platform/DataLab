@@ -22,8 +22,8 @@ msgstr ""
 msgid "Main window"
 msgstr "Fenêtre principale"
 
-msgid "The :mod:`cdl.core.gui.main` module provides the main window of the DataLab (CDL) project."
-msgstr "Le module :mod:`cdl.core.gui.main` fournit la fenêtre principale du projet DataLab (CDL)."
+msgid "The :mod:`cdl.gui.main` module provides the main window of the DataLab (CDL) project."
+msgstr "Le module :mod:`cdl.gui.main` fournit la fenêtre principale du projet DataLab (CDL)."
 
 msgid "DataLab main window"
 msgstr "Fenêtre principale de DataLab"
@@ -433,4 +433,3 @@ msgstr ""
 
 msgid "True if closed properly, False otherwise"
 msgstr ""
-

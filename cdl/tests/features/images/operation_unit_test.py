@@ -21,44 +21,42 @@ import pytest
 import scipy.ndimage as spi
 from guidata.qthelpers import qt_app_context
 
-import cdl.obj
-import sigima.image as si
-import sigima.param
+import sigima_.image as si
+import sigima_.param
 from cdl.env import execenv
 from cdl.tests.data import create_noisygauss_image
 from cdl.utils.tests import check_array_result
 from cdl.utils.vistools import view_images_side_by_side
-from sigima.algorithms.datatypes import is_integer_dtype
+from sigima_ import ImageDatatypes, ImageObj, NewImageParam
+from sigima_.algorithms.datatypes import is_integer_dtype
 
 
-def __iterate_images() -> Generator[cdl.obj.ImageObj, None, None]:
+def __iterate_images() -> Generator[ImageObj, None, None]:
     """Iterate over all possible image types for testing."""
     size = 128
-    for dtype in cdl.obj.ImageDatatypes:
-        param = cdl.obj.NewImageParam.create(dtype=dtype, height=size, width=size)
+    for dtype in ImageDatatypes:
+        param = NewImageParam.create(dtype=dtype, height=size, width=size)
         yield create_noisygauss_image(param, level=0.0)
 
 
-def __iterate_image_couples() -> Generator[
-    tuple[cdl.obj.ImageObj, cdl.obj.ImageObj], None, None
-]:
+def __iterate_image_couples() -> Generator[tuple[ImageObj, ImageObj], None, None]:
     """Iterate over all possible image couples for testing."""
     size = 128
-    for dtype1 in cdl.obj.ImageDatatypes:
-        param1 = cdl.obj.NewImageParam.create(dtype=dtype1, height=size, width=size)
+    for dtype1 in ImageDatatypes:
+        param1 = NewImageParam.create(dtype=dtype1, height=size, width=size)
         ima1 = create_noisygauss_image(param1, level=0.0)
-        for dtype2 in cdl.obj.ImageDatatypes:
-            param2 = cdl.obj.NewImageParam.create(dtype=dtype2, height=size, width=size)
+        for dtype2 in ImageDatatypes:
+            param2 = NewImageParam.create(dtype=dtype2, height=size, width=size)
             ima2 = create_noisygauss_image(param2, level=0.0)
             yield ima1, ima2
 
 
-def __create_n_images(n: int = 100) -> list[cdl.obj.ImageObj]:
+def __create_n_images(n: int = 100) -> list[ImageObj]:
     """Create a list of N different images for testing."""
     images = []
     for i in range(n):
-        param = cdl.obj.NewImageParam.create(
-            dtype=cdl.obj.ImageDatatypes.FLOAT32,
+        param = NewImageParam.create(
+            dtype=ImageDatatypes.FLOAT32,
             height=128,
             width=128,
         )
@@ -170,18 +168,18 @@ def test_image_division() -> None:
         check_array_result("Image division", ima3.data, exp)
 
 
-def __constparam(value: float) -> sigima.param.ConstantParam:
+def __constparam(value: float) -> sigima_.param.ConstantParam:
     """Create a constant parameter."""
-    return sigima.param.ConstantParam.create(value=value)
+    return sigima_.param.ConstantParam.create(value=value)
 
 
 def __iterate_image_with_constant() -> Generator[
-    tuple[cdl.obj.ImageObj, sigima.param.ConstantParam], None, None
+    tuple[ImageObj, sigima_.param.ConstantParam], None, None
 ]:
     """Iterate over all possible image and constant couples for testing."""
     size = 128
-    for dtype in cdl.obj.ImageDatatypes:
-        param = cdl.obj.NewImageParam.create(dtype=dtype, height=size, width=size)
+    for dtype in ImageDatatypes:
+        param = NewImageParam.create(dtype=dtype, height=size, width=size)
         ima = create_noisygauss_image(param, level=0.0)
         for value in (-1.0, 3.14, 5):
             p = __constparam(value)
@@ -245,7 +243,7 @@ def test_image_arithmetic() -> None:
     # pylint: disable=too-many-nested-blocks
     for ima1, ima2 in __iterate_image_couples():
         dtype1 = ima1.data.dtype
-        p = sigima.param.ArithmeticParam.create()
+        p = sigima_.param.ArithmeticParam.create()
         for o in p.operators:
             p.operator = o
             for a in (0.0, 1.0, 2.0):
@@ -333,7 +331,7 @@ def test_image_astype() -> None:
     """Image type conversion test."""
     execenv.print("*** Testing image type conversion:")
     for ima1 in __iterate_images():
-        for dtype_str in cdl.obj.ImageObj.get_valid_dtypenames():
+        for dtype_str in ImageObj.get_valid_dtypenames():
             dtype1_str = str(ima1.data.dtype)
             execenv.print(f"  {dtype1_str} -> {dtype_str}: ", end="")
             dtype_exp = np.dtype(dtype_str)
@@ -342,7 +340,7 @@ def test_image_astype() -> None:
             if info_exp.min < info_ima1.min or info_exp.max > info_ima1.max:
                 continue
             exp = np.clip(ima1.data, info_exp.min, info_exp.max).astype(dtype_exp)
-            p = sigima.param.DataTypeIParam.create(dtype_str=dtype_str)
+            p = sigima_.param.DataTypeIParam.create(dtype_str=dtype_str)
             ima2 = si.astype(ima1, p)
             check_array_result(
                 f"Image astype({dtype1_str}->{dtype_str})", ima2.data, exp
@@ -380,7 +378,7 @@ def test_image_logp1() -> None:
     with np.errstate(over="ignore"):
         for ima1 in __iterate_images():
             execenv.print(f"  log1p({ima1.data.dtype}): ", end="")
-            p = sigima.param.LogP1Param.create(n=2)
+            p = sigima_.param.LogP1Param.create(n=2)
             exp = np.log10(ima1.data + p.n)
             ima2 = si.logp1(ima1, p)
             check_array_result("Image log1p", ima2.data, exp)
@@ -391,7 +389,7 @@ def __generic_flip_check(compfunc: callable, expfunc: callable) -> None:
     execenv.print(f"*** Testing image flip: {compfunc.__name__}")
     for ima1 in __iterate_images():
         execenv.print(f"  {compfunc.__name__}({ima1.data.dtype}): ", end="")
-        ima2: cdl.obj.ImageObj = compfunc(ima1)
+        ima2: ImageObj = compfunc(ima1)
         check_array_result("Image flip", ima2.data, expfunc(ima1.data))
 
 
@@ -443,7 +441,7 @@ def test_image_rotate() -> None:
     for ima1 in __iterate_images():
         for angle in (30, 45, 60, 120):
             execenv.print(f"  rotate{angle}({ima1.data.dtype}): ", end="")
-            ima2 = si.rotate(ima1, sigima.param.RotateParam.create(angle=angle))
+            ima2 = si.rotate(ima1, sigima_.param.RotateParam.create(angle=angle))
             exp = spi.rotate(ima1.data, angle, reshape=False)
             check_array_result(f"Image rotate{angle}", ima2.data, exp)
 

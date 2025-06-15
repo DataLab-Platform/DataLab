@@ -30,17 +30,18 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename
 
+from cdl.adapters_plotpy.factories import create_adapter_from_object
+from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from cdl.core.io.h5 import H5Importer
-from cdl.core.model.signal import CURVESTYLES
-from cdl.obj import ImageObj, SignalObj
+from cdl.h5 import H5Importer
 from cdl.utils.qthelpers import qt_handle_error_message
-from cdl.utils.strings import to_string
+from sigima_ import ImageObj, SignalObj
+from sigima_.io.utils import to_string
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot
 
-    from cdl.core.io.h5.common import BaseNode
+    from cdl.h5.common import BaseNode
 
 
 class AbstractTreeWidgetMeta(type(QW.QTreeWidget), abc.ABCMeta):
@@ -489,7 +490,7 @@ class PlotPreview(QW.QStackedWidget):
             obj: ImageObj
             widget = self.imagewidget
         with CURVESTYLES.suspend():
-            item = obj.make_item()
+            item = create_adapter_from_object(obj).make_item()
         plot = widget.get_plot()
         plot.del_all_items()
         plot.add_item(item)

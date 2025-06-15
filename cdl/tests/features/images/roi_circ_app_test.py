@@ -14,13 +14,13 @@ from typing import TYPE_CHECKING, Literal
 import numpy as np
 from skimage import draw
 
-import cdl.obj as dlo
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.features.common.roi_app_test import print_obj_shapes
+from sigima_ import model
 
 if TYPE_CHECKING:
-    from cdl.obj import ImageObj
+    from sigima_ import ImageObj
 
 
 def create_test_image_with_roi(
@@ -38,8 +38,8 @@ def create_test_image_with_roi(
         coords = [xc, yc, r]
     else:
         raise NotImplementedError(f"Geometry {geometry} not implemented")
-    ima = dlo.create_image(f"Test image with ROI/{geometry}", data)
-    ima.roi = dlo.create_image_roi(geometry, coords, indices=True, singleobj=False)
+    ima = model.create_image(f"Test image with ROI/{geometry}", data)
+    ima.roi = model.create_image_roi(geometry, coords, indices=True, singleobj=False)
     return ima
 
 
@@ -48,7 +48,7 @@ def test_roi_circ():
     with cdltest_app_context() as win:
         execenv.print("Circular ROI test:")
         panel = win.imagepanel
-        for geometry in ("rectangle", "circle"):  # dlo.ROI2DParam.geometries:
+        for geometry in ("rectangle", "circle"):  # model.ROI2DParam.geometries:
             ima = create_test_image_with_roi(geometry)
             panel.add_object(ima)
             print_obj_shapes(ima)

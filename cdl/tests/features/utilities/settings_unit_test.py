@@ -8,8 +8,8 @@ DataLab settings test
 
 from guidata.qthelpers import qt_app_context
 
-from cdl.core.gui.settings import edit_settings
 from cdl.env import execenv
+from cdl.gui.settings import edit_settings
 
 
 def test_edit_settings():

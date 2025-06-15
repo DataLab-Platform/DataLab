@@ -12,11 +12,12 @@ covered by other tests.
 
 import os
 
-import sigima.signal as ss
+import sigima_.signal as ss
 from cdl.env import execenv
+from cdl.objectmodel import get_uuid, short_id
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_paracetamol_signal
-from sigima.param import MovingMedianParam
+from sigima_.param import MovingMedianParam
 
 
 def test_main_app():
@@ -63,7 +64,7 @@ def test_main_app():
         uuids = win.get_object_uuids()
         uuids2 = win.get_object_uuids(group=1)
         uuids3 = win.get_object_uuids(group="Group 1")
-        uuids4 = win.get_object_uuids(group=grp1.uuid)
+        uuids4 = win.get_object_uuids(group=get_uuid(grp1))
         assert uuids == uuids2 == uuids3 == uuids4, "Group UUIDs should be the same"
         execenv.print(f"Object uuids:{os.linesep}{uuids}")
 
@@ -71,25 +72,25 @@ def test_main_app():
         execenv.print("*** Testing `get_object` ***")
         # Get object from title
         obj = win.get_object(titles[-1])
-        execenv.print(f"  Object (from title) '{obj.short_id}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from title) '{short_id(obj)}':{os.linesep}{obj}")
         # Get object
         obj = win.get_object(1)
-        execenv.print(f"  Object (from number)  '{obj.short_id}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from number)  '{short_id(obj)}':{os.linesep}{obj}")
         # Get object by uuid
         obj = win.get_object(uuids[-1])
-        execenv.print(f"  Object (from uuid)  '{obj.short_id}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from uuid)  '{short_id(obj)}':{os.linesep}{obj}")
 
         # Testing dict-like interface of main window:
         execenv.print("*** Testing dict-like interface of proxy ***")
         # Get object from title
         obj = win[titles[-1]]
-        execenv.print(f"  Object (from title) '{obj.short_id}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from title) '{short_id(obj)}':{os.linesep}{obj}")
         # Get object
         obj = win[1]
-        execenv.print(f"  Object (from number)  '{obj.short_id}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from number)  '{short_id(obj)}':{os.linesep}{obj}")
         # Get object by uuid
         obj = win[uuids[-1]]
-        execenv.print(f"  Object (from uuid)  '{obj.short_id}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from uuid)  '{short_id(obj)}':{os.linesep}{obj}")
 
         # Use "calc" method with parameters
         param = MovingMedianParam.create(n=5)

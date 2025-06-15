@@ -20,11 +20,11 @@ from guidata.qthelpers import (
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
-import cdl.obj
 from cdl.config import _
-from cdl.core.gui.main import CDLMainWindow
+from cdl.gui.main import CDLMainWindow
 from cdl.tests import data as test_data
 from cdl.tests.features.macro.macroeditor_unit_test import get_macro_example_path
+from sigima_ import NewImageParam
 
 
 class HostWidget(QW.QWidget):
@@ -168,7 +168,7 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
     def add_images(self):
         """Add images to DataLab"""
         if self.cdl is not None:
-            p = cdl.obj.new_image_param(height=2000, width=2000, title=self.imatitle)
+            p = NewImageParam.create(height=2000, width=2000, title=self.imatitle)
             for func in (
                 test_data.create_sincos_image,
                 test_data.create_noisygauss_image,

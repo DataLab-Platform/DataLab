@@ -6,7 +6,7 @@ Tour test
 
 # guitest: show
 
-from cdl.core.gui.tour import start
+from cdl.gui.tour import start
 from cdl.tests import cdltest_app_context
 
 

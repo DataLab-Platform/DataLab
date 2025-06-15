@@ -12,8 +12,8 @@ import struct
 
 import numpy as np
 
-from cdl.core.io.base import FormatInfo
-from cdl.core.io.image.base import ImageFormatBase
+from sigima_.io.base import FormatInfo
+from sigima_.io.image.base import ImageFormatBase
 
 # ==============================================================================
 # Thales Pixium FXD file format

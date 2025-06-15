@@ -16,9 +16,10 @@ from __future__ import annotations
 import os.path as osp
 from typing import TYPE_CHECKING, Any
 
-import sigima.param
-import sigima.signal as ss
+import sigima_.param
+import sigima_.signal as ss
 from cdl.env import execenv
+from cdl.objectmodel import get_uuid
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import (
     create_2dstep_image,
@@ -27,7 +28,7 @@ from cdl.tests.data import (
 )
 
 if TYPE_CHECKING:
-    from cdl.core.gui.main import CDLMainWindow
+    from cdl.gui.main import CDLMainWindow
 
 
 def __print_test_result(title: str, result: Any = None) -> None:
@@ -51,7 +52,7 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
     panel.add_object(sig)
     panel.processor.run_feature(ss.derivative)
     panel.processor.run_feature(
-        ss.moving_average, sigima.param.MovingAverageParam.create(n=5)
+        ss.moving_average, sigima_.param.MovingAverageParam.create(n=5)
     )
 
     __print_test_result("`SimpleObjectTree.__str__` method", objview)
@@ -72,8 +73,8 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
 
     # Plot item parameters changed:
     __print_test_result("Plot item parameters changed")
-    objview.select_objects([sig.uuid])
-    item = panel.plothandler[sig.uuid]
+    objview.select_objects([get_uuid(sig)])
+    item = panel.plothandler[get_uuid(sig)]
     panel.plot_item_parameters_changed(item)
 
     # Duplicate group:
@@ -94,7 +95,7 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
 
     # Properties changed:
     __print_test_result("Properties changed")
-    objview.select_objects([sig.uuid])
+    objview.select_objects([get_uuid(sig)])
     panel.properties_changed()
 
     # Get object titles:
@@ -149,7 +150,7 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
         sig.yunit,
         sig.xlabel,
         sig.ylabel,
-        group_id=gp2.uuid,
+        group_id=get_uuid(gp2),
         set_current=False,
     )
 
@@ -176,7 +177,7 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
         ima.xlabel,
         ima.ylabel,
         ima.zlabel,
-        group_id=gp3.uuid,
+        group_id=get_uuid(gp3),
         set_current=False,
     )
 

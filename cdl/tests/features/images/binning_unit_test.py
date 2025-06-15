@@ -16,12 +16,12 @@ from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
-import sigima.image.geometry as si
-import sigima.param
+import sigima_.image.geometry as si
+import sigima_.param
 from cdl.env import execenv
 from cdl.tests.data import get_test_image
 from cdl.utils.vistools import view_image_items
-from sigima.algorithms.image import BINNING_OPERATIONS, binning
+from sigima_.algorithms.image import BINNING_OPERATIONS, binning
 
 
 def compare_binning_images(data: ma.MaskedArray) -> None:
@@ -88,7 +88,7 @@ def test_binning() -> None:
     src.data = data = np.array(src.data[:500, :500], dtype=float)
     ny, nx = data.shape
 
-    p = sigima.param.BinningParam()
+    p = sigima_.param.BinningParam()
     for operation in p.operations:
         p.operation = operation
         for sx in range(1, 3):

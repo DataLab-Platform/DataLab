@@ -8,12 +8,11 @@ This plugin is an example of DataLab plugin. It provides test data samples
 and some actions to test DataLab functionalities.
 """
 
-import cdl.obj as dlo
 import cdl.tests.data as test_data
 from cdl.config import _
 from cdl.plugins import PluginBase, PluginInfo
-from sigima import image as si
-from sigima import signal as ss
+from sigima_ import ImageObj, NormalRandomParam, SignalObj
+from sigima_.base import dst_1_to_1
 
 # ------------------------------------------------------------------------------
 # All computation functions must be defined as global functions, otherwise
@@ -21,18 +20,16 @@ from sigima import signal as ss
 # ------------------------------------------------------------------------------
 
 
-def add_noise_to_signal(
-    src: dlo.SignalObj, p: test_data.GaussianNoiseParam
-) -> dlo.SignalObj:
+def add_noise_to_signal(src: SignalObj, p: test_data.GaussianNoiseParam) -> SignalObj:
     """Add gaussian noise to signal"""
-    dst = ss.dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
+    dst = dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
     test_data.add_gaussian_noise_to_signal(dst, p)
     return dst
 
 
-def add_noise_to_image(src: dlo.ImageObj, p: dlo.NormalRandomParam) -> dlo.ImageObj:
+def add_noise_to_image(src: ImageObj, p: NormalRandomParam) -> ImageObj:
     """Add gaussian noise to image"""
-    dst = si.dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
+    dst = dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
     test_data.add_gaussian_noise_to_image(dst, p)
     return dst
 
@@ -75,7 +72,7 @@ class PluginTestData(PluginBase):
         """Add noise to image"""
         self.imagepanel.processor.compute_1_to_1(
             add_noise_to_image,
-            paramclass=dlo.NormalRandomParam,
+            paramclass=NormalRandomParam,
             title=_("Add noise"),
         )
 

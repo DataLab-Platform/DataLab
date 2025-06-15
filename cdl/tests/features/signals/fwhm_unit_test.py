@@ -14,22 +14,23 @@ import pytest
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
-import cdl.obj
 import cdl.tests.data as cdltd
 import cdl.utils.tests
-import sigima.param
-import sigima.signal as ss
+import sigima_.param
+import sigima_.signal as ss
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.utils.vistools import view_curve_items
+from sigima_ import SignalObj
 
 
-def __test_fwhm_interactive(obj: cdl.obj.SignalObj, method: str) -> None:
+def __test_fwhm_interactive(obj: SignalObj, method: str) -> None:
     """Interactive test for the full width at half maximum computation."""
-    param = sigima.param.FWHMParam.create(method=method)
+    param = sigima_.param.FWHMParam.create(method=method)
     df = ss.fwhm(obj, param).to_dataframe()
     view_curve_items(
         [
-            obj.make_item(),
+            create_adapter_from_object(obj).make_item(),
             make.annotated_segment(df.x0[0], df.y0[0], df.x1[0], df.y1[0]),
         ],
         title=f"FWHM [{method}]",
@@ -42,7 +43,7 @@ def test_signal_fwhm_interactive() -> None:
         execenv.print("Computing FWHM of a multi-peak signal:")
         obj1 = cdltd.create_paracetamol_signal()
         obj2 = cdltd.create_noisy_signal(cdltd.GaussianNoiseParam.create(sigma=0.05))
-        for method, _mname in sigima.param.FWHMParam.methods:
+        for method, _mname in sigima_.param.FWHMParam.methods:
             execenv.print(f"  Method: {method}")
             for obj in (obj1, obj2):
                 if method == "zero-crossing":
@@ -64,12 +65,12 @@ def test_signal_fwhm() -> None:
         ("voigt", 2.56591),
         ("zero-crossing", real_fwhm),
     ):
-        param = sigima.param.FWHMParam.create(method=method)
+        param = sigima_.param.FWHMParam.create(method=method)
         df = ss.fwhm(obj, param).to_dataframe()
         cdl.utils.tests.check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
     obj = cdltd.create_paracetamol_signal()
     with pytest.warns(UserWarning):
-        ss.fwhm(obj, sigima.param.FWHMParam.create(method="zero-crossing"))
+        ss.fwhm(obj, sigima_.param.FWHMParam.create(method="zero-crossing"))
 
 
 @pytest.mark.validation
@@ -86,7 +87,7 @@ def test_signal_full_width_at_y() -> None:
     """Validation test for the full width at y computation."""
     obj = cdltd.get_test_signal("fwhm.txt")
     real_fwhm = 2.675  # Manual validation
-    param = sigima.param.OrdinateParam.create(y=0.5)
+    param = sigima_.param.OrdinateParam.create(y=0.5)
     df = ss.full_width_at_y(obj, param).to_dataframe()
     cdl.utils.tests.check_scalar_result("∆X", df.L[0], real_fwhm, rtol=0.05)
 

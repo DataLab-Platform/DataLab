@@ -22,20 +22,20 @@ msgstr ""
 msgid "Processor"
 msgstr "Processeur"
 
-msgid "The :mod:`cdl.core.gui.processor` package provides the **processor objects** for signals and images."
-msgstr "Le paquet :mod:`cdl.core.gui.processor` fournit les **objets processeur** pour les signaux et les images."
+msgid "The :mod:`cdl.gui.processor` package provides the **processor objects** for signals and images."
+msgstr "Le paquet :mod:`cdl.gui.processor` fournit les **objets processeur** pour les signaux et les images."
 
-msgid "Processor objects are the bridge between the computation modules (in :mod:`sigima.computation`) and the GUI modules (in :mod:`cdl.core.gui`). They are used to call the computation functions and to update the GUI from inside the data panel objects."
-msgstr "Les objets processeur sont le pont entre les modules de calcul (dans :mod:`sigima.computation`) et les modules GUI (dans :mod:`cdl.core.gui`). Ils sont utilisés pour appeler les fonctions de calcul et pour mettre à jour l'interface utilisateur depuis l'intérieur des objets de panneau de données."
+msgid "Processor objects are the bridge between the computation modules (in :mod:`sigima_.computation`) and the GUI modules (in :mod:`cdl.gui`). They are used to call the computation functions and to update the GUI from inside the data panel objects."
+msgstr "Les objets processeur sont le pont entre les modules de calcul (dans :mod:`sigima_.computation`) et les modules GUI (dans :mod:`cdl.gui`). Ils sont utilisés pour appeler les fonctions de calcul et pour mettre à jour l'interface utilisateur depuis l'intérieur des objets de panneau de données."
 
 msgid "When implementing a processing feature in DataLab, the steps are usually the following:"
 msgstr "Lors de la mise en œuvre d'une fonction de traitement dans DataLab, les étapes sont généralement les suivantes :"
 
-msgid "Add an action in the :mod:`cdl.core.gui.actionhandler` module to trigger the processing feature from the GUI (e.g. a menu item or a toolbar button)."
-msgstr "Ajout d'une action dans le module :mod:`cdl.core.gui.actionhandler` pour déclencher la fonction de traitement depuis l'interface utilisateur (par exemple, un élément de menu ou un bouton de barre d'outils)."
+msgid "Add an action in the :mod:`cdl.gui.actionhandler` module to trigger the processing feature from the GUI (e.g. a menu item or a toolbar button)."
+msgstr "Ajout d'une action dans le module :mod:`cdl.gui.actionhandler` pour déclencher la fonction de traitement depuis l'interface utilisateur (par exemple, un élément de menu ou un bouton de barre d'outils)."
 
-msgid "Implement the computation function in the :mod:`sigima.computation` module (that would eventually call the algorithm from the :mod:`sigima.algorithms` module)."
-msgstr "Implémentation de la fonction de calcul dans le module :mod:`sigima.computation` (qui appellerait éventuellement l'algorithme du module :mod:`sigima.algorithms`)."
+msgid "Implement the computation function in the :mod:`sigima_.computation` module (that would eventually call the algorithm from the :mod:`sigima_.algorithms` module)."
+msgstr "Implémentation de la fonction de calcul dans le module :mod:`sigima_.computation` (qui appellerait éventuellement l'algorithme du module :mod:`sigima_.algorithms`)."
 
 msgid "Implement the processor object method in this package to call the computation function and eventually update the GUI."
 msgstr "Implémentation de la méthode de l'objet processeur dans ce paquet pour appeler la fonction de calcul et éventuellement mettre à jour l'interface utilisateur."
@@ -43,14 +43,14 @@ msgstr "Implémentation de la méthode de l'objet processeur dans ce paquet pour
 msgid "The processor objects are organized in submodules according to their purpose:"
 msgstr "Les objets processeurs sont organisés en sous-modules selon leur objectif :"
 
-msgid ":mod:`cdl.core.gui.processor.base`: Common processing features"
-msgstr ":mod:`cdl.core.gui.processor.base`: Fonctions de traitement communes"
+msgid ":mod:`cdl.gui.processor.base`: Common processing features"
+msgstr ":mod:`cdl.gui.processor.base`: Fonctions de traitement communes"
 
-msgid ":mod:`cdl.core.gui.processor.signal`: Signal processing features"
-msgstr ":mod:`cdl.core.gui.processor.signal`: Fonctions de traitement de signaux"
+msgid ":mod:`cdl.gui.processor.signal`: Signal processing features"
+msgstr ":mod:`cdl.gui.processor.signal`: Fonctions de traitement de signaux"
 
-msgid ":mod:`cdl.core.gui.processor.image`: Image processing features"
-msgstr ":mod:`cdl.core.gui.processor.image`: Fonctions de traitement d'images"
+msgid ":mod:`cdl.gui.processor.image`: Image processing features"
+msgstr ":mod:`cdl.gui.processor.image`: Fonctions de traitement d'images"
 
 msgid "Generic processing types"
 msgstr "Types de traitement génériques"

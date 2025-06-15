@@ -12,8 +12,8 @@ It provides a new image file format, Dürr NDT XYZ, from Dürr NDT GmbH & Co. KG
 
 import numpy as np
 
-from cdl.core.io.base import FormatInfo
-from cdl.core.io.image.base import ImageFormatBase
+from sigima_.io.base import FormatInfo
+from sigima_.io.image.base import ImageFormatBase
 
 
 class XYZImageFormat(ImageFormatBase):

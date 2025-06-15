@@ -20,9 +20,9 @@ A high-level test scenario producing beautiful screenshots.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show,skip
 
-import cdl.obj as dlo
-import sigima.param as sp
+import sigima_.param as sp
 from cdl.tests import cdltest_app_context
+from sigima_ import model
 
 
 def run_beautiful_scenario(screenshots: bool = False):
@@ -31,8 +31,8 @@ def run_beautiful_scenario(screenshots: bool = False):
     with cdltest_app_context(console=False, exec_loop=not screenshots) as win:
         # Beautiful screenshot of a signal
         panel = win.signalpanel
-        newparam = dlo.new_signal_param(stype=dlo.SignalTypes.LORENTZ)
-        sig = dlo.create_signal_from_param(newparam)
+        base_param = model.NewSignalParam.create(stype=model.SignalTypes.LORENTZ)
+        sig = model.create_signal_from_param(base_param, model.GaussLorentzVoigtParam())
         panel.add_object(sig)
         panel.processor.run_feature("fft")
         panel.processor.run_feature("wiener")
@@ -47,11 +47,11 @@ def run_beautiful_scenario(screenshots: bool = False):
             win.take_screenshot("s_beautiful")
         # Beautiful screenshot of an image
         panel = win.imagepanel
-        newparam = dlo.new_image_param(
-            height=data_size, width=data_size, itype=dlo.ImageTypes.GAUSS
+        base_param = model.NewImageParam.create(
+            height=data_size, width=data_size, itype=model.ImageTypes.GAUSS
         )
-        ima = dlo.create_image_from_param(newparam)
-        ima.metadata["colormap"] = "jet"
+        ima = model.create_image_from_param(base_param, model.Gauss2DParam())
+        ima.set_metadata_option("colormap", "jet")
         panel.add_object(ima)
         panel.processor.run_feature("equalize_hist", sp.EqualizeHistParam())
         panel.processor.run_feature("equalize_adapthist", sp.EqualizeAdaptHistParam())
@@ -60,7 +60,7 @@ def run_beautiful_scenario(screenshots: bool = False):
         panel.processor.run_feature("white_tophat", sp.MorphologyParam())
         panel.processor.run_feature("denoise_tv", sp.DenoiseTVParam())
         n = data_size // 3
-        roi = dlo.create_image_roi(
+        roi = model.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
         panel.processor.compute_roi_extraction(roi)

@@ -18,15 +18,16 @@ from plotpy.plot import PlotDialog
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+from cdl.adapters_plotpy.factories import create_adapter_from_object
+from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from cdl.core.model.signal import CURVESTYLES
-from sigima.algorithms.signal import full_width_at_y
+from sigima_.algorithms.signal import full_width_at_y
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection
     from qtpy.QtWidgets import QWidget
 
-    from cdl.obj import SignalObj
+    from sigima_ import SignalObj
 
 
 class SignalDeltaXDialog(PlotDialog):
@@ -37,11 +38,7 @@ class SignalDeltaXDialog(PlotDialog):
         parent: parent widget. Defaults to None.
     """
 
-    def __init__(
-        self,
-        signal: SignalObj,
-        parent: QWidget | None = None,
-    ) -> None:
+    def __init__(self, signal: SignalObj, parent: QWidget | None = None) -> None:
         self.__curve_styles = CURVESTYLES.style_generator()
         self.__signal = signal
         self.__coords: list[float, float, float, float] | None = None
@@ -85,7 +82,7 @@ class SignalDeltaXDialog(PlotDialog):
 
         obj = self.__signal
         with CURVESTYLES.alternative(self.__curve_styles):
-            self.curve = obj.make_item()
+            self.curve = create_adapter_from_object(obj).make_item()
         plot = self.get_plot()
         plot.set_antialiasing(True)
 

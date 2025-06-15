@@ -209,11 +209,11 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_ref_lut_range = conf.Option()
 
     # Default visualization settings at item creation
-    # (e.g. see `ImageObj.make_item` in cdl/core/model/image.py)
+    # (e.g. see adapter's `make_item` methods in cdl/adapters_plotpy/*.py)
     ima_eliminate_outliers = conf.Option()
 
     # Default visualization settings, persisted in object metadata
-    # (e.g. see `SignalObj.update_metadata_view_settings`)
+    # (e.g. see `BaseDataPanel.update_metadata_view_settings`)
     sig_def_shade = conf.Option()
     sig_def_curvestyle = conf.Option()
     sig_def_baseline = conf.Option()
@@ -221,7 +221,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # because it would not be compatible with the auto-downsampling feature.
 
     # Default visualization settings, persisted in object metadata
-    # (e.g. see `ImageObj.update_metadata_view_settings`)
+    # (e.g. see `BaseDataPanel.update_metadata_view_settings`)
     ima_def_colormap = conf.Option()
     ima_def_invert_colormap = conf.Option()
     ima_def_interpolation = conf.Option()

@@ -18,9 +18,9 @@ import numpy as np
 import pytest
 import scipy.integrate as spt
 
-import cdl.obj
-import sigima.image.measurement as si
-import sigima.signal as ss
+import sigima_.image.measurement as si
+import sigima_.signal as ss
+from sigima_ import model
 
 
 def get_analytical_stats(data: np.ndarray) -> dict[str, float]:
@@ -52,22 +52,21 @@ def get_analytical_stats(data: np.ndarray) -> dict[str, float]:
     return results
 
 
-def create_reference_signal() -> cdl.obj.SignalObj:
+def create_reference_signal() -> model.SignalObj:
     """Create reference signal"""
-    snew = cdl.obj.new_signal_param("Gaussian", stype=cdl.obj.SignalTypes.GAUSS)
-    addparam = cdl.obj.GaussLorentzVoigtParam()
-    sig = cdl.obj.create_signal_from_param(snew, addparam=addparam, edit=False)
-    sig.roi = cdl.obj.create_signal_roi([len(sig.x) // 2, len(sig.x) - 1], indices=True)
+    snew = model.NewSignalParam.create(title="Gaussian", stype=model.SignalTypes.GAUSS)
+    extra_param = model.GaussLorentzVoigtParam()
+    sig = model.create_signal_from_param(snew, extra_param=extra_param)
+    sig.roi = model.create_signal_roi([len(sig.x) // 2, len(sig.x) - 1], indices=True)
     return sig
 
 
-def create_reference_image() -> cdl.obj.ImageObj:
+def create_reference_image() -> model.ImageObj:
     """Create reference image"""
-    inew = cdl.obj.new_image_param("2D-Gaussian", cdl.obj.ImageTypes.GAUSS)
-    addparam = cdl.obj.Gauss2DParam()
-    ima = cdl.obj.create_image_from_param(inew, addparam=addparam, edit=False)
+    inew = model.NewImageParam.create(title="2D-Gaussian", itype=model.ImageTypes.GAUSS)
+    ima = model.create_image_from_param(inew, extra_param=model.Gauss2DParam())
     dy, dx = ima.data.shape
-    ima.roi = cdl.obj.create_image_roi(
+    ima.roi = model.create_image_roi(
         "rectangle",
         [
             [dx // 2, 0, dx, dy],

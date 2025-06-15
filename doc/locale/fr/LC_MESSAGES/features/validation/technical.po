@@ -82,11 +82,11 @@ msgstr "Le périmètre de la validation technique dans DataLab inclut toutes les
 msgid "This includes functions for (all functions are named ``compute_<function_name>``):"
 msgstr "Cela inclut des fonctions pour (toutes les fonctions sont nommées ``compute_<function_name>``) :"
 
-msgid "Signal processing (:mod:`sigima.signal`)"
-msgstr "Le traitement du signal (:mod:`sigima.signal`)"
+msgid "Signal processing (:mod:`sigima_.signal`)"
+msgstr "Le traitement du signal (:mod:`sigima_.signal`)"
 
-msgid "Image processing (:mod:`sigima.image`)"
-msgstr "Le traitement d'image (:mod:`sigima.image`)"
+msgid "Image processing (:mod:`sigima_.image`)"
+msgstr "Le traitement d'image (:mod:`sigima_.image`)"
 
 msgid "Implementation"
 msgstr "Implémentation"

@@ -15,16 +15,16 @@ and their purpose:
     * - Submodule
       - Purpose
 
-    * - :mod:`sigima.algorithms`
+    * - :mod:`sigima_.algorithms`
       - Algorithms for data analysis, which operates on NumPy arrays
 
-    * - :mod:`sigima.param`
+    * - :mod:`sigima_.param`
       - Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)
 
     * - :mod:`cdl.obj`
       - Convenience module to access the DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`) and related functions
 
-    * - :mod:`sigima.computation`
+    * - :mod:`sigima_.computation`
       - Computation functions, which operate on DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`)
 
     * - :mod:`cdl.proxy`
@@ -44,13 +44,13 @@ and their purpose:
    :maxdepth: 1
    :caption: Internal features:
 
-   core.gui/index
-   core.gui/main
-   core.gui/panel
-   core.gui/actionhandler
-   core.gui/objectview
-   core.gui/plothandler
-   core.gui/roieditor
-   core.gui/processor
-   core.gui/docks
-   core.gui/h5io
+   gui/index
+   gui/main
+   gui/panel
+   gui/actionhandler
+   gui/objectview
+   gui/plothandler
+   gui/roieditor
+   gui/processor
+   gui/docks
+   gui/h5io

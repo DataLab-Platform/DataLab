@@ -22,8 +22,8 @@ msgstr ""
 msgid "Docks"
 msgstr "Docks"
 
-msgid "The :mod:`cdl.core.gui.docks` module provides the dockable widgets for the DataLab main window."
-msgstr "Le module :mod:`cdl.core.gui.docks` fournit les widgets dockables pour la fenêtre principale de DataLab."
+msgid "The :mod:`cdl.gui.docks` module provides the dockable widgets for the DataLab main window."
+msgstr "Le module :mod:`cdl.gui.docks` fournit les widgets dockables pour la fenêtre principale de DataLab."
 
 msgid "Plot widget"
 msgstr "Widget de visualisation"

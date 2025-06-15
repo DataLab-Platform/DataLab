@@ -15,20 +15,20 @@ import pytest
 import scipy.signal as sps
 from guidata.qthelpers import qt_app_context
 
-import cdl.obj
 import cdl.tests.data as ctd
-import sigima.algorithms.signal as alg
-import sigima.param
-import sigima.signal as ss
+import sigima_.algorithms.signal as alg
+import sigima_.param
+import sigima_.signal as ss
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result
 from cdl.utils.vistools import view_curves
+from sigima_ import NewSignalParam, SignalTypes, create_signal_from_param
 
 
 def test_signal_fft_interactive() -> None:
     """1D FFT interactive test."""
     with qt_app_context():
-        newparam = cdl.obj.new_signal_param(stype=cdl.obj.SignalTypes.COSINUS, size=500)
+        newparam = NewSignalParam.create(stype=SignalTypes.COSINUS, size=500)
 
         # *** Note ***
         #
@@ -38,7 +38,7 @@ def test_signal_fft_interactive() -> None:
         # is not meaningful if xmin is different.
         newparam.xmin = 0.0
 
-        s1 = cdl.obj.create_signal_from_param(newparam)
+        s1 = create_signal_from_param(newparam)
         t, y = s1.xydata
         f, s = alg.fft1d(t, y)
         t2, y2 = alg.ifft1d(f, s)
@@ -52,10 +52,10 @@ def test_signal_fft_interactive() -> None:
 @pytest.mark.validation
 def test_signal_zero_padding() -> None:
     """1D FFT zero padding validation test."""
-    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=1000)
+    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=50.0, size=1000)
 
     # Validate zero padding with custom length
-    param = sigima.param.ZeroPadding1DParam.create(n=250)
+    param = sigima_.param.ZeroPadding1DParam.create(n=250)
     assert param.strategy == "custom", (
         f"Wrong default strategy: {param.strategy} (expected 'custom')"
     )
@@ -83,7 +83,7 @@ def test_signal_zero_padding() -> None:
         ("double", 1000),
         ("triple", 2000),
     ):
-        param = sigima.param.ZeroPadding1DParam.create(strategy=strategy)
+        param = sigima_.param.ZeroPadding1DParam.create(strategy=strategy)
         param.update_from_obj(s1)
         assert param.n == expected_length, (
             f"Wrong length for '{param.strategy}' strategy: {param.n}"
@@ -101,7 +101,7 @@ def test_signal_fft() -> None:
     xmin = 0.0
 
     s1 = ctd.create_periodic_signal(
-        cdl.obj.SignalTypes.COSINUS, freq=freq, size=size, xmin=xmin
+        SignalTypes.COSINUS, freq=freq, size=size, xmin=xmin
     )
     fft = ss.fft(s1)
     ifft = ss.ifft(fft)
@@ -147,7 +147,7 @@ def test_signal_magnitude_spectrum() -> None:
     freq = 50.0
     size = 10000
 
-    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
+    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=freq, size=size)
     fft = ss.fft(s1)
     mag = ss.magnitude_spectrum(s1)
     fpk1 = fft.x[np.argmax(mag.y[: size // 2])]
@@ -164,7 +164,7 @@ def test_signal_phase_spectrum() -> None:
     freq = 50.0
     size = 10000
 
-    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
+    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=freq, size=size)
     fft = ss.fft(s1)
     phase = ss.phase_spectrum(s1)
     fpk1 = fft.x[np.argmax(phase.y[: size // 2])]
@@ -182,8 +182,8 @@ def test_signal_psd() -> None:
     freq = 50.0
     size = 10000
 
-    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
-    param = sigima.param.SpectrumParam()
+    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=freq, size=size)
+    param = sigima_.param.SpectrumParam()
     for log_scale in (False, True):
         param.log = log_scale
         psd = ss.psd(s1, param)

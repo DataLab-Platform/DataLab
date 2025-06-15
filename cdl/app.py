@@ -12,8 +12,8 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf
-from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
+from cdl.gui.main import CDLMainWindow
 from cdl.utils.qthelpers import cdl_app_context
 
 

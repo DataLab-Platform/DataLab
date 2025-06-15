@@ -1,1 +1,1 @@
-.. automodule:: sigima.param
+.. automodule:: sigima_.param

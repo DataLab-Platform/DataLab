@@ -1,1 +1,1 @@
-.. automodule:: sigima.algorithms
+.. automodule:: sigima_.algorithms

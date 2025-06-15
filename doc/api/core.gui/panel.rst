@@ -1,1 +1,1 @@
-.. automodule:: cdl.core.gui.panel
+.. automodule:: cdl.gui.panel

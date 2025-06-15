@@ -13,8 +13,8 @@ Testing all the macro-commands features.
 import os.path as osp
 import time
 
-from cdl.core.gui.macroeditor import Macro
-from cdl.core.gui.main import CDLMainWindow
+from cdl.gui.macroeditor import Macro
+from cdl.gui.main import CDLMainWindow
 from cdl.tests import cdltest_app_context
 from cdl.utils.tests import CDLTemporaryDirectory
 

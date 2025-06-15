@@ -12,9 +12,9 @@ Testing the following:
 # guitest: show
 
 from cdl.config import _
-from cdl.obj import Gauss2DParam, ImageTypes, UniformRandomParam, new_image_param
 from cdl.tests import cdltest_app_context
-from sigima.image.exposure import FlatFieldParam
+from sigima_ import Gauss2DParam, ImageTypes, NewImageParam, UniformRandomParam
+from sigima_.image.exposure import FlatFieldParam
 
 
 def test_flatfield():
@@ -23,17 +23,19 @@ def test_flatfield():
         panel = win.imagepanel
 
         ima0 = panel.new_object(
-            new_image_param(_("Raw data (2D-Gaussian)"), itype=ImageTypes.GAUSS),
-            addparam=Gauss2DParam(),
+            NewImageParam.create(
+                title=_("Raw data (2D-Gaussian)"), itype=ImageTypes.GAUSS
+            ),
+            extra_param=Gauss2DParam(),
             edit=False,
         )
         addp = UniformRandomParam()
         addp.vmax = 5
         ima1 = panel.new_object(
-            new_image_param(
-                _("Flat data (Uniform random)"), itype=ImageTypes.UNIFORMRANDOM
+            NewImageParam.create(
+                title=_("Flat data (Uniform random)"), itype=ImageTypes.UNIFORMRANDOM
             ),
-            addparam=addp,
+            extra_param=addp,
             edit=False,
         )
 

@@ -421,7 +421,7 @@ msgstr "Met à jour l'élément de tracé à partir des données."
 msgid "if True, data has changed"
 msgstr "si True, les données ont changé"
 
-msgid "Convert coordinates from physical (real world) to (array) indices (pixel)"
+msgid "Convert coordinates from physical (real world) to indices (pixel)"
 msgstr ""
 
 msgid "coordinates"
@@ -430,7 +430,7 @@ msgstr "coordonnées"
 msgid "Indices"
 msgstr "Indices"
 
-msgid "Convert coordinates from (array) indices to physical (real world)"
+msgid "Convert coordinates from indices to physical (real world)"
 msgstr ""
 
 #, fuzzy
@@ -1308,4 +1308,3 @@ msgstr "Nombre flottant stocké avec 32 bits"
 
 msgid "Float number stored with 64 bits"
 msgstr "Nombre flottant stocké avec 64 bits"
-

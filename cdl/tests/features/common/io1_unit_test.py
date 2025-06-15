@@ -13,11 +13,12 @@ from __future__ import annotations
 import numpy as np
 from guidata.qthelpers import qt_app_context
 
-from cdl.core.io.image import funcs as image_funcs
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
-from cdl.obj import ImageObj, SignalObj, read_images, read_signals
 from cdl.utils.tests import try_open_test_data
 from cdl.utils.vistools import view_curve_items, view_images
+from sigima_ import ImageObj, SignalObj, read_images, read_signals
+from sigima_.io.image import funcs as image_funcs
 
 
 def __read_objs(fname: str) -> list[ImageObj] | list[SignalObj]:
@@ -38,7 +39,7 @@ def open_txt(fname: str | None = None) -> None:
     objs = __read_objs(fname)
     for obj in objs:
         execenv.print(obj)
-    view_curve_items([obj.make_item() for obj in objs])
+    view_curve_items([create_adapter_from_object(obj).make_item() for obj in objs])
 
 
 @try_open_test_data("Testing CSV file reader", "*.csv")
@@ -47,7 +48,7 @@ def open_csv(fname: str | None = None) -> None:
     objs = __read_objs(fname)
     for obj in objs:
         execenv.print(obj)
-    view_curve_items([obj.make_item() for obj in objs])
+    view_curve_items([create_adapter_from_object(obj).make_item() for obj in objs])
 
 
 @try_open_test_data("Testing MAT-File reader", "*.mat")
@@ -57,7 +58,7 @@ def open_mat(fname: str | None = None) -> None:
     for obj in objs:
         execenv.print(obj)
     if isinstance(objs[0], SignalObj):
-        view_curve_items([obj.make_item() for obj in objs])
+        view_curve_items([create_adapter_from_object(obj).make_item() for obj in objs])
     else:
         view_images([obj.data for obj in objs])
 

@@ -8,8 +8,8 @@ Log viewer test: raise an exception and create a seg fault in DataLab
 
 from guidata.qthelpers import qt_app_context
 
-from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
+from cdl.gui.main import CDLMainWindow
 
 
 def error():

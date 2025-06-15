@@ -13,32 +13,32 @@ from __future__ import annotations
 
 import numpy as np
 
-import cdl.obj
-import sigima.param
+import sigima_.param
 from cdl.config import Conf
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
+from sigima_ import model
 
 
 def create_image_with_resultshapes():
     """Create test image with resultshapes"""
-    newparam = cdl.obj.new_image_param(
+    newparam = model.NewImageParam.create(
         height=600,
         width=600,
         title="Test image (with result shapes)",
-        itype=cdl.obj.ImageTypes.GAUSS,
-        dtype=cdl.obj.ImageDatatypes.UINT16,
+        itype=model.ImageTypes.GAUSS,
+        dtype=model.ImageDatatypes.UINT16,
     )
-    addparam = cdl.obj.Gauss2DParam.create(x0=2, y0=3)
-    image = cdl.obj.create_image_from_param(newparam, addparam)
+    addparam = model.Gauss2DParam.create(x0=2, y0=3)
+    image = model.create_image(newparam, addparam)
     for mshape in test_data.create_resultshapes():
         mshape.add_to(image)
     return image
 
 
 def __check_resultshapes_merge(
-    obj1: cdl.obj.SignalObj | cdl.obj.ImageObj,
-    obj2: cdl.obj.SignalObj | cdl.obj.ImageObj,
+    obj1: model.SignalObj | model.ImageObj,
+    obj2: model.SignalObj | model.ImageObj,
 ) -> None:
     """Check if result shapes merge properly: the scenario is to duplicate an object,
     then compute average. We thus have to check if the second object (average) has the
@@ -54,8 +54,8 @@ def __check_resultshapes_merge(
 
 
 def __check_roi_merge(
-    obj1: cdl.obj.SignalObj | cdl.obj.ImageObj,
-    obj2: cdl.obj.SignalObj | cdl.obj.ImageObj,
+    obj1: model.SignalObj | model.ImageObj,
+    obj2: model.SignalObj | model.ImageObj,
 ) -> None:
     """Check if ROI merge properly: the scenario is to duplicate an object,
     then compute average. We thus have to check if the second object (average) has the
@@ -76,12 +76,12 @@ def test_resultshapes():
     with cdltest_app_context(console=False) as win:
         obj1 = test_data.create_sincos_image()
         obj2 = create_image_with_resultshapes()
-        obj2.roi = cdl.obj.create_image_roi("rectangle", [10, 10, 50, 400])
+        obj2.roi = model.create_image_roi("rectangle", [10, 10, 50, 400])
         panel = win.signalpanel
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)
             panel.add_object(sig)
-            panel.processor.run_feature("fwhm", sigima.param.FWHMParam())
+            panel.processor.run_feature("fwhm", sigima_.param.FWHMParam())
             panel.processor.run_feature("fw1e2")
         panel.objview.select_objects((1, 2))
         panel.show_results()

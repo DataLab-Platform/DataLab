@@ -170,7 +170,7 @@ For floating point data types, the conversion is straightforward.
 
 .. note::
 
-    Data type conversion uses the :py:func:`sigima.algorithms.datatypes.clip_astype`
+    Data type conversion uses the :py:func:`sigima_.algorithms.datatypes.clip_astype`
     function which relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 

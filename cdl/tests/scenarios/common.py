@@ -11,16 +11,15 @@ from __future__ import annotations
 
 import numpy as np
 
-import cdl.obj as dlo
-import sigima.image.exposure
-import sigima.image.filtering
-import sigima.image.geometry
-import sigima.image.mathops
-import sigima.param as sp
+import sigima_.image.exposure
+import sigima_.image.filtering
+import sigima_.image.geometry
+import sigima_.image.mathops
+import sigima_.param as sp
 from cdl.config import _
-from cdl.core.gui.main import CDLMainWindow
-from cdl.core.gui.panel.image import ImagePanel
-from cdl.core.gui.panel.signal import SignalPanel
+from cdl.gui.main import CDLMainWindow
+from cdl.gui.panel.image import ImagePanel
+from cdl.gui.panel.signal import SignalPanel
 from cdl.tests.data import (
     GaussianNoiseParam,
     create_noisy_signal,
@@ -33,6 +32,7 @@ from cdl.tests.features.common.newobject_unit_test import (
     iterate_signal_creation,
 )
 from cdl.widgets import fitdialog
+from sigima_ import model
 
 
 def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) -> None:
@@ -57,7 +57,7 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     panel.processor.run_feature("imag")
     panel.remove_object()
     panel.processor.run_feature(
-        "astype", sigima.image.mathops.DataTypeIParam.create(dtype_str="float64")
+        "astype", sigima_.image.mathops.DataTypeIParam.create(dtype_str="float64")
     )
     panel.processor.run_feature("log10")
     panel.processor.run_feature("exp")
@@ -148,11 +148,11 @@ def run_signal_computations(
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    newparam = dlo.new_signal_param(
-        _("Random function"), stype=dlo.SignalTypes.UNIFORMRANDOM
+    base_param = model.NewSignalParam.create(
+        title=_("Random function"), stype=model.SignalTypes.UNIFORMRANDOM
     )
-    addparam = dlo.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
-    noiseobj1 = panel.new_object(newparam, addparam=addparam, edit=False)
+    extra_param = model.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
+    noiseobj1 = panel.new_object(base_param, extra_param=extra_param, edit=False)
 
     compute_common_operations(panel)
 
@@ -201,7 +201,7 @@ def run_signal_computations(
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
-    roi = dlo.create_signal_roi([i1, i2], indices=True)
+    roi = model.create_signal_roi([i1, i2], indices=True)
     panel.processor.compute_roi_extraction(roi)
 
     sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
@@ -220,10 +220,10 @@ def run_signal_computations(
         panel.objview.set_current_object(sig)
         panel.processor.compute_fit(fittitle, fitfunc)
 
-    newparam = dlo.new_signal_param(_("Gaussian"), stype=dlo.SignalTypes.GAUSS)
-    sig = dlo.create_signal_from_param(
-        newparam, dlo.GaussLorentzVoigtParam(), edit=False
+    base_param = model.NewSignalParam.create(
+        title=_("Gaussian"), stype=model.SignalTypes.GAUSS
     )
+    sig = model.create_signal_from_param(base_param, model.GaussLorentzVoigtParam())
     panel.add_object(sig)
 
     param = sp.FWHMParam()
@@ -235,7 +235,7 @@ def run_signal_computations(
     # Create a new signal which X values are a subset of sig1
     x = np.linspace(sig1.x.min(), sig1.x.max(), data_size // 2)[: data_size // 4]
     y = x * 0.0
-    sig2 = dlo.create_signal("X values for interpolation", x, y)
+    sig2 = model.create_signal("X values for interpolation", x, y)
     panel.add_object(sig2)
 
     # Test interpolation
@@ -285,7 +285,7 @@ def run_image_computations(
     win.set_current_panel("image")
     panel = win.imagepanel
 
-    newparam = dlo.new_image_param(height=data_size, width=data_size)
+    newparam = model.NewImageParam.create(height=data_size, width=data_size)
 
     if all_types:
         for image in iterate_image_creation(data_size, non_zero=True):
@@ -299,16 +299,16 @@ def run_image_computations(
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    newparam = dlo.new_image_param(itype=dlo.ImageTypes.UNIFORMRANDOM)
-    addparam = dlo.UniformRandomParam()
+    newparam = model.NewImageParam.create(itype=model.ImageTypes.UNIFORMRANDOM)
+    addparam = model.UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)
     addparam.vmax = int(ima1.data.max() * 0.2)
-    panel.new_object(newparam, addparam=addparam, edit=False)
+    panel.new_object(newparam, extra_param=addparam, edit=False)
 
     compute_common_operations(panel)
 
     # Test denoising methods
-    param = sigima.image.exposure.ZCalibrateParam.create(a=1.2, b=0.1)
+    param = sigima_.image.exposure.ZCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.run_feature("calibration", param)
     param = sp.DenoiseTVParam()
     panel.processor.run_feature("denoise_tv", param)
@@ -347,7 +347,7 @@ def run_image_computations(
     panel.processor.run_feature("opening", param)
     panel.processor.run_feature("closing", param)
 
-    param = sigima.image.filtering.ButterworthParam.create(order=2, cut_off=0.5)
+    param = sigima_.image.filtering.ButterworthParam.create(order=2, cut_off=0.5)
     panel.processor.run_feature("butterworth", param)
 
     param = sp.CannyParam()
@@ -396,7 +396,7 @@ def run_image_computations(
     ):
         panel.processor.run_feature(func_name)
 
-    param = sigima.image.mathops.LogP1Param.create(n=1)
+    param = sigima_.image.mathops.LogP1Param.create(n=1)
     panel.processor.run_feature("logp1", param)
 
     panel.processor.run_feature("rotate90")
@@ -404,16 +404,16 @@ def run_image_computations(
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = sigima.image.geometry.RotateParam.create(angle=5.0)
+    param = sigima_.image.geometry.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 
-    param = sigima.image.geometry.ResizeParam.create(zoom=1.3)
+    param = sigima_.image.geometry.ResizeParam.create(zoom=1.3)
     panel.processor.run_feature("resize", param)
 
     n = data_size // 10
-    roi = dlo.create_image_roi(
+    roi = model.create_image_roi(
         "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
     )
     panel.processor.compute_roi_extraction(roi)
@@ -429,7 +429,7 @@ def run_image_computations(
     param = sp.ContourShapeParam()
     panel.processor.run_feature("contour_shape", param)
 
-    param = sigima.image.geometry.BinningParam.create(sx=2, sy=2, operation="average")
+    param = sigima_.image.geometry.BinningParam.create(sx=2, sy=2, operation="average")
     panel.processor.run_feature("binning", param)
 
     # Test histogram

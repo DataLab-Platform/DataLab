@@ -10,10 +10,10 @@ then open DataLab to show it.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import cdl.obj as dlo
-import sigima.param as sp
+import sigima_.param as sp
 from cdl.proxy import proxy_context
 from cdl.tests.data import get_test_image
+from sigima_ import model
 
 
 def test_example_app():
@@ -22,12 +22,12 @@ def test_example_app():
     dedicated instance."""
     with proxy_context("local") as proxy:
         data = get_test_image("flower.npy").data
-        image = dlo.create_image("Test image with peaks", data)
+        image = model.create_image("Test image with peaks", data)
         proxy.add_object(image)
         proxy.calc("roberts")
         data_size = data.shape[0]
         n = data_size // 5
-        roi = dlo.create_image_roi(
+        roi = model.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
         proxy.compute_roi_extraction(roi)

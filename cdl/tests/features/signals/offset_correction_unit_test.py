@@ -14,11 +14,12 @@ import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
-import sigima.signal as ss
-from cdl.obj import ROI1DParam
+import sigima_.signal as ss
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.tests.data import create_paracetamol_signal
 from cdl.utils.vistools import view_curve_items
 from cdl.widgets.signalbaseline import SignalBaselineDialog
+from sigima_.model.signal import ROI1DParam
 
 
 def test_signal_offset_correction_interactive() -> None:
@@ -31,7 +32,11 @@ def test_signal_offset_correction_interactive() -> None:
             param.xmin, param.xmax = dlg.get_x_range()
             s2 = ss.offset_correction(s1, param)
             view_curve_items(
-                [s1.make_item(), s2.make_item()], title="Signal offset correction"
+                [
+                    create_adapter_from_object(s1).make_item(),
+                    create_adapter_from_object(s2).make_item(),
+                ],
+                title="Signal offset correction",
             )
 
 

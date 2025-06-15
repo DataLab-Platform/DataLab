@@ -22,8 +22,8 @@ msgstr ""
 msgid "Plot handler"
 msgstr "Gestionnaire de visualisation"
 
-msgid "The :mod:`cdl.core.gui.plothandler` module provides plot handlers for signal and image panels, that is, classes handling `PlotPy` plot items for representing signals and images."
-msgstr "Le module :mod:`cdl.core.gui.plothandler` fournit des gestionnaires de visualisation pour les panneaux de signaux et d'images, c'est-à-dire des classes gérant les items de visualisation `PlotPy` pour représenter les signaux et les images."
+msgid "The :mod:`cdl.gui.plothandler` module provides plot handlers for signal and image panels, that is, classes handling `PlotPy` plot items for representing signals and images."
+msgstr "Le module :mod:`cdl.gui.plothandler` fournit des gestionnaires de visualisation pour les panneaux de signaux et d'images, c'est-à-dire des classes gérant les items de visualisation `PlotPy` pour représenter les signaux et les images."
 
 msgid "Signal plot handler"
 msgstr "Gestionnaire de visualisation de signaux"
@@ -129,4 +129,3 @@ msgstr "Gestionnaire de visualisation d'images"
 
 msgid "Object handling image plot items, plot dialogs, plot options"
 msgstr "Objet gérant les items de visualisation d'images, les dialogues de visualisation et les options de visualisation"
-

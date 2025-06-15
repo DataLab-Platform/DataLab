@@ -20,8 +20,8 @@ if len(sys.argv) > 1 and sys.argv[1] == "-c":
 #
 # This part is executed when the script is run as a standalone application.
 # It is protected by using `if __name__ == '__main__':` to avoid running it again when
-# the multiprocessing pool is created (see cdl/core/gui/processor/base.py).
-elif __name__ == '__main__':
+# the multiprocessing pool is created (see cdl/gui/processor/base.py).
+elif __name__ == "__main__":
     try:
         from cdl.app import run
 

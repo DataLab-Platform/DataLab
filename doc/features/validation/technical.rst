@@ -46,8 +46,8 @@ operate on DataLab's signal and image objects (i.e. :class:`cdl.obj.SignalObj` a
 
 This includes functions for (all functions are named ``compute_<function_name>``):
 
-- Signal processing (:mod:`sigima.signal`)
-- Image processing (:mod:`sigima.image`)
+- Signal processing (:mod:`sigima_.signal`)
+- Image processing (:mod:`sigima_.image`)
 
 Implementation
 --------------

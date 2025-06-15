@@ -7,11 +7,11 @@ Update processor methods CSV files
 The purpose of this script is to generate CSV files containing the list of compute
 methods attached to the processor classes:
 
-- :class:`cdl.core.gui.processor.signal.SignalProcessor`
-- :class:`cdl.core.gui.processor.image.ImageProcessor`
+- :class:`cdl.gui.processor.signal.SignalProcessor`
+- :class:`cdl.gui.processor.image.ImageProcessor`
 
 Those methods are *almost* associated elementwise with the compute functions defined in
-the :mod:`sigima.computation` package.
+the :mod:`sigima_.computation` package.
 """
 
 from __future__ import annotations
@@ -20,8 +20,8 @@ import csv
 import inspect
 import os.path as osp
 
-from cdl.core.gui.processor.image import ImageProcessor
-from cdl.core.gui.processor.signal import SignalProcessor
+from cdl.gui.processor.image import ImageProcessor
+from cdl.gui.processor.signal import SignalProcessor
 from cdl.utils.strings import shorten_docstring
 
 

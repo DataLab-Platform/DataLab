@@ -29,7 +29,7 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import APP_NAME, DATETIME_FORMAT, SHOTPATH, Conf, _, get_old_log_fname
 from cdl.env import execenv
-from cdl.utils.strings import to_string
+from sigima_.io.utils import to_string
 
 
 def close_widgets_and_quit(screenshot=False) -> None:
@@ -204,7 +204,7 @@ def create_progress_bar(
 
 class CallbackWorker(QC.QThread):
     """Worker for executing long operations in a separate thread (this must not be
-    confused with the :py:class:`cdl.core.gui.processor.base.Worker` class, which
+    confused with the :py:class:`cdl.gui.processor.base.Worker` class, which
     handles the execution of computations in a another process)
 
     Args:

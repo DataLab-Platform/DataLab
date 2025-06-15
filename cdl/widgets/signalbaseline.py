@@ -13,14 +13,15 @@ from guidata.configtools import get_icon
 from plotpy.builder import make
 from plotpy.plot import PlotDialog
 
+from cdl.adapters_plotpy.factories import create_adapter_from_object
+from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from cdl.core.model.signal import CURVESTYLES
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection
     from qtpy.QtWidgets import QWidget
 
-    from cdl.obj import SignalObj
+    from sigima_ import SignalObj
 
 
 class SignalBaselineDialog(PlotDialog):
@@ -51,7 +52,7 @@ class SignalBaselineDialog(PlotDialog):
         """Setup dialog box"""
         obj = self.__signal
         with CURVESTYLES.alternative(self.__curve_styles):
-            self.curve = obj.make_item()
+            self.curve = create_adapter_from_object(obj).make_item()
         plot = self.get_plot()
         plot.set_antialiasing(True)
         plot.SIG_RANGE_CHANGED.connect(self.xrange_changed)

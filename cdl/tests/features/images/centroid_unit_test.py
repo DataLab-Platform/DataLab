@@ -24,8 +24,7 @@ from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
-import cdl.obj as dlo
-import sigima.image.measurement as si
+import sigima_.image.measurement as si
 from cdl.config import _
 from cdl.env import execenv
 from cdl.tests.data import (
@@ -34,7 +33,8 @@ from cdl.tests.data import (
 )
 from cdl.utils.tests import check_scalar_result
 from cdl.utils.vistools import view_image_items
-from sigima.algorithms.image import get_centroid_fourier
+from sigima_ import NewImageParam, create_image_roi
+from sigima_.algorithms.image import get_centroid_fourier
 
 
 def get_centroid_from_moments(data):
@@ -107,9 +107,9 @@ def __check_centroid(image, expected_x, expected_y):
 @pytest.mark.validation
 def test_image_centroid():
     """Test centroid computation"""
-    param = dlo.NewImageParam.create(height=500, width=500)
+    param = NewImageParam.create(height=500, width=500)
     image = create_noisygauss_image(param, center=(-2.0, 3.0), add_annotations=True)
-    circle_roi = dlo.create_image_roi("circle", [200, 325, 10])
+    circle_roi = create_image_roi("circle", [200, 325, 10])
     for roi, x0, y0 in (
         (None, 0, 0),
         (None, 100, 100),

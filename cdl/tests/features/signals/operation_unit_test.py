@@ -18,37 +18,38 @@ import warnings
 import numpy as np
 import pytest
 
-import cdl.obj
 import cdl.tests.data as ctd
-import sigima.param
-import sigima.signal as ss
+import sigima_.param as sp
+import sigima_.signal as ss
 from cdl.utils.tests import check_array_result
+from sigima_ import SignalObj, SignalTypes
 
 
-def __create_two_signals() -> tuple[cdl.obj.SignalObj, cdl.obj.SignalObj]:
+def __create_two_signals() -> tuple[SignalObj, SignalObj]:
     """Create two signals for testing."""
-    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=100)
-    s2 = ctd.create_periodic_signal(cdl.obj.SignalTypes.SINUS, freq=25.0, size=100)
+    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=50.0, size=100)
+    s2 = ctd.create_periodic_signal(SignalTypes.SINUS, freq=25.0, size=100)
     return s1, s2
 
 
-def __create_n_signals(n: int = 100) -> list[cdl.obj.SignalObj]:
+def __create_n_signals(n: int = 100) -> list[SignalObj]:
     """Create a list of N different signals for testing."""
     signals = []
     for i in range(n):
         s = ctd.create_periodic_signal(
-            cdl.obj.SignalTypes.COSINUS, freq=50.0 + i, size=100, a=(i + 1) * 0.1
+            SignalTypes.COSINUS,
+            freq=50.0 + i,
+            size=100,
+            a=(i + 1) * 0.1,
         )
         signals.append(s)
     return signals
 
 
-def __create_one_signal_and_constant() -> tuple[
-    cdl.obj.SignalObj, sigima.param.ConstantParam
-]:
+def __create_one_signal_and_constant() -> tuple[SignalObj, sp.ConstantParam]:
     """Create one signal and a constant for testing."""
-    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=50.0, size=100)
-    param = sigima.param.ConstantParam.create(value=-np.pi)
+    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=50.0, size=100)
+    param = sp.ConstantParam.create(value=-np.pi)
     return s1, param
 
 
@@ -188,8 +189,8 @@ def test_signal_imag() -> None:
 def test_signal_astype() -> None:
     """Data type conversion validation test."""
     s1 = __create_two_signals()[0]
-    for dtype_str in cdl.obj.SignalObj.get_valid_dtypenames():
-        p = sigima.param.DataTypeSParam.create(dtype_str=dtype_str)
+    for dtype_str in SignalObj.get_valid_dtypenames():
+        p = sp.DataTypeSParam.create(dtype_str=dtype_str)
         astype_signal = ss.astype(s1, p)
         assert astype_signal.y.dtype == np.dtype(dtype_str)
 
@@ -222,7 +223,7 @@ def test_signal_sqrt() -> None:
 def test_signal_power() -> None:
     """Power validation test."""
     s1 = ctd.get_test_signal("paracetamol.txt")
-    p = sigima.param.PowerParam.create(power=2.0)
+    p = sp.PowerParam.create(power=2.0)
     power_signal = ss.power(s1, p)
     check_array_result("Power", power_signal.y, s1.y**p.power)
 
@@ -231,7 +232,7 @@ def test_signal_power() -> None:
 def test_signal_arithmetic() -> None:
     """Arithmetic operations validation test."""
     s1, s2 = __create_two_signals()
-    p = sigima.param.ArithmeticParam.create()
+    p = sp.ArithmeticParam.create()
     for operator in p.operators:
         p.operator = operator
         for factor in (0.0, 1.0, 2.0):

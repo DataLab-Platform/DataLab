@@ -17,9 +17,9 @@ import warnings
 
 from cdl.config import Conf
 from cdl.env import execenv
-from cdl.obj import SignalObj
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
+from sigima_ import SignalObj
 
 
 def comp_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument

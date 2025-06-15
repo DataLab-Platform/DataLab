@@ -21,9 +21,9 @@ import os.path as osp
 
 from guidata.qthelpers import qt_app_context
 
-from cdl.core.gui.macroeditor import Macro
-from cdl.core.gui.panel import macro
 from cdl.env import execenv
+from cdl.gui.macroeditor import Macro
+from cdl.gui.panel import macro
 from cdl.utils import tests
 from cdl.utils.tests import get_temporary_directory
 

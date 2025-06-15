@@ -10,9 +10,9 @@ from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
 
 from cdl.env import execenv
-from cdl.obj import ImageObj, SignalObj
 from cdl.tests.data import get_test_fnames
 from cdl.widgets.textimport import TextImportWizard
+from sigima_ import ImageObj, SignalObj
 
 
 def file_to_clipboard(filename: str) -> None:

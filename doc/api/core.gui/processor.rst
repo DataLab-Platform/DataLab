@@ -1,1 +1,1 @@
-.. automodule:: cdl.core.gui.processor
+.. automodule:: cdl.gui.processor

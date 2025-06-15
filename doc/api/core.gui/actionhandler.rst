@@ -1,2 +1,2 @@
-.. automodule:: cdl.core.gui.actionhandler
+.. automodule:: cdl.gui.actionhandler
     :no-members:

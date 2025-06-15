@@ -11,18 +11,18 @@ Metadata application test:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import cdl.obj as dlo
-import sigima.image.detection as si_det
-import sigima.image.measurement
-import sigima.param as sp
-import sigima.signal as ss
-from cdl.core.gui.panel.base import BaseDataPanel
-from cdl.core.gui.panel.image import ImagePanel
-from cdl.core.gui.panel.signal import SignalPanel
+import sigima_.image.detection as si_det
+import sigima_.image.measurement
+import sigima_.param as sp
+import sigima_.signal as ss
 from cdl.env import execenv
+from cdl.gui.panel.base import BaseDataPanel
+from cdl.gui.panel.image import ImagePanel
+from cdl.gui.panel.signal import SignalPanel
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common import roi_app_test
+from sigima_ import model
 
 
 def __run_signal_computations(panel: SignalPanel):
@@ -35,8 +35,8 @@ def __run_signal_computations(panel: SignalPanel):
 def __run_image_computations(panel: ImagePanel):
     """Test all image features related to ROI"""
     execenv.print("  Image features")
-    panel.processor.run_feature(sigima.image.measurement.centroid)
-    panel.processor.run_feature(sigima.image.measurement.enclosing_circle)
+    panel.processor.run_feature(sigima_.image.measurement.centroid)
+    panel.processor.run_feature(sigima_.image.measurement.enclosing_circle)
     panel.processor.run_feature(si_det.peak_detection, sp.Peak2DDetectionParam())
 
 
@@ -63,13 +63,13 @@ def test_metadata_app():
         # === Signal metadata features test ===
         panel = win.signalpanel
         sig = create_paracetamol_signal(size)
-        sig.roi = dlo.create_signal_roi([[26, 41], [125, 146]], indices=True)
+        sig.roi = model.create_signal_roi([[26, 41], [125, 146]], indices=True)
         panel.add_object(sig)
         __run_signal_computations(panel)
         __test_metadata_features(panel)
         # === Image metadata features test ===
         panel = win.imagepanel
-        param = dlo.new_image_param(height=size, width=size)
+        param = model.NewImageParam.create(height=size, width=size)
         ima = roi_app_test.create_test_image_with_roi(param)
         panel.add_object(ima)
         __run_image_computations(panel)

@@ -8,7 +8,7 @@ Macro Panel application test
 # guitest: show
 
 from cdl import config
-from cdl.core.gui.main import CDLMainWindow
+from cdl.gui.main import CDLMainWindow
 from cdl.utils import qthelpers as qth
 
 

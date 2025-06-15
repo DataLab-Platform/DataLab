@@ -16,7 +16,7 @@ Testing the profile extraction features of the image panel:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima.param
+import sigima_.param
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_noisygauss_image, get_test_image
 
@@ -31,7 +31,7 @@ def test_profile():
             ("horizontal", 102, 131),
             ("vertical", 102, 131),
         ):
-            profparam = sigima.param.LineProfileParam.create(
+            profparam = sigima_.param.LineProfileParam.create(
                 direction=direction, row=row, col=col
             )
             proc.compute_line_profile(profparam)
@@ -39,7 +39,7 @@ def test_profile():
             ("horizontal", 10, 10, 102, 131),
             ("vertical", 10, 10, 102, 131),
         ):
-            avgprofparam = sigima.param.AverageProfileParam.create(
+            avgprofparam = sigima_.param.AverageProfileParam.create(
                 direction=direction,
                 row1=row1,
                 col1=col1,
@@ -47,7 +47,7 @@ def test_profile():
                 col2=col2,
             )
             proc.compute_average_profile(avgprofparam)
-        segprofparam = sigima.param.SegmentProfileParam.create(
+        segprofparam = sigima_.param.SegmentProfileParam.create(
             row1=10, col1=10, row2=102, col2=131
         )
         proc.compute_segment_profile(segprofparam)
@@ -62,7 +62,7 @@ def test_profile():
             if center is None:
                 proc.compute_radial_profile()
             else:
-                param = sigima.param.RadialProfileParam.create(
+                param = sigima_.param.RadialProfileParam.create(
                     center=center, x0=x0, y0=y0
                 )
                 proc.compute_radial_profile(param)

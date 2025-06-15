@@ -17,7 +17,7 @@ publicly in the :mod:`cdl.obj` package.
 
 Also, DataLab uses many different datasets (based on guidata's ``DataSet`` class)
 to store the parameters of the computations. These datasets are defined in
-different modules but are exposed publicly in the :mod:`sigima.param` package.
+different modules but are exposed publicly in the :mod:`sigima_.param` package.
 
 .. seealso::
 

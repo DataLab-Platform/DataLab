@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from guidata.qthelpers import qt_app_context
 
-import sigima.algorithms.signal as alg
+import sigima_.algorithms.signal as alg
 from cdl.tests.data import get_test_signal
 from cdl.utils.vistools import view_curves
 

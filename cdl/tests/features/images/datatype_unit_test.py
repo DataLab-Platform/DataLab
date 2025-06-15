@@ -12,22 +12,22 @@ from __future__ import annotations
 
 import numpy as np
 
-import cdl.obj
 from cdl.env import execenv
-from sigima.algorithms.datatypes import clip_astype, is_integer_dtype
+from sigima_ import ImageDatatypes
+from sigima_.algorithms.datatypes import clip_astype, is_integer_dtype
 
 
-def get_integer_datatypes() -> list[cdl.obj.ImageDatatypes]:
+def get_integer_datatypes() -> list[ImageDatatypes]:
     """Return all integer data types."""
-    return [dtype for dtype in cdl.obj.ImageDatatypes if "int" in dtype.name.lower()]
+    return [dtype for dtype in ImageDatatypes if "int" in dtype.name.lower()]
 
 
 def test_clip_astype():
     """Test `clip_astype` algorithm"""
 
     # Test that function do nothing for certain data types
-    for dtype1 in cdl.obj.ImageDatatypes:
-        for dtype2 in cdl.obj.ImageDatatypes:
+    for dtype1 in ImageDatatypes:
+        for dtype2 in ImageDatatypes:
             if not is_integer_dtype(dtype2.value):
                 continue
             if is_integer_dtype(dtype1.value):

@@ -47,18 +47,19 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from skimage import exposure, feature, filters, morphology, restoration, util
 
-import cdl.obj
-import sigima.image as si
-import sigima.param
+import sigima_.image as si
+import sigima_.param
 from cdl.tests.data import get_test_image
 from cdl.utils.tests import check_array_result, check_scalar_result
+from sigima_ import ImageObj
+from sigima_.model.image import ROI2DParam
 
 
 @pytest.mark.validation
 def test_image_calibration() -> None:
     """Validation test for the image calibration processing."""
     src = get_test_image("flower.npy")
-    p = sigima.param.ZCalibrateParam()
+    p = sigima_.param.ZCalibrateParam()
 
     # Test with a = 1 and b = 0: should do nothing
     p.a, p.b = 1.0, 0.0
@@ -88,7 +89,7 @@ def test_image_normalize() -> None:
     src = get_test_image("flower.npy")
     src.data = np.array(src.data, dtype=float)
     src.data[20:30, 20:30] = np.nan  # Adding NaN values to the image
-    p = sigima.param.NormalizeParam()
+    p = sigima_.param.NormalizeParam()
 
     # Given the fact that the normalization methods implementations are
     # straightforward, we do not need to compare arrays with each other,
@@ -122,7 +123,7 @@ def test_image_normalize() -> None:
 def test_image_clip() -> None:
     """Validation test for the image clipping processing."""
     src = get_test_image("flower.npy")
-    p = sigima.param.ClipParam()
+    p = sigima_.param.ClipParam()
 
     for lower, upper in ((float("-inf"), float("inf")), (50, 100)):
         p.lower, p.upper = lower, upper
@@ -136,7 +137,7 @@ def test_image_offset_correction() -> None:
     """Validation test for the image offset correction processing."""
     src = get_test_image("flower.npy")
     # Defining the ROI that will be used to estimate the offset
-    p = cdl.obj.ROI2DParam.create(x0=0, y0=0, dx=50, dy=20)
+    p = ROI2DParam.create(x0=0, y0=0, dx=50, dy=20)
     dst = si.offset_correction(src, p)
     ix0, iy0 = int(p.x0), int(p.y0)
     ix1, iy1 = int(p.x0 + p.dx), int(p.y0 + p.dy)
@@ -149,7 +150,7 @@ def test_image_gaussian_filter() -> None:
     """Validation test for the image Gaussian filter processing."""
     src = get_test_image("flower.npy")
     for sigma in (10.0, 50.0):
-        p = sigima.param.GaussianParam.create(sigma=sigma)
+        p = sigima_.param.GaussianParam.create(sigma=sigma)
         dst = si.gaussian_filter(src, p)
         exp = spi.gaussian_filter(src.data, sigma=sigma)
         check_array_result(f"GaussianFilter[sigma={sigma}]", dst.data, exp)
@@ -159,7 +160,7 @@ def test_image_gaussian_filter() -> None:
 def test_image_moving_average() -> None:
     """Validation test for the image moving average processing."""
     src = get_test_image("flower.npy")
-    p = sigima.param.MovingAverageParam.create(n=30)
+    p = sigima_.param.MovingAverageParam.create(n=30)
     for mode in p.modes:
         p.mode = mode
         dst = si.moving_average(src, p)
@@ -171,7 +172,7 @@ def test_image_moving_average() -> None:
 def test_image_moving_median() -> None:
     """Validation test for the image moving median processing."""
     src = get_test_image("flower.npy")
-    p = sigima.param.MovingMedianParam.create(n=5)
+    p = sigima_.param.MovingMedianParam.create(n=5)
     for mode in p.modes:
         p.mode = mode
         dst = si.moving_median(src, p)
@@ -192,7 +193,7 @@ def test_image_wiener() -> None:
 def test_threshold() -> None:
     """Validation test for the image threshold processing."""
     src = get_test_image("flower.npy")
-    p = sigima.param.ThresholdParam.create(value=100)
+    p = sigima_.param.ThresholdParam.create(value=100)
     dst = si.threshold(src, p)
     exp = util.img_as_ubyte(src.data > p.value)
     check_array_result(f"Threshold[{p.value}]", dst.data, exp)
@@ -202,7 +203,7 @@ def __generic_threshold_validation(method: str) -> None:
     """Generic test for thresholding methods."""
     # See [1] for more information about the validation of thresholding methods.
     src = get_test_image("flower.npy")
-    dst = si.threshold(src, sigima.param.ThresholdParam.create(method=method))
+    dst = si.threshold(src, sigima_.param.ThresholdParam.create(method=method))
     exp = util.img_as_ubyte(
         src.data > getattr(filters, f"threshold_{method}")(src.data)
     )
@@ -257,7 +258,7 @@ def test_adjust_gamma() -> None:
     # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for gamma, gain in ((0.5, 1.0), (1.0, 2.0), (1.5, 0.5)):
-        p = sigima.param.AdjustGammaParam.create(gamma=gamma, gain=gain)
+        p = sigima_.param.AdjustGammaParam.create(gamma=gamma, gain=gain)
         dst = si.adjust_gamma(src, p)
         exp = exposure.adjust_gamma(src.data, gamma=gamma, gain=gain)
         check_array_result(f"AdjustGamma[gamma={gamma},gain={gain}]", dst.data, exp)
@@ -269,7 +270,7 @@ def test_adjust_log() -> None:
     # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for gain, inv in ((1.0, False), (2.0, True)):
-        p = sigima.param.AdjustLogParam.create(gain=gain, inv=inv)
+        p = sigima_.param.AdjustLogParam.create(gain=gain, inv=inv)
         dst = si.adjust_log(src, p)
         exp = exposure.adjust_log(src.data, gain=gain, inv=inv)
         check_array_result(f"AdjustLog[gain={gain},inv={inv}]", dst.data, exp)
@@ -281,7 +282,7 @@ def test_adjust_sigmoid() -> None:
     # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for cutoff, gain, inv in ((0.5, 1.0, False), (0.25, 2.0, True)):
-        p = sigima.param.AdjustSigmoidParam.create(cutoff=cutoff, gain=gain, inv=inv)
+        p = sigima_.param.AdjustSigmoidParam.create(cutoff=cutoff, gain=gain, inv=inv)
         dst = si.adjust_sigmoid(src, p)
         exp = exposure.adjust_sigmoid(src.data, cutoff=cutoff, gain=gain, inv=inv)
         check_array_result(
@@ -294,7 +295,7 @@ def test_rescale_intensity() -> None:
     """Validation test for the image intensity rescaling processing."""
     # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
-    p = sigima.param.RescaleIntensityParam.create(in_range=(0, 255), out_range=(0, 1))
+    p = sigima_.param.RescaleIntensityParam.create(in_range=(0, 255), out_range=(0, 1))
     dst = si.rescale_intensity(src, p)
     exp = exposure.rescale_intensity(
         src.data, in_range=p.in_range, out_range=p.out_range
@@ -308,7 +309,7 @@ def test_equalize_hist() -> None:
     # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for nbins in (256, 512):
-        p = sigima.param.EqualizeHistParam.create(nbins=nbins)
+        p = sigima_.param.EqualizeHistParam.create(nbins=nbins)
         dst = si.equalize_hist(src, p)
         exp = exposure.equalize_hist(src.data, nbins=nbins)
         check_array_result(f"EqualizeHist[nbins={nbins}]", dst.data, exp)
@@ -320,7 +321,7 @@ def test_equalize_adapthist() -> None:
     # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for clip_limit in (0.01, 0.1):
-        p = sigima.param.EqualizeAdaptHistParam.create(clip_limit=clip_limit)
+        p = sigima_.param.EqualizeAdaptHistParam.create(clip_limit=clip_limit)
         dst = si.equalize_adapthist(src, p)
         exp = exposure.equalize_adapthist(src.data, clip_limit=clip_limit)
         check_array_result(f"AdaptiveHist[clip_limit={clip_limit}]", dst.data, exp)
@@ -333,7 +334,9 @@ def test_denoise_tv() -> None:
     src = get_test_image("flower.npy")
     src.data = src.data[::8, ::8]
     for weight, eps, mni in ((0.1, 0.0002, 200), (0.5, 0.0001, 100)):
-        p = sigima.param.DenoiseTVParam.create(weight=weight, eps=eps, max_num_iter=mni)
+        p = sigima_.param.DenoiseTVParam.create(
+            weight=weight, eps=eps, max_num_iter=mni
+        )
         dst = si.denoise_tv(src, p)
         exp = restoration.denoise_tv_chambolle(src.data, weight, eps, mni)
         check_array_result(
@@ -350,7 +353,7 @@ def test_denoise_bilateral() -> None:
     src = get_test_image("flower.npy")
     src.data = src.data[::8, ::8]
     for sigma, mode in ((1.0, "constant"), (2.0, "edge")):
-        p = sigima.param.DenoiseBilateralParam.create(sigma_spatial=sigma, mode=mode)
+        p = sigima_.param.DenoiseBilateralParam.create(sigma_spatial=sigma, mode=mode)
         dst = si.denoise_bilateral(src, p)
         exp = restoration.denoise_bilateral(src.data, sigma_spatial=sigma, mode=mode)
         check_array_result(
@@ -366,7 +369,7 @@ def test_denoise_wavelet() -> None:
     # See [1] for more information about the validation of restoration methods.
     src = get_test_image("flower.npy")
     src.data = src.data[::8, ::8]
-    p = sigima.param.DenoiseWaveletParam()
+    p = sigima_.param.DenoiseWaveletParam()
     for wavelets in ("db1", "db2", "db3"):
         for mode in p.modes:
             for method in ("BayesShrink",):
@@ -388,7 +391,7 @@ def test_denoise_tophat() -> None:
     """Validation test for the image top-hat denoising processing."""
     # See [1] for more information about the validation of restoration methods.
     src = get_test_image("flower.npy")
-    p = sigima.param.MorphologyParam.create(radius=10)
+    p = sigima_.param.MorphologyParam.create(radius=10)
     dst = si.denoise_tophat(src, p)
     footprint = morphology.disk(p.radius)
     exp = src.data - morphology.white_tophat(src.data, footprint=footprint)
@@ -399,8 +402,8 @@ def __generic_morphology_validation(method: str) -> None:
     """Generic test for morphology methods."""
     # See [1] for more information about the validation of morphology methods.
     src = get_test_image("flower.npy")
-    p = sigima.param.MorphologyParam.create(radius=10)
-    dst: cdl.obj.ImageObj = getattr(si, method)(src, p)
+    p = sigima_.param.MorphologyParam.create(radius=10)
+    dst: ImageObj = getattr(si, method)(src, p)
     exp = getattr(morphology, method)(src.data, footprint=morphology.disk(p.radius))
     check_array_result(f"{method.capitalize()}[radius={p.radius}]", dst.data, exp)
 
@@ -446,7 +449,9 @@ def test_canny() -> None:
     """Validation test for the image Canny edge detection processing."""
     # See [1] for more information about the validation of edge detection methods.
     src = get_test_image("flower.npy")
-    p = sigima.param.CannyParam.create(sigma=1.0, low_threshold=0.1, high_threshold=0.2)
+    p = sigima_.param.CannyParam.create(
+        sigma=1.0, low_threshold=0.1, high_threshold=0.2
+    )
     dst = si.canny(src, p)
     exp = util.img_as_ubyte(
         feature.canny(
@@ -471,7 +476,7 @@ def __generic_edge_validation(method: str) -> None:
     """Generic test for edge detection methods."""
     # See [1] for more information about the validation of edge detection methods.
     src = get_test_image("flower.npy")
-    dst: cdl.obj.ImageObj = getattr(si, method)(src)
+    dst: ImageObj = getattr(si, method)(src)
     exp = getattr(filters, method)(src.data)
     check_array_result(f"{method.capitalize()}", dst.data, exp)
 
@@ -564,7 +569,7 @@ def test_laplace() -> None:
 def test_butterworth() -> None:
     """Validation test for the image Butterworth filter processing."""
     src = get_test_image("flower.npy")
-    p = sigima.param.ButterworthParam.create(order=2, cut_off=0.5, high_pass=False)
+    p = sigima_.param.ButterworthParam.create(order=2, cut_off=0.5, high_pass=False)
     dst = si.butterworth(src, p)
     exp = filters.butterworth(src.data, p.cut_off, p.high_pass, p.order)
     check_array_result(

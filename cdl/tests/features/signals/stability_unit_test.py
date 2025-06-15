@@ -13,10 +13,10 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import sigima.param
-import sigima.signal as ss
-from cdl.obj import create_signal
+import sigima_.param
+import sigima_.signal as ss
 from cdl.utils.tests import check_array_result
+from sigima_ import create_signal
 
 
 def generate_white_noise(n_points, sigma=1.0):
@@ -61,7 +61,7 @@ def test_signal_allan_variance():
     sig1 = create_signal("White Noise Test", time_white, values_white)
 
     # Define Allan variance parameters
-    param = sigima.param.AllanVarianceParam()
+    param = sigima_.param.AllanVarianceParam()
     param.max_tau = max(tau_values)
 
     # Compute Allan variance using the high-level function
@@ -95,7 +95,7 @@ def test_signal_allan_deviation():
     sig1 = create_signal("White Noise Test", time_white, values_white)
 
     # Define Allan variance parameters
-    param = sigima.param.AllanVarianceParam()
+    param = sigima_.param.AllanVarianceParam()
     param.max_tau = max(tau_values)
 
     # Compute Allan deviation using the high-level function

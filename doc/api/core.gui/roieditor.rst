@@ -1,2 +1,2 @@
-.. automodule:: cdl.core.gui.roieditor
+.. automodule:: cdl.gui.roieditor
     :no-members:

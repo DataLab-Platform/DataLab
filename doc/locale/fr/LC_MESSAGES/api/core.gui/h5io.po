@@ -22,8 +22,8 @@ msgstr ""
 msgid "HDF5 I/O"
 msgstr "E/S HDF5"
 
-msgid "The :mod:`cdl.core.gui.h5io` module provides the HDF5 file open/save into/from DataLab data model/main window."
-msgstr "Le module :mod:`cdl.core.gui.h5io` fournit l'ouverture/enregistrement de fichiers HDF5 dans/depuis le modèle de données de DataLab/fenêtre principale."
+msgid "The :mod:`cdl.gui.h5io` module provides the HDF5 file open/save into/from DataLab data model/main window."
+msgstr "Le module :mod:`cdl.gui.h5io` fournit l'ouverture/enregistrement de fichiers HDF5 dans/depuis le modèle de données de DataLab/fenêtre principale."
 
 msgid "Object handling HDF5 file open/save into/from DataLab data model/main window"
 msgstr "Objet gérant l'ouverture/enregistrement de fichiers HDF5 dans/depuis le modèle de données de DataLab/fenêtre principale"

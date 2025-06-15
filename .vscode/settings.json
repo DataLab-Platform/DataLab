@@ -23,7 +23,7 @@
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit",
+        "source.organizeImports.ruff": "explicit"
     },
     "[restructuredtext]": {
         "editor.wordWrap": "on"

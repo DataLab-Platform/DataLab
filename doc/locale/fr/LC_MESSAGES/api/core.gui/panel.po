@@ -22,44 +22,44 @@ msgstr ""
 msgid "Panel"
 msgstr "Panneau"
 
-msgid "The :mod:`cdl.core.gui.panel` package provides the **panel objects** for signals and images."
-msgstr "Le paquet :mod:`cdl.core.gui.panel` fournit les **objets panneaux** pour les signaux et les images."
+msgid "The :mod:`cdl.gui.panel` package provides the **panel objects** for signals and images."
+msgstr "Le paquet :mod:`cdl.gui.panel` fournit les **objets panneaux** pour les signaux et les images."
 
 msgid "Three types of panels are available:"
 msgstr "Trois types de panneaux sont disponibles :"
 
-msgid ":class:`cdl.core.gui.panel.signal.SignalPanel`: Signal panel"
-msgstr ":class:`cdl.core.gui.panel.signal.SignalPanel`: Panneau Signal"
+msgid ":class:`cdl.gui.panel.signal.SignalPanel`: Signal panel"
+msgstr ":class:`cdl.gui.panel.signal.SignalPanel`: Panneau Signal"
 
-msgid ":class:`cdl.core.gui.panel.image.ImagePanel`: Image panel"
-msgstr ":class:`cdl.core.gui.panel.image.ImagePanel`: Panneau Image"
+msgid ":class:`cdl.gui.panel.image.ImagePanel`: Image panel"
+msgstr ":class:`cdl.gui.panel.image.ImagePanel`: Panneau Image"
 
-msgid ":class:`cdl.core.gui.panel.macro.MacroPanel`: Macro panel"
-msgstr ":class:`cdl.core.gui.panel.macro.MacroPanel`: Panneau Macro"
+msgid ":class:`cdl.gui.panel.macro.MacroPanel`: Macro panel"
+msgstr ":class:`cdl.gui.panel.macro.MacroPanel`: Panneau Macro"
 
 msgid "Signal and Image Panels are called **Data Panels** and are used to display and handle signals and images in the main window of DataLab."
 msgstr "Les panneaux Signal et Image sont appelés **Panneaux de données** et sont utilisés pour afficher et gérer les signaux et les images dans la fenêtre principale de DataLab."
 
-msgid "Data Panels rely on the :class:`cdl.core.gui.panel.base.ObjectProp` class (managing the object properties) and a set of modules to handle the GUI features:"
-msgstr "Les Panneaux de données reposent sur la classe :class:`cdl.core.gui.panel.base.ObjectProp` (gestion des propriétés de l'objet) et un ensemble de modules pour gérer les fonctionnalités de l'interface graphique :"
+msgid "Data Panels rely on the :class:`cdl.gui.panel.base.ObjectProp` class (managing the object properties) and a set of modules to handle the GUI features:"
+msgstr "Les Panneaux de données reposent sur la classe :class:`cdl.gui.panel.base.ObjectProp` (gestion des propriétés de l'objet) et un ensemble de modules pour gérer les fonctionnalités de l'interface graphique :"
 
-msgid ":mod:`cdl.core.gui.actionhandler`: Application actions (menus, toolbars, context menu)"
-msgstr ":mod:`cdl.core.gui.actionhandler`: Actions de l'application (menus, barres d'outils, menu contextuel)"
+msgid ":mod:`cdl.gui.actionhandler`: Application actions (menus, toolbars, context menu)"
+msgstr ":mod:`cdl.gui.actionhandler`: Actions de l'application (menus, barres d'outils, menu contextuel)"
 
-msgid ":mod:`cdl.core.gui.objectview`: Widgets to display object (signal/image) trees"
-msgstr ":mod:`cdl.core.gui.objectview`: Widgets pour afficher les arbres d'objets (signaux/images)"
+msgid ":mod:`cdl.gui.objectview`: Widgets to display object (signal/image) trees"
+msgstr ":mod:`cdl.gui.objectview`: Widgets pour afficher les arbres d'objets (signaux/images)"
 
-msgid ":mod:`cdl.core.gui.plothandler`: `PlotPy` items for representing signals and images"
-msgstr ":mod:`cdl.core.gui.plothandler`: items `PlotPy` de représentation graphique de signaux et d'images"
+msgid ":mod:`cdl.gui.plothandler`: `PlotPy` items for representing signals and images"
+msgstr ":mod:`cdl.gui.plothandler`: items `PlotPy` de représentation graphique de signaux et d'images"
 
-msgid ":mod:`cdl.core.gui.processor`: Processor (computation)"
-msgstr ":mod:`cdl.core.gui.processor`: Processeur (calcul)"
+msgid ":mod:`cdl.gui.processor`: Processor (computation)"
+msgstr ":mod:`cdl.gui.processor`: Processeur (calcul)"
 
-msgid ":mod:`cdl.core.gui.panel.roieditor`: ROI editor"
-msgstr ":mod:`cdl.core.gui.panel.roieditor`: Éditeur de ROI"
+msgid ":mod:`cdl.gui.panel.roieditor`: ROI editor"
+msgstr ":mod:`cdl.gui.panel.roieditor`: Éditeur de ROI"
 
-msgid "The Macro Panel is used to display and run macros. It relies on the :mod:`cdl.core.gui.macroeditor` module to handle the macro edition and execution."
-msgstr "Le Panneau Macro est utilisé pour afficher et exécuter des macros. Il repose sur le module :mod:`cdl.core.gui.macroeditor` pour gérer l'édition et l'exécution des macros."
+msgid "The Macro Panel is used to display and run macros. It relies on the :mod:`cdl.gui.macroeditor` module to handle the macro edition and execution."
+msgstr "Le Panneau Macro est utilisé pour afficher et exécuter des macros. Il repose sur le module :mod:`cdl.gui.macroeditor` pour gérer l'édition et l'exécution des macros."
 
 msgid "Base features"
 msgstr "Fonctionnalités de base"
@@ -85,7 +85,7 @@ msgstr ""
 msgid "Object defining DataLab panel interface, based on a vertical QSplitter widget"
 msgstr ""
 
-msgid "A panel handle an object list (objects are signals, images, macros...). Each object must implement ``cdl.core.gui.ObjItf`` interface"
+msgid "A panel handle an object list (objects are signals, images, macros...). Each object must implement ``cdl.gui.ObjItf`` interface"
 msgstr ""
 
 msgid "Return serializable name of object"
@@ -718,4 +718,3 @@ msgstr ""
 
 msgid "Remove macro"
 msgstr ""
-

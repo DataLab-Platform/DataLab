@@ -16,13 +16,31 @@ from typing import Generator
 import guidata.dataset as gds
 import numpy as np
 
-import cdl.obj
 from cdl.config import _
 from cdl.utils.tests import get_test_fnames
-from sigima.algorithms.datatypes import is_integer_dtype
+from sigima_ import (
+    GaussLorentzVoigtParam,
+    ImageDatatypes,
+    ImageObj,
+    ImageTypes,
+    NewImageParam,
+    NewSignalParam,
+    NormalRandomParam,
+    PeriodicParam,
+    ResultProperties,
+    ResultShape,
+    SignalObj,
+    SignalTypes,
+    create_image,
+    create_image_from_param,
+    create_signal_from_param,
+    read_image,
+    read_signal,
+)
+from sigima_.algorithms.datatypes import is_integer_dtype
 
 
-def get_test_signal(filename: str) -> cdl.obj.SignalObj:
+def get_test_signal(filename: str) -> SignalObj:
     """Return test signal
 
     Args:
@@ -31,10 +49,10 @@ def get_test_signal(filename: str) -> cdl.obj.SignalObj:
     Returns:
         Signal object
     """
-    return cdl.obj.read_signal(get_test_fnames(filename)[0])
+    return read_signal(get_test_fnames(filename)[0])
 
 
-def get_test_image(filename: str) -> cdl.obj.ImageObj:
+def get_test_image(filename: str) -> ImageObj:
     """Return test image
 
     Args:
@@ -43,12 +61,12 @@ def get_test_image(filename: str) -> cdl.obj.ImageObj:
     Returns:
         Image object
     """
-    return cdl.obj.read_image(get_test_fnames(filename)[0])
+    return read_image(get_test_fnames(filename)[0])
 
 
 def create_paracetamol_signal(
     size: int | None = None, title: str | None = None
-) -> cdl.obj.SignalObj:
+) -> SignalObj:
     """Create test signal (Paracetamol molecule spectrum)
 
     Args:
@@ -58,7 +76,7 @@ def create_paracetamol_signal(
     Returns:
         Signal object
     """
-    obj = cdl.obj.read_signal(get_test_fnames("paracetamol.txt")[0])
+    obj = read_signal(get_test_fnames("paracetamol.txt")[0])
     if title is not None:
         obj.title = title
     if size is not None:
@@ -96,7 +114,7 @@ class GaussianNoiseParam(gds.DataSet):
 
 
 def add_gaussian_noise_to_signal(
-    signal: cdl.obj.SignalObj, p: GaussianNoiseParam | None = None
+    signal: SignalObj, p: GaussianNoiseParam | None = None
 ) -> None:
     """Add Gaussian (Normal-law) random noise to data
 
@@ -113,11 +131,11 @@ def add_gaussian_noise_to_signal(
 
 def create_noisy_signal(
     noiseparam: GaussianNoiseParam | None = None,
-    newparam: cdl.obj.NewSignalParam | None = None,
-    addparam: cdl.obj.GaussLorentzVoigtParam | None = None,
+    newparam: NewSignalParam | None = None,
+    addparam: GaussLorentzVoigtParam | None = None,
     title: str | None = None,
     noised: bool | None = None,
-) -> cdl.obj.SignalObj:
+) -> SignalObj:
     """Create curve data, optionally noised
 
     Args:
@@ -133,33 +151,33 @@ def create_noisy_signal(
          If True, eventually creates a new noiseparam if None
 
     Returns:
-        cdl.obj.Signal object
+        Signal object
     """
     if newparam is None:
-        newparam = cdl.obj.NewSignalParam()
-        newparam.stype = cdl.obj.SignalTypes.GAUSS
+        newparam = NewSignalParam()
+        newparam.stype = SignalTypes.GAUSS
     if title is not None:
         newparam.title = title
     newparam.title = "Test signal (noisy)" if newparam.title is None else newparam.title
     if addparam is None:
-        addparam = cdl.obj.GaussLorentzVoigtParam()
+        addparam = GaussLorentzVoigtParam()
     if noised is not None and noised and noiseparam is None:
         noiseparam = GaussianNoiseParam()
         noiseparam.sigma = 5.0
-    sig = cdl.obj.create_signal_from_param(newparam, addparam)
+    sig = create_signal_from_param(newparam, addparam)
     if noiseparam is not None:
         add_gaussian_noise_to_signal(sig, noiseparam)
     return sig
 
 
 def create_periodic_signal(
-    shape: cdl.obj.SignalTypes,
+    shape: SignalTypes,
     freq: float = 50.0,
     size: int = 10000,
     xmin: float = -10.0,
     xmax: float = 10.0,
     a: float = 1.0,
-) -> cdl.obj.SignalObj:
+) -> SignalObj:
     """Create a periodic signal
 
     Args:
@@ -173,9 +191,9 @@ def create_periodic_signal(
     Returns:
         Signal object
     """
-    newparam = cdl.obj.new_signal_param(stype=shape, size=size, xmin=xmin, xmax=xmax)
-    addparam = cdl.obj.PeriodicParam.create(freq=freq, a=a)
-    return cdl.obj.create_signal_from_param(newparam, addparam)
+    newparam = NewSignalParam.create(stype=shape, size=size, xmin=xmin, xmax=xmax)
+    addparam = PeriodicParam.create(freq=freq, a=a)
+    return create_signal_from_param(newparam, addparam)
 
 
 def create_2d_steps_data(size: int, width: int, dtype: np.dtype) -> np.ndarray:
@@ -272,7 +290,7 @@ def get_laser_spot_data() -> list[np.ndarray]:
     znoise = create_2d_random(2000, np.uint16)
     zgauss = create_2d_gaussian(2000, np.uint16, x0=2.0, y0=-3.0)
     return [zgauss + znoise] + [
-        cdl.obj.read_image(fname).data for fname in get_test_fnames("*.scor-data")
+        read_image(fname).data for fname in get_test_fnames("*.scor-data")
     ]
 
 
@@ -340,8 +358,8 @@ def get_peak2d_data(
 
 
 def __set_default_size_dtype(
-    p: cdl.obj.NewImageParam | None = None,
-) -> cdl.obj.NewImageParam:
+    p: NewImageParam | None = None,
+) -> NewImageParam:
     """Set default shape and dtype
 
     Args:
@@ -351,35 +369,31 @@ def __set_default_size_dtype(
         Image parameters
     """
     if p is None:
-        p = cdl.obj.NewImageParam()
+        p = NewImageParam()
     p.height = 2000 if p.height is None else p.height
     p.width = 2000 if p.width is None else p.width
-    p.dtype = cdl.obj.ImageDatatypes.UINT16 if p.dtype is None else p.dtype
+    p.dtype = ImageDatatypes.UINT16 if p.dtype is None else p.dtype
     return p
 
 
-def add_gaussian_noise_to_image(
-    image: cdl.obj.ImageObj, param: cdl.obj.NormalRandomParam
-) -> None:
+def add_gaussian_noise_to_image(image: ImageObj, param: NormalRandomParam) -> None:
     """Add Gaussian noise to image
 
     Args:
         src: Source image
         param: Parameters for the normal distribution
     """
-    newparam = cdl.obj.new_image_param(
+    newparam = NewImageParam.create(
         height=image.data.shape[0],
         width=image.data.shape[1],
-        dtype=cdl.obj.ImageDatatypes.from_dtype(image.data.dtype),
-        itype=cdl.obj.ImageTypes.NORMALRANDOM,
+        dtype=ImageDatatypes.from_dtype(image.data.dtype),
+        itype=ImageTypes.NORMALRANDOM,
     )
-    noise = cdl.obj.create_image_from_param(newparam, param)
+    noise = create_image_from_param(newparam, param)
     image.data = image.data + noise.data
 
 
-def create_checkerboard(
-    p: cdl.obj.NewImageParam | None = None, num_checkers=8
-) -> cdl.obj.ImageObj:
+def create_checkerboard(p: NewImageParam | None = None, num_checkers=8) -> ImageObj:
     """Generate a checkerboard pattern
 
     Args:
@@ -388,7 +402,7 @@ def create_checkerboard(
     """
     p = __set_default_size_dtype(p)
     p.title = "Test image (checkerboard)" if p.title is None else p.title
-    obj = cdl.obj.create_image_from_param(p)
+    obj = create_image_from_param(p)
     re = np.r_[num_checkers * [0, 1]]  # one row of the checkerboard
     board = np.vstack(num_checkers * (re, re ^ 1))  # build the checkerboard
     board = np.kron(
@@ -399,8 +413,8 @@ def create_checkerboard(
 
 
 def create_2dstep_image(
-    p: cdl.obj.NewImageParam | None = None,
-) -> cdl.obj.ImageObj:
+    p: NewImageParam | None = None,
+) -> ImageObj:
     """Creating 2D step image
 
     Args:
@@ -411,7 +425,7 @@ def create_2dstep_image(
     """
     p = __set_default_size_dtype(p)
     p.title = "Test image (2D step)" if p.title is None else p.title
-    obj = cdl.obj.create_image_from_param(p)
+    obj = create_image(p)
     obj.data = create_2d_steps_data(p.height, p.height // 10, p.dtype.value)
     return obj
 
@@ -453,7 +467,7 @@ def create_ring_data(
     return data
 
 
-def create_ring_image(p: RingParam | None = None) -> cdl.obj.ImageObj:
+def create_ring_image(p: RingParam | None = None) -> ImageObj:
     """Creating 2D ring image
 
     Args:
@@ -464,7 +478,7 @@ def create_ring_image(p: RingParam | None = None) -> cdl.obj.ImageObj:
     """
     if p is None:
         p = RingParam()
-    obj = cdl.obj.create_image(
+    obj = create_image(
         f"Ring(size={p.size},x0={p.ring_x0},y0={p.ring_y0},width={p.ring_width},"
         f"radius={p.ring_radius},intensity={p.ring_intensity})"
     )
@@ -480,8 +494,8 @@ def create_ring_image(p: RingParam | None = None) -> cdl.obj.ImageObj:
 
 
 def create_peak2d_image(
-    p: cdl.obj.NewImageParam | None = None,
-) -> cdl.obj.ImageObj:
+    p: NewImageParam | None = None,
+) -> ImageObj:
     """Creating 2D peak image
 
     Args:
@@ -492,7 +506,7 @@ def create_peak2d_image(
     """
     p = __set_default_size_dtype(p)
     p.title = "Test image (2D peaks)" if p.title is None else p.title
-    obj = cdl.obj.create_image_from_param(p)
+    obj = create_image(p)
     param = PeakDataParam()
     if p.height is not None and p.width is not None:
         param.size = max(p.height, p.width)
@@ -501,8 +515,8 @@ def create_peak2d_image(
 
 
 def create_sincos_image(
-    p: cdl.obj.NewImageParam | None = None,
-) -> cdl.obj.ImageObj:
+    p: NewImageParam | None = None,
+) -> ImageObj:
     """Creating test image (sin(x)+cos(y))
 
     Args:
@@ -516,7 +530,7 @@ def create_sincos_image(
     dtype = p.dtype.value
     x, y = np.meshgrid(np.linspace(0, 10, p.width), np.linspace(0, 10, p.height))
     raw_data = 0.5 * (np.sin(x) + np.cos(y)) + 0.5
-    obj = cdl.obj.create_image_from_param(p)
+    obj = create_image(p)
     if np.issubdtype(dtype, np.floating):
         obj.data = raw_data
         return obj
@@ -527,11 +541,11 @@ def create_sincos_image(
 
 
 def create_noisygauss_image(
-    p: cdl.obj.NewImageParam | None = None,
+    p: NewImageParam | None = None,
     center: tuple[float, float] | None = None,
     level: float = 0.1,
     add_annotations: bool = False,
-) -> cdl.obj.ImageObj:
+) -> ImageObj:
     """Create test image (2D noisy gaussian)
 
     Args:
@@ -547,7 +561,7 @@ def create_noisygauss_image(
     p.title = "Test image (noisy 2D Gaussian)" if p.title is None else p.title
     dtype = p.dtype.value
     size = p.width
-    obj = cdl.obj.create_image_from_param(p)
+    obj = create_image(p)
     if center is None:
         # Default center
         x0, y0 = 2.0, 3.0
@@ -562,8 +576,8 @@ def create_noisygauss_image(
 
 
 def create_multigauss_image(
-    p: cdl.obj.NewImageParam | None = None,
-) -> cdl.obj.ImageObj:
+    p: NewImageParam | None = None,
+) -> ImageObj:
     """Create test image (multiple 2D-gaussian peaks)
 
     Args:
@@ -576,7 +590,7 @@ def create_multigauss_image(
     p.title = "Test image (multi-2D-gaussian)" if p.title is None else p.title
     dtype = p.dtype.value
     size = p.width
-    obj = cdl.obj.create_image_from_param(p)
+    obj = create_image(p)
     obj.data = (
         create_2d_gaussian(size, dtype, x0=0.5, y0=3.0)
         + create_2d_gaussian(size, dtype, x0=-1.0, y0=-1.0, sigma=1.0)
@@ -585,7 +599,7 @@ def create_multigauss_image(
     return obj
 
 
-def create_annotated_image(title: str | None = None) -> cdl.obj.ImageObj:
+def create_annotated_image(title: str | None = None) -> ImageObj:
     """Create test image with annotations
 
     Returns:
@@ -593,13 +607,13 @@ def create_annotated_image(title: str | None = None) -> cdl.obj.ImageObj:
     """
     data = create_2d_gaussian(600, np.uint16, x0=2.0, y0=3.0)
     title = "Test image (with metadata)" if title is None else title
-    image = cdl.obj.create_image(title, data)
+    image = create_image(title, data)
     image.add_annotations_from_file(get_test_fnames("annotations.json")[0])
     return image
 
 
-def create_resultshapes() -> Generator[cdl.obj.ResultShape, None, None]:
-    """Create test result shapes (core.model.base.ResultShape test objects)
+def create_resultshapes() -> Generator[ResultShape, None, None]:
+    """Create test result shapes (core.base.ResultShape test objects)
 
     Yields:
         ResultShape object
@@ -614,11 +628,11 @@ def create_resultshapes() -> Generator[cdl.obj.ResultShape, None, None]:
             [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
         ),
     ):
-        yield cdl.obj.ResultShape(shape, data, shape, add_label=shape == "segment")
+        yield ResultShape(shape, data, shape, add_label=shape == "segment")
 
 
-def create_resultproperties() -> Generator[cdl.obj.ResultProperties, None, None]:
-    """Create test result properties (core.model.base.ResultProperties test object)
+def create_resultproperties() -> Generator[ResultProperties, None, None]:
+    """Create test result properties (core.base.ResultProperties test object)
 
     Returns:
         ResultProperties object
@@ -631,4 +645,4 @@ def create_resultproperties() -> Generator[cdl.obj.ResultProperties, None, None]
             ["P1", "P2", "P3", "P4"],
         ),
     ):
-        yield cdl.obj.ResultProperties(title, data, labels)
+        yield ResultProperties(title, data, labels)

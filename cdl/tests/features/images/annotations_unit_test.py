@@ -16,10 +16,11 @@ from plotpy.items import AnnotatedShape, PolygonShape
 from plotpy.plot import BasePlot
 from qtpy import QtWidgets as QW
 
-from cdl.core.model.base import ANN_KEY
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
+from sigima_.model.base import ANN_KEY
 
 
 def set_annotation_color(annotation: AnnotatedShape, color: str) -> None:
@@ -52,7 +53,8 @@ def test_annotations_unit():
         )
         segm = make.annotated_segment(700, 700, 800, 800, title="Test")
         label = make.label("Test", (1000, 1000), (0, 0), "BR")
-        ima1.add_annotations_from_items([rect, circ, elli, segm, label])
+        adapter = create_adapter_from_object(ima1)
+        adapter.add_annotations_from_items([rect, circ, elli, segm, label])
         panel.add_object(ima1)
 
         # Create another image with annotations

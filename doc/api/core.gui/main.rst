@@ -1,2 +1,2 @@
-.. automodule:: cdl.core.gui.main
+.. automodule:: cdl.gui.main
     :no-members:

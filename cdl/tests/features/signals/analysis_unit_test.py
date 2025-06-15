@@ -17,18 +17,20 @@ from __future__ import annotations
 
 import pytest
 
-import cdl.obj
-import sigima.param
-import sigima.signal as ss
+import sigima_.param
+import sigima_.signal as ss
 from cdl.tests.data import get_test_signal
 from cdl.utils.tests import check_scalar_result
+from sigima_ import NewSignalParam, SignalTypes, create_signal_from_param
 
 
 @pytest.mark.validation
 def test_signal_bandwidth_3db() -> None:
     """Validation test for the bandwidth computation."""
     obj = get_test_signal("bandwidth.txt")
-    df = ss.bandwidth_3db(obj).to_dataframe()
+    res = ss.bandwidth_3db(obj)
+    assert res is not None, "Bandwidth computation failed"
+    df = res.to_dataframe()
     check_scalar_result("Bandwitdh@-3dB", df.L[0], 39.0, rtol=0.001)
 
 
@@ -36,8 +38,10 @@ def test_signal_bandwidth_3db() -> None:
 def test_dynamic_parameters() -> None:
     """Validation test for dynamic parameters computation."""
     obj = get_test_signal("dynamic_parameters.txt")
-    param = sigima.param.DynamicParam.create(full_scale=1.0)
-    df = ss.dynamic_parameters(obj, param).to_dataframe()
+    param = sigima_.param.DynamicParam.create(full_scale=1.0)
+    res = ss.dynamic_parameters(obj, param)
+    assert res is not None, "Dynamic parameters computation failed"
+    df = res.to_dataframe()
     check_scalar_result("ENOB", df.ENOB[0], 5.1, rtol=0.001)
     check_scalar_result("SINAD", df.SINAD[0], 32.49, rtol=0.001)
     check_scalar_result("THD", df.THD[0], -30.18, rtol=0.001)
@@ -50,7 +54,9 @@ def test_dynamic_parameters() -> None:
 def test_signal_sampling_rate_period() -> None:
     """Validation test for the sampling rate and period computation."""
     obj = get_test_signal("dynamic_parameters.txt")
-    df = ss.sampling_rate_period(obj).to_dataframe()
+    res = ss.sampling_rate_period(obj)
+    assert res is not None, "Sampling rate and period computation failed"
+    df = res.to_dataframe()
     check_scalar_result("Sampling rate", df["fs"][0], 1.0e10, rtol=0.001)
     check_scalar_result("Period", df["T"][0], 1.0e-10, rtol=0.001)
 
@@ -59,7 +65,9 @@ def test_signal_sampling_rate_period() -> None:
 def test_signal_contrast() -> None:
     """Validation test for the contrast computation."""
     obj = get_test_signal("fw1e2.txt")
-    df = ss.contrast(obj).to_dataframe()
+    res = ss.contrast(obj)
+    assert res is not None, "Contrast computation failed"
+    df = res.to_dataframe()
     check_scalar_result("Contrast", df.contrast[0], 0.825, rtol=0.001)
 
 
@@ -67,7 +75,9 @@ def test_signal_contrast() -> None:
 def test_signal_x_at_minmax() -> None:
     """Validation test for the x value at min/max computation."""
     obj = get_test_signal("fw1e2.txt")
-    df = ss.x_at_minmax(obj).to_dataframe()
+    res = ss.x_at_minmax(obj)
+    assert res is not None, "X at min/max computation failed"
+    df = res.to_dataframe()
     check_scalar_result("X@Ymin", df["X@Ymin"][0], 0.803, rtol=0.001)
     check_scalar_result("X@Ymax", df["X@Ymax"][0], 5.184, rtol=0.001)
 
@@ -75,26 +85,30 @@ def test_signal_x_at_minmax() -> None:
 @pytest.mark.validation
 def test_signal_x_at_y() -> None:
     """Validation test for the abscissa finding computation."""
-    newparam = cdl.obj.new_signal_param(stype=cdl.obj.SignalTypes.STEP)
-    obj = cdl.obj.create_signal_from_param(newparam)
+    newparam = NewSignalParam.create(stype=SignalTypes.STEP)
+    obj = create_signal_from_param(newparam)
     if obj is None:
         raise ValueError("Failed to create test signal")
     param = ss.OrdinateParam.create(y=0.5)
-    df = ss.x_at_y(obj, param).to_dataframe()
+    res = ss.x_at_y(obj, param)
+    assert res is not None, "X at Y computation failed"
+    df = res.to_dataframe()
     check_scalar_result("x|y=0.5", df["x"][0], 0.0)
 
 
 @pytest.mark.validation
 def test_signal_y_at_x() -> None:
     """Validation test for the ordinate finding computation."""
-    newparam = cdl.obj.new_signal_param(
-        stype=cdl.obj.SignalTypes.TRIANGLE, xmin=0.0, xmax=10.0, size=101
+    newparam = NewSignalParam.create(
+        stype=SignalTypes.TRIANGLE, xmin=0.0, xmax=10.0, size=101
     )
-    obj = cdl.obj.create_signal_from_param(newparam)
+    obj = create_signal_from_param(newparam)
     if obj is None:
         raise ValueError("Failed to create test signal")
     param = ss.AbscissaParam.create(x=2.5)
-    df = ss.y_at_x(obj, param).to_dataframe()
+    res = ss.y_at_x(obj, param)
+    assert res is not None, "Y at X computation failed"
+    df = res.to_dataframe()
     check_scalar_result("y|x=0.5", df["y"][0], 1.0)
 
 

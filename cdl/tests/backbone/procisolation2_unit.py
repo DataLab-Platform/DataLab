@@ -19,9 +19,10 @@ from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
-import cdl.obj
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests.data import create_2d_random, create_noisygauss_image
+from sigima_ import NewImageParam
 
 
 class MainWindow(QW.QMainWindow):
@@ -49,9 +50,9 @@ class MainWindow(QW.QMainWindow):
         self.layout.addWidget(self.cancel_button)
 
         # Create a test image and add it to the plot
-        param = cdl.obj.new_image_param(height=1000, width=1000)
+        param = NewImageParam.create(height=1000, width=1000)
         image = create_noisygauss_image(param, add_annotations=True)
-        self.imageitem = image.make_item()
+        self.imageitem = create_adapter_from_object(image).make_item()
         self.imagewidget.plot.add_item(self.imageitem)
 
         self.array = image.data

@@ -7,6 +7,7 @@ opencv-python-headless
 pandas
 PyWavelets
 psutil
+typing-extensions>=4.0
 pylint
 ruff
 coverage

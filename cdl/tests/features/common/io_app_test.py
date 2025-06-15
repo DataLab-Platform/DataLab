@@ -11,13 +11,13 @@ I/O application test:
 
 import os.path as osp
 
-from cdl.core.gui.panel.base import BaseDataPanel
-from cdl.core.io.base import BaseIORegistry, IOAction
-from cdl.core.io.image import ImageIORegistry
-from cdl.core.io.signal import SignalIORegistry
 from cdl.env import execenv
+from cdl.gui.panel.base import BaseDataPanel
 from cdl.tests import cdltest_app_context
 from cdl.utils.tests import CDLTemporaryDirectory, get_test_fnames
+from sigima_.io.base import BaseIORegistry, IOAction
+from sigima_.io.image import ImageIORegistry
+from sigima_.io.signal import SignalIORegistry
 
 
 def __testfunc(

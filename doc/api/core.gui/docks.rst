@@ -1,2 +1,2 @@
-.. automodule:: cdl.core.gui.docks
+.. automodule:: cdl.gui.docks
     :no-members:

@@ -31,13 +31,14 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+from cdl.adapters_plotpy.factories import create_adapter_from_object
+from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from cdl.core.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
-from cdl.core.model.signal import CURVESTYLES
-from cdl.obj import ImageObj, SignalObj, create_image, create_signal
-from cdl.utils.io import count_lines, read_first_n_lines
 from cdl.utils.qthelpers import CallbackWorker, create_progress_bar, qt_long_callback
 from cdl.widgets.wizard import Wizard, WizardPage
+from sigima_ import ImageObj, SignalObj, create_image, create_signal
+from sigima_.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
+from sigima_.io.utils import count_lines, read_first_n_lines
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem
@@ -221,8 +222,7 @@ class SignalImportParam(BaseImportParam):
         _("First Column is X"),
         default=True,
         help=_(
-            "First column contains the X values\n"
-            "(ignored if there is only one column)"
+            "First column contains the X values\n(ignored if there is only one column)"
         ),
     ).set_pos(col=2)
 
@@ -585,7 +585,7 @@ class GraphicalRepresentationPage(WizardPage):
         """Plot signals"""
         obj = create_signal(title, x=x, y=y, labels=labels, units=units)
         with CURVESTYLES.alternative(self.__curve_styles):
-            item = obj.make_item()
+            item = create_adapter_from_object(obj).make_item()
         plot = self.plot_widget.get_plot()
         plot.add_item(item, z=zorder)
         maxpoints = 20000
@@ -597,7 +597,7 @@ class GraphicalRepresentationPage(WizardPage):
     def __show_image(self, data: np.ndarray) -> None:
         """Show image"""
         obj = create_image("", data)
-        item = obj.make_item()
+        item = create_adapter_from_object(obj).make_item()
         plot = self.plot_widget.get_plot()
         plot.add_item(item)
         self.__objitmlist.append((obj, item))
