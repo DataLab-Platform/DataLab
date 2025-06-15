@@ -265,7 +265,7 @@ class PolygonalROI(BaseSingleImageROI):
             dx: translation along X-axis
             dy: translation along Y-axis
         """
-        coords = self.get_indices_coords(obj)
+        coords = np.array(self.get_indices_coords(obj))
         coords[::2] += int(dx)
         coords[1::2] += int(dy)
         self.set_indices_coords(obj, coords)
@@ -295,7 +295,7 @@ class PolygonalROI(BaseSingleImageROI):
         """
         param = ROI2DParam(title=self.title if title is None else title)
         param.geometry = "polygon"
-        param.points = self.get_indices_coords(obj)
+        param.points = np.array(self.get_indices_coords(obj))
         return param
 
 
