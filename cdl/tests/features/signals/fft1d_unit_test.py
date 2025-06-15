@@ -22,7 +22,7 @@ import sigima_.signal as ss
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result
 from cdl.utils.vistools import view_curves
-from sigima_ import NewSignalParam, SignalTypes, create_signal_from_param
+from sigima_ import NewSignalParam, PeriodicParam, SignalTypes, create_signal_from_param
 
 
 def test_signal_fft_interactive() -> None:
@@ -38,7 +38,8 @@ def test_signal_fft_interactive() -> None:
         # is not meaningful if xmin is different.
         newparam.xmin = 0.0
 
-        s1 = create_signal_from_param(newparam)
+        extra_param = PeriodicParam()
+        s1 = create_signal_from_param(newparam, extra_param=extra_param)
         t, y = s1.xydata
         f, s = alg.fft1d(t, y)
         t2, y2 = alg.ifft1d(f, s)
