@@ -139,7 +139,7 @@ def test_average_profile() -> None:
 
 
 if __name__ == "__main__":
-    # test_profile_unit()
+    test_profile_unit()
     test_line_profile()
     test_segment_profile()
     test_average_profile()

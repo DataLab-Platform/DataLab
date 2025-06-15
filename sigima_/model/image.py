@@ -939,8 +939,8 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
             indices[1::2] -= self.y0 + 0.5 * self.dy
             indices[1::2] /= self.dy
         if clip:
-            indices[::2] = np.clip(indices[:, ::2], 0, self.data.shape[1] - 1)
-            indices[1::2] = np.clip(indices[:, 1::2], 0, self.data.shape[0] - 1)
+            indices[::2] = np.clip(indices[::2], 0, self.data.shape[1] - 1)
+            indices[1::2] = np.clip(indices[1::2], 0, self.data.shape[0] - 1)
         return np.array(indices, int).tolist()
 
     def indices_to_physical(self, indices: list[float]) -> list[int]:
