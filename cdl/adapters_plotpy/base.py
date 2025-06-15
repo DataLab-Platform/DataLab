@@ -37,10 +37,6 @@ from plotpy.items import (
     PolygonShape,
 )
 
-from cdl.adapters_plotpy.converters import (
-    annotation_json_dicts_to_items,
-    items_to_annotation_json_dicts,
-)
 from cdl.config import PLOTPY_CONF, Conf
 from sigima_.algorithms import coordinates
 from sigima_.model.base import (
@@ -573,7 +569,10 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
         Args:
             items: annotation plot items
         """
-        self.obj.annotations += [ann for ann in items_to_annotation_json_dicts(items)]
+        ann_items = json_to_items(self.obj.annotations)
+        ann_items.extend(items)
+        if ann_items:
+            self.obj.annotations = items_to_json(ann_items)
 
     @abc.abstractmethod
     def add_label_with_title(self, title: str | None = None) -> None:
@@ -611,7 +610,7 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
                 )
         if self.obj.annotations:
             try:
-                for item in annotation_json_dicts_to_items(self.obj.annotations):
+                for item in json_to_items(self.obj.annotations):
                     if isinstance(item, AnnotatedShape):
                         config_annotated_shape(item, fmt, lbl)
                     set_plot_item_editable(item, editable)

@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import abc
 import enum
-import json
 from collections.abc import Callable, Generator, Iterable
 from copy import deepcopy
 from typing import Any, Generic, Iterator, Literal, Self, Type, TypeVar
@@ -23,10 +22,8 @@ from numpy import ma
 from cdl.config import Conf, _
 from sigima_.algorithms import coordinates
 from sigima_.algorithms.datatypes import is_integer_dtype
-from sigima_.model.annotation import AnnotationRegistry
 
 ROI_KEY = "_roi_"
-ANN_KEY = "_ann_"
 
 
 def deepcopy_metadata(
@@ -46,7 +43,7 @@ def deepcopy_metadata(
     """
     if special_keys is None:
         special_keys = set()
-    special_keys = set([ROI_KEY, ANN_KEY]) | special_keys
+    special_keys = set([ROI_KEY]) | special_keys
     mdcopy = deepcopy(metadata)
     for key, value in metadata.items():
         rshape = ResultShape.from_metadata_entry(key, value)
@@ -901,10 +898,6 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
             mshape.transform_coordinates(
                 lambda coords: self.transform_coords(coords, orig, func, param)
             )
-        for ann_dict in self.annotations:
-            annotation = AnnotationRegistry.create_from_json(ann_dict)
-            self.transform_coords(annotation.points, orig, func, param)
-            ann_dict.update(annotation.to_json())
 
     def remove_all_shapes(self) -> None:
         """Remove metadata shapes and ROIs"""
@@ -913,52 +906,6 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
             if resultshape is not None or key == ROI_KEY:
                 # Metadata entry is a metadata shape or a ROI
                 self.metadata.pop(key)
-
-    @property
-    def annotations(self) -> list[dict[str, Any]]:
-        """Object annotations (JSON data describing annotation plot items)
-
-        Returns:
-            List of JSON dictionaries describing annotations, or an empty list
-            if there are no annotations
-        """
-        annotations = self.metadata.get(ANN_KEY, [])
-        if not isinstance(annotations, list):
-            raise TypeError("self.annotations must be a list of annotation dicts")
-        return annotations
-
-    @annotations.setter
-    def annotations(self, annotations: list[dict[str, Any]] | None) -> None:
-        """Set object annotations (JSON data describing annotation plot items)
-
-        Args:
-            annotations: list of JSON dictionaries describing annotations,
-             or None to remove annotations
-        """
-        if annotations is None:
-            if ANN_KEY in self.metadata:
-                self.metadata.pop(ANN_KEY)
-        else:
-            self.metadata[ANN_KEY] = annotations
-
-    def add_annotations_from_file(self, filename: str) -> None:
-        """Add object annotations from file (JSON).
-
-        Args:
-            filename: filename
-        """
-        with open(filename, "r", encoding="utf-8") as file:
-            new_annotations: list[dict[str, Any]] = json.load(file)
-        self.annotations.extend(new_annotations)
-
-    def export_annotations_to_file(self, filename: str) -> None:
-        """Export object annotations to file (JSON).
-
-        Args:
-            filename: filename
-        """
-        with open(filename, "w", encoding="utf-8") as file:
-            json.dump(self.annotations, file, indent=4, ensure_ascii=False)
 
     def update_metadata_from(self, other_metadata: dict[str, Any]) -> None:
         """Update metadata from another object's metadata (merge result shapes and
@@ -979,10 +926,6 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
                 if mshape.key not in self.metadata:
                     mshape.add_to(self)
                 other_metadata.pop(key)
-        # Merge annotations
-        if ANN_KEY in other_metadata and self.annotations:
-            self.annotations.extend(other_metadata[ANN_KEY])
-            other_metadata.pop(ANN_KEY)
         # Updating the rest of the metadata
         self.metadata.update(other_metadata)
 

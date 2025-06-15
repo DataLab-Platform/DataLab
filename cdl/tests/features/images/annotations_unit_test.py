@@ -20,7 +20,6 @@ from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
-from sigima_.model.base import ANN_KEY
 
 
 def set_annotation_color(annotation: AnnotatedShape, color: str) -> None:
@@ -62,18 +61,18 @@ def test_annotations_unit():
         panel.add_object(ima2)
 
         execenv.print("Check [geometric shapes] <--> [plot items] conversion:")
-        execenv.print(f"(comparing {ANN_KEY} metadata)")
+        execenv.print("(comparing annotations)")
         for ima in (ima1, ima2):
             execenv.print(f"  Checking image '{ima.title}': ", end="")
             panel.objview.select_objects([ima])
             # Open separate view
             panel.open_separate_view().done(QW.QDialog.DialogCode.Accepted)
-            orig_metadata = ima.metadata.copy()
+            orig_ann = ima.annotations
             panel.open_separate_view().done(QW.QDialog.DialogCode.Accepted)
-            # Check if metadata are still the same
-            # open("before.json", mode="wb").write(orig_metadata[ANN_KEY].encode())
-            # open("after.json", mode="wb").write(ima.metadata[ANN_KEY].encode())
-            assert orig_metadata[ANN_KEY] == ima.metadata[ANN_KEY]
+            # Check if annotations are still the same
+            # open("before.json", mode="wb").write(orig_ann.encode())
+            # open("after.json", mode="wb").write(ima.annotations.encode())
+            assert orig_ann == ima.annotations
             execenv.print("OK")
 
 

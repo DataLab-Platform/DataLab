@@ -38,7 +38,7 @@ from qtpy.compat import (
 )
 
 from cdl import objectmodel
-from cdl.adapters_plotpy.converters import items_to_annotation_json_dicts
+from cdl.adapters_plotpy.base import items_to_json
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.config import APP_NAME, Conf, _
 from cdl.env import execenv
@@ -66,7 +66,7 @@ from sigima_ import (
     TypeROI,
     create_signal,
 )
-from sigima_.model.base import ANN_KEY, ROI_KEY
+from sigima_.model.base import ROI_KEY
 
 if TYPE_CHECKING:
     from typing import Callable
@@ -267,7 +267,6 @@ class PasteMetadataParam(gds.DataSet):
 
     keep_roi = gds.BoolItem(_("Regions of interest"), default=True)
     keep_resultshapes = gds.BoolItem(_("Result shapes"), default=False).set_pos(col=1)
-    keep_annotations = gds.BoolItem(_("Annotations"), default=True)
     keep_resultproperties = gds.BoolItem(_("Result properties"), default=False).set_pos(
         col=1
     )
@@ -624,8 +623,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         metadata = {}
         if param.keep_roi and ROI_KEY in self.__metadata_clipboard:
             metadata[ROI_KEY] = self.__metadata_clipboard[ROI_KEY]
-        if param.keep_annotations and ANN_KEY in self.__metadata_clipboard:
-            metadata[ANN_KEY] = self.__metadata_clipboard[ANN_KEY]
         if param.keep_resultshapes:
             for key, value in self.__metadata_clipboard.items():
                 if ResultShape.match(key, value):
@@ -639,7 +636,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if (
                     not ResultShape.match(key, value)
                     and not ResultProperties.match(key, value)
-                    and key not in (ROI_KEY, ANN_KEY)
+                    and key not in (ROI_KEY,)
                 ):
                     metadata[key] = value
         sel_objects = self.objview.get_sel_objects(include_groups=True)
@@ -1258,7 +1255,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if not item.is_readonly() and is_plot_item_serializable(item):
                     rw_items.append(item)
             obj = self.__separate_views[dlg]
-            obj.annotations = items_to_annotation_json_dicts(rw_items)
+            obj.annotations = items_to_json(rw_items)
             self.selection_changed(update_items=True)
         self.__separate_views.pop(dlg)
         dlg.deleteLater()

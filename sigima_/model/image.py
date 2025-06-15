@@ -777,6 +777,10 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
     _datag = gds.BeginGroup(_("Data"))
     data = gds.FloatArrayItem(_("Data"))  # type: ignore[assignment]
     metadata = gds.DictItem(_("Metadata"), default={})  # type: ignore[assignment]
+    annotations = gds.StringItem(_("Annotations"), default="").set_prop(
+        "display",
+        hide=True,
+    )  # Annotations as a serialized JSON string
     _e_datag = gds.EndGroup(_("Data"))
 
     _dxdyg = gds.BeginGroup(f"{_('Origin')} / {_('Pixel spacing')}")
@@ -903,6 +907,7 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
         obj.dx = self.dx
         obj.dy = self.dy
         obj.metadata = base.deepcopy_metadata(self.metadata)
+        obj.annotations = self.annotations
         obj.data = np.array(self.data, copy=True, dtype=dtype)
         obj.dicom_template = self.dicom_template
         return obj
@@ -1156,7 +1161,7 @@ def create_image_from_param(
             f"σ={ep.sigma:g}),x0={ep.x0:g},y0={ep.y0:g})"
         )
 
-    elif base_param.itype in ImageTypes.UNIFORMRANDOM:
+    elif base_param.itype == ImageTypes.UNIFORMRANDOM:
         if ep is None:
             raise ValueError("extra_param (UniformRandomParam) required.")
         assert isinstance(ep, base.UniformRandomParam)

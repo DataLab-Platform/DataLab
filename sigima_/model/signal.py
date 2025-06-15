@@ -204,6 +204,10 @@ class SignalObj(gds.DataSet, base.BaseObj[SignalROI]):
     title = gds.StringItem(_("Signal title"), default=_("Untitled"))
     xydata = gds.FloatArrayItem(_("Data"), transpose=True, minmax="rows")
     metadata = gds.DictItem(_("Metadata"), default={})  # type: ignore[assignment]
+    annotations = gds.StringItem(_("Annotations"), default="").set_prop(
+        "display",
+        hide=True,
+    )  # Annotations as a serialized JSON string
     _e_datag = gds.EndGroup(_("Data and metadata"))
 
     _unitsg = gds.BeginGroup(_("Titles and units"))
@@ -286,6 +290,7 @@ class SignalObj(gds.DataSet, base.BaseObj[SignalROI]):
         if dtype not in (None, float, complex, np.complex128):
             raise RuntimeError("Signal data only supports float64/complex128 dtype")
         obj.metadata = base.deepcopy_metadata(self.metadata)
+        obj.annotations = self.annotations
         obj.xydata = np.array(self.xydata, copy=True, dtype=dtype)
         return obj
 
