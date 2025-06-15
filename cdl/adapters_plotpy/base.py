@@ -416,8 +416,9 @@ class BaseSingleROIPlotPyAdapter(Generic[TypeSingleROI, TypeROIItem], abc.ABC):
             Plot item
         """
 
+    @classmethod
     @abc.abstractmethod
-    def from_plot_item(self, item: TypeROIItem) -> TypeSingleROI:
+    def from_plot_item(cls, item: TypeROIItem) -> TypeSingleROI:
         """Create single ROI from plot item
 
         Args:
@@ -601,7 +602,7 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
                 roi = self.obj.roi
                 if roi is not None:
                     yield from create_adapter_from_object(roi).iterate_roi_items(
-                        self, fmt=fmt, lbl=lbl, editable=False
+                        self.obj, fmt=fmt, lbl=lbl, editable=False
                     )
             elif ResultShape.match(key, value):
                 mshape: ResultShape = ResultShape.from_metadata_entry(key, value)

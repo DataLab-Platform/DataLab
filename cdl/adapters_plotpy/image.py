@@ -51,7 +51,8 @@ class PolygonalROIPlotPyAdapter(
         item.set_style("plot", "shape/drag")
         return item
 
-    def from_plot_item(self, item: AnnotatedPolygon) -> PolygonalROI:
+    @classmethod
+    def from_plot_item(cls, item: AnnotatedPolygon) -> PolygonalROI:
         """Create ROI from plot item
 
         Args:
@@ -105,7 +106,8 @@ class RectangularROIPlotPyAdapter(
         param.update_item(roi_item.label)
         return roi_item
 
-    def from_plot_item(self, item: AnnotatedRectangle) -> RectangularROI:
+    @classmethod
+    def from_plot_item(cls, item: AnnotatedRectangle) -> RectangularROI:
         """Create ROI from plot item
 
         Args:
@@ -155,7 +157,8 @@ class CircularROIPlotPyAdapter(
         item.set_style("plot", "shape/drag")
         return item
 
-    def from_plot_item(self, item: AnnotatedCircle) -> CircularROI:
+    @classmethod
+    def from_plot_item(cls, item: AnnotatedCircle) -> CircularROI:
         """Create ROI from plot item
 
         Args:

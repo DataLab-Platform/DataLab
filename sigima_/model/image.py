@@ -780,7 +780,7 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
     annotations = gds.StringItem(_("Annotations"), default="").set_prop(
         "display",
         hide=True,
-    )  # Annotations as a serialized JSON string
+    )  # Annotations as a serialized JSON string  # type: ignore[assignment]
     _e_datag = gds.EndGroup(_("Data"))
 
     _dxdyg = gds.BeginGroup(f"{_('Origin')} / {_('Pixel spacing')}")
@@ -1120,6 +1120,12 @@ def create_image_from_param(
         NotImplementedError: if the image type is not supported
     """
     global IMG_NB
+    if base_param.height is None:
+        base_param.height = 500
+    if base_param.width is None:
+        base_param.width = 500
+    if base_param.dtype is None:
+        base_param.dtype = ImageDatatypes.UINT16
     incr_img_nb = not base_param.title
     prefix = base_param.itype.name.lower()
     if incr_img_nb:

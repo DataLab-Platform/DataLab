@@ -561,6 +561,7 @@ def create_noisygauss_image(
     center: tuple[float, float] | None = None,
     level: float = 0.1,
     add_annotations: bool = False,
+    extra_param: gds.DataSet | None = None,
 ) -> ImageObj:
     """Create test image (2D noisy gaussian)
 
@@ -569,6 +570,7 @@ def create_noisygauss_image(
         center: Center of the gaussian. Defaults to None.
         level: Level of the random noise. Defaults to 0.1.
         add_annotations: If True, add annotations. Defaults to False.
+        extra_param: Extra parameters for the image creation. Defaults to None.
 
     Returns:
         Image object
@@ -577,7 +579,7 @@ def create_noisygauss_image(
     p.title = "Test image (noisy 2D Gaussian)" if p.title is None else p.title
     dtype = p.dtype.value
     size = p.width
-    obj = create_image(p)
+    obj = create_image_from_param(p, extra_param=extra_param)
     if center is None:
         # Default center
         x0, y0 = 2.0, 3.0
@@ -592,12 +594,13 @@ def create_noisygauss_image(
 
 
 def create_multigauss_image(
-    p: NewImageParam | None = None,
+    p: NewImageParam | None = None, extra_param: gds.DataSet | None = None
 ) -> ImageObj:
     """Create test image (multiple 2D-gaussian peaks)
 
     Args:
         p: Image parameters. Defaults to None.
+        extra_param: Extra parameters for the image creation. Defaults to None.
 
     Returns:
         Image object
@@ -606,7 +609,7 @@ def create_multigauss_image(
     p.title = "Test image (multi-2D-gaussian)" if p.title is None else p.title
     dtype = p.dtype.value
     size = p.width
-    obj = create_image(p)
+    obj = create_image_from_param(p, extra_param=extra_param)
     obj.data = (
         create_2d_gaussian(size, dtype, x0=0.5, y0=3.0)
         + create_2d_gaussian(size, dtype, x0=-1.0, y0=-1.0, sigma=1.0)

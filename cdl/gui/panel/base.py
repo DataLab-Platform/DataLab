@@ -45,7 +45,7 @@ from cdl.env import execenv
 from cdl.gui import actionhandler, objectview
 from cdl.gui.newobject import NewSignalParam
 from cdl.gui.roieditor import TypeROIEditor
-from cdl.objectmodel import get_uuid, set_uuid, short_id
+from cdl.objectmodel import ObjectGroup, get_uuid, set_uuid, short_id
 from cdl.utils.qthelpers import (
     CallbackWorker,
     create_progress_bar,
@@ -200,7 +200,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         with reader.group(name):
             obj = self.create_object()
             obj.deserialize(reader)
-            set_uuid(obj)
+            if isinstance(obj, (SignalObj, ImageObj, ObjectGroup)):
+                set_uuid(obj)
         return obj
 
     @abc.abstractmethod
@@ -327,7 +328,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Ensure that item's parameters are up-to-date:
             item.param.update_param(item)
             # Update object metadata from plot item parameters
-            obj.update_metadata_from_plot_item(item)
+            create_adapter_from_object(obj).update_metadata_from_plot_item(item)
             if obj is self.objview.get_current_object():
                 self.objprop.update_properties_from(obj)
         self.plothandler.update_resultproperty_from_plot_item(item)
@@ -357,7 +358,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # save the latest visualization settings:
         try:
             item = self.plothandler[get_uuid(obj)]
-            obj.update_metadata_from_plot_item(item)
+            create_adapter_from_object(obj).update_metadata_from_plot_item(item)
         except KeyError:
             # Plot item has not been created yet (this happens when auto-refresh has
             # been disabled)

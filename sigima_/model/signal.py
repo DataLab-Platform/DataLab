@@ -118,11 +118,6 @@ class SegmentROI(base.BaseSingleROI["SignalObj", ROI1DParam]):
         param.xmin, param.xmax = self.get_physical_coords(obj)
         return param
 
-    # def to_plot_item(self, obj: SignalObj, title: str | None = None)
-
-    # @classmethod
-    # def from_plot_item(cls: SegmentROI, item: XRangeSelection) -> SegmentROI:
-
 
 class SignalROI(base.BaseROI["SignalObj", SegmentROI, ROI1DParam]):
     """Signal Regions of Interest
@@ -207,7 +202,7 @@ class SignalObj(gds.DataSet, base.BaseObj[SignalROI]):
     annotations = gds.StringItem(_("Annotations"), default="").set_prop(
         "display",
         hide=True,
-    )  # Annotations as a serialized JSON string
+    )  # Annotations as a serialized JSON string  # type: ignore[assignment]
     _e_datag = gds.EndGroup(_("Data and metadata"))
 
     _unitsg = gds.BeginGroup(_("Titles and units"))

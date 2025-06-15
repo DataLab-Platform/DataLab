@@ -626,6 +626,7 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
 
     # This is overriden in children classes with a gds.DictItem instance:
     metadata: dict[str, Any] = {}
+    annotations: str = ""
 
     VALID_DTYPES = (np.float64,)  # To be overriden in children classes
 

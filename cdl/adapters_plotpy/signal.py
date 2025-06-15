@@ -50,7 +50,8 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, XRangeSelec
         item = make.range(xmin, xmax)
         return item
 
-    def from_plot_item(self, item: XRangeSelection) -> SegmentROI:
+    @classmethod
+    def from_plot_item(cls, item: XRangeSelection) -> SegmentROI:
         """Create ROI from plot item
 
         Args:

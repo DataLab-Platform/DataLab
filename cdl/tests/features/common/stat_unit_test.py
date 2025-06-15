@@ -64,7 +64,8 @@ def create_reference_signal() -> model.SignalObj:
 def create_reference_image() -> model.ImageObj:
     """Create reference image"""
     inew = model.NewImageParam.create(title="2D-Gaussian", itype=model.ImageTypes.GAUSS)
-    ima = model.create_image_from_param(inew, extra_param=model.Gauss2DParam())
+    extra_param = model.Gauss2DParam()
+    ima = model.create_image_from_param(inew, extra_param=extra_param)
     dy, dx = ima.data.shape
     ima.roi = model.create_image_roi(
         "rectangle",
