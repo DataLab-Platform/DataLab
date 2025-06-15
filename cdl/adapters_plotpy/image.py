@@ -21,10 +21,11 @@ from plotpy.items import (
 
 from cdl.adapters_plotpy.base import (
     BaseObjPlotPyAdapter,
+    BaseROIPlotPyAdapter,
     BaseSingleROIPlotPyAdapter,
 )
 from cdl.config import Conf
-from sigima_.model import CircularROI, ImageObj, PolygonalROI, RectangularROI
+from sigima_ import CircularROI, ImageObj, ImageROI, PolygonalROI, RectangularROI
 
 
 class PolygonalROIPlotPyAdapter(
@@ -168,6 +169,35 @@ class CircularROIPlotPyAdapter(
         return CircularROI(
             CircularROI.rect_to_coords(*rect), False, item.annotationparam.title
         )
+
+
+class ImageROIPlotPyAdapter(BaseROIPlotPyAdapter[ImageROI]):
+    """Image ROI plot item adapter class
+
+    Args:
+        roi: ROI object
+    """
+
+    def to_plot_item(
+        self,
+        single_roi: PolygonalROI | RectangularROI | CircularROI,
+        obj: ImageObj,
+        title: str | None = None,
+    ) -> AnnotatedCircle | AnnotatedRectangle | AnnotatedPolygon:
+        """Make ROI plot item from single ROI
+
+        Args:
+            single_roi: single ROI object
+            obj: object (signal/image), for physical-indices coordinates conversion
+            title: ROI title
+
+        Returns:
+            Plot item
+        """
+        # pylint: disable=import-outside-toplevel
+        from cdl.adapters_plotpy.factories import create_adapter_from_object
+
+        return create_adapter_from_object(single_roi).to_plot_item(obj, title)
 
 
 class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):

@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 from sigima_ import (
     CircularROI,
     ImageObj,
+    ImageROI,
     PolygonalROI,
     RectangularROI,
     ResultProperties,
@@ -31,6 +32,7 @@ if TYPE_CHECKING:
     from cdl.adapters_plotpy.image import (
         CircularROIPlotPyAdapter,
         ImageObjPlotPyAdapter,
+        ImageROIPlotPyAdapter,
         PolygonalROIPlotPyAdapter,
         RectangularROIPlotPyAdapter,
     )
@@ -78,6 +80,7 @@ def create_adapter_from_object(
     from cdl.adapters_plotpy.image import (
         CircularROIPlotPyAdapter,
         ImageObjPlotPyAdapter,
+        ImageROIPlotPyAdapter,
         PolygonalROIPlotPyAdapter,
         RectangularROIPlotPyAdapter,
     )
@@ -105,6 +108,8 @@ def create_adapter_from_object(
         adapter = CircularROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, PolygonalROI):
         adapter = PolygonalROIPlotPyAdapter(object_to_adapt)
+    elif isinstance(object_to_adapt, ImageROI):
+        adapter = ImageROIPlotPyAdapter(object_to_adapt)
     else:
         raise TypeError(f"Unsupported object type: {type(object_to_adapt)}")
     return adapter
