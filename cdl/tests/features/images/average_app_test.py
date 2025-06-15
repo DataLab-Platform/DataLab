@@ -33,7 +33,7 @@ def test_image_average():
         p = model.NewImageParam.create(height=size, width=size, dtype=dtype)
         data = ctd.create_2d_gaussian(size, np.dtype(dtype.value))
         for _idx in range(N):
-            obj = model.create_image(p)
+            obj = model.create_image_from_param(p)
             obj.data = data
             panel.add_object(obj)
         panel.objview.select_groups([0])
