@@ -30,7 +30,7 @@ def create_image_with_resultshapes():
         dtype=model.ImageDatatypes.UINT16,
     )
     addparam = model.Gauss2DParam.create(x0=2, y0=3)
-    image = model.create_image(newparam, addparam)
+    image = model.create_image_from_param(newparam, addparam)
     for mshape in test_data.create_resultshapes():
         mshape.add_to(image)
     return image
