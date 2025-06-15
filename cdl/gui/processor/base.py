@@ -825,6 +825,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     if new_obj is None:
                         break
                     group_id = dst_gid if dst_gid is not None else src_gid
+                    patch_title_with_ids(new_obj, src_obj_list, short_id)
                     self.panel.add_object(new_obj, group_id=group_id)
 
         # Select newly created group, if any
@@ -971,6 +972,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     if new_obj is None:
                         continue
                     group_id = objmodel.get_object_group_id(obj)
+                    patch_title_with_ids(new_obj, [obj, obj2], short_id)
                     self.panel.add_object(new_obj, group_id=group_id)
 
     def register_1_to_1(
