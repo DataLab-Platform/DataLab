@@ -37,11 +37,10 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterator
-from typing import TYPE_CHECKING, Callable
+from typing import Callable
 from uuid import uuid4
 
-if TYPE_CHECKING:
-    from sigima_ import ImageObj, SignalObj
+from sigima_ import ImageObj, SignalObj
 
 
 def get_number(obj: SignalObj | ImageObj | ObjectGroup) -> int:
