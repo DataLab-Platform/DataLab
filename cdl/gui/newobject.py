@@ -26,7 +26,6 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import _
 from sigima_.model import NormalRandomParam, UniformRandomParam
-from sigima_.model.base import Choices
 from sigima_.model.image import (
     Gauss2DParam,
     ImageDatatypes,
@@ -40,6 +39,7 @@ from sigima_.model.signal import (
     DEFAULT_TITLE,
     ExponentialParam,
     GaussLorentzVoigtParam,
+    NewSignalParam,
     PeriodicParam,
     PolyParam,
     PulseParam,
@@ -49,43 +49,12 @@ from sigima_.model.signal import (
     create_signal,
     get_next_signal_number,
 )
-from sigima_.model.signal import NewSignalParam as OrigNewSignalParam
+from sigima_.model.signal import ExperimentalSignalParam as OrigExperimentalSignalParam
 from sigima_.model.signal import create_signal_from_param as create_signal_headless
 
 
-class ExtendedSignalTypes(Choices):
-    """Signal types"""
-
-    ZEROS = SignalTypes.ZEROS
-    GAUSS = SignalTypes.GAUSS
-    LORENTZ = SignalTypes.LORENTZ
-    VOIGT = SignalTypes.VOIGT
-    UNIFORMRANDOM = SignalTypes.UNIFORMRANDOM
-    NORMALRANDOM = SignalTypes.NORMALRANDOM
-    SINUS = SignalTypes.SINUS
-    COSINUS = SignalTypes.COSINUS
-    SAWTOOTH = SignalTypes.SAWTOOTH
-    TRIANGLE = SignalTypes.TRIANGLE
-    SQUARE = SignalTypes.SQUARE
-    SINC = SignalTypes.SINC
-    STEP = SignalTypes.STEP
-    EXPONENTIAL = SignalTypes.EXPONENTIAL
-    PULSE = SignalTypes.PULSE
-    POLYNOMIAL = SignalTypes.POLYNOMIAL
-    #: Experimental function
-    EXPERIMENTAL = _("experimental")
-
-
-class ExperSignalParam(gds.DataSet):
+class ExperimentalSignalParam(OrigExperimentalSignalParam):
     """Parameters for experimental signal"""
-
-    size = gds.IntItem("Size", default=5).set_prop("display", hide=True)
-    xyarray = gds.FloatArrayItem(
-        "XY Values",
-        format="%g",
-    )
-    xmin = gds.FloatItem("Min", default=0).set_prop("display", hide=True)
-    xmax = gds.FloatItem("Max", default=1).set_prop("display", hide=True)
 
     def edit_curve(self, *args) -> None:  # pylint: disable=unused-argument
         """Edit experimental curve"""
@@ -118,34 +87,6 @@ class ExperSignalParam(gds.DataSet):
 
     btn_curve_edit = gds.ButtonItem(
         "Edit curve", callback=edit_curve, icon="signal.svg"
-    )
-
-    def setup_array(
-        self,
-        size: int | None = None,
-        xmin: float | None = None,
-        xmax: float | None = None,
-    ) -> None:
-        """Setup the xyarray from size, xmin and xmax (use the current values is not
-        provided)
-
-        Args:
-            size: xyarray size (default: None)
-            xmin: X min (default: None)
-            xmax: X max (default: None)
-        """
-        self.size = size or self.size
-        self.xmin = xmin or self.xmin
-        self.xmax = xmax or self.xmax
-        x_arr = np.linspace(self.xmin, self.xmax, self.size)  # type: ignore
-        self.xyarray = np.vstack((x_arr, x_arr)).T
-
-
-class NewSignalParam(OrigNewSignalParam):
-    """New signal dataset"""
-
-    stype = gds.ChoiceItem(_("Type"), ExtendedSignalTypes.get_choices()).set_prop(
-        "display", hide=gds.GetAttrProp("hide_signal_type")
     )
 
 
@@ -182,33 +123,36 @@ def create_signal_gui(
     if incr_sig_nb:
         base_param.title = f"{base_param.title} {get_next_signal_number():d}"
 
-    if base_param.stype == ExtendedSignalTypes.EXPERIMENTAL:
-        p2 = ExperSignalParam("Experimental points")
-        p2.setup_array(size=base_param.size, xmin=base_param.xmin, xmax=base_param.xmax)
-        if edit and not p2.edit(parent=parent):
+    if base_param.stype == SignalTypes.EXPERIMENTAL:
+        exp_param = ExperimentalSignalParam(_("Experimental points"))
+        exp_param.setup_array(
+            size=base_param.size, xmin=base_param.xmin, xmax=base_param.xmax
+        )
+        if edit and not exp_param.edit(parent=parent):
             return None
         signal = create_signal(base_param.title)
-        signal.xydata = p2.xyarray.T
+        signal.xydata = exp_param.xyarray.T
         if signal.title == DEFAULT_TITLE:
-            signal.title = f"experimental(npts={p2.size})"
+            signal.title = f"experimental(npts={exp_param.size})"
         return signal
 
     param_classes = {
-        ExtendedSignalTypes.UNIFORMRANDOM: UniformRandomParam,
-        ExtendedSignalTypes.NORMALRANDOM: NormalRandomParam,
-        ExtendedSignalTypes.GAUSS: GaussLorentzVoigtParam,
-        ExtendedSignalTypes.LORENTZ: GaussLorentzVoigtParam,
-        ExtendedSignalTypes.VOIGT: GaussLorentzVoigtParam,
-        ExtendedSignalTypes.SINUS: PeriodicParam,
-        ExtendedSignalTypes.COSINUS: PeriodicParam,
-        ExtendedSignalTypes.SAWTOOTH: PeriodicParam,
-        ExtendedSignalTypes.TRIANGLE: PeriodicParam,
-        ExtendedSignalTypes.SQUARE: PeriodicParam,
-        ExtendedSignalTypes.SINC: PeriodicParam,
-        ExtendedSignalTypes.STEP: StepParam,
-        ExtendedSignalTypes.EXPONENTIAL: ExponentialParam,
-        ExtendedSignalTypes.PULSE: PulseParam,
-        ExtendedSignalTypes.POLYNOMIAL: PolyParam,
+        SignalTypes.UNIFORMRANDOM: UniformRandomParam,
+        SignalTypes.NORMALRANDOM: NormalRandomParam,
+        SignalTypes.GAUSS: GaussLorentzVoigtParam,
+        SignalTypes.LORENTZ: GaussLorentzVoigtParam,
+        SignalTypes.VOIGT: GaussLorentzVoigtParam,
+        SignalTypes.SINUS: PeriodicParam,
+        SignalTypes.COSINUS: PeriodicParam,
+        SignalTypes.SAWTOOTH: PeriodicParam,
+        SignalTypes.TRIANGLE: PeriodicParam,
+        SignalTypes.SQUARE: PeriodicParam,
+        SignalTypes.SINC: PeriodicParam,
+        SignalTypes.STEP: StepParam,
+        SignalTypes.EXPONENTIAL: ExponentialParam,
+        SignalTypes.PULSE: PulseParam,
+        SignalTypes.POLYNOMIAL: PolyParam,
+        SignalTypes.EXPERIMENTAL: ExperimentalSignalParam,
     }
     if base_param.stype in param_classes:
         if extra_param is None:

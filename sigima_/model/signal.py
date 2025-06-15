@@ -507,6 +507,8 @@ class SignalTypes(base.Choices):
     PULSE = _("pulse")
     #: Polynomial function
     POLYNOMIAL = _("polynomial")
+    #: Experimental function
+    EXPERIMENTAL = _("experimental")
 
 
 class GaussLorentzVoigtParam(gds.DataSet):
@@ -585,6 +587,38 @@ class PolyParam(gds.DataSet):
     a4 = gds.FloatItem("a4", default=0.0).set_pos(col=1)
     a2 = gds.FloatItem("a2", default=0.0)
     a5 = gds.FloatItem("a5", default=0.0).set_pos(col=1)
+
+
+class ExperimentalSignalParam(gds.DataSet):
+    """Parameters for experimental signal"""
+
+    size = gds.IntItem("Size", default=5).set_prop("display", hide=True)
+    xyarray = gds.FloatArrayItem(
+        "XY Values",
+        format="%g",
+    )
+    xmin = gds.FloatItem("Min", default=0).set_prop("display", hide=True)
+    xmax = gds.FloatItem("Max", default=1).set_prop("display", hide=True)
+
+    def setup_array(
+        self,
+        size: int | None = None,
+        xmin: float | None = None,
+        xmax: float | None = None,
+    ) -> None:
+        """Setup the xyarray from size, xmin and xmax (use the current values is not
+        provided)
+
+        Args:
+            size: xyarray size (default: None)
+            xmin: X min (default: None)
+            xmax: X max (default: None)
+        """
+        self.size = size or self.size
+        self.xmin = xmin or self.xmin
+        self.xmax = xmax or self.xmax
+        x_arr = np.linspace(self.xmin, self.xmax, self.size)  # type: ignore
+        self.xyarray = np.vstack((x_arr, x_arr)).T
 
 
 DEFAULT_TITLE = _("Untitled signal")
@@ -758,6 +792,14 @@ def create_signal_from_param(
             f"{prefix}(a0={ep.a0:.3g},a1={ep.a1:.3g},a2={ep.a2:.3g},"
             f"a3={ep.a3:.3g},a4={ep.a4:.3g},a5={ep.a5:.3g})"
         )
+
+    elif base_param.stype == SignalTypes.EXPERIMENTAL:
+        if ep is None:
+            raise ValueError("extra_param (Experimental) required.")
+        assert isinstance(ep, ExperimentalSignalParam)
+        ep.setup_array(size=base_param.size, xmin=base_param.xmin, xmax=base_param.xmax)
+        xarr, yarr = ep.xyarray.T
+        title = f"experimental(npts={ep.size})"
 
     else:
         raise NotImplementedError(

@@ -63,6 +63,8 @@ def iterate_signal_creation(
             extra_param = model.PulseParam()
         elif stype == model.SignalTypes.POLYNOMIAL:
             extra_param = model.PolyParam()
+        elif stype == model.SignalTypes.EXPERIMENTAL:
+            extra_param = model.ExperimentalSignalParam()
         else:
             extra_param = None
         signal = model.create_signal_from_param(base_param, extra_param=extra_param)
@@ -186,4 +188,5 @@ def test_new_object():
 
 
 if __name__ == "__main__":
-    test_new_object()
+    # test_new_object()
+    print(model.SignalTypes.get_choices())

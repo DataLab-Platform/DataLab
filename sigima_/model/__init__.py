@@ -41,6 +41,7 @@ from sigima_.model.signal import (
     create_signal,
     create_signal_from_param,
     ExponentialParam,
+    ExperimentalSignalParam,
     PulseParam,
     PolyParam,
     StepParam,

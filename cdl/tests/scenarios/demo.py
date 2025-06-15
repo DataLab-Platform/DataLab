@@ -92,9 +92,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     panel.objview.set_current_object(sig3)
     panel.processor.compute_multigaussianfit()
 
-    base_param = cdl.gui.newobject.NewSignalParam.create(
-        title=_("Gaussian"), stype=cdl.gui.newobject.ExtendedSignalTypes.GAUSS
-    )
+    base_param = NewSignalParam.create(title=_("Gaussian"), stype=SignalTypes.GAUSS)
     sig = create_signal_from_param(base_param, GaussLorentzVoigtParam())
     panel.add_object(sig)
 
