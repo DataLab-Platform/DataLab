@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 14:03+0200\n"
+"POT-Creation-Date: 2025-05-16 10:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -232,7 +232,10 @@ msgstr ""
 msgid "New instance of :py:class:`ConstantParam`."
 msgstr ""
 
-msgid "Create a result object, as returned by the callback function of the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method"
+msgid "Create a result object, as returned by the callback function of the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_1_to_1` method."
+msgstr ""
+
+msgid "Data of the result object is copied from the source object (`src`). This initial data is usually replaced by the processing function, but it may also be used to initialize the result object as part of the processing function."
 msgstr ""
 
 msgid "source signal or image object"
@@ -248,25 +251,37 @@ msgstr ""
 msgid "Result signal or image object"
 msgstr ""
 
-msgid "Create a result  object, as returned by the callback function of the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method"
+msgid "Create a result object, as returned by the callback function of the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n_to_1` method"
 msgstr ""
 
-msgid "input signal or image object"
+msgid "Data of the result object is copied from the first source object (`src_list[0]`). This initial data is usually replaced by the processing function, but it may also be used to initialize the result object as part of the processing function."
+msgstr ""
+
+msgid "list of input signal or image objects"
 msgstr ""
 
 msgid "name of the processing function"
 msgstr ""
 
+msgid "suffix to add to the title"
+msgstr ""
+
+msgid "Create a result  object, as returned by the callback function of the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_2_to_1` method"
+msgstr ""
+
+msgid "Data of the result object is copied from the first source object (`src1`). This initial data is usually replaced by the processing function, but it may also be used to initialize the result object as part of the processing function."
+msgstr ""
+
+msgid "input signal or image object"
+msgstr ""
+
 msgid "Output signal or image object"
 msgstr ""
 
-msgid "Create new signal object as a result of a compute_11 function"
+msgid "Create new signal object as a result of a `compute_1_to_1` function"
 msgstr ""
 
-msgid "As opposed to the `dst_11` functions, this function creates a new signal object without copying the original object metadata, except for the \"source\" entry."
-msgstr ""
-
-msgid "suffix to add to the title"
+msgid "As opposed to the `dst_1_to_1` functions, this function creates a new signal object without copying the original object metadata, except for the \"source\" entry."
 msgstr ""
 
 msgid "units of the output signal"
@@ -326,19 +341,19 @@ msgstr ""
 msgid "Additional keyword arguments to pass to the function"
 msgstr ""
 
-msgid "Add **dst** and **src** signals and return **dst** signal modified in place"
+msgid "Add **src** signals and return a new result signal object"
 msgstr ""
 
-msgid "destination signal"
-msgstr ""
-
-msgid "source signal"
+msgid "list of source signals"
 msgstr ""
 
 msgid "Modified **dst** signal (modified in place)"
 msgstr ""
 
-msgid "Multiply **dst** and **src** signals and return **dst** signal modified in place"
+msgid "Average **src** signals and return a new result signal object"
+msgstr ""
+
+msgid "Multiply **dst** by **src** signals and return a new result signal object"
 msgstr ""
 
 msgid "Add **dst** and a constant value and return a the new result signal object"
@@ -408,6 +423,9 @@ msgid "Result signal object **src1** / **src2**"
 msgstr ""
 
 msgid "Extract multiple regions of interest from data"
+msgstr ""
+
+msgid "source signal"
 msgstr ""
 
 msgid "group of parameters"
@@ -626,6 +644,18 @@ msgstr ""
 msgid "Compute frequency filter (low-pass, high-pass, band-pass, band-stop), with :py:func:`scipy.signal.filtfilt`"
 msgstr ""
 
+msgid "Compute low-pass filter with :py:func:`scipy.signal.filtfilt`"
+msgstr ""
+
+msgid "Compute high-pass filter with :py:func:`scipy.signal.filtfilt`"
+msgstr ""
+
+msgid "Compute band-pass filter with :py:func:`scipy.signal.filtfilt`"
+msgstr ""
+
+msgid "Compute band-stop filter with :py:func:`scipy.signal.filtfilt`"
+msgstr ""
+
 msgid "Zero padding parameters"
 msgstr ""
 
@@ -722,6 +752,9 @@ msgstr ""
 msgid "New instance of :py:class:`ResamplingParam`."
 msgstr ""
 
+msgid "Update parameters from a signal object."
+msgstr ""
+
 msgid "Resample data with :py:func:`cdl.algorithms.signal.interpolate`"
 msgstr ""
 
@@ -780,6 +813,9 @@ msgid "New instance of :py:class:`WindowingParam`."
 msgstr ""
 
 msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman, tukey, rectangular) with :py:func:`cdl.algorithms.signal.windowing`"
+msgstr ""
+
+msgid "destination signal"
 msgstr ""
 
 msgid "Reverse x-axis"
@@ -1049,16 +1085,22 @@ msgstr ""
 msgid "The instance of this wrapper is callable and returns a :class:`cdl.obj.ImageObj` object."
 msgstr ""
 
-msgid "Create a result signal object, as returned by the callback function of the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method"
+msgid "Create a result signal object, as returned by the callback function of the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_1_to_1` method"
 msgstr ""
 
-msgid "Add **dst** and **src** images and return **dst** image modified in place"
+msgid "Add images in the list and return the result image object"
+msgstr ""
+
+msgid "list of input image objects"
 msgstr ""
 
 msgid "Output image object (modified in place)"
 msgstr ""
 
-msgid "Multiply **dst** and **src** images and return **dst** image modified in place"
+msgid "Compute the average of images in the list and return the result image object"
+msgstr ""
+
+msgid "Multiply images in the list and return the result image object"
 msgstr ""
 
 msgid "Add **dst** and a constant value and return the new result image object"
@@ -1119,6 +1161,9 @@ msgid "Returns a new instance of :py:class:`FlatFieldParam` with the fields set 
 msgstr ""
 
 msgid "New instance of :py:class:`FlatFieldParam`."
+msgstr ""
+
+msgid "Update parameters from image"
 msgstr ""
 
 msgid "Compute flat field correction with :py:func:`cdl.algorithms.image.flatfield`"
@@ -1377,9 +1422,6 @@ msgid "Returns a new instance of :py:class:`RadialProfileParam` with the fields 
 msgstr ""
 
 msgid "New instance of :py:class:`RadialProfileParam`."
-msgstr ""
-
-msgid "Update parameters from image"
 msgstr ""
 
 msgid "Compute radial profile around the centroid with :py:func:`cdl.algorithms.image.get_radial_profile`"
@@ -2113,3 +2155,37 @@ msgstr ""
 
 msgid "Compute blobs using OpenCV with :py:func:`cdl.algorithms.image.find_blobs_opencv`"
 msgstr ""
+
+msgid "Decorator to mark a function as a DataLab computation function."
+msgstr ""
+
+msgid "Optional name to override the function name."
+msgstr ""
+
+msgid "Optional docstring override or additional description."
+msgstr ""
+
+msgid "The wrapped function, tagged with a marker attribute."
+msgstr ""
+
+msgid "Check if a function is a DataLab computation function."
+msgstr ""
+
+msgid "The function to check."
+msgstr ""
+
+msgid "True if the function is a DataLab computation function, False otherwise."
+msgstr ""
+
+msgid "Find all computation functions in the `cdl.computation` package."
+msgstr ""
+
+msgid "This function uses introspection to locate all functions decorated with `@computation_function` in the `cdl.computation` package and its subpackages."
+msgstr ""
+
+msgid "Optional module to search in. If None, the current module is used."
+msgstr ""
+
+msgid "A list of tuples, each containing the function name and the function object."
+msgstr ""
+

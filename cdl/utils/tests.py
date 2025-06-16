@@ -297,8 +297,8 @@ def check_scalar_result(
     restxt = f"{title}: {res} (expected: {exp})"
     execenv.print(restxt)
     if isinstance(exp, tuple):
-        assert any(
-            np.isclose(res, exp_val, rtol=rtol, atol=atol) for exp_val in exp
-        ), restxt
+        assert any(np.isclose(res, exp_val, rtol=rtol, atol=atol) for exp_val in exp), (
+            restxt
+        )
     else:
         assert np.isclose(res, exp, rtol=rtol, atol=atol), restxt

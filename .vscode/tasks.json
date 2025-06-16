@@ -4,6 +4,84 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Run Ruff Formatter",
+            "command": "ruff",
+            "args": [
+                "format"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true
+            },
+            "type": "shell"
+        },
+        {
+            "label": "Run Ruff Linter",
+            "command": "ruff",
+            "args": [
+                "check",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell"
+        },
+        {
+            "label": "Run Pylint",
+            "command": "pylint",
+            "args": [
+                "cdl",
+                "--disable=duplicate-code",
+                "--disable=fixme",
+                "--disable=too-many-arguments",
+                "--disable=too-many-branches",
+                "--disable=too-many-instance-attributes",
+                "--disable=too-many-lines",
+                "--disable=too-many-locals",
+                "--disable=too-many-public-methods",
+                "--disable=too-many-statements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true
+            },
+            "type": "shell"
+        },
+        {
             "label": "gettext - Scan",
             "type": "shell",
             "command": "cmd",
@@ -14,7 +92,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -43,7 +121,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -61,20 +139,18 @@
             }
         },
         {
-            "label": "Run Pylint",
+            "label": "Run pytest",
             "type": "shell",
             "command": "cmd",
             "args": [
                 "/c",
-                "run_pylint.bat",
-                "--disable=fixme",
-                "--disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements,too-many-public-methods,too-many-lines,too-many-instance-attributes",
-                "--disable=R0801",
+                "run_pytest.bat"
             ],
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    // "DEBUG": "1",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -92,32 +168,30 @@
             }
         },
         {
-            "label": "Run Ruff",
-            "type": "shell",
-            "command": "cmd",
+            "label": "Update requirements.txt",
+            "command": "toml-to-req",
             "args": [
-                "/c",
-                "run_ruff.bat",
+                "--toml-file",
+                "pyproject.toml",
+                "--optional-lists",
+                "qt,opencv,dev,doc,test",
             ],
             "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
-                    "UNATTENDED": "1"
-                }
+                "cwd": "${workspaceFolder}"
             },
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "presentation": {
+                "clear": true,
                 "echo": true,
-                "reveal": "always",
                 "focus": false,
                 "panel": "dedicated",
+                "reveal": "always",
                 "showReuseMessage": true,
-                "clear": true
-            }
+            },
+            "type": "shell"
         },
         {
             "label": "Run Coverage",
@@ -130,7 +204,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -158,36 +232,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
-                    "UNATTENDED": "1"
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "dedicated",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
-            "label": "Run pytest",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "run_pytest.bat"
-            ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    // "DEBUG": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -215,7 +260,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -233,7 +278,7 @@
             }
         },
         {
-            "label": "Upgrade all packages (!)",
+            "label": "Upgrade all packages ⚠️",
             "type": "shell",
             "command": "cmd",
             "args": [
@@ -243,7 +288,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -271,7 +316,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
@@ -319,7 +364,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
@@ -349,7 +394,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1",
                 }
             },
@@ -378,7 +423,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
@@ -409,7 +454,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
@@ -440,7 +485,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
@@ -471,7 +516,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
@@ -506,7 +551,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "UNATTENDED": "1"
                 }
@@ -540,7 +585,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
@@ -578,7 +623,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
@@ -618,7 +663,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${command:python.interpreterPath}",
                 }
             },
             "group": {
