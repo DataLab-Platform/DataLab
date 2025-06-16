@@ -20,4 +20,4 @@ sphinx-copybutton
 sphinx-sitemap
 sphinx_design
 sphinx_intl
-toml-to-requirements==0.3.0
+toml-to-requirements
