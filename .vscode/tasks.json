@@ -82,6 +82,74 @@
             "type": "shell"
         },
         {
+            "label": "sphinx-build",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "sphinx",
+                "build",
+                ".",
+                "../build/gettext",
+                "-b",
+                "gettext",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/doc",
+                "statusbar": {
+                    "hide": true
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell"
+        },
+        {
+            "label": "📒 Sphinx intl",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "sphinx_intl",
+                "update",
+                "-p",
+                "../build/gettext",
+                "-l",
+                "fr",
+                "--no-obsolete",
+                "-w",
+                "0",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/doc",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "sphinx-build"
+            ]
+        },
+        {
             "label": "🔎 Scan translations",
             "command": "${command:python.interpreterPath}",
             "args": [
