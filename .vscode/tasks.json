@@ -14,7 +14,7 @@
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": true
             },
             "presentation": {
                 "clear": true,
@@ -37,7 +37,7 @@
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": true
             },
             "presentation": {
                 "clear": true,
@@ -69,7 +69,7 @@
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": true
             },
             "presentation": {
                 "clear": true,
@@ -180,7 +180,10 @@
                 "qt,opencv,dev,doc,test",
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true
+                }
             },
             "group": {
                 "kind": "build",
@@ -237,11 +240,14 @@
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -265,11 +271,14 @@
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -281,7 +290,7 @@
             }
         },
         {
-            "label": "Upgrade all packages (!)",
+            "label": "Upgrade all packages ⚠️",
             "type": "shell",
             "command": "cmd",
             "args": [
@@ -293,11 +302,14 @@
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -370,6 +382,9 @@
                     "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "args": [
@@ -379,7 +394,7 @@
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -399,6 +414,9 @@
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1",
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "args": [
@@ -408,7 +426,7 @@
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -430,6 +448,9 @@
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "args": [
@@ -439,7 +460,7 @@
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -492,6 +513,9 @@
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "args": [
@@ -501,7 +525,7 @@
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -523,6 +547,9 @@
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "args": [
@@ -532,7 +559,7 @@
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -557,6 +584,9 @@
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "args": [
@@ -566,7 +596,7 @@
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -591,6 +621,9 @@
                     "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
                     "UNATTENDED": "1"
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "args": [
@@ -600,7 +633,7 @@
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
@@ -667,11 +700,14 @@
                 "env": {
                     "UNATTENDED": "1",
                     "PYTHON": "${command:python.interpreterPath}",
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "echo": true,
