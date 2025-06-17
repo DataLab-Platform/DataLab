@@ -92,6 +92,8 @@
                 "cdl",
                 "--directory",
                 ".",
+                "--copyright-holder",
+                "DataLab Platform Developers"
             ],
             "group": {
                 "kind": "build",
