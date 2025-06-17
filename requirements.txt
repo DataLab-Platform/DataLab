@@ -3,7 +3,7 @@ PlotPy >= 2.7.4
 PyQt5
 PyWavelets >= 1.1
 SciPy >= 1.5, < 1.15.0
-babel == 2.17.0
+babel
 guidata >= 3.9
 myst_parser
 opencv-python-headless >= 4.5
@@ -14,7 +14,6 @@ pyinstaller>=6.0
 pylint
 pytest
 pytest-xvfb
-python-dotenv == 1.1.0
 ruff
 scikit-image >= 0.18
 sphinx

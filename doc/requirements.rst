@@ -45,25 +45,22 @@ Optional modules for development:
       - Version
       - Summary
     * - babel
-      -  == 2.17.0
+      -
       - Internationalization utilities
     * - Coverage
-      - 
+      -
       - Code coverage measurement for Python
     * - pyinstaller
       - >=6.0
       - PyInstaller bundles a Python application and all its dependencies into a single package.
     * - pylint
-      - 
+      -
       - python code static checker
-    * - python-dotenv
-      -  == 1.1.0
-      - Read key-value pairs from a .env file and set them as environment variables
     * - ruff
-      - 
+      -
       - An extremely fast Python linter and code formatter, written in Rust.
     * - toml-to-requirements
-      - 
+      -
       - Convert a pyproject.toml file to a requirements.txt file
 
 Optional modules for building the documentation:
@@ -76,28 +73,28 @@ Optional modules for building the documentation:
       - Version
       - Summary
     * - PyQt5
-      - 
+      -
       - Python bindings for the Qt cross platform application toolkit
     * - sphinx
-      - 
+      -
       - Python documentation generator
     * - sphinx_intl
-      - 
+      -
       - Sphinx utility that make it easy to translate and to apply translation.
     * - sphinx-sitemap
-      - 
+      -
       - Sitemap generator for Sphinx
     * - myst_parser
-      - 
+      -
       - An extended [CommonMark](https://spec.commonmark.org/) compliant parser,
     * - sphinx_design
-      - 
+      -
       - A sphinx extension for designing beautiful, view size responsive web components.
     * - sphinx-copybutton
-      - 
+      -
       - Add a copy button to each of your code cells.
     * - pydata-sphinx-theme
-      - 
+      -
       - Bootstrap-based Sphinx theme from the PyData community
 
 Optional modules for running test suite:
@@ -110,8 +107,8 @@ Optional modules for running test suite:
       - Version
       - Summary
     * - pytest
-      - 
+      -
       - pytest: simple powerful testing with Python
     * - pytest-xvfb
-      - 
+      -
       - A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests.
