@@ -4,7 +4,7 @@ PyQt5
 PyWavelets >= 1.1
 SciPy >= 1.5, < 1.15.0
 babel
-guidata >= 3.9
+guidata >= 3.10
 myst_parser
 opencv-python-headless >= 4.5
 pandas >= 1.2
