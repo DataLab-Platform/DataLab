@@ -429,12 +429,18 @@
             }
         },
         {
-            "label": "Upgrade PlotPyStack packages",
+            "label": "📦 Upgrade PlotPyStack",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "/c",
-                "upgrade_stack.bat"
+                "-m",
+                "pip",
+                "install",
+                "--upgrade",
+                "pip",
+                "PythonQwt",
+                "guidata",
+                "PlotPy",
             ],
             "options": {
                 "cwd": "scripts",
