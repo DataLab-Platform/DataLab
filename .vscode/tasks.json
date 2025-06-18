@@ -176,9 +176,9 @@
                 "focus": false,
                 "panel": "dedicated",
                 "reveal": "always",
-                "showReuseMessage": true,
+                "showReuseMessage": true
             },
-            "type": "shell",
+            "type": "shell"
         },
         {
             "label": "🔎 Scan translations",
@@ -202,12 +202,12 @@
                 "cwd": "${workspaceFolder}"
             },
             "presentation": {
+                "clear": false,
                 "echo": true,
                 "focus": false,
                 "panel": "shared",
                 "reveal": "always",
-                "showReuseMessage": true,
-                "clear": false
+                "showReuseMessage": true
             },
             "type": "shell",
             "dependsOrder": "sequence",
@@ -236,12 +236,12 @@
                 "cwd": "${workspaceFolder}"
             },
             "presentation": {
+                "clear": false,
                 "echo": true,
                 "focus": false,
                 "panel": "shared",
                 "reveal": "always",
-                "showReuseMessage": true,
-                "clear": false
+                "showReuseMessage": true
             },
             "type": "shell",
             "dependsOrder": "sequence",
@@ -430,7 +430,6 @@
         },
         {
             "label": "📦 Upgrade PlotPyStack",
-            "type": "shell",
             "command": "${command:python.interpreterPath}",
             "args": [
                 "-m",
@@ -443,11 +442,7 @@
                 "PlotPy",
             ],
             "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                }
+                "cwd": "${workspaceFolder}",
             },
             "group": {
                 "kind": "build",
@@ -460,7 +455,8 @@
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": false
-            }
+            },
+            "type": "shell"
         },
         {
             "label": "🧹 Clean Up",
