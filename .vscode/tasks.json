@@ -257,16 +257,16 @@
         },
         {
             "label": "🚀 Run pytest",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "/c",
-                "run_pytest.bat"
+                "-m",
+                "pytest",
+                "--ff"
             ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}",
                 "env": {
                     // "DEBUG": "1",
-                    "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1"
                 }
             },
