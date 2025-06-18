@@ -114,7 +114,7 @@
             "type": "shell"
         },
         {
-            "label": "📒 Sphinx intl",
+            "label": "sphinx-intl update",
             "command": "${command:python.interpreterPath}",
             "args": [
                 "-m",
@@ -130,6 +130,9 @@
             ],
             "options": {
                 "cwd": "${workspaceFolder}/doc",
+                "statusbar": {
+                    "hide": true
+                }
             },
             "group": {
                 "kind": "build",
@@ -150,7 +153,7 @@
             ]
         },
         {
-            "label": "📓 Sphinx build",
+            "label": "sphinx-intl build",
             "command": "${command:python.interpreterPath}",
             "args": [
                 "-m",
@@ -158,7 +161,10 @@
                 "build",
             ],
             "options": {
-                "cwd": "${workspaceFolder}/doc"
+                "cwd": "${workspaceFolder}/doc",
+                "statusbar": {
+                    "hide": true
+                }
             },
             "group": {
                 "kind": "build",
@@ -170,9 +176,9 @@
                 "focus": false,
                 "panel": "dedicated",
                 "reveal": "always",
-                "showReuseMessage": true
+                "showReuseMessage": true,
             },
-            "type": "shell"
+            "type": "shell",
         },
         {
             "label": "🔎 Scan translations",
@@ -204,6 +210,11 @@
                 "clear": false
             },
             "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "sphinx-build",
+                "sphinx-intl update"
+            ]
         },
         {
             "label": "📚 Compile translations",
@@ -232,7 +243,11 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "type": "shell"
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "sphinx-intl build",
+            ]
         },
         {
             "label": "Run pytest",
