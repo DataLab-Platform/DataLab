@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run Ruff Formatter",
+            "label": "🧽 Run Ruff Formatter",
             "command": "ruff",
             "args": [
                 "format"
@@ -27,7 +27,7 @@
             "type": "shell"
         },
         {
-            "label": "Run Ruff Linter",
+            "label": "🔦 Run Ruff Linter",
             "command": "ruff",
             "args": [
                 "check",
@@ -50,7 +50,7 @@
             "type": "shell"
         },
         {
-            "label": "Run Pylint",
+            "label": "🔦 Run Pylint",
             "command": "pylint",
             "args": [
                 "cdl",
@@ -250,7 +250,7 @@
             ]
         },
         {
-            "label": "Run pytest",
+            "label": "🚀 Run pytest",
             "command": "cmd",
             "args": [
                 "/c",
@@ -463,7 +463,7 @@
             }
         },
         {
-            "label": "Clean Up",
+            "label": "🧹 Clean Up",
             "type": "shell",
             "command": "cmd",
             "args": [
@@ -586,7 +586,7 @@
             }
         },
         {
-            "label": "HTML documentation: quick preview",
+            "label": "HTML doc: quick preview",
             "type": "shell",
             "command": "cmd",
             "options": {
@@ -763,7 +763,7 @@
             ]
         },
         {
-            "label": "New release",
+            "label": "✨ New release",
             "type": "shell",
             "command": "cmd",
             "args": [
@@ -833,7 +833,7 @@
             }
         },
         {
-            "label": "List untracked files",
+            "label": "❔ List untracked files",
             "type": "shell",
             "command": "git ls-files --others | Where-Object { $_ -notmatch '^\\.' -and $_ -notmatch '^(build|dist|releases)/' -and $_ -notmatch '.(pyc|mo)$'}",
             "options": {
