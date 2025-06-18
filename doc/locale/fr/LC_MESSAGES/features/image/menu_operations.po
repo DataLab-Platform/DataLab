@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-30 11:57+0200\n"
+"POT-Creation-Date: 2025-05-16 10:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "Operations on Images"
 msgstr "Opérations sur les images"
@@ -167,7 +167,7 @@ msgstr "Parties réelles et imaginaires"
 msgid "|abs| Absolute value"
 msgstr "|abs| Valeur absolue"
 
-msgid "absolute"
+msgid "abs"
 msgstr ""
 
 #, python-brace-format
@@ -355,3 +355,4 @@ msgstr ""
 
 msgid "Reset the positions of the selected images to first image (x0, y0) coordinates"
 msgstr "Réinitialiser les positions des images sélectionnées aux coordonnées de la première image (x0, y0)"
+

@@ -11,7 +11,6 @@
             "program": "${workspaceFolder}/cdl/app.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": false,
             "args": [
                 // "--reset"
@@ -33,7 +32,6 @@
             "program": "${workspaceFolder}/cdl/tests/__init__.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {
                 // "DEBUG": "1",
@@ -47,7 +45,6 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": false,
             "args": [
                 // "--h5browser",
@@ -74,7 +71,6 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "pythonArgs": [
                 "-W error::DeprecationWarning",
                 "-W error::RuntimeWarning",
@@ -99,7 +95,6 @@
             "module": "cProfile",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-o",
                 "${file}.prof",
@@ -113,7 +108,6 @@
             "program": "${workspaceFolder}/cdl/tests/features/hdf5/h5browser1_unit.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {
                 "DEBUG": "1",

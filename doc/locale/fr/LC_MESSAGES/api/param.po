@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 14:03+0200\n"
+"POT-Creation-Date: 2025-05-16 10:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -516,6 +516,10 @@ msgstr ""
 msgid "New instance of :py:class:`ResamplingParam`."
 msgstr ""
 
+#, fuzzy
+msgid "Update parameters from a signal object."
+msgstr "Mettre à jour les paramètres à partir du signal"
+
 msgid "Windowing parameters"
 msgstr "Paramètres de fenêtrage"
 
@@ -639,6 +643,9 @@ msgstr ""
 msgid "New instance of :py:class:`FlatFieldParam`."
 msgstr ""
 
+msgid "Update parameters from image"
+msgstr "Mettre à jour les paramètres à partir de l'image"
+
 msgid "Grid parameters"
 msgstr "Paramètres de grille"
 
@@ -719,9 +726,6 @@ msgstr ""
 
 msgid "New instance of :py:class:`RadialProfileParam`."
 msgstr ""
-
-msgid "Update parameters from image"
-msgstr "Mettre à jour les paramètres à partir de l'image"
 
 msgid "Resize parameters"
 msgstr "Paramètres de redimensionnement"
@@ -1157,3 +1161,4 @@ msgstr ""
 
 msgid "New instance of :py:class:`ThresholdParam`."
 msgstr ""
+

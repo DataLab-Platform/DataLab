@@ -119,6 +119,7 @@ bugs or implementing new features.
    contribute_code
    guidelines
    gitworkflow
+   dependencies
    environment
    roadmap
    changelog
