@@ -5,8 +5,10 @@
     "tasks": [
         {
             "label": "🧽 Run Ruff Formatter",
-            "command": "ruff",
+            "command": "${command:python.interpreterPath}",
             "args": [
+                "-m",
+                "ruff",
                 "format"
             ],
             "options": {
@@ -28,8 +30,10 @@
         },
         {
             "label": "🔦 Run Ruff Linter",
-            "command": "ruff",
+            "command": "${command:python.interpreterPath}",
             "args": [
+                "-m",
+                "ruff",
                 "check",
             ],
             "options": {
@@ -51,8 +55,10 @@
         },
         {
             "label": "🔦 Run Pylint",
-            "command": "pylint",
+            "command": "${command:python.interpreterPath}",
             "args": [
+                "-m",
+                "pylint",
                 "cdl",
                 "--disable=duplicate-code",
                 "--disable=fixme",
