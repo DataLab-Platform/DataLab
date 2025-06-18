@@ -789,9 +789,9 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Clean Up",
-                "Upgrade PlotPyStack packages",
-                "gettext - Compile",
+                "🧹 Clean Up",
+                "📦 Upgrade PlotPyStack",
+                "📚 Compile translations",
                 "Build Python packages",
                 "Create executable",
                 "Create installer"
