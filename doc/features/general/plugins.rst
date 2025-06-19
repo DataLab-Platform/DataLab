@@ -7,103 +7,98 @@ Plugins
     :description: Plugin system for DataLab, the open-source scientific data analysis and visualization platform
     :keywords: DataLab, plugin, processing, input/output, HDF5, file format, data analysis, visualization, scientific, open-source, platform
 
-DataLab is a modular application. It is possible to add new features to DataLab
-by writing plugins. A plugin is a Python module that is loaded at startup by
-DataLab. A plugin may add new features to DataLab, or modify existing features.
-
-The plugin system currently supports the following features:
-
-- Processing features: add new processing tasks to the DataLab processing
-  system, including specific graphical user interfaces.
-- Input/output features: add new file formats to the DataLab file I/O system.
-- HDF5 features: add new HDF5 file formats to the DataLab HDF5 I/O system.
+DataLab supports a robust plugin architecture, allowing users to extend the application’s features without modifying its core. Plugins can introduce new processing tools, data import/export formats, or custom GUI elements — all seamlessly integrated into the platform.
 
 What is a plugin?
-^^^^^^^^^^^^^^^^^
+-----------------
 
-A plugin is a Python module that is loaded at startup by DataLab. A plugin may
-add new features to DataLab, or modify existing features.
+A plugin is a Python module that is automatically loaded by DataLab at startup. It can define new features or modify existing ones.
 
-A plugin is a Python module which file name starts with ``cdl_``, and which
-contains a class derived from the :class:`cdl.plugins.PluginBase` class.
-The name of the class is not important, as long as it is derived from
-:class:`cdl.plugins.PluginBase` and has a ``PLUGIN_INFO`` attribute that is an
-instance of the :class:`cdl.plugins.PluginInfo` class. The ``PLUGIN_INFO`` attribute
-is used by DataLab to retrieve information about the plugin.
+To be recognized as a plugin, the file must:
+
+- Be a Python module whose name **starts with** ``cdl_`` (e.g. ``cdl_myplugin.py``),
+- Contain a class that **inherits from** :class:`cdl.plugins.PluginBase`,
+- Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`cdl.plugins.PluginInfo`.
+
+This `PLUGIN_INFO` object is used by DataLab to retrieve metadata such as the plugin name, type, and menu integration.
 
 .. note::
 
-    DataLab's plugin discovery mechanism will only load plugins that are defined
-    in Python files which names start with ``cdl_`` (e.g. ``cdl_myplugin.py``).
+   Only Python files whose names start with ``cdl_`` will be scanned for plugins.
+
+DataLab supports three categories of plugins, each with its own purpose and registration mechanism:
+
+- **Processing and visualization plugins**
+  Add custom actions for signal or image processing. These may include new computation functions, data visualization tools, or interactive dialogs. Integrated into a dedicated submenu of the “Plugins” menu.
+
+- **Input/Output plugins**
+  Define new file formats (read and/or write) handled transparently by DataLab's I/O framework. These plugins extend compatibility with custom or third-party data formats.
+
+- **HDF5 plugins**
+  Special plugins that support HDF5 files with domain-specific tree structures. These allow DataLab to interpret signals or images organized in non-standard ways.
 
 Where to put a plugin?
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
-As plugins are Python modules, they can be put anywhere in the Python path of
-the DataLab installation.
+Plugins are automatically discovered at startup from multiple locations:
 
-Special additional locations are available for plugins:
+- The user plugin directory:
+  Typically `~/.DataLab/plugins` on Linux/macOS or `C:/Users/YourName/.DataLab/plugins` on Windows.
 
-- The `plugins` directory in the user configuration folder
-  (e.g. `C:/Users/JohnDoe/.DataLab/plugins` on Windows
-  or `~/.DataLab/plugins` on Linux).
+- A custom plugin directory:
+  Configurable in DataLab's preferences.
 
-- The `plugins` directory in the same folder as the `DataLab` executable
-  in case of a standalone installation.
+- The standalone distribution directory:
+  If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned.
 
-- The `plugins` directory in the `cdl` package in case for internal plugins
-  only (i.e. it is not recommended to put your own plugins there).
+- The internal `cdl/plugins` folder (not recommended for user plugins):
+  This location is reserved for built-in or bundled plugins and should not be modified manually.
 
 How to develop a plugin?
-^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------
 
-To develop a plugin, you may start by deriving from one of the example plugins
-(see below) and modify it to suit your needs.
+The recommended approach to developing a plugin is to derive from an existing example and adapt it to your needs. You can explore the source code in the `cdl/plugins` folder or refer to community-contributed examples.
 
-If you want to code a plugin in your usual Python development environment (preferably
-with an IDE like `Spyder <https://www.spyder-ide.org/>`_) and take advantage of the
-code completion, you can add the `cdl` package to your Python path.
+To develop in your usual Python environment (e.g., with an IDE like `Spyder <https://www.spyder-ide.org/>`_), you can:
 
-This can be done:
+1. **Install DataLab in your Python environment**, using one of the following methods:
 
-- By installing DataLab in your Python environment (using one of the following methods:
-  :ref:`install_conda`, :ref:`install_pip`, :ref:`install_wheel`, or :ref:`install_source`),
+   - :ref:`install_conda`
+   - :ref:`install_pip`
+   - :ref:`install_wheel`
+   - :ref:`install_source`
 
-- Or by adding the `cdl` package to your Python path manually:
+2. **Or add the `cdl` package manually to your Python path**:
 
-  - Download the DataLab source code from the `PyPI page <https://pypi.org/project/cdl/>`_,
-  - Unzip the source code to a folder on your computer,
-  - Add the `cdl` package to your Python path (e.g. by using the *PYTHONPATH Manager* in Spyder).
+   - Download the source from the `PyPI page <https://pypi.org/project/cdl/>`_,
+   - Unzip the archive,
+   - Add the `cdl` directory to your PYTHONPATH (e.g., using the *PYTHONPATH Manager* in Spyder).
 
 .. note::
 
-    Even if you have installed the `cdl` package properly in your Python environment,
-    you won't be able to run the DataLab application from your development environment
-    to test your plugin. You will need to run DataLab from the command line or from
-    the shortcut created during the installation.
+   Even if you’ve installed `cdl` in your environment, you cannot run the full DataLab application directly from an IDE. You must launch DataLab via the command line or using the installer-created shortcut to properly test your plugin.
 
 Example: processing plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------
 
-Here is a simple example of a plugin that adds a new features to DataLab.
+Here is a minimal example of a plugin that prints a message when activated:
 
 .. literalinclude:: ../../../cdl/plugins/cdl_testdata.py
 
 Example: input/output plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 
 Here is a simple example of a plugin that adds a new file formats to DataLab.
 
 .. literalinclude:: ../../../cdl/plugins/cdl_imageformats.py
 
 Other examples
-^^^^^^^^^^^^^^
+--------------
 
-Other examples of plugins can be found in the `plugins/examples` directory of
-the DataLab source code (explore `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
+Other examples of plugins can be found in the `plugins/examples` directory of the DataLab source code (explore `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
 
 Public API
-^^^^^^^^^^
+----------
 
 .. automodule:: cdl.plugins
     :members: PluginInfo, PluginBase, FormatInfo, ImageFormatBase, ClassicsImageFormat, SignalFormatBase

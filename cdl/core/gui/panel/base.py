@@ -319,6 +319,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Find the object corresponding to the plot item
         obj = self.plothandler.get_obj_from_item(item)
         if obj is not None:
+            # Unselect the item in the plot so that we update the item parameters
+            # in the right state (fix issue #184):
+            item.unselect()
             # Ensure that item's parameters are up-to-date:
             item.param.update_param(item)
             # Update object metadata from plot item parameters

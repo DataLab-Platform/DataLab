@@ -80,8 +80,8 @@ class ContourShapeParam(GenericDetectionParam):
     )
 
     # The following item is used to store the 'shape type' and is implicitly accessed by
-    # the `cdl.core.gui.processor.base.BaseProcessor.compute_1_to_0` method. The keys of
-    # the item choices (i.e. the first element of each tuple of `shapes`) must match the
+    # the `cdl.core.gui.processor.base.BaseProcessor.compute_10` method. The keys of the
+    # item choices (i.e. the first element of each tuple of `shapes`) must match the
     # names of the `cdl.core.model.base.ShapeTypes` (when uppercased).
     assert {shape[0].upper() for shape in shapes}.issubset(
         set(ShapeTypes.__members__.keys())

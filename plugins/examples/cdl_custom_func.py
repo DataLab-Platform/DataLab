@@ -57,8 +57,7 @@ class CustomFilters(cdl.plugins.PluginBase):
         with acth.new_menu(self.PLUGIN_INFO.name):
             for name, func in (("Weighted average denoise", weighted_average_denoise),):
                 # Wrap function to handle ``ImageObj`` objects instead of NumPy arrays
-                wrapped_func = cpi.Wrap1to1Func(func)
+                wrapped_func = cpi.Wrap11Func(func)
                 acth.new_action(
-                    name,
-                    triggered=lambda: proc.compute_1_to_1(wrapped_func, title=name),
+                    name, triggered=lambda: proc.compute_11(wrapped_func, title=name)
                 )

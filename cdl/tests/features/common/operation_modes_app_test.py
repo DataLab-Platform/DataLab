@@ -41,7 +41,7 @@ def check_titles(title, titles):
 
 def test_single_operand_mode_compute_n1():
     """Run single operand mode test scenario
-    with `compute_n_to_1` operation (e.g. sum)"""
+    with compute_n1 operation (e.g. sum)"""
     original_mode = Conf.proc.operation_mode.get()
     Conf.proc.operation_mode.set("single")
 
@@ -109,7 +109,7 @@ def test_single_operand_mode_compute_n1():
 
 def test_pairwise_operations_mode_compute_n1():
     """Run pairwise operations mode test scenario
-    with `compute_n_to_1` operation (e.g. sum)"""
+    with compute_n1 operation (e.g. sum)"""
     original_mode = Conf.proc.operation_mode.get()
     Conf.proc.operation_mode.set("pairwise")
 
@@ -188,7 +188,7 @@ def test_pairwise_operations_mode_compute_n1():
 
 def test_single_operand_mode_compute_n1n():
     """Run single operand mode test scenario
-    with `compute_2_to_1` operation (e.g. difference)"""
+    with compute_n1n operation (e.g. difference)"""
     original_mode = Conf.proc.operation_mode.get()
     Conf.proc.operation_mode.set("single")
 
@@ -272,7 +272,7 @@ def test_single_operand_mode_compute_n1n():
 
 def test_pairwise_operations_mode_compute_n1n():
     """Run pairwise operations mode test scenario
-    with `compute_2_to_1` operation (e.g. difference)"""
+    with compute_n1n operation (e.g. difference)"""
     original_mode = Conf.proc.operation_mode.get()
     Conf.proc.operation_mode.set("pairwise")
 

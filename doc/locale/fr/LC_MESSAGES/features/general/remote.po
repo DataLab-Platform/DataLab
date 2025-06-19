@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-16 10:07+0200\n"
+"POT-Creation-Date: 2025-06-19 15:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,11 +143,17 @@ msgstr "Objet représentant un proxy/client vers le serveur XML-RPC de DataLab. 
 msgid "Here is a simple example of how to use RemoteClient in a Python script or in a Jupyter notebook:"
 msgstr "Voici un exemple simple de l'utilisation de RemoteClient dans un script Python ou dans un notebook Jupyter :"
 
-msgid "Try to connect to DataLab XML-RPC server."
-msgstr "Tentative de connexion au serveur XML-RPC de DataLab."
+msgid "Set XML-RPC port to connect to."
+msgstr ""
 
 msgid "Parameters"
 msgstr "Paramètres"
+
+msgid "XML-RPC port to connect to. If None, the port is automatically retrieved from DataLab configuration."
+msgstr "Port XML-RPC auquel se connecter. Si None, le port est automatiquement récupéré à partir de la configuration de DataLab."
+
+msgid "Try to connect to DataLab XML-RPC server."
+msgstr "Tentative de connexion au serveur XML-RPC de DataLab."
 
 msgid "XML-RPC port to connect to. If not specified, the port is automatically retrieved from DataLab configuration."
 msgstr "Port XML-RPC auquel se connecter. Si non spécifié, le port est automatiquement récupéré à partir de la configuration de DataLab."
@@ -746,4 +752,3 @@ msgstr ""
 #, fuzzy
 msgid "Compute 2D peak detection with :py:func:`cdl.computation.image.peak_detection`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
-

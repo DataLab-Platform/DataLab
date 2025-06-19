@@ -31,8 +31,8 @@ from cdl.tests.features.common.newobject_unit_test import (
 from cdl.widgets import fitdialog
 
 
-def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) -> None:
-    """Test `compute_1_to_1` type operations on a signal or image
+def __compute_11_operations(panel: SignalPanel | ImagePanel, number: int) -> None:
+    """Test compute_11 type operations on a signal or image
 
     Requires that one signal or image has been added at index."""
     assert len(panel) >= number - 1
@@ -122,7 +122,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
 
     panel.add_label_with_title()
 
-    __compute_1_to_1_operations(panel, 2)
+    __compute_11_operations(panel, 2)
 
 
 def run_signal_computations(
