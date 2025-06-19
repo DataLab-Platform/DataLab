@@ -114,7 +114,8 @@ include = ["cdl*"]
 version = { attr = "cdl.__version__" }
 
 [tool.pytest.ini_options]
-addopts = "cdl"
+addopts = "cdl --import-mode=importlib"
+# addopts = "cdl --import-mode=importlib --show-windows"  # Disable offscreen mode
 
 [tool.ruff]
 exclude = [".git", ".vscode", "build", "dist", "*.ipynb"]

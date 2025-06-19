@@ -261,13 +261,12 @@
             "args": [
                 "-m",
                 "pytest",
-                "--ff"
+                "--ff",
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
                 "env": {
                     // "DEBUG": "1", // ☣️ Debug mode will reset .ini settings
-                    "QT_QPA_PLATFORM": "offscreen",
                     "UNATTENDED": "1"
                 }
             },

@@ -31,6 +31,16 @@ execenv.verbose = "quiet"
 INITIAL_CWD = os.getcwd()
 
 
+def pytest_addoption(parser):
+    """Add custom command line options to pytest."""
+    parser.addoption(
+        "--show-windows",
+        action="store_true",
+        default=False,
+        help="Display Qt windows during tests (disables QT_QPA_PLATFORM=offscreen)",
+    )
+
+
 def pytest_report_header(config):  # pylint: disable=unused-argument
     """Add additional information to the pytest report header."""
     nfstr = ", ".join(
@@ -67,6 +77,8 @@ def pytest_configure(config):
         "markers",
         "validation: mark a test as a validation test (ground truth or analytical)",
     )
+    if not config.getoption("--show-windows"):
+        os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 
 @pytest.fixture(autouse=True)
