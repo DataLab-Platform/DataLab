@@ -26,19 +26,6 @@
             }
         },
         {
-            "name": "Run Test Launcher",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/cdl/tests/__init__.py",
-            "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.env",
-            "justMyCode": true,
-            "env": {
-                // "DEBUG": "1",
-                "QT_COLOR_MODE": "light",
-            }
-        },
-        {
             "name": "Run current file",
             "type": "debugpy",
             "request": "launch",
