@@ -128,7 +128,7 @@ class Wrap1to1Func:
         return dst
 
 
-# MARK: compute_n_to_1 functions -------------------------------------------------------
+# MARK: n_to_1 functions -------------------------------------------------------
 # Functions with N input signals and 1 output signal
 # --------------------------------------------------------------------------------------
 # Those functions are perfoming a computation on N input signals and return a single
@@ -266,7 +266,7 @@ def division_constant(src: SignalObj, p: ConstantParam) -> SignalObj:
     return dst
 
 
-# MARK: compute_2_to_1 functions -------------------------------------------------------
+# MARK: 2_to_1 functions -------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
 
@@ -379,7 +379,7 @@ def division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-# MARK: compute_1_to_1 functions -------------------------------------------------------
+# MARK: 1_to_1 functions -------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 15:29+0200\n"
+"POT-Creation-Date: 2025-05-06 17:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -40,9 +40,8 @@ msgstr "Implémentation de la fonction de calcul dans le module :mod:`cdl.comput
 msgid "Implement the processor object method in this package to call the computation function and eventually update the GUI."
 msgstr "Implémentation de la méthode de l'objet processeur dans ce paquet pour appeler la fonction de calcul et éventuellement mettre à jour l'interface utilisateur."
 
-#, fuzzy
 msgid "The processor objects are organized in submodules according to their purpose:"
-msgstr "Les objets processeur sont organisés en sous-modules en fonction de leur objectif."
+msgstr "Les objets processeurs sont organisés en sous-modules selon leur objectif :"
 
 msgid ":mod:`cdl.core.gui.processor.base`: Common processing features"
 msgstr ":mod:`cdl.core.gui.processor.base`: Fonctions de traitement communes"
@@ -54,86 +53,85 @@ msgid ":mod:`cdl.core.gui.processor.image`: Image processing features"
 msgstr ":mod:`cdl.core.gui.processor.image`: Fonctions de traitement d'images"
 
 msgid "Generic processing types"
-msgstr ""
+msgstr "Types de traitement génériques"
 
 msgid "To support consistent processing workflows, the :class:`BaseProcessor` class defines five generic processing methods, each corresponding to a fundamental input/output pattern. These methods are tightly integrated with the GUI logic: the input objects are taken from the current selection in the active panel (Signal or Image), and the output objects are automatically appended to the same panel."
-msgstr ""
+msgstr "Pour prendre en charge des flux de traitement cohérents, la classe :class:`BaseProcessor` définit cinq méthodes de traitement génériques, chacune correspondant à un modèle d'entrée/sortie fondamental. Ces méthodes sont étroitement intégrées à la logique de l'interface utilisateur : les objets d'entrée sont extraits de la sélection actuelle dans le panneau actif (Signal ou Image), et les objets de sortie sont automatiquement ajoutés au même panneau."
 
 msgid "Descriptions:"
-msgstr ""
+msgstr "Descriptions :"
 
 msgid "``compute_1_to_1``: Applies an independent transformation to each selected object."
-msgstr ""
+msgstr "``compute_1_to_1`` : Applique une transformation indépendante à chaque objet sélectionné."
 
 msgid "``compute_1_to_0``: Runs an analysis or measurement producing metadata or scalar data."
-msgstr ""
+msgstr "``compute_1_to_0`` : Exécute une analyse ou une mesure produisant des métadonnées ou des données scalaires."
 
 msgid "``compute_1_to_n``: Produces multiple output objects from a single input (e.g. ROI extraction)."
-msgstr ""
+msgstr "``compute_1_to_n`` : Produit plusieurs objets de sortie à partir d'une seule entrée (par exemple, extraction de ROI)."
 
 msgid "``compute_n_to_1``: Aggregates multiple objects into one (e.g. sum, average); supports pairwise mode."
-msgstr ""
+msgstr "``compute_n_to_1`` : Agrège plusieurs objets en un (par exemple, somme, moyenne) ; prend en charge le mode pairwise."
 
 msgid "``compute_2_to_1``: Applies a binary operation with a second operand (object or constant); supports pairwise mode."
-msgstr ""
+msgstr "``compute_2_to_1`` : Applique une opération binaire avec un deuxième opérande (objet ou constante) ; prend en charge le mode pairwise."
 
 msgid "Method name"
-msgstr ""
+msgstr "Nom de la méthode"
 
 msgid "Signature"
-msgstr ""
+msgstr "Signature"
 
 msgid "Multi-selection behavior"
-msgstr ""
+msgstr "Comportement de multi-sélection"
 
 msgid "``compute_1_to_1``"
-msgstr ""
+msgstr "``compute_1_to_1``"
 
 msgid "1 object ➝ 1 object"
-msgstr ""
+msgstr "1 objet ➝ 1 objet"
 
 msgid "k ➝ k"
-msgstr ""
+msgstr "k ➝ k"
 
 msgid "``compute_1_to_0``"
-msgstr ""
+msgstr "``compute_1_to_0``"
 
 msgid "1 object ➝ no object"
-msgstr ""
+msgstr "1 objet ➝ aucun objet"
 
 msgid "k ➝ 0"
-msgstr ""
+msgstr "k ➝ 0"
 
 msgid "``compute_1_to_n``"
-msgstr ""
+msgstr "``compute_1_to_n``"
 
 msgid "1 object ➝ n objects"
-msgstr ""
+msgstr "1 objet ➝ n objets"
 
 msgid "k ➝ k·n"
-msgstr ""
+msgstr "k ➝ k·n"
 
 msgid "``compute_n_to_1``"
-msgstr ""
+msgstr "``compute_n_to_1``"
 
 msgid "n objects ➝ 1 object"
-msgstr ""
+msgstr "n objets ➝ 1 objet"
 
 msgid "n ➝ 1<br>n ➝ n (pairwise mode)"
-msgstr ""
+msgstr "n ➝ 1<br>n ➝ n (mode pairwise)"
 
 msgid "``compute_2_to_1``"
-msgstr ""
+msgstr "``compute_2_to_1``"
 
 msgid "1 object + 1 operand ➝ 1 object"
-msgstr ""
+msgstr "1 objet + 1 opérande ➝ 1 objet"
 
 msgid "k + 1 ➝ k<br>n + n ➝ n (pairwise mode)"
-msgstr ""
+msgstr "k + 1 ➝ k<br>n + n ➝ n (mode pairwise)"
 
 msgid "These methods are for internal or advanced use (e.g. plugin or macro authors) and will evolve without backward compatibility guarantees."
-msgstr ""
+msgstr "Ces méthodes sont destinées à un usage interne ou avancé (par exemple, auteurs de plugins ou de macros) et évolueront sans garanties de compatibilité ascendante."
 
 msgid "Future developments (such as a visual pipeline editor) may require generalizing this model to support additional sources and destinations beyond the current panel-based selection/output logic."
-msgstr ""
-
+msgstr "Les développements futurs (comme un éditeur de pipeline visuel) peuvent nécessiter de généraliser ce modèle pour prendre en charge des sources et des destinations supplémentaires au-delà de la logique actuelle de sélection/sortie basée sur le panneau."

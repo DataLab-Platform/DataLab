@@ -6,23 +6,16 @@ Dependencies viewer test
 
 # guitest: show
 
-from __future__ import annotations
-
 from guidata.qthelpers import qt_app_context
 
-import cdl.utils.qthelpers as qth
-from cdl.widgets import instconfviewer
+from cdl.widgets.instconfviewer import exec_cdl_installconfig_dialog
 
 
-def test_dep_viewer(screenshots: bool = False) -> None:
+def test_dep_viewer():
     """Test dep viewer window"""
     with qt_app_context():
-        instconfviewer.exec_cdl_installconfig_dialog()
-        if screenshots:
-            dlg = instconfviewer.InstallConfigViewerWindow()
-            dlg.show()
-            qth.grab_save_window(dlg, dlg.objectName())
+        exec_cdl_installconfig_dialog()
 
 
 if __name__ == "__main__":
-    test_dep_viewer(screenshots=True)
+    test_dep_viewer()
