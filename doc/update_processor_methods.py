@@ -37,11 +37,11 @@ def get_compute_methods(klass: type) -> list[str]:
     compute_methods = []
     for name, obj in inspect.getmembers(klass, inspect.isfunction):
         if name.startswith("compute_") and name not in (
-            "compute_10",
-            "compute_11",
-            "compute_1n",
-            "compute_n1",
-            "compute_n1n",
+            "compute_1_to_0",
+            "compute_1_to_1",
+            "compute_1_to_n",
+            "compute_n_to_1",
+            "compute_2_to_1",
         ):
             compute_methods.append((name, obj.__doc__))
     return compute_methods

@@ -19,7 +19,10 @@ enabling automated extraction of regions or features of interest.
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.computation.param module.
+# - All `guidata.dataset.DataSet` parameter classes must also be imported
+#   in the `sigima_.param` module.
+# - All functions decorated by `computation_function` must be imported in the upper
+#   level `sigima_.image` module.
 
 from __future__ import annotations
 
