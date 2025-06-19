@@ -194,8 +194,7 @@ def exec_script(
             print("---- STDOUT ----\n", stdout)
             print("---- STDERR ----\n", stderr)
             return None
-        else:
-            proc.wait()
+        proc.wait()
     return proc
 
 
