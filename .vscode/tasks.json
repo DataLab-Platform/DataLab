@@ -267,6 +267,7 @@
                 "cwd": "${workspaceFolder}",
                 "env": {
                     // "DEBUG": "1",
+                    "QT_QPA_PLATFORM": "offscreen",
                     "UNATTENDED": "1"
                 }
             },
