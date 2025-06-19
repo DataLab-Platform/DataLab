@@ -2,6 +2,12 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.20.1 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to "Square" after validating "Parameters…" dialog
+
 ## DataLab Version 0.20.0 ##
 
 💥 New features and enhancements:

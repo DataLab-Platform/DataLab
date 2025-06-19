@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-26 15:46+0200\n"
+"POT-Creation-Date: 2025-06-19 15:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -23,6 +23,15 @@ msgstr "Historique des modifications"
 
 msgid "See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones."
 msgstr "Voir la page de la [feuille de route](https://datalab-platform.com/fr/contributing/roadmap.html) de DataLab pour les jalons futurs et passés."
+
+msgid "DataLab Version 0.20.1"
+msgstr "DataLab Version 0.20.1"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Corrections de bugs :"
+
+msgid "Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to \"Square\" after validating \"Parameters…\" dialog"
+msgstr "Correction de l'[Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Le style du marqueur de courbe change de manière inattendue en \"Carré\" après validation de la boîte de dialogue \"Paramètres…\""
 
 msgid "DataLab Version 0.20.0"
 msgstr "DataLab Version 0.20.0"
@@ -162,9 +171,6 @@ msgstr "Ceci corrige l'[Issue #151](https://github.com/DataLab-Platform/DataLab/
 
 msgid "DataLab Version 0.19.2"
 msgstr "DataLab Version 0.19.2"
-
-msgid "🛠️ Bug fixes:"
-msgstr "🛠️ Corrections de bugs :"
 
 msgid "Fixed [Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172) - Image profiles: when moving/resizing image, profile plots are not refreshed (fixed in PlotPy v2.7.4)"
 msgstr "Correction de l'[Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172) - Profils d'image : lors du déplacement/redimensionnement de l'image, les graphiques de profil ne sont pas actualisés (corrigé dans PlotPy v2.7.4)"
