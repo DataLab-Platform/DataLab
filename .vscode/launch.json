@@ -58,7 +58,7 @@
                 // "1000"
             ],
             "env": {
-                "DEBUG": "1",
+                // "DEBUG": "1",  // ☣️ Debug mode will reset .ini settings
                 // "TEST_SEGFAULT_ERROR": "1",
                 "LANG": "en",
                 "QT_COLOR_MODE": "light",
@@ -80,7 +80,7 @@
                 "--unattended",
             ],
             "env": {
-                "DEBUG": "1",
+                // "DEBUG": "1",  // ☣️ Debug mode will reset .ini settings
                 // The `CDL_DATA` environment variable is set here just for checking
                 // that the data path is not added twice to the test data path list:
                 "CDL_DATA": "${workspaceFolder}/cdl/data/tests",

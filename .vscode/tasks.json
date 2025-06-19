@@ -266,7 +266,7 @@
             "options": {
                 "cwd": "${workspaceFolder}",
                 "env": {
-                    // "DEBUG": "1",
+                    // "DEBUG": "1", // ☣️ Debug mode will reset .ini settings
                     "QT_QPA_PLATFORM": "offscreen",
                     "UNATTENDED": "1"
                 }
