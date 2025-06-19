@@ -644,7 +644,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 ):
                     metadata[key] = value
         sel_objects = self.objview.get_sel_objects(include_groups=True)
-        for obj in sorted(sel_objects, key=lambda obj: short_id(obj), reverse=True):
+        for obj in sorted(sel_objects, key=short_id, reverse=True):
             obj.update_metadata_from(metadata)
         # We have to do a special refresh in order to force the plot handler to update
         # all plot items, even the ones that are not visible (otherwise, image masks
@@ -670,7 +670,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if answer == QW.QMessageBox.No:
                 return
         sel_objects = self.objview.get_sel_objects(include_groups=True)
-        for obj in sorted(sel_objects, key=lambda obj: short_id(obj), reverse=True):
+        for obj in sorted(sel_objects, key=short_id, reverse=True):
             dlg_list: list[QW.QDialog] = []
             for dlg, obj_i in self.__separate_views.items():
                 if obj_i is obj:
@@ -851,16 +851,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     @abc.abstractmethod
     def new_object(
         self,
-        newparam: NewSignalParam | NewImageParam | None = None,
-        addparam: gds.DataSet | None = None,
+        base_param: NewSignalParam | NewImageParam | None = None,
+        extra_param: gds.DataSet | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
     ) -> TypeObj | None:
         """Create a new object (signal/image).
 
         Args:
-            newparam: new object parameters
-            addparam: additional parameters
+            base_param: new object parameters
+            extra_param: additional parameters
             edit: Open a dialog box to edit parameters (default: True)
             add_to_panel: Add object to panel (default: True)
 
