@@ -73,7 +73,9 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
     try:
         branch = sco(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
         commit = sco(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
-        infolist.append(f"Git branch: {branch}, commit: {commit}")
+        message = sco(["git", "log", "-1", "--pretty=%B"], text=True).strip()
+        message = message[:35] + "[…]" if len(message) > 35 else message
+        infolist.append(f"Git branch: {branch}, commit: {message} ({commit})")
     except (subprocess.CalledProcessError, FileNotFoundError):
         pass
     return infolist
