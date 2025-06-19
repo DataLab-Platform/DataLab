@@ -158,21 +158,45 @@ def exec_script(
     wait: bool = True,
     args: list[str] = None,
     env: dict[str, str] | None = None,
-) -> None:
+    verbose: bool = False,
+) -> subprocess.Popen | None:
     """Run test script.
 
     Args:
-        path (str): path to script
-        wait (bool): wait for script to finish
-        args (list): arguments to pass to script
-        env (dict): environment variables to pass to script
+        path: path to script
+        wait: wait for script to finish
+        args: arguments to pass to script
+        env: environment variables to pass to script
+        verbose: if True, print command and output
+
+    Returns:
+        subprocess.Popen object if wait is False, None otherwise
     """
-    command = [sys.executable, '"' + path + '"'] + ([] if args is None else args)
     stderr = subprocess.DEVNULL if execenv.unattended else None
     # pylint: disable=consider-using-with
-    proc = subprocess.Popen(" ".join(command), shell=True, stderr=stderr, env=env)
+    if verbose:
+        command = [sys.executable, path] + ([] if args is None else args)
+        proc = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=env,
+            text=True,
+        )
+    else:
+        command = [sys.executable, '"' + path + '"'] + ([] if args is None else args)
+        proc = subprocess.Popen(" ".join(command), shell=True, stderr=stderr, env=env)
     if wait:
-        proc.wait()
+        if verbose:
+            stdout, stderr = proc.communicate()
+            print("Command:", " ".join(command))
+            print("Return code:", proc.returncode)
+            print("---- STDOUT ----\n", stdout)
+            print("---- STDERR ----\n", stderr)
+            return None
+        else:
+            proc.wait()
+    return proc
 
 
 def get_script_output(

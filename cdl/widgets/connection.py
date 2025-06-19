@@ -26,7 +26,7 @@ class ConnectionThread(QC.QThread):
     """DataLab Connection thread"""
 
     SIG_CONNECTION_OK = QC.Signal()
-    SIG_CONNECTION_KO = QC.Signal()
+    SIG_CONNECTION_KO = QC.Signal(str)
 
     def __init__(self, connect_callback: Callable, parent: QC.QObject = None) -> None:
         super().__init__(parent)
@@ -37,8 +37,8 @@ class ConnectionThread(QC.QThread):
         try:
             self.connect_callback()
             self.SIG_CONNECTION_OK.emit()
-        except ConnectionRefusedError:
-            self.SIG_CONNECTION_KO.emit()
+        except ConnectionRefusedError as exc:
+            self.SIG_CONNECTION_KO.emit(str(exc))
 
 
 class ConnectionDialog(QW.QDialog):
@@ -55,6 +55,7 @@ class ConnectionDialog(QW.QDialog):
         self.setWindowTitle(_("Connection to DataLab"))
         self.setWindowIcon(get_icon("DataLab.svg"))
         self.resize(300, 50)
+        self.__error_message = ""
         self.host_label = QW.QLabel()
         pixmap = QG.QPixmap(get_image_file_path("DataLab-Banner-200.png"))
         self.host_label.setPixmap(pixmap)
@@ -101,18 +102,28 @@ class ConnectionDialog(QW.QDialog):
         self.status_label.setText("Connection successful!")
         QC.QTimer.singleShot(1000, self.accept)
 
-    def __on_connection_failed(self) -> None:
+    def __on_connection_failed(self, error_message: str) -> None:
         """Connection failed"""
+        self.__error_message = error_message
         self.progress_bar.setRange(0, 1)
         self.progress_bar.setValue(1)
         self.__set_status_icon("MessageBoxCritical")
-        self.status_label.setText("Connection failed.")
+        self.status_label.setText(f"Connection failed: {error_message}")
         QC.QTimer.singleShot(2000, self.reject)
+
+    def get_error_message(self) -> str:
+        """Get error message if connection failed"""
+        return self.__error_message
 
     def exec(self) -> int:
         """Execute dialog"""
         self.__connect_to_server()
         return super().exec()
+
+    def reject(self) -> None:
+        """Reject dialog"""
+        super().reject()
+        self.__error_message = "Cancelled by user"
 
 
 if __name__ == "__main__":
