@@ -1119,7 +1119,6 @@ def create_image_from_param(
         ValueError: if `extra_param` is required but not provided
         NotImplementedError: if the image type is not supported
     """
-    global IMG_NB
     if base_param.height is None:
         base_param.height = 500
     if base_param.width is None:
@@ -1128,15 +1127,13 @@ def create_image_from_param(
         base_param.dtype = ImageDatatypes.UINT16
     incr_img_nb = not base_param.title
     prefix = base_param.itype.name.lower()
+    title = base_param.title = base_param.title or DEFAULT_TITLE
     if incr_img_nb:
-        base_param.title = f"{base_param.title} {IMG_NB + 1:d}"
-        IMG_NB += 1
+        title = f"{title} {get_next_image_number()}"
 
-    image = create_image(base_param.title)
     shape = (base_param.height, base_param.width)
     dtype = base_param.dtype.value
     ep = extra_param
-    title = base_param.title or DEFAULT_TITLE
 
     if base_param.itype == ImageTypes.ZEROS:
         data = np.zeros(shape, dtype=dtype)
@@ -1186,7 +1183,6 @@ def create_image_from_param(
     else:
         raise NotImplementedError(f"Image type '{base_param.itype}' not implemented.")
 
-    image.data = data
-    if image.title == DEFAULT_TITLE:
-        image.title = title
+    title = title if base_param.title == DEFAULT_TITLE else base_param.title
+    image = create_image(title, data)
     return image

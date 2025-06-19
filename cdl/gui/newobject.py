@@ -119,10 +119,6 @@ def create_signal_gui(
         if not base_param.edit(parent=parent):
             return None
 
-    incr_sig_nb = not base_param.title
-    if incr_sig_nb:
-        base_param.title = f"{base_param.title} {get_next_signal_number():d}"
-
     if base_param.stype == SignalTypes.EXPERIMENTAL:
         exp_param = ExperimentalSignalParam(_("Experimental points"))
         exp_param.setup_array(
@@ -206,10 +202,6 @@ def create_image_gui(
         base_param.width = 500
     if base_param.dtype is None:
         base_param.dtype = ImageDatatypes.UINT16
-
-    incr_img_nb = not base_param.title
-    if incr_img_nb:
-        base_param.title = f"{base_param.title} {get_next_image_number()}"
 
     ep = extra_param
     if base_param.itype == ImageTypes.GAUSS:

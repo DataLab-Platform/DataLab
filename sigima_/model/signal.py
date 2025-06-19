@@ -686,13 +686,12 @@ def create_signal_from_param(
     """
     incr_sig_nb = not base_param.title
     prefix = base_param.stype.name.lower()
+    title = base_param.title = base_param.title or DEFAULT_TITLE
     if incr_sig_nb:
-        base_param.title = f"{base_param.title} {get_next_signal_number():d}"
+        title = f"{title} {get_next_signal_number():d}"
 
     ep = extra_param
-    signal = create_signal(base_param.title)
     xarr = np.linspace(base_param.xmin, base_param.xmax, base_param.size)
-    title = base_param.title or DEFAULT_TITLE
 
     if base_param.stype == SignalTypes.ZEROS:
         yarr = np.zeros(base_param.size)
@@ -806,7 +805,6 @@ def create_signal_from_param(
             f"Signal type '{base_param.stype}' is not implemented."
         )
 
-    signal.set_xydata(xarr, yarr)
-    if signal.title == DEFAULT_TITLE:
-        signal.title = title
+    title = title if base_param.title == DEFAULT_TITLE else base_param.title
+    signal = create_signal(title, xarr, yarr)
     return signal
