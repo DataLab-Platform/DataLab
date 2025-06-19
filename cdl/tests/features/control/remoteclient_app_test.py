@@ -13,12 +13,13 @@ from __future__ import annotations
 
 import functools
 import os
+import time
 from contextlib import contextmanager
 
+import psutil
 from guidata.qthelpers import qt_app_context, qt_wait
 from qtpy import QtWidgets as QW
 
-from cdl import app
 from cdl.config import _
 from cdl.env import execenv
 from cdl.proxy import RemoteProxy
@@ -84,7 +85,8 @@ class HostWindow(embedded1_unit_test.AbstractClientWindow):
                     self.host.log(f"    {name}")
             else:
                 self.cdl = None
-                self.host.log("🔥 Connection refused 🔥 (server is not ready?)")
+                error_msg = connect_dlg.get_error_message()
+                self.host.log(f"🔥 Connection refused 🔥 ({error_msg})")
                 if execenv.unattended:
                     raise ConnectionRefusedError(
                         "Connection refused (server is not ready?)"
@@ -177,6 +179,18 @@ def qt_wait_print(dt: float, message: str, parent=None):
     execenv.print("OK")
 
 
+def is_pid_alive(pid: int) -> bool:
+    """Check if a process with the given PID is alive
+
+    Args:
+        Process ID to check
+
+    Returns:
+        True if the process is alive, False otherwise
+    """
+    return psutil.pid_exists(pid) and psutil.Process(pid).is_running()
+
+
 def test_remote_client():
     """Remote client application test"""
     env = os.environ.copy()
@@ -184,14 +198,26 @@ def test_remote_client():
     if execenv.XMLRPCPORT_ENV in env:
         # May happen when executing other tests before
         env.pop(execenv.XMLRPCPORT_ENV)
-    exec_script(app.__file__, wait=False, env=env)
+
+    proc = exec_script("-m", args=["cdl.app"], wait=False, env=env, verbose=False)
+    # If the process fails to start, it will raise the `AssertionError` exception
+    # with the message "Unable to start DataLab application".
+    # In that case, it might be useful to set `wait=True` and `verbose=True` in the
+    # `exec_script` call above, so that the script waits for the DataLab application
+    # to start and prints the output to the console. This way, you can see any
+    # error messages or logs that might help you understand why the application failed
+    # to start.
+    # If the script is executed within a pytest session, add the `-s` option to pytest.
+    time.sleep(2)
+    assert is_pid_alive(proc.pid), "Unable to start DataLab application"
+
     with qt_app_context(exec_loop=True):
         window = HostWindow()
         window.resize(800, 800)
         window.show()
         dt = 1
         if execenv.unattended:
-            qt_wait(10, show_message=True, parent=window)
+            qt_wait(8, show_message=True, parent=window)
             window.init_cdl()
             with qt_wait_print(dt, "Executing multiple commands"):
                 window.exec_multiple_cmd()

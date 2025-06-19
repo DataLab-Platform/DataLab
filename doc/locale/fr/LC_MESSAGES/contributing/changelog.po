@@ -84,6 +84,9 @@ msgstr "Ces méthodes sont internes et utilisées par des développeurs avancés
 msgid "This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types"
 msgstr "Ceci corrige l'[Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationaliser les noms de méthodes `BaseProcessor` pour les types de traitement de base"
 
+msgid "Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to \"Square\" after validating \"Parameters…\" dialog"
+msgstr "Correction de l'[Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Le style du marqueur de courbe change de manière inattendue en \"Carré\" après validation de la boîte de dialogue \"Paramètres…\""
+
 msgid "ℹ️ Other changes:"
 msgstr "ℹ️ Autres changements :"
 

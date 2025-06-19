@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:21+0100\n"
+"POT-Creation-Date: 2025-05-14 15:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,26 +17,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "DataLab's installation and configuration viewer"
-msgstr "Visualiseur d'installation et de configuration de DataLab"
-
-msgid "installation, configuration, viewer, DataLab"
-msgstr "installation, configuration, visualiseur, DataLab"
-
-msgid "Installation and configuration viewer"
+msgid "Installation and Configuration"
 msgstr "Installation et configuration"
 
-msgid "Because of the multiple ways of installing DataLab on your machine, understanding why the application behaves unexpectedly without any information on your configuration could be very challenging."
-msgstr "En raison des multiples façons d'installer DataLab sur votre machine, comprendre l'origine d'un dysfontionnement de l'application sans information sur votre configuration peut s'avérer très difficile."
+msgid "The **Installation and Configuration** dialog box is a diagnostic tool available from DataLab’s graphical interface. It provides a structured overview of the current installation, user-specific settings, and available plugins and I/O features."
+msgstr "La boîte de dialogue **Installation et configuration** est un outil de diagnostic disponible dans l'interface graphique de DataLab. Elle fournit un aperçu structuré de l'installation actuelle, des paramètres spécifiques à l'utilisateur et des plugins et fonctionnalités d'E/S disponibles."
 
-msgid "That is why DataLab provides the dialog box \"Installation and configuration\" which gathers all the information about your installation and configuration."
-msgstr "C'est pourquoi DataLab fournit la boîte de dialogue \"Installation et configuration\" qui rassemble toutes les informations sur votre installation et votre configuration utilisateur."
+msgid "This tool is primarily designed for troubleshooting and verification purposes — whether you are a user trying to understand how DataLab is set up on your system, or a developer validating your plugin integration."
+msgstr "Cet outil est principalement conçu pour le dépannage et la vérification — que vous soyez un utilisateur essayant de comprendre comment DataLab est configuré sur votre système, ou un développeur validant l'intégration de votre plugin."
 
-msgid "The installation and configuration viewer is accessible from the \"?\" menu in the main window."
-msgstr "Le visualiseur d'installation et de configuration est accessible depuis le menu \"?\" de la fenêtre principale."
+msgid "To open the dialog box, go to the \"?\" menu in the main DataLab window and select **Installation and configuration**. This will open a dialog window that displays all relevant information about your DataLab installation."
+msgstr "Pour ouvrir la boîte de dialogue, allez dans le menu \"?\" dans la fenêtre principale de DataLab et sélectionnez **Installation et configuration**. Cela ouvrira une boîte de dialogue qui affiche toutes les informations pertinentes sur votre installation de DataLab."
 
-msgid "Installation and configuration (see \"?\" menu)"
-msgstr "Installation et configuration (voir menu \"?\")"
+msgid "The dialog window is divided into **three tabs**, each covering a specific aspect of the environment."
+msgstr "La fenêtre de dialogue est divisée en **trois onglets**, chacun couvrant un aspect spécifique de l'environnement."
 
-msgid "Reporting unexpected behavior or any other bug on `GitHub Issues`_ will be greatly appreciated, especially if above contents are attached to the report (as well log files, see :ref:`ref-to-logviewer`)."
-msgstr "Signaler un comportement inattendu ou tout autre type d'anomalie sur la page `GitHub Issues`_ sera grandement apprécié, d'autant plus si vous prenez soin de joindre les informations ci-dessus (ainsi que les journaux d'historique, cf. :ref:`ref-to-logviewer`)."
+msgid "1. Installation Configuration"
+msgstr "1. Installation et configuration"
+
+msgid "Installation and configuration (see \"?\" menu), tab 1"
+msgstr "Installation et configuration (voir menu \"?\"), onglet 1"
+
+msgid "This tab displays system-level information about the DataLab installation, including:"
+msgstr "Cet onglet affiche des informations au niveau système sur l'installation de DataLab, y compris :"
+
+msgid "Application version;"
+msgstr "Version de l'application ;"
+
+msgid "Platform and operating system;"
+msgstr "Système d'exploitation et plateforme ;"
+
+msgid "Whether DataLab is running in frozen (standalone) mode or as a standard Python package;"
+msgstr "Si DataLab fonctionne en mode gelé (autonome) ou en tant que package Python standard ;"
+
+msgid "Internal paths used for data storage and plugin discovery;"
+msgstr "Chemins internes utilisés pour le stockage de données et la découverte de plugins ;"
+
+msgid "Python interpreter details (version, architecture, paths);"
+msgstr "Détails de l'interpréteur Python (version, architecture, chemins) ;"
+
+msgid "Location of the `cdl` package."
+msgstr "Emplacement du package `cdl`."
+
+msgid "This section is especially useful for debugging path-related issues or confirming the installation context (e.g., standalone vs. pip-installed)."
+msgstr "Cette section est particulièrement utile pour déboguer les problèmes liés aux chemins ou confirmer le contexte d'installation (par exemple, autonome ou installé via pip)."
+
+msgid "2. User Configuration"
+msgstr "2. Configuration utilisateur"
+
+msgid "Installation and configuration (see \"?\" menu), tab 2"
+msgstr "Installation et configuration (voir menu \"?\"), onglet 2"
+
+msgid "This tab lists user-specific configuration details, through the contents of DataLab's configuration file."
+msgstr "Cet onglet répertorie les détails de configuration spécifiques à l'utilisateur, à travers le contenu du fichier de configuration de DataLab."
+
+msgid "It helps users verify their personalized settings and ensures that DataLab is reading the correct directories for user-defined plugins or preferences."
+msgstr "Il aide les utilisateurs à vérifier leurs paramètres personnalisés et garantit que DataLab lit les bons répertoires pour les plugins ou préférences définis par l'utilisateur."
+
+msgid "3. Plugins and I/O Features"
+msgstr "3. Plugins et fonctionnalités d'E/S"
+
+msgid "Installation and configuration (see \"?\" menu), tab 3"
+msgstr "Installation et configuration (voir menu \"?\"), onglet 3"
+
+msgid "This tab lists all plugins and I/O handlers currently available in the application."
+msgstr "Cet onglet répertorie tous les plugins et gestionnaires d'E/S actuellement disponibles dans l'application."
+
+msgid "This view is ideal for verifying that all expected plugins and I/O features are detected, loaded, and functional."
+msgstr "Cette vue est idéale pour vérifier que tous les plugins et fonctionnalités d'E/S attendus sont détectés, chargés et fonctionnels."
+
+msgid "Usage Tips"
+msgstr "Conseils d'utilisation"
+
+msgid "You can copy text from any of the tabs for diagnostic or support purposes."
+msgstr "Vous pouvez copier du texte depuis n'importe quel onglet à des fins de diagnostic ou de support."
+
+msgid "If a plugin or I/O feature does not appear, check that its filename starts with `cdl_` and that it is located in a recognized plugin directory (see the *User Configuration* tab)."
+msgstr "Si un plugin ou une fonctionnalité d'E/S n'apparaît pas, vérifiez que son nom de fichier commence par `cdl_` et qu'il est situé dans un répertoire de plugins reconnu (voir l'onglet *Configuration utilisateur*)."
+
+msgid "Reporting unexpected behavior or any other bug on `GitHub Issues`_ will be greatly appreciated, especially if the contents of this viewer are attached to the report (as well as log files, see :ref:`ref-to-logviewer`)."
+msgstr "Signaler un comportement inattendu ou tout autre bug sur `GitHub Issues`_ sera grandement apprécié, surtout si le contenu de ce visualiseur est joint au rapport (ainsi que les fichiers journaux, voir :ref:`ref-to-logviewer`)."

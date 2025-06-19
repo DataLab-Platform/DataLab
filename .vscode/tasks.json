@@ -35,6 +35,7 @@
                 "-m",
                 "ruff",
                 "check",
+                "--fix",
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -261,12 +262,12 @@
             "args": [
                 "-m",
                 "pytest",
-                "--ff"
+                "--ff",
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
                 "env": {
-                    // "DEBUG": "1",
+                    // "DEBUG": "1", // ☣️ Debug mode will reset .ini settings
                     "UNATTENDED": "1"
                 }
             },
