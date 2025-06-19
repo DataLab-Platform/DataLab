@@ -15,7 +15,6 @@ from typing import TYPE_CHECKING
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 
-import cdl.gui.newobject
 import sigima_.image.geometry
 import sigima_.param as sp
 from cdl.config import _, reset

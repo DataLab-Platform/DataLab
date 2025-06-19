@@ -32,7 +32,6 @@ if TYPE_CHECKING:
     from cdl.adapters_plotpy.image import (
         CircularROIPlotPyAdapter,
         ImageObjPlotPyAdapter,
-        ImageROIPlotPyAdapter,
         PolygonalROIPlotPyAdapter,
         RectangularROIPlotPyAdapter,
     )
