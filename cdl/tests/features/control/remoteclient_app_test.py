@@ -20,7 +20,6 @@ import psutil
 from guidata.qthelpers import qt_app_context, qt_wait
 from qtpy import QtWidgets as QW
 
-from cdl import app
 from cdl.config import _
 from cdl.env import execenv
 from cdl.proxy import RemoteProxy
