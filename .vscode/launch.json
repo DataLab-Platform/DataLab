@@ -81,6 +81,7 @@
             ],
             "env": {
                 // "DEBUG": "1",  // ☣️ Debug mode will reset .ini settings
+                // "QT_QPA_PLATFORM": "offscreen",
                 // The `CDL_DATA` environment variable is set here just for checking
                 // that the data path is not added twice to the test data path list:
                 "CDL_DATA": "${workspaceFolder}/cdl/data/tests",
