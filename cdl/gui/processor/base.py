@@ -446,7 +446,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         objmodel = self.panel.objmodel
         src_grps = sorted(
             {objmodel.get_group_from_object(obj) for obj in objs},
-            key=lambda x: objmodel.get_number(x),
+            key=objmodel.get_number,
         )
         src_gids = [get_uuid(grp) for grp in src_grps]
 
