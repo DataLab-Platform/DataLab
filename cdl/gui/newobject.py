@@ -162,11 +162,11 @@ def create_signal_gui(
 
     try:
         signal = create_signal_headless(base_param, extra_param)
-    except Exception as exc:
+    except Exception as exc:  # pylint: disable=broad-except
         if parent is not None:
             QW.QMessageBox.warning(parent, _("Error"), str(exc))
         else:
-            raise ValueError("Error creating signal: {exc}") from exc
+            raise ValueError(f"Error creating signal: {exc}") from exc
         return None
 
     return signal
@@ -239,11 +239,11 @@ def create_image_gui(
 
     try:
         image = create_image_headless(base_param, ep)
-    except Exception as exc:
+    except Exception as exc:  # pylint: disable=broad-except
         if parent is not None:
             QW.QMessageBox.warning(parent, _("Error"), str(exc))
         else:
-            raise ValueError("Error creating image: {exc}") from exc
+            raise ValueError(f"Error creating image: {exc}") from exc
         return None
 
     return image
