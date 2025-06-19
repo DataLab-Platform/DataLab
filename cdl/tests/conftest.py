@@ -9,6 +9,7 @@ executed before running any tests.
 """
 
 import os
+import subprocess
 
 import guidata
 import h5py
@@ -64,10 +65,17 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
         infolist[-1] += f", OpenCV {cv2.__version__}"
     except ImportError:
         pass
-    for vname in ("CDL_DATA", "PYTHONPATH", "DEBUG"):
+    for vname in ("CDL_DATA", "PYTHONPATH", "DEBUG", "QT_API", "QT_QPA_PLATFORM"):
         value = os.environ.get(vname, "")
         if value:
             infolist.append(f"{vname}: {value}")
+    sco = subprocess.check_output
+    try:
+        branch = sco(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
+        commit = sco(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
+        infolist.append(f"Git branch: {branch}, commit: {commit}")
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        pass
     return infolist
 
 
