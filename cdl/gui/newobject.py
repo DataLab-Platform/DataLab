@@ -32,7 +32,6 @@ from sigima_.model.image import (
     ImageObj,
     ImageTypes,
     NewImageParam,
-    get_next_image_number,
 )
 from sigima_.model.image import create_image_from_param as create_image_headless
 from sigima_.model.signal import (
@@ -47,7 +46,6 @@ from sigima_.model.signal import (
     SignalTypes,
     StepParam,
     create_signal,
-    get_next_signal_number,
 )
 from sigima_.model.signal import ExperimentalSignalParam as OrigExperimentalSignalParam
 from sigima_.model.signal import create_signal_from_param as create_signal_headless
