@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 14:03+0200\n"
+"POT-Creation-Date: 2025-06-17 17:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,7 +194,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.9"
+msgid ">= 3.10"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -267,17 +267,11 @@ msgstr "Bibliothèque d'interfaces graphiques Qt pour Python"
 msgid "Optional modules for development:"
 msgstr "Modules optionnels pour le développement :"
 
-msgid "ruff"
+msgid "babel"
 msgstr ""
 
-msgid "An extremely fast Python linter and code formatter, written in Rust."
-msgstr "Analyseur de code et formateur Python extrêmement rapide, écrit en Rust."
-
-msgid "pylint"
+msgid "Internationalization utilities"
 msgstr ""
-
-msgid "python code static checker"
-msgstr "Analyseur statique de code Python"
 
 msgid "Coverage"
 msgstr ""
@@ -293,6 +287,24 @@ msgstr ""
 
 msgid "PyInstaller bundles a Python application and all its dependencies into a single package."
 msgstr "PyInstaller permet de créer un exécutable unique à partir d'une application Python et de ses dépendances."
+
+msgid "pylint"
+msgstr ""
+
+msgid "python code static checker"
+msgstr "Analyseur statique de code Python"
+
+msgid "ruff"
+msgstr ""
+
+msgid "An extremely fast Python linter and code formatter, written in Rust."
+msgstr "Analyseur de code et formateur Python extrêmement rapide, écrit en Rust."
+
+msgid "toml-to-requirements"
+msgstr "toml-to-requirements"
+
+msgid "Convert a pyproject.toml file to a requirements.txt file"
+msgstr "Conversion d'un fichier pyproject.toml en un fichier requirements.txt"
 
 msgid "Optional modules for building the documentation:"
 msgstr "Modules optionnels pour la génération de la documentation :"

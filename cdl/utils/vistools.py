@@ -30,7 +30,7 @@ def get_name_title(name, title):
         TEST_NB[name] = TEST_NB.setdefault(name, 0) + 1
         name = get_default_test_name(f"{TEST_NB[name]:02d}")
     if title is None:
-        title = f'{_("Test dialog")} `{name}`'
+        title = f"{_('Test dialog')} `{name}`"
     return name, title
 
 

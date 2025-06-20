@@ -223,7 +223,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
     def get_serializable_name(self, obj: Macro) -> str:
         """Return serializable name of object"""
         title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
-        name = f"{obj.PREFIX}{(self.__macros.index(obj)+1):03d}: {title}"
+        name = f"{obj.PREFIX}{(self.__macros.index(obj) + 1):03d}: {title}"
         return name
 
     def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:

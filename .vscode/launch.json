@@ -11,7 +11,6 @@
             "program": "${workspaceFolder}/cdl/app.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": false,
             "args": [
                 // "--reset"
@@ -27,27 +26,12 @@
             }
         },
         {
-            "name": "Run Test Launcher",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/cdl/tests/__init__.py",
-            "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
-            "justMyCode": true,
-            "env": {
-                // "DEBUG": "1",
-                "QT_COLOR_MODE": "light",
-            }
-        },
-        {
             "name": "Run current file",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": false,
             "args": [
                 // "--h5browser",
@@ -61,7 +45,7 @@
                 // "1000"
             ],
             "env": {
-                "DEBUG": "1",
+                // "DEBUG": "1",  // ☣️ Debug mode will reset .ini settings
                 // "TEST_SEGFAULT_ERROR": "1",
                 "LANG": "en",
                 "QT_COLOR_MODE": "light",
@@ -74,7 +58,6 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "pythonArgs": [
                 "-W error::DeprecationWarning",
                 "-W error::RuntimeWarning",
@@ -84,7 +67,8 @@
                 "--unattended",
             ],
             "env": {
-                "DEBUG": "1",
+                // "DEBUG": "1",  // ☣️ Debug mode will reset .ini settings
+                // "QT_QPA_PLATFORM": "offscreen",
                 // The `CDL_DATA` environment variable is set here just for checking
                 // that the data path is not added twice to the test data path list:
                 "CDL_DATA": "${workspaceFolder}/cdl/data/tests",
@@ -99,7 +83,6 @@
             "module": "cProfile",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-o",
                 "${file}.prof",
@@ -113,7 +96,6 @@
             "program": "${workspaceFolder}/cdl/tests/features/hdf5/h5browser1_unit.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {
                 "DEBUG": "1",

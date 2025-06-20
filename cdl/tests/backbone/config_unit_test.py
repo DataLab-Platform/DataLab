@@ -90,15 +90,22 @@ def is_wsl() -> bool:
     return False
 
 
+def is_offscreen_on_windows() -> bool:
+    """Return True if running in offscreen mode on Windows"""
+    return os.environ.get("QT_QPA_PLATFORM", "") == "offscreen" and os.name == "nt"
+
+
 def assert_in_interval(val1, val2, interval, context):
     """Raise an AssertionError if val1 is in [val2-interval/2,val2+interval/2]"""
     itv1, itv2 = val2 - 0.5 * interval, val2 + 0.5 * interval
     try:
         assert itv1 <= val1 <= itv2
     except AssertionError as exc:
-        if is_wsl():
-            # Ignore if executing the test on WSL: position of windows is not reliable
-            # on WSL (e.g. Gnome) and the test will fail
+        if is_wsl() or is_offscreen_on_windows():
+            # Ignore this assertion error in two cases:
+            # 1. If running on WSL, as the position of windows is not reliable
+            # 2. If running in offscreen mode on Windows (e.g. in CI or pytest session),
+            #    as the position of windows may not be set correctly in offscreen mode
             pass
         else:
             raise AssertionError(f"{context}: {itv1} <= {val1} <= {itv2}") from exc

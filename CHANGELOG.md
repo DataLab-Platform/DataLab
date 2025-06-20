@@ -26,6 +26,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * These methods are internal and used by advanced developers (e.g. plugin authors); hence, **no backward compatibility is maintained**
   * This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types
 
+🛠️ Bug fixes:
+
+* Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to "Square" after validating "Parameters…" dialog
+
+ℹ️ Other changes:
+
+* Updated `guidata` dependency to V3.10.0
+* Using new `guidata` translation utility based on `babel`
+
 ## DataLab Version 0.20.0 ##
 
 💥 New features and enhancements:

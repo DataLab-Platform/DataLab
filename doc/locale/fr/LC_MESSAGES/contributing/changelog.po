@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-13 14:45+0200\n"
+"POT-Creation-Date: 2025-06-17 17:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -83,6 +83,18 @@ msgstr "Ces méthodes sont internes et utilisées par des développeurs avancés
 
 msgid "This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types"
 msgstr "Ceci corrige l'[Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationaliser les noms de méthodes `BaseProcessor` pour les types de traitement de base"
+
+msgid "Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to \"Square\" after validating \"Parameters…\" dialog"
+msgstr "Correction de l'[Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Le style du marqueur de courbe change de manière inattendue en \"Carré\" après validation de la boîte de dialogue \"Paramètres…\""
+
+msgid "ℹ️ Other changes:"
+msgstr "ℹ️ Autres changements :"
+
+msgid "Updated `guidata` dependency to V3.10.0"
+msgstr "Dépendance `guidata` mise à jour vers V3.10.0"
+
+msgid "Using new `guidata` translation utility based on `babel`"
+msgstr "Utilisation du nouvel utilitaire de traduction `guidata` basé sur `babel`"
 
 msgid "DataLab Version 0.20.0"
 msgstr "DataLab Version 0.20.0"
@@ -642,9 +654,6 @@ msgstr "Lanceur Windows \"start.pyw\" : écriture d'un fichier journal \"datala
 
 msgid "Changing the color theme now correctly updates all DataLab's user interface components without the need to restart the application"
 msgstr "Changer le thème de couleur met maintenant à jour correctement tous les composants de l'interface utilisateur de DataLab sans avoir besoin de redémarrer l'application"
-
-msgid "ℹ️ Other changes:"
-msgstr "ℹ️ Autres changements :"
 
 msgid "OpenCV is now an optional dependency:"
 msgstr "OpenCV est désormais une dépendance facultative :"

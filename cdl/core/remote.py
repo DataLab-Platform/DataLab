@@ -721,7 +721,7 @@ def get_cdl_xmlrpc_port() -> str:
     Raises:
         ConnectionRefusedError: DataLab has not yet been executed
     """
-    #  The following is valid only when using Python 3.8+ with DataLab
+    #  The following is valid only when using Python 3.9+ with DataLab
     #  installed on the client side. In any other situation, please use the
     #  ``get_cdl_xmlrpc_port`` function from doc/remotecontrol_py27.py.
     initialize()
@@ -759,25 +759,41 @@ class RemoteClient(BaseProxy):
 
     def __init__(self) -> None:
         super().__init__()
-        self.port: str = None
+        self.port: str | None = None
         self._cdl: ServerProxy
 
-    def __connect_to_server(self, port: str | None = None) -> None:
+    def set_port(self, port: str | None = None) -> None:
+        """Set XML-RPC port to connect to.
+
+        Args:
+            port: XML-RPC port to connect to. If None, the port is automatically
+             retrieved from DataLab configuration.
+        """
+        execenv.print(f"Setting XML-RPC port... [input:{port}] ", end="")
+        port_str = ""
+        if port is None:
+            port = execenv.xmlrpcport
+            port_str = f"→[execenv.xmlrpcport:{port}] "
+            if port is None:
+                port = get_cdl_xmlrpc_port()
+                port_str = f"→[Conf.main.rpc_server_port:{port}] "
+        execenv.print(port_str, end="")
+        self.port = port
+        if port is None:
+            execenv.print("KO")
+            raise ConnectionRefusedError("DataLab XML-RPC port is not set")
+        execenv.print("OK")
+
+    def __connect_to_server(self) -> None:
         """Connect to DataLab XML-RPC server.
 
         Args:
-            port: XML-RPC port to connect to. If not specified,
-             the port is automatically retrieved from DataLab configuration.
+            port: XML-RPC port to connect to.
 
         Raises:
             ConnectionRefusedError: DataLab is currently not running
         """
-        if port is None:
-            port = execenv.xmlrpcport
-            if port is None:
-                port = get_cdl_xmlrpc_port()
-        self.port = port
-        self._cdl = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
+        self._cdl = ServerProxy(f"http://127.0.0.1:{self.port}", allow_none=True)
         try:
             version = self.get_version()
         except ConnectionRefusedError as exc:
@@ -817,10 +833,11 @@ class RemoteClient(BaseProxy):
             raise ValueError("timeout must be >= 0.0")
         if retries < 1:
             raise ValueError("retries must be >= 1")
-        execenv.print("Connecting to DataLab XML-RPC server...", end="")
+        self.set_port(port)
+        execenv.print(f"Connecting to DataLab XML-RPC server... [port:{port}] ", end="")
         for _index in range(retries):
             try:
-                self.__connect_to_server(port=port)
+                self.__connect_to_server()
                 break
             except ConnectionRefusedError:
                 time.sleep(timeout / retries)

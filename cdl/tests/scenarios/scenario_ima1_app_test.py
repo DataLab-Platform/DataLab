@@ -18,9 +18,9 @@ from cdl.tests.scenarios import common
 
 def test_scenario_image() -> None:
     """Run image unit test scenario 1 (no process isolation)"""
-    assert (
-        Conf.main.process_isolation_enabled.get()
-    ), "Process isolation must be enabled"
+    assert Conf.main.process_isolation_enabled.get(), (
+        "Process isolation must be enabled"
+    )
     with cdltest_app_context(save=True) as win:
         with win.context_no_refresh():
             execenv.print("Testing image features without process isolation...")

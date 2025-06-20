@@ -40,7 +40,7 @@ classifiers = [
 ]
 requires-python = ">=3.9, <4"
 dependencies = [
-    "guidata >= 3.9",
+    "guidata >= 3.10",
     "PlotPy >= 2.7.4",
     "SciPy >= 1.5, < 1.15.0",
     "scikit-image >= 0.18",
@@ -63,7 +63,14 @@ datalab-tests = "cdl.tests:run"
 [project.optional-dependencies]
 qt = ["PyQt5"]
 opencv = ["opencv-python-headless >= 4.5"]
-dev = ["ruff", "pylint", "Coverage", "pyinstaller>=6.0"]
+dev = [
+    "babel",
+    "Coverage",
+    "pyinstaller>=6.0",
+    "pylint",
+    "ruff",
+    "toml-to-requirements",
+]
 doc = [
     "PyQt5",
     "sphinx",
@@ -107,7 +114,8 @@ include = ["cdl*"]
 version = { attr = "cdl.__version__" }
 
 [tool.pytest.ini_options]
-addopts = "cdl"
+addopts = "cdl --import-mode=importlib"
+# addopts = "cdl --import-mode=importlib --show-windows"  # Disable offscreen mode
 
 [tool.ruff]
 exclude = [".git", ".vscode", "build", "dist", "*.ipynb"]
