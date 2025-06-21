@@ -1608,7 +1608,7 @@ def calc_resultshape(
             # As of now, this happens only for polygon contours.
             # We need to pad the arrays with NaNs.
             max_cols = max(num_cols)
-            num_rows = addition(coords.shape[0] for coords in res)
+            num_rows = sum(coords.shape[0] for coords in res)
             array = np.full((num_rows, max_cols), np.nan)
             row = 0
             for coords in res:
