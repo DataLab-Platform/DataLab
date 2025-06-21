@@ -78,8 +78,8 @@ class Wrap1to1Func:
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
 
-    The instance of this wrapper is callable and returns a :class:`sigima_.obj.SignalObj`
-    object.
+    The instance of this wrapper is callable and returns
+    a :class:`sigima_.obj.SignalObj` object.
 
     Example:
 
