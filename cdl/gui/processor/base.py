@@ -14,7 +14,7 @@ import time
 import warnings
 from dataclasses import dataclass
 from multiprocessing.pool import Pool
-from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional
 
 import guidata.dataset as gds
 import numpy as np
