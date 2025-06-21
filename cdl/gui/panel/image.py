@@ -26,8 +26,8 @@ from cdl.gui.newobject import create_image_gui
 from cdl.gui.panel.base import BaseDataPanel
 from cdl.gui.plothandler import ImagePlotHandler
 from cdl.gui.processor.image import ImageProcessor
-from sigima_ import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 from sigima_.io.image import ImageIORegistry
+from sigima_.obj import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 
 if TYPE_CHECKING:
     import guidata.dataset as gds

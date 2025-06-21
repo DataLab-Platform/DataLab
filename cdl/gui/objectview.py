@@ -47,7 +47,7 @@ from qtpy import QtWidgets as QW
 from cdl.config import _
 from cdl.objectmodel import ObjectGroup, get_short_id, get_uuid
 from cdl.utils.qthelpers import block_signals
-from sigima_ import ImageObj, SignalObj
+from sigima_.obj import ImageObj, SignalObj
 
 if TYPE_CHECKING:
     from typing import Any

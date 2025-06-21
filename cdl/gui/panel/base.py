@@ -55,7 +55,7 @@ from cdl.utils.qthelpers import (
     save_restore_stds,
 )
 from cdl.widgets.textimport import TextImportWizard
-from sigima_ import (
+from sigima_.obj import (
     ImageObj,
     NewImageParam,
     ResultProperties,

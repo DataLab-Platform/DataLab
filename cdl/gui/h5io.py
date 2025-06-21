@@ -24,7 +24,7 @@ from cdl.h5 import H5Importer
 from cdl.h5.native import NativeH5Reader, NativeH5Writer
 from cdl.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from cdl.widgets.h5browser import H5BrowserDialog
-from sigima_ import SignalObj
+from sigima_.obj import SignalObj
 
 if TYPE_CHECKING:
     from cdl.gui.main import CDLMainWindow

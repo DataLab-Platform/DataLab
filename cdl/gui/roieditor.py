@@ -56,7 +56,7 @@ from cdl.adapters_plotpy.converters import (
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.config import Conf, _
 from cdl.env import execenv
-from sigima_ import (
+from sigima_.obj import (
     CircularROI,
     ImageObj,
     ImageROI,

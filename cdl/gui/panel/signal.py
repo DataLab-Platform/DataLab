@@ -28,8 +28,8 @@ from cdl.gui.newobject import NewSignalParam, create_signal_gui
 from cdl.gui.panel.base import BaseDataPanel
 from cdl.gui.plothandler import SignalPlotHandler
 from cdl.gui.processor.signal import SignalProcessor
-from sigima_ import SignalObj, SignalROI
 from sigima_.io.signal import SignalIORegistry
+from sigima_.obj import SignalObj, SignalROI
 
 if TYPE_CHECKING:
     import guidata.dataset as gds

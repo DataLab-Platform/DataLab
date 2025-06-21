@@ -14,8 +14,8 @@ from collections.abc import Callable
 import numpy as np
 from guidata.qthelpers import exec_dialog
 
-import sigima_.computation.base as sb
-import sigima_.computation.signal as ss
+import sigima_.computation.base as sigima_base
+import sigima_.computation.signal as sigima_signal
 import sigima_.param
 from cdl.config import _
 from cdl.gui.processor.base import BaseProcessor
@@ -27,8 +27,14 @@ from cdl.widgets import (
     signaldeltax,
     signalpeak,
 )
-from sigima_ import ResultProperties, ResultShape, SignalObj
-from sigima_.obj.signal import ROI1DParam, SignalROI, create_signal
+from sigima_.obj import (
+    ResultProperties,
+    ResultShape,
+    ROI1DParam,
+    SignalObj,
+    SignalROI,
+    create_signal,
+)
 
 
 class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
@@ -39,75 +45,91 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     def register_computations(self) -> None:
         """Register signal computations"""
         # MARK: OPERATION
-        self.register_n_to_1(ss.addition, _("Sum"), icon_name="sum.svg")
-        self.register_n_to_1(ss.average, _("Average"), icon_name="average.svg")
+        self.register_n_to_1(sigima_signal.addition, _("Sum"), icon_name="sum.svg")
+        self.register_n_to_1(
+            sigima_signal.average, _("Average"), icon_name="average.svg"
+        )
         self.register_2_to_1(
-            ss.difference,
+            sigima_signal.difference,
             _("Difference"),
             icon_name="difference.svg",
             obj2_name=_("signal to subtract"),
         )
         self.register_2_to_1(
-            ss.quadratic_difference,
+            sigima_signal.quadratic_difference,
             _("Quadratic Difference"),
             icon_name="quadratic_difference.svg",
             obj2_name=_("signal to subtract"),
         )
-        self.register_n_to_1(ss.product, _("Product"), icon_name="product.svg")
+        self.register_n_to_1(
+            sigima_signal.product, _("Product"), icon_name="product.svg"
+        )
         self.register_2_to_1(
-            ss.division,
+            sigima_signal.division,
             _("Division"),
             icon_name="division.svg",
             obj2_name=_("divider"),
         )
-        self.register_1_to_1(ss.inverse, _("Inverse"), icon_name="inverse.svg")
+        self.register_1_to_1(
+            sigima_signal.inverse, _("Inverse"), icon_name="inverse.svg"
+        )
         self.register_2_to_1(
-            ss.arithmetic,
+            sigima_signal.arithmetic,
             _("Arithmetic"),
-            paramclass=sb.ArithmeticParam,
+            paramclass=sigima_base.ArithmeticParam,
             icon_name="arithmetic.svg",
             obj2_name=_("signal to operate with"),
         )
         self.register_1_to_1(
-            ss.addition_constant,
+            sigima_signal.addition_constant,
             _("Add constant"),
-            paramclass=sb.ConstantParam,
+            paramclass=sigima_base.ConstantParam,
             icon_name="constant_add.svg",
         )
         self.register_1_to_1(
-            ss.difference_constant,
+            sigima_signal.difference_constant,
             _("Subtract constant"),
-            paramclass=sb.ConstantParam,
+            paramclass=sigima_base.ConstantParam,
             icon_name="constant_subtract.svg",
         )
         self.register_1_to_1(
-            ss.product_constant,
+            sigima_signal.product_constant,
             _("Multiply by constant"),
-            paramclass=sb.ConstantParam,
+            paramclass=sigima_base.ConstantParam,
             icon_name="constant_multiply.svg",
         )
         self.register_1_to_1(
-            ss.division_constant,
+            sigima_signal.division_constant,
             _("Divide by constant"),
-            paramclass=sb.ConstantParam,
+            paramclass=sigima_base.ConstantParam,
             icon_name="constant_divide.svg",
         )
-        self.register_1_to_1(ss.absolute, _("Absolute value"), icon_name="abs.svg")
-        self.register_1_to_1(ss.real, _("Real part"), icon_name="re.svg")
-        self.register_1_to_1(ss.imag, _("Imaginary part"), icon_name="im.svg")
         self.register_1_to_1(
-            ss.astype,
+            sigima_signal.absolute, _("Absolute value"), icon_name="abs.svg"
+        )
+        self.register_1_to_1(sigima_signal.real, _("Real part"), icon_name="re.svg")
+        self.register_1_to_1(
+            sigima_signal.imag, _("Imaginary part"), icon_name="im.svg"
+        )
+        self.register_1_to_1(
+            sigima_signal.astype,
             _("Convert data type"),
             paramclass=sigima_.param.DataTypeSParam,
             icon_name="convert_dtype.svg",
         )
-        self.register_1_to_1(ss.exp, _("Exponential"), icon_name="exp.svg")
-        self.register_1_to_1(ss.log10, _("Logarithm (base 10)"), icon_name="log10.svg")
-        self.register_1_to_1(ss.sqrt, _("Square root"), icon_name="sqrt.svg")
-        self.register_1_to_1(ss.derivative, _("Derivative"), icon_name="derivative.svg")
-        self.register_1_to_1(ss.integral, _("Integral"), icon_name="integral.svg")
+        self.register_1_to_1(sigima_signal.exp, _("Exponential"), icon_name="exp.svg")
+        self.register_1_to_1(
+            sigima_signal.log10, _("Logarithm (base 10)"), icon_name="log10.svg"
+        )
+        self.register_1_to_1(sigima_signal.sqrt, _("Square root"), icon_name="sqrt.svg")
+        self.register_1_to_1(
+            sigima_signal.derivative, _("Derivative"), icon_name="derivative.svg"
+        )
+        self.register_1_to_1(
+            sigima_signal.integral, _("Integral"), icon_name="integral.svg"
+        )
         self.register_2_to_1(
-            ss.convolution,
+            sigima_signal.convolution,
             _("Convolution"),
             icon_name="convolution.svg",
             obj2_name=_("signal to convolve with"),
@@ -116,53 +138,74 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         # MARK: PROCESSING
         # Axis transformation
         self.register_1_to_1(
-            ss.calibration, _("Linear calibration"), ss.XYCalibrateParam
-        )
-        self.register_1_to_1(ss.swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg")
-        self.register_1_to_1(
-            ss.reverse_x, _("Reverse X-axis"), icon_name="reverse_signal_x.svg"
+            sigima_signal.calibration,
+            _("Linear calibration"),
+            sigima_signal.XYCalibrateParam,
         )
         self.register_1_to_1(
-            ss.to_polar,
+            sigima_signal.swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg"
+        )
+        self.register_1_to_1(
+            sigima_signal.reverse_x,
+            _("Reverse X-axis"),
+            icon_name="reverse_signal_x.svg",
+        )
+        self.register_1_to_1(
+            sigima_signal.to_polar,
             _("Convert to polar coordinates"),
             paramclass=sigima_.param.AngleUnitParam,
         )
         self.register_1_to_1(
-            ss.to_cartesian,
+            sigima_signal.to_cartesian,
             _("Convert to cartesian coordinates"),
             paramclass=sigima_.param.AngleUnitParam,
         )
         # Level adjustment
         self.register_1_to_1(
-            ss.normalize, _("Normalize"), sb.NormalizeParam, "normalize.svg"
+            sigima_signal.normalize,
+            _("Normalize"),
+            sigima_base.NormalizeParam,
+            "normalize.svg",
         )
-        self.register_1_to_1(ss.clip, _("Clipping"), sb.ClipParam, "clip.svg")
         self.register_1_to_1(
-            ss.offset_correction,
+            sigima_signal.clip, _("Clipping"), sigima_base.ClipParam, "clip.svg"
+        )
+        self.register_1_to_1(
+            sigima_signal.offset_correction,
             _("Offset correction"),
             icon_name="offset_correction.svg",
             comment=_("Evaluate and subtract the offset value from the data"),
         )
         # Noise reduction
-        self.register_1_to_1(ss.gaussian_filter, _("Gaussian filter"), sb.GaussianParam)
         self.register_1_to_1(
-            ss.moving_average, _("Moving average"), sb.MovingAverageParam
+            sigima_signal.gaussian_filter,
+            _("Gaussian filter"),
+            sigima_base.GaussianParam,
         )
-        self.register_1_to_1(ss.moving_median, _("Moving median"), sb.MovingMedianParam)
-        self.register_1_to_1(ss.wiener, _("Wiener filter"))
+        self.register_1_to_1(
+            sigima_signal.moving_average,
+            _("Moving average"),
+            sigima_base.MovingAverageParam,
+        )
+        self.register_1_to_1(
+            sigima_signal.moving_median,
+            _("Moving median"),
+            sigima_base.MovingMedianParam,
+        )
+        self.register_1_to_1(sigima_signal.wiener, _("Wiener filter"))
         # Fourier analysis
         self.register_1_to_1(
-            ss.zero_padding,
+            sigima_signal.zero_padding,
             _("Zero padding"),
-            ss.ZeroPadding1DParam,
+            sigima_signal.ZeroPadding1DParam,
             comment=_(
                 "Zero padding is used to increase the frequency resolution of the FFT"
             ),
         )
         self.register_1_to_1(
-            ss.fft,
+            sigima_signal.fft,
             _("FFT"),
-            sb.FFTParam,
+            sigima_base.FFTParam,
             comment=_(
                 "Fast Fourier Transform (FFT) is an estimation of the "
                 "Discrete Fourier Transform (DFT). "
@@ -171,9 +214,9 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             edit=False,
         )
         self.register_1_to_1(
-            ss.ifft,
+            sigima_signal.ifft,
             _("Inverse FFT"),
-            sb.FFTParam,
+            sigima_base.FFTParam,
             comment=_(
                 "Inverse Fast Fourier Transform (IFFT) is an estimation of the "
                 "Inverse Discrete Fourier Transform (IDFT). "
@@ -182,7 +225,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             edit=False,
         )
         self.register_1_to_1(
-            ss.magnitude_spectrum,
+            sigima_signal.magnitude_spectrum,
             _("Magnitude spectrum"),
             paramclass=sigima_.param.SpectrumParam,
             comment=_(
@@ -191,7 +234,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             ),
         )
         self.register_1_to_1(
-            ss.phase_spectrum,
+            sigima_signal.phase_spectrum,
             _("Phase spectrum"),
             comment=_(
                 "Phase spectrum is the angle of the FFT result. "
@@ -199,7 +242,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             ),
         )
         self.register_1_to_1(
-            ss.psd,
+            sigima_signal.psd,
             _("Power spectral density"),
             paramclass=sigima_.param.SpectrumParam,
             comment=_(
@@ -209,45 +252,45 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         )
 
         self.register_1_to_1(
-            ss.power,
+            sigima_signal.power,
             _("Power"),
             paramclass=sigima_.param.PowerParam,
             icon_name="power.svg",
         )
         self.register_1_to_1(
-            ss.peak_detection,
+            sigima_signal.peak_detection,
             _("Peak detection"),
             paramclass=sigima_.param.PeakDetectionParam,
             icon_name="peak_detect.svg",
         )
         # Frequency filters
         self.register_1_to_1(
-            ss.lowpass,
+            sigima_signal.lowpass,
             _("Low-pass filter"),
             sigima_.param.LowPassFilterParam,
             "lowpass.svg",
         )
         self.register_1_to_1(
-            ss.highpass,
+            sigima_signal.highpass,
             _("High-pass filter"),
             sigima_.param.HighPassFilterParam,
             "highpass.svg",
         )
         self.register_1_to_1(
-            ss.bandpass,
+            sigima_signal.bandpass,
             _("Band-pass filter"),
             sigima_.param.BandPassFilterParam,
             "bandpass.svg",
         )
         self.register_1_to_1(
-            ss.bandstop,
+            sigima_signal.bandstop,
             _("Band-stop filter"),
             sigima_.param.BandStopFilterParam,
             "bandstop.svg",
         )
         # Other processing
         self.register_1_to_1(
-            ss.windowing,
+            sigima_signal.windowing,
             _("Windowing"),
             paramclass=sigima_.param.WindowingParam,
             icon_name="windowing.svg",
@@ -256,13 +299,13 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             ),
         )
         self.register_1_to_1(
-            ss.detrending,
+            sigima_signal.detrending,
             _("Detrending"),
-            ss.DetrendingParam,
+            sigima_signal.DetrendingParam,
             icon_name="detrending.svg",
         )
         self.register_2_to_1(
-            ss.interpolation,
+            sigima_signal.interpolation,
             _("Interpolation"),
             paramclass=sigima_.param.InterpolationParam,
             obj2_name=_("signal for X values"),
@@ -270,117 +313,119 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         )
 
         self.register_1_to_1(
-            ss.resampling,
+            sigima_signal.resampling,
             _("Resampling"),
-            ss.ResamplingParam,
+            sigima_signal.ResamplingParam,
             icon_name="resampling.svg",
         )
         # Stability analysis
         self.register_1_to_1(
-            ss.allan_variance,
+            sigima_signal.allan_variance,
             _("Allan variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.allan_deviation,
+            sigima_signal.allan_deviation,
             _("Allan deviation"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.overlapping_allan_variance,
+            sigima_signal.overlapping_allan_variance,
             _("Overlapping Allan variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.modified_allan_variance,
+            sigima_signal.modified_allan_variance,
             _("Modified Allan variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.hadamard_variance,
+            sigima_signal.hadamard_variance,
             _("Hadamard variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.modified_allan_variance,
+            sigima_signal.modified_allan_variance,
             _("Modified Allan variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.hadamard_variance,
+            sigima_signal.hadamard_variance,
             _("Hadamard variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.modified_allan_variance,
+            sigima_signal.modified_allan_variance,
             _("Modified Allan variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.hadamard_variance,
+            sigima_signal.hadamard_variance,
             _("Hadamard variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.total_variance,
+            sigima_signal.total_variance,
             _("Total variance"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         self.register_1_to_1(
-            ss.time_deviation,
+            sigima_signal.time_deviation,
             _("Time deviation"),
             paramclass=sigima_.param.AllanVarianceParam,
         )
         # Other processing
         self.register_2_to_1(
-            ss.xy_mode,
+            sigima_signal.xy_mode,
             _("X-Y mode"),
             obj2_name=_("Y-signal of the X-Y mode"),
             comment=_("Plot one signal as a fonction of the other one"),
         )
-        self.register_1_to_n(ss.extract_roi, "ROI", icon_name="roi.svg")
+        self.register_1_to_n(sigima_signal.extract_roi, "ROI", icon_name="roi.svg")
 
         # MARK: ANALYSIS
-        self.register_1_to_0(ss.stats, _("Statistics"), icon_name="stats.svg")
+        self.register_1_to_0(
+            sigima_signal.stats, _("Statistics"), icon_name="stats.svg"
+        )
         self.register_1_to_1(
-            ss.histogram,
+            sigima_signal.histogram,
             _("Histogram"),
-            paramclass=ss.HistogramParam,
+            paramclass=sigima_signal.HistogramParam,
             icon_name="histogram.svg",
         )
         self.register_1_to_0(
-            ss.fwhm,
+            sigima_signal.fwhm,
             _("Full width at half-maximum"),
-            paramclass=ss.FWHMParam,
+            paramclass=sigima_signal.FWHMParam,
             icon_name="fwhm.svg",
         )
         self.register_1_to_0(
-            ss.fw1e2,
+            sigima_signal.fw1e2,
             _("Full width at") + " 1/e²",
             icon_name="fw1e2.svg",
         )
         self.register_1_to_0(
-            ss.full_width_at_y,
+            sigima_signal.full_width_at_y,
             _("Full width at y=..."),
-            paramclass=ss.OrdinateParam,
+            paramclass=sigima_signal.OrdinateParam,
             comment=_("Compute the full width at a given y value"),
         )
         self.register_1_to_0(
-            ss.x_at_y,
+            sigima_signal.x_at_y,
             _("First abscissa at y=..."),
-            paramclass=ss.OrdinateParam,
+            paramclass=sigima_signal.OrdinateParam,
             comment=_(
                 "Compute the first abscissa at a given y value (linear interpolation)"
             ),
         )
         self.register_1_to_0(
-            ss.y_at_x,
+            sigima_signal.y_at_x,
             _("Ordinate at x=..."),
-            paramclass=ss.AbscissaParam,
+            paramclass=sigima_signal.AbscissaParam,
             comment=_("Compute the ordinate at a given x value (linear interpolation)"),
         )
         self.register_1_to_0(
-            ss.x_at_minmax,
+            sigima_signal.x_at_minmax,
             _("Abscissa of the minimum and maximum"),
             comment=_(
                 "Compute the smallest argument of the minima and the smallest "
@@ -388,20 +433,20 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             ),
         )
         self.register_1_to_0(
-            ss.sampling_rate_period,
+            sigima_signal.sampling_rate_period,
             _("Sampling rate and period"),
             comment=_(
                 "Compute sampling rate and period for a constant sampling signal"
             ),
         )
         self.register_1_to_0(
-            ss.dynamic_parameters,
+            sigima_signal.dynamic_parameters,
             _("Dynamic parameters"),
-            paramclass=ss.DynamicParam,
+            paramclass=sigima_signal.DynamicParam,
             comment=_("Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."),
         )
         self.register_1_to_0(
-            ss.bandwidth_3db,
+            sigima_signal.bandwidth_3db,
             _("Bandwidth at -3dB"),
             comment=_(
                 "Compute bandwidth at -3dB assuming a low-pass filter "
@@ -409,7 +454,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             ),
         )
         self.register_1_to_0(
-            ss.contrast,
+            sigima_signal.contrast,
             _("Contrast"),
             comment=_(
                 "Compute contrast of a signal, i.e. (max-min)/(max+min), "
@@ -447,17 +492,17 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         - :py:func:`sigima_.signal.time_deviation`
         """
         if param is None:
-            param = ss.AllanVarianceParam()
+            param = sigima_signal.AllanVarianceParam()
             if not param.edit(parent=self.panel.parent()):
                 return
         funcs = [
-            ss.allan_variance,
-            ss.allan_deviation,
-            ss.overlapping_allan_variance,
-            ss.modified_allan_variance,
-            ss.hadamard_variance,
-            ss.total_variance,
-            ss.time_deviation,
+            sigima_signal.allan_variance,
+            sigima_signal.allan_deviation,
+            sigima_signal.overlapping_allan_variance,
+            sigima_signal.modified_allan_variance,
+            sigima_signal.hadamard_variance,
+            sigima_signal.total_variance,
+            sigima_signal.time_deviation,
         ]
         self.compute_multiple_1_to_1(
             funcs, [param] * len(funcs), "Stability", edit=False
@@ -470,7 +515,9 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """Detect peaks from data
         with :py:func:`sigima_.signal.peak_detection`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
-        edit, param = self.init_param(param, ss.PeakDetectionParam, _("Peak detection"))
+        edit, param = self.init_param(
+            param, sigima_signal.PeakDetectionParam, _("Peak detection")
+        )
         if edit:
             dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel.parent())
             if exec_dialog(dlg):
@@ -486,7 +533,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     ) -> None:
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
-        edit, param = self.init_param(param, ss.PolynomialFitParam, txt)
+        edit, param = self.init_param(param, sigima_signal.PolynomialFitParam, txt)
         if not edit or param.edit(self.panel.parent()):
             dlgfunc = fitdialog.polynomialfit
 
@@ -555,7 +602,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         # is compatible with this call, and it simply passes the second argument through
         # to the `extract_rois` function. However, this should be rectified in the
         # future to ensure that the method signature and its usage are consistent.
-        self.compute_1_to_1(ss.extract_rois, params, title=_("Extract ROI"))
+        self.compute_1_to_1(sigima_signal.extract_rois, params, title=_("Extract ROI"))
 
     # ------Signal Analysis
 
@@ -569,7 +616,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.panel.parent())
             if exec_dialog(dlg):
-                param = ss.OrdinateParam()
+                param = sigima_signal.OrdinateParam()
                 param.y = dlg.get_y_value()
             else:
                 return None
@@ -577,7 +624,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
 
     @qt_try_except()
     def compute_x_at_y(
-        self, param: ss.OrdinateParam | None = None
+        self, param: sigima_signal.OrdinateParam | None = None
     ) -> dict[str, ResultProperties] | None:
         """Compute x at y with :py:func:`sigima_.signal.x_at_y`."""
         if param is None:
@@ -586,7 +633,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 obj, cursor_orientation="horizontal", parent=self.panel.parent()
             )
             if exec_dialog(dlg):
-                param = ss.OrdinateParam()
+                param = sigima_signal.OrdinateParam()
                 param.y = dlg.get_y_value()
             else:
                 return None
@@ -594,7 +641,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
 
     @qt_try_except()
     def compute_y_at_x(
-        self, param: ss.AbscissaParam | None = None
+        self, param: sigima_signal.AbscissaParam | None = None
     ) -> dict[str, ResultProperties] | None:
         """Compute y at x with :py:func:`sigima_.signal.y_at_x`."""
         if param is None:
@@ -603,7 +650,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 obj, cursor_orientation="vertical", parent=self.panel.parent()
             )
             if exec_dialog(dlg):
-                param = ss.AbscissaParam()
+                param = sigima_signal.AbscissaParam()
                 param.x = dlg.get_x_value()
             else:
                 return None

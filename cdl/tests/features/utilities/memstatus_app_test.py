@@ -12,7 +12,7 @@ import psutil
 from cdl import config
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from sigima_ import Gauss2DParam, ImageTypes, NewImageParam
+from sigima_.obj import Gauss2DParam, ImageTypes, NewImageParam
 
 
 def memory_alarm(threshold):

@@ -17,18 +17,20 @@ from guidata.qthelpers import qt_app_context
 
 import cdl.tests.data as ctd
 import sigima_.algorithms.signal as alg
-import sigima_.computation.signal as ss
+import sigima_.computation.signal as sigima_signal
+import sigima_.obj
 import sigima_.param
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result
 from cdl.utils.vistools import view_curves
-from sigima_ import NewSignalParam, PeriodicParam, SignalTypes, create_signal_from_param
 
 
 def test_signal_fft_interactive() -> None:
     """1D FFT interactive test."""
     with qt_app_context():
-        newparam = NewSignalParam.create(stype=SignalTypes.COSINUS, size=500)
+        newparam = sigima_.obj.NewSignalParam.create(
+            stype=sigima_.obj.SignalTypes.COSINUS, size=500
+        )
 
         # *** Note ***
         #
@@ -38,8 +40,8 @@ def test_signal_fft_interactive() -> None:
         # is not meaningful if xmin is different.
         newparam.xmin = 0.0
 
-        extra_param = PeriodicParam()
-        s1 = create_signal_from_param(newparam, extra_param=extra_param)
+        extra_param = sigima_.obj.PeriodicParam()
+        s1 = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
         t, y = s1.xydata
         f, s = alg.fft1d(t, y)
         t2, y2 = alg.ifft1d(f, s)
@@ -53,14 +55,16 @@ def test_signal_fft_interactive() -> None:
 @pytest.mark.validation
 def test_signal_zero_padding() -> None:
     """1D FFT zero padding validation test."""
-    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=50.0, size=1000)
+    s1 = ctd.create_periodic_signal(
+        sigima_.obj.SignalTypes.COSINUS, freq=50.0, size=1000
+    )
 
     # Validate zero padding with custom length
     param = sigima_.param.ZeroPadding1DParam.create(n=250)
     assert param.strategy == "custom", (
         f"Wrong default strategy: {param.strategy} (expected 'custom')"
     )
-    s2 = ss.zero_padding(s1, param)
+    s2 = sigima_signal.zero_padding(s1, param)
     len1 = len(s1.y)
     exp_len2 = len1 + param.n
     execenv.print("Validating zero padding with custom length...", end=" ")
@@ -102,10 +106,10 @@ def test_signal_fft() -> None:
     xmin = 0.0
 
     s1 = ctd.create_periodic_signal(
-        SignalTypes.COSINUS, freq=freq, size=size, xmin=xmin
+        sigima_.obj.SignalTypes.COSINUS, freq=freq, size=size, xmin=xmin
     )
-    fft = ss.fft(s1)
-    ifft = ss.ifft(fft)
+    fft = sigima_signal.fft(s1)
+    ifft = sigima_signal.ifft(fft)
 
     # Check that the inverse FFT reconstructs the original signal
     check_array_result("Cosine signal FFT/iFFT X reconstruction", s1.y, ifft.y.real)
@@ -148,9 +152,11 @@ def test_signal_magnitude_spectrum() -> None:
     freq = 50.0
     size = 10000
 
-    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=freq, size=size)
-    fft = ss.fft(s1)
-    mag = ss.magnitude_spectrum(s1)
+    s1 = ctd.create_periodic_signal(
+        sigima_.obj.SignalTypes.COSINUS, freq=freq, size=size
+    )
+    fft = sigima_signal.fft(s1)
+    mag = sigima_signal.magnitude_spectrum(s1)
     fpk1 = fft.x[np.argmax(mag.y[: size // 2])]
     check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
 
@@ -165,9 +171,11 @@ def test_signal_phase_spectrum() -> None:
     freq = 50.0
     size = 10000
 
-    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=freq, size=size)
-    fft = ss.fft(s1)
-    phase = ss.phase_spectrum(s1)
+    s1 = ctd.create_periodic_signal(
+        sigima_.obj.SignalTypes.COSINUS, freq=freq, size=size
+    )
+    fft = sigima_signal.fft(s1)
+    phase = sigima_signal.phase_spectrum(s1)
     fpk1 = fft.x[np.argmax(phase.y[: size // 2])]
     check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
 
@@ -183,11 +191,13 @@ def test_signal_psd() -> None:
     freq = 50.0
     size = 10000
 
-    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=freq, size=size)
+    s1 = ctd.create_periodic_signal(
+        sigima_.obj.SignalTypes.COSINUS, freq=freq, size=size
+    )
     param = sigima_.param.SpectrumParam()
     for log_scale in (False, True):
         param.log = log_scale
-        psd = ss.psd(s1, param)
+        psd = sigima_signal.psd(s1, param)
 
         # Check that the PSD is correct (Welch's method is used by default)
         exp_x, exp_y = sps.welch(s1.y, fs=1.0 / (s1.x[1] - s1.x[0]))

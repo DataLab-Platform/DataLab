@@ -12,7 +12,7 @@ from cdl.env import execenv
 from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
 from cdl.tests.data import create_multigauss_image
 from cdl.tests.features.common.roi_app_test import create_test_image_with_roi
-from sigima_ import NewImageParam
+from sigima_.obj import NewImageParam
 
 
 def test_contour_app():

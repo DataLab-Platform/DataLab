@@ -19,7 +19,7 @@ from qtpy import QtCore as QC
 from cdl.gui.docks import profile_to_signal
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image
-from sigima_ import NewImageParam
+from sigima_.obj import NewImageParam
 
 
 def test_image_tools_app():

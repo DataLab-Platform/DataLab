@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     from plotpy.panels import XCrossSection, YCrossSection
     from plotpy.plot import BasePlot
 
-    from sigima_ import ImageObj
+    from sigima_.obj import ImageObj
 
 
 class ProfileExtractionDialog(PlotDialog):

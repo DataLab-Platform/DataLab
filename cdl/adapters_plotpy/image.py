@@ -25,7 +25,7 @@ from cdl.adapters_plotpy.base import (
     BaseSingleROIPlotPyAdapter,
 )
 from cdl.config import Conf
-from sigima_ import CircularROI, ImageObj, ImageROI, PolygonalROI, RectangularROI
+from sigima_.obj import CircularROI, ImageObj, ImageROI, PolygonalROI, RectangularROI
 
 
 class PolygonalROIPlotPyAdapter(

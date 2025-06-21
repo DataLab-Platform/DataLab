@@ -24,7 +24,9 @@ from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
-import sigima_.computation.image.measurement as si
+import sigima_.algorithms.image as alg
+import sigima_.computation.image as sigima_image
+import sigima_.obj
 from cdl.config import _
 from cdl.env import execenv
 from cdl.tests.data import (
@@ -33,8 +35,6 @@ from cdl.tests.data import (
 )
 from cdl.utils.tests import check_scalar_result
 from cdl.utils.vistools import view_image_items
-from sigima_ import NewImageParam, create_image_roi
-from sigima_.algorithms.image import get_centroid_fourier
 
 
 def get_centroid_from_moments(data):
@@ -75,7 +75,7 @@ def compare_centroid_funcs(data):
         ("SciPy", spi.center_of_mass),
         ("OpenCV", get_centroid_with_cv2),
         ("Moments", get_centroid_from_moments),
-        ("Fourier", get_centroid_fourier),
+        ("Fourier", alg.get_centroid_fourier),
     ):
         try:
             t0 = time.time()
@@ -99,7 +99,7 @@ def test_centroid_graphically():
 
 def __check_centroid(image, expected_x, expected_y):
     """Check centroid computation"""
-    df = si.centroid(image).to_dataframe()
+    df = sigima_image.centroid(image).to_dataframe()
     check_scalar_result("Centroid X", df.x[0], expected_x, atol=1.0)
     check_scalar_result("Centroid Y", df.y[0], expected_y, atol=1.0)
 
@@ -107,9 +107,9 @@ def __check_centroid(image, expected_x, expected_y):
 @pytest.mark.validation
 def test_image_centroid():
     """Test centroid computation"""
-    param = NewImageParam.create(height=500, width=500)
+    param = sigima_.obj.NewImageParam.create(height=500, width=500)
     image = create_noisygauss_image(param, center=(-2.0, 3.0), add_annotations=True)
-    circle_roi = create_image_roi("circle", [200, 325, 10])
+    circle_roi = sigima_.obj.create_image_roi("circle", [200, 325, 10])
     for roi, x0, y0 in (
         (None, 0, 0),
         (None, 100, 100),

@@ -16,7 +16,7 @@ from collections.abc import Generator
 
 from guidata.qthelpers import qt_app_context
 
-import sigima_.obj as so
+import sigima_.obj
 from cdl.env import execenv
 from cdl.gui.newobject import create_image_gui, create_signal_gui
 from cdl.utils.vistools import view_curves, view_images
@@ -24,65 +24,70 @@ from cdl.utils.vistools import view_curves, view_images
 
 def iterate_signal_creation(
     data_size: int = 500, non_zero: bool = False, verbose: bool = True
-) -> Generator[so.SignalObj, None, None]:
+) -> Generator[sigima_.obj.SignalObj, None, None]:
     """Iterate over all possible signals created from parameters"""
     if verbose:
         execenv.print(
             f"  Iterating over signal types (size={data_size}, non_zero={non_zero}):"
         )
-    for stype in so.SignalTypes:
-        if non_zero and stype in (so.SignalTypes.ZEROS,):
+    for stype in sigima_.obj.SignalTypes:
+        if non_zero and stype in (sigima_.obj.SignalTypes.ZEROS,):
             continue
         if verbose:
             execenv.print(f"    {stype.value}")
-        base_param = so.NewSignalParam.create(stype=stype, size=data_size)
-        if stype == so.SignalTypes.UNIFORMRANDOM:
-            extra_param = so.UniformRandomParam()
-        elif stype == so.SignalTypes.NORMALRANDOM:
-            extra_param = so.NormalRandomParam()
+        base_param = sigima_.obj.NewSignalParam.create(stype=stype, size=data_size)
+        if stype == sigima_.obj.SignalTypes.UNIFORMRANDOM:
+            extra_param = sigima_.obj.UniformRandomParam()
+        elif stype == sigima_.obj.SignalTypes.NORMALRANDOM:
+            extra_param = sigima_.obj.NormalRandomParam()
         elif stype in (
-            so.SignalTypes.GAUSS,
-            so.SignalTypes.LORENTZ,
-            so.SignalTypes.VOIGT,
+            sigima_.obj.SignalTypes.GAUSS,
+            sigima_.obj.SignalTypes.LORENTZ,
+            sigima_.obj.SignalTypes.VOIGT,
         ):
-            extra_param = so.GaussLorentzVoigtParam()
+            extra_param = sigima_.obj.GaussLorentzVoigtParam()
         elif stype in (
-            so.SignalTypes.SINUS,
-            so.SignalTypes.COSINUS,
-            so.SignalTypes.SAWTOOTH,
-            so.SignalTypes.TRIANGLE,
-            so.SignalTypes.SQUARE,
-            so.SignalTypes.SINC,
+            sigima_.obj.SignalTypes.SINUS,
+            sigima_.obj.SignalTypes.COSINUS,
+            sigima_.obj.SignalTypes.SAWTOOTH,
+            sigima_.obj.SignalTypes.TRIANGLE,
+            sigima_.obj.SignalTypes.SQUARE,
+            sigima_.obj.SignalTypes.SINC,
         ):
-            extra_param = so.PeriodicParam()
-        elif stype == so.SignalTypes.STEP:
-            extra_param = so.StepParam()
-        elif stype == so.SignalTypes.EXPONENTIAL:
-            extra_param = so.ExponentialParam()
-        elif stype == so.SignalTypes.PULSE:
-            extra_param = so.PulseParam()
-        elif stype == so.SignalTypes.POLYNOMIAL:
-            extra_param = so.PolyParam()
-        elif stype == so.SignalTypes.EXPERIMENTAL:
-            extra_param = so.ExperimentalSignalParam()
+            extra_param = sigima_.obj.PeriodicParam()
+        elif stype == sigima_.obj.SignalTypes.STEP:
+            extra_param = sigima_.obj.StepParam()
+        elif stype == sigima_.obj.SignalTypes.EXPONENTIAL:
+            extra_param = sigima_.obj.ExponentialParam()
+        elif stype == sigima_.obj.SignalTypes.PULSE:
+            extra_param = sigima_.obj.PulseParam()
+        elif stype == sigima_.obj.SignalTypes.POLYNOMIAL:
+            extra_param = sigima_.obj.PolyParam()
+        elif stype == sigima_.obj.SignalTypes.EXPERIMENTAL:
+            extra_param = sigima_.obj.ExperimentalSignalParam()
         else:
             extra_param = None
-        signal = so.create_signal_from_param(base_param, extra_param=extra_param)
-        if stype == so.SignalTypes.ZEROS:
+        signal = sigima_.obj.create_signal_from_param(
+            base_param, extra_param=extra_param
+        )
+        if stype == sigima_.obj.SignalTypes.ZEROS:
             assert (signal.y == 0).all()
         yield signal
 
 
 def iterate_image_creation(
     data_size: int = 500, non_zero: bool = False, verbose: bool = True
-) -> Generator[so.ImageObj, None, None]:
+) -> Generator[sigima_.obj.ImageObj, None, None]:
     """Iterate over all possible images created from parameters"""
     if verbose:
         execenv.print(
             f"  Iterating over image types (size={data_size}, non_zero={non_zero}):"
         )
-    for itype in so.ImageTypes:
-        if non_zero and itype in (so.ImageTypes.EMPTY, so.ImageTypes.ZEROS):
+    for itype in sigima_.obj.ImageTypes:
+        if non_zero and itype in (
+            sigima_.obj.ImageTypes.EMPTY,
+            sigima_.obj.ImageTypes.ZEROS,
+        ):
             continue
         if verbose:
             execenv.print(f"    {itype.value}")
@@ -90,40 +95,47 @@ def iterate_image_creation(
 
 
 def _iterate_image_datatypes(
-    itype: so.ImageTypes, data_size: int, verbose: bool
-) -> Generator[so.ImageObj | None, None, None]:
-    for dtype in so.ImageDatatypes:
+    itype: sigima_.obj.ImageTypes, data_size: int, verbose: bool
+) -> Generator[sigima_.obj.ImageObj | None, None, None]:
+    for dtype in sigima_.obj.ImageDatatypes:
         if verbose:
             execenv.print(f"      {dtype.value}")
-        base_param = so.NewImageParam.create(
+        base_param = sigima_.obj.NewImageParam.create(
             itype=itype, dtype=dtype, width=data_size, height=data_size
         )
         extra_param = _get_additional_param(itype, dtype)
-        image = so.create_image_from_param(base_param, extra_param=extra_param)
+        image = sigima_.obj.create_image_from_param(base_param, extra_param=extra_param)
         if image is not None:
             _test_image_data(itype, image)
         yield image
 
 
 def _get_additional_param(
-    itype: so.ImageTypes, dtype: so.ImageDatatypes
-) -> so.Gauss2DParam | so.UniformRandomParam | so.NormalRandomParam | None:
-    if itype == so.ImageTypes.GAUSS:
-        addparam = so.Gauss2DParam()
+    itype: sigima_.obj.ImageTypes, dtype: sigima_.obj.ImageDatatypes
+) -> (
+    sigima_.obj.Gauss2DParam
+    | sigima_.obj.UniformRandomParam
+    | sigima_.obj.NormalRandomParam
+    | None
+):
+    if itype == sigima_.obj.ImageTypes.GAUSS:
+        addparam = sigima_.obj.Gauss2DParam()
         addparam.x0 = addparam.y0 = 3
         addparam.sigma = 5
-    elif itype == so.ImageTypes.UNIFORMRANDOM:
-        addparam = so.UniformRandomParam()
+    elif itype == sigima_.obj.ImageTypes.UNIFORMRANDOM:
+        addparam = sigima_.obj.UniformRandomParam()
         addparam.set_from_datatype(dtype.value)
-    elif itype == so.ImageTypes.NORMALRANDOM:
-        addparam = so.NormalRandomParam()
+    elif itype == sigima_.obj.ImageTypes.NORMALRANDOM:
+        addparam = sigima_.obj.NormalRandomParam()
         addparam.set_from_datatype(dtype.value)
     else:
         addparam = None
     return addparam
 
 
-def _test_image_data(itype: so.ImageTypes, image: so.ImageObj) -> None:
+def _test_image_data(
+    itype: sigima_.obj.ImageTypes, image: sigima_.obj.ImageObj
+) -> None:
     """
     Tests the data of an image based on its type.
 
@@ -135,7 +147,7 @@ def _test_image_data(itype: so.ImageTypes, image: so.ImageObj) -> None:
         AssertionError: If the image data does not match the expected values
          for the given image type.
     """
-    if itype == so.ImageTypes.ZEROS:
+    if itype == sigima_.obj.ImageTypes.ZEROS:
         assert (image.data == 0).all()
     else:
         assert image.data is not None
@@ -144,10 +156,10 @@ def _test_image_data(itype: so.ImageTypes, image: so.ImageObj) -> None:
 def all_combinations_test() -> None:
     """Test all combinations for new signal/image feature"""
     execenv.print(f"Testing {all_combinations_test.__name__}:")
-    execenv.print(f"  Signal types ({len(so.SignalTypes)}):")
+    execenv.print(f"  Signal types ({len(sigima_.obj.SignalTypes)}):")
     for signal in iterate_signal_creation():
         assert signal.x is not None and signal.y is not None
-    execenv.print(f"  Image types ({len(so.ImageTypes)}):")
+    execenv.print(f"  Image types ({len(sigima_.obj.ImageTypes)}):")
     for image in iterate_image_creation():
         assert image.data is not None
     execenv.print(f"{all_combinations_test.__name__} OK")
@@ -170,8 +182,8 @@ def __new_image_test() -> None:
     if image is not None:
         view_images(image.data, name=__new_image_test.__name__, title=image.title)
     # Test with parametered 2D-Gaussian
-    base_param = so.NewImageParam.create(itype=so.ImageTypes.GAUSS)
-    extra_param = so.Gauss2DParam()
+    base_param = sigima_.obj.NewImageParam.create(itype=sigima_.obj.ImageTypes.GAUSS)
+    extra_param = sigima_.obj.Gauss2DParam()
     extra_param.x0 = extra_param.y0 = 3
     extra_param.sigma = 5
     image = create_image_gui(base_param, extra_param=extra_param, edit=edit)

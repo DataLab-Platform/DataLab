@@ -12,13 +12,15 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import sigima_.param as sp
+import sigima_.obj
+import sigima_.param
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from sigima_ import ImageObj, create_image
 
 
-def create_random_test_data(size: tuple[int, int] | None = None) -> ImageObj:
+def create_random_test_data(
+    size: tuple[int, int] | None = None,
+) -> sigima_.obj.ImageObj:
     """Create a test image, based on a fast algorithm, to be able to generate
     a high number of images.
 
@@ -37,7 +39,7 @@ def create_random_test_data(size: tuple[int, int] | None = None) -> ImageObj:
     )
     # Add some random noise:
     data += 0.1 * np.random.randn(*data.shape)
-    image = create_image("Random test image", data)
+    image = sigima_.obj.create_image("Random test image", data)
     return image
 
 
@@ -61,7 +63,7 @@ def test_high_number_of_images() -> None:
 
         # Comment the two following lines to check if DataLab only shows the last image
         # when they are all superposed
-        param = sp.GridParam.create(cols=10)
+        param = sigima_.param.GridParam.create(cols=10)
         panel.processor.distribute_on_grid(param)
 
         panel.duplicate_object()

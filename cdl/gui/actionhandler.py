@@ -52,7 +52,7 @@ if TYPE_CHECKING:
     from cdl.gui.panel.image import ImagePanel
     from cdl.gui.panel.signal import SignalPanel
     from cdl.objectmodel import ObjectGroup
-    from sigima_ import ImageObj, SignalObj
+    from sigima_.obj import ImageObj, SignalObj
 
 
 class SelectCond:

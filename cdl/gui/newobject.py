@@ -25,30 +25,29 @@ from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
 
 from cdl.config import _
-from sigima_.obj import NormalRandomParam, UniformRandomParam
-from sigima_.obj.image import (
+from sigima_.obj import ExperimentalSignalParam as OrigExperimentalSignalParam
+from sigima_.obj import (
+    ExponentialParam,
     Gauss2DParam,
+    GaussLorentzVoigtParam,
     ImageDatatypes,
     ImageObj,
     ImageTypes,
     NewImageParam,
-)
-from sigima_.obj.image import create_image_from_param as create_image_headless
-from sigima_.obj.signal import (
-    DEFAULT_TITLE,
-    ExponentialParam,
-    GaussLorentzVoigtParam,
     NewSignalParam,
+    NormalRandomParam,
     PeriodicParam,
     PolyParam,
     PulseParam,
     SignalObj,
     SignalTypes,
     StepParam,
+    UniformRandomParam,
     create_signal,
 )
-from sigima_.obj.signal import ExperimentalSignalParam as OrigExperimentalSignalParam
-from sigima_.obj.signal import create_signal_from_param as create_signal_headless
+from sigima_.obj import create_image_from_param as create_image_headless
+from sigima_.obj import create_signal_from_param as create_signal_headless
+from sigima_.obj.signal import DEFAULT_TITLE as SIGNAL_DEFAULT_TITLE
 
 
 class ExperimentalSignalParam(OrigExperimentalSignalParam):
@@ -126,7 +125,7 @@ def create_signal_gui(
             return None
         signal = create_signal(base_param.title)
         signal.xydata = exp_param.xyarray.T
-        if signal.title == DEFAULT_TITLE:
+        if signal.title == SIGNAL_DEFAULT_TITLE:
             signal.title = f"experimental(npts={exp_param.size})"
         return signal
 

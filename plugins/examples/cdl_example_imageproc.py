@@ -19,8 +19,8 @@ This sub-menu contains two actions, "Preprocess image" and "Detect blobs".
 import numpy as np
 import skimage.draw
 
-import cdl.obj
 import cdl.plugins
+import sigima_.obj
 import sigima_.param
 
 
@@ -53,7 +53,9 @@ class ExtractBlobs(cdl.plugins.PluginBase):
             data = np.clip(arr, 0, 65535).astype(np.uint16)
 
             # Create a new image object and add it to the image panel
-            obj = cdl.obj.create_image(newparam.title, data, units=("mm", "mm", "lsb"))
+            obj = sigima_.obj.create_image(
+                newparam.title, data, units=("mm", "mm", "lsb")
+            )
             self.proxy.add_object(obj)
 
     def preprocess(self) -> None:

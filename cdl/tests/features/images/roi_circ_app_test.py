@@ -9,23 +9,20 @@ Circular ROI test
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 import numpy as np
 from skimage import draw
 
-import sigima_.obj as so
+import sigima_.obj
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.features.common.roi_app_test import print_obj_shapes
 
-if TYPE_CHECKING:
-    from sigima_ import ImageObj
-
 
 def create_test_image_with_roi(
     geometry: Literal["rectangle", "circle", "polygon"],
-) -> ImageObj:
+) -> sigima_.obj.ImageObj:
     """Create test image with ROIs"""
     data = np.zeros((500, 750), dtype=np.uint16)
     xc, yc, r = 500, 200, 100
@@ -38,8 +35,10 @@ def create_test_image_with_roi(
         coords = [xc, yc, r]
     else:
         raise NotImplementedError(f"Geometry {geometry} not implemented")
-    ima = so.create_image(f"Test image with ROI/{geometry}", data)
-    ima.roi = so.create_image_roi(geometry, coords, indices=True, singleobj=False)
+    ima = sigima_.obj.create_image(f"Test image with ROI/{geometry}", data)
+    ima.roi = sigima_.obj.create_image_roi(
+        geometry, coords, indices=True, singleobj=False
+    )
     return ima
 
 

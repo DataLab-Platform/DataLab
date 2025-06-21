@@ -42,11 +42,10 @@ from sigima_.io.image.formats import ClassicsImageFormat  # noqa: F401
 from sigima_.io.signal.base import SignalFormatBase  # noqa: F401
 
 if TYPE_CHECKING:
-    from cdl.core.model.image import NewImageParam
     from cdl.gui import main
-    from cdl.gui.newobject import NewSignalParam
     from cdl.gui.panel.image import ImagePanel
     from cdl.gui.panel.signal import SignalPanel
+    from sigima_.obj import NewImageParam, NewSignalParam
 
 
 PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")

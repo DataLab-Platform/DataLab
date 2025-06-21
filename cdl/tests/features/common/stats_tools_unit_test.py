@@ -24,7 +24,7 @@ from qtpy import QtWidgets as QW
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.gui.docks import DataLabPlotWidget
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
-from sigima_ import ImageObj, SignalObj
+from sigima_.obj import ImageObj, SignalObj
 
 
 def simulate_stats_tool(

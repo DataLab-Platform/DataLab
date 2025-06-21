@@ -14,12 +14,12 @@ import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
-import sigima_.computation.signal as ss
+import sigima_.computation.signal as sigima_signal
+import sigima_.obj
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.tests.data import create_paracetamol_signal
 from cdl.utils.vistools import view_curve_items
 from cdl.widgets.signalbaseline import SignalBaselineDialog
-from sigima_.obj.signal import ROI1DParam
 
 
 def test_signal_offset_correction_interactive() -> None:
@@ -28,9 +28,9 @@ def test_signal_offset_correction_interactive() -> None:
         s1 = create_paracetamol_signal()
         dlg = SignalBaselineDialog(s1)
         if exec_dialog(dlg):
-            param = ROI1DParam()
+            param = sigima_.obj.ROI1DParam()
             param.xmin, param.xmax = dlg.get_x_range()
-            s2 = ss.offset_correction(s1, param)
+            s2 = sigima_signal.offset_correction(s1, param)
             view_curve_items(
                 [
                     create_adapter_from_object(s1).make_item(),
@@ -44,8 +44,8 @@ def test_signal_offset_correction_interactive() -> None:
 def test_signal_offset_correction() -> None:
     """Signal offset correction validation test."""
     s1 = create_paracetamol_signal()
-    param = ROI1DParam.create(xmin=10.0, xmax=12.0)
-    s2 = ss.offset_correction(s1, param)
+    param = sigima_.obj.ROI1DParam.create(xmin=10.0, xmax=12.0)
+    s2 = sigima_signal.offset_correction(s1, param)
 
     # Check that the offset correction has been applied
     imin, imax = np.searchsorted(s1.x, [param.xmin, param.xmax])

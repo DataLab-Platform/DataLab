@@ -17,7 +17,7 @@ from plotpy.items import (
 )
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
-from sigima_ import (
+from sigima_.obj import (
     CircularROI,
     PolygonalROI,
     RectangularROI,

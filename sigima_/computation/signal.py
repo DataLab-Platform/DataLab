@@ -24,8 +24,8 @@ import scipy.integrate as spt
 import scipy.ndimage as spi
 import scipy.signal as sps
 
-import sigima_.algorithms.coordinates
-import sigima_.algorithms.signal as alg
+import sigima_.algorithms.coordinates as alg_coords
+import sigima_.algorithms.signal as alg_signal
 from cdl.config import Conf, _
 from sigima_.computation import computation_function
 from sigima_.computation.base import (
@@ -622,7 +622,7 @@ def peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
         src, "peak_detection", f"threshold={p.threshold}%, min_dist={p.min_dist}pts"
     )
     x, y = src.get_data()
-    indices = alg.peak_indices(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
+    indices = alg_signal.peak_indices(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
     dst.set_xydata(x[indices], y[indices])
     dst.set_metadata_option("curvestyle", "Sticks")
     return dst
@@ -641,7 +641,7 @@ def normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "normalize", f"ref={p.method}")
     x, y = src.get_data()
-    dst.set_xydata(x, alg.normalize(y, p.method))
+    dst.set_xydata(x, alg_signal.normalize(y, p.method))
     restore_data_outside_roi(dst, src)
     return dst
 
@@ -1058,7 +1058,7 @@ def zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
         suffix = f"strategy={p.strategy}"
     dst = dst_1_to_1(src, "zero_padding", suffix)
     x, y = src.get_data()
-    dst.set_xydata(*alg.zero_padding(x, y, p.n))
+    dst.set_xydata(*alg_signal.zero_padding(x, y, p.n))
     return dst
 
 
@@ -1075,7 +1075,7 @@ def fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_1_to_1(src, "fft")
     x, y = src.get_data()
-    dst.set_xydata(*alg.fft1d(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*alg_signal.fft1d(x, y, shift=True if p is None else p.shift))
     dst.save_attr_to_metadata("xunit", "Hz" if dst.xunit == "s" else "")
     dst.save_attr_to_metadata("yunit", "")
     dst.save_attr_to_metadata("xlabel", _("Frequency"))
@@ -1095,7 +1095,7 @@ def ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_1_to_1(src, "ifft")
     x, y = src.get_data()
-    dst.set_xydata(*alg.ifft1d(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*alg_signal.ifft1d(x, y, shift=True if p is None else p.shift))
     dst.restore_attr_from_metadata("xunit", "s" if src.xunit == "Hz" else "")
     dst.restore_attr_from_metadata("yunit", "")
     dst.restore_attr_from_metadata("xlabel", "")
@@ -1117,7 +1117,7 @@ def magnitude_spectrum(src: SignalObj, p: SpectrumParam | None = None) -> Signal
     dst = dst_1_to_1(src, "magnitude_spectrum")
     x, y = src.get_data()
     log_scale = p is not None and p.log
-    dst.set_xydata(*alg.magnitude_spectrum(x, y, log_scale=log_scale))
+    dst.set_xydata(*alg_signal.magnitude_spectrum(x, y, log_scale=log_scale))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
     dst.yunit = "dB" if log_scale else ""
@@ -1137,7 +1137,7 @@ def phase_spectrum(src: SignalObj) -> SignalObj:
     """
     dst = dst_1_to_1(src, "phase_spectrum")
     x, y = src.get_data()
-    dst.set_xydata(*alg.phase_spectrum(x, y))
+    dst.set_xydata(*alg_signal.phase_spectrum(x, y))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
     dst.yunit = ""
@@ -1159,7 +1159,7 @@ def psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     dst = dst_1_to_1(src, "psd")
     x, y = src.get_data()
     log_scale = p is not None and p.log
-    psd_x, psd_y = alg.psd(x, y, log_scale=log_scale)
+    psd_x, psd_y = alg_signal.psd(x, y, log_scale=log_scale)
     dst.xydata = np.vstack((psd_x, psd_y))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
@@ -1247,7 +1247,7 @@ def interpolation(src1: SignalObj, src2: SignalObj, p: InterpolationParam) -> Si
     dst = dst_2_to_1(src1, src2, "interpolation", suffix)
     x1, y1 = src1.get_data()
     xnew, _y2 = src2.get_data()
-    ynew = alg.interpolate(x1, y1, xnew, p.method, p.fill_value)
+    ynew = alg_signal.interpolate(x1, y1, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst
 
@@ -1305,7 +1305,7 @@ def resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
         xnew = np.arange(p.xmin, p.xmax, p.dx)
     else:
         xnew = np.linspace(p.xmin, p.xmax, p.nbpts)
-    ynew = alg.interpolate(x, y, xnew, p.method, p.fill_value)
+    ynew = alg_signal.interpolate(x, y, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst
 
@@ -1449,7 +1449,7 @@ def windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
     elif p.method == "gaussian":
         suffix += f", sigma={p.sigma:.3f}"
     dst = dst_1_to_1(src, "windowing", suffix)  # type: ignore
-    dst.y = alg.windowing(dst.y, p.method, p.alpha)  # type: ignore
+    dst.y = alg_signal.windowing(dst.y, p.method, p.alpha)  # type: ignore
     restore_data_outside_roi(dst, src)
     return dst
 
@@ -1490,7 +1490,7 @@ def to_polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "Polar coordinates", f"unit={p.unit}")
     x, y = src.get_data()
-    r, theta = sigima_.algorithms.coordinates.to_polar(x, y, p.unit)
+    r, theta = alg_coords.to_polar(x, y, p.unit)
     dst.set_xydata(r, theta)
     return dst
 
@@ -1515,7 +1515,7 @@ def to_cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "Cartesian coordinates", f"unit={p.unit}")
     r, theta = src.get_data()
-    x, y = sigima_.algorithms.coordinates.to_cartesian(r, theta, p.unit)
+    x, y = alg_coords.to_cartesian(r, theta, p.unit)
     dst.set_xydata(x, y)
     return dst
 
@@ -1540,7 +1540,7 @@ def allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    avar = alg.allan_variance(x, y, tau_values)
+    avar = alg_signal.allan_variance(x, y, tau_values)
     dst.set_xydata(tau_values, avar)
     return dst
 
@@ -1559,7 +1559,7 @@ def allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "allan_deviation", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    adev = alg.allan_deviation(x, y, tau_values)
+    adev = alg_signal.allan_deviation(x, y, tau_values)
     dst.set_xydata(tau_values, adev)
     return dst
 
@@ -1578,7 +1578,7 @@ def overlapping_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalO
     dst = dst_1_to_1(src, "overlapping_allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    oavar = alg.overlapping_allan_variance(x, y, tau_values)
+    oavar = alg_signal.overlapping_allan_variance(x, y, tau_values)
     dst.set_xydata(tau_values, oavar)
     return dst
 
@@ -1597,7 +1597,7 @@ def modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "modified_allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    mavar = alg.modified_allan_variance(x, y, tau_values)
+    mavar = alg_signal.modified_allan_variance(x, y, tau_values)
     dst.set_xydata(tau_values, mavar)
     return dst
 
@@ -1616,7 +1616,7 @@ def hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "hadamard_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    hvar = alg.hadamard_variance(x, y, tau_values)
+    hvar = alg_signal.hadamard_variance(x, y, tau_values)
     dst.set_xydata(tau_values, hvar)
     return dst
 
@@ -1635,7 +1635,7 @@ def total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "total_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    tvar = alg.total_variance(x, y, tau_values)
+    tvar = alg_signal.total_variance(x, y, tau_values)
     dst.set_xydata(tau_values, tvar)
     return dst
 
@@ -1654,7 +1654,7 @@ def time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "time_deviation", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    tdev = alg.time_deviation(x, y, tau_values)
+    tdev = alg_signal.time_deviation(x, y, tau_values)
     dst.set_xydata(tau_values, tdev)
     return dst
 
@@ -1760,7 +1760,7 @@ def fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
         "fwhm",
         "segment",
         obj,
-        alg.fwhm,
+        alg_signal.fwhm,
         param.method,
         param.xmin,
         param.xmax,
@@ -1778,7 +1778,7 @@ def fw1e2(obj: SignalObj) -> ResultShape | None:
     Returns:
         Segment coordinates
     """
-    return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2, add_label=True)
+    return calc_resultshape("fw1e2", "segment", obj, alg_signal.fw1e2, add_label=True)
 
 
 class OrdinateParam(gds.DataSet):
@@ -1800,7 +1800,7 @@ def full_width_at_y(obj: SignalObj, p: OrdinateParam) -> ResultShape | None:
         Segment coordinates
     """
     return calc_resultshape(
-        "∆X", "segment", obj, alg.full_width_at_y, p.y, add_label=True
+        "∆X", "segment", obj, alg_signal.full_width_at_y, p.y, add_label=True
     )
 
 
@@ -1819,7 +1819,11 @@ def x_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
     return calc_resultproperties(
         f"x|y={p.y}",
         obj,
-        {"x = %g {.xunit}": lambda xy: alg.find_first_x_at_y_value(xy[0], xy[1], p.y)},
+        {
+            "x = %g {.xunit}": lambda xy: alg_signal.find_first_x_at_y_value(
+                xy[0], xy[1], p.y
+            )
+        },
     )
 
 
@@ -1844,7 +1848,7 @@ def y_at_x(obj: SignalObj, p: AbscissaParam) -> ResultProperties:
     return calc_resultproperties(
         f"y|x={p.x}",
         obj,
-        {"y = %g {.yunit}": lambda xy: alg.find_y_at_x_value(xy[0], xy[1], p.x)},
+        {"y = %g {.yunit}": lambda xy: alg_signal.find_y_at_x_value(xy[0], xy[1], p.x)},
     )
 
 
@@ -1883,7 +1887,7 @@ def bandwidth_3db(obj: SignalObj) -> ResultShape | None:
         Result properties with bandwidth
     """
     return calc_resultshape(
-        "bandwidth", "segment", obj, alg.bandwidth, 3.0, add_label=True
+        "bandwidth", "segment", obj, alg_signal.bandwidth, 3.0, add_label=True
     )
 
 
@@ -1924,12 +1928,14 @@ def dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultProperties:
     """
     dsfx = f" = %g {p.unit}"
     funcs = {
-        "Freq": lambda xy: alg.sinus_frequency(xy[0], xy[1]),
-        "ENOB = %.1f bits": lambda xy: alg.enob(xy[0], xy[1], p.full_scale),
-        "SNR" + dsfx: lambda xy: alg.snr(xy[0], xy[1], p.unit),
-        "SINAD" + dsfx: lambda xy: alg.sinad(xy[0], xy[1], p.unit),
-        "THD" + dsfx: lambda xy: alg.thd(xy[0], xy[1], p.full_scale, p.unit, p.nb_harm),
-        "SFDR" + dsfx: lambda xy: alg.sfdr(xy[0], xy[1], p.full_scale, p.unit),
+        "Freq": lambda xy: alg_signal.sinus_frequency(xy[0], xy[1]),
+        "ENOB = %.1f bits": lambda xy: alg_signal.enob(xy[0], xy[1], p.full_scale),
+        "SNR" + dsfx: lambda xy: alg_signal.snr(xy[0], xy[1], p.unit),
+        "SINAD" + dsfx: lambda xy: alg_signal.sinad(xy[0], xy[1], p.unit),
+        "THD" + dsfx: lambda xy: alg_signal.thd(
+            xy[0], xy[1], p.full_scale, p.unit, p.nb_harm
+        ),
+        "SFDR" + dsfx: lambda xy: alg_signal.sfdr(xy[0], xy[1], p.full_scale, p.unit),
     }
     return calc_resultproperties("ADC", src, funcs)
 
@@ -1952,8 +1958,8 @@ def sampling_rate_period(obj: SignalObj) -> ResultProperties:
         "sampling_rate_period",
         obj,
         {
-            "fs = %g": lambda xy: alg.sampling_rate(xy[0]),
-            "T = %g {.xunit}": lambda xy: alg.sampling_period(xy[0]),
+            "fs = %g": lambda xy: alg_signal.sampling_rate(xy[0]),
+            "T = %g {.xunit}": lambda xy: alg_signal.sampling_period(xy[0]),
         },
     )
 
@@ -1965,7 +1971,7 @@ def contrast(obj: SignalObj) -> ResultProperties:
         "contrast",
         obj,
         {
-            "contrast": lambda xy: alg.contrast(xy[1]),
+            "contrast": lambda xy: alg_signal.contrast(xy[1]),
         },
     )
 

@@ -61,7 +61,7 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import _
 from cdl.env import execenv
-from sigima_ import create_image, create_signal
+from sigima_.obj import create_image, create_signal
 
 if TYPE_CHECKING:
     from cdl.gui.main import CDLMainWindow

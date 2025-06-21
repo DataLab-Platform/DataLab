@@ -17,11 +17,11 @@ from typing import TYPE_CHECKING
 import numpy as np
 from skimage import draw
 
-import sigima_.param as sp
+import sigima_.param as sigima_param
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
-from sigima_ import (
+from sigima_.obj import (
     ImageObj,
     ImageROI,
     NewImageParam,
@@ -57,9 +57,9 @@ IROI3 = [
 
 def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None):
     """Test all signal features related to ROI"""
-    panel.processor.run_feature("fwhm", sp.FWHMParam())
+    panel.processor.run_feature("fwhm", sigima_param.FWHMParam())
     panel.processor.run_feature("fw1e2")
-    panel.processor.run_feature("histogram", sp.HistogramParam())
+    panel.processor.run_feature("histogram", sigima_param.HistogramParam())
     panel.remove_object()
     obj_nb = len(panel)
     last_obj = panel[obj_nb]
@@ -71,7 +71,9 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
         if last_obj.roi is not None:
             roi.single_rois = last_obj.roi.single_rois
 
-    panel.processor.run_feature("gaussian_filter", sp.GaussianParam.create(sigma=10.0))
+    panel.processor.run_feature(
+        "gaussian_filter", sigima_param.GaussianParam.create(sigma=10.0)
+    )
     if execenv.unattended and last_obj.roi is not None and not last_obj.roi.is_empty():
         # Check if the processed data is correct: signal should be the same as the
         # original data outside the ROI, and should be different inside the ROI.
@@ -125,8 +127,8 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     """Test all image features related to ROI"""
     panel.processor.run_feature("centroid")
     panel.processor.run_feature("enclosing_circle")
-    panel.processor.run_feature("histogram", sp.HistogramParam())
-    panel.processor.run_feature("peak_detection", sp.Peak2DDetectionParam())
+    panel.processor.run_feature("histogram", sigima_param.HistogramParam())
+    panel.processor.run_feature("peak_detection", sigima_param.Peak2DDetectionParam())
     obj_nb = len(panel)
     last_obj = panel[obj_nb]
     roi = ImageROI(singleobj=singleobj)
@@ -139,7 +141,7 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
 
     value = 1
     panel.processor.run_feature(
-        "addition_constant", sp.ConstantParam.create(value=value)
+        "addition_constant", sigima_param.ConstantParam.create(value=value)
     )
     if execenv.unattended and last_obj.roi is not None and not last_obj.roi.is_empty():
         # Check if the processed data is correct: image should be the same as the

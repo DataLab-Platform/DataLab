@@ -12,7 +12,7 @@ import numpy as np
 from guidata.qthelpers import qt_app_context
 
 from cdl.env import execenv
-from sigima_.obj.image import ROI2DParam
+from sigima_.obj import ROI2DParam
 
 
 def test_roi_param_interactive():

@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from plotpy.items import Marker
     from qtpy.QtWidgets import QWidget
 
-    from sigima_ import SignalObj
+    from sigima_.obj import SignalObj
 
 
 class DistanceSlider(QW.QWidget):

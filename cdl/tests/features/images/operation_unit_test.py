@@ -21,42 +21,46 @@ import pytest
 import scipy.ndimage as spi
 from guidata.qthelpers import qt_app_context
 
-import sigima_.computation.image as si
+import sigima_.algorithms.datatypes as alg_datatypes
+import sigima_.computation.image as sigima_image
+import sigima_.obj
 import sigima_.param
 from cdl.env import execenv
 from cdl.tests.data import create_noisygauss_image
 from cdl.utils.tests import check_array_result
 from cdl.utils.vistools import view_images_side_by_side
-from sigima_ import ImageDatatypes, ImageObj, NewImageParam
-from sigima_.algorithms.datatypes import is_integer_dtype
 
 
-def __iterate_images() -> Generator[ImageObj, None, None]:
+def __iterate_images() -> Generator[sigima_.obj.ImageObj, None, None]:
     """Iterate over all possible image types for testing."""
     size = 128
-    for dtype in ImageDatatypes:
-        param = NewImageParam.create(dtype=dtype, height=size, width=size)
+    for dtype in sigima_.obj.ImageDatatypes:
+        param = sigima_.obj.NewImageParam.create(dtype=dtype, height=size, width=size)
         yield create_noisygauss_image(param, level=0.0)
 
 
-def __iterate_image_couples() -> Generator[tuple[ImageObj, ImageObj], None, None]:
+def __iterate_image_couples() -> Generator[
+    tuple[sigima_.obj.ImageObj, sigima_.obj.ImageObj], None, None
+]:
     """Iterate over all possible image couples for testing."""
     size = 128
-    for dtype1 in ImageDatatypes:
-        param1 = NewImageParam.create(dtype=dtype1, height=size, width=size)
+    for dtype1 in sigima_.obj.ImageDatatypes:
+        param1 = sigima_.obj.NewImageParam.create(dtype=dtype1, height=size, width=size)
         ima1 = create_noisygauss_image(param1, level=0.0)
-        for dtype2 in ImageDatatypes:
-            param2 = NewImageParam.create(dtype=dtype2, height=size, width=size)
+        for dtype2 in sigima_.obj.ImageDatatypes:
+            param2 = sigima_.obj.NewImageParam.create(
+                dtype=dtype2, height=size, width=size
+            )
             ima2 = create_noisygauss_image(param2, level=0.0)
             yield ima1, ima2
 
 
-def __create_n_images(n: int = 100) -> list[ImageObj]:
+def __create_n_images(n: int = 100) -> list[sigima_.obj.ImageObj]:
     """Create a list of N different images for testing."""
     images = []
     for i in range(n):
-        param = NewImageParam.create(
-            dtype=ImageDatatypes.FLOAT32,
+        param = sigima_.obj.NewImageParam.create(
+            dtype=sigima_.obj.ImageDatatypes.FLOAT32,
             height=128,
             width=128,
         )
@@ -73,11 +77,11 @@ def test_image_addition() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  {dtype1} += {dtype2}: ", end="")
         exp = ima1.data.astype(float) + ima2.data.astype(float)
-        ima3 = si.addition([ima1, ima2])
+        ima3 = sigima_image.addition([ima1, ima2])
         check_array_result("Image addition", ima3.data, exp)
     imalist = __create_n_images()
     n = len(imalist)
-    ima3 = si.addition(imalist)
+    ima3 = sigima_image.addition(imalist)
     res = ima3.data
     exp = np.zeros_like(ima3.data)
     for ima in imalist:
@@ -93,11 +97,11 @@ def test_image_average() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  µ({dtype1},{dtype2}): ", end="")
         exp = (ima1.data.astype(float) + ima2.data.astype(float)) / 2.0
-        ima3 = si.average([ima1, ima2])
+        ima3 = sigima_image.average([ima1, ima2])
         check_array_result("Image average", ima3.data, exp)
     imalist = __create_n_images()
     n = len(imalist)
-    ima3 = si.average(imalist)
+    ima3 = sigima_image.average(imalist)
     res = ima3.data
     exp = np.zeros_like(ima3.data)
     for ima in imalist:
@@ -114,7 +118,7 @@ def test_image_difference() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  {dtype1} -= {dtype2}: ", end="")
         exp = ima1.data.astype(float) - ima2.data.astype(float)
-        ima3 = si.difference(ima1, ima2)
+        ima3 = sigima_image.difference(ima1, ima2)
         check_array_result("Image difference", ima3.data, exp)
 
 
@@ -126,7 +130,7 @@ def test_image_quadratic_difference() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  ({dtype1} - {dtype2})/√2: ", end="")
         exp = (ima1.data.astype(float) - ima2.data.astype(float)) / np.sqrt(2)
-        ima3 = si.quadratic_difference(ima1, ima2)
+        ima3 = sigima_image.quadratic_difference(ima1, ima2)
         check_array_result("Image quadratic difference", ima3.data, exp)
 
 
@@ -138,11 +142,11 @@ def test_image_product() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  {dtype1} *= {dtype2}: ", end="")
         exp = ima1.data.astype(float) * ima2.data.astype(float)
-        ima3 = si.product([ima1, ima2])
+        ima3 = sigima_image.product([ima1, ima2])
         check_array_result("Image multiplication", ima3.data, exp)
     imalist = __create_n_images()
     n = len(imalist)
-    ima3 = si.product(imalist)
+    ima3 = sigima_image.product(imalist)
     res = ima3.data
     exp = np.ones_like(ima3.data)
     for ima in imalist:
@@ -159,7 +163,7 @@ def test_image_division() -> None:
         dtype1, dtype2 = ima1.data.dtype, ima2.data.dtype
         execenv.print(f"  {dtype1} /= {dtype2}: ", end="")
         exp = ima1.data.astype(float) / ima2.data.astype(float)
-        ima3 = si.division(ima1, ima2)
+        ima3 = sigima_image.division(ima1, ima2)
         if not np.allclose(ima3.data, exp):
             with qt_app_context():
                 view_images_side_by_side(
@@ -174,12 +178,12 @@ def __constparam(value: float) -> sigima_.param.ConstantParam:
 
 
 def __iterate_image_with_constant() -> Generator[
-    tuple[ImageObj, sigima_.param.ConstantParam], None, None
+    tuple[sigima_.obj.ImageObj, sigima_.param.ConstantParam], None, None
 ]:
     """Iterate over all possible image and constant couples for testing."""
     size = 128
-    for dtype in ImageDatatypes:
-        param = NewImageParam.create(dtype=dtype, height=size, width=size)
+    for dtype in sigima_.obj.ImageDatatypes:
+        param = sigima_.obj.NewImageParam.create(dtype=dtype, height=size, width=size)
         ima = create_noisygauss_image(param, level=0.0)
         for value in (-1.0, 3.14, 5):
             p = __constparam(value)
@@ -195,7 +199,7 @@ def test_image_addition_constant() -> None:
         execenv.print(f"  {dtype1} += constant ({p.value}): ", end="")
         expvalue = np.array(p.value).astype(dtype=dtype1)
         exp = ima1.data.astype(float) + expvalue
-        ima2 = si.addition_constant(ima1, p)
+        ima2 = sigima_image.addition_constant(ima1, p)
         check_array_result(f"Image + constant ({p.value})", ima2.data, exp)
 
 
@@ -208,7 +212,7 @@ def test_image_difference_constant() -> None:
         execenv.print(f"  {dtype1} -= constant ({p.value}): ", end="")
         expvalue = np.array(p.value).astype(dtype=dtype1)
         exp = ima1.data.astype(float) - expvalue
-        ima2 = si.difference_constant(ima1, p)
+        ima2 = sigima_image.difference_constant(ima1, p)
         check_array_result(f"Image - constant ({p.value})", ima2.data, exp)
 
 
@@ -220,7 +224,7 @@ def test_image_product_constant() -> None:
         dtype1 = ima1.data.dtype
         execenv.print(f"  {dtype1} *= constant ({p.value}): ", end="")
         exp = ima1.data.astype(float) * p.value
-        ima2 = si.product_constant(ima1, p)
+        ima2 = sigima_image.product_constant(ima1, p)
         check_array_result(f"Image x constant ({p.value})", ima2.data, exp)
 
 
@@ -232,7 +236,7 @@ def test_image_division_constant() -> None:
         dtype1 = ima1.data.dtype
         execenv.print(f"  {dtype1} /= constant ({p.value}): ", end="")
         exp = ima1.data.astype(float) / p.value
-        ima2 = si.division_constant(ima1, p)
+        ima2 = sigima_image.division_constant(ima1, p)
         check_array_result(f"Image / constant ({p.value})", ima2.data, exp)
 
 
@@ -251,7 +255,7 @@ def test_image_arithmetic() -> None:
                 for b in (0.0, 1.0, 2.0):
                     p.constant = b
                     ima2.data = np.clip(ima2.data, 1, None)  # Avoid division by zero
-                    ima3 = si.arithmetic(ima1, ima2, p)
+                    ima3 = sigima_image.arithmetic(ima1, ima2, p)
                     if o in ("×", "/") and a == 0.0:
                         exp = np.ones_like(ima1.data) * b
                     elif o == "+":
@@ -263,7 +267,7 @@ def test_image_arithmetic() -> None:
                     elif o == "/":
                         exp = np.divide(ima1.data, ima2.data, dtype=float) * a + b
                     if p.restore_dtype:
-                        if is_integer_dtype(dtype1):
+                        if alg_datatypes.is_integer_dtype(dtype1):
                             iinfo1 = np.iinfo(dtype1)
                             exp = np.clip(exp, iinfo1.min, iinfo1.max)
                         exp = exp.astype(dtype1)
@@ -282,7 +286,7 @@ def test_image_inverse() -> None:
             warnings.simplefilter("ignore", category=RuntimeWarning)
             exp = np.reciprocal(ima1.data, dtype=float)
             exp[np.isinf(exp)] = np.nan
-        ima2 = si.inverse(ima1)
+        ima2 = sigima_image.inverse(ima1)
         check_array_result("Image inverse", ima2.data, exp)
 
 
@@ -293,7 +297,7 @@ def test_image_absolute() -> None:
     for ima1 in __iterate_images():
         execenv.print(f"  abs({ima1.data.dtype}): ", end="")
         exp = np.abs(ima1.data)
-        ima2 = si.absolute(ima1)
+        ima2 = sigima_image.absolute(ima1)
         check_array_result("Absolute value", ima2.data, exp)
 
 
@@ -304,7 +308,7 @@ def test_image_real() -> None:
     for ima1 in __iterate_images():
         execenv.print(f"  re({ima1.data.dtype}): ", end="")
         exp = np.real(ima1.data)
-        ima2 = si.real(ima1)
+        ima2 = sigima_image.real(ima1)
         check_array_result("Real part", ima2.data, exp)
 
 
@@ -315,13 +319,13 @@ def test_image_imag() -> None:
     for ima1 in __iterate_images():
         execenv.print(f"  im({ima1.data.dtype}): ", end="")
         exp = np.imag(ima1.data)
-        ima2 = si.imag(ima1)
+        ima2 = sigima_image.imag(ima1)
         check_array_result("Imaginary part", ima2.data, exp)
 
 
 def __get_numpy_info(dtype: np.dtype) -> np.generic:
     """Get numpy info for a given data type."""
-    if is_integer_dtype(dtype):
+    if alg_datatypes.is_integer_dtype(dtype):
         return np.iinfo(dtype)
     return np.finfo(dtype)
 
@@ -331,7 +335,7 @@ def test_image_astype() -> None:
     """Image type conversion test."""
     execenv.print("*** Testing image type conversion:")
     for ima1 in __iterate_images():
-        for dtype_str in ImageObj.get_valid_dtypenames():
+        for dtype_str in sigima_.obj.ImageObj.get_valid_dtypenames():
             dtype1_str = str(ima1.data.dtype)
             execenv.print(f"  {dtype1_str} -> {dtype_str}: ", end="")
             dtype_exp = np.dtype(dtype_str)
@@ -341,7 +345,7 @@ def test_image_astype() -> None:
                 continue
             exp = np.clip(ima1.data, info_exp.min, info_exp.max).astype(dtype_exp)
             p = sigima_.param.DataTypeIParam.create(dtype_str=dtype_str)
-            ima2 = si.astype(ima1, p)
+            ima2 = sigima_image.astype(ima1, p)
             check_array_result(
                 f"Image astype({dtype1_str}->{dtype_str})", ima2.data, exp
             )
@@ -355,7 +359,7 @@ def test_image_exp() -> None:
         for ima1 in __iterate_images():
             execenv.print(f"  exp({ima1.data.dtype}): ", end="")
             exp = np.exp(ima1.data)
-            ima2 = si.exp(ima1)
+            ima2 = sigima_image.exp(ima1)
             check_array_result("Image exp", ima2.data, exp)
 
 
@@ -367,7 +371,7 @@ def test_image_log10() -> None:
         for ima1 in __iterate_images():
             execenv.print(f"  log10({ima1.data.dtype}): ", end="")
             exp = np.log10(np.exp(ima1.data))
-            ima2 = si.log10(si.exp(ima1))
+            ima2 = sigima_image.log10(sigima_image.exp(ima1))
             check_array_result("Image log10", ima2.data, exp)
 
 
@@ -380,7 +384,7 @@ def test_image_logp1() -> None:
             execenv.print(f"  log1p({ima1.data.dtype}): ", end="")
             p = sigima_.param.LogP1Param.create(n=2)
             exp = np.log10(ima1.data + p.n)
-            ima2 = si.logp1(ima1, p)
+            ima2 = sigima_image.logp1(ima1, p)
             check_array_result("Image log1p", ima2.data, exp)
 
 
@@ -389,26 +393,26 @@ def __generic_flip_check(compfunc: callable, expfunc: callable) -> None:
     execenv.print(f"*** Testing image flip: {compfunc.__name__}")
     for ima1 in __iterate_images():
         execenv.print(f"  {compfunc.__name__}({ima1.data.dtype}): ", end="")
-        ima2: ImageObj = compfunc(ima1)
+        ima2: sigima_.obj.ImageObj = compfunc(ima1)
         check_array_result("Image flip", ima2.data, expfunc(ima1.data))
 
 
 @pytest.mark.validation
 def test_image_fliph() -> None:
     """Image horizontal flip test."""
-    __generic_flip_check(si.fliph, np.fliplr)
+    __generic_flip_check(sigima_image.fliph, np.fliplr)
 
 
 @pytest.mark.validation
 def test_image_flipd() -> None:
     """Image diagonal flip test."""
-    __generic_flip_check(si.swap_axes, np.transpose)
+    __generic_flip_check(sigima_image.swap_axes, np.transpose)
 
 
 @pytest.mark.validation
 def test_image_flipv() -> None:
     """Image vertical flip test."""
-    __generic_flip_check(si.flipv, np.flipud)
+    __generic_flip_check(sigima_image.flipv, np.flipud)
 
 
 def __generic_rotate_check(angle: int) -> None:
@@ -416,7 +420,7 @@ def __generic_rotate_check(angle: int) -> None:
     execenv.print(f"*** Testing image {angle}° rotation:")
     for ima1 in __iterate_images():
         execenv.print(f"  rotate{angle}({ima1.data.dtype}): ", end="")
-        ima2 = getattr(si, f"rotate{angle}")(ima1)
+        ima2 = getattr(sigima_image, f"rotate{angle}")(ima1)
         check_array_result(
             f"Image rotate{angle}", ima2.data, np.rot90(ima1.data, k=angle // 90)
         )
@@ -441,7 +445,9 @@ def test_image_rotate() -> None:
     for ima1 in __iterate_images():
         for angle in (30, 45, 60, 120):
             execenv.print(f"  rotate{angle}({ima1.data.dtype}): ", end="")
-            ima2 = si.rotate(ima1, sigima_.param.RotateParam.create(angle=angle))
+            ima2 = sigima_image.rotate(
+                ima1, sigima_.param.RotateParam.create(angle=angle)
+            )
             exp = spi.rotate(ima1.data, angle, reshape=False)
             check_array_result(f"Image rotate{angle}", ima2.data, exp)
 

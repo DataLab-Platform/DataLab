@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection
     from qtpy.QtWidgets import QWidget
 
-    from sigima_ import SignalObj
+    from sigima_.obj import SignalObj
 
 
 class SignalBaselineDialog(PlotDialog):

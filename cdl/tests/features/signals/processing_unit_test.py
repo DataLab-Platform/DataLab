@@ -27,19 +27,12 @@ import scipy.signal as sps
 from packaging.version import Version
 
 import cdl.tests.data as ctd
-import sigima_.algorithms.coordinates
-import sigima_.computation.signal as ss
+import sigima_.algorithms.coordinates as alg_coords
+import sigima_.computation.signal as sigima_signal
+import sigima_.obj
 import sigima_.param
 from cdl.tests.data import get_test_signal
 from cdl.utils.tests import check_array_result, check_scalar_result
-from sigima_ import (
-    GaussLorentzVoigtParam,
-    NewSignalParam,
-    ROI1DParam,
-    SignalTypes,
-    create_signal,
-    create_signal_from_param,
-)
 
 
 @pytest.mark.validation
@@ -52,7 +45,7 @@ def test_signal_calibration() -> None:
     p.a, p.b = 1.0, 0.0
     for axis, _taxis in p.axes:
         p.axis = axis
-        dst = ss.calibration(src, p)
+        dst = sigima_signal.calibration(src, p)
         exp = src.xydata
         check_array_result("Calibration[identity]", dst.xydata, exp)
 
@@ -65,7 +58,7 @@ def test_signal_calibration() -> None:
             exp_x1 = p.a * exp_x1 + p.b
         else:
             exp_y1 = p.a * exp_y1 + p.b
-        dst = ss.calibration(src, p)
+        dst = sigima_signal.calibration(src, p)
         res_x1, res_y1 = dst.xydata
         title = f"Calibration[{axis},a={p.a},b={p.b}]"
         check_array_result(f"{title}.x", res_x1, exp_x1)
@@ -76,7 +69,7 @@ def test_signal_calibration() -> None:
 def test_signal_swap_axes() -> None:
     """Validation test for the signal axes swapping processing."""
     src = get_test_signal("paracetamol.txt")
-    dst = ss.swap_axes(src)
+    dst = sigima_signal.swap_axes(src)
     exp_y, exp_x = src.xydata
     check_array_result("SwapAxes|x", dst.x, exp_x)
     check_array_result("SwapAxes|y", dst.y, exp_y)
@@ -86,7 +79,7 @@ def test_signal_swap_axes() -> None:
 def test_signal_reverse_x() -> None:
     """Validation test for the signal reverse x processing."""
     src = get_test_signal("paracetamol.txt")
-    dst = ss.reverse_x(src)
+    dst = sigima_signal.reverse_x(src)
     exp = src.data[::-1]
     check_array_result("ReverseX", dst.data, exp)
 
@@ -97,13 +90,13 @@ def test_to_polar() -> None:
     x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
 
-    r, theta = sigima_.algorithms.coordinates.to_polar(x, y, "rad")
+    r, theta = alg_coords.to_polar(x, y, "rad")
     exp_r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
     exp_theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
     check_array_result(f"{title}|r", r, exp_r)
     check_array_result(f"{title}|theta", theta, exp_theta)
 
-    r, theta = sigima_.algorithms.coordinates.to_polar(x, y, unit="deg")
+    r, theta = alg_coords.to_polar(x, y, unit="deg")
     exp_theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
     check_array_result(f"{title}|r", r, exp_r)
     check_array_result(f"{title}|theta", theta, exp_theta)
@@ -115,14 +108,14 @@ def test_to_cartesian() -> None:
     r = np.array([0.0, np.sqrt(2.0), np.sqrt(8.0), np.sqrt(18.0), np.sqrt(32.0)])
     theta = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
 
-    x, y = sigima_.algorithms.coordinates.to_cartesian(r, theta, "rad")
+    x, y = alg_coords.to_cartesian(r, theta, "rad")
     exp_x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     exp_y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     check_array_result(f"{title}|x", x, exp_x)
     check_array_result(f"{title}|y", y, exp_y)
 
     theta = np.array([0.0, 45.0, 45.0, 45.0, 45.0])
-    x, y = sigima_.algorithms.coordinates.to_cartesian(r, theta, unit="deg")
+    x, y = alg_coords.to_cartesian(r, theta, unit="deg")
     check_array_result(f"{title}|x", x, exp_x)
     check_array_result(f"{title}|y", y, exp_y)
 
@@ -134,11 +127,11 @@ def test_signal_to_polar() -> None:
     p = sigima_.param.AngleUnitParam()
     x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
     y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
-    src = create_signal("test", x, y)
+    src = sigima_.obj.create_signal("test", x, y)
 
     for p.unit, _unit_name in sigima_.param.AngleUnitParam.units:
-        dst1 = ss.to_polar(src, p)
-        dst2 = ss.to_cartesian(dst1, p)
+        dst1 = sigima_signal.to_polar(src, p)
+        dst2 = sigima_signal.to_cartesian(dst1, p)
         check_array_result(f"{title}|x", dst2.x, x)
         check_array_result(f"{title}|y", dst2.y, y)
 
@@ -154,9 +147,9 @@ def test_signal_to_cartesian() -> None:
     angles_rad = np.array([0.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0, np.pi / 4.0])
     for p.unit, _unit_name in sigima_.param.AngleUnitParam.units:
         theta = angles_rad if p.unit == "rad" else angles_deg
-        src = create_signal("test", r, theta)
-        dst1 = ss.to_cartesian(src, p)
-        dst2 = ss.to_polar(dst1, p)
+        src = sigima_.obj.create_signal("test", r, theta)
+        dst1 = sigima_signal.to_cartesian(src, p)
+        dst2 = sigima_signal.to_polar(dst1, p)
         check_array_result(f"{title}|x", dst2.x, r)
         check_array_result(f"{title}|y", dst2.y, theta)
 
@@ -173,7 +166,7 @@ def test_signal_normalize() -> None:
     # we simply need to check if some properties are satisfied.
     for method_value, _method_name in p.methods:
         p.method = method_value
-        dst = ss.normalize(src, p)
+        dst = sigima_signal.normalize(src, p)
         title = f"Normalize[method='{p.method}']"
         exp_min, exp_max = None, None
         if p.method == "maximum":
@@ -204,7 +197,7 @@ def test_signal_clip() -> None:
 
     for lower, upper in ((float("-inf"), float("inf")), (250.0, 500.0)):
         p.lower, p.upper = lower, upper
-        dst = ss.clip(src, p)
+        dst = sigima_signal.clip(src, p)
         exp = np.clip(src.data, p.lower, p.upper)
         check_array_result(f"Clip[{lower},{upper}]", dst.data, exp)
 
@@ -213,11 +206,13 @@ def test_signal_clip() -> None:
 def test_signal_convolution() -> None:
     """Validation test for the signal convolution processing."""
     src1 = get_test_signal("paracetamol.txt")
-    snew = NewSignalParam.create(title="Gaussian", stype=SignalTypes.GAUSS)
-    extra_param = GaussLorentzVoigtParam.create(sigma=10.0)
-    src2 = create_signal_from_param(snew, extra_param=extra_param)
+    snew = sigima_.obj.NewSignalParam.create(
+        title="Gaussian", stype=sigima_.obj.SignalTypes.GAUSS
+    )
+    extra_param = sigima_.obj.GaussLorentzVoigtParam.create(sigma=10.0)
+    src2 = sigima_.obj.create_signal_from_param(snew, extra_param=extra_param)
 
-    dst = ss.convolution(src1, src2)
+    dst = sigima_signal.convolution(src1, src2)
     exp = np.convolve(src1.data, src2.data, mode="same")
     check_array_result("Convolution", dst.data, exp)
 
@@ -226,7 +221,7 @@ def test_signal_convolution() -> None:
 def test_signal_derivative() -> None:
     """Validation test for the signal derivative processing."""
     src = get_test_signal("paracetamol.txt")
-    dst = ss.derivative(src)
+    dst = sigima_signal.derivative(src)
     x, y = src.xydata
 
     # Compute the derivative using a simple finite difference:
@@ -248,13 +243,13 @@ def test_signal_integral() -> None:
     src.data /= np.max(src.data)
 
     # Check the integral of the derivative:
-    dst = ss.integral(ss.derivative(src))
+    dst = sigima_signal.integral(sigima_signal.derivative(src))
     # The integral of the derivative should be the original signal, up to a constant:
     dst.y += src.y[0]
 
     check_array_result("Integral[Derivative]", dst.y, src.y, atol=0.05)
 
-    dst = ss.integral(src)
+    dst = sigima_signal.integral(src)
     x, y = src.xydata
 
     # Compute the integral using a simple trapezoidal rule:
@@ -271,7 +266,7 @@ def test_signal_detrending() -> None:
     src = get_test_signal("paracetamol.txt")
     for method_value, _method_name in sigima_.param.DetrendingParam.methods:
         p = sigima_.param.DetrendingParam.create(method=method_value)
-        dst = ss.detrending(src, p)
+        dst = sigima_signal.detrending(src, p)
         exp = sps.detrend(src.data, type=p.method)
         check_array_result(f"Detrending [method={p.method}]", dst.data, exp)
 
@@ -282,8 +277,8 @@ def test_signal_offset_correction() -> None:
     src = get_test_signal("paracetamol.txt")
     # Defining the ROI that will be used to estimate the offset
     imin, imax = 0, 20
-    p = ROI1DParam.create(xmin=src.x[imin], xmax=src.x[imax])
-    dst = ss.offset_correction(src, p)
+    p = sigima_.obj.ROI1DParam.create(xmin=src.x[imin], xmax=src.x[imax])
+    dst = sigima_signal.offset_correction(src, p)
     exp = src.data - np.mean(src.data[imin:imax])
     check_array_result("OffsetCorrection", dst.data, exp)
 
@@ -294,7 +289,7 @@ def test_signal_gaussian_filter() -> None:
     src = get_test_signal("paracetamol.txt")
     for sigma in (10.0, 50.0):
         p = sigima_.param.GaussianParam.create(sigma=sigma)
-        dst = ss.gaussian_filter(src, p)
+        dst = sigima_signal.gaussian_filter(src, p)
         exp = spi.gaussian_filter(src.data, sigma=sigma)
         check_array_result(f"GaussianFilter[sigma={sigma}]", dst.data, exp)
 
@@ -306,7 +301,7 @@ def test_signal_moving_average() -> None:
     p = sigima_.param.MovingAverageParam.create(n=30)
     for mode in p.modes:
         p.mode = mode
-        dst = ss.moving_average(src, p)
+        dst = sigima_signal.moving_average(src, p)
         exp = spi.uniform_filter(src.data, size=p.n, mode=p.mode)
 
         # Implementation note:
@@ -335,7 +330,7 @@ def test_signal_moving_median() -> None:
     p = sigima_.param.MovingMedianParam.create(n=15)
     for mode in p.modes:
         p.mode = mode
-        dst = ss.moving_median(src, p)
+        dst = sigima_signal.moving_median(src, p)
         exp = spi.median_filter(src.data, size=p.n, mode=p.mode)
         check_array_result(f"MovingMed[n={p.n},mode={p.mode}]", dst.data, exp, rtol=0.1)
 
@@ -344,7 +339,7 @@ def test_signal_moving_median() -> None:
 def test_signal_wiener() -> None:
     """Validation test for the signal Wiener filter processing."""
     src = get_test_signal("paracetamol.txt")
-    dst = ss.wiener(src)
+    dst = sigima_signal.wiener(src)
     exp = sps.wiener(src.data)
     check_array_result("Wiener", dst.data, exp)
 
@@ -352,21 +347,21 @@ def test_signal_wiener() -> None:
 @pytest.mark.validation
 def test_signal_resampling() -> None:
     """Validation test for the signal resampling processing."""
-    src1 = ctd.create_periodic_signal(SignalTypes.SINUS, freq=50.0, size=5)
+    src1 = ctd.create_periodic_signal(sigima_.obj.SignalTypes.SINUS, freq=50.0, size=5)
     x1, y1 = src1.xydata
     p1 = sigima_.param.ResamplingParam.create(
         xmin=src1.x[0], xmax=src1.x[-1], nbpts=src1.x.size
     )
-    dst1 = ss.resampling(src1, p1)
+    dst1 = sigima_signal.resampling(src1, p1)
     dst1x, dst1y = dst1.xydata
     check_array_result("x1new", dst1x, x1)
     check_array_result("y1new", dst1y, y1)
 
-    src2 = ctd.create_periodic_signal(SignalTypes.SINUS, freq=50.0, size=9)
+    src2 = ctd.create_periodic_signal(sigima_.obj.SignalTypes.SINUS, freq=50.0, size=9)
     p2 = sigima_.param.ResamplingParam.create(
         xmin=src1.x[0], xmax=src1.x[-1], nbpts=src1.x.size
     )
-    dst2 = ss.resampling(src2, p2)
+    dst2 = sigima_signal.resampling(src2, p2)
     dst2x, dst2y = dst2.xydata
     check_array_result("x2new", dst2x, x1)
     check_array_result("y2new", dst2y, y1)
@@ -375,17 +370,17 @@ def test_signal_resampling() -> None:
 @pytest.mark.validation
 def test_signal_XY_mode() -> None:
     """Validation test for the signal X-Y mode processing."""
-    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=50.0, size=5)
-    s2 = ctd.create_periodic_signal(SignalTypes.SINUS, freq=50.0, size=5)
-    dst = ss.xy_mode(s1, s2)
+    s1 = ctd.create_periodic_signal(sigima_.obj.SignalTypes.COSINUS, freq=50.0, size=5)
+    s2 = ctd.create_periodic_signal(sigima_.obj.SignalTypes.SINUS, freq=50.0, size=5)
+    dst = sigima_signal.xy_mode(s1, s2)
     x, y = dst.xydata
     check_array_result("XYMode", x, s1.y)
     check_array_result("XYMode", y, s2.y)
     check_array_result("XYMode", x**2 + y**2, np.ones_like(x))
 
-    s1 = ctd.create_periodic_signal(SignalTypes.COSINUS, freq=50.0, size=9)
-    s2 = ctd.create_periodic_signal(SignalTypes.SINUS, freq=50.0, size=5)
-    dst = ss.xy_mode(s1, s2)
+    s1 = ctd.create_periodic_signal(sigima_.obj.SignalTypes.COSINUS, freq=50.0, size=9)
+    s2 = ctd.create_periodic_signal(sigima_.obj.SignalTypes.SINUS, freq=50.0, size=5)
+    dst = sigima_signal.xy_mode(s1, s2)
     x, y = dst.xydata
     check_array_result("XYMode2", x, s1.y[::2])
     check_array_result("XYMode2", y, s2.y)

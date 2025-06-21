@@ -8,7 +8,12 @@ Signal FFT application test.
 # guitest: show
 
 from cdl.tests import cdltest_app_context
-from sigima_ import NewSignalParam, PeriodicParam, SignalTypes, create_signal_from_param
+from sigima_.obj import (
+    NewSignalParam,
+    PeriodicParam,
+    SignalTypes,
+    create_signal_from_param,
+)
 
 
 def test_fft1d_app():

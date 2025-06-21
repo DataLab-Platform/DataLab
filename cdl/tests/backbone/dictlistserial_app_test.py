@@ -14,7 +14,7 @@ from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import get_test_image
 from cdl.utils.tests import CDLTemporaryDirectory, compare_metadata
-from sigima_ import create_image
+from sigima_.obj import create_image
 
 
 def test_dict_serialization():

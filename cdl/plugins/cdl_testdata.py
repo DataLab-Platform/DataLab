@@ -11,8 +11,8 @@ and some actions to test DataLab functionalities.
 import cdl.tests.data as test_data
 from cdl.config import _
 from cdl.plugins import PluginBase, PluginInfo
-from sigima_ import ImageObj, NormalRandomParam, SignalObj
 from sigima_.computation.base import dst_1_to_1
+from sigima_.obj import ImageObj, NormalRandomParam, SignalObj
 
 # ------------------------------------------------------------------------------
 # All computation functions must be defined as global functions, otherwise

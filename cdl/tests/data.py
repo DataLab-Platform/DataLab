@@ -18,7 +18,9 @@ import numpy as np
 
 from cdl.config import _
 from cdl.utils.tests import get_test_fnames
-from sigima_ import (
+from sigima_.algorithms.datatypes import is_integer_dtype
+from sigima_.io import read_image, read_signal
+from sigima_.obj import (
     GaussLorentzVoigtParam,
     ImageDatatypes,
     ImageObj,
@@ -34,10 +36,7 @@ from sigima_ import (
     create_image,
     create_image_from_param,
     create_signal_from_param,
-    read_image,
-    read_signal,
 )
-from sigima_.algorithms.datatypes import is_integer_dtype
 
 
 def get_test_signal(filename: str) -> SignalObj:

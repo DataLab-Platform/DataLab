@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from plotpy.items import ImageItem, RangeComputation2d, RectangleShape
     from qtpy.QtWidgets import QWidget
 
-    from sigima_ import ImageObj
+    from sigima_.obj import ImageObj
 
 
 class ImageBackgroundDialog(PlotDialog):

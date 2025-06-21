@@ -14,6 +14,8 @@ from sigima_.obj.base import (
     ResultShape,
     TypeObj,
     TypeROI,
+    TypeROIParam,
+    TypeSingleROI,
     ShapeTypes,
 )
 from sigima_.obj.image import (

@@ -30,9 +30,8 @@ from cdl.gui.processor.catcher import CompOut, wng_err_func
 from cdl.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
-from sigima_ import ImageObj, SignalObj
 from sigima_.computation import is_computation_function
-from sigima_.obj.base import TypeROI, TypeROIParam
+from sigima_.obj import ImageObj, SignalObj, TypeROI, TypeROIParam
 
 if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
@@ -41,7 +40,7 @@ if TYPE_CHECKING:
 
     from cdl.gui.panel.image import ImagePanel
     from cdl.gui.panel.signal import SignalPanel
-    from sigima_ import ResultProperties, ResultShape
+    from sigima_.obj import ResultProperties, ResultShape
 
 
 # Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
@@ -1199,24 +1198,23 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         .. code-block:: python
 
-            import sigima_.signal as ss
+            import sigima_.computation.signal as sigima_signal
             import sigima_.param
 
             # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
-            # (example with computation functions from `sigima_.signal`)
-            compute(ss.normalize)
+            compute(sigima_signal.normalize)
             param = sigima_.param.MovingAverageParam(n=3)
-            compute(ss.moving_average, param)
+            compute(sigima_signal.moving_average, param)
             compute(computation_function, param, edit=False)
 
             # For pattern `2_to_1`:
-            compute(ss.difference, obj2)
+            compute(sigima_signal.difference, obj2)
             param = sigima_.param.InterpolationParam(method="cubic")
-            compute(ss.interpolation, obj2, param)
+            compute(sigima_signal.interpolation, obj2, param)
 
             # For pattern `1_to_n`:
             params = roi.to_params(obj)
-            compute(ss.extract_roi, params=params)  # `params` is a list of DataSet
+            compute(sigima_signal.extract_roi, params=params)
 
         Args:
             key: The key to look up in the registry. It can be a string, a callable,

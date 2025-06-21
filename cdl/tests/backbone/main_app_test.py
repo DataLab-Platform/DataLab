@@ -12,12 +12,12 @@ covered by other tests.
 
 import os
 
-import sigima_.computation.signal as ss
+import sigima_.computation.signal as sigima_signal
+import sigima_.param
 from cdl.env import execenv
 from cdl.objectmodel import get_short_id, get_uuid
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_paracetamol_signal
-from sigima_.param import MovingMedianParam
 
 
 def test_main_app():
@@ -53,8 +53,8 @@ def test_main_app():
         # Add signals to signal panel
         sig1 = create_paracetamol_signal(500)
         panel.add_object(sig1)
-        panel.processor.run_feature(ss.derivative)
-        panel.processor.run_feature(ss.wiener)
+        panel.processor.run_feature(sigima_signal.derivative)
+        panel.processor.run_feature(sigima_signal.wiener)
 
         # Get object titles
         titles = win.get_object_titles()
@@ -97,7 +97,7 @@ def test_main_app():
         execenv.print(f"  Object (from uuid)  '{get_short_id(obj)}':{os.linesep}{obj}")
 
         # Use "calc" method with parameters
-        param = MovingMedianParam.create(n=5)
+        param = sigima_.param.MovingMedianParam.create(n=5)
         win.calc("compute_moving_median", param)
         # Use "calc" method without parameters
         win.calc("compute_integral")

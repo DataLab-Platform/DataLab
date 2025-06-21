@@ -11,11 +11,10 @@ Metadata application test:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima_.computation.image.detection as si_det
-import sigima_.computation.image.measurement
-import sigima_.computation.signal as ss
-import sigima_.obj as so
-import sigima_.param as sp
+import sigima_.computation.image as sigima_image
+import sigima_.computation.signal as sigima_signal
+import sigima_.obj
+import sigima_.param
 from cdl.env import execenv
 from cdl.gui.panel.base import BaseDataPanel
 from cdl.gui.panel.image import ImagePanel
@@ -28,16 +27,18 @@ from cdl.tests.features.common import roi_app_test
 def __run_signal_computations(panel: SignalPanel):
     """Test all signal features related to ROI"""
     execenv.print("  Signal features")
-    panel.processor.run_feature(ss.fwhm, sp.FWHMParam())
-    panel.processor.run_feature(ss.fw1e2)
+    panel.processor.run_feature(sigima_signal.fwhm, sigima_.param.FWHMParam())
+    panel.processor.run_feature(sigima_signal.fw1e2)
 
 
 def __run_image_computations(panel: ImagePanel):
     """Test all image features related to ROI"""
     execenv.print("  Image features")
-    panel.processor.run_feature(sigima_.computation.image.measurement.centroid)
-    panel.processor.run_feature(sigima_.computation.image.measurement.enclosing_circle)
-    panel.processor.run_feature(si_det.peak_detection, sp.Peak2DDetectionParam())
+    panel.processor.run_feature(sigima_image.centroid)
+    panel.processor.run_feature(sigima_image.enclosing_circle)
+    panel.processor.run_feature(
+        sigima_image.peak_detection, sigima_.param.Peak2DDetectionParam()
+    )
 
 
 def __test_metadata_features(panel: BaseDataPanel):
@@ -63,13 +64,13 @@ def test_metadata_app():
         # === Signal metadata features test ===
         panel = win.signalpanel
         sig = create_paracetamol_signal(size)
-        sig.roi = so.create_signal_roi([[26, 41], [125, 146]], indices=True)
+        sig.roi = sigima_.obj.create_signal_roi([[26, 41], [125, 146]], indices=True)
         panel.add_object(sig)
         __run_signal_computations(panel)
         __test_metadata_features(panel)
         # === Image metadata features test ===
         panel = win.imagepanel
-        param = so.NewImageParam.create(height=size, width=size)
+        param = sigima_.obj.NewImageParam.create(height=size, width=size)
         ima = roi_app_test.create_test_image_with_roi(param)
         panel.add_object(ima)
         __run_image_computations(panel)

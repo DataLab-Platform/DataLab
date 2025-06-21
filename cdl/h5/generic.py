@@ -10,8 +10,8 @@ import h5py
 import numpy as np
 
 from cdl.h5 import common, utils
-from sigima_ import create_image, create_signal
 from sigima_.io.utils import to_string
+from sigima_.obj import create_image, create_signal
 
 
 class BaseGenericNode(common.BaseNode):

@@ -12,7 +12,7 @@ then open DataLab to show them.
 
 from cdl.app import run
 from cdl.tests import data as test_data
-from sigima_ import NewImageParam
+from sigima_.obj import NewImageParam
 
 
 def test_launcher2():

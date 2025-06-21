@@ -7,7 +7,7 @@ Image FFT application test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima_.obj as so
+import sigima_.obj
 from cdl.tests import cdltest_app_context
 
 
@@ -15,11 +15,11 @@ def test_fft2d_app() -> None:
     """FFT application test."""
     with cdltest_app_context() as win:
         panel = win.imagepanel
-        newparam = so.NewImageParam.create(
-            itype=so.ImageTypes.GAUSS, width=100, height=100
+        newparam = sigima_.obj.NewImageParam.create(
+            itype=sigima_.obj.ImageTypes.GAUSS, width=100, height=100
         )
-        extra_param = so.Gauss2DParam()
-        i1 = so.create_image_from_param(newparam, extra_param=extra_param)
+        extra_param = sigima_.obj.Gauss2DParam()
+        i1 = sigima_.obj.create_image_from_param(newparam, extra_param=extra_param)
         panel.add_object(i1)
         panel.processor.run_feature("fft")
         panel.processor.run_feature("ifft")

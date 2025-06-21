@@ -22,7 +22,7 @@ from qtpy import QtWidgets as QW
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests.data import create_2d_random, create_noisygauss_image
-from sigima_ import NewImageParam
+from sigima_.obj import NewImageParam
 
 
 class MainWindow(QW.QMainWindow):

@@ -19,7 +19,7 @@ import numpy as np
 import scipy.ndimage as spi
 
 import cdl.plugins
-import sigima_.computation.image.base as si
+import sigima_.computation.image as sigima_image
 
 
 def weighted_average_denoise(data: np.ndarray) -> np.ndarray:
@@ -55,7 +55,7 @@ class CustomFilters(cdl.plugins.PluginBase):
         with acth.new_menu(self.PLUGIN_INFO.name):
             for name, func in (("Weighted average denoise", weighted_average_denoise),):
                 # Wrap function to handle ``ImageObj`` objects instead of NumPy arrays
-                wrapped_func = si.Wrap1to1Func(func)
+                wrapped_func = sigima_image.Wrap1to1Func(func)
                 acth.new_action(
                     name,
                     triggered=lambda: proc.compute_1_to_1(wrapped_func, title=name),

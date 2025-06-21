@@ -13,8 +13,8 @@ from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 
-import sigima_.computation.base as sb
-import sigima_.computation.image as si
+import sigima_.computation.base as sigima_base
+import sigima_.computation.image as sigima_image
 import sigima_.param
 from cdl.config import APP_NAME, _
 from cdl.gui.processor.base import BaseProcessor
@@ -22,8 +22,8 @@ from cdl.gui.profiledialog import ProfileExtractionDialog
 from cdl.objectmodel import get_uuid
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets import imagebackground
-from sigima_ import ImageROI, ResultShape, ROI2DParam, create_image_roi
 from sigima_.algorithms.image import distance_matrix
+from sigima_.obj import ImageROI, ResultShape, ROI2DParam, create_image_roi
 
 
 class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
@@ -34,157 +34,171 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     def register_computations(self) -> None:
         """Register image computations"""
         # MARK: OPERATION
-        self.register_n_to_1(si.addition, _("Sum"), icon_name="sum.svg")
-        self.register_n_to_1(si.average, _("Average"), icon_name="average.svg")
+        self.register_n_to_1(sigima_image.addition, _("Sum"), icon_name="sum.svg")
+        self.register_n_to_1(
+            sigima_image.average, _("Average"), icon_name="average.svg"
+        )
         self.register_2_to_1(
-            si.difference,
+            sigima_image.difference,
             _("Difference"),
             icon_name="difference.svg",
             obj2_name=_("image to subtract"),
         )
         self.register_2_to_1(
-            si.quadratic_difference,
+            sigima_image.quadratic_difference,
             _("Quadratic Difference"),
             icon_name="quadratic_difference.svg",
             obj2_name=_("image to subtract"),
         )
-        self.register_n_to_1(si.product, _("Product"), icon_name="product.svg")
+        self.register_n_to_1(
+            sigima_image.product, _("Product"), icon_name="product.svg"
+        )
         self.register_2_to_1(
-            si.division,
+            sigima_image.division,
             _("Division"),
             icon_name="division.svg",
             obj2_name=_("divider"),
         )
-        self.register_1_to_1(si.inverse, _("Inverse"), icon_name="inverse.svg")
+        self.register_1_to_1(
+            sigima_image.inverse, _("Inverse"), icon_name="inverse.svg"
+        )
         self.register_2_to_1(
-            si.arithmetic,
+            sigima_image.arithmetic,
             _("Arithmetic"),
-            paramclass=sb.ArithmeticParam,
+            paramclass=sigima_base.ArithmeticParam,
             icon_name="arithmetic.svg",
             obj2_name=_("signal to operate with"),
         )
         self.register_1_to_1(
-            si.addition_constant,
+            sigima_image.addition_constant,
             _("Add constant"),
-            paramclass=sb.ConstantParam,
+            paramclass=sigima_base.ConstantParam,
             icon_name="constant_add.svg",
         )
         self.register_1_to_1(
-            si.difference_constant,
+            sigima_image.difference_constant,
             _("Subtract constant"),
-            paramclass=sb.ConstantParam,
+            paramclass=sigima_base.ConstantParam,
             icon_name="constant_subtract.svg",
         )
         self.register_1_to_1(
-            si.product_constant,
+            sigima_image.product_constant,
             _("Multiply by constant"),
-            paramclass=sb.ConstantParam,
+            paramclass=sigima_base.ConstantParam,
             icon_name="constant_multiply.svg",
         )
         self.register_1_to_1(
-            si.division_constant,
+            sigima_image.division_constant,
             _("Divide by constant"),
-            paramclass=sb.ConstantParam,
+            paramclass=sigima_base.ConstantParam,
             icon_name="constant_divide.svg",
         )
-        self.register_1_to_1(si.absolute, _("Absolute value"), icon_name="abs.svg")
-        self.register_1_to_1(si.real, _("Real part"), icon_name="re.svg")
-        self.register_1_to_1(si.imag, _("Imaginary part"), icon_name="im.svg")
         self.register_1_to_1(
-            si.astype,
+            sigima_image.absolute, _("Absolute value"), icon_name="abs.svg"
+        )
+        self.register_1_to_1(sigima_image.real, _("Real part"), icon_name="re.svg")
+        self.register_1_to_1(sigima_image.imag, _("Imaginary part"), icon_name="im.svg")
+        self.register_1_to_1(
+            sigima_image.astype,
             _("Convert data type"),
             paramclass=sigima_.param.DataTypeSParam,
             icon_name="convert_dtype.svg",
         )
-        self.register_1_to_1(si.exp, _("Exponential"), icon_name="exp.svg")
-        self.register_1_to_1(si.log10, _("Logarithm (base 10)"), icon_name="log10.svg")
-        self.register_1_to_1(si.logp1, "Log10(z+n)")
+        self.register_1_to_1(sigima_image.exp, _("Exponential"), icon_name="exp.svg")
+        self.register_1_to_1(
+            sigima_image.log10, _("Logarithm (base 10)"), icon_name="log10.svg"
+        )
+        self.register_1_to_1(sigima_image.logp1, "Log10(z+n)")
         self.register_2_to_1(
-            si.flatfield,
+            sigima_image.flatfield,
             _("Flat-field correction"),
-            si.FlatFieldParam,
+            sigima_image.FlatFieldParam,
             obj2_name=_("flat field image"),
         )
         # Flip or rotation
         self.register_1_to_1(
-            si.fliph,
+            sigima_image.fliph,
             _("Flip horizontally"),
             icon_name="flip_horizontally.svg",
         )
         self.register_1_to_1(
-            si.swap_axes,
+            sigima_image.swap_axes,
             _("Flip diagonally"),
             icon_name="swap_x_y.svg",
         )
         self.register_1_to_1(
-            si.flipv,
+            sigima_image.flipv,
             _("Flip vertically"),
             icon_name="flip_vertically.svg",
         )
         self.register_1_to_1(
-            si.rotate270,
+            sigima_image.rotate270,
             _("Rotate %s right") % "90°",
             icon_name="rotate_right.svg",
         )
         self.register_1_to_1(
-            si.rotate90,
+            sigima_image.rotate90,
             _("Rotate %s left") % "90°",
             icon_name="rotate_left.svg",
         )
         self.register_1_to_1(
-            si.rotate,
+            sigima_image.rotate,
             _("Rotate by..."),
-            si.RotateParam,
+            sigima_image.RotateParam,
         )
         # Intensity profiles
         self.register_1_to_1(
-            si.line_profile,
+            sigima_image.line_profile,
             _("Line profile"),
-            si.LineProfileParam,
+            sigima_image.LineProfileParam,
             icon_name="profile.svg",
             edit=False,
         )
         self.register_1_to_1(
-            si.segment_profile,
+            sigima_image.segment_profile,
             _("Segment profile"),
-            si.SegmentProfileParam,
+            sigima_image.SegmentProfileParam,
             icon_name="profile_segment.svg",
             edit=False,
         )
         self.register_1_to_1(
-            si.average_profile,
+            sigima_image.average_profile,
             _("Average profile"),
-            si.AverageProfileParam,
+            sigima_image.AverageProfileParam,
             icon_name="profile_average.svg",
             edit=False,
         )
         self.register_1_to_1(
-            si.radial_profile,
+            sigima_image.radial_profile,
             _("Radial profile"),
-            si.RadialProfileParam,
+            sigima_image.RadialProfileParam,
             icon_name="profile_radial.svg",
         )
 
         # MARK: PROCESSING
         # Axis transformation
         self.register_1_to_1(
-            si.calibration, _("Linear calibration"), si.ZCalibrateParam
+            sigima_image.calibration,
+            _("Linear calibration"),
+            sigima_image.ZCalibrateParam,
         )
         self.register_1_to_1(
-            si.swap_axes,
+            sigima_image.swap_axes,
             _("Swap X/Y axes"),
             icon_name="swap_x_y.svg",
         )
         # Level adjustment
         self.register_1_to_1(
-            si.normalize,
+            sigima_image.normalize,
             _("Normalize"),
-            paramclass=sb.NormalizeParam,
+            paramclass=sigima_base.NormalizeParam,
             icon_name="normalize.svg",
         )
-        self.register_1_to_1(si.clip, _("Clipping"), sb.ClipParam, "clip.svg")
         self.register_1_to_1(
-            si.offset_correction,
+            sigima_image.clip, _("Clipping"), sigima_base.ClipParam, "clip.svg"
+        )
+        self.register_1_to_1(
+            sigima_image.offset_correction,
             _("Offset correction"),
             ROI2DParam,
             comment=_("Evaluate and subtract the offset value from the data"),
@@ -192,34 +206,34 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
         # Noise reduction
         self.register_1_to_1(
-            si.gaussian_filter,
+            sigima_image.gaussian_filter,
             _("Gaussian filter"),
-            sb.GaussianParam,
+            sigima_base.GaussianParam,
         )
         self.register_1_to_1(
-            si.moving_average,
+            sigima_image.moving_average,
             _("Moving average"),
-            sb.MovingAverageParam,
+            sigima_base.MovingAverageParam,
         )
         self.register_1_to_1(
-            si.moving_median,
+            sigima_image.moving_median,
             _("Moving median"),
-            sb.MovingMedianParam,
+            sigima_base.MovingMedianParam,
         )
-        self.register_1_to_1(si.wiener, _("Wiener filter"))
+        self.register_1_to_1(sigima_image.wiener, _("Wiener filter"))
         # Fourier analysis
         self.register_1_to_1(
-            si.zero_padding,
+            sigima_image.zero_padding,
             _("Zero padding"),
-            si.ZeroPadding2DParam,
+            sigima_image.ZeroPadding2DParam,
             comment=_(
                 "Zero padding is used to increase the frequency resolution of the FFT"
             ),
         )
         self.register_1_to_1(
-            si.fft,
+            sigima_image.fft,
             _("FFT"),
-            sb.FFTParam,
+            sigima_base.FFTParam,
             comment=_(
                 "Fast Fourier Transform (FFT) is an estimation of the "
                 "Discrete Fourier Transform (DFT). "
@@ -228,9 +242,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             edit=False,
         )
         self.register_1_to_1(
-            si.ifft,
+            sigima_image.ifft,
             _("Inverse FFT"),
-            sb.FFTParam,
+            sigima_base.FFTParam,
             comment=_(
                 "Inverse Fast Fourier Transform (IFFT) is an estimation of the "
                 "Inverse Discrete Fourier Transform (IDFT). "
@@ -239,7 +253,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             edit=False,
         )
         self.register_1_to_1(
-            si.magnitude_spectrum,
+            sigima_image.magnitude_spectrum,
             _("Magnitude spectrum"),
             paramclass=sigima_.param.SpectrumParam,
             comment=_(
@@ -248,7 +262,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             ),
         )
         self.register_1_to_1(
-            si.phase_spectrum,
+            sigima_image.phase_spectrum,
             _("Phase spectrum"),
             comment=_(
                 "Phase spectrum is the angle of the FFT result. "
@@ -256,7 +270,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             ),
         )
         self.register_1_to_1(
-            si.psd,
+            sigima_image.psd,
             _("Power spectral density"),
             paramclass=sigima_.param.SpectrumParam,
             comment=_(
@@ -266,199 +280,203 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
         # Thresholding
         self.register_1_to_1(
-            si.threshold,
+            sigima_image.threshold,
             _("Parametric thresholding"),
-            si.ThresholdParam,
+            sigima_image.ThresholdParam,
             comment=_(
                 "Parametric thresholding allows to select a thresholding method "
                 "and a threshold value."
             ),
         )
-        self.register_1_to_1(si.threshold_isodata, _("ISODATA thresholding"))
-        self.register_1_to_1(si.threshold_li, _("Li thresholding"))
-        self.register_1_to_1(si.threshold_mean, _("Mean thresholding"))
-        self.register_1_to_1(si.threshold_minimum, _("Minimum thresholding"))
-        self.register_1_to_1(si.threshold_otsu, _("Otsu thresholding"))
-        self.register_1_to_1(si.threshold_triangle, _("Triangle thresholding"))
-        self.register_1_to_1(si.threshold_yen, _("Li thresholding"))
+        self.register_1_to_1(sigima_image.threshold_isodata, _("ISODATA thresholding"))
+        self.register_1_to_1(sigima_image.threshold_li, _("Li thresholding"))
+        self.register_1_to_1(sigima_image.threshold_mean, _("Mean thresholding"))
+        self.register_1_to_1(sigima_image.threshold_minimum, _("Minimum thresholding"))
+        self.register_1_to_1(sigima_image.threshold_otsu, _("Otsu thresholding"))
+        self.register_1_to_1(
+            sigima_image.threshold_triangle, _("Triangle thresholding")
+        )
+        self.register_1_to_1(sigima_image.threshold_yen, _("Li thresholding"))
         # Exposure
         self.register_1_to_1(
-            si.adjust_gamma,
+            sigima_image.adjust_gamma,
             _("Gamma correction"),
-            si.AdjustGammaParam,
+            sigima_image.AdjustGammaParam,
         )
         self.register_1_to_1(
-            si.adjust_log,
+            sigima_image.adjust_log,
             _("Logarithmic correction"),
-            si.AdjustLogParam,
+            sigima_image.AdjustLogParam,
         )
         self.register_1_to_1(
-            si.adjust_sigmoid,
+            sigima_image.adjust_sigmoid,
             _("Sigmoid correction"),
-            si.AdjustSigmoidParam,
+            sigima_image.AdjustSigmoidParam,
         )
         self.register_1_to_1(
-            si.equalize_hist,
+            sigima_image.equalize_hist,
             _("Histogram equalization"),
-            si.EqualizeHistParam,
+            sigima_image.EqualizeHistParam,
         )
         self.register_1_to_1(
-            si.equalize_adapthist,
+            sigima_image.equalize_adapthist,
             _("Adaptive histogram equalization"),
-            si.EqualizeAdaptHistParam,
+            sigima_image.EqualizeAdaptHistParam,
         )
         self.register_1_to_1(
-            si.rescale_intensity,
+            sigima_image.rescale_intensity,
             _("Intensity rescaling"),
-            si.RescaleIntensityParam,
+            sigima_image.RescaleIntensityParam,
         )
         # Restoration
         self.register_1_to_1(
-            si.denoise_tv,
+            sigima_image.denoise_tv,
             _("Total variation denoising"),
-            si.DenoiseTVParam,
+            sigima_image.DenoiseTVParam,
         )
         self.register_1_to_1(
-            si.denoise_bilateral,
+            sigima_image.denoise_bilateral,
             _("Bilateral filter denoising"),
-            si.DenoiseBilateralParam,
+            sigima_image.DenoiseBilateralParam,
         )
         self.register_1_to_1(
-            si.denoise_wavelet,
+            sigima_image.denoise_wavelet,
             _("Wavelet denoising"),
-            si.DenoiseWaveletParam,
+            sigima_image.DenoiseWaveletParam,
         )
         self.register_1_to_1(
-            si.denoise_tophat,
+            sigima_image.denoise_tophat,
             _("White Top-hat denoising"),
-            si.MorphologyParam,
+            sigima_image.MorphologyParam,
         )
         # Morphology
         self.register_1_to_1(
-            si.white_tophat,
+            sigima_image.white_tophat,
             _("White Top-Hat (disk)"),
-            si.MorphologyParam,
+            sigima_image.MorphologyParam,
         )
         self.register_1_to_1(
-            si.black_tophat,
+            sigima_image.black_tophat,
             _("Black Top-Hat (disk)"),
-            si.MorphologyParam,
+            sigima_image.MorphologyParam,
         )
         self.register_1_to_1(
-            si.erosion,
+            sigima_image.erosion,
             _("Erosion (disk)"),
-            si.MorphologyParam,
+            sigima_image.MorphologyParam,
         )
         self.register_1_to_1(
-            si.dilation,
+            sigima_image.dilation,
             _("Dilation (disk)"),
-            si.MorphologyParam,
+            sigima_image.MorphologyParam,
         )
         self.register_1_to_1(
-            si.opening,
+            sigima_image.opening,
             _("Opening (disk)"),
-            si.MorphologyParam,
+            sigima_image.MorphologyParam,
         )
         self.register_1_to_1(
-            si.closing,
+            sigima_image.closing,
             _("Closing (disk)"),
-            si.MorphologyParam,
+            sigima_image.MorphologyParam,
         )
         # Edges
-        self.register_1_to_1(si.roberts, _("Roberts filter"))
-        self.register_1_to_1(si.prewitt, _("Prewitt filter"))
-        self.register_1_to_1(si.prewitt_h, _("Prewitt filter (horizontal)"))
-        self.register_1_to_1(si.prewitt_v, _("Prewitt filter (vertical)"))
-        self.register_1_to_1(si.sobel, _("Sobel filter"))
-        self.register_1_to_1(si.sobel_h, _("Sobel filter (horizontal)"))
-        self.register_1_to_1(si.sobel_v, _("Sobel filter (vertical)"))
-        self.register_1_to_1(si.scharr, _("Scharr filter"))
-        self.register_1_to_1(si.scharr_h, _("Scharr filter (horizontal)"))
-        self.register_1_to_1(si.scharr_v, _("Scharr filter (vertical)"))
-        self.register_1_to_1(si.farid, _("Farid filter"))
-        self.register_1_to_1(si.farid_h, _("Farid filter (horizontal)"))
-        self.register_1_to_1(si.farid_v, _("Farid filter (vertical)"))
-        self.register_1_to_1(si.laplace, _("Laplace filter"))
-        self.register_1_to_1(si.canny, _("Canny filter"), si.CannyParam)
+        self.register_1_to_1(sigima_image.roberts, _("Roberts filter"))
+        self.register_1_to_1(sigima_image.prewitt, _("Prewitt filter"))
+        self.register_1_to_1(sigima_image.prewitt_h, _("Prewitt filter (horizontal)"))
+        self.register_1_to_1(sigima_image.prewitt_v, _("Prewitt filter (vertical)"))
+        self.register_1_to_1(sigima_image.sobel, _("Sobel filter"))
+        self.register_1_to_1(sigima_image.sobel_h, _("Sobel filter (horizontal)"))
+        self.register_1_to_1(sigima_image.sobel_v, _("Sobel filter (vertical)"))
+        self.register_1_to_1(sigima_image.scharr, _("Scharr filter"))
+        self.register_1_to_1(sigima_image.scharr_h, _("Scharr filter (horizontal)"))
+        self.register_1_to_1(sigima_image.scharr_v, _("Scharr filter (vertical)"))
+        self.register_1_to_1(sigima_image.farid, _("Farid filter"))
+        self.register_1_to_1(sigima_image.farid_h, _("Farid filter (horizontal)"))
+        self.register_1_to_1(sigima_image.farid_v, _("Farid filter (vertical)"))
+        self.register_1_to_1(sigima_image.laplace, _("Laplace filter"))
+        self.register_1_to_1(
+            sigima_image.canny, _("Canny filter"), sigima_image.CannyParam
+        )
         # Other processing
         self.register_1_to_1(
-            si.butterworth,
+            sigima_image.butterworth,
             _("Butterworth filter"),
-            si.ButterworthParam,
+            sigima_image.ButterworthParam,
         )
-        self.register_1_to_n(si.extract_roi, "ROI", icon_name="roi.svg")
+        self.register_1_to_n(sigima_image.extract_roi, "ROI", icon_name="roi.svg")
         self.register_1_to_1(
-            si.resize,
+            sigima_image.resize,
             _("Resize"),
-            si.ResizeParam,
+            sigima_image.ResizeParam,
             icon_name="resize.svg",
         )
         self.register_1_to_1(
-            si.binning,
+            sigima_image.binning,
             _("Pixel binning"),
-            si.BinningParam,
+            sigima_image.BinningParam,
             icon_name="binning.svg",
         )
 
         # MARK: ANALYSIS
-        self.register_1_to_0(si.stats, _("Statistics"), icon_name="stats.svg")
+        self.register_1_to_0(sigima_image.stats, _("Statistics"), icon_name="stats.svg")
         self.register_1_to_1(
-            si.histogram,
+            sigima_image.histogram,
             _("Histogram"),
-            paramclass=sb.HistogramParam,
+            paramclass=sigima_base.HistogramParam,
             icon_name="histogram.svg",
         )
         self.register_1_to_0(
-            si.centroid,
+            sigima_image.centroid,
             _("Centroid"),
             comment=_("Compute image centroid"),
         )
         self.register_1_to_0(
-            si.enclosing_circle,
+            sigima_image.enclosing_circle,
             _("Minimum enclosing circle center"),
             comment=_("Compute smallest enclosing circle center"),
         )
         self.register_1_to_0(
-            si.contour_shape,
+            sigima_image.contour_shape,
             _("Contour detection"),
-            si.ContourShapeParam,
+            sigima_image.ContourShapeParam,
             comment=_("Compute contour shape fit"),
         )
         self.register_1_to_0(
-            si.peak_detection,
+            sigima_image.peak_detection,
             _("Peak detection"),
-            si.Peak2DDetectionParam,
+            sigima_image.Peak2DDetectionParam,
             comment=_("Detect peaks in the image"),
         )
         self.register_1_to_0(
-            si.hough_circle_peaks,
+            sigima_image.hough_circle_peaks,
             _("Circle Hough transform"),
-            si.HoughCircleParam,
+            sigima_image.HoughCircleParam,
             comment=_("Detect circular shapes using circle Hough transform"),
         )
         # Blob detection
         self.register_1_to_0(
-            si.blob_dog,
+            sigima_image.blob_dog,
             _("Blob detection (DOG)"),
-            si.BlobDOGParam,
+            sigima_image.BlobDOGParam,
             comment=_("Detect blobs using Difference of Gaussian (DOG) method"),
         )
         self.register_1_to_0(
-            si.blob_doh,
+            sigima_image.blob_doh,
             _("Blob detection (DOH)"),
-            si.BlobDOHParam,
+            sigima_image.BlobDOHParam,
             comment=_("Detect blobs using Difference of Gaussian (DOH) method"),
         )
         self.register_1_to_0(
-            si.blob_log,
+            sigima_image.blob_log,
             _("Blob detection (LOG)"),
-            si.BlobLOGParam,
+            sigima_image.BlobLOGParam,
             comment=_("Detect blobs using Laplacian of Gaussian (LOG) method"),
         )
         self.register_1_to_0(
-            si.blob_opencv,
+            sigima_image.blob_opencv,
             _("Blob detection (OpenCV)"),
-            si.BlobOpenCVParam,
+            sigima_image.BlobOpenCVParam,
             comment=_("Detect blobs using OpenCV SimpleBlobDetector"),
         )
 
@@ -475,7 +493,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                     + "\n"
                     + _("Selected images do not have the same size"),
                 )
-        edit, param = self.init_param(param, si.ResizeParam, _("Resize"))
+        edit, param = self.init_param(param, sigima_image.ResizeParam, _("Resize"))
         if edit:
             original_size = obj0.data.shape
             dlg = ResizeDialog(
@@ -496,7 +514,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         input_dtype_str = str(obj0.data.dtype)
         title = _("Binning")
-        edit, param = self.init_param(param, si.BinningParam, title)
+        edit, param = self.init_param(param, sigima_image.BinningParam, title)
         if edit:
             param.dtype_str = input_dtype_str
         if param.dtype_str is None:
@@ -511,7 +529,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         with :py:func:`sigima_.image.line_profile`"""
         title = _("Profile")
         add_initial_shape = self.has_param_defaults(sigima_.param.LineProfileParam)
-        edit, param = self.init_param(param, si.LineProfileParam, title)
+        edit, param = self.init_param(param, sigima_image.LineProfileParam, title)
         if edit:
             options = self.panel.plothandler.get_current_plot_options()
             dlg = ProfileExtractionDialog(
@@ -531,7 +549,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         with :py:func:`sigima_.image.segment_profile`"""
         title = _("Profile")
         add_initial_shape = self.has_param_defaults(sigima_.param.SegmentProfileParam)
-        edit, param = self.init_param(param, si.SegmentProfileParam, title)
+        edit, param = self.init_param(param, sigima_image.SegmentProfileParam, title)
         if edit:
             options = self.panel.plothandler.get_current_plot_options()
             dlg = ProfileExtractionDialog(
@@ -551,7 +569,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         with :py:func:`sigima_.image.average_profile`"""
         title = _("Average profile")
         add_initial_shape = self.has_param_defaults(sigima_.param.AverageProfileParam)
-        edit, param = self.init_param(param, si.AverageProfileParam, title)
+        edit, param = self.init_param(param, sigima_image.AverageProfileParam, title)
         if edit:
             options = self.panel.plothandler.get_current_plot_options()
             dlg = ProfileExtractionDialog(
@@ -570,7 +588,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute radial profile
         with :py:func:`sigima_.image.radial_profile`"""
         title = _("Radial profile")
-        edit, param = self.init_param(param, si.RadialProfileParam, title)
+        edit, param = self.init_param(param, sigima_image.RadialProfileParam, title)
         if edit:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             param.update_from_obj(obj)
@@ -580,7 +598,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     def distribute_on_grid(self, param: sigima_.param.GridParam | None = None) -> None:
         """Distribute images on a grid"""
         title = _("Distribute on grid")
-        edit, param = self.init_param(param, si.GridParam, title)
+        edit, param = self.init_param(param, sigima_image.GridParam, title)
         if edit and not param.edit(parent=self.panel.parent()):
             return
         objs = self.panel.objview.get_sel_objects(include_groups=True)
@@ -680,13 +698,13 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """
         self.compute_multiple_1_to_1(
             [
-                si.threshold_isodata,
-                si.threshold_li,
-                si.threshold_mean,
-                si.threshold_minimum,
-                si.threshold_otsu,
-                si.threshold_triangle,
-                si.threshold_yen,
+                sigima_image.threshold_isodata,
+                sigima_image.threshold_li,
+                sigima_image.threshold_mean,
+                sigima_image.threshold_minimum,
+                sigima_image.threshold_otsu,
+                sigima_image.threshold_triangle,
+                sigima_image.threshold_yen,
             ],
             None,
             "Threshold",
@@ -706,19 +724,19 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         if params is not None:
             assert len(params) == 4, "Wrong number of parameters (4 expected)"
         funcs = [
-            si.denoise_tv,
-            si.denoise_bilateral,
-            si.denoise_wavelet,
-            si.denoise_tophat,
+            sigima_image.denoise_tv,
+            sigima_image.denoise_bilateral,
+            sigima_image.denoise_wavelet,
+            sigima_image.denoise_tophat,
         ]
         edit = params is None
         if edit:
             params = []
             for paramclass, title in (
-                (si.DenoiseTVParam, _("Total variation denoising")),
-                (si.DenoiseBilateralParam, _("Bilateral filter denoising")),
-                (si.DenoiseWaveletParam, _("Wavelet denoising")),
-                (si.MorphologyParam, _("Denoise / Top-Hat")),
+                (sigima_image.DenoiseTVParam, _("Total variation denoising")),
+                (sigima_image.DenoiseBilateralParam, _("Bilateral filter denoising")),
+                (sigima_image.DenoiseWaveletParam, _("Wavelet denoising")),
+                (sigima_image.MorphologyParam, _("Denoise / Top-Hat")),
             ):
                 param = paramclass(title)
                 self.update_param_defaults(param)
@@ -740,16 +758,16 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         - :py:func:`sigima_.image.morphology.closing`
         """
         if param is None:
-            param = si.MorphologyParam()
+            param = sigima_image.MorphologyParam()
             if not param.edit(parent=self.panel.parent()):
                 return
         funcs = [
-            si.white_tophat,
-            si.black_tophat,
-            si.erosion,
-            si.dilation,
-            si.opening,
-            si.closing,
+            sigima_image.white_tophat,
+            sigima_image.black_tophat,
+            sigima_image.erosion,
+            sigima_image.dilation,
+            sigima_image.opening,
+            sigima_image.closing,
         ]
         self.compute_multiple_1_to_1(funcs, [param] * len(funcs), "Morph", edit=False)
 
@@ -774,20 +792,20 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         - :py:func:`sigima_.image.edges.laplace`
         """
         funcs = [
-            si.roberts,
-            si.prewitt,
-            si.prewitt_h,
-            si.prewitt_v,
-            si.sobel,
-            si.sobel_h,
-            si.sobel_v,
-            si.scharr,
-            si.scharr_h,
-            si.scharr_v,
-            si.farid,
-            si.farid_h,
-            si.farid_v,
-            si.laplace,
+            sigima_image.roberts,
+            sigima_image.prewitt,
+            sigima_image.prewitt_h,
+            sigima_image.prewitt_v,
+            sigima_image.sobel,
+            sigima_image.sobel_h,
+            sigima_image.sobel_v,
+            sigima_image.scharr,
+            sigima_image.scharr_h,
+            sigima_image.scharr_v,
+            sigima_image.farid,
+            sigima_image.farid_h,
+            sigima_image.farid_v,
+            sigima_image.laplace,
         ]
         self.compute_multiple_1_to_1(funcs, None, "Edges")
 
@@ -800,7 +818,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         # is compatible with this call, and it simply passes the second argument through
         # to the `extract_rois` function. However, this should be rectified in the
         # future to ensure that the method signature and its usage are consistent.
-        self.compute_1_to_1(si.extract_rois, params, title=_("Extract ROI"))
+        self.compute_1_to_1(sigima_image.extract_rois, params, title=_("Extract ROI"))
 
     # ------Image Analysis
     @qt_try_except()
@@ -810,7 +828,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute 2D peak detection
         with :py:func:`sigima_.image.peak_detection`"""
         edit, param = self.init_param(
-            param, si.Peak2DDetectionParam, _("Peak detection")
+            param, sigima_image.Peak2DDetectionParam, _("Peak detection")
         )
         if edit:
             data = self.panel.objview.get_sel_objects(include_groups=True)[0].data

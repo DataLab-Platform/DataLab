@@ -16,7 +16,7 @@ from __future__ import annotations
 import os.path as osp
 from typing import TYPE_CHECKING, Any
 
-import sigima_.computation.signal as ss
+import sigima_.computation.signal as sigima_signal
 import sigima_.param
 from cdl.env import execenv
 from cdl.objectmodel import get_uuid
@@ -50,9 +50,9 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
 
     sig = create_paracetamol_signal()
     panel.add_object(sig)
-    panel.processor.run_feature(ss.derivative)
+    panel.processor.run_feature(sigima_signal.derivative)
     panel.processor.run_feature(
-        ss.moving_average, sigima_.param.MovingAverageParam.create(n=5)
+        sigima_signal.moving_average, sigima_.param.MovingAverageParam.create(n=5)
     )
 
     __print_test_result("`SimpleObjectTree.__str__` method", objview)

@@ -15,8 +15,9 @@ from typing import TYPE_CHECKING
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 
-import sigima_.computation.image.geometry
-import sigima_.param as sp
+import sigima_.computation.image as sigima_image
+import sigima_.obj
+import sigima_.param
 from cdl.config import _, reset
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
@@ -26,17 +27,6 @@ from cdl.tests.data import (
     create_peak2d_image,
     create_sincos_image,
     get_test_image,
-)
-from sigima_ import (
-    GaussLorentzVoigtParam,
-    ImageTypes,
-    NewImageParam,
-    NewSignalParam,
-    SignalTypes,
-    UniformRandomParam,
-    create_image_from_param,
-    create_image_roi,
-    create_signal_from_param,
 )
 
 if TYPE_CHECKING:
@@ -59,11 +49,11 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     qt_wait(DELAY1)
 
     panel.objview.set_current_object(sig1)
-    base_param = NewSignalParam.create(
-        title=_("Random function"), stype=SignalTypes.UNIFORMRANDOM
+    base_param = sigima_.obj.NewSignalParam.create(
+        title=_("Random function"), stype=sigima_.obj.SignalTypes.UNIFORMRANDOM
     )
-    extra_param = UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
-    sig2 = create_signal_from_param(base_param, extra_param=extra_param)
+    extra_param = sigima_.obj.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
+    sig2 = sigima_.obj.create_signal_from_param(base_param, extra_param=extra_param)
     win.add_object(sig2)
 
     # compute_common_operations(panel)
@@ -81,7 +71,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     panel.processor.run_feature("detrending")
     sig3 = panel.objview.get_current_object()
 
-    param = sp.PeakDetectionParam()
+    param = sigima_.param.PeakDetectionParam()
     panel.processor.run_feature("peak_detection", param)
     sig4 = panel.objview.get_current_object()
     panel.objview.select_objects([sig3, sig4])
@@ -91,8 +81,12 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     panel.objview.set_current_object(sig3)
     panel.processor.compute_multigaussianfit()
 
-    base_param = NewSignalParam.create(title=_("Gaussian"), stype=SignalTypes.GAUSS)
-    sig = create_signal_from_param(base_param, GaussLorentzVoigtParam())
+    base_param = sigima_.obj.NewSignalParam.create(
+        title=_("Gaussian"), stype=sigima_.obj.SignalTypes.GAUSS
+    )
+    sig = sigima_.obj.create_signal_from_param(
+        base_param, sigima_.obj.GaussLorentzVoigtParam()
+    )
     panel.add_object(sig)
 
     panel.processor.run_feature("fwhm")
@@ -106,7 +100,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     win.set_current_panel("image")
     panel = win.imagepanel
 
-    base_param = NewImageParam.create(height=data_size, width=data_size)
+    base_param = sigima_.obj.NewImageParam.create(height=data_size, width=data_size)
 
     # ima1 = create_noisygauss_image(newparam)
     # panel.add_object(ima1)
@@ -118,15 +112,15 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
 
     panel.objview.set_current_object(ima1)
 
-    base_param = NewImageParam.create(
-        itype=ImageTypes.UNIFORMRANDOM,
+    base_param = sigima_.obj.NewImageParam.create(
+        itype=sigima_.obj.ImageTypes.UNIFORMRANDOM,
         height=base_param.height,
         width=base_param.width,
     )
-    base_param = UniformRandomParam()
+    base_param = sigima_.obj.UniformRandomParam()
     base_param.set_from_datatype(ima1.data.dtype)
     base_param.vmax = int(ima1.data.max() * 0.2)
-    ima2 = create_image_from_param(base_param, extra_param=base_param)
+    ima2 = sigima_.obj.create_image_from_param(base_param, extra_param=base_param)
     panel.add_object(ima2)
 
     panel.objview.select_objects((1, 2))
@@ -148,7 +142,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = sigima_.computation.image.geometry.RotateParam.create(angle=5.0)
+    param = sigima_image.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
@@ -156,8 +150,10 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     base_param.title = None
     ima1 = create_multigauss_image(base_param)
     s = data_size
-    roi = create_image_roi("rectangle", [s // 2, s // 2, s - 25 - s // 2, s - s // 2])
-    roi.add_roi(create_image_roi("circle", [s // 3, s // 2, s // 4]))
+    roi = sigima_.obj.create_image_roi(
+        "rectangle", [s // 2, s // 2, s - 25 - s // 2, s - s // 2]
+    )
+    roi.add_roi(sigima_.obj.create_image_roi("circle", [s // 3, s // 2, s // 4]))
     ima1.roi = roi
     panel.add_object(ima1)
 
@@ -174,18 +170,20 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     base_param.title = None
     ima = create_peak2d_image(base_param)
     panel.add_object(ima)
-    param = sp.Peak2DDetectionParam.create(create_rois=True)
+    param = sigima_.param.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.run_feature("peak_detection", param)
 
     qt_wait(DELAY2)
 
-    param = sp.ContourShapeParam()
+    param = sigima_.param.ContourShapeParam()
     panel.processor.run_feature("contour_shape", param)
 
     qt_wait(DELAY2)
 
     n = data_size // 10
-    roi = create_image_roi("rectangle", [n, n, data_size - 2 * n, data_size - 2 * n])
+    roi = sigima_.obj.create_image_roi(
+        "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
+    )
     panel.processor.compute_roi_extraction(roi)
 
 

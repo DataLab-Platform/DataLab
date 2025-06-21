@@ -71,7 +71,7 @@ from cdl.utils.qthelpers import (
     configure_menu_about_to_show,
 )
 from cdl.widgets import instconfviewer, logviewer, status
-from sigima_ import ImageObj, SignalObj, create_image, create_signal
+from sigima_.obj import ImageObj, SignalObj, create_image, create_signal
 
 if TYPE_CHECKING:
     from typing import Literal

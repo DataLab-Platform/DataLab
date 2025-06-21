@@ -18,7 +18,7 @@ from cdl.adapters_plotpy.converters import (
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
-from sigima_ import (
+from sigima_.obj import (
     ImageObj,
     ImageROI,
     SignalObj,

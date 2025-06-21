@@ -12,7 +12,7 @@ from qtpy import QtWidgets as QW
 from cdl.env import execenv
 from cdl.tests.data import get_test_fnames
 from cdl.widgets.textimport import TextImportWizard
-from sigima_ import ImageObj, SignalObj
+from sigima_.obj import ImageObj, SignalObj
 
 
 def file_to_clipboard(filename: str) -> None:

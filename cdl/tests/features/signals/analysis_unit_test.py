@@ -17,24 +17,18 @@ from __future__ import annotations
 
 import pytest
 
-import sigima_.computation.signal as ss
+import sigima_.computation.signal as sigima_signal
+import sigima_.obj
 import sigima_.param
 from cdl.tests.data import get_test_signal
 from cdl.utils.tests import check_scalar_result
-from sigima_ import (
-    NewSignalParam,
-    PeriodicParam,
-    SignalTypes,
-    StepParam,
-    create_signal_from_param,
-)
 
 
 @pytest.mark.validation
 def test_signal_bandwidth_3db() -> None:
     """Validation test for the bandwidth computation."""
     obj = get_test_signal("bandwidth.txt")
-    res = ss.bandwidth_3db(obj)
+    res = sigima_signal.bandwidth_3db(obj)
     assert res is not None, "Bandwidth computation failed"
     df = res.to_dataframe()
     check_scalar_result("Bandwitdh@-3dB", df.L[0], 39.0, rtol=0.001)
@@ -45,7 +39,7 @@ def test_dynamic_parameters() -> None:
     """Validation test for dynamic parameters computation."""
     obj = get_test_signal("dynamic_parameters.txt")
     param = sigima_.param.DynamicParam.create(full_scale=1.0)
-    res = ss.dynamic_parameters(obj, param)
+    res = sigima_signal.dynamic_parameters(obj, param)
     assert res is not None, "Dynamic parameters computation failed"
     df = res.to_dataframe()
     check_scalar_result("ENOB", df.ENOB[0], 5.1, rtol=0.001)
@@ -60,7 +54,7 @@ def test_dynamic_parameters() -> None:
 def test_signal_sampling_rate_period() -> None:
     """Validation test for the sampling rate and period computation."""
     obj = get_test_signal("dynamic_parameters.txt")
-    res = ss.sampling_rate_period(obj)
+    res = sigima_signal.sampling_rate_period(obj)
     assert res is not None, "Sampling rate and period computation failed"
     df = res.to_dataframe()
     check_scalar_result("Sampling rate", df["fs"][0], 1.0e10, rtol=0.001)
@@ -71,7 +65,7 @@ def test_signal_sampling_rate_period() -> None:
 def test_signal_contrast() -> None:
     """Validation test for the contrast computation."""
     obj = get_test_signal("fw1e2.txt")
-    res = ss.contrast(obj)
+    res = sigima_signal.contrast(obj)
     assert res is not None, "Contrast computation failed"
     df = res.to_dataframe()
     check_scalar_result("Contrast", df.contrast[0], 0.825, rtol=0.001)
@@ -81,7 +75,7 @@ def test_signal_contrast() -> None:
 def test_signal_x_at_minmax() -> None:
     """Validation test for the x value at min/max computation."""
     obj = get_test_signal("fw1e2.txt")
-    res = ss.x_at_minmax(obj)
+    res = sigima_signal.x_at_minmax(obj)
     assert res is not None, "X at min/max computation failed"
     df = res.to_dataframe()
     check_scalar_result("X@Ymin", df["X@Ymin"][0], 0.803, rtol=0.001)
@@ -91,13 +85,13 @@ def test_signal_x_at_minmax() -> None:
 @pytest.mark.validation
 def test_signal_x_at_y() -> None:
     """Validation test for the abscissa finding computation."""
-    newparam = NewSignalParam.create(stype=SignalTypes.STEP)
-    extra_param = StepParam()
-    obj = create_signal_from_param(newparam, extra_param=extra_param)
+    newparam = sigima_.obj.NewSignalParam.create(stype=sigima_.obj.SignalTypes.STEP)
+    extra_param = sigima_.obj.StepParam()
+    obj = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
     if obj is None:
         raise ValueError("Failed to create test signal")
-    param = ss.OrdinateParam.create(y=0.5)
-    res = ss.x_at_y(obj, param)
+    param = sigima_signal.OrdinateParam.create(y=0.5)
+    res = sigima_signal.x_at_y(obj, param)
     assert res is not None, "X at Y computation failed"
     df = res.to_dataframe()
     check_scalar_result("x|y=0.5", df["x"][0], 0.0)
@@ -106,15 +100,15 @@ def test_signal_x_at_y() -> None:
 @pytest.mark.validation
 def test_signal_y_at_x() -> None:
     """Validation test for the ordinate finding computation."""
-    newparam = NewSignalParam.create(
-        stype=SignalTypes.TRIANGLE, xmin=0.0, xmax=10.0, size=101
+    newparam = sigima_.obj.NewSignalParam.create(
+        stype=sigima_.obj.SignalTypes.TRIANGLE, xmin=0.0, xmax=10.0, size=101
     )
-    extra_param = PeriodicParam()
-    obj = create_signal_from_param(newparam, extra_param=extra_param)
+    extra_param = sigima_.obj.PeriodicParam()
+    obj = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
     if obj is None:
         raise ValueError("Failed to create test signal")
-    param = ss.AbscissaParam.create(x=2.5)
-    res = ss.y_at_x(obj, param)
+    param = sigima_signal.AbscissaParam.create(x=2.5)
+    res = sigima_signal.y_at_x(obj, param)
     assert res is not None, "Y at X computation failed"
     df = res.to_dataframe()
     check_scalar_result("y|x=0.5", df["y"][0], 1.0)

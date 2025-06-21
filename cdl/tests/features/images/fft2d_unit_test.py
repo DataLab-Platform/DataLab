@@ -14,12 +14,12 @@ from guidata.qthelpers import qt_app_context
 
 import cdl.tests.data as ctd
 import sigima_.algorithms.image as alg
-import sigima_.computation.image.fourier
+import sigima_.computation.image as sigima_image
+import sigima_.obj
 import sigima_.param
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result
 from cdl.utils.vistools import view_images_side_by_side
-from sigima_ import create_image
 
 
 def test_image_fft_interactive():
@@ -58,7 +58,7 @@ def test_image_zero_padding() -> None:
 
     # Validate the zero padding with bottom-right position
     param.position = "bottom-right"
-    ima2 = sigima_.computation.image.fourier.zero_padding(ima1, param)
+    ima2 = sigima_image.zero_padding(ima1, param)
     sh1, sh2 = ima1.data.shape, ima2.data.shape
     exp_sh2 = (sh1[0] + rows, sh1[1] + cols)
     execenv.print("Validating zero padding for bottom-right position...", end=" ")
@@ -73,7 +73,7 @@ def test_image_zero_padding() -> None:
 
     # Validate the zero padding with center position
     param.position = "center"
-    ima3 = sigima_.computation.image.fourier.zero_padding(ima1, param)
+    ima3 = sigima_image.zero_padding(ima1, param)
     sh3 = ima3.data.shape
     exp_sh3 = (sh1[0] + rows, sh1[1] + cols)
     execenv.print("Validating zero padding for center position...", end=" ")
@@ -97,7 +97,7 @@ def test_image_zero_padding() -> None:
     # Validate zero padding with strategies other than custom size
     # Image size is (200, 300) and the next power of 2 is (256, 512)
     # The multiple of 64 is (256, 320)
-    ima4 = create_image("", np.zeros((200, 300)))
+    ima4 = sigima_.obj.create_image("", np.zeros((200, 300)))
     for strategy, (exp_rows, exp_cols) in (
         ("next_pow2", (56, 212)),
         ("multiple_of_64", (56, 20)),
@@ -118,8 +118,8 @@ def test_image_zero_padding() -> None:
 def test_image_fft() -> None:
     """2D FFT validation test."""
     ima1 = ctd.create_checkerboard()
-    fft = sigima_.computation.image.fourier.fft(ima1)
-    ifft = sigima_.computation.image.fourier.ifft(fft)
+    fft = sigima_image.fft(ima1)
+    ifft = sigima_image.ifft(fft)
 
     # Check that the inverse FFT reconstructs the original image
     check_array_result("Checkerboard image FFT/iFFT", ifft.data.real, ima1.data)
@@ -142,8 +142,8 @@ def test_image_ifft() -> None:
 def test_image_magnitude_spectrum() -> None:
     """2D magnitude spectrum validation test."""
     ima1 = ctd.create_checkerboard()
-    fft = sigima_.computation.image.fourier.fft(ima1)
-    mag = sigima_.computation.image.fourier.magnitude_spectrum(ima1)
+    fft = sigima_image.fft(ima1)
+    mag = sigima_image.magnitude_spectrum(ima1)
 
     # Check that the magnitude spectrum is correct
     exp = np.abs(fft.data)
@@ -154,8 +154,8 @@ def test_image_magnitude_spectrum() -> None:
 def test_image_phase_spectrum() -> None:
     """2D phase spectrum validation test."""
     ima1 = ctd.create_checkerboard()
-    fft = sigima_.computation.image.fourier.fft(ima1)
-    phase = sigima_.computation.image.fourier.phase_spectrum(ima1)
+    fft = sigima_image.fft(ima1)
+    phase = sigima_image.phase_spectrum(ima1)
 
     # Check that the phase spectrum is correct
     exp = np.rad2deg(np.angle(fft.data))
@@ -166,10 +166,10 @@ def test_image_phase_spectrum() -> None:
 def test_image_psd() -> None:
     """2D Power Spectral Density validation test."""
     ima1 = ctd.create_checkerboard()
-    psd = sigima_.computation.image.fourier.psd(ima1)
+    psd = sigima_image.psd(ima1)
 
     # Check that the PSD is correct
-    exp = np.abs(sigima_.computation.image.fourier.fft(ima1).data) ** 2
+    exp = np.abs(sigima_image.fft(ima1).data) ** 2
     check_array_result("Checkerboard image PSD", psd.data, exp)
 
 

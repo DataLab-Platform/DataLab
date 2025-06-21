@@ -16,18 +16,18 @@ from plotpy.builder import make
 
 import cdl.tests.data as cdltd
 import cdl.utils.tests
-import sigima_.computation.signal as ss
+import sigima_.computation.signal as sigima_signal
+import sigima_.obj
 import sigima_.param
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.utils.vistools import view_curve_items
-from sigima_ import SignalObj
 
 
-def __test_fwhm_interactive(obj: SignalObj, method: str) -> None:
+def __test_fwhm_interactive(obj: sigima_.obj.SignalObj, method: str) -> None:
     """Interactive test for the full width at half maximum computation."""
     param = sigima_.param.FWHMParam.create(method=method)
-    df = ss.fwhm(obj, param).to_dataframe()
+    df = sigima_signal.fwhm(obj, param).to_dataframe()
     view_curve_items(
         [
             create_adapter_from_object(obj).make_item(),
@@ -66,11 +66,11 @@ def test_signal_fwhm() -> None:
         ("zero-crossing", real_fwhm),
     ):
         param = sigima_.param.FWHMParam.create(method=method)
-        df = ss.fwhm(obj, param).to_dataframe()
+        df = sigima_signal.fwhm(obj, param).to_dataframe()
         cdl.utils.tests.check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
     obj = cdltd.create_paracetamol_signal()
     with pytest.warns(UserWarning):
-        ss.fwhm(obj, sigima_.param.FWHMParam.create(method="zero-crossing"))
+        sigima_signal.fwhm(obj, sigima_.param.FWHMParam.create(method="zero-crossing"))
 
 
 @pytest.mark.validation
@@ -78,7 +78,7 @@ def test_signal_fw1e2() -> None:
     """Validation test for the full width at 1/e^2 maximum computation."""
     obj = cdltd.get_test_signal("fw1e2.txt")
     exp = 4.06  # Manual validation
-    df = ss.fw1e2(obj).to_dataframe()
+    df = sigima_signal.fw1e2(obj).to_dataframe()
     cdl.utils.tests.check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
 
 
@@ -88,7 +88,7 @@ def test_signal_full_width_at_y() -> None:
     obj = cdltd.get_test_signal("fwhm.txt")
     real_fwhm = 2.675  # Manual validation
     param = sigima_.param.OrdinateParam.create(y=0.5)
-    df = ss.full_width_at_y(obj, param).to_dataframe()
+    df = sigima_signal.full_width_at_y(obj, param).to_dataframe()
     cdl.utils.tests.check_scalar_result("∆X", df.L[0], real_fwhm, rtol=0.05)
 
 
