@@ -21,9 +21,10 @@ The following subpackages are available:
 from __future__ import annotations
 
 import os
-from collections.abc import Generator
 from contextlib import contextmanager
+from typing import Generator
 
+import pytest
 from guidata.guitest import run_testlauncher
 
 import cdl.config  # Loading icons
@@ -79,6 +80,17 @@ def cdltest_app_context(
                 # Closing main window properly
                 win.set_modified(False)
                 win.close()
+
+
+@contextmanager
+def skip_if_opencv_missing() -> Generator[None, None, None]:
+    """Skip test if OpenCV is not available"""
+    try:
+        yield
+    except ImportError as exc:
+        if "cv2" in str(exc).lower():
+            pytest.skip("OpenCV not available, skipping test")
+        raise exc
 
 
 def take_plotwidget_screenshot(panel: SignalPanel | ImagePanel, name: str) -> None:

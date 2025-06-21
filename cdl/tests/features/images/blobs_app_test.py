@@ -9,7 +9,7 @@ Blob detection application test
 
 import sigima_.param
 from cdl.adapters_plotpy.factories import create_adapter_from_object
-from cdl.tests import cdltest_app_context
+from cdl.tests import cdltest_app_context, skip_if_opencv_missing
 from cdl.tests.data import get_test_image
 from sigima_ import create_image
 
@@ -33,7 +33,8 @@ def test_blobs():
             image = create_image(name, data)
             create_adapter_from_object(image).add_label_with_title()
             panel.add_object(image)
-            proc.run_feature(compute_method, param)
+            with skip_if_opencv_missing():
+                proc.run_feature(compute_method, param)
 
         # Testing distribute_on_grid and reset_positions
         # ==============================================
