@@ -13,8 +13,8 @@ from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 
-import sigima_.base as sb
-import sigima_.image as si
+import sigima_.computation.base as sb
+import sigima_.computation.image as si
 import sigima_.param
 from cdl.config import APP_NAME, _
 from cdl.gui.processor.base import BaseProcessor

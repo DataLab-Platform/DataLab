@@ -19,7 +19,7 @@ import numpy as np
 import scipy.ndimage as spi
 
 import cdl.plugins
-import sigima_.image.base as si
+import sigima_.computation.image.base as si
 
 
 def weighted_average_denoise(data: np.ndarray) -> np.ndarray:

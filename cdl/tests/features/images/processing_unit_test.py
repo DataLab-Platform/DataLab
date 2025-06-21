@@ -47,7 +47,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from skimage import exposure, feature, filters, morphology, restoration, util
 
-import sigima_.image as si
+import sigima_.computation.image as si
 import sigima_.param
 from cdl.tests.data import get_test_image
 from cdl.utils.tests import check_array_result, check_scalar_result

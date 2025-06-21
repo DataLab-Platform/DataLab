@@ -11,11 +11,11 @@ Metadata application test:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima_.image.detection as si_det
-import sigima_.image.measurement
+import sigima_.computation.image.detection as si_det
+import sigima_.computation.image.measurement
+import sigima_.computation.signal as ss
 import sigima_.obj as so
 import sigima_.param as sp
-import sigima_.signal as ss
 from cdl.env import execenv
 from cdl.gui.panel.base import BaseDataPanel
 from cdl.gui.panel.image import ImagePanel
@@ -35,8 +35,8 @@ def __run_signal_computations(panel: SignalPanel):
 def __run_image_computations(panel: ImagePanel):
     """Test all image features related to ROI"""
     execenv.print("  Image features")
-    panel.processor.run_feature(sigima_.image.measurement.centroid)
-    panel.processor.run_feature(sigima_.image.measurement.enclosing_circle)
+    panel.processor.run_feature(sigima_.computation.image.measurement.centroid)
+    panel.processor.run_feature(sigima_.computation.image.measurement.enclosing_circle)
     panel.processor.run_feature(si_det.peak_detection, sp.Peak2DDetectionParam())
 
 

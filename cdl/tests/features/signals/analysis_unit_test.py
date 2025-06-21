@@ -17,8 +17,8 @@ from __future__ import annotations
 
 import pytest
 
+import sigima_.computation.signal as ss
 import sigima_.param
-import sigima_.signal as ss
 from cdl.tests.data import get_test_signal
 from cdl.utils.tests import check_scalar_result
 from sigima_ import (

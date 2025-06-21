@@ -16,8 +16,8 @@ from __future__ import annotations
 import os.path as osp
 from typing import TYPE_CHECKING, Any
 
+import sigima_.computation.signal as ss
 import sigima_.param
-import sigima_.signal as ss
 from cdl.env import execenv
 from cdl.objectmodel import get_uuid
 from cdl.tests import cdltest_app_context

@@ -28,8 +28,8 @@ from packaging.version import Version
 
 import cdl.tests.data as ctd
 import sigima_.algorithms.coordinates
+import sigima_.computation.signal as ss
 import sigima_.param
-import sigima_.signal as ss
 from cdl.tests.data import get_test_signal
 from cdl.utils.tests import check_array_result, check_scalar_result
 from sigima_ import (

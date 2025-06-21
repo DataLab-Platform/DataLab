@@ -12,7 +12,7 @@ covered by other tests.
 
 import os
 
-import sigima_.signal as ss
+import sigima_.computation.signal as ss
 from cdl.env import execenv
 from cdl.objectmodel import get_uuid, short_id
 from cdl.tests import cdltest_app_context

@@ -16,7 +16,7 @@ from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
-import sigima_.image.geometry as si
+import sigima_.computation.image.geometry as si
 import sigima_.param
 from cdl.env import execenv
 from cdl.tests.data import get_test_image

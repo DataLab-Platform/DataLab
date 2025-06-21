@@ -17,8 +17,8 @@ from guidata.qthelpers import qt_app_context
 
 import cdl.tests.data as ctd
 import sigima_.algorithms.signal as alg
+import sigima_.computation.signal as ss
 import sigima_.param
-import sigima_.signal as ss
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result
 from cdl.utils.vistools import view_curves

@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 
-import sigima_.image.geometry
+import sigima_.computation.image.geometry
 import sigima_.param as sp
 from cdl.config import _, reset
 from cdl.env import execenv
@@ -148,7 +148,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = sigima_.image.geometry.RotateParam.create(angle=5.0)
+    param = sigima_.computation.image.geometry.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.run_feature("rotate", param)

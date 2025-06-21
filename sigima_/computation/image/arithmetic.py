@@ -33,14 +33,14 @@ import numpy as np
 from cdl.config import Conf
 from sigima_ import computation_function
 from sigima_.algorithms.datatypes import clip_astype
-from sigima_.base import (
+from sigima_.computation.base import (
     ArithmeticParam,
     ConstantParam,
     dst_1_to_1,
     dst_2_to_1,
     dst_n_to_1,
 )
-from sigima_.image.base import restore_data_outside_roi
+from sigima_.computation.image.base import restore_data_outside_roi
 from sigima_.obj.image import ImageObj
 
 # MARK: compute_n_to_1 functions -------------------------------------------------------

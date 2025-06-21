@@ -24,7 +24,7 @@ from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
-import sigima_.image.measurement as si
+import sigima_.computation.image.measurement as si
 from cdl.config import _
 from cdl.env import execenv
 from cdl.tests.data import (

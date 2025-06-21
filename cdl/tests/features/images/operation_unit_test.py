@@ -21,7 +21,7 @@ import pytest
 import scipy.ndimage as spi
 from guidata.qthelpers import qt_app_context
 
-import sigima_.image as si
+import sigima_.computation.image as si
 import sigima_.param
 from cdl.env import execenv
 from cdl.tests.data import create_noisygauss_image

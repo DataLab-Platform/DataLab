@@ -19,8 +19,8 @@ import numpy as np
 import pytest
 
 import cdl.tests.data as ctd
+import sigima_.computation.signal as ss
 import sigima_.param as sp
-import sigima_.signal as ss
 from cdl.utils.tests import check_array_result
 from sigima_ import SignalObj, SignalTypes
 

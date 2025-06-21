@@ -14,7 +14,7 @@ Testing the following:
 from cdl.config import _
 from cdl.tests import cdltest_app_context
 from sigima_ import Gauss2DParam, ImageTypes, NewImageParam, UniformRandomParam
-from sigima_.image.exposure import FlatFieldParam
+from sigima_.computation.image.exposure import FlatFieldParam
 
 
 def test_flatfield():

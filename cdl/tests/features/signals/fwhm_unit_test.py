@@ -16,8 +16,8 @@ from plotpy.builder import make
 
 import cdl.tests.data as cdltd
 import cdl.utils.tests
+import sigima_.computation.signal as ss
 import sigima_.param
-import sigima_.signal as ss
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.utils.vistools import view_curve_items

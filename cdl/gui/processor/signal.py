@@ -14,9 +14,9 @@ from collections.abc import Callable
 import numpy as np
 from guidata.qthelpers import exec_dialog
 
-import sigima_.base as sb
+import sigima_.computation.base as sb
+import sigima_.computation.signal as ss
 import sigima_.param
-import sigima_.signal as ss
 from cdl.config import _
 from cdl.gui.processor.base import BaseProcessor
 from cdl.utils.qthelpers import qt_try_except

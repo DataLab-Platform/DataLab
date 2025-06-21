@@ -21,7 +21,7 @@ from __future__ import annotations
 import guidata.dataset as gds
 
 from cdl.config import _
-from sigima_.image.arithmetic import (
+from sigima_.computation.image.arithmetic import (
     addition,
     average,
     product,
@@ -34,7 +34,7 @@ from sigima_.image.arithmetic import (
     quadratic_difference,
     division,
 )
-from sigima_.image.detection import (
+from sigima_.computation.image.detection import (
     BlobDOGParam,
     BlobDOHParam,
     BlobLOGParam,
@@ -50,7 +50,7 @@ from sigima_.image.detection import (
     hough_circle_peaks,
     peak_detection,
 )
-from sigima_.image.edges import (
+from sigima_.computation.image.edges import (
     CannyParam,
     canny,
     farid,
@@ -68,7 +68,7 @@ from sigima_.image.edges import (
     sobel_h,
     sobel_v,
 )
-from sigima_.image.exposure import (
+from sigima_.computation.image.exposure import (
     AdjustGammaParam,
     AdjustLogParam,
     AdjustSigmoidParam,
@@ -90,7 +90,7 @@ from sigima_.image.exposure import (
     offset_correction,
     rescale_intensity,
 )
-from sigima_.image.extraction import (
+from sigima_.computation.image.extraction import (
     AverageProfileParam,
     LineProfileParam,
     RadialProfileParam,
@@ -102,7 +102,7 @@ from sigima_.image.extraction import (
     radial_profile,
     segment_profile,
 )
-from sigima_.image.filtering import (
+from sigima_.computation.image.filtering import (
     ButterworthParam,
     butterworth,
     gaussian_filter,
@@ -110,7 +110,7 @@ from sigima_.image.filtering import (
     moving_median,
     wiener,
 )
-from sigima_.image.fourier import (
+from sigima_.computation.image.fourier import (
     ZeroPadding2DParam,
     fft,
     ifft,
@@ -119,7 +119,7 @@ from sigima_.image.fourier import (
     psd,
     zero_padding,
 )
-from sigima_.image.geometry import (
+from sigima_.computation.image.geometry import (
     BinningParam,
     ResizeParam,
     RotateParam,
@@ -132,7 +132,7 @@ from sigima_.image.geometry import (
     rotate270,
     swap_axes,
 )
-from sigima_.image.mathops import (
+from sigima_.computation.image.mathops import (
     DataTypeIParam,
     LogP1Param,
     absolute,
@@ -144,8 +144,8 @@ from sigima_.image.mathops import (
     logp1,
     real,
 )
-from sigima_.image.measurement import centroid, enclosing_circle, stats
-from sigima_.image.morphology import (
+from sigima_.computation.image.measurement import centroid, enclosing_circle, stats
+from sigima_.computation.image.morphology import (
     MorphologyParam,
     black_tophat,
     closing,
@@ -154,7 +154,7 @@ from sigima_.image.morphology import (
     opening,
     white_tophat,
 )
-from sigima_.image.restoration import (
+from sigima_.computation.image.restoration import (
     DenoiseBilateralParam,
     DenoiseTVParam,
     DenoiseWaveletParam,
@@ -163,7 +163,7 @@ from sigima_.image.restoration import (
     denoise_tv,
     denoise_wavelet,
 )
-from sigima_.image.threshold import (
+from sigima_.computation.image.threshold import (
     ThresholdParam,
     threshold,
     threshold_isodata,

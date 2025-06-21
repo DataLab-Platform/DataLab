@@ -11,10 +11,6 @@ from __future__ import annotations
 
 import numpy as np
 
-import sigima_.image.exposure
-import sigima_.image.filtering
-import sigima_.image.geometry
-import sigima_.image.mathops
 import sigima_.obj as so
 import sigima_.param as sp
 from cdl.config import _
@@ -57,7 +53,8 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     panel.processor.run_feature("imag")
     panel.remove_object()
     panel.processor.run_feature(
-        "astype", sigima_.image.mathops.DataTypeIParam.create(dtype_str="float64")
+        "astype",
+        sp.DataTypeIParam.create(dtype_str="float64"),
     )
     panel.processor.run_feature("log10")
     panel.processor.run_feature("exp")
@@ -111,7 +108,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
 
     obj = panel.objmodel.get_groups()[0][-1]
     param = sp.ClipParam()  # Clipping before division...
-    param.upper = (so.data.max() - so.data.min()) * 0.8 + so.data.min()
+    param.upper = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.run_feature("clip", param)
 
     param = sp.NormalizeParam()
@@ -308,7 +305,7 @@ def run_image_computations(
     compute_common_operations(panel)
 
     # Test denoising methods
-    param = sigima_.image.exposure.ZCalibrateParam.create(a=1.2, b=0.1)
+    param = sp.ZCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.run_feature("calibration", param)
     param = sp.DenoiseTVParam()
     panel.processor.run_feature("denoise_tv", param)
@@ -347,7 +344,7 @@ def run_image_computations(
     panel.processor.run_feature("opening", param)
     panel.processor.run_feature("closing", param)
 
-    param = sigima_.image.filtering.ButterworthParam.create(order=2, cut_off=0.5)
+    param = sp.ButterworthParam.create(order=2, cut_off=0.5)
     panel.processor.run_feature("butterworth", param)
 
     param = sp.CannyParam()
@@ -396,7 +393,7 @@ def run_image_computations(
     ):
         panel.processor.run_feature(func_name)
 
-    param = sigima_.image.mathops.LogP1Param.create(n=1)
+    param = sp.LogP1Param.create(n=1)
     panel.processor.run_feature("logp1", param)
 
     panel.processor.run_feature("rotate90")
@@ -404,12 +401,12 @@ def run_image_computations(
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = sigima_.image.geometry.RotateParam.create(angle=5.0)
+    param = sp.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 
-    param = sigima_.image.geometry.ResizeParam.create(zoom=1.3)
+    param = sp.ResizeParam.create(zoom=1.3)
     panel.processor.run_feature("resize", param)
 
     n = data_size // 10
@@ -427,7 +424,7 @@ def run_image_computations(
     param = sp.ContourShapeParam()
     panel.processor.run_feature("contour_shape", param)
 
-    param = sigima_.image.geometry.BinningParam.create(sx=2, sy=2, operation="average")
+    param = sp.BinningParam.create(sx=2, sy=2, operation="average")
     panel.processor.run_feature("binning", param)
 
     # Test histogram

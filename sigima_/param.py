@@ -4,8 +4,8 @@
 Parameters (:mod:`sigima_.param`)
 -----------------------------
 
-The :mod:`sigima_.param` module aims at providing all the dataset parameters that are used
-by the :mod:`sigima_.computation` and :mod:`cdl.gui.processor` packages.
+The :mod:`sigima_.param` module aims at providing all the dataset parameters that are
+used by the :mod:`sigima_.computation` and :mod:`cdl.gui.processor` packages.
 
 Those datasets are defined in other modules:
 
@@ -213,7 +213,7 @@ Threshold parameters
 # pylint:disable=unused-import
 # flake8: noqa
 
-from sigima_.base import (
+from sigima_.computation.base import (
     ArithmeticParam,
     ClipParam,
     ConstantParam,
@@ -225,7 +225,7 @@ from sigima_.base import (
     NormalizeParam,
     SpectrumParam,
 )
-from sigima_.signal import (
+from sigima_.computation.signal import (
     AllanVarianceParam,
     AbscissaParam,
     AngleUnitParam,
@@ -248,10 +248,10 @@ from sigima_.signal import (
     ZeroPadding1DParam,
 )
 
-from sigima_.image import (
+from sigima_.computation.image import (
     GridParam,
 )
-from sigima_.image import (
+from sigima_.computation.image import (
     BlobDOGParam,
     BlobDOHParam,
     BlobLOGParam,
@@ -260,8 +260,8 @@ from sigima_.image import (
     HoughCircleParam,
     Peak2DDetectionParam,
 )
-from sigima_.image import CannyParam
-from sigima_.image import (
+from sigima_.computation.image import CannyParam
+from sigima_.computation.image import (
     AdjustGammaParam,
     AdjustLogParam,
     AdjustSigmoidParam,
@@ -271,20 +271,20 @@ from sigima_.image import (
     RescaleIntensityParam,
     ZCalibrateParam,
 )
-from sigima_.image import (
+from sigima_.computation.image import (
     AverageProfileParam,
     LineProfileParam,
     RadialProfileParam,
     SegmentProfileParam,
 )
-from sigima_.image import ButterworthParam
-from sigima_.image import ZeroPadding2DParam
-from sigima_.image import BinningParam, ResizeParam, RotateParam
-from sigima_.image import DataTypeIParam, LogP1Param
-from sigima_.image import MorphologyParam
-from sigima_.image import (
+from sigima_.computation.image import ButterworthParam
+from sigima_.computation.image import ZeroPadding2DParam
+from sigima_.computation.image import BinningParam, ResizeParam, RotateParam
+from sigima_.computation.image import DataTypeIParam, LogP1Param
+from sigima_.computation.image import MorphologyParam
+from sigima_.computation.image import (
     DenoiseBilateralParam,
     DenoiseTVParam,
     DenoiseWaveletParam,
 )
-from sigima_.image import ThresholdParam
+from sigima_.computation.image import ThresholdParam

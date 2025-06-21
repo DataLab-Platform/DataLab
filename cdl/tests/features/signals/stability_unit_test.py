@@ -13,8 +13,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+import sigima_.computation.signal as ss
 import sigima_.param
-import sigima_.signal as ss
 from cdl.utils.tests import check_array_result
 from sigima_ import create_signal
 

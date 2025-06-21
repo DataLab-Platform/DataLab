@@ -23,7 +23,7 @@ from typing import Any, Literal
 import numpy as np
 
 from sigima_.algorithms.datatypes import is_integer_dtype
-from sigima_.base import dst_1_to_1, new_signal_result
+from sigima_.computation.base import dst_1_to_1, new_signal_result
 from sigima_.obj.base import ResultShape
 from sigima_.obj.image import ImageObj
 from sigima_.obj.signal import SignalObj

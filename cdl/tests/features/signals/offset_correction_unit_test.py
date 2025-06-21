@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
-import sigima_.signal as ss
+import sigima_.computation.signal as ss
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.tests.data import create_paracetamol_signal
 from cdl.utils.vistools import view_curve_items
