@@ -8,18 +8,28 @@ Scientific computing engine for 1D signals and 2D images,
 part of the DataLab open-source platform.
 """
 
-# TODO: Rename "sigima_" (temporary name until the package is fully migrated)
-#       to "sigima_" when the migration is complete.
+# ---- Actions that can be done progressively, before the package is fully migrated ----
 # TODO: Remove all dependencies on `cdl` package on all modules
 # TODO: Remove all references for `Conf` (no need for it in `sigima_` package?)
-# TODO: Add local translations for the `sigima_` package
-# TODO: Add `pytest` infrastructure for the `sigima_` package
-# TODO: Implement a I/O plugin system similar to the `cdl.plugins` module
-# TODO: Implement a computation plugin system similar to the `cdl.plugins` module
+# TODO: Add `pytest` infrastructure. Step 1: within `cdl` package, move pure `sigima_`
+#       tests to `cdl/tests/sigima_` directory.
 # TODO: Handle the NumPy minimum requirement to v1.21 to use advanced type hints?
 # TODO: Should we keep `PREFIX` attribute in `BaseObj`? (it's clearly useful for
 #       `cdl` package, but not used in `sigima_` package - however, it may be tricky
 #       to define it elsewhere, no?)
+# --------------------------------------------------------------------------------------
+
+# -------- Point of no return after creating an independent `sigima_` package ----------
+# TODO: Rename "sigima_" (temporary name until the package is fully migrated)
+#       to "sigima_" when the migration is complete.
+# TODO: Add local translations for the `sigima_` package
+# TODO: Add documentation. Step 1: initiate `sigima_` package documentation
+# TODO: Add documentation. Step 2: migrate parts of `cdl` package documentation
+# TODO: Add `pytest` infrastructure. Step 2: migrate `cdl/tests/sigima_`
+#       to `sigima_/tests` directory.
+# TODO: Implement a I/O plugin system similar to the `cdl.plugins` module
+# TODO: Implement a computation plugin system similar to the `cdl.plugins` module
+# --------------------------------------------------------------------------------------
 
 # pylint:disable=unused-import
 # flake8: noqa
