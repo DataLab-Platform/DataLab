@@ -28,13 +28,13 @@ msgstr "Le module :mod:`sigima_.param` fournit tous les paramètres de jeu de do
 msgid "Those datasets are defined in other modules:"
 msgstr "Ces jeux de données sont définis dans d'autres modules :"
 
-msgid ":mod:`sigima_.base`"
+msgid ":mod:`sigima_.computation.base`"
 msgstr ""
 
-msgid ":mod:`sigima_.image`"
+msgid ":mod:`sigima_.computation.image`"
 msgstr ""
 
-msgid ":mod:`sigima_.signal`"
+msgid ":mod:`sigima_.computation.signal`"
 msgstr ""
 
 msgid "The :mod:`sigima_.param` module is thus a convenient way to import all the sets of parameters at once."
@@ -1161,4 +1161,3 @@ msgstr ""
 
 msgid "New instance of :py:class:`ThresholdParam`."
 msgstr ""
-

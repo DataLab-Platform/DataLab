@@ -120,7 +120,7 @@ Example of use:
 Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: cdl.core.remote.RemoteClient
+.. autoclass:: cdl.remote.RemoteClient
     :inherited-members:
 
 Public API: additional methods

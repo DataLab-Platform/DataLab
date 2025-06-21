@@ -36,7 +36,7 @@ a tree structure. Each panel in the main window corresponds to a branch of the
 tree. Each data set shown in the panels corresponds to a leaf of the tree. Inside
 the data set, the data is organized in an object-oriented way, with a set of
 attributes and methods. The data model is described in more details in the
-API section (see :mod:`cdl.obj`).
+API section (see :mod:`sigima_.obj`).
 
 For each data set (1D signal or 2D image), not only the data itself is stored,
 but also a set of metadata, which describes the data or the way it has to be

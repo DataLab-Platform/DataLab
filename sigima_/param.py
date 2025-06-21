@@ -9,9 +9,9 @@ used by the :mod:`sigima_.computation` and :mod:`cdl.gui.processor` packages.
 
 Those datasets are defined in other modules:
 
-    - :mod:`sigima_.base`
-    - :mod:`sigima_.image`
-    - :mod:`sigima_.signal`
+    - :mod:`sigima_.computation.base`
+    - :mod:`sigima_.computation.image`
+    - :mod:`sigima_.computation.signal`
 
 The :mod:`sigima_.param` module is thus a convenient way to import all the sets of
 parameters at once.
@@ -21,9 +21,9 @@ As a matter of fact, the following import statement is equivalent to the previou
 .. code-block:: python
 
     # Original import statement
-    from sigima_.base import MovingAverageParam
-    from sigima_.signal import PolynomialFitParam
-    from sigima_.image.exposure import EqualizeHistParam
+    from sigima_.computation.base import MovingAverageParam
+    from sigima_.computation.signal import PolynomialFitParam
+    from sigima_.computation.image.exposure import EqualizeHistParam
 
     # Equivalent import statement
     from sigima_.param import MovingAverageParam, PolynomialFitParam, EqualizeHistParam

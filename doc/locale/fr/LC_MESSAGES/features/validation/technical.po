@@ -76,17 +76,17 @@ msgstr "Examen par un expert"
 msgid "Scope"
 msgstr "Périmètre"
 
-msgid "The scope of technical validation in DataLab includes all compute functions that operate on DataLab's signal and image objects (i.e. :class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`)."
-msgstr "Le périmètre de la validation technique dans DataLab inclut toutes les fonctions de calcul qui opèrent sur les objets de signal et d'image de DataLab (c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`)."
+msgid "The scope of technical validation in DataLab includes all compute functions that operate on DataLab's signal and image objects (i.e. :class:`sigima_.obj.SignalObj` and :class:`sigima_.obj.ImageObj`)."
+msgstr "Le périmètre de la validation technique dans DataLab inclut toutes les fonctions de calcul qui opèrent sur les objets de signal et d'image de DataLab (c'est-à-dire :class:`sigima_.obj.SignalObj` et :class:`sigima_.obj.ImageObj`)."
 
 msgid "This includes functions for (all functions are named ``compute_<function_name>``):"
 msgstr "Cela inclut des fonctions pour (toutes les fonctions sont nommées ``compute_<function_name>``) :"
 
-msgid "Signal processing (:mod:`sigima_.signal`)"
-msgstr "Le traitement du signal (:mod:`sigima_.signal`)"
+msgid "Signal processing (:mod:`sigima_.computation.signal`)"
+msgstr "Le traitement du signal (:mod:`sigima_.computation.signal`)"
 
-msgid "Image processing (:mod:`sigima_.image`)"
-msgstr "Le traitement d'image (:mod:`sigima_.image`)"
+msgid "Image processing (:mod:`sigima_.computation.image`)"
+msgstr "Le traitement d'image (:mod:`sigima_.computation.image`)"
 
 msgid "Implementation"
 msgstr "Implémentation"

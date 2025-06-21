@@ -19,29 +19,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Object model (:mod:`cdl.obj`)"
-msgstr "Modèle de données (:mod:`cdl.obj`)"
+msgid "Object model (:mod:`sigima_.obj`)"
+msgstr "Modèle de données (:mod:`sigima_.obj`)"
 
-msgid "The :mod:`cdl.obj` module aims at providing all the necessary classes and functions to create and manipulate DataLab signal and image objects."
-msgstr "Le module :mod:`cdl.obj` fournit les classes et fonctions nécessaires pour créer et manipuler des objets signal et image."
+msgid "The :mod:`sigima_.obj` module aims at providing all the necessary classes and functions to create and manipulate DataLab signal and image objects."
+msgstr "Le module :mod:`sigima_.obj` fournit les classes et fonctions nécessaires pour créer et manipuler des objets signal et image."
 
 msgid "Those classes and functions are defined in other modules:"
 msgstr "Ces classes et fonctions sont définies dans d'autres modules :"
 
-msgid ":mod:`cdl.core.model.base`"
+msgid ":mod:`sigima_.obj.base`"
 msgstr ""
 
-msgid ":mod:`cdl.core.model.image`"
+msgid ":mod:`sigima_.obj.image`"
 msgstr ""
 
-msgid ":mod:`cdl.core.model.signal`"
+msgid ":mod:`sigima_.obj.signal`"
 msgstr ""
 
-msgid ":mod:`cdl.core.io`"
+msgid ":mod:`sigima_.io`"
 msgstr ""
 
-msgid "The :mod:`cdl.obj` module is thus a convenient way to import all the objects at once. As a matter of fact, the following import statement is equivalent to the previous one:"
-msgstr "Le module :mod:`cdl.obj` est donc un moyen pratique d'importer tous les objets en une seule fois. En fait, l'instruction d'importation suivante est équivalente à la précédente :"
+msgid "The :mod:`sigima_.obj` module is thus a convenient way to import all the objects at once. As a matter of fact, the following import statement is equivalent to the previous one:"
+msgstr "Le module :mod:`sigima_.obj` est donc un moyen pratique d'importer tous les objets en une seule fois. En fait, l'instruction d'importation suivante est équivalente à la précédente :"
 
 msgid "Common objects"
 msgstr "Objets communs"

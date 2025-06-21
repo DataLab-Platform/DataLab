@@ -21,11 +21,11 @@ and their purpose:
     * - :mod:`sigima_.param`
       - Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)
 
-    * - :mod:`cdl.obj`
-      - Convenience module to access the DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`) and related functions
+    * - :mod:`sigima_.obj`
+      - Convenience module to access the DataLab objects (:class:`sigima_.obj.SignalObj` or :class:`sigima_.obj.ImageObj`) and related functions
 
     * - :mod:`sigima_.computation`
-      - Computation functions, which operate on DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`)
+      - Computation functions, which operate on DataLab objects (:class:`sigima_.obj.SignalObj` or :class:`sigima_.obj.ImageObj`)
 
     * - :mod:`cdl.proxy`
       - Proxy objects to access the DataLab interface from a Python script or a remote application

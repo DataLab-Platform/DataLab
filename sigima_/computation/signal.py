@@ -78,20 +78,20 @@ class Wrap1to1Func:
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
 
-    The instance of this wrapper is callable and returns a :class:`cdl.obj.SignalObj`
+    The instance of this wrapper is callable and returns a :class:`sigima_.obj.SignalObj`
     object.
 
     Example:
 
         >>> import numpy as np
-        >>> from sigima_.signal import Wrap1to1Func
-        >>> import cdl.obj
+        >>> from sigima_.computation.signal import Wrap1to1Func
+        >>> import sigima_.obj
         >>> def square(y):
         ...     return y**2
         >>> compute_square = Wrap1to1Func(square)
         >>> x = np.linspace(0, 10, 100)
         >>> y = np.sin(x)
-        >>> sig0 = cdl.obj.create_signal("Example", x, y)
+        >>> sig0 = sigima_.obj.create_signal("Example", x, y)
         >>> sig1 = compute_square(sig0)
 
     Args:

@@ -60,19 +60,19 @@ class Wrap1to1Func:
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
 
-    The instance of this wrapper is callable and returns a :class:`cdl.obj.ImageObj`
+    The instance of this wrapper is callable and returns a :class:`sigima_.obj.ImageObj`
     object.
 
     Example:
 
         >>> import numpy as np
-        >>> from sigima_.image import Wrap1to1Func
-        >>> import cdl.obj
+        >>> from sigima_.computation.image import Wrap1to1Func
+        >>> import sigima_.obj
         >>> def add_noise(data):
         ...     return data + np.random.random(data.shape)
         >>> compute_add_noise = Wrap1to1Func(add_noise)
         >>> data= np.ones((100, 100))
-        >>> ima0 = cdl.obj.create_image("Example", data)
+        >>> ima0 = sigima_.obj.create_image("Example", data)
         >>> ima1 = compute_add_noise(ima0)
 
     Args:

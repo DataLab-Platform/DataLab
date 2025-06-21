@@ -518,200 +518,200 @@ msgstr "Lorsque vous travaillez avec des signaux, les méthodes de :class:`cdl.g
 msgid "Object handling signal processing: operations, processing, analysis"
 msgstr "Objet de traitement de signal : opérations, traitement, analyse"
 
-msgid "Compute sum with :py:func:`sigima_.signal.compute_sum`"
+msgid "Compute sum with :py:func:`sigima_.computation.signal.compute_sum`"
 msgstr ""
 
-msgid "Compute sum with a constant with :py:func:`sigima_.signal.compute_addition_constant`"
+msgid "Compute sum with a constant with :py:func:`sigima_.computation.signal.compute_addition_constant`"
 msgstr ""
 
-msgid "Compute average with :py:func:`sigima_.signal.compute_sum` and divide by the number of signals"
+msgid "Compute average with :py:func:`sigima_.computation.signal.compute_sum` and divide by the number of signals"
 msgstr ""
 
-msgid "Compute product with :py:func:`sigima_.signal.compute_product`"
+msgid "Compute product with :py:func:`sigima_.computation.signal.compute_product`"
 msgstr ""
 
-msgid "Compute product with a constant with :py:func:`sigima_.signal.compute_product_constant`"
+msgid "Compute product with a constant with :py:func:`sigima_.computation.signal.compute_product_constant`"
 msgstr ""
 
-msgid "Swap data axes with :py:func:`sigima_.signal.compute_swap_axes`"
+msgid "Swap data axes with :py:func:`sigima_.computation.signal.compute_swap_axes`"
 msgstr ""
 
 msgid "Compute inverse"
 msgstr ""
 
-msgid "Compute absolute value with :py:func:`sigima_.signal.compute_abs`"
+msgid "Compute absolute value with :py:func:`sigima_.computation.signal.compute_abs`"
 msgstr ""
 
-msgid "Compute real part with :py:func:`sigima_.signal.compute_re`"
+msgid "Compute real part with :py:func:`sigima_.computation.signal.compute_re`"
 msgstr ""
 
-msgid "Compute imaginary part with :py:func:`sigima_.signal.compute_im`"
+msgid "Compute imaginary part with :py:func:`sigima_.computation.signal.compute_im`"
 msgstr ""
 
-msgid "Convert data type with :py:func:`sigima_.signal.compute_astype`"
+msgid "Convert data type with :py:func:`sigima_.computation.signal.compute_astype`"
 msgstr ""
 
-msgid "Compute Log10 with :py:func:`sigima_.signal.compute_log10`"
+msgid "Compute Log10 with :py:func:`sigima_.computation.signal.compute_log10`"
 msgstr ""
 
-msgid "Compute Log10 with :py:func:`sigima_.signal.compute_exp`"
+msgid "Compute Log10 with :py:func:`sigima_.computation.signal.compute_exp`"
 msgstr ""
 
-msgid "Compute square root with :py:func:`sigima_.signal.compute_sqrt`"
+msgid "Compute square root with :py:func:`sigima_.computation.signal.compute_sqrt`"
 msgstr ""
 
-msgid "Compute power with :py:func:`sigima_.signal.compute_power`"
+msgid "Compute power with :py:func:`sigima_.computation.signal.compute_power`"
 msgstr ""
 
-msgid "Compute arithmetic operation between two signals with :py:func:`sigima_.signal.compute_arithmetic`"
+msgid "Compute arithmetic operation between two signals with :py:func:`sigima_.computation.signal.compute_arithmetic`"
 msgstr ""
 
-msgid "Compute difference between two signals with :py:func:`sigima_.signal.compute_difference`"
+msgid "Compute difference between two signals with :py:func:`sigima_.computation.signal.compute_difference`"
 msgstr ""
 
-msgid "Compute difference with a constant with :py:func:`sigima_.signal.compute_difference_constant`"
+msgid "Compute difference with a constant with :py:func:`sigima_.computation.signal.compute_difference_constant`"
 msgstr ""
 
-msgid "Compute quadratic difference between two signals with :py:func:`sigima_.signal.compute_quadratic_difference`"
+msgid "Compute quadratic difference between two signals with :py:func:`sigima_.computation.signal.compute_quadratic_difference`"
 msgstr ""
 
-msgid "Compute division between two signals with :py:func:`sigima_.signal.compute_division`"
+msgid "Compute division between two signals with :py:func:`sigima_.computation.signal.compute_division`"
 msgstr ""
 
-msgid "Compute division by a constant with :py:func:`sigima_.signal.compute_division_constant`"
+msgid "Compute division by a constant with :py:func:`sigima_.computation.signal.compute_division_constant`"
 msgstr ""
 
-msgid "Detect peaks from data with :py:func:`sigima_.signal.compute_peak_detection`"
+msgid "Detect peaks from data with :py:func:`sigima_.computation.signal.compute_peak_detection`"
 msgstr ""
 
-msgid "Reverse X axis with :py:func:`sigima_.signal.compute_reverse_x`"
+msgid "Reverse X axis with :py:func:`sigima_.computation.signal.compute_reverse_x`"
 msgstr ""
 
-msgid "Convert cartesian to polar coordinates with :py:func:`sigima_.signal.compute_to_polar`"
+msgid "Convert cartesian to polar coordinates with :py:func:`sigima_.computation.signal.compute_to_polar`"
 msgstr ""
 
-msgid "Convert polar to cartesian coordinates with :py:func:`sigima_.signal.compute_to_cartesian`."
+msgid "Convert polar to cartesian coordinates with :py:func:`sigima_.computation.signal.compute_to_cartesian`."
 msgstr ""
 
-msgid "Normalize data with :py:func:`sigima_.signal.compute_normalize`"
+msgid "Normalize data with :py:func:`sigima_.computation.signal.compute_normalize`"
 msgstr ""
 
-msgid "Compute derivative with :py:func:`sigima_.signal.compute_derivative`"
+msgid "Compute derivative with :py:func:`sigima_.computation.signal.compute_derivative`"
 msgstr ""
 
-msgid "Compute integral with :py:func:`sigima_.signal.compute_integral`"
+msgid "Compute integral with :py:func:`sigima_.computation.signal.compute_integral`"
 msgstr ""
 
-msgid "Compute data linear calibration with :py:func:`sigima_.signal.compute_calibration`"
+msgid "Compute data linear calibration with :py:func:`sigima_.computation.signal.compute_calibration`"
 msgstr ""
 
-msgid "Compute maximum data clipping with :py:func:`sigima_.signal.compute_clip`"
+msgid "Compute maximum data clipping with :py:func:`sigima_.computation.signal.compute_clip`"
 msgstr ""
 
-msgid "Compute offset correction with :py:func:`sigima_.signal.compute_offset_correction`"
+msgid "Compute offset correction with :py:func:`sigima_.computation.signal.compute_offset_correction`"
 msgstr ""
 
-msgid "Compute gaussian filter with :py:func:`sigima_.signal.compute_gaussian_filter`"
+msgid "Compute gaussian filter with :py:func:`sigima_.computation.signal.compute_gaussian_filter`"
 msgstr ""
 
-msgid "Compute moving average with :py:func:`sigima_.signal.compute_moving_average`"
+msgid "Compute moving average with :py:func:`sigima_.computation.signal.compute_moving_average`"
 msgstr ""
 
-msgid "Compute moving median with :py:func:`sigima_.signal.compute_moving_median`"
+msgid "Compute moving median with :py:func:`sigima_.computation.signal.compute_moving_median`"
 msgstr ""
 
-msgid "Compute Wiener filter with :py:func:`sigima_.signal.compute_wiener`"
+msgid "Compute Wiener filter with :py:func:`sigima_.computation.signal.compute_wiener`"
 msgstr ""
 
-msgid "Compute high-pass filter with :py:func:`sigima_.signal.compute_filter`"
+msgid "Compute high-pass filter with :py:func:`sigima_.computation.signal.compute_filter`"
 msgstr ""
 
-msgid "Compute band-pass filter with :py:func:`sigima_.signal.compute_filter`"
+msgid "Compute band-pass filter with :py:func:`sigima_.computation.signal.compute_filter`"
 msgstr ""
 
-msgid "Compute band-stop filter with :py:func:`sigima_.signal.compute_filter`"
+msgid "Compute band-stop filter with :py:func:`sigima_.computation.signal.compute_filter`"
 msgstr ""
 
 #, fuzzy
-msgid "Compute zero padding with :py:func:`sigima_.signal.compute_zero_padding`"
+msgid "Compute zero padding with :py:func:`sigima_.computation.signal.compute_zero_padding`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
-msgid "Compute FFT with :py:func:`sigima_.signal.compute_fft`"
+msgid "Compute FFT with :py:func:`sigima_.computation.signal.compute_fft`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`sigima_.signal.compute_ifft`"
+msgid "Compute iFFT with :py:func:`sigima_.computation.signal.compute_ifft`"
 msgstr ""
 
-msgid "Compute magnitude spectrum with :py:func:`sigima_.signal.compute_magnitude_spectrum`"
+msgid "Compute magnitude spectrum with :py:func:`sigima_.computation.signal.compute_magnitude_spectrum`"
 msgstr ""
 
-msgid "Compute phase spectrum with :py:func:`sigima_.signal.compute_phase_spectrum`"
+msgid "Compute phase spectrum with :py:func:`sigima_.computation.signal.compute_phase_spectrum`"
 msgstr ""
 
-msgid "Compute power spectral density with :py:func:`sigima_.signal.compute_psd`"
+msgid "Compute power spectral density with :py:func:`sigima_.computation.signal.compute_psd`"
 msgstr ""
 
-msgid "Compute interpolation with :py:func:`sigima_.signal.compute_interpolation`"
+msgid "Compute interpolation with :py:func:`sigima_.computation.signal.compute_interpolation`"
 msgstr ""
 
-msgid "Compute resampling with :py:func:`sigima_.signal.compute_resampling`"
+msgid "Compute resampling with :py:func:`sigima_.computation.signal.compute_resampling`"
 msgstr ""
 
-msgid "Compute detrending with :py:func:`sigima_.signal.compute_detrending`"
+msgid "Compute detrending with :py:func:`sigima_.computation.signal.compute_detrending`"
 msgstr ""
 
-msgid "Compute XY mode with :py:func:`sigima_.signal.compute_XY_mode.`"
+msgid "Compute XY mode with :py:func:`sigima_.computation.signal.compute_XY_mode.`"
 msgstr ""
 
-msgid "Compute convolution with :py:func:`sigima_.signal.compute_convolution`"
+msgid "Compute convolution with :py:func:`sigima_.computation.signal.compute_convolution`"
 msgstr ""
 
-msgid "Compute windowing with :py:func:`sigima_.signal.compute_windowing`"
+msgid "Compute windowing with :py:func:`sigima_.computation.signal.compute_windowing`"
 msgstr ""
 
-msgid "Compute Allan variance with :py:func:`sigima_.signal.compute_allan_variance`"
+msgid "Compute Allan variance with :py:func:`sigima_.computation.signal.compute_allan_variance`"
 msgstr ""
 
-msgid "Compute Allan deviation with :py:func:`sigima_.signal.compute_allan_deviation`"
+msgid "Compute Allan deviation with :py:func:`sigima_.computation.signal.compute_allan_deviation`"
 msgstr ""
 
-msgid "Compute overlapping Allan variance with :py:func:`sigima_.signal.compute_overlapping_allan_variance`"
+msgid "Compute overlapping Allan variance with :py:func:`sigima_.computation.signal.compute_overlapping_allan_variance`"
 msgstr ""
 
-msgid "Compute modified Allan variance with :py:func:`sigima_.signal.compute_modified_allan_variance`"
+msgid "Compute modified Allan variance with :py:func:`sigima_.computation.signal.compute_modified_allan_variance`"
 msgstr ""
 
-msgid "Compute Hadamard variance with :py:func:`sigima_.signal.compute_hadamard_variance`"
+msgid "Compute Hadamard variance with :py:func:`sigima_.computation.signal.compute_hadamard_variance`"
 msgstr ""
 
-msgid "Compute total variance with :py:func:`sigima_.signal.compute_total_variance`"
+msgid "Compute total variance with :py:func:`sigima_.computation.signal.compute_total_variance`"
 msgstr ""
 
-msgid "Compute time deviation with :py:func:`sigima_.signal.compute_time_deviation`"
+msgid "Compute time deviation with :py:func:`sigima_.computation.signal.compute_time_deviation`"
 msgstr ""
 
 msgid "Compute all stability analysis features using the following functions:"
 msgstr ""
 
-msgid ":py:func:`sigima_.signal.compute_allan_variance`"
+msgid ":py:func:`sigima_.computation.signal.compute_allan_variance`"
 msgstr ""
 
-msgid ":py:func:`sigima_.signal.compute_allan_deviation`"
+msgid ":py:func:`sigima_.computation.signal.compute_allan_deviation`"
 msgstr ""
 
-msgid ":py:func:`sigima_.signal.compute_overlapping_allan_variance`"
+msgid ":py:func:`sigima_.computation.signal.compute_overlapping_allan_variance`"
 msgstr ""
 
-msgid ":py:func:`sigima_.signal.compute_modified_allan_variance`"
+msgid ":py:func:`sigima_.computation.signal.compute_modified_allan_variance`"
 msgstr ""
 
-msgid ":py:func:`sigima_.signal.compute_hadamard_variance`"
+msgid ":py:func:`sigima_.computation.signal.compute_hadamard_variance`"
 msgstr ""
 
-msgid ":py:func:`sigima_.signal.compute_total_variance`"
+msgid ":py:func:`sigima_.computation.signal.compute_total_variance`"
 msgstr ""
 
-msgid ":py:func:`sigima_.signal.compute_time_deviation`"
+msgid ":py:func:`sigima_.computation.signal.compute_time_deviation`"
 msgstr ""
 
 msgid "Compute polynomial fitting curve"
@@ -729,41 +729,41 @@ msgstr ""
 msgid "Compute multi-Gaussian fitting curve using an interactive dialog"
 msgstr "Calculer la courbe de régression multi-gaussienne avec une boîte de dialogue interactive"
 
-msgid "Compute FWHM with :py:func:`sigima_.signal.compute_fwhm`"
+msgid "Compute FWHM with :py:func:`sigima_.computation.signal.compute_fwhm`"
 msgstr ""
 
-msgid "Compute FW at 1/e² with :py:func:`sigima_.signal.compute_fw1e2`"
+msgid "Compute FW at 1/e² with :py:func:`sigima_.computation.signal.compute_fw1e2`"
 msgstr ""
 
-msgid "Compute full width at a given y with :py:func:`sigima_.signal.compute_full_width_at_y`"
+msgid "Compute full width at a given y with :py:func:`sigima_.computation.signal.compute_full_width_at_y`"
 msgstr ""
 
-msgid "Compute data statistics with :py:func:`sigima_.signal.compute_stats`"
+msgid "Compute data statistics with :py:func:`sigima_.computation.signal.compute_stats`"
 msgstr ""
 
-msgid "Compute histogram with :py:func:`sigima_.signal.compute_histogram`"
+msgid "Compute histogram with :py:func:`sigima_.computation.signal.compute_histogram`"
 msgstr ""
 
-msgid "Compute contrast with :py:func:`sigima_.signal.compute_contrast`"
+msgid "Compute contrast with :py:func:`sigima_.computation.signal.compute_contrast`"
 msgstr ""
 
-msgid "Compute x at min/max with :py:func:`sigima_.signal.compute_x_at_minmax`"
+msgid "Compute x at min/max with :py:func:`sigima_.computation.signal.compute_x_at_minmax`"
 msgstr ""
 
-msgid "Compute x at y with :py:func:`sigima_.signal.compute_x_at_y`."
+msgid "Compute x at y with :py:func:`sigima_.computation.signal.compute_x_at_y`."
 msgstr ""
 
 #, fuzzy
-msgid "Compute y at x with :py:func:`sigima_.signal.compute_y_at_x`."
+msgid "Compute y at x with :py:func:`sigima_.computation.signal.compute_y_at_x`."
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
-msgid "Compute sampling rate and period (mean and std) with :py:func:`sigima_.signal.compute_sampling_rate_period`"
+msgid "Compute sampling rate and period (mean and std) with :py:func:`sigima_.computation.signal.compute_sampling_rate_period`"
 msgstr ""
 
-msgid "Compute bandwidth at -3dB with :py:func:`sigima_.signal.compute_bandwidth_3db`"
+msgid "Compute bandwidth at -3dB with :py:func:`sigima_.computation.signal.compute_bandwidth_3db`"
 msgstr ""
 
-msgid "Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR) with :py:func:`sigima_.signal.compute_dynamic_parameters`"
+msgid "Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR) with :py:func:`sigima_.computation.signal.compute_dynamic_parameters`"
 msgstr ""
 
 msgid "Image processor"
@@ -775,40 +775,40 @@ msgstr "Lorsque vous travaillez avec des images, les méthodes de :class:`cdl.gu
 msgid "Object handling image processing: operations, processing, analysis"
 msgstr "Objet de traitement d'image : opérations, traitement, analyse"
 
-msgid "Normalize data with :py:func:`sigima_.image.compute_normalize`"
+msgid "Normalize data with :py:func:`sigima_.computation.image.compute_normalize`"
 msgstr ""
 
-msgid "Compute sum with :py:func:`sigima_.image.compute_sum`"
+msgid "Compute sum with :py:func:`sigima_.computation.image.compute_sum`"
 msgstr ""
 
-msgid "Compute sum with a constant using :py:func:`sigima_.image.compute_addition_constant`"
+msgid "Compute sum with a constant using :py:func:`sigima_.computation.image.compute_addition_constant`"
 msgstr ""
 
-msgid "Compute average with :py:func:`sigima_.image.compute_sum` and dividing by the number of images"
+msgid "Compute average with :py:func:`sigima_.computation.image.compute_sum` and dividing by the number of images"
 msgstr ""
 
-msgid "Compute product with :py:func:`sigima_.image.compute_product`"
+msgid "Compute product with :py:func:`sigima_.computation.image.compute_product`"
 msgstr ""
 
-msgid "Compute product with a constant using :py:func:`sigima_.image.compute_product_constant`"
+msgid "Compute product with a constant using :py:func:`sigima_.computation.image.compute_product_constant`"
 msgstr ""
 
-msgid "Compute base 10 logarithm using :py:func:`sigima_.image.compute_logp1`"
+msgid "Compute base 10 logarithm using :py:func:`sigima_.computation.image.compute_logp1`"
 msgstr ""
 
-msgid "Rotate data arbitrarily using :py:func:`sigima_.image.compute_rotate`"
+msgid "Rotate data arbitrarily using :py:func:`sigima_.computation.image.compute_rotate`"
 msgstr ""
 
-msgid "Rotate data 90° with :py:func:`sigima_.image.compute_rotate90`"
+msgid "Rotate data 90° with :py:func:`sigima_.computation.image.compute_rotate90`"
 msgstr ""
 
-msgid "Rotate data 270° with :py:func:`sigima_.image.compute_rotate270`"
+msgid "Rotate data 270° with :py:func:`sigima_.computation.image.compute_rotate270`"
 msgstr ""
 
-msgid "Flip data horizontally using :py:func:`sigima_.image.compute_fliph`"
+msgid "Flip data horizontally using :py:func:`sigima_.computation.image.compute_fliph`"
 msgstr ""
 
-msgid "Flip data vertically with :py:func:`sigima_.image.compute_flipv`"
+msgid "Flip data vertically with :py:func:`sigima_.computation.image.compute_flipv`"
 msgstr ""
 
 msgid "Distribute images on a grid"
@@ -817,360 +817,360 @@ msgstr "Distribuer les images sur une grille"
 msgid "Reset image positions"
 msgstr "Réinitialiser les positions des images"
 
-msgid "Resize image with :py:func:`sigima_.image.compute_resize`"
+msgid "Resize image with :py:func:`sigima_.computation.image.compute_resize`"
 msgstr ""
 
-msgid "Binning image with :py:func:`sigima_.image.compute_binning`"
+msgid "Binning image with :py:func:`sigima_.computation.image.compute_binning`"
 msgstr ""
 
-msgid "Compute profile along a vertical or horizontal line with :py:func:`sigima_.image.compute_line_profile`"
+msgid "Compute profile along a vertical or horizontal line with :py:func:`sigima_.computation.image.compute_line_profile`"
 msgstr ""
 
-msgid "Compute profile along a segment with :py:func:`sigima_.image.compute_segment_profile`"
+msgid "Compute profile along a segment with :py:func:`sigima_.computation.image.compute_segment_profile`"
 msgstr ""
 
-msgid "Compute average profile with :py:func:`sigima_.image.compute_average_profile`"
+msgid "Compute average profile with :py:func:`sigima_.computation.image.compute_average_profile`"
 msgstr ""
 
-msgid "Compute radial profile with :py:func:`sigima_.image.compute_radial_profile`"
+msgid "Compute radial profile with :py:func:`sigima_.computation.image.compute_radial_profile`"
 msgstr ""
 
-msgid "Compute histogram with :py:func:`sigima_.image.compute_histogram`"
+msgid "Compute histogram with :py:func:`sigima_.computation.image.compute_histogram`"
 msgstr ""
 
-msgid "Swap data axes with :py:func:`sigima_.image.compute_swap_axes`."
+msgid "Swap data axes with :py:func:`sigima_.computation.image.compute_swap_axes`."
 msgstr ""
 
-msgid "Compute absolute value with :py:func:`sigima_.image.compute_abs`"
+msgid "Compute absolute value with :py:func:`sigima_.computation.image.compute_abs`"
 msgstr ""
 
-msgid "Compute real part with :py:func:`sigima_.image.compute_re`"
+msgid "Compute real part with :py:func:`sigima_.computation.image.compute_re`"
 msgstr ""
 
-msgid "Compute imaginary part with :py:func:`sigima_.image.compute_im`"
+msgid "Compute imaginary part with :py:func:`sigima_.computation.image.compute_im`"
 msgstr ""
 
-msgid "Convert data type with :py:func:`sigima_.image.compute_astype`"
+msgid "Convert data type with :py:func:`sigima_.computation.image.compute_astype`"
 msgstr ""
 
-msgid "Compute Log10 with :py:func:`sigima_.image.compute_log10`"
+msgid "Compute Log10 with :py:func:`sigima_.computation.image.compute_log10`"
 msgstr ""
 
-msgid "Compute Log10 with :py:func:`sigima_.image.compute_exp`"
+msgid "Compute Log10 with :py:func:`sigima_.computation.image.compute_exp`"
 msgstr ""
 
-msgid "Compute arithmetic operation between two images with :py:func:`sigima_.image.compute_arithmetic`"
+msgid "Compute arithmetic operation between two images with :py:func:`sigima_.computation.image.compute_arithmetic`"
 msgstr ""
 
-msgid "Compute difference between two images with :py:func:`sigima_.image.compute_difference`"
+msgid "Compute difference between two images with :py:func:`sigima_.computation.image.compute_difference`"
 msgstr ""
 
-msgid "Compute difference with a constant with :py:func:`sigima_.image.compute_difference_constant`"
+msgid "Compute difference with a constant with :py:func:`sigima_.computation.image.compute_difference_constant`"
 msgstr ""
 
-msgid "Compute quadratic difference between two images with :py:func:`sigima_.image.compute_quadratic_difference`"
+msgid "Compute quadratic difference between two images with :py:func:`sigima_.computation.image.compute_quadratic_difference`"
 msgstr ""
 
-msgid "Compute division between two images with :py:func:`sigima_.image.compute_division`"
+msgid "Compute division between two images with :py:func:`sigima_.computation.image.compute_division`"
 msgstr ""
 
-msgid "Compute division by a constant with :py:func:`sigima_.image.compute_division_constant`"
+msgid "Compute division by a constant with :py:func:`sigima_.computation.image.compute_division_constant`"
 msgstr ""
 
-msgid "Compute flat field correction with :py:func:`sigima_.image.compute_flatfield`"
+msgid "Compute flat field correction with :py:func:`sigima_.computation.image.compute_flatfield`"
 msgstr ""
 
-msgid "Compute data linear calibration with :py:func:`sigima_.image.compute_calibration`"
+msgid "Compute data linear calibration with :py:func:`sigima_.computation.image.compute_calibration`"
 msgstr ""
 
-msgid "Compute maximum data clipping with :py:func:`sigima_.image.compute_clip`"
+msgid "Compute maximum data clipping with :py:func:`sigima_.computation.image.compute_clip`"
 msgstr ""
 
-msgid "Compute offset correction with :py:func:`sigima_.image.compute_offset_correction`"
+msgid "Compute offset correction with :py:func:`sigima_.computation.image.compute_offset_correction`"
 msgstr ""
 
-msgid "Compute gaussian filter with :py:func:`sigima_.image.compute_gaussian_filter`"
+msgid "Compute gaussian filter with :py:func:`sigima_.computation.image.compute_gaussian_filter`"
 msgstr ""
 
-msgid "Compute moving average with :py:func:`sigima_.image.compute_moving_average`"
+msgid "Compute moving average with :py:func:`sigima_.computation.image.compute_moving_average`"
 msgstr ""
 
-msgid "Compute moving median with :py:func:`sigima_.image.compute_moving_median`"
+msgid "Compute moving median with :py:func:`sigima_.computation.image.compute_moving_median`"
 msgstr ""
 
-msgid "Compute Wiener filter with :py:func:`sigima_.image.compute_wiener`"
+msgid "Compute Wiener filter with :py:func:`sigima_.computation.image.compute_wiener`"
 msgstr ""
 
 #, fuzzy
-msgid "Compute zero padding with :py:func:`sigima_.image.compute_zero_padding`"
+msgid "Compute zero padding with :py:func:`sigima_.computation.image.compute_zero_padding`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
-msgid "Compute FFT with :py:func:`sigima_.image.compute_fft`"
+msgid "Compute FFT with :py:func:`sigima_.computation.image.compute_fft`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`sigima_.image.compute_ifft`"
+msgid "Compute iFFT with :py:func:`sigima_.computation.image.compute_ifft`"
 msgstr ""
 
-msgid "Compute magnitude spectrum with :py:func:`sigima_.image.compute_magnitude_spectrum`"
+msgid "Compute magnitude spectrum with :py:func:`sigima_.computation.image.compute_magnitude_spectrum`"
 msgstr ""
 
-msgid "Compute phase spectrum with :py:func:`sigima_.image.compute_phase_spectrum`"
+msgid "Compute phase spectrum with :py:func:`sigima_.computation.image.compute_phase_spectrum`"
 msgstr ""
 
-msgid "Compute Power Spectral Density (PSD) with :py:func:`sigima_.image.compute_psd`"
+msgid "Compute Power Spectral Density (PSD) with :py:func:`sigima_.computation.image.compute_psd`"
 msgstr ""
 
-msgid "Compute Butterworth filter with :py:func:`sigima_.image.compute_butterworth`"
+msgid "Compute Butterworth filter with :py:func:`sigima_.computation.image.compute_butterworth`"
 msgstr ""
 
-msgid "Compute parametric threshold with :py:func:`sigima_.image.threshold.compute_threshold`"
+msgid "Compute parametric threshold with :py:func:`sigima_.computation.image.threshold.compute_threshold`"
 msgstr ""
 
-msgid "Compute threshold using Isodata algorithm with :py:func:`sigima_.image.threshold.compute_threshold_isodata`"
+msgid "Compute threshold using Isodata algorithm with :py:func:`sigima_.computation.image.threshold.compute_threshold_isodata`"
 msgstr ""
 
-msgid "Compute threshold using Li algorithm with :py:func:`sigima_.image.threshold.compute_threshold_li`"
+msgid "Compute threshold using Li algorithm with :py:func:`sigima_.computation.image.threshold.compute_threshold_li`"
 msgstr ""
 
-msgid "Compute threshold using Mean algorithm with :py:func:`sigima_.image.threshold.compute_threshold_mean`"
+msgid "Compute threshold using Mean algorithm with :py:func:`sigima_.computation.image.threshold.compute_threshold_mean`"
 msgstr ""
 
-msgid "Compute threshold using Minimum algorithm with :py:func:`sigima_.image.threshold.compute_threshold_minimum`"
+msgid "Compute threshold using Minimum algorithm with :py:func:`sigima_.computation.image.threshold.compute_threshold_minimum`"
 msgstr ""
 
-msgid "Compute threshold using Otsu algorithm with :py:func:`sigima_.image.threshold.compute_threshold_otsu`"
+msgid "Compute threshold using Otsu algorithm with :py:func:`sigima_.computation.image.threshold.compute_threshold_otsu`"
 msgstr ""
 
-msgid "Compute threshold using Triangle algorithm with :py:func:`sigima_.image.threshold.compute_threshold_triangle`"
+msgid "Compute threshold using Triangle algorithm with :py:func:`sigima_.computation.image.threshold.compute_threshold_triangle`"
 msgstr ""
 
-msgid "Compute threshold using Yen algorithm with :py:func:`sigima_.image.threshold.compute_threshold_yen`"
+msgid "Compute threshold using Yen algorithm with :py:func:`sigima_.computation.image.threshold.compute_threshold_yen`"
 msgstr ""
 
 msgid "Compute all threshold algorithms using the following functions:"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.threshold.compute_threshold_isodata`"
+msgid ":py:func:`sigima_.computation.image.threshold.compute_threshold_isodata`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.threshold.compute_threshold_li`"
+msgid ":py:func:`sigima_.computation.image.threshold.compute_threshold_li`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.threshold.compute_threshold_mean`"
+msgid ":py:func:`sigima_.computation.image.threshold.compute_threshold_mean`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.threshold.compute_threshold_minimum`"
+msgid ":py:func:`sigima_.computation.image.threshold.compute_threshold_minimum`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.threshold.compute_threshold_otsu`"
+msgid ":py:func:`sigima_.computation.image.threshold.compute_threshold_otsu`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.threshold.compute_threshold_triangle`"
+msgid ":py:func:`sigima_.computation.image.threshold.compute_threshold_triangle`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.threshold.compute_threshold_yen`"
+msgid ":py:func:`sigima_.computation.image.threshold.compute_threshold_yen`"
 msgstr ""
 
-msgid "Compute gamma correction with :py:func:`sigima_.image.exposure.compute_adjust_gamma`"
+msgid "Compute gamma correction with :py:func:`sigima_.computation.image.exposure.compute_adjust_gamma`"
 msgstr ""
 
-msgid "Compute log correction with :py:func:`sigima_.image.exposure.compute_adjust_log`"
+msgid "Compute log correction with :py:func:`sigima_.computation.image.exposure.compute_adjust_log`"
 msgstr ""
 
-msgid "Compute sigmoid correction with :py:func:`sigima_.image.exposure.compute_adjust_sigmoid`"
+msgid "Compute sigmoid correction with :py:func:`sigima_.computation.image.exposure.compute_adjust_sigmoid`"
 msgstr ""
 
-msgid "Rescale image intensity levels with :py:func`sigima_.image.exposure.compute_rescale_intensity`"
+msgid "Rescale image intensity levels with :py:func`sigima_.computation.image.exposure.compute_rescale_intensity`"
 msgstr ""
 
-msgid "Histogram equalization with :py:func:`sigima_.image.exposure.compute_equalize_hist`"
+msgid "Histogram equalization with :py:func:`sigima_.computation.image.exposure.compute_equalize_hist`"
 msgstr ""
 
-msgid "Adaptive histogram equalization with :py:func:`sigima_.image.exposure.compute_equalize_adapthist`"
+msgid "Adaptive histogram equalization with :py:func:`sigima_.computation.image.exposure.compute_equalize_adapthist`"
 msgstr ""
 
-msgid "Compute Total Variation denoising with :py:func:`sigima_.image.restoration.compute_denoise_tv`"
+msgid "Compute Total Variation denoising with :py:func:`sigima_.computation.image.restoration.compute_denoise_tv`"
 msgstr ""
 
-msgid "Compute bilateral filter denoising with :py:func:`sigima_.image.restoration.compute_denoise_bilateral`"
+msgid "Compute bilateral filter denoising with :py:func:`sigima_.computation.image.restoration.compute_denoise_bilateral`"
 msgstr ""
 
-msgid "Compute Wavelet denoising with :py:func:`sigima_.image.restoration.compute_denoise_wavelet`"
+msgid "Compute Wavelet denoising with :py:func:`sigima_.computation.image.restoration.compute_denoise_wavelet`"
 msgstr ""
 
-msgid "Denoise using White Top-Hat with :py:func:`sigima_.image.restoration.compute_denoise_tophat`"
+msgid "Denoise using White Top-Hat with :py:func:`sigima_.computation.image.restoration.compute_denoise_tophat`"
 msgstr ""
 
 msgid "Compute all denoising filters using the following functions:"
 msgstr "Calculer tous les filtres de débruitage en utilisant les fonctions suivantes :"
 
-msgid ":py:func:`sigima_.image.restoration.compute_denoise_tv`"
+msgid ":py:func:`sigima_.computation.image.restoration.compute_denoise_tv`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.restoration.compute_denoise_bilateral`"
+msgid ":py:func:`sigima_.computation.image.restoration.compute_denoise_bilateral`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.restoration.compute_denoise_wavelet`"
+msgid ":py:func:`sigima_.computation.image.restoration.compute_denoise_wavelet`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.restoration.compute_denoise_tophat`"
+msgid ":py:func:`sigima_.computation.image.restoration.compute_denoise_tophat`"
 msgstr ""
 
-msgid "Compute White Top-Hat with :py:func:`sigima_.image.morphology.compute_white_tophat`"
+msgid "Compute White Top-Hat with :py:func:`sigima_.computation.image.morphology.compute_white_tophat`"
 msgstr ""
 
-msgid "Compute Black Top-Hat with :py:func:`sigima_.image.morphology.compute_black_tophat`"
+msgid "Compute Black Top-Hat with :py:func:`sigima_.computation.image.morphology.compute_black_tophat`"
 msgstr ""
 
-msgid "Compute Erosion with :py:func:`sigima_.image.morphology.compute_erosion`"
+msgid "Compute Erosion with :py:func:`sigima_.computation.image.morphology.compute_erosion`"
 msgstr ""
 
-msgid "Compute Dilation with :py:func:`sigima_.image.morphology.compute_dilation`"
+msgid "Compute Dilation with :py:func:`sigima_.computation.image.morphology.compute_dilation`"
 msgstr ""
 
-msgid "Compute morphological opening with :py:func:`sigima_.image.morphology.compute_opening`"
+msgid "Compute morphological opening with :py:func:`sigima_.computation.image.morphology.compute_opening`"
 msgstr ""
 
-msgid "Compute morphological closing with :py:func:`sigima_.image.morphology.compute_closing`"
+msgid "Compute morphological closing with :py:func:`sigima_.computation.image.morphology.compute_closing`"
 msgstr ""
 
 msgid "Compute all morphology filters using the following functions:"
 msgstr "Calculer tous les filtres de morphologie en utilisant les fonctions suivantes :"
 
-msgid ":py:func:`sigima_.image.morphology.compute_white_tophat`"
+msgid ":py:func:`sigima_.computation.image.morphology.compute_white_tophat`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.morphology.compute_black_tophat`"
+msgid ":py:func:`sigima_.computation.image.morphology.compute_black_tophat`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.morphology.compute_erosion`"
+msgid ":py:func:`sigima_.computation.image.morphology.compute_erosion`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.morphology.compute_dilation`"
+msgid ":py:func:`sigima_.computation.image.morphology.compute_dilation`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.morphology.compute_opening`"
+msgid ":py:func:`sigima_.computation.image.morphology.compute_opening`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.morphology.compute_closing`"
+msgid ":py:func:`sigima_.computation.image.morphology.compute_closing`"
 msgstr ""
 
-msgid "Compute Canny filter with :py:func:`sigima_.image.edges.compute_canny`"
+msgid "Compute Canny filter with :py:func:`sigima_.computation.image.edges.compute_canny`"
 msgstr ""
 
-msgid "Compute Roberts filter with :py:func:`sigima_.image.edges.compute_roberts`"
+msgid "Compute Roberts filter with :py:func:`sigima_.computation.image.edges.compute_roberts`"
 msgstr ""
 
-msgid "Compute Prewitt filter with :py:func:`sigima_.image.edges.compute_prewitt`"
+msgid "Compute Prewitt filter with :py:func:`sigima_.computation.image.edges.compute_prewitt`"
 msgstr ""
 
-msgid "Compute Prewitt filter (horizontal) with :py:func:`sigima_.image.edges.compute_prewitt_h`"
+msgid "Compute Prewitt filter (horizontal) with :py:func:`sigima_.computation.image.edges.compute_prewitt_h`"
 msgstr ""
 
-msgid "Compute Prewitt filter (vertical) with :py:func:`sigima_.image.edges.compute_prewitt_v`"
+msgid "Compute Prewitt filter (vertical) with :py:func:`sigima_.computation.image.edges.compute_prewitt_v`"
 msgstr ""
 
-msgid "Compute Sobel filter with :py:func:`sigima_.image.edges.compute_sobel`"
+msgid "Compute Sobel filter with :py:func:`sigima_.computation.image.edges.compute_sobel`"
 msgstr ""
 
-msgid "Compute Sobel filter (horizontal) with :py:func:`sigima_.image.edges.compute_sobel_h`"
+msgid "Compute Sobel filter (horizontal) with :py:func:`sigima_.computation.image.edges.compute_sobel_h`"
 msgstr ""
 
-msgid "Compute Sobel filter (vertical) with :py:func:`sigima_.image.edges.compute_sobel_v`"
+msgid "Compute Sobel filter (vertical) with :py:func:`sigima_.computation.image.edges.compute_sobel_v`"
 msgstr ""
 
-msgid "Compute Scharr filter with :py:func:`sigima_.image.edges.compute_scharr`"
+msgid "Compute Scharr filter with :py:func:`sigima_.computation.image.edges.compute_scharr`"
 msgstr ""
 
-msgid "Compute Scharr filter (horizontal) with :py:func:`sigima_.image.edges.compute_scharr_h`"
+msgid "Compute Scharr filter (horizontal) with :py:func:`sigima_.computation.image.edges.compute_scharr_h`"
 msgstr ""
 
-msgid "Compute Scharr filter (vertical) with :py:func:`sigima_.image.edges.compute_scharr_v`"
+msgid "Compute Scharr filter (vertical) with :py:func:`sigima_.computation.image.edges.compute_scharr_v`"
 msgstr ""
 
-msgid "Compute Farid filter with :py:func:`sigima_.image.edges.compute_farid`"
+msgid "Compute Farid filter with :py:func:`sigima_.computation.image.edges.compute_farid`"
 msgstr ""
 
-msgid "Compute Farid filter (horizontal) with :py:func:`sigima_.image.edges.compute_farid_h`"
+msgid "Compute Farid filter (horizontal) with :py:func:`sigima_.computation.image.edges.compute_farid_h`"
 msgstr ""
 
-msgid "Compute Farid filter (vertical) with :py:func:`sigima_.image.edges.compute_farid_v`"
+msgid "Compute Farid filter (vertical) with :py:func:`sigima_.computation.image.edges.compute_farid_v`"
 msgstr ""
 
-msgid "Compute Laplace filter with :py:func:`sigima_.image.edges.compute_laplace`"
+msgid "Compute Laplace filter with :py:func:`sigima_.computation.image.edges.compute_laplace`"
 msgstr ""
 
 msgid "Compute all edges filters using the following functions:"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_roberts`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_roberts`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_prewitt`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_prewitt`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_prewitt_h`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_prewitt_h`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_prewitt_v`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_prewitt_v`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_sobel`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_sobel`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_sobel_h`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_sobel_h`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_sobel_v`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_sobel_v`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_scharr`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_scharr`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_scharr_h`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_scharr_h`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_scharr_v`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_scharr_v`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_farid`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_farid`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_farid_h`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_farid_h`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_farid_v`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_farid_v`"
 msgstr ""
 
-msgid ":py:func:`sigima_.image.edges.compute_laplace`"
+msgid ":py:func:`sigima_.computation.image.edges.compute_laplace`"
 msgstr ""
 
-msgid "Compute data statistics with :py:func:`sigima_.image.compute_stats`"
+msgid "Compute data statistics with :py:func:`sigima_.computation.image.compute_stats`"
 msgstr ""
 
-msgid "Compute image centroid with :py:func:`sigima_.image.compute_centroid`"
+msgid "Compute image centroid with :py:func:`sigima_.computation.image.compute_centroid`"
 msgstr ""
 
-msgid "Compute minimum enclosing circle with :py:func:`sigima_.image.compute_enclosing_circle`"
+msgid "Compute minimum enclosing circle with :py:func:`sigima_.computation.image.compute_enclosing_circle`"
 msgstr ""
 
-msgid "Compute 2D peak detection with :py:func:`sigima_.image.compute_peak_detection`"
+msgid "Compute 2D peak detection with :py:func:`sigima_.computation.image.compute_peak_detection`"
 msgstr ""
 
-msgid "Compute contour shape fit with :py:func:`sigima_.image.detection.compute_contour_shape`"
+msgid "Compute contour shape fit with :py:func:`sigima_.computation.image.detection.compute_contour_shape`"
 msgstr ""
 
-msgid "Compute peak detection based on a circle Hough transform with :py:func:`sigima_.image.compute_hough_circle_peaks`"
+msgid "Compute peak detection based on a circle Hough transform with :py:func:`sigima_.computation.image.compute_hough_circle_peaks`"
 msgstr ""
 
-msgid "Compute blob detection using Difference of Gaussian method with :py:func:`sigima_.image.detection.compute_blob_dog`"
+msgid "Compute blob detection using Difference of Gaussian method with :py:func:`sigima_.computation.image.detection.compute_blob_dog`"
 msgstr ""
 
-msgid "Compute blob detection using Determinant of Hessian method with :py:func:`sigima_.image.detection.compute_blob_doh`"
+msgid "Compute blob detection using Determinant of Hessian method with :py:func:`sigima_.computation.image.detection.compute_blob_doh`"
 msgstr ""
 
-msgid "Compute blob detection using Laplacian of Gaussian method with :py:func:`sigima_.image.detection.compute_blob_log`"
+msgid "Compute blob detection using Laplacian of Gaussian method with :py:func:`sigima_.computation.image.detection.compute_blob_log`"
 msgstr ""
 
-msgid "Compute blob detection using OpenCV with :py:func:`sigima_.image.detection.compute_blob_opencv`"
+msgid "Compute blob detection using OpenCV with :py:func:`sigima_.computation.image.detection.compute_blob_opencv`"
 msgstr ""

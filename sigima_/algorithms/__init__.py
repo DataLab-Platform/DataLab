@@ -11,7 +11,7 @@ but can be used independently as well.
     The :mod:`sigima_.algorithms` package is the main entry point for the DataLab
     algorithms when manipulating NumPy arrays. See the :mod:`sigima_.computation`
     package for algorithms that operate directly on DataLab objects (i.e.
-    :class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`).
+    :class:`sigima_.obj.SignalObj` and :class:`sigima_.obj.ImageObj`).
 
 The algorithms are organized in subpackages according to their purpose. The following
 subpackages are available:

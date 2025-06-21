@@ -21,7 +21,7 @@ and removing noise prior to further analysis.
 # - All `guidata.dataset.DataSet` parameter classes must also be imported
 #   in the `sigima_.param` module.
 # - All functions decorated by `computation_function` must be imported in the upper
-#   level `sigima_.image` module.
+#   level `sigima_.computation.image` module.
 
 from __future__ import annotations
 

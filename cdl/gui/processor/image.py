@@ -482,7 +482,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
 
     @qt_try_except()
     def compute_resize(self, param: sigima_.param.ResizeParam | None = None) -> None:
-        """Resize image with :py:func:`sigima_.image.resize`"""
+        """Resize image with :py:func:`sigima_.computation.image.resize`"""
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         for obj in self.panel.objview.get_sel_objects():
             if obj.data.shape != obj0.data.shape:
@@ -509,7 +509,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
 
     @qt_try_except()
     def compute_binning(self, param: sigima_.param.BinningParam | None = None) -> None:
-        """Binning image with :py:func:`sigima_.image.binning`"""
+        """Binning image with :py:func:`sigima_.computation.image.binning`"""
         edit = param is None
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         input_dtype_str = str(obj0.data.dtype)
@@ -526,7 +526,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self, param: sigima_.param.LineProfileParam | None = None
     ) -> None:
         """Compute profile along a vertical or horizontal line
-        with :py:func:`sigima_.image.line_profile`"""
+        with :py:func:`sigima_.computation.image.line_profile`"""
         title = _("Profile")
         add_initial_shape = self.has_param_defaults(sigima_.param.LineProfileParam)
         edit, param = self.init_param(param, sigima_image.LineProfileParam, title)
@@ -546,7 +546,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self, param: sigima_.param.SegmentProfileParam | None = None
     ):
         """Compute profile along a segment
-        with :py:func:`sigima_.image.segment_profile`"""
+        with :py:func:`sigima_.computation.image.segment_profile`"""
         title = _("Profile")
         add_initial_shape = self.has_param_defaults(sigima_.param.SegmentProfileParam)
         edit, param = self.init_param(param, sigima_image.SegmentProfileParam, title)
@@ -566,7 +566,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self, param: sigima_.param.AverageProfileParam | None = None
     ) -> None:
         """Compute average profile
-        with :py:func:`sigima_.image.average_profile`"""
+        with :py:func:`sigima_.computation.image.average_profile`"""
         title = _("Average profile")
         add_initial_shape = self.has_param_defaults(sigima_.param.AverageProfileParam)
         edit, param = self.init_param(param, sigima_image.AverageProfileParam, title)
@@ -586,7 +586,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self, param: sigima_.param.RadialProfileParam | None = None
     ) -> None:
         """Compute radial profile
-        with :py:func:`sigima_.image.radial_profile`"""
+        with :py:func:`sigima_.computation.image.radial_profile`"""
         title = _("Radial profile")
         edit, param = self.init_param(param, sigima_image.RadialProfileParam, title)
         if edit:
@@ -671,7 +671,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     @qt_try_except()
     def compute_offset_correction(self, param: ROI2DParam | None = None) -> None:
         """Compute offset correction
-        with :py:func:`sigima_.image.offset_correction`"""
+        with :py:func:`sigima_.computation.image.offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
             dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
@@ -688,13 +688,13 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute all threshold algorithms
         using the following functions:
 
-        - :py:func:`sigima_.image.threshold.threshold_isodata`
-        - :py:func:`sigima_.image.threshold.threshold_li`
-        - :py:func:`sigima_.image.threshold.threshold_mean`
-        - :py:func:`sigima_.image.threshold.threshold_minimum`
-        - :py:func:`sigima_.image.threshold.threshold_otsu`
-        - :py:func:`sigima_.image.threshold.threshold_triangle`
-        - :py:func:`sigima_.image.threshold.threshold_yen`
+        - :py:func:`sigima_.computation.image.threshold.threshold_isodata`
+        - :py:func:`sigima_.computation.image.threshold.threshold_li`
+        - :py:func:`sigima_.computation.image.threshold.threshold_mean`
+        - :py:func:`sigima_.computation.image.threshold.threshold_minimum`
+        - :py:func:`sigima_.computation.image.threshold.threshold_otsu`
+        - :py:func:`sigima_.computation.image.threshold.threshold_triangle`
+        - :py:func:`sigima_.computation.image.threshold.threshold_yen`
         """
         self.compute_multiple_1_to_1(
             [
@@ -716,10 +716,10 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute all denoising filters
         using the following functions:
 
-        - :py:func:`sigima_.image.restoration.denoise_tv`
-        - :py:func:`sigima_.image.restoration.denoise_bilateral`
-        - :py:func:`sigima_.image.restoration.denoise_wavelet`
-        - :py:func:`sigima_.image.restoration.denoise_tophat`
+        - :py:func:`sigima_.computation.image.restoration.denoise_tv`
+        - :py:func:`sigima_.computation.image.restoration.denoise_bilateral`
+        - :py:func:`sigima_.computation.image.restoration.denoise_wavelet`
+        - :py:func:`sigima_.computation.image.restoration.denoise_tophat`
         """
         if params is not None:
             assert len(params) == 4, "Wrong number of parameters (4 expected)"
@@ -750,12 +750,12 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute all morphology filters
         using the following functions:
 
-        - :py:func:`sigima_.image.morphology.white_tophat`
-        - :py:func:`sigima_.image.morphology.black_tophat`
-        - :py:func:`sigima_.image.morphology.erosion`
-        - :py:func:`sigima_.image.morphology.dilation`
-        - :py:func:`sigima_.image.morphology.opening`
-        - :py:func:`sigima_.image.morphology.closing`
+        - :py:func:`sigima_.computation.image.morphology.white_tophat`
+        - :py:func:`sigima_.computation.image.morphology.black_tophat`
+        - :py:func:`sigima_.computation.image.morphology.erosion`
+        - :py:func:`sigima_.computation.image.morphology.dilation`
+        - :py:func:`sigima_.computation.image.morphology.opening`
+        - :py:func:`sigima_.computation.image.morphology.closing`
         """
         if param is None:
             param = sigima_image.MorphologyParam()
@@ -776,20 +776,20 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute all edges filters
         using the following functions:
 
-        - :py:func:`sigima_.image.edges.roberts`
-        - :py:func:`sigima_.image.edges.prewitt`
-        - :py:func:`sigima_.image.edges.prewitt_h`
-        - :py:func:`sigima_.image.edges.prewitt_v`
-        - :py:func:`sigima_.image.edges.sobel`
-        - :py:func:`sigima_.image.edges.sobel_h`
-        - :py:func:`sigima_.image.edges.sobel_v`
-        - :py:func:`sigima_.image.edges.scharr`
-        - :py:func:`sigima_.image.edges.scharr_h`
-        - :py:func:`sigima_.image.edges.scharr_v`
-        - :py:func:`sigima_.image.edges.farid`
-        - :py:func:`sigima_.image.edges.farid_h`
-        - :py:func:`sigima_.image.edges.farid_v`
-        - :py:func:`sigima_.image.edges.laplace`
+        - :py:func:`sigima_.computation.image.edges.roberts`
+        - :py:func:`sigima_.computation.image.edges.prewitt`
+        - :py:func:`sigima_.computation.image.edges.prewitt_h`
+        - :py:func:`sigima_.computation.image.edges.prewitt_v`
+        - :py:func:`sigima_.computation.image.edges.sobel`
+        - :py:func:`sigima_.computation.image.edges.sobel_h`
+        - :py:func:`sigima_.computation.image.edges.sobel_v`
+        - :py:func:`sigima_.computation.image.edges.scharr`
+        - :py:func:`sigima_.computation.image.edges.scharr_h`
+        - :py:func:`sigima_.computation.image.edges.scharr_v`
+        - :py:func:`sigima_.computation.image.edges.farid`
+        - :py:func:`sigima_.computation.image.edges.farid_h`
+        - :py:func:`sigima_.computation.image.edges.farid_v`
+        - :py:func:`sigima_.computation.image.edges.laplace`
         """
         funcs = [
             sigima_image.roberts,
@@ -826,7 +826,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self, param: sigima_.param.Peak2DDetectionParam | None = None
     ) -> dict[str, ResultShape]:
         """Compute 2D peak detection
-        with :py:func:`sigima_.image.peak_detection`"""
+        with :py:func:`sigima_.computation.image.peak_detection`"""
         edit, param = self.init_param(
             param, sigima_image.Peak2DDetectionParam, _("Peak detection")
         )

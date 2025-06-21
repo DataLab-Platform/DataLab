@@ -49,17 +49,17 @@ msgstr ""
 msgid "Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)"
 msgstr "Module de commodité pour accéder aux ensembles de paramètres DataLab (instances d'objets :class:`guidata.dataset.DataSet`)"
 
-msgid ":mod:`cdl.obj`"
+msgid ":mod:`sigima_.obj`"
 msgstr ""
 
-msgid "Convenience module to access the DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`) and related functions"
-msgstr "Module de commodité pour accéder aux objets DataLab (:class:`cdl.obj.SignalObj` ou :class:`cdl.obj.ImageObj`) et fonctions associées"
+msgid "Convenience module to access the DataLab objects (:class:`sigima_.obj.SignalObj` or :class:`sigima_.obj.ImageObj`) and related functions"
+msgstr "Module de commodité pour accéder aux objets DataLab (:class:`sigima_.obj.SignalObj` ou :class:`sigima_.obj.ImageObj`) et fonctions associées"
 
 msgid ":mod:`sigima_.computation`"
 msgstr ""
 
-msgid "Computation functions, which operate on DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`)"
-msgstr "Fonctions de calcul, qui opèrent sur les objets DataLab (:class:`cdl.obj.SignalObj` ou :class:`cdl.obj.ImageObj`)"
+msgid "Computation functions, which operate on DataLab objects (:class:`sigima_.obj.SignalObj` or :class:`sigima_.obj.ImageObj`)"
+msgstr "Fonctions de calcul, qui opèrent sur les objets DataLab (:class:`sigima_.obj.SignalObj` ou :class:`sigima_.obj.ImageObj`)"
 
 msgid ":mod:`cdl.proxy`"
 msgstr ""

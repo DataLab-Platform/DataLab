@@ -1294,8 +1294,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     def compute_roi_extraction(self, roi: TypeROI | None = None) -> None:
         """Extract Region Of Interest (ROI) from data with:
 
-        - :py:func:`sigima_.image.compute_extract_roi` for single ROI
-        - :py:func:`sigima_.image.compute_extract_rois` for multiple ROIs"""
+        - :py:func:`sigima_.computation.image.compute_extract_roi` for single ROI
+        - :py:func:`sigima_.computation.image.compute_extract_rois` for multiple ROIs"""
         # Expected behavior:
         # -----------------
         # * If `roi` is not None or not empty, skip the ROI dialog

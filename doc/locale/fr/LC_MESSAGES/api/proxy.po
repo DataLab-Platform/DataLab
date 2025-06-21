@@ -530,13 +530,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_XY_mode`"
 msgstr ""
 
-msgid "Compute XY mode with :py:func:`sigima_.signal.compute_XY_mode.`"
+msgid "Compute XY mode with :py:func:`sigima_.computation.signal.compute_XY_mode.`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_abs`"
 msgstr ""
 
-msgid "Compute absolute value with :py:func:`sigima_.signal.compute_abs`"
+msgid "Compute absolute value with :py:func:`sigima_.computation.signal.compute_abs`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_addition_constant`"
@@ -572,13 +572,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_astype`"
 msgstr ""
 
-msgid "Convert data type with :py:func:`sigima_.signal.compute_astype`"
+msgid "Convert data type with :py:func:`sigima_.computation.signal.compute_astype`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_average`"
 msgstr ""
 
-msgid "Compute average with :py:func:`sigima_.signal.compute_sum`"
+msgid "Compute average with :py:func:`sigima_.computation.signal.compute_sum`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_bandpass`"
@@ -620,7 +620,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_contrast`"
 msgstr ""
 
-msgid "Compute contrast with :py:func:`sigima_.signal.compute_contrast`"
+msgid "Compute contrast with :py:func:`sigima_.computation.signal.compute_contrast`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_convolution`"
@@ -674,13 +674,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_exp`"
 msgstr ""
 
-msgid "Compute Log10 with :py:func:`sigima_.signal.compute_exp`"
+msgid "Compute Log10 with :py:func:`sigima_.computation.signal.compute_exp`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_fft`"
 msgstr ""
 
-msgid "Compute FFT with :py:func:`sigima_.signal.compute_fft`"
+msgid "Compute FFT with :py:func:`sigima_.computation.signal.compute_fft`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_fit`"
@@ -698,13 +698,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_fw1e2`"
 msgstr ""
 
-msgid "Compute FW at 1/e² with :py:func:`sigima_.signal.compute_fw1e2`"
+msgid "Compute FW at 1/e² with :py:func:`sigima_.computation.signal.compute_fw1e2`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_fwhm`"
 msgstr ""
 
-msgid "Compute FWHM with :py:func:`sigima_.signal.compute_fwhm`"
+msgid "Compute FWHM with :py:func:`sigima_.computation.signal.compute_fwhm`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_gaussian_filter`"
@@ -734,19 +734,19 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_ifft`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`sigima_.signal.compute_ifft`"
+msgid "Compute iFFT with :py:func:`sigima_.computation.signal.compute_ifft`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_im`"
 msgstr ""
 
-msgid "Compute imaginary part with :py:func:`sigima_.signal.compute_im`"
+msgid "Compute imaginary part with :py:func:`sigima_.computation.signal.compute_im`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_integral`"
 msgstr ""
 
-msgid "Compute integral with :py:func:`sigima_.signal.compute_integral`"
+msgid "Compute integral with :py:func:`sigima_.computation.signal.compute_integral`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_interpolation`"
@@ -764,7 +764,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_log10`"
 msgstr ""
 
-msgid "Compute Log10 with :py:func:`sigima_.signal.compute_log10`"
+msgid "Compute Log10 with :py:func:`sigima_.computation.signal.compute_log10`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_lowpass`"
@@ -803,7 +803,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_normalize`"
 msgstr ""
 
-msgid "Normalize data with :py:func:`sigima_.signal.compute_normalize`"
+msgid "Normalize data with :py:func:`sigima_.computation.signal.compute_normalize`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_offset_correction`"
@@ -845,13 +845,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_power`"
 msgstr ""
 
-msgid "Compute power with :py:func:`sigima_.signal.compute_power`"
+msgid "Compute power with :py:func:`sigima_.computation.signal.compute_power`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_product`"
 msgstr ""
 
-msgid "Compute product with :py:func:`sigima_.signal.compute_product`"
+msgid "Compute product with :py:func:`sigima_.computation.signal.compute_product`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_product_constant`"
@@ -875,7 +875,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_re`"
 msgstr ""
 
-msgid "Compute real part with :py:func:`sigima_.signal.compute_re`"
+msgid "Compute real part with :py:func:`sigima_.computation.signal.compute_re`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_resampling`"
@@ -887,7 +887,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_reverse_x`"
 msgstr ""
 
-msgid "Reverse X axis with :py:func:`sigima_.signal.compute_reverse_x`"
+msgid "Reverse X axis with :py:func:`sigima_.computation.signal.compute_reverse_x`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_roi_extraction`"
@@ -905,7 +905,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_sqrt`"
 msgstr ""
 
-msgid "Compute square root with :py:func:`sigima_.signal.compute_sqrt`"
+msgid "Compute square root with :py:func:`sigima_.computation.signal.compute_sqrt`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_stats`"
@@ -917,13 +917,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_sum`"
 msgstr ""
 
-msgid "Compute sum with :py:func:`sigima_.signal.compute_sum`"
+msgid "Compute sum with :py:func:`sigima_.computation.signal.compute_sum`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_swap_axes`"
 msgstr ""
 
-msgid "Swap data axes with :py:func:`sigima_.signal.compute_swap_axes`"
+msgid "Swap data axes with :py:func:`sigima_.computation.signal.compute_swap_axes`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_time_deviation`"
@@ -959,13 +959,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_x_at_y`"
 msgstr ""
 
-msgid "Compute x at y with :py:func:`sigima_.signal.compute_x_at_y`"
+msgid "Compute x at y with :py:func:`sigima_.computation.signal.compute_x_at_y`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_y_at_x`"
 msgstr ""
 
-msgid "Compute y at x with :py:func:`sigima_.signal.compute_y_at_x`"
+msgid "Compute y at x with :py:func:`sigima_.computation.signal.compute_y_at_x`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_zero_padding`"
@@ -986,7 +986,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_abs`"
 msgstr ""
 
-msgid "Compute absolute value with :py:func:`sigima_.image.compute_abs`"
+msgid "Compute absolute value with :py:func:`sigima_.computation.image.compute_abs`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_addition_constant`"
@@ -1043,13 +1043,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_astype`"
 msgstr ""
 
-msgid "Convert data type with :py:func:`sigima_.image.compute_astype`"
+msgid "Convert data type with :py:func:`sigima_.computation.image.compute_astype`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_average`"
 msgstr ""
 
-msgid "Compute average with :py:func:`sigima_.image.compute_sum`"
+msgid "Compute average with :py:func:`sigima_.computation.image.compute_sum`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_average_profile`"
@@ -1061,7 +1061,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_binning`"
 msgstr ""
 
-msgid "Binning image with :py:func:`sigima_.image.compute_binning`"
+msgid "Binning image with :py:func:`sigima_.computation.image.compute_binning`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_black_tophat`"
@@ -1205,7 +1205,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_exp`"
 msgstr ""
 
-msgid "Compute Log10 with :py:func:`sigima_.image.compute_exp`"
+msgid "Compute Log10 with :py:func:`sigima_.computation.image.compute_exp`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_farid`"
@@ -1229,7 +1229,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_fft`"
 msgstr ""
 
-msgid "Compute FFT with :py:func:`sigima_.image.compute_fft`"
+msgid "Compute FFT with :py:func:`sigima_.computation.image.compute_fft`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_flatfield`"
@@ -1247,7 +1247,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_flipv`"
 msgstr ""
 
-msgid "Flip data vertically with :py:func:`sigima_.image.compute_flipv`"
+msgid "Flip data vertically with :py:func:`sigima_.computation.image.compute_flipv`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_gaussian_filter`"
@@ -1256,7 +1256,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_histogram`"
 msgstr ""
 
-msgid "Compute histogram with :py:func:`sigima_.image.compute_histogram`"
+msgid "Compute histogram with :py:func:`sigima_.computation.image.compute_histogram`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_hough_circle_peaks`"
@@ -1268,13 +1268,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_ifft`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`sigima_.image.compute_ifft`"
+msgid "Compute iFFT with :py:func:`sigima_.computation.image.compute_ifft`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_im`"
 msgstr ""
 
-msgid "Compute imaginary part with :py:func:`sigima_.image.compute_im`"
+msgid "Compute imaginary part with :py:func:`sigima_.computation.image.compute_im`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_inverse`"
@@ -1295,7 +1295,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_log10`"
 msgstr ""
 
-msgid "Compute Log10 with :py:func:`sigima_.image.compute_log10`"
+msgid "Compute Log10 with :py:func:`sigima_.computation.image.compute_log10`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_logp1`"
@@ -1316,7 +1316,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_normalize`"
 msgstr ""
 
-msgid "Normalize data with :py:func:`sigima_.image.compute_normalize`"
+msgid "Normalize data with :py:func:`sigima_.computation.image.compute_normalize`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_offset_correction`"
@@ -1358,7 +1358,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_product`"
 msgstr ""
 
-msgid "Compute product with :py:func:`sigima_.image.compute_product`"
+msgid "Compute product with :py:func:`sigima_.computation.image.compute_product`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_product_constant`"
@@ -1385,7 +1385,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_re`"
 msgstr ""
 
-msgid "Compute real part with :py:func:`sigima_.image.compute_re`"
+msgid "Compute real part with :py:func:`sigima_.computation.image.compute_re`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_rescale_intensity`"
@@ -1397,7 +1397,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_resize`"
 msgstr ""
 
-msgid "Resize image with :py:func:`sigima_.image.compute_resize`"
+msgid "Resize image with :py:func:`sigima_.computation.image.compute_resize`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_roberts`"
@@ -1418,13 +1418,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_rotate270`"
 msgstr ""
 
-msgid "Rotate data 270° with :py:func:`sigima_.image.compute_rotate270`"
+msgid "Rotate data 270° with :py:func:`sigima_.computation.image.compute_rotate270`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_rotate90`"
 msgstr ""
 
-msgid "Rotate data 90° with :py:func:`sigima_.image.compute_rotate90`"
+msgid "Rotate data 90° with :py:func:`sigima_.computation.image.compute_rotate90`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_scharr`"
@@ -1475,13 +1475,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_sum`"
 msgstr ""
 
-msgid "Compute sum with :py:func:`sigima_.image.compute_sum`"
+msgid "Compute sum with :py:func:`sigima_.computation.image.compute_sum`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_swap_axes`"
 msgstr ""
 
-msgid "Swap data axes with :py:func:`sigima_.image.compute_swap_axes`"
+msgid "Swap data axes with :py:func:`sigima_.computation.image.compute_swap_axes`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_threshold`"
