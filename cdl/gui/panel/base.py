@@ -45,7 +45,7 @@ from cdl.env import execenv
 from cdl.gui import actionhandler, objectview
 from cdl.gui.newobject import NewSignalParam
 from cdl.gui.roieditor import TypeROIEditor
-from cdl.objectmodel import ObjectGroup, get_uuid, set_uuid, short_id
+from cdl.objectmodel import ObjectGroup, get_short_id, get_uuid, set_uuid
 from cdl.utils.qthelpers import (
     CallbackWorker,
     create_progress_bar,
@@ -187,7 +187,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     def get_serializable_name(self, obj: ObjItf) -> str:
         """Return serializable name of object"""
         title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
-        name = f"{short_id(obj)}: {title}"
+        name = f"{get_short_id(obj)}: {title}"
         return name
 
     def serialize_object_to_hdf5(self, obj: ObjItf, writer: NativeH5Writer) -> None:
@@ -255,7 +255,7 @@ def create_resultdata_dict(
             rdata.results.append(result)
             rdata.xlabels = result.headers
             for i_row_res in range(result.array.shape[0]):
-                ylabel = f"{result.title}({short_id(obj)})"
+                ylabel = f"{result.title}({get_short_id(obj)})"
                 i_roi = int(result.array[i_row_res, 0])
                 if i_roi >= 0:
                     ylabel += f"|ROI{i_roi}"
@@ -596,7 +596,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Copy object metadata"""
         obj = self.objview.get_sel_objects()[0]
         self.__metadata_clipboard = obj.metadata.copy()
-        new_pref = short_id(obj) + "_"
+        new_pref = get_short_id(obj) + "_"
         for key, value in obj.metadata.items():
             if ResultShape.match(key, value):
                 mshape = ResultShape.from_metadata_entry(key, value)
@@ -644,7 +644,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 ):
                     metadata[key] = value
         sel_objects = self.objview.get_sel_objects(include_groups=True)
-        for obj in sorted(sel_objects, key=short_id, reverse=True):
+        for obj in sorted(sel_objects, key=get_short_id, reverse=True):
             obj.update_metadata_from(metadata)
         # We have to do a special refresh in order to force the plot handler to update
         # all plot items, even the ones that are not visible (otherwise, image masks
@@ -670,7 +670,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if answer == QW.QMessageBox.No:
                 return
         sel_objects = self.objview.get_sel_objects(include_groups=True)
-        for obj in sorted(sel_objects, key=short_id, reverse=True):
+        for obj in sorted(sel_objects, key=get_short_id, reverse=True):
             dlg_list: list[QW.QDialog] = []
             for dlg, obj_i in self.__separate_views.items():
                 if obj_i is obj:
@@ -1578,7 +1578,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                                     i_xaxis = rdata.xlabels.index(param.xaxis)
                                     x = result.shown_array[mask, i_xaxis]
                                 y = result.shown_array[mask, i_yaxis]
-                                shid = short_id(objs[index])
+                                shid = get_short_id(objs[index])
                                 stitle = f"{title} ({shid}){roi_suffix}"
                                 self.__add_result_signal(
                                     x, y, stitle, param.xaxis, param.yaxis

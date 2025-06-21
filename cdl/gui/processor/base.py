@@ -27,7 +27,7 @@ from qtpy import QtWidgets as QW
 from cdl import env
 from cdl.config import Conf, _
 from cdl.gui.processor.catcher import CompOut, wng_err_func
-from cdl.objectmodel import get_uuid, patch_title_with_ids, short_id
+from cdl.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 from sigima_ import is_computation_function
@@ -402,7 +402,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         continue
-                    patch_title_with_ids(new_obj, [obj], short_id)
+                    patch_title_with_ids(new_obj, [obj], get_short_id)
 
                     # Is new object a native object (i.e. a Signal object for a Signal
                     # Panel, or an Image object for an Image Panel) ?
@@ -418,7 +418,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         if new_gid is None:
                             # Create a new group for each selected group
                             old_g = self.panel.objmodel.get_group(old_gid)
-                            new_g = self.panel.add_group(f"{name}({short_id(old_g)})")
+                            new_g = self.panel.add_group(
+                                f"{name}({get_short_id(old_g)})"
+                            )
                             new_gids[old_gid] = new_gid = get_uuid(new_g)
                     if is_new_obj_native:
                         self.panel.add_object(new_obj, group_id=new_gid)
@@ -683,7 +685,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
                 for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.title}({short_id(obj)})"
+                    ylabel = f"{result.title}({get_short_id(obj)})"
                     i_roi = int(result.array[i_row_res, 0])
                     if i_roi >= 0:
                         ylabel += f"|ROI{i_roi}"
@@ -752,7 +754,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if not valid:
                 return
             dst_gname = (
-                f"{name}({','.join([short_id(grp) for grp in src_grps])})|pairwise"
+                f"{name}({','.join([get_short_id(grp) for grp in src_grps])})|pairwise"
             )
             group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
             if not group_exclusive:
@@ -784,7 +786,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         break
-                    patch_title_with_ids(new_obj, src_objs_pair, short_id)
+                    patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
                     self.panel.add_object(new_obj, group_id=dst_gid)
 
         else:
@@ -825,7 +827,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     if new_obj is None:
                         break
                     group_id = dst_gid if dst_gid is not None else src_gid
-                    patch_title_with_ids(new_obj, src_obj_list, short_id)
+                    patch_title_with_ids(new_obj, src_obj_list, get_short_id)
                     self.panel.add_object(new_obj, group_id=group_id)
 
         # Select newly created group, if any
@@ -943,7 +945,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         )
                         if new_obj is None:
                             continue
-                        patch_title_with_ids(new_obj, [src_obj1, src_obj2], short_id)
+                        patch_title_with_ids(
+                            new_obj, [src_obj1, src_obj2], get_short_id
+                        )
                         self.panel.add_object(new_obj, group_id=dst_gid)
 
         else:
@@ -972,7 +976,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     if new_obj is None:
                         continue
                     group_id = objmodel.get_object_group_id(obj)
-                    patch_title_with_ids(new_obj, [obj, obj2], short_id)
+                    patch_title_with_ids(new_obj, [obj, obj2], get_short_id)
                     self.panel.add_object(new_obj, group_id=group_id)
 
     def register_1_to_1(

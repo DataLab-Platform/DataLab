@@ -14,7 +14,7 @@ import os
 
 import sigima_.computation.signal as ss
 from cdl.env import execenv
-from cdl.objectmodel import get_uuid, short_id
+from cdl.objectmodel import get_short_id, get_uuid
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_paracetamol_signal
 from sigima_.param import MovingMedianParam
@@ -72,25 +72,29 @@ def test_main_app():
         execenv.print("*** Testing `get_object` ***")
         # Get object from title
         obj = win.get_object(titles[-1])
-        execenv.print(f"  Object (from title) '{short_id(obj)}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from title) '{get_short_id(obj)}':{os.linesep}{obj}")
         # Get object
         obj = win.get_object(1)
-        execenv.print(f"  Object (from number)  '{short_id(obj)}':{os.linesep}{obj}")
+        execenv.print(
+            f"  Object (from number)  '{get_short_id(obj)}':{os.linesep}{obj}"
+        )
         # Get object by uuid
         obj = win.get_object(uuids[-1])
-        execenv.print(f"  Object (from uuid)  '{short_id(obj)}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from uuid)  '{get_short_id(obj)}':{os.linesep}{obj}")
 
         # Testing dict-like interface of main window:
         execenv.print("*** Testing dict-like interface of proxy ***")
         # Get object from title
         obj = win[titles[-1]]
-        execenv.print(f"  Object (from title) '{short_id(obj)}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from title) '{get_short_id(obj)}':{os.linesep}{obj}")
         # Get object
         obj = win[1]
-        execenv.print(f"  Object (from number)  '{short_id(obj)}':{os.linesep}{obj}")
+        execenv.print(
+            f"  Object (from number)  '{get_short_id(obj)}':{os.linesep}{obj}"
+        )
         # Get object by uuid
         obj = win[uuids[-1]]
-        execenv.print(f"  Object (from uuid)  '{short_id(obj)}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from uuid)  '{get_short_id(obj)}':{os.linesep}{obj}")
 
         # Use "calc" method with parameters
         param = MovingMedianParam.create(n=5)

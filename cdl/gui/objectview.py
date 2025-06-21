@@ -45,7 +45,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from cdl.config import _
-from cdl.objectmodel import ObjectGroup, get_uuid, short_id
+from cdl.objectmodel import ObjectGroup, get_short_id, get_uuid
 from cdl.utils.qthelpers import block_signals
 from sigima_ import ImageObj, SignalObj
 
@@ -206,7 +206,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         item: QW.QTreeWidgetItem, obj: SignalObj | ImageObj | ObjectGroup
     ) -> None:
         """Update item"""
-        item.setText(0, f"{short_id(obj)}: {obj.title}")
+        item.setText(0, f"{get_short_id(obj)}: {obj.title}")
         if isinstance(obj, (SignalObj, ImageObj)):
             item.setToolTip(0, metadata_to_html(obj.metadata))
         item.setData(0, QC.Qt.UserRole, get_uuid(obj))

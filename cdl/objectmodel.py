@@ -76,7 +76,7 @@ def set_uuid(obj: SignalObj | ImageObj | ObjectGroup) -> None:
         obj.set_metadata_option("uuid", str(uuid4()))
 
 
-def short_id(obj: SignalObj | ImageObj | ObjectGroup) -> str:
+def get_short_id(obj: SignalObj | ImageObj | ObjectGroup) -> str:
     """Short object ID"""
     return f"{obj.PREFIX}{get_number(obj):03d}"
 
