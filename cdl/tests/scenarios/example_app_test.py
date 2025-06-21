@@ -13,6 +13,7 @@ then open DataLab to show it.
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.proxy import proxy_context
+from cdl.tests import skip_if_opencv_missing
 from cdl.tests.data import get_test_image
 
 
@@ -39,7 +40,8 @@ def test_example_app():
             filter_by_circularity=True,
             min_circularity=0.2,
         )
-        proxy.calc("blob_opencv", param)
+        with skip_if_opencv_missing():
+            proxy.calc("blob_opencv", param)
 
 
 if __name__ == "__main__":
