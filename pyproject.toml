@@ -47,6 +47,7 @@ dependencies = [
     "pandas >= 1.2",
     "PyWavelets >= 1.1",
     "psutil >= 5.7",
+    "packaging >= 20.0",
 ]
 dynamic = ["version"]
 
