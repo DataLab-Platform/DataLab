@@ -41,6 +41,7 @@ def test_image_offset_correction_interactive() -> None:
             ok = exec_dialog(dlg)
         if ok:
             param = ROI2DParam()
+            # pylint: disable=unbalanced-tuple-unpacking
             ix0, iy0, ix1, iy1 = i1.physical_to_indices(dlg.get_rect_coords())
             param.x0, param.y0, param.dx, param.dy = ix0, iy0, ix1 - ix0, iy1 - iy0
             i2 = sigima_.computation.image.exposure.offset_correction(i1, param)

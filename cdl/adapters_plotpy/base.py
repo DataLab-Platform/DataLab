@@ -485,7 +485,6 @@ class BaseROIPlotPyAdapter(Generic[TypeROI], abc.ABC):
         Returns:
             Plot item
         """
-        ...
 
     def iterate_roi_items(
         self, obj: TypeObj, fmt: str, lbl: bool, editable: bool = True
@@ -552,7 +551,6 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
         Returns:
             Plot item
         """
-        ...
 
     @abc.abstractmethod
     def update_item(self, item: TypePlotItem, data_changed: bool = True) -> None:
@@ -562,7 +560,6 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
             item: plot item
             data_changed: if True, data has changed
         """
-        ...
 
     def add_annotations_from_items(self, items: list) -> None:
         """Add object annotations (annotation plot items).

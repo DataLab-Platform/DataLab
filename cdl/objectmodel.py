@@ -285,14 +285,18 @@ class ObjectModel:
         if isinstance(obj_or_group, ObjectGroup):
             try:
                 return self._groups.index(obj_or_group) + 1
-            except ValueError:
-                raise KeyError(f"Group {get_uuid(obj_or_group)} not found in model")
+            except ValueError as exc:
+                raise KeyError(
+                    f"Group {get_uuid(obj_or_group)} not found in model"
+                ) from exc
         if isinstance(obj_or_group, (SignalObj, ImageObj)):
             objs = self.get_all_objects()
             try:
                 return objs.index(obj_or_group) + 1
-            except ValueError:
-                raise KeyError(f"Object {get_uuid(obj_or_group)} not found in model")
+            except ValueError as exc:
+                raise KeyError(
+                    f"Object {get_uuid(obj_or_group)} not found in model"
+                ) from exc
         raise KeyError(f"Object or group {get_uuid(obj_or_group)} not found in model")
 
     def get_group_from_number(self, number: int) -> ObjectGroup:

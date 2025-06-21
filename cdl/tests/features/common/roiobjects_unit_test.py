@@ -124,6 +124,7 @@ def test_create_image_roi() -> None:
 
             bbox_phys = [float(val) for val in sroi.get_bounding_box(obj)]
             if geometry in ("rectangle", "circle"):
+                # pylint: disable=unbalanced-tuple-unpacking
                 x0, y0, x1, y1 = obj.physical_to_indices(bbox_phys)
                 if geometry == "rectangle":
                     coords_from_bbox = [int(xy) for xy in [x0, y0, x1 - x0, y1 - y0]]

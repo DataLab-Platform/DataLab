@@ -1459,131 +1459,130 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         self.mainwindow.signalpanel.add_object(obj)
 
+    def __plot_result(
+        self, category: str, rdata: ResultData, objs: list[SignalObj | ImageObj]
+    ) -> None:
+        """Plot results for a specific category"""
+        xchoices = (("indices", _("Indices")),)
+        for xlabel in rdata.xlabels:
+            xchoices += ((xlabel, xlabel),)
+        ychoices = xchoices[1:]
+
+        # Regrouping ResultShape results by their `title` attribute:
+        grouped_results: dict[str, list[ResultShape]] = {}
+        for result in rdata.results:
+            grouped_results.setdefault(result.title, []).append(result)
+
+        # From here, results are already grouped by their `category` attribute,
+        # and then by their `title` attribute. We can now plot them.
+        #
+        # Now, we have two common use cases:
+        # 1. Plotting one curve per object (signal/image) and per `title`
+        #    attribute, if each selected object contains a result object
+        #    with multiple values (e.g. from a blob detection feature).
+        # 2. Plotting one curve per `title` attribute, if each selected object
+        #    contains a result object with a single value (e.g. from a FHWM
+        #    feature) - in that case, we select only the first value of each
+        #    result object.
+
+        # The default kind of plot depends on the number of values in each
+        # result and the number of selected objects:
+        default_kind = (
+            "one_curve_per_object"
+            if any(result.array.shape[0] > 1 for result in rdata.results)
+            else "one_curve_per_title"
+        )
+
+        class PlotResultParam(gds.DataSet):
+            """Plot results parameters"""
+
+            kind = gds.ChoiceItem(
+                _("Plot kind"),
+                (
+                    (
+                        "one_curve_per_object",
+                        _("One curve per object (or ROI) and per result title"),
+                    ),
+                    ("one_curve_per_title", _("One curve per result title")),
+                ),
+                default=default_kind,
+            )
+            xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indices")
+            yaxis = gds.ChoiceItem(_("Y axis"), ychoices, default=ychoices[0][0])
+
+        comment = (
+            _(
+                "Plot results obtained from previous analyses.<br><br>"
+                "This plot is based on results associated with '%s' prefix."
+            )
+            % category
+        )
+        param = PlotResultParam(_("Plot results"), comment=comment)
+        if not param.edit(parent=self.parent()):
+            return
+
+        i_yaxis = rdata.xlabels.index(param.yaxis)
+        if param.kind == "one_curve_per_title":
+            # One curve per ROI (if any) and per result title
+            # ------------------------------------------------------------------
+            # Begin by checking if all results have the same number of ROIs:
+            # for simplicity, let's check the number of unique ROI indices.
+            all_roi_indexes = [
+                np.unique(result.array[:, 0]) for result in rdata.results
+            ]
+            # Check if all roi_indexes are the same:
+            if len(set(map(tuple, all_roi_indexes))) > 1:
+                QW.QMessageBox.warning(
+                    self,
+                    _("Plot results"),
+                    _(
+                        "All objects associated with results must have the "
+                        "same regions of interest (ROIs) to plot results "
+                        "together."
+                    ),
+                )
+                return
+            for i_roi in all_roi_indexes[0]:
+                roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
+                for title, results in grouped_results.items():  # title
+                    x, y = [], []
+                    for index, result in enumerate(results):
+                        mask = result.array[:, 0] == i_roi
+                        if param.xaxis == "indices":
+                            x.append(index)
+                        else:
+                            i_xaxis = rdata.xlabels.index(param.xaxis)
+                            x.append(result.shown_array[mask, i_xaxis][0])
+                        y.append(result.shown_array[mask, i_yaxis][0])
+                    self.__add_result_signal(
+                        x, y, f"{title}{roi_suffix}", param.xaxis, param.yaxis
+                    )
+        else:
+            # One curve per result title, per object and per ROI
+            # ------------------------------------------------------------------
+            for title, results in grouped_results.items():  # title
+                for index, result in enumerate(results):  # object
+                    roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
+                    for i_roi in roi_idx:  # ROI
+                        roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
+                        mask = result.array[:, 0] == i_roi
+                        if param.xaxis == "indices":
+                            x = np.arange(result.array.shape[0])[mask]
+                        else:
+                            i_xaxis = rdata.xlabels.index(param.xaxis)
+                            x = result.shown_array[mask, i_xaxis]
+                        y = result.shown_array[mask, i_yaxis]
+                        shid = get_short_id(objs[index])
+                        stitle = f"{title} ({shid}){roi_suffix}"
+                        self.__add_result_signal(x, y, stitle, param.xaxis, param.yaxis)
+
     def plot_results(self) -> None:
         """Plot results"""
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
             for category, rdata in rdatadict.items():
-                xchoices = (("indices", _("Indices")),)
-                for xlabel in rdata.xlabels:
-                    xchoices += ((xlabel, xlabel),)
-                ychoices = xchoices[1:]
-
-                # Regrouping ResultShape results by their `title` attribute:
-                grouped_results: dict[str, list[ResultShape]] = {}
-                for result in rdata.results:
-                    grouped_results.setdefault(result.title, []).append(result)
-
-                # From here, results are already grouped by their `category` attribute,
-                # and then by their `title` attribute. We can now plot them.
-                #
-                # Now, we have two common use cases:
-                # 1. Plotting one curve per object (signal/image) and per `title`
-                #    attribute, if each selected object contains a result object
-                #    with multiple values (e.g. from a blob detection feature).
-                # 2. Plotting one curve per `title` attribute, if each selected object
-                #    contains a result object with a single value (e.g. from a FHWM
-                #    feature) - in that case, we select only the first value of each
-                #    result object.
-
-                # The default kind of plot depends on the number of values in each
-                # result and the number of selected objects:
-                default_kind = (
-                    "one_curve_per_object"
-                    if any(result.array.shape[0] > 1 for result in rdata.results)
-                    else "one_curve_per_title"
-                )
-
-                class PlotResultParam(gds.DataSet):
-                    """Plot results parameters"""
-
-                    kind = gds.ChoiceItem(
-                        _("Plot kind"),
-                        (
-                            (
-                                "one_curve_per_object",
-                                _("One curve per object (or ROI) and per result title"),
-                            ),
-                            ("one_curve_per_title", _("One curve per result title")),
-                        ),
-                        default=default_kind,
-                    )
-                    xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indices")
-                    yaxis = gds.ChoiceItem(
-                        _("Y axis"), ychoices, default=ychoices[0][0]
-                    )
-
-                comment = (
-                    _(
-                        "Plot results obtained from previous analyses.<br><br>"
-                        "This plot is based on results associated with '%s' prefix."
-                    )
-                    % category
-                )
-                param = PlotResultParam(_("Plot results"), comment=comment)
-                if not param.edit(parent=self.parent()):
-                    return
-
-                i_yaxis = rdata.xlabels.index(param.yaxis)
-                if param.kind == "one_curve_per_title":
-                    # One curve per ROI (if any) and per result title
-                    # ------------------------------------------------------------------
-                    # Begin by checking if all results have the same number of ROIs:
-                    # for simplicity, let's check the number of unique ROI indices.
-                    all_roi_indexes = [
-                        np.unique(result.array[:, 0]) for result in rdata.results
-                    ]
-                    # Check if all roi_indexes are the same:
-                    if len(set(map(tuple, all_roi_indexes))) > 1:
-                        QW.QMessageBox.warning(
-                            self,
-                            _("Plot results"),
-                            _(
-                                "All objects associated with results must have the "
-                                "same regions of interest (ROIs) to plot results "
-                                "together."
-                            ),
-                        )
-                        return
-                    for i_roi in all_roi_indexes[0]:
-                        roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
-                        for title, results in grouped_results.items():  # title
-                            x, y = [], []
-                            for index, result in enumerate(results):
-                                mask = result.array[:, 0] == i_roi
-                                if param.xaxis == "indices":
-                                    x.append(index)
-                                else:
-                                    i_xaxis = rdata.xlabels.index(param.xaxis)
-                                    x.append(result.shown_array[mask, i_xaxis][0])
-                                y.append(result.shown_array[mask, i_yaxis][0])
-                            self.__add_result_signal(
-                                x, y, f"{title}{roi_suffix}", param.xaxis, param.yaxis
-                            )
-                else:
-                    # One curve per result title, per object and per ROI
-                    # ------------------------------------------------------------------
-                    for title, results in grouped_results.items():  # title
-                        for index, result in enumerate(results):  # object
-                            roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
-                            for i_roi in roi_idx:  # ROI
-                                roi_suffix = (
-                                    f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
-                                )
-                                mask = result.array[:, 0] == i_roi
-                                if param.xaxis == "indices":
-                                    x = np.arange(result.array.shape[0])[mask]
-                                else:
-                                    i_xaxis = rdata.xlabels.index(param.xaxis)
-                                    x = result.shown_array[mask, i_xaxis]
-                                y = result.shown_array[mask, i_yaxis]
-                                shid = get_short_id(objs[index])
-                                stitle = f"{title} ({shid}){roi_suffix}"
-                                self.__add_result_signal(
-                                    x, y, stitle, param.xaxis, param.yaxis
-                                )
-
+                self.__plot_result(category, rdata, objs)
         else:
             self.__show_no_result_warning()
 

@@ -161,7 +161,7 @@ def create_signal_gui(
             QW.QMessageBox.warning(parent, _("Error"), str(exc))
         else:
             raise ValueError(f"Error creating signal: {exc}") from exc
-        return None
+        signal = None
 
     return signal
 

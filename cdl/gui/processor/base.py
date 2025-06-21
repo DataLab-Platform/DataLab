@@ -30,7 +30,7 @@ from cdl.gui.processor.catcher import CompOut, wng_err_func
 from cdl.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
-from sigima_ import is_computation_function
+from sigima_.computation import is_computation_function
 from sigima_.obj.base import TypeROI, TypeROIParam
 
 if TYPE_CHECKING:

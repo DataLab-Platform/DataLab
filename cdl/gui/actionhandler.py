@@ -226,6 +226,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             if is_new:
                 self.add_to_action_list(menu)
 
+    # pylint: disable=too-many-positional-arguments
     def new_action(
         self,
         title: str,

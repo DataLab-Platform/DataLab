@@ -926,7 +926,7 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
         """Convert coordinates from physical (real world) to indices (pixel)
 
         Args:
-            coords: coordinates
+            coords: flat list of physical coordinates [x0, y0, x1, y1, ...]
             clip: if True, clip values to image boundaries
 
         Returns:
@@ -947,7 +947,7 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
         """Convert coordinates from indices to physical (real world)
 
         Args:
-            indices: indices
+            indices: flat list of indices [x0, y0, x1, y1, ...]
 
         Returns:
             Coordinates
@@ -959,16 +959,6 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
             coords[1::2] *= self.dy
             coords[1::2] += self.y0 + 0.5 * self.dy
         return coords.tolist()
-
-    # def update_plot_item_parameters(self, item: MaskedImageItem) -> None:
-
-    # def update_metadata_from_plot_item(self, item: MaskedImageItem) -> None:
-
-    # def make_item(self, update_from: MaskedImageItem | None = None)
-
-    # def update_item(self, item: MaskedImageItem, data_changed: bool = True) -> None:
-
-    # def add_label_with_title(self, title: str | None = None) -> None:
 
 
 def create_image(
