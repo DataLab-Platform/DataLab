@@ -9,7 +9,7 @@ Blob detection application test
 
 import cdl.param
 from cdl.obj import create_image
-from cdl.tests import cdltest_app_context
+from cdl.tests import cdltest_app_context, skip_if_opencv_missing
 from cdl.tests.data import get_test_image
 
 
@@ -32,7 +32,8 @@ def test_blobs():
             image = create_image(name, data)
             image.add_label_with_title()
             panel.add_object(image)
-            compute_method(param)
+            with skip_if_opencv_missing():
+                compute_method(param)
 
         # Testing distribute_on_grid and reset_positions
         # ==============================================
