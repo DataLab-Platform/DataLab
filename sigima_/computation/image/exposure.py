@@ -32,7 +32,7 @@ from skimage import exposure
 
 import sigima_.algorithms.image as alg
 from cdl.config import _
-from sigima_ import computation_function
+from sigima_.computation import computation_function
 from sigima_.computation.base import (
     ClipParam,
     HistogramParam,

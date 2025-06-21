@@ -36,7 +36,7 @@ from plotpy.panels.csection.csitem import compute_line_section as csline
 
 import sigima_.algorithms.image as alg
 from cdl.config import _
-from sigima_ import computation_function
+from sigima_.computation import computation_function
 from sigima_.computation.base import dst_1_to_1
 from sigima_.computation.image.base import dst_1_to_1_signal
 from sigima_.obj.image import ImageObj, ImageROI, ROI2DParam

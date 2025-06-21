@@ -30,7 +30,7 @@ import numpy as np
 from numpy import ma
 
 import sigima_.algorithms.image as alg
-from sigima_ import computation_function
+from sigima_.computation import computation_function
 from sigima_.computation.base import calc_resultproperties
 from sigima_.computation.image.base import calc_resultshape
 from sigima_.obj.base import ResultProperties, ResultShape

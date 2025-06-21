@@ -27,7 +27,7 @@ import scipy.signal as sps
 import sigima_.algorithms.coordinates
 import sigima_.algorithms.signal as alg
 from cdl.config import Conf, _
-from sigima_ import computation_function
+from sigima_.computation import computation_function
 from sigima_.computation.base import (
     ArithmeticParam,
     ClipParam,

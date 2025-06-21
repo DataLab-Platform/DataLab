@@ -31,8 +31,8 @@ from __future__ import annotations
 import numpy as np
 
 from cdl.config import Conf
-from sigima_ import computation_function
 from sigima_.algorithms.datatypes import clip_astype
+from sigima_.computation import computation_function
 from sigima_.computation.base import (
     ArithmeticParam,
     ConstantParam,

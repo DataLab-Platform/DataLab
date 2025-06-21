@@ -31,7 +31,7 @@ import scipy.signal as sps
 from skimage import filters
 
 from cdl.config import _
-from sigima_ import computation_function
+from sigima_.computation import computation_function
 from sigima_.computation.base import (
     GaussianParam,
     MovingAverageParam,
