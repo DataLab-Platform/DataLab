@@ -62,12 +62,13 @@ from sigima_ import (
     ImageROI,
     PolygonalROI,
     RectangularROI,
+    ROI1DParam,
+    ROI2DParam,
     SegmentROI,
     SignalObj,
     SignalROI,
     TypeObj,
     TypeROI,
-    obj,
 )
 
 if TYPE_CHECKING:
@@ -466,7 +467,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
 
     def manually_add_roi(self) -> None:
         """Manually add segment ROI"""
-        param = obj.ROI1DParam()
+        param = ROI1DParam()
         if param.edit(parent=self):
             segment_roi = param.to_single_roi(self.obj)
             shape = create_adapter_from_object(segment_roi).to_plot_item(self.obj)
@@ -533,7 +534,7 @@ class ImageROIEditor(
         assert roi_type in ("rectangle", "circle", "polygon")
         if roi_type == "polygon":
             raise NotImplementedError("Manual polygonal ROI creation is not supported")
-        param = obj.ROI2DParam()
+        param = ROI2DParam()
         param.geometry = roi_type
         if param.edit(parent=self):
             roi = param.to_single_roi(self.obj)

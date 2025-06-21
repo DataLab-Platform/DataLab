@@ -84,7 +84,7 @@ def test_signal_stats_unit() -> None:
     obj = create_reference_signal()
     res = ss.stats(obj)
     df = res.to_dataframe()
-    ref = get_analytical_stats(so.xydata)
+    ref = get_analytical_stats(obj.xydata)
     name_map = {
         "min": "min(y)",
         "max": "max(y)",
@@ -125,7 +125,7 @@ def test_image_stats_unit() -> None:
         res = si.stats(obj)
 
     df = res.to_dataframe()
-    ref = get_analytical_stats(so.data)
+    ref = get_analytical_stats(obj.data)
     name_map = {
         "min": "min(z)",
         "max": "max(z)",

@@ -58,7 +58,7 @@ def test_roi_circ() -> None:
         for obj_nb in (1, 2):
             obj = panel[obj_nb]
             panel.objview.set_current_object(obj)
-            params = so.roi.to_params(obj)
+            params = obj.roi.to_params(obj)
             panel.processor.run_feature("extract_roi", params=params)
 
 
