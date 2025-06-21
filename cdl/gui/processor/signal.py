@@ -11,7 +11,6 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 
-import guidata.dataset as gds
 import numpy as np
 from guidata.qthelpers import exec_dialog
 
@@ -32,7 +31,7 @@ from sigima_ import ResultProperties, ResultShape, SignalObj
 from sigima_.model.signal import ROI1DParam, SignalROI, create_signal
 
 
-class SignalProcessor(BaseProcessor[SignalROI]):
+class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     """Object handling signal processing: operations, processing, analysis"""
 
     # pylint: disable=duplicate-code
@@ -548,9 +547,15 @@ class SignalProcessor(BaseProcessor[SignalROI]):
                 self.__row_compute_fit(obj, _("Multi-Gaussian fit"), multigaussianfit)
 
     @qt_try_except()
-    def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
+    def _extract_multiple_roi_in_single_object(self, params: list[ROI1DParam]) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
-        self.compute_1_to_1(ss.extract_rois, group, title=_("Extract ROI"))
+        # TODO: This `compute_1_to_1` call is not ideal, as it passes a list of
+        # parameter sets (`params` is a list of `DataSet` objects) instead of a single
+        # parameter set as expected by the method. Currently, the method implementation
+        # is compatible with this call, and it simply passes the second argument through
+        # to the `extract_rois` function. However, this should be rectified in the
+        # future to ensure that the method signature and its usage are consistent.
+        self.compute_1_to_1(ss.extract_rois, params, title=_("Extract ROI"))
 
     # ------Signal Analysis
 

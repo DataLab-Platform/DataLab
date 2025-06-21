@@ -56,8 +56,10 @@ def test_roi_circ():
             panel.processor.run_feature("centroid")
         # Extracting ROIs:
         for obj_nb in (1, 2):
-            panel.objview.set_current_object(panel[obj_nb])
-            panel.processor.run_feature("roi_extraction")
+            obj = panel[obj_nb]
+            panel.objview.set_current_object(obj)
+            params = obj.roi.to_params(obj)
+            panel.processor.run_feature("extract_roi", params=params)
 
 
 if __name__ == "__main__":

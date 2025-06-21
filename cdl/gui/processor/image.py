@@ -8,8 +8,6 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import numpy as np
 from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
@@ -27,11 +25,8 @@ from cdl.widgets import imagebackground
 from sigima_ import ImageROI, ResultShape, ROI2DParam, create_image_roi
 from sigima_.algorithms.image import distance_matrix
 
-if TYPE_CHECKING:
-    import guidata.dataset as gds
 
-
-class ImageProcessor(BaseProcessor[ImageROI]):
+class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     """Object handling image processing: operations, processing, analysis"""
 
     # pylint: disable=duplicate-code
@@ -797,9 +792,15 @@ class ImageProcessor(BaseProcessor[ImageROI]):
         self.compute_multiple_1_to_1(funcs, None, "Edges")
 
     @qt_try_except()
-    def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
+    def _extract_multiple_roi_in_single_object(self, params: list[ROI2DParam]) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
-        self.compute_1_to_1(si.extract_rois, group, title=_("Extract ROI"))
+        # TODO: This `compute_1_to_1` call is not ideal, as it passes a list of
+        # parameter sets (`params` is a list of `DataSet` objects) instead of a single
+        # parameter set as expected by the method. Currently, the method implementation
+        # is compatible with this call, and it simply passes the second argument through
+        # to the `extract_rois` function. However, this should be rectified in the
+        # future to ensure that the method signature and its usage are consistent.
+        self.compute_1_to_1(si.extract_rois, params, title=_("Extract ROI"))
 
     # ------Image Analysis
     @qt_try_except()

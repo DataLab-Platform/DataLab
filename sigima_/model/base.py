@@ -1309,23 +1309,20 @@ class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):  # type: 
             Mask (boolean array where True values are inside the ROI)
         """
 
-    def to_params(
-        self, obj: TypeObj, title: str | None = None
-    ) -> TypeROIParam | gds.DataSetGroup:
-        """Convert ROIs to group of parameters
+    def to_params(self, obj: TypeObj) -> list[TypeROIParam]:
+        """Convert ROIs to a list of parameters
 
         Args:
             obj: object (signal/image), for physical to pixel conversion
-            title: group title
+
+        Returns:
+            ROI parameters
         """
-        return gds.DataSetGroup(
-            [iroi.to_param(obj, f"ROI{idx:02d}") for idx, iroi in enumerate(self)],
-            title=_("Regions of interest") if title is None else title,
-        )
+        return [iroi.to_param(obj, f"ROI{idx:02d}") for idx, iroi in enumerate(self)]
 
     @classmethod
     def from_params(
-        cls: Type[BaseROI], obj: TypeObj, params: TypeROIParam | gds.DataSetGroup
+        cls: Type[BaseROI], obj: TypeObj, params: list[TypeROIParam]
     ) -> BaseROI[TypeObj, TypeSingleROI, TypeROIParam]:
         """Create ROIs from parameters
 
@@ -1337,12 +1334,9 @@ class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):  # type: 
             ROIs
         """
         roi = cls()
-        if isinstance(params, gds.DataSetGroup):
-            for param in params.datasets:
-                assert isinstance(param, BaseROIParam)
-                roi.add_roi(param.to_single_roi(obj))
-        else:
-            roi.add_roi(params.to_single_roi(obj))
+        for param in params:
+            assert isinstance(param, BaseROIParam), "Invalid ROI parameter type"
+            roi.add_roi(param.to_single_roi(obj))
         return roi
 
     def to_dict(self) -> dict:

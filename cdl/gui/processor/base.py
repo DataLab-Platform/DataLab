@@ -31,7 +31,7 @@ from cdl.objectmodel import get_uuid, patch_title_with_ids, short_id
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 from sigima_ import is_computation_function
-from sigima_.model.base import TypeROI
+from sigima_.model.base import TypeROI, TypeROIParam
 
 if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
@@ -209,7 +209,7 @@ class ComputingFeature:
         return title
 
 
-class BaseProcessor(QC.QObject, Generic[TypeROI]):
+class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     """Object handling data processing: operations, processing, analysis.
 
     Args:
@@ -1213,8 +1213,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             compute(ss.interpolation, obj2, param)
 
             # For pattern `1_to_n`:
-            group = roi.to_params(obj)
-            compute(ss.extract_roi, params=group.datasets)
+            params = roi.to_params(obj)
+            compute(ss.extract_roi, params=params)  # `params` is a list of DataSet
 
         Args:
             key: The key to look up in the registry. It can be a string, a callable,
@@ -1240,6 +1240,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         if pattern in {"1_to_1", "1_to_0", "n_to_1"}:
             compute_method = getattr(self, f"compute_{pattern}")
             param = kwargs.pop("param", args[0] if args else None)
+            assert isinstance(param, (gds.DataSet, type(None))), (
+                f"For pattern '{pattern}', 'param' must be a DataSet or None"
+            )
             return compute_method(
                 feature.function,
                 param=param,
@@ -1250,7 +1253,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             )
         if pattern == "2_to_1":
             obj2 = kwargs.pop("obj2", args[0] if args else None)
+            assert isinstance(obj2, (Obj, list, type(None))), (
+                "For pattern '2_to_1', 'obj2' must be an Obj, a list of Obj, or None"
+            )
             param = kwargs.pop("param", args[1] if args and len(args) > 1 else None)
+            assert isinstance(param, (gds.DataSet, type(None))), (
+                "For pattern '2_to_1', 'param' must be a DataSet or None"
+            )
             return self.compute_2_to_1(
                 obj2,
                 feature.obj2_name or _("Second operand"),
@@ -1263,6 +1272,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
             )
         if pattern == "1_to_n":
             params = kwargs.get("params", args[0] if args else [])
+            if not isinstance(params, list) or any(
+                not isinstance(param, gds.DataSet) for param in params
+            ):
+                raise ValueError(
+                    "For pattern '1_to_n', 'params' must be "
+                    "a list of DataSet or a DataSetGroup"
+                )
             return self.compute_1_to_n(
                 feature.function,
                 params=params,
@@ -1290,29 +1306,28 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         if roi is None or roi.is_empty():
             return
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
-        group = roi.to_params(obj)
-        if roi.singleobj and len(group.datasets) > 1:
+        params = roi.to_params(obj)
+        if roi.singleobj and len(params) > 1:
             # Extract multiple ROIs into a single object (remove all the ROIs),
             # if the "Extract all ROIs into a single image object"
             # option is checked and if there are more than one ROI
-            self._extract_multiple_roi_in_single_object(group)
+            self._extract_multiple_roi_in_single_object(params)
         else:
             # Extract each ROI into a separate object (keep the ROI in the case of
             # a circular ROI), if the "Extract all ROIs into a single image object"
             # option is not checked or if there is only one ROI (See Issue #31)
-            self.run_feature("extract_roi", params=group.datasets, edit=False)
+            self.run_feature("extract_roi", params=params, edit=False)
 
     @abc.abstractmethod
     @qt_try_except()
-    def _extract_multiple_roi_in_single_object(self, group: gds.DataSetGroup) -> None:
+    def _extract_multiple_roi_in_single_object(
+        self, params: list[TypeROIParam]
+    ) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
 
     # ------Analysis-------------------------------------------------------------------
 
-    def edit_regions_of_interest(
-        self,
-        extract: bool = False,
-    ) -> TypeROI | None:
+    def edit_regions_of_interest(self, extract: bool = False) -> TypeROI | None:
         """Define Region Of Interest (ROI).
 
         Args:
@@ -1332,7 +1347,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
         edited_roi, modified = results
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         obj = objs[-1]
-        group = edited_roi.to_params(obj)
+        params = edited_roi.to_params(obj)
+        group = gds.DataSetGroup(params, title=_("Regions of Interest"))
         if (
             env.execenv.unattended  # Unattended mode (automated unit tests)
             or edited_roi.is_empty()  # No ROI has been defined
@@ -1344,7 +1360,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI]):
                     for obj_i in objs:
                         obj_i.roi = None
                 else:
-                    edited_roi = edited_roi.from_params(obj, group)
+                    edited_roi = edited_roi.from_params(obj, params)
                     if not extract:
                         for obj_i in objs:
                             obj_i.roi = edited_roi

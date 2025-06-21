@@ -44,12 +44,12 @@ from sigima_.model.signal import SignalObj
 
 
 @computation_function()
-def extract_rois(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
+def extract_rois(src: ImageObj, params: list[ROI2DParam]) -> ImageObj:
     """Extract multiple regions of interest from data
 
     Args:
         src: input image object
-        group: parameters defining the regions of interest
+        params: list of ROI parameters
 
     Returns:
         Output image object
@@ -58,16 +58,15 @@ def extract_rois(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     y0, x0 = ymax, xmax = src.data.shape
     # Initialize x1, y1 with minimum values:
     y1, x1 = ymin, xmin = 0, 0
-    for p in group.datasets:
-        p: ROI2DParam
+    for p in params:
         x0i, y0i, x1i, y1i = p.get_bounding_box_indices()
         x0, y0, x1, y1 = min(x0, x0i), min(y0, y0i), max(x1, x1i), max(y1, y1i)
     x0, y0 = max(x0, xmin), max(y0, ymin)
     x1, y1 = min(x1, xmax), min(y1, ymax)
 
     suffix = None
-    if len(group.datasets) == 1:
-        p = group.datasets[0]
+    if len(params) == 1:
+        p = params[0]
         suffix = p.get_suffix()
     dst = dst_1_to_1(src, "extract_rois", suffix)
     dst.x0 += x0 * src.dx
@@ -75,7 +74,7 @@ def extract_rois(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     dst.roi = None
 
     src2 = src.copy()
-    src2.roi = ImageROI.from_params(src2, group)
+    src2.roi = ImageROI.from_params(src2, params)
     src2.data[src2.maskdata] = 0
     dst.data = src2.data[y0:y1, x0:x1]
     return dst

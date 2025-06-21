@@ -385,24 +385,24 @@ def division(src1: SignalObj, src2: SignalObj) -> SignalObj:
 
 
 @computation_function()
-def extract_rois(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
+def extract_rois(src: SignalObj, params: list[ROI1DParam]) -> SignalObj:
     """Extract multiple regions of interest from data
 
     Args:
         src: source signal
-        group: group of parameters
+        params: list of ROI parameters
 
     Returns:
         Signal with multiple regions of interest
     """
     suffix = None
-    if len(group.datasets) == 1:
-        p: ROI1DParam = group.datasets[0]
+    if len(params) == 1:
+        p: ROI1DParam = params[0]
         suffix = f"{p.xmin:.3g}≤x≤{p.xmax:.3g}"
     dst = dst_1_to_1(src, "extract_rois", suffix)
     x, y = src.get_data()
     xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
-    for p in group.datasets:
+    for p in params:
         idx1, idx2 = np.searchsorted(x, p.xmin), np.searchsorted(x, p.xmax)
         slice0 = slice(idx1, idx2)
         xout[slice0], yout[slice0] = x[slice0], y[slice0]
