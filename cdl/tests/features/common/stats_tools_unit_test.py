@@ -15,6 +15,7 @@ from __future__ import annotations
 import numpy as np
 import plotpy
 from guidata.qthelpers import exec_dialog, qt_app_context
+from packaging.version import Version
 from plotpy.constants import PlotType
 from plotpy.tests.unit.utils import drag_mouse
 from plotpy.tools import CurveStatsTool, ImageStatsTool
@@ -23,7 +24,6 @@ from qtpy import QtWidgets as QW
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.gui.docks import DataLabPlotWidget
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
-from cdl.utils.misc import compare_versions
 from sigima_ import ImageObj, SignalObj
 
 
@@ -43,7 +43,7 @@ def simulate_stats_tool(
     klass = CurveStatsTool if plot_type == PlotType.CURVE else ImageStatsTool
     stattool = widget.get_manager().get_tool(klass)
     stattool.activate()
-    if compare_versions(plotpy.__version__, "<", "2.4"):
+    if Version(plotpy.__version__) < Version("2.4"):
         qapp = QW.QApplication.instance()
         drag_mouse(widget, qapp, x_path, y_path)
     else:

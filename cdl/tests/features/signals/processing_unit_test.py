@@ -21,8 +21,10 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+import scipy
 import scipy.ndimage as spi
 import scipy.signal as sps
+from packaging.version import Version
 
 import cdl.tests.data as ctd
 import sigima_.algorithms.coordinates
@@ -323,6 +325,10 @@ def test_signal_moving_average() -> None:
 
 
 @pytest.mark.validation
+@pytest.mark.skipif(
+    Version("1.15.0") <= Version(scipy.__version__) <= Version("1.15.2"),
+    reason="Skipping test: scipy median_filter is broken in 1.15.0-1.15.2",
+)
 def test_signal_moving_median() -> None:
     """Validation test for the signal moving median processing."""
     src = get_test_signal("paracetamol.txt")

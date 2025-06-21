@@ -27,6 +27,7 @@ from xmlrpc.server import SimpleXMLRPCServer
 import guidata.dataset as gds
 import numpy as np
 from guidata.io import JSONReader, JSONWriter
+from packaging.version import Version
 from qtpy import QtCore as QC
 
 import cdl
@@ -34,7 +35,6 @@ from cdl.adapters_plotpy import items_to_json, json_to_items
 from cdl.baseproxy import AbstractCDLControl, BaseProxy
 from cdl.config import Conf, initialize
 from cdl.env import execenv
-from cdl.utils.misc import is_version_at_least
 from sigima_.model.image import ImageObj, create_image
 from sigima_.model.signal import SignalObj, create_signal
 
@@ -798,14 +798,14 @@ class RemoteClient(BaseProxy):
             version = self.get_version()
         except ConnectionRefusedError as exc:
             raise ConnectionRefusedError("DataLab is currently not running") from exc
-        # If DataLab version is not compatible with this client, show a warning using
-        # standard `warnings` module:
-        minor_version = ".".join(cdl.__version__.split(".")[:2])
-        if not is_version_at_least(version, minor_version):
+        # If DataLab version is not compatible with this client, show a warning
+        server_ver = Version(version)
+        client_ver = Version(cdl.__version__)
+        if server_ver < client_ver:
             warnings.warn(
-                f"DataLab server version ({version}) may not be fully compatible with "
-                f"this DataLab client version ({cdl.__version__}).\n"
-                f"Please upgrade the server to {minor_version} or higher."
+                f"DataLab server version ({server_ver}) may not be fully compatible "
+                f"with this DataLab client version ({client_ver}).\n"
+                f"Please upgrade the server to {client_ver} or higher."
             )
 
     def connect(
