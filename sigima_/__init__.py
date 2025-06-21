@@ -8,19 +8,8 @@ Scientific computing engine for 1D signals and 2D images,
 part of the DataLab open-source platform.
 """
 
-# TODO: Annotations: currently, the `items_to_json` and `json_to_items` functions rely
-#       on PlotPy's serialization functions, which are not compatible with `sigima`
-#       annotations model. So, we have to implement the functions to convert `sigima`
-#       annotations to PlotPy items and vice versa: `items_to_sigima_annotations` and
-#       `sigima_annotations_to_items`.
-#       Here are the locations where the functions will be used:
-#       - `BaseObjPlotPyAdapter.add_annotations_from_items`
-#       - `BaseDataPanel.__separate_view_finished`
-#       - `RemoteClient.add_annotations_from_items`
-
 # TODO: Rename "sigima_" (temporary name until the package is fully migrated)
 #       to "sigima_" when the migration is complete.
-# TODO: Move functions below to a separate module?
 # TODO: Remove all dependencies on `cdl` package on all modules
 # TODO: Remove all references for `Conf` (no need for it in `sigima_` package?)
 # TODO: Add local translations for the `sigima_` package
@@ -28,7 +17,9 @@ part of the DataLab open-source platform.
 # TODO: Implement a I/O plugin system similar to the `cdl.plugins` module
 # TODO: Implement a computation plugin system similar to the `cdl.plugins` module
 # TODO: Handle the NumPy minimum requirement to v1.21 to use advanced type hints?
-# TODO: Should we keep `PREFIX` attribute in `BaseObj`?
+# TODO: Should we keep `PREFIX` attribute in `BaseObj`? (it's clearly useful for
+#       `cdl` package, but not used in `sigima_` package - however, it may be tricky
+#       to define it elsewhere, no?)
 
 # pylint:disable=unused-import
 # flake8: noqa
