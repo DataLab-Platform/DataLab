@@ -166,12 +166,20 @@ def cdl_app_context(
         remove_empty_log_file(tb_log_fname)
 
 
+def is_running_tests() -> bool:
+    """Check if code is running during test execution"""
+    return "pytest" in sys.modules or hasattr(sys, "_called_from_test")
+
+
 @contextmanager
 def try_or_log_error(context: str) -> Generator[None, None, None]:
     """Try to execute a function and log an error message if it fails"""
     try:
         yield
     except Exception:  # pylint: disable=broad-except
+        if is_running_tests():
+            # If we are running tests, we want to raise the exception
+            raise
         traceback.print_exc()
         logger = logging.getLogger(__name__)
         logger.error("Error in %s", context, exc_info=traceback.format_exc())
@@ -355,6 +363,9 @@ def qt_try_except(message=None, context=None):
             try:
                 output = func(*args, **kwargs)
             except Exception as msg:  # pylint: disable=broad-except
+                if is_running_tests():
+                    # If we are running tests, we want to raise the exception
+                    raise
                 qt_handle_error_message(panel.parent(), msg, context)
             finally:
                 panel.SIG_STATUS_MESSAGE.emit("")
@@ -376,6 +387,9 @@ def qt_try_loadsave_file(
     try:
         yield filename
     except Exception as msg:  # pylint: disable=broad-except
+        if is_running_tests():
+            # If we are running tests, we want to raise the exception
+            raise
         traceback.print_exc()
         url = osp.dirname(filename).replace("\\", "/")
         if operation == "load":
