@@ -7,13 +7,13 @@ Contour finding application test with Fabry-Perot images
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+import sigima_.obj as so
 import sigima_.param
 from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
 from cdl.tests.data import get_test_image
-from sigima_ import model
 
 
-def test_contour_app():
+def test_contour_app() -> None:
     """Run contour finding application test scenario"""
     with cdltest_app_context() as win:
         panel = win.imagepanel
@@ -23,7 +23,7 @@ def test_contour_app():
         ima1 = get_test_image("fabry-perot1.jpg")
         ima1.set_metadata_option("colormap", "gray")
         xc, yc, r = 601.0, 556.0, 457.0
-        roi = model.create_image_roi("circle", [xc, yc, r])
+        roi = so.create_image_roi("circle", [xc, yc, r])
         ima1.roi = roi
         panel.add_object(ima1)
         param = sigima_.param.ContourShapeParam.create(shape=shape)

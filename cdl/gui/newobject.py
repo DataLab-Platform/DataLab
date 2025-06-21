@@ -25,16 +25,16 @@ from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
 
 from cdl.config import _
-from sigima_.model import NormalRandomParam, UniformRandomParam
-from sigima_.model.image import (
+from sigima_.obj import NormalRandomParam, UniformRandomParam
+from sigima_.obj.image import (
     Gauss2DParam,
     ImageDatatypes,
     ImageObj,
     ImageTypes,
     NewImageParam,
 )
-from sigima_.model.image import create_image_from_param as create_image_headless
-from sigima_.model.signal import (
+from sigima_.obj.image import create_image_from_param as create_image_headless
+from sigima_.obj.signal import (
     DEFAULT_TITLE,
     ExponentialParam,
     GaussLorentzVoigtParam,
@@ -47,8 +47,8 @@ from sigima_.model.signal import (
     StepParam,
     create_signal,
 )
-from sigima_.model.signal import ExperimentalSignalParam as OrigExperimentalSignalParam
-from sigima_.model.signal import create_signal_from_param as create_signal_headless
+from sigima_.obj.signal import ExperimentalSignalParam as OrigExperimentalSignalParam
+from sigima_.obj.signal import create_signal_from_param as create_signal_headless
 
 
 class ExperimentalSignalParam(OrigExperimentalSignalParam):

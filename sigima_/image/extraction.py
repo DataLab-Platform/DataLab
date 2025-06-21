@@ -39,8 +39,8 @@ from cdl.config import _
 from sigima_ import computation_function
 from sigima_.base import dst_1_to_1
 from sigima_.image.base import dst_1_to_1_signal
-from sigima_.model.image import ImageObj, ImageROI, ROI2DParam
-from sigima_.model.signal import SignalObj
+from sigima_.obj.image import ImageObj, ImageROI, ROI2DParam
+from sigima_.obj.signal import SignalObj
 
 
 @computation_function()

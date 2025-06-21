@@ -25,7 +25,7 @@ from skimage import draw
 from cdl.config import _
 from sigima_.algorithms.datatypes import clip_astype
 from sigima_.algorithms.image import scale_data_to_min_max
-from sigima_.model import base
+from sigima_.obj import base
 
 
 def to_builtin(obj) -> str | int | float | list | dict | np.ndarray | None:

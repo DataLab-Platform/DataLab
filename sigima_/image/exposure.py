@@ -42,9 +42,9 @@ from sigima_.base import (
     new_signal_result,
 )
 from sigima_.image.base import Wrap1to1Func, restore_data_outside_roi
-from sigima_.model.base import BaseProcParam
-from sigima_.model.image import ImageObj, ROI2DParam
-from sigima_.model.signal import SignalObj
+from sigima_.obj.base import BaseProcParam
+from sigima_.obj.image import ImageObj, ROI2DParam
+from sigima_.obj.signal import SignalObj
 
 
 class AdjustGammaParam(gds.DataSet):

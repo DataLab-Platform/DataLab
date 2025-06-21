@@ -45,8 +45,8 @@ from sigima_.base import (
     dst_n_to_1,
     new_signal_result,
 )
-from sigima_.model.base import ResultProperties, ResultShape
-from sigima_.model.signal import ROI1DParam, SignalObj
+from sigima_.obj.base import ResultProperties, ResultShape
+from sigima_.obj.signal import ROI1DParam, SignalObj
 
 
 def restore_data_outside_roi(dst: SignalObj, src: SignalObj) -> None:

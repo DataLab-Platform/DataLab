@@ -219,10 +219,10 @@ def create_test_image_with_roi(newimageparam: NewImageParam) -> ImageObj:
     """Create test image with ROIs
 
     Args:
-        newimageparam (cdl.obj.NewImageParam): Image parameters
+        newimageparam (sigima_.NewImageParam): Image parameters
 
     Returns:
-        cdl.obj.ImageObj: Image object with ROIs
+        sigima_.ImageObj: Image object with ROIs
     """
     ima = create_multigauss_image(newimageparam)
     ima.data += 1  # Ensure that the image has non-zero values (for ROI check tests)

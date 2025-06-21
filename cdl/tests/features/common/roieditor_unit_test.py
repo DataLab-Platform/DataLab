@@ -18,7 +18,7 @@ from cdl.gui.panel.image import ImagePanel
 from cdl.gui.panel.signal import SignalPanel
 from cdl.gui.roieditor import ImageROIEditor, SignalROIEditor
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
-from sigima_.model import ImageROI, create_image_roi, create_signal_roi
+from sigima_.obj import ImageROI, create_image_roi, create_signal_roi
 
 
 def test_signal_roi_editor() -> None:

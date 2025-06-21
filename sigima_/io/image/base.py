@@ -14,7 +14,7 @@ import numpy as np
 from cdl.config import _
 from cdl.utils.qthelpers import CallbackWorker
 from sigima_.io.base import BaseIORegistry, FormatBase
-from sigima_.model.image import ImageObj, create_image
+from sigima_.obj.image import ImageObj, create_image
 
 
 class ImageIORegistry(BaseIORegistry):

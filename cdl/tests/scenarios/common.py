@@ -15,6 +15,7 @@ import sigima_.image.exposure
 import sigima_.image.filtering
 import sigima_.image.geometry
 import sigima_.image.mathops
+import sigima_.obj as so
 import sigima_.param as sp
 from cdl.config import _
 from cdl.gui.main import CDLMainWindow
@@ -32,7 +33,6 @@ from cdl.tests.features.common.newobject_unit_test import (
     iterate_signal_creation,
 )
 from cdl.widgets import fitdialog
-from sigima_ import model
 
 
 def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) -> None:
@@ -111,7 +111,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
 
     obj = panel.objmodel.get_groups()[0][-1]
     param = sp.ClipParam()  # Clipping before division...
-    param.upper = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
+    param.upper = (so.data.max() - so.data.min()) * 0.8 + so.data.min()
     panel.processor.run_feature("clip", param)
 
     param = sp.NormalizeParam()
@@ -148,10 +148,10 @@ def run_signal_computations(
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    base_param = model.NewSignalParam.create(
-        title=_("Random function"), stype=model.SignalTypes.UNIFORMRANDOM
+    base_param = so.NewSignalParam.create(
+        title=_("Random function"), stype=so.SignalTypes.UNIFORMRANDOM
     )
-    extra_param = model.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
+    extra_param = so.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
     noiseobj1 = panel.new_object(base_param, extra_param=extra_param, edit=False)
 
     compute_common_operations(panel)
@@ -201,7 +201,7 @@ def run_signal_computations(
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
-    roi = model.create_signal_roi([i1, i2], indices=True)
+    roi = so.create_signal_roi([i1, i2], indices=True)
     panel.processor.compute_roi_extraction(roi)
 
     sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
@@ -220,10 +220,10 @@ def run_signal_computations(
         panel.objview.set_current_object(sig)
         panel.processor.compute_fit(fittitle, fitfunc)
 
-    base_param = model.NewSignalParam.create(
-        title=_("Gaussian"), stype=model.SignalTypes.GAUSS
+    base_param = so.NewSignalParam.create(
+        title=_("Gaussian"), stype=so.SignalTypes.GAUSS
     )
-    sig = model.create_signal_from_param(base_param, model.GaussLorentzVoigtParam())
+    sig = so.create_signal_from_param(base_param, so.GaussLorentzVoigtParam())
     panel.add_object(sig)
 
     param = sp.FWHMParam()
@@ -235,7 +235,7 @@ def run_signal_computations(
     # Create a new signal which X values are a subset of sig1
     x = np.linspace(sig1.x.min(), sig1.x.max(), data_size // 2)[: data_size // 4]
     y = x * 0.0
-    sig2 = model.create_signal("X values for interpolation", x, y)
+    sig2 = so.create_signal("X values for interpolation", x, y)
     panel.add_object(sig2)
 
     # Test interpolation
@@ -285,7 +285,7 @@ def run_image_computations(
     win.set_current_panel("image")
     panel = win.imagepanel
 
-    newparam = model.NewImageParam.create(height=data_size, width=data_size)
+    newparam = so.NewImageParam.create(height=data_size, width=data_size)
 
     if all_types:
         for image in iterate_image_creation(data_size, non_zero=True):
@@ -299,8 +299,8 @@ def run_image_computations(
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    newparam = model.NewImageParam.create(itype=model.ImageTypes.UNIFORMRANDOM)
-    addparam = model.UniformRandomParam()
+    newparam = so.NewImageParam.create(itype=so.ImageTypes.UNIFORMRANDOM)
+    addparam = so.UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)
     addparam.vmax = int(ima1.data.max() * 0.2)
     panel.new_object(newparam, extra_param=addparam, edit=False)
@@ -413,9 +413,7 @@ def run_image_computations(
     panel.processor.run_feature("resize", param)
 
     n = data_size // 10
-    roi = model.create_image_roi(
-        "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
-    )
+    roi = so.create_image_roi("rectangle", [n, n, data_size - 2 * n, data_size - 2 * n])
     panel.processor.compute_roi_extraction(roi)
 
     panel.processor.run_feature("centroid")

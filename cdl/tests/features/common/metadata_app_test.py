@@ -13,6 +13,7 @@ Metadata application test:
 
 import sigima_.image.detection as si_det
 import sigima_.image.measurement
+import sigima_.obj as so
 import sigima_.param as sp
 import sigima_.signal as ss
 from cdl.env import execenv
@@ -22,7 +23,6 @@ from cdl.gui.panel.signal import SignalPanel
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common import roi_app_test
-from sigima_ import model
 
 
 def __run_signal_computations(panel: SignalPanel):
@@ -63,13 +63,13 @@ def test_metadata_app():
         # === Signal metadata features test ===
         panel = win.signalpanel
         sig = create_paracetamol_signal(size)
-        sig.roi = model.create_signal_roi([[26, 41], [125, 146]], indices=True)
+        sig.roi = so.create_signal_roi([[26, 41], [125, 146]], indices=True)
         panel.add_object(sig)
         __run_signal_computations(panel)
         __test_metadata_features(panel)
         # === Image metadata features test ===
         panel = win.imagepanel
-        param = model.NewImageParam.create(height=size, width=size)
+        param = so.NewImageParam.create(height=size, width=size)
         ima = roi_app_test.create_test_image_with_roi(param)
         panel.add_object(ima)
         __run_image_computations(panel)

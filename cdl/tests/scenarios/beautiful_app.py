@@ -20,19 +20,19 @@ A high-level test scenario producing beautiful screenshots.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show,skip
 
+import sigima_.obj as so
 import sigima_.param as sp
 from cdl.tests import cdltest_app_context
-from sigima_ import model
 
 
-def run_beautiful_scenario(screenshots: bool = False):
+def run_beautiful_scenario(screenshots: bool = False) -> None:
     """High-level test scenario producing beautiful screenshots"""
     data_size = 500
     with cdltest_app_context(console=False, exec_loop=not screenshots) as win:
         # Beautiful screenshot of a signal
         panel = win.signalpanel
-        base_param = model.NewSignalParam.create(stype=model.SignalTypes.LORENTZ)
-        sig = model.create_signal_from_param(base_param, model.GaussLorentzVoigtParam())
+        base_param = so.NewSignalParam.create(stype=so.SignalTypes.LORENTZ)
+        sig = so.create_signal_from_param(base_param, so.GaussLorentzVoigtParam())
         panel.add_object(sig)
         panel.processor.run_feature("fft")
         panel.processor.run_feature("wiener")
@@ -47,10 +47,10 @@ def run_beautiful_scenario(screenshots: bool = False):
             win.take_screenshot("s_beautiful")
         # Beautiful screenshot of an image
         panel = win.imagepanel
-        base_param = model.NewImageParam.create(
-            height=data_size, width=data_size, itype=model.ImageTypes.GAUSS
+        base_param = so.NewImageParam.create(
+            height=data_size, width=data_size, itype=so.ImageTypes.GAUSS
         )
-        ima = model.create_image_from_param(base_param, model.Gauss2DParam())
+        ima = so.create_image_from_param(base_param, so.Gauss2DParam())
         ima.set_metadata_option("colormap", "jet")
         panel.add_object(ima)
         panel.processor.run_feature("equalize_hist", sp.EqualizeHistParam())
@@ -60,7 +60,7 @@ def run_beautiful_scenario(screenshots: bool = False):
         panel.processor.run_feature("white_tophat", sp.MorphologyParam())
         panel.processor.run_feature("denoise_tv", sp.DenoiseTVParam())
         n = data_size // 3
-        roi = model.create_image_roi(
+        roi = so.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
         panel.processor.compute_roi_extraction(roi)

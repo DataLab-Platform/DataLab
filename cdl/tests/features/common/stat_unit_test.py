@@ -19,8 +19,8 @@ import pytest
 import scipy.integrate as spt
 
 import sigima_.image.measurement as si
+import sigima_.obj as so
 import sigima_.signal as ss
-from sigima_ import model
 
 
 def get_analytical_stats(data: np.ndarray) -> dict[str, float]:
@@ -52,22 +52,22 @@ def get_analytical_stats(data: np.ndarray) -> dict[str, float]:
     return results
 
 
-def create_reference_signal() -> model.SignalObj:
+def create_reference_signal() -> so.SignalObj:
     """Create reference signal"""
-    snew = model.NewSignalParam.create(title="Gaussian", stype=model.SignalTypes.GAUSS)
-    extra_param = model.GaussLorentzVoigtParam()
-    sig = model.create_signal_from_param(snew, extra_param=extra_param)
-    sig.roi = model.create_signal_roi([len(sig.x) // 2, len(sig.x) - 1], indices=True)
+    snew = so.NewSignalParam.create(title="Gaussian", stype=so.SignalTypes.GAUSS)
+    extra_param = so.GaussLorentzVoigtParam()
+    sig = so.create_signal_from_param(snew, extra_param=extra_param)
+    sig.roi = so.create_signal_roi([len(sig.x) // 2, len(sig.x) - 1], indices=True)
     return sig
 
 
-def create_reference_image() -> model.ImageObj:
+def create_reference_image() -> so.ImageObj:
     """Create reference image"""
-    inew = model.NewImageParam.create(title="2D-Gaussian", itype=model.ImageTypes.GAUSS)
-    extra_param = model.Gauss2DParam()
-    ima = model.create_image_from_param(inew, extra_param=extra_param)
+    inew = so.NewImageParam.create(title="2D-Gaussian", itype=so.ImageTypes.GAUSS)
+    extra_param = so.Gauss2DParam()
+    ima = so.create_image_from_param(inew, extra_param=extra_param)
     dy, dx = ima.data.shape
-    ima.roi = model.create_image_roi(
+    ima.roi = so.create_image_roi(
         "rectangle",
         [
             [dx // 2, 0, dx, dy],
@@ -84,7 +84,7 @@ def test_signal_stats_unit() -> None:
     obj = create_reference_signal()
     res = ss.stats(obj)
     df = res.to_dataframe()
-    ref = get_analytical_stats(obj.xydata)
+    ref = get_analytical_stats(so.xydata)
     name_map = {
         "min": "min(y)",
         "max": "max(y)",
@@ -125,7 +125,7 @@ def test_image_stats_unit() -> None:
         res = si.stats(obj)
 
     df = res.to_dataframe()
-    ref = get_analytical_stats(obj.data)
+    ref = get_analytical_stats(so.data)
     name_map = {
         "min": "min(z)",
         "max": "max(z)",

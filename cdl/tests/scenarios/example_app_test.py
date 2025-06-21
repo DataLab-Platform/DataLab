@@ -10,24 +10,24 @@ then open DataLab to show it.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+import sigima_.obj as so
 import sigima_.param as sp
 from cdl.proxy import proxy_context
 from cdl.tests.data import get_test_image
-from sigima_ import model
 
 
-def test_example_app():
+def test_example_app() -> None:
     """Example of high-level test scenario using proxy interface, so that it may
     be run remotely inside an already running DataLab instance, or in a new
     dedicated instance."""
     with proxy_context("local") as proxy:
         data = get_test_image("flower.npy").data
-        image = model.create_image("Test image with peaks", data)
+        image = so.create_image("Test image with peaks", data)
         proxy.add_object(image)
         proxy.calc("roberts")
         data_size = data.shape[0]
         n = data_size // 5
-        roi = model.create_image_roi(
+        roi = so.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
         proxy.compute_roi_extraction(roi)

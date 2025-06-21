@@ -14,10 +14,10 @@ from typing import TYPE_CHECKING, Literal
 import numpy as np
 from skimage import draw
 
+import sigima_.obj as so
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.features.common.roi_app_test import print_obj_shapes
-from sigima_ import model
 
 if TYPE_CHECKING:
     from sigima_ import ImageObj
@@ -38,12 +38,12 @@ def create_test_image_with_roi(
         coords = [xc, yc, r]
     else:
         raise NotImplementedError(f"Geometry {geometry} not implemented")
-    ima = model.create_image(f"Test image with ROI/{geometry}", data)
-    ima.roi = model.create_image_roi(geometry, coords, indices=True, singleobj=False)
+    ima = so.create_image(f"Test image with ROI/{geometry}", data)
+    ima.roi = so.create_image_roi(geometry, coords, indices=True, singleobj=False)
     return ima
 
 
-def test_roi_circ():
+def test_roi_circ() -> None:
     """Run circular ROI application test scenario"""
     with cdltest_app_context() as win:
         execenv.print("Circular ROI test:")
@@ -58,7 +58,7 @@ def test_roi_circ():
         for obj_nb in (1, 2):
             obj = panel[obj_nb]
             panel.objview.set_current_object(obj)
-            params = obj.roi.to_params(obj)
+            params = so.roi.to_params(obj)
             panel.processor.run_feature("extract_roi", params=params)
 
 

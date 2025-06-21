@@ -66,7 +66,7 @@ from sigima_ import (
     TypeROI,
     create_signal,
 )
-from sigima_.model.base import ROI_KEY
+from sigima_.obj.base import ROI_KEY
 
 if TYPE_CHECKING:
     from typing import Callable

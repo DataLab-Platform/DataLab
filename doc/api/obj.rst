@@ -1,1 +1,1 @@
-.. automodule:: cdl.obj
+.. automodule:: sigima_.obj

@@ -35,7 +35,7 @@ from cdl.config import _
 from sigima_ import computation_function
 from sigima_.base import FFTParam, SpectrumParam, dst_1_to_1
 from sigima_.image.base import Wrap1to1Func
-from sigima_.model.image import ImageObj
+from sigima_.obj.image import ImageObj
 
 
 class ZeroPadding2DParam(gds.DataSet):

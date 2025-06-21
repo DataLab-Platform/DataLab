@@ -19,7 +19,7 @@ import scipy.signal as sps
 
 from cdl.config import _
 from sigima_.algorithms.signal import GaussianModel, LorentzianModel, VoigtModel
-from sigima_.model import base
+from sigima_.obj import base
 
 
 class ROI1DParam(base.BaseROIParam["SignalObj", "SegmentROI"]):

@@ -16,7 +16,7 @@ import numpy as np
 from cdl.config import _
 from cdl.utils.qthelpers import CallbackWorker
 from sigima_.io.base import BaseIORegistry, FormatBase
-from sigima_.model.signal import SignalObj, create_signal
+from sigima_.obj.signal import SignalObj, create_signal
 
 
 class SignalIORegistry(BaseIORegistry):

@@ -41,7 +41,7 @@ from sigima_.base import (
     dst_n_to_1,
 )
 from sigima_.image.base import restore_data_outside_roi
-from sigima_.model.image import ImageObj
+from sigima_.obj.image import ImageObj
 
 # MARK: compute_n_to_1 functions -------------------------------------------------------
 # Functions with N input images and 1 output image

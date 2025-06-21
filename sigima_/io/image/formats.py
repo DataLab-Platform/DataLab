@@ -20,7 +20,7 @@ from sigima_.io.base import FormatInfo
 from sigima_.io.converters import convert_array_to_standard_type
 from sigima_.io.image import funcs
 from sigima_.io.image.base import ImageFormatBase, MultipleImagesFormatBase
-from sigima_.model.image import ImageObj
+from sigima_.obj.image import ImageObj
 
 
 class ClassicsImageFormat(ImageFormatBase):

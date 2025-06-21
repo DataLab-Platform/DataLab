@@ -19,7 +19,7 @@ from sigima_.io.signal.base import SignalFormatBase
 
 if TYPE_CHECKING:
     from cdl.utils.qthelpers import CallbackWorker
-    from sigima_.model.signal import SignalObj
+    from sigima_.obj.signal import SignalObj
 
 
 class CSVSignalFormat(SignalFormatBase):

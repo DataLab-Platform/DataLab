@@ -19,7 +19,7 @@ from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.tests.data import create_paracetamol_signal
 from cdl.utils.vistools import view_curve_items
 from cdl.widgets.signalbaseline import SignalBaselineDialog
-from sigima_.model.signal import ROI1DParam
+from sigima_.obj.signal import ROI1DParam
 
 
 def test_signal_offset_correction_interactive() -> None:

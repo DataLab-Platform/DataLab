@@ -35,8 +35,8 @@ from cdl.adapters_plotpy import items_to_json, json_to_items
 from cdl.baseproxy import AbstractCDLControl, BaseProxy
 from cdl.config import Conf, initialize
 from cdl.env import execenv
-from sigima_.model.image import ImageObj, create_image
-from sigima_.model.signal import SignalObj, create_signal
+from sigima_.obj.image import ImageObj, create_image
+from sigima_.obj.signal import SignalObj, create_signal
 
 if TYPE_CHECKING:
     from cdl.gui.main import CDLMainWindow

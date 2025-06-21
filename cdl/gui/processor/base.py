@@ -31,7 +31,7 @@ from cdl.objectmodel import get_uuid, patch_title_with_ids, short_id
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 from sigima_ import is_computation_function
-from sigima_.model.base import TypeROI, TypeROIParam
+from sigima_.obj.base import TypeROI, TypeROIParam
 
 if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult

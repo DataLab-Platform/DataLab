@@ -39,7 +39,7 @@ from sigima_.base import (
     dst_1_to_1,
 )
 from sigima_.image.base import Wrap1to1Func, restore_data_outside_roi
-from sigima_.model.image import ImageObj
+from sigima_.obj.image import ImageObj
 
 
 @computation_function()

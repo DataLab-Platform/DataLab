@@ -52,7 +52,7 @@ import sigima_.param
 from cdl.tests.data import get_test_image
 from cdl.utils.tests import check_array_result, check_scalar_result
 from sigima_ import ImageObj
-from sigima_.model.image import ROI2DParam
+from sigima_.obj.image import ROI2DParam
 
 
 @pytest.mark.validation

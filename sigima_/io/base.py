@@ -16,7 +16,7 @@ import re
 
 from cdl.config import _
 from cdl.utils.qthelpers import CallbackWorker
-from sigima_.model.base import BaseObj
+from sigima_.obj.base import BaseObj
 
 
 class IOAction(enum.Enum):

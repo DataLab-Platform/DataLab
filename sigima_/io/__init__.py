@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from sigima_.io.image.base import ImageIORegistry
 from sigima_.io.signal.base import SignalIORegistry
-from sigima_.model.image import ImageObj
-from sigima_.model.signal import SignalObj
+from sigima_.obj.image import ImageObj
+from sigima_.obj.signal import SignalObj
 
 
 def read_signals(filename: str) -> list[SignalObj]:

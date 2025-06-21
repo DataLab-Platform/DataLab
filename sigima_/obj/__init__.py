@@ -7,7 +7,7 @@ Model classes for signals and images.
 # pylint:disable=unused-import
 # flake8: noqa
 
-from sigima_.model.base import (
+from sigima_.obj.base import (
     UniformRandomParam,
     NormalRandomParam,
     ResultProperties,
@@ -16,7 +16,7 @@ from sigima_.model.base import (
     TypeROI,
     ShapeTypes,
 )
-from sigima_.model.image import (
+from sigima_.obj.image import (
     ImageObj,
     ImageROI,
     create_image_roi,
@@ -31,7 +31,7 @@ from sigima_.model.image import (
     ImageDatatypes,
     NewImageParam,
 )
-from sigima_.model.signal import (
+from sigima_.obj.signal import (
     SignalObj,
     ROI1DParam,
     SegmentROI,

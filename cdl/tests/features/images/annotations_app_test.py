@@ -12,7 +12,7 @@ Annotations application test:
 
 from cdl.app import run
 from cdl.tests import data as test_data
-from sigima_.model import create_image_roi
+from sigima_.obj import create_image_roi
 
 
 def test_annotations_app():

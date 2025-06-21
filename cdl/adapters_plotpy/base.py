@@ -39,7 +39,7 @@ from plotpy.items import (
 
 from cdl.config import PLOTPY_CONF, Conf
 from sigima_.algorithms import coordinates
-from sigima_.model.base import (
+from sigima_.obj.base import (
     ROI_KEY,
     BaseObj,
     BaseROI,

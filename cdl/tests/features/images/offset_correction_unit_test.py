@@ -21,7 +21,7 @@ from cdl.env import execenv
 from cdl.tests.data import create_noisygauss_image
 from cdl.utils.vistools import view_images_side_by_side
 from cdl.widgets.imagebackground import ImageBackgroundDialog
-from sigima_.model.image import ROI2DParam
+from sigima_.obj.image import ROI2DParam
 
 
 def test_image_offset_correction_interactive() -> None:

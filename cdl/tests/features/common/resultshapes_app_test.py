@@ -13,32 +13,32 @@ from __future__ import annotations
 
 import numpy as np
 
+import sigima_.obj as so
 import sigima_.param
 from cdl.config import Conf
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
-from sigima_ import model
 
 
-def create_image_with_resultshapes():
+def create_image_with_resultshapes() -> so.ImageObj:
     """Create test image with resultshapes"""
-    newparam = model.NewImageParam.create(
+    newparam = so.NewImageParam.create(
         height=600,
         width=600,
         title="Test image (with result shapes)",
-        itype=model.ImageTypes.GAUSS,
-        dtype=model.ImageDatatypes.UINT16,
+        itype=so.ImageTypes.GAUSS,
+        dtype=so.ImageDatatypes.UINT16,
     )
-    addparam = model.Gauss2DParam.create(x0=2, y0=3)
-    image = model.create_image_from_param(newparam, addparam)
+    addparam = so.Gauss2DParam.create(x0=2, y0=3)
+    image = so.create_image_from_param(newparam, addparam)
     for mshape in test_data.create_resultshapes():
         mshape.add_to(image)
     return image
 
 
 def __check_resultshapes_merge(
-    obj1: model.SignalObj | model.ImageObj,
-    obj2: model.SignalObj | model.ImageObj,
+    obj1: so.SignalObj | so.ImageObj,
+    obj2: so.SignalObj | so.ImageObj,
 ) -> None:
     """Check if result shapes merge properly: the scenario is to duplicate an object,
     then compute average. We thus have to check if the second object (average) has the
@@ -54,8 +54,8 @@ def __check_resultshapes_merge(
 
 
 def __check_roi_merge(
-    obj1: model.SignalObj | model.ImageObj,
-    obj2: model.SignalObj | model.ImageObj,
+    obj1: so.SignalObj | so.ImageObj,
+    obj2: so.SignalObj | so.ImageObj,
 ) -> None:
     """Check if ROI merge properly: the scenario is to duplicate an object,
     then compute average. We thus have to check if the second object (average) has the
@@ -71,12 +71,12 @@ def __check_roi_merge(
         assert roi1.get_single_roi(0) == single_roi2
 
 
-def test_resultshapes():
+def test_resultshapes() -> None:
     """Result shapes test"""
     with cdltest_app_context(console=False) as win:
         obj1 = test_data.create_sincos_image()
         obj2 = create_image_with_resultshapes()
-        obj2.roi = model.create_image_roi("rectangle", [10, 10, 50, 400])
+        obj2.roi = so.create_image_roi("rectangle", [10, 10, 50, 400])
         panel = win.signalpanel
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)

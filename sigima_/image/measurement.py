@@ -33,8 +33,8 @@ import sigima_.algorithms.image as alg
 from sigima_ import computation_function
 from sigima_.base import calc_resultproperties
 from sigima_.image.base import calc_resultshape
-from sigima_.model.base import ResultProperties, ResultShape
-from sigima_.model.image import ImageObj
+from sigima_.obj.base import ResultProperties, ResultShape
+from sigima_.obj.image import ImageObj
 
 
 def get_centroid_coords(data: np.ndarray) -> np.ndarray:
@@ -95,6 +95,20 @@ def enclosing_circle(image: ImageObj) -> ResultShape | None:
     )
 
 
+def __calc_snr_without_warning(data: np.ndarray) -> float:
+    """Calculate SNR based on <z>/σ(z), ignoring warnings
+
+    Args:
+        data: input data
+
+    Returns:
+        Signal-to-noise ratio
+    """
+    with np.errstate(divide="ignore", invalid="ignore"):
+        snr = ma.mean(data) / ma.std(data)
+    return snr
+
+
 @computation_function()
 def stats(obj: ImageObj) -> ResultProperties:
     """Compute statistics on an image
@@ -111,7 +125,7 @@ def stats(obj: ImageObj) -> ResultProperties:
         "<z> = %g {.zunit}": ma.mean,
         "median(z) = %g {.zunit}": ma.median,
         "σ(z) = %g {.zunit}": ma.std,
-        "<z>/σ(z)": lambda z: ma.mean(z) / ma.std(z),
+        "<z>/σ(z)": __calc_snr_without_warning,
         "peak-to-peak(z) = %g {.zunit}": ma.ptp,
         "Σ(z) = %g {.zunit}": ma.sum,
     }

@@ -28,7 +28,7 @@ from cdl.widgets import (
     signalpeak,
 )
 from sigima_ import ResultProperties, ResultShape, SignalObj
-from sigima_.model.signal import ROI1DParam, SignalROI, create_signal
+from sigima_.obj.signal import ROI1DParam, SignalROI, create_signal
 
 
 class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
