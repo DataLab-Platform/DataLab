@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 15:16+0200\n"
+"POT-Creation-Date: 2025-06-21 09:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,9 @@ msgstr "DataLab Version 0.20.1"
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "Fixed [Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Hard crash when trying to activate the curve stats tool on a zero signal"
+msgstr "Correction de l'[Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Plantage sévère lors de l'activation de l'outil de statistiques de courbe sur un signal nul"
 
 msgid "Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to \"Square\" after validating \"Parameters…\" dialog"
 msgstr "Correction de l'[Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Le style du marqueur de courbe change de manière inattendue en \"Carré\" après validation de la boîte de dialogue \"Paramètres…\""

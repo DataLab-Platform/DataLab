@@ -6,6 +6,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Fixed [Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Hard crash when trying to activate the curve stats tool on a zero signal
 * Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to "Square" after validating "Parameters…" dialog
 
 ## DataLab Version 0.20.0 ##

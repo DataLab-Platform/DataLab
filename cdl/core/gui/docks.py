@@ -63,26 +63,58 @@ if TYPE_CHECKING:
     from plotpy.styles import BaseImageParam
 
 
-def fwhm_info(x, y):
-    """Return FWHM information string"""
-    try:
-        with warnings.catch_warnings(record=True) as w:
-            x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
-            wstr = " ⚠️" if w else ""
-    except ValueError:
-        return "🛑"
-    return f"{x1 - x0:g}{wstr}"
+class CurveStatsToolFunctions:
+    """Statistical functions for CurveStatsTool"""
 
+    @classmethod
+    def set_labelfuncs(cls, statstool: CurveStatsTool) -> None:
+        """Set label functions for CurveStatsTool"""
+        labelfuncs = (
+            ("%g &lt; x &lt; %g", lambda *args: cls.nan_min_max(args[0])),
+            ("%g &lt; y &lt; %g", lambda *args: cls.nan_min_max(args[1])),
+            ("&lt;y&gt;=%g", lambda *args: cls.nan_mean(args[1])),
+            ("σ(y)=%g", lambda *args: cls.nan_std(args[1])),
+            ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
+            ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
+            ("FWHM = %s", cls.fwhm_info),
+        )
+        statstool.set_labelfuncs(labelfuncs)
 
-CURVESTATSTOOL_LABELFUNCS = (
-    ("%g &lt; x &lt; %g", lambda *args: (np.nanmin(args[0]), np.nanmax(args[0]))),
-    ("%g &lt; y &lt; %g", lambda *args: (np.nanmin(args[1]), np.nanmax(args[1]))),
-    ("&lt;y&gt;=%g", lambda *args: np.nanmean(args[1])),
-    ("σ(y)=%g", lambda *args: np.nanstd(args[1])),
-    ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
-    ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
-    ("FWHM = %s", fwhm_info),
-)
+    @staticmethod
+    def nan_min_max(arr: np.ndarray) -> tuple[float, float]:
+        """Return min/max tuple"""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            min_val = np.nanmin(arr)
+            max_val = np.nanmax(arr)
+        return (min_val, max_val)
+
+    @staticmethod
+    def nan_mean(arr: np.ndarray) -> float:
+        """Return mean value, ignoring NaNs"""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            mean_val = np.nanmean(arr)
+        return mean_val
+
+    @staticmethod
+    def nan_std(arr: np.ndarray) -> float:
+        """Return standard deviation, ignoring NaNs"""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            std_val = np.nanstd(arr)
+        return std_val
+
+    @staticmethod
+    def fwhm_info(x, y):
+        """Return FWHM information string"""
+        try:
+            with warnings.catch_warnings(record=True) as w:
+                x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
+                wstr = " ⚠️" if w else ""
+        except (ValueError, ZeroDivisionError):
+            return "🛑"
+        return f"{x1 - x0:g}{wstr}"
 
 
 def get_more_image_stats(
@@ -245,7 +277,7 @@ class DataLabPlotWidget(PlotWidget):
         if self.options.type == PlotType.CURVE:
             mgr.register_curve_tools()
             statstool = mgr.get_tool(CurveStatsTool)
-            statstool.set_labelfuncs(CURVESTATSTOOL_LABELFUNCS)
+            CurveStatsToolFunctions.set_labelfuncs(statstool)
         else:
             mgr.register_image_tools()
             # Customizing the ImageStatsTool
