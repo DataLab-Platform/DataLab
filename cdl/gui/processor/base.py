@@ -42,8 +42,6 @@ if TYPE_CHECKING:
     from cdl.gui.panel.signal import SignalPanel
     from sigima_ import ImageObj, ResultProperties, ResultShape, SignalObj
 
-    Obj = Union[SignalObj, ImageObj]
-
 
 # Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
 multiprocessing.freeze_support()
@@ -453,7 +451,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         src_gids = [get_uuid(grp) for grp in src_grps]
 
         # [src_objs dictionary] keys: old group id, values: list of old objects
-        src_objs: dict[str, list[Obj]] = {}
+        src_objs: dict[str, list[SignalObj | ImageObj]] = {}
         for src_gid in src_gids:
             src_objs[src_gid] = [
                 obj for obj in objs if objmodel.get_object_group_id(obj) == src_gid
@@ -767,7 +765,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             )
             with create_progress_bar(self.panel, title, max_=n_pairs) as progress:
                 for i_pair, src_obj1 in enumerate(src_objs[src_gids[0]][:max_i_pair]):
-                    src_obj1: SignalObj | ImageObj
                     progress.setValue(i_pair + 1)
                     progress.setLabelText(title)
                     src_objs_pair = [src_obj1]
@@ -793,7 +790,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             # In single operand mode, we create a single object for all selected objects
 
             # [src_objs dictionary] keys: old group id, values: list of old objects
-            src_objs: dict[str, list[Obj]] = {}
+            src_objs: dict[str, list[SignalObj | ImageObj]] = {}
 
             grps = self.panel.objview.get_sel_groups()
             if grps:
@@ -836,7 +833,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     def compute_2_to_1(
         self,
-        obj2: Obj | list[Obj] | None,
+        obj2: SignalObj | ImageObj | list[SignalObj | ImageObj] | None,
         obj2_name: str,
         func: Callable,
         param: gds.DataSet | None = None,
@@ -1257,8 +1254,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             )
         if pattern == "2_to_1":
             obj2 = kwargs.pop("obj2", args[0] if args else None)
-            assert isinstance(obj2, (Obj, list, type(None))), (
-                "For pattern '2_to_1', 'obj2' must be an Obj, a list of Obj, or None"
+            assert isinstance(obj2, (SignalObj, ImageObj, list, type(None))), (
+                "For pattern '2_to_1', 'obj2' must be a SignalObj, ImageObj, "
+                "list of SignalObj/ImageObj, or None"
             )
             param = kwargs.pop("param", args[1] if args and len(args) > 1 else None)
             assert isinstance(param, (gds.DataSet, type(None))), (
