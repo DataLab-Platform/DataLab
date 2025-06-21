@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 09:53+0200\n"
+"POT-Creation-Date: 2025-06-21 10:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -35,6 +35,9 @@ msgstr "Correction de l'[Issue #233](https://github.com/DataLab-Platform/DataLab
 
 msgid "Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to \"Square\" after validating \"Parameters…\" dialog"
 msgstr "Correction de l'[Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Le style du marqueur de courbe change de manière inattendue en \"Carré\" après validation de la boîte de dialogue \"Paramètres…\""
+
+msgid "Fixed [Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117) - DataLab's signal moving median crashes on Linux with `mode='mirror'`: `free(): invalid next size (normal)` (this is a bug in SciPy v1.15.0 to v1.15.2, which was fixed in SciPy v1.15.3)"
+msgstr "Correction de l'[Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117) - Le filtre médian mobile de DataLab plante sur Linux avec `mode='mirror'` : `free(): invalid next size (normal)` (il s'agit d'un bug dans SciPy v1.15.0 à v1.15.2, qui a été corrigé dans SciPy v1.15.3)"
 
 msgid "DataLab Version 0.20.0"
 msgstr "DataLab Version 0.20.0"
