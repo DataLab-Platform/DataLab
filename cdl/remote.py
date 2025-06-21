@@ -738,7 +738,7 @@ class RemoteClient(BaseProxy):
         Here is a simple example of how to use RemoteClient in a Python script
         or in a Jupyter notebook:
 
-        >>> from cdl.core.remote import RemoteClient
+        >>> from cdl.remote import RemoteClient
         >>> proxy = RemoteClient()
         >>> proxy.connect()
         Connecting to DataLab XML-RPC server...OK (port: 28867)
@@ -749,9 +749,9 @@ class RemoteClient(BaseProxy):
         >>> proxy.get_object_titles()
         ['toto']
         >>> proxy["toto"]
-        <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima_.obj.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1]
-        <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima_.obj.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1].data
         array([1., 2., 3.])
     """
