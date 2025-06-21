@@ -516,9 +516,9 @@ class ObjectModel:
         """Return dictionary mapping group/object uuids to their short ID"""
         mapping = {}
         for group in self._groups:
-            mapping[get_uuid(group)] = short_id(group)
+            mapping[get_uuid(group)] = get_short_id(group)
             for obj in group:
-                mapping[get_uuid(obj)] = short_id(obj)
+                mapping[get_uuid(obj)] = get_short_id(obj)
         return mapping
 
     def replace_short_ids_by_uuids_in_titles(
