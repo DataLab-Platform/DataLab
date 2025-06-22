@@ -6,6 +6,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Signal cursors:
+  * Fixed [Issue #231](https://github.com/DataLab-Platform/DataLab/issues/231) - Add horizontal cursors to the Signal View (requires PlotPy v2.8)
+  * Fixed [Issue #232](https://github.com/DataLab-Platform/DataLab/issues/232) - Add Δx measurement on curve stats tool (vertical cursors)
+
 * Computation functions refactoring:
   * Added new `@computation_function` decorator to mark and register computation functions
   * Renamed computation functions to remove redundant "compute_" prefix (e.g., `compute_fft` ➝ `fft`)

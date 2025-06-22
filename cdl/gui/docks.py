@@ -46,6 +46,13 @@ from plotpy.tools import (
     RectZoomTool,
     SelectTool,
 )
+
+try:
+    from plotpy.tools import YRangeCursorTool
+except ImportError:
+    # YRangeCursorTool is not available in PlotPy < 2.8
+    YRangeCursorTool = None
+
 from plotpy.tools.image import get_stats as get_image_stats
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -64,20 +71,29 @@ if TYPE_CHECKING:
 
 
 class CurveStatsToolFunctions:
-    """Statistical functions for CurveStatsTool"""
+    """Statistical functions for `CurveStatsTool`
+    and `YRangeCursorTool` (if available, i.e. PlotPy >= 2.8)"""
 
     @classmethod
     def set_labelfuncs(cls, statstool: CurveStatsTool) -> None:
-        """Set label functions for CurveStatsTool"""
-        labelfuncs = (
-            ("%g &lt; x &lt; %g", lambda *args: cls.nan_min_max(args[0])),
-            ("%g &lt; y &lt; %g", lambda *args: cls.nan_min_max(args[1])),
-            ("&lt;y&gt;=%g", lambda *args: cls.nan_mean(args[1])),
-            ("σ(y)=%g", lambda *args: cls.nan_std(args[1])),
-            ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
-            ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
-            ("FWHM = %s", cls.fwhm_info),
-        )
+        """Set label functions for the statistics tool"""
+        if isinstance(statstool, CurveStatsTool):
+            labelfuncs = (
+                ("%g &lt; x &lt; %g", lambda *args: cls.nan_min_max(args[0])),
+                ("%g &lt; y &lt; %g", lambda *args: cls.nan_min_max(args[1])),
+                ("∆x=%g", lambda *args: cls.nan_delta(args[0])),
+                ("∆y=%g", lambda *args: cls.nan_delta(args[1])),
+                ("&lt;y&gt;=%g", lambda *args: cls.nan_mean(args[1])),
+                ("σ(y)=%g", lambda *args: cls.nan_std(args[1])),
+                ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
+                ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
+                ("FWHM = %s", cls.fwhm_info),
+            )
+        else:  # YRangeCursorTool
+            labelfuncs = (
+                ("%g &lt; y &lt; %g", lambda ymin, ymax: (ymin, ymax)),
+                ("∆y=%g", lambda ymin, ymax: ymax - ymin),
+            )
         statstool.set_labelfuncs(labelfuncs)
 
     @staticmethod
@@ -88,6 +104,14 @@ class CurveStatsToolFunctions:
             min_val = np.nanmin(arr)
             max_val = np.nanmax(arr)
         return (min_val, max_val)
+
+    @staticmethod
+    def nan_delta(arr: np.ndarray) -> float:
+        """Return delta value, ignoring NaNs"""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            delta_val = np.nanmax(arr) - np.nanmin(arr)
+        return delta_val
 
     @staticmethod
     def nan_mean(arr: np.ndarray) -> float:
@@ -276,8 +300,11 @@ class DataLabPlotWidget(PlotWidget):
         mgr.add_separator_tool()
         if self.options.type == PlotType.CURVE:
             mgr.register_curve_tools()
-            statstool = mgr.get_tool(CurveStatsTool)
-            CurveStatsToolFunctions.set_labelfuncs(statstool)
+            xstatstool = mgr.get_tool(CurveStatsTool)
+            CurveStatsToolFunctions.set_labelfuncs(xstatstool)
+            if YRangeCursorTool is not None:
+                ystatstool = mgr.get_tool(YRangeCursorTool)
+                CurveStatsToolFunctions.set_labelfuncs(ystatstool)
         else:
             mgr.register_image_tools()
             # Customizing the ImageStatsTool

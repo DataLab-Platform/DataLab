@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-17 17:01+0200\n"
+"POT-Creation-Date: 2025-06-22 17:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 msgid "Changelog"
 msgstr "Historique des modifications"
@@ -29,6 +29,15 @@ msgstr "DataLab Version 0.21.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Signal cursors:"
+msgstr "Curseurs de signal :"
+
+msgid "Fixed [Issue #231](https://github.com/DataLab-Platform/DataLab/issues/231) - Add horizontal cursors to the Signal View (requires PlotPy v2.8)"
+msgstr "Correction de l'[Issue #231](https://github.com/DataLab-Platform/DataLab/issues/231) - Ajout de curseurs horizontaux à la Vue Signal (nécessite PlotPy v2.8)"
+
+msgid "Fixed [Issue #232](https://github.com/DataLab-Platform/DataLab/issues/232) - Add Δx measurement on curve stats tool (vertical cursors)"
+msgstr "Correction de l'[Issue #232](https://github.com/DataLab-Platform/DataLab/issues/232) - Ajout de la mesure Δx sur l'outil de statistiques de courbe (curseurs verticaux)"
 
 msgid "Computation functions refactoring:"
 msgstr "Refactorisation des fonctions de calcul :"
@@ -84,6 +93,9 @@ msgstr "Ces méthodes sont internes et utilisées par des développeurs avancés
 msgid "This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types"
 msgstr "Ceci corrige l'[Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationaliser les noms de méthodes `BaseProcessor` pour les types de traitement de base"
 
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Corrections de bugs :"
+
 msgid "Fixed [Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Hard crash when trying to activate the curve stats tool on a zero signal"
 msgstr "Correction de l'[Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Plantage sévère lors de l'activation de l'outil de statistiques de courbe sur un signal nul"
 
@@ -129,7 +141,6 @@ msgstr "Nouvelle fonctionnalité \"Coller\" dans la boîte de dialogue de l'édi
 msgid "The features above require guidata v3.9.0 or later"
 msgstr "Les fonctionnalités ci-dessus nécessitent guidata v3.9.0 ou une version ultérieure"
 
-#, fuzzy
 msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) and [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 msgstr "Ceci clotûre les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 
@@ -237,9 +248,6 @@ msgstr "Ceci corrige l'[Issue #151](https://github.com/DataLab-Platform/DataLab/
 
 msgid "DataLab Version 0.19.2"
 msgstr "DataLab Version 0.19.2"
-
-msgid "🛠️ Bug fixes:"
-msgstr "🛠️ Corrections de bugs :"
 
 msgid "Fixed [Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172) - Image profiles: when moving/resizing image, profile plots are not refreshed (fixed in PlotPy v2.7.4)"
 msgstr "Correction de l'[Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172) - Profils d'image : lors du déplacement/redimensionnement de l'image, les graphiques de profil ne sont pas actualisés (corrigé dans PlotPy v2.7.4)"

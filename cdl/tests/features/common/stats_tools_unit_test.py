@@ -3,8 +3,9 @@
 """
 Custom curve and image stats tool unit test.
 
-PlotPy's statistics tools (`plotpy.tools.CurveStatsTool` and
-`plotpy.tools.ImageStatsTool` are customized in `cdl.gui.docks` module).
+PlotPy's statistics tools (`plotpy.tools.XCurveStatsTool`,
+`plotpy.tools.YCurveStatsTool`, and `plotpy.tools.ImageStatsTool`
+are customized in `cdl.gui.docks` module).
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -19,6 +20,13 @@ from packaging.version import Version
 from plotpy.constants import PlotType
 from plotpy.tests.unit.utils import drag_mouse
 from plotpy.tools import CurveStatsTool, ImageStatsTool
+
+try:
+    from plotpy.tools import YRangeCursorTool
+except ImportError:
+    # YRangeCursorTool is not available in PlotPy < 2.8
+    YRangeCursorTool = None
+
 from qtpy import QtWidgets as QW
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
@@ -40,27 +48,35 @@ def simulate_stats_tool(
     plot.add_item(item)
     plot.set_active_item(item)
     item.unselect()
-    klass = CurveStatsTool if plot_type == PlotType.CURVE else ImageStatsTool
-    stattool = widget.get_manager().get_tool(klass)
-    stattool.activate()
-    if Version(plotpy.__version__) < Version("2.4"):
-        qapp = QW.QApplication.instance()
-        drag_mouse(widget, qapp, x_path, y_path)
+    if plot_type == PlotType.CURVE:
+        classes = [CurveStatsTool]
+        if YRangeCursorTool is not None:
+            classes.append(YRangeCursorTool)
     else:
-        drag_mouse(widget, x_path, y_path)
+        classes = [
+            ImageStatsTool,
+        ]
+    for klass in classes:
+        stattool = widget.get_manager().get_tool(klass)
+        stattool.activate()
+        if Version(plotpy.__version__) < Version("2.4"):
+            qapp = QW.QApplication.instance()
+            drag_mouse(widget, qapp, x_path, y_path)
+        else:
+            drag_mouse(widget, x_path, y_path)
     return widget
 
 
 def test_stats_tool() -> None:
-    """Test CurveStatsTool with a custom signal."""
+    """Test `XCurveStatsTool` with a custom signal."""
     sig = create_paracetamol_signal()
     ima = create_multigauss_image()
     with qt_app_context():
         dlg = QW.QDialog()
         dlg.setWindowTitle("Stats Tool Test")
         dlg.resize(1200, 600)
-        swidget = simulate_stats_tool(PlotType.CURVE, sig, [0.01, 0.02], [0.5, 0.5])
-        iwidget = simulate_stats_tool(PlotType.IMAGE, ima, [0.2, 0.8], [0.7, 0.9])
+        swidget = simulate_stats_tool(PlotType.CURVE, sig, [0.01, 0.02], [0.7, 0.9])
+        iwidget = simulate_stats_tool(PlotType.IMAGE, ima, [0.2, 0.8], [0.9, 0.95])
         hlayout = QW.QHBoxLayout()
         hlayout.addWidget(swidget)
         hlayout.addWidget(iwidget)
