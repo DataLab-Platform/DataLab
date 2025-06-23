@@ -20,6 +20,8 @@ part of the DataLab open-source platform.
 # --------------------------------------------------------------------------------------
 
 # -------- Point of no return after creating an independent `sigima_` package ----------
+# TODO: Remove "sigima_*" from "cdl" pyproject.toml (`include = ["cdl*", "sigima_*"]`)
+# TODO: Rename "cdl" package to "datalab" (at last! finally!)
 # TODO: Rename "sigima_" (temporary name until the package is fully migrated)
 #       to "sigima_" when the migration is complete.
 # TODO: Add local translations for the `sigima_` package

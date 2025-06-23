@@ -86,7 +86,7 @@ doc = [
 test = ["pytest", "pytest-xvfb"]
 
 [tool.setuptools.packages.find]
-include = ["cdl*"]
+include = ["cdl*", "sigima_*"]
 
 [tool.setuptools.package-data]
 "*" = [
