@@ -27,7 +27,7 @@ class ClassicsImageFormat(ImageFormatBase):
     """Object representing classic image file types"""
 
     FORMAT_INFO = FormatInfo(
-        name="BMP, JPEG, PNG, TIFF JPEG2000",
+        name="BMP, JPEG, PNG, TIFF, JPEG2000",
         extensions="*.bmp *.jpg *.jpeg *.png *.tif *.tiff *.jp2",
         readable=True,
         writeable=True,
