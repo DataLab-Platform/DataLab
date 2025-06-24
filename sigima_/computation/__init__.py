@@ -98,8 +98,16 @@ import importlib
 import inspect
 import os.path as osp
 import pkgutil
+import sys
 from types import ModuleType
-from typing import Callable, Optional, ParamSpec, TypeVar
+from typing import Callable, Optional, TypeVar
+
+if sys.version_info >= (3, 10):
+    # Use ParamSpec from typing module in Python 3.10+
+    from typing import ParamSpec
+else:
+    # Use ParamSpec from typing_extensions module in Python < 3.10
+    from typing_extensions import ParamSpec
 
 # Marker attribute used by @computation_function and introspection
 COMPUTATION_METADATA_ATTR = "__computation_function_metadata"
