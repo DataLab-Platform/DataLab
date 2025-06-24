@@ -10,9 +10,17 @@ from __future__ import annotations
 
 import abc
 import enum
+import sys
 from collections.abc import Callable, Generator, Iterable
 from copy import deepcopy
-from typing import Any, Generic, Iterator, Literal, Self, Type, TypeVar
+from typing import Any, Generic, Iterator, Literal, Type, TypeVar
+
+if sys.version_info >= (3, 11):
+    # Use Self from typing module in Python 3.11+
+    from typing import Self
+else:
+    # Use Self from typing_extensions module in Python < 3.11
+    from typing_extensions import Self
 
 import guidata.dataset as gds
 import numpy as np
