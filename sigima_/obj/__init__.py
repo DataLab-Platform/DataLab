@@ -1,7 +1,9 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Model classes for signals and images.
+Model classes for signals and images (:mod:`sigima_.obj`)
+---------------------------------------------------------
+
 """
 
 # pylint:disable=unused-import

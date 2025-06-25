@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: cdl 0.20.0\n"
+"Project-Id-Version:  cdl\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-06-19 15:29+0200\n"
+"POT-Creation-Date: 2025-06-24 15:31+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -16,717 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
-
-msgid "Operator"
-msgstr "Opérateur"
-
-msgid "Factor"
-msgstr "Facteur"
-
-msgid "Constant"
-msgstr "Constante"
-
-msgid "Operation"
-msgstr "Opération"
-
-msgid "Convert to `obj1` data type"
-msgstr "Convertir vers le type de données de `obj1`"
-
-msgid "Result"
-msgstr "Résultat"
-
-msgid ""
-"Mode of the filter:\n"
-"- 'reflect': Reflect the data at the boundary\n"
-"- 'constant': Pad with a constant value\n"
-"- 'nearest': Pad with the nearest value\n"
-"- 'mirror': Reflect the data at the boundary with the data itself\n"
-"- 'wrap': Circular boundary"
-msgstr ""
-"Mode du filtre :\n"
-"- 'reflect' : Réfléchir les données à la frontière\n"
-"- 'constant' : Remplir avec une valeur constante\n"
-"- 'nearest' : Remplir avec la valeur la plus proche\n"
-"- 'mirror' : Réfléchir les données à la frontière avec les données elles-mêmes\n"
-"- 'wrap' : Frontière circulaire"
-
-msgid "Size of the moving window"
-msgstr "Taille de la fenêtre glissante"
-
-msgid "Mode"
-msgstr "Mode"
-
-msgid "Lower clipping value"
-msgstr "Borne inférieure d'écrêtage"
-
-msgid "Upper clipping value"
-msgstr "Borne supérieure d'écrêtage"
-
-msgid "Maximum"
-msgstr "Maximum"
-
-msgid "Amplitude"
-msgstr "Amplitude"
-
-msgid "Area"
-msgstr "Aire"
-
-msgid "Energy"
-msgstr "Energie"
-
-msgid "RMS"
-msgstr "RMS"
-
-msgid "Normalize with respect to"
-msgstr "Normaliser par rapport à"
-
-msgid "Number of bins"
-msgstr "Nombre de classes"
-
-msgid "Lower limit"
-msgstr "Limite inférieure"
-
-msgid "Upper limit"
-msgstr "Limite supérieure"
-
-msgid "Shift"
-msgstr "Décalage"
-
-msgid "Shift zero frequency to center"
-msgstr "Décaler la fréquence nulle au centre"
-
-msgid "Logarithmic scale"
-msgstr "Echelle logarithmique"
-
-msgid "Constant value"
-msgstr "Constante"
-
-msgid "cval"
-msgstr "cval"
-
-msgid "Value used for points outside the boundaries of the input if mode is 'constant'"
-msgstr "Valeur utilisée pour les points situés en dehors des frontières de l'image d'origine (si le mode est 'constant')"
-
-msgid "Reshape the output array"
-msgstr "Redimensionner l'image de destination"
-
-msgid "Reshape the output array so that the input array is contained completely in the output"
-msgstr "Redimensionner l'image de destination de sorte qu'elle puisse contenir la totalité de l'image source"
-
-msgid "Prefilter the input image"
-msgstr "Prétraitement de l'image d'origine (spline)"
-
-msgid "Order"
-msgstr "Ordre"
-
-msgid "Spline interpolation order"
-msgstr "Ordre de l'interpolation de type spline"
-
-msgid "columns"
-msgstr "colonnes"
-
-msgid "rows"
-msgstr "lignes"
-
-msgid "Distribute over"
-msgstr "Distribuer selon les"
-
-msgid "Columns"
-msgstr "Colonnes"
-
-msgid "Rows"
-msgstr "Lignes"
-
-msgid "Column spacing"
-msgstr "Espace entre chaque colonne"
-
-msgid "Row spacing"
-msgstr "Espace entre chaque ligne"
-
-msgid "Zoom"
-msgstr "Zoom"
-
-msgid "Cluster size (X)"
-msgstr "Nombre de pixels (X)"
-
-msgid "Number of adjacent pixels to be combined together along X-axis."
-msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des X."
-
-msgid "Cluster size (Y)"
-msgstr "Nombre de pixels (Y)"
-
-msgid "Number of adjacent pixels to be combined together along Y-axis."
-msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
-
-msgid "Data type"
-msgstr "Type de données"
-
-msgid "Change pixel size"
-msgstr "Modifier la taille des pixels"
-
-msgid "Change pixel size so that overall image size remains the same."
-msgstr "Modification de la taille des pixels de sorte que les dimensions de l'images restent les mêmes après l'opération."
-
-msgid "horizontal"
-msgstr "horizontal"
-
-msgid "vertical"
-msgstr "vertical"
-
-msgid "Direction"
-msgstr "Direction"
-
-msgid "Row"
-msgstr "Ligne"
-
-msgid "Column"
-msgstr "Colonne"
-
-msgid "Start row"
-msgstr "Ligne (début)"
-
-msgid "Start column"
-msgstr "Colonne (début)"
-
-msgid "End row"
-msgstr "Ligne (fin)"
-
-msgid "End column"
-msgstr "Colonne (fin)"
-
-msgid "Profile rectangular area"
-msgstr "Zone rectangulaire du profil"
-
-msgid "Row 1"
-msgstr "Ligne 1"
-
-msgid "Row 2"
-msgstr "Ligne 2"
-
-msgid "Column 1"
-msgstr "Colonne 1"
-
-msgid "Column 2"
-msgstr "Colonne 2"
-
-msgid "Center position"
-msgstr "Position du centre"
-
-msgid "Image centroid"
-msgstr "Barycentre de l'image"
-
-msgid "Image center"
-msgstr "Centre de l'image"
-
-msgid "User-defined"
-msgstr "Défini par l'utilisateur"
-
-msgid "Center"
-msgstr "Centre"
-
-msgid "Padding strategy"
-msgstr "Stratégie de complément de zéros"
-
-msgid "Rows to add"
-msgstr "Lignes à ajouter"
-
-msgid "Columns to add"
-msgstr "Colonnes à ajouter"
-
-msgid "Padding position"
-msgstr "Position du complément de zéros"
-
-msgid "Cut-off frequency ratio"
-msgstr "Fréquence de coupure relative"
-
-msgid "High-pass filter"
-msgstr "Filtre passe-haut"
-
-msgid "If True, apply high-pass filter instead of low-pass"
-msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas"
-
-msgid "Order of the Butterworth filter"
-msgstr "Ordre du filtre de Butterworth"
-
-msgid "Radius<sub>min</sub>"
-msgstr "Rayon<sub>min</sub>"
-
-msgid "Radius<sub>max</sub>"
-msgstr "Rayon<sub>max</sub>"
-
-msgid "Minimal distance"
-msgstr "Distance minimale"
-
-msgid "Relative threshold"
-msgstr "Seuil relatif"
-
-msgid "Detection threshold, relative to difference between data maximum and minimum"
-msgstr "Seuil de détection, relatif à la différence entre le maximum et le minimum des données de l'image"
-
-msgid "Neighborhoods size"
-msgstr "Taille du voisinage"
-
-msgid "Size of the sliding window used in maximum/minimum filtering algorithm"
-msgstr "Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage maximum/minimum"
-
-msgid "Create regions of interest"
-msgstr "Créer des régions d'intérêt"
-
-msgid "Ellipse"
-msgstr "Ellipse"
-
-msgid "Circle"
-msgstr "Cercle"
-
-msgid "Polygon"
-msgstr "Polygone"
-
-msgid "Shape"
-msgstr "Forme"
-
-msgid "The minimum standard deviation for Gaussian Kernel. Keep this low to detect smaller blobs."
-msgstr "L'écart-type minimal pour le noyau gaussien. Cette valeur doit être faible pour détecter de petites taches."
-
-msgid "The maximum standard deviation for Gaussian Kernel. Keep this high to detect larger blobs."
-msgstr "L'écart-type maximal pour le noyau gaussien. Cette valeur doit être élevée pour détecter de grandes taches."
-
-msgid "Minimum intensity of blobs."
-msgstr "Intensité minimale des taches."
-
-msgid "Overlap"
-msgstr "Recouvrement"
-
-msgid "If two blobs overlap by a fraction greater than this value, the smaller blob is eliminated."
-msgstr "Si deux taches ont un taux de recouvrement supérieur à ce seuil, alors la plus petite tache est éliminée."
-
-msgid "Exclude border"
-msgstr "Exclure la bordure"
-
-msgid "If True, exclude blobs from the border of the image."
-msgstr "Si le réglage est actif, exclure les taches de la bordure de l'image."
-
-msgid "Log scale"
-msgstr "Echelle logarithmique"
-
-msgid "If set intermediate values of standard deviations are interpolated using a logarithmic scale to the base 10. If not, linear interpolation is used."
-msgstr "Les valeurs intermédiaires d'écart-type peuvent être interpolées selon une échelle linéaire ou logarithmique."
-
-msgid "Min. threshold"
-msgstr "Seuil min."
-
-msgid "The minimum threshold between local maxima and minima. This parameter does not affect the quality of the blobs, only the quantity. Lower thresholds result in larger numbers of blobs."
-msgstr "Le seuil minimum entre les maxima et minima locaux. Ce paramètre n'affecte pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un nombre plus important de taches."
-
-msgid "Max. threshold"
-msgstr "Seuil max."
-
-msgid "The maximum threshold between local maxima and minima. This parameter does not affect the quality of the blobs, only the quantity. Lower thresholds result in larger numbers of blobs."
-msgstr "Le seuil maximum entre les maxima et minima locaux. Ce paramètre n'affecte pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un nombre plus important de taches."
-
-msgid "Min. repeatability"
-msgstr "Répétabilité min."
-
-msgid "The minimum number of times a blob needs to be detected in a sequence of images to be considered valid."
-msgstr "Le nombre minimum de fois qu'une tache doit être détectée dans une séquence d'images pour être considérée valide."
-
-msgid "Min. distance between blobs"
-msgstr "Distance min. entre taches"
-
-msgid "The minimum distance between two blobs. If blobs are found closer together than this distance, the smaller blob is removed."
-msgstr "La distance minimale entre deux taches. Si deux taches sont détectées à une distance inférieure à celle-ci, alors la plus petite tache est éliminée."
-
-msgid "Filter by color"
-msgstr "Filtrer par couleur"
-
-msgid "If true, the image is filtered by color instead of intensity."
-msgstr "Si vrai, l'image est filtrée par couleur au lieu d'intensité."
-
-msgid "Blob color"
-msgstr "Couleur de la tache"
-
-msgid "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
-msgstr "La couleur des taches à détecter (0 pour les taches foncées, 255 pour les taches claires)."
-
-msgid "Filter by area"
-msgstr "Filtrer par aire"
-
-msgid "If true, the image is filtered by blob area."
-msgstr "Si vrai, l'image est filtrée par l'aire des taches."
-
-msgid "Min. area"
-msgstr "Aire min."
-
-msgid "The minimum blob area."
-msgstr "L'aire minimale des taches."
-
-msgid "Max. area"
-msgstr "Aire max."
-
-msgid "The maximum blob area."
-msgstr "L'aire maximale des taches."
-
-msgid "Filter by circularity"
-msgstr "Filtrer par circularité"
-
-msgid "If true, the image is filtered by blob circularity."
-msgstr "Si vrai, l'image est filtrée par la circularité des taches."
-
-msgid "Min. circularity"
-msgstr "Circularité min."
-
-msgid "The minimum circularity of the blobs."
-msgstr "La circularité minimale des taches."
-
-msgid "Max. circularity"
-msgstr "Circularité max."
-
-msgid "The maximum circularity of the blobs."
-msgstr "La circularité maximale des taches."
-
-msgid "Filter by inertia"
-msgstr "Filtrer par inertie"
-
-msgid "If true, the image is filtered by blob inertia."
-msgstr "Si vrai, l'image est filtrée par l'inertie des taches."
-
-msgid "Min. inertia ratio"
-msgstr "Ratio d'inertie min."
-
-msgid "The minimum inertia ratio of the blobs."
-msgstr "Le ratio d'inertie minimal des taches."
-
-msgid "Max. inertia ratio"
-msgstr "Ratio d'inertie max."
-
-msgid "The maximum inertia ratio of the blobs."
-msgstr "Le ratio d'inertie maximal des taches."
-
-msgid "Filter by convexity"
-msgstr "Filtrer par convexité"
-
-msgid "If true, the image is filtered by blob convexity."
-msgstr "Si vrai, l'image est filtrée par la convexité des taches."
-
-msgid "Min. convexity"
-msgstr "Convexité min."
-
-msgid "The minimum convexity of the blobs."
-msgstr "La convexité minimale des taches."
-
-msgid "Max. convexity"
-msgstr "Convexité max."
-
-msgid "The maximum convexity of the blobs."
-msgstr "La convexité maximale des taches."
-
-msgid "Standard deviation of the Gaussian filter."
-msgstr "Ecart-type du filtrage gaussien"
-
-msgid "Low threshold"
-msgstr "Seuil bas"
-
-msgid "Lower bound for hysteresis thresholding (linking edges)."
-msgstr "Borne inférieure pour le seuillage par hystérésis (liaison des contours)."
-
-msgid "High threshold"
-msgstr "Seuil haut"
-
-msgid "Upper bound for hysteresis thresholding (linking edges)."
-msgstr "Borne supérieure pour le seuillage par hystérésis (liaison des contours)."
-
-msgid "Use quantiles"
-msgstr "Utiliser les quantiles"
-
-msgid "If True then treat low_threshold and high_threshold as quantiles of the edge magnitude image, rather than absolute edge magnitude values. If True then the thresholds must be in the range [0, 1]."
-msgstr "Interprète les seuils bas et haut en tant que quantiles des niveaux des contours, au lieu de valeurs absolues des contours. Si le réglage est actif, alors les seuils doivent être compris entre 0 et 1."
-
-msgid "Value to fill past edges of input if mode is constant."
-msgstr "Valeur de remplissage si le mode est constant."
-
-msgid "Gamma"
-msgstr "Gamma"
-
-msgid "Gamma correction factor (higher values give more contrast)."
-msgstr "Facteur de correction gamma (plus la valeur est élevée, plus le contraste est important)."
-
-msgid "Gain"
-msgstr "Gain"
-
-msgid "Gain factor (higher values give more contrast)."
-msgstr "Facteur de gain (plus la valeur est élevée, plus le contraste est important)."
-
-msgid "Inverse"
-msgstr "Inverse"
-
-msgid "If True, apply inverse logarithmic transformation."
-msgstr "Si vrai, appliquer une transformation logarithmique inverse."
-
-msgid "Cutoff"
-msgstr "Cutoff"
-
-msgid "Cutoff value (higher values give more contrast)."
-msgstr "Valeur de coupure (plus la valeur est élevée, plus le contraste est important)."
-
-msgid "If True, apply inverse sigmoid transformation."
-msgstr "Si vrai, appliquer une transformation sigmoïde inverse."
-
-msgid "Input range"
-msgstr "Echelle de niveaux en entrée"
-
-msgid "Min and max intensity values of input image ('image' refers to input image min/max levels, 'dtype' refers to input image data type range)."
-msgstr "Valeurs min/max d'intensité de l'image en entrée ('image' correspond aux niveaux min/max de l'image en entrée, 'dtype' correspond aux valeurs min/max du type de données de l'image)."
-
-msgid "Output range"
-msgstr "Echelle de niveaux en sortie"
-
-msgid "Min and max intensity values of output image  ('image' refers to input image min/max levels, 'dtype' refers to input image data type range).."
-msgstr "Valeurs min/max d'intensité de l'image en sortie ('image' correspond aux niveaux min/max de l'image en entrée, 'dtype' correspond aux valeurs min/max du type de données de l'image)."
-
-msgid "Number of bins for image histogram."
-msgstr "Nombre de classes de l'histogramme des niveaux de l'image."
-
-msgid "Clipping limit"
-msgstr "Écrêtage limite"
-
-msgid "Clipping limit (higher values give more contrast)."
-msgstr "Valeur d'écrêtage (plus la valeur est élevée, plus le contraste est important)."
-
-msgid "Footprint (disk) radius."
-msgstr "Rayon de l'ouverture circulaire (disque)."
-
-msgid "Radius"
-msgstr "Rayon"
-
-msgid "Denoising weight"
-msgstr "Poids de débruitage"
-
-msgid "The greater weight, the more denoising (at the expense of fidelity to input)."
-msgstr "Plus le poids est élevé, plus le débruitage est fort (aux dépens de la fidélité des données)."
-
-msgid "Relative difference of the value of the cost function that determines the stop criterion. The algorithm stops when: (E_(n-1) - E_n) < eps * E_0"
-msgstr "Différence relative de la valeur de la fonction de coût qui détermine le critère d'arrêt de l'algorithme. Ce dernier s'arrête lorsque : (E_(n-1) - E_n) < eps * E_0"
-
-msgid "Max. iterations"
-msgstr "Nb. max. d'itérations"
-
-msgid "Maximal number of iterations used for the optimization"
-msgstr "Nombre maximal d'itérations utilisé pour l'optimisation"
-
-msgid "Standard deviation for range distance. A larger value results in averaging of pixels with larger spatial differences."
-msgstr "Ecart-type dans le domaine spatial. Une valeur élevée a pour effet de moyenner des pixels séparés par de grandes distances."
-
-msgid "Used in conjunction with mode 'constant', the value outside the image boundaries."
-msgstr "Valeur de remplissage en dehors des bornes de l'image (en mode constant)."
-
-msgid "Wavelet"
-msgstr "Ondelette"
-
-msgid "Manual"
-msgstr "Manuel"
-
-msgid "Mean"
-msgstr "Moyenne"
-
-msgid "Minimum"
-msgstr "Minimum"
-
-msgid "Triangle"
-msgstr "Triangle"
-
-msgid "Threshold method"
-msgstr "Méthode de seuillage"
-
-msgid "Threshold value"
-msgstr "Valeur de seuil"
-
-msgid "Greater than"
-msgstr "Supérieur à"
-
-msgid "Less than"
-msgstr "Inférieur à"
-
-msgid "Destination data type"
-msgstr "Type de données de destination"
-
-msgid "Output image data type."
-msgstr "Type de données de l'image générée."
-
-msgid "Power"
-msgstr "Puissance"
-
-msgid "Threshold"
-msgstr "Seuil"
-
-msgid "Minimum distance"
-msgstr "Distance minimale"
-
-msgid "X-axis"
-msgstr "Axe des X"
-
-msgid "Y-axis"
-msgstr "Axe des Y"
-
-msgid "Calibrate"
-msgstr "Étalonner"
-
-msgid "Bessel"
-msgstr "Bessel"
-
-msgid "Butterworth"
-msgstr "Butterworth"
-
-msgid "Chebyshev type 1"
-msgstr "Chebyshev de type 1"
-
-msgid "Chebyshev type 2"
-msgstr "Chebyshev de type 2"
-
-msgid "Elliptic"
-msgstr "Elliptique"
-
-msgid "Filter method"
-msgstr "Méthode de filtrage"
-
-msgid "Filter order"
-msgstr "Ordre du filtre"
-
-msgid "Low cutoff frequency"
-msgstr "Fréquence de coupure basse"
-
-msgid "High cutoff frequency"
-msgstr "Fréquence de coupure haute"
-
-msgid "Passband ripple"
-msgstr "Ondulation de la bande passante"
-
-msgid "Stopband attenuation"
-msgstr "Atténuation de la bande d'arrêt"
-
-msgid "Strategy"
-msgstr "Stratégie"
-
-msgid "Number of points to add"
-msgstr "Nombre de points à ajouter"
-
-msgid "Number of points"
-msgstr "Nombre de points"
-
-msgid "Frequency"
-msgstr "Fréquence"
-
-msgid "Degree"
-msgstr "Degré"
-
-msgid "Counts"
-msgstr "Coups"
-
-msgid "Linear"
-msgstr "Linéaire"
-
-msgid "Spline"
-msgstr "Spline"
-
-msgid "Quadratic"
-msgstr "Quadratique"
-
-msgid "Cubic"
-msgstr "Cubique"
-
-msgid "Barycentric"
-msgstr "Barycentrique"
-
-msgid "PCHIP"
-msgstr "PCHIP"
-
-msgid "Interpolation method"
-msgstr "Méthode d'interpolation"
-
-msgid "Fill value"
-msgstr "Valeur de remplissage"
-
-msgid "Value to use for points outside the interpolation domain (used only with linear, cubic and pchip methods)."
-msgstr "Valeur à utiliser pour les points en dehors du domaine d'interpolation (utilisé uniquement avec les méthodes linéaire, cubique et pchip)."
-
-msgid "X<sub>min</sub>"
-msgstr "X<sub>min</sub>"
-
-msgid "X<sub>max</sub>"
-msgstr "X<sub>max</sub>"
-
-msgid "Detrending method"
-msgstr "Méthode d'élimation de la tendance"
-
-msgid "Cosine"
-msgstr "Cosinus"
-
-msgid "Exponential"
-msgstr "Exponentielle"
-
-msgid "Flat top"
-msgstr "Sommet plat"
-
-msgid "Gaussian"
-msgstr "Gaussienne"
-
-msgid "Rectangular"
-msgstr "Rectangulaire"
-
-msgid "Method"
-msgstr "Méthode"
-
-msgid "Shape parameter of the Tukey windowing function"
-msgstr "Paramètre de forme de la fonction de fenêtrage de Tukey"
-
-msgid "Shape parameter of the Kaiser windowing function"
-msgstr "Paramètre de forme de la fonction de fenêtrage de Kaiser"
-
-msgid "Shape parameter of the Gaussian windowing function"
-msgstr "Paramètre de forme de la fonction de fenêtrage gaussienne"
-
-msgid "Radian"
-msgstr "Radian"
-
-msgid "Angle unit"
-msgstr "Unité de l'angle"
-
-msgid "Zero-crossing"
-msgstr "Passage par zéro"
-
-msgid "Gaussian fit"
-msgstr "Ajustement gaussien"
-
-msgid "Lorentzian fit"
-msgstr "Ajustement lorentzien"
-
-msgid "Voigt fit"
-msgstr "Ajustement Voigt"
-
-msgid "Lower X boundary (empty for no limit, i.e. start of the signal)"
-msgstr "Borne X inférieure (vide pour aucune limite, c'est-à-dire le début du signal)"
-
-msgid "Upper X boundary (empty for no limit, i.e. end of the signal)"
-msgstr "Borne X supérieure (vide pour aucune limite, c'est-à-dire la fin du signal)"
-
-msgid "Ordinate"
-msgstr "Coordonnées"
-
-msgid "Abscissa"
-msgstr "Abscisse"
-
-msgid "Full scale"
-msgstr "Pleine échelle"
-
-msgid "Unit for SINAD"
-msgstr "Unité pour SINAD"
-
-msgid "Unit"
-msgstr "Unité"
-
-msgid "Number of harmonics"
-msgstr "Nombre d'harmoniques"
-
-msgid "Number of harmonics to consider for THD"
-msgstr "Nombre d'harmoniques à considérer pour le THD"
 
 msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
@@ -929,6 +218,15 @@ msgstr "Ajustement linéaire"
 
 msgid "Polynomial fit"
 msgstr "Ajustement polynomial"
+
+msgid "Gaussian fit"
+msgstr "Ajustement gaussien"
+
+msgid "Lorentzian fit"
+msgstr "Ajustement lorentzien"
+
+msgid "Voigt fit"
+msgstr "Ajustement Voigt"
 
 msgid "Multi-Gaussian fit"
 msgstr "Ajustement multi-gaussien"
@@ -1365,6 +663,18 @@ msgstr "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous
 msgid "Do you want to save all signals and images to an HDF5 file before quitting DataLab?"
 msgstr "Souhaitez-vous enregistrer tous les signaux et images dans un fichier HDF5 avant de quitter DataLab ?"
 
+msgid "Select one point then press OK to accept"
+msgstr "Sélectionnez un point puis appuyez sur OK pour valider"
+
+msgid "Edit experimental curve"
+msgstr "Editer la courbe expérimentale"
+
+msgid "Insert point"
+msgstr "Insérer un point"
+
+msgid "Experimental points"
+msgstr "Points expérimentaux"
+
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
@@ -1382,9 +692,6 @@ msgstr "Paramètres d'analyse"
 
 msgid "Result shapes"
 msgstr "Résultats graphiques"
-
-msgid "Annotations"
-msgstr "Annotations"
 
 msgid "Result properties"
 msgstr "Résultats numériques"
@@ -1434,6 +741,9 @@ msgstr "Analyse du répertoire"
 
 msgid "Save as"
 msgstr "Enregistrer sous"
+
+msgid "Annotations"
+msgstr "Annotations"
 
 msgid "Results"
 msgstr "Résultats"
@@ -1557,6 +867,9 @@ msgstr "<u>Note :</u> le mode d'opération est <i>single</i> : 1 objet attendu"
 msgid "Second operand"
 msgstr "Second opérande"
 
+msgid "Regions of Interest"
+msgstr "Régions d'intérêt"
+
 msgid "Sum"
 msgstr "Addition"
 
@@ -1580,6 +893,9 @@ msgstr "Division"
 
 msgid "divider"
 msgstr "le diviseur"
+
+msgid "Inverse"
+msgstr "Inverse"
 
 msgid "Arithmetic"
 msgstr "Arithmétique"
@@ -1610,6 +926,9 @@ msgstr "Partie imaginaire"
 
 msgid "Convert data type"
 msgstr "Convertir le type de données"
+
+msgid "Exponential"
+msgstr "Exponentielle"
 
 msgid "Logarithm (base 10)"
 msgstr "Logarithme (base 10)"
@@ -1838,11 +1157,11 @@ msgstr "Statistiques"
 msgid "Histogram"
 msgstr "Histogramme"
 
-msgid "Compute image centroid"
-msgstr "Calcule le barycentre de l'image"
-
 msgid "Centroid"
 msgstr "Barycentre"
+
+msgid "Compute image centroid"
+msgstr "Calcule le barycentre de l'image"
 
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
@@ -1913,6 +1232,9 @@ msgstr "Débruitage Top-Hat"
 msgid "Extract ROI"
 msgstr "Extraire une ROI"
 
+msgid "Create regions of interest"
+msgstr "Créer des régions d'intérêt"
+
 msgid "signal to subtract"
 msgstr "signal à soustraire"
 
@@ -1940,8 +1262,14 @@ msgstr "Convertir en coordonnées polaires"
 msgid "Convert to cartesian coordinates"
 msgstr "Convertir en coordonnées cartésiennes"
 
+msgid "Power"
+msgstr "Puissance"
+
 msgid "Low-pass filter"
 msgstr "Filtre passe-bas"
+
+msgid "High-pass filter"
+msgstr "Filtre passe-haut"
 
 msgid "Band-pass filter"
 msgstr "Filtre passe-bande"
@@ -2407,240 +1735,6 @@ msgstr "C'est la fin de la visite guidée !"
 msgid "You can show the tour again, or close this dialog box."
 msgstr "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de dialogue."
 
-msgid "All supported files"
-msgstr "Tous les fichiers pris en charge"
-
-msgid "Image I/O formats"
-msgstr "Formats d'entrée/sortie d'images"
-
-msgid "Text files"
-msgstr "Fichiers texte"
-
-msgid "MAT-Files"
-msgstr "Fichiers MAT"
-
-msgid "Signal I/O formats"
-msgstr "Formats d'entrée/sortie de signaux"
-
-msgid "CSV files"
-msgstr "Fichiers CSV"
-
-msgid "NumPy binary files"
-msgstr "Fichiers binaires NumPy"
-
-msgid "Seed"
-msgstr "Graine"
-
-msgid "Uniform distribution lower bound"
-msgstr "Borne inférieure de la distribution uniforme"
-
-msgid "Uniform distribution higher bound"
-msgstr "Borne supérieure de la distribution uniforme"
-
-msgid "Normal distribution mean"
-msgstr "Moyenne de la distribution normale"
-
-msgid "Normal distribution standard deviation"
-msgstr "Ecart-type de la distribution normale"
-
-msgid "Geometry"
-msgstr "Géométrie"
-
-msgid "Top left corner"
-msgstr "Coin supérieur gauche"
-
-msgid "Center coordinates"
-msgstr "Coordonnées du centre"
-
-msgid "Coordinates"
-msgstr "Coordonnées"
-
-msgid "Data"
-msgstr "Données"
-
-msgid "Metadata"
-msgstr "Métadonnées"
-
-msgid "Origin"
-msgstr "Origine"
-
-msgid "Pixel spacing"
-msgstr "Taille des pixels"
-
-msgid "Image title"
-msgstr "Titre de l'image"
-
-msgid "Title"
-msgstr "Titre"
-
-msgid "Z-axis"
-msgstr "Axe des Z"
-
-msgid "Scales"
-msgstr "Echelles"
-
-msgid "Auto scale"
-msgstr "Echelle automatique"
-
-msgid "Lower bound"
-msgstr "Borne inférieure"
-
-msgid "Upper bound"
-msgstr "Borne supérieure"
-
-msgid "LUT range"
-msgstr "Plage de LUT"
-
-msgid "zeros"
-msgstr "zéros"
-
-msgid "empty"
-msgstr "vide"
-
-msgid "gaussian"
-msgstr "gaussienne"
-
-msgid "random (uniform law)"
-msgstr "aléatoire (loi uniforme)"
-
-msgid "random (normal law)"
-msgstr "aléatoire (loi normale)"
-
-msgid "Height"
-msgstr "Hauteur"
-
-msgid "Image height: number of rows"
-msgstr "Hauteur de l'image : nombre de lignes"
-
-msgid "Image width: number of columns"
-msgstr "Largeur de l'image : nombre de colonnes"
-
-msgid "Width"
-msgstr "Largeur"
-
-msgid "Type"
-msgstr "Type"
-
-msgid "Untitled image"
-msgstr "Image sans titre"
-
-msgid "2D-gaussian image"
-msgstr "Gaussienne 2D"
-
-msgid "First point coordinate"
-msgstr "Coordonnée du premier point"
-
-msgid "Last point coordinate"
-msgstr "Coordonnée du dernier point"
-
-msgid "Data and metadata"
-msgstr "Données et métadonnées"
-
-msgid "Signal title"
-msgstr "Titre du signal"
-
-msgid "Titles and units"
-msgstr "Titres et unités"
-
-msgid "lorentzian"
-msgstr "lorentzienne"
-
-msgid "sinus"
-msgstr "sinus"
-
-msgid "cosinus"
-msgstr "cosinus"
-
-msgid "sawtooth"
-msgstr "dent de scie"
-
-msgid "triangle"
-msgstr "triangle"
-
-msgid "square"
-msgstr "carré"
-
-msgid "cardinal sine"
-msgstr "sinus cardinal"
-
-msgid "step"
-msgstr "échelon"
-
-msgid "exponential"
-msgstr "exponentielle"
-
-msgid "pulse"
-msgstr "impulsion"
-
-msgid "polynomial"
-msgstr "polynomial"
-
-msgid "experimental"
-msgstr "expérimental"
-
-msgid "Phase"
-msgstr "Phase"
-
-msgid "Offset"
-msgstr "Offset"
-
-msgid "Exponent"
-msgstr "Exposant"
-
-msgid "End"
-msgstr "Fin"
-
-msgid "Select one point then press OK to accept"
-msgstr "Sélectionnez un point puis appuyez sur OK pour valider"
-
-msgid "Edit experimental curve"
-msgstr "Editer la courbe expérimentale"
-
-msgid "Insert point"
-msgstr "Insérer un point"
-
-msgid "Signal size (total number of points)"
-msgstr "Nombre de points"
-
-msgid "Size"
-msgstr "Taille"
-
-msgid "Untitled signal"
-msgstr "Signal sans titre"
-
-msgid "Lorentzian"
-msgstr "Lorentzienne"
-
-msgid "Sinusoid"
-msgstr "Sinusoïde"
-
-msgid "Sawtooth function"
-msgstr "Fontion dents de scie"
-
-msgid "Triangle function"
-msgstr "Fonction triangle"
-
-msgid "Square function"
-msgstr "Fonction carrée"
-
-msgid "Cardinal sine"
-msgstr "Sinus cardinal"
-
-msgid "Step function"
-msgstr "Fonction échelon"
-
-msgid "Exponential function"
-msgstr "Fonction exponentielle"
-
-msgid "Pulse function"
-msgstr "Fonction impulsion"
-
-msgid "Polynomial function"
-msgstr "Fonction polynomiale"
-
-msgid "Experimental points"
-msgstr "Points expérimentaux"
-
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
 
@@ -2710,6 +1804,9 @@ msgstr "Créer une image 2D échelon"
 msgid "Create ring image"
 msgstr "Créer une image avec un anneau"
 
+msgid "Mean"
+msgstr "Moyenne"
+
 msgid "Mean of the Gaussian distribution"
 msgstr "Moyenne de la distribution gaussienne"
 
@@ -2719,11 +1816,20 @@ msgstr "Ecart-type"
 msgid "Standard deviation of the Gaussian distribution"
 msgstr "Ecart-type de la distribution gaussienne"
 
+msgid "Seed"
+msgstr "Graine"
+
 msgid "Seed for random number generator"
 msgstr "Graine du générateur de nombres aléatoires"
 
+msgid "Size"
+msgstr "Taille"
+
 msgid "Number"
 msgstr "Nombre"
+
+msgid "Number of points"
+msgstr "Nombre de points"
 
 msgid "Sigma of the 2D Gaussian"
 msgstr "Sigma de la gaussienne 2D"
@@ -2739,6 +1845,12 @@ msgstr "X<sub>centre</sub>"
 
 msgid "Y<sub>center</sub>"
 msgstr "Y<sub>centre</sub>"
+
+msgid "Width"
+msgstr "Largeur"
+
+msgid "Radius"
+msgstr "Rayon"
 
 msgid "Intensity"
 msgstr "Intensité"
@@ -2806,6 +1918,9 @@ msgstr "Image d'homogénéité (Distribution uniforme)"
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
+msgid "Gaussian"
+msgstr "Gaussienne"
+
 msgid "Click OK to start the demo.<br><br><u>Note:</u><br>- Demo will cover a <i>selection</i> of DataLab features (for a complete list of features, please refer to the documentation).<br>- It won't require any user interaction."
 msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La démo couvre une <i>sélection</i> des fonctionnalités de DataLab (pour une liste complète des fonctionnalités, veuillez vous référer à la documentation).<br>- Elle ne nécessite aucune interaction de l'utilisateur."
 
@@ -2844,6 +1959,9 @@ msgstr "Contenu du fichier"
 msgid "Polymomial fit"
 msgstr "Ajustement polynomial"
 
+msgid "Amplitude"
+msgstr "Amplitude"
+
 msgid "Base line"
 msgstr "Ligne de base"
 
@@ -2861,6 +1979,12 @@ msgstr "Coefficient B"
 
 msgid "y0 constant"
 msgstr "Constante y0"
+
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgid "Phase"
+msgstr "Phase"
 
 msgid "Continuous component"
 msgstr "Composante continue"
@@ -2891,6 +2015,9 @@ msgstr "Valeur"
 
 msgid "Name"
 msgstr "Nom"
+
+msgid "Type"
+msgstr "Type"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3087,6 +2214,9 @@ msgstr "Transposer"
 msgid "Transpose the data (swap rows and columns)"
 msgstr "Transposer les données (échanger les lignes et les colonnes)"
 
+msgid "Data type"
+msgstr "Type de données"
+
 msgid "Output signal data type."
 msgstr "Type de données du signal de sortie."
 
@@ -3099,6 +2229,9 @@ msgid ""
 msgstr ""
 "La première colonne contient les valeurs des X\n"
 "(ignoré s'il n'y a qu'une seule colonne)"
+
+msgid "Output image data type."
+msgstr "Type de données de l'image générée."
 
 msgid "Raw Data"
 msgstr "Données brutes"
@@ -3151,6 +2284,9 @@ msgstr "Tout sélectionner"
 
 msgid "Adding data to the plot"
 msgstr "Ajout des données au graphique"
+
+msgid "Title"
+msgstr "Titre"
 
 msgid "X label"
 msgstr "Titre X"
@@ -3244,4 +2380,838 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
+msgid "Operator"
+msgstr "Opérateur"
+
+msgid "Factor"
+msgstr "Facteur"
+
+msgid "Constant"
+msgstr "Constante"
+
+msgid "Operation"
+msgstr "Opération"
+
+msgid "Convert to `obj1` data type"
+msgstr "Convertir vers le type de données de `obj1`"
+
+msgid "Result"
+msgstr "Résultat"
+
+msgid ""
+"Mode of the filter:\n"
+"- 'reflect': Reflect the data at the boundary\n"
+"- 'constant': Pad with a constant value\n"
+"- 'nearest': Pad with the nearest value\n"
+"- 'mirror': Reflect the data at the boundary with the data itself\n"
+"- 'wrap': Circular boundary"
+msgstr ""
+"Mode du filtre :\n"
+"- 'reflect' : Réfléchir les données à la frontière\n"
+"- 'constant' : Remplir avec une valeur constante\n"
+"- 'nearest' : Remplir avec la valeur la plus proche\n"
+"- 'mirror' : Réfléchir les données à la frontière avec les données elles-mêmes\n"
+"- 'wrap' : Frontière circulaire"
+
+msgid "Size of the moving window"
+msgstr "Taille de la fenêtre glissante"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "Lower clipping value"
+msgstr "Borne inférieure d'écrêtage"
+
+msgid "Upper clipping value"
+msgstr "Borne supérieure d'écrêtage"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Area"
+msgstr "Aire"
+
+msgid "Energy"
+msgstr "Energie"
+
+msgid "RMS"
+msgstr "RMS"
+
+msgid "Normalize with respect to"
+msgstr "Normaliser par rapport à"
+
+msgid "Number of bins"
+msgstr "Nombre de classes"
+
+msgid "Lower limit"
+msgstr "Limite inférieure"
+
+msgid "Upper limit"
+msgstr "Limite supérieure"
+
+msgid "Shift"
+msgstr "Décalage"
+
+msgid "Shift zero frequency to center"
+msgstr "Décaler la fréquence nulle au centre"
+
+msgid "Logarithmic scale"
+msgstr "Echelle logarithmique"
+
+msgid "Constant value"
+msgstr "Constante"
+
+msgid "columns"
+msgstr "colonnes"
+
+msgid "rows"
+msgstr "lignes"
+
+msgid "Distribute over"
+msgstr "Distribuer selon les"
+
+msgid "Columns"
+msgstr "Colonnes"
+
+msgid "Rows"
+msgstr "Lignes"
+
+msgid "Column spacing"
+msgstr "Espace entre chaque colonne"
+
+msgid "Row spacing"
+msgstr "Espace entre chaque ligne"
+
+msgid "Relative threshold"
+msgstr "Seuil relatif"
+
+msgid "Detection threshold, relative to difference between data maximum and minimum"
+msgstr "Seuil de détection, relatif à la différence entre le maximum et le minimum des données de l'image"
+
+msgid "Neighborhoods size"
+msgstr "Taille du voisinage"
+
+msgid "Size of the sliding window used in maximum/minimum filtering algorithm"
+msgstr "Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage maximum/minimum"
+
+msgid "Ellipse"
+msgstr "Ellipse"
+
+msgid "Circle"
+msgstr "Cercle"
+
+msgid "Polygon"
+msgstr "Polygone"
+
+msgid "Shape"
+msgstr "Forme"
+
+msgid "The minimum standard deviation for Gaussian Kernel. Keep this low to detect smaller blobs."
+msgstr "L'écart-type minimal pour le noyau gaussien. Cette valeur doit être faible pour détecter de petites taches."
+
+msgid "The maximum standard deviation for Gaussian Kernel. Keep this high to detect larger blobs."
+msgstr "L'écart-type maximal pour le noyau gaussien. Cette valeur doit être élevée pour détecter de grandes taches."
+
+msgid "Minimum intensity of blobs."
+msgstr "Intensité minimale des taches."
+
+msgid "Overlap"
+msgstr "Recouvrement"
+
+msgid "If two blobs overlap by a fraction greater than this value, the smaller blob is eliminated."
+msgstr "Si deux taches ont un taux de recouvrement supérieur à ce seuil, alors la plus petite tache est éliminée."
+
+msgid "Exclude border"
+msgstr "Exclure la bordure"
+
+msgid "If True, exclude blobs from the border of the image."
+msgstr "Si le réglage est actif, exclure les taches de la bordure de l'image."
+
+msgid "Log scale"
+msgstr "Echelle logarithmique"
+
+msgid "If set intermediate values of standard deviations are interpolated using a logarithmic scale to the base 10. If not, linear interpolation is used."
+msgstr "Les valeurs intermédiaires d'écart-type peuvent être interpolées selon une échelle linéaire ou logarithmique."
+
+msgid "Min. threshold"
+msgstr "Seuil min."
+
+msgid "The minimum threshold between local maxima and minima. This parameter does not affect the quality of the blobs, only the quantity. Lower thresholds result in larger numbers of blobs."
+msgstr "Le seuil minimum entre les maxima et minima locaux. Ce paramètre n'affecte pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un nombre plus important de taches."
+
+msgid "Max. threshold"
+msgstr "Seuil max."
+
+msgid "The maximum threshold between local maxima and minima. This parameter does not affect the quality of the blobs, only the quantity. Lower thresholds result in larger numbers of blobs."
+msgstr "Le seuil maximum entre les maxima et minima locaux. Ce paramètre n'affecte pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un nombre plus important de taches."
+
+msgid "Min. repeatability"
+msgstr "Répétabilité min."
+
+msgid "The minimum number of times a blob needs to be detected in a sequence of images to be considered valid."
+msgstr "Le nombre minimum de fois qu'une tache doit être détectée dans une séquence d'images pour être considérée valide."
+
+msgid "Min. distance between blobs"
+msgstr "Distance min. entre taches"
+
+msgid "The minimum distance between two blobs. If blobs are found closer together than this distance, the smaller blob is removed."
+msgstr "La distance minimale entre deux taches. Si deux taches sont détectées à une distance inférieure à celle-ci, alors la plus petite tache est éliminée."
+
+msgid "Filter by color"
+msgstr "Filtrer par couleur"
+
+msgid "If true, the image is filtered by color instead of intensity."
+msgstr "Si vrai, l'image est filtrée par couleur au lieu d'intensité."
+
+msgid "Blob color"
+msgstr "Couleur de la tache"
+
+msgid "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
+msgstr "La couleur des taches à détecter (0 pour les taches foncées, 255 pour les taches claires)."
+
+msgid "Filter by area"
+msgstr "Filtrer par aire"
+
+msgid "If true, the image is filtered by blob area."
+msgstr "Si vrai, l'image est filtrée par l'aire des taches."
+
+msgid "Min. area"
+msgstr "Aire min."
+
+msgid "The minimum blob area."
+msgstr "L'aire minimale des taches."
+
+msgid "Max. area"
+msgstr "Aire max."
+
+msgid "The maximum blob area."
+msgstr "L'aire maximale des taches."
+
+msgid "Filter by circularity"
+msgstr "Filtrer par circularité"
+
+msgid "If true, the image is filtered by blob circularity."
+msgstr "Si vrai, l'image est filtrée par la circularité des taches."
+
+msgid "Min. circularity"
+msgstr "Circularité min."
+
+msgid "The minimum circularity of the blobs."
+msgstr "La circularité minimale des taches."
+
+msgid "Max. circularity"
+msgstr "Circularité max."
+
+msgid "The maximum circularity of the blobs."
+msgstr "La circularité maximale des taches."
+
+msgid "Filter by inertia"
+msgstr "Filtrer par inertie"
+
+msgid "If true, the image is filtered by blob inertia."
+msgstr "Si vrai, l'image est filtrée par l'inertie des taches."
+
+msgid "Min. inertia ratio"
+msgstr "Ratio d'inertie min."
+
+msgid "The minimum inertia ratio of the blobs."
+msgstr "Le ratio d'inertie minimal des taches."
+
+msgid "Max. inertia ratio"
+msgstr "Ratio d'inertie max."
+
+msgid "The maximum inertia ratio of the blobs."
+msgstr "Le ratio d'inertie maximal des taches."
+
+msgid "Filter by convexity"
+msgstr "Filtrer par convexité"
+
+msgid "If true, the image is filtered by blob convexity."
+msgstr "Si vrai, l'image est filtrée par la convexité des taches."
+
+msgid "Min. convexity"
+msgstr "Convexité min."
+
+msgid "The minimum convexity of the blobs."
+msgstr "La convexité minimale des taches."
+
+msgid "Max. convexity"
+msgstr "Convexité max."
+
+msgid "The maximum convexity of the blobs."
+msgstr "La convexité maximale des taches."
+
+msgid "Radius<sub>min</sub>"
+msgstr "Rayon<sub>min</sub>"
+
+msgid "Radius<sub>max</sub>"
+msgstr "Rayon<sub>max</sub>"
+
+msgid "Minimal distance"
+msgstr "Distance minimale"
+
+msgid "Standard deviation of the Gaussian filter."
+msgstr "Ecart-type du filtrage gaussien"
+
+msgid "Low threshold"
+msgstr "Seuil bas"
+
+msgid "Lower bound for hysteresis thresholding (linking edges)."
+msgstr "Borne inférieure pour le seuillage par hystérésis (liaison des contours)."
+
+msgid "High threshold"
+msgstr "Seuil haut"
+
+msgid "Upper bound for hysteresis thresholding (linking edges)."
+msgstr "Borne supérieure pour le seuillage par hystérésis (liaison des contours)."
+
+msgid "Use quantiles"
+msgstr "Utiliser les quantiles"
+
+msgid "If True then treat low_threshold and high_threshold as quantiles of the edge magnitude image, rather than absolute edge magnitude values. If True then the thresholds must be in the range [0, 1]."
+msgstr "Interprète les seuils bas et haut en tant que quantiles des niveaux des contours, au lieu de valeurs absolues des contours. Si le réglage est actif, alors les seuils doivent être compris entre 0 et 1."
+
+msgid "Value to fill past edges of input if mode is constant."
+msgstr "Valeur de remplissage si le mode est constant."
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Gamma correction factor (higher values give more contrast)."
+msgstr "Facteur de correction gamma (plus la valeur est élevée, plus le contraste est important)."
+
+msgid "Gain"
+msgstr "Gain"
+
+msgid "Gain factor (higher values give more contrast)."
+msgstr "Facteur de gain (plus la valeur est élevée, plus le contraste est important)."
+
+msgid "If True, apply inverse logarithmic transformation."
+msgstr "Si vrai, appliquer une transformation logarithmique inverse."
+
+msgid "Cutoff"
+msgstr "Cutoff"
+
+msgid "Cutoff value (higher values give more contrast)."
+msgstr "Valeur de coupure (plus la valeur est élevée, plus le contraste est important)."
+
+msgid "If True, apply inverse sigmoid transformation."
+msgstr "Si vrai, appliquer une transformation sigmoïde inverse."
+
+msgid "Input range"
+msgstr "Echelle de niveaux en entrée"
+
+msgid "Min and max intensity values of input image ('image' refers to input image min/max levels, 'dtype' refers to input image data type range)."
+msgstr "Valeurs min/max d'intensité de l'image en entrée ('image' correspond aux niveaux min/max de l'image en entrée, 'dtype' correspond aux valeurs min/max du type de données de l'image)."
+
+msgid "Output range"
+msgstr "Echelle de niveaux en sortie"
+
+msgid "Min and max intensity values of output image  ('image' refers to input image min/max levels, 'dtype' refers to input image data type range).."
+msgstr "Valeurs min/max d'intensité de l'image en sortie ('image' correspond aux niveaux min/max de l'image en entrée, 'dtype' correspond aux valeurs min/max du type de données de l'image)."
+
+msgid "Number of bins for image histogram."
+msgstr "Nombre de classes de l'histogramme des niveaux de l'image."
+
+msgid "Clipping limit"
+msgstr "Écrêtage limite"
+
+msgid "Clipping limit (higher values give more contrast)."
+msgstr "Valeur d'écrêtage (plus la valeur est élevée, plus le contraste est important)."
+
+msgid "horizontal"
+msgstr "horizontal"
+
+msgid "vertical"
+msgstr "vertical"
+
+msgid "Direction"
+msgstr "Direction"
+
+msgid "Row"
+msgstr "Ligne"
+
+msgid "Column"
+msgstr "Colonne"
+
+msgid "Start row"
+msgstr "Ligne (début)"
+
+msgid "Start column"
+msgstr "Colonne (début)"
+
+msgid "End row"
+msgstr "Ligne (fin)"
+
+msgid "End column"
+msgstr "Colonne (fin)"
+
+msgid "Profile rectangular area"
+msgstr "Zone rectangulaire du profil"
+
+msgid "Row 1"
+msgstr "Ligne 1"
+
+msgid "Row 2"
+msgstr "Ligne 2"
+
+msgid "Column 1"
+msgstr "Colonne 1"
+
+msgid "Column 2"
+msgstr "Colonne 2"
+
+msgid "Center position"
+msgstr "Position du centre"
+
+msgid "Image centroid"
+msgstr "Barycentre de l'image"
+
+msgid "Image center"
+msgstr "Centre de l'image"
+
+msgid "User-defined"
+msgstr "Défini par l'utilisateur"
+
+msgid "Center"
+msgstr "Centre"
+
+msgid "Cut-off frequency ratio"
+msgstr "Fréquence de coupure relative"
+
+msgid "If True, apply high-pass filter instead of low-pass"
+msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas"
+
+msgid "Order"
+msgstr "Ordre"
+
+msgid "Order of the Butterworth filter"
+msgstr "Ordre du filtre de Butterworth"
+
+msgid "Padding strategy"
+msgstr "Stratégie de complément de zéros"
+
+msgid "Rows to add"
+msgstr "Lignes à ajouter"
+
+msgid "Columns to add"
+msgstr "Colonnes à ajouter"
+
+msgid "Padding position"
+msgstr "Position du complément de zéros"
+
+msgid "cval"
+msgstr "cval"
+
+msgid "Value used for points outside the boundaries of the input if mode is 'constant'"
+msgstr "Valeur utilisée pour les points situés en dehors des frontières de l'image d'origine (si le mode est 'constant')"
+
+msgid "Reshape the output array"
+msgstr "Redimensionner l'image de destination"
+
+msgid "Reshape the output array so that the input array is contained completely in the output"
+msgstr "Redimensionner l'image de destination de sorte qu'elle puisse contenir la totalité de l'image source"
+
+msgid "Prefilter the input image"
+msgstr "Prétraitement de l'image d'origine (spline)"
+
+msgid "Spline interpolation order"
+msgstr "Ordre de l'interpolation de type spline"
+
+msgid "Zoom"
+msgstr "Zoom"
+
+msgid "Cluster size (X)"
+msgstr "Nombre de pixels (X)"
+
+msgid "Number of adjacent pixels to be combined together along X-axis."
+msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des X."
+
+msgid "Cluster size (Y)"
+msgstr "Nombre de pixels (Y)"
+
+msgid "Number of adjacent pixels to be combined together along Y-axis."
+msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
+
+msgid "Change pixel size"
+msgstr "Modifier la taille des pixels"
+
+msgid "Change pixel size so that overall image size remains the same."
+msgstr "Modification de la taille des pixels de sorte que les dimensions de l'images restent les mêmes après l'opération."
+
+msgid "Footprint (disk) radius."
+msgstr "Rayon de l'ouverture circulaire (disque)."
+
+msgid "Denoising weight"
+msgstr "Poids de débruitage"
+
+msgid "The greater weight, the more denoising (at the expense of fidelity to input)."
+msgstr "Plus le poids est élevé, plus le débruitage est fort (aux dépens de la fidélité des données)."
+
+msgid "Relative difference of the value of the cost function that determines the stop criterion. The algorithm stops when: (E_(n-1) - E_n) < eps * E_0"
+msgstr "Différence relative de la valeur de la fonction de coût qui détermine le critère d'arrêt de l'algorithme. Ce dernier s'arrête lorsque : (E_(n-1) - E_n) < eps * E_0"
+
+msgid "Max. iterations"
+msgstr "Nb. max. d'itérations"
+
+msgid "Maximal number of iterations used for the optimization"
+msgstr "Nombre maximal d'itérations utilisé pour l'optimisation"
+
+msgid "Standard deviation for range distance. A larger value results in averaging of pixels with larger spatial differences."
+msgstr "Ecart-type dans le domaine spatial. Une valeur élevée a pour effet de moyenner des pixels séparés par de grandes distances."
+
+msgid "Used in conjunction with mode 'constant', the value outside the image boundaries."
+msgstr "Valeur de remplissage en dehors des bornes de l'image (en mode constant)."
+
+msgid "Wavelet"
+msgstr "Ondelette"
+
+msgid "Manual"
+msgstr "Manuel"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Triangle"
+msgstr "Triangle"
+
+msgid "Threshold method"
+msgstr "Méthode de seuillage"
+
+msgid "Threshold value"
+msgstr "Valeur de seuil"
+
+msgid "Greater than"
+msgstr "Supérieur à"
+
+msgid "Less than"
+msgstr "Inférieur à"
+
+msgid "Destination data type"
+msgstr "Type de données de destination"
+
+msgid "Threshold"
+msgstr "Seuil"
+
+msgid "Minimum distance"
+msgstr "Distance minimale"
+
+msgid "X-axis"
+msgstr "Axe des X"
+
+msgid "Y-axis"
+msgstr "Axe des Y"
+
+msgid "Calibrate"
+msgstr "Étalonner"
+
+msgid "Bessel"
+msgstr "Bessel"
+
+msgid "Butterworth"
+msgstr "Butterworth"
+
+msgid "Chebyshev type 1"
+msgstr "Chebyshev de type 1"
+
+msgid "Chebyshev type 2"
+msgstr "Chebyshev de type 2"
+
+msgid "Elliptic"
+msgstr "Elliptique"
+
+msgid "Filter method"
+msgstr "Méthode de filtrage"
+
+msgid "Filter order"
+msgstr "Ordre du filtre"
+
+msgid "Low cutoff frequency"
+msgstr "Fréquence de coupure basse"
+
+msgid "High cutoff frequency"
+msgstr "Fréquence de coupure haute"
+
+msgid "Passband ripple"
+msgstr "Ondulation de la bande passante"
+
+msgid "Stopband attenuation"
+msgstr "Atténuation de la bande d'arrêt"
+
+msgid "Strategy"
+msgstr "Stratégie"
+
+msgid "Number of points to add"
+msgstr "Nombre de points à ajouter"
+
+msgid "Degree"
+msgstr "Degré"
+
+msgid "Counts"
+msgstr "Coups"
+
+msgid "Linear"
+msgstr "Linéaire"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Quadratic"
+msgstr "Quadratique"
+
+msgid "Cubic"
+msgstr "Cubique"
+
+msgid "Barycentric"
+msgstr "Barycentrique"
+
+msgid "PCHIP"
+msgstr "PCHIP"
+
+msgid "Interpolation method"
+msgstr "Méthode d'interpolation"
+
+msgid "Fill value"
+msgstr "Valeur de remplissage"
+
+msgid "Value to use for points outside the interpolation domain (used only with linear, cubic and pchip methods)."
+msgstr "Valeur à utiliser pour les points en dehors du domaine d'interpolation (utilisé uniquement avec les méthodes linéaire, cubique et pchip)."
+
+msgid "X<sub>min</sub>"
+msgstr "X<sub>min</sub>"
+
+msgid "X<sub>max</sub>"
+msgstr "X<sub>max</sub>"
+
+msgid "Detrending method"
+msgstr "Méthode d'élimation de la tendance"
+
+msgid "Cosine"
+msgstr "Cosinus"
+
+msgid "Flat top"
+msgstr "Sommet plat"
+
+msgid "Rectangular"
+msgstr "Rectangulaire"
+
+msgid "Method"
+msgstr "Méthode"
+
+msgid "Shape parameter of the Tukey windowing function"
+msgstr "Paramètre de forme de la fonction de fenêtrage de Tukey"
+
+msgid "Shape parameter of the Kaiser windowing function"
+msgstr "Paramètre de forme de la fonction de fenêtrage de Kaiser"
+
+msgid "Shape parameter of the Gaussian windowing function"
+msgstr "Paramètre de forme de la fonction de fenêtrage gaussienne"
+
+msgid "Radian"
+msgstr "Radian"
+
+msgid "Angle unit"
+msgstr "Unité de l'angle"
+
+msgid "Zero-crossing"
+msgstr "Passage par zéro"
+
+msgid "Lower X boundary (empty for no limit, i.e. start of the signal)"
+msgstr "Borne X inférieure (vide pour aucune limite, c'est-à-dire le début du signal)"
+
+msgid "Upper X boundary (empty for no limit, i.e. end of the signal)"
+msgstr "Borne X supérieure (vide pour aucune limite, c'est-à-dire la fin du signal)"
+
+msgid "Ordinate"
+msgstr "Coordonnées"
+
+msgid "Abscissa"
+msgstr "Abscisse"
+
+msgid "Full scale"
+msgstr "Pleine échelle"
+
+msgid "Unit for SINAD"
+msgstr "Unité pour SINAD"
+
+msgid "Unit"
+msgstr "Unité"
+
+msgid "Number of harmonics"
+msgstr "Nombre d'harmoniques"
+
+msgid "Number of harmonics to consider for THD"
+msgstr "Nombre d'harmoniques à considérer pour le THD"
+
+msgid "All supported files"
+msgstr "Tous les fichiers pris en charge"
+
+msgid "Image I/O formats"
+msgstr "Formats d'entrée/sortie d'images"
+
+msgid "Text files"
+msgstr "Fichiers texte"
+
+msgid "MAT-Files"
+msgstr "Fichiers MAT"
+
+msgid "Signal I/O formats"
+msgstr "Formats d'entrée/sortie de signaux"
+
+msgid "CSV files"
+msgstr "Fichiers CSV"
+
+msgid "NumPy binary files"
+msgstr "Fichiers binaires NumPy"
+
+msgid "Uniform distribution lower bound"
+msgstr "Borne inférieure de la distribution uniforme"
+
+msgid "Uniform distribution higher bound"
+msgstr "Borne supérieure de la distribution uniforme"
+
+msgid "Normal distribution mean"
+msgstr "Moyenne de la distribution normale"
+
+msgid "Normal distribution standard deviation"
+msgstr "Ecart-type de la distribution normale"
+
+msgid "Geometry"
+msgstr "Géométrie"
+
+msgid "Top left corner"
+msgstr "Coin supérieur gauche"
+
+msgid "Center coordinates"
+msgstr "Coordonnées du centre"
+
+msgid "Coordinates"
+msgstr "Coordonnées"
+
+msgid "Data"
+msgstr "Données"
+
+msgid "Metadata"
+msgstr "Métadonnées"
+
+msgid "Origin"
+msgstr "Origine"
+
+msgid "Pixel spacing"
+msgstr "Taille des pixels"
+
+msgid "Image title"
+msgstr "Titre de l'image"
+
+msgid "Z-axis"
+msgstr "Axe des Z"
+
+msgid "Scales"
+msgstr "Echelles"
+
+msgid "Auto scale"
+msgstr "Echelle automatique"
+
+msgid "Lower bound"
+msgstr "Borne inférieure"
+
+msgid "Upper bound"
+msgstr "Borne supérieure"
+
+msgid "LUT range"
+msgstr "Plage de LUT"
+
+msgid "zeros"
+msgstr "zéros"
+
+msgid "empty"
+msgstr "vide"
+
+msgid "gaussian"
+msgstr "gaussienne"
+
+msgid "random (uniform law)"
+msgstr "aléatoire (loi uniforme)"
+
+msgid "random (normal law)"
+msgstr "aléatoire (loi normale)"
+
+msgid "Untitled image"
+msgstr "Image sans titre"
+
+msgid "Height"
+msgstr "Hauteur"
+
+msgid "Image height: number of rows"
+msgstr "Hauteur de l'image : nombre de lignes"
+
+msgid "Image width: number of columns"
+msgstr "Largeur de l'image : nombre de colonnes"
+
+msgid "First point coordinate"
+msgstr "Coordonnée du premier point"
+
+msgid "Last point coordinate"
+msgstr "Coordonnée du dernier point"
+
+msgid "Data and metadata"
+msgstr "Données et métadonnées"
+
+msgid "Signal title"
+msgstr "Titre du signal"
+
+msgid "Titles and units"
+msgstr "Titres et unités"
+
+msgid "lorentzian"
+msgstr "lorentzienne"
+
+msgid "sinus"
+msgstr "sinus"
+
+msgid "cosinus"
+msgstr "cosinus"
+
+msgid "sawtooth"
+msgstr "dent de scie"
+
+msgid "triangle"
+msgstr "triangle"
+
+msgid "square"
+msgstr "carré"
+
+msgid "cardinal sine"
+msgstr "sinus cardinal"
+
+msgid "step"
+msgstr "échelon"
+
+msgid "exponential"
+msgstr "exponentielle"
+
+msgid "pulse"
+msgstr "impulsion"
+
+msgid "polynomial"
+msgstr "polynomial"
+
+msgid "experimental"
+msgstr "expérimental"
+
+msgid "Offset"
+msgstr "Offset"
+
+msgid "Exponent"
+msgstr "Exposant"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "Untitled signal"
+msgstr "Signal sans titre"
+
+msgid "Signal size (total number of points)"
+msgstr "Nombre de points"
 

@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-07 19:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+msgid "Plot handler"
+msgstr "Gestionnaire de visualisation"
+
+msgid "The :mod:`cdl.gui.plothandler` module provides plot handlers for signal and image panels, that is, classes handling `PlotPy` plot items for representing signals and images."
+msgstr "Le module :mod:`cdl.gui.plothandler` fournit des gestionnaires de visualisation pour les panneaux de signaux et d'images, c'est-à-dire des classes gérant les items de visualisation `PlotPy` pour représenter les signaux et les images."
+
+msgid "Signal plot handler"
+msgstr "Gestionnaire de visualisation de signaux"
+
+msgid "Object handling signal plot items, plot dialogs, plot options"
+msgstr "Objet gérant les items de visualisation de signaux, les dialogues de visualisation et les options de visualisation"
+
+msgid "Toggle anti-aliasing"
+msgstr "Activer/désactiver l'anti-crénelage"
+
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgid "if True, enable anti-aliasing"
+msgstr "si True, activer l'anti-crénelage"
+
+msgid "Return standard signal/image plot options"
+msgstr "Renvoyer les options de visualisation standard pour les signaux/images"
+
+msgid "Add geometric shape items associated to computed results and annotations, for the object with the given uuid"
+msgstr "Ajouter des items de formes géométriques associés aux résultats calculés et aux annotations, pour l'objet avec l'uuid donné"
+
+msgid "Clean up data view"
+msgstr "Nettoyer la vue de données"
+
+msgid "Clear plot items"
+msgstr "Effacer les items de visualisation"
+
+msgid "Return item associated to object uuid. If the key is not found, default is returned if given, otherwise None is returned."
+msgstr "Renvoie l'item associé à l'uuid de l'objet. Si la clé n'est pas trouvée, la valeur par défaut est renvoyée si elle est donnée, sinon None est renvoyé."
+
+msgid "Return object associated to plot item"
+msgstr "Renvoyer l'objet associé à l'item de visualisation"
+
+msgid "plot item"
+msgstr "item de visualisation"
+
+msgid "Returns"
+msgstr "Renvoie"
+
+msgid "Object associated to plot item"
+msgstr "Objet associé à l'item de visualisation"
+
+msgid "Reduce the number of shown objects to visible items only. The base implementation is to show only the first selected item if the option \"Show first only\" is enabled."
+msgstr ""
+
+msgid "list of object uuids"
+msgstr ""
+
+msgid "Reduced list of object uuids"
+msgstr ""
+
+msgid "Refresh plot."
+msgstr "Actualiser la visualisation"
+
+msgid "string describing the objects to refresh. Valid values are \"selected\" (refresh the selected objects), \"all\" (refresh all objects), \"existing\" (refresh existing plot items), or an object uuid."
+msgstr "chaîne décrivant les objets à actualiser. Les valeurs valides sont \"selected\" (actualiser les objets sélectionnés), \"all\" (actualiser tous les objets), \"existing\" (actualiser les items de visualisation existants), ou un uuid d'objet."
+
+msgid "if True, update the items. If False, only show the items (do not update them, except if the option \"Use reference item LUT range\" is enabled and more than one item is selected). Defaults to True."
+msgstr "si True, mettre à jour les items. Si False, seulement afficher les items (ne pas les mettre à jour, sauf si l'option \"Utiliser la plage LUT de l'item de référence\" est activée et que plus d'un item est sélectionné). Par défaut à True."
+
+msgid "if True, force refresh even if auto refresh is disabled. Defaults to False."
+msgstr ""
+
+msgid "if True, only refresh visible items. Defaults to True. Visible items are the ones that are not hidden by other items or the items except the first one if the option \"Show first only\" is enabled. This is useful for images, where the last image is the one that is shown. If False, all items are refreshed."
+msgstr ""
+
+msgid "if True, only refresh existing items. Defaults to False. Existing items are the ones that have already been created and are associated to the object uuid. If False, create new items for the objects that do not have an item yet."
+msgstr ""
+
+msgid "Raises"
+msgstr "Lève"
+
+msgid "if `what` is not a valid value"
+msgstr "si `what` n'est pas une valeur valide"
+
+msgid "Remove all geometric shapes associated to result items"
+msgstr "Supprimer toutes les formes géométriques associées aux items de résultats"
+
+msgid "Remove plot item associated to object uuid"
+msgstr "Supprimer l'item de visualisation associé à l'uuid de l'objet"
+
+msgid "Set auto refresh mode."
+msgstr "Définir le mode d'actualisation automatique."
+
+msgid "if True, refresh plot items automatically"
+msgstr "si True, actualiser les items de visualisation automatiquement"
+
+msgid "Set show first only mode."
+msgstr ""
+
+msgid "if True, show only the first selected item"
+msgstr ""
+
+msgid "Update plot item according to reference item"
+msgstr "Mettre à jour l'item de visualisation selon l'item de référence"
+
+msgid "Update result property from plot item"
+msgstr "Mettre à jour la propriété de résultat à partir de l'item de visualisation"
+
+msgid "Image plot handler"
+msgstr "Gestionnaire de visualisation d'images"
+
+msgid "Object handling image plot items, plot dialogs, plot options"
+msgstr "Objet gérant les items de visualisation d'images, les dialogues de visualisation et les options de visualisation"

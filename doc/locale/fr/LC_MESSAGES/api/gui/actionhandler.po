@@ -187,3 +187,4 @@ msgstr "objets sélectionnés"
 
 msgid "Object handling image panel GUI interactions: actions, menus, ..."
 msgstr "Objet gérant les interactions GUI du panneau d'images : actions, menus, ..."
+

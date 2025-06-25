@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 15:18+0200\n"
+"POT-Creation-Date: 2025-04-14 10:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -20,55 +20,55 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 msgid "Panel"
-msgstr ""
+msgstr "Panneau"
 
 msgid "The :mod:`cdl.gui.panel` package provides the **panel objects** for signals and images."
-msgstr ""
+msgstr "Le paquet :mod:`cdl.gui.panel` fournit les **objets panneaux** pour les signaux et les images."
 
 msgid "Three types of panels are available:"
-msgstr ""
+msgstr "Trois types de panneaux sont disponibles :"
 
 msgid ":class:`cdl.gui.panel.signal.SignalPanel`: Signal panel"
-msgstr ""
+msgstr ":class:`cdl.gui.panel.signal.SignalPanel`: Panneau Signal"
 
 msgid ":class:`cdl.gui.panel.image.ImagePanel`: Image panel"
-msgstr ""
+msgstr ":class:`cdl.gui.panel.image.ImagePanel`: Panneau Image"
 
 msgid ":class:`cdl.gui.panel.macro.MacroPanel`: Macro panel"
-msgstr ""
+msgstr ":class:`cdl.gui.panel.macro.MacroPanel`: Panneau Macro"
 
 msgid "Signal and Image Panels are called **Data Panels** and are used to display and handle signals and images in the main window of DataLab."
-msgstr ""
+msgstr "Les panneaux Signal et Image sont appelés **Panneaux de données** et sont utilisés pour afficher et gérer les signaux et les images dans la fenêtre principale de DataLab."
 
 msgid "Data Panels rely on the :class:`cdl.gui.panel.base.ObjectProp` class (managing the object properties) and a set of modules to handle the GUI features:"
-msgstr ""
+msgstr "Les Panneaux de données reposent sur la classe :class:`cdl.gui.panel.base.ObjectProp` (gestion des propriétés de l'objet) et un ensemble de modules pour gérer les fonctionnalités de l'interface graphique :"
 
 msgid ":mod:`cdl.gui.actionhandler`: Application actions (menus, toolbars, context menu)"
-msgstr ""
+msgstr ":mod:`cdl.gui.actionhandler`: Actions de l'application (menus, barres d'outils, menu contextuel)"
 
 msgid ":mod:`cdl.gui.objectview`: Widgets to display object (signal/image) trees"
-msgstr ""
+msgstr ":mod:`cdl.gui.objectview`: Widgets pour afficher les arbres d'objets (signaux/images)"
 
 msgid ":mod:`cdl.gui.plothandler`: `PlotPy` items for representing signals and images"
-msgstr ""
+msgstr ":mod:`cdl.gui.plothandler`: items `PlotPy` de représentation graphique de signaux et d'images"
 
 msgid ":mod:`cdl.gui.processor`: Processor (computation)"
-msgstr ""
+msgstr ":mod:`cdl.gui.processor`: Processeur (calcul)"
 
 msgid ":mod:`cdl.gui.panel.roieditor`: ROI editor"
-msgstr ""
+msgstr ":mod:`cdl.gui.panel.roieditor`: Éditeur de ROI"
 
 msgid "The Macro Panel is used to display and run macros. It relies on the :mod:`cdl.gui.macroeditor` module to handle the macro edition and execution."
-msgstr ""
+msgstr "Le Panneau Macro est utilisé pour afficher et exécuter des macros. Il repose sur le module :mod:`cdl.gui.macroeditor` pour gérer l'édition et l'exécution des macros."
 
 msgid "Base features"
-msgstr ""
+msgstr "Fonctionnalités de base"
 
 msgid "Return True if plot item is serializable"
-msgstr ""
+msgstr "Renvoie True si l'élément de tracé est sérialisable"
 
 msgid "Object handling panel properties"
-msgstr ""
+msgstr "Objet gérant les propriétés du panneau"
 
 msgid "Add additional button on bottom of properties panel"
 msgstr ""
@@ -478,6 +478,9 @@ msgstr ""
 msgid "Default: None."
 msgstr ""
 
+msgid "guidata.dataset.dataitems.StringItem"
+msgstr ""
+
 msgid "guidata.dataset.dataitems.FloatArrayItem"
 msgstr ""
 
@@ -488,16 +491,13 @@ msgstr ""
 msgid "guidata.dataset.dataitems.DictItem"
 msgstr ""
 
-msgid "Default: ''."
-msgstr ""
-
-msgid "guidata.dataset.dataitems.StringItem"
-msgstr ""
-
 msgid "Signal title\\.  Default: 'Untitled'."
 msgstr ""
 
 msgid "Title\\.  Default: ''."
+msgstr ""
+
+msgid "Default: ''."
 msgstr ""
 
 msgid "Lower bound\\.  Default: None."
@@ -718,4 +718,3 @@ msgstr ""
 
 msgid "Remove macro"
 msgstr ""
-

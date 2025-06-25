@@ -1,6 +1,6 @@
 """
 Algorithms (:mod:`sigima_.algorithms`)
-----------------------------------
+--------------------------------------
 
 This package contains the algorithms used by the DataLab project. Those algorithms
 operate directly on NumPy arrays and are designed to be used in the DataLab pipeline,

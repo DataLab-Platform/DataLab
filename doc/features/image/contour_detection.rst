@@ -39,5 +39,5 @@ The contour detection algorithm works in the following way:
 Feature is based on ``get_contour_shapes`` function
 from ``sigima_.algorithms`` module:
 
-  .. literalinclude:: ../../../cdl/algorithms/image.py
+  .. literalinclude:: ../../../sigima_/algorithms/image.py
      :pyobject: get_contour_shapes
