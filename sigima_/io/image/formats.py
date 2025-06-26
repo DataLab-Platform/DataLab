@@ -94,7 +94,7 @@ class TextImageFormat(ImageFormatBase):
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
+        """Read and return data."""
         for encoding in ("utf-8", "utf-8-sig", "latin-1"):
             for delimiter in ("\t", ",", " ", ";"):
                 try:

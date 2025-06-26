@@ -164,7 +164,7 @@ def read_csv(
     # First attempt: no header (try to read with different delimiters)
     read_without_header = True
     for decimal in (".", ","):
-        for delimiter in (",", ";", "\t", " "):
+        for delimiter in (",", ";", r"\s+"):
             try:
                 df = pd.read_csv(
                     filename,
@@ -186,7 +186,7 @@ def read_csv(
     # Second attempt: with header
     if df is None:
         for decimal in (".", ","):
-            for delimiter in (",", ";", "\t", " "):
+            for delimiter in (",", ";", r"\s+"):
                 # Headers are generally in the first 10 lines, so we try to skip the
                 # minimum number of lines before reading the data:
                 for skiprows in range(20):
