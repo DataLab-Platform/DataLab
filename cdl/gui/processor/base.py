@@ -1361,7 +1361,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     for obj_i in objs:
                         obj_i.roi = None
                 else:
-                    edited_roi = edited_roi.from_params(obj, params)
+                    edited_roi = edited_roi.__class__.from_params(
+                        obj, params, singleobj=edited_roi.singleobj
+                    )
                     if not extract:
                         for obj_i in objs:
                             obj_i.roi = edited_roi
