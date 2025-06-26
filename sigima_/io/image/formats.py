@@ -10,6 +10,7 @@ import os.path as osp
 
 import imageio.v3 as iio
 import numpy as np
+import pandas as pd
 import plotpy.io
 import scipy.io as sio
 import skimage.io
@@ -96,12 +97,22 @@ class TextImageFormat(ImageFormatBase):
     def read_data(filename: str) -> np.ndarray:
         """Read data and return it"""
         for encoding in ("utf-8", "utf-8-sig", "latin-1"):
-            for delimiter in ("\t", ",", " ", ";"):
-                try:
-                    return np.loadtxt(filename, delimiter=delimiter, encoding=encoding)
-                except ValueError:
-                    continue
-        raise ValueError(f"Could not read image data from file {filename} as text file")
+            for decimal in (".", ","):
+                for delimiter in (",", ";", r"\s+"):
+                    try:
+                        df = pd.read_csv(
+                            filename,
+                            decimal=decimal,
+                            delimiter=delimiter,
+                            encoding=encoding,
+                            header=None,
+                        )
+                        # Handle the extra column created with trailing delimiters.
+                        df = df.dropna(axis=1, how="all")
+                        return df.to_numpy(np.float64)
+                    except ValueError:
+                        continue
+        raise ValueError(f"Could not read image data from file {filename}.")
 
     @staticmethod
     def write_data(filename: str, data: np.ndarray) -> None:
