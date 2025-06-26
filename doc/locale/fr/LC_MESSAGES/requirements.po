@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-17 17:01+0200\n"
+"POT-Creation-Date: 2025-06-26 20:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -61,7 +61,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "SciPy"
 msgstr ""
 
-msgid ">= 1.5, < 1.15.0"
+msgid ">= 1.5"
 msgstr ""
 
 msgid "Fundamental algorithms for scientific computing in Python"
@@ -102,6 +102,24 @@ msgstr ""
 
 msgid "Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7."
 msgstr "Bibliothèque multiplateforme pour la surveillance des processus et du système en Python."
+
+msgid "packaging"
+msgstr ""
+
+msgid ">= 20.0"
+msgstr ""
+
+msgid "Core utilities for Python packages"
+msgstr ""
+
+msgid "typing-extensions"
+msgstr ""
+
+msgid ">= 4.0"
+msgstr ""
+
+msgid "Backported and Experimental Type Hints for Python 3.9+"
+msgstr ""
 
 msgid "PyQt5"
 msgstr ""
@@ -213,3 +231,4 @@ msgstr ""
 
 msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
 msgstr "Un plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
+

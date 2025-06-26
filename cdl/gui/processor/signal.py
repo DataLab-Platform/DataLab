@@ -290,7 +290,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         )
         # Other processing
         self.register_1_to_1(
-            sigima_signal.windowing,
+            sigima_signal.apply_window,
             _("Windowing"),
             paramclass=sigima_.param.WindowingParam,
             icon_name="windowing.svg",
@@ -305,7 +305,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             icon_name="detrending.svg",
         )
         self.register_2_to_1(
-            sigima_signal.interpolation,
+            sigima_signal.interpolate,
             _("Interpolation"),
             paramclass=sigima_.param.InterpolationParam,
             obj2_name=_("signal for X values"),

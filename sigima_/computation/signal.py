@@ -24,9 +24,19 @@ import scipy.integrate as spt
 import scipy.ndimage as spi
 import scipy.signal as sps
 
-import sigima_.algorithms.coordinates as alg_coords
-import sigima_.algorithms.signal as alg_signal
 from cdl.config import Conf, _
+from sigima_.algorithms import coordinates
+from sigima_.algorithms.signal import (
+    dynamic,
+    fourier,
+    interpolation,
+    level,
+    misc,
+    peakdetection,
+    pulse,
+    stability,
+    windowing,
+)
 from sigima_.computation import computation_function
 from sigima_.computation.base import (
     ArithmeticParam,
@@ -609,7 +619,8 @@ class PeakDetectionParam(gds.DataSet):
 
 @computation_function()
 def peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
-    """Peak detection with :py:func:`sigima_.algorithms.signal.peak_indices`
+    """Peak detection with
+    :py:func:`sigima_.algorithms.signal.peakdetection.peak_indices`
 
     Args:
         src: source signal
@@ -622,7 +633,9 @@ def peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
         src, "peak_detection", f"threshold={p.threshold}%, min_dist={p.min_dist}pts"
     )
     x, y = src.get_data()
-    indices = alg_signal.peak_indices(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
+    indices = peakdetection.peak_indices(
+        y, thres=p.threshold * 0.01, min_dist=p.min_dist
+    )
     dst.set_xydata(x[indices], y[indices])
     dst.set_metadata_option("curvestyle", "Sticks")
     return dst
@@ -630,7 +643,7 @@ def peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
 
 @computation_function()
 def normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
-    """Normalize data with :py:func:`sigima_.algorithms.signal.normalize`
+    """Normalize data with :py:func:`sigima_.algorithms.signal.level.normalize`
 
     Args:
         src: source signal
@@ -641,7 +654,7 @@ def normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "normalize", f"ref={p.method}")
     x, y = src.get_data()
-    dst.set_xydata(x, alg_signal.normalize(y, p.method))
+    dst.set_xydata(x, level.normalize(y, p.method))
     restore_data_outside_roi(dst, src)
     return dst
 
@@ -1043,7 +1056,8 @@ class ZeroPadding1DParam(gds.DataSet):
 
 @computation_function()
 def zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
-    """Compute zero padding with :py:func:`sigima_.algorithms.signal.zero_padding`
+    """Compute zero padding with
+    :py:func:`sigima_.algorithms.signal.fourier.zero_padding`
 
     Args:
         src: source signal
@@ -1058,13 +1072,13 @@ def zero_padding(src: SignalObj, p: ZeroPadding1DParam) -> SignalObj:
         suffix = f"strategy={p.strategy}"
     dst = dst_1_to_1(src, "zero_padding", suffix)
     x, y = src.get_data()
-    dst.set_xydata(*alg_signal.zero_padding(x, y, p.n))
+    dst.set_xydata(*fourier.zero_padding(x, y, p.n))
     return dst
 
 
 @computation_function()
 def fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
-    """Compute FFT with :py:func:`sigima_.algorithms.signal.fft1d`
+    """Compute FFT with :py:func:`sigima_.algorithms.signal.fourier.fft1d`
 
     Args:
         src: source signal
@@ -1075,7 +1089,7 @@ def fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_1_to_1(src, "fft")
     x, y = src.get_data()
-    dst.set_xydata(*alg_signal.fft1d(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*fourier.fft1d(x, y, shift=True if p is None else p.shift))
     dst.save_attr_to_metadata("xunit", "Hz" if dst.xunit == "s" else "")
     dst.save_attr_to_metadata("yunit", "")
     dst.save_attr_to_metadata("xlabel", _("Frequency"))
@@ -1084,7 +1098,7 @@ def fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
 
 @computation_function()
 def ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
-    """Compute iFFT with :py:func:`sigima_.algorithms.signal.ifft1d`
+    """Compute iFFT with :py:func:`sigima_.algorithms.signal.fourier.ifft1d`
 
     Args:
         src: source signal
@@ -1095,7 +1109,7 @@ def ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_1_to_1(src, "ifft")
     x, y = src.get_data()
-    dst.set_xydata(*alg_signal.ifft1d(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*fourier.ifft1d(x, y, shift=True if p is None else p.shift))
     dst.restore_attr_from_metadata("xunit", "s" if src.xunit == "Hz" else "")
     dst.restore_attr_from_metadata("yunit", "")
     dst.restore_attr_from_metadata("xlabel", "")
@@ -1105,7 +1119,7 @@ def ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
 @computation_function()
 def magnitude_spectrum(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     """Compute magnitude spectrum
-    with :py:func:`sigima_.algorithms.signal.magnitude_spectrum`
+    with :py:func:`sigima_.algorithms.signal.fourier.magnitude_spectrum`
 
     Args:
         src: source signal
@@ -1117,7 +1131,7 @@ def magnitude_spectrum(src: SignalObj, p: SpectrumParam | None = None) -> Signal
     dst = dst_1_to_1(src, "magnitude_spectrum")
     x, y = src.get_data()
     log_scale = p is not None and p.log
-    dst.set_xydata(*alg_signal.magnitude_spectrum(x, y, log_scale=log_scale))
+    dst.set_xydata(*fourier.magnitude_spectrum(x, y, log_scale=log_scale))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
     dst.yunit = "dB" if log_scale else ""
@@ -1127,7 +1141,7 @@ def magnitude_spectrum(src: SignalObj, p: SpectrumParam | None = None) -> Signal
 @computation_function()
 def phase_spectrum(src: SignalObj) -> SignalObj:
     """Compute phase spectrum
-    with :py:func:`sigima_.algorithms.signal.phase_spectrum`
+    with :py:func:`sigima_.algorithms.signal.fourier.phase_spectrum`
 
     Args:
         src: source signal
@@ -1137,7 +1151,7 @@ def phase_spectrum(src: SignalObj) -> SignalObj:
     """
     dst = dst_1_to_1(src, "phase_spectrum")
     x, y = src.get_data()
-    dst.set_xydata(*alg_signal.phase_spectrum(x, y))
+    dst.set_xydata(*fourier.phase_spectrum(x, y))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
     dst.yunit = ""
@@ -1147,7 +1161,7 @@ def phase_spectrum(src: SignalObj) -> SignalObj:
 @computation_function()
 def psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     """Compute power spectral density
-    with :py:func:`sigima_.algorithms.signal.psd`
+    with :py:func:`sigima_.algorithms.signal.fourier.psd`
 
     Args:
         src: source signal
@@ -1159,7 +1173,7 @@ def psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     dst = dst_1_to_1(src, "psd")
     x, y = src.get_data()
     log_scale = p is not None and p.log
-    psd_x, psd_y = alg_signal.psd(x, y, log_scale=log_scale)
+    psd_x, psd_y = fourier.psd(x, y, log_scale=log_scale)
     dst.xydata = np.vstack((psd_x, psd_y))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
@@ -1230,8 +1244,9 @@ class InterpolationParam(gds.DataSet):
 
 
 @computation_function()
-def interpolation(src1: SignalObj, src2: SignalObj, p: InterpolationParam) -> SignalObj:
-    """Interpolate data with :py:func:`sigima_.algorithms.signal.interpolate`
+def interpolate(src1: SignalObj, src2: SignalObj, p: InterpolationParam) -> SignalObj:
+    """Interpolate data with
+    :py:func:`sigima_.algorithms.signal.interpolation.interpolate`
 
     Args:
         src1: source signal 1
@@ -1244,10 +1259,10 @@ def interpolation(src1: SignalObj, src2: SignalObj, p: InterpolationParam) -> Si
     suffix = f"method={p.method}"
     if p.fill_value is not None and p.method in ("linear", "cubic", "pchip"):
         suffix += f", fill_value={p.fill_value}"
-    dst = dst_2_to_1(src1, src2, "interpolation", suffix)
+    dst = dst_2_to_1(src1, src2, "interpolate", suffix)
     x1, y1 = src1.get_data()
     xnew, _y2 = src2.get_data()
-    ynew = alg_signal.interpolate(x1, y1, xnew, p.method, p.fill_value)
+    ynew = interpolation.interpolate(x1, y1, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst
 
@@ -1283,7 +1298,7 @@ class ResamplingParam(InterpolationParam):
 
 @computation_function()
 def resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
-    """Resample data with :py:func:`sigima_.algorithms.signal.interpolate`
+    """Resample data with :py:func:`sigima_.algorithms.signal.interpolation.interpolate`
 
     Args:
         src: source signal
@@ -1305,7 +1320,7 @@ def resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
         xnew = np.arange(p.xmin, p.xmax, p.dx)
     else:
         xnew = np.linspace(p.xmin, p.xmax, p.nbpts)
-    ynew = alg_signal.interpolate(x, y, xnew, p.method, p.fill_value)
+    ynew = interpolation.interpolate(x, y, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst
 
@@ -1430,9 +1445,9 @@ class WindowingParam(gds.DataSet):
 
 
 @computation_function()
-def windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
+def apply_window(src: SignalObj, p: WindowingParam) -> SignalObj:
     """Compute windowing (available methods: hamming, hanning, bartlett, blackman,
-    tukey, rectangular) with :py:func:`sigima_.algorithms.signal.windowing`
+    tukey, rectangular) with :py:func:`sigima_.algorithms.signal.windowing.apply_window`
 
     Args:
         dst: destination signal
@@ -1448,8 +1463,8 @@ def windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
         suffix += f", beta={p.beta:.3f}"
     elif p.method == "gaussian":
         suffix += f", sigma={p.sigma:.3f}"
-    dst = dst_1_to_1(src, "windowing", suffix)  # type: ignore
-    dst.y = alg_signal.windowing(dst.y, p.method, p.alpha)  # type: ignore
+    dst = dst_1_to_1(src, "apply_window", suffix)  # type: ignore
+    dst.y = windowing.apply_window(dst.y, p.method, p.alpha)  # type: ignore
     restore_data_outside_roi(dst, src)
     return dst
 
@@ -1490,7 +1505,7 @@ def to_polar(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "Polar coordinates", f"unit={p.unit}")
     x, y = src.get_data()
-    r, theta = alg_coords.to_polar(x, y, p.unit)
+    r, theta = coordinates.to_polar(x, y, p.unit)
     dst.set_xydata(r, theta)
     return dst
 
@@ -1515,7 +1530,7 @@ def to_cartesian(src: SignalObj, p: AngleUnitParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "Cartesian coordinates", f"unit={p.unit}")
     r, theta = src.get_data()
-    x, y = alg_coords.to_cartesian(r, theta, p.unit)
+    x, y = coordinates.to_cartesian(r, theta, p.unit)
     dst.set_xydata(x, y)
     return dst
 
@@ -1528,7 +1543,8 @@ class AllanVarianceParam(gds.DataSet):
 
 @computation_function()
 def allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
-    """Compute Allan variance with :py:func:`sigima_.algorithms.signal.allan_variance`
+    """Compute Allan variance with
+    :py:func:`sigima_.algorithms.signal.stability.allan_variance`
 
     Args:
         src: source signal
@@ -1540,14 +1556,15 @@ def allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    avar = alg_signal.allan_variance(x, y, tau_values)
+    avar = stability.allan_variance(x, y, tau_values)
     dst.set_xydata(tau_values, avar)
     return dst
 
 
 @computation_function()
 def allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
-    """Compute Allan deviation with :py:func:`sigima_.algorithms.signal.allan_deviation`
+    """Compute Allan deviation with
+    :py:func:`sigima_.algorithms.signal.stability.allan_deviation`
 
     Args:
         src: source signal
@@ -1559,7 +1576,7 @@ def allan_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "allan_deviation", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    adev = alg_signal.allan_deviation(x, y, tau_values)
+    adev = stability.allan_deviation(x, y, tau_values)
     dst.set_xydata(tau_values, adev)
     return dst
 
@@ -1578,7 +1595,7 @@ def overlapping_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalO
     dst = dst_1_to_1(src, "overlapping_allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    oavar = alg_signal.overlapping_allan_variance(x, y, tau_values)
+    oavar = stability.overlapping_allan_variance(x, y, tau_values)
     dst.set_xydata(tau_values, oavar)
     return dst
 
@@ -1597,7 +1614,7 @@ def modified_allan_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "modified_allan_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    mavar = alg_signal.modified_allan_variance(x, y, tau_values)
+    mavar = stability.modified_allan_variance(x, y, tau_values)
     dst.set_xydata(tau_values, mavar)
     return dst
 
@@ -1616,7 +1633,7 @@ def hadamard_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "hadamard_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    hvar = alg_signal.hadamard_variance(x, y, tau_values)
+    hvar = stability.hadamard_variance(x, y, tau_values)
     dst.set_xydata(tau_values, hvar)
     return dst
 
@@ -1635,7 +1652,7 @@ def total_variance(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "total_variance", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    tvar = alg_signal.total_variance(x, y, tau_values)
+    tvar = stability.total_variance(x, y, tau_values)
     dst.set_xydata(tau_values, tvar)
     return dst
 
@@ -1654,7 +1671,7 @@ def time_deviation(src: SignalObj, p: AllanVarianceParam) -> SignalObj:
     dst = dst_1_to_1(src, "time_deviation", f"max_tau={p.max_tau}")
     x, y = src.get_data()
     tau_values = np.arange(1, p.max_tau + 1)
-    tdev = alg_signal.time_deviation(x, y, tau_values)
+    tdev = stability.time_deviation(x, y, tau_values)
     dst.set_xydata(tau_values, tdev)
     return dst
 
@@ -1747,7 +1764,7 @@ class FWHMParam(gds.DataSet):
 
 @computation_function()
 def fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
-    """Compute FWHM with :py:func:`sigima_.algorithms.signal.fwhm`
+    """Compute FWHM with :py:func:`sigima_.algorithms.signal.pulse.fwhm`
 
     Args:
         obj: source signal
@@ -1760,7 +1777,7 @@ def fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
         "fwhm",
         "segment",
         obj,
-        alg_signal.fwhm,
+        pulse.fwhm,
         param.method,
         param.xmin,
         param.xmax,
@@ -1770,7 +1787,7 @@ def fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
 
 @computation_function()
 def fw1e2(obj: SignalObj) -> ResultShape | None:
-    """Compute FW at 1/e² with :py:func:`sigima_.algorithms.signal.fw1e2`
+    """Compute FW at 1/e² with :py:func:`sigima_.algorithms.signal.pulse.fw1e2`
 
     Args:
         obj: source signal
@@ -1778,7 +1795,7 @@ def fw1e2(obj: SignalObj) -> ResultShape | None:
     Returns:
         Segment coordinates
     """
-    return calc_resultshape("fw1e2", "segment", obj, alg_signal.fw1e2, add_label=True)
+    return calc_resultshape("fw1e2", "segment", obj, pulse.fw1e2, add_label=True)
 
 
 class OrdinateParam(gds.DataSet):
@@ -1800,7 +1817,7 @@ def full_width_at_y(obj: SignalObj, p: OrdinateParam) -> ResultShape | None:
         Segment coordinates
     """
     return calc_resultshape(
-        "∆X", "segment", obj, alg_signal.full_width_at_y, p.y, add_label=True
+        "∆X", "segment", obj, pulse.full_width_at_y, p.y, add_label=True
     )
 
 
@@ -1819,11 +1836,7 @@ def x_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
     return calc_resultproperties(
         f"x|y={p.y}",
         obj,
-        {
-            "x = %g {.xunit}": lambda xy: alg_signal.find_first_x_at_y_value(
-                xy[0], xy[1], p.y
-            )
-        },
+        {"x = %g {.xunit}": lambda xy: misc.find_first_x_at_y_value(xy[0], xy[1], p.y)},
     )
 
 
@@ -1848,7 +1861,7 @@ def y_at_x(obj: SignalObj, p: AbscissaParam) -> ResultProperties:
     return calc_resultproperties(
         f"y|x={p.x}",
         obj,
-        {"y = %g {.yunit}": lambda xy: alg_signal.find_y_at_x_value(xy[0], xy[1], p.x)},
+        {"y = %g {.yunit}": lambda xy: misc.find_y_at_x_value(xy[0], xy[1], p.x)},
     )
 
 
@@ -1878,7 +1891,8 @@ def stats(obj: SignalObj) -> ResultProperties:
 
 @computation_function()
 def bandwidth_3db(obj: SignalObj) -> ResultShape | None:
-    """Compute bandwidth at -3 dB with :py:func:`sigima_.algorithms.signal.bandwidth`
+    """Compute bandwidth at -3 dB with
+    :py:func:`sigima_.algorithms.signal.misc.bandwidth`
 
     Args:
         obj: source signal
@@ -1887,7 +1901,7 @@ def bandwidth_3db(obj: SignalObj) -> ResultShape | None:
         Result properties with bandwidth
     """
     return calc_resultshape(
-        "bandwidth", "segment", obj, alg_signal.bandwidth, 3.0, add_label=True
+        "bandwidth", "segment", obj, misc.bandwidth, 3.0, add_label=True
     )
 
 
@@ -1912,12 +1926,12 @@ def dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultProperties:
     """Compute Dynamic parameters
     using the following functions:
 
-    - Freq: :py:func:`sigima_.algorithms.signal.sinus_frequency`
-    - ENOB: :py:func:`sigima_.algorithms.signal.enob`
-    - SNR: :py:func:`sigima_.algorithms.signal.snr`
-    - SINAD: :py:func:`sigima_.algorithms.signal.sinad`
-    - THD: :py:func:`sigima_.algorithms.signal.thd`
-    - SFDR: :py:func:`sigima_.algorithms.signal.sfdr`
+    - Freq: :py:func:`sigima_.algorithms.signal.dynamic.sinus_frequency`
+    - ENOB: :py:func:`sigima_.algorithms.signal.dynamic.enob`
+    - SNR: :py:func:`sigima_.algorithms.signal.dynamic.snr`
+    - SINAD: :py:func:`sigima_.algorithms.signal.dynamic.sinad`
+    - THD: :py:func:`sigima_.algorithms.signal.dynamic.thd`
+    - SFDR: :py:func:`sigima_.algorithms.signal.dynamic.sfdr`
 
     Args:
         src: source signal
@@ -1928,14 +1942,14 @@ def dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultProperties:
     """
     dsfx = f" = %g {p.unit}"
     funcs = {
-        "Freq": lambda xy: alg_signal.sinus_frequency(xy[0], xy[1]),
-        "ENOB = %.1f bits": lambda xy: alg_signal.enob(xy[0], xy[1], p.full_scale),
-        "SNR" + dsfx: lambda xy: alg_signal.snr(xy[0], xy[1], p.unit),
-        "SINAD" + dsfx: lambda xy: alg_signal.sinad(xy[0], xy[1], p.unit),
-        "THD" + dsfx: lambda xy: alg_signal.thd(
+        "Freq": lambda xy: dynamic.sinus_frequency(xy[0], xy[1]),
+        "ENOB = %.1f bits": lambda xy: dynamic.enob(xy[0], xy[1], p.full_scale),
+        "SNR" + dsfx: lambda xy: dynamic.snr(xy[0], xy[1], p.unit),
+        "SINAD" + dsfx: lambda xy: dynamic.sinad(xy[0], xy[1], p.unit),
+        "THD" + dsfx: lambda xy: dynamic.thd(
             xy[0], xy[1], p.full_scale, p.unit, p.nb_harm
         ),
-        "SFDR" + dsfx: lambda xy: alg_signal.sfdr(xy[0], xy[1], p.full_scale, p.unit),
+        "SFDR" + dsfx: lambda xy: dynamic.sfdr(xy[0], xy[1], p.full_scale, p.unit),
     }
     return calc_resultproperties("ADC", src, funcs)
 
@@ -1945,8 +1959,8 @@ def sampling_rate_period(obj: SignalObj) -> ResultProperties:
     """Compute sampling rate and period
     using the following functions:
 
-    - fs: :py:func:`sigima_.algorithms.signal.sampling_rate`
-    - T: :py:func:`sigima_.algorithms.signal.sampling_period`
+    - fs: :py:func:`sigima_.algorithms.signal.dynamic.sampling_rate`
+    - T: :py:func:`sigima_.algorithms.signal.dynamic.sampling_period`
 
     Args:
         obj: source signal
@@ -1958,20 +1972,20 @@ def sampling_rate_period(obj: SignalObj) -> ResultProperties:
         "sampling_rate_period",
         obj,
         {
-            "fs = %g": lambda xy: alg_signal.sampling_rate(xy[0]),
-            "T = %g {.xunit}": lambda xy: alg_signal.sampling_period(xy[0]),
+            "fs = %g": lambda xy: dynamic.sampling_rate(xy[0]),
+            "T = %g {.xunit}": lambda xy: dynamic.sampling_period(xy[0]),
         },
     )
 
 
 @computation_function()
 def contrast(obj: SignalObj) -> ResultProperties:
-    """Compute contrast with :py:func:`sigima_.algorithms.signal.contrast`"""
+    """Compute contrast with :py:func:`sigima_.algorithms.signal.misc.contrast`"""
     return calc_resultproperties(
         "contrast",
         obj,
         {
-            "contrast": lambda xy: alg_signal.contrast(xy[1]),
+            "contrast": lambda xy: misc.contrast(xy[1]),
         },
     )
 

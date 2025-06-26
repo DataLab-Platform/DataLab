@@ -11,7 +11,7 @@ from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.tests.data import create_paracetamol_signal
 from cdl.widgets.signaldeltax import SignalDeltaXDialog
-from sigima_.algorithms.signal import full_width_at_y
+from sigima_.algorithms.signal.pulse import full_width_at_y
 
 
 def test_signal_delta_x_dialog():
