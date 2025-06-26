@@ -27,7 +27,7 @@ class ClassicsImageFormat(ImageFormatBase):
     """Object representing classic image file types"""
 
     FORMAT_INFO = FormatInfo(
-        name="BMP, JPEG, PNG, TIFF JPEG2000",
+        name="BMP, JPEG, PNG, TIFF, JPEG2000",
         extensions="*.bmp *.jpg *.jpeg *.png *.tif *.tiff *.jp2",
         readable=True,
         writeable=True,
@@ -105,23 +105,20 @@ class TextImageFormat(ImageFormatBase):
 
     @staticmethod
     def write_data(filename: str, data: np.ndarray) -> None:
-        """Write data to file
+        """Write data to file.
 
         Args:
-            filename: File name
-            data: Image array data
+            filename: File name.
+            data: Image array data.
         """
-        if data.dtype in (
-            np.int8,
-            np.uint8,
-            np.int16,
-            np.uint16,
-            np.int32,
-            np.uint32,
-        ):
+        if np.issubdtype(data.dtype, np.integer):
             fmt = "%d"
-        else:
+        elif np.issubdtype(data.dtype, np.floating):
             fmt = "%.18e"
+        else:
+            raise NotImplementedError(
+                f"Writing data of type {data.dtype} to text file is not supported."
+            )
         ext = osp.splitext(filename)[1]
         if ext.lower() in (".txt", ".asc", ""):
             np.savetxt(filename, data, fmt=fmt)

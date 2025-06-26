@@ -4,35 +4,33 @@
 .. Data Type Conversion Algorithms (see parent package :mod:`sigima_.algorithms`)
 """
 
-# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-
 from __future__ import annotations
 
 import numpy as np
 
 
 def is_integer_dtype(dtype: np.dtype) -> bool:
-    """Return True if data type is an integer type
+    """Return True if data type is an integer type.
 
     Args:
-        dtype: Data type to check
+        dtype: Data type to check.
 
     Returns:
-        True if data type is an integer type
+        True if data type is an integer type.
     """
-    return issubclass(np.dtype(dtype).type, np.integer)
+    return np.issubdtype(dtype, np.integer)
 
 
 def is_complex_dtype(dtype: np.dtype) -> bool:
-    """Return True if data type is a complex type
+    """Return True if data type is a complex type.
 
     Args:
-        dtype: Data type to check
+        dtype: Data type to check.
 
     Returns:
-        True if data type is a complex type
+        True if data type is a complex type.
     """
-    return issubclass(np.dtype(dtype).type, complex)
+    return np.issubdtype(dtype, complex)
 
 
 def clip_astype(data: np.ndarray, dtype: np.dtype) -> np.ndarray:
