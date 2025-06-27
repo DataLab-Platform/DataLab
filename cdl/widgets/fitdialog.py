@@ -14,13 +14,13 @@ from scipy.special import erf  # pylint: disable=no-name-in-module
 
 from cdl.config import _
 from cdl.utils.tests import get_default_test_name
-from sigima_.algorithms.signal import (
+from sigima_.algorithms.signal.fitmodels import (
     GaussianModel,
     LorentzianModel,
     VoigtModel,
-    sort_frequencies,
-    xpeak,
 )
+from sigima_.algorithms.signal.fourier import sort_frequencies
+from sigima_.algorithms.signal.peakdetection import xpeak
 
 
 def guifit(

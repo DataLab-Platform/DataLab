@@ -221,7 +221,16 @@ class BaseROIEditor(
     Generic[TypeObj, TypeROI, TypePlotItem, TypeROIItem],  # type: ignore
     metaclass=BaseROIEditorMeta,
 ):
-    """ROI Editor"""
+    """ROI Editor
+
+    Args:
+        parent: Parent plot dialog
+        obj: Object to edit (:class:`sigima_.obj.SignalObj` or
+         :class:`sigima_.obj.ImageObj`)
+        extract: If True, the dialog is in "extract mode" (extracting ROIs)
+        item: Optional plot item to add to the plot (if None, a new item is created
+         from the object)
+    """
 
     ICON_NAME = None
     OBJ_NAME = None
@@ -247,6 +256,8 @@ class BaseROIEditor(
         roi = obj.roi
         if roi is None:
             roi = self.get_obj_roi_class()()
+        if roi.singleobj is None:
+            roi.singleobj = Conf.proc.extract_roi_singleobj.get()
         self.__roi: TypeROI = roi
 
         fmt = create_adapter_from_object(obj).get_obj_option("format")
@@ -448,7 +459,16 @@ class ROIRangeInfo(ObjectInfo):
 
 
 class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelection]):
-    """Signal ROI Editor"""
+    """Signal ROI Editor
+
+    Args:
+        parent: Parent plot dialog
+        obj: Object to edit (:class:`sigima_.obj.SignalObj` or
+         :class:`sigima_.obj.ImageObj`)
+        extract: If True, the dialog is in "extract mode" (extracting ROIs)
+        item: Optional plot item to add to the plot (if None, a new item is created
+         from the object)
+    """
 
     ICON_NAME = "signal_roi.svg"
     OBJ_NAME = _("signal")
@@ -508,7 +528,16 @@ class ImageROIEditor(
         Union[AnnotatedPolygon, AnnotatedRectangle, AnnotatedCircle],
     ]
 ):
-    """Image ROI Editor"""
+    """Image ROI Editor
+
+    Args:
+        parent: Parent plot dialog
+        obj: Object to edit (:class:`sigima_.obj.SignalObj` or
+         :class:`sigima_.obj.ImageObj`)
+        extract: If True, the dialog is in "extract mode" (extracting ROIs)
+        item: Optional plot item to add to the plot (if None, a new item is created
+         from the object)
+    """
 
     ICON_NAME = "image_roi.svg"
     OBJ_NAME = _("image")

@@ -179,7 +179,7 @@ def run_signal_computations(
     for method_value, _method_name in param.methods:
         panel.objview.set_current_object(noiseobj2)
         param.method = method_value
-        panel.processor.run_feature("windowing", param)
+        panel.processor.run_feature("apply_window", param)
 
     win.add_object(sig1.copy())
 
@@ -246,7 +246,7 @@ def run_signal_computations(
             param = sigima_.param.InterpolationParam.create(
                 method=method, fill_value=fill_value
             )
-            panel.processor.run_feature("interpolation", sig2, param)
+            panel.processor.run_feature("interpolate", sig2, param)
 
     # Test resampling
     xmin, xmax = x[0], x[-1]

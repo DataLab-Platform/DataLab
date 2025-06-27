@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 15:21+0200\n"
+"POT-Creation-Date: 2025-06-26 16:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -512,10 +512,10 @@ msgstr ""
 msgid "New instance of :py:class:`PeakDetectionParam`."
 msgstr ""
 
-msgid "Peak detection with :py:func:`sigima_.algorithms.signal.peak_indices`"
+msgid "Peak detection with :py:func:`sigima_.algorithms.signal.peakdetection.peak_indices`"
 msgstr ""
 
-msgid "Normalize data with :py:func:`sigima_.algorithms.signal.normalize`"
+msgid "Normalize data with :py:func:`sigima_.algorithms.signal.level.normalize`"
 msgstr ""
 
 msgid "Compute derivative with :py:func:`numpy.gradient`"
@@ -677,22 +677,22 @@ msgstr ""
 msgid "Callback for choice item"
 msgstr ""
 
-msgid "Compute zero padding with :py:func:`sigima_.algorithms.signal.zero_padding`"
+msgid "Compute zero padding with :py:func:`sigima_.algorithms.signal.fourier.zero_padding`"
 msgstr ""
 
-msgid "Compute FFT with :py:func:`sigima_.algorithms.signal.fft1d`"
+msgid "Compute FFT with :py:func:`sigima_.algorithms.signal.fourier.fft1d`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`sigima_.algorithms.signal.ifft1d`"
+msgid "Compute iFFT with :py:func:`sigima_.algorithms.signal.fourier.ifft1d`"
 msgstr ""
 
-msgid "Compute magnitude spectrum with :py:func:`sigima_.algorithms.signal.magnitude_spectrum`"
+msgid "Compute magnitude spectrum with :py:func:`sigima_.algorithms.signal.fourier.magnitude_spectrum`"
 msgstr ""
 
-msgid "Compute phase spectrum with :py:func:`sigima_.algorithms.signal.phase_spectrum`"
+msgid "Compute phase spectrum with :py:func:`sigima_.algorithms.signal.fourier.phase_spectrum`"
 msgstr ""
 
-msgid "Compute power spectral density with :py:func:`sigima_.algorithms.signal.psd`"
+msgid "Compute power spectral density with :py:func:`sigima_.algorithms.signal.fourier.psd`"
 msgstr ""
 
 msgid "Polynomial fitting parameters"
@@ -725,7 +725,7 @@ msgstr ""
 msgid "New instance of :py:class:`InterpolationParam`."
 msgstr ""
 
-msgid "Interpolate data with :py:func:`sigima_.algorithms.signal.interpolate`"
+msgid "Interpolate data with :py:func:`sigima_.algorithms.signal.interpolation.interpolate`"
 msgstr ""
 
 msgid "Resample parameters"
@@ -755,7 +755,7 @@ msgstr ""
 msgid "Update parameters from a signal object."
 msgstr ""
 
-msgid "Resample data with :py:func:`sigima_.algorithms.signal.interpolate`"
+msgid "Resample data with :py:func:`sigima_.algorithms.signal.interpolation.interpolate`"
 msgstr ""
 
 msgid "Detrending parameters"
@@ -812,7 +812,7 @@ msgstr ""
 msgid "New instance of :py:class:`WindowingParam`."
 msgstr ""
 
-msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman, tukey, rectangular) with :py:func:`sigima_.algorithms.signal.windowing`"
+msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman, tukey, rectangular) with :py:func:`sigima_.algorithms.signal.windowing.apply_window`"
 msgstr ""
 
 msgid "destination signal"
@@ -863,10 +863,10 @@ msgstr ""
 msgid "New instance of :py:class:`AllanVarianceParam`."
 msgstr ""
 
-msgid "Compute Allan variance with :py:func:`sigima_.algorithms.signal.allan_variance`"
+msgid "Compute Allan variance with :py:func:`sigima_.algorithms.signal.stability.allan_variance`"
 msgstr ""
 
-msgid "Compute Allan deviation with :py:func:`sigima_.algorithms.signal.allan_deviation`"
+msgid "Compute Allan deviation with :py:func:`sigima_.algorithms.signal.stability.allan_deviation`"
 msgstr ""
 
 msgid "Compute Overlapping Allan variance."
@@ -932,13 +932,13 @@ msgstr ""
 msgid "New instance of :py:class:`FWHMParam`."
 msgstr ""
 
-msgid "Compute FWHM with :py:func:`sigima_.algorithms.signal.fwhm`"
+msgid "Compute FWHM with :py:func:`sigima_.algorithms.signal.pulse.fwhm`"
 msgstr ""
 
 msgid "Segment coordinates"
 msgstr ""
 
-msgid "Compute FW at 1/e² with :py:func:`sigima_.algorithms.signal.fw1e2`"
+msgid "Compute FW at 1/e² with :py:func:`sigima_.algorithms.signal.pulse.fw1e2`"
 msgstr ""
 
 msgid "Ordinate parameter"
@@ -995,7 +995,7 @@ msgstr ""
 msgid "Compute statistics on a signal"
 msgstr ""
 
-msgid "Compute bandwidth at -3 dB with :py:func:`sigima_.algorithms.signal.bandwidth`"
+msgid "Compute bandwidth at -3 dB with :py:func:`sigima_.algorithms.signal.misc.bandwidth`"
 msgstr ""
 
 msgid "Result properties with bandwidth"
@@ -1022,22 +1022,22 @@ msgstr ""
 msgid "Compute Dynamic parameters using the following functions:"
 msgstr ""
 
-msgid "Freq: :py:func:`sigima_.algorithms.signal.sinus_frequency`"
+msgid "Freq: :py:func:`sigima_.algorithms.signal.dynamic.sinus_frequency`"
 msgstr ""
 
-msgid "ENOB: :py:func:`sigima_.algorithms.signal.enob`"
+msgid "ENOB: :py:func:`sigima_.algorithms.signal.dynamic.enob`"
 msgstr ""
 
-msgid "SNR: :py:func:`sigima_.algorithms.signal.snr`"
+msgid "SNR: :py:func:`sigima_.algorithms.signal.dynamic.snr`"
 msgstr ""
 
-msgid "SINAD: :py:func:`sigima_.algorithms.signal.sinad`"
+msgid "SINAD: :py:func:`sigima_.algorithms.signal.dynamic.sinad`"
 msgstr ""
 
-msgid "THD: :py:func:`sigima_.algorithms.signal.thd`"
+msgid "THD: :py:func:`sigima_.algorithms.signal.dynamic.thd`"
 msgstr ""
 
-msgid "SFDR: :py:func:`sigima_.algorithms.signal.sfdr`"
+msgid "SFDR: :py:func:`sigima_.algorithms.signal.dynamic.sfdr`"
 msgstr ""
 
 msgid "Result properties with ENOB, SNR, SINAD, THD, SFDR"
@@ -1046,16 +1046,16 @@ msgstr ""
 msgid "Compute sampling rate and period using the following functions:"
 msgstr ""
 
-msgid "fs: :py:func:`sigima_.algorithms.signal.sampling_rate`"
+msgid "fs: :py:func:`sigima_.algorithms.signal.dynamic.sampling_rate`"
 msgstr ""
 
-msgid "T: :py:func:`sigima_.algorithms.signal.sampling_period`"
+msgid "T: :py:func:`sigima_.algorithms.signal.dynamic.sampling_period`"
 msgstr ""
 
 msgid "Result properties with sampling rate and period"
 msgstr ""
 
-msgid "Compute contrast with :py:func:`sigima_.algorithms.signal.contrast`"
+msgid "Compute contrast with :py:func:`sigima_.algorithms.signal.misc.contrast`"
 msgstr ""
 
 msgid "Compute the smallest argument at the minima and the smallest argument at the maxima."

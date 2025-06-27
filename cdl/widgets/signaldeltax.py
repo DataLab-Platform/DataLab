@@ -21,7 +21,7 @@ from qtpy import QtWidgets as QW
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from sigima_.algorithms.signal import full_width_at_y
+from sigima_.algorithms.signal.pulse import full_width_at_y
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection
