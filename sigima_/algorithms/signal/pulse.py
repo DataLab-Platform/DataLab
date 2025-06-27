@@ -102,7 +102,7 @@ def fwhm(
 
 
 def fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
-    """Compute Full Width at 1/e� of the input data (using a Gaussian model fitting).
+    """Compute Full Width at 1/e² of the input data (using a Gaussian model fitting).
 
     Args:
         data: X,Y data
