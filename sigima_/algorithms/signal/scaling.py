@@ -48,3 +48,36 @@ def normalize(
     if parameter == "rms":
         return yin / np.sqrt(np.nanmean(yin * yin.conjugate()))
     raise RuntimeError(f"Unsupported parameter {parameter}")
+
+
+def zscore(yin: np.ndarray) -> np.ndarray:
+    """Standardize signal to zero mean and unit variance.
+
+    Args:
+        yin: Input array
+
+    Returns:
+        Standardized array with mean 0 and std 1
+    """
+    mean = np.nanmean(yin)
+    std = np.nanstd(yin)
+    if std == 0:
+        raise ValueError("Standard deviation is zero; z-score is undefined.")
+    return (yin - mean) / std
+
+
+def robust_scale(yin: np.ndarray) -> np.ndarray:
+    """Scale signal by median and interquartile range (IQR).
+
+    Args:
+        yin: Input array
+
+    Returns:
+        Scaled array with median 0 and IQR ~1
+    """
+    median = np.nanmedian(yin)
+    q75, q25 = np.nanpercentile(yin, [75, 25])
+    iqr = q75 - q25
+    if iqr == 0:
+        raise ValueError("Interquartile range is zero; robust scaling is undefined.")
+    return (yin - median) / iqr
