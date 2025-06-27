@@ -10,5 +10,5 @@
 :py:func:`~cdl.gui.processor.image.ImageProcessor.compute_peak_detection`,Compute 2D peak detection
 :py:func:`~cdl.gui.processor.image.ImageProcessor.compute_radial_profile`,Compute radial profile
 :py:func:`~cdl.gui.processor.image.ImageProcessor.compute_resize`,Resize image with :py:func:`sigima_.computation.image.resize`
-:py:func:`~cdl.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data
+:py:func:`~cdl.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
 :py:func:`~cdl.gui.processor.image.ImageProcessor.compute_segment_profile`,Compute profile along a segment

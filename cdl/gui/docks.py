@@ -61,7 +61,7 @@ from qtpy.QtWidgets import QApplication, QMainWindow
 
 from cdl.config import APP_NAME, Conf, _
 from sigima_.algorithms.image import get_centroid_fourier
-from sigima_.algorithms.signal import fwhm
+from sigima_.algorithms.signal.pulse import fwhm
 from sigima_.obj import create_signal
 
 if TYPE_CHECKING:

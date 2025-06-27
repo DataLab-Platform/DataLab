@@ -815,9 +815,9 @@ class SignalActionHandler(BaseActionHandler):
                         "related to Error function (erf)"
                     ),
                 )
-            self.action_for("windowing")
+            self.action_for("apply_window")
             self.action_for("detrending")
-            self.action_for("interpolation")
+            self.action_for("interpolate")
             self.action_for("resampling")
             with self.new_menu(_("Stability analysis"), icon_name="stability.svg"):
                 self.action_for("allan_variance")
