@@ -236,7 +236,7 @@ class RadialProfileParam(gds.DataSet):
         self.x0 = obj.xc
         self.y0 = obj.yc
 
-    def choice_callback(self, item, value):
+    def choice_callback(self, item, value):  # pylint: disable=unused-argument
         """Callback for choice item"""
         if value == "centroid":
             self.y0, self.x0 = alg.get_centroid_fourier(self.__obj.get_masked_view())

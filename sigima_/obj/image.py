@@ -881,6 +881,7 @@ class ImageObj(gds.DataSet, base.BaseObj[ImageROI]):
             view.mask = np.isnan(self.data)
             return view
         single_roi = self.roi.get_single_roi(roi_index)
+        # pylint: disable=unbalanced-tuple-unpacking
         x0, y0, x1, y1 = self.physical_to_indices(single_roi.get_bounding_box(self))
         return self.get_masked_view()[y0:y1, x0:x1]
 

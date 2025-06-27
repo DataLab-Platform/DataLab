@@ -265,6 +265,8 @@ def dst_n_to_1(
     return dst
 
 
+# TODO: `src2` is not used for now, but it may be used in the future, should we keep it?
+# pylint: disable=unused-argument
 def dst_2_to_1(
     src1: SignalObj | ImageObj,
     src2: SignalObj | ImageObj,
