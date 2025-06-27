@@ -99,6 +99,7 @@
                 "../build/gettext",
                 "-b",
                 "gettext",
+                "-W"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/doc",
@@ -233,7 +234,7 @@
                 "--name",
                 "cdl",
                 "--directory",
-                ".",
+                "."
             ],
             "group": {
                 "kind": "build",
