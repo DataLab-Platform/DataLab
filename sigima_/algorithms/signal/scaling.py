@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Level Adjustment (see parent package :mod:`sigima_.algorithms.signal`)
+.. Scaling (see parent package :mod:`sigima_.algorithms.signal`)
 
 """
 

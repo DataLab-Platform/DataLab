@@ -42,10 +42,10 @@ Interpolation Algorithms
 .. automodule:: sigima_.algorithms.signal.interpolation
    :members:
 
-Level Adjustment Algorithms
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Scaling Algorithms
+^^^^^^^^^^^^^^^^^^
 
-.. automodule:: sigima_.algorithms.signal.level
+.. automodule:: sigima_.algorithms.signal.scaling
    :members:
 
 Features

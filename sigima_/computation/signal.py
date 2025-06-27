@@ -31,9 +31,9 @@ from sigima_.algorithms.signal import (
     features,
     fourier,
     interpolation,
-    level,
     peakdetection,
     pulse,
+    scaling,
     stability,
     windowing,
 )
@@ -654,7 +654,7 @@ def normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """
     dst = dst_1_to_1(src, "normalize", f"ref={p.method}")
     x, y = src.get_data()
-    dst.set_xydata(x, level.normalize(y, p.method))
+    dst.set_xydata(x, scaling.normalize(y, p.method))
     restore_data_outside_roi(dst, src)
     return dst
 
