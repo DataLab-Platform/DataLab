@@ -19,7 +19,6 @@ import numpy as np
 
 from cdl.config import Conf, _
 from sigima_ import ImageObj, ResultProperties, SignalObj, create_signal
-from sigima_.algorithms.datatypes import is_complex_dtype
 
 if TYPE_CHECKING:
     from typing import Callable
@@ -244,7 +243,7 @@ def dst_n_to_1(
     title = f"{name}(" + ", ".join(f"{{{i}}}" for i in range(len(src_list))) + ")"
     if suffix:  # suffix may be None or an empty string
         title += "|" + suffix
-    if any(is_complex_dtype(obj.data.dtype) for obj in src_list):
+    if any(np.issubdtype(obj.data.dtype, complex) for obj in src_list):
         dst_dtype = complex
     else:
         dst_dtype = float

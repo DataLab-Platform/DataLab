@@ -22,7 +22,6 @@ from numpy import ma
 
 from cdl.config import _
 from sigima_.algorithms import coordinates
-from sigima_.algorithms.datatypes import is_integer_dtype
 
 if sys.version_info >= (3, 11):
     # Use Self from typing module in Python 3.11+
@@ -93,7 +92,7 @@ class BaseProcParam(gds.DataSet):
 
     def set_from_datatype(self, dtype):
         """Set min/max range from NumPy datatype"""
-        if is_integer_dtype(dtype):
+        if np.issubdtype(dtype, np.integer):
             info = np.iinfo(dtype)
             self.apply_integer_range(info.min, info.max)
         else:

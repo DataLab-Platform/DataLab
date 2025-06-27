@@ -21,7 +21,6 @@ import pytest
 import scipy.ndimage as spi
 from guidata.qthelpers import qt_app_context
 
-import sigima_.algorithms.datatypes as alg_datatypes
 import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
@@ -267,7 +266,7 @@ def test_image_arithmetic() -> None:
                     elif o == "/":
                         exp = np.divide(ima1.data, ima2.data, dtype=float) * a + b
                     if p.restore_dtype:
-                        if alg_datatypes.is_integer_dtype(dtype1):
+                        if np.issubdtype(dtype1, np.integer):
                             iinfo1 = np.iinfo(dtype1)
                             exp = np.clip(exp, iinfo1.min, iinfo1.max)
                         exp = exp.astype(dtype1)
@@ -325,7 +324,7 @@ def test_image_imag() -> None:
 
 def __get_numpy_info(dtype: np.dtype) -> np.generic:
     """Get numpy info for a given data type."""
-    if alg_datatypes.is_integer_dtype(dtype):
+    if np.issubdtype(dtype, np.integer):
         return np.iinfo(dtype)
     return np.finfo(dtype)
 
