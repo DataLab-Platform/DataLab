@@ -28,10 +28,10 @@ from cdl.config import Conf, _
 from sigima_.algorithms import coordinates
 from sigima_.algorithms.signal import (
     dynamic,
+    features,
     fourier,
     interpolation,
     level,
-    misc,
     peakdetection,
     pulse,
     stability,
@@ -1836,7 +1836,11 @@ def x_at_y(obj: SignalObj, p: OrdinateParam) -> ResultProperties:
     return calc_resultproperties(
         f"x|y={p.y}",
         obj,
-        {"x = %g {.xunit}": lambda xy: misc.find_first_x_at_y_value(xy[0], xy[1], p.y)},
+        {
+            "x = %g {.xunit}": lambda xy: features.find_first_x_at_y_value(
+                xy[0], xy[1], p.y
+            )
+        },
     )
 
 
@@ -1861,7 +1865,7 @@ def y_at_x(obj: SignalObj, p: AbscissaParam) -> ResultProperties:
     return calc_resultproperties(
         f"y|x={p.x}",
         obj,
-        {"y = %g {.yunit}": lambda xy: misc.find_y_at_x_value(xy[0], xy[1], p.x)},
+        {"y = %g {.yunit}": lambda xy: features.find_y_at_x_value(xy[0], xy[1], p.x)},
     )
 
 
@@ -1901,7 +1905,7 @@ def bandwidth_3db(obj: SignalObj) -> ResultShape | None:
         Result properties with bandwidth
     """
     return calc_resultshape(
-        "bandwidth", "segment", obj, misc.bandwidth, 3.0, add_label=True
+        "bandwidth", "segment", obj, features.bandwidth, 3.0, add_label=True
     )
 
 
@@ -1985,7 +1989,7 @@ def contrast(obj: SignalObj) -> ResultProperties:
         "contrast",
         obj,
         {
-            "contrast": lambda xy: misc.contrast(xy[1]),
+            "contrast": lambda xy: features.contrast(xy[1]),
         },
     )
 

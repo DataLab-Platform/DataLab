@@ -14,7 +14,7 @@ from typing import Literal
 import numpy as np
 import scipy.optimize
 
-from sigima_.algorithms.signal import fitmodels, misc, peakdetection
+from sigima_.algorithms.signal import features, fitmodels, peakdetection
 
 # MARK: Pulse analysis -----------------------------------------------------------------
 
@@ -32,7 +32,7 @@ def full_width_at_y(
         Full width segment coordinates
     """
     x, y = data
-    crossings = misc.find_x_at_value(x, y, level)
+    crossings = features.find_x_at_value(x, y, level)
     if crossings.size < 2:
         raise ValueError("Not enough zero-crossing points found")
     return crossings[0], level, crossings[-1], level
@@ -73,7 +73,7 @@ def fwhm(
 
     if method == "zero-crossing":
         hmax = dy * 0.5 + np.min(y)
-        fx = misc.find_x_at_value(x, y, hmax)
+        fx = features.find_x_at_value(x, y, hmax)
         if fx.size > 2:
             warnings.warn(f"Ambiguous zero-crossing points (found {fx.size} points)")
         elif fx.size < 2:

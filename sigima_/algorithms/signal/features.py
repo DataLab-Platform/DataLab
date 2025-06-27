@@ -1,8 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Miscellaneous Tools (see parent package :mod:`sigima_.algorithms.signal`)
-
+.. Features (see parent package :mod:`sigima_.algorithms.signal`)
 """
 
 from __future__ import annotations

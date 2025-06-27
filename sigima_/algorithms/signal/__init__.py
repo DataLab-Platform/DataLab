@@ -48,10 +48,10 @@ Level Adjustment Algorithms
 .. automodule:: sigima_.algorithms.signal.level
    :members:
 
-Miscellaneous Tools
-^^^^^^^^^^^^^^^^^^^
+Features
+^^^^^^^^
 
-.. automodule:: sigima_.algorithms.signal.misc
+.. automodule:: sigima_.algorithms.signal.features
    :members:
 
 Peak Detection Algorithms
