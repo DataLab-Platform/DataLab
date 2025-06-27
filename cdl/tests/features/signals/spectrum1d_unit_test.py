@@ -12,9 +12,13 @@ from __future__ import annotations
 
 from guidata.qthelpers import qt_app_context
 
-import sigima_.algorithms.signal as alg
 from cdl.tests.data import get_test_signal
 from cdl.utils.vistools import view_curves
+from sigima_.algorithms.signal.fourier import (
+    magnitude_spectrum,
+    phase_spectrum,
+    psd,
+)
 
 
 def test_signal_magnitude_spectrum_interactive() -> None:
@@ -22,7 +26,7 @@ def test_signal_magnitude_spectrum_interactive() -> None:
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata
-        xms, yms = alg.magnitude_spectrum(x, y, log_scale=True)
+        xms, yms = magnitude_spectrum(x, y, log_scale=True)
         view_curves(
             [(xms, yms)],
             title="Magnitude spectrum",
@@ -36,7 +40,7 @@ def test_signal_phase_spectrum_interactive() -> None:
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata
-        xps, yps = alg.phase_spectrum(x, y)
+        xps, yps = phase_spectrum(x, y)
         view_curves(
             [(xps, yps)],
             title="Phase spectrum",
@@ -50,7 +54,7 @@ def test_signal_psd_interactive() -> None:
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata
-        xpsd, ypsd = alg.psd(x, y, log_scale=True)
+        xpsd, ypsd = psd(x, y, log_scale=True)
         view_curves(
             [(xpsd, ypsd)],
             title="Power spectral density",

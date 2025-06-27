@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 from numpy import ma
 
-from cdl.config import Conf, _
+from cdl.config import _
 from sigima_.algorithms import coordinates
 from sigima_.algorithms.datatypes import is_integer_dtype
 
@@ -1229,8 +1229,6 @@ class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):  # type: 
 
     def __init__(self, singleobj: bool | None = None, inverse: bool = False) -> None:
         self.single_rois: list[TypeSingleROI] = []
-        if singleobj is None:
-            singleobj = Conf.proc.extract_roi_singleobj.get()
         self.singleobj = singleobj
         self.inverse = inverse
 
@@ -1330,13 +1328,19 @@ class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):  # type: 
 
     @classmethod
     def from_params(
-        cls: Type[BaseROI], obj: TypeObj, params: list[TypeROIParam]
+        cls: Type[BaseROI],
+        obj: TypeObj,
+        params: list[TypeROIParam],
+        singleobj: bool | None = None,
+        inverse: bool = False,
     ) -> BaseROI[TypeObj, TypeSingleROI, TypeROIParam]:
         """Create ROIs from parameters
 
         Args:
             obj: object (signal/image)
             params: ROI parameters
+            singleobj: If True, extract all ROIs into a single object
+            inverse: If True, extract the inverse of the ROIs
 
         Returns:
             ROIs
@@ -1345,6 +1349,8 @@ class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):  # type: 
         for param in params:
             assert isinstance(param, BaseROIParam), "Invalid ROI parameter type"
             roi.add_roi(param.to_single_roi(obj))
+        roi.singleobj = singleobj
+        roi.inverse = inverse
         return roi
 
     def to_dict(self) -> dict:
