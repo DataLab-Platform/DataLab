@@ -320,6 +320,7 @@ def initialize():
     # Proc section
     Conf.proc.operation_mode.get("single")
     Conf.proc.fft_shift_enabled.get(True)
+    sigima_options.fft_shift_enabled.set(True)  # Sync with sigima_ config
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
     sigima_options.keep_results.set(False)  # Sync with sigima_ config

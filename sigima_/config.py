@@ -98,6 +98,15 @@ class OptionsContainer:
                 "invocations."
             ),
         )
+        self.fft_shift_enabled = OptionField(
+            "fft_shift_enabled",
+            default=True,
+            description=(
+                "If True, the FFT operations will apply a shift to the zero frequency "
+                "component to the center of the spectrum. This is useful for "
+                "visualizing frequency components in a more intuitive way."
+            ),
+        )
         # Add new options here
 
     def describe_all(self) -> None:

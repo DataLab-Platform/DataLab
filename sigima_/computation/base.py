@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING
 import guidata.dataset as gds
 import numpy as np
 
-from cdl.config import Conf, _
+from cdl.config import _
 from sigima_ import ImageObj, ResultProperties, SignalObj, create_signal
 from sigima_.algorithms.datatypes import is_complex_dtype
 from sigima_.config import options
@@ -160,7 +160,7 @@ class FFTParam(gds.DataSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.shift = Conf.proc.fft_shift_enabled.get()
+        self.shift = options.fft_shift_enabled.get()
 
 
 class SpectrumParam(gds.DataSet):

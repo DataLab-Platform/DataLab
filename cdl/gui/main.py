@@ -1678,6 +1678,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __edit_settings(self) -> None:
         """Edit settings"""
         changed_options = edit_settings(self)
+        sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
         sigima_options.keep_results.set(Conf.proc.keep_results.get())
         for option in changed_options:
             if option == "color_mode":
