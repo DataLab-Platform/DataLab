@@ -26,7 +26,7 @@ import scipy.signal as sps
 
 import sigima_.algorithms.coordinates as alg_coords
 import sigima_.algorithms.signal as alg_signal
-from cdl.config import Conf, _
+from cdl.config import _
 from sigima_.computation import computation_function
 from sigima_.computation.base import (
     ArithmeticParam,
@@ -45,6 +45,7 @@ from sigima_.computation.base import (
     dst_n_to_1,
     new_signal_result,
 )
+from sigima_.config import options
 from sigima_.obj.base import ResultProperties, ResultShape
 from sigima_.obj.signal import ROI1DParam, SignalObj
 
@@ -286,7 +287,7 @@ def arithmetic(src1: SignalObj, src2: SignalObj, p: ArithmeticParam) -> SignalOb
     initial_dtype = src1.xydata.dtype
     title = p.operation.replace("obj1", "{0}").replace("obj2", "{1}")
     dst = src1.copy(title=title)
-    if not Conf.proc.keep_results.get():
+    if not options.keep_results.get():
         dst.delete_results()  # Remove any previous results
     o, a, b = p.operator, p.factor, p.constant
     if o in ("×", "/") and a == 0.0:

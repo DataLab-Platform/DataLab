@@ -20,6 +20,7 @@ import numpy as np
 from cdl.config import Conf, _
 from sigima_ import ImageObj, ResultProperties, SignalObj, create_signal
 from sigima_.algorithms.datatypes import is_complex_dtype
+from sigima_.config import options
 
 if TYPE_CHECKING:
     from typing import Callable
@@ -209,7 +210,7 @@ def dst_1_to_1(
     if suffix:  # suffix may be None or an empty string
         title += suffix
     dst = src.copy(title=title)
-    if not Conf.proc.keep_results.get():
+    if not options.keep_results.get():
         dst.delete_results()  # Remove any previous results
     return dst
 
@@ -250,10 +251,10 @@ def dst_n_to_1(
         dst_dtype = float
     dst = src_list[0].copy(title=title, dtype=dst_dtype)
     dst.roi = None
-    if not Conf.proc.keep_results.get():
+    if not options.keep_results.get():
         dst.delete_results()  # Remove any previous results
     for src_obj in src_list:
-        if Conf.proc.keep_results.get():
+        if options.keep_results.get():
             dst.update_resultshapes_from(src_obj)
         if src_obj.roi is not None:
             if dst.roi is None:
@@ -295,7 +296,7 @@ def dst_2_to_1(
     if suffix is not None:
         title += "|" + suffix
     dst = src1.copy(title=title)
-    if not Conf.proc.keep_results.get():
+    if not options.keep_results.get():
         dst.delete_results()  # Remove any previous results
     return dst
 

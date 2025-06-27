@@ -30,7 +30,6 @@ from __future__ import annotations
 
 import numpy as np
 
-from cdl.config import Conf
 from sigima_.algorithms.datatypes import clip_astype
 from sigima_.computation import computation_function
 from sigima_.computation.base import (
@@ -41,6 +40,7 @@ from sigima_.computation.base import (
     dst_n_to_1,
 )
 from sigima_.computation.image.base import restore_data_outside_roi
+from sigima_.config import options
 from sigima_.obj.image import ImageObj
 
 # MARK: compute_n_to_1 functions -------------------------------------------------------
@@ -210,7 +210,7 @@ def arithmetic(src1: ImageObj, src2: ImageObj, p: ArithmeticParam) -> ImageObj:
     initial_dtype = src1.data.dtype
     title = p.operation.replace("obj1", "{0}").replace("obj2", "{1}")
     dst = src1.copy(title=title)
-    if not Conf.proc.keep_results.get():
+    if not options.keep_results.get():
         dst.delete_results()  # Remove any previous results
     o, a, b = p.operator, p.factor, p.constant
     # Apply operator

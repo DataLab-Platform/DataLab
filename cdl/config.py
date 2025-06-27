@@ -20,6 +20,7 @@ from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.constants import LUTAlpha
 
 from cdl.utils import conf
+from sigima_.config import options as sigima_options
 
 CONF_VERSION = "0.3.0"
 
@@ -321,6 +322,7 @@ def initialize():
     Conf.proc.fft_shift_enabled.get(True)
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
+    sigima_options.keep_results.set(False)  # Sync with sigima_ config
     Conf.proc.ignore_warnings.get(False)
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
