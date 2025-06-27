@@ -71,6 +71,7 @@ from cdl.utils.qthelpers import (
     configure_menu_about_to_show,
 )
 from cdl.widgets import instconfviewer, logviewer, status
+from sigima_.config import options as sigima_options
 from sigima_.obj import ImageObj, SignalObj, create_image, create_signal
 
 if TYPE_CHECKING:
@@ -1677,6 +1678,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __edit_settings(self) -> None:
         """Edit settings"""
         changed_options = edit_settings(self)
+        sigima_options.keep_results.set(Conf.proc.keep_results.get())
         for option in changed_options:
             if option == "color_mode":
                 self.__update_color_mode()

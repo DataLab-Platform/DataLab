@@ -15,9 +15,9 @@ import numpy as np
 
 import sigima_.obj
 import sigima_.param
-from cdl.config import Conf
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
+from sigima_.config import options as sigima_options
 
 
 def create_image_with_resultshapes() -> sigima_.obj.ImageObj:
@@ -92,7 +92,7 @@ def test_resultshapes() -> None:
             panel.add_object(obj)
         panel.show_results()
         panel.plot_results()
-        with Conf.proc.keep_results.temp(True):
+        with sigima_options.keep_results.context(True):
             # Test merging result shapes (duplicate obj, then compute average):
             for panel in (win.signalpanel, win.imagepanel):
                 panel.objview.select_objects((2,))

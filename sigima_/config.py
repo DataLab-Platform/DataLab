@@ -8,111 +8,143 @@ The :mod:`sigima_.config` module provides a way to manage configuration options 
 `sigima_` library.
 
 It allows users to set and retrieve options that affect the behavior of the library,
-such as whether to keep results of computations or not. The options are handled
-as in-memory key-value pairs, with default values provided.
+such as whether to keep results of computations or not. The options are handled as
+in-memory objects with default values provided, and can be temporarily overridden using
+a context manager.
 
-It includes a context manager for temporary overrides of options.
-
-.. autofunction:: set_options
-.. autofunction:: get_option
-.. autofunction:: temporary_options
-
-The temporary options context manager allows you to temporarily change options within a
-specific scope, ensuring that the original options are restored after the context is
-exited. It is used as follows:
+Typical usage:
 
 .. code-block:: python
 
-    from sigima_.config import temporary_options
+    from sigima_.config import options
 
-    with temporary_options(keep_results=False):
-        # Code here will use the temporary option
+    # Get an option
+    value = options.keep_results.get(default=True)
+
+    # Set an option
+    options.keep_results.set(False)
+
+    # Temporarily override an option
+    with options.keep_results.context(True):
+        ...
 """
 
 from __future__ import annotations
 
-import dataclasses
 from contextlib import contextmanager
 from typing import Any, Generator
 
 
-@dataclasses.dataclass
-class SigimaOptions:
-    """Configuration options for the sigima_ library.
-
-    Attributes:
-        keep_results: If True, computation functions will not delete previous results
-         when creating new objects. This allows for retaining results across
-         invocations. By default, it is set to False, because it may be confusing
-         to keep results if computations may affect those results.
-    """
-
-    keep_results: bool = True
-
-
-# Global instance of `SigimaOptions` to hold current configuration
-OPTIONS: SigimaOptions = SigimaOptions()
-
-
-def set_options(keep_results: bool | None = None):
-    """Set configuration options for the `sigima_` library.
+class OptionField:
+    """A configurable option field with get/set/context interface.
 
     Args:
-        keep_results: If True, computation functions will not delete previous results
-         when creating new objects. This allows for retaining results across
-         invocations. By default, it is set to False, because it may be confusing
-         to keep results if computations may affect those results.
+        name: Name of the option (used for introspection or errors).
+        default: Default value of the option.
     """
-    global OPTIONS
-    if keep_results is not None:
-        OPTIONS.keep_results = keep_results
+
+    def __init__(self, name: str, default: Any, description: str = "") -> None:
+        self.name = name
+        self._value = default
+        self.description = description
+
+    def get(self) -> Any:
+        """Return the current value of the option.
+
+        Returns:
+            The current value of the option.
+        """
+        return self._value
+
+    def set(self, value: Any) -> None:
+        """Set the value of the option.
+
+        Args:
+            value: The new value to assign.
+        """
+        self._value = value
+
+    @contextmanager
+    def context(self, temp_value: Any) -> Generator[None, None, None]:
+        """Temporarily override the option within a context.
+
+        Args:
+            temp_value: Temporary value to use within the context.
+
+        Yields:
+            None. Restores the original value upon exit.
+        """
+        old_value = self._value
+        self._value = temp_value
+        try:
+            yield
+        finally:
+            self._value = old_value
 
 
-def get_option(name: str) -> str | Any:
-    """Get the value of a configuration option.
+class OptionsContainer:
+    """Container for all configurable options in the `sigima_` library.
 
-    Args:
-        name: The name of the option to retrieve.
-
-    Returns:
-        The value of the requested option.
-
-    Raises:
-        KeyError: If the option name is unknown.
+    Options are exposed as attributes with `.get()`, `.set()` and `.context()` methods.
     """
-    global OPTIONS
-    if not hasattr(OPTIONS, name):
-        raise KeyError(f"Unknown option: {name}")
-    return getattr(OPTIONS, name)
+
+    def __init__(self) -> None:
+        self.keep_results = OptionField(
+            "keep_results",
+            default=True,
+            description=(
+                "If True, computation functions will not delete previous results "
+                "when creating new objects. This allows for retaining results across "
+                "invocations."
+            ),
+        )
+        # Add new options here
+
+    def describe_all(self) -> None:
+        """Print the name, value, and description of all options."""
+        for name in vars(self):
+            opt = getattr(self, name)
+            if isinstance(opt, OptionField):
+                print(f"{name} = {opt.get()}  # {opt.description}")
+
+    def get_option(self, name: str) -> Any:
+        """Get the value of an option by name.
+
+        Args:
+            name: The name of the option to retrieve.
+
+        Returns:
+            The value of the requested option.
+
+        Raises:
+            KeyError: If the option does not exist.
+        """
+        try:
+            field = getattr(self, name)
+        except AttributeError:
+            raise KeyError(f"Unknown option: {name}")
+        if not isinstance(field, OptionField):
+            raise KeyError(f"Attribute '{name}' is not a configurable option.")
+        return field.get()
+
+    def set_option(self, name: str, value: Any) -> None:
+        """Set the value of an option by name.
+
+        Args:
+            name: The name of the option to modify.
+            value: The value to assign.
+
+        Raises:
+            KeyError: If the option does not exist.
+        """
+        try:
+            field = getattr(self, name)
+        except AttributeError:
+            raise KeyError(f"Unknown option: {name}")
+        if not isinstance(field, OptionField):
+            raise KeyError(f"Attribute '{name}' is not a configurable option.")
+        field.set(value)
 
 
-@contextmanager
-def temporary_options(keep_results: bool | None = None) -> Generator[None, None, None]:
-    """Context manager for temporarily modifying options.
-
-    This allows you to change options within a specific scope, and they will be
-    restored to their original values after the context is exited.
-
-    Args:
-        keep_results: If True, the result object will not delete previous results.
-         This allows for retaining results across invocations. By default, it is set
-         to False, because it may be confusing to keep results if computations may
-         affect those results.
-
-    Yields:
-        The context manager does not return any value, but modifies the
-         global `OPTIONS` during its execution.
-
-    Raises:
-        KeyError: If the option name is unknown.
-    """
-    global OPTIONS
-    old_options = OPTIONS
-    try:
-        new_options = dataclasses.replace(OPTIONS)
-        if keep_results is not None:
-            new_options.keep_results = keep_results
-        OPTIONS = new_options
-        yield
-    finally:
-        OPTIONS = old_options
+#: Global instance of the options container
+options = OptionsContainer()
