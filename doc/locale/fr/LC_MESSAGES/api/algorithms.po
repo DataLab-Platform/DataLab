@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 16:12+0200\n"
+"POT-Creation-Date: 2025-06-27 11:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -86,14 +86,13 @@ msgid ":mod:`sigima_.algorithms.signal.windowing`: Windowing algorithms"
 msgstr ":mod:`sigima_.algorithms.signal.windowing` : Algorithmes de fenêtrage"
 
 msgid "Dynamic Parameter Extraction"
-msgstr ""
+msgstr "Extraction des paramètres dynamiques"
 
 msgid "Sinusoidal model function."
-msgstr ""
+msgstr "Fonction de modèle sinusoïdal."
 
-#, fuzzy
 msgid "Fit a sinusoidal model to the input data."
-msgstr "Appliquer une fenêtre aux données d'entrée."
+msgstr "Ajuster un modèle sinusoïdal aux données d'entrée."
 
 msgid "Parameters"
 msgstr "Paramètres"
@@ -108,77 +107,73 @@ msgid "Returns"
 msgstr "Retourne"
 
 msgid "A tuple containing the fit parameters (amplitude, frequency, phase, offset) and the residuals"
-msgstr ""
+msgstr "Un tuple contenant les paramètres d'ajustement (amplitude, fréquence, phase, décalage) et les résidus"
 
 msgid "Compute the frequency of a sinusoidal signal."
-msgstr ""
+msgstr "Calculer la fréquence d'un signal sinusoïdal."
 
-#, fuzzy
 msgid "x signal data"
-msgstr "Données mises à l'échelle"
+msgstr "données du signal X"
 
-#, fuzzy
 msgid "y signal data"
-msgstr "Données mises à l'échelle"
+msgstr "données du signal Y"
 
 msgid "Frequency of the sinusoidal signal"
-msgstr ""
+msgstr "Fréquence du signal sinusoïdal"
 
 msgid "Compute Effective Number of Bits (ENOB)."
-msgstr ""
+msgstr "Calculer les bits effectifs (ENOB)."
 
 msgid "Full scale(V). Defaults to 1.0."
-msgstr ""
+msgstr "Plage complète (V). Par défaut : 1.0."
 
 msgid "Effective Number of Bits (ENOB)"
-msgstr ""
+msgstr "Nombre de bits effectifs (ENOB)"
 
 msgid "Compute Signal-to-Noise and Distortion Ratio (SINAD)."
-msgstr ""
+msgstr "Calculer le rapport signal-bruit et de distorsion (SINAD)."
 
 msgid "Unit of the input data. Valid values are 'dBc' and 'dBFS'. Defaults to 'dBc'."
-msgstr ""
+msgstr "Unité des données d'entrée. Les valeurs valides sont 'dBc' et 'dBFS'. Par défaut : 'dBc'."
 
 msgid "Signal-to-Noise and Distortion Ratio (SINAD)"
-msgstr ""
+msgstr "Rapport signal-bruit et de distorsion (SINAD)"
 
 msgid "Compute Total Harmonic Distortion (THD)."
-msgstr ""
+msgstr "Calculer la distorsion harmonique totale (THD)."
 
-#, fuzzy
 msgid "Number of harmonics to consider. Defaults to 5."
-msgstr "Paramètre de la fenêtre de Tukey. Par défaut : 0.5."
+msgstr "Nombre d'harmoniques à considérer. Par défaut : 5."
 
 msgid "Total Harmonic Distortion (THD)"
-msgstr ""
+msgstr "Distorsion harmonique totale (THD)"
 
 msgid "Compute Spurious-Free Dynamic Range (SFDR)."
-msgstr ""
+msgstr "Calculer la plage dynamique sans interférence (SFDR)."
 
 msgid "Spurious-Free Dynamic Range (SFDR)"
-msgstr ""
+msgstr "Plage dynamique sans interférence (SFDR)"
 
 msgid "Compute Signal-to-Noise Ratio (SNR)."
-msgstr ""
+msgstr "Calculer le rapport signal-bruit (SNR)."
 
 msgid "Signal-to-Noise Ratio (SNR)"
-msgstr ""
+msgstr "Rapport signal-bruit (SNR)"
 
 msgid "Compute sampling period"
-msgstr ""
+msgstr "Calculer la période d'échantillonnage"
 
 msgid "Sampling period"
-msgstr ""
+msgstr "Période d'échantillonnage"
 
 msgid "Compute mean sampling rate"
-msgstr ""
+msgstr "Calculer le taux d'échantillonnage moyen"
 
 msgid "Sampling rate"
-msgstr ""
+msgstr "Taux d'échantillonnage"
 
-#, fuzzy
 msgid "Curve Fitting Models"
-msgstr "Classe de base du modèle de régression"
+msgstr "Modèles de régression"
 
 msgid "Curve fitting model base class"
 msgstr "Classe de base du modèle de régression"
@@ -211,56 +206,49 @@ msgid "Fourier Analysis Algorithms"
 msgstr "Algorithmes d'analyse de Fourier"
 
 msgid "Append n zeros at the end of the signal."
-msgstr ""
+msgstr "Ajouter n zéros à la fin du signal."
 
 msgid "Number of zeros to append"
-msgstr ""
+msgstr "Nombre de zéros à ajouter"
 
 msgid "X data, Y data (tuple)"
-msgstr ""
+msgstr "Données X, données Y (tuple)"
 
-#, fuzzy
 msgid "Compute FFT on X,Y data."
-msgstr "Calculer la FFT du tableau complexe `z`"
+msgstr "Calculer la FFT sur les données X,Y."
 
-#, fuzzy
 msgid "Shift the zero frequency to the center of the spectrum. Defaults to True."
-msgstr "Décaler la fréquence nulle vers le centre (par défaut : True)"
+msgstr "Déplacer la fréquence zéro au centre du spectre. Par défaut : True."
 
 msgid "Compute iFFT on X,Y data."
-msgstr ""
+msgstr "Calculer la iFFT sur les données X,Y."
 
-#, fuzzy
 msgid "Compute magnitude spectrum."
-msgstr "Calculer le spectre de magnitude du tableau complexe `z`"
+msgstr "Calculer le spectre de magnitude."
 
-#, fuzzy
 msgid "Use log scale. Defaults to False."
-msgstr "Utiliser une échelle logarithmique (par défaut : False)"
+msgstr "Utiliser une échelle logarithmique (par défaut : False)."
 
-#, fuzzy
 msgid "Magnitude spectrum (X data, Y data)"
-msgstr "Spectre de magnitude des données d'entrée"
+msgstr "Spectre de magnitude (données X, données Y)"
 
-#, fuzzy
 msgid "Compute phase spectrum."
-msgstr "Calculer le spectre de phase du tableau complexe `z`"
+msgstr "Calculer le spectre de phase."
 
-#, fuzzy
 msgid "Phase spectrum in degrees (X data, Y data)"
-msgstr "Spectre de phase des données d'entrée (en degrés)"
+msgstr "Spectre de phase en degrés (données X, données Y)"
 
 msgid "Compute Power Spectral Density (PSD), using the Welch method."
-msgstr ""
+msgstr "Calculer la densité spectrale de puissance (PSD) en utilisant la méthode de Welch."
 
 msgid "Return type"
 msgstr "Type de retour"
 
 msgid "Sort from X,Y data by computing FFT(y)."
-msgstr ""
+msgstr "Trier les données X,Y en calculant FFT(y)."
 
 msgid "Sorted frequencies in ascending order"
-msgstr ""
+msgstr "Fréquences triées par ordre croissant"
 
 msgid "Interpolation Algorithms"
 msgstr "Algorithmes d'interpolation"
@@ -280,92 +268,86 @@ msgstr "Valeur de remplissage. Par défaut : None. Cette valeur est utilisée po
 msgid "Interpolated Y data"
 msgstr "Données Y interpolées"
 
-msgid "Level Adjustment Algorithms"
-msgstr ""
+msgid "Scaling Algorithms"
+msgstr "Algorithmes de mise à l'échelle"
 
 msgid "Normalize input array to a given parameter."
 msgstr "Normaliser le tableau d'entrée à un paramètre donné."
 
-#, fuzzy
 msgid "Input array"
-msgstr "Données d'entrée"
+msgstr "Tableau d'entrée"
 
-#, fuzzy
 msgid "Normalization parameter. Defaults to \"maximum\""
-msgstr "Paramètre de normalisation (par défaut : \"maximum\")"
+msgstr "Paramètre de normalisation. Par défaut : \"maximum\""
 
 msgid "Normalized array"
 msgstr "Tableau normalisé"
 
-msgid "Miscellaneous Tools"
-msgstr ""
+msgid "Features"
+msgstr "Caractéristiques"
 
 msgid "Find the left indices of the zero-crossing intervals in the given array."
-msgstr ""
+msgstr "Trouver les indices de gauche des intervalles de passage par zéro dans le tableau donné."
 
-#, fuzzy
 msgid "Input array."
-msgstr "Données d'entrée"
+msgstr "Tableau d'entrée."
 
 msgid "An array of indices where zero-crossings occur."
-msgstr ""
+msgstr "Un tableau d'indices où les passages par zéro se produisent."
 
 msgid "Find the first x value where the signal reaches a given y value (interpolated)."
-msgstr ""
+msgstr "Trouver la première valeur x où le signal atteint une valeur y donnée (interpolée)."
 
 msgid "y signal data (possibly non-monotonic)"
-msgstr ""
+msgstr "Données du signal y (possiblement non monotoniques)"
 
 msgid "the y value to find the corresponding x value for"
-msgstr ""
+msgstr "la valeur y pour laquelle trouver la valeur x correspondante"
 
 msgid "The first interpolated x value at the given y, or `nan` if not found"
-msgstr ""
+msgstr "La première valeur x interpolée à la valeur y donnée, ou `nan` si non trouvée"
 
 msgid "Find the y value at a given x value using linear interpolation."
-msgstr ""
+msgstr "Trouver la valeur y à une valeur x donnée en utilisant l'interpolation linéaire."
 
-#, fuzzy
 msgid "Monotonic X data"
-msgstr "Nouvelles données X"
+msgstr "Données X (fonction monotone)"
 
 msgid "Y data (may contain NaNs)"
-msgstr ""
+msgstr "Données Y (peut contenir des NaNs)"
 
 msgid "The x value to find the corresponding y value for"
-msgstr ""
+msgstr "La valeur x pour laquelle trouver la valeur y correspondante"
 
 msgid "The interpolated y value at the given x, or `nan` if not computable"
-msgstr ""
+msgstr "La valeur y interpolée à la valeur x donnée, ou `nan` si non calculable"
 
 msgid "Find the x values where the y value is the closest to the given value using linear interpolation to deduce the precise x value."
-msgstr ""
+msgstr "Trouver les valeurs x où la valeur y est la plus proche de la valeur donnée en utilisant l'interpolation linéaire pour déduire la valeur x précise."
 
 msgid "Value to find"
-msgstr ""
+msgstr "Valeur à trouver"
 
 msgid "An array of x values where the y value is the closest to the given value (empty array if no zero crossing is found)"
-msgstr ""
+msgstr "Un tableau de valeurs x où la valeur y est la plus proche de la valeur donnée (tableau vide si aucun passage par zéro n'est trouvé)"
 
 msgid "Compute the bandwidth of the signal at a given level."
-msgstr ""
+msgstr "Calculer la bande passante du signal à un niveau donné."
 
-#, fuzzy
 msgid "X,Y data"
-msgstr "Données Y"
+msgstr "Données X,Y"
 
 msgid "Level in dB at which the bandwidth is computed. Defaults to 3.0."
-msgstr ""
+msgstr "Niveau en dB auquel la bande passante est calculée. Par défaut : 3.0."
 
-#, fuzzy
 msgid "segment coordinates"
-msgstr "Liste des coordonnées"
+msgstr "coordonnées du segment"
 
 msgid "Compute contrast"
-msgstr ""
+msgstr "Calculer le contraste"
 
 msgid "Contrast"
-msgstr ""
+msgstr "Contraste"
 
 msgid "Peak Detection Algorithms"
 msgstr "Algorithmes de détection de pics."
@@ -401,107 +383,121 @@ msgid "Pulse Analysis Algorithms"
 msgstr "Algorithmes d'analyse d'impulsion"
 
 msgid "Compute the full width at a given y level using zero-crossing method."
-msgstr ""
+msgstr "Calculer la largeur totale à un niveau y donné en utilisant la méthode du passage par zéro."
 
 msgid "The Y level at which to compute the width"
-msgstr ""
+msgstr "Le niveau Y auquel calculer la largeur"
 
-#, fuzzy
 msgid "Full width segment coordinates"
-msgstr "Ordonnée du centre de l'ellipse"
+msgstr "Coordonnées du segment de largeur totale"
 
 msgid "Compute Full Width at Half Maximum (FWHM) of the input data"
-msgstr ""
+msgstr "Calculer la largeur à mi-hauteur (FWHM) des données d'entrée"
 
 msgid "Calculation method. Two types of methods are supported: a zero-crossing method and fitting methods (based on various models: Gauss, Lorentz, Voigt). Defaults to \"zero-crossing\"."
-msgstr ""
+msgstr "Méthode de calcul. Deux types de méthodes sont supportées : une méthode de passage par zéro et des méthodes d'ajustement (basées sur divers modèles : Gauss, Lorentz, Voigt). Par défaut : \"passage par zéro\"."
 
 msgid "Lower X bound for the fitting. Defaults to None (no lower bound, i.e. the fitting starts from the first point)."
-msgstr ""
+msgstr "Limite inférieure X pour l'ajustement. Par défaut : None (pas de limite inférieure, c'est-à-dire que l'ajustement commence à partir du premier point)."
 
 msgid "Upper X bound for the fitting. Defaults to None (no upper bound, i.e. the fitting ends at the last point)"
-msgstr ""
+msgstr "Limite supérieure X pour l'ajustement. Par défaut : None (pas de limite supérieure, c'est-à-dire que l'ajustement se termine au dernier point)."
 
-#, fuzzy
 msgid "FWHM segment coordinates"
-msgstr "Coordonnées du segment LMH"
+msgstr "Coordonnées du segment FWHM"
 
-msgid "Compute Full Width at 1/e� of the input data (using a Gaussian model fitting)."
-msgstr ""
+msgid "Compute Full Width at 1/e² of the input data (using a Gaussian model fitting)."
+msgstr "Calculer la largeur à 1/e² des données d'entrée (en utilisant un ajustement de modèle gaussien)."
 
-#, fuzzy
 msgid "FW at 1/e² segment coordinates"
-msgstr "Coordonnée y cartésienne."
+msgstr "Coordonnées du segment FW à 1/e²"
 
 msgid "Stability Analysis Algorithms"
 msgstr "Algorithmes d'analyse de stabilité"
 
 msgid "Calculate the Allan variance for given time and measurement values at specified tau values."
-msgstr ""
+msgstr "Calculer la variance d'Allan pour des valeurs de temps et de mesure données à des valeurs tau spécifiées."
 
-#, fuzzy
 msgid "Time array"
-msgstr "Tableau normalisé"
+msgstr "Tableau de temps"
 
 msgid "Measured values array"
-msgstr ""
+msgstr "Tableau des valeurs mesurées"
 
 msgid "Allan deviation time values"
-msgstr ""
+msgstr "Valeurs temporelles de la déviation d'Allan"
 
 msgid "Allan variance values"
-msgstr ""
+msgstr "Valeurs de la variance d'Allan"
 
 msgid "Calculate the Allan deviation for given time and measurement values at specified tau values."
-msgstr ""
+msgstr "Calculer la déviation d'Allan pour des valeurs de temps et de mesure données à des valeurs tau spécifiées."
 
 msgid "Allan deviation values"
-msgstr ""
+msgstr "Valeurs de la déviation d'Allan"
 
 msgid "Calculate the Overlapping Allan variance for given time and measurement values."
-msgstr ""
+msgstr "Calculer la variance d'Allan chevauchante pour des valeurs de temps et de mesure données."
 
 msgid "Overlapping Allan variance values"
-msgstr ""
+msgstr "Valeurs de la variance d'Allan chevauchante"
 
 msgid "Calculate the Modified Allan variance for given time and measurement values."
-msgstr ""
+msgstr "Calculer la variance d'Allan modifiée pour des valeurs de temps et de mesure données."
 
 msgid "Modified Allan deviation time values"
-msgstr ""
+msgstr "Valeurs temporelles de la déviation d'Allan modifiée"
 
 msgid "Modified Allan variance values"
-msgstr ""
+msgstr "Valeurs de la variance d'Allan modifiée"
 
 msgid "Calculate the Hadamard variance for given time and measurement values."
-msgstr ""
+msgstr "Calculer la variance de Hadamard pour des valeurs de temps et de mesure données."
 
 msgid "Hadamard deviation time values"
-msgstr ""
+msgstr "Valeurs temporelles de la déviation de Hadamard"
 
 msgid "Hadamard variance values"
-msgstr ""
+msgstr "Valeurs de la variance de Hadamard"
 
 msgid "Calculate the Total variance for given time and measurement values."
-msgstr ""
+msgstr "Calculer la variance totale pour des valeurs de temps et de mesure données."
 
 msgid "Total variance time values"
-msgstr ""
+msgstr "Valeurs temporelles de la variance totale"
 
 msgid "Total variance values"
-msgstr ""
+msgstr "Valeurs de la variance totale"
 
 msgid "Calculate the Time Deviation (TDEV) for given time and measurement values."
-msgstr ""
+msgstr "Calculer la déviation temporelle (TDEV) pour des valeurs de temps et de mesure données."
 
 msgid "Time deviation time values"
-msgstr ""
+msgstr "Valeurs temporelles de la déviation temporelle"
 
 msgid "Time deviation values"
-msgstr ""
+msgstr "Valeurs de la déviation temporelle"
 
 msgid "Windowing Algorithms"
 msgstr "Algorithmes de fenêtrage"
+
+msgid "Get the window function."
+msgstr "Obtenir la fonction de fenêtre."
+
+msgid "The window functions are from `scipy.signal.windows` and `numpy`. All functions take an integer argument that specifies the length of the window, and return a numpy array of the same length."
+msgstr "Les fonctions de fenêtre proviennent de `scipy.signal.windows` et `numpy`. Toutes les fonctions prennent un argument entier qui spécifie la longueur de la fenêtre et renvoient un tableau numpy de la même longueur."
+
+msgid "Windowing function name."
+msgstr "Nom de la fonction de fenêtrage."
+
+msgid "Window function"
+msgstr "Fonction de fenêtre"
+
+msgid "Raises"
+msgstr "Lève"
+
+msgid "If the method is not recognized."
+msgstr "Si la méthode n'est pas reconnue."
 
 msgid "Apply windowing to the input data."
 msgstr "Appliquer une fenêtre aux données d'entrée."
@@ -559,9 +555,6 @@ msgstr "Stratégie de complément de zéros : - \"bas-droite\" : tout le complé
 
 msgid "The padded 2D image as a NumPy array."
 msgstr "L'image 2D complétée sous forme de tableau NumPy."
-
-msgid "Raises"
-msgstr "Lève"
 
 msgid "If the input is not a 2D array or if padding values are negative."
 msgstr "Si l'entrée n'est pas un tableau 2D ou si les valeurs de complément sont négatives."
@@ -828,7 +821,7 @@ msgid "Data Type Conversion Algorithms"
 msgstr "Algorithmes de conversion de type de données"
 
 msgid "Return True if data type is an integer type."
-msgstr "Retourne True si le type de données est un type entier".
+msgstr "Retourne True si le type de données est un type entier\""
 
 msgid "Data type to check."
 msgstr "Type de données à vérifier."
@@ -840,7 +833,7 @@ msgid "Return True if data type is a complex type."
 msgstr "Retourne True si le type de données est un type complexe."
 
 msgid "True if data type is a complex type."
-msgstr "True si le type de données est un type complexe".
+msgstr "True si le type de données est un type complexe\""
 
 msgid "Convert array to a new data type, after having clipped values to the new data type's range if it is an integer type. If data type is not integer, this is equivalent to ``data.astype(dtype)``."
 msgstr "Convertit le tableau en un nouveau type de données, après avoir coupé les valeurs à la plage du nouveau type de données si c'est un type entier. Si le type de données n'est pas entier, cela équivaut à ``data.astype(dtype)``."

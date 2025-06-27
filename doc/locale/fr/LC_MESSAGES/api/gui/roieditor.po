@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 14:55+0100\n"
+"POT-Creation-Date: 2025-06-27 11:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -31,17 +31,32 @@ msgstr "Editeur de ROI de signal"
 msgid "Signal ROI Editor"
 msgstr "Editeur de ROI de signal"
 
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgid "Parent plot dialog"
+msgstr "Dialogue de tracé parent"
+
+msgid "Object to edit (:class:`sigima_.obj.SignalObj` or :class:`sigima_.obj.ImageObj`)"
+msgstr "Objet à modifier (:class:`sigima_.obj.SignalObj` ou :class:`sigima_.obj.ImageObj`)"
+
+msgid "If True, the dialog is in \"extract mode\" (extracting ROIs)"
+msgstr "Si vrai, le dialogue est en \"mode extraction\" (extraction de ROI)"
+
+msgid "Optional plot item to add to the plot (if None, a new item is created from the object)"
+msgstr "Élément de tracé facultatif à ajouter au tracé (si None, un nouvel élément est créé à partir de l'objet)"
+
 msgid "Get object ROI class"
-msgstr ""
+msgstr "Obtenir la classe ROI de l'objet"
 
 msgid "Add tools to plot dialog"
-msgstr ""
+msgstr "Ajouter des outils au dialogue de tracé"
 
 msgid "Manually add segment ROI"
-msgstr ""
+msgstr "Ajouter manuellement un segment ROI"
 
 msgid "Create coordinate-based ROI actions"
-msgstr ""
+msgstr "Créer des actions ROI basées sur les coordonnées"
 
 msgid "Setup ROI editor widget"
 msgstr "Configurer le widget de l'éditeur de ROI"
@@ -56,4 +71,4 @@ msgid "Image ROI Editor"
 msgstr "Editeur de ROI d'image"
 
 msgid "Manually add image ROI"
-msgstr ""
+msgstr "Ajouter manuellement un ROI d'image"
