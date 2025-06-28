@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-27 11:12+0200\n"
+"POT-Creation-Date: 2025-06-28 11:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -820,21 +820,6 @@ msgstr "La convexité maximale de la tache."
 msgid "Data Type Conversion Algorithms"
 msgstr "Algorithmes de conversion de type de données"
 
-msgid "Return True if data type is an integer type."
-msgstr "Retourne True si le type de données est un type entier\""
-
-msgid "Data type to check."
-msgstr "Type de données à vérifier."
-
-msgid "True if data type is an integer type."
-msgstr "True si le type de données est un type entier."
-
-msgid "Return True if data type is a complex type."
-msgstr "Retourne True si le type de données est un type complexe."
-
-msgid "True if data type is a complex type."
-msgstr "True si le type de données est un type complexe\""
-
 msgid "Convert array to a new data type, after having clipped values to the new data type's range if it is an integer type. If data type is not integer, this is equivalent to ``data.astype(dtype)``."
 msgstr "Convertit le tableau en un nouveau type de données, après avoir coupé les valeurs à la plage du nouveau type de données si c'est un type entier. Si le type de données n'est pas entier, cela équivaut à ``data.astype(dtype)``."
 
@@ -996,3 +981,4 @@ msgstr "Coordonnées cartésiennes (x, y) où x est la coordonnée x et y est la
 
 msgid "Negative radius values are not supported. They will be set to 0."
 msgstr "Les valeurs de rayon négatives ne sont pas prises en charge. Elles seront définies sur 0."
+
