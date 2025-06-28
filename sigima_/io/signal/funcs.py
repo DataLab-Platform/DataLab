@@ -9,13 +9,15 @@ I/O signal functions
 from __future__ import annotations
 
 import re
-from typing import TextIO
+from typing import TYPE_CHECKING, TextIO
 
 import numpy as np
 import pandas as pd
 
-from cdl.utils.qthelpers import CallbackWorker
 from sigima_.io.utils import count_lines, read_first_n_lines
+
+if TYPE_CHECKING:
+    from cdl.utils.qthelpers import CallbackWorker
 
 
 def get_labels_units_from_dataframe(

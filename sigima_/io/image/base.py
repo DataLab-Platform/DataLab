@@ -8,13 +8,16 @@ from __future__ import annotations
 
 import abc
 import os.path as osp
+from typing import TYPE_CHECKING
 
 import numpy as np
 
-from cdl.utils.qthelpers import CallbackWorker
 from sigima_.config import _
 from sigima_.io.base import BaseIORegistry, FormatBase
 from sigima_.obj.image import ImageObj, create_image
+
+if TYPE_CHECKING:
+    from cdl.utils.qthelpers import CallbackWorker
 
 
 class ImageIORegistry(BaseIORegistry):
