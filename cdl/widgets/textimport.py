@@ -609,7 +609,7 @@ class GraphicalRepresentationPage(WizardPage):
         self.__curve_styles = CURVESTYLES.style_generator()
         df = self.data_page.get_dataframe()
         assert df is not None
-        data = df.to_numpy()
+        data = df.to_numpy(np.dtype(self.data_page.param.dtype_str))
         param = self.data_page.param
         plot = self.plot_widget.get_plot()
         plot.del_all_items()
@@ -689,7 +689,7 @@ def update_dataset_non_empty_values(dest: gds.DataSet, source: gds.DataSet) -> N
     for item in source.get_items():
         key = item.get_name()
         value = getattr(source, key)
-        if value in (None, "") and hasattr(dest, key):
+        if value not in (None, "") and hasattr(dest, key):
             setattr(dest, key, value)
 
 
