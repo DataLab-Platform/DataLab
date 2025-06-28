@@ -16,9 +16,9 @@ from sigima_.io.base import FormatInfo
 from sigima_.io.converters import convert_array_to_standard_type
 from sigima_.io.signal import funcs
 from sigima_.io.signal.base import SignalFormatBase
+from sigima_.worker import CallbackWorkerProtocol
 
 if TYPE_CHECKING:
-    from cdl.utils.qthelpers import CallbackWorker
     from sigima_.obj.signal import SignalObj
 
 
@@ -33,7 +33,7 @@ class CSVSignalFormat(SignalFormatBase):
     )
 
     def read(
-        self, filename: str, worker: CallbackWorker | None = None
+        self, filename: str, worker: CallbackWorkerProtocol | None = None
     ) -> list[SignalObj]:
         """Read list of signal objects from file
 
@@ -124,7 +124,7 @@ class MatSignalFormat(SignalFormatBase):
     )  # pylint: disable=duplicate-code
 
     def read(
-        self, filename: str, worker: CallbackWorker | None = None
+        self, filename: str, worker: CallbackWorkerProtocol | None = None
     ) -> list[SignalObj]:
         """Read data and metadata from file, write metadata to object, return xydata
 

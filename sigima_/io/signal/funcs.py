@@ -9,15 +9,13 @@ I/O signal functions
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, TextIO
+from typing import TextIO
 
 import numpy as np
 import pandas as pd
 
 from sigima_.io.utils import count_lines, read_first_n_lines
-
-if TYPE_CHECKING:
-    from cdl.utils.qthelpers import CallbackWorker
+from sigima_.worker import CallbackWorkerProtocol
 
 
 def get_labels_units_from_dataframe(
@@ -53,7 +51,7 @@ def get_labels_units_from_dataframe(
 def read_csv_by_chunks(
     fname_or_fileobj: str | TextIO,
     nlines: int | None = None,
-    worker: CallbackWorker | None = None,
+    worker: CallbackWorkerProtocol | None = None,
     decimal: str = ".",
     delimiter: str | None = None,
     header: int | None = "infer",
@@ -132,7 +130,7 @@ DATA_HEADERS = [
 
 def read_csv(
     filename: str,
-    worker: CallbackWorker | None = None,
+    worker: CallbackWorkerProtocol | None = None,
 ) -> tuple[
     np.ndarray, str | None, str | None, list[str] | None, list[str] | None, str | None
 ]:

@@ -8,16 +8,13 @@ from __future__ import annotations
 
 import abc
 import os.path as osp
-from typing import TYPE_CHECKING
 
 import numpy as np
 
 from sigima_.config import _
 from sigima_.io.base import BaseIORegistry, FormatBase
 from sigima_.obj.image import ImageObj, create_image
-
-if TYPE_CHECKING:
-    from cdl.utils.qthelpers import CallbackWorker
+from sigima_.worker import CallbackWorkerProtocol
 
 
 class ImageIORegistry(BaseIORegistry):
@@ -52,7 +49,7 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
         return create_image(name, metadata={"source": filename})
 
     def read(
-        self, filename: str, worker: CallbackWorker | None = None
+        self, filename: str, worker: CallbackWorkerProtocol | None = None
     ) -> list[ImageObj]:
         """Read list of image objects from file
 
@@ -116,7 +113,7 @@ class MultipleImagesFormatBase(ImageFormatBase):
     """
 
     def read(
-        self, filename: str, worker: CallbackWorker | None = None
+        self, filename: str, worker: CallbackWorkerProtocol | None = None
     ) -> list[ImageObj]:
         """Read list of image objects from file
 

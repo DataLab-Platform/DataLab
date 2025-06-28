@@ -10,16 +10,13 @@ from __future__ import annotations
 
 import abc
 import os.path as osp
-from typing import TYPE_CHECKING
 
 import numpy as np
 
 from sigima_.config import _
 from sigima_.io.base import BaseIORegistry, FormatBase
 from sigima_.obj.signal import SignalObj, create_signal
-
-if TYPE_CHECKING:
-    from cdl.utils.qthelpers import CallbackWorker
+from sigima_.worker import CallbackWorkerProtocol
 
 
 class SignalIORegistry(BaseIORegistry):
@@ -105,7 +102,7 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
         return objs
 
     def read(
-        self, filename: str, worker: CallbackWorker | None = None
+        self, filename: str, worker: CallbackWorkerProtocol | None = None
     ) -> list[SignalObj]:
         """Read list of signal objects from file
 

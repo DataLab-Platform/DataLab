@@ -13,13 +13,10 @@ import enum
 import os
 import os.path as osp
 import re
-from typing import TYPE_CHECKING
 
 from sigima_.config import _
 from sigima_.obj.base import BaseObj
-
-if TYPE_CHECKING:
-    from cdl.utils.qthelpers import CallbackWorker
+from sigima_.worker import CallbackWorkerProtocol
 
 
 class IOAction(enum.Enum):
@@ -92,7 +89,7 @@ class FormatBase:
         return f"{self.info.name} ({self.info.extensions})"
 
     def read(
-        self, filename: str, worker: CallbackWorker | None = None
+        self, filename: str, worker: CallbackWorkerProtocol | None = None
     ) -> list[BaseObj]:
         """Read list of native objects (signal or image) from file.
         For single object, return a list with one object.
@@ -245,7 +242,9 @@ class BaseIORegistry(type):
         )
 
     @classmethod
-    def read(cls, filename: str, worker: CallbackWorker | None = None) -> list[BaseObj]:
+    def read(
+        cls, filename: str, worker: CallbackWorkerProtocol | None = None
+    ) -> list[BaseObj]:
         """Read data from file, return native object (signal or image) list.
         For single object, return a list with one object.
 

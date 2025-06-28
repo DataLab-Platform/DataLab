@@ -7,7 +7,6 @@ DataLab I/O image formats
 from __future__ import annotations
 
 import os.path as osp
-from typing import TYPE_CHECKING
 
 import imageio.v3 as iio
 import numpy as np
@@ -22,9 +21,7 @@ from sigima_.io.converters import convert_array_to_standard_type
 from sigima_.io.image import funcs
 from sigima_.io.image.base import ImageFormatBase, MultipleImagesFormatBase
 from sigima_.obj.image import ImageObj
-
-if TYPE_CHECKING:
-    from cdl.utils.qthelpers import CallbackWorker
+from sigima_.worker import CallbackWorkerProtocol
 
 
 class ClassicsImageFormat(ImageFormatBase):
@@ -153,7 +150,7 @@ class MatImageFormat(ImageFormatBase):
     )  # pylint: disable=duplicate-code
 
     def read(
-        self, filename: str, worker: CallbackWorker | None = None
+        self, filename: str, worker: CallbackWorkerProtocol | None = None
     ) -> list[ImageObj]:
         """Read list of image objects from file
 

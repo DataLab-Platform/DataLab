@@ -215,6 +215,9 @@ class CallbackWorker(QC.QThread):
     confused with the :py:class:`cdl.gui.processor.base.Worker` class, which
     handles the execution of computations in a another process)
 
+    Implements `CallbackWorkerProtocol` from `sigima_.worker`, used for computations
+    that support cancellation and progress reporting.
+
     Args:
         callback: The function to be executed in a separate thread, that takes
          optionnally 'worker' as argument (instance of this class), and any other
