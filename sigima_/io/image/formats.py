@@ -16,7 +16,7 @@ import plotpy.io
 import scipy.io as sio
 import skimage.io
 
-from cdl.config import IMAGEIO_FORMATS, Conf, _
+from sigima_.config import _, options
 from sigima_.io.base import FormatInfo
 from sigima_.io.converters import convert_array_to_standard_type
 from sigima_.io.image import funcs
@@ -230,10 +230,8 @@ class AndorSIFImageFormat(MultipleImagesFormatBase):
 # Generate classes based on the information above:
 def generate_imageio_format_classes():
     """Generate classes based on the information above"""
-    imageio_formats = IMAGEIO_FORMATS
-    conf_formats = Conf.io.imageio_formats.get()
-    if conf_formats:
-        imageio_formats += conf_formats
+    imageio_formats = options.imageio_formats.get()
+
     for extensions, name in imageio_formats:
         class_dict = {
             "FORMAT_INFO": FormatInfo(
@@ -243,7 +241,7 @@ def generate_imageio_format_classes():
                 lambda filename: iio.imread(filename, index=None)
             ),
         }
-        class_name = extensions.split()[0].upper() + "ImageIOFormat"
+        class_name = extensions.split()[0].split(".")[1].upper() + "ImageFormat"
         globals()[class_name] = type(
             class_name, (MultipleImagesFormatBase,), class_dict
         )

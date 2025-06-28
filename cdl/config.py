@@ -316,7 +316,9 @@ def initialize():
     Conf.io.h5_clear_workspace_ask.get(True)
     Conf.io.h5_fullpath_in_title.get(False)
     Conf.io.h5_fname_in_title.get(True)
-    Conf.io.imageio_formats.get(())
+    iofmts = Conf.io.imageio_formats.get(())
+    if len(iofmts) > 0:
+        sigima_options.imageio_formats.set(iofmts)  # Sync with sigima_ config
     # Proc section
     Conf.proc.operation_mode.get("single")
     Conf.proc.fft_shift_enabled.get(True)
@@ -539,18 +541,3 @@ PLOTPY_DEFAULTS = {
 
 PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
 PLOTPY_CONF.set_application(osp.join(APP_NAME, "plotpy"), CONF_VERSION, load=False)
-
-
-# Default image file formats supported by the ImageIO library
-#
-# This object represents the natively supported image file formats from the ImageIO
-# library. This list is used in the core I/O module to load data from files with the
-# supported formats. It may be extended using the `imageio_formats` option in the
-# configuration file (see section `io`).
-#:
-IMAGEIO_FORMATS = (
-    ("*.gel", "Opticks GEL"),
-    ("*.spe", "Princeton Instruments SPE"),
-    ("*.ndpi", "Hamamatsu Slide Scanner NDPI"),
-    ("*.rec", "PCO Camera REC"),
-)
