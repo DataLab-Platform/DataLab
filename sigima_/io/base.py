@@ -13,10 +13,13 @@ import enum
 import os
 import os.path as osp
 import re
+from typing import TYPE_CHECKING
 
 from cdl.config import _
-from cdl.utils.qthelpers import CallbackWorker
 from sigima_.obj.base import BaseObj
+
+if TYPE_CHECKING:
+    from cdl.utils.qthelpers import CallbackWorker
 
 
 class IOAction(enum.Enum):

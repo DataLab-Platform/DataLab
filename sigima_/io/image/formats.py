@@ -7,6 +7,7 @@ DataLab I/O image formats
 from __future__ import annotations
 
 import os.path as osp
+from typing import TYPE_CHECKING
 
 import imageio.v3 as iio
 import numpy as np
@@ -16,12 +17,14 @@ import scipy.io as sio
 import skimage.io
 
 from cdl.config import IMAGEIO_FORMATS, Conf, _
-from cdl.utils.qthelpers import CallbackWorker
 from sigima_.io.base import FormatInfo
 from sigima_.io.converters import convert_array_to_standard_type
 from sigima_.io.image import funcs
 from sigima_.io.image.base import ImageFormatBase, MultipleImagesFormatBase
 from sigima_.obj.image import ImageObj
+
+if TYPE_CHECKING:
+    from cdl.utils.qthelpers import CallbackWorker
 
 
 class ClassicsImageFormat(ImageFormatBase):
