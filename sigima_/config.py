@@ -32,10 +32,21 @@ Typical usage:
 The following table lists the available options:
 
 .. autodata:: sigima_.config.OPTIONS_RST
+
+.. note::
+
+    The options are stored in an environment variable in JSON format, allowing for
+    synchronization with external configurations or other processes that may need to
+    read or modify the options. The environment variable name is defined by
+    :attr:`sigima_.config.OptionsContainer.ENV_VAR`. This is especially useful for
+    applications such as DataLab (where the `sigima_` library is used as a core
+    component) as computations may be run in separate processes.
 """
 
 from __future__ import annotations
 
+import json
+import os
 from contextlib import contextmanager
 from typing import Any, Generator
 
@@ -51,11 +62,19 @@ class OptionField:
     """A configurable option field with get/set/context interface.
 
     Args:
+        container: Options container instance to which this option belongs.
         name: Name of the option (used for introspection or errors).
         default: Default value of the option.
     """
 
-    def __init__(self, name: str, default: Any, description: str = "") -> None:
+    def __init__(
+        self,
+        container: OptionsContainer,
+        name: str,
+        default: Any,
+        description: str = "",
+    ) -> None:
+        self._container = container
         self.name = name
         self.check(default)  # Validate the default value
         self._value = default
@@ -79,18 +98,21 @@ class OptionField:
         Returns:
             The current value of the option.
         """
+        self._container._ensure_loaded_from_env()
         return self._value
 
-    def set(self, value: Any) -> None:
+    def set(self, value: Any, sync_env: bool = True) -> None:
         """Set the value of the option.
 
         Args:
             value: The new value to assign.
+            sync_env: Whether to synchronize the environment variable.
         """
         self.check(value)  # Validate the new value
         self._value = value
+        if sync_env:
+            self._container._sync_env()
 
-    @contextmanager
     def context(self, temp_value: Any) -> Generator[None, None, None]:
         """Temporarily override the option within a context.
 
@@ -100,18 +122,24 @@ class OptionField:
         Yields:
             None. Restores the original value upon exit.
         """
-        old_value = self._value
-        self._value = temp_value
-        try:
-            yield
-        finally:
-            self._value = old_value
+
+        @contextmanager
+        def _ctx():
+            old_value = self._value
+            self.set(temp_value)
+            try:
+                yield
+            finally:
+                self.set(old_value)
+
+        return _ctx()
 
 
 class TypedOptionField(OptionField):
     """A configurable option field with type checking.
 
     Args:
+        container: Options container instance to which this option belongs.
         name: Name of the option (used for introspection or errors).
         default: Default value of the option.
         expected_type: Expected type of the option value.
@@ -119,10 +147,15 @@ class TypedOptionField(OptionField):
     """
 
     def __init__(
-        self, name: str, default: Any, expected_type: type, description: str = ""
+        self,
+        container: OptionsContainer,
+        name: str,
+        default: Any,
+        expected_type: type,
+        description: str = "",
     ) -> None:
         self.expected_type = expected_type
-        super().__init__(name, default, description)
+        super().__init__(container, name, default, description)
 
     def check(self, value: Any) -> None:
         """Check if the value is of the expected type.
@@ -157,6 +190,7 @@ class ImageIOOptionField(OptionField):
             )
 
     Args:
+        container: Options container instance to which this option belongs.
         name: Name of the option (used for introspection or errors).
         default: Default value of the option.
         description: Description of the option.
@@ -212,8 +246,15 @@ class OptionsContainer:
     Options are exposed as attributes with `.get()`, `.set()` and `.context()` methods.
     """
 
+    #: Environment variable name for options in JSON format
+    # This is used to synchronize options with external configurations or with
+    # separate processes that may need to read or modify the options.
+    ENV_VAR = "SIGIMA_OPTIONS_JSON"
+
     def __init__(self) -> None:
+        self._loaded_from_env = False
         self.keep_results = TypedOptionField(
+            self,
             "keep_results",
             default=True,
             expected_type=bool,
@@ -224,6 +265,7 @@ class OptionsContainer:
             ),
         )
         self.fft_shift_enabled = TypedOptionField(
+            self,
             "fft_shift_enabled",
             default=True,
             expected_type=bool,
@@ -234,6 +276,7 @@ class OptionsContainer:
             ),
         )
         self.imageio_formats = ImageIOOptionField(
+            self,
             "imageio_formats",
             default=IMAGEIO_FORMATS,
             description=_(
@@ -287,43 +330,46 @@ class OptionsContainer:
                 doc += f"      - {opt.description}\n"
         return doc
 
-    def get_option(self, name: str) -> Any:
-        """Get the value of an option by name.
+    def _ensure_loaded_from_env(self) -> None:
+        """Lazy-load from JSON env var on first access."""
+        if self._loaded_from_env:
+            return
+        if self.ENV_VAR in os.environ:
+            try:
+                values = json.loads(os.environ[self.ENV_VAR])
+                self.from_dict(values)
+            except Exception as e:
+                print(f"[sigima] Warning: failed to load options from env: {e}")
+        self._loaded_from_env = True
 
-        Args:
-            name: The name of the option to retrieve.
+    def _sync_env(self) -> None:
+        """Update env var with current option values."""
+        os.environ[self.ENV_VAR] = json.dumps(self.to_dict())
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return the current option values as a dictionary.
 
         Returns:
-            The value of the requested option.
-
-        Raises:
-            KeyError: If the option does not exist.
+            A dictionary with option names as keys and their current values.
         """
-        try:
-            field = getattr(self, name)
-        except AttributeError:
-            raise KeyError(f"Unknown option: {name}")
-        if not isinstance(field, OptionField):
-            raise KeyError(f"Attribute '{name}' is not a configurable option.")
-        return field.get()
+        return {
+            name: getattr(self, name).get()
+            for name in vars(self)
+            if isinstance(getattr(self, name), OptionField)
+        }
 
-    def set_option(self, name: str, value: Any) -> None:
-        """Set the value of an option by name.
+    def from_dict(self, values: dict[str, Any]) -> None:
+        """Set option values from a dictionary.
 
         Args:
-            name: The name of the option to modify.
-            value: The value to assign.
-
-        Raises:
-            KeyError: If the option does not exist.
+            values: A dictionary with option names as keys and their new values.
         """
-        try:
-            field = getattr(self, name)
-        except AttributeError:
-            raise KeyError(f"Unknown option: {name}")
-        if not isinstance(field, OptionField):
-            raise KeyError(f"Attribute '{name}' is not a configurable option.")
-        field.set(value)
+        for name, value in values.items():
+            if hasattr(self, name):
+                opt = getattr(self, name)
+                if isinstance(opt, OptionField):
+                    opt.set(value, sync_env=False)
+        self._sync_env()
 
 
 #: Global instance of the options container
