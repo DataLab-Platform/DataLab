@@ -4,8 +4,6 @@
 Image I/O formats test
 """
 
-from __future__ import annotations
-
 
 def get_image_formats():
     """Get image formats"""
