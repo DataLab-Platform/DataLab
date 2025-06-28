@@ -15,13 +15,6 @@ from collections.abc import Callable, Generator, Iterable
 from copy import deepcopy
 from typing import Any, Generic, Iterator, Literal, Type, TypeVar
 
-if sys.version_info >= (3, 11):
-    # Use Self from typing module in Python 3.11+
-    from typing import Self
-else:
-    # Use Self from typing_extensions module in Python < 3.11
-    from typing_extensions import Self
-
 import guidata.dataset as gds
 import numpy as np
 import pandas as pd
@@ -29,7 +22,13 @@ from numpy import ma
 
 from cdl.config import _
 from sigima_.algorithms import coordinates
-from sigima_.algorithms.datatypes import is_integer_dtype
+
+if sys.version_info >= (3, 11):
+    # Use Self from typing module in Python 3.11+
+    from typing import Self
+else:
+    # Use Self from typing_extensions module in Python < 3.11
+    from typing_extensions import Self
 
 ROI_KEY = "_roi_"
 
@@ -93,7 +92,7 @@ class BaseProcParam(gds.DataSet):
 
     def set_from_datatype(self, dtype):
         """Set min/max range from NumPy datatype"""
-        if is_integer_dtype(dtype):
+        if np.issubdtype(dtype, np.integer):
             info = np.iinfo(dtype)
             self.apply_integer_range(info.min, info.max)
         else:
@@ -624,8 +623,6 @@ class BaseObjMeta(abc.ABCMeta, gds.DataSetMeta):
 class NoDefaultOption:
     """Marker class for metadata option without default value"""
 
-    pass
-
 
 class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
     """Object (signal/image) interface"""
@@ -876,7 +873,8 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
         self,
         coords: np.ndarray,
         orig: BaseObj[TypeROI],
-        func: Callable,
+        func: Callable[[BaseObj[TypeROI], BaseObj[TypeROI], np.ndarray], None]
+        | Callable[[BaseObj[TypeROI], BaseObj[TypeROI], np.ndarray, gds.DataSet], None],
         param: gds.DataSet | None,
     ) -> None:
         """Transform coordinates
@@ -893,7 +891,11 @@ class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
             func(self, orig, coords, param)
 
     def transform_shapes(
-        self, orig: BaseObj[TypeROI], func: Callable, param: gds.DataSet | None = None
+        self,
+        orig: BaseObj[TypeROI],
+        func: Callable[[BaseObj[TypeROI], BaseObj[TypeROI], np.ndarray], None]
+        | Callable[[BaseObj[TypeROI], BaseObj[TypeROI], np.ndarray, gds.DataSet], None],
+        param: gds.DataSet | None = None,
     ) -> None:
         """Apply transform function to result shape / annotations coordinates.
 

@@ -37,6 +37,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117) - DataLab's signal moving median crashes on Linux with `mode='mirror'`: `free(): invalid next size (normal)` (this is a bug in SciPy v1.15.0 to v1.15.2, which was fixed in SciPy v1.15.3)
 * Fixed [Issue #186](https://github.com/DataLab-Platform/DataLab/issues/186) - Image text files with a comma as decimal separator cannot be opened directly (only the Import Wizard does support this)
 * Fixed [Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238) - Image text files with a trailing delimiter leads to data with a superfluous column when opened directly (does not happen in the Import Wizard)
+* Fixed [Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239) - Text Import Wizard does not preserve user-defined titles and units
+* Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)
 * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\s+` instead of single space character)
 
 ℹ️ Other changes:
@@ -868,7 +870,8 @@ NumPy 2.0 support has been added with this release.
       ```python
       with proxy.context_no_refresh():
           # Do something without refreshing the plot view
-          proxy.compute_fft() # (...)      ```
+          proxy.compute_fft() # (...)
+      ```
 
   * Improved curve readability:
     * Until this release, the curve style was automatically set by cycling through

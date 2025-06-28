@@ -18,7 +18,7 @@ from qtpy import QtWidgets as QW
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from sigima_.algorithms.signal import peak_indices
+from sigima_.algorithms.signal.peakdetection import peak_indices
 
 if TYPE_CHECKING:
     from plotpy.items import Marker

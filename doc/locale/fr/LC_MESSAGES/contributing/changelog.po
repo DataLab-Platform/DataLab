@@ -111,6 +111,12 @@ msgstr "Correction de l'[Issue #186](https://github.com/DataLab-Platform/DataLab
 msgid "Fixed [Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238) - Image text files with a trailing delimiter leads to data with a superfluous column when opened directly (does not happen in the Import Wizard)"
 msgstr "Correction de l'[Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238) - Les fichiers texte d'image avec un délimiteur final entraînent l'apparition d'une colonne superflue dans les données importées lorsqu'ils sont ouverts directement (ce qui ne se produit pas dans l'Assistant d'importation)"
 
+msgid "Fixed [Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239) - Text Import Wizard does not preserve user-defined titles and units"
+msgstr "Correction de l'[Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239) - L'Assistant d'importation de texte ne préserve pas les titres et unités définis par l'utilisateur"
+
+msgid "Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)"
+msgstr "Correction de l'[Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - L'Assistant d'importation de texte ne préserve pas le type de données défini par l'utilisateur (par exemple, `int16`, `float32`, etc.)"
+
 msgid "Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\\s+` instead of single space character)"
 msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec des séparateurs d'espaces variables (utilisation désormais du motif regex `\\s+` au lieu du caractère espace simple)"
 

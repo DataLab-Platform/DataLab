@@ -178,6 +178,7 @@ def rotate270(src: ImageObj) -> ImageObj:
     return dst
 
 
+# pylint: disable=unused-argument
 def hflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
     """Apply HFlip to coords"""
     coords[:, ::2] = dst.x0 + dst.width - coords[:, ::2]
@@ -199,6 +200,7 @@ def fliph(src: ImageObj) -> ImageObj:
     return dst
 
 
+# pylint: disable=unused-argument
 def vflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
     """Apply VFlip to coords"""
     coords[:, 1::2] = dst.y0 + dst.height - coords[:, 1::2]

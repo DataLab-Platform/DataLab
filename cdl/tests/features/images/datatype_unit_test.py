@@ -13,7 +13,7 @@ from __future__ import annotations
 import numpy as np
 
 from cdl.env import execenv
-from sigima_.algorithms.datatypes import clip_astype, is_integer_dtype
+from sigima_.algorithms.datatypes import clip_astype
 from sigima_.obj import ImageDatatypes
 
 
@@ -28,9 +28,9 @@ def test_clip_astype():
     # Test that function do nothing for certain data types
     for dtype1 in ImageDatatypes:
         for dtype2 in ImageDatatypes:
-            if not is_integer_dtype(dtype2.value):
+            if not np.issubdtype(dtype2.value, np.integer):
                 continue
-            if is_integer_dtype(dtype1.value):
+            if np.issubdtype(dtype1.value, np.integer):
                 info1 = np.iinfo(dtype1.value)
             else:
                 info1 = np.finfo(dtype1.value)

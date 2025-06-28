@@ -18,7 +18,6 @@ import numpy as np
 
 from cdl.config import _
 from cdl.utils.tests import get_test_fnames
-from sigima_.algorithms.datatypes import is_integer_dtype
 from sigima_.io import read_image, read_signal
 from sigima_.obj import (
     GaussLorentzVoigtParam,
@@ -235,7 +234,7 @@ def create_2d_random(
         2D data
     """
     rng = np.random.default_rng(seed)
-    amp = (np.iinfo(dtype).max if is_integer_dtype(dtype) else 1.0) * level
+    amp = (np.iinfo(dtype).max if np.issubdtype(dtype, np.integer) else 1.0) * level
     return np.array(rng.random((size, size)) * amp, dtype=dtype)
 
 

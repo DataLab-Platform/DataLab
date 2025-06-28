@@ -61,6 +61,7 @@
                 "-m",
                 "pylint",
                 "cdl",
+                "sigima_",
                 "--disable=duplicate-code",
                 "--disable=fixme",
                 "--disable=too-many-arguments",
@@ -99,6 +100,7 @@
                 "../build/gettext",
                 "-b",
                 "gettext",
+                "-W"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/doc",
@@ -233,7 +235,7 @@
                 "--name",
                 "cdl",
                 "--directory",
-                ".",
+                "."
             ],
             "group": {
                 "kind": "build",

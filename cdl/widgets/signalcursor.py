@@ -19,7 +19,7 @@ from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
 from cdl.utils.qthelpers import block_signals
-from sigima_.algorithms.signal import find_first_x_at_y_value
+from sigima_.algorithms.signal.features import find_first_x_at_y_value
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker

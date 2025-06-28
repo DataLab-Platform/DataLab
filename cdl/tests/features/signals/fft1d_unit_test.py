@@ -16,13 +16,13 @@ import scipy.signal as sps
 from guidata.qthelpers import qt_app_context
 
 import cdl.tests.data as ctd
-import sigima_.algorithms.signal as alg
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result
 from cdl.utils.vistools import view_curves
+from sigima_.algorithms.signal import fourier
 
 
 def test_signal_fft_interactive() -> None:
@@ -43,8 +43,8 @@ def test_signal_fft_interactive() -> None:
         extra_param = sigima_.obj.PeriodicParam()
         s1 = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
         t, y = s1.xydata
-        f, s = alg.fft1d(t, y)
-        t2, y2 = alg.ifft1d(f, s)
+        f, s = fourier.fft1d(t, y)
+        t2, y2 = fourier.ifft1d(f, s)
         execenv.print("Comparing original and FFT/iFFT signals...", end=" ")
         execenv.print("OK")
         check_array_result("Signal FFT/iFFT X data", t2, t)

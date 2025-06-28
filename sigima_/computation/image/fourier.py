@@ -50,7 +50,7 @@ class ZeroPadding2DParam(gds.DataSet):
         self.__obj = obj
         self.choice_callback(None, self.strategy)
 
-    def choice_callback(self, item, value):
+    def choice_callback(self, item, value):  # pylint: disable=unused-argument
         """Callback to update padding values"""
         if self.__obj is None:
             return

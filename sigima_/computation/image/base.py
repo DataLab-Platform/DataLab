@@ -22,7 +22,6 @@ from typing import Any, Literal
 
 import numpy as np
 
-from sigima_.algorithms.datatypes import is_integer_dtype
 from sigima_.computation.base import dst_1_to_1, new_signal_result
 from sigima_.obj.base import ResultShape
 from sigima_.obj.image import ImageObj
@@ -45,7 +44,8 @@ def restore_data_outside_roi(dst: ImageObj, src: ImageObj) -> None:
         if (
             np.array_equal(src.maskdata, dst.maskdata)
             and (
-                dst.data.dtype == src.data.dtype or not is_integer_dtype(dst.data.dtype)
+                dst.data.dtype == src.data.dtype
+                or not np.issubdtype(dst.data.dtype, np.integer)
             )
             and dst.data.shape == src.data.shape
         ):

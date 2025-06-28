@@ -9,30 +9,6 @@ from __future__ import annotations
 import numpy as np
 
 
-def is_integer_dtype(dtype: np.dtype) -> bool:
-    """Return True if data type is an integer type.
-
-    Args:
-        dtype: Data type to check.
-
-    Returns:
-        True if data type is an integer type.
-    """
-    return np.issubdtype(dtype, np.integer)
-
-
-def is_complex_dtype(dtype: np.dtype) -> bool:
-    """Return True if data type is a complex type.
-
-    Args:
-        dtype: Data type to check.
-
-    Returns:
-        True if data type is a complex type.
-    """
-    return np.issubdtype(dtype, complex)
-
-
 def clip_astype(data: np.ndarray, dtype: np.dtype) -> np.ndarray:
     """Convert array to a new data type, after having clipped values to the new
     data type's range if it is an integer type.
@@ -45,6 +21,6 @@ def clip_astype(data: np.ndarray, dtype: np.dtype) -> np.ndarray:
     Returns:
         Array converted to new data type
     """
-    if is_integer_dtype(dtype):
+    if np.issubdtype(dtype, np.integer):
         return np.clip(data, np.iinfo(dtype).min, np.iinfo(dtype).max).astype(dtype)
     return data.astype(dtype)

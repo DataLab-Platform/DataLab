@@ -710,6 +710,7 @@ def remove_overlapping_disks(coords: np.ndarray) -> np.ndarray:
     return coords
 
 
+# pylint: disable=too-many-positional-arguments
 def find_blobs_opencv(
     data: np.ndarray,
     min_threshold: float | None = None,
