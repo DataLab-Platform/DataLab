@@ -21,11 +21,11 @@ import guidata.dataset as gds
 import pywt
 from skimage import morphology, restoration
 
-from cdl.config import _
 from sigima_.computation import computation_function
 from sigima_.computation.base import dst_1_to_1
 from sigima_.computation.image.base import Wrap1to1Func, restore_data_outside_roi
 from sigima_.computation.image.morphology import MorphologyParam
+from sigima_.config import _
 from sigima_.obj.image import ImageObj
 
 

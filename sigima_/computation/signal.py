@@ -24,7 +24,6 @@ import scipy.integrate as spt
 import scipy.ndimage as spi
 import scipy.signal as sps
 
-from cdl.config import _
 from sigima_.algorithms import coordinates
 from sigima_.algorithms.signal import (
     dynamic,
@@ -55,7 +54,7 @@ from sigima_.computation.base import (
     dst_n_to_1,
     new_signal_result,
 )
-from sigima_.config import options
+from sigima_.config import _, options
 from sigima_.obj.base import ResultProperties, ResultShape
 from sigima_.obj.signal import ROI1DParam, SignalObj
 
@@ -84,7 +83,7 @@ def restore_data_outside_roi(dst: SignalObj, src: SignalObj) -> None:
 class Wrap1to1Func:
     """Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce
     a 1 signal → 1 signal function, which can be used inside DataLab's infrastructure
-    to perform computations with :class:`cdl.gui.processor.signal.SignalProcessor`.
+    to perform computations with the Signal Processor object.
 
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.

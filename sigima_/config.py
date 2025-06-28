@@ -5,7 +5,8 @@ Configuration (:mod:`sigima_.config`)
 -------------------------------------
 
 The :mod:`sigima_.config` module provides a way to manage configuration options for the
-`sigima_` library.
+`sigima_` library, as well as to handle translations and data paths, and other
+configuration-related tasks.
 
 It allows users to set and retrieve options that affect the behavior of the library,
 such as whether to keep results of computations or not. The options are handled as
@@ -33,6 +34,13 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from typing import Any, Generator
+
+from guidata import configtools
+
+# Translation and data path configuration
+MOD_NAME = "sigima_"
+_ = configtools.get_translation(MOD_NAME)
+DATAPATH = configtools.get_module_data_path(MOD_NAME, "data")
 
 
 class OptionField:

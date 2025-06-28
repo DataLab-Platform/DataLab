@@ -26,9 +26,9 @@ from __future__ import annotations
 import guidata.dataset as gds
 
 import sigima_.algorithms.image as alg
-from cdl.config import _
 from sigima_.computation import computation_function
 from sigima_.computation.image.base import calc_resultshape
+from sigima_.config import _
 from sigima_.obj.base import ResultShape, ShapeTypes
 from sigima_.obj.image import ImageObj
 

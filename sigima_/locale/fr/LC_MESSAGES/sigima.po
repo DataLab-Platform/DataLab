@@ -1,0 +1,3216 @@
+# French translations for sigima.
+# Copyright (C) 2025 DataLab Platform Developers
+# This file is distributed under the same license as the sigima project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  sigima\n"
+"Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
+"POT-Creation-Date: 2025-06-26 15:12+0200\n"
+"PO-Revision-Date: 2025-05-22 15:46+0200\n"
+"Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
+"Language: fr\n"
+"Language-Team: DataLab Platform Developers <p.raybaut@codra.fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "DataLab is a generic signal and image processing platform"
+msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
+
+#, python-format
+msgid "New %s..."
+msgstr "Nouvel objet %s..."
+
+#, python-format
+msgid "Create new %s"
+msgstr "Créer un nouvel objet %s"
+
+#, python-format
+msgid "Open %s..."
+msgstr "Ouvrir un objet %s..."
+
+#, python-format
+msgid "Open %s"
+msgstr "Ouvrir un objet %s"
+
+msgid "Open from directory..."
+msgstr "Ouvrir depuis le répertoire..."
+
+#, python-format
+msgid "Open %s objects from directory"
+msgstr "Ouvrir des objets %s depuis le répertoire"
+
+#, python-format
+msgid "Save %s..."
+msgstr "Enregistrer un objet %s..."
+
+#, python-format
+msgid "Save selected %s"
+msgstr "Enregistrer l'objet %s sélectionné"
+
+msgid "Import text file..."
+msgstr "Importer un fichier texte..."
+
+msgid "Rename"
+msgstr "Renommer"
+
+#, python-format
+msgid "Edit title of selected %s or group"
+msgstr "Modifier le titre de l'objet %s ou du groupe sélectionné"
+
+msgid "New group..."
+msgstr "Nouveau groupe..."
+
+msgid "Create a new group"
+msgstr "Créer un nouveau groupe"
+
+msgid "Move up"
+msgstr "Déplacer vers le haut"
+
+msgid "Move up selection (groups or objects)"
+msgstr "Déplacer vers le haut la sélection (groupes ou objets)"
+
+msgid "Move down"
+msgstr "Déplacer vers le bas"
+
+msgid "Move down selection (groups or objects)"
+msgstr "Déplacer vers le bas la sélection (groupes ou objets)"
+
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#, python-format
+msgid "Duplicate selected %s"
+msgstr "Dupliquer l'objet %s sélectionné"
+
+msgid "Remove"
+msgstr "Supprimer"
+
+#, python-format
+msgid "Remove selected %s"
+msgstr "Supprimer l'objet %s sélectionné"
+
+msgid "Delete all"
+msgstr "Supprimer tout"
+
+msgid "Delete all groups and objects"
+msgstr "Supprimer tous les groupes et objets"
+
+msgid "Copy metadata"
+msgstr "Copier les métadonnées"
+
+#, python-format
+msgid "Copy metadata from selected %s"
+msgstr "Copier les métadonnées de l'objet %s sélectionné"
+
+msgid "Paste metadata"
+msgstr "Coller les métadonnées"
+
+#, python-format
+msgid "Paste metadata into selected %s"
+msgstr "Coller les métadonnées dans l'objet %s sélectionné"
+
+msgid "Import metadata"
+msgstr "Importer les métadonnées"
+
+#, python-format
+msgid "Import metadata into %s"
+msgstr "Importer les métadonnées dans l'objet %s"
+
+msgid "Export metadata"
+msgstr "Exporter les métadonnées"
+
+#, python-format
+msgid "Export selected %s metadata"
+msgstr "Exporter les métadonnées de l'objet %s sélectionné"
+
+msgid "Delete object metadata"
+msgstr "Supprimer les métadonnées"
+
+msgid "Delete all that is contained in object metadata"
+msgstr "Supprimer toutes les métadonnées liées à l'objet"
+
+msgid "Add object title to plot"
+msgstr "Ajouter le titre de l'objet au graphique"
+
+msgid "Add object title as a label to the plot"
+msgstr "Ajouter le titre de l'objet comme étiquette au graphique"
+
+msgid "Copy titles to clipboard"
+msgstr "Copier les titres dans le presse-papier"
+
+msgid "Copy titles of selected objects to clipboard"
+msgstr "Copier les titres des objets sélectionnés dans le presse-papier"
+
+msgid "Edit regions of interest..."
+msgstr "Modifier les régions d'intérêt..."
+
+msgid "Remove regions of interest"
+msgstr "Supprimer les régions d'intérêt"
+
+msgid "View in a new window"
+msgstr "Voir dans une nouvelle fenêtre"
+
+#, python-format
+msgid "View selected %s in a new window"
+msgstr "Voir l'objet %s sélectionné dans une nouvelle fenêtre"
+
+msgid "Edit annotations"
+msgstr "Modifier les annotations"
+
+#, python-format
+msgid "Edit annotations of selected %s"
+msgstr "Modifier les annotations de l'objet %s sélectionné"
+
+msgid "Refresh manually"
+msgstr "Rafraîchir manuellement"
+
+msgid "Refresh plot, even if auto-refresh is enabled"
+msgstr "Rafraîchit le graphique, même si le rafraîchissement automatique est activé"
+
+msgid "Constant Operations"
+msgstr "Opérations avec une constante"
+
+msgid "Axis transformation"
+msgstr "Transformation des axes"
+
+msgid "Level adjustment"
+msgstr "Ajustement de niveau"
+
+msgid "Offset correction"
+msgstr "Soustraction d'offset"
+
+msgid "Evaluate and subtract the offset value from the data"
+msgstr "Évaluer et soustraire la valeur d'offset des données"
+
+msgid "Noise reduction"
+msgstr "Réduction de bruit"
+
+msgid "Fourier analysis"
+msgstr "Analyse de Fourier"
+
+msgid "ROI extraction"
+msgstr "Extraction de ROI"
+
+msgid "Show results"
+msgstr "Afficher les résultats"
+
+msgid "Plot results"
+msgstr "Tracer les résultats"
+
+msgid "Delete results"
+msgstr "Supprimer les résultats"
+
+msgid "signal"
+msgstr "signal"
+
+msgid "Frequency filters"
+msgstr "Filtres fréquentiels"
+
+msgid "Fitting"
+msgstr "Ajustement"
+
+msgid "Linear fit"
+msgstr "Ajustement linéaire"
+
+msgid "Polynomial fit"
+msgstr "Ajustement polynomial"
+
+msgid "Gaussian fit"
+msgstr "Ajustement gaussien"
+
+msgid "Lorentzian fit"
+msgstr "Ajustement lorentzien"
+
+msgid "Voigt fit"
+msgstr "Ajustement Voigt"
+
+msgid "Multi-Gaussian fit"
+msgstr "Ajustement multi-gaussien"
+
+msgid "Exponential fit"
+msgstr "Ajustement exponentiel"
+
+msgid "Sinusoidal fit"
+msgstr "Ajustement sinusoïdal"
+
+msgid "CDF fit"
+msgstr "Ajustement CDF"
+
+msgid "Cumulative distribution function fit, related to Error function (erf)"
+msgstr "Fonction de distribution cumulative (CDF), liée à la fonction d'erreur (erf)"
+
+msgid "Stability analysis"
+msgstr "Analyse de stabilité"
+
+msgid "All stability features"
+msgstr "Toutes les analyses de stabilité"
+
+msgid "Compute all stability features"
+msgstr "Calcule toutes les analyses de stabilité"
+
+msgid "Full width at y=..."
+msgstr "Largeur à y=..."
+
+msgid "Compute the full width at a given y value"
+msgstr "Calcule la largeur à une valeur y donnée"
+
+msgid "First abscissa at y=..."
+msgstr "Première abscisse à y=..."
+
+msgid "Compute the first abscissa at a given y value (linear interpolation)"
+msgstr "Calcule la première abscisse à une valeur y donnée (interpolation linéaire)"
+
+msgid "Ordinate at x=..."
+msgstr "Ordonnée à x=..."
+
+msgid "Compute the ordinate at a given x value (linear interpolation)"
+msgstr "Calcule l'ordonnée à une valeur x donnée (interpolation linéaire)"
+
+msgid "Peak detection"
+msgstr "Détection de pics"
+
+msgid "Curve anti-aliasing"
+msgstr "Anticrénelage des courbes"
+
+msgid "Toggle curve anti-aliasing on/off (may slow down plotting)"
+msgstr "Active/désactive l'anticrénelage des courbes (peut ralentir le tracé)"
+
+msgid "Reset curve styles"
+msgstr "Réinitialiser les styles de courbes"
+
+msgid ""
+"Curve styles are looped over a list of predefined styles.\n"
+"This action resets the list to its initial state."
+msgstr ""
+"Les styles de courbes sont parcourus dans une liste de styles prédéfinis.\n"
+"Cette action réinitialise la liste à son état initial."
+
+msgid "image"
+msgstr "image"
+
+msgid "Show contrast panel"
+msgstr "Afficher le panneau de contraste"
+
+msgid "Show or hide contrast adjustment panel"
+msgstr "Afficher ou cacher le panneau de réglage du contraste"
+
+msgid "Flip or rotation"
+msgstr "Symétrie ou rotation"
+
+msgid "Intensity profiles"
+msgstr "Profils d'intensité"
+
+msgid "Line profile..."
+msgstr "Profil rectiligne..."
+
+msgid "Extract horizontal or vertical profile"
+msgstr "Extraire un profil horizontal ou vertical"
+
+msgid "Segment profile..."
+msgstr "Profil le long d'un segment..."
+
+msgid "Extract profile along a segment"
+msgstr "Extraire un profil le long d'un segment"
+
+msgid "Average profile..."
+msgstr "Profil moyen..."
+
+msgid "Extract average horizontal or vertical profile"
+msgstr "Extraire un profil moyen horizontal ou vertical"
+
+msgid "Radial profile extraction..."
+msgstr "Extraire le profil radial..."
+
+msgid "Radial profile extraction around image centroid"
+msgstr "Extraire le profil radial autour du barycentre de l'image"
+
+msgid "Distribute on a grid..."
+msgstr "Distribuer sur une grille..."
+
+msgid "Reset image positions"
+msgstr "Réinitialiser les positions des images"
+
+msgid "Thresholding"
+msgstr "Seuillage"
+
+msgid "All thresholding methods"
+msgstr "Toutes les méthodes de seuillage"
+
+msgid "Apply all thresholding methods"
+msgstr "Appliquer toutes les méthodes de seuillage"
+
+msgid "Exposure"
+msgstr "Exposition"
+
+msgid "Restoration"
+msgstr "Restauration"
+
+msgid "All denoising methods"
+msgstr "Tous les débruitages"
+
+msgid "Apply all denoising methods"
+msgstr "Appliquer tous les débruitages"
+
+msgid "Morphology"
+msgstr "Morphologie"
+
+msgid "All morphological operations"
+msgstr "Toutes les opérations morphologiques"
+
+msgid "Apply all morphological operations"
+msgstr "Appliquer toutes les opérations morphologiques"
+
+msgid "Edges"
+msgstr "Contours"
+
+msgid "All edges filters"
+msgstr "Tous les filtres de contours"
+
+msgid "Compute all edges filters"
+msgstr "Calcule tous les filtres de contours"
+
+msgid "2D peak detection"
+msgstr "Détection de pics 2D"
+
+msgid "Compute automatic 2D peak detection"
+msgstr "Détection automatique de pics 2D"
+
+msgid "Blob detection"
+msgstr "Détection de taches"
+
+msgid "Resize"
+msgstr "Redimensionner"
+
+msgid "Pixel binning"
+msgstr "Binning"
+
+msgid "Process signal"
+msgstr "Traiter le signal"
+
+#, python-format
+msgid "Loading data from %s..."
+msgstr "Chargement des données depuis %s..."
+
+msgid "Clipping uint32 data to int32."
+msgstr "Troncature de données uint32 en int32."
+
+msgid "No supported data available in HDF5 file(s)."
+msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
+
+msgid "Macro simple example"
+msgstr "Exemple simple de macro"
+
+msgid "Untitled"
+msgstr "Sans titre"
+
+#, python-format
+msgid "# ==> Unable to run '%s' macro"
+msgstr "# ==> Impossible d'exécuter la macro '%s'"
+
+msgid "Macro Python interpreter failed to start!"
+msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
+
+#, python-format
+msgid "# ==> Running '%s' macro..."
+msgstr "# ==> Exécution de la macro '%s'..."
+
+#, python-format
+msgid "Terminating '%s' macro"
+msgstr "Arrêt de la macro '%s'"
+
+#, python-format
+msgid "# <== '%s' macro has finished"
+msgstr "# <== La macro '%s' a terminé son exécution"
+
+#, python-format
+msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
+msgstr "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous néanmoins continuer ?"
+
+msgid "This software is in the <b>beta stage</b> of its release cycle. The focus of beta testing is providing a feature complete software for users interested in trying new features before the final release. However, <u>beta software may not behave as expected and will probably have more bugs or performance issues than completed software</u>."
+msgstr "Ce logiciel est en <b>phase beta</b> de son cycle de développement. L'objectif de la phase de beta test est de fournir une version du logiciel disposant de toutes les fonctionnalités prévues dans la version finale, à l'attention d'utilisateurs intéressés de tester en avance de phase ces fonctionnalités. Cependant, <u>un logiciel en version beta peut ne pas fonctionner correctement et présente plus d'anomalies résiduelles et de problèmes de performance que la version finale</u>."
+
+msgid "This software is in the <b>alpha stage</b> of its release cycle. The focus of alpha testing is providing an incomplete software for early testing of specific features by users. Please note that <u>alpha software was not thoroughly tested</u> by the developer before it is released."
+msgstr "Ce logiciel est en <b>phase alpha</b> de son cycle de développement. L'objectif de la phase d'alpha test est de fournir une version incomplète du logiciel pour des tests réalisés en amont par des utilisateurs intéressés ou concernés par de nouvelles fonctionnalités ou des corrections d'anomalies. Notez que <u>la version alpha d'un logiciel ne fait pas l'objet de tests poussés avant sa diffusion</u>."
+
+msgid "<i>This is not a stable release.</i>"
+msgstr "<i>Ceci n'est pas une version stable.</i>"
+
+msgid "The dependency check feature is not relevant for the standalone version of DataLab."
+msgstr "La vérification des dépendances n'est pas pertinente pour la version autonome de DataLab."
+
+msgid "All critical dependencies of DataLab have been qualified on this operating system."
+msgstr "Toutes les dépendances critiques de DataLab ont été qualifiées sur ce système d'exploitation."
+
+msgid "Non-compliant dependency:"
+msgstr "Dépendance non-conforme :"
+
+msgid "Non-compliant dependencies:"
+msgstr "Dépendances non-conformes :"
+
+msgid "DataLab has not yet been qualified on your operating system."
+msgstr "DataLab n'a pas encore été qualifié sur votre système d'exploitation."
+
+msgid "At least one dependency does not comply with DataLab qualification standard reference (wrong dependency version has been installed, or dependency source code has been modified, or the application has not yet been qualified on your operating system)."
+msgstr "Au moins une dépendance est non-conforme avec le référentiel de qualification de DataLab (la version de la dépendance est non-conforme, ou le code source de la dépendance a été modifié, ou encore l'application n'a pas encore été qualifiée dans le cadre de votre système d'exploitation)."
+
+msgid "This means that the application has not been officially qualified in this context and may not behave as expected."
+msgstr "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce contexte et peut donc se comporter de façon inattendue."
+
+msgid "Do you want to see available log files?"
+msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
+
+#, python-format
+msgid "Welcome to %s!"
+msgstr "Bienvenue dans %s !"
+
+msgid "Open HDF5 files..."
+msgstr "Ouvrir des fichiers HDF5..."
+
+msgid "Open one or several HDF5 files"
+msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
+
+msgid "Save to HDF5 file..."
+msgstr "Enregistrer dans un fichier HDF5..."
+
+msgid "Save to HDF5 file"
+msgstr "Enregistrer dans un fichier HDF5"
+
+msgid "Browse HDF5 file..."
+msgstr "Parcourir un fichier HDF5..."
+
+msgid "Browse an HDF5 file"
+msgstr "Parcourir un fichier HDF5"
+
+msgid "Settings..."
+msgstr "Préférences..."
+
+msgid "Open settings dialog"
+msgstr "Ouvrir la boîte de dialogue des préférences"
+
+msgid "Main Toolbar"
+msgstr "Barre d'outils principale"
+
+msgid "Hide window"
+msgstr "Cacher la fenêtre"
+
+msgid "Hide DataLab window"
+msgstr "Cacher la fenêtre de DataLab"
+
+msgid "Quit"
+msgstr "Quitter"
+
+msgid "Quit application"
+msgstr "Quitter l'application"
+
+msgid "Auto-refresh"
+msgstr "Rafraîchissement automatique"
+
+msgid "Auto-refresh plot when object is modified, added or removed"
+msgstr "Rafraîchir le graphique automatiquement lors de la modification, de l'ajout ou de la suppression d'un objet"
+
+msgid "Show first object only"
+msgstr "Afficher uniquement le premier objet"
+
+msgid "Show only the first selected object (signal or image)"
+msgstr "Afficher uniquement le premier objet sélectionné (signal ou image)"
+
+msgid "Show graphical object titles"
+msgstr "Afficher les titres des objets graphiques"
+
+msgid "Show or hide ROI and other graphical object titles or subtitles"
+msgstr "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et autres objets graphiques"
+
+msgid "Signal Panel Toolbar"
+msgstr "Barre d'outils du panneau Signal"
+
+msgid "Image Panel Toolbar"
+msgstr "Barre d'outils du panneau Image"
+
+msgid "Signal View"
+msgstr "Vue Signal"
+
+msgid "Image View"
+msgstr "Vue Image"
+
+msgid "Signal Panel"
+msgstr "Panneau Signal"
+
+msgid "Image Panel"
+msgstr "Panneau Image"
+
+msgid "File"
+msgstr "Fichier"
+
+msgid "&Edit"
+msgstr "&Édition"
+
+msgid "Operations"
+msgstr "Opérations"
+
+msgid "Processing"
+msgstr "Traitement"
+
+msgid "Analysis"
+msgstr "Analyse"
+
+msgid "Plugins"
+msgstr "Plugins"
+
+msgid "&View"
+msgstr "&Affichage"
+
+msgid "Online documentation"
+msgstr "Documentation en ligne"
+
+msgid "PDF documentation"
+msgstr "Documentation PDF"
+
+msgid "Tour"
+msgstr "Visite guidée"
+
+msgid "Demo"
+msgstr "Démo"
+
+msgid "Test segfault/Python error"
+msgstr "Tester un plantage/une erreur Python"
+
+msgid "Log files"
+msgstr "Journaux de bord"
+
+msgid "Installation and configuration"
+msgstr "Installation et configuration"
+
+msgid "Project home page"
+msgstr "Page d'accueil du projet"
+
+msgid "Bug report or feature request"
+msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
+
+msgid "Check critical dependencies..."
+msgstr "Vérifier les dépendances critiques..."
+
+msgid "About..."
+msgstr "À propos..."
+
+msgid "Console"
+msgstr "Console"
+
+msgid "Macro Panel"
+msgstr "Gestionnaire de Macros"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+#, python-format
+msgid "Do you want to clear current workspace (signals and images) before importing data from HDF5 files?<br><br>Choosing to ignore this message will prevent it from being displayed again, and will use the current setting (%s)."
+msgstr "Souhaitez-vous effacer l'espace de travail actuel (signaux et images) avant d'importer des données depuis des fichiers HDF5 ?<br><br>Ignorer ce message empêchera son affichage ultérieur, et utilisera le réglage actuel (%s)."
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
+
+msgid "Open"
+msgstr "Ouvrir"
+
+msgid "HDF5 files (*.h5 *.hdf5)"
+msgstr "Fichiers HDF5 (*.h5 *.hdf5)"
+
+msgid "not started"
+msgstr "non démarré"
+
+#, python-format
+msgid "started (port %s)"
+msgstr "démarré (port %s)"
+
+msgid "enabled"
+msgstr "activé"
+
+msgid "disabled"
+msgstr "désactivé"
+
+msgid "Advanced configuration:"
+msgstr "Configuration avancée :"
+
+msgid "XML-RPC server:"
+msgstr "Serveur XML-RPC :"
+
+msgid "Process isolation:"
+msgstr "Isolation de processus :"
+
+msgid "Created by"
+msgstr "Créé par"
+
+#, python-format
+msgid "Developed and maintained by %s open-source project team"
+msgstr "Développé et maintenu par l'équipe du projet libre %s"
+
+msgid "About"
+msgstr "À propos de"
+
+msgid "Visualization settings"
+msgstr "Réglages d'affichage"
+
+#, python-format
+msgid "Default visualization settings have changed.<br><br>Do you want to update all active %s objects?"
+msgstr "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre à jour tous les objets %s actifs ?"
+
+msgid "Do you want to save all signals and images to an HDF5 file before quitting DataLab?"
+msgstr "Souhaitez-vous enregistrer tous les signaux et images dans un fichier HDF5 avant de quitter DataLab ?"
+
+msgid "Select one point then press OK to accept"
+msgstr "Sélectionnez un point puis appuyez sur OK pour valider"
+
+msgid "Edit experimental curve"
+msgstr "Editer la courbe expérimentale"
+
+msgid "Insert point"
+msgstr "Insérer un point"
+
+msgid "Experimental points"
+msgstr "Points expérimentaux"
+
+msgid "Object metadata"
+msgstr "Métadonnées de l'objet"
+
+msgid "(click on Metadata button for more details)"
+msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
+
+msgid "Drag files here to open"
+msgstr "Déposer des fichiers ici pour les ouvrir"
+
+msgid "Properties"
+msgstr "Propriétés"
+
+msgid "Analysis parameters"
+msgstr "Paramètres d'analyse"
+
+msgid "Result shapes"
+msgstr "Résultats graphiques"
+
+msgid "Result properties"
+msgstr "Résultats numériques"
+
+msgid "Other metadata"
+msgstr "Autres métadonnées"
+
+msgid "Select what to keep from the clipboard.<br><br>Result shapes and annotations, if kept, will be merged with existing ones. <u>All other metadata will be replaced</u>."
+msgstr "Sélectionnez ce que vous souhaitez conserver dans le presse-papier.<br><br>Les formes graphiques et les annotations, si conservées, seront fusionnées avec celles existantes. <u>Toutes les autres métadonnées seront remplacées</u>."
+
+msgid "Delete group(s)"
+msgstr "Supprimer le(s) groupe(s)"
+
+msgid "Are you sure you want to delete the selected group(s)?"
+msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
+
+#, python-format
+msgid "Do you want to delete all objects (%s)?"
+msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
+
+msgid "Delete metadata"
+msgstr "Supprimer les métadonnées"
+
+msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
+msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
+
+msgid "New group"
+msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
+
+msgid "Rename object"
+msgstr "Renommer l'objet"
+
+msgid "Object name:"
+msgstr "Nom de l'objet :"
+
+msgid "Rename group"
+msgstr "Renommer le groupe"
+
+msgid "Adding objects to workspace"
+msgstr "Ajout d'objets à l'espace de travail"
+
+msgid "Scanning directory"
+msgstr "Analyse du répertoire"
+
+msgid "Save as"
+msgstr "Enregistrer sous"
+
+msgid "Annotations"
+msgstr "Annotations"
+
+msgid "Results"
+msgstr "Résultats"
+
+msgid "Show results obtained from previous analysis"
+msgstr "Afficher les résultats obtenus avec des analyses réalisées précédemment"
+
+msgid "Open a dialog to edit annotations"
+msgstr "Ouvrir une boîte de dialogue pour éditer les annotations"
+
+msgid "No result currently available for this object."
+msgstr "Aucun résultat disponible pour le moment."
+
+msgid "This feature leverages the results of previous analysis performed on the selected object(s).<br><br>To compute results, select one or more objects and choose a feature in the <u>Analysis</u> menu."
+msgstr "Cette fonctionnalité exploite les résultats d'analyse précédents.<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et choisissez une fonctionnalité dans le menu <u>Analyse</u>."
+
+msgid "Indices"
+msgstr "Indices"
+
+msgid "Plot kind"
+msgstr "Type de graphique"
+
+msgid "One curve per object (or ROI) and per result title"
+msgstr "Une courbe par objet (ou ROI) et par titre de résultat"
+
+msgid "One curve per result title"
+msgstr "Une courbe par titre de résultat"
+
+msgid "X axis"
+msgstr "Axe des X"
+
+msgid "Y axis"
+msgstr "Axe des Y"
+
+#, python-format
+msgid "Plot results obtained from previous analyses.<br><br>This plot is based on results associated with '%s' prefix."
+msgstr "Tracer les résultats obtenus avec des analyses réalisées précédemment.<br><br>Ce graphique est basé sur les résultats associés au préfixe '%s'."
+
+msgid "All objects associated with results must have the same regions of interest (ROIs) to plot results together."
+msgstr "Tous les objets associés aux résultats doivent avoir les mêmes ROIs pour tracer les résultats ensemble."
+
+msgid "Are you sure you want to delete all results of the selected object(s)?"
+msgstr "Êtes-vous sûr de vouloir supprimer tous les résultats des objets sélectionnés ?"
+
+msgid "Macro panel"
+msgstr "Panneau des macros"
+
+msgid "-***- Macro Console -***-"
+msgstr "-***- Console des macros -***-"
+
+msgid "Run macro"
+msgstr "Exécuter la macro"
+
+msgid "Stop macro"
+msgstr "Arrêter la macro"
+
+msgid "New macro"
+msgstr "Nouvelle macro"
+
+msgid "Rename macro"
+msgstr "Renommer la macro"
+
+msgid "Import macro from file"
+msgstr "Importer la macro depuis un fichier"
+
+msgid "Export macro to file"
+msgstr "Exporter la macro vers un fichier"
+
+msgid "Remove macro"
+msgstr "Supprimer la macro"
+
+msgid "Macro editor toolbar"
+msgstr "Barre d'outils des macros"
+
+msgid "New title:"
+msgstr "Nouveau titre :"
+
+msgid "When closed, the macro is <u>permanently destroyed</u>, unless it has been exported first."
+msgstr "Lorsqu'elle est fermée, une macro est <u>détruite de manière définitive</u>, sauf si elle a été exportée au préalable."
+
+msgid "Do you want to continue?"
+msgstr "Souhaitez-vous vraiment continuer ?"
+
+msgid "Creating geometric shapes"
+msgstr "Création des formes géométriques"
+
+msgid "Creating plot items"
+msgstr "Création des objets graphiques"
+
+msgid "DataLab relies on various libraries to perform the computation. During the computation, errors may occur because of the data (e.g. division by zero, unexpected data type, etc.) or because of the libraries (e.g. memory error, etc.). If you encounter an error, before reporting it, please ensure that the computation is correct, by checking the data and the parameters."
+msgstr "DataLab utilise plusieurs bibliothèques pour réaliser les calculs. Lors des calculs, des erreurs peuvent survenir en raison de la nature des données (par exemple division par zéro, type de données inattendu, etc.) ou à cause de limitations ou d'erreurs dans les bibliothèques (par exemple erreur mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-vous que le calcul est correct, en vérifiant les données et les paramètres."
+
+#, python-format
+msgid "Computing: %s"
+msgstr "Calcul en cours : %s"
+
+msgid "In pairwise mode, you need to select objects in at least two groups."
+msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins deux groupes."
+
+msgid "In pairwise mode, you need to select the same number of objects in each group."
+msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
+
+msgid "Parameters"
+msgstr "Paramètres"
+
+#, python-format
+msgid "Calculating: %s"
+msgstr "Calcul : %s"
+
+#, python-format
+msgid "Select %s"
+msgstr "Sélectionner %s"
+
+#, python-format
+msgid "<u>Note:</u> operation mode is <i>pairwise</i>: %s object(s) expected (i.e. as many as in the first group)"
+msgstr "<u>Note :</u> le mode d'opération est <i>pairwise</i> : %s objet(s) attendu(s) (c'est-à-dire autant que dans le premier groupe)"
+
+msgid "<u>Note:</u> operation mode is <i>single operand</i>: 1 object expected"
+msgstr "<u>Note :</u> le mode d'opération est <i>single</i> : 1 objet attendu"
+
+msgid "Second operand"
+msgstr "Second opérande"
+
+msgid "Regions of Interest"
+msgstr "Régions d'intérêt"
+
+msgid "Sum"
+msgstr "Addition"
+
+msgid "Average"
+msgstr "Moyenne"
+
+msgid "Difference"
+msgstr "Soustraction"
+
+msgid "image to subtract"
+msgstr "image à soustraire"
+
+msgid "Quadratic Difference"
+msgstr "Différence quadratique"
+
+msgid "Product"
+msgstr "Produit"
+
+msgid "Division"
+msgstr "Division"
+
+msgid "divider"
+msgstr "le diviseur"
+
+msgid "Inverse"
+msgstr "Inverse"
+
+msgid "Arithmetic"
+msgstr "Arithmétique"
+
+msgid "signal to operate with"
+msgstr "signal opérande"
+
+msgid "Add constant"
+msgstr "Additionner une constante"
+
+msgid "Subtract constant"
+msgstr "Soustraire une constante"
+
+msgid "Multiply by constant"
+msgstr "Multiplier par une constante"
+
+msgid "Divide by constant"
+msgstr "Diviser par une constante"
+
+msgid "Absolute value"
+msgstr "Valeur absolue"
+
+msgid "Real part"
+msgstr "Partie réelle"
+
+msgid "Imaginary part"
+msgstr "Partie imaginaire"
+
+msgid "Convert data type"
+msgstr "Convertir le type de données"
+
+msgid "Exponential"
+msgstr "Exponentielle"
+
+msgid "Logarithm (base 10)"
+msgstr "Logarithme (base 10)"
+
+msgid "Flat-field correction"
+msgstr "Correction de champ plat"
+
+msgid "flat field image"
+msgstr "l'image de champ plat"
+
+msgid "Flip horizontally"
+msgstr "Symétrie horizontale"
+
+msgid "Flip diagonally"
+msgstr "Symétrie diagonale"
+
+msgid "Flip vertically"
+msgstr "Symétrie verticale"
+
+#, python-format
+msgid "Rotate %s right"
+msgstr "Rotation directe de %s"
+
+#, python-format
+msgid "Rotate %s left"
+msgstr "Rotation inverse de %s"
+
+msgid "Rotate by..."
+msgstr "Rotation de..."
+
+msgid "Line profile"
+msgstr "Profil rectiligne"
+
+msgid "Segment profile"
+msgstr "Profil le long d'un segment"
+
+msgid "Average profile"
+msgstr "Profil moyen"
+
+msgid "Radial profile"
+msgstr "Profil radial"
+
+msgid "Linear calibration"
+msgstr "Étalonnage linéaire"
+
+msgid "Swap X/Y axes"
+msgstr "Permuter les axes X/Y"
+
+msgid "Normalize"
+msgstr "Normaliser"
+
+msgid "Clipping"
+msgstr "Écrêtage"
+
+msgid "Gaussian filter"
+msgstr "Filtre gaussien"
+
+msgid "Moving average"
+msgstr "Moyenne mobile"
+
+msgid "Moving median"
+msgstr "Médiane mobile"
+
+msgid "Wiener filter"
+msgstr "Filtre de Wiener"
+
+msgid "Zero padding"
+msgstr "Complément de zéros"
+
+msgid "Zero padding is used to increase the frequency resolution of the FFT"
+msgstr "Le complément de zéros est utilisé pour augmenter la résolution de la FFT"
+
+msgid "FFT"
+msgstr "FFT"
+
+msgid "Fast Fourier Transform (FFT) is an estimation of the Discrete Fourier Transform (DFT). Results are complex numbers, but only the real part is plotted."
+msgstr ""
+
+msgid "Inverse FFT"
+msgstr "FFT inverse"
+
+msgid "Inverse Fast Fourier Transform (IFFT) is an estimation of the Inverse Discrete Fourier Transform (IDFT). Results are complex numbers, but only the real part is plotted."
+msgstr ""
+
+msgid "Magnitude spectrum"
+msgstr "Spectre d'amplitude"
+
+msgid "Magnitude spectrum is the absolute value of the FFT result. It is a measure of the amplitude of the frequency components."
+msgstr "Le spectre d'amplitude est la valeur absolue du résultat de la transformée de Fourier rapide. Il mesure l'amplitude des composantes fréquentielles."
+
+msgid "Phase spectrum"
+msgstr "Spectre de phase"
+
+msgid "Phase spectrum is the angle of the FFT result. It is a measure of the phase of the frequency components."
+msgstr "Le spectre de phase est l'angle du résultat de la transformée de Fourier rapide. Il mesure la phase des composantes fréquentielles."
+
+msgid "Power spectral density"
+msgstr "Densité spectrale de puissance"
+
+msgid "Power spectral density (PSD) is the square of the magnitude spectrum. It is a measure of the power of the frequency components."
+msgstr "La densité spectrale de puissance est le carré du spectre d'amplitude. Elle mesure la puissance des composantes fréquentielles."
+
+msgid "Parametric thresholding"
+msgstr "Seuillage paramétrique"
+
+msgid "Parametric thresholding allows to select a thresholding method and a threshold value."
+msgstr "Le seuillage paramétrique permet de sélectionner une méthode de seuillage et une valeur de seuil."
+
+msgid "ISODATA thresholding"
+msgstr "Seuillage ISODATA"
+
+msgid "Li thresholding"
+msgstr "Seuillage Li"
+
+msgid "Mean thresholding"
+msgstr "Seuillage moyen"
+
+msgid "Minimum thresholding"
+msgstr "Seuillage minimum"
+
+msgid "Otsu thresholding"
+msgstr "Seuillage Otsu"
+
+msgid "Triangle thresholding"
+msgstr "Seuillage Triangle"
+
+msgid "Gamma correction"
+msgstr "Correction gamma"
+
+msgid "Logarithmic correction"
+msgstr "Correction logarithmique"
+
+msgid "Sigmoid correction"
+msgstr "Correction sigmoïde"
+
+msgid "Histogram equalization"
+msgstr "Egalisation d'histogramme"
+
+msgid "Adaptive histogram equalization"
+msgstr "Egalisation d'histogramme adaptative"
+
+msgid "Intensity rescaling"
+msgstr "Ajustement des niveaux"
+
+msgid "Total variation denoising"
+msgstr "Filtrage variationnel (débruitage)"
+
+msgid "Bilateral filter denoising"
+msgstr "Filtrage bilatéral (débruitage)"
+
+msgid "Wavelet denoising"
+msgstr "Débruitage par ondelettes"
+
+msgid "White Top-hat denoising"
+msgstr "Débruitage Top-Hat"
+
+msgid "White Top-Hat (disk)"
+msgstr "Top-Hat (disque)"
+
+msgid "Black Top-Hat (disk)"
+msgstr "Top-Hat dual (disque)"
+
+msgid "Erosion (disk)"
+msgstr "Erosion (disque)"
+
+msgid "Dilation (disk)"
+msgstr "Dilatation (disque)"
+
+msgid "Opening (disk)"
+msgstr "Ouverture (disque)"
+
+msgid "Closing (disk)"
+msgstr "Fermeture (disque)"
+
+msgid "Roberts filter"
+msgstr "Filtre de Roberts"
+
+msgid "Prewitt filter"
+msgstr "Filtre de Prewitt"
+
+msgid "Prewitt filter (horizontal)"
+msgstr "Filtre de Prewitt (horizontal)"
+
+msgid "Prewitt filter (vertical)"
+msgstr "Filtre de Prewitt (vertical)"
+
+msgid "Sobel filter"
+msgstr "Filtre de Sobel"
+
+msgid "Sobel filter (horizontal)"
+msgstr "Filtre de Sobel (horizontal)"
+
+msgid "Sobel filter (vertical)"
+msgstr "Filtre de Sobel (vertical)"
+
+msgid "Scharr filter"
+msgstr "Filtre de Scharr"
+
+msgid "Scharr filter (horizontal)"
+msgstr "Filtre de Scharr (horizontal)"
+
+msgid "Scharr filter (vertical)"
+msgstr "Filtre de Scharr (vertical)"
+
+msgid "Farid filter"
+msgstr "Filtre de Farid"
+
+msgid "Farid filter (horizontal)"
+msgstr "Filtre de Farid (horizontal)"
+
+msgid "Farid filter (vertical)"
+msgstr "Filtre de Farid (vertical)"
+
+msgid "Laplace filter"
+msgstr "Filtre de Laplace"
+
+msgid "Canny filter"
+msgstr "Filtre de Canny"
+
+msgid "Butterworth filter"
+msgstr "Filtre de Butterworth"
+
+msgid "Statistics"
+msgstr "Statistiques"
+
+msgid "Histogram"
+msgstr "Histogramme"
+
+msgid "Centroid"
+msgstr "Barycentre"
+
+msgid "Compute image centroid"
+msgstr "Calcule le barycentre de l'image"
+
+msgid "Minimum enclosing circle center"
+msgstr "Centre du cercle minimum"
+
+msgid "Compute smallest enclosing circle center"
+msgstr "Calcule le centre du cercle minimum"
+
+msgid "Contour detection"
+msgstr "Détection de contours"
+
+msgid "Compute contour shape fit"
+msgstr "Ajustement d'une forme géométrique à un contour"
+
+msgid "Detect peaks in the image"
+msgstr "Détection de pics dans l'image"
+
+msgid "Circle Hough transform"
+msgstr "Transformée de Hough circulaire"
+
+msgid "Detect circular shapes using circle Hough transform"
+msgstr "Détection de formes circulaires à partir d'une tranformée de Hough"
+
+msgid "Blob detection (DOG)"
+msgstr "Détection de taches (gaussien)"
+
+msgid "Detect blobs using Difference of Gaussian (DOG) method"
+msgstr "Détection de taches basée sur la méthode du discriminant gaussien"
+
+msgid "Blob detection (DOH)"
+msgstr "Détection de taches (hessien)"
+
+msgid "Detect blobs using Difference of Gaussian (DOH) method"
+msgstr "Détection de taches basée sur la méthode du hessien gaussien"
+
+msgid "Blob detection (LOG)"
+msgstr "Détection de taches (LOG)"
+
+msgid "Detect blobs using Laplacian of Gaussian (LOG) method"
+msgstr "Détection de taches basée sur la méthode du laplacien de gaussien (LOG)"
+
+msgid "Blob detection (OpenCV)"
+msgstr "Détection de taches (OpenCV)"
+
+msgid "Detect blobs using OpenCV SimpleBlobDetector"
+msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
+
+msgid "Warning:"
+msgstr "Attention :"
+
+msgid "Selected images do not have the same size"
+msgstr "Les images sélectionnées n'ont pas la même taille"
+
+msgid "Destination size:"
+msgstr "Taille de destination :"
+
+msgid "Binning"
+msgstr "Binning"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Distribute on grid"
+msgstr "Distribuer sur grille"
+
+msgid "Denoise / Top-Hat"
+msgstr "Débruitage Top-Hat"
+
+msgid "Extract ROI"
+msgstr "Extraire une ROI"
+
+msgid "Create regions of interest"
+msgstr "Créer des régions d'intérêt"
+
+msgid "signal to subtract"
+msgstr "signal à soustraire"
+
+msgid "Square root"
+msgstr "Racine carrée"
+
+msgid "Derivative"
+msgstr "Dérivée"
+
+msgid "Integral"
+msgstr "Intégrale"
+
+msgid "Convolution"
+msgstr "Convolution"
+
+msgid "signal to convolve with"
+msgstr "signal à convoluer"
+
+msgid "Reverse X-axis"
+msgstr "Inverser l'axe des X"
+
+msgid "Convert to polar coordinates"
+msgstr "Convertir en coordonnées polaires"
+
+msgid "Convert to cartesian coordinates"
+msgstr "Convertir en coordonnées cartésiennes"
+
+msgid "Power"
+msgstr "Puissance"
+
+msgid "Low-pass filter"
+msgstr "Filtre passe-bas"
+
+msgid "High-pass filter"
+msgstr "Filtre passe-haut"
+
+msgid "Band-pass filter"
+msgstr "Filtre passe-bande"
+
+msgid "Band-stop filter"
+msgstr "Filtre coupe-bande"
+
+msgid "Windowing"
+msgstr "Fenêtrage"
+
+msgid "Apply a window function (or apodization): Hanning, Hamming, ..."
+msgstr "Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, Hamming, ..."
+
+msgid "Detrending"
+msgstr "Elimination de tendance"
+
+msgid "Interpolation"
+msgstr "Interpolation"
+
+msgid "signal for X values"
+msgstr "signal pour les valeurs X"
+
+msgid "Resampling"
+msgstr "Rééchantillonnage"
+
+msgid "Allan variance"
+msgstr "Variance d'Allan"
+
+msgid "Allan deviation"
+msgstr "Ecart-type d'Allan"
+
+msgid "Overlapping Allan variance"
+msgstr "Variance d’Allan avec recouvrement"
+
+msgid "Modified Allan variance"
+msgstr "Variance d'Allan modifiée"
+
+msgid "Hadamard variance"
+msgstr "Variance de Hadamard"
+
+msgid "Total variance"
+msgstr "Variance totale"
+
+msgid "Time deviation"
+msgstr "Ecart-type temporel"
+
+msgid "X-Y mode"
+msgstr "Mode X-Y"
+
+msgid "Y-signal of the X-Y mode"
+msgstr "Signal de l'axe des ordonnées du mode X-Y"
+
+msgid "Plot one signal as a fonction of the other one"
+msgstr "Tracer un signal en fonction de l'autre"
+
+msgid "Full width at half-maximum"
+msgstr "Largeur à mi-hauteur"
+
+msgid "Full width at"
+msgstr "Largeur à "
+
+msgid "Abscissa of the minimum and maximum"
+msgstr "Abscisse du minimum et du maximum"
+
+msgid "Compute the smallest argument of the minima and the smallest argument of the maxima"
+msgstr "Calcule le plus petit argument du minimum et le plus petit argument du maximum"
+
+msgid "Sampling rate and period"
+msgstr "Fréquence et période d'échantillonnage"
+
+msgid "Compute sampling rate and period for a constant sampling signal"
+msgstr "Calcule la fréquence et la période d'échantillonnage pour un signal à pas constant"
+
+msgid "Dynamic parameters"
+msgstr "Paramètres dynamiques"
+
+msgid "Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."
+msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD..."
+
+msgid "Bandwidth at -3dB"
+msgstr "Bande passante à -3dB"
+
+msgid "Compute bandwidth at -3dB assuming a low-pass filter already expressed in dB"
+msgstr "Calcule la bande passante à -3dB en supposant un filtre passe-bas déjà exprimé en dB"
+
+msgid "Contrast"
+msgstr "Contraste"
+
+msgid "Compute contrast of a signal, i.e. (max-min)/(max+min), e.g. for an image profile"
+msgstr "Calcule le contraste d'un signal, c'est-à-dire (max-min)/(max+min), p.ex. pour un profil d'image"
+
+msgid "Edit profile parameters"
+msgstr "Modifier les paramètres du profil"
+
+msgid "Reset selection"
+msgstr "Réinitialiser la sélection"
+
+msgid "Range ROI"
+msgstr "Intervalle ROI"
+
+msgid "Rectangular ROI"
+msgstr "ROI rectangulaire"
+
+msgid "Circular ROI"
+msgstr "ROI circulaire"
+
+msgid "Polygonal ROI"
+msgstr "ROI polygonale"
+
+msgid "Graphical ROI"
+msgstr "ROI graphique"
+
+msgid "Coordinate-based ROI"
+msgstr "ROI par coordonnées"
+
+msgid "Remove all"
+msgstr "Supprimer tout"
+
+#, python-format
+msgid ""
+"Extract all ROIs\n"
+"into a single %s"
+msgstr ""
+"Extraire toutes les ROI\n"
+"dans un seul objet %s"
+
+msgid "Remove all ROIs"
+msgstr "Supprimer toutes les ROI"
+
+msgid "Are you sure you want to remove all ROIs?"
+msgstr "Êtes-vous sûr de vouloir supprimer toutes les ROI ?"
+
+msgid "Regions of interest"
+msgstr "Régions d'intérêt"
+
+msgid "Settings for main window and general features"
+msgstr "Réglages de la fenêtre principale et des fonctionnalités générales"
+
+msgid "Color mode"
+msgstr "Thème de couleur"
+
+msgid "Color mode for the application"
+msgstr "Thème de couleur pour l'application"
+
+msgid "Process isolation"
+msgstr "Isolation de processus"
+
+msgid "With process isolation, each computation is run in a separate process,<br>which prevents the application from freezing during long computations."
+msgstr "Avec l'isolation de processus, chaque calcul est exécuté dans un processus séparé,<br>ce qui évite que l'application ne se fige pendant les calculs longs."
+
+msgid "RPC server"
+msgstr "Serveur XML-RPC"
+
+msgid "RPC server is used to communicate with external applications,<br>like your own scripts (e.g. from Spyder or Jupyter) or other software."
+msgstr "Le serveur XML-RPC est utilisé pour communiquer avec des applications externes,<br>comme vos propres scripts (par exemple depuis Spyder ou Jupyter) ou d'autres logiciels."
+
+msgid "Available memory threshold"
+msgstr "Seuil de mémoire disponible"
+
+msgid "MB"
+msgstr "Mo"
+
+msgid "Threshold below which a warning is displayed before loading any new data"
+msgstr "Seuil en dessous duquel un avertissement est affiché avant de charger toute nouvelle donnée"
+
+msgid "Third-party plugins"
+msgstr "Plugins tiers"
+
+msgid "Disable third-party plugins at startup"
+msgstr "Désactiver les plugins tiers au démarrage"
+
+msgid "Plugins path"
+msgstr "Chemin des plugins"
+
+msgid "Path to third-party plugins.<br><br>DataLab will discover plugins in this path, as well as in your PYTHONPATH."
+msgstr "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans ce chemin, ainsi que dans votre PYTHONPATH."
+
+msgid "Settings for internal console, used for debugging or advanced users"
+msgstr "Réglages de la console interne, utilisée pour le débogage ou les utilisateurs avancés"
+
+msgid "Console enabled"
+msgstr "Console activée"
+
+msgid "External editor path"
+msgstr "Chemin de l'éditeur externe"
+
+msgid "External editor arguments"
+msgstr "Arguments de l'éditeur externe"
+
+msgid "Settings for I/O operations"
+msgstr "Réglages des opérations d'entrée/sortie"
+
+msgid "Clear workspace before loading HDF5 file"
+msgstr "Effacer l'espace de travail avant de charger un fichier HDF5"
+
+msgid "Ask before clearing workspace"
+msgstr "Demander avant d'effacer l'espace de travail"
+
+msgid "HDF5 full path in title"
+msgstr "Chemin complet du fichier HDF5 dans le titre"
+
+msgid "If enabled, the full path of the HDF5 data set will be used as the title for the signal/image object.<br>If disabled, only the name of the data set will be used as the title."
+msgstr "Si activé, le chemin complet du fichier HDF5 sera utilisé comme titre de l'objet signal/image.<br>Si désactivé, seul le nom du fichier HDF5 sera utilisé comme titre."
+
+msgid "HDF5 file name in title"
+msgstr "Nom du fichier HDF5 dans le titre"
+
+msgid "If enabled, the name of the HDF5 file will be used as a suffix in the title of the signal/image object."
+msgstr "Si activé, le nom du fichier HDF5 sera utilisé comme suffixe dans le titre de l'objet signal/image."
+
+msgid "Settings for computations"
+msgstr "Réglages des calculs"
+
+msgid "Operation mode"
+msgstr "Mode d'opération"
+
+#, python-format
+msgid "Operation mode for computations taking <i>N</i> inputs:<ul><li><b>single</b>: single operand mode</li><li><b>pairwise</b>: pairwise operation mode</li></ul><br>Computations taking <i>N</i> inputs are the ones where:<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
+msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
+
+msgid "FFT shift"
+msgstr "Décalage FFT"
+
+msgid "Enable FFT shift to center the zero-frequency component in the frequency spectrum for easier visualization and analysis."
+msgstr "Activer le décalage FFT pour centrer la composante de fréquence nulle dans le spectre de fréquence pour une visualisation et une analyse plus faciles."
+
+msgid "Extract ROI in single object"
+msgstr "Extraire les ROI dans un seul objet"
+
+msgid "If enabled, multiple ROIs will be extracted into a single object.<br>If disabled, each ROI will be extracted into a separate object."
+msgstr "Si activé, plusieurs ROI seront extraites dans un seul objet.<br>Si désactivé, chaque ROI sera extraite dans un objet séparé."
+
+msgid "Keep results after computation"
+msgstr "Conserver les résultats après le calcul"
+
+msgid "If enabled, the results of a previous analysis will be kept in object's metadata after the computation.<br>If disabled, the results will be removed from the object's metadata.<br><br>This option is disabled by default because keeping analysis results may be confusing as those results could be outdated following the computation."
+msgstr "Si activé, les résultats d'une analyse précédente seront conservés dans les métadonnées de l'objet après le calcul.<br>Si désactivé, les résultats seront supprimés des métadonnées de l'objet.<br><br>Cette option est désactivée par défaut car la conservation des résultats d'analyse peut prêter à confusion, car ces résultats pourraient être obsolètes suite au calcul."
+
+msgid "Ignore warnings"
+msgstr "Ignorer les avertissements"
+
+msgid "Ignore warnings during computations"
+msgstr "Ignorer les avertissements lors des calculs"
+
+msgid "Default image visualization settings"
+msgstr "Réglages d'affichage d'images par défaut"
+
+msgid "Common"
+msgstr "Commun"
+
+msgid "Plot toolbar position"
+msgstr "Position de la barre d'outils des graphiques"
+
+msgid "Top (above plot)"
+msgstr "Haut (au-dessus du graphique)"
+
+msgid "Bottom (below plot)"
+msgstr "Bas (en-dessous du graphique)"
+
+msgid "Left (of plot)"
+msgstr "Gauche (à gauche du graphique)"
+
+msgid "Right (of plot)"
+msgstr "Droite (à droite du graphique)"
+
+msgid "Signal"
+msgstr "Signal"
+
+msgid "Use auto downsampling"
+msgstr "Utiliser l'auto-sous-échantillonnage"
+
+msgid "Use auto downsampling for large signals"
+msgstr "Utiliser l'auto-sous-échantillonnage pour les signaux volumineux"
+
+msgid "Downsampling max points"
+msgstr "Nombre max. de points"
+
+msgid "Maximum number of points for downsampling"
+msgstr "Nombre maximum de points pour le sous-échantillonnage"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Use reference image LUT range"
+msgstr "Utiliser la LUT de l'image de référence"
+
+msgid "If this setting is enabled, images are shown<br>with the same LUT range as the first selected image"
+msgstr "Si cette option est activée, les images sont affichées<br>avec la même LUT que la première image sélectionnée"
+
+msgid "Eliminate outliers"
+msgstr "Eliminer les bords"
+
+msgid "%"
+msgstr "%"
+
+msgid "Eliminate a percentage of the highest and lowest values<br>of the image histogram - <i>recommanded values are below 1%</i>"
+msgstr "Eliminer un pourcentage des valeurs les plus hautes et les plus basses<br>de l'histogramme de l'image - <i>les valeurs recommandées sont inférieures à 1%</i>"
+
+msgid "Process isolation enable status"
+msgstr "Etat d'activation de l'isolation de processus"
+
+msgid "RPC server enable status"
+msgstr "Etat d'activation du serveur XML-RPC"
+
+msgid "Console enable status"
+msgstr "Etat d'activation de la console"
+
+msgid "Third-party plugins support"
+msgstr "Prise en charge des plugins tiers"
+
+msgid "Third-party plugins path"
+msgstr "Chemin des plugins tiers"
+
+msgid "General"
+msgstr "Général"
+
+msgid "Visualization"
+msgstr "Visualisation"
+
+msgid "I/O"
+msgstr "Entrée/sortie"
+
+msgid "Settings"
+msgstr "Préférences"
+
+msgid "Restart required"
+msgstr "Redémarrage requis"
+
+#, python-format
+msgid ""
+"The following options have been changed:\n"
+"\n"
+"- %s\n"
+"\n"
+"A restart is required for these changes to take effect."
+msgstr ""
+"Les options suivantes ont été modifiées :\n"
+"\n"
+"- %s\n"
+"\n"
+"Un redémarrage est nécessaire pour que ces changements prennent effet."
+
+msgid "Start"
+msgstr "Démarrer"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "Hit <b>Enter</b> to continue to the next step, or <b>Esc</b> to close the tour."
+msgstr "Taper <b>Entrée</b> pour passer à l'étape suivante, ou <b>Echap</b> pour fermer la visite guidée."
+
+msgid "Test signal, for the tour"
+msgstr "Signal de test, pour la visite guidée"
+
+msgid "Test image, for the tour"
+msgstr "Image de test, pour la visite guidée"
+
+msgid "Welcome to DataLab!"
+msgstr "Bienvenue dans DataLab !"
+
+msgid "This tour will guide you through the main features of DataLab."
+msgstr "Cette visite guidée vous présentera les principales fonctionnalités de DataLab."
+
+msgid "DataLab main window"
+msgstr "Fenêtre principale de DataLab"
+
+msgid "This is the main window of DataLab. It is composed of several parts that we will describe in the following steps."
+msgstr "Ceci est la fenêtre principale de DataLab. Elle est composée de plusieurs parties que nous décrirons dans les étapes suivantes."
+
+msgid "Menus and toolbars regroup the main actions that can be performed in DataLab. Their content is adapted to the current panel, as we will see in the following steps."
+msgstr "Les menus et barres d'outils regroupent les principales actions qui peuvent être réalisées dans DataLab. Leur contenu est adapté au panneau courant, comme nous le verrons dans les étapes suivantes."
+
+msgid "The main window is composed of two main panels: the Signal Panel, and the Image Panel.<br>Switching between panels is done using the highlighted tabs."
+msgstr "La fenêtre principale est composée de deux panneaux principaux : le panneau Signal, et le panneau Image.<br>Le passage d'un panneau à l'autre se fait en utilisant les onglets surlignés."
+
+msgid "The <b>Signal Panel</b> is used to manage 1D signals.It is composed of the elements shown in the following steps."
+msgstr "Le <b>Panneau Signal</b> est utilisé pour gérer les signaux 1D. Il est composé des éléments décrits dans les étapes suivantes."
+
+msgid "List and properties"
+msgstr "Liste et propriétés"
+
+msgid "In the highlighted area, signals are listed at the top, and their properties may be displayed and edited at the bottom.<br><br>Signals are numbered (but may be reorganized) and put together in numbered groups."
+msgstr "Dans la zone surlignée, les signaux sont listés en haut, et leurs propriétés peuvent être affichées et éditées en bas.<br><br>Les signaux sont numérotés (mais peuvent être réorganisés) et peuvent être regroupés dans des groupes numérotés."
+
+msgid "View"
+msgstr "Vue"
+
+msgid "Signals are plotted in the <b>Signal View</b>.<br><br>Curves may be customized using context menus or the vertical toolbar on the left (appearance settings are saved in the signal metadata)."
+msgstr "Les signaux sont tracés dans la <b>Vues Signal</b>.<br><br>Les courbes peuvent être personnalisées en utilisant les menus contextuels ou la barre d'outils verticale à gauche (ces réglages d'apparence sont enregistrés dans les métadonnées du signal)."
+
+msgid "File menu"
+msgstr "Menu Fichier"
+
+msgid "The <b>File</b> menu contains actions to create new signals, import and export signals individually (various formats) or to save or restore the whole workspace (HDF5 files)."
+msgstr "Le menu <b>Fichier</b> contient les actions pour créer de nouveaux signaux, importer et exporter des signaux individuellement (divers formats) ou pour enregistrer ou restaurer l'ensemble de l'espace de travail (fichiers HDF5)."
+
+msgid "Edit menu"
+msgstr "Menu Edition"
+
+msgid "The <b>Edit</b> menu contains actions to edit signals individually or in groups."
+msgstr "Le menu <b>Edition</b> contient les actions pour éditer des signaux individuellement ou en groupes."
+
+msgid "Operations menu"
+msgstr "Menu Opérations"
+
+msgid "The <b>Operations</b> menu is focused on arithmetic operations, basic mathematical functions or data type conversions."
+msgstr "Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les fonctions mathématiques de base ou les conversions de type de données."
+
+msgid "Processing menu"
+msgstr "Menu Traitement"
+
+msgid "The <b>Processing</b> menu regroups 1->1 signal processing actions."
+msgstr "Le menu <b>Traitement</b> regroupe les actions de traitement de signaux 1->1."
+
+msgid "Analysis menu"
+msgstr "Menu Analyse"
+
+msgid "The <b>Analysis</b> menu regroups 1->0 signal computing actions (that is, actions that do not modify the signals, but compute a result, e.g. scalar values), with optional ROI selection."
+msgstr "Le menu <b>Analyse</b> regroupe les actions de calculs de signaux 1->0 (c'est-à-dire les actions qui ne modifient pas les signaux, mais qui calculent un résultat, par exemple des valeurs scalaires), avec une sélection optionnelle de ROI."
+
+msgid "The <b>Image Panel</b> is used to manage 2D images. It is composed of the elements shown in the following steps."
+msgstr "Le <b>Panneau Image</b> est utilisé pour gérer les images 2D. Il est composé des éléments décrits dans les étapes suivantes."
+
+msgid "In the highlighted area, images are listed at the top, and their properties may be displayed and edited at the bottom.<br><br>Images are numbered (but may be reorganized) and put together in numbered groups."
+msgstr "Dans la zone surlignée, les images sont listées en haut, et leurs propriétés peuvent être affichées et éditées en bas.<br><br>Les images sont numérotées (mais peuvent être réorganisées) et peuvent être regroupées dans des groupes numérotés."
+
+msgid "Images are shown in the <b>Image View</b>.<br><br>The displayed images may be customized using context menus or the vertical toolbar on the left (appearance settings are saved in the image metadata)."
+msgstr "Les images sont affichées dans la <b>Vues Image</b>.<br><br>Les images affichées peuvent être personnalisées en utilisant les menus contextuels ou la barre d'outils verticale à gauche (ces réglages d'apparence sont enregistrés dans les métadonnées de l'image)."
+
+msgid "The <b>File</b> menu contains actions to create new images, import and export images individually (various formats) or to save or restore the whole workspace (HDF5 files)."
+msgstr "Le menu <b>Fichier</b> contient les actions pour créer de nouvelles images, importer et exporter des images individuellement (divers formats) ou pour enregistrer ou restaurer l'ensemble de l'espace de travail (fichiers HDF5)."
+
+msgid "The <b>Edit</b> menu contains actions to edit images individually or in groups."
+msgstr "Le menu <b>Edition</b> contient les actions pour éditer des images individuellement ou en groupes."
+
+msgid "The <b>Operations</b> menu is focused on arithmetic operations, data type conversions, pixel binning resize, intensity profiles..."
+msgstr "Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les conversions de type de données, le redimensionnement par binning de pixels, les profils d'intensité..."
+
+msgid "The <b>Processing</b> menu regroups 1->1 image processing actions (that is, actions that modify the images)."
+msgstr "Le menu <b>Traitement</b> regroupe les actions de traitement d'images 1->1 (c'est-à-dire les actions qui modifient les images)."
+
+msgid "The <b>Analysis</b> menu regroups 1->0 image computing actions (that is, actions that do not modify the images, but compute a result, e.g. circle coordinates), with optional ROI selection."
+msgstr "Le menu <b>Analyse</b> regroupe les actions de calculs d'images 1->0 (c'est-à-dire les actions qui ne modifient pas les images, mais qui calculent un résultat, par exemple les coordonnées d'un cercle), avec une sélection optionnelle de ROI."
+
+msgid "Extensions"
+msgstr "Extensions"
+
+msgid "DataLab is designed to be easily extended with new features, by using <b>Macros</b>, <b>Plugins</b> or <b>Remote Control</b>.<br><br>The common point between these mechanisms is that they are all relying on Python scripts and the <i>DataLab API</i>."
+msgstr "DataLab est conçu pour être facilement personnalisable avec de nouvelles fonctionnalités, en utilisant des <b>Macros</b>, des <b>Plugins</b> ou un <b>Contrôle à distance</b>.<br><br>Le point commun entre ces mécanismes est qu'ils reposent tous sur des scripts Python et l'<i>API DataLab</i>."
+
+msgid "Macros"
+msgstr "Macros"
+
+msgid "The <b>Macro Panel</b> allows to create, edit and run macros.<br>Macros are saved together with the DataLab workspace (HDF5 file)."
+msgstr "Le <b>Gestionnaire de Macros</b> permet de créer, éditer et exécuter des macros.<br>Les macros sont sauvegardées avec l'espace de travail DataLab (fichier HDF5)."
+
+msgid "The <b>Plugins</b> menu regroups features that are not part of the core of DataLab, but that are provided as plugins.<br>(See the documentation for more information about plugins.)"
+msgstr "Le menu <b>Plugins</b> regroupe des fonctionnalités qui ne font pas partie du coeur de DataLab, mais qui sont fournies sous forme de plugins.<br>(Voir la documentation pour plus d'informations sur les plugins.)"
+
+msgid "This is the end of the tour!"
+msgstr "C'est la fin de la visite guidée !"
+
+msgid "You can show the tour again, or close this dialog box."
+msgstr "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de dialogue."
+
+msgid "Registered plugins:"
+msgstr "Plugins enregistrés :"
+
+msgid "No plugins available"
+msgstr "Aucun plugin disponible"
+
+msgid "Plugins are disabled (see DataLab settings)"
+msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
+
+msgid "Warning"
+msgstr "Attention"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Question"
+msgstr "Question"
+
+msgid "Test data"
+msgstr "Données de test"
+
+msgid "Testing DataLab functionalities"
+msgstr "Tester les fonctionnalités de DataLab"
+
+msgid "Add noise"
+msgstr "Ajouter du bruit"
+
+msgid "Noise"
+msgstr "Bruit"
+
+msgid "Ring"
+msgstr "Anneau"
+
+msgid "Add noise to signal"
+msgstr "Ajouter du bruit au signal"
+
+msgid "Load spectrum of paracetamol"
+msgstr "Charger le spectre du paracétamol"
+
+msgid "Create noisy signal"
+msgstr "Créer un signal bruité"
+
+msgid "Add noise to image"
+msgstr "Ajouter du bruit à l'image"
+
+msgid "Create image with peaks"
+msgstr "Créer une image avec des pics"
+
+msgid "Create 2D sin cos image"
+msgstr "Créer une image 2D sin cos"
+
+msgid "Create 2D noisy gauss image"
+msgstr "Créer une image 2D gaussienne bruitée"
+
+msgid "Create 2D multi gauss image"
+msgstr "Créer une image 2D multi-gaussienne"
+
+msgid "Create annotated image"
+msgstr "Créer une image annotée"
+
+msgid "Create 2D step image"
+msgstr "Créer une image 2D échelon"
+
+msgid "Create ring image"
+msgstr "Créer une image avec un anneau"
+
+msgid "Mean"
+msgstr "Moyenne"
+
+msgid "Mean of the Gaussian distribution"
+msgstr "Moyenne de la distribution gaussienne"
+
+msgid "Standard deviation"
+msgstr "Ecart-type"
+
+msgid "Standard deviation of the Gaussian distribution"
+msgstr "Ecart-type de la distribution gaussienne"
+
+msgid "Seed"
+msgstr "Graine"
+
+msgid "Seed for random number generator"
+msgstr "Graine du générateur de nombres aléatoires"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Number"
+msgstr "Nombre"
+
+msgid "Number of points"
+msgstr "Nombre de points"
+
+msgid "Sigma of the 2D Gaussian"
+msgstr "Sigma de la gaussienne 2D"
+
+msgid "Amplitude of the 2D Gaussian"
+msgstr "Amplitude de la gaussienne 2D"
+
+msgid "Attenuation"
+msgstr "Atténuation"
+
+msgid "X<sub>center</sub>"
+msgstr "X<sub>centre</sub>"
+
+msgid "Y<sub>center</sub>"
+msgstr "Y<sub>centre</sub>"
+
+msgid "Width"
+msgstr "Largeur"
+
+msgid "Radius"
+msgstr "Rayon"
+
+msgid "Intensity"
+msgstr "Intensité"
+
+msgid "Host application"
+msgstr "Application hôte"
+
+msgid "Raise window"
+msgstr "Placer la fenêtre au premier plan"
+
+msgid "Add signal objects"
+msgstr "Ajouter des objets signaux"
+
+msgid "Add image objects"
+msgstr "Ajouter des objets images"
+
+msgid "Remove all objects"
+msgstr "Supprimer tous les objets"
+
+msgid "Import macro from file (example)"
+msgstr "Importer une macro depuis un fichier (exemple)"
+
+msgid "Close DataLab"
+msgstr "Fermer DataLab"
+
+msgid "This the host application, which embeds DataLab."
+msgstr "Ceci est une application embarquant DataLab."
+
+msgid "Open DataLab"
+msgstr "Ouvrir DataLab"
+
+msgid "Import signal from DataLab"
+msgstr "Importer un signal depuis DataLab"
+
+msgid "Import image from DataLab"
+msgstr "Importer une image depuis DataLab"
+
+msgid "Remote client test"
+msgstr "Test du client distant"
+
+msgid "This the client application, which connects to DataLab."
+msgstr "Ceci l'application cliente, qui se connecte à DataLab."
+
+msgid "Connect to DataLab"
+msgstr "Se connecter à DataLab"
+
+msgid "Execute multiple commands"
+msgstr "Exécuter des commandes multiples"
+
+msgid "Get object titles"
+msgstr "Obtenir la liste des titres"
+
+msgid "Get object uuids"
+msgstr "Obtenir la liste des uuids"
+
+msgid "Get object"
+msgstr "Obtenir un objet"
+
+msgid "Raw data (2D-Gaussian)"
+msgstr "Image brute (gaussienne 2D)"
+
+msgid "Flat data (Uniform random)"
+msgstr "Image d'homogénéité (Distribution uniforme)"
+
+msgid "Random function"
+msgstr "Fonction gaussienne aléatoire"
+
+msgid "Gaussian"
+msgstr "Gaussienne"
+
+msgid "Click OK to start the demo.<br><br><u>Note:</u><br>- Demo will cover a <i>selection</i> of DataLab features (for a complete list of features, please refer to the documentation).<br>- It won't require any user interaction."
+msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La démo couvre une <i>sélection</i> des fonctionnalités de DataLab (pour une liste complète des fonctionnalités, veuillez vous référer à la documentation).<br>- Elle ne nécessite aucune interaction de l'utilisateur."
+
+msgid "Click OK to end demo."
+msgstr "Cliquer sur OK pour terminer la démo."
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Error:"
+msgstr "Erreur:"
+
+msgid "Context"
+msgstr "Contexte"
+
+#, python-format
+msgid "The file %s could not be read:"
+msgstr "Le fichier %s n'a pas pu être ouvert :"
+
+#, python-format
+msgid "The file %s could not be written:"
+msgstr "Le fichier %s n'a pas pu être enregistré :"
+
+msgid "in this folder"
+msgstr "dans ce dossier"
+
+msgid "Open tab menu"
+msgstr "Ouvrir le menu des onglets"
+
+msgid "Connection to DataLab"
+msgstr "Connexion à DataLab"
+
+msgid "Contents of file"
+msgstr "Contenu du fichier"
+
+msgid "Polymomial fit"
+msgstr "Ajustement polynomial"
+
+msgid "Amplitude"
+msgstr "Amplitude"
+
+msgid "Base line"
+msgstr "Ligne de base"
+
+msgid "Std-dev"
+msgstr "Ecart-type"
+
+msgid "Y0"
+msgstr "Y0"
+
+msgid "A coefficient"
+msgstr "Coefficient A"
+
+msgid "B coefficient"
+msgstr "Coefficient B"
+
+msgid "y0 constant"
+msgstr "Constante y0"
+
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgid "Phase"
+msgstr "Phase"
+
+msgid "Continuous component"
+msgstr "Composante continue"
+
+msgid "Collapse all"
+msgstr "Replier tout"
+
+msgid "Expand all"
+msgstr "Déplier tout"
+
+msgid "Restore"
+msgstr "Restaurer"
+
+msgid "Restore original tree layout"
+msgstr "Restaurer l'organisation initiale de l'arbre"
+
+msgid "Collapse selection"
+msgstr "Replier la sélection"
+
+msgid "Expand selection"
+msgstr "Déplier la sélection"
+
+msgid "HDF5 Browser"
+msgstr "Explorateur HDF5"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Unsupported data"
+msgstr "Données non prises en charge"
+
+msgid "Group"
+msgstr "Groupe"
+
+msgid "Attributes"
+msgstr "Attributs"
+
+msgid "Show array"
+msgstr "Afficher le tableau"
+
+msgid "Path"
+msgstr "Chemin"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Textual preview"
+msgstr "Aperçu textuel"
+
+msgid "Select HDF5 file"
+msgstr "Sélectionner un fichier HDF5"
+
+msgid "Check all"
+msgstr "Cocher tout"
+
+msgid "Uncheck all"
+msgstr "Décocher tout"
+
+msgid "Show only supported data"
+msgstr "Afficher uniquement les données prises en charge"
+
+msgid "Show values"
+msgstr "Afficher les valeurs"
+
+msgid "Image background selection"
+msgstr "Sélection de l'arrière-plan de l'image"
+
+msgid "Background area"
+msgstr "Zone d'arrière-plan"
+
+msgid "Background value:"
+msgstr "Valeur de l'arrière-plan :"
+
+msgid "Installation configuration"
+msgstr "Configuration d'installation"
+
+msgid "User configuration"
+msgstr "Configuration utilisateur"
+
+msgid "Plugins and I/O features"
+msgstr "Plugins et fonctionnalités d'entrée/sortie"
+
+msgid "Log files were generated during current session."
+msgstr "Des journaux de bord ont été générés lors de la session en cours."
+
+msgid "Log files were generated during last session."
+msgstr "Des journaux de bord ont été générés lors de la dernière session."
+
+msgid "Log files are currently empty."
+msgstr "Les journaux de bord sont vides."
+
+msgid "Signal baseline selection"
+msgstr "Sélection de la ligne de base du signal"
+
+msgid "Select X value with cursor"
+msgstr "Sélectionner la valeur X avec le curseur"
+
+msgid "Select Y value with cursor"
+msgstr "Sélectionner la valeur Y avec le curseur"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Apply cursor position"
+msgstr "Appliquer la position du curseur"
+
+msgid "Cursor position"
+msgstr "Position du curseur"
+
+msgid "Minimum distance:"
+msgstr "Distance minimale :"
+
+msgid "Signal peak detection"
+msgstr "Détection de pics 1D"
+
+msgid "Memory available:"
+msgstr "Mémoire disponible :"
+
+msgid "Memory used:"
+msgstr "Mémoire utilisée :"
+
+msgid "Alarm threshold:"
+msgstr "Seuil d'alarme :"
+
+msgid "Memory:"
+msgstr "Mémoire :"
+
+msgid "Plugins:"
+msgstr "Plugins :"
+
+msgid "XML-RPC:"
+msgstr "XML-RPC :"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "Clipboard"
+msgstr "Presse-papiers"
+
+msgid "Source of the data"
+msgstr "Source des données"
+
+msgid "File containing the data"
+msgstr "Fichier contenant les données"
+
+msgid "Preview parameters"
+msgstr "Paramètres de l'aperçu"
+
+msgid "Maximum Number of Rows"
+msgstr "Nombre maximum de lignes"
+
+msgid "Maximum number of rows to display"
+msgstr "Nombre maximum de lignes à afficher"
+
+msgid "Select the source of the data:"
+msgstr "Sélectionner la source des données :"
+
+msgid "Source Parameters"
+msgstr "Paramètres de la source"
+
+msgid "Delimiter"
+msgstr "Délimiteur"
+
+msgid "Tab"
+msgstr "Tabulation"
+
+msgid "Space"
+msgstr "Espace"
+
+msgid "Column delimiter character"
+msgstr "Caractère délimiteur de colonne"
+
+msgid "Decimal"
+msgstr "Décimal"
+
+msgid "Point"
+msgstr "Point"
+
+msgid "Comma"
+msgstr "Virgule"
+
+msgid "Decimal separator character"
+msgstr "Caractère séparateur décimal"
+
+msgid "Comments"
+msgstr "Commentaires"
+
+msgid "Character that indicates a comment line"
+msgstr "Caractère indiquant une ligne de commentaire"
+
+msgid "Rows to Skip"
+msgstr "Lignes à sauter"
+
+msgid "Number of rows to skip at the beginning of the file (including comments)"
+msgstr "Nombre de lignes à sauter au début du fichier (y compris les commentaires)"
+
+msgid "Max. nb of rows"
+msgstr "Nb max. de lignes"
+
+msgid "Maximum number of rows to import"
+msgstr "Nombre maximum de lignes à importer"
+
+msgid "Header"
+msgstr "En-tête"
+
+msgid "None"
+msgstr "Aucun"
+
+msgid "Infer"
+msgstr "Inférer"
+
+msgid "First row"
+msgstr "Première ligne"
+
+msgid "Row index to use as the column names"
+msgstr "Indice de ligne à utiliser comme noms de colonnes"
+
+msgid "Transpose"
+msgstr "Transposer"
+
+msgid "Transpose the data (swap rows and columns)"
+msgstr "Transposer les données (échanger les lignes et les colonnes)"
+
+msgid "Data type"
+msgstr "Type de données"
+
+msgid "Output signal data type."
+msgstr "Type de données du signal de sortie."
+
+msgid "First Column is X"
+msgstr "La première colonne est X"
+
+msgid ""
+"First column contains the X values\n"
+"(ignored if there is only one column)"
+msgstr ""
+"La première colonne contient les valeurs des X\n"
+"(ignoré s'il n'y a qu'une seule colonne)"
+
+msgid "Output image data type."
+msgstr "Type de données de l'image générée."
+
+msgid "Raw Data"
+msgstr "Données brutes"
+
+msgid "Preview"
+msgstr "Aperçu"
+
+msgid "Data Preview"
+msgstr "Aperçu des données"
+
+msgid "Preview and modify the import settings:"
+msgstr "Aperçu et modification des paramètres d'importation :"
+
+msgid "Import Parameters"
+msgstr "Paramètres d'importation"
+
+msgid "Reading data"
+msgstr "Lecture des données"
+
+#, python-format
+msgid ""
+"The number of signals to import is very high (%d).\n"
+"This may be an error.\n"
+"\n"
+"Are you sure you want to continue?"
+msgstr ""
+"Le nombre de signaux à importer est très élevé (%d).\n"
+"Cela peut être une erreur.\n"
+"\n"
+"Etes-vous sûr de vouloir continuer ?"
+
+msgid "Graphical Representation"
+msgstr "Représentation graphique"
+
+msgid "Graphical representation of the imported data"
+msgstr "Représentation graphique des données importées"
+
+#, python-format
+msgid "Unselect the %s that you do not want to import:"
+msgstr "Désélectionner les %s que vous ne voulez pas importer :"
+
+msgid "signals"
+msgstr "signaux"
+
+msgid "images"
+msgstr "images"
+
+msgid "Select all"
+msgstr "Tout sélectionner"
+
+msgid "Adding data to the plot"
+msgstr "Ajout des données au graphique"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "X label"
+msgstr "Titre X"
+
+msgid "Y label"
+msgstr "Titre Y"
+
+msgid "X unit"
+msgstr "Unité X"
+
+msgid "Y unit"
+msgstr "Unité Y"
+
+msgid "Z label"
+msgstr "Titre Z"
+
+msgid "Z unit"
+msgstr "Unité Z"
+
+msgid "Labels and units"
+msgstr "Titres et unités"
+
+msgid "Set the labels and units for the imported data"
+msgstr "Définir les titres et unités pour les données importées"
+
+msgid "The following title, labels and units will be applied to the data.<br><br><i><u>Note</u>: Leave empty the labels and units to keep the default values (i.e. the values which were inferred from the data).</i>"
+msgstr "Les titres, étiquettes et unités suivants seront appliqués aux données.<br><br><i><u>Note</u> : Laisser vide les étiquettes et unités pour conserver les valeurs par défaut (c'est-à-dire les valeurs qui ont été déduites des données)."
+
+msgid "clipboard"
+msgstr "presse-papiers"
+
+msgid "Imported from:"
+msgstr "Importer depuis :"
+
+msgid "DataLab Import Wizard"
+msgstr "Assistant d'importation de DataLab"
+
+msgid "Error message"
+msgstr "Message d'erreur"
+
+msgid "The following traceback may help to understand the problem:"
+msgstr "Le traceback suivant peut aider à comprendre le problème :"
+
+msgid "Warning message"
+msgstr "Message d'avertissement"
+
+msgid "Please take into account the following warning message:"
+msgstr "Merci de prendre en compte le message d'avertissement suivant :"
+
+msgid "An error has occured during the following context:"
+msgstr "Une erreur est survenue dans le contexte suivant:"
+
+msgid "Tip"
+msgstr "Astuce"
+
+msgid "Please click on the 'Ignore' button to ignore this warning next time."
+msgstr "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la prochaine fois."
+
+msgid "Back"
+msgstr "Précédent"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "Finish"
+msgstr "Terminer"
+
+msgid "Welcome to the Example Wizard"
+msgstr "Bienvenue dans l'assistant exemple"
+
+msgid "This wizard will guide you through the process of importing data."
+msgstr "Cet assistant vous guidera à travers le processus d'importation de données."
+
+msgid "Select the Source of the Data"
+msgstr "Sélectionner la source des données"
+
+msgid "Select the source of the data to be imported (clipboard or file)."
+msgstr "Sélectionner la source des données à importer (presse-papiers ou fichier)."
+
+msgid "Browse..."
+msgstr "Parcourir..."
+
+msgid "Select the File to Import"
+msgstr "Sélectionner le fichier à importer"
+
+msgid "CSV Files (*.csv);;Text Files (*.txt);;All Files (*)"
+msgstr "Fichiers CSV (*.csv);;Fichiers texte (*.txt);;Tous les fichiers (*)"
+
+msgid "Please select the file to import."
+msgstr "Merci de sélectionner le fichier à importer."
+
+msgid "Example Wizard"
+msgstr "Assistant exemple"
+
+msgid "Operator"
+msgstr "Opérateur"
+
+msgid "Factor"
+msgstr "Facteur"
+
+msgid "Constant"
+msgstr "Constante"
+
+msgid "Operation"
+msgstr "Opération"
+
+msgid "Convert to `obj1` data type"
+msgstr "Convertir vers le type de données de `obj1`"
+
+msgid "Result"
+msgstr "Résultat"
+
+msgid ""
+"Mode of the filter:\n"
+"- 'reflect': Reflect the data at the boundary\n"
+"- 'constant': Pad with a constant value\n"
+"- 'nearest': Pad with the nearest value\n"
+"- 'mirror': Reflect the data at the boundary with the data itself\n"
+"- 'wrap': Circular boundary"
+msgstr ""
+"Mode du filtre :\n"
+"- 'reflect' : Réfléchir les données à la frontière\n"
+"- 'constant' : Remplir avec une valeur constante\n"
+"- 'nearest' : Remplir avec la valeur la plus proche\n"
+"- 'mirror' : Réfléchir les données à la frontière avec les données elles-mêmes\n"
+"- 'wrap' : Frontière circulaire"
+
+msgid "Size of the moving window"
+msgstr "Taille de la fenêtre glissante"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "Lower clipping value"
+msgstr "Borne inférieure d'écrêtage"
+
+msgid "Upper clipping value"
+msgstr "Borne supérieure d'écrêtage"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Area"
+msgstr "Aire"
+
+msgid "Energy"
+msgstr "Energie"
+
+msgid "RMS"
+msgstr "RMS"
+
+msgid "Normalize with respect to"
+msgstr "Normaliser par rapport à"
+
+msgid "Number of bins"
+msgstr "Nombre de classes"
+
+msgid "Lower limit"
+msgstr "Limite inférieure"
+
+msgid "Upper limit"
+msgstr "Limite supérieure"
+
+msgid "Shift"
+msgstr "Décalage"
+
+msgid "Shift zero frequency to center"
+msgstr "Décaler la fréquence nulle au centre"
+
+msgid "Logarithmic scale"
+msgstr "Echelle logarithmique"
+
+msgid "Constant value"
+msgstr "Constante"
+
+msgid "columns"
+msgstr "colonnes"
+
+msgid "rows"
+msgstr "lignes"
+
+msgid "Distribute over"
+msgstr "Distribuer selon les"
+
+msgid "Columns"
+msgstr "Colonnes"
+
+msgid "Rows"
+msgstr "Lignes"
+
+msgid "Column spacing"
+msgstr "Espace entre chaque colonne"
+
+msgid "Row spacing"
+msgstr "Espace entre chaque ligne"
+
+msgid "Relative threshold"
+msgstr "Seuil relatif"
+
+msgid "Detection threshold, relative to difference between data maximum and minimum"
+msgstr "Seuil de détection, relatif à la différence entre le maximum et le minimum des données de l'image"
+
+msgid "Neighborhoods size"
+msgstr "Taille du voisinage"
+
+msgid "Size of the sliding window used in maximum/minimum filtering algorithm"
+msgstr "Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage maximum/minimum"
+
+msgid "Ellipse"
+msgstr "Ellipse"
+
+msgid "Circle"
+msgstr "Cercle"
+
+msgid "Polygon"
+msgstr "Polygone"
+
+msgid "Shape"
+msgstr "Forme"
+
+msgid "The minimum standard deviation for Gaussian Kernel. Keep this low to detect smaller blobs."
+msgstr "L'écart-type minimal pour le noyau gaussien. Cette valeur doit être faible pour détecter de petites taches."
+
+msgid "The maximum standard deviation for Gaussian Kernel. Keep this high to detect larger blobs."
+msgstr "L'écart-type maximal pour le noyau gaussien. Cette valeur doit être élevée pour détecter de grandes taches."
+
+msgid "Minimum intensity of blobs."
+msgstr "Intensité minimale des taches."
+
+msgid "Overlap"
+msgstr "Recouvrement"
+
+msgid "If two blobs overlap by a fraction greater than this value, the smaller blob is eliminated."
+msgstr "Si deux taches ont un taux de recouvrement supérieur à ce seuil, alors la plus petite tache est éliminée."
+
+msgid "Exclude border"
+msgstr "Exclure la bordure"
+
+msgid "If True, exclude blobs from the border of the image."
+msgstr "Si le réglage est actif, exclure les taches de la bordure de l'image."
+
+msgid "Log scale"
+msgstr "Echelle logarithmique"
+
+msgid "If set intermediate values of standard deviations are interpolated using a logarithmic scale to the base 10. If not, linear interpolation is used."
+msgstr "Les valeurs intermédiaires d'écart-type peuvent être interpolées selon une échelle linéaire ou logarithmique."
+
+msgid "Min. threshold"
+msgstr "Seuil min."
+
+msgid "The minimum threshold between local maxima and minima. This parameter does not affect the quality of the blobs, only the quantity. Lower thresholds result in larger numbers of blobs."
+msgstr "Le seuil minimum entre les maxima et minima locaux. Ce paramètre n'affecte pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un nombre plus important de taches."
+
+msgid "Max. threshold"
+msgstr "Seuil max."
+
+msgid "The maximum threshold between local maxima and minima. This parameter does not affect the quality of the blobs, only the quantity. Lower thresholds result in larger numbers of blobs."
+msgstr "Le seuil maximum entre les maxima et minima locaux. Ce paramètre n'affecte pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un nombre plus important de taches."
+
+msgid "Min. repeatability"
+msgstr "Répétabilité min."
+
+msgid "The minimum number of times a blob needs to be detected in a sequence of images to be considered valid."
+msgstr "Le nombre minimum de fois qu'une tache doit être détectée dans une séquence d'images pour être considérée valide."
+
+msgid "Min. distance between blobs"
+msgstr "Distance min. entre taches"
+
+msgid "The minimum distance between two blobs. If blobs are found closer together than this distance, the smaller blob is removed."
+msgstr "La distance minimale entre deux taches. Si deux taches sont détectées à une distance inférieure à celle-ci, alors la plus petite tache est éliminée."
+
+msgid "Filter by color"
+msgstr "Filtrer par couleur"
+
+msgid "If true, the image is filtered by color instead of intensity."
+msgstr "Si vrai, l'image est filtrée par couleur au lieu d'intensité."
+
+msgid "Blob color"
+msgstr "Couleur de la tache"
+
+msgid "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
+msgstr "La couleur des taches à détecter (0 pour les taches foncées, 255 pour les taches claires)."
+
+msgid "Filter by area"
+msgstr "Filtrer par aire"
+
+msgid "If true, the image is filtered by blob area."
+msgstr "Si vrai, l'image est filtrée par l'aire des taches."
+
+msgid "Min. area"
+msgstr "Aire min."
+
+msgid "The minimum blob area."
+msgstr "L'aire minimale des taches."
+
+msgid "Max. area"
+msgstr "Aire max."
+
+msgid "The maximum blob area."
+msgstr "L'aire maximale des taches."
+
+msgid "Filter by circularity"
+msgstr "Filtrer par circularité"
+
+msgid "If true, the image is filtered by blob circularity."
+msgstr "Si vrai, l'image est filtrée par la circularité des taches."
+
+msgid "Min. circularity"
+msgstr "Circularité min."
+
+msgid "The minimum circularity of the blobs."
+msgstr "La circularité minimale des taches."
+
+msgid "Max. circularity"
+msgstr "Circularité max."
+
+msgid "The maximum circularity of the blobs."
+msgstr "La circularité maximale des taches."
+
+msgid "Filter by inertia"
+msgstr "Filtrer par inertie"
+
+msgid "If true, the image is filtered by blob inertia."
+msgstr "Si vrai, l'image est filtrée par l'inertie des taches."
+
+msgid "Min. inertia ratio"
+msgstr "Ratio d'inertie min."
+
+msgid "The minimum inertia ratio of the blobs."
+msgstr "Le ratio d'inertie minimal des taches."
+
+msgid "Max. inertia ratio"
+msgstr "Ratio d'inertie max."
+
+msgid "The maximum inertia ratio of the blobs."
+msgstr "Le ratio d'inertie maximal des taches."
+
+msgid "Filter by convexity"
+msgstr "Filtrer par convexité"
+
+msgid "If true, the image is filtered by blob convexity."
+msgstr "Si vrai, l'image est filtrée par la convexité des taches."
+
+msgid "Min. convexity"
+msgstr "Convexité min."
+
+msgid "The minimum convexity of the blobs."
+msgstr "La convexité minimale des taches."
+
+msgid "Max. convexity"
+msgstr "Convexité max."
+
+msgid "The maximum convexity of the blobs."
+msgstr "La convexité maximale des taches."
+
+msgid "Radius<sub>min</sub>"
+msgstr "Rayon<sub>min</sub>"
+
+msgid "Radius<sub>max</sub>"
+msgstr "Rayon<sub>max</sub>"
+
+msgid "Minimal distance"
+msgstr "Distance minimale"
+
+msgid "Standard deviation of the Gaussian filter."
+msgstr "Ecart-type du filtrage gaussien"
+
+msgid "Low threshold"
+msgstr "Seuil bas"
+
+msgid "Lower bound for hysteresis thresholding (linking edges)."
+msgstr "Borne inférieure pour le seuillage par hystérésis (liaison des contours)."
+
+msgid "High threshold"
+msgstr "Seuil haut"
+
+msgid "Upper bound for hysteresis thresholding (linking edges)."
+msgstr "Borne supérieure pour le seuillage par hystérésis (liaison des contours)."
+
+msgid "Use quantiles"
+msgstr "Utiliser les quantiles"
+
+msgid "If True then treat low_threshold and high_threshold as quantiles of the edge magnitude image, rather than absolute edge magnitude values. If True then the thresholds must be in the range [0, 1]."
+msgstr "Interprète les seuils bas et haut en tant que quantiles des niveaux des contours, au lieu de valeurs absolues des contours. Si le réglage est actif, alors les seuils doivent être compris entre 0 et 1."
+
+msgid "Value to fill past edges of input if mode is constant."
+msgstr "Valeur de remplissage si le mode est constant."
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Gamma correction factor (higher values give more contrast)."
+msgstr "Facteur de correction gamma (plus la valeur est élevée, plus le contraste est important)."
+
+msgid "Gain"
+msgstr "Gain"
+
+msgid "Gain factor (higher values give more contrast)."
+msgstr "Facteur de gain (plus la valeur est élevée, plus le contraste est important)."
+
+msgid "If True, apply inverse logarithmic transformation."
+msgstr "Si vrai, appliquer une transformation logarithmique inverse."
+
+msgid "Cutoff"
+msgstr "Cutoff"
+
+msgid "Cutoff value (higher values give more contrast)."
+msgstr "Valeur de coupure (plus la valeur est élevée, plus le contraste est important)."
+
+msgid "If True, apply inverse sigmoid transformation."
+msgstr "Si vrai, appliquer une transformation sigmoïde inverse."
+
+msgid "Input range"
+msgstr "Echelle de niveaux en entrée"
+
+msgid "Min and max intensity values of input image ('image' refers to input image min/max levels, 'dtype' refers to input image data type range)."
+msgstr "Valeurs min/max d'intensité de l'image en entrée ('image' correspond aux niveaux min/max de l'image en entrée, 'dtype' correspond aux valeurs min/max du type de données de l'image)."
+
+msgid "Output range"
+msgstr "Echelle de niveaux en sortie"
+
+msgid "Min and max intensity values of output image  ('image' refers to input image min/max levels, 'dtype' refers to input image data type range).."
+msgstr "Valeurs min/max d'intensité de l'image en sortie ('image' correspond aux niveaux min/max de l'image en entrée, 'dtype' correspond aux valeurs min/max du type de données de l'image)."
+
+msgid "Number of bins for image histogram."
+msgstr "Nombre de classes de l'histogramme des niveaux de l'image."
+
+msgid "Clipping limit"
+msgstr "Écrêtage limite"
+
+msgid "Clipping limit (higher values give more contrast)."
+msgstr "Valeur d'écrêtage (plus la valeur est élevée, plus le contraste est important)."
+
+msgid "horizontal"
+msgstr "horizontal"
+
+msgid "vertical"
+msgstr "vertical"
+
+msgid "Direction"
+msgstr "Direction"
+
+msgid "Row"
+msgstr "Ligne"
+
+msgid "Column"
+msgstr "Colonne"
+
+msgid "Start row"
+msgstr "Ligne (début)"
+
+msgid "Start column"
+msgstr "Colonne (début)"
+
+msgid "End row"
+msgstr "Ligne (fin)"
+
+msgid "End column"
+msgstr "Colonne (fin)"
+
+msgid "Profile rectangular area"
+msgstr "Zone rectangulaire du profil"
+
+msgid "Row 1"
+msgstr "Ligne 1"
+
+msgid "Row 2"
+msgstr "Ligne 2"
+
+msgid "Column 1"
+msgstr "Colonne 1"
+
+msgid "Column 2"
+msgstr "Colonne 2"
+
+msgid "Center position"
+msgstr "Position du centre"
+
+msgid "Image centroid"
+msgstr "Barycentre de l'image"
+
+msgid "Image center"
+msgstr "Centre de l'image"
+
+msgid "User-defined"
+msgstr "Défini par l'utilisateur"
+
+msgid "Center"
+msgstr "Centre"
+
+msgid "Cut-off frequency ratio"
+msgstr "Fréquence de coupure relative"
+
+msgid "If True, apply high-pass filter instead of low-pass"
+msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas"
+
+msgid "Order"
+msgstr "Ordre"
+
+msgid "Order of the Butterworth filter"
+msgstr "Ordre du filtre de Butterworth"
+
+msgid "Padding strategy"
+msgstr "Stratégie de complément de zéros"
+
+msgid "Rows to add"
+msgstr "Lignes à ajouter"
+
+msgid "Columns to add"
+msgstr "Colonnes à ajouter"
+
+msgid "Padding position"
+msgstr "Position du complément de zéros"
+
+msgid "cval"
+msgstr "cval"
+
+msgid "Value used for points outside the boundaries of the input if mode is 'constant'"
+msgstr "Valeur utilisée pour les points situés en dehors des frontières de l'image d'origine (si le mode est 'constant')"
+
+msgid "Reshape the output array"
+msgstr "Redimensionner l'image de destination"
+
+msgid "Reshape the output array so that the input array is contained completely in the output"
+msgstr "Redimensionner l'image de destination de sorte qu'elle puisse contenir la totalité de l'image source"
+
+msgid "Prefilter the input image"
+msgstr "Prétraitement de l'image d'origine (spline)"
+
+msgid "Spline interpolation order"
+msgstr "Ordre de l'interpolation de type spline"
+
+msgid "Zoom"
+msgstr "Zoom"
+
+msgid "Cluster size (X)"
+msgstr "Nombre de pixels (X)"
+
+msgid "Number of adjacent pixels to be combined together along X-axis."
+msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des X."
+
+msgid "Cluster size (Y)"
+msgstr "Nombre de pixels (Y)"
+
+msgid "Number of adjacent pixels to be combined together along Y-axis."
+msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
+
+msgid "Change pixel size"
+msgstr "Modifier la taille des pixels"
+
+msgid "Change pixel size so that overall image size remains the same."
+msgstr "Modification de la taille des pixels de sorte que les dimensions de l'images restent les mêmes après l'opération."
+
+msgid "Footprint (disk) radius."
+msgstr "Rayon de l'ouverture circulaire (disque)."
+
+msgid "Denoising weight"
+msgstr "Poids de débruitage"
+
+msgid "The greater weight, the more denoising (at the expense of fidelity to input)."
+msgstr "Plus le poids est élevé, plus le débruitage est fort (aux dépens de la fidélité des données)."
+
+msgid "Relative difference of the value of the cost function that determines the stop criterion. The algorithm stops when: (E_(n-1) - E_n) < eps * E_0"
+msgstr "Différence relative de la valeur de la fonction de coût qui détermine le critère d'arrêt de l'algorithme. Ce dernier s'arrête lorsque : (E_(n-1) - E_n) < eps * E_0"
+
+msgid "Max. iterations"
+msgstr "Nb. max. d'itérations"
+
+msgid "Maximal number of iterations used for the optimization"
+msgstr "Nombre maximal d'itérations utilisé pour l'optimisation"
+
+msgid "Standard deviation for range distance. A larger value results in averaging of pixels with larger spatial differences."
+msgstr "Ecart-type dans le domaine spatial. Une valeur élevée a pour effet de moyenner des pixels séparés par de grandes distances."
+
+msgid "Used in conjunction with mode 'constant', the value outside the image boundaries."
+msgstr "Valeur de remplissage en dehors des bornes de l'image (en mode constant)."
+
+msgid "Wavelet"
+msgstr "Ondelette"
+
+msgid "Manual"
+msgstr "Manuel"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Triangle"
+msgstr "Triangle"
+
+msgid "Threshold method"
+msgstr "Méthode de seuillage"
+
+msgid "Threshold value"
+msgstr "Valeur de seuil"
+
+msgid "Greater than"
+msgstr "Supérieur à"
+
+msgid "Less than"
+msgstr "Inférieur à"
+
+msgid "Destination data type"
+msgstr "Type de données de destination"
+
+msgid "Threshold"
+msgstr "Seuil"
+
+msgid "Minimum distance"
+msgstr "Distance minimale"
+
+msgid "X-axis"
+msgstr "Axe des X"
+
+msgid "Y-axis"
+msgstr "Axe des Y"
+
+msgid "Calibrate"
+msgstr "Étalonner"
+
+msgid "Bessel"
+msgstr "Bessel"
+
+msgid "Butterworth"
+msgstr "Butterworth"
+
+msgid "Chebyshev type 1"
+msgstr "Chebyshev de type 1"
+
+msgid "Chebyshev type 2"
+msgstr "Chebyshev de type 2"
+
+msgid "Elliptic"
+msgstr "Elliptique"
+
+msgid "Filter method"
+msgstr "Méthode de filtrage"
+
+msgid "Filter order"
+msgstr "Ordre du filtre"
+
+msgid "Low cutoff frequency"
+msgstr "Fréquence de coupure basse"
+
+msgid "High cutoff frequency"
+msgstr "Fréquence de coupure haute"
+
+msgid "Passband ripple"
+msgstr "Ondulation de la bande passante"
+
+msgid "Stopband attenuation"
+msgstr "Atténuation de la bande d'arrêt"
+
+msgid "Strategy"
+msgstr "Stratégie"
+
+msgid "Number of points to add"
+msgstr "Nombre de points à ajouter"
+
+msgid "Degree"
+msgstr "Degré"
+
+msgid "Counts"
+msgstr "Coups"
+
+msgid "Linear"
+msgstr "Linéaire"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Quadratic"
+msgstr "Quadratique"
+
+msgid "Cubic"
+msgstr "Cubique"
+
+msgid "Barycentric"
+msgstr "Barycentrique"
+
+msgid "PCHIP"
+msgstr "PCHIP"
+
+msgid "Interpolation method"
+msgstr "Méthode d'interpolation"
+
+msgid "Fill value"
+msgstr "Valeur de remplissage"
+
+msgid "Value to use for points outside the interpolation domain (used only with linear, cubic and pchip methods)."
+msgstr "Valeur à utiliser pour les points en dehors du domaine d'interpolation (utilisé uniquement avec les méthodes linéaire, cubique et pchip)."
+
+msgid "X<sub>min</sub>"
+msgstr "X<sub>min</sub>"
+
+msgid "X<sub>max</sub>"
+msgstr "X<sub>max</sub>"
+
+msgid "Detrending method"
+msgstr "Méthode d'élimation de la tendance"
+
+msgid "Cosine"
+msgstr "Cosinus"
+
+msgid "Flat top"
+msgstr "Sommet plat"
+
+msgid "Rectangular"
+msgstr "Rectangulaire"
+
+msgid "Method"
+msgstr "Méthode"
+
+msgid "Shape parameter of the Tukey windowing function"
+msgstr "Paramètre de forme de la fonction de fenêtrage de Tukey"
+
+msgid "Shape parameter of the Kaiser windowing function"
+msgstr "Paramètre de forme de la fonction de fenêtrage de Kaiser"
+
+msgid "Shape parameter of the Gaussian windowing function"
+msgstr "Paramètre de forme de la fonction de fenêtrage gaussienne"
+
+msgid "Radian"
+msgstr "Radian"
+
+msgid "Angle unit"
+msgstr "Unité de l'angle"
+
+msgid "Zero-crossing"
+msgstr "Passage par zéro"
+
+msgid "Lower X boundary (empty for no limit, i.e. start of the signal)"
+msgstr "Borne X inférieure (vide pour aucune limite, c'est-à-dire le début du signal)"
+
+msgid "Upper X boundary (empty for no limit, i.e. end of the signal)"
+msgstr "Borne X supérieure (vide pour aucune limite, c'est-à-dire la fin du signal)"
+
+msgid "Ordinate"
+msgstr "Coordonnées"
+
+msgid "Abscissa"
+msgstr "Abscisse"
+
+msgid "Full scale"
+msgstr "Pleine échelle"
+
+msgid "Unit for SINAD"
+msgstr "Unité pour SINAD"
+
+msgid "Unit"
+msgstr "Unité"
+
+msgid "Number of harmonics"
+msgstr "Nombre d'harmoniques"
+
+msgid "Number of harmonics to consider for THD"
+msgstr "Nombre d'harmoniques à considérer pour le THD"
+
+msgid "All supported files"
+msgstr "Tous les fichiers pris en charge"
+
+msgid "Image I/O formats"
+msgstr "Formats d'entrée/sortie d'images"
+
+msgid "Text files"
+msgstr "Fichiers texte"
+
+msgid "MAT-Files"
+msgstr "Fichiers MAT"
+
+msgid "Signal I/O formats"
+msgstr "Formats d'entrée/sortie de signaux"
+
+msgid "CSV files"
+msgstr "Fichiers CSV"
+
+msgid "NumPy binary files"
+msgstr "Fichiers binaires NumPy"
+
+msgid "Uniform distribution lower bound"
+msgstr "Borne inférieure de la distribution uniforme"
+
+msgid "Uniform distribution higher bound"
+msgstr "Borne supérieure de la distribution uniforme"
+
+msgid "Normal distribution mean"
+msgstr "Moyenne de la distribution normale"
+
+msgid "Normal distribution standard deviation"
+msgstr "Ecart-type de la distribution normale"
+
+msgid "Geometry"
+msgstr "Géométrie"
+
+msgid "Top left corner"
+msgstr "Coin supérieur gauche"
+
+msgid "Center coordinates"
+msgstr "Coordonnées du centre"
+
+msgid "Coordinates"
+msgstr "Coordonnées"
+
+msgid "Data"
+msgstr "Données"
+
+msgid "Metadata"
+msgstr "Métadonnées"
+
+msgid "Origin"
+msgstr "Origine"
+
+msgid "Pixel spacing"
+msgstr "Taille des pixels"
+
+msgid "Image title"
+msgstr "Titre de l'image"
+
+msgid "Z-axis"
+msgstr "Axe des Z"
+
+msgid "Scales"
+msgstr "Echelles"
+
+msgid "Auto scale"
+msgstr "Echelle automatique"
+
+msgid "Lower bound"
+msgstr "Borne inférieure"
+
+msgid "Upper bound"
+msgstr "Borne supérieure"
+
+msgid "LUT range"
+msgstr "Plage de LUT"
+
+msgid "zeros"
+msgstr "zéros"
+
+msgid "empty"
+msgstr "vide"
+
+msgid "gaussian"
+msgstr "gaussienne"
+
+msgid "random (uniform law)"
+msgstr "aléatoire (loi uniforme)"
+
+msgid "random (normal law)"
+msgstr "aléatoire (loi normale)"
+
+msgid "Untitled image"
+msgstr "Image sans titre"
+
+msgid "Height"
+msgstr "Hauteur"
+
+msgid "Image height: number of rows"
+msgstr "Hauteur de l'image : nombre de lignes"
+
+msgid "Image width: number of columns"
+msgstr "Largeur de l'image : nombre de colonnes"
+
+msgid "First point coordinate"
+msgstr "Coordonnée du premier point"
+
+msgid "Last point coordinate"
+msgstr "Coordonnée du dernier point"
+
+msgid "Data and metadata"
+msgstr "Données et métadonnées"
+
+msgid "Signal title"
+msgstr "Titre du signal"
+
+msgid "Titles and units"
+msgstr "Titres et unités"
+
+msgid "lorentzian"
+msgstr "lorentzienne"
+
+msgid "sinus"
+msgstr "sinus"
+
+msgid "cosinus"
+msgstr "cosinus"
+
+msgid "sawtooth"
+msgstr "dent de scie"
+
+msgid "triangle"
+msgstr "triangle"
+
+msgid "square"
+msgstr "carré"
+
+msgid "cardinal sine"
+msgstr "sinus cardinal"
+
+msgid "step"
+msgstr "échelon"
+
+msgid "exponential"
+msgstr "exponentielle"
+
+msgid "pulse"
+msgstr "impulsion"
+
+msgid "polynomial"
+msgstr "polynomial"
+
+msgid "experimental"
+msgstr "expérimental"
+
+msgid "Offset"
+msgstr "Offset"
+
+msgid "Exponent"
+msgstr "Exposant"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "Untitled signal"
+msgstr "Signal sans titre"
+
+msgid "Signal size (total number of points)"
+msgstr "Nombre de points"

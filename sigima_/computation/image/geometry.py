@@ -33,10 +33,10 @@ import scipy.ndimage as spi
 from plotpy.mathutils.geometry import vector_rotation
 
 import sigima_.algorithms.image as alg
-from cdl.config import _
 from sigima_.computation import computation_function
 from sigima_.computation.base import dst_1_to_1
 from sigima_.computation.image.base import Wrap1to1Func
+from sigima_.config import _
 from sigima_.obj.image import ImageObj
 
 

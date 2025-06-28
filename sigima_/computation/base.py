@@ -17,10 +17,8 @@ from typing import TYPE_CHECKING
 import guidata.dataset as gds
 import numpy as np
 
-from cdl.config import _
 from sigima_ import ImageObj, ResultProperties, SignalObj, create_signal
-from sigima_.algorithms.datatypes import is_complex_dtype
-from sigima_.config import options
+from sigima_.config import _, options
 
 if TYPE_CHECKING:
     from typing import Callable

@@ -13,8 +13,8 @@ import os.path as osp
 
 import numpy as np
 
-from cdl.config import _
 from cdl.utils.qthelpers import CallbackWorker
+from sigima_.config import _
 from sigima_.io.base import BaseIORegistry, FormatBase
 from sigima_.obj.signal import SignalObj, create_signal
 

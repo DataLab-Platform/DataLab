@@ -31,7 +31,6 @@ import numpy as np
 from skimage import exposure
 
 import sigima_.algorithms.image as alg
-from cdl.config import _
 from sigima_.computation import computation_function
 from sigima_.computation.base import (
     ClipParam,
@@ -42,6 +41,7 @@ from sigima_.computation.base import (
     new_signal_result,
 )
 from sigima_.computation.image.base import Wrap1to1Func, restore_data_outside_roi
+from sigima_.config import _
 from sigima_.obj.base import BaseProcParam
 from sigima_.obj.image import ImageObj, ROI2DParam
 from sigima_.obj.signal import SignalObj

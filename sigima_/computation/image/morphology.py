@@ -20,10 +20,10 @@ from __future__ import annotations
 import guidata.dataset as gds
 from skimage import morphology
 
-from cdl.config import _
 from sigima_.computation import computation_function
 from sigima_.computation.base import dst_1_to_1
 from sigima_.computation.image.base import restore_data_outside_roi
+from sigima_.config import _
 from sigima_.obj.image import ImageObj
 
 

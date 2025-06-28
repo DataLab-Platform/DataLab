@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import guidata.dataset as gds
 
-from cdl.config import _
+from sigima_.config import _
 from sigima_.computation.image.base import (
     Wrap1to1Func,
     calc_resultshape,

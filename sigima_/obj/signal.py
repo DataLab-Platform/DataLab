@@ -17,12 +17,12 @@ import guidata.dataset as gds
 import numpy as np
 import scipy.signal as sps
 
-from cdl.config import _
 from sigima_.algorithms.signal.fitmodels import (
     GaussianModel,
     LorentzianModel,
     VoigtModel,
 )
+from sigima_.config import _
 from sigima_.obj import base
 
 

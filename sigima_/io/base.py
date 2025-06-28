@@ -15,7 +15,7 @@ import os.path as osp
 import re
 from typing import TYPE_CHECKING
 
-from cdl.config import _
+from sigima_.config import _
 from sigima_.obj.base import BaseObj
 
 if TYPE_CHECKING:

@@ -22,9 +22,9 @@ import numpy as np
 from numpy import ma
 from skimage import draw
 
-from cdl.config import _
 from sigima_.algorithms.datatypes import clip_astype
 from sigima_.algorithms.image import scale_data_to_min_max
+from sigima_.config import _
 from sigima_.obj import base
 
 

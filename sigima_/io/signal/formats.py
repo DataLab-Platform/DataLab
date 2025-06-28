@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 import scipy.io as sio
 
-from cdl.config import _
+from sigima_.config import _
 from sigima_.io.base import FormatInfo
 from sigima_.io.converters import convert_array_to_standard_type
 from sigima_.io.signal import funcs
