@@ -55,7 +55,7 @@ def restore_data_outside_roi(dst: ImageObj, src: ImageObj) -> None:
 class Wrap1to1Func:
     """Wrap a 1 array → 1 array function to produce a 1 image → 1 image function,
     which can be used inside DataLab's infrastructure to perform computations with
-    :class:`cdl.gui.processor.image.ImageProcessor`.
+    the Image Processor object.
 
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
@@ -109,8 +109,8 @@ class Wrap1to1Func:
 
 
 def dst_1_to_1_signal(src: ImageObj, name: str, suffix: str | None = None) -> SignalObj:
-    """Create a result signal object, as returned by the callback function of the
-    :func:`cdl.gui.processor.base.BaseProcessor.compute_1_to_1` method
+    """Create a result signal object, for processing functions that take a single
+    image object as input and return a single signal object (1-to-1-signal).
 
     Args:
         src: input image object

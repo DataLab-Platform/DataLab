@@ -5,7 +5,7 @@ Parameters (:mod:`sigima_.param`)
 ---------------------------------
 
 The :mod:`sigima_.param` module aims at providing all the dataset parameters that are
-used by the :mod:`sigima_.computation` and :mod:`cdl.gui.processor` packages.
+used by the :mod:`sigima_.computation` and DataLab's processors.
 
 Those datasets are defined in other modules:
 

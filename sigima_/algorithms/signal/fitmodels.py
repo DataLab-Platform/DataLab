@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Fit Models (see parent package :mod:`cdl.algorithms`)
+.. Fit Models (see parent package :mod:`sigima_.algorithms`)
 
 """
 

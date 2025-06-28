@@ -16,7 +16,6 @@ part of the DataLab open-source platform.
 # ** Task 1. Core Architecture Redesign **
 # **   Milestone 1.c. Redesign the API for the new core library **
 # TODO: Remove all dependencies on `cdl` package on all modules
-# TODO: Remove all references for `Conf` (no need for it in `sigima_` package?)
 # TODO: Handle the NumPy minimum requirement to v1.21 to use advanced type hints?
 # TODO: Should we keep `PREFIX` attribute in `BaseObj`? (it's clearly useful for
 #       `cdl` package, but not used in `sigima_` package - however, it may be tricky

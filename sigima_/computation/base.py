@@ -179,8 +179,8 @@ class ConstantParam(gds.DataSet):
 def dst_1_to_1(
     src: SignalObj | ImageObj, name: str, suffix: str | None = None
 ) -> SignalObj | ImageObj:
-    """Create a result object, as returned by the callback function of the
-    :func:`cdl.gui.processor.base.BaseProcessor.compute_1_to_1` method.
+    """Create a result object, for processing functions that take a single
+    signal or image object as input and return a single signal or image object (1-to-1).
 
     .. note::
 
@@ -216,8 +216,8 @@ def dst_1_to_1(
 def dst_n_to_1(
     src_list: list[SignalObj | ImageObj], name: str, suffix: str | None = None
 ) -> SignalObj | ImageObj:
-    """Create a result object, as returned by the callback function of the
-    :func:`cdl.gui.processor.base.BaseProcessor.compute_n_to_1` method
+    """Create a result object, for processing functions that take a list of signal or
+    image objects as input and return a single signal or image object (n-to-1).
 
     .. note::
 
@@ -270,8 +270,8 @@ def dst_2_to_1(
     name: str,
     suffix: str | None = None,
 ) -> SignalObj | ImageObj:
-    """Create a result  object, as returned by the callback function of the
-    :func:`cdl.gui.processor.base.BaseProcessor.compute_2_to_1` method
+    """Create a result  object, for processing functions that take two signal or
+    image objects as input and return a single signal or image object (2-to-1).
 
     .. note::
 

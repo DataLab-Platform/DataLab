@@ -172,7 +172,8 @@ class ShapeTypes(enum.Enum):
 
 class BaseResult(abc.ABC):
     """Base class for results, i.e. objects returned by computation functions
-    used by :py:class`cdl.gui.processor.base.BaseProcessor.compute_1_to_0` method.
+    taking one signal or image as input, and returning a result that can be
+    serialized in signal/image metadata.
 
     Args:
         title: result title
