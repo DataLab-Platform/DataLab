@@ -299,7 +299,7 @@ def __compute_grid(
 
 
 def view_images_side_by_side(
-    images: list[ImageItem | np.ndarray],
+    images: list[ImageItem | np.ndarray | ImageObj],
     titles: list[str],
     share_axes: bool = True,
     rows: int | None = None,
@@ -309,7 +309,7 @@ def view_images_side_by_side(
     """Show sequence of images
 
     Args:
-        images: List of `ImageItem` or `np.ndarray` objects to display
+        images: List of `ImageItem`, `np.ndarray`, or `ImageObj` objects to display
         titles: List of titles for each image
         share_axes: Whether to share axes across plots, default is True
         rows: Fixed number of rows in the grid, or None to compute automatically
@@ -326,7 +326,13 @@ def view_images_side_by_side(
             if isinstance(img, ImageItem):
                 item = img
             else:
-                item = make.image(img, interpolation="nearest", eliminate_outliers=0.1)
+                if isinstance(img, ImageObj):
+                    data = img.data
+                elif isinstance(img, np.ndarray):
+                    data = img
+                else:
+                    raise TypeError(f"Unsupported image type: {type(img)}")
+                item = make.image(data, interpolation="nearest", eliminate_outliers=0.1)
             plot.add_item(item)
             win.add_plot(row, col, plot, sync=share_axes)
         win.finalize_configuration()

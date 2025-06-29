@@ -9,18 +9,21 @@ Image peak detection test using circle Hough transform
 # guitest: show
 
 import numpy as np
-from guidata.qthelpers import qt_app_context
-from plotpy.builder import make
+import pytest
 from skimage.feature import canny
 
-from cdl.env import execenv
 from sigima_.algorithms.image import get_hough_circle_peaks
+from sigima_.env import execenv
 from sigima_.tests.data import get_peak2d_data
-from sigima_.tests.vistools import view_image_items
 
 
 def __exec_hough_circle_test(data):
     """Peak detection using circle Hough transform"""
+    # pylint: disable=import-outside-toplevel
+    from plotpy.builder import make
+
+    from sigima_.tests import vistools
+
     edges = canny(
         data,
         sigma=30,
@@ -47,11 +50,15 @@ def __exec_hough_circle_test(data):
         xc, yc, r = shapeargs
         item = make.circle(xc - r, yc, xc + r, yc)
         items.append(item)
-    view_image_items(items)
+    vistools.view_image_items(items)
 
 
+@pytest.mark.gui
 def test_hough_circle():
     """2D peak detection test"""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         __exec_hough_circle_test(get_peak2d_data(multi=False))
 

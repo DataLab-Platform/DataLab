@@ -12,45 +12,43 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from guidata.qthelpers import exec_dialog, qt_app_context
 
 import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
-from cdl.adapters_plotpy.factories import create_adapter_from_object
-from cdl.env import execenv
-from cdl.widgets.imagebackground import ImageBackgroundDialog
 from sigima_.tests.data import create_noisygauss_image
-from sigima_.tests.vistools import view_images_side_by_side
 
 
+@pytest.mark.gui
 def test_image_offset_correction_interactive() -> None:
     """Image offset correction interactive test."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+    from plotpy.builder import make
+    from plotpy.items import RectangleShape
+    from plotpy.tools import RectangleTool
+    from plotpy.widgets.selectdialog import SelectDialog, select_with_shape_tool
+
+    from sigima_.tests import vistools
+
     with qt_app_context():
         i1 = create_noisygauss_image()
-        dlg = ImageBackgroundDialog(i1)
-        with execenv.context(delay=200):
-            # On Windows, the `QApplication.processEvents()` introduced with
-            # guidata V3.5.1 in `exec_dialog` is sufficient to force an update
-            # of the dialog. The delay is not required.
-            # On Linux, the delay is required to ensure that the dialog is displayed
-            # because the `QApplication.processEvents()` do not trigger the drawing
-            # event on the dialog as expected. So, the `RangeComputation2d` is not
-            # drawn, the background value is not computed, and `get_rect_coords()`
-            # returns `None` which causes the test to fail.
-            ok = exec_dialog(dlg)
-        if ok:
+        shape: RectangleShape = select_with_shape_tool(
+            None,
+            RectangleTool,
+            make.image(i1.data, interpolation="nearest", eliminate_outliers=1.0),
+            "Select background area",
+            tooldialogclass=SelectDialog,
+        )
+        if shape is not None:
             param = sigima_.obj.ROI2DParam()
             # pylint: disable=unbalanced-tuple-unpacking
-            ix0, iy0, ix1, iy1 = i1.physical_to_indices(dlg.get_rect_coords())
+            ix0, iy0, ix1, iy1 = i1.physical_to_indices(shape.get_rect())
             param.x0, param.y0, param.dx, param.dy = ix0, iy0, ix1 - ix0, iy1 - iy0
             i2 = sigima_image.offset_correction(i1, param)
             i3 = sigima_image.clip(i2, sigima_.param.ClipParam.create(lower=0))
-            view_images_side_by_side(
-                [
-                    create_adapter_from_object(i1).make_item(),
-                    create_adapter_from_object(i3).make_item(),
-                ],
+            vistools.view_images_side_by_side(
+                [i1, i3],
                 titles=["Original image", "Corrected image"],
                 title="Image offset correction and thresholding",
             )

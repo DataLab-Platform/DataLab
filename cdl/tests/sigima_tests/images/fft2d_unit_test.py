@@ -16,15 +16,17 @@ import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
 import sigima_.tests.data as ctd
-from cdl.env import execenv
+from sigima_.env import execenv
 from sigima_.tests.helpers import check_array_result, check_scalar_result
-from sigima_.tests.vistools import view_images_side_by_side
 
 
+@pytest.mark.gui
 def test_image_fft_interactive():
     """2D FFT interactive test."""
     # pylint: disable=import-outside-toplevel
     from guidata.qthelpers import qt_app_context
+
+    from sigima_.tests import vistools
 
     with qt_app_context():
         # Create a 2D ring image
@@ -45,7 +47,7 @@ def test_image_fft_interactive():
 
         images = [data, f.real, f.imag, np.abs(f), data2.real, data2.imag]
         titles = ["Original", "Re(FFT)", "Im(FFT)", "Abs(FFT)", "Re(iFFT)", "Im(iFFT)"]
-        view_images_side_by_side(images, titles, rows=2, title="2D FFT/iFFT")
+        vistools.view_images_side_by_side(images, titles, rows=2, title="2D FFT/iFFT")
 
 
 @pytest.mark.validation

@@ -19,15 +19,13 @@ from typing import Generator
 import numpy as np
 import pytest
 import scipy.ndimage as spi
-from guidata.qthelpers import qt_app_context
 
 import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
-from cdl.env import execenv
+from sigima_.env import execenv
 from sigima_.tests.data import create_noisygauss_image
 from sigima_.tests.helpers import check_array_result
-from sigima_.tests.vistools import view_images_side_by_side
 
 
 def __iterate_images() -> Generator[sigima_.obj.ImageObj, None, None]:
@@ -154,7 +152,7 @@ def test_image_product() -> None:
 
 
 @pytest.mark.validation
-def test_image_division() -> None:
+def test_image_division(request: pytest.FixtureRequest) -> None:
     """Image division test."""
     execenv.print("*** Testing image division:")
     for ima1, ima2 in __iterate_image_couples():
@@ -164,10 +162,16 @@ def test_image_division() -> None:
         exp = ima1.data.astype(float) / ima2.data.astype(float)
         ima3 = sigima_image.division(ima1, ima2)
         if not np.allclose(ima3.data, exp):
-            with qt_app_context():
-                view_images_side_by_side(
-                    [ima1.data, ima2.data, ima3.data], ["ima1", "ima2", "ima3"]
-                )
+            if request.config.getoption("--gui"):
+                # pylint: disable=import-outside-toplevel
+                from guidata.qthelpers import qt_app_context
+
+                from sigima_.tests.vistools import view_images_side_by_side
+
+                with qt_app_context():
+                    view_images_side_by_side(
+                        [ima1.data, ima2.data, ima3.data], ["ima1", "ima2", "ima3"]
+                    )
         check_array_result("Image division", ima3.data, exp)
 
 
