@@ -26,6 +26,11 @@ from sigima_.env import execenv
 TST_PATH = []
 
 
+def get_test_paths() -> list[str]:
+    """Return the list of test data paths"""
+    return TST_PATH
+
+
 def add_test_path(path: str) -> None:
     """Appends test data path, after normalizing it and making it absolute.
     Do nothing if the path is already in the list.

@@ -9,6 +9,7 @@ executed before running any tests.
 """
 
 import os
+import os.path as osp
 import subprocess
 
 import guidata
@@ -24,6 +25,7 @@ import skimage
 import cdl
 from cdl.env import execenv
 from cdl.plugins import get_available_plugins
+from sigima_.tests import helpers
 
 # Turn on unattended mode for executing tests without user interaction
 execenv.unattended = True
@@ -84,6 +86,10 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
     if envlist:
         infolist.append("Environment variables:")
         infolist.extend(envlist)
+    infolist.append("Test paths:")
+    for test_path in helpers.get_test_paths():
+        test_path = osp.abspath(test_path)
+        infolist.append(f"  {test_path}")
     sco = subprocess.check_output
     try:
         gitlist = ["Git information:"]
