@@ -14,7 +14,7 @@ Testing the following:
 # guitest: show
 
 from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
-from cdl.tests.features.common.stat_unit_test import (
+from cdl.tests.sigima_tests.common.stat_unit_test import (
     create_reference_image,
     create_reference_signal,
 )

@@ -20,19 +20,14 @@ import time
 import numpy as np
 import pytest
 import scipy.ndimage as spi
-from guidata.qthelpers import qt_app_context
 from numpy import ma
-from plotpy.builder import make
 
 import sigima_.algorithms.image as alg
 import sigima_.computation.image as sigima_image
 import sigima_.obj
-from cdl.config import _
-from cdl.env import execenv
-from sigima_.tests.data import (
-    create_noisygauss_image,
-    get_laser_spot_data,
-)
+from sigima_.config import _
+from sigima_.env import execenv
+from sigima_.tests.data import create_noisygauss_image, get_laser_spot_data
 from sigima_.tests.helpers import check_scalar_result
 from sigima_.tests.vistools import view_image_items
 
@@ -57,17 +52,11 @@ def get_centroid_with_cv2(data):
     return row, col
 
 
-def add_xcursor(items, x, y, title):
-    """Added X cursor to plot"""
-    label = "  " + f"{_('Centroid')}[{title}] (x=%s, y=%s)"
-    execenv.print(label % (x, y))
-    cursor = make.xcursor(x, y, label=label)
-    cursor.setTitle(title)
-    items.append(cursor)
-
-
-def compare_centroid_funcs(data):
+def __compare_centroid_funcs(data):
     """Compare centroid methods"""
+    # pylint: disable=import-outside-toplevel
+    from plotpy.builder import make
+
     items = []
     items += [make.image(data, interpolation="nearest", eliminate_outliers=2.0)]
     # Computing centroid coordinates
@@ -79,22 +68,30 @@ def compare_centroid_funcs(data):
     ):
         try:
             t0 = time.time()
-            row, col = func(data)
+            y, x = func(data)
             dt = time.time() - t0
-            add_xcursor(items, col, row, name)
+            label = "  " + f"{_('Centroid')}[{name}] (x=%s, y=%s)"
+            execenv.print(label % (x, y))
+            cursor = make.xcursor(x, y, label=label)
+            cursor.setTitle(name)
+            items.append(cursor)
             execenv.print(f"    Calculation time: {int(dt * 1e3):d} ms")
         except ImportError:
             execenv.print(f"    Unable to compute {name}: missing module")
     view_image_items(items)
 
 
-def test_centroid_graphically():
+@pytest.mark.gui
+def test_image_centroid_interactive():
     """Centroid test comparing different methods and showing results"""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         for data in get_laser_spot_data():
             execenv.print(f"Data[dtype={data.dtype},shape={data.shape}]")
             # Testing with masked arrays
-            compare_centroid_funcs(data.view(ma.MaskedArray))
+            __compare_centroid_funcs(data.view(ma.MaskedArray))
 
 
 def __check_centroid(image, expected_x, expected_y):
@@ -121,5 +118,5 @@ def test_image_centroid():
 
 
 if __name__ == "__main__":
-    test_centroid_graphically()
+    test_image_centroid_interactive()
     test_image_centroid()
