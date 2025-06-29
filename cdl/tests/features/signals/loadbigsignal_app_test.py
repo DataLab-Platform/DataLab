@@ -19,7 +19,7 @@ import pytest
 
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.utils.tests import CDLTemporaryDirectory
+from cdl.utils.tests import WorkdirRestoringTempDir
 
 
 def create_large_random_dataframe(nrows: int, ncols: int) -> pd.DataFrame:
@@ -61,7 +61,7 @@ def create_large_random_dataframe(nrows: int, ncols: int) -> pd.DataFrame:
 @pytest.mark.parametrize("nrows, ncols", [(10000, 16)])
 def test_loadbigsignal_app(nrows: int, ncols: int) -> None:
     """Load big signal application test"""
-    with CDLTemporaryDirectory() as tmpdir:
+    with WorkdirRestoringTempDir() as tmpdir:
         with cdltest_app_context() as win:
             execenv.print("Loading big signal application test:")
             execenv.print("  - Working in temporary directory:", tmpdir)

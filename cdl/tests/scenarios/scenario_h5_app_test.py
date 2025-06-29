@@ -29,13 +29,13 @@ from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_noisygauss_image, create_paracetamol_signal
 from cdl.tests.scenarios import scenario_mac_app_test
 from cdl.utils.strings import save_html_diff
-from cdl.utils.tests import CDLTemporaryDirectory
+from cdl.utils.tests import WorkdirRestoringTempDir
 from sigima_.param import ClipParam
 
 
 def test_scenario_h5():
     """Example of high-level test scenario with HDF5 file"""
-    with CDLTemporaryDirectory() as tmpdir:
+    with WorkdirRestoringTempDir() as tmpdir:
         with cdltest_app_context(console=False) as win:
             # === Creating two test signals
             panel = win.signalpanel

@@ -15,7 +15,7 @@ import os.path as osp
 from cdl.env import execenv
 from cdl.plugins import discover_plugins
 from cdl.utils.strings import reduce_path
-from cdl.utils.tests import CDLTemporaryDirectory, get_test_fnames
+from cdl.utils.tests import WorkdirRestoringTempDir, get_test_fnames
 from sigima_.io.base import BaseIORegistry
 from sigima_.io.image import ImageIORegistry
 from sigima_.io.signal import SignalIORegistry
@@ -28,7 +28,7 @@ def __testfunc(
 ) -> None:
     """Test I/O features"""
     execenv.print(f"  {title}:")
-    with CDLTemporaryDirectory() as tmpdir:
+    with WorkdirRestoringTempDir() as tmpdir:
         # os.startfile(tmpdir)
         fnames = get_test_fnames(pattern, in_folder)
         objects = {}

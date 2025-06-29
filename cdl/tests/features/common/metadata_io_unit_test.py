@@ -25,7 +25,7 @@ from cdl.utils.tests import compare_metadata
 def test_metadata_io_unit():
     """Run image tools test scenario"""
     with execenv.context(unattended=True):
-        with tests.CDLTemporaryDirectory() as tmpdir:
+        with tests.WorkdirRestoringTempDir() as tmpdir:
             fname = osp.join(tmpdir, "test.json")
             with cdltest_app_context() as win:
                 panel = win.imagepanel

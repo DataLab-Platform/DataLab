@@ -76,7 +76,7 @@ def test_macro_editor():
         widget.rename_macro(1, new_title)
         assert widget.get_macro_titles()[0] == new_title
 
-        with tests.CDLTemporaryDirectory() as tmpdir:
+        with tests.WorkdirRestoringTempDir() as tmpdir:
             fname = osp.join(tmpdir, "macro.py")
             widget.export_macro_to_file(1, fname)
             widget.import_macro_from_file(fname)

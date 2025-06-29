@@ -13,14 +13,14 @@ import numpy as np
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import get_test_image
-from cdl.utils.tests import CDLTemporaryDirectory, compare_metadata
+from cdl.utils.tests import WorkdirRestoringTempDir, compare_metadata
 from sigima_.obj import create_image
 
 
 def test_dict_serialization():
     """Dictionnary/List in metadata (de)serialization test"""
     with execenv.context(unattended=True):
-        with CDLTemporaryDirectory() as tmpdir:
+        with WorkdirRestoringTempDir() as tmpdir:
             with cdltest_app_context(console=False) as win:
                 panel = win.imagepanel
 

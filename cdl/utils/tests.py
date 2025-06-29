@@ -129,16 +129,26 @@ def get_output_data_path(extension: str, suffix: str | None = None) -> str:
     return osp.join(TST_PATH[0], f"{name}.{extension}")
 
 
-class CDLTemporaryDirectory(tempfile.TemporaryDirectory):
-    """DataLab's temporary directory class that ignores errors when cleaning up,
-    and restores the current working directory after cleanup"""
+class WorkdirRestoringTempDir(tempfile.TemporaryDirectory):
+    """Enhanced temporary directory with working directory preservation.
+
+    A subclass of :py:class:`tempfile.TemporaryDirectory` that:
+
+    * Preserves and automatically restores the working directory during cleanup
+    * Handles common cleanup errors silently (PermissionError, RecursionError)
+
+    Example::
+
+        with WorkdirRestoringTempDir() as tmpdir:
+            os.chdir(tmpdir)  # Directory change is automatically reverted at exit
+    """
 
     def __init__(self) -> None:
         super().__init__()
         self.__cwd = os.getcwd()
 
     def cleanup(self) -> None:
-        """Cleanup temporary directory and ignore errors"""
+        """Clean up temporary directory, restore working directory, ignore errors."""
         os.chdir(self.__cwd)
         try:
             super().cleanup()
@@ -148,7 +158,7 @@ class CDLTemporaryDirectory(tempfile.TemporaryDirectory):
 
 def get_temporary_directory() -> str:
     """Return path to a temporary directory, and clean-up at exit"""
-    tmp = CDLTemporaryDirectory()
+    tmp = WorkdirRestoringTempDir()
     atexit.register(tmp.cleanup)
     return tmp.name
 
