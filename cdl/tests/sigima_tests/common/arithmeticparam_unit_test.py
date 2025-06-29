@@ -7,14 +7,18 @@ Arithmetic parameters unit test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from guidata.qthelpers import qt_app_context
+import pytest
 
-from cdl.env import execenv
+from sigima_.env import execenv
 from sigima_.param import ArithmeticParam
 
 
+@pytest.mark.gui
 def test_arithmetic_param_interactive():
     """Arithmetic parameters interactive test."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         param = ArithmeticParam()
         if param.edit():

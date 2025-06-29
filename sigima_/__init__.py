@@ -47,8 +47,9 @@ part of the DataLab open-source platform.
 # TODO: Add local translations for the `sigima_` package
 #
 # ** Task 2. Technical Validation and Testing **
-# TODO: Add `pytest` infrastructure. Step 2: migrate `cdl/tests/sigima_`
-#       to `sigima_/tests` directory.
+# TODO: Add `pytest` infrastructure. Step 2: migrate `cdl/tests/sigima_tests`
+#       to `sigima_/tests` directory and create a `conftest.py` file using the
+#       `cdl/tests/conftest.py` file as a template (see TODOs in that file).
 #
 # ** Task 3. Documentation and Training Materials **
 # TODO: Add documentation. Step 1: initiate `sigima_` package documentation
