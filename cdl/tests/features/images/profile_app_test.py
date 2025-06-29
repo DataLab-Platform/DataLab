@@ -18,7 +18,7 @@ Testing the profile extraction features of the image panel:
 
 import sigima_.param
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import create_noisygauss_image, get_test_image
+from sigima_.tests.data import create_noisygauss_image, get_test_image
 
 
 def test_profile():

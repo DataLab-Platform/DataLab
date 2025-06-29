@@ -25,7 +25,7 @@ import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
 from cdl.env import execenv
-from cdl.tests.data import create_noisygauss_image
+from sigima_.tests.data import create_noisygauss_image
 from sigima_.tests.helpers import check_array_result
 from sigima_.tests.vistools import view_images_side_by_side
 

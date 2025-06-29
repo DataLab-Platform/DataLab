@@ -15,8 +15,8 @@ from plotpy.builder import make
 
 from cdl.config import _
 from cdl.env import execenv
-from cdl.tests.data import get_laser_spot_data
 from sigima_.algorithms.image import get_centroid_fourier, get_enclosing_circle
+from sigima_.tests.data import get_laser_spot_data
 from sigima_.tests.vistools import view_image_items
 
 

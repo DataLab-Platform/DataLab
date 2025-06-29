@@ -21,7 +21,7 @@ import sigima_.param
 from cdl.env import execenv
 from cdl.objectmodel import get_uuid
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import (
+from sigima_.tests.data import (
     create_2dstep_image,
     create_paracetamol_signal,
     get_test_fnames,

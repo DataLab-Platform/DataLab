@@ -17,18 +17,18 @@ from cdl.config import _
 from cdl.gui.main import CDLMainWindow
 from cdl.gui.panel.image import ImagePanel
 from cdl.gui.panel.signal import SignalPanel
-from cdl.tests.data import (
+from cdl.tests.features.common.newobject_unit_test import (
+    iterate_image_creation,
+    iterate_signal_creation,
+)
+from cdl.widgets import fitdialog
+from sigima_.tests.data import (
     GaussianNoiseParam,
     create_noisy_signal,
     create_paracetamol_signal,
     create_peak2d_image,
     create_sincos_image,
 )
-from cdl.tests.features.common.newobject_unit_test import (
-    iterate_image_creation,
-    iterate_signal_creation,
-)
-from cdl.widgets import fitdialog
 
 
 def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) -> None:

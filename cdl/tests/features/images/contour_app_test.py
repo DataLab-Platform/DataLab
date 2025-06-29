@@ -10,9 +10,9 @@ Contour finding application test
 import sigima_.param
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
-from cdl.tests.data import create_multigauss_image
 from cdl.tests.features.common.roi_app_test import create_test_image_with_roi
 from sigima_.obj import NewImageParam
+from sigima_.tests.data import create_multigauss_image
 
 
 def test_contour_app():

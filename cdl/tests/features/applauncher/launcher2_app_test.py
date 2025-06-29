@@ -11,8 +11,8 @@ then open DataLab to show them.
 # guitest: show
 
 from cdl.app import run
-from cdl.tests import data as test_data
 from sigima_.obj import NewImageParam
+from sigima_.tests import data as test_data
 
 
 def test_launcher2():

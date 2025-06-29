@@ -9,7 +9,7 @@ Edges processing application test
 
 import sigima_.param
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import get_test_image
+from sigima_.tests.data import get_test_image
 
 
 def test_edges():

@@ -16,8 +16,8 @@ import numpy as np
 import sigima_.obj
 import sigima_.param
 from cdl.tests import cdltest_app_context
-from cdl.tests import data as test_data
 from sigima_.config import options as sigima_options
+from sigima_.tests import data as test_data
 
 
 def create_image_with_resultshapes() -> sigima_.obj.ImageObj:

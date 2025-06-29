@@ -12,8 +12,8 @@ import numpy as np
 
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import get_test_image
 from sigima_.obj import create_image
+from sigima_.tests.data import get_test_image
 from sigima_.tests.helpers import WorkdirRestoringTempDir, compare_metadata
 
 

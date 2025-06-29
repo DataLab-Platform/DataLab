@@ -19,8 +19,8 @@ import sigima_.obj
 import sigima_.param
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
-from cdl.tests.data import create_noisygauss_image
 from cdl.widgets.imagebackground import ImageBackgroundDialog
+from sigima_.tests.data import create_noisygauss_image
 from sigima_.tests.vistools import view_images_side_by_side
 
 

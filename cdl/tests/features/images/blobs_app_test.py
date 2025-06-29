@@ -10,8 +10,8 @@ Blob detection application test
 import sigima_.param
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.tests import cdltest_app_context, skip_if_opencv_missing
-from cdl.tests.data import get_test_image
 from sigima_.obj import create_image
+from sigima_.tests.data import get_test_image
 
 
 def test_blobs():

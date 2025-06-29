@@ -8,7 +8,7 @@ This plugin is an example of DataLab plugin. It provides test data samples
 and some actions to test DataLab functionalities.
 """
 
-import cdl.tests.data as test_data
+import sigima_.tests.data as test_data
 from cdl.config import _
 from cdl.plugins import PluginBase, PluginInfo
 from sigima_.computation.base import dst_1_to_1

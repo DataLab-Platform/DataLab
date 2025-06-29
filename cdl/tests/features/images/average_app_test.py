@@ -18,8 +18,8 @@ uint8.
 
 import numpy as np
 
-import cdl.tests.data as ctd
 import sigima_.obj
+import sigima_.tests.data as ctd
 from cdl.tests import cdltest_app_context
 from sigima_.tests.helpers import check_array_result
 

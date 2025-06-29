@@ -11,9 +11,9 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 from guidata.qthelpers import qt_app_context
 
 from cdl.env import execenv
-from cdl.tests.data import GaussianNoiseParam, create_noisy_signal, get_test_signal
 from cdl.widgets import fitdialog as fdlg
 from sigima_.algorithms.signal.peakdetection import peak_indices
+from sigima_.tests.data import GaussianNoiseParam, create_noisy_signal, get_test_signal
 from sigima_.tests.helpers import get_default_test_name
 
 

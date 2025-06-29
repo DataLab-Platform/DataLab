@@ -17,7 +17,7 @@ import sigima_.param
 from cdl.env import execenv
 from cdl.objectmodel import get_short_id, get_uuid
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import create_paracetamol_signal
+from sigima_.tests.data import create_paracetamol_signal
 
 
 def test_main_app():

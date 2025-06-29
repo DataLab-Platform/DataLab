@@ -15,9 +15,9 @@ from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
 from cdl.env import execenv
-from cdl.tests.data import get_peak2d_data
 from sigima_.algorithms import coordinates
 from sigima_.algorithms.image import get_2d_peaks_coords, get_contour_shapes
+from sigima_.tests.data import get_peak2d_data
 from sigima_.tests.vistools import view_image_items
 
 

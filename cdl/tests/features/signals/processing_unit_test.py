@@ -26,12 +26,12 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from packaging.version import Version
 
-import cdl.tests.data as ctd
 import sigima_.algorithms.coordinates as alg_coords
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
-from cdl.tests.data import get_test_signal
+import sigima_.tests.data as ctd
+from sigima_.tests.data import get_test_signal
 from sigima_.tests.helpers import check_array_result, check_scalar_result
 
 

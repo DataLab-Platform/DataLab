@@ -20,7 +20,6 @@ from skimage import draw
 import sigima_.param as sigima_param
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
 from sigima_.obj import (
     ImageObj,
     ImageROI,
@@ -30,6 +29,7 @@ from sigima_.obj import (
     create_image_roi,
     create_signal_roi,
 )
+from sigima_.tests.data import create_multigauss_image, create_paracetamol_signal
 
 if TYPE_CHECKING:
     from cdl.gui.panel.image import ImagePanel

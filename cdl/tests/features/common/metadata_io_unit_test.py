@@ -17,7 +17,7 @@ import os.path as osp
 
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.tests import data as test_data
+from sigima_.tests import data as test_data
 from sigima_.tests import helpers
 from sigima_.tests.helpers import compare_metadata
 

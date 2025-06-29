@@ -12,8 +12,8 @@ Testing peak detection dialog box.
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.env import execenv
-from cdl.tests.data import get_test_signal
 from cdl.widgets.signalpeak import SignalPeakDetectionDialog
+from sigima_.tests.data import get_test_signal
 
 
 def test_peak1d():

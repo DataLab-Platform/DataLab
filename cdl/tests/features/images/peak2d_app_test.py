@@ -12,7 +12,7 @@ Testing the following:
 
 import sigima_.param
 from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
-from cdl.tests.data import create_peak2d_image
+from sigima_.tests.data import create_peak2d_image
 
 
 def test_peak2d():

@@ -20,8 +20,8 @@ from cdl.gui.panel.base import BaseDataPanel
 from cdl.gui.panel.image import ImagePanel
 from cdl.gui.panel.signal import SignalPanel
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common import roi_app_test
+from sigima_.tests.data import create_paracetamol_signal
 
 
 def __run_signal_computations(panel: SignalPanel):

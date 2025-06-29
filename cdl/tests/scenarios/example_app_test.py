@@ -14,7 +14,7 @@ import sigima_.obj
 import sigima_.param
 from cdl.proxy import proxy_context
 from cdl.tests import skip_if_opencv_missing
-from cdl.tests.data import get_test_image
+from sigima_.tests.data import get_test_image
 
 
 def test_example_app() -> None:

@@ -15,8 +15,8 @@ from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
 
 from cdl.env import execenv
-from cdl.tests.data import get_test_fnames
 from cdl.widgets.h5browser import H5BrowserDialog
+from sigima_.tests.data import get_test_fnames
 
 
 def create_h5browser_dialog(

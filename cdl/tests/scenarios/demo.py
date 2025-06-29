@@ -21,7 +21,7 @@ import sigima_.param
 from cdl.config import _, reset
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import (
+from sigima_.tests.data import (
     create_multigauss_image,
     create_paracetamol_signal,
     create_peak2d_image,

@@ -11,8 +11,8 @@ import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.env import execenv
-from cdl.tests.data import create_noisygauss_image
 from cdl.widgets.imagebackground import ImageBackgroundDialog
+from sigima_.tests.data import create_noisygauss_image
 
 
 def test_image_background_selection():

@@ -12,11 +12,11 @@ import numpy as np
 import pytest
 from guidata.qthelpers import qt_app_context
 
-import cdl.tests.data as ctd
 import sigima_.algorithms.image as alg
 import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
+import sigima_.tests.data as ctd
 from cdl.env import execenv
 from sigima_.tests.helpers import check_array_result, check_scalar_result
 from sigima_.tests.vistools import view_images_side_by_side

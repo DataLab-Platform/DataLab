@@ -11,7 +11,7 @@ from __future__ import annotations
 import numpy as np
 
 from cdl.tests import cdltest_app_context
-from cdl.tests import data as test_data
+from sigima_.tests import data as test_data
 
 
 def create_image_with_resultproperties():

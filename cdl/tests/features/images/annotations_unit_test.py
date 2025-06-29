@@ -19,7 +19,7 @@ from qtpy import QtWidgets as QW
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.tests import data as test_data
+from sigima_.tests import data as test_data
 
 
 def set_annotation_color(annotation: AnnotatedShape, color: str) -> None:

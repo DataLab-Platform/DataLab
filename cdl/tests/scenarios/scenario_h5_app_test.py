@@ -26,10 +26,10 @@ import os.path as osp
 
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import create_noisygauss_image, create_paracetamol_signal
 from cdl.tests.scenarios import scenario_mac_app_test
 from cdl.utils.strings import save_html_diff
 from sigima_.param import ClipParam
+from sigima_.tests.data import create_noisygauss_image, create_paracetamol_signal
 from sigima_.tests.helpers import WorkdirRestoringTempDir
 
 

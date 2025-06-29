@@ -14,10 +14,10 @@ import pytest
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
-import cdl.tests.data as cdltd
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
+import sigima_.tests.data as cdltd
 import sigima_.tests.helpers
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv

@@ -16,7 +16,7 @@ from typing import Generator
 import guidata.dataset as gds
 import numpy as np
 
-from cdl.config import _
+from sigima_.config import _
 from sigima_.io import read_image, read_signal
 from sigima_.obj import (
     GaussLorentzVoigtParam,

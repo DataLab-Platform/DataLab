@@ -22,9 +22,9 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import _
 from cdl.gui.main import CDLMainWindow
-from cdl.tests import data as test_data
 from cdl.tests.features.macro.macroeditor_unit_test import get_macro_example_path
 from sigima_.obj import NewImageParam
+from sigima_.tests import data as test_data
 
 
 class HostWidget(QW.QWidget):

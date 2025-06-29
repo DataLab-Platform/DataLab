@@ -18,10 +18,10 @@ import warnings
 import numpy as np
 import pytest
 
-import cdl.tests.data as ctd
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param as sigima_param
+import sigima_.tests.data as ctd
 from sigima_.tests.helpers import check_array_result
 
 

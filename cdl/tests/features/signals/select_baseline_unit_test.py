@@ -11,8 +11,8 @@ import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.env import execenv
-from cdl.tests.data import create_paracetamol_signal
 from cdl.widgets.signalbaseline import SignalBaselineDialog
+from sigima_.tests.data import create_paracetamol_signal
 
 
 def test_signal_baseline_selection():

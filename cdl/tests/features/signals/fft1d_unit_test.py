@@ -15,10 +15,10 @@ import pytest
 import scipy.signal as sps
 from guidata.qthelpers import qt_app_context
 
-import cdl.tests.data as ctd
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
+import sigima_.tests.data as ctd
 from cdl.env import execenv
 from sigima_.algorithms.signal import fourier
 from sigima_.tests.helpers import check_array_result, check_scalar_result

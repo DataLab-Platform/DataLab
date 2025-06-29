@@ -10,7 +10,7 @@ Distribute on grid application test
 import sigima_.param
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import get_test_image
+from sigima_.tests.data import get_test_image
 
 
 def test_distribute_on_grid():

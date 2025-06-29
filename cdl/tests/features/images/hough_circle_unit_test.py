@@ -14,8 +14,8 @@ from plotpy.builder import make
 from skimage.feature import canny
 
 from cdl.env import execenv
-from cdl.tests.data import get_peak2d_data
 from sigima_.algorithms.image import get_hough_circle_peaks
+from sigima_.tests.data import get_peak2d_data
 from sigima_.tests.vistools import view_image_items
 
 

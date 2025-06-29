@@ -29,7 +29,7 @@ import sigima_.computation.image as sigima_image
 import sigima_.obj
 from cdl.config import _
 from cdl.env import execenv
-from cdl.tests.data import (
+from sigima_.tests.data import (
     create_noisygauss_image,
     get_laser_spot_data,
 )

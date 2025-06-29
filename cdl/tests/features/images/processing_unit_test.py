@@ -50,7 +50,7 @@ from skimage import exposure, feature, filters, morphology, restoration, util
 import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
-from cdl.tests.data import get_test_image
+from sigima_.tests.data import get_test_image
 from sigima_.tests.helpers import check_array_result, check_scalar_result
 
 

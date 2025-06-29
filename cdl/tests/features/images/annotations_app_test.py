@@ -11,8 +11,8 @@ Annotations application test:
 # guitest: show
 
 from cdl.app import run
-from cdl.tests import data as test_data
 from sigima_.obj import create_image_roi
+from sigima_.tests import data as test_data
 
 
 def test_annotations_app():

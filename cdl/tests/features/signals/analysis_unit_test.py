@@ -20,7 +20,7 @@ import pytest
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
-from cdl.tests.data import get_test_signal
+from sigima_.tests.data import get_test_signal
 from sigima_.tests.helpers import check_scalar_result
 
 

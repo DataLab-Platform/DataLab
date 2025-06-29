@@ -12,7 +12,7 @@ Simple image dialog for testing all image tools available in DataLab
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
-from cdl.tests.data import create_noisygauss_image
+from sigima_.tests.data import create_noisygauss_image
 from sigima_.tests.vistools import view_image_items
 
 
