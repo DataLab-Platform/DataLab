@@ -25,7 +25,7 @@ from cdl.env import execenv
 from cdl.gui.processor.base import is_pairwise_mode
 from cdl.objectmodel import get_short_id
 from cdl.utils.qthelpers import cdl_app_context
-from cdl.utils.tests import get_test_fnames
+from sigima_.tests.helpers import get_test_fnames
 
 
 def check_titles(title, titles):

@@ -24,8 +24,8 @@ from guidata.qthelpers import qt_app_context
 from cdl.env import execenv
 from cdl.gui.macroeditor import Macro
 from cdl.gui.panel import macro
-from cdl.utils import tests
-from cdl.utils.tests import get_temporary_directory
+from sigima_.tests import helpers
+from sigima_.tests.helpers import get_temporary_directory
 
 
 def get_macro_example_path() -> str:
@@ -76,7 +76,7 @@ def test_macro_editor():
         widget.rename_macro(1, new_title)
         assert widget.get_macro_titles()[0] == new_title
 
-        with tests.WorkdirRestoringTempDir() as tmpdir:
+        with helpers.WorkdirRestoringTempDir() as tmpdir:
             fname = osp.join(tmpdir, "macro.py")
             widget.export_macro_to_file(1, fname)
             widget.import_macro_from_file(fname)

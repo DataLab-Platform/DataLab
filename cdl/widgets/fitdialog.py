@@ -13,7 +13,6 @@ from scipy.optimize import curve_fit
 from scipy.special import erf  # pylint: disable=no-name-in-module
 
 from cdl.config import _
-from cdl.utils.tests import get_default_test_name
 from sigima_.algorithms.signal.fitmodels import (
     GaussianModel,
     LorentzianModel,
@@ -21,6 +20,7 @@ from sigima_.algorithms.signal.fitmodels import (
 )
 from sigima_.algorithms.signal.fourier import sort_frequencies
 from sigima_.algorithms.signal.peakdetection import xpeak
+from sigima_.tests.helpers import get_default_test_name
 
 
 def guifit(

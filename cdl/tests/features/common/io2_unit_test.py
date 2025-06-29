@@ -15,10 +15,10 @@ import os.path as osp
 from cdl.env import execenv
 from cdl.plugins import discover_plugins
 from cdl.utils.strings import reduce_path
-from cdl.utils.tests import WorkdirRestoringTempDir, get_test_fnames
 from sigima_.io.base import BaseIORegistry
 from sigima_.io.image import ImageIORegistry
 from sigima_.io.signal import SignalIORegistry
+from sigima_.tests.helpers import WorkdirRestoringTempDir, get_test_fnames
 
 discover_plugins()
 

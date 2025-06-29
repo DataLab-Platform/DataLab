@@ -17,7 +17,7 @@ import sigima_.param
 from cdl.env import execenv
 from cdl.gui.profiledialog import ProfileExtractionDialog
 from cdl.tests.data import create_noisygauss_image, create_sincos_image
-from cdl.utils.tests import check_array_result
+from sigima_.tests.helpers import check_array_result
 
 
 def test_profile_unit():

@@ -20,8 +20,8 @@ from cdl import app
 from cdl.env import execenv
 from cdl.proxy import RemoteProxy
 from cdl.tests.data import create_2d_gaussian, create_paracetamol_signal
-from cdl.utils.tests import WorkdirRestoringTempDir, exec_script
 from sigima_.param import XYCalibrateParam
+from sigima_.tests.helpers import WorkdirRestoringTempDir, exec_script
 
 
 def multiple_commands(remote: RemoteProxy):

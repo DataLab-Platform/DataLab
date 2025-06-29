@@ -21,7 +21,7 @@ import numpy as np
 import cdl.tests.data as ctd
 import sigima_.obj
 from cdl.tests import cdltest_app_context
-from cdl.utils.tests import check_array_result
+from sigima_.tests.helpers import check_array_result
 
 
 def test_image_average() -> None:

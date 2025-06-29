@@ -33,7 +33,7 @@ from cdl.gui.main import CDLMainWindow
 from cdl.gui.panel.image import ImagePanel
 from cdl.gui.panel.signal import SignalPanel
 from cdl.utils import qthelpers as qth
-from cdl.utils import tests
+from sigima_.tests import helpers
 
 
 @contextmanager
@@ -66,11 +66,11 @@ def cdltest_app_context(
                 win.resize(width, height)
                 win.showNormal()
             win.show()
-            win.setObjectName(tests.get_default_test_name())  # screenshot name
+            win.setObjectName(helpers.get_default_test_name())  # screenshot name
             yield win
         finally:
             if save:
-                path = tests.get_output_data_path("h5")
+                path = helpers.get_output_data_path("h5")
                 try:
                     os.remove(path)
                     win.save_to_h5_file(path)

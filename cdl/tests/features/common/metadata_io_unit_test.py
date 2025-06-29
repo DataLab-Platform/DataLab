@@ -18,14 +18,14 @@ import os.path as osp
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
-from cdl.utils import tests
-from cdl.utils.tests import compare_metadata
+from sigima_.tests import helpers
+from sigima_.tests.helpers import compare_metadata
 
 
 def test_metadata_io_unit():
     """Run image tools test scenario"""
     with execenv.context(unattended=True):
-        with tests.WorkdirRestoringTempDir() as tmpdir:
+        with helpers.WorkdirRestoringTempDir() as tmpdir:
             fname = osp.join(tmpdir, "test.json")
             with cdltest_app_context() as win:
                 panel = win.imagepanel

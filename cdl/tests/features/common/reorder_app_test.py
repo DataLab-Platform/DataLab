@@ -19,7 +19,7 @@ from cdl import app
 from cdl.env import execenv
 from cdl.objectmodel import get_uuid
 from cdl.utils.qthelpers import cdl_app_context
-from cdl.utils.tests import get_test_fnames
+from sigima_.tests.helpers import get_test_fnames
 
 
 def test_reorder():

@@ -32,7 +32,7 @@ import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
 from cdl.tests.data import get_test_signal
-from cdl.utils.tests import check_array_result, check_scalar_result
+from sigima_.tests.helpers import check_array_result, check_scalar_result
 
 
 @pytest.mark.validation

@@ -19,7 +19,7 @@ from plotpy.plot import (
 )
 
 from cdl.config import _
-from cdl.utils.tests import get_default_test_name
+from sigima_.tests.helpers import get_default_test_name
 
 TEST_NB = {}
 

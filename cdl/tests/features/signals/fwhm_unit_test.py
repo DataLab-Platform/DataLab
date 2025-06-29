@@ -15,10 +15,10 @@ from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
 import cdl.tests.data as cdltd
-import cdl.utils.tests
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
+import sigima_.tests.helpers
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.utils.vistools import view_curve_items
@@ -67,7 +67,9 @@ def test_signal_fwhm() -> None:
     ):
         param = sigima_.param.FWHMParam.create(method=method)
         df = sigima_signal.fwhm(obj, param).to_dataframe()
-        cdl.utils.tests.check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
+        sigima_.tests.helpers.check_scalar_result(
+            f"FWHM[{method}]", df.L[0], exp, rtol=0.05
+        )
     obj = cdltd.create_paracetamol_signal()
     with pytest.warns(UserWarning):
         sigima_signal.fwhm(obj, sigima_.param.FWHMParam.create(method="zero-crossing"))
@@ -79,7 +81,7 @@ def test_signal_fw1e2() -> None:
     obj = cdltd.get_test_signal("fw1e2.txt")
     exp = 4.06  # Manual validation
     df = sigima_signal.fw1e2(obj).to_dataframe()
-    cdl.utils.tests.check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
+    sigima_.tests.helpers.check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
 
 
 @pytest.mark.validation
@@ -89,7 +91,7 @@ def test_signal_full_width_at_y() -> None:
     real_fwhm = 2.675  # Manual validation
     param = sigima_.param.OrdinateParam.create(y=0.5)
     df = sigima_signal.full_width_at_y(obj, param).to_dataframe()
-    cdl.utils.tests.check_scalar_result("∆X", df.L[0], real_fwhm, rtol=0.05)
+    sigima_.tests.helpers.check_scalar_result("∆X", df.L[0], real_fwhm, rtol=0.05)
 
 
 if __name__ == "__main__":

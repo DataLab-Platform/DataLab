@@ -17,7 +17,6 @@ import guidata.dataset as gds
 import numpy as np
 
 from cdl.config import _
-from cdl.utils.tests import get_test_fnames
 from sigima_.io import read_image, read_signal
 from sigima_.obj import (
     GaussLorentzVoigtParam,
@@ -36,6 +35,7 @@ from sigima_.obj import (
     create_image_from_param,
     create_signal_from_param,
 )
+from sigima_.tests.helpers import get_test_fnames
 
 
 def get_test_signal(filename: str) -> SignalObj:

@@ -8,7 +8,7 @@ Log viewer test
 
 from cdl.app import run
 from cdl.tests.features.utilities import logview_error
-from cdl.utils.tests import exec_script
+from sigima_.tests.helpers import exec_script
 
 
 def test_logviewer_app():

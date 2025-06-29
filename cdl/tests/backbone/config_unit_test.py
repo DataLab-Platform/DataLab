@@ -19,7 +19,7 @@ from cdl.config import Conf
 from cdl.env import execenv
 from cdl.utils.conf import CONF
 from cdl.utils.qthelpers import cdl_app_context
-from cdl.utils.tests import get_test_fnames
+from sigima_.tests.helpers import get_test_fnames
 
 SEC_MAIN = Conf.main
 OPT_MAX = SEC_MAIN.window_maximized

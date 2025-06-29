@@ -16,7 +16,7 @@ import sys
 
 import cdl
 from cdl.env import VerbosityLevels, execenv
-from cdl.utils.tests import get_script_output
+from sigima_.tests.helpers import get_script_output
 
 ARGV_TEST = "--execenvtest"
 

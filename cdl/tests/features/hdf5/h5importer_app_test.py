@@ -12,7 +12,7 @@ Running application a few times in a row with different entry parameters.
 from cdl import app
 from cdl.env import execenv
 from cdl.utils.qthelpers import cdl_app_context
-from cdl.utils.tests import get_test_fnames
+from sigima_.tests.helpers import get_test_fnames
 
 
 def test_h5importer_app(pattern=None):

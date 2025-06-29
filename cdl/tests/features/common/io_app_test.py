@@ -14,10 +14,10 @@ import os.path as osp
 from cdl.env import execenv
 from cdl.gui.panel.base import BaseDataPanel
 from cdl.tests import cdltest_app_context
-from cdl.utils.tests import WorkdirRestoringTempDir, get_test_fnames
 from sigima_.io.base import BaseIORegistry, IOAction
 from sigima_.io.image import ImageIORegistry
 from sigima_.io.signal import SignalIORegistry
+from sigima_.tests.helpers import WorkdirRestoringTempDir, get_test_fnames
 
 
 def __testfunc(

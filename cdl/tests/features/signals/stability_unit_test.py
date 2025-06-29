@@ -16,7 +16,7 @@ import pytest
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
-from cdl.utils.tests import check_array_result
+from sigima_.tests.helpers import check_array_result
 
 
 def generate_white_noise(n_points, sigma=1.0):

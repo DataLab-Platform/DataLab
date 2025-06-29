@@ -19,7 +19,7 @@ import pytest
 
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.utils.tests import WorkdirRestoringTempDir
+from sigima_.tests.helpers import WorkdirRestoringTempDir
 
 
 def create_large_random_dataframe(nrows: int, ncols: int) -> pd.DataFrame:

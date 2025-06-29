@@ -16,7 +16,7 @@ import time
 from cdl.gui.macroeditor import Macro
 from cdl.gui.main import CDLMainWindow
 from cdl.tests import cdltest_app_context
-from cdl.utils.tests import WorkdirRestoringTempDir
+from sigima_.tests.helpers import WorkdirRestoringTempDir
 
 
 def add_macro_sample(win: CDLMainWindow, index: int) -> Macro:

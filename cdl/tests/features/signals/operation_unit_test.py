@@ -22,7 +22,7 @@ import cdl.tests.data as ctd
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param as sigima_param
-from cdl.utils.tests import check_array_result
+from sigima_.tests.helpers import check_array_result
 
 
 def __create_two_signals() -> tuple[sigima_.obj.SignalObj, sigima_.obj.SignalObj]:
