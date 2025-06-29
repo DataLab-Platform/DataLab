@@ -9,13 +9,14 @@ Testing `sigima_` specific formats.
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from guidata.qthelpers import qt_app_context
 
 from sigima_.env import execenv
 from sigima_.io import read_images, read_signals
 from sigima_.io.image import funcs as image_funcs
 from sigima_.obj import ImageObj, SignalObj
-from sigima_.tests import helpers, vistools
+from sigima_.tests import helpers
 
 
 def __read_objs(fname: str) -> list[ImageObj] | list[SignalObj]:
@@ -31,49 +32,66 @@ def __read_objs(fname: str) -> list[ImageObj] | list[SignalObj]:
 
 
 @helpers.try_open_test_data("Testing TXT file reader", "*.txt")
-def open_txt(fname: str | None = None) -> None:
+def open_txt(fname: str | None = None, request: pytest.FixtureRequest = None) -> None:
     """Testing TXT files"""
     objs = __read_objs(fname)
     for obj in objs:
         execenv.print(obj)
-    vistools.view_curves_and_images(objs)
+    if request is not None and request.config.getoption("--gui"):
+        from sigima_.tests import vistools  # pylint: disable=import-outside-toplevel
+
+        vistools.view_curves_and_images(objs)
 
 
 @helpers.try_open_test_data("Testing CSV file reader", "*.csv")
-def open_csv(fname: str | None = None) -> None:
+def open_csv(fname: str | None = None, request: pytest.FixtureRequest = None) -> None:
     """Testing CSV files"""
     objs = __read_objs(fname)
     for obj in objs:
         execenv.print(obj)
-    vistools.view_curves_and_images(objs)
+    if request is not None and request.config.getoption("--gui"):
+        from sigima_.tests import vistools  # pylint: disable=import-outside-toplevel
+
+        vistools.view_curves_and_images(objs)
 
 
 @helpers.try_open_test_data("Testing MAT-File reader", "*.mat")
-def open_mat(fname: str | None = None) -> None:
+def open_mat(fname: str | None = None, request: pytest.FixtureRequest = None) -> None:
     """Testing MAT files"""
     objs = __read_objs(fname)
     for obj in objs:
         execenv.print(obj)
-    if isinstance(objs[0], SignalObj):
-        vistools.view_curves(objs)
-    else:
-        vistools.view_images(objs)
+    if request is not None and request.config.getoption("--gui"):
+        from sigima_.tests import vistools  # pylint: disable=import-outside-toplevel
+
+        if isinstance(objs[0], SignalObj):
+            vistools.view_curves(objs)
+        else:
+            vistools.view_images(objs)
 
 
 @helpers.try_open_test_data("Testing SIF file handler", "*.sif")
-def open_sif(fname: str | None = None) -> None:
+def open_sif(fname: str | None = None, request: pytest.FixtureRequest = None) -> None:
     """Testing SIF files"""
     execenv.print(image_funcs.SIFFile(fname))
     datalist = image_funcs.imread_sif(fname)
-    vistools.view_images(datalist)
+    if request is not None and request.config.getoption("--gui"):
+        from sigima_.tests import vistools  # pylint: disable=import-outside-toplevel
+
+        vistools.view_images(datalist)
 
 
 @helpers.try_open_test_data("Testing SCOR-DATA file handler", "*.scor-data")
-def open_scordata(fname: str | None = None) -> None:
+def open_scordata(
+    fname: str | None = None, request: pytest.FixtureRequest = None
+) -> None:
     """Testing SCOR-DATA files"""
     execenv.print(image_funcs.SCORFile(fname))
     data = image_funcs.imread_scor(fname)
-    vistools.view_images(data)
+    if request is not None and request.config.getoption("--gui"):
+        from sigima_.tests import vistools  # pylint: disable=import-outside-toplevel
+
+        vistools.view_images(data)
 
 
 def test_io1() -> None:

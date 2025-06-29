@@ -29,7 +29,6 @@ from sigima_.config import _
 from sigima_.env import execenv
 from sigima_.tests.data import create_noisygauss_image, get_laser_spot_data
 from sigima_.tests.helpers import check_scalar_result
-from sigima_.tests.vistools import view_image_items
 
 
 def get_centroid_from_moments(data):
@@ -57,6 +56,8 @@ def __compare_centroid_funcs(data):
     # pylint: disable=import-outside-toplevel
     from plotpy.builder import make
 
+    from sigima_.tests import vistools
+
     items = []
     items += [make.image(data, interpolation="nearest", eliminate_outliers=2.0)]
     # Computing centroid coordinates
@@ -78,7 +79,7 @@ def __compare_centroid_funcs(data):
             execenv.print(f"    Calculation time: {int(dt * 1e3):d} ms")
         except ImportError:
             execenv.print(f"    Unable to compute {name}: missing module")
-    view_image_items(items)
+    vistools.view_image_items(items)
 
 
 @pytest.mark.gui

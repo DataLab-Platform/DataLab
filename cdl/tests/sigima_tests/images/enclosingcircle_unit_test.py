@@ -10,18 +10,21 @@ Testing enclsoing circle function on various test images.
 # pylint: disable=duplicate-code
 # guitest: show
 
-from guidata.qthelpers import qt_app_context
-from plotpy.builder import make
+import pytest
 
-from cdl.config import _
-from cdl.env import execenv
 from sigima_.algorithms.image import get_centroid_fourier, get_enclosing_circle
+from sigima_.config import _
+from sigima_.env import execenv
 from sigima_.tests.data import get_laser_spot_data
-from sigima_.tests.vistools import view_image_items
 
 
 def __enclosingcircle_test(data):
     """Enclosing circle test function"""
+    # pylint: disable=import-outside-toplevel
+    from plotpy.builder import make
+
+    from sigima_.tests import vistools
+
     items = []
     items += [make.image(data, interpolation="nearest", eliminate_outliers=1.0)]
 
@@ -43,15 +46,19 @@ def __enclosingcircle_test(data):
     execenv.print(x, y, radius)
     execenv.print("")
 
-    view_image_items(items)
+    vistools.view_image_items(items)
 
 
-def test_enclosing_circle():
-    """Test"""
+@pytest.mark.gui
+def test_enclosing_circle_interactive():
+    """Interactive test for enclosing circle computation."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         for data in get_laser_spot_data():
             __enclosingcircle_test(data)
 
 
 if __name__ == "__main__":
-    test_enclosing_circle()
+    test_enclosing_circle_interactive()

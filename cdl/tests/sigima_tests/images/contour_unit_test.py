@@ -6,23 +6,25 @@ Contour finding test
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 import sys
 import time
 
-from guidata.qthelpers import qt_app_context
-from plotpy.builder import make
+import pytest
 
-from cdl.env import execenv
 from sigima_.algorithms import coordinates
 from sigima_.algorithms.image import get_2d_peaks_coords, get_contour_shapes
+from sigima_.env import execenv
 from sigima_.tests.data import get_peak2d_data
-from sigima_.tests.vistools import view_image_items
 
 
 def find_contours(data):
     """Find contours"""
+    # pylint: disable=import-outside-toplevel
+    from plotpy.builder import make
+
+    from sigima_.tests import vistools
+
     items = [make.image(data, interpolation="linear", colormap="hsv")]
     t0 = time.time()
     peak_coords = get_2d_peaks_coords(data)
@@ -49,14 +51,18 @@ def find_contours(data):
                 x, y = shapeargs[::2], shapeargs[1::2]
                 item = make.polygon(x, y, closed=False)
             items.append(item)
-    view_image_items(items)
+    vistools.view_image_items(items)
 
 
-def test_contour():
+@pytest.mark.gui
+def test_contour_interactive():
     """2D peak detection test"""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         find_contours(get_peak2d_data())
 
 
 if __name__ == "__main__":
-    test_contour()
+    test_contour_interactive()

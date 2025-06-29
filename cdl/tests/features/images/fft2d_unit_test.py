@@ -10,7 +10,6 @@ Image FFT unit test.
 
 import numpy as np
 import pytest
-from guidata.qthelpers import qt_app_context
 
 import sigima_.algorithms.image as alg
 import sigima_.computation.image as sigima_image
@@ -24,6 +23,9 @@ from sigima_.tests.vistools import view_images_side_by_side
 
 def test_image_fft_interactive():
     """2D FFT interactive test."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         # Create a 2D ring image
         execenv.print("Generating 2D ring image...", end=" ")

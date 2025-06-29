@@ -12,9 +12,7 @@ import time
 
 import numpy as np
 import pytest
-from guidata.qthelpers import qt_app_context
 from numpy import ma
-from plotpy.builder import make
 
 import sigima_.computation.image as sigima_image
 import sigima_.param
@@ -30,6 +28,9 @@ def compare_binning_images(data: ma.MaskedArray) -> None:
     Args:
         data: Image data
     """
+    # pylint: disable=import-outside-toplevel
+    from plotpy.builder import make
+
     items = []
     items += [make.image(data, interpolation="nearest", eliminate_outliers=2.0)]
     # Computing pixel binning
@@ -59,8 +60,12 @@ def compare_binning_images(data: ma.MaskedArray) -> None:
     view_image_items(items, title="Binning test", show_itemlist=True)
 
 
-def test_binning_graphically() -> None:
+@pytest.mark.gui
+def test_binning_interactive() -> None:
     """Test binning computation and show results"""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         data = get_test_image("*.scor-data").data[:500, :500]
         execenv.print(f"Data[dtype={data.dtype},shape={data.shape}]")
@@ -121,5 +126,5 @@ def test_binning() -> None:
 
 
 if __name__ == "__main__":
-    test_binning_graphically()
+    test_binning_interactive()
     test_binning()
