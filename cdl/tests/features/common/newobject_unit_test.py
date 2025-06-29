@@ -19,7 +19,7 @@ from guidata.qthelpers import qt_app_context
 import sigima_.obj
 from cdl.env import execenv
 from cdl.gui.newobject import create_image_gui, create_signal_gui
-from cdl.utils.vistools import view_curves, view_images
+from sigima_.tests.vistools import view_curves, view_images
 
 
 def iterate_signal_creation(

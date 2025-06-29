@@ -15,11 +15,11 @@ from guidata.qthelpers import qt_app_context
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
-from cdl.utils.vistools import view_curve_items, view_images
 from sigima_.io import read_images, read_signals
 from sigima_.io.image import funcs as image_funcs
 from sigima_.obj import ImageObj, SignalObj
 from sigima_.tests.helpers import try_open_test_data
+from sigima_.tests.vistools import view_curve_items, view_images
 
 
 def __read_objs(fname: str) -> list[ImageObj] | list[SignalObj]:

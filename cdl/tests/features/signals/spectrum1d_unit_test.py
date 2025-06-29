@@ -13,12 +13,12 @@ from __future__ import annotations
 from guidata.qthelpers import qt_app_context
 
 from cdl.tests.data import get_test_signal
-from cdl.utils.vistools import view_curves
 from sigima_.algorithms.signal.fourier import (
     magnitude_spectrum,
     phase_spectrum,
     psd,
 )
+from sigima_.tests.vistools import view_curves
 
 
 def test_signal_magnitude_spectrum_interactive() -> None:

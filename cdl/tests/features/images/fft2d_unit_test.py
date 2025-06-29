@@ -18,8 +18,8 @@ import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
 from cdl.env import execenv
-from cdl.utils.vistools import view_images_side_by_side
 from sigima_.tests.helpers import check_array_result, check_scalar_result
+from sigima_.tests.vistools import view_images_side_by_side
 
 
 def test_image_fft_interactive():

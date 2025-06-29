@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-DataLab Visualization tools (based on PlotPy)
+Visualization tools for `sigima_` interactive tests (based on PlotPy)
 """
 
 import plotpy.items

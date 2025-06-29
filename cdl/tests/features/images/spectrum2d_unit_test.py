@@ -12,7 +12,7 @@ from guidata.qthelpers import qt_app_context
 
 import sigima_.algorithms.image as alg
 from cdl.tests.data import get_test_image
-from cdl.utils.vistools import view_images_side_by_side
+from sigima_.tests.vistools import view_images_side_by_side
 
 
 def test_image_spectrum_interactive():

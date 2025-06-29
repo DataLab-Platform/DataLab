@@ -21,7 +21,7 @@ import sigima_.param
 import sigima_.tests.helpers
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
-from cdl.utils.vistools import view_curve_items
+from sigima_.tests.vistools import view_curve_items
 
 
 def __test_fwhm_interactive(obj: sigima_.obj.SignalObj, method: str) -> None:

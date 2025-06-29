@@ -20,9 +20,9 @@ import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
 from cdl.env import execenv
-from cdl.utils.vistools import view_curves
 from sigima_.algorithms.signal import fourier
 from sigima_.tests.helpers import check_array_result, check_scalar_result
+from sigima_.tests.vistools import view_curves
 
 
 def test_signal_fft_interactive() -> None:

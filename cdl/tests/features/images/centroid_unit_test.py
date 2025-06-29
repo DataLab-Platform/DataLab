@@ -33,8 +33,8 @@ from cdl.tests.data import (
     create_noisygauss_image,
     get_laser_spot_data,
 )
-from cdl.utils.vistools import view_image_items
 from sigima_.tests.helpers import check_scalar_result
+from sigima_.tests.vistools import view_image_items
 
 
 def get_centroid_from_moments(data):

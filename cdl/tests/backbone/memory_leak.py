@@ -16,7 +16,7 @@ from guidata.qthelpers import qt_app_context
 
 from cdl.env import execenv
 from cdl.tests.features.control.embedded1_unit_test import HostWindow
-from cdl.utils.vistools import view_curves
+from sigima_.tests.vistools import view_curves
 
 
 def memory_leak_test(iterations=100):

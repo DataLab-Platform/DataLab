@@ -26,8 +26,8 @@ import sigima_.obj
 import sigima_.param
 from cdl.env import execenv
 from cdl.tests.data import create_noisygauss_image
-from cdl.utils.vistools import view_images_side_by_side
 from sigima_.tests.helpers import check_array_result
+from sigima_.tests.vistools import view_images_side_by_side
 
 
 def __iterate_images() -> Generator[sigima_.obj.ImageObj, None, None]:
