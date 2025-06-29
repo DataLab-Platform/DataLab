@@ -4,6 +4,9 @@
 Module providing a warning/error message box
 """
 
+import os.path as osp
+import re
+import subprocess
 import traceback
 
 from guidata.config import CONF
@@ -13,8 +16,35 @@ from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
-from cdl.config import Conf, _
-from cdl.utils.misc import go_to_error
+from cdl.config import Conf, _, get_mod_source_dir
+
+
+def go_to_error(text: str) -> None:
+    """Go to error: open file with external editor, and go to line number
+
+    Args:
+        text (str): Error text
+    """
+    pattern = r'File "(.+)", line (\d+),'
+    match = re.search(pattern, text)
+    if match:
+        path = match.group(1)
+        line_number = match.group(2)
+        mod_src_dir = get_mod_source_dir()
+        if not osp.isfile(path) and mod_src_dir is not None:
+            otherpath = osp.join(mod_src_dir, path)
+            if not osp.isfile(otherpath):
+                # TODO: [P3] For frozen app, go to error is implemented only when the
+                # source code is available locally (development mode).
+                # How about using a web browser to open the source code on github?
+                return
+            path = otherpath
+        if not osp.isfile(path):
+            return  # File not found (unhandled case)
+        fdict = {"path": path, "line_number": line_number}
+        args = Conf.console.external_editor_args.get().format(**fdict).split(" ")
+        editor_path = Conf.console.external_editor_path.get()
+        subprocess.run([editor_path] + args, shell=True, check=False)
 
 
 def insert_spaces(text: str, nbchars: int) -> str:

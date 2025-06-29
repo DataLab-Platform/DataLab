@@ -64,13 +64,13 @@ from cdl.plugins import PluginRegistry, discover_plugins
 from cdl.remote import RemoteServer
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
-from cdl.utils.misc import go_to_error
 from cdl.utils.qthelpers import (
     add_corner_menu,
     bring_to_front,
     configure_menu_about_to_show,
 )
 from cdl.widgets import instconfviewer, logviewer, status
+from cdl.widgets.warningerror import go_to_error
 from sigima_.config import options as sigima_options
 from sigima_.obj import ImageObj, SignalObj, create_image, create_signal
 
