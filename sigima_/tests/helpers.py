@@ -20,8 +20,8 @@ from typing import Any
 import numpy as np
 from guidata.configtools import get_module_data_path
 
-from cdl.config import MOD_NAME
-from cdl.env import execenv
+from sigima_.config import MOD_NAME
+from sigima_.env import execenv
 
 TST_PATH = []
 
