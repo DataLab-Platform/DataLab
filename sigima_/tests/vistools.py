@@ -114,7 +114,8 @@ def view_curves(
     """Create a curve dialog and plot curves
 
     Args:
-        data_or_objs: Single `SignalObj` or `np.ndarray`, or a list/tuple of these
+        data_or_objs: Single `SignalObj` or `np.ndarray`, or a list/tuple of these,
+         or a list/tuple of (xdata, ydata) pairs
         name: Name of the dialog, or None to use a default name
         title: Title of the dialog, or None to use a default title
         xlabel: Label for the x-axis, or None for no label
@@ -129,6 +130,8 @@ def view_curves(
         if isinstance(data_or_obj, SignalObj):
             data = data_or_obj.xydata
         elif isinstance(data_or_obj, np.ndarray):
+            data = data_or_obj
+        elif isinstance(data_or_obj, (tuple, list)) and len(data_or_obj) == 2:
             data = data_or_obj
         else:
             raise TypeError(f"Unsupported data type: {type(data_or_obj)}")
