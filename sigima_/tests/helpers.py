@@ -51,8 +51,8 @@ def add_test_path_from_env(envvar: str) -> None:
         add_test_path(path)
 
 
-# Add test data files and folders pointed by `CDL_DATA` environment variable:
-add_test_path_from_env("CDL_DATA")
+# Add test data files and folders pointed by `SIGIMA_DATA` environment variable:
+add_test_path_from_env("SIGIMA_DATA")
 
 
 def add_test_module_path(modname: str, relpath: str) -> None:

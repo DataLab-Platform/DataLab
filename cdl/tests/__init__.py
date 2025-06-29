@@ -21,6 +21,7 @@ The following subpackages are available:
 from __future__ import annotations
 
 import os
+import os.path as osp
 from contextlib import contextmanager
 from typing import Generator
 
@@ -28,12 +29,19 @@ import pytest
 from guidata.guitest import run_testlauncher
 
 import cdl.config  # Loading icons
+from cdl.config import MOD_NAME
 from cdl.env import execenv
 from cdl.gui.main import CDLMainWindow
 from cdl.gui.panel.image import ImagePanel
 from cdl.gui.panel.signal import SignalPanel
 from cdl.utils import qthelpers as qth
 from sigima_.tests import helpers
+
+# Add test data files and folders pointed by `CDL_DATA` environment variable:
+helpers.add_test_path_from_env("CDL_DATA")
+
+# Add test data files and folders for the DataLab module:
+helpers.add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 
 
 @contextmanager

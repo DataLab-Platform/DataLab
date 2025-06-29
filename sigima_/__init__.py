@@ -50,6 +50,9 @@ part of the DataLab open-source platform.
 # TODO: Add `pytest` infrastructure. Step 2: migrate `cdl/tests/sigima_tests`
 #       to `sigima_/tests` directory and create a `conftest.py` file using the
 #       `cdl/tests/conftest.py` file as a template (see TODOs in that file).
+# TODO: Handle the `CDL_DATA` environment variable in the `sigima_` package
+#       and its documentation (at the moment, it has been replaced by `SIGIMA_DATA`
+#       in sigima_\tests\helpers.py)
 #
 # ** Task 3. Documentation and Training Materials **
 # TODO: Add documentation. Step 1: initiate `sigima_` package documentation
