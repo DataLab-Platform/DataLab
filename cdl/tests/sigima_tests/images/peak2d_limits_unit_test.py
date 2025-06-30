@@ -5,23 +5,28 @@ Image peak detection test: testing algorithm limits
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-# guitest: skip
 
-from guidata.qthelpers import qt_app_context
+import pytest
 
-from cdl.env import execenv
-from cdl.tests.features.images.peak2d_unit_test import exec_image_peak_detection_func
+from cdl.tests.sigima_tests.images.peak2d_unit_test import (
+    exec_image_peak_detection_func,
+)
 from sigima_.algorithms.image import get_2d_peaks_coords
+from sigima_.env import execenv
 from sigima_.tests.data import get_peak2d_data
 
 
-def peak2d_limit_test():
+@pytest.mark.skip(reason="Limit testing, not required for automated testing")
+def test_peak2d_limit():
     """2D peak detection test"""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         execenv.print("Testing peak detection algorithm with random generated data:")
         for idx in range(100):
             execenv.print(f"  Iteration #{idx:02d}: ", end="")
-            generated_data = get_peak2d_data(multi=True)
+            generated_data, _coords = get_peak2d_data(multi=True)
             coords = get_2d_peaks_coords(generated_data)
             if coords.shape[0] != 4:
                 execenv.print(f"KO - {coords.shape[0]}/4 peaks were detected")
@@ -33,4 +38,4 @@ def peak2d_limit_test():
 
 
 if __name__ == "__main__":
-    peak2d_limit_test()
+    test_peak2d_limit()

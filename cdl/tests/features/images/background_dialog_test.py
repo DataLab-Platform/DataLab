@@ -10,6 +10,7 @@ Image background dialog unit test.
 
 from __future__ import annotations
 
+import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 import sigima_.computation.image as sigima_image
@@ -21,8 +22,27 @@ from sigima_.tests import vistools
 from sigima_.tests.data import create_noisygauss_image
 
 
-def test_image_background_dialog() -> None:
-    """Image background dialog test."""
+def test_image_background_selection() -> None:
+    """Image background selection test."""
+    with qt_app_context():
+        img = create_noisygauss_image()
+        dlg = ImageBackgroundDialog(img)
+        dlg.resize(640, 480)
+        dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
+        with execenv.context(delay=200):
+            # For more details about the why of the delay, see the comment in
+            # cdl\tests\features\image\offset_correction_unit_test.py
+            exec_dialog(dlg)
+        execenv.print(f"background: {dlg.get_background()}")
+        execenv.print(f"rect coords: {dlg.get_rect_coords()}")
+        # Check background value:
+        x0, y0, x1, y1 = dlg.get_rect_coords()
+        ix0, iy0, ix1, iy1 = dlg.imageitem.get_closest_index_rect(x0, y0, x1, y1)
+        assert np.isclose(img.data[iy0:iy1, ix0:ix1].mean(), dlg.get_background())
+
+
+def test_image_offset_correction_with_background_dialog() -> None:
+    """Image offset correction interactive test using the background dialog."""
     with qt_app_context():
         i1 = create_noisygauss_image()
         dlg = ImageBackgroundDialog(i1)
@@ -51,4 +71,5 @@ def test_image_background_dialog() -> None:
 
 
 if __name__ == "__main__":
-    test_image_background_dialog()
+    test_image_background_selection()
+    test_image_offset_correction_with_background_dialog()

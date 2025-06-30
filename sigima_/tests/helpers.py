@@ -316,8 +316,21 @@ def check_array_result(
     exp: np.ndarray,
     rtol: float = 1.0e-5,
     atol: float = 1.0e-8,
+    sort: bool = False,
 ) -> None:
-    """Assert that two arrays are almost equal."""
+    """Assert that two arrays are almost equal.
+
+    Args:
+        title: title of the test
+        res: result array
+        exp: expected array
+        rtol: relative tolerance for comparison
+        atol: absolute tolerance for comparison
+        sort: if True, sort arrays before comparison (default: False)
+    """
+    if sort:
+        res = np.sort(np.array(res, copy=True), axis=None)
+        exp = np.sort(np.array(exp, copy=True), axis=None)
     restxt = f"{title}: {__array_to_str(res)} (expected: {__array_to_str(exp)})"
     execenv.print(restxt)
     assert np.allclose(res, exp, rtol=rtol, atol=atol, equal_nan=True), restxt
@@ -331,7 +344,15 @@ def check_scalar_result(
     rtol: float = 1.0e-5,
     atol: float = 1.0e-8,
 ) -> None:
-    """Assert that two scalars are almost equal."""
+    """Assert that two scalars are almost equal.
+
+    Args:
+        title: title of the test
+        res: result value
+        exp: expected value or tuple of expected values
+        rtol: relative tolerance for comparison
+        atol: absolute tolerance for comparison
+    """
     restxt = f"{title}: {res} (expected: {exp})"
     execenv.print(restxt)
     if isinstance(exp, tuple):

@@ -83,7 +83,7 @@ class PluginTestData(PluginBase):
             param = test_data.PeakDataParam.create(size=max(obj.data.shape))
             self.imagepanel.processor.update_param_defaults(param)
             if param.edit(self.main):
-                obj.data = test_data.get_peak2d_data(param)
+                obj.data, _coords = test_data.get_peak2d_data(param)
                 self.proxy.add_object(obj)
 
     def create_sincos_image(self) -> None:

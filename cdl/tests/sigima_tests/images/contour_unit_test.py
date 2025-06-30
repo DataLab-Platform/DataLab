@@ -57,11 +57,12 @@ def find_contours(data):
 @pytest.mark.gui
 def test_contour_interactive():
     """2D peak detection test"""
+    data, _coords = get_peak2d_data()
     # pylint: disable=import-outside-toplevel
     from guidata.qthelpers import qt_app_context
 
     with qt_app_context():
-        find_contours(get_peak2d_data())
+        find_contours(data)
 
 
 if __name__ == "__main__":

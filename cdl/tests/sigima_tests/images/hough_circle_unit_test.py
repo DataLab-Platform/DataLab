@@ -56,11 +56,12 @@ def __exec_hough_circle_test(data):
 @pytest.mark.gui
 def test_hough_circle():
     """2D peak detection test"""
+    data, _coords = get_peak2d_data(multi=False)
     # pylint: disable=import-outside-toplevel
     from guidata.qthelpers import qt_app_context
 
     with qt_app_context():
-        __exec_hough_circle_test(get_peak2d_data(multi=False))
+        __exec_hough_circle_test(data)
 
 
 if __name__ == "__main__":

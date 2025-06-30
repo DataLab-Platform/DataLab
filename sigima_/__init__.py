@@ -26,6 +26,10 @@ part of the DataLab open-source platform.
 # TODO: Handle the specific case of 'cdl\tests\features\common\io2_unit_test.py': this
 #       test covers the I/O plugin system, which is not yet implemented in the
 #       `sigima_` package.
+# TODO: Handle the specific case of 'cdl\tests\features\common\roiobjects_unit_test.py':
+#       this test covers both GUI and non-GUI features related to ROI objects.
+#       We need to separate the GUI-related tests from the non-GUI ones, so that
+#       we can run the non-GUI tests in the `sigima_` package without requiring a GUI.
 # --------------------------------------------------------------------------------------
 
 # -------- Point of no return after creating an independent `sigima_` package ----------

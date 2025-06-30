@@ -318,7 +318,7 @@ class PeakDataParam(gds.DataSet):
 
 def get_peak2d_data(
     p: PeakDataParam | None = None, seed: int | None = None, multi: bool = False
-) -> np.ndarray:
+) -> tuple[np.ndarray, np.ndarray]:
     """Return a list of NumPy arrays containing images which are relevant for
     testing 2D peak detection or similar image processing features
 
@@ -329,16 +329,16 @@ def get_peak2d_data(
          Defaults to False.
 
     Returns:
-        2D data
+        A tuple containing the image data and coordinates of the peaks.
     """
     if p is None:
         p = PeakDataParam()
     delta = 0.1
     rng = np.random.default_rng(seed)
-    coords = (rng.random((p.n_points, 2)) - 0.5) * 10 * (1 - delta)
+    coords_phys = (rng.random((p.n_points, 2)) - 0.5) * 10 * (1 - delta)
     data = rng.normal(p.mu_noise, p.sigma_noise, size=(p.size, p.size))
     multi_nb = 2 if multi else 1
-    for x0, y0 in coords:
+    for x0, y0 in coords_phys:
         for idx in range(multi_nb):
             if idx != 0:
                 p.dx0 = 0.08 + rng.random() * 0.08
@@ -352,7 +352,14 @@ def get_peak2d_data(
                 sigma=p.sigma_gauss2d,
                 amp=p.amp_gauss2d / multi_nb * p.att,
             )
-    return data
+    # Convert coordinates to indices
+    coords = []
+    for x0, y0 in coords_phys:
+        x = int((x0 + 10) / 20 * p.size)
+        y = int((y0 + 10) / 20 * p.size)
+        if 0 <= x < p.size and 0 <= y < p.size:
+            coords.append((x, y))
+    return data, np.array(coords)
 
 
 def __set_default_size_dtype(
@@ -510,7 +517,8 @@ def create_peak2d_image(
     param = PeakDataParam()
     if p.height is not None and p.width is not None:
         param.size = max(p.height, p.width)
-    obj.data = get_peak2d_data(param)
+    obj.data, coords = get_peak2d_data(param)
+    obj.metdata["peak_coords"] = coords
     return obj
 
 

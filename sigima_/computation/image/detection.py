@@ -53,11 +53,14 @@ class Peak2DDetectionParam(GenericDetectionParam):
 
     size = gds.IntItem(
         _("Neighborhoods size"),
-        default=10,
+        default=None,
+        check=False,  # Allow None value
         min=1,
         unit="pixels",
         help=_(
-            "Size of the sliding window used in maximum/minimum filtering algorithm"
+            "Size of the sliding window used in maximum/minimum filtering algorithm "
+            "(if no value is provided, the algorithm will use a default size "
+            "based on the image size). "
         ),
     )
     create_rois = gds.BoolItem(_("Create regions of interest"), default=True)

@@ -6,17 +6,21 @@ Image spectrum unit test.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
-from guidata.qthelpers import qt_app_context
+import pytest
 
 import sigima_.algorithms.image as alg
 from sigima_.tests.data import get_test_image
-from sigima_.tests.vistools import view_images_side_by_side
 
 
+@pytest.mark.gui
 def test_image_spectrum_interactive():
     """Interactive test of the magnitude/phase/power spectrum of an image."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
+    from sigima_.tests.vistools import view_images_side_by_side
+
     with qt_app_context():
         obj = get_test_image("NF 180338201.scor-data")
         data = obj.data
