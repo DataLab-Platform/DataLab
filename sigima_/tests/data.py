@@ -518,7 +518,7 @@ def create_peak2d_image(
     if p.height is not None and p.width is not None:
         param.size = max(p.height, p.width)
     obj.data, coords = get_peak2d_data(param)
-    obj.metdata["peak_coords"] = coords
+    obj.metadata["peak_coords"] = coords
     return obj
 
 
