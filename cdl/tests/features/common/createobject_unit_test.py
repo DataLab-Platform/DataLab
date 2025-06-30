@@ -1,0 +1,53 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
+"""
+New signal/image test
+
+Testing GUI functions related to signal/image creation.
+"""
+
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
+# guitest: show
+
+from __future__ import annotations
+
+from guidata.qthelpers import qt_app_context
+
+import sigima_.obj
+from cdl.env import execenv
+from cdl.gui.newobject import create_image_gui, create_signal_gui
+from sigima_.tests.vistools import view_curves, view_images
+
+
+def test_new_signal() -> None:
+    """Test new signal feature"""
+    edit = not execenv.unattended
+    with qt_app_context():
+        signal = create_signal_gui(None, edit=edit)
+        if signal is not None:
+            data = (signal.x, signal.y)
+            view_curves([data], name=test_new_signal.__name__, title=signal.title)
+
+
+def test_new_image() -> None:
+    """Test new image feature"""
+    # Test with no input parameter
+    edit = not execenv.unattended
+    with qt_app_context():
+        image = create_image_gui(None, edit=edit)
+        if image is not None:
+            view_images(image.data, name=test_new_image.__name__, title=image.title)
+        # Test with parametered 2D-Gaussian
+        bparam = sigima_.obj.NewImageParam.create(itype=sigima_.obj.ImageTypes.GAUSS)
+        eparam = sigima_.obj.Gauss2DParam()
+        eparam.x0 = eparam.y0 = 3
+        eparam.sigma = 5
+        image = create_image_gui(bparam, extra_param=eparam, edit=edit)
+        if image is not None:
+            view_images(image.data, name=test_new_image.__name__, title=image.title)
+
+
+if __name__ == "__main__":
+    test_new_signal()
+    test_new_image()

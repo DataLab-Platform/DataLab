@@ -17,7 +17,7 @@ from cdl.config import _
 from cdl.gui.main import CDLMainWindow
 from cdl.gui.panel.image import ImagePanel
 from cdl.gui.panel.signal import SignalPanel
-from cdl.tests.features.common.newobject_unit_test import (
+from cdl.tests.sigima_tests.common.createobject_test import (
     iterate_image_creation,
     iterate_signal_creation,
 )

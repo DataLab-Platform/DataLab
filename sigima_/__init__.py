@@ -22,13 +22,10 @@ part of the DataLab open-source platform.
 #
 # ** Task 2. Technical Validation and Testing **
 # TODO: Add `pytest` infrastructure. Step 1: within `cdl` package, move pure `sigima_`
-#       tests to `cdl/tests/sigima_` directory. Before that, we have to come up with a
-#       plan for handling the GUI requirements of the unit tests. We must find a way
-#       to run the tests without requiring a GUI, and, at the same time, to
-#       provide a way to run the tests with a GUI for manual testing and debugging.
-#       The solution has to be flexible enough to allow for both automated and
-#       manual testing, without having to separate the tests into two different
-#       directories or files which would be a nightmare to maintain.
+#       tests to `cdl/tests/sigima_` directory.
+# TODO: Handle the specific case of 'cdl\tests\features\common\io2_unit_test.py': this
+#       test covers the I/O plugin system, which is not yet implemented in the
+#       `sigima_` package.
 # --------------------------------------------------------------------------------------
 
 # -------- Point of no return after creating an independent `sigima_` package ----------

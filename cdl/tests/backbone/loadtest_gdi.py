@@ -23,8 +23,8 @@ import os
 from cdl.env import execenv
 from cdl.gui.main import CDLMainWindow
 from cdl.tests import cdltest_app_context
-from cdl.tests.features.common.newobject_unit_test import iterate_image_creation
 from cdl.tests.scenarios.common import compute_common_operations
+from cdl.tests.sigima_tests.common.createobject_test import iterate_image_creation
 from sigima_.obj import NewImageParam
 from sigima_.tests.data import create_sincos_image
 from sigima_.tests.helpers import get_test_fnames

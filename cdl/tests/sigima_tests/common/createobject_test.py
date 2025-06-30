@@ -3,23 +3,18 @@
 """
 New signal/image test
 
-Testing functions related to signal/image creation.
+Testing parameter-based signal/image creation.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 from __future__ import annotations
 
 from collections.abc import Generator
 
-from guidata.qthelpers import qt_app_context
-
 import sigima_.obj
-from cdl.env import execenv
-from cdl.gui.newobject import create_image_gui, create_signal_gui
-from sigima_.tests.vistools import view_curves, view_images
+from sigima_.env import execenv
 
 
 def iterate_signal_creation(
@@ -153,51 +148,17 @@ def _test_image_data(
         assert image.data is not None
 
 
-def all_combinations_test() -> None:
+def test_all_combinations() -> None:
     """Test all combinations for new signal/image feature"""
-    execenv.print(f"Testing {all_combinations_test.__name__}:")
+    execenv.print(f"Testing {test_all_combinations.__name__}:")
     execenv.print(f"  Signal types ({len(sigima_.obj.SignalTypes)}):")
     for signal in iterate_signal_creation():
         assert signal.x is not None and signal.y is not None
     execenv.print(f"  Image types ({len(sigima_.obj.ImageTypes)}):")
     for image in iterate_image_creation():
         assert image.data is not None
-    execenv.print(f"{all_combinations_test.__name__} OK")
-
-
-def __new_signal_test() -> None:
-    """Test new signal feature"""
-    edit = not execenv.unattended
-    signal = create_signal_gui(None, edit=edit)
-    if signal is not None:
-        data = (signal.x, signal.y)
-        view_curves([data], name=__new_signal_test.__name__, title=signal.title)
-
-
-def __new_image_test() -> None:
-    """Test new image feature"""
-    # Test with no input parameter
-    edit = not execenv.unattended
-    image = create_image_gui(None, edit=edit)
-    if image is not None:
-        view_images(image.data, name=__new_image_test.__name__, title=image.title)
-    # Test with parametered 2D-Gaussian
-    base_param = sigima_.obj.NewImageParam.create(itype=sigima_.obj.ImageTypes.GAUSS)
-    extra_param = sigima_.obj.Gauss2DParam()
-    extra_param.x0 = extra_param.y0 = 3
-    extra_param.sigma = 5
-    image = create_image_gui(base_param, extra_param=extra_param, edit=edit)
-    if image is not None:
-        view_images(image.data, name=__new_image_test.__name__, title=image.title)
-
-
-def test_new_object() -> None:
-    """Test new signal/image feature"""
-    all_combinations_test()
-    with qt_app_context():
-        __new_signal_test()
-        __new_image_test()
+    execenv.print(f"{test_all_combinations.__name__} OK")
 
 
 if __name__ == "__main__":
-    test_new_object()
+    test_all_combinations()
