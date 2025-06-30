@@ -4,18 +4,26 @@
 Image I/O formats test
 """
 
+# Note about the modules imported outside top-level:
+#
+# We want to keep the import order under control, so we import the modules only when
+# they are needed, especially for the dynamically defined image formats in the `formats`
+# module. This way, we can ensure that the formats are defined just before we use them
+# in the tests. This is particularly useful for testing the `imageio_formats` option
+# that allows users to set custom image I/O formats.
+
 
 def get_image_formats():
     """Get image formats"""
+    # pylint: disable=import-outside-toplevel
     from sigima_.io.image import formats
 
-    return [
-        class_name for class_name in dir(formats) if class_name.endswith("ImageFormat")
-    ]
+    return [clname for clname in dir(formats) if clname.endswith("ImageFormat")]
 
 
 def test_imageio_formats_option():
     """Set other image I/O formats"""
+    # pylint: disable=import-outside-toplevel
     from sigima_.config import options
     from sigima_.io.image import formats
 

@@ -264,6 +264,13 @@ def dst_n_to_1(
     return dst
 
 
+# Note about `src2` parameter:
+# ----------------------------
+# The `src2` parameter is currently not used in the function, but it is included
+# to maintain a consistent interface with other similar functions (e.g., `dst_n_to_1`).
+# This may be useful in the future if we want to extend the functionality.
+#
+# pylint: disable=unused-argument
 def dst_2_to_1(
     src1: SignalObj | ImageObj,
     src2: SignalObj | ImageObj,

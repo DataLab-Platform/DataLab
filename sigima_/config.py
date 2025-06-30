@@ -90,7 +90,6 @@ class OptionField:
             ValueError: If the value is not valid.
         """
         # This method can be overridden in subclasses for specific validation
-        pass
 
     def get(self) -> Any:
         """Return the current value of the option.
@@ -98,7 +97,7 @@ class OptionField:
         Returns:
             The current value of the option.
         """
-        self._container._ensure_loaded_from_env()
+        self._container.ensure_loaded_from_env()
         return self._value
 
     def set(self, value: Any, sync_env: bool = True) -> None:
@@ -111,7 +110,7 @@ class OptionField:
         self.check(value)  # Validate the new value
         self._value = value
         if sync_env:
-            self._container._sync_env()
+            self._container.sync_env()
 
     def context(self, temp_value: Any) -> Generator[None, None, None]:
         """Temporarily override the option within a context.
@@ -218,13 +217,14 @@ class ImageIOOptionField(OptionField):
                     "Each item must be a tuple of (format, description) as strings"
                 )
 
-    def set(self, value: Any) -> None:
-        """Set the value of the image I/O formats option.
+    def set(self, value: Any, sync_env: bool = True) -> None:
+        """Set the value of the option.
 
         Args:
             value: The new value to assign.
+            sync_env: Whether to synchronize the environment variable.
         """
-        super().set(value)
+        super().set(value, sync_env)
         from sigima_.io.image import formats  # pylint: disable=import-outside-toplevel
 
         # Generate image I/O format classes based on the new value
@@ -285,9 +285,9 @@ class OptionsContainer:
 
 .. note::
 
-    The `sigima` library supports any image format that can be read by the
-    `imageio` library, provided that the associated plugin(s) are installed
-    (see `imageio documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_)
+    The `sigima` library supports any image format that can be read by the `imageio`
+    library, provided that the associated plugin(s) are installed (see `imageio
+    documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_)
     and that the output NumPy array data type and shape are supported by `sigima`.
 
     To add a new file format, you may use the `imageio_formats` option to specify
@@ -330,7 +330,7 @@ class OptionsContainer:
                 doc += f"      - {opt.description}\n"
         return doc
 
-    def _ensure_loaded_from_env(self) -> None:
+    def ensure_loaded_from_env(self) -> None:
         """Lazy-load from JSON env var on first access."""
         if self._loaded_from_env:
             return
@@ -338,11 +338,12 @@ class OptionsContainer:
             try:
                 values = json.loads(os.environ[self.ENV_VAR])
                 self.from_dict(values)
-            except Exception as e:
-                print(f"[sigima] Warning: failed to load options from env: {e}")
+            except Exception as exc:  # pylint: disable=broad-except
+                # If loading fails, we just log a warning and continue with defaults
+                print(f"[sigima] Warning: failed to load options from env: {exc}")
         self._loaded_from_env = True
 
-    def _sync_env(self) -> None:
+    def sync_env(self) -> None:
         """Update env var with current option values."""
         os.environ[self.ENV_VAR] = json.dumps(self.to_dict())
 
@@ -369,7 +370,7 @@ class OptionsContainer:
                 opt = getattr(self, name)
                 if isinstance(opt, OptionField):
                     opt.set(value, sync_env=False)
-        self._sync_env()
+        self.sync_env()
 
 
 #: Global instance of the options container

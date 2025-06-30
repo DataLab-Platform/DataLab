@@ -36,11 +36,9 @@ class CallbackWorkerProtocol(Protocol):
 
     def set_progress(self, value: float) -> None:
         """Update progress (between 0.0 and 1.0)."""
-        ...
 
     def was_canceled(self) -> bool:
         """Check whether the operation has been canceled."""
-        ...
 
 
 class TextCallbackWorker:

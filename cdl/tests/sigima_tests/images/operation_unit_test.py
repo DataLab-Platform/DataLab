@@ -152,7 +152,7 @@ def test_image_product() -> None:
 
 
 @pytest.mark.validation
-def test_image_division(request: pytest.FixtureRequest) -> None:
+def test_image_division(request: pytest.FixtureRequest = None) -> None:
     """Image division test."""
     execenv.print("*** Testing image division:")
     for ima1, ima2 in __iterate_image_couples():
