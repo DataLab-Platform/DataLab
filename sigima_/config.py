@@ -225,7 +225,9 @@ class ImageIOOptionField(OptionField):
             sync_env: Whether to synchronize the environment variable.
         """
         super().set(value, sync_env)
-        from sigima_.io.image import formats  # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        # pylint: disable=import-outside-toplevel
+        from sigima_.io.image import formats
 
         # Generate image I/O format classes based on the new value
         # This allows dynamic loading of formats based on the configuration
