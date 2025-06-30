@@ -325,8 +325,7 @@ def get_peak2d_data(
     Args:
         p: Peak data test image parameters. Defaults to None.
         seed: Seed for random number generator. Defaults to None.
-        multi: If True, multiple peaks are generated.
-         Defaults to False.
+        multi: If True, multiple peaks are generated. Defaults to False.
 
     Returns:
         A tuple containing the image data and coordinates of the peaks.

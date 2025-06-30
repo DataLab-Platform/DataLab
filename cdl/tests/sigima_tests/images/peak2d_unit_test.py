@@ -61,7 +61,7 @@ def view_image_peak_detection(data: np.ndarray, coords: np.ndarray) -> None:
 
 def test_peak2d_unit():
     """2D peak detection unit test"""
-    data, coords_expected = get_peak2d_data(multi=False)
+    data, coords_expected = get_peak2d_data(seed=1, multi=False)
     coords = exec_image_peak_detection_func(data)
     assert coords.shape == coords_expected.shape, (
         f"Expected {coords_expected.shape[0]} peaks, got {coords.shape[0]}"
@@ -74,7 +74,7 @@ def test_peak2d_unit():
 @pytest.mark.validation
 def test_image_peak_detection():
     """2D peak detection unit test"""
-    data, coords_expected = get_peak2d_data(multi=False)
+    data, coords_expected = get_peak2d_data(seed=1, multi=False)
     obj = sigima_.obj.create_image("peak2d_unit_test", data=data)
     param = sigima_.param.Peak2DDetectionParam()
     df = sigima_image.peak_detection(obj, param).to_dataframe()
