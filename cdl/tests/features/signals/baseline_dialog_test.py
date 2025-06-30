@@ -1,18 +1,24 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Signal base line selection unit test.
+Baseline dialog test
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
 # guitest: show
+
+from __future__ import annotations
 
 import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 
+import sigima_.computation.signal as sigima_signal
+import sigima_.obj
 from cdl.env import execenv
 from cdl.widgets.signalbaseline import SignalBaselineDialog
 from sigima_.tests.data import create_paracetamol_signal
+from sigima_.tests.vistools import view_curves
 
 
 def test_signal_baseline_selection():
@@ -30,5 +36,18 @@ def test_signal_baseline_selection():
     assert dlg.get_baseline() == sig.data[i0:i1].mean()
 
 
+def test_signal_baseline_dialog() -> None:
+    """Test the signal baseline dialog for offset correction."""
+    with qt_app_context():
+        s1 = create_paracetamol_signal()
+        dlg = SignalBaselineDialog(s1)
+        if exec_dialog(dlg):
+            param = sigima_.obj.ROI1DParam()
+            param.xmin, param.xmax = dlg.get_x_range()
+            s2 = sigima_signal.offset_correction(s1, param)
+            view_curves([s1, s2], title="Signal offset correction")
+
+
 if __name__ == "__main__":
     test_signal_baseline_selection()
+    test_signal_baseline_dialog()

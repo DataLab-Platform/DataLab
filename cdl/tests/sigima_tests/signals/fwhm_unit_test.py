@@ -6,31 +6,32 @@ Unit tests for full width computing features
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 from __future__ import annotations
 
 import pytest
-from guidata.qthelpers import qt_app_context
-from plotpy.builder import make
 
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
 import sigima_.tests.data as cdltd
 import sigima_.tests.helpers
-from cdl.adapters_plotpy.factories import create_adapter_from_object
-from cdl.env import execenv
-from sigima_.tests.vistools import view_curve_items
+from sigima_.env import execenv
 
 
 def __test_fwhm_interactive(obj: sigima_.obj.SignalObj, method: str) -> None:
     """Interactive test for the full width at half maximum computation."""
+    # pylint: disable=import-outside-toplevel
+    from plotpy.builder import make
+
+    from sigima_.tests.vistools import view_curve_items
+
     param = sigima_.param.FWHMParam.create(method=method)
     df = sigima_signal.fwhm(obj, param).to_dataframe()
+    x, y = obj.xydata
     view_curve_items(
         [
-            create_adapter_from_object(obj).make_item(),
+            make.mcurve(x.real, y.real, label=obj.title),
             make.annotated_segment(df.x0[0], df.y0[0], df.x1[0], df.y1[0]),
         ],
         title=f"FWHM [{method}]",
@@ -39,6 +40,9 @@ def __test_fwhm_interactive(obj: sigima_.obj.SignalObj, method: str) -> None:
 
 def test_signal_fwhm_interactive() -> None:
     """FWHM interactive test."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         execenv.print("Computing FWHM of a multi-peak signal:")
         obj1 = cdltd.create_paracetamol_signal()

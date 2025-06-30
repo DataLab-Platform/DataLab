@@ -6,11 +6,10 @@ Signal spectrum unit test.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 from __future__ import annotations
 
-from guidata.qthelpers import qt_app_context
+import pytest
 
 from sigima_.algorithms.signal.fourier import (
     magnitude_spectrum,
@@ -18,11 +17,16 @@ from sigima_.algorithms.signal.fourier import (
     psd,
 )
 from sigima_.tests.data import get_test_signal
-from sigima_.tests.vistools import view_curves
 
 
+@pytest.mark.gui
 def test_signal_magnitude_spectrum_interactive() -> None:
     """Interactive test of the magnitude spectrum of a signal."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
+    from sigima_.tests.vistools import view_curves
+
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata
@@ -35,8 +39,14 @@ def test_signal_magnitude_spectrum_interactive() -> None:
         )
 
 
+@pytest.mark.gui
 def test_signal_phase_spectrum_interactive() -> None:
     """Interactive test of the phase spectrum of a signal."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
+    from sigima_.tests.vistools import view_curves
+
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata
@@ -49,8 +59,14 @@ def test_signal_phase_spectrum_interactive() -> None:
         )
 
 
+@pytest.mark.gui
 def test_signal_psd_interactive() -> None:
     """Interactive test of the power spectral density of a signal."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
+    from sigima_.tests.vistools import view_curves
+
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata

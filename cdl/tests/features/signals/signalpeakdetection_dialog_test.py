@@ -1,9 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Signal peak detection test
-
-Testing peak detection dialog box.
+Signal peak detection dialog test.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -16,7 +14,7 @@ from cdl.widgets.signalpeak import SignalPeakDetectionDialog
 from sigima_.tests.data import get_test_signal
 
 
-def test_peak1d():
+def test_peak1d_dialog():
     """Signal peak dialog test"""
     with qt_app_context():
         s = get_test_signal("paracetamol.txt")
@@ -32,4 +30,4 @@ def test_peak1d():
 
 
 if __name__ == "__main__":
-    test_peak1d()
+    test_peak1d_dialog()

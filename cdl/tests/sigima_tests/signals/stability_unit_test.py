@@ -6,7 +6,6 @@ Signal stability analysis unit test.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 from __future__ import annotations
 

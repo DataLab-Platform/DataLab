@@ -5,7 +5,6 @@ Arithmetic parameters unit test.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-# guitest: show
 
 import pytest
 

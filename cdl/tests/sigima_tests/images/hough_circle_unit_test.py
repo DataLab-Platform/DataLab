@@ -6,7 +6,6 @@ Image peak detection test using circle Hough transform
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 import numpy as np
 import pytest

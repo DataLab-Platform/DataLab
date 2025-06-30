@@ -8,7 +8,6 @@ Testing enclsoing circle function on various test images.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 import pytest
 

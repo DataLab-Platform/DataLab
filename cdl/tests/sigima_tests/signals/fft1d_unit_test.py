@@ -6,27 +6,29 @@ Signal FFT unit test.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 from __future__ import annotations
 
 import numpy as np
 import pytest
 import scipy.signal as sps
-from guidata.qthelpers import qt_app_context
 
 import sigima_.computation.signal as sigima_signal
 import sigima_.obj
 import sigima_.param
 import sigima_.tests.data as ctd
-from cdl.env import execenv
 from sigima_.algorithms.signal import fourier
+from sigima_.env import execenv
 from sigima_.tests.helpers import check_array_result, check_scalar_result
 from sigima_.tests.vistools import view_curves
 
 
+@pytest.mark.gui
 def test_signal_fft_interactive() -> None:
     """1D FFT interactive test."""
+    # pylint: disable=import-outside-toplevel
+    from guidata.qthelpers import qt_app_context
+
     with qt_app_context():
         newparam = sigima_.obj.NewSignalParam.create(
             stype=sigima_.obj.SignalTypes.COSINUS, size=500

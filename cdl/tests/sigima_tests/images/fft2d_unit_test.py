@@ -6,7 +6,6 @@ Image FFT unit test.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 import numpy as np
 import pytest

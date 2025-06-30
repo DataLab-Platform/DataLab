@@ -13,7 +13,6 @@ Comparing different algorithms for centroid calculation:
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-# guitest: show
 
 import time
 
