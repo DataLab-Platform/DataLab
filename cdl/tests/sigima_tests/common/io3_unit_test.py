@@ -46,7 +46,6 @@ def _add_image_format() -> Type[ImageFormatBase]:
                 np.ndarray: image data
             """
             # Implement reading logic here
-            pass
 
     return MyImageFormat
 
@@ -62,8 +61,7 @@ def test_add_image_format() -> None:
     execenv.print("OK")
     execenv.print(f"New number of image formats:      {n2}")
     assert (
-        sum([isinstance(fmt, image_class) for fmt in ImageIORegistry.get_formats()])
-        == 1
+        sum(isinstance(fmt, image_class) for fmt in ImageIORegistry.get_formats()) == 1
     )
     finfo = image_class.FORMAT_INFO
     finfo_str = "\n".join([(" " * 4) + line for line in str(finfo).splitlines()])
@@ -88,7 +86,6 @@ def _add_signal_format() -> Type[SignalFormatBase]:
             writeable=False,
         )
 
-        @staticmethod
         def read_xydata(self, filename: str) -> np.ndarray:
             """Read data and metadata from file, write metadata to object, return xydata
 
@@ -99,7 +96,7 @@ def _add_signal_format() -> Type[SignalFormatBase]:
                 NumPy array xydata
             """
             # Implement reading logic here
-            pass
+            print(f"Reading data from {filename}")
 
     return MySignalFormat
 
@@ -115,7 +112,7 @@ def test_add_signal_format() -> None:
     execenv.print("OK")
     execenv.print(f"New number of signal formats:      {n2}")
     assert (
-        sum([isinstance(fmt, signal_class) for fmt in SignalIORegistry.get_formats()])
+        sum(isinstance(fmt, signal_class) for fmt in SignalIORegistry.get_formats())
         == 1
     )
     finfo = signal_class.FORMAT_INFO

@@ -313,10 +313,10 @@ class SpiriconImageFormat(ImageFormatBase):
 
 
 class XYZImageFormat(ImageFormatBase):
-    """Object representing Dürr NDT XYZ image file type"""
+    """Object representing DÃ¼rr NDT XYZ image file type"""
 
     FORMAT_INFO = FormatInfo(
-        name="Dürr NDT",
+        name="DÃ¼rr NDT",
         extensions="*.xyz",
         readable=True,
         writeable=False,

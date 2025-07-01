@@ -24,6 +24,7 @@ import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
 from sigima_.env import execenv
+from sigima_.tests import guiutils
 from sigima_.tests.data import create_noisygauss_image
 from sigima_.tests.helpers import check_array_result
 
@@ -154,6 +155,7 @@ def test_image_product() -> None:
 @pytest.mark.validation
 def test_image_division(request: pytest.FixtureRequest = None) -> None:
     """Image division test."""
+    guiutils.set_current_request(request)
     execenv.print("*** Testing image division:")
     for ima1, ima2 in __iterate_image_couples():
         ima2.data = np.ones_like(ima2.data)
@@ -162,7 +164,7 @@ def test_image_division(request: pytest.FixtureRequest = None) -> None:
         exp = ima1.data.astype(float) / ima2.data.astype(float)
         ima3 = sigima_image.division(ima1, ima2)
         if not np.allclose(ima3.data, exp):
-            if request.config.getoption("--gui"):
+            if guiutils.is_gui_enabled():
                 # pylint: disable=import-outside-toplevel
                 from guidata.qthelpers import qt_app_context
 
@@ -459,7 +461,7 @@ if __name__ == "__main__":
     test_image_addition()
     test_image_average()
     test_image_product()
-    test_image_division()
+    test_image_division(request=guiutils.DummyRequest(gui=True))
     test_image_difference()
     test_image_quadratic_difference()
     test_image_addition_constant()
