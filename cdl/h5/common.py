@@ -16,8 +16,38 @@ import h5py
 import numpy as np
 
 from cdl.config import Conf
-from sigima_.io.converters import convert_array_to_standard_type, data_to_xy
+from sigima_.io.converters import convert_array_to_standard_type
 from sigima_.io.utils import to_string
+
+
+def data_to_xy(data: np.ndarray) -> list[np.ndarray]:
+    """Convert 2-D array into a list of 1-D array data (x, y, dx, dy).
+    This is useful for importing data and creating a DataLab signal with it.
+
+    Args:
+        data (numpy.ndarray): 2-D array of data
+
+    Returns:
+        list[np.ndarray]: list of 1-D array data (x, y, dx, dy)
+    """
+    if len(data.ravel()) == len(data):
+        return np.arange(len(data)), data.ravel(), None, None
+    rows, cols = data.shape
+    for colnb in (2, 3, 4):
+        if cols == colnb and rows > colnb:
+            data = data.T
+            break
+    if len(data) == 1:
+        data = data.T
+    if len(data) not in (2, 3, 4):
+        raise ValueError(f"Invalid data: len(data)={len(data)} (expected 2, 3 or 4)")
+    x, y = data[:2]
+    dx, dy = None, None
+    if len(data) == 3:
+        dy = data[2]
+    if len(data) == 4:
+        dx, dy = data[2:]
+    return x, y, dx, dy
 
 
 class BaseNode(metaclass=abc.ABCMeta):
