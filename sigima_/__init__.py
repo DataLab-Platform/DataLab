@@ -17,9 +17,6 @@ part of the DataLab open-source platform.
 # the NLnet Foundation.
 
 # ---- Actions that can be done progressively, before the package is fully migrated ----
-# ** Task 1. Core Architecture Redesign **
-# **   Milestone 1.c. Redesign the API for the new core library **
-#
 # ** Task 2. Technical Validation and Testing **
 # TODO: Add `pytest` infrastructure. Step 1: within `cdl` package, move pure `sigima_`
 #       tests to `cdl/tests/sigima_` directory.
