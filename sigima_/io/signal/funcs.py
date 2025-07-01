@@ -14,7 +14,6 @@ from typing import TextIO
 import numpy as np
 import pandas as pd
 
-from cdl.utils.qthelpers import CallbackWorker
 from sigima_.io.common.textreader import count_lines, read_first_n_lines
 
 
