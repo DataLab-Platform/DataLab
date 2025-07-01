@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 from sigima_.io.common.textreader import count_lines, read_first_n_lines
+from sigima_.worker import CallbackWorkerProtocol
 
 
 def get_labels_units_from_dataframe(
