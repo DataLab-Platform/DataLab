@@ -8,6 +8,8 @@ Testing `sigima_` specific formats.
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pytest
 from guidata.qthelpers import qt_app_context
@@ -28,6 +30,11 @@ def __read_objs(fname: str) -> list[ImageObj] | list[SignalObj]:
     for obj in objs:
         if np.all(np.isnan(obj.data)):
             raise ValueError("Data is all NaNs")
+    for obj in objs:
+        # Ignore warnings for complex numbers (workaround for guidata)
+        with np.errstate(all="ignore"), warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            execenv.print(obj)
     return objs
 
 
@@ -35,8 +42,6 @@ def __read_objs(fname: str) -> list[ImageObj] | list[SignalObj]:
 def open_txt(fname: str | None = None) -> None:
     """Testing TXT files"""
     objs = __read_objs(fname)
-    for obj in objs:
-        execenv.print(obj)
     if guiutils.is_gui_enabled():
         from sigima_.tests import vistools  # pylint: disable=import-outside-toplevel
 
@@ -47,8 +52,6 @@ def open_txt(fname: str | None = None) -> None:
 def open_csv(fname: str | None = None) -> None:
     """Testing CSV files"""
     objs = __read_objs(fname)
-    for obj in objs:
-        execenv.print(obj)
     if guiutils.is_gui_enabled():
         from sigima_.tests import vistools  # pylint: disable=import-outside-toplevel
 
@@ -59,8 +62,6 @@ def open_csv(fname: str | None = None) -> None:
 def open_mat(fname: str | None = None) -> None:
     """Testing MAT files"""
     objs = __read_objs(fname)
-    for obj in objs:
-        execenv.print(obj)
     if guiutils.is_gui_enabled():
         from sigima_.tests import vistools  # pylint: disable=import-outside-toplevel
 
