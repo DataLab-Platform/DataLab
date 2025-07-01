@@ -112,12 +112,6 @@ msgstr ""
 msgid "Core utilities for Python packages"
 msgstr ""
 
-msgid "typing-extensions"
-msgstr ""
-
-msgid ">= 4.0"
-msgstr ""
-
 msgid "Backported and Experimental Type Hints for Python 3.9+"
 msgstr ""
 
@@ -231,4 +225,3 @@ msgstr ""
 
 msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
 msgstr "Un plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
-
