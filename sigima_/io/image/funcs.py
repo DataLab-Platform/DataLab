@@ -14,7 +14,7 @@ import time
 
 import numpy as np
 
-from sigima_.io.converters import to_string
+from sigima_.io.common.converters import to_string
 
 
 # ==============================================================================

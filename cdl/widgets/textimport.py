@@ -37,8 +37,8 @@ from cdl.config import _
 from cdl.utils.qthelpers import CallbackWorker, create_progress_bar, qt_long_callback
 from cdl.widgets.wizard import Wizard, WizardPage
 from sigima_ import ImageObj, SignalObj, create_image, create_signal
+from sigima_.io.common.textreader import count_lines, read_first_n_lines
 from sigima_.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
-from sigima_.io.textreader import count_lines, read_first_n_lines
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem

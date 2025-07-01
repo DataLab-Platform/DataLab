@@ -16,7 +16,7 @@ import h5py
 import numpy as np
 
 from cdl.config import Conf
-from sigima_.io.converters import convert_array_to_standard_type, to_string
+from sigima_.io.common.converters import convert_array_to_standard_type, to_string
 
 
 def data_to_xy(data: np.ndarray) -> list[np.ndarray]:

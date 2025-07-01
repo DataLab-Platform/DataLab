@@ -36,7 +36,7 @@ from cdl.config import _
 from cdl.h5 import H5Importer
 from cdl.utils.qthelpers import qt_handle_error_message
 from sigima_ import ImageObj, SignalObj
-from sigima_.io.converters import to_string
+from sigima_.io.common.converters import to_string
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot

@@ -17,7 +17,7 @@ import skimage.io
 
 from sigima_.config import _, options
 from sigima_.io.base import FormatInfo
-from sigima_.io.converters import convert_array_to_standard_type
+from sigima_.io.common.converters import convert_array_to_standard_type
 from sigima_.io.image import funcs
 from sigima_.io.image.base import ImageFormatBase, MultipleImagesFormatBase
 from sigima_.obj.image import ImageObj
@@ -313,10 +313,10 @@ class SpiriconImageFormat(ImageFormatBase):
 
 
 class XYZImageFormat(ImageFormatBase):
-    """Object representing DÃ¼rr NDT XYZ image file type"""
+    """Object representing Dürr NDT XYZ image file type"""
 
     FORMAT_INFO = FormatInfo(
-        name="DÃ¼rr NDT",
+        name="Dürr NDT",
         extensions="*.xyz",
         readable=True,
         writeable=False,

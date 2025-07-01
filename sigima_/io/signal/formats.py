@@ -13,7 +13,7 @@ import scipy.io as sio
 
 from sigima_.config import _
 from sigima_.io.base import FormatInfo
-from sigima_.io.converters import convert_array_to_standard_type
+from sigima_.io.common.converters import convert_array_to_standard_type
 from sigima_.io.signal import funcs
 from sigima_.io.signal.base import SignalFormatBase
 from sigima_.worker import CallbackWorkerProtocol
