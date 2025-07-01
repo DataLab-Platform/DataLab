@@ -16,16 +16,6 @@ part of the DataLab open-source platform.
 # package, in the context of the DataLab Core Architecture Redesign project funded by
 # the NLnet Foundation.
 
-# ---- Actions that can be done progressively, before the package is fully migrated ----
-# ** Task 2. Technical Validation and Testing **
-# TODO: Add `pytest` infrastructure. Step 1: within `cdl` package, move pure `sigima_`
-#       tests to `cdl/tests/sigima_` directory.
-# TODO: Handle the specific case of 'cdl\tests\features\common\roiobjects_unit_test.py':
-#       this test covers both GUI and non-GUI features related to ROI objects.
-#       We need to separate the GUI-related tests from the non-GUI ones, so that
-#       we can run the non-GUI tests in the `sigima_` package without requiring a GUI.
-# --------------------------------------------------------------------------------------
-
 # -------- Point of no return after creating an independent `sigima_` package ----------
 # TODO: In `cdl` Python package, remove modifications related to the inclusion of the
 #       `sigima_` module within the `cdl` package (e.g., see TODOs in pyproject.toml,
