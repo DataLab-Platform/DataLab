@@ -182,7 +182,14 @@ class BaseResult(abc.ABC):
         labels: result labels (one label per column of result array)
     """
 
+    #: Class attribute that defines a string prefix used to uniquely identify instances
+    #: of this class in metadata serialization. Each subclass should override this with
+    #: a unique identifier (e.g., "_properties_" for properties, "_shapes_" for shapes).
+    #: This prefix is prepended to the object title when creating metadata keys,
+    #: enabling type identification during deserialization.
     PREFIX = ""  # To be overriden in children classes
+
+    #: Class attribute that defines a tuple of attributes to be serialized in metadata.
     METADATA_ATTRS = ()  # To be overriden in children classes
 
     def __init__(
@@ -628,12 +635,21 @@ class NoDefaultOption:
 class BaseObj(Generic[TypeROI], metaclass=BaseObjMeta):
     """Object (signal/image) interface"""
 
+    #: Class attribute that defines a string prefix used to uniquely identify instances
+    #: of this class in metadata serialization. Each subclass should override this with
+    #: a unique identifier (e.g., "s" for signals, "i" for images).
+    #: This prefix is used as part of the key for storing and retrieving object-specific
+    #: metadata, supporting type-based serialization and deserialization.
     PREFIX = ""  # This is overriden in children classes
 
     # This is overriden in children classes with a gds.DictItem instance:
     metadata: dict[str, Any] = {}
     annotations: str = ""
 
+    #: Class attribute that defines a tuple of valid NumPy data types supported by this
+    #: class. This is used to validate the data type of the object when it is set or
+    #: modified and to ensure that the object can handle the data correctly.
+    #: Subclasses should override this with a specific set of valid data types.
     VALID_DTYPES = (np.float64,)  # To be overriden in children classes
 
     def __init__(self):
@@ -1228,6 +1244,10 @@ class BaseROI(Generic[TypeObj, TypeSingleROI, TypeROIParam], abc.ABC):  # type: 
         inverse: if True, ROI is outside the region of interest
     """
 
+    #: Class attribute that defines a string prefix used for identifying ROI types
+    #: in object metadata. This prefix is used when serializing and deserializing ROIs,
+    #: allowing the system to determine the appropriate ROI class for reconstruction.
+    #: Each ROI subclass should override this with a unique string identifier.
     PREFIX = ""  # This is overriden in children classes
 
     def __init__(self, singleobj: bool | None = None, inverse: bool = False) -> None:

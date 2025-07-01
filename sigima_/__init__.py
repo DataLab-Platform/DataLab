@@ -8,6 +8,10 @@ Scientific computing engine for 1D signals and 2D images,
 part of the DataLab open-source platform.
 """
 
+# TODO: Use `numpy.typing.NDArray` for more precise type annotations once NumPy >= 1.21
+# can be safely required (e.g. after raising the minimum required version of
+# scikit-image to >= 0.19).
+
 # The following comments are used to track the migration process of the `sigima_`
 # package, in the context of the DataLab Core Architecture Redesign project funded by
 # the NLnet Foundation.
@@ -15,10 +19,6 @@ part of the DataLab open-source platform.
 # ---- Actions that can be done progressively, before the package is fully migrated ----
 # ** Task 1. Core Architecture Redesign **
 # **   Milestone 1.c. Redesign the API for the new core library **
-# TODO: Handle the NumPy minimum requirement to v1.21 to use advanced type hints?
-# TODO: Should we keep `PREFIX` attribute in `BaseObj`? (it's clearly useful for
-#       `cdl` package, but not used in `sigima_` package - however, it may be tricky
-#       to define it elsewhere, no?)
 #
 # ** Task 2. Technical Validation and Testing **
 # TODO: Add `pytest` infrastructure. Step 1: within `cdl` package, move pure `sigima_`
