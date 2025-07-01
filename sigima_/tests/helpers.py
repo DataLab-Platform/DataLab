@@ -134,6 +134,18 @@ def get_output_data_path(extension: str, suffix: str | None = None) -> str:
     return osp.join(TST_PATH[0], f"{name}.{extension}")
 
 
+def reduce_path(filename: str) -> str:
+    """Reduce a file path to a relative path
+
+    Args:
+        filename: path to reduce
+
+    Returns:
+        Relative path to the file, relative to its parent directory
+    """
+    return osp.relpath(filename, osp.join(osp.dirname(filename), osp.pardir))
+
+
 class WorkdirRestoringTempDir(tempfile.TemporaryDirectory):
     """Enhanced temporary directory with working directory preservation.
 

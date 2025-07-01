@@ -11,11 +11,6 @@ import os.path as osp
 import webbrowser
 
 
-def reduce_path(filename: str) -> str:
-    """Reduce a file path to a relative path"""
-    return osp.relpath(filename, osp.join(osp.dirname(filename), osp.pardir))
-
-
 def save_html_diff(
     text1: str, text2: str, desc1: str, desc2: str, filename: str
 ) -> None:
