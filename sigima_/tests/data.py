@@ -659,7 +659,7 @@ def create_resultshapes() -> Generator[ResultShape, None, None]:
 def create_resultproperties() -> Generator[ResultProperties, None, None]:
     """Create test result properties (core.base.ResultProperties test object)
 
-    Returns:
+    Yields:
         ResultProperties object
     """
     for title, data, labels in (
