@@ -147,7 +147,7 @@ class BaseIORegistry(type):
         return cls._io_format_instances
 
     @classmethod
-    def get_format_infos(cls) -> str:
+    def get_format_info(cls) -> str:
         """Return I/O format info
 
         Returns:
@@ -155,8 +155,8 @@ class BaseIORegistry(type):
         """
         text = f"{cls.REGISTRY_INFO}:{os.linesep}"
         indent = " " * 4
-        finfos = os.linesep.join([str(fmt.info) for fmt in cls.get_formats()])
-        text += os.linesep.join([indent + line for line in finfos.splitlines()])
+        finfo = os.linesep.join([str(fmt.info) for fmt in cls.get_formats()])
+        text += os.linesep.join([indent + line for line in finfo.splitlines()])
         return text
 
     @classmethod

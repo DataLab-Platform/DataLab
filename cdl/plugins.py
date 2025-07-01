@@ -14,7 +14,7 @@ Plugins are Python modules that relies on two classes:
 
 Plugins may also extends DataLab I/O features by providing new image or
 signal formats. To do so, they must provide a subclass of :class:`ImageFormatBase`
-or :class:`SignalFormatBase`, in which format infos are defined using the
+or :class:`SignalFormatBase`, in which format information is defined using the
 :class:`FormatInfo` class.
 """
 
@@ -100,8 +100,8 @@ class PluginRegistry(type):
         execenv.log(cls, f"{len(cls._plugin_instances)} plugins left")
 
     @classmethod
-    def get_plugin_infos(cls, html: bool = True) -> str:
-        """Return plugin infos (names, versions, descriptions) in html format
+    def get_plugin_info(cls, html: bool = True) -> str:
+        """Return plugin information (names, versions, descriptions) in html format
 
         Args:
             html: return html formatted text (default: True)

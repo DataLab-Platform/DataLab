@@ -545,7 +545,7 @@ class RemoteServer(QC.QThread):
         return True
 
     @remote_call
-    def get_group_titles_with_object_infos(
+    def get_group_titles_with_object_info(
         self,
     ) -> tuple[list[str], list[list[str]], list[list[str]]]:
         """Return groups titles and lists of inner objects uuids and titles.
@@ -553,7 +553,7 @@ class RemoteServer(QC.QThread):
         Returns:
             Groups titles, lists of inner objects uuids and titles
         """
-        return self.win.get_group_titles_with_object_infos()
+        return self.win.get_group_titles_with_object_info()
 
     @remote_call
     def get_object_titles(self, panel: str | None = None) -> list[str]:

@@ -237,7 +237,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         raise ValueError(f"Unknown panel: {panel}")
 
     @remote_controlled
-    def get_group_titles_with_object_infos(
+    def get_group_titles_with_object_info(
         self,
     ) -> tuple[list[str], list[list[str]], list[list[str]]]:
         """Return groups titles and lists of inner objects uuids and titles.
@@ -246,7 +246,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             Groups titles, lists of inner objects uuids and titles
         """
         panel = self.__get_current_basedatapanel()
-        return panel.objmodel.get_group_titles_with_object_infos()
+        return panel.objmodel.get_group_titles_with_object_info()
 
     @remote_controlled
     def get_object_titles(self, panel: str | None = None) -> list[str]:

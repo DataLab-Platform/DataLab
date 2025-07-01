@@ -362,7 +362,7 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_group_titles_with_object_infos(
+    def get_group_titles_with_object_info(
         self,
     ) -> tuple[list[str], list[list[str]], list[list[str]]]:
         """Return groups titles and lists of inner objects uuids and titles.
@@ -707,7 +707,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         self._cdl.delete_metadata(refresh_plot, keep_roi)
 
-    def get_group_titles_with_object_infos(
+    def get_group_titles_with_object_info(
         self,
     ) -> tuple[list[str], list[list[str]], list[list[str]]]:
         """Return groups titles and lists of inner objects uuids and titles.
@@ -715,7 +715,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         Returns:
             Tuple: groups titles, lists of inner objects uuids and titles
         """
-        return self._cdl.get_group_titles_with_object_infos()
+        return self._cdl.get_group_titles_with_object_info()
 
     def get_object_titles(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel.

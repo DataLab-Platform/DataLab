@@ -468,7 +468,7 @@ class ObjectModel:
                 ids.append(group.get_object_ids())
         return ids
 
-    def get_group_titles_with_object_infos(
+    def get_group_titles_with_object_info(
         self,
     ) -> tuple[list[str], list[list[str]], list[list[str]]]:
         """Return groups titles and lists of inner objects uuids and titles.

@@ -149,7 +149,7 @@ def get_more_image_stats(
     y1: float,
 ) -> str:
     """Return formatted string with stats on image rectangular area
-    (output should be compatible with AnnotatedShape.get_infos)
+    (output should be compatible with AnnotatedShape.get_info)
 
     Args:
         item: image item
@@ -160,7 +160,7 @@ def get_more_image_stats(
     """
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", UserWarning)
-        infos = get_image_stats(item, x0, y0, x1, y1)
+        info = get_image_stats(item, x0, y0, x1, y1)
 
     ix0, iy0, ix1, iy1 = item.get_closest_index_rect(x0, y0, x1, y1)
     data = item.data[iy0:iy1, ix0:ix1]
@@ -169,32 +169,32 @@ def get_more_image_stats(
 
     integral = np.nansum(data)
     integral_fmt = r"%.3e " + zunit
-    infos += f"<br>∑ = {integral_fmt % integral}"
+    info += f"<br>∑ = {integral_fmt % integral}"
 
     if xunit == yunit:
         surfacefmt = p.xformat.split()[0] + " " + xunit
         if xunit != "":
             surfacefmt = surfacefmt + "²"
         surface = abs((x1 - x0) * (y1 - y0))
-        infos += f"<br>A = {surfacefmt % surface}"
+        info += f"<br>A = {surfacefmt % surface}"
         if xunit is not None and zunit is not None:
             if surface != 0:
                 density = integral / surface
                 densityfmt = r"%.3e"
                 if xunit and zunit:
                     densityfmt += " " + zunit + "/" + xunit + "²"
-                infos = infos + f"<br>ρ = {densityfmt % density}"
+                info = info + f"<br>ρ = {densityfmt % density}"
 
     c_i, c_j = get_centroid_fourier(data)
     c_x, c_y = item.get_plot_coordinates(c_j + ix0, c_i + iy0)
-    infos += "<br>" + "<br>".join(
+    info += "<br>" + "<br>".join(
         [
             "C|x = " + p.xformat % c_x,
             "C|y = " + p.yformat % c_y,
         ]
     )
 
-    return infos
+    return info
 
 
 def profile_to_signal(plot: BasePlot, panel: XCrossSection | YCrossSection) -> None:

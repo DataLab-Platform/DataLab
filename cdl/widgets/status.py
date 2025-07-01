@@ -136,7 +136,7 @@ class PluginStatus(BaseStatus):
         else:
             text += "-"
         self.label.setText(text)
-        self.setToolTip(PluginRegistry.get_plugin_infos())
+        self.setToolTip(PluginRegistry.get_plugin_info())
 
 
 class XMLRPCStatus(BaseStatus):

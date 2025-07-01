@@ -41,7 +41,7 @@ def get_pip_list() -> str:
     return decode_fs_string(output)
 
 
-def get_install_infos() -> str:
+def get_install_info() -> str:
     """Get DataLab installation informations
 
     Returns:
@@ -49,22 +49,22 @@ def get_install_infos() -> str:
     """
     if IS_FROZEN:
         #  Stand-alone version
-        more_infos = "This is the Stand-alone version of DataLab"
+        more_info = "This is the Stand-alone version of DataLab"
     else:
-        more_infos = ""
+        more_info = ""
         try:
             state = dephash.check_dependencies_hash(DATAPATH)
             bad_deps = [name for name in state if not state[name]]
             if bad_deps:
-                more_infos += "Invalid dependencies: "
-                more_infos += ", ".join(bad_deps)
+                more_info += "Invalid dependencies: "
+                more_info += ", ".join(bad_deps)
             else:
-                more_infos += "Dependencies hash file: checked."
+                more_info += "Dependencies hash file: checked."
         except IOError:
-            more_infos += "Unable to open dependencies hash file."
-        more_infos += os.linesep * 2
-        more_infos += get_pip_list()
-    infos = os.linesep.join(
+            more_info += "Unable to open dependencies hash file."
+        more_info += os.linesep * 2
+        more_info += get_pip_list()
+    info = os.linesep.join(
         [
             f"DataLab v{cdl.__version__}",
             "",
@@ -72,10 +72,10 @@ def get_install_infos() -> str:
             f"Platform: {platform.platform()}",
             f"Python v{sys.version}",
             "",
-            more_infos,
+            more_info,
         ]
     )
-    return infos
+    return info
 
 
 class InstallConfigViewerWindow(QW.QDialog):
@@ -88,14 +88,14 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.setWindowIcon(get_icon("DataLab.svg"))
         self.tabs = QW.QTabWidget(self)
         uc_title, uc_contents = get_title_contents(Conf.get_filename())
-        plugins_io_contents = PluginRegistry.get_plugin_infos(html=False)
+        plugins_io_contents = PluginRegistry.get_plugin_info(html=False)
         for registry in (SignalIORegistry, ImageIORegistry):
             plugins_io_contents += os.linesep + ("_" * 80) + os.linesep * 2
-            plugins_io_contents += registry.get_format_infos()
+            plugins_io_contents += registry.get_format_info()
         for title, contents, tab_icon, tab_title in (
             (
                 _("Installation configuration"),
-                get_install_infos(),
+                get_install_info(),
                 get_icon("libre-toolbox.svg"),
                 _("Installation configuration"),
             ),

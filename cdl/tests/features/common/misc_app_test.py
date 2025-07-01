@@ -103,8 +103,8 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
     execenv.print(win.get_object_titles())
 
     # Get object titles with info:
-    __print_test_result("Get group titles with object infos")
-    execenv.print(win.get_group_titles_with_object_infos())
+    __print_test_result("Get group titles with object info")
+    execenv.print(win.get_group_titles_with_object_info())
 
     # Pop up tab menu:
     __print_test_result("Pop up tab menu")
