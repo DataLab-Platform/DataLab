@@ -8,7 +8,7 @@ DataLab Utilities for exogenous HDF5 format support
 
 import numpy as np
 
-from sigima_.io.utils import to_string
+from sigima_.io.converters import to_string
 
 
 def fix_ldata(fuzzy):

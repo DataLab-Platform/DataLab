@@ -28,7 +28,7 @@ import cdl
 from cdl.config import _
 from cdl.env import execenv
 from cdl.gui import ObjItf
-from sigima_.io.utils import to_string
+from sigima_.io.converters import to_string
 
 UNTITLED_NB = 0
 

@@ -10,7 +10,7 @@ import h5py
 import numpy as np
 
 from cdl.h5 import common, utils
-from sigima_.io.utils import to_string
+from sigima_.io.converters import to_string
 from sigima_.obj import create_image, create_signal
 
 

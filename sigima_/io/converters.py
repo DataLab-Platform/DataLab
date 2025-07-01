@@ -8,6 +8,8 @@ I/O conversion functions
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 import skimage
 
@@ -54,3 +56,16 @@ def convert_array_to_standard_type(array: np.ndarray) -> np.ndarray:
         return array
 
     raise ValueError("Unsupported data type")
+
+
+def to_string(obj: Any) -> str:
+    """Convert to string, trying utf-8 then latin-1 codec"""
+    if isinstance(obj, bytes):
+        try:
+            return obj.decode()
+        except UnicodeDecodeError:
+            return obj.decode("latin-1")
+    try:
+        return str(obj)
+    except UnicodeDecodeError:
+        return str(obj, encoding="latin-1")

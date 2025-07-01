@@ -9,7 +9,6 @@ I/O utility functions
 from __future__ import annotations
 
 from itertools import islice
-from typing import Any
 
 
 def count_lines(filename: str) -> int:
@@ -49,16 +48,3 @@ def read_first_n_lines(filename: str, n: int = 100000) -> str:
         except UnicodeDecodeError:
             pass
     raise IOError(f"Cannot read file {filename}")
-
-
-def to_string(obj: Any) -> str:
-    """Convert to string, trying utf-8 then latin-1 codec"""
-    if isinstance(obj, bytes):
-        try:
-            return obj.decode()
-        except UnicodeDecodeError:
-            return obj.decode("latin-1")
-    try:
-        return str(obj)
-    except UnicodeDecodeError:
-        return str(obj, encoding="latin-1")
