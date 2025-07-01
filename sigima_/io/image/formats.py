@@ -36,7 +36,14 @@ class ClassicsImageFormat(ImageFormatBase):
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
+        """Read data and return it
+
+        Args:
+            filename: File name
+
+        Returns:
+            Image array data
+        """
         return skimage.io.imread(filename, as_gray=True)
 
     @staticmethod
@@ -69,7 +76,14 @@ class NumPyImageFormat(ImageFormatBase):
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
+        """Read data and return it
+
+        Args:
+            filename: File name
+
+        Returns:
+            Image array data
+        """
         return convert_array_to_standard_type(np.load(filename))
 
     @staticmethod
@@ -95,7 +109,14 @@ class TextImageFormat(ImageFormatBase):
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read and return data."""
+        """Read data and return it
+
+        Args:
+            filename: File name
+
+        Returns:
+            Image array data
+        """
         for encoding in ("utf-8", "utf-8-sig", "latin-1"):
             for decimal in (".", ","):
                 for delimiter in (",", ";", r"\s+"):
@@ -177,7 +198,14 @@ class MatImageFormat(ImageFormatBase):
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
+        """Read data and return it
+
+        Args:
+            filename: File name
+
+        Returns:
+            Image array data
+        """
         # This method is not used, as read() is overridden
 
     @staticmethod
@@ -204,7 +232,14 @@ class DICOMImageFormat(ImageFormatBase):
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
+        """Read data and return it
+
+        Args:
+            filename: File name
+
+        Returns:
+            Image array data
+        """
         return plotpy.io.imread(filename)
 
 
@@ -220,7 +255,14 @@ class AndorSIFImageFormat(MultipleImagesFormatBase):
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
+        """Read data and return it
+
+        Args:
+            filename: File name
+
+        Returns:
+            Image array data
+        """
         return funcs.imread_sif(filename)
 
 
@@ -259,5 +301,40 @@ class SpiriconImageFormat(ImageFormatBase):
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
+        """Read data and return it
+
+        Args:
+            filename: File name
+
+        Returns:
+            Image array data
+        """
         return funcs.imread_scor(filename)
+
+
+class XYZImageFormat(ImageFormatBase):
+    """Object representing Dürr NDT XYZ image file type"""
+
+    FORMAT_INFO = FormatInfo(
+        name="Dürr NDT",
+        extensions="*.xyz",
+        readable=True,
+        writeable=False,
+    )
+
+    @staticmethod
+    def read_data(filename: str) -> np.ndarray:
+        """Read data and return it
+
+        Args:
+            filename: File name
+
+        Returns:
+            Image array data
+        """
+        with open(filename, "rb") as fdesc:
+            cols = int(np.fromfile(fdesc, dtype=np.uint16, count=1)[0])
+            rows = int(np.fromfile(fdesc, dtype=np.uint16, count=1)[0])
+            arr = np.fromfile(fdesc, dtype=np.uint16, count=cols * rows)
+            arr = arr.reshape((rows, cols))
+        return np.fliplr(arr)

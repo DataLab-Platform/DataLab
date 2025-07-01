@@ -44,6 +44,15 @@ class FormatInfo:
     Writeable:  {"Yes" if self.writeable else "No"}
     Requires:   {", ".join(self.requires) if self.requires else "None"}"""
 
+    def to_rst_table_row(self) -> str:
+        """Return reStructuredText table row for format info
+        (table `.. list-table::` format, with 5 columns)"""
+        return f"""    * - {self.name}
+      - {self.extensions}
+      - {"•" if self.readable else ""}
+      - {"•" if self.writeable else ""}
+      - {", ".join(self.requires) if self.requires else "-"}"""
+
 
 class FormatBase:
     """Object representing a data file io"""
@@ -147,17 +156,26 @@ class BaseIORegistry(type):
         return cls._io_format_instances
 
     @classmethod
-    def get_format_info(cls) -> str:
+    def get_format_info(cls, rst: bool = True) -> str:
         """Return I/O format info
+
+        Args:
+            rst: if True, return in reStructuredText format (default: True)
 
         Returns:
             Text description for all I/O formats
         """
-        text = f"{cls.REGISTRY_INFO}:{os.linesep}"
-        indent = " " * 4
-        finfo = os.linesep.join([str(fmt.info) for fmt in cls.get_formats()])
-        text += os.linesep.join([indent + line for line in finfo.splitlines()])
-        return text
+        if rst:
+            txt = f"{cls.REGISTRY_INFO}:\n\n.. list-table::\n    :header-rows: 1\n\n"
+            txt += "    * - Name\n      - Extensions\n      "
+            txt += "- Readable\n      - Writeable\n      - Requires\n"
+            txt += "\n".join([fmt.info.to_rst_table_row() for fmt in cls.get_formats()])
+        else:
+            txt = f"{cls.REGISTRY_INFO}:{os.linesep}"
+            indent = " " * 4
+            finfo = "\n".join([str(fmt.info) for fmt in cls.get_formats()])
+            txt += "\n".join([indent + line for line in finfo.splitlines()])
+        return txt
 
     @classmethod
     def get_all_filters(cls, action: IOAction) -> str:
