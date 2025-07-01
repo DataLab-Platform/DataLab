@@ -139,7 +139,7 @@ msgid "Added support for background images in ANDOR SIF files"
 msgstr "Ajout de la prise en charge des images de fond dans les fichiers ANDOR SIF"
 
 msgid "This closes [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Add support for ANDOR SIF files with background image"
-msgstr "Ceci clotûre le ticket [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Ajout de la prise en charge des fichiers ANDOR SIF avec image de fond"
+msgstr "Ceci clôture le ticket [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Ajout de la prise en charge des fichiers ANDOR SIF avec image de fond"
 
 msgid "Array editor (results, signal and image data, ...):"
 msgstr "Éditeur de tableau (résultats, données de signal et d'image, ...)"
@@ -158,7 +158,7 @@ msgstr "Les fonctionnalités ci-dessus nécessitent guidata v3.9.0 ou une versio
 
 #, fuzzy
 msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) and [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
-msgstr "Ceci clotûre les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
+msgstr "Ceci clôture les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 
 msgid "Fourier analysis features (\"Processing\" menu):"
 msgstr "Fonctionnalités d'analyse de Fourier (menu \"Traitement\") :"
@@ -206,7 +206,7 @@ msgid "Images: the rectangular ROI selection tool is now active by default, and 
 msgstr "Images : l'outil de sélection de la ROI rectangulaire est désormais actif par défaut, et l'utilisateur peut sélectionner immédiatement la ROI rectangulaire à utiliser comme ROI"
 
 msgid "This closes [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - ROI editor: activate ROI selection tool by default, so that the user can select right away the area to be used as a ROI"
-msgstr "Ceci clotûre le ticket [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - Éditeur de ROI : activer l'outil de sélection de ROI par défaut, afin que l'utilisateur puisse sélectionner immédiatement la zone à utiliser comme ROI"
+msgstr "Ceci clôture le ticket [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - Éditeur de ROI : activer l'outil de sélection de ROI par défaut, afin que l'utilisateur puisse sélectionner immédiatement la zone à utiliser comme ROI"
 
 msgid "Added the \"Select tool\" to editor's toolbar, to allow the user to switch between the \"Select\" and \"Draw\" tools easily without having to use the plot toolbar on the top of the window"
 msgstr "Ajout de l'outil \"Sélectionner\" à la barre d'outils de l'éditeur, pour permettre à l'utilisateur de basculer facilement entre les outils \"Sélectionner\" et \"Dessiner\" sans avoir à utiliser la barre d'outils de tracé en haut de la fenêtre"
@@ -230,7 +230,7 @@ msgid "Each feature has its own dialog box, which allows to set the y or x value
 msgstr "Chaque fonctionnalité a sa propre boîte de dialogue, qui permet de définir la valeur y ou x à utiliser pour la recherche avec un curseur ou une zone de texte"
 
 msgid "This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
-msgstr "Ceci clotûre les tickets [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) et [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
+msgstr "Ceci clôture les tickets [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) et [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
 
 msgid "New full width at given y feature:"
 msgstr "Nouvelle fonctionnalité de calcul de largeur à un y donné :"
@@ -242,7 +242,7 @@ msgid "A specific dialog box allows to set the y value to be used for the search
 msgstr "Une boîte de dialogue spécifique permet de définir la valeur y à utiliser avec un curseur ou une zone de texte"
 
 msgid "This closes [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
-msgstr "Ceci clotûre le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
 msgid "Public API (local or remote):"
 msgstr "API publique (locale ou distante) :"
@@ -386,7 +386,7 @@ msgid "Method was added to the following classes: `AbstractCDLControl`, `BaseDat
 msgstr "Cette méthode a été ajoutée aux classes suivantes : `AbstractCDLControl`, `BaseDataPanel` et `RemoteClient`"
 
 msgid "This closes the following issues:"
-msgstr "Cette fonctionnalité clotûre les tickets suivants :"
+msgstr "Cette fonctionnalité clôture les tickets suivants :"
 
 msgid "[Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `BaseDataPanel.add_group`: add `select` argument"
 msgstr "[Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `BaseDataPanel.add_group` : ajout de l'argument `select`"
@@ -410,7 +410,7 @@ msgid "Added a new \"Ask before clearing workspace\" option in the \"Settings\" 
 msgstr "Ajout d'une nouvelle option \"Demander avant d'effacer l'espace de travail\" dans la boîte de dialogue \"Paramètres\", pour permettre à l'utilisateur de désactiver ou de réactiver la boîte de dialogue de confirmation demandant si l'espace de travail actuel doit être effacé lors de l'ouverture d'un fichier HDF5"
 
 msgid "This closes [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146) - Ask before clearing workspace when opening HDF5 file: add \"Ignore\" option to prevent dialog from being displayed again"
-msgstr "Ceci clotûre le ticket [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146) - Demander avant d'effacer l'espace de travail lors de l'ouverture d'un fichier HDF5 : ajouter l'option \"Ignorer\" pour empêcher la boîte de dialogue d'être affichée à nouveau"
+msgstr "Ceci clôture le ticket [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146) - Demander avant d'effacer l'espace de travail lors de l'ouverture d'un fichier HDF5 : ajouter l'option \"Ignorer\" pour empêcher la boîte de dialogue d'être affichée à nouveau"
 
 msgid "Object and group title renaming:"
 msgstr "Renommage du titre des objets et des groupes :"
@@ -449,7 +449,7 @@ msgid "The polygonal ROI is not supported yet"
 msgstr "La ROI polygonale n'est pas encore prise en charge"
 
 msgid "This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates"
-msgstr "Ceci clotûre le ticket [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - Éditeur de ROI : ajouter la saisie manuelle des coordonnées"
+msgstr "Ceci clôture le ticket [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - Éditeur de ROI : ajouter la saisie manuelle des coordonnées"
 
 msgid "Fixed [Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Image analysis: mask `nan` values when computing statistics, for example"
 msgstr "Correction de l'[Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Analyse d'image : masque des valeurs `nan` lors du calcul des statistiques, par exemple"
