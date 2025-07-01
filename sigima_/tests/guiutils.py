@@ -5,6 +5,8 @@ Utilities to manage GUI activation for tests executed with pytest
 or as standalone scripts.
 """
 
+from __future__ import annotations
+
 import types
 
 import pytest
