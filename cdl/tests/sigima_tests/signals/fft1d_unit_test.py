@@ -53,6 +53,17 @@ def test_signal_fft_interactive() -> None:
         check_array_result("Signal FFT/iFFT Y data", y2, y)
         view_curves([(t, y), (t2, y2)])
 
+        extra_param = sigima_.obj.PeriodicParam()
+        s1 = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
+        t, y = s1.xydata
+        f, s = fourier.fft1d(t, y, shift=False)
+        t2, y2 = fourier.ifft1d(f, s, shift=False)
+        execenv.print("Comparing original and FFT/iFFT signals...", end=" ")
+        execenv.print("OK")
+        check_array_result("Signal FFT/iFFT X data", t2, t)
+        check_array_result("Signal FFT/iFFT Y data", y2, y)
+        view_curves([(t, y), (t2, y2)])
+
 
 @pytest.mark.validation
 def test_signal_zero_padding() -> None:
