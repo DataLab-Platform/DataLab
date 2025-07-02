@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 17:16+0200\n"
+"POT-Creation-Date: 2025-07-01 13:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -22,8 +22,8 @@ msgstr ""
 msgid "Parameters (:mod:`sigima_.param`)"
 msgstr "Paramètres (:mod:`sigima_.param`)"
 
-msgid "The :mod:`sigima_.param` module aims at providing all the dataset parameters that are used by the :mod:`sigima_.computation` and :mod:`cdl.gui.processor` packages."
-msgstr "Le module :mod:`sigima_.param` fournit tous les paramètres de jeu de données utilisés par les modules :mod:`sigima_.computation` et :mod:`cdl.gui.processor`."
+msgid "The :mod:`sigima_.param` module aims at providing all the dataset parameters that are used by the :mod:`sigima_.computation` and DataLab's processors."
+msgstr "Le module :mod:`sigima_.param` a vocation à fournir tous les paramètres de jeu de données utilisés par les modules :mod:`sigima_.computation` et :mod:`cdl.gui.processor`."
 
 msgid "Those datasets are defined in other modules:"
 msgstr "Ces jeux de données sont définis dans d'autres modules :"
@@ -940,7 +940,7 @@ msgstr ""
 msgid "New instance of :py:class:`ContourShapeParam`."
 msgstr ""
 
-msgid "Neighborhoods size\\. Size of the sliding window used in maximum/minimum filtering algorithm\\. Integer higher than 1, unit: pixels\\. Default: 10."
+msgid "Neighborhoods size\\. Size of the sliding window used in maximum/minimum filtering algorithm (if no value is provided, the algorithm will use a default size based on the image size). \\. Integer higher than 1, unit: pixels\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`Peak2DDetectionParam` with the fields set to the given values."
@@ -1158,4 +1158,3 @@ msgstr ""
 
 msgid "New instance of :py:class:`ThresholdParam`."
 msgstr ""
-

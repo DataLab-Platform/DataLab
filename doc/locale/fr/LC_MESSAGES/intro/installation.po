@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 20:24+0200\n"
+"POT-Creation-Date: 2025-07-02 13:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -264,9 +264,6 @@ msgstr ""
 msgid "Core utilities for Python packages"
 msgstr ""
 
-msgid "Backported and Experimental Type Hints for Python 3.9+"
-msgstr ""
-
 msgid "PyQt5"
 msgstr ""
 
@@ -380,3 +377,4 @@ msgstr "Plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
+

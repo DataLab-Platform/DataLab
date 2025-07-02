@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:12+0100\n"
+"POT-Creation-Date: 2025-07-01 13:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -182,6 +182,15 @@ msgstr "DataLab prend également en charge tout format d'image pouvant être lu 
 msgid "To add a new file format, you may use the `imageio_formats` entry of DataLab configuration file. This entry is a formatted like the `IMAGEIO_FORMATS` object which represents the natively supported formats:"
 msgstr "Pour ajouter un nouveau format de fichier, vous pouvez utiliser l'entrée `imageio_formats` du fichier de configuration de DataLab. Cette entrée est formatée comme l'objet `IMAGEIO_FORMATS` qui représente les formats pris en charge nativement :"
 
+msgid "Built-in immutable sequence."
+msgstr ""
+
+msgid "If no argument is given, the constructor returns an empty tuple. If iterable is specified the tuple is initialized from iterable's items."
+msgstr ""
+
+msgid "If the argument is a tuple, the return value is the same object."
+msgstr ""
+
 msgid "Save image"
 msgstr "Enregister l'image"
 
@@ -244,3 +253,4 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
+
