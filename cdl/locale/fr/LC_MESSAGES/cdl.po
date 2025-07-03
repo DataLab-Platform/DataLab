@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  cdl\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-06-26 15:12+0200\n"
+"POT-Creation-Date: 2025-07-03 16:25+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1804,57 +1804,6 @@ msgstr "Créer une image 2D échelon"
 msgid "Create ring image"
 msgstr "Créer une image avec un anneau"
 
-msgid "Mean"
-msgstr "Moyenne"
-
-msgid "Mean of the Gaussian distribution"
-msgstr "Moyenne de la distribution gaussienne"
-
-msgid "Standard deviation"
-msgstr "Ecart-type"
-
-msgid "Standard deviation of the Gaussian distribution"
-msgstr "Ecart-type de la distribution gaussienne"
-
-msgid "Seed"
-msgstr "Graine"
-
-msgid "Seed for random number generator"
-msgstr "Graine du générateur de nombres aléatoires"
-
-msgid "Size"
-msgstr "Taille"
-
-msgid "Number"
-msgstr "Nombre"
-
-msgid "Number of points"
-msgstr "Nombre de points"
-
-msgid "Sigma of the 2D Gaussian"
-msgstr "Sigma de la gaussienne 2D"
-
-msgid "Amplitude of the 2D Gaussian"
-msgstr "Amplitude de la gaussienne 2D"
-
-msgid "Attenuation"
-msgstr "Atténuation"
-
-msgid "X<sub>center</sub>"
-msgstr "X<sub>centre</sub>"
-
-msgid "Y<sub>center</sub>"
-msgstr "Y<sub>centre</sub>"
-
-msgid "Width"
-msgstr "Largeur"
-
-msgid "Radius"
-msgstr "Rayon"
-
-msgid "Intensity"
-msgstr "Intensité"
-
 msgid "Host application"
 msgstr "Application hôte"
 
@@ -1968,6 +1917,9 @@ msgstr "Ligne de base"
 msgid "Std-dev"
 msgstr "Ecart-type"
 
+msgid "Mean"
+msgstr "Moyenne"
+
 msgid "Y0"
 msgstr "Y0"
 
@@ -2018,6 +1970,9 @@ msgstr "Nom"
 
 msgid "Type"
 msgstr "Type"
+
+msgid "Size"
+msgstr "Taille"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -2492,7 +2447,8 @@ msgstr "Seuil de détection, relatif à la différence entre le maximum et le mi
 msgid "Neighborhoods size"
 msgstr "Taille du voisinage"
 
-msgid "Size of the sliding window used in maximum/minimum filtering algorithm"
+#, fuzzy
+msgid "Size of the sliding window used in maximum/minimum filtering algorithm (if no value is provided, the algorithm will use a default size based on the image size). "
 msgstr "Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage maximum/minimum"
 
 msgid "Ellipse"
@@ -2843,6 +2799,9 @@ msgstr "Modification de la taille des pixels de sorte que les dimensions de l'im
 msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
+msgid "Radius"
+msgstr "Rayon"
+
 msgid "Denoising weight"
 msgstr "Poids de débruitage"
 
@@ -2945,6 +2904,9 @@ msgstr "Stratégie"
 msgid "Number of points to add"
 msgstr "Nombre de points à ajouter"
 
+msgid "Number of points"
+msgstr "Nombre de points"
+
 msgid "Degree"
 msgstr "Degré"
 
@@ -3044,6 +3006,31 @@ msgstr "Nombre d'harmoniques"
 msgid "Number of harmonics to consider for THD"
 msgstr "Nombre d'harmoniques à considérer pour le THD"
 
+msgid "If True, computation functions will not delete previous results when creating new objects. This allows for retaining results across invocations."
+msgstr ""
+
+msgid "If True, the FFT operations will apply a shift to the zero frequency component to the center of the spectrum. This is useful for visualizing frequency components in a more intuitive way."
+msgstr ""
+
+msgid ""
+"List of supported image I/O formats. Each format is a tuple of\n"
+"(file extension, description).\n"
+"\n"
+".. note::\n"
+"\n"
+"    The `sigima` library supports any image format that can be read by the `imageio`\n"
+"    library, provided that the associated plugin(s) are installed (see `imageio\n"
+"    documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_)\n"
+"    and that the output NumPy array data type and shape are supported by `sigima`.\n"
+"\n"
+"    To add a new file format, you may use the `imageio_formats` option to specify\n"
+"    additional formats. Each entry should be a tuple of (file extension, description).\n"
+"\n"
+"    Example:\n"
+"\n"
+"    .. autodata:: sigima_.config.IMAGEIO_FORMATS\n"
+msgstr ""
+
 msgid "All supported files"
 msgstr "Tous les fichiers pris en charge"
 
@@ -3064,6 +3051,9 @@ msgstr "Fichiers CSV"
 
 msgid "NumPy binary files"
 msgstr "Fichiers binaires NumPy"
+
+msgid "Seed"
+msgstr "Graine"
 
 msgid "Uniform distribution lower bound"
 msgstr "Borne inférieure de la distribution uniforme"
@@ -3149,6 +3139,9 @@ msgstr "Hauteur de l'image : nombre de lignes"
 msgid "Image width: number of columns"
 msgstr "Largeur de l'image : nombre de colonnes"
 
+msgid "Width"
+msgstr "Largeur"
+
 msgid "First point coordinate"
 msgstr "Coordonnée du premier point"
 
@@ -3214,4 +3207,37 @@ msgstr "Signal sans titre"
 
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
+
+msgid "Mean of the Gaussian distribution"
+msgstr "Moyenne de la distribution gaussienne"
+
+msgid "Standard deviation"
+msgstr "Ecart-type"
+
+msgid "Standard deviation of the Gaussian distribution"
+msgstr "Ecart-type de la distribution gaussienne"
+
+msgid "Seed for random number generator"
+msgstr "Graine du générateur de nombres aléatoires"
+
+msgid "Number"
+msgstr "Nombre"
+
+msgid "Sigma of the 2D Gaussian"
+msgstr "Sigma de la gaussienne 2D"
+
+msgid "Amplitude of the 2D Gaussian"
+msgstr "Amplitude de la gaussienne 2D"
+
+msgid "Attenuation"
+msgstr "Atténuation"
+
+msgid "X<sub>center</sub>"
+msgstr "X<sub>centre</sub>"
+
+msgid "Y<sub>center</sub>"
+msgstr "Y<sub>centre</sub>"
+
+msgid "Intensity"
+msgstr "Intensité"
 
