@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 11:10+0200\n"
+"POT-Creation-Date: 2025-07-03 16:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -220,8 +220,29 @@ msgstr "Calculer la FFT sur les données X,Y."
 msgid "Shift the zero frequency to the center of the spectrum. Defaults to True."
 msgstr "Déplacer la fréquence zéro au centre du spectre. Par défaut : True."
 
-msgid "Compute iFFT on X,Y data."
-msgstr "Calculer la iFFT sur les données X,Y."
+msgid "Compute inverse Fast Fourier Transform (iFFT)."
+msgstr "Calcule l'inverse de la transformée de Fourier rapide (iFFT)."
+
+msgid "1-D evenly-spaced values in frequency domain."
+msgstr "Valeurs 1-D uniformément espacées dans le domaine de fréquence."
+
+msgid "1-D spectrum values."
+msgstr "Valeurs du spectre 1-D."
+
+msgid "If `True`, input has zero-frequency component shifted to the center."
+msgstr "Si `True`, l'entrée a le composant de fréquence zéro décalé au centre."
+
+msgid "Starting value for the reconstructed time axis."
+msgstr "Valeur de départ pour l'axe temporel reconstruit."
+
+msgid "Tuple containing the signal x and y data in time domain."
+msgstr "Tuple contenant les données x et y du signal dans le domaine temporel."
+
+msgid "Raises"
+msgstr "Lève"
+
+msgid "If the frequency array has less than two elements."
+msgstr "Si le tableau de fréquences a moins de deux éléments."
 
 msgid "Compute magnitude spectrum."
 msgstr "Calculer le spectre de magnitude."
@@ -492,9 +513,6 @@ msgstr "Nom de la fonction de fenêtrage."
 
 msgid "Window function"
 msgstr "Fonction de fenêtre"
-
-msgid "Raises"
-msgstr "Lève"
 
 msgid "If the method is not recognized."
 msgstr "Si la méthode n'est pas reconnue."
@@ -981,4 +999,3 @@ msgstr "Coordonnées cartésiennes (x, y) où x est la coordonnée x et y est la
 
 msgid "Negative radius values are not supported. They will be set to 0."
 msgstr "Les valeurs de rayon négatives ne sont pas prises en charge. Elles seront définies sur 0."
-

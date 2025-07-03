@@ -1109,7 +1109,7 @@ def ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_1_to_1(src, "ifft")
     x, y = src.get_data()
-    dst.set_xydata(*fourier.ifft1d(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*fourier.ifft1d(x, y, shifted=True if p is None else p.shift))
     dst.restore_attr_from_metadata("xunit", "s" if src.xunit == "Hz" else "")
     dst.restore_attr_from_metadata("yunit", "")
     dst.restore_attr_from_metadata("xlabel", "")

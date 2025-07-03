@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import numpy as np
+import numpy.typing as npt
 import scipy.signal
 
 from sigima_.algorithms.signal.dynamic import sampling_rate
@@ -53,27 +54,40 @@ def fft1d(
 
 
 def ifft1d(
-    x: np.ndarray, y: np.ndarray, shift: bool = True
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute iFFT on X,Y data.
+    f: npt.NDArray[np.floating],
+    sp: npt.NDArray[np.complexfloating],
+    shifted: bool = True,
+    initial: float = 0.0,
+) -> tuple[npt.NDArray[np.floating], npt.NDArray[np.floating]]:
+    """Compute inverse Fast Fourier Transform (iFFT).
 
     Args:
-        x: X data
-        y: Y data
-        shift: Shift the zero frequency to the center of the spectrum. Defaults to True.
+        f: 1-D evenly-spaced values in frequency domain.
+        sp: 1-D spectrum values.
+        shifted: If `True`, input has zero-frequency component shifted to the center.
+        initial: Starting value for the reconstructed time axis.
 
     Returns:
-        X data, Y data (tuple)
+        Tuple containing the signal x and y data in time domain.
+
+    Raises:
+        ValueError: If the frequency array has less than two elements.
     """
-    if shift:
-        y = np.fft.ifftshift(y)
+    if f.size < 2:
+        raise ValueError("Frequency array must have at least two elements.")
+    if shifted:
+        # Move zero-frequency component to the beginning.
+        sp = np.fft.ifftshift(sp)
     else:
-        x = np.fft.fftshift(x)
-    y1 = np.fft.ifft(y)
-    # Recalculate the original time domain array
-    dt = 1.0 / (x[-1] - x[0] + (x[1] - x[0]))
-    x1 = np.arange(y1.size) * dt
-    return x1, y1.real
+        # Move zero-frequency to the center.
+        f = np.fft.fftshift(f)
+    if not np.allclose(np.diff(f), np.mean(np.diff(f))):
+        raise ValueError("Frequency array must be evenly spaced.")
+    y = np.fft.ifft(sp)
+    df = np.mean(np.diff(f))
+    dt = 1.0 / (len(f) * df)
+    x = np.linspace(initial, initial + (len(y) - 1) * dt, y.size)
+    return x, y.real
 
 
 def magnitude_spectrum(
