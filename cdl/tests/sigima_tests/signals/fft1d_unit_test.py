@@ -44,25 +44,22 @@ def test_signal_fft_interactive() -> None:
 
         extra_param = sigima_.obj.PeriodicParam()
         s1 = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
-        t, y = s1.xydata
-        f, s = fourier.fft1d(t, y)
-        t2, y2 = fourier.ifft1d(f, s)
-        execenv.print("Comparing original and FFT/iFFT signals...", end=" ")
-        execenv.print("OK")
-        check_array_result("Signal FFT/iFFT X data", t2, t)
-        check_array_result("Signal FFT/iFFT Y data", y2, y)
-        view_curves([(t, y), (t2, y2)])
-
-        extra_param = sigima_.obj.PeriodicParam()
-        s1 = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
-        t, y = s1.xydata
-        f, s = fourier.fft1d(t, y, shift=False)
-        t2, y2 = fourier.ifft1d(f, s, shift=False)
-        execenv.print("Comparing original and FFT/iFFT signals...", end=" ")
-        execenv.print("OK")
-        check_array_result("Signal FFT/iFFT X data", t2, t)
-        check_array_result("Signal FFT/iFFT Y data", y2, y)
-        view_curves([(t, y), (t2, y2)])
+        t1, y1 = s1.xydata
+        for shift in (True, False):
+            f1, sp1 = fourier.fft1d(t1, y1, shift=shift)
+            t2, y2 = fourier.ifft1d(f1, sp1, shift=shift)
+            execenv.print(
+                f"Comparing original and recovered signals for shift = {shift}..."
+            )
+            check_array_result("Original and recovered x data", t2, t1)
+            check_array_result("Original and recovered y data", y2, y1)
+            execenv.print("OK")
+            view_curves(
+                [
+                    sigima_.obj.create_signal("Original", t1, y1),
+                    sigima_.obj.create_signal("Recovered", t2, y2),
+                ]
+            )
 
 
 @pytest.mark.validation
