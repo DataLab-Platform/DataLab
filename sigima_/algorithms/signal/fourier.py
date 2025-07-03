@@ -67,10 +67,11 @@ def ifft1d(
     """
     if shift:
         y = np.fft.ifftshift(y)
+    else:
+        x = np.fft.fftshift(x)
     y1 = np.fft.ifft(y)
     # Recalculate the original time domain array
-    x_sorted = np.sort(x)
-    dt = 1.0 / (x_sorted[-1] - x_sorted[0] + (x_sorted[1] - x_sorted[0]))
+    dt = 1.0 / (x[-1] - x[0] + (x[1] - x[0]))
     x1 = np.arange(y1.size) * dt
     return x1, y1.real
 
