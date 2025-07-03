@@ -39,6 +39,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238) - Image text files with a trailing delimiter leads to data with a superfluous column when opened directly (does not happen in the Import Wizard)
 * Fixed [Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239) - Text Import Wizard does not preserve user-defined titles and units
 * Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)
+* Fixed [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Erroneous ifft1d x-axis computation when shift=False
 * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\s+` instead of single space character)
 
 ℹ️ Other changes:

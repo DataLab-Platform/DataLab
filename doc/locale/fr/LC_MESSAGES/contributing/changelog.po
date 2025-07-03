@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 15:12+0200\n"
+"POT-Creation-Date: 2025-07-03 16:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -116,6 +116,9 @@ msgstr "Correction de l'[Issue #239](https://github.com/DataLab-Platform/DataLab
 
 msgid "Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)"
 msgstr "Correction de l'[Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - L'Assistant d'importation de texte ne préserve pas le type de données défini par l'utilisateur (par exemple, `int16`, `float32`, etc.)"
+
+msgid "Fixed [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Erroneous ifft1d x-axis computation when shift=False"
+msgstr "Correction de [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Calcul erroné de l'axe temporel dans ifft1d lorsque shift=False"
 
 msgid "Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\\s+` instead of single space character)"
 msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec des séparateurs d'espaces variables (utilisation désormais du motif regex `\\s+` au lieu du caractère espace simple)"
