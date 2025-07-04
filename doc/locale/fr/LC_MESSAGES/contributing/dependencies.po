@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 15:59+0200\n"
+"POT-Creation-Date: 2025-07-04 12:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -32,7 +32,7 @@ msgid "Dependencies in DataLab Project are defined in the `pyproject.toml` file,
 msgstr "Les dépendances du projet DataLab sont définies dans le fichier `pyproject.toml`, comme recommandé officiellement par l'autorité de packaging Python (voir `Writing your pyproject.toml <https://packaging.python.org/en/latest/guides/writing-pyproject-toml/>`_)."
 
 msgid "The `pyproject.toml` file contains many sections, but the most relevant for dependencies are:"
-msgstr ""Le fichier `pyproject.toml` contient de nombreuses sections, mais les plus pertinentes pour les dépendances sont :"
+msgstr "\"Le fichier `pyproject.toml` contient de nombreuses sections, mais les plus pertinentes pour les dépendances sont :"
 
 msgid "`[project.dependencies]`: This section lists the direct dependencies of the application. These are the packages that the application needs to run."
 msgstr "`[project.dependencies]`: Cette section liste les dépendances directes de l'application. Ce sont les paquets dont l'application a besoin pour fonctionner."
@@ -73,11 +73,20 @@ msgstr "Voir :ref:`installation` pour plus d'informations sur la façon d'instal
 msgid "Development"
 msgstr "En développement"
 
-msgid "In development, you may also use the `requirements.txt` file to make it easier to install the dependencies in a virtual environment or container."
-msgstr "En développement, vous pouvez également utiliser le fichier `requirements.txt` pour faciliter l'installation des dépendances dans un environnement virtuel ou un conteneur."
+msgid "In development, you may also use the requirements text files to make it easier to install the dependencies in a virtual environment or container."
+msgstr "En développement, vous pouvez également utiliser les fichiers de texte des exigences pour faciliter l'installation des dépendances dans un environnement virtuel ou un conteneur."
 
-msgid "The `requirements.txt` file is generated from the `pyproject.toml` file using `toml-to-requirements` tool. This file is useful for quickly installing the dependencies in a virtual environment or container."
-msgstr "Le fichier `requirements.txt` est généré à partir du fichier `pyproject.toml` en utilisant l'outil `toml-to-requirements`. Ce fichier est utile pour installer rapidement les dépendances dans un environnement virtuel ou un conteneur."
+msgid "Two requirements files are provided:"
+msgstr "Deux fichiers de dépendances sont fournis :"
+
+msgid "`requirements.txt`: This file lists all the dependencies needed for the project, including both direct and optional dependencies. This is the exact list of dependencies that are defined in the `pyproject.toml` file, but formatted for use with `pip` or other package managers that support requirements files."
+msgstr "`requirements.txt`: Ce fichier liste toutes les dépendances nécessaires au projet, y compris les dépendances directes et optionnelles. C'est la liste exacte des dépendances définies dans le fichier `pyproject.toml`, mais formatée pour être utilisée avec `pip` ou d'autres gestionnaires de paquets qui prennent en charge les fichiers de dépendances."
+
+msgid "`requirements-min.txt`: This file lists the dependencies with minimum versions required to run the project. It is useful for executing the project with the maximum compatibility, ensuring that the project runs with the least restrictive versions of the dependencies. *This is the recommended file to use when developing the project.*"
+msgstr "`requirements-min.txt`: Ce fichier liste les dépendances avec les versions minimales requises pour exécuter le projet. Il est utile pour exécuter le projet avec la compatibilité maximale, garantissant que le projet s'exécute avec les versions les moins restrictives des dépendances. *C'est le fichier recommandé à utiliser lors du développement du projet.*"
+
+msgid "The requirements files are generated from the `pyproject.toml` file using a tool provided by the `guidata` package."
+msgstr "Les fichiers de dépendances sont générés à partir du fichier `pyproject.toml` à l'aide d'un outil fourni par le package `guidata`."
 
 msgid "Adding New Dependencies"
 msgstr "Ajouter de nouvelles dépendances"

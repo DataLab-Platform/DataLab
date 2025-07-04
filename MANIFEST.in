@@ -6,4 +6,5 @@ include conftest.py
 include CHANGELOG.md
 include CONTRIBUTING.md
 include requirements.txt
+include requirements-min.txt
 include *.desktop
