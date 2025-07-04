@@ -45,9 +45,9 @@ def test_signal_fft_interactive() -> None:
         extra_param = sigima_.obj.PeriodicParam()
         s1 = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
         t1, y1 = s1.xydata
-        for shift in (True, False):
-            f1, sp1 = fourier.fft1d(t1, y1, shift=shift)
-            t2, y2 = fourier.ifft1d(f1, sp1, shifted=shift)
+        for shifted in (True, False):
+            f1, sp1 = fourier.fft1d(t1, y1, shifted=shifted)
+            t2, y2 = fourier.ifft1d(f1, sp1, shifted=shifted)
             execenv.print(
                 f"Comparing original and recovered signals for shift = {shift}..."
             )

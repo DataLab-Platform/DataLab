@@ -33,24 +33,28 @@ def zero_padding(x: np.ndarray, y: np.ndarray, n: int) -> tuple[np.ndarray, np.n
 
 
 def fft1d(
-    x: np.ndarray, y: np.ndarray, shift: bool = True
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute FFT on X,Y data.
+    x: npt.NDArray[np.floating],
+    y: npt.NDArray[np.floating],
+    shifted: bool = True,
+) -> tuple[npt.NDArray[np.floating], npt.NDArray[np.complexfloating]]:
+    """
+    Compute the Fast Fourier Transform (FFT) of a 1D real signal.
 
     Args:
-        x: X data
-        y: Y data
-        shift: Shift the zero frequency to the center of the spectrum. Defaults to True.
+        x: Time domain axis (evenly spaced).
+        y: Signal values.
+        shifted: If True, shift zero frequency to the center of the spectrum.
 
     Returns:
-        X data, Y data (tuple)
+        Tuple (f, sp): Frequency axis and corresponding FFT values.
     """
-    y1 = np.fft.fft(y)
-    x1 = np.fft.fftfreq(x.size, d=x[1] - x[0])
-    if shift:
-        x1 = np.fft.fftshift(x1)
-        y1 = np.fft.fftshift(y1)
-    return x1, y1
+    dt = x[1] - x[0]
+    f = np.fft.fftfreq(x.size, d=dt)  # Frequency axis
+    sp = np.fft.fft(y)  # Spectrum values
+    if shifted:
+        f = np.fft.fftshift(f)
+        sp = np.fft.fftshift(sp)
+    return f, sp
 
 
 def ifft1d(
@@ -59,33 +63,34 @@ def ifft1d(
     shifted: bool = True,
     initial: float = 0.0,
 ) -> tuple[npt.NDArray[np.floating], npt.NDArray[np.floating]]:
-    """Compute inverse Fast Fourier Transform (iFFT).
+    """
+    Compute the inverse FFT of a spectrum.
 
     Args:
-        f: 1-D evenly-spaced values in frequency domain.
-        sp: 1-D spectrum values.
-        shifted: If `True`, input has zero-frequency component shifted to the center.
-        initial: Starting value for the reconstructed time axis.
+        f: Frequency axis (evenly spaced).
+        spectrum: FFT values.
+        shifted: If True, the input spectrum is centered (zero frequency in the middle).
+        initial: Starting value for the time axis.
 
     Returns:
-        Tuple containing the signal x and y data in time domain.
+        Tuple (x, y): Time axis and reconstructed real signal.
 
     Raises:
-        ValueError: If the frequency array has less than two elements.
+        ValueError: If frequency array is not evenly spaced or has fewer than 2 points.
     """
     if f.size < 2:
         raise ValueError("Frequency array must have at least two elements.")
     if shifted:
-        # Move zero-frequency component to the beginning.
         sp = np.fft.ifftshift(sp)
     else:
-        # Move zero-frequency to the center.
         f = np.fft.fftshift(f)
-    if not np.allclose(np.diff(f), np.mean(np.diff(f))):
-        raise ValueError("Frequency array must be evenly spaced.")
-    y = np.fft.ifft(sp)
+
     df = np.mean(np.diff(f))
-    dt = 1.0 / (len(f) * df)
+    if not np.allclose(np.diff(f), df):
+        raise ValueError("Frequency array must be evenly spaced.")
+
+    y = np.fft.ifft(sp)
+    dt = 1.0 / (f.size * df)
     x = np.linspace(initial, initial + (len(y) - 1) * dt, y.size)
     return x, y.real
 
@@ -155,5 +160,5 @@ def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     Returns:
         Sorted frequencies in ascending order
     """
-    freqs, fourier = fft1d(x, y, shift=False)
+    freqs, fourier = fft1d(x, y, shifted=False)
     return freqs[np.argsort(fourier)]

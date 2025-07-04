@@ -1089,7 +1089,7 @@ def fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_1_to_1(src, "fft")
     x, y = src.get_data()
-    dst.set_xydata(*fourier.fft1d(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*fourier.fft1d(x, y, shifted=True if p is None else p.shift))
     dst.save_attr_to_metadata("xunit", "Hz" if dst.xunit == "s" else "")
     dst.save_attr_to_metadata("yunit", "")
     dst.save_attr_to_metadata("xlabel", _("Frequency"))
