@@ -8,7 +8,6 @@
 from __future__ import annotations
 
 import numpy as np
-import numpy.typing as npt
 import scipy.signal
 
 from sigima_.algorithms.signal.dynamic import sampling_rate
@@ -33,10 +32,8 @@ def zero_padding(x: np.ndarray, y: np.ndarray, n: int) -> tuple[np.ndarray, np.n
 
 
 def fft1d(
-    x: npt.NDArray[np.floating],
-    y: npt.NDArray[np.floating],
-    shifted: bool = True,
-) -> tuple[npt.NDArray[np.floating], npt.NDArray[np.complexfloating]]:
+    x: np.ndarray, y: np.ndarray, shifted: bool = True
+) -> tuple[np.ndarray, np.ndarray]:
     """
     Compute the Fast Fourier Transform (FFT) of a 1D real signal.
 
@@ -58,11 +55,8 @@ def fft1d(
 
 
 def ifft1d(
-    f: npt.NDArray[np.floating],
-    sp: npt.NDArray[np.complexfloating],
-    shifted: bool = True,
-    initial: float = 0.0,
-) -> tuple[npt.NDArray[np.floating], npt.NDArray[np.floating]]:
+    f: np.ndarray, sp: np.ndarray, shifted: bool = True, initial: float = 0.0
+) -> tuple[np.ndarray, np.ndarray]:
     """
     Compute the inverse FFT of a spectrum.
 
