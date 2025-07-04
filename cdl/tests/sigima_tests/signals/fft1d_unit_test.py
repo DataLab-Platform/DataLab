@@ -19,47 +19,9 @@ import sigima_.param
 import sigima_.tests.data as ctd
 from sigima_.algorithms.signal import fourier
 from sigima_.env import execenv
+from sigima_.tests import guiutils
 from sigima_.tests.helpers import check_array_result, check_scalar_result
 from sigima_.tests.vistools import view_curves
-
-
-@pytest.mark.gui
-def test_signal_fft_interactive() -> None:
-    """1D FFT interactive test."""
-    # pylint: disable=import-outside-toplevel
-    from guidata.qthelpers import qt_app_context
-
-    with qt_app_context():
-        newparam = sigima_.obj.NewSignalParam.create(
-            stype=sigima_.obj.SignalTypes.COSINUS, size=500
-        )
-
-        # *** Note ***
-        #
-        # We set xmin to 0.0 to be able to compare the X data of the original and
-        # reconstructed signals, because the FFT do not preserve the X data (phase is
-        # lost, sampling rate is assumed to be constant), so that comparing the X data
-        # is not meaningful if xmin is different.
-        newparam.xmin = 0.0
-
-        extra_param = sigima_.obj.PeriodicParam()
-        s1 = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
-        t1, y1 = s1.xydata
-        for shifted in (True, False):
-            f1, sp1 = fourier.fft1d(t1, y1, shifted=shifted)
-            t2, y2 = fourier.ifft1d(f1, sp1, shifted=shifted)
-            execenv.print(
-                f"Comparing original and recovered signals for shift = {shift}..."
-            )
-            check_array_result("Original and recovered x data", t2, t1)
-            check_array_result("Original and recovered y data", y2, y1)
-            execenv.print("OK")
-            view_curves(
-                [
-                    sigima_.obj.create_signal("Original", t1, y1),
-                    sigima_.obj.create_signal("Recovered", t2, y2),
-                ]
-            )
 
 
 @pytest.mark.validation
@@ -148,12 +110,52 @@ def test_signal_fft() -> None:
     )
 
 
-@pytest.mark.skip(reason="Already covered by the `test_signal_fft` test.")
 @pytest.mark.validation
-def test_signal_ifft() -> None:
+def test_signal_ifft(request: pytest.FixtureRequest | None = None) -> None:
     """1D iFFT validation test."""
-    # This is just a way of marking the iFFT test as a validation test because it is
-    # already covered by the FFT test above (there is no need to repeat the same test).
+    # To validate the iFFT, we check that the original signal and the
+    # reconstructed signal are equal. We need to set the request
+    # to enable the GUI if needed, so that the test can be run interactively.
+
+    guiutils.set_current_request(request)
+
+    newparam = sigima_.obj.NewSignalParam.create(
+        stype=sigima_.obj.SignalTypes.COSINUS, size=500
+    )
+
+    # *** Note ***
+    #
+    # We set xmin to 0.0 to be able to compare the X data of the original and
+    # reconstructed signals, because the FFT do not preserve the X data (phase is
+    # lost, sampling rate is assumed to be constant), so that comparing the X data
+    # is not meaningful if xmin is different.
+    newparam.xmin = 0.0
+
+    extra_param = sigima_.obj.PeriodicParam()
+    s1 = sigima_.obj.create_signal_from_param(newparam, extra_param=extra_param)
+    t1, y1 = s1.xydata
+    for shifted in (True, False):
+        f1, sp1 = fourier.fft1d(t1, y1, shifted=shifted)
+        t2, y2 = fourier.ifft1d(f1, sp1, shifted=shifted)
+
+        execenv.print(
+            f"Comparing original and recovered signals for `shifted={shifted}`...",
+        )
+        check_array_result("Original and recovered x data", t2, t1)
+        check_array_result("Original and recovered y data", y2, y1)
+        execenv.print("OK")
+
+        if guiutils.is_gui_enabled():
+            # pylint: disable=import-outside-toplevel
+            from guidata.qthelpers import qt_app_context
+
+            with qt_app_context():
+                view_curves(
+                    [
+                        sigima_.obj.create_signal("Original", t1, y1),
+                        sigima_.obj.create_signal("Recovered", t2, y2),
+                    ]
+                )
 
 
 @pytest.mark.validation
@@ -220,9 +222,9 @@ def test_signal_psd() -> None:
 
 
 if __name__ == "__main__":
-    test_signal_fft_interactive()
     test_signal_zero_padding()
     test_signal_fft()
+    test_signal_ifft(request=guiutils.DummyRequest(gui=True))
     test_signal_magnitude_spectrum()
     test_signal_phase_spectrum()
     test_signal_psd()
