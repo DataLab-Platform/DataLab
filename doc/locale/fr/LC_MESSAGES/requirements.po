@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-02 13:58+0200\n"
+"POT-Creation-Date: 2025-07-04 12:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,7 +19,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "The :mod:`cdl` package requires the following Python modules:"
+#, fuzzy
+msgid "The `cdl` package requires the following Python modules:"
 msgstr "Le paquet :mod:`cdl` nécessite les modules Python suivants :"
 
 msgid "Name"
@@ -57,6 +58,16 @@ msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
 msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
+
+msgid "NumPy"
+msgstr ""
+
+msgid ">=1.19"
+msgstr ""
+
+#, fuzzy
+msgid "Fundamental package for array computing in Python"
+msgstr "Algorithmes fondamentaux pour le calcul scientifique en Python"
 
 msgid "SciPy"
 msgstr ""
@@ -112,10 +123,17 @@ msgstr ""
 msgid "Core utilities for Python packages"
 msgstr ""
 
-msgid "PyQt5"
+msgid "tomli"
 msgstr ""
 
-msgid ">=5.11"
+msgid "A lil' TOML parser"
+msgstr ""
+
+#, fuzzy
+msgid "Optional modules for GUI support (Qt):"
+msgstr "Modules optionnels pour exécuter la suite de tests :"
+
+msgid "PyQt5"
 msgstr ""
 
 msgid "Python bindings for the Qt cross platform application toolkit"

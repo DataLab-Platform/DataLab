@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  cdl\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-03 16:25+0200\n"
+"POT-Creation-Date: 2025-07-04 14:12+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -2447,9 +2447,8 @@ msgstr "Seuil de détection, relatif à la différence entre le maximum et le mi
 msgid "Neighborhoods size"
 msgstr "Taille du voisinage"
 
-#, fuzzy
 msgid "Size of the sliding window used in maximum/minimum filtering algorithm (if no value is provided, the algorithm will use a default size based on the image size). "
-msgstr "Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage maximum/minimum"
+msgstr "Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage maximum/minimum (si aucune valeur n'est fournie, l'algorithme utilisera une taille par défaut basée sur la taille de l'image)."
 
 msgid "Ellipse"
 msgstr "Ellipse"
@@ -3240,4 +3239,3 @@ msgstr "Y<sub>centre</sub>"
 
 msgid "Intensity"
 msgstr "Intensité"
-
