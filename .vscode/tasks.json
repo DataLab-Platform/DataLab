@@ -288,16 +288,18 @@
             "type": "shell",
         },
         {
-            "label": "Update requirements.txt",
-            "command": "toml-to-req",
+            "label": "Generate requirements",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "--toml-file",
-                "pyproject.toml",
-                "--optional-lists",
-                "qt,opencv,dev,doc,test",
+                "-m",
+                "guidata.utils.genreqs",
+                "all",
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "C:/Dev/Projets/guidata",
+                },
                 "statusbar": {
                     "hide": true
                 }
@@ -373,7 +375,11 @@
                 "panel": "dedicated",
                 "showReuseMessage": true,
                 "clear": true
-            }
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Generate requirements",
+            ]
         },
         {
             "label": "Run pytest on all environments",
@@ -588,7 +594,11 @@
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": true
-            }
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Generate requirements",
+            ]
         },
         {
             "label": "HTML doc: quick preview",
@@ -653,7 +663,11 @@
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": true
-            }
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Generate requirements",
+            ]
         },
         {
             "label": "GitHub Pages: preview",
@@ -764,6 +778,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
+                "Generate requirements",
                 "Build PDF documentation"
             ]
         },

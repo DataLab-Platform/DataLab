@@ -1,4 +1,5 @@
 Coverage
+NumPy>=1.19
 PlotPy >= 2.7.4
 PyQt5
 PyWavelets >= 1.1
@@ -23,3 +24,4 @@ sphinx-sitemap
 sphinx_design
 sphinx_intl
 toml-to-requirements
+tomli
