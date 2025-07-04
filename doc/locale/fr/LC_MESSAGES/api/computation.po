@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 16:13+0200\n"
+"POT-Creation-Date: 2025-07-04 12:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -232,7 +232,7 @@ msgstr ""
 msgid "New instance of :py:class:`ConstantParam`."
 msgstr ""
 
-msgid "Create a result object, as returned by the callback function of the :func:`cdl.gui.processor.base.BaseProcessor.compute_1_to_1` method."
+msgid "Create a result object, for processing functions that take a single signal or image object as input and return a single signal or image object (1-to-1)."
 msgstr ""
 
 msgid "Data of the result object is copied from the source object (`src`). This initial data is usually replaced by the processing function, but it may also be used to initialize the result object as part of the processing function."
@@ -251,7 +251,7 @@ msgstr ""
 msgid "Result signal or image object"
 msgstr ""
 
-msgid "Create a result object, as returned by the callback function of the :func:`cdl.gui.processor.base.BaseProcessor.compute_n_to_1` method"
+msgid "Create a result object, for processing functions that take a list of signal or image objects as input and return a single signal or image object (n-to-1)."
 msgstr ""
 
 msgid "Data of the result object is copied from the first source object (`src_list[0]`). This initial data is usually replaced by the processing function, but it may also be used to initialize the result object as part of the processing function."
@@ -266,7 +266,7 @@ msgstr ""
 msgid "suffix to add to the title"
 msgstr ""
 
-msgid "Create a result  object, as returned by the callback function of the :func:`cdl.gui.processor.base.BaseProcessor.compute_2_to_1` method"
+msgid "Create a result  object, for processing functions that take two signal or image objects as input and return a single signal or image object (2-to-1)."
 msgstr ""
 
 msgid "Data of the result object is copied from the first source object (`src1`). This initial data is usually replaced by the processing function, but it may also be used to initialize the result object as part of the processing function."
@@ -320,7 +320,7 @@ msgstr ""
 msgid "source signal object"
 msgstr ""
 
-msgid "Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce a 1 signal → 1 signal function, which can be used inside DataLab's infrastructure to perform computations with :class:`cdl.gui.processor.signal.SignalProcessor`."
+msgid "Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce a 1 signal → 1 signal function, which can be used inside DataLab's infrastructure to perform computations with the Signal Processor object."
 msgstr ""
 
 msgid "This wrapping mechanism using a class is necessary for the resulted function to be pickable by the ``multiprocessing`` module."
@@ -1562,7 +1562,7 @@ msgstr ""
 msgid "New instance of :py:class:`GenericDetectionParam`."
 msgstr ""
 
-msgid "Neighborhoods size\\. Size of the sliding window used in maximum/minimum filtering algorithm\\. Integer higher than 1, unit: pixels\\. Default: 10."
+msgid "Neighborhoods size\\. Size of the sliding window used in maximum/minimum filtering algorithm (if no value is provided, the algorithm will use a default size based on the image size). \\. Integer higher than 1, unit: pixels\\. Default: None."
 msgstr ""
 
 msgid "Default: True."
