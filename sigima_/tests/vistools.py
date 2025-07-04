@@ -129,9 +129,16 @@ def view_curves(
     else:
         datalist = [data_or_objs]
     items = []
+    curve_title: str | None = None
     for data_or_obj in datalist:
         if isinstance(data_or_obj, SignalObj):
             data = data_or_obj.xydata
+            if data_or_obj.title:
+                curve_title = data_or_obj.title
+            if data_or_obj.xlabel and xlabel is None:
+                xlabel = data_or_obj.xlabel
+            if data_or_obj.ylabel and ylabel is None:
+                ylabel = data_or_obj.ylabel
         elif isinstance(data_or_obj, np.ndarray):
             data = data_or_obj
         elif isinstance(data_or_obj, (tuple, list)) and len(data_or_obj) == 2:
@@ -143,6 +150,8 @@ def view_curves(
             item = make.mcurve(xdata, ydata)
         else:
             item = make.mcurve(data)
+        if curve_title is not None:
+            item.setTitle(curve_title)
         items.append(item)
     view_curve_items(items, name=name, title=title, xlabel=xlabel, ylabel=ylabel)
 
@@ -239,14 +248,23 @@ def view_images(
     else:
         datalist = [data_or_objs]
     items = []
+    image_title: str | None = None
     for data_or_obj in datalist:
         if isinstance(data_or_obj, ImageObj):
             data = data_or_obj.data
+            if data_or_obj.title:
+                image_title = data_or_obj.title
+            if data_or_obj.xlabel and xlabel is None:
+                xlabel = data_or_obj.xlabel
+            if data_or_obj.ylabel and ylabel is None:
+                ylabel = data_or_obj.ylabel
         elif isinstance(data_or_obj, np.ndarray):
             data = data_or_obj
         else:
             raise TypeError(f"Unsupported data type: {type(data_or_obj)}")
         item = make.image(data, interpolation="nearest", eliminate_outliers=0.1)
+        if image_title is not None:
+            item.setTitle(image_title)
         items.append(item)
     view_image_items(items, name=name, title=title, xlabel=xlabel, ylabel=ylabel)
 
