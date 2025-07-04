@@ -105,7 +105,10 @@ def view_curve_items(
 
 
 def view_curves(
-    data_or_objs: list[SignalObj | np.ndarray] | SignalObj | np.ndarray,
+    data_or_objs: list[SignalObj | np.ndarray | tuple[np.ndarray, np.ndarray]]
+    | SignalObj
+    | np.ndarray
+    | tuple[np.ndarray, np.ndarray],
     name: str | None = None,
     title: str | None = None,
     xlabel: str | None = None,
