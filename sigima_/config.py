@@ -91,13 +91,18 @@ class OptionField:
         """
         # This method can be overridden in subclasses for specific validation
 
-    def get(self) -> Any:
+    def get(self, sync_env: bool = True) -> Any:
         """Return the current value of the option.
+
+        Args:
+            sync_env: Whether to ensure the environment variable is synchronized
+             with the current value.
 
         Returns:
             The current value of the option.
         """
-        self._container.ensure_loaded_from_env()
+        if sync_env:
+            self._container.ensure_loaded_from_env()
         return self._value
 
     def set(self, value: Any, sync_env: bool = True) -> None:
@@ -177,7 +182,8 @@ class ImageIOOptionField(OptionField):
     .. note::
 
         This option is specifically for image I/O formats and expects a tuple of
-        tuple of strings representing the formats, similar to the following:
+        tuples (or list of lists) of strings representing the formats,
+        similar to the following:
 
         ... code-block:: python
 
@@ -195,7 +201,13 @@ class ImageIOOptionField(OptionField):
         description: Description of the option.
     """
 
-    def check(self, value: Any) -> None:
+    def check(
+        self,
+        value: list[list[str, str]]
+        | list[tuple[str, str]]
+        | tuple[tuple[str, str]]
+        | tuple[list[str, str]],
+    ) -> None:
         """Check if the value is a valid image I/O format.
 
         Args:
@@ -204,8 +216,8 @@ class ImageIOOptionField(OptionField):
         Raises:
             ValueError: If the value is not a valid image I/O format.
         """
-        if not isinstance(value, tuple) or not all(
-            isinstance(item, tuple) and len(item) == 2 for item in value
+        if not isinstance(value, (tuple, list)) or not all(
+            isinstance(item, (tuple, list)) and len(item) == 2 for item in value
         ):
             raise ValueError(
                 "Expected a tuple of tuples with two elements each "
@@ -231,7 +243,7 @@ class ImageIOOptionField(OptionField):
 
         # Generate image I/O format classes based on the new value
         # This allows dynamic loading of formats based on the configuration
-        formats.generate_imageio_format_classes()
+        formats.generate_imageio_format_classes(value)
 
 
 IMAGEIO_FORMATS = (
@@ -356,7 +368,7 @@ class OptionsContainer:
             A dictionary with option names as keys and their current values.
         """
         return {
-            name: getattr(self, name).get()
+            name: getattr(self, name).get(sync_env=False)
             for name in vars(self)
             if isinstance(getattr(self, name), OptionField)
         }
@@ -378,4 +390,8 @@ class OptionsContainer:
 #: Global instance of the options container
 options = OptionsContainer()
 
-OPTIONS_RST = options.generate_rst_doc()
+# TODO: The following line is only needed for the documentation generation and causes
+# a circular import if placed here. It should be moved to the documentation one way or
+# another, but for now we keep it here momentarily.
+#
+# OPTIONS_RST = options.generate_rst_doc()

@@ -267,9 +267,16 @@ class AndorSIFImageFormat(MultipleImagesFormatBase):
 
 
 # Generate classes based on the information above:
-def generate_imageio_format_classes():
+def generate_imageio_format_classes(
+    imageio_formats: list[list[str, str]]
+    | list[tuple[str, str]]
+    | tuple[tuple[str, str]]
+    | tuple[list[str, str]]
+    | None = None,
+) -> None:
     """Generate classes based on the information above"""
-    imageio_formats = options.imageio_formats.get()
+    if imageio_formats is None:
+        imageio_formats = options.imageio_formats.get()
 
     for extensions, name in imageio_formats:
         class_dict = {

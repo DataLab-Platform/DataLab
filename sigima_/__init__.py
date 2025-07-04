@@ -21,6 +21,7 @@ part of the DataLab open-source platform.
 #       `sigima_` module within the `cdl` package (e.g., see TODOs in pyproject.toml,
 #       VSCode tasks, Pylint configuration, etc.)
 # TODO: Move `cdl.tests.sigima_tests` to external `sigima.tests` module
+# TODO: Fix TODO related to `OPTIONS_RST` in 'sigima_\config.py'
 # ** Task 1. Core Architecture Redesign **
 # **   Milestone 1.b. Decouple I/O features (including I/O plugins) **
 # TODO: Implement a I/O plugin system similar to the `cdl.plugins` module
