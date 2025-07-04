@@ -71,7 +71,6 @@ dev = [
     "pyinstaller>=6.0",
     "pylint",
     "ruff",
-    "toml-to-requirements",
 ]
 doc = [
     "PyQt5",
