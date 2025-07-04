@@ -140,9 +140,10 @@ def test_signal_ifft(request: pytest.FixtureRequest | None = None) -> None:
 
         execenv.print(
             f"Comparing original and recovered signals for `shifted={shifted}`...",
+            end=" ",
         )
-        check_array_result("Original and recovered x data", t2, t1)
-        check_array_result("Original and recovered y data", y2, y1)
+        check_array_result("Original and recovered x data", t2, t1, verbose=False)
+        check_array_result("Original and recovered y data", y2, y1, verbose=False)
         execenv.print("OK")
 
         if guiutils.is_gui_enabled():
