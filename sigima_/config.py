@@ -265,6 +265,24 @@ class OptionsContainer:
     # separate processes that may need to read or modify the options.
     ENV_VAR = "SIGIMA_OPTIONS_JSON"
 
+    @classmethod
+    def set_env(cls, value: str) -> None:
+        """Set the environment variable with the given JSON string.
+
+        Args:
+            value: A JSON string representation of the options to set.
+        """
+        os.environ[cls.ENV_VAR] = value
+
+    @classmethod
+    def get_env(cls) -> str:
+        """Get the current value of the environment variable.
+
+        Returns:
+            The JSON string representation of the options from the environment variable.
+        """
+        return os.environ.get(cls.ENV_VAR, "{}")
+
     def __init__(self) -> None:
         self._loaded_from_env = False
         self.keep_results = TypedOptionField(
@@ -348,18 +366,26 @@ class OptionsContainer:
         """Lazy-load from JSON env var on first access."""
         if self._loaded_from_env:
             return
-        if self.ENV_VAR in os.environ:
-            try:
-                values = json.loads(os.environ[self.ENV_VAR])
-                self.from_dict(values)
-            except Exception as exc:  # pylint: disable=broad-except
-                # If loading fails, we just log a warning and continue with defaults
-                print(f"[sigima] Warning: failed to load options from env: {exc}")
+        value = self.get_env()
+        try:
+            values = json.loads(value)
+            self.from_dict(values)
+        except Exception as exc:  # pylint: disable=broad-except
+            # If loading fails, we just log a warning and continue with defaults
+            print(f"[sigima] Warning: failed to load options from env: {exc}")
         self._loaded_from_env = True
+
+    def to_env_json(self) -> str:
+        """Return the current options as a JSON string for environment variable.
+
+        Returns:
+            A JSON string representation of the current options.
+        """
+        return json.dumps(self.to_dict())
 
     def sync_env(self) -> None:
         """Update env var with current option values."""
-        os.environ[self.ENV_VAR] = json.dumps(self.to_dict())
+        self.set_env(self.to_env_json())
 
     def to_dict(self) -> dict[str, Any]:
         """Return the current option values as a dictionary.

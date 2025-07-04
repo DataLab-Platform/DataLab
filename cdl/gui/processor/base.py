@@ -31,6 +31,7 @@ from cdl.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 from sigima_.computation import is_computation_function
+from sigima_.config import options as sigima_options
 from sigima_.obj import ImageObj, SignalObj, TypeROI, TypeROIParam
 
 if TYPE_CHECKING:
@@ -67,6 +68,22 @@ COMPUTATION_TIP = _(
 
 
 POOL: Pool | None = None
+
+
+def run_with_env(func: Callable, args: tuple, env_json: str) -> CompOut:
+    """Wrapper to apply environment config before calling func
+
+    Args:
+        func: function to call
+        args: function arguments
+
+    Returns:
+        Computation output object containing the result, error message,
+         or warning message.
+    """
+    sigima_options.set_env(env_json)
+    sigima_options.ensure_loaded_from_env()  # recharge depuis l'env
+    return wng_err_func(func, args)
 
 
 class Worker:
@@ -117,7 +134,8 @@ class Worker:
         """
         global POOL  # pylint: disable=global-statement,global-variable-not-assigned
         assert POOL is not None
-        self.asyncresult = POOL.apply_async(wng_err_func, (func, args))
+        env_json = sigima_options.get_env()
+        self.asyncresult = POOL.apply_async(run_with_env, (func, args, env_json))
 
     def close(self) -> None:
         """Close worker: close pool properly and wait for all tasks to finish"""

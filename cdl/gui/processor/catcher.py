@@ -37,11 +37,14 @@ class CompOut:
 
 def wng_err_func(func: Callable, args: tuple[Any]) -> CompOut:
     """Wrapper function to catch errors and warnings during computation
+
     Args:
-        func (Callable): function to call
-        args (tuple[Any]): function arguments
+        func: function to call
+        args: function arguments
+
     Returns:
-        CompOut: computation output
+        Computation output object containing the result, error message,
+         or warning message.
     """
     with warnings.catch_warnings(record=True) as wngs:
         try:
