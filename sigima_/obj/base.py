@@ -412,6 +412,7 @@ class ResultShape(BaseResult):
         shape: shape kind
         add_label: if True, add a label item (and the geometrical shape) to plot
          (default to False)
+        roi: optional ROI associated to the result shape (default to None)
 
     Raises:
         AssertionError: invalid argument
@@ -442,6 +443,7 @@ class ResultShape(BaseResult):
             "rectangle", "circle", "ellipse", "segment", "marker", "point", "polygon"
         ],
         add_label: bool = False,
+        roi: BaseROI | None = None,
     ) -> None:
         self.shape = shape
         try:
@@ -449,6 +451,7 @@ class ResultShape(BaseResult):
         except KeyError as exc:
             raise ValueError(f"Invalid shapetype {shape}") from exc
         self.add_label = add_label
+        self.roi = roi
         super().__init__(title, array)
 
     @property
@@ -552,6 +555,21 @@ class ResultShape(BaseResult):
         if comp_array is None:
             return self.raw_data
         return np.hstack([self.raw_data, comp_array])
+
+    def add_to(self, obj: BaseObj) -> None:
+        """Add result to object metadata
+
+        Args:
+            obj: object (signal/image)
+        """
+        super().add_to(obj)
+        if self.roi is not None:
+            if obj.roi is None:
+                obj.roi = self.roi.copy()
+            else:
+                roi: BaseROI = obj.roi
+                roi.add_roi(self.roi)
+                obj.roi = roi
 
     @property
     def label_contents(self) -> tuple[tuple[int, str], ...]:

@@ -835,28 +835,4 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             param.size = max(min(data.shape) // 40, 50)
 
         results = self.run_feature("peak_detection", param, edit=edit)
-        if results is not None and param.create_rois and len(results.items()) > 1:
-            with create_progress_bar(
-                self.panel, _("Create regions of interest"), max_=len(results)
-            ) as progress:
-                for idx, (oid, result) in enumerate(results.items()):
-                    progress.setValue(idx + 1)
-                    QW.QApplication.processEvents()
-                    if progress.wasCanceled():
-                        break
-                    obj = self.panel.objmodel[oid]
-                    dist = distance_matrix(result.raw_data)
-                    dist_min = dist[dist != 0].min()
-                    assert dist_min > 0
-                    radius = int(0.5 * dist_min / np.sqrt(2) - 1)
-                    assert radius >= 1
-                    ymax, xmax = obj.data.shape
-                    coords = []
-                    for x, y in result.raw_data:
-                        x0, y0 = max(x - radius, 0), max(y - radius, 0)
-                        dx, dy = min(x + radius, xmax) - x0, min(y + radius, ymax) - y0
-                        coords.append([x0, y0, dx, dy])
-                    obj.roi = create_image_roi("rectangle", coords, indices=True)
-                    self.SIG_ADD_SHAPE.emit(get_uuid(obj))
-                    self.panel.refresh_plot(get_uuid(obj), True, False)
         return results

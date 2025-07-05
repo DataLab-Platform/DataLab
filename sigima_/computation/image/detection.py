@@ -24,13 +24,14 @@ enabling automated extraction of regions or features of interest.
 from __future__ import annotations
 
 import guidata.dataset as gds
+import numpy as np
 
 import sigima_.algorithms.image as alg
 from sigima_.computation import computation_function
 from sigima_.computation.image.base import calc_resultshape
 from sigima_.config import _
 from sigima_.obj.base import ResultShape, ShapeTypes
-from sigima_.obj.image import ImageObj
+from sigima_.obj.image import ImageObj, create_image_roi
 
 
 class GenericDetectionParam(gds.DataSet):
@@ -67,20 +68,34 @@ class Peak2DDetectionParam(GenericDetectionParam):
 
 
 @computation_function()
-def peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> ResultShape | None:
+def peak_detection(obj: ImageObj, p: Peak2DDetectionParam) -> ResultShape | None:
     """Compute 2D peak detection
     with :py:func:`sigima_.algorithms.image.get_2d_peaks_coords`
 
     Args:
-        imageOutput: input image
+        obj: input image
         p: parameters
 
     Returns:
         Peak coordinates
     """
-    return calc_resultshape(
-        "peak", "point", image, alg.get_2d_peaks_coords, p.size, p.threshold
+    result = calc_resultshape(
+        "peak", "point", obj, alg.get_2d_peaks_coords, p.size, p.threshold
     )
+    if result is not None and p.create_rois:
+        dist = alg.distance_matrix(result.raw_data)
+        dist_min = dist[dist != 0].min()
+        assert dist_min > 0
+        radius = int(0.5 * dist_min / np.sqrt(2) - 1)
+        assert radius >= 1
+        ymax, xmax = obj.data.shape
+        coords = []
+        for x, y in result.raw_data:
+            x0, y0 = max(x - radius, 0), max(y - radius, 0)
+            dx, dy = min(x + radius, xmax) - x0, min(y + radius, ymax) - y0
+            coords.append([x0, y0, dx, dy])
+        result.roi = create_image_roi("rectangle", coords, indices=True)
+    return result
 
 
 class ContourShapeParam(GenericDetectionParam):

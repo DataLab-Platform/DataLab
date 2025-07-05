@@ -75,18 +75,37 @@ def test_peak2d_unit():
 def test_image_peak_detection():
     """2D peak detection unit test"""
     data, coords_expected = get_peak2d_data(seed=1, multi=False)
-    obj = sigima_.obj.create_image("peak2d_unit_test", data=data)
-    param = sigima_.param.Peak2DDetectionParam()
-    df = sigima_image.peak_detection(obj, param).to_dataframe()
-    coords = df.to_numpy(int)
-    assert coords.shape == coords_expected.shape, (
-        f"Expected {coords_expected.shape[0]} peaks, got {coords.shape[0]}"
-    )
-    # Absolute tolerance is set to 2 pixels, as coordinates are in pixel units
-    # and the algorithm may detect peaks at slightly different pixel locations
-    check_array_result(
-        "Peak coords (comp.)", coords, coords_expected, atol=2, sort=True
-    )
+    for create_rois in (True, False):
+        obj = sigima_.obj.create_image("peak2d_unit_test", data=data)
+        param = sigima_.param.Peak2DDetectionParam.create(create_rois=create_rois)
+        result = sigima_image.peak_detection(obj, param)
+        df = result.to_dataframe()
+        coords = df.to_numpy(int)
+        assert coords.shape == coords_expected.shape, (
+            f"Expected {coords_expected.shape[0]} peaks, got {coords.shape[0]}"
+        )
+        # Absolute tolerance is set to 2 pixels, as coordinates are in pixel units
+        # and the algorithm may detect peaks at slightly different pixel locations
+        check_array_result(
+            "Peak coords (comp.)", coords, coords_expected, atol=2, sort=True
+        )
+        if create_rois:
+            assert result.roi is not None, "ROI should be created"
+            assert len(result.roi) == coords.shape[0], (
+                f"Expected {coords.shape[0]} ROIs, got {len(result.roi)}"
+            )
+            for i, roi in enumerate(result.roi):
+                # Check that ROIs are rectangles
+                assert isinstance(roi, sigima_.obj.RectangularROI), (
+                    f"Expected RectangularROI, got {type(roi)}"
+                )
+                # Check that ROIs are correctly positioned
+                x0, y0, x1, y1 = roi.get_bounding_box(obj)
+                x, y = coords[i]
+                assert x0 <= x < x1, f"ROI {i} x0={x0}, x={x}, x1={x1} does not match"
+                assert y0 <= y < y1, f"ROI {i} y0={y0}, y={y}, y1={y1} does not match"
+        else:
+            assert result.roi is None, "ROI should not be created"
 
 
 @pytest.mark.gui
@@ -103,6 +122,6 @@ def test_peak2d_interactive():
 
 
 if __name__ == "__main__":
-    test_peak2d_unit()
+    # test_peak2d_unit()
     test_image_peak_detection()
-    test_peak2d_interactive()
+    # test_peak2d_interactive()
