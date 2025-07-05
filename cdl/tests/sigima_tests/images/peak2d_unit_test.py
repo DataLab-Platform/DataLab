@@ -18,8 +18,8 @@ import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
 from sigima_.algorithms.image import get_2d_peaks_coords
-from sigima_.env import execenv
 from sigima_.tests.data import get_peak2d_data
+from sigima_.tests.env import execenv
 from sigima_.tests.helpers import check_array_result
 from sigima_.tests.vistools import view_image_items
 

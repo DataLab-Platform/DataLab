@@ -10,11 +10,11 @@ from typing import Type
 
 import numpy as np
 
-from sigima_.env import execenv
 from sigima_.io import ImageIORegistry, SignalIORegistry
 from sigima_.io.base import FormatInfo
 from sigima_.io.image.base import ImageFormatBase
 from sigima_.io.signal.base import SignalFormatBase
+from sigima_.tests.env import execenv
 
 
 def _get_image_format_number() -> int:

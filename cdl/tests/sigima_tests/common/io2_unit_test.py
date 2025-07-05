@@ -10,10 +10,10 @@ from __future__ import annotations
 
 import os.path as osp
 
-from sigima_.env import execenv
 from sigima_.io.base import BaseIORegistry
 from sigima_.io.image import ImageIORegistry
 from sigima_.io.signal import SignalIORegistry
+from sigima_.tests.env import execenv
 from sigima_.tests.helpers import WorkdirRestoringTempDir, get_test_fnames, reduce_path
 
 

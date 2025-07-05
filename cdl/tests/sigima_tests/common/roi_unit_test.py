@@ -14,8 +14,8 @@ from typing import Generator
 import sigima_.obj
 from sigima_.computation import image as sigima_image
 from sigima_.computation import signal as sigima_signal
-from sigima_.env import execenv
 from sigima_.tests.data import create_multigauss_image, create_paracetamol_signal
+from sigima_.tests.env import execenv
 
 CLASS_NAME = "class_name"
 

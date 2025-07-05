@@ -8,8 +8,8 @@ Arithmetic parameters unit test.
 
 import pytest
 
-from sigima_.env import execenv
 from sigima_.param import ArithmeticParam
+from sigima_.tests.env import execenv
 
 
 @pytest.mark.gui

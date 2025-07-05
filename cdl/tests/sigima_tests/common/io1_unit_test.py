@@ -14,11 +14,11 @@ import numpy as np
 import pytest
 from guidata.qthelpers import qt_app_context
 
-from sigima_.env import execenv
 from sigima_.io import read_images, read_signals
 from sigima_.io.image import funcs as image_funcs
 from sigima_.obj import ImageObj, SignalObj
 from sigima_.tests import guiutils, helpers
+from sigima_.tests.env import execenv
 
 
 def __read_objs(fname: str) -> list[ImageObj] | list[SignalObj]:

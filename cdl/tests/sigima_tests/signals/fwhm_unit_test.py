@@ -16,7 +16,7 @@ import sigima_.obj
 import sigima_.param
 import sigima_.tests.data as cdltd
 import sigima_.tests.helpers
-from sigima_.env import execenv
+from sigima_.tests.env import execenv
 
 
 def __test_fwhm_interactive(obj: sigima_.obj.SignalObj, method: str) -> None:

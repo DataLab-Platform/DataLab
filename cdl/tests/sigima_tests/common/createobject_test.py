@@ -14,7 +14,7 @@ from __future__ import annotations
 from collections.abc import Generator
 
 import sigima_.obj
-from sigima_.env import execenv
+from sigima_.tests.env import execenv
 
 
 def iterate_signal_creation(

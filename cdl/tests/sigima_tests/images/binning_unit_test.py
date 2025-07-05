@@ -16,8 +16,8 @@ from numpy import ma
 import sigima_.computation.image as sigima_image
 import sigima_.param
 from sigima_.algorithms.image import BINNING_OPERATIONS, binning
-from sigima_.env import execenv
 from sigima_.tests.data import get_test_image
+from sigima_.tests.env import execenv
 from sigima_.tests.vistools import view_image_items
 
 

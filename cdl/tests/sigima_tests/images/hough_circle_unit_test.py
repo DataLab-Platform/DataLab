@@ -12,8 +12,8 @@ import pytest
 from skimage.feature import canny
 
 from sigima_.algorithms.image import get_hough_circle_peaks
-from sigima_.env import execenv
 from sigima_.tests.data import get_peak2d_data
+from sigima_.tests.env import execenv
 
 
 def __exec_hough_circle_test(data):

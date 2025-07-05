@@ -12,8 +12,8 @@ import guidata.dataset as gds
 import numpy as np
 import pytest
 
-from sigima_.env import execenv
 from sigima_.obj import ROI2DParam
+from sigima_.tests.env import execenv
 
 
 def __create_roi_2d_parameters() -> gds.DataSetGroup:

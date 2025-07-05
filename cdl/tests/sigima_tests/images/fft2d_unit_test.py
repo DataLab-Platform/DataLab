@@ -15,7 +15,7 @@ import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
 import sigima_.tests.data as ctd
-from sigima_.env import execenv
+from sigima_.tests.env import execenv
 from sigima_.tests.helpers import check_array_result, check_scalar_result
 
 

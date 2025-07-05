@@ -13,8 +13,8 @@ import pytest
 
 from sigima_.algorithms.image import get_centroid_fourier, get_enclosing_circle
 from sigima_.config import _
-from sigima_.env import execenv
 from sigima_.tests.data import get_laser_spot_data
+from sigima_.tests.env import execenv
 
 
 def __enclosingcircle_test(data):

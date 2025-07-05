@@ -12,8 +12,8 @@ from cdl.tests.sigima_tests.images.peak2d_unit_test import (
     exec_image_peak_detection_func,
 )
 from sigima_.algorithms.image import get_2d_peaks_coords
-from sigima_.env import execenv
 from sigima_.tests.data import get_peak2d_data
+from sigima_.tests.env import execenv
 
 
 @pytest.mark.skip(reason="Limit testing, not required for automated testing")

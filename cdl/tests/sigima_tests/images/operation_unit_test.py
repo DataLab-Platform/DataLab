@@ -23,9 +23,9 @@ import scipy.ndimage as spi
 import sigima_.computation.image as sigima_image
 import sigima_.obj
 import sigima_.param
-from sigima_.env import execenv
 from sigima_.tests import guiutils
 from sigima_.tests.data import create_noisygauss_image
+from sigima_.tests.env import execenv
 from sigima_.tests.helpers import check_array_result
 
 

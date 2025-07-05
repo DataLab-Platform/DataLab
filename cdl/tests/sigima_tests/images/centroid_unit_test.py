@@ -25,8 +25,8 @@ import sigima_.algorithms.image as alg
 import sigima_.computation.image as sigima_image
 import sigima_.obj
 from sigima_.config import _
-from sigima_.env import execenv
 from sigima_.tests.data import create_noisygauss_image, get_laser_spot_data
+from sigima_.tests.env import execenv
 from sigima_.tests.helpers import check_scalar_result
 
 
