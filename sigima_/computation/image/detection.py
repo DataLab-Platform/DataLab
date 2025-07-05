@@ -82,7 +82,9 @@ def peak_detection(obj: ImageObj, p: Peak2DDetectionParam) -> ResultShape | None
     result = calc_resultshape(
         "peak", "point", obj, alg.get_2d_peaks_coords, p.size, p.threshold
     )
-    if result is not None and p.create_rois:
+    if result is not None and p.create_rois and result.raw_data.shape[0] > 1:
+        # Create a rectangular ROI around each peak, only if there are more than one
+        # peak detected (otherwise, it would not make sense to create an ROI)
         dist = alg.distance_matrix(result.raw_data)
         dist_min = dist[dist != 0].min()
         assert dist_min > 0
