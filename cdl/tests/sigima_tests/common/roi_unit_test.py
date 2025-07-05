@@ -12,6 +12,8 @@ from __future__ import annotations
 from typing import Generator
 
 import sigima_.obj
+from sigima_.computation import image as sigima_image
+from sigima_.computation import signal as sigima_signal
 from sigima_.env import execenv
 from sigima_.tests.data import create_multigauss_image, create_paracetamol_signal
 
@@ -171,6 +173,28 @@ def test_signal_roi_creation() -> None:
             __conversion_methods(roi, obj)
 
 
+def test_signal_roi_merge() -> None:
+    """Test signal ROI merge"""
+
+    # Create a signal object with a single ROI, and another one with another ROI.
+    # Compute the average of the two objects, and check if the resulting object
+    # has the expected ROI (i.e. the union of the original object's ROI).
+
+    obj1 = create_paracetamol_signal()
+    obj2 = create_paracetamol_signal()
+    obj2.roi = sigima_.obj.create_signal_roi([60, 120], indices=True)
+    obj1.roi = sigima_.obj.create_signal_roi([50, 100], indices=True)
+
+    # Compute the average of the two objects
+    obj3 = sigima_signal.average([obj1, obj2])
+    assert obj3.roi is not None, "Merged object should have a ROI"
+    assert len(obj3.roi) == 2, "Merged object should have two single ROIs"
+    for single_roi in obj3.roi:
+        assert single_roi.get_indices_coords(obj3) in ([50, 100], [60, 120]), (
+            "Merged object should have the union of the original object's ROIs"
+        )
+
+
 def test_image_roi_creation() -> None:
     """Test image ROI creation and conversion methods"""
 
@@ -233,6 +257,31 @@ def test_image_roi_creation() -> None:
             __conversion_methods(roi, obj)
 
 
+def test_image_roi_merge() -> None:
+    """Test image ROI merge"""
+
+    # Create an image object with a single ROI, and another one with another ROI.
+    # Compute the average of the two objects, and check if the resulting object
+    # has the expected ROI (i.e. the union of the original object's ROI).
+
+    obj1 = create_multigauss_image()
+    obj2 = create_multigauss_image()
+    obj2.roi = sigima_.obj.create_image_roi("rectangle", [600, 800, 1000, 1200])
+    obj1.roi = sigima_.obj.create_image_roi("rectangle", [500, 750, 1000, 1250])
+
+    # Compute the average of the two objects
+    obj3 = sigima_image.average([obj1, obj2])
+    assert obj3.roi is not None, "Merged object should have a ROI"
+    assert len(obj3.roi) == 2, "Merged object should have two single ROIs"
+    for single_roi in obj3.roi:
+        assert single_roi.get_indices_coords(obj3) in (
+            [500, 750, 1000, 1250],
+            [600, 800, 1000, 1200],
+        ), "Merged object should have the union of the original object's ROIs"
+
+
 if __name__ == "__main__":
     test_signal_roi_creation()
+    test_signal_roi_merge()
+    test_image_roi_merge()
     test_image_roi_creation()
