@@ -20,7 +20,7 @@ from sigima_.tests.data import create_multigauss_image, create_paracetamol_signa
 CLASS_NAME = "class_name"
 
 
-def create_signal_rois(
+def create_test_signal_rois(
     obj: sigima_.obj.SignalObj,
 ) -> Generator[sigima_.obj.SignalROI, None, None]:
     """Create test signal ROIs (sigima_.obj.SignalROI test object)
@@ -60,7 +60,7 @@ def create_signal_rois(
             yield roi
 
 
-def create_image_rois(
+def create_test_image_rois(
     obj: sigima_.obj.ImageObj,
 ) -> Generator[sigima_.obj.ImageROI, None, None]:
     """Create test image ROIs (sigima_.obj.ImageROI test object)

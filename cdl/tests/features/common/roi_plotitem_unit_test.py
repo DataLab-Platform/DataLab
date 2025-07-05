@@ -19,8 +19,8 @@ from cdl.adapters_plotpy.converters import (
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests.sigima_tests.common.roi_unit_test import (
-    create_image_rois,
-    create_signal_rois,
+    create_test_image_rois,
+    create_test_signal_rois,
 )
 from sigima_.tests.data import create_multigauss_image, create_paracetamol_signal
 
@@ -47,7 +47,7 @@ def test_signal_roi_plotitem_conversion() -> None:
     execenv.print("Test signal ROIs conversion to/from plot items")
     execenv.print("==============================================")
     obj = create_paracetamol_signal()
-    for roi in create_signal_rois(obj):
+    for roi in create_test_signal_rois(obj):
         __conversion_methods(roi, obj)
 
 
@@ -57,7 +57,7 @@ def test_image_roi_plotitem_conversion() -> None:
     execenv.print("Test image ROIs conversion to/from plot items")
     execenv.print("==============================================")
     obj = create_multigauss_image()
-    for roi in create_image_rois(obj):
+    for roi in create_test_image_rois(obj):
         __conversion_methods(roi, obj)
 
 
