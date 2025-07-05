@@ -356,7 +356,7 @@ class RectangularROI(BaseSingleImageROI):
         coords[1] += int(dy)
         self.set_indices_coords(obj, coords)
 
-    def get_physical_coords(self, obj: ImageObj) -> np.ndarray:
+    def get_physical_coords(self, obj: ImageObj) -> list[float]:
         """Return physical coords
 
         Args:
@@ -371,7 +371,7 @@ class RectangularROI(BaseSingleImageROI):
             return [x0, y0, x1 - x0, y1 - y0]
         return self.coords
 
-    def get_indices_coords(self, obj: ImageObj) -> np.ndarray:
+    def get_indices_coords(self, obj: ImageObj) -> list[int]:
         """Return indices coords
 
         Args:
@@ -381,7 +381,7 @@ class RectangularROI(BaseSingleImageROI):
             Indices coords
         """
         if self.indices:
-            return self.coords
+            return self.coords.tolist()
         ix0, iy0, ix1, iy1 = obj.physical_to_indices(self.get_bounding_box(obj))
         return [ix0, iy0, ix1 - ix0, iy1 - iy0]
 
@@ -397,7 +397,7 @@ class RectangularROI(BaseSingleImageROI):
         else:
             ix0, iy0, idx, idy = coords
             x0, y0, x1, y1 = obj.indices_to_physical([ix0, iy0, ix0 + idx, iy0 + idy])
-            self.coords = [x0, y0, x1 - x0, y1 - y0]
+            self.coords = np.array([x0, y0, x1 - x0, y1 - y0])
 
     def to_mask(self, obj: ImageObj) -> np.ndarray:
         """Create mask from ROI
@@ -516,7 +516,7 @@ class CircularROI(BaseSingleImageROI):
             return [0.5 * (x0 + x1), 0.5 * (y0 + y1), 0.5 * (x1 - x0)]
         return self.coords
 
-    def get_indices_coords(self, obj: ImageObj) -> np.ndarray:
+    def get_indices_coords(self, obj: ImageObj) -> list[int]:
         """Return indices coords
 
         Args:
@@ -546,7 +546,7 @@ class CircularROI(BaseSingleImageROI):
             x0, y0, x1, y1 = obj.indices_to_physical(
                 [ixc - ir, iyc - ir, ixc + ir, iyc + ir]
             )
-            self.coords = [0.5 * (x0 + x1), 0.5 * (y0 + y1), 0.5 * (x1 - x0)]
+            self.coords = np.array([0.5 * (x0 + x1), 0.5 * (y0 + y1), 0.5 * (x1 - x0)])
 
     def to_mask(self, obj: ImageObj) -> np.ndarray:
         """Create mask from ROI
