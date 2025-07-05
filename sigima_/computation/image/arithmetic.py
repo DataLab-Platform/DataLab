@@ -28,6 +28,8 @@ of image data.
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 
 from sigima_.algorithms.datatypes import clip_astype
@@ -277,6 +279,8 @@ def division(src1: ImageObj, src2: ImageObj) -> ImageObj:
         Result image object **src1** / **src2** (new object)
     """
     dst = dst_2_to_1(src1, src2, "/")
-    dst.data = np.divide(src1.data, src2.data, dtype=float)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        dst.data = np.divide(src1.data, src2.data, dtype=float)
     restore_data_outside_roi(dst, src1)
     return dst

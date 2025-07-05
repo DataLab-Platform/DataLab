@@ -384,7 +384,9 @@ def division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     dst = dst_2_to_1(src1, src2, "/")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
-    dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
     restore_data_outside_roi(dst, src1)
     return dst
 
