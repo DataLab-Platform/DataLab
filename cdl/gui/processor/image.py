@@ -19,11 +19,9 @@ import sigima_.param
 from cdl.config import APP_NAME, _
 from cdl.gui.processor.base import BaseProcessor
 from cdl.gui.profiledialog import ProfileExtractionDialog
-from cdl.objectmodel import get_uuid
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets import imagebackground
-from sigima_.algorithms.image import distance_matrix
-from sigima_.obj import ImageROI, ResultShape, ROI2DParam, create_image_roi
+from sigima_.obj import ImageROI, ResultShape, ROI2DParam
 
 
 class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
