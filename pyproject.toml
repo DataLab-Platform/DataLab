@@ -71,6 +71,7 @@ dev = [
     "pyinstaller>=6.0",
     "pylint",
     "ruff",
+    "pre-commit",
 ]
 doc = [
     "PyQt5",
