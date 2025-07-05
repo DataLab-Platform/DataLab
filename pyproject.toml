@@ -42,13 +42,13 @@ requires-python = ">=3.9, <4"
 dependencies = [
     "guidata >= 3.11",
     "PlotPy >= 2.7.4",
-    "NumPy>=1.19",
-    "SciPy >= 1.5",
-    "scikit-image >= 0.18",
-    "pandas >= 1.2",
-    "PyWavelets >= 1.1",
-    "psutil >= 5.7",
-    "packaging >= 20.0",
+    "NumPy >= 1.22",
+    "SciPy >= 1.7.3",
+    "scikit-image >= 0.19",
+    "pandas >= 1.4",
+    "PyWavelets >= 1.2",
+    "psutil >= 5.8",
+    "packaging >= 21.3",
 ]
 dynamic = ["version"]
 
@@ -63,18 +63,17 @@ datalab-demo = "cdl.tests.scenarios.demo:run"
 datalab-tests = "cdl.tests:run"
 
 [project.optional-dependencies]
-qt = ["PyQt5"]
-opencv = ["opencv-python-headless >= 4.5"]
+qt = ["PyQt5 >= 5.15.6"]
+opencv = ["opencv-python-headless >= 4.5.4.60"]
 dev = [
     "babel",
     "Coverage",
-    "pyinstaller>=6.0",
+    "pyinstaller >= 6.0",
     "pylint",
     "ruff",
     "pre-commit",
 ]
 doc = [
-    "PyQt5",
     "sphinx",
     "sphinx_intl",
     "sphinx-sitemap",

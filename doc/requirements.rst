@@ -11,35 +11,32 @@ The `cdl` package requires the following Python modules:
       - >=3.9, <4
       - Python programming language
     * - guidata
-      -  >= 3.10
+      -  >= 3.11
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
       -  >= 2.7.4
       - Curve and image plotting tools for Python/Qt applications
     * - NumPy
-      - >=1.19
+      -  >= 1.22
       - Fundamental package for array computing in Python
     * - SciPy
-      -  >= 1.5
+      -  >= 1.7.3
       - Fundamental algorithms for scientific computing in Python
     * - scikit-image
-      -  >= 0.18
+      -  >= 0.19
       - Image processing in Python
     * - pandas
-      -  >= 1.2
+      -  >= 1.4
       - Powerful data structures for data analysis, time series, and statistics
     * - PyWavelets
-      -  >= 1.1
+      -  >= 1.2
       - PyWavelets, wavelet transform module
     * - psutil
-      -  >= 5.7
+      -  >= 5.8
       - Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7.
     * - packaging
-      -  >= 20.0
+      -  >= 21.3
       - Core utilities for Python packages
-    * - tomli
-      - 
-      - A lil' TOML parser
 
 Optional modules for GUI support (Qt):
 
@@ -51,7 +48,7 @@ Optional modules for GUI support (Qt):
       - Version
       - Summary
     * - PyQt5
-      - 
+      -  >= 5.15.6
       - Python bindings for the Qt cross platform application toolkit
 
 Optional modules for development:
@@ -70,7 +67,7 @@ Optional modules for development:
       - 
       - Code coverage measurement for Python
     * - pyinstaller
-      - >=6.0
+      -  >= 6.0
       - PyInstaller bundles a Python application and all its dependencies into a single package.
     * - pylint
       - 
@@ -78,9 +75,9 @@ Optional modules for development:
     * - ruff
       - 
       - An extremely fast Python linter and code formatter, written in Rust.
-    * - toml-to-requirements
+    * - pre-commit
       - 
-      - Convert a pyproject.toml file to a requirements.txt file
+      - A framework for managing and maintaining multi-language pre-commit hooks.
 
 Optional modules for building the documentation:
 
@@ -91,9 +88,6 @@ Optional modules for building the documentation:
     * - Name
       - Version
       - Summary
-    * - PyQt5
-      - 
-      - Python bindings for the Qt cross platform application toolkit
     * - sphinx
       - 
       - Python documentation generator
