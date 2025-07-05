@@ -284,7 +284,6 @@ class OptionsContainer:
         return os.environ.get(cls.ENV_VAR, "{}")
 
     def __init__(self) -> None:
-        self._loaded_from_env = False
         self.keep_results = TypedOptionField(
             self,
             "keep_results",
@@ -364,8 +363,6 @@ class OptionsContainer:
 
     def ensure_loaded_from_env(self) -> None:
         """Lazy-load from JSON env var on first access."""
-        if self._loaded_from_env:
-            return
         value = self.get_env()
         try:
             values = json.loads(value)
@@ -373,7 +370,6 @@ class OptionsContainer:
         except Exception as exc:  # pylint: disable=broad-except
             # If loading fails, we just log a warning and continue with defaults
             print(f"[sigima] Warning: failed to load options from env: {exc}")
-        self._loaded_from_env = True
 
     def to_env_json(self) -> str:
         """Return the current options as a JSON string for environment variable.
