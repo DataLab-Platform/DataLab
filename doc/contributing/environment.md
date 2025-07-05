@@ -52,10 +52,14 @@ DataLab requires the following :
 
 Installing all required packages :
 
-    pip install --upgrade -r dev\requirements.txt
+    pip install --upgrade -r requirements-min.txt
 
 ℹ️ See [Installation](https://datalab-platform.com/en/intro/installation.html)
 for more details on reference Python and Qt versions.
+
+⚠️ If you are contributing to DataLab's processing features, you will need to work on both DataLab's main repository and sigima's repository. To install `sigima` in editable mode, use the following command:
+
+    pip install -e ../sigima  # Adjust the path to your local sigima repository
 
 If you are using [WinPython](https://winpython.github.io/), thank you for supporting
 the scientific open-source Python community!
@@ -71,7 +75,7 @@ The following table lists the currently officially used Python distributions:
 | 3.13           | OK           | 3.13.2.0          |
 
 ⚠ We strongly recommend using the `.dot` versions of WinPython which are lightweight
-and can be customized to your needs (using `pip install -r requirements.txt`).
+and can be customized to your needs (using `pip install -r requirements-min.txt`).
 
 ✅ We also recommend using a dedicated WinPython instance for DataLab.
 
