@@ -23,12 +23,12 @@ from guidata.widgets.codeeditor import CodeEditor
 from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigima.io.common.converters import to_string
 
 import cdl
 from cdl.config import _
 from cdl.env import execenv
 from cdl.gui import ObjItf
-from sigima_.io.common.converters import to_string
 
 UNTITLED_NB = 0
 

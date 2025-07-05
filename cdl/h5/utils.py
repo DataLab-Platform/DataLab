@@ -7,8 +7,7 @@ DataLab Utilities for exogenous HDF5 format support
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import numpy as np
-
-from sigima_.io.common.converters import to_string
+from sigima.io.common.converters import to_string
 
 
 def fix_ldata(fuzzy):

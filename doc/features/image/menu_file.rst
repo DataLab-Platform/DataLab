@@ -91,7 +91,7 @@ Create a new image from the following supported filetypes:
     To add a new file format, you may use the `imageio_formats` entry of DataLab configuration file.
     This entry is a formatted like the `IMAGEIO_FORMATS` object which represents the natively supported formats:
 
-    .. autodata:: sigima_.config.IMAGEIO_FORMATS
+    .. autodata:: sigima.config.IMAGEIO_FORMATS
 
 Save image
 ^^^^^^^^^^

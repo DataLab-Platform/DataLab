@@ -47,7 +47,7 @@ The 2d peak detection parameters are the following:
   - "Relative threshold": detection threshold
 
 Feature is based on ``get_2d_peaks_coords`` function
-from ``sigima_.algorithms`` module:
+from ``sigima.algorithms`` module:
 
-  .. literalinclude:: ../../../sigima_/algorithms/image.py
+  .. literalinclude:: ../../../sigima/algorithms/image.py
      :pyobject: get_2d_peaks_coords

@@ -7,13 +7,14 @@ Signal FFT application test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from cdl.tests import cdltest_app_context
-from sigima_.obj import (
+from sigima.obj import (
     NewSignalParam,
     PeriodicParam,
     SignalTypes,
     create_signal_from_param,
 )
+
+from cdl.tests import cdltest_app_context
 
 
 def test_fft1d_app():

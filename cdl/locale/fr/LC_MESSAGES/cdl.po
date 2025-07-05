@@ -3027,7 +3027,7 @@ msgid ""
 "\n"
 "    Example:\n"
 "\n"
-"    .. autodata:: sigima_.config.IMAGEIO_FORMATS\n"
+"    .. autodata:: sigima.config.IMAGEIO_FORMATS\n"
 msgstr ""
 
 msgid "All supported files"

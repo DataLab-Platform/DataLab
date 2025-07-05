@@ -529,42 +529,42 @@ msgid "Register signal computations"
 msgstr ""
 
 #, fuzzy
-msgid "Compute offset correction with :py:func:`sigima_.computation.signal.offset_correction`"
+msgid "Compute offset correction with :py:func:`sigima.computation.signal.offset_correction`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Compute all stability analysis features using the following functions:"
 msgstr ""
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.signal.allan_variance`"
+msgid ":py:func:`sigima.computation.signal.allan_variance`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.signal.allan_deviation`"
+msgid ":py:func:`sigima.computation.signal.allan_deviation`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.signal.overlapping_allan_variance`"
+msgid ":py:func:`sigima.computation.signal.overlapping_allan_variance`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.signal.modified_allan_variance`"
+msgid ":py:func:`sigima.computation.signal.modified_allan_variance`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.signal.hadamard_variance`"
+msgid ":py:func:`sigima.computation.signal.hadamard_variance`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.signal.total_variance`"
+msgid ":py:func:`sigima.computation.signal.total_variance`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.signal.time_deviation`"
+msgid ":py:func:`sigima.computation.signal.time_deviation`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid "Detect peaks from data with :py:func:`sigima_.computation.signal.peak_detection`"
+msgid "Detect peaks from data with :py:func:`sigima.computation.signal.peak_detection`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Compute polynomial fitting curve"
@@ -583,15 +583,15 @@ msgid "Compute multi-Gaussian fitting curve using an interactive dialog"
 msgstr "Calculer la courbe de régression multi-gaussienne avec une boîte de dialogue interactive"
 
 #, fuzzy
-msgid "Compute full width at a given y with :py:func:`sigima_.computation.signal.full_width_at_y`"
+msgid "Compute full width at a given y with :py:func:`sigima.computation.signal.full_width_at_y`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid "Compute x at y with :py:func:`sigima_.computation.signal.x_at_y`."
+msgid "Compute x at y with :py:func:`sigima.computation.signal.x_at_y`."
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid "Compute y at x with :py:func:`sigima_.computation.signal.y_at_x`."
+msgid "Compute y at x with :py:func:`sigima.computation.signal.y_at_x`."
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Image processor"
@@ -608,27 +608,27 @@ msgid "Register image computations"
 msgstr "Réinitialiser les positions des images"
 
 #, fuzzy
-msgid "Resize image with :py:func:`sigima_.computation.image.resize`"
+msgid "Resize image with :py:func:`sigima.computation.image.resize`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid "Binning image with :py:func:`sigima_.computation.image.binning`"
+msgid "Binning image with :py:func:`sigima.computation.image.binning`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid "Compute profile along a vertical or horizontal line with :py:func:`sigima_.computation.image.line_profile`"
+msgid "Compute profile along a vertical or horizontal line with :py:func:`sigima.computation.image.line_profile`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid "Compute profile along a segment with :py:func:`sigima_.computation.image.segment_profile`"
+msgid "Compute profile along a segment with :py:func:`sigima.computation.image.segment_profile`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid "Compute average profile with :py:func:`sigima_.computation.image.average_profile`"
+msgid "Compute average profile with :py:func:`sigima.computation.image.average_profile`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid "Compute radial profile with :py:func:`sigima_.computation.image.radial_profile`"
+msgid "Compute radial profile with :py:func:`sigima.computation.image.radial_profile`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Distribute images on a grid"
@@ -638,127 +638,126 @@ msgid "Reset image positions"
 msgstr "Réinitialiser les positions des images"
 
 #, fuzzy
-msgid "Compute offset correction with :py:func:`sigima_.computation.image.offset_correction`"
+msgid "Compute offset correction with :py:func:`sigima.computation.image.offset_correction`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Compute all threshold algorithms using the following functions:"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.threshold.threshold_isodata`"
+msgid ":py:func:`sigima.computation.image.threshold.threshold_isodata`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.threshold.threshold_li`"
+msgid ":py:func:`sigima.computation.image.threshold.threshold_li`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.threshold.threshold_mean`"
+msgid ":py:func:`sigima.computation.image.threshold.threshold_mean`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.threshold.threshold_minimum`"
+msgid ":py:func:`sigima.computation.image.threshold.threshold_minimum`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.threshold.threshold_otsu`"
+msgid ":py:func:`sigima.computation.image.threshold.threshold_otsu`"
 msgstr ""
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.threshold.threshold_triangle`"
+msgid ":py:func:`sigima.computation.image.threshold.threshold_triangle`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.threshold.threshold_yen`"
+msgid ":py:func:`sigima.computation.image.threshold.threshold_yen`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Compute all denoising filters using the following functions:"
 msgstr "Calculer tous les filtres de débruitage en utilisant les fonctions suivantes :"
 
-msgid ":py:func:`sigima_.computation.image.restoration.denoise_tv`"
+msgid ":py:func:`sigima.computation.image.restoration.denoise_tv`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.restoration.denoise_bilateral`"
+msgid ":py:func:`sigima.computation.image.restoration.denoise_bilateral`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.restoration.denoise_wavelet`"
+msgid ":py:func:`sigima.computation.image.restoration.denoise_wavelet`"
 msgstr ""
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.restoration.denoise_tophat`"
+msgid ":py:func:`sigima.computation.image.restoration.denoise_tophat`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Compute all morphology filters using the following functions:"
 msgstr "Calculer tous les filtres de morphologie en utilisant les fonctions suivantes :"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.morphology.white_tophat`"
+msgid ":py:func:`sigima.computation.image.morphology.white_tophat`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
-msgid ":py:func:`sigima_.computation.image.morphology.black_tophat`"
+msgid ":py:func:`sigima.computation.image.morphology.black_tophat`"
 msgstr ""
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.morphology.erosion`"
+msgid ":py:func:`sigima.computation.image.morphology.erosion`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.morphology.dilation`"
+msgid ":py:func:`sigima.computation.image.morphology.dilation`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.morphology.opening`"
+msgid ":py:func:`sigima.computation.image.morphology.opening`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.morphology.closing`"
+msgid ":py:func:`sigima.computation.image.morphology.closing`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 msgid "Compute all edges filters using the following functions:"
 msgstr ""
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.edges.roberts`"
+msgid ":py:func:`sigima.computation.image.edges.roberts`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
-msgid ":py:func:`sigima_.computation.image.edges.prewitt`"
+msgid ":py:func:`sigima.computation.image.edges.prewitt`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.edges.prewitt_h`"
+msgid ":py:func:`sigima.computation.image.edges.prewitt_h`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.edges.prewitt_v`"
+msgid ":py:func:`sigima.computation.image.edges.prewitt_v`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.edges.sobel`"
+msgid ":py:func:`sigima.computation.image.edges.sobel`"
 msgstr ""
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.edges.sobel_h`"
+msgid ":py:func:`sigima.computation.image.edges.sobel_h`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.edges.sobel_v`"
+msgid ":py:func:`sigima.computation.image.edges.sobel_v`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
-msgid ":py:func:`sigima_.computation.image.edges.scharr`"
+msgid ":py:func:`sigima.computation.image.edges.scharr`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.edges.scharr_h`"
+msgid ":py:func:`sigima.computation.image.edges.scharr_h`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.edges.scharr_v`"
+msgid ":py:func:`sigima.computation.image.edges.scharr_v`"
 msgstr ""
 
 #, fuzzy
-msgid ":py:func:`sigima_.computation.image.edges.farid`"
+msgid ":py:func:`sigima.computation.image.edges.farid`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
-msgid ":py:func:`sigima_.computation.image.edges.farid_h`"
+msgid ":py:func:`sigima.computation.image.edges.farid_h`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.edges.farid_v`"
+msgid ":py:func:`sigima.computation.image.edges.farid_v`"
 msgstr ""
 
-msgid ":py:func:`sigima_.computation.image.edges.laplace`"
+msgid ":py:func:`sigima.computation.image.edges.laplace`"
 msgstr ""
 
 #, fuzzy
-msgid "Compute 2D peak detection with :py:func:`sigima_.computation.image.peak_detection`"
+msgid "Compute 2D peak detection with :py:func:`sigima.computation.image.peak_detection`"
 msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
-

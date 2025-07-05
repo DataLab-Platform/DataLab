@@ -20,8 +20,9 @@ A high-level test scenario producing beautiful screenshots.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show,skip
 
-import sigima_.obj
-import sigima_.param as sigima_param
+import sigima.obj
+import sigima.param as sigima_param
+
 from cdl.tests import cdltest_app_context
 
 
@@ -31,11 +32,11 @@ def run_beautiful_scenario(screenshots: bool = False) -> None:
     with cdltest_app_context(console=False, exec_loop=not screenshots) as win:
         # Beautiful screenshot of a signal
         panel = win.signalpanel
-        base_param = sigima_.obj.NewSignalParam.create(
-            stype=sigima_.obj.SignalTypes.LORENTZ
+        base_param = sigima.obj.NewSignalParam.create(
+            stype=sigima.obj.SignalTypes.LORENTZ
         )
-        sig = sigima_.obj.create_signal_from_param(
-            base_param, sigima_.obj.GaussLorentzVoigtParam()
+        sig = sigima.obj.create_signal_from_param(
+            base_param, sigima.obj.GaussLorentzVoigtParam()
         )
         panel.add_object(sig)
         panel.processor.run_feature("fft")
@@ -51,12 +52,10 @@ def run_beautiful_scenario(screenshots: bool = False) -> None:
             win.take_screenshot("s_beautiful")
         # Beautiful screenshot of an image
         panel = win.imagepanel
-        base_param = sigima_.obj.NewImageParam.create(
-            height=data_size, width=data_size, itype=sigima_.obj.ImageTypes.GAUSS
+        base_param = sigima.obj.NewImageParam.create(
+            height=data_size, width=data_size, itype=sigima.obj.ImageTypes.GAUSS
         )
-        ima = sigima_.obj.create_image_from_param(
-            base_param, sigima_.obj.Gauss2DParam()
-        )
+        ima = sigima.obj.create_image_from_param(base_param, sigima.obj.Gauss2DParam())
         ima.set_metadata_option("colormap", "jet")
         panel.add_object(ima)
         panel.processor.run_feature("equalize_hist", sigima_param.EqualizeHistParam())
@@ -70,7 +69,7 @@ def run_beautiful_scenario(screenshots: bool = False) -> None:
         panel.processor.run_feature("white_tophat", sigima_param.MorphologyParam())
         panel.processor.run_feature("denoise_tv", sigima_param.DenoiseTVParam())
         n = data_size // 3
-        roi = sigima_.obj.create_image_roi(
+        roi = sigima.obj.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
         panel.processor.compute_roi_extraction(roi)

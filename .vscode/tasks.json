@@ -61,7 +61,6 @@
                 "-m",
                 "pylint",
                 "cdl",
-                "sigima_",
                 "--disable=duplicate-code",
                 "--disable=fixme",
                 "--disable=too-many-arguments",
@@ -297,9 +296,6 @@
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
-                "env": {
-                    "PYTHONPATH": "C:/Dev/Projets/guidata",
-                },
                 "statusbar": {
                     "hide": true
                 }

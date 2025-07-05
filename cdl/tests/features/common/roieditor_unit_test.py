@@ -12,13 +12,13 @@ from __future__ import annotations
 import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 from plotpy.plot import PlotDialog
+from sigima.obj import ImageROI, create_image_roi, create_signal_roi
+from sigima.tests.data import create_multigauss_image, create_paracetamol_signal
 
 from cdl.env import execenv
 from cdl.gui.panel.image import ImagePanel
 from cdl.gui.panel.signal import SignalPanel
 from cdl.gui.roieditor import ImageROIEditor, SignalROIEditor
-from sigima_.obj import ImageROI, create_image_roi, create_signal_roi
-from sigima_.tests.data import create_multigauss_image, create_paracetamol_signal
 
 
 def test_signal_roi_editor() -> None:

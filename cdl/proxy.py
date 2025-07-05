@@ -79,7 +79,7 @@ There are two ways to call a processor method:
     proxy.calc("average")
 
     # Call a method with parameters
-    p = sigima_.param.MovingAverageParam.create(n=30)
+    p = sigima.param.MovingAverageParam.create(n=30)
     proxy.calc("compute_moving_average", p)
 
 2. Directly calling the processor method from the proxy object:
@@ -90,7 +90,7 @@ There are two ways to call a processor method:
     proxy.compute_average()
 
     # Call a method with parameters
-    p = sigima_.param.MovingAverageParam.create(n=30)
+    p = sigima.param.MovingAverageParam.create(n=30)
     proxy.compute_moving_average(p)
 
 .. warning::
@@ -139,11 +139,11 @@ from contextlib import contextmanager
 
 import guidata.dataset as gds
 import numpy as np
+from sigima import ImageObj, SignalObj
 
 from cdl.baseproxy import BaseProxy
 from cdl.remote import RemoteClient
 from cdl.utils import qthelpers as qth
-from sigima_ import ImageObj, SignalObj
 
 
 class RemoteProxy(RemoteClient):
@@ -180,9 +180,9 @@ class RemoteProxy(RemoteClient):
         >>> proxy.get_object_titles()
         ['toto']
         >>> proxy["toto"]  # from title
-        <sigima_.obj.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima.obj.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1]  # from number
-        <sigima_.obj.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima.obj.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1].data
         array([1., 2., 3.])
         >>> proxy.set_current_panel("image")

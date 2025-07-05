@@ -12,12 +12,13 @@ covered by other tests.
 
 import os
 
-import sigima_.computation.signal as sigima_signal
-import sigima_.param
+import sigima.computation.signal as sigima_signal
+import sigima.param
+from sigima.tests.data import create_paracetamol_signal
+
 from cdl.env import execenv
 from cdl.objectmodel import get_short_id, get_uuid
 from cdl.tests import cdltest_app_context
-from sigima_.tests.data import create_paracetamol_signal
 
 
 def test_main_app():
@@ -97,7 +98,7 @@ def test_main_app():
         execenv.print(f"  Object (from uuid)  '{get_short_id(obj)}':{os.linesep}{obj}")
 
         # Use "calc" method with parameters
-        param = sigima_.param.MovingMedianParam.create(n=5)
+        param = sigima.param.MovingMedianParam.create(n=5)
         win.calc("compute_moving_median", param)
         # Use "calc" method without parameters
         win.calc("compute_integral")

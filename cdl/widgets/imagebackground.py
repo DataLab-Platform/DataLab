@@ -19,8 +19,7 @@ from cdl.config import _
 if TYPE_CHECKING:
     from plotpy.items import ImageItem, RangeComputation2d, RectangleShape
     from qtpy.QtWidgets import QWidget
-
-    from sigima_.obj import ImageObj
+    from sigima.obj import ImageObj
 
 
 class ImageBackgroundDialog(PlotDialog):

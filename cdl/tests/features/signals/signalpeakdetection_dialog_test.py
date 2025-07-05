@@ -8,10 +8,10 @@ Signal peak detection dialog test.
 # guitest: show
 
 from guidata.qthelpers import exec_dialog, qt_app_context
+from sigima.tests.data import get_test_signal
 
 from cdl.env import execenv
 from cdl.widgets.signalpeak import SignalPeakDetectionDialog
-from sigima_.tests.data import get_test_signal
 
 
 def test_peak1d_dialog():

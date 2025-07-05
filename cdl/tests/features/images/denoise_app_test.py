@@ -7,9 +7,10 @@ Denoise processing application test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima_.param
+import sigima.param
+from sigima.tests.data import get_test_image
+
 from cdl.tests import cdltest_app_context
-from sigima_.tests.data import get_test_image
 
 
 def test_denoise():
@@ -21,7 +22,7 @@ def test_denoise():
         proc = panel.processor
         proc.compute_all_denoise()
         panel.objview.select_groups()
-        param = sigima_.param.GridParam.create(cols=3)
+        param = sigima.param.GridParam.create(cols=3)
         proc.distribute_on_grid(param)
         panel.add_label_with_title()
 

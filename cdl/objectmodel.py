@@ -40,7 +40,7 @@ from collections.abc import Iterator
 from typing import Callable
 from uuid import uuid4
 
-from sigima_ import ImageObj, SignalObj
+from sigima import ImageObj, SignalObj
 
 
 def get_number(obj: SignalObj | ImageObj | ObjectGroup) -> int:

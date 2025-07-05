@@ -10,9 +10,10 @@ then open DataLab to show them.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+from sigima.obj import NewImageParam
+from sigima.tests import data as test_data
+
 from cdl.app import run
-from sigima_.obj import NewImageParam
-from sigima_.tests import data as test_data
 
 
 def test_launcher2():

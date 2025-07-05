@@ -11,10 +11,10 @@ import os.path as osp
 import pkgutil
 import re
 
+import sigima.computation
 from _pytest.mark import Mark
 
 import cdl.tests as tests_pkg
-import sigima_.computation
 from cdl import __version__
 from cdl.utils.strings import shorten_docstring
 
@@ -74,8 +74,8 @@ def get_validation_tests(package: str) -> list:
 
 def generate_csv_files() -> None:
     """Generate CSV files containing the validation status of compute functions"""
-    compute_functions = sigima_.computation.find_computation_functions(
-        sigima_.computation
+    compute_functions = sigima.computation.find_computation_functions(
+        sigima.computation
     )
     validation_tests = get_validation_tests(tests_pkg)
 

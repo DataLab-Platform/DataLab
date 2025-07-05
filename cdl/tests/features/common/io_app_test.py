@@ -11,13 +11,14 @@ I/O application test:
 
 import os.path as osp
 
+from sigima.io.base import BaseIORegistry, IOAction
+from sigima.io.image import ImageIORegistry
+from sigima.io.signal import SignalIORegistry
+from sigima.tests.helpers import WorkdirRestoringTempDir, get_test_fnames
+
 from cdl.env import execenv
 from cdl.gui.panel.base import BaseDataPanel
 from cdl.tests import cdltest_app_context
-from sigima_.io.base import BaseIORegistry, IOAction
-from sigima_.io.image import ImageIORegistry
-from sigima_.io.signal import SignalIORegistry
-from sigima_.tests.helpers import WorkdirRestoringTempDir, get_test_fnames
 
 
 def __testfunc(

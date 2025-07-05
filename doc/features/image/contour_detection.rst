@@ -37,7 +37,7 @@ The contour detection algorithm works in the following way:
   - Then, each contour is fitted to the closest ellipse (or circle)
 
 Feature is based on ``get_contour_shapes`` function
-from ``sigima_.algorithms`` module:
+from ``sigima.algorithms`` module:
 
-  .. literalinclude:: ../../../sigima_/algorithms/image.py
+  .. literalinclude:: ../../../sigima/algorithms/image.py
      :pyobject: get_contour_shapes

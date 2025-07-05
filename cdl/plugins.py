@@ -31,21 +31,22 @@ from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
 
+# pylint: disable=unused-import
+from sigima.io.base import FormatInfo  # noqa: F401
+from sigima.io.image.base import ImageFormatBase  # noqa: F401
+from sigima.io.image.formats import ClassicsImageFormat  # noqa: F401
+from sigima.io.signal.base import SignalFormatBase  # noqa: F401
+
 from cdl.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
 from cdl.env import execenv
 from cdl.proxy import LocalProxy
 
-# pylint: disable=unused-import
-from sigima_.io.base import FormatInfo  # noqa: F401
-from sigima_.io.image.base import ImageFormatBase  # noqa: F401
-from sigima_.io.image.formats import ClassicsImageFormat  # noqa: F401
-from sigima_.io.signal.base import SignalFormatBase  # noqa: F401
-
 if TYPE_CHECKING:
+    from sigima.obj import NewImageParam, NewSignalParam
+
     from cdl.gui import main
     from cdl.gui.panel.image import ImagePanel
     from cdl.gui.panel.signal import SignalPanel
-    from sigima_.obj import NewImageParam, NewSignalParam
 
 
 PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")

@@ -21,12 +21,12 @@ import scipy.signal as sps
 from guidata.qthelpers import qt_app_context
 from plotpy.plot import PlotWindow
 from qtpy import QtWidgets as QW
+from sigima.obj import ImageDatatypes, NewImageParam
+from sigima.tests.data import create_2d_random, create_noisygauss_image
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.utils.qthelpers import create_progress_bar
-from sigima_.obj import ImageDatatypes, NewImageParam
-from sigima_.tests.data import create_2d_random, create_noisygauss_image
 
 POOL: Pool | None = None
 

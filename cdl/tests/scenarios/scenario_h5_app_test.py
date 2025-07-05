@@ -24,13 +24,14 @@ This scenario executes the following steps:
 
 import os.path as osp
 
+from sigima.param import ClipParam
+from sigima.tests.data import create_noisygauss_image, create_paracetamol_signal
+from sigima.tests.helpers import WorkdirRestoringTempDir
+
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.scenarios import scenario_mac_app_test
 from cdl.utils.strings import save_html_diff
-from sigima_.param import ClipParam
-from sigima_.tests.data import create_noisygauss_image, create_paracetamol_signal
-from sigima_.tests.helpers import WorkdirRestoringTempDir
 
 
 def test_scenario_h5():

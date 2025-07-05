@@ -26,10 +26,10 @@ from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigima.io.common.converters import to_string
 
 from cdl.config import APP_NAME, DATETIME_FORMAT, SHOTPATH, Conf, _, get_old_log_fname
 from cdl.env import execenv
-from sigima_.io.common.converters import to_string
 
 
 def close_widgets_and_quit(screenshot=False) -> None:
@@ -215,7 +215,7 @@ class CallbackWorker(QC.QThread):
     confused with the :py:class:`cdl.gui.processor.base.Worker` class, which
     handles the execution of computations in a another process)
 
-    Implements `CallbackWorkerProtocol` from `sigima_.worker`, used for computations
+    Implements `CallbackWorkerProtocol` from `sigima.worker`, used for computations
     that support cancellation and progress reporting.
 
     Args:

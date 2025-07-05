@@ -14,17 +14,16 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigima.algorithms.signal.peakdetection import peak_indices
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from sigima_.algorithms.signal.peakdetection import peak_indices
 
 if TYPE_CHECKING:
     from plotpy.items import Marker
     from qtpy.QtWidgets import QWidget
-
-    from sigima_.obj import SignalObj
+    from sigima.obj import SignalObj
 
 
 class DistanceSlider(QW.QWidget):

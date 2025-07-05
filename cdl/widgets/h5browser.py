@@ -29,14 +29,14 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename
+from sigima import ImageObj, SignalObj
+from sigima.io.common.converters import to_string
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
 from cdl.h5 import H5Importer
 from cdl.utils.qthelpers import qt_handle_error_message
-from sigima_ import ImageObj, SignalObj
-from sigima_.io.common.converters import to_string
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot

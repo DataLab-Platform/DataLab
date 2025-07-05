@@ -20,12 +20,13 @@ import pytest
 import qtpy
 import qwt
 import scipy
+import sigima
 import skimage
+from sigima.tests import helpers
 
 import cdl
 from cdl.env import execenv
 from cdl.plugins import get_available_plugins
-from sigima_.tests import helpers
 
 # Turn on unattended mode for executing tests without user interaction
 execenv.unattended = True
@@ -42,12 +43,6 @@ def pytest_addoption(parser):
         default=False,
         help="Display Qt windows during tests (disables QT_QPA_PLATFORM=offscreen)",
     )
-    # TODO: Migrate the `--gui` option to the future `sigima` test infrastructure,
-    # and turn the default to False because `sigima` will have to be headless (or
-    # at least not require a GUI) by default.
-    parser.addoption(
-        "--gui", action="store_true", default=True, help="Run tests that require a GUI"
-    )
 
 
 def pytest_report_header(config):  # pylint: disable=unused-argument
@@ -61,6 +56,7 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
         qtbindings_version = qtpy.PYQT_VERSION
     infolist = [
         f"DataLab {cdl.__version__} [Plugins: {nfstr if nfstr else 'None'}]",
+        f"  sigima {sigima.__version__},",
         f"  guidata {guidata.__version__}, PlotPy {plotpy.__version__}",
         f"  PythonQwt {qwt.__version__}, "
         f"{qtpy.API_NAME} {qtbindings_version} [Qt version: {qtpy.QT_VERSION}]",
@@ -116,21 +112,6 @@ def pytest_configure(config):
     )
     if not config.getoption("--show-windows"):
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
-    # TODO: Migrate the following `gui` marker to the future `sigima` test infra
-    config.addinivalue_line("markers", "gui: mark test as requiring GUI")
-
-
-# TODO: Migrate the following function to the future `sigima` test infrastructure
-def pytest_collection_modifyitems(config, items):
-    """Modify collected test items based on command line options."""
-    if config.getoption("--gui"):
-        return  # L'utilisateur a demandé d'exécuter les tests GUI
-
-    skip_gui = pytest.mark.skip(reason="GUI test: run with --gui")
-
-    for item in items:
-        if "gui" in item.keywords:
-            item.add_marker(skip_gui)
 
 
 @pytest.fixture(autouse=True)

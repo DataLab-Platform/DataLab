@@ -27,6 +27,7 @@ from typing import Generator
 
 import pytest
 from guidata.guitest import run_testlauncher
+from sigima.tests import helpers
 
 import cdl.config  # Loading icons
 from cdl.config import MOD_NAME
@@ -35,7 +36,6 @@ from cdl.gui.main import CDLMainWindow
 from cdl.gui.panel.image import ImagePanel
 from cdl.gui.panel.signal import SignalPanel
 from cdl.utils import qthelpers as qth
-from sigima_.tests import helpers
 
 # Add test data files and folders pointed by `CDL_DATA` environment variable:
 helpers.add_test_path_from_env("CDL_DATA")

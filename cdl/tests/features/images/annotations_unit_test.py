@@ -15,11 +15,11 @@ from plotpy.builder import make
 from plotpy.items import AnnotatedShape, PolygonShape
 from plotpy.plot import BasePlot
 from qtpy import QtWidgets as QW
+from sigima.tests import data as test_data
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from sigima_.tests import data as test_data
 
 
 def set_annotation_color(annotation: AnnotatedShape, color: str) -> None:

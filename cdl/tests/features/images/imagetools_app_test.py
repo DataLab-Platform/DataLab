@@ -15,11 +15,11 @@ import os.path as osp
 from plotpy.coords import axes_to_canvas
 from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
+from sigima.obj import NewImageParam
+from sigima.tests.data import create_multigauss_image
 
 from cdl.gui.docks import profile_to_signal
 from cdl.tests import cdltest_app_context
-from sigima_.obj import NewImageParam
-from sigima_.tests.data import create_multigauss_image
 
 
 def test_image_tools_app():

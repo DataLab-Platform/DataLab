@@ -10,11 +10,11 @@ import numpy as np
 from guidata.dataset import update_dataset
 from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
+from sigima.obj import ImageObj, SignalObj
+from sigima.tests.data import get_test_fnames
 
 from cdl.env import execenv
 from cdl.widgets.textimport import ImageParam, SignalParam, TextImportWizard
-from sigima_.obj import ImageObj, SignalObj
-from sigima_.tests.data import get_test_fnames
 
 
 def file_to_clipboard(filename: str) -> None:

@@ -590,13 +590,13 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_x_at_y`"
 msgstr ""
 
-msgid "Compute x at y with :py:func:`sigima_.computation.signal.x_at_y`"
+msgid "Compute x at y with :py:func:`sigima.computation.signal.x_at_y`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_y_at_x`"
 msgstr ""
 
-msgid "Compute y at x with :py:func:`sigima_.computation.signal.y_at_x`"
+msgid "Compute y at x with :py:func:`sigima.computation.signal.y_at_x`"
 msgstr ""
 
 msgid "Image processing"
@@ -641,7 +641,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_binning`"
 msgstr ""
 
-msgid "Binning image with :py:func:`sigima_.computation.image.binning`"
+msgid "Binning image with :py:func:`sigima.computation.image.binning`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_line_profile`"
@@ -671,7 +671,7 @@ msgstr ""
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_resize`"
 msgstr ""
 
-msgid "Resize image with :py:func:`sigima_.computation.image.resize`"
+msgid "Resize image with :py:func:`sigima.computation.image.resize`"
 msgstr ""
 
 msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_roi_extraction`"
@@ -682,4 +682,3 @@ msgstr ""
 
 msgid "Compute profile along a segment"
 msgstr ""
-

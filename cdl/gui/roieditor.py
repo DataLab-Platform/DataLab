@@ -44,19 +44,7 @@ from plotpy.plot import PlotDialog, PlotManager
 from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool, SelectTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-
-from cdl.adapters_plotpy import (
-    TypePlotItem,
-    TypeROIItem,
-    configure_roi_item,
-)
-from cdl.adapters_plotpy.converters import (
-    plotitem_to_singleroi,
-)
-from cdl.adapters_plotpy.factories import create_adapter_from_object
-from cdl.config import Conf, _
-from cdl.env import execenv
-from sigima_.obj import (
+from sigima.obj import (
     CircularROI,
     ImageObj,
     ImageROI,
@@ -70,6 +58,18 @@ from sigima_.obj import (
     TypeObj,
     TypeROI,
 )
+
+from cdl.adapters_plotpy import (
+    TypePlotItem,
+    TypeROIItem,
+    configure_roi_item,
+)
+from cdl.adapters_plotpy.converters import (
+    plotitem_to_singleroi,
+)
+from cdl.adapters_plotpy.factories import create_adapter_from_object
+from cdl.config import Conf, _
+from cdl.env import execenv
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot
@@ -225,8 +225,8 @@ class BaseROIEditor(
 
     Args:
         parent: Parent plot dialog
-        obj: Object to edit (:class:`sigima_.obj.SignalObj` or
-         :class:`sigima_.obj.ImageObj`)
+        obj: Object to edit (:class:`sigima.obj.SignalObj` or
+         :class:`sigima.obj.ImageObj`)
         extract: If True, the dialog is in "extract mode" (extracting ROIs)
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)
@@ -463,8 +463,8 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
 
     Args:
         parent: Parent plot dialog
-        obj: Object to edit (:class:`sigima_.obj.SignalObj` or
-         :class:`sigima_.obj.ImageObj`)
+        obj: Object to edit (:class:`sigima.obj.SignalObj` or
+         :class:`sigima.obj.ImageObj`)
         extract: If True, the dialog is in "extract mode" (extracting ROIs)
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)
@@ -532,8 +532,8 @@ class ImageROIEditor(
 
     Args:
         parent: Parent plot dialog
-        obj: Object to edit (:class:`sigima_.obj.SignalObj` or
-         :class:`sigima_.obj.ImageObj`)
+        obj: Object to edit (:class:`sigima.obj.SignalObj` or
+         :class:`sigima.obj.ImageObj`)
         extract: If True, the dialog is in "extract mode" (extracting ROIs)
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)

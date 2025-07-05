@@ -36,10 +36,8 @@ from plotpy.items import (
     LabelItem,
     PolygonShape,
 )
-
-from cdl.config import PLOTPY_CONF, Conf
-from sigima_.algorithms import coordinates
-from sigima_.obj.base import (
+from sigima.algorithms import coordinates
+from sigima.obj.base import (
     ROI_KEY,
     BaseObj,
     BaseROI,
@@ -51,6 +49,8 @@ from sigima_.obj.base import (
     TypeROIParam,
     TypeSingleROI,
 )
+
+from cdl.config import PLOTPY_CONF, Conf
 
 if TYPE_CHECKING:
     from plotpy.items import (
@@ -153,7 +153,7 @@ def json_to_items(json_str: str | None) -> list:
 
 
 class ResultPlotPyAdapter:
-    """Adapter for converting `sigima_` result properties or result shape to PlotPy
+    """Adapter for converting `sigima` result properties or result shape to PlotPy
 
     Args:
         result: Result properties or result shape
@@ -228,7 +228,7 @@ class ResultPlotPyAdapter:
 
 
 class ResultPropertiesPlotPyAdapter(ResultPlotPyAdapter):
-    """Adapter for converting `sigima_` result properties to PlotPy
+    """Adapter for converting `sigima` result properties to PlotPy
 
     Args:
         result: Result properties
@@ -243,7 +243,7 @@ class ResultPropertiesPlotPyAdapter(ResultPlotPyAdapter):
 
 
 class ResultShapePlotPyAdapter(ResultPlotPyAdapter):
-    """Adapter for converting `sigima_` result shapes to PlotPy
+    """Adapter for converting `sigima` result shapes to PlotPy
 
     Args:
         result: Result shape

@@ -6,9 +6,10 @@ Log viewer test
 
 # guitest: show
 
+from sigima.tests.helpers import exec_script
+
 from cdl.app import run
 from cdl.tests.features.utilities import logview_error
-from sigima_.tests.helpers import exec_script
 
 
 def test_logviewer_app():

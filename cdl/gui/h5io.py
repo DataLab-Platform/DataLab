@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING
 
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
+from sigima.obj import SignalObj
 
 from cdl.config import _
 from cdl.env import execenv
@@ -24,7 +25,6 @@ from cdl.h5 import H5Importer
 from cdl.h5.native import NativeH5Reader, NativeH5Writer
 from cdl.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from cdl.widgets.h5browser import H5BrowserDialog
-from sigima_.obj import SignalObj
 
 if TYPE_CHECKING:
     from cdl.gui.main import CDLMainWindow

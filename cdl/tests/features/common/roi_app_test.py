@@ -15,12 +15,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-from skimage import draw
-
-import sigima_.param as sigima_param
-from cdl.env import execenv
-from cdl.tests import cdltest_app_context
-from sigima_.obj import (
+import sigima.param as sigima_param
+from sigima.obj import (
     ImageObj,
     ImageROI,
     NewImageParam,
@@ -29,7 +25,11 @@ from sigima_.obj import (
     create_image_roi,
     create_signal_roi,
 )
-from sigima_.tests.data import create_multigauss_image, create_paracetamol_signal
+from sigima.tests.data import create_multigauss_image, create_paracetamol_signal
+from skimage import draw
+
+from cdl.env import execenv
+from cdl.tests import cdltest_app_context
 
 if TYPE_CHECKING:
     from cdl.gui.panel.image import ImagePanel
@@ -223,10 +223,10 @@ def create_test_image_with_roi(newimageparam: NewImageParam) -> ImageObj:
     """Create test image with ROIs
 
     Args:
-        newimageparam (sigima_.NewImageParam): Image parameters
+        newimageparam (sigima.NewImageParam): Image parameters
 
     Returns:
-        sigima_.ImageObj: Image object with ROIs
+        sigima.ImageObj: Image object with ROIs
     """
     ima = create_multigauss_image(newimageparam)
     ima.data += 1  # Ensure that the image has non-zero values (for ROI check tests)

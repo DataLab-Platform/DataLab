@@ -19,12 +19,12 @@ from guidata.qthelpers import (
 )
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
+from sigima.obj import NewImageParam
+from sigima.tests import data as test_data
 
 from cdl.config import _
 from cdl.gui.main import CDLMainWindow
 from cdl.tests.features.macro.macroeditor_unit_test import get_macro_example_path
-from sigima_.obj import NewImageParam
-from sigima_.tests import data as test_data
 
 
 class HostWidget(QW.QWidget):

@@ -14,9 +14,10 @@ from __future__ import annotations
 import os
 import sys
 
+from sigima.tests.helpers import get_script_output
+
 import cdl
 from cdl.env import VerbosityLevels, execenv
-from sigima_.tests.helpers import get_script_output
 
 ARGV_TEST = "--execenvtest"
 

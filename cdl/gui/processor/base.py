@@ -23,6 +23,9 @@ from guidata.qthelpers import exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigima.computation import is_computation_function
+from sigima.config import options as sigima_options
+from sigima.obj import ImageObj, SignalObj, TypeROI, TypeROIParam
 
 from cdl import env
 from cdl.config import Conf, _
@@ -30,18 +33,15 @@ from cdl.gui.processor.catcher import CompOut, wng_err_func
 from cdl.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
-from sigima_.computation import is_computation_function
-from sigima_.config import options as sigima_options
-from sigima_.obj import ImageObj, SignalObj, TypeROI, TypeROIParam
 
 if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
 
     from plotpy.plot import PlotWidget
+    from sigima.obj import ResultProperties, ResultShape
 
     from cdl.gui.panel.image import ImagePanel
     from cdl.gui.panel.signal import SignalPanel
-    from sigima_.obj import ResultProperties, ResultShape
 
 
 # Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
@@ -1216,18 +1216,18 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         .. code-block:: python
 
-            import sigima_.computation.signal as sigima_signal
-            import sigima_.param
+            import sigima.computation.signal as sigima_signal
+            import sigima.param
 
             # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
             compute(sigima_signal.normalize)
-            param = sigima_.param.MovingAverageParam(n=3)
+            param = sigima.param.MovingAverageParam(n=3)
             compute(sigima_signal.moving_average, param)
             compute(computation_function, param, edit=False)
 
             # For pattern `2_to_1`:
             compute(sigima_signal.difference, obj2)
-            param = sigima_.param.InterpolationParam(method="cubic")
+            param = sigima.param.InterpolationParam(method="cubic")
             compute(sigima_signal.interpolation, obj2, param)
 
             # For pattern `1_to_n`:
@@ -1312,8 +1312,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     def compute_roi_extraction(self, roi: TypeROI | None = None) -> None:
         """Extract Region Of Interest (ROI) from data with:
 
-        - :py:func:`sigima_.computation.image.compute_extract_roi` for single ROI
-        - :py:func:`sigima_.computation.image.compute_extract_rois` for multiple ROIs"""
+        - :py:func:`sigima.computation.image.compute_extract_roi` for single ROI
+        - :py:func:`sigima.computation.image.compute_extract_rois` for multiple ROIs"""
         # Expected behavior:
         # -----------------
         # * If `roi` is not None or not empty, skip the ROI dialog

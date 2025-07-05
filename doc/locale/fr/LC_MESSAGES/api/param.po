@@ -19,26 +19,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Parameters (:mod:`sigima_.param`)"
-msgstr "Paramètres (:mod:`sigima_.param`)"
+msgid "Parameters (:mod:`sigima.param`)"
+msgstr "Paramètres (:mod:`sigima.param`)"
 
-msgid "The :mod:`sigima_.param` module aims at providing all the dataset parameters that are used by the :mod:`sigima_.computation` and DataLab's processors."
-msgstr "Le module :mod:`sigima_.param` a vocation à fournir tous les paramètres de jeu de données utilisés par les modules :mod:`sigima_.computation` et :mod:`cdl.gui.processor`."
+msgid "The :mod:`sigima.param` module aims at providing all the dataset parameters that are used by the :mod:`sigima.computation` and DataLab's processors."
+msgstr "Le module :mod:`sigima.param` a vocation à fournir tous les paramètres de jeu de données utilisés par les modules :mod:`sigima.computation` et :mod:`cdl.gui.processor`."
 
 msgid "Those datasets are defined in other modules:"
 msgstr "Ces jeux de données sont définis dans d'autres modules :"
 
-msgid ":mod:`sigima_.computation.base`"
+msgid ":mod:`sigima.computation.base`"
 msgstr ""
 
-msgid ":mod:`sigima_.computation.image`"
+msgid ":mod:`sigima.computation.image`"
 msgstr ""
 
-msgid ":mod:`sigima_.computation.signal`"
+msgid ":mod:`sigima.computation.signal`"
 msgstr ""
 
-msgid "The :mod:`sigima_.param` module is thus a convenient way to import all the sets of parameters at once."
-msgstr "Le module :mod:`sigima_.param` est donc un moyen pratique d'importer tous les ensembles de paramètres en une seule fois."
+msgid "The :mod:`sigima.param` module is thus a convenient way to import all the sets of parameters at once."
+msgstr "Le module :mod:`sigima.param` est donc un moyen pratique d'importer tous les ensembles de paramètres en une seule fois."
 
 msgid "As a matter of fact, the following import statement is equivalent to the previous one:"
 msgstr "En fait, l'instruction d'importation suivante est équivalente à la précédente :"
@@ -52,8 +52,8 @@ msgstr "Les jeux de données listés dans les sections suivantes sont utilisés 
 msgid "Each dataset is a subclass of :py:class:`guidata.dataset.datatypes.DataSet` and thus needs to be instantiated before being used."
 msgstr "Ces jeux de données (sous-classes de :py:class:`guidata.dataset.datatypes.Dataset`) sont définis dans d'autres modules :"
 
-msgid "Here is a complete example of how to instantiate a dataset and access its parameters with the :py:class:`sigima_.param.BinningParam` dataset:"
-msgstr "Voici un exemple complet de la façon d'instancier un jeu de données et d'accéder à ses paramètres avec le jeu de données :py:class:`sigima_.param.BinningParam` :"
+msgid "Here is a complete example of how to instantiate a dataset and access its parameters with the :py:class:`sigima.param.BinningParam` dataset:"
+msgstr "Voici un exemple complet de la façon d'instancier un jeu de données et d'accéder à ses paramètres avec le jeu de données :py:class:`sigima.param.BinningParam` :"
 
 msgid "Binning parameters"
 msgstr "Paramètres de binning"

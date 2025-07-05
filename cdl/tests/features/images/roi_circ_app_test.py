@@ -12,9 +12,9 @@ from __future__ import annotations
 from typing import Literal
 
 import numpy as np
+import sigima.obj
 from skimage import draw
 
-import sigima_.obj
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.features.common.roi_app_test import print_obj_shapes
@@ -22,7 +22,7 @@ from cdl.tests.features.common.roi_app_test import print_obj_shapes
 
 def create_test_image_with_roi(
     geometry: Literal["rectangle", "circle", "polygon"],
-) -> sigima_.obj.ImageObj:
+) -> sigima.obj.ImageObj:
     """Create test image with ROIs"""
     data = np.zeros((500, 750), dtype=np.uint16)
     xc, yc, r = 500, 200, 100
@@ -35,8 +35,8 @@ def create_test_image_with_roi(
         coords = [xc, yc, r]
     else:
         raise NotImplementedError(f"Geometry {geometry} not implemented")
-    ima = sigima_.obj.create_image(f"Test image with ROI/{geometry}", data)
-    ima.roi = sigima_.obj.create_image_roi(
+    ima = sigima.obj.create_image(f"Test image with ROI/{geometry}", data)
+    ima.roi = sigima.obj.create_image_roi(
         geometry, coords, indices=True, singleobj=False
     )
     return ima

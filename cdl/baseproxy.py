@@ -31,8 +31,7 @@ from typing import TYPE_CHECKING, Generator
 
 import guidata.dataset as gds
 import numpy as np
-
-from sigima_ import ImageObj, SignalObj
+from sigima import ImageObj, SignalObj
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

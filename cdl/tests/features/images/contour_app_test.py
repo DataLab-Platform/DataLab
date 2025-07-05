@@ -7,12 +7,13 @@ Contour finding application test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima_.param
+import sigima.param
+from sigima.obj import NewImageParam
+from sigima.tests.data import create_multigauss_image
+
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
 from cdl.tests.features.common.roi_app_test import create_test_image_with_roi
-from sigima_.obj import NewImageParam
-from sigima_.tests.data import create_multigauss_image
 
 
 def test_contour_app():
@@ -24,7 +25,7 @@ def test_contour_app():
             ima1 = create_multigauss_image(newparam)
             ima1.set_metadata_option("colormap", "gray")
             panel.add_object(ima1)
-            param = sigima_.param.ContourShapeParam.create(shape=shape)
+            param = sigima.param.ContourShapeParam.create(shape=shape)
             panel.processor.run_feature("contour_shape", param)
             take_plotwidget_screenshot(panel, "contour_test")
             ima2 = create_test_image_with_roi(newparam)

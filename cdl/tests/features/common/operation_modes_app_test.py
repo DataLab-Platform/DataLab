@@ -19,13 +19,14 @@ performed in this mode: sum, difference, product, division, ...
 
 from __future__ import annotations
 
+from sigima.tests.helpers import get_test_fnames
+
 from cdl import app
 from cdl.config import Conf
 from cdl.env import execenv
 from cdl.gui.processor.base import is_pairwise_mode
 from cdl.objectmodel import get_short_id
 from cdl.utils.qthelpers import cdl_app_context
-from sigima_.tests.helpers import get_test_fnames
 
 
 def check_titles(title, titles):

@@ -11,14 +11,14 @@ Baseline dialog test
 from __future__ import annotations
 
 import numpy as np
+import sigima.computation.signal as sigima_signal
+import sigima.obj
 from guidata.qthelpers import exec_dialog, qt_app_context
+from sigima.tests.data import create_paracetamol_signal
+from sigima.tests.vistools import view_curves
 
-import sigima_.computation.signal as sigima_signal
-import sigima_.obj
 from cdl.env import execenv
 from cdl.widgets.signalbaseline import SignalBaselineDialog
-from sigima_.tests.data import create_paracetamol_signal
-from sigima_.tests.vistools import view_curves
 
 
 def test_signal_baseline_selection():
@@ -42,7 +42,7 @@ def test_signal_baseline_dialog() -> None:
         s1 = create_paracetamol_signal()
         dlg = SignalBaselineDialog(s1)
         if exec_dialog(dlg):
-            param = sigima_.obj.ROI1DParam()
+            param = sigima.obj.ROI1DParam()
             param.xmin, param.xmax = dlg.get_x_range()
             s2 = sigima_signal.offset_correction(s1, param)
             view_curves([s1, s2], title="Signal offset correction")

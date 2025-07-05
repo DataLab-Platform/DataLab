@@ -10,25 +10,25 @@ Scenarios common functions
 from __future__ import annotations
 
 import numpy as np
-
-import sigima_.obj
-import sigima_.param
-from cdl.config import _
-from cdl.gui.main import CDLMainWindow
-from cdl.gui.panel.image import ImagePanel
-from cdl.gui.panel.signal import SignalPanel
-from cdl.tests.sigima_tests.common.createobject_test import (
+import sigima.obj
+import sigima.param
+from sigima.tests.common.createobject_test import (
     iterate_image_creation,
     iterate_signal_creation,
 )
-from cdl.widgets import fitdialog
-from sigima_.tests.data import (
+from sigima.tests.data import (
     GaussianNoiseParam,
     create_noisy_signal,
     create_paracetamol_signal,
     create_peak2d_image,
     create_sincos_image,
 )
+
+from cdl.config import _
+from cdl.gui.main import CDLMainWindow
+from cdl.gui.panel.image import ImagePanel
+from cdl.gui.panel.signal import SignalPanel
+from cdl.widgets import fitdialog
 
 
 def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) -> None:
@@ -37,9 +37,9 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     Requires that one signal or image has been added at index."""
     assert len(panel) >= number - 1
     panel.objview.select_objects((number,))
-    panel.processor.run_feature("gaussian_filter", sigima_.param.GaussianParam())
-    panel.processor.run_feature("moving_average", sigima_.param.MovingAverageParam())
-    panel.processor.run_feature("moving_median", sigima_.param.MovingMedianParam())
+    panel.processor.run_feature("gaussian_filter", sigima.param.GaussianParam())
+    panel.processor.run_feature("moving_average", sigima.param.MovingAverageParam())
+    panel.processor.run_feature("moving_median", sigima.param.MovingMedianParam())
     panel.processor.run_feature("wiener")
     panel.processor.run_feature("fft")
     panel.processor.run_feature("ifft")
@@ -54,7 +54,7 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     panel.remove_object()
     panel.processor.run_feature(
         "astype",
-        sigima_.param.DataTypeIParam.create(dtype_str="float64"),
+        sigima.param.DataTypeIParam.create(dtype_str="float64"),
     )
     panel.processor.run_feature("log10")
     panel.processor.run_feature("exp")
@@ -79,7 +79,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.run_feature("quadratic_difference", panel[2])
     panel.delete_metadata()
 
-    const_oper_param = sigima_.param.ConstantParam.create(value=2.0)
+    const_oper_param = sigima.param.ConstantParam.create(value=2.0)
     for const_oper in (
         "addition_constant",
         "difference_constant",
@@ -99,7 +99,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((1, 2))
     panel.processor.run_feature("product")
 
-    param = sigima_.param.ConstantParam()
+    param = sigima.param.ConstantParam()
     param.value = 2.0
     panel.processor.run_feature("addition_constant", param)
     panel.processor.run_feature("difference_constant", param)
@@ -107,11 +107,11 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.run_feature("division_constant", param)
 
     obj = panel.objmodel.get_groups()[0][-1]
-    param = sigima_.param.ClipParam()  # Clipping before division...
+    param = sigima.param.ClipParam()  # Clipping before division...
     param.upper = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.run_feature("clip", param)
 
-    param = sigima_.param.NormalizeParam()
+    param = sigima.param.NormalizeParam()
     for method_value, _method_name in param.methods:
         param.method = method_value
         panel.processor.run_feature("normalize", param)
@@ -145,26 +145,26 @@ def run_signal_computations(
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    base_param = sigima_.obj.NewSignalParam.create(
-        title=_("Random function"), stype=sigima_.obj.SignalTypes.UNIFORMRANDOM
+    base_param = sigima.obj.NewSignalParam.create(
+        title=_("Random function"), stype=sigima.obj.SignalTypes.UNIFORMRANDOM
     )
-    extra_param = sigima_.obj.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
+    extra_param = sigima.obj.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
     noiseobj1 = panel.new_object(base_param, extra_param=extra_param, edit=False)
 
     compute_common_operations(panel)
 
     # Signal specific operations
     panel.processor.run_feature("sqrt")
-    panel.processor.run_feature("power", sigima_.param.PowerParam.create(power=2))
+    panel.processor.run_feature("power", sigima.param.PowerParam.create(power=2))
     panel.processor.run_feature("reverse_x")
     panel.processor.run_feature("reverse_x")
 
     # Test filter methods
     for filter_func_name, paramclass in (
-        ("lowpass", sigima_.param.LowPassFilterParam),
-        ("highpass", sigima_.param.HighPassFilterParam),
-        ("bandpass", sigima_.param.BandPassFilterParam),
-        ("bandstop", sigima_.param.BandStopFilterParam),
+        ("lowpass", sigima.param.LowPassFilterParam),
+        ("highpass", sigima.param.HighPassFilterParam),
+        ("bandpass", sigima.param.BandPassFilterParam),
+        ("bandstop", sigima.param.BandStopFilterParam),
     ):
         for method_value, _method_name in paramclass.methods:
             panel.objview.set_current_object(sig1)
@@ -175,7 +175,7 @@ def run_signal_computations(
     # Test windowing methods
     noiseobj2 = noiseobj1.copy()
     win.add_object(noiseobj2)
-    param = sigima_.param.WindowingParam()
+    param = sigima.param.WindowingParam()
     for method_value, _method_name in param.methods:
         panel.objview.set_current_object(noiseobj2)
         param.method = method_value
@@ -183,13 +183,13 @@ def run_signal_computations(
 
     win.add_object(sig1.copy())
 
-    param = sigima_.param.XYCalibrateParam.create(a=1.2, b=0.1)
+    param = sigima.param.XYCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.run_feature("calibration", param)
 
     panel.processor.run_feature("derivative")
     panel.processor.run_feature("integral")
 
-    param = sigima_.param.PeakDetectionParam()
+    param = sigima.param.PeakDetectionParam()
     panel.processor.compute_peak_detection(param)
 
     panel.processor.compute_multigaussianfit()
@@ -198,12 +198,12 @@ def run_signal_computations(
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
-    roi = sigima_.obj.create_signal_roi([i1, i2], indices=True)
+    roi = sigima.obj.create_signal_roi([i1, i2], indices=True)
     panel.processor.compute_roi_extraction(roi)
 
     sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
     panel.add_object(sig)
-    param = sigima_.param.PolynomialFitParam()
+    param = sigima.param.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
     for fittitle, fitfunc in (
         (_("Gaussian fit"), fitdialog.gaussianfit),
@@ -217,15 +217,15 @@ def run_signal_computations(
         panel.objview.set_current_object(sig)
         panel.processor.compute_fit(fittitle, fitfunc)
 
-    base_param = sigima_.obj.NewSignalParam.create(
-        title=_("Gaussian"), stype=sigima_.obj.SignalTypes.GAUSS
+    base_param = sigima.obj.NewSignalParam.create(
+        title=_("Gaussian"), stype=sigima.obj.SignalTypes.GAUSS
     )
-    sig = sigima_.obj.create_signal_from_param(
-        base_param, sigima_.obj.GaussLorentzVoigtParam()
+    sig = sigima.obj.create_signal_from_param(
+        base_param, sigima.obj.GaussLorentzVoigtParam()
     )
     panel.add_object(sig)
 
-    param = sigima_.param.FWHMParam()
+    param = sigima.param.FWHMParam()
     for method_value, _method_name in param.methods:
         param.method = method_value
         panel.processor.run_feature("fwhm", param)
@@ -234,16 +234,16 @@ def run_signal_computations(
     # Create a new signal which X values are a subset of sig1
     x = np.linspace(sig1.x.min(), sig1.x.max(), data_size // 2)[: data_size // 4]
     y = x * 0.0
-    sig2 = sigima_.obj.create_signal("X values for interpolation", x, y)
+    sig2 = sigima.obj.create_signal("X values for interpolation", x, y)
     panel.add_object(sig2)
 
     # Test interpolation
     # pylint: disable=protected-access
-    for method_choice_tuple in sigima_.param.InterpolationParam.methods:
+    for method_choice_tuple in sigima.param.InterpolationParam.methods:
         method = method_choice_tuple[0]
         for fill_value in (None, 0.0):
             panel.objview.set_current_object(sig1)
-            param = sigima_.param.InterpolationParam.create(
+            param = sigima.param.InterpolationParam.create(
                 method=method, fill_value=fill_value
             )
             panel.processor.run_feature("interpolate", sig2, param)
@@ -252,7 +252,7 @@ def run_signal_computations(
     xmin, xmax = x[0], x[-1]
     for mode, dx, nbpts in (("dx", 0.1, 10), ("nbpts", 0.0, 100)):
         panel.objview.set_current_object(sig1)
-        param = sigima_.param.ResamplingParam.create(
+        param = sigima.param.ResamplingParam.create(
             xmin=xmin, xmax=xmax, mode=mode, dx=dx, nbpts=nbpts
         )
         panel.processor.run_feature("resampling", param)
@@ -265,13 +265,13 @@ def run_signal_computations(
     # Test detrending
     panel.objview.set_current_object(sig1)
     # pylint: disable=protected-access
-    for method_choice_tuple in sigima_.param.DetrendingParam.methods:
-        param = sigima_.param.DetrendingParam.create(method=method_choice_tuple[0])
+    for method_choice_tuple in sigima.param.DetrendingParam.methods:
+        param = sigima.param.DetrendingParam.create(method=method_choice_tuple[0])
         panel.processor.run_feature("detrending", param)
 
     # Test histogram
     panel.objview.set_current_object(sig1)
-    param = sigima_.param.HistogramParam.create(bins=100)
+    param = sigima.param.HistogramParam.create(bins=100)
     panel.processor.run_feature("histogram", param)
 
     # Test bandwidth and dynamic parameters
@@ -286,7 +286,7 @@ def run_image_computations(
     win.set_current_panel("image")
     panel = win.imagepanel
 
-    newparam = sigima_.obj.NewImageParam.create(height=data_size, width=data_size)
+    newparam = sigima.obj.NewImageParam.create(height=data_size, width=data_size)
 
     if all_types:
         for image in iterate_image_creation(data_size, non_zero=True):
@@ -300,10 +300,10 @@ def run_image_computations(
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    newparam = sigima_.obj.NewImageParam.create(
-        itype=sigima_.obj.ImageTypes.UNIFORMRANDOM
+    newparam = sigima.obj.NewImageParam.create(
+        itype=sigima.obj.ImageTypes.UNIFORMRANDOM
     )
-    addparam = sigima_.obj.UniformRandomParam()
+    addparam = sigima.obj.UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)
     addparam.vmax = int(ima1.data.max() * 0.2)
     panel.new_object(newparam, extra_param=addparam, edit=False)
@@ -311,13 +311,13 @@ def run_image_computations(
     compute_common_operations(panel)
 
     # Test denoising methods
-    param = sigima_.param.ZCalibrateParam.create(a=1.2, b=0.1)
+    param = sigima.param.ZCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.run_feature("calibration", param)
-    param = sigima_.param.DenoiseTVParam()
+    param = sigima.param.DenoiseTVParam()
     panel.processor.run_feature("denoise_tv", param)
-    param = sigima_.param.DenoiseBilateralParam()
+    param = sigima.param.DenoiseBilateralParam()
     panel.processor.run_feature("denoise_bilateral", param)
-    param = sigima_.param.DenoiseWaveletParam()
+    param = sigima.param.DenoiseWaveletParam()
     panel.processor.run_feature("denoise_wavelet", param)
 
     # Test exposure methods
@@ -326,21 +326,21 @@ def run_image_computations(
     panel.processor.run_feature(
         "absolute"
     )  # Avoid neg. values for skimage correction methods
-    param = sigima_.param.AdjustGammaParam.create(gamma=0.5)
+    param = sigima.param.AdjustGammaParam.create(gamma=0.5)
     panel.processor.run_feature("adjust_gamma", param)
-    param = sigima_.param.AdjustLogParam.create(gain=0.5)
+    param = sigima.param.AdjustLogParam.create(gain=0.5)
     panel.processor.run_feature("adjust_log", param)
-    param = sigima_.param.AdjustSigmoidParam.create(gain=0.5)
+    param = sigima.param.AdjustSigmoidParam.create(gain=0.5)
     panel.processor.run_feature("adjust_sigmoid", param)
-    param = sigima_.param.EqualizeHistParam()
+    param = sigima.param.EqualizeHistParam()
     panel.processor.run_feature("equalize_hist", param)
-    param = sigima_.param.EqualizeAdaptHistParam()
+    param = sigima.param.EqualizeAdaptHistParam()
     panel.processor.run_feature("equalize_adapthist", param)
-    param = sigima_.param.RescaleIntensityParam()
+    param = sigima.param.RescaleIntensityParam()
     panel.processor.run_feature("rescale_intensity", param)
 
     # Test morphology methods
-    param = sigima_.param.MorphologyParam.create(radius=10)
+    param = sigima.param.MorphologyParam.create(radius=10)
     panel.processor.run_feature("denoise_tophat", param)
     panel.processor.run_feature("white_tophat", param)
     panel.processor.run_feature("black_tophat", param)
@@ -350,19 +350,19 @@ def run_image_computations(
     panel.processor.run_feature("opening", param)
     panel.processor.run_feature("closing", param)
 
-    param = sigima_.param.ButterworthParam.create(order=2, cut_off=0.5)
+    param = sigima.param.ButterworthParam.create(order=2, cut_off=0.5)
     panel.processor.run_feature("butterworth", param)
 
-    param = sigima_.param.CannyParam()
+    param = sigima.param.CannyParam()
     panel.processor.run_feature("canny", param)
 
     # Test threshold methods
     ima2 = create_sincos_image(newparam, extra_param=addparam)
     panel.add_object(ima2)
-    param = sigima_.param.ThresholdParam()
+    param = sigima.param.ThresholdParam()
     for method_value, _method_name in param.methods:
         panel.objview.set_current_object(ima2)
-        param = sigima_.param.ThresholdParam.create(method=method_value)
+        param = sigima.param.ThresholdParam.create(method=method_value)
         if method_value == "manual":
             param.value = (ima2.data.max() - ima2.data.min()) * 0.5 + ima2.data.min()
         panel.processor.run_feature("threshold", param)
@@ -399,7 +399,7 @@ def run_image_computations(
     ):
         panel.processor.run_feature(func_name)
 
-    param = sigima_.param.LogP1Param.create(n=1)
+    param = sigima.param.LogP1Param.create(n=1)
     panel.processor.run_feature("logp1", param)
 
     panel.processor.run_feature("rotate90")
@@ -407,16 +407,16 @@ def run_image_computations(
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = sigima_.param.RotateParam.create(angle=5.0)
+    param = sigima.param.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 
-    param = sigima_.param.ResizeParam.create(zoom=1.3)
+    param = sigima.param.ResizeParam.create(zoom=1.3)
     panel.processor.run_feature("resize", param)
 
     n = data_size // 10
-    roi = sigima_.obj.create_image_roi(
+    roi = sigima.obj.create_image_roi(
         "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
     )
     panel.processor.compute_roi_extraction(roi)
@@ -426,16 +426,16 @@ def run_image_computations(
 
     ima = create_peak2d_image(newparam, extra_param=addparam)
     panel.add_object(ima)
-    param = sigima_.param.Peak2DDetectionParam.create(create_rois=True)
+    param = sigima.param.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.compute_peak_detection(param)
 
-    param = sigima_.param.ContourShapeParam()
+    param = sigima.param.ContourShapeParam()
     panel.processor.run_feature("contour_shape", param)
 
-    param = sigima_.param.BinningParam.create(sx=2, sy=2, operation="average")
+    param = sigima.param.BinningParam.create(sx=2, sy=2, operation="average")
     panel.processor.run_feature("binning", param)
 
     # Test histogram
     panel.objview.set_current_object(ima)
-    param = sigima_.param.HistogramParam.create(bins=100)
+    param = sigima.param.HistogramParam.create(bins=100)
     panel.processor.run_feature("histogram", param)

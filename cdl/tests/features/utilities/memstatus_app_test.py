@@ -8,11 +8,11 @@ Memory status widget application test
 
 import numpy as np
 import psutil
+from sigima.obj import Gauss2DParam, ImageTypes, NewImageParam
 
 from cdl import config
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from sigima_.obj import Gauss2DParam, ImageTypes, NewImageParam
 
 
 def memory_alarm(threshold):

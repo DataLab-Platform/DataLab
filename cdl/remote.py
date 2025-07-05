@@ -29,13 +29,13 @@ import numpy as np
 from guidata.io import JSONReader, JSONWriter
 from packaging.version import Version
 from qtpy import QtCore as QC
+from sigima.obj import ImageObj, SignalObj, create_image, create_signal
 
 import cdl
 from cdl.adapters_plotpy import items_to_json, json_to_items
 from cdl.baseproxy import AbstractCDLControl, BaseProxy
 from cdl.config import Conf, initialize
 from cdl.env import execenv
-from sigima_.obj import ImageObj, SignalObj, create_image, create_signal
 
 if TYPE_CHECKING:
     from cdl.gui.main import CDLMainWindow
@@ -749,9 +749,9 @@ class RemoteClient(BaseProxy):
         >>> proxy.get_object_titles()
         ['toto']
         >>> proxy["toto"]
-        <sigima_.obj.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima.obj.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1]
-        <sigima_.obj.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima.obj.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1].data
         array([1., 2., 3.])
     """

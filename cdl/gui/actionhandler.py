@@ -49,10 +49,11 @@ from cdl.config import Conf, _
 from cdl.widgets import fitdialog
 
 if TYPE_CHECKING:
+    from sigima.obj import ImageObj, SignalObj
+
     from cdl.gui.panel.image import ImagePanel
     from cdl.gui.panel.signal import SignalPanel
     from cdl.objectmodel import ObjectGroup
-    from sigima_.obj import ImageObj, SignalObj
 
 
 class SelectCond:
@@ -1047,7 +1048,7 @@ class ImageActionHandler(BaseActionHandler):
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):
             # TODO: [P3] Add "Create ROI grid..." action to create a regular grid
-            # or ROIs (maybe reuse/derive from `sigima_.param.GridParam`)
+            # or ROIs (maybe reuse/derive from `sigima.param.GridParam`)
             self.action_for("centroid", separator=True)
             self.action_for("enclosing_circle")
             self.new_action(

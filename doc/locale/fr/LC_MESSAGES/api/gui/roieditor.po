@@ -37,8 +37,8 @@ msgstr "Paramètres"
 msgid "Parent plot dialog"
 msgstr "Dialogue de tracé parent"
 
-msgid "Object to edit (:class:`sigima_.obj.SignalObj` or :class:`sigima_.obj.ImageObj`)"
-msgstr "Objet à modifier (:class:`sigima_.obj.SignalObj` ou :class:`sigima_.obj.ImageObj`)"
+msgid "Object to edit (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`)"
+msgstr "Objet à modifier (:class:`sigima.obj.SignalObj` ou :class:`sigima.obj.ImageObj`)"
 
 msgid "If True, the dialog is in \"extract mode\" (extracting ROIs)"
 msgstr "Si vrai, le dialogue est en \"mode extraction\" (extraction de ROI)"

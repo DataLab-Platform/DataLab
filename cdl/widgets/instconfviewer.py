@@ -15,14 +15,14 @@ from subprocess import PIPE, Popen
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
+from sigima.io.image import ImageIORegistry
+from sigima.io.signal import SignalIORegistry
 
 import cdl
 from cdl.config import APP_NAME, DATAPATH, IS_FROZEN, Conf, _
 from cdl.plugins import PluginRegistry
 from cdl.utils import dephash
 from cdl.widgets.fileviewer import FileViewerWidget, get_title_contents
-from sigima_.io.image import ImageIORegistry
-from sigima_.io.signal import SignalIORegistry
 
 
 def decode_fs_string(string: bytes) -> str:

@@ -7,9 +7,10 @@ Morphology processing application test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima_.param
+import sigima.param
+from sigima.tests.data import get_test_image
+
 from cdl.tests import cdltest_app_context
-from sigima_.tests.data import get_test_image
 
 
 def test_morphology():
@@ -19,10 +20,10 @@ def test_morphology():
         panel = win.imagepanel
         panel.add_object(get_test_image("flower.npy"))
         proc = panel.processor
-        param = sigima_.param.MorphologyParam.create(radius=10)
+        param = sigima.param.MorphologyParam.create(radius=10)
         proc.compute_all_morphology(param)
         panel.objview.select_groups()
-        param = sigima_.param.GridParam.create(cols=4)
+        param = sigima.param.GridParam.create(cols=4)
         proc.distribute_on_grid(param)
         panel.add_label_with_title()
 

@@ -18,9 +18,9 @@ from guidata import configtools
 from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.constants import LUTAlpha
+from sigima.config import options as sigima_options
 
 from cdl.utils import conf
-from sigima_.config import options as sigima_options
 
 CONF_VERSION = "0.3.0"
 
@@ -318,14 +318,14 @@ def initialize():
     Conf.io.h5_fname_in_title.get(True)
     iofmts = Conf.io.imageio_formats.get(())
     if len(iofmts) > 0:
-        sigima_options.imageio_formats.set(iofmts)  # Sync with sigima_ config
+        sigima_options.imageio_formats.set(iofmts)  # Sync with sigima config
     # Proc section
     Conf.proc.operation_mode.get("single")
     Conf.proc.fft_shift_enabled.get(True)
-    sigima_options.fft_shift_enabled.set(True)  # Sync with sigima_ config
+    sigima_options.fft_shift_enabled.set(True)  # Sync with sigima config
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
-    sigima_options.keep_results.set(False)  # Sync with sigima_ config
+    sigima_options.keep_results.set(False)  # Sync with sigima config
     Conf.proc.ignore_warnings.get(False)
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")

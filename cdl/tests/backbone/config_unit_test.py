@@ -13,13 +13,13 @@ import os.path as osp
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigima.tests.helpers import get_test_fnames
 
 from cdl import app
 from cdl.config import Conf
 from cdl.env import execenv
 from cdl.utils.conf import CONF
 from cdl.utils.qthelpers import cdl_app_context
-from sigima_.tests.helpers import get_test_fnames
 
 SEC_MAIN = Conf.main
 OPT_MAX = SEC_MAIN.window_maximized

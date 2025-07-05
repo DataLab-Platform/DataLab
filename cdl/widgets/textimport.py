@@ -30,15 +30,15 @@ from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigima import ImageObj, SignalObj, create_image, create_signal
+from sigima.io.common.textreader import count_lines, read_first_n_lines
+from sigima.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
 from cdl.utils.qthelpers import CallbackWorker, create_progress_bar, qt_long_callback
 from cdl.widgets.wizard import Wizard, WizardPage
-from sigima_ import ImageObj, SignalObj, create_image, create_signal
-from sigima_.io.common.textreader import count_lines, read_first_n_lines
-from sigima_.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem

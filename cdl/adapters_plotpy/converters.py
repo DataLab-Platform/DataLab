@@ -15,14 +15,14 @@ from plotpy.items import (
     AnnotatedRectangle,
     XRangeSelection,
 )
-
-from cdl.adapters_plotpy.factories import create_adapter_from_object
-from sigima_.obj import (
+from sigima.obj import (
     CircularROI,
     PolygonalROI,
     RectangularROI,
     SegmentROI,
 )
+
+from cdl.adapters_plotpy.factories import create_adapter_from_object
 
 
 def plotitem_to_singleroi(

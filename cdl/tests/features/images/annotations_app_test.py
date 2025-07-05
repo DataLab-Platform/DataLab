@@ -10,9 +10,10 @@ Annotations application test:
 
 # guitest: show
 
+from sigima.obj import create_image_roi
+from sigima.tests import data as test_data
+
 from cdl.app import run
-from sigima_.obj import create_image_roi
-from sigima_.tests import data as test_data
 
 
 def test_annotations_app():

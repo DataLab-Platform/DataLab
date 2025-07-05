@@ -7,11 +7,12 @@ Blob detection application test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima_.param
+import sigima.param
+from sigima.obj import create_image
+from sigima.tests.data import get_test_image
+
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.tests import cdltest_app_context, skip_if_opencv_missing
-from sigima_.obj import create_image
-from sigima_.tests.data import get_test_image
 
 
 def test_blobs():
@@ -24,10 +25,10 @@ def test_blobs():
         # Testing blob detection
         # ======================
         for paramclass, compute_method, name in (
-            (sigima_.param.BlobDOGParam, "blob_dog", "BlobDOG"),
-            (sigima_.param.BlobDOHParam, "blob_doh", "BlobDOH"),
-            (sigima_.param.BlobLOGParam, "blob_log", "BlobLOG"),
-            (sigima_.param.BlobOpenCVParam, "blob_opencv", "BlobOpenCV"),
+            (sigima.param.BlobDOGParam, "blob_dog", "BlobDOG"),
+            (sigima.param.BlobDOHParam, "blob_doh", "BlobDOH"),
+            (sigima.param.BlobLOGParam, "blob_log", "BlobLOG"),
+            (sigima.param.BlobOpenCVParam, "blob_opencv", "BlobOpenCV"),
         ):
             param = paramclass()
             image = create_image(name, data)
@@ -39,7 +40,7 @@ def test_blobs():
         # Testing distribute_on_grid and reset_positions
         # ==============================================
         panel.objview.selectAll()
-        param = sigima_.param.GridParam.create(cols=2, colspac=10, rowspac=10)
+        param = sigima.param.GridParam.create(cols=2, colspac=10, rowspac=10)
         proc.distribute_on_grid(param)
 
 

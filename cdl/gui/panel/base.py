@@ -36,6 +36,18 @@ from qtpy.compat import (
     getopenfilenames,
     getsavefilename,
 )
+from sigima.obj import (
+    ImageObj,
+    NewImageParam,
+    ResultProperties,
+    ResultShape,
+    ShapeTypes,
+    SignalObj,
+    TypeObj,
+    TypeROI,
+    create_signal,
+)
+from sigima.obj.base import ROI_KEY
 
 from cdl import objectmodel
 from cdl.adapters_plotpy.base import items_to_json
@@ -55,23 +67,13 @@ from cdl.utils.qthelpers import (
     save_restore_stds,
 )
 from cdl.widgets.textimport import TextImportWizard
-from sigima_.obj import (
-    ImageObj,
-    NewImageParam,
-    ResultProperties,
-    ResultShape,
-    ShapeTypes,
-    SignalObj,
-    TypeObj,
-    TypeROI,
-    create_signal,
-)
-from sigima_.obj.base import ROI_KEY
 
 if TYPE_CHECKING:
     from typing import Callable
 
     from plotpy.items import CurveItem, LabelItem, MaskedImageItem
+    from sigima.io.image import ImageIORegistry
+    from sigima.io.signal import SignalIORegistry
 
     from cdl.gui import ObjItf
     from cdl.gui.main import CDLMainWindow
@@ -79,8 +81,6 @@ if TYPE_CHECKING:
     from cdl.gui.processor.image import ImageProcessor
     from cdl.gui.processor.signal import SignalProcessor
     from cdl.h5.native import NativeH5Reader, NativeH5Writer
-    from sigima_.io.image import ImageIORegistry
-    from sigima_.io.signal import SignalIORegistry
 
 
 def is_plot_item_serializable(item: ShapeTypes) -> bool:

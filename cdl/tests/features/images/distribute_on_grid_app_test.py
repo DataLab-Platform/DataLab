@@ -7,10 +7,11 @@ Distribute on grid application test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima_.param
+import sigima.param
+from sigima.tests.data import get_test_image
+
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from sigima_.tests.data import get_test_image
 
 
 def test_distribute_on_grid():
@@ -20,16 +21,16 @@ def test_distribute_on_grid():
             panel = win.imagepanel
             proc = panel.processor
             panel.add_object(get_test_image("flower.npy"))
-            proc.compute_all_morphology(sigima_.param.MorphologyParam.create(radius=10))
+            proc.compute_all_morphology(sigima.param.MorphologyParam.create(radius=10))
             panel.objview.select_groups()
 
             # Distribute on grid
             params = [
-                sigima_.param.GridParam.create(cols=4),
-                sigima_.param.GridParam.create(
+                sigima.param.GridParam.create(cols=4),
+                sigima.param.GridParam.create(
                     rows=3, colspac=20, rowspac=20, direction="row"
                 ),
-                sigima_.param.GridParam.create(cols=2, colspac=10, rowspac=10),
+                sigima.param.GridParam.create(cols=2, colspac=10, rowspac=10),
             ]
             origins = []
             for param in params:

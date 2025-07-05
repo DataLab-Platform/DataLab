@@ -17,17 +17,16 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigima.algorithms.signal.pulse import full_width_at_y
 
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.adapters_plotpy.signal import CURVESTYLES
 from cdl.config import _
-from sigima_.algorithms.signal.pulse import full_width_at_y
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection
     from qtpy.QtWidgets import QWidget
-
-    from sigima_.obj import SignalObj
+    from sigima.obj import SignalObj
 
 
 class SignalDeltaXDialog(PlotDialog):

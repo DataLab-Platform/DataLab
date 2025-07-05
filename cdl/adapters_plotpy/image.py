@@ -18,6 +18,7 @@ from plotpy.items import (
     AnnotatedRectangle,
     MaskedImageItem,
 )
+from sigima.obj import CircularROI, ImageObj, ImageROI, PolygonalROI, RectangularROI
 
 from cdl.adapters_plotpy.base import (
     BaseObjPlotPyAdapter,
@@ -25,7 +26,6 @@ from cdl.adapters_plotpy.base import (
     BaseSingleROIPlotPyAdapter,
 )
 from cdl.config import Conf
-from sigima_.obj import CircularROI, ImageObj, ImageROI, PolygonalROI, RectangularROI
 
 
 class PolygonalROIPlotPyAdapter(

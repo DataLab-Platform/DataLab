@@ -39,6 +39,8 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
+from sigima.config import options as sigima_options
+from sigima.obj import ImageObj, SignalObj, create_image, create_signal
 
 import cdl
 from cdl import __docurl__, __homeurl__, __supporturl__, env
@@ -71,8 +73,6 @@ from cdl.utils.qthelpers import (
 )
 from cdl.widgets import instconfviewer, logviewer, status
 from cdl.widgets.warningerror import go_to_error
-from sigima_.config import options as sigima_options
-from sigima_.obj import ImageObj, SignalObj, create_image, create_signal
 
 if TYPE_CHECKING:
     from typing import Literal

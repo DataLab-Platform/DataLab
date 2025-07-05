@@ -15,11 +15,12 @@ Metadata import/export unit test:
 
 import os.path as osp
 
+from sigima.tests import data as test_data
+from sigima.tests import helpers
+from sigima.tests.helpers import compare_metadata
+
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from sigima_.tests import data as test_data
-from sigima_.tests import helpers
-from sigima_.tests.helpers import compare_metadata
 
 
 def test_metadata_io_unit():

@@ -13,10 +13,10 @@ import os
 import numpy as np
 import psutil
 from guidata.qthelpers import qt_app_context
+from sigima.tests.vistools import view_curves
 
 from cdl.env import execenv
 from cdl.tests.features.control.embedded1_unit_test import HostWindow
-from sigima_.tests.vistools import view_curves
 
 
 def memory_leak_test(iterations=100):

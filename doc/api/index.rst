@@ -15,17 +15,17 @@ and their purpose:
     * - Submodule
       - Purpose
 
-    * - :mod:`sigima_.algorithms`
+    * - :mod:`sigima.algorithms`
       - Algorithms for data analysis, which operates on NumPy arrays
 
-    * - :mod:`sigima_.param`
+    * - :mod:`sigima.param`
       - Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)
 
-    * - :mod:`sigima_.obj`
-      - Convenience module to access the DataLab objects (:class:`sigima_.obj.SignalObj` or :class:`sigima_.obj.ImageObj`) and related functions
+    * - :mod:`sigima.obj`
+      - Convenience module to access the DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`) and related functions
 
-    * - :mod:`sigima_.computation`
-      - Computation functions, which operate on DataLab objects (:class:`sigima_.obj.SignalObj` or :class:`sigima_.obj.ImageObj`)
+    * - :mod:`sigima.computation`
+      - Computation functions, which operate on DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`)
 
     * - :mod:`cdl.proxy`
       - Proxy objects to access the DataLab interface from a Python script or a remote application

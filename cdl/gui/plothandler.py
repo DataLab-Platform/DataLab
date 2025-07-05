@@ -37,13 +37,13 @@ from plotpy.constants import PlotType
 from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedImageItem
 from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
+from sigima.obj import ImageObj, SignalObj, TypeObj
 
 from cdl.adapters_plotpy import TypePlotItem
 from cdl.adapters_plotpy.factories import create_adapter_from_object
 from cdl.config import Conf, _
 from cdl.objectmodel import get_uuid
 from cdl.utils.qthelpers import block_signals, create_progress_bar
-from sigima_.obj import ImageObj, SignalObj, TypeObj
 
 if TYPE_CHECKING:
     from plotpy.items import LabelItem

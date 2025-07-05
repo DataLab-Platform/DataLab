@@ -1,1 +1,1 @@
-.. automodule:: sigima_.computation
+.. automodule:: sigima.computation

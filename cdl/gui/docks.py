@@ -58,11 +58,11 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QApplication, QMainWindow
+from sigima.algorithms.image import get_centroid_fourier
+from sigima.algorithms.signal.pulse import fwhm
+from sigima.obj import create_signal
 
 from cdl.config import APP_NAME, Conf, _
-from sigima_.algorithms.image import get_centroid_fourier
-from sigima_.algorithms.signal.pulse import fwhm
-from sigima_.obj import create_signal
 
 if TYPE_CHECKING:
     from plotpy.items.image.base import BaseImageItem
