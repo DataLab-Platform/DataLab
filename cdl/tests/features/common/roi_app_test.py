@@ -128,7 +128,9 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     panel.processor.run_feature("centroid")
     panel.processor.run_feature("enclosing_circle")
     panel.processor.run_feature("histogram", sigima_param.HistogramParam())
-    panel.processor.run_feature("peak_detection", sigima_param.Peak2DDetectionParam())
+    panel.processor.run_feature(
+        "peak_detection", sigima_param.Peak2DDetectionParam.create(create_rois=False)
+    )
     obj_nb = len(panel)
     last_obj = panel[obj_nb]
     roi = ImageROI(singleobj=singleobj)
