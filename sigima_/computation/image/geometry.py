@@ -265,7 +265,7 @@ def resize(src: ImageObj, p: ResizeParam) -> ImageObj:
         Output image object
     """
     dst = dst_1_to_1(src, "resize", f"zoom={p.zoom:.3f}")
-    dst.data = spi.interpolation.zoom(
+    dst.data = spi.zoom(
         src.data,
         p.zoom,
         order=p.order,
