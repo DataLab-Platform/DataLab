@@ -251,8 +251,11 @@ def dst_n_to_1(
     dst.roi = None
     if not options.keep_results.get():
         dst.delete_results()  # Remove any previous results
-    for src_obj in src_list:
-        if options.keep_results.get():
+    for index, src_obj in enumerate(src_list):
+        if options.keep_results.get() and index > 0:
+            # If we keep results, we need to merge the result shapes.
+            # We skip the first object, as it is already copied
+            # to the destination object.
             dst.update_resultshapes_from(src_obj)
         if src_obj.roi is not None:
             if dst.roi is None:

@@ -49,7 +49,16 @@ def __check_resultshapes_merge(
         obj1: Original object
         obj2: Merged object
     """
-    for rs1, rs2 in zip(obj1.iterate_resultshapes(), obj2.iterate_resultshapes()):
+    rsl1, rsl2 = list(obj1.iterate_resultshapes()), list(obj2.iterate_resultshapes())
+    assert len(rsl2) == len(rsl1), (
+        "Merged object the same number of result shapes as original object, "
+        "but expected twice the number of result shapes for each type."
+    )
+    for rs1, rs2 in zip(rsl1, rsl2):
+        assert rs1.array.shape[0] * 2 == rs2.array.shape[0], (
+            f"Result shape array length mismatch: {rs1.array.shape[0]} * 2 != "
+            f"{rs2.array.shape[0]}"
+        )
         assert np.all(np.vstack([rs1.array, rs1.array])[:, 1:] == rs2.array[:, 1:])
 
 
