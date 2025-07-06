@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "2D Peak Detection"
+msgstr ""
+
+msgid "DataLab provides a \"2D Peak Detection\" feature which is based on a minimum-maximum filter algorithm."
+msgstr ""
+
+msgid "2D peak detection parameters."
+msgstr ""
+
+msgid "How to use the feature:"
+msgstr ""
+
+msgid "Create or open an image in DataLab workspace"
+msgstr ""
+
+msgid "Select \"2d peak detection\" in \"Analysis\" menu"
+msgstr ""
+
+msgid "Enter parameters \"Neighborhoods size\" and \"Relative threhold\""
+msgstr ""
+
+msgid "Check \"Create regions of interest\" if you want a ROI defined for each detected peak (this may become useful when using another computation afterwards on each area around peaks, e.g. contour detection)"
+msgstr ""
+
+msgid "2d peak detection results (see test \"peak2d_app.py\")"
+msgstr ""
+
+msgid "Results are shown in a table:"
+msgstr ""
+
+msgid "Each row is associated to a detected peak"
+msgstr ""
+
+msgid "First column shows the ROI index (0 if no ROI is defined on input image)"
+msgstr ""
+
+msgid "Second and third columns show peak coordinates"
+msgstr ""
+
+msgid "Example of 2D peak detection."
+msgstr ""
+
+msgid "The 2d peak detection algorithm works in the following way:"
+msgstr ""
+
+msgid "First, the minimum and maximum filtered images are computed using a sliding window algorithm with a user-defined size (implementation based on `scipy.ndimage.minimum_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.minimum_filter.html>`_ and `scipy.ndimage.maximum_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.maximum_filter.html>`_)"
+msgstr ""
+
+msgid "Then, the difference between the maximum and minimum filtered images is clipped at a user-defined threshold"
+msgstr ""
+
+msgid "Resulting image features are labeled using `scipy.ndimage.label <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.label.html>`_"
+msgstr ""
+
+msgid "Peak coordinates are then obtained from labels center"
+msgstr ""
+
+msgid "Duplicates are eventually removed"
+msgstr ""
+
+msgid "The 2d peak detection parameters are the following:"
+msgstr ""
+
+msgid "\"Neighborhoods size\": size of the sliding window (see above)"
+msgstr ""
+
+msgid "\"Relative threshold\": detection threshold"
+msgstr ""
+
+msgid "Feature is based on ``get_2d_peaks_coords`` function from ``sigima.algorithms`` module:"
+msgstr ""
+

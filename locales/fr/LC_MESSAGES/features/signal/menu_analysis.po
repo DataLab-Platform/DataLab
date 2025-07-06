@@ -1,0 +1,242 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Analysis features on Signals"
+msgstr ""
+
+msgid "This section describes the signal analysis features available in DataLab."
+msgstr ""
+
+msgid ":ref:`sig-menu-operations` for more information on operations that can be performed on signals, or :ref:`sig-menu-processing` for information on processing features on signals."
+msgstr ""
+
+msgid "Screenshot of the \"Analysis\" menu."
+msgstr ""
+
+msgid "When the \"Signal Panel\" is selected, the menus and toolbars are updated to provide signal-related actions."
+msgstr ""
+
+msgid "The \"Analysis\" menu allows you to perform various computations on the selected signals, such as statistics, full width at half-maximum, or full width at 1/e²."
+msgstr ""
+
+msgid "In DataLab vocabulary, an \"analysis\" is a feature that computes a scalar result from a signal. This result is stored as metadata, and thus attached to signal. This is different from a \"processing\" which creates a new signal from an existing one."
+msgstr ""
+
+msgid "Statistics"
+msgstr ""
+
+msgid "Compute statistics on selected signal and show a summary table."
+msgstr ""
+
+msgid "Example of statistical summary table: each row is associated to an ROI (the first row gives the statistics for the whole data)."
+msgstr ""
+
+msgid "Histogram"
+msgstr ""
+
+msgid "Compute histogram of selected signal and show it."
+msgstr ""
+
+msgid "Parameters are:"
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Bins"
+msgstr ""
+
+msgid "Number of bins"
+msgstr ""
+
+msgid "Lower limit"
+msgstr ""
+
+msgid "Lower limit of the histogram"
+msgstr ""
+
+msgid "Upper limit"
+msgstr ""
+
+msgid "Upper limit of the histogram"
+msgstr ""
+
+msgid "Example of histogram."
+msgstr ""
+
+msgid "Full width at half-maximum"
+msgstr ""
+
+msgid "Compute the Full Width at Half-Maximum (FWHM) of selected signal, using one of the following methods:"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "Zero-crossing"
+msgstr ""
+
+msgid "Find the zero-crossings of the signal after having centered its amplitude around zero"
+msgstr ""
+
+msgid "Gauss"
+msgstr ""
+
+msgid "Fit data to a Gaussian model using least-square method"
+msgstr ""
+
+msgid "Lorentz"
+msgstr ""
+
+msgid "Fit data to a Lorentzian model using least-square method"
+msgstr ""
+
+msgid "Voigt"
+msgstr ""
+
+msgid "Fit data to a Voigt model using least-square method"
+msgstr ""
+
+msgid "The computed result is displayed as an annotated segment."
+msgstr ""
+
+msgid "Full width at 1/e²"
+msgstr ""
+
+msgid "Fit data to a Gaussian model using least-square method. Then, compute the full width at 1/e²."
+msgstr ""
+
+msgid "Computed scalar results are systematically stored as metadata. Metadata is attached to signal and serialized with it when exporting current session in a HDF5 file."
+msgstr ""
+
+msgid "Arguments of the min and max"
+msgstr ""
+
+msgid "Compute the smallest argument of the minima and the smallest argument of the maxima of the selected signal."
+msgstr ""
+
+msgid "Abscissa at y=..."
+msgstr ""
+
+msgid "Compute the abscissa at a given ordinate value for the selected signal. If there is no solution, the displayed result is NaN. If there are multiple solutions, the displayed result is the smallest value."
+msgstr ""
+
+msgid "Peak detection"
+msgstr ""
+
+msgid "Create a new signal from semi-automatic peak detection of each selected signal."
+msgstr ""
+
+msgid "Peak detection dialog: threshold is adjustable by moving the horizontal marker, peaks are detected automatically (see vertical markers with labels indicating peak position)"
+msgstr ""
+
+msgid "Sampling rate and period"
+msgstr ""
+
+msgid "Compute the sampling rate and period of selected signal."
+msgstr ""
+
+msgid "This feature assumes that the X values are regularly spaced."
+msgstr ""
+
+msgid "Dynamic parameters"
+msgstr ""
+
+msgid "Compute the following dynamic parameters on selected signal:"
+msgstr ""
+
+msgid "f"
+msgstr ""
+
+msgid "Frequency (sinusoidal fit)"
+msgstr ""
+
+msgid "ENOB"
+msgstr ""
+
+msgid "Effective Number Of Bits"
+msgstr ""
+
+msgid "SNR"
+msgstr ""
+
+msgid "Signal-to-Noise Ratio"
+msgstr ""
+
+msgid "SINAD"
+msgstr ""
+
+msgid "Signal-to-Noise And Distortion Ratio"
+msgstr ""
+
+msgid "THD"
+msgstr ""
+
+msgid "Total Harmonic Distortion"
+msgstr ""
+
+msgid "SFDR"
+msgstr ""
+
+msgid "Spurious-Free Dynamic Range"
+msgstr ""
+
+msgid "Bandwidth at -3 dB"
+msgstr ""
+
+msgid "Assuming the signal is a filter response, compute the bandwidth at -3 dB by finding the frequency range where the signal is above -3 dB."
+msgstr ""
+
+msgid "This feature assumes that the signal is a filter response, already expressed in dB."
+msgstr ""
+
+msgid "Contrast"
+msgstr ""
+
+msgid "Compute the contrast of selected signal."
+msgstr ""
+
+msgid "The contrast is defined as the ratio of the difference and the sum of the maximum and minimum values:"
+msgstr ""
+
+msgid ""
+"\\text{Contrast} = \\dfrac{\\text{max}(y) - \\text{min}(y)}{\\text{max}(y) + \\text{min}(y)}\n"
+"\n"
+msgstr ""
+
+msgid "This feature assumes that the signal is a profile from an image, where the contrast is meaningful. This justifies the optical definition of contrast."
+msgstr ""
+
+msgid "Show results"
+msgstr ""
+
+msgid "Show the results of all analyses performed on the selected signals. This shows the same table as the one shown after having performed a computation."
+msgstr ""
+
+msgid "Plot results"
+msgstr ""
+
+msgid "Plot the results of analyses performed on the selected signals, with user-defined X and Y axes (e.g. plot the FWHM as a function of the signal index)."
+msgstr ""
+

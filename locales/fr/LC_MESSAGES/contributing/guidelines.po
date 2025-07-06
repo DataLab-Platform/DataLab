@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Coding guidelines"
+msgstr ""
+
+msgid "Generic coding guidelines"
+msgstr ""
+
+msgid "We follow the `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ coding style."
+msgstr ""
+
+msgid "In particular, we are especially strict about the following guidelines:"
+msgstr ""
+
+msgid "Limit all lines to a maximum of 79 characters."
+msgstr ""
+
+msgid "Respect the naming conventions (classes, functions, variables, etc.)."
+msgstr ""
+
+msgid "Use specific exceptions instead of the generic :class:`Exception`."
+msgstr ""
+
+msgid "To enforce these guidelines, the following tools are mandatory:"
+msgstr ""
+
+msgid "`ruff <https://pypi.org/project/ruff/>`_ for code formatting and static code analysis."
+msgstr ""
+
+msgid "`pylint <https://pypi.org/project/pylint/>`_ for static code analysis."
+msgstr ""
+
+msgid "ruff"
+msgstr ""
+
+msgid "If you are using `Visual Studio Code <https://code.visualstudio.com/>`_, the project settings will automatically format your code with `ruff` on save (you may also run the task \"Run Ruff\" to run `ruff` on the project)."
+msgstr ""
+
+msgid "To run `ruff`, run the following command::"
+msgstr ""
+
+msgid "pylint"
+msgstr ""
+
+msgid "To run `pylint`, run the following command::"
+msgstr ""
+
+msgid "If you are using `Visual Studio Code <https://code.visualstudio.com/>`_ on Windows, you may run the task \"Run Pylint\" to run `pylint` on the project."
+msgstr ""
+
+msgid "A `pylint` rating greater than 9/10 is required to merge a pull request."
+msgstr ""
+
+msgid "Specific coding guidelines"
+msgstr ""
+
+msgid "In addition to the generic coding guidelines, we have the following specific guidelines:"
+msgstr ""
+
+msgid "Write docstrings for all classes, methods and functions. The docstrings should follow the `Google style <https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings>`_."
+msgstr ""
+
+msgid "Add typing annotations for all functions and methods. The annotations should use the future syntax (``from __future__ import annotations``)"
+msgstr ""
+
+msgid "Try to keep the code as simple as possible. If you have to write a complex piece of code, try to split it into several functions or classes."
+msgstr ""
+
+msgid "Add as many comments as possible. The code should be self-explanatory, but it is always useful to add some comments to explain the general idea of the code, or to explain some tricky parts."
+msgstr ""
+
+msgid "Do not use ``from module import *`` statements, even in the ``__init__`` module of a package."
+msgstr ""
+
+msgid "Avoid using mixins (multiple inheritance) when possible. It is often possible to use composition instead of inheritance."
+msgstr ""
+
+msgid "Avoid using ``__getattr__`` and ``__setattr__`` methods. They are often used to implement lazy initialization, but this can be done in a more explicit way."
+msgstr ""
+

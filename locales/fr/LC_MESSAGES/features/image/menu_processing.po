@@ -1,0 +1,625 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Processing Images"
+msgstr ""
+
+msgid "This section describes the image processing features available in DataLab."
+msgstr ""
+
+msgid ":ref:`ima-menu-operations` for more information on operations that can be performed on images, or :ref:`ima-menu-analysis` for information on analysis features on images."
+msgstr ""
+
+msgid "Screenshot of the \"Processing\" menu."
+msgstr ""
+
+msgid "When the \"Image Panel\" is selected, the menus and toolbars are updated to provide image-related actions."
+msgstr ""
+
+msgid "The \"Processing\" menu allows you to perform various processing on the current image or group of images: it allows you to apply filters, to perform exposure correction, to perform denoising, to perform morphological operations, and so on."
+msgstr ""
+
+msgid "Axis transformation"
+msgstr ""
+
+msgid "Linear calibration"
+msgstr ""
+
+msgid "Create a new image which is a linear calibration of each selected image with respect to Z axis:"
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
+
+msgid "Z-axis"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{1} = a.z_{0} + b`"
+msgstr ""
+
+msgid "Swap X/Y axes"
+msgstr ""
+
+msgid "Create a new image which is the result of swapping X/Y data."
+msgstr ""
+
+msgid "Level adjustment"
+msgstr ""
+
+msgid "Normalize"
+msgstr ""
+
+msgid "Create a new image which is the normalized version of each selected image by maximum, amplitude, sum, energy or RMS:"
+msgstr ""
+
+msgid "Normalization"
+msgstr ""
+
+msgid "Equation"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{max}}`"
+msgstr ""
+
+msgid "Amplitude"
+msgstr ""
+
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{max}-z_{min}}`"
+msgstr ""
+
+msgid "Area"
+msgstr ""
+
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{\\sum_{i=0}^{N-1}{z_{i}}}`"
+msgstr ""
+
+msgid "Energy"
+msgstr ""
+
+msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\sum_{n=0}^{N}|z_{0}[n]|^2}}`"
+msgstr ""
+
+msgid "RMS"
+msgstr ""
+
+msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}|z_{0}[n]|^2}}`"
+msgstr ""
+
+msgid "Clipping"
+msgstr ""
+
+msgid "Apply the clipping to each selected image."
+msgstr ""
+
+msgid "Offset correction"
+msgstr ""
+
+msgid "Create a new image which is the result of offset correction on each selected image. This operation is performed by subtracting the image background value which is estimated by the mean value of a user-defined rectangular area."
+msgstr ""
+
+msgid "Noise reduction"
+msgstr ""
+
+msgid "Create a new image which is the result of noise reduction on each selected image."
+msgstr ""
+
+msgid "The following filters are available:"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Formula/implementation"
+msgstr ""
+
+msgid "Gaussian filter"
+msgstr ""
+
+msgid "`scipy.ndimage.gaussian_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter.html>`_"
+msgstr ""
+
+msgid "Moving average"
+msgstr ""
+
+msgid "`scipy.ndimage.uniform_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_"
+msgstr ""
+
+msgid "Moving median"
+msgstr ""
+
+msgid "`scipy.ndimage.median_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html>`_"
+msgstr ""
+
+msgid "Wiener filter"
+msgstr ""
+
+msgid "`scipy.signal.wiener <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_"
+msgstr ""
+
+msgid "Fourier analysis"
+msgstr ""
+
+msgid "Zero padding"
+msgstr ""
+
+msgid "Create a new image which is the result of zero padding on each selected image."
+msgstr ""
+
+msgid "The following parameters are available:"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Strategy"
+msgstr ""
+
+msgid "Zero padding strategy (see below)"
+msgstr ""
+
+msgid "Rows"
+msgstr ""
+
+msgid "Number of rows to add (if `strategy` is 'custom')"
+msgstr ""
+
+msgid "Columns"
+msgstr ""
+
+msgid "Number of columns to add (if `strategy` is 'custom')"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Position of the added zeros: 'bottom-right', 'centered'"
+msgstr ""
+
+msgid "Zero padding strategy refers to the method used to add zeros to the image, and it can be one of the following:"
+msgstr ""
+
+msgid "next_pow2"
+msgstr ""
+
+msgid "Next power of 2 (e.g. 512, 1024, ...)"
+msgstr ""
+
+msgid "multiple_of_64"
+msgstr ""
+
+msgid "Next multiple of 64 (e.g. 512, 576, ...)"
+msgstr ""
+
+msgid "custom"
+msgstr ""
+
+msgid "Custom size (user-defined)"
+msgstr ""
+
+msgid "FFT related functions"
+msgstr ""
+
+msgid "Create a new image which is the result of a Fourier analysis on each selected image."
+msgstr ""
+
+msgid "The following functions are available:"
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "FFT"
+msgstr ""
+
+msgid "Fast Fourier Transform"
+msgstr ""
+
+msgid "`numpy.fft.fft2 <https://numpy.org/doc/stable/reference/generated/numpy.fft.fft2.html>`_"
+msgstr ""
+
+msgid "Inverse FFT"
+msgstr ""
+
+msgid "Inverse Fast Fourier Transform"
+msgstr ""
+
+msgid "`numpy.fft.ifft2 <https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft2.html>`_"
+msgstr ""
+
+msgid "Magnitude spectrum"
+msgstr ""
+
+msgid "Optionnal: use logarithmic scale (dB)"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{1} = |FFT(z_{0})|` or :math:`z_{1} = 20 \\log_{10}(|FFT(z_{0})|)` (dB)"
+msgstr ""
+
+msgid "Phase spectrum"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{1} = \\angle(FFT(z_{0}))`"
+msgstr ""
+
+msgid "Power spectral density"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{1} = |FFT(z_{0})|^2` or :math:`z_{1} = 10 \\log_{10}(|FFT(z_{0})|^2)` (dB)"
+msgstr ""
+
+msgid "FFT and inverse FFT are performed using frequency shifting if the option is enabled in DataLab settings (see :ref:`settings`)."
+msgstr ""
+
+msgid "Thresholding"
+msgstr ""
+
+msgid "Create a new image which is the result of thresholding on each selected image, eventually based on user-defined parameters (\"Parametric thresholding\")."
+msgstr ""
+
+msgid "The following parameters are available when selecting \"Parametric thresholding\":"
+msgstr ""
+
+msgid "Threshold method"
+msgstr ""
+
+msgid "The thresholding method to use (see table below)"
+msgstr ""
+
+msgid "Bins"
+msgstr ""
+
+msgid "Number of bins for histogram calculation"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Threshold value"
+msgstr ""
+
+msgid "Operation"
+msgstr ""
+
+msgid "Operation to apply (> or <)"
+msgstr ""
+
+msgid "The following thresholding methods are available:"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "Implementation"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Manual thresholding (user-defined parameters)"
+msgstr ""
+
+msgid "ISODATA"
+msgstr ""
+
+msgid "`skimage.filters.threshold_isodata <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_isodata>`_"
+msgstr ""
+
+msgid "Li"
+msgstr ""
+
+msgid "`skimage.filters.threshold_li <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_li>`_"
+msgstr ""
+
+msgid "Mean"
+msgstr ""
+
+msgid "`skimage.filters.threshold_mean <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_mean>`_"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "`skimage.filters.threshold_minimum <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_minimum>`_"
+msgstr ""
+
+msgid "Otsu"
+msgstr ""
+
+msgid "`skimage.filters.threshold_otsu <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_otsu>`_"
+msgstr ""
+
+msgid "Triangle"
+msgstr ""
+
+msgid "`skimage.filters.threshold_triangle <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_triangle>`_"
+msgstr ""
+
+msgid "Yen"
+msgstr ""
+
+msgid "`skimage.filters.threshold_yen <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_yen>`_"
+msgstr ""
+
+msgid "The \"All thresholding methods\" option allows to perform all thresholding methods on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different thresholding methods on the same image."
+msgstr ""
+
+msgid "Exposure"
+msgstr ""
+
+msgid "Create a new image which is the result of exposure correction on each selected image."
+msgstr ""
+
+msgid "Comments"
+msgstr ""
+
+msgid "Gamma correction"
+msgstr ""
+
+msgid "`skimage.exposure.adjust_gamma <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_"
+msgstr ""
+
+msgid "Logarithmic correction"
+msgstr ""
+
+msgid "`skimage.exposure.adjust_log <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_"
+msgstr ""
+
+msgid "Sigmoid correction"
+msgstr ""
+
+msgid "`skimage.exposure.adjust_sigmoid <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_"
+msgstr ""
+
+msgid "Histogram equalization"
+msgstr ""
+
+msgid "`skimage.exposure.equalize_hist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_"
+msgstr ""
+
+msgid "Adaptive histogram equalization"
+msgstr ""
+
+msgid "`skimage.exposure.equalize_adapthist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_"
+msgstr ""
+
+msgid "Contrast Limited Adaptive Histogram Equalization (CLAHE) algorithm"
+msgstr ""
+
+msgid "Intensity rescaling"
+msgstr ""
+
+msgid "`skimage.exposure.rescale_intensity <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_"
+msgstr ""
+
+msgid "Stretch or shrink image intensity levels"
+msgstr ""
+
+msgid "Restoration"
+msgstr ""
+
+msgid "Create a new image which is the result of restoration on each selected image."
+msgstr ""
+
+msgid "Total variation denoising"
+msgstr ""
+
+msgid "`skimage.restoration.denoise_tv_chambolle <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-tv-chambolle>`_"
+msgstr ""
+
+msgid "Bilateral filter denoising"
+msgstr ""
+
+msgid "`skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_"
+msgstr ""
+
+msgid "Wavelet denoising"
+msgstr ""
+
+msgid "`skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_"
+msgstr ""
+
+msgid "White Top-Hat denoising"
+msgstr ""
+
+msgid "`skimage.morphology.white_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_"
+msgstr ""
+
+msgid "Denoise image by subtracting its white top hat transform"
+msgstr ""
+
+msgid "The \"All denoising methods\" option allows to perform all denoising methods on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different denoising methods on the same image."
+msgstr ""
+
+msgid "Morphology"
+msgstr ""
+
+msgid "Create a new image which is the result of morphological operations on each selected image, using a disk footprint."
+msgstr ""
+
+msgid "White Top-Hat (disk)"
+msgstr ""
+
+msgid "Black Top-Hat (disk)"
+msgstr ""
+
+msgid "`skimage.morphology.black_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_"
+msgstr ""
+
+msgid "Erosion (disk)"
+msgstr ""
+
+msgid "`skimage.morphology.erosion <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_"
+msgstr ""
+
+msgid "Dilation (disk)"
+msgstr ""
+
+msgid "`skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_"
+msgstr ""
+
+msgid "Opening (disk)"
+msgstr ""
+
+msgid "`skimage.morphology.opening <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_"
+msgstr ""
+
+msgid "Closing (disk)"
+msgstr ""
+
+msgid "`skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_"
+msgstr ""
+
+msgid "The \"All morphological operations\" option allows to perform all morphological operations on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different morphological operations on the same image."
+msgstr ""
+
+msgid "Edges"
+msgstr ""
+
+msgid "Create a new image which is the result of edge filtering on each selected image."
+msgstr ""
+
+msgid "Roberts filter"
+msgstr ""
+
+msgid "`skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_"
+msgstr ""
+
+msgid "Prewitt filter"
+msgstr ""
+
+msgid "`skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_"
+msgstr ""
+
+msgid "Prewitt filter (horizontal)"
+msgstr ""
+
+msgid "`skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_"
+msgstr ""
+
+msgid "Prewitt filter (vertical)"
+msgstr ""
+
+msgid "`skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_"
+msgstr ""
+
+msgid "Sobel filter"
+msgstr ""
+
+msgid "`skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_"
+msgstr ""
+
+msgid "Sobel filter (horizontal)"
+msgstr ""
+
+msgid "`skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_"
+msgstr ""
+
+msgid "Sobel filter (vertical)"
+msgstr ""
+
+msgid "`skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_"
+msgstr ""
+
+msgid "Scharr filter"
+msgstr ""
+
+msgid "`skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_"
+msgstr ""
+
+msgid "Scharr filter (horizontal)"
+msgstr ""
+
+msgid "`skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_"
+msgstr ""
+
+msgid "Scharr filter (vertical)"
+msgstr ""
+
+msgid "`skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_"
+msgstr ""
+
+msgid "Farid filter"
+msgstr ""
+
+msgid "`skimage.filters.farid <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters>`_"
+msgstr ""
+
+msgid "Farid filter (horizontal)"
+msgstr ""
+
+msgid "`skimage.filters.farid_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_"
+msgstr ""
+
+msgid "Farid filter (vertical)"
+msgstr ""
+
+msgid "`skimage.filters.farid_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_"
+msgstr ""
+
+msgid "Laplace filter"
+msgstr ""
+
+msgid "`skimage.filters.laplace <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_"
+msgstr ""
+
+msgid "Canny filter"
+msgstr ""
+
+msgid "`skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_"
+msgstr ""
+
+msgid "The \"All edges filters\" option allows to perform all edge filtering algorithms on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different edge filters on the same image."
+msgstr ""
+
+msgid "Butterworth filter"
+msgstr ""
+
+msgid "Perform Butterworth filter on an image (implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+msgstr ""
+
+msgid "Resize"
+msgstr ""
+
+msgid "Create a new image which is a resized version of each selected image."
+msgstr ""
+
+msgid "Pixel binning"
+msgstr ""
+
+msgid "Combine clusters of adjacent pixels, throughout the image, into single pixels. The result can be the sum, average, median, minimum, or maximum value of the cluster."
+msgstr ""
+
+msgid "ROI extraction"
+msgstr ""
+
+msgid "Create a new image from a user-defined Region of Interest."
+msgstr ""
+
+msgid "ROI extraction dialog: the ROI is defined by moving the position and adjusting the size of a rectangle shape."
+msgstr ""
+

@@ -1,0 +1,156 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Git Workflow"
+msgstr ""
+
+msgid "This document describes the Git workflow used in the DataLab project, based on a ``main`` branch, a ``develop`` branch, and feature-specific branches. It also defines how bug fixes are managed."
+msgstr ""
+
+msgid "This workflow is a simplified version of the `Gitflow Workflow <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`_. It has been adapted to suit the needs of the DataLab project at the current stage of development. In the near future, we may consider adopting a more complex workflow, e.g. by adding release branches."
+msgstr ""
+
+msgid "Branching Model"
+msgstr ""
+
+msgid "Main Branches"
+msgstr ""
+
+msgid "``main``: Represents the stable, production-ready version of the project."
+msgstr ""
+
+msgid "``develop``: Used for ongoing development and integration of new features."
+msgstr ""
+
+msgid "Feature Branches"
+msgstr ""
+
+msgid "``develop/feature_name``: Used for the development of new features."
+msgstr ""
+
+msgid "Created from ``develop``."
+msgstr ""
+
+msgid "Merged back into ``develop`` once completed."
+msgstr ""
+
+msgid "Deleted after merging."
+msgstr ""
+
+msgid "Bug Fix Branches"
+msgstr ""
+
+msgid "``fix/xxx``: Used for general bug fixes that are not urgent."
+msgstr ""
+
+msgid "``hotfix/xxx``: Used for urgent production-critical fixes."
+msgstr ""
+
+msgid "Created from ``main``."
+msgstr ""
+
+msgid "Merged back into ``main``."
+msgstr ""
+
+msgid "The fix is then cherry-picked into ``develop``."
+msgstr ""
+
+msgid "Hotfixes (high-priority fixes) will be integrated in the next maintenance release (X.Y.Z -> Z+1), while fixes (low-priority fixes) will be integrated in the next feature release (X.Y -> Y+1)."
+msgstr ""
+
+msgid "Workflow for New Features"
+msgstr ""
+
+msgid "Create a new feature branch from ``develop``:"
+msgstr ""
+
+msgid "Develop the feature and commit changes."
+msgstr ""
+
+msgid "Merge the feature branch back into ``develop``:"
+msgstr ""
+
+msgid "Delete the feature branch:"
+msgstr ""
+
+msgid "Do not leave feature branches unmerged for too long. Regularly rebase them on ``develop`` to minimize conflicts."
+msgstr ""
+
+msgid "Workflow for Regular Bug Fixes"
+msgstr ""
+
+msgid "Create a bug fix branch from ``develop``:"
+msgstr ""
+
+msgid "Apply the fix and commit changes."
+msgstr ""
+
+msgid "Merge the fix branch back into ``develop``:"
+msgstr ""
+
+msgid "Delete the fix branch:"
+msgstr ""
+
+msgid "Do not create a ``fix/xxx`` branch from a ``develop/feature_name`` branch. Always branch from ``develop`` to ensure fixes are correctly propagated."
+msgstr ""
+
+msgid "Workflow for Critical Hotfixes"
+msgstr ""
+
+msgid "Create a hotfix branch from ``main``:"
+msgstr ""
+
+msgid "Merge the fix back into ``main``:"
+msgstr ""
+
+msgid "Cherry-pick the fix into ``develop``:"
+msgstr ""
+
+msgid "Delete the hotfix branch:"
+msgstr ""
+
+msgid "Do not merge ``fix/xxx`` or ``hotfix/xxx`` directly into ``main`` without following the workflow. Ensure hotfixes are cherry-picked into ``develop`` to avoid losing fixes in future releases."
+msgstr ""
+
+msgid "Best Practices"
+msgstr ""
+
+msgid "Regularly **rebase feature branches** on ``develop`` to stay up to date:"
+msgstr ""
+
+msgid "Avoid long-lived branches to minimize merge conflicts."
+msgstr ""
+
+msgid "Ensure bug fixes in ``main`` are **always cherry-picked** to ``develop``."
+msgstr ""
+
+msgid "Clearly differentiate between ``fix/xxx`` (non-urgent fixes) and ``hotfix/xxx`` (critical production fixes)."
+msgstr ""
+
+msgid "Takeaway"
+msgstr ""
+
+msgid "This workflow ensures a structured yet flexible development process while keeping ``main`` stable and ``develop`` always updated with the latest changes."
+msgstr ""
+
+msgid "It also ensures that bug fixes are correctly managed and propagated across branches."
+msgstr ""
+

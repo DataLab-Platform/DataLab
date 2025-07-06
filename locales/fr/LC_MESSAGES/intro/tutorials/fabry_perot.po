@@ -1,0 +1,238 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Tutorial on how to measure Fabry-Perot fringes using DataLab, the open-source scientific data analysis and visualization platform"
+msgstr ""
+
+msgid "DataLab, fabry-perot, interferometer, fringe, image processing, contour detection, circle fitting, intensity profile, signal processing, metadata, annotations, workspace, hdf5"
+msgstr ""
+
+msgid ":octicon:`book;1em;sd-text-info` Measuring Fabry-Perot fringes"
+msgstr ""
+
+msgid "This example shows how to measure Fabry-Perot fringes using the image processing features of DataLab:"
+msgstr ""
+
+msgid "Load an image of a Fabry-Perot interferometer"
+msgstr ""
+
+msgid "Define a circular region of interest (ROI) around the central fringe"
+msgstr ""
+
+msgid "Detect contours in the ROI and fit them to circles"
+msgstr ""
+
+msgid "Show the radius of the circles"
+msgstr ""
+
+msgid "Annotate the image"
+msgstr ""
+
+msgid "Copy/paste the ROI to another image"
+msgstr ""
+
+msgid "Extract the intensity profile along the X axis"
+msgstr ""
+
+msgid "Save the workspace"
+msgstr ""
+
+msgid "First, we open DataLab and load the images:"
+msgstr ""
+
+msgid "Open the image files with \"File > Open...\", or with the |fileopen_ima| button in the toolbar, or by dragging and dropping the files into DataLab (on the panel on the right)."
+msgstr ""
+
+msgid "fileopen_ima"
+msgstr ""
+
+msgid "Select the test images \"fabry_perot1.jpg\" and \"fabry_perot2.jpg\" and click \"Open\"."
+msgstr ""
+
+msgid "The selected image is displayed in the main window. We can zoom in and out by pressing the right mouse button and dragging the mouse up and down. We can also pan the image by pressing the middle mouse button and dragging the mouse."
+msgstr ""
+
+msgid "Zoom in and out with the right mouse button. Pan the image with the middle mouse button."
+msgstr ""
+
+msgid "When working on application-specific images (e.g. X-ray radiography images, or optical microscopy images), it is often useful to change the colormap to a grayscale colormap. If you see a different image colormap than the one shown in the figure, you can change it by selecting the image in the visualization panel, and the selecting the colormap in the vertical toolbar on the left of the visualization panel."
+msgstr ""
+
+msgid "Or, even better, you can change the default colormap in the DataLab settings by selecting \"Edit > Settings...\" in the menu, or the |libre-gui-settings| button in the toolbar."
+msgstr ""
+
+msgid "libre-gui-settings"
+msgstr ""
+
+msgid "Select the \"Visualization\" tab, and select the \"gray\" colormap."
+msgstr ""
+
+msgid "Then, let's define a circular region of interest (ROI) around the central fringe."
+msgstr ""
+
+msgid "Select the \"Edit regions of interest\" tool in the \"Analysis\" menu."
+msgstr ""
+
+msgid "The \"Regions of interest\" dialog opens. Click \"Add ROI\" and select a circular ROI. Resize the predefined ROI by dragging the handles. Note that you may change the ROI radius while keeping its center fixed by pressing the \"Ctrl\" key. Click \"OK\" to close the dialog."
+msgstr ""
+
+msgid "Another dialog box opens, and asks you to confirm the ROI parameters. Click \"OK\"."
+msgstr ""
+
+msgid "The ROI is displayed on the image: masked pixels are grayed out, and the ROI boundary is displayed in blue (note that, internally, the ROI is defined by a binary mask, i.e. image data is represented as a NumPy masked array)."
+msgstr ""
+
+msgid "Now, let's detect the contours in the ROI and fit them to circles."
+msgstr ""
+
+msgid "Select the \"Contour detection\" tool in the \"Analysis\" menu."
+msgstr ""
+
+msgid "The \"Contour\" parameters dialog opens. Select the shape \"Circle\" and click \"OK\"."
+msgstr ""
+
+msgid "The \"Results\" dialog opens, and displays the fitted circle parameters. Click \"OK\"."
+msgstr ""
+
+msgid "The fitted circles are displayed on the image."
+msgstr ""
+
+msgid "If you want to show the analysis results again, you can select the \"Show results\" |show_results| entry in the \"Analysis\" menu, or the \"Show results\" |show_results| button, below the image list:"
+msgstr ""
+
+msgid "show_results"
+msgstr ""
+
+msgid "The images (or signals) can also be displayed in a separate window, by clicking on the \"View in a new window\" entry in the \"View\" menu (or the |new_window| button in the toolbar). This is useful to compare side by side images or signals."
+msgstr ""
+
+msgid "new_window"
+msgstr ""
+
+msgid "The image is displayed in a separate window. The ROI and the fitted circles are also displayed. Annotations can be added to the image by clicking on the buttons at the bottom of the window. The annotations are stored in the metadata of the image, and together with the image data when the workspace is saved. Click on \"OK\" to close the window."
+msgstr ""
+
+msgid "The image is displayed in the main window, together with the annotations."
+msgstr ""
+
+msgid "If you want to take a closer look at the metadata, you can open the \"Metadata\" dialog."
+msgstr ""
+
+msgid "The \"Metadata\" button is located below the image list."
+msgstr ""
+
+msgid "The \"Metadata\" dialog opens. Among other information, it displays the annotations (in a JSON format), some style information (e.g. the colormap), and the ROI."
+msgstr ""
+
+msgid "Now, let's delete the image metadata (including the annotations) to clean up the image."
+msgstr ""
+
+msgid "Select the \"Delete metadata\" entry in the \"Edit\" menu, or the |metadata_delete| button in the toolbar."
+msgstr ""
+
+msgid "metadata_delete"
+msgstr ""
+
+msgid "The \"Delete metadata\" dialog opens. Click \"No\" to keep the ROI and delete the rest of the metadata."
+msgstr ""
+
+msgid "If we want to define the exact same ROI on the second image, we can copy/paste the ROI from the first image to the second image, using the metadata."
+msgstr ""
+
+msgid "Select the \"Copy metadata\" entry in the \"Edit\" menu, or the |metadata_copy| button in the toolbar."
+msgstr ""
+
+msgid "metadata_copy"
+msgstr ""
+
+msgid "Select the second image in the \"Images\" panel, then select the \"Paste metadata\" entry in the \"Edit\" menu, or the |metadata_paste| button in the toolbar."
+msgstr ""
+
+msgid "metadata_paste"
+msgstr ""
+
+msgid "The ROI is added to the second image."
+msgstr ""
+
+msgid "Select the \"Contour detection\" tool in the \"Analysis\" menu, with the same parameters as before (shape \"Circle\"). On this image, there are two fringes, so four circles are fitted. The \"Results\" dialog opens, and displays the fitted circle parameters. Click \"OK\"."
+msgstr ""
+
+msgid "To extract the intensity profile along the X axis, we have two options:"
+msgstr ""
+
+msgid "Either select the \"Line profile...\" entry |profile| in the \"Operations > Intensity profiles\" menu."
+msgstr ""
+
+msgid "profile"
+msgstr ""
+
+msgid "Or activate the \"Cross section\" tool |cross_section| in the vertical toolbar on the left of the visualization panel."
+msgstr ""
+
+msgid "cross_section"
+msgstr ""
+
+msgid "Let's try the first option, by selecting the \"Line profile...\" entry |profile|: that is the most straightforward way to extract a profile from an image, and it corresponds to the ``compute_profile`` method of DataLab's API (so it can be used in a script, a plugin or a macro)."
+msgstr ""
+
+msgid "Select the \"Line profile...\" entry |profile| in the \"Operations\" menu."
+msgstr ""
+
+msgid "The \"Profile\" dialog opens. Enter the row of the horizontal profile (or the column of the vertical profile) in the dialog box that opens. Click \"OK\"."
+msgstr ""
+
+msgid "The intensity profile is added to the \"Signals\" panel, and DataLab switches to this panel to display the profile."
+msgstr ""
+
+msgid "If you want to do some measurements on the profile, or add annotations, you can open the signal in a separate window, by clicking on the \"View in a new window\" entry in the \"View\" menu (or the |new_window| button in the toolbar)."
+msgstr ""
+
+msgid "The signal is displayed in a separate window. Here, we added vertical cursors and a very interesting text label. As for the images, the annotations are stored in the metadata of the signal, and together with the signal data when the workspace is saved. Click on \"OK\" to close the window."
+msgstr ""
+
+msgid "Now, let's try the second option for extracting the intensity profile along the X axis, by activating the \"Cross section\" tool |cross_section| in the vertical toolbar on the left of the visualization panel (this tool is a `PlotPy <https://github.com/PlotPyStack/plotpy>`_ feature). Before being able to use it, we need to select the image in the visualization panel (otherwise the tool is grayed out). Then, we can click on the image to display the intensity profile along the X axis. DataLab integrates a modified version of this tool, that allows to transfer the profile to the \"Signals\" panel for further processing."
+msgstr ""
+
+msgid "Switch back to the \"Images\" panel, and select the image *in the visualization panel* (otherwise the \"Cross section\" |cross_section| tool is grayed out). Select the \"Cross section\" tool |cross_section| in the vertical toolbar, and click on the image to display the intensity profiles along the X and Y axes."
+msgstr ""
+
+msgid "Then, click on the \"Process signal\" button |to_signal| in the toolbar near the profile to transfer the profile to the \"Signals\" panel."
+msgstr ""
+
+msgid "to_signal"
+msgstr ""
+
+msgid "Finally, we can save the workspace to a file. The workspace contains all the images and signals that were loaded or processed in DataLab. It also contains the analysis results, the visualization settings (colormaps, contrast, etc.), the metadata, and the annotations."
+msgstr ""
+
+msgid "Save the workspace to a file with \"File > Save to HDF5 file...\", or the |filesave_h5| button in the toolbar."
+msgstr ""
+
+msgid "filesave_h5"
+msgstr ""
+
+msgid "If you want to load the workspace again, you can use the \"File > Open HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the \"File > Browse HDF5 file...\" (or the |h5browser| button in the toolbar) to load only a selection of data sets from the workspace."
+msgstr ""
+
+msgid "fileopen_h5"
+msgstr ""
+
+msgid "h5browser"
+msgstr ""
+

@@ -1,0 +1,271 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Operations on Signals"
+msgstr ""
+
+msgid "This section describes the operations that can be performed on signals."
+msgstr ""
+
+msgid ":ref:`sig-menu-processing` for more information on signal processing features, or :ref:`sig-menu-analysis` for information on analysis features on signals."
+msgstr ""
+
+msgid "Screenshot of the \"Operations\" menu."
+msgstr ""
+
+msgid "When the \"Signal Panel\" is selected, the menus and toolbars are updated to provide signal-related actions."
+msgstr ""
+
+msgid "The \"Operations\" menu allows you to perform various operations on the selected signals, such as arithmetic operations, peak detection, or convolution."
+msgstr ""
+
+msgid "Basic arithmetic operations"
+msgstr ""
+
+msgid "Operation"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "|sum| Sum"
+msgstr ""
+
+msgid "sum"
+msgstr ""
+
+msgid ":math:`y_{M} = \\sum_{k=0}^{M-1}{y_{k}}`"
+msgstr ""
+
+msgid "|average| Average"
+msgstr ""
+
+msgid "average"
+msgstr ""
+
+msgid ":math:`y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}`"
+msgstr ""
+
+msgid "|difference| Difference"
+msgstr ""
+
+msgid "difference"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{2} = y_{1} - y_{0}`"
+msgstr ""
+
+msgid "|product| Product"
+msgstr ""
+
+msgid "product"
+msgstr ""
+
+msgid ":math:`y_{M} = \\prod_{k=0}^{M-1}{y_{k}}`"
+msgstr ""
+
+msgid "|division| Division"
+msgstr ""
+
+msgid "division"
+msgstr ""
+
+msgid ":math:`y_{2} = \\dfrac{y_{1}}{y_{0}}`"
+msgstr ""
+
+msgid "|inverse| Inverse"
+msgstr ""
+
+msgid "inverse"
+msgstr ""
+
+msgid ":math:`y_{2} = \\dfrac{1}{y_{1}}`"
+msgstr ""
+
+msgid "Operations with a constant"
+msgstr ""
+
+msgid "Create a new signal which is the result of a constant operation on each selected signal:"
+msgstr ""
+
+msgid "|constant_add| Addition"
+msgstr ""
+
+msgid "constant_add"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = y_{k-1} + c`"
+msgstr ""
+
+msgid "|constant_subtract| Subtraction"
+msgstr ""
+
+msgid "constant_subtract"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = y_{k-1} - c`"
+msgstr ""
+
+msgid "|constant_multiply| Multiplication"
+msgstr ""
+
+msgid "constant_multiply"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = y_{k-1} \\times c`"
+msgstr ""
+
+msgid "|constant_divide| Division"
+msgstr ""
+
+msgid "constant_divide"
+msgstr ""
+
+msgid ":math:`y_{k} = \\dfrac{y_{k-1}}{c}`"
+msgstr ""
+
+msgid "Absolute value, real and imaginary parts"
+msgstr ""
+
+msgid "|abs| Absolute value"
+msgstr ""
+
+msgid "abs"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = |y_{k-1}|`"
+msgstr ""
+
+msgid "|re| Real part"
+msgstr ""
+
+msgid "re"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = \\Re(y_{k-1})`"
+msgstr ""
+
+msgid "|im| Imaginary part"
+msgstr ""
+
+msgid "im"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = \\Im(y_{k-1})`"
+msgstr ""
+
+msgid "Data type conversion"
+msgstr ""
+
+msgid "The \"Convert data type\" |convert_dtype| action allows you to convert the data type of the selected signals."
+msgstr ""
+
+msgid "convert_dtype"
+msgstr ""
+
+msgid "Data type conversion relies on :py:func:`numpy.ndarray.astype` function with the default parameters (`casting='unsafe'`)."
+msgstr ""
+
+msgid "Basic mathematical functions"
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "|exp| Exponential"
+msgstr ""
+
+msgid "exp"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = \\exp(y_{k-1})`"
+msgstr ""
+
+msgid "|log10| Logarithm (base 10)"
+msgstr ""
+
+msgid "log10"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = \\log_{10}(y_{k-1})`"
+msgstr ""
+
+msgid "|power| Power"
+msgstr ""
+
+msgid "power"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = y_{k-1}^{n}`"
+msgstr ""
+
+msgid "|sqrt| Square root"
+msgstr ""
+
+msgid "sqrt"
+msgstr ""
+
+msgid ":math:`y_{k} = \\sqrt{y_{k-1}}`"
+msgstr ""
+
+msgid "Other mathematical operations"
+msgstr ""
+
+msgid "Implementation"
+msgstr ""
+
+msgid "|derivative| Derivative"
+msgstr ""
+
+msgid "derivative"
+msgstr ""
+
+msgid "Based on `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
+msgstr ""
+
+msgid "|integral| Integral"
+msgstr ""
+
+msgid "integral"
+msgstr ""
+
+msgid "Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
+msgstr ""
+
+msgid "|convolution| Convolution"
+msgstr ""
+
+msgid "convolution"
+msgstr ""
+
+msgid "Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+msgstr ""
+

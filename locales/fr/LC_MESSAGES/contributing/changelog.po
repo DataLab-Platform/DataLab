@@ -1,0 +1,2461 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Changelog"
+msgstr ""
+
+msgid "See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones."
+msgstr ""
+
+msgid "DataLab Version 0.21.0"
+msgstr ""
+
+msgid "💥 New features and enhancements:"
+msgstr ""
+
+msgid "Signal cursors:"
+msgstr ""
+
+msgid "Fixed [Issue #231](https://github.com/DataLab-Platform/DataLab/issues/231) - Add horizontal cursors to the Signal View (requires PlotPy v2.8)"
+msgstr ""
+
+msgid "Fixed [Issue #232](https://github.com/DataLab-Platform/DataLab/issues/232) - Add Δx measurement on curve stats tool (vertical cursors)"
+msgstr ""
+
+msgid "Computation functions refactoring:"
+msgstr ""
+
+msgid "Added new `@computation_function` decorator to mark and register computation functions"
+msgstr ""
+
+msgid "Renamed computation functions to remove redundant \"compute_\" prefix (e.g., `compute_fft` ➝ `fft`)"
+msgstr ""
+
+msgid "Added infrastructure for discovering computation functions via introspection"
+msgstr ""
+
+msgid "Improved function naming in coordinate transformations (e.g., `to_polar` ➝ `to_polar`)"
+msgstr ""
+
+msgid "Added type hints and improved documentation across computation modules"
+msgstr ""
+
+msgid "These changes improve code organization and maintainability while making the API more intuitive"
+msgstr ""
+
+msgid "Internal changes only - **no backward compatibility is maintained** for plugin developers"
+msgstr ""
+
+msgid "Generic processing types refactoring:"
+msgstr ""
+
+msgid "Refactored the naming convention of core `BaseProcessor` methods implementing generic data processing patterns (e.g. one input ➝ one output, n inputs ➝ one output, etc.)"
+msgstr ""
+
+msgid "New method names are now based on their input/output signature for better clarity and extensibility:"
+msgstr ""
+
+msgid "`compute_1_to_1`: transforms each selected object independently"
+msgstr ""
+
+msgid "`compute_1_to_0`: performs a measurement or analysis without generating a new object"
+msgstr ""
+
+msgid "`compute_1_to_n`: generates multiple outputs from a single input (e.g. ROI extraction)"
+msgstr ""
+
+msgid "`compute_n_to_1`: combines multiple inputs into a single output (e.g. sum, mean); supports pairwise mode"
+msgstr ""
+
+msgid "`compute_2_to_1`: applies a binary operation between an object and a second operand (object or constant); supports pairwise mode"
+msgstr ""
+
+msgid "These methods are internal and used by advanced developers (e.g. plugin authors); hence, **no backward compatibility is maintained**"
+msgstr ""
+
+msgid "This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types"
+msgstr ""
+
+msgid "🛠️ Bug fixes:"
+msgstr ""
+
+msgid "Fixed [Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Hard crash when trying to activate the curve stats tool on a zero signal"
+msgstr ""
+
+msgid "Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to \"Square\" after validating \"Parameters…\" dialog"
+msgstr ""
+
+msgid "Fixed [Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117) - DataLab's signal moving median crashes on Linux with `mode='mirror'`: `free(): invalid next size (normal)` (this is a bug in SciPy v1.15.0 to v1.15.2, which was fixed in SciPy v1.15.3)"
+msgstr ""
+
+msgid "Fixed [Issue #186](https://github.com/DataLab-Platform/DataLab/issues/186) - Image text files with a comma as decimal separator cannot be opened directly (only the Import Wizard does support this)"
+msgstr ""
+
+msgid "Fixed [Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238) - Image text files with a trailing delimiter leads to data with a superfluous column when opened directly (does not happen in the Import Wizard)"
+msgstr ""
+
+msgid "Fixed [Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239) - Text Import Wizard does not preserve user-defined titles and units"
+msgstr ""
+
+msgid "Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)"
+msgstr ""
+
+msgid "Fixed [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Erroneous ifft1d x-axis computation when shift=False"
+msgstr ""
+
+msgid "Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\\s+` instead of single space character)"
+msgstr ""
+
+msgid "ℹ️ Other changes:"
+msgstr ""
+
+msgid "Updated `guidata` dependency to V3.10.0"
+msgstr ""
+
+msgid "Using new `guidata` translation utility based on `babel`"
+msgstr ""
+
+msgid "DataLab Version 0.20.0"
+msgstr ""
+
+msgid "ANDOR SIF Images:"
+msgstr ""
+
+msgid "Added support for background images in ANDOR SIF files"
+msgstr ""
+
+msgid "This closes [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Add support for ANDOR SIF files with background image"
+msgstr ""
+
+msgid "Array editor (results, signal and image data, ...):"
+msgstr ""
+
+msgid "New \"Copy all\" button in the array editor dialog box, to copy all the data in the clipboard, including row and column headers"
+msgstr ""
+
+msgid "New \"Export\" button in the array editor dialog box, to export the data in a CSV file, including row and column headers"
+msgstr ""
+
+msgid "New \"Paste\" button in the array editor dialog box, to paste the data from the clipboard into the array editor (this feature is not available for read-only data, such as analysis results)"
+msgstr ""
+
+msgid "The features above require guidata v3.9.0 or later"
+msgstr ""
+
+msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) and [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
+msgstr ""
+
+msgid "Fourier analysis features (\"Processing\" menu):"
+msgstr ""
+
+msgid "New \"Zero padding\" feature"
+msgstr ""
+
+msgid "Implementation for signals:"
+msgstr ""
+
+msgid "Choose a zero padding strategy (Next power of 2, Double the length, Triple the length, Custom length)"
+msgstr ""
+
+msgid "Or manually set the zero padding length (if \"Custom length\" is selected)"
+msgstr ""
+
+msgid "Implementation for images:"
+msgstr ""
+
+msgid "Choose a zero padding strategy (Next power of 2, Next multiple of 64, Custom length)"
+msgstr ""
+
+msgid "Or manually set the zero padding row and column lengths (if \"Custom length\" is selected)"
+msgstr ""
+
+msgid "Set the position of the zero padding (bottom-right, centered)"
+msgstr ""
+
+msgid "This closes [Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Fourier analysis: add zero padding feature for signals and images"
+msgstr ""
+
+msgid "Region of Interest (ROI) editor:"
+msgstr ""
+
+msgid "This concerns the \"Edit Regions of Interest\" feature for both signals and images"
+msgstr ""
+
+msgid "New behavior:"
+msgstr ""
+
+msgid "Signals: the range ROI selection tool is now active by default, and the user can select right away the range of the signal to be used as a ROI"
+msgstr ""
+
+msgid "Images: the rectangular ROI selection tool is now active by default, and the user can select right away the rectangular ROI to be used as a ROI"
+msgstr ""
+
+msgid "This closes [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - ROI editor: activate ROI selection tool by default, so that the user can select right away the area to be used as a ROI"
+msgstr ""
+
+msgid "Added the \"Select tool\" to editor's toolbar, to allow the user to switch between the \"Select\" and \"Draw\" tools easily without having to use the plot toolbar on the top of the window"
+msgstr ""
+
+msgid "Signal processing features (\"Processing\" menu):"
+msgstr ""
+
+msgid "New \"X-Y mode\" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)"
+msgstr ""
+
+msgid "New abscissa and ordinate find features:"
+msgstr ""
+
+msgid "\"First abscissa at y=...\" feature: this feature allows to find the first abscissa value of a signal at a given y value (e.g. the abscissa value of a signal at y=0)"
+msgstr ""
+
+msgid "\"Ordinate at x=...\" feature: this feature allows to find the ordinate value of a signal at a given x value (e.g. the ordinate value of a signal at x=0)"
+msgstr ""
+
+msgid "Each feature has its own dialog box, which allows to set the y or x value to be used for the search with a slider or a text box"
+msgstr ""
+
+msgid "This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
+msgstr ""
+
+msgid "New full width at given y feature:"
+msgstr ""
+
+msgid "The \"Full width at y=...\" feature allows to find the full width of a signal at a given y value (e.g. the full width of a signal at y=0)"
+msgstr ""
+
+msgid "A specific dialog box allows to set the y value to be used for the search with a slider or a text box"
+msgstr ""
+
+msgid "This closes [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+msgstr ""
+
+msgid "Public API (local or remote):"
+msgstr ""
+
+msgid "Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:"
+msgstr ""
+
+msgid "This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes"
+msgstr ""
+
+msgid "`group_id` argument allows to specify the group ID where the signal or image should be added (if not specified, the signal or image is added to the current group)"
+msgstr ""
+
+msgid "`set_current` argument allows to specify if the signal or image should be set as current after being added (default is `True`)"
+msgstr ""
+
+msgid "This closes [Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - Public API: add a keyword `group_id` to `add_signal` and `add_image`"
+msgstr ""
+
+msgid "DataLab Version 0.19.2"
+msgstr ""
+
+msgid "Fixed [Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172) - Image profiles: when moving/resizing image, profile plots are not refreshed (fixed in PlotPy v2.7.4)"
+msgstr ""
+
+msgid "Fixed [Issue #173](https://github.com/DataLab-Platform/DataLab/issues/173) - Phase spectrum: add unit (degree) and function reference (`numpy.angle`) to the documentation"
+msgstr ""
+
+msgid "Fixed [Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177) - \"Open from directory\" feature: unexpected group name (a group named \".\" is created instead of the root folder name)"
+msgstr ""
+
+msgid "Fixed [Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Signal / Fourier analysis: magnitude spectrum feature does not work as expected with logarithmic scale enabled"
+msgstr ""
+
+msgid "Fixed [Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Average profile visualization: empty profile is displayed when the target rectangular area is outside the image area (this has been fixed upstream, in PlotPy v2.7.4, and so requires the latest version of PlotPy)"
+msgstr ""
+
+msgid "DataLab Version 0.19.1"
+msgstr ""
+
+msgid "Pairwise operation mode:"
+msgstr ""
+
+msgid "Fixed an unexpected behavior when using the pairwise operation mode with functions that take a single second operand (e.g. for images: difference, division, arithmetic operations, and flatfield correction)"
+msgstr ""
+
+msgid "If only one set of operands was selected in a single group, a warning message was displayed \"In pairwise mode, you need to select objects in at least two groups.\", which is correct for functions that are symmetric (e.g. addition, multiplication, etc.), but not for functions that are not symmetric (e.g. difference, division, etc.)."
+msgstr ""
+
+msgid "This is now fixed: the warning message is only displayed for functions that are symmetric (e.g. addition, multiplication, etc.)."
+msgstr ""
+
+msgid "This closes [Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157) - Pairwise operation mode: unexpected behavior with functions that take a single second operand"
+msgstr ""
+
+msgid "Fixed [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignore `nan` values for image normalization, flatfield correction, offset correction, and centroid computation"
+msgstr ""
+
+msgid "Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)"
+msgstr ""
+
+msgid "Fixed [Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - When editing ROI of a list of images, the first image of the selection is shown (instead of the last as in the image panel)"
+msgstr ""
+
+msgid "Fixed [Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - When selecting multiple images just after opening an HDF5 file, the \"View in a new window\" feature does not work (`KeyError` exception)"
+msgstr ""
+
+msgid "Fixed [Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - When selecting multiple images and clearing ROI in ROI editor, only the first image is affected"
+msgstr ""
+
+msgid "Fixed [Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Refresh image items only if necessary (when editing ROI, pasting/deleting metadata)"
+msgstr ""
+
+msgid "Fixed [Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - View in a new window: when displaying multiple images, the item list panel should be visible"
+msgstr ""
+
+msgid "Fixed [Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Open from directory: expected one group per folder when loading multiple files"
+msgstr ""
+
+msgid "Fixed [Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164) - Open from directory: unsupported files should be ignored when loading files recursively, to avoid warning popup dialog boxes"
+msgstr ""
+
+msgid "Fixed [Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165) - When opening a file, the default signal/image title must be set to the file name, instead of the relative path to the file name"
+msgstr ""
+
+msgid "DataLab Version 0.19.0"
+msgstr ""
+
+msgid "Image operation features (\"Operations\" menu):"
+msgstr ""
+
+msgid "Renamed \"Rotation\" submenu to \"Flip or rotation\""
+msgstr ""
+
+msgid "New \"Flip diagonally\" feature"
+msgstr ""
+
+msgid "New \"Convert to Cartesian coordinates\" feature"
+msgstr ""
+
+msgid "New \"Convert to polar coordinates\" feature"
+msgstr ""
+
+msgid "Signal analysis features (\"Analysis\" menu):"
+msgstr ""
+
+msgid "Renamed \"X values at min/max\" to \"Abscissa of the minimum and maximum\""
+msgstr ""
+
+msgid "New \"Abscissa at y=...\" feature"
+msgstr ""
+
+msgid "New \"Open from directory\" feature:"
+msgstr ""
+
+msgid "This feature allows to open multiple files from a directory at once, recursively (only the files with the supported extensions by the current panel are opened)"
+msgstr ""
+
+msgid "Add \"Open from directory\" action to the \"File\" menu for both Signal and Image panels"
+msgstr ""
+
+msgid "Add support for folders when dropping files in the Signal and Image panels"
+msgstr ""
+
+msgid "Add `1/x` operation to the \"Operations\" menu for both Signal and Image panels:"
+msgstr ""
+
+msgid "This feature relies on the `numpy.reciprocal` function, and handles the case where the denominator is zero by catching warnings and replacing the `np.inf` values with `np.nan` values"
+msgstr ""
+
+msgid "Add `compute_inverse` method for image and signal processors"
+msgstr ""
+
+msgid "This closes [Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - New feature: `1/x` for signals and images"
+msgstr ""
+
+msgid "Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:"
+msgstr ""
+
+msgid "Method was added to the following classes: `AbstractCDLControl`, `BaseDataPanel` and `RemoteClient`"
+msgstr ""
+
+msgid "This closes the following issues:"
+msgstr ""
+
+msgid "[Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `BaseDataPanel.add_group`: add `select` argument"
+msgstr ""
+
+msgid "[Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Remote proxy / Public API: add `add_group` method"
+msgstr ""
+
+msgid "`AbstractCDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
+msgstr ""
+
+msgid "When opening an HDF5 file, the confirmation dialog box asking if current workspace should be cleared has a new possible answer \"Ignore\":"
+msgstr ""
+
+msgid "Choosing \"Ignore\" will prevent the confirmation dialog box from being displayed again, and will choose the current setting (i.e. clear or not the workspace) for all subsequent file openings"
+msgstr ""
+
+msgid "Added a new \"Clear workspace before loading HDF5 file\" option in the \"Settings\" dialog box, to allow the user to change the current setting (i.e. clear or not the workspace) for all subsequent file openings"
+msgstr ""
+
+msgid "Added a new \"Ask before clearing workspace\" option in the \"Settings\" dialog box, to allow the user to disable or re-enable the confirmation dialog box asking if current workspace should be cleared when opening an HDF5 file"
+msgstr ""
+
+msgid "This closes [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146) - Ask before clearing workspace when opening HDF5 file: add \"Ignore\" option to prevent dialog from being displayed again"
+msgstr ""
+
+msgid "Object and group title renaming:"
+msgstr ""
+
+msgid "Removed \"Rename group\" feature from the \"Edit\" menu and context menu"
+msgstr ""
+
+msgid "Added \"Rename object\" feature to the \"Edit\" menu and context menu, with F2 shortcut, to rename the title of the selected object or group"
+msgstr ""
+
+msgid "This closes [Issue #148](https://github.com/DataLab-Platform/DataLab/issues/148) - Rename signal/image/group title by pressing F2"
+msgstr ""
+
+msgid "Region of Interest editor:"
+msgstr ""
+
+msgid "Regrouped the graphical actions (new rectangular ROI, new circular ROI, new polygonal ROI) in a single menu \"Graphical ROI\""
+msgstr ""
+
+msgid "Added new \"Coordinate-based ROI\" menu to create a ROI using manual input of the coordinates:"
+msgstr ""
+
+msgid "For signals, the ROI is defined by the start and end coordinates"
+msgstr ""
+
+msgid "For images:"
+msgstr ""
+
+msgid "The rectangular ROI is defined by the top-left and bottom-right coordinates"
+msgstr ""
+
+msgid "The circular ROI is defined by the center and radius coordinates"
+msgstr ""
+
+msgid "The polygonal ROI is not supported yet"
+msgstr ""
+
+msgid "This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates"
+msgstr ""
+
+msgid "Fixed [Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Image analysis: mask `nan` values when computing statistics, for example"
+msgstr ""
+
+msgid "Fixed [Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144) - Average profile extraction: `ValueError` when selection rectangle is larger than the image"
+msgstr ""
+
+msgid "DataLab Version 0.18.2"
+msgstr ""
+
+msgid "ℹ️ General information:"
+msgstr ""
+
+msgid "Python 3.13 is now supported, since the availability of the scikit-image V0.25 (see [Issue #104](https://github.com/DataLab-Platform/DataLab/issues/104) - Python 3.13: `KeyError: 'area_bbox'`)"
+msgstr ""
+
+msgid "💥 Enhancements:"
+msgstr ""
+
+msgid "Added new \"Keep results after computation\" option in \"Processing\" section:"
+msgstr ""
+
+msgid "Before this change, when applying a processing feature (e.g. a filter, a threshold, etc.) on a signal or an image, the analysis results were removed from the object"
+msgstr ""
+
+msgid "This new option allows to keep the analysis results after applying a processing feature on a signal or an image. Even if the analysis results are not updated, they might be relevant in some use cases (e.g. when using the 2D peak detection feature on an image, and then applying a filter on the image, or summing two images, etc.)"
+msgstr ""
+
+msgid "Fixed [Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138) - Image colormaps were no longer stored in metadata (and serialized in HDF5 files) since PlotPy v2.6.3 (this commit, specifically: [PlotPyStack/PlotPy@a37af8a](https://github.com/PlotPyStack/PlotPy/commit/a37af8ae8392e5e3655e5c34b67a7cd1544ea845))"
+msgstr ""
+
+msgid "Fixed [Issue #137](https://github.com/DataLab-Platform/DataLab/issues/137) - Arithmetic operations and signal interpolation: dialog box with parameters is not displayed"
+msgstr ""
+
+msgid "Fixed [Issue #136](https://github.com/DataLab-Platform/DataLab/issues/136) - When processing a signal or an image, the analysis result is kept from original object"
+msgstr ""
+
+msgid "Before this fix, when processing a signal or an image (e.g. when applying a filter, a threshold, etc.), the analysis result was kept from the original object, and was not updated with the new data. Thus the analysis result was not meaningful anymore, and was misleading the user."
+msgstr ""
+
+msgid "This is now fixed: the analysis result is now removed when processing a signal or an image. However it is not recalculated automatically, because there is no way to know which analysis result should be recalculated (e.g. if the user has applied a filter, should the FWHM be recalculated?) - besides, the current implementation of the analysis features does not allow to recalculate the analysis results automatically when the data is modified. The user has to recalculate the analysis results manually if needed."
+msgstr ""
+
+msgid "Fixed [Issue #132](https://github.com/DataLab-Platform/DataLab/issues/132) - Plot analysis results: \"One curve per result title\" mode ignores ROIs"
+msgstr ""
+
+msgid "Before this fix, the \"One curve per result title\" mode was ignoring ROIs, and was plotting the selected result for all objects (signals or images) without taking into account the ROI defined on the objects"
+msgstr ""
+
+msgid "This is now fixed: the \"One curve per result title\" mode now takes into account the ROI defined on the objects, and plots the selected result for each object (signal or image) and for each ROI defined on the object"
+msgstr ""
+
+msgid "Fixed [Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128) - Support long object titles in Signal and Image panels"
+msgstr ""
+
+msgid "Fixed [Issue #133](https://github.com/DataLab-Platform/DataLab/issues/133) - Remove specific analysis results from metadata clipboard during copy operation"
+msgstr ""
+
+msgid "Fixed [Issue #135](https://github.com/DataLab-Platform/DataLab/issues/135) - Allow to edit ROI on multiple signals or images at once"
+msgstr ""
+
+msgid "Before this fix, the ROI editor was disabled when multiple signals or images were selected"
+msgstr ""
+
+msgid "This is now fixed: the ROI editor is now enabled when multiple signals or images are selected, and the ROI is applied to all selected signals or images (only the ROI of the first selected signal or image is taken into account)"
+msgstr ""
+
+msgid "This new behavior is consistent with the ROI extraction feature, which allows to extract the ROI on multiple signals or images at once, based on the ROI defined on the first selected signal or image"
+msgstr ""
+
+msgid "Image ROI features:"
+msgstr ""
+
+msgid "Fixed [Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120) - ROI extraction on multiple images: defined ROI should not be saved in the first selected object. The design choice is to save the defined ROI neither in the first nor in any of the selected objects: the ROI is only used for the extraction, and is not saved in any object"
+msgstr ""
+
+msgid "Fixed [Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121) - `AttributeError` when extracting multiple ROIs on a single image, if more than one image is selected"
+msgstr ""
+
+msgid "Fixed [Issue #122](https://github.com/DataLab-Platform/DataLab/issues/122) - Image masks are not refreshed when removing metadata except for the active image"
+msgstr ""
+
+msgid "Fixed [Issue #123](https://github.com/DataLab-Platform/DataLab/issues/123) - Image masks are not refreshed when pasting metadata on multiple images, except for the last image"
+msgstr ""
+
+msgid "Text and CSV files:"
+msgstr ""
+
+msgid "Enhance text file reading by detecting data headers (using a list of typical headers from scientific instruments) and by allowing to skip the header when reading the file"
+msgstr ""
+
+msgid "Ignore encoding errors when reading files in both open feature and import wizard, hence allowing to read files with special characters without raising an exception"
+msgstr ""
+
+msgid "Fixed [Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124) - Text files: support locale decimal separator (different than `.`)"
+msgstr ""
+
+msgid "Signal analysis features: fixed duplicate results when no ROI is defined"
+msgstr ""
+
+msgid "Fixed [Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113) - Call to `RemoteClient.open_h5_files` (and `import_h5_file`) fails without passing the optional arguments"
+msgstr ""
+
+msgid "Fixed [Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116) - `KeyError` exception when trying to remove a group after opening an HDF5 file"
+msgstr ""
+
+msgid "DataLab Version 0.18.1"
+msgstr ""
+
+msgid "FWHM computation now raises an exception when less than two points are found with zero-crossing method"
+msgstr ""
+
+msgid "Improved result validation for array-like results by checking the data type of the result"
+msgstr ""
+
+msgid "Fixed [Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106) - Analysis: coordinate shifted results on images with ROIs and shifted origin"
+msgstr ""
+
+msgid "Fixed [Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107) - Wrong indices when extracting a profile from an image with a ROI"
+msgstr ""
+
+msgid "Fixed [Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111) - Proxy `add_object` method does not support signal/image metadata (e.g. ROI)"
+msgstr ""
+
+msgid "Test data plugin / \"Create 2D noisy gauss image\": fixed amplitude calculation in `datalab.tests.data.create_2d_random` for non-integer data types"
+msgstr ""
+
+msgid "📚 Documentation:"
+msgstr ""
+
+msgid "Fixed path separators in plugin directory documentation"
+msgstr ""
+
+msgid "Corrected left and right area descriptions in workspace documentation"
+msgstr ""
+
+msgid "Updated Google style link in contributing guidelines"
+msgstr ""
+
+msgid "Fixed various French translations in the documentation"
+msgstr ""
+
+msgid "DataLab Version 0.18.0"
+msgstr ""
+
+msgid "PlotPy v2.7 is required for this release."
+msgstr ""
+
+msgid "Dropped support for Python 3.8."
+msgstr ""
+
+msgid "Python 3.13 is not supported yet, due to the fact that some dependencies are not compatible with this version."
+msgstr ""
+
+msgid "New operation mode feature:"
+msgstr ""
+
+msgid "Added \"Operation mode\" feature to the \"Processing\" tab in the \"Settings\" dialog box"
+msgstr ""
+
+msgid "This feature allows to choose between \"single\" and \"pairwise\" operation modes for all basic operations (addition, subtraction, multiplication, division, etc.):"
+msgstr ""
+
+msgid "\"Single\" mode: single operand mode (default mode: the operation is done on each object independently)"
+msgstr ""
+
+msgid "\"Pairwise\" mode: pairwise operand mode (the operation is done on each pair of objects)"
+msgstr ""
+
+msgid "This applies to both signals and images, and to computations taking *N* inputs"
+msgstr ""
+
+msgid "Computations taking *N* inputs are the ones where:"
+msgstr ""
+
+msgid "*N(>=2)* objects in give *N* objects out"
+msgstr ""
+
+msgid "*N(>=1)* object(s) + 1 object in give N objects out"
+msgstr ""
+
+msgid "New ROI (Region Of Interest) features:"
+msgstr ""
+
+msgid "New polygonal ROI feature"
+msgstr ""
+
+msgid "Complete redesign of the ROI editor user interfaces, improving ergonomics and consistency with the rest of the application"
+msgstr ""
+
+msgid "Major internal refactoring of the ROI system to make it more robust (more tests) and easier to maintain"
+msgstr ""
+
+msgid "Implemented [Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Launch DataLab using `datalab` instead of `datalab`. Note that the `datalab` command is still available for backward compatibility."
+msgstr ""
+
+msgid "Implemented [Issue #101](https://github.com/DataLab-Platform/DataLab/issues/101) - Configuration: set default image interpolation to anti-aliasing (`5` instead of `0` for nearest). This change is motivated by the fact that a performance improvement was made in PlotPy v2.7 on Windows, which allows to use anti-aliasing interpolation by default without a significant performance impact."
+msgstr ""
+
+msgid "Implemented [Issue #100](https://github.com/DataLab-Platform/DataLab/issues/100) - Use the same installer and executable on Windows 7 SP1, 8, 10, 11. Before this change, a specific installer was required for Windows 7 SP1, due to the fact that Python 3.9 and later versions are not supported on this platform. A workaround was implemented to make DataLab work on Windows 7 SP1 with Python 3.9."
+msgstr ""
+
+msgid "Fixed [Issue #103](https://github.com/DataLab-Platform/DataLab/issues/103) - `proxy.add_annotations_from_items`: circle shape color seems to be ignored."
+msgstr ""
+
+msgid "DataLab Version 0.17.1"
+msgstr ""
+
+msgid "ℹ️ PlotPy v2.6.2 is required for this release."
+msgstr ""
+
+msgid "Image View:"
+msgstr ""
+
+msgid "Before this release, when selecting a high number of images (e.g. when selecting a group of images), the application was very slow because all the images were displayed in the image view, even if they were all superimposed on the same image"
+msgstr ""
+
+msgid "The workaround was to enable the \"Show first only\" option"
+msgstr ""
+
+msgid "Now, to improve performance, if multiple images are selected, only the last image of the selection is displayed in the image view if this last image has no transparency and if the other images are completely covered by this last image"
+msgstr ""
+
+msgid "Clarification: action \"Show first only\" was renamed to \"Show first object only\", and a new icon was added to the action"
+msgstr ""
+
+msgid "API: added `width` and `height` properties to `ImageObj` class (returns the width and height of the image in physical units)"
+msgstr ""
+
+msgid "Windows launcher \"start.pyw\": writing a log file \"datalab_error.log\" when an exception occurs at startup"
+msgstr ""
+
+msgid "Changing the color theme now correctly updates all DataLab's user interface components without the need to restart the application"
+msgstr ""
+
+msgid "OpenCV is now an optional dependency:"
+msgstr ""
+
+msgid "This change is motivated by the fact that the OpenCV conda package is not maintained on Windows (at least), which leads to an error when installing DataLab with conda"
+msgstr ""
+
+msgid "When OpenCV is not installed, only the \"OpenCV blob detection\" feature won't work, and a warning message will be displayed when trying to use this feature"
+msgstr ""
+
+msgid "DataLab Version 0.17.0"
+msgstr ""
+
+msgid "ℹ️ PlotPy v2.6 is required for this release."
+msgstr ""
+
+msgid "Menu \"Computing\" was renamed to \"Analysis\" for both Signal and Image panels, to better reflect the nature of the features in this menu"
+msgstr ""
+
+msgid "Regions Of Interest (ROIs) are now taken into account everywhere in the application where it makes sense, and not only for the old \"Computing\" menu (now \"Analysis\") features. This closes [Issue #93](https://github.com/DataLab-Platform/DataLab/issues/93). If a signal or an image has an ROI defined:"
+msgstr ""
+
+msgid "Operations are done on the ROI only (except if the operation changes the data shape, or the pixel size for images)"
+msgstr ""
+
+msgid "Processing features are done on the ROI only (if the destination object data type is compatible with the source object data type, which excludes thresholding, for instance)"
+msgstr ""
+
+msgid "Analysis features are done on the ROI only, like before"
+msgstr ""
+
+msgid "As a consequence of previous point, and for clarity:"
+msgstr ""
+
+msgid "The \"Edit Regions of interest\" and \"Remove all Regions of interest\" features have been moved from the old \"Computing\" (now \"Analysis\") menu to the \"Edit\" menu where all metadata-related features are located"
+msgstr ""
+
+msgid "The \"Edit Regions of interest\" action has been added to both Signal and Image View vertical toolbars (in second position, after the \"View in a new window\" action)"
+msgstr ""
+
+msgid "Following the bug fix on image data type conversion issues with basic operations, a new \"Arithmetic operation\" feature has been added to the \"Operations\" menu for both Signal and Image panels. This feature allows to perform linear operations on signals and images, with the following operations:"
+msgstr ""
+
+msgid "Addition: ``obj3 = (obj1 + obj2) * a + b``"
+msgstr ""
+
+msgid "Subtraction: ``obj3 = (obj1 - obj2) * a + b``"
+msgstr ""
+
+msgid "Multiplication: ``obj3 = (obj1 * obj2) * a + b``"
+msgstr ""
+
+msgid "Division: ``obj3 = (obj1 / obj2) * a + b``"
+msgstr ""
+
+msgid "Improved \"View in a new window\" and \"ROI editor\" dialog boxes size management: default size won't be larger than DataLab's main window size"
+msgstr ""
+
+msgid "ROI editor:"
+msgstr ""
+
+msgid "Added toolbars for both Signal and Image ROI editors, to allow to zoom in and out, and to reset the zoom level easily"
+msgstr ""
+
+msgid "Rearranged the buttons in the ROI editor dialog box for better ergonomics and consistency with the Annotations editor (\"View in a new window\" dialog box)"
+msgstr ""
+
+msgid "Application color theme:"
+msgstr ""
+
+msgid "Added support for color theme (auto, light, dark) in the \"Settings\" dialog box"
+msgstr ""
+
+msgid "The color theme is applied without restarting the application"
+msgstr ""
+
+msgid "Intensity profile / Segment profile extraction:"
+msgstr ""
+
+msgid "When extracting a profile on an image with a ROI defined, the associated PlotPy feature show a warning message ('UserWarning: Warning: converting a masked element to nan.') but the profile is correctly extracted and displayed, with NaN values where the ROI is not defined."
+msgstr ""
+
+msgid "NaN values are now removed from the profile before plotting it"
+msgstr ""
+
+msgid "Simple processing features with a one-to-on mapping with a Python function (e.g. `numpy.absolute`, `numpy.log10`, etc.) and without parameters: fix result object title which was systematically ending with \"|\" (the character that usually precedes the list of parameters)"
+msgstr ""
+
+msgid "Butterworth filter: fix cutoff frequency ratio default value and valid range"
+msgstr ""
+
+msgid "Fix actions refresh issue in Image View vertical toolbar:"
+msgstr ""
+
+msgid "When starting DataLab with the Signal Panel active, switching to the Image View was showing \"View in a new window\" or \"Edit Regions of interest\" actions enabled in the vertical toolbar, even if no image was displayed in the Image View"
+msgstr ""
+
+msgid "The Image View vertical toolbar is now correctly updated at startup"
+msgstr ""
+
+msgid "View in a new window: cross section tools (intensity profiles) stayed disabled unless the user selected an image through the item list - this is now fixed"
+msgstr ""
+
+msgid "Image View: \"Show contrast panel\" toolbar button was not enabled at startup, and was only enabled when at least one image was displayed in the Image View - it is now always enabled, as expected"
+msgstr ""
+
+msgid "Image data type conversion:"
+msgstr ""
+
+msgid "Previously, the data type conversion feature was common to signal and image processing features, i.e. a simple conversion of the data type using NumPy's `astype` method"
+msgstr ""
+
+msgid "This was not sufficient for image processing features, in particular for integer images, because even if the result was correct from a numerical point of view, underflow or overflow could be legitimately seen as a bug from a mathematical point of view"
+msgstr ""
+
+msgid "The image data type conversion feature now relies on the internal `clip_astype` function, which clips the data to the valid range of the target data type before converting it (in the case of integer images)"
+msgstr ""
+
+msgid "Image ROI extraction issues:"
+msgstr ""
+
+msgid "Multiple regressions were introduced in version 0.16.0:"
+msgstr ""
+
+msgid "Single circular ROI extraction was not working as expected (a rectangular ROI was extracted, with unexpected coordinates)"
+msgstr ""
+
+msgid "Multiple circular ROI extraction lead to a rectangular ROI extraction"
+msgstr ""
+
+msgid "Multiple ROI extraction was no longer cropping the image to the overall bounding box of the ROIs"
+msgstr ""
+
+msgid "These issues are now fixed, and unit tests have been added to prevent regressions:"
+msgstr ""
+
+msgid "An independent test algorithm has been implemented to check the correctness of the ROI extraction in all cases mentioned above"
+msgstr ""
+
+msgid "Tests cover both single and multiple ROI extraction, with circular and rectangular ROIs"
+msgstr ""
+
+msgid "Overflow and underflow issues in some operations on integer images:"
+msgstr ""
+
+msgid "When processing integer images, some features were causing overflow or underflow issues, leading to unexpected results (correct results from a numerical point of view, but not from a mathematical point of view)"
+msgstr ""
+
+msgid "This issue only concerned basic operations (addition, subtraction, multiplication, division, and constant operations) - all the other features were already working as expected"
+msgstr ""
+
+msgid "This is now fixed as result output are now floating point images"
+msgstr ""
+
+msgid "Unit tests have been added to prevent regressions for all these operations"
+msgstr ""
+
+msgid "DataLab Version 0.16.4"
+msgstr ""
+
+msgid "This is a minor maintenance release."
+msgstr ""
+
+msgid "Requires PlotPy v2.4.1 or later to fix the following issues related to the contrast adjustment feature:"
+msgstr ""
+
+msgid "A regression was introduced in an earlier version of PlotPy: levels histogram was no longer removed from contrast adjustment panel when the associated image was removed from the plot"
+msgstr ""
+
+msgid "This is now fixed: when an image is removed, the histogram is removed as well and the contrast panel is refreshed (which was not the case even before the regression)"
+msgstr ""
+
+msgid "Ignore `AssertionError` in *config_unit_test.py* when executing test suite on WSL"
+msgstr ""
+
+msgid "Fix class reference in `Wrap11Func` documentation"
+msgstr ""
+
+msgid "DataLab Version 0.16.3"
+msgstr ""
+
+msgid "Fixed [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84) - Build issues with V0.16.1: `signal` name conflict, ..."
+msgstr ""
+
+msgid "This issue was intended to be fixed in version 0.16.2, but the fix was not complete"
+msgstr ""
+
+msgid "Thanks to [@rolandmas](https://github.com/rolandmas) for reporting the issue and for the help in investigating the problem and testing the fix"
+msgstr ""
+
+msgid "Fixed [Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Test data paths may be added multiple times to `datalab.utils.tests.TST_PATH`"
+msgstr ""
+
+msgid "This issue is related to [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)"
+msgstr ""
+
+msgid "Adding the test data paths multiple times to `datalab.utils.tests.TST_PATH` was causing the test data to be loaded multiple times, which lead to some tests failing (a simple workaround was added to V0.16.2: this issue is now fixed)"
+msgstr ""
+
+msgid "Thanks again to [@rolandmas](https://github.com/rolandmas) for reporting the issue in the context of the Debian packaging"
+msgstr ""
+
+msgid "Fixed [Issue #86](https://github.com/DataLab-Platform/DataLab/issues/86) - Average of N integer images overflows data type"
+msgstr ""
+
+msgid "Fixed [Issue #87](https://github.com/DataLab-Platform/DataLab/issues/87) - Image average profile extraction: `AttributeError` when trying to edit profile parameters"
+msgstr ""
+
+msgid "Fixed [Issue #88](https://github.com/DataLab-Platform/DataLab/issues/88) - Image segment profile: point coordinates inversion"
+msgstr ""
+
+msgid "DataLab Version 0.16.2"
+msgstr ""
+
+msgid "This release requires PlotPy v2.4.0 or later, which brings the following bug fixes and new features:"
+msgstr ""
+
+msgid "New constrast adjustment features and bug fixes:"
+msgstr ""
+
+msgid "New layout: the vertical toolbar (which was constrained in a small area on the right side of the panel) is now a horizontal toolbar at the top of the panel, beside the title"
+msgstr ""
+
+msgid "New \"Set range\" button: allows the user to set manually the minimum and maximum values of the histogram range"
+msgstr ""
+
+msgid "Fixed histogram update issues when no image was currently selected (even if the an image was displayed and was selected before)"
+msgstr ""
+
+msgid "Histogram range was not updated when either the minimum or maximum value was set using the \"Minimum value\" or \"Maximum value\" buttons (which have been renamed to \"Min.\" and \"Max.\" in this release)"
+msgstr ""
+
+msgid "Histogram range was not updated when the \"Set full range\" button was clicked, or when the LUT range was modified using the \"Scales / LUT range\" form in \"Properties\" group box"
+msgstr ""
+
+msgid "Image view context menu: new \"Reverse X axis\" feature"
+msgstr ""
+
+msgid "ℹ️ Minor new features and enhancements:"
+msgstr ""
+
+msgid "Image file types:"
+msgstr ""
+
+msgid "Added native support for reading .SPE, .GEL, .NDPI and .REC image files"
+msgstr ""
+
+msgid "Added support for any `imageio`-supported file format through configuration file (entry `imageio_formats` may be customized to complement the default list of supported formats: see [documentation](https://datalab-platform.com/en/features/image/menu_file.html#open-image) for more details)"
+msgstr ""
+
+msgid "Image Fourier analysis:"
+msgstr ""
+
+msgid "Fixed logarithmic scale for the magnitude spectrum (computing dB instead of natural logarithm)"
+msgstr ""
+
+msgid "Fixed PSD computation with logarithmic scale (computing dB instead of natural logarithm)"
+msgstr ""
+
+msgid "Updated the documentation to explicitly mention that the logarithmic scale is in dB"
+msgstr ""
+
+msgid "Fixed [Issue #82](https://github.com/DataLab-Platform/DataLab/issues/82) - Macros are not renamed in DataLab after exporting them to Python scripts"
+msgstr ""
+
+msgid "`ResultProperties` object can now be added to `SignalObj` or `ImageObj` metadata even outside a Qt event loop (because the label item is no longer created right away)"
+msgstr ""
+
+msgid "Progress bar is now automatically closed as expected when an error occurrs during a long operation (e.g. when opening a file)"
+msgstr ""
+
+msgid "Difference, division...: dialog box for the second operand selection was allowing to select a group (only a signal or an image should be selected)"
+msgstr ""
+
+msgid "When doing an operation which involves an object (signal or image) with higher order number than the current object (e.g. when subtracting an image with an image from a group below the current image), the resulting object's title now correctly refers to the order numbers of the objects involved in the operation (e.g., to continue with the subtraction example mentioned above, the resulting object's title was previously referring to the order number before the insertion of the resulting image)"
+msgstr ""
+
+msgid "Added support for additional test data folder thanks to the `CDL_DATA` environment variable (useful for testing purposes, and especially in the context of Debian packaging)"
+msgstr ""
+
+msgid "DataLab Version 0.16.1"
+msgstr ""
+
+#, python-format
+msgid "Since version 0.16.0, many validation functions have been added to the test suite. The percentage of validated compute functions has increased from 37% to 84% in this release."
+msgstr ""
+
+msgid "NumPy 2.0 support has been added with this release."
+msgstr ""
+
+msgid "Signal and image moving average and median filters:"
+msgstr ""
+
+msgid "Added \"Mode\" parameter to choose the mode of the filter (e.g. \"reflect\", \"constant\", \"nearest\", \"mirror\", \"wrap\")"
+msgstr ""
+
+msgid "The default mode is \"reflect\" for moving average and \"nearest\" for moving median"
+msgstr ""
+
+msgid "This allows to handle edge effects when filtering signals and images"
+msgstr ""
+
+msgid "Fixed Canny edge detection to return binary image as `uint8` instead of `bool` (for consistency with other image processing features)"
+msgstr ""
+
+msgid "Fixed Image normalization: lower bound was wrongly set for `maximum` method"
+msgstr ""
+
+msgid "Fixed `ValueError` when computing PSD with logarithmic scale"
+msgstr ""
+
+msgid "Fixed Signal derivative algorithm: now using `numpy.gradient` instead of a custom implementation"
+msgstr ""
+
+msgid "Fixed SciPy's `cumtrapz` deprecation: use `cumulative_trapezoid` instead"
+msgstr ""
+
+msgid "Curve selection now shows the individual points of the curve (before, only the curve line width was broadened)"
+msgstr ""
+
+msgid "Windows installer: add support for unstable releases (e.g., 0.16.1.dev0), thus allowing to easily install the latest development version of DataLab on Windows"
+msgstr ""
+
+msgid "Fixed [Issue #81](https://github.com/DataLab-Platform/DataLab/issues/81) - When opening files, show progress dialog only if necessary"
+msgstr ""
+
+msgid "Fixed [Issue #80](https://github.com/DataLab-Platform/DataLab/issues/80) - Plotting results: support for two use cases"
+msgstr ""
+
+msgid "The features of the \"Analysis\" menu produce *results* (scalars): blob detection (circle coordinates), 2D peak detection (point coordinates), etc. Depending on the feature, result tables are displayed in the \"Results\" dialog box, and the results are also stored in the signal or image metadata: each line of the result table is an individual result, and each column is a property of the result - some results may consist only of a single individual result (e.g., image centroid or curve FHWM), while others may consist of multiple individual results (e.g., blob detection, contour detection, etc.)."
+msgstr ""
+
+msgid "Before this change, the \"Plot results\" feature only supported plotting the first individual result of a result table, as a function of the index (of the signal or image objects) or any of the columns of the result table. This was not sufficient for some use cases, where the user wanted to plot multiple individual results of a result table."
+msgstr ""
+
+msgid "Now, the \"Plot results\" feature supports two use cases:"
+msgstr ""
+
+msgid "\"One curve per result title\": Plotting the first individual result of a result table, as before"
+msgstr ""
+
+msgid "\"One curve per object (or ROI) and per result title\": Plotting all individual results of a result table, as a function of the index (of the signal or image objects) or any of the columns of the result table"
+msgstr ""
+
+msgid "The selection of the use case is done in the \"Plot results\" dialog box"
+msgstr ""
+
+msgid "The default use case is \"One curve per result title\" if the result table has only one line, and \"One curve per object (or ROI) and per result title\" otherwise"
+msgstr ""
+
+msgid "DataLab Version 0.16.0"
+msgstr ""
+
+msgid "Major user interface overhaul:"
+msgstr ""
+
+msgid "The menu bar and toolbars have been reorganized to make the application more intuitive and easier to use"
+msgstr ""
+
+msgid "Operations and processing features have been regrouped in submenus"
+msgstr ""
+
+msgid "All visualization-related actions are now grouped in the plot view vertical toolbar"
+msgstr ""
+
+msgid "Clarified the \"Annotations\" management (new buttons, toolbar action...)"
+msgstr ""
+
+msgid "New validation process for signal and image features:"
+msgstr ""
+
+msgid "Before this release, DataLab's validation process was exclusively done from the programmer's point of view, by writing unit tests and integration tests, thus ensuring that the code was working as expected (i.e. that no exception was raised and that the behavior was correct)"
+msgstr ""
+
+msgid "With this release, a new validation process has been introduced, from the user's point of view, by adding new validation functions (marked with the `@pytest.mark.validation` decorator) in the test suite"
+msgstr ""
+
+msgid "A new \"Validation\" section in the documentation explains how validation is done and contains a list of all validation functions with the statistics of the validation process (generated from the test suite)"
+msgstr ""
+
+msgid "The validation process is a work in progress and will be improved in future versions"
+msgstr ""
+
+msgid "\"Properties\" group box:"
+msgstr ""
+
+msgid "Added \"Scales\" tab, to show and set the plot scales:"
+msgstr ""
+
+msgid "X, Y for signals"
+msgstr ""
+
+msgid "X, Y, Z (LUT range) for images"
+msgstr ""
+
+msgid "View options:"
+msgstr ""
+
+msgid "New \"Show first only\" option in the \"View\" menu, to show only the first curve (or image) when multiple curves (or images) are displayed in the plot view"
+msgstr ""
+
+msgid "New (movable) label for FWHM computations, additional to the existing segment annotation"
+msgstr ""
+
+msgid "I/O features:"
+msgstr ""
+
+msgid "Added support for reading and writing .MAT files (MATLAB format)"
+msgstr ""
+
+msgid "Create a new group when opening a file containing multiple signals or images (e.g. CSV file with multiple curves)"
+msgstr ""
+
+msgid "Add support for binary images"
+msgstr ""
+
+msgid "Signal ROI extraction: added new dialog box to manually edit the ROI lower and upper bounds after defining the ROI graphically"
+msgstr ""
+
+msgid "ℹ️ New **Signal** operations, processing and analysis features:"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
+msgid "Submenu"
+msgstr ""
+
+msgid "Features"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "New signal"
+msgstr ""
+
+msgid "Exponential, pulse, polynomial, experimental (manual input)"
+msgstr ""
+
+msgid "Operations"
+msgstr ""
+
+msgid "Exponential, Square root, Power"
+msgstr ""
+
+msgid "Operations with a constant"
+msgstr ""
+
+msgid "+, -, *, /"
+msgstr ""
+
+msgid "Processing"
+msgstr ""
+
+msgid "Axis Transformation"
+msgstr ""
+
+msgid "Reverse X-axis"
+msgstr ""
+
+msgid "Level Adjustment"
+msgstr ""
+
+msgid "Offset correction"
+msgstr ""
+
+msgid "Fourier analysis"
+msgstr ""
+
+msgid "Power spectrum, Phase spectrum, Magnitude spectrum, Power spectral density"
+msgstr ""
+
+msgid "Frequency filters"
+msgstr ""
+
+msgid "Low-pass, High-pass, Band-pass, Band-stop"
+msgstr ""
+
+msgid "Windowing (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-top...)"
+msgstr ""
+
+msgid "Fit"
+msgstr ""
+
+msgid "Linear fit, Sinusoidal fit, Exponential fit, CDF fit"
+msgstr ""
+
+msgid "Analysis"
+msgstr ""
+
+msgid "FWHM (Zero-crossing method), X value @ min/max, Sampling period/frequency, Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR), -3dB bandwidth, Contrast"
+msgstr ""
+
+msgid "ℹ️ New **Image** operations, processing and analysis features:"
+msgstr ""
+
+msgid "Exponential"
+msgstr ""
+
+msgid "Intensity profiles"
+msgstr ""
+
+msgid "Profile along a segment"
+msgstr ""
+
+msgid "Normalization, Clipping, Offset correction"
+msgstr ""
+
+msgid "Thresholding"
+msgstr ""
+
+msgid "Parametric, ISODATA, Li, Mean, Minimum, Otsu, Triangle, Yen"
+msgstr ""
+
+msgid "Fixed a performance issue due to an unnecessary refresh of the plot view when adding a new signal or image"
+msgstr ""
+
+msgid "Fixed [Issue #77](https://github.com/DataLab-Platform/DataLab/issues/77) - Intensity profiles: unable to accept dialog the second time"
+msgstr ""
+
+msgid "Fixed [Issue #75](https://github.com/DataLab-Platform/DataLab/issues/75) - View in a new window: curve anti-aliasing is not enabled by default"
+msgstr ""
+
+msgid "Annotations visibility is now correctly saved and restored:"
+msgstr ""
+
+msgid "Before this release, when modifying the annotations visibility in the separate plot view, the visibility was not saved and restored when reopening the plot view"
+msgstr ""
+
+msgid "This has been [fixed upstream](https://github.com/PlotPyStack/PlotPy/commit/03faaa42e5d6d4016ea8c99334c29d46a5963467) in PlotPy (v2.3.3)"
+msgstr ""
+
+msgid "DataLab Version 0.15.1"
+msgstr ""
+
+msgid "Fixed [Issue #68](https://github.com/DataLab-Platform/DataLab/issues/68) - Slow loading of even simple plots:"
+msgstr ""
+
+msgid "On macOS, the user experience was degraded when handling even simple plots"
+msgstr ""
+
+msgid "This was due to the way macOS handles the pop-up windows, e.g. when refreshing the plot view (\"Creating plot items\" progress bar), hence causing a very annoying flickering effect and a global slowdown of the application"
+msgstr ""
+
+msgid "This is now fixed by showing the progress bar only after a short delay (1s), that is when it is really needed (i.e. for long operations)"
+msgstr ""
+
+msgid "Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the very thorough feedback and the help in testing the fix"
+msgstr ""
+
+msgid "Fixed [Issue #69](https://github.com/DataLab-Platform/DataLab/issues/69) - Annotations should be read-only in Signal/Image View"
+msgstr ""
+
+msgid "Regarding the annotations, DataLab's current behavior is the following:"
+msgstr ""
+
+msgid "Annotations are created only when showing the signal/image in a separate window (double-click on the object, or \"View\" > \"View in a new window\")"
+msgstr ""
+
+msgid "When displaying the objects in either the \"Signal View\" or the \"Image View\", the annotations should be read-only (i.e. not movable, nor resizable or deletable)"
+msgstr ""
+
+msgid "However, some annotations were still deletable in the \"Signal View\" and the \"Image View\": this is now fixed"
+msgstr ""
+
+msgid "Note that the fact that annotations can't be created in the \"Signal View\" or the \"Image View\" is a limitation of the current implementation, and may be improved in future versions"
+msgstr ""
+
+msgid "DataLab Version 0.15.0"
+msgstr ""
+
+msgid "🎁 New installer for the stand-alone version on Windows:"
+msgstr ""
+
+msgid "The stand-alone version on Windows is now distributed as an MSI installer (instead of an EXE installer)"
+msgstr ""
+
+msgid "This avoids the false positive detection of the stand-alone version as a potential threat by some antivirus software"
+msgstr ""
+
+msgid "The program will install files and shortcuts:"
+msgstr ""
+
+msgid "For current user, if the user has no administrator privileges"
+msgstr ""
+
+msgid "For all users, if the user has administrator privileges"
+msgstr ""
+
+msgid "Installation directory may be customized"
+msgstr ""
+
+msgid "MSI installer allows to integrate DataLab's installation seemlessly in an organization's deployment system"
+msgstr ""
+
+msgid "Added support for large text/CSV files:"
+msgstr ""
+
+msgid "Files over 1 GB (and with reasonable number of lines) can now be imported as signals or images without crashing the application or even slowing it down"
+msgstr ""
+
+msgid "The file is read by chunks and, for signals, the data is downsampled to a reasonable number of points for visualization"
+msgstr ""
+
+msgid "Large files are supported when opening a file (or dragging and dropping a file in the Signal Panel) and when importing a file in the Text Import Wizard"
+msgstr ""
+
+msgid "Auto downsampling feature:"
+msgstr ""
+
+msgid "Added \"Auto downsampling\" feature to signal visualization settings (see \"Settings\" dialog box)"
+msgstr ""
+
+msgid "This feature allows to automatically downsample the signal data for visualization when the number of points is too high and would lead to a slow rendering"
+msgstr ""
+
+msgid "The downsampling factor is automatically computed based on the configured maximum number of points to display"
+msgstr ""
+
+msgid "This feature is enabled by default and may be disabled in the signal visualization settings"
+msgstr ""
+
+msgid "CSV format handling:"
+msgstr ""
+
+msgid "Improved support for CSV files with a header row (column names)"
+msgstr ""
+
+msgid "Added support for CSV files with empty columns"
+msgstr ""
+
+msgid "Open/save file error handling:"
+msgstr ""
+
+msgid "Error messages are now more explicit when opening or saving a file fails"
+msgstr ""
+
+msgid "Added a link to the folder containing the file in the error message"
+msgstr ""
+
+msgid "Added \"Plugins and I/O formats\" page to the Installation and Configuration Viewer (see \"Help\" menu)"
+msgstr ""
+
+msgid "Reset DataLab configuration:"
+msgstr ""
+
+msgid "In some cases, it may be useful to reset the DataLab configuration file to its default values (e.g. when the configuration file is corrupted)"
+msgstr ""
+
+msgid "Added new `--reset` command line option to remove the configuration folder"
+msgstr ""
+
+msgid "Added new \"Reset DataLab\" Start Menu shortcut to the Windows installer"
+msgstr ""
+
+msgid "Fixed [Issue #64](https://github.com/DataLab-Platform/DataLab/issues/64) - HDF5 browser does not show datasets with 1x1 size:"
+msgstr ""
+
+msgid "HDF5 datasets with a size of 1x1 were not shown in the HDF5 browser"
+msgstr ""
+
+msgid "Even if those datasets should not be considered as signals or images, they are now shown in the HDF5 browser (but not checkable, i.e. not importable as signals or images)"
+msgstr ""
+
+msgid "DataLab Version 0.14.2"
+msgstr ""
+
+msgid "⚠️ API changes required for fixing support for multiple signals loading feature:"
+msgstr ""
+
+msgid "Merged `open_object` and `open_objects` methods to `load_from_files` in proxy classes, main window and data panels"
+msgstr ""
+
+msgid "For consistency's sake: merged `save_object` and `save_objects` into `save_to_files`"
+msgstr ""
+
+msgid "To sum up, those changes lead to the following situation:"
+msgstr ""
+
+msgid "`load_from_files`: load a sequence of objects from multiple files"
+msgstr ""
+
+msgid "`save_to_files`: save a sequence of objects to multiple files (at the moment, it only supports saving a single object to a single file, but it may be extended in the future to support saving multiple objects to a single file)"
+msgstr ""
+
+msgid "Fixed [Issue #61](https://github.com/DataLab-Platform/DataLab/issues/61) - Text file import wizard: application crash when importing a multiple curve text file:"
+msgstr ""
+
+msgid "This issue concerns a use case where the text file contains multiple curves"
+msgstr ""
+
+msgid "This is now fixed and an automatic test has been added to prevent regressions"
+msgstr ""
+
+msgid "DataLab Version 0.14.1"
+msgstr ""
+
+msgid "🎉 New domain name: [datalab-platform.com](https://datalab-platform.com)"
+msgstr ""
+
+msgid "💥 New features:"
+msgstr ""
+
+msgid "Added support for colormap inversion in Image View:"
+msgstr ""
+
+msgid "New \"Invert colormap\" entry in plot context menu, image parameters, and in the default image view settings"
+msgstr ""
+
+msgid "This requires `PlotPy` v2.3 or later"
+msgstr ""
+
+msgid "HDF5 Browser:"
+msgstr ""
+
+msgid "Added \"Show array\" button at the corner of the \"Group\" and \"Attributes\" tabs, to show the array in a separate window (useful for copy/pasting data to other applications, for instance)"
+msgstr ""
+
+msgid "Attributes: added support for more scalar data types"
+msgstr ""
+
+msgid "Testability and maintainability:"
+msgstr ""
+
+msgid "DataLab's unit tests are now using [pytest](https://pytest.org). This has required a lot of work for the transition, especially to readapt the tests so that they may be executed in the same process. For instance, a particular attention has been given to sandboxing the tests, so that they do not interfere with each other."
+msgstr ""
+
+msgid "Added continuous integration (CI) with GitHub Actions"
+msgstr ""
+
+msgid "For this release, test coverage is 87%"
+msgstr ""
+
+msgid "Text file import assistant:"
+msgstr ""
+
+msgid "Drastically improved the performance of the array preview when importing large text files (no more progress bar, and the preview is now displayed almost instantaneously)"
+msgstr ""
+
+msgid "XML-RPC server was not shut down properly when closing DataLab"
+msgstr ""
+
+msgid "Fixed test-related issues: some edge cases were hidden by the old test suite, and have been revealed by the transition to `pytest`. This has led to some bug fixes and improvements in the code."
+msgstr ""
+
+msgid "On Linux, when running a computation on a signal or an image, and on rare occasions, the computation was stuck as if it was running indefinitely. Even though the graphical user interface was still responsive, the computation was not progressing and the user had to cancel the operation and restart it. This was due to the start method of the separate process used for the computation (default method was \"fork\" on Linux). This is now fixed by using the \"spawn\" method instead, which is the recommended method for latest versions of Python on Linux when multithreading is involved."
+msgstr ""
+
+msgid "Fixed [Issue #60](https://github.com/DataLab-Platform/DataLab/issues/60) - `OSError: Invalid HDF5 file [...]` when trying to open an HDF5 file with an extension other than \".h5\""
+msgstr ""
+
+msgid "Image Region of Interest (ROI) extraction: when modifying the image bounds in the confirmation dialog box, the ROI was not updated accordingly until the operation was run again"
+msgstr ""
+
+msgid "Deprecation issues:"
+msgstr ""
+
+msgid "Fixed `scipy.ndimage.filters` deprecation warning"
+msgstr ""
+
+msgid "Fixed `numpy.fromstring` deprecation warning"
+msgstr ""
+
+msgid "DataLab Version 0.14.0"
+msgstr ""
+
+msgid "New \"Histogram\" feature in \"Analysis\" menu:"
+msgstr ""
+
+msgid "Added histogram computation feature for both signals and images"
+msgstr ""
+
+msgid "The histogram is computed on the regions of interest (ROI) if any, or on the whole signal/image if no ROI is defined"
+msgstr ""
+
+msgid "Editable parameters: number of bins, lower and upper bounds"
+msgstr ""
+
+msgid "HDF5 browser:"
+msgstr ""
+
+msgid "Improved tree view layout (more compact and readable)"
+msgstr ""
+
+msgid "Multiple files can now be opened at once, using the file selection dialog box"
+msgstr ""
+
+msgid "Added tabs with information below the graphical preview:"
+msgstr ""
+
+msgid "Group info: path, textual preview, etc."
+msgstr ""
+
+msgid "Attributes info: name, value"
+msgstr ""
+
+msgid "Added \"Show only supported data\" check box: when checked, only supported data (signals and images) are shown in the tree view"
+msgstr ""
+
+msgid "Added \"Show values\" check box, to show/hide the values in the tree view"
+msgstr ""
+
+msgid "Macro Panel:"
+msgstr ""
+
+msgid "Macro commands are now numbered, starting from 1, like signals and images"
+msgstr ""
+
+msgid "Remote control API (`RemoteProxy` and `LocalProxy`):"
+msgstr ""
+
+msgid "`get_object_titles` method now accepts \"macro\" as panel name and returns the list of macro titles"
+msgstr ""
+
+msgid "New `run_macro`, `stop_macro` and `import_macro_from_file` methods"
+msgstr ""
+
+msgid "Stand-alone version - Integration in Windows start menu:"
+msgstr ""
+
+msgid "Fixed \"Uninstall\" shortcut (unclickable due to a generic name)"
+msgstr ""
+
+msgid "Translated \"Browse installation directory\" and \"Uninstall\" shortcuts"
+msgstr ""
+
+msgid "Fixed [Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) - Changing image bounds in Image View has no effect on the associated image object properties"
+msgstr ""
+
+msgid "Fixed [Issue #56](https://github.com/DataLab-Platform/DataLab/issues/56) - \"Test data\" plugin: `AttributeError: 'NoneType' object has no attribute 'data'` when canceling \"Create image with peaks\""
+msgstr ""
+
+msgid "Fixed [Issue #57](https://github.com/DataLab-Platform/DataLab/issues/57) - Circle and ellipse result shapes are not transformed properly"
+msgstr ""
+
+msgid "Curve color and style cycle:"
+msgstr ""
+
+msgid "Before this release, this cycle was handled by the same mechanism either for the Signal Panel or the HDF5 Browser, which was not the expected behavior"
+msgstr ""
+
+msgid "Now, the cycle is handled separately: the HDF5 Browser or the Text Import Wizard use always the same color and style for curves, and they don't interfere with the Signal Panel cycle"
+msgstr ""
+
+msgid "DataLab Version 0.12.0"
+msgstr ""
+
+msgid "🧹 Clarity-Enhanced Interface Update:"
+msgstr ""
+
+msgid "The tabs used to switch between the data panels (signals and images) and the visualization components (\"Curve panel\" and \"Image panel\") have been renamed to \"Signal Panel\" and \"Image Panel\" (instead of \"Signals\" and \"Images\")"
+msgstr ""
+
+msgid "The visualization components have been renamed to \"Signal View\" and \"Image View\" (instead of \"Curve panel\" and \"Image panel\")"
+msgstr ""
+
+msgid "The data panel toolbar has been renamed to \"Signal Toolbar\" and \"Image Toolbar\" (instead of \"Signal Processing Toolbar\" and \"Image Processing Toolbar\")"
+msgstr ""
+
+msgid "Ergonomics improvements: the \"Signal Panel\" and \"Image Panel\" are now displayed on the left side of the main window, and the \"Signal View\" and \"Image View\" are displayed on the right side of the main window. This reduces the distance between the list of objects (signals and images) and the associated actions (toolbars and menus), and makes the interface more intuitive and easier to use"
+msgstr ""
+
+msgid "✨ New tour and demo feature:"
+msgstr ""
+
+msgid "When starting DataLab for the first time, an optional tour is now shown to the user to introduce the main features of the application"
+msgstr ""
+
+msgid "The tour can be started again at any time from the \"?\" menu"
+msgstr ""
+
+msgid "Also added a new \"Demo\" feature to the \"?\" menu"
+msgstr ""
+
+msgid "🚀 New Binder environment to test DataLab online without installing anything"
+msgstr ""
+
+msgid "New text tutorials are available:"
+msgstr ""
+
+msgid "Measuring Laser Beam Size"
+msgstr ""
+
+msgid "DataLab and Spyder: a perfect match"
+msgstr ""
+
+msgid "\"Getting started\" section: added more explanations and links to the tutorials"
+msgstr ""
+
+msgid "New \"Contributing\" section explaining how to contribute to DataLab, whether you are a developer or not"
+msgstr ""
+
+msgid "New \"Macros\" section explaining how to use the macro commands feature"
+msgstr ""
+
+msgid "Added \"Copy\" button to code blocks in the documentation"
+msgstr ""
+
+msgid "New \"Text file import assistant\" feature:"
+msgstr ""
+
+msgid "This feature allows to import text files as signals or images"
+msgstr ""
+
+msgid "The user can define the source (clipboard or texte file)"
+msgstr ""
+
+msgid "Then, it is possible to define the delimiter, the number of rows to skip, the destination data type, etc."
+msgstr ""
+
+msgid "Added menu on the \"Signal Panel\" and \"Image Panel\" tabs corner to quickly access the most used features (e.g. \"Add\", \"Remove\", \"Duplicate\", etc.)"
+msgstr ""
+
+msgid "Intensity profile extraction feature:"
+msgstr ""
+
+msgid "Added graphical user interface to extract intensity profiles from images, for both line and averaged profiles"
+msgstr ""
+
+msgid "Parameters are still directly editable by the user (\"Edit profile parameters\" button)"
+msgstr ""
+
+msgid "Parameters are now stored from one profile extraction to another"
+msgstr ""
+
+msgid "Statistics feature:"
+msgstr ""
+
+msgid "Added `<y>/σ(y)` to the signal \"Statistics\" result table (in addition to the mean, median, standard deviation, etc.)"
+msgstr ""
+
+msgid "Added `peak-to-peak` to the signal and image \"Statistics\" result table"
+msgstr ""
+
+msgid "Curve fitting feature: fit results are now stored in a dictionary in the signal metadata (instead of being stored individually in the signal metadata)"
+msgstr ""
+
+msgid "Window state:"
+msgstr ""
+
+msgid "The toolbars and dock widgets state (visibility, position, etc.) are now stored in the configuration file and restored at startup (size and position were already stored and restored)"
+msgstr ""
+
+msgid "This implements part of [Issue #30](https://github.com/DataLab-Platform/DataLab/issues/30) - Save/restore main window layout"
+msgstr ""
+
+msgid "Fixed [Issue #41](https://github.com/DataLab-Platform/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates"
+msgstr ""
+
+msgid "Fixed [Issue #49](https://github.com/DataLab-Platform/DataLab/issues/49) - Error when trying to open a (UTF-8 BOM) text file as an image"
+msgstr ""
+
+msgid "Fixed [Issue #51](https://github.com/DataLab-Platform/DataLab/issues/51) - Unexpected dimensions when adding new ROI on an image with X/Y arbitrary units (not pixels)"
+msgstr ""
+
+msgid "Improved plot item style serialization management:"
+msgstr ""
+
+msgid "Before this release, the plot item style was stored in the signal/image metadata only when saving the workspace to an HDF5 file. So, when modifying the style of a signal/image from the \"Parameters\" button (view toolbar), the style was not kept in some cases (e.g. when duplicating the signal/image)."
+msgstr ""
+
+msgid "Now, the plot item style is stored in the signal/image metadata whenever the style is modified, and is restored when reloading the workspace"
+msgstr ""
+
+msgid "Handled `ComplexWarning` cast warning when adding regions of interest (ROI) to a signal with complex data"
+msgstr ""
+
+msgid "DataLab Version 0.11.0"
+msgstr ""
+
+msgid "Signals and images may now be reordered in the tree view:"
+msgstr ""
+
+msgid "Using the new \"Move up\" and \"Move down\" actions in the \"Edit\" menu (or using the corresponding toolbar buttons):"
+msgstr ""
+
+msgid "This fixes [Issue #22](https://github.com/DataLab-Platform/DataLab/issues/22) - Add \"move up/down\" actions in \"Edit\" menu, for signals/images and groups"
+msgstr ""
+
+msgid "Signals and images may also be reordered using drag and drop:"
+msgstr ""
+
+msgid "Signals and images can be dragged and dropped inside their own panel to change their order"
+msgstr ""
+
+msgid "Groups can also be dragged and dropped inside their panel"
+msgstr ""
+
+msgid "The feature also supports multi-selection (using the standard Ctrl and Shift modifiers), so that multiple signals/images/groups can be moved at once, not necessarily with contiguous positions"
+msgstr ""
+
+msgid "This fixes [Issue #17](https://github.com/DataLab-Platform/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images tree views"
+msgstr ""
+
+msgid "New 1D interpolation features:"
+msgstr ""
+
+msgid "Added \"Interpolation\" feature to signal panel's \"Processing\" menu"
+msgstr ""
+
+msgid "Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP"
+msgstr ""
+
+msgid "Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the contribution to spline interpolation"
+msgstr ""
+
+msgid "This fixes [Issue #20](https://github.com/DataLab-Platform/DataLab/issues/20) - Add 1D interpolation features"
+msgstr ""
+
+msgid "New 1D resampling feature:"
+msgstr ""
+
+msgid "Added \"Resampling\" feature to signal panel's \"Processing\" menu"
+msgstr ""
+
+msgid "Same interpolation methods as for the \"Interpolation\" feature"
+msgstr ""
+
+msgid "Possibility to specify the resampling step or the number of points"
+msgstr ""
+
+msgid "This fixes [Issue #21](https://github.com/DataLab-Platform/DataLab/issues/21) - Add 1D resampling feature"
+msgstr ""
+
+msgid "New 1D convolution feature:"
+msgstr ""
+
+msgid "Added \"Convolution\" feature to signal panel's \"Operation\" menu"
+msgstr ""
+
+msgid "This fixes [Issue #23](https://github.com/DataLab-Platform/DataLab/issues/23) - Add 1D convolution feature"
+msgstr ""
+
+msgid "New 1D detrending feature:"
+msgstr ""
+
+msgid "Added \"Detrending\" feature to signal panel's \"Processing\" menu"
+msgstr ""
+
+msgid "Methods available: linear or constant"
+msgstr ""
+
+msgid "This fixes [Issue #24](https://github.com/DataLab-Platform/DataLab/issues/24) - Add 1D detrending feature"
+msgstr ""
+
+msgid "2D analysis results:"
+msgstr ""
+
+msgid "Before this release, 2D analysis results such as contours, blobs, etc. were stored in image metadata dictionary as coordinates (x0, y0, x1, y1, ...) even for circles and ellipses (i.e. the coordinates of the bounding rectangles)."
+msgstr ""
+
+msgid "For convenience, the circle and ellipse coordinates are now stored in image metadata dictionary as (x0, y0, radius) and (x0, y0, a, b, theta) respectively."
+msgstr ""
+
+msgid "These results are also shown as such in the \"Results\" dialog box (either at the end of the computing process or when clicking on the \"Show results\" button)."
+msgstr ""
+
+msgid "This fixes [Issue #32](https://github.com/DataLab-Platform/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`"
+msgstr ""
+
+msgid "1D and 2D analysis results:"
+msgstr ""
+
+msgid "Additionnaly to the previous enhancement, more analysis results are now shown in the \"Results\" dialog box"
+msgstr ""
+
+msgid "This concerns both 1D (FHWM...) and 2D analysis results (contours, blobs...):"
+msgstr ""
+
+msgid "Segment results now also show length (L) and center coordinates (Xc, Yc)"
+msgstr ""
+
+msgid "Circle and ellipse results now also show area (A)"
+msgstr ""
+
+msgid "Added \"Plot results\" entry in \"Analysis\" menu:"
+msgstr ""
+
+msgid "This feature allows to plot analysis results (1D or 2D)"
+msgstr ""
+
+msgid "It creates a new signal with X and Y axes corresponding to user-defined parameters (e.g. X = indices and Y = radius for circle results)"
+msgstr ""
+
+msgid "Increased default width of the object selection dialog box:"
+msgstr ""
+
+msgid "The object selection dialog box is now wider by default, so that the full signal/image/group titles may be more easily readable"
+msgstr ""
+
+msgid "Delete metadata feature:"
+msgstr ""
+
+msgid "Before this release, the feature was deleting all metadata, including the Regions Of Interest (ROI) metadata, if any."
+msgstr ""
+
+msgid "Now a confirmation dialog box is shown to the user before deleting all metadata if the signal/image has ROI metadata: this allows to keep the ROI metadata if needed."
+msgstr ""
+
+msgid "Image profile extraction feature: added support for masked images (when defining regions of interest, the areas outside the ROIs are masked, and the profile is extracted only on the unmasked areas, or averaged on the unmasked areas in the case of average profile extraction)"
+msgstr ""
+
+msgid "Curve style: added \"Reset curve styles\" in \"View\" menu. This feature allows to reset the curve style cycle to its initial state."
+msgstr ""
+
+msgid "Plugin base classe `PluginBase`:"
+msgstr ""
+
+msgid "Added `edit_new_signal_parameters` method for showing a dialog box to edit parameters for a new signal"
+msgstr ""
+
+msgid "Added `edit_new_image_parameters` method for showing a dialog box to edit parameters for a new image (updated the *datalab_testdata.py* plugin accordingly)"
+msgstr ""
+
+msgid "Signal and image computations API (`datalab.computations`):"
+msgstr ""
+
+msgid "Added wrappers for signal and image 1 -> 1 computations"
+msgstr ""
+
+msgid "These wrappers aim at simplifying the creation of a basic computation function operating on DataLab's native objects (`SignalObj` and `ImageObj`) from a function operating on NumPy arrays"
+msgstr ""
+
+msgid "This simplifies DataLab's internals and makes it easier to create new computing features inside plugins"
+msgstr ""
+
+msgid "See the *datalab_custom_func.py* example plugin for a practical use case"
+msgstr ""
+
+msgid "Added \"Radial profile extraction\" feature to image panel's \"Operation\" menu:"
+msgstr ""
+
+msgid "This feature allows to extract a radially averaged profile from an image"
+msgstr ""
+
+msgid "The profile is extracted around a user-defined center (x0, y0)"
+msgstr ""
+
+msgid "The center may also be computed (centroid or image center)"
+msgstr ""
+
+msgid "Automated test suite:"
+msgstr ""
+
+msgid "Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method to toggle the \"Auto-refresh\" feature. This feature may be useful to improve performance during the execution of test scripts"
+msgstr ""
+
+msgid "Test scenarios on signals and images are now using this feature to improve performance"
+msgstr ""
+
+msgid "Signal and image metadata:"
+msgstr ""
+
+msgid "Added \"source\" entry to the metadata dictionary, to store the source file path when importing a signal or an image from a file"
+msgstr ""
+
+msgid "This field is kept while processing the signal/image, in order to keep track of the source file path"
+msgstr ""
+
+msgid "New [Tutorial section](https://datalab-platform.com/en/intro/tutorials/index.html) in the documentation:"
+msgstr ""
+
+msgid "This section provides a set of tutorials to learn how to use DataLab"
+msgstr ""
+
+msgid "The following video tutorials are available:"
+msgstr ""
+
+msgid "Quick demo"
+msgstr ""
+
+msgid "Adding your own features"
+msgstr ""
+
+msgid "The following text tutorials are available:"
+msgstr ""
+
+msgid "Processing a spectrum"
+msgstr ""
+
+msgid "Detecting blobs on an image"
+msgstr ""
+
+msgid "Measuring Fabry-Perot fringes"
+msgstr ""
+
+msgid "Prototyping a custom processing pipeline"
+msgstr ""
+
+msgid "New [API section](https://datalab-platform.com/en/api/index.html) in the documentation:"
+msgstr ""
+
+msgid "This section explains how to use DataLab as a Python library, by covering the following topics:"
+msgstr ""
+
+msgid "How to use DataLab algorithms on NumPy arrays"
+msgstr ""
+
+msgid "How to use DataLab computation features on DataLab objects (signals and images)"
+msgstr ""
+
+msgid "How to use DataLab I/O features"
+msgstr ""
+
+msgid "How to use proxy objects to control DataLab remotely"
+msgstr ""
+
+msgid "This section also provides a complete API reference for DataLab objects and features"
+msgstr ""
+
+msgid "This fixes [Issue #19](https://github.com/DataLab-Platform/DataLab/issues/19) - Add API documentation (data model, functions on arrays or signal/image objects, ...)"
+msgstr ""
+
+msgid "Fixed [Issue #29](https://github.com/DataLab-Platform/DataLab/issues/29) - Polynomial fit error: `QDialog [...] argument 1 has an unexpected type 'SignalProcessor'`"
+msgstr ""
+
+msgid "Image ROI extraction feature:"
+msgstr ""
+
+msgid "Before this release, when extracting a single circular ROI from an image with the \"Extract all ROIs into a single image object\" option enabled, the result was a single image without the ROI mask (the ROI mask was only available when extracting ROI with the option disabled)"
+msgstr ""
+
+msgid "This was leading to an unexpected behavior, because one could interpret the result (a square image without the ROI mask) as the result of a single rectangular ROI"
+msgstr ""
+
+msgid "Now, when extracting a single circular ROI from an image with the \"Extract all ROIs into a single image object\" option enabled, the result is a single image with the ROI mask (as if the option was disabled)"
+msgstr ""
+
+msgid "This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `compute_extract_roi` function"
+msgstr ""
+
+msgid "Analysis on circular ROI:"
+msgstr ""
+
+msgid "Before this release, when running computations on a circular ROI, the results were unexpected in terms of coordinates (results seemed to be computed in a region located above the actual ROI)."
+msgstr ""
+
+msgid "This was due to a regression introduced in an earlier release."
+msgstr ""
+
+msgid "Now, when defining a circular ROI and running computations on it, the results are computed on the actual ROI"
+msgstr ""
+
+msgid "This fixes [Issue #33](https://github.com/DataLab-Platform/DataLab/issues/33) - Analysis on circular ROI: unexpected results"
+msgstr ""
+
+msgid "Contour detection on ROI:"
+msgstr ""
+
+msgid "Before this release, when running contour detection on a ROI, some contours were detected outside the ROI (it may be due to a limitation of the scikit-image `find_contours` function)."
+msgstr ""
+
+msgid "Now, thanks a workaround, the erroneous contours are filtered out."
+msgstr ""
+
+msgid "A new test module `datalab.tests.features.images.contour_fabryperot_app` has been added to test the contour detection feature on a Fabry-Perot image (thanks to [@emarin2642](https://github.com/emarin2642) for the contribution)"
+msgstr ""
+
+msgid "This fixes [Issue #34](https://github.com/DataLab-Platform/DataLab/issues/34) - Contour detection: unexpected results outside ROI"
+msgstr ""
+
+msgid "Analysis result merging:"
+msgstr ""
+
+msgid "Before this release, when doing a `1->N` computation (sum, average, product) on a group of signals/images, the analysis results associated to each signal/image were merged into a single result, but only the type of result present in the first signal/image was kept."
+msgstr ""
+
+msgid "Now, the analysis results associated to each signal/image are merged into a single result, whatever the type of result is."
+msgstr ""
+
+msgid "Fixed [Issue #36](https://github.com/DataLab-Platform/DataLab/issues/36) - \"Delete all\" action enable state is sometimes not refreshed"
+msgstr ""
+
+msgid "Image X/Y swap: when swapping X and Y axes, the regions of interest (ROI) were not removed and not swapped either (ROI are now removed, until we implement the swap feature, if requested)"
+msgstr ""
+
+msgid "\"Properties\" group box: the \"Apply\" button was enabled by default, even when no property was modified, which was confusing for the user (the \"Apply\" button is now disabled by default, and is enabled only when a property is modified)"
+msgstr ""
+
+msgid "Fixed proxy `get_object` method when there is no object to return (`None` is returned instead of an exception)"
+msgstr ""
+
+msgid "Fixed `IndexError: list index out of range` when performing some operations or computations on groups of signals/images (e.g. \"ROI extraction\", \"Peak detection\", \"Resize\", etc.)"
+msgstr ""
+
+msgid "Drag and drop from a file manager: filenames are now sorted alphabetically"
+msgstr ""
+
+msgid "DataLab Version 0.10.1"
+msgstr ""
+
+msgid "*Note*: V0.10.0 was almost immediately replaced by V0.10.1 due to a last minute bug fix"
+msgstr ""
+
+msgid "Features common to signals and images:"
+msgstr ""
+
+msgid "Added \"Real part\" and \"Imaginary part\" features to \"Operation\" menu"
+msgstr ""
+
+msgid "Added \"Convert data type\" feature to \"Operation\" menu"
+msgstr ""
+
+msgid "Features added following user requests (12/18/2023 meetup @ CEA):"
+msgstr ""
+
+msgid "Curve and image styles are now saved in the HDF5 file:"
+msgstr ""
+
+msgid "Curve style covers the following properties: color, line style, line width, marker style, marker size, marker edge color, marker face color, etc."
+msgstr ""
+
+msgid "Image style covers the following properties: colormap, interpolation, etc."
+msgstr ""
+
+msgid "Those properties were already persistent during the working session, but were lost when saving and reloading the HDF5 file"
+msgstr ""
+
+msgid "Now, those properties are saved in the HDF5 file and are restored when reloading the HDF5 file"
+msgstr ""
+
+msgid "New profile extraction features for images:"
+msgstr ""
+
+msgid "Added \"Line profile\" to \"Operations\" menu, to extract a profile from an image along a row or a column"
+msgstr ""
+
+msgid "Added \"Average profile\" to \"Operations\" menu, to extract the average profile on a rectangular area of an image, along a row or a column"
+msgstr ""
+
+msgid "Image LUT range (contrast/brightness settings) is now saved in the HDF5 file:"
+msgstr ""
+
+msgid "As for curve and image styles, the LUT range was already persistent during the working session, but was lost when saving and reloading the HDF5 file"
+msgstr ""
+
+msgid "Now, the LUT range is saved in the HDF5 file and is restored when reloading it"
+msgstr ""
+
+msgid "Added \"Auto-refresh\" and \"Refresh manually\" actions in \"View\" menu (and main toolbar):"
+msgstr ""
+
+msgid "When \"Auto-refresh\" is enabled (default), the plot view is automatically refreshed when a signal/image is modified, added or removed. Even though the refresh is optimized, this may lead to performance issues when working with large datasets."
+msgstr ""
+
+msgid "When disabled, the plot view is not automatically refreshed. The user must manually refresh the plot view by clicking on the \"Refresh manually\" button in the main toolbar or by pressing the standard refresh key (e.g. \"F5\")."
+msgstr ""
+
+msgid "Added `toggle_auto_refresh` method to DataLab proxy object:"
+msgstr ""
+
+msgid "This method allows to toggle the \"Auto-refresh\" feature from a macro-command, a plugin or a remote control client."
+msgstr ""
+
+msgid "A context manager `context_no_refresh` is also available to temporarily disable the \"Auto-refresh\" feature from a macro-command, a plugin or a remote control client. Typical usage:"
+msgstr ""
+
+msgid "Improved curve readability:"
+msgstr ""
+
+msgid "Until this release, the curve style was automatically set by cycling through **PlotPy** predefined styles"
+msgstr ""
+
+msgid "However, some styles are not suitable for curve readability (e.g. \"cyan\" and \"yellow\" colors are not readable on a white background, especially when combined with a \"dashed\" line style)"
+msgstr ""
+
+msgid "This release introduces a new curve style management with colors which are distinguishable and accessible, even to color vision deficiency people"
+msgstr ""
+
+msgid "Added \"Curve anti-aliasing\" feature to \"View\" menu (and toolbar):"
+msgstr ""
+
+msgid "This feature allows to enable/disable curve anti-aliasing (default: enabled)"
+msgstr ""
+
+msgid "When enabled, the curve rendering is smoother but may lead to performance issues when working with large datasets (that's why it can be disabled)"
+msgstr ""
+
+msgid "Added `toggle_show_titles` method to DataLab proxy object. This method allows to toggle the \"Show graphical object titles\" feature from a macro-command, a plugin or a remote control client."
+msgstr ""
+
+msgid "Remote client is now checking the server version and shows a warning message if the server version may not be fully compatible with the client version."
+msgstr ""
+
+msgid "Image contour detection feature (\"Analysis\" menu):"
+msgstr ""
+
+msgid "The contour detection feature was not taking into account the \"shape\" parameter (circle, ellipse, polygon) when computing the contours. The parameter was stored but really used only when calling the feature a second time."
+msgstr ""
+
+msgid "This unintentional behavior led to an `AssertionError` when choosing \"polygon\" as the contour shape and trying to compute the contours for the first time."
+msgstr ""
+
+msgid "This is now fixed (see [Issue #9](https://github.com/DataLab-Platform/DataLab/issues/9) - Image contour detection: `AssertionError` when choosing \"polygon\" as the contour shape)"
+msgstr ""
+
+msgid "Keyboard shortcuts:"
+msgstr ""
+
+msgid "The keyboard shortcuts for \"New\", \"Open\", \"Save\", \"Duplicate\", \"Remove\", \"Delete all\" and \"Refresh manually\" actions were not working properly."
+msgstr ""
+
+msgid "Those shortcuts were specific to each signal/image panel, and were working only when the panel on which the shortcut was pressed for the first time was active (when activated from another panel, the shortcut was not working and a warning message was displayed in the console, e.g. `QAction::event: Ambiguous shortcut overload: Ctrl+C`)"
+msgstr ""
+
+msgid "Besides, the shortcuts were not working at startup (when no panel had focus)."
+msgstr ""
+
+msgid "This is now fixed: the shortcuts are now working whatever the active panel is, and even at startup (see [Issue #10](https://github.com/DataLab-Platform/DataLab/issues/10) - Keyboard shortcuts not working properly: `QAction::event: Ambiguous shortcut overload: Ctrl+C`)"
+msgstr ""
+
+msgid "\"Show graphical object titles\" and \"Auto-refresh\" actions were not working properly:"
+msgstr ""
+
+msgid "The \"Show graphical object titles\" and \"Auto-refresh\" actions were only working on the active signal/image panel, and not on all panels."
+msgstr ""
+
+msgid "This is now fixed (see [Issue #11](https://github.com/DataLab-Platform/DataLab/issues/11) - \"Show graphical object titles\" and \"Auto-refresh\" actions were working only on current signal/image panel)"
+msgstr ""
+
+msgid "Fixed [Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`"
+msgstr ""
+
+msgid "Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install datalab` error - 2. Missing menus:"
+msgstr ""
+
+msgid "Part 1: `pip install datalab` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard"
+msgstr ""
+
+msgid "Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding dynamic menus"
+msgstr ""
+
+msgid "HDF5 file format: when importing an HDF5 dataset as a signal or an image, the dataset attributes were systematically copied to signal/image metadata: we now only copy the attributes which match standard data types (integers, floats, strings) to avoid errors when serializing/deserializing the signal/image object"
+msgstr ""
+
+msgid "Installation/configuration viewer: improved readability (removed syntax highlighting)"
+msgstr ""
+
+msgid "PyInstaller specification file: added missing `skimage` data files manually in order to continue supporting Python 3.8 (see [Issue #12](https://github.com/DataLab-Platform/DataLab/issues/12) - Stand-alone version on Windows 7: missing `api-ms-win-core-path-l1-1-0.dll`)"
+msgstr ""
+
+msgid "Fixed [Issue #13](https://github.com/DataLab-Platform/DataLab/issues/13) - ArchLinux: `qt.qpa.plugin: Could not load the Qt platform plugin \"xcb\" in \"\" even though it was found`"
+msgstr ""
+
+msgid "DataLab Version 0.9.2"
+msgstr ""
+
+msgid "Region of interest (ROI) extraction feature for images:"
+msgstr ""
+
+msgid "ROI extraction was not working properly when the \"Extract all ROIs into a single image object\" option was enabled if there was only one defined ROI. The result was an image positioned at the origin (0, 0) instead of the expected position (x0, y0) and the ROI rectangle itself was not removed as expected. This is now fixed (see [Issue #6](https://github.com/DataLab-Platform/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI)"
+msgstr ""
+
+msgid "ROI rectangles with negative coordinates were not properly handled: ROI extraction was raising a `ValueError` exception, and the image mask was not displayed properly. This is now fixed (see [Issue #7](https://github.com/DataLab-Platform/DataLab/issues/7) - Image ROI extraction: `ValueError: zero-size array to reduction operation minimum which has no identity`)"
+msgstr ""
+
+msgid "ROI extraction was not taking into account the pixel size (dx, dy) and the origin (x0, y0) of the image. This is now fixed (see [Issue #8](https://github.com/DataLab-Platform/DataLab/issues/8) - Image ROI extraction: take into account pixel size)"
+msgstr ""
+
+msgid "Macro-command console is now read-only:"
+msgstr ""
+
+msgid "The macro-command panel Python console is currently not supporting standard input stream (`stdin`) and this is intended (at least for now)"
+msgstr ""
+
+msgid "Set Python console read-only to avoid confusion"
+msgstr ""
+
+msgid "DataLab Version 0.9.1"
+msgstr ""
+
+msgid "French translation is not available on Windows/Stand alone version:"
+msgstr ""
+
+msgid "Locale was not properly detected on Windows for stand-alone version (frozen with `pyinstaller`) due to an issue with `locale.getlocale()` (function returning `None` instead of the expected locale on frozen applications)"
+msgstr ""
+
+msgid "This is ultimately a `pyinstaller` issue, but a workaround has been implemented in `guidata` V3.2.2 (see [guidata issue #68](https://github.com/PlotPyStack/guidata/issues/68) - Windows: gettext translation is not working on frozen applications)"
+msgstr ""
+
+msgid "[Issue #2](https://github.com/DataLab-Platform/DataLab/issues/2) - French translation is not available on Windows Stand alone version"
+msgstr ""
+
+msgid "Saving image to JPEG2000 fails for non integer data:"
+msgstr ""
+
+msgid "JPEG2000 encoder does not support non integer data or signed integer data"
+msgstr ""
+
+msgid "Before, DataLab was showing an error message when trying to save incompatible data to JPEG2000: this was not a consistent behavior with other standard image formats (e.g. PNG, JPG, etc.) for which DataLab was automatically converting data to the appropriate format (8-bit unsigned integer)"
+msgstr ""
+
+msgid "Current behavior is now consistent with other standard image formats: when saving to JPEG2000, DataLab automatically converts data to 8-bit unsigned integer or 16-bit unsigned integer (depending on the original data type)"
+msgstr ""
+
+msgid "[Issue #3](https://github.com/DataLab-Platform/DataLab/issues/3) - Save image to JPEG2000: 'OSError: encoder error -2 when writing image file'"
+msgstr ""
+
+msgid "Windows stand-alone version shortcuts not showing in current user start menu:"
+msgstr ""
+
+msgid "When installing DataLab on Windows from a non-administrator account, the shortcuts were not showing in the current user start menu but in the administrator start menu instead (due to the elevated privileges of the installer and the fact that the installer does not support installing shortcuts for all users)"
+msgstr ""
+
+msgid "Now, the installer *does not* ask for elevated privileges anymore, and shortcuts are installed in the current user start menu (this also means that the current user must have write access to the installation directory)"
+msgstr ""
+
+msgid "In future releases, the installer will support installing shortcuts for all users if there is a demand for it (see [Issue #5](https://github.com/DataLab-Platform/DataLab/issues/5))"
+msgstr ""
+
+msgid "[Issue #4](https://github.com/DataLab-Platform/DataLab/issues/4) - Windows: stand-alone version shortcuts not showing in current user start menu"
+msgstr ""
+
+msgid "Installation and configuration window for stand-alone version:"
+msgstr ""
+
+msgid "Do not show ambiguous error message 'Invalid dependencies' anymore"
+msgstr ""
+
+msgid "Dependencies are supposed to be checked when building the stand-alone version"
+msgstr ""
+
+msgid "Added PDF documentation to stand-alone version:"
+msgstr ""
+
+msgid "The PDF documentation was missing in previous release"
+msgstr ""
+
+msgid "Now, the PDF documentation (in English and French) is included in the stand-alone version"
+msgstr ""
+
+msgid "DataLab Version 0.9.0"
+msgstr ""
+
+msgid "New dependencies:"
+msgstr ""
+
+msgid "DataLab is now powered by [PlotPyStack](https://github.com/PlotPyStack):"
+msgstr ""
+
+msgid "[PythonQwt](https://github.com/PlotPyStack/PythonQwt)"
+msgstr ""
+
+msgid "[guidata](https://github.com/PlotPyStack/guidata)"
+msgstr ""
+
+msgid "[PlotPy](https://github.com/PlotPyStack/PlotPy)"
+msgstr ""
+
+msgid "[opencv-python](https://pypi.org/project/opencv-python/) (algorithms for image processing)"
+msgstr ""
+
+msgid "New reference platform:"
+msgstr ""
+
+msgid "DataLab is validated on Windows 11 with Python 3.11 and PyQt 5.15"
+msgstr ""
+
+msgid "DataLab is also compatible with other OS (Linux, MacOS) and other Python-Qt bindings and versions (Python 3.8-3.12, PyQt6, PySide6)"
+msgstr ""
+
+msgid "New features:"
+msgstr ""
+
+msgid "DataLab is a platform:"
+msgstr ""
+
+msgid "Added support for plugins"
+msgstr ""
+
+msgid "Custom processing features available in the \"Plugins\" menu"
+msgstr ""
+
+msgid "Custom I/O features: new file formats can be added to the standard I/O features for signals and images"
+msgstr ""
+
+msgid "Custom HDF5 features: new HDF5 file formats can be added to the standard HDF5 import feature"
+msgstr ""
+
+msgid "More features to come..."
+msgstr ""
+
+msgid "Added remote control feature: DataLab can be controlled remotely via a TCP/IP connection (see [Remote control](https://datalab-platform.com/en/remote_control.html))"
+msgstr ""
+
+msgid "Added macro commands: DataLab can be controlled via a macro file (see [Macro commands](https://datalab-platform.com/en/macro_commands.html))"
+msgstr ""
+
+msgid "General features:"
+msgstr ""
+
+msgid "Added settings dialog box (see \"Settings\" entry in \"File\" menu):"
+msgstr ""
+
+msgid "General settings"
+msgstr ""
+
+msgid "Visualization settings"
+msgstr ""
+
+msgid "Processing settings"
+msgstr ""
+
+msgid "Etc."
+msgstr ""
+
+msgid "New default layout: signal/image panels are on the right side of the main window, visualization panels are on the left side with a vertical toolbar"
+msgstr ""
+
+msgid "Signal/Image features:"
+msgstr ""
+
+msgid "Added process isolation: each signal/image is processed in a separate process, so that DataLab does not freeze anymore when processing large signals/images"
+msgstr ""
+
+msgid "Added support for groups: signals and images can be grouped together, and operations can be applied to all objects in a group, or between groups"
+msgstr ""
+
+msgid "Added warning and error dialogs with detailed traceback links to the source code (warnings may be optionally ignored)"
+msgstr ""
+
+msgid "Drastically improved performance when selecting objects"
+msgstr ""
+
+msgid "Optimized performance when showing large images"
+msgstr ""
+
+msgid "Added support for dropping files on signal/image panel"
+msgstr ""
+
+msgid "Added \"Analysis parameters\" group box to show last result input parameters"
+msgstr ""
+
+msgid "Added \"Copy titles to clipboard\" feature in \"Edit\" menu"
+msgstr ""
+
+msgid "For every single processing feature (operation, processing and analysis menus), the entered parameters (dialog boxes) are stored in cache to be used as defaults the next time the feature is used"
+msgstr ""
+
+msgid "Signal processing:"
+msgstr ""
+
+msgid "Added support for optional FFT shift (see Settings dialog box)"
+msgstr ""
+
+msgid "Image processing:"
+msgstr ""
+
+msgid "Added pixel binning operation (X/Y binning factors, operation: sum, mean...)"
+msgstr ""
+
+msgid "Added \"Distribute on a grid\" and \"Reset image positions\" in operation menu"
+msgstr ""
+
+msgid "Added Butterworth filter"
+msgstr ""
+
+msgid "Added exposure processing features:"
+msgstr ""
+
+msgid "Gamma correction"
+msgstr ""
+
+msgid "Logarithmic correction"
+msgstr ""
+
+msgid "Sigmoïd correction"
+msgstr ""
+
+msgid "Added restoration processing features:"
+msgstr ""
+
+msgid "Total variation denoising filter (TV Chambolle)"
+msgstr ""
+
+msgid "Bilateral filter (denoising)"
+msgstr ""
+
+msgid "Wavelet denoising filter"
+msgstr ""
+
+msgid "White Top-Hat denoising filter"
+msgstr ""
+
+msgid "Added morphological transforms (disk footprint):"
+msgstr ""
+
+msgid "White Top-Hat"
+msgstr ""
+
+msgid "Black Top-Hat"
+msgstr ""
+
+msgid "Erosion"
+msgstr ""
+
+msgid "Dilation"
+msgstr ""
+
+msgid "Opening"
+msgstr ""
+
+msgid "Closing"
+msgstr ""
+
+msgid "Added edge detection features:"
+msgstr ""
+
+msgid "Roberts filter"
+msgstr ""
+
+msgid "Prewitt filter (vertical, horizontal, both)"
+msgstr ""
+
+msgid "Sobel filter (vertical, horizontal, both)"
+msgstr ""
+
+msgid "Scharr filter (vertical, horizontal, both)"
+msgstr ""
+
+msgid "Farid filter (vertical, horizontal, both)"
+msgstr ""
+
+msgid "Laplace filter"
+msgstr ""
+
+msgid "Canny filter"
+msgstr ""
+
+msgid "Contour detection: added support for polygonal contours (in addition to circle and ellipse contours)"
+msgstr ""
+
+msgid "Added circle Hough transform (circle detection)"
+msgstr ""
+
+msgid "Added image intensity levels rescaling"
+msgstr ""
+
+msgid "Added histogram equalization"
+msgstr ""
+
+msgid "Added adaptative histogram equalization"
+msgstr ""
+
+msgid "Added blob detection methods:"
+msgstr ""
+
+msgid "Difference of Gaussian"
+msgstr ""
+
+msgid "Determinant of Hessian method"
+msgstr ""
+
+msgid "Laplacian of Gaussian"
+msgstr ""
+
+msgid "Blob detection using OpenCV"
+msgstr ""
+
+msgid "Result shapes and annotations are now transformed (instead of removed) when executing one of the following operations:"
+msgstr ""
+
+msgid "Rotation (arbitrary angle, +90°, -90°)"
+msgstr ""
+
+msgid "Symetry (vertical/horizontal)"
+msgstr ""
+
+msgid "Console: added configurable external editor (default: VSCode) to follow the traceback links to the source code"
+msgstr ""
+

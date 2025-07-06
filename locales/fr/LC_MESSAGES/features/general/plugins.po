@@ -1,0 +1,285 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Plugin system for DataLab, the open-source scientific data analysis and visualization platform"
+msgstr ""
+
+msgid "DataLab, plugin, processing, input/output, HDF5, file format, data analysis, visualization, scientific, open-source, platform"
+msgstr ""
+
+msgid "Plugins"
+msgstr ""
+
+msgid "DataLab supports a robust plugin architecture, allowing users to extend the application’s features without modifying its core. Plugins can introduce new processing tools, data import/export formats, or custom GUI elements — all seamlessly integrated into the platform."
+msgstr ""
+
+msgid "What is a plugin?"
+msgstr ""
+
+msgid "A plugin is a Python module that is automatically loaded by DataLab at startup. It can define new features or modify existing ones."
+msgstr ""
+
+msgid "To be recognized as a plugin, the file must:"
+msgstr ""
+
+msgid "Be a Python module whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``),"
+msgstr ""
+
+msgid "Contain a class that **inherits from** :class:`datalab.plugins.PluginBase`,"
+msgstr ""
+
+msgid "Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`."
+msgstr ""
+
+msgid "This `PLUGIN_INFO` object is used by DataLab to retrieve metadata such as the plugin name, type, and menu integration."
+msgstr ""
+
+msgid "Only Python files whose names start with ``datalab_`` will be scanned for plugins."
+msgstr ""
+
+msgid "DataLab supports three categories of plugins, each with its own purpose and registration mechanism:"
+msgstr ""
+
+msgid "**Processing and visualization plugins** Add custom actions for signal or image processing. These may include new computation functions, data visualization tools, or interactive dialogs. Integrated into a dedicated submenu of the “Plugins” menu."
+msgstr ""
+
+msgid "**Input/Output plugins** Define new file formats (read and/or write) handled transparently by DataLab's I/O framework. These plugins extend compatibility with custom or third-party data formats."
+msgstr ""
+
+msgid "**HDF5 plugins** Special plugins that support HDF5 files with domain-specific tree structures. These allow DataLab to interpret signals or images organized in non-standard ways."
+msgstr ""
+
+msgid "Where to put a plugin?"
+msgstr ""
+
+msgid "Plugins are automatically discovered at startup from multiple locations:"
+msgstr ""
+
+msgid "The user plugin directory: Typically `~/.DataLab/plugins` on Linux/macOS or `C:/Users/YourName/.DataLab/plugins` on Windows."
+msgstr ""
+
+msgid "A custom plugin directory: Configurable in DataLab's preferences."
+msgstr ""
+
+msgid "The standalone distribution directory: If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned."
+msgstr ""
+
+msgid "The internal `datalab/plugins` folder (not recommended for user plugins): This location is reserved for built-in or bundled plugins and should not be modified manually."
+msgstr ""
+
+msgid "How to develop a plugin?"
+msgstr ""
+
+msgid "The recommended approach to developing a plugin is to derive from an existing example and adapt it to your needs. You can explore the source code in the `datalab/plugins` folder or refer to community-contributed examples."
+msgstr ""
+
+msgid "To develop in your usual Python environment (e.g., with an IDE like `Spyder <https://www.spyder-ide.org/>`_), you can:"
+msgstr ""
+
+msgid "**Install DataLab in your Python environment**, using one of the following methods:"
+msgstr ""
+
+msgid ":ref:`install_conda`"
+msgstr ""
+
+msgid ":ref:`install_pip`"
+msgstr ""
+
+msgid ":ref:`install_wheel`"
+msgstr ""
+
+msgid ":ref:`install_source`"
+msgstr ""
+
+msgid "**Or add the `datalab` package manually to your Python path**:"
+msgstr ""
+
+msgid "Download the source from the `PyPI page <https://pypi.org/project/datalab/>`_,"
+msgstr ""
+
+msgid "Unzip the archive,"
+msgstr ""
+
+msgid "Add the `datalab` directory to your PYTHONPATH (e.g., using the *PYTHONPATH Manager* in Spyder)."
+msgstr ""
+
+msgid "Even if you’ve installed `datalab` in your environment, you cannot run the full DataLab application directly from an IDE. You must launch DataLab via the command line or using the installer-created shortcut to properly test your plugin."
+msgstr ""
+
+msgid "Example: processing plugin"
+msgstr ""
+
+msgid "Here is a minimal example of a plugin that prints a message when activated:"
+msgstr ""
+
+msgid "Example: input/output plugin"
+msgstr ""
+
+msgid "Here is a simple example of a plugin that adds a new file formats to DataLab."
+msgstr ""
+
+msgid "Other examples"
+msgstr ""
+
+msgid "Other examples of plugins can be found in the `plugins/examples` directory of the DataLab source code (explore `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
+msgstr ""
+
+msgid "Public API"
+msgstr ""
+
+msgid "DataLab plugin system"
+msgstr ""
+
+msgid "DataLab plugin system provides a way to extend the application with new functionalities."
+msgstr ""
+
+msgid "Plugins are Python modules that relies on two classes:"
+msgstr ""
+
+msgid ":class:`PluginInfo`, which stores information about the plugin"
+msgstr ""
+
+msgid ":class:`PluginBase`, which is the base class for all plugins"
+msgstr ""
+
+msgid "Plugins may also extends DataLab I/O features by providing new image or signal formats. To do so, they must provide a subclass of :class:`ImageFormatBase` or :class:`SignalFormatBase`, in which format information is defined using the :class:`FormatInfo` class."
+msgstr ""
+
+msgid "Metaclass for registering plugins"
+msgstr ""
+
+msgid "Return plugin classes"
+msgstr ""
+
+msgid "Return plugin instances"
+msgstr ""
+
+msgid "Return plugin instance"
+msgstr ""
+
+msgid "Register plugin"
+msgstr ""
+
+msgid "Unregister plugin"
+msgstr ""
+
+msgid "Unregister all plugins"
+msgstr ""
+
+msgid "Return plugin information (names, versions, descriptions) in html format"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "return html formatted text (default: True)"
+msgstr ""
+
+msgid "Plugin info"
+msgstr ""
+
+msgid "Mixed metaclass to avoid conflicts"
+msgstr ""
+
+msgid "Plugin base class"
+msgstr ""
+
+msgid "Return signal panel"
+msgstr ""
+
+msgid "Return image panel"
+msgstr ""
+
+msgid "Show warning message"
+msgstr ""
+
+msgid "Show error message"
+msgstr ""
+
+msgid "Show info message"
+msgstr ""
+
+msgid "Ask yes/no question"
+msgstr ""
+
+msgid "Create and edit new signal parameter dataset"
+msgstr ""
+
+msgid "title of the new signal"
+msgstr ""
+
+msgid "size of the new signal (default: None, get from current signal)"
+msgstr ""
+
+msgid "hide signal type parameter (default: True)"
+msgstr ""
+
+msgid "Returns"
+msgstr ""
+
+msgid "New signal parameter dataset (or None if canceled)"
+msgstr ""
+
+msgid "Create and edit new image parameter dataset"
+msgstr ""
+
+msgid "title of the new image"
+msgstr ""
+
+msgid "shape of the new image (default: None, get from current image)"
+msgstr ""
+
+msgid "hide image heigth parameter (default: False)"
+msgstr ""
+
+msgid "hide image type parameter (default: True)"
+msgstr ""
+
+msgid "hide image data type parameter (default: False)"
+msgstr ""
+
+msgid "New image parameter dataset (or None if canceled)"
+msgstr ""
+
+msgid "Return True if plugin is registered"
+msgstr ""
+
+msgid "Register plugin hooks"
+msgstr ""
+
+msgid "Unregister plugin hooks"
+msgstr ""
+
+msgid "Create actions"
+msgstr ""
+
+msgid "Discover plugins using naming convention"
+msgstr ""
+
+msgid "List of discovered plugins (as classes)"
+msgstr ""
+
+msgid "Instantiate and get available plugins"
+msgstr ""
+
+msgid "List of available plugins (as instances)"
+msgstr ""
+

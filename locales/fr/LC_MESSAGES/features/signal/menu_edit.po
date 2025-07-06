@@ -1,0 +1,141 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Manipulate metadata"
+msgstr ""
+
+msgid "This section describes how to manipulate metadata in DataLab."
+msgstr ""
+
+msgid "Screenshot of the \"Edit\" menu."
+msgstr ""
+
+msgid "The \"Edit\" menu allows you to perform classic editing operations on the current signal or group of signals (create/rename group, move up/down, delete signal/group of signals, etc.)."
+msgstr ""
+
+msgid "It also allows you to manipulate metadata associated with the current signal."
+msgstr ""
+
+msgid "Copy/paste metadata"
+msgstr ""
+
+msgid "As metadata contains useful information about the signal, it can be copied and pasted from one signal to another by selecting the \"Copy metadata\" |metadata_copy| and \"Paste metadata\" |metadata_paste| actions in the \"Edit\" menu."
+msgstr ""
+
+msgid "metadata_copy"
+msgstr ""
+
+msgid "metadata_paste"
+msgstr ""
+
+msgid "This feature allows you to tranfer those information from one signal to another:"
+msgstr ""
+
+msgid ":ref:`Regions Of Interest (ROIs) <sig-roi>`: that is a very efficient way to reuse the same ROI on different signals and easily compare the results of the analysis on those signals"
+msgstr ""
+
+msgid "Analyze results, such as peak positions or FHWM intervals (the relevance of transferring such information depends on the context and is up to the user to decide)"
+msgstr ""
+
+msgid "Any other information that you may have added to the metadata of a signal"
+msgstr ""
+
+msgid "Copying metadata from a signal to another will overwrite the metadata of the destination signal (for the metadata keys that are common to both signals) or simply add the metadata keys that are not present in the destination signal."
+msgstr ""
+
+msgid "Import/export metadata"
+msgstr ""
+
+msgid "Metadata can also be imported and exported from/to a JSON file using the \"Import metadata\" |metadata_import| and \"Export metadata\" |metadata_export| actions in the \"Edit\" menu. This is exactly the same as the copy/paste metadata feature (see above for more details on the use cases of this feature), but it allows you to save the metadata to a file and then import it back later."
+msgstr ""
+
+msgid "metadata_import"
+msgstr ""
+
+msgid "metadata_export"
+msgstr ""
+
+msgid "Delete metadata"
+msgstr ""
+
+msgid "When deleting metadata using the \"Delete metadata\" |metadata_delete| action in the \"Edit\" menu, you will be prompted to confirm the deletion of Region of Interests (ROIs) if they are present in the metadata. After this eventual confirmation, the metadata will be deleted, meaning that analysis results, ROIs, and any other information associated with the signal will be lost."
+msgstr ""
+
+msgid "metadata_delete"
+msgstr ""
+
+msgid "Signal titles"
+msgstr ""
+
+msgid "Signal titles may be considered as metadata from a user point of view, even if they are not stored in the metadata of the signal (but in an attribute of the signal object)."
+msgstr ""
+
+msgid "The \"Edit\" menu allows you to:"
+msgstr ""
+
+msgid "\"Add object title to plot\": this action will add a label on top of the signal with its title."
+msgstr ""
+
+msgid "\"Copy titles to clipboard\" |copy_titles|: this action will copy the titles of the selected signals to the clipboard, which might be useful to paste them in a text editor or in a spreadsheet."
+msgstr ""
+
+msgid "copy_titles"
+msgstr ""
+
+msgid "Example of the content of the clipboard:"
+msgstr ""
+
+msgid "Regions Of Interest (ROI)"
+msgstr ""
+
+msgid "The Regions Of Interest (ROI) are signal areas that are defined by the user to perform specific operations, processing, or analysis on them."
+msgstr ""
+
+msgid "ROI are taken into account almost in all computing features in DataLab:"
+msgstr ""
+
+msgid "The \"Operations\" menu features are done only on the ROI if one is defined (except if the operation changes the number of points, like interpolation or resampling)."
+msgstr ""
+
+msgid "The \"Processing\" menu actions are performed only on the ROI if one is defined (except if the destination signal data type is different from the source's, like in the Fourier analysis features)."
+msgstr ""
+
+msgid "The \"Analysis\" menu actions are done only on the ROI if one is defined."
+msgstr ""
+
+msgid "ROI are stored as metadata, and thus attached to signal."
+msgstr ""
+
+msgid "\"Edit regions of interest\" |roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range."
+msgstr ""
+
+msgid "roi"
+msgstr ""
+
+msgid "A signal with an ROI."
+msgstr ""
+
+msgid "\"Remove regions of interest\" |roi_delete|: remove all defined ROI for the selected signals."
+msgstr ""
+
+msgid "roi_delete"
+msgstr ""
+

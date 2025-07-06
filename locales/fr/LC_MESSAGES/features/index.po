@@ -1,0 +1,105 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Validation:"
+msgstr ""
+
+msgid "General features:"
+msgstr ""
+
+msgid "Signal processing:"
+msgstr ""
+
+msgid "Image processing:"
+msgstr ""
+
+msgid "DataLab features"
+msgstr ""
+
+msgid "DataLab, features, validation, signal processing, image processing"
+msgstr ""
+
+msgid "Features"
+msgstr ""
+
+msgid "The following sections describe the features of DataLab, the open-source scientific data analysis and visualization platform."
+msgstr ""
+
+msgid "First, the **validation** section explains why and how DataLab is validated - that is another singular and fundamental feature of DataLab."
+msgstr ""
+
+msgid "Then, the **general features** section describes the general features of DataLab, which concern both the signal and image processing panels."
+msgstr ""
+
+msgid "The **signal processing** and **image processing** sections describe the features specific to the signal and image processing panels, respectively."
+msgstr ""
+
+msgid "Before jumping into the details of other parts of the documentation, it is recommended to start with the :ref:`workspace` page, which describes the basic concepts of DataLab."
+msgstr ""
+
+msgid "For a synthetic overview of the features of DataLab, please refer to the :ref:`key_features` page."
+msgstr ""
+
+msgid "Validation"
+msgstr ""
+
+msgid "DataLab is a platform for scientific data analysis and visualization. It may be used in a variety of scientific disciplines, including biology, physics, and astronomy. The common ground for all these disciplines is the need to validate the results of computational analysis against ground-truth data. This is a critical step in the scientific method, and it is essential for reproducibility and trust in the results. This is what we call **technical validation**."
+msgstr ""
+
+msgid "DataLab is also used in industrial applications, where the validation of the results is essential for guaranteeing the quality of the process but a wider range of validation is required to ensure that a maximum of use cases are covered from a functional point of view. This is what we call **functional validation**."
+msgstr ""
+
+msgid "Thus, DataLab validation may be categorized into two types:"
+msgstr ""
+
+msgid "**Technical validation**: ensures that the results of computational analysis are accurate and reliable."
+msgstr ""
+
+msgid "**Functional validation**: checks that the software behaves as expected in a variety of use cases (classic automated unit test suite)."
+msgstr ""
+
+msgid "General features"
+msgstr ""
+
+msgid "This section describes the general features of DataLab, which concern both the signal and image processing panels."
+msgstr ""
+
+msgid "DataLab main window"
+msgstr ""
+
+msgid "Signal processing"
+msgstr ""
+
+msgid "This section describes the features specific to the signal processing panel. The signal processing panel is the default panel when DataLab is started."
+msgstr ""
+
+msgid "DataLab main window: Signal processing view"
+msgstr ""
+
+msgid "Image processing"
+msgstr ""
+
+msgid "This section describes the features specific to the image processing panel. The image processing panel can be selected by clicking on the \"Images\" tab at the bottom-right of the DataLab main window."
+msgstr ""
+
+msgid "DataLab main window: Image processing view"
+msgstr ""
+

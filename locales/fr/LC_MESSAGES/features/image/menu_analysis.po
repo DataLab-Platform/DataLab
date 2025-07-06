@@ -1,0 +1,171 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Analysis features on Images"
+msgstr ""
+
+msgid "This section describes the image analysis features available in DataLab."
+msgstr ""
+
+msgid ":ref:`ima-menu-operations` for more information on operations that can be performed on images, or :ref:`ima-menu-processing` for information on processing features on images."
+msgstr ""
+
+msgid "Screenshot of the \"Analysis\" menu."
+msgstr ""
+
+msgid "When the \"Image Panel\" is selected, the menus and toolbars are updated to provide image-related actions."
+msgstr ""
+
+msgid "The \"Analysis\" menu allows you to perform various computations on the current image or group of images. It also allows you to compute statistics, to compute the centroid, to detect peaks, to detect contours, and so on."
+msgstr ""
+
+msgid "In DataLab vocabulary, an \"analysis\" is a feature that computes a scalar result from an image. This result is stored as metadata, and thus attached to image. This is different from a \"processing\" which creates a new image from an existing one."
+msgstr ""
+
+msgid "Statistics"
+msgstr ""
+
+msgid "Compute statistics on selected image and show a summary table."
+msgstr ""
+
+msgid "Example of statistical summary table: each row is associated to an ROI (the first row gives the statistics for the whole data)."
+msgstr ""
+
+msgid "Histogram"
+msgstr ""
+
+msgid "Compute histogram of selected image and show it in the Signal Panel."
+msgstr ""
+
+msgid "Parameters are:"
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Bins"
+msgstr ""
+
+msgid "Number of bins"
+msgstr ""
+
+msgid "Lower limit"
+msgstr ""
+
+msgid "Lower limit of the histogram"
+msgstr ""
+
+msgid "Upper limit"
+msgstr ""
+
+msgid "Upper limit of the histogram"
+msgstr ""
+
+msgid "Example of histogram."
+msgstr ""
+
+msgid "Centroid"
+msgstr ""
+
+msgid "Compute image centroid using a Fourier transform method (as discussed by `Weisshaar et al. <http://www.mnd-umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf>`_). This method is quite insensitive to background noise."
+msgstr ""
+
+msgid "Minimum enclosing circle center"
+msgstr ""
+
+msgid "Compute the circle contour enclosing image values above a threshold level defined as the half-maximum value."
+msgstr ""
+
+msgid "2D peak detection"
+msgstr ""
+
+msgid "Automatically find peaks on image using a minimum-maximum filter algorithm."
+msgstr ""
+
+msgid "Example of 2D peak detection."
+msgstr ""
+
+msgid "See :ref:`ref-to-2d-peak-detection` for more details on algorithm and associated parameters."
+msgstr ""
+
+msgid "Contour detection"
+msgstr ""
+
+msgid "Automatically extract contours and fit them using a circle or an ellipse, or directly represent them as a polygon."
+msgstr ""
+
+msgid "Example of contour detection."
+msgstr ""
+
+msgid "See :ref:`ref-to-contour-detection` for more details on algorithm and associated parameters."
+msgstr ""
+
+msgid "Computed scalar results are systematically stored as metadata. Metadata is attached to image and serialized with it when exporting current session in a HDF5 file."
+msgstr ""
+
+msgid "Circle Hough transform"
+msgstr ""
+
+msgid "Detect circular shapes using circle Hough transform (implementation based on `skimage.transform.hough_circle_peaks <https://scikit-image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)."
+msgstr ""
+
+msgid "Blob detection"
+msgstr ""
+
+msgid "Blob detection (DOG)"
+msgstr ""
+
+msgid "Detect blobs using Difference of Gaussian (DOG) method (implementation based on `skimage.feature.blob_dog <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
+msgstr ""
+
+msgid "Blob detection (DOH)"
+msgstr ""
+
+msgid "Detect blobs using Determinant of Hessian (DOH) method (implementation based on `skimage.feature.blob_doh <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
+msgstr ""
+
+msgid "Blob detection (LOG)"
+msgstr ""
+
+msgid "Detect blobs using Laplacian of Gaussian (LOG) method (implementation based on `skimage.feature.blob_log <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
+msgstr ""
+
+msgid "Blob detection (OpenCV)"
+msgstr ""
+
+msgid "Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
+msgstr ""
+
+msgid "Show results"
+msgstr ""
+
+msgid "Show the results of all analyses performed on the selected images. This shows the same table as the one shown after having performed a computation."
+msgstr ""
+
+msgid "Plot results"
+msgstr ""
+
+msgid "Plot the results of analyses performed on the selected images, with user-defined X and Y axes (e.g. plot the contour circle radius as a function of the image number)."
+msgstr ""
+

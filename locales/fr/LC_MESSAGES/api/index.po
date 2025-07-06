@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Public features:"
+msgstr ""
+
+msgid "Internal features:"
+msgstr ""
+
+msgid "API"
+msgstr ""
+
+msgid "The public Application Programming Interface (API) of DataLab offers a set of functions to access the DataLab features. Those functions are available in various submodules of the `datalab` package. The following table lists the available submodules and their purpose:"
+msgstr ""
+
+msgid "Submodule"
+msgstr ""
+
+msgid "Purpose"
+msgstr ""
+
+msgid ":mod:`sigima.algorithms`"
+msgstr ""
+
+msgid "Algorithms for data analysis, which operates on NumPy arrays"
+msgstr ""
+
+msgid ":mod:`sigima.param`"
+msgstr ""
+
+msgid "Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)"
+msgstr ""
+
+msgid ":mod:`sigima.obj`"
+msgstr ""
+
+msgid "Convenience module to access the DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`) and related functions"
+msgstr ""
+
+msgid ":mod:`sigima.computation`"
+msgstr ""
+
+msgid "Computation functions, which operate on DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`)"
+msgstr ""
+
+msgid ":mod:`datalab.proxy`"
+msgstr ""
+
+msgid "Proxy objects to access the DataLab interface from a Python script or a remote application"
+msgstr ""
+

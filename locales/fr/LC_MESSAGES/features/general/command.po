@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "DataLab command line features"
+msgstr ""
+
+msgid "command line, datalab, run, test, demo"
+msgstr ""
+
+msgid "Command line features"
+msgstr ""
+
+msgid "Run DataLab"
+msgstr ""
+
+msgid "To run DataLab from the command line, type the following::"
+msgstr ""
+
+msgid "To show help on command line usage, simply run::"
+msgstr ""
+
+msgid "Open HDF5 file at startup"
+msgstr ""
+
+msgid "To open HDF5 files, or even import only a specified HDF5 dataset, use the following::"
+msgstr ""
+
+msgid "Open HDF5 browser at startup"
+msgstr ""
+
+msgid "To open the HDF5 browser at startup, use one of the following commands::"
+msgstr ""
+
+msgid "Run DataLab demo"
+msgstr ""
+
+msgid "To execute DataLab demo, run the following::"
+msgstr ""
+
+msgid "Run technical validation tests"
+msgstr ""
+
+msgid "Technical validation tests are directly included in individual unit tests and are disseminated throughout the code. The test functions including validation tests are marked with the ``@pytest.mark.validation`` decorator."
+msgstr ""
+
+msgid "To execute DataLab technical validation tests, run the following::"
+msgstr ""
+
+msgid "See section :ref:`validation` for more information on DataLab's validation strategy."
+msgstr ""
+
+msgid "Run complete test suite"
+msgstr ""
+
+msgid "To execute all DataLab unit tests, simply run::"
+msgstr ""
+
+msgid "Run interactive tests"
+msgstr ""
+
+msgid "To execute DataLab interactive tests, run the following::"
+msgstr ""
+

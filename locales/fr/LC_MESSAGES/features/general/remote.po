@@ -1,0 +1,720 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "How to remote control DataLab, the open-source scientific data analysis and visualization platform"
+msgstr ""
+
+msgid "DataLab, remote control, XML-RPC, Python, IDE, Spyder, Jupyter, third-party application, signal, image, HDF5, calculation, processor"
+msgstr ""
+
+msgid "Remote controlling"
+msgstr ""
+
+msgid "DataLab may be controlled remotely using the `XML-RPC`_ protocol which is natively supported by Python (and many other languages). Remote controlling allows to access DataLab main features from a separate process."
+msgstr ""
+
+msgid "If you are looking for a lighweight alternative solution to remote control DataLab (i.e. without having to install the whole DataLab package and its dependencies on your environment), please have a look at the `DataLab Simple Client`_ package (`pip install cdlclient`)."
+msgstr ""
+
+msgid "From an IDE"
+msgstr ""
+
+msgid "DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other IDE, or even a Jupyter Notebook) that runs a Python script. It allows to connect to a running DataLab instance, adds a signal and an image, and then runs calculations. This feature is exposed by the `RemoteProxy` class that is provided in module ``datalab.proxy``."
+msgstr ""
+
+msgid "From a third-party application"
+msgstr ""
+
+msgid "DataLab may also be controlled remotely from a third-party application, for the same purpose."
+msgstr ""
+
+msgid "If the third-party application is written in Python 3, it may directly use the `RemoteProxy` class as mentioned above. From another language, it is also achievable, but it requires to implement a XML-RPC client in this language using the same methods of proxy server as in the `RemoteProxy` class."
+msgstr ""
+
+msgid "Data (signals and images) may also be exchanged between DataLab and the remote client application, in both directions."
+msgstr ""
+
+msgid "The remote client application may be written in any language that supports XML-RPC. For example, it is possible to write a remote client application in Python, Java, C++, C#, etc. The remote client application may be a graphical application or a command line application."
+msgstr ""
+
+msgid "The remote client application may be run on the same computer as DataLab or on a different computer. In the latter case, the remote client application must know the IP address of the computer running DataLab."
+msgstr ""
+
+msgid "The remote client application may be run before or after DataLab. In the latter case, the remote client application must try to connect to DataLab until it succeeds."
+msgstr ""
+
+msgid "Supported features"
+msgstr ""
+
+msgid "Supported features are the following:"
+msgstr ""
+
+msgid "Switch to signal or image panel"
+msgstr ""
+
+msgid "Remove all signals and images"
+msgstr ""
+
+msgid "Save current session to a HDF5 file"
+msgstr ""
+
+msgid "Open HDF5 files into current session"
+msgstr ""
+
+msgid "Browse HDF5 file"
+msgstr ""
+
+msgid "Open a signal or an image from file"
+msgstr ""
+
+msgid "Add a signal"
+msgstr ""
+
+msgid "Add an image"
+msgstr ""
+
+msgid "Get object list"
+msgstr ""
+
+msgid "Run calculation with parameters"
+msgstr ""
+
+msgid "The signal and image objects are described on this section: :ref:`ref-to-model`."
+msgstr ""
+
+msgid "Some examples are provided to help implementing such a communication between your application and DataLab:"
+msgstr ""
+
+msgid "See module: ``datalab.tests.remoteclient_app``"
+msgstr ""
+
+msgid "See module: ``datalab.tests.remoteclient_unit``"
+msgstr ""
+
+msgid "Screenshot of remote client application test (``datalab.tests.remoteclient_app``)"
+msgstr ""
+
+msgid "Examples"
+msgstr ""
+
+msgid "When using Python 3, you may directly use the `RemoteProxy` class as in examples cited above or below."
+msgstr ""
+
+msgid "Here is an example in Python 3 of a script that connects to a running DataLab instance, adds a signal and an image, and then runs calculations (the cell structure of the script make it convenient to be used in `Spyder`_ IDE):"
+msgstr ""
+
+msgid "Here is a Python 2.7 reimplementation of this class:"
+msgstr ""
+
+msgid "Connection dialog"
+msgstr ""
+
+msgid "The DataLab package also provides a connection dialog that may be used to connect to a running DataLab instance. It is exposed by the :py:class:`datalab.widgets.connection.ConnectionDialog` class."
+msgstr ""
+
+msgid "Screenshot of connection dialog (``datalab.widgets.connection.ConnectionDialog``)"
+msgstr ""
+
+msgid "Example of use:"
+msgstr ""
+
+msgid "Public API: remote client"
+msgstr ""
+
+msgid "Object representing a proxy/client to DataLab XML-RPC server. This object is used to call DataLab functions from a Python script."
+msgstr ""
+
+msgid "Here is a simple example of how to use RemoteClient in a Python script or in a Jupyter notebook:"
+msgstr ""
+
+msgid "Set XML-RPC port to connect to."
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "XML-RPC port to connect to. If None, the port is automatically retrieved from DataLab configuration."
+msgstr ""
+
+msgid "Try to connect to DataLab XML-RPC server."
+msgstr ""
+
+msgid "XML-RPC port to connect to. If not specified, the port is automatically retrieved from DataLab configuration."
+msgstr ""
+
+msgid "Timeout in seconds. Defaults to 5.0."
+msgstr ""
+
+msgid "Number of retries. Defaults to 10."
+msgstr ""
+
+msgid "Raises"
+msgstr ""
+
+msgid "Unable to connect to DataLab"
+msgstr ""
+
+msgid "Invalid timeout (must be >= 0.0)"
+msgstr ""
+
+msgid "Invalid number of retries (must be >= 1)"
+msgstr ""
+
+msgid "Disconnect from DataLab XML-RPC server."
+msgstr ""
+
+msgid "Return True if connected to DataLab XML-RPC server."
+msgstr ""
+
+msgid "Return list of available methods."
+msgstr ""
+
+msgid "Add signal data to DataLab."
+msgstr ""
+
+msgid "Signal title"
+msgstr ""
+
+msgid "X data"
+msgstr ""
+
+msgid "Y data"
+msgstr ""
+
+msgid "X unit. Defaults to None"
+msgstr ""
+
+msgid "Y unit. Defaults to None"
+msgstr ""
+
+msgid "X label. Defaults to None"
+msgstr ""
+
+msgid "Y label. Defaults to None"
+msgstr ""
+
+msgid "group id in which to add the signal. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added signal as current"
+msgstr ""
+
+msgid "Returns"
+msgstr ""
+
+msgid "True if signal was added successfully, False otherwise"
+msgstr ""
+
+msgid "Invalid xdata dtype"
+msgstr ""
+
+msgid "Invalid ydata dtype"
+msgstr ""
+
+msgid "Add image data to DataLab."
+msgstr ""
+
+msgid "Image title"
+msgstr ""
+
+msgid "Image data"
+msgstr ""
+
+msgid "Z unit. Defaults to None"
+msgstr ""
+
+msgid "Z label. Defaults to None"
+msgstr ""
+
+msgid "group id in which to add the image. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added image as current"
+msgstr ""
+
+msgid "True if image was added successfully, False otherwise"
+msgstr ""
+
+msgid "Invalid data dtype"
+msgstr ""
+
+msgid "Add object to DataLab."
+msgstr ""
+
+msgid "Signal or image object"
+msgstr ""
+
+msgid "group id in which to add the object. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added object as current"
+msgstr ""
+
+msgid "Call compute function ``name`` in current panel's processor."
+msgstr ""
+
+msgid "Compute function name"
+msgstr ""
+
+msgid "Compute function parameter. Defaults to None."
+msgstr ""
+
+msgid "unknown function"
+msgstr ""
+
+msgid "Get object (signal/image) from index."
+msgstr ""
+
+msgid "Object number, or object id, or object title. Defaults to None (current object)."
+msgstr ""
+
+msgid "Panel name. Defaults to None (current panel)."
+msgstr ""
+
+msgid "Object"
+msgstr ""
+
+msgid "if object not found"
+msgstr ""
+
+msgid "Get plot item shapes associated to object (signal/image)."
+msgstr ""
+
+msgid "List of plot item shapes"
+msgstr ""
+
+msgid "Add object annotations (annotation plot items)."
+msgstr ""
+
+msgid "annotation plot items"
+msgstr ""
+
+msgid "refresh plot. Defaults to True."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
+msgstr ""
+
+msgid "Add group to DataLab."
+msgstr ""
+
+msgid "Group title"
+msgstr ""
+
+msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
+msgstr ""
+
+msgid "Select the group after creation. Defaults to False."
+msgstr ""
+
+msgid "Add a label with object title on the associated plot"
+msgstr ""
+
+msgid "Label title. Defaults to None. If None, the title is the object title."
+msgstr ""
+
+msgid "Close DataLab application"
+msgstr ""
+
+msgid "Return a context manager to temporarily disable auto refresh."
+msgstr ""
+
+msgid "Context manager"
+msgstr ""
+
+msgid "Example"
+msgstr ""
+
+msgid "Delete metadata of selected objects"
+msgstr ""
+
+msgid "Refresh plot. Defaults to True."
+msgstr ""
+
+msgid "Keep ROI. Defaults to False."
+msgstr ""
+
+msgid "Return current panel name."
+msgstr ""
+
+msgid "\"signal\", \"image\", \"macro\"))"
+msgstr ""
+
+msgid "Return type"
+msgstr ""
+
+msgid "Return groups titles and lists of inner objects uuids and titles."
+msgstr ""
+
+msgid "groups titles, lists of inner objects uuids and titles"
+msgstr ""
+
+msgid "Get object (signal/image) list for current panel. Objects are sorted by group number and object index in group."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\", \"macro\"). If None, current data panel is used (i.e. signal or image panel)."
+msgstr ""
+
+msgid "List of object titles"
+msgstr ""
+
+msgid "if panel not found"
+msgstr ""
+
+msgid "Get object (signal/image) uuid list for current panel. Objects are sorted by group number and object index in group."
+msgstr ""
+
+msgid "Group number, or group id, or group title. Defaults to None (all groups)."
+msgstr ""
+
+msgid "List of object uuids"
+msgstr ""
+
+msgid "Return all public methods of the class, except itself."
+msgstr ""
+
+msgid "List of public methods"
+msgstr ""
+
+msgid "Return selected objects uuids."
+msgstr ""
+
+msgid "If True, also return objects from selected groups."
+msgstr ""
+
+msgid "List of selected objects uuids."
+msgstr ""
+
+msgid "Return DataLab public version."
+msgstr ""
+
+msgid "DataLab version"
+msgstr ""
+
+msgid "Open DataLab HDF5 browser to Import HDF5 file."
+msgstr ""
+
+msgid "HDF5 file name"
+msgstr ""
+
+msgid "Reset all application data. Defaults to None."
+msgstr ""
+
+msgid "Import macro from file"
+msgstr ""
+
+msgid "Filename."
+msgstr ""
+
+msgid "Open objects from directory in current panel (signals/images)."
+msgstr ""
+
+msgid "directory path"
+msgstr ""
+
+msgid "Open objects from files in current panel (signals/images)."
+msgstr ""
+
+msgid "list of file names"
+msgstr ""
+
+msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
+msgstr ""
+
+msgid "List of HDF5 files to open. Defaults to None."
+msgstr ""
+
+msgid "Import all objects from HDF5 files. Defaults to None."
+msgstr ""
+
+msgid "Raise DataLab window"
+msgstr ""
+
+msgid "Reset all application data"
+msgstr ""
+
+msgid "Run macro."
+msgstr ""
+
+msgid "Macro number, or macro title. Defaults to None (current macro)."
+msgstr ""
+
+msgid "if macro not found"
+msgstr ""
+
+msgid "Save to a DataLab HDF5 file."
+msgstr ""
+
+msgid "Select groups in current panel."
+msgstr ""
+
+msgid "List of group numbers (1 to N), or list of group uuids, or None to select all groups. Defaults to None."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used. Defaults to None."
+msgstr ""
+
+msgid "Select objects in current panel."
+msgstr ""
+
+msgid "List of object numbers (1 to N) or uuids to select"
+msgstr ""
+
+msgid "Switch to panel."
+msgstr ""
+
+msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
+msgstr ""
+
+msgid "Stop macro."
+msgstr ""
+
+msgid "Toggle auto refresh state."
+msgstr ""
+
+msgid "Auto refresh state"
+msgstr ""
+
+msgid "Toggle show titles state."
+msgstr ""
+
+msgid "Show titles state"
+msgstr ""
+
+msgid "Public API: additional methods"
+msgstr ""
+
+msgid "The remote control class methods (either using the proxy or the remote client) may be completed with additional methods which are dynamically added at runtime. This mechanism allows to access the methods of the processors of DataLab (see :mod:`datalab.gui.processor`)."
+msgstr ""
+
+msgid "Signal processor"
+msgstr ""
+
+msgid "When working with signals, the methods of :class:`datalab.gui.processor.signal.SignalProcessor` may be accessed."
+msgstr ""
+
+msgid "Object handling signal processing: operations, processing, analysis"
+msgstr ""
+
+msgid "Register signal computations"
+msgstr ""
+
+msgid "Compute offset correction with :py:func:`sigima.computation.signal.offset_correction`"
+msgstr ""
+
+msgid "Compute all stability analysis features using the following functions:"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.signal.allan_variance`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.signal.allan_deviation`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.signal.overlapping_allan_variance`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.signal.modified_allan_variance`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.signal.hadamard_variance`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.signal.total_variance`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.signal.time_deviation`"
+msgstr ""
+
+msgid "Detect peaks from data with :py:func:`sigima.computation.signal.peak_detection`"
+msgstr ""
+
+msgid "Compute polynomial fitting curve"
+msgstr ""
+
+msgid "Compute fitting curve using an interactive dialog"
+msgstr ""
+
+msgid "Title of the dialog"
+msgstr ""
+
+msgid "Fitting dialog function"
+msgstr ""
+
+msgid "Compute multi-Gaussian fitting curve using an interactive dialog"
+msgstr ""
+
+msgid "Compute full width at a given y with :py:func:`sigima.computation.signal.full_width_at_y`"
+msgstr ""
+
+msgid "Compute x at y with :py:func:`sigima.computation.signal.x_at_y`."
+msgstr ""
+
+msgid "Compute y at x with :py:func:`sigima.computation.signal.y_at_x`."
+msgstr ""
+
+msgid "Image processor"
+msgstr ""
+
+msgid "When working with images, the methods of :class:`datalab.gui.processor.image.ImageProcessor` may be accessed."
+msgstr ""
+
+msgid "Object handling image processing: operations, processing, analysis"
+msgstr ""
+
+msgid "Register image computations"
+msgstr ""
+
+msgid "Resize image with :py:func:`sigima.computation.image.resize`"
+msgstr ""
+
+msgid "Binning image with :py:func:`sigima.computation.image.binning`"
+msgstr ""
+
+msgid "Compute profile along a vertical or horizontal line with :py:func:`sigima.computation.image.line_profile`"
+msgstr ""
+
+msgid "Compute profile along a segment with :py:func:`sigima.computation.image.segment_profile`"
+msgstr ""
+
+msgid "Compute average profile with :py:func:`sigima.computation.image.average_profile`"
+msgstr ""
+
+msgid "Compute radial profile with :py:func:`sigima.computation.image.radial_profile`"
+msgstr ""
+
+msgid "Distribute images on a grid"
+msgstr ""
+
+msgid "Reset image positions"
+msgstr ""
+
+msgid "Compute offset correction with :py:func:`sigima.computation.image.offset_correction`"
+msgstr ""
+
+msgid "Compute all threshold algorithms using the following functions:"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.threshold.threshold_isodata`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.threshold.threshold_li`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.threshold.threshold_mean`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.threshold.threshold_minimum`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.threshold.threshold_otsu`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.threshold.threshold_triangle`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.threshold.threshold_yen`"
+msgstr ""
+
+msgid "Compute all denoising filters using the following functions:"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.restoration.denoise_tv`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.restoration.denoise_bilateral`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.restoration.denoise_wavelet`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.restoration.denoise_tophat`"
+msgstr ""
+
+msgid "Compute all morphology filters using the following functions:"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.morphology.white_tophat`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.morphology.black_tophat`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.morphology.erosion`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.morphology.dilation`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.morphology.opening`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.morphology.closing`"
+msgstr ""
+
+msgid "Compute all edges filters using the following functions:"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.roberts`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.prewitt`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.prewitt_h`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.prewitt_v`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.sobel`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.sobel_h`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.sobel_v`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.scharr`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.scharr_h`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.scharr_v`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.farid`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.farid_h`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.farid_v`"
+msgstr ""
+
+msgid ":py:func:`sigima.computation.image.edges.laplace`"
+msgstr ""
+
+msgid "Compute 2D peak detection with :py:func:`sigima.computation.image.peak_detection`"
+msgstr ""
+

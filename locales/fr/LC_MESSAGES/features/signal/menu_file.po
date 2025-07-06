@@ -1,0 +1,267 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Create, open and save Signals"
+msgstr ""
+
+msgid "This section describes how to create, open and save signals (and workspaces)."
+msgstr ""
+
+msgid "Screenshot of the \"File\" menu."
+msgstr ""
+
+msgid "When the \"Signal Panel\" is selected, the menus and toolbars are updated to provide signal-related actions."
+msgstr ""
+
+msgid "The \"File\" menu allows you to:"
+msgstr ""
+
+msgid "Create, open, save and close signals (see below)."
+msgstr ""
+
+msgid "Save and restore the current workspace or browse HDF5 files (see :ref:`workspace`)."
+msgstr ""
+
+msgid "Edit DataLab preferences (see :ref:`settings`)."
+msgstr ""
+
+msgid "New signal"
+msgstr ""
+
+msgid "Create a new signal from various models:"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Equation"
+msgstr ""
+
+msgid "Zeros"
+msgstr ""
+
+msgid ":math:`y[i] = 0`"
+msgstr ""
+
+msgid "Gaussian"
+msgstr ""
+
+msgid ":math:`y = y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
+msgstr ""
+
+msgid "Lorentzian"
+msgstr ""
+
+msgid ":math:`y = y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
+msgstr ""
+
+msgid "Voigt"
+msgstr ""
+
+msgid ":math:`y = y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with :math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+msgstr ""
+
+msgid "Random (uniform law)"
+msgstr ""
+
+msgid ":math:`y[i] \\in [-0.5, 0.5]`"
+msgstr ""
+
+msgid "Random (normal law)"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y[i] \\sim \\mathcal{N}(-0.5, 0.5)`"
+msgstr ""
+
+msgid "Sine"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A.sin(2\\pi.f.x+\\phi)`"
+msgstr ""
+
+msgid "Cosine"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A.cos(2\\pi.f.x+\\phi)`"
+msgstr ""
+
+msgid "Sawtooth"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A \\cdot \\left( 2 \\left( f x + \\frac{\\phi}{2\\pi} - \\left\\lfloor f x + \\frac{\\phi}{2\\pi} + \\frac{1}{2} \\right\\rfloor \\right) \\right)`"
+msgstr ""
+
+msgid "Triangle"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A \\cdot \\text{sawtooth}(2 \\pi f x + \\phi, \\text{width} = 0.5)`"
+msgstr ""
+
+msgid "Square"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_0 + A \\cdot \\text{sgn}\\left( \\sin\\left( 2\\pi f x + \\phi \\right) \\right)`"
+msgstr ""
+
+msgid "Cardinal sine"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_0 + A \\cdot \\text{sinc}\\left(2\\pi f x + \\phi\\right)`"
+msgstr ""
+
+msgid "Step"
+msgstr ""
+
+msgid ":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x > x_{0} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgstr ""
+
+msgid "Exponential"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A.exp(B.x)`"
+msgstr ""
+
+msgid "Pulse"
+msgstr ""
+
+msgid ":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x < x_{1} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgstr ""
+
+msgid "Polynomial"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`"
+msgstr ""
+
+msgid "Experimental"
+msgstr ""
+
+msgid "Manual input of X and Y values"
+msgstr ""
+
+msgid "Open signal"
+msgstr ""
+
+msgid "Create a new signal from the following supported filetypes:"
+msgstr ""
+
+msgid "File type"
+msgstr ""
+
+msgid "Extensions"
+msgstr ""
+
+msgid "Text files"
+msgstr ""
+
+msgid ".txt, .csv"
+msgstr ""
+
+msgid "NumPy arrays"
+msgstr ""
+
+msgid ".npy"
+msgstr ""
+
+msgid "MAT-Files"
+msgstr ""
+
+msgid ".mat"
+msgstr ""
+
+msgid "Save signal"
+msgstr ""
+
+msgid "Save current signal to the following supported filetypes:"
+msgstr ""
+
+msgid ".csv"
+msgstr ""
+
+msgid "Import text file"
+msgstr ""
+
+msgid "DataLab can natively import signal files (e.g. CSV, NPY, etc.). However some specific text file formats may not be supported. In this case, you can use the `Import text file` feature, which allows you to import a text file and convert it to a signal."
+msgstr ""
+
+msgid "This feature is accessible from the `File` menu, under the `Import text file` option."
+msgstr ""
+
+msgid "It opens an import wizard that guides you through the process of importing the text file."
+msgstr ""
+
+msgid "Step 1: Select the source"
+msgstr ""
+
+msgid "The first step is to select the source of the text file. You can either select a file from your computer or the clipboard if you have copied the text from another application."
+msgstr ""
+
+msgid "Step 2: Preview and configure the import"
+msgstr ""
+
+msgid "The second step consists of configuring the import and previewing the result. You can configure the following options:"
+msgstr ""
+
+msgid "**Delimiter**: The character used to separate the values in the text file."
+msgstr ""
+
+msgid "**Comments**: The character used to indicate that the line is a comment and should be ignored."
+msgstr ""
+
+msgid "**Rows to Skip**: The number of rows to skip at the beginning of the file."
+msgstr ""
+
+msgid "**Maximum Number of Rows**: The maximum number of rows to import. If the file contains more rows, they will be ignored."
+msgstr ""
+
+msgid "**Transpose**: If checked, the rows and columns will be transposed."
+msgstr ""
+
+msgid "**Data type**: The destination data type of the imported data."
+msgstr ""
+
+msgid "**First Column is X**: If checked, the first column will be used as the X axis."
+msgstr ""
+
+msgid "When you are done configuring the import, click the `Apply` button to see the result."
+msgstr ""
+
+msgid "Step 2: Configure the import"
+msgstr ""
+
+msgid "Step 2: Preview the result"
+msgstr ""
+
+msgid "Step 3: Show graphical representation"
+msgstr ""
+
+msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
+msgstr ""
+
