@@ -110,8 +110,8 @@ msgstr ""
 msgid "**Or add the `datalab` package manually to your Python path**:"
 msgstr "**Ou ajoutez manuellement le package `datalab` à votre chemin Python** :"
 
-msgid "Download the source from the `PyPI page <https://pypi.org/project/datalab/>`_,"
-msgstr "Téléchargez le code source depuis la `page PyPI <https://pypi.org/project/datalab/>`_,"
+msgid "Download the source from the `PyPI page <https://pypi.org/project/datalab-platform/>`_,"
+msgstr "Téléchargez le code source depuis la `page PyPI <https://pypi.org/project/datalab-platform/>`_,"
 
 msgid "Unzip the archive,"
 msgstr "Décompressez l'archive,"

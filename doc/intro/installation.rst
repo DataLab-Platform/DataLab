@@ -73,7 +73,7 @@ Package manager ``pip``
 :octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
 
 DataLab's package ``datalab`` is available on the Python Package Index (PyPI)
-on the following URL: https://pypi.python.org/pypi/datalab.
+on the following URL: https://pypi.python.org/pypi/datalab-platform.
 
 Installing DataLab from PyPI with Qt is as simple as running this command
 (you may need to use ``pip3`` instead of ``pip`` on some systems):

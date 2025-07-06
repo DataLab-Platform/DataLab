@@ -209,7 +209,7 @@ The only requirement is to install a DataLab client in Spyder's Python environme
 
         pip install datalab-client
 
-    Or you may also install the `DataLab Python package <https://pypi.org/project/datalab/>`_
+    Or you may also install the `DataLab Python package <https://pypi.org/project/datalab-platform/>`_
     (``datalab``) which includes the client (but also other modules, so we don't recommend
     this method if you don't need all DataLab's features in this Python environment)::
 

@@ -110,7 +110,7 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "PyPI",
-            "url": "https://pypi.org/project/datalab",
+            "url": "https://pypi.org/project/datalab-platform",
             "icon": "_static/pypi.svg",
             "type": "local",
             "attributes": {"target": "_blank"},

@@ -82,7 +82,7 @@ msgstr ""
 msgid "Package manager ``pip``"
 msgstr ""
 
-msgid "DataLab's package ``datalab`` is available on the Python Package Index (PyPI) on the following URL: https://pypi.python.org/pypi/datalab."
+msgid "DataLab's package ``datalab`` is available on the Python Package Index (PyPI) on the following URL: https://pypi.python.org/pypi/datalab-platform."
 msgstr ""
 
 msgid "Installing DataLab from PyPI with Qt is as simple as running this command (you may need to use ``pip3`` instead of ``pip`` on some systems):"
@@ -396,4 +396,3 @@ msgstr ""
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr ""
-

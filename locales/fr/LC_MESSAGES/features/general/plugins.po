@@ -112,7 +112,7 @@ msgstr ""
 msgid "**Or add the `datalab` package manually to your Python path**:"
 msgstr ""
 
-msgid "Download the source from the `PyPI page <https://pypi.org/project/datalab/>`_,"
+msgid "Download the source from the `PyPI page <https://pypi.org/project/datalab-platform/>`_,"
 msgstr ""
 
 msgid "Unzip the archive,"
@@ -282,4 +282,3 @@ msgstr ""
 
 msgid "List of available plugins (as instances)"
 msgstr ""
-

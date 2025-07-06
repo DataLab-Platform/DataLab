@@ -70,7 +70,7 @@ To develop in your usual Python environment (e.g., with an IDE like `Spyder <htt
 
 2. **Or add the `datalab` package manually to your Python path**:
 
-   - Download the source from the `PyPI page <https://pypi.org/project/datalab/>`_,
+   - Download the source from the `PyPI page <https://pypi.org/project/datalab-platform/>`_,
    - Unzip the archive,
    - Add the `datalab` directory to your PYTHONPATH (e.g., using the *PYTHONPATH Manager* in Spyder).
 

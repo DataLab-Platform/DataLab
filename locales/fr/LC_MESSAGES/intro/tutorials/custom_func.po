@@ -145,7 +145,7 @@ msgstr ""
 msgid "If you use the stand-alone version of DataLab or if you want or need to keep DataLab and Spyder in separate Python environments, you can install the `DataLab Simple Client <https://pypi.org/project/cdlclient/>`_ (``datalab-client``) using the ``pip`` package manager::"
 msgstr ""
 
-msgid "Or you may also install the `DataLab Python package <https://pypi.org/project/datalab/>`_ (``datalab``) which includes the client (but also other modules, so we don't recommend this method if you don't need all DataLab's features in this Python environment)::"
+msgid "Or you may also install the `DataLab Python package <https://pypi.org/project/datalab-platform/>`_ (``datalab``) which includes the client (but also other modules, so we don't recommend this method if you don't need all DataLab's features in this Python environment)::"
 msgstr ""
 
 msgid "If you use the DataLab Python package, you may run Spyder in the same Python environment as DataLab, so you don't need to install the client: it is already available in the main DataLab package (the ``datalab`` package)."
@@ -216,4 +216,3 @@ msgstr ""
 
 msgid "We generate again our test image using (see the first steps of the tutorial), and we process it using the plugin: \"Plugins > My custom filters > Weighted average denoise\"."
 msgstr ""
-
