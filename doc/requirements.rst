@@ -20,10 +20,10 @@ The `cdl` package requires the following Python modules:
       -  >= 1.22
       - Fundamental package for array computing in Python
     * - SciPy
-      -  >= 1.7.3
+      -  >= 1.10.1
       - Fundamental algorithms for scientific computing in Python
     * - scikit-image
-      -  >= 0.19
+      -  >= 0.19.2
       - Image processing in Python
     * - pandas
       -  >= 1.4
@@ -60,6 +60,9 @@ Optional modules for development:
     * - Name
       - Version
       - Summary
+    * - build
+      - 
+      - A simple, correct Python build frontend
     * - babel
       - 
       - Internationalization utilities
