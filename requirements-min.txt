@@ -4,7 +4,7 @@ PlotPy==2.7.4
 PyQt5==5.15.6
 PyWavelets==1.2
 SciPy==1.10.1
-SigIma==0.1.0
+Sigima==0.1.0
 babel
 build
 guidata==3.11
