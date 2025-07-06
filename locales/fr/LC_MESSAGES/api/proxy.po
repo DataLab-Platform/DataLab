@@ -418,7 +418,7 @@ msgstr ""
 msgid "This class provides access to DataLab features from a proxy class. This is the local version of proxy, which is used when DataLab is started from the same process as the proxy."
 msgstr ""
 
-msgid "CDLMainWindow instance."
+msgid "DLMainWindow instance."
 msgstr ""
 
 msgid "Compute function parameter. Defaults to None"
@@ -448,7 +448,7 @@ msgstr ""
 msgid "The proxy context manager allows to use the proxy in various contexts (Python script, Jupyter notebook, etc.). It also allows to switch seamlessly between local and remote proxy, keeping the same code inside the context."
 msgstr ""
 
-msgid "Context manager handling CDL proxy creation and destruction."
+msgid "Context manager handling DL proxy creation and destruction."
 msgstr ""
 
 msgid "proxy type (\"local\" or \"remote\") For remote proxy, the port can be specified as \"remote:port\""
@@ -682,4 +682,3 @@ msgstr ""
 
 msgid "Compute profile along a segment"
 msgstr ""
-

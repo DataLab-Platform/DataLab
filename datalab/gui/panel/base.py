@@ -76,7 +76,7 @@ if TYPE_CHECKING:
     from sigima.io.signal import SignalIORegistry
 
     from datalab.gui import ObjItf
-    from datalab.gui.main import CDLMainWindow
+    from datalab.gui.main import DLMainWindow
     from datalab.gui.plothandler import ImagePlotHandler, SignalPlotHandler
     from datalab.gui.processor.image import ImageProcessor
     from datalab.gui.processor.signal import SignalProcessor
@@ -299,7 +299,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     @abc.abstractmethod
     def __init__(self, parent: QW.QWidget) -> None:
         super().__init__(parent)
-        self.mainwindow: CDLMainWindow = parent
+        self.mainwindow: DLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
         self.objmodel = objectmodel.ObjectModel()
         self.objview = objectview.ObjectView(self, self.objmodel)

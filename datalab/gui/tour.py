@@ -64,7 +64,7 @@ from datalab.config import _
 from datalab.env import execenv
 
 if TYPE_CHECKING:
-    from datalab.gui.main import CDLMainWindow
+    from datalab.gui.main import DLMainWindow
 
 
 class Cover(QW.QWidget):
@@ -72,7 +72,7 @@ class Cover(QW.QWidget):
     Widget that covers the main window with a gray area with an opacity of 50%.
     """
 
-    def __init__(self, parent: CDLMainWindow) -> None:
+    def __init__(self, parent: DLMainWindow) -> None:
         super().__init__(parent)
         self.setWindowFlags(QC.Qt.Tool | QC.Qt.FramelessWindowHint)
         self.setAttribute(QC.Qt.WA_TranslucentBackground)
@@ -365,9 +365,9 @@ class TourStep:
         widgets: Widgets to be highlighted. If None, no widget is highlighted, meaning
          that the step is probably an introduction or a conclusion.
         setup_callback: Callback function to be called before the step is displayed,
-          which takes a single argument, the `CDLMainWindow` instance.
+          which takes a single argument, the `DLMainWindow` instance.
         teardown_callback: Callback function to be called after the step is displayed,
-          which takes a single argument, the `CDLMainWindow` instance.
+          which takes a single argument, the `DLMainWindow` instance.
         step_type: Step type. Can be "regular", "introduction" or "conclusion".
     """
 
@@ -437,7 +437,7 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
         win: DataLab main window.
     """
 
-    def __init__(self, win: CDLMainWindow) -> None:
+    def __init__(self, win: DLMainWindow) -> None:
         super().__init__(win)
         self.win = win
         self._steps: list[TourStep] = []
@@ -474,13 +474,13 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
             self.win.restoreGeometry(self.__window_geometry)
 
     @abc.abstractmethod
-    def setup_tour(self, win: CDLMainWindow) -> None:
+    def setup_tour(self, win: DLMainWindow) -> None:
         """
         Setup the tour: add steps to the tour.
         """
 
     @abc.abstractmethod
-    def cleanup_tour(self, win: CDLMainWindow) -> None:
+    def cleanup_tour(self, win: DLMainWindow) -> None:
         """
         Cleanup the tour.
         """
@@ -503,9 +503,9 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
             widgets: Widgets to be highlighted. If None, no widget is highlighted,
              meaning that the step is probably an introduction or a conclusion.
             setup_callback: Callback function to be called before the step is displayed,
-             which takes a single argument, the `CDLMainWindow` instance.
+             which takes a single argument, the `DLMainWindow` instance.
             teardown_callback: Callback function to be called after the step is
-             displayed, which takes a single argument, the `CDLMainWindow` instance.
+             displayed, which takes a single argument, the `DLMainWindow` instance.
             step_type: Step type. Can be "regular", "introduction" or "conclusion".
              Defaults to None.
         """
@@ -585,7 +585,7 @@ class Tour(BaseTour):
         win: DataLab main window.
     """
 
-    def prepare_signalpanel(self, win: CDLMainWindow) -> None:
+    def prepare_signalpanel(self, win: DLMainWindow) -> None:
         """
         Prepare the signal panel.
 
@@ -599,7 +599,7 @@ class Tour(BaseTour):
         win.add_object(sig)
         win.set_current_panel("signal")
 
-    def prepare_imagepanel(self, win: CDLMainWindow) -> None:
+    def prepare_imagepanel(self, win: DLMainWindow) -> None:
         """
         Prepare the image panel.
 
@@ -615,7 +615,7 @@ class Tour(BaseTour):
         win.add_object(img)
         win.set_current_panel("image")
 
-    def popup_menu(self, win: CDLMainWindow, menu: QW.QMenu) -> None:
+    def popup_menu(self, win: DLMainWindow, menu: QW.QMenu) -> None:
         """
         Popup a menu.
 
@@ -625,7 +625,7 @@ class Tour(BaseTour):
         """
         menu.popup(win.mapToGlobal(QC.QPoint(50, 50)))
 
-    def cleanup_tour(self, win: CDLMainWindow) -> None:
+    def cleanup_tour(self, win: DLMainWindow) -> None:
         """
         Cleanup the tour.
 
@@ -641,7 +641,7 @@ class Tour(BaseTour):
         else:
             win.imagepanel.remove_object()
 
-    def setup_tour(self, win: CDLMainWindow) -> None:
+    def setup_tour(self, win: DLMainWindow) -> None:
         """
         Setup the tour: add steps to the tour.
         """
@@ -877,7 +877,7 @@ class Tour(BaseTour):
         )
 
 
-def start(win: CDLMainWindow) -> None:
+def start(win: DLMainWindow) -> None:
     """
     Start the tour of DataLab features.
 

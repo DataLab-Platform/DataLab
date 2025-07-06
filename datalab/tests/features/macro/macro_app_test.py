@@ -8,7 +8,7 @@ Macro Panel application test
 # guitest: show
 
 from datalab import config
-from datalab.gui.main import CDLMainWindow
+from datalab.gui.main import DLMainWindow
 from datalab.utils import qthelpers as qth
 
 
@@ -16,7 +16,7 @@ def test_macro(screenshots: bool = False) -> None:
     """Run image tools test scenario"""
     config.reset()  # Reset configuration (remove configuration file and initialize it)
     with qth.datalab_app_context(exec_loop=True):
-        win = CDLMainWindow()
+        win = DLMainWindow()
         win.show()
         win.set_current_panel("macro")
         win.macropanel.add_macro()

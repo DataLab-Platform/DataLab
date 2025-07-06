@@ -25,7 +25,7 @@ from sigima.tests.data import (
 )
 
 from datalab.config import _
-from datalab.gui.main import CDLMainWindow
+from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
 from datalab.widgets import fitdialog
@@ -127,7 +127,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
 
 
 def run_signal_computations(
-    win: CDLMainWindow, data_size: int = 500, all_types: bool = True
+    win: DLMainWindow, data_size: int = 500, all_types: bool = True
 ) -> None:
     """Testing signal features"""
     panel = win.signalpanel
@@ -280,7 +280,7 @@ def run_signal_computations(
 
 
 def run_image_computations(
-    win: CDLMainWindow, data_size: int = 150, all_types: bool = True
+    win: DLMainWindow, data_size: int = 150, all_types: bool = True
 ) -> None:
     """Test image features"""
     win.set_current_panel("image")

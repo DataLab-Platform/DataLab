@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-CDLExecEnv test
+DLExecEnv test
 ---------------
 
 Checking DataLab execution environment management.
@@ -23,20 +23,20 @@ ARGV_TEST = "--execenvtest"
 
 
 def print_execenv() -> None:
-    """Print CDL execution environment"""
+    """Print DL execution environment"""
     sys.argv.remove(ARGV_TEST)
     print(str(execenv.to_dict()))
 
 
 def get_subprocess_execenv_dict(args: list[str], env: dict | None = None) -> dict:
-    """Get CDL execution environment dict from subprocess
+    """Get DL execution environment dict from subprocess
 
     Args:
         args (list[str]): command-line arguments
         env (dict | None): environment variables to pass to subprocess
 
     Returns:
-        dict[str, str | int | bool | None]: CDL execution environment dict
+        dict[str, str | int | bool | None]: DL execution environment dict
     """
     output = get_script_output(__file__, args=args + [ARGV_TEST], env=env)
     return eval(output)  # pylint: disable=eval-used
@@ -63,7 +63,7 @@ def assert_two_dicts_are_equal(
 
 
 def test_cli():
-    """Test CDL execution environment from command-line"""
+    """Test DL execution environment from command-line"""
     remove_all_datalab_envvars()
 
     # Test default values
@@ -162,7 +162,7 @@ def test_cli():
 
 
 def remove_all_datalab_envvars():
-    """Remove all CDL environment variables"""
+    """Remove all DL environment variables"""
     for _attrname, envvar in execenv.iterate_over_attrs_envvars():
         os.environ.pop(envvar, None)
 

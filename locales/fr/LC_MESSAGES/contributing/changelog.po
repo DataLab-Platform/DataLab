@@ -253,7 +253,7 @@ msgstr ""
 msgid "Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:"
 msgstr ""
 
-msgid "This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes"
+msgid "This concerns the `LocalProxy`, `AbstractDLControl`, `RemoteClient`, `RemoteServer` and `DLMainWindow` classes"
 msgstr ""
 
 msgid "`group_id` argument allows to specify the group ID where the signal or image should be added (if not specified, the signal or image is added to the current group)"
@@ -385,7 +385,7 @@ msgstr ""
 msgid "Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:"
 msgstr ""
 
-msgid "Method was added to the following classes: `AbstractCDLControl`, `BaseDataPanel` and `RemoteClient`"
+msgid "Method was added to the following classes: `AbstractDLControl`, `BaseDataPanel` and `RemoteClient`"
 msgstr ""
 
 msgid "This closes the following issues:"
@@ -397,7 +397,7 @@ msgstr ""
 msgid "[Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Remote proxy / Public API: add `add_group` method"
 msgstr ""
 
-msgid "`AbstractCDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
+msgid "`AbstractDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
 msgstr ""
 
 msgid "When opening an HDF5 file, the confirmation dialog box asking if current workspace should be cleared has a new possible answer \"Ignore\":"

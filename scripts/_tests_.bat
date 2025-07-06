@@ -11,11 +11,11 @@ call %FUNC% SetPythonPath
 call %FUNC% UsePython
 call %FUNC% GetVersion VERSION
 call %FUNC% GetModName MODNAME
-call %FUNC% GetCDLProjectPath DATALAB_MODULE_PATH
+call %FUNC% GetDLProjectPath DATALAB_MODULE_PATH
 
 echo Modname=%MODNAME%
 echo LibName=%LIBNAME%
 echo LibVersion=%VERSION%
-echo CDLModulePath=%DATALAB_MODULE_PATH%
+echo DLModulePath=%DATALAB_MODULE_PATH%
 
 call %FUNC% EndOfScript

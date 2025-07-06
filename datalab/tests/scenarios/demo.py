@@ -30,13 +30,13 @@ from datalab.env import execenv
 from datalab.tests import cdltest_app_context
 
 if TYPE_CHECKING:
-    from datalab.gui.main import CDLMainWindow
+    from datalab.gui.main import DLMainWindow
 
 DELAY1, DELAY2, DELAY3 = 1, 2, 3
 # DELAY1, DELAY2, DELAY3 = 0, 0, 0
 
 
-def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
+def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     """Testing signal features"""
     panel = win.signalpanel
     win.set_current_panel("signal")
@@ -95,7 +95,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     qt_wait(DELAY2)
 
 
-def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
+def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     """Testing signal features"""
     win.set_current_panel("image")
     panel = win.imagepanel
@@ -187,11 +187,11 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     panel.processor.compute_roi_extraction(roi)
 
 
-def play_demo(win: CDLMainWindow) -> None:
+def play_demo(win: DLMainWindow) -> None:
     """Play demo
 
     Args:
-        win: CDLMainWindow instance
+        win: DLMainWindow instance
     """
     ret = QW.QMessageBox.information(
         win,

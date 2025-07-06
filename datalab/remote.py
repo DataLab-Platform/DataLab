@@ -33,12 +33,12 @@ from sigima.obj import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
 from datalab.adapters_plotpy import items_to_json, json_to_items
-from datalab.baseproxy import AbstractCDLControl, BaseProxy
+from datalab.baseproxy import AbstractDLControl, BaseProxy
 from datalab.config import Conf, initialize
 from datalab.env import execenv
 
 if TYPE_CHECKING:
-    from datalab.gui.main import CDLMainWindow
+    from datalab.gui.main import DLMainWindow
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
@@ -131,7 +131,7 @@ def remote_call(func: Callable) -> object:
     return method_wrapper
 
 
-# Note: RemoteServer can't inherit from AbstractCDLControl because it is a QThread
+# Note: RemoteServer can't inherit from AbstractDLControl because it is a QThread
 # and most of the methods are not returning expected data types
 
 
@@ -161,7 +161,7 @@ class RemoteServer(QC.QThread):
     SIG_STOP_MACRO = QC.Signal(str)
     SIG_IMPORT_MACRO_FROM_FILE = QC.Signal(str)
 
-    def __init__(self, win: CDLMainWindow) -> None:
+    def __init__(self, win: DLMainWindow) -> None:
         QC.QThread.__init__(self)
         self.port: int = None
         self.is_ready = True
@@ -223,9 +223,9 @@ class RemoteServer(QC.QThread):
 
     @classmethod
     def check_remote_functions(cls) -> None:
-        """Check if all AbstractCDLControl methods are implemented in RemoteServer"""
+        """Check if all AbstractDLControl methods are implemented in RemoteServer"""
         mlist = []
-        for method in AbstractCDLControl.get_public_methods():
+        for method in AbstractDLControl.get_public_methods():
             if not hasattr(cls, method):
                 mlist.append(method)
         if mlist:
@@ -233,7 +233,7 @@ class RemoteServer(QC.QThread):
 
     def register_functions(self, server: SimpleXMLRPCServer) -> None:
         """Register functions"""
-        for name in AbstractCDLControl.get_public_methods():
+        for name in AbstractDLControl.get_public_methods():
             server.register_function(getattr(self, name))
 
     def run(self) -> None:

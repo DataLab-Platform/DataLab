@@ -90,7 +90,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * This closes [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)
 * Public API (local or remote):
   * Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:
-    * This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes
+    * This concerns the `LocalProxy`, `AbstractDLControl`, `RemoteClient`, `RemoteServer` and `DLMainWindow` classes
     * `group_id` argument allows to specify the group ID where the signal or image should be added (if not specified, the signal or image is added to the current group)
     * `set_current` argument allows to specify if the signal or image should be set as current after being added (default is `True`)
     * This closes [Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - Public API: add a keyword `group_id` to `add_signal` and `add_image`
@@ -148,11 +148,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This closes [Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - New feature: `1/x` for signals and images
 * Public API (local or remote):
   * Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:
-    * Method was added to the following classes: `AbstractCDLControl`, `BaseDataPanel` and `RemoteClient`
+    * Method was added to the following classes: `AbstractDLControl`, `BaseDataPanel` and `RemoteClient`
     * This closes the following issues:
       * [Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `BaseDataPanel.add_group`: add `select` argument
       * [Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Remote proxy / Public API: add `add_group` method
-  * `AbstractCDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))
+  * `AbstractDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))
 * When opening an HDF5 file, the confirmation dialog box asking if current workspace should be cleared has a new possible answer "Ignore":
   * Choosing "Ignore" will prevent the confirmation dialog box from being displayed again, and will choose the current setting (i.e. clear or not the workspace) for all subsequent file openings
   * Added a new "Clear workspace before loading HDF5 file" option in the "Settings" dialog box, to allow the user to change the current setting (i.e. clear or not the workspace) for all subsequent file openings

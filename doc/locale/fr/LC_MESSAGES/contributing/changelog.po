@@ -253,8 +253,8 @@ msgstr "API publique (locale ou distante) :"
 msgid "Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:"
 msgstr "Ajout des arguments `group_id` et `set_current` aux méthodes `add_signal`, `add_image` et `add_object` :"
 
-msgid "This concerns the `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` and `CDLMainWindow` classes"
-msgstr "Cela concerne les classes `LocalProxy`, `AbstractCDLControl`, `RemoteClient`, `RemoteServer` et `CDLMainWindow`"
+msgid "This concerns the `LocalProxy`, `AbstractDLControl`, `RemoteClient`, `RemoteServer` and `DLMainWindow` classes"
+msgstr "Cela concerne les classes `LocalProxy`, `AbstractDLControl`, `RemoteClient`, `RemoteServer` et `DLMainWindow`"
 
 msgid "`group_id` argument allows to specify the group ID where the signal or image should be added (if not specified, the signal or image is added to the current group)"
 msgstr "L'argument `group_id` permet de spécifier l'identifiant du groupe où le signal ou l'image doit être ajouté (s'il n'est pas spécifié, le signal ou l'image est ajouté au groupe actuel)"
@@ -385,8 +385,8 @@ msgstr "Ceci corrige l'[Issue #143](https://github.com/DataLab-Platform/DataLab/
 msgid "Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:"
 msgstr "Ajout de la méthode `add_group` avec les arguments `title` et `select` pour créer un nouveau groupe dans un panneau de données (par exemple, panneau Signal ou Image) et éventuellement le sélectionner après sa création :"
 
-msgid "Method was added to the following classes: `AbstractCDLControl`, `BaseDataPanel` and `RemoteClient`"
-msgstr "Cette méthode a été ajoutée aux classes suivantes : `AbstractCDLControl`, `BaseDataPanel` et `RemoteClient`"
+msgid "Method was added to the following classes: `AbstractDLControl`, `BaseDataPanel` and `RemoteClient`"
+msgstr "Cette méthode a été ajoutée aux classes suivantes : `AbstractDLControl`, `BaseDataPanel` et `RemoteClient`"
 
 msgid "This closes the following issues:"
 msgstr "Cette fonctionnalité clôture les tickets suivants :"
@@ -397,8 +397,8 @@ msgstr "[Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `
 msgid "[Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Remote proxy / Public API: add `add_group` method"
 msgstr "[Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Proxy distant / API publique : ajout de la méthode `add_group`"
 
-msgid "`AbstractCDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
-msgstr "`AbstractCDLControl.get_object_uuids` : ajout d'un argument optionnel `group` (identifiant, titre ou numéro du groupe) pour éventuellement filtrer les objets par groupe (ceci clôture le ticket [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
+msgid "`AbstractDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
+msgstr "`AbstractDLControl.get_object_uuids` : ajout d'un argument optionnel `group` (identifiant, titre ou numéro du groupe) pour éventuellement filtrer les objets par groupe (ceci clôture le ticket [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
 
 msgid "When opening an HDF5 file, the confirmation dialog box asking if current workspace should be cleared has a new possible answer \"Ignore\":"
 msgstr "Lors de l'ouverture d'un fichier HDF5, la boîte de dialogue de confirmation demandant si l'espace de travail actuel doit être effacé a une nouvelle réponse possible \"Ignorer\" :"

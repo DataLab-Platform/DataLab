@@ -13,7 +13,7 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import Conf
 from datalab.env import execenv
-from datalab.gui.main import CDLMainWindow
+from datalab.gui.main import DLMainWindow
 from datalab.utils.qthelpers import datalab_app_context
 
 
@@ -23,7 +23,7 @@ def create(
     objects=None,
     h5files=None,
     size=None,
-) -> CDLMainWindow:
+) -> DLMainWindow:
     """Create DataLab application and return mainwindow instance
 
     Args:
@@ -38,7 +38,7 @@ def create(
         pixmap = QG.QPixmap(get_image_file_path("DataLab-Splash.png"))
         splashscreen = QW.QSplashScreen(pixmap, QC.Qt.WindowStaysOnTopHint)
         splashscreen.show()
-    window = CDLMainWindow(console=console)
+    window = DLMainWindow(console=console)
     if size is not None:
         width, height = size
         window.resize(width, height)

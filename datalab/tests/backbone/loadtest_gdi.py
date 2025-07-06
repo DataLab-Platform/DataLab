@@ -26,7 +26,7 @@ from sigima.tests.data import create_sincos_image
 from sigima.tests.helpers import get_test_fnames
 
 from datalab.env import execenv
-from datalab.gui.main import CDLMainWindow
+from datalab.gui.main import DLMainWindow
 from datalab.tests import cdltest_app_context
 from datalab.tests.scenarios.common import compute_common_operations
 
@@ -71,7 +71,7 @@ else:
         return 0
 
 
-def test_various_image_features(win: CDLMainWindow):
+def test_various_image_features(win: DLMainWindow):
     """Run image related tests."""
     win.set_current_panel("image")
     panel = win.imagepanel
@@ -84,7 +84,7 @@ def test_various_image_features(win: CDLMainWindow):
         break
 
 
-def test_gdi_count(win: CDLMainWindow) -> int | None:
+def test_gdi_count(win: DLMainWindow) -> int | None:
     """Test the GDI count.
 
     This function will create a DataSetGroup, show the widget, and then

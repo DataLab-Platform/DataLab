@@ -8,7 +8,7 @@ DataLab base proxy module
 # How to add a new method to the proxy:
 # -------------------------------------
 #
-# 1.  Add the method to the AbstractCDLControl class, as an abstract method
+# 1.  Add the method to the AbstractDLControl class, as an abstract method
 #
 # 2a. If the method requires any data conversion to get through the XML-RPC layer,
 #     implement the method in both LocalProxy and RemoteClient classes
@@ -17,10 +17,10 @@ DataLab base proxy module
 #     directly in the BaseProxy class, so that it is available to both LocalProxy
 #     and RemoteClient classes without any code duplication
 #
-# 3.  Implement the method in the CDLMainWindow class
+# 3.  Implement the method in the DLMainWindow class
 #
 # 4.  Implement the method in the RemoteServer class (it will be automatically
-#     registered as an XML-RPC method, like all methods of AbstractCDLControl)
+#     registered as an XML-RPC method, like all methods of AbstractDLControl)
 
 from __future__ import annotations
 
@@ -36,11 +36,11 @@ from sigima import ImageObj, SignalObj
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
-    from datalab.gui.main import CDLMainWindow
+    from datalab.gui.main import DLMainWindow
     from datalab.remote import ServerProxy
 
 
-class AbstractCDLControl(abc.ABC):
+class AbstractDLControl(abc.ABC):
     """Abstract base class for controlling DataLab (main window or remote server)"""
 
     def __len__(self) -> int:
@@ -534,15 +534,15 @@ class AbstractCDLControl(abc.ABC):
         raise AttributeError(f"DataLab has no compute function '{name}'")
 
 
-class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
+class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
     """Common base class for DataLab proxies
 
     Args:
-        datalab: CDLMainWindow instance or ServerProxy instance. If None, then the proxy
+        datalab: DLMainWindow instance or ServerProxy instance. If None, then the proxy
          implementation will have to set it later (e.g. see RemoteClient).
     """
 
-    def __init__(self, datalab: CDLMainWindow | ServerProxy | None = None) -> None:
+    def __init__(self, datalab: DLMainWindow | ServerProxy | None = None) -> None:
         self._datalab = datalab
 
     def get_version(self) -> str:

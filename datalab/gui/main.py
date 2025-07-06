@@ -7,7 +7,7 @@ Main window
 The :mod:`datalab.gui.main` module provides the main window of the
 DataLab project.
 
-.. autoclass:: CDLMainWindow
+.. autoclass:: DLMainWindow
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -45,7 +45,7 @@ from sigima.obj import ImageObj, SignalObj, create_image, create_signal
 import datalab
 from datalab import __docurl__, __homeurl__, __supporturl__, env
 from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.baseproxy import AbstractCDLControl
+from datalab.baseproxy import AbstractDLControl
 from datalab.config import (
     APP_DESC,
     APP_NAME,
@@ -105,11 +105,11 @@ def remote_controlled(func):
     return method_wrapper
 
 
-class CDLMainWindowMeta(type(QW.QMainWindow), abc.ABCMeta):
+class DLMainWindowMeta(type(QW.QMainWindow), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowMeta):
+class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta):
     """DataLab main window
 
     Args:
@@ -127,13 +127,13 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     @staticmethod
     def get_instance(console=None, hide_on_close=False):
         """Return singleton instance"""
-        if CDLMainWindow.__instance is None:
-            return CDLMainWindow(console, hide_on_close)
-        return CDLMainWindow.__instance
+        if DLMainWindow.__instance is None:
+            return DLMainWindow(console, hide_on_close)
+        return DLMainWindow.__instance
 
     def __init__(self, console=None, hide_on_close=False):
         """Initialize main window"""
-        CDLMainWindow.__instance = self
+        DLMainWindow.__instance = self
         super().__init__()
         self.setObjectName(APP_NAME)
         self.setWindowIcon(get_icon("DataLab.svg"))
@@ -1512,7 +1512,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         panel = self.__get_current_basedatapanel()
         panel.load_from_directory(path)
 
-    # ------Other methods related to AbstractCDLControl interface
+    # ------Other methods related to AbstractDLControl interface
     def get_version(self) -> str:
         """Return DataLab public version.
 
@@ -1521,11 +1521,11 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         return datalab.__version__
 
-    def close_application(self) -> None:  # Implementing AbstractCDLControl interface
+    def close_application(self) -> None:  # Implementing AbstractDLControl interface
         """Close DataLab application"""
         self.close()
 
-    def raise_window(self) -> None:  # Implementing AbstractCDLControl interface
+    def raise_window(self) -> None:  # Implementing AbstractDLControl interface
         """Raise DataLab window"""
         bring_to_front(self)
 

@@ -29,7 +29,7 @@ from datalab.objectmodel import get_uuid
 from datalab.tests import cdltest_app_context
 
 if TYPE_CHECKING:
-    from datalab.gui.main import CDLMainWindow
+    from datalab.gui.main import DLMainWindow
 
 
 def __print_test_result(title: str, result: Any = None) -> None:
@@ -40,11 +40,11 @@ def __print_test_result(title: str, result: Any = None) -> None:
         execenv.print("")
 
 
-def __misc_unit_function(win: CDLMainWindow) -> None:
+def __misc_unit_function(win: DLMainWindow) -> None:
     """Run miscellaneous unit tests
 
     Args:
-        win: CDLMainWindow instance
+        win: DLMainWindow instance
     """
     panel = win.signalpanel
     objview = panel.objview

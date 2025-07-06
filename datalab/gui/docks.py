@@ -215,7 +215,7 @@ def profile_to_signal(plot: BasePlot, panel: XCrossSection | YCrossSection) -> N
         # Note : this is the only way to retrieve the DataLab main window instance
         # when the CrossSectionItem object is embedded into an image widget
         # parented to another main window.
-        win = main.CDLMainWindow.get_instance()
+        win = main.DLMainWindow.get_instance()
         assert win is not None  # Should never happen
 
     for item in panel.cs_plot.get_items():

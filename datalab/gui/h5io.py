@@ -27,7 +27,7 @@ from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from datalab.widgets.h5browser import H5BrowserDialog
 
 if TYPE_CHECKING:
-    from datalab.gui.main import CDLMainWindow
+    from datalab.gui.main import DLMainWindow
     from datalab.h5.common import BaseNode
 
 
@@ -38,7 +38,7 @@ class H5InputOutput:
         mainwindow: Main window
     """
 
-    def __init__(self, mainwindow: CDLMainWindow) -> None:
+    def __init__(self, mainwindow: DLMainWindow) -> None:
         self.mainwindow = mainwindow
         self.uint32_wng: bool = None
 

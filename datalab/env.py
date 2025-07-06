@@ -129,7 +129,7 @@ class VerbosityLevels(enum.Enum):
 #
 
 
-class CDLExecEnv:
+class DLExecEnv:
     """Object representing DataLab test environment"""
 
     UNATTENDED_ARG = "unattended"
@@ -161,7 +161,7 @@ class CDLExecEnv:
             self.to_dict()
 
     def iterate_over_attrs_envvars(self) -> Generator[tuple[str, str], None, None]:
-        """Iterate over CDL environment variables
+        """Iterate over DataLab environment variables
 
         Yields:
             A tuple (attribute name, environment variable name)
@@ -518,4 +518,4 @@ class CDLExecEnv:
                 setattr(self, key, value)
 
 
-execenv = CDLExecEnv()
+execenv = DLExecEnv()

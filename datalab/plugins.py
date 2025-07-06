@@ -160,7 +160,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     PLUGIN_INFO: PluginInfo = None
 
     def __init__(self):
-        self.main: main.CDLMainWindow = None
+        self.main: main.DLMainWindow = None
         self.proxy: LocalProxy = None
         self._is_registered = False
         self.info = self.PLUGIN_INFO
@@ -263,7 +263,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Return True if plugin is registered"""
         return self._is_registered
 
-    def register(self, main: main.CDLMainWindow) -> None:
+    def register(self, main: main.DLMainWindow) -> None:
         """Register plugin"""
         if self._is_registered:
             return

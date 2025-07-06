@@ -32,7 +32,7 @@ from sigima.tests import helpers
 import datalab.config  # Loading icons
 from datalab.config import MOD_NAME
 from datalab.env import execenv
-from datalab.gui.main import CDLMainWindow
+from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
 from datalab.utils import qthelpers as qth
@@ -51,7 +51,7 @@ def cdltest_app_context(
     save: bool = False,
     console: bool | None = None,
     exec_loop: bool = True,
-) -> Generator[CDLMainWindow, None, None]:
+) -> Generator[DLMainWindow, None, None]:
     """Context manager handling DataLab mainwindow creation and Qt event loop
     with optional HDF5 file save and other options for testing purposes
 
@@ -66,7 +66,7 @@ def cdltest_app_context(
         size = 950, 600
     with qth.datalab_app_context(exec_loop=exec_loop):
         try:
-            win = CDLMainWindow(console=console)
+            win = DLMainWindow(console=console)
             if maximized:
                 win.showMaximized()
             else:

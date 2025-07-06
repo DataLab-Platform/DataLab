@@ -16,15 +16,15 @@ import time
 from sigima.tests.helpers import WorkdirRestoringTempDir
 
 from datalab.gui.macroeditor import Macro
-from datalab.gui.main import CDLMainWindow
+from datalab.gui.main import DLMainWindow
 from datalab.tests import cdltest_app_context
 
 
-def add_macro_sample(win: CDLMainWindow, index: int) -> Macro:
+def add_macro_sample(win: DLMainWindow, index: int) -> Macro:
     """Add a macro sample to the macro panel
 
     Args:
-        win: CDLMainWindow
+        win: DLMainWindow
         index: index of the macro sample to add
     """
     macro = win.macropanel.add_macro()

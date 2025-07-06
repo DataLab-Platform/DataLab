@@ -9,7 +9,7 @@ It is shown and raised above other windows when reopening application.
 
 # guitest: show
 
-from datalab.gui.main import CDLMainWindow
+from datalab.gui.main import DLMainWindow
 from datalab.tests.features.control import embedded1_unit_test
 
 
@@ -19,7 +19,7 @@ class HostWindow(embedded1_unit_test.AbstractHostWindow):
     def init_cdl(self) -> None:
         """Open DataLab test"""
         if self.datalab is None:
-            self.datalab = CDLMainWindow(console=False, hide_on_close=True)
+            self.datalab = DLMainWindow(console=False, hide_on_close=True)
             self.host.log("✨ Initialized DataLab window")
             self.datalab.show()
         else:

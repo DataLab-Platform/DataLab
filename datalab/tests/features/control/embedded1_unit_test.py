@@ -23,7 +23,7 @@ from sigima.obj import NewImageParam
 from sigima.tests import data as test_data
 
 from datalab.config import _
-from datalab.gui.main import CDLMainWindow
+from datalab.gui.main import DLMainWindow
 from datalab.tests.features.macro.macroeditor_unit_test import get_macro_example_path
 
 
@@ -95,7 +95,7 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
         win32_fix_title_bar_background(self)
         self.setWindowTitle(_("Host application"))
         self.setWindowIcon(get_std_icon("ComputerIcon"))
-        self.datalab: CDLMainWindow = None
+        self.datalab: DLMainWindow = None
         self.host = HostWidget(self)
         self.setCentralWidget(self.host)
         self.setup_window()
@@ -259,7 +259,7 @@ class HostWindow(AbstractHostWindow):
     def init_cdl(self):
         """Open DataLab test"""
         if self.datalab is None:
-            self.datalab = CDLMainWindow(console=False)
+            self.datalab = DLMainWindow(console=False)
             self.datalab.SIG_CLOSING.connect(self.datalab_was_closed)
             self.datalab.show()
             self.host.log("✨Initialized DataLab window")

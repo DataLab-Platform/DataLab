@@ -50,7 +50,7 @@ REM ======================================================
     del _tmp_.txt
     goto:eof
 
-:GetCDLProjectPath
+:GetDLProjectPath
 call:SetPythonPath
 python -c "import datalab, os;print(os.path.abspath(os.path.join(datalab.__path__[0], os.pardir)))" > _tmp_.txt
 set /p %1=<_tmp_.txt

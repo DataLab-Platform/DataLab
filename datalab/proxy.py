@@ -202,7 +202,7 @@ class LocalProxy(BaseProxy):
     process as the proxy.
 
     Args:
-        datalab (CDLMainWindow): CDLMainWindow instance.
+        datalab (DLMainWindow): DLMainWindow instance.
 
     .. note::
 
@@ -367,7 +367,7 @@ class LocalProxy(BaseProxy):
 
 @contextmanager
 def proxy_context(what: str) -> Generator[LocalProxy | RemoteProxy, None, None]:
-    """Context manager handling CDL proxy creation and destruction.
+    """Context manager handling DL proxy creation and destruction.
 
     Args:
         what: proxy type ("local" or "remote")
@@ -388,11 +388,11 @@ def proxy_context(what: str) -> Generator[LocalProxy | RemoteProxy, None, None]:
         port = int(what.split(":")[1].strip())
     if what == "local":
         # pylint: disable=import-outside-toplevel, cyclic-import
-        from datalab.gui.main import CDLMainWindow
+        from datalab.gui.main import DLMainWindow
 
         with qth.datalab_app_context(exec_loop=True):
             try:
-                win = CDLMainWindow()
+                win = DLMainWindow()
                 proxy = LocalProxy(win)
                 win.show()
                 yield proxy
