@@ -5,7 +5,7 @@ GUI
 ===
 
 The :mod:`datalab.gui` package contains functionnalities related to the graphical
-user interface (GUI) of the DataLab (CDL) project. Those features are mostly specific
+user interface (GUI) of the DataLab project. Those features are mostly specific
 to DataLab and are not intended to be used independently.
 
 The purpose of this section of the documentation is to provide an overview of the

@@ -22,7 +22,7 @@ msgstr ""
 msgid "Main window"
 msgstr ""
 
-msgid "The :mod:`datalab.gui.main` module provides the main window of the DataLab (CDL) project."
+msgid "The :mod:`datalab.gui.main` module provides the main window of the DataLab project."
 msgstr ""
 
 msgid "DataLab main window"
@@ -432,4 +432,3 @@ msgstr ""
 
 msgid "True if closed properly, False otherwise"
 msgstr ""
-

@@ -5,7 +5,7 @@ Main window
 ===========
 
 The :mod:`datalab.gui.main` module provides the main window of the
-DataLab (CDL) project.
+DataLab project.
 
 .. autoclass:: CDLMainWindow
 """

@@ -20,7 +20,7 @@ msgstr ""
 msgid "GUI"
 msgstr ""
 
-msgid "The :mod:`datalab.gui` package contains functionnalities related to the graphical user interface (GUI) of the DataLab (CDL) project. Those features are mostly specific to DataLab and are not intended to be used independently."
+msgid "The :mod:`datalab.gui` package contains functionnalities related to the graphical user interface (GUI) of the DataLab project. Those features are mostly specific to DataLab and are not intended to be used independently."
 msgstr ""
 
 msgid "The purpose of this section of the documentation is to provide an overview of the DataLab GUI architecture and to describe the main features of the modules contained in this package. It is not intended to provide a detailed description of the GUI features, but rather to provide a starting point for the reader who wants to understand the DataLab internal architecture."
@@ -97,4 +97,3 @@ msgstr ""
 
 msgid "HDF5 input/output"
 msgstr ""
-
