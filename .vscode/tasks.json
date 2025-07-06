@@ -315,32 +315,61 @@
             "type": "shell"
         },
         {
-            "label": "Run Coverage",
+            "label": "🧪 Run coverage tests",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "/c",
-                "run_coverage.bat"
+                "-m",
+                "coverage",
+                "run",
+                "-m",
+                "pytest",
+                "cdl"
             ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}",
                 "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
+                    "COVERAGE_PROCESS_START": "${workspaceFolder}/.coveragerc",
+                },
+                "statusbar": {
+                    "hide": true
                 }
             },
             "group": {
-                "kind": "build",
+                "kind": "test",
                 "isDefault": true
             },
             "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "dedicated",
-                "showReuseMessage": true,
-                "clear": true
-            }
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "📊 Coverage full",
+            "type": "shell",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && start htmlcov\\index.html"
+            },
+            "linux": {
+                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && xdg-open htmlcov/index.html"
+            },
+            "osx": {
+                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && open htmlcov/index.html"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "COVERAGE_PROCESS_START": "${workspaceFolder}/.coveragerc"
+                }
+            },
+            "presentation": {
+                "panel": "dedicated"
+            },
+            "problemMatcher": [],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "🧪 Run coverage tests",
+            ],
         },
         {
             "label": "Update doc resources (statically generated)",
