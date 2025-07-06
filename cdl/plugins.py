@@ -101,6 +101,15 @@ class PluginRegistry(type):
         execenv.log(cls, f"{len(cls._plugin_instances)} plugins left")
 
     @classmethod
+    def unregister_all_plugins(cls):
+        """Unregister all plugins"""
+        for plugin in cls._plugin_instances:
+            execenv.log(cls, f"Unregistering plugin {plugin.info.name}")
+            plugin.unregister()
+        cls._plugin_instances.clear()
+        execenv.log(cls, "All plugins unregistered")
+
+    @classmethod
     def get_plugin_info(cls, html: bool = True) -> str:
         """Return plugin information (names, versions, descriptions) in html format
 

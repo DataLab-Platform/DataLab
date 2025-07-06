@@ -763,11 +763,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     @staticmethod
     def __unregister_plugins() -> None:
         """Unregister plugins"""
-        while PluginRegistry.get_plugins():
-            # Unregistering plugin
-            plugin = PluginRegistry.get_plugins()[-1]
-            with qth.try_or_log_error(f"Unregistering plugin {plugin.info.name}"):
-                plugin.unregister()
+        with qth.try_or_log_error("Unregistering plugins"):
+            PluginRegistry.unregister_all_plugins()
 
     def __configure_statusbar(self) -> None:
         """Configure status bar"""
