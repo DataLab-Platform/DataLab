@@ -287,13 +287,8 @@
             "type": "shell",
         },
         {
-            "label": "Generate requirements",
-            "command": "${command:python.interpreterPath}",
-            "args": [
-                "-m",
-                "guidata.utils.genreqs",
-                "all",
-            ],
+            "label": "🛠️ Generate doc assets",
+            "command": "${command:python.interpreterPath} -m guidata.utils.genreqs all && ${command:python.interpreterPath} doc/update_validation_status.py && ${command:python.interpreterPath} doc/update_processor_methods.py",
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
@@ -370,41 +365,6 @@
             "dependsOn": [
                 "🧪 Run coverage tests",
             ],
-        },
-        {
-            "label": "Update doc resources (statically generated)",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "update_doc_resources.bat"
-            ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                },
-                "statusbar": {
-                    "hide": true
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "dedicated",
-                "showReuseMessage": true,
-                "clear": true
-            },
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Generate requirements",
-            ]
         },
         {
             "label": "📦 Upgrade PlotPyStack",
@@ -584,7 +544,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Generate requirements",
+                "🛠️ Generate doc assets",
             ]
         },
         {
@@ -677,7 +637,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Generate requirements",
+                "🛠️ Generate doc assets",
             ]
         },
         {
@@ -789,8 +749,8 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Generate requirements",
                 "Build PDF documentation"
+                "🛠️ Generate doc assets",
             ]
         },
         {

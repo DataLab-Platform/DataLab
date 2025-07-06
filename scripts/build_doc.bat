@@ -14,8 +14,6 @@ call %FUNC% SetPythonPath
 call %FUNC% UsePython
 call %FUNC% GetVersion DATALAB_VERSION
 cd %SCRIPTPATH%\..
-%PYTHON% doc\update_validation_status.py
-%PYTHON% doc\update_processor_methods.py
 
 @REM Set light mode for Qt applications and clean previous documentation ===============
 set QT_COLOR_MODE=light
