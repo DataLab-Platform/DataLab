@@ -10,5 +10,5 @@
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_peak_detection`,Compute 2D peak detection
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_radial_profile`,Compute radial profile
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_resize`,Resize image with :py:func:`sigima.computation.image.resize`
-:py:func:`~datalab.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data
+:py:func:`~datalab.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_segment_profile`,Compute profile along a segment

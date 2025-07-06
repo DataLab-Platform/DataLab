@@ -6,6 +6,6 @@
 :py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_offset_correction`,Compute offset correction
 :py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_peak_detection`,Detect peaks from data
 :py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_polyfit`,Compute polynomial fitting curve
-:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
 :py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_x_at_y`,Compute x at y with :py:func:`sigima.computation.signal.x_at_y`
 :py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_y_at_x`,Compute y at x with :py:func:`sigima.computation.signal.y_at_x`
