@@ -60,7 +60,7 @@
             "args": [
                 "-m",
                 "pylint",
-                "cdl",
+                "datalab",
                 "--disable=duplicate-code",
                 "--disable=fixme",
                 "--disable=too-many-arguments",
@@ -196,7 +196,7 @@
                 "guidata.utils.translations",
                 "scan",
                 "--name",
-                "cdl",
+                "datalab",
                 "--directory",
                 ".",
                 "--copyright-holder",
@@ -232,7 +232,7 @@
                 "guidata.utils.translations",
                 "compile",
                 "--name",
-                "cdl",
+                "datalab",
                 "--directory",
                 "."
             ],
@@ -324,7 +324,7 @@
                 "run",
                 "-m",
                 "pytest",
-                "cdl"
+                "datalab"
             ],
             "options": {
                 "cwd": "${workspaceFolder}",

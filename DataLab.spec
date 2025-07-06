@@ -1,15 +1,15 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 # Initial command:
-# pyinstaller -y --clean -n DataLab -i resources\DataLab.ico cdl\start.pyw
+# pyinstaller -y --clean -n DataLab -i resources\DataLab.ico datalab\start.pyw
 
 from PyInstaller.utils.hooks import collect_submodules, collect_data_files
-all_hidden_imports = collect_submodules('cdl')
-datas = collect_data_files('cdl') + [('cdl\\plugins', 'cdl\\plugins')]
+all_hidden_imports = collect_submodules('datalab')
+datas = collect_data_files('datalab') + [('datalab\\plugins', 'datalab\\plugins')]
 datas += collect_data_files('guidata') + collect_data_files('plotpy')
 
 a = Analysis(
-    ['cdl\\start.pyw'],
+    ['datalab\\start.pyw'],
     pathex=[],
     binaries=[],
     datas=datas,

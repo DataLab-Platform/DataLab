@@ -1,1 +1,1 @@
-.. automodule:: cdl.gui.processor
+.. automodule:: datalab.gui.processor

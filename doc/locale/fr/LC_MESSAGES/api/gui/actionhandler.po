@@ -23,8 +23,8 @@ msgid "Action handler"
 msgstr "Gestionnaire d'actions"
 
 #, fuzzy
-msgid "The :mod:`cdl.gui.actionhandler` module handles all application actions (menus, toolbars, context menu). These actions point to DataLab panels, processors, objecthandler, ..."
-msgstr "Le module :mod:`cdl.gui.actionhandler` gère toutes les actions de l'application (menus, barres d'outils, menu contextuel). Ces actions pointent vers les panneaux, les processeurs, les gestionnaires d'objets, ..."
+msgid "The :mod:`datalab.gui.actionhandler` module handles all application actions (menus, toolbars, context menu). These actions point to DataLab panels, processors, objecthandler, ..."
+msgstr "Le module :mod:`datalab.gui.actionhandler` gère toutes les actions de l'application (menus, barres d'outils, menu contextuel). Ces actions pointent vers les panneaux, les processeurs, les gestionnaires d'objets, ..."
 
 msgid "Utility classes"
 msgstr "Classes utilitaires"
@@ -187,4 +187,3 @@ msgstr "objets sélectionnés"
 
 msgid "Object handling image panel GUI interactions: actions, menus, ..."
 msgstr "Objet gérant les interactions GUI du panneau d'images : actions, menus, ..."
-

@@ -1,2 +1,2 @@
-.. automodule:: cdl.gui.h5io
+.. automodule:: datalab.gui.h5io
     :no-members:

@@ -1,2 +1,2 @@
-.. automodule:: cdl.gui.actionhandler
+.. automodule:: datalab.gui.actionhandler
     :no-members:

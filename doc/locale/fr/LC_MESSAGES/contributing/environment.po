@@ -187,8 +187,8 @@ msgstr "Données de test"
 msgid "DataLab test data are located in different folders, depending on their nature or origin."
 msgstr "Les données de test de DataLab sont situées dans différents dossiers, selon leur nature ou leur origine."
 
-msgid "Required data for unit tests are located in \"cdl\\data\\tests\" (public data)."
-msgstr "Les données requises pour les tests unitaires sont situées dans \"cdl\\data\\tests\" (données publiques)"
+msgid "Required data for unit tests are located in \"datalab\\data\\tests\" (public data)."
+msgstr "Les données requises pour les tests unitaires sont situées dans \"datalab\\data\\tests\" (données publiques)"
 
 msgid "A second folder %CDL_DATA% (optional) may be defined for additional tests which are still under development (or for confidential data)."
 msgstr "Un second dossier %CDL_DATA% (facultatif) peut être défini pour des tests supplémentaires qui sont encore en cours de développement (ou pour des données confidentielles)."

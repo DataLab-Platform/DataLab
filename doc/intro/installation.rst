@@ -18,7 +18,7 @@ Installation
         - |download_link1|
 
 This section provides information on how to install DataLab on your system.
-Once installed, you can start DataLab by running the ``cdl`` command in a terminal,
+Once installed, you can start DataLab by running the ``datalab`` command in a terminal,
 or by clicking on the DataLab shortcut in the Start menu (on Windows).
 
 .. seealso::
@@ -72,21 +72,21 @@ Package manager ``pip``
 
 :octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
 
-DataLab's package ``cdl`` is available on the Python Package Index (PyPI)
-on the following URL: https://pypi.python.org/pypi/cdl.
+DataLab's package ``datalab`` is available on the Python Package Index (PyPI)
+on the following URL: https://pypi.python.org/pypi/datalab.
 
 Installing DataLab from PyPI with Qt is as simple as running this command
 (you may need to use ``pip3`` instead of ``pip`` on some systems):
 
 .. code-block:: console
 
-    $ pip install cdl[qt]
+    $ pip install datalab[qt]
 
 Or, if you prefer, you can install DataLab without the Qt library (not recommended):
 
 .. code-block:: console
 
-    $ pip install cdl
+    $ pip install datalab
 
 .. note::
 
@@ -95,7 +95,7 @@ Or, if you prefer, you can install DataLab without the Qt library (not recommend
 
     .. code-block:: console
 
-        $ pip install --upgrade cdl[qt]
+        $ pip install --upgrade datalab[qt]
 
 .. _install_aioinstaller:
 
@@ -187,7 +187,7 @@ Installing DataLab directly from the source package may be done using ``pip``:
 
 .. code-block:: console
 
-    $ pip install --upgrade cdl-0.11.1.tar.gz
+    $ pip install --upgrade datalab-0.11.1.tar.gz
 
 Or, if you prefer, you can install it manually by running the following command
 from the root directory of the source package:
@@ -204,7 +204,7 @@ by running the following command from the root directory of the source package
 
     $ pip install build wheel  # Install build and wheel packages (if needed)
     $ python -m build  # Build the wheel package
-    $ pip install --upgrade dist/cdl-0.11.1-py2.py3-none-any.whl  # Install the wheel package
+    $ pip install --upgrade dist/datalab-0.11.1-py2.py3-none-any.whl  # Install the wheel package
 
 .. _install_development:
 

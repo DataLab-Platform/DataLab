@@ -23,7 +23,7 @@ msgid "Parameters (:mod:`sigima.param`)"
 msgstr "Paramètres (:mod:`sigima.param`)"
 
 msgid "The :mod:`sigima.param` module aims at providing all the dataset parameters that are used by the :mod:`sigima.computation` and DataLab's processors."
-msgstr "Le module :mod:`sigima.param` a vocation à fournir tous les paramètres de jeu de données utilisés par les modules :mod:`sigima.computation` et :mod:`cdl.gui.processor`."
+msgstr "Le module :mod:`sigima.param` a vocation à fournir tous les paramètres de jeu de données utilisés par les modules :mod:`sigima.computation` et :mod:`datalab.gui.processor`."
 
 msgid "Those datasets are defined in other modules:"
 msgstr "Ces jeux de données sont définis dans d'autres modules :"

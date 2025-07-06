@@ -14,9 +14,9 @@ import re
 import sigima.computation
 from _pytest.mark import Mark
 
-import cdl.tests as tests_pkg
-from cdl import __version__
-from cdl.utils.strings import shorten_docstring
+import datalab.tests as tests_pkg
+from datalab import __version__
+from datalab.utils.strings import shorten_docstring
 
 
 def check_for_validation_test(
@@ -39,10 +39,10 @@ def check_for_validation_test(
     stable_version = re.sub(r"\.?(post|dev|rc|b|a)\S*", "", __version__)
     for test, path, line_number in validation_tests:
         if test in names:
-            # Path relative to the `cdl` package:
+            # Path relative to the `datalab` package:
             path = osp.relpath(path, start=osp.dirname(osp.join(tests_pkg.__file__)))
             name = "/".join(path.split(osp.sep))
-            link = f"https://github.com/DataLab-Platform/DataLab/blob/v{stable_version}/cdl/tests/{name}#L{line_number}"
+            link = f"https://github.com/DataLab-Platform/DataLab/blob/v{stable_version}/datalab/tests/{name}#L{line_number}"
             return f"`{test} <{link}>`_"
     return None
 

@@ -230,7 +230,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106) - Analysis: coordinate shifted results on images with ROIs and shifted origin
 * Fixed [Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107) - Wrong indices when extracting a profile from an image with a ROI
 * Fixed [Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111) - Proxy `add_object` method does not support signal/image metadata (e.g. ROI)
-* Test data plugin / "Create 2D noisy gauss image": fixed amplitude calculation in `cdl.tests.data.create_2d_random` for non-integer data types
+* Test data plugin / "Create 2D noisy gauss image": fixed amplitude calculation in `datalab.tests.data.create_2d_random` for non-integer data types
 
 📚 Documentation:
 
@@ -264,7 +264,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Complete redesign of the ROI editor user interfaces, improving ergonomics and consistency with the rest of the application
   * Major internal refactoring of the ROI system to make it more robust (more tests) and easier to maintain
 
-* Implemented [Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Launch DataLab using `datalab` instead of `cdl`. Note that the `cdl` command is still available for backward compatibility.
+* Implemented [Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Launch DataLab using `datalab` instead of `datalab`. Note that the `datalab` command is still available for backward compatibility.
 
 * Implemented [Issue #101](https://github.com/DataLab-Platform/DataLab/issues/101) - Configuration: set default image interpolation to anti-aliasing (`5` instead of `0` for nearest). This change is motivated by the fact that a performance improvement was made in PlotPy v2.7 on Windows, which allows to use anti-aliasing interpolation by default without a significant performance impact.
 
@@ -377,9 +377,9 @@ This is a minor maintenance release.
 * Fixed [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84) - Build issues with V0.16.1: `signal` name conflict, ...
   * This issue was intended to be fixed in version 0.16.2, but the fix was not complete
   * Thanks to [@rolandmas](https://github.com/rolandmas) for reporting the issue and for the help in investigating the problem and testing the fix
-* Fixed [Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Test data paths may be added multiple times to `cdl.utils.tests.TST_PATH`
+* Fixed [Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Test data paths may be added multiple times to `datalab.utils.tests.TST_PATH`
   * This issue is related to [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)
-  * Adding the test data paths multiple times to `cdl.utils.tests.TST_PATH` was causing the test data to be loaded multiple times, which lead to some tests failing (a simple workaround was added to V0.16.2: this issue is now fixed)
+  * Adding the test data paths multiple times to `datalab.utils.tests.TST_PATH` was causing the test data to be loaded multiple times, which lead to some tests failing (a simple workaround was added to V0.16.2: this issue is now fixed)
   * Thanks again to [@rolandmas](https://github.com/rolandmas) for reporting the issue in the context of the Debian packaging
 * Fixed [Issue #86](https://github.com/DataLab-Platform/DataLab/issues/86) - Average of N integer images overflows data type
 * Fixed [Issue #87](https://github.com/DataLab-Platform/DataLab/issues/87) - Image average profile extraction: `AttributeError` when trying to edit profile parameters
@@ -774,12 +774,12 @@ NumPy 2.0 support has been added with this release.
 * Curve style: added "Reset curve styles" in "View" menu. This feature allows to reset the curve style cycle to its initial state.
 * Plugin base classe `PluginBase`:
   * Added `edit_new_signal_parameters` method for showing a dialog box to edit parameters for a new signal
-  * Added `edit_new_image_parameters` method for showing a dialog box to edit parameters for a new image (updated the *cdl_testdata.py* plugin accordingly)
-* Signal and image computations API (`cdl.computations`):
+  * Added `edit_new_image_parameters` method for showing a dialog box to edit parameters for a new image (updated the *datalab_testdata.py* plugin accordingly)
+* Signal and image computations API (`datalab.computations`):
   * Added wrappers for signal and image 1 -> 1 computations
   * These wrappers aim at simplifying the creation of a basic computation function operating on DataLab's native objects (`SignalObj` and `ImageObj`) from a function operating on NumPy arrays
   * This simplifies DataLab's internals and makes it easier to create new computing features inside plugins
-  * See the *cdl_custom_func.py* example plugin for a practical use case
+  * See the *datalab_custom_func.py* example plugin for a practical use case
 * Added "Radial profile extraction" feature to image panel's "Operation" menu:
   * This feature allows to extract a radially averaged profile from an image
   * The profile is extracted around a user-defined center (x0, y0)
@@ -828,7 +828,7 @@ NumPy 2.0 support has been added with this release.
 * Contour detection on ROI:
   * Before this release, when running contour detection on a ROI, some contours were detected outside the ROI (it may be due to a limitation of the scikit-image `find_contours` function).
   * Now, thanks a workaround, the erroneous contours are filtered out.
-  * A new test module `cdl.tests.features.images.contour_fabryperot_app` has been added to test the contour detection feature on a Fabry-Perot image (thanks to [@emarin2642](https://github.com/emarin2642) for the contribution)
+  * A new test module `datalab.tests.features.images.contour_fabryperot_app` has been added to test the contour detection feature on a Fabry-Perot image (thanks to [@emarin2642](https://github.com/emarin2642) for the contribution)
   * This fixes [Issue #34](https://github.com/DataLab-Platform/DataLab/issues/34) - Contour detection: unexpected results outside ROI
 * Analysis result merging:
   * Before this release, when doing a `1->N` computation (sum, average, product) on a group of signals/images, the analysis results associated to each signal/image were merged into a single result, but only the type of result present in the first signal/image was kept.
@@ -900,8 +900,8 @@ NumPy 2.0 support has been added with this release.
   * The "Show graphical object titles" and "Auto-refresh" actions were only working on the active signal/image panel, and not on all panels.
   * This is now fixed (see [Issue #11](https://github.com/DataLab-Platform/DataLab/issues/11) - "Show graphical object titles" and "Auto-refresh" actions were working only on current signal/image panel)
 * Fixed [Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`
-* Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. Missing menus:
-  * Part 1: `pip install cdl` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard
+* Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install datalab` error - 2. Missing menus:
+  * Part 1: `pip install datalab` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard
   * Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding dynamic menus
 * HDF5 file format: when importing an HDF5 dataset as a signal or an image, the dataset attributes were systematically copied to signal/image metadata: we now only copy the attributes which match standard data types (integers, floats, strings) to avoid errors when serializing/deserializing the signal/image object
 * Installation/configuration viewer: improved readability (removed syntax highlighting)

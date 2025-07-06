@@ -4,9 +4,9 @@
 Module for taking DataLab screenshots
 """
 
-from cdl import config
-from cdl.tests.features.applauncher import launcher1_app_test
-from cdl.tests.scenarios import beautiful_app
+from datalab import config
+from datalab.tests.features.applauncher import launcher1_app_test
+from datalab.tests.scenarios import beautiful_app
 
 if __name__ == "__main__":
     print("Updating screenshots...", end=" ")

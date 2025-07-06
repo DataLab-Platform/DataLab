@@ -35,8 +35,8 @@ msgstr "Si vous recherchez une solution alternative légère pour contrôler Dat
 msgid "From an IDE"
 msgstr "Depuis un IDE"
 
-msgid "DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other IDE, or even a Jupyter Notebook) that runs a Python script. It allows to connect to a running DataLab instance, adds a signal and an image, and then runs calculations. This feature is exposed by the `RemoteProxy` class that is provided in module ``cdl.proxy``."
-msgstr "DataLab peut être contrôlé à distance depuis un IDE (par exemple `Spyder`_ ou tout autre IDE, ou même un Jupyter Notebook) qui exécute un script Python. Il permet de se connecter à une instance de DataLab en cours d'exécution, d'ajouter un signal et une image, puis d'exécuter des calculs. Cette fonctionnalité est exposée par la classe RemoteProxy fournie dans le module cdl.proxy."
+msgid "DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other IDE, or even a Jupyter Notebook) that runs a Python script. It allows to connect to a running DataLab instance, adds a signal and an image, and then runs calculations. This feature is exposed by the `RemoteProxy` class that is provided in module ``datalab.proxy``."
+msgstr "DataLab peut être contrôlé à distance depuis un IDE (par exemple `Spyder`_ ou tout autre IDE, ou même un Jupyter Notebook) qui exécute un script Python. Il permet de se connecter à une instance de DataLab en cours d'exécution, d'ajouter un signal et une image, puis d'exécuter des calculs. Cette fonctionnalité est exposée par la classe RemoteProxy fournie dans le module datalab.proxy."
 
 msgid "From a third-party application"
 msgstr "Depuis une application tierce"
@@ -101,14 +101,14 @@ msgstr "Les objets signal et image sont décrits dans cette section : :ref:`ref-
 msgid "Some examples are provided to help implementing such a communication between your application and DataLab:"
 msgstr "Quelques exemples sont fournis pour aider à implémenter une telle communication entre votre application et DataLab :"
 
-msgid "See module: ``cdl.tests.remoteclient_app``"
-msgstr "Voir le module : ``cdl.tests.remoteclient_app``"
+msgid "See module: ``datalab.tests.remoteclient_app``"
+msgstr "Voir le module : ``datalab.tests.remoteclient_app``"
 
-msgid "See module: ``cdl.tests.remoteclient_unit``"
-msgstr "Voir le module : ``cdl.tests.remoteclient_unit``"
+msgid "See module: ``datalab.tests.remoteclient_unit``"
+msgstr "Voir le module : ``datalab.tests.remoteclient_unit``"
 
-msgid "Screenshot of remote client application test (``cdl.tests.remoteclient_app``)"
-msgstr "Capture d'écran du test de l'application cliente distante (``cdl.tests.remoteclient_app``)"
+msgid "Screenshot of remote client application test (``datalab.tests.remoteclient_app``)"
+msgstr "Capture d'écran du test de l'application cliente distante (``datalab.tests.remoteclient_app``)"
 
 msgid "Examples"
 msgstr "Exemples"
@@ -125,11 +125,11 @@ msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
 msgid "Connection dialog"
 msgstr "Boîte de dialogue de connexion"
 
-msgid "The DataLab package also provides a connection dialog that may be used to connect to a running DataLab instance. It is exposed by the :py:class:`cdl.widgets.connection.ConnectionDialog` class."
-msgstr "Le package DataLab fournit également une boîte de dialogue de connexion qui peut être utilisée pour se connecter à une instance de DataLab en cours d'exécution. Elle est exposée par la classe :py:class:`cdl.widgets.connection.ConnectionDialog`."
+msgid "The DataLab package also provides a connection dialog that may be used to connect to a running DataLab instance. It is exposed by the :py:class:`datalab.widgets.connection.ConnectionDialog` class."
+msgstr "Le package DataLab fournit également une boîte de dialogue de connexion qui peut être utilisée pour se connecter à une instance de DataLab en cours d'exécution. Elle est exposée par la classe :py:class:`datalab.widgets.connection.ConnectionDialog`."
 
-msgid "Screenshot of connection dialog (``cdl.widgets.connection.ConnectionDialog``)"
-msgstr "Capture d'écran de la boîte de dialogue de connexion (``cdl.widgets.connection.ConnectionDialog``)"
+msgid "Screenshot of connection dialog (``datalab.widgets.connection.ConnectionDialog``)"
+msgstr "Capture d'écran de la boîte de dialogue de connexion (``datalab.widgets.connection.ConnectionDialog``)"
 
 msgid "Example of use:"
 msgstr "Exemple d'utilisation :"
@@ -513,14 +513,14 @@ msgstr "État d'affichage des titres"
 msgid "Public API: additional methods"
 msgstr "API publique : méthodes supplémentaires"
 
-msgid "The remote control class methods (either using the proxy or the remote client) may be completed with additional methods which are dynamically added at runtime. This mechanism allows to access the methods of the processors of DataLab (see :mod:`cdl.gui.processor`)."
-msgstr "Les méthodes de la classe de contrôle à distance (en utilisant le proxy ou le client distant) peuvent être complétées par des méthodes supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce mécanisme permet d'accéder aux méthodes des processeurs de DataLab (voir :mod:`cdl.gui.processor`)."
+msgid "The remote control class methods (either using the proxy or the remote client) may be completed with additional methods which are dynamically added at runtime. This mechanism allows to access the methods of the processors of DataLab (see :mod:`datalab.gui.processor`)."
+msgstr "Les méthodes de la classe de contrôle à distance (en utilisant le proxy ou le client distant) peuvent être complétées par des méthodes supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce mécanisme permet d'accéder aux méthodes des processeurs de DataLab (voir :mod:`datalab.gui.processor`)."
 
 msgid "Signal processor"
 msgstr "Processeur de signal"
 
-msgid "When working with signals, the methods of :class:`cdl.gui.processor.signal.SignalProcessor` may be accessed."
-msgstr "Lorsque vous travaillez avec des signaux, les méthodes de :class:`cdl.gui.processor.signal.SignalProcessor` peuvent être accédées."
+msgid "When working with signals, the methods of :class:`datalab.gui.processor.signal.SignalProcessor` may be accessed."
+msgstr "Lorsque vous travaillez avec des signaux, les méthodes de :class:`datalab.gui.processor.signal.SignalProcessor` peuvent être accédées."
 
 msgid "Object handling signal processing: operations, processing, analysis"
 msgstr "Objet de traitement de signal : opérations, traitement, analyse"
@@ -597,8 +597,8 @@ msgstr "Calculer la détection de pics basée sur une transformée de Hough circ
 msgid "Image processor"
 msgstr "Processeur d'image"
 
-msgid "When working with images, the methods of :class:`cdl.gui.processor.image.ImageProcessor` may be accessed."
-msgstr "Lorsque vous travaillez avec des images, les méthodes de :class:`cdl.gui.processor.image.ImageProcessor` peuvent être accédées."
+msgid "When working with images, the methods of :class:`datalab.gui.processor.image.ImageProcessor` may be accessed."
+msgstr "Lorsque vous travaillez avec des images, les méthodes de :class:`datalab.gui.processor.image.ImageProcessor` peuvent être accédées."
 
 msgid "Object handling image processing: operations, processing, analysis"
 msgstr "Objet de traitement d'image : opérations, traitement, analyse"

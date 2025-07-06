@@ -4,7 +4,7 @@
 Create dependencies hash
 """
 
-from cdl.config import DATAPATH
-from cdl.utils import dephash
+from datalab.config import DATAPATH
+from datalab.utils import dephash
 
 dephash.create_dependencies_file(DATAPATH, ("guidata", "plotpy"))

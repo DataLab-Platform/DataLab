@@ -25,7 +25,7 @@ First, we open DataLab and load the images:
    the toolbar, or by dragging and dropping the files into DataLab (on the panel on
    the right).
 
-.. |fileopen_ima| image:: ../../../cdl/data/icons/io/fileopen_ima.svg
+.. |fileopen_ima| image:: ../../../datalab/data/icons/io/fileopen_ima.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -60,7 +60,7 @@ by pressing the middle mouse button and dragging the mouse.
 
        Select the "Visualization" tab, and select the "gray" colormap.
 
-.. |libre-gui-settings| image:: ../../../cdl/data/icons/libre-gui-settings.svg
+.. |libre-gui-settings| image:: ../../../datalab/data/icons/libre-gui-settings.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -114,7 +114,7 @@ Now, let's detect the contours in the ROI and fit them to circles.
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../cdl/data/icons/analysis/show_results.svg
+.. |show_results| image:: ../../../datalab/data/icons/analysis/show_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -123,7 +123,7 @@ The images (or signals) can also be displayed in a separate window, by clicking 
 the "View in a new window" entry in the "View" menu (or the |new_window| button in
 the toolbar). This is useful to compare side by side images or signals.
 
-.. |new_window| image:: ../../../cdl/data/icons/view/new_window.svg
+.. |new_window| image:: ../../../datalab/data/icons/view/new_window.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -158,7 +158,7 @@ Now, let's delete the image metadata (including the annotations) to clean up the
    Select the "Delete metadata" entry in the "Edit" menu, or the |metadata_delete|
    button in the toolbar.
 
-.. |metadata_delete| image:: ../../../cdl/data/icons/edit/metadata_delete.svg
+.. |metadata_delete| image:: ../../../datalab/data/icons/edit/metadata_delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -176,7 +176,7 @@ ROI from the first image to the second image, using the metadata.
     Select the "Copy metadata" entry in the "Edit" menu, or the |metadata_copy|
     button in the toolbar.
 
-.. |metadata_copy| image:: ../../../cdl/data/icons/edit/metadata_copy.svg
+.. |metadata_copy| image:: ../../../datalab/data/icons/edit/metadata_copy.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -186,7 +186,7 @@ ROI from the first image to the second image, using the metadata.
     Select the second image in the "Images" panel, then select the "Paste metadata"
     entry in the "Edit" menu, or the |metadata_paste| button in the toolbar.
 
-.. |metadata_paste| image:: ../../../cdl/data/icons/edit/metadata_paste.svg
+.. |metadata_paste| image:: ../../../datalab/data/icons/edit/metadata_paste.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -214,7 +214,7 @@ To extract the intensity profile along the X axis, we have two options:
 - Or activate the "Cross section" tool |cross_section| in the vertical toolbar
   on the left of the visualization panel.
 
-.. |profile| image:: ../../../cdl/data/icons/operations/profile.svg
+.. |profile| image:: ../../../datalab/data/icons/operations/profile.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -270,7 +270,7 @@ transfer the profile to the "Signals" panel for further processing.
 Then, click on the "Process signal" button |to_signal| in the toolbar near the
 profile to transfer the profile to the "Signals" panel.
 
-.. |to_signal| image:: ../../../cdl/data/icons/to_signal.svg
+.. |to_signal| image:: ../../../datalab/data/icons/to_signal.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -290,7 +290,7 @@ the annotations.
     Save the workspace to a file with "File > Save to HDF5 file...",
     or the |filesave_h5| button in the toolbar.
 
-.. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
+.. |filesave_h5| image:: ../../../datalab/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -300,12 +300,12 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../../datalab/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
+.. |h5browser| image:: ../../../datalab/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

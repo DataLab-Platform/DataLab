@@ -27,7 +27,7 @@ DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other
 IDE, or even a Jupyter Notebook) that runs a Python script. It allows to
 connect to a running DataLab instance, adds a signal and an image, and then
 runs calculations. This feature is exposed by the `RemoteProxy` class that
-is provided in module ``cdl.proxy``.
+is provided in module ``datalab.proxy``.
 
 From a third-party application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -79,12 +79,12 @@ Supported features are the following:
 Some examples are provided to help implementing such a communication
 between your application and DataLab:
 
-  - See module: ``cdl.tests.remoteclient_app``
-  - See module: ``cdl.tests.remoteclient_unit``
+  - See module: ``datalab.tests.remoteclient_app``
+  - See module: ``datalab.tests.remoteclient_unit``
 
 .. figure:: /images/shots/remote_control_test.png
 
-    Screenshot of remote client application test (``cdl.tests.remoteclient_app``)
+    Screenshot of remote client application test (``datalab.tests.remoteclient_app``)
 
 Examples
 ^^^^^^^^
@@ -107,20 +107,20 @@ Connection dialog
 
 The DataLab package also provides a connection dialog that may be used
 to connect to a running DataLab instance. It is exposed by the
-:py:class:`cdl.widgets.connection.ConnectionDialog` class.
+:py:class:`datalab.widgets.connection.ConnectionDialog` class.
 
 .. figure:: ../../images/shots/connect_dialog.png
 
-    Screenshot of connection dialog (``cdl.widgets.connection.ConnectionDialog``)
+    Screenshot of connection dialog (``datalab.widgets.connection.ConnectionDialog``)
 
 Example of use:
 
-.. literalinclude:: ../../../cdl/tests/features/control/connect_dialog.py
+.. literalinclude:: ../../../datalab/tests/features/control/connect_dialog.py
 
 Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: cdl.remote.RemoteClient
+.. autoclass:: datalab.remote.RemoteClient
     :inherited-members:
 
 Public API: additional methods
@@ -129,25 +129,25 @@ Public API: additional methods
 The remote control class methods (either using the proxy or the remote client)
 may be completed with additional methods which are dynamically added at
 runtime. This mechanism allows to access the methods of the processors of DataLab
-(see :mod:`cdl.gui.processor`).
+(see :mod:`datalab.gui.processor`).
 
 Signal processor
 ~~~~~~~~~~~~~~~~
 
-When working with signals, the methods of :class:`cdl.gui.processor.signal.SignalProcessor`
+When working with signals, the methods of :class:`datalab.gui.processor.signal.SignalProcessor`
 may be accessed.
 
-.. automodule:: cdl.gui.processor.signal
+.. automodule:: datalab.gui.processor.signal
     :members:
     :no-index:
 
 Image processor
 ~~~~~~~~~~~~~~~
 
-When working with images, the methods of :class:`cdl.gui.processor.image.ImageProcessor`
+When working with images, the methods of :class:`datalab.gui.processor.image.ImageProcessor`
 may be accessed.
 
-.. automodule:: cdl.gui.processor.image
+.. automodule:: datalab.gui.processor.image
     :members:
     :no-index:
 

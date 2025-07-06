@@ -5,7 +5,7 @@ API
 
 The public Application Programming Interface (API) of DataLab offers a set of
 functions to access the DataLab features. Those functions are available in various
-submodules of the `cdl` package. The following table lists the available submodules
+submodules of the `datalab` package. The following table lists the available submodules
 and their purpose:
 
 .. list-table::
@@ -27,7 +27,7 @@ and their purpose:
     * - :mod:`sigima.computation`
       - Computation functions, which operate on DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`)
 
-    * - :mod:`cdl.proxy`
+    * - :mod:`datalab.proxy`
       - Proxy objects to access the DataLab interface from a Python script or a remote application
 
 .. toctree::

@@ -9,8 +9,8 @@ parallel = True
 concurrency = multiprocessing,thread
 
 omit =
-    */cdl/utils/tests.py
-    */cdl/tests/*
+    */datalab/utils/tests.py
+    */datalab/tests/*
     */guidata/*
     */plotpy/*
 

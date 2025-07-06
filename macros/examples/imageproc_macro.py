@@ -8,7 +8,7 @@ import scipy.ndimage as spi
 # `pip install cdlclient`), as it's more lightweight than the full DataLab package:
 #
 # from cdlclient import SimpleRemoteProxy as RemoteProxy
-from cdl.proxy import RemoteProxy
+from datalab.proxy import RemoteProxy
 
 proxy = RemoteProxy()
 proxy.set_current_panel("image")

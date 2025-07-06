@@ -1,2 +1,2 @@
-.. automodule:: cdl.gui.roieditor
+.. automodule:: datalab.gui.roieditor
     :no-members:

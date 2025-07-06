@@ -224,22 +224,22 @@ The following filters are available:
     * - |bandstop| Band-stop
       - Filter out frequencies inside a range
 
-.. |lowpass| image:: ../../../cdl/data/icons/processing/lowpass.svg
+.. |lowpass| image:: ../../../datalab/data/icons/processing/lowpass.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |highpass| image:: ../../../cdl/data/icons/processing/highpass.svg
+.. |highpass| image:: ../../../datalab/data/icons/processing/highpass.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |bandpass| image:: ../../../cdl/data/icons/processing/bandpass.svg
+.. |bandpass| image:: ../../../datalab/data/icons/processing/bandpass.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |bandstop| image:: ../../../cdl/data/icons/processing/bandstop.svg
+.. |bandstop| image:: ../../../datalab/data/icons/processing/bandstop.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

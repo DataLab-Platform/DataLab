@@ -3,13 +3,13 @@
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
 
 @REM Deploying images and icons
-copy DataLab.svg ..\cdl\data\logo
+copy DataLab.svg ..\datalab\data\logo
 %INKSCAPE_PATH% "DataLab-Title.svg" -o "..\doc\_static\DataLab-Title.png" -w 190
 %INKSCAPE_PATH% "DataLab-Frontpage.svg" -o "..\doc\_static\DataLab-Frontpage.png" -w 1300
-%INKSCAPE_PATH% "DataLab-Splash.svg" -o "..\cdl\data\logo\DataLab-Splash.png" -w 350
-%INKSCAPE_PATH% "DataLab-Watermark.svg" -o "..\cdl\data\logo\DataLab-Watermark.png" -w 225
+%INKSCAPE_PATH% "DataLab-Splash.svg" -o "..\datalab\data\logo\DataLab-Splash.png" -w 350
+%INKSCAPE_PATH% "DataLab-Watermark.svg" -o "..\datalab\data\logo\DataLab-Watermark.png" -w 225
 %INKSCAPE_PATH% "DataLab-Banner.svg" -o "..\doc\images\DataLab-Banner.png" -w 364
-%INKSCAPE_PATH% "DataLab-Banner.svg" -o "..\cdl\data\logo\DataLab-Banner-150.png" -w 150
+%INKSCAPE_PATH% "DataLab-Banner.svg" -o "..\datalab\data\logo\DataLab-Banner-150.png" -w 150
 %INKSCAPE_PATH% "DataLab-Screenshot-Theme.svg" -o "..\doc\images\DataLab-Screenshot-Theme.png" -w 982
 %INKSCAPE_PATH% "DataLab-Overview.svg" -o "..\doc\images\DataLab-Overview.png" -w 1250
 %INKSCAPE_PATH% "DataLab-Windows-Installer.svg" -o "..\doc\images\shots\windows_installer.png" -w 900

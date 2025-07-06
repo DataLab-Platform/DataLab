@@ -23,7 +23,7 @@ def array_to_rpcbinary(data):
     return Binary(dbytes.getvalue())
 
 
-def get_cdl_xmlrpc_port():
+def get_datalab_xmlrpc_port():
     """Return DataLab current XML-RPC port"""
     if sys.platform == "win32" and "HOME" in os.environ:
         os.environ.pop("HOME")  # Avoid getting old WinPython settings dir
@@ -46,7 +46,7 @@ class RemoteClient(object):
     def connect(self, port=None):
         """Connect to DataLab XML-RPC server"""
         if port is None:
-            port = get_cdl_xmlrpc_port()
+            port = get_datalab_xmlrpc_port()
         self.port = port
         url = "http://127.0.0.1:" + port
         self.serverproxy = ServerProxy(url, allow_none=True)
@@ -167,10 +167,10 @@ class RemoteClient(object):
 
 def test_remote_client():
     """DataLab Remote Client test"""
-    cdl = RemoteClient()
-    cdl.connect()
+    datalab = RemoteClient()
+    datalab.connect()
     data = np.array([[3, 4, 5], [7, 8, 0]], dtype=np.uint16)
-    cdl.add_image("toto", data)
+    datalab.add_image("toto", data)
 
 
 if __name__ == "__main__":

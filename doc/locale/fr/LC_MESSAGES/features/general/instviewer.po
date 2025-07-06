@@ -56,8 +56,8 @@ msgstr "Chemins internes utilisés pour le stockage de données et la découvert
 msgid "Python interpreter details (version, architecture, paths);"
 msgstr "Détails de l'interpréteur Python (version, architecture, chemins) ;"
 
-msgid "Location of the `cdl` package."
-msgstr "Emplacement du package `cdl`."
+msgid "Location of the `datalab` package."
+msgstr "Emplacement du package `datalab`."
 
 msgid "This section is especially useful for debugging path-related issues or confirming the installation context (e.g., standalone vs. pip-installed)."
 msgstr "Cette section est particulièrement utile pour déboguer les problèmes liés aux chemins ou confirmer le contexte d'installation (par exemple, autonome ou installé via pip)."
@@ -92,8 +92,8 @@ msgstr "Conseils d'utilisation"
 msgid "You can copy text from any of the tabs for diagnostic or support purposes."
 msgstr "Vous pouvez copier du texte depuis n'importe quel onglet à des fins de diagnostic ou de support."
 
-msgid "If a plugin or I/O feature does not appear, check that its filename starts with `cdl_` and that it is located in a recognized plugin directory (see the *User Configuration* tab)."
-msgstr "Si un plugin ou une fonctionnalité d'E/S n'apparaît pas, vérifiez que son nom de fichier commence par `cdl_` et qu'il est situé dans un répertoire de plugins reconnu (voir l'onglet *Configuration utilisateur*)."
+msgid "If a plugin or I/O feature does not appear, check that its filename starts with `datalab_` and that it is located in a recognized plugin directory (see the *User Configuration* tab)."
+msgstr "Si un plugin ou une fonctionnalité d'E/S n'apparaît pas, vérifiez que son nom de fichier commence par `datalab_` et qu'il est situé dans un répertoire de plugins reconnu (voir l'onglet *Configuration utilisateur*)."
 
 msgid "Reporting unexpected behavior or any other bug on `GitHub Issues`_ will be greatly appreciated, especially if the contents of this viewer are attached to the report (as well as log files, see :ref:`ref-to-logviewer`)."
 msgstr "Signaler un comportement inattendu ou tout autre bug sur `GitHub Issues`_ sera grandement apprécié, surtout si le contenu de ce visualiseur est joint au rapport (ainsi que les fichiers journaux, voir :ref:`ref-to-logviewer`)."

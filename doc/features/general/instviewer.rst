@@ -25,7 +25,7 @@ This tab displays system-level information about the DataLab installation, inclu
 - Whether DataLab is running in frozen (standalone) mode or as a standard Python package;
 - Internal paths used for data storage and plugin discovery;
 - Python interpreter details (version, architecture, paths);
-- Location of the `cdl` package.
+- Location of the `datalab` package.
 
 This section is especially useful for debugging path-related issues or confirming the installation context (e.g., standalone vs. pip-installed).
 
@@ -55,7 +55,7 @@ Usage Tips
 ----------
 
 - You can copy text from any of the tabs for diagnostic or support purposes.
-- If a plugin or I/O feature does not appear, check that its filename starts with `cdl_` and that it is located in a recognized plugin directory (see the *User Configuration* tab).
+- If a plugin or I/O feature does not appear, check that its filename starts with `datalab_` and that it is located in a recognized plugin directory (see the *User Configuration* tab).
 
 .. note::
 

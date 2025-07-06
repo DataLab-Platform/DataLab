@@ -1,11 +1,11 @@
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_all_stability`,Compute all stability analysis features
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_fit`,Compute fitting curve using an interactive dialog
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_full_width_at_y`,Compute full width at a given y
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_multigaussianfit`,Compute multi-Gaussian fitting curve using an interactive dialog
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_multiple_1_to_1`,Generic processing method: 1 object in → n objects out
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_offset_correction`,Compute offset correction
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_peak_detection`,Detect peaks from data
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_polyfit`,Compute polynomial fitting curve
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_x_at_y`,Compute x at y with :py:func:`sigima.computation.signal.x_at_y`
-:py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_y_at_x`,Compute y at x with :py:func:`sigima.computation.signal.y_at_x`
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_all_stability`,Compute all stability analysis features
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_fit`,Compute fitting curve using an interactive dialog
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_full_width_at_y`,Compute full width at a given y
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_multigaussianfit`,Compute multi-Gaussian fitting curve using an interactive dialog
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_multiple_1_to_1`,Generic processing method: 1 object in → n objects out
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_offset_correction`,Compute offset correction
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_peak_detection`,Detect peaks from data
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_polyfit`,Compute polynomial fitting curve
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_x_at_y`,Compute x at y with :py:func:`sigima.computation.signal.x_at_y`
+:py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_y_at_x`,Compute y at x with :py:func:`sigima.computation.signal.y_at_x`

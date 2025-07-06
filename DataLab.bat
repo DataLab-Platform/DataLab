@@ -21,4 +21,4 @@ set PYTHONPATH=%PYTHONPATH%;%ORIGINAL_PYTHONPATH%
 
 REM Extract pythonw.exe from the same directory as the provided python.exe
 for %%a in ("%PYTHON_EXE%") do set "PYTHON_DIR=%%~dpa"
-start "" "%PYTHON_DIR%pythonw.exe" cdl\start.pyw %2 %3 %4 %5 %6 %7 %8 %9
+start "" "%PYTHON_DIR%pythonw.exe" datalab\start.pyw %2 %3 %4 %5 %6 %7 %8 %9

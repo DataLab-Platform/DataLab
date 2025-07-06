@@ -26,7 +26,7 @@ First, we open DataLab and load the images:
    the toolbar, or by dragging and dropping the files into DataLab (on the panel on
    the right).
 
-.. |fileopen_ima| image:: ../../../cdl/data/icons/io/fileopen_ima.svg
+.. |fileopen_ima| image:: ../../../datalab/data/icons/io/fileopen_ima.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -57,7 +57,7 @@ pressing the middle mouse button and dragging the mouse.
     But, let's go back to the initial display by selecting the "Reset image positions"
     entry in the "Operations" menu.
 
-.. |distribute_on_grid| image:: ../../../cdl/data/icons/operations/distribute_on_grid.svg
+.. |distribute_on_grid| image:: ../../../datalab/data/icons/operations/distribute_on_grid.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -117,7 +117,7 @@ might be useful to apply a threshold to the images.
     title of this measurement has been displayed with
     "View > Show graphical object titles" or the |show_titles| button in the toolbar).
 
-.. |show_titles| image:: ../../../cdl/data/icons/view/show_titles.svg
+.. |show_titles| image:: ../../../datalab/data/icons/view/show_titles.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -147,12 +147,12 @@ the |delete_all| button in the toolbar). We alse clean the intermediate results
 in the "Images" panel by selecting the images obtained during our prototyping
 and deleting them individually (with "Edit > Remove" or the |delete| button).
 
-.. |delete_all| image:: ../../../cdl/data/icons/edit/delete_all.svg
+.. |delete_all| image:: ../../../datalab/data/icons/edit/delete_all.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |delete| image:: ../../../cdl/data/icons/edit/delete.svg
+.. |delete| image:: ../../../datalab/data/icons/edit/delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -183,7 +183,7 @@ the whole group "g001").
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../cdl/data/icons/analysis/show_results.svg
+.. |show_results| image:: ../../../datalab/data/icons/analysis/show_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -196,7 +196,7 @@ the whole group "g001").
     choosing the x and y axes among the result columns. Here, we choose the
     to plot the FWHM values (`L`) as a function of the image index (`Indices`).
 
-.. |plot_results| image:: ../../../cdl/data/icons/analysis/plot_results.svg
+.. |plot_results| image:: ../../../datalab/data/icons/analysis/plot_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -218,7 +218,7 @@ all the images and signals that were loaded or processed in DataLab. It also con
 the analysis results, the visualization settings (colormaps, contrast, etc.), the
 metadata, and the annotations.
 
-.. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
+.. |filesave_h5| image:: ../../../datalab/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -228,12 +228,12 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../../datalab/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
+.. |h5browser| image:: ../../../datalab/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

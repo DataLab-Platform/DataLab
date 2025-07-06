@@ -22,12 +22,12 @@ As metadata contains useful information about the signal, it can be copied and p
 from one signal to another by selecting the "Copy metadata" |metadata_copy| and
 "Paste metadata" |metadata_paste| actions in the "Edit" menu.
 
-.. |metadata_copy| image:: ../../../cdl/data/icons/edit/metadata_copy.svg
+.. |metadata_copy| image:: ../../../datalab/data/icons/edit/metadata_copy.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |metadata_paste| image:: ../../../cdl/data/icons/edit/metadata_paste.svg
+.. |metadata_paste| image:: ../../../datalab/data/icons/edit/metadata_paste.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -56,12 +56,12 @@ metadata" |metadata_import| and "Export metadata" |metadata_export| actions in t
 for more details on the use cases of this feature), but it allows you to save the
 metadata to a file and then import it back later.
 
-.. |metadata_import| image:: ../../../cdl/data/icons/edit/metadata_import.svg
+.. |metadata_import| image:: ../../../datalab/data/icons/edit/metadata_import.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |metadata_export| image:: ../../../cdl/data/icons/edit/metadata_export.svg
+.. |metadata_export| image:: ../../../datalab/data/icons/edit/metadata_export.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -75,7 +75,7 @@ if they are present in the metadata. After this eventual confirmation, the metad
 will be deleted, meaning that analysis results, ROIs, and any other information
 associated with the signal will be lost.
 
-.. |metadata_delete| image:: ../../../cdl/data/icons/edit/metadata_delete.svg
+.. |metadata_delete| image:: ../../../datalab/data/icons/edit/metadata_delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -112,7 +112,7 @@ The "Edit" menu allows you to:
         s008: fft(s005)
         s009: fft(s006)
 
-.. |copy_titles| image:: ../../../cdl/data/icons/edit/copy_titles.svg
+.. |copy_titles| image:: ../../../datalab/data/icons/edit/copy_titles.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -154,12 +154,12 @@ The "Edit" menu allows you to:
 - "Remove regions of interest" |roi_delete|: remove all defined ROI for the selected
   signals.
 
-.. |roi| image:: ../../../cdl/data/icons/edit/roi.svg
+.. |roi| image:: ../../../datalab/data/icons/edit/roi.svg
     :width: 24px
     :height: 24px
     :class: dark-light
 
-.. |roi_delete| image:: ../../../cdl/data/icons/edit/roi_delete.svg
+.. |roi_delete| image:: ../../../datalab/data/icons/edit/roi_delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light

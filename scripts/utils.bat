@@ -52,7 +52,7 @@ REM ======================================================
 
 :GetCDLProjectPath
 call:SetPythonPath
-python -c "import cdl, os;print(os.path.abspath(os.path.join(cdl.__path__[0], os.pardir)))" > _tmp_.txt
+python -c "import datalab, os;print(os.path.abspath(os.path.join(datalab.__path__[0], os.pardir)))" > _tmp_.txt
 set /p %1=<_tmp_.txt
 del _tmp_.txt
 goto:eof

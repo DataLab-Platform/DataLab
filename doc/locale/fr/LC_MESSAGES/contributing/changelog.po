@@ -577,8 +577,8 @@ msgstr "Correction de l'[Issue #107](https://github.com/DataLab-Platform/DataLab
 msgid "Fixed [Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111) - Proxy `add_object` method does not support signal/image metadata (e.g. ROI)"
 msgstr "Correction de l'[Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111) - La méthode `add_object` du proxy ne prend pas en charge les métadonnées du signal/image (par exemple la ROI)"
 
-msgid "Test data plugin / \"Create 2D noisy gauss image\": fixed amplitude calculation in `cdl.tests.data.create_2d_random` for non-integer data types"
-msgstr "Plugin de données de test / \"Créer une image gaussienne bruitée 2D\" : correction du calcul de l'amplitude dans `cdl.tests.data.create_2d_random` pour les types de données non entiers"
+msgid "Test data plugin / \"Create 2D noisy gauss image\": fixed amplitude calculation in `datalab.tests.data.create_2d_random` for non-integer data types"
+msgstr "Plugin de données de test / \"Créer une image gaussienne bruitée 2D\" : correction du calcul de l'amplitude dans `datalab.tests.data.create_2d_random` pour les types de données non entiers"
 
 msgid "📚 Documentation:"
 msgstr "📚 Documentation :"
@@ -646,8 +646,8 @@ msgstr "Refonte complète des interfaces utilisateur de l'éditeur de ROI, amél
 msgid "Major internal refactoring of the ROI system to make it more robust (more tests) and easier to maintain"
 msgstr "Refactorisation interne majeure du système de ROI pour le rendre plus robuste (plus de tests) et plus facile à maintenir"
 
-msgid "Implemented [Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Launch DataLab using `datalab` instead of `cdl`. Note that the `cdl` command is still available for backward compatibility."
-msgstr "Implémentation de l'[Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Lancer DataLab en utilisant `datalab` au lieu de `cdl`. Notez que la commande `cdl` est toujours disponible pour la compatibilité ascendante."
+msgid "Implemented [Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Launch DataLab using `datalab` instead of `datalab`. Note that the `datalab` command is still available for backward compatibility."
+msgstr "Implémentation de l'[Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Lancer DataLab en utilisant `datalab` au lieu de `datalab`. Notez que la commande `datalab` est toujours disponible pour la compatibilité ascendante."
 
 msgid "Implemented [Issue #101](https://github.com/DataLab-Platform/DataLab/issues/101) - Configuration: set default image interpolation to anti-aliasing (`5` instead of `0` for nearest). This change is motivated by the fact that a performance improvement was made in PlotPy v2.7 on Windows, which allows to use anti-aliasing interpolation by default without a significant performance impact."
 msgstr "Implémentation de l'[Issue #101](https://github.com/DataLab-Platform/DataLab/issues/101) - Configuration : définir l'interpolation d'image par défaut sur l'anti-crénelage (`5` au lieu de `0` pour le plus proche). Ce changement est motivé par le fait qu'une amélioration des performances a été apportée dans PlotPy v2.7 sur Windows, ce qui permet d'utiliser l'interpolation par anti-crénelage par défaut sans impact significatif sur les performances."
@@ -877,14 +877,14 @@ msgstr "Ce problème devait être corrigé dans la version 0.16.2, mais la corre
 msgid "Thanks to [@rolandmas](https://github.com/rolandmas) for reporting the issue and for the help in investigating the problem and testing the fix"
 msgstr "Merci à [@rolandmas](https://github.com/rolandmas) pour avoir signalé le problème et pour l'aide apportée dans l'investigation du problème et le test de la correction"
 
-msgid "Fixed [Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Test data paths may be added multiple times to `cdl.utils.tests.TST_PATH`"
-msgstr "Correction de l'[Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Les chemins des données de test peuvent être ajoutés plusieurs fois à `cdl.utils.tests.TST_PATH`"
+msgid "Fixed [Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Test data paths may be added multiple times to `datalab.utils.tests.TST_PATH`"
+msgstr "Correction de l'[Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Les chemins des données de test peuvent être ajoutés plusieurs fois à `datalab.utils.tests.TST_PATH`"
 
 msgid "This issue is related to [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)"
 msgstr "Ce problème est lié à l'[Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)"
 
-msgid "Adding the test data paths multiple times to `cdl.utils.tests.TST_PATH` was causing the test data to be loaded multiple times, which lead to some tests failing (a simple workaround was added to V0.16.2: this issue is now fixed)"
-msgstr "Ajouter les chemins des données de test plusieurs fois à `cdl.utils.tests.TST_PATH` entraînait le chargement multiple des données de test, ce qui a conduit à l'échec de certains tests (une solution de contournement simple a été ajoutée à V0.16.2 : ce problème est maintenant corrigé)"
+msgid "Adding the test data paths multiple times to `datalab.utils.tests.TST_PATH` was causing the test data to be loaded multiple times, which lead to some tests failing (a simple workaround was added to V0.16.2: this issue is now fixed)"
+msgstr "Ajouter les chemins des données de test plusieurs fois à `datalab.utils.tests.TST_PATH` entraînait le chargement multiple des données de test, ce qui a conduit à l'échec de certains tests (une solution de contournement simple a été ajoutée à V0.16.2 : ce problème est maintenant corrigé)"
 
 msgid "Thanks again to [@rolandmas](https://github.com/rolandmas) for reporting the issue in the context of the Debian packaging"
 msgstr "Merci encore à [@rolandmas](https://github.com/rolandmas) pour avoir signalé le problème dans le contexte de l'emballage Debian"
@@ -1799,11 +1799,11 @@ msgstr "Classe de base des plugins `PluginBase` :"
 msgid "Added `edit_new_signal_parameters` method for showing a dialog box to edit parameters for a new signal"
 msgstr "Ajout de la méthode `edit_new_signal_parameters` pour afficher une boîte de dialogue pour éditer les paramètres d'un nouveau signal"
 
-msgid "Added `edit_new_image_parameters` method for showing a dialog box to edit parameters for a new image (updated the *cdl_testdata.py* plugin accordingly)"
-msgstr "Ajout de la méthode `edit_new_image_parameters` pour afficher une boîte de dialogue pour éditer les paramètres d'une nouvelle image (mise à jour du plugin *cdl_testdata.py* en conséquence)"
+msgid "Added `edit_new_image_parameters` method for showing a dialog box to edit parameters for a new image (updated the *datalab_testdata.py* plugin accordingly)"
+msgstr "Ajout de la méthode `edit_new_image_parameters` pour afficher une boîte de dialogue pour éditer les paramètres d'une nouvelle image (mise à jour du plugin *datalab_testdata.py* en conséquence)"
 
-msgid "Signal and image computations API (`cdl.computations`):"
-msgstr "API de calculs sur les signaux et les images (`cdl.computations`) :"
+msgid "Signal and image computations API (`datalab.computations`):"
+msgstr "API de calculs sur les signaux et les images (`datalab.computations`) :"
 
 msgid "Added wrappers for signal and image 1 -> 1 computations"
 msgstr "Ajout de wrappers pour les calculs 1 -> 1 sur les signaux et les images"
@@ -1814,8 +1814,8 @@ msgstr "Ces wrappers visent à simplifier la création d'une fonction de calcul 
 msgid "This simplifies DataLab's internals and makes it easier to create new computing features inside plugins"
 msgstr "Cela simplifie les fonctionnalités internes de DataLab et facilite la création de nouvelles fonctionnalités de calcul dans les plugins"
 
-msgid "See the *cdl_custom_func.py* example plugin for a practical use case"
-msgstr "Voir le plugin d'exemple *cdl_custom_func.py* pour un cas d'utilisation pratique"
+msgid "See the *datalab_custom_func.py* example plugin for a practical use case"
+msgstr "Voir le plugin d'exemple *datalab_custom_func.py* pour un cas d'utilisation pratique"
 
 msgid "Added \"Radial profile extraction\" feature to image panel's \"Operation\" menu:"
 msgstr "Ajout de la fonctionnalité \"Extraction du profil radial\" au menu \"Opération\" du panneau d'image :"
@@ -1943,8 +1943,8 @@ msgstr "Avant cette version, lors de l'exécution de la détection des contours 
 msgid "Now, thanks a workaround, the erroneous contours are filtered out."
 msgstr "A présent, grâce à une solution de contournement, les contours erronés sont filtrés."
 
-msgid "A new test module `cdl.tests.features.images.contour_fabryperot_app` has been added to test the contour detection feature on a Fabry-Perot image (thanks to [@emarin2642](https://github.com/emarin2642) for the contribution)"
-msgstr "Un nouveau module de test `cdl.tests.features.images.contour_fabryperot_app` a été ajouté pour tester la fonctionnalité de détection des contours sur une image Fabry-Perot (merci à [@emarin2642](https://github.com/emarin2642) pour sa contribution)"
+msgid "A new test module `datalab.tests.features.images.contour_fabryperot_app` has been added to test the contour detection feature on a Fabry-Perot image (thanks to [@emarin2642](https://github.com/emarin2642) for the contribution)"
+msgstr "Un nouveau module de test `datalab.tests.features.images.contour_fabryperot_app` a été ajouté pour tester la fonctionnalité de détection des contours sur une image Fabry-Perot (merci à [@emarin2642](https://github.com/emarin2642) pour sa contribution)"
 
 msgid "This fixes [Issue #34](https://github.com/DataLab-Platform/DataLab/issues/34) - Contour detection: unexpected results outside ROI"
 msgstr "Ceci corrige l'[Issue #34](https://github.com/DataLab-Platform/DataLab/issues/34) - Détection des contours : résultats inattendus en dehors de la ROI"
@@ -2111,11 +2111,11 @@ msgstr "Ceci est maintenant corrigé (voir [Issue #11](https://github.com/DataLa
 msgid "Fixed [Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`"
 msgstr "Correction de l'[Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) - Enregistrer/Réouvrir le projet HDF5 sans nettoyage entraîne une `ValueError`"
 
-msgid "Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. Missing menus:"
-msgstr "Correction de l'[Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS : 1. Erreur `pip install cdl` - 2. Menus manquants :"
+msgid "Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install datalab` error - 2. Missing menus:"
+msgstr "Correction de l'[Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS : 1. Erreur `pip install datalab` - 2. Menus manquants :"
 
-msgid "Part 1: `pip install cdl` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard"
-msgstr "Partie 1 : l'erreur `pip install cdl` sur MacOS était en fait un problème de **PlotPy** (voir [ce problème]"
+msgid "Part 1: `pip install datalab` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard"
+msgstr "Partie 1 : l'erreur `pip install datalab` sur MacOS était en fait un problème de **PlotPy** (voir [ce problème]"
 
 msgid "Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding dynamic menus"
 msgstr "Partie 2 : les menus manquants sur MacOS étaient dus à un bogue PyQt/MacOS concernant les menus dynamiques"

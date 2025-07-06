@@ -20,8 +20,8 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 #, fuzzy
-msgid "The `cdl` package requires the following Python modules:"
-msgstr "Le paquet :mod:`cdl` nécessite les modules Python suivants :"
+msgid "The `datalab` package requires the following Python modules:"
+msgstr "Le paquet :mod:`datalab` nécessite les modules Python suivants :"
 
 msgid "Name"
 msgstr "Nom"
@@ -240,4 +240,3 @@ msgstr ""
 
 msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
 msgstr "Un plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
-

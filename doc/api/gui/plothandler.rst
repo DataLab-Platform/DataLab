@@ -1,2 +1,2 @@
-.. automodule:: cdl.gui.plothandler
+.. automodule:: datalab.gui.plothandler
     :no-members:

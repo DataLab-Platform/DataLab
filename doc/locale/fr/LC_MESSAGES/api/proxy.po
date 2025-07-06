@@ -19,10 +19,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Proxy objects (:mod:`cdl.proxy`)"
+msgid "Proxy objects (:mod:`datalab.proxy`)"
 msgstr ""
 
-msgid "The :mod:`cdl.proxy` module provides a way to access DataLab features from a proxy class."
+msgid "The :mod:`datalab.proxy` module provides a way to access DataLab features from a proxy class."
 msgstr ""
 
 msgid "The list of compute methods accessible from the proxy objects is available in the :ref:`processor_methods` section."
@@ -475,10 +475,10 @@ msgstr ""
 msgid "All the proxy objects provide access to the DataLab computing methods exposed by the processor classes:"
 msgstr ""
 
-msgid ":class:`cdl.gui.processor.signal.SignalProcessor`"
+msgid ":class:`datalab.gui.processor.signal.SignalProcessor`"
 msgstr ""
 
-msgid ":class:`cdl.gui.processor.image.ImageProcessor`"
+msgid ":class:`datalab.gui.processor.image.ImageProcessor`"
 msgstr ""
 
 msgid "The list of processor methods is available in tables below."
@@ -533,67 +533,67 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_all_stability`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_all_stability`"
 msgstr ""
 
 msgid "Compute all stability analysis features"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_fit`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_fit`"
 msgstr ""
 
 msgid "Compute fitting curve using an interactive dialog"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_full_width_at_y`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_full_width_at_y`"
 msgstr ""
 
 msgid "Compute full width at a given y"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_multigaussianfit`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_multigaussianfit`"
 msgstr ""
 
 msgid "Compute multi-Gaussian fitting curve using an interactive dialog"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_multiple_1_to_1`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_multiple_1_to_1`"
 msgstr ""
 
 msgid "Generic processing method: 1 object in → n objects out"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_offset_correction`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_offset_correction`"
 msgstr ""
 
 msgid "Compute offset correction"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_peak_detection`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_peak_detection`"
 msgstr ""
 
 msgid "Detect peaks from data"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_polyfit`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_polyfit`"
 msgstr ""
 
 msgid "Compute polynomial fitting curve"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_roi_extraction`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_roi_extraction`"
 msgstr ""
 
 msgid "Extract Region Of Interest (ROI) from data"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_x_at_y`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_x_at_y`"
 msgstr ""
 
 msgid "Compute x at y with :py:func:`sigima.computation.signal.x_at_y`"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.signal.SignalProcessor.compute_y_at_x`"
+msgid ":py:func:`~datalab.gui.processor.signal.SignalProcessor.compute_y_at_x`"
 msgstr ""
 
 msgid "Compute y at x with :py:func:`sigima.computation.signal.y_at_x`"
@@ -608,76 +608,76 @@ msgstr ""
 msgid "Image processor methods"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_all_denoise`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_all_denoise`"
 msgstr ""
 
 msgid "Compute all denoising filters"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_all_edges`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_all_edges`"
 msgstr ""
 
 msgid "Compute all edges filters"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_all_morphology`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_all_morphology`"
 msgstr ""
 
 msgid "Compute all morphology filters"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_all_threshold`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_all_threshold`"
 msgstr ""
 
 msgid "Compute all threshold algorithms"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_average_profile`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_average_profile`"
 msgstr ""
 
 msgid "Compute average profile"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_binning`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_binning`"
 msgstr ""
 
 msgid "Binning image with :py:func:`sigima.computation.image.binning`"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_line_profile`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_line_profile`"
 msgstr ""
 
 msgid "Compute profile along a vertical or horizontal line"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_multiple_1_to_1`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_multiple_1_to_1`"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_offset_correction`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_offset_correction`"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_peak_detection`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_peak_detection`"
 msgstr ""
 
 msgid "Compute 2D peak detection"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_radial_profile`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_radial_profile`"
 msgstr ""
 
 msgid "Compute radial profile"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_resize`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_resize`"
 msgstr ""
 
 msgid "Resize image with :py:func:`sigima.computation.image.resize`"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_roi_extraction`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_roi_extraction`"
 msgstr ""
 
-msgid ":py:func:`~cdl.gui.processor.image.ImageProcessor.compute_segment_profile`"
+msgid ":py:func:`~datalab.gui.processor.image.ImageProcessor.compute_segment_profile`"
 msgstr ""
 
 msgid "Compute profile along a segment"

@@ -46,7 +46,7 @@ Here is the code of the ``weighted_average_denoise`` function::
         return spi.generic_filter(data, filter_func, size=5)
 
 For testing our processing function, we will use a generated image from a DataLab
-plugin example (`plugins/examples/cdl_example_imageproc.py`). Before starting,
+plugin example (`plugins/examples/datalab_example_imageproc.py`). Before starting,
 make sure that the plugin is installed in DataLab (see the first steps of the
 tutorial :ref:`tutorial_blobs`).
 
@@ -76,7 +76,7 @@ Let's get back to our custom function. We can create a new macro-command that wi
 apply the function to the current image. To do so, we open the "Macro Panel" and
 click on the "New macro" |libre-gui-add| button.
 
-.. |libre-gui-add| image:: ../../../cdl/data/icons/libre-gui-add.svg
+.. |libre-gui-add| image:: ../../../datalab/data/icons/libre-gui-add.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -88,7 +88,7 @@ this code and replace it with our own code::
     # Import the necessary modules
     import numpy as np
     import scipy.ndimage as spi
-    from cdl.proxy import RemoteProxy
+    from datalab.proxy import RemoteProxy
 
     # Define our custom processing function
     def weighted_average_denoise(values: np.ndarray) -> float:
@@ -174,12 +174,12 @@ Now, let's execute the macro-command by clicking on the "Run macro"
     - ``Connecting to DataLab XML-RPC server...OK [...]``: the proxy is connected to DataLab
     - ``---[...]---[# <== 'Untitled 01' macro has finished]``: the macro-command ends
 
-.. |libre-camera-flash-on| image:: ../../../cdl/data/icons/libre-camera-flash-on.svg
+.. |libre-camera-flash-on| image:: ../../../datalab/data/icons/libre-camera-flash-on.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |libre-camera-flash-off| image:: ../../../cdl/data/icons/libre-camera-flash-off.svg
+.. |libre-camera-flash-off| image:: ../../../datalab/data/icons/libre-camera-flash-off.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -204,20 +204,20 @@ The only requirement is to install a DataLab client in Spyder's Python environme
 
 -   If you use the stand-alone version of DataLab or if you want or need to keep
     DataLab and Spyder in separate Python environments, you can install the
-    `DataLab Simple Client <https://pypi.org/project/cdlclient/>`_ (``cdl-client``)
+    `DataLab Simple Client <https://pypi.org/project/cdlclient/>`_ (``datalab-client``)
     using the ``pip`` package manager::
 
-        pip install cdl-client
+        pip install datalab-client
 
-    Or you may also install the `DataLab Python package <https://pypi.org/project/cdl/>`_
-    (``cdl``) which includes the client (but also other modules, so we don't recommend
+    Or you may also install the `DataLab Python package <https://pypi.org/project/datalab/>`_
+    (``datalab``) which includes the client (but also other modules, so we don't recommend
     this method if you don't need all DataLab's features in this Python environment)::
 
-        pip install cdl
+        pip install datalab
 
 -   If you use the DataLab Python package, you may run Spyder in the same Python
     environment as DataLab, so you don't need to install the client: it is already
-    available in the main DataLab package (the ``cdl`` package).
+    available in the main DataLab package (the ``datalab`` package).
 
 Once the client is installed, we can start Spyder and create a new Python script:
 
@@ -300,8 +300,8 @@ To avoid writing a lot of boilerplate code, we can use the function wrapper prov
 by DataLab: :class:`sigima.computation.image.Wrap1to1Func`.
 
 Besides we need to define a class that describes our plugin, which must inherit
-from :class:`cdl.plugins.PluginBase` and name the Python script that contains the
-plugin code with a name that starts with ``cdl_`` (e.g. ``cdl_custom_func.py``), so
+from :class:`datalab.plugins.PluginBase` and name the Python script that contains the
+plugin code with a name that starts with ``datalab_`` (e.g. ``datalab_custom_func.py``), so
 that DataLab can discover it at startup.
 
 Moreover, inside the plugin code, we want to add an entry in the "Plugins" menu, so
@@ -309,7 +309,7 @@ that the user can access our plugin from the GUI.
 
 Here is the plugin code:
 
-.. literalinclude:: ../../../plugins/examples/cdl_custom_func.py
+.. literalinclude:: ../../../plugins/examples/datalab_custom_func.py
     :language: python
     :linenos:
 

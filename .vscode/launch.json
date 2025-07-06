@@ -8,16 +8,16 @@
             "name": "Run DataLab",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/cdl/app.py",
+            "program": "${workspaceFolder}/datalab/app.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
             "justMyCode": false,
             "args": [
                 // "--reset"
                 // "--h5browser",
-                // "${workspaceFolder}/cdl/data/tests/empty.h5"
-                // "${workspaceFolder}/cdl/data/tests/reordering_test.h5",
-                // "${workspaceFolder}/cdl/data/tests/reordering_test.h5,/DataLab_Sig/g001: /s003: wiener(s002)/xydata",
+                // "${workspaceFolder}/datalab/data/tests/empty.h5"
+                // "${workspaceFolder}/datalab/data/tests/reordering_test.h5",
+                // "${workspaceFolder}/datalab/data/tests/reordering_test.h5,/DataLab_Sig/g001: /s003: wiener(s002)/xydata",
             ],
             "env": {
                 // "DEBUG": "1",
@@ -35,8 +35,8 @@
             "justMyCode": false,
             "args": [
                 // "--h5browser",
-                // "${workspaceFolder}/cdl/data/tests/format_v1.7.h5",
-                // "${workspaceFolder}/cdl/data/tests/format_v1.7.h5,/DataLab_Ima/i002: i002+i004",
+                // "${workspaceFolder}/datalab/data/tests/format_v1.7.h5",
+                // "${workspaceFolder}/datalab/data/tests/format_v1.7.h5,/DataLab_Ima/i002: i002+i004",
                 // "--unattended",
                 // "--screenshot",
                 // "--verbose",
@@ -71,7 +71,7 @@
                 // "QT_QPA_PLATFORM": "offscreen",
                 // The `CDL_DATA` environment variable is set here just for checking
                 // that the data path is not added twice to the test data path list:
-                "CDL_DATA": "${workspaceFolder}/cdl/data/tests",
+                "CDL_DATA": "${workspaceFolder}/datalab/data/tests",
                 "LANG": "en",
                 "QT_COLOR_MODE": "light",
             }
@@ -93,7 +93,7 @@
             "name": "Run H5browser",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/cdl/tests/features/hdf5/h5browser1_unit.py",
+            "program": "${workspaceFolder}/datalab/tests/features/hdf5/h5browser1_unit.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
             "justMyCode": true,

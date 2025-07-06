@@ -45,37 +45,37 @@ Basic arithmetic operations
     * - |inverse| Inverse
       - :math:`z_{2} = \dfrac{1}{z_{1}}`
 
-.. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
+.. |sum| image:: ../../../datalab/data/icons/operations/sum.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |average| image:: ../../../cdl/data/icons/operations/average.svg
+.. |average| image:: ../../../datalab/data/icons/operations/average.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |difference| image:: ../../../cdl/data/icons/operations/difference.svg
+.. |difference| image:: ../../../datalab/data/icons/operations/difference.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |quadratic_difference| image:: ../../../cdl/data/icons/operations/quadratic_difference.svg
+.. |quadratic_difference| image:: ../../../datalab/data/icons/operations/quadratic_difference.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |product| image:: ../../../cdl/data/icons/operations/product.svg
+.. |product| image:: ../../../datalab/data/icons/operations/product.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |division| image:: ../../../cdl/data/icons/operations/division.svg
+.. |division| image:: ../../../datalab/data/icons/operations/division.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |inverse| image:: ../../../cdl/data/icons/operations/inverse.svg
+.. |inverse| image:: ../../../datalab/data/icons/operations/inverse.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -100,22 +100,22 @@ Create a new image which is the result of a constant operation on each selected 
     * - |constant_divide| Division
       - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
 
-.. |constant_add| image:: ../../../cdl/data/icons/operations/constant_add.svg
+.. |constant_add| image:: ../../../datalab/data/icons/operations/constant_add.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |constant_subtract| image:: ../../../cdl/data/icons/operations/constant_subtract.svg
+.. |constant_subtract| image:: ../../../datalab/data/icons/operations/constant_subtract.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |constant_multiply| image:: ../../../cdl/data/icons/operations/constant_multiply.svg
+.. |constant_multiply| image:: ../../../datalab/data/icons/operations/constant_multiply.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |constant_divide| image:: ../../../cdl/data/icons/operations/constant_divide.svg
+.. |constant_divide| image:: ../../../datalab/data/icons/operations/constant_divide.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -140,17 +140,17 @@ Real and imaginary parts
       - :math:`z_{k} = \Im(z_{k-1})`
 
 
-.. |abs| image:: ../../../cdl/data/icons/operations/abs.svg
+.. |abs| image:: ../../../datalab/data/icons/operations/abs.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |re| image:: ../../../cdl/data/icons/operations/re.svg
+.. |re| image:: ../../../datalab/data/icons/operations/re.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |im| image:: ../../../cdl/data/icons/operations/im.svg
+.. |im| image:: ../../../datalab/data/icons/operations/im.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -163,7 +163,7 @@ of the selected images. For integer data types, the conversion is done by clippi
 the values to the new data type range before effectively converting the data type.
 For floating point data types, the conversion is straightforward.
 
-.. |convert_dtype| image:: ../../../cdl/data/icons/operations/convert_dtype.svg
+.. |convert_dtype| image:: ../../../datalab/data/icons/operations/convert_dtype.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -190,12 +190,12 @@ Basic mathematical functions
     * - Log10(z+n)
       - :math:`z_{k} = \log_{10}(z_{k-1}+n)` (avoid Log10(0) on image background)
 
-.. |exp| image:: ../../../cdl/data/icons/operations/exp.svg
+.. |exp| image:: ../../../datalab/data/icons/operations/exp.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |log10| image:: ../../../cdl/data/icons/operations/log10.svg
+.. |log10| image:: ../../../datalab/data/icons/operations/log10.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -295,12 +295,12 @@ Distribute images along a grid
     * - |reset_positions| Reset image positions
       - Reset the positions of the selected images to first image (x0, y0) coordinates
 
-.. |distribute_on_grid| image:: ../../../cdl/data/icons/operations/distribute_on_grid.svg
+.. |distribute_on_grid| image:: ../../../datalab/data/icons/operations/distribute_on_grid.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |reset_positions| image:: ../../../cdl/data/icons/operations/reset_positions.svg
+.. |reset_positions| image:: ../../../datalab/data/icons/operations/reset_positions.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

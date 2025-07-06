@@ -50,32 +50,32 @@ The Macro Panel is a simple interface to:
 - Execute macros, using the "Run macro" |libre-camera-flash-on| button.
 - Stop the execution of a macro, using the "Stop macro" |libre-camera-flash-off| button.
 
-.. |libre-gui-add| image:: ../../../cdl/data/icons/libre-gui-add.svg
+.. |libre-gui-add| image:: ../../../datalab/data/icons/libre-gui-add.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |libre-gui-pencil| image:: ../../../cdl/data/icons/libre-gui-pencil.svg
+.. |libre-gui-pencil| image:: ../../../datalab/data/icons/libre-gui-pencil.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |fileopen_py| image:: ../../../cdl/data/icons/io/fileopen_py.svg
+.. |fileopen_py| image:: ../../../datalab/data/icons/io/fileopen_py.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |filesave_py| image:: ../../../cdl/data/icons/io/filesave_py.svg
+.. |filesave_py| image:: ../../../datalab/data/icons/io/filesave_py.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |libre-camera-flash-on| image:: ../../../cdl/data/icons/libre-camera-flash-on.svg
+.. |libre-camera-flash-on| image:: ../../../datalab/data/icons/libre-camera-flash-on.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |libre-camera-flash-off| image:: ../../../cdl/data/icons/libre-camera-flash-off.svg
+.. |libre-camera-flash-off| image:: ../../../datalab/data/icons/libre-camera-flash-off.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

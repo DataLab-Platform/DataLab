@@ -43,32 +43,32 @@ Basic arithmetic operations
     * - |inverse| Inverse
       - :math:`y_{2} = \dfrac{1}{y_{1}}`
 
-.. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
+.. |sum| image:: ../../../datalab/data/icons/operations/sum.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |average| image:: ../../../cdl/data/icons/operations/average.svg
+.. |average| image:: ../../../datalab/data/icons/operations/average.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |difference| image:: ../../../cdl/data/icons/operations/difference.svg
+.. |difference| image:: ../../../datalab/data/icons/operations/difference.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |product| image:: ../../../cdl/data/icons/operations/product.svg
+.. |product| image:: ../../../datalab/data/icons/operations/product.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |division| image:: ../../../cdl/data/icons/operations/division.svg
+.. |division| image:: ../../../datalab/data/icons/operations/division.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |inverse| image:: ../../../cdl/data/icons/operations/inverse.svg
+.. |inverse| image:: ../../../datalab/data/icons/operations/inverse.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -93,22 +93,22 @@ Create a new signal which is the result of a constant operation on each selected
     * - |constant_divide| Division
       - :math:`y_{k} = \dfrac{y_{k-1}}{c}`
 
-.. |constant_add| image:: ../../../cdl/data/icons/operations/constant_add.svg
+.. |constant_add| image:: ../../../datalab/data/icons/operations/constant_add.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |constant_subtract| image:: ../../../cdl/data/icons/operations/constant_subtract.svg
+.. |constant_subtract| image:: ../../../datalab/data/icons/operations/constant_subtract.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |constant_multiply| image:: ../../../cdl/data/icons/operations/constant_multiply.svg
+.. |constant_multiply| image:: ../../../datalab/data/icons/operations/constant_multiply.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |constant_divide| image:: ../../../cdl/data/icons/operations/constant_divide.svg
+.. |constant_divide| image:: ../../../datalab/data/icons/operations/constant_divide.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -129,17 +129,17 @@ Absolute value, real and imaginary parts
     * - |im| Imaginary part
       - :math:`y_{k} = \Im(y_{k-1})`
 
-.. |abs| image:: ../../../cdl/data/icons/operations/abs.svg
+.. |abs| image:: ../../../datalab/data/icons/operations/abs.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |re| image:: ../../../cdl/data/icons/operations/re.svg
+.. |re| image:: ../../../datalab/data/icons/operations/re.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |im| image:: ../../../cdl/data/icons/operations/im.svg
+.. |im| image:: ../../../datalab/data/icons/operations/im.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -150,7 +150,7 @@ Data type conversion
 The "Convert data type" |convert_dtype| action allows you to convert the data type
 of the selected signals.
 
-.. |convert_dtype| image:: ../../../cdl/data/icons/operations/convert_dtype.svg
+.. |convert_dtype| image:: ../../../datalab/data/icons/operations/convert_dtype.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -178,22 +178,22 @@ Basic mathematical functions
     * - |sqrt| Square root
       - :math:`y_{k} = \sqrt{y_{k-1}}`
 
-.. |exp| image:: ../../../cdl/data/icons/operations/exp.svg
+.. |exp| image:: ../../../datalab/data/icons/operations/exp.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |log10| image:: ../../../cdl/data/icons/operations/log10.svg
+.. |log10| image:: ../../../datalab/data/icons/operations/log10.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |power| image:: ../../../cdl/data/icons/operations/power.svg
+.. |power| image:: ../../../datalab/data/icons/operations/power.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |sqrt| image:: ../../../cdl/data/icons/operations/sqrt.svg
+.. |sqrt| image:: ../../../datalab/data/icons/operations/sqrt.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -214,17 +214,17 @@ Other mathematical operations
     * - |convolution| Convolution
       - Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_
 
-.. |derivative| image:: ../../../cdl/data/icons/operations/derivative.svg
+.. |derivative| image:: ../../../datalab/data/icons/operations/derivative.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |integral| image:: ../../../cdl/data/icons/operations/integral.svg
+.. |integral| image:: ../../../datalab/data/icons/operations/integral.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |convolution| image:: ../../../cdl/data/icons/operations/convolution.svg
+.. |convolution| image:: ../../../datalab/data/icons/operations/convolution.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

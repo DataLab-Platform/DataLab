@@ -9,7 +9,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import cdl
+import datalab
 
 os.environ["CDL_DOC"] = "1"
 
@@ -61,7 +61,7 @@ def setup(app):
 project = "DataLab"
 author = ""
 copyright = "2023, DataLab Platform Developers"
-release = cdl.__version__
+release = datalab.__version__
 rst_prolog = f"""
 .. |download_link1| raw:: html
 
@@ -86,7 +86,7 @@ templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- Options for sitemap extension -------------------------------------------
-html_baseurl = cdl.__homeurl__  # for sitemap extension
+html_baseurl = datalab.__homeurl__  # for sitemap extension
 sitemap_locales = ["en", "fr"]
 sitemap_filename = "../sitemap.xml"
 
@@ -105,12 +105,12 @@ html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
     "logo": {
-        "text": f"v{cdl.__version__}",
+        "text": f"v{datalab.__version__}",
     },
     "icon_links": [
         {
             "name": "PyPI",
-            "url": "https://pypi.org/project/cdl",
+            "url": "https://pypi.org/project/datalab",
             "icon": "_static/pypi.svg",
             "type": "local",
             "attributes": {"target": "_blank"},

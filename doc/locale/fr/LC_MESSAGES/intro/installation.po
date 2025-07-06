@@ -35,8 +35,8 @@ msgstr "Lien de téléchargement direct pour la dernière version de DataLab :"
 msgid "|download_link1|"
 msgstr "|download_link1|"
 
-msgid "This section provides information on how to install DataLab on your system. Once installed, you can start DataLab by running the ``cdl`` command in a terminal, or by clicking on the DataLab shortcut in the Start menu (on Windows)."
-msgstr "Cette section fournit des informations sur l'installation de DataLab sur votre système. Une fois installé, vous pouvez démarrer DataLab en exécutant la commande ``cdl`` dans un terminal, ou en cliquant sur le raccourci DataLab dans le menu Démarrer (sous Windows)."
+msgid "This section provides information on how to install DataLab on your system. Once installed, you can start DataLab by running the ``datalab`` command in a terminal, or by clicking on the DataLab shortcut in the Start menu (on Windows)."
+msgstr "Cette section fournit des informations sur l'installation de DataLab sur votre système. Une fois installé, vous pouvez démarrer DataLab en exécutant la commande ``datalab`` dans un terminal, ou en cliquant sur le raccourci DataLab dans le menu Démarrer (sous Windows)."
 
 msgid "For more details on how to execute DataLab and its command-line options, see :ref:`ref-to-command-line-features`."
 msgstr "Pour plus de détails sur l'exécution de DataLab et ses options en ligne de commande, voir :ref:`ref-to-command-line-features`."
@@ -80,8 +80,8 @@ msgstr "Pour installer le paquet ``datalab`` depuis le canal ``conda-forge`` (ht
 msgid "Package manager ``pip``"
 msgstr "Gestionnaire de paquets ``pip``"
 
-msgid "DataLab's package ``cdl`` is available on the Python Package Index (PyPI) on the following URL: https://pypi.python.org/pypi/cdl."
-msgstr "Le paquet ``cdl`` de DataLab est disponible sur l'index des paquets Python (PyPI) à l'adresse suivante : https://pypi.python.org/pypi/cdl."
+msgid "DataLab's package ``datalab`` is available on the Python Package Index (PyPI) on the following URL: https://pypi.python.org/pypi/datalab."
+msgstr "Le paquet ``datalab`` de DataLab est disponible sur l'index des paquets Python (PyPI) à l'adresse suivante : https://pypi.python.org/pypi/datalab."
 
 msgid "Installing DataLab from PyPI with Qt is as simple as running this command (you may need to use ``pip3`` instead of ``pip`` on some systems):"
 msgstr "L'installation de DataLab depuis PyPI avec Qt est aussi simple que d'exécuter cette commande (vous devrez peut-être utiliser ``pip3`` au lieu de ``pip`` sur certains systèmes) :"
@@ -171,8 +171,8 @@ msgid "The DataLab all-in-one installer already include all those required libra
 msgstr "L'installeur tout-en-un de DataLab inclut déjà toutes ces dépendances ainsi que Python lui-même."
 
 #, fuzzy
-msgid "The `cdl` package requires the following Python modules:"
-msgstr "Le paquet :mod:`cdl` requiert les modules Python suivants :"
+msgid "The `datalab` package requires the following Python modules:"
+msgstr "Le paquet :mod:`datalab` requiert les modules Python suivants :"
 
 msgid "Name"
 msgstr "Nom"
@@ -395,4 +395,3 @@ msgstr "Plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-

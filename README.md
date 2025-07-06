@@ -1,9 +1,9 @@
 ![DataLab](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/DataLab-banner.png)
 
-[![license](https://img.shields.io/pypi/l/cdl.svg)](./LICENSE)
-[![pypi version](https://img.shields.io/pypi/v/cdl.svg)](https://pypi.org/project/CDL/)
-[![PyPI status](https://img.shields.io/pypi/status/cdl.svg)](https://github.com/DataLab-Platform/DataLab)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/cdl.svg)](https://pypi.python.org/pypi/CDL/)
+[![license](https://img.shields.io/pypi/l/datalab.svg)](./LICENSE)
+[![pypi version](https://img.shields.io/pypi/v/datalab.svg)](https://pypi.org/project/CDL/)
+[![PyPI status](https://img.shields.io/pypi/status/datalab.svg)](https://github.com/DataLab-Platform/DataLab)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/datalab.svg)](https://pypi.python.org/pypi/CDL/)
 
 DataLab is an **open-source platform for scientific and technical data processing
 and visualization** with unique features designed to meet industrial requirements.

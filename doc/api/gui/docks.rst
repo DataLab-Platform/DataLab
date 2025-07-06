@@ -1,2 +1,2 @@
-.. automodule:: cdl.gui.docks
+.. automodule:: datalab.gui.docks
     :no-members:

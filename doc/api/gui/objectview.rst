@@ -1,2 +1,2 @@
-.. automodule:: cdl.gui.objectview
+.. automodule:: datalab.gui.objectview
     :no-members:

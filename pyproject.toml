@@ -5,7 +5,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cdl"
+name = "datalab"
 authors = [{ name = "Pierre Raybaut", email = "p.raybaut@codra.fr" }]
 maintainers = [
     { name = "DataLab Platform Developers", email = "p.raybaut@codra.fr" },
@@ -57,10 +57,9 @@ Homepage = "https://datalab-platform.com/"
 Documentation = "https://datalab-platform.com/"
 
 [project.gui-scripts]
-cdl = "cdl.app:run"
-datalab = "cdl.app:run"
-datalab-demo = "cdl.tests.scenarios.demo:run"
-datalab-tests = "cdl.tests:run"
+datalab = "datalab.app:run"
+datalab-demo = "datalab.tests.scenarios.demo:run"
+datalab-tests = "datalab.tests:run"
 
 [project.optional-dependencies]
 qt = ["PyQt5 >= 5.15.6"]
@@ -86,7 +85,7 @@ doc = [
 test = ["pytest", "pytest-xvfb"]
 
 [tool.setuptools.packages.find]
-include = ["cdl*"]
+include = ["datalab*"]
 
 [tool.setuptools.package-data]
 "*" = [
@@ -113,11 +112,11 @@ include = ["cdl*"]
 ]
 
 [tool.setuptools.dynamic]
-version = { attr = "cdl.__version__" }
+version = { attr = "datalab.__version__" }
 
 [tool.pytest.ini_options]
-addopts = "cdl --import-mode=importlib"
-# addopts = "cdl --import-mode=importlib --show-windows"  # Disable offscreen mode
+addopts = "datalab --import-mode=importlib"
+# addopts = "datalab --import-mode=importlib --show-windows"  # Disable offscreen mode
 
 [tool.ruff]
 exclude = [".git", ".vscode", "build", "dist", "*.ipynb"]

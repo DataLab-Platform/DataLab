@@ -22,8 +22,8 @@ msgstr ""
 msgid "GUI"
 msgstr "GUI"
 
-msgid "The :mod:`cdl.gui` package contains functionnalities related to the graphical user interface (GUI) of the DataLab (CDL) project. Those features are mostly specific to DataLab and are not intended to be used independently."
-msgstr "Le paquet :mod:`cdl.gui` contient des fonctionnalités liées à l'interface graphique (GUI) du projet DataLab (CDL). Ces fonctionnalités sont principalement spécifiques à DataLab et ne sont pas destinées à être utilisées indépendamment."
+msgid "The :mod:`datalab.gui` package contains functionnalities related to the graphical user interface (GUI) of the DataLab (CDL) project. Those features are mostly specific to DataLab and are not intended to be used independently."
+msgstr "Le paquet :mod:`datalab.gui` contient des fonctionnalités liées à l'interface graphique (GUI) du projet DataLab (CDL). Ces fonctionnalités sont principalement spécifiques à DataLab et ne sont pas destinées à être utilisées indépendamment."
 
 msgid "The purpose of this section of the documentation is to provide an overview of the DataLab GUI architecture and to describe the main features of the modules contained in this package. It is not intended to provide a detailed description of the GUI features, but rather to provide a starting point for the reader who wants to understand the DataLab internal architecture."
 msgstr "Le but de cette section de la documentation est de fournir un aperçu de l'architecture de l'interface graphique de DataLab et de décrire les principales fonctionnalités des modules contenus dans ce paquet. Il ne vise pas à fournir une description détaillée des fonctionnalités de l'interface graphique, mais plutôt à fournir un point de départ pour le lecteur qui souhaite comprendre l'architecture interne de DataLab."
@@ -31,14 +31,14 @@ msgstr "Le but de cette section de la documentation est de fournir un aperçu de
 msgid "DataLab's main window is composed of several parts, each of them being handled by a specific module of this package:"
 msgstr "La fenêtre principale de DataLab est composée de plusieurs parties, chacune d'elles étant gérée par un module spécifique de ce paquet :"
 
-msgid "**Signal and image panels**: those panels are used to display signals and images and to provide a set of tools to manipulate them. Each data panel relies on a set of modules to handle the GUI features (:mod:`cdl.gui.actionhandler` and :mod:`cdl.gui.objectview`), the data model (:mod:`cdl.gui.objectmodel`), the data visualization (:mod:`cdl.gui.plothandler`), and the data processing (:mod:`cdl.gui.processor`)."
-msgstr "Les **Panneaux Signal et Image** : ces panneaux sont utilisés pour afficher des signaux et des images et pour fournir un ensemble d'outils pour les manipuler. Chaque panneau de données repose sur un ensemble de modules pour gérer les fonctionnalités de l'interface graphique (:mod:`cdl.gui.actionhandler` et :mod:`cdl.gui.objectview`), le modèle de données (:mod:`cdl.gui.objectmodel`), la visualisation des données (:mod:`cdl.gui.plothandler`), et le traitement des données (:mod:`cdl.gui.processor`)."
+msgid "**Signal and image panels**: those panels are used to display signals and images and to provide a set of tools to manipulate them. Each data panel relies on a set of modules to handle the GUI features (:mod:`datalab.gui.actionhandler` and :mod:`datalab.gui.objectview`), the data model (:mod:`datalab.gui.objectmodel`), the data visualization (:mod:`datalab.gui.plothandler`), and the data processing (:mod:`datalab.gui.processor`)."
+msgstr "Les **Panneaux Signal et Image** : ces panneaux sont utilisés pour afficher des signaux et des images et pour fournir un ensemble d'outils pour les manipuler. Chaque panneau de données repose sur un ensemble de modules pour gérer les fonctionnalités de l'interface graphique (:mod:`datalab.gui.actionhandler` et :mod:`datalab.gui.objectview`), le modèle de données (:mod:`datalab.gui.objectmodel`), la visualisation des données (:mod:`datalab.gui.plothandler`), et le traitement des données (:mod:`datalab.gui.processor`)."
 
-msgid "**Macro panel**: this panel is used to display and run macros. It relies on the :mod:`cdl.gui.macroeditor` module to handle the macro edition and execution."
-msgstr "Le **Panneau Macro** : ce panneau est utilisé pour afficher et exécuter des macros. Il repose sur le module :mod:`cdl.gui.macroeditor` pour gérer l'édition et l'exécution des macros."
+msgid "**Macro panel**: this panel is used to display and run macros. It relies on the :mod:`datalab.gui.macroeditor` module to handle the macro edition and execution."
+msgstr "Le **Panneau Macro** : ce panneau est utilisé pour afficher et exécuter des macros. Il repose sur le module :mod:`datalab.gui.macroeditor` pour gérer l'édition et l'exécution des macros."
 
-msgid "**Specialized widgets**: those widgets are used to handle specific features such as ROI edition (:mod:`cdl.gui.roieditor`), Intensity profile edition (:mod:`cdl.gui.profiledialog`), etc."
-msgstr "Les **widgets spécialisés** : ces widgets sont utilisés pour gérer des fonctionnalités spécifiques telles que l'édition des ROI (:mod:`cdl.gui.roieditor`), l'édition des profils d'intensité (:mod:`cdl.gui.profiledialog`), etc."
+msgid "**Specialized widgets**: those widgets are used to handle specific features such as ROI edition (:mod:`datalab.gui.roieditor`), Intensity profile edition (:mod:`datalab.gui.profiledialog`), etc."
+msgstr "Les **widgets spécialisés** : ces widgets sont utilisés pour gérer des fonctionnalités spécifiques telles que l'édition des ROI (:mod:`datalab.gui.roieditor`), l'édition des profils d'intensité (:mod:`datalab.gui.profiledialog`), etc."
 
 msgid "Submodule"
 msgstr "Sous-module"
@@ -46,55 +46,55 @@ msgstr "Sous-module"
 msgid "Purpose"
 msgstr "Objectif"
 
-msgid ":mod:`cdl.gui.main`"
+msgid ":mod:`datalab.gui.main`"
 msgstr ""
 
 msgid "DataLab main window and application"
 msgstr "Fenêtre principale et application DataLab"
 
-msgid ":mod:`cdl.gui.panel`"
+msgid ":mod:`datalab.gui.panel`"
 msgstr ""
 
 msgid "Signal, image and macro panels"
 msgstr "Panneaux Signal, Image et Macro"
 
-msgid ":mod:`cdl.gui.actionhandler`"
+msgid ":mod:`datalab.gui.actionhandler`"
 msgstr ""
 
 msgid "Application actions (menus, toolbars, context menu)"
 msgstr "Actions de l'application (menus, barres d'outils, menu contextuel)"
 
-msgid ":mod:`cdl.gui.objectview`"
+msgid ":mod:`datalab.gui.objectview`"
 msgstr ""
 
 msgid "Widgets to display object (signal/image) trees"
 msgstr "Widgets pour afficher les arbres d'objets (signal/image)"
 
-msgid ":mod:`cdl.gui.plothandler`"
+msgid ":mod:`datalab.gui.plothandler`"
 msgstr ""
 
 msgid "`PlotPy` plot items for representing signals and images"
 msgstr "Items de visualisation `PlotPy` pour représenter des signaux et des images"
 
-msgid ":mod:`cdl.gui.roieditor`"
+msgid ":mod:`datalab.gui.roieditor`"
 msgstr ""
 
 msgid "ROI editor"
 msgstr "Editeur de ROI"
 
-msgid ":mod:`cdl.gui.processor`"
+msgid ":mod:`datalab.gui.processor`"
 msgstr ""
 
 msgid "Processor"
 msgstr "Processeur"
 
-msgid ":mod:`cdl.gui.docks`"
+msgid ":mod:`datalab.gui.docks`"
 msgstr ""
 
 msgid "Dock widgets"
 msgstr "Widgets dockables"
 
-msgid ":mod:`cdl.gui.h5io`"
+msgid ":mod:`datalab.gui.h5io`"
 msgstr ""
 
 msgid "HDF5 input/output"

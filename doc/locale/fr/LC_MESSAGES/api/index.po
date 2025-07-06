@@ -28,8 +28,8 @@ msgstr "Fonctionnalités internes :"
 msgid "API"
 msgstr "API"
 
-msgid "The public Application Programming Interface (API) of DataLab offers a set of functions to access the DataLab features. Those functions are available in various submodules of the `cdl` package. The following table lists the available submodules and their purpose:"
-msgstr "L'interface de programmation d'application (API) publique de DataLab offre un ensemble de fonctions pour accéder aux fonctionnalités de DataLab. Ces fonctions sont disponibles dans divers sous-modules du package `cdl`. Le tableau suivant répertorie les sous-modules disponibles et leurs contenus respectifs :"
+msgid "The public Application Programming Interface (API) of DataLab offers a set of functions to access the DataLab features. Those functions are available in various submodules of the `datalab` package. The following table lists the available submodules and their purpose:"
+msgstr "L'interface de programmation d'application (API) publique de DataLab offre un ensemble de fonctions pour accéder aux fonctionnalités de DataLab. Ces fonctions sont disponibles dans divers sous-modules du package `datalab`. Le tableau suivant répertorie les sous-modules disponibles et leurs contenus respectifs :"
 
 msgid "Submodule"
 msgstr "Sous-module"
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Computation functions, which operate on DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`)"
 msgstr "Fonctions de calcul, qui opèrent sur les objets DataLab (:class:`sigima.obj.SignalObj` ou :class:`sigima.obj.ImageObj`)"
 
-msgid ":mod:`cdl.proxy`"
+msgid ":mod:`datalab.proxy`"
 msgstr ""
 
 msgid "Proxy objects to access the DataLab interface from a Python script or a remote application"

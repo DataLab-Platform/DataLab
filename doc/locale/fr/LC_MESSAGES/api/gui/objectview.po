@@ -22,8 +22,8 @@ msgstr ""
 msgid "Object view"
 msgstr "Vue des objets"
 
-msgid "The :mod:`cdl.gui.objectview` module provides widgets to display object (signal/image) trees."
-msgstr "Le module :mod:`cdl.gui.objectview` fournit des widgets pour afficher des arbres d'objets (signal/image)."
+msgid "The :mod:`datalab.gui.objectview` module provides widgets to display object (signal/image) trees."
+msgstr "Le module :mod:`datalab.gui.objectview` fournit des widgets pour afficher des arbres d'objets (signal/image)."
 
 msgid "This module provides tree widgets to display signals, images and groups. It is important to note that, by design, the user can only select either individual signals/images or groups, but not both at the same time. This is an important design choice, as it allows to simplify the user experience, and to avoid potential confusion between the two types of selection."
 msgstr ""

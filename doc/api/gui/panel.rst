@@ -1,1 +1,1 @@
-.. automodule:: cdl.gui.panel
+.. automodule:: datalab.gui.panel

@@ -1,2 +1,2 @@
-.. automodule:: cdl.gui.main
+.. automodule:: datalab.gui.main
     :no-members:
