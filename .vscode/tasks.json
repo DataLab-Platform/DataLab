@@ -378,37 +378,6 @@
             ]
         },
         {
-            "label": "Run pytest on all environments",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "run_pytest_on_all.bat"
-            ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                },
-                "statusbar": {
-                    "hide": true
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "dedicated",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
             "label": "📦 Upgrade PlotPyStack",
             "command": "${command:python.interpreterPath}",
             "args": [
