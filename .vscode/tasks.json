@@ -409,37 +409,6 @@
             }
         },
         {
-            "label": "Upgrade all packages ⚠️",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "upgrade_all.bat"
-            ],
-            "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "UNATTENDED": "1"
-                },
-                "statusbar": {
-                    "hide": true
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
             "label": "📦 Upgrade PlotPyStack",
             "command": "${command:python.interpreterPath}",
             "args": [
