@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath(".."))
 
 import datalab
 
-os.environ["CDL_DOC"] = "1"
+os.environ["DATALAB_DOC"] = "1"
 
 
 # -- Copy CHANGELOG.md to doc/contributing folder ------------------------

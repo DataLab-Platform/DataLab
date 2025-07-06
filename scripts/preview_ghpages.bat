@@ -14,7 +14,7 @@ call %FUNC% UsePython
 
 start http://localhost:8000
 
-cd %CDL_GHPAGES%
+cd %DATALAB_GHPAGES%
 %PYTHON% -m http.server
 
 call %FUNC% EndOfScript

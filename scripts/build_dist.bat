@@ -12,7 +12,7 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UsePython
-call %FUNC% GetVersion CDL_VERSION
+call %FUNC% GetVersion DATALAB_VERSION
 
 set REPODIR=%SCRIPTPATH%\..
 
@@ -32,8 +32,8 @@ copy %REPODIR%\%MODNAME%\data\doc\*.pdf %MODNAME%\data\doc
 popd
 
 if not exist %REPODIR%\dist ( mkdir %REPODIR%\dist )
-copy %CLONEDIR%\dist\%MODNAME%-%CDL_VERSION%*.whl %REPODIR%\dist
-copy %CLONEDIR%\dist\%MODNAME%-%CDL_VERSION%*.tar.gz %REPODIR%\dist
+copy %CLONEDIR%\dist\%MODNAME%-%DATALAB_VERSION%*.whl %REPODIR%\dist
+copy %CLONEDIR%\dist\%MODNAME%-%DATALAB_VERSION%*.tar.gz %REPODIR%\dist
 
 rmdir /s /q %CLONEDIR%
 call %FUNC% EndOfScript

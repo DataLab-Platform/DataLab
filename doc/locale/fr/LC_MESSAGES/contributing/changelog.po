@@ -964,8 +964,8 @@ msgstr "Soustraction, division... : la boîte de dialogue pour la sélection du 
 msgid "When doing an operation which involves an object (signal or image) with higher order number than the current object (e.g. when subtracting an image with an image from a group below the current image), the resulting object's title now correctly refers to the order numbers of the objects involved in the operation (e.g., to continue with the subtraction example mentioned above, the resulting object's title was previously referring to the order number before the insertion of the resulting image)"
 msgstr "Lorsqu'une opération implique un objet (signal ou image) ayant un numéro d'ordre supérieur à l'objet actuel (par exemple, lors de la soustraction d'une image avec une image d'un groupe en dessous de l'image actuelle), le titre de l'objet résultant fait désormais correctement référence aux numéros d'ordre des objets impliqués dans l'opération (par exemple, pour continuer avec l'exemple de soustraction mentionné ci-dessus, le titre de l'objet résultant faisait précédemment référence au numéro d'ordre avant l'insertion de l'image résultante)"
 
-msgid "Added support for additional test data folder thanks to the `CDL_DATA` environment variable (useful for testing purposes, and especially in the context of Debian packaging)"
-msgstr "Ajout de la prise en charge d'un dossier de données de test supplémentaire grâce à la variable d'environnement `CDL_DATA` (utile à des fins de test, et notamment dans le contexte de la préparation du paquet Debian de DataLab)"
+msgid "Added support for additional test data folder thanks to the `DATALAB_DATA` environment variable (useful for testing purposes, and especially in the context of Debian packaging)"
+msgstr "Ajout de la prise en charge d'un dossier de données de test supplémentaire grâce à la variable d'environnement `DATALAB_DATA` (utile à des fins de test, et notamment dans le contexte de la préparation du paquet Debian de DataLab)"
 
 msgid "DataLab Version 0.16.1"
 msgstr "DataLab Version 0.16.1"

@@ -86,7 +86,7 @@ DataLab test data are located in different folders, depending on their nature or
 
 Required data for unit tests are located in "datalab\data\tests" (public data).
 
-A second folder %CDL_DATA% (optional) may be defined for additional tests which are
+A second folder %DATALAB_DATA% (optional) may be defined for additional tests which are
 still under development (or for confidential data).
 
 Specific environment variables
@@ -107,7 +107,7 @@ Visual Studio Code configuration used in `launch.json` and/or `tasks.json`
 (examples) :
 
     @REM Folder containing additional working test data
-    set CDL_DATA=C:\Dev\Projets\CDL_data
+    set DATALAB_DATA=C:\Dev\Projets\DATALAB_data
 
 Visual Studio Code `.env` file:
 

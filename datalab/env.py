@@ -138,14 +138,14 @@ class CDLExecEnv:
     SCREENSHOT_ARG = "screenshot"
     DELAY_ARG = "delay"
     XMLRPCPORT_ARG = "xmlrpcport"
-    DO_NOT_QUIT_ENV = "CDL_DO_NOT_QUIT"
+    DO_NOT_QUIT_ENV = "DATALAB_DO_NOT_QUIT"
     UNATTENDED_ENV = GuiDataExecEnv.UNATTENDED_ENV
     ACCEPT_DIALOGS_ENV = GuiDataExecEnv.ACCEPT_DIALOGS_ENV
     VERBOSE_ENV = GuiDataExecEnv.VERBOSE_ENV
     SCREENSHOT_ENV = GuiDataExecEnv.SCREENSHOT_ENV
     DELAY_ENV = GuiDataExecEnv.DELAY_ENV
-    XMLRPCPORT_ENV = "CDL_XMLRPCPORT"
-    CATCHER_TEST_ENV = "CDL_CATCHER_TEST"
+    XMLRPCPORT_ENV = "DATALAB_XMLRPCPORT"
+    CATCHER_TEST_ENV = "DATALAB_CATCHER_TEST"
 
     def __init__(self):
         self.h5files = None
@@ -400,7 +400,7 @@ class CDLExecEnv:
         if args.h5browser:
             self.h5browser_file = args.h5browser
         if args.version:
-            version = os.environ["CDL_VERSION"]
+            version = os.environ["DATALAB_VERSION"]
             print(f"DataLab {version} on {platform.system()}")
             sys.exit()
         if args.reset:  # Remove ".DataLab" configuration directory

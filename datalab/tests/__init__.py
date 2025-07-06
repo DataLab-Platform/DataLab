@@ -37,8 +37,8 @@ from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
 from datalab.utils import qthelpers as qth
 
-# Add test data files and folders pointed by `CDL_DATA` environment variable:
-helpers.add_test_path_from_env("CDL_DATA")
+# Add test data files and folders pointed by `DATALAB_DATA` environment variable:
+helpers.add_test_path_from_env("DATALAB_DATA")
 
 # Add test data files and folders for the DataLab module:
 helpers.add_test_module_path(MOD_NAME, osp.join("data", "tests"))

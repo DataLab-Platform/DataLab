@@ -964,7 +964,7 @@ msgstr ""
 msgid "When doing an operation which involves an object (signal or image) with higher order number than the current object (e.g. when subtracting an image with an image from a group below the current image), the resulting object's title now correctly refers to the order numbers of the objects involved in the operation (e.g., to continue with the subtraction example mentioned above, the resulting object's title was previously referring to the order number before the insertion of the resulting image)"
 msgstr ""
 
-msgid "Added support for additional test data folder thanks to the `CDL_DATA` environment variable (useful for testing purposes, and especially in the context of Debian packaging)"
+msgid "Added support for additional test data folder thanks to the `DATALAB_DATA` environment variable (useful for testing purposes, and especially in the context of Debian packaging)"
 msgstr ""
 
 msgid "DataLab Version 0.16.1"
@@ -2458,4 +2458,3 @@ msgstr ""
 
 msgid "Console: added configurable external editor (default: VSCode) to follow the traceback links to the source code"
 msgstr ""
-

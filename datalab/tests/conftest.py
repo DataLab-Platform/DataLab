@@ -70,7 +70,7 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
     except ImportError:
         pass
     envlist = []
-    for vname in ("CDL_DATA", "PYTHONPATH", "DEBUG", "QT_API", "QT_QPA_PLATFORM"):
+    for vname in ("DATALAB_DATA", "PYTHONPATH", "DEBUG", "QT_API", "QT_QPA_PLATFORM"):
         value = os.environ.get(vname, "")
         if value:
             if vname == "PYTHONPATH":

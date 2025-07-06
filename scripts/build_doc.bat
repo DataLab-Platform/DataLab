@@ -12,7 +12,7 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UsePython
-call %FUNC% GetVersion CDL_VERSION
+call %FUNC% GetVersion DATALAB_VERSION
 cd %SCRIPTPATH%\..
 %PYTHON% doc\update_validation_status.py
 %PYTHON% doc\update_processor_methods.py
