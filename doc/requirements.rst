@@ -16,7 +16,7 @@ The `datalab` package requires the following Python modules:
     * - PlotPy
       -  >= 2.7.4
       - Curve and image plotting tools for Python/Qt applications
-    * - SigIma
+    * - Sigima
       -  >= 0.1.0
       - Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform.
     * - NumPy
@@ -64,25 +64,25 @@ Optional modules for development:
       - Version
       - Summary
     * - build
-      - 
+      -
       - A simple, correct Python build frontend
     * - babel
-      - 
+      -
       - Internationalization utilities
     * - Coverage
-      - 
+      -
       - Code coverage measurement for Python
     * - pyinstaller
       -  >= 6.0
       - PyInstaller bundles a Python application and all its dependencies into a single package.
     * - pylint
-      - 
+      -
       - python code static checker
     * - ruff
-      - 
+      -
       - An extremely fast Python linter and code formatter, written in Rust.
     * - pre-commit
-      - 
+      -
       - A framework for managing and maintaining multi-language pre-commit hooks.
 
 Optional modules for building the documentation:
@@ -95,25 +95,25 @@ Optional modules for building the documentation:
       - Version
       - Summary
     * - sphinx
-      - 
+      -
       - Python documentation generator
     * - sphinx_intl
-      - 
+      -
       - Sphinx utility that make it easy to translate and to apply translation.
     * - sphinx-sitemap
-      - 
+      -
       - Sitemap generator for Sphinx
     * - myst_parser
-      - 
+      -
       - An extended [CommonMark](https://spec.commonmark.org/) compliant parser,
     * - sphinx_design
-      - 
+      -
       - A sphinx extension for designing beautiful, view size responsive web components.
     * - sphinx-copybutton
-      - 
+      -
       - Add a copy button to each of your code cells.
     * - pydata-sphinx-theme
-      - 
+      -
       - Bootstrap-based Sphinx theme from the PyData community
 
 Optional modules for running test suite:
@@ -126,8 +126,8 @@ Optional modules for running test suite:
       - Version
       - Summary
     * - pytest
-      - 
+      -
       - pytest: simple powerful testing with Python
     * - pytest-xvfb
-      - 
+      -
       - A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests.

@@ -42,7 +42,7 @@ requires-python = ">=3.9, <4"
 dependencies = [
     "guidata >= 3.11",
     "PlotPy >= 2.7.4",
-    "SigIma >= 0.1.0",
+    "Sigima >= 0.1.0",
     "NumPy >= 1.22",
     "SciPy >= 1.10.1",
     "scikit-image >= 0.19.2",

@@ -49,5 +49,5 @@ The 2d peak detection parameters are the following:
 Feature is based on ``get_2d_peaks_coords`` function
 from ``sigima.algorithms`` module:
 
-  .. literalinclude:: ../../../../SigIma/sigima/algorithms/image.py
+  .. literalinclude:: ../../../../Sigima/sigima/algorithms/image.py
      :pyobject: get_2d_peaks_coords
