@@ -66,6 +66,7 @@ datalab-tests = "cdl.tests:run"
 qt = ["PyQt5 >= 5.15.6"]
 opencv = ["opencv-python-headless >= 4.5.4.60"]
 dev = [
+    "build",
     "babel",
     "Coverage",
     "pyinstaller >= 6.0",
