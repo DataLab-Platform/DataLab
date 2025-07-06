@@ -26,7 +26,7 @@ from sigima.tests import helpers
 
 import cdl
 from cdl.env import execenv
-from cdl.plugins import get_available_plugins
+from cdl.plugins import PluginRegistry, get_available_plugins
 
 # Turn on unattended mode for executing tests without user interaction
 execenv.unattended = True
@@ -119,3 +119,9 @@ def reset_cwd(request):  # pylint: disable=unused-argument
     """Reset the current working directory to the initial one after each test."""
     yield
     os.chdir(INITIAL_CWD)
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_runtest_teardown(item, nextitem):  # pylint: disable=unused-argument
+    """Run teardown after each test."""
+    PluginRegistry.unregister_all_plugins()
