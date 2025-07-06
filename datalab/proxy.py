@@ -2,7 +2,7 @@
 
 """
 Proxy objects (:mod:`datalab.proxy`)
---------------------------------
+------------------------------------
 
 The :mod:`datalab.proxy` module provides a way to access DataLab features from a proxy
 class.
