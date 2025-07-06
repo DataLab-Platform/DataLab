@@ -599,20 +599,23 @@
         {
             "label": "HTML doc: quick preview",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "sphinx",
+                "build",
+                ".",
+                "../build/doc",
+                "-b",
+                "html",
+                "-W"
+            ],
             "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${command:python.interpreterPath}",
-                    "QT_COLOR_MODE": "light",
-                    "RELEASE": "1",
-                    "UNATTENDED": "1"
+                "cwd": "${workspaceFolder}/doc",
+                "statusbar": {
+                    "hide": true
                 }
             },
-            "args": [
-                "/c",
-                "build_doc_html.bat"
-            ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -626,6 +629,27 @@
                 "showReuseMessage": true,
                 "clear": true
             }
+        },
+        {
+            "label": "🌐 Build/open HTML doc",
+            "type": "shell",
+            "windows": {
+                "command": "start ../build/doc/index.html"
+            },
+            "linux": {
+                "command": "xdg-open ../build/doc/index.html"
+            },
+            "osx": {
+                "command": "open ../build/doc/index.html"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/doc"
+            },
+            "problemMatcher": [],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "HTML doc: quick preview",
+            ]
         },
         {
             "label": "GitHub Pages: build",
