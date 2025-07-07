@@ -1217,17 +1217,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         .. code-block:: python
 
             import sigima.computation.signal as sigima_signal
-            import sigima.param
+            import sigima.params
 
             # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
             compute(sigima_signal.normalize)
-            param = sigima.param.MovingAverageParam(n=3)
+            param = sigima.params.MovingAverageParam(n=3)
             compute(sigima_signal.moving_average, param)
             compute(computation_function, param, edit=False)
 
             # For pattern `2_to_1`:
             compute(sigima_signal.difference, obj2)
-            param = sigima.param.InterpolationParam(method="cubic")
+            param = sigima.params.InterpolationParam(method="cubic")
             compute(sigima_signal.interpolation, obj2, param)
 
             # For pattern `1_to_n`:

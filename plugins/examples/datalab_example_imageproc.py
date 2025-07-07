@@ -18,7 +18,7 @@ This sub-menu contains two actions, "Preprocess image" and "Detect blobs".
 
 import numpy as np
 import sigima.obj
-import sigima.param
+import sigima.params
 import skimage.draw
 
 import datalab.plugins
@@ -61,16 +61,16 @@ class ExtractBlobs(datalab.plugins.PluginBase):
     def preprocess(self) -> None:
         """Preprocess image"""
         panel = self.imagepanel
-        param = sigima.param.BinningParam.create(sx=2, sy=2)
+        param = sigima.params.BinningParam.create(sx=2, sy=2)
         panel.processor.run_feature("binning", param)
         panel.processor.run_feature(
-            "moving_median", sigima.param.MovingMedianParam.create(n=5)
+            "moving_median", sigima.params.MovingMedianParam.create(n=5)
         )
 
     def detect_blobs(self) -> None:
         """Detect circular blobs"""
         panel = self.imagepanel
-        param = sigima.param.BlobOpenCVParam()
+        param = sigima.params.BlobOpenCVParam()
         param.filter_by_color = False
         param.min_area = 600.0
         param.max_area = 6000.0

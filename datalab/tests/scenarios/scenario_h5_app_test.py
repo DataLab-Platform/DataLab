@@ -24,7 +24,7 @@ This scenario executes the following steps:
 
 import os.path as osp
 
-from sigima.param import ClipParam
+from sigima.params import ClipParam
 from sigima.tests.data import create_noisygauss_image, create_paracetamol_signal
 from sigima.tests.helpers import WorkdirRestoringTempDir
 

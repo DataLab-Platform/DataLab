@@ -1048,7 +1048,7 @@ class ImageActionHandler(BaseActionHandler):
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):
             # TODO: [P3] Add "Create ROI grid..." action to create a regular grid
-            # or ROIs (maybe reuse/derive from `sigima.param.GridParam`)
+            # or ROIs (maybe reuse/derive from `sigima.params.GridParam`)
             self.action_for("centroid", separator=True)
             self.action_for("enclosing_circle")
             self.new_action(

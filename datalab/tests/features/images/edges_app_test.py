@@ -7,7 +7,7 @@ Edges processing application test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima.param
+import sigima.params
 from sigima.tests.data import get_test_image
 
 from datalab.tests import cdltest_app_context
@@ -22,7 +22,7 @@ def test_edges():
         proc = panel.processor
         proc.compute_all_edges()
         panel.objview.select_groups()
-        param = sigima.param.GridParam.create(cols=4)
+        param = sigima.params.GridParam.create(cols=4)
         proc.distribute_on_grid(param)
         panel.add_label_with_title()
 

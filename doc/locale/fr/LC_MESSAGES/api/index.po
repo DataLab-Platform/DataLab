@@ -43,7 +43,7 @@ msgstr ""
 msgid "Algorithms for data analysis, which operates on NumPy arrays"
 msgstr "Algorithmes pour l'analyse de données, qui opèrent sur des tableaux NumPy"
 
-msgid ":mod:`sigima.param`"
+msgid ":mod:`sigima.params`"
 msgstr ""
 
 msgid "Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)"

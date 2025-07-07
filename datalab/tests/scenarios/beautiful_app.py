@@ -21,7 +21,7 @@ A high-level test scenario producing beautiful screenshots.
 # guitest: show,skip
 
 import sigima.obj
-import sigima.param as sigima_param
+import sigima.params as sigima_param
 
 from datalab.tests import cdltest_app_context
 

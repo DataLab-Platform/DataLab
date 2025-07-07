@@ -18,7 +18,7 @@ and their purpose:
     * - :mod:`sigima.algorithms`
       - Algorithms for data analysis, which operates on NumPy arrays
 
-    * - :mod:`sigima.param`
+    * - :mod:`sigima.params`
       - Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)
 
     * - :mod:`sigima.obj`
@@ -35,7 +35,7 @@ and their purpose:
    :caption: Public features:
 
    algorithms
-   param
+   params
    obj
    computation
    proxy

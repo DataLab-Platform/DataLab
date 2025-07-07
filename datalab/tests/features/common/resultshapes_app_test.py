@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import numpy as np
 import sigima.obj
-import sigima.param
+import sigima.params
 from sigima.config import options as sigima_options
 from sigima.tests import data as test_data
 
@@ -90,7 +90,7 @@ def test_resultshapes() -> None:
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)
             panel.add_object(sig)
-            panel.processor.run_feature("fwhm", sigima.param.FWHMParam())
+            panel.processor.run_feature("fwhm", sigima.params.FWHMParam())
             panel.processor.run_feature("fw1e2")
         panel.objview.select_objects((1, 2))
         panel.show_results()

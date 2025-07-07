@@ -12,7 +12,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 import sigima.obj
-import sigima.param
+import sigima.params
 
 from datalab.env import execenv
 from datalab.tests import cdltest_app_context
@@ -63,7 +63,7 @@ def test_high_number_of_images() -> None:
 
         # Comment the two following lines to check if DataLab only shows the last image
         # when they are all superposed
-        param = sigima.param.GridParam.create(cols=10)
+        param = sigima.params.GridParam.create(cols=10)
         panel.processor.distribute_on_grid(param)
 
         panel.duplicate_object()

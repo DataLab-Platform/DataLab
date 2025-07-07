@@ -17,10 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Parameters (:mod:`sigima.param`)"
+msgid "Parameters (:mod:`sigima.params`)"
 msgstr ""
 
-msgid "The :mod:`sigima.param` module aims at providing all the dataset parameters that are used by the :mod:`sigima.computation` and DataLab's processors."
+msgid "The :mod:`sigima.params` module aims at providing all the dataset parameters that are used by the :mod:`sigima.computation` and DataLab's processors."
 msgstr ""
 
 msgid "Those datasets are defined in other modules:"
@@ -35,7 +35,7 @@ msgstr ""
 msgid ":mod:`sigima.computation.signal`"
 msgstr ""
 
-msgid "The :mod:`sigima.param` module is thus a convenient way to import all the sets of parameters at once."
+msgid "The :mod:`sigima.params` module is thus a convenient way to import all the sets of parameters at once."
 msgstr ""
 
 msgid "As a matter of fact, the following import statement is equivalent to the previous one:"
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Each dataset is a subclass of :py:class:`guidata.dataset.datatypes.DataSet` and thus needs to be instantiated before being used."
 msgstr ""
 
-msgid "Here is a complete example of how to instantiate a dataset and access its parameters with the :py:class:`sigima.param.BinningParam` dataset:"
+msgid "Here is a complete example of how to instantiate a dataset and access its parameters with the :py:class:`sigima.params.BinningParam` dataset:"
 msgstr ""
 
 msgid "Binning parameters"
@@ -1156,4 +1156,3 @@ msgstr ""
 
 msgid "New instance of :py:class:`ThresholdParam`."
 msgstr ""
-

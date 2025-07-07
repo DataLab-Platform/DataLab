@@ -8,7 +8,7 @@ Contour finding application test with Fabry-Perot images
 # guitest: show
 
 import sigima.obj
-import sigima.param
+import sigima.params
 from sigima.tests.data import get_test_image
 
 from datalab.tests import cdltest_app_context, take_plotwidget_screenshot
@@ -27,7 +27,7 @@ def test_contour_app() -> None:
         roi = sigima.obj.create_image_roi("circle", [xc, yc, r])
         ima1.roi = roi
         panel.add_object(ima1)
-        param = sigima.param.ContourShapeParam.create(shape=shape)
+        param = sigima.params.ContourShapeParam.create(shape=shape)
         panel.processor.run_feature("contour_shape", param)
         take_plotwidget_screenshot(panel, "contour_fabryperot_test")
 
@@ -37,10 +37,10 @@ def test_contour_app() -> None:
         panel.add_object(ima2)
         panel.processor.run_feature("contour_shape", param)
 
-        param = sigima.param.LineProfileParam.create(direction="horizontal", row=554)
+        param = sigima.params.LineProfileParam.create(direction="horizontal", row=554)
         panel.processor.run_feature("line_profile", param)
 
-        param = sigima.param.AverageProfileParam.create(
+        param = sigima.params.AverageProfileParam.create(
             direction="horizontal", row1=550, row2=560
         )
         panel.processor.run_feature("average_profile", param)

@@ -10,7 +10,7 @@ Testing the following:
 
 # guitest: show
 
-import sigima.param
+import sigima.params
 from sigima.tests.data import create_peak2d_image
 
 from datalab.tests import cdltest_app_context, take_plotwidget_screenshot
@@ -22,7 +22,7 @@ def test_peak2d():
         panel = win.imagepanel
         ima = create_peak2d_image()
         panel.add_object(ima)
-        param = sigima.param.Peak2DDetectionParam.create(create_rois=True)
+        param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
         panel.processor.run_feature("peak_detection", param)
         win.toggle_show_titles(False)
         take_plotwidget_screenshot(panel, "peak2d_test")

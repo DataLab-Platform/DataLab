@@ -15,7 +15,7 @@ import time
 import numpy as np
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
-from sigima.param import XYCalibrateParam
+from sigima.params import XYCalibrateParam
 from sigima.tests.data import create_2d_gaussian, create_paracetamol_signal
 from sigima.tests.helpers import WorkdirRestoringTempDir, exec_script
 

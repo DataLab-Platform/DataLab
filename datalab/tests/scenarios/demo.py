@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 import sigima.computation.image as sigima_image
 import sigima.obj
-import sigima.param
+import sigima.params
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 from sigima.tests.data import (
@@ -71,7 +71,7 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     panel.processor.run_feature("detrending")
     sig3 = panel.objview.get_current_object()
 
-    param = sigima.param.PeakDetectionParam()
+    param = sigima.params.PeakDetectionParam()
     panel.processor.run_feature("peak_detection", param)
     sig4 = panel.objview.get_current_object()
     panel.objview.select_objects([sig3, sig4])
@@ -170,12 +170,12 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     base_param.title = None
     ima = create_peak2d_image(base_param)
     panel.add_object(ima)
-    param = sigima.param.Peak2DDetectionParam.create(create_rois=True)
+    param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.run_feature("peak_detection", param)
 
     qt_wait(DELAY2)
 
-    param = sigima.param.ContourShapeParam()
+    param = sigima.params.ContourShapeParam()
     panel.processor.run_feature("contour_shape", param)
 
     qt_wait(DELAY2)

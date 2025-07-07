@@ -11,7 +11,7 @@ then open DataLab to show it.
 # guitest: show
 
 import sigima.obj
-import sigima.param
+import sigima.params
 from sigima.tests.data import get_test_image
 
 from datalab.proxy import proxy_context
@@ -31,7 +31,7 @@ def test_example_app() -> None:
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
         proxy.compute_roi_extraction(roi)
-        param = sigima.param.BlobOpenCVParam.create(
+        param = sigima.params.BlobOpenCVParam.create(
             min_dist_between_blobs=0.1,
             filter_by_color=False,
             min_area=500,

@@ -13,7 +13,7 @@ covered by other tests.
 import os
 
 import sigima.computation.signal as sigima_signal
-import sigima.param
+import sigima.params
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.env import execenv
@@ -98,7 +98,7 @@ def test_main_app():
         execenv.print(f"  Object (from uuid)  '{get_short_id(obj)}':{os.linesep}{obj}")
 
         # Use "calc" method with parameters
-        param = sigima.param.MovingMedianParam.create(n=5)
+        param = sigima.params.MovingMedianParam.create(n=5)
         win.calc("compute_moving_median", param)
         # Use "calc" method without parameters
         win.calc("compute_integral")
