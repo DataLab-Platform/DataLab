@@ -36,7 +36,6 @@ from plotpy.items import (
     LabelItem,
     PolygonShape,
 )
-from sigima.algorithms import coordinates
 from sigima.obj.base import (
     ROI_KEY,
     BaseObj,
@@ -49,6 +48,7 @@ from sigima.obj.base import (
     TypeROIParam,
     TypeSingleROI,
 )
+from sigima.tools import coordinates
 
 from datalab.config import PLOTPY_CONF, Conf
 

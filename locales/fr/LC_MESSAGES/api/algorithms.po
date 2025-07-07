@@ -19,34 +19,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Algorithms (:mod:`sigima.algorithms`)"
+msgid "Algorithms (:mod:`sigima.tools`)"
 msgstr ""
 
 msgid "This package contains the algorithms used by the DataLab project. Those algorithms operate directly on NumPy arrays and are designed to be used in the DataLab pipeline, but can be used independently as well."
 msgstr ""
 
-msgid "The :mod:`sigima.algorithms` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima.computation` package for algorithms that operate directly on DataLab objects (i.e. :class:`sigima.obj.SignalObj` and :class:`sigima.obj.ImageObj`)."
+msgid "The :mod:`sigima.tools` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima.computation` package for algorithms that operate directly on DataLab objects (i.e. :class:`sigima.obj.SignalObj` and :class:`sigima.obj.ImageObj`)."
 msgstr ""
 
 msgid "The algorithms are organized in subpackages according to their purpose. The following subpackages are available:"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal`: Signal processing algorithms"
+msgid ":mod:`sigima.tools.signal`: Signal processing algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.image`: Image processing algorithms"
+msgid ":mod:`sigima.tools.image`: Image processing algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.datatypes`: Data type conversion algorithms"
+msgid ":mod:`sigima.tools.datatypes`: Data type conversion algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.coordinates`: Coordinate conversion algorithms"
+msgid ":mod:`sigima.tools.coordinates`: Coordinate conversion algorithms"
 msgstr ""
 
 msgid "Signal Processing Algorithms"
 msgstr ""
 
-msgid "Signal Processing Algorithms (:mod:`sigima.algorithms.signal`)"
+msgid "Signal Processing Algorithms (:mod:`sigima.tools.signal`)"
 msgstr ""
 
 msgid "This package contains signal processing algorithms."
@@ -55,34 +55,34 @@ msgstr ""
 msgid "Algorithms are organized into subpackages according to their purpose:"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.dynamic`: Dynamic parameter extraction"
+msgid ":mod:`sigima.tools.signal.dynamic`: Dynamic parameter extraction"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.fitmodels`: Curve fitting models"
+msgid ":mod:`sigima.tools.signal.fitmodels`: Curve fitting models"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.fourier`: Fourier analysis algorithms"
+msgid ":mod:`sigima.tools.signal.fourier`: Fourier analysis algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.interpolation`: Interpolation algorithms"
+msgid ":mod:`sigima.tools.signal.interpolation`: Interpolation algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.level`: Level adjustment algorithms"
+msgid ":mod:`sigima.tools.signal.level`: Level adjustment algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.misc`: Miscellaneous tools"
+msgid ":mod:`sigima.tools.signal.misc`: Miscellaneous tools"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.peakdetection`: Peak detection algorithms"
+msgid ":mod:`sigima.tools.signal.peakdetection`: Peak detection algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.pulse`: Pulse analysis algorithms"
+msgid ":mod:`sigima.tools.signal.pulse`: Pulse analysis algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.stability`: Stability analysis algorithms"
+msgid ":mod:`sigima.tools.signal.stability`: Stability analysis algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.windowing`: Windowing algorithms"
+msgid ":mod:`sigima.tools.signal.windowing`: Windowing algorithms"
 msgstr ""
 
 msgid "Dynamic Parameter Extraction"
@@ -1044,4 +1044,3 @@ msgstr ""
 
 msgid "Tuple of (x, y) coordinates of rotated vector"
 msgstr ""
-

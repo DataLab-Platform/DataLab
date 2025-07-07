@@ -242,7 +242,7 @@ msgstr ""
 msgid ":py:func:`contrast <sigima.computation.signal.contrast>`"
 msgstr ""
 
-msgid "Compute contrast with :py:func:`sigima.algorithms.signal.misc.contrast`"
+msgid "Compute contrast with :py:func:`sigima.tools.signal.misc.contrast`"
 msgstr ""
 
 msgid "`test_signal_contrast <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/signals/analysis_unit_test.py#L64>`_"
@@ -344,7 +344,7 @@ msgstr ""
 msgid ":py:func:`fft <sigima.computation.signal.fft>`"
 msgstr ""
 
-msgid "Compute FFT with :py:func:`sigima.algorithms.signal.fourier.fft1d`"
+msgid "Compute FFT with :py:func:`sigima.tools.signal.fourier.fft1d`"
 msgstr ""
 
 msgid "`test_signal_fft <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/signals/fft1d_unit_test.py#L99>`_"
@@ -359,7 +359,7 @@ msgstr ""
 msgid ":py:func:`fw1e2 <sigima.computation.signal.fw1e2>`"
 msgstr ""
 
-msgid "Compute FW at 1/e² with :py:func:`sigima.algorithms.signal.pulse.fw1e2`"
+msgid "Compute FW at 1/e² with :py:func:`sigima.tools.signal.pulse.fw1e2`"
 msgstr ""
 
 msgid "`test_signal_fw1e2 <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/signals/fwhm_unit_test.py#L76>`_"
@@ -368,7 +368,7 @@ msgstr ""
 msgid ":py:func:`fwhm <sigima.computation.signal.fwhm>`"
 msgstr ""
 
-msgid "Compute FWHM with :py:func:`sigima.algorithms.signal.pulse.fwhm`"
+msgid "Compute FWHM with :py:func:`sigima.tools.signal.pulse.fwhm`"
 msgstr ""
 
 msgid "`test_signal_fwhm <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/signals/fwhm_unit_test.py#L57>`_"
@@ -404,7 +404,7 @@ msgstr ""
 msgid ":py:func:`ifft <sigima.computation.signal.ifft>`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`sigima.algorithms.signal.fourier.ifft1d`"
+msgid "Compute iFFT with :py:func:`sigima.tools.signal.fourier.ifft1d`"
 msgstr ""
 
 msgid "`test_signal_ifft <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/signals/fft1d_unit_test.py#L141>`_"
@@ -494,7 +494,7 @@ msgstr ""
 msgid ":py:func:`normalize <sigima.computation.signal.normalize>`"
 msgstr ""
 
-msgid "Normalize data with :py:func:`sigima.algorithms.signal.level.normalize`"
+msgid "Normalize data with :py:func:`sigima.tools.signal.level.normalize`"
 msgstr ""
 
 msgid "`test_signal_normalize <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/signals/processing_unit_test.py#L157>`_"
@@ -587,7 +587,7 @@ msgstr ""
 msgid ":py:func:`resampling <sigima.computation.signal.resampling>`"
 msgstr ""
 
-msgid "Resample data with :py:func:`sigima.algorithms.signal.interpolation.interpolate`"
+msgid "Resample data with :py:func:`sigima.tools.signal.interpolation.interpolate`"
 msgstr ""
 
 msgid "`test_signal_resampling <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/signals/processing_unit_test.py#L347>`_"
@@ -782,7 +782,7 @@ msgstr ""
 msgid ":py:func:`astype <sigima.computation.image.astype>`"
 msgstr ""
 
-msgid "Convert image data type with :py:func:`sigima.algorithms.datatypes.clip_astype`"
+msgid "Convert image data type with :py:func:`sigima.tools.datatypes.clip_astype`"
 msgstr ""
 
 msgid "`test_image_astype <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/images/operation_unit_test.py#L333>`_"
@@ -809,7 +809,7 @@ msgstr ""
 msgid ":py:func:`binning <sigima.computation.image.binning>`"
 msgstr ""
 
-msgid "Binning function on data with :py:func:`sigima.algorithms.image.binning`"
+msgid "Binning function on data with :py:func:`sigima.tools.image.binning`"
 msgstr ""
 
 msgid "`test_binning <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/images/binning_unit_test.py#L70>`_"
@@ -1064,7 +1064,7 @@ msgstr ""
 msgid ":py:func:`fft <sigima.computation.image.fft>`"
 msgstr ""
 
-msgid "Compute FFT with :py:func:`sigima.algorithms.image.fft2d`"
+msgid "Compute FFT with :py:func:`sigima.tools.image.fft2d`"
 msgstr ""
 
 msgid "`test_image_fft <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/images/fft2d_unit_test.py#L117>`_"
@@ -1073,7 +1073,7 @@ msgstr ""
 msgid ":py:func:`flatfield <sigima.computation.image.flatfield>`"
 msgstr ""
 
-msgid "Compute flat field correction with :py:func:`sigima.algorithms.image.flatfield`"
+msgid "Compute flat field correction with :py:func:`sigima.tools.image.flatfield`"
 msgstr ""
 
 msgid ":py:func:`fliph <sigima.computation.image.fliph>`"
@@ -1115,7 +1115,7 @@ msgstr ""
 msgid ":py:func:`ifft <sigima.computation.image.ifft>`"
 msgstr ""
 
-msgid "Compute inverse FFT with :py:func:`sigima.algorithms.image.ifft2d`"
+msgid "Compute inverse FFT with :py:func:`sigima.tools.image.ifft2d`"
 msgstr ""
 
 msgid "`test_image_ifft <https://github.com/DataLab-Platform/DataLab/blob/v0.21.0/datalab/tests/features/images/fft2d_unit_test.py#L133>`_"

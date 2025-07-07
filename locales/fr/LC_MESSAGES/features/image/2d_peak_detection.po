@@ -88,6 +88,5 @@ msgstr ""
 msgid "\"Relative threshold\": detection threshold"
 msgstr ""
 
-msgid "Feature is based on ``get_2d_peaks_coords`` function from ``sigima.algorithms`` module:"
+msgid "Feature is based on ``get_2d_peaks_coords`` function from ``sigima.tools`` module:"
 msgstr ""
-

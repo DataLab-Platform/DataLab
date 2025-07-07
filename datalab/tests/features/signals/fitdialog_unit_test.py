@@ -9,9 +9,9 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 # guitest: show
 
 from guidata.qthelpers import qt_app_context
-from sigima.algorithms.signal.peakdetection import peak_indices
 from sigima.tests.data import GaussianNoiseParam, create_noisy_signal, get_test_signal
 from sigima.tests.helpers import get_default_test_name
+from sigima.tools.signal.peakdetection import peak_indices
 
 from datalab.env import execenv
 from datalab.widgets import fitdialog as fdlg

@@ -34,7 +34,7 @@ msgstr ""
 msgid "Add an action in the :mod:`datalab.gui.actionhandler` module to trigger the processing feature from the GUI (e.g. a menu item or a toolbar button)."
 msgstr ""
 
-msgid "Implement the computation function in the :mod:`sigima.computation` module (that would eventually call the algorithm from the :mod:`sigima.algorithms` module)."
+msgid "Implement the computation function in the :mod:`sigima.computation` module (that would eventually call the algorithm from the :mod:`sigima.tools` module)."
 msgstr ""
 
 msgid "Implement the processor object method in this package to call the computation function and eventually update the GUI."
@@ -135,4 +135,3 @@ msgstr ""
 
 msgid "Future developments (such as a visual pipeline editor) may require generalizing this model to support additional sources and destinations beyond the current panel-based selection/output logic."
 msgstr ""
-

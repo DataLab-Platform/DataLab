@@ -15,7 +15,7 @@ and their purpose:
     * - Submodule
       - Purpose
 
-    * - :mod:`sigima.algorithms`
+    * - :mod:`sigima.tools`
       - Algorithms for data analysis, which operates on NumPy arrays
 
     * - :mod:`sigima.params`
@@ -34,7 +34,7 @@ and their purpose:
    :maxdepth: 2
    :caption: Public features:
 
-   algorithms
+   tools
    params
    obj
    computation

@@ -34,8 +34,8 @@ msgstr "Lors de la mise en œuvre d'une fonction de traitement dans DataLab, les
 msgid "Add an action in the :mod:`datalab.gui.actionhandler` module to trigger the processing feature from the GUI (e.g. a menu item or a toolbar button)."
 msgstr "Ajout d'une action dans le module :mod:`datalab.gui.actionhandler` pour déclencher la fonction de traitement depuis l'interface utilisateur (par exemple, un élément de menu ou un bouton de barre d'outils)."
 
-msgid "Implement the computation function in the :mod:`sigima.computation` module (that would eventually call the algorithm from the :mod:`sigima.algorithms` module)."
-msgstr "Implémentation de la fonction de calcul dans le module :mod:`sigima.computation` (qui appellerait éventuellement l'algorithme du module :mod:`sigima.algorithms`)."
+msgid "Implement the computation function in the :mod:`sigima.computation` module (that would eventually call the algorithm from the :mod:`sigima.tools` module)."
+msgstr "Implémentation de la fonction de calcul dans le module :mod:`sigima.computation` (qui appellerait éventuellement l'algorithme du module :mod:`sigima.tools`)."
 
 msgid "Implement the processor object method in this package to call the computation function and eventually update the GUI."
 msgstr "Implémentation de la méthode de l'objet processeur dans ce paquet pour appeler la fonction de calcul et éventuellement mettre à jour l'interface utilisateur."

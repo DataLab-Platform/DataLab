@@ -37,7 +37,7 @@ msgstr ""
 msgid "Purpose"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms`"
+msgid ":mod:`sigima.tools`"
 msgstr ""
 
 msgid "Algorithms for data analysis, which operates on NumPy arrays"

@@ -25,13 +25,13 @@ msgstr ""
 msgid "This package contains the computation functions used by the DataLab project. Those functions operate directly on DataLab objects (i.e. :class:`sigima.obj.SignalObj` and :class:`sigima.obj.ImageObj`) and are designed to be used in the DataLab pipeline, but can be used independently as well."
 msgstr ""
 
-msgid "The :mod:`sigima.computation` package is the main entry point for the DataLab computation functions when manipulating DataLab objects. See the :mod:`sigima.algorithms` package for algorithms that operate directly on NumPy arrays."
+msgid "The :mod:`sigima.computation` package is the main entry point for the DataLab computation functions when manipulating DataLab objects. See the :mod:`sigima.tools` package for algorithms that operate directly on NumPy arrays."
 msgstr ""
 
 msgid "Each computation module defines a set of computation objects, that is, functions that implement processing features and classes that implement the corresponding parameters (in the form of :py:class:`guidata.dataset.datatypes.Dataset` subclasses). The computation functions takes a DataLab object (e.g. :class:`sigima.obj.SignalObj`) and a parameter object (e.g. :py:class:`sigima.params.MovingAverageParam`) as input and return a DataLab object as output (the result of the computation). The parameter object is used to configure the computation function (e.g. the size of the moving average window)."
 msgstr ""
 
-msgid "In DataLab overall architecture, the purpose of this package is to provide the computation functions that are used by the :mod:`sigima.core.gui.processor` module, based on the algorithms defined in the :mod:`sigima.algorithms` module and on the data model defined in the :mod:`sigima.obj` (or :mod:`sigima.core.model`) module."
+msgid "In DataLab overall architecture, the purpose of this package is to provide the computation functions that are used by the :mod:`sigima.core.gui.processor` module, based on the algorithms defined in the :mod:`sigima.tools` module and on the data model defined in the :mod:`sigima.obj` (or :mod:`sigima.core.model`) module."
 msgstr ""
 
 msgid "The computation modules are organized in subpackages according to their purpose. The following subpackages are available:"
@@ -512,10 +512,10 @@ msgstr ""
 msgid "New instance of :py:class:`PeakDetectionParam`."
 msgstr ""
 
-msgid "Peak detection with :py:func:`sigima.algorithms.signal.peakdetection.peak_indices`"
+msgid "Peak detection with :py:func:`sigima.tools.signal.peakdetection.peak_indices`"
 msgstr ""
 
-msgid "Normalize data with :py:func:`sigima.algorithms.signal.level.normalize`"
+msgid "Normalize data with :py:func:`sigima.tools.signal.level.normalize`"
 msgstr ""
 
 msgid "Compute derivative with :py:func:`numpy.gradient`"
@@ -677,22 +677,22 @@ msgstr ""
 msgid "Callback for choice item"
 msgstr ""
 
-msgid "Compute zero padding with :py:func:`sigima.algorithms.signal.fourier.zero_padding`"
+msgid "Compute zero padding with :py:func:`sigima.tools.signal.fourier.zero_padding`"
 msgstr ""
 
-msgid "Compute FFT with :py:func:`sigima.algorithms.signal.fourier.fft1d`"
+msgid "Compute FFT with :py:func:`sigima.tools.signal.fourier.fft1d`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`sigima.algorithms.signal.fourier.ifft1d`"
+msgid "Compute iFFT with :py:func:`sigima.tools.signal.fourier.ifft1d`"
 msgstr ""
 
-msgid "Compute magnitude spectrum with :py:func:`sigima.algorithms.signal.fourier.magnitude_spectrum`"
+msgid "Compute magnitude spectrum with :py:func:`sigima.tools.signal.fourier.magnitude_spectrum`"
 msgstr ""
 
-msgid "Compute phase spectrum with :py:func:`sigima.algorithms.signal.fourier.phase_spectrum`"
+msgid "Compute phase spectrum with :py:func:`sigima.tools.signal.fourier.phase_spectrum`"
 msgstr ""
 
-msgid "Compute power spectral density with :py:func:`sigima.algorithms.signal.fourier.psd`"
+msgid "Compute power spectral density with :py:func:`sigima.tools.signal.fourier.psd`"
 msgstr ""
 
 msgid "Polynomial fitting parameters"
@@ -725,7 +725,7 @@ msgstr ""
 msgid "New instance of :py:class:`InterpolationParam`."
 msgstr ""
 
-msgid "Interpolate data with :py:func:`sigima.algorithms.signal.interpolation.interpolate`"
+msgid "Interpolate data with :py:func:`sigima.tools.signal.interpolation.interpolate`"
 msgstr ""
 
 msgid "Resample parameters"
@@ -755,7 +755,7 @@ msgstr ""
 msgid "Update parameters from a signal object."
 msgstr ""
 
-msgid "Resample data with :py:func:`sigima.algorithms.signal.interpolation.interpolate`"
+msgid "Resample data with :py:func:`sigima.tools.signal.interpolation.interpolate`"
 msgstr ""
 
 msgid "Detrending parameters"
@@ -812,7 +812,7 @@ msgstr ""
 msgid "New instance of :py:class:`WindowingParam`."
 msgstr ""
 
-msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman, tukey, rectangular) with :py:func:`sigima.algorithms.signal.windowing.apply_window`"
+msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman, tukey, rectangular) with :py:func:`sigima.tools.signal.windowing.apply_window`"
 msgstr ""
 
 msgid "destination signal"
@@ -833,7 +833,7 @@ msgstr ""
 msgid "New instance of :py:class:`AngleUnitParam`."
 msgstr ""
 
-msgid "Convert cartesian coordinates to polar coordinates with :py:func:`sigima.algorithms.coordinates.to_polar`."
+msgid "Convert cartesian coordinates to polar coordinates with :py:func:`sigima.tools.coordinates.to_polar`."
 msgstr ""
 
 msgid "Source signal."
@@ -845,7 +845,7 @@ msgstr ""
 msgid "Result signal object."
 msgstr ""
 
-msgid "Convert polar coordinates to cartesian coordinates with :py:func:`sigima.algorithms.coordinates.to_cartesian`."
+msgid "Convert polar coordinates to cartesian coordinates with :py:func:`sigima.tools.coordinates.to_cartesian`."
 msgstr ""
 
 msgid "This function assumes that the x-axis represents the radius and the y-axis represents the angle. Negative values are not allowed for the radius, and will be clipped to 0 (a warning will be raised)."
@@ -863,10 +863,10 @@ msgstr ""
 msgid "New instance of :py:class:`AllanVarianceParam`."
 msgstr ""
 
-msgid "Compute Allan variance with :py:func:`sigima.algorithms.signal.stability.allan_variance`"
+msgid "Compute Allan variance with :py:func:`sigima.tools.signal.stability.allan_variance`"
 msgstr ""
 
-msgid "Compute Allan deviation with :py:func:`sigima.algorithms.signal.stability.allan_deviation`"
+msgid "Compute Allan deviation with :py:func:`sigima.tools.signal.stability.allan_deviation`"
 msgstr ""
 
 msgid "Compute Overlapping Allan variance."
@@ -932,13 +932,13 @@ msgstr ""
 msgid "New instance of :py:class:`FWHMParam`."
 msgstr ""
 
-msgid "Compute FWHM with :py:func:`sigima.algorithms.signal.pulse.fwhm`"
+msgid "Compute FWHM with :py:func:`sigima.tools.signal.pulse.fwhm`"
 msgstr ""
 
 msgid "Segment coordinates"
 msgstr ""
 
-msgid "Compute FW at 1/e² with :py:func:`sigima.algorithms.signal.pulse.fw1e2`"
+msgid "Compute FW at 1/e² with :py:func:`sigima.tools.signal.pulse.fw1e2`"
 msgstr ""
 
 msgid "Ordinate parameter"
@@ -995,7 +995,7 @@ msgstr ""
 msgid "Compute statistics on a signal"
 msgstr ""
 
-msgid "Compute bandwidth at -3 dB with :py:func:`sigima.algorithms.signal.misc.bandwidth`"
+msgid "Compute bandwidth at -3 dB with :py:func:`sigima.tools.signal.misc.bandwidth`"
 msgstr ""
 
 msgid "Result properties with bandwidth"
@@ -1022,22 +1022,22 @@ msgstr ""
 msgid "Compute Dynamic parameters using the following functions:"
 msgstr ""
 
-msgid "Freq: :py:func:`sigima.algorithms.signal.dynamic.sinus_frequency`"
+msgid "Freq: :py:func:`sigima.tools.signal.dynamic.sinus_frequency`"
 msgstr ""
 
-msgid "ENOB: :py:func:`sigima.algorithms.signal.dynamic.enob`"
+msgid "ENOB: :py:func:`sigima.tools.signal.dynamic.enob`"
 msgstr ""
 
-msgid "SNR: :py:func:`sigima.algorithms.signal.dynamic.snr`"
+msgid "SNR: :py:func:`sigima.tools.signal.dynamic.snr`"
 msgstr ""
 
-msgid "SINAD: :py:func:`sigima.algorithms.signal.dynamic.sinad`"
+msgid "SINAD: :py:func:`sigima.tools.signal.dynamic.sinad`"
 msgstr ""
 
-msgid "THD: :py:func:`sigima.algorithms.signal.dynamic.thd`"
+msgid "THD: :py:func:`sigima.tools.signal.dynamic.thd`"
 msgstr ""
 
-msgid "SFDR: :py:func:`sigima.algorithms.signal.dynamic.sfdr`"
+msgid "SFDR: :py:func:`sigima.tools.signal.dynamic.sfdr`"
 msgstr ""
 
 msgid "Result properties with ENOB, SNR, SINAD, THD, SFDR"
@@ -1046,16 +1046,16 @@ msgstr ""
 msgid "Compute sampling rate and period using the following functions:"
 msgstr ""
 
-msgid "fs: :py:func:`sigima.algorithms.signal.dynamic.sampling_rate`"
+msgid "fs: :py:func:`sigima.tools.signal.dynamic.sampling_rate`"
 msgstr ""
 
-msgid "T: :py:func:`sigima.algorithms.signal.dynamic.sampling_period`"
+msgid "T: :py:func:`sigima.tools.signal.dynamic.sampling_period`"
 msgstr ""
 
 msgid "Result properties with sampling rate and period"
 msgstr ""
 
-msgid "Compute contrast with :py:func:`sigima.algorithms.signal.misc.contrast`"
+msgid "Compute contrast with :py:func:`sigima.tools.signal.misc.contrast`"
 msgstr ""
 
 msgid "Compute the smallest argument at the minima and the smallest argument at the maxima."
@@ -1301,7 +1301,7 @@ msgstr ""
 msgid "Update parameters from image"
 msgstr ""
 
-msgid "Compute flat field correction with :py:func:`sigima.algorithms.image.flatfield`"
+msgid "Compute flat field correction with :py:func:`sigima.tools.image.flatfield`"
 msgstr ""
 
 msgid "raw data image object"
@@ -1313,7 +1313,7 @@ msgstr ""
 msgid "flat field parameters"
 msgstr ""
 
-msgid "Normalize image data depending on its maximum, with :py:func:`sigima.algorithms.image.normalize`"
+msgid "Normalize image data depending on its maximum, with :py:func:`sigima.tools.image.normalize`"
 msgstr ""
 
 msgid "Compute histogram of the image data, with :py:func:`numpy.histogram`"
@@ -1574,7 +1574,7 @@ msgstr ""
 msgid "New instance of :py:class:`Peak2DDetectionParam`."
 msgstr ""
 
-msgid "Compute 2D peak detection with :py:func:`sigima.algorithms.image.get_2d_peaks_coords`"
+msgid "Compute 2D peak detection with :py:func:`sigima.tools.image.get_2d_peaks_coords`"
 msgstr ""
 
 msgid "input image"
@@ -1595,7 +1595,7 @@ msgstr ""
 msgid "New instance of :py:class:`ContourShapeParam`."
 msgstr ""
 
-msgid "Compute contour shape fit with :py:func:`sigima.algorithms.image.get_contour_shapes`"
+msgid "Compute contour shape fit with :py:func:`sigima.tools.image.get_contour_shapes`"
 msgstr ""
 
 msgid "Base class for blob detection parameters"
@@ -1631,7 +1631,7 @@ msgstr ""
 msgid "New instance of :py:class:`BlobDOGParam`."
 msgstr ""
 
-msgid "Compute blobs using Difference of Gaussian method with :py:func:`sigima.algorithms.image.find_blobs_dog`"
+msgid "Compute blobs using Difference of Gaussian method with :py:func:`sigima.tools.image.find_blobs_dog`"
 msgstr ""
 
 msgid "Blobs coordinates"
@@ -1649,7 +1649,7 @@ msgstr ""
 msgid "New instance of :py:class:`BlobDOHParam`."
 msgstr ""
 
-msgid "Compute blobs using Determinant of Hessian method with :py:func:`sigima.algorithms.image.find_blobs_doh`"
+msgid "Compute blobs using Determinant of Hessian method with :py:func:`sigima.tools.image.find_blobs_doh`"
 msgstr ""
 
 msgid "Blob detection using Laplacian of Gaussian method"
@@ -1661,7 +1661,7 @@ msgstr ""
 msgid "New instance of :py:class:`BlobLOGParam`."
 msgstr ""
 
-msgid "Compute blobs using Laplacian of Gaussian method with :py:func:`sigima.algorithms.image.find_blobs_log`"
+msgid "Compute blobs using Laplacian of Gaussian method with :py:func:`sigima.tools.image.find_blobs_log`"
 msgstr ""
 
 msgid "Blob detection using OpenCV"
@@ -1727,7 +1727,7 @@ msgstr ""
 msgid "New instance of :py:class:`BlobOpenCVParam`."
 msgstr ""
 
-msgid "Compute blobs using OpenCV with :py:func:`sigima.algorithms.image.find_blobs_opencv`"
+msgid "Compute blobs using OpenCV with :py:func:`sigima.tools.image.find_blobs_opencv`"
 msgstr ""
 
 msgid "Circle Hough transform parameters"
@@ -1748,7 +1748,7 @@ msgstr ""
 msgid "New instance of :py:class:`HoughCircleParam`."
 msgstr ""
 
-msgid "Compute Hough circles with :py:func:`sigima.algorithms.image.get_hough_circle_peaks`"
+msgid "Compute Hough circles with :py:func:`sigima.tools.image.get_hough_circle_peaks`"
 msgstr ""
 
 msgid "Circle coordinates"

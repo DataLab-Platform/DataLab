@@ -14,7 +14,7 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from sigima.algorithms.signal.peakdetection import peak_indices
+from sigima.tools.signal.peakdetection import peak_indices
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.adapters_plotpy.signal import CURVESTYLES

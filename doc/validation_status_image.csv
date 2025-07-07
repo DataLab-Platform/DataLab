@@ -5,10 +5,10 @@
 :py:func:`adjust_log <sigima.computation.image.adjust_log>`,Compute log correction with :py:func:`skimage.exposure.adjust_log`,`test_adjust_log <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L265>`_
 :py:func:`adjust_sigmoid <sigima.computation.image.adjust_sigmoid>`,Compute sigmoid correction with :py:func:`skimage.exposure.adjust_sigmoid`,`test_adjust_sigmoid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L277>`_
 :py:func:`arithmetic <sigima.computation.image.arithmetic>`,Compute arithmetic operation on two images,`test_image_arithmetic <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L248>`_
-:py:func:`astype <sigima.computation.image.astype>`,Convert image data type with :py:func:`sigima.algorithms.datatypes.clip_astype`,`test_image_astype <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L338>`_
+:py:func:`astype <sigima.computation.image.astype>`,Convert image data type with :py:func:`sigima.tools.datatypes.clip_astype`,`test_image_astype <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L338>`_
 :py:func:`average <sigima.computation.image.average>`,Compute the average of images in the list and return the result image object,`test_image_average <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L90>`_
 :py:func:`average_profile <sigima.computation.image.average_profile>`,Compute horizontal or vertical average profile,`test_average_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L66>`_
-:py:func:`binning <sigima.computation.image.binning>`,Binning function on data with :py:func:`sigima.algorithms.image.binning`,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/binning_unit_test.py#L75>`_
+:py:func:`binning <sigima.computation.image.binning>`,Binning function on data with :py:func:`sigima.tools.image.binning`,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/binning_unit_test.py#L75>`_
 :py:func:`black_tophat <sigima.computation.image.black_tophat>`,Compute Black Top-Hat with :py:func:`skimage.morphology.black_tophat`,`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L413>`_
 :py:func:`blob_dog <sigima.computation.image.blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
 :py:func:`blob_doh <sigima.computation.image.blob_doh>`,Compute blobs using Determinant of Hessian method,N/A
@@ -40,14 +40,14 @@
 :py:func:`farid <sigima.computation.image.farid>`,Compute Farid filter with :py:func:`skimage.filters.farid`,`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L538>`_
 :py:func:`farid_h <sigima.computation.image.farid_h>`,Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`,`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L544>`_
 :py:func:`farid_v <sigima.computation.image.farid_v>`,Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`,`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L550>`_
-:py:func:`fft <sigima.computation.image.fft>`,Compute FFT with :py:func:`sigima.algorithms.image.fft2d`,`test_image_fft <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L120>`_
-:py:func:`flatfield <sigima.computation.image.flatfield>`,Compute flat field correction with :py:func:`sigima.algorithms.image.flatfield`,N/A
+:py:func:`fft <sigima.computation.image.fft>`,Compute FFT with :py:func:`sigima.tools.image.fft2d`,`test_image_fft <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L120>`_
+:py:func:`flatfield <sigima.computation.image.flatfield>`,Compute flat field correction with :py:func:`sigima.tools.image.flatfield`,N/A
 :py:func:`fliph <sigima.computation.image.fliph>`,Flip data horizontally with :py:func:`numpy.fliplr`,`test_image_fliph <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L405>`_
 :py:func:`flipv <sigima.computation.image.flipv>`,Flip data vertically with :py:func:`numpy.flipud`,`test_image_flipv <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L417>`_
 :py:func:`gaussian_filter <sigima.computation.image.gaussian_filter>`,Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`,`test_image_gaussian_filter <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L146>`_
 :py:func:`histogram <sigima.computation.image.histogram>`,"Compute histogram of the image data, with :py:func:`numpy.histogram`",N/A
 :py:func:`hough_circle_peaks <sigima.computation.image.hough_circle_peaks>`,Compute Hough circles,N/A
-:py:func:`ifft <sigima.computation.image.ifft>`,Compute inverse FFT with :py:func:`sigima.algorithms.image.ifft2d`,`test_image_ifft <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L136>`_
+:py:func:`ifft <sigima.computation.image.ifft>`,Compute inverse FFT with :py:func:`sigima.tools.image.ifft2d`,`test_image_ifft <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L136>`_
 :py:func:`imag <sigima.computation.image.imag>`,Compute imaginary part with :py:func:`numpy.imag`,`test_image_imag <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L320>`_
 :py:func:`inverse <sigima.computation.image.inverse>`,Compute the inverse of an image and return the new result image object,`test_image_inverse <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L284>`_
 :py:func:`laplace <sigima.computation.image.laplace>`,Compute Laplace filter with :py:func:`skimage.filters.laplace`,`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L556>`_
@@ -137,7 +137,7 @@
 :py:func:`clip <sigima.computation.image.exposure.clip>`,Apply clipping with :py:func:`numpy.clip`,N/A
 :py:func:`equalize_adapthist <sigima.computation.image.exposure.equalize_adapthist>`,Adaptive histogram equalization,`test_equalize_adapthist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L316>`_
 :py:func:`equalize_hist <sigima.computation.image.exposure.equalize_hist>`,Histogram equalization with :py:func:`skimage.exposure.equalize_hist`,`test_equalize_hist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L304>`_
-:py:func:`flatfield <sigima.computation.image.exposure.flatfield>`,Compute flat field correction with :py:func:`sigima.algorithms.image.flatfield`,N/A
+:py:func:`flatfield <sigima.computation.image.exposure.flatfield>`,Compute flat field correction with :py:func:`sigima.tools.image.flatfield`,N/A
 :py:func:`histogram <sigima.computation.image.exposure.histogram>`,"Compute histogram of the image data, with :py:func:`numpy.histogram`",N/A
 :py:func:`normalize <sigima.computation.image.exposure.normalize>`,,N/A
 :py:func:`offset_correction <sigima.computation.image.exposure.offset_correction>`,Apply offset correction,N/A
@@ -153,13 +153,13 @@
 :py:func:`moving_average <sigima.computation.image.filtering.moving_average>`,Compute moving average with :py:func:`scipy.ndimage.uniform_filter`,N/A
 :py:func:`moving_median <sigima.computation.image.filtering.moving_median>`,Compute moving median with :py:func:`scipy.ndimage.median_filter`,N/A
 :py:func:`wiener <sigima.computation.image.filtering.wiener>`,Compute Wiener filter with :py:func:`scipy.signal.wiener`,N/A
-:py:func:`fft <sigima.computation.image.fourier.fft>`,Compute FFT with :py:func:`sigima.algorithms.image.fft2d`,N/A
-:py:func:`ifft <sigima.computation.image.fourier.ifft>`,Compute inverse FFT with :py:func:`sigima.algorithms.image.ifft2d`,N/A
+:py:func:`fft <sigima.computation.image.fourier.fft>`,Compute FFT with :py:func:`sigima.tools.image.fft2d`,N/A
+:py:func:`ifft <sigima.computation.image.fourier.ifft>`,Compute inverse FFT with :py:func:`sigima.tools.image.ifft2d`,N/A
 :py:func:`magnitude_spectrum <sigima.computation.image.fourier.magnitude_spectrum>`,Compute magnitude spectrum,N/A
 :py:func:`phase_spectrum <sigima.computation.image.fourier.phase_spectrum>`,Compute phase spectrum,N/A
 :py:func:`psd <sigima.computation.image.fourier.psd>`,Compute power spectral density,N/A
 :py:func:`zero_padding <sigima.computation.image.fourier.zero_padding>`,,N/A
-:py:func:`binning <sigima.computation.image.geometry.binning>`,Binning function on data with :py:func:`sigima.algorithms.image.binning`,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/binning_unit_test.py#L75>`_
+:py:func:`binning <sigima.computation.image.geometry.binning>`,Binning function on data with :py:func:`sigima.tools.image.binning`,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/binning_unit_test.py#L75>`_
 :py:func:`fliph <sigima.computation.image.geometry.fliph>`,Flip data horizontally with :py:func:`numpy.fliplr`,N/A
 :py:func:`flipv <sigima.computation.image.geometry.flipv>`,Flip data vertically with :py:func:`numpy.flipud`,N/A
 :py:func:`resize <sigima.computation.image.geometry.resize>`,Zooming function with :py:func:`scipy.ndimage.zoom`,N/A
@@ -168,7 +168,7 @@
 :py:func:`rotate90 <sigima.computation.image.geometry.rotate90>`,Rotate data 90° with :py:func:`numpy.rot90`,N/A
 :py:func:`swap_axes <sigima.computation.image.geometry.swap_axes>`,Swap image axes with :py:func:`numpy.transpose`,N/A
 :py:func:`absolute <sigima.computation.image.mathops.absolute>`,Compute absolute value with :py:data:`numpy.absolute`,N/A
-:py:func:`astype <sigima.computation.image.mathops.astype>`,Convert image data type with :py:func:`sigima.algorithms.datatypes.clip_astype`,N/A
+:py:func:`astype <sigima.computation.image.mathops.astype>`,Convert image data type with :py:func:`sigima.tools.datatypes.clip_astype`,N/A
 :py:func:`exp <sigima.computation.image.mathops.exp>`,Compute exponential with :py:data:`numpy.exp`,N/A
 :py:func:`imag <sigima.computation.image.mathops.imag>`,Compute imaginary part with :py:func:`numpy.imag`,N/A
 :py:func:`inverse <sigima.computation.image.mathops.inverse>`,Compute the inverse of an image and return the new result image object,N/A
