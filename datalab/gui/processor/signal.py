@@ -216,7 +216,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.ifft,
             _("Inverse FFT"),
-            sigima_base.FFTParam,
+            paramclass=None,
             comment=_(
                 "Inverse Fast Fourier Transform (IFFT) is an estimation of the "
                 "Inverse Discrete Fourier Transform (IDFT). "

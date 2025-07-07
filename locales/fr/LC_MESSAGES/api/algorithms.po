@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-07 15:35+0200\n"
+"POT-Creation-Date: 2025-07-07 15:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -295,13 +295,13 @@ msgstr ""
 msgid "Signal values."
 msgstr ""
 
-msgid "If True, shift zero frequency to the center of the spectrum."
+msgid "If True, shift zero frequency and its corresponding FFT component to the"
 msgstr ""
 
 msgid "Frequency axis and corresponding FFT values."
 msgstr ""
 
-msgid "Compute the inverse FFT of a spectrum."
+msgid "Compute the inverse Fast Fourier Transform (FFT) of a 1D complex spectrum."
 msgstr ""
 
 msgid "Frequency axis (evenly spaced)."
@@ -310,13 +310,10 @@ msgstr ""
 msgid "FFT values."
 msgstr ""
 
-msgid "If True, the input spectrum is centered (zero frequency in the middle)."
-msgstr ""
-
 msgid "Starting value for the time axis."
 msgstr ""
 
-msgid "Time axis and reconstructed real signal."
+msgid "Time axis and real signal."
 msgstr ""
 
 msgid "Raises"
