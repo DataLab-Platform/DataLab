@@ -220,7 +220,7 @@ def read_csv(
             # This means that the first line is data, so we have to read it again, but
             # without the header:
             read_without_header = True
-        except ValueError:
+        except (ValueError, TypeError):
             read_without_header = False
             # This means that the first line is a header, so we already have the data
             # without missing values.
