@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sigima.obj import (
+from sigima.objects import (
     CircularROI,
     ImageObj,
     ImageROI,

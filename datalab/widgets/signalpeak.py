@@ -23,7 +23,7 @@ from datalab.config import _
 if TYPE_CHECKING:
     from plotpy.items import Marker
     from qtpy.QtWidgets import QWidget
-    from sigima.obj import SignalObj
+    from sigima.objects import SignalObj
 
 
 class DistanceSlider(QW.QWidget):

@@ -36,7 +36,7 @@ from plotpy.items import (
     LabelItem,
     PolygonShape,
 )
-from sigima.obj.base import (
+from sigima.objects.base import (
     ROI_KEY,
     BaseObj,
     BaseROI,

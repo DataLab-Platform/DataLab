@@ -16,7 +16,7 @@ import sigima.computation.base as sigima_base
 import sigima.computation.signal as sigima_signal
 import sigima.params
 from guidata.qthelpers import exec_dialog
-from sigima.obj import (
+from sigima.objects import (
     ResultProperties,
     ResultShape,
     ROI1DParam,

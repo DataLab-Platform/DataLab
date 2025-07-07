@@ -8,7 +8,7 @@ Contour finding application test
 # guitest: show
 
 import sigima.params
-from sigima.obj import NewImageParam
+from sigima.objects import NewImageParam
 from sigima.tests.data import create_multigauss_image
 
 from datalab.env import execenv

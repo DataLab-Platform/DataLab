@@ -180,9 +180,9 @@ class RemoteProxy(RemoteClient):
         >>> proxy.get_object_titles()
         ['toto']
         >>> proxy["toto"]  # from title
-        <sigima.obj.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima.objects.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1]  # from number
-        <sigima.obj.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima.objects.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1].data
         array([1., 2., 3.])
         >>> proxy.set_current_panel("image")

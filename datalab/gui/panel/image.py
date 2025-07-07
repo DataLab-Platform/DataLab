@@ -19,7 +19,7 @@ from plotpy.tools import (
     LabelTool,
 )
 from sigima.io.image import ImageIORegistry
-from sigima.obj import ImageDatatypes, ImageObj, ImageROI, NewImageParam
+from sigima.objects import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 
 from datalab.config import Conf, _
 from datalab.gui import roieditor

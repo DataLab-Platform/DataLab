@@ -20,7 +20,7 @@ from datalab.config import _
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection
     from qtpy.QtWidgets import QWidget
-    from sigima.obj import SignalObj
+    from sigima.objects import SignalObj
 
 
 class SignalBaselineDialog(PlotDialog):

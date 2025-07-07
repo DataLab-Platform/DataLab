@@ -17,7 +17,7 @@ This sub-menu contains two actions, "Preprocess image" and "Detect blobs".
 """
 
 import numpy as np
-import sigima.obj
+import sigima.objects
 import sigima.params
 import skimage.draw
 
@@ -53,7 +53,7 @@ class ExtractBlobs(datalab.plugins.PluginBase):
             data = np.clip(arr, 0, 65535).astype(np.uint16)
 
             # Create a new image object and add it to the image panel
-            obj = sigima.obj.create_image(
+            obj = sigima.objects.create_image(
                 newparam.title, data, units=("mm", "mm", "lsb")
             )
             self.proxy.add_object(obj)

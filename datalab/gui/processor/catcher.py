@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING, Any
 from datalab.env import execenv
 
 if TYPE_CHECKING:
-    from sigima.obj import ImageObj, ResultProperties, ResultShape, SignalObj
+    from sigima.objects import ImageObj, ResultProperties, ResultShape, SignalObj
 
 
 @dataclasses.dataclass

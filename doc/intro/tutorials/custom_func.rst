@@ -293,9 +293,9 @@ way (see below):
     ourselves.
 
 The most significant change is that we need to define a function that will be
-operating on DataLab's native image objects (:class:`sigima.obj.ImageObj`), instead of
+operating on DataLab's native image objects (:class:`sigima.objects.ImageObj`), instead of
 operating on NumPy arrays. So we need to find a way to call our custom function
-``weighted_average_denoise`` with a :class:`sigima.obj.ImageObj` as input and output.
+``weighted_average_denoise`` with a :class:`sigima.objects.ImageObj` as input and output.
 To avoid writing a lot of boilerplate code, we can use the function wrapper provided
 by DataLab: :class:`sigima.computation.image.Wrap1to1Func`.
 

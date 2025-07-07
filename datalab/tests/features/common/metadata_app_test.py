@@ -13,7 +13,7 @@ Metadata application test:
 
 import sigima.computation.image as sigima_image
 import sigima.computation.signal as sigima_signal
-import sigima.obj
+import sigima.objects
 import sigima.params
 from sigima.tests.data import create_paracetamol_signal
 
@@ -65,13 +65,13 @@ def test_metadata_app():
         # === Signal metadata features test ===
         panel = win.signalpanel
         sig = create_paracetamol_signal(size)
-        sig.roi = sigima.obj.create_signal_roi([[26, 41], [125, 146]], indices=True)
+        sig.roi = sigima.objects.create_signal_roi([[26, 41], [125, 146]], indices=True)
         panel.add_object(sig)
         __run_signal_computations(panel)
         __test_metadata_features(panel)
         # === Image metadata features test ===
         panel = win.imagepanel
-        param = sigima.obj.NewImageParam.create(height=size, width=size)
+        param = sigima.objects.NewImageParam.create(height=size, width=size)
         ima = roi_app_test.create_test_image_with_roi(param)
         panel.add_object(ima)
         __run_image_computations(panel)

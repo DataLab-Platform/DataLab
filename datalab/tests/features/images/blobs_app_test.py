@@ -8,7 +8,7 @@ Blob detection application test
 # guitest: show
 
 import sigima.params
-from sigima.obj import create_image
+from sigima.objects import create_image
 from sigima.tests.data import get_test_image
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object

@@ -10,7 +10,7 @@ import numpy as np
 from guidata.dataset import update_dataset
 from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
-from sigima.obj import ImageObj, SignalObj
+from sigima.objects import ImageObj, SignalObj
 from sigima.tests.data import get_test_fnames
 
 from datalab.env import execenv

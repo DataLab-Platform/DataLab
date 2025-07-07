@@ -15,7 +15,7 @@ from plotpy.items import (
     AnnotatedRectangle,
     XRangeSelection,
 )
-from sigima.obj import (
+from sigima.objects import (
     CircularROI,
     PolygonalROI,
     RectangularROI,

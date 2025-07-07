@@ -10,7 +10,7 @@ ROI to plot item conversion unit tests
 from __future__ import annotations
 
 import numpy as np
-import sigima.obj
+import sigima.objects
 from guidata.qthelpers import qt_app_context
 from sigima.tests.common.roi_unit_test import (
     create_test_image_rois,
@@ -26,8 +26,8 @@ from datalab.env import execenv
 
 
 def __conversion_methods(
-    roi: sigima.obj.SignalROI | sigima.obj.ImageROI,
-    obj: sigima.obj.SignalObj | sigima.obj.ImageObj,
+    roi: sigima.objects.SignalROI | sigima.objects.ImageROI,
+    obj: sigima.objects.SignalObj | sigima.objects.ImageObj,
 ) -> None:
     """Test conversion methods for single ROI objects"""
     execenv.print("    test `to_plot_item` and `from_plot_item` methods: ", end="")

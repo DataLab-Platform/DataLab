@@ -16,7 +16,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import sigima.params as sigima_param
-from sigima.obj import (
+from sigima.objects import (
     ImageObj,
     ImageROI,
     NewImageParam,

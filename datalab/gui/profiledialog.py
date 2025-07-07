@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from plotpy.items import CurveItem
     from plotpy.panels import XCrossSection, YCrossSection
     from plotpy.plot import BasePlot
-    from sigima.obj import ImageObj
+    from sigima.objects import ImageObj
 
 
 class ProfileExtractionDialog(PlotDialog):

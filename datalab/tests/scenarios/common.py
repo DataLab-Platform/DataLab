@@ -10,7 +10,7 @@ Scenarios common functions
 from __future__ import annotations
 
 import numpy as np
-import sigima.obj
+import sigima.objects
 import sigima.params
 from sigima.tests.common.createobject_test import (
     iterate_image_creation,
@@ -145,10 +145,12 @@ def run_signal_computations(
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    base_param = sigima.obj.NewSignalParam.create(
-        title=_("Random function"), stype=sigima.obj.SignalTypes.UNIFORMRANDOM
+    base_param = sigima.objects.NewSignalParam.create(
+        title=_("Random function"), stype=sigima.objects.SignalTypes.UNIFORMRANDOM
     )
-    extra_param = sigima.obj.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
+    extra_param = sigima.objects.UniformRandomParam.create(
+        vmin=0, vmax=sig1.y.max() * 0.2
+    )
     noiseobj1 = panel.new_object(base_param, extra_param=extra_param, edit=False)
 
     compute_common_operations(panel)
@@ -198,7 +200,7 @@ def run_signal_computations(
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
-    roi = sigima.obj.create_signal_roi([i1, i2], indices=True)
+    roi = sigima.objects.create_signal_roi([i1, i2], indices=True)
     panel.processor.compute_roi_extraction(roi)
 
     sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
@@ -217,11 +219,11 @@ def run_signal_computations(
         panel.objview.set_current_object(sig)
         panel.processor.compute_fit(fittitle, fitfunc)
 
-    base_param = sigima.obj.NewSignalParam.create(
-        title=_("Gaussian"), stype=sigima.obj.SignalTypes.GAUSS
+    base_param = sigima.objects.NewSignalParam.create(
+        title=_("Gaussian"), stype=sigima.objects.SignalTypes.GAUSS
     )
-    sig = sigima.obj.create_signal_from_param(
-        base_param, sigima.obj.GaussLorentzVoigtParam()
+    sig = sigima.objects.create_signal_from_param(
+        base_param, sigima.objects.GaussLorentzVoigtParam()
     )
     panel.add_object(sig)
 
@@ -234,7 +236,7 @@ def run_signal_computations(
     # Create a new signal which X values are a subset of sig1
     x = np.linspace(sig1.x.min(), sig1.x.max(), data_size // 2)[: data_size // 4]
     y = x * 0.0
-    sig2 = sigima.obj.create_signal("X values for interpolation", x, y)
+    sig2 = sigima.objects.create_signal("X values for interpolation", x, y)
     panel.add_object(sig2)
 
     # Test interpolation
@@ -286,7 +288,7 @@ def run_image_computations(
     win.set_current_panel("image")
     panel = win.imagepanel
 
-    newparam = sigima.obj.NewImageParam.create(height=data_size, width=data_size)
+    newparam = sigima.objects.NewImageParam.create(height=data_size, width=data_size)
 
     if all_types:
         for image in iterate_image_creation(data_size, non_zero=True):
@@ -300,10 +302,10 @@ def run_image_computations(
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    newparam = sigima.obj.NewImageParam.create(
-        itype=sigima.obj.ImageTypes.UNIFORMRANDOM
+    newparam = sigima.objects.NewImageParam.create(
+        itype=sigima.objects.ImageTypes.UNIFORMRANDOM
     )
-    addparam = sigima.obj.UniformRandomParam()
+    addparam = sigima.objects.UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)
     addparam.vmax = int(ima1.data.max() * 0.2)
     panel.new_object(newparam, extra_param=addparam, edit=False)
@@ -416,7 +418,7 @@ def run_image_computations(
     panel.processor.run_feature("resize", param)
 
     n = data_size // 10
-    roi = sigima.obj.create_image_roi(
+    roi = sigima.objects.create_image_roi(
         "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
     )
     panel.processor.compute_roi_extraction(roi)

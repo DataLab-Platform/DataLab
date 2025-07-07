@@ -43,7 +43,7 @@ from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigima.obj import ImageObj, SignalObj
+from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import _
 from datalab.objectmodel import ObjectGroup, get_short_id, get_uuid

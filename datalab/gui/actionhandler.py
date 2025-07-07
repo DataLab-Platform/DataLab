@@ -49,7 +49,7 @@ from datalab.config import Conf, _
 from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
-    from sigima.obj import ImageObj, SignalObj
+    from sigima.objects import ImageObj, SignalObj
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel

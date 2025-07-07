@@ -15,7 +15,7 @@ import sigima.params
 from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
-from sigima.obj import ImageROI, ResultShape, ROI2DParam
+from sigima.objects import ImageROI, ResultShape, ROI2DParam
 
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor

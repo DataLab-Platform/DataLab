@@ -9,10 +9,10 @@ Internal data model
 
 In its internal data model, DataLab stores data using two main classes:
 
-* :class:`sigima.obj.SignalObj`, which represents a signal object, and
-* :class:`sigima.obj.ImageObj`, which represents an image object.
+* :class:`sigima.objects.SignalObj`, which represents a signal object, and
+* :class:`sigima.objects.ImageObj`, which represents an image object.
 
-These classes are defined in the :mod:`sigima.obj` package.
+These classes are defined in the :mod:`sigima.objects` package.
 
 Also, DataLab uses many different datasets (based on guidata's ``DataSet`` class)
 to store the parameters of the computations. These datasets are defined in

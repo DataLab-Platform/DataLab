@@ -7,7 +7,7 @@ Signal FFT application test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from sigima.obj import (
+from sigima.objects import (
     NewSignalParam,
     PeriodicParam,
     SignalTypes,

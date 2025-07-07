@@ -18,7 +18,7 @@ from plotpy.items import (
     AnnotatedRectangle,
     MaskedImageItem,
 )
-from sigima.obj import CircularROI, ImageObj, ImageROI, PolygonalROI, RectangularROI
+from sigima.objects import CircularROI, ImageObj, ImageROI, PolygonalROI, RectangularROI
 
 from datalab.adapters_plotpy.base import (
     BaseObjPlotPyAdapter,

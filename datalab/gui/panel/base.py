@@ -36,7 +36,7 @@ from qtpy.compat import (
     getopenfilenames,
     getsavefilename,
 )
-from sigima.obj import (
+from sigima.objects import (
     ImageObj,
     NewImageParam,
     ResultProperties,
@@ -47,7 +47,7 @@ from sigima.obj import (
     TypeROI,
     create_signal,
 )
-from sigima.obj.base import ROI_KEY
+from sigima.objects.base import ROI_KEY
 
 from datalab import objectmodel
 from datalab.adapters_plotpy.base import items_to_json

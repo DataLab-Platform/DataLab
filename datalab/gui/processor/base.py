@@ -25,7 +25,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.computation import is_computation_function
 from sigima.config import options as sigima_options
-from sigima.obj import ImageObj, SignalObj, TypeROI, TypeROIParam
+from sigima.objects import ImageObj, SignalObj, TypeROI, TypeROIParam
 
 from datalab import env
 from datalab.config import Conf, _
@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
 
     from plotpy.plot import PlotWidget
-    from sigima.obj import ResultProperties, ResultShape
+    from sigima.objects import ResultProperties, ResultShape
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel

@@ -25,8 +25,8 @@ msgstr "Algorithmes (:mod:`sigima.tools`)"
 msgid "This package contains the algorithms used by the DataLab project. Those algorithms operate directly on NumPy arrays and are designed to be used in the DataLab pipeline, but can be used independently as well."
 msgstr "Ce paquet contient les algorithmes utilisés par le projet DataLab. Ces algorithmes opèrent directement sur des tableaux NumPy et sont conçus pour être utilisés dans le pipeline DataLab, mais peuvent également être utilisés indépendamment."
 
-msgid "The :mod:`sigima.tools` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima.computation` package for algorithms that operate directly on DataLab objects (i.e. :class:`sigima.obj.SignalObj` and :class:`sigima.obj.ImageObj`)."
-msgstr "Le module :mod:`sigima.tools` est le point d'entrée principal pour les algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le module :mod:`sigima.computation` pour les algorithmes qui opèrent directement sur les objets DataLab (c'est-à-dire :class:`sigima.obj.SignalObj` et :class:`sigima.obj.ImageObj`)."
+msgid "The :mod:`sigima.tools` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima.computation` package for algorithms that operate directly on DataLab objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`)."
+msgstr "Le module :mod:`sigima.tools` est le point d'entrée principal pour les algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le module :mod:`sigima.computation` pour les algorithmes qui opèrent directement sur les objets DataLab (c'est-à-dire :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`)."
 
 msgid "The algorithms are organized in subpackages according to their purpose. The following subpackages are available:"
 msgstr "Les algorithmes sont organisés en sous-paquets en fonction de leur objectif. Les sous-paquets suivants sont disponibles :"

@@ -12,7 +12,7 @@ from __future__ import annotations
 import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 from plotpy.plot import PlotDialog
-from sigima.obj import ImageROI, create_image_roi, create_signal_roi
+from sigima.objects import ImageROI, create_image_roi, create_signal_roi
 from sigima.tests.data import create_multigauss_image, create_paracetamol_signal
 
 from datalab.env import execenv

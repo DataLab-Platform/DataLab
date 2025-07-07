@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import numpy as np
 import sigima.computation.image as sigima_image
-import sigima.obj
+import sigima.objects
 import sigima.params
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests import vistools
@@ -57,7 +57,7 @@ def test_image_offset_correction_with_background_dialog() -> None:
             # returns `None` which causes the test to fail.
             ok = exec_dialog(dlg)
         if ok:
-            param = sigima.obj.ROI2DParam()
+            param = sigima.objects.ROI2DParam()
             # pylint: disable=unbalanced-tuple-unpacking
             ix0, iy0, ix1, iy1 = i1.physical_to_indices(dlg.get_rect_coords())
             param.x0, param.y0, param.dx, param.dy = ix0, iy0, ix1 - ix0, iy1 - iy0

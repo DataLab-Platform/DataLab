@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING
 
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
-from sigima.obj import SignalObj
+from sigima.objects import SignalObj
 
 from datalab.config import _
 from datalab.env import execenv

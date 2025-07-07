@@ -28,7 +28,7 @@ except ImportError:
     YRangeCursorTool = None
 
 from qtpy import QtWidgets as QW
-from sigima.obj import ImageObj, SignalObj
+from sigima.objects import ImageObj, SignalObj
 from sigima.tests.data import create_multigauss_image, create_paracetamol_signal
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object

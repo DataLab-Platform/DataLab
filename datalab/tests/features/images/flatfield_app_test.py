@@ -12,7 +12,7 @@ Testing the following:
 # guitest: show
 
 from sigima.computation.image import FlatFieldParam
-from sigima.obj import Gauss2DParam, ImageTypes, NewImageParam, UniformRandomParam
+from sigima.objects import Gauss2DParam, ImageTypes, NewImageParam, UniformRandomParam
 
 from datalab.config import _
 from datalab.tests import cdltest_app_context

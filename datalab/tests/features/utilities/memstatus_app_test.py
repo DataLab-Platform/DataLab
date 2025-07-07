@@ -8,7 +8,7 @@ Memory status widget application test
 
 import numpy as np
 import psutil
-from sigima.obj import Gauss2DParam, ImageTypes, NewImageParam
+from sigima.objects import Gauss2DParam, ImageTypes, NewImageParam
 
 from datalab import config
 from datalab.env import execenv

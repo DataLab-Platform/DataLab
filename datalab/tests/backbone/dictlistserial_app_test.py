@@ -9,7 +9,7 @@ Testing (de)serialization of Dictionnary/List inside object metadata
 import os.path as osp
 
 import numpy as np
-from sigima.obj import create_image
+from sigima.objects import create_image
 from sigima.tests.data import get_test_image
 from sigima.tests.helpers import WorkdirRestoringTempDir, compare_metadata
 

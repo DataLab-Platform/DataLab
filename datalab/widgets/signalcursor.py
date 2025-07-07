@@ -24,7 +24,7 @@ from datalab.utils.qthelpers import block_signals
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker
     from qtpy.QtWidgets import QWidget
-    from sigima.obj import SignalObj
+    from sigima.objects import SignalObj
 
 
 class SignalCursorDialog(PlotDialog):

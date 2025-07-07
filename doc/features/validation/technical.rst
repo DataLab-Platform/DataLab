@@ -41,8 +41,8 @@ Scope
 -----
 
 The scope of technical validation in DataLab includes all compute functions that
-operate on DataLab's signal and image objects (i.e. :class:`sigima.obj.SignalObj` and
-:class:`sigima.obj.ImageObj`).
+operate on DataLab's signal and image objects (i.e. :class:`sigima.objects.SignalObj` and
+:class:`sigima.objects.ImageObj`).
 
 This includes functions for (all functions are named ``compute_<function_name>``):
 

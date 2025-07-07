@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-import sigima.obj
+import sigima.objects
 import sigima.params
 
 from datalab.env import execenv
@@ -20,7 +20,7 @@ from datalab.tests import cdltest_app_context
 
 def create_random_test_data(
     size: tuple[int, int] | None = None,
-) -> sigima.obj.ImageObj:
+) -> sigima.objects.ImageObj:
     """Create a test image, based on a fast algorithm, to be able to generate
     a high number of images.
 
@@ -39,7 +39,7 @@ def create_random_test_data(
     )
     # Add some random noise:
     data += 0.1 * np.random.randn(*data.shape)
-    image = sigima.obj.create_image("Random test image", data)
+    image = sigima.objects.create_image("Random test image", data)
     return image
 
 
