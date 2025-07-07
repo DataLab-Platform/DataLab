@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"POT-Creation-Date: 2025-07-07 15:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -58,6 +58,9 @@ msgstr ""
 msgid ":mod:`sigima.algorithms.signal.dynamic`: Dynamic parameter extraction"
 msgstr ""
 
+msgid ":mod:`sigima.algorithms.signal.features`: Feature extraction algorithms"
+msgstr ""
+
 msgid ":mod:`sigima.algorithms.signal.fitmodels`: Curve fitting models"
 msgstr ""
 
@@ -67,16 +70,13 @@ msgstr ""
 msgid ":mod:`sigima.algorithms.signal.interpolation`: Interpolation algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms.signal.level`: Level adjustment algorithms"
-msgstr ""
-
-msgid ":mod:`sigima.algorithms.signal.misc`: Miscellaneous tools"
-msgstr ""
-
 msgid ":mod:`sigima.algorithms.signal.peakdetection`: Peak detection algorithms"
 msgstr ""
 
 msgid ":mod:`sigima.algorithms.signal.pulse`: Pulse analysis algorithms"
+msgstr ""
+
+msgid ":mod:`sigima.algorithms.signal.scaling`: Scaling algorithms"
 msgstr ""
 
 msgid ":mod:`sigima.algorithms.signal.stability`: Stability analysis algorithms"
@@ -172,6 +172,78 @@ msgstr ""
 msgid "Sampling rate"
 msgstr ""
 
+msgid "Feature Extraction Algorithms"
+msgstr ""
+
+msgid "Find the left indices of the zero-crossing intervals in the given array."
+msgstr ""
+
+msgid "Input array."
+msgstr ""
+
+msgid "An array of indices where zero-crossings occur."
+msgstr ""
+
+msgid "Find the first x value where the signal reaches a given y value (interpolated)."
+msgstr ""
+
+msgid "y signal data (possibly non-monotonic)"
+msgstr ""
+
+msgid "the y value to find the corresponding x value for"
+msgstr ""
+
+msgid "The first interpolated x value at the given y, or `nan` if not found"
+msgstr ""
+
+msgid "Find the y value at a given x value using linear interpolation."
+msgstr ""
+
+msgid "Monotonic X data"
+msgstr ""
+
+msgid "Y data (may contain NaNs)"
+msgstr ""
+
+msgid "The x value to find the corresponding y value for"
+msgstr ""
+
+msgid "The interpolated y value at the given x, or `nan` if not computable"
+msgstr ""
+
+msgid "Find the x values where the y value is the closest to the given value using linear interpolation to deduce the precise x value."
+msgstr ""
+
+msgid "Value to find"
+msgstr ""
+
+msgid "An array of x values where the y value is the closest to the given value (empty array if no zero crossing is found)"
+msgstr ""
+
+msgid "Compute the bandwidth of the signal at a given level."
+msgstr ""
+
+msgid "X,Y data"
+msgstr ""
+
+msgid "Level in dB at which the bandwidth is computed. Defaults to 3.0."
+msgstr ""
+
+msgid "segment coordinates"
+msgstr ""
+
+msgid "Return type"
+msgstr ""
+
+msgid "Compute contrast"
+msgstr ""
+
+msgid "Input array"
+msgstr ""
+
+msgid "Contrast"
+msgstr ""
+
 msgid "Curve Fitting Models"
 msgstr ""
 
@@ -227,9 +299,6 @@ msgid "If True, shift zero frequency to the center of the spectrum."
 msgstr ""
 
 msgid "Frequency axis and corresponding FFT values."
-msgstr ""
-
-msgid "Return type"
 msgstr ""
 
 msgid "Compute the inverse FFT of a spectrum."
@@ -298,87 +367,6 @@ msgstr ""
 msgid "Interpolated Y data"
 msgstr ""
 
-msgid "Scaling Algorithms"
-msgstr ""
-
-msgid "Normalize input array to a given parameter."
-msgstr ""
-
-msgid "Input array"
-msgstr ""
-
-msgid "Normalization parameter. Defaults to \"maximum\""
-msgstr ""
-
-msgid "Normalized array"
-msgstr ""
-
-msgid "Features"
-msgstr ""
-
-msgid "Find the left indices of the zero-crossing intervals in the given array."
-msgstr ""
-
-msgid "Input array."
-msgstr ""
-
-msgid "An array of indices where zero-crossings occur."
-msgstr ""
-
-msgid "Find the first x value where the signal reaches a given y value (interpolated)."
-msgstr ""
-
-msgid "y signal data (possibly non-monotonic)"
-msgstr ""
-
-msgid "the y value to find the corresponding x value for"
-msgstr ""
-
-msgid "The first interpolated x value at the given y, or `nan` if not found"
-msgstr ""
-
-msgid "Find the y value at a given x value using linear interpolation."
-msgstr ""
-
-msgid "Monotonic X data"
-msgstr ""
-
-msgid "Y data (may contain NaNs)"
-msgstr ""
-
-msgid "The x value to find the corresponding y value for"
-msgstr ""
-
-msgid "The interpolated y value at the given x, or `nan` if not computable"
-msgstr ""
-
-msgid "Find the x values where the y value is the closest to the given value using linear interpolation to deduce the precise x value."
-msgstr ""
-
-msgid "Value to find"
-msgstr ""
-
-msgid "An array of x values where the y value is the closest to the given value (empty array if no zero crossing is found)"
-msgstr ""
-
-msgid "Compute the bandwidth of the signal at a given level."
-msgstr ""
-
-msgid "X,Y data"
-msgstr ""
-
-msgid "Level in dB at which the bandwidth is computed. Defaults to 3.0."
-msgstr ""
-
-msgid "segment coordinates"
-msgstr ""
-
-msgid "Compute contrast"
-msgstr ""
-
-msgid "Contrast"
-msgstr ""
-
 msgid "Peak Detection Algorithms"
 msgstr ""
 
@@ -440,6 +428,18 @@ msgid "Compute Full Width at 1/e² of the input data (using a Gaussian model fit
 msgstr ""
 
 msgid "FW at 1/e² segment coordinates"
+msgstr ""
+
+msgid "Scaling Algorithms"
+msgstr ""
+
+msgid "Normalize input array to a given parameter."
+msgstr ""
+
+msgid "Normalization parameter. Defaults to \"maximum\""
+msgstr ""
+
+msgid "Normalized array"
 msgstr ""
 
 msgid "Stability Analysis Algorithms"

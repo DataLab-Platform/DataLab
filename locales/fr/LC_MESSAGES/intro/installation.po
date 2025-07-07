@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"POT-Creation-Date: 2025-07-07 15:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -172,7 +172,7 @@ msgstr ""
 msgid "The DataLab all-in-one installer already include all those required libraries as well as Python itself."
 msgstr ""
 
-msgid "The `datalab` package requires the following Python modules:"
+msgid "The `datalab-platform` package requires the following Python modules:"
 msgstr ""
 
 msgid "Name"
@@ -209,6 +209,15 @@ msgid ">= 2.7.4"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
+msgstr ""
+
+msgid "Sigima"
+msgstr ""
+
+msgid ">= 0.1.0"
+msgstr ""
+
+msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
 msgstr ""
 
 msgid "NumPy"
@@ -396,3 +405,4 @@ msgstr ""
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr ""
+
