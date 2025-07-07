@@ -196,7 +196,7 @@ msgstr ""
 msgid "Warnings and errors will be handled by DataLab, so we don't need to handle them ourselves."
 msgstr ""
 
-msgid "The most significant change is that we need to define a function that will be operating on DataLab's native image objects (:class:`sigima.objects.ImageObj`), instead of operating on NumPy arrays. So we need to find a way to call our custom function ``weighted_average_denoise`` with a :class:`sigima.objects.ImageObj` as input and output. To avoid writing a lot of boilerplate code, we can use the function wrapper provided by DataLab: :class:`sigima.computation.image.Wrap1to1Func`."
+msgid "The most significant change is that we need to define a function that will be operating on DataLab's native image objects (:class:`sigima.objects.ImageObj`), instead of operating on NumPy arrays. So we need to find a way to call our custom function ``weighted_average_denoise`` with a :class:`sigima.objects.ImageObj` as input and output. To avoid writing a lot of boilerplate code, we can use the function wrapper provided by DataLab: :class:`sigima.proc.image.Wrap1to1Func`."
 msgstr ""
 
 msgid "Besides we need to define a class that describes our plugin, which must inherit from :class:`datalab.plugins.PluginBase` and name the Python script that contains the plugin code with a name that starts with ``datalab_`` (e.g. ``datalab_custom_func.py``), so that DataLab can discover it at startup."

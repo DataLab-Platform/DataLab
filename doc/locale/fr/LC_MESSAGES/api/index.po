@@ -55,7 +55,7 @@ msgstr ""
 msgid "Convenience module to access the DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`) and related functions"
 msgstr "Module de commodité pour accéder aux objets DataLab (:class:`sigima.objects.SignalObj` ou :class:`sigima.objects.ImageObj`) et fonctions associées"
 
-msgid ":mod:`sigima.computation`"
+msgid ":mod:`sigima.proc`"
 msgstr ""
 
 msgid "Computation functions, which operate on DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)"

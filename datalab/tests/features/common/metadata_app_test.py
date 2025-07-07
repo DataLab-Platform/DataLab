@@ -11,10 +11,10 @@ Metadata application test:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima.computation.image as sigima_image
-import sigima.computation.signal as sigima_signal
 import sigima.objects
 import sigima.params
+import sigima.proc.image as sigima_image
+import sigima.proc.signal as sigima_signal
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.env import execenv

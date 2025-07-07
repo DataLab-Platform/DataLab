@@ -46,8 +46,8 @@ operate on DataLab's signal and image objects (i.e. :class:`sigima.objects.Signa
 
 This includes functions for (all functions are named ``compute_<function_name>``):
 
-- Signal processing (:mod:`sigima.computation.signal`)
-- Image processing (:mod:`sigima.computation.image`)
+- Signal processing (:mod:`sigima.proc.signal`)
+- Image processing (:mod:`sigima.proc.image`)
 
 Implementation
 --------------

@@ -12,9 +12,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import sigima.computation.image as sigima_image
 import sigima.objects
 import sigima.params
+import sigima.proc.image as sigima_image
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 from sigima.tests.data import (

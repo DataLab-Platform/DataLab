@@ -11,9 +11,9 @@ Image background dialog unit test.
 from __future__ import annotations
 
 import numpy as np
-import sigima.computation.image as sigima_image
 import sigima.objects
 import sigima.params
+import sigima.proc.image as sigima_image
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests import vistools
 from sigima.tests.data import create_noisygauss_image

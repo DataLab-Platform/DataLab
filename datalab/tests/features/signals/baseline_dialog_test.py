@@ -11,8 +11,8 @@ Baseline dialog test
 from __future__ import annotations
 
 import numpy as np
-import sigima.computation.signal as sigima_signal
 import sigima.objects
+import sigima.proc.signal as sigima_signal
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests.data import create_paracetamol_signal
 from sigima.tests.vistools import view_curves

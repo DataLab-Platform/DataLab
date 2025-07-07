@@ -22,19 +22,19 @@ msgstr ""
 msgid "Parameters (:mod:`sigima.params`)"
 msgstr "Paramètres (:mod:`sigima.params`)"
 
-msgid "The :mod:`sigima.params` module aims at providing all the dataset parameters that are used by the :mod:`sigima.computation` and DataLab's processors."
-msgstr "Le module :mod:`sigima.params` a vocation à fournir tous les paramètres de jeu de données utilisés par le module :mod:`sigima.computation` et les processeurs de DataLab."
+msgid "The :mod:`sigima.params` module aims at providing all the dataset parameters that are used by the :mod:`sigima.proc` and DataLab's processors."
+msgstr "Le module :mod:`sigima.params` a vocation à fournir tous les paramètres de jeu de données utilisés par le module :mod:`sigima.proc` et les processeurs de DataLab."
 
 msgid "Those datasets are defined in other modules:"
 msgstr "Ces jeux de données sont définis dans d'autres modules :"
 
-msgid ":mod:`sigima.computation.base`"
+msgid ":mod:`sigima.proc.base`"
 msgstr ""
 
-msgid ":mod:`sigima.computation.image`"
+msgid ":mod:`sigima.proc.image`"
 msgstr ""
 
-msgid ":mod:`sigima.computation.signal`"
+msgid ":mod:`sigima.proc.signal`"
 msgstr ""
 
 msgid "The :mod:`sigima.params` module is thus a convenient way to import all the sets of parameters at once."

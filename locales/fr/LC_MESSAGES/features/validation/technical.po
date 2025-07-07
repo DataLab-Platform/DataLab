@@ -82,10 +82,10 @@ msgstr ""
 msgid "This includes functions for (all functions are named ``compute_<function_name>``):"
 msgstr ""
 
-msgid "Signal processing (:mod:`sigima.computation.signal`)"
+msgid "Signal processing (:mod:`sigima.proc.signal`)"
 msgstr ""
 
-msgid "Image processing (:mod:`sigima.computation.image`)"
+msgid "Image processing (:mod:`sigima.proc.image`)"
 msgstr ""
 
 msgid "Implementation"

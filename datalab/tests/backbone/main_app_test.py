@@ -12,8 +12,8 @@ covered by other tests.
 
 import os
 
-import sigima.computation.signal as sigima_signal
 import sigima.params
+import sigima.proc.signal as sigima_signal
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.env import execenv

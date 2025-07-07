@@ -1,198 +1,198 @@
-:py:func:`absolute <sigima.computation.image.absolute>`,Compute absolute value with :py:data:`numpy.absolute`,`test_image_absolute <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L298>`_
-:py:func:`addition <sigima.computation.image.addition>`,Add images in the list and return the result image object,`test_image_addition <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L70>`_
-:py:func:`addition_constant <sigima.computation.image.addition_constant>`,Add **dst** and a constant value and return the new result image object,`test_image_addition_constant <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L198>`_
-:py:func:`adjust_gamma <sigima.computation.image.adjust_gamma>`,Gamma correction with :py:func:`skimage.exposure.adjust_gamma`,`test_adjust_gamma <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L253>`_
-:py:func:`adjust_log <sigima.computation.image.adjust_log>`,Compute log correction with :py:func:`skimage.exposure.adjust_log`,`test_adjust_log <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L265>`_
-:py:func:`adjust_sigmoid <sigima.computation.image.adjust_sigmoid>`,Compute sigmoid correction with :py:func:`skimage.exposure.adjust_sigmoid`,`test_adjust_sigmoid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L277>`_
-:py:func:`arithmetic <sigima.computation.image.arithmetic>`,Compute arithmetic operation on two images,`test_image_arithmetic <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L248>`_
-:py:func:`astype <sigima.computation.image.astype>`,Convert image data type with :py:func:`sigima.tools.datatypes.clip_astype`,`test_image_astype <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L338>`_
-:py:func:`average <sigima.computation.image.average>`,Compute the average of images in the list and return the result image object,`test_image_average <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L90>`_
-:py:func:`average_profile <sigima.computation.image.average_profile>`,Compute horizontal or vertical average profile,`test_average_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L66>`_
-:py:func:`binning <sigima.computation.image.binning>`,Binning function on data with :py:func:`sigima.tools.image.binning`,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/binning_unit_test.py#L75>`_
-:py:func:`black_tophat <sigima.computation.image.black_tophat>`,Compute Black Top-Hat with :py:func:`skimage.morphology.black_tophat`,`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L413>`_
-:py:func:`blob_dog <sigima.computation.image.blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
-:py:func:`blob_doh <sigima.computation.image.blob_doh>`,Compute blobs using Determinant of Hessian method,N/A
-:py:func:`blob_log <sigima.computation.image.blob_log>`,Compute blobs using Laplacian of Gaussian method,N/A
-:py:func:`blob_opencv <sigima.computation.image.blob_opencv>`,Compute blobs using OpenCV,N/A
-:py:func:`butterworth <sigima.computation.image.butterworth>`,Compute Butterworth filter with :py:func:`skimage.filters.butterworth`,`test_butterworth <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L562>`_
-:py:func:`calibration <sigima.computation.image.calibration>`,Compute linear calibration,`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L56>`_
-:py:func:`canny <sigima.computation.image.canny>`,Compute Canny filter with :py:func:`skimage.feature.canny`,`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L443>`_
-:py:func:`centroid <sigima.computation.image.centroid>`,Compute centroid,`test_image_centroid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/centroid_unit_test.py#L104>`_
-:py:func:`clip <sigima.computation.image.clip>`,Apply clipping with :py:func:`numpy.clip`,`test_image_clip <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L120>`_
-:py:func:`closing <sigima.computation.image.closing>`,Compute morphological closing with :py:func:`skimage.morphology.closing`,`test_closing <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L437>`_
-:py:func:`contour_shape <sigima.computation.image.contour_shape>`,Compute contour shape fit,N/A
-:py:func:`denoise_bilateral <sigima.computation.image.denoise_bilateral>`,Compute bilateral filter denoising,`test_denoise_bilateral <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L345>`_
-:py:func:`denoise_tophat <sigima.computation.image.denoise_tophat>`,Denoise using White Top-Hat,`test_denoise_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L385>`_
-:py:func:`denoise_tv <sigima.computation.image.denoise_tv>`,Compute Total Variation denoising,`test_denoise_tv <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L328>`_
-:py:func:`denoise_wavelet <sigima.computation.image.denoise_wavelet>`,Compute Wavelet denoising,`test_denoise_wavelet <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L362>`_
-:py:func:`difference <sigima.computation.image.difference>`,Compute difference between two images,`test_image_difference <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L111>`_
-:py:func:`difference_constant <sigima.computation.image.difference_constant>`,Subtract a constant value from an image and return the new result image object,`test_image_difference_constant <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L211>`_
-:py:func:`dilation <sigima.computation.image.dilation>`,Compute Dilation with :py:func:`skimage.morphology.dilation`,`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L425>`_
-:py:func:`division <sigima.computation.image.division>`,Compute division between two images,`test_image_division <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L155>`_
-:py:func:`division_constant <sigima.computation.image.division_constant>`,Divide an image by a constant value and return the new result image object,`test_image_division_constant <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L236>`_
-:py:func:`enclosing_circle <sigima.computation.image.enclosing_circle>`,Compute minimum enclosing circle,N/A
-:py:func:`equalize_adapthist <sigima.computation.image.equalize_adapthist>`,Adaptive histogram equalization,`test_equalize_adapthist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L316>`_
-:py:func:`equalize_hist <sigima.computation.image.equalize_hist>`,Histogram equalization with :py:func:`skimage.exposure.equalize_hist`,`test_equalize_hist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L304>`_
-:py:func:`erosion <sigima.computation.image.erosion>`,Compute Erosion with :py:func:`skimage.morphology.erosion`,`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L419>`_
-:py:func:`exp <sigima.computation.image.exp>`,Compute exponential with :py:data:`numpy.exp`,`test_image_exp <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L359>`_
-:py:func:`extract_roi <sigima.computation.image.extract_roi>`,Extract single ROI,N/A
-:py:func:`extract_rois <sigima.computation.image.extract_rois>`,Extract multiple regions of interest from data,N/A
-:py:func:`farid <sigima.computation.image.farid>`,Compute Farid filter with :py:func:`skimage.filters.farid`,`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L538>`_
-:py:func:`farid_h <sigima.computation.image.farid_h>`,Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`,`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L544>`_
-:py:func:`farid_v <sigima.computation.image.farid_v>`,Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`,`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L550>`_
-:py:func:`fft <sigima.computation.image.fft>`,Compute FFT with :py:func:`sigima.tools.image.fft2d`,`test_image_fft <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L120>`_
-:py:func:`flatfield <sigima.computation.image.flatfield>`,Compute flat field correction with :py:func:`sigima.tools.image.flatfield`,N/A
-:py:func:`fliph <sigima.computation.image.fliph>`,Flip data horizontally with :py:func:`numpy.fliplr`,`test_image_fliph <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L405>`_
-:py:func:`flipv <sigima.computation.image.flipv>`,Flip data vertically with :py:func:`numpy.flipud`,`test_image_flipv <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L417>`_
-:py:func:`gaussian_filter <sigima.computation.image.gaussian_filter>`,Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`,`test_image_gaussian_filter <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L146>`_
-:py:func:`histogram <sigima.computation.image.histogram>`,"Compute histogram of the image data, with :py:func:`numpy.histogram`",N/A
-:py:func:`hough_circle_peaks <sigima.computation.image.hough_circle_peaks>`,Compute Hough circles,N/A
-:py:func:`ifft <sigima.computation.image.ifft>`,Compute inverse FFT with :py:func:`sigima.tools.image.ifft2d`,`test_image_ifft <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L136>`_
-:py:func:`imag <sigima.computation.image.imag>`,Compute imaginary part with :py:func:`numpy.imag`,`test_image_imag <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L320>`_
-:py:func:`inverse <sigima.computation.image.inverse>`,Compute the inverse of an image and return the new result image object,`test_image_inverse <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L284>`_
-:py:func:`laplace <sigima.computation.image.laplace>`,Compute Laplace filter with :py:func:`skimage.filters.laplace`,`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L556>`_
-:py:func:`line_profile <sigima.computation.image.line_profile>`,Compute horizontal or vertical profile,`test_line_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L19>`_
-:py:func:`log10 <sigima.computation.image.log10>`,Compute log10 with :py:data:`numpy.log10`,`test_image_log10 <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L371>`_
-:py:func:`logp1 <sigima.computation.image.logp1>`,Compute log10(z+n) with :py:data:`numpy.log10`,`test_image_logp1 <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L383>`_
-:py:func:`magnitude_spectrum <sigima.computation.image.magnitude_spectrum>`,Compute magnitude spectrum,`test_image_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L144>`_
-:py:func:`moving_average <sigima.computation.image.moving_average>`,Compute moving average with :py:func:`scipy.ndimage.uniform_filter`,`test_image_moving_average <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L157>`_
-:py:func:`moving_median <sigima.computation.image.moving_median>`,Compute moving median with :py:func:`scipy.ndimage.median_filter`,`test_image_moving_median <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L169>`_
-:py:func:`normalize <sigima.computation.image.normalize>`,,`test_image_normalize <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L84>`_
-:py:func:`offset_correction <sigima.computation.image.offset_correction>`,Apply offset correction,`test_image_offset_correction <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/offset_correction_unit_test.py#L56>`_
-:py:func:`opening <sigima.computation.image.opening>`,Compute morphological opening with :py:func:`skimage.morphology.opening`,`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L431>`_
-:py:func:`peak_detection <sigima.computation.image.peak_detection>`,Compute 2D peak detection,`test_image_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/peak2d_unit_test.py#L76>`_
-:py:func:`phase_spectrum <sigima.computation.image.phase_spectrum>`,Compute phase spectrum,`test_image_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L156>`_
-:py:func:`prewitt <sigima.computation.image.prewitt>`,Compute Prewitt filter with :py:func:`skimage.filters.prewitt`,`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L484>`_
-:py:func:`prewitt_h <sigima.computation.image.prewitt_h>`,Compute horizontal Prewitt filter with :py:func:`skimage.filters.prewitt_h`,`test_prewitt_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L490>`_
-:py:func:`prewitt_v <sigima.computation.image.prewitt_v>`,Compute vertical Prewitt filter with :py:func:`skimage.filters.prewitt_v`,`test_prewitt_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L496>`_
-:py:func:`product <sigima.computation.image.product>`,Multiply images in the list and return the result image object,`test_image_product <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L135>`_
-:py:func:`product_constant <sigima.computation.image.product_constant>`,Multiply **dst** by a constant value and return the new result image object,`test_image_product_constant <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L224>`_
-:py:func:`psd <sigima.computation.image.psd>`,Compute power spectral density,`test_image_psd <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L168>`_
-:py:func:`quadratic_difference <sigima.computation.image.quadratic_difference>`,Compute quadratic difference between two images,`test_image_quadratic_difference <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L123>`_
-:py:func:`radial_profile <sigima.computation.image.radial_profile>`,Compute radial profile around the centroid,N/A
-:py:func:`real <sigima.computation.image.real>`,Compute real part with :py:func:`numpy.real`,`test_image_real <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L309>`_
-:py:func:`rescale_intensity <sigima.computation.image.rescale_intensity>`,Rescale image intensity levels,`test_rescale_intensity <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L291>`_
-:py:func:`resize <sigima.computation.image.resize>`,Zooming function with :py:func:`scipy.ndimage.zoom`,N/A
-:py:func:`roberts <sigima.computation.image.roberts>`,Compute Roberts filter with :py:func:`skimage.filters.roberts`,`test_roberts <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L478>`_
-:py:func:`rotate <sigima.computation.image.rotate>`,Rotate data with :py:func:`scipy.ndimage.rotate`,`test_image_rotate <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L446>`_
-:py:func:`rotate270 <sigima.computation.image.rotate270>`,Rotate data 270° with :py:func:`numpy.rot90`,`test_image_rotate270 <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L440>`_
-:py:func:`rotate90 <sigima.computation.image.rotate90>`,Rotate data 90° with :py:func:`numpy.rot90`,`test_image_rotate90 <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L434>`_
-:py:func:`scharr <sigima.computation.image.scharr>`,Compute Scharr filter with :py:func:`skimage.filters.scharr`,`test_scharr <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L520>`_
-:py:func:`scharr_h <sigima.computation.image.scharr_h>`,Compute horizontal Scharr filter with :py:func:`skimage.filters.scharr_h`,`test_scharr_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L526>`_
-:py:func:`scharr_v <sigima.computation.image.scharr_v>`,Compute vertical Scharr filter with :py:func:`skimage.filters.scharr_v`,`test_scharr_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L532>`_
-:py:func:`segment_profile <sigima.computation.image.segment_profile>`,Compute segment profile,`test_segment_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L46>`_
-:py:func:`sobel <sigima.computation.image.sobel>`,Compute Sobel filter with :py:func:`skimage.filters.sobel`,`test_sobel <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L502>`_
-:py:func:`sobel_h <sigima.computation.image.sobel_h>`,Compute horizontal Sobel filter with :py:func:`skimage.filters.sobel_h`,`test_sobel_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L508>`_
-:py:func:`sobel_v <sigima.computation.image.sobel_v>`,Compute vertical Sobel filter with :py:func:`skimage.filters.sobel_v`,`test_sobel_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L514>`_
-:py:func:`stats <sigima.computation.image.stats>`,Compute statistics on an image,`test_image_stats_unit <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/common/stat_unit_test.py#L122>`_
-:py:func:`swap_axes <sigima.computation.image.swap_axes>`,Swap image axes with :py:func:`numpy.transpose`,`test_image_swap_axes <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L75>`_
-:py:func:`threshold <sigima.computation.image.threshold>`,"Compute the threshold, using one of the available algorithms",`test_threshold <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L190>`_
-:py:func:`threshold_isodata <sigima.computation.image.threshold_isodata>`,Compute the threshold using the Isodata algorithm with default parameters,`test_threshold_isodata <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L211>`_
-:py:func:`threshold_li <sigima.computation.image.threshold_li>`,Compute the threshold using the Li algorithm with default parameters,`test_threshold_li <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L217>`_
-:py:func:`threshold_mean <sigima.computation.image.threshold_mean>`,Compute the threshold using the Mean algorithm,`test_threshold_mean <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L223>`_
-:py:func:`threshold_minimum <sigima.computation.image.threshold_minimum>`,Compute the threshold using the Minimum algorithm with default parameters,`test_threshold_minimum <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L229>`_
-:py:func:`threshold_otsu <sigima.computation.image.threshold_otsu>`,Compute the threshold using the Otsu algorithm with default parameters,`test_threshold_otsu <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L235>`_
-:py:func:`threshold_triangle <sigima.computation.image.threshold_triangle>`,Compute the threshold using the Triangle algorithm with default parameters,`test_threshold_triangle <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L241>`_
-:py:func:`threshold_yen <sigima.computation.image.threshold_yen>`,Compute the threshold using the Yen algorithm with default parameters,`test_threshold_yen <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L247>`_
-:py:func:`white_tophat <sigima.computation.image.white_tophat>`,Compute White Top-Hat with :py:func:`skimage.morphology.white_tophat`,`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L407>`_
-:py:func:`wiener <sigima.computation.image.wiener>`,Compute Wiener filter with :py:func:`scipy.signal.wiener`,`test_image_wiener <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L181>`_
-:py:func:`zero_padding <sigima.computation.image.zero_padding>`,,`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L52>`_
-:py:func:`addition <sigima.computation.image.arithmetic.addition>`,Add images in the list and return the result image object,N/A
-:py:func:`addition_constant <sigima.computation.image.arithmetic.addition_constant>`,Add **dst** and a constant value and return the new result image object,N/A
-:py:func:`arithmetic <sigima.computation.image.arithmetic.arithmetic>`,Compute arithmetic operation on two images,N/A
-:py:func:`average <sigima.computation.image.arithmetic.average>`,Compute the average of images in the list and return the result image object,N/A
-:py:func:`difference <sigima.computation.image.arithmetic.difference>`,Compute difference between two images,N/A
-:py:func:`difference_constant <sigima.computation.image.arithmetic.difference_constant>`,Subtract a constant value from an image and return the new result image object,N/A
-:py:func:`division <sigima.computation.image.arithmetic.division>`,Compute division between two images,N/A
-:py:func:`division_constant <sigima.computation.image.arithmetic.division_constant>`,Divide an image by a constant value and return the new result image object,N/A
-:py:func:`product <sigima.computation.image.arithmetic.product>`,Multiply images in the list and return the result image object,N/A
-:py:func:`product_constant <sigima.computation.image.arithmetic.product_constant>`,Multiply **dst** by a constant value and return the new result image object,N/A
-:py:func:`quadratic_difference <sigima.computation.image.arithmetic.quadratic_difference>`,Compute quadratic difference between two images,N/A
-:py:func:`blob_dog <sigima.computation.image.detection.blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
-:py:func:`blob_doh <sigima.computation.image.detection.blob_doh>`,Compute blobs using Determinant of Hessian method,N/A
-:py:func:`blob_log <sigima.computation.image.detection.blob_log>`,Compute blobs using Laplacian of Gaussian method,N/A
-:py:func:`blob_opencv <sigima.computation.image.detection.blob_opencv>`,Compute blobs using OpenCV,N/A
-:py:func:`contour_shape <sigima.computation.image.detection.contour_shape>`,Compute contour shape fit,N/A
-:py:func:`hough_circle_peaks <sigima.computation.image.detection.hough_circle_peaks>`,Compute Hough circles,N/A
-:py:func:`peak_detection <sigima.computation.image.detection.peak_detection>`,Compute 2D peak detection,N/A
-:py:func:`canny <sigima.computation.image.edges.canny>`,Compute Canny filter with :py:func:`skimage.feature.canny`,`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L443>`_
-:py:func:`farid <sigima.computation.image.edges.farid>`,Compute Farid filter with :py:func:`skimage.filters.farid`,`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L538>`_
-:py:func:`farid_h <sigima.computation.image.edges.farid_h>`,Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`,`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L544>`_
-:py:func:`farid_v <sigima.computation.image.edges.farid_v>`,Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`,`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L550>`_
-:py:func:`laplace <sigima.computation.image.edges.laplace>`,Compute Laplace filter with :py:func:`skimage.filters.laplace`,`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L556>`_
-:py:func:`prewitt <sigima.computation.image.edges.prewitt>`,Compute Prewitt filter with :py:func:`skimage.filters.prewitt`,`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L484>`_
-:py:func:`prewitt_h <sigima.computation.image.edges.prewitt_h>`,Compute horizontal Prewitt filter with :py:func:`skimage.filters.prewitt_h`,`test_prewitt_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L490>`_
-:py:func:`prewitt_v <sigima.computation.image.edges.prewitt_v>`,Compute vertical Prewitt filter with :py:func:`skimage.filters.prewitt_v`,`test_prewitt_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L496>`_
-:py:func:`roberts <sigima.computation.image.edges.roberts>`,Compute Roberts filter with :py:func:`skimage.filters.roberts`,`test_roberts <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L478>`_
-:py:func:`scharr <sigima.computation.image.edges.scharr>`,Compute Scharr filter with :py:func:`skimage.filters.scharr`,`test_scharr <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L520>`_
-:py:func:`scharr_h <sigima.computation.image.edges.scharr_h>`,Compute horizontal Scharr filter with :py:func:`skimage.filters.scharr_h`,`test_scharr_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L526>`_
-:py:func:`scharr_v <sigima.computation.image.edges.scharr_v>`,Compute vertical Scharr filter with :py:func:`skimage.filters.scharr_v`,`test_scharr_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L532>`_
-:py:func:`sobel <sigima.computation.image.edges.sobel>`,Compute Sobel filter with :py:func:`skimage.filters.sobel`,`test_sobel <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L502>`_
-:py:func:`sobel_h <sigima.computation.image.edges.sobel_h>`,Compute horizontal Sobel filter with :py:func:`skimage.filters.sobel_h`,`test_sobel_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L508>`_
-:py:func:`sobel_v <sigima.computation.image.edges.sobel_v>`,Compute vertical Sobel filter with :py:func:`skimage.filters.sobel_v`,`test_sobel_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L514>`_
-:py:func:`adjust_gamma <sigima.computation.image.exposure.adjust_gamma>`,Gamma correction with :py:func:`skimage.exposure.adjust_gamma`,`test_adjust_gamma <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L253>`_
-:py:func:`adjust_log <sigima.computation.image.exposure.adjust_log>`,Compute log correction with :py:func:`skimage.exposure.adjust_log`,`test_adjust_log <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L265>`_
-:py:func:`adjust_sigmoid <sigima.computation.image.exposure.adjust_sigmoid>`,Compute sigmoid correction with :py:func:`skimage.exposure.adjust_sigmoid`,`test_adjust_sigmoid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L277>`_
-:py:func:`calibration <sigima.computation.image.exposure.calibration>`,Compute linear calibration,N/A
-:py:func:`clip <sigima.computation.image.exposure.clip>`,Apply clipping with :py:func:`numpy.clip`,N/A
-:py:func:`equalize_adapthist <sigima.computation.image.exposure.equalize_adapthist>`,Adaptive histogram equalization,`test_equalize_adapthist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L316>`_
-:py:func:`equalize_hist <sigima.computation.image.exposure.equalize_hist>`,Histogram equalization with :py:func:`skimage.exposure.equalize_hist`,`test_equalize_hist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L304>`_
-:py:func:`flatfield <sigima.computation.image.exposure.flatfield>`,Compute flat field correction with :py:func:`sigima.tools.image.flatfield`,N/A
-:py:func:`histogram <sigima.computation.image.exposure.histogram>`,"Compute histogram of the image data, with :py:func:`numpy.histogram`",N/A
-:py:func:`normalize <sigima.computation.image.exposure.normalize>`,,N/A
-:py:func:`offset_correction <sigima.computation.image.exposure.offset_correction>`,Apply offset correction,N/A
-:py:func:`rescale_intensity <sigima.computation.image.exposure.rescale_intensity>`,Rescale image intensity levels,`test_rescale_intensity <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L291>`_
-:py:func:`average_profile <sigima.computation.image.extraction.average_profile>`,Compute horizontal or vertical average profile,`test_average_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L66>`_
-:py:func:`extract_roi <sigima.computation.image.extraction.extract_roi>`,Extract single ROI,N/A
-:py:func:`extract_rois <sigima.computation.image.extraction.extract_rois>`,Extract multiple regions of interest from data,N/A
-:py:func:`line_profile <sigima.computation.image.extraction.line_profile>`,Compute horizontal or vertical profile,`test_line_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L19>`_
-:py:func:`radial_profile <sigima.computation.image.extraction.radial_profile>`,Compute radial profile around the centroid,N/A
-:py:func:`segment_profile <sigima.computation.image.extraction.segment_profile>`,Compute segment profile,`test_segment_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L46>`_
-:py:func:`butterworth <sigima.computation.image.filtering.butterworth>`,Compute Butterworth filter with :py:func:`skimage.filters.butterworth`,`test_butterworth <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L562>`_
-:py:func:`gaussian_filter <sigima.computation.image.filtering.gaussian_filter>`,Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`,N/A
-:py:func:`moving_average <sigima.computation.image.filtering.moving_average>`,Compute moving average with :py:func:`scipy.ndimage.uniform_filter`,N/A
-:py:func:`moving_median <sigima.computation.image.filtering.moving_median>`,Compute moving median with :py:func:`scipy.ndimage.median_filter`,N/A
-:py:func:`wiener <sigima.computation.image.filtering.wiener>`,Compute Wiener filter with :py:func:`scipy.signal.wiener`,N/A
-:py:func:`fft <sigima.computation.image.fourier.fft>`,Compute FFT with :py:func:`sigima.tools.image.fft2d`,N/A
-:py:func:`ifft <sigima.computation.image.fourier.ifft>`,Compute inverse FFT with :py:func:`sigima.tools.image.ifft2d`,N/A
-:py:func:`magnitude_spectrum <sigima.computation.image.fourier.magnitude_spectrum>`,Compute magnitude spectrum,N/A
-:py:func:`phase_spectrum <sigima.computation.image.fourier.phase_spectrum>`,Compute phase spectrum,N/A
-:py:func:`psd <sigima.computation.image.fourier.psd>`,Compute power spectral density,N/A
-:py:func:`zero_padding <sigima.computation.image.fourier.zero_padding>`,,N/A
-:py:func:`binning <sigima.computation.image.geometry.binning>`,Binning function on data with :py:func:`sigima.tools.image.binning`,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/binning_unit_test.py#L75>`_
-:py:func:`fliph <sigima.computation.image.geometry.fliph>`,Flip data horizontally with :py:func:`numpy.fliplr`,N/A
-:py:func:`flipv <sigima.computation.image.geometry.flipv>`,Flip data vertically with :py:func:`numpy.flipud`,N/A
-:py:func:`resize <sigima.computation.image.geometry.resize>`,Zooming function with :py:func:`scipy.ndimage.zoom`,N/A
-:py:func:`rotate <sigima.computation.image.geometry.rotate>`,Rotate data with :py:func:`scipy.ndimage.rotate`,N/A
-:py:func:`rotate270 <sigima.computation.image.geometry.rotate270>`,Rotate data 270° with :py:func:`numpy.rot90`,N/A
-:py:func:`rotate90 <sigima.computation.image.geometry.rotate90>`,Rotate data 90° with :py:func:`numpy.rot90`,N/A
-:py:func:`swap_axes <sigima.computation.image.geometry.swap_axes>`,Swap image axes with :py:func:`numpy.transpose`,N/A
-:py:func:`absolute <sigima.computation.image.mathops.absolute>`,Compute absolute value with :py:data:`numpy.absolute`,N/A
-:py:func:`astype <sigima.computation.image.mathops.astype>`,Convert image data type with :py:func:`sigima.tools.datatypes.clip_astype`,N/A
-:py:func:`exp <sigima.computation.image.mathops.exp>`,Compute exponential with :py:data:`numpy.exp`,N/A
-:py:func:`imag <sigima.computation.image.mathops.imag>`,Compute imaginary part with :py:func:`numpy.imag`,N/A
-:py:func:`inverse <sigima.computation.image.mathops.inverse>`,Compute the inverse of an image and return the new result image object,N/A
-:py:func:`log10 <sigima.computation.image.mathops.log10>`,Compute log10 with :py:data:`numpy.log10`,N/A
-:py:func:`logp1 <sigima.computation.image.mathops.logp1>`,Compute log10(z+n) with :py:data:`numpy.log10`,N/A
-:py:func:`real <sigima.computation.image.mathops.real>`,Compute real part with :py:func:`numpy.real`,N/A
-:py:func:`centroid <sigima.computation.image.measurement.centroid>`,Compute centroid,N/A
-:py:func:`enclosing_circle <sigima.computation.image.measurement.enclosing_circle>`,Compute minimum enclosing circle,N/A
-:py:func:`stats <sigima.computation.image.measurement.stats>`,Compute statistics on an image,N/A
-:py:func:`black_tophat <sigima.computation.image.morphology.black_tophat>`,Compute Black Top-Hat with :py:func:`skimage.morphology.black_tophat`,`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L413>`_
-:py:func:`closing <sigima.computation.image.morphology.closing>`,Compute morphological closing with :py:func:`skimage.morphology.closing`,`test_closing <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L437>`_
-:py:func:`dilation <sigima.computation.image.morphology.dilation>`,Compute Dilation with :py:func:`skimage.morphology.dilation`,`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L425>`_
-:py:func:`erosion <sigima.computation.image.morphology.erosion>`,Compute Erosion with :py:func:`skimage.morphology.erosion`,`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L419>`_
-:py:func:`opening <sigima.computation.image.morphology.opening>`,Compute morphological opening with :py:func:`skimage.morphology.opening`,`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L431>`_
-:py:func:`white_tophat <sigima.computation.image.morphology.white_tophat>`,Compute White Top-Hat with :py:func:`skimage.morphology.white_tophat`,`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L407>`_
-:py:func:`denoise_bilateral <sigima.computation.image.restoration.denoise_bilateral>`,Compute bilateral filter denoising,`test_denoise_bilateral <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L345>`_
-:py:func:`denoise_tophat <sigima.computation.image.restoration.denoise_tophat>`,Denoise using White Top-Hat,`test_denoise_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L385>`_
-:py:func:`denoise_tv <sigima.computation.image.restoration.denoise_tv>`,Compute Total Variation denoising,`test_denoise_tv <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L328>`_
-:py:func:`denoise_wavelet <sigima.computation.image.restoration.denoise_wavelet>`,Compute Wavelet denoising,`test_denoise_wavelet <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L362>`_
-:py:func:`threshold <sigima.computation.image.threshold.threshold>`,"Compute the threshold, using one of the available algorithms",`test_threshold <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L190>`_
-:py:func:`threshold_isodata <sigima.computation.image.threshold.threshold_isodata>`,Compute the threshold using the Isodata algorithm with default parameters,`test_threshold_isodata <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L211>`_
-:py:func:`threshold_li <sigima.computation.image.threshold.threshold_li>`,Compute the threshold using the Li algorithm with default parameters,`test_threshold_li <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L217>`_
-:py:func:`threshold_mean <sigima.computation.image.threshold.threshold_mean>`,Compute the threshold using the Mean algorithm,`test_threshold_mean <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L223>`_
-:py:func:`threshold_minimum <sigima.computation.image.threshold.threshold_minimum>`,Compute the threshold using the Minimum algorithm with default parameters,`test_threshold_minimum <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L229>`_
-:py:func:`threshold_otsu <sigima.computation.image.threshold.threshold_otsu>`,Compute the threshold using the Otsu algorithm with default parameters,`test_threshold_otsu <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L235>`_
-:py:func:`threshold_triangle <sigima.computation.image.threshold.threshold_triangle>`,Compute the threshold using the Triangle algorithm with default parameters,`test_threshold_triangle <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L241>`_
-:py:func:`threshold_yen <sigima.computation.image.threshold.threshold_yen>`,Compute the threshold using the Yen algorithm with default parameters,`test_threshold_yen <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L247>`_
+:py:func:`absolute <sigima.proc.image.absolute>`,Compute absolute value with :py:data:`numpy.absolute`,`test_image_absolute <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L298>`_
+:py:func:`addition <sigima.proc.image.addition>`,Add images in the list and return the result image object,`test_image_addition <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L70>`_
+:py:func:`addition_constant <sigima.proc.image.addition_constant>`,Add **dst** and a constant value and return the new result image object,`test_image_addition_constant <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L198>`_
+:py:func:`adjust_gamma <sigima.proc.image.adjust_gamma>`,Gamma correction with :py:func:`skimage.exposure.adjust_gamma`,`test_adjust_gamma <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L253>`_
+:py:func:`adjust_log <sigima.proc.image.adjust_log>`,Compute log correction with :py:func:`skimage.exposure.adjust_log`,`test_adjust_log <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L265>`_
+:py:func:`adjust_sigmoid <sigima.proc.image.adjust_sigmoid>`,Compute sigmoid correction with :py:func:`skimage.exposure.adjust_sigmoid`,`test_adjust_sigmoid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L277>`_
+:py:func:`arithmetic <sigima.proc.image.arithmetic>`,Compute arithmetic operation on two images,`test_image_arithmetic <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L248>`_
+:py:func:`astype <sigima.proc.image.astype>`,Convert image data type with :py:func:`sigima.tools.datatypes.clip_astype`,`test_image_astype <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L338>`_
+:py:func:`average <sigima.proc.image.average>`,Compute the average of images in the list and return the result image object,`test_image_average <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L90>`_
+:py:func:`average_profile <sigima.proc.image.average_profile>`,Compute horizontal or vertical average profile,`test_average_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L66>`_
+:py:func:`binning <sigima.proc.image.binning>`,Binning function on data with :py:func:`sigima.tools.image.binning`,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/binning_unit_test.py#L75>`_
+:py:func:`black_tophat <sigima.proc.image.black_tophat>`,Compute Black Top-Hat with :py:func:`skimage.morphology.black_tophat`,`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L413>`_
+:py:func:`blob_dog <sigima.proc.image.blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
+:py:func:`blob_doh <sigima.proc.image.blob_doh>`,Compute blobs using Determinant of Hessian method,N/A
+:py:func:`blob_log <sigima.proc.image.blob_log>`,Compute blobs using Laplacian of Gaussian method,N/A
+:py:func:`blob_opencv <sigima.proc.image.blob_opencv>`,Compute blobs using OpenCV,N/A
+:py:func:`butterworth <sigima.proc.image.butterworth>`,Compute Butterworth filter with :py:func:`skimage.filters.butterworth`,`test_butterworth <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L562>`_
+:py:func:`calibration <sigima.proc.image.calibration>`,Compute linear calibration,`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L56>`_
+:py:func:`canny <sigima.proc.image.canny>`,Compute Canny filter with :py:func:`skimage.feature.canny`,`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L443>`_
+:py:func:`centroid <sigima.proc.image.centroid>`,Compute centroid,`test_image_centroid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/centroid_unit_test.py#L104>`_
+:py:func:`clip <sigima.proc.image.clip>`,Apply clipping with :py:func:`numpy.clip`,`test_image_clip <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L120>`_
+:py:func:`closing <sigima.proc.image.closing>`,Compute morphological closing with :py:func:`skimage.morphology.closing`,`test_closing <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L437>`_
+:py:func:`contour_shape <sigima.proc.image.contour_shape>`,Compute contour shape fit,N/A
+:py:func:`denoise_bilateral <sigima.proc.image.denoise_bilateral>`,Compute bilateral filter denoising,`test_denoise_bilateral <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L345>`_
+:py:func:`denoise_tophat <sigima.proc.image.denoise_tophat>`,Denoise using White Top-Hat,`test_denoise_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L385>`_
+:py:func:`denoise_tv <sigima.proc.image.denoise_tv>`,Compute Total Variation denoising,`test_denoise_tv <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L328>`_
+:py:func:`denoise_wavelet <sigima.proc.image.denoise_wavelet>`,Compute Wavelet denoising,`test_denoise_wavelet <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L362>`_
+:py:func:`difference <sigima.proc.image.difference>`,Compute difference between two images,`test_image_difference <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L111>`_
+:py:func:`difference_constant <sigima.proc.image.difference_constant>`,Subtract a constant value from an image and return the new result image object,`test_image_difference_constant <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L211>`_
+:py:func:`dilation <sigima.proc.image.dilation>`,Compute Dilation with :py:func:`skimage.morphology.dilation`,`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L425>`_
+:py:func:`division <sigima.proc.image.division>`,Compute division between two images,`test_image_division <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L155>`_
+:py:func:`division_constant <sigima.proc.image.division_constant>`,Divide an image by a constant value and return the new result image object,`test_image_division_constant <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L236>`_
+:py:func:`enclosing_circle <sigima.proc.image.enclosing_circle>`,Compute minimum enclosing circle,N/A
+:py:func:`equalize_adapthist <sigima.proc.image.equalize_adapthist>`,Adaptive histogram equalization,`test_equalize_adapthist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L316>`_
+:py:func:`equalize_hist <sigima.proc.image.equalize_hist>`,Histogram equalization with :py:func:`skimage.exposure.equalize_hist`,`test_equalize_hist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L304>`_
+:py:func:`erosion <sigima.proc.image.erosion>`,Compute Erosion with :py:func:`skimage.morphology.erosion`,`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L419>`_
+:py:func:`exp <sigima.proc.image.exp>`,Compute exponential with :py:data:`numpy.exp`,`test_image_exp <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L359>`_
+:py:func:`extract_roi <sigima.proc.image.extract_roi>`,Extract single ROI,N/A
+:py:func:`extract_rois <sigima.proc.image.extract_rois>`,Extract multiple regions of interest from data,N/A
+:py:func:`farid <sigima.proc.image.farid>`,Compute Farid filter with :py:func:`skimage.filters.farid`,`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L538>`_
+:py:func:`farid_h <sigima.proc.image.farid_h>`,Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`,`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L544>`_
+:py:func:`farid_v <sigima.proc.image.farid_v>`,Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`,`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L550>`_
+:py:func:`fft <sigima.proc.image.fft>`,Compute FFT with :py:func:`sigima.tools.image.fft2d`,`test_image_fft <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L120>`_
+:py:func:`flatfield <sigima.proc.image.flatfield>`,Compute flat field correction with :py:func:`sigima.tools.image.flatfield`,N/A
+:py:func:`fliph <sigima.proc.image.fliph>`,Flip data horizontally with :py:func:`numpy.fliplr`,`test_image_fliph <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L405>`_
+:py:func:`flipv <sigima.proc.image.flipv>`,Flip data vertically with :py:func:`numpy.flipud`,`test_image_flipv <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L417>`_
+:py:func:`gaussian_filter <sigima.proc.image.gaussian_filter>`,Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`,`test_image_gaussian_filter <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L146>`_
+:py:func:`histogram <sigima.proc.image.histogram>`,"Compute histogram of the image data, with :py:func:`numpy.histogram`",N/A
+:py:func:`hough_circle_peaks <sigima.proc.image.hough_circle_peaks>`,Compute Hough circles,N/A
+:py:func:`ifft <sigima.proc.image.ifft>`,Compute inverse FFT with :py:func:`sigima.tools.image.ifft2d`,`test_image_ifft <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L136>`_
+:py:func:`imag <sigima.proc.image.imag>`,Compute imaginary part with :py:func:`numpy.imag`,`test_image_imag <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L320>`_
+:py:func:`inverse <sigima.proc.image.inverse>`,Compute the inverse of an image and return the new result image object,`test_image_inverse <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L284>`_
+:py:func:`laplace <sigima.proc.image.laplace>`,Compute Laplace filter with :py:func:`skimage.filters.laplace`,`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L556>`_
+:py:func:`line_profile <sigima.proc.image.line_profile>`,Compute horizontal or vertical profile,`test_line_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L19>`_
+:py:func:`log10 <sigima.proc.image.log10>`,Compute log10 with :py:data:`numpy.log10`,`test_image_log10 <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L371>`_
+:py:func:`logp1 <sigima.proc.image.logp1>`,Compute log10(z+n) with :py:data:`numpy.log10`,`test_image_logp1 <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L383>`_
+:py:func:`magnitude_spectrum <sigima.proc.image.magnitude_spectrum>`,Compute magnitude spectrum,`test_image_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L144>`_
+:py:func:`moving_average <sigima.proc.image.moving_average>`,Compute moving average with :py:func:`scipy.ndimage.uniform_filter`,`test_image_moving_average <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L157>`_
+:py:func:`moving_median <sigima.proc.image.moving_median>`,Compute moving median with :py:func:`scipy.ndimage.median_filter`,`test_image_moving_median <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L169>`_
+:py:func:`normalize <sigima.proc.image.normalize>`,,`test_image_normalize <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L84>`_
+:py:func:`offset_correction <sigima.proc.image.offset_correction>`,Apply offset correction,`test_image_offset_correction <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/offset_correction_unit_test.py#L56>`_
+:py:func:`opening <sigima.proc.image.opening>`,Compute morphological opening with :py:func:`skimage.morphology.opening`,`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L431>`_
+:py:func:`peak_detection <sigima.proc.image.peak_detection>`,Compute 2D peak detection,`test_image_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/peak2d_unit_test.py#L76>`_
+:py:func:`phase_spectrum <sigima.proc.image.phase_spectrum>`,Compute phase spectrum,`test_image_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L156>`_
+:py:func:`prewitt <sigima.proc.image.prewitt>`,Compute Prewitt filter with :py:func:`skimage.filters.prewitt`,`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L484>`_
+:py:func:`prewitt_h <sigima.proc.image.prewitt_h>`,Compute horizontal Prewitt filter with :py:func:`skimage.filters.prewitt_h`,`test_prewitt_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L490>`_
+:py:func:`prewitt_v <sigima.proc.image.prewitt_v>`,Compute vertical Prewitt filter with :py:func:`skimage.filters.prewitt_v`,`test_prewitt_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L496>`_
+:py:func:`product <sigima.proc.image.product>`,Multiply images in the list and return the result image object,`test_image_product <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L135>`_
+:py:func:`product_constant <sigima.proc.image.product_constant>`,Multiply **dst** by a constant value and return the new result image object,`test_image_product_constant <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L224>`_
+:py:func:`psd <sigima.proc.image.psd>`,Compute power spectral density,`test_image_psd <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L168>`_
+:py:func:`quadratic_difference <sigima.proc.image.quadratic_difference>`,Compute quadratic difference between two images,`test_image_quadratic_difference <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L123>`_
+:py:func:`radial_profile <sigima.proc.image.radial_profile>`,Compute radial profile around the centroid,N/A
+:py:func:`real <sigima.proc.image.real>`,Compute real part with :py:func:`numpy.real`,`test_image_real <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L309>`_
+:py:func:`rescale_intensity <sigima.proc.image.rescale_intensity>`,Rescale image intensity levels,`test_rescale_intensity <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L291>`_
+:py:func:`resize <sigima.proc.image.resize>`,Zooming function with :py:func:`scipy.ndimage.zoom`,N/A
+:py:func:`roberts <sigima.proc.image.roberts>`,Compute Roberts filter with :py:func:`skimage.filters.roberts`,`test_roberts <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L478>`_
+:py:func:`rotate <sigima.proc.image.rotate>`,Rotate data with :py:func:`scipy.ndimage.rotate`,`test_image_rotate <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L446>`_
+:py:func:`rotate270 <sigima.proc.image.rotate270>`,Rotate data 270° with :py:func:`numpy.rot90`,`test_image_rotate270 <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L440>`_
+:py:func:`rotate90 <sigima.proc.image.rotate90>`,Rotate data 90° with :py:func:`numpy.rot90`,`test_image_rotate90 <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/operation_unit_test.py#L434>`_
+:py:func:`scharr <sigima.proc.image.scharr>`,Compute Scharr filter with :py:func:`skimage.filters.scharr`,`test_scharr <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L520>`_
+:py:func:`scharr_h <sigima.proc.image.scharr_h>`,Compute horizontal Scharr filter with :py:func:`skimage.filters.scharr_h`,`test_scharr_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L526>`_
+:py:func:`scharr_v <sigima.proc.image.scharr_v>`,Compute vertical Scharr filter with :py:func:`skimage.filters.scharr_v`,`test_scharr_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L532>`_
+:py:func:`segment_profile <sigima.proc.image.segment_profile>`,Compute segment profile,`test_segment_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L46>`_
+:py:func:`sobel <sigima.proc.image.sobel>`,Compute Sobel filter with :py:func:`skimage.filters.sobel`,`test_sobel <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L502>`_
+:py:func:`sobel_h <sigima.proc.image.sobel_h>`,Compute horizontal Sobel filter with :py:func:`skimage.filters.sobel_h`,`test_sobel_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L508>`_
+:py:func:`sobel_v <sigima.proc.image.sobel_v>`,Compute vertical Sobel filter with :py:func:`skimage.filters.sobel_v`,`test_sobel_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L514>`_
+:py:func:`stats <sigima.proc.image.stats>`,Compute statistics on an image,`test_image_stats_unit <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/common/stat_unit_test.py#L122>`_
+:py:func:`swap_axes <sigima.proc.image.swap_axes>`,Swap image axes with :py:func:`numpy.transpose`,`test_image_swap_axes <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L75>`_
+:py:func:`threshold <sigima.proc.image.threshold>`,"Compute the threshold, using one of the available algorithms",`test_threshold <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L190>`_
+:py:func:`threshold_isodata <sigima.proc.image.threshold_isodata>`,Compute the threshold using the Isodata algorithm with default parameters,`test_threshold_isodata <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L211>`_
+:py:func:`threshold_li <sigima.proc.image.threshold_li>`,Compute the threshold using the Li algorithm with default parameters,`test_threshold_li <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L217>`_
+:py:func:`threshold_mean <sigima.proc.image.threshold_mean>`,Compute the threshold using the Mean algorithm,`test_threshold_mean <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L223>`_
+:py:func:`threshold_minimum <sigima.proc.image.threshold_minimum>`,Compute the threshold using the Minimum algorithm with default parameters,`test_threshold_minimum <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L229>`_
+:py:func:`threshold_otsu <sigima.proc.image.threshold_otsu>`,Compute the threshold using the Otsu algorithm with default parameters,`test_threshold_otsu <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L235>`_
+:py:func:`threshold_triangle <sigima.proc.image.threshold_triangle>`,Compute the threshold using the Triangle algorithm with default parameters,`test_threshold_triangle <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L241>`_
+:py:func:`threshold_yen <sigima.proc.image.threshold_yen>`,Compute the threshold using the Yen algorithm with default parameters,`test_threshold_yen <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L247>`_
+:py:func:`white_tophat <sigima.proc.image.white_tophat>`,Compute White Top-Hat with :py:func:`skimage.morphology.white_tophat`,`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L407>`_
+:py:func:`wiener <sigima.proc.image.wiener>`,Compute Wiener filter with :py:func:`scipy.signal.wiener`,`test_image_wiener <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L181>`_
+:py:func:`zero_padding <sigima.proc.image.zero_padding>`,,`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/fft2d_unit_test.py#L52>`_
+:py:func:`addition <sigima.proc.image.arithmetic.addition>`,Add images in the list and return the result image object,N/A
+:py:func:`addition_constant <sigima.proc.image.arithmetic.addition_constant>`,Add **dst** and a constant value and return the new result image object,N/A
+:py:func:`arithmetic <sigima.proc.image.arithmetic.arithmetic>`,Compute arithmetic operation on two images,N/A
+:py:func:`average <sigima.proc.image.arithmetic.average>`,Compute the average of images in the list and return the result image object,N/A
+:py:func:`difference <sigima.proc.image.arithmetic.difference>`,Compute difference between two images,N/A
+:py:func:`difference_constant <sigima.proc.image.arithmetic.difference_constant>`,Subtract a constant value from an image and return the new result image object,N/A
+:py:func:`division <sigima.proc.image.arithmetic.division>`,Compute division between two images,N/A
+:py:func:`division_constant <sigima.proc.image.arithmetic.division_constant>`,Divide an image by a constant value and return the new result image object,N/A
+:py:func:`product <sigima.proc.image.arithmetic.product>`,Multiply images in the list and return the result image object,N/A
+:py:func:`product_constant <sigima.proc.image.arithmetic.product_constant>`,Multiply **dst** by a constant value and return the new result image object,N/A
+:py:func:`quadratic_difference <sigima.proc.image.arithmetic.quadratic_difference>`,Compute quadratic difference between two images,N/A
+:py:func:`blob_dog <sigima.proc.image.detection.blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
+:py:func:`blob_doh <sigima.proc.image.detection.blob_doh>`,Compute blobs using Determinant of Hessian method,N/A
+:py:func:`blob_log <sigima.proc.image.detection.blob_log>`,Compute blobs using Laplacian of Gaussian method,N/A
+:py:func:`blob_opencv <sigima.proc.image.detection.blob_opencv>`,Compute blobs using OpenCV,N/A
+:py:func:`contour_shape <sigima.proc.image.detection.contour_shape>`,Compute contour shape fit,N/A
+:py:func:`hough_circle_peaks <sigima.proc.image.detection.hough_circle_peaks>`,Compute Hough circles,N/A
+:py:func:`peak_detection <sigima.proc.image.detection.peak_detection>`,Compute 2D peak detection,N/A
+:py:func:`canny <sigima.proc.image.edges.canny>`,Compute Canny filter with :py:func:`skimage.feature.canny`,`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L443>`_
+:py:func:`farid <sigima.proc.image.edges.farid>`,Compute Farid filter with :py:func:`skimage.filters.farid`,`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L538>`_
+:py:func:`farid_h <sigima.proc.image.edges.farid_h>`,Compute horizontal Farid filter with :py:func:`skimage.filters.farid_h`,`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L544>`_
+:py:func:`farid_v <sigima.proc.image.edges.farid_v>`,Compute vertical Farid filter with :py:func:`skimage.filters.farid_v`,`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L550>`_
+:py:func:`laplace <sigima.proc.image.edges.laplace>`,Compute Laplace filter with :py:func:`skimage.filters.laplace`,`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L556>`_
+:py:func:`prewitt <sigima.proc.image.edges.prewitt>`,Compute Prewitt filter with :py:func:`skimage.filters.prewitt`,`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L484>`_
+:py:func:`prewitt_h <sigima.proc.image.edges.prewitt_h>`,Compute horizontal Prewitt filter with :py:func:`skimage.filters.prewitt_h`,`test_prewitt_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L490>`_
+:py:func:`prewitt_v <sigima.proc.image.edges.prewitt_v>`,Compute vertical Prewitt filter with :py:func:`skimage.filters.prewitt_v`,`test_prewitt_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L496>`_
+:py:func:`roberts <sigima.proc.image.edges.roberts>`,Compute Roberts filter with :py:func:`skimage.filters.roberts`,`test_roberts <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L478>`_
+:py:func:`scharr <sigima.proc.image.edges.scharr>`,Compute Scharr filter with :py:func:`skimage.filters.scharr`,`test_scharr <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L520>`_
+:py:func:`scharr_h <sigima.proc.image.edges.scharr_h>`,Compute horizontal Scharr filter with :py:func:`skimage.filters.scharr_h`,`test_scharr_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L526>`_
+:py:func:`scharr_v <sigima.proc.image.edges.scharr_v>`,Compute vertical Scharr filter with :py:func:`skimage.filters.scharr_v`,`test_scharr_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L532>`_
+:py:func:`sobel <sigima.proc.image.edges.sobel>`,Compute Sobel filter with :py:func:`skimage.filters.sobel`,`test_sobel <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L502>`_
+:py:func:`sobel_h <sigima.proc.image.edges.sobel_h>`,Compute horizontal Sobel filter with :py:func:`skimage.filters.sobel_h`,`test_sobel_h <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L508>`_
+:py:func:`sobel_v <sigima.proc.image.edges.sobel_v>`,Compute vertical Sobel filter with :py:func:`skimage.filters.sobel_v`,`test_sobel_v <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L514>`_
+:py:func:`adjust_gamma <sigima.proc.image.exposure.adjust_gamma>`,Gamma correction with :py:func:`skimage.exposure.adjust_gamma`,`test_adjust_gamma <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L253>`_
+:py:func:`adjust_log <sigima.proc.image.exposure.adjust_log>`,Compute log correction with :py:func:`skimage.exposure.adjust_log`,`test_adjust_log <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L265>`_
+:py:func:`adjust_sigmoid <sigima.proc.image.exposure.adjust_sigmoid>`,Compute sigmoid correction with :py:func:`skimage.exposure.adjust_sigmoid`,`test_adjust_sigmoid <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L277>`_
+:py:func:`calibration <sigima.proc.image.exposure.calibration>`,Compute linear calibration,N/A
+:py:func:`clip <sigima.proc.image.exposure.clip>`,Apply clipping with :py:func:`numpy.clip`,N/A
+:py:func:`equalize_adapthist <sigima.proc.image.exposure.equalize_adapthist>`,Adaptive histogram equalization,`test_equalize_adapthist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L316>`_
+:py:func:`equalize_hist <sigima.proc.image.exposure.equalize_hist>`,Histogram equalization with :py:func:`skimage.exposure.equalize_hist`,`test_equalize_hist <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L304>`_
+:py:func:`flatfield <sigima.proc.image.exposure.flatfield>`,Compute flat field correction with :py:func:`sigima.tools.image.flatfield`,N/A
+:py:func:`histogram <sigima.proc.image.exposure.histogram>`,"Compute histogram of the image data, with :py:func:`numpy.histogram`",N/A
+:py:func:`normalize <sigima.proc.image.exposure.normalize>`,,N/A
+:py:func:`offset_correction <sigima.proc.image.exposure.offset_correction>`,Apply offset correction,N/A
+:py:func:`rescale_intensity <sigima.proc.image.exposure.rescale_intensity>`,Rescale image intensity levels,`test_rescale_intensity <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L291>`_
+:py:func:`average_profile <sigima.proc.image.extraction.average_profile>`,Compute horizontal or vertical average profile,`test_average_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L66>`_
+:py:func:`extract_roi <sigima.proc.image.extraction.extract_roi>`,Extract single ROI,N/A
+:py:func:`extract_rois <sigima.proc.image.extraction.extract_rois>`,Extract multiple regions of interest from data,N/A
+:py:func:`line_profile <sigima.proc.image.extraction.line_profile>`,Compute horizontal or vertical profile,`test_line_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L19>`_
+:py:func:`radial_profile <sigima.proc.image.extraction.radial_profile>`,Compute radial profile around the centroid,N/A
+:py:func:`segment_profile <sigima.proc.image.extraction.segment_profile>`,Compute segment profile,`test_segment_profile <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/profile_unit_test.py#L46>`_
+:py:func:`butterworth <sigima.proc.image.filtering.butterworth>`,Compute Butterworth filter with :py:func:`skimage.filters.butterworth`,`test_butterworth <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L562>`_
+:py:func:`gaussian_filter <sigima.proc.image.filtering.gaussian_filter>`,Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`,N/A
+:py:func:`moving_average <sigima.proc.image.filtering.moving_average>`,Compute moving average with :py:func:`scipy.ndimage.uniform_filter`,N/A
+:py:func:`moving_median <sigima.proc.image.filtering.moving_median>`,Compute moving median with :py:func:`scipy.ndimage.median_filter`,N/A
+:py:func:`wiener <sigima.proc.image.filtering.wiener>`,Compute Wiener filter with :py:func:`scipy.signal.wiener`,N/A
+:py:func:`fft <sigima.proc.image.fourier.fft>`,Compute FFT with :py:func:`sigima.tools.image.fft2d`,N/A
+:py:func:`ifft <sigima.proc.image.fourier.ifft>`,Compute inverse FFT with :py:func:`sigima.tools.image.ifft2d`,N/A
+:py:func:`magnitude_spectrum <sigima.proc.image.fourier.magnitude_spectrum>`,Compute magnitude spectrum,N/A
+:py:func:`phase_spectrum <sigima.proc.image.fourier.phase_spectrum>`,Compute phase spectrum,N/A
+:py:func:`psd <sigima.proc.image.fourier.psd>`,Compute power spectral density,N/A
+:py:func:`zero_padding <sigima.proc.image.fourier.zero_padding>`,,N/A
+:py:func:`binning <sigima.proc.image.geometry.binning>`,Binning function on data with :py:func:`sigima.tools.image.binning`,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/binning_unit_test.py#L75>`_
+:py:func:`fliph <sigima.proc.image.geometry.fliph>`,Flip data horizontally with :py:func:`numpy.fliplr`,N/A
+:py:func:`flipv <sigima.proc.image.geometry.flipv>`,Flip data vertically with :py:func:`numpy.flipud`,N/A
+:py:func:`resize <sigima.proc.image.geometry.resize>`,Zooming function with :py:func:`scipy.ndimage.zoom`,N/A
+:py:func:`rotate <sigima.proc.image.geometry.rotate>`,Rotate data with :py:func:`scipy.ndimage.rotate`,N/A
+:py:func:`rotate270 <sigima.proc.image.geometry.rotate270>`,Rotate data 270° with :py:func:`numpy.rot90`,N/A
+:py:func:`rotate90 <sigima.proc.image.geometry.rotate90>`,Rotate data 90° with :py:func:`numpy.rot90`,N/A
+:py:func:`swap_axes <sigima.proc.image.geometry.swap_axes>`,Swap image axes with :py:func:`numpy.transpose`,N/A
+:py:func:`absolute <sigima.proc.image.mathops.absolute>`,Compute absolute value with :py:data:`numpy.absolute`,N/A
+:py:func:`astype <sigima.proc.image.mathops.astype>`,Convert image data type with :py:func:`sigima.tools.datatypes.clip_astype`,N/A
+:py:func:`exp <sigima.proc.image.mathops.exp>`,Compute exponential with :py:data:`numpy.exp`,N/A
+:py:func:`imag <sigima.proc.image.mathops.imag>`,Compute imaginary part with :py:func:`numpy.imag`,N/A
+:py:func:`inverse <sigima.proc.image.mathops.inverse>`,Compute the inverse of an image and return the new result image object,N/A
+:py:func:`log10 <sigima.proc.image.mathops.log10>`,Compute log10 with :py:data:`numpy.log10`,N/A
+:py:func:`logp1 <sigima.proc.image.mathops.logp1>`,Compute log10(z+n) with :py:data:`numpy.log10`,N/A
+:py:func:`real <sigima.proc.image.mathops.real>`,Compute real part with :py:func:`numpy.real`,N/A
+:py:func:`centroid <sigima.proc.image.measurement.centroid>`,Compute centroid,N/A
+:py:func:`enclosing_circle <sigima.proc.image.measurement.enclosing_circle>`,Compute minimum enclosing circle,N/A
+:py:func:`stats <sigima.proc.image.measurement.stats>`,Compute statistics on an image,N/A
+:py:func:`black_tophat <sigima.proc.image.morphology.black_tophat>`,Compute Black Top-Hat with :py:func:`skimage.morphology.black_tophat`,`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L413>`_
+:py:func:`closing <sigima.proc.image.morphology.closing>`,Compute morphological closing with :py:func:`skimage.morphology.closing`,`test_closing <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L437>`_
+:py:func:`dilation <sigima.proc.image.morphology.dilation>`,Compute Dilation with :py:func:`skimage.morphology.dilation`,`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L425>`_
+:py:func:`erosion <sigima.proc.image.morphology.erosion>`,Compute Erosion with :py:func:`skimage.morphology.erosion`,`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L419>`_
+:py:func:`opening <sigima.proc.image.morphology.opening>`,Compute morphological opening with :py:func:`skimage.morphology.opening`,`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L431>`_
+:py:func:`white_tophat <sigima.proc.image.morphology.white_tophat>`,Compute White Top-Hat with :py:func:`skimage.morphology.white_tophat`,`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L407>`_
+:py:func:`denoise_bilateral <sigima.proc.image.restoration.denoise_bilateral>`,Compute bilateral filter denoising,`test_denoise_bilateral <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L345>`_
+:py:func:`denoise_tophat <sigima.proc.image.restoration.denoise_tophat>`,Denoise using White Top-Hat,`test_denoise_tophat <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L385>`_
+:py:func:`denoise_tv <sigima.proc.image.restoration.denoise_tv>`,Compute Total Variation denoising,`test_denoise_tv <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L328>`_
+:py:func:`denoise_wavelet <sigima.proc.image.restoration.denoise_wavelet>`,Compute Wavelet denoising,`test_denoise_wavelet <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L362>`_
+:py:func:`threshold <sigima.proc.image.threshold.threshold>`,"Compute the threshold, using one of the available algorithms",`test_threshold <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L190>`_
+:py:func:`threshold_isodata <sigima.proc.image.threshold.threshold_isodata>`,Compute the threshold using the Isodata algorithm with default parameters,`test_threshold_isodata <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L211>`_
+:py:func:`threshold_li <sigima.proc.image.threshold.threshold_li>`,Compute the threshold using the Li algorithm with default parameters,`test_threshold_li <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L217>`_
+:py:func:`threshold_mean <sigima.proc.image.threshold.threshold_mean>`,Compute the threshold using the Mean algorithm,`test_threshold_mean <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L223>`_
+:py:func:`threshold_minimum <sigima.proc.image.threshold.threshold_minimum>`,Compute the threshold using the Minimum algorithm with default parameters,`test_threshold_minimum <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L229>`_
+:py:func:`threshold_otsu <sigima.proc.image.threshold.threshold_otsu>`,Compute the threshold using the Otsu algorithm with default parameters,`test_threshold_otsu <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L235>`_
+:py:func:`threshold_triangle <sigima.proc.image.threshold.threshold_triangle>`,Compute the threshold using the Triangle algorithm with default parameters,`test_threshold_triangle <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L241>`_
+:py:func:`threshold_yen <sigima.proc.image.threshold.threshold_yen>`,Compute the threshold using the Yen algorithm with default parameters,`test_threshold_yen <https://github.com/DataLab-Platform/Sigima/blob/v0.1.0/sigima/tests/images/processing_unit_test.py#L247>`_

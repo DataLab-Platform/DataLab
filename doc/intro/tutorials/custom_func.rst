@@ -297,7 +297,7 @@ operating on DataLab's native image objects (:class:`sigima.objects.ImageObj`), 
 operating on NumPy arrays. So we need to find a way to call our custom function
 ``weighted_average_denoise`` with a :class:`sigima.objects.ImageObj` as input and output.
 To avoid writing a lot of boilerplate code, we can use the function wrapper provided
-by DataLab: :class:`sigima.computation.image.Wrap1to1Func`.
+by DataLab: :class:`sigima.proc.image.Wrap1to1Func`.
 
 Besides we need to define a class that describes our plugin, which must inherit
 from :class:`datalab.plugins.PluginBase` and name the Python script that contains the

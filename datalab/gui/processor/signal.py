@@ -12,9 +12,9 @@ import re
 from collections.abc import Callable
 
 import numpy as np
-import sigima.computation.base as sigima_base
-import sigima.computation.signal as sigima_signal
 import sigima.params
+import sigima.proc.base as sigima_base
+import sigima.proc.signal as sigima_signal
 from guidata.qthelpers import exec_dialog
 from sigima.objects import (
     ResultProperties,
@@ -465,7 +465,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_offset_correction(self, param: ROI1DParam | None = None) -> None:
         """Compute offset correction
-        with :py:func:`sigima.computation.signal.offset_correction`"""
+        with :py:func:`sigima.proc.signal.offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
             dlg = signalbaseline.SignalBaselineDialog(obj, parent=self.panel.parent())
@@ -483,13 +483,13 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """Compute all stability analysis features
         using the following functions:
 
-        - :py:func:`sigima.computation.signal.allan_variance`
-        - :py:func:`sigima.computation.signal.allan_deviation`
-        - :py:func:`sigima.computation.signal.overlapping_allan_variance`
-        - :py:func:`sigima.computation.signal.modified_allan_variance`
-        - :py:func:`sigima.computation.signal.hadamard_variance`
-        - :py:func:`sigima.computation.signal.total_variance`
-        - :py:func:`sigima.computation.signal.time_deviation`
+        - :py:func:`sigima.proc.signal.allan_variance`
+        - :py:func:`sigima.proc.signal.allan_deviation`
+        - :py:func:`sigima.proc.signal.overlapping_allan_variance`
+        - :py:func:`sigima.proc.signal.modified_allan_variance`
+        - :py:func:`sigima.proc.signal.hadamard_variance`
+        - :py:func:`sigima.proc.signal.total_variance`
+        - :py:func:`sigima.proc.signal.time_deviation`
         """
         if param is None:
             param = sigima_signal.AllanVarianceParam()
@@ -513,7 +513,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self, param: sigima.params.PeakDetectionParam | None = None
     ) -> None:
         """Detect peaks from data
-        with :py:func:`sigima.computation.signal.peak_detection`"""
+        with :py:func:`sigima.proc.signal.peak_detection`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         edit, param = self.init_param(
             param, sigima_signal.PeakDetectionParam, _("Peak detection")
@@ -611,7 +611,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self, param: sigima.params.OrdinateParam | None = None
     ) -> dict[str, ResultShape] | None:
         """Compute full width at a given y
-        with :py:func:`sigima.computation.signal.full_width_at_y`"""
+        with :py:func:`sigima.proc.signal.full_width_at_y`"""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.panel.parent())
@@ -626,7 +626,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     def compute_x_at_y(
         self, param: sigima_signal.OrdinateParam | None = None
     ) -> dict[str, ResultProperties] | None:
-        """Compute x at y with :py:func:`sigima.computation.signal.x_at_y`."""
+        """Compute x at y with :py:func:`sigima.proc.signal.x_at_y`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signalcursor.SignalCursorDialog(
@@ -643,7 +643,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     def compute_y_at_x(
         self, param: sigima_signal.AbscissaParam | None = None
     ) -> dict[str, ResultProperties] | None:
-        """Compute y at x with :py:func:`sigima.computation.signal.y_at_x`."""
+        """Compute y at x with :py:func:`sigima.proc.signal.y_at_x`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signalcursor.SignalCursorDialog(

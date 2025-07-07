@@ -16,8 +16,8 @@ from __future__ import annotations
 import os.path as osp
 from typing import TYPE_CHECKING, Any
 
-import sigima.computation.signal as sigima_signal
 import sigima.params
+import sigima.proc.signal as sigima_signal
 from sigima.tests.data import (
     create_2dstep_image,
     create_paracetamol_signal,

@@ -20,19 +20,19 @@ msgstr ""
 msgid "Parameters (:mod:`sigima.params`)"
 msgstr ""
 
-msgid "The :mod:`sigima.params` module aims at providing all the dataset parameters that are used by the :mod:`sigima.computation` and DataLab's processors."
+msgid "The :mod:`sigima.params` module aims at providing all the dataset parameters that are used by the :mod:`sigima.proc` and DataLab's processors."
 msgstr ""
 
 msgid "Those datasets are defined in other modules:"
 msgstr ""
 
-msgid ":mod:`sigima.computation.base`"
+msgid ":mod:`sigima.proc.base`"
 msgstr ""
 
-msgid ":mod:`sigima.computation.image`"
+msgid ":mod:`sigima.proc.image`"
 msgstr ""
 
-msgid ":mod:`sigima.computation.signal`"
+msgid ":mod:`sigima.proc.signal`"
 msgstr ""
 
 msgid "The :mod:`sigima.params` module is thus a convenient way to import all the sets of parameters at once."

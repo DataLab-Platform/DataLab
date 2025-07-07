@@ -19,13 +19,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Computation (:mod:`sigima.computation`)"
+msgid "Computation (:mod:`sigima.proc`)"
 msgstr ""
 
 msgid "This package contains the computation functions used by the DataLab project. Those functions operate directly on DataLab objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`) and are designed to be used in the DataLab pipeline, but can be used independently as well."
 msgstr ""
 
-msgid "The :mod:`sigima.computation` package is the main entry point for the DataLab computation functions when manipulating DataLab objects. See the :mod:`sigima.tools` package for algorithms that operate directly on NumPy arrays."
+msgid "The :mod:`sigima.proc` package is the main entry point for the DataLab computation functions when manipulating DataLab objects. See the :mod:`sigima.tools` package for algorithms that operate directly on NumPy arrays."
 msgstr ""
 
 msgid "Each computation module defines a set of computation objects, that is, functions that implement processing features and classes that implement the corresponding parameters (in the form of :py:class:`guidata.dataset.datatypes.Dataset` subclasses). The computation functions takes a DataLab object (e.g. :class:`sigima.objects.SignalObj`) and a parameter object (e.g. :py:class:`sigima.params.MovingAverageParam`) as input and return a DataLab object as output (the result of the computation). The parameter object is used to configure the computation function (e.g. the size of the moving average window)."
@@ -37,13 +37,13 @@ msgstr ""
 msgid "The computation modules are organized in subpackages according to their purpose. The following subpackages are available:"
 msgstr ""
 
-msgid ":mod:`sigima.computation.base`: Common processing features"
+msgid ":mod:`sigima.proc.base`: Common processing features"
 msgstr ""
 
-msgid ":mod:`sigima.computation.signal`: Signal processing features"
+msgid ":mod:`sigima.proc.signal`: Signal processing features"
 msgstr ""
 
-msgid ":mod:`sigima.computation.image`: Image processing features"
+msgid ":mod:`sigima.proc.image`: Image processing features"
 msgstr ""
 
 msgid "Common processing features"
@@ -1802,10 +1802,10 @@ msgstr ""
 msgid "If the function is not a DataLab computation function."
 msgstr ""
 
-msgid "Find all computation functions in the `sigima.computation` package."
+msgid "Find all computation functions in the `sigima.proc` package."
 msgstr ""
 
-msgid "This function uses introspection to locate all functions decorated with `@computation_function` in the `sigima.computation` package and its subpackages."
+msgid "This function uses introspection to locate all functions decorated with `@computation_function` in the `sigima.proc` package and its subpackages."
 msgstr ""
 
 msgid "Optional module to search in. If None, the current module is used."

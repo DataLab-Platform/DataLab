@@ -24,7 +24,7 @@ and their purpose:
     * - :mod:`sigima.objects`
       - Convenience module to access the DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`) and related functions
 
-    * - :mod:`sigima.computation`
+    * - :mod:`sigima.proc`
       - Computation functions, which operate on DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)
 
     * - :mod:`datalab.proxy`
@@ -36,8 +36,8 @@ and their purpose:
 
    tools
    params
-   obj
-   computation
+   objects
+   proc
    proxy
 
 .. toctree::
