@@ -289,7 +289,7 @@
         },
         {
             "label": "🛠️ Generate doc assets",
-            "command": "${command:python.interpreterPath} -m guidata.utils.genreqs all && ${command:python.interpreterPath} doc/update_validation_status.py && ${command:python.interpreterPath} doc/update_processor_methods.py",
+            "command": "${command:python.interpreterPath} -m guidata.utils.genreqs all && ${command:python.interpreterPath} doc/update_validation_status.py",
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
