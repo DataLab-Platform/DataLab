@@ -16,8 +16,6 @@ import sigima.tests as tests_pkg
 from _pytest.mark import Mark
 from sigima import __version__
 
-from datalab.utils.strings import shorten_docstring
-
 
 def check_for_validation_test(
     full_function_name: str, validation_tests: list[tuple[str, str]]
@@ -70,6 +68,22 @@ def get_validation_tests(package: str) -> list:
                         line_number = inspect.getsourcelines(obj)[1]
                         validation_tests.append((name, module_path, line_number))
     return validation_tests
+
+
+def shorten_docstring(docstring: str) -> str:
+    """Shorten a docstring to a single line
+
+    Args:
+        docstring: Docstring
+
+    Returns:
+        Shortened docstring
+    """
+    shorter = docstring.split("\n")[0].strip() if docstring else "-"
+    for suffix in (".", ":", ",", "using", "with"):
+        shorter = shorter.removesuffix(suffix)
+    shorter = shorter.split(" with :py:func:")[0]  # Remove function references
+    return shorter
 
 
 def generate_csv_files() -> None:

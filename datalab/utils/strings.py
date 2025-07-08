@@ -32,18 +32,3 @@ def save_html_diff(
     with open(filename, "w", encoding="utf-8") as file:
         file.write(diff_html)
     webbrowser.open("file://" + osp.realpath(filename))
-
-
-def shorten_docstring(docstring: str) -> str:
-    """Shorten a docstring to a single line
-
-    Args:
-        docstring: Docstring
-
-    Returns:
-        Shortened docstring
-    """
-    shorter = docstring.split("\n")[0].strip() if docstring else "-"
-    for suffix in (".", ":", ",", "using", "with"):
-        shorter = shorter.removesuffix(suffix)
-    return shorter
