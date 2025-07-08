@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 15:18+0200\n"
+"POT-Creation-Date: 2025-07-08 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -23,9 +23,6 @@ msgid "Proxy objects (:mod:`datalab.proxy`)"
 msgstr ""
 
 msgid "The :mod:`datalab.proxy` module provides a way to access DataLab features from a proxy class."
-msgstr ""
-
-msgid "The list of compute methods accessible from the proxy objects is available in the :ref:`processor_methods` section."
 msgstr ""
 
 msgid "Remote proxy"
@@ -178,7 +175,10 @@ msgstr ""
 msgid "Invalid ydata dtype"
 msgstr ""
 
-msgid "Call compute function ``name`` in current panel's processor."
+msgid "Call computation feature ``name``"
+msgstr ""
+
+msgid "This calls either the processor's ``compute_<name>`` method (if it exists), or the processor's ``<name>`` computation feature (if it is registered, using the ``run_feature`` method). It looks for the function in all panels, starting with the current one."
 msgstr ""
 
 msgid "Compute function name"
@@ -481,13 +481,7 @@ msgstr ""
 msgid ":class:`datalab.gui.processor.image.ImageProcessor`"
 msgstr ""
 
-msgid "The list of processor methods is available in tables below."
-msgstr ""
-
-msgid "There are two ways to call a processor method:"
-msgstr ""
-
-msgid "Using the :meth:`calc` method of the proxy object:"
+msgid "To run a computation feature associated to a processor, you can use the :meth:`calc` method of the proxy object:"
 msgstr ""
 
 msgid "Directly calling the processor method from the proxy object:"
@@ -682,3 +676,4 @@ msgstr ""
 
 msgid "Compute profile along a segment"
 msgstr ""
+

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-04 12:33+0200\n"
+"POT-Creation-Date: 2025-07-08 14:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,9 +170,8 @@ msgstr "Dépendances"
 msgid "The DataLab all-in-one installer already include all those required libraries as well as Python itself."
 msgstr "L'installeur tout-en-un de DataLab inclut déjà toutes ces dépendances ainsi que Python lui-même."
 
-#, fuzzy
-msgid "The `datalab` package requires the following Python modules:"
-msgstr "Le paquet :mod:`datalab` requiert les modules Python suivants :"
+msgid "The `datalab-platform` package requires the following Python modules:"
+msgstr "Le paquet `datalab-platform` nécessite les modules Python suivants :"
 
 msgid "Name"
 msgstr "Nom"
@@ -195,7 +194,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.10"
+msgid ">= 3.11"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -210,20 +209,28 @@ msgstr ""
 msgid "Curve and image plotting tools for Python/Qt applications"
 msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 
+msgid "Sigima"
+msgstr ""
+
+msgid ">= 0.1.0"
+msgstr ""
+
+msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
+msgstr ""
+
 msgid "NumPy"
 msgstr ""
 
-msgid ">=1.19"
+msgid ">= 1.22"
 msgstr ""
 
-#, fuzzy
 msgid "Fundamental package for array computing in Python"
-msgstr "Algorithmes fondamentaux pour le calcul scientifique en Python"
+msgstr "Paquet fondamental pour le calcul sur tableaux en Python"
 
 msgid "SciPy"
 msgstr ""
 
-msgid ">= 1.5"
+msgid ">= 1.10.1"
 msgstr ""
 
 msgid "Fundamental algorithms for scientific computing in Python"
@@ -232,7 +239,7 @@ msgstr "Algorithmes fondamentaux pour le calcul scientifique en Python"
 msgid "scikit-image"
 msgstr ""
 
-msgid ">= 0.18"
+msgid ">= 0.19.2"
 msgstr ""
 
 msgid "Image processing in Python"
@@ -241,7 +248,7 @@ msgstr "Traitement d'images en Python"
 msgid "pandas"
 msgstr ""
 
-msgid ">= 1.2"
+msgid ">= 1.4"
 msgstr ""
 
 msgid "Powerful data structures for data analysis, time series, and statistics"
@@ -250,7 +257,7 @@ msgstr "Analyse de données, séries temporelles et statistiques"
 msgid "PyWavelets"
 msgstr ""
 
-msgid ">= 1.1"
+msgid ">= 1.2"
 msgstr ""
 
 msgid "PyWavelets, wavelet transform module"
@@ -259,33 +266,28 @@ msgstr "PyWavelets, module de transformation en ondelettes"
 msgid "psutil"
 msgstr ""
 
-msgid ">= 5.7"
+msgid ">= 5.8"
 msgstr ""
 
-#, fuzzy
 msgid "Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7."
-msgstr "Bibliothèque multiplateforme pour la surveillance des processus et du système en Python."
+msgstr "Librairie multiplateforme pour la surveillance des processus et du système en Python. NOTE : la syntaxe de ce script DOIT rester compatible avec Python 2.7."
 
 msgid "packaging"
 msgstr ""
 
-msgid ">= 20.0"
+msgid ">= 21.3"
 msgstr ""
 
 msgid "Core utilities for Python packages"
 msgstr ""
 
-msgid "tomli"
-msgstr ""
-
-msgid "A lil' TOML parser"
-msgstr ""
-
-#, fuzzy
 msgid "Optional modules for GUI support (Qt):"
-msgstr "Modules optionnels pour l'exécution de la suite de tests :"
+msgstr "Modules optionnels pour le support de l'interface graphique (Qt) :"
 
 msgid "PyQt5"
+msgstr ""
+
+msgid ">= 5.15.6"
 msgstr ""
 
 msgid "Python bindings for the Qt cross platform application toolkit"
@@ -293,6 +295,12 @@ msgstr "Bibliothèque d'interfaces graphiques Qt pour Python"
 
 msgid "Optional modules for development:"
 msgstr "Modules optionnels pour le développement :"
+
+msgid "build"
+msgstr ""
+
+msgid "A simple, correct Python build frontend"
+msgstr ""
 
 msgid "babel"
 msgstr ""
@@ -309,7 +317,7 @@ msgstr "Mesure de la couverture de code pour Python"
 msgid "pyinstaller"
 msgstr ""
 
-msgid ">=6.0"
+msgid ">= 6.0"
 msgstr ""
 
 msgid "PyInstaller bundles a Python application and all its dependencies into a single package."
@@ -327,11 +335,11 @@ msgstr ""
 msgid "An extremely fast Python linter and code formatter, written in Rust."
 msgstr "Analyseur de code et formateur Python extrêmement rapide, écrit en Rust."
 
-msgid "toml-to-requirements"
-msgstr "toml-to-requirements"
+msgid "pre-commit"
+msgstr ""
 
-msgid "Convert a pyproject.toml file to a requirements.txt file"
-msgstr "Conversion d'un fichier pyproject.toml en un fichier requirements.txt"
+msgid "A framework for managing and maintaining multi-language pre-commit hooks."
+msgstr ""
 
 msgid "Optional modules for building the documentation:"
 msgstr "Modules optionnels pour la génération de la documentation :"

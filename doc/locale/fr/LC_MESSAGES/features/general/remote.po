@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 15:18+0200\n"
+"POT-Creation-Date: 2025-07-08 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,70 +149,65 @@ msgstr ""
 msgid "Parameters"
 msgstr "Paramètres"
 
-#, fuzzy
 msgid "XML-RPC port to connect to. If None, the port is automatically retrieved from DataLab configuration."
-msgstr "Port XML-RPC auquel se connecter. Si non spécifié, le port est automatiquement récupéré à partir de la configuration de DataLab."
+msgstr ""
 
 msgid "Try to connect to DataLab XML-RPC server."
-msgstr "Tentative de connexion au serveur XML-RPC de DataLab."
+msgstr ""
 
 msgid "XML-RPC port to connect to. If not specified, the port is automatically retrieved from DataLab configuration."
-msgstr "Port XML-RPC auquel se connecter. Si non spécifié, le port est automatiquement récupéré à partir de la configuration de DataLab."
+msgstr ""
 
 msgid "Timeout in seconds. Defaults to 5.0."
-msgstr "Délai d'attente en secondes. Par défaut, 5.0."
+msgstr ""
 
 msgid "Number of retries. Defaults to 10."
-msgstr "Nombre de tentatives. Par défaut, 10."
+msgstr ""
 
 msgid "Raises"
-msgstr "Lève"
+msgstr ""
 
 msgid "Unable to connect to DataLab"
-msgstr "Impossible de se connecter à DataLab"
+msgstr ""
 
 msgid "Invalid timeout (must be >= 0.0)"
-msgstr "Délai d'attente non valide (doit être >= 0.0)"
+msgstr ""
 
 msgid "Invalid number of retries (must be >= 1)"
-msgstr "Nombre de tentatives non valide (doit être >= 1)"
+msgstr ""
 
 msgid "Disconnect from DataLab XML-RPC server."
-msgstr "Déconnexion du serveur XML-RPC de DataLab."
+msgstr ""
 
 msgid "Return True if connected to DataLab XML-RPC server."
-msgstr "Renvoie True si connecté au serveur XML-RPC de DataLab."
+msgstr ""
 
 msgid "Return list of available methods."
-msgstr "Renvoie la liste des méthodes disponibles."
+msgstr ""
 
 msgid "Add signal data to DataLab."
-msgstr "Ajouter des données de signal à DataLab."
+msgstr ""
 
 msgid "Signal title"
-msgstr "Titre du signal"
+msgstr ""
 
 msgid "X data"
-msgstr "Données X"
+msgstr ""
 
 msgid "Y data"
-msgstr "Données Y"
+msgstr ""
 
-#, fuzzy
 msgid "X unit. Defaults to None"
-msgstr "Unité X. Par défaut, None."
+msgstr ""
 
-#, fuzzy
 msgid "Y unit. Defaults to None"
-msgstr "Unité Y. Par défaut, None."
+msgstr ""
 
-#, fuzzy
 msgid "X label. Defaults to None"
-msgstr "Libellé X. Par défaut, None."
+msgstr ""
 
-#, fuzzy
 msgid "Y label. Defaults to None"
-msgstr "Libellé Y. Par défaut, None."
+msgstr ""
 
 msgid "group id in which to add the signal. Defaults to \"\""
 msgstr ""
@@ -221,33 +216,31 @@ msgid "if True, set the added signal as current"
 msgstr ""
 
 msgid "Returns"
-msgstr "Renvoie"
+msgstr ""
 
 msgid "True if signal was added successfully, False otherwise"
-msgstr "True si le signal a été ajouté avec succès, False sinon"
+msgstr ""
 
 msgid "Invalid xdata dtype"
-msgstr "Type de données xdata non valide"
+msgstr ""
 
 msgid "Invalid ydata dtype"
-msgstr "Type de données ydata non valide"
+msgstr ""
 
 msgid "Add image data to DataLab."
-msgstr "Ajouter des données d'image à DataLab."
+msgstr ""
 
 msgid "Image title"
-msgstr "Titre de l'image"
+msgstr ""
 
 msgid "Image data"
-msgstr "Données de l'image"
+msgstr ""
 
-#, fuzzy
 msgid "Z unit. Defaults to None"
-msgstr "Unité Z. Par défaut, None."
+msgstr ""
 
-#, fuzzy
 msgid "Z label. Defaults to None"
-msgstr "Libellé Z. Par défaut, None."
+msgstr ""
 
 msgid "group id in which to add the image. Defaults to \"\""
 msgstr ""
@@ -256,16 +249,17 @@ msgid "if True, set the added image as current"
 msgstr ""
 
 msgid "True if image was added successfully, False otherwise"
-msgstr "True si l'image a été ajoutée avec succès, False sinon"
+msgstr ""
 
 msgid "Invalid data dtype"
-msgstr "Type de données non valide"
+msgstr ""
 
 msgid "Add object to DataLab."
-msgstr "Ajouter un objet à DataLab."
+msgstr ""
 
+#, fuzzy
 msgid "Signal or image object"
-msgstr "Objet signal ou image"
+msgstr "Basculer vers le panneau de signal ou d'image"
 
 msgid "group id in which to add the object. Defaults to \"\""
 msgstr ""
@@ -273,305 +267,301 @@ msgstr ""
 msgid "if True, set the added object as current"
 msgstr ""
 
-msgid "Call compute function ``name`` in current panel's processor."
-msgstr "Appeler la fonction de calcul ``name`` dans le processeur du panneau en cours."
+msgid "Call computation feature ``name``"
+msgstr ""
+
+msgid "This calls either the processor's ``compute_<name>`` method (if it exists), or the processor's ``<name>`` computation feature (if it is registered, using the ``run_feature`` method). It looks for the function in all panels, starting with the current one."
+msgstr ""
 
 msgid "Compute function name"
-msgstr "Nom de la fonction de calcul"
+msgstr ""
 
 msgid "Compute function parameter. Defaults to None."
-msgstr "Paramètre de la fonction de calcul. Par défaut, None."
+msgstr ""
 
 msgid "unknown function"
 msgstr ""
 
+#, fuzzy
 msgid "Get object (signal/image) from index."
-msgstr "Obtenir un objet (signal/image) à partir de l'index."
+msgstr "Ouvrir un signal ou une image à partir d'un fichier"
 
 msgid "Object number, or object id, or object title. Defaults to None (current object)."
-msgstr "Numéro d'objet, ou identifiant d'objet, ou titre d'objet. Par défaut, None (objet en cours)."
+msgstr ""
 
 msgid "Panel name. Defaults to None (current panel)."
-msgstr "Nom du panneau. Par défaut, None (panneau en cours)."
+msgstr ""
 
 msgid "Object"
-msgstr "Objet"
+msgstr ""
 
 msgid "if object not found"
-msgstr "si l'objet n'est pas trouvé"
+msgstr ""
 
 msgid "Get plot item shapes associated to object (signal/image)."
-msgstr "Obtenir les formes géométriques des éléments de tracé associés à l'objet (signal/image)."
+msgstr ""
 
 msgid "List of plot item shapes"
-msgstr "Liste des formes géométriques des éléments de tracé"
+msgstr ""
 
 msgid "Add object annotations (annotation plot items)."
-msgstr "Ajouter des annotations d'objet (éléments de tracé d'annotation)."
+msgstr ""
 
 msgid "annotation plot items"
-msgstr "éléments de tracé d'annotation"
+msgstr ""
 
 msgid "refresh plot. Defaults to True."
-msgstr "rafraîchir le tracé. Par défaut, True."
+msgstr ""
 
 msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
-msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé."
+msgstr ""
 
-#, fuzzy
 msgid "Add group to DataLab."
-msgstr "Ajouter un objet à DataLab."
+msgstr ""
 
-#, fuzzy
 msgid "Group title"
-msgstr "Titre de l'image"
+msgstr ""
 
-#, fuzzy
 msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
-msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé. Par défaut, None."
+msgstr ""
 
-#, fuzzy
 msgid "Select the group after creation. Defaults to False."
-msgstr "Conserver la ROI. Par défaut, False."
+msgstr ""
 
 msgid "Add a label with object title on the associated plot"
-msgstr "Ajouter une étiquette avec le titre de l'objet sur le tracé associé"
+msgstr ""
 
 msgid "Label title. Defaults to None. If None, the title is the object title."
-msgstr "Titre de l'étiquette. Par défaut, None. Si None, le titre est le titre de l'objet."
+msgstr ""
 
+#, fuzzy
 msgid "Close DataLab application"
-msgstr "Fermer l'application DataLab"
+msgstr "Depuis une application tierce"
 
 msgid "Return a context manager to temporarily disable auto refresh."
-msgstr "Renvoie un gestionnaire de contexte pour désactiver temporairement le rafraîchissement automatique."
+msgstr ""
 
 msgid "Context manager"
-msgstr "Gestionnaire de contexte"
+msgstr ""
 
+#, fuzzy
 msgid "Example"
-msgstr "Exemple"
+msgstr "Exemples"
 
 msgid "Delete metadata of selected objects"
-msgstr "Supprimer les métadonnées des objets sélectionnés"
+msgstr ""
 
 msgid "Refresh plot. Defaults to True."
-msgstr "Rafraîchir le tracé. Par défaut, True."
+msgstr ""
 
 msgid "Keep ROI. Defaults to False."
-msgstr "Conserver la ROI. Par défaut, False."
+msgstr ""
 
 msgid "Return current panel name."
-msgstr "Renvoie le nom du panneau en cours."
+msgstr ""
 
 msgid "\"signal\", \"image\", \"macro\"))"
-msgstr "\"signal\", \"image\", \"macro\"))"
+msgstr ""
 
 msgid "Return type"
-msgstr "Type de retour"
+msgstr ""
 
 msgid "Return groups titles and lists of inner objects uuids and titles."
-msgstr "Renvoie les titres des groupes et les listes des uuids et titres des objets internes."
+msgstr ""
 
 msgid "groups titles, lists of inner objects uuids and titles"
-msgstr "titres des groupes, listes des uuids et titres des objets internes"
+msgstr ""
 
 msgid "Get object (signal/image) list for current panel. Objects are sorted by group number and object index in group."
-msgstr "Obtenir la liste des objets (signal/image) pour le panneau en cours. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
+msgstr ""
 
 msgid "panel name (valid values: \"signal\", \"image\", \"macro\"). If None, current data panel is used (i.e. signal or image panel)."
-msgstr "nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\"). Si None, le panneau de données en cours est utilisé (c'est-à-dire le panneau de signal ou d'image)."
+msgstr ""
 
+#, fuzzy
 msgid "List of object titles"
-msgstr "Liste des titres des objets"
+msgstr "Obtenir la liste des objets"
 
 msgid "if panel not found"
-msgstr "si le panneau n'est pas trouvé"
+msgstr ""
 
 msgid "Get object (signal/image) uuid list for current panel. Objects are sorted by group number and object index in group."
-msgstr "Obtenir la liste des uuids des objets (signal/image) pour le panneau en cours. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
+msgstr ""
+
+msgid "Group number, or group id, or group title. Defaults to None (all groups)."
+msgstr ""
 
 #, fuzzy
-msgid "Group number, or group id, or group title. Defaults to None (all groups)."
-msgstr "Numéro de macro, ou titre de macro. Par défaut, None (macro en cours)."
-
 msgid "List of object uuids"
-msgstr "Liste des uuid des objets"
+msgstr "Obtenir la liste des objets"
 
 msgid "Return all public methods of the class, except itself."
-msgstr "Renvoie toutes les méthodes publiques de la classe, sauf elle-même."
+msgstr ""
 
 msgid "List of public methods"
-msgstr "Liste des méthodes publiques"
+msgstr ""
 
 msgid "Return selected objects uuids."
-msgstr "Renvoie les uuids des objets sélectionnés."
+msgstr ""
 
 msgid "If True, also return objects from selected groups."
-msgstr "Si True, renvoie également les objets des groupes sélectionnés."
+msgstr ""
 
 msgid "List of selected objects uuids."
-msgstr "Liste des uuids des objets sélectionnés."
+msgstr ""
 
 msgid "Return DataLab public version."
-msgstr "Renvoie la version de DataLab."
+msgstr ""
 
 msgid "DataLab version"
-msgstr "Version de DataLab"
+msgstr ""
 
 msgid "Open DataLab HDF5 browser to Import HDF5 file."
-msgstr "Ouvrir le navigateur HDF5 de DataLab pour importer un fichier HDF5."
-
-msgid "HDF5 file name"
-msgstr "Nom du fichier HDF5"
-
-msgid "Reset all application data. Defaults to None."
-msgstr "Réinitialiser toutes les données de l'application. Par défaut, None."
-
-msgid "Import macro from file"
-msgstr "Importer une macro à partir d'un fichier"
-
-msgid "Filename."
-msgstr "Nom du fichier."
+msgstr ""
 
 #, fuzzy
+msgid "HDF5 file name"
+msgstr "Parcourir un fichier HDF5"
+
+msgid "Reset all application data. Defaults to None."
+msgstr ""
+
+msgid "Import macro from file"
+msgstr ""
+
+msgid "Filename."
+msgstr ""
+
 msgid "Open objects from directory in current panel (signals/images)."
-msgstr "Ouvrir des objets à partir de fichiers dans le panneau en cours "
+msgstr ""
 
 msgid "directory path"
 msgstr ""
 
 msgid "Open objects from files in current panel (signals/images)."
-msgstr "Ouvrir des objets à partir de fichiers dans le panneau en cours "
+msgstr ""
 
 msgid "list of file names"
-msgstr "liste des noms de fichiers"
+msgstr ""
 
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
-msgstr "Ouvrir un fichier HDF5 de DataLab ou importer à partir de tout autre fichier HDF5."
+msgstr ""
 
 msgid "List of HDF5 files to open. Defaults to None."
-msgstr "Liste des fichiers HDF5 à ouvrir. Par défaut, None."
+msgstr ""
 
 msgid "Import all objects from HDF5 files. Defaults to None."
-msgstr "Importer tous les objets à partir des fichiers HDF5. Par défaut, None."
+msgstr ""
 
 msgid "Raise DataLab window"
-msgstr "Faire apparaître la fenêtre de DataLab"
+msgstr ""
 
 msgid "Reset all application data"
-msgstr "Réinitialiser toutes les données de l'application"
+msgstr ""
 
 msgid "Run macro."
-msgstr "Exécute la macro."
+msgstr ""
 
 msgid "Macro number, or macro title. Defaults to None (current macro)."
-msgstr "Numéro de macro, ou titre de macro. Par défaut, None (macro en cours)."
+msgstr ""
 
 msgid "if macro not found"
-msgstr "si la macro n'est pas trouvée"
+msgstr ""
 
+#, fuzzy
 msgid "Save to a DataLab HDF5 file."
-msgstr "Enregistrer dans un fichier HDF5 de DataLab."
+msgstr "Enregistrer la session en cours dans un fichier HDF5"
 
 msgid "Select groups in current panel."
-msgstr "Sélectionner des groupes dans le panneau en cours."
+msgstr ""
 
 msgid "List of group numbers (1 to N), or list of group uuids, or None to select all groups. Defaults to None."
-msgstr "Liste des numéros de groupe (1 à N), ou liste des uuids de groupe, ou None pour sélectionner tous les groupes. Par défaut, None."
+msgstr ""
 
 msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used. Defaults to None."
-msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé. Par défaut, None."
+msgstr ""
 
 msgid "Select objects in current panel."
-msgstr "Sélectionner des objets dans le panneau en cours."
+msgstr ""
 
 msgid "List of object numbers (1 to N) or uuids to select"
-msgstr "Liste des numéros d'objet (1 à N) ou uuids à sélectionner"
+msgstr ""
 
+#, fuzzy
 msgid "Switch to panel."
-msgstr "Basculer vers le panneau."
+msgstr "Basculer vers le panneau de signal ou d'image"
 
 msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
-msgstr "Nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\"))"
+msgstr ""
 
 msgid "Stop macro."
-msgstr "Arrête la macro."
+msgstr ""
 
 msgid "Toggle auto refresh state."
-msgstr "Basculer l'état du rafraîchissement automatique."
+msgstr ""
 
 msgid "Auto refresh state"
-msgstr "État du rafraîchissement automatique"
+msgstr ""
 
 msgid "Toggle show titles state."
-msgstr "Basculer l'état d'affichage des titres."
+msgstr ""
 
 msgid "Show titles state"
-msgstr "État d'affichage des titres"
+msgstr ""
 
 msgid "Public API: additional methods"
-msgstr "API publique : méthodes supplémentaires"
+msgstr ""
 
 msgid "The remote control class methods (either using the proxy or the remote client) may be completed with additional methods which are dynamically added at runtime. This mechanism allows to access the methods of the processors of DataLab (see :mod:`datalab.gui.processor`)."
-msgstr "Les méthodes de la classe de contrôle à distance (en utilisant le proxy ou le client distant) peuvent être complétées par des méthodes supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce mécanisme permet d'accéder aux méthodes des processeurs de DataLab (voir :mod:`datalab.gui.processor`)."
+msgstr ""
 
 msgid "Signal processor"
-msgstr "Processeur de signal"
+msgstr ""
 
 msgid "When working with signals, the methods of :class:`datalab.gui.processor.signal.SignalProcessor` may be accessed."
-msgstr "Lorsque vous travaillez avec des signaux, les méthodes de :class:`datalab.gui.processor.signal.SignalProcessor` peuvent être accédées."
+msgstr ""
 
 msgid "Object handling signal processing: operations, processing, analysis"
-msgstr "Objet de traitement de signal : opérations, traitement, analyse"
+msgstr ""
 
 msgid "Register signal computations"
 msgstr ""
 
-#, fuzzy
 msgid "Compute offset correction with :py:func:`sigima.proc.signal.offset_correction`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid "Compute all stability analysis features using the following functions:"
 msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.signal.allan_variance`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.signal.allan_deviation`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.signal.overlapping_allan_variance`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.signal.modified_allan_variance`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.signal.hadamard_variance`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.signal.total_variance`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.signal.time_deviation`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Detect peaks from data with :py:func:`sigima.proc.signal.peak_detection`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid "Compute polynomial fitting curve"
-msgstr "Calculer la courbe de régression polynomiale"
+msgstr ""
 
 msgid "Compute fitting curve using an interactive dialog"
-msgstr "Calculer la courbe de régression avec une boîte de dialogue interactive"
+msgstr ""
 
 msgid "Title of the dialog"
 msgstr ""
@@ -580,66 +570,55 @@ msgid "Fitting dialog function"
 msgstr ""
 
 msgid "Compute multi-Gaussian fitting curve using an interactive dialog"
-msgstr "Calculer la courbe de régression multi-gaussienne avec une boîte de dialogue interactive"
+msgstr ""
 
-#, fuzzy
 msgid "Compute full width at a given y with :py:func:`sigima.proc.signal.full_width_at_y`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Compute x at y with :py:func:`sigima.proc.signal.x_at_y`."
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Compute y at x with :py:func:`sigima.proc.signal.y_at_x`."
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid "Image processor"
-msgstr "Processeur d'image"
+msgstr ""
 
 msgid "When working with images, the methods of :class:`datalab.gui.processor.image.ImageProcessor` may be accessed."
-msgstr "Lorsque vous travaillez avec des images, les méthodes de :class:`datalab.gui.processor.image.ImageProcessor` peuvent être accédées."
+msgstr ""
 
 msgid "Object handling image processing: operations, processing, analysis"
-msgstr "Objet de traitement d'image : opérations, traitement, analyse"
+msgstr ""
 
-#, fuzzy
 msgid "Register image computations"
-msgstr "Réinitialiser les positions des images"
+msgstr ""
 
-#, fuzzy
 msgid "Resize image with :py:func:`sigima.proc.image.resize`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Binning image with :py:func:`sigima.proc.image.binning`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Compute profile along a vertical or horizontal line with :py:func:`sigima.proc.image.line_profile`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Compute profile along a segment with :py:func:`sigima.proc.image.segment_profile`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Compute average profile with :py:func:`sigima.proc.image.average_profile`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid "Compute radial profile with :py:func:`sigima.proc.image.radial_profile`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid "Distribute images on a grid"
-msgstr "Distribuer les images sur une grille"
+msgstr ""
 
 msgid "Reset image positions"
-msgstr "Réinitialiser les positions des images"
+msgstr ""
 
-#, fuzzy
 msgid "Compute offset correction with :py:func:`sigima.proc.image.offset_correction`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid "Compute all threshold algorithms using the following functions:"
 msgstr ""
@@ -659,16 +638,14 @@ msgstr ""
 msgid ":py:func:`sigima.proc.image.threshold.threshold_otsu`"
 msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.threshold.threshold_triangle`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.threshold.threshold_yen`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid "Compute all denoising filters using the following functions:"
-msgstr "Calculer tous les filtres de débruitage en utilisant les fonctions suivantes :"
+msgstr ""
 
 msgid ":py:func:`sigima.proc.image.restoration.denoise_tv`"
 msgstr ""
@@ -679,42 +656,35 @@ msgstr ""
 msgid ":py:func:`sigima.proc.image.restoration.denoise_wavelet`"
 msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.restoration.denoise_tophat`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid "Compute all morphology filters using the following functions:"
-msgstr "Calculer tous les filtres de morphologie en utilisant les fonctions suivantes :"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.morphology.white_tophat`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid ":py:func:`sigima.proc.image.morphology.black_tophat`"
 msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.morphology.erosion`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.morphology.dilation`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.morphology.opening`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.morphology.closing`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid "Compute all edges filters using the following functions:"
 msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.edges.roberts`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid ":py:func:`sigima.proc.image.edges.prewitt`"
 msgstr ""
@@ -728,13 +698,11 @@ msgstr ""
 msgid ":py:func:`sigima.proc.image.edges.sobel`"
 msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.edges.sobel_h`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.edges.sobel_v`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid ":py:func:`sigima.proc.image.edges.scharr`"
 msgstr ""
@@ -745,9 +713,8 @@ msgstr ""
 msgid ":py:func:`sigima.proc.image.edges.scharr_v`"
 msgstr ""
 
-#, fuzzy
 msgid ":py:func:`sigima.proc.image.edges.farid`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
 
 msgid ":py:func:`sigima.proc.image.edges.farid_h`"
 msgstr ""
@@ -758,6 +725,6 @@ msgstr ""
 msgid ":py:func:`sigima.proc.image.edges.laplace`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute 2D peak detection with :py:func:`sigima.proc.image.peak_detection`"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
+

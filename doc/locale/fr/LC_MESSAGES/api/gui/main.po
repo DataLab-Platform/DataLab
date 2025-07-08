@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-05 12:29+0200\n"
+"POT-Creation-Date: 2025-07-08 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "Main window"
 msgstr "Fenêtre principale"
@@ -49,9 +49,8 @@ msgstr "Retourne les titres des groupes et les listes des uuids et titres des ob
 msgid "Returns"
 msgstr ""
 
-#, fuzzy
 msgid "Groups titles, lists of inner objects uuids and titles"
-msgstr "Retourne les titres des groupes et les listes des uuids et titres des objets internes."
+msgstr ""
 
 msgid "Get object (signal/image) list for current panel. Objects are sorted by group number and object index in group."
 msgstr ""
@@ -239,7 +238,10 @@ msgstr ""
 msgid "unknown panel"
 msgstr ""
 
-msgid "Call compute function ``name`` in current panel's processor."
+msgid "Call computation feature ``name``"
+msgstr ""
+
+msgid "This calls either the processor's ``compute_<name>`` method (if it exists), or the processor's ``<name>`` computation feature (if it is registered, using the ``run_feature`` method). It looks for the function in all panels, starting with the current one."
 msgstr ""
 
 msgid "Compute function name"
