@@ -61,16 +61,16 @@ Supported features
 
 Supported features are the following:
 
-  - Switch to signal or image panel
-  - Remove all signals and images
-  - Save current session to a HDF5 file
-  - Open HDF5 files into current session
-  - Browse HDF5 file
-  - Open a signal or an image from file
-  - Add a signal
-  - Add an image
-  - Get object list
-  - Run calculation with parameters
+- Switch to signal or image panel
+- Remove all signals and images
+- Save current session to a HDF5 file
+- Open HDF5 files into current session
+- Browse HDF5 file
+- Open a signal or an image from file
+- Add a signal
+- Add an image
+- Get object list
+- Run calculation with parameters
 
 .. note::
 
@@ -79,12 +79,12 @@ Supported features are the following:
 Some examples are provided to help implementing such a communication
 between your application and DataLab:
 
-  - See module: ``datalab.tests.remoteclient_app``
-  - See module: ``datalab.tests.remoteclient_unit``
+- See module: ``datalab.tests.features.control.remoteclient_app_test``
+- See module: ``datalab.tests.features.control.remoteclient_unit``
 
 .. figure:: /images/shots/remote_control_test.png
 
-    Screenshot of remote client application test (``datalab.tests.remoteclient_app``)
+    Screenshot of remote client application test (``datalab.tests.features.control.remoteclient_app_test``)
 
 Examples
 ^^^^^^^^
@@ -123,33 +123,6 @@ Public API: remote client
 .. autoclass:: datalab.remote.RemoteClient
     :inherited-members:
 
-Public API: additional methods
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The remote control class methods (either using the proxy or the remote client)
-may be completed with additional methods which are dynamically added at
-runtime. This mechanism allows to access the methods of the processors of DataLab
-(see :mod:`datalab.gui.processor`).
-
-Signal processor
-~~~~~~~~~~~~~~~~
-
-When working with signals, the methods of :class:`datalab.gui.processor.signal.SignalProcessor`
-may be accessed.
-
-.. automodule:: datalab.gui.processor.signal
-    :members:
-    :no-index:
-
-Image processor
-~~~~~~~~~~~~~~~
-
-When working with images, the methods of :class:`datalab.gui.processor.image.ImageProcessor`
-may be accessed.
-
-.. automodule:: datalab.gui.processor.image
-    :members:
-    :no-index:
 
 .. _XML-RPC: https://docs.python.org/3/library/xmlrpc.html
 
