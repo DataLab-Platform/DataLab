@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 14:49+0200\n"
+"POT-Creation-Date: 2025-07-08 17:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,74 +19,77 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Algorithms (:mod:`sigima.tools`)"
-msgstr ""
+msgid "Tools (:mod:`sigima.tools`)"
+msgstr "Outils (:mod:`sigima.tools`)"
 
-msgid "This package contains the algorithms used by the DataLab project. Those algorithms operate directly on NumPy arrays and are designed to be used in the DataLab pipeline, but can be used independently as well."
-msgstr ""
+msgid "This package contains functions operating on NumPy arrays that are intended to be used in Sigima computation functions. These functions are complementary to the algorithms provided by external libraries such as SciPy, NumPy, and scikit-image."
+msgstr "Ce paquet contient des fonctions opérant sur des tableaux NumPy qui sont destinées à être utilisées dans les fonctions de calcul Sigima. Ces fonctions sont complémentaires aux algorithmes fournis par des bibliothèques externes telles que SciPy, NumPy et scikit-image."
 
-msgid "The :mod:`sigima.tools` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima.proc` package for algorithms that operate directly on DataLab objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`)."
-msgstr ""
+msgid "Even though these functions are primarily designed to be used in the Sigima pipeline, they can also be used independently. They provide a wide range of algorithms but are not exhaustive due to the vast number of algorithms already available in the scientific Python ecosystem."
+msgstr "Bien que ces fonctions soient principalement conçues pour être utilisées dans le pipeline Sigima, elles peuvent également être utilisées de manière indépendante. Elles offrent une large gamme d'algorithmes mais ne sont pas exhaustives en raison du grand nombre d'algorithmes déjà disponibles dans l'écosystème scientifique Python."
+
+msgid "The :mod:`sigima.proc` contains the Sigima computation functions that operate on signal and image objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`, defined in the :mod:`sigima.objects` package)."
+msgstr "Le :mod:`sigima.proc` contient les fonctions de calcul Sigima qui opèrent sur les objets signal et image (c'est-à-dire :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`, définis dans le paquet :mod:`sigima.objects`)."
 
 msgid "The algorithms are organized in subpackages according to their purpose. The following subpackages are available:"
-msgstr ""
+msgstr "Les algorithmes sont organisés en sous-paquets selon leur objectif. Les sous-paquets suivants sont disponibles :"
 
 msgid ":mod:`sigima.tools.signal`: Signal processing algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal`: Algorithmes de traitement du signal"
 
 msgid ":mod:`sigima.tools.image`: Image processing algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.image`: Algorithmes de traitement d'image"
 
 msgid ":mod:`sigima.tools.datatypes`: Data type conversion algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.datatypes`: Algorithmes de conversion de type de données"
 
 msgid ":mod:`sigima.tools.coordinates`: Coordinate conversion algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.coordinates`: Algorithmes de conversion de coordonnées"
 
 msgid "Signal Processing Algorithms"
-msgstr ""
+msgstr "Algorithmes de traitement du signal"
 
 msgid "Signal Processing Algorithms (:mod:`sigima.tools.signal`)"
-msgstr ""
+msgstr "Algorithmes de traitement du signal (:mod:`sigima.tools.signal`)"
 
 msgid "This package contains signal processing algorithms."
-msgstr ""
+msgstr "Ce paquet contient des algorithmes de traitement du signal."
 
 msgid "Algorithms are organized into subpackages according to their purpose:"
-msgstr ""
+msgstr "Les algorithmes sont organisés en sous-paquets selon leur objectif :"
 
 msgid ":mod:`sigima.tools.signal.dynamic`: Dynamic parameter extraction"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.dynamic`: Extraction de paramètres dynamiques"
 
 msgid ":mod:`sigima.tools.signal.features`: Feature extraction algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.features`: Algorithmes d'extraction de caractéristiques"
 
 msgid ":mod:`sigima.tools.signal.fitmodels`: Curve fitting models"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.fitmodels`: Modèles d'ajustement de courbe"
 
 msgid ":mod:`sigima.tools.signal.fourier`: Fourier analysis algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.fourier`: Algorithmes d'analyse de Fourier"
 
 msgid ":mod:`sigima.tools.signal.interpolation`: Interpolation algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.interpolation`: Algorithmes d'interpolation"
 
 msgid ":mod:`sigima.tools.signal.peakdetection`: Peak detection algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.peakdetection`: Algorithmes de détection de pics"
 
 msgid ":mod:`sigima.tools.signal.pulse`: Pulse analysis algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.pulse`: Algorithmes d'analyse d'impulsions"
 
 msgid ":mod:`sigima.tools.signal.scaling`: Scaling algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.scaling`: Algorithmes de mise à l'échelle"
 
 msgid ":mod:`sigima.tools.signal.stability`: Stability analysis algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.stability`: Algorithmes d'analyse de stabilité"
 
 msgid ":mod:`sigima.tools.signal.windowing`: Windowing algorithms"
-msgstr ""
+msgstr ":mod:`sigima.tools.signal.windowing`: Algorithmes de fenêtrage"
 
 msgid "Dynamic Parameter Extraction"
-msgstr ""
+msgstr "Extraction de paramètres dynamiques"
 
 msgid "Sinusoidal model function."
 msgstr ""
@@ -173,7 +176,7 @@ msgid "Sampling rate"
 msgstr ""
 
 msgid "Feature Extraction Algorithms"
-msgstr ""
+msgstr "Algorithmes d'extraction de caractéristiques"
 
 msgid "Find the left indices of the zero-crossing intervals in the given array."
 msgstr ""
@@ -245,7 +248,7 @@ msgid "Contrast"
 msgstr ""
 
 msgid "Curve Fitting Models"
-msgstr ""
+msgstr "Modèles d'ajustement de courbe"
 
 msgid "Curve fitting model base class"
 msgstr ""
@@ -275,7 +278,7 @@ msgid "1-dimensional Voigt fit model"
 msgstr ""
 
 msgid "Fourier Analysis Algorithms"
-msgstr ""
+msgstr "Algorithmes d'analyse de Fourier"
 
 msgid "Append n zeros at the end of the signal."
 msgstr ""
@@ -347,7 +350,7 @@ msgid "Sorted frequencies in ascending order"
 msgstr ""
 
 msgid "Interpolation Algorithms"
-msgstr ""
+msgstr "Algorithmes d'interpolation"
 
 msgid "Interpolate data."
 msgstr ""
@@ -365,7 +368,7 @@ msgid "Interpolated Y data"
 msgstr ""
 
 msgid "Peak Detection Algorithms"
-msgstr ""
+msgstr "Algorithmes de détection de pics"
 
 msgid "Peak detection routine."
 msgstr ""
@@ -395,7 +398,7 @@ msgid "Peak X-position"
 msgstr ""
 
 msgid "Pulse Analysis Algorithms"
-msgstr ""
+msgstr "Algorithmes d'analyse d'impulsions"
 
 msgid "Compute the full width at a given y level using zero-crossing method."
 msgstr ""
@@ -428,7 +431,7 @@ msgid "FW at 1/e² segment coordinates"
 msgstr ""
 
 msgid "Scaling Algorithms"
-msgstr ""
+msgstr "Algorithmes de mise à l'échelle"
 
 msgid "Normalize input array to a given parameter."
 msgstr ""
@@ -440,7 +443,7 @@ msgid "Normalized array"
 msgstr ""
 
 msgid "Stability Analysis Algorithms"
-msgstr ""
+msgstr "Algorithmes d'analyse de stabilité"
 
 msgid "Calculate the Allan variance for given time and measurement values at specified tau values."
 msgstr ""
@@ -506,7 +509,7 @@ msgid "Time deviation values"
 msgstr ""
 
 msgid "Windowing Algorithms"
-msgstr ""
+msgstr "Algorithmes de fenêtrage"
 
 msgid "Get the window function."
 msgstr ""
@@ -542,7 +545,7 @@ msgid "Windowed Y data"
 msgstr ""
 
 msgid "Image Processing Algorithms"
-msgstr ""
+msgstr "Algorithmes de traitement d'image"
 
 msgid "Scale array `data` to fit [zmin, zmax] dynamic range"
 msgstr ""
@@ -842,7 +845,7 @@ msgid "The maximum blob convexity."
 msgstr ""
 
 msgid "Data Type Conversion Algorithms"
-msgstr ""
+msgstr "Algorithmes de conversion de type de données"
 
 msgid "Convert array to a new data type, after having clipped values to the new data type's range if it is an integer type. If data type is not integer, this is equivalent to ``data.astype(dtype)``."
 msgstr ""
@@ -857,7 +860,7 @@ msgid "Array converted to new data type"
 msgstr ""
 
 msgid "Coordinate Conversion Algorithms"
-msgstr ""
+msgstr "Algorithmes de conversion de coordonnées"
 
 msgid "Convert circle center and radius to X diameter coordinates"
 msgstr ""
@@ -1041,4 +1044,3 @@ msgstr ""
 
 msgid "Tuple of (x, y) coordinates of rotated vector"
 msgstr ""
-

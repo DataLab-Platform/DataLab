@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 14:49+0200\n"
+"POT-Creation-Date: 2025-07-08 17:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -20,34 +20,37 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 msgid "Computation (:mod:`sigima.proc`)"
-msgstr ""
+msgstr "Calculs (:mod:`sigima.proc`)"
 
-msgid "This package contains the computation functions used by the DataLab project. Those functions operate directly on DataLab objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`) and are designed to be used in the DataLab pipeline, but can be used independently as well."
-msgstr ""
+msgid "This package contains the Sigima computation functions that implement processing features for signal and image objects. These functions are designed to operate directly on :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj` objects, which are defined in the :mod:`sigima.objects` package."
+msgstr "Ce paquet contient les fonctions de calcul Sigima qui implémentent des fonctionnalités de traitement pour les objets signal et image. Ces fonctions sont conçues pour fonctionner directement sur les objets :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`, qui sont définis dans le paquet :mod:`sigima.objects`."
 
-msgid "The :mod:`sigima.proc` package is the main entry point for the DataLab computation functions when manipulating DataLab objects. See the :mod:`sigima.tools` package for algorithms that operate directly on NumPy arrays."
-msgstr ""
+msgid "Even though these functions are primarily designed to be used in the Sigima pipeline, they can also be used independently."
+msgstr "Bien que ces fonctions soient principalement conçues pour être utilisées dans le pipeline Sigima, elles peuvent également être utilisées de manière indépendante."
 
-msgid "Each computation module defines a set of computation objects, that is, functions that implement processing features and classes that implement the corresponding parameters (in the form of :py:class:`guidata.dataset.datatypes.Dataset` subclasses). The computation functions takes a DataLab object (e.g. :class:`sigima.objects.SignalObj`) and a parameter object (e.g. :py:class:`sigima.params.MovingAverageParam`) as input and return a DataLab object as output (the result of the computation). The parameter object is used to configure the computation function (e.g. the size of the moving average window)."
-msgstr ""
+msgid "See the :mod:`sigima.tools` package for some algorithms that operate directly on NumPy arrays."
+msgstr "Voir le paquet :mod:`sigima.tools` pour certains algorithmes qui opèrent directement sur des tableaux NumPy."
 
-msgid "In DataLab overall architecture, the purpose of this package is to provide the computation functions that are used by the :mod:`sigima.core.gui.processor` module, based on the algorithms defined in the :mod:`sigima.tools` module and on the data model defined in the :mod:`sigima.objects` (or :mod:`sigima.core.model`) module."
-msgstr ""
+msgid "Each computation module defines a set of computation objects, that is, functions that implement processing features and classes that implement the corresponding parameters (in the form of :py:class:`guidata.dataset.datatypes.Dataset` subclasses). The computation functions takes a signal or image object (e.g. :py:class:`sigima.objects.SignalObj`) and a parameter object (e.g. :py:class:`sigima.params.MovingAverageParam`) as input and return a signal or image object as output (the result of the computation). The parameter object is used to configure the computation function (e.g. the size of the moving average window)."
+msgstr "Chaque module de calcul définit un ensemble d'objets de calcul, c'est-à-dire des fonctions qui implémentent des fonctionnalités de traitement et des classes qui implémentent les paramètres correspondants (sous la forme de sous-classes de :py:class:`guidata.dataset.datatypes.Dataset`). Les fonctions de calcul prennent un objet signal ou image (par exemple :py:class:`sigima.objects.SignalObj`) et un objet paramètre (par exemple :py:class:`sigima.params.MovingAverageParam`) en entrée et renvoient un objet signal ou image en sortie (le résultat du calcul). L'objet paramètre est utilisé pour configurer la fonction de calcul (par exemple, la taille de la fenêtre de moyenne mobile)."
+
+msgid "In Sigima overall architecture, the purpose of this package is to provide the computation functions that are used by the :mod:`sigima.core.gui.processor` module, based on the algorithms defined in the :mod:`sigima.tools` module and on the data model defined in the :mod:`sigima.objects` (or :mod:`sigima.core.model`) module."
+msgstr "Dans l'architecture globale de Sigima, le but de ce paquet est de fournir les fonctions de calcul qui sont utilisées par le module :mod:`sigima.core.gui.processor`, basées sur les algorithmes définis dans le module :mod:`sigima.tools` et sur le modèle de données défini dans le module :mod:`sigima.objects` (ou :mod:`sigima.core.model`)."
 
 msgid "The computation modules are organized in subpackages according to their purpose. The following subpackages are available:"
-msgstr ""
+msgstr "Les modules de calcul sont organisés en sous-packages selon leur objectif. Les sous-packages suivants sont disponibles :"
 
 msgid ":mod:`sigima.proc.base`: Common processing features"
-msgstr ""
+msgstr ":mod:`sigima.proc.base`: Fonctionnalités de traitement communes"
 
 msgid ":mod:`sigima.proc.signal`: Signal processing features"
-msgstr ""
+msgstr ":mod:`sigima.proc.signal`: Fonctionnalités de traitement des signaux"
 
 msgid ":mod:`sigima.proc.image`: Image processing features"
-msgstr ""
+msgstr ":mod:`sigima.proc.image`: Fonctionnalités de traitement des images"
 
 msgid "Common processing features"
-msgstr ""
+msgstr "Fonctionnalités de traitement communes"
 
 msgid "Arithmetic parameters"
 msgstr ""
@@ -309,7 +312,7 @@ msgid "Result properties object"
 msgstr ""
 
 msgid "Signal processing features"
-msgstr ""
+msgstr "Fonctionnalités de traitement des signaux"
 
 msgid "Restore data outside the Region Of Interest (ROI) of the input signal after a computation, only if the input signal has a ROI, and if the output signal has the same ROI as the input signal, and if the data types are the same, and if the shapes are the same. Otherwise, do nothing."
 msgstr ""
@@ -320,7 +323,7 @@ msgstr ""
 msgid "source signal object"
 msgstr ""
 
-msgid "Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce a 1 signal → 1 signal function, which can be used inside DataLab's infrastructure to perform computations with the Signal Processor object."
+msgid "Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce a 1 signal → 1 signal function, which can be used as a Sigima computation function and inside DataLab's infrastructure to perform computations with the Signal Processor object."
 msgstr ""
 
 msgid "This wrapping mechanism using a class is necessary for the resulted function to be pickable by the ``multiprocessing`` module."
@@ -1068,10 +1071,10 @@ msgid "An object containing the x-values at the minima and the maxima."
 msgstr ""
 
 msgid "Image processing features"
-msgstr ""
+msgstr "Fonctionnalités de traitement d'image"
 
-msgid "Base image processing features"
-msgstr ""
+msgid "Basic image processing"
+msgstr "Traitement d'image de base"
 
 msgid "Grid parameters"
 msgstr ""
@@ -1097,8 +1100,8 @@ msgstr ""
 msgid "New instance of :py:class:`GridParam`."
 msgstr ""
 
-msgid "Threshold features"
-msgstr ""
+msgid "Thresholding"
+msgstr "Seuillage"
 
 msgid "Threshold computation module"
 msgstr ""
@@ -1172,8 +1175,8 @@ msgstr ""
 msgid "Compute the threshold using the Yen algorithm with default parameters, see :py:func:`skimage.filters.threshold_yen`"
 msgstr ""
 
-msgid "Exposure correction features"
-msgstr ""
+msgid "Exposure correction"
+msgstr "Correction d'exposition"
 
 msgid "Exposure computation module"
 msgstr ""
@@ -1340,8 +1343,8 @@ msgstr ""
 msgid "Apply offset correction"
 msgstr ""
 
-msgid "Restoration features"
-msgstr ""
+msgid "Restoration"
+msgstr "Restauration"
 
 msgid "Restoration computation module"
 msgstr ""
@@ -1412,7 +1415,7 @@ msgstr ""
 msgid "Denoise using White Top-Hat with :py:func:`skimage.morphology.white_tophat`"
 msgstr ""
 
-msgid "Morphological features"
+msgid "Morphology"
 msgstr ""
 
 msgid "Morphology computation module"
@@ -1448,8 +1451,8 @@ msgstr ""
 msgid "Compute morphological closing with :py:func:`skimage.morphology.closing`"
 msgstr ""
 
-msgid "Edge detection features"
-msgstr ""
+msgid "Edge detection"
+msgstr "Détection de contours"
 
 msgid "Edges computation module"
 msgstr ""
@@ -1535,8 +1538,8 @@ msgstr ""
 msgid "Compute Laplace filter with :py:func:`skimage.filters.laplace`"
 msgstr ""
 
-msgid "Detection features"
-msgstr ""
+msgid "Detection"
+msgstr "Détection"
 
 msgid "Detection computation module"
 msgstr ""
@@ -1754,19 +1757,13 @@ msgstr ""
 msgid "Circle coordinates"
 msgstr ""
 
-msgid "Metadata for a computation function."
+msgid "Utilities"
 msgstr ""
 
-msgid "The name of the computation function."
+msgid "This package also provides some utility functions to help with the creation and introspection of computation functions:"
 msgstr ""
 
-msgid "str"
-msgstr ""
-
-msgid "A description or docstring for the computation function."
-msgstr ""
-
-msgid "Decorator to mark a function as a DataLab computation function."
+msgid "Decorator to mark a function as a Sigima computation function."
 msgstr ""
 
 msgid "Optional name to override the function name."
@@ -1778,16 +1775,16 @@ msgstr ""
 msgid "The wrapped function, tagged with a marker attribute."
 msgstr ""
 
-msgid "Check if a function is a DataLab computation function."
+msgid "Check if a function is a Sigima computation function."
 msgstr ""
 
 msgid "The function to check."
 msgstr ""
 
-msgid "True if the function is a DataLab computation function, False otherwise."
+msgid "True if the function is a Sigima computation function, False otherwise."
 msgstr ""
 
-msgid "Get the metadata of a DataLab computation function."
+msgid "Get the metadata of a Sigima computation function."
 msgstr ""
 
 msgid "The function to get metadata from."
@@ -1799,7 +1796,7 @@ msgstr ""
 msgid "Raises"
 msgstr ""
 
-msgid "If the function is not a DataLab computation function."
+msgid "If the function is not a Sigima computation function."
 msgstr ""
 
 msgid "Find all computation functions in the `sigima.proc` package."
@@ -1814,3 +1811,14 @@ msgstr ""
 msgid "A list of tuples, each containing the function name and the function object."
 msgstr ""
 
+msgid "Metadata for a computation function."
+msgstr ""
+
+msgid "The name of the computation function."
+msgstr ""
+
+msgid "str"
+msgstr ""
+
+msgid "A description or docstring for the computation function."
+msgstr ""

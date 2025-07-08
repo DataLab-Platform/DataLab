@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 14:49+0200\n"
+"POT-Creation-Date: 2025-07-08 17:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -20,13 +20,13 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 msgid "Model classes for signals and images (:mod:`sigima.objects`)"
-msgstr ""
+msgstr "Modèles de classes pour les signaux et les images (:mod:`sigima.objects`)"
 
-msgid "The :mod:`sigima.objects` module aims at providing all the necessary classes and functions to create and manipulate DataLab signal and image objects."
-msgstr ""
+msgid "The :mod:`sigima.objects` module aims at providing all the necessary classes and functions to create and manipulate Sigima signal and image objects."
+msgstr "Le module :mod:`sigima.objects` vise à fournir toutes les classes et fonctions nécessaires pour créer et manipuler des objets de signal et d'image Sigima."
 
 msgid "Those classes and functions are defined in submodules:"
-msgstr ""
+msgstr "Ces classes et fonctions sont définies dans des sous-modules :"
 
 msgid ":mod:`sigima.objects.base`"
 msgstr ""
@@ -38,7 +38,7 @@ msgid ":mod:`sigima.objects.signal`"
 msgstr ""
 
 msgid "Common objects"
-msgstr ""
+msgstr "Objets communs"
 
 msgid "Object representing properties serializable in signal/image metadata."
 msgstr ""
@@ -191,7 +191,7 @@ msgid "Normal-law random signal/image parameters"
 msgstr ""
 
 msgid "Signal model"
-msgstr ""
+msgstr "Modèle de signal"
 
 msgid "Signal object"
 msgstr ""
@@ -855,7 +855,7 @@ msgid "Mask (boolean array where True values are inside the ROI)"
 msgstr ""
 
 msgid "Image model"
-msgstr ""
+msgstr "Modèle d'image"
 
 msgid "Image object"
 msgstr ""
@@ -1096,4 +1096,3 @@ msgstr ""
 
 msgid "Float number stored with 64 bits"
 msgstr ""
-
