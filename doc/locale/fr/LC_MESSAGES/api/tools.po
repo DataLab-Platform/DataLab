@@ -28,8 +28,8 @@ msgstr "Ce paquet contient des fonctions opérant sur des tableaux NumPy qui son
 msgid "Even though these functions are primarily designed to be used in the Sigima pipeline, they can also be used independently. They provide a wide range of algorithms but are not exhaustive due to the vast number of algorithms already available in the scientific Python ecosystem."
 msgstr "Bien que ces fonctions soient principalement conçues pour être utilisées dans le pipeline Sigima, elles peuvent également être utilisées de manière indépendante. Elles offrent une large gamme d'algorithmes mais ne sont pas exhaustives en raison du grand nombre d'algorithmes déjà disponibles dans l'écosystème scientifique Python."
 
-msgid "The :mod:`sigima.proc` contains the Sigima computation functions that operate on signal and image objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`, defined in the :mod:`sigima.objects` package)."
-msgstr "Le :mod:`sigima.proc` contient les fonctions de calcul Sigima qui opèrent sur les objets signal et image (c'est-à-dire :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`, définis dans le paquet :mod:`sigima.objects`)."
+msgid "The :mod:`sigima.proc` module contains the Sigima computation functions that operate on signal and image objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`, defined in the :mod:`sigima.objects` package)."
+msgstr "Le module :mod:`sigima.proc` contient les fonctions de calcul Sigima qui opèrent sur les objets signal et image (c'est-à-dire :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`, définis dans le paquet :mod:`sigima.objects`)."
 
 msgid "The algorithms are organized in subpackages according to their purpose. The following subpackages are available:"
 msgstr "Les algorithmes sont organisés en sous-paquets selon leur objectif. Les sous-paquets suivants sont disponibles :"
