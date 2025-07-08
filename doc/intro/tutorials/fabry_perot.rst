@@ -223,8 +223,8 @@ To extract the intensity profile along the X axis, we have two options:
 
 Let's try the first option, by selecting the "Line profile..." entry |profile|:
 that is the most straightforward way to extract a profile from an image, and it
-corresponds to the ``compute_profile`` method of DataLab's API (so it can be used
-in a script, a plugin or a macro).
+corresponds to the ``calc("line_profile")`` computation feature of DataLab's API
+(so it can be used in a script, a plugin or a macro).
 
 .. figure:: ../../images/tutorials/fabry_perot/24.png
 

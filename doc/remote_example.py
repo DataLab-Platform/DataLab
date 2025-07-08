@@ -33,7 +33,7 @@ proxy.add_signal("toto", x, y)
 
 # %% Executing commands in DataLab (...)
 
-proxy.compute_derivative()
+proxy.calc("derivative")
 proxy.toggle_auto_refresh(True)  # Turning on auto-refresh
 
 # %% Executing commands in DataLab (...)
@@ -46,4 +46,4 @@ z = np.random.rand(400, 400)
 proxy.add_image("foobar", z)
 with proxy.context_no_refresh():
     for _idx in range(100):
-        proxy.compute_fft()
+        proxy.calc("fft")

@@ -25,7 +25,6 @@ DataLab base proxy module
 from __future__ import annotations
 
 import abc
-from collections.abc import Callable
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Generator
 
@@ -148,9 +147,9 @@ class AbstractDLControl(abc.ABC):
 
             >>> with proxy.context_no_refresh():
             ...     proxy.add_image("image1", data1)
-            ...     proxy.compute_fft()
-            ...     proxy.compute_wiener()
-            ...     proxy.compute_ifft()
+            ...     proxy.calc("fft")
+            ...     proxy.calc("wiener")
+            ...     proxy.calc("ifft")
             ...     # Auto refresh is disabled during the above operations
         """
         self.toggle_auto_refresh(False)
@@ -495,7 +494,14 @@ class AbstractDLControl(abc.ABC):
 
     @abc.abstractmethod
     def calc(self, name: str, param: gds.DataSet | None = None) -> gds.DataSet:
-        """Call compute function ``name`` in current panel's processor.
+        """Call computation feature ``name``
+
+        .. note::
+
+            This calls either the processor's ``compute_<name>`` method (if it exists),
+            or the processor's ``<name>`` computation feature (if it is registered,
+            using the ``run_feature`` method).
+            It looks for the function in all panels, starting with the current one.
 
         Args:
             name: Compute function name
@@ -504,34 +510,6 @@ class AbstractDLControl(abc.ABC):
         Raises:
             ValueError: unknown function
         """
-
-    def __getattr__(self, name: str) -> Callable:
-        """Return compute function ``name`` in current panel's processor.
-
-        Args:
-            name: Compute function name
-
-        Returns:
-            Callable: Compute function
-
-        Raises:
-            AttributeError: If compute function ``name`` does not exist
-        """
-
-        def compute_func(param: gds.DataSet | None = None) -> gds.DataSet:
-            """Compute function.
-
-            Args:
-                param: Compute function parameter. Defaults to None.
-
-            Returns:
-                Compute function result
-            """
-            return self.calc(name, param)
-
-        if name.startswith("compute_"):
-            return compute_func
-        raise AttributeError(f"DataLab has no compute function '{name}'")
 
 
 class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):

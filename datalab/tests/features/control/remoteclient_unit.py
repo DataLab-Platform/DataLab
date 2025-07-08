@@ -53,7 +53,7 @@ def multiple_commands(remote: RemoteProxy):
         remote.calc("log10")
 
         param = XYCalibrateParam.create(a=1.2, b=0.1)
-        remote.calc("compute_calibration", param)
+        remote.calc("calibration", param)
 
         time.sleep(2)  # Avoid permission error when trying to clean-up temporary files
 

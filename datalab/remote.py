@@ -528,7 +528,14 @@ class RemoteServer(QC.QThread):
 
     @remote_call
     def calc(self, name: str, param_data: list[str] | None = None) -> bool:
-        """Call compute function ``name`` in current panel's processor.
+        """Call computation feature ``name``
+
+        .. note::
+
+            This calls either the processor's ``compute_<name>`` method (if it exists),
+            or the processor's ``<name>`` computation feature (if it is registered,
+            using the ``run_feature`` method).
+            It looks for the function in all panels, starting with the current one.
 
         Args:
             name: Compute function name
@@ -975,7 +982,14 @@ class RemoteClient(BaseProxy):
         self._datalab.add_object(obj_data, group_id, set_current)
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
-        """Call compute function ``name`` in current panel's processor.
+        """Call computation feature ``name``
+
+        .. note::
+
+            This calls either the processor's ``compute_<name>`` method (if it exists),
+            or the processor's ``<name>`` computation feature (if it is registered,
+            using the ``run_feature`` method).
+            It looks for the function in all panels, starting with the current one.
 
         Args:
             name: Compute function name

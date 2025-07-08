@@ -99,9 +99,9 @@ def test_main_app():
 
         # Use "calc" method with parameters
         param = sigima.params.MovingMedianParam.create(n=5)
-        win.calc("compute_moving_median", param)
+        win.calc("moving_median", param)
         # Use "calc" method without parameters
-        win.calc("compute_integral")
+        win.calc("integral")
         # Use "calc" and choose an unknown computation method
         try:
             win.calc("unknown_method")

@@ -1181,7 +1181,14 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     @remote_controlled
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
-        """Call compute function ``name`` in current panel's processor.
+        """Call computation feature ``name``
+
+        .. note::
+
+            This calls either the processor's ``compute_<name>`` method (if it exists),
+            or the processor's ``<name>`` computation feature (if it is registered,
+            using the ``run_feature`` method).
+            It looks for the function in all panels, starting with the current one.
 
         Args:
             name: Compute function name
@@ -1190,26 +1197,30 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         Raises:
             ValueError: unknown function
         """
-        name = name.removeprefix("compute_")
         panels = [self.tabwidget.currentWidget()]
         panels.extend(self.panels)
         for panel in panels:
             if isinstance(panel, base.BaseDataPanel):
                 panel: base.BaseDataPanel
-                try:
-                    feature = panel.processor.get_feature(name)
-                    panel.processor.run_feature(feature, param)
+                # Some computation features are wrapped in a method with a
+                # "compute_" prefix, so we check for this first:
+                func = getattr(panel.processor, f"compute_{name}", None)
+                if func is not None:
+                    if param is None:
+                        func()
+                    else:
+                        func(param)
                     return
-                except ValueError:
-                    for funcname in (name, f"compute_{name}"):
-                        func = getattr(panel.processor, funcname, None)
-                        if func is not None:
-                            if param is None:
-                                func()
-                            else:
-                                func(param)
-                            return
-        raise ValueError(f"Unknown function {name}")
+                else:
+                    # If the function is not wrapped, we check if it is a
+                    # registered feature:
+                    try:
+                        feature = panel.processor.get_feature(name)
+                        panel.processor.run_feature(feature, param)
+                        return
+                    except ValueError:
+                        continue
+        raise ValueError(f"Unknown computation function {name}")
 
     # ------GUI refresh
     def has_objects(self) -> bool:

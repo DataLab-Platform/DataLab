@@ -7,9 +7,6 @@ Proxy objects (:mod:`datalab.proxy`)
 The :mod:`datalab.proxy` module provides a way to access DataLab features from a proxy
 class.
 
-The list of compute methods accessible from the proxy objects is available in the
-:ref:`processor_methods` section.
-
 Remote proxy
 ^^^^^^^^^^^^
 
@@ -62,25 +59,17 @@ the processor classes:
 - :class:`datalab.gui.processor.signal.SignalProcessor`
 - :class:`datalab.gui.processor.image.ImageProcessor`
 
-.. seealso::
-
-    The list of processor methods is available in tables below.
-
-There are two ways to call a processor method:
-
-1. Using the :meth:`calc` method of the proxy object:
+To run a computation feature associated to a processor, you can use the
+:meth:`calc` method of the proxy object:
 
 .. code-block:: python
 
     # Call a method without parameter
-    proxy.calc("compute_average")
-
-    # This is equivalent to:
     proxy.calc("average")
 
     # Call a method with parameters
     p = sigima.params.MovingAverageParam.create(n=30)
-    proxy.calc("compute_moving_average", p)
+    proxy.calc("moving_average", p)
 
 2. Directly calling the processor method from the proxy object:
 
@@ -305,7 +294,14 @@ class LocalProxy(BaseProxy):
         self._datalab.add_object(obj, group_id, set_current)
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
-        """Call compute function ``name`` in current panel's processor.
+        """Call computation feature ``name``
+
+        .. note::
+
+            This calls either the processor's ``compute_<name>`` method (if it exists),
+            or the processor's ``<name>`` computation feature (if it is registered,
+            using the ``run_feature`` method).
+            It looks for the function in all panels, starting with the current one.
 
         Args:
             name: Compute function name

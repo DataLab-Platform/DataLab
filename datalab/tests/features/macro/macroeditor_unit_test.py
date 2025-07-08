@@ -42,7 +42,7 @@ proxy = RemoteProxy()
 
 z = np.random.rand(20, 20)
 proxy.add_image("toto", z)
-proxy.compute_fft()
+proxy.calc("fft")
 
 print("All done! :)")
 """
