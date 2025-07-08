@@ -88,7 +88,7 @@ def shorten_docstring(docstring: str) -> str:
 
 def generate_csv_files() -> None:
     """Generate CSV files containing the validation status of compute functions"""
-    compute_functions = sigima.proc.find_computation_functions(sigima.proc)
+    compute_functions = sigima.proc.find_computation_functions()
     validation_tests = get_validation_tests(tests_pkg)
 
     submodules = {"signal": [], "image": []}
