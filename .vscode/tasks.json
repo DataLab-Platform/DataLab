@@ -128,6 +128,8 @@
                 "-m",
                 "sphinx_intl",
                 "update",
+                "-d",
+                "doc/locale",
                 "-p",
                 "build/gettext",
                 "-l",
@@ -220,7 +222,6 @@
             "type": "shell",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "sphinx-build",
                 "sphinx-intl update"
             ]
         },
