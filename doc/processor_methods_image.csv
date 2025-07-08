@@ -3,12 +3,12 @@
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_all_morphology`,Compute all morphology filters
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_all_threshold`,Compute all threshold algorithms
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_average_profile`,Compute average profile
-:py:func:`~datalab.gui.processor.image.ImageProcessor.compute_binning`,Binning image with :py:func:`sigima.computation.image.binning`
+:py:func:`~datalab.gui.processor.image.ImageProcessor.compute_binning`,Binning image with :py:func:`sigima.proc.image.binning`
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_line_profile`,Compute profile along a vertical or horizontal line
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_multiple_1_to_1`,Generic processing method: 1 object in → n objects out
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_offset_correction`,Compute offset correction
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_peak_detection`,Compute 2D peak detection
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_radial_profile`,Compute radial profile
-:py:func:`~datalab.gui.processor.image.ImageProcessor.compute_resize`,Resize image with :py:func:`sigima.computation.image.resize`
-:py:func:`~datalab.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data 
+:py:func:`~datalab.gui.processor.image.ImageProcessor.compute_resize`,Resize image with :py:func:`sigima.proc.image.resize`
+:py:func:`~datalab.gui.processor.image.ImageProcessor.compute_roi_extraction`,Extract Region Of Interest (ROI) from data
 :py:func:`~datalab.gui.processor.image.ImageProcessor.compute_segment_profile`,Compute profile along a segment

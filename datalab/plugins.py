@@ -42,7 +42,7 @@ from datalab.env import execenv
 from datalab.proxy import LocalProxy
 
 if TYPE_CHECKING:
-    from sigima.obj import NewImageParam, NewSignalParam
+    from sigima.objects import NewImageParam, NewSignalParam
 
     from datalab.gui import main
     from datalab.gui.panel.image import ImagePanel

@@ -37,29 +37,29 @@ msgstr "Sous-module"
 msgid "Purpose"
 msgstr "Contenu"
 
-msgid ":mod:`sigima.algorithms`"
+msgid ":mod:`sigima.tools`"
 msgstr ""
 
 msgid "Algorithms for data analysis, which operates on NumPy arrays"
 msgstr "Algorithmes pour l'analyse de données, qui opèrent sur des tableaux NumPy"
 
-msgid ":mod:`sigima.param`"
+msgid ":mod:`sigima.params`"
 msgstr ""
 
 msgid "Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)"
 msgstr "Module de commodité pour accéder aux ensembles de paramètres DataLab (instances d'objets :class:`guidata.dataset.DataSet`)"
 
-msgid ":mod:`sigima.obj`"
+msgid ":mod:`sigima.objects`"
 msgstr ""
 
-msgid "Convenience module to access the DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`) and related functions"
-msgstr "Module de commodité pour accéder aux objets DataLab (:class:`sigima.obj.SignalObj` ou :class:`sigima.obj.ImageObj`) et fonctions associées"
+msgid "Convenience module to access the DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`) and related functions"
+msgstr "Module de commodité pour accéder aux objets DataLab (:class:`sigima.objects.SignalObj` ou :class:`sigima.objects.ImageObj`) et fonctions associées"
 
-msgid ":mod:`sigima.computation`"
+msgid ":mod:`sigima.proc`"
 msgstr ""
 
-msgid "Computation functions, which operate on DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`)"
-msgstr "Fonctions de calcul, qui opèrent sur les objets DataLab (:class:`sigima.obj.SignalObj` ou :class:`sigima.obj.ImageObj`)"
+msgid "Computation functions, which operate on DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)"
+msgstr "Fonctions de calcul, qui opèrent sur les objets DataLab (:class:`sigima.objects.SignalObj` ou :class:`sigima.objects.ImageObj`)"
 
 msgid ":mod:`datalab.proxy`"
 msgstr ""

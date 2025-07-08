@@ -9,8 +9,8 @@ and some actions to test DataLab functionalities.
 """
 
 import sigima.tests.data as test_data
-from sigima.computation.base import dst_1_to_1
-from sigima.obj import ImageObj, NormalRandomParam, SignalObj
+from sigima.objects import ImageObj, NormalRandomParam, SignalObj
+from sigima.proc.base import dst_1_to_1
 
 from datalab.config import _
 from datalab.plugins import PluginBase, PluginInfo

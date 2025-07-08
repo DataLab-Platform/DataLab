@@ -79,7 +79,7 @@ There are two ways to call a processor method:
     proxy.calc("average")
 
     # Call a method with parameters
-    p = sigima.param.MovingAverageParam.create(n=30)
+    p = sigima.params.MovingAverageParam.create(n=30)
     proxy.calc("compute_moving_average", p)
 
 2. Directly calling the processor method from the proxy object:
@@ -90,7 +90,7 @@ There are two ways to call a processor method:
     proxy.compute_average()
 
     # Call a method with parameters
-    p = sigima.param.MovingAverageParam.create(n=30)
+    p = sigima.params.MovingAverageParam.create(n=30)
     proxy.compute_moving_average(p)
 
 .. warning::
@@ -180,9 +180,9 @@ class RemoteProxy(RemoteClient):
         >>> proxy.get_object_titles()
         ['toto']
         >>> proxy["toto"]  # from title
-        <sigima.obj.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima.objects.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1]  # from number
-        <sigima.obj.signal.SignalObj at 0x7f7f1c0b4a90>
+        <sigima.objects.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> proxy[1].data
         array([1., 2., 3.])
         >>> proxy.set_current_panel("image")

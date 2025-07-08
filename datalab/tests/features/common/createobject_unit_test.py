@@ -12,7 +12,7 @@ Testing GUI functions related to signal/image creation.
 
 from __future__ import annotations
 
-import sigima.obj
+import sigima.objects
 from guidata.qthelpers import qt_app_context
 from sigima.tests.vistools import view_curves, view_images
 
@@ -39,8 +39,10 @@ def test_new_image() -> None:
         if image is not None:
             view_images(image.data, name=test_new_image.__name__, title=image.title)
         # Test with parametered 2D-Gaussian
-        bparam = sigima.obj.NewImageParam.create(itype=sigima.obj.ImageTypes.GAUSS)
-        eparam = sigima.obj.Gauss2DParam()
+        bparam = sigima.objects.NewImageParam.create(
+            itype=sigima.objects.ImageTypes.GAUSS
+        )
+        eparam = sigima.objects.Gauss2DParam()
         eparam.x0 = eparam.y0 = 3
         eparam.sigma = 5
         image = create_image_gui(bparam, extra_param=eparam, edit=edit)

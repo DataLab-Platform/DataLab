@@ -86,5 +86,5 @@ msgstr "\"Taille de voisinage\": taille de la fenêtre glissante (cf. plus haut)
 msgid "\"Relative threshold\": detection threshold"
 msgstr "\"Seuil relatif\": seuil de détection"
 
-msgid "Feature is based on ``get_2d_peaks_coords`` function from ``sigima.algorithms`` module:"
-msgstr "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du module ``sigima.algorithms`` :"
+msgid "Feature is based on ``get_2d_peaks_coords`` function from ``sigima.tools`` module:"
+msgstr "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du module ``sigima.tools`` :"

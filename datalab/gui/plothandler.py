@@ -37,7 +37,7 @@ from plotpy.constants import PlotType
 from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedImageItem
 from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
-from sigima.obj import ImageObj, SignalObj, TypeObj
+from sigima.objects import ImageObj, SignalObj, TypeObj
 
 from datalab.adapters_plotpy import TypePlotItem
 from datalab.adapters_plotpy.factories import create_adapter_from_object

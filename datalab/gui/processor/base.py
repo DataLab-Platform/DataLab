@@ -23,9 +23,9 @@ from guidata.qthelpers import exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from sigima.computation import is_computation_function
 from sigima.config import options as sigima_options
-from sigima.obj import ImageObj, SignalObj, TypeROI, TypeROIParam
+from sigima.objects import ImageObj, SignalObj, TypeROI, TypeROIParam
+from sigima.proc import is_computation_function
 
 from datalab import env
 from datalab.config import Conf, _
@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
 
     from plotpy.plot import PlotWidget
-    from sigima.obj import ResultProperties, ResultShape
+    from sigima.objects import ResultProperties, ResultShape
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
@@ -1216,18 +1216,18 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         .. code-block:: python
 
-            import sigima.computation.signal as sigima_signal
-            import sigima.param
+            import sigima.proc.signal as sigima_signal
+            import sigima.params
 
             # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
             compute(sigima_signal.normalize)
-            param = sigima.param.MovingAverageParam(n=3)
+            param = sigima.params.MovingAverageParam(n=3)
             compute(sigima_signal.moving_average, param)
             compute(computation_function, param, edit=False)
 
             # For pattern `2_to_1`:
             compute(sigima_signal.difference, obj2)
-            param = sigima.param.InterpolationParam(method="cubic")
+            param = sigima.params.InterpolationParam(method="cubic")
             compute(sigima_signal.interpolation, obj2, param)
 
             # For pattern `1_to_n`:
@@ -1312,8 +1312,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     def compute_roi_extraction(self, roi: TypeROI | None = None) -> None:
         """Extract Region Of Interest (ROI) from data with:
 
-        - :py:func:`sigima.computation.image.compute_extract_roi` for single ROI
-        - :py:func:`sigima.computation.image.compute_extract_rois` for multiple ROIs"""
+        - :py:func:`sigima.proc.image.compute_extract_roi` for single ROI
+        - :py:func:`sigima.proc.image.compute_extract_rois` for multiple ROIs"""
         # Expected behavior:
         # -----------------
         # * If `roi` is not None or not empty, skip the ROI dialog

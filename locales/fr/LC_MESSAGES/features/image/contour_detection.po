@@ -70,6 +70,5 @@ msgstr ""
 msgid "Then, each contour is fitted to the closest ellipse (or circle)"
 msgstr ""
 
-msgid "Feature is based on ``get_contour_shapes`` function from ``sigima.algorithms`` module:"
+msgid "Feature is based on ``get_contour_shapes`` function from ``sigima.tools`` module:"
 msgstr ""
-

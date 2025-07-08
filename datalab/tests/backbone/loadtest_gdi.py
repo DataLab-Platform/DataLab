@@ -20,7 +20,7 @@ from __future__ import annotations
 import ctypes
 import os
 
-from sigima.obj import NewImageParam
+from sigima.objects import NewImageParam
 from sigima.tests.common.createobject_test import iterate_image_creation
 from sigima.tests.data import create_sincos_image
 from sigima.tests.helpers import get_test_fnames

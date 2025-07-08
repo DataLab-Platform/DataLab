@@ -19,7 +19,7 @@ from guidata.qthelpers import (
 )
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
-from sigima.obj import NewImageParam
+from sigima.objects import NewImageParam
 from sigima.tests import data as test_data
 
 from datalab.config import _

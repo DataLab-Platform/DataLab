@@ -37,7 +37,7 @@ msgstr ""
 msgid "Parent plot dialog"
 msgstr ""
 
-msgid "Object to edit (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`)"
+msgid "Object to edit (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)"
 msgstr ""
 
 msgid "If True, the dialog is in \"extract mode\" (extracting ROIs)"
@@ -72,4 +72,3 @@ msgstr ""
 
 msgid "Manually add image ROI"
 msgstr ""
-

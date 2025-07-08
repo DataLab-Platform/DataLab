@@ -6,7 +6,7 @@ The :mod:`datalab.gui.processor` package provides the **processor objects**
 for signals and images.
 
 Processor objects are the bridge between the computation modules
-(in :mod:`sigima.computation`) and the GUI modules (in :mod:`datalab.gui`).
+(in :mod:`sigima.proc`) and the GUI modules (in :mod:`datalab.gui`).
 They are used to call the computation functions and to update the GUI from inside
 the data panel objects.
 
@@ -15,8 +15,8 @@ When implementing a processing feature in DataLab, the steps are usually the fol
 - Add an action in the :mod:`datalab.gui.actionhandler` module to trigger the
   processing feature from the GUI (e.g. a menu item or a toolbar button).
 
-- Implement the computation function in the :mod:`sigima.computation` module
-  (that would eventually call the algorithm from the :mod:`sigima.algorithms` module).
+- Implement the computation function in the :mod:`sigima.proc` module
+  (that would eventually call the algorithm from the :mod:`sigima.tools` module).
 
 - Implement the processor object method in this package to call the computation
   function and eventually update the GUI.

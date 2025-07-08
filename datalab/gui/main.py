@@ -40,7 +40,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
 from sigima.config import options as sigima_options
-from sigima.obj import ImageObj, SignalObj, create_image, create_signal
+from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
 from datalab import __docurl__, __homeurl__, __supporturl__, env

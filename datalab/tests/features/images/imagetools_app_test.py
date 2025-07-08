@@ -15,7 +15,7 @@ import os.path as osp
 from plotpy.coords import axes_to_canvas
 from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
-from sigima.obj import NewImageParam
+from sigima.objects import NewImageParam
 from sigima.tests.data import create_multigauss_image
 
 from datalab.gui.docks import profile_to_signal

@@ -19,35 +19,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Algorithms (:mod:`sigima.algorithms`)"
-msgstr "Algorithmes (:mod:`sigima.algorithms`)"
+msgid "Algorithms (:mod:`sigima.tools`)"
+msgstr "Algorithmes (:mod:`sigima.tools`)"
 
 msgid "This package contains the algorithms used by the DataLab project. Those algorithms operate directly on NumPy arrays and are designed to be used in the DataLab pipeline, but can be used independently as well."
 msgstr "Ce paquet contient les algorithmes utilisés par le projet DataLab. Ces algorithmes opèrent directement sur des tableaux NumPy et sont conçus pour être utilisés dans le pipeline DataLab, mais peuvent également être utilisés indépendamment."
 
-msgid "The :mod:`sigima.algorithms` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima.computation` package for algorithms that operate directly on DataLab objects (i.e. :class:`sigima.obj.SignalObj` and :class:`sigima.obj.ImageObj`)."
-msgstr "Le module :mod:`sigima.algorithms` est le point d'entrée principal pour les algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le module :mod:`sigima.computation` pour les algorithmes qui opèrent directement sur les objets DataLab (c'est-à-dire :class:`sigima.obj.SignalObj` et :class:`sigima.obj.ImageObj`)."
+msgid "The :mod:`sigima.tools` package is the main entry point for the DataLab algorithms when manipulating NumPy arrays. See the :mod:`sigima.proc` package for algorithms that operate directly on DataLab objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`)."
+msgstr "Le module :mod:`sigima.tools` est le point d'entrée principal pour les algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le module :mod:`sigima.proc` pour les algorithmes qui opèrent directement sur les objets DataLab (c'est-à-dire :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`)."
 
 msgid "The algorithms are organized in subpackages according to their purpose. The following subpackages are available:"
 msgstr "Les algorithmes sont organisés en sous-paquets en fonction de leur objectif. Les sous-paquets suivants sont disponibles :"
 
-msgid ":mod:`sigima.algorithms.signal`: Signal processing algorithms"
-msgstr ":mod:`sigima.algorithms.signal` : Algorithmes de traitement du signal"
+msgid ":mod:`sigima.tools.signal`: Signal processing algorithms"
+msgstr ":mod:`sigima.tools.signal` : Algorithmes de traitement du signal"
 
-msgid ":mod:`sigima.algorithms.image`: Image processing algorithms"
-msgstr ":mod:`sigima.algorithms.image` : Algorithmes de traitement d'image"
+msgid ":mod:`sigima.tools.image`: Image processing algorithms"
+msgstr ":mod:`sigima.tools.image` : Algorithmes de traitement d'image"
 
-msgid ":mod:`sigima.algorithms.datatypes`: Data type conversion algorithms"
-msgstr ":mod:`sigima.algorithms.datatypes` : Algorithmes de conversion de type de données"
+msgid ":mod:`sigima.tools.datatypes`: Data type conversion algorithms"
+msgstr ":mod:`sigima.tools.datatypes` : Algorithmes de conversion de type de données"
 
-msgid ":mod:`sigima.algorithms.coordinates`: Coordinate conversion algorithms"
-msgstr ":mod:`sigima.algorithms.coordinates` : Algorithmes de conversion de coordonnées"
+msgid ":mod:`sigima.tools.coordinates`: Coordinate conversion algorithms"
+msgstr ":mod:`sigima.tools.coordinates` : Algorithmes de conversion de coordonnées"
 
 msgid "Signal Processing Algorithms"
 msgstr "Algorithmes de traitement du signal"
 
-msgid "Signal Processing Algorithms (:mod:`sigima.algorithms.signal`)"
-msgstr "Algorithmes de traitement du signal (:mod:`sigima.algorithms`)"
+msgid "Signal Processing Algorithms (:mod:`sigima.tools.signal`)"
+msgstr "Algorithmes de traitement du signal (:mod:`sigima.tools`)"
 
 msgid "This package contains signal processing algorithms."
 msgstr "Ce module contient des algorithmes de traitement du signal."
@@ -55,35 +55,35 @@ msgstr "Ce module contient des algorithmes de traitement du signal."
 msgid "Algorithms are organized into subpackages according to their purpose:"
 msgstr "Les algorithmes sont organisés en sous-paquets en fonction de leur objectif :"
 
-msgid ":mod:`sigima.algorithms.signal.dynamic`: Dynamic parameter extraction"
-msgstr ":mod:`sigima.algorithms.signal.dynamic` : Algorithmes d'extraction des paramètres de la dynamique du signal"
+msgid ":mod:`sigima.tools.signal.dynamic`: Dynamic parameter extraction"
+msgstr ":mod:`sigima.tools.signal.dynamic` : Algorithmes d'extraction des paramètres de la dynamique du signal"
 
-msgid ":mod:`sigima.algorithms.signal.fitmodels`: Curve fitting models"
-msgstr ":mod:`sigima.algorithms.signal.fitmodels` : Modèles d'ajustement de courbe"
+msgid ":mod:`sigima.tools.signal.fitmodels`: Curve fitting models"
+msgstr ":mod:`sigima.tools.signal.fitmodels` : Modèles d'ajustement de courbe"
 
-msgid ":mod:`sigima.algorithms.signal.fourier`: Fourier analysis algorithms"
-msgstr ":mod:`sigima.algorithms.signal.fourier` : Algorithmes d'analyse de Fourier"
+msgid ":mod:`sigima.tools.signal.fourier`: Fourier analysis algorithms"
+msgstr ":mod:`sigima.tools.signal.fourier` : Algorithmes d'analyse de Fourier"
 
-msgid ":mod:`sigima.algorithms.signal.interpolation`: Interpolation algorithms"
-msgstr ":mod:`sigima.algorithms.signal.interpolation` : Algorithmes d'interpolation"
+msgid ":mod:`sigima.tools.signal.interpolation`: Interpolation algorithms"
+msgstr ":mod:`sigima.tools.signal.interpolation` : Algorithmes d'interpolation"
 
-msgid ":mod:`sigima.algorithms.signal.level`: Level adjustment algorithms"
-msgstr ":mod:`sigima.algorithms.signal.level` : Algorithmes d'ajustement de niveau"
+msgid ":mod:`sigima.tools.signal.level`: Level adjustment algorithms"
+msgstr ":mod:`sigima.tools.signal.level` : Algorithmes d'ajustement de niveau"
 
-msgid ":mod:`sigima.algorithms.signal.misc`: Miscellaneous tools"
-msgstr ":mod:`sigima.algorithms.signal.misc` : Outils divers"
+msgid ":mod:`sigima.tools.signal.misc`: Miscellaneous tools"
+msgstr ":mod:`sigima.tools.signal.misc` : Outils divers"
 
-msgid ":mod:`sigima.algorithms.signal.peakdetection`: Peak detection algorithms"
-msgstr ":mod:`sigima.algorithms.signal.peakdetection` : Algorithmes de détection de pics"
+msgid ":mod:`sigima.tools.signal.peakdetection`: Peak detection algorithms"
+msgstr ":mod:`sigima.tools.signal.peakdetection` : Algorithmes de détection de pics"
 
-msgid ":mod:`sigima.algorithms.signal.pulse`: Pulse analysis algorithms"
-msgstr ":mod:`sigima.algorithms.signal.pulse` : Algorithmes d'analyse d'impulsion"
+msgid ":mod:`sigima.tools.signal.pulse`: Pulse analysis algorithms"
+msgstr ":mod:`sigima.tools.signal.pulse` : Algorithmes d'analyse d'impulsion"
 
-msgid ":mod:`sigima.algorithms.signal.stability`: Stability analysis algorithms"
-msgstr ":mod:`sigima.algorithms.signal.stability` : Algorithmes d'analyse de stabilité"
+msgid ":mod:`sigima.tools.signal.stability`: Stability analysis algorithms"
+msgstr ":mod:`sigima.tools.signal.stability` : Algorithmes d'analyse de stabilité"
 
-msgid ":mod:`sigima.algorithms.signal.windowing`: Windowing algorithms"
-msgstr ":mod:`sigima.algorithms.signal.windowing` : Algorithmes de fenêtrage"
+msgid ":mod:`sigima.tools.signal.windowing`: Windowing algorithms"
+msgstr ":mod:`sigima.tools.signal.windowing` : Algorithmes de fenêtrage"
 
 msgid "Dynamic Parameter Extraction"
 msgstr "Extraction des paramètres dynamiques"

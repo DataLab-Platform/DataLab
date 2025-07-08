@@ -23,8 +23,8 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
-from sigima.obj import ExperimentalSignalParam as OrigExperimentalSignalParam
-from sigima.obj import (
+from sigima.objects import ExperimentalSignalParam as OrigExperimentalSignalParam
+from sigima.objects import (
     ExponentialParam,
     Gauss2DParam,
     GaussLorentzVoigtParam,
@@ -43,9 +43,9 @@ from sigima.obj import (
     UniformRandomParam,
     create_signal,
 )
-from sigima.obj import create_image_from_param as create_image_headless
-from sigima.obj import create_signal_from_param as create_signal_headless
-from sigima.obj.signal import DEFAULT_TITLE as SIGNAL_DEFAULT_TITLE
+from sigima.objects import create_image_from_param as create_image_headless
+from sigima.objects import create_signal_from_param as create_signal_headless
+from sigima.objects.signal import DEFAULT_TITLE as SIGNAL_DEFAULT_TITLE
 
 from datalab.config import _
 

@@ -58,9 +58,9 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QApplication, QMainWindow
-from sigima.algorithms.image import get_centroid_fourier
-from sigima.algorithms.signal.pulse import fwhm
-from sigima.obj import create_signal
+from sigima.objects import create_signal
+from sigima.tools.image import get_centroid_fourier
+from sigima.tools.signal.pulse import fwhm
 
 from datalab.config import APP_NAME, Conf, _
 

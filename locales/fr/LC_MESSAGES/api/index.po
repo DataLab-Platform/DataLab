@@ -37,28 +37,28 @@ msgstr ""
 msgid "Purpose"
 msgstr ""
 
-msgid ":mod:`sigima.algorithms`"
+msgid ":mod:`sigima.tools`"
 msgstr ""
 
 msgid "Algorithms for data analysis, which operates on NumPy arrays"
 msgstr ""
 
-msgid ":mod:`sigima.param`"
+msgid ":mod:`sigima.params`"
 msgstr ""
 
 msgid "Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)"
 msgstr ""
 
-msgid ":mod:`sigima.obj`"
+msgid ":mod:`sigima.objects`"
 msgstr ""
 
-msgid "Convenience module to access the DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`) and related functions"
+msgid "Convenience module to access the DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`) and related functions"
 msgstr ""
 
-msgid ":mod:`sigima.computation`"
+msgid ":mod:`sigima.proc`"
 msgstr ""
 
-msgid "Computation functions, which operate on DataLab objects (:class:`sigima.obj.SignalObj` or :class:`sigima.obj.ImageObj`)"
+msgid "Computation functions, which operate on DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)"
 msgstr ""
 
 msgid ":mod:`datalab.proxy`"
@@ -66,4 +66,3 @@ msgstr ""
 
 msgid "Proxy objects to access the DataLab interface from a Python script or a remote application"
 msgstr ""
-

@@ -20,7 +20,7 @@ from plotpy.tools import (
     XCursorTool,
 )
 from sigima.io.signal import SignalIORegistry
-from sigima.obj import SignalObj, SignalROI
+from sigima.objects import SignalObj, SignalROI
 
 from datalab.adapters_plotpy.signal import CURVESTYLES
 from datalab.config import _

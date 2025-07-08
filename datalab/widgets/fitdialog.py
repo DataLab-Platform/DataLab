@@ -11,14 +11,14 @@ from plotpy.plot import PlotOptions
 from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.optimize import curve_fit
 from scipy.special import erf  # pylint: disable=no-name-in-module
-from sigima.algorithms.signal.fitmodels import (
+from sigima.tests.helpers import get_default_test_name
+from sigima.tools.signal.fitmodels import (
     GaussianModel,
     LorentzianModel,
     VoigtModel,
 )
-from sigima.algorithms.signal.fourier import sort_frequencies
-from sigima.algorithms.signal.peakdetection import xpeak
-from sigima.tests.helpers import get_default_test_name
+from sigima.tools.signal.fourier import sort_frequencies
+from sigima.tools.signal.peakdetection import xpeak
 
 from datalab.config import _
 

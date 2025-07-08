@@ -7,7 +7,7 @@ Profile extraction unit test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima.param
+import sigima.params
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests.data import create_noisygauss_image
 
@@ -23,22 +23,22 @@ def test_profile_unit():
             for initial_param in (True, False):
                 if initial_param:
                     if mode == "line":
-                        param = sigima.param.LineProfileParam.create(row=100, col=200)
+                        param = sigima.params.LineProfileParam.create(row=100, col=200)
                     elif mode == "segment":
-                        param = sigima.param.SegmentProfileParam.create(
+                        param = sigima.params.SegmentProfileParam.create(
                             row1=10, col1=20, row2=200, col2=300
                         )
                     else:
-                        param = sigima.param.AverageProfileParam.create(
+                        param = sigima.params.AverageProfileParam.create(
                             row1=10, col1=20, row2=200, col2=300
                         )
                 else:
                     if mode == "line":
-                        param = sigima.param.LineProfileParam()
+                        param = sigima.params.LineProfileParam()
                     elif mode == "segment":
-                        param = sigima.param.SegmentProfileParam()
+                        param = sigima.params.SegmentProfileParam()
                     else:
-                        param = sigima.param.AverageProfileParam()
+                        param = sigima.params.AverageProfileParam()
                 execenv.print("-" * 80)
                 execenv.print(f"Testing mode: {mode} - initial_param: {initial_param}")
                 dialog = ProfileExtractionDialog(

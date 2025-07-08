@@ -10,8 +10,8 @@ then open DataLab to show it.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima.obj
-import sigima.param
+import sigima.objects
+import sigima.params
 from sigima.tests.data import get_test_image
 
 from datalab.proxy import proxy_context
@@ -22,16 +22,16 @@ def test_example_app() -> None:
     """Example of high-level test scenario using proxy interface"""
     with proxy_context("local") as proxy:
         data = get_test_image("flower.npy").data
-        image = sigima.obj.create_image("Test image with peaks", data)
+        image = sigima.objects.create_image("Test image with peaks", data)
         proxy.add_object(image)
         proxy.calc("roberts")
         data_size = data.shape[0]
         n = data_size // 5
-        roi = sigima.obj.create_image_roi(
+        roi = sigima.objects.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
         proxy.compute_roi_extraction(roi)
-        param = sigima.param.BlobOpenCVParam.create(
+        param = sigima.params.BlobOpenCVParam.create(
             min_dist_between_blobs=0.1,
             filter_by_color=False,
             min_area=500,

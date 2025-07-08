@@ -16,7 +16,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal
 
 import qtpy.QtCore as QC
-import sigima.param
+import sigima.params
 from guidata.configtools import get_icon
 from plotpy.interfaces import ICurveItemType
 from plotpy.items import AnnotatedPoint, AnnotatedRectangle, AnnotatedSegment
@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from plotpy.items import CurveItem
     from plotpy.panels import XCrossSection, YCrossSection
     from plotpy.plot import BasePlot
-    from sigima.obj import ImageObj
+    from sigima.objects import ImageObj
 
 
 class ProfileExtractionDialog(PlotDialog):
@@ -48,9 +48,9 @@ class ProfileExtractionDialog(PlotDialog):
     def __init__(
         self,
         mode: Literal["line", "segment", "rectangle"],
-        param: sigima.param.LineProfileParam
-        | sigima.param.SegmentProfileParam
-        | sigima.param.AverageProfileParam,
+        param: sigima.params.LineProfileParam
+        | sigima.params.SegmentProfileParam
+        | sigima.params.AverageProfileParam,
         options: PlotOptions | None = None,
         parent: QWidget | None = None,
         add_initial_shape: bool = False,
@@ -170,11 +170,11 @@ class ProfileExtractionDialog(PlotDialog):
         self.param_btn.setEnabled(False)
         self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(False)
         if self.mode == "line":
-            self.param = sigima.param.LineProfileParam()
+            self.param = sigima.params.LineProfileParam()
         elif self.mode == "segment":
-            self.param = sigima.param.SegmentProfileParam()
+            self.param = sigima.params.SegmentProfileParam()
         else:
-            self.param = sigima.param.AverageProfileParam()
+            self.param = sigima.params.AverageProfileParam()
         plot = self.get_plot()
         if self.shape is not None:
             plot.del_item(self.shape)
@@ -210,16 +210,16 @@ class ProfileExtractionDialog(PlotDialog):
         p2i = self.__physical_to_indices
         p = self.param
         if isinstance(self.shape, AnnotatedPoint):
-            assert isinstance(p, sigima.param.LineProfileParam)
+            assert isinstance(p, sigima.params.LineProfileParam)
             p.col, p.row = p2i(self.shape.get_pos())
         elif isinstance(self.shape, AnnotatedSegment):
-            assert isinstance(p, sigima.param.SegmentProfileParam)
+            assert isinstance(p, sigima.params.SegmentProfileParam)
             p.col1, p.row1, p.col2, p.row2 = p2i(self.shape.get_rect())
             if p.col1 > p.col2:
                 p.col1, p.col2 = p.col2, p.col1
                 p.row1, p.row2 = p.row2, p.row1
         else:
-            assert isinstance(p, sigima.param.AverageProfileParam)
+            assert isinstance(p, sigima.params.AverageProfileParam)
             p.col1, p.row1, p.col2, p.row2 = p2i(self.shape.get_rect())
             if p.col1 > p.col2:
                 p.col1, p.col2 = p.col2, p.col1
@@ -231,15 +231,15 @@ class ProfileExtractionDialog(PlotDialog):
         i2p = self.__obj.indices_to_physical
         p = self.param
         if isinstance(self.shape, AnnotatedPoint):
-            assert isinstance(p, sigima.param.LineProfileParam)
+            assert isinstance(p, sigima.params.LineProfileParam)
             x, y = i2p([p.col, p.row])
             self.shape.set_pos(x, y)
         elif isinstance(self.shape, AnnotatedSegment):
-            assert isinstance(p, sigima.param.SegmentProfileParam)
+            assert isinstance(p, sigima.params.SegmentProfileParam)
             x1, y1, x2, y2 = i2p([p.col1, p.row1, p.col2, p.row2])
             self.shape.set_rect(x1, y1, x2, y2)
         else:
-            assert isinstance(p, sigima.param.AverageProfileParam)
+            assert isinstance(p, sigima.params.AverageProfileParam)
             x1, y1, x2, y2 = i2p([p.col1, p.row1, p.col2, p.row2])
             self.shape.set_rect(x1, y1, x2, y2)
 

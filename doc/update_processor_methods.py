@@ -11,7 +11,7 @@ methods attached to the processor classes:
 - :class:`datalab.gui.processor.image.ImageProcessor`
 
 Those methods are *almost* associated elementwise with the compute functions defined in
-the :mod:`sigima.computation` package.
+the :mod:`sigima.proc` package.
 """
 
 from __future__ import annotations

@@ -12,9 +12,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import sigima.computation.image as sigima_image
-import sigima.obj
-import sigima.param
+import sigima.objects
+import sigima.params
+import sigima.proc.image as sigima_image
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 from sigima.tests.data import (
@@ -49,11 +49,13 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     qt_wait(DELAY1)
 
     panel.objview.set_current_object(sig1)
-    base_param = sigima.obj.NewSignalParam.create(
-        title=_("Random function"), stype=sigima.obj.SignalTypes.UNIFORMRANDOM
+    base_param = sigima.objects.NewSignalParam.create(
+        title=_("Random function"), stype=sigima.objects.SignalTypes.UNIFORMRANDOM
     )
-    extra_param = sigima.obj.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
-    sig2 = sigima.obj.create_signal_from_param(base_param, extra_param=extra_param)
+    extra_param = sigima.objects.UniformRandomParam.create(
+        vmin=0, vmax=sig1.y.max() * 0.2
+    )
+    sig2 = sigima.objects.create_signal_from_param(base_param, extra_param=extra_param)
     win.add_object(sig2)
 
     # compute_common_operations(panel)
@@ -71,7 +73,7 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     panel.processor.run_feature("detrending")
     sig3 = panel.objview.get_current_object()
 
-    param = sigima.param.PeakDetectionParam()
+    param = sigima.params.PeakDetectionParam()
     panel.processor.run_feature("peak_detection", param)
     sig4 = panel.objview.get_current_object()
     panel.objview.select_objects([sig3, sig4])
@@ -81,11 +83,11 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     panel.objview.set_current_object(sig3)
     panel.processor.compute_multigaussianfit()
 
-    base_param = sigima.obj.NewSignalParam.create(
-        title=_("Gaussian"), stype=sigima.obj.SignalTypes.GAUSS
+    base_param = sigima.objects.NewSignalParam.create(
+        title=_("Gaussian"), stype=sigima.objects.SignalTypes.GAUSS
     )
-    sig = sigima.obj.create_signal_from_param(
-        base_param, sigima.obj.GaussLorentzVoigtParam()
+    sig = sigima.objects.create_signal_from_param(
+        base_param, sigima.objects.GaussLorentzVoigtParam()
     )
     panel.add_object(sig)
 
@@ -100,7 +102,7 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     win.set_current_panel("image")
     panel = win.imagepanel
 
-    base_param = sigima.obj.NewImageParam.create(height=data_size, width=data_size)
+    base_param = sigima.objects.NewImageParam.create(height=data_size, width=data_size)
 
     # ima1 = create_noisygauss_image(newparam)
     # panel.add_object(ima1)
@@ -112,15 +114,15 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
 
     panel.objview.set_current_object(ima1)
 
-    base_param = sigima.obj.NewImageParam.create(
-        itype=sigima.obj.ImageTypes.UNIFORMRANDOM,
+    base_param = sigima.objects.NewImageParam.create(
+        itype=sigima.objects.ImageTypes.UNIFORMRANDOM,
         height=base_param.height,
         width=base_param.width,
     )
-    base_param = sigima.obj.UniformRandomParam()
+    base_param = sigima.objects.UniformRandomParam()
     base_param.set_from_datatype(ima1.data.dtype)
     base_param.vmax = int(ima1.data.max() * 0.2)
-    ima2 = sigima.obj.create_image_from_param(base_param, extra_param=base_param)
+    ima2 = sigima.objects.create_image_from_param(base_param, extra_param=base_param)
     panel.add_object(ima2)
 
     panel.objview.select_objects((1, 2))
@@ -150,10 +152,10 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     base_param.title = None
     ima1 = create_multigauss_image(base_param)
     s = data_size
-    roi = sigima.obj.create_image_roi(
+    roi = sigima.objects.create_image_roi(
         "rectangle", [s // 2, s // 2, s - 25 - s // 2, s - s // 2]
     )
-    roi.add_roi(sigima.obj.create_image_roi("circle", [s // 3, s // 2, s // 4]))
+    roi.add_roi(sigima.objects.create_image_roi("circle", [s // 3, s // 2, s // 4]))
     ima1.roi = roi
     panel.add_object(ima1)
 
@@ -170,18 +172,18 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     base_param.title = None
     ima = create_peak2d_image(base_param)
     panel.add_object(ima)
-    param = sigima.param.Peak2DDetectionParam.create(create_rois=True)
+    param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.run_feature("peak_detection", param)
 
     qt_wait(DELAY2)
 
-    param = sigima.param.ContourShapeParam()
+    param = sigima.params.ContourShapeParam()
     panel.processor.run_feature("contour_shape", param)
 
     qt_wait(DELAY2)
 
     n = data_size // 10
-    roi = sigima.obj.create_image_roi(
+    roi = sigima.objects.create_image_roi(
         "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
     )
     panel.processor.compute_roi_extraction(roi)

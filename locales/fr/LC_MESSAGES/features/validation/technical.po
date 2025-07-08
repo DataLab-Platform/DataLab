@@ -76,16 +76,16 @@ msgstr ""
 msgid "Scope"
 msgstr ""
 
-msgid "The scope of technical validation in DataLab includes all compute functions that operate on DataLab's signal and image objects (i.e. :class:`sigima.obj.SignalObj` and :class:`sigima.obj.ImageObj`)."
+msgid "The scope of technical validation in DataLab includes all compute functions that operate on DataLab's signal and image objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`)."
 msgstr ""
 
 msgid "This includes functions for (all functions are named ``compute_<function_name>``):"
 msgstr ""
 
-msgid "Signal processing (:mod:`sigima.computation.signal`)"
+msgid "Signal processing (:mod:`sigima.proc.signal`)"
 msgstr ""
 
-msgid "Image processing (:mod:`sigima.computation.image`)"
+msgid "Image processing (:mod:`sigima.proc.image`)"
 msgstr ""
 
 msgid "Implementation"
@@ -132,4 +132,3 @@ msgstr ""
 
 msgid "See paragraph :ref:`run_scientific_validation_tests` for more information on how to run technical validation tests."
 msgstr ""
-

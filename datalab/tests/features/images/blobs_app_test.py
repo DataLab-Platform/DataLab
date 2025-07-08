@@ -7,8 +7,8 @@ Blob detection application test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-import sigima.param
-from sigima.obj import create_image
+import sigima.params
+from sigima.objects import create_image
 from sigima.tests.data import get_test_image
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
@@ -25,10 +25,10 @@ def test_blobs():
         # Testing blob detection
         # ======================
         for paramclass, compute_method, name in (
-            (sigima.param.BlobDOGParam, "blob_dog", "BlobDOG"),
-            (sigima.param.BlobDOHParam, "blob_doh", "BlobDOH"),
-            (sigima.param.BlobLOGParam, "blob_log", "BlobLOG"),
-            (sigima.param.BlobOpenCVParam, "blob_opencv", "BlobOpenCV"),
+            (sigima.params.BlobDOGParam, "blob_dog", "BlobDOG"),
+            (sigima.params.BlobDOHParam, "blob_doh", "BlobDOH"),
+            (sigima.params.BlobLOGParam, "blob_log", "BlobLOG"),
+            (sigima.params.BlobOpenCVParam, "blob_opencv", "BlobOpenCV"),
         ):
             param = paramclass()
             image = create_image(name, data)
@@ -40,7 +40,7 @@ def test_blobs():
         # Testing distribute_on_grid and reset_positions
         # ==============================================
         panel.objview.selectAll()
-        param = sigima.param.GridParam.create(cols=2, colspac=10, rowspac=10)
+        param = sigima.params.GridParam.create(cols=2, colspac=10, rowspac=10)
         proc.distribute_on_grid(param)
 
 

@@ -15,8 +15,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-import sigima.param as sigima_param
-from sigima.obj import (
+import sigima.params as sigima_param
+from sigima.objects import (
     ImageObj,
     ImageROI,
     NewImageParam,

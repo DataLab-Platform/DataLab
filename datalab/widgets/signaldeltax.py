@@ -17,7 +17,7 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigima.algorithms.signal.pulse import full_width_at_y
+from sigima.tools.signal.pulse import full_width_at_y
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.adapters_plotpy.signal import CURVESTYLES
@@ -26,7 +26,7 @@ from datalab.config import _
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection
     from qtpy.QtWidgets import QWidget
-    from sigima.obj import SignalObj
+    from sigima.objects import SignalObj
 
 
 class SignalDeltaXDialog(PlotDialog):

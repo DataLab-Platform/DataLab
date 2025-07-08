@@ -15,7 +15,7 @@ caught and displayed in the GUI.
 
 import warnings
 
-from sigima.obj import SignalObj
+from sigima.objects import SignalObj
 from sigima.tests import data as test_data
 
 from datalab.config import Conf

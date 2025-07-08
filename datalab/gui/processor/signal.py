@@ -12,11 +12,11 @@ import re
 from collections.abc import Callable
 
 import numpy as np
-import sigima.computation.base as sigima_base
-import sigima.computation.signal as sigima_signal
-import sigima.param
+import sigima.params
+import sigima.proc.base as sigima_base
+import sigima.proc.signal as sigima_signal
 from guidata.qthelpers import exec_dialog
-from sigima.obj import (
+from sigima.objects import (
     ResultProperties,
     ResultShape,
     ROI1DParam,
@@ -114,7 +114,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.astype,
             _("Convert data type"),
-            paramclass=sigima.param.DataTypeSParam,
+            paramclass=sigima.params.DataTypeSParam,
             icon_name="convert_dtype.svg",
         )
         self.register_1_to_1(sigima_signal.exp, _("Exponential"), icon_name="exp.svg")
@@ -153,12 +153,12 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.to_polar,
             _("Convert to polar coordinates"),
-            paramclass=sigima.param.AngleUnitParam,
+            paramclass=sigima.params.AngleUnitParam,
         )
         self.register_1_to_1(
             sigima_signal.to_cartesian,
             _("Convert to cartesian coordinates"),
-            paramclass=sigima.param.AngleUnitParam,
+            paramclass=sigima.params.AngleUnitParam,
         )
         # Level adjustment
         self.register_1_to_1(
@@ -226,7 +226,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.magnitude_spectrum,
             _("Magnitude spectrum"),
-            paramclass=sigima.param.SpectrumParam,
+            paramclass=sigima.params.SpectrumParam,
             comment=_(
                 "Magnitude spectrum is the absolute value of the FFT result. "
                 "It is a measure of the amplitude of the frequency components."
@@ -243,7 +243,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.psd,
             _("Power spectral density"),
-            paramclass=sigima.param.SpectrumParam,
+            paramclass=sigima.params.SpectrumParam,
             comment=_(
                 "Power spectral density (PSD) is the square of the magnitude spectrum. "
                 "It is a measure of the power of the frequency components."
@@ -253,45 +253,45 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.power,
             _("Power"),
-            paramclass=sigima.param.PowerParam,
+            paramclass=sigima.params.PowerParam,
             icon_name="power.svg",
         )
         self.register_1_to_1(
             sigima_signal.peak_detection,
             _("Peak detection"),
-            paramclass=sigima.param.PeakDetectionParam,
+            paramclass=sigima.params.PeakDetectionParam,
             icon_name="peak_detect.svg",
         )
         # Frequency filters
         self.register_1_to_1(
             sigima_signal.lowpass,
             _("Low-pass filter"),
-            sigima.param.LowPassFilterParam,
+            sigima.params.LowPassFilterParam,
             "lowpass.svg",
         )
         self.register_1_to_1(
             sigima_signal.highpass,
             _("High-pass filter"),
-            sigima.param.HighPassFilterParam,
+            sigima.params.HighPassFilterParam,
             "highpass.svg",
         )
         self.register_1_to_1(
             sigima_signal.bandpass,
             _("Band-pass filter"),
-            sigima.param.BandPassFilterParam,
+            sigima.params.BandPassFilterParam,
             "bandpass.svg",
         )
         self.register_1_to_1(
             sigima_signal.bandstop,
             _("Band-stop filter"),
-            sigima.param.BandStopFilterParam,
+            sigima.params.BandStopFilterParam,
             "bandstop.svg",
         )
         # Other processing
         self.register_1_to_1(
             sigima_signal.apply_window,
             _("Windowing"),
-            paramclass=sigima.param.WindowingParam,
+            paramclass=sigima.params.WindowingParam,
             icon_name="windowing.svg",
             comment=_(
                 "Apply a window function (or apodization): Hanning, Hamming, ..."
@@ -306,7 +306,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_2_to_1(
             sigima_signal.interpolate,
             _("Interpolation"),
-            paramclass=sigima.param.InterpolationParam,
+            paramclass=sigima.params.InterpolationParam,
             obj2_name=_("signal for X values"),
             icon_name="interpolation.svg",
         )
@@ -321,57 +321,57 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.allan_variance,
             _("Allan variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.allan_deviation,
             _("Allan deviation"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.overlapping_allan_variance,
             _("Overlapping Allan variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.modified_allan_variance,
             _("Modified Allan variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.hadamard_variance,
             _("Hadamard variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.modified_allan_variance,
             _("Modified Allan variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.hadamard_variance,
             _("Hadamard variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.modified_allan_variance,
             _("Modified Allan variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.hadamard_variance,
             _("Hadamard variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.total_variance,
             _("Total variance"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
             sigima_signal.time_deviation,
             _("Time deviation"),
-            paramclass=sigima.param.AllanVarianceParam,
+            paramclass=sigima.params.AllanVarianceParam,
         )
         # Other processing
         self.register_2_to_1(
@@ -464,7 +464,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_offset_correction(self, param: ROI1DParam | None = None) -> None:
         """Compute offset correction
-        with :py:func:`sigima.computation.signal.offset_correction`"""
+        with :py:func:`sigima.proc.signal.offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
             dlg = signalbaseline.SignalBaselineDialog(obj, parent=self.panel.parent())
@@ -477,18 +477,18 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
 
     @qt_try_except()
     def compute_all_stability(
-        self, param: sigima.param.AllanVarianceParam | None = None
+        self, param: sigima.params.AllanVarianceParam | None = None
     ) -> None:
         """Compute all stability analysis features
         using the following functions:
 
-        - :py:func:`sigima.computation.signal.allan_variance`
-        - :py:func:`sigima.computation.signal.allan_deviation`
-        - :py:func:`sigima.computation.signal.overlapping_allan_variance`
-        - :py:func:`sigima.computation.signal.modified_allan_variance`
-        - :py:func:`sigima.computation.signal.hadamard_variance`
-        - :py:func:`sigima.computation.signal.total_variance`
-        - :py:func:`sigima.computation.signal.time_deviation`
+        - :py:func:`sigima.proc.signal.allan_variance`
+        - :py:func:`sigima.proc.signal.allan_deviation`
+        - :py:func:`sigima.proc.signal.overlapping_allan_variance`
+        - :py:func:`sigima.proc.signal.modified_allan_variance`
+        - :py:func:`sigima.proc.signal.hadamard_variance`
+        - :py:func:`sigima.proc.signal.total_variance`
+        - :py:func:`sigima.proc.signal.time_deviation`
         """
         if param is None:
             param = sigima_signal.AllanVarianceParam()
@@ -509,10 +509,10 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
 
     @qt_try_except()
     def compute_peak_detection(
-        self, param: sigima.param.PeakDetectionParam | None = None
+        self, param: sigima.params.PeakDetectionParam | None = None
     ) -> None:
         """Detect peaks from data
-        with :py:func:`sigima.computation.signal.peak_detection`"""
+        with :py:func:`sigima.proc.signal.peak_detection`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         edit, param = self.init_param(
             param, sigima_signal.PeakDetectionParam, _("Peak detection")
@@ -528,7 +528,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
 
     @qt_try_except()
     def compute_polyfit(
-        self, param: sigima.param.PolynomialFitParam | None = None
+        self, param: sigima.params.PolynomialFitParam | None = None
     ) -> None:
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
@@ -607,10 +607,10 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
 
     @qt_try_except()
     def compute_full_width_at_y(
-        self, param: sigima.param.OrdinateParam | None = None
+        self, param: sigima.params.OrdinateParam | None = None
     ) -> dict[str, ResultShape] | None:
         """Compute full width at a given y
-        with :py:func:`sigima.computation.signal.full_width_at_y`"""
+        with :py:func:`sigima.proc.signal.full_width_at_y`"""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.panel.parent())
@@ -625,7 +625,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     def compute_x_at_y(
         self, param: sigima_signal.OrdinateParam | None = None
     ) -> dict[str, ResultProperties] | None:
-        """Compute x at y with :py:func:`sigima.computation.signal.x_at_y`."""
+        """Compute x at y with :py:func:`sigima.proc.signal.x_at_y`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signalcursor.SignalCursorDialog(
@@ -642,7 +642,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     def compute_y_at_x(
         self, param: sigima_signal.AbscissaParam | None = None
     ) -> dict[str, ResultProperties] | None:
-        """Compute y at x with :py:func:`sigima.computation.signal.y_at_x`."""
+        """Compute y at x with :py:func:`sigima.proc.signal.y_at_x`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signalcursor.SignalCursorDialog(

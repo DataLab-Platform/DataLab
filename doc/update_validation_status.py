@@ -11,7 +11,7 @@ import os.path as osp
 import pkgutil
 import re
 
-import sigima.computation
+import sigima.proc
 import sigima.tests as tests_pkg
 from _pytest.mark import Mark
 from sigima import __version__
@@ -74,9 +74,7 @@ def get_validation_tests(package: str) -> list:
 
 def generate_csv_files() -> None:
     """Generate CSV files containing the validation status of compute functions"""
-    compute_functions = sigima.computation.find_computation_functions(
-        sigima.computation
-    )
+    compute_functions = sigima.proc.find_computation_functions(sigima.proc)
     validation_tests = get_validation_tests(tests_pkg)
 
     submodules = {"signal": [], "image": []}
