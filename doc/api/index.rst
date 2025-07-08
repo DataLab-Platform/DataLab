@@ -3,10 +3,7 @@
 API
 ===
 
-The public Application Programming Interface (API) of DataLab offers a set of
-functions to access the DataLab features. Those functions are available in various
-submodules of the `datalab` package. The following table lists the available submodules
-and their purpose:
+The public Application Programming Interface (API) of DataLab offers a set of functions to access the DataLab features. Those functions are available in various submodules of the `sigima` and `datalab` packages. The `sigima` package is the computation engine of DataLab, while the `datalab` package provides the interface to access the application features. The following table lists the available submodules and their purpose:
 
 .. list-table::
     :header-rows: 1
@@ -16,16 +13,16 @@ and their purpose:
       - Purpose
 
     * - :mod:`sigima.tools`
-      - Algorithms for data analysis, which operates on NumPy arrays
+      - Algorithms for data analysis (operating on NumPy arrays) which purpose is to fill in the gaps of common scientific libraries (NumPy, SciPy, scikit-image, etc.), offering consistent tools for computation functions (see :mod:`sigima.proc`)
 
     * - :mod:`sigima.params`
-      - Convenience module to access the DataLab sets of parameters (instances of :class:`guidata.dataset.DataSet` objects)
+      - Sets of parameters for configuring computation functions (these parameters are instances of :class:`guidata.dataset.DataSet` objects)
 
     * - :mod:`sigima.objects`
-      - Convenience module to access the DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`) and related functions
+      - Object model for signals and images (:class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`) and related functions
 
     * - :mod:`sigima.proc`
-      - Computation functions, which operate on DataLab objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)
+      - Computation functions, which operate on signal and image objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)
 
     * - :mod:`datalab.proxy`
       - Proxy objects to access the DataLab interface from a Python script or a remote application

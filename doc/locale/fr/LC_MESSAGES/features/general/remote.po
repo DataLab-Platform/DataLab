@@ -148,3 +148,364 @@ msgstr ""
 
 msgid "Parameters"
 msgstr "Paramètres"
+
+msgid "XML-RPC port to connect to. If None, the port is automatically retrieved from DataLab configuration."
+msgstr ""
+
+msgid "Try to connect to DataLab XML-RPC server."
+msgstr ""
+
+msgid "XML-RPC port to connect to. If not specified, the port is automatically retrieved from DataLab configuration."
+msgstr ""
+
+msgid "Timeout in seconds. Defaults to 5.0."
+msgstr ""
+
+msgid "Number of retries. Defaults to 10."
+msgstr ""
+
+msgid "Raises"
+msgstr ""
+
+msgid "Unable to connect to DataLab"
+msgstr ""
+
+msgid "Invalid timeout (must be >= 0.0)"
+msgstr ""
+
+msgid "Invalid number of retries (must be >= 1)"
+msgstr ""
+
+msgid "Disconnect from DataLab XML-RPC server."
+msgstr ""
+
+msgid "Return True if connected to DataLab XML-RPC server."
+msgstr ""
+
+msgid "Return list of available methods."
+msgstr ""
+
+msgid "Add signal data to DataLab."
+msgstr ""
+
+msgid "Signal title"
+msgstr ""
+
+msgid "X data"
+msgstr ""
+
+msgid "Y data"
+msgstr ""
+
+msgid "X unit. Defaults to None"
+msgstr ""
+
+msgid "Y unit. Defaults to None"
+msgstr ""
+
+msgid "X label. Defaults to None"
+msgstr ""
+
+msgid "Y label. Defaults to None"
+msgstr ""
+
+msgid "group id in which to add the signal. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added signal as current"
+msgstr ""
+
+msgid "Returns"
+msgstr ""
+
+msgid "True if signal was added successfully, False otherwise"
+msgstr ""
+
+msgid "Invalid xdata dtype"
+msgstr ""
+
+msgid "Invalid ydata dtype"
+msgstr ""
+
+msgid "Add image data to DataLab."
+msgstr ""
+
+msgid "Image title"
+msgstr ""
+
+msgid "Image data"
+msgstr ""
+
+msgid "Z unit. Defaults to None"
+msgstr ""
+
+msgid "Z label. Defaults to None"
+msgstr ""
+
+msgid "group id in which to add the image. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added image as current"
+msgstr ""
+
+msgid "True if image was added successfully, False otherwise"
+msgstr ""
+
+msgid "Invalid data dtype"
+msgstr ""
+
+msgid "Add object to DataLab."
+msgstr ""
+
+#, fuzzy
+msgid "Signal or image object"
+msgstr "Basculer vers le panneau de signal ou d'image"
+
+msgid "group id in which to add the object. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added object as current"
+msgstr ""
+
+msgid "Call computation feature ``name``"
+msgstr ""
+
+msgid "This calls either the processor's ``compute_<name>`` method (if it exists), or the processor's ``<name>`` computation feature (if it is registered, using the ``run_feature`` method). It looks for the function in all panels, starting with the current one."
+msgstr ""
+
+msgid "Compute function name"
+msgstr ""
+
+msgid "Compute function parameter. Defaults to None."
+msgstr ""
+
+msgid "unknown function"
+msgstr ""
+
+#, fuzzy
+msgid "Get object (signal/image) from index."
+msgstr "Ouvrir un signal ou une image à partir d'un fichier"
+
+msgid "Object number, or object id, or object title. Defaults to None (current object)."
+msgstr ""
+
+msgid "Panel name. Defaults to None (current panel)."
+msgstr ""
+
+msgid "Object"
+msgstr ""
+
+msgid "if object not found"
+msgstr ""
+
+msgid "Get plot item shapes associated to object (signal/image)."
+msgstr ""
+
+msgid "List of plot item shapes"
+msgstr ""
+
+msgid "Add object annotations (annotation plot items)."
+msgstr ""
+
+msgid "annotation plot items"
+msgstr ""
+
+msgid "refresh plot. Defaults to True."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
+msgstr ""
+
+msgid "Add group to DataLab."
+msgstr ""
+
+msgid "Group title"
+msgstr ""
+
+msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
+msgstr ""
+
+msgid "Select the group after creation. Defaults to False."
+msgstr ""
+
+msgid "Add a label with object title on the associated plot"
+msgstr ""
+
+msgid "Label title. Defaults to None. If None, the title is the object title."
+msgstr ""
+
+#, fuzzy
+msgid "Close DataLab application"
+msgstr "Depuis une application tierce"
+
+msgid "Return a context manager to temporarily disable auto refresh."
+msgstr ""
+
+msgid "Context manager"
+msgstr ""
+
+#, fuzzy
+msgid "Example"
+msgstr "Exemples"
+
+msgid "Delete metadata of selected objects"
+msgstr ""
+
+msgid "Refresh plot. Defaults to True."
+msgstr ""
+
+msgid "Keep ROI. Defaults to False."
+msgstr ""
+
+msgid "Return current panel name."
+msgstr ""
+
+msgid "\"signal\", \"image\", \"macro\"))"
+msgstr ""
+
+msgid "Return type"
+msgstr ""
+
+msgid "Return groups titles and lists of inner objects uuids and titles."
+msgstr ""
+
+msgid "groups titles, lists of inner objects uuids and titles"
+msgstr ""
+
+msgid "Get object (signal/image) list for current panel. Objects are sorted by group number and object index in group."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\", \"macro\"). If None, current data panel is used (i.e. signal or image panel)."
+msgstr ""
+
+#, fuzzy
+msgid "List of object titles"
+msgstr "Obtenir la liste des objets"
+
+msgid "if panel not found"
+msgstr ""
+
+msgid "Get object (signal/image) uuid list for current panel. Objects are sorted by group number and object index in group."
+msgstr ""
+
+msgid "Group number, or group id, or group title. Defaults to None (all groups)."
+msgstr ""
+
+#, fuzzy
+msgid "List of object uuids"
+msgstr "Obtenir la liste des objets"
+
+msgid "Return all public methods of the class, except itself."
+msgstr ""
+
+msgid "List of public methods"
+msgstr ""
+
+msgid "Return selected objects uuids."
+msgstr ""
+
+msgid "If True, also return objects from selected groups."
+msgstr ""
+
+msgid "List of selected objects uuids."
+msgstr ""
+
+msgid "Return DataLab public version."
+msgstr ""
+
+msgid "DataLab version"
+msgstr ""
+
+msgid "Open DataLab HDF5 browser to Import HDF5 file."
+msgstr ""
+
+#, fuzzy
+msgid "HDF5 file name"
+msgstr "Parcourir un fichier HDF5"
+
+msgid "Reset all application data. Defaults to None."
+msgstr ""
+
+msgid "Import macro from file"
+msgstr ""
+
+msgid "Filename."
+msgstr ""
+
+msgid "Open objects from directory in current panel (signals/images)."
+msgstr ""
+
+msgid "directory path"
+msgstr ""
+
+msgid "Open objects from files in current panel (signals/images)."
+msgstr ""
+
+msgid "list of file names"
+msgstr ""
+
+msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
+msgstr ""
+
+msgid "List of HDF5 files to open. Defaults to None."
+msgstr ""
+
+msgid "Import all objects from HDF5 files. Defaults to None."
+msgstr ""
+
+msgid "Raise DataLab window"
+msgstr ""
+
+msgid "Reset all application data"
+msgstr ""
+
+msgid "Run macro."
+msgstr ""
+
+msgid "Macro number, or macro title. Defaults to None (current macro)."
+msgstr ""
+
+msgid "if macro not found"
+msgstr ""
+
+#, fuzzy
+msgid "Save to a DataLab HDF5 file."
+msgstr "Enregistrer la session en cours dans un fichier HDF5"
+
+msgid "Select groups in current panel."
+msgstr ""
+
+msgid "List of group numbers (1 to N), or list of group uuids, or None to select all groups. Defaults to None."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used. Defaults to None."
+msgstr ""
+
+msgid "Select objects in current panel."
+msgstr ""
+
+msgid "List of object numbers (1 to N) or uuids to select"
+msgstr ""
+
+#, fuzzy
+msgid "Switch to panel."
+msgstr "Basculer vers le panneau de signal ou d'image"
+
+msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
+msgstr ""
+
+msgid "Stop macro."
+msgstr ""
+
+msgid "Toggle auto refresh state."
+msgstr ""
+
+msgid "Auto refresh state"
+msgstr ""
+
+msgid "Toggle show titles state."
+msgstr ""
+
+msgid "Show titles state"
+msgstr ""
+
