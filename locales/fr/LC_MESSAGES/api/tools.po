@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"POT-Creation-Date: 2025-07-08 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -58,6 +58,9 @@ msgstr ""
 msgid ":mod:`sigima.tools.signal.dynamic`: Dynamic parameter extraction"
 msgstr ""
 
+msgid ":mod:`sigima.tools.signal.features`: Feature extraction algorithms"
+msgstr ""
+
 msgid ":mod:`sigima.tools.signal.fitmodels`: Curve fitting models"
 msgstr ""
 
@@ -67,16 +70,13 @@ msgstr ""
 msgid ":mod:`sigima.tools.signal.interpolation`: Interpolation algorithms"
 msgstr ""
 
-msgid ":mod:`sigima.tools.signal.level`: Level adjustment algorithms"
-msgstr ""
-
-msgid ":mod:`sigima.tools.signal.misc`: Miscellaneous tools"
-msgstr ""
-
 msgid ":mod:`sigima.tools.signal.peakdetection`: Peak detection algorithms"
 msgstr ""
 
 msgid ":mod:`sigima.tools.signal.pulse`: Pulse analysis algorithms"
+msgstr ""
+
+msgid ":mod:`sigima.tools.signal.scaling`: Scaling algorithms"
 msgstr ""
 
 msgid ":mod:`sigima.tools.signal.stability`: Stability analysis algorithms"
@@ -172,148 +172,7 @@ msgstr ""
 msgid "Sampling rate"
 msgstr ""
 
-msgid "Curve Fitting Models"
-msgstr ""
-
-msgid "Curve fitting model base class"
-msgstr ""
-
-msgid "Return fitting function"
-msgstr ""
-
-msgid "Return amp from function amplitude and sigma"
-msgstr ""
-
-msgid "Return function amplitude"
-msgstr ""
-
-msgid "Return function FWHM"
-msgstr ""
-
-msgid "Return segment coordinates for y=half-maximum intersection"
-msgstr ""
-
-msgid "1-dimensional Gaussian fit model"
-msgstr ""
-
-msgid "1-dimensional Lorentzian fit model"
-msgstr ""
-
-msgid "1-dimensional Voigt fit model"
-msgstr ""
-
-msgid "Fourier Analysis Algorithms"
-msgstr ""
-
-msgid "Append n zeros at the end of the signal."
-msgstr ""
-
-msgid "Number of zeros to append"
-msgstr ""
-
-msgid "X data, Y data (tuple)"
-msgstr ""
-
-msgid "Compute the Fast Fourier Transform (FFT) of a 1D real signal."
-msgstr ""
-
-msgid "Time domain axis (evenly spaced)."
-msgstr ""
-
-msgid "Signal values."
-msgstr ""
-
-msgid "If True, shift zero frequency to the center of the spectrum."
-msgstr ""
-
-msgid "Frequency axis and corresponding FFT values."
-msgstr ""
-
-msgid "Return type"
-msgstr ""
-
-msgid "Compute the inverse FFT of a spectrum."
-msgstr ""
-
-msgid "Frequency axis (evenly spaced)."
-msgstr ""
-
-msgid "FFT values."
-msgstr ""
-
-msgid "If True, the input spectrum is centered (zero frequency in the middle)."
-msgstr ""
-
-msgid "Starting value for the time axis."
-msgstr ""
-
-msgid "Time axis and reconstructed real signal."
-msgstr ""
-
-msgid "Raises"
-msgstr ""
-
-msgid "If frequency array is not evenly spaced or has fewer than 2 points."
-msgstr ""
-
-msgid "Compute magnitude spectrum."
-msgstr ""
-
-msgid "Use log scale. Defaults to False."
-msgstr ""
-
-msgid "Magnitude spectrum (X data, Y data)"
-msgstr ""
-
-msgid "Compute phase spectrum."
-msgstr ""
-
-msgid "Phase spectrum in degrees (X data, Y data)"
-msgstr ""
-
-msgid "Compute Power Spectral Density (PSD), using the Welch method."
-msgstr ""
-
-msgid "Sort from X,Y data by computing FFT(y)."
-msgstr ""
-
-msgid "Sorted frequencies in ascending order"
-msgstr ""
-
-msgid "Interpolation Algorithms"
-msgstr ""
-
-msgid "Interpolate data."
-msgstr ""
-
-msgid "New X data"
-msgstr ""
-
-msgid "Interpolation method"
-msgstr ""
-
-msgid "Fill value. Defaults to None. This value is used to fill in for requested points outside of the X data range. It is only used if the method argument is 'linear', 'cubic' or 'pchip'."
-msgstr ""
-
-msgid "Interpolated Y data"
-msgstr ""
-
-msgid "Scaling Algorithms"
-msgstr ""
-
-msgid "Normalize input array to a given parameter."
-msgstr ""
-
-msgid "Input array"
-msgstr ""
-
-msgid "Normalization parameter. Defaults to \"maximum\""
-msgstr ""
-
-msgid "Normalized array"
-msgstr ""
-
-msgid "Features"
+msgid "Feature Extraction Algorithms"
 msgstr ""
 
 msgid "Find the left indices of the zero-crossing intervals in the given array."
@@ -373,10 +232,136 @@ msgstr ""
 msgid "segment coordinates"
 msgstr ""
 
+msgid "Return type"
+msgstr ""
+
 msgid "Compute contrast"
 msgstr ""
 
+msgid "Input array"
+msgstr ""
+
 msgid "Contrast"
+msgstr ""
+
+msgid "Curve Fitting Models"
+msgstr ""
+
+msgid "Curve fitting model base class"
+msgstr ""
+
+msgid "Return fitting function"
+msgstr ""
+
+msgid "Return amp from function amplitude and sigma"
+msgstr ""
+
+msgid "Return function amplitude"
+msgstr ""
+
+msgid "Return function FWHM"
+msgstr ""
+
+msgid "Return segment coordinates for y=half-maximum intersection"
+msgstr ""
+
+msgid "1-dimensional Gaussian fit model"
+msgstr ""
+
+msgid "1-dimensional Lorentzian fit model"
+msgstr ""
+
+msgid "1-dimensional Voigt fit model"
+msgstr ""
+
+msgid "Fourier Analysis Algorithms"
+msgstr ""
+
+msgid "Append n zeros at the end of the signal."
+msgstr ""
+
+msgid "Number of zeros to append"
+msgstr ""
+
+msgid "X data, Y data (tuple)"
+msgstr ""
+
+msgid "Compute the Fast Fourier Transform (FFT) of a 1D real signal."
+msgstr ""
+
+msgid "Time domain axis (evenly spaced)."
+msgstr ""
+
+msgid "Signal values."
+msgstr ""
+
+msgid "If True, shift zero frequency and its corresponding FFT component to the"
+msgstr ""
+
+msgid "Frequency axis and corresponding FFT values."
+msgstr ""
+
+msgid "Compute the inverse Fast Fourier Transform (FFT) of a 1D complex spectrum."
+msgstr ""
+
+msgid "Frequency axis (evenly spaced)."
+msgstr ""
+
+msgid "FFT values."
+msgstr ""
+
+msgid "Starting value for the time axis."
+msgstr ""
+
+msgid "Time axis and real signal."
+msgstr ""
+
+msgid "Raises"
+msgstr ""
+
+msgid "If frequency array is not evenly spaced or has fewer than 2 points."
+msgstr ""
+
+msgid "Compute magnitude spectrum."
+msgstr ""
+
+msgid "Use log scale. Defaults to False."
+msgstr ""
+
+msgid "Magnitude spectrum (X data, Y data)"
+msgstr ""
+
+msgid "Compute phase spectrum."
+msgstr ""
+
+msgid "Phase spectrum in degrees (X data, Y data)"
+msgstr ""
+
+msgid "Compute Power Spectral Density (PSD), using the Welch method."
+msgstr ""
+
+msgid "Sort from X,Y data by computing FFT(y)."
+msgstr ""
+
+msgid "Sorted frequencies in ascending order"
+msgstr ""
+
+msgid "Interpolation Algorithms"
+msgstr ""
+
+msgid "Interpolate data."
+msgstr ""
+
+msgid "New X data"
+msgstr ""
+
+msgid "Interpolation method"
+msgstr ""
+
+msgid "Fill value. Defaults to None. This value is used to fill in for requested points outside of the X data range. It is only used if the method argument is 'linear', 'cubic' or 'pchip'."
+msgstr ""
+
+msgid "Interpolated Y data"
 msgstr ""
 
 msgid "Peak Detection Algorithms"
@@ -440,6 +425,18 @@ msgid "Compute Full Width at 1/e² of the input data (using a Gaussian model fit
 msgstr ""
 
 msgid "FW at 1/e² segment coordinates"
+msgstr ""
+
+msgid "Scaling Algorithms"
+msgstr ""
+
+msgid "Normalize input array to a given parameter."
+msgstr ""
+
+msgid "Normalization parameter. Defaults to \"maximum\""
+msgstr ""
+
+msgid "Normalized array"
 msgstr ""
 
 msgid "Stability Analysis Algorithms"
@@ -1044,3 +1041,4 @@ msgstr ""
 
 msgid "Tuple of (x, y) coordinates of rotated vector"
 msgstr ""
+

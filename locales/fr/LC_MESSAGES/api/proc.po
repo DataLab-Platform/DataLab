@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-06 14:46+0200\n"
+"POT-Creation-Date: 2025-07-08 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -683,7 +683,10 @@ msgstr ""
 msgid "Compute FFT with :py:func:`sigima.tools.signal.fourier.fft1d`"
 msgstr ""
 
-msgid "Compute iFFT with :py:func:`sigima.tools.signal.fourier.ifft1d`"
+msgid "Compute the inverse FFT with :py:func:`sigima.tools.signal.fourier.ifft1d`."
+msgstr ""
+
+msgid "Source signal."
 msgstr ""
 
 msgid "Compute magnitude spectrum with :py:func:`sigima.tools.signal.fourier.magnitude_spectrum`"
@@ -834,9 +837,6 @@ msgid "New instance of :py:class:`AngleUnitParam`."
 msgstr ""
 
 msgid "Convert cartesian coordinates to polar coordinates with :py:func:`sigima.tools.coordinates.to_polar`."
-msgstr ""
-
-msgid "Source signal."
 msgstr ""
 
 msgid "Parameters."
@@ -1813,3 +1813,4 @@ msgstr ""
 
 msgid "A list of tuples, each containing the function name and the function object."
 msgstr ""
+
