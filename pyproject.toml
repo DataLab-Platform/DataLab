@@ -40,7 +40,7 @@ classifiers = [
 ]
 requires-python = ">=3.9, <4"
 dependencies = [
-    "guidata >= 3.11",
+    "guidata >= 3.12",
     "PlotPy >= 2.7.4",
     "Sigima >= 0.1.0",
     "NumPy >= 1.22",
