@@ -29,10 +29,7 @@ def test_image_background_selection() -> None:
         dlg = ImageBackgroundDialog(img)
         dlg.resize(640, 480)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
-        with execenv.context(delay=200):
-            # For more details about the why of the delay, see the comment in
-            # datalab\tests\features\image\offset_correction_unit_test.py
-            exec_dialog(dlg)
+        exec_dialog(dlg)
         execenv.print(f"background: {dlg.get_background()}")
         execenv.print(f"rect coords: {dlg.get_rect_coords()}")
         # Check background value:
@@ -46,16 +43,7 @@ def test_image_offset_correction_with_background_dialog() -> None:
     with qt_app_context():
         i1 = create_noisygauss_image()
         dlg = ImageBackgroundDialog(i1)
-        with execenv.context(delay=200):
-            # On Windows, the `QApplication.processEvents()` introduced with
-            # guidata V3.5.1 in `exec_dialog` is sufficient to force an update
-            # of the dialog. The delay is not required.
-            # On Linux, the delay is required to ensure that the dialog is displayed
-            # because the `QApplication.processEvents()` do not trigger the drawing
-            # event on the dialog as expected. So, the `RangeComputation2d` is not
-            # drawn, the background value is not computed, and `get_rect_coords()`
-            # returns `None` which causes the test to fail.
-            ok = exec_dialog(dlg)
+        ok = exec_dialog(dlg)
         if ok:
             param = sigima.objects.ROI2DParam()
             # pylint: disable=unbalanced-tuple-unpacking
