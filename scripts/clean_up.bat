@@ -30,6 +30,10 @@ del /s /q *~ 1>nul 2>&1
 del /s /q *.bak 1>nul 2>&1
 del /s /q *.orig 1>nul 2>&1
 
+@REM Removing empty directories left by version control branch switching
+@REM (recursive, starting from the most nested to remove a full tree)
+for /f "delims=" %%d in ('dir /ad /b /s ^| sort /r') do @if exist "%%d" rd "%%d" 2>nul
+
 @REM Removing localization template files
 if exist doc\locale\pot ( rmdir /s /q doc\locale\pot )
 del /s /q %MODNAME%\locale\%MODNAME%.pot 1>nul 2>&1
