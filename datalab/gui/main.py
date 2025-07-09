@@ -1212,15 +1212,14 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                     else:
                         func(param)
                     return
-                else:
-                    # If the function is not wrapped, we check if it is a
-                    # registered feature:
-                    try:
-                        feature = panel.processor.get_feature(name)
-                        panel.processor.run_feature(feature, param)
-                        return
-                    except ValueError:
-                        continue
+                # If the function is not wrapped, we check if it is a
+                # registered feature:
+                try:
+                    feature = panel.processor.get_feature(name)
+                    panel.processor.run_feature(feature, param)
+                    return
+                except ValueError:
+                    continue
         raise ValueError(f"Unknown computation function {name}")
 
     # ------GUI refresh
