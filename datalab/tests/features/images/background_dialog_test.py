@@ -42,7 +42,7 @@ def test_image_background_selection() -> None:
         dlg.resize(640, 480)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
         exec_dialog(dlg)
-        qt_wait_until(lambda: wait_for_rect_coords(dlg))
+        qt_wait_until(lambda: wait_for_rect_coords(dlg), timeout=5.0, interval=0.1)
         execenv.print(f"background: {dlg.get_background()}")
         execenv.print(f"rect coords: {dlg.get_rect_coords()}")
         # Check background value:
@@ -58,7 +58,7 @@ def test_image_offset_correction_with_background_dialog() -> None:
         dlg = ImageBackgroundDialog(i1)
         ok = exec_dialog(dlg)
         if ok:
-            qt_wait_until(lambda: wait_for_rect_coords(dlg))
+            qt_wait_until(lambda: wait_for_rect_coords(dlg), timeout=5.0, interval=0.1)
             param = sigima.objects.ROI2DParam()
             # pylint: disable=unbalanced-tuple-unpacking
             ix0, iy0, ix1, iy1 = i1.physical_to_indices(dlg.get_rect_coords())
