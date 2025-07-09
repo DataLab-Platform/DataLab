@@ -1201,6 +1201,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         panels.extend(self.panels)
         for panel in panels:
             if isinstance(panel, base.BaseDataPanel):
+                name = name.removeprefix("compute_")
                 panel: base.BaseDataPanel
                 # Some computation features are wrapped in a method with a
                 # "compute_" prefix, so we check for this first:

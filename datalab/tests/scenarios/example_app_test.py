@@ -30,7 +30,7 @@ def test_example_app() -> None:
         roi = sigima.objects.create_image_roi(
             "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
         )
-        proxy.compute_roi_extraction(roi)
+        proxy.calc("compute_roi_extraction", roi)
         param = sigima.params.BlobOpenCVParam.create(
             min_dist_between_blobs=0.1,
             filter_by_color=False,
