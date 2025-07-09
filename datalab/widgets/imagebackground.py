@@ -81,6 +81,14 @@ class ImageBackgroundDialog(PlotDialog):
         return self.__background
 
     def get_rect_coords(self) -> tuple[float, float, float, float]:
-        """Get rectangle coordinates"""
-        assert self.__rect_coords is not None, "Rectangle coordinates not set"
+        """Get rectangle coordinates
+
+        Returns:
+            tuple: rectangle coordinates (x0, y0, x1, y1)
+
+        Raises:
+            ValueError: if rectangle coordinates are not set
+        """
+        if self.__rect_coords is None:
+            raise ValueError("Rectangle coordinates not set")
         return self.__rect_coords

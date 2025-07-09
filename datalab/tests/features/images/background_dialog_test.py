@@ -14,12 +14,24 @@ import numpy as np
 import sigima.objects
 import sigima.params
 import sigima.proc.image as sigima_image
-from guidata.qthelpers import exec_dialog, qt_app_context
+from guidata.qthelpers import exec_dialog, qt_app_context, qt_wait_until
 from sigima.tests import vistools
 from sigima.tests.data import create_noisygauss_image
 
 from datalab.env import execenv
 from datalab.widgets.imagebackground import ImageBackgroundDialog
+
+
+def wait_for_rect_coords(dlg: ImageBackgroundDialog) -> bool:
+    """Condition to wait for rectangle coordinates."""
+    # Wait for rectangle coordinates to be set. This is necessary because
+    # when executing the dialog in unattended mode, the rectangle
+    # coordinates may not be set immediately (Qt events may not be processed).
+    try:
+        dlg.get_rect_coords()
+        return True
+    except ValueError:
+        return False
 
 
 def test_image_background_selection() -> None:
@@ -30,6 +42,7 @@ def test_image_background_selection() -> None:
         dlg.resize(640, 480)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
         exec_dialog(dlg)
+        qt_wait_until(lambda: wait_for_rect_coords(dlg))
         execenv.print(f"background: {dlg.get_background()}")
         execenv.print(f"rect coords: {dlg.get_rect_coords()}")
         # Check background value:
@@ -45,6 +58,7 @@ def test_image_offset_correction_with_background_dialog() -> None:
         dlg = ImageBackgroundDialog(i1)
         ok = exec_dialog(dlg)
         if ok:
+            qt_wait_until(lambda: wait_for_rect_coords(dlg))
             param = sigima.objects.ROI2DParam()
             # pylint: disable=unbalanced-tuple-unpacking
             ix0, iy0, ix1, iy1 = i1.physical_to_indices(dlg.get_rect_coords())
