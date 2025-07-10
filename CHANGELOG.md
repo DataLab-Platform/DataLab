@@ -9,6 +9,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * FT-Lab signals and images:
   * Added support for CEA's FT-Lab signal and image binary formats.
   * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
+* Zero padding:
+  * Enhanced to support both prepending and appending zeros.
+  * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
+  * Default strategy is now "Next power of 2".
 
 * Signal cursors:
   * Fixed [Issue #231](https://github.com/DataLab-Platform/DataLab/issues/231) - Add horizontal cursors to the Signal View (requires PlotPy v2.8)
