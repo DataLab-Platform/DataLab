@@ -9,7 +9,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * New image processing features:
   * Added new "Gaussian frequency filter" feature:
     * This feature allows to filter an image in the frequency domain using a Gaussian filter
-    * The feature is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)
+    * It is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)
     * This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images
 
 * Signal cursors:
