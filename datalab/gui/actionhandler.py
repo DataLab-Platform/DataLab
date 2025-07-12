@@ -1044,6 +1044,8 @@ class ImageActionHandler(BaseActionHandler):
                 )
                 self.action_for("canny")
             self.action_for("butterworth")
+            with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
+                self.action_for("freq_fft")
 
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):

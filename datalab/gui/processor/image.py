@@ -219,6 +219,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sigima_base.MovingMedianParam,
         )
         self.register_1_to_1(sigima_image.wiener, _("Wiener filter"))
+        self.register_1_to_1(
+            sigima_image.freq_fft,
+            _("Gaussian frequency filter"),
+            sigima_image.FreqFFTParam,
+        )
         # Fourier analysis
         self.register_1_to_1(
             sigima_image.zero_padding,
