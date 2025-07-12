@@ -6,13 +6,22 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
-* FT-Lab signals and images:
-  * Added support for CEA's FT-Lab signal and image binary formats.
-  * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
-* Zero padding:
-  * Enhanced to support both prepending and appending zeros.
-  * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
-  * Default strategy is now "Next power of 2".
+* New image processing features:
+  * Added new "Gaussian frequency filter" feature:
+    * This feature allows to filter an image in the frequency domain using a Gaussian filter
+    * It is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)
+    * This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images
+
+* New signal processing features:
+  * Zero padding:
+    * Enhanced to support both prepending and appending zeros.
+    * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
+    * Default strategy is now "Next power of 2".
+
+* New I/O features:
+  * FT-Lab signals and images:
+    * Added support for CEA's FT-Lab signal and image binary formats.
+    * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
 
 * Signal cursors:
   * Fixed [Issue #231](https://github.com/DataLab-Platform/DataLab/issues/231) - Add horizontal cursors to the Signal View (requires PlotPy v2.8)
