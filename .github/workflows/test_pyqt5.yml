@@ -36,7 +36,18 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ruff pytest
         pip install PyQt5
-        pip install .
+        # Install other dependencies first
+        pip install "guidata >= 3.12" "PlotPy >= 2.7.4" "NumPy >= 1.22" "SciPy >= 1.10.1" "scikit-image >= 0.19.2" "pandas >= 1.4" "PyWavelets >= 1.2" "psutil >= 5.8" "packaging >= 21.3"
+        # Install sigima conditionally based on branch
+        if [ "${{ github.ref_name }}" = "develop" ]; then
+          echo "Installing sigima from GitHub repository for develop branch"
+          pip install git+https://github.com/DataLab-Platform/sigima.git
+        else
+          echo "Installing sigima from PyPI for non-develop branch"
+          pip install "Sigima >= 0.1.0"
+        fi
+        # Install DataLab package without dependencies (since we installed them above)
+        pip install . --no-deps
     - name: Lint with Ruff
       run: ruff check --output-format=github datalab
     - name: Test with pytest
