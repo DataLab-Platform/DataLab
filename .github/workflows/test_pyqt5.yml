@@ -37,6 +37,10 @@ jobs:
         python -m pip install ruff pytest
         pip install PyQt5
         pip install .
+        if [ "${{ github.ref_name }}" = "develop" ]; then
+           pip uninstall -y sigima
+           pip install git+https://github.com/DataLab-Platform/Sigima.git@develop
+        fi
     - name: Lint with Ruff
       run: ruff check --output-format=github datalab
     - name: Test with pytest
