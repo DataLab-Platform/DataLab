@@ -25,7 +25,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, TypeROI, TypeROIParam
-from sigima.proc import is_computation_function
+from sigima.proc.decorator import is_computation_function
 
 from datalab import env
 from datalab.config import Conf, _
