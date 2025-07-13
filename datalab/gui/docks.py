@@ -134,7 +134,7 @@ class CurveStatsToolFunctions:
         """Return FWHM information string"""
         try:
             with warnings.catch_warnings(record=True) as w:
-                x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
+                x0, _y0, x1, _y1 = fwhm(x, y, "zero-crossing")
                 wstr = " ⚠️" if w else ""
         except (ValueError, ZeroDivisionError):
             return "🛑"
