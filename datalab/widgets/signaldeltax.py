@@ -105,7 +105,7 @@ class SignalDeltaXDialog(PlotDialog):
 
         try:
             with warnings.catch_warnings(record=True) as w:
-                self.__coords = full_width_at_y((sig.x, sig.y), y)
+                self.__coords = full_width_at_y(sig.x, sig.y, y)
                 delta_str = f"{self.__coords[2] - self.__coords[0]:g}"
                 warning_or_error = len(w) > 0
                 self.delta_xrange.setVisible(True)
