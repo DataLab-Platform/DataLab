@@ -17,7 +17,7 @@ from sigima.tools.signal.fitmodels import (
     LorentzianModel,
     VoigtModel,
 )
-from sigima.tools.signal.fourier import sort_frequencies
+from sigima.tools.signal.fourier import fft1d
 from sigima.tools.signal.peakdetection import xpeak
 
 from datalab.config import _
@@ -289,6 +289,20 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
 
 # --- Sinusoidal fitting curve ------------------------------------------------
+
+
+def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
+    """Sort from X,Y data by computing FFT(y).
+
+    Args:
+        x: X data
+        y: Y data
+
+    Returns:
+        Sorted frequencies in ascending order
+    """
+    freqs, fourier = fft1d(x, y, shift=False)
+    return freqs[np.argsort(fourier)]
 
 
 def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
