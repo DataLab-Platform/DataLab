@@ -53,6 +53,7 @@ def test_import_wizard():
             ("image", "fiber.txt", ImageObj),
             ("signal", "multiple_curves.csv", SignalObj),
             ("signal", "paracetamol.txt", SignalObj),
+            ("signal", "spectrum.mca", SignalObj),
         ):
             path = get_test_fnames(fname)[0]
             if not execenv.unattended:
@@ -81,6 +82,11 @@ def test_import_wizard():
                     datapge.param.delimiter_choice = ";"
                     datapge.param.skip_rows = 1
                     n_objs = 5
+                elif fname == "spectrum.mca":
+                    datapge.param.skip_rows = 18
+                    datapge.param.max_rows = 2048
+                    datapge.param.header = None
+                    datapge.param.first_col_is_x = False
                 else:
                     datapge.param.skip_rows = 10
                 datapge.param_widget.get()
