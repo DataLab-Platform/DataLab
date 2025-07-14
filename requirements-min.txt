@@ -7,7 +7,7 @@ SciPy==1.10.1
 Sigima==0.1.0
 babel
 build
-guidata==3.11
+guidata==3.12
 myst_parser
 opencv-python-headless==4.5.4.60
 packaging==21.3
