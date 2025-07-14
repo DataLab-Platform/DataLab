@@ -165,6 +165,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_2_to_1(
             sigima_signal.deconvolve,
             _("Deconvolution"),
+            icon_name="deconvolution.svg",
             obj2_name=_("kernel to deconvolve"),
         )
 

@@ -379,6 +379,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_2_to_1(
             sigima_image.deconvolve,
             _("Deconvolution"),
+            icon_name="deconvolution.svg",
             obj2_name=_("Kernel image"),
         )
 
