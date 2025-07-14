@@ -12,10 +12,6 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
-from sigima.tests.common.createobject_test import (
-    iterate_image_creation,
-    iterate_signal_creation,
-)
 from sigima.tests.data import (
     GaussianNoiseParam,
     create_noisy_signal,
@@ -23,6 +19,8 @@ from sigima.tests.data import (
     create_peak2d_image,
     create_sincos_image,
 )
+from sigima.tests.image.imageobj_unit_test import iterate_image_creation
+from sigima.tests.signal.signalobj_unit_test import iterate_signal_creation
 
 from datalab.config import _
 from datalab.gui.main import DLMainWindow
