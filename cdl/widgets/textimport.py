@@ -615,7 +615,7 @@ class GraphicalRepresentationPage(WizardPage):
         self.__objitmlist = []
         if self.destination == "signal":
             xydata = data.T
-            x = np.arange(len(xydata[0]))
+            x = np.arange(len(xydata[0]), dtype=self.data_page.param.dtype_str)
             if len(xydata) == 1:
                 self.__plot_signal(x, xydata[0], "")
             else:
