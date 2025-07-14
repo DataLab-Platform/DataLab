@@ -162,6 +162,11 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             icon_name="convolution.svg",
             obj2_name=_("signal to convolve with"),
         )
+        self.register_2_to_1(
+            sigima_signal.deconvolve,
+            _("Deconvolution"),
+            obj2_name=_("kernel to deconvolve"),
+        )
 
         # MARK: PROCESSING
         # Axis transformation

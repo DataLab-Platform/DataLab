@@ -813,6 +813,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_pos=-1,
             )
 
+        with self.new_category(ActionCategory.OPERATION):
+            self.action_for("deconvolve")
+
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Show results") + "...",

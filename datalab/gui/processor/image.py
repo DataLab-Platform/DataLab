@@ -376,6 +376,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sigima_image.RadialProfileParam,
             icon_name="profile_radial.svg",
         )
+        self.register_2_to_1(
+            sigima_image.deconvolve,
+            _("Deconvolution"),
+            obj2_name=_("Kernel image"),
+        )
 
         # MARK: PROCESSING
         # Axis transformation
