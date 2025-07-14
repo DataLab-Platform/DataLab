@@ -12,7 +12,7 @@ import struct
 
 import numpy as np
 from sigima.io.base import FormatInfo
-from sigima.io.image.base import ImageFormatBase
+from sigima.io.image.base import SingleImageFormatBase
 
 # ==============================================================================
 # Thales Pixium FXD file format
@@ -104,7 +104,7 @@ class FXDFile:
         self.data = data.reshape(self.nbrows, self.nbcols)
 
 
-class FXDImageFormat(ImageFormatBase):
+class FXDImageFormat(SingleImageFormatBase):
     """Object representing Thales Pixium (FXD) image file type"""
 
     FORMAT_INFO = FormatInfo(
@@ -133,7 +133,7 @@ class FXDImageFormat(ImageFormatBase):
 # ==============================================================================
 
 
-class XYZImageFormat(ImageFormatBase):
+class XYZImageFormat(SingleImageFormatBase):
     """Object representing Dürr NDT XYZ image file type"""
 
     FORMAT_INFO = FormatInfo(

@@ -12,10 +12,10 @@ It provides a new image file format, Dürr NDT XYZ, from Dürr NDT GmbH & Co. KG
 
 import numpy as np
 from sigima.io.base import FormatInfo
-from sigima.io.image.base import ImageFormatBase
+from sigima.io.image.base import SingleImageFormatBase
 
 
-class XYZImageFormat(ImageFormatBase):
+class XYZImageFormat(SingleImageFormatBase):
     """Object representing Dürr NDT XYZ image file type"""
 
     FORMAT_INFO = FormatInfo(
