@@ -141,6 +141,11 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             sigima_signal.calibration,
             _("Linear calibration"),
             sigima_signal.XYCalibrateParam,
+            comment=_(
+                "Apply linear calibration to the X or Y axis:\n"
+                "  • x' = ax + b\n"
+                "  • y' = ay + b"
+            ),
         )
         self.register_1_to_1(
             sigima_signal.swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg"

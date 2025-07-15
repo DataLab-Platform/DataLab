@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-15 10:28+0200\n"
+"POT-Creation-Date: 2025-07-15 18:13+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1253,6 +1253,12 @@ msgstr "Convolution"
 msgid "signal to convolve with"
 msgstr "signal à convoluer"
 
+msgid ""
+"Apply linear calibration to the X or Y axis:\n"
+"  • x' = ax + b\n"
+"  • y' = ay + b"
+msgstr ""
+
 msgid "Reverse X-axis"
 msgstr "Inverser l'axe des X"
 
@@ -2341,3 +2347,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
