@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 17:36+0200\n"
+"POT-Creation-Date: 2025-07-15 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -25,37 +25,110 @@ msgstr "Outils (:mod:`sigima.tools`)"
 msgid "This package contains functions operating on NumPy arrays that are intended to be used in Sigima computation functions. These functions are complementary to the algorithms provided by external libraries such as SciPy, NumPy, and scikit-image."
 msgstr "Ce paquet contient des fonctions opérant sur des tableaux NumPy qui sont destinées à être utilisées dans les fonctions de calcul Sigima. Ces fonctions sont complémentaires aux algorithmes fournis par des bibliothèques externes telles que SciPy, NumPy et scikit-image."
 
-msgid "Even though these functions are primarily designed to be used in the Sigima pipeline, they can also be used independently. They provide a wide range of algorithms but are not exhaustive due to the vast number of algorithms already available in the scientific Python ecosystem."
+#, fuzzy
+msgid "Even though these functions are primarily designed to be used in the Sigima pipeline, they can also be used independently. They provide a wide range of features but are not exhaustive due to the vast number of algorithms already available in the scientific Python ecosystem."
 msgstr "Bien que ces fonctions soient principalement conçues pour être utilisées dans le pipeline Sigima, elles peuvent également être utilisées de manière indépendante. Elles offrent une large gamme d'algorithmes mais ne sont pas exhaustives en raison du grand nombre d'algorithmes déjà disponibles dans l'écosystème scientifique Python."
 
 msgid "The :mod:`sigima.proc` module contains the Sigima computation functions that operate on signal and image objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`, defined in the :mod:`sigima.objects` package)."
 msgstr "Le module :mod:`sigima.proc` contient les fonctions de calcul Sigima qui opèrent sur les objets signal et image (c'est-à-dire :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`, définis dans le paquet :mod:`sigima.objects`)."
 
-msgid "The algorithms are organized in subpackages according to their purpose. The following subpackages are available:"
+#, fuzzy
+msgid "These tools are organized in subpackages according to their purpose. The following subpackages are available:"
 msgstr "Les algorithmes sont organisés en sous-paquets selon leur objectif. Les sous-paquets suivants sont disponibles :"
 
-msgid ":mod:`sigima.tools.signal`: Signal processing algorithms"
-msgstr ":mod:`sigima.tools.signal`: Algorithmes de traitement du signal"
-
-msgid ":mod:`sigima.tools.image`: Image processing algorithms"
-msgstr ":mod:`sigima.tools.image`: Algorithmes de traitement d'image"
-
-msgid ":mod:`sigima.tools.datatypes`: Data type conversion algorithms"
+#, fuzzy
+msgid ":mod:`sigima.tools.checks`: Input data checks for all tools"
 msgstr ":mod:`sigima.tools.datatypes`: Algorithmes de conversion de type de données"
 
-msgid ":mod:`sigima.tools.coordinates`: Coordinate conversion algorithms"
+#, fuzzy
+msgid ":mod:`sigima.tools.signal`: Signal processing tools"
+msgstr ":mod:`sigima.tools.signal`: Algorithmes de traitement du signal"
+
+#, fuzzy
+msgid ":mod:`sigima.tools.image`: Image processing tools"
+msgstr ":mod:`sigima.tools.image`: Algorithmes de traitement d'image"
+
+#, fuzzy
+msgid ":mod:`sigima.tools.datatypes`: Data type conversion tools"
+msgstr ":mod:`sigima.tools.datatypes`: Algorithmes de conversion de type de données"
+
+#, fuzzy
+msgid ":mod:`sigima.tools.coordinates`: Coordinate conversion tools"
 msgstr ":mod:`sigima.tools.coordinates`: Algorithmes de conversion de coordonnées"
 
-msgid "Signal Processing Algorithms"
+msgid "Check functions"
+msgstr ""
+
+msgid "Decorator to check inputs of functions operating on 1D NumPy arrays (x/y)."
+msgstr ""
+
+msgid "Can be used with parentheses:"
+msgstr ""
+
+msgid "Or without parentheses (default arguments):"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Whether to check if x is 1-D."
+msgstr ""
+
+msgid "Expected dtype of x."
+msgstr ""
+
+msgid "Whether to check if x is sorted."
+msgstr ""
+
+msgid "Whether to check if x is evenly spaced."
+msgstr ""
+
+msgid "Whether to check if y is 1-D."
+msgstr ""
+
+msgid "Expected dtype of y."
+msgstr ""
+
+msgid "Whether to check if x and y have same size."
+msgstr ""
+
+msgid "Relative tolerance for regular spacing."
+msgstr ""
+
+msgid "Returns"
+msgstr ""
+
+msgid "Decorated function with pre-checks on x/y."
+msgstr ""
+
+msgid "Decorator to check input for functions operating on 2D NumPy arrays (e.g. images)."
+msgstr ""
+
+msgid "Expected number of dimensions."
+msgstr ""
+
+msgid "Expected dtype."
+msgstr ""
+
+msgid "Whether to check that the array has dynamic range."
+msgstr ""
+
+msgid "Whether to check that all values are finite."
+msgstr ""
+
+msgid "Decorated function with pre-checks on data."
+msgstr ""
+
+#, fuzzy
+msgid "Signal Processing Tools"
 msgstr "Algorithmes de traitement du signal"
 
-msgid "Signal Processing Algorithms (:mod:`sigima.tools.signal`)"
+#, fuzzy
+msgid "Signal Processing Tools (:mod:`sigima.tools.signal`)"
 msgstr "Algorithmes de traitement du signal (:mod:`sigima.tools.signal`)"
 
-msgid "This package contains signal processing algorithms."
-msgstr "Ce paquet contient des algorithmes de traitement du signal."
-
-msgid "Algorithms are organized into subpackages according to their purpose:"
+#, fuzzy
+msgid "This package contains signal processing tools, which are organized into subpackages according to their purpose:"
 msgstr "Les algorithmes sont organisés en sous-paquets selon leur objectif :"
 
 msgid ":mod:`sigima.tools.signal.dynamic`: Dynamic parameter extraction"
@@ -97,16 +170,10 @@ msgstr ""
 msgid "Fit a sinusoidal model to the input data."
 msgstr ""
 
-msgid "Parameters"
-msgstr ""
-
 msgid "X data"
 msgstr ""
 
 msgid "Y data"
-msgstr ""
-
-msgid "Returns"
 msgstr ""
 
 msgid "A tuple containing the fit parameters (amplitude, frequency, phase, offset) and the residuals"
@@ -226,9 +293,6 @@ msgstr ""
 msgid "Compute the bandwidth of the signal at a given level."
 msgstr ""
 
-msgid "X,Y data"
-msgstr ""
-
 msgid "Level in dB at which the bandwidth is computed. Defaults to 3.0."
 msgstr ""
 
@@ -283,10 +347,19 @@ msgstr "Algorithmes d'analyse de Fourier"
 msgid "Append n zeros at the end of the signal."
 msgstr ""
 
-msgid "Number of zeros to append"
+msgid "X data."
 msgstr ""
 
-msgid "X data, Y data (tuple)"
+msgid "Y data."
+msgstr ""
+
+msgid "Number of zeros to prepend."
+msgstr ""
+
+msgid "Number of zeros to append."
+msgstr ""
+
+msgid "Padded x and y."
 msgstr ""
 
 msgid "Compute the Fast Fourier Transform (FFT) of a 1D real signal."
@@ -343,10 +416,31 @@ msgstr ""
 msgid "Compute Power Spectral Density (PSD), using the Welch method."
 msgstr ""
 
-msgid "Sort from X,Y data by computing FFT(y)."
+msgid "X data, Y data (tuple)"
 msgstr ""
 
-msgid "Sorted frequencies in ascending order"
+msgid "Apply a brickwall filter (ideal frequency filter) to a 1D signal."
+msgstr ""
+
+msgid "1D uniformly spaced axis (e.g. time or sample number)."
+msgstr ""
+
+msgid "Signal values (same length as x)."
+msgstr ""
+
+msgid "First cutoff frequency (Hz)."
+msgstr ""
+
+msgid "Second cutoff frequency (Hz), required for band filters."
+msgstr ""
+
+msgid "Type of filter to apply."
+msgstr ""
+
+msgid "Tuple (x, y_filtered), where y_filtered is the filtered signal."
+msgstr ""
+
+msgid "If x is not uniformly spaced, if cutoff frequencies are invalid,     or if required parameters are missing."
 msgstr ""
 
 msgid "Interpolation Algorithms"
@@ -544,7 +638,8 @@ msgstr ""
 msgid "Windowed Y data"
 msgstr ""
 
-msgid "Image Processing Algorithms"
+#, fuzzy
+msgid "Image Processing Tools"
 msgstr "Algorithmes de traitement d'image"
 
 msgid "Scale array `data` to fit [zmin, zmax] dynamic range"
@@ -620,6 +715,30 @@ msgid "Compute power spectral density of complex array `z`"
 msgstr ""
 
 msgid "Power spectral density of input data"
+msgstr ""
+
+msgid "Apply a 2D Gaussian bandpass filter in the frequency domain to an image."
+msgstr ""
+
+msgid "This function performs a 2D Fast Fourier Transform (FFT) on the input image, applies a Gaussian filter centered at frequency `f0` with standard deviation `sigma` (both expressed in cycles per pixel, 0 <= f < 0.5), and then transforms the result back to the spatial domain."
+msgstr ""
+
+msgid "Input image data as a 2D NumPy array."
+msgstr ""
+
+msgid "Center frequency of the Gaussian filter (cycles/pixel, 0 = DC)."
+msgstr ""
+
+msgid "Standard deviation of the Gaussian filter (cycles/pixel)."
+msgstr ""
+
+msgid "Specifies how to return the inverse FFT result."
+msgstr ""
+
+msgid "The filtered image as a 2D NumPy array."
+msgstr ""
+
+msgid "If 'zin' is not 2D or if 'ifft_result_type' is invalid."
 msgstr ""
 
 msgid "Perform image pixel binning"
@@ -844,7 +963,8 @@ msgstr ""
 msgid "The maximum blob convexity."
 msgstr ""
 
-msgid "Data Type Conversion Algorithms"
+#, fuzzy
+msgid "Data Type Conversion Tools"
 msgstr "Algorithmes de conversion de type de données"
 
 msgid "Convert array to a new data type, after having clipped values to the new data type's range if it is an integer type. If data type is not integer, this is equivalent to ``data.astype(dtype)``."
@@ -859,7 +979,8 @@ msgstr ""
 msgid "Array converted to new data type"
 msgstr ""
 
-msgid "Coordinate Conversion Algorithms"
+#, fuzzy
+msgid "Coordinate Conversion Tools"
 msgstr "Algorithmes de conversion de coordonnées"
 
 msgid "Convert circle center and radius to X diameter coordinates"
@@ -1044,3 +1165,4 @@ msgstr ""
 
 msgid "Tuple of (x, y) coordinates of rotated vector"
 msgstr ""
+

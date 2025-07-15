@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 17:42+0200\n"
+"POT-Creation-Date: 2025-07-15 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -566,7 +566,7 @@ msgstr ""
 msgid "Base class for high-pass, low-pass, band-pass and band-stop filters"
 msgstr ""
 
-msgid "Filter method\\.  Single choice from: 'bessel', 'butter', 'cheby1', 'cheby2', 'ellip'. Default: 'bessel'."
+msgid "Filter method\\.  Single choice from: 'bessel', 'butter', 'cheby1', 'cheby2', 'ellip', 'brickwall'. Default: 'bessel'."
 msgstr ""
 
 msgid "Filter order\\.  Integer higher than 1\\. Default: 3."
@@ -582,6 +582,12 @@ msgid "Passband ripple\\.  Float higher than 0, non zero, unit: db\\. Default: 1
 msgstr ""
 
 msgid "Stopband attenuation\\.  Float higher than 0, non zero, unit: db\\. Default: 1."
+msgstr ""
+
+msgid "Default: True."
+msgstr ""
+
+msgid "Minimum FFT points number\\.  Default: 0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`BaseHighLowBandParam` with the fields set to the given values."
@@ -609,6 +615,9 @@ msgid "Return type"
 msgstr ""
 
 msgid "Low-pass filter parameters"
+msgstr ""
+
+msgid "Cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`LowPassFilterParam` with the fields set to the given values."
@@ -659,10 +668,19 @@ msgstr ""
 msgid "Compute band-stop filter with :py:func:`scipy.signal.filtfilt`"
 msgstr ""
 
-msgid "Zero padding parameters"
+msgid "ZeroPadding1DParam manages the parameters for applying zero-padding to signals."
 msgstr ""
 
-msgid "Single choice from: 'next_pow2', 'double', 'triple', 'custom'. Default: 'custom'."
+msgid "Attributes:"
+msgstr ""
+
+msgid "strategies: Available strategies (\"next_pow2\", \"double\", \"triple\", \"custom\"). strategy: Choice item for selecting the zero-padding strategy. locations: Available locations for padding (\"append\", \"prepend\", \"both\"). location: Choice item for selecting where to add the padding. n: Number of points to add as padding (active only for \"custom\" strategy)."
+msgstr ""
+
+msgid "Single choice from: 'next_pow2', 'double', 'triple', 'custom'. Default: 'next_pow2'."
+msgstr ""
+
+msgid "Where to add the padding\\. Single choice from: 'append', 'prepend', 'both'. Default: 'append'."
 msgstr ""
 
 msgid "Number of points\\. Number of points to add\\. Integer higher than 1\\. Default: None."
@@ -674,22 +692,46 @@ msgstr ""
 msgid "New instance of :py:class:`ZeroPadding1DParam`."
 msgstr ""
 
-msgid "Update parameters from signal"
+msgid "Update parameters from signal."
 msgstr ""
 
-msgid "Callback for choice item"
+msgid "Signal object from which to update the dataset."
 msgstr ""
 
-msgid "Compute zero padding with :py:func:`sigima.tools.signal.fourier.zero_padding`"
+msgid "Compute the next power of two greater than or equal to the given size."
+msgstr ""
+
+msgid "The input integer."
+msgstr ""
+
+msgid "The smallest power of two greater than or equal to 'size'."
+msgstr ""
+
+msgid "Callback for strategy choice item."
+msgstr ""
+
+msgid "Unused argument (in this context)."
+msgstr ""
+
+msgid "The selected strategy value."
+msgstr ""
+
+msgid "Compute zero padding with :py:func:`sigima.tools.signal.fourier.zero_padding`."
+msgstr ""
+
+msgid "Source signal."
+msgstr ""
+
+msgid "Parameters."
+msgstr ""
+
+msgid "Result signal object."
 msgstr ""
 
 msgid "Compute FFT with :py:func:`sigima.tools.signal.fourier.fft1d`"
 msgstr ""
 
 msgid "Compute the inverse FFT with :py:func:`sigima.tools.signal.fourier.ifft1d`."
-msgstr ""
-
-msgid "Source signal."
 msgstr ""
 
 msgid "Compute magnitude spectrum with :py:func:`sigima.tools.signal.fourier.magnitude_spectrum`"
@@ -840,12 +882,6 @@ msgid "New instance of :py:class:`AngleUnitParam`."
 msgstr ""
 
 msgid "Convert cartesian coordinates to polar coordinates with :py:func:`sigima.tools.coordinates.to_polar`."
-msgstr ""
-
-msgid "Parameters."
-msgstr ""
-
-msgid "Result signal object."
 msgstr ""
 
 msgid "Convert polar coordinates to cartesian coordinates with :py:func:`sigima.tools.coordinates.to_cartesian`."
@@ -1568,9 +1604,6 @@ msgstr ""
 msgid "Neighborhoods size\\. Size of the sliding window used in maximum/minimum filtering algorithm (if no value is provided, the algorithm will use a default size based on the image size). \\. Integer higher than 1, unit: pixels\\. Default: None."
 msgstr ""
 
-msgid "Default: True."
-msgstr ""
-
 msgid "Returns a new instance of :py:class:`Peak2DDetectionParam` with the fields set to the given values."
 msgstr ""
 
@@ -1757,7 +1790,7 @@ msgstr ""
 msgid "Circle coordinates"
 msgstr ""
 
-msgid "Utilities"
+msgid "Decorators and utilities"
 msgstr ""
 
 msgid "This package also provides some utility functions to help with the creation and introspection of computation functions:"
@@ -1811,14 +1844,3 @@ msgstr ""
 msgid "A list of tuples, each containing the function name and the function object."
 msgstr ""
 
-msgid "Metadata for a computation function."
-msgstr ""
-
-msgid "The name of the computation function."
-msgstr ""
-
-msgid "str"
-msgstr ""
-
-msgid "A description or docstring for the computation function."
-msgstr ""

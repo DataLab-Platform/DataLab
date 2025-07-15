@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 17:36+0200\n"
+"POT-Creation-Date: 2025-07-15 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -301,7 +301,7 @@ msgstr ""
 msgid "Band-pass filter parameters"
 msgstr ""
 
-msgid "Filter method\\.  Single choice from: 'bessel', 'butter', 'cheby1', 'cheby2', 'ellip'. Default: 'bessel'."
+msgid "Filter method\\.  Single choice from: 'bessel', 'butter', 'cheby1', 'cheby2', 'ellip', 'brickwall'. Default: 'bessel'."
 msgstr ""
 
 msgid "Filter order\\.  Integer higher than 1\\. Default: 3."
@@ -317,6 +317,12 @@ msgid "Passband ripple\\.  Float higher than 0, non zero, unit: db\\. Default: 1
 msgstr ""
 
 msgid "Stopband attenuation\\.  Float higher than 0, non zero, unit: db\\. Default: 1."
+msgstr ""
+
+msgid "Default: True."
+msgstr ""
+
+msgid "Minimum FFT points number\\.  Default: 0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`BandPassFilterParam` with the fields set to the given values."
@@ -419,6 +425,9 @@ msgid "New instance of :py:class:`FWHMParam`."
 msgstr ""
 
 msgid "High-pass filter parameters"
+msgstr ""
+
+msgid "Cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`HighPassFilterParam` with the fields set to the given values."
@@ -550,10 +559,19 @@ msgstr ""
 msgid "New instance of :py:class:`XYCalibrateParam`."
 msgstr ""
 
-msgid "Zero padding parameters"
+msgid "ZeroPadding1DParam manages the parameters for applying zero-padding to signals."
 msgstr ""
 
-msgid "Single choice from: 'next_pow2', 'double', 'triple', 'custom'. Default: 'custom'."
+msgid "Attributes:"
+msgstr ""
+
+msgid "strategies: Available strategies (\"next_pow2\", \"double\", \"triple\", \"custom\"). strategy: Choice item for selecting the zero-padding strategy. locations: Available locations for padding (\"append\", \"prepend\", \"both\"). location: Choice item for selecting where to add the padding. n: Number of points to add as padding (active only for \"custom\" strategy)."
+msgstr ""
+
+msgid "Single choice from: 'next_pow2', 'double', 'triple', 'custom'. Default: 'next_pow2'."
+msgstr ""
+
+msgid "Where to add the padding\\. Single choice from: 'append', 'prepend', 'both'. Default: 'append'."
 msgstr ""
 
 msgid "Number of points\\. Number of points to add\\. Integer higher than 1\\. Default: None."
@@ -565,10 +583,28 @@ msgstr ""
 msgid "New instance of :py:class:`ZeroPadding1DParam`."
 msgstr ""
 
-msgid "Update parameters from signal"
+msgid "Update parameters from signal."
 msgstr ""
 
-msgid "Callback for choice item"
+msgid "Signal object from which to update the dataset."
+msgstr ""
+
+msgid "Compute the next power of two greater than or equal to the given size."
+msgstr ""
+
+msgid "The input integer."
+msgstr ""
+
+msgid "The smallest power of two greater than or equal to 'size'."
+msgstr ""
+
+msgid "Callback for strategy choice item."
+msgstr ""
+
+msgid "Unused argument (in this context)."
+msgstr ""
+
+msgid "The selected strategy value."
 msgstr ""
 
 msgid "Image parameters"
@@ -724,6 +760,9 @@ msgstr ""
 msgid "New instance of :py:class:`RadialProfileParam`."
 msgstr ""
 
+msgid "Callback for choice item"
+msgstr ""
+
 msgid "Resize parameters"
 msgstr ""
 
@@ -731,9 +770,6 @@ msgid "Single choice from: 'constant', 'nearest', 'reflect', 'wrap'. Default: 'c
 msgstr ""
 
 msgid "Value used for points outside the boundaries of the input if mode is 'constant'\\. Default: 0.0."
-msgstr ""
-
-msgid "Default: True."
 msgstr ""
 
 msgid "Spline interpolation order\\. Integer between 0 and 5\\. Default: 3."
