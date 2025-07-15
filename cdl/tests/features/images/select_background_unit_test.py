@@ -8,6 +8,7 @@ Image background selection unit test.
 # guitest: show
 
 import numpy as np
+import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.env import execenv
@@ -15,6 +16,7 @@ from cdl.tests.data import create_noisygauss_image
 from cdl.widgets.imagebackground import ImageBackgroundDialog
 
 
+@pytest.mark.skip("Skipped in unattended mode: issues with recent versions of guidata.")
 def test_image_background_selection():
     """Image background selection test."""
     with qt_app_context():
