@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-08 14:46+0200\n"
+"POT-Creation-Date: 2025-07-15 10:28+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -995,6 +995,9 @@ msgstr "Médiane mobile"
 msgid "Wiener filter"
 msgstr "Filtre de Wiener"
 
+msgid "Gaussian frequency filter"
+msgstr "Filtre fréquentiel gaussien"
+
 msgid "Zero padding"
 msgstr "Complément de zéros"
 
@@ -1005,13 +1008,13 @@ msgid "FFT"
 msgstr "FFT"
 
 msgid "Fast Fourier Transform (FFT) is an estimation of the Discrete Fourier Transform (DFT). Results are complex numbers, but only the real part is plotted."
-msgstr ""
+msgstr "La transformée de Fourier rapide (FFT) est une estimation de la transformée de Fourier discrète (DFT). Les résultats sont des nombres complexes, mais seule la partie réelle est tracée."
 
 msgid "Inverse FFT"
 msgstr "FFT inverse"
 
 msgid "Inverse Fast Fourier Transform (IFFT) is an estimation of the Inverse Discrete Fourier Transform (IDFT). Results are complex numbers, but only the real part is plotted."
-msgstr ""
+msgstr "La transformée de Fourier rapide inverse (IFFT) est une estimation de la transformée de Fourier discrète inverse (IDFT). Les résultats sont des nombres complexes, mais seule la partie réelle est tracée."
 
 msgid "Magnitude spectrum"
 msgstr "Spectre d'amplitude"
@@ -1449,6 +1452,12 @@ msgstr "Réglages de la console interne, utilisée pour le débogage ou les util
 
 msgid "Console enabled"
 msgstr "Console activée"
+
+msgid "Show console on error"
+msgstr "Afficher la console en cas d'erreur"
+
+msgid "If enabled, the console will be shown when an error occurs in the application. This is useful for debugging purposes as it allows to see the error traceback."
+msgstr "Si activé, la console sera affichée lorsqu'une erreur se produit dans l'application. Cela est utile pour le débogage car cela permet de voir la trace de l'erreur."
 
 msgid "External editor path"
 msgstr "Chemin de l'éditeur externe"
@@ -2332,4 +2341,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

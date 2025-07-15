@@ -1069,6 +1069,19 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         ]
         add_actions(self.help_menu, help_menu_actions)
 
+    def __update_console_show_mode(self) -> None:
+        """Update console show mode from configuration option
+
+        Console show mode is whether the console is shown or not when an error occurs.
+        """
+        if self.console is not None:
+            state = Conf.console.show_console_on_error.get()
+            self.console.setVisible(state)
+            if state:
+                self.console.exception_occurred.connect(self.console.show_console)
+            else:
+                self.console.exception_occurred.disconnect(self.console.show_console)
+
     def __setup_console(self) -> None:
         """Add an internal console"""
         ns = {
@@ -1102,6 +1115,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
             lambda txt: self.repopulate_panel_trees()
         )
+        self.__update_console_show_mode()
 
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
@@ -1690,6 +1704,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         changed_options = edit_settings(self)
         sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
         sigima_options.keep_results.set(Conf.proc.keep_results.get())
+        self.__update_console_show_mode()
         for option in changed_options:
             if option == "color_mode":
                 self.__update_color_mode()

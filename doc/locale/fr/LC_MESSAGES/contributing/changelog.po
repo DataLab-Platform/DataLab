@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-03 16:31+0200\n"
+"POT-Creation-Date: 2025-07-15 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,60 @@ msgstr "DataLab Version 0.21.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "New image processing features:"
+msgstr "Nouvelles fonctionnalités de traitement d'image :"
+
+msgid "Added new \"Gaussian frequency filter\" feature:"
+msgstr "Ajout d'une nouvelle fonctionnalité de \"filtre de fréquence gaussien\" :"
+
+msgid "This feature allows to filter an image in the frequency domain using a Gaussian filter"
+msgstr ""
+
+msgid "It is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)"
+msgstr "Elle est implémentée dans la fonction `sigima.proc.image.freq_fft` (nécessite Sigima v0.3)"
+
+msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images"
+msgstr "Ceci clôture le ticket [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images"
+
+msgid "New signal processing features:"
+msgstr "Nouvelles fonctionnalités de traitement de signal :"
+
+msgid "Zero padding:"
+msgstr "Complément de zéros :"
+
+msgid "Enhanced to support both prepending and appending zeros."
+msgstr "Amélioré pour prendre en charge l'ajout de zéros au début et à la fin."
+
+msgid "Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+
+msgid "Default strategy is now \"Next power of 2\"."
+msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
+
+msgid "New I/O features:"
+msgstr "Nouvelles fonctionnalités d'E/S :"
+
+msgid "FT-Lab signals and images:"
+msgstr "Signaux et images FT-Lab :"
+
+msgid "Added support for CEA's FT-Lab signal and image binary formats."
+msgstr "Ajout de la prise en charge des formats binaires de signaux et d'images FT-Lab du CEA."
+
+msgid "This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types"
+msgstr "Ceci clôture le ticket [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Ajout de la prise en charge des types de fichiers .sig et .ima"
+
+msgid "Application settings:"
+msgstr "Paramètres de l'application :"
+
+msgid "Added new \"Show console on error\" option in the \"Console\" section of the \"Settings\" dialog box:"
+msgstr "Ajout d'une nouvelle option \"Afficher la console en cas d'erreur\" dans la section \"Console\" de la boîte de dialogue \"Paramètres\" :"
+
+msgid "If enabled, the console will be shown when an error occurs in the application, allowing to see the error traceback (this was previously the default behavior)"
+msgstr "Si activé, la console sera affichée lorsqu'une erreur se produit dans l'application, permettant de voir la trace de l'erreur (c'était auparavant le comportement par défaut)"
+
+msgid "Now, the console is not shown by default on error, but it does not prevent the console from containing the error traceback as it works in the background."
+msgstr "Maintenant, la console n'est pas affichée par défaut en cas d'erreur, mais cela n'empêche pas la console de contenir la trace de l'erreur car elle fonctionne en arrière-plan."
 
 msgid "Signal cursors:"
 msgstr "Curseurs de signal :"

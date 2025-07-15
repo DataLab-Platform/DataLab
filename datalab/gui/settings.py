@@ -77,6 +77,15 @@ class ConsoleSettings(gds.DataSet):
         _("Settings for internal console, used for debugging or advanced users")
     )
     console_enabled = gds.BoolItem("", _("Console enabled"))
+    show_console_on_error = gds.BoolItem(
+        "",
+        _("Show console on error"),
+        help=_(
+            "If enabled, the console will be shown when an error occurs in the "
+            "application. This is useful for debugging purposes as it allows to "
+            "see the error traceback."
+        ),
+    )
     external_editor_path = gds.StringItem(_("External editor path"))
     external_editor_args = gds.StringItem(_("External editor arguments"))
     _g0 = gds.EndGroup("")

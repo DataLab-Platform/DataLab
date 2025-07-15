@@ -23,6 +23,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Added support for CEA's FT-Lab signal and image binary formats.
     * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
 
+* Application settings:
+  * Added new "Show console on error" option in the "Console" section of the "Settings" dialog box:
+    * If enabled, the console will be shown when an error occurs in the application, allowing to see the error traceback (this was previously the default behavior)
+    * Now, the console is not shown by default on error, but it does not prevent the console from containing the error traceback as it works in the background.
+
 * Signal cursors:
   * Fixed [Issue #231](https://github.com/DataLab-Platform/DataLab/issues/231) - Add horizontal cursors to the Signal View (requires PlotPy v2.8)
   * Fixed [Issue #232](https://github.com/DataLab-Platform/DataLab/issues/232) - Add Δx measurement on curve stats tool (vertical cursors)

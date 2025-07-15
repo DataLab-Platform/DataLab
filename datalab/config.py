@@ -122,6 +122,7 @@ class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
     option names in .INI file based on class attribute names)."""
 
     console_enabled = conf.Option()
+    show_console_on_error = conf.Option()
     max_line_count = conf.Option()
     external_editor_path = conf.Option()
     external_editor_args = conf.Option()
@@ -309,6 +310,7 @@ def initialize():
     Conf.main.tour_enabled.get(True)
     # Console section
     Conf.console.console_enabled.get(True)
+    Conf.console.show_console_on_error.get(False)
     Conf.console.external_editor_path.get("code")
     Conf.console.external_editor_args.get("-g {path}:{line_number}")
     # IO section
