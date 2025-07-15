@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 11:32+0200\n"
+"POT-Creation-Date: 2025-07-15 15:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -56,6 +56,9 @@ msgstr "Correction de l'[Issue #235](https://github.com/DataLab-Platform/DataLab
 
 msgid "Fixed [Issue #236](https://github.com/DataLab-Platform/DataLab/issues/236) - Text Import Wizard: add support for `.mca` files"
 msgstr "Correction de l'[Issue #236](https://github.com/DataLab-Platform/DataLab/issues/236) - L'Assistant d'importation de texte : ajout de la prise en charge des fichiers `.mca`"
+
+msgid "Fixed [Issue #243](https://github.com/DataLab-Platform/DataLab/issues/243) - View in a new window (image): intensity profile tools are sometimes disabled (fixed in PlotPy v2.7.5)"
+msgstr "Correction de l'[Issue #243](https://github.com/DataLab-Platform/DataLab/issues/243) - Afficher dans une nouvelle fenêtre (image) : les outils de profil d'intensité sont parfois désactivés (corrigé dans PlotPy v2.7.5)"
 
 msgid "DataLab Version 0.20.0"
 msgstr "DataLab Version 0.20.0"

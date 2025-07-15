@@ -15,6 +15,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)
 * Fixed [Issue #235](https://github.com/DataLab-Platform/DataLab/issues/235) - Text Import Wizard: add support for importing signal files with integer values
 * Fixed [Issue #236](https://github.com/DataLab-Platform/DataLab/issues/236) - Text Import Wizard: add support for `.mca` files
+* Fixed [Issue #243](https://github.com/DataLab-Platform/DataLab/issues/243) - View in a new window (image): intensity profile tools are sometimes disabled (fixed in PlotPy v2.7.5)
 
 ## DataLab Version 0.20.0 ##
 
