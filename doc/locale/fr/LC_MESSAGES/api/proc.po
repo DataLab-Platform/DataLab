@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 10:28+0200\n"
+"POT-Creation-Date: 2025-07-15 18:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -211,7 +211,7 @@ msgstr ""
 msgid "New instance of :py:class:`FFTParam`."
 msgstr ""
 
-msgid "Spectrum parameters"
+msgid "Spectrum parameters."
 msgstr ""
 
 msgid "Default: False."
@@ -728,19 +728,25 @@ msgstr ""
 msgid "Result signal object."
 msgstr ""
 
-msgid "Compute FFT with :py:func:`sigima.tools.signal.fourier.fft1d`"
+msgid "Compute FFT with :py:func:`sigima.tools.signal.fourier.fft1d`."
 msgstr ""
 
 msgid "Compute the inverse FFT with :py:func:`sigima.tools.signal.fourier.ifft1d`."
 msgstr ""
 
-msgid "Compute magnitude spectrum with :py:func:`sigima.tools.signal.fourier.magnitude_spectrum`"
+msgid "Compute magnitude spectrum."
 msgstr ""
 
-msgid "Compute phase spectrum with :py:func:`sigima.tools.signal.fourier.phase_spectrum`"
+msgid "This function computes the magnitude spectrum of a signal using :py:func:`sigima.tools.signal.fourier.magnitude_spectrum`."
 msgstr ""
 
-msgid "Compute power spectral density with :py:func:`sigima.tools.signal.fourier.psd`"
+msgid "Compute phase spectrum."
+msgstr ""
+
+msgid "This function computes the phase spectrum of a signal using :py:func:`sigima.tools.signal.fourier.phase_spectrum`"
+msgstr ""
+
+msgid "Compute power spectral density with :py:func:`sigima.tools.signal.fourier.psd`."
 msgstr ""
 
 msgid "Polynomial fitting parameters"
@@ -1364,10 +1370,13 @@ msgstr ""
 msgid "Image linear calibration parameters"
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`ZCalibrateParam` with the fields set to the given values."
+msgid "Calibrate\\.  Single choice from: 'x', 'y', 'z'. Default: 'z'."
 msgstr ""
 
-msgid "New instance of :py:class:`ZCalibrateParam`."
+msgid "Returns a new instance of :py:class:`XYZCalibrateParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`XYZCalibrateParam`."
 msgstr ""
 
 msgid "calibration parameters"

@@ -784,10 +784,10 @@ msgstr ""
 msgid "Image linear calibration parameters"
 msgstr "Paramètres de calibration linéaire de l'image"
 
-msgid "Returns a new instance of :py:class:`ZCalibrateParam` with the fields set to the given values."
+msgid "Returns a new instance of :py:class:`XYZCalibrateParam` with the fields set to the given values."
 msgstr ""
 
-msgid "New instance of :py:class:`ZCalibrateParam`."
+msgid "New instance of :py:class:`XYZCalibrateParam`."
 msgstr ""
 
 msgid "Zero padding parameters for 2D images"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 10:28+0200\n"
+"POT-Creation-Date: 2025-07-15 18:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -401,22 +401,25 @@ msgstr ""
 msgid "Compute magnitude spectrum."
 msgstr ""
 
-msgid "Use log scale. Defaults to False."
+msgid "Compute the magnitude spectrum root-power level in decibel (dB)."
 msgstr ""
 
-msgid "Magnitude spectrum (X data, Y data)"
+msgid "Frequency values and magnitude spectrum."
 msgstr ""
 
 msgid "Compute phase spectrum."
 msgstr ""
 
-msgid "Phase spectrum in degrees (X data, Y data)"
+msgid "Frequency values and phase spectrum in degrees."
 msgstr ""
 
-msgid "Compute Power Spectral Density (PSD), using the Welch method."
+msgid "Estimate the Power Spectral Density (PSD) using Welch's method."
 msgstr ""
 
-msgid "X data, Y data (tuple)"
+msgid "Compute the power spectral density power level in decibel (dB)."
+msgstr ""
+
+msgid "Frequency values and PSD."
 msgstr ""
 
 msgid "Apply a brickwall filter (ideal frequency filter) to a 1D signal."

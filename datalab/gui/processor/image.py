@@ -178,7 +178,13 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(
             sigima_image.calibration,
             _("Linear calibration"),
-            sigima_image.ZCalibrateParam,
+            sigima_image.XYZCalibrateParam,
+            comment=_(
+                "Apply linear calibration to the X, Y or Z axis:\n"
+                "  • x' = ax + b\n"
+                "  • y' = ay + b\n"
+                "  • z' = az + b"
+            ),
         )
         self.register_1_to_1(
             sigima_image.swap_axes,
