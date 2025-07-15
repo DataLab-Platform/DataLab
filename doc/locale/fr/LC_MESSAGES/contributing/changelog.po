@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 10:28+0200\n"
+"POT-Creation-Date: 2025-07-15 19:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -74,6 +74,18 @@ msgstr "Ceci clôture le ticket [Issue #211](https://github.com/DataLab-Platform
 
 msgid "Application settings:"
 msgstr "Paramètres de l'application :"
+
+msgid "Added new \"Lock image aspect ratio to 1:1\" option in the \"Image\" section of the \"Settings\" dialog box:"
+msgstr "Ajout d'une nouvelle option \"Verrouiller le ratio d'aspect à 1:1\" dans la section \"Image\" de la boîte de dialogue \"Paramètres\" :"
+
+msgid "If enabled, the aspect ratio of images is locked to 1:1 (square pixels) when resizing images"
+msgstr "Si activé, le ratio d'aspect des images est verrouillé à 1:1 (pixels carrés) lors du redimensionnement des images"
+
+msgid "The default and recommended setting is to disable this option, so that the aspect ratio of images is locked to a value corresponding to the physical pixel size of the image"
+msgstr "Le paramètre par défaut et recommandé est de désactiver cette option, afin que le ratio d'aspect des images soit verrouillé à une valeur correspondant à la taille physique des pixels de l'image"
+
+msgid "This closes [Issue #244](https://github.com/DataLab-Platform/DataLab/issues/244) - Add option to lock image aspect ratio to 1:1 (disabled by default, so that physical pixel size is used)"
+msgstr "Ceci clôture le ticket [Issue #244](https://github.com/DataLab-Platform/DataLab/issues/244) - Ajout de l'option de verrouillage du ratio d'aspect de l'image à 1:1 (désactivé par défaut, afin que la taille des pixels physiques soit utilisée)"
 
 msgid "Added new \"Show console on error\" option in the \"Console\" section of the \"Settings\" dialog box:"
 msgstr "Ajout d'une nouvelle option \"Afficher la console en cas d'erreur\" dans la section \"Console\" de la boîte de dialogue \"Paramètres\" :"

@@ -207,6 +207,9 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     sig_autodownsampling = conf.Option()
     sig_autodownsampling_maxpoints = conf.Option()
 
+    # If True, lock aspect ratio of images to 1:1 (ignore physical pixel size)
+    ima_aspect_ratio_1_1 = conf.Option()
+
     # If True, images are shown with the same LUT range as the first selected image
     ima_ref_lut_range = conf.Option()
 
@@ -334,6 +337,7 @@ def initialize():
     assert tb_pos in ("top", "bottom", "left", "right")
     Conf.view.sig_autodownsampling.get(True)
     Conf.view.sig_autodownsampling_maxpoints.get(100000)
+    Conf.view.ima_aspect_ratio_1_1.get(False)
     Conf.view.ima_ref_lut_range.get(False)
     Conf.view.ima_eliminate_outliers.get(0.1)
     Conf.view.sig_def_shade.get(0.0)

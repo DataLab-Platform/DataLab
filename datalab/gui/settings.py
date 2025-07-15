@@ -230,6 +230,15 @@ class ViewSettings(gds.DataSet):
     _g1 = gds.EndGroup("")
 
     g2 = gds.BeginGroup(_("Image"))
+    ima_aspect_ratio_1_1 = gds.BoolItem(
+        "",
+        _("Lock aspect ratio to 1:1"),
+        help=_(
+            "If enabled, the aspect ratio of the image will be locked to 1:1.<br>"
+            "If disabled, the aspect ratio will be determined by the physical pixel "
+            "size (this is the default and recommended setting)."
+        ),
+    )
     ima_ref_lut_range = gds.BoolItem(
         "",
         _("Use reference image LUT range"),

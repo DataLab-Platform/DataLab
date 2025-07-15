@@ -271,6 +271,14 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         if self.__auto_refresh:
             self.refresh_plot("selected")
 
+    def get_existing_oids(self) -> list[str]:
+        """Get existing object uuids.
+
+        Returns:
+            List of object uuids that have a plot item associated to them.
+        """
+        return list(self.__plotitems.keys())
+
     def reduce_shown_oids(self, oids: list[str]) -> list[str]:
         """Reduce the number of shown objects to visible items only. The base
         implementation is to show only the first selected item if the option
@@ -333,7 +341,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                     item.hide()
         elif what == "existing":
             # Refresh existing objects
-            oids = list(self.__plotitems.keys())
+            oids = self.get_existing_oids()
         elif what == "all":
             # Refresh all objects
             oids = self.panel.objmodel.get_object_ids()
@@ -597,6 +605,22 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
             only_existing=only_existing,
         )
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
+        plot = self.plotwidget.get_plot()
+        new_aspect_ratio = current_aspect_ratio = plot.get_aspect_ratio()
+        if Conf.view.ima_aspect_ratio_1_1.get():
+            # Lock aspect ratio to 1:1
+            new_aspect_ratio = 1.0
+        else:
+            # Use physical pixel size to set aspect ratio
+            for oid in reversed(self.reduce_shown_oids(self.get_existing_oids())):
+                if self.get(oid).isVisible():
+                    obj: ImageObj = self.panel.objmodel[oid]
+                    new_aspect_ratio = obj.dx / obj.dy
+                    break
+        if new_aspect_ratio != current_aspect_ratio:
+            # Update aspect ratio only if it has changed
+            plot.set_aspect_ratio(new_aspect_ratio)
+            plot.do_autoscale()
 
     def cleanup_dataview(self) -> None:
         """Clean up data view"""

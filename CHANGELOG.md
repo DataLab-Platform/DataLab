@@ -24,6 +24,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
 
 * Application settings:
+  * Added new "Lock image aspect ratio to 1:1" option in the "Image" section of the "Settings" dialog box:
+    * If enabled, the aspect ratio of images is locked to 1:1 (square pixels) when resizing images
+    * The default and recommended setting is to disable this option, so that the aspect ratio of images is locked to a value corresponding to the physical pixel size of the image
+    * This closes [Issue #244](https://github.com/DataLab-Platform/DataLab/issues/244) - Add option to lock image aspect ratio to 1:1 (disabled by default, so that physical pixel size is used)
   * Added new "Show console on error" option in the "Console" section of the "Settings" dialog box:
     * If enabled, the console will be shown when an error occurs in the application, allowing to see the error traceback (this was previously the default behavior)
     * Now, the console is not shown by default on error, but it does not prevent the console from containing the error traceback as it works in the background.
