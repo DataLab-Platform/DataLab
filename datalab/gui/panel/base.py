@@ -896,6 +896,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             group_id = get_uuid(self.add_group(osp.basename(filename)))
         for obj in objs:
             if add_objects:
+                set_uuid(obj)  # In case the object UUID was serialized in the file,
+                # we need to reset it to a new UUID to avoid conflicts (e.g. HDF5 file)
                 self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
         self.selection_changed()
         return objs
