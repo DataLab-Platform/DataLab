@@ -4,61 +4,174 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "gettext - Scan",
-            "type": "shell",
-            "command": "cmd",
+            "label": "sphinx-build",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "/c",
-                "gettext_scan.bat"
+                "-m",
+                "sphinx",
+                "build",
+                "doc",
+                "build/gettext",
+                "-b",
+                "gettext",
+                "-W"
             ],
             "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
-                    "UNATTENDED": "1"
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true
                 }
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
+                "clear": true,
                 "echo": true,
-                "reveal": "always",
                 "focus": false,
-                "panel": "shared",
+                "panel": "dedicated",
+                "reveal": "always",
                 "showReuseMessage": true,
-                "clear": false
-            }
+            },
+            "type": "shell"
         },
         {
-            "label": "gettext - Compile",
-            "type": "shell",
-            "command": "cmd",
+            "label": "sphinx-intl update",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "/c",
-                "gettext.bat",
-                "compile"
+                "-m",
+                "sphinx_intl",
+                "update",
+                "-d",
+                "doc/locale",
+                "-p",
+                "build/gettext",
+                "-l",
+                "fr",
+                "--no-obsolete",
+                "-w",
+                "0",
             ],
             "options": {
-                "cwd": "scripts",
-                "env": {
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
-                    "UNATTENDED": "1"
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true
                 }
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
+                "clear": true,
                 "echo": true,
+                "focus": false,
+                "panel": "dedicated",
                 "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "sphinx-build"
+            ]
+        },
+        {
+            "label": "sphinx-intl build",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "sphinx_intl",
+                "build",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/doc",
+                "statusbar": {
+                    "hide": true
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true
+            },
+            "type": "shell"
+        },
+        {
+            "label": "🔎 Scan translations",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "guidata.utils.translations",
+                "scan",
+                "--name",
+                "cdl",
+                "--directory",
+                ".",
+                "--copyright-holder",
+                "DataLab Platform Developers"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "clear": false,
+                "echo": true,
                 "focus": false,
                 "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
+                "reveal": "always",
+                "showReuseMessage": true
+            },
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "sphinx-intl update"
+            ]
+        },
+        {
+            "label": "📚 Compile translations",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "guidata.utils.translations",
+                "compile",
+                "--name",
+                "cdl",
+                "--directory",
+                "."
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "clear": false,
+                "echo": true,
+                "focus": false,
+                "panel": "shared",
+                "reveal": "always",
+                "showReuseMessage": true
+            },
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "sphinx-intl build",
+            ]
         },
         {
             "label": "Run Pylint",
@@ -600,7 +713,7 @@
             "dependsOn": [
                 "Clean Up",
                 "Upgrade PlotPyStack packages",
-                "gettext - Compile",
+                "📚 Compile translations",
                 "Build Python packages",
                 "Create executable",
                 "Create installer"
