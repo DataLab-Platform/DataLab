@@ -131,7 +131,8 @@ def __misc_unit_function(win: DLMainWindow) -> None:
 
     # Open objects from signal panel
     __print_test_result("Open objects from signal panel")
-    win.signalpanel.load_from_files(get_test_fnames("curve_formats/*.*"))
+    fnames = [f for f in get_test_fnames("curve_formats/*.*") if not f.endswith(".mca")]
+    win.signalpanel.load_from_files(fnames)
 
     # Get version
     __print_test_result("Get version")

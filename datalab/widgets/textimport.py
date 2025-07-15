@@ -85,7 +85,7 @@ class SourceParam(gds.DataSet):
     path = (
         gds.FileOpenItem(
             _("File"),
-            formats=("txt", "csv", "dat", "asc"),
+            formats=("txt", "csv", "dat", "asc", "mca"),
             check=False,
             help=_("File containing the data"),
         )
