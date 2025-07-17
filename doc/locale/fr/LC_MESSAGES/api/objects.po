@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 17:36+0200\n"
+"POT-Creation-Date: 2025-07-17 18:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -179,15 +179,6 @@ msgid "Point shape"
 msgstr ""
 
 msgid "Polygon shape"
-msgstr ""
-
-msgid "Uniform-law random signal/image parameters"
-msgstr ""
-
-msgid "Do something in case of integer min-max range"
-msgstr ""
-
-msgid "Normal-law random signal/image parameters"
 msgstr ""
 
 msgid "Signal model"
@@ -662,12 +653,6 @@ msgstr ""
 msgid "new signal parameters"
 msgstr ""
 
-msgid "additional parameters (optional)"
-msgstr ""
-
-msgid "if `extra_param` is required but not provided"
-msgstr ""
-
 msgid "if the signal type is not supported"
 msgstr ""
 
@@ -677,6 +662,12 @@ msgstr ""
 msgid "Signal filled with zeros"
 msgstr ""
 
+msgid "Random signal (uniform law)"
+msgstr ""
+
+msgid "Random signal (normal law)"
+msgstr ""
+
 msgid "Gaussian function"
 msgstr ""
 
@@ -684,12 +675,6 @@ msgid "Lorentzian function"
 msgstr ""
 
 msgid "Voigt function"
-msgstr ""
-
-msgid "Random signal (uniform law)"
-msgstr ""
-
-msgid "Random signal (normal law)"
 msgstr ""
 
 msgid "Sinusoid"
@@ -728,6 +713,21 @@ msgstr ""
 msgid "New signal dataset"
 msgstr ""
 
+msgid "Generate a title based on current parameters."
+msgstr ""
+
+msgid "Generate x data based on current parameters."
+msgstr ""
+
+msgid "Compute 1D data based on current parameters."
+msgstr ""
+
+msgid "Tuple of (x, y) arrays"
+msgstr ""
+
+msgid "Parameters for zero signal"
+msgstr ""
+
 msgid "Default: 'Untitled signal'."
 msgstr ""
 
@@ -737,25 +737,52 @@ msgstr ""
 msgid "Default: 10.0."
 msgstr ""
 
-msgid "Signal size (total number of points)\\. Integer higher than 1\\. Default: 500."
+msgid "Signal size (total number of points)\\. Default: 500."
 msgstr ""
 
 msgid "guidata.dataset.dataitems.IntItem"
 msgstr ""
 
-msgid "Single choice from: SignalTypes.ZEROS, SignalTypes.GAUSS, SignalTypes.LORENTZ, SignalTypes.VOIGT, SignalTypes.UNIFORMRANDOM, SignalTypes.NORMALRANDOM, SignalTypes.SINUS, SignalTypes.COSINUS, SignalTypes.SAWTOOTH, SignalTypes.TRIANGLE, SignalTypes.SQUARE, SignalTypes.SINC, SignalTypes.STEP, SignalTypes.EXPONENTIAL, SignalTypes.PULSE, SignalTypes.POLYNOMIAL, SignalTypes.EXPERIMENTAL. Default: SignalTypes.ZEROS."
+msgid "Returns a new instance of :py:class:`ZerosParam` with the fields set to the given values."
 msgstr ""
 
-msgid "guidata.dataset.dataitems.ChoiceItem"
+msgid "New instance of :py:class:`ZerosParam`."
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`NewSignalParam` with the fields set to the given values."
+msgid "Uniform-law random signal/image parameters"
 msgstr ""
 
-msgid "New instance of :py:class:`NewSignalParam`."
+msgid "Default: 1."
 msgstr ""
 
-msgid "Parameters for Gaussian and Lorentzian functions"
+msgid "V\\ :subscript:`min`\\. Uniform distribution lower bound\\. Default: -0.5."
+msgstr ""
+
+msgid "V\\ :subscript:`max`\\. Uniform distribution higher bound\\. Default: 0.5."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`UniformRandomParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`UniformRandomParam`."
+msgstr ""
+
+msgid "Normal-law random signal/image parameters"
+msgstr ""
+
+msgid "μ\\. Normal distribution mean\\. Default: 0.1."
+msgstr ""
+
+msgid "σ\\. Normal distribution standard deviation\\. Default: 0.02."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`NormalRandomParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`NormalRandomParam`."
+msgstr ""
+
+msgid "Parameters for Gaussian function"
 msgstr ""
 
 msgid "Default: 1.0."
@@ -770,10 +797,94 @@ msgstr ""
 msgid "μ\\.  Default: 0.0."
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`GaussLorentzVoigtParam` with the fields set to the given values."
+msgid "Returns a new instance of :py:class:`GaussParam` with the fields set to the given values."
 msgstr ""
 
-msgid "New instance of :py:class:`GaussLorentzVoigtParam`."
+msgid "New instance of :py:class:`GaussParam`."
+msgstr ""
+
+msgid "Parameters for Lorentzian function"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`LorentzParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`LorentzParam`."
+msgstr ""
+
+msgid "Parameters for Voigt function"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`VoigtParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`VoigtParam`."
+msgstr ""
+
+msgid "Parameters for sinus function"
+msgstr ""
+
+msgid "Frequency\\.  Default: 1.0."
+msgstr ""
+
+msgid "Single choice from: FreqUnits.HZ, FreqUnits.KHZ, FreqUnits.MHZ, FreqUnits.GHZ. Default: FreqUnits.HZ."
+msgstr ""
+
+msgid "guidata.dataset.dataitems.ChoiceItem"
+msgstr ""
+
+msgid "Float, unit: °\\. Default: 0.0."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`SinusParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`SinusParam`."
+msgstr ""
+
+msgid "Parameters for cosinus function"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`CosinusParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`CosinusParam`."
+msgstr ""
+
+msgid "Parameters for sawtooth function"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`SawtoothParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`SawtoothParam`."
+msgstr ""
+
+msgid "Parameters for triangle function"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`TriangleParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`TriangleParam`."
+msgstr ""
+
+msgid "Parameters for square function"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`SquareParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`SquareParam`."
+msgstr ""
+
+msgid "Parameters for cardinal sine function"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`SincParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`SincParam`."
 msgstr ""
 
 msgid "Parameters for step function"
@@ -785,25 +896,67 @@ msgstr ""
 msgid "New instance of :py:class:`StepParam`."
 msgstr ""
 
-msgid "Parameters for periodic functions"
+msgid "Parameters for exponential function"
 msgstr ""
 
-msgid "Frequency\\.  Default: 1.0."
+msgid "Returns a new instance of :py:class:`ExponentialParam` with the fields set to the given values."
 msgstr ""
 
-msgid "Single choice from: FreqUnits.HZ, FreqUnits.KHZ, FreqUnits.MHZ, FreqUnits.GHZ. Default: FreqUnits.HZ."
+msgid "New instance of :py:class:`ExponentialParam`."
 msgstr ""
 
-msgid "Float, unit: °\\. Default: 0.0."
+msgid "Parameters for pulse function"
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`PeriodicParam` with the fields set to the given values."
+msgid "Amplitude\\.  Default: 1.0."
 msgstr ""
 
-msgid "New instance of :py:class:`PeriodicParam`."
+msgid "End\\.  Default: 0.0."
 msgstr ""
 
-msgid "Return frequency in Hz"
+msgid "Returns a new instance of :py:class:`PulseParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`PulseParam`."
+msgstr ""
+
+msgid "Parameters for polynomial function"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`PolyParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`PolyParam`."
+msgstr ""
+
+msgid "Parameters for experimental signal"
+msgstr ""
+
+msgid "Default: 0."
+msgstr ""
+
+msgid "Default: 5."
+msgstr ""
+
+msgid "XY Values\\.  Default: None."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ExperimentalSignalParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ExperimentalSignalParam`."
+msgstr ""
+
+msgid "Setup the xyarray from size, xmin and xmax (use the current values is not provided)"
+msgstr ""
+
+msgid "xyarray size (default: None)"
+msgstr ""
+
+msgid "X min (default: None)"
+msgstr ""
+
+msgid "X max (default: None)"
 msgstr ""
 
 msgid "Signal ROI parameters"
@@ -950,7 +1103,7 @@ msgstr ""
 msgid "if the image type is not supported"
 msgstr ""
 
-msgid "Image types"
+msgid "Image types."
 msgstr ""
 
 msgid "Image filled with zeros"
@@ -959,37 +1112,79 @@ msgstr ""
 msgid "Empty image (filled with data from memory state)"
 msgstr ""
 
-msgid "2D Gaussian image"
-msgstr ""
-
 msgid "Image filled with random data (uniform law)"
 msgstr ""
 
 msgid "Image filled with random data (normal law)"
 msgstr ""
 
-msgid "New image dataset"
+msgid "2D Gaussian image"
+msgstr ""
+
+msgid "Bilinear form image"
+msgstr ""
+
+msgid "New image dataset."
+msgstr ""
+
+msgid "Generate 2D data based on current parameters."
+msgstr ""
+
+msgid "Tuple (height, width) for the output array."
+msgstr ""
+
+msgid "NumPy data type for the output array."
+msgstr ""
+
+msgid "2D data array"
+msgstr ""
+
+msgid "Image parameters for a 2D image filled with zeros"
 msgstr ""
 
 msgid "Default: 'Untitled image'."
 msgstr ""
 
-msgid "Image height: number of rows\\. Integer higher than 1\\. Default: None."
+msgid "Image height: number of rows\\. Default: 1024."
 msgstr ""
 
-msgid "Image width: number of columns\\. Integer higher than 1\\. Default: None."
+msgid "Image width: number of columns\\. Default: 1024."
 msgstr ""
 
 msgid "Data type\\.  Single choice from: ImageDatatypes.UINT8, ImageDatatypes.UINT16, ImageDatatypes.INT16, ImageDatatypes.FLOAT32, ImageDatatypes.FLOAT64. Default: ImageDatatypes.UINT8."
 msgstr ""
 
-msgid "Single choice from: ImageTypes.ZEROS, ImageTypes.EMPTY, ImageTypes.GAUSS, ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM. Default: ImageTypes.ZEROS."
+msgid "Returns a new instance of :py:class:`Zeros2DParam` with the fields set to the given values."
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`NewImageParam` with the fields set to the given values."
+msgid "New instance of :py:class:`Zeros2DParam`."
 msgstr ""
 
-msgid "New instance of :py:class:`NewImageParam`."
+msgid "Image parameters for an empty 2D image (filled with data from memory state)"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`Empty2DParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`Empty2DParam`."
+msgstr ""
+
+msgid "Uniform-law random image parameters"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`UniformRandom2DParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`UniformRandom2DParam`."
+msgstr ""
+
+msgid "Normal-law random image parameters"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`NormalRandom2DParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`NormalRandom2DParam`."
 msgstr ""
 
 msgid "2D Gaussian parameters"
@@ -1004,13 +1199,40 @@ msgstr ""
 msgid "Default: 10."
 msgstr ""
 
-msgid "Default: 0."
-msgstr ""
-
 msgid "Returns a new instance of :py:class:`Gauss2DParam` with the fields set to the given values."
 msgstr ""
 
 msgid "New instance of :py:class:`Gauss2DParam`."
+msgstr ""
+
+msgid "Define the parameters of a 2D ramp (planar ramp)."
+msgstr ""
+
+msgid "z = a (x - x<sub>0</sub>) + b (y - y<sub>0</sub>) + c"
+msgstr ""
+
+msgid "x\\ :subscript:`0`\\.  Default: 0.0."
+msgstr ""
+
+msgid "y\\ :subscript:`0`\\.  Default: 0.0."
+msgstr ""
+
+msgid "x\\ :subscript:`min`\\.  Default: -1.0."
+msgstr ""
+
+msgid "x\\ :subscript:`max`\\.  Default: 1.0."
+msgstr ""
+
+msgid "y\\ :subscript:`min`\\.  Default: -1.0."
+msgstr ""
+
+msgid "y\\ :subscript:`max`\\.  Default: 1.0."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`Ramp2DParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`Ramp2DParam`."
 msgstr ""
 
 msgid "Image ROI parameters"
@@ -1096,3 +1318,4 @@ msgstr ""
 
 msgid "Float number stored with 64 bits"
 msgstr ""
+

@@ -16,11 +16,8 @@ def test_fft2d_app() -> None:
     """FFT application test."""
     with cdltest_app_context() as win:
         panel = win.imagepanel
-        newparam = sigima.objects.NewImageParam.create(
-            itype=sigima.objects.ImageTypes.GAUSS, width=100, height=100
-        )
-        extra_param = sigima.objects.Gauss2DParam()
-        i1 = sigima.objects.create_image_from_param(newparam, extra_param=extra_param)
+        param = sigima.objects.Gauss2DParam.create(width=100, height=100)
+        i1 = sigima.objects.create_image_from_param(param)
         panel.add_object(i1)
         panel.processor.run_feature("fft")
         panel.processor.run_feature("ifft")

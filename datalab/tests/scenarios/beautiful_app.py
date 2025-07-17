@@ -32,19 +32,13 @@ def run_beautiful_scenario(screenshots: bool = False) -> None:
     with cdltest_app_context(console=False, exec_loop=not screenshots) as win:
         # Beautiful screenshot of a signal
         panel = win.signalpanel
-        base_param = sigima.objects.NewSignalParam.create(
-            stype=sigima.objects.SignalTypes.LORENTZ
-        )
-        sig = sigima.objects.create_signal_from_param(
-            base_param, sigima.objects.GaussLorentzVoigtParam()
-        )
+        sig = sigima.objects.create_signal_from_param(sigima.objects.LorentzParam())
         panel.add_object(sig)
         panel.processor.run_feature("fft")
         panel.processor.run_feature("wiener")
         panel.processor.run_feature("derivative")
         panel.processor.run_feature("integral")
-        param = sigima_param.GaussianParam()
-        panel.processor.run_feature("gaussian_filter", param)
+        panel.processor.run_feature("gaussian_filter", sigima_param.GaussianParam())
         panel.processor.run_feature("fft")
         panel.processor.run_feature("derivative")
         if screenshots:
@@ -52,12 +46,8 @@ def run_beautiful_scenario(screenshots: bool = False) -> None:
             win.take_screenshot("s_beautiful")
         # Beautiful screenshot of an image
         panel = win.imagepanel
-        base_param = sigima.objects.NewImageParam.create(
-            height=data_size, width=data_size, itype=sigima.objects.ImageTypes.GAUSS
-        )
-        ima = sigima.objects.create_image_from_param(
-            base_param, sigima.objects.Gauss2DParam()
-        )
+        param = sigima.objects.Gauss2DParam.create(height=data_size, width=data_size)
+        ima = sigima.objects.create_image_from_param(param)
         ima.set_metadata_option("colormap", "jet")
         panel.add_object(ima)
         panel.processor.run_feature("equalize_hist", sigima_param.EqualizeHistParam())

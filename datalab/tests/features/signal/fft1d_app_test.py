@@ -7,12 +7,7 @@ Signal FFT application test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from sigima.objects import (
-    NewSignalParam,
-    PeriodicParam,
-    SignalTypes,
-    create_signal_from_param,
-)
+from sigima.objects import CosinusParam, create_signal_from_param
 
 from datalab.tests import cdltest_app_context
 
@@ -21,9 +16,7 @@ def test_fft1d_app():
     """FFT application test."""
     with cdltest_app_context() as win:
         panel = win.signalpanel
-        newparam = NewSignalParam.create(stype=SignalTypes.COSINUS, size=10000)
-        extra_param = PeriodicParam()
-        s1 = create_signal_from_param(newparam, extra_param=extra_param)
+        s1 = create_signal_from_param(CosinusParam.create(size=10000))
         panel.add_object(s1)
         panel.processor.run_feature("fft")
         panel.processor.run_feature("ifft")

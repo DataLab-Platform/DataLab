@@ -11,7 +11,7 @@ Testing the following:
 
 # guitest: show
 
-from sigima.objects import Gauss2DParam, ImageTypes, NewImageParam, UniformRandomParam
+from sigima.objects import Gauss2DParam, UniformRandom2DParam
 from sigima.proc.image import FlatFieldParam
 
 from datalab.config import _
@@ -23,22 +23,12 @@ def test_flatfield():
     with cdltest_app_context() as win:
         panel = win.imagepanel
 
-        ima0 = panel.new_object(
-            NewImageParam.create(
-                title=_("Raw data (2D-Gaussian)"), itype=ImageTypes.GAUSS
-            ),
-            extra_param=Gauss2DParam(),
-            edit=False,
+        param0 = Gauss2DParam.create(title=_("Raw data (2D-Gaussian)"))
+        ima0 = panel.new_object(param0, edit=False)
+        param1 = UniformRandom2DParam.create(
+            title=_("Flat data (Uniform random)"), vmax=5
         )
-        addp = UniformRandomParam()
-        addp.vmax = 5
-        ima1 = panel.new_object(
-            NewImageParam.create(
-                title=_("Flat data (Uniform random)"), itype=ImageTypes.UNIFORMRANDOM
-            ),
-            extra_param=addp,
-            edit=False,
-        )
+        ima1 = panel.new_object(param1, edit=False)
 
         panel.objview.select_objects([ima0])
         ffp = FlatFieldParam()

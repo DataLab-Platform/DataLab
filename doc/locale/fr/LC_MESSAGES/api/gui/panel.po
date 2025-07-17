@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 10:27+0200\n"
+"POT-Creation-Date: 2025-07-17 18:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -313,9 +313,6 @@ msgstr ""
 msgid "new object parameters"
 msgstr ""
 
-msgid "additional parameters"
-msgstr ""
-
 msgid "Open a dialog box to edit parameters (default: True)"
 msgstr ""
 
@@ -478,9 +475,6 @@ msgstr ""
 msgid "Default: None."
 msgstr ""
 
-msgid "guidata.dataset.dataitems.StringItem"
-msgstr ""
-
 msgid "guidata.dataset.dataitems.FloatArrayItem"
 msgstr ""
 
@@ -491,13 +485,16 @@ msgstr ""
 msgid "guidata.dataset.dataitems.DictItem"
 msgstr ""
 
+msgid "Default: ''."
+msgstr ""
+
+msgid "guidata.dataset.dataitems.StringItem"
+msgstr ""
+
 msgid "Signal title\\.  Default: 'Untitled'."
 msgstr ""
 
 msgid "Title\\.  Default: ''."
-msgstr ""
-
-msgid "Default: ''."
 msgstr ""
 
 msgid "Lower bound\\.  Default: None."
@@ -718,3 +715,4 @@ msgstr ""
 
 msgid "Remove macro"
 msgstr ""
+

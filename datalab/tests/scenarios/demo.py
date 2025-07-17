@@ -49,13 +49,10 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     qt_wait(DELAY1)
 
     panel.objview.set_current_object(sig1)
-    base_param = sigima.objects.NewSignalParam.create(
-        title=_("Random function"), stype=sigima.objects.SignalTypes.UNIFORMRANDOM
+    param = sigima.objects.UniformRandomParam.create(
+        title=_("Random function"), vmin=0, vmax=sig1.y.max() * 0.2
     )
-    extra_param = sigima.objects.UniformRandomParam.create(
-        vmin=0, vmax=sig1.y.max() * 0.2
-    )
-    sig2 = sigima.objects.create_signal_from_param(base_param, extra_param=extra_param)
+    sig2 = sigima.objects.create_signal_from_param(param)
     win.add_object(sig2)
 
     # compute_common_operations(panel)
@@ -83,12 +80,8 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     panel.objview.set_current_object(sig3)
     panel.processor.compute_multigaussianfit()
 
-    base_param = sigima.objects.NewSignalParam.create(
-        title=_("Gaussian"), stype=sigima.objects.SignalTypes.GAUSS
-    )
-    sig = sigima.objects.create_signal_from_param(
-        base_param, sigima.objects.GaussLorentzVoigtParam()
-    )
+    param = sigima.objects.GaussParam.create(title=_("Gaussian"))
+    sig = sigima.objects.create_signal_from_param(param)
     panel.add_object(sig)
 
     panel.processor.run_feature("fwhm")
@@ -102,11 +95,6 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     win.set_current_panel("image")
     panel = win.imagepanel
 
-    base_param = sigima.objects.NewImageParam.create(height=data_size, width=data_size)
-
-    # ima1 = create_noisygauss_image(newparam)
-    # panel.add_object(ima1)
-
     panel.add_object(get_test_image("flower.npy"))
     ima1 = panel.objview.get_current_object()
 
@@ -114,15 +102,10 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
 
     panel.objview.set_current_object(ima1)
 
-    base_param = sigima.objects.NewImageParam.create(
-        itype=sigima.objects.ImageTypes.UNIFORMRANDOM,
-        height=base_param.height,
-        width=base_param.width,
-    )
-    base_param = sigima.objects.UniformRandomParam()
-    base_param.set_from_datatype(ima1.data.dtype)
-    base_param.vmax = int(ima1.data.max() * 0.2)
-    ima2 = sigima.objects.create_image_from_param(base_param, extra_param=base_param)
+    param = sigima.objects.UniformRandomParam.create(width=data_size, height=data_size)
+    param.set_from_datatype(ima1.data.dtype)
+    param.vmax = int(ima1.data.max() * 0.2)
+    ima2 = sigima.objects.create_image_from_param(param)
     panel.add_object(ima2)
 
     panel.objview.select_objects((1, 2))
@@ -133,8 +116,8 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     panel.processor.run_feature("histogram")
     qt_wait(DELAY2)
 
-    base_param.title = None
-    ima1 = create_sincos_image(base_param)
+    param.title = None
+    ima1 = create_sincos_image(param)
     panel.add_object(ima1)
 
     qt_wait(DELAY3)
@@ -149,8 +132,8 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 
-    base_param.title = None
-    ima1 = create_multigauss_image(base_param)
+    param.title = None
+    ima1 = create_multigauss_image(param)
     s = data_size
     roi = sigima.objects.create_image_roi(
         "rectangle", [s // 2, s // 2, s - 25 - s // 2, s - s // 2]
@@ -169,8 +152,8 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
 
     qt_wait(DELAY2)
 
-    base_param.title = None
-    ima = create_peak2d_image(base_param)
+    param.title = None
+    ima = create_peak2d_image(param)
     panel.add_object(ima)
     param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.run_feature("peak_detection", param)

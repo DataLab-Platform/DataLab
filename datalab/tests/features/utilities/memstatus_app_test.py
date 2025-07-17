@@ -8,7 +8,7 @@ Memory status widget application test
 
 import numpy as np
 import psutil
-from sigima.objects import Gauss2DParam, ImageTypes, NewImageParam
+from sigima.objects import Gauss2DParam
 
 from datalab import config
 from datalab.env import execenv
@@ -22,11 +22,10 @@ def memory_alarm(threshold):
     with cdltest_app_context() as win:
         panel = win.imagepanel
         win.memorystatus.update_status()  # Force memory status update
-        newparam = NewImageParam.create(itype=ImageTypes.GAUSS)
-        addparam = Gauss2DParam.create(
+        param = Gauss2DParam.create(
             x0=rng.integers(-9, 9), y0=rng.integers(-9, 9), sigma=rng.integers(1, 20)
         )
-        panel.new_object(newparam, extra_param=addparam, edit=False)
+        panel.new_object(param, edit=False)
 
 
 def test_mem_status():

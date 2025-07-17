@@ -143,13 +143,10 @@ def run_signal_computations(
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    base_param = sigima.objects.NewSignalParam.create(
-        title=_("Random function"), stype=sigima.objects.SignalTypes.UNIFORMRANDOM
+    param = sigima.objects.UniformRandomParam.create(
+        title=_("Random function"), vmin=0, vmax=sig1.y.max() * 0.2
     )
-    extra_param = sigima.objects.UniformRandomParam.create(
-        vmin=0, vmax=sig1.y.max() * 0.2
-    )
-    noiseobj1 = panel.new_object(base_param, extra_param=extra_param, edit=False)
+    noiseobj1 = panel.new_object(param, edit=False)
 
     compute_common_operations(panel)
 
@@ -217,12 +214,8 @@ def run_signal_computations(
         panel.objview.set_current_object(sig)
         panel.processor.compute_fit(fittitle, fitfunc)
 
-    base_param = sigima.objects.NewSignalParam.create(
-        title=_("Gaussian"), stype=sigima.objects.SignalTypes.GAUSS
-    )
-    sig = sigima.objects.create_signal_from_param(
-        base_param, sigima.objects.GaussLorentzVoigtParam()
-    )
+    param = sigima.objects.GaussParam.create(title=_("Gaussian"))
+    sig = sigima.objects.create_signal_from_param(param)
     panel.add_object(sig)
 
     param = sigima.params.FWHMParam()
@@ -300,13 +293,10 @@ def run_image_computations(
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    newparam = sigima.objects.NewImageParam.create(
-        itype=sigima.objects.ImageTypes.UNIFORMRANDOM
-    )
-    addparam = sigima.objects.UniformRandomParam()
-    addparam.set_from_datatype(ima1.data.dtype)
-    addparam.vmax = int(ima1.data.max() * 0.2)
-    panel.new_object(newparam, extra_param=addparam, edit=False)
+    unifparam = sigima.objects.UniformRandom2DParam()
+    unifparam.set_from_datatype(ima1.data.dtype)
+    unifparam.vmax = int(ima1.data.max() * 0.2)
+    panel.new_object(unifparam, edit=False)
 
     compute_common_operations(panel)
 
@@ -321,7 +311,7 @@ def run_image_computations(
     panel.processor.run_feature("denoise_wavelet", param)
 
     # Test exposure methods
-    ima2 = create_sincos_image(newparam, extra_param=addparam)
+    ima2 = create_sincos_image(newparam)
     panel.add_object(ima2)
     panel.processor.run_feature(
         "absolute"
@@ -357,7 +347,7 @@ def run_image_computations(
     panel.processor.run_feature("canny", param)
 
     # Test threshold methods
-    ima2 = create_sincos_image(newparam, extra_param=addparam)
+    ima2 = create_sincos_image(newparam)
     panel.add_object(ima2)
     param = sigima.params.ThresholdParam()
     for method_value, _method_name in param.methods:
@@ -379,7 +369,7 @@ def run_image_computations(
         panel.processor.run_feature(func_name)
 
     # Test edge detection methods
-    ima2 = create_sincos_image(newparam, extra_param=addparam)
+    ima2 = create_sincos_image(newparam)
     panel.add_object(ima2)
     for func_name in (
         "roberts",
@@ -424,7 +414,7 @@ def run_image_computations(
     panel.processor.run_feature("centroid")
     panel.processor.run_feature("enclosing_circle")
 
-    ima = create_peak2d_image(newparam, extra_param=addparam)
+    ima = create_peak2d_image(newparam)
     panel.add_object(ima)
     param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.compute_peak_detection(param)

@@ -39,13 +39,8 @@ def test_new_image() -> None:
         if image is not None:
             view_images(image.data, name=test_new_image.__name__, title=image.title)
         # Test with parametered 2D-Gaussian
-        bparam = sigima.objects.NewImageParam.create(
-            itype=sigima.objects.ImageTypes.GAUSS
-        )
-        eparam = sigima.objects.Gauss2DParam()
-        eparam.x0 = eparam.y0 = 3
-        eparam.sigma = 5
-        image = create_image_gui(bparam, extra_param=eparam, edit=edit)
+        param = sigima.objects.Gauss2DParam.create(x0=3, y0=3, sigma=5)
+        image = create_image_gui(param, edit=edit)
         if image is not None:
             view_images(image.data, name=test_new_image.__name__, title=image.title)
 
