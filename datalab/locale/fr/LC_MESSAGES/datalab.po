@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-15 19:48+0200\n"
+"POT-Creation-Date: 2025-07-17 11:47+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -674,6 +674,9 @@ msgstr "Insérer un point"
 
 msgid "Experimental points"
 msgstr "Points expérimentaux"
+
+msgid "Bilinear image"
+msgstr "Image bilinéaire"
 
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
@@ -2367,4 +2370,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

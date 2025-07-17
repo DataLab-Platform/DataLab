@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:31+0200\n"
+"POT-Creation-Date: 2025-07-17 11:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -59,6 +59,12 @@ msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-P
 
 msgid "Default strategy is now \"Next power of 2\"."
 msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
+
+msgid "New bilinear image generator."
+msgstr "Nouveau générateur d'image bilinéaire."
+
+msgid "This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
+msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
 
 msgid "New I/O features:"
 msgstr "Nouvelles fonctionnalités d'E/S :"

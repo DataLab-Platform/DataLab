@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 17:36+0200\n"
+"POT-Creation-Date: 2025-07-17 11:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -950,13 +950,16 @@ msgstr ""
 msgid "if the image type is not supported"
 msgstr ""
 
-msgid "Image types"
+msgid "Image types."
 msgstr ""
 
 msgid "Image filled with zeros"
 msgstr ""
 
 msgid "Empty image (filled with data from memory state)"
+msgstr ""
+
+msgid "Bilinear form image"
 msgstr ""
 
 msgid "2D Gaussian image"
@@ -968,28 +971,58 @@ msgstr ""
 msgid "Image filled with random data (normal law)"
 msgstr ""
 
-msgid "New image dataset"
+msgid "New image dataset."
 msgstr ""
 
 msgid "Default: 'Untitled image'."
 msgstr ""
 
-msgid "Image height: number of rows\\. Integer higher than 1\\. Default: None."
+msgid "Image height: number of rows\\. Integer higher than 1\\. Default: 1024."
 msgstr ""
 
-msgid "Image width: number of columns\\. Integer higher than 1\\. Default: None."
+msgid "Image width: number of columns\\. Integer higher than 1\\. Default: 1024."
 msgstr ""
 
 msgid "Data type\\.  Single choice from: ImageDatatypes.UINT8, ImageDatatypes.UINT16, ImageDatatypes.INT16, ImageDatatypes.FLOAT32, ImageDatatypes.FLOAT64. Default: ImageDatatypes.UINT8."
 msgstr ""
 
-msgid "Single choice from: ImageTypes.ZEROS, ImageTypes.EMPTY, ImageTypes.GAUSS, ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM. Default: ImageTypes.ZEROS."
+msgid "Single choice from: ImageTypes.ZEROS, ImageTypes.EMPTY, ImageTypes.BILINEAR, ImageTypes.GAUSS, ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM. Default: ImageTypes.ZEROS."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`NewImageParam` with the fields set to the given values."
 msgstr ""
 
 msgid "New instance of :py:class:`NewImageParam`."
+msgstr ""
+
+msgid "Define the parameters of a bilinear form."
+msgstr ""
+
+msgid "z = a (x - x<sub>0</sub>) + b (y - y<sub>0</sub>) + c"
+msgstr ""
+
+msgid "x\\ :subscript:`0`\\.  Default: 0.0."
+msgstr ""
+
+msgid "y\\ :subscript:`0`\\.  Default: 0.0."
+msgstr ""
+
+msgid "x\\ :subscript:`min`\\.  Default: -1.0."
+msgstr ""
+
+msgid "x\\ :subscript:`max`\\.  Default: 1.0."
+msgstr ""
+
+msgid "y\\ :subscript:`min`\\.  Default: -1.0."
+msgstr ""
+
+msgid "y\\ :subscript:`max`\\.  Default: 1.0."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`BilinearFormParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`BilinearFormParam`."
 msgstr ""
 
 msgid "2D Gaussian parameters"
@@ -1096,3 +1129,4 @@ msgstr ""
 
 msgid "Float number stored with 64 bits"
 msgstr ""
+
