@@ -113,7 +113,7 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         if newparam is None:
             newparam = NewImageParam.create(title=title)
         if curobj is not None:
-            newparam.width, newparam.height = curobj.data.shape
+            newparam.height, newparam.width = curobj.data.shape
             newparam.dtype = ImageDatatypes.from_dtype(curobj.data.dtype)
         return newparam
 
