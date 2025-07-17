@@ -12,12 +12,13 @@ from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.optimize import curve_fit
 from scipy.special import erf  # pylint: disable=no-name-in-module
 from sigima.tests.helpers import get_default_test_name
+from sigima.tools.checks import check_1d_arrays
 from sigima.tools.signal.fitmodels import (
     GaussianModel,
     LorentzianModel,
     VoigtModel,
 )
-from sigima.tools.signal.fourier import fft1d
+from sigima.tools.signal.fourier import magnitude_spectrum
 from sigima.tools.signal.peakdetection import xpeak
 
 from datalab.config import _
@@ -291,18 +292,19 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 # --- Sinusoidal fitting curve ------------------------------------------------
 
 
-def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
-    """Sort from X,Y data by computing FFT(y).
+@check_1d_arrays(x_evenly_spaced=True)
+def dominant_frequency(x: np.ndarray, y: np.ndarray) -> np.floating:
+    """Find the dominant frequency.
 
     Args:
-        x: X data
-        y: Y data
+        x: 1-D x values.
+        y: 1-D y values.
 
     Returns:
-        Sorted frequencies in ascending order
+        Dominant frequency.
     """
-    freqs, fourier = fft1d(x, y, shift=False)
-    return freqs[np.argsort(fourier)]
+    f, spectrum = magnitude_spectrum(x, y)
+    return np.abs(f[np.argmax(spectrum)])
 
 
 def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
@@ -312,8 +314,7 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     the fitting parameters"""
 
     guess_a = (np.max(y) - np.min(y)) / 2
-    freqs = sort_frequencies(x, y)
-    guess_f = freqs[0]
+    guess_f = dominant_frequency(x, y)
     guess_ph = 0
     guess_c = np.mean(y, dtype=float)
 

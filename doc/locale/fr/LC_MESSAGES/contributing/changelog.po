@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 19:48+0200\n"
+"POT-Creation-Date: 2025-07-17 15:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -188,6 +188,9 @@ msgstr "Correction de [Issue #241](https://github.com/DataLab-Platform/DataLab/i
 
 msgid "Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\\s+` instead of single space character)"
 msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec des séparateurs d'espaces variables (utilisation désormais du motif regex `\\s+` au lieu du caractère espace simple)"
+
+msgid "Improved initial frequency estimate for sinusoidal curve fitting."
+msgstr "Amélioration de l'estimation initiale de la fréquence pour l'ajustement de courbe sinusoïdale."
 
 msgid "ℹ️ Other changes:"
 msgstr "ℹ️ Autres changements :"

@@ -67,6 +67,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)
 * Fixed [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Erroneous ifft1d x-axis computation when shift=False
 * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\s+` instead of single space character)
+* Improved initial frequency estimate for sinusoidal curve fitting.
 
 ℹ️ Other changes:
 
