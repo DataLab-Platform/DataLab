@@ -251,7 +251,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """
         newparam = self.imagepanel.get_newparam_from_current(title=title)
         if shape is not None:
-            newparam.width, newparam.height = shape
+            newparam.height, newparam.width = shape
         newparam.hide_image_height = hide_image_height
         newparam.hide_image_type = hide_image_type
         newparam.hide_image_dtype = hide_image_dtype
