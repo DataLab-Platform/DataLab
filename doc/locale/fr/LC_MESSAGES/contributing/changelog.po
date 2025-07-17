@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 19:48+0200\n"
+"POT-Creation-Date: 2025-07-17 11:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -62,6 +62,9 @@ msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
 
 msgid "New I/O features:"
 msgstr "Nouvelles fonctionnalités d'E/S :"
+
+msgid "Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using `\\s+` instead of single space character)."
+msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec des séparateurs d'espaces variables (utilisation désormais de `\\s+` au lieu du caractère espace simple)."
 
 msgid "FT-Lab signals and images:"
 msgstr "Signaux et images FT-Lab :"
@@ -186,8 +189,11 @@ msgstr "Correction de l'[Issue #240](https://github.com/DataLab-Platform/DataLab
 msgid "Fixed [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Erroneous ifft1d x-axis computation when shift=False"
 msgstr "Correction de [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Calcul erroné de l'axe temporel dans ifft1d lorsque shift=False"
 
-msgid "Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\\s+` instead of single space character)"
-msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec des séparateurs d'espaces variables (utilisation désormais du motif regex `\\s+` au lieu du caractère espace simple)"
+msgid "Fixed [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Incorrect shape unpacking in edit_new_image_parameters"
+msgstr "Correction de [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Déballage incorrect de dimensiosn dans edit_new_image_parameters"
+
+msgid "Fixed [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Incorrect unpacking of image shape in get_newparam_from_current"
+msgstr "Correction de [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Déballage incorrect des dimensions de l'image dans get_newparam_from_current"
 
 msgid "ℹ️ Other changes:"
 msgstr "ℹ️ Autres changements :"

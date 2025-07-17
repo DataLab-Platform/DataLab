@@ -19,6 +19,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Default strategy is now "Next power of 2".
 
 * New I/O features:
+  * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using `\s+` instead of single space character).
   * FT-Lab signals and images:
     * Added support for CEA's FT-Lab signal and image binary formats.
     * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
@@ -66,7 +67,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239) - Text Import Wizard does not preserve user-defined titles and units
 * Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)
 * Fixed [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Erroneous ifft1d x-axis computation when shift=False
-* Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using regex pattern `\s+` instead of single space character)
+* Fixed [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Incorrect shape unpacking in edit_new_image_parameters
+* Fixed [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Incorrect unpacking of image shape in get_newparam_from_current
 
 ℹ️ Other changes:
 
