@@ -32,7 +32,6 @@ from datalab.gui.plothandler import SignalPlotHandler
 from datalab.gui.processor.signal import SignalProcessor
 
 if TYPE_CHECKING:
-    import guidata.dataset as gds
     from qtpy import QtWidgets as QW
 
     from datalab.gui.docks import DockablePlotWidget
@@ -107,16 +106,14 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
 
     def new_object(
         self,
-        base_param: NewSignalParam | None = None,
-        extra_param: gds.DataSet | None = None,
+        param: NewSignalParam | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
     ) -> SignalObj | None:
         """Create a new object (signal).
 
         Args:
-            base_param (guidata.dataset.DataSet): new object parameters
-            extra_param (guidata.dataset.DataSet): additional parameters
+            param (guidata.dataset.DataSet): new object parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
             add_to_panel (bool): Add the new object to the panel (default: True)
 
@@ -125,10 +122,8 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         """
         if not self.mainwindow.confirm_memory_state():
             return None
-        base_param = self.get_newparam_from_current(base_param)
-        signal = create_signal_gui(
-            base_param, extra_param=extra_param, edit=edit, parent=self.parent()
-        )
+        param = self.get_newparam_from_current(param)
+        signal = create_signal_gui(param, edit=edit, parent=self.parent())
         if signal is None:
             return None
         if add_to_panel:

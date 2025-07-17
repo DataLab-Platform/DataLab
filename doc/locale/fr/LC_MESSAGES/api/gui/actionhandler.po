@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-16 10:07+0200\n"
+"POT-Creation-Date: 2025-07-17 18:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -63,9 +63,11 @@ msgstr "Catégories d'actions"
 msgid "Handler classes"
 msgstr "Classes de gestion"
 
-#, fuzzy
 msgid "Object handling signal panel GUI interactions: actions, menus, ..."
-msgstr "Objet gérant les interactions GUI du panneau de signaux : actions, menus..."
+msgstr "Objet gérant les interactions GUI du panneau de signaux : actions, menus, ..."
+
+msgid "Create actions for creating new objects"
+msgstr "Créer des actions pour créer de nouveaux objets"
 
 msgid "Create actions that are added to the menus in the first place"
 msgstr "Créer des actions qui sont ajoutées aux menus en premier lieu"

@@ -30,7 +30,6 @@ from datalab.gui.plothandler import ImagePlotHandler
 from datalab.gui.processor.image import ImageProcessor
 
 if TYPE_CHECKING:
-    import guidata.dataset as gds
     from plotpy.plot import BasePlot
     from qtpy import QtWidgets as QW
 
@@ -119,16 +118,14 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
 
     def new_object(
         self,
-        base_param: NewImageParam | None = None,
-        extra_param: gds.DataSet | None = None,
+        param: NewImageParam | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
     ) -> ImageObj | None:
         """Create a new object (image).
 
         Args:
-            base_param (guidata.dataset.DataSet): new object parameters
-            extra_param (guidata.dataset.DataSet): additional parameters
+            param (guidata.dataset.DataSet): new object parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
             add_to_panel (bool): Add the object to the panel (default: True)
 
@@ -137,10 +134,8 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         """
         if not self.mainwindow.confirm_memory_state():
             return None
-        base_param = self.get_newparam_from_current(base_param)
-        image = create_image_gui(
-            base_param, extra_param=extra_param, edit=edit, parent=self.parent()
-        )
+        param = self.get_newparam_from_current(param)
+        image = create_image_gui(param, edit=edit, parent=self.parent())
         if image is None:
             return None
         if add_to_panel:

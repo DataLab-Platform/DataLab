@@ -22,15 +22,15 @@ from datalab.tests import cdltest_app_context
 
 def create_image_with_resultshapes() -> sigima.objects.ImageObj:
     """Create test image with resultshapes"""
-    newparam = sigima.objects.NewImageParam.create(
+    param = sigima.objects.Gauss2DParam.create(
         height=600,
         width=600,
         title="Test image (with result shapes)",
-        itype=sigima.objects.ImageTypes.GAUSS,
         dtype=sigima.objects.ImageDatatypes.UINT16,
+        x0=2,
+        y0=3,
     )
-    addparam = sigima.objects.Gauss2DParam.create(x0=2, y0=3)
-    image = sigima.objects.create_image_from_param(newparam, addparam)
+    image = sigima.objects.create_image_from_param(param)
     for mshape in test_data.create_resultshapes():
         mshape.add_to(image)
     return image

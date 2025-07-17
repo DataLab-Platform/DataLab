@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-17 11:47+0200\n"
+"POT-Creation-Date: 2025-07-17 18:14+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -21,12 +21,8 @@ msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
 
 #, python-format
-msgid "New %s..."
-msgstr "Nouvel objet %s..."
-
-#, python-format
-msgid "Create new %s"
-msgstr "Créer un nouvel objet %s"
+msgid "New %s"
+msgstr "Nouvel objet %s"
 
 #, python-format
 msgid "Open %s..."
@@ -207,6 +203,61 @@ msgstr "Supprimer les résultats"
 msgid "signal"
 msgstr "signal"
 
+msgid "Zeros"
+msgstr "Zéros"
+
+msgid "Random uniform distribution"
+msgstr "Distribution uniforme aléatoire"
+
+msgid "Random normal distribution"
+msgstr "Distribution normale aléatoire"
+
+msgid "Gaussian"
+msgstr "Gaussienne"
+
+msgid "Lorentzian"
+msgstr "Lorentzienne"
+
+msgid "Voigt"
+msgstr "Voigt"
+
+msgid "Sinus"
+msgstr "Sinus"
+
+msgid "Cosinus"
+msgstr "Cosinus"
+
+msgid "Sawtooth"
+msgstr "Dents de scie"
+
+msgid "Triangle"
+msgstr "Triangle"
+
+msgid "Square"
+msgstr "Carré"
+
+msgid "Cardinal sine"
+msgstr "Sinus cardinal"
+
+msgid "Step"
+msgstr "Échelon"
+
+msgid "Exponential"
+msgstr "Exponentielle"
+
+msgid "Pulse"
+msgstr "Impulsion"
+
+msgid "Polynomial"
+msgstr "Polynomial"
+
+msgid "Custom"
+msgstr "Personnalisé"
+
+#, python-format
+msgid "Create new %s"
+msgstr "Créer un nouvel objet %s"
+
 msgid "Frequency filters"
 msgstr "Filtres fréquentiels"
 
@@ -291,6 +342,12 @@ msgstr ""
 
 msgid "image"
 msgstr "image"
+
+msgid "Empty"
+msgstr "Vide"
+
+msgid "Ramp"
+msgstr "Rampe"
 
 msgid "Show contrast panel"
 msgstr "Afficher le panneau de contraste"
@@ -672,12 +729,6 @@ msgstr "Editer la courbe expérimentale"
 msgid "Insert point"
 msgstr "Insérer un point"
 
-msgid "Experimental points"
-msgstr "Points expérimentaux"
-
-msgid "Bilinear image"
-msgstr "Image bilinéaire"
-
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
@@ -929,9 +980,6 @@ msgstr "Partie imaginaire"
 
 msgid "Convert data type"
 msgstr "Convertir le type de données"
-
-msgid "Exponential"
-msgstr "Exponentielle"
 
 msgid "Logarithm (base 10)"
 msgstr "Logarithme (base 10)"
@@ -1901,9 +1949,6 @@ msgstr "Image d'homogénéité (Distribution uniforme)"
 
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
-
-msgid "Gaussian"
-msgstr "Gaussienne"
 
 msgid "Click OK to start the demo.<br><br><u>Note:</u><br>- Demo will cover a <i>selection</i> of DataLab features (for a complete list of features, please refer to the documentation).<br>- It won't require any user interaction."
 msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La démo couvre une <i>sélection</i> des fonctionnalités de DataLab (pour une liste complète des fonctionnalités, veuillez vous référer à la documentation).<br>- Elle ne nécessite aucune interaction de l'utilisateur."

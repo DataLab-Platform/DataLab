@@ -851,16 +851,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     @abc.abstractmethod
     def new_object(
         self,
-        base_param: NewSignalParam | NewImageParam | None = None,
-        extra_param: gds.DataSet | None = None,
+        param: NewSignalParam | NewImageParam | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
     ) -> TypeObj | None:
         """Create a new object (signal/image).
 
         Args:
-            base_param: new object parameters
-            extra_param: additional parameters
+            param: new object parameters
             edit: Open a dialog box to edit parameters (default: True)
             add_to_panel: Add object to panel (default: True)
 

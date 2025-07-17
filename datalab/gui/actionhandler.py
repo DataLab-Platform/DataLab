@@ -39,6 +39,7 @@ from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
+import sigima.objects as sio
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from qtpy import QtCore as QC
@@ -447,18 +448,17 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 self.view_toolbar.insertAction(before, action)
         self.view_toolbar.insertSeparator(before)
 
+    @abc.abstractmethod
+    def create_new_object_actions(self):
+        """Create actions for creating new objects"""
+
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
         with self.new_category(ActionCategory.FILE):
-            self.new_action(
-                _("New %s...") % self.OBJECT_STR,
-                icon_name=f"new_{self.OBJECT_STR}.svg",
-                tip=_("Create new %s") % self.OBJECT_STR,
-                triggered=self.panel.new_object,
-                shortcut=QG.QKeySequence(QG.QKeySequence.New),
-                select_condition=SelectCond.always,
-                toolbar_pos=-1,
-            )
+            with self.new_menu(
+                _("New %s") % self.OBJECT_STR, icon_name=f"new_{self.OBJECT_STR}.svg"
+            ):
+                self.create_new_object_actions()
             self.new_action(
                 _("Open %s...") % self.OBJECT_STR,
                 # icon: fileopen_signal.svg or fileopen_image.svg
@@ -759,6 +759,34 @@ class SignalActionHandler(BaseActionHandler):
 
     OBJECT_STR = _("signal")
 
+    def create_new_object_actions(self):
+        """Create actions for creating new objects"""
+        for label, pclass in (
+            (_("Zeros"), sio.ZerosParam),
+            (_("Random uniform distribution"), sio.UniformRandomParam),
+            (_("Random normal distribution"), sio.NormalRandomParam),
+            (_("Gaussian"), sio.GaussParam),
+            (_("Lorentzian"), sio.LorentzParam),
+            (_("Voigt"), sio.VoigtParam),
+            (_("Sinus"), sio.SinusParam),
+            (_("Cosinus"), sio.CosinusParam),
+            (_("Sawtooth"), sio.SawtoothParam),
+            (_("Triangle"), sio.TriangleParam),
+            (_("Square"), sio.SquareParam),
+            (_("Cardinal sine"), sio.SincParam),
+            (_("Step"), sio.StepParam),
+            (_("Exponential"), sio.ExponentialParam),
+            (_("Pulse"), sio.PulseParam),
+            (_("Polynomial"), sio.PolyParam),
+            (_("Custom"), sio.ExperimentalSignalParam),
+        ):
+            self.new_action(
+                label,
+                tip=_("Create new %s") % label,
+                triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
+                select_condition=SelectCond.always,
+            )
+
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
         super().create_first_actions()
@@ -901,6 +929,23 @@ class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
+
+    def create_new_object_actions(self):
+        """Create actions for creating new objects"""
+        for label, pclass in (
+            (_("Zeros"), sio.Zeros2DParam),
+            (_("Empty"), sio.Empty2DParam),
+            (_("Random uniform distribution"), sio.UniformRandom2DParam),
+            (_("Random normal distribution"), sio.NormalRandom2DParam),
+            (_("Gaussian"), sio.Gauss2DParam),
+            (_("Ramp"), sio.Ramp2DParam),
+        ):
+            self.new_action(
+                label,
+                tip=_("Create new %s") % label,
+                triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
+                select_condition=SelectCond.always,
+            )
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""

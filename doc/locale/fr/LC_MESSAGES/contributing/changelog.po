@@ -60,8 +60,8 @@ msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-P
 msgid "Default strategy is now \"Next power of 2\"."
 msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
 
-msgid "New bilinear image generator."
-msgstr "Nouveau générateur d'image bilinéaire."
+msgid "New 2D ramp image generator."
+msgstr "Nouveau générateur d'image de type rampe 2D."
 
 msgid "This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
