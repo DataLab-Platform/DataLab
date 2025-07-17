@@ -18,6 +18,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
     * Default strategy is now "Next power of 2".
 
+* New bilinear image generator.
+  * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).
+
 * New I/O features:
   * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using `\s+` instead of single space character).
   * FT-Lab signals and images:

@@ -23,8 +23,8 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
-from sigima.objects import ExperimentalSignalParam as OrigExperimentalSignalParam
 from sigima.objects import (
+    BilinearFormParam,
     ExponentialParam,
     Gauss2DParam,
     GaussLorentzVoigtParam,
@@ -43,6 +43,7 @@ from sigima.objects import (
     UniformRandomParam,
     create_signal,
 )
+from sigima.objects import ExperimentalSignalParam as OrigExperimentalSignalParam
 from sigima.objects import create_image_from_param as create_image_headless
 from sigima.objects import create_signal_from_param as create_signal_headless
 from sigima.objects.signal import DEFAULT_TITLE as SIGNAL_DEFAULT_TITLE
@@ -201,7 +202,12 @@ def create_image_gui(
         base_param.dtype = ImageDatatypes.UINT16
 
     ep = extra_param
-    if base_param.itype == ImageTypes.GAUSS:
+    if base_param.itype == ImageTypes.BILINEAR:
+        if ep is None:
+            ep = BilinearFormParam(_("Bilinear image"))
+        if edit and not ep.edit(parent=parent):
+            return None
+    elif base_param.itype == ImageTypes.GAUSS:
         if ep is None:
             ep = Gauss2DParam("2D-gaussian image")
         if ep.a is None:
@@ -209,9 +215,8 @@ def create_image_gui(
                 ep.a = np.iinfo(base_param.dtype.value).max / 2.0
             except ValueError:
                 ep.a = 10.0
-        if edit:
-            if not ep.edit(parent=parent):
-                return None
+        if edit and not ep.edit(parent=parent):
+            return None
         extra_param = ep
 
     elif base_param.itype in (ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM):
