@@ -404,13 +404,13 @@
             "label": "🔁 Reinstall guidata/plotpy/sigima dev",
             "type": "shell",
             "windows": {
-                "command": "pip uninstall -y guidata plotpy sigima; Remove-Item -Recurse -Force .venv/Lib/site-packages/guidata -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .venv/Lib/site-packages/plotpy -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .venv/Lib/site-packages/sigima -ErrorAction SilentlyContinue; pip install -e ../guidata; pip install -e ../plotpy; pip install -e ../sigima",
+                "command": ".venv/scripts/pip uninstall -y guidata plotpy sigima; Remove-Item -Recurse -Force .venv/Lib/site-packages/guidata -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .venv/Lib/site-packages/plotpy -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .venv/Lib/site-packages/sigima -ErrorAction SilentlyContinue; .venv/scripts/pip install -e ../guidata; .venv/scripts/pip install -e ../plotpy; .venv/scripts/pip install -e ../sigima",
             },
             "linux": {
-                "command": "pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && pip install -e ../guidata && pip install -e ../plotpy && pip install -e ../sigima"
+                "command": ".venv/bin/pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && .venv/bin/pip install -e ../guidata && .venv/bin/pip install -e ../plotpy && .venv/bin/pip install -e ../sigima"
             },
             "osx": {
-                "command": "pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && pip install -e ../guidata && pip install -e ../plotpy && pip install -e ../sigima"
+                "command": ".venv/bin/pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && .venv/bin/pip install -e ../guidata && .venv/bin/pip install -e ../plotpy && .venv/bin/pip install -e ../sigima"
             },
             "options": {
                 "cwd": "${workspaceFolder}",
