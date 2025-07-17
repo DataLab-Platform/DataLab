@@ -190,9 +190,8 @@ def create_image_gui(
         base_param = NewImageParam()
         if not base_param.edit(parent=parent):
             return None
-    elif edit:
-        if not base_param.edit(parent=parent):
-            return None
+    elif edit and not base_param.edit(parent=parent):
+        return None
 
     if base_param.height is None:
         base_param.height = 500
@@ -238,6 +237,6 @@ def create_image_gui(
             QW.QMessageBox.warning(parent, _("Error"), str(exc))
         else:
             raise ValueError(f"Error creating image: {exc}") from exc
-        return None
+        image = None
 
     return image
