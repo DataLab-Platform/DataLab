@@ -160,8 +160,8 @@ msgstr "Polynomial"
 msgid ":math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`"
 msgstr ""
 
-msgid "Experimental"
-msgstr "Expérimental"
+msgid "Custom"
+msgstr "Personnalisé"
 
 msgid "Manual input of X and Y values"
 msgstr "Saisie manuelle des valeurs X et Y"

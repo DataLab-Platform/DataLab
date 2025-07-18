@@ -21,7 +21,7 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
-from sigima.objects import ExperimentalSignalParam as OrigExperimentalSignalParam
+from sigima.objects import CustomSignalParam as OrigCustomSignalParam
 from sigima.objects import (
     Gauss2DParam,
     ImageDatatypes,
@@ -40,18 +40,18 @@ from sigima.objects.signal import DEFAULT_TITLE as SIGNAL_DEFAULT_TITLE
 from datalab.config import _
 
 
-class ExperimentalSignalParam(OrigExperimentalSignalParam):
-    """Parameters for experimental signal"""
+class CustomSignalParam(OrigCustomSignalParam):
+    """Parameters for custom signal (e.g. manually defined experimental data)"""
 
     def edit_curve(self, *args) -> None:  # pylint: disable=unused-argument
-        """Edit experimental curve"""
+        """Edit custom curve"""
         win: PlotDialog = make.dialog(
             wintitle=_("Select one point then press OK to accept"),
             edit=True,
             type="curve",
         )
         edit_tool = win.manager.add_tool(
-            EditPointTool, title=_("Edit experimental curve")
+            EditPointTool, title=_("Edit curve interactively")
         )
         edit_tool.activate()
         plot = win.manager.get_plot()
@@ -95,23 +95,26 @@ def create_signal_gui(
     Raises:
         ValueError: if base_param is None and edit is False
     """
-    if isinstance(param, ExperimentalSignalParam):
-        param.setup_array(size=param.size, xmin=param.xmin, xmax=param.xmax)
-        if edit and not param.edit(parent=parent):
-            return None
-        signal = create_signal(param.title)
-        signal.xydata = param.xyarray.T
-        if signal.title == SIGNAL_DEFAULT_TITLE:
-            signal.title = f"experimental(npts={param.size})"
-        return signal
-
     if param is None:
         param = NewSignalParam()
         edit = True  # Default to editing if no parameters provided
 
+    if isinstance(param, OrigCustomSignalParam) and edit:
+        p_init = NewSignalParam(_("Custom signal"))
+        if not p_init.edit(parent=parent):
+            return None
+        param.setup_array(size=p_init.size, xmin=p_init.xmin, xmax=p_init.xmax)
+
     if edit:
         if not param.edit(parent=parent):
             return None
+
+    if isinstance(param, OrigCustomSignalParam):
+        signal = create_signal(param.title)
+        signal.xydata = param.xyarray.T
+        if signal.title == SIGNAL_DEFAULT_TITLE:
+            signal.title = f"custom(npts={param.size})"
+        return signal
 
     try:
         signal = create_signal_headless(param)

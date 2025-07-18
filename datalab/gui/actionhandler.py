@@ -47,6 +47,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.config import Conf, _
+from datalab.gui import newobject
 from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
@@ -778,7 +779,7 @@ class SignalActionHandler(BaseActionHandler):
             (_("Exponential"), sio.ExponentialParam),
             (_("Pulse"), sio.PulseParam),
             (_("Polynomial"), sio.PolyParam),
-            (_("Custom"), sio.ExperimentalSignalParam),
+            (_("Custom"), newobject.CustomSignalParam),
         ):
             self.new_action(
                 label,

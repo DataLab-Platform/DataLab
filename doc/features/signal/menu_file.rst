@@ -63,7 +63,7 @@ Create a new signal from various models:
       - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
     * - Polynomial
       - :math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`
-    * - Experimental
+    * - Custom
       - Manual input of X and Y values
 
 .. _open_signal:

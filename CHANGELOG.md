@@ -531,7 +531,7 @@ NumPy 2.0 support has been added with this release.
 
 | Menu        | Submenu      |Features                                                 |
 |-------------|--------------|---------------------------------------------------------|
-| New | New signal | Exponential, pulse, polynomial, experimental (manual input)            |
+| New | New signal | Exponential, pulse, polynomial, custom (manual input)            |
 | Operations  | | Exponential, Square root, Power |
 | Operations  | Operations with a constant | +, -, *, / |
 | Processing  | Axis Transformation | Reverse X-axis |

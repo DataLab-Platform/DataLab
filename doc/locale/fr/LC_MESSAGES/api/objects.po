@@ -941,10 +941,10 @@ msgstr ""
 msgid "XY Values\\.  Default: None."
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`ExperimentalSignalParam` with the fields set to the given values."
+msgid "Returns a new instance of :py:class:`CustomSignalParam` with the fields set to the given values."
 msgstr ""
 
-msgid "New instance of :py:class:`ExperimentalSignalParam`."
+msgid "New instance of :py:class:`CustomSignalParam`."
 msgstr ""
 
 msgid "Setup the xyarray from size, xmin and xmax (use the current values is not provided)"
@@ -1318,4 +1318,3 @@ msgstr ""
 
 msgid "Float number stored with 64 bits"
 msgstr ""
-

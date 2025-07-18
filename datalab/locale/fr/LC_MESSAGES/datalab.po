@@ -723,8 +723,8 @@ msgstr "Souhaitez-vous enregistrer tous les signaux et images dans un fichier HD
 msgid "Select one point then press OK to accept"
 msgstr "Sélectionnez un point puis appuyez sur OK pour valider"
 
-msgid "Edit experimental curve"
-msgstr "Editer la courbe expérimentale"
+msgid "Edit curve interactively"
+msgstr "Modifier la courbe graphiquement"
 
 msgid "Insert point"
 msgstr "Insérer un point"

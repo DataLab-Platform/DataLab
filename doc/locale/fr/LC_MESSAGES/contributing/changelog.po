@@ -1205,8 +1205,8 @@ msgstr "Nouveau"
 msgid "New signal"
 msgstr "Nouveau signal"
 
-msgid "Exponential, pulse, polynomial, experimental (manual input)"
-msgstr "Exponentielle, impulsion, polynomiale, expérimentale (entrée manuelle)"
+msgid "Exponential, pulse, polynomial, custom (manual input)"
+msgstr "Exponentielle, impulsion, polynomiale, personnalisé (entrée manuelle)"
 
 msgid "Operations"
 msgstr "Opérations"
