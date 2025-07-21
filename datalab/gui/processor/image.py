@@ -99,6 +99,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(sigima_image.real, _("Real part"), icon_name="re.svg")
         self.register_1_to_1(sigima_image.imag, _("Imaginary part"), icon_name="im.svg")
         self.register_1_to_1(
+            sigima_image.phase_angle,
+            _("Phase angle"),
+            paramclass=sigima.params.PhaseAngleParam,
+        )
+        self.register_1_to_1(
             sigima_image.astype,
             _("Convert data type"),
             paramclass=sigima.params.DataTypeIParam,

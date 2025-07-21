@@ -699,6 +699,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.action_for("absolute", separator=True)
             self.action_for("real")
             self.action_for("imag")
+            self.action_for("phase_angle")
             self.action_for("astype", separator=True)
             self.action_for("exp", separator=True)
             self.action_for("log10", separator=False)
