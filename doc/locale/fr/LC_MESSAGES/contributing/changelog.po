@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 19:48+0200\n"
+"POT-Creation-Date: 2025-07-22 16:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -65,6 +65,12 @@ msgstr "Nouveau générateur d'image de type rampe 2D."
 
 msgid "This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
+
+msgid "New signal generators: linear chirp, logistic function, Planck function."
+msgstr "Nouveaux générateurs de signaux: chirp linéaire, fonction logistique, fonction de Planck."
+
+msgid "This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213)."
+msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
 
 msgid "New I/O features:"
 msgstr "Nouvelles fonctionnalités d'E/S :"
@@ -195,14 +201,14 @@ msgstr "Correction de l'[Issue #240](https://github.com/DataLab-Platform/DataLab
 msgid "Fixed [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Erroneous ifft1d x-axis computation when shift=False"
 msgstr "Correction de [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Calcul erroné de l'axe temporel dans ifft1d lorsque shift=False"
 
+msgid "Improved initial frequency estimate for sinusoidal curve fitting."
+msgstr "Amélioration de l'estimation initiale de la fréquence pour l'ajustement de courbe sinusoïdale."
+
 msgid "Fixed [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Incorrect shape unpacking in edit_new_image_parameters"
 msgstr "Correction de [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Déballage incorrect de dimensiosn dans edit_new_image_parameters"
 
 msgid "Fixed [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Incorrect unpacking of image shape in get_newparam_from_current"
 msgstr "Correction de [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Déballage incorrect des dimensions de l'image dans get_newparam_from_current"
-
-msgid "Improved initial frequency estimate for sinusoidal curve fitting."
-msgstr "Amélioration de l'estimation initiale de la fréquence pour l'ajustement de courbe sinusoïdale."
 
 msgid "ℹ️ Other changes:"
 msgstr "ℹ️ Autres changements :"

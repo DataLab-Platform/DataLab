@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-22 15:57+0200\n"
+"POT-Creation-Date: 2025-07-22 16:54+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -221,6 +221,9 @@ msgstr "Lorentzienne"
 msgid "Voigt"
 msgstr "Voigt"
 
+msgid "Planckian"
+msgstr "Planckienne"
+
 msgid "Sinus"
 msgstr "Sinus"
 
@@ -239,11 +242,17 @@ msgstr "Carré"
 msgid "Cardinal sine"
 msgstr "Sinus cardinal"
 
+msgid "Linear chirp"
+msgstr "Modulation linéaire de fréquence"
+
 msgid "Step"
 msgstr "Échelon"
 
 msgid "Exponential"
 msgstr "Exponentielle"
+
+msgid "Logistic"
+msgstr "Logistique"
 
 msgid "Pulse"
 msgstr "Impulsion"

@@ -39,6 +39,8 @@ Create a new signal from various models:
       - :math:`y = y_{0}+\dfrac{A}{\sigma.\pi}.\dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
     * - Voigt
       - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
+    * - Planckian
+      - :math:`y = \dfrac{2 h c^2}{\lambda^5 \left(exp\left(\dfrac{h c}{\lambda k T}\right)-1\right)}`
     * - Random (uniform law)
       - :math:`y[i] \in [-0.5, 0.5]`
     * - Random (normal law)
@@ -55,10 +57,14 @@ Create a new signal from various models:
       - :math:`y = y_0 + A \cdot \text{sgn}\left( \sin\left( 2\pi f x + \phi \right) \right)`
     * - Cardinal sine
       - :math:`y = y_0 + A \cdot \text{sinc}\left(2\pi f x + \phi\right)`
+    * - Linear chirp
+      - :math:`y = y_{0} + a \sin(\phi_{0} + 2\pi (f_{0} x +  \frac{1}{2} c x^{2}))`
     * - Step
       - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x > x_{0} \\ 0 & \text{otherwise}\end{array}\right.`
     * - Exponential
       - :math:`y = y_{0}+A.exp(B.x)`
+    * - Logistic
+      - :math:`y = y_{0} + \dfrac{a}{1 + exp(-k (x - x_{0}))}`
     * - Pulse
       - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
     * - Polynomial
