@@ -769,7 +769,7 @@ class SignalActionHandler(BaseActionHandler):
             (_("Gaussian"), sio.GaussParam),
             (_("Lorentzian"), sio.LorentzParam),
             (_("Voigt"), sio.VoigtParam),
-            (_("Planckian"), sio.PlanckParam),
+            (_("Blackbody (Planck's law)"), sio.PlanckParam),
             (_("Sinus"), sio.SinusParam),
             (_("Cosinus"), sio.CosinusParam),
             (_("Sawtooth"), sio.SawtoothParam),

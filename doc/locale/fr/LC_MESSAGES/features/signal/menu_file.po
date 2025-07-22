@@ -79,8 +79,8 @@ msgstr "Voigt"
 msgid ":math:`y = y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with :math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
 msgstr ":math:`y = y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec :math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
 
-msgid "Planckian"
-msgstr "Planckienne"
+msgid "Blackbody (Planck's law)"
+msgstr "Corps noir (loi de Planck)"
 
 msgid ":math:`y = \\dfrac{2 h c^2}{\\lambda^5 \\left(exp\\left(\\dfrac{h c}{\\lambda k T}\\right)-1\\right)}`"
 msgstr ""
@@ -283,4 +283,3 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
-

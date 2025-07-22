@@ -39,7 +39,7 @@ Create a new signal from various models:
       - :math:`y = y_{0}+\dfrac{A}{\sigma.\pi}.\dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
     * - Voigt
       - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
-    * - Planckian
+    * - Blackbody (Planck's law)
       - :math:`y = \dfrac{2 h c^2}{\lambda^5 \left(exp\left(\dfrac{h c}{\lambda k T}\right)-1\right)}`
     * - Random (uniform law)
       - :math:`y[i] \in [-0.5, 0.5]`
