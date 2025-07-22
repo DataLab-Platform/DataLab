@@ -15,6 +15,9 @@
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "build",
@@ -43,10 +46,34 @@
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "build",
                 "isDefault": true,
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell",
+        },
+        {
+            "label": "🧽🔦 Ruff",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "🧽 Ruff Formatter",
+                "🔦 Ruff Linter",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false,
             },
             "presentation": {
                 "clear": true,
