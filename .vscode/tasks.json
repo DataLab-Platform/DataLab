@@ -11,14 +11,14 @@
                 "${command:python.interpreterPath}",
                 "-m",
                 "ruff",
-                "format"
+                "format",
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "clear": true,
@@ -26,9 +26,9 @@
                 "focus": false,
                 "panel": "dedicated",
                 "reveal": "always",
-                "showReuseMessage": true
+                "showReuseMessage": true,
             },
-            "type": "shell"
+            "type": "shell",
         },
         {
             "label": "🔦 Ruff Linter",
@@ -42,11 +42,11 @@
                 "--fix",
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "clear": true,
@@ -56,7 +56,7 @@
                 "reveal": "always",
                 "showReuseMessage": true,
             },
-            "type": "shell"
+            "type": "shell",
         },
         {
             "label": "🔦 Pylint",
@@ -75,14 +75,14 @@
                 "--disable=too-many-lines",
                 "--disable=too-many-locals",
                 "--disable=too-many-public-methods",
-                "--disable=too-many-statements"
+                "--disable=too-many-statements",
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "clear": true,
@@ -90,9 +90,9 @@
                 "focus": false,
                 "panel": "dedicated",
                 "reveal": "always",
-                "showReuseMessage": true
+                "showReuseMessage": true,
             },
-            "type": "shell"
+            "type": "shell",
         },
         {
             "label": "sphinx-build",
@@ -107,17 +107,17 @@
                 "build/gettext",
                 "-b",
                 "gettext",
-                "-W"
+                "-W",
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "clear": true,
@@ -127,7 +127,7 @@
                 "reveal": "always",
                 "showReuseMessage": true,
             },
-            "type": "shell"
+            "type": "shell",
         },
         {
             "label": "sphinx-intl update",
@@ -151,12 +151,12 @@
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "clear": true,
@@ -169,8 +169,8 @@
             "type": "shell",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "sphinx-build"
-            ]
+                "sphinx-build",
+            ],
         },
         {
             "label": "sphinx-intl build",
@@ -185,12 +185,12 @@
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "clear": true,
@@ -198,9 +198,9 @@
                 "focus": false,
                 "panel": "dedicated",
                 "reveal": "always",
-                "showReuseMessage": true
+                "showReuseMessage": true,
             },
-            "type": "shell"
+            "type": "shell",
         },
         {
             "label": "🔎 Scan translations",
@@ -216,14 +216,14 @@
                 "--directory",
                 ".",
                 "--copyright-holder",
-                "DataLab Platform Developers"
+                "DataLab Platform Developers",
             ],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
             },
             "presentation": {
                 "clear": false,
@@ -231,13 +231,13 @@
                 "focus": false,
                 "panel": "shared",
                 "reveal": "always",
-                "showReuseMessage": true
+                "showReuseMessage": true,
             },
             "type": "shell",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "sphinx-intl update"
-            ]
+                "sphinx-intl update",
+            ],
         },
         {
             "label": "📚 Compile translations",
@@ -251,14 +251,14 @@
                 "--name",
                 "datalab",
                 "--directory",
-                "."
+                ".",
             ],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
             },
             "presentation": {
                 "clear": false,
@@ -266,13 +266,13 @@
                 "focus": false,
                 "panel": "shared",
                 "reveal": "always",
-                "showReuseMessage": true
+                "showReuseMessage": true,
             },
             "type": "shell",
             "dependsOrder": "sequence",
             "dependsOn": [
                 "sphinx-intl build",
-            ]
+            ],
         },
         {
             "label": "🚀 Pytest",
@@ -288,12 +288,12 @@
                 "cwd": "${workspaceFolder}",
                 "env": {
                     // "DEBUG": "1", // ☣️ Debug mode will reset .ini settings
-                    "UNATTENDED": "1"
-                }
+                    "UNATTENDED": "1",
+                },
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "echo": true,
@@ -301,7 +301,7 @@
                 "focus": false,
                 "panel": "dedicated",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": true,
             },
             "type": "shell",
         },
@@ -311,12 +311,12 @@
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "clear": true,
@@ -326,7 +326,7 @@
                 "reveal": "always",
                 "showReuseMessage": true,
             },
-            "type": "shell"
+            "type": "shell",
         },
         {
             "label": "🧪 Coverage tests",
@@ -340,7 +340,7 @@
                 "run",
                 "-m",
                 "pytest",
-                "datalab"
+                "datalab",
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
@@ -348,38 +348,38 @@
                     "COVERAGE_PROCESS_START": "${workspaceFolder}/.coveragerc",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "test",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
-                "panel": "dedicated"
+                "panel": "dedicated",
             },
-            "problemMatcher": []
+            "problemMatcher": [],
         },
         {
             "label": "📊 Coverage full",
             "type": "shell",
             "windows": {
-                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && start htmlcov\\index.html"
+                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && start htmlcov\\index.html",
             },
             "linux": {
-                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && xdg-open htmlcov/index.html"
+                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && xdg-open htmlcov/index.html",
             },
             "osx": {
-                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && open htmlcov/index.html"
+                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && open htmlcov/index.html",
             },
             "options": {
                 "cwd": "${workspaceFolder}",
                 "env": {
-                    "COVERAGE_PROCESS_START": "${workspaceFolder}/.coveragerc"
-                }
+                    "COVERAGE_PROCESS_START": "${workspaceFolder}/.coveragerc",
+                },
             },
             "presentation": {
-                "panel": "dedicated"
+                "panel": "dedicated",
             },
             "problemMatcher": [],
             "dependsOrder": "sequence",
@@ -405,12 +405,12 @@
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "echo": true,
@@ -418,9 +418,9 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": false
+                "clear": false,
             },
-            "type": "shell"
+            "type": "shell",
         },
         {
             "label": "🔁 Reinstall guidata/plotpy/sigima dev",
@@ -429,22 +429,22 @@
                 "command": ".venv/scripts/pip uninstall -y guidata plotpy sigima; Remove-Item -Recurse -Force .venv/Lib/site-packages/guidata -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .venv/Lib/site-packages/plotpy -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .venv/Lib/site-packages/sigima -ErrorAction SilentlyContinue; .venv/scripts/pip install -e ../guidata; .venv/scripts/pip install -e ../plotpy; .venv/scripts/pip install -e ../sigima",
             },
             "linux": {
-                "command": ".venv/bin/pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && .venv/bin/pip install -e ../guidata && .venv/bin/pip install -e ../plotpy && .venv/bin/pip install -e ../sigima"
+                "command": ".venv/bin/pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && .venv/bin/pip install -e ../guidata && .venv/bin/pip install -e ../plotpy && .venv/bin/pip install -e ../sigima",
             },
             "osx": {
-                "command": ".venv/bin/pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && .venv/bin/pip install -e ../guidata && .venv/bin/pip install -e ../plotpy && .venv/bin/pip install -e ../sigima"
+                "command": ".venv/bin/pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && .venv/bin/pip install -e ../guidata && .venv/bin/pip install -e ../plotpy && .venv/bin/pip install -e ../sigima",
             },
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "presentation": {
                 "panel": "dedicated",
-                "reveal": "always"
+                "reveal": "always",
             },
-            "problemMatcher": []
+            "problemMatcher": [],
         },
         {
             "label": "🧹 Clean Up",
@@ -452,14 +452,14 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "clean_up.bat"
+                "clean_up.bat",
             ],
             "options": {
-                "cwd": "scripts"
+                "cwd": "scripts",
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "echo": true,
@@ -467,8 +467,8 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": false
-            }
+                "clear": false,
+            },
         },
         {
             "label": "Create executable",
@@ -479,20 +479,20 @@
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
-                    "UNATTENDED": "1"
+                    "UNATTENDED": "1",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "args": [
                 "/c",
-                "build_exe.bat"
+                "build_exe.bat",
             ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "echo": true,
@@ -500,8 +500,8 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
-            }
+                "clear": true,
+            },
         },
         {
             "label": "Create installer",
@@ -514,17 +514,17 @@
                     "UNATTENDED": "1",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "args": [
                 "/c",
-                "build_installer.bat"
+                "build_installer.bat",
             ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "echo": true,
@@ -532,8 +532,8 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
-            }
+                "clear": true,
+            },
         },
         {
             "label": "Build PDF doc",
@@ -545,20 +545,20 @@
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
-                    "UNATTENDED": "1"
+                    "UNATTENDED": "1",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "args": [
                 "/c",
-                "build_doc.bat"
+                "build_doc.bat",
             ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "echo": true,
@@ -566,12 +566,12 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": true,
             },
             "dependsOrder": "sequence",
             "dependsOn": [
                 "🛠️ Generate doc assets",
-            ]
+            ],
         },
         {
             "label": "HTML doc: quick preview",
@@ -587,18 +587,18 @@
                 "build/doc",
                 "-b",
                 "html",
-                "-W"
+                "-W",
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "echo": true,
@@ -606,29 +606,29 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
-            }
+                "clear": true,
+            },
         },
         {
             "label": "🌐 Build/open HTML doc",
             "type": "shell",
             "windows": {
-                "command": "start build/doc/index.html"
+                "command": "start build/doc/index.html",
             },
             "linux": {
-                "command": "xdg-open build/doc/index.html"
+                "command": "xdg-open build/doc/index.html",
             },
             "osx": {
-                "command": "open build/doc/index.html"
+                "command": "open build/doc/index.html",
             },
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
             },
             "problemMatcher": [],
             "dependsOrder": "sequence",
             "dependsOn": [
                 "HTML doc: quick preview",
-            ]
+            ],
         },
         {
             "label": "GitHub Pages: build",
@@ -640,20 +640,20 @@
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
-                    "UNATTENDED": "1"
+                    "UNATTENDED": "1",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "args": [
                 "/c",
-                "build_ghpages.bat"
+                "build_ghpages.bat",
             ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "echo": true,
@@ -661,12 +661,12 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": true,
             },
             "dependsOrder": "sequence",
             "dependsOn": [
                 "🛠️ Generate doc assets",
-            ]
+            ],
         },
         {
             "label": "GitHub Pages: preview",
@@ -678,20 +678,20 @@
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
                     "RELEASE": "1",
-                    "UNATTENDED": "1"
+                    "UNATTENDED": "1",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "args": [
                 "/c",
-                "preview_ghpages.bat"
+                "preview_ghpages.bat",
             ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "echo": true,
@@ -699,12 +699,12 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": true,
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "GitHub Pages: build"
-            ]
+                "GitHub Pages: build",
+            ],
         },
         {
             "label": "GitHub Pages: upload",
@@ -715,20 +715,20 @@
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
-                    "UNATTENDED": "1"
+                    "UNATTENDED": "1",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "args": [
                 "/c",
-                "upload_ghpages.bat"
+                "upload_ghpages.bat",
             ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "echo": true,
@@ -736,12 +736,12 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": true,
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "GitHub Pages: build"
-            ]
+                "GitHub Pages: build",
+            ],
         },
         {
             "label": "Build Python packages",
@@ -752,20 +752,20 @@
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
-                    "UNATTENDED": "1"
+                    "UNATTENDED": "1",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "args": [
                 "/c",
-                "build_dist.bat"
+                "build_dist.bat",
             ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "echo": true,
@@ -773,13 +773,13 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": true,
             },
             "dependsOrder": "sequence",
             "dependsOn": [
                 "🛠️ Generate doc assets",
-                "Build PDF doc"
-            ]
+                "Build PDF doc",
+            ],
         },
         {
             "label": "✨ Release",
@@ -787,20 +787,20 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "release.bat"
+                "release.bat",
             ],
             "options": {
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "RELEASE": "1",
-                    "UNATTENDED": "1"
-                }
+                    "UNATTENDED": "1",
+                },
             },
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "echo": true,
@@ -808,7 +808,7 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": true,
             },
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -817,8 +817,8 @@
                 "📚 Compile translations",
                 "Build Python packages",
                 "Create executable",
-                "Create installer"
-            ]
+                "Create installer",
+            ],
         },
         {
             "label": "Run _tests_.bat",
@@ -835,12 +835,12 @@
                     "PYTHON": "${command:python.interpreterPath}",
                 },
                 "statusbar": {
-                    "hide": true
-                }
+                    "hide": true,
+                },
             },
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": false,
             },
             "presentation": {
                 "echo": true,
@@ -848,8 +848,8 @@
                 "focus": false,
                 "panel": "dedicated",
                 "showReuseMessage": true,
-                "clear": true
-            }
+                "clear": true,
+            },
         },
         {
             "label": "❔ Untracked files",
@@ -860,7 +860,7 @@
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true,
             },
             "presentation": {
                 "echo": true,
@@ -868,8 +868,8 @@
                 "focus": false,
                 "panel": "dedicated",
                 "showReuseMessage": true,
-                "clear": true
-            }
+                "clear": true,
+            },
         },
-    ]
+    ],
 }
