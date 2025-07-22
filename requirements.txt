@@ -1,28 +1,23 @@
+Coverage
+PlotPy >= 2.7.5
 PyQt5
-guidata
-plotpy
-PythonQwt
-scikit-image
-opencv-python-headless
-pandas
-PyWavelets
-psutil
+PyWavelets >= 1.1
+SciPy >= 1.5
+guidata >= 3.9
+myst_parser
+opencv-python-headless >= 4.5
+packaging >= 20.0
+pandas >= 1.2
+psutil >= 5.7
+pydata-sphinx-theme
+pyinstaller>=6.0
 pylint
-ruff
-coverage
 pytest
 pytest-xvfb
-pycodestyle
-pyinstaller>=6.2
+ruff
+scikit-image >= 0.18
 sphinx
-sphinx-intl
-sphinx-sitemap
-myst_parser
-sphinx_design
 sphinx-copybutton
-pydata-sphinx-theme
-esbonio
-rstcheck
-doc8
-build
-twine
+sphinx-sitemap
+sphinx_design
+sphinx_intl

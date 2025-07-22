@@ -11,6 +11,6 @@ call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% SetPythonPath
 call %FUNC% UsePython
 cd %SCRIPTPATH%\..
-%PYTHON% doc\update_requirements.py
+%PYTHON% -m guidata.utils.genreqs all
 %PYTHON% doc\update_validation_status.py
 %PYTHON% doc\update_processor_methods.py

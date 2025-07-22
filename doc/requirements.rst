@@ -1,4 +1,4 @@
-The :mod:`cdl` package requires the following Python modules:
+The `cdl` package requires the following Python modules:
 
 .. list-table::
     :header-rows: 1
@@ -14,10 +14,10 @@ The :mod:`cdl` package requires the following Python modules:
       -  >= 3.9
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
-      -  >= 2.7.4
+      -  >= 2.7.5
       - Curve and image plotting tools for Python/Qt applications
     * - SciPy
-      -  >= 1.5, < 1.15.0
+      -  >= 1.5
       - Fundamental algorithms for scientific computing in Python
     * - scikit-image
       -  >= 0.18
@@ -31,8 +31,21 @@ The :mod:`cdl` package requires the following Python modules:
     * - psutil
       -  >= 5.7
       - Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7.
+    * - packaging
+      -  >= 20.0
+      - Core utilities for Python packages
+
+Optional modules for GUI support (Qt):
+
+.. list-table::
+    :header-rows: 1
+    :align: left
+
+    * - Name
+      - Version
+      - Summary
     * - PyQt5
-      - >=5.11
+      - 
       - Python bindings for the Qt cross platform application toolkit
 
 Optional modules for development:
