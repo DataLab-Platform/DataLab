@@ -76,7 +76,7 @@ msgstr "Contribuer"
 msgid "Getting involved in the project"
 msgstr "S'impliquer dans le projet"
 
-msgid "DataLab has been funded, chronologically, by the following takeholders:"
+msgid "DataLab has been funded, chronologically, by the following stakeholders:"
 msgstr "DataLab a été financé, chronologiquement, par les parties prenantes suivantes :"
 
 msgid "|cea_logo|"
