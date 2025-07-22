@@ -64,7 +64,7 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
             Getting involved in the project
 
-DataLab has been funded, chronologically, by the following takeholders:
+DataLab has been funded, chronologically, by the following stakeholders:
 
 .. list-table::
     :header-rows: 0
