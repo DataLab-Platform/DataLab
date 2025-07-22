@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 18:53+0200\n"
+"POT-Creation-Date: 2025-07-22 15:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -314,15 +314,6 @@ msgstr ""
 msgid "Signal processing features"
 msgstr "Fonctionnalités de traitement des signaux"
 
-msgid "Restore data outside the Region Of Interest (ROI) of the input signal after a computation, only if the input signal has a ROI, and if the output signal has the same ROI as the input signal, and if the data types are the same, and if the shapes are the same. Otherwise, do nothing."
-msgstr ""
-
-msgid "destination signal object"
-msgstr ""
-
-msgid "source signal object"
-msgstr ""
-
 msgid "Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce a 1 signal → 1 signal function, which can be used as a Sigima computation function and inside DataLab's infrastructure to perform computations with the Signal Processor object."
 msgstr ""
 
@@ -344,6 +335,15 @@ msgstr ""
 msgid "Additional keyword arguments to pass to the function"
 msgstr ""
 
+msgid "Restore data outside the Region Of Interest (ROI) of the input signal after a computation, only if the input signal has a ROI, and if the output signal has the same ROI as the input signal, and if the data types are the same, and if the shapes are the same. Otherwise, do nothing."
+msgstr ""
+
+msgid "destination signal object"
+msgstr ""
+
+msgid "source signal object"
+msgstr ""
+
 msgid "Add **src** signals and return a new result signal object"
 msgstr ""
 
@@ -362,13 +362,25 @@ msgstr ""
 msgid "Add **dst** and a constant value and return a the new result signal object"
 msgstr ""
 
-msgid "input signal object"
+msgid "Args:"
 msgstr ""
 
-msgid "constant value"
+msgid "src: input signal object p: constant value"
+msgstr ""
+
+msgid "Returns:"
 msgstr ""
 
 msgid "Result signal object **src** + **p.value** (new object)"
+msgstr ""
+
+msgid "This computation function can be called in two ways:"
+msgstr ""
+
+msgid "With a parameter ``ConstantParam`` object:"
+msgstr ""
+
+msgid "Or, with keyword arguments directly:"
 msgstr ""
 
 msgid "Subtract a constant value from a signal"
@@ -392,22 +404,25 @@ msgstr ""
 msgid "Perform arithmetic operation on two signals"
 msgstr ""
 
-msgid "source signal 1"
-msgstr ""
-
-msgid "source signal 2"
-msgstr ""
-
-msgid "parameters"
+msgid "src1: source signal 1 src2: source signal 2 p: parameters"
 msgstr ""
 
 msgid "Result signal object"
+msgstr ""
+
+msgid "With a parameter ``ArithmeticParam`` object:"
 msgstr ""
 
 msgid "Compute difference between two signals"
 msgstr ""
 
 msgid "If uncertainty is available, it is propagated."
+msgstr ""
+
+msgid "source signal 1"
+msgstr ""
+
+msgid "source signal 2"
 msgstr ""
 
 msgid "Result signal object **src1** - **src2**"
@@ -440,10 +455,13 @@ msgstr ""
 msgid "Extract single region of interest from data"
 msgstr ""
 
-msgid "ROI parameters"
+msgid "src: source signal p: ROI parameters"
 msgstr ""
 
 msgid "Signal with single region of interest"
+msgstr ""
+
+msgid "With a parameter ``ROI1DParam`` object:"
 msgstr ""
 
 msgid "Swap axes"
@@ -476,6 +494,12 @@ msgstr ""
 msgid "Convert data type with :py:func:`numpy.astype`"
 msgstr ""
 
+msgid "src: source signal p: parameters"
+msgstr ""
+
+msgid "With a parameter ``DataTypeSParam`` object:"
+msgstr ""
+
 msgid "Compute Log10 with :py:data:`numpy.log10`"
 msgstr ""
 
@@ -500,6 +524,9 @@ msgstr ""
 msgid "Compute power with :py:data:`numpy.power`"
 msgstr ""
 
+msgid "With a parameter ``PowerParam`` object:"
+msgstr ""
+
 msgid "Peak detection parameters"
 msgstr ""
 
@@ -515,10 +542,20 @@ msgstr ""
 msgid "New instance of :py:class:`PeakDetectionParam`."
 msgstr ""
 
-msgid "Peak detection with :py:func:`sigima.tools.signal.peakdetection.peak_indices`"
+#, fuzzy
+msgid "Peak detection with"
+msgstr "Détection de contours"
+
+msgid ":py:func:`sigima.tools.signal.peakdetection.peak_indices`"
+msgstr ""
+
+msgid "With a parameter ``PeakDetectionParam`` object:"
 msgstr ""
 
 msgid "Normalize data with :py:func:`sigima.tools.signal.level.normalize`"
+msgstr ""
+
+msgid "With a parameter ``NormalizeParam`` object:"
 msgstr ""
 
 msgid "Compute derivative with :py:func:`numpy.gradient`"
@@ -542,28 +579,44 @@ msgstr ""
 msgid "Compute linear calibration"
 msgstr ""
 
+msgid "With a parameter ``XYCalibrateParam`` object:"
+msgstr ""
+
 msgid "Compute maximum data clipping with :py:func:`numpy.clip`"
 msgstr ""
 
-msgid "Correct offset: subtract the mean value of the signal in the specified range (baseline correction)"
+msgid "With a parameter ``ClipParam`` object:"
 msgstr ""
 
+msgid "Correct offset: subtract the mean value of the signal in the specified range"
+msgstr ""
+
+#, fuzzy
+msgid "(baseline correction)"
+msgstr "Correction d'exposition"
+
 msgid "Compute gaussian filter with :py:func:`scipy.ndimage.gaussian_filter`"
+msgstr ""
+
+msgid "With a parameter ``GaussianParam`` object:"
 msgstr ""
 
 msgid "Compute moving average with :py:func:`scipy.ndimage.uniform_filter`"
 msgstr ""
 
+msgid "With a parameter ``MovingAverageParam`` object:"
+msgstr ""
+
 msgid "Compute moving median with :py:func:`scipy.ndimage.median_filter`"
+msgstr ""
+
+msgid "With a parameter ``MovingMedianParam`` object:"
 msgstr ""
 
 msgid "Compute Wiener filter with :py:func:`scipy.signal.wiener`"
 msgstr ""
 
-msgid "Filter types"
-msgstr ""
-
-msgid "Base class for high-pass, low-pass, band-pass and band-stop filters"
+msgid "Low-pass filter parameters"
 msgstr ""
 
 msgid "Filter method\\.  Single choice from: 'bessel', 'butter', 'cheby1', 'cheby2', 'ellip', 'brickwall'. Default: 'bessel'."
@@ -572,7 +625,7 @@ msgstr ""
 msgid "Filter order\\.  Integer higher than 1\\. Default: 3."
 msgstr ""
 
-msgid "Low cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
+msgid "Cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
 msgstr ""
 
 msgid "High cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
@@ -588,36 +641,6 @@ msgid "Default: True."
 msgstr ""
 
 msgid "Minimum FFT points number\\.  Default: 0."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`BaseHighLowBandParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`BaseHighLowBandParam`."
-msgstr ""
-
-msgid "Return the Nyquist frequency of a signal object"
-msgstr ""
-
-msgid "signal object"
-msgstr ""
-
-msgid "Update the filter parameters from a signal object"
-msgstr ""
-
-msgid "Return the filter parameters (a and b) as a tuple. These parameters are used in the scipy.signal filter functions (eg. `scipy.signal.filtfilt`)."
-msgstr ""
-
-msgid "filter parameters"
-msgstr ""
-
-msgid "Return type"
-msgstr ""
-
-msgid "Low-pass filter parameters"
-msgstr ""
-
-msgid "Cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`LowPassFilterParam` with the fields set to the given values."
@@ -638,6 +661,9 @@ msgstr ""
 msgid "Band-pass filter parameters"
 msgstr ""
 
+msgid "Low cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
+msgstr ""
+
 msgid "Returns a new instance of :py:class:`BandPassFilterParam` with the fields set to the given values."
 msgstr ""
 
@@ -653,19 +679,28 @@ msgstr ""
 msgid "New instance of :py:class:`BandStopFilterParam`."
 msgstr ""
 
-msgid "Compute frequency filter (low-pass, high-pass, band-pass, band-stop), with :py:func:`scipy.signal.filtfilt`"
+msgid "Compute low-pass filter with :py:func:`scipy.signal.filtfilt`"
 msgstr ""
 
-msgid "Compute low-pass filter with :py:func:`scipy.signal.filtfilt`"
+msgid "With a parameter ``LowPassFilterParam`` object:"
 msgstr ""
 
 msgid "Compute high-pass filter with :py:func:`scipy.signal.filtfilt`"
 msgstr ""
 
+msgid "With a parameter ``HighPassFilterParam`` object:"
+msgstr ""
+
 msgid "Compute band-pass filter with :py:func:`scipy.signal.filtfilt`"
 msgstr ""
 
+msgid "With a parameter ``BandPassFilterParam`` object:"
+msgstr ""
+
 msgid "Compute band-stop filter with :py:func:`scipy.signal.filtfilt`"
+msgstr ""
+
+msgid "With a parameter ``BandStopFilterParam`` object:"
 msgstr ""
 
 msgid "ZeroPadding1DParam manages the parameters for applying zero-padding to signals."
@@ -719,16 +754,22 @@ msgstr ""
 msgid "Compute zero padding with :py:func:`sigima.tools.signal.fourier.zero_padding`."
 msgstr ""
 
-msgid "Source signal."
-msgstr ""
-
-msgid "Parameters."
+msgid "src: Source signal. p: Parameters."
 msgstr ""
 
 msgid "Result signal object."
 msgstr ""
 
+msgid "With a parameter ``ZeroPadding1DParam`` object:"
+msgstr ""
+
 msgid "Compute FFT with :py:func:`sigima.tools.signal.fourier.fft1d`."
+msgstr ""
+
+msgid "Source signal."
+msgstr ""
+
+msgid "Parameters."
 msgstr ""
 
 msgid "Compute the inverse FFT with :py:func:`sigima.tools.signal.fourier.ifft1d`."
@@ -764,6 +805,9 @@ msgstr ""
 msgid "Compute histogram with :py:func:`numpy.histogram`"
 msgstr ""
 
+msgid "With a parameter ``HistogramParam`` object:"
+msgstr ""
+
 msgid "Interpolation parameters"
 msgstr ""
 
@@ -779,7 +823,13 @@ msgstr ""
 msgid "New instance of :py:class:`InterpolationParam`."
 msgstr ""
 
-msgid "Interpolate data with :py:func:`sigima.tools.signal.interpolation.interpolate`"
+msgid "Interpolate data with"
+msgstr ""
+
+msgid ":py:func:`sigima.tools.signal.interpolation.interpolate`"
+msgstr ""
+
+msgid "With a parameter ``InterpolationParam`` object:"
 msgstr ""
 
 msgid "Resample parameters"
@@ -812,6 +862,9 @@ msgstr ""
 msgid "Resample data with :py:func:`sigima.tools.signal.interpolation.interpolate`"
 msgstr ""
 
+msgid "With a parameter ``ResamplingParam`` object:"
+msgstr ""
+
 msgid "Detrending parameters"
 msgstr ""
 
@@ -825,6 +878,9 @@ msgid "New instance of :py:class:`DetrendingParam`."
 msgstr ""
 
 msgid "Detrend data with :py:func:`scipy.signal.detrend`"
+msgstr ""
+
+msgid "With a parameter ``DetrendingParam`` object:"
 msgstr ""
 
 msgid "Simulate the X-Y mode of an oscilloscope."
@@ -866,10 +922,16 @@ msgstr ""
 msgid "New instance of :py:class:`WindowingParam`."
 msgstr ""
 
-msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman, tukey, rectangular) with :py:func:`sigima.tools.signal.windowing.apply_window`"
+msgid "Compute windowing (available methods: hamming, hanning, bartlett, blackman,"
 msgstr ""
 
-msgid "destination signal"
+msgid "tukey, rectangular) with :py:func:`sigima.tools.signal.windowing.apply_window`"
+msgstr ""
+
+msgid "dst: destination signal src: source signal"
+msgstr ""
+
+msgid "With a parameter ``WindowingParam`` object:"
 msgstr ""
 
 msgid "Reverse x-axis"
@@ -887,10 +949,19 @@ msgstr ""
 msgid "New instance of :py:class:`AngleUnitParam`."
 msgstr ""
 
-msgid "Convert cartesian coordinates to polar coordinates with :py:func:`sigima.tools.coordinates.to_polar`."
+msgid "Convert cartesian coordinates to polar coordinates with"
 msgstr ""
 
-msgid "Convert polar coordinates to cartesian coordinates with :py:func:`sigima.tools.coordinates.to_cartesian`."
+msgid ":py:func:`sigima.tools.coordinates.to_polar`."
+msgstr ""
+
+msgid "With a parameter ``AngleUnitParam`` object:"
+msgstr ""
+
+msgid "Convert polar coordinates to cartesian coordinates with"
+msgstr ""
+
+msgid ":py:func:`sigima.tools.coordinates.to_cartesian`."
 msgstr ""
 
 msgid "This function assumes that the x-axis represents the radius and the y-axis represents the angle. Negative values are not allowed for the radius, and will be clipped to 0 (a warning will be raised)."
@@ -908,10 +979,19 @@ msgstr ""
 msgid "New instance of :py:class:`AllanVarianceParam`."
 msgstr ""
 
-msgid "Compute Allan variance with :py:func:`sigima.tools.signal.stability.allan_variance`"
+msgid "Compute Allan variance with"
 msgstr ""
 
-msgid "Compute Allan deviation with :py:func:`sigima.tools.signal.stability.allan_deviation`"
+msgid ":py:func:`sigima.tools.signal.stability.allan_variance`"
+msgstr ""
+
+msgid "With a parameter ``AllanVarianceParam`` object:"
+msgstr ""
+
+msgid "Compute Allan deviation with"
+msgstr ""
+
+msgid ":py:func:`sigima.tools.signal.stability.allan_deviation`"
 msgstr ""
 
 msgid "Compute Overlapping Allan variance."
@@ -980,6 +1060,9 @@ msgstr ""
 msgid "Compute FWHM with :py:func:`sigima.tools.signal.pulse.fwhm`"
 msgstr ""
 
+msgid "parameters"
+msgstr ""
+
 msgid "Segment coordinates"
 msgstr ""
 
@@ -1010,10 +1093,13 @@ msgstr ""
 msgid "Compute the smallest x-value at a given y-value for a signal object."
 msgstr ""
 
-msgid "The parameter dataset for finding the abscissa."
+msgid "obj: The signal object containing x and y data. p: The parameter dataset for finding the abscissa."
 msgstr ""
 
 msgid "An object containing the x-value."
+msgstr ""
+
+msgid "With a parameter ``OrdinateParam`` object:"
 msgstr ""
 
 msgid "Abscissa parameter"
@@ -1031,10 +1117,13 @@ msgstr ""
 msgid "Compute the smallest y-value at a given x-value for a signal object."
 msgstr ""
 
-msgid "The parameter dataset for finding the ordinate."
+msgid "obj: The signal object containing x and y data. p: The parameter dataset for finding the ordinate."
 msgstr ""
 
 msgid "An object containing the y-value."
+msgstr ""
+
+msgid "With a parameter ``AbscissaParam`` object:"
 msgstr ""
 
 msgid "Compute statistics on a signal"
@@ -1064,7 +1153,10 @@ msgstr ""
 msgid "New instance of :py:class:`DynamicParam`."
 msgstr ""
 
-msgid "Compute Dynamic parameters using the following functions:"
+msgid "Compute Dynamic parameters"
+msgstr ""
+
+msgid "using the following functions:"
 msgstr ""
 
 msgid "Freq: :py:func:`sigima.tools.signal.dynamic.sinus_frequency`"
@@ -1086,6 +1178,9 @@ msgid "SFDR: :py:func:`sigima.tools.signal.dynamic.sfdr`"
 msgstr ""
 
 msgid "Result properties with ENOB, SNR, SINAD, THD, SFDR"
+msgstr ""
+
+msgid "With a parameter ``DynamicParam`` object:"
 msgstr ""
 
 msgid "Compute sampling rate and period using the following functions:"
@@ -1118,28 +1213,355 @@ msgstr "Fonctionnalités de traitement d'image"
 msgid "Basic image processing"
 msgstr "Traitement d'image de base"
 
-msgid "Grid parameters"
+msgid "Base computation module"
 msgstr ""
 
-msgid "Distribute over\\.  Single choice from: 'col', 'row'. Default: 'col'."
+msgid "This module provides core classes and utility functions that serve as building blocks for the other computation modules."
 msgstr ""
 
-msgid "Columns\\.  Integer, non zero\\. Default: 1."
+msgid "Main features include: - Generic helper functions used across image processing modules - Core wrappers and infrastructure for computation functions"
 msgstr ""
 
-msgid "Integer, non zero\\. Default: 1."
+msgid "Intended primarily for internal use, these tools support consistent API design and code reuse."
 msgstr ""
 
-msgid "Column spacing\\.  Float higher than 0.0\\. Default: 0.0."
+msgid "Restore data outside the Region Of Interest (ROI) of the input image after a computation, only if the input image has a ROI, and if the output image has the same ROI as the input image, and if the data types are compatible, and if the shapes are the same. Otherwise, do nothing."
 msgstr ""
 
-msgid "Row spacing\\.  Float higher than 0.0\\. Default: 0.0."
+msgid "output image object"
 msgstr ""
 
-msgid "Returns a new instance of :py:class:`GridParam` with the fields set to the given values."
+msgid "Wrap a 1 array → 1 array function to produce a 1 image → 1 image function, which can be used as a Sigima computation function and inside DataLab's infrastructure to perform computations with the Image Processor object."
 msgstr ""
 
-msgid "New instance of :py:class:`GridParam`."
+msgid "The instance of this wrapper is callable and returns a :class:`sigima.objects.ImageObj` object."
+msgstr ""
+
+msgid "Create a result signal object, for processing functions that take a single image object as input and return a single signal object (1-to-1-signal)."
+msgstr ""
+
+msgid "Calculate result shape by executing a computation function on an image object, taking into account the image origin (x0, y0), scale (dx, dy) and ROIs."
+msgstr ""
+
+msgid "Moreover, the computation function must return a single value or a NumPy array containing the result of the computation. This array contains the coordinates of points, polygons, circles or ellipses in the form [[x, y], ...], or [[x0, y0, x1, y1, ...], ...], or [[x0, y0, r], ...], or [[x0, y0, a, b, theta], ...]."
+msgstr ""
+
+msgid "Arithmetic"
+msgstr ""
+
+msgid "Arithmetic computation module"
+msgstr ""
+
+msgid "This module provides arithmetic operations for images, such as pixel-wise addition, subtraction, multiplication, division, as well as operations with constants and combined arithmetic formulas."
+msgstr ""
+
+msgid "Main features include: - Pixel-wise addition, subtraction, multiplication, and division between images - Application of arithmetic operations with constants to images - Support for quadratic difference and general arithmetic expressions"
+msgstr ""
+
+msgid "These functions are typically used for basic algebraic processing and normalization of image data."
+msgstr ""
+
+msgid "Add images in the list and return the result image object"
+msgstr ""
+
+msgid "list of input image objects"
+msgstr ""
+
+msgid "Output image object (modified in place)"
+msgstr ""
+
+msgid "Compute the average of images in the list and return the result image object"
+msgstr ""
+
+msgid "Multiply images in the list and return the result image object"
+msgstr ""
+
+msgid "Add **dst** and a constant value and return the new result image object"
+msgstr ""
+
+msgid "src: input image object p: constant value"
+msgstr ""
+
+msgid "Result image object **src** + **p.value** (new object)"
+msgstr ""
+
+msgid "Subtract a constant value from an image and return the new result image object"
+msgstr ""
+
+msgid "Result image object **src** - **p.value** (new object)"
+msgstr ""
+
+msgid "Multiply **dst** by a constant value and return the new result image object"
+msgstr ""
+
+msgid "Result image object **src** * **p.value** (new object)"
+msgstr ""
+
+msgid "Divide an image by a constant value and return the new result image object"
+msgstr ""
+
+msgid "Result image object **src** / **p.value** (new object)"
+msgstr ""
+
+msgid "Compute arithmetic operation on two images"
+msgstr ""
+
+msgid "src1: input image object src2: input image object p: arithmetic parameters"
+msgstr ""
+
+msgid "Result image object"
+msgstr ""
+
+msgid "Compute difference between two images"
+msgstr ""
+
+msgid "Result image object **src1** - **src2** (new object)"
+msgstr ""
+
+msgid "Compute quadratic difference between two images"
+msgstr ""
+
+msgid "Result image object (**src1** - **src2**) / sqrt(2.0) (new object)"
+msgstr ""
+
+msgid "Compute division between two images"
+msgstr ""
+
+msgid "Result image object **src1** / **src2** (new object)"
+msgstr ""
+
+msgid "Mathematical Operations"
+msgstr ""
+
+msgid "Mathematical Operations Module"
+msgstr ""
+
+msgid "This module implements mathematical operations on images, such as inversion, absolute value, real/imaginary part extraction, type casting, and exponentiation."
+msgstr ""
+
+msgid "Main features include: - Pixel-wise mathematical transformations (e.g., log, exp, abs, real, imag, log10) - Type casting and other value-level operations"
+msgstr ""
+
+msgid "These functions enable flexible manipulation of image data at the value level."
+msgstr ""
+
+msgid "Compute the inverse of an image and return the new result image object"
+msgstr ""
+
+msgid "Result image object 1 / **src** (new object)"
+msgstr ""
+
+msgid "Output image object"
+msgstr ""
+
+msgid "Compute log10 with :py:data:`numpy.log10`"
+msgstr ""
+
+msgid "Log10 parameters"
+msgstr ""
+
+msgid "Default: None."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`LogP1Param` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`LogP1Param`."
+msgstr ""
+
+msgid "Compute log10(z+n) with :py:data:`numpy.log10`"
+msgstr ""
+
+msgid "src: input image object p: parameters"
+msgstr ""
+
+msgid "With a parameter ``LogP1Param`` object:"
+msgstr ""
+
+msgid "Convert image data type parameters"
+msgstr ""
+
+msgid "Destination data type\\. Output image data type. Single choice from: 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'float32'."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`DataTypeIParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`DataTypeIParam`."
+msgstr ""
+
+msgid "Convert image data type with :py:func:`sigima.tools.datatypes.clip_astype`"
+msgstr ""
+
+msgid "With a parameter ``DataTypeIParam`` object:"
+msgstr ""
+
+msgid "Measurements"
+msgstr ""
+
+msgid "Measurement computation module"
+msgstr ""
+
+msgid "This module provides tools for extracting quantitative information from images, such as object centroids, enclosing circles, and region-based statistics."
+msgstr ""
+
+msgid "Main features include: - Centroid and enclosing circle computation - Region/property measurements - Statistical analysis of image regions"
+msgstr ""
+
+msgid "These functions are useful for image quantification and morphometric analysis."
+msgstr ""
+
+msgid "Compute centroid with :py:func:`sigima.tools.image.get_centroid_fourier`"
+msgstr ""
+
+msgid "input image"
+msgstr ""
+
+msgid "Centroid coordinates"
+msgstr ""
+
+msgid "Compute minimum enclosing circle with :py:func:`sigima.tools.image.get_enclosing_circle`"
+msgstr ""
+
+msgid "Diameter coords"
+msgstr ""
+
+msgid "Compute statistics on an image"
+msgstr ""
+
+msgid "Result properties"
+msgstr ""
+
+msgid "Filtering"
+msgstr ""
+
+msgid "Filtering computation module"
+msgstr ""
+
+msgid "This module provides spatial and frequency-based filtering operations for images."
+msgstr ""
+
+msgid "Main features include: - Gaussian, median, moving average, Wiener, and Butterworth filters - Noise reduction and image smoothing"
+msgstr ""
+
+msgid "Filtering functions are essential for enhancing image quality and removing noise prior to further analysis."
+msgstr ""
+
+msgid "Butterworth filter parameters"
+msgstr ""
+
+msgid "Cut-off frequency ratio\\. Cut-off frequency ratio\\. Float between 0.0 and 0.5\\. Default: 0.005."
+msgstr ""
+
+msgid "If true, apply high-pass filter instead of low-pass\\. Default: False."
+msgstr ""
+
+msgid "Order of the butterworth filter\\. Integer higher than 1\\. Default: 2."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ButterworthParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ButterworthParam`."
+msgstr ""
+
+msgid "Compute Butterworth filter with :py:func:`skimage.filters.butterworth`"
+msgstr ""
+
+msgid "With a parameter ``ButterworthParam`` object:"
+msgstr ""
+
+msgid "2D Gaussian bandpass FFT filter parameters"
+msgstr ""
+
+msgid "Center frequency\\. Center frequency of the gaussian filter\\. Float higher than 0.0, unit: pixels⁻¹\\. Default: 1."
+msgstr ""
+
+msgid "σ\\. Standard deviation of the gaussian filter\\. Float higher than 0.0, unit: pixels⁻¹\\. Default: 0.5."
+msgstr ""
+
+msgid "Inverse FFT result\\. How to return the inverse fft result\\. Single choice from: 'real', 'abs'. Default: 'real'."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`FreqFFTParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`FreqFFTParam`."
+msgstr ""
+
+msgid "Apply a 2D Gaussian bandpass filter in the frequency domain to an image."
+msgstr ""
+
+msgid "With a parameter ``FreqFFTParam`` object:"
+msgstr ""
+
+msgid "Fourier"
+msgstr ""
+
+msgid "Fourier computation module"
+msgstr ""
+
+msgid "This module implements Fourier transform operations and related spectral analysis tools for images."
+msgstr ""
+
+msgid "Main features include: - Forward and inverse Fast Fourier Transform (FFT) - Magnitude and phase spectrum calculation - Power spectral density (PSD) computation"
+msgstr ""
+
+msgid "Fourier analysis is commonly used for frequency-domain filtering and periodicity analysis in images."
+msgstr ""
+
+msgid "Zero padding parameters for 2D images"
+msgstr ""
+
+msgid "Padding strategy\\.  Single choice from: 'next_pow2', 'multiple_of_64', 'custom'. Default: 'custom'."
+msgstr ""
+
+msgid "Rows to add\\.  Integer higher than 0\\. Default: None."
+msgstr ""
+
+msgid "Columns to add\\.  Integer higher than 0\\. Default: None."
+msgstr ""
+
+msgid "Padding position\\.  Single choice from: 'bottom-right', 'center'. Default: 'bottom-right'."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ZeroPadding2DParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ZeroPadding2DParam`."
+msgstr ""
+
+msgid "Update parameters from image"
+msgstr ""
+
+msgid "Callback to update padding values"
+msgstr ""
+
+msgid "Compute zero padding for an image using `sigima.tools.image.zero_padding`."
+msgstr ""
+
+msgid "src: source image object p: parameters"
+msgstr ""
+
+msgid "New padded image object"
+msgstr ""
+
+msgid "With a parameter ``ZeroPadding2DParam`` object:"
+msgstr ""
+
+msgid "Compute FFT with :py:func:`sigima.tools.image.fft2d`"
+msgstr ""
+
+msgid "Compute inverse FFT with :py:func:`sigima.tools.image.ifft2d`"
+msgstr ""
+
+msgid "Compute magnitude spectrum with :py:func:`sigima.tools.image.magnitude_spectrum`"
+msgstr ""
+
+msgid "Compute phase spectrum with :py:func:`sigima.tools.image.phase_spectrum`"
+msgstr ""
+
+msgid "Compute power spectral density with :py:func:`sigima.tools.image.psd`"
 msgstr ""
 
 msgid "Thresholding"
@@ -1193,7 +1615,7 @@ msgstr ""
 msgid "Yen: :py:func:`skimage.filters.threshold_yen`"
 msgstr ""
 
-msgid "Output image object"
+msgid "With a parameter ``ThresholdParam`` object:"
 msgstr ""
 
 msgid "Compute the threshold using the Isodata algorithm with default parameters, see :py:func:`skimage.filters.threshold_isodata`"
@@ -1250,6 +1672,9 @@ msgstr ""
 msgid "Gamma correction with :py:func:`skimage.exposure.adjust_gamma`"
 msgstr ""
 
+msgid "With a parameter ``AdjustGammaParam`` object:"
+msgstr ""
+
 msgid "Logarithmic adjustment parameters"
 msgstr ""
 
@@ -1263,6 +1688,9 @@ msgid "New instance of :py:class:`AdjustLogParam`."
 msgstr ""
 
 msgid "Compute log correction with :py:func:`skimage.exposure.adjust_log`"
+msgstr ""
+
+msgid "With a parameter ``AdjustLogParam`` object:"
 msgstr ""
 
 msgid "Sigmoid adjustment parameters"
@@ -1286,6 +1714,9 @@ msgstr ""
 msgid "Compute sigmoid correction with :py:func:`skimage.exposure.adjust_sigmoid`"
 msgstr ""
 
+msgid "With a parameter ``AdjustSigmoidParam`` object:"
+msgstr ""
+
 msgid "Intensity rescaling parameters"
 msgstr ""
 
@@ -1301,7 +1732,13 @@ msgstr ""
 msgid "New instance of :py:class:`RescaleIntensityParam`."
 msgstr ""
 
-msgid "Rescale image intensity levels with :py:func:`skimage.exposure.rescale_intensity`"
+msgid "Rescale image intensity levels"
+msgstr ""
+
+msgid "with :py:func:`skimage.exposure.rescale_intensity`"
+msgstr ""
+
+msgid "With a parameter ``RescaleIntensityParam`` object:"
 msgstr ""
 
 msgid "Histogram equalization parameters"
@@ -1319,6 +1756,9 @@ msgstr ""
 msgid "Histogram equalization with :py:func:`skimage.exposure.equalize_hist`"
 msgstr ""
 
+msgid "With a parameter ``EqualizeHistParam`` object:"
+msgstr ""
+
 msgid "Adaptive histogram equalization parameters"
 msgstr ""
 
@@ -1331,7 +1771,13 @@ msgstr ""
 msgid "New instance of :py:class:`EqualizeAdaptHistParam`."
 msgstr ""
 
-msgid "Adaptive histogram equalization with :py:func:`skimage.exposure.equalize_adapthist`"
+msgid "Adaptive histogram equalization"
+msgstr ""
+
+msgid "with :py:func:`skimage.exposure.equalize_adapthist`"
+msgstr ""
+
+msgid "With a parameter ``EqualizeAdaptHistParam`` object:"
 msgstr ""
 
 msgid "Flat-field parameters"
@@ -1343,22 +1789,19 @@ msgstr ""
 msgid "New instance of :py:class:`FlatFieldParam`."
 msgstr ""
 
-msgid "Update parameters from image"
-msgstr ""
-
 msgid "Compute flat field correction with :py:func:`sigima.tools.image.flatfield`"
 msgstr ""
 
-msgid "raw data image object"
+msgid "src1: raw data image object src2: flat field image object p: flat field parameters"
 msgstr ""
 
-msgid "flat field image object"
-msgstr ""
-
-msgid "flat field parameters"
+msgid "With a parameter ``FlatFieldParam`` object:"
 msgstr ""
 
 msgid "Normalize image data depending on its maximum, with :py:func:`sigima.tools.image.normalize`"
+msgstr ""
+
+msgid "src: input image object"
 msgstr ""
 
 msgid "Compute histogram of the image data, with :py:func:`numpy.histogram`"
@@ -1379,13 +1822,19 @@ msgstr ""
 msgid "New instance of :py:class:`XYZCalibrateParam`."
 msgstr ""
 
-msgid "calibration parameters"
+msgid "src: input image object p: calibration parameters"
+msgstr ""
+
+msgid "With a parameter ``XYZCalibrateParam`` object:"
 msgstr ""
 
 msgid "Apply clipping with :py:func:`numpy.clip`"
 msgstr ""
 
 msgid "Apply offset correction"
+msgstr ""
+
+msgid "With a parameter ``ROI2DParam`` object:"
 msgstr ""
 
 msgid "Restoration"
@@ -1412,7 +1861,13 @@ msgstr ""
 msgid "New instance of :py:class:`DenoiseTVParam`."
 msgstr ""
 
-msgid "Compute Total Variation denoising with :py:func:`skimage.restoration.denoise_tv_chambolle`"
+msgid "Compute Total Variation denoising"
+msgstr ""
+
+msgid "with :py:func:`skimage.restoration.denoise_tv_chambolle`"
+msgstr ""
+
+msgid "With a parameter ``DenoiseTVParam`` object:"
 msgstr ""
 
 msgid "Bilateral filter denoising parameters"
@@ -1433,7 +1888,13 @@ msgstr ""
 msgid "New instance of :py:class:`DenoiseBilateralParam`."
 msgstr ""
 
-msgid "Compute bilateral filter denoising with :py:func:`skimage.restoration.denoise_bilateral`"
+msgid "Compute bilateral filter denoising"
+msgstr ""
+
+msgid "with :py:func:`skimage.restoration.denoise_bilateral`"
+msgstr ""
+
+msgid "With a parameter ``DenoiseBilateralParam`` object:"
 msgstr ""
 
 msgid "Wavelet denoising parameters"
@@ -1454,10 +1915,22 @@ msgstr ""
 msgid "New instance of :py:class:`DenoiseWaveletParam`."
 msgstr ""
 
-msgid "Compute Wavelet denoising with :py:func:`skimage.restoration.denoise_wavelet`"
+msgid "Compute Wavelet denoising"
 msgstr ""
 
-msgid "Denoise using White Top-Hat with :py:func:`skimage.morphology.white_tophat`"
+msgid "with :py:func:`skimage.restoration.denoise_wavelet`"
+msgstr ""
+
+msgid "With a parameter ``DenoiseWaveletParam`` object:"
+msgstr ""
+
+msgid "Denoise using White Top-Hat"
+msgstr ""
+
+msgid "with :py:func:`skimage.morphology.white_tophat`"
+msgstr ""
+
+msgid "With a parameter ``MorphologyParam`` object:"
 msgstr ""
 
 msgid "Morphology"
@@ -1541,6 +2014,9 @@ msgstr ""
 msgid "Compute Canny filter with :py:func:`skimage.feature.canny`"
 msgstr ""
 
+msgid "With a parameter ``CannyParam`` object:"
+msgstr ""
+
 msgid "Compute Roberts filter with :py:func:`skimage.filters.roberts`"
 msgstr ""
 
@@ -1620,9 +2096,6 @@ msgid "New instance of :py:class:`Peak2DDetectionParam`."
 msgstr ""
 
 msgid "Compute 2D peak detection with :py:func:`sigima.tools.image.get_2d_peaks_coords`"
-msgstr ""
-
-msgid "input image"
 msgstr ""
 
 msgid "Peak coordinates"
@@ -1799,6 +2272,114 @@ msgstr ""
 msgid "Circle coordinates"
 msgstr ""
 
+msgid "Geometry"
+msgstr ""
+
+msgid "Geometry computation module"
+msgstr ""
+
+msgid "This module implements geometric transformations and manipulations for images, such as rotations, flips, resizing, axis swapping, binning, and padding."
+msgstr ""
+
+msgid "Main features include: - Rotation by arbitrary or fixed angles - Horizontal and vertical flipping - Resizing and binning of images - Axis swapping and zero padding"
+msgstr ""
+
+msgid "These functions are useful for preparing and augmenting image data."
+msgstr ""
+
+msgid "Rotate parameters"
+msgstr ""
+
+msgid "Angle (°)\\.  Default: None."
+msgstr ""
+
+msgid "Single choice from: 'constant', 'nearest', 'reflect', 'wrap'. Default: 'constant'."
+msgstr ""
+
+msgid "Value used for points outside the boundaries of the input if mode is 'constant'\\. Default: 0.0."
+msgstr ""
+
+msgid "Reshape the output array so that the input array is contained completely in the output\\. Default: False."
+msgstr ""
+
+msgid "Spline interpolation order\\. Integer between 0 and 5\\. Default: 3."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`RotateParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`RotateParam`."
+msgstr ""
+
+msgid "Rotate data with :py:func:`scipy.ndimage.rotate`"
+msgstr ""
+
+msgid "With a parameter ``RotateParam`` object:"
+msgstr ""
+
+msgid "Rotate data 90° with :py:func:`numpy.rot90`"
+msgstr ""
+
+msgid "Rotate data 270° with :py:func:`numpy.rot90`"
+msgstr ""
+
+msgid "Flip data horizontally with :py:func:`numpy.fliplr`"
+msgstr ""
+
+msgid "Flip data vertically with :py:func:`numpy.flipud`"
+msgstr ""
+
+msgid "Resize parameters"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ResizeParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ResizeParam`."
+msgstr ""
+
+msgid "Zooming function with :py:func:`scipy.ndimage.zoom`"
+msgstr ""
+
+msgid "With a parameter ``ResizeParam`` object:"
+msgstr ""
+
+msgid "Binning parameters"
+msgstr ""
+
+msgid "Cluster size (X)\\. Number of adjacent pixels to be combined together along x-axis. Integer higher than 2\\. Default: 2."
+msgstr ""
+
+msgid "Cluster size (Y)\\. Number of adjacent pixels to be combined together along y-axis. Integer higher than 2\\. Default: 2."
+msgstr ""
+
+msgid "Single choice from: 'sum', 'average', 'median', 'min', 'max'. Default: 'sum'."
+msgstr ""
+
+msgid "Data type\\. Output image data type. Single choice from: 'dtype', 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'dtype'."
+msgstr ""
+
+msgid "Change pixel size so that overall image size remains the same. Default: False."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`BinningParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`BinningParam`."
+msgstr ""
+
+msgid "Binning function on data with :py:func:`sigima.tools.image.binning`"
+msgstr ""
+
+msgid "src: input image object param: parameters"
+msgstr ""
+
+msgid "With a parameter ``BinningParam`` object:"
+msgstr ""
+
+msgid "Swap image axes with :py:func:`numpy.transpose`"
+msgstr ""
+
 msgid "Decorators and utilities"
 msgstr ""
 
@@ -1808,13 +2389,25 @@ msgstr ""
 msgid "Decorator to mark a function as a Sigima computation function."
 msgstr ""
 
-msgid "Optional name to override the function name."
+msgid "Adds a marker attribute (ComputationMetadata) to the wrapped function."
+msgstr ""
+
+msgid "Makes the signature explicit: parameters of any guidata DataSet used as argument become keyword-only arguments, so the function can be called as `func(obj, param1=..., param2=..., ...)`."
+msgstr ""
+
+msgid "Maintains backward compatibility: a DataSet instance can still be passed directly."
+msgstr ""
+
+msgid "Signature shown in IDE and help() reflects all available parameters."
+msgstr ""
+
+msgid "Optional name to override the function name in metadata."
 msgstr ""
 
 msgid "Optional docstring override or additional description."
 msgstr ""
 
-msgid "The wrapped function, tagged with a marker attribute."
+msgid "The wrapped function, tagged with a marker attribute and an explicit signature."
 msgstr ""
 
 msgid "Check if a function is a Sigima computation function."

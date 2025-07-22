@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 18:13+0200\n"
+"POT-Creation-Date: 2025-07-22 15:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -677,6 +677,9 @@ msgstr ""
 msgid "Voigt function"
 msgstr ""
 
+msgid "Planck function"
+msgstr ""
+
 msgid "Sinusoid"
 msgstr ""
 
@@ -695,10 +698,16 @@ msgstr ""
 msgid "Cardinal sine"
 msgstr ""
 
+msgid "Linear chirp"
+msgstr ""
+
 msgid "Step function"
 msgstr ""
 
 msgid "Exponential function"
+msgstr ""
+
+msgid "Logistic function"
 msgstr ""
 
 msgid "Pulse function"
@@ -707,7 +716,7 @@ msgstr ""
 msgid "Polynomial function"
 msgstr ""
 
-msgid "Experimental function"
+msgid "Custom function"
 msgstr ""
 
 msgid "New signal dataset"
@@ -929,13 +938,7 @@ msgstr ""
 msgid "New instance of :py:class:`PolyParam`."
 msgstr ""
 
-msgid "Parameters for experimental signal"
-msgstr ""
-
-msgid "Default: 0."
-msgstr ""
-
-msgid "Default: 5."
+msgid "Parameters for custom signal (e.g. manually defined experimental data)"
 msgstr ""
 
 msgid "XY Values\\.  Default: None."
@@ -1199,6 +1202,9 @@ msgstr ""
 msgid "Default: 10."
 msgstr ""
 
+msgid "Default: 0."
+msgstr ""
+
 msgid "Returns a new instance of :py:class:`Gauss2DParam` with the fields set to the given values."
 msgstr ""
 
@@ -1318,3 +1324,4 @@ msgstr ""
 
 msgid "Float number stored with 64 bits"
 msgstr ""
+
