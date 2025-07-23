@@ -117,6 +117,12 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.imag, _("Imaginary part"), icon_name="im.svg"
         )
+        self.register_2_to_1(
+            sigima_signal.combine_to_complex,
+            _("Combine to complex"),
+            paramclass=sigima_base.CombineToComplexParam,
+            obj2_name=_("imaginary part or phase angle"),
+        )
         self.register_1_to_1(
             sigima_signal.astype,
             _("Convert data type"),

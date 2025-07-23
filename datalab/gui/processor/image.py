@@ -104,6 +104,12 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
         self.register_1_to_1(sigima_image.real, _("Real part"), icon_name="re.svg")
         self.register_1_to_1(sigima_image.imag, _("Imaginary part"), icon_name="im.svg")
+        self.register_2_to_1(
+            sigima_image.combine_to_complex,
+            _("Combine to complex"),
+            paramclass=sigima_base.CombineToComplexParam,
+            obj2_name=_("imaginary part or phase angle"),
+        )
         self.register_1_to_1(
             sigima_image.astype,
             _("Convert data type"),
