@@ -21,9 +21,8 @@ import ctypes
 import os
 
 from sigima.objects import NewImageParam
-from sigima.tests.data import create_sincos_image
+from sigima.tests.data import create_sincos_image, iterate_image_creation
 from sigima.tests.helpers import get_test_fnames
-from sigima.tests.image.imageobj_unit_test import iterate_image_creation
 
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow

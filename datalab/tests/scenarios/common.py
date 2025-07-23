@@ -18,9 +18,9 @@ from sigima.tests.data import (
     create_paracetamol_signal,
     create_peak2d_image,
     create_sincos_image,
+    iterate_image_creation,
+    iterate_signal_creation,
 )
-from sigima.tests.image.imageobj_unit_test import iterate_image_creation
-from sigima.tests.signal.signalobj_unit_test import iterate_signal_creation
 
 from datalab.config import _
 from datalab.gui.main import DLMainWindow
