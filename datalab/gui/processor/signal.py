@@ -162,10 +162,10 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             obj2_name=_("signal to convolve with"),
         )
         self.register_2_to_1(
-            sigima_signal.deconvolve,
+            sigima_signal.deconvolution,
             _("Deconvolution"),
             icon_name="deconvolution.svg",
-            obj2_name=_("kernel to deconvolve"),
+            obj2_name=_("signal to deconvolve with"),
         )
 
     def register_processing(self) -> None:

@@ -1178,6 +1178,12 @@ msgstr "Profil moyen"
 msgid "Radial profile"
 msgstr "Profil radial"
 
+msgid "Deconvolution"
+msgstr "Déconvolution"
+
+msgid "kernel to deconvolve with"
+msgstr "noyau de la déconvolution"
+
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
 
@@ -1505,7 +1511,10 @@ msgid "Convolution"
 msgstr "Convolution"
 
 msgid "signal to convolve with"
-msgstr "signal à convoluer"
+msgstr "signal pour la convolution"
+
+msgid "signal to deconvolve with"
+msgstr "signal pour la déconvolution"
 
 msgid ""
 "Apply linear calibration to the X or Y axis:\n"

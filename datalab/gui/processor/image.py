@@ -376,10 +376,10 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             icon_name="profile_radial.svg",
         )
         self.register_2_to_1(
-            sigima_image.deconvolve,
+            sigima_image.deconvolution,
             _("Deconvolution"),
             icon_name="deconvolution.svg",
-            obj2_name=_("Kernel image"),
+            obj2_name=_("kernel to deconvolve with"),
         )
 
     def register_processing(self) -> None:
