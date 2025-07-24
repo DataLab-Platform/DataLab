@@ -38,6 +38,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_n_to_1(
             sigima_image.average, _("Average"), icon_name="average.svg"
         )
+        self.register_n_to_1(
+            sigima_image.standard_deviation, _("Standard deviation")
+        )
         self.register_2_to_1(
             sigima_image.difference,
             _("Difference"),

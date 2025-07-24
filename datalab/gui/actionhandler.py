@@ -685,6 +685,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.OPERATION):
             self.action_for("addition")
             self.action_for("average")
+            self.action_for("standard_deviation")
             self.action_for("difference")
             self.action_for("quadratic_difference")
             self.action_for("product")
