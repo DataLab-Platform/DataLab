@@ -700,20 +700,20 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         # MARK: OPERATION
         with self.new_category(ActionCategory.OPERATION):
-            self.action_for("addition")
-            self.action_for("average")
-            self.action_for("standard_deviation")
-            self.action_for("difference")
-            self.action_for("quadratic_difference")
-            self.action_for("product")
-            self.action_for("division")
-            self.action_for("inverse")
             self.action_for("arithmetic")
             with self.new_menu(_("Constant Operations"), icon_name="constant.svg"):
                 self.action_for("addition_constant")
                 self.action_for("difference_constant")
                 self.action_for("product_constant")
                 self.action_for("division_constant")
+            self.action_for("addition")
+            self.action_for("difference")
+            self.action_for("product")
+            self.action_for("division")
+            self.action_for("inverse", separator=True)
+            self.action_for("exp")
+            self.action_for("log10")
+            self.action_for("deconvolve", separator=True)
             self.action_for("absolute", separator=True)
             self.action_for("phase")
             self.action_for("complex_from_magnitude_phase")
@@ -721,8 +721,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.action_for("imag")
             self.action_for("complex_from_real_imag")
             self.action_for("astype", separator=True)
-            self.action_for("exp", separator=True)
-            self.action_for("log10", separator=False)
+            self.action_for("average", separator=True)
+            self.action_for("quadratic_difference")
 
         # MARK: PROCESSING
         with self.new_category(ActionCategory.PROCESSING):
@@ -813,9 +813,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_pos=-1,
             )
 
-        with self.new_category(ActionCategory.OPERATION):
-            self.action_for("deconvolve")
-
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Show results") + "...",
@@ -884,7 +881,6 @@ class SignalActionHandler(BaseActionHandler):
             self.action_for("power", separator=True)
             self.action_for("sqrt")
             self.action_for("derivative", separator=True)
-            self.action_for("integral")
 
         def cra_fit(title, fitdlgfunc, iconname, tip: str | None = None):
             """Create curve fitting action"""
@@ -1032,7 +1028,7 @@ class SignalActionHandler(BaseActionHandler):
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
         with self.new_category(ActionCategory.OPERATION):
-            self.action_for("convolution", separator=True)
+            self.action_for("integral")
         super().create_last_actions()
 
 
