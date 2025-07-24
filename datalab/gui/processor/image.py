@@ -209,9 +209,8 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """
         return GeometricTransformWrapper(func, operation)
 
-    def register_computations(self) -> None:
-        """Register image computations"""
-        # MARK: OPERATION
+    def register_operations(self) -> None:
+        """Register operations."""
         self.register_n_to_1(sigima_image.addition, _("Sum"), icon_name="sum.svg")
         self.register_n_to_1(
             sigima_image.average, _("Average"), icon_name="average.svg"
@@ -383,7 +382,8 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             obj2_name=_("Kernel image"),
         )
 
-        # MARK: PROCESSING
+    def register_processing(self) -> None:
+        """Register processing functions."""
         # Axis transformation
         self.register_1_to_1(
             sigima_image.calibration,
@@ -668,7 +668,8 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             icon_name="resampling2d.svg",
         )
 
-        # MARK: ANALYSIS
+    def register_analysis(self) -> None:
+        """Register analysis functions."""
         self.register_1_to_0(sigima_image.stats, _("Statistics"), icon_name="stats.svg")
         self.register_1_to_1(
             sigima_image.horizontal_projection,

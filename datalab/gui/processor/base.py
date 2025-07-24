@@ -275,11 +275,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 self.worker = None
 
     @abc.abstractmethod
+    def register_operations(self) -> None:
+        """Register operations."""
+
+    @abc.abstractmethod
+    def register_processing(self) -> None:
+        """Register processing functions."""
+
+    @abc.abstractmethod
+    def register_analysis(self) -> None:
+        """Register analysis functions."""
+
     def register_computations(self) -> None:
-        """Register signal computations"""
-        # This method is used to register the computation functions in the
-        # computing registry. It is called in the constructor of the
-        # BaseProcessor class, so it must be implemented in the derived classes.
+        """Register computations."""
+        self.register_operations()
+        self.register_processing()
+        self.register_analysis()
 
     def has_param_defaults(self, paramclass: type[gds.DataSet]) -> bool:
         """Return True if parameter defaults are available.

@@ -44,9 +44,8 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
 
     # pylint: disable=duplicate-code
 
-    def register_computations(self) -> None:
-        """Register signal computations"""
-        # MARK: OPERATION
+    def register_operations(self) -> None:
+        """Register operations."""
         self.register_n_to_1(sigima_signal.addition, _("Sum"), icon_name="sum.svg")
         self.register_n_to_1(
             sigima_signal.average, _("Average"), icon_name="average.svg"
@@ -169,7 +168,8 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             obj2_name=_("kernel to deconvolve"),
         )
 
-        # MARK: PROCESSING
+    def register_processing(self) -> None:
+        """Register processing functions."""
         # Axis transformation
         self.register_1_to_1(
             sigima_signal.calibration,
@@ -435,7 +435,8 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         )
         self.register_1_to_n(sigima_signal.extract_roi, "ROI", icon_name="roi.svg")
 
-        # MARK: ANALYSIS
+    def register_analysis(self) -> None:
+        """Register analysis functions."""
         self.register_1_to_0(
             sigima_signal.stats, _("Statistics"), icon_name="stats.svg"
         )
