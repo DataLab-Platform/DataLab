@@ -99,7 +99,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(
             sigima_image.astype,
             _("Convert data type"),
-            paramclass=sigima.params.DataTypeSParam,
+            paramclass=sigima.params.DataTypeIParam,
             icon_name="convert_dtype.svg",
         )
         self.register_1_to_1(sigima_image.exp, _("Exponential"), icon_name="exp.svg")
