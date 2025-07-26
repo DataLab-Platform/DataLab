@@ -15,7 +15,7 @@ import os
 import os.path as osp
 import re
 import warnings
-from typing import TYPE_CHECKING, Generic, Type
+from typing import TYPE_CHECKING, Generic, Literal, Type
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
@@ -1308,11 +1308,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         dlg.setObjectName(name)
         return dlg
 
-    def get_roi_editor_output(self, extract: bool) -> tuple[TypeROI, bool] | None:
+    def get_roi_editor_output(
+        self, mode: Literal["apply", "extract"] = "apply"
+    ) -> tuple[TypeROI, bool] | None:
         """Get ROI data (array) from specific dialog box.
 
         Args:
-            extract: Extract ROI from data
+            mode: If "extract", the dialog is in "extract mode" (extracting ROIs)
 
         Returns:
             A tuple containing the ROI object and a boolean indicating whether the
@@ -1341,7 +1343,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
 
         # pylint: disable=not-callable
-        roi_editor = self.get_roieditor_class()(dlg, obj, extract, item=item)
+        roi_editor = self.get_roieditor_class()(dlg, obj, mode, item=item)
 
         dlg.button_layout.insertWidget(0, roi_editor)
 

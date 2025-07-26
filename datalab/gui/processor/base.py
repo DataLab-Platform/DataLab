@@ -1321,7 +1321,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         #   ROI Editor dialog anyway
         # * If multiple objs are selected, then apply the first obj ROI to all
         if roi is None or roi.is_empty():
-            roi = self.edit_regions_of_interest(extract=True)
+            roi = self.edit_regions_of_interest(mode="extract")
         if roi is None or roi.is_empty():
             return
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
@@ -1346,11 +1346,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     # ------Analysis-------------------------------------------------------------------
 
-    def edit_regions_of_interest(self, extract: bool = False) -> TypeROI | None:
+    def edit_regions_of_interest(
+        self, mode: Literal["apply", "extract"] = "apply"
+    ) -> TypeROI | None:
         """Define Region Of Interest (ROI).
 
         Args:
-            extract: If True, ROI is extracted from data. Defaults to False.
+            mode: If "extract", ROI is extracted from data. Defaults to "apply".
 
         Returns:
             ROI object or None if ROI dialog has been canceled.
@@ -1360,7 +1362,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # * If first selected obj has a ROI, use this ROI as default but open
         #   ROI Editor dialog anyway
         # * If multiple objs are selected, then apply the first obj ROI to all
-        results = self.panel.get_roi_editor_output(extract=extract)
+        results = self.panel.get_roi_editor_output(mode=mode)
         if results is None:
             return None
         edited_roi, modified = results
@@ -1374,7 +1376,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             or group.edit(parent=self.panel.parent())  # ROI dialog has been accepted
         ):
             if modified:
-                # If ROI has been modified, save ROI (not in "extract mode")
+                # If ROI has been modified, save ROI (not in "extract" mode)
                 if edited_roi.is_empty():
                     for obj_i in objs:
                         obj_i.roi = None
@@ -1382,7 +1384,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     edited_roi = edited_roi.__class__.from_params(
                         obj, params, singleobj=edited_roi.singleobj
                     )
-                    if not extract:
+                    if mode == "apply":
+                        # Apply ROI to all selected objects
                         for obj_i in objs:
                             obj_i.roi = edited_roi
                 self.SIG_ADD_SHAPE.emit(get_uuid(obj))

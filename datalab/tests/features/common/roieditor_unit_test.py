@@ -32,7 +32,7 @@ def test_signal_roi_editor() -> None:
     with qt_app_context(exec_loop=False):
         execenv.print(title)
         dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
-        editor = cls(dlg, obj, extract=True)
+        editor = cls(dlg, obj, mode="extract")
         dlg.button_layout.insertWidget(0, editor)
         exec_dialog(dlg)
 
@@ -56,19 +56,19 @@ def test_image_roi_editor() -> None:
     obj.roi = create_image_roi_example()
     with qt_app_context(exec_loop=False):
         execenv.print(title)
-        for extract in (True, False):
-            execenv.print(f"  extract={extract}")
+        for mode in ("extract", "apply"):
+            execenv.print(f"  mode={mode}")
             dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
-            roi_editor = cls(dlg, obj, extract=extract)
+            roi_editor = cls(dlg, obj, mode=mode)
             dlg.button_layout.insertWidget(0, roi_editor)
-            if not extract:
+            if mode == "apply":
                 # Clear the ROI
                 roi_editor.remove_all_rois()
             if exec_dialog(dlg):
                 results = roi_editor.get_roieditor_results()
                 if results is not None:
                     edited_roi, modified = results
-                    if extract:
+                    if mode == "extract":
                         # Test that the single ROIs are equal
                         # pylint: disable=use-a-generator
                         assert all(

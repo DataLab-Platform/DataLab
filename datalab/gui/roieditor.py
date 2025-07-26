@@ -227,7 +227,7 @@ class BaseROIEditor(
         parent: Parent plot dialog
         obj: Object to edit (:class:`sigima.objects.SignalObj` or
          :class:`sigima.objects.ImageObj`)
-        extract: If True, the dialog is in "extract mode" (extracting ROIs)
+        mode: If "extract", the dialog is in "extract mode" (extracting ROIs)
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)
     """
@@ -240,7 +240,7 @@ class BaseROIEditor(
         self,
         parent: PlotDialog,
         obj: TypeObj,
-        extract: bool,
+        mode: Literal["apply", "extract"] = "apply",
         item: TypePlotItem | None = None,
     ) -> None:
         super().__init__(parent)
@@ -249,7 +249,7 @@ class BaseROIEditor(
         self.plot = parent.get_plot()
         self.toolbar = QW.QToolBar(self)
         self.obj = obj
-        self.extract = extract
+        self.mode = mode
         self.__modified: bool | None = None
         self._tools: list[InteractiveTool] = []
 
@@ -295,7 +295,7 @@ class BaseROIEditor(
         #  when at least one ROI is defined,
         #  whereas in non-extract mode (when editing ROIs) the OK button is by default
         #  disabled (until ROI data is modified)
-        if extract:
+        if self.mode == "extract":
             self.modified = len(self.roi_items) > 0
         else:
             self.modified = False
@@ -317,7 +317,7 @@ class BaseROIEditor(
     def modified(self, value: bool) -> None:
         """Set dialog modified state"""
         self.__modified = value
-        if self.extract:
+        if self.mode == "extract":
             #  In "extract mode", OK button is enabled when at least one ROI is defined
             value = value and len(self.roi_items) > 0
         self.plot_dialog.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(value)
@@ -387,7 +387,7 @@ class BaseROIEditor(
                 widget = self.toolbar.widgetForAction(action)
                 widget.setPopupMode(QW.QToolButton.ToolButtonPopupMode.InstantPopup)
         layout.addWidget(self.toolbar)
-        if self.extract:
+        if self.mode == "extract":
             self.singleobj_btn = QW.QCheckBox(
                 _("Extract all ROIs\ninto a single %s") % self.OBJ_NAME,
                 self,
@@ -465,7 +465,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
         parent: Parent plot dialog
         obj: Object to edit (:class:`sigima.objects.SignalObj` or
          :class:`sigima.objects.ImageObj`)
-        extract: If True, the dialog is in "extract mode" (extracting ROIs)
+        mode: If "extract", the dialog is in "extract mode" (extracting ROIs)
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)
     """
@@ -534,7 +534,7 @@ class ImageROIEditor(
         parent: Parent plot dialog
         obj: Object to edit (:class:`sigima.objects.SignalObj` or
          :class:`sigima.objects.ImageObj`)
-        extract: If True, the dialog is in "extract mode" (extracting ROIs)
+        mode: If "extract", the dialog is in "extract mode" (extracting ROIs)
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)
     """
