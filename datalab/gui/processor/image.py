@@ -685,9 +685,14 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         if param is None:
             dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
             if exec_dialog(dlg):
-                param = ROI2DParam.create(geometry="rectangle")
                 x0, y0, x1, y1 = dlg.get_rect_coords()
-                param.x0, param.y0, param.dx, param.dy = x0, y0, x1 - x0, y1 - y0
+                param = ROI2DParam.create(
+                    geometry="rectangle",
+                    x0=int(x0),
+                    y0=int(y0),
+                    dx=int(x1 - x0),
+                    dy=int(y1 - y0),
+                )
             else:
                 return
         self.run_feature("offset_correction", param)
