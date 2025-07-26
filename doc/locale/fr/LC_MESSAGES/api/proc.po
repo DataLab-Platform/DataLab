@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-22 15:55+0200\n"
+"POT-Creation-Date: 2025-07-26 14:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -55,7 +55,7 @@ msgstr "Fonctionnalités de traitement communes"
 msgid "Arithmetic parameters"
 msgstr ""
 
-msgid "Single choice from: '+', '-', '×', '/'. Default: '+'."
+msgid "Opérateur\\.  Single choice from: '+', '-', '×', '/'. Default: '+'."
 msgstr ""
 
 msgid "type"
@@ -64,22 +64,22 @@ msgstr ""
 msgid "guidata.dataset.dataitems.ChoiceItem"
 msgstr ""
 
-msgid "Default: 1.0."
+msgid "Facteur\\.  Flottant\\. Default: 1.0."
 msgstr ""
 
 msgid "guidata.dataset.dataitems.FloatItem"
 msgstr ""
 
-msgid "Default: 0.0."
+msgid "Constante\\.  Flottant\\. Default: 0.0."
 msgstr ""
 
-msgid "Default: ''."
+msgid "Opération\\.  Chaîne\\. Default: ''."
 msgstr ""
 
 msgid "guidata.dataset.dataitems.StringItem"
 msgstr ""
 
-msgid "Result\\.  Default: True."
+msgid "Résultat\\.  Default: True."
 msgstr ""
 
 msgid "guidata.dataset.dataitems.BoolItem"
@@ -106,7 +106,7 @@ msgstr ""
 msgid "Gaussian filter parameters"
 msgstr ""
 
-msgid "σ\\.  Default: 1.0."
+msgid "σ\\.  Flottant\\. Default: 1.0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`GaussianParam` with the fields set to the given values."
@@ -118,13 +118,13 @@ msgstr ""
 msgid "Moving average parameters"
 msgstr ""
 
-msgid "Size of the moving window\\.  Integer higher than 1\\. Default: 3."
+msgid "Taille de la fenêtre glissante\\.  Entier supérieur à 1\\. Default: 3."
 msgstr ""
 
 msgid "guidata.dataset.dataitems.IntItem"
 msgstr ""
 
-msgid "Mode of the filter: - 'reflect': reflect the data at the boundary - 'constant': pad with a constant value - 'nearest': pad with the nearest value - 'mirror': reflect the data at the boundary with the data itself - 'wrap': circular boundary\\. Single choice from: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'. Default: 'reflect'."
+msgid "Mode du filtre : - 'reflect' : réfléchir les données à la frontière - 'constant' : remplir avec une valeur constante - 'nearest' : remplir avec la valeur la plus proche - 'mirror' : réfléchir les données à la frontière avec les données elles-mêmes - 'wrap' : frontière circulaire\\. Single choice from: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'. Default: 'reflect'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`MovingAverageParam` with the fields set to the given values."
@@ -136,10 +136,10 @@ msgstr ""
 msgid "Moving median parameters"
 msgstr ""
 
-msgid "Size of the moving window\\.  Integer higher than 1, odd\\. Default: 3."
+msgid "Taille de la fenêtre glissante\\.  Entier supérieur à 1, impair\\. Default: 3."
 msgstr ""
 
-msgid "Mode of the filter: - 'reflect': reflect the data at the boundary - 'constant': pad with a constant value - 'nearest': pad with the nearest value - 'mirror': reflect the data at the boundary with the data itself - 'wrap': circular boundary\\. Single choice from: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'. Default: 'nearest'."
+msgid "Mode du filtre : - 'reflect' : réfléchir les données à la frontière - 'constant' : remplir avec une valeur constante - 'nearest' : remplir avec la valeur la plus proche - 'mirror' : réfléchir les données à la frontière avec les données elles-mêmes - 'wrap' : frontière circulaire\\. Single choice from: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'. Default: 'nearest'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`MovingMedianParam` with the fields set to the given values."
@@ -151,10 +151,10 @@ msgstr ""
 msgid "Data clipping parameters"
 msgstr ""
 
-msgid "Lower clipping value\\.  Default: None."
+msgid "Borne inférieure d'écrêtage\\.  Flottant\\. Default: None."
 msgstr ""
 
-msgid "Upper clipping value\\.  Default: None."
+msgid "Borne supérieure d'écrêtage\\.  Flottant\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ClipParam` with the fields set to the given values."
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Normalize parameters"
 msgstr ""
 
-msgid "Normalize with respect to\\.  Single choice from: 'maximum', 'amplitude', 'area', 'energy', 'rms'. Default: 'maximum'."
+msgid "Normaliser par rapport à\\.  Single choice from: 'maximum', 'amplitude', 'area', 'energy', 'rms'. Default: 'maximum'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`NormalizeParam` with the fields set to the given values."
@@ -178,13 +178,13 @@ msgstr ""
 msgid "Histogram parameters"
 msgstr ""
 
-msgid "Number of bins\\.  Integer higher than 1\\. Default: 256."
+msgid "Nombre de classes\\.  Entier supérieur à 1\\. Default: 256."
 msgstr ""
 
-msgid "Lower limit\\.  Default: None."
+msgid "Limite inférieure\\.  Flottant\\. Default: None."
 msgstr ""
 
-msgid "Upper limit\\.  Default: None."
+msgid "Limite supérieure\\.  Flottant\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`HistogramParam` with the fields set to the given values."
@@ -202,7 +202,7 @@ msgstr ""
 msgid "FFT parameters"
 msgstr ""
 
-msgid "Shift zero frequency to center\\. Default: None."
+msgid "Décaler la fréquence nulle au centre\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`FFTParam` with the fields set to the given values."
@@ -226,7 +226,7 @@ msgstr ""
 msgid "Parameter used to set a constant value to used in operations"
 msgstr ""
 
-msgid "Constant value\\.  Default: None."
+msgid "Constante\\.  Flottant\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ConstantParam` with the fields set to the given values."
@@ -383,6 +383,9 @@ msgstr ""
 msgid "Or, with keyword arguments directly:"
 msgstr ""
 
+msgid "Both styles are fully supported and equivalent."
+msgstr ""
+
 msgid "Subtract a constant value from a signal"
 msgstr ""
 
@@ -482,7 +485,7 @@ msgstr ""
 msgid "Convert signal data type parameters"
 msgstr ""
 
-msgid "Destination data type\\. Output image data type. Single choice from: 'float32', 'float64', 'complex128'. Default: 'float32'."
+msgid "Type de données de destination\\. Type de données de l'image générée. Single choice from: 'float32', 'float64', 'complex128'. Default: 'float32'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`DataTypeSParam` with the fields set to the given values."
@@ -512,7 +515,7 @@ msgstr ""
 msgid "Power parameters"
 msgstr ""
 
-msgid "Default: 2.0."
+msgid "Puissance\\.  Flottant\\. Default: 2.0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`PowerParam` with the fields set to the given values."
@@ -530,10 +533,10 @@ msgstr ""
 msgid "Peak detection parameters"
 msgstr ""
 
-msgid "Integer between 0 and 100, unit: %\\. Default: 30."
+msgid "Seuil\\.  Entier compris entre 0 et 100, unité : %\\. Default: 30."
 msgstr ""
 
-msgid "Minimum distance\\.  Integer higher than 1, unit: points\\. Default: 1."
+msgid "Distance minimale\\.  Entier supérieur à 1, unité : points\\. Default: 1."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`PeakDetectionParam` with the fields set to the given values."
@@ -567,7 +570,13 @@ msgstr ""
 msgid "Signal calibration parameters"
 msgstr ""
 
-msgid "Calibrate\\.  Single choice from: 'x', 'y'. Default: 'y'."
+msgid "Étalonner\\.  Single choice from: 'x', 'y'. Default: 'y'."
+msgstr ""
+
+msgid "Flottant\\. Default: 1.0."
+msgstr ""
+
+msgid "Flottant\\. Default: 0.0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`XYCalibrateParam` with the fields set to the given values."
@@ -619,28 +628,28 @@ msgstr ""
 msgid "Low-pass filter parameters"
 msgstr ""
 
-msgid "Filter method\\.  Single choice from: 'bessel', 'butter', 'cheby1', 'cheby2', 'ellip', 'brickwall'. Default: 'bessel'."
+msgid "Méthode de filtrage\\.  Single choice from: 'bessel', 'butter', 'cheby1', 'cheby2', 'ellip', 'brickwall'. Default: 'bessel'."
 msgstr ""
 
-msgid "Filter order\\.  Integer higher than 1\\. Default: 3."
+msgid "Ordre du filtre\\.  Entier supérieur à 1\\. Default: 3."
 msgstr ""
 
-msgid "Cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
+msgid "Fréquence de coupure\\.  Flottant supérieur à 0, non nul, unité : hz\\. Default: None."
 msgstr ""
 
-msgid "High cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
+msgid "Fréquence de coupure haute\\.  Flottant supérieur à 0, non nul, unité : hz\\. Default: None."
 msgstr ""
 
-msgid "Passband ripple\\.  Float higher than 0, non zero, unit: db\\. Default: 1."
+msgid "Ondulation de la bande passante\\.  Flottant supérieur à 0, non nul, unité : db\\. Default: 1."
 msgstr ""
 
-msgid "Stopband attenuation\\.  Float higher than 0, non zero, unit: db\\. Default: 1."
+msgid "Atténuation de la bande d'arrêt\\.  Flottant supérieur à 0, non nul, unité : db\\. Default: 1."
 msgstr ""
 
 msgid "Default: True."
 msgstr ""
 
-msgid "Minimum FFT points number\\.  Default: 0."
+msgid "Nombre minimum de points FFT\\.  Entier\\. Default: 0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`LowPassFilterParam` with the fields set to the given values."
@@ -661,7 +670,7 @@ msgstr ""
 msgid "Band-pass filter parameters"
 msgstr ""
 
-msgid "Low cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. Default: None."
+msgid "Fréquence de coupure basse\\.  Flottant supérieur à 0, non nul, unité : hz\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`BandPassFilterParam` with the fields set to the given values."
@@ -712,13 +721,13 @@ msgstr ""
 msgid "strategies: Available strategies (\"next_pow2\", \"double\", \"triple\", \"custom\"). strategy: Choice item for selecting the zero-padding strategy. locations: Available locations for padding (\"append\", \"prepend\", \"both\"). location: Choice item for selecting where to add the padding. n: Number of points to add as padding (active only for \"custom\" strategy)."
 msgstr ""
 
-msgid "Single choice from: 'next_pow2', 'double', 'triple', 'custom'. Default: 'next_pow2'."
+msgid "Stratégie\\.  Single choice from: 'next_pow2', 'double', 'triple', 'custom'. Default: 'next_pow2'."
 msgstr ""
 
-msgid "Where to add the padding\\. Single choice from: 'append', 'prepend', 'both'. Default: 'append'."
+msgid "Emplacement\\. Où ajouter le complément de zéros\\. Single choice from: 'append', 'prepend', 'both'. Default: 'append'."
 msgstr ""
 
-msgid "Number of points\\. Number of points to add\\. Integer higher than 1\\. Default: None."
+msgid "Nombre de points\\. Nombre de points à ajouter\\. Entier supérieur à 1\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ZeroPadding1DParam` with the fields set to the given values."
@@ -793,7 +802,7 @@ msgstr ""
 msgid "Polynomial fitting parameters"
 msgstr ""
 
-msgid "Integer between 1 and 10\\. Default: 3."
+msgid "Degré\\.  Entier compris entre 1 et 10\\. Default: 3."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`PolynomialFitParam` with the fields set to the given values."
@@ -811,10 +820,10 @@ msgstr ""
 msgid "Interpolation parameters"
 msgstr ""
 
-msgid "Interpolation method\\.  Single choice from: 'linear', 'spline', 'quadratic', 'cubic', 'barycentric', 'pchip'. Default: 'linear'."
+msgid "Méthode d'interpolation\\.  Single choice from: 'linear', 'spline', 'quadratic', 'cubic', 'barycentric', 'pchip'. Default: 'linear'."
 msgstr ""
 
-msgid "Value to use for points outside the interpolation domain (used only with linear, cubic and pchip methods). Default: None."
+msgid "Valeur de remplissage\\. Valeur à utiliser pour les points en dehors du domaine d'interpolation (utilisé uniquement avec les méthodes linéaire, cubique et pchip). Flottant\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`InterpolationParam` with the fields set to the given values."
@@ -835,19 +844,19 @@ msgstr ""
 msgid "Resample parameters"
 msgstr ""
 
-msgid "X\\ :subscript:`min`\\.  Default: None."
+msgid "X\\ :subscript:`min`\\.  Flottant\\. Default: None."
 msgstr ""
 
-msgid "X\\ :subscript:`max`\\.  Default: None."
+msgid "X\\ :subscript:`max`\\.  Flottant\\. Default: None."
 msgstr ""
 
 msgid "Single choice from: 'dx', 'nbpts'. Default: 'nbpts'."
 msgstr ""
 
-msgid "ΔX\\.  Default: None."
+msgid "ΔX\\.  Flottant\\. Default: None."
 msgstr ""
 
-msgid "Number of points\\.  Default: None."
+msgid "Nombre de points\\.  Entier\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ResamplingParam` with the fields set to the given values."
@@ -868,7 +877,7 @@ msgstr ""
 msgid "Detrending parameters"
 msgstr ""
 
-msgid "Detrending method\\.  Single choice from: 'linear', 'constant'. Default: 'linear'."
+msgid "Méthode d'élimation de la tendance\\.  Single choice from: 'linear', 'constant'. Default: 'linear'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`DetrendingParam` with the fields set to the given values."
@@ -904,16 +913,16 @@ msgstr ""
 msgid "Windowing parameters"
 msgstr ""
 
-msgid "Single choice from: 'barthann', 'bartlett', 'blackman', 'blackman-harris', 'bohman', 'boxcar', 'cosine', 'exponential', 'flat-top', 'gaussian', 'hamming', 'hanning', 'kaiser', 'lanczos', 'nuttall', 'parzen', 'rectangular', 'taylor', 'tukey'. Default: 'hamming'."
+msgid "Méthode\\.  Single choice from: 'barthann', 'bartlett', 'blackman', 'blackman-harris', 'bohman', 'boxcar', 'cosine', 'exponential', 'flat-top', 'gaussian', 'hamming', 'hanning', 'kaiser', 'lanczos', 'nuttall', 'parzen', 'rectangular', 'taylor', 'tukey'. Default: 'hamming'."
 msgstr ""
 
-msgid "Shape parameter of the tukey windowing function\\. Default: 0.5."
+msgid "Paramètre de forme de la fonction de fenêtrage de tukey\\. Flottant\\. Default: 0.5."
 msgstr ""
 
-msgid "Shape parameter of the kaiser windowing function\\. Default: 14.0."
+msgid "Paramètre de forme de la fonction de fenêtrage de kaiser\\. Flottant\\. Default: 14.0."
 msgstr ""
 
-msgid "Shape parameter of the gaussian windowing function\\. Default: 0.5."
+msgid "Paramètre de forme de la fonction de fenêtrage gaussienne\\. Flottant\\. Default: 0.5."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`WindowingParam` with the fields set to the given values."
@@ -940,7 +949,7 @@ msgstr ""
 msgid "Choice of angle unit."
 msgstr ""
 
-msgid "Angle unit\\.  Single choice from: 'rad', 'deg'. Default: 'rad'."
+msgid "Unité de l'angle\\.  Single choice from: 'rad', 'deg'. Default: 'rad'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`AngleUnitParam` with the fields set to the given values."
@@ -949,19 +958,25 @@ msgstr ""
 msgid "New instance of :py:class:`AngleUnitParam`."
 msgstr ""
 
-msgid "Convert cartesian coordinates to polar coordinates with"
+msgid "Convert cartesian coordinates to polar coordinates."
 msgstr ""
 
-msgid ":py:func:`sigima.tools.coordinates.to_polar`."
+msgid "This function converts the x and y coordinates of a signal to polar coordinates using :py:func:`sigima.tools.coordinates.to_polar`."
+msgstr ""
+
+msgid "Raises:"
+msgstr ""
+
+msgid "ValueError: If the x and y units are not the same."
 msgstr ""
 
 msgid "With a parameter ``AngleUnitParam`` object:"
 msgstr ""
 
-msgid "Convert polar coordinates to cartesian coordinates with"
+msgid "Convert polar coordinates to cartesian coordinates."
 msgstr ""
 
-msgid ":py:func:`sigima.tools.coordinates.to_cartesian`."
+msgid "This function converts the r and theta coordinates of a signal to cartesian coordinates using :py:func:`sigima.tools.coordinates.to_cartesian`."
 msgstr ""
 
 msgid "This function assumes that the x-axis represents the radius and the y-axis represents the angle. Negative values are not allowed for the radius, and will be clipped to 0 (a warning will be raised)."
@@ -970,7 +985,7 @@ msgstr ""
 msgid "Allan variance parameters"
 msgstr ""
 
-msgid "Max τ\\.  Integer higher than 1, unit: pts\\. Default: 100."
+msgid "Max τ\\.  Entier supérieur à 1, unité : pts\\. Default: 100."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`AllanVarianceParam` with the fields set to the given values."
@@ -982,7 +997,7 @@ msgstr ""
 msgid "Compute Allan variance with"
 msgstr ""
 
-msgid ":py:func:`sigima.tools.signal.stability.allan_variance`"
+msgid ":py:func:`sigima.tools.signal.stability.allan_variance`."
 msgstr ""
 
 msgid "With a parameter ``AllanVarianceParam`` object:"
@@ -1042,13 +1057,13 @@ msgstr ""
 msgid "FWHM parameters"
 msgstr ""
 
-msgid "Single choice from: 'zero-crossing', 'gauss', 'lorentz', 'voigt'. Default: 'zero-crossing'."
+msgid "Méthode\\.  Single choice from: 'zero-crossing', 'gauss', 'lorentz', 'voigt'. Default: 'zero-crossing'."
 msgstr ""
 
-msgid "X\\ :subscript:`MIN`\\. Lower x boundary (empty for no limit, i.e. Start of the signal)\\. Default: None."
+msgid "X\\ :subscript:`MIN`\\. Borne x inférieure (vide pour aucune limite, c'est-à-dire le début du signal)\\. Flottant\\. Default: None."
 msgstr ""
 
-msgid "X\\ :subscript:`MAX`\\. Upper x boundary (empty for no limit, i.e. End of the signal)\\. Default: None."
+msgid "X\\ :subscript:`MAX`\\. Borne x supérieure (vide pour aucune limite, c'est-à-dire la fin du signal)\\. Flottant\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`FWHMParam` with the fields set to the given values."
@@ -1072,7 +1087,7 @@ msgstr ""
 msgid "Ordinate parameter"
 msgstr ""
 
-msgid "Ordinate\\.  Default: 0."
+msgid "Coordonnées\\.  Flottant\\. Default: 0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`OrdinateParam` with the fields set to the given values."
@@ -1105,7 +1120,7 @@ msgstr ""
 msgid "Abscissa parameter"
 msgstr ""
 
-msgid "Abscissa\\.  Default: 0."
+msgid "Abscisse\\.  Flottant\\. Default: 0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`AbscissaParam` with the fields set to the given values."
@@ -1138,13 +1153,13 @@ msgstr ""
 msgid "Parameters for dynamic range computation (ENOB, SNR, SINAD, THD, SFDR)"
 msgstr ""
 
-msgid "Float higher than 0.0, unit: v\\. Default: 0.16."
+msgid "Pleine échelle\\.  Flottant supérieur à 0.0, unité : v\\. Default: 0.16."
 msgstr ""
 
-msgid "Unit for sinad\\. Single choice from: 'dBc', 'dBFS'. Default: 'dBc'."
+msgid "Unité\\. Unité pour sinad\\. Single choice from: 'dBc', 'dBFS'. Default: 'dBc'."
 msgstr ""
 
-msgid "Number of harmonics\\. Number of harmonics to consider for thd\\. Integer higher than 1\\. Default: 5."
+msgid "Nombre d'harmoniques\\. Nombre d'harmoniques à considérer pour le thd\\. Entier supérieur à 1\\. Default: 5."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`DynamicParam` with the fields set to the given values."
@@ -1360,7 +1375,7 @@ msgstr ""
 msgid "Log10 parameters"
 msgstr ""
 
-msgid "Default: None."
+msgid "Flottant\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`LogP1Param` with the fields set to the given values."
@@ -1381,7 +1396,7 @@ msgstr ""
 msgid "Convert image data type parameters"
 msgstr ""
 
-msgid "Destination data type\\. Output image data type. Single choice from: 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'float32'."
+msgid "Type de données de destination\\. Type de données de l'image générée. Single choice from: 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'float32'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`DataTypeIParam` with the fields set to the given values."
@@ -1450,13 +1465,13 @@ msgstr ""
 msgid "Butterworth filter parameters"
 msgstr ""
 
-msgid "Cut-off frequency ratio\\. Cut-off frequency ratio\\. Float between 0.0 and 0.5\\. Default: 0.005."
+msgid "Fréquence de coupure relative\\. Fréquence de coupure relative\\. Flottant compris entre 0.0 et 0.5\\. Default: 0.005."
 msgstr ""
 
-msgid "If true, apply high-pass filter instead of low-pass\\. Default: False."
+msgid "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas\\. Default: False."
 msgstr ""
 
-msgid "Order of the butterworth filter\\. Integer higher than 1\\. Default: 2."
+msgid "Ordre\\. Ordre du filtre de butterworth\\. Entier supérieur à 1\\. Default: 2."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ButterworthParam` with the fields set to the given values."
@@ -1474,13 +1489,13 @@ msgstr ""
 msgid "2D Gaussian bandpass FFT filter parameters"
 msgstr ""
 
-msgid "Center frequency\\. Center frequency of the gaussian filter\\. Float higher than 0.0, unit: pixels⁻¹\\. Default: 1."
+msgid "Fréquence centrale\\. Fréquence centrale du filtre gaussien\\. Flottant supérieur à 0.0, unité : pixels⁻¹\\. Default: 1."
 msgstr ""
 
-msgid "σ\\. Standard deviation of the gaussian filter\\. Float higher than 0.0, unit: pixels⁻¹\\. Default: 0.5."
+msgid "σ\\. Ecart-type du filtre gaussien\\. Flottant supérieur à 0.0, unité : pixels⁻¹\\. Default: 0.5."
 msgstr ""
 
-msgid "Inverse FFT result\\. How to return the inverse fft result\\. Single choice from: 'real', 'abs'. Default: 'real'."
+msgid "Résultat de la FFT inverse\\. Comment retourner le résultat de la fft inverse\\. Single choice from: 'real', 'abs'. Default: 'real'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`FreqFFTParam` with the fields set to the given values."
@@ -1513,16 +1528,16 @@ msgstr ""
 msgid "Zero padding parameters for 2D images"
 msgstr ""
 
-msgid "Padding strategy\\.  Single choice from: 'next_pow2', 'multiple_of_64', 'custom'. Default: 'custom'."
+msgid "Stratégie de complément de zéros\\.  Single choice from: 'next_pow2', 'multiple_of_64', 'custom'. Default: 'custom'."
 msgstr ""
 
-msgid "Rows to add\\.  Integer higher than 0\\. Default: None."
+msgid "Lignes à ajouter\\.  Entier supérieur à 0\\. Default: None."
 msgstr ""
 
-msgid "Columns to add\\.  Integer higher than 0\\. Default: None."
+msgid "Colonnes à ajouter\\.  Entier supérieur à 0\\. Default: None."
 msgstr ""
 
-msgid "Padding position\\.  Single choice from: 'bottom-right', 'center'. Default: 'bottom-right'."
+msgid "Position du complément de zéros\\.  Single choice from: 'bottom-right', 'center'. Default: 'bottom-right'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ZeroPadding2DParam` with the fields set to the given values."
@@ -1573,13 +1588,13 @@ msgstr ""
 msgid "Histogram threshold parameters"
 msgstr ""
 
-msgid "Threshold method\\.  Single choice from: 'manual', 'isodata', 'li', 'mean', 'minimum', 'otsu', 'triangle', 'yen'. Default: 'manual'."
+msgid "Méthode de seuillage\\.  Single choice from: 'manual', 'isodata', 'li', 'mean', 'minimum', 'otsu', 'triangle', 'yen'. Default: 'manual'."
 msgstr ""
 
-msgid "Threshold value\\.  Default: 0.0."
+msgid "Valeur de seuil\\.  Flottant\\. Default: 0.0."
 msgstr ""
 
-msgid "Single choice from: '>', '<'. Default: '>'."
+msgid "Opération\\.  Single choice from: '>', '<'. Default: '>'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ThresholdParam` with the fields set to the given values."
@@ -1657,10 +1672,10 @@ msgstr ""
 msgid "Gamma adjustment parameters"
 msgstr ""
 
-msgid "Gamma correction factor (higher values give more contrast). Float higher than 0.0\\. Default: 1.0."
+msgid "Facteur de correction gamma (plus la valeur est élevée, plus le contraste est important). Flottant supérieur à 0.0\\. Default: 1.0."
 msgstr ""
 
-msgid "Gain factor (higher values give more contrast). Float higher than 0.0\\. Default: 1.0."
+msgid "Facteur de gain (plus la valeur est élevée, plus le contraste est important). Flottant supérieur à 0.0\\. Default: 1.0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`AdjustGammaParam` with the fields set to the given values."
@@ -1678,7 +1693,7 @@ msgstr ""
 msgid "Logarithmic adjustment parameters"
 msgstr ""
 
-msgid "If true, apply inverse logarithmic transformation. Default: False."
+msgid "Si vrai, appliquer une transformation logarithmique inverse. Default: False."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`AdjustLogParam` with the fields set to the given values."
@@ -1696,13 +1711,13 @@ msgstr ""
 msgid "Sigmoid adjustment parameters"
 msgstr ""
 
-msgid "Cutoff value (higher values give more contrast). Float between 0.0 and 1.0\\. Default: 0.5."
+msgid "Valeur de coupure (plus la valeur est élevée, plus le contraste est important). Flottant compris entre 0.0 et 1.0\\. Default: 0.5."
 msgstr ""
 
-msgid "Gain factor (higher values give more contrast). Float higher than 0.0\\. Default: 10.0."
+msgid "Facteur de gain (plus la valeur est élevée, plus le contraste est important). Flottant supérieur à 0.0\\. Default: 10.0."
 msgstr ""
 
-msgid "If true, apply inverse sigmoid transformation. Default: False."
+msgid "Si vrai, appliquer une transformation sigmoïde inverse. Default: False."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`AdjustSigmoidParam` with the fields set to the given values."
@@ -1720,10 +1735,10 @@ msgstr ""
 msgid "Intensity rescaling parameters"
 msgstr ""
 
-msgid "Input range\\. Min and max intensity values of input image ('image' refers to input image min/max levels, 'dtype' refers to input image data type range). Single choice from: 'image', 'dtype', 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'image'."
+msgid "Echelle de niveaux en entrée\\. Valeurs min/max d'intensité de l'image en entrée ('image' correspond aux niveaux min/max de l'image en entrée, 'dtype' correspond aux valeurs min/max du type de données de l'image). Single choice from: 'image', 'dtype', 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'image'."
 msgstr ""
 
-msgid "Output range\\. Min and max intensity values of output image  ('image' refers to input image min/max levels, 'dtype' refers to input image data type range).. Single choice from: 'image', 'dtype', 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'dtype'."
+msgid "Echelle de niveaux en sortie\\. Valeurs min/max d'intensité de l'image en sortie ('image' correspond aux niveaux min/max de l'image en entrée, 'dtype' correspond aux valeurs min/max du type de données de l'image). Single choice from: 'image', 'dtype', 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'dtype'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`RescaleIntensityParam` with the fields set to the given values."
@@ -1744,7 +1759,7 @@ msgstr ""
 msgid "Histogram equalization parameters"
 msgstr ""
 
-msgid "Number of bins\\. Number of bins for image histogram. Integer higher than 1\\. Default: 256."
+msgid "Nombre de classes\\. Nombre de classes de l'histogramme des niveaux de l'image. Entier supérieur à 1\\. Default: 256."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`EqualizeHistParam` with the fields set to the given values."
@@ -1762,7 +1777,7 @@ msgstr ""
 msgid "Adaptive histogram equalization parameters"
 msgstr ""
 
-msgid "Clipping limit\\. Clipping limit (higher values give more contrast). Float between 0.0 and 1.0\\. Default: 0.01."
+msgid "Écrêtage limite\\. Valeur d'écrêtage (plus la valeur est élevée, plus le contraste est important). Flottant compris entre 0.0 et 1.0\\. Default: 0.01."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`EqualizeAdaptHistParam` with the fields set to the given values."
@@ -1781,6 +1796,9 @@ msgid "With a parameter ``EqualizeAdaptHistParam`` object:"
 msgstr ""
 
 msgid "Flat-field parameters"
+msgstr ""
+
+msgid "Seuil\\.  Flottant\\. Default: 0.0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`FlatFieldParam` with the fields set to the given values."
@@ -1813,7 +1831,7 @@ msgstr ""
 msgid "Image linear calibration parameters"
 msgstr ""
 
-msgid "Calibrate\\.  Single choice from: 'x', 'y', 'z'. Default: 'z'."
+msgid "Étalonner\\.  Single choice from: 'x', 'y', 'z'. Default: 'z'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`XYZCalibrateParam` with the fields set to the given values."
@@ -1846,13 +1864,13 @@ msgstr ""
 msgid "Total Variation denoising parameters"
 msgstr ""
 
-msgid "Denoising weight\\. The greater weight, the more denoising (at the expense of fidelity to input). Float higher than 0, non zero\\. Default: 0.1."
+msgid "Poids de débruitage\\. Plus le poids est élevé, plus le débruitage est fort (aux dépens de la fidélité des données). Flottant supérieur à 0, non nul\\. Default: 0.1."
 msgstr ""
 
-msgid "Epsilon\\. Relative difference of the value of the cost function that determines the stop criterion. The algorithm stops when: (e_(n-1) - e_n) < eps \\* e_0\\. Float higher than 0, non zero\\. Default: 0.0002."
+msgid "Epsilon\\. Différence relative de la valeur de la fonction de coût qui détermine le critère d'arrêt de l'algorithme. Ce dernier s'arrête lorsque : (e_(n-1) - e_n) < eps \\* e_0\\. Flottant supérieur à 0, non nul\\. Default: 0.0002."
 msgstr ""
 
-msgid "Max. iterations\\. Maximal number of iterations used for the optimization\\. Integer higher than 0, non zero\\. Default: 200."
+msgid "Nb. max. d'itérations\\. Nombre maximal d'itérations utilisé pour l'optimisation\\. Entier supérieur à 0, non nul\\. Default: 200."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`DenoiseTVParam` with the fields set to the given values."
@@ -1873,13 +1891,13 @@ msgstr ""
 msgid "Bilateral filter denoising parameters"
 msgstr ""
 
-msgid "σ\\ :subscript:`spatial`\\. Standard deviation for range distance. A larger value results in averaging of pixels with larger spatial differences. Float higher than 0, non zero, unit: pixels\\. Default: 1.0."
+msgid "σ\\ :subscript:`spatial`\\. Ecart-type dans le domaine spatial. Une valeur élevée a pour effet de moyenner des pixels séparés par de grandes distances. Flottant supérieur à 0, non nul, unité : pixels\\. Default: 1.0."
 msgstr ""
 
 msgid "Single choice from: 'constant', 'edge', 'symmetric', 'reflect', 'wrap'. Default: 'constant'."
 msgstr ""
 
-msgid "Used in conjunction with mode 'constant', the value outside the image boundaries. Default: 0."
+msgid "Valeur de remplissage en dehors des bornes de l'image (en mode constant). Flottant\\. Default: 0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`DenoiseBilateralParam` with the fields set to the given values."
@@ -1900,13 +1918,13 @@ msgstr ""
 msgid "Wavelet denoising parameters"
 msgstr ""
 
-msgid "Single choice from: 'bior1.1', 'bior1.3', 'bior1.5', 'bior2.2', 'bior2.4', 'bior2.6', 'bior2.8', 'bior3.1', 'bior3.3', 'bior3.5', 'bior3.7', 'bior3.9', 'bior4.4', 'bior5.5', 'bior6.8', 'cgau1', 'cgau2', 'cgau3', 'cgau4', 'cgau5', 'cgau6', 'cgau7', 'cgau8', 'cmor', 'coif1', 'coif2', 'coif3', 'coif4', 'coif5', 'coif6', 'coif7', 'coif8', 'coif9', 'coif10', 'coif11', 'coif12', 'coif13', 'coif14', 'coif15', 'coif16', 'coif17', 'db1', 'db2', 'db3', 'db4', 'db5', 'db6', 'db7', 'db8', 'db9', 'db10', 'db11', 'db12', 'db13', 'db14', 'db15', 'db16', 'db17', 'db18', 'db19', 'db20', 'db21', 'db22', 'db23', 'db24', 'db25', 'db26', 'db27', 'db28', 'db29', 'db30', 'db31', 'db32', 'db33', 'db34', 'db35', 'db36', 'db37', 'db38', 'dmey', 'fbsp', 'gaus1', 'gaus2', 'gaus3', 'gaus4', 'gaus5', 'gaus6', 'gaus7', 'gaus8', 'haar', 'mexh', 'morl', 'rbio1.1', 'rbio1.3', 'rbio1.5', 'rbio2.2', 'rbio2.4', 'rbio2.6', 'rbio2.8', 'rbio3.1', 'rbio3.3', 'rbio3.5', 'rbio3.7', 'rbio3.9', 'rbio4.4', 'rbio5.5', 'rbio6.8', 'shan', 'sym2', 'sym3', 'sym4', 'sym5', 'sym6', 'sym7', 'sym8', 'sym9', 'sym10', 'sym11', 'sym12', 'sym13', 'sym14', 'sym15', 'sym16', 'sym17', 'sym18', 'sym19', 'sym20'. Default: 'sym9'."
+msgid "Ondelette\\.  Single choice from: 'bior1.1', 'bior1.3', 'bior1.5', 'bior2.2', 'bior2.4', 'bior2.6', 'bior2.8', 'bior3.1', 'bior3.3', 'bior3.5', 'bior3.7', 'bior3.9', 'bior4.4', 'bior5.5', 'bior6.8', 'cgau1', 'cgau2', 'cgau3', 'cgau4', 'cgau5', 'cgau6', 'cgau7', 'cgau8', 'cmor', 'coif1', 'coif2', 'coif3', 'coif4', 'coif5', 'coif6', 'coif7', 'coif8', 'coif9', 'coif10', 'coif11', 'coif12', 'coif13', 'coif14', 'coif15', 'coif16', 'coif17', 'db1', 'db2', 'db3', 'db4', 'db5', 'db6', 'db7', 'db8', 'db9', 'db10', 'db11', 'db12', 'db13', 'db14', 'db15', 'db16', 'db17', 'db18', 'db19', 'db20', 'db21', 'db22', 'db23', 'db24', 'db25', 'db26', 'db27', 'db28', 'db29', 'db30', 'db31', 'db32', 'db33', 'db34', 'db35', 'db36', 'db37', 'db38', 'dmey', 'fbsp', 'gaus1', 'gaus2', 'gaus3', 'gaus4', 'gaus5', 'gaus6', 'gaus7', 'gaus8', 'haar', 'mexh', 'morl', 'rbio1.1', 'rbio1.3', 'rbio1.5', 'rbio2.2', 'rbio2.4', 'rbio2.6', 'rbio2.8', 'rbio3.1', 'rbio3.3', 'rbio3.5', 'rbio3.7', 'rbio3.9', 'rbio4.4', 'rbio5.5', 'rbio6.8', 'shan', 'sym2', 'sym3', 'sym4', 'sym5', 'sym6', 'sym7', 'sym8', 'sym9', 'sym10', 'sym11', 'sym12', 'sym13', 'sym14', 'sym15', 'sym16', 'sym17', 'sym18', 'sym19', 'sym20'. Default: 'sym9'."
 msgstr ""
 
 msgid "Single choice from: 'soft', 'hard'. Default: 'soft'."
 msgstr ""
 
-msgid "Single choice from: 'BayesShrink', 'VisuShrink'. Default: 'VisuShrink'."
+msgid "Méthode\\.  Single choice from: 'BayesShrink', 'VisuShrink'. Default: 'VisuShrink'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`DenoiseWaveletParam` with the fields set to the given values."
@@ -1933,6 +1951,15 @@ msgstr ""
 msgid "With a parameter ``MorphologyParam`` object:"
 msgstr ""
 
+msgid "Erase an area of the image using the mean value of the image."
+msgstr ""
+
+msgid "The erased area is defined by a region of interest (ROI) parameter set. This ROI must not be mistaken with the ROI of the image object. If the image object has a ROI, it is not used in this processing, except to restore the data outside the ROI (as in all other processing)."
+msgstr ""
+
+msgid "parameters defining the area to erase (region of interest)"
+msgstr ""
+
 msgid "Morphology"
 msgstr ""
 
@@ -1942,7 +1969,7 @@ msgstr ""
 msgid "White Top-Hat parameters"
 msgstr ""
 
-msgid "Footprint (disk) radius. Integer higher than 1\\. Default: 1."
+msgid "Rayon\\. Rayon de l'ouverture circulaire (disque). Entier supérieur à 1\\. Default: 1."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`MorphologyParam` with the fields set to the given values."
@@ -1987,22 +2014,22 @@ msgstr ""
 msgid "Canny filter parameters"
 msgstr ""
 
-msgid "Standard deviation of the gaussian filter. Float higher than 0, non zero, unit: pixels\\. Default: 1.0."
+msgid "Ecart-type du filtrage gaussien\\. Flottant supérieur à 0, non nul, unité : pixels\\. Default: 1.0."
 msgstr ""
 
-msgid "Lower bound for hysteresis thresholding (linking edges). Float higher than 0\\. Default: 0.1."
+msgid "Seuil bas\\. Borne inférieure pour le seuillage par hystérésis (liaison des contours). Flottant supérieur à 0\\. Default: 0.1."
 msgstr ""
 
-msgid "Upper bound for hysteresis thresholding (linking edges). Float higher than 0\\. Default: 0.9."
+msgid "Seuil haut\\. Borne supérieure pour le seuillage par hystérésis (liaison des contours). Flottant supérieur à 0\\. Default: 0.9."
 msgstr ""
 
-msgid "If true then treat low_threshold and high_threshold as quantiles of the edge magnitude image, rather than absolute edge magnitude values. If true then the thresholds must be in the range [0, 1]. Default: True."
+msgid "Interprète les seuils bas et haut en tant que quantiles des niveaux des contours, au lieu de valeurs absolues des contours. Si le réglage est actif, alors les seuils doivent être compris entre 0 et 1. Default: True."
 msgstr ""
 
 msgid "Single choice from: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'. Default: 'constant'."
 msgstr ""
 
-msgid "Value to fill past edges of input if mode is constant. Default: 0.0."
+msgid "Valeur de remplissage si le mode est constant. Flottant\\. Default: 0.0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`CannyParam` with the fields set to the given values."
@@ -2077,7 +2104,7 @@ msgstr ""
 msgid "Generic detection parameters"
 msgstr ""
 
-msgid "Relative threshold\\. Detection threshold, relative to difference between data maximum and minimum\\. Float between 0.1 and 0.9\\. Default: 0.5."
+msgid "Seuil relatif\\. Seuil de détection, relatif à la différence entre le maximum et le minimum des données de l'image\\. Flottant compris entre 0.1 et 0.9\\. Default: 0.5."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`GenericDetectionParam` with the fields set to the given values."
@@ -2086,7 +2113,7 @@ msgstr ""
 msgid "New instance of :py:class:`GenericDetectionParam`."
 msgstr ""
 
-msgid "Neighborhoods size\\. Size of the sliding window used in maximum/minimum filtering algorithm (if no value is provided, the algorithm will use a default size based on the image size). \\. Integer higher than 1, unit: pixels\\. Default: None."
+msgid "Taille du voisinage\\. Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage par maximum/minimum (si aucune valeur n'est fournie, l'algorithme utilisera une taille par défaut basée sur la taille de l'image). Entier supérieur à 1, unité : pixels\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`Peak2DDetectionParam` with the fields set to the given values."
@@ -2104,7 +2131,7 @@ msgstr ""
 msgid "Contour shape parameters"
 msgstr ""
 
-msgid "Single choice from: 'ellipse', 'circle', 'polygon'. Default: 'ellipse'."
+msgid "Forme\\.  Single choice from: 'ellipse', 'circle', 'polygon'. Default: 'ellipse'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ContourShapeParam` with the fields set to the given values."
@@ -2119,16 +2146,16 @@ msgstr ""
 msgid "Base class for blob detection parameters"
 msgstr ""
 
-msgid "σ\\ :subscript:`min`\\. The minimum standard deviation for gaussian kernel. Keep this low to detect smaller blobs. Float higher than 0, non zero, unit: pixels\\. Default: 1.0."
+msgid "σ\\ :subscript:`min`\\. L'écart-type minimal pour le noyau gaussien. Cette valeur doit être faible pour détecter de petites taches. Flottant supérieur à 0, non nul, unité : pixels\\. Default: 1.0."
 msgstr ""
 
-msgid "σ\\ :subscript:`max`\\. The maximum standard deviation for gaussian kernel. Keep this high to detect larger blobs. Float higher than 0, non zero, unit: pixels\\. Default: 30.0."
+msgid "σ\\ :subscript:`max`\\. L'écart-type maximal pour le noyau gaussien. Cette valeur doit être élevée pour détecter de grandes taches. Flottant supérieur à 0, non nul, unité : pixels\\. Default: 30.0."
 msgstr ""
 
-msgid "Relative threshold\\. Minimum intensity of blobs. Float between 0.0 and 1.0\\. Default: 0.2."
+msgid "Seuil relatif\\. Intensité minimale des taches. Flottant compris entre 0.0 et 1.0\\. Default: 0.2."
 msgstr ""
 
-msgid "If two blobs overlap by a fraction greater than this value, the smaller blob is eliminated. Float between 0.0 and 1.0\\. Default: 0.5."
+msgid "Recouvrement\\. Si deux taches ont un taux de recouvrement supérieur à ce seuil, alors la plus petite tache est éliminée. Flottant compris entre 0.0 et 1.0\\. Default: 0.5."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`BaseBlobParam` with the fields set to the given values."
@@ -2140,7 +2167,7 @@ msgstr ""
 msgid "Blob detection using Difference of Gaussian method"
 msgstr ""
 
-msgid "If true, exclude blobs from the border of the image. Default: True."
+msgid "Si le réglage est actif, exclure les taches de la bordure de l'image. Default: True."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`BlobDOGParam` with the fields set to the given values."
@@ -2158,7 +2185,7 @@ msgstr ""
 msgid "Blob detection using Determinant of Hessian method"
 msgstr ""
 
-msgid "If set intermediate values of standard deviations are interpolated using a logarithmic scale to the base 10. If not, linear interpolation is used. Default: False."
+msgid "Les valeurs intermédiaires d'écart-type peuvent être interpolées selon une échelle linéaire ou logarithmique. Default: False."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`BlobDOHParam` with the fields set to the given values."
@@ -2185,58 +2212,58 @@ msgstr ""
 msgid "Blob detection using OpenCV"
 msgstr ""
 
-msgid "Min. threshold\\. The minimum threshold between local maxima and minima. This parameter does not affect the quality of the blobs, only the quantity. Lower thresholds result in larger numbers of blobs. Float higher than 0.0\\. Default: 10.0."
+msgid "Seuil min. Le seuil minimum entre les maxima et minima locaux. Ce paramètre n'affecte pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un nombre plus important de taches. Flottant supérieur à 0.0\\. Default: 10.0."
 msgstr ""
 
-msgid "Max. threshold\\. The maximum threshold between local maxima and minima. This parameter does not affect the quality of the blobs, only the quantity. Lower thresholds result in larger numbers of blobs. Float higher than 0.0\\. Default: 200.0."
+msgid "Seuil max. Le seuil maximum entre les maxima et minima locaux. Ce paramètre n'affecte pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un nombre plus important de taches. Flottant supérieur à 0.0\\. Default: 200.0."
 msgstr ""
 
-msgid "Min. repeatability\\. The minimum number of times a blob needs to be detected in a sequence of images to be considered valid. Integer higher than 1\\. Default: 2."
+msgid "Répétabilité min. Le nombre minimum de fois qu'une tache doit être détectée dans une séquence d'images pour être considérée valide. Entier supérieur à 1\\. Default: 2."
 msgstr ""
 
-msgid "Min. distance between blobs\\. The minimum distance between two blobs. If blobs are found closer together than this distance, the smaller blob is removed. Float higher than 0.0, non zero\\. Default: 10.0."
+msgid "Distance min. entre taches\\. La distance minimale entre deux taches. Si deux taches sont détectées à une distance inférieure à celle-ci, alors la plus petite tache est éliminée. Flottant supérieur à 0.0, non nul\\. Default: 10.0."
 msgstr ""
 
-msgid "If true, the image is filtered by color instead of intensity. Default: True."
+msgid "Si vrai, l'image est filtrée par couleur au lieu d'intensité. Default: True."
 msgstr ""
 
-msgid "The color of the blobs to detect (0 for dark blobs, 255 for light blobs). Default: 0."
+msgid "Couleur de la tache\\. La couleur des taches à détecter (0 pour les taches foncées, 255 pour les taches claires). Entier\\. Default: 0."
 msgstr ""
 
-msgid "If true, the image is filtered by blob area. Default: True."
+msgid "Si vrai, l'image est filtrée par l'aire des taches. Default: True."
 msgstr ""
 
-msgid "Min. area\\. The minimum blob area. Float higher than 0.0\\. Default: 25.0."
+msgid "Aire min. L'aire minimale des taches. Flottant supérieur à 0.0\\. Default: 25.0."
 msgstr ""
 
-msgid "Max. area\\. The maximum blob area. Float higher than 0.0\\. Default: 500.0."
+msgid "Aire max. L'aire maximale des taches. Flottant supérieur à 0.0\\. Default: 500.0."
 msgstr ""
 
-msgid "If true, the image is filtered by blob circularity. Default: False."
+msgid "Si vrai, l'image est filtrée par la circularité des taches. Default: False."
 msgstr ""
 
-msgid "Min. circularity\\. The minimum circularity of the blobs. Float between 0.0 and 1.0\\. Default: 0.8."
+msgid "Circularité min. La circularité minimale des taches. Flottant compris entre 0.0 et 1.0\\. Default: 0.8."
 msgstr ""
 
-msgid "Max. circularity\\. The maximum circularity of the blobs. Float between 0.0 and 1.0\\. Default: 1.0."
+msgid "Circularité max. La circularité maximale des taches. Flottant compris entre 0.0 et 1.0\\. Default: 1.0."
 msgstr ""
 
-msgid "If true, the image is filtered by blob inertia. Default: False."
+msgid "Si vrai, l'image est filtrée par l'inertie des taches. Default: False."
 msgstr ""
 
-msgid "Min. inertia ratio\\. The minimum inertia ratio of the blobs. Float between 0.0 and 1.0\\. Default: 0.6."
+msgid "Ratio d'inertie min. Le ratio d'inertie minimal des taches. Flottant compris entre 0.0 et 1.0\\. Default: 0.6."
 msgstr ""
 
-msgid "Max. inertia ratio\\. The maximum inertia ratio of the blobs. Float between 0.0 and 1.0\\. Default: 1.0."
+msgid "Ratio d'inertie max. Le ratio d'inertie maximal des taches. Flottant compris entre 0.0 et 1.0\\. Default: 1.0."
 msgstr ""
 
-msgid "If true, the image is filtered by blob convexity. Default: False."
+msgid "Si vrai, l'image est filtrée par la convexité des taches. Default: False."
 msgstr ""
 
-msgid "Min. convexity\\. The minimum convexity of the blobs. Float between 0.0 and 1.0\\. Default: 0.8."
+msgid "Convexité min. La convexité minimale des taches. Flottant compris entre 0.0 et 1.0\\. Default: 0.8."
 msgstr ""
 
-msgid "Max. convexity\\. The maximum convexity of the blobs. Float between 0.0 and 1.0\\. Default: 1.0."
+msgid "Convexité max. La convexité maximale des taches. Flottant compris entre 0.0 et 1.0\\. Default: 1.0."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`BlobOpenCVParam` with the fields set to the given values."
@@ -2251,13 +2278,13 @@ msgstr ""
 msgid "Circle Hough transform parameters"
 msgstr ""
 
-msgid "Radius\\ :subscript:`min`\\.  Integer higher than 0, non zero, unit: pixels\\. Default: None."
+msgid "Rayon\\ :subscript:`min`\\.  Entier supérieur à 0, non nul, unité : pixels\\. Default: None."
 msgstr ""
 
-msgid "Radius\\ :subscript:`max`\\.  Integer higher than 0, non zero, unit: pixels\\. Default: None."
+msgid "Rayon\\ :subscript:`max`\\.  Entier supérieur à 0, non nul, unité : pixels\\. Default: None."
 msgstr ""
 
-msgid "Minimal distance\\.  Integer higher than 0\\. Default: None."
+msgid "Distance minimale\\.  Entier supérieur à 0\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`HoughCircleParam` with the fields set to the given values."
@@ -2290,19 +2317,19 @@ msgstr ""
 msgid "Rotate parameters"
 msgstr ""
 
-msgid "Angle (°)\\.  Default: None."
+msgid "Angle (°)\\.  Flottant\\. Default: None."
 msgstr ""
 
 msgid "Single choice from: 'constant', 'nearest', 'reflect', 'wrap'. Default: 'constant'."
 msgstr ""
 
-msgid "Value used for points outside the boundaries of the input if mode is 'constant'\\. Default: 0.0."
+msgid "Valeur utilisée pour les points situés en dehors des frontières de l'image d'origine (si le mode est 'constant')\\. Flottant\\. Default: 0.0."
 msgstr ""
 
-msgid "Reshape the output array so that the input array is contained completely in the output\\. Default: False."
+msgid "Redimensionner l'image de destination de sorte qu'elle puisse contenir la totalité de l'image source\\. Default: False."
 msgstr ""
 
-msgid "Spline interpolation order\\. Integer between 0 and 5\\. Default: 3."
+msgid "Ordre\\. Ordre de l'interpolation de type spline\\. Entier compris entre 0 et 5\\. Default: 3."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`RotateParam` with the fields set to the given values."
@@ -2347,19 +2374,19 @@ msgstr ""
 msgid "Binning parameters"
 msgstr ""
 
-msgid "Cluster size (X)\\. Number of adjacent pixels to be combined together along x-axis. Integer higher than 2\\. Default: 2."
+msgid "Nombre de pixels (X)\\. Nombre de pixels adjacents à regrouper le long de l'axe des x. Entier supérieur à 2\\. Default: 2."
 msgstr ""
 
-msgid "Cluster size (Y)\\. Number of adjacent pixels to be combined together along y-axis. Integer higher than 2\\. Default: 2."
+msgid "Nombre de pixels (Y)\\. Nombre de pixels adjacents à regrouper le long de l'axe des y. Entier supérieur à 2\\. Default: 2."
 msgstr ""
 
-msgid "Single choice from: 'sum', 'average', 'median', 'min', 'max'. Default: 'sum'."
+msgid "Opération\\.  Single choice from: 'sum', 'average', 'median', 'min', 'max'. Default: 'sum'."
 msgstr ""
 
-msgid "Data type\\. Output image data type. Single choice from: 'dtype', 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'dtype'."
+msgid "Type de données\\. Type de données de l'image générée. Single choice from: 'dtype', 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'dtype'."
 msgstr ""
 
-msgid "Change pixel size so that overall image size remains the same. Default: False."
+msgid "Modification de la taille des pixels de sorte que les dimensions de l'images restent les mêmes après l'opération. Default: False."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`BinningParam` with the fields set to the given values."
@@ -2389,25 +2416,37 @@ msgstr ""
 msgid "Decorator to mark a function as a Sigima computation function."
 msgstr ""
 
-msgid "Adds a marker attribute (ComputationMetadata) to the wrapped function."
+msgid "This decorator enables two calling conventions:"
 msgstr ""
 
-msgid "Makes the signature explicit: parameters of any guidata DataSet used as argument become keyword-only arguments, so the function can be called as `func(obj, param1=..., param2=..., ...)`."
+msgid "With a guidata DataSet object as a parameter (classic style)."
 msgstr ""
 
-msgid "Maintains backward compatibility: a DataSet instance can still be passed directly."
+msgid "With the DataSet items passed as individual keyword arguments (expanded style)."
 msgstr ""
 
-msgid "Signature shown in IDE and help() reflects all available parameters."
+msgid "The decorator ensures:"
 msgstr ""
 
-msgid "Optional name to override the function name in metadata."
+msgid "An explicit and informative function signature (including all DataSet items as keyword arguments)."
 msgstr ""
 
-msgid "Optional docstring override or additional description."
+msgid "A Sphinx-friendly docstring documenting both call styles."
 msgstr ""
 
-msgid "The wrapped function, tagged with a marker attribute and an explicit signature."
+msgid "Pickle-compatibility (crucial for multiprocessing)."
+msgstr ""
+
+msgid "Conflict detection if both DataSet instance and expanded keyword arguments are used simultaneously."
+msgstr ""
+
+msgid "Optional custom name for metadata."
+msgstr ""
+
+msgid "Optional custom description or docstring."
+msgstr ""
+
+msgid "The decorated, enhanced computation function."
 msgstr ""
 
 msgid "Check if a function is a Sigima computation function."

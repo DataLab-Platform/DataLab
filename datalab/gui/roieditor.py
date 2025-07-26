@@ -227,7 +227,9 @@ class BaseROIEditor(
         parent: Parent plot dialog
         obj: Object to edit (:class:`sigima.objects.SignalObj` or
          :class:`sigima.objects.ImageObj`)
-        mode: If "extract", the dialog is in "extract mode" (extracting ROIs)
+        mode: Mode of operation, either "apply" (define ROI, then apply it to
+         selected objects), "extract" (define ROI, then extract data from it),
+         or "define" (define ROI without applying or extracting).
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)
     """
@@ -240,10 +242,14 @@ class BaseROIEditor(
         self,
         parent: PlotDialog,
         obj: TypeObj,
-        mode: Literal["apply", "extract"] = "apply",
+        mode: Literal["apply", "extract", "define"] = "apply",
         item: TypePlotItem | None = None,
     ) -> None:
         super().__init__(parent)
+        assert mode in ("apply", "extract", "define"), (
+            f"Invalid mode: {mode}. Must be either 'apply', 'extract' or 'define'."
+        )
+
         self.plot_dialog = parent
         parent.accepted.connect(self.dialog_accepted)
         self.plot = parent.get_plot()
@@ -253,7 +259,14 @@ class BaseROIEditor(
         self.__modified: bool | None = None
         self._tools: list[InteractiveTool] = []
 
-        roi = obj.roi
+        if mode == "define":
+            # In "define" mode, we do not want to show the object's ROI to avoid any
+            # confusion with the ROI being defined
+            roi = None
+        else:
+            # In "apply" or "extract" mode, we want to show the object's ROI
+            # if it exists, otherwise create a new empty ROI
+            roi = obj.roi
         if roi is None:
             roi = self.get_obj_roi_class()()
         if roi.singleobj is None:
@@ -317,8 +330,9 @@ class BaseROIEditor(
     def modified(self, value: bool) -> None:
         """Set dialog modified state"""
         self.__modified = value
-        if self.mode == "extract":
-            #  In "extract mode", OK button is enabled when at least one ROI is defined
+        if self.mode in ("extract", "define"):
+            # In "extract" mode or in "define" mode, OK button is enabled
+            # when at least one ROI is defined
             value = value and len(self.roi_items) > 0
         self.plot_dialog.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(value)
 
@@ -592,7 +606,13 @@ class ImageROIEditor(
         """Setup ROI editor widget"""
         super().setup_widget()
         item: MaskedImageItem = self.plot.get_items(item_type=IImageItemType)[0]
-        item.set_mask_visible(False)
+
+        # In "define" mode, we want to show the mask that is associated with the
+        # image's ROI, if it exists, because the ROI that is being defined has nothing
+        # to do with the image's ROI: it is just a temporary ROI that will for example
+        # be used in a processing function, so the user need to visualize the mask that
+        # corresponds to the data on which the processing function will be applied.
+        item.set_mask_visible(self.mode == "define")
 
     def update_roi_titles(self) -> None:
         """Update ROI annotation titles"""

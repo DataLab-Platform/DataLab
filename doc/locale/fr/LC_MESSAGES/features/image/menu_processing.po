@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-20 20:28+0200\n"
+"POT-Creation-Date: 2025-07-26 14:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid "Processing Images"
 msgstr "Traitement des images"
@@ -601,6 +601,15 @@ msgstr "Filtre de Butterworth"
 
 msgid "Perform Butterworth filter on an image (implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
 msgstr "Calcule le résultat d'un filtre de Butterworth sur l'image (implémentation basée sur `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+
+msgid "Erase area"
+msgstr "Gommer une zone"
+
+msgid "Erase an area in the image as defined by a region of interest (ROI)."
+msgstr "Gomme une zone de l'image définie par une région d'intérêt (ROI)."
+
+msgid "The region to erase is defined by the user through a dialog box. It can consist of a single ROI or multiple ROIs with various shapes (rectangular, circular, etc.). Note that the ROI defined here is not bound to any object; it is used solely to specify the area to erase in the image. In particular, it is independent of the image’s ROI, if any (the latter is shown in the dialog box as a masked area)."
+msgstr "La région à effacer est définie par l'utilisateur via une boîte de dialogue. Elle peut consister en une seule ROI ou plusieurs ROIs avec différentes formes (rectangulaire, circulaire, etc.). Notez que la ROI définie ici n'est liée à aucun objet ; elle est utilisée uniquement pour spécifier la zone à effacer dans l'image. En particulier, elle est indépendante de la ROI de l'image, le cas échéant (cette dernière est affichée dans la boîte de dialogue comme une zone masquée)."
 
 msgid "Resize"
 msgstr "Redimensionner"

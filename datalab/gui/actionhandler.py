@@ -1093,6 +1093,13 @@ class ImageActionHandler(BaseActionHandler):
                 )
                 self.action_for("canny")
             self.action_for("butterworth")
+            self.new_action(
+                _("Erase area") + "...",
+                triggered=self.panel.processor.compute_erase,
+                icon_name="erase.svg",
+                separator=True,
+                tip=_("Erase area in the image as defined by a region of interest"),
+            )
             with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
                 self.action_for("freq_fft")
 

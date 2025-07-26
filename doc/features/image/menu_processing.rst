@@ -389,6 +389,20 @@ Butterworth filter
 Perform Butterworth filter on an image
 (implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)
 
+Erase area
+^^^^^^^^^^
+
+Erase an area in the image as defined by a region of interest (ROI).
+
+.. note::
+
+    The region to erase is defined by the user through a dialog box. It can consist of
+    a single ROI or multiple ROIs with various shapes (rectangular, circular, etc.).
+    Note that the ROI defined here is not bound to any object; it is used solely to
+    specify the area to erase in the image. In particular, it is independent of the
+    image’s ROI, if any (the latter is shown in the dialog box as a masked area).
+
+
 Resize
 ^^^^^^
 

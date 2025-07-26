@@ -1347,16 +1347,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     # ------Analysis-------------------------------------------------------------------
 
     def edit_regions_of_interest(
-        self, mode: Literal["apply", "extract"] = "apply"
+        self, mode: Literal["apply", "extract", "define"] = "apply"
     ) -> TypeROI | None:
         """Define Region Of Interest (ROI).
 
         Args:
-            mode: If "extract", ROI is extracted from data. Defaults to "apply".
+            mode: Mode of operation, either "apply" (define ROI, then apply it to
+             selected objects), "extract" (define ROI, then extract data from it),
+             or "define" (define ROI without applying or extracting).
 
         Returns:
             ROI object or None if ROI dialog has been canceled.
         """
+        assert mode in ("apply", "extract", "define"), (
+            f"Invalid mode: {mode}. Must be either 'apply', 'extract' or 'define'."
+        )
         # Expected behavior:
         # -----------------
         # * If first selected obj has a ROI, use this ROI as default but open
@@ -1377,7 +1382,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         ):
             if modified:
                 # If ROI has been modified, save ROI (not in "extract" mode)
-                if edited_roi.is_empty():
+                if edited_roi.is_empty() and mode != "define":
+                    # If ROI is empty, remove it from all selected objects
+                    # (not in "define" mode because the ROI is just defined and used
+                    # in a processing function for example: it's not bound to any
+                    # object yet)
                     for obj_i in objs:
                         obj_i.roi = None
                 else:

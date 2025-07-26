@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-22 16:03+0200\n"
+"POT-Creation-Date: 2025-07-26 14:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -44,6 +44,18 @@ msgstr "Elle est implémentée dans la fonction `sigima.proc.image.freq_fft` (n�
 
 msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images"
 msgstr "Ceci clôture le ticket [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images"
+
+msgid "New \"Erase area\" feature"
+msgstr "Nouvelle fonctionnalité \"Gommer une zone\""
+
+msgid "This feature allows to erase an area in an image as defined by a region of interest"
+msgstr "Cette fonctionnalité permet d'effacer une zone d'une image telle que définie par une région d'intérêt"
+
+msgid "It is implemented in the `sigima.proc.image.erase` function (requires Sigima v0.3)"
+msgstr "Elle est implémentée dans la fonction `sigima.proc.image.erase` (nécessite Sigima v0.3)"
+
+msgid "This closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Add support for background subtraction and inpainting on ROI"
+msgstr "Ceci clôture le ticket [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Ajout de la prise en charge de la soustraction d'arrière-plan et de l'inpainting sur la ROI"
 
 msgid "New signal processing features:"
 msgstr "Nouvelles fonctionnalités de traitement de signal :"

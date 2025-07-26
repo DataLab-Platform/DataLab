@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-22 16:54+0200\n"
+"POT-Creation-Date: 2025-07-26 14:38+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -438,6 +438,12 @@ msgstr "Tous les filtres de contours"
 
 msgid "Compute all edges filters"
 msgstr "Calcule tous les filtres de contours"
+
+msgid "Erase area"
+msgstr "Gommer une zone"
+
+msgid "Erase area in the image as defined by a region of interest"
+msgstr "Gomme une zone de l'image définie par une région d'intérêt (ROI)."
 
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
@@ -2428,3 +2434,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

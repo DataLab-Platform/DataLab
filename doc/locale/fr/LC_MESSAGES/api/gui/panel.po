@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 18:13+0200\n"
+"POT-Creation-Date: 2025-07-26 14:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -424,7 +424,7 @@ msgstr ""
 msgid "Get ROI data (array) from specific dialog box."
 msgstr ""
 
-msgid "Extract ROI from data"
+msgid "Mode of operation, either \"apply\" (define ROI, then apply it to selected objects), \"extract\" (define ROI, then extract data from it), or \"define\" (define ROI without applying or extracting)."
 msgstr ""
 
 msgid "A tuple containing the ROI object and a boolean indicating whether the dialog was accepted or not."
@@ -472,38 +472,41 @@ msgstr ""
 msgid "Signal object"
 msgstr ""
 
-msgid "Default: None."
+msgid "Titre du signal\\.  Chaîne\\. Default: 'Sans titre'."
+msgstr ""
+
+msgid "guidata.dataset.dataitems.StringItem"
+msgstr ""
+
+msgid "Données\\.  Default: None."
 msgstr ""
 
 msgid "guidata.dataset.dataitems.FloatArrayItem"
 msgstr ""
 
 #, python-brace-format
-msgid "Default: {}."
+msgid "Métadonnées\\.  Default: {}."
 msgstr ""
 
 msgid "guidata.dataset.dataitems.DictItem"
 msgstr ""
 
-msgid "Default: ''."
+msgid "Chaîne\\. Default: ''."
 msgstr ""
 
-msgid "guidata.dataset.dataitems.StringItem"
+msgid "Titre\\.  Chaîne\\. Default: ''."
 msgstr ""
 
-msgid "Signal title\\.  Default: 'Untitled'."
+msgid "Unité\\.  Chaîne\\. Default: ''."
 msgstr ""
 
-msgid "Title\\.  Default: ''."
-msgstr ""
-
-msgid "Lower bound\\.  Default: None."
+msgid "Borne inférieure\\.  Flottant\\. Default: None."
 msgstr ""
 
 msgid "guidata.dataset.dataitems.FloatItem"
 msgstr ""
 
-msgid "Upper bound\\.  Default: None."
+msgid "Borne supérieure\\.  Flottant\\. Default: None."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`SignalObj` with the fields set to the given values."
@@ -539,19 +542,19 @@ msgstr ""
 msgid "Image object"
 msgstr ""
 
-msgid "X\\ :subscript:`0`\\.  Default: 0.0."
+msgid "X\\ :subscript:`0`\\.  Flottant\\. Default: 0.0."
 msgstr ""
 
-msgid "Y\\ :subscript:`0`\\.  Default: 0.0."
+msgid "Y\\ :subscript:`0`\\.  Flottant\\. Default: 0.0."
 msgstr ""
 
-msgid "Δx\\.  Float, non zero\\. Default: 1.0."
+msgid "Δx\\.  Flottant, non nul\\. Default: 1.0."
 msgstr ""
 
-msgid "Δy\\.  Float, non zero\\. Default: 1.0."
+msgid "Δy\\.  Flottant, non nul\\. Default: 1.0."
 msgstr ""
 
-msgid "Image title\\.  Default: 'Untitled'."
+msgid "Titre de l'image\\.  Chaîne\\. Default: 'Sans titre'."
 msgstr ""
 
 msgid "Returns a new instance of :py:class:`ImageObj` with the fields set to the given values."

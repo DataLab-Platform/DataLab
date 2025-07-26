@@ -1309,12 +1309,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         return dlg
 
     def get_roi_editor_output(
-        self, mode: Literal["apply", "extract"] = "apply"
+        self, mode: Literal["apply", "extract", "define"] = "apply"
     ) -> tuple[TypeROI, bool] | None:
         """Get ROI data (array) from specific dialog box.
 
         Args:
-            mode: If "extract", the dialog is in "extract mode" (extracting ROIs)
+            mode: Mode of operation, either "apply" (define ROI, then apply it to
+             selected objects), "extract" (define ROI, then extract data from it),
+             or "define" (define ROI without applying or extracting).
 
         Returns:
             A tuple containing the ROI object and a boolean indicating whether the

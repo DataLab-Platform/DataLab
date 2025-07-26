@@ -230,6 +230,13 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             _("Gaussian frequency filter"),
             sigima_image.FreqFFTParam,
         )
+        self.register_1_to_1(
+            sigima_image.erase,
+            _("Erase area"),
+            ROI2DParam,
+            comment=_("Erase area in the image as defined by a region of interest"),
+            icon_name="erase.svg",
+        )
         # Fourier analysis
         self.register_1_to_1(
             sigima_image.zero_padding,
@@ -698,6 +705,33 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.run_feature("offset_correction", param)
 
     @qt_try_except()
+    def compute_erase(self, roi: ImageROI | None = None) -> None:
+        """Erase area in the image as defined by a region of interest
+
+        Args:
+            roi: Region of interest to erase
+        """
+        if roi is None or roi.is_empty():
+            roi = self.edit_regions_of_interest(mode="define")
+        if roi is None or roi.is_empty():
+            return
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        params = roi.to_params(obj)
+
+        # TODO: This `compute_1_to_1` call is not ideal, as it passes a list of
+        # parameter sets (`params` is a list of `DataSet` objects) instead of a single
+        # parameter set as expected by the method. Currently, the method implementation
+        # is compatible with this call, and it simply passes the second argument through
+        # to the `extract_rois` function. However, this should be rectified in the
+        # future to ensure that the method signature and its usage are consistent.
+        # The question is: should we pass a list of `DataSet` objects or directly a
+        # `ImageROI` object?
+        # (same as `_extract_multiple_roi_in_single_object`)
+        self.compute_1_to_1(
+            sigima_image.erase, params, title=_("Erase area"), edit=False
+        )
+
+    @qt_try_except()
     def compute_all_threshold(self) -> None:
         """Compute all threshold algorithms
         using the following functions:
@@ -832,6 +866,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         # is compatible with this call, and it simply passes the second argument through
         # to the `extract_rois` function. However, this should be rectified in the
         # future to ensure that the method signature and its usage are consistent.
+        # The question is: should we pass a list of `DataSet` objects or directly a
+        # `ImageROI` object?
+        # (same as `compute_erase`)
         self.compute_1_to_1(sigima_image.extract_rois, params, title=_("Extract ROI"))
 
     # ------Image Analysis
