@@ -20,12 +20,12 @@ from sigima.objects import (
     ImageObj,
     ImageROI,
     NewImageParam,
-    SignalObj,
     SignalROI,
     create_image_roi,
     create_signal_roi,
 )
 from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
+from sigima.tests.helpers import print_obj_data_dimensions
 from skimage import draw
 
 from datalab.env import execenv
@@ -237,38 +237,14 @@ def create_test_image_with_roi(newimageparam: NewImageParam) -> ImageObj:
     return ima
 
 
-def array_2d_to_str(arr: np.ndarray) -> str:
-    """Return 2-D array characteristics as string"""
-    if arr.size == 0:
-        return "Empty array!"
-    return f"{arr.shape[0]} x {arr.shape[1]} array (min={arr.min()}, max={arr.max()})"
+def test_signal_roi_app(screenshots: bool = False) -> None:
+    """Run Signal ROI application test scenario
 
-
-def array_1d_to_str(arr: np.ndarray) -> str:
-    """Return 1-D array characteristics as string"""
-    if arr.size == 0:
-        return "Empty array!"
-    return f"{arr.size} columns array (min={arr.min()}, max={arr.max()})"
-
-
-def print_obj_shapes(obj):
-    """Print object and associated ROI array shapes"""
-    execenv.print(f"  Accessing object '{obj.title}':")
-    func = array_1d_to_str if isinstance(obj, SignalObj) else array_2d_to_str
-    execenv.print(f"    data: {func(obj.data)}")
-    if obj.roi is not None:
-        for idx in range(len(obj.roi)):
-            roi_data = obj.get_data(idx)
-            if isinstance(obj, SignalObj):
-                roi_data = roi_data[1]  # y data
-            execenv.print(f"    ROI[{idx}]: {func(roi_data)}")
-
-
-def test_roi_app(screenshots: bool = False):
-    """Run ROI application test scenario"""
+    Args:
+        screenshots: If True, take screenshots during the test.
+    """
     with datalab_test_app_context(console=False) as win:
-        execenv.print("ROI application test:")
-        # === Signal ROI extraction test ===
+        execenv.print("Signal ROI application test:")
         panel = win.signalpanel
         sig1 = create_paracetamol_signal(SIZE)
         panel.add_object(sig1)
@@ -278,13 +254,18 @@ def test_roi_app(screenshots: bool = False):
         for singleobj in (False, True):
             sig2_i = sig2.copy()
             panel.add_object(sig2_i)
-            print_obj_shapes(sig2_i)
+            print_obj_data_dimensions(sig2_i, indent=1)
             panel.processor.edit_regions_of_interest()
             if screenshots:
                 win.statusBar().hide()
                 win.take_screenshot("s_roi_signal")
             __run_signal_computations(panel, singleobj=singleobj)
-        # === Image ROI extraction test ===
+
+
+def test_image_roi_app(screenshots: bool = False):
+    """Run Image ROI application test scenario"""
+    with datalab_test_app_context(console=False) as win:
+        execenv.print("Image ROI application test:")
         panel = win.imagepanel
         param = NewImageParam.create(height=SIZE, width=SIZE)
         ima1 = create_multigaussian_image(param)
@@ -294,7 +275,7 @@ def test_roi_app(screenshots: bool = False):
         for singleobj in (False, True):
             ima2_i = ima2.copy()
             panel.add_object(ima2_i)
-            print_obj_shapes(ima2_i)
+            print_obj_data_dimensions(ima2_i)
             panel.processor.edit_regions_of_interest()
             if screenshots:
                 win.statusBar().hide()
@@ -303,4 +284,5 @@ def test_roi_app(screenshots: bool = False):
 
 
 if __name__ == "__main__":
-    test_roi_app(screenshots=True)
+    test_signal_roi_app(screenshots=True)
+    test_image_roi_app(screenshots=True)
