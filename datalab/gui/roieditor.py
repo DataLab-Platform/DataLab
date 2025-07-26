@@ -479,7 +479,9 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
         parent: Parent plot dialog
         obj: Object to edit (:class:`sigima.objects.SignalObj` or
          :class:`sigima.objects.ImageObj`)
-        mode: If "extract", the dialog is in "extract mode" (extracting ROIs)
+        mode: Mode of operation, either "apply" (define ROI, then apply it to
+         selected objects), "extract" (define ROI, then extract data from it),
+         or "define" (define ROI without applying or extracting).
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)
     """
@@ -548,7 +550,9 @@ class ImageROIEditor(
         parent: Parent plot dialog
         obj: Object to edit (:class:`sigima.objects.SignalObj` or
          :class:`sigima.objects.ImageObj`)
-        mode: If "extract", the dialog is in "extract mode" (extracting ROIs)
+        mode: Mode of operation, either "apply" (define ROI, then apply it to
+         selected objects), "extract" (define ROI, then extract data from it),
+         or "define" (define ROI without applying or extracting).
         item: Optional plot item to add to the plot (if None, a new item is created
          from the object)
     """
