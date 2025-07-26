@@ -13,7 +13,7 @@ from sigima.tests.data import create_multigaussian_image
 
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
-from datalab.tests.features.common.roi_app_test import create_test_image_with_roi
+from datalab.tests.features.image.roi_app_test import create_test_image_with_roi
 
 
 def test_contour_app():

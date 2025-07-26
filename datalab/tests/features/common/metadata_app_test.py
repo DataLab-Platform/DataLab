@@ -22,7 +22,7 @@ from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
 from datalab.tests import datalab_test_app_context
-from datalab.tests.features.common import roi_app_test
+from datalab.tests.features.image.roi_app_test import create_test_image_with_roi
 
 
 def __run_signal_computations(panel: SignalPanel):
@@ -72,7 +72,7 @@ def test_metadata_app():
         # === Image metadata features test ===
         panel = win.imagepanel
         param = sigima.objects.NewImageParam.create(height=size, width=size)
-        ima = roi_app_test.create_test_image_with_roi(param)
+        ima = create_test_image_with_roi(param)
         panel.add_object(ima)
         __run_image_computations(panel)
         __test_metadata_features(panel)
