@@ -15,6 +15,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * This feature allows to erase an area in an image as defined by a region of interest
     * It is implemented in the `sigima.proc.image.erase` function (requires Sigima v0.3)
     * This closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Add support for background subtraction and inpainting on ROI
+  * Improved centroid computation:
+    * New adaptive method (`get_centroid_auto`) selects the most reliable centroid estimation (Fourier or fallback) based on internal consistency checks with projected profile methods.
+    * Projected profile-based centroid (`get_projected_profile_centroid`) now available for robust, fast, and noise-tolerant estimation — performs well in truncated or asymmetric images.
+    * GUI barycenter tool now uses the auto-adaptive method by default for better accuracy and reliability in edge cases.
+    * See [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Inaccurate centroid estimation in edge cases with `get_centroid_fourier`
+    * In interactive tools, the centroid is now computed using the `measure.centroid` function from `scikit-image`, which provides a better compromise between speed and accuracy and is suitable for real-time applications.
 
 * New signal processing features:
   * Zero padding:

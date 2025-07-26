@@ -46,6 +46,7 @@ from plotpy.tools import (
     RectZoomTool,
     SelectTool,
 )
+from skimage import measure
 
 try:
     from plotpy.tools import YRangeCursorTool
@@ -59,7 +60,6 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QApplication, QMainWindow
 from sigima.objects import create_signal
-from sigima.tools.image import get_centroid_fourier
 from sigima.tools.signal.pulse import fwhm
 
 from datalab.config import APP_NAME, Conf, _
@@ -185,7 +185,7 @@ def get_more_image_stats(
                     densityfmt += " " + zunit + "/" + xunit + "²"
                 info = info + f"<br>ρ = {densityfmt % density}"
 
-    c_i, c_j = get_centroid_fourier(data)
+    c_i, c_j = measure.centroid(data)
     c_x, c_y = item.get_plot_coordinates(c_j + ix0, c_i + iy0)
     info += "<br>" + "<br>".join(
         [

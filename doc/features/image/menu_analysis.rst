@@ -66,9 +66,26 @@ Parameters are:
 Centroid
 ^^^^^^^^
 
-Compute image centroid using a Fourier transform method
-(as discussed by `Weisshaar et al. <http://www.mnd-umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf>`_).
-This method is quite insensitive to background noise.
+Compute the centroid of the image using a robust adaptive algorithm.
+
+DataLab uses the :py:func:`sigima.tools.image.get_centroid_auto` function to estimate
+the image centroid.
+
+This function combines the robustness of a Fourier-based approach
+(as discussed by `Weisshaar et al. <http://www.mnd-umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf>`_)
+with fallback mechanisms designed to handle pathological cases, such as:
+
+- truncated or asymmetric shapes,
+- off-center objects,
+- strong background noise.
+
+Internally, :py:func:`sigima.tools.image.get_centroid_auto` compares the
+Fourier result with two alternative estimators (a projected profile-based method
+:py:func:`sigima.tools.image.get_projected_profile_centroid` and a standard centroid
+from `scikit-image`), and selects the most consistent one.
+
+This strategy ensures accurate and stable results across a wide range
+of image types — from clean laboratory data to noisy or partial acquisitions.
 
 Minimum enclosing circle center
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

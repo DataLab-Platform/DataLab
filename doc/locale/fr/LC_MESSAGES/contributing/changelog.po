@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 14:38+0200\n"
+"POT-Creation-Date: 2025-07-26 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -33,11 +33,11 @@ msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"
 
-msgid "Added new \"Gaussian frequency filter\" feature:"
-msgstr "Ajout d'une nouvelle fonctionnalité de \"filtre de fréquence gaussien\" :"
+msgid "New \"Gaussian frequency filter\" feature:"
+msgstr "Nouvelle fonctionnalité \"Filtre de fréquence gaussien\""
 
 msgid "This feature allows to filter an image in the frequency domain using a Gaussian filter"
-msgstr ""
+msgstr "Cette fonctionnalité permet de filtrer une image dans le domaine fréquentiel à l'aide d'un filtre gaussien."
 
 msgid "It is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)"
 msgstr "Elle est implémentée dans la fonction `sigima.proc.image.freq_fft` (nécessite Sigima v0.3)"
@@ -45,8 +45,8 @@ msgstr "Elle est implémentée dans la fonction `sigima.proc.image.freq_fft` (n�
 msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images"
 msgstr "Ceci clôture le ticket [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images"
 
-msgid "New \"Erase area\" feature"
-msgstr "Nouvelle fonctionnalité \"Gommer une zone\""
+msgid "New \"Erase area\" feature:"
+msgstr "Nouvelle fonctionnalité \"Gommer une zone\" :"
 
 msgid "This feature allows to erase an area in an image as defined by a region of interest"
 msgstr "Cette fonctionnalité permet d'effacer une zone d'une image telle que définie par une région d'intérêt"
@@ -56,6 +56,24 @@ msgstr "Elle est implémentée dans la fonction `sigima.proc.image.erase` (néce
 
 msgid "This closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Add support for background subtraction and inpainting on ROI"
 msgstr "Ceci clôture le ticket [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Ajout de la prise en charge de la soustraction d'arrière-plan et de l'inpainting sur la ROI"
+
+msgid "Improved centroid computation:"
+msgstr "Amélioration du calcul du barycentre :"
+
+msgid "New adaptive method (`get_centroid_auto`) selects the most reliable centroid estimation (Fourier or fallback) based on internal consistency checks with projected profile methods."
+msgstr "Nouvelle méthode adaptative (`get_centroid_auto`) sélectionne l'estimation de barycentre la plus fiable (Fourier ou de secours) basée sur des vérifications de cohérence interne avec les méthodes de profil projeté."
+
+msgid "Projected profile-based centroid (`get_projected_profile_centroid`) now available for robust, fast, and noise-tolerant estimation — performs well in truncated or asymmetric images."
+msgstr "Le barycentre basé sur le profil projeté (`get_projected_profile_centroid`) est maintenant disponible pour une estimation robuste, rapide et tolérante au bruit — il fonctionne bien dans les images tronquées ou asymétriques."
+
+msgid "GUI barycenter tool now uses the auto-adaptive method by default for better accuracy and reliability in edge cases."
+msgstr "L'outil de barycentre de l'interface graphique utilise désormais la méthode auto-adaptative par défaut pour une meilleure précision et fiabilité dans les cas limites."
+
+msgid "See [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Inaccurate centroid estimation in edge cases with `get_centroid_fourier`"
+msgstr "Voir [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Estimation inexacte du barycentre dans les cas limites avec `get_centroid_fourier`"
+
+msgid "In interactive tools, the centroid is now computed using the `measure.centroid` function from `scikit-image`, which provides a better compromise between speed and accuracy and is suitable for real-time applications."
+msgstr "Dans les outils interactifs, le barycentre est désormais calculé en utilisant la fonction `measure.centroid` de `scikit-image`, qui offre un meilleur compromis entre vitesse et précision et convient aux applications en temps réel."
 
 msgid "New signal processing features:"
 msgstr "Nouvelles fonctionnalités de traitement de signal :"
