@@ -16,7 +16,7 @@ from plotpy.coords import axes_to_canvas
 from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
 from sigima.objects import NewImageParam
-from sigima.tests.data import create_multigauss_image
+from sigima.tests.data import create_multigaussian_image
 
 from datalab.gui.docks import profile_to_signal
 from datalab.tests import cdltest_app_context
@@ -27,7 +27,7 @@ def test_image_tools_app():
     with cdltest_app_context() as win:
         panel = win.imagepanel
         newparam = NewImageParam.create(height=200, width=200)
-        ima = create_multigauss_image(newparam)
+        ima = create_multigaussian_image(newparam)
         panel.add_object(ima)
         panel.set_current_object_title(f"Test image for {osp.basename(__file__)}")
         plotwidget = panel.plothandler.plotwidget

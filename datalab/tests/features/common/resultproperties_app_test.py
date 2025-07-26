@@ -16,7 +16,7 @@ from datalab.tests import cdltest_app_context
 
 def create_image_with_resultproperties():
     """Create test image with result properties"""
-    image = test_data.create_multigauss_image()
+    image = test_data.create_multigaussian_image()
     for prop in test_data.create_resultproperties():
         prop.add_to(image)
     return image

@@ -22,7 +22,7 @@ from guidata.qthelpers import qt_app_context
 from plotpy.plot import PlotWindow
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageDatatypes, NewImageParam
-from sigima.tests.data import create_2d_random, create_noisygauss_image
+from sigima.tests.data import create_2d_random, create_noisy_gaussian_image
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.env import execenv
@@ -96,7 +96,7 @@ def test_multiprocessing1(iterations: int = 4) -> None:
         param = NewImageParam.create(
             height=1000, width=1000, dtype=ImageDatatypes.UINT16
         )
-        image = create_noisygauss_image(param, add_annotations=True)
+        image = create_noisy_gaussian_image(param, add_annotations=True)
         win.get_plot().add_item(create_adapter_from_object(image).make_item())
         worker = Worker()
         with create_progress_bar(win, "Computing", max_=iterations) as progress:

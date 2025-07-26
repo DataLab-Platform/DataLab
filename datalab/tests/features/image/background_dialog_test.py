@@ -16,7 +16,7 @@ import sigima.params
 import sigima.proc.image as sigima_image
 from guidata.qthelpers import exec_dialog, qt_app_context, qt_wait_until
 from sigima.tests import vistools
-from sigima.tests.data import create_noisygauss_image
+from sigima.tests.data import create_noisy_gaussian_image
 
 from datalab.env import execenv
 from datalab.widgets.imagebackground import ImageBackgroundDialog
@@ -37,7 +37,7 @@ def wait_for_rect_coords(dlg: ImageBackgroundDialog) -> bool:
 def test_image_background_selection() -> None:
     """Image background selection test."""
     with qt_app_context():
-        img = create_noisygauss_image()
+        img = create_noisy_gaussian_image()
         dlg = ImageBackgroundDialog(img)
         dlg.resize(640, 480)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
@@ -54,7 +54,7 @@ def test_image_background_selection() -> None:
 def test_image_offset_correction_with_background_dialog() -> None:
     """Image offset correction interactive test using the background dialog."""
     with qt_app_context():
-        i1 = create_noisygauss_image()
+        i1 = create_noisy_gaussian_image()
         dlg = ImageBackgroundDialog(i1)
         ok = exec_dialog(dlg)
         if ok:

@@ -25,7 +25,7 @@ from sigima.objects import (
     create_image_roi,
     create_signal_roi,
 )
-from sigima.tests.data import create_multigauss_image, create_paracetamol_signal
+from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 from skimage import draw
 
 from datalab.env import execenv
@@ -228,7 +228,7 @@ def create_test_image_with_roi(newimageparam: NewImageParam) -> ImageObj:
     Returns:
         sigima.ImageObj: Image object with ROIs
     """
-    ima = create_multigauss_image(newimageparam)
+    ima = create_multigaussian_image(newimageparam)
     ima.data += 1  # Ensure that the image has non-zero values (for ROI check tests)
     roi = create_image_roi("rectangle", IROI1)
     roi.add_roi(create_image_roi("circle", IROI2))
@@ -287,7 +287,7 @@ def test_roi_app(screenshots: bool = False):
         # === Image ROI extraction test ===
         panel = win.imagepanel
         param = NewImageParam.create(height=SIZE, width=SIZE)
-        ima1 = create_multigauss_image(param)
+        ima1 = create_multigaussian_image(param)
         panel.add_object(ima1)
         __run_image_computations(panel)
         ima2 = create_test_image_with_roi(param)

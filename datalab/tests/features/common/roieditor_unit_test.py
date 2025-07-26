@@ -13,7 +13,7 @@ import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
 from plotpy.plot import PlotDialog
 from sigima.objects import ImageROI, create_image_roi, create_signal_roi
-from sigima.tests.data import create_multigauss_image, create_paracetamol_signal
+from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
 from datalab.env import execenv
 from datalab.gui.panel.image import ImagePanel
@@ -52,7 +52,7 @@ def test_image_roi_editor() -> None:
     cls = ImageROIEditor
     title = f"Testing {cls.__name__}"
     options = ImagePanel.ROIDIALOGOPTIONS
-    obj = create_multigauss_image()
+    obj = create_multigaussian_image()
     obj.roi = create_image_roi_example()
     with qt_app_context(exec_loop=False):
         execenv.print(title)

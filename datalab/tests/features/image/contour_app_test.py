@@ -9,7 +9,7 @@ Contour finding application test
 
 import sigima.params
 from sigima.objects import NewImageParam
-from sigima.tests.data import create_multigauss_image
+from sigima.tests.data import create_multigaussian_image
 
 from datalab.env import execenv
 from datalab.tests import cdltest_app_context, take_plotwidget_screenshot
@@ -22,7 +22,7 @@ def test_contour_app():
     with cdltest_app_context() as win:
         panel = win.imagepanel
         for shape in ("polygon", "circle", "ellipse"):
-            ima1 = create_multigauss_image(newparam)
+            ima1 = create_multigaussian_image(newparam)
             ima1.set_metadata_option("colormap", "gray")
             panel.add_object(ima1)
             param = sigima.params.ContourShapeParam.create(shape=shape)

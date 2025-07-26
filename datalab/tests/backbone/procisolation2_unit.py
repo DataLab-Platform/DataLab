@@ -19,7 +19,7 @@ from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.objects import NewImageParam
-from sigima.tests.data import create_2d_random, create_noisygauss_image
+from sigima.tests.data import create_2d_random, create_noisy_gaussian_image
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.env import execenv
@@ -51,7 +51,7 @@ class MainWindow(QW.QMainWindow):
 
         # Create a test image and add it to the plot
         param = NewImageParam.create(height=1000, width=1000)
-        image = create_noisygauss_image(param, add_annotations=True)
+        image = create_noisy_gaussian_image(param, add_annotations=True)
         self.imageitem = create_adapter_from_object(image).make_item()
         self.imagewidget.plot.add_item(self.imageitem)
 

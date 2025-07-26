@@ -171,8 +171,8 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
             p = NewImageParam.create(height=2000, width=2000, title=self.imatitle)
             for func in (
                 test_data.create_sincos_image,
-                test_data.create_noisygauss_image,
-                test_data.create_multigauss_image,
+                test_data.create_noisy_gaussian_image,
+                test_data.create_multigaussian_image,
             ):
                 obj = func(p)
                 self.add_object(obj)

@@ -17,7 +17,7 @@ Testing the profile extraction features of the image panel:
 # guitest: show
 
 import sigima.params
-from sigima.tests.data import create_noisygauss_image, get_test_image
+from sigima.tests.data import create_noisy_gaussian_image, get_test_image
 
 from datalab.tests import cdltest_app_context
 
@@ -52,7 +52,7 @@ def test_profile():
             row1=10, col1=10, row2=102, col2=131
         )
         proc.compute_segment_profile(segprofparam)
-        image2 = create_noisygauss_image(center=(0.0, 0.0), add_annotations=False)
+        image2 = create_noisy_gaussian_image(center=(0.0, 0.0), add_annotations=False)
         panel.add_object(image2)
         for center, x0, y0 in (
             (None, None, None),

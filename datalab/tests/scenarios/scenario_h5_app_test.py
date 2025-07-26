@@ -25,7 +25,7 @@ This scenario executes the following steps:
 import os.path as osp
 
 from sigima.params import ClipParam
-from sigima.tests.data import create_noisygauss_image, create_paracetamol_signal
+from sigima.tests.data import create_noisy_gaussian_image, create_paracetamol_signal
 from sigima.tests.helpers import WorkdirRestoringTempDir
 
 from datalab.env import execenv
@@ -45,7 +45,7 @@ def test_scenario_h5():
             panel.processor.run_feature("derivative")
             # === Creating two test images
             panel = win.imagepanel
-            ima1 = create_noisygauss_image(add_annotations=True)
+            ima1 = create_noisy_gaussian_image(add_annotations=True)
             panel.add_object(ima1)
             param = ClipParam.create(upper=ima1.data.mean())
             panel.processor.run_feature("clip", param)

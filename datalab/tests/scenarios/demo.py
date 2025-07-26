@@ -18,9 +18,9 @@ import sigima.proc.image as sigima_image
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 from sigima.tests.data import (
-    create_multigauss_image,
+    create_multigaussian_image,
     create_paracetamol_signal,
-    create_peak2d_image,
+    create_peak_image,
     create_sincos_image,
     get_test_image,
 )
@@ -133,7 +133,7 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
         panel.processor.run_feature("rotate", param)
 
     param.title = None
-    ima1 = create_multigauss_image(param)
+    ima1 = create_multigaussian_image(param)
     s = data_size
     roi = sigima.objects.create_image_roi(
         "rectangle", [s // 2, s // 2, s - 25 - s // 2, s - s // 2]
@@ -153,7 +153,7 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     qt_wait(DELAY2)
 
     param.title = None
-    ima = create_peak2d_image(param)
+    ima = create_peak_image(param)
     panel.add_object(ima)
     param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.run_feature("peak_detection", param)

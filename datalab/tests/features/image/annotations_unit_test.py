@@ -41,7 +41,7 @@ def test_annotations_unit():
         panel = win.imagepanel
 
         # Create image with annotations
-        ima1 = test_data.create_multigauss_image()
+        ima1 = test_data.create_multigaussian_image()
         ima1.title = "Annotations from items"
         rect = make.annotated_rectangle(100, 100, 200, 200, title="Test")
         set_annotation_color(rect, "#2222ff")

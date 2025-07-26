@@ -9,7 +9,7 @@ Profile extraction unit test
 
 import sigima.params
 from guidata.qthelpers import exec_dialog, qt_app_context
-from sigima.tests.data import create_noisygauss_image
+from sigima.tests.data import create_noisy_gaussian_image
 
 from datalab.env import execenv
 from datalab.gui.profiledialog import ProfileExtractionDialog
@@ -18,7 +18,7 @@ from datalab.gui.profiledialog import ProfileExtractionDialog
 def test_profile_unit():
     """Run profile extraction test"""
     with qt_app_context():
-        obj = create_noisygauss_image(center=(0.0, 0.0), add_annotations=False)
+        obj = create_noisy_gaussian_image(center=(0.0, 0.0), add_annotations=False)
         for mode in ("line", "segment", "rectangle"):
             for initial_param in (True, False):
                 if initial_param:

@@ -11,7 +11,7 @@ Testing the following:
 # guitest: show
 
 import sigima.params
-from sigima.tests.data import create_peak2d_image
+from sigima.tests.data import create_peak_image
 
 from datalab.tests import cdltest_app_context, take_plotwidget_screenshot
 
@@ -20,7 +20,7 @@ def test_peak2d():
     """Run 2D peak detection scenario"""
     with cdltest_app_context() as win:
         panel = win.imagepanel
-        ima = create_peak2d_image()
+        ima = create_peak_image()
         panel.add_object(ima)
         param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
         panel.processor.run_feature("peak_detection", param)

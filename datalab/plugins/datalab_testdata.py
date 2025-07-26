@@ -77,7 +77,7 @@ class PluginTestData(PluginBase):
             title=_("Add noise"),
         )
 
-    def create_peak2d_image(self) -> None:
+    def create_peak_image(self) -> None:
         """Create 2D peak image"""
         obj = self.imagepanel.new_object(add_to_panel=False)
         if obj is not None:
@@ -94,22 +94,22 @@ class PluginTestData(PluginBase):
             obj = test_data.create_sincos_image(newparam)
             self.proxy.add_object(obj)
 
-    def create_noisygauss_image(self) -> None:
+    def create_noisy_gaussian_image(self) -> None:
         """Create 2D noisy gauss image"""
         newparam = self.edit_new_image_parameters(
             hide_image_height=True, hide_image_type=True
         )
         if newparam is not None:
-            obj = test_data.create_noisygauss_image(newparam, add_annotations=False)
+            obj = test_data.create_noisy_gaussian_image(newparam, add_annotations=False)
             self.proxy.add_object(obj)
 
-    def create_multigauss_image(self) -> None:
+    def create_multigaussian_image(self) -> None:
         """Create 2D multi gauss image"""
         newparam = self.edit_new_image_parameters(
             hide_image_height=True, hide_image_type=True
         )
         if newparam is not None:
-            obj = test_data.create_multigauss_image(newparam)
+            obj = test_data.create_multigaussian_image(newparam)
             self.proxy.add_object(obj)
 
     def create_2dstep_image(self) -> None:
@@ -156,7 +156,7 @@ class PluginTestData(PluginBase):
             # with iah.new_menu(_("Data samples")):
             iah.new_action(
                 _("Create image with peaks"),
-                triggered=self.create_peak2d_image,
+                triggered=self.create_peak_image,
                 select_condition="always",
                 separator=True,
             )
@@ -167,12 +167,12 @@ class PluginTestData(PluginBase):
             )
             iah.new_action(
                 _("Create 2D noisy gauss image"),
-                triggered=self.create_noisygauss_image,
+                triggered=self.create_noisy_gaussian_image,
                 select_condition="always",
             )
             iah.new_action(
                 _("Create 2D multi gauss image"),
-                triggered=self.create_multigauss_image,
+                triggered=self.create_multigaussian_image,
                 select_condition="always",
             )
             iah.new_action(

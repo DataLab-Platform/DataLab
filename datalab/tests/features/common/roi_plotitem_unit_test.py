@@ -16,7 +16,7 @@ from sigima.tests.common.roi_unit_test import (
     create_test_image_rois,
     create_test_signal_rois,
 )
-from sigima.tests.data import create_multigauss_image, create_paracetamol_signal
+from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
 from datalab.adapters_plotpy.converters import (
     plotitem_to_singleroi,
@@ -56,7 +56,7 @@ def test_image_roi_plotitem_conversion() -> None:
     execenv.print("==============================================")
     execenv.print("Test image ROIs conversion to/from plot items")
     execenv.print("==============================================")
-    obj = create_multigauss_image()
+    obj = create_multigaussian_image()
     for roi in create_test_image_rois(obj):
         __conversion_methods(roi, obj)
 

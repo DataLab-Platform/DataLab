@@ -16,7 +16,7 @@ from sigima.tests.data import (
     GaussianNoiseParam,
     create_noisy_signal,
     create_paracetamol_signal,
-    create_peak2d_image,
+    create_peak_image,
     create_sincos_image,
     iterate_image_creation,
     iterate_signal_creation,
@@ -414,7 +414,7 @@ def run_image_computations(
     panel.processor.run_feature("centroid")
     panel.processor.run_feature("enclosing_circle")
 
-    ima = create_peak2d_image(newparam)
+    ima = create_peak_image(newparam)
     panel.add_object(ima)
     param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.compute_peak_detection(param)

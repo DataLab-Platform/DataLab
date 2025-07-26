@@ -29,7 +29,7 @@ except ImportError:
 
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
-from sigima.tests.data import create_multigauss_image, create_paracetamol_signal
+from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.gui.docks import DataLabPlotWidget
@@ -70,7 +70,7 @@ def simulate_stats_tool(
 def test_stats_tool() -> None:
     """Test `XCurveStatsTool` with a custom signal."""
     sig = create_paracetamol_signal()
-    ima = create_multigauss_image()
+    ima = create_multigaussian_image()
     with qt_app_context():
         dlg = QW.QDialog()
         dlg.setWindowTitle("Stats Tool Test")
