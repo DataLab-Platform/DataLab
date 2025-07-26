@@ -1330,7 +1330,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         dlg = self.create_new_dialog(
             edit=True,
-            toolbar=True,
+            toolbar=mode != "define",
             title=f"{roi_s} - {obj.title}",
             name=f"{obj.PREFIX}_roi_dialog",
             options=options,
