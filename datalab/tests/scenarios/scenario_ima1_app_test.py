@@ -12,7 +12,7 @@ Testing all the image processing features, without process isolation.
 
 from datalab.config import Conf
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 from datalab.tests.scenarios import common
 
 
@@ -21,7 +21,7 @@ def test_scenario_image() -> None:
     assert Conf.main.process_isolation_enabled.get(), (
         "Process isolation must be enabled"
     )
-    with cdltest_app_context(save=True) as win:
+    with datalab_test_app_context(save=True) as win:
         with win.context_no_refresh():
             execenv.print("Testing image features without process isolation...")
             win.set_process_isolation_enabled(False)

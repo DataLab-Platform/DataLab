@@ -20,7 +20,7 @@ from sigima.tests import helpers
 from sigima.tests.helpers import compare_metadata
 
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_metadata_io_unit():
@@ -28,7 +28,7 @@ def test_metadata_io_unit():
     with execenv.context(unattended=True):
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             fname = osp.join(tmpdir, "test.json")
-            with cdltest_app_context() as win:
+            with datalab_test_app_context() as win:
                 panel = win.imagepanel
                 ima = test_data.create_annotated_image()
                 for mshape in test_data.create_resultshapes():

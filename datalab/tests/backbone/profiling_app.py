@@ -7,13 +7,13 @@ Profiling
 # guitest: skip
 
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_profiling():
     """Profiling test"""
     with execenv.context(unattended=True):
-        with cdltest_app_context() as win:
+        with datalab_test_app_context() as win:
             win.open_h5_files(
                 [
                     "C:/Dev/Projets/X-GRID_data/Projets_Oasis/XGRID5/"

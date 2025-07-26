@@ -13,12 +13,12 @@ Testing the following:
 import sigima.params
 from sigima.tests.data import create_peak_image
 
-from datalab.tests import cdltest_app_context, take_plotwidget_screenshot
+from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
 
 
 def test_peak2d():
     """Run 2D peak detection scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         ima = create_peak_image()
         panel.add_object(ima)

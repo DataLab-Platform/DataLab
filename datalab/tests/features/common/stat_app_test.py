@@ -18,12 +18,12 @@ from sigima.tests.common.stat_unit_test import (
     create_reference_signal,
 )
 
-from datalab.tests import cdltest_app_context, take_plotwidget_screenshot
+from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
 
 
 def test_stat_app():
     """Run statistics application test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         # === Signal statistics test ===
         panel = win.signalpanel
         panel.add_object(create_reference_signal())

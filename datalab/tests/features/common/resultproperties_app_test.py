@@ -11,7 +11,7 @@ from __future__ import annotations
 import numpy as np
 from sigima.tests import data as test_data
 
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def create_image_with_resultproperties():
@@ -26,7 +26,7 @@ def test_resultproperties():
     """Result properties application test"""
     obj1 = test_data.create_sincos_image()
     obj2 = create_image_with_resultproperties()
-    with cdltest_app_context(console=False) as win:
+    with datalab_test_app_context(console=False) as win:
         panel = win.signalpanel
         noiseparam = test_data.GaussianNoiseParam()
         for sigma in np.linspace(0.0, 0.5, 11):

@@ -17,7 +17,7 @@ import sigima.params
 from sigima.config import options as sigima_options
 from sigima.tests import data as test_data
 
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def create_image_with_resultshapes() -> sigima.objects.ImageObj:
@@ -82,7 +82,7 @@ def __check_roi_merge(
 
 def test_resultshapes() -> None:
     """Result shapes test"""
-    with cdltest_app_context(console=False) as win:
+    with datalab_test_app_context(console=False) as win:
         obj1 = test_data.create_sincos_image()
         obj2 = create_image_with_resultshapes()
         obj2.roi = sigima.objects.create_image_roi("rectangle", [10, 10, 50, 400])

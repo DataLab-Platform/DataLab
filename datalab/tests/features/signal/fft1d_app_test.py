@@ -9,12 +9,12 @@ Signal FFT application test.
 
 from sigima.objects import CosinusParam, create_signal_from_param
 
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_fft1d_app():
     """FFT application test."""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.signalpanel
         s1 = create_signal_from_param(CosinusParam.create(size=10000))
         panel.add_object(s1)

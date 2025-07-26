@@ -21,7 +21,7 @@ from datalab.env import execenv
 from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common import roi_app_test
 
 
@@ -60,7 +60,7 @@ def __test_metadata_features(panel: BaseDataPanel):
 def test_metadata_app():
     """Run metadata application test scenario"""
     size = 200
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         execenv.print("Metadata application test:")
         # === Signal metadata features test ===
         panel = win.signalpanel

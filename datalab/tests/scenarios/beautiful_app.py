@@ -23,13 +23,13 @@ A high-level test scenario producing beautiful screenshots.
 import sigima.objects
 import sigima.params as sigima_param
 
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def run_beautiful_scenario(screenshots: bool = False) -> None:
     """High-level test scenario producing beautiful screenshots"""
     data_size = 500
-    with cdltest_app_context(console=False, exec_loop=not screenshots) as win:
+    with datalab_test_app_context(console=False, exec_loop=not screenshots) as win:
         # Beautiful screenshot of a signal
         panel = win.signalpanel
         sig = sigima.objects.create_signal_from_param(sigima.objects.LorentzParam())

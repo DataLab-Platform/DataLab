@@ -29,7 +29,7 @@ from sigima.tests.data import create_multigaussian_image, create_paracetamol_sig
 from skimage import draw
 
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 if TYPE_CHECKING:
     from datalab.gui.panel.image import ImagePanel
@@ -266,7 +266,7 @@ def print_obj_shapes(obj):
 
 def test_roi_app(screenshots: bool = False):
     """Run ROI application test scenario"""
-    with cdltest_app_context(console=False) as win:
+    with datalab_test_app_context(console=False) as win:
         execenv.print("ROI application test:")
         # === Signal ROI extraction test ===
         panel = win.signalpanel

@@ -16,7 +16,7 @@ import sigima.objects
 from skimage import draw
 
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common.roi_app_test import print_obj_shapes
 
 
@@ -44,7 +44,7 @@ def create_test_image_with_roi(
 
 def test_roi_circ() -> None:
     """Run circular ROI application test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         execenv.print("Circular ROI test:")
         panel = win.imagepanel
         for geometry in ("rectangle", "circle"):  # model.ROI2DParam.geometries:

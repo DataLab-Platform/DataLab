@@ -15,12 +15,12 @@ from sigima.objects import Gauss2DParam, UniformRandom2DParam
 from sigima.proc.image import FlatFieldParam
 
 from datalab.config import _
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_flatfield():
     """Run flat field test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
 
         param0 = Gauss2DParam.create(title=_("Raw data (2D-Gaussian)"))

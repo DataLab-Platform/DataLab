@@ -11,12 +11,12 @@ import sigima.objects
 import sigima.params
 from sigima.tests.data import get_test_image
 
-from datalab.tests import cdltest_app_context, take_plotwidget_screenshot
+from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
 
 
 def test_contour_app() -> None:
     """Run contour finding application test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
 
         shape = "circle"

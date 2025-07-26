@@ -15,7 +15,7 @@ import sigima.objects
 import sigima.params
 
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def create_random_test_data(
@@ -55,7 +55,7 @@ def test_high_number_of_images() -> None:
         ima.title += f" {idx}"
         images.append(ima)
     execenv.print(" done")
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         for ima in images:
             panel.add_object(ima)

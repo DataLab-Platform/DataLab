@@ -9,12 +9,12 @@ Image FFT application test.
 
 import sigima.objects
 
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_fft2d_app() -> None:
     """FFT application test."""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         param = sigima.objects.Gauss2DParam.create(width=100, height=100)
         i1 = sigima.objects.create_image_from_param(param)

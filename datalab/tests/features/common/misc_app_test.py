@@ -26,7 +26,7 @@ from sigima.tests.data import (
 
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -190,7 +190,7 @@ def __misc_unit_function(win: DLMainWindow) -> None:
 
 def test_misc_app() -> None:
     """Run misc. application test scenario"""
-    with cdltest_app_context(console=False) as win:
+    with datalab_test_app_context(console=False) as win:
         execenv.print("Miscellaneous application test")
         execenv.print("==============================")
         execenv.print("")

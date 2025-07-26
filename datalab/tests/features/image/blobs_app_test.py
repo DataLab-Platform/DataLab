@@ -12,12 +12,12 @@ from sigima.objects import create_image
 from sigima.tests.data import get_test_image
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.tests import cdltest_app_context, skip_if_opencv_missing
+from datalab.tests import datalab_test_app_context, skip_if_opencv_missing
 
 
 def test_blobs():
     """Run blob detection application test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         proc = panel.processor
         data = get_test_image("flower.npy").data

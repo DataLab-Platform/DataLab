@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from datalab.config import Conf
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 from datalab.tests.scenarios import common
 
 
@@ -23,7 +23,7 @@ def test_scenario_signal1() -> None:
     assert Conf.main.process_isolation_enabled.get(), (
         "Process isolation must be enabled"
     )
-    with cdltest_app_context(save=True) as win:
+    with datalab_test_app_context(save=True) as win:
         with win.context_no_refresh():
             execenv.print("Testing signal features (process isolation: off)...")
             win.set_process_isolation_enabled(False)

@@ -20,7 +20,7 @@ from sigima.tests import data as test_data
 
 from datalab.config import Conf
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def comp_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument
@@ -48,7 +48,7 @@ def comp_no_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argume
 def test_catcher():
     """Catch error and warning test"""
     with execenv.context(catcher_test=True):
-        with cdltest_app_context() as win:
+        with datalab_test_app_context() as win:
             panel = win.signalpanel
             sig = test_data.create_paracetamol_signal()
             panel.add_object(sig)

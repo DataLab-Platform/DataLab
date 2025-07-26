@@ -45,7 +45,7 @@ helpers.add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 
 
 @contextmanager
-def cdltest_app_context(
+def datalab_test_app_context(
     size: tuple[int, int] = None,
     maximized: bool = False,
     save: bool = False,

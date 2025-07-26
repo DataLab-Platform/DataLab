@@ -19,7 +19,7 @@ from sigima.tests import data as test_data
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def set_annotation_color(annotation: AnnotatedShape, color: str) -> None:
@@ -37,7 +37,7 @@ def set_annotation_color(annotation: AnnotatedShape, color: str) -> None:
 
 def test_annotations_unit():
     """Run image tools test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
 
         # Create image with annotations

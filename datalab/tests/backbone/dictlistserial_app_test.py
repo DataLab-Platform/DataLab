@@ -12,14 +12,14 @@ from sigima.tests.data import create_test_image_with_metadata
 from sigima.tests.helpers import WorkdirRestoringTempDir, compare_metadata
 
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_dict_serialization():
     """Dictionnary/List in metadata (de)serialization test"""
     with execenv.context(unattended=True):
         with WorkdirRestoringTempDir() as tmpdir:
-            with cdltest_app_context(console=False) as win:
+            with datalab_test_app_context(console=False) as win:
                 panel = win.imagepanel
                 image = create_test_image_with_metadata()
                 panel.add_object(image)

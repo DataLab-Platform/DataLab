@@ -12,14 +12,14 @@ from sigima.objects import NewImageParam
 from sigima.tests.data import create_multigaussian_image
 
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context, take_plotwidget_screenshot
+from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
 from datalab.tests.features.common.roi_app_test import create_test_image_with_roi
 
 
 def test_contour_app():
     """Run contour finding application test scenario"""
     newparam = NewImageParam.create(height=200, width=200)
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         for shape in ("polygon", "circle", "ellipse"):
             ima1 = create_multigaussian_image(newparam)

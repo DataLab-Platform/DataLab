@@ -18,12 +18,12 @@ from sigima.tests.data import create_paracetamol_signal
 
 from datalab.env import execenv
 from datalab.objectmodel import get_short_id, get_uuid
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_main_app():
     """Main window test"""
-    with cdltest_app_context(console=False) as win:
+    with datalab_test_app_context(console=False) as win:
         # Switch from panel to panel
         for panelname in ("macro", "image", "signal"):
             win.set_current_panel(panelname)

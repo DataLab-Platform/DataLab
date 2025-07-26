@@ -12,14 +12,14 @@ from sigima.objects import Gauss2DParam
 
 from datalab import config
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def memory_alarm(threshold):
     """Memory alarm test"""
     config.Conf.main.available_memory_threshold.set(threshold)
     rng = np.random.default_rng()
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         win.memorystatus.update_status()  # Force memory status update
         param = Gauss2DParam.create(

@@ -18,7 +18,7 @@ from sigima.tests.helpers import WorkdirRestoringTempDir, get_test_fnames
 
 from datalab.env import execenv
 from datalab.gui.panel.base import BaseDataPanel
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def __testfunc(
@@ -64,7 +64,7 @@ def __testfunc(
 
 def test_io_app() -> None:
     """Run image tools test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         execenv.print("I/O application test:")
         __testfunc("Signals", win.signalpanel, SignalIORegistry, "*.*", "curve_formats")
         __testfunc("Images", win.imagepanel, ImageIORegistry, "*.*", "image_formats")

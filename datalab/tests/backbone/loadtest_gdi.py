@@ -26,7 +26,7 @@ from sigima.tests.helpers import get_test_fnames
 
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 from datalab.tests.scenarios.common import compute_common_operations
 
 if os.name == "nt":
@@ -124,7 +124,7 @@ def test_gdi_count(win: DLMainWindow) -> int | None:
 def load_test():
     """Load test."""
     with execenv.context(unattended=True):
-        with cdltest_app_context() as win:
+        with datalab_test_app_context() as win:
             gdi_count = []
             for iteration in range(4):
                 execenv.print(f"Test iteration: {iteration}")

@@ -16,12 +16,12 @@ unexpected behavior in the future.
 
 from sigima.tests.data import get_test_image
 
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_offset_correction():
     """Run offset correction application test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         win.imagepanel.add_object(get_test_image("flower.npy"))
         win.imagepanel.processor.compute_offset_correction()
 

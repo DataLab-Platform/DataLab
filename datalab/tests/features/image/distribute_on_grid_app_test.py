@@ -11,13 +11,13 @@ import sigima.params
 from sigima.tests.data import get_test_image
 
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_distribute_on_grid():
     """Run distribute on grid application test scenario"""
     with execenv.context(unattended=True):
-        with cdltest_app_context(console=False) as win:
+        with datalab_test_app_context(console=False) as win:
             panel = win.imagepanel
             proc = panel.processor
             panel.add_object(get_test_image("flower.npy"))

@@ -27,7 +27,7 @@ from sigima.tests.data import (
 
 from datalab.config import _, reset
 from datalab.env import execenv
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -201,7 +201,7 @@ def play_demo(win: DLMainWindow) -> None:
 def run():
     """Run demo"""
     reset()  # Reset configuration (remove configuration file and initialize it)
-    with cdltest_app_context(console=False) as win:
+    with datalab_test_app_context(console=False) as win:
         play_demo(win)
 
 

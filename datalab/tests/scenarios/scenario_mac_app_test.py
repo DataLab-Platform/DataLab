@@ -17,7 +17,7 @@ from sigima.tests.helpers import WorkdirRestoringTempDir
 
 from datalab.gui.macroeditor import Macro
 from datalab.gui.main import DLMainWindow
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def add_macro_sample(win: DLMainWindow, index: int) -> Macro:
@@ -41,7 +41,7 @@ def add_macro_sample(win: DLMainWindow, index: int) -> Macro:
 def test_scenario_macro() -> None:
     """Example of high-level test scenario with HDF5 file"""
     with WorkdirRestoringTempDir() as tmpdir:
-        with cdltest_app_context(console=False) as win:
+        with datalab_test_app_context(console=False) as win:
             win.set_current_panel("macro")
             add_macro_sample(win, 0)
             win.macropanel.run_macro()

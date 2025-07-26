@@ -21,12 +21,12 @@ import sigima.objects
 import sigima.tests.data as ctd
 from sigima.tests.helpers import check_array_result
 
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_image_average() -> None:
     """Average application test."""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         N, size = 10, 256
         dtype = sigima.objects.ImageDatatypes.UINT8

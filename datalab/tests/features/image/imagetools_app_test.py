@@ -19,12 +19,12 @@ from sigima.objects import NewImageParam
 from sigima.tests.data import create_multigaussian_image
 
 from datalab.gui.docks import profile_to_signal
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_image_tools_app():
     """Run image tools test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         newparam = NewImageParam.create(height=200, width=200)
         ima = create_multigaussian_image(newparam)

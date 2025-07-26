@@ -19,12 +19,12 @@ Testing the profile extraction features of the image panel:
 import sigima.params
 from sigima.tests.data import create_noisy_gaussian_image, get_test_image
 
-from datalab.tests import cdltest_app_context
+from datalab.tests import datalab_test_app_context
 
 
 def test_profile():
     """Run profile extraction test scenario"""
-    with cdltest_app_context() as win:
+    with datalab_test_app_context() as win:
         panel = win.imagepanel
         panel.add_object(get_test_image("flower.npy"))
         proc = panel.processor
