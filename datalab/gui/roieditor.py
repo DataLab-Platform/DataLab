@@ -236,7 +236,7 @@ class BaseROIEditor(
     ICON_NAME = None
     OBJ_NAME = None
     ROI_ITEM_TYPES = ()
-    ADDITIONAL_OPTIONS: dict[str, Any] | None = None
+    ADDITIONAL_OPTIONS: dict[str, Any] = {}
 
     def __init__(
         self,
@@ -275,6 +275,11 @@ class BaseROIEditor(
         if roi.singleobj is None:
             roi.singleobj = Conf.proc.extract_roi_singleobj.get()
         self.__roi: TypeROI = roi
+
+        if options is None:
+            options = self.ADDITIONAL_OPTIONS
+        else:
+            options = options.copy(self.ADDITIONAL_OPTIONS)
 
         roi_s = _("Regions of interest")
         super().__init__(
