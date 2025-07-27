@@ -49,7 +49,7 @@ from plotpy.tools import (
 from skimage import measure
 
 try:
-    from plotpy.tools import YRangeCursorTool
+    from plotpy.tools import YRangeCursorTool  # pylint: disable=ungrouped-imports
 except ImportError:
     # YRangeCursorTool is not available in PlotPy < 2.8
     YRangeCursorTool = None
