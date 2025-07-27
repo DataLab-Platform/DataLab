@@ -61,7 +61,8 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, XRangeSelec
         """
         if not isinstance(item, XRangeSelection):
             raise TypeError("Invalid plot item type")
-        return SegmentROI(item.get_range(), False)
+        coords = sorted(item.get_range())
+        return SegmentROI(coords, False)
 
 
 class SignalROIPlotPyAdapter(BaseROIPlotPyAdapter[SignalROI]):
