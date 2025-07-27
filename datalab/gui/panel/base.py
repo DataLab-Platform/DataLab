@@ -15,7 +15,7 @@ import os
 import os.path as osp
 import re
 import warnings
-from typing import TYPE_CHECKING, Generic, Literal, Type
+from typing import TYPE_CHECKING, Any, Generic, Literal, Type
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
@@ -289,7 +289,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     SIG_REFRESH_PLOT = QC.Signal(
         str, bool, bool, bool, bool
     )  # Connected to PlotHandler.refresh_plot
-    ROIDIALOGOPTIONS = {}
 
     @staticmethod
     @abc.abstractmethod
@@ -1264,13 +1263,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.__separate_views.pop(dlg)
         dlg.deleteLater()
 
+    def get_dialog_size(self) -> tuple[int, int]:
+        """Get dialog size (minimum and maximum)"""
+        # Resize the dialog so that it's at least MINDIALOGSIZE (absolute values),
+        # and at most MAXDIALOGSIZE (% of the main window size):
+        minwidth, minheight = self.MINDIALOGSIZE
+        maxwidth = int(self.mainwindow.width() * self.MAXDIALOGSIZE)
+        maxheight = int(self.mainwindow.height() * self.MAXDIALOGSIZE)
+        size = min(minwidth, maxwidth), min(minheight, maxheight)
+        return size
+
     def create_new_dialog(
         self,
         edit: bool = False,
         toolbar: bool = True,
         title: str | None = None,
         name: str | None = None,
-        options: dict | None = None,
+        options: dict[str, Any] | None = None,
     ) -> PlotDialog | None:
         """Create new pop-up signal/image plot dialog.
 
@@ -1284,27 +1293,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Returns:
             Plot dialog instance
         """
-        plot_options = self.plothandler.get_current_plot_options()
+        plot_options = self.plothandler.get_plot_options()
         if options is not None:
             plot_options = plot_options.copy(options)
-
-        # Resize the dialog so that it's at least MINDIALOGSIZE (absolute values),
-        # and at most MAXDIALOGSIZE (% of the main window size):
-        minwidth, minheight = self.MINDIALOGSIZE
-        maxwidth = int(self.mainwindow.width() * self.MAXDIALOGSIZE)
-        maxheight = int(self.mainwindow.height() * self.MAXDIALOGSIZE)
-        size = min(minwidth, maxwidth), min(minheight, maxheight)
 
         # pylint: disable=not-callable
         dlg = PlotDialog(
             parent=self.parent(),
             title=APP_NAME if title is None else f"{title} - {APP_NAME}",
-            edit=edit,
             options=plot_options,
             toolbar=toolbar,
-            size=size,
+            icon="DataLab.svg",
+            edit=edit,
+            size=self.get_dialog_size(),
         )
-        dlg.setWindowIcon(get_icon("DataLab.svg"))
         dlg.setObjectName(name)
         return dlg
 
@@ -1322,34 +1324,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             A tuple containing the ROI object and a boolean indicating whether the
             dialog was accepted or not.
         """
-        roi_s = _("Regions of interest")
-        options = self.ROIDIALOGOPTIONS
         obj = self.objview.get_sel_objects(include_groups=True)[-1]
-
-        # Create a new dialog
-
-        dlg = self.create_new_dialog(
-            edit=True,
-            toolbar=mode != "define",
-            title=f"{roi_s} - {obj.title}",
-            name=f"{obj.PREFIX}_roi_dialog",
-            options=options,
-        )
-        if dlg is None:
-            return None
-
-        # Create ROI editor (and add it to the dialog)
-
         item = create_adapter_from_object(obj).make_item(
             update_from=self.plothandler[get_uuid(obj)]
         )
-
-        # pylint: disable=not-callable
-        roi_editor = self.get_roieditor_class()(dlg, obj, mode, item=item)
-
-        dlg.button_layout.insertWidget(0, roi_editor)
-
-        if exec_dialog(dlg):
+        roi_editor_class = self.get_roieditor_class()  # pylint: disable=not-callable
+        roi_editor = roi_editor_class(
+            parent=self.parent(),
+            obj=obj,
+            mode=mode,
+            item=item,
+            options=self.plothandler.get_plot_options(),
+            size=self.get_dialog_size(),
+        )
+        if exec_dialog(roi_editor):
             return roi_editor.get_roieditor_results()
         return None
 

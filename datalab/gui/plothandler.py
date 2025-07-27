@@ -471,7 +471,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             ]
         )
 
-    def get_current_plot_options(self) -> PlotOptions:
+    def get_plot_options(self) -> PlotOptions:
         """Return standard signal/image plot options"""
         return PlotOptions(
             type=self.PLOT_TYPE,
@@ -496,9 +496,9 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
         self.plot.set_antialiasing(state)
         self.plot.replot()
 
-    def get_current_plot_options(self) -> PlotOptions:
+    def get_plot_options(self) -> PlotOptions:
         """Return standard signal/image plot options"""
-        options = super().get_current_plot_options()
+        options = super().get_plot_options()
         options.curve_antialiasing = self.plot.antialiased
         return options
 
@@ -628,9 +628,9 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
             widget.hide()
         super().cleanup_dataview()
 
-    def get_current_plot_options(self) -> PlotOptions:
+    def get_plot_options(self) -> PlotOptions:
         """Return standard signal/image plot options"""
-        options = super().get_current_plot_options()
+        options = super().get_plot_options()
         options.zlabel = self.plot.get_axis_title("right")
         options.zunit = self.plot.get_axis_unit("right")
         return options

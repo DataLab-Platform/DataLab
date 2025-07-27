@@ -11,13 +11,10 @@ from __future__ import annotations
 
 import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
-from plotpy.plot import PlotDialog
 from sigima.objects import ImageROI, create_image_roi, create_signal_roi
 from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
 from datalab.env import execenv
-from datalab.gui.panel.image import ImagePanel
-from datalab.gui.panel.signal import SignalPanel
 from datalab.gui.roieditor import ImageROIEditor, SignalROIEditor
 
 
@@ -25,16 +22,13 @@ def test_signal_roi_editor() -> None:
     """Test signal ROI editor"""
     cls = SignalROIEditor
     title = f"Testing {cls.__name__}"
-    options = SignalPanel.ROIDIALOGOPTIONS
     obj = create_paracetamol_signal()
     roi = create_signal_roi([50, 100], indices=True)
     obj.roi = roi
     with qt_app_context(exec_loop=False):
         execenv.print(title)
-        dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
-        editor = cls(dlg, obj, mode="extract")
-        dlg.button_layout.insertWidget(0, editor)
-        exec_dialog(dlg)
+        roi_editor = cls(parent=None, obj=obj, mode="extract", size=(800, 600))
+        exec_dialog(roi_editor)
 
 
 def create_image_roi_example() -> ImageROI:
@@ -51,20 +45,17 @@ def test_image_roi_editor() -> None:
     """Test image ROI editor"""
     cls = ImageROIEditor
     title = f"Testing {cls.__name__}"
-    options = ImagePanel.ROIDIALOGOPTIONS
     obj = create_multigaussian_image()
     obj.roi = create_image_roi_example()
     with qt_app_context(exec_loop=False):
         execenv.print(title)
         for mode in ("extract", "apply"):
             execenv.print(f"  mode={mode}")
-            dlg = PlotDialog(title=title, edit=True, options=options, toolbar=True)
-            roi_editor = cls(dlg, obj, mode=mode)
-            dlg.button_layout.insertWidget(0, roi_editor)
+            roi_editor = cls(parent=None, obj=obj, mode=mode, size=(800, 600))
             if mode == "apply":
                 # Clear the ROI
                 roi_editor.remove_all_rois()
-            if exec_dialog(dlg):
+            if exec_dialog(roi_editor):
                 results = roi_editor.get_roieditor_results()
                 if results is not None:
                     edited_roi, modified = results

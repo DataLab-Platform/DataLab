@@ -547,7 +547,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         add_initial_shape = self.has_param_defaults(sigima.params.LineProfileParam)
         edit, param = self.init_param(param, sigima_image.LineProfileParam, title)
         if edit:
-            options = self.panel.plothandler.get_current_plot_options()
+            options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
                 "line", param, options, self.panel.parent(), add_initial_shape
             )
@@ -567,7 +567,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         add_initial_shape = self.has_param_defaults(sigima.params.SegmentProfileParam)
         edit, param = self.init_param(param, sigima_image.SegmentProfileParam, title)
         if edit:
-            options = self.panel.plothandler.get_current_plot_options()
+            options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
                 "segment", param, options, self.panel.parent(), add_initial_shape
             )
@@ -587,7 +587,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         add_initial_shape = self.has_param_defaults(sigima.params.AverageProfileParam)
         edit, param = self.init_param(param, sigima_image.AverageProfileParam, title)
         if edit:
-            options = self.panel.plothandler.get_current_plot_options()
+            options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
                 "rectangle", param, options, self.panel.parent(), add_initial_shape
             )

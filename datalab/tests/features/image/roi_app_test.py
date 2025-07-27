@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
+import pytest
 import sigima.params as sigima_param
 from sigima.objects import ImageObj, ImageROI, NewImageParam, create_image_roi
 from sigima.tests.data import create_multigaussian_image
@@ -174,5 +175,17 @@ def test_image_roi_app(screenshots: bool = False):
             __run_image_computations(panel, singleobj=singleobj)
 
 
+@pytest.mark.skip(reason="This test is only for manual testing")
+def test_image_roi_basic_app():
+    """Run Image ROI basic application test scenario"""
+    with datalab_test_app_context(console=False) as win:
+        panel = win.imagepanel
+        param = NewImageParam.create(height=SIZE, width=SIZE)
+        ima1 = create_multigaussian_image(param)
+        panel.add_object(ima1)
+        panel.processor.edit_regions_of_interest()
+
+
 if __name__ == "__main__":
+    test_image_roi_basic_app()
     test_image_roi_app(screenshots=False)
