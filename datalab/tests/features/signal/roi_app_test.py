@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
+import pytest
 import sigima.params as sigima_param
 from sigima.objects import SignalROI, create_signal_roi
 from sigima.tests.data import create_paracetamol_signal
@@ -121,5 +122,16 @@ def test_signal_roi_app(screenshots: bool = False) -> None:
             __run_signal_computations(panel, singleobj=singleobj)
 
 
+@pytest.mark.skip(reason="This test is only for manual testing")
+def test_signal_roi_basic_app():
+    """Run Signal ROI basic application test scenario"""
+    with datalab_test_app_context(console=False) as win:
+        panel = win.signalpanel
+        sig1 = create_paracetamol_signal(SIZE)
+        panel.add_object(sig1)
+        panel.processor.edit_regions_of_interest()
+
+
 if __name__ == "__main__":
+    test_signal_roi_basic_app()
     test_signal_roi_app(screenshots=False)
