@@ -35,6 +35,7 @@ from plotpy.items import (
     AnnotatedPolygon,
     AnnotatedRectangle,
     CurveItem,
+    DataInfoLabel,
     MaskedImageItem,
     ObjectInfo,
     XRangeSelection,
@@ -456,6 +457,10 @@ class BaseROIEditor(
     def update_roi_titles(self) -> None:
         """Update ROI annotation titles"""
 
+    def get_roi_items(self) -> list[TypeROIItem]:
+        """Get ROI items"""
+        return self.roi_items
+
     def update_roi_items(self) -> None:
         """Update ROI items"""
         old_nb_items = len(self.roi_items)
@@ -489,12 +494,12 @@ class BaseROIEditor(
 class ROIRangeInfo(ObjectInfo):
     """ObjectInfo for ROI selection"""
 
-    def __init__(self, roi_items: list[TypeROIItem]) -> None:
-        self.roi_items = roi_items
+    def __init__(self, roi_editor: SignalROIEditor) -> None:
+        self.roi_editor = roi_editor
 
     def get_text(self) -> str:
         textlist = []
-        for index, roi_item in enumerate(self.roi_items):
+        for index, roi_item in enumerate(self.roi_editor.get_roi_items()):
             x0, x1 = roi_item.get_range()
             textlist.append(f"ROI{index:02d}: {x0} ≤ x ≤ {x1}")
         return "<br>".join(textlist)
@@ -517,6 +522,25 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
     ICON_NAME = "signal_roi.svg"
     OBJ_NAME = _("signal")
     ROI_ITEM_TYPES = (XRangeSelection,)
+
+    def __init__(
+        self,
+        parent: QW.QWidget | None,
+        obj: SignalObj | ImageObj,
+        mode: Literal["apply", "extract", "define"] = "apply",
+        item: TypePlotItem | None = None,
+        options: PlotOptions | dict[str, Any] | None = None,
+        size: tuple[int, int] | None = None,
+    ) -> None:
+        self.info_label: DataInfoLabel | None = None
+        super().__init__(
+            parent=parent,
+            obj=obj,
+            mode=mode,
+            item=item,
+            options=options,
+            size=size,
+        )
 
     def get_obj_roi_class(self) -> type[SignalROI]:
         """Get object ROI class"""
@@ -553,10 +577,10 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
     def setup_items(self) -> None:
         """Setup items"""
         super().setup_items()
-        info = ROIRangeInfo(self.roi_items)
-        info_label = make.info_label("BL", info, title=_("Regions of interest"))
-        self.get_plot().add_item(info_label)
-        self.info_label = info_label
+        self.info_label = make.info_label(
+            "BL", [ROIRangeInfo(self)], title=_("Regions of interest")
+        )
+        self.get_plot().add_item(self.info_label)
 
     def update_roi_titles(self):
         """Update ROI annotation titles"""
