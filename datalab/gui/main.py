@@ -1704,10 +1704,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         changed_options = edit_settings(self)
         sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
         sigima_options.keep_results.set(Conf.proc.keep_results.get())
-        self.__update_console_show_mode()
         for option in changed_options:
             if option == "color_mode":
                 self.__update_color_mode()
+            if option == "show_console_on_error":
+                self.__update_console_show_mode()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()
