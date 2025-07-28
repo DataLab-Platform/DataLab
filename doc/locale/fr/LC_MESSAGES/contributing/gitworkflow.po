@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:21+0100\n"
+"POT-Creation-Date: 2025-07-28 18:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -75,6 +75,24 @@ msgstr "La correction est ensuite sélectionnée dans ``develop``."
 
 msgid "Hotfixes (high-priority fixes) will be integrated in the next maintenance release (X.Y.Z -> Z+1), while fixes (low-priority fixes) will be integrated in the next feature release (X.Y -> Y+1)."
 msgstr "Les correctifs urgents (correctifs de haute priorité) seront intégrés dans la prochaine version de maintenance (X.Y.Z -> Z+1), tandis que les correctifs (correctifs de basse priorité) seront intégrés dans la prochaine version de fonctionnalité (X.Y -> Y+1)."
+
+msgid "Documentation Branches"
+msgstr "Branches de documentation"
+
+msgid "When working on documentation that is not related to source code (e.g. training materials, user guides), branches should be named using the ``doc/`` prefix."
+msgstr "Lors de la rédaction de documentation qui n'est pas liée au code source (par exemple, les supports de formation, les guides utilisateur), les branches doivent être nommées en utilisant le préfixe ``doc/``."
+
+msgid "Examples:"
+msgstr "Exemples :"
+
+msgid "``doc/training-materials``"
+msgstr "``doc/training-materials``"
+
+msgid "``doc/user-guide``"
+msgstr "``doc/user-guide``"
+
+msgid "This naming convention improves clarity by clearly separating documentation efforts from code-related development (features, fixes, etc.)."
+msgstr "Cette convention de nommage améliore la clarté en séparant clairement les efforts de documentation du développement lié au code (fonctionnalités, corrections, etc.)."
 
 msgid "Workflow for New Features"
 msgstr "Workflow pour les nouvelles fonctionnalités"

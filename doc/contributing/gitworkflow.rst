@@ -53,6 +53,23 @@ Bug Fix Branches
       release (X.Y.Z -> Z+1), while fixes (low-priority fixes) will be integrated
       in the next feature release (X.Y -> Y+1).
 
+
+Documentation Branches
+----------------------
+
+When working on documentation that is not related to source code
+(e.g. training materials, user guides), branches should be named
+using the ``doc/`` prefix.
+
+Examples:
+
+- ``doc/training-materials``
+- ``doc/user-guide``
+
+This naming convention improves clarity by clearly separating
+documentation efforts from code-related development (features, fixes, etc.).
+
+
 Workflow for New Features
 -------------------------
 
