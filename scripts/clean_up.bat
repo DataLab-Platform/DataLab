@@ -39,7 +39,7 @@ if exist doc\locale\pot ( rmdir /s /q doc\locale\pot )
 del /s /q %MODNAME%\locale\%MODNAME%.pot 1>nul 2>&1
 
 @REM Removing files related to documentation generation
-del /q doc/contributing/changelog.md 1>nul 2>&1
+del /q doc/changelog.md 1>nul 2>&1
 
 @REM Removing generated PDF documentation files
 del /q %MODNAME%\data\doc\%LIBNAME%*.pdf 1>nul 2>&1

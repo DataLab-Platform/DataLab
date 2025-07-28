@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-04 12:33+0200\n"
+"POT-Creation-Date: 2025-07-28 17:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -40,22 +40,28 @@ msgstr "`[project.dependencies]`: Cette section liste les dépendances directes 
 msgid "`[project.optional-dependencies]`: This section lists optional dependencies that can be installed to enable additional features. These dependencies are not required for the core functionality of the application but can enhance its capabilities."
 msgstr "`[project.optional-dependencies]`: Cette section liste les dépendances optionnelles qui peuvent être installées pour activer des fonctionnalités supplémentaires. Ces dépendances ne sont pas nécessaires au fonctionnement de base de l'application, mais peuvent améliorer ses capacités."
 
-msgid "Among the optional dependencies, we have:"
+#, fuzzy
+msgid "Among the optional dependencies, we have the following groups:"
 msgstr "Parmi les dépendances optionnelles, nous avons :"
 
-msgid "`qt`: This group contains dependencies needed for the Qt-based graphical user interface (currently, PyQt5)."
+#, fuzzy
+msgid "`qt`: Qt-based graphical user interface (currently, PyQt5)."
 msgstr "`qt`: Ce groupe contient les dépendances nécessaires à l'interface utilisateur graphique basée sur Qt (actuellement, PyQt5)."
 
-msgid "`opencv`: This group contains dependencies needed for computer vision tasks requiring OpenCV."
+#, fuzzy
+msgid "`opencv`: computer vision tasks requiring OpenCV."
 msgstr "`opencv`: Ce groupe contient les dépendances nécessaires aux tâches de vision par ordinateur nécessitant OpenCV."
 
-msgid "`dev`: This group contains dependencies needed for development and testing (linters, formatters, etc.)."
+#, fuzzy
+msgid "`dev`: development and testing (linters, formatters, etc.)."
 msgstr "`dev`: Ce groupe contient les dépendances nécessaires au développement et aux tests (linters, formateurs, etc.)."
 
-msgid "`doc`: This group contains dependencies needed for building the documentation (Sphinx, etc.)."
+#, fuzzy
+msgid "`doc`: building the documentation (Sphinx, etc.)."
 msgstr "`doc`: Ce groupe contient les dépendances nécessaires à la construction de la documentation (Sphinx, etc.)."
 
-msgid "`test`: This group contains dependencies needed for running the tests (pytest, etc.)."
+#, fuzzy
+msgid "`test`: running the tests (pytest, etc.)."
 msgstr "`test`: Ce groupe contient les dépendances nécessaires à l'exécution des tests (pytest, etc.)."
 
 msgid "Deploying Dependencies"
@@ -108,3 +114,4 @@ msgstr "Pour les autres dépendances optionnelles, spécifiez la plage de versio
 
 msgid "In other words, except for the `dev` dependencies, always specify a version range that is compatible with the application."
 msgstr "En d'autres termes, sauf pour les dépendances `dev`, spécifiez toujours une plage de versions compatible avec l'application."
+

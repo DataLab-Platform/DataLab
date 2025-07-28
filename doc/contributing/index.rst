@@ -122,4 +122,3 @@ bugs or implementing new features.
    dependencies
    environment
    roadmap
-   changelog

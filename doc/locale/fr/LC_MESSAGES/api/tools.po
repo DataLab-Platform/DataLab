@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 18:13+0200\n"
+"POT-Creation-Date: 2025-07-26 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -781,6 +781,33 @@ msgid "Return image centroid using Fourier algorithm"
 msgstr ""
 
 msgid "Centroid coordinates (row, col)"
+msgstr ""
+
+msgid "Estimate centroid from smoothed 1D projections."
+msgstr ""
+
+msgid "2D image array"
+msgstr ""
+
+msgid "Ratio of smoothing window size (default: 1/40)"
+msgstr ""
+
+msgid "'median' (default) or 'barycenter'"
+msgstr ""
+
+msgid "(y, x) coordinates"
+msgstr ""
+
+msgid "Automatically select the most reliable centroid estimation method: - Prefer Fourier if it is more consistent with the projected median. - Fallback to scikit-image centroid if Fourier is less coherent."
+msgstr ""
+
+msgid "2D image array."
+msgstr ""
+
+msgid "If True, also return the name of the selected method."
+msgstr ""
+
+msgid "Estimated centroid coordinates (float). Optionally, the selected method as string: \"fourier\" or \"skimage\"."
 msgstr ""
 
 msgid "Return absolute level"

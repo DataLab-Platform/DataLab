@@ -114,6 +114,7 @@ DataLab has been funded, chronologically, by the following stakeholders:
         features/index
         api/index
         contributing/index
+        changelog
 
     .. note:: DataLab was created by `CODRA`_/`Pierre Raybaut`_ in 2023. It is
             developed and maintained by DataLab Platform Developers.

@@ -15,13 +15,13 @@ The `pyproject.toml` file contains many sections, but the most relevant for depe
 - `[project.dependencies]`: This section lists the direct dependencies of the application. These are the packages that the application needs to run.
 - `[project.optional-dependencies]`: This section lists optional dependencies that can be installed to enable additional features. These dependencies are not required for the core functionality of the application but can enhance its capabilities.
 
-Among the optional dependencies, we have:
+Among the optional dependencies, we have the following groups:
 
-- `qt`: This group contains dependencies needed for the Qt-based graphical user interface (currently, PyQt5).
-- `opencv`: This group contains dependencies needed for computer vision tasks requiring OpenCV.
-- `dev`: This group contains dependencies needed for development and testing (linters, formatters, etc.).
-- `doc`: This group contains dependencies needed for building the documentation (Sphinx, etc.).
-- `test`: This group contains dependencies needed for running the tests (pytest, etc.).
+- `qt`: Qt-based graphical user interface (currently, PyQt5).
+- `opencv`: computer vision tasks requiring OpenCV.
+- `dev`: development and testing (linters, formatters, etc.).
+- `doc`: building the documentation (Sphinx, etc.).
+- `test`: running the tests (pytest, etc.).
 
 Deploying Dependencies
 ----------------------

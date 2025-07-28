@@ -1,4 +1,4 @@
-# Changelog #
+# Release notes #
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 

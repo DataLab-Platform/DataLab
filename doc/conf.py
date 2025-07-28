@@ -14,9 +14,9 @@ import datalab
 os.environ["DATALAB_DOC"] = "1"
 
 
-# -- Copy CHANGELOG.md to doc/contributing folder ------------------------
+# -- Copy CHANGELOG.md to doc folder ------------------------
 #
-# Note: An alternative to this could be to create a 'contributing/changelog.rst' file
+# Note: An alternative to this could be to create a 'changelog.rst' file
 # containing the following:
 #
 # .. include:: ../../CHANGELOG.md
@@ -31,7 +31,7 @@ os.environ["DATALAB_DOC"] = "1"
 def copy_changelog(app):
     """Copy CHANGELOG.md to doc/contributing folder."""
     docpath = osp.abspath(osp.dirname(__file__))
-    dest_fname = osp.join(docpath, "contributing", "changelog.md")
+    dest_fname = osp.join(docpath, "changelog.md")
     if osp.exists(dest_fname):
         os.remove(dest_fname)
     shutil.copyfile(osp.join(docpath, "..", "CHANGELOG.md"), dest_fname)

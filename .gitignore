@@ -5,7 +5,7 @@ resources/*.png
 doc.zip
 releases/
 /tutorialnotes*.md
-doc/contributing/changelog.md
+doc/changelog.md
 scenario_*.h5
 
 # Windows specific

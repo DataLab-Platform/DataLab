@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-26 14:38+0200\n"
+"POT-Creation-Date: 2025-07-28 17:58+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1469,14 +1469,8 @@ msgstr "ROI circulaire"
 msgid "Polygonal ROI"
 msgstr "ROI polygonale"
 
-msgid "Graphical ROI"
-msgstr "ROI graphique"
-
-msgid "Coordinate-based ROI"
-msgstr "ROI par coordonnées"
-
-msgid "Remove all"
-msgstr "Supprimer tout"
+msgid "Regions of interest"
+msgstr "Régions d'intérêt"
 
 #, python-format
 msgid ""
@@ -1486,14 +1480,20 @@ msgstr ""
 "Extraire toutes les ROI\n"
 "dans un seul objet %s"
 
+msgid "Graphical ROI"
+msgstr "ROI graphique"
+
+msgid "Coordinate-based ROI"
+msgstr "ROI par coordonnées"
+
+msgid "Remove all"
+msgstr "Supprimer tout"
+
 msgid "Remove all ROIs"
 msgstr "Supprimer toutes les ROI"
 
 msgid "Are you sure you want to remove all ROIs?"
 msgstr "Êtes-vous sûr de vouloir supprimer toutes les ROI ?"
-
-msgid "Regions of interest"
-msgstr "Régions d'intérêt"
 
 msgid "Settings for main window and general features"
 msgstr "Réglages de la fenêtre principale et des fonctionnalités générales"
