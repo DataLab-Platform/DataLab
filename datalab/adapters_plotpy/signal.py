@@ -223,29 +223,20 @@ class SignalObjPlotPyAdapter(BaseObjPlotPyAdapter[SignalObj, CurveItem]):
             Plot item
         """
         o = self.obj
-        if len(o.xydata) in (2, 3, 4):
+        if len(o.xydata) in (2, 4):
             assert isinstance(o.xydata, np.ndarray)
             if len(o.xydata) == 2:  # x, y signal
                 x, y = o.xydata
-                assert isinstance(x, np.ndarray) and isinstance(y, np.ndarray)
                 item = make.mcurve(x.real, y.real, label=o.title)
-            elif len(o.xydata) == 3:  # x, y, dy error bar signal
-                x, y, dy = o.xydata
-                assert (
-                    isinstance(x, np.ndarray)
-                    and isinstance(y, np.ndarray)
-                    and isinstance(dy, np.ndarray)
-                )
-                item = make.merror(x.real, y.real, dy.real, label=o.title)
-            elif len(o.xydata) == 4:  # x, y, dx, dy error bar signal
+            else:  # x, y, dx, dy error bar signal
                 x, y, dx, dy = o.xydata
-                assert (
-                    isinstance(x, np.ndarray)
-                    and isinstance(y, np.ndarray)
-                    and isinstance(dx, np.ndarray)
-                    and isinstance(dy, np.ndarray)
-                )
-                item = make.merror(x.real, y.real, dx.real, dy.real, label=o.title)
+                if o.dx is None and o.dy is None:  # x, y signal with no error
+                    item = make.mcurve(x.real, y.real, label=o.title)
+                elif o.dx is None:  # x, y, dy error bar signal with y error
+                    item = make.merror(x.real, y.real, dy.real, label=o.title)
+                else:  # x, y, dx, dy error bar signal with x error
+                    dy = np.zeros_like(y) if dy is None else dy
+                    item = make.merror(x.real, y.real, dx.real, dy.real, label=o.title)
             CURVESTYLES.apply_style(item.param)
             apply_downsampling(item, do_not_update=True)
         else:
