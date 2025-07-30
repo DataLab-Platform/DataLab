@@ -13,6 +13,7 @@ omit =
     */datalab/tests/*
     */guidata/*
     */plotpy/*
+    */sigima/*
 
     #--- Workaround for certain builds of python-opencv package:
     ./config-3.9.py
