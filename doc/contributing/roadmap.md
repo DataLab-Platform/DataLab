@@ -74,14 +74,16 @@ As DataLab's modular architecture evolves, a natural next step is to provide a *
 
 A web frontend would allow users to:
 
-* **Run DataLab remotely** (e.g. from a server or cloud platform) and access it via a browser;
+* **Run DataLab remotely** (e.g. from a server) and access it via a browser;
 * Perform processing and visualization tasks without needing a local Python environment;
 * Facilitate **collaborative data analysis**, sharing sessions or results with colleagues;
 * Integrate with JupyterHub, dashboards, or lab management tools for centralized usage.
 
-This frontend could be built on top of the upcoming `DataLab-core` library, exposing its features through a web interface — possibly leveraging tools like **JupyterLab extensions**, **Panel**, or **Dash**, depending on the chosen stack.
+This frontend could be built on top of the upcoming [Sigima](https://sigima.readthedocs.io/) library, exposing its features through a web interface — possibly leveraging tools like **JupyterLab extensions**, **Panel**, or **Dash**, depending on the chosen stack.
 
-While still exploratory, this direction would increase **accessibility, portability, and scalability** of DataLab, especially in academic, industrial, and cloud-based environments.
+While still exploratory, this direction would increase **accessibility and portability** of DataLab, especially in academic and industrial environments.
+
+> ℹ️ The web frontend shall not replace the desktop application, but rather complement it by providing a different access mode. DataLab's philosophy is to remain a **local application** that does not require a server to run, ensuring data privacy and security. More precisely, the web frontend will empower users to run DataLab on a server and access it remotely - typically on a local network, but it will not be a cloud-based solution or a first step towards a fully cloud-based application which would be against the project's philosophy.
 
 ### ⏱️ Support for Time Series
 
