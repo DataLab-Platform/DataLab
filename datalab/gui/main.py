@@ -157,7 +157,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.imagepanel: ImagePanel | None = None
         self.tabwidget: QW.QTabWidget | None = None
         self.tabmenu: QW.QMenu | None = None
-        self.docks: dict[AbstractPanel, QW.QDockWidget] | None = None
+        self.docks: dict[AbstractPanel | DockableConsole, QW.QDockWidget] | None = None
         self.h5inputoutput = H5InputOutput(self)
 
         self.openh5_action: QW.QAction | None = None
@@ -933,10 +933,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.tabwidget = QW.QTabWidget()
         self.tabmenu = add_corner_menu(self.tabwidget)
         configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
-        cdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Signal View"))
+        sdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Signal View"))
         idock = self.__add_dockwidget(self.__add_image_panel(), title=_("Image View"))
-        self.tabifyDockWidget(cdock, idock)
-        self.docks = {self.signalpanel: cdock, self.imagepanel: idock}
+        self.tabifyDockWidget(sdock, idock)
+        self.docks = {self.signalpanel: sdock, self.imagepanel: idock}
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
         self.signalpanel.SIG_OBJECT_ADDED.connect(
             lambda: self.set_current_panel("signal")
@@ -1076,7 +1076,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """
         if self.console is not None:
             state = Conf.console.show_console_on_error.get()
-            self.console.setVisible(state)
+            cdock = self.docks[self.console]
+            if not state and cdock.isVisible():
+                cdock.hide()
             if state:
                 self.console.exception_occurred.connect(self.console.show_console)
             else:
@@ -1110,8 +1112,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.console = DockableConsole(self, namespace=ns, message=msg, debug=DEBUG)
         self.console.setMaximumBlockCount(Conf.console.max_line_count.get(5000))
         self.console.go_to_error.connect(go_to_error)
-        console_dock = self.__add_dockwidget(self.console, _("Console"))
-        console_dock.hide()
+        cdock = self.__add_dockwidget(self.console, _("Console"))
+        self.docks[self.console] = cdock
+        cdock.hide()
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
             lambda txt: self.repopulate_panel_trees()
         )
