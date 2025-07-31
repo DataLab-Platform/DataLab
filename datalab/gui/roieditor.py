@@ -88,9 +88,31 @@ def tool_deselect_items(tool: InteractiveTool) -> None:
     plot.select_some_items([])  # Deselect all items
 
 
-def tool_setup_shape(shape: TypeROIItem, obj: SignalObj | ImageObj) -> None:
+def get_roi_items_from_plot(plot: BasePlot) -> list[TypeROIItem]:
+    """Get ROI items from plot (applies to both Signal and Image ROIs)
+
+    Args:
+        plot: Plot to get items from
+
+    Returns:
+        List of ROI items from the plot.
+    """
+    return [
+        item
+        for item in plot.get_items()
+        if isinstance(
+            item,
+            (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon, XRangeSelection),
+        )
+    ]
+
+
+def tool_setup_shape(
+    plot: BasePlot, shape: TypeROIItem, obj: SignalObj | ImageObj
+) -> None:
     """Tool setup shape"""
-    shape.setTitle("ROI")
+    roi_item_nb = len(get_roi_items_from_plot(plot))
+    shape.setTitle(f"ROI{roi_item_nb:02d}")
     configure_roi_item_in_tool(shape, obj)
 
 
@@ -141,7 +163,7 @@ class ROIRectangleTool(RectangleTool):
     # Reimplement `RectangularShapeTool` method
     def setup_shape(self, shape: AnnotatedRectangle) -> None:
         """Setup shape"""
-        tool_setup_shape(shape, self.obj)
+        tool_setup_shape(self.get_active_plot(), shape, self.obj)
 
 
 class ROICircleTool(CircleTool):
@@ -168,7 +190,7 @@ class ROICircleTool(CircleTool):
     # Reimplement `RectangularShapeTool` method
     def setup_shape(self, shape: AnnotatedCircle) -> None:
         """Setup shape"""
-        tool_setup_shape(shape, self.obj)
+        tool_setup_shape(self.get_active_plot(), shape, self.obj)
 
 
 class ROIPolygonTool(PolygonTool):
@@ -194,7 +216,7 @@ class ROIPolygonTool(PolygonTool):
     # Reimplement `RectangularShapeTool` method
     def setup_shape(self, shape: AnnotatedPolygon) -> None:
         """Setup shape"""
-        tool_setup_shape(shape, self.obj)
+        tool_setup_shape(self.get_active_plot(), shape, self.obj)
 
 
 TypeROIEditor = TypeVar("TypeROIEditor", bound="BaseROIEditor")
@@ -452,12 +474,9 @@ class BaseROIEditor(
     def update_roi_items(self) -> None:
         """Update ROI items"""
         old_nb_items = len(self.roi_items)
-        self.roi_items = [
-            item
-            for item in self.get_plot().get_items()
-            if isinstance(item, self.ROI_ITEM_TYPES)
-        ]
-        self.get_plot().select_some_items([])
+        plot = self.get_plot()
+        self.roi_items = get_roi_items_from_plot(plot)
+        plot.select_some_items([])
         self.update_roi_titles()
         if old_nb_items != len(self.roi_items):
             self.modified = True
