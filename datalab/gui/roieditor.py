@@ -124,12 +124,7 @@ class ROIRectangleTool(RectangleTool):
     ICON = "roi_new_rectangle.svg"
 
     def __init__(self, manager: PlotManager, obj: ImageObj) -> None:
-        super().__init__(
-            manager,
-            switch_to_default_tool=False,
-            toolbar_id=None,
-            setup_shape_cb=tool_setup_shape,
-        )
+        super().__init__(manager, switch_to_default_tool=False, toolbar_id=None)
         self.roi = RectangularROI([0, 0, 1, 1], True)
         self.obj = obj
 
@@ -143,6 +138,7 @@ class ROIRectangleTool(RectangleTool):
         item = create_adapter_from_object(self.roi).to_plot_item(self.obj)
         return item, 0, 2
 
+    # Reimplement `RectangularShapeTool` method
     def setup_shape(self, shape: AnnotatedRectangle) -> None:
         """Setup shape"""
         tool_setup_shape(shape, self.obj)
@@ -155,12 +151,7 @@ class ROICircleTool(CircleTool):
     ICON = "roi_new_circle.svg"
 
     def __init__(self, manager: PlotManager, obj: ImageObj) -> None:
-        super().__init__(
-            manager,
-            switch_to_default_tool=False,
-            toolbar_id=None,
-            setup_shape_cb=tool_setup_shape,
-        )
+        super().__init__(manager, switch_to_default_tool=False, toolbar_id=None)
         self.roi = CircularROI([0, 0, 1], True)
         self.obj = obj
 
@@ -174,6 +165,7 @@ class ROICircleTool(CircleTool):
         item = create_adapter_from_object(self.roi).to_plot_item(self.obj)
         return item, 0, 1
 
+    # Reimplement `RectangularShapeTool` method
     def setup_shape(self, shape: AnnotatedCircle) -> None:
         """Setup shape"""
         tool_setup_shape(shape, self.obj)
@@ -186,12 +178,7 @@ class ROIPolygonTool(PolygonTool):
     ICON = "roi_new_polygon.svg"
 
     def __init__(self, manager: PlotManager, obj: ImageObj) -> None:
-        super().__init__(
-            manager,
-            switch_to_default_tool=False,
-            toolbar_id=None,
-            setup_shape_cb=tool_setup_shape,
-        )
+        super().__init__(manager, switch_to_default_tool=False, toolbar_id=None)
         self.roi = PolygonalROI([[0, 0], [1, 0], [1, 1], [0, 1]], True)
         self.obj = obj
 
@@ -204,6 +191,7 @@ class ROIPolygonTool(PolygonTool):
         """Create shape"""
         return create_adapter_from_object(self.roi).to_plot_item(self.obj)
 
+    # Reimplement `RectangularShapeTool` method
     def setup_shape(self, shape: AnnotatedPolygon) -> None:
         """Setup shape"""
         tool_setup_shape(shape, self.obj)
