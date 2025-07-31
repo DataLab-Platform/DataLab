@@ -111,9 +111,8 @@ def tool_setup_shape(
     plot: BasePlot, shape: TypeROIItem, obj: SignalObj | ImageObj
 ) -> None:
     """Tool setup shape"""
-    roi_item_nb = len(get_roi_items_from_plot(plot))
-    shape.setTitle(f"ROI{roi_item_nb:02d}")
     configure_roi_item_in_tool(shape, obj)
+    shape.setTitle(f"ROI{len(get_roi_items_from_plot(plot)):02d}")
 
 
 class ROISegmentTool(HRangeTool):
@@ -135,7 +134,7 @@ class ROISegmentTool(HRangeTool):
     def create_shape(self) -> XRangeSelection:
         """Create shape"""
         shape = create_adapter_from_object(self.roi).to_plot_item(self.obj)
-        configure_roi_item_in_tool(shape, self.obj)
+        tool_setup_shape(self.get_active_plot(), shape, self.obj)
         return shape
 
 
