@@ -496,6 +496,12 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             comment=_("Compute the ordinate at a given x value (linear interpolation)"),
         )
         self.register_1_to_0(
+            sigima_signal.get_parameters,
+            _("Obtain signal parameters"),
+            paramclass=sigima_signal.ParametersParam,
+            comment=_("Obtain signal parameters"),
+        )
+        self.register_1_to_0(
             sigima_signal.x_at_minmax,
             _("Abscissa of the minimum and maximum"),
             comment=_(

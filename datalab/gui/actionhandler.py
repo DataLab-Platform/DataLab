@@ -1070,6 +1070,7 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_y_at_x,
                 tip=_("Compute the ordinate at a given x value (linear interpolation)"),
             )
+            self.action_for("get_parameters")
             self.new_action(
                 _("Peak detection"),
                 separator=True,
