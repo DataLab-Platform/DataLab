@@ -66,6 +66,7 @@ def datalab_test_app_context(
     if size is None:
         size = 950, 600
     with qth.datalab_app_context(exec_loop=exec_loop):
+        win: DLMainWindow | None = None
         try:
             win = DLMainWindow(console=console)
             if maximized:
@@ -86,7 +87,7 @@ def datalab_test_app_context(
                 except (FileNotFoundError, PermissionError):
                     pass
             has_exception_occurred = sys.exc_info()[0] is not None
-            if not exec_loop or has_exception_occurred:
+            if not exec_loop or has_exception_occurred and win is not None:
                 # Closing main window properly
                 win.set_modified(False)
                 win.close()
