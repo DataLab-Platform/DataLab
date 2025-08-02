@@ -31,22 +31,21 @@ from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
 
+from datalab.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
+from datalab.env import execenv
+from datalab.proxy import LocalProxy
+
 # pylint: disable=unused-import
 from sigima.io.base import FormatInfo  # noqa: F401
 from sigima.io.image.base import ImageFormatBase  # noqa: F401
 from sigima.io.image.formats import ClassicsImageFormat  # noqa: F401
 from sigima.io.signal.base import SignalFormatBase  # noqa: F401
 
-from datalab.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
-from datalab.env import execenv
-from datalab.proxy import LocalProxy
-
 if TYPE_CHECKING:
-    from sigima.objects import NewImageParam, NewSignalParam
-
     from datalab.gui import main
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+    from sigima.objects import NewImageParam, NewSignalParam
 
 
 PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")

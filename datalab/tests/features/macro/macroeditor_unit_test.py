@@ -20,12 +20,12 @@ All other methods should be tested here.
 import os.path as osp
 
 from guidata.qthelpers import qt_app_context
-from sigima.tests import helpers
-from sigima.tests.helpers import get_temporary_directory
 
 from datalab.env import execenv
 from datalab.gui.macroeditor import Macro
 from datalab.gui.panel import macro
+from sigima.tests import helpers
+from sigima.tests.helpers import get_temporary_directory
 
 
 def get_macro_example_path() -> str:

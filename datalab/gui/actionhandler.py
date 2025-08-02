@@ -39,23 +39,22 @@ from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
-import sigima.objects as sio
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+import sigima.objects as sio
 from datalab.config import Conf, _
 from datalab.gui import newobject
 from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
-    from sigima.objects import ImageObj, SignalObj
-
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
     from datalab.objectmodel import ObjectGroup
+    from sigima.objects import ImageObj, SignalObj
 
 
 class SelectCond:

@@ -23,12 +23,12 @@ from guidata.widgets.codeeditor import CodeEditor
 from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from sigima.io.common.converters import to_string
 
 import datalab
 from datalab.config import _
 from datalab.env import execenv
 from datalab.gui import ObjItf
+from sigima.io.common.converters import to_string
 
 UNTITLED_NB = 0
 

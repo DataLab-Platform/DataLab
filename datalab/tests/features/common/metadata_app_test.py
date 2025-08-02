@@ -15,14 +15,13 @@ import sigima.objects
 import sigima.params
 import sigima.proc.image as sigima_image
 import sigima.proc.signal as sigima_signal
-from sigima.tests.data import create_paracetamol_signal
-
 from datalab.env import execenv
 from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.image.roi_app_test import create_test_image_with_roi
+from sigima.tests.data import create_paracetamol_signal
 
 
 def __run_signal_computations(panel: SignalPanel):

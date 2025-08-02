@@ -16,7 +16,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal
 
 import qtpy.QtCore as QC
-import sigima.params
 from guidata.configtools import get_icon
 from plotpy.interfaces import ICurveItemType
 from plotpy.items import AnnotatedPoint, AnnotatedRectangle, AnnotatedSegment
@@ -26,6 +25,7 @@ from plotpy.tools import AverageCrossSectionTool, CrossSectionTool, LineCrossSec
 from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QWidget
 
+import sigima.params
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.config import _
 
@@ -33,6 +33,7 @@ if TYPE_CHECKING:
     from plotpy.items import CurveItem
     from plotpy.panels import XCrossSection, YCrossSection
     from plotpy.plot import BasePlot
+
     from sigima.objects import ImageObj
 
 

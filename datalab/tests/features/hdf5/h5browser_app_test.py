@@ -13,10 +13,10 @@ from __future__ import annotations
 
 from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
-from sigima.tests.data import get_test_fnames
 
 from datalab.env import execenv
 from datalab.widgets.h5browser import H5BrowserDialog
+from sigima.tests.data import get_test_fnames
 
 
 def create_h5browser_dialog(

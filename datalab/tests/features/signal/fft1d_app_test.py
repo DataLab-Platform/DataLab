@@ -7,9 +7,8 @@ Signal FFT application test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from sigima.objects import CosinusParam, create_signal_from_param
-
 from datalab.tests import datalab_test_app_context
+from sigima.objects import CosinusParam, create_signal_from_param
 
 
 def test_fft1d_app():

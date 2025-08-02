@@ -16,7 +16,6 @@ import numpy as np
 from guidata.dataset import restore_dataset, update_dataset
 from plotpy.builder import make
 from plotpy.items import CurveItem, XRangeSelection
-from sigima.objects import SegmentROI, SignalObj, SignalROI
 
 from datalab.adapters_plotpy.base import (
     BaseObjPlotPyAdapter,
@@ -24,6 +23,7 @@ from datalab.adapters_plotpy.base import (
     BaseSingleROIPlotPyAdapter,
 )
 from datalab.config import Conf
+from sigima.objects import SegmentROI, SignalObj, SignalROI
 
 if TYPE_CHECKING:
     from plotpy.styles import CurveParam

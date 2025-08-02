@@ -12,19 +12,11 @@ import re
 from collections.abc import Callable
 
 import numpy as np
+from guidata.qthelpers import exec_dialog
+
 import sigima.params
 import sigima.proc.base as sigima_base
 import sigima.proc.signal as sigima_signal
-from guidata.qthelpers import exec_dialog
-from sigima.objects import (
-    ResultProperties,
-    ResultShape,
-    ROI1DParam,
-    SignalObj,
-    SignalROI,
-    create_signal,
-)
-
 from datalab.config import _
 from datalab.gui.processor.base import BaseProcessor
 from datalab.utils.qthelpers import qt_try_except
@@ -34,6 +26,14 @@ from datalab.widgets import (
     signalcursor,
     signaldeltax,
     signalpeak,
+)
+from sigima.objects import (
+    ResultProperties,
+    ResultShape,
+    ROI1DParam,
+    SignalObj,
+    SignalROI,
+    create_signal,
 )
 
 

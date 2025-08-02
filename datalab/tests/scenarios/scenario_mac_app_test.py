@@ -13,11 +13,10 @@ Testing all the macro-commands features.
 import os.path as osp
 import time
 
-from sigima.tests.helpers import WorkdirRestoringTempDir
-
 from datalab.gui.macroeditor import Macro
 from datalab.gui.main import DLMainWindow
 from datalab.tests import datalab_test_app_context
+from sigima.tests.helpers import WorkdirRestoringTempDir
 
 
 def add_macro_sample(win: DLMainWindow, index: int) -> Macro:

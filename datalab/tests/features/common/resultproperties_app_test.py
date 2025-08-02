@@ -9,9 +9,9 @@ Result properties application test
 from __future__ import annotations
 
 import numpy as np
-from sigima.tests import data as test_data
 
 from datalab.tests import datalab_test_app_context
+from sigima.tests import data as test_data
 
 
 def create_image_with_resultproperties():

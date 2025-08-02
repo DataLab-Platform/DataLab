@@ -8,9 +8,8 @@ Denoise processing application test
 # guitest: show
 
 import sigima.params
-from sigima.tests.data import get_test_image
-
 from datalab.tests import datalab_test_app_context
+from sigima.tests.data import get_test_image
 
 
 def test_denoise():

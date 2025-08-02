@@ -11,9 +11,8 @@ Testing the following:
 # guitest: show
 
 import sigima.params
-from sigima.tests.data import create_peak_image
-
 from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
+from sigima.tests.data import create_peak_image
 
 
 def test_peak2d():

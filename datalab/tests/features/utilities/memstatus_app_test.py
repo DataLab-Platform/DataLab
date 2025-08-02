@@ -8,11 +8,11 @@ Memory status widget application test
 
 import numpy as np
 import psutil
-from sigima.objects import Gauss2DParam
 
 from datalab import config
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
+from sigima.objects import Gauss2DParam
 
 
 def memory_alarm(threshold):

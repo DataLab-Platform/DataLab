@@ -59,10 +59,10 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QApplication, QMainWindow
-from sigima.objects import create_signal
-from sigima.tools.signal.pulse import fwhm
 
 from datalab.config import APP_NAME, Conf, _
+from sigima.objects import create_signal
+from sigima.tools.signal.pulse import fwhm
 
 if TYPE_CHECKING:
     from plotpy.items.image.base import BaseImageItem

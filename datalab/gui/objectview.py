@@ -43,11 +43,11 @@ from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import _
 from datalab.objectmodel import ObjectGroup, get_short_id, get_uuid
 from datalab.utils.qthelpers import block_signals
+from sigima.objects import ImageObj, SignalObj
 
 if TYPE_CHECKING:
     from typing import Any

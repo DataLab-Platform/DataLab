@@ -8,12 +8,11 @@ Contour finding application test
 # guitest: show
 
 import sigima.params
-from sigima.objects import NewImageParam
-from sigima.tests.data import create_multigaussian_image
-
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
 from datalab.tests.features.image.roi_app_test import create_test_image_with_roi
+from sigima.objects import NewImageParam
+from sigima.tests.data import create_multigaussian_image
 
 
 def test_contour_app():

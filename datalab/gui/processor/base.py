@@ -23,9 +23,6 @@ from guidata.qthelpers import exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from sigima.config import options as sigima_options
-from sigima.objects import ImageObj, SignalObj, TypeROI, TypeROIParam
-from sigima.proc.decorator import is_computation_function
 
 from datalab import env
 from datalab.config import Conf, _
@@ -33,15 +30,18 @@ from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets.warningerror import show_warning_error
+from sigima.config import options as sigima_options
+from sigima.objects import ImageObj, SignalObj, TypeROI, TypeROIParam
+from sigima.proc.decorator import is_computation_function
 
 if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
 
     from plotpy.plot import PlotWidget
-    from sigima.objects import ResultProperties, ResultShape
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+    from sigima.objects import ResultProperties, ResultShape
 
 
 # Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)

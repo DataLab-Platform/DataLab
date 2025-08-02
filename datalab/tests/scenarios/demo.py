@@ -12,11 +12,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from guidata.qthelpers import qt_wait
+from qtpy import QtWidgets as QW
+
 import sigima.objects
 import sigima.params
 import sigima.proc.image as sigima_image
-from guidata.qthelpers import qt_wait
-from qtpy import QtWidgets as QW
+from datalab.config import _, reset
+from datalab.env import execenv
+from datalab.tests import datalab_test_app_context
 from sigima.tests.data import (
     create_multigaussian_image,
     create_paracetamol_signal,
@@ -24,10 +28,6 @@ from sigima.tests.data import (
     create_sincos_image,
     get_test_image,
 )
-
-from datalab.config import _, reset
-from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow

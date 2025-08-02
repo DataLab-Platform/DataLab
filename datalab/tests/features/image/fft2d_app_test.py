@@ -8,7 +8,6 @@ Image FFT application test.
 # guitest: show
 
 import sigima.objects
-
 from datalab.tests import datalab_test_app_context
 
 

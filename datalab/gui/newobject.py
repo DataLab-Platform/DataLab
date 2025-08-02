@@ -21,6 +21,8 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from plotpy.tools import EditPointTool
 from qtpy import QtWidgets as QW
+
+from datalab.config import _
 from sigima.objects import CustomSignalParam as OrigCustomSignalParam
 from sigima.objects import (
     Gauss2DParam,
@@ -36,8 +38,6 @@ from sigima.objects import (
 from sigima.objects import create_image_from_param as create_image_headless
 from sigima.objects import create_signal_from_param as create_signal_headless
 from sigima.objects.signal import DEFAULT_TITLE as SIGNAL_DEFAULT_TITLE
-
-from datalab.config import _
 
 
 class CustomSignalParam(OrigCustomSignalParam):

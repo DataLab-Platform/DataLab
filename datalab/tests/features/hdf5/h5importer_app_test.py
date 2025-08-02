@@ -9,11 +9,10 @@ Running application a few times in a row with different entry parameters.
 
 # guitest: show
 
-from sigima.tests.helpers import get_test_fnames
-
 from datalab import app
 from datalab.env import execenv
 from datalab.utils.qthelpers import datalab_app_context
+from sigima.tests.helpers import get_test_fnames
 
 
 def test_h5importer_app(pattern=None):

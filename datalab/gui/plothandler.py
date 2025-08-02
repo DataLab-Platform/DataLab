@@ -37,13 +37,13 @@ from plotpy.constants import PlotType
 from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedImageItem
 from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
-from sigima.objects import ImageObj, SignalObj, TypeObj
 
 from datalab.adapters_plotpy import TypePlotItem
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.config import Conf, _
 from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import block_signals, create_progress_bar
+from sigima.objects import ImageObj, SignalObj, TypeObj
 
 if TYPE_CHECKING:
     from plotpy.items import LabelItem

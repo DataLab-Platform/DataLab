@@ -14,16 +14,17 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigima.tools.signal.features import find_first_x_at_y_value
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.adapters_plotpy.signal import CURVESTYLES
 from datalab.config import _
 from datalab.utils.qthelpers import block_signals
+from sigima.tools.signal.features import find_first_x_at_y_value
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker
     from qtpy.QtWidgets import QWidget
+
     from sigima.objects import SignalObj
 
 

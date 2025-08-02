@@ -78,11 +78,11 @@ from contextlib import contextmanager
 
 import guidata.dataset as gds
 import numpy as np
-from sigima import ImageObj, SignalObj
 
 from datalab.baseproxy import BaseProxy
 from datalab.remote import RemoteClient
 from datalab.utils import qthelpers as qth
+from sigima import ImageObj, SignalObj
 
 
 class RemoteProxy(RemoteClient):

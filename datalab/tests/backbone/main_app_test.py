@@ -14,11 +14,10 @@ import os
 
 import sigima.params
 import sigima.proc.signal as sigima_signal
-from sigima.tests.data import create_paracetamol_signal
-
 from datalab.env import execenv
 from datalab.objectmodel import get_short_id, get_uuid
 from datalab.tests import datalab_test_app_context
+from sigima.tests.data import create_paracetamol_signal
 
 
 def test_main_app():

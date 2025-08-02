@@ -15,12 +15,11 @@ Groups/signals/images reorder test:
 
 # guitest: show
 
-from sigima.tests.helpers import get_test_fnames
-
 from datalab import app
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import datalab_app_context
+from sigima.tests.helpers import get_test_fnames
 
 
 def test_reorder():

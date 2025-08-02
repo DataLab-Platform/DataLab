@@ -19,14 +19,13 @@ performed in this mode: sum, difference, product, division, ...
 
 from __future__ import annotations
 
-from sigima.tests.helpers import get_test_fnames
-
 from datalab import app
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.gui.processor.base import is_pairwise_mode
 from datalab.objectmodel import get_short_id
 from datalab.utils.qthelpers import datalab_app_context
+from sigima.tests.helpers import get_test_fnames
 
 
 def check_titles(title, titles):

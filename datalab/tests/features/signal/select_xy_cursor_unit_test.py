@@ -12,11 +12,11 @@ from typing import Literal
 import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
-from sigima.tests.data import create_paracetamol_signal
-from sigima.tools.signal.features import find_first_x_at_y_value
 
 from datalab.env import execenv
 from datalab.widgets.signalcursor import SignalCursorDialog
+from sigima.tests.data import create_paracetamol_signal
+from sigima.tools.signal.features import find_first_x_at_y_value
 
 
 @pytest.mark.parametrize("cursor_orientation", ["horizontal", "vertical"])

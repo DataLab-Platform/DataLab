@@ -11,11 +11,10 @@ Testing the following:
 
 # guitest: show
 
-from sigima.objects import Gauss2DParam, UniformRandom2DParam
-from sigima.proc.image import FlatFieldParam
-
 from datalab.config import _
 from datalab.tests import datalab_test_app_context
+from sigima.objects import Gauss2DParam, UniformRandom2DParam
+from sigima.proc.image import FlatFieldParam
 
 
 def test_flatfield():

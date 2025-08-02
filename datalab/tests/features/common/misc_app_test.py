@@ -18,15 +18,14 @@ from typing import TYPE_CHECKING, Any
 
 import sigima.params
 import sigima.proc.signal as sigima_signal
+from datalab.env import execenv
+from datalab.objectmodel import get_uuid
+from datalab.tests import datalab_test_app_context
 from sigima.tests.data import (
     create_2dstep_image,
     create_paracetamol_signal,
     get_test_fnames,
 )
-
-from datalab.env import execenv
-from datalab.objectmodel import get_uuid
-from datalab.tests import datalab_test_app_context
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow

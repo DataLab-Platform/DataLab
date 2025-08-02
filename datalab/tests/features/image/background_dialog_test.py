@@ -11,15 +11,15 @@ Image background dialog unit test.
 from __future__ import annotations
 
 import numpy as np
+from guidata.qthelpers import exec_dialog, qt_app_context, qt_wait_until
+
 import sigima.objects
 import sigima.params
 import sigima.proc.image as sigima_image
-from guidata.qthelpers import exec_dialog, qt_app_context, qt_wait_until
-from sigima.tests import vistools
-from sigima.tests.data import create_noisy_gaussian_image
-
 from datalab.env import execenv
 from datalab.widgets.imagebackground import ImageBackgroundDialog
+from sigima.tests import vistools
+from sigima.tests.data import create_noisy_gaussian_image
 
 
 def wait_for_rect_coords(dlg: ImageBackgroundDialog) -> bool:

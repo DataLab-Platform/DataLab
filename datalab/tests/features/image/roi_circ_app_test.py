@@ -12,12 +12,12 @@ from __future__ import annotations
 from typing import Literal
 
 import numpy as np
-import sigima.objects
-from sigima.tests.helpers import print_obj_data_dimensions
 from skimage import draw
 
+import sigima.objects
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
+from sigima.tests.helpers import print_obj_data_dimensions
 
 
 def create_test_image_with_roi(

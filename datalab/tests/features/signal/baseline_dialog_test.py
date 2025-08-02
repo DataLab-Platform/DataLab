@@ -11,14 +11,14 @@ Baseline dialog test
 from __future__ import annotations
 
 import numpy as np
+from guidata.qthelpers import exec_dialog, qt_app_context
+
 import sigima.objects
 import sigima.proc.signal as sigima_signal
-from guidata.qthelpers import exec_dialog, qt_app_context
-from sigima.tests.data import create_paracetamol_signal
-from sigima.tests.vistools import view_curves
-
 from datalab.env import execenv
 from datalab.widgets.signalbaseline import SignalBaselineDialog
+from sigima.tests.data import create_paracetamol_signal
+from sigima.tests.vistools import view_curves
 
 
 def test_signal_baseline_selection():

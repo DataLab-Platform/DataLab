@@ -10,8 +10,14 @@ Scenarios common functions
 from __future__ import annotations
 
 import numpy as np
+
 import sigima.objects
 import sigima.params
+from datalab.config import _
+from datalab.gui.main import DLMainWindow
+from datalab.gui.panel.image import ImagePanel
+from datalab.gui.panel.signal import SignalPanel
+from datalab.widgets import fitdialog
 from sigima.tests.data import (
     GaussianNoiseParam,
     create_noisy_signal,
@@ -21,12 +27,6 @@ from sigima.tests.data import (
     iterate_image_creation,
     iterate_signal_creation,
 )
-
-from datalab.config import _
-from datalab.gui.main import DLMainWindow
-from datalab.gui.panel.image import ImagePanel
-from datalab.gui.panel.signal import SignalPanel
-from datalab.widgets import fitdialog
 
 
 def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) -> None:

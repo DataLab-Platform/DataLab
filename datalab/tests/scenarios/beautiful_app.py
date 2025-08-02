@@ -22,7 +22,6 @@ A high-level test scenario producing beautiful screenshots.
 
 import sigima.objects
 import sigima.params as sigima_param
-
 from datalab.tests import datalab_test_app_context
 
 

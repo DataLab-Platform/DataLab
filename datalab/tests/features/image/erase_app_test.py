@@ -5,9 +5,8 @@
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from sigima.tests.data import get_test_image
-
 from datalab.tests import datalab_test_app_context
+from sigima.tests.data import get_test_image
 
 
 def test_erase():
