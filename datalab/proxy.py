@@ -144,10 +144,10 @@ class LocalProxy(BaseProxy):
         title: str,
         xdata: np.ndarray,
         ydata: np.ndarray,
-        xunit: str | None = None,
-        yunit: str | None = None,
-        xlabel: str | None = None,
-        ylabel: str | None = None,
+        xunit: str = "",
+        yunit: str = "",
+        xlabel: str = "",
+        ylabel: str = "",
         group_id: str = "",
         set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
@@ -157,10 +157,10 @@ class LocalProxy(BaseProxy):
             title: Signal title
             xdata: X data
             ydata: Y data
-            xunit: X unit. Defaults to None
-            yunit: Y unit. Defaults to None
-            xlabel: X label. Defaults to None
-            ylabel: Y label. Defaults to None
+            xunit: X unit. Defaults to ""
+            yunit: Y unit. Defaults to ""
+            xlabel: X label. Defaults to ""
+            ylabel: Y label. Defaults to ""
             group_id: group id in which to add the signal. Defaults to ""
             set_current: if True, set the added signal as current
 
@@ -179,12 +179,12 @@ class LocalProxy(BaseProxy):
         self,
         title: str,
         data: np.ndarray,
-        xunit: str | None = None,
-        yunit: str | None = None,
-        zunit: str | None = None,
-        xlabel: str | None = None,
-        ylabel: str | None = None,
-        zlabel: str | None = None,
+        xunit: str = "",
+        yunit: str = "",
+        zunit: str = "",
+        xlabel: str = "",
+        ylabel: str = "",
+        zlabel: str = "",
         group_id: str = "",
         set_current: bool = True,
     ) -> bool:  # pylint: disable=too-many-arguments
@@ -193,12 +193,12 @@ class LocalProxy(BaseProxy):
         Args:
             title: Image title
             data: Image data
-            xunit: X unit. Defaults to None
-            yunit: Y unit. Defaults to None
-            zunit: Z unit. Defaults to None
-            xlabel: X label. Defaults to None
-            ylabel: Y label. Defaults to None
-            zlabel: Z label. Defaults to None
+            xunit: X unit. Defaults to ""
+            yunit: Y unit. Defaults to ""
+            zunit: Z unit. Defaults to ""
+            xlabel: X label. Defaults to ""
+            ylabel: Y label. Defaults to ""
+            zlabel: Z label. Defaults to ""
             group_id: group id in which to add the image. Defaults to ""
             set_current: if True, set the added image as current
 

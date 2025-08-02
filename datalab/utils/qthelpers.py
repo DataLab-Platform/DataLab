@@ -175,7 +175,7 @@ def datalab_app_context(
 
 def is_running_tests() -> bool:
     """Check if code is running during test execution"""
-    return "pytest" in sys.modules or hasattr(sys, "_called_from_test")
+    return "pytest" in sys.modules
 
 
 @contextmanager
