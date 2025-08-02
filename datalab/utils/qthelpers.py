@@ -26,7 +26,6 @@ from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigima.io.common.converters import to_string
 
 from datalab.config import (
     APP_NAME,
@@ -37,6 +36,7 @@ from datalab.config import (
     get_old_log_fname,
 )
 from datalab.env import execenv
+from sigima.io.common.converters import to_string
 
 
 def close_widgets_and_quit(screenshot=False) -> None:
@@ -175,7 +175,7 @@ def datalab_app_context(
 
 def is_running_tests() -> bool:
     """Check if code is running during test execution"""
-    return "pytest" in sys.modules or hasattr(sys, "_called_from_test")
+    return "pytest" in sys.modules
 
 
 @contextmanager
