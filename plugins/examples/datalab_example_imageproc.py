@@ -17,11 +17,11 @@ This sub-menu contains two actions, "Preprocess image" and "Detect blobs".
 """
 
 import numpy as np
+import sigima.objects
+import sigima.params
 import skimage.draw
 
 import datalab.plugins
-import sigima.objects
-import sigima.params
 
 
 class ExtractBlobs(datalab.plugins.PluginBase):

@@ -11,14 +11,14 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
-from skimage import draw
-
 import sigima.params as sigima_param
-from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
 from sigima.objects import ImageObj, ImageROI, NewImageParam, create_image_roi
 from sigima.tests.data import create_multigaussian_image
 from sigima.tests.helpers import print_obj_data_dimensions
+from skimage import draw
+
+from datalab.env import execenv
+from datalab.tests import datalab_test_app_context
 
 if TYPE_CHECKING:
     from datalab.gui.panel.image import ImagePanel

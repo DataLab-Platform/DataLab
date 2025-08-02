@@ -17,8 +17,9 @@ Testing the profile extraction features of the image panel:
 # guitest: show
 
 import sigima.params
-from datalab.tests import datalab_test_app_context
 from sigima.tests.data import create_noisy_gaussian_image, get_test_image
+
+from datalab.tests import datalab_test_app_context
 
 
 def test_profile():

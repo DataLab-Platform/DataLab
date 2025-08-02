@@ -20,13 +20,13 @@ import pytest
 import qtpy
 import qwt
 import scipy
+import sigima
 import skimage
+from sigima.tests import helpers
 
 import datalab
-import sigima
 from datalab.env import execenv
 from datalab.plugins import PluginRegistry, get_available_plugins
-from sigima.tests import helpers
 
 # Turn on unattended mode for executing tests without user interaction
 execenv.unattended = True

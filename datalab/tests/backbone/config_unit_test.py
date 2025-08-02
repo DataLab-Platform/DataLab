@@ -13,13 +13,13 @@ import os.path as osp
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigima.tests.helpers import get_test_fnames
 
 from datalab import app
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.utils.conf import CONF
 from datalab.utils.qthelpers import datalab_app_context
-from sigima.tests.helpers import get_test_fnames
 
 SEC_MAIN = Conf.main
 OPT_MAX = SEC_MAIN.window_maximized

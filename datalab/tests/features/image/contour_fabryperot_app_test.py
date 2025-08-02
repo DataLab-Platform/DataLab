@@ -9,8 +9,9 @@ Contour finding application test with Fabry-Perot images
 
 import sigima.objects
 import sigima.params
-from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
 from sigima.tests.data import get_test_image
+
+from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
 
 
 def test_contour_app() -> None:

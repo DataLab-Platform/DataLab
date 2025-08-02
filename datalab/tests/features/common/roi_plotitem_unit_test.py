@@ -10,19 +10,19 @@ ROI to plot item conversion unit tests
 from __future__ import annotations
 
 import numpy as np
-from guidata.qthelpers import qt_app_context
-
 import sigima.objects
-from datalab.adapters_plotpy.converters import (
-    plotitem_to_singleroi,
-)
-from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.env import execenv
+from guidata.qthelpers import qt_app_context
 from sigima.tests.common.roi_unit_test import (
     create_test_image_rois,
     create_test_signal_rois,
 )
 from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
+
+from datalab.adapters_plotpy.converters import (
+    plotitem_to_singleroi,
+)
+from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.env import execenv
 
 
 def __conversion_methods(

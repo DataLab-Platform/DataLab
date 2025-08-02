@@ -11,7 +11,6 @@ Simple image dialog for testing all image tools available in DataLab
 
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
-
 from sigima.tests.data import create_noisy_gaussian_image
 from sigima.tests.vistools import view_image_items
 

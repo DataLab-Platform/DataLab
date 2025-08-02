@@ -44,18 +44,6 @@ from plotpy.plot import PlotDialog, PlotManager, PlotOptions
 from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool, SelectTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-
-from datalab.adapters_plotpy import (
-    TypePlotItem,
-    TypeROIItem,
-    configure_roi_item,
-)
-from datalab.adapters_plotpy.converters import (
-    plotitem_to_singleroi,
-)
-from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.config import Conf, _
-from datalab.env import execenv
 from sigima.objects import (
     CircularROI,
     ImageObj,
@@ -70,6 +58,18 @@ from sigima.objects import (
     TypeObj,
     TypeROI,
 )
+
+from datalab.adapters_plotpy import (
+    TypePlotItem,
+    TypeROIItem,
+    configure_roi_item,
+)
+from datalab.adapters_plotpy.converters import (
+    plotitem_to_singleroi,
+)
+from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.config import Conf, _
+from datalab.env import execenv
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot

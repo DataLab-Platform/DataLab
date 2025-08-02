@@ -11,8 +11,6 @@ from plotpy.plot import PlotOptions
 from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.optimize import curve_fit
 from scipy.special import erf  # pylint: disable=no-name-in-module
-
-from datalab.config import _
 from sigima.tests.helpers import get_default_test_name
 from sigima.tools.checks import check_1d_arrays
 from sigima.tools.signal.fitmodels import (
@@ -22,6 +20,8 @@ from sigima.tools.signal.fitmodels import (
 )
 from sigima.tools.signal.fourier import magnitude_spectrum
 from sigima.tools.signal.peakdetection import xpeak
+
+from datalab.config import _
 
 
 def guifit(

@@ -24,13 +24,14 @@ This scenario executes the following steps:
 
 import os.path as osp
 
+from sigima.params import ClipParam
+from sigima.tests.data import create_noisy_gaussian_image, create_paracetamol_signal
+from sigima.tests.helpers import WorkdirRestoringTempDir
+
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 from datalab.tests.scenarios import scenario_mac_app_test
 from datalab.utils.strings import save_html_diff
-from sigima.params import ClipParam
-from sigima.tests.data import create_noisy_gaussian_image, create_paracetamol_signal
-from sigima.tests.helpers import WorkdirRestoringTempDir
 
 
 def test_scenario_h5():

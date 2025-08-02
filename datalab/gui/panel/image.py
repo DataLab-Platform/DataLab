@@ -18,6 +18,8 @@ from plotpy.tools import (
     AnnotatedSegmentTool,
     LabelTool,
 )
+from sigima.io.image import ImageIORegistry
+from sigima.objects import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 
 from datalab.config import Conf, _
 from datalab.gui import roieditor
@@ -26,8 +28,6 @@ from datalab.gui.newobject import create_image_gui
 from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.plothandler import ImagePlotHandler
 from datalab.gui.processor.image import ImageProcessor
-from sigima.io.image import ImageIORegistry
-from sigima.objects import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot

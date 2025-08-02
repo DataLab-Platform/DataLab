@@ -8,9 +8,10 @@ Distribute on grid application test
 # guitest: show
 
 import sigima.params
+from sigima.tests.data import get_test_image
+
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
-from sigima.tests.data import get_test_image
 
 
 def test_distribute_on_grid():

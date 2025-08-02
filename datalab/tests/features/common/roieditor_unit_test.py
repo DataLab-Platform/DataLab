@@ -11,11 +11,11 @@ from __future__ import annotations
 
 import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
+from sigima.objects import ImageROI, create_image_roi, create_signal_roi
+from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
 from datalab.env import execenv
 from datalab.gui.roieditor import ImageROIEditor, SignalROIEditor
-from sigima.objects import ImageROI, create_image_roi, create_signal_roi
-from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
 
 def test_signal_roi_editor() -> None:

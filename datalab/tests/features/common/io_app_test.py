@@ -11,13 +11,14 @@ I/O application test:
 
 import os.path as osp
 
-from datalab.env import execenv
-from datalab.gui.panel.base import BaseDataPanel
-from datalab.tests import datalab_test_app_context
 from sigima.io.base import BaseIORegistry, IOAction
 from sigima.io.image import ImageIORegistry
 from sigima.io.signal import SignalIORegistry
 from sigima.tests.helpers import WorkdirRestoringTempDir, get_test_fnames
+
+from datalab.env import execenv
+from datalab.gui.panel.base import BaseDataPanel
+from datalab.tests import datalab_test_app_context
 
 
 def __testfunc(

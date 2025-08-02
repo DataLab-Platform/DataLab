@@ -30,7 +30,6 @@ from typing import TYPE_CHECKING, Generator
 
 import guidata.dataset as gds
 import numpy as np
-
 from sigima import ImageObj, SignalObj
 
 if TYPE_CHECKING:

@@ -11,13 +11,13 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
-
 import sigima.params as sigima_param
-from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
 from sigima.objects import SignalROI, create_signal_roi
 from sigima.tests.data import create_paracetamol_signal
 from sigima.tests.helpers import print_obj_data_dimensions
+
+from datalab.env import execenv
+from datalab.tests import datalab_test_app_context
 
 if TYPE_CHECKING:
     from datalab.gui.panel.signal import SignalPanel

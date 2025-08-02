@@ -10,9 +10,10 @@ Annotations application test:
 
 # guitest: show
 
-from datalab.app import run
 from sigima.objects import create_image_roi
 from sigima.tests import data as test_data
+
+from datalab.app import run
 
 
 def test_annotations_app():

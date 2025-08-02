@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING
 
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
+from sigima.objects import SignalObj
 
 from datalab.config import _
 from datalab.env import execenv
@@ -24,7 +25,6 @@ from datalab.h5 import H5Importer
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from datalab.widgets.h5browser import H5BrowserDialog
-from sigima.objects import SignalObj
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow

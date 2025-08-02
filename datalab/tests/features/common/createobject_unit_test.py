@@ -12,12 +12,12 @@ Testing GUI functions related to signal/image creation.
 
 from __future__ import annotations
 
-from guidata.qthelpers import qt_app_context
-
 import sigima.objects
+from guidata.qthelpers import qt_app_context
+from sigima.tests.vistools import view_curves, view_images
+
 from datalab.env import execenv
 from datalab.gui.newobject import create_image_gui, create_signal_gui
-from sigima.tests.vistools import view_curves, view_images
 
 
 def test_new_signal() -> None:

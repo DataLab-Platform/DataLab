@@ -15,11 +15,12 @@ caught and displayed in the GUI.
 
 import warnings
 
+from sigima.objects import SignalObj
+from sigima.tests import data as test_data
+
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
-from sigima.objects import SignalObj
-from sigima.tests import data as test_data
 
 
 def comp_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument

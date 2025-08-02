@@ -8,10 +8,11 @@ Testing (de)serialization of Dictionnary/List inside object metadata
 
 import os.path as osp
 
-from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
 from sigima.tests.data import create_test_image_with_metadata
 from sigima.tests.helpers import WorkdirRestoringTempDir, compare_metadata
+
+from datalab.env import execenv
+from datalab.tests import datalab_test_app_context
 
 
 def test_dict_serialization():

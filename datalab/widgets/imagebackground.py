@@ -19,7 +19,6 @@ from datalab.config import _
 if TYPE_CHECKING:
     from plotpy.items import ImageItem, RangeComputation2d, RectangleShape
     from qtpy.QtWidgets import QWidget
-
     from sigima.objects import ImageObj
 
 

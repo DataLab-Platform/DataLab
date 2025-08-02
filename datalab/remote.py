@@ -29,13 +29,13 @@ import numpy as np
 from guidata.io import JSONReader, JSONWriter
 from packaging.version import Version
 from qtpy import QtCore as QC
+from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
 from datalab.adapters_plotpy import items_to_json, json_to_items
 from datalab.baseproxy import AbstractDLControl, BaseProxy
 from datalab.config import Conf, initialize
 from datalab.env import execenv
-from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow

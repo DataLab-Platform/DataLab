@@ -12,12 +12,12 @@ Result shapes application test:
 from __future__ import annotations
 
 import numpy as np
-
 import sigima.objects
 import sigima.params
-from datalab.tests import datalab_test_app_context
 from sigima.config import options as sigima_options
 from sigima.tests import data as test_data
+
+from datalab.tests import datalab_test_app_context
 
 
 def create_image_with_resultshapes() -> sigima.objects.ImageObj:

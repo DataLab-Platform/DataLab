@@ -36,6 +36,18 @@ from qtpy.compat import (
     getopenfilenames,
     getsavefilename,
 )
+from sigima.objects import (
+    ImageObj,
+    NewImageParam,
+    ResultProperties,
+    ResultShape,
+    ShapeTypes,
+    SignalObj,
+    TypeObj,
+    TypeROI,
+    create_signal,
+)
+from sigima.objects.base import ROI_KEY
 
 from datalab import objectmodel
 from datalab.adapters_plotpy.base import items_to_json
@@ -55,23 +67,13 @@ from datalab.utils.qthelpers import (
     save_restore_stds,
 )
 from datalab.widgets.textimport import TextImportWizard
-from sigima.objects import (
-    ImageObj,
-    NewImageParam,
-    ResultProperties,
-    ResultShape,
-    ShapeTypes,
-    SignalObj,
-    TypeObj,
-    TypeROI,
-    create_signal,
-)
-from sigima.objects.base import ROI_KEY
 
 if TYPE_CHECKING:
     from typing import Callable
 
     from plotpy.items import CurveItem, LabelItem, MaskedImageItem
+    from sigima.io.image import ImageIORegistry
+    from sigima.io.signal import SignalIORegistry
 
     from datalab.gui import ObjItf
     from datalab.gui.main import DLMainWindow
@@ -79,8 +81,6 @@ if TYPE_CHECKING:
     from datalab.gui.processor.image import ImageProcessor
     from datalab.gui.processor.signal import SignalProcessor
     from datalab.h5.native import NativeH5Reader, NativeH5Writer
-    from sigima.io.image import ImageIORegistry
-    from sigima.io.signal import SignalIORegistry
 
 
 def is_plot_item_serializable(item: ShapeTypes) -> bool:

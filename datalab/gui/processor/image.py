@@ -9,19 +9,19 @@
 from __future__ import annotations
 
 import numpy as np
-from guidata.qthelpers import exec_dialog
-from plotpy.widgets.resizedialog import ResizeDialog
-from qtpy import QtWidgets as QW
-
 import sigima.params
 import sigima.proc.base as sigima_base
 import sigima.proc.image as sigima_image
+from guidata.qthelpers import exec_dialog
+from plotpy.widgets.resizedialog import ResizeDialog
+from qtpy import QtWidgets as QW
+from sigima.objects import ImageROI, ResultShape, ROI2DParam
+
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
 from datalab.gui.profiledialog import ProfileExtractionDialog
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets import imagebackground
-from sigima.objects import ImageROI, ResultShape, ROI2DParam
 
 
 class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):

@@ -18,9 +18,9 @@ from guidata import configtools
 from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.constants import LUTAlpha
+from sigima.config import options as sigima_options
 
 from datalab.utils import conf
-from sigima.config import options as sigima_options
 
 CONF_VERSION = "0.3.0"
 

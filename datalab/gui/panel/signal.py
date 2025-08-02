@@ -19,6 +19,8 @@ from plotpy.tools import (
     VCursorTool,
     XCursorTool,
 )
+from sigima.io.signal import SignalIORegistry
+from sigima.objects import SignalObj, SignalROI
 
 from datalab.adapters_plotpy.signal import CURVESTYLES
 from datalab.config import _
@@ -28,8 +30,6 @@ from datalab.gui.newobject import NewSignalParam, create_signal_gui
 from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.plothandler import SignalPlotHandler
 from datalab.gui.processor.signal import SignalProcessor
-from sigima.io.signal import SignalIORegistry
-from sigima.objects import SignalObj, SignalROI
 
 if TYPE_CHECKING:
     from qtpy import QtWidgets as QW

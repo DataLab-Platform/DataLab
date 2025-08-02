@@ -36,8 +36,6 @@ from plotpy.items import (
     LabelItem,
     PolygonShape,
 )
-
-from datalab.config import PLOTPY_CONF, Conf
 from sigima.objects.base import (
     ROI_KEY,
     BaseObj,
@@ -51,6 +49,8 @@ from sigima.objects.base import (
     TypeSingleROI,
 )
 from sigima.tools import coordinates
+
+from datalab.config import PLOTPY_CONF, Conf
 
 if TYPE_CHECKING:
     from plotpy.items import (

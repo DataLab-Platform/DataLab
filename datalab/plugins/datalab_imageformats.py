@@ -11,7 +11,6 @@ It provides image file formats from cameras, scanners, and other acquisition dev
 import struct
 
 import numpy as np
-
 from sigima.io.base import FormatInfo
 from sigima.io.image.base import SingleImageFormatBase
 

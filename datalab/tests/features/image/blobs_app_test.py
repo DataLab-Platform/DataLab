@@ -8,10 +8,11 @@ Blob detection application test
 # guitest: show
 
 import sigima.params
-from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.tests import datalab_test_app_context, skip_if_opencv_missing
 from sigima.objects import create_image
 from sigima.tests.data import get_test_image
+
+from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.tests import datalab_test_app_context, skip_if_opencv_missing
 
 
 def test_blobs():

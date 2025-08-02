@@ -39,6 +39,8 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
+from sigima.config import options as sigima_options
+from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
 from datalab import __docurl__, __homeurl__, __supporturl__, env
@@ -71,8 +73,6 @@ from datalab.utils.qthelpers import (
 )
 from datalab.widgets import instconfviewer, logviewer, status
 from datalab.widgets.warningerror import go_to_error
-from sigima.config import options as sigima_options
-from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 if TYPE_CHECKING:
     from typing import Literal

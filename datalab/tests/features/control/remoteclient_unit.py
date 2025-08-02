@@ -15,13 +15,13 @@ import time
 import numpy as np
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
+from sigima.params import XYCalibrateParam
+from sigima.tests.data import create_2d_gaussian, create_paracetamol_signal
+from sigima.tests.helpers import WorkdirRestoringTempDir, exec_script
 
 from datalab import app
 from datalab.env import execenv
 from datalab.proxy import RemoteProxy
-from sigima.params import XYCalibrateParam
-from sigima.tests.data import create_2d_gaussian, create_paracetamol_signal
-from sigima.tests.helpers import WorkdirRestoringTempDir, exec_script
 
 
 def multiple_commands(remote: RemoteProxy):

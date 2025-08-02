@@ -20,13 +20,14 @@ from __future__ import annotations
 import ctypes
 import os
 
+from sigima.objects import NewImageParam
+from sigima.tests.data import create_sincos_image, iterate_image_creation
+from sigima.tests.helpers import get_test_fnames
+
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
 from datalab.tests import datalab_test_app_context
 from datalab.tests.scenarios.common import compute_common_operations
-from sigima.objects import NewImageParam
-from sigima.tests.data import create_sincos_image, iterate_image_creation
-from sigima.tests.helpers import get_test_fnames
 
 if os.name == "nt":
     from ctypes import WinDLL

@@ -17,11 +17,11 @@ uint8.
 # guitest: show
 
 import numpy as np
-
 import sigima.objects
 import sigima.tests.data as ctd
-from datalab.tests import datalab_test_app_context
 from sigima.tests.helpers import check_array_result
+
+from datalab.tests import datalab_test_app_context
 
 
 def test_image_average() -> None:

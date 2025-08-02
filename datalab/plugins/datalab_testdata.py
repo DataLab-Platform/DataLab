@@ -9,10 +9,11 @@ and some actions to test DataLab functionalities.
 """
 
 import sigima.tests.data as test_data
-from datalab.config import _
-from datalab.plugins import PluginBase, PluginInfo
 from sigima.objects import ImageObj, NormalRandomParam, SignalObj
 from sigima.proc.base import dst_1_to_1
+
+from datalab.config import _
+from datalab.plugins import PluginBase, PluginInfo
 
 # ------------------------------------------------------------------------------
 # All computation functions must be defined as global functions, otherwise

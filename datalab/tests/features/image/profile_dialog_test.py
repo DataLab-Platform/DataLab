@@ -7,12 +7,12 @@ Profile extraction unit test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from guidata.qthelpers import exec_dialog, qt_app_context
-
 import sigima.params
+from guidata.qthelpers import exec_dialog, qt_app_context
+from sigima.tests.data import create_noisy_gaussian_image
+
 from datalab.env import execenv
 from datalab.gui.profiledialog import ProfileExtractionDialog
-from sigima.tests.data import create_noisy_gaussian_image
 
 
 def test_profile_unit():

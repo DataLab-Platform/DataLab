@@ -11,9 +11,9 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-
 import sigima.objects
 import sigima.params
+
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 

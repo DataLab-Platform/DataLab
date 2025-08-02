@@ -15,11 +15,12 @@ Metadata import/export unit test:
 
 import os.path as osp
 
-from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
 from sigima.tests import data as test_data
 from sigima.tests import helpers
 from sigima.tests.helpers import compare_metadata
+
+from datalab.env import execenv
+from datalab.tests import datalab_test_app_context
 
 
 def test_metadata_io_unit():

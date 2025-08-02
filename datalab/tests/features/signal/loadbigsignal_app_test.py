@@ -16,10 +16,10 @@ import os.path as osp
 import numpy as np
 import pandas as pd
 import pytest
+from sigima.tests.helpers import WorkdirRestoringTempDir
 
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
-from sigima.tests.helpers import WorkdirRestoringTempDir
 
 
 def create_large_random_dataframe(nrows: int, ncols: int) -> pd.DataFrame:

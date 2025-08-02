@@ -58,10 +58,10 @@ from guidata.qthelpers import is_dark_theme
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigima.objects import create_image, create_signal
 
 from datalab.config import _
 from datalab.env import execenv
-from sigima.objects import create_image, create_signal
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow

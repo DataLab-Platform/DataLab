@@ -15,14 +15,14 @@ from subprocess import PIPE, Popen
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
+from sigima.io.image import ImageIORegistry
+from sigima.io.signal import SignalIORegistry
 
 import datalab
 from datalab.config import APP_NAME, DATAPATH, IS_FROZEN, Conf, _
 from datalab.plugins import PluginRegistry
 from datalab.utils import dephash
 from datalab.widgets.fileviewer import FileViewerWidget, get_title_contents
-from sigima.io.image import ImageIORegistry
-from sigima.io.signal import SignalIORegistry
 
 
 def decode_fs_string(string: bytes) -> str:
