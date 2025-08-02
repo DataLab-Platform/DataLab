@@ -22,12 +22,12 @@ from __future__ import annotations
 
 import os
 import os.path as osp
+import sys
 from contextlib import contextmanager
 from typing import Generator
 
 import pytest
 from guidata.guitest import run_testlauncher
-from sigima.tests import helpers
 
 import datalab.config  # Loading icons
 from datalab.config import MOD_NAME
@@ -36,6 +36,7 @@ from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
 from datalab.utils import qthelpers as qth
+from sigima.tests import helpers
 
 # Add test data files and folders pointed by `DATALAB_DATA` environment variable:
 helpers.add_test_path_from_env("DATALAB_DATA")
@@ -84,7 +85,8 @@ def datalab_test_app_context(
                     win.save_to_h5_file(path)
                 except (FileNotFoundError, PermissionError):
                     pass
-            if not exec_loop:
+            has_exception_occurred = sys.exc_info()[0] is not None
+            if not exec_loop or has_exception_occurred:
                 # Closing main window properly
                 win.set_modified(False)
                 win.close()
