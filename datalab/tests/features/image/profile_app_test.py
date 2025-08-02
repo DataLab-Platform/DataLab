@@ -54,10 +54,10 @@ def test_profile():
         image2 = create_noisy_gaussian_image(center=(0.0, 0.0), add_annotations=False)
         panel.add_object(image2)
         for center, x0, y0 in (
-            (None, None, None),
-            ("centroid", None, None),
-            ("center", None, None),
-            ("manual", 800, 900),
+            (None, 0.0, 0.0),
+            ("centroid", 0.0, 0.0),
+            ("center", 0.0, 0.0),
+            ("manual", 800.0, 900.0),
         ):
             if center is None:
                 proc.compute_radial_profile()
