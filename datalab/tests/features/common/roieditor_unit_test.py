@@ -23,7 +23,7 @@ def test_signal_roi_editor() -> None:
     cls = SignalROIEditor
     title = f"Testing {cls.__name__}"
     obj = create_paracetamol_signal()
-    roi = create_signal_roi([50, 100], indices=True)
+    roi = create_signal_roi([50, 100], indices=True, title="Test ROI")
     obj.roi = roi
     with qt_app_context(exec_loop=False):
         execenv.print(title)
@@ -33,10 +33,12 @@ def test_signal_roi_editor() -> None:
 
 def create_image_roi_example() -> ImageROI:
     """Create an example image ROI"""
-    roi = create_image_roi("rectangle", [500, 750, 1000, 1250])
-    roi.add_roi(create_image_roi("circle", [1500, 1500, 500]))
+    roi = create_image_roi("rectangle", [500, 750, 1000, 1250], title="Test ROI 1")
+    roi.add_roi(create_image_roi("circle", [1500, 1500, 500], title="Test ROI 2"))
     roi.add_roi(
-        create_image_roi("polygon", [450, 150, 1300, 350, 1250, 950, 400, 1350])
+        create_image_roi(
+            "polygon", [450, 150, 1300, 350, 1250, 950, 400, 1350], title="Test ROI 3"
+        )
     )
     return roi
 

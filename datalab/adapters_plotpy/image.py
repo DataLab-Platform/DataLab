@@ -37,17 +37,15 @@ class PolygonalROIPlotPyAdapter(
         single_roi: single ROI object
     """
 
-    def to_plot_item(self, obj: ImageObj, title: str | None = None) -> AnnotatedPolygon:
+    def to_plot_item(self, obj: ImageObj) -> AnnotatedPolygon:
         """Make and return the annnotated polygon associated to ROI
 
         Args:
             obj: object (image), for physical-indices coordinates conversion
-            title: title
         """
         coords = np.array(self.single_roi.get_physical_coords(obj))
         points = coords.reshape(-1, 2)
         item = AnnotatedPolygon(points)
-        item.annotationparam.title = self.single_roi.title if title is None else title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
         return item
@@ -59,9 +57,8 @@ class PolygonalROIPlotPyAdapter(
         Args:
             item: plot item
         """
-        return PolygonalROI(
-            item.get_points().flatten(), False, item.annotationparam.title
-        )
+        title = str(item.title().text())
+        return PolygonalROI(item.get_points().flatten(), False, title)
 
 
 class RectangularROIPlotPyAdapter(
@@ -73,14 +70,11 @@ class RectangularROIPlotPyAdapter(
         single_roi: single ROI object
     """
 
-    def to_plot_item(
-        self, obj: ImageObj, title: str | None = None
-    ) -> AnnotatedRectangle:
+    def to_plot_item(self, obj: ImageObj) -> AnnotatedRectangle:
         """Make and return the annnotated rectangle associated to ROI
 
         Args:
             obj: object (image), for physical-indices coordinates conversion
-            title: title
         """
 
         def info_callback(item: AnnotatedRectangle) -> str:
@@ -98,8 +92,7 @@ class RectangularROIPlotPyAdapter(
 
         x0, y0, dx, dy = self.single_roi.get_physical_coords(obj)
         x1, y1 = x0 + dx, y0 + dy
-        title = self.single_roi.title if title is None else title
-        roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1, title)
+        roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1)
         roi_item.set_info_callback(info_callback)
         param = roi_item.label.labelparam
         param.anchor = "BL"
@@ -115,9 +108,8 @@ class RectangularROIPlotPyAdapter(
             item: plot item
         """
         rect = item.get_rect()
-        return RectangularROI(
-            RectangularROI.rect_to_coords(*rect), False, item.annotationparam.title
-        )
+        title = str(item.title().text())
+        return RectangularROI(RectangularROI.rect_to_coords(*rect), False, title)
 
 
 class CircularROIPlotPyAdapter(
@@ -129,12 +121,11 @@ class CircularROIPlotPyAdapter(
         single_roi: single ROI object
     """
 
-    def to_plot_item(self, obj: ImageObj, title: str | None = None) -> AnnotatedCircle:
+    def to_plot_item(self, obj: ImageObj) -> AnnotatedCircle:
         """Make and return the annnotated circle associated to ROI
 
         Args:
             obj: object (image), for physical-indices coordinates conversion
-            title: title
         """
 
         def info_callback(item: AnnotatedCircle) -> str:
@@ -153,7 +144,6 @@ class CircularROIPlotPyAdapter(
         xc, yc, r = self.single_roi.get_physical_coords(obj)
         item = AnnotatedCircle(xc - r, yc, xc + r, yc)
         item.set_info_callback(info_callback)
-        item.annotationparam.title = self.single_roi.title if title is None else title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
         return item
@@ -166,9 +156,8 @@ class CircularROIPlotPyAdapter(
             item: plot item
         """
         rect = item.get_rect()
-        return CircularROI(
-            CircularROI.rect_to_coords(*rect), False, item.annotationparam.title
-        )
+        title = str(item.title().text())
+        return CircularROI(CircularROI.rect_to_coords(*rect), False, title)
 
 
 class ImageROIPlotPyAdapter(BaseROIPlotPyAdapter[ImageROI]):
@@ -182,14 +171,12 @@ class ImageROIPlotPyAdapter(BaseROIPlotPyAdapter[ImageROI]):
         self,
         single_roi: PolygonalROI | RectangularROI | CircularROI,
         obj: ImageObj,
-        title: str | None = None,
     ) -> AnnotatedCircle | AnnotatedRectangle | AnnotatedPolygon:
         """Make ROI plot item from single ROI
 
         Args:
             single_roi: single ROI object
             obj: object (signal/image), for physical-indices coordinates conversion
-            title: ROI title
 
         Returns:
             Plot item
@@ -197,7 +184,7 @@ class ImageROIPlotPyAdapter(BaseROIPlotPyAdapter[ImageROI]):
         # pylint: disable=import-outside-toplevel
         from datalab.adapters_plotpy.factories import create_adapter_from_object
 
-        return create_adapter_from_object(single_roi).to_plot_item(obj, title)
+        return create_adapter_from_object(single_roi).to_plot_item(obj)
 
 
 class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):

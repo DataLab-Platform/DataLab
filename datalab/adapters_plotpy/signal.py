@@ -38,15 +38,14 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, XRangeSelec
     """
 
     # pylint: disable=unused-argument
-    def to_plot_item(self, obj: SignalObj, title: str | None = None) -> XRangeSelection:
+    def to_plot_item(self, obj: SignalObj) -> XRangeSelection:
         """Make and return the annnotated segment associated with the ROI
 
         Args:
             obj: object (signal), for physical-indices coordinates conversion
-            title: title
         """
         xmin, xmax = self.single_roi.get_physical_coords(obj)
-        item = make.range(xmin, xmax)
+        item = make.xrange(xmin, xmax)
         return item
 
     @classmethod
@@ -62,7 +61,8 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, XRangeSelec
         if not isinstance(item, XRangeSelection):
             raise TypeError("Invalid plot item type")
         coords = sorted(item.get_range())
-        return SegmentROI(coords, False)
+        title = str(item.title().text())
+        return SegmentROI(coords, False, title=title)
 
 
 class SignalROIPlotPyAdapter(BaseROIPlotPyAdapter[SignalROI]):
@@ -72,20 +72,17 @@ class SignalROIPlotPyAdapter(BaseROIPlotPyAdapter[SignalROI]):
         roi: ROI object
     """
 
-    def to_plot_item(
-        self, single_roi: SegmentROI, obj: SignalObj, title: str | None = None
-    ) -> XRangeSelection:
+    def to_plot_item(self, single_roi: SegmentROI, obj: SignalObj) -> XRangeSelection:
         """Make ROI plot item from single ROI
 
         Args:
             single_roi: single ROI object
             obj: object (signal/image), for physical-indices coordinates conversion
-            title: ROI title
 
         Returns:
             Plot item
         """
-        return SegmentROIPlotPyAdapter(single_roi).to_plot_item(obj, title)
+        return SegmentROIPlotPyAdapter(single_roi).to_plot_item(obj)
 
 
 class CurveStyles:

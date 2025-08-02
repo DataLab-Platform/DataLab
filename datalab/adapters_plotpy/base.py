@@ -405,12 +405,11 @@ class BaseSingleROIPlotPyAdapter(Generic[TypeSingleROI, TypeROIItem], abc.ABC):
         self.single_roi = single_roi
 
     @abc.abstractmethod
-    def to_plot_item(self, obj: TypeObj, title: str | None = None) -> TypeROIItem:
+    def to_plot_item(self, obj: TypeObj) -> TypeROIItem:
         """Make ROI plot item from ROI.
 
         Args:
             obj: object (signal/image), for physical-indices coordinates conversion
-            title: ROI title
 
         Returns:
             Plot item
@@ -472,15 +471,12 @@ class BaseROIPlotPyAdapter(Generic[TypeROI], abc.ABC):
         self.roi = roi
 
     @abc.abstractmethod
-    def to_plot_item(
-        self, single_roi: TypeSingleROI, obj: TypeObj, title: str | None = None
-    ) -> TypeROIItem:
+    def to_plot_item(self, single_roi: TypeSingleROI, obj: TypeObj) -> TypeROIItem:
         """Make ROI plot item from single ROI
 
         Args:
             single_roi: single ROI object
             obj: object (signal/image), for physical-indices coordinates conversion
-            title: ROI title
 
         Returns:
             Plot item
@@ -502,11 +498,14 @@ class BaseROIPlotPyAdapter(Generic[TypeROI], abc.ABC):
             Plot item
         """
         for index, single_roi in enumerate(self.roi.single_rois):
-            title = "ROI" if index is None else f"ROI{index:02d}"
-            roi_item = self.to_plot_item(single_roi, obj, title)
-            yield configure_roi_item(
+            roi_item = self.to_plot_item(single_roi, obj)
+            item = configure_roi_item(
                 roi_item, fmt, lbl, editable, option=self.roi.PREFIX
             )
+            default_title = "ROI" if index is None else f"ROI{index:02d}"
+            title = single_roi.title or default_title
+            item.setTitle(title)
+            yield item
 
 
 TypePlotItem = TypeVar("TypePlotItem", bound="CurveItem | MaskedImageItem")
