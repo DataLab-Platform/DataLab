@@ -49,6 +49,7 @@ class MainSettings(gds.DataSet):
     )
     available_memory_threshold = gds.IntItem(
         _("Available memory threshold"),
+        default=0,
         unit=_("MB"),
         help=_(
             "Threshold below which a warning is displayed before loading any new data"
@@ -61,6 +62,7 @@ class MainSettings(gds.DataSet):
     )
     plugins_path = gds.DirectoryItem(
         _("Plugins path"),
+        allow_none=True,
         help=_(
             "Path to third-party plugins.<br><br>"
             "DataLab will discover plugins in this path, "
@@ -86,8 +88,8 @@ class ConsoleSettings(gds.DataSet):
             "see the error traceback."
         ),
     )
-    external_editor_path = gds.StringItem(_("External editor path"))
-    external_editor_args = gds.StringItem(_("External editor arguments"))
+    external_editor_path = gds.StringItem(_("External editor path"), "")
+    external_editor_args = gds.StringItem(_("External editor arguments"), "")
     _g0 = gds.EndGroup("")
 
 
@@ -224,6 +226,7 @@ class ViewSettings(gds.DataSet):
     ).set_prop("display", store=_prop_ads)
     sig_autodownsampling_maxpoints = gds.IntItem(
         _("Downsampling max points"),
+        default=10000,
         min=1000,
         help=_("Maximum number of points for downsampling"),
     ).set_prop("display", active=_prop_ads)
@@ -250,8 +253,9 @@ class ViewSettings(gds.DataSet):
     ima_eliminate_outliers = gds.FloatItem(
         _("Eliminate outliers"),
         unit=_("%"),
-        min=0,
-        max=100,
+        default=2.0,
+        min=0.0,
+        max=100.0,
         help=_(
             "Eliminate a percentage of the highest and lowest values<br>"
             "of the image histogram - <i>recommanded values are below 1%</i>"
