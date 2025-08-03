@@ -1101,7 +1101,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
                 filename, _filter = getopenfilename(
-                    self, _("Import metadata"), basedir, "*.json"
+                    self, _("Import metadata"), basedir, "*.dlabmeta"
                 )
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
@@ -1121,7 +1121,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
                 filename, _filt = getsavefilename(
-                    self, _("Export metadata"), basedir, "*.json"
+                    self, _("Export metadata"), basedir, "*.dlabmeta"
                 )
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
