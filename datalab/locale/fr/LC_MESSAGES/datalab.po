@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-07-28 17:58+0200\n"
+"POT-Creation-Date: 2025-08-03 12:09+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -147,6 +147,9 @@ msgstr "Modifier les régions d'intérêt..."
 msgid "Remove regions of interest"
 msgstr "Supprimer les régions d'intérêt"
 
+msgid "Extract regions of interest"
+msgstr "Extraire les régions d'intérêt"
+
 msgid "View in a new window"
 msgstr "Voir dans une nouvelle fenêtre"
 
@@ -187,9 +190,6 @@ msgstr "Réduction de bruit"
 
 msgid "Fourier analysis"
 msgstr "Analyse de Fourier"
-
-msgid "ROI extraction"
-msgstr "Extraction de ROI"
 
 msgid "Show results"
 msgstr "Afficher les résultats"
@@ -619,6 +619,9 @@ msgstr "Fichier"
 
 msgid "&Edit"
 msgstr "&Édition"
+
+msgid "ROI"
+msgstr "ROI"
 
 msgid "Operations"
 msgstr "Opérations"
@@ -2434,4 +2437,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

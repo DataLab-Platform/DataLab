@@ -5,6 +5,15 @@ Manipulate metadata
 
 This section describes how to manipulate metadata in DataLab.
 
+Image metadata contains various information about the image or its representation,
+such as view settings, Regions Of Interest (ROIs), analysis results, and any other
+information that you may have added to the metadata of an image (or that comes from
+the image file itself).
+
+.. seealso::
+
+   For more information about Regions Of Interest (ROIs), see the :ref:`ima-menu-roi` section.
+
 .. figure:: /images/shots/i_edit.png
 
     Screenshot of the "Edit" menu.
@@ -34,7 +43,7 @@ from one image to another by selecting the "Copy metadata" |metadata_copy| and
 
 This feature allows you to tranfer those information from one image to another:
 
-- :ref:`Regions Of Interest (ROIs) <ima-roi>`: that is a very efficient way to reuse
+- :ref:`Regions Of Interest (ROIs) <ima-menu-roi>`: that is a very efficient way to reuse
   the same ROI on different images and easily compare the results of the analysis on
   those images
 - Analyze results, such as a centroid position or a contour detection (the relevance
@@ -118,50 +127,3 @@ The "Edit" menu allows you to:
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
-
-.. _ima-roi:
-
-Regions Of Interest (ROI)
--------------------------
-
-The Regions Of Interest (ROI) are image areas that are defined by the user to
-perform specific operations, processing, or analysis on them.
-
-ROI are taken into account almost in all computing features in DataLab:
-
-- The "Operations" menu features are done only on the ROI if one is defined (except
-  if the operation changes the data shape - like the resize operation - or the pixel
-  size - like the binning operation).
-
-- The "Processing" menu actions are performed only on the ROI if one is defined (except
-  if the destination signal data type is different from the source's, like in the
-  Fourier analysis features or like the thresholding operations).
-
-- The "Analysis" menu actions are done only on the ROI if one is defined.
-
-.. note::
-
-    ROI are stored as metadata, and thus attached to image.
-
-The "Edit" menu allows you to:
-
-- "Edit regions of interest" |roi|: open a dialog box to manage ROI associated with
-  the selected image (add, remove, move, resize, etc.). The ROI definition dialog is
-  exactly the same as ROI extraction (see below).
-
-.. figure:: /images/shots/i_roi_image.png
-
-    An image with an ROI.
-
-- "Remove regions of interest" |roi_delete|: remove all defined ROI for the selected
-  images.
-
-.. |roi| image:: ../../../datalab/data/icons/edit/roi.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light
-
-.. |roi_delete| image:: ../../../datalab/data/icons/edit/roi_delete.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light

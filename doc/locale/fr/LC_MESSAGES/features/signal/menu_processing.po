@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:17+0100\n"
+"POT-Creation-Date: 2025-08-03 12:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -248,9 +248,6 @@ msgstr "Les fonctions suivantes sont disponibles :"
 
 msgid "Function"
 msgstr "Fonction"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "FFT"
 msgstr "FFT"
@@ -580,9 +577,6 @@ msgstr "Elimination de tendance"
 msgid "Create a new signal which is the detrending of each selected signal. This features is based on SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function."
 msgstr "Crée un signal à partir de l'élimination de tendance de chaque signal. Cette fonctionnalité est basée sur la fonction `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ de SciPy."
 
-msgid "The following parameters are available:"
-msgstr "Les paramètres suivants sont disponibles :"
-
 msgid "Detrending method: 'linear' or 'constant'. See SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function."
 msgstr "Méthode d'élimination de tendance : 'linéaire' ou 'constante'. Voir la fonction `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ de SciPy."
 
@@ -667,9 +661,6 @@ msgstr "Pas"
 msgid "Resampling step size"
 msgstr "Pas de rééchantillonnage"
 
-msgid "Number of points"
-msgstr "Nombre de points"
-
 msgid "Resampling number of points"
 msgstr "Nombre de points de rééchantillonnage"
 
@@ -733,11 +724,3 @@ msgstr "Mode XY"
 msgid "Simulate the X-Y mode of an oscilloscope."
 msgstr "Simuler le mode XY d'un oscilloscope."
 
-msgid "ROI extraction"
-msgstr "Extraction de ROI"
-
-msgid "Create a new signal from a user-defined Region of Interest (ROI)."
-msgstr "Crée un signal à partir d'une région d'intérêt (ROI) définie par l'utilisateur."
-
-msgid "ROI extraction dialog: the ROI is defined by moving the position and adjusting the width of an horizontal range."
-msgstr "Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est définie en ajustant la position et la largeur de l'échelle horizontale de sélection."

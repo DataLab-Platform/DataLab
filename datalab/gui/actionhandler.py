@@ -146,6 +146,7 @@ class ActionCategory(enum.Enum):
     FILE = enum.auto()
     EDIT = enum.auto()
     VIEW = enum.auto()
+    ROI = enum.auto()
     OPERATION = enum.auto()
     PROCESSING = enum.auto()
     ANALYSIS = enum.auto()
@@ -614,9 +615,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 tip=_("Copy titles of selected objects to clipboard"),
                 triggered=self.panel.copy_titles_to_clipboard,
             )
+
+        with self.new_category(ActionCategory.ROI):
             self.new_action(
                 _("Edit regions of interest..."),
-                separator=True,
                 triggered=self.panel.processor.edit_regions_of_interest,
                 icon_name="roi.svg",
                 context_menu_pos=-1,
@@ -630,6 +632,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon_name="roi_delete.svg",
                 select_condition=SelectCond.with_roi,
                 context_menu_pos=-1,
+            )
+            self.new_action(
+                _("Extract regions of interest"),
+                triggered=self.panel.processor.compute_roi_extraction,
+                # Icon name is 'signal_roi.svg' or 'image_roi.svg':
+                icon_name=f"{self.OBJECT_STR}_roi.svg",
+                separator=True,
             )
 
         with self.new_category(ActionCategory.VIEW):
@@ -724,15 +733,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
-        with self.new_category(ActionCategory.PROCESSING):
-            self.new_action(
-                _("ROI extraction"),
-                triggered=self.panel.processor.compute_roi_extraction,
-                # Icon name is 'signal_roi.svg' or 'image_roi.svg':
-                icon_name=f"{self.OBJECT_STR}_roi.svg",
-                separator=True,
-            )
-
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Show results") + "...",
