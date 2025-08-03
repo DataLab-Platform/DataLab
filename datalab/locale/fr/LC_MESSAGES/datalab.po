@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-03 12:09+0200\n"
+"POT-Creation-Date: 2025-08-03 17:48+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -141,14 +141,42 @@ msgstr "Copier les titres dans le presse-papier"
 msgid "Copy titles of selected objects to clipboard"
 msgstr "Copier les titres des objets sélectionnés dans le presse-papier"
 
-msgid "Edit regions of interest..."
-msgstr "Modifier les régions d'intérêt..."
+msgid "Edit"
+msgstr "Modifier"
 
-msgid "Remove regions of interest"
-msgstr "Supprimer les régions d'intérêt"
+msgid "Extract"
+msgstr "Extraire"
 
-msgid "Extract regions of interest"
-msgstr "Extraire les régions d'intérêt"
+msgid "Copy"
+msgstr "Copier"
+
+#, python-format
+msgid "Copy regions of interest from selected %s"
+msgstr "Copier les régions d'intérêt de l'objet %s sélectionné"
+
+msgid "Paste"
+msgstr "Coller"
+
+#, python-format
+msgid "Paste regions of interest into selected %s"
+msgstr "Coller les régions d'intérêt dans l'objet %s sélectionné"
+
+msgid "Import"
+msgstr "Importer"
+
+#, python-format
+msgid "Import regions of interest into %s"
+msgstr "Importer les régions d'intérêt dans l'objet %s"
+
+msgid "Export"
+msgstr "Exporter"
+
+#, python-format
+msgid "Export selected %s regions of interest"
+msgstr "Exporter les régions d'intérêt de l'objet %s sélectionné"
+
+msgid "Remove all"
+msgstr "Supprimer tout"
 
 msgid "View in a new window"
 msgstr "Voir dans une nouvelle fenêtre"
@@ -747,9 +775,8 @@ msgstr "Modifier la courbe graphiquement"
 msgid "Insert point"
 msgstr "Insérer un point"
 
-#, fuzzy
 msgid "Custom signal"
-msgstr "Signal"
+msgstr "Signal personnalisé"
 
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
@@ -817,6 +844,12 @@ msgstr "Analyse du répertoire"
 
 msgid "Save as"
 msgstr "Enregistrer sous"
+
+msgid "Import ROI"
+msgstr "Importer une ROI"
+
+msgid "Export ROI"
+msgstr "Exporter une ROI"
 
 msgid "Annotations"
 msgstr "Annotations"
@@ -1488,9 +1521,6 @@ msgstr "ROI graphique"
 
 msgid "Coordinate-based ROI"
 msgstr "ROI par coordonnées"
-
-msgid "Remove all"
-msgstr "Supprimer tout"
 
 msgid "Remove all ROIs"
 msgstr "Supprimer toutes les ROI"
@@ -2437,3 +2467,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

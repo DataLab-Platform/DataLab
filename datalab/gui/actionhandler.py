@@ -139,6 +139,19 @@ class SelectCond:
         """At least one signal or image has a ROI"""
         return any(obj.roi is not None for obj in selected_objects)
 
+    @staticmethod
+    # pylint: disable=unused-argument
+    def exactly_one_with_roi(
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalObj | ImageObj],
+    ) -> bool:
+        """Exactly one signal or image has a ROI"""
+        return (
+            len(selected_groups) == 0
+            and len(selected_objects) == 1
+            and selected_objects[0].roi is not None
+        )
+
 
 class ActionCategory(enum.Enum):
     """Action categories"""
@@ -618,7 +631,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.ROI):
             self.new_action(
-                _("Edit regions of interest..."),
+                _("Edit") + "...",
                 triggered=self.panel.processor.edit_regions_of_interest,
                 icon_name="roi.svg",
                 context_menu_pos=-1,
@@ -627,18 +640,51 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_category=ActionCategory.VIEW_TOOLBAR,
             )
             self.new_action(
-                _("Remove regions of interest"),
-                triggered=self.panel.processor.delete_regions_of_interest,
-                icon_name="roi_delete.svg",
-                select_condition=SelectCond.with_roi,
-                context_menu_pos=-1,
-            )
-            self.new_action(
-                _("Extract regions of interest"),
+                _("Extract") + "...",
                 triggered=self.panel.processor.compute_roi_extraction,
                 # Icon name is 'signal_roi.svg' or 'image_roi.svg':
                 icon_name=f"{self.OBJECT_STR}_roi.svg",
                 separator=True,
+            )
+            self.new_action(
+                _("Copy"),
+                separator=True,
+                icon_name="roi_copy.svg",
+                tip=_("Copy regions of interest from selected %s") % self.OBJECT_STR,
+                triggered=self.panel.copy_roi,
+                select_condition=SelectCond.exactly_one_with_roi,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Paste"),
+                icon_name="roi_paste.svg",
+                tip=_("Paste regions of interest into selected %s") % self.OBJECT_STR,
+                triggered=self.panel.paste_roi,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Import") + "...",
+                icon_name="roi_import.svg",
+                tip=_("Import regions of interest into %s") % self.OBJECT_STR,
+                triggered=self.panel.import_roi_from_file,
+                select_condition=SelectCond.exactly_one,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Export") + "...",
+                icon_name="roi_export.svg",
+                tip=_("Export selected %s regions of interest") % self.OBJECT_STR,
+                triggered=self.panel.export_roi_to_file,
+                select_condition=SelectCond.exactly_one_with_roi,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Remove all"),
+                separator=True,
+                triggered=self.panel.processor.delete_regions_of_interest,
+                icon_name="roi_delete.svg",
+                select_condition=SelectCond.with_roi,
+                context_menu_pos=-1,
             )
 
         with self.new_category(ActionCategory.VIEW):

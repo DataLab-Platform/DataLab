@@ -6,6 +6,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* New ROI (Region of Interest) management features:
+  * New "ROI" menu, between "Edit" and "Operations" menus
+  * This menu provides quick access to ROI creation, editing, and deletion tools.
+  * New features have also been added to the "ROI" menu:
+    * "Copy": copies the selected ROI to the clipboard
+    * "Paste": pastes the ROI from the clipboard to the selected object (signal or image)
+    * "Export": exports the selected ROI to a file (JSON format)
+    * "Import": imports a ROI from a file (JSON format)
+
 * New image processing features:
   * New "Gaussian frequency filter" feature:
     * This feature allows to filter an image in the frequency domain using a Gaussian filter
