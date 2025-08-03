@@ -1409,7 +1409,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     def delete_regions_of_interest(self) -> None:
         """Delete Regions Of Interest"""
-        for obj in self.panel.objview.get_sel_objects():
-            if obj.roi is not None:
-                obj.roi = None
-                self.panel.selection_changed(update_items=True)
+        if (
+            env.execenv.unattended
+            or QW.QMessageBox.question(
+                self.panel.parent(),
+                _("Remove all ROIs"),
+                _("Are you sure you want to remove all ROIs?"),
+            )
+            == QW.QMessageBox.Yes
+        ):
+            for obj in self.panel.objview.get_sel_objects():
+                if obj.roi is not None:
+                    obj.roi = None
+                    self.panel.selection_changed(update_items=True)
