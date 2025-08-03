@@ -16,18 +16,22 @@ from sigima.tests.data import create_multigaussian_image, create_paracetamol_sig
 
 from datalab.env import execenv
 from datalab.gui.roieditor import ImageROIEditor, SignalROIEditor
+from datalab.utils import qthelpers as qth
 
 
-def test_signal_roi_editor() -> None:
+def test_signal_roi_editor(screenshots: bool = False) -> None:
     """Test signal ROI editor"""
     cls = SignalROIEditor
     title = f"Testing {cls.__name__}"
     obj = create_paracetamol_signal()
-    roi = create_signal_roi([50, 100], indices=True)
+    roi = create_signal_roi([36.4, 40.9], indices=False)
     obj.roi = roi
     with qt_app_context(exec_loop=False):
         execenv.print(title)
         roi_editor = cls(parent=None, obj=obj, mode="extract", size=(800, 600))
+        if screenshots:
+            roi_editor.show()
+            qth.grab_save_window(roi_editor, "s_roi_editor")
         exec_dialog(roi_editor)
 
 
@@ -39,7 +43,7 @@ def create_image_roi_example() -> ImageROI:
     return roi
 
 
-def test_image_roi_editor() -> None:
+def test_image_roi_editor(screenshots: bool = False) -> None:
     """Test image ROI editor"""
     cls = ImageROIEditor
     title = f"Testing {cls.__name__}"
@@ -53,6 +57,9 @@ def test_image_roi_editor() -> None:
             if mode == "apply":
                 # Clear the ROI
                 roi_editor.remove_all_rois()
+            if screenshots and mode == "extract":
+                roi_editor.show()
+                qth.grab_save_window(roi_editor, "i_roi_editor")
             if exec_dialog(roi_editor):
                 results = roi_editor.get_roieditor_results()
                 if results is not None:
@@ -87,5 +94,5 @@ def test_image_roi_editor() -> None:
 
 
 if __name__ == "__main__":
-    test_signal_roi_editor()
-    test_image_roi_editor()
+    test_signal_roi_editor(screenshots=True)
+    test_image_roi_editor(screenshots=True)
