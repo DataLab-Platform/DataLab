@@ -33,11 +33,9 @@ def test_signal_roi_editor() -> None:
 
 def create_image_roi_example() -> ImageROI:
     """Create an example image ROI"""
-    roi = create_image_roi("rectangle", [500, 750, 1000, 1250])
-    roi.add_roi(create_image_roi("circle", [1500, 1500, 500]))
-    roi.add_roi(
-        create_image_roi("polygon", [450, 150, 1300, 350, 1250, 950, 400, 1350])
-    )
+    roi = create_image_roi("rectangle", [720, 720, 304, 304])
+    roi.add_roi(create_image_roi("circle", [550, 650, 165]))
+    roi.add_roi(create_image_roi("polygon", [225, 75, 650, 175, 625, 475, 200, 675]))
     return roi
 
 
