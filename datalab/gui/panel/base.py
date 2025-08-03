@@ -23,7 +23,6 @@ import numpy as np
 import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
-from guidata.io import JSONHandler
 from guidata.qthelpers import add_actions, create_action, exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
