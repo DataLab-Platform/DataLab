@@ -113,6 +113,7 @@ def test_main_app():
         for menu in (
             win.file_menu,
             win.edit_menu,
+            win.roi_menu,
             win.operation_menu,
             win.processing_menu,
             win.analysis_menu,

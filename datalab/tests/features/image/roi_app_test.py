@@ -188,4 +188,4 @@ def test_image_roi_basic_app():
 
 if __name__ == "__main__":
     test_image_roi_basic_app()
-    test_image_roi_app(screenshots=False)
+    test_image_roi_app(screenshots=True)

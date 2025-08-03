@@ -27,7 +27,7 @@ def test_metadata_io_unit():
     """Run image tools test scenario"""
     with execenv.context(unattended=True):
         with helpers.WorkdirRestoringTempDir() as tmpdir:
-            fname = osp.join(tmpdir, "test.json")
+            fname = osp.join(tmpdir, "test.dlabmeta")
             with datalab_test_app_context() as win:
                 panel = win.imagepanel
                 ima = test_data.create_annotated_image()

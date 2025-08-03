@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 15:38+0200\n"
+"POT-Creation-Date: 2025-08-03 12:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -364,16 +364,16 @@ msgstr ""
 msgid "Y data"
 msgstr ""
 
-msgid "X unit. Defaults to None"
+msgid "X unit. Defaults to \"\""
 msgstr ""
 
-msgid "Y unit. Defaults to None"
+msgid "Y unit. Defaults to \"\""
 msgstr ""
 
-msgid "X label. Defaults to None"
+msgid "X label. Defaults to \"\""
 msgstr ""
 
-msgid "Y label. Defaults to None"
+msgid "Y label. Defaults to \"\""
 msgstr ""
 
 msgid "group id in which to add the signal. Defaults to \"\""
@@ -400,10 +400,10 @@ msgstr ""
 msgid "Image data"
 msgstr ""
 
-msgid "Z unit. Defaults to None"
+msgid "Z unit. Defaults to \"\""
 msgstr ""
 
-msgid "Z label. Defaults to None"
+msgid "Z label. Defaults to \"\""
 msgstr ""
 
 msgid "group id in which to add the image. Defaults to \"\""
@@ -435,3 +435,4 @@ msgstr ""
 
 msgid "True if closed properly, False otherwise"
 msgstr ""
+

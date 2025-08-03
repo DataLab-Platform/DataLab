@@ -34,7 +34,7 @@ from one signal to another by selecting the "Copy metadata" |metadata_copy| and
 
 This feature allows you to tranfer those information from one signal to another:
 
-- :ref:`Regions Of Interest (ROIs) <sig-roi>`: that is a very efficient way to reuse
+- :ref:`Regions Of Interest (ROIs) <sig-menu-roi>`: that is a very efficient way to reuse
   the same ROI on different signals and easily compare the results of the analysis
   on those signals
 - Analyze results, such as peak positions or FHWM intervals (the relevance of
@@ -116,50 +116,3 @@ The "Edit" menu allows you to:
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
-
-.. _sig-roi:
-
-Regions Of Interest (ROI)
--------------------------
-
-The Regions Of Interest (ROI) are signal areas that are defined by the user to
-perform specific operations, processing, or analysis on them.
-
-ROI are taken into account almost in all computing features in DataLab:
-
-- The "Operations" menu features are done only on the ROI if one is defined (except
-  if the operation changes the number of points, like interpolation or resampling).
-
-- The "Processing" menu actions are performed only on the ROI if one is defined (except
-  if the destination signal data type is different from the source's, like in the
-  Fourier analysis features).
-
-- The "Analysis" menu actions are done only on the ROI if one is defined.
-
-.. note::
-
-    ROI are stored as metadata, and thus attached to signal.
-
-The "Edit" menu allows you to:
-
-- "Edit regions of interest" |roi|: open a dialog box to manage ROI associated with
-  the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is
-  exactly the same as ROI extraction (see below): the ROI is defined by moving the
-  position and adjusting the width of an horizontal range.
-
-.. figure:: /images/shots/s_roi_signal.png
-
-    A signal with an ROI.
-
-- "Remove regions of interest" |roi_delete|: remove all defined ROI for the selected
-  signals.
-
-.. |roi| image:: ../../../datalab/data/icons/edit/roi.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light
-
-.. |roi_delete| image:: ../../../datalab/data/icons/edit/roi_delete.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light

@@ -414,13 +414,3 @@ Pixel binning
 Combine clusters of adjacent pixels, throughout the image,
 into single pixels. The result can be the sum, average, median, minimum,
 or maximum value of the cluster.
-
-ROI extraction
-^^^^^^^^^^^^^^
-
-Create a new image from a user-defined Region of Interest.
-
-.. figure:: /images/shots/i_roi_dialog.png
-
-    ROI extraction dialog: the ROI is defined by moving the position
-    and adjusting the size of a rectangle shape.

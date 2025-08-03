@@ -96,6 +96,8 @@ include = ["datalab*"]
     "*.mo",
     "*.txt",
     "*.json",
+    "*.dlabroi",
+    "*.dlabmeta",
     "*_test.h5",
     "*.npy",
     "*.dcm",

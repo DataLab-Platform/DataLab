@@ -12,11 +12,12 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 from guidata.qthelpers import qt_app_context
-from sigima.tests.common.roi_unit_test import (
+from sigima.tests.data import (
+    create_multigaussian_image,
+    create_paracetamol_signal,
     create_test_image_rois,
     create_test_signal_rois,
 )
-from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
 from datalab.adapters_plotpy.converters import (
     plotitem_to_singleroi,

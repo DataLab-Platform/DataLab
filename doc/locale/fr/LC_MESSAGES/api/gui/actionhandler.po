@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 18:13+0200\n"
+"POT-Creation-Date: 2025-08-03 17:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -55,6 +55,10 @@ msgid "At least two signals or images are selected"
 msgstr "Au moins deux signaux ou images sont sélectionnés"
 
 msgid "At least one signal or image has a ROI"
+msgstr "Au moins un signal ou une image a une ROI"
+
+#, fuzzy
+msgid "Exactly one signal or image has a ROI"
 msgstr "Au moins un signal ou une image a une ROI"
 
 msgid "Action categories"
@@ -189,3 +193,4 @@ msgstr "objets sélectionnés"
 
 msgid "Object handling image panel GUI interactions: actions, menus, ..."
 msgstr "Objet gérant les interactions GUI du panneau d'images : actions, menus, ..."
+

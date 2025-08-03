@@ -63,6 +63,11 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
     # pylint: disable=duplicate-code
 
     @staticmethod
+    def get_roi_class() -> Type[ImageROI]:
+        """Return ROI class"""
+        return ImageROI
+
+    @staticmethod
     def get_roieditor_class() -> Type[roieditor.ImageROIEditor]:
         """Return ROI editor class"""
         return roieditor.ImageROIEditor

@@ -23,7 +23,6 @@ import numpy as np
 import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
-from guidata.io import JSONHandler
 from guidata.qthelpers import add_actions, create_action, exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
@@ -36,6 +35,7 @@ from qtpy.compat import (
     getopenfilenames,
     getsavefilename,
 )
+from sigima.io import read_metadata, read_roi, write_metadata, write_roi
 from sigima.objects import (
     ImageObj,
     NewImageParam,
@@ -292,6 +292,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     @staticmethod
     @abc.abstractmethod
+    def get_roi_class() -> Type[TypeROI]:
+        """Return ROI class"""
+
+    @staticmethod
+    @abc.abstractmethod
     def get_roieditor_class() -> Type[TypeROIEditor]:
         """Return ROI editor class"""
 
@@ -308,6 +313,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.processor: SignalProcessor | ImageProcessor = None
         self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}
+        self.__roi_clipboard: TypeROI | None = None
         self.context_menu = QW.QMenu()
         self.__separate_views: dict[QW.QDialog, TypeObj] = {}
 
@@ -648,6 +654,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # We have to do a special refresh in order to force the plot handler to update
         # all plot items, even the ones that are not visible (otherwise, image masks
         # would not be updated after pasting the metadata: see issue #123)
+        self.refresh_plot(
+            "selected", update_items=True, only_visible=False, only_existing=True
+        )
+
+    def copy_roi(self) -> None:
+        """Copy regions of interest"""
+        obj = self.objview.get_sel_objects()[0]
+        self.__roi_clipboard = obj.roi.copy()
+
+    def paste_roi(self) -> None:
+        """Paste regions of interest"""
+        sel_objects = self.objview.get_sel_objects(include_groups=True)
+        for obj in sel_objects:
+            if obj.roi is None:
+                obj.roi = self.__roi_clipboard.copy()
+            else:
+                obj.roi = obj.roi.combine_with(self.__roi_clipboard)
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
@@ -1077,16 +1100,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
                 filename, _filter = getopenfilename(
-                    self, _("Import metadata"), basedir, "*.json"
+                    self, _("Import metadata"), basedir, "*.dlabmeta"
                 )
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
-                # Import object's metadata from file as JSON:
-                handler = JSONHandler(filename)
-                handler.load()
-                obj.metadata = handler.get_json_dict()
+                obj.metadata = read_metadata(filename)
             self.refresh_plot("selected", True, False)
 
     def export_metadata_from_file(self, filename: str | None = None) -> None:
@@ -1100,15 +1120,54 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
                 filename, _filt = getsavefilename(
-                    self, _("Export metadata"), basedir, "*.json"
+                    self, _("Export metadata"), basedir, "*.dlabmeta"
                 )
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
-                # Export object's metadata to file as JSON:
-                handler = JSONHandler(filename)
-                handler.set_json_dict(obj.metadata)
-                handler.save()
+                write_metadata(filename, obj.metadata)
+
+    def import_roi_from_file(self, filename: str | None = None) -> None:
+        """Import regions of interest from file (JSON).
+
+        Args:
+            filename: File name
+        """
+        if filename is None:  # pragma: no cover
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                filename, _filter = getopenfilename(
+                    self, _("Import ROI"), basedir, "*.dlabroi"
+                )
+        if filename:
+            with qt_try_loadsave_file(self.parent(), filename, "load"):
+                Conf.main.base_dir.set(filename)
+                obj = self.objview.get_sel_objects(include_groups=True)[0]
+                roi = read_roi(filename)
+                if obj.roi is None:
+                    obj.roi = roi
+                else:
+                    obj.roi.combine_with(roi)
+            self.refresh_plot("selected", True, False)
+
+    def export_roi_to_file(self, filename: str | None = None) -> None:
+        """Export regions of interest to file (JSON).
+
+        Args:
+            filename: File name
+        """
+        obj = self.objview.get_sel_objects(include_groups=True)[0]
+        assert obj.roi is not None
+        if filename is None:  # pragma: no cover
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                filename, _filt = getsavefilename(
+                    self, _("Export ROI"), basedir, "*.dlabroi"
+                )
+        if filename:
+            with qt_try_loadsave_file(self.parent(), filename, "save"):
+                Conf.main.base_dir.set(filename)
+                write_roi(filename, obj.roi)
 
     # ------Refreshing GUI--------------------------------------------------------------
     def selection_changed(self, update_items: bool = False) -> None:

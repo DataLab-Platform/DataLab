@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 17:58+0200\n"
+"POT-Creation-Date: 2025-08-03 17:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,30 @@ msgstr "DataLab Version 0.21.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "New ROI (Region of Interest) management features:"
+msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
+
+msgid "New \"ROI\" menu, between \"Edit\" and \"Operations\" menus"
+msgstr "Nouveau menu \"ROI\", entre les menus \"Édition\" et \"Opérations\""
+
+msgid "This menu provides quick access to ROI creation, editing, and deletion tools."
+msgstr "Ce menu fournit un accès rapide aux outils de création, de modification et de suppression des ROI."
+
+msgid "New features have also been added to the \"ROI\" menu:"
+msgstr "De nouvelles fonctionnalités ont également été ajoutées au menu \"ROI\" :"
+
+msgid "\"Copy\": copies the selected ROI to the clipboard"
+msgstr "\"Copier\": copie la ROI sélectionnée dans le presse-papiers"
+
+msgid "\"Paste\": pastes the ROI from the clipboard to the selected object (signal or image)"
+msgstr "\"Coller\": colle la ROI du presse-papiers dans l'objet sélectionné (signal ou image)"
+
+msgid "\"Export\": exports the selected ROI to a file (JSON format)"
+msgstr "\"Exporter\": exporte la ROI sélectionnée vers un fichier (format JSON)"
+
+msgid "\"Import\": imports a ROI from a file (JSON format)"
+msgstr "\"Importer\": importe une ROI depuis un fichier (format JSON)"
 
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"

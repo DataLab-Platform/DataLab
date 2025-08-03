@@ -455,13 +455,3 @@ X-Y Mode
 ^^^^^^^^
 
 Simulate the X-Y mode of an oscilloscope.
-
-ROI extraction
-^^^^^^^^^^^^^^
-
-Create a new signal from a user-defined Region of Interest (ROI).
-
-.. figure:: /images/shots/s_roi_dialog.png
-
-    ROI extraction dialog: the ROI is defined by moving the position
-    and adjusting the width of an horizontal range.

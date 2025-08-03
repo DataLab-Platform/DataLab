@@ -64,6 +64,11 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
     # pylint: disable=duplicate-code
 
     @staticmethod
+    def get_roi_class() -> Type[SignalROI]:
+        """Return ROI class"""
+        return SignalROI
+
+    @staticmethod
     def get_roieditor_class() -> Type[roieditor.SignalROIEditor]:
         """Return ROI editor class"""
         return roieditor.SignalROIEditor

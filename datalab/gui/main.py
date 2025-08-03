@@ -171,6 +171,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
         self.file_menu: QW.QMenu | None = None
         self.edit_menu: QW.QMenu | None = None
+        self.roi_menu: QW.QMenu | None = None
         self.operation_menu: QW.QMenu | None = None
         self.processing_menu: QW.QMenu | None = None
         self.analysis_menu: QW.QMenu | None = None
@@ -660,6 +661,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 for name in (
                     "file",
                     "edit",
+                    "roi",
                     "view",
                     "operation",
                     "processing",
@@ -971,6 +973,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.file_menu = self.menuBar().addMenu(_("File"))
         configure_menu_about_to_show(self.file_menu, self.__update_file_menu)
         self.edit_menu = self.menuBar().addMenu(_("&Edit"))
+        self.roi_menu = self.menuBar().addMenu(_("ROI"))
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
         self.analysis_menu = self.menuBar().addMenu(_("Analysis"))
@@ -980,6 +983,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.help_menu = self.menuBar().addMenu("?")
         for menu in (
             self.edit_menu,
+            self.roi_menu,
             self.operation_menu,
             self.processing_menu,
             self.analysis_menu,
@@ -1301,6 +1305,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         category = {
             self.file_menu: ActionCategory.FILE,
             self.edit_menu: ActionCategory.EDIT,
+            self.roi_menu: ActionCategory.ROI,
             self.view_menu: ActionCategory.VIEW,
             self.operation_menu: ActionCategory.OPERATION,
             self.processing_menu: ActionCategory.PROCESSING,
