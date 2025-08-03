@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-08-03 18:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -55,8 +55,8 @@ msgstr "Les ROI sont stockées en tant que métadonnées et sont donc attachées
 msgid "The \"ROI\" menu allows you to:"
 msgstr "Le menu \"ROI\" vous permet de :"
 
-msgid "\"Edit regions of interest\" |roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range."
-msgstr "\"Modifier les régions d'intérêt\" |roi| : ouvre une boîte de dialogue pour gérer les ROI associées au signal sélectionné (ajouter, supprimer, déplacer, redimensionner, etc.). La boîte de dialogue de définition des ROI est exactement la même que l'extraction des ROI (voir ci-dessous) : le ROI est défini en déplaçant la position et en ajustant la largeur d'une plage horizontale."
+msgid "\"Edit\" |roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range."
+msgstr "\"Modifier\" |roi| : ouvrir une boîte de dialogue pour gérer les ROI associées au signal sélectionné (ajouter, supprimer, déplacer, redimensionner, etc.). La boîte de dialogue de définition des ROI est exactement la même que celle de l'extraction des ROI (voir ci-dessous) : la ROI est définie en déplaçant la position et en ajustant la largeur d'une plage horizontale."
 
 msgid "roi"
 msgstr ""
@@ -64,16 +64,40 @@ msgstr ""
 msgid "A signal with an ROI."
 msgstr "Un signal avec une ROI."
 
-msgid "\"Remove regions of interest\" |roi_delete|: remove all defined ROI for the selected signals."
-msgstr "\"Supprimer les régions d'intérêt\" |roi_delete| : supprime toutes les ROI définies pour les signaux sélectionnés."
-
-msgid "roi_delete"
-msgstr ""
-
-msgid "\"Extract regions of interest\" |signal_roi|: extract the defined ROI from the selected signals. This will create a new signal for each ROI (or a single signal, if the \"Extract all ROIs into a single signal\" option is selected in the dialog), with the same metadata as the original signal, but with the data corresponding to the ROI only. The new signals will be added to the current workspace."
-msgstr "\"Extraire les régions d'intérêt\" |signal_roi| : extrait les ROI définies des signaux sélectionnés. Cela créera un nouveau signal pour chaque ROI (ou un seul signal, si l'option \"Extraire toutes les ROI dans un seul signal\" est sélectionnée dans la boîte de dialogue), avec les mêmes métadonnées que le signal original, mais avec les données correspondant uniquement à la ROI. Les nouveaux signaux seront ajoutés à l'espace de travail actuel."
+msgid "\"Extract\" |signal_roi|: extract the defined ROI from the selected signals. This will create a new signal for each ROI (or a single signal, if the \"Extract all ROIs into a single signal\" option is selected in the dialog), with the same metadata as the original signal, but with the data corresponding to the ROI only. The new signals will be added to the current workspace."
+msgstr "\"Extraire\" |signal_roi| : extraire la ROI définie des signaux sélectionnés. Cela créera un nouveau signal pour chaque ROI (ou un seul signal, si l'option \"Extraire toutes les ROIs dans un seul signal\" est sélectionnée dans la boîte de dialogue), avec les mêmes métadonnées que le signal d'origine, mais avec les données correspondant uniquement à la ROI. Les nouveaux signaux seront ajoutés à l'espace de travail actuel."
 
 msgid "signal_roi"
+msgstr ""
+
+msgid "\"Copy\" |roi_copy|: copy the defined ROI from the selected signals to the clipboard. This allows you to paste the ROI into another signal or use it in other operations."
+msgstr "\"Copier\" |roi_copy| : copier la ROI définie des signaux sélectionnés dans le presse-papiers. Cela vous permet de coller la ROI dans un autre signal ou de l'utiliser dans d'autres opérations."
+
+msgid "roi_copy"
+msgstr ""
+
+msgid "\"Paste\" |roi_paste|: paste the copied ROI from the clipboard to the selected signals. This will add the ROI to the signals, allowing you to define or modify ROIs based on previously copied ones."
+msgstr "\"Coller\" |roi_paste| : coller la ROI copiée du presse-papiers dans les signaux sélectionnés. Cela ajoutera la ROI aux signaux, vous permettant de définir ou de modifier des ROI en fonction de celles précédemment copiées."
+
+msgid "roi_paste"
+msgstr ""
+
+msgid "\"Import\" |roi_import|: import ROIs from a file. This allows you to load previously saved ROIs into the current signal."
+msgstr "\"Importer\" |roi_import| : importer des ROI à partir d'un fichier. Cela vous permet de charger des ROI précédemment enregistrées dans le signal actuel."
+
+msgid "roi_import"
+msgstr ""
+
+msgid "\"Export\" |roi_export|: export the defined ROIs to a file. This allows you to save the ROIs for later use or to share them with others."
+msgstr "\"Exporter\" |roi_export| : exporter les ROI définies vers un fichier. Cela vous permet de sauvegarder les ROI pour une utilisation ultérieure ou de les partager avec d'autres."
+
+msgid "roi_export"
+msgstr ""
+
+msgid "\"Remove all\" |roi_delete|: remove all defined ROI for the selected signals."
+msgstr "\"Supprimer tout\" |roi_delete| : supprimer toutes les ROI définies pour les signaux sélectionnés."
+
+msgid "roi_delete"
 msgstr ""
 
 msgid "ROI extraction dialog: the ROI is defined by moving the position and adjusting the width of an horizontal range."

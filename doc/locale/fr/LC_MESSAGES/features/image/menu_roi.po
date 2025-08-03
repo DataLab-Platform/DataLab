@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-08-03 18:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -55,8 +55,8 @@ msgstr "Les ROI sont stockées en tant que métadonnées et sont donc attachées
 msgid "The \"ROI\" menu allows you to:"
 msgstr "Le menu \"ROI\" vous permet de :"
 
-msgid "\"Edit regions of interest\" |roi|: open a dialog box to manage ROI associated with the selected image (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below)."
-msgstr "\"Modifier les régions d'intérêt\" |roi| : ouvre une boîte de dialogue pour gérer les ROI associées à l'image sélectionnée (ajouter, supprimer, déplacer, redimensionner, etc.). La boîte de dialogue de définition des ROI est exactement la même que l'extraction des ROI (voir ci-dessous)."
+msgid "\"Edit\" |roi|: open a dialog box to manage ROI associated with the selected image (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below)."
+msgstr "\"Modifier\" |roi| : ouvrir une boîte de dialogue pour gérer les ROI associées à l'image sélectionnée (ajouter, supprimer, déplacer, redimensionner, etc.). La boîte de dialogue de définition des ROI est exactement la même que celle de l'extraction des ROI (voir ci-dessous)."
 
 msgid "roi"
 msgstr ""
@@ -64,16 +64,40 @@ msgstr ""
 msgid "An image with an ROI."
 msgstr "Une image avec une ROI."
 
-msgid "\"Remove regions of interest\" |roi_delete|: remove all defined ROI for the selected images."
-msgstr "\"Supprimer les régions d'intérêt\" |roi_delete| : supprime toutes les ROI définies pour les images sélectionnées."
-
-msgid "roi_delete"
-msgstr ""
-
-msgid "\"Extract regions of interest\" |image_roi|: extract the defined ROI from the selected images. This will create a new image for each ROI (or a single image, if the \"Extract all ROIs into a single image\" option is selected in the dialog), with the same metadata as the original image, but with the data corresponding to the ROI only. The new images will be added to the current workspace."
-msgstr ""
+msgid "\"Extract\" |image_roi|: extract the defined ROI from the selected images. This will create a new image for each ROI (or a single image, if the \"Extract all ROIs into a single image\" option is selected in the dialog), with the same metadata as the original image, but with the data corresponding to the ROI only. The new images will be added to the current workspace."
+msgstr "\"Extraire\" |image_roi| : extraire la ROI définie des images sélectionnées. Cela créera une nouvelle image pour chaque ROI (ou une seule image, si l'option \"Extraire toutes les ROIs dans une seule image\" est sélectionnée dans la boîte de dialogue), avec les mêmes métadonnées que l'image d'origine, mais avec les données correspondant uniquement à la ROI. Les nouvelles images seront ajoutées à l'espace de travail actuel."
 
 msgid "image_roi"
+msgstr ""
+
+msgid "\"Copy\" |roi_copy|: copy the defined ROI from the selected images to the clipboard. This allows you to paste the ROI into another image or use it in other operations."
+msgstr "\"Copier\" |roi_copy| : copier la ROI définie des images sélectionnées dans le presse-papiers. Cela vous permet de coller la ROI dans une autre image ou de l'utiliser dans d'autres opérations."
+
+msgid "roi_copy"
+msgstr ""
+
+msgid "\"Paste\" |roi_paste|: paste the copied ROI from the clipboard to the selected images. This will add the ROI to the images, allowing you to define or modify ROIs based on previously copied ones."
+msgstr "\"Coller\" |roi_paste| : coller la ROI copiée du presse-papiers dans les images sélectionnées. Cela ajoutera la ROI aux images, vous permettant de définir ou de modifier des ROI en fonction de celles précédemment copiées."
+
+msgid "roi_paste"
+msgstr ""
+
+msgid "\"Import\" |roi_import|: import ROIs from a file. This allows you to load previously saved ROIs into the current image."
+msgstr "\"Importer\" |roi_import| : importer des ROI à partir d'un fichier. Cela vous permet de charger des ROI précédemment enregistrées dans l'image actuelle."
+
+msgid "roi_import"
+msgstr ""
+
+msgid "\"Export\" |roi_export|: export the defined ROIs to a file. This allows you to save the ROIs for later use or to share them with others."
+msgstr "\"Exporter\" |roi_export| : exporter les ROI définies vers un fichier. Cela vous permet de sauvegarder les ROI pour une utilisation ultérieure ou de les partager avec d'autres."
+
+msgid "roi_export"
+msgstr ""
+
+msgid "\"Remove all\" |roi_delete|: remove all defined ROI for the selected images."
+msgstr "\"Supprimer tout\" |roi_delete| : supprimer toutes les ROI définies pour les images sélectionnées."
+
+msgid "roi_delete"
 msgstr ""
 
 msgid "ROI extraction dialog: the ROI is defined by moving the position and adjusting the size of a rectangle shape."

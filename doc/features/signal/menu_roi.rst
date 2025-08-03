@@ -31,15 +31,23 @@ ROI are taken into account almost in all computing features in DataLab:
 
 The "ROI" menu allows you to:
 
-- "Edit regions of interest" |roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range.
+- "Edit" |roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range.
 
 .. figure:: /images/shots/s_roi_editor.png
 
     A signal with an ROI.
 
-- "Remove regions of interest" |roi_delete|: remove all defined ROI for the selected signals.
+- "Extract" |signal_roi|: extract the defined ROI from the selected signals. This will create a new signal for each ROI (or a single signal, if the "Extract all ROIs into a single signal" option is selected in the dialog), with the same metadata as the original signal, but with the data corresponding to the ROI only. The new signals will be added to the current workspace.
 
-- "Extract regions of interest" |signal_roi|: extract the defined ROI from the selected signals. This will create a new signal for each ROI (or a single signal, if the "Extract all ROIs into a single signal" option is selected in the dialog), with the same metadata as the original signal, but with the data corresponding to the ROI only. The new signals will be added to the current workspace.
+- "Copy" |roi_copy|: copy the defined ROI from the selected signals to the clipboard. This allows you to paste the ROI into another signal or use it in other operations.
+
+- "Paste" |roi_paste|: paste the copied ROI from the clipboard to the selected signals. This will add the ROI to the signals, allowing you to define or modify ROIs based on previously copied ones.
+
+- "Import" |roi_import|: import ROIs from a file. This allows you to load previously saved ROIs into the current signal.
+
+- "Export" |roi_export|: export the defined ROIs to a file. This allows you to save the ROIs for later use or to share them with others.
+
+- "Remove all" |roi_delete|: remove all defined ROI for the selected signals.
 
 .. figure:: /images/shots/s_roi_dialog.png
 
@@ -50,12 +58,32 @@ The "ROI" menu allows you to:
     :height: 24px
     :class: dark-light
 
-.. |roi_delete| image:: ../../../datalab/data/icons/roi/roi_delete.svg
+.. |signal_roi| image:: ../../../datalab/data/icons/roi/signal_roi.svg
     :width: 24px
     :height: 24px
     :class: dark-light
 
-.. |signal_roi| image:: ../../../datalab/data/icons/roi/signal_roi.svg
+.. |roi_copy| image:: ../../../datalab/data/icons/roi/roi_copy.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light
+
+.. |roi_paste| image:: ../../../datalab/data/icons/roi/roi_paste.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light
+
+.. |roi_import| image:: ../../../datalab/data/icons/roi/roi_import.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light
+
+.. |roi_export| image:: ../../../datalab/data/icons/roi/roi_export.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light
+
+.. |roi_delete| image:: ../../../datalab/data/icons/roi/roi_delete.svg
     :width: 24px
     :height: 24px
     :class: dark-light
