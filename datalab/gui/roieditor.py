@@ -34,11 +34,11 @@ from plotpy.items import (
     AnnotatedCircle,
     AnnotatedPolygon,
     AnnotatedRectangle,
+    AnnotatedXRange,
     CurveItem,
     DataInfoLabel,
     MaskedImageItem,
     ObjectInfo,
-    XRangeSelection,
 )
 from plotpy.plot import PlotDialog, PlotManager, PlotOptions
 from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool, SelectTool
@@ -110,7 +110,7 @@ class ROISegmentTool(HRangeTool):
         tool_deselect_items(self)
         super().activate()
 
-    def create_shape(self) -> XRangeSelection:
+    def create_shape(self) -> AnnotatedXRange:
         """Create shape"""
         shape = create_adapter_from_object(self.roi).to_plot_item(self.obj)
         configure_roi_item_in_tool(shape, self.obj)
@@ -505,7 +505,7 @@ class ROIRangeInfo(ObjectInfo):
         return "<br>".join(textlist)
 
 
-class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelection]):
+class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXRange]):
     """Signal ROI Editor
 
     Args:
@@ -521,7 +521,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
 
     ICON_NAME = "signal_roi.svg"
     OBJ_NAME = _("signal")
-    ROI_ITEM_TYPES = (XRangeSelection,)
+    ROI_ITEM_TYPES = (AnnotatedXRange,)
 
     def __init__(
         self,

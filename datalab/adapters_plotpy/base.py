@@ -59,10 +59,10 @@ if TYPE_CHECKING:
         AnnotatedEllipse,
         AnnotatedPolygon,
         AnnotatedRectangle,
+        AnnotatedXRange,
         CurveItem,
         Marker,
         MaskedImageItem,
-        XRangeSelection,
     )
     from plotpy.styles import AnnotationParam, ShapeParam
 
@@ -390,7 +390,7 @@ TypeSingleROIPlotPyAdapter = TypeVar(
 )
 TypeROIItem = TypeVar(
     "TypeROIItem",
-    bound="XRangeSelection | AnnotatedPolygon | AnnotatedRectangle | AnnotatedCircle",
+    bound="AnnotatedXRange | AnnotatedPolygon | AnnotatedRectangle | AnnotatedCircle",
 )
 
 
