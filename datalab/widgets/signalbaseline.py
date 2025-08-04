@@ -58,7 +58,7 @@ class SignalBaselineDialog(PlotDialog):
         plot.SIG_MARKER_CHANGED.connect(self.cursor_changed)
         self.cursor = make.hcursor(0.0, _("Base line") + " = %g")
         self.cursor.set_movable(False)
-        self.xrange = make.range(obj.x[0], obj.x[int(0.2 * len(obj.x))])
+        self.xrange = make.xrange(obj.x[0], obj.x[int(0.2 * len(obj.x))])
         for item in (self.curve, self.cursor, self.xrange):
             plot.add_item(item)
         plot.replot()
