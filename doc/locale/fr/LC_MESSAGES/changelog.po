@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 17:48+0200\n"
+"POT-Creation-Date: 2025-08-04 12:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -53,6 +53,15 @@ msgstr "\"Exporter\": exporte la ROI sélectionnée vers un fichier (format JSON
 
 msgid "\"Import\": imports a ROI from a file (JSON format)"
 msgstr "\"Importer\": importe une ROI depuis un fichier (format JSON)"
+
+msgid "ROI editor now supports setting the ROI title:"
+msgstr "L'éditeur de ROI prend désormais en charge la définition du titre de la ROI :"
+
+msgid "When adding ROIs interactively, the user can now set a title from the object list on the right side of the ROI editor"
+msgstr "Lors de l'ajout de ROIs de manière interactive, l'utilisateur peut désormais définir un titre à partir de la liste des objets sur le côté droit de l'éditeur de ROI."
+
+msgid "After validating the dialog, each ROI title may also be edited in the confirmation dialog"
+msgstr "Après validation de la boîte de dialogue, chaque titre de ROI peut également être modifié dans la boîte de dialogue de confirmation."
 
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 17:41+0200\n"
+"POT-Creation-Date: 2025-08-04 12:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -999,6 +999,9 @@ msgstr ""
 msgid "Signal ROI parameters"
 msgstr ""
 
+msgid "ROI title\\.  Default: ''."
+msgstr ""
+
 msgid "First point coordinate\\.  Default: 0.0."
 msgstr ""
 
@@ -1015,9 +1018,6 @@ msgid "Convert parameters to single ROI"
 msgstr ""
 
 msgid "signal object"
-msgstr ""
-
-msgid "ROI title"
 msgstr ""
 
 msgid "Single ROI"

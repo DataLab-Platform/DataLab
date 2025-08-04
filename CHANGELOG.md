@@ -14,6 +14,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * "Paste": pastes the ROI from the clipboard to the selected object (signal or image)
     * "Export": exports the selected ROI to a file (JSON format)
     * "Import": imports a ROI from a file (JSON format)
+  * ROI editor now supports setting the ROI title:
+    * When adding ROIs interactively, the user can now set a title from the object list on the right side of the ROI editor
+    * After validating the dialog, each ROI title may also be edited in the confirmation dialog
 
 * New image processing features:
   * New "Gaussian frequency filter" feature:
