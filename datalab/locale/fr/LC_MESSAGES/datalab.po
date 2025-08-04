@@ -476,13 +476,13 @@ msgstr "Toutes les opérations morphologiques"
 msgid "Apply all morphological operations"
 msgstr "Appliquer toutes les opérations morphologiques"
 
-msgid "Edges"
-msgstr "Contours"
+msgid "Edge detection"
+msgstr "Détection de contours"
 
-msgid "All edges filters"
-msgstr "Tous les filtres de contours"
+msgid "All edge detection filters..."
+msgstr "Tous les filtres de contours..."
 
-msgid "Compute all edges filters"
+msgid "Compute all edge detection filters"
 msgstr "Calcule tous les filtres de contours"
 
 msgid "Erase area"
@@ -1253,35 +1253,8 @@ msgstr "Ouverture (disque)"
 msgid "Closing (disk)"
 msgstr "Fermeture (disque)"
 
-msgid "Roberts filter"
-msgstr "Filtre de Roberts"
-
-msgid "Prewitt filter"
-msgstr "Filtre de Prewitt"
-
-msgid "Prewitt filter (horizontal)"
-msgstr "Filtre de Prewitt (horizontal)"
-
-msgid "Prewitt filter (vertical)"
-msgstr "Filtre de Prewitt (vertical)"
-
-msgid "Sobel filter"
-msgstr "Filtre de Sobel"
-
-msgid "Sobel filter (horizontal)"
-msgstr "Filtre de Sobel (horizontal)"
-
-msgid "Sobel filter (vertical)"
-msgstr "Filtre de Sobel (vertical)"
-
-msgid "Scharr filter"
-msgstr "Filtre de Scharr"
-
-msgid "Scharr filter (horizontal)"
-msgstr "Filtre de Scharr (horizontal)"
-
-msgid "Scharr filter (vertical)"
-msgstr "Filtre de Scharr (vertical)"
+msgid "Canny filter"
+msgstr "Filtre de Canny"
 
 msgid "Farid filter"
 msgstr "Filtre de Farid"
@@ -1295,8 +1268,35 @@ msgstr "Filtre de Farid (vertical)"
 msgid "Laplace filter"
 msgstr "Filtre de Laplace"
 
-msgid "Canny filter"
-msgstr "Filtre de Canny"
+msgid "Prewitt filter"
+msgstr "Filtre de Prewitt"
+
+msgid "Prewitt filter (horizontal)"
+msgstr "Filtre de Prewitt (horizontal)"
+
+msgid "Prewitt filter (vertical)"
+msgstr "Filtre de Prewitt (vertical)"
+
+msgid "Roberts filter"
+msgstr "Filtre de Roberts"
+
+msgid "Scharr filter"
+msgstr "Filtre de Scharr"
+
+msgid "Scharr filter (horizontal)"
+msgstr "Filtre de Scharr (horizontal)"
+
+msgid "Scharr filter (vertical)"
+msgstr "Filtre de Scharr (vertical)"
+
+msgid "Sobel filter"
+msgstr "Filtre de Sobel"
+
+msgid "Sobel filter (horizontal)"
+msgstr "Filtre de Sobel (horizontal)"
+
+msgid "Sobel filter (vertical)"
+msgstr "Filtre de Sobel (vertical)"
 
 msgid "Butterworth filter"
 msgstr "Filtre de Butterworth"
