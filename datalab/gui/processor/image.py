@@ -298,9 +298,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sigima_image.ButterworthParam,
         )
         self.register_1_to_1(
-            sigima_image.freq_fft,
-            _("Gaussian filter"),
-            sigima_image.FreqFFTParam,
+            sigima_image.freq_domain_gaussian_filter,
+            _("Gaussian filter in the frequency domain"),
+            sigima_image.FreqDomainGaussianParam,
         )
         # Thresholding
         self.register_1_to_1(

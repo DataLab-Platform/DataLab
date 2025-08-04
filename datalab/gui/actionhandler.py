@@ -1089,7 +1089,7 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Frequency filters"), icon_name="noise_reduction.svg"):
                 self.action_for("butterworth")
-                self.action_for("freq_fft")
+                self.action_for("freq_domain_gaussian_filter")
             with self.new_menu(_("Thresholding"), icon_name="thresholding.svg"):
                 self.action_for("threshold")
                 self.action_for("threshold_isodata")

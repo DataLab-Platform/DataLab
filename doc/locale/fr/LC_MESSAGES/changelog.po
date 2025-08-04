@@ -87,17 +87,17 @@ msgstr "Prévisualiser la grille de ROI avant de la créer"
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"
 
-msgid "New \"Gaussian frequency filter\" feature:"
-msgstr "Nouvelle fonctionnalité \"Filtre de fréquence gaussien\""
+msgid "New \"Frequency domain Gaussian filter\" feature:"
+msgstr "Nouvelle fonctionnalité \"Filtre de fréquence gaussien\" :"
 
-msgid "This feature allows to filter an image in the frequency domain using a Gaussian filter"
+msgid "This feature allows to filter an image in the frequency domain using a Gaussian filter."
 msgstr "Cette fonctionnalité permet de filtrer une image dans le domaine fréquentiel à l'aide d'un filtre gaussien."
 
-msgid "It is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)"
-msgstr "Elle est implémentée dans la fonction `sigima.proc.image.freq_fft` (nécessite Sigima v0.3)"
+msgid "It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function (requires Sigima v0.3)."
+msgstr "Elle est implémentée dans la fonction `sigima.proc.image.frequency_domain_gaussian_filter` (nécessite Sigima v0.3)"
 
-msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images"
-msgstr "Ceci clôture le ticket [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images"
+msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images."
+msgstr "Ceci clôture [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images."
 
 msgid "New \"Erase area\" feature:"
 msgstr "Nouvelle fonctionnalité \"Gommer une zone\" :"

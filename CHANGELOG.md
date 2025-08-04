@@ -26,10 +26,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
       * Preview the ROI grid before creating it
 
 * New image processing features:
-  * New "Gaussian frequency filter" feature:
-    * This feature allows to filter an image in the frequency domain using a Gaussian filter
-    * It is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)
-    * This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images
+  * New "Frequency domain Gaussian filter" feature:
+    * This feature allows to filter an image in the frequency domain using a Gaussian filter.
+    * It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function (requires Sigima v0.3).
+    * This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images.
   * New "Erase area" feature:
     * This feature allows to erase an area in an image as defined by a region of interest
     * It is implemented in the `sigima.proc.image.erase` function (requires Sigima v0.3)

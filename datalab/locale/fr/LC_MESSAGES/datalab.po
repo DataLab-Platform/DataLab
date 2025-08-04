@@ -1130,9 +1130,6 @@ msgstr "Médiane mobile"
 msgid "Wiener filter"
 msgstr "Filtre de Wiener"
 
-msgid "Gaussian frequency filter"
-msgstr "Filtre fréquentiel gaussien"
-
 msgid "Zero padding"
 msgstr "Complément de zéros"
 
@@ -1168,6 +1165,12 @@ msgstr "Densité spectrale de puissance"
 
 msgid "Power spectral density (PSD) is the square of the magnitude spectrum. It is a measure of the power of the frequency components."
 msgstr "La densité spectrale de puissance est le carré du spectre d'amplitude. Elle mesure la puissance des composantes fréquentielles."
+
+msgid "Butterworth filter"
+msgstr "Filtre de Butterworth"
+
+msgid "Gaussian filter in the frequency domain"
+msgstr "Filtre gaussien dans le domaine fréquentiel"
 
 msgid "Parametric thresholding"
 msgstr "Seuillage paramétrique"
@@ -1285,9 +1288,6 @@ msgstr "Filtre de Laplace"
 
 msgid "Canny filter"
 msgstr "Filtre de Canny"
-
-msgid "Butterworth filter"
-msgstr "Filtre de Butterworth"
 
 msgid "Statistics"
 msgstr "Statistiques"
