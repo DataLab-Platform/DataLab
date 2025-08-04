@@ -38,7 +38,7 @@ def test_signal_roi_editor(screenshots: bool = False) -> None:
 def create_image_roi_example() -> ImageROI:
     """Create an example image ROI"""
     roi = create_image_roi("rectangle", [720, 720, 304, 304], title="Test ROI 1")
-    roi.add_roi(create_image_roi("circle", [550, 650, 165]), title="Test ROI 2")
+    roi.add_roi(create_image_roi("circle", [550, 650, 165], title="Test ROI 2"))
     roi.add_roi(
         create_image_roi(
             "polygon", [225, 75, 650, 175, 625, 475, 200, 675], title="Test ROI 3"
