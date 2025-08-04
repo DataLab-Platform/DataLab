@@ -96,9 +96,7 @@ def tool_setup_shape(
         name = str(item.title().text())
         match = re.match(r"ROI(\d+)", name)
         if match is not None:
-            index = int(match.group(1))
-            if index > max_index:
-                max_index = index
+            max_index = max(max_index, int(match.group(1)))
     shape.setTitle(f"ROI{max_index + 1:02d}")
 
 
