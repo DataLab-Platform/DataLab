@@ -192,7 +192,7 @@ class ComputingFeature:
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
     function: Optional[Callable] = None
-    paramclass: Optional[type] = None
+    paramclass: Optional[type[gds.DataSet]] = None
     title: Optional[str] = None
     icon_name: Optional[str] = None
     comment: Optional[str] = None
@@ -514,7 +514,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self,
         func: Callable,
         param: gds.DataSet | None = None,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -629,7 +629,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self,
         func: Callable,
         param: gds.DataSet | None = None,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -725,7 +725,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self,
         func: Callable,
         param: gds.DataSet | None = None,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -856,7 +856,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         obj2_name: str,
         func: Callable,
         param: gds.DataSet | None = None,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -999,7 +999,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self,
         function: Callable,
         title: str,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -1038,7 +1038,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self,
         function: Callable,
         title: str,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -1102,7 +1102,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self,
         function: Callable,
         title: str,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -1140,7 +1140,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self,
         function: Callable,
         title: str,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
