@@ -46,6 +46,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Enhanced to support both prepending and appending zeros.
     * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
     * Default strategy is now "Next power of 2".
+  * Ideal frequency domain filter ("Brick wall filter"):
+    * It is implemented in `sigima.proc.signal.frequency_filter` (requires Sigima v0.3).
+    * This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal).
 
 * New 2D ramp image generator.
   * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).

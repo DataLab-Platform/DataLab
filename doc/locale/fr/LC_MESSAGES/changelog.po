@@ -144,6 +144,15 @@ msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-P
 msgid "Default strategy is now \"Next power of 2\"."
 msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
 
+msgid "Ideal frequency domain filter (\"Brick wall filter\"):"
+msgstr "Filtre fréquentiel idéal :"
+
+msgid "It is implemented in `sigima.proc.signal.frequency_filter` (requires Sigima v0.3)."
+msgstr "Elle est implémentée dans `sigima.proc.image.freq_fft` (nécessite Sigima v0.3)."
+
+msgid "This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal)."
+msgstr "Ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filtres / Filtre idéal (Signal)."
+
 msgid "New 2D ramp image generator."
 msgstr "Nouveau générateur d'image de type rampe 2D."
 

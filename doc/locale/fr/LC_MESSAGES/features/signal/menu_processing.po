@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-08-05 14:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -353,6 +353,12 @@ msgstr ""
 
 msgid "Bessel filter, using SciPy's `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_ function"
 msgstr "Filtre de Bessel, utilisant la fonction `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_"
+
+msgid "Brick wall"
+msgstr "Filtre idéal"
+
+msgid "Ideal (rectangular) filter in the frequency domain"
+msgstr "Filtre idéal (rectangulaire) dans le domaine de la fréquence"
 
 msgid "Butterworth"
 msgstr ""
@@ -723,4 +729,3 @@ msgstr "Mode XY"
 
 msgid "Simulate the X-Y mode of an oscilloscope."
 msgstr "Simuler le mode XY d'un oscilloscope."
-
