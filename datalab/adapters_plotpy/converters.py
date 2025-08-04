@@ -9,6 +9,8 @@ PlotPy Adapter Converters
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from plotpy.items import (
     AnnotatedCircle,
     AnnotatedPolygon,
@@ -23,6 +25,9 @@ from sigima.objects import (
 )
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
+
+if TYPE_CHECKING:
+    from sigima.objects import ImageObj, SignalObj
 
 
 def plotitem_to_singleroi(
@@ -64,14 +69,16 @@ def plotitem_to_singleroi(
 
 def singleroi_to_plotitem(
     roi: SegmentROI | RectangularROI | CircularROI | PolygonalROI,
+    obj: SignalObj | ImageObj,
 ) -> AnnotatedXRange | AnnotatedRectangle | AnnotatedCircle | AnnotatedPolygon:
     """Create a PlotPy item from the given single ROI to integrate with DataLab
 
     Args:
         roi: The single ROI for which to create a PlotPy item
+        obj: The object (signal or image) associated with the ROI
 
     Returns:
         A PlotPy item instance
     """
     adapter = create_adapter_from_object(roi)
-    return adapter.to_plot_item()
+    return adapter.to_plot_item(obj)
