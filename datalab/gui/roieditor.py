@@ -29,16 +29,13 @@ from typing import TYPE_CHECKING, Any, Generic, Literal, TypeVar, Union
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
-from plotpy.builder import make
 from plotpy.items import (
     AnnotatedCircle,
     AnnotatedPolygon,
     AnnotatedRectangle,
+    AnnotatedXRange,
     CurveItem,
-    DataInfoLabel,
     MaskedImageItem,
-    ObjectInfo,
-    XRangeSelection,
 )
 from plotpy.plot import PlotDialog, PlotManager, PlotOptions
 from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool, SelectTool
@@ -102,7 +99,7 @@ def get_roi_items_from_plot(plot: BasePlot) -> list[TypeROIItem]:
         for item in plot.get_items()
         if isinstance(
             item,
-            (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon, XRangeSelection),
+            (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon, AnnotatedXRange),
         )
     ]
 
@@ -131,7 +128,7 @@ class ROISegmentTool(HRangeTool):
         tool_deselect_items(self)
         super().activate()
 
-    def create_shape(self) -> XRangeSelection:
+    def create_shape(self) -> AnnotatedXRange:
         """Create shape"""
         shape = create_adapter_from_object(self.roi).to_plot_item(self.obj)
         tool_setup_shape(self.get_active_plot(), shape, self.obj)
@@ -492,21 +489,7 @@ class BaseROIEditor(
         self.modified = True
 
 
-class ROIRangeInfo(ObjectInfo):
-    """ObjectInfo for ROI selection"""
-
-    def __init__(self, roi_editor: SignalROIEditor) -> None:
-        self.roi_editor = roi_editor
-
-    def get_text(self) -> str:
-        textlist = []
-        for index, roi_item in enumerate(self.roi_editor.get_roi_items()):
-            x0, x1 = roi_item.get_range()
-            textlist.append(f"ROI{index:02d}: {x0} ≤ x ≤ {x1}")
-        return "<br>".join(textlist)
-
-
-class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelection]):
+class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXRange]):
     """Signal ROI Editor
 
     Args:
@@ -522,7 +505,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
 
     ICON_NAME = "signal_roi.svg"
     OBJ_NAME = _("signal")
-    ROI_ITEM_TYPES = (XRangeSelection,)
+    ROI_ITEM_TYPES = (AnnotatedXRange,)
 
     def __init__(
         self,
@@ -533,7 +516,6 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
         options: PlotOptions | dict[str, Any] | None = None,
         size: tuple[int, int] | None = None,
     ) -> None:
-        self.info_label: DataInfoLabel | None = None
         super().__init__(
             parent=parent,
             obj=obj,
@@ -576,19 +558,6 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, XRangeSelec
             triggered=self.manually_add_roi,
         )
         return [segcoord_act]
-
-    def setup_items(self) -> None:
-        """Setup items"""
-        super().setup_items()
-        self.info_label = make.info_label(
-            "BL", [ROIRangeInfo(self)], title=_("Regions of interest")
-        )
-        self.get_plot().add_item(self.info_label)
-
-    def update_roi_items(self):
-        """Update ROI annotation titles"""
-        super().update_roi_items()
-        self.info_label.update_text()
 
 
 class ImageROIEditor(
