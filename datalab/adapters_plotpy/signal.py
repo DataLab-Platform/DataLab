@@ -44,7 +44,7 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, AnnotatedXR
             obj: object (signal), for physical-indices coordinates conversion
         """
         xmin, xmax = self.single_roi.get_physical_coords(obj)
-        item = make.annotated_xrange(xmin, xmax, title=title)
+        item = make.annotated_xrange(xmin, xmax, title=self.single_roi.title)
         return item
 
     @classmethod
@@ -60,7 +60,8 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, AnnotatedXR
         if not isinstance(item, AnnotatedXRange):
             raise TypeError("Invalid plot item type")
         coords = sorted(item.get_range())
-        return SegmentROI(coords, False, item.annotationparam.title)
+        title = str(item.title().text())
+        return SegmentROI(coords, False, title)
 
 
 class SignalROIPlotPyAdapter(BaseROIPlotPyAdapter[SignalROI]):

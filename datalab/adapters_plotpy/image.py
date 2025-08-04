@@ -46,6 +46,7 @@ class PolygonalROIPlotPyAdapter(
         coords = np.array(self.single_roi.get_physical_coords(obj))
         points = coords.reshape(-1, 2)
         item = AnnotatedPolygon(points)
+        item.annotationparam.title = self.single_roi.title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
         return item
@@ -92,7 +93,9 @@ class RectangularROIPlotPyAdapter(
 
         x0, y0, dx, dy = self.single_roi.get_physical_coords(obj)
         x1, y1 = x0 + dx, y0 + dy
-        roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1)
+        roi_item: AnnotatedRectangle = make.annotated_rectangle(
+            x0, y0, x1, y1, title=self.single_roi.title
+        )
         roi_item.set_info_callback(info_callback)
         param = roi_item.label.labelparam
         param.anchor = "BL"
@@ -144,6 +147,7 @@ class CircularROIPlotPyAdapter(
         xc, yc, r = self.single_roi.get_physical_coords(obj)
         item = AnnotatedCircle(xc - r, yc, xc + r, yc)
         item.set_info_callback(info_callback)
+        item.annotationparam.title = self.single_roi.title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
         return item

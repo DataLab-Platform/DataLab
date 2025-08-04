@@ -502,9 +502,7 @@ class BaseROIPlotPyAdapter(Generic[TypeROI], abc.ABC):
             item = configure_roi_item(
                 roi_item, fmt, lbl, editable, option=self.roi.PREFIX
             )
-            default_title = "ROI" if index is None else f"ROI{index:02d}"
-            title = single_roi.title or default_title
-            item.setTitle(title)
+            item.setTitle(single_roi.title or f"ROI{index:02d}")
             yield item
 
 
