@@ -40,6 +40,8 @@ jobs:
         if [ "${{ github.ref_name }}" = "develop" ]; then
            pip uninstall -y guidata
            pip install git+https://github.com/PlotPyStack/guidata.git@develop
+           pip uninstall -y plotpy
+           pip install git+https://github.com/PlotPyStack/plotpy.git@develop
            pip uninstall -y sigima
            pip install git+https://github.com/DataLab-Platform/Sigima.git@develop
         fi
