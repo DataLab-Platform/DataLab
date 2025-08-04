@@ -1138,28 +1138,28 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Apply all morphological operations"),
                 )
-            with self.new_menu(_("Edges"), icon_name="edges.svg"):
-                self.action_for("roberts")
-                self.action_for("prewitt", separator=True)
-                self.action_for("prewitt_h")
-                self.action_for("prewitt_v")
-                self.action_for("sobel", separator=True)
-                self.action_for("sobel_h")
-                self.action_for("sobel_v")
-                self.action_for("scharr", separator=True)
-                self.action_for("scharr_h")
-                self.action_for("scharr_v")
+            with self.new_menu(_("Edge detection"), icon_name="edges.svg"):
+                self.action_for("canny")
                 self.action_for("farid", separator=True)
                 self.action_for("farid_h")
                 self.action_for("farid_v")
                 self.action_for("laplace", separator=True)
+                self.action_for("prewitt", separator=True)
+                self.action_for("prewitt_h")
+                self.action_for("prewitt_v")
+                self.action_for("roberts", separator=True)
+                self.action_for("scharr", separator=True)
+                self.action_for("scharr_h")
+                self.action_for("scharr_v")
+                self.action_for("sobel", separator=True)
+                self.action_for("sobel_h")
+                self.action_for("sobel_v")
                 self.new_action(
-                    _("All edges filters") + "...",
+                    _("All edge detection filters..."),
                     triggered=self.panel.processor.compute_all_edges,
                     separator=True,
-                    tip=_("Compute all edges filters"),
+                    tip=_("Compute all edge detection filters"),
                 )
-                self.action_for("canny")
             self.action_for("butterworth")
             self.new_action(
                 _("Erase area") + "...",

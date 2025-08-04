@@ -590,24 +590,25 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             _("Closing (disk)"),
             sigima_image.MorphologyParam,
         )
-        # Edges
-        self.register_1_to_1(sigima_image.roberts, _("Roberts filter"))
-        self.register_1_to_1(sigima_image.prewitt, _("Prewitt filter"))
-        self.register_1_to_1(sigima_image.prewitt_h, _("Prewitt filter (horizontal)"))
-        self.register_1_to_1(sigima_image.prewitt_v, _("Prewitt filter (vertical)"))
-        self.register_1_to_1(sigima_image.sobel, _("Sobel filter"))
-        self.register_1_to_1(sigima_image.sobel_h, _("Sobel filter (horizontal)"))
-        self.register_1_to_1(sigima_image.sobel_v, _("Sobel filter (vertical)"))
-        self.register_1_to_1(sigima_image.scharr, _("Scharr filter"))
-        self.register_1_to_1(sigima_image.scharr_h, _("Scharr filter (horizontal)"))
-        self.register_1_to_1(sigima_image.scharr_v, _("Scharr filter (vertical)"))
+        # Edge detection
+        self.register_1_to_1(
+            sigima_image.canny, _("Canny filter"), sigima_image.CannyParam
+        )
         self.register_1_to_1(sigima_image.farid, _("Farid filter"))
         self.register_1_to_1(sigima_image.farid_h, _("Farid filter (horizontal)"))
         self.register_1_to_1(sigima_image.farid_v, _("Farid filter (vertical)"))
         self.register_1_to_1(sigima_image.laplace, _("Laplace filter"))
-        self.register_1_to_1(
-            sigima_image.canny, _("Canny filter"), sigima_image.CannyParam
-        )
+        self.register_1_to_1(sigima_image.prewitt, _("Prewitt filter"))
+        self.register_1_to_1(sigima_image.prewitt_h, _("Prewitt filter (horizontal)"))
+        self.register_1_to_1(sigima_image.prewitt_v, _("Prewitt filter (vertical)"))
+        self.register_1_to_1(sigima_image.roberts, _("Roberts filter"))
+        self.register_1_to_1(sigima_image.scharr, _("Scharr filter"))
+        self.register_1_to_1(sigima_image.scharr_h, _("Scharr filter (horizontal)"))
+        self.register_1_to_1(sigima_image.scharr_v, _("Scharr filter (vertical)"))
+        self.register_1_to_1(sigima_image.sobel, _("Sobel filter"))
+        self.register_1_to_1(sigima_image.sobel_h, _("Sobel filter (horizontal)"))
+        self.register_1_to_1(sigima_image.sobel_v, _("Sobel filter (vertical)"))
+
         # Other processing
         self.register_1_to_1(
             sigima_image.butterworth,
@@ -1045,39 +1046,42 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
 
     @qt_try_except()
     def compute_all_edges(self) -> None:
-        """Compute all edges filters
-        using the following functions:
+        """Compute all edge detection algorithms.
 
-        - :py:func:`sigima.proc.image.edges.roberts`
-        - :py:func:`sigima.proc.image.edges.prewitt`
-        - :py:func:`sigima.proc.image.edges.prewitt_h`
-        - :py:func:`sigima.proc.image.edges.prewitt_v`
-        - :py:func:`sigima.proc.image.edges.sobel`
-        - :py:func:`sigima.proc.image.edges.sobel_h`
-        - :py:func:`sigima.proc.image.edges.sobel_v`
-        - :py:func:`sigima.proc.image.edges.scharr`
-        - :py:func:`sigima.proc.image.edges.scharr_h`
-        - :py:func:`sigima.proc.image.edges.scharr_v`
+        This function calls the following edge detection algorithms:
+
+        - :py:func:`sigima.proc.image.edges.canny`
         - :py:func:`sigima.proc.image.edges.farid`
         - :py:func:`sigima.proc.image.edges.farid_h`
         - :py:func:`sigima.proc.image.edges.farid_v`
         - :py:func:`sigima.proc.image.edges.laplace`
+        - :py:func:`sigima.proc.image.edges.prewitt`
+        - :py:func:`sigima.proc.image.edges.prewitt_h`
+        - :py:func:`sigima.proc.image.edges.prewitt_v`
+        - :py:func:`sigima.proc.image.edges.roberts`
+        - :py:func:`sigima.proc.image.edges.scharr`
+        - :py:func:`sigima.proc.image.edges.scharr_h`
+        - :py:func:`sigima.proc.image.edges.scharr_v`
+        - :py:func:`sigima.proc.image.edges.sobel`
+        - :py:func:`sigima.proc.image.edges.sobel_h`
+        - :py:func:`sigima.proc.image.edges.sobel_v`
         """
         funcs = [
-            sigima_image.roberts,
-            sigima_image.prewitt,
-            sigima_image.prewitt_h,
-            sigima_image.prewitt_v,
-            sigima_image.sobel,
-            sigima_image.sobel_h,
-            sigima_image.sobel_v,
-            sigima_image.scharr,
-            sigima_image.scharr_h,
-            sigima_image.scharr_v,
+            sigima_image.canny,
             sigima_image.farid,
             sigima_image.farid_h,
             sigima_image.farid_v,
             sigima_image.laplace,
+            sigima_image.prewitt,
+            sigima_image.prewitt_h,
+            sigima_image.prewitt_v,
+            sigima_image.roberts,
+            sigima_image.scharr,
+            sigima_image.scharr_h,
+            sigima_image.scharr_v,
+            sigima_image.sobel,
+            sigima_image.sobel_h,
+            sigima_image.sobel_v,
         ]
         self.compute_multiple_1_to_1(funcs, None, "Edges")
 
