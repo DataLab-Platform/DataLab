@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING, Generator
 import numpy as np
 from guidata.dataset import restore_dataset, update_dataset
 from plotpy.builder import make
-from plotpy.items import CurveItem, XRangeSelection
+from plotpy.items import AnnotatedXRange, CurveItem
 from sigima.objects import SegmentROI, SignalObj, SignalROI
 
 from datalab.adapters_plotpy.base import (
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from plotpy.styles import CurveParam
 
 
-class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, XRangeSelection]):
+class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, AnnotatedXRange]):
     """Segment ROI plot item adapter
 
     Args:
@@ -37,19 +37,18 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, XRangeSelec
         title: ROI title
     """
 
-    # pylint: disable=unused-argument
-    def to_plot_item(self, obj: SignalObj) -> XRangeSelection:
+    def to_plot_item(self, obj: SignalObj) -> AnnotatedXRange:
         """Make and return the annnotated segment associated with the ROI
 
         Args:
             obj: object (signal), for physical-indices coordinates conversion
         """
         xmin, xmax = self.single_roi.get_physical_coords(obj)
-        item = make.xrange(xmin, xmax)
+        item = make.annotated_xrange(xmin, xmax, title=title)
         return item
 
     @classmethod
-    def from_plot_item(cls, item: XRangeSelection) -> SegmentROI:
+    def from_plot_item(cls, item: AnnotatedXRange) -> SegmentROI:
         """Create ROI from plot item
 
         Args:
@@ -58,11 +57,10 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, XRangeSelec
         Returns:
             ROI
         """
-        if not isinstance(item, XRangeSelection):
+        if not isinstance(item, AnnotatedXRange):
             raise TypeError("Invalid plot item type")
         coords = sorted(item.get_range())
-        title = str(item.title().text())
-        return SegmentROI(coords, False, title=title)
+        return SegmentROI(coords, False, item.annotationparam.title)
 
 
 class SignalROIPlotPyAdapter(BaseROIPlotPyAdapter[SignalROI]):
@@ -72,7 +70,7 @@ class SignalROIPlotPyAdapter(BaseROIPlotPyAdapter[SignalROI]):
         roi: ROI object
     """
 
-    def to_plot_item(self, single_roi: SegmentROI, obj: SignalObj) -> XRangeSelection:
+    def to_plot_item(self, single_roi: SegmentROI, obj: SignalObj) -> AnnotatedXRange:
         """Make ROI plot item from single ROI
 
         Args:

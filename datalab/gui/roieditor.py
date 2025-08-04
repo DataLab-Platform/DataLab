@@ -29,13 +29,16 @@ from typing import TYPE_CHECKING, Any, Generic, Literal, TypeVar, Union
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
+from plotpy.builder import make
 from plotpy.items import (
     AnnotatedCircle,
     AnnotatedPolygon,
     AnnotatedRectangle,
     AnnotatedXRange,
     CurveItem,
+    DataInfoLabel,
     MaskedImageItem,
+    ObjectInfo,
 )
 from plotpy.plot import PlotDialog, PlotManager, PlotOptions
 from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool, SelectTool
@@ -85,28 +88,7 @@ def tool_deselect_items(tool: InteractiveTool) -> None:
     plot.select_some_items([])  # Deselect all items
 
 
-def get_roi_items_from_plot(plot: BasePlot) -> list[TypeROIItem]:
-    """Get ROI items from plot (applies to both Signal and Image ROIs)
-
-    Args:
-        plot: Plot to get items from
-
-    Returns:
-        List of ROI items from the plot.
-    """
-    return [
-        item
-        for item in plot.get_items()
-        if isinstance(
-            item,
-            (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon, AnnotatedXRange),
-        )
-    ]
-
-
-def tool_setup_shape(
-    plot: BasePlot, shape: TypeROIItem, obj: SignalObj | ImageObj
-) -> None:
+def tool_setup_shape(shape: TypeROIItem, obj: SignalObj | ImageObj) -> None:
     """Tool setup shape"""
     configure_roi_item_in_tool(shape, obj)
     shape.setTitle(f"ROI{len(get_roi_items_from_plot(plot)):02d}")
@@ -459,6 +441,10 @@ class BaseROIEditor(
         ):
             self.get_plot().del_items(self.roi_items)
 
+    @abc.abstractmethod
+    def update_roi_titles(self) -> None:
+        """Update ROI annotation titles"""
+
     def get_roi_items(self) -> list[TypeROIItem]:
         """Get ROI items"""
         return self.roi_items
@@ -466,9 +452,13 @@ class BaseROIEditor(
     def update_roi_items(self) -> None:
         """Update ROI items"""
         old_nb_items = len(self.roi_items)
-        plot = self.get_plot()
-        self.roi_items = get_roi_items_from_plot(plot)
-        plot.select_some_items([])
+        self.roi_items = [
+            item
+            for item in self.get_plot().get_items()
+            if isinstance(item, self.ROI_ITEM_TYPES)
+        ]
+        self.get_plot().select_some_items([])
+        self.update_roi_titles()
         if old_nb_items != len(self.roi_items):
             self.modified = True
 
@@ -541,8 +531,6 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
         """Manually add segment ROI"""
         param = ROI1DParam()
         if param.edit(parent=self):
-            if not param.title:
-                param.title = f"ROI{len(self.roi_items):02d}"
             segment_roi = param.to_single_roi(self.obj)
             shape = create_adapter_from_object(segment_roi).to_plot_item(self.obj)
             configure_roi_item_in_tool(shape, self.obj)
@@ -558,6 +546,18 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
             triggered=self.manually_add_roi,
         )
         return [segcoord_act]
+
+    def setup_items(self) -> None:
+        """Setup items"""
+        super().setup_items()
+        self.info_label = make.info_label(
+            "BL", [ROIRangeInfo(self)], title=_("Regions of interest")
+        self.get_plot().add_item(self.info_label)
+
+    def update_roi_titles(self):
+        """Update ROI annotation titles"""
+        super().update_roi_titles()
+        self.info_label.update_text()
 
 
 class ImageROIEditor(
@@ -611,8 +611,6 @@ class ImageROIEditor(
         param = ROI2DParam()
         param.geometry = roi_type
         if param.edit(parent=self):
-            if not param.title:
-                param.title = f"ROI{len(self.roi_items):02d}"
             roi = param.to_single_roi(self.obj)
             shape = create_adapter_from_object(roi).to_plot_item(self.obj)
             configure_roi_item_in_tool(shape, self.obj)
@@ -644,3 +642,11 @@ class ImageROIEditor(
         # be used in a processing function, so the user need to visualize the mask that
         # corresponds to the data on which the processing function will be applied.
         self.main_item.set_mask_visible(self.mode == "define")
+
+    def update_roi_titles(self) -> None:
+        """Update ROI annotation titles"""
+        super().update_roi_titles()
+        for index, roi_item in enumerate(self.roi_items):
+            roi_item: AnnotatedRectangle | AnnotatedCircle | AnnotatedPolygon
+            roi_item.annotationparam.title = f"ROI{index:02d}"
+            roi_item.annotationparam.update_item(roi_item)

@@ -85,7 +85,7 @@ class SignalDeltaXDialog(PlotDialog):
         plot = self.get_plot()
         plot.set_antialiasing(True)
 
-        self.delta_xrange = make.range(0.0, 1.0)
+        self.delta_xrange = make.xrange(0.0, 1.0)
         self.delta_xrange.setVisible(False)
         self.delta_xrange.set_style("roi", "s/readonly")
         self.delta_xrange.set_selectable(False)

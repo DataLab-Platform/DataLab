@@ -13,7 +13,7 @@ from plotpy.items import (
     AnnotatedCircle,
     AnnotatedPolygon,
     AnnotatedRectangle,
-    XRangeSelection,
+    AnnotatedXRange,
 )
 from sigima.objects import (
     CircularROI,
@@ -26,7 +26,7 @@ from datalab.adapters_plotpy.factories import create_adapter_from_object
 
 
 def plotitem_to_singleroi(
-    plot_item: XRangeSelection
+    plot_item: AnnotatedXRange
     | AnnotatedRectangle
     | AnnotatedCircle
     | AnnotatedPolygon,
@@ -49,7 +49,7 @@ def plotitem_to_singleroi(
         SegmentROIPlotPyAdapter,
     )
 
-    if isinstance(plot_item, XRangeSelection):
+    if isinstance(plot_item, AnnotatedXRange):
         adapter = SegmentROIPlotPyAdapter
     elif isinstance(plot_item, AnnotatedRectangle):
         adapter = RectangularROIPlotPyAdapter
@@ -64,7 +64,7 @@ def plotitem_to_singleroi(
 
 def singleroi_to_plotitem(
     roi: SegmentROI | RectangularROI | CircularROI | PolygonalROI,
-) -> XRangeSelection | AnnotatedRectangle | AnnotatedCircle | AnnotatedPolygon:
+) -> AnnotatedXRange | AnnotatedRectangle | AnnotatedCircle | AnnotatedPolygon:
     """Create a PlotPy item from the given single ROI to integrate with DataLab
 
     Args:
