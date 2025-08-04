@@ -10,14 +10,20 @@ PlotPy to integrate with DataLab's data model and GUI.
 # flake8: noqa
 
 from __future__ import annotations
+
 from datalab.adapters_plotpy.base import (
     ResultPropertiesPlotPyAdapter,
     ResultShapePlotPyAdapter,
     TypePlotItem,
-    json_to_items,
-    items_to_json,
-    configure_roi_item,
     TypeROIItem,
+    configure_roi_item,
+    items_to_json,
+    json_to_items,
+)
+from datalab.adapters_plotpy.converters import (
+    create_adapter_from_object,
+    plotitem_to_singleroi,
+    singleroi_to_plotitem,
 )
 from datalab.adapters_plotpy.image import (
     CircularROIPlotPyAdapter,
@@ -29,9 +35,4 @@ from datalab.adapters_plotpy.signal import (
     SegmentROIPlotPyAdapter,
     SignalObjPlotPyAdapter,
     SignalROIPlotPyAdapter,
-)
-from datalab.adapters_plotpy.converters import (
-    create_adapter_from_object,
-    plotitem_to_singleroi,
-    singleroi_to_plotitem,
 )
