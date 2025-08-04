@@ -1087,6 +1087,9 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: PROCESSING
         with self.new_category(ActionCategory.PROCESSING):
+            with self.new_menu(_("Frequency filters"), icon_name="noise_reduction.svg"):
+                self.action_for("butterworth")
+                self.action_for("freq_fft")
             with self.new_menu(_("Thresholding"), icon_name="thresholding.svg"):
                 self.action_for("threshold")
                 self.action_for("threshold_isodata")
@@ -1155,7 +1158,6 @@ class ImageActionHandler(BaseActionHandler):
                     tip=_("Compute all edges filters"),
                 )
                 self.action_for("canny")
-            self.action_for("butterworth")
             self.new_action(
                 _("Erase area") + "...",
                 triggered=self.panel.processor.compute_erase,
@@ -1163,8 +1165,6 @@ class ImageActionHandler(BaseActionHandler):
                 separator=True,
                 tip=_("Erase area in the image as defined by a region of interest"),
             )
-            with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
-                self.action_for("freq_fft")
 
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):

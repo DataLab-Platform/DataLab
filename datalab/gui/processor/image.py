@@ -228,11 +228,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
         self.register_1_to_1(sigima_image.wiener, _("Wiener filter"))
         self.register_1_to_1(
-            sigima_image.freq_fft,
-            _("Gaussian frequency filter"),
-            sigima_image.FreqFFTParam,
-        )
-        self.register_1_to_1(
             sigima_image.erase,
             _("Erase area"),
             ROI2DParam,
@@ -295,6 +290,17 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 "Power spectral density (PSD) is the square of the magnitude spectrum. "
                 "It is a measure of the power of the frequency components."
             ),
+        )
+        # Frequency filters
+        self.register_1_to_1(
+            sigima_image.butterworth,
+            _("Butterworth filter"),
+            sigima_image.ButterworthParam,
+        )
+        self.register_1_to_1(
+            sigima_image.freq_fft,
+            _("Gaussian filter"),
+            sigima_image.FreqFFTParam,
         )
         # Thresholding
         self.register_1_to_1(
@@ -417,11 +423,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sigima_image.canny, _("Canny filter"), sigima_image.CannyParam
         )
         # Other processing
-        self.register_1_to_1(
-            sigima_image.butterworth,
-            _("Butterworth filter"),
-            sigima_image.ButterworthParam,
-        )
         self.register_1_to_n(sigima_image.extract_roi, "ROI", icon_name="roi.svg")
         self.register_1_to_1(
             sigima_image.resize,
