@@ -9,9 +9,11 @@ I/O application test:
 
 # guitest: show
 
+from __future__ import annotations
+
 import os.path as osp
 
-from sigima.io.base import BaseIORegistry, IOAction
+from sigima.io.base import IOAction
 from sigima.io.image import ImageIORegistry
 from sigima.io.signal import SignalIORegistry
 from sigima.tests.helpers import WorkdirRestoringTempDir, get_test_fnames
@@ -24,7 +26,7 @@ from datalab.tests import datalab_test_app_context
 def __testfunc(
     title: str,
     panel: BaseDataPanel,
-    registry: BaseIORegistry,
+    registry: SignalIORegistry | ImageIORegistry,
     pattern: str,
     in_folder: str,
 ) -> None:
