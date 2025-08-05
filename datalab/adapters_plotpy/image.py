@@ -28,6 +28,14 @@ from datalab.adapters_plotpy.base import (
 from datalab.config import Conf
 
 
+def _vs(var: str, sub: str = "") -> str:
+    """Return variable name with subscript"""
+    txt = f"<var>{var}</var>"
+    if sub:
+        txt += f"<sub>{sub}</sub>"
+    return txt
+
+
 class PolygonalROIPlotPyAdapter(
     BaseSingleROIPlotPyAdapter[PolygonalROI, AnnotatedPolygon]
 ):
@@ -43,9 +51,22 @@ class PolygonalROIPlotPyAdapter(
         Args:
             obj: object (image), for physical-indices coordinates conversion
         """
+
+        def info_callback(item: AnnotatedPolygon) -> str:
+            """Return info string for circular ROI"""
+            xc, yc = item.get_center()
+            if self.single_roi.indices:
+                xc, yc = obj.physical_to_indices([xc, yc])
+            return "<br>".join(
+                [
+                    f"({_vs('x', 'c')}, {_vs('y', 'c')}) = ({xc:g}, {yc:g})",
+                ]
+            )
+
         coords = np.array(self.single_roi.get_physical_coords(obj))
         points = coords.reshape(-1, 2)
         item = AnnotatedPolygon(points)
+        item.set_info_callback(info_callback)
         item.annotationparam.title = self.single_roi.title
         item.annotationparam.update_item(item)
         item.set_style("plot", "shape/drag")
@@ -86,22 +107,22 @@ class RectangularROIPlotPyAdapter(
             x0, y0, dx, dy = self.single_roi.rect_to_coords(x0, y0, x1, y1)
             return "<br>".join(
                 [
-                    f"X0, Y0 = {x0:g}, {y0:g}",
-                    f"ΔX x ΔY  = {dx:g} x {dy:g}",
+                    f"({_vs('x', '0')}, {_vs('y', '0')}) = ({x0:g}, {y0:g})",
+                    f"{_vs('Δx')} × {_vs('Δy')} = {dx:g} × {dy:g}",
                 ]
             )
 
         x0, y0, dx, dy = self.single_roi.get_physical_coords(obj)
         x1, y1 = x0 + dx, y0 + dy
-        roi_item: AnnotatedRectangle = make.annotated_rectangle(
+        item: AnnotatedRectangle = make.annotated_rectangle(
             x0, y0, x1, y1, title=self.single_roi.title
         )
-        roi_item.set_info_callback(info_callback)
-        param = roi_item.label.labelparam
+        item.set_info_callback(info_callback)
+        param = item.label.labelparam
         param.anchor = "BL"
         param.xc, param.yc = 5, -5
-        param.update_item(roi_item.label)
-        return roi_item
+        param.update_item(item.label)
+        return item
 
     @classmethod
     def from_plot_item(cls, item: AnnotatedRectangle) -> RectangularROI:
@@ -139,8 +160,8 @@ class CircularROIPlotPyAdapter(
             xc, yc, r = self.single_roi.rect_to_coords(x0, y0, x1, y1)
             return "<br>".join(
                 [
-                    f"Center = {xc:g}, {yc:g}",
-                    f"Radius = {r:g}",
+                    f"({_vs('x', 'c')}, {_vs('y', 'c')}) = ({xc:g}, {yc:g})",
+                    f"{_vs('r')} = {r:g}",
                 ]
             )
 
