@@ -131,7 +131,7 @@ class ROIRectangleTool(RectangleTool):
 
     def __init__(self, manager: PlotManager, obj: ImageObj) -> None:
         super().__init__(manager, switch_to_default_tool=False, toolbar_id=None)
-        self.roi = RectangularROI([0, 0, 1, 1], True)
+        self.roi = RectangularROI([0, 0, 1, 1], False)
         self.obj = obj
 
     def activate(self):
@@ -158,7 +158,7 @@ class ROICircleTool(CircleTool):
 
     def __init__(self, manager: PlotManager, obj: ImageObj) -> None:
         super().__init__(manager, switch_to_default_tool=False, toolbar_id=None)
-        self.roi = CircularROI([0, 0, 1], True)
+        self.roi = CircularROI([0, 0, 1], False)
         self.obj = obj
 
     def activate(self):
@@ -185,7 +185,7 @@ class ROIPolygonTool(PolygonTool):
 
     def __init__(self, manager: PlotManager, obj: ImageObj) -> None:
         super().__init__(manager, switch_to_default_tool=False, toolbar_id=None)
-        self.roi = PolygonalROI([[0, 0], [1, 0], [1, 1], [0, 1]], True)
+        self.roi = PolygonalROI([[0, 0], [1, 0], [1, 1], [0, 1]], False)
         self.obj = obj
 
     def activate(self):

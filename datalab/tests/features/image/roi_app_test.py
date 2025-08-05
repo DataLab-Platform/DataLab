@@ -109,9 +109,8 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
             assert np.all(im2.data != 0), nzroi
             assert im2.data.shape == (IROI2[2] * 2, IROI2[2] * 2), roisham
             mask2 = np.zeros(shape=im2.data.shape, dtype=bool)
-            xc, yc, r = IROI2
-            xc = yc = r  # Adjust for ROI origin
-            rr, cc = draw.disk((yc, xc), r)
+            xc = yc = r = IROI2[2]  # Adjust for ROI origin
+            rr, cc = draw.disk((yc, xc), r, shape=im2.data.shape)
             mask2[rr, cc] = 1
             assert np.all(im2.maskdata == ~mask2), "Mask data mismatch"
         else:  # Single object mode
