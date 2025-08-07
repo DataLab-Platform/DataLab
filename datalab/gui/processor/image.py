@@ -712,7 +712,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             roi: Region of interest to erase
         """
         if roi is None or roi.is_empty():
-            roi = self.edit_regions_of_interest(mode="define")
+            roi = self.edit_roi_graphically(mode="define")
         if roi is None or roi.is_empty():
             return
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]

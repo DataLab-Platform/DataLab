@@ -631,13 +631,20 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.ROI):
             self.new_action(
-                _("Edit") + "...",
-                triggered=self.panel.processor.edit_regions_of_interest,
+                _("Edit graphically") + "...",
+                triggered=self.panel.processor.edit_roi_graphically,
                 icon_name="roi.svg",
                 context_menu_pos=-1,
                 context_menu_sep=True,
                 toolbar_pos=-1,
                 toolbar_category=ActionCategory.VIEW_TOOLBAR,
+                tip=_("Edit regions of interest graphically"),
+            )
+            self.new_action(
+                _("Edit numerically") + "...",
+                triggered=self.panel.processor.edit_roi_numerically,
+                select_condition=SelectCond.exactly_one_with_roi,
+                tip=_("Edit regions of interest numerically"),
             )
             self.new_action(
                 _("Extract") + "...",

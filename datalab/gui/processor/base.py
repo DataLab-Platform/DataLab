@@ -1321,7 +1321,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         #   ROI Editor dialog anyway
         # * If multiple objs are selected, then apply the first obj ROI to all
         if roi is None or roi.is_empty():
-            roi = self.edit_regions_of_interest(mode="extract")
+            roi = self.edit_roi_graphically(mode="extract")
         if roi is None or roi.is_empty():
             return
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
@@ -1346,7 +1346,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     # ------Analysis-------------------------------------------------------------------
 
-    def edit_regions_of_interest(
+    def edit_roi_graphically(
         self, mode: Literal["apply", "extract", "define"] = "apply"
     ) -> TypeROI | None:
         """Define Region Of Interest (ROI).
@@ -1406,6 +1406,34 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     only_existing=True,
                 )
         return edited_roi
+
+    def edit_roi_numerically(self) -> TypeROI:
+        """Edit Regions Of Interest (ROIs) numerically.
+
+        Opens a dialog to edit the parameters of the selected ROIs.
+        If no ROIs are selected, it will prompt the user to select ROIs.
+
+        Returns:
+            The edited ROI object if the dialog is accepted, otherwise the original ROI.
+        """
+        obj = self.panel.objview.get_sel_objects()[0]
+        assert obj.roi is not None, _("No ROI selected for editing.")
+        params = obj.roi.to_params(obj)
+        group = gds.DataSetGroup(params, title=_("Regions of Interest"))
+        if group.edit(parent=self.panel.parent()):
+            edited_roi = obj.roi.__class__.from_params(
+                obj, params, singleobj=obj.roi.singleobj
+            )
+            obj.roi = edited_roi
+            self.SIG_ADD_SHAPE.emit(get_uuid(obj))
+            self.panel.refresh_plot(
+                "selected",
+                update_items=True,
+                only_visible=False,
+                only_existing=True,
+            )
+            return edited_roi
+        return obj.roi
 
     def delete_regions_of_interest(self) -> None:
         """Delete Regions Of Interest"""

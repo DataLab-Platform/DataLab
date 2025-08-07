@@ -115,7 +115,7 @@ def test_signal_roi_app(screenshots: bool = False) -> None:
             sig2_i = sig2.copy()
             panel.add_object(sig2_i)
             print_obj_data_dimensions(sig2_i, indent=1)
-            panel.processor.edit_regions_of_interest()
+            panel.processor.edit_roi_graphically()
             if screenshots:
                 win.statusBar().hide()
                 win.take_screenshot("s_roi_signal")
@@ -129,7 +129,7 @@ def test_signal_roi_basic_app():
         panel = win.signalpanel
         sig1 = create_paracetamol_signal(SIZE)
         panel.add_object(sig1)
-        panel.processor.edit_regions_of_interest()
+        panel.processor.edit_roi_graphically()
 
 
 if __name__ == "__main__":

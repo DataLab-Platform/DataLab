@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-03 17:48+0200\n"
+"POT-Creation-Date: 2025-08-07 17:06+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -141,8 +141,21 @@ msgstr "Copier les titres dans le presse-papier"
 msgid "Copy titles of selected objects to clipboard"
 msgstr "Copier les titres des objets sélectionnés dans le presse-papier"
 
-msgid "Edit"
-msgstr "Modifier"
+#, fuzzy
+msgid "Edit graphically"
+msgstr "ROI graphique"
+
+#, fuzzy
+msgid "Edit regions of interest graphically"
+msgstr "Régions d'intérêt"
+
+#, fuzzy
+msgid "Edit numerically"
+msgstr "Symétrie verticale"
+
+#, fuzzy
+msgid "Edit regions of interest numerically"
+msgstr "Régions d'intérêt"
 
 msgid "Extract"
 msgstr "Extraire"
@@ -978,6 +991,9 @@ msgstr "Second opérande"
 
 msgid "Regions of Interest"
 msgstr "Régions d'intérêt"
+
+msgid "No ROI selected for editing."
+msgstr ""
 
 msgid "Sum"
 msgstr "Addition"

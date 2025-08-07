@@ -160,7 +160,7 @@ def test_image_roi_app(screenshots: bool = False):
             ima2_i = ima2.copy()
             panel.add_object(ima2_i)
             print_obj_data_dimensions(ima2_i)
-            panel.processor.edit_regions_of_interest()
+            panel.processor.edit_roi_graphically()
             if screenshots:
                 win.statusBar().hide()
                 win.take_screenshot("i_roi_image")
@@ -175,7 +175,7 @@ def test_image_roi_basic_app():
         param = NewImageParam.create(height=SIZE, width=SIZE)
         ima1 = create_multigaussian_image(param)
         panel.add_object(ima1)
-        panel.processor.edit_regions_of_interest()
+        panel.processor.edit_roi_graphically()
 
 
 if __name__ == "__main__":

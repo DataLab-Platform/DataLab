@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 18:05+0200\n"
+"POT-Creation-Date: 2025-08-07 17:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -55,14 +55,17 @@ msgstr "Les ROI sont stockées en tant que métadonnées et sont donc attachées
 msgid "The \"ROI\" menu allows you to:"
 msgstr "Le menu \"ROI\" vous permet de :"
 
-msgid "\"Edit\" |roi|: open a dialog box to manage ROI associated with the selected image (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below)."
-msgstr "\"Modifier\" |roi| : ouvrir une boîte de dialogue pour gérer les ROI associées à l'image sélectionnée (ajouter, supprimer, déplacer, redimensionner, etc.). La boîte de dialogue de définition des ROI est exactement la même que celle de l'extraction des ROI (voir ci-dessous)."
+msgid "\"Edit graphically\" |edit_roi|: open a dialog box to manage ROI associated with the selected image (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below)."
+msgstr "\"Édition graphique\" |edit_roi| : ouvrir une boîte de dialogue pour gérer les ROI associées à l'image sélectionnée (ajouter, supprimer, déplacer, redimensionner, etc.). La boîte de dialogue de définition des ROI est exactement la même que celle de l'extraction des ROI (voir ci-dessous)."
 
-msgid "roi"
+msgid "edit_roi"
 msgstr ""
 
 msgid "An image with an ROI."
 msgstr "Une image avec une ROI."
+
+msgid "\"Edit numerically\": open a dialog box to edit the parameters of the selected ROIs numerically (i.e. using a simple form). This allows you to define or modify ROIs based on numerical values."
+msgstr "\"Édition numérique\" : ouvrir une boîte de dialogue pour modifier les paramètres des ROI sélectionnées numériquement (c'est-à-dire à l'aide d'un formulaire simple). Cela vous permet de définir ou de modifier des ROI en fonction de valeurs numériques."
 
 msgid "\"Extract\" |image_roi|: extract the defined ROI from the selected images. This will create a new image for each ROI (or a single image, if the \"Extract all ROIs into a single image\" option is selected in the dialog), with the same metadata as the original image, but with the data corresponding to the ROI only. The new images will be added to the current workspace."
 msgstr "\"Extraire\" |image_roi| : extraire la ROI définie des images sélectionnées. Cela créera une nouvelle image pour chaque ROI (ou une seule image, si l'option \"Extraire toutes les ROIs dans une seule image\" est sélectionnée dans la boîte de dialogue), avec les mêmes métadonnées que l'image d'origine, mais avec les données correspondant uniquement à la ROI. Les nouvelles images seront ajoutées à l'espace de travail actuel."

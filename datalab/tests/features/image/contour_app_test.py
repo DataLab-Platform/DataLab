@@ -31,7 +31,7 @@ def test_contour_app():
             ima2 = create_test_image_with_roi(newparam)
             ima2.set_metadata_option("colormap", "gray")
             panel.add_object(ima2)
-            panel.processor.edit_regions_of_interest()
+            panel.processor.edit_roi_graphically()
             panel.processor.run_feature("contour_shape", param)
             if not execenv.unattended:
                 break

@@ -31,11 +31,13 @@ ROI are taken into account almost in all computing features in DataLab:
 
 The "ROI" menu allows you to:
 
-- "Edit" |roi|: open a dialog box to manage ROI associated with the selected image (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below).
+- "Edit graphically" |edit_roi|: open a dialog box to manage ROI associated with the selected image (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below).
 
 .. figure:: /images/shots/i_roi_editor.png
 
     An image with an ROI.
+
+- "Edit numerically": open a dialog box to edit the parameters of the selected ROIs numerically (i.e. using a simple form). This allows you to define or modify ROIs based on numerical values.
 
 - "Extract" |image_roi|: extract the defined ROI from the selected images. This will create a new image for each ROI (or a single image, if the "Extract all ROIs into a single image" option is selected in the dialog), with the same metadata as the original image, but with the data corresponding to the ROI only. The new images will be added to the current workspace.
 
@@ -53,7 +55,7 @@ The "ROI" menu allows you to:
 
     ROI extraction dialog: the ROI is defined by moving the position and adjusting the size of a rectangle shape.
 
-.. |roi| image:: ../../../datalab/data/icons/roi/roi.svg
+.. |edit_roi| image:: ../../../datalab/data/icons/roi/roi.svg
     :width: 24px
     :height: 24px
     :class: dark-light

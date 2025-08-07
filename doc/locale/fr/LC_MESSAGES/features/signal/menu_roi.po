@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 18:05+0200\n"
+"POT-Creation-Date: 2025-08-07 17:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -55,14 +55,17 @@ msgstr "Les ROI sont stockées en tant que métadonnées et sont donc attachées
 msgid "The \"ROI\" menu allows you to:"
 msgstr "Le menu \"ROI\" vous permet de :"
 
-msgid "\"Edit\" |roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range."
-msgstr "\"Modifier\" |roi| : ouvrir une boîte de dialogue pour gérer les ROI associées au signal sélectionné (ajouter, supprimer, déplacer, redimensionner, etc.). La boîte de dialogue de définition des ROI est exactement la même que celle de l'extraction des ROI (voir ci-dessous) : la ROI est définie en déplaçant la position et en ajustant la largeur d'une plage horizontale."
+msgid "\"Edit graphically\" |edit_roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range."
+msgstr "\"Édition graphique\" |edit_roi| : ouvrir une boîte de dialogue pour gérer les ROI associées au signal sélectionné (ajouter, supprimer, déplacer, redimensionner, etc.). La boîte de dialogue de définition des ROI est exactement la même que celle de l'extraction des ROI (voir ci-dessous) : la ROI est définie en déplaçant la position et en ajustant la largeur d'une plage horizontale."
 
-msgid "roi"
+msgid "edit_roi"
 msgstr ""
 
 msgid "A signal with an ROI."
 msgstr "Un signal avec une ROI."
+
+msgid "\"Edit numerically\": open a dialog box to edit the parameters of the selected ROIs numerically (i.e. using a simple form). This allows you to define or modify ROIs based on numerical values."
+msgstr "\"Édition numérique\" : ouvrir une boîte de dialogue pour modifier les paramètres des ROI sélectionnées numériquement (c'est-à-dire à l'aide d'un formulaire simple). Cela vous permet de définir ou de modifier des ROI en fonction de valeurs numériques."
 
 msgid "\"Extract\" |signal_roi|: extract the defined ROI from the selected signals. This will create a new signal for each ROI (or a single signal, if the \"Extract all ROIs into a single signal\" option is selected in the dialog), with the same metadata as the original signal, but with the data corresponding to the ROI only. The new signals will be added to the current workspace."
 msgstr "\"Extraire\" |signal_roi| : extraire la ROI définie des signaux sélectionnés. Cela créera un nouveau signal pour chaque ROI (ou un seul signal, si l'option \"Extraire toutes les ROIs dans un seul signal\" est sélectionnée dans la boîte de dialogue), avec les mêmes métadonnées que le signal d'origine, mais avec les données correspondant uniquement à la ROI. Les nouveaux signaux seront ajoutés à l'espace de travail actuel."

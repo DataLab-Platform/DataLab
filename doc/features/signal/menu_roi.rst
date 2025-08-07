@@ -31,11 +31,13 @@ ROI are taken into account almost in all computing features in DataLab:
 
 The "ROI" menu allows you to:
 
-- "Edit" |roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range.
+- "Edit graphically" |edit_roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range.
 
 .. figure:: /images/shots/s_roi_editor.png
 
     A signal with an ROI.
+
+- "Edit numerically": open a dialog box to edit the parameters of the selected ROIs numerically (i.e. using a simple form). This allows you to define or modify ROIs based on numerical values.
 
 - "Extract" |signal_roi|: extract the defined ROI from the selected signals. This will create a new signal for each ROI (or a single signal, if the "Extract all ROIs into a single signal" option is selected in the dialog), with the same metadata as the original signal, but with the data corresponding to the ROI only. The new signals will be added to the current workspace.
 
@@ -53,7 +55,7 @@ The "ROI" menu allows you to:
 
     ROI extraction dialog: the ROI is defined by moving the position and adjusting the width of an horizontal range.
 
-.. |roi| image:: ../../../datalab/data/icons/roi/roi.svg
+.. |edit_roi| image:: ../../../datalab/data/icons/roi/roi.svg
     :width: 24px
     :height: 24px
     :class: dark-light
