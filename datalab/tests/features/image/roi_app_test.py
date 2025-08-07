@@ -25,19 +25,12 @@ if TYPE_CHECKING:
 
 SIZE = 200
 
-
 # Image ROIs:
-IROI1 = [SIZE // 2, SIZE // 2, SIZE - 25 - SIZE // 2, SIZE - SIZE // 2]  # Rectangle
-IROI2 = [SIZE // 3, SIZE // 2, SIZE // 4]  # Circle
-IROI3 = [
-    SIZE // 2,
-    SIZE // 2,
-    SIZE // 2,
-    SIZE - SIZE // 4,
-    SIZE - SIZE // 4,
-    SIZE - SIZE // 3,
-]  # Polygon (triangle, that is intentionally inside the rectangle, so that this ROI
+IROI1 = [100, 100, 75, 100]  # Rectangle
+IROI2 = [66, 100, 50]  # Circle
+# Polygon (triangle, that is intentionally inside the rectangle, so that this ROI
 # has no impact on the mask calculations in the tests)
+IROI3 = [100, 100, 100, 150, 150, 133]
 
 
 def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
