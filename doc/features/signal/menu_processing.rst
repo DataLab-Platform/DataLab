@@ -316,7 +316,7 @@ The following window functions are available:
       - :py:func:`scipy.signal.windows.blackmanharris`
     * - Bohman
       - :py:func:`scipy.signal.windows.bohman`
-    * - Boxcar
+    * - Boxcar (rectangular)
       - :py:func:`scipy.signal.windows.boxcar`
     * - Cosine
       - :py:func:`scipy.signal.windows.cosine`
@@ -328,7 +328,7 @@ The following window functions are available:
       - :py:func:`scipy.signal.windows.gaussian`
     * - Hamming
       - :py:func:`numpy.hamming`
-    * - Hanning
+    * - Hann
       - :py:func:`numpy.hanning`
     * - Kaiser
       - :py:func:`scipy.signal.windows.kaiser`
@@ -338,8 +338,6 @@ The following window functions are available:
       - :py:func:`scipy.signal.windows.nuttall`
     * - Parzen
       - :py:func:`scipy.signal.windows.parzen`
-    * - Rectangular
-      - :py:func:`numpy.ones`
     * - Taylor
       - :py:func:`scipy.signal.windows.taylor`
     * - Tukey

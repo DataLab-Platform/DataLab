@@ -298,9 +298,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             _("Windowing"),
             paramclass=sigima.params.WindowingParam,
             icon_name="windowing.svg",
-            comment=_(
-                "Apply a window function (or apodization): Hanning, Hamming, ..."
-            ),
+            comment=_("Apply a window (apodization) function: Hann, Hamming..."),
         )
         self.register_1_to_1(
             sigima_signal.detrending,

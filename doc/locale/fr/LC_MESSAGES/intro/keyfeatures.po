@@ -167,8 +167,8 @@ msgstr "Ajustement interactif multi-gaussien"
 msgid "Frequency filters (low-pass, high-pass, band-pass, band-stop)"
 msgstr "Filtres fréquentiels (passe-bas, passe-haut, passe-bande, coupe-bande)"
 
-msgid "Windowing (Hamming, Hanning...)"
-msgstr "Fenêtrage (Hamming, Hanning...)"
+msgid "Windowing (Hann, Hamming...)"
+msgstr "Fenêtrage (Hann, Hamming...)"
 
 msgid "Butterworth filter"
 msgstr "Filtre de Butterworth"

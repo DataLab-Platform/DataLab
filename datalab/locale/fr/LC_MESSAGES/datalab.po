@@ -1430,8 +1430,8 @@ msgstr "Filtre coupe-bande"
 msgid "Windowing"
 msgstr "Fenêtrage"
 
-msgid "Apply a window function (or apodization): Hanning, Hamming, ..."
-msgstr "Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, Hamming, ..."
+msgid "Apply a window (apodization) function: Hann, Hamming..."
+msgstr "Appliquer une fonction de fenêtrage (ou d'apodisation) : Hann, Hamming..."
 
 msgid "Detrending"
 msgstr "Elimination de tendance"
