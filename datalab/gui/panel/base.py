@@ -47,7 +47,7 @@ from sigima.objects import (
     TypeROI,
     create_signal,
 )
-from sigima.objects.base import ROI_KEY
+from sigima.objects.base import ROI_KEY, get_obj_roi_title
 
 from datalab import objectmodel
 from datalab.adapters_plotpy.base import items_to_json
@@ -257,8 +257,10 @@ def create_resultdata_dict(
             for i_row_res in range(result.array.shape[0]):
                 ylabel = f"{result.title}({get_short_id(obj)})"
                 i_roi = int(result.array[i_row_res, 0])
+                roititle = ""
                 if i_roi >= 0:
-                    ylabel += f"|ROI{i_roi}"
+                    roititle = get_obj_roi_title(obj, i_roi)
+                    ylabel += f"|{roititle}"
                 rdata.ylabels.append(ylabel)
     return rdatadict
 
@@ -1593,8 +1595,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     ),
                 )
                 return
+            obj = objs[0]
             for i_roi in all_roi_indexes[0]:
-                roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
+                roi_suffix = ""
                 for title, results in grouped_results.items():  # title
                     x, y = [], []
                     for index, result in enumerate(results):
@@ -1605,6 +1608,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                             i_xaxis = rdata.xlabels.index(param.xaxis)
                             x.append(result.shown_array[mask, i_xaxis][0])
                         y.append(result.shown_array[mask, i_yaxis][0])
+                    if i_roi >= 0:
+                        roi_suffix = f"|{get_obj_roi_title(obj, i_roi)}"
                     self.__add_result_signal(
                         x, y, f"{title}{roi_suffix}", param.xaxis, param.yaxis
                     )
@@ -1613,9 +1618,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # ------------------------------------------------------------------
             for title, results in grouped_results.items():  # title
                 for index, result in enumerate(results):  # object
+                    obj = objs[index]
                     roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
                     for i_roi in roi_idx:  # ROI
-                        roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
+                        roi_suffix = ""
+                        if i_roi >= 0:
+                            roi_suffix = f"|{get_obj_roi_title(obj, i_roi)}"
                         mask = result.array[:, 0] == i_roi
                         if param.xaxis == "indices":
                             x = np.arange(result.array.shape[0])[mask]
@@ -1623,7 +1631,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                             i_xaxis = rdata.xlabels.index(param.xaxis)
                             x = result.shown_array[mask, i_xaxis]
                         y = result.shown_array[mask, i_yaxis]
-                        shid = get_short_id(objs[index])
+                        shid = get_short_id(obj)
                         stitle = f"{title} ({shid}){roi_suffix}"
                         self.__add_result_signal(x, y, stitle, param.xaxis, param.yaxis)
 

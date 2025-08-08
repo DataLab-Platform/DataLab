@@ -25,6 +25,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, TypeROI, TypeROIParam
+from sigima.objects.base import get_obj_roi_title
 from sigima.proc.decorator import is_computation_function
 
 from datalab import env
@@ -695,16 +696,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     obj.metadata[f"{result.title}Param"] = str(param)
 
                 results[get_uuid(obj)] = result
-                xlabels = result.headers
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
+                xlabels = result.headers
                 for i_row_res in range(result.array.shape[0]):
                     ylabel = f"{result.title}({get_short_id(obj)})"
                     i_roi = int(result.array[i_row_res, 0])
                     if i_roi >= 0:
-                        ylabel += f"|ROI{i_roi}"
+                        ylabel += f"|{get_obj_roi_title(obj, i_roi)}"
                     ylabels.append(ylabel)
         if results:
             with warnings.catch_warnings():

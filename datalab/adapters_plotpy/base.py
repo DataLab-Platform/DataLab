@@ -47,6 +47,7 @@ from sigima.objects.base import (
     TypeROI,
     TypeROIParam,
     TypeSingleROI,
+    get_generic_roi_title,
 )
 from sigima.tools import coordinates
 
@@ -502,7 +503,7 @@ class BaseROIPlotPyAdapter(Generic[TypeROI], abc.ABC):
             item = configure_roi_item(
                 roi_item, fmt, lbl, editable, option=self.roi.PREFIX
             )
-            item.setTitle(single_roi.title or f"ROI{index:02d}")
+            item.setTitle(single_roi.title or get_generic_roi_title(index))
             yield item
 
 

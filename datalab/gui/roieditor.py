@@ -56,6 +56,7 @@ from sigima.objects import (
     TypeObj,
     TypeROI,
 )
+from sigima.objects.base import get_generic_roi_title
 
 from datalab.adapters_plotpy import (
     TypePlotItem,
@@ -87,7 +88,9 @@ def tool_deselect_items(tool: InteractiveTool) -> None:
 
 
 def tool_setup_shape(
-    plot: BasePlot, shape: TypeROIItem, obj: SignalObj | ImageObj
+    plot: BasePlot,
+    shape: TypeROIItem,
+    obj: SignalObj | ImageObj,
 ) -> None:
     """Tool setup shape"""
     configure_roi_item_in_tool(shape, obj)
@@ -97,7 +100,7 @@ def tool_setup_shape(
         match = re.match(r"ROI(\d+)", name)
         if match is not None:
             max_index = max(max_index, int(match.group(1)))
-    shape.setTitle(f"ROI{max_index + 1:02d}")
+    shape.setTitle(get_generic_roi_title(max_index + 1))
 
 
 class ROISegmentTool(HRangeTool):
