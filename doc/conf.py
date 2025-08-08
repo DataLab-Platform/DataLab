@@ -7,12 +7,17 @@ import os.path as osp
 import shutil
 import sys
 
+import guidata.config as gcfg
+
 sys.path.insert(0, os.path.abspath(".."))
 
 import datalab
 
 os.environ["DATALAB_DOC"] = "1"
 
+# Turn off validation of guidata config
+# (documentation build is not the right place for validation)
+gcfg.set_validation_mode(gcfg.ValidationMode.DISABLED)
 
 # -- Copy CHANGELOG.md to doc folder ------------------------
 #
