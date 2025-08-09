@@ -289,7 +289,7 @@ class BaseROIEditor(
             edit=True,
             size=size,
         )
-        self.setObjectName(f"{obj.PREFIX}_roi_dialog")
+        self.setObjectName(f"{obj.PREFIX}_roi_editor")
         self.accepted.connect(self.dialog_accepted)
 
         # Create the ROI items
@@ -352,10 +352,13 @@ class BaseROIEditor(
         """Setup items"""
         self.main_item.set_selectable(False)
         self.main_item.set_readonly(True)
-        self.get_plot().add_item(self.main_item)
+        plot = self.get_plot()
+        plot.add_item(self.main_item)
+        plot.set_active_item(self.main_item)
+        self.main_item.unselect()
         for roi_item in self.roi_items:
-            self.get_plot().add_item(roi_item)
-            self.get_plot().set_active_item(roi_item)
+            plot.add_item(roi_item)
+            plot.set_active_item(roi_item)
 
     @abc.abstractmethod
     def get_obj_roi_class(self) -> type[TypeROI]:
