@@ -15,11 +15,10 @@ from sigima.objects import ImageObj, ImageROI, RectangularROI
 from sigima.objects.base import ChoiceEnum
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.config import DEBUG, _
-from datalab.env import execenv
+from datalab.config import _
 
 
-class DirectionChoice(ChoiceEnum):
+class Direction(ChoiceEnum):
     """Direction choice"""
 
     INCREASING = _("increasing")
@@ -39,29 +38,12 @@ class ROIGridParam(gds.DataSet):
         if self.roi_editor.is_ready():
             self.roi_editor.SIG_GEOMETRY_CHANGED.emit()
 
-    base_name = gds.StringItem(_("Base name"), default="ROI").set_prop(
-        "display", callback=geometry_changed
-    )
-    name_pattern = gds.StringItem(
-        _("Name pattern"), default="{base}({r},{c})"
-    ).set_prop("display", callback=geometry_changed)
+    _b_group0 = gds.BeginGroup(_("Geometry"))
     ny = gds.IntItem(
-        "N<sub>y</sub> (%s)" % _("rows"), default=1, nonzero=True
+        "N<sub>y</sub> (%s)" % _("rows"), default=3, nonzero=True
     ).set_prop("display", callback=geometry_changed)
     nx = (
-        gds.IntItem("N<sub>x</sub> (%s)" % _("columns"), default=1, nonzero=True)
-        .set_prop("display", callback=geometry_changed)
-        .set_pos(col=1)
-    )
-    xdirection = gds.ChoiceItem(_("X direction"), DirectionChoice.choices()).set_prop(
-        "display", callback=geometry_changed
-    )
-    ydirection = (
-        gds.ChoiceItem(
-            _("Y direction"),
-            DirectionChoice.choices(),
-            default=DirectionChoice.DECREASING.value,
-        )
+        gds.IntItem("N<sub>x</sub> (%s)" % _("columns"), default=3, nonzero=True)
         .set_prop("display", callback=geometry_changed)
         .set_pos(col=1)
     )
@@ -97,6 +79,23 @@ class ROIGridParam(gds.DataSet):
         unit="%",
         slider=True,
     ).set_prop("display", callback=geometry_changed)
+    _e_group0 = gds.EndGroup(_("Geometry"))
+    _b_group1 = gds.BeginGroup(_("ROI titles"))
+    base_name = gds.StringItem(_("Base name"), default="ROI").set_prop(
+        "display", callback=geometry_changed
+    )
+    name_pattern = gds.StringItem(
+        _("Name pattern"), default="{base}({r},{c})"
+    ).set_prop("display", callback=geometry_changed)
+    xdirection = gds.ChoiceItem(_("X direction"), Direction.choices()).set_prop(
+        "display", callback=geometry_changed
+    )
+    ydirection = (
+        gds.ChoiceItem(_("Y direction"), Direction.choices())
+        .set_prop("display", callback=geometry_changed)
+        .set_pos(col=1)
+    )
+    _e_group1 = gds.EndGroup(_("ROI titles"))
 
 
 class DisplayParam(gds.DataSet):
@@ -122,6 +121,40 @@ class DisplayParam(gds.DataSet):
     show_names = gds.BoolItem(_("Show names"), default=True).set_prop(
         "display", callback=display_changed, active=_prop_show_roi
     )
+
+
+def add_grid_roi_to_image(obj: ImageObj, p: ROIGridParam) -> None:
+    """Add a grid ROI to the image object.
+
+    Args:
+        obj: The image object to create the ROI for.
+        p: ROIGridParam object containing the grid parameters.
+    """
+    roi = ImageROI()
+    dx_cell = obj.width / p.nx
+    dy_cell = obj.height / p.ny
+    dx = dx_cell * p.xsize / 100.0
+    dy = dy_cell * p.ysize / 100.0
+    xtrans = obj.width * (p.xtranslation - 50.0) / 100.0
+    ytrans = obj.height * (p.ytranslation - 50.0) / 100.0
+    lbl_rows = range(p.ny)
+    if p.ydirection == Direction.DECREASING:
+        lbl_rows = range(p.ny - 1, -1, -1)
+    lbl_cols = range(p.nx)
+    if p.xdirection == Direction.DECREASING:
+        lbl_cols = range(p.nx - 1, -1, -1)
+    ptn: str = p.name_pattern
+    for ir in range(p.ny):
+        for ic in range(p.nx):
+            x0 = obj.x0 + (ic + 0.5) * dx_cell + xtrans - 0.5 * dx
+            y0 = obj.y0 + (ir + 0.5) * dy_cell + ytrans - 0.5 * dy
+            nir, nic = lbl_rows[ir], lbl_cols[ic]
+            try:
+                title = ptn.format(base=p.base_name, r=nir + 1, c=nic + 1)
+            except Exception:  # pylint: disable=broad-except
+                title = f"ROI({nir + 1},{nic + 1})"
+            roi.add_roi(RectangularROI([x0, y0, dx, dy], indices=False, title=title))
+    obj.roi = roi
 
 
 class ImageGridROIEditor(PlotDialog):
@@ -165,7 +198,7 @@ class ImageGridROIEditor(PlotDialog):
             _("Display parameters"), DisplayParam, show_button=False, roi_editor=self
         )
         gds.update_dataset(self.displayparamwidget.dataset, displayparam)
-        self.init_param()
+        self.update_obj(update_item=False)
 
         if options is None:
             options = self.ADDITIONAL_OPTIONS
@@ -227,61 +260,9 @@ class ImageGridROIEditor(PlotDialog):
                 plot.add_item(ritem)
         plot.replot()
 
-    def init_param(self) -> None:
-        """Initialize parameters"""
-        rows, cols = self.obj.data.shape
-        gp = self.gridparamwidget.dataset
-        gp.nx = gp.ny = 3
-        gp.xtranslation = gp.ytranslation = gp.xsize = gp.ysize = 50
-        self.gridparamwidget.get()
-        self.update_obj(update_item=False)
-
-    def __get_roi_coords(
-        self, i_row: int, i_col: int
-    ) -> list[float, float, float, float]:
-        """Get the coordinates of the ROI for the given row and column indices"""
-        obj = self.obj
-        gp = self.gridparamwidget.dataset
-
-        xtrans = obj.width * (float(gp.xtranslation) - 50.0) / 100.0
-        ytrans = obj.height * (float(gp.ytranslation) - 50.0) / 100.0
-
-        dx_max = obj.width / gp.nx
-        dx = dx_max * float(gp.xsize) / 100.0
-        dy_max = obj.height / gp.ny
-        dy = dy_max * float(gp.ysize) / 100.0
-
-        x1 = obj.x0 + (i_col + 0.5) * dx_max + xtrans - 0.5 * dx
-        y1 = obj.y0 + (i_row + 0.5) * dy_max + ytrans - 0.5 * dy
-
-        return [x1, y1, dx, dy]
-
     def update_obj(self, update_item: bool = True) -> None:
         """Update the object with the current parameters"""
-        roi = ImageROI()
-        gp = self.gridparamwidget.dataset
-        # Iterate over grid cells, taking into account the number of columns and rows,
-        # the direction of increasing rows and columns
-        row_list = list(range(gp.ny))
-        col_list = list(range(gp.nx))
-        if gp.ydirection == DirectionChoice.DECREASING.value:
-            row_list = list(range(gp.ny - 1, -1, -1))
-        if gp.xdirection == DirectionChoice.DECREASING.value:
-            col_list = list(range(gp.nx - 1, -1, -1))
-        ptn: str = gp.name_pattern
-        for i_row in row_list:
-            for i_col in col_list:
-                try:
-                    title = ptn.format(base=gp.base_name, r=i_row + 1, c=i_col + 1)
-                except Exception:  # pylint: disable=broad-except
-                    title = f"{gp.base_name}({i_row + 1}, {i_col + 1})"
-                x0, y0, dx, dy = self.__get_roi_coords(i_row, i_col)
-                coords = [x0, y0, dx, dy]
-                if DEBUG:
-                    execenv.print(f"Creating ROI: {title} with coords {coords}")
-                single_roi = RectangularROI(coords, indices=False, title=title)
-                roi.add_roi(single_roi)
-        self.obj.roi = roi
+        add_grid_roi_to_image(self.obj, self.gridparamwidget.dataset)
         if update_item:
             self.update_items()
 
