@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-09 10:45+0200\n"
+"POT-Creation-Date: 2025-08-09 16:13+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1349,6 +1349,12 @@ msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 msgid "Creating a ROI grid will overwrite any existing ROI.<br><br>Do you want to continue?"
 msgstr "La création d'une grille de ROI écrasera toute ROI existante.<br><br>Voulez-vous continuer ?"
 
+msgid "Extract ROI"
+msgstr "Extraire une ROI"
+
+msgid "Do you want to extract images from the defined ROI?"
+msgstr "Souhaitez-vous extraire les images de la ROI définie ?"
+
 msgid "Warning:"
 msgstr "Attention :"
 
@@ -1369,9 +1375,6 @@ msgstr "Distribuer sur grille"
 
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
-
-msgid "Extract ROI"
-msgstr "Extraire une ROI"
 
 msgid "signal to subtract"
 msgstr "signal à soustraire"
@@ -1548,42 +1551,6 @@ msgstr "Supprimer toutes les ROI"
 
 msgid "Are you sure you want to remove all ROIs?"
 msgstr "Êtes-vous sûr de vouloir supprimer toutes les ROI ?"
-
-msgid "increasing"
-msgstr "croissant"
-
-msgid "decreasing"
-msgstr "décroissant"
-
-msgid "Base name"
-msgstr "Nom de base"
-
-msgid "Name pattern"
-msgstr "Modèle de nom"
-
-msgid "rows"
-msgstr "lignes"
-
-msgid "columns"
-msgstr "colonnes"
-
-msgid "X direction"
-msgstr "Direction X"
-
-msgid "Y direction"
-msgstr "Direction Y"
-
-msgid "X translation"
-msgstr "Translation X"
-
-msgid "Y translation"
-msgstr "Translation Y"
-
-msgid "column size"
-msgstr "taille de colonne"
-
-msgid "row size"
-msgstr "taille de ligne"
 
 msgid "Show mask"
 msgstr "Afficher le masque"
@@ -1981,6 +1948,9 @@ msgstr "Bruit"
 msgid "Ring"
 msgstr "Anneau"
 
+msgid "Grid of Gaussian Images"
+msgstr "Grille d'images gaussiennes"
+
 msgid "Add noise to signal"
 msgstr "Ajouter du bruit au signal"
 
@@ -1999,10 +1969,10 @@ msgstr "Créer une image avec des pics"
 msgid "Create 2D sin cos image"
 msgstr "Créer une image 2D sin cos"
 
-msgid "Create 2D noisy gauss image"
+msgid "Create 2D noisy gaussian image"
 msgstr "Créer une image 2D gaussienne bruitée"
 
-msgid "Create 2D multi gauss image"
+msgid "Create 2D multi gaussian image"
 msgstr "Créer une image 2D multi-gaussienne"
 
 msgid "Create annotated image"
@@ -2013,6 +1983,9 @@ msgstr "Créer une image 2D échelon"
 
 msgid "Create ring image"
 msgstr "Créer une image avec un anneau"
+
+msgid "Create image with a grid of gaussian spots"
+msgstr "Créer une image avec une grille de spots gaussiens"
 
 msgid "Host application"
 msgstr "Application hôte"

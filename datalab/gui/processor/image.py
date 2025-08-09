@@ -527,6 +527,18 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 only_visible=False,
                 only_existing=True,
             )
+            # Now, we ask the user if we shall extract the freshly defined ROI:
+            if (
+                QW.QMessageBox.question(
+                    self.panel.parent(),
+                    _("Extract ROI"),
+                    _("Do you want to extract images from the defined ROI?"),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    QW.QMessageBox.No,
+                )
+                == QW.QMessageBox.Yes
+            ):
+                self.compute_roi_extraction(editor.get_roi())
 
     @qt_try_except()
     def compute_resize(self, param: sigima.params.ResizeParam | None = None) -> None:
