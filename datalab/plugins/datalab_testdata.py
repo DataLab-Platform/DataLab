@@ -131,6 +131,13 @@ class PluginTestData(PluginBase):
         obj = test_data.create_annotated_image()
         self.proxy.add_object(obj)
 
+    def create_grid_gaussian_image(self) -> None:
+        """Create image with a grid of gaussian spots"""
+        param = test_data.GridOfGaussianImages(_("Grid of Gaussian Images"))
+        if param.edit(self.main):
+            obj = test_data.create_grid_of_gaussian_images(param)
+            self.proxy.add_object(obj)
+
     # Plugin menu entries ------------------------------------------------------
     def create_actions(self) -> None:
         """Create actions"""
@@ -166,12 +173,12 @@ class PluginTestData(PluginBase):
                 select_condition="always",
             )
             iah.new_action(
-                _("Create 2D noisy gauss image"),
+                _("Create 2D noisy gaussian image"),
                 triggered=self.create_noisy_gaussian_image,
                 select_condition="always",
             )
             iah.new_action(
-                _("Create 2D multi gauss image"),
+                _("Create 2D multi gaussian image"),
                 triggered=self.create_multigaussian_image,
                 select_condition="always",
             )
@@ -188,5 +195,10 @@ class PluginTestData(PluginBase):
             iah.new_action(
                 _("Create ring image"),
                 triggered=self.create_ring_image,
+                select_condition="always",
+            )
+            iah.new_action(
+                _("Create image with a grid of gaussian spots"),
+                triggered=self.create_grid_gaussian_image,
                 select_condition="always",
             )
