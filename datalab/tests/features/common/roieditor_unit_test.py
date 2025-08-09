@@ -31,7 +31,7 @@ def test_signal_roi_editor(screenshots: bool = False) -> None:
         roi_editor = cls(parent=None, obj=obj, mode="extract", size=(800, 600))
         if screenshots:
             roi_editor.show()
-            qth.grab_save_window(roi_editor, "s_roi_editor")
+            qth.grab_save_window(roi_editor)
         exec_dialog(roi_editor)
 
 
@@ -63,7 +63,7 @@ def test_image_roi_editor(screenshots: bool = False) -> None:
                 roi_editor.remove_all_rois()
             if screenshots and mode == "extract":
                 roi_editor.show()
-                qth.grab_save_window(roi_editor, "i_roi_editor")
+                qth.grab_save_window(roi_editor)
             if exec_dialog(roi_editor):
                 results = roi_editor.get_roieditor_results()
                 if results is not None:
