@@ -11,91 +11,12 @@ import guidata.dataset.qtwidgets as gdq
 from plotpy.plot import PlotDialog, PlotOptions
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from sigima.objects import ImageObj, ImageROI, RectangularROI
-from sigima.objects.base import ChoiceEnum
+from sigima.objects import ImageObj, ImageROI
+from sigima.params import ROIGridParam
+from sigima.proc.image import generate_image_grid_roi
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.config import _
-
-
-class Direction(ChoiceEnum):
-    """Direction choice"""
-
-    INCREASING = _("increasing")
-    DECREASING = _("decreasing")
-
-
-class ROIGridParam(gds.DataSet):
-    """ROI Grid parameters"""
-
-    def __init__(self, roi_editor: ImageGridROIEditor | None = None) -> None:
-        super().__init__()
-        self.roi_editor = roi_editor
-
-    def geometry_changed(self, item, value) -> None:
-        """Emit geometry changed signal."""
-        assert self.roi_editor is not None, "ROI editor is not set"
-        if self.roi_editor.is_ready():
-            self.roi_editor.SIG_GEOMETRY_CHANGED.emit()
-
-    _b_group0 = gds.BeginGroup(_("Geometry"))
-    ny = gds.IntItem(
-        "N<sub>y</sub> (%s)" % _("rows"), default=3, nonzero=True
-    ).set_prop("display", callback=geometry_changed)
-    nx = (
-        gds.IntItem("N<sub>x</sub> (%s)" % _("columns"), default=3, nonzero=True)
-        .set_prop("display", callback=geometry_changed)
-        .set_pos(col=1)
-    )
-    xtranslation = gds.IntItem(
-        _("X translation"),
-        default=50,
-        min=0,
-        max=100,
-        unit="%",
-        slider=True,
-    ).set_prop("display", callback=geometry_changed)
-    ytranslation = gds.IntItem(
-        _("Y translation"),
-        default=50,
-        min=0,
-        max=100,
-        unit="%",
-        slider=True,
-    ).set_prop("display", callback=geometry_changed)
-    xsize = gds.IntItem(
-        "X size (%s)" % _("column size"),
-        default=50,
-        min=0,
-        max=100,
-        unit="%",
-        slider=True,
-    ).set_prop("display", callback=geometry_changed)
-    ysize = gds.IntItem(
-        "Y size (%s)" % _("row size"),
-        default=50,
-        min=0,
-        max=100,
-        unit="%",
-        slider=True,
-    ).set_prop("display", callback=geometry_changed)
-    _e_group0 = gds.EndGroup(_("Geometry"))
-    _b_group1 = gds.BeginGroup(_("ROI titles"))
-    base_name = gds.StringItem(_("Base name"), default="ROI").set_prop(
-        "display", callback=geometry_changed
-    )
-    name_pattern = gds.StringItem(
-        _("Name pattern"), default="{base}({r},{c})"
-    ).set_prop("display", callback=geometry_changed)
-    xdirection = gds.ChoiceItem(_("X direction"), Direction.choices()).set_prop(
-        "display", callback=geometry_changed
-    )
-    ydirection = (
-        gds.ChoiceItem(_("Y direction"), Direction.choices())
-        .set_prop("display", callback=geometry_changed)
-        .set_pos(col=1)
-    )
-    _e_group1 = gds.EndGroup(_("ROI titles"))
 
 
 class DisplayParam(gds.DataSet):
@@ -123,40 +44,6 @@ class DisplayParam(gds.DataSet):
     )
 
 
-def add_grid_roi_to_image(obj: ImageObj, p: ROIGridParam) -> None:
-    """Add a grid ROI to the image object.
-
-    Args:
-        obj: The image object to create the ROI for.
-        p: ROIGridParam object containing the grid parameters.
-    """
-    roi = ImageROI()
-    dx_cell = obj.width / p.nx
-    dy_cell = obj.height / p.ny
-    dx = dx_cell * p.xsize / 100.0
-    dy = dy_cell * p.ysize / 100.0
-    xtrans = obj.width * (p.xtranslation - 50.0) / 100.0
-    ytrans = obj.height * (p.ytranslation - 50.0) / 100.0
-    lbl_rows = range(p.ny)
-    if p.ydirection == Direction.DECREASING:
-        lbl_rows = range(p.ny - 1, -1, -1)
-    lbl_cols = range(p.nx)
-    if p.xdirection == Direction.DECREASING:
-        lbl_cols = range(p.nx - 1, -1, -1)
-    ptn: str = p.name_pattern
-    for ir in range(p.ny):
-        for ic in range(p.nx):
-            x0 = obj.x0 + (ic + 0.5) * dx_cell + xtrans - 0.5 * dx
-            y0 = obj.y0 + (ir + 0.5) * dy_cell + ytrans - 0.5 * dy
-            nir, nic = lbl_rows[ir], lbl_cols[ic]
-            try:
-                title = ptn.format(base=p.base_name, r=nir + 1, c=nic + 1)
-            except Exception:  # pylint: disable=broad-except
-                title = f"ROI({nir + 1},{nic + 1})"
-            roi.add_roi(RectangularROI([x0, y0, dx, dy], indices=False, title=title))
-    obj.roi = roi
-
-
 class ImageGridROIEditor(PlotDialog):
     """Image Grid ROI Editor.
 
@@ -180,18 +67,17 @@ class ImageGridROIEditor(PlotDialog):
         options: PlotOptions | dict[str, Any] | None = None,
         size: tuple[int, int] | None = None,
     ) -> None:
+        self.__roi = ImageROI()
         self.__is_ready = False
         self.obj = obj = obj.copy()  # Avoid modifying the original object
         obj.roi = None  # Clear the ROI to avoid conflicts with the editor
         gridparam = gridparam or ROIGridParam()
-        gridparam.roi_editor = self
         displayparam = displayparam or DisplayParam()
-        displayparam.roi_editor = self
         self.gridparamwidget = gdq.DataSetEditGroupBox(
-            _("Grid parameters"),
-            ROIGridParam,
-            show_button=False,
-            roi_editor=self,
+            _("Grid parameters"), ROIGridParam, show_button=False
+        )
+        self.gridparamwidget.dataset.on_geometry_changed = (
+            lambda: self.SIG_GEOMETRY_CHANGED.emit()
         )
         gds.update_dataset(self.gridparamwidget.dataset, gridparam)
         self.displayparamwidget = gdq.DataSetEditGroupBox(
@@ -220,6 +106,10 @@ class ImageGridROIEditor(PlotDialog):
         self.SIG_GEOMETRY_CHANGED.connect(self.update_obj)
         self.SIG_DISPLAY_CHANGED.connect(self.update_items)
         self.__is_ready = True
+
+    def get_roi(self) -> ImageROI:
+        """Get the current ROI"""
+        return self.__roi
 
     def is_ready(self) -> bool:
         """Check if the editor is ready for use"""
@@ -262,10 +152,7 @@ class ImageGridROIEditor(PlotDialog):
 
     def update_obj(self, update_item: bool = True) -> None:
         """Update the object with the current parameters"""
-        add_grid_roi_to_image(self.obj, self.gridparamwidget.dataset)
+        roi = generate_image_grid_roi(self.obj, self.gridparamwidget.dataset)
+        self.__roi = self.obj.roi = roi
         if update_item:
             self.update_items()
-
-    def get_roi(self) -> ImageROI:
-        """Get the current ROI"""
-        return self.obj.roi.copy()
