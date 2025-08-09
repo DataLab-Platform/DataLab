@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.proc.image import Direction, ROIGridParam
-from sigima.tests.data import create_grid_image
+from sigima.tests.data import create_grid_of_gaussian_images
 
 from datalab.gui.roigrideditor import ImageGridROIEditor
 from datalab.utils import qthelpers as qth
@@ -18,7 +18,9 @@ from datalab.utils import qthelpers as qth
 def test_roi_grid(screenshots: bool = False) -> None:
     """ROI grid test."""
     with qt_app_context():
-        roi_editor = ImageGridROIEditor(parent=None, obj=create_grid_image())
+        roi_editor = ImageGridROIEditor(
+            parent=None, obj=create_grid_of_gaussian_images()
+        )
         if screenshots:
             roi_editor.show()
             qth.grab_save_window(roi_editor)
@@ -27,7 +29,7 @@ def test_roi_grid(screenshots: bool = False) -> None:
 
 def test_roi_grid_geometry_headless() -> None:
     """Test ROI grid geometry in headless mode."""
-    img = create_grid_image()
+    img = create_grid_of_gaussian_images()
 
     # Create grid parameters
     gp = ROIGridParam()

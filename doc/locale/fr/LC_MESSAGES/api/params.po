@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-08-09 16:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -613,72 +613,6 @@ msgstr ""
 msgid "Base image parameters"
 msgstr ""
 
-msgid "Average horizontal or vertical profile parameters"
-msgstr ""
-
-msgid "Single choice from: 'horizontal', 'vertical'. Default: 'horizontal'."
-msgstr ""
-
-msgid "Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "Integer higher than -1\\. Default: -1."
-msgstr ""
-
-msgid "Column 1\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "Column 2\\.  Integer higher than -1\\. Default: -1."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`AverageProfileParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`AverageProfileParam`."
-msgstr ""
-
-msgid "Butterworth filter parameters"
-msgstr ""
-
-msgid "Cut-off frequency ratio\\. Cut-off frequency ratio\\. Float between 0.0 and 0.5\\. Default: 0.005."
-msgstr ""
-
-msgid "If true, apply high-pass filter instead of low-pass\\. Default: False."
-msgstr ""
-
-msgid "Order of the butterworth filter\\. Integer higher than 1\\. Default: 2."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`ButterworthParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`ButterworthParam`."
-msgstr ""
-
-msgid "Convert image data type parameters"
-msgstr ""
-
-msgid "Destination data type\\. Output image data type. Single choice from: 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'float32'."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`DataTypeIParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`DataTypeIParam`."
-msgstr ""
-
-msgid "Flat-field parameters"
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`FlatFieldParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`FlatFieldParam`."
-msgstr ""
-
-msgid "Update parameters from image"
-msgstr ""
-
 msgid "Grid parameters"
 msgstr ""
 
@@ -701,159 +635,6 @@ msgid "Returns a new instance of :py:class:`GridParam` with the fields set to th
 msgstr ""
 
 msgid "New instance of :py:class:`GridParam`."
-msgstr ""
-
-msgid "Circle Hough transform parameters"
-msgstr ""
-
-msgid "Radius\\ :subscript:`min`\\.  Integer higher than 0, non zero, unit: pixels\\. Default: None."
-msgstr ""
-
-msgid "Radius\\ :subscript:`max`\\.  Integer higher than 0, non zero, unit: pixels\\. Default: None."
-msgstr ""
-
-msgid "Minimal distance\\.  Integer higher than 0\\. Default: None."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`HoughCircleParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`HoughCircleParam`."
-msgstr ""
-
-msgid "Horizontal or vertical profile parameters"
-msgstr ""
-
-msgid "Column\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`LineProfileParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`LineProfileParam`."
-msgstr ""
-
-msgid "Log10 parameters"
-msgstr ""
-
-msgid "Default: None."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`LogP1Param` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`LogP1Param`."
-msgstr ""
-
-msgid "Radial profile parameters"
-msgstr ""
-
-msgid "Center position\\.  Single choice from: 'centroid', 'center', 'user'. Default: 'centroid'."
-msgstr ""
-
-msgid "X\\ :subscript:`Center`\\.  Float, unit: pixel\\. Default: 0.0."
-msgstr ""
-
-msgid "Y\\ :subscript:`Center`\\.  Float, unit: pixel\\. Default: 0.0."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`RadialProfileParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`RadialProfileParam`."
-msgstr ""
-
-msgid "Callback for choice item"
-msgstr ""
-
-msgid "Resize parameters"
-msgstr ""
-
-msgid "Single choice from: 'constant', 'nearest', 'reflect', 'wrap'. Default: 'constant'."
-msgstr ""
-
-msgid "Value used for points outside the boundaries of the input if mode is 'constant'\\. Default: 0.0."
-msgstr ""
-
-msgid "Spline interpolation order\\. Integer between 0 and 5\\. Default: 3."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`ResizeParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`ResizeParam`."
-msgstr ""
-
-msgid "Rotate parameters"
-msgstr ""
-
-msgid "Angle (°)\\.  Default: None."
-msgstr ""
-
-msgid "Reshape the output array so that the input array is contained completely in the output\\. Default: False."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`RotateParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`RotateParam`."
-msgstr ""
-
-msgid "Segment profile parameters"
-msgstr ""
-
-msgid "Start row\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "Start column\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "End row\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "End column\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`SegmentProfileParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`SegmentProfileParam`."
-msgstr ""
-
-msgid "Image linear calibration parameters"
-msgstr ""
-
-msgid "Calibrate\\.  Single choice from: 'x', 'y', 'z'. Default: 'z'."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`XYZCalibrateParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`XYZCalibrateParam`."
-msgstr ""
-
-msgid "Zero padding parameters for 2D images"
-msgstr ""
-
-msgid "Padding strategy\\.  Single choice from: 'next_pow2', 'multiple_of_64', 'custom'. Default: 'custom'."
-msgstr ""
-
-msgid "Rows to add\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "Columns to add\\.  Integer higher than 0\\. Default: 0."
-msgstr ""
-
-msgid "Padding position\\.  Single choice from: 'bottom-right', 'center'. Default: 'bottom-right'."
-msgstr ""
-
-msgid "Returns a new instance of :py:class:`ZeroPadding2DParam` with the fields set to the given values."
-msgstr ""
-
-msgid "New instance of :py:class:`ZeroPadding2DParam`."
-msgstr ""
-
-msgid "Callback to update padding values"
 msgstr ""
 
 msgid "Detection parameters"
@@ -991,6 +772,24 @@ msgstr ""
 msgid "New instance of :py:class:`Peak2DDetectionParam`."
 msgstr ""
 
+msgid "Circle Hough transform parameters"
+msgstr ""
+
+msgid "Radius\\ :subscript:`min`\\.  Integer higher than 0, non zero, unit: pixels\\. Default: None."
+msgstr ""
+
+msgid "Radius\\ :subscript:`max`\\.  Integer higher than 0, non zero, unit: pixels\\. Default: None."
+msgstr ""
+
+msgid "Minimal distance\\.  Integer higher than 0\\. Default: None."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`HoughCircleParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`HoughCircleParam`."
+msgstr ""
+
 msgid "Edge detection parameters"
 msgstr ""
 
@@ -1106,6 +905,262 @@ msgid "Returns a new instance of :py:class:`RescaleIntensityParam` with the fiel
 msgstr ""
 
 msgid "New instance of :py:class:`RescaleIntensityParam`."
+msgstr ""
+
+msgid "Flat-field parameters"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`FlatFieldParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`FlatFieldParam`."
+msgstr ""
+
+msgid "Update parameters from image"
+msgstr ""
+
+msgid "Image linear calibration parameters"
+msgstr ""
+
+msgid "Calibrate\\.  Single choice from: 'x', 'y', 'z'. Default: 'z'."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`XYZCalibrateParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`XYZCalibrateParam`."
+msgstr ""
+
+msgid "Extraction parameters"
+msgstr ""
+
+msgid "Average horizontal or vertical profile parameters"
+msgstr ""
+
+msgid "Single choice from: 'horizontal', 'vertical'. Default: 'horizontal'."
+msgstr ""
+
+msgid "Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "Integer higher than -1\\. Default: -1."
+msgstr ""
+
+msgid "Column 1\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "Column 2\\.  Integer higher than -1\\. Default: -1."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`AverageProfileParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`AverageProfileParam`."
+msgstr ""
+
+msgid "Horizontal or vertical profile parameters"
+msgstr ""
+
+msgid "Column\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`LineProfileParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`LineProfileParam`."
+msgstr ""
+
+msgid "Radial profile parameters"
+msgstr ""
+
+msgid "Center position\\.  Single choice from: 'centroid', 'center', 'user'. Default: 'centroid'."
+msgstr ""
+
+msgid "X\\ :subscript:`Center`\\.  Float, unit: pixel\\. Default: 0.0."
+msgstr ""
+
+msgid "Y\\ :subscript:`Center`\\.  Float, unit: pixel\\. Default: 0.0."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`RadialProfileParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`RadialProfileParam`."
+msgstr ""
+
+msgid "Callback for choice item"
+msgstr ""
+
+msgid "Segment profile parameters"
+msgstr ""
+
+msgid "Start row\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "Start column\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "End row\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "End column\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`SegmentProfileParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`SegmentProfileParam`."
+msgstr ""
+
+msgid "Direction choice"
+msgstr ""
+
+msgid "ROI Grid parameters"
+msgstr ""
+
+msgid "N\\ :subscript:`y` (rows)\\.  Integer, non zero\\. Default: 3."
+msgstr ""
+
+msgid "N\\ :subscript:`x` (columns)\\.  Integer, non zero\\. Default: 3."
+msgstr ""
+
+msgid "Integer between 0 and 100, unit: %\\. Default: 50."
+msgstr ""
+
+msgid "X size (column size)\\.  Integer between 0 and 100, unit: %\\. Default: 50."
+msgstr ""
+
+msgid "Y size (row size)\\.  Integer between 0 and 100, unit: %\\. Default: 50."
+msgstr ""
+
+msgid "Default: 'ROI'."
+msgstr ""
+
+#, python-brace-format
+msgid "Default: '{base}({r},{c})'."
+msgstr ""
+
+msgid "Single choice from: Direction.INCREASING, Direction.DECREASING. Default: Direction.INCREASING."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ROIGridParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ROIGridParam`."
+msgstr ""
+
+msgid "Notify host (if any) that geometry changed."
+msgstr ""
+
+msgid "Filtering parameters"
+msgstr ""
+
+msgid "Butterworth filter parameters"
+msgstr ""
+
+msgid "Cut-off frequency ratio\\. Cut-off frequency ratio\\. Float between 0.0 and 0.5\\. Default: 0.005."
+msgstr ""
+
+msgid "If true, apply high-pass filter instead of low-pass\\. Default: False."
+msgstr ""
+
+msgid "Order of the butterworth filter\\. Integer higher than 1\\. Default: 2."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ButterworthParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ButterworthParam`."
+msgstr ""
+
+msgid "Fourier analysis parameters"
+msgstr ""
+
+msgid "Zero padding parameters for 2D images"
+msgstr ""
+
+msgid "Padding strategy\\.  Single choice from: 'next_pow2', 'multiple_of_64', 'custom'. Default: 'custom'."
+msgstr ""
+
+msgid "Rows to add\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "Columns to add\\.  Integer higher than 0\\. Default: 0."
+msgstr ""
+
+msgid "Padding position\\.  Single choice from: 'bottom-right', 'center'. Default: 'bottom-right'."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ZeroPadding2DParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ZeroPadding2DParam`."
+msgstr ""
+
+msgid "Callback to update padding values"
+msgstr ""
+
+msgid "Geometry parameters"
+msgstr ""
+
+msgid "Resize parameters"
+msgstr ""
+
+msgid "Default: None."
+msgstr ""
+
+msgid "Single choice from: 'constant', 'nearest', 'reflect', 'wrap'. Default: 'constant'."
+msgstr ""
+
+msgid "Value used for points outside the boundaries of the input if mode is 'constant'\\. Default: 0.0."
+msgstr ""
+
+msgid "Spline interpolation order\\. Integer between 0 and 5\\. Default: 3."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`ResizeParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`ResizeParam`."
+msgstr ""
+
+msgid "Rotate parameters"
+msgstr ""
+
+msgid "Angle (°)\\.  Default: None."
+msgstr ""
+
+msgid "Reshape the output array so that the input array is contained completely in the output\\. Default: False."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`RotateParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`RotateParam`."
+msgstr ""
+
+msgid "Mathematical operation parameters"
+msgstr ""
+
+msgid "Convert image data type parameters"
+msgstr ""
+
+msgid "Destination data type\\. Output image data type. Single choice from: 'float32', 'float64', 'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'float32'."
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`DataTypeIParam` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`DataTypeIParam`."
+msgstr ""
+
+msgid "Log10 parameters"
+msgstr ""
+
+msgid "Returns a new instance of :py:class:`LogP1Param` with the fields set to the given values."
+msgstr ""
+
+msgid "New instance of :py:class:`LogP1Param`."
 msgstr ""
 
 msgid "Morphological parameters"
