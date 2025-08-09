@@ -7,10 +7,22 @@
 
 from __future__ import annotations
 
+from guidata.qthelpers import exec_dialog, qt_app_context
+from sigima.tests.data import create_grid_image
 
-def test_roi_grid() -> None:
+from datalab.gui.roigrideditor import ImageGridROIEditor
+from datalab.utils import qthelpers as qth
+
+
+def test_roi_grid(screenshots: bool = False) -> None:
     """ROI grid test."""
+    with qt_app_context():
+        roi_editor = ImageGridROIEditor(parent=None, obj=create_grid_image())
+        if screenshots:
+            roi_editor.show()
+            qth.grab_save_window(roi_editor)
+        exec_dialog(roi_editor)
 
 
 if __name__ == "__main__":
-    test_roi_grid()
+    test_roi_grid(screenshots=True)

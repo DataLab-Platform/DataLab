@@ -416,8 +416,12 @@ def qt_try_loadsave_file(
         pass
 
 
-def grab_save_window(widget: QW.QWidget, name: str) -> None:  # pragma: no cover
+def grab_save_window(
+    widget: QW.QWidget, name: str | None = None
+) -> None:  # pragma: no cover
     """Grab window screenshot and save it"""
+    if name is None:
+        name = widget.objectName()
     widget.activateWindow()
     widget.raise_()
     QW.QApplication.processEvents()

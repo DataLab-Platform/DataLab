@@ -39,6 +39,8 @@ The "ROI" menu allows you to:
 
 - "Edit numerically": open a dialog box to edit the parameters of the selected ROIs numerically (i.e. using a simple form). This allows you to define or modify ROIs based on numerical values.
 
+- "Create ROI grid" |roi_grid|: open a dialog box to create a grid of ROIs on the selected image. This allows you to define multiple ROIs distributed evenly across the image.
+
 - "Extract" |image_roi|: extract the defined ROI from the selected images. This will create a new image for each ROI (or a single image, if the "Extract all ROIs into a single image" option is selected in the dialog), with the same metadata as the original image, but with the data corresponding to the ROI only. The new images will be added to the current workspace.
 
 - "Copy" |roi_copy|: copy the defined ROI from the selected images to the clipboard. This allows you to paste the ROI into another image or use it in other operations.
@@ -61,6 +63,11 @@ The "ROI" menu allows you to:
     :class: dark-light
 
 .. |image_roi| image:: ../../../datalab/data/icons/roi/image_roi.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light
+
+.. |roi_grid| image:: ../../../datalab/data/icons/roi/roi_grid.svg
     :width: 24px
     :height: 24px
     :class: dark-light

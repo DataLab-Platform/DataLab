@@ -20,6 +20,8 @@ from sigima.objects import ImageROI, ResultShape, ROI2DParam
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
 from datalab.gui.profiledialog import ProfileExtractionDialog
+from datalab.gui.roigrideditor import ImageGridROIEditor
+from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets import imagebackground
 
@@ -495,6 +497,36 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sigima_image.BlobOpenCVParam,
             comment=_("Detect blobs using OpenCV SimpleBlobDetector"),
         )
+
+    def create_roi_grid(self) -> None:
+        """Create a grid of regions of interest"""
+        obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        if any([obj.roi is not None for obj in self.panel.objview.get_sel_objects()]):
+            if (
+                QW.QMessageBox.question(
+                    self.panel.parent(),
+                    _("Warning"),
+                    _(
+                        "Creating a ROI grid will overwrite any existing ROI.<br><br>"
+                        "Do you want to continue?"
+                    ),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    QW.QMessageBox.No,
+                )
+                == QW.QMessageBox.No
+            ):
+                return
+        editor = ImageGridROIEditor(parent=self.parent(), obj=obj0)
+        if exec_dialog(editor):
+            for obj in self.panel.objview.get_sel_objects():
+                obj.roi = editor.get_roi()
+            self.SIG_ADD_SHAPE.emit(get_uuid(obj0))
+            self.panel.refresh_plot(
+                "selected",
+                update_items=True,
+                only_visible=False,
+                only_existing=True,
+            )
 
     @qt_try_except()
     def compute_resize(self, param: sigima.params.ResizeParam | None = None) -> None:

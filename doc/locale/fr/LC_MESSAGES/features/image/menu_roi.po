@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-07 17:06+0200\n"
+"POT-Creation-Date: 2025-08-09 10:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -66,6 +66,12 @@ msgstr "Une image avec une ROI."
 
 msgid "\"Edit numerically\": open a dialog box to edit the parameters of the selected ROIs numerically (i.e. using a simple form). This allows you to define or modify ROIs based on numerical values."
 msgstr "\"Édition numérique\" : ouvrir une boîte de dialogue pour modifier les paramètres des ROI sélectionnées numériquement (c'est-à-dire à l'aide d'un formulaire simple). Cela vous permet de définir ou de modifier des ROI en fonction de valeurs numériques."
+
+msgid "\"Create ROI grid\" |roi_grid|: open a dialog box to create a grid of ROIs on the selected image. This allows you to define multiple ROIs distributed evenly across the image."
+msgstr "\"Créer une grille de ROI\" |roi_grid| : ouvrir une boîte de dialogue pour créer une grille de ROIs sur l'image sélectionnée. Cela vous permet de définir plusieurs ROIs réparties uniformément sur l'image."
+
+msgid "roi_grid"
+msgstr ""
 
 msgid "\"Extract\" |image_roi|: extract the defined ROI from the selected images. This will create a new image for each ROI (or a single image, if the \"Extract all ROIs into a single image\" option is selected in the dialog), with the same metadata as the original image, but with the data corresponding to the ROI only. The new images will be added to the current workspace."
 msgstr "\"Extraire\" |image_roi| : extraire la ROI définie des images sélectionnées. Cela créera une nouvelle image pour chaque ROI (ou une seule image, si l'option \"Extraire toutes les ROIs dans une seule image\" est sélectionnée dans la boîte de dialogue), avec les mêmes métadonnées que l'image d'origine, mais avec les données correspondant uniquement à la ROI. Les nouvelles images seront ajoutées à l'espace de travail actuel."

@@ -10,6 +10,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * New "ROI" menu, between "Edit" and "Operations" menus
   * This menu provides quick access to ROI creation, editing, and deletion tools.
   * New features have also been added to the "ROI" menu:
+    * "Create ROI grid": for images, see below
     * "Copy": copies the selected ROI to the clipboard
     * "Paste": pastes the ROI from the clipboard to the selected object (signal or image)
     * "Export": exports the selected ROI to a file (JSON format)
@@ -17,6 +18,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * ROI editor now supports setting the ROI title:
     * When adding ROIs interactively, the user can now set a title from the object list on the right side of the ROI editor
     * After validating the dialog, each ROI title may also be edited in the confirmation dialog
+  * New "Create ROI grid" feature:
+    * This feature allows to create a grid of ROIs over an image
+    * The grid is defined using a dialog that allows the user to specify the number of rows and columns, as well as the spacing between the ROIs
 
 * New image processing features:
   * New "Gaussian frequency filter" feature:

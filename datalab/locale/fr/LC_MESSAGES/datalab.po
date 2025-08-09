@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-07 17:06+0200\n"
+"POT-Creation-Date: 2025-08-09 10:45+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -141,55 +141,17 @@ msgstr "Copier les titres dans le presse-papier"
 msgid "Copy titles of selected objects to clipboard"
 msgstr "Copier les titres des objets sélectionnés dans le presse-papier"
 
-#, fuzzy
 msgid "Edit graphically"
-msgstr "ROI graphique"
+msgstr "Édition graphique"
 
-#, fuzzy
 msgid "Edit regions of interest graphically"
-msgstr "Régions d'intérêt"
+msgstr "Édition graphique des régions d'intérêt"
 
-#, fuzzy
 msgid "Edit numerically"
-msgstr "Symétrie verticale"
+msgstr "Édition numérique"
 
-#, fuzzy
 msgid "Edit regions of interest numerically"
-msgstr "Régions d'intérêt"
-
-msgid "Extract"
-msgstr "Extraire"
-
-msgid "Copy"
-msgstr "Copier"
-
-#, python-format
-msgid "Copy regions of interest from selected %s"
-msgstr "Copier les régions d'intérêt de l'objet %s sélectionné"
-
-msgid "Paste"
-msgstr "Coller"
-
-#, python-format
-msgid "Paste regions of interest into selected %s"
-msgstr "Coller les régions d'intérêt dans l'objet %s sélectionné"
-
-msgid "Import"
-msgstr "Importer"
-
-#, python-format
-msgid "Import regions of interest into %s"
-msgstr "Importer les régions d'intérêt dans l'objet %s"
-
-msgid "Export"
-msgstr "Exporter"
-
-#, python-format
-msgid "Export selected %s regions of interest"
-msgstr "Exporter les régions d'intérêt de l'objet %s sélectionné"
-
-msgid "Remove all"
-msgstr "Supprimer tout"
+msgstr "Édition numérique des régions d'intérêt"
 
 msgid "View in a new window"
 msgstr "Voir dans une nouvelle fenêtre"
@@ -231,6 +193,40 @@ msgstr "Réduction de bruit"
 
 msgid "Fourier analysis"
 msgstr "Analyse de Fourier"
+
+msgid "Extract"
+msgstr "Extraire"
+
+msgid "Copy"
+msgstr "Copier"
+
+#, python-format
+msgid "Copy regions of interest from selected %s"
+msgstr "Copier les régions d'intérêt de l'objet %s sélectionné"
+
+msgid "Paste"
+msgstr "Coller"
+
+#, python-format
+msgid "Paste regions of interest into selected %s"
+msgstr "Coller les régions d'intérêt dans l'objet %s sélectionné"
+
+msgid "Import"
+msgstr "Importer"
+
+#, python-format
+msgid "Import regions of interest into %s"
+msgstr "Importer les régions d'intérêt dans l'objet %s"
+
+msgid "Export"
+msgstr "Exporter"
+
+#, python-format
+msgid "Export selected %s regions of interest"
+msgstr "Exporter les régions d'intérêt de l'objet %s sélectionné"
+
+msgid "Remove all"
+msgstr "Supprimer tout"
 
 msgid "Show results"
 msgstr "Afficher les résultats"
@@ -398,6 +394,12 @@ msgstr "Vide"
 
 msgid "Ramp"
 msgstr "Rampe"
+
+msgid "Create ROI grid"
+msgstr "Créer une grille de ROI"
+
+msgid "Create a grid of regions of interest"
+msgstr "Créer une grille de régions d'intérêt"
 
 msgid "Show contrast panel"
 msgstr "Afficher le panneau de contraste"
@@ -1344,6 +1346,9 @@ msgstr "Détection de taches (OpenCV)"
 msgid "Detect blobs using OpenCV SimpleBlobDetector"
 msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
+msgid "Creating a ROI grid will overwrite any existing ROI.<br><br>Do you want to continue?"
+msgstr "La création d'une grille de ROI écrasera toute ROI existante.<br><br>Voulez-vous continuer ?"
+
 msgid "Warning:"
 msgstr "Attention :"
 
@@ -1543,6 +1548,60 @@ msgstr "Supprimer toutes les ROI"
 
 msgid "Are you sure you want to remove all ROIs?"
 msgstr "Êtes-vous sûr de vouloir supprimer toutes les ROI ?"
+
+msgid "increasing"
+msgstr "croissant"
+
+msgid "decreasing"
+msgstr "décroissant"
+
+msgid "Base name"
+msgstr "Nom de base"
+
+msgid "Name pattern"
+msgstr "Modèle de nom"
+
+msgid "rows"
+msgstr "lignes"
+
+msgid "columns"
+msgstr "colonnes"
+
+msgid "X direction"
+msgstr "Direction X"
+
+msgid "Y direction"
+msgstr "Direction Y"
+
+msgid "X translation"
+msgstr "Translation X"
+
+msgid "Y translation"
+msgstr "Translation Y"
+
+msgid "column size"
+msgstr "taille de colonne"
+
+msgid "row size"
+msgstr "taille de ligne"
+
+msgid "Show mask"
+msgstr "Afficher le masque"
+
+msgid "Show ROI"
+msgstr "Afficher la ROI"
+
+msgid "Show names"
+msgstr "Afficher les noms"
+
+msgid "Grid parameters"
+msgstr "Paramètres de grille"
+
+msgid "Display parameters"
+msgstr "Paramètres d'affichage"
+
+msgid "ROI grid"
+msgstr "Grille de ROI"
 
 msgid "Settings for main window and general features"
 msgstr "Réglages de la fenêtre principale et des fonctionnalités générales"
@@ -2483,4 +2542,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

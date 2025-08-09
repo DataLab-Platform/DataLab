@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:27+0200\n"
+"POT-Creation-Date: 2025-08-09 10:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -42,6 +42,9 @@ msgstr "Ce menu fournit un accès rapide aux outils de création, de modificatio
 msgid "New features have also been added to the \"ROI\" menu:"
 msgstr "De nouvelles fonctionnalités ont également été ajoutées au menu \"ROI\" :"
 
+msgid "\"Create ROI grid\": for images, see below"
+msgstr ""
+
 msgid "\"Copy\": copies the selected ROI to the clipboard"
 msgstr "\"Copier\": copie la ROI sélectionnée dans le presse-papiers"
 
@@ -62,6 +65,15 @@ msgstr "Lors de l'ajout de ROIs de manière interactive, l'utilisateur peut dés
 
 msgid "After validating the dialog, each ROI title may also be edited in the confirmation dialog"
 msgstr "Après validation de la boîte de dialogue, chaque titre de ROI peut également être modifié dans la boîte de dialogue de confirmation."
+
+msgid "New \"Create ROI grid\" feature:"
+msgstr "Nouvelle fonctionnalité \"Créer une grille de ROI\" :"
+
+msgid "This feature allows to create a grid of ROIs over an image"
+msgstr "Cette fonctionnalité permet de créer une grille de ROIs sur une image."
+
+msgid "The grid is defined using a dialog that allows the user to specify the number of rows and columns, as well as the spacing between the ROIs"
+msgstr "La grille est définie à l'aide d'une boîte de dialogue qui permet à l'utilisateur de spécifier le nombre de lignes et de colonnes, ainsi que l'espacement entre les ROIs."
 
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"
