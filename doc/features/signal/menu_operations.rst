@@ -34,6 +34,8 @@ Basic arithmetic operations
       - :math:`y_{M} = \sum_{k=0}^{M-1}{y_{k}}`
     * - |average| Average
       - :math:`y_{M} = \dfrac{1}{M}\sum_{k=0}^{M-1}{y_{k}}`
+    * - |standard_deviation| Standard Deviation
+      - :math:`y_{M} = \sqrt{\dfrac{1}{M}\sum_{k=0}^{M-1}{(y_{k} - \bar{y})^{2}}}`
     * - |difference| Difference
       - :math:`y_{2} = y_{1} - y_{0}`
     * - |product| Product
@@ -49,6 +51,11 @@ Basic arithmetic operations
     :class: dark-light no-scaled-link
 
 .. |average| image:: ../../../datalab/data/icons/operations/average.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |standard_deviation| image:: ../../../datalab/data/icons/operations/standard_deviation.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
