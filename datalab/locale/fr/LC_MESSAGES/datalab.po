@@ -1003,6 +1003,9 @@ msgstr "Addition"
 msgid "Average"
 msgstr "Moyenne"
 
+msgid "Standard deviation"
+msgstr "Écart-type"
+
 msgid "Difference"
 msgstr "Soustraction"
 
