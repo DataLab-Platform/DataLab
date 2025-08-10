@@ -49,7 +49,11 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_n_to_1(
             sigima_signal.average, _("Average"), icon_name="average.svg"
         )
-        self.register_n_to_1(sigima_signal.standard_deviation, _("Standard deviation"))
+        self.register_n_to_1(
+            sigima_signal.standard_deviation,
+            _("Standard deviation"),
+            icon_name="std.svg",
+        )
         self.register_2_to_1(
             sigima_signal.difference,
             _("Difference"),
