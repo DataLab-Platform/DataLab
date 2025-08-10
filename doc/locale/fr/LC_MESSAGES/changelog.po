@@ -30,6 +30,18 @@ msgstr "DataLab Version 0.21.0"
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
+msgid "New common signal/image feature:"
+msgstr "Nouvelles fonctionnalités communes signal/image :"
+
+msgid "Standard deviation of the selected signals or images."
+msgstr "Écart-type des signaux ou des images de la sélection."
+
+msgid "This complements the \"Average\" feature."
+msgstr "Ceci complète la fonctionnalité \"Moyenne\"."
+
+msgid "This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
 

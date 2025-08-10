@@ -6,6 +6,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* New common signal/image feature:
+  * Standard deviation of the selected signals or images.
+    * This complements the "Average" feature.
+    * This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196).
+
 * New ROI (Region of Interest) management features:
   * New "ROI" menu, between "Edit" and "Operations" menus
   * This menu provides quick access to ROI creation, editing, and deletion tools.
