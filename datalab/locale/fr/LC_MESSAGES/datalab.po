@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-09 16:13+0200\n"
+"POT-Creation-Date: 2025-08-10 07:48+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1561,6 +1561,9 @@ msgstr "Afficher la ROI"
 msgid "Show names"
 msgstr "Afficher les noms"
 
+msgid "ROI grid files (*.dlabgrid);;All files (*)"
+msgstr ""
+
 msgid "Grid parameters"
 msgstr "Paramètres de grille"
 
@@ -1569,6 +1572,29 @@ msgstr "Paramètres d'affichage"
 
 msgid "ROI grid"
 msgstr "Grille de ROI"
+
+msgid "Import/Export"
+msgstr "Importer/Exporter"
+
+msgid "Import grid"
+msgstr "Importer une grille"
+
+msgid "Export grid"
+msgstr "Exporter une grille"
+
+msgid "Import ROI grid"
+msgstr "Importer une grille de ROI"
+
+#, python-brace-format
+msgid "Failed to import ROI grid: {0}"
+msgstr "Échec de l'importation de la grille de ROI : {0}"
+
+msgid "Export ROI grid"
+msgstr "Exporter une grille de ROI"
+
+#, python-brace-format
+msgid "Failed to export ROI grid: {0}"
+msgstr "Échec de l'exportation de la grille de ROI : {0}"
 
 msgid "Settings for main window and general features"
 msgstr "Réglages de la fenêtre principale et des fonctionnalités générales"

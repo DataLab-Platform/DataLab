@@ -20,7 +20,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * After validating the dialog, each ROI title may also be edited in the confirmation dialog
   * New "Create ROI grid" feature:
     * This feature allows to create a grid of ROIs over an image
-    * The grid is defined using a dialog that allows the user to specify the number of rows and columns, as well as the spacing between the ROIs
+    * The grid is defined using a dialog that allows the user to:
+      * Specify the number of rows and columns, as well as the spacing between the ROIs
+      * Import/export ROI grids to/from files (JSON format)
+      * Preview the ROI grid before creating it
 
 * New image processing features:
   * New "Gaussian frequency filter" feature:

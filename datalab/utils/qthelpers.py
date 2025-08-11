@@ -444,7 +444,7 @@ def save_restore_stds() -> Generator[None, None, None]:
 
 @contextmanager
 def block_signals(
-    widget: QW.QWidget, enable: bool = True
+    widget: QW.QWidget, enable: bool = True, children: bool = False
 ) -> Generator[None, None, None]:
     """Eventually block/unblock widget Qt signals before/after doing some things
 
@@ -454,17 +454,24 @@ def block_signals(
          to avoid blocking signals when not needed without having to handle it by
          adding an `if` statement which would require to duplicate the code that is
          inside the `with` statement in the `else` branch.
+        children: Whether to block/unblock signals for child widgets (default: False).
 
     Returns:
         Context manager
     """
     if enable:
         widget.blockSignals(True)
+        if children:
+            for child in widget.findChildren(QW.QWidget):
+                child.blockSignals(True)
     try:
         yield
     finally:
         if enable:
             widget.blockSignals(False)
+            if children:
+                for child in widget.findChildren(QW.QWidget):
+                    child.blockSignals(False)
 
 
 def create_menu_button(

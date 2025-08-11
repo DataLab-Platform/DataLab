@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-09 10:51+0200\n"
+"POT-Creation-Date: 2025-08-11 17:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -72,8 +72,17 @@ msgstr "Nouvelle fonctionnalité \"Créer une grille de ROI\" :"
 msgid "This feature allows to create a grid of ROIs over an image"
 msgstr "Cette fonctionnalité permet de créer une grille de ROIs sur une image."
 
-msgid "The grid is defined using a dialog that allows the user to specify the number of rows and columns, as well as the spacing between the ROIs"
-msgstr "La grille est définie à l'aide d'une boîte de dialogue qui permet à l'utilisateur de spécifier le nombre de lignes et de colonnes, ainsi que l'espacement entre les ROIs."
+msgid "The grid is defined using a dialog that allows the user to:"
+msgstr "La grille est définie à l'aide d'une boîte de dialogue qui permet à l'utilisateur de :"
+
+msgid "Specify the number of rows and columns, as well as the spacing between the ROIs"
+msgstr "Spécifier le nombre de lignes et de colonnes, ainsi que l'espacement entre les ROIs."
+
+msgid "Import/export ROI grids to/from files (JSON format)"
+msgstr "Importer/Exporter des grilles de ROI vers/depuis des fichiers (format JSON)"
+
+msgid "Preview the ROI grid before creating it"
+msgstr "Prévisualiser la grille de ROI avant de la créer"
 
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"

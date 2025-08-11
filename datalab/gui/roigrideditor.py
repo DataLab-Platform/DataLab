@@ -11,12 +11,14 @@ import guidata.dataset.qtwidgets as gdq
 from plotpy.plot import PlotDialog, PlotOptions
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigima.io import read_roi_grid, write_roi_grid
 from sigima.objects import ImageObj, ImageROI
 from sigima.params import ROIGridParam
 from sigima.proc.image import generate_image_grid_roi
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.config import _
+from datalab.utils.qthelpers import block_signals
 
 
 class DisplayParam(gds.DataSet):
@@ -57,6 +59,7 @@ class ImageGridROIEditor(PlotDialog):
     SIG_GEOMETRY_CHANGED = QC.Signal()
     SIG_DISPLAY_CHANGED = QC.Signal()
     ADDITIONAL_OPTIONS = {"show_itemlist": False, "show_contrast": False}
+    IO_FILTERS = _("ROI grid files (*.dlabgrid);;All files (*)")
 
     def __init__(
         self,
@@ -126,9 +129,55 @@ class ImageGridROIEditor(PlotDialog):
     def setup_editor_layout(self) -> None:
         """Setup editor layout"""
         self.editor_layout.addWidget(self.gridparamwidget)
+        gbox = QW.QGroupBox(_("Import/Export"))
+        glayout = QW.QHBoxLayout()
+        glayout.addWidget(
+            QW.QPushButton(_("Import grid"), clicked=self.import_roi_grid)
+        )
+        glayout.addWidget(
+            QW.QPushButton(_("Export grid"), clicked=self.export_roi_grid)
+        )
+        gbox.setLayout(glayout)
+        self.editor_layout.addWidget(gbox)
         self.editor_layout.addWidget(self.displayparamwidget)
         self.editor_layout.addStretch()
-        self.editor_layout.addSpacing(100)
+
+    def import_roi_grid(self) -> None:
+        """Import ROI grid from file"""
+        filename, _filter = QW.QFileDialog.getOpenFileName(
+            self, _("Import ROI grid"), "", self.IO_FILTERS
+        )
+        if filename:
+            try:
+                gp = read_roi_grid(filename)
+            except Exception as exc:  # pylint: disable=broad-except
+                QW.QMessageBox.critical(
+                    self,
+                    _("Error"),
+                    _("Failed to import ROI grid: {0}").format(str(exc)),
+                )
+                return
+            gds.update_dataset(self.gridparamwidget.dataset, gp)
+            with block_signals(widget=self.gridparamwidget, children=True):
+                self.gridparamwidget.get()
+            self.update_items()
+            self.SIG_GEOMETRY_CHANGED.emit()
+
+    def export_roi_grid(self) -> None:
+        """Export ROI grid to file"""
+        self.gridparamwidget.set()
+        filename, _filter = QW.QFileDialog.getSaveFileName(
+            self, _("Export ROI grid"), "", self.IO_FILTERS
+        )
+        if filename:
+            try:
+                write_roi_grid(filename, self.gridparamwidget.dataset)
+            except Exception as exc:  # pylint: disable=broad-except
+                QW.QMessageBox.critical(
+                    self,
+                    _("Error"),
+                    _("Failed to export ROI grid: {0}").format(str(exc)),
+                )
 
     def update_items(self) -> None:
         """Setup items"""
