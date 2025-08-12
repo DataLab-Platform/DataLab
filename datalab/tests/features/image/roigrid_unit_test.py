@@ -50,7 +50,7 @@ def test_roi_grid_geometry_headless() -> None:
         assert "ROI(1,1)" in titles and "ROI(2,2)" in titles
         # Check one ROI position approximately
         r00 = next(r for r in roi if r.title == "ROI(1,1)")
-        x0, y0, dx, dy = r00.get_physical_coords(img)
+        _x0, _y0, dx, dy = r00.get_physical_coords(img)
         assert dx == img.width / 2 * 0.5
         assert dy == img.height / 2 * 0.5
 

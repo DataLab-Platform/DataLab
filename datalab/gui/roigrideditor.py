@@ -28,7 +28,7 @@ class DisplayParam(gds.DataSet):
         super().__init__()
         self.roi_editor = roi_editor
 
-    def display_changed(self, item, value) -> None:
+    def display_changed(self, item, value) -> None:  # pylint: disable=unused-argument
         """Emit display changed signal."""
         assert self.roi_editor is not None, "ROI editor is not set"
         if self.roi_editor.is_ready():
@@ -70,6 +70,7 @@ class ImageGridROIEditor(PlotDialog):
         options: PlotOptions | dict[str, Any] | None = None,
         size: tuple[int, int] | None = None,
     ) -> None:
+        self.editor_layout: QW.QVBoxLayout | None = None
         self.__roi = ImageROI()
         self.__is_ready = False
         self.obj = obj = obj.copy()  # Avoid modifying the original object
@@ -78,9 +79,6 @@ class ImageGridROIEditor(PlotDialog):
         displayparam = displayparam or DisplayParam()
         self.gridparamwidget = gdq.DataSetEditGroupBox(
             _("Grid parameters"), ROIGridParam, show_button=False
-        )
-        self.gridparamwidget.dataset.on_geometry_changed = (
-            lambda: self.SIG_GEOMETRY_CHANGED.emit()
         )
         gds.update_dataset(self.gridparamwidget.dataset, gridparam)
         self.displayparamwidget = gdq.DataSetEditGroupBox(
@@ -102,6 +100,9 @@ class ImageGridROIEditor(PlotDialog):
             icon="DataLab.svg",
             edit=True,
             size=size,
+        )
+        self.gridparamwidget.dataset.on_geometry_changed = (
+            self.SIG_GEOMETRY_CHANGED.emit
         )
         self.setObjectName("i_grid_roi_editor")
         self.setup_editor_layout()

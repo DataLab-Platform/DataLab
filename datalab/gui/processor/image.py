@@ -501,7 +501,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     def create_roi_grid(self) -> None:
         """Create a grid of regions of interest"""
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
-        if any([obj.roi is not None for obj in self.panel.objview.get_sel_objects()]):
+        if any(obj.roi is not None for obj in self.panel.objview.get_sel_objects()):
             if (
                 QW.QMessageBox.question(
                     self.panel.parent(),
