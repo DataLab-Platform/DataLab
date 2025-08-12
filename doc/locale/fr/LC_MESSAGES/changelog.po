@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 17:49+0200\n"
+"POT-Creation-Date: 2025-08-12 12:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -73,16 +73,18 @@ msgid "This feature allows to create a grid of ROIs over an image"
 msgstr "Cette fonctionnalité permet de créer une grille de ROIs sur une image."
 
 msgid "The grid is defined using a dialog that allows the user to:"
-msgstr "La grille est définie à l'aide d'une boîte de dialogue qui permet à l'utilisateur de :"
+msgstr ""
 
+#, fuzzy
 msgid "Specify the number of rows and columns, as well as the spacing between the ROIs"
 msgstr "Spécifier le nombre de lignes et de colonnes, ainsi que l'espacement entre les ROIs."
 
+#, fuzzy
 msgid "Import/export ROI grids to/from files (JSON format)"
-msgstr "Importer/Exporter des grilles de ROI vers/depuis des fichiers (format JSON)"
+msgstr "\"Importer\": importe une ROI depuis un fichier (format JSON)"
 
 msgid "Preview the ROI grid before creating it"
-msgstr "Prévisualiser la grille de ROI avant de la créer"
+msgstr ""
 
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"
@@ -135,14 +137,23 @@ msgstr "Nouvelles fonctionnalités de traitement de signal :"
 msgid "Zero padding:"
 msgstr "Complément de zéros :"
 
-msgid "Enhanced to support both prepending and appending zeros."
-msgstr "Amélioré pour prendre en charge l'ajout de zéros au début et à la fin."
+msgid "Enhanced feature to support both prepending and appending zeros."
+msgstr "Fonctionnalité améliorée pour prendre en charge l'ajout de zéros au début et à la fin."
 
 msgid "Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
 msgid "Default strategy is now \"Next power of 2\"."
 msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
+
+msgid "New signal analysis features:"
+msgstr "Nouvelles fonctionnalités d'analyse du signal :"
+
+msgid "Bandwidth at -3dB:"
+msgstr "Bande passante à -3 dB :"
+
+msgid "Enhanced to support passband bandwidth in addition to baseband bandwidth."
+msgstr "Amélioration pour prendre en charge la bande passante d'un filtre passe-bande en plus de la bande passante d'un filtre passe-bas."
 
 msgid "New 2D ramp image generator."
 msgstr "Nouveau générateur d'image de type rampe 2D."

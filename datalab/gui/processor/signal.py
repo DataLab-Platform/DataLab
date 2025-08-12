@@ -453,8 +453,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             sigima_signal.bandwidth_3db,
             _("Bandwidth at -3dB"),
             comment=_(
-                "Compute bandwidth at -3dB assuming a low-pass filter "
-                "already expressed in dB"
+                "Compute bandwidth at -3dB assuming the signal is already in decibels"
             ),
         )
         self.register_1_to_0(
