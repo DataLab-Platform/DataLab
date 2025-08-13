@@ -107,14 +107,15 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.absolute, _("Absolute value"), icon_name="abs.svg"
         )
+        self.register_1_to_1(
+            sigima_signal.phase,
+            _("Phase"),
+            paramclass=sigima.params.PhaseParam,
+            icon_name="phase.svg",
+        )
         self.register_1_to_1(sigima_signal.real, _("Real part"), icon_name="re.svg")
         self.register_1_to_1(
             sigima_signal.imag, _("Imaginary part"), icon_name="im.svg"
-        )
-        self.register_1_to_1(
-            sigima_signal.phase_angle,
-            _("Phase angle"),
-            paramclass=sigima.params.PhaseAngleParam,
         )
         self.register_1_to_1(
             sigima_signal.astype,
