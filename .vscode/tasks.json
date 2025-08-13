@@ -253,7 +253,7 @@
                 "cwd": "${workspaceFolder}",
             },
             "presentation": {
-                "clear": false,
+                "clear": true,
                 "echo": true,
                 "focus": false,
                 "panel": "dedicated",
@@ -288,7 +288,7 @@
                 "cwd": "${workspaceFolder}",
             },
             "presentation": {
-                "clear": false,
+                "clear": true,
                 "echo": true,
                 "focus": false,
                 "panel": "dedicated",
