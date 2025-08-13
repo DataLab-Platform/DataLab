@@ -27,4 +27,5 @@
     "python.testing.pytestEnabled": true,
     "python.testing.pytestPath": "pytest",
     "python.testing.unittestEnabled": false,
+    "terminal.integrated.tabs.description": "${workspaceFolder}",
 }
