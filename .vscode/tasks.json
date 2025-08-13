@@ -122,6 +122,37 @@
             "type": "shell",
         },
         {
+            "label": "🚀 Pytest",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "${command:python.interpreterPath}",
+                "-m",
+                "pytest",
+                "--ff",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    // "DEBUG": "1", // ☣️ Debug mode will reset .ini settings
+                    "UNATTENDED": "1",
+                },
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true,
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true,
+            },
+            "type": "shell",
+        },
+        {
             "label": "sphinx-build",
             "command": "${command:python.interpreterPath}",
             "args": [
@@ -300,37 +331,6 @@
             "dependsOn": [
                 "sphinx-intl build",
             ],
-        },
-        {
-            "label": "🚀 Pytest",
-            "command": "${command:python.interpreterPath}",
-            "args": [
-                "scripts/run_with_env.py",
-                "${command:python.interpreterPath}",
-                "-m",
-                "pytest",
-                "--ff",
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}",
-                "env": {
-                    // "DEBUG": "1", // ☣️ Debug mode will reset .ini settings
-                    "UNATTENDED": "1",
-                },
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true,
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "dedicated",
-                "showReuseMessage": true,
-                "clear": true,
-            },
-            "type": "shell",
         },
         {
             "label": "🛠️ Generate doc assets",
