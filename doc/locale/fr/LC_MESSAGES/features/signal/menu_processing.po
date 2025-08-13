@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-08-13 11:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -79,10 +79,13 @@ msgid "Convert to Cartesian coordinates"
 msgstr "Convertir en coordonnées cartésiennes"
 
 msgid "Create a new signal which is the result of converting polar coordinates to Cartesian coordinates."
-msgstr "Crée un signal en convertissant les coordonnées polaires en coordonnées cartésiennes."
+msgstr "Crée un signal en convertissant les coordonnées cartésiennes en coordonnées polaires."
 
-msgid "This function assumes that the x-axis represents the radius and the y-axis represents the angle. Negative values are not allowed for the radius, and will be clipped to 0 (a warning will be raised)."
-msgstr "Cette fonction suppose que l'axe des X représente le rayon et l'axe des Y représente l'angle. Les valeurs négatives ne sont pas autorisées pour le rayon, et seront écrêtées à 0 (un avertissement sera émis)."
+msgid "This function assumes that the x-axis represents the radius and the y-axis the angle."
+msgstr "Cette fonction suppose que l'axe des x représente le rayon et l'axe des y l'angle."
+
+msgid "A radius cannot be negative. Any negative value is clipped to 0."
+msgstr "Un rayon ne peut pas être négatif. Toute valeur négative est écrêtée à 0."
 
 msgid "Convert to polar coordinates"
 msgstr "Convertir en coordonnées polaires"
@@ -723,4 +726,3 @@ msgstr "Mode XY"
 
 msgid "Simulate the X-Y mode of an oscilloscope."
 msgstr "Simuler le mode XY d'un oscilloscope."
-
