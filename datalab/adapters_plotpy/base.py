@@ -263,7 +263,8 @@ class ResultShapePlotPyAdapter(ResultPlotPyAdapter):
         Returns:
             Label item
         """
-        if self.result.add_label:
+        if self.result.shapetype is ShapeTypes.SEGMENT:
+            # Add a label item for the segment shape
             return super().create_label_item(obj)
         return None
 
