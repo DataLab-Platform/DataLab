@@ -15,6 +15,7 @@ import os
 import os.path as osp
 import re
 import warnings
+from enum import Enum
 from typing import TYPE_CHECKING, Any, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -36,6 +37,7 @@ from qtpy.compat import (
     getsavefilename,
 )
 from sigima.io import read_metadata, read_roi, write_metadata, write_roi
+from sigima.io.common.filename import format_object_names
 from sigima.objects import (
     ImageObj,
     NewImageParam,
@@ -270,6 +272,156 @@ class PasteMetadataParam(gds.DataSet):
     keep_geometry = gds.BoolItem(_("Geometry results"), default=False).set_pos(col=1)
     keep_tables = gds.BoolItem(_("Table results"), default=False).set_pos(col=1)
     keep_other = gds.BoolItem(_("Other metadata"), default=True)
+
+
+class BulkSaveSettings(str, Enum):
+    """Bulk save settings enumeration
+
+    This is used to define the naming scheme for bulk saving objects.
+    It can be used to select between using the object title directly or a
+    custom pattern.
+    """
+
+    def __str__(self) -> str:
+        """Return string representation of the enum value"""
+        return self.value
+
+    TITLE = "title"
+    PATTERN = "pattern"
+
+
+class BulkSaveParam(gds.DataSet):
+    """Bulk save parameters
+
+    Fields:
+        directory: Target output directory (pre-filled with last used base dir)
+        naming: Choose between using object title directly or a formatting pattern
+        pattern: Formatting pattern (Python str.format) when naming=='pattern'
+                 Available placeholders: {n} (1-based index), {title} (object title)
+        overwrite: Overwrite existing files
+        preview: Read-only multiline list of generated filenames (updated by a
+                 callback provided externally – see BaseDataPanel.bulk_save_dialog)
+    """
+
+    # Directory pre-filled with configured base directory (updated before editing)
+    _naming_prop = gds.GetAttrProp("naming")
+    directory = gds.DirectoryItem(_("Directory"), default=Conf.main.base_dir.get())
+    _panel = None
+
+    def set_panel(self, panel):
+        """Attach panel reference (needed for callbacks)."""
+        self._panel = panel
+
+    def update_filenames(self, _item=None, _value=None) -> None:
+        """Update filenames in the preview field"""
+        panel = getattr(self, "_panel", None)
+        if panel is None:
+            # Panel not yet attached: nothing to do
+            self.preview = ""
+            self.filenames_array = []
+            return
+        objs = panel.objview.get_sel_objects(include_groups=True)
+        if not objs:
+            self.preview = ""
+            self.filenames_array = []
+            return
+        # Build filenames using the selected naming scheme
+        TITLE_PATTERN = "{title}"
+        if self.naming == BulkSaveSettings.TITLE:
+            self.pattern = TITLE_PATTERN
+
+        # update radio choice item when pattern is changed
+        if _item and getattr(_item, "_name", None) == "pattern":
+            if _value == TITLE_PATTERN:
+                self.naming = BulkSaveSettings.TITLE
+            else:
+                self.naming = BulkSaveSettings.PATTERN
+            self.pattern = _value
+
+        format_string = self.pattern or TITLE_PATTERN
+
+        try:
+            filters = panel.IO_REGISTRY.get_write_filters()
+        except (AttributeError, TypeError):
+            filters = ""
+        try:
+            fname, ext = osp.splitext(format_string)
+            if "}" in ext:
+                # dynamic extensions are not supported
+                ext = ""
+                fname = format_string
+            possible_ext = re.findall(r"\.([a-zA-Z0-9]+)", filters or "")
+
+            name_ext = ext if ext and ext in possible_ext else "csv"
+            self.filenames_array = format_object_names(objs, fname + "." + name_ext)
+            self.preview = "\n".join(
+                f"{i + 1:03d}: {name}" for i, name in enumerate(self.filenames_array)
+            )
+        except (ValueError, KeyError, TypeError, re.error) as exc:  # pragma: no cover
+            self.preview = "Format error. Check the pattern.\n" + str(exc)
+
+    naming = gds.ChoiceItem(
+        _("File name"),
+        BulkSaveSettings,
+        default=BulkSaveSettings.TITLE,
+        help=_("Choose how to build each output file name"),
+        radio=True,
+    ).set_prop("display", callback=update_filenames)
+
+    pattern = gds.StringItem(
+        _("Custom pattern"),
+        default="{index:03d}_{title}",
+        help=_(
+            "Python format string for file naming.\n\n"
+            "Available placeholders:\n"
+            "{title} (title), {type} ('signal' or 'image'),\n"
+            "{index} (1-based index), {i} (0-based index), {n} (total objects),\n"
+            "{xlabel}, {xunit}, {ylabel}, {yunit} (axis info for signals),\n"
+            "{metadata} (metadata mapping, e.g. {metadata[key]}).\n\n"
+            "Python modifiers are allowed.\n"
+            "Examples: {index:03d} (3-digit index with leading zeros),\n"
+            "{title:20.20} (title truncated to 20 characters),\n"
+            "{title:20.20s} (title truncated to 20 characters, no unicode chars),\n"
+            "{title:20.20|upper} (title truncated to 20 characters, upper case),\n"
+        ),
+    ).set_prop(
+        "display",
+        callback=update_filenames,
+    )
+
+    overwrite = gds.BoolItem(_("Overwrite existing"), default=False)
+
+    filenames_array = []
+
+    help = gds.TextItem(
+        _("Help"),
+        default=_(
+            "Python format string for file naming.\n\n"
+            "Available placeholders:\n"
+            "{title} (title), \n"
+            "{type} ('signal' or 'image'),\n"
+            "{index} (1-based index),\n"
+            "{i} (0-based index),\n"
+            "{n} (total objects),\n"
+            "{xlabel}, {xunit}, {ylabel}, {yunit} (axis info for signals),\n"
+            "{metadata} (metadata mapping, e.g. {metadata[key]}).\n\n"
+            "Python modifiers are allowed.\n"
+            "Examples: {index:03d} (3-digit index with leading zeros),\n"
+            "{title:20.20} (title truncated to 20 characters),\n"
+            "{title:20.20s} (title truncated to 20 characters, no unicode chars),\n"
+            "{title:20.20|upper} (title truncated to 20 characters, upper case),\n"
+        ),
+    ).set_prop("display", multiline=True, readonly=True)
+
+    preview = (
+        gds.TextItem(_("Preview"), default="")
+        .set_prop("display", multiline=True, readonly=True)
+        .set_pos(col=1)
+    )
+
+    def set_directory_default(self):  # helper (optional)
+        """Update directory default from current configuration (call before editing)."""
+        self.directory = Conf.main.base_dir.get()
 
 
 class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
@@ -1131,6 +1283,70 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     Conf.main.base_dir.set(filename)
                     self.__save_to_file(obj, filename)
 
+    def bulk_save_dialog(self, param: BulkSaveParam | None = None) -> None:
+        """Bulk save selected objects.
+
+        Args:
+            param: Optional BulkSaveParam dataset. If None, a new one is created.
+
+        Opens a dialog (unless a pre-filled param already edited is passed) to select
+        output directory, naming mode (title or pattern) and preview filenames before
+        saving all selected objects.
+        """
+        objs = self.objview.get_sel_objects(include_groups=True)
+        if not objs:
+            QW.QMessageBox.information(self, APP_NAME, _("No object selected"))
+            return
+
+        created_param = False
+        if param is None:
+            param = BulkSaveParam(
+                _("Bulk save"),
+                comment=_("Save all selected objects with a naming pattern."),
+            )
+            param.set_directory_default()
+            created_param = True
+        else:
+            # Ensure directory default if field empty
+            if not getattr(param, "directory", ""):
+                param.set_directory_default()
+
+        # Attach panel reference (needed by callbacks)
+        param.set_panel(self)
+
+        # Precompute filenames (initial preview)
+        param.update_filenames()
+
+        if created_param:
+            if not param.edit(parent=self.parent()):
+                return
+            # Recompute after user edits naming/pattern
+            param.update_filenames()
+
+        target_dir = param.directory
+        os.makedirs(target_dir, exist_ok=True)
+        Conf.main.base_dir.set(target_dir)
+
+        with create_progress_bar(self, _("Saving objects"), max_=len(objs)) as progress:
+            for i, (obj, base_name) in enumerate(zip(objs, param.filenames_array)):
+                progress.setValue(i + 1)
+                if progress.wasCanceled():
+                    break
+                out_path = osp.join(target_dir, base_name)
+
+                # Add number if file already exists
+                if not param.overwrite and osp.exists(out_path):
+                    root, ext = osp.splitext(out_path)
+                    k = 1
+                    while osp.exists(f"{root}_{k}{ext}"):
+                        k += 1
+                    out_path = f"{root}_{k}{ext}"
+
+                with qt_try_loadsave_file(self.parent(), out_path, "save"):
+                    self.__save_to_file(obj, out_path)
+
+        QW.QMessageBox.information(self, APP_NAME, _("Bulk save finished."))
+
     def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
         """Handle dropped files
 
@@ -1162,6 +1378,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 ) as progress:
                     for idx, obj in enumerate(objs):
                         progress.setValue(idx)
+                        QW.QApplication.processEvents()
                         if progress.wasCanceled():
                             break
                         self.add_object(obj)
@@ -1671,7 +1888,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 return
             obj = objs[0]
             for i_roi in all_roi_indexes[0]:
-                roi_suffix = ""
+                roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
                 for title, results in grouped_results.items():  # title
                     x, y = [], []
                     for index, result in enumerate(results):
@@ -1705,7 +1922,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                             i_xaxis = rdata.xlabels.index(param.xaxis)
                             x = result.shown_array[mask, i_xaxis]
                         y = result.shown_array[mask, i_yaxis]
-                        shid = get_short_id(obj)
+                        shid = get_short_id(objs[index])
                         stitle = f"{title} ({shid}){roi_suffix}"
                         self.__add_result_signal(x, y, stitle, param.xaxis, param.yaxis)
 
