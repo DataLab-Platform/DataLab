@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-16 10:07+0200\n"
+"POT-Creation-Date: 2025-08-14 08:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -161,38 +161,47 @@ msgstr ""
 msgid "where :math:`c` is the constant value and :math:`conv` is the conversion function which handles data type conversion (keeping the same data type as the input image)."
 msgstr "où :math:`c` est la valeur constante et :math:`conv` est la fonction de conversion qui gère la conversion du type de données (en conservant le même type de données que l'image d'entrée)."
 
-msgid "Real and imaginary parts"
-msgstr "Parties réelles et imaginaires"
+msgid "Absolute value and complex image operations"
+msgstr "Valeur absolue et opérations sur les images complexes"
 
 msgid "|abs| Absolute value"
 msgstr "|abs| Valeur absolue"
 
 msgid "abs"
-msgstr ""
+msgstr "abs"
 
 #, python-brace-format
 msgid ":math:`z_{k} = |z_{k-1}|`"
-msgstr ""
+msgstr ":math:`z_{k} = |z_{k-1}|`"
+
+msgid "|phase| Phase (argument)"
+msgstr "|phase| Phase (argument)"
+
+msgid "phase"
+msgstr "phase"
+
+msgid ":py:func:`sigima.proc.image.phase`"
+msgstr ":py:func:`sigima.proc.image.phase`"
 
 msgid "|re| Real part"
 msgstr "|re| Partie réelle"
 
 msgid "re"
-msgstr ""
+msgstr "re"
 
 #, python-brace-format
 msgid ":math:`z_{k} = \\Re(z_{k-1})`"
-msgstr ""
+msgstr ":math:`z_{k} = \\Re(z_{k-1})`"
 
 msgid "|im| Imaginary part"
 msgstr "|im| Partie imaginaire"
 
 msgid "im"
-msgstr ""
+msgstr "im"
 
 #, python-brace-format
 msgid ":math:`z_{k} = \\Im(z_{k-1})`"
-msgstr ""
+msgstr ":math:`z_{k} = \\Im(z_{k-1})`"
 
 msgid "Data type conversion"
 msgstr "Conversion du type de données"

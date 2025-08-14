@@ -113,8 +113,8 @@ Create a new signal which is the result of a constant operation on each selected
     :height: 24px
     :class: dark-light no-scaled-link
 
-Absolute value, real and imaginary parts
-----------------------------------------
+Absolute value and complex signal operations
+--------------------------------------------
 
 .. list-table::
     :header-rows: 1
@@ -124,12 +124,19 @@ Absolute value, real and imaginary parts
       - Description
     * - |abs| Absolute value
       - :math:`y_{k} = |y_{k-1}|`
+    * - |phase| Phase (argument)
+      - :py:func:`sigima.proc.signal.phase`
     * - |re| Real part
       - :math:`y_{k} = \Re(y_{k-1})`
     * - |im| Imaginary part
       - :math:`y_{k} = \Im(y_{k-1})`
 
 .. |abs| image:: ../../../datalab/data/icons/operations/abs.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |phase| image:: ../../../datalab/data/icons/operations/phase.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

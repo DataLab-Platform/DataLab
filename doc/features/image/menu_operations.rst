@@ -123,8 +123,8 @@ Create a new image which is the result of a constant operation on each selected 
 where :math:`c` is the constant value and :math:`conv` is the conversion function
 which handles data type conversion (keeping the same data type as the input image).
 
-Real and imaginary parts
-------------------------
+Absolute value and complex image operations
+-------------------------------------------
 
 .. list-table::
     :header-rows: 1
@@ -134,6 +134,8 @@ Real and imaginary parts
       - Description
     * - |abs| Absolute value
       - :math:`z_{k} = |z_{k-1}|`
+    * - |phase| Phase (argument)
+      - :py:func:`sigima.proc.image.phase`
     * - |re| Real part
       - :math:`z_{k} = \Re(z_{k-1})`
     * - |im| Imaginary part
@@ -141,6 +143,11 @@ Real and imaginary parts
 
 
 .. |abs| image:: ../../../datalab/data/icons/operations/abs.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |phase| image:: ../../../datalab/data/icons/operations/phase.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

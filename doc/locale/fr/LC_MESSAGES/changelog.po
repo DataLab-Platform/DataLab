@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 17:49+0200\n"
+"POT-Creation-Date: 2025-08-14 08:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,18 @@ msgstr "DataLab Version 0.21.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "New common signal/image feature:"
+msgstr "Nouvelles fonctionnalités communes signal/image :"
+
+msgid "Added `phase` (argument) feature to extract the phase information from complex signals or images."
+msgstr "Ajout de la fonctionnalité `phase` (argument) pour extraire les informations de phase des signaux ou des images complexes."
+
+msgid "This complements the \"Absolute value\" (modulus) feature."
+msgstr "Ceci complète la fonctionnalité \"Valeur absolue\" (module)."
+
+msgid "This partially implements [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+msgstr "Ceci implémente une partie de [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"

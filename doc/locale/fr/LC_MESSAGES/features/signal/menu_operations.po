@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-16 10:07+0200\n"
+"POT-Creation-Date: 2025-08-14 08:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -146,8 +146,8 @@ msgstr ""
 msgid ":math:`y_{k} = \\dfrac{y_{k-1}}{c}`"
 msgstr ""
 
-msgid "Absolute value, real and imaginary parts"
-msgstr "Valeur absolue, parties réelle et imaginaire"
+msgid "Absolute value and complex signal operations"
+msgstr "Valeur absolue et opérations sur les signaux complexes"
 
 msgid "|abs| Absolute value"
 msgstr "|abs| Valeur absolue"
@@ -157,27 +157,36 @@ msgstr ""
 
 #, python-brace-format
 msgid ":math:`y_{k} = |y_{k-1}|`"
+msgstr ":math:`y_{k} = |y_{k-1}|`"
+
+msgid "|phase| Phase (argument)"
+msgstr "|phase| Phase (argument)"
+
+msgid "phase"
 msgstr ""
+
+msgid ":py:func:`sigima.proc.signal.phase`"
+msgstr ":py:func:`sigima.proc.signal.phase`"
 
 msgid "|re| Real part"
 msgstr "|re| Partie réelle"
 
 msgid "re"
-msgstr ""
+msgstr "re"
 
 #, python-brace-format
 msgid ":math:`y_{k} = \\Re(y_{k-1})`"
-msgstr ""
+msgstr ":math:`y_{k} = \\Re(y_{k-1})`"
 
 msgid "|im| Imaginary part"
 msgstr "|im| Partie imaginaire"
 
 msgid "im"
-msgstr ""
+msgstr "im"
 
 #, python-brace-format
 msgid ":math:`y_{k} = \\Im(y_{k-1})`"
-msgstr ""
+msgstr ":math:`y_{k} = \\Im(y_{k-1})`"
 
 msgid "Data type conversion"
 msgstr "Conversion du type de données"
@@ -268,4 +277,3 @@ msgstr ""
 
 msgid "Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
 msgstr "Basée sur `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
-
