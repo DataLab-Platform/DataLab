@@ -618,57 +618,98 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Copy object metadata"""
         obj = self.objview.get_sel_objects()[0]
         self.__metadata_clipboard = obj.metadata.copy()
+
+        # Rename geometry results to avoid conflicts when pasting to same object type
         new_pref = get_short_id(obj) + "_"
+        self._rename_results_in_clipboard(new_pref)
 
-        # First, collect all geometry metadata entries to process
-        geometry_entries = []
-        for key, _value in obj.metadata.items():
-            # Check if this is a geometry result metadata entry
-            if key.startswith("Geometry_") and key.endswith("_array"):
-                geometry_entries.append(key)
+    def _rename_results_in_clipboard(self, prefix: str) -> None:
+        """Rename geometry and table results in clipboard to avoid conflicts.
 
-        # Process each geometry entry
-        for key in geometry_entries:
+        Args:
+            prefix: Prefix to add to result titles
+        """
+        # Handle geometry results
+        geometry_keys = [
+            k
+            for k in self.__metadata_clipboard.keys()
+            if k.startswith("Geometry_") and k.endswith("_array")
+        ]
+
+        for array_key in geometry_keys:
             try:
-                geometry_adapter = GeometryAdapter.from_metadata_entry(obj, key)
-                title = geometry_adapter.title
-                if not re.match(obj.PREFIX + r"[0-9]{3}[\s]*", title):
-                    # Handling additional result (e.g. diameter)
-                    # Collect keys to update
-                    keys_to_update = []
-                    for a_key, a_value in obj.metadata.items():
-                        if isinstance(a_key, str) and a_key.startswith(title):
-                            keys_to_update.append((a_key, a_value))
+                # Extract title from key: "Geometry_title_array" -> "title"
+                title = array_key[9:-6]  # Remove "Geometry_" and "_array"
 
-                    # Update the clipboard
-                    for a_key, a_value in keys_to_update:
-                        self.__metadata_clipboard.pop(a_key, None)
-                        self.__metadata_clipboard[new_pref + a_key] = a_value
+                # Find all related keys for this geometry result
+                title_key = f"Geometry_{title}_title"
+                shape_key = f"Geometry_{title}_shape"
 
-                    # Update title and store back in clipboard
-                    # Create new GeometryResult with updated title (frozen)
-                    from datalab.adapters_metadata.legacy import create_geometry_result
+                if (
+                    title_key in self.__metadata_clipboard
+                    and shape_key in self.__metadata_clipboard
+                ):
+                    # Get the values
+                    array_val = self.__metadata_clipboard[array_key]
+                    title_val = self.__metadata_clipboard[title_key]
+                    shape_val = self.__metadata_clipboard[shape_key]
 
-                    new_geometry = create_geometry_result(
-                        title=new_pref + title,
-                        kind=geometry_adapter.geometry.kind,
-                        coords=geometry_adapter.geometry.coords,
-                        roi_indices=geometry_adapter.geometry.roi_indices,
-                        attrs=geometry_adapter.geometry.attrs,
-                    )
-                    new_adapter = GeometryAdapter(new_geometry)
-                    self.__metadata_clipboard.pop(key, None)
-                    # Store the new geometry in clipboard (manually add keys)
-                    prefix = new_adapter.META_PREFIX
-                    title = new_adapter.title
-                    array_key = prefix + title + new_adapter.ARRAY_SUFFIX
-                    title_key = prefix + title + new_adapter.TITLE_SUFFIX
-                    shape_key = prefix + title + new_adapter.SHAPE_SUFFIX
-                    self.__metadata_clipboard[array_key] = new_adapter.array
-                    self.__metadata_clipboard[title_key] = new_adapter.title
-                    self.__metadata_clipboard[shape_key] = new_adapter.shapetype.value
-            except (ValueError, TypeError):
-                pass
+                    # Create new keys with prefix
+                    new_title = prefix + title_val
+                    new_array_key = f"Geometry_{new_title}_array"
+                    new_title_key = f"Geometry_{new_title}_title"
+                    new_shape_key = f"Geometry_{new_title}_shape"
+
+                    # Remove old entries
+                    del self.__metadata_clipboard[array_key]
+                    del self.__metadata_clipboard[title_key]
+                    del self.__metadata_clipboard[shape_key]
+
+                    # Add new entries
+                    self.__metadata_clipboard[new_array_key] = array_val
+                    self.__metadata_clipboard[new_title_key] = new_title
+                    self.__metadata_clipboard[new_shape_key] = shape_val
+
+            except (KeyError, ValueError, IndexError):
+                # If we can't process this geometry result, leave it as is
+                continue
+
+        # Handle table results (similar logic)
+        table_keys = [
+            k
+            for k in self.__metadata_clipboard.keys()
+            if k.startswith("Table_") and k.endswith("_array")
+        ]
+
+        for array_key in table_keys:
+            try:
+                # Extract title from key: "Table_title_array" -> "title"
+                title = array_key[6:-6]  # Remove "Table_" and "_array"
+
+                # Find all related keys for this table result
+                title_key = f"Table_{title}_title"
+
+                if title_key in self.__metadata_clipboard:
+                    # Get the values
+                    array_val = self.__metadata_clipboard[array_key]
+                    title_val = self.__metadata_clipboard[title_key]
+
+                    # Create new keys with prefix
+                    new_title = prefix + title_val
+                    new_array_key = f"Table_{new_title}_array"
+                    new_title_key = f"Table_{new_title}_title"
+
+                    # Remove old entries
+                    del self.__metadata_clipboard[array_key]
+                    del self.__metadata_clipboard[title_key]
+
+                    # Add new entries
+                    self.__metadata_clipboard[new_array_key] = array_val
+                    self.__metadata_clipboard[new_title_key] = new_title
+
+            except (KeyError, ValueError, IndexError):
+                # If we can't process this table result, leave it as is
+                continue
 
     def paste_metadata(self, param: PasteMetadataParam | None = None) -> None:
         """Paste metadata to selected object(s)"""
@@ -688,11 +729,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             metadata[ROI_KEY] = self.__metadata_clipboard[ROI_KEY]
         if param.keep_geometry:
             for key, value in self.__metadata_clipboard.items():
-                if key.startswith("Geometry_") and key.endswith("_array"):
+                if key.startswith("Geometry_"):
                     metadata[key] = value
         if param.keep_tables:
             for key, value in self.__metadata_clipboard.items():
-                if key.startswith("Table_") and key.endswith("_array"):
+                if key.startswith("Table_"):
                     metadata[key] = value
         if param.keep_other:
             for key, value in self.__metadata_clipboard.items():
