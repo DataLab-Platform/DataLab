@@ -24,6 +24,8 @@ from datalab.gui.profiledialog import ProfileExtractionDialog
 from datalab.gui.roigrideditor import ImageGridROIEditor
 from datalab.objectmodel import get_uuid
 from datalab.utils.geometry_transforms import apply_geometry_transform
+from datalab.utils.qthelpers import create_progress_bar, qt_try_except
+from datalab.widgets import imagebackground
 
 
 class GeometricTransformWrapper:
@@ -137,10 +139,6 @@ class GeometricTransformWrapper:
 
                 metadata = ComputationMetadata(**metadata_dict)
                 setattr(self, computation_metadata_attr, metadata)
-
-
-from datalab.utils.qthelpers import create_progress_bar, qt_try_except
-from datalab.widgets import imagebackground
 
 
 class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
