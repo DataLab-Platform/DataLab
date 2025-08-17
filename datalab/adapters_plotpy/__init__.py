@@ -11,8 +11,8 @@ PlotPy to integrate with DataLab's data model and GUI.
 
 from __future__ import annotations
 from datalab.adapters_plotpy.base import (
-    ResultPropertiesPlotPyAdapter,
-    ResultShapePlotPyAdapter,
+    GeometryPlotPyAdapter,
+    TablePlotPyAdapter,
     TypePlotItem,
     json_to_items,
     items_to_json,

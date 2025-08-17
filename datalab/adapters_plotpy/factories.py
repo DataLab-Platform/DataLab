@@ -9,72 +9,34 @@ PlotPy Adapter Factories
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from sigima.objects import (
     CircularROI,
     ImageObj,
     ImageROI,
     PolygonalROI,
     RectangularROI,
-    ResultProperties,
-    ResultShape,
     SegmentROI,
     SignalObj,
     SignalROI,
 )
-
-if TYPE_CHECKING:
-    from datalab.adapters_plotpy.base import (
-        ResultPropertiesPlotPyAdapter,
-        ResultShapePlotPyAdapter,
-    )
-    from datalab.adapters_plotpy.image import (
-        CircularROIPlotPyAdapter,
-        ImageObjPlotPyAdapter,
-        PolygonalROIPlotPyAdapter,
-        RectangularROIPlotPyAdapter,
-    )
-    from datalab.adapters_plotpy.signal import (
-        SegmentROIPlotPyAdapter,
-        SignalObjPlotPyAdapter,
-        SignalROIPlotPyAdapter,
-    )
+from sigima.objects.scalar import GeometryResult, TableResult
 
 
-def create_adapter_from_object(
-    object_to_adapt: ResultProperties
-    | ResultShape
-    | SignalObj
-    | SignalROI
-    | SegmentROI
-    | ImageObj
-    | RectangularROI
-    | CircularROI
-    | PolygonalROI,
-) -> (
-    ResultPropertiesPlotPyAdapter
-    | ResultShapePlotPyAdapter
-    | SignalObjPlotPyAdapter
-    | SignalROIPlotPyAdapter
-    | SegmentROIPlotPyAdapter
-    | ImageObjPlotPyAdapter
-    | RectangularROIPlotPyAdapter
-    | CircularROIPlotPyAdapter
-    | PolygonalROIPlotPyAdapter
-):
+def create_adapter_from_object(object_to_adapt):
     """Create an adapter for the given object to integrate with PlotPy
 
     Args:
-        object_to_adapt: The object to adapt (e.g., SignalObj, ImageObj)
+        object_to_adapt: The object to adapt (signal, image, ROI, or scalar result)
 
     Returns:
         An adapter instance
     """
     # pylint: disable=import-outside-toplevel
+    # Import adapters
+    from datalab.adapters_metadata import GeometryAdapter, TableAdapter
     from datalab.adapters_plotpy.base import (
-        ResultPropertiesPlotPyAdapter,
-        ResultShapePlotPyAdapter,
+        GeometryPlotPyAdapter,
+        TablePlotPyAdapter,
     )
     from datalab.adapters_plotpy.image import (
         CircularROIPlotPyAdapter,
@@ -89,10 +51,17 @@ def create_adapter_from_object(
         SignalROIPlotPyAdapter,
     )
 
-    if isinstance(object_to_adapt, ResultProperties):
-        adapter = ResultPropertiesPlotPyAdapter(object_to_adapt)
-    elif isinstance(object_to_adapt, ResultShape):
-        adapter = ResultShapePlotPyAdapter(object_to_adapt)
+    # Handle GeometryResult and TableResult directly
+    if isinstance(object_to_adapt, GeometryResult):
+        adapter = GeometryPlotPyAdapter(object_to_adapt)
+    elif isinstance(object_to_adapt, TableResult):
+        adapter = TablePlotPyAdapter(object_to_adapt)
+    # Handle adapter objects
+    elif isinstance(object_to_adapt, GeometryAdapter):
+        adapter = GeometryPlotPyAdapter(object_to_adapt.geometry)
+    elif isinstance(object_to_adapt, TableAdapter):
+        adapter = TablePlotPyAdapter(object_to_adapt.table)
+    # Handle signal and image types
     elif isinstance(object_to_adapt, SignalObj):
         adapter = SignalObjPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, SignalROI):

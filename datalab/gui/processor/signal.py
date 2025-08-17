@@ -17,13 +17,12 @@ import sigima.proc.base as sigima_base
 import sigima.proc.signal as sigima_signal
 from guidata.qthelpers import exec_dialog
 from sigima.objects import (
-    ResultProperties,
-    ResultShape,
     ROI1DParam,
     SignalObj,
     SignalROI,
     create_signal,
 )
+from sigima.objects.scalar import GeometryResult, TableResult
 
 from datalab.config import _
 from datalab.gui.processor.base import BaseProcessor
@@ -613,7 +612,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_full_width_at_y(
         self, param: sigima.params.OrdinateParam | None = None
-    ) -> dict[str, ResultShape] | None:
+    ) -> dict[str, GeometryResult] | None:
         """Compute full width at a given y
         with :py:func:`sigima.proc.signal.full_width_at_y`"""
         if param is None:
@@ -629,7 +628,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_x_at_y(
         self, param: sigima_signal.OrdinateParam | None = None
-    ) -> dict[str, ResultProperties] | None:
+    ) -> dict[str, TableResult] | None:
         """Compute x at y with :py:func:`sigima.proc.signal.x_at_y`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
@@ -646,7 +645,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_y_at_x(
         self, param: sigima_signal.AbscissaParam | None = None
-    ) -> dict[str, ResultProperties] | None:
+    ) -> dict[str, TableResult] | None:
         """Compute y at x with :py:func:`sigima.proc.signal.y_at_x`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]

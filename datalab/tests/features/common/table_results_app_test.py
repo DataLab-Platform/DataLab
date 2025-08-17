@@ -29,7 +29,6 @@ def create_image_with_table_results():
         names=["Mean", "Std", "Min", "Max"],
         labels=["Mean", "Standard Deviation", "Minimum", "Maximum"],
         data=np.array([[100.0, 15.5, 50.0, 150.0]]),
-        roi_indices=np.array([-1]),  # Use NO_ROI sentinel value
     )
 
     TableAdapter(table).add_to(image)

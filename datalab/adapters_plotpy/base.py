@@ -40,15 +40,14 @@ from sigima.objects.base import (
     ROI_KEY,
     BaseObj,
     BaseROI,
-    ResultProperties,
-    ResultShape,
-    ShapeTypes,
     TypeObj,
     TypeROI,
     TypeROIParam,
     TypeSingleROI,
     get_generic_roi_title,
+    get_obj_roi_title,
 )
+from sigima.objects.scalar import GeometryResult, KindShape, TableResult
 from sigima.tools import coordinates
 
 from datalab.config import PLOTPY_CONF, Conf
@@ -154,13 +153,13 @@ def json_to_items(json_str: str | None) -> list:
 
 
 class ResultPlotPyAdapter:
-    """Adapter for converting `sigima` result properties or result shape to PlotPy
+    """Adapter for converting `sigima` table or geometry results to PlotPy
 
     Args:
-        result: Result properties or result shape
+        result: Table or geometry result
     """
 
-    def __init__(self, result: ResultProperties | ResultShape) -> None:
+    def __init__(self, result: TableResult | GeometryResult) -> None:
         self.result = result
         self.item_json = ""  # JSON representation of the item
 
@@ -176,6 +175,29 @@ class ResultPlotPyAdapter:
         if item is not None:
             self.item_json = items_to_json([item])
         self.result.set_obj_metadata(obj)
+
+    def __get_text(self, obj: TypeObj) -> str:
+        """Return text representation of result"""
+        res = self.result
+        text = ""
+        for i_row in range(res.array.shape[0]):
+            suffix = ""
+            i_roi = i_row - 1
+            if i_roi >= 0:
+                suffix = f"|{get_obj_roi_title(obj, i_roi)}"
+            text += f"<u>{res.title}{suffix}</u>:"
+            for i_col, label in res.label_contents:
+                # "label" may contains "<" and ">" characters which are interpreted
+                # as HTML tags by the LabelItem. We must escape them.
+                label = label.replace("<", "&lt;").replace(">", "&gt;")
+                if "%" not in label:
+                    label += " = %g"
+                text += (
+                    "<br>" + label.strip().format(obj) % res.shown_array[i_row, i_col]
+                )
+            if i_row < res.shown_array.shape[0] - 1:
+                text += "<br><br>"
+        return text
 
     def create_label_item(self, obj: BaseObj) -> LabelItem | None:
         """Create label item
@@ -193,7 +215,7 @@ class ResultPlotPyAdapter:
             filled with the object properties. For instance, the label text may contain
             the signal or image units.
         """
-        text = self.result.get_text(obj)
+        text = self.__get_text(obj)
         item = make.label(text, "TL", (0, 0), "TL", title=self.result.title)
         font = get_font(PLOTPY_CONF, "properties", "label/font")
         item.set_style("properties", "label")
@@ -228,33 +250,33 @@ class ResultPlotPyAdapter:
         return None
 
 
-class ResultPropertiesPlotPyAdapter(ResultPlotPyAdapter):
-    """Adapter for converting `sigima` result properties to PlotPy
+class TablePlotPyAdapter(ResultPlotPyAdapter):
+    """Adapter for converting `sigima` table results to PlotPy
 
     Args:
-        result: Result properties
+        result: Table result
 
     Raises:
         AssertionError: invalid argument
     """
 
-    def __init__(self, result: ResultProperties) -> None:
-        assert isinstance(result, ResultProperties)
+    def __init__(self, result: TableResult) -> None:
+        assert isinstance(result, TableResult)
         super().__init__(result)
 
 
-class ResultShapePlotPyAdapter(ResultPlotPyAdapter):
-    """Adapter for converting `sigima` result shapes to PlotPy
+class GeometryPlotPyAdapter(ResultPlotPyAdapter):
+    """Adapter for converting `sigima` geometry results to PlotPy
 
     Args:
-        result: Result shape
+        result: Geometry result
 
     Raises:
         AssertionError: invalid argument
     """
 
-    def __init__(self, result: ResultShape) -> None:
-        assert isinstance(result, ResultShape)
+    def __init__(self, result: GeometryResult) -> None:
+        assert isinstance(result, GeometryResult)
         super().__init__(result)
 
     def create_label_item(self, obj: BaseObj) -> LabelItem | None:
@@ -263,7 +285,7 @@ class ResultShapePlotPyAdapter(ResultPlotPyAdapter):
         Returns:
             Label item
         """
-        if self.result.shapetype is ShapeTypes.SEGMENT:
+        if self.result.kind is KindShape.SEGMENT:
             # Add a label item for the segment shape
             return super().create_label_item(obj)
         return None
@@ -307,10 +329,10 @@ class ResultShapePlotPyAdapter(ResultPlotPyAdapter):
         Returns:
             Plot item
         """
-        if self.result.shapetype is ShapeTypes.MARKER:
+        if self.result.kind is KindShape.MARKER:
             x0, y0 = coords
             item = self.__make_marker_item(x0, y0, fmt)
-        elif self.result.shapetype is ShapeTypes.POINT:
+        elif self.result.kind is KindShape.POINT:
             x0, y0 = coords
             item = AnnotatedPoint(x0, y0)
             sparam: ShapeParam = item.shape.shapeparam
@@ -322,28 +344,31 @@ class ResultShapePlotPyAdapter(ResultPlotPyAdapter):
             aparam.title = self.result.title
             sparam.update_item(item.shape)
             aparam.update_item(item)
-        elif self.result.shapetype is ShapeTypes.RECTANGLE:
+        elif self.result.kind is KindShape.RECTANGLE:
             x0, y0, x1, y1 = coords
             item = make.annotated_rectangle(x0, y0, x1, y1, title=self.result.title)
-        elif self.result.shapetype is ShapeTypes.CIRCLE:
+        elif self.result.kind is KindShape.CIRCLE:
             xc, yc, r = coords
             x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
             item = make.annotated_circle(x0, y0, x1, y1, title=self.result.title)
-        elif self.result.shapetype is ShapeTypes.SEGMENT:
+        elif self.result.kind is KindShape.SEGMENT:
             x0, y0, x1, y1 = coords
             item = make.annotated_segment(x0, y0, x1, y1, title=self.result.title)
-        elif self.result.shapetype is ShapeTypes.ELLIPSE:
+        elif self.result.kind is KindShape.ELLIPSE:
             xc, yc, a, b, t = coords
             coords = coordinates.ellipse_to_diameters(xc, yc, a, b, t)
             x0, y0, x1, y1, x2, y2, x3, y3 = coords
             item = make.annotated_ellipse(
                 x0, y0, x1, y1, x2, y2, x3, y3, title=self.result.title
             )
-        elif self.result.shapetype is ShapeTypes.POLYGON:
+        elif self.result.kind is KindShape.POLYGON:
             x, y = coords[::2], coords[1::2]
             item = make.polygon(x, y, title=self.result.title, closed=False)
         else:
-            print(f"Warning: unsupported item {self.result.shapetype}", file=sys.stderr)
+            print(
+                f"Warning: unsupported geometry kind {self.result.kind}",
+                file=sys.stderr,
+            )
             return None
         if isinstance(item, AnnotatedShape):
             config_annotated_shape(item, fmt, lbl, "results", option)
@@ -600,11 +625,21 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
                     yield from create_adapter_from_object(roi).iterate_roi_items(
                         self.obj, fmt=fmt, lbl=lbl, editable=False
                     )
-            elif ResultShape.match(key, value):
-                mshape: ResultShape = ResultShape.from_metadata_entry(key, value)
-                yield from create_adapter_from_object(mshape).iterate_plot_items(
-                    fmt, lbl, self.obj.PREFIX
-                )
+            # Process geometry results from metadata (using GeometryAdapter)
+            elif key.startswith("Geometry_") and key.endswith("_array"):
+                from datalab.adapters_metadata import GeometryAdapter
+
+                try:
+                    geometry_adapter = GeometryAdapter.from_metadata_entry(
+                        self.obj, key
+                    )
+                    geometry_result = geometry_adapter.geometry
+                    yield from create_adapter_from_object(
+                        geometry_result
+                    ).iterate_plot_items(fmt, lbl, self.obj.PREFIX)
+                except (ValueError, TypeError):
+                    # Skip invalid entries
+                    pass
         if self.obj.annotations:
             try:
                 for item in json_to_items(self.obj.annotations):

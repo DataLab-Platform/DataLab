@@ -22,8 +22,8 @@ from datalab.adapters_metadata import GeometryAdapter
 from datalab.tests import datalab_test_app_context
 
 
-def create_image_with_resultshapes() -> sigima.objects.ImageObj:
-    """Create test image with resultshapes"""
+def create_image_with_geometry_results() -> sigima.objects.ImageObj:
+    """Create test image with geometry results"""
     param = sigima.objects.Gauss2DParam.create(
         height=600,
         width=600,
@@ -102,11 +102,11 @@ def __check_roi_merge(
         assert roi1.get_single_roi(0) == single_roi2
 
 
-def test_geometry_and_roi_merging() -> None:
-    """Result shapes test"""
-    with datalab_test_app_context(console=False) as win:
+def test_geometry_results() -> None:
+    """Geometry results test"""
+    with datalab_test_app_context() as win:
         obj1 = test_data.create_sincos_image()
-        obj2 = create_image_with_resultshapes()
+        obj2 = create_image_with_geometry_results()
         obj2.roi = sigima.objects.create_image_roi("rectangle", [10, 10, 50, 400])
         panel = win.signalpanel
         for noised in (False, True):
@@ -136,4 +136,4 @@ def test_geometry_and_roi_merging() -> None:
 
 
 if __name__ == "__main__":
-    test_geometry_and_roi_merging()
+    test_geometry_results()

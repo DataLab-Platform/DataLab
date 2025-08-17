@@ -15,13 +15,130 @@ import sigima.proc.image as sigima_image
 from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
-from sigima.objects import ImageROI, ResultShape, ROI2DParam
+from sigima.objects import ImageROI, ROI2DParam
+from sigima.objects.scalar import GeometryResult
 
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
 from datalab.gui.profiledialog import ProfileExtractionDialog
 from datalab.gui.roigrideditor import ImageGridROIEditor
 from datalab.objectmodel import get_uuid
+from datalab.utils.geometry_transforms import apply_geometry_transform
+
+
+class GeometricTransformWrapper:
+    """Pickleable wrapper for geometric transformation functions.
+
+    This class creates a callable wrapper that can be pickled, unlike nested functions.
+    Instead of storing the function directly, it stores the module path and function
+    name to allow proper pickling.
+    """
+
+    def __init__(self, func, operation: str):
+        self.operation = operation
+
+        # Store function reference for execution
+        self.func = func
+
+        # Store function module and name for pickling
+        self.__module__ = func.__module__
+        self.__qualname__ = func.__qualname__
+        self.__annotations__ = getattr(func, "__annotations__", {})
+        self.__name__ = getattr(func, "__name__", str(func))
+
+        # Copy the __wrapped__ attribute if it exists (for Sigima compatibility)
+        # Note: We don't copy __wrapped__ as it may contain unpickleable references
+        # The wrapper functionality will still work without it
+
+        # Copy Sigima computation metadata (required for validation)
+        computation_metadata_attr = "__computation_function_metadata"
+        if hasattr(func, computation_metadata_attr):
+            setattr(
+                self,
+                computation_metadata_attr,
+                getattr(func, computation_metadata_attr),
+            )
+
+    def __call__(self, src_obj, param=None):
+        """Call the wrapped function and apply geometry transformations."""
+        # Call the original function
+        if param is not None:
+            dst_obj = self.func(src_obj, param)
+        else:
+            dst_obj = self.func(src_obj)
+
+        # Apply geometry transformation to any geometry results
+        if hasattr(dst_obj, "iterate_geometry_results"):
+            # Apply geometry transformation based on operation type
+            if self.operation == "rotate90":
+                apply_geometry_transform(dst_obj, "rotate_90", None)
+            elif self.operation == "rotate270":
+                apply_geometry_transform(dst_obj, "rotate_270", None)
+            elif self.operation == "fliph":
+                apply_geometry_transform(dst_obj, "hflip", None)
+            elif self.operation == "flipv":
+                apply_geometry_transform(dst_obj, "vflip", None)
+            elif self.operation == "rotate" and param:
+                # For custom rotation, we need to apply rotation with angle
+                apply_geometry_transform(dst_obj, "rotate", {"angle": param.angle})
+            elif self.operation == "swap_axes":
+                # For diagonal flip/transpose
+                apply_geometry_transform(dst_obj, "transpose", None)
+
+        return dst_obj
+
+    def __getstate__(self):
+        """Custom pickling: exclude the function reference."""
+        # Build state manually to avoid any problematic attributes
+        state = {
+            "operation": self.operation,
+            "__module__": self.__module__,
+            "__qualname__": self.__qualname__,
+            "__annotations__": self.__annotations__,
+            "__name__": self.__name__,
+        }
+
+        # Store function information for reconstruction
+        if hasattr(self, "func"):
+            state["_func_module"] = self.func.__module__
+            state["_func_name"] = self.func.__name__
+
+        # Note: We don't copy __wrapped__ as it may contain unpickleable references
+
+        # Copy computation metadata safely
+        computation_metadata_attr = "__computation_function_metadata"
+        if hasattr(self, computation_metadata_attr):
+            metadata = getattr(self, computation_metadata_attr)
+            # Store as a dict to avoid any pickling issues with the object itself
+            if hasattr(metadata, "__dict__"):
+                state[computation_metadata_attr] = metadata.__dict__.copy()
+            else:
+                state[computation_metadata_attr] = metadata
+
+        return state
+
+    def __setstate__(self, state):
+        """Custom unpickling: restore the function reference."""
+        self.__dict__.update(state)
+        # Restore function from module and name
+        if "_func_module" in state and "_func_name" in state:
+            import importlib
+
+            module = importlib.import_module(state["_func_module"])
+            self.func = getattr(module, state["_func_name"])
+
+        # Reconstruct computation metadata if it was stored as dict
+        computation_metadata_attr = "__computation_function_metadata"
+        if computation_metadata_attr in state:
+            metadata_dict = state[computation_metadata_attr]
+            if isinstance(metadata_dict, dict):
+                # Import the ComputationMetadata class and reconstruct
+                from sigima.proc.decorator import ComputationMetadata
+
+                metadata = ComputationMetadata(**metadata_dict)
+                setattr(self, computation_metadata_attr, metadata)
+
+
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets import imagebackground
 
@@ -30,6 +147,18 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     """Object handling image processing: operations, processing, analysis"""
 
     # pylint: disable=duplicate-code
+
+    def _wrap_geometric_transform(self, func, operation: str):
+        """Wrap a geometric transformation function to apply geometry transforms.
+
+        Args:
+            func: The original Sigima function
+            operation: The operation name for geometry transformation
+
+        Returns:
+            Pickleable wrapped function that applies geometry transformations
+        """
+        return GeometricTransformWrapper(func, operation)
 
     def register_computations(self) -> None:
         """Register image computations"""
@@ -117,32 +246,32 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
         # Flip or rotation
         self.register_1_to_1(
-            sigima_image.fliph,
+            self._wrap_geometric_transform(sigima_image.fliph, "fliph"),
             _("Flip horizontally"),
             icon_name="flip_horizontally.svg",
         )
         self.register_1_to_1(
-            sigima_image.swap_axes,
+            self._wrap_geometric_transform(sigima_image.swap_axes, "swap_axes"),
             _("Flip diagonally"),
             icon_name="swap_x_y.svg",
         )
         self.register_1_to_1(
-            sigima_image.flipv,
+            self._wrap_geometric_transform(sigima_image.flipv, "flipv"),
             _("Flip vertically"),
             icon_name="flip_vertically.svg",
         )
         self.register_1_to_1(
-            sigima_image.rotate270,
+            self._wrap_geometric_transform(sigima_image.rotate270, "rotate270"),
             _("Rotate %s right") % "90°",
             icon_name="rotate_right.svg",
         )
         self.register_1_to_1(
-            sigima_image.rotate90,
+            self._wrap_geometric_transform(sigima_image.rotate90, "rotate90"),
             _("Rotate %s left") % "90°",
             icon_name="rotate_left.svg",
         )
         self.register_1_to_1(
-            sigima_image.rotate,
+            self._wrap_geometric_transform(sigima_image.rotate, "rotate"),
             _("Rotate by..."),
             sigima_image.RotateParam,
         )
@@ -677,13 +806,14 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                     obj.x0 += delta_x0
                     obj.y0 += delta_y0
 
-                    # pylint: disable=unused-argument
-                    def translate_coords(obj, orig, coords):
-                        """Apply translation to coords"""
-                        coords[:, ::2] += delta_x0
-                        coords[:, 1::2] += delta_y0
+                    # Apply translation to geometry results
+                    from datalab.utils.geometry_transforms import (
+                        apply_geometry_transform,
+                    )
 
-                    obj.transform_shapes(None, translate_coords)
+                    apply_geometry_transform(
+                        obj, "translate", {"dx": delta_x0, "dy": delta_y0}
+                    )
                 if param.direction == "row":
                     # Distributing images over rows
                     sign = np.sign(param.rows)
@@ -718,13 +848,14 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 obj.x0 += delta_x0
                 obj.y0 += delta_y0
 
-                # pylint: disable=unused-argument
-                def translate_coords(obj, orig, coords):
-                    """Apply translation to coords"""
-                    coords[:, ::2] += delta_x0
-                    coords[:, 1::2] += delta_y0
+                # Apply translation to geometry results
+                from datalab.utils.geometry_transforms import (
+                    apply_geometry_transform,
+                )
 
-                obj.transform_shapes(None, translate_coords)
+                apply_geometry_transform(
+                    obj, "translate", {"dx": delta_x0, "dy": delta_y0}
+                )
         self.panel.refresh_plot("selected", True, False)
 
     # ------Image Processing
@@ -919,7 +1050,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     @qt_try_except()
     def compute_peak_detection(
         self, param: sigima.params.Peak2DDetectionParam | None = None
-    ) -> dict[str, ResultShape]:
+    ) -> dict[str, GeometryResult]:
         """Compute 2D peak detection
         with :py:func:`sigima.proc.image.peak_detection`"""
         edit, param = self.init_param(

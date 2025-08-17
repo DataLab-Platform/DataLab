@@ -39,6 +39,7 @@ from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj, TypeObj
 
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.adapters_plotpy import TypePlotItem
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.config import Conf, _
@@ -160,8 +161,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         if obj.metadata:
             obj_adapter = create_adapter_from_object(obj)
             items = list(obj_adapter.iterate_shape_items(editable=False))
-            results = list(obj.iterate_resultproperties()) + list(
-                obj.iterate_resultshapes()
+            results = list(TableAdapter.iterate_from_obj(obj)) + list(
+                GeometryAdapter.iterate_from_obj(obj)
             )
             for result in results:
                 result_adapter = create_adapter_from_object(result)

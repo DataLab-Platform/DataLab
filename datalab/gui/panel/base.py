@@ -39,9 +39,6 @@ from sigima.io import read_metadata, read_roi, write_metadata, write_roi
 from sigima.objects import (
     ImageObj,
     NewImageParam,
-    ResultProperties,
-    ResultShape,
-    ShapeTypes,
     SignalObj,
     TypeObj,
     TypeROI,
@@ -50,6 +47,7 @@ from sigima.objects import (
 from sigima.objects.base import ROI_KEY, get_obj_roi_title
 
 from datalab import objectmodel
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.adapters_plotpy.base import items_to_json
 from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.config import APP_NAME, Conf, _
@@ -83,7 +81,7 @@ if TYPE_CHECKING:
     from datalab.h5.native import NativeH5Reader, NativeH5Writer
 
 
-def is_plot_item_serializable(item: ShapeTypes) -> bool:
+def is_plot_item_serializable(item: Any) -> bool:
     """Return True if plot item is serializable"""
     try:
         plotpy.io.item_class_from_name(item.__class__.__name__)
@@ -230,7 +228,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
 class ResultData:
     """Result data associated to a shapetype"""
 
-    results: list[ResultShape | ResultProperties] = None
+    # We now store adapted objects from the new architecture
+    results: list = None
     xlabels: list[str] = None
     ylabels: list[str] = None
 
@@ -248,12 +247,30 @@ def create_resultdata_dict(
     """
     rdatadict: dict[str, ResultData] = {}
     for obj in objs:
-        for result in list(obj.iterate_resultshapes()) + list(
-            obj.iterate_resultproperties()
-        ):
-            rdata = rdatadict.setdefault(result.category, ResultData([], None, []))
+        # Get geometry results (adapters for GeometryResult objects)
+        for result in list(GeometryAdapter.iterate_from_obj(obj)):
+            # Use "shape" with shapetype as category for geometry results
+            category = f"shape_{result.shapetype.value}"
+            rdata = rdatadict.setdefault(category, ResultData([], None, []))
             rdata.results.append(result)
+            # Headers depend on the type of geometry - use actual headers from adapter
             rdata.xlabels = result.headers
+            for i_row_res in range(result.array.shape[0]):
+                ylabel = f"{result.title}({get_short_id(obj)})"
+                i_roi = int(result.array[i_row_res, 0])
+                roititle = ""
+                if i_roi >= 0:
+                    roititle = get_obj_roi_title(obj, i_roi)
+                    ylabel += f"|{roititle}"
+                rdata.ylabels.append(ylabel)
+
+        # Get table results (adapters for TableResult objects)
+        for result in list(TableAdapter.iterate_from_obj(obj)):
+            # Use title as category for table results
+            category = result.title
+            rdata = rdatadict.setdefault(category, ResultData([], None, []))
+            rdata.results.append(result)
+            rdata.xlabels = result.headers if hasattr(result, "headers") else []
             for i_row_res in range(result.array.shape[0]):
                 ylabel = f"{result.title}({get_short_id(obj)})"
                 i_roi = int(result.array[i_row_res, 0])
@@ -269,10 +286,8 @@ class PasteMetadataParam(gds.DataSet):
     """Paste metadata parameters"""
 
     keep_roi = gds.BoolItem(_("Regions of interest"), default=True)
-    keep_resultshapes = gds.BoolItem(_("Result shapes"), default=False).set_pos(col=1)
-    keep_resultproperties = gds.BoolItem(_("Result properties"), default=False).set_pos(
-        col=1
-    )
+    keep_geometry = gds.BoolItem(_("Geometry results"), default=False).set_pos(col=1)
+    keep_tables = gds.BoolItem(_("Table results"), default=False).set_pos(col=1)
     keep_other = gds.BoolItem(_("Other metadata"), default=True)
 
 
@@ -604,19 +619,56 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj = self.objview.get_sel_objects()[0]
         self.__metadata_clipboard = obj.metadata.copy()
         new_pref = get_short_id(obj) + "_"
+
+        # First, collect all geometry metadata entries to process
+        geometry_entries = []
         for key, value in obj.metadata.items():
-            if ResultShape.match(key, value):
-                mshape = ResultShape.from_metadata_entry(key, value)
-                if not re.match(obj.PREFIX + r"[0-9]{3}[\s]*", mshape.title):
+            # Check if this is a geometry result metadata entry
+            if key.startswith("Geometry_") and key.endswith("_array"):
+                geometry_entries.append(key)
+
+        # Process each geometry entry
+        for key in geometry_entries:
+            try:
+                geometry_adapter = GeometryAdapter.from_metadata_entry(obj, key)
+                title = geometry_adapter.title
+                if not re.match(obj.PREFIX + r"[0-9]{3}[\s]*", title):
                     # Handling additional result (e.g. diameter)
+                    # Collect keys to update
+                    keys_to_update = []
                     for a_key, a_value in obj.metadata.items():
-                        if isinstance(a_key, str) and a_key.startswith(mshape.title):
-                            self.__metadata_clipboard.pop(a_key)
-                            self.__metadata_clipboard[new_pref + a_key] = a_value
-                    mshape.title = new_pref + mshape.title
-                    # Handling result shape
-                    self.__metadata_clipboard.pop(key)
-                    self.__metadata_clipboard[mshape.key] = value
+                        if isinstance(a_key, str) and a_key.startswith(title):
+                            keys_to_update.append((a_key, a_value))
+
+                    # Update the clipboard
+                    for a_key, a_value in keys_to_update:
+                        self.__metadata_clipboard.pop(a_key, None)
+                        self.__metadata_clipboard[new_pref + a_key] = a_value
+
+                    # Update title and store back in clipboard
+                    # Create new GeometryResult with updated title (frozen)
+                    from datalab.adapters_metadata.legacy import create_geometry_result
+
+                    new_geometry = create_geometry_result(
+                        title=new_pref + title,
+                        kind=geometry_adapter.geometry.kind,
+                        coords=geometry_adapter.geometry.coords,
+                        roi_indices=geometry_adapter.geometry.roi_indices,
+                        attrs=geometry_adapter.geometry.attrs,
+                    )
+                    new_adapter = GeometryAdapter(new_geometry)
+                    self.__metadata_clipboard.pop(key, None)
+                    # Store the new geometry in clipboard (manually add keys)
+                    prefix = new_adapter.META_PREFIX
+                    title = new_adapter.title
+                    array_key = prefix + title + new_adapter.ARRAY_SUFFIX
+                    title_key = prefix + title + new_adapter.TITLE_SUFFIX
+                    shape_key = prefix + title + new_adapter.SHAPE_SUFFIX
+                    self.__metadata_clipboard[array_key] = new_adapter.array
+                    self.__metadata_clipboard[title_key] = new_adapter.title
+                    self.__metadata_clipboard[shape_key] = new_adapter.shapetype.value
+            except (ValueError, TypeError):
+                pass
 
     def paste_metadata(self, param: PasteMetadataParam | None = None) -> None:
         """Paste metadata to selected object(s)"""
@@ -634,19 +686,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         metadata = {}
         if param.keep_roi and ROI_KEY in self.__metadata_clipboard:
             metadata[ROI_KEY] = self.__metadata_clipboard[ROI_KEY]
-        if param.keep_resultshapes:
+        if param.keep_geometry:
             for key, value in self.__metadata_clipboard.items():
-                if ResultShape.match(key, value):
+                if key.startswith("Geometry_") and key.endswith("_array"):
                     metadata[key] = value
-        if param.keep_resultproperties:
+        if param.keep_tables:
             for key, value in self.__metadata_clipboard.items():
-                if ResultProperties.match(key, value):
+                if key.startswith("Table_") and key.endswith("_array"):
                     metadata[key] = value
         if param.keep_other:
             for key, value in self.__metadata_clipboard.items():
                 if (
-                    not ResultShape.match(key, value)
-                    and not ResultProperties.match(key, value)
+                    not key.startswith("Geometry_")
+                    and not key.startswith("Table_")
                     and key not in (ROI_KEY,)
                 ):
                     metadata[key] = value
@@ -1522,7 +1574,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         ychoices = xchoices[1:]
 
         # Regrouping ResultShape results by their `title` attribute:
-        grouped_results: dict[str, list[ResultShape]] = {}
+        grouped_results = {}
         for result in rdata.results:
             grouped_results.setdefault(result.title, []).append(result)
 
@@ -1609,7 +1661,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                             x.append(result.shown_array[mask, i_xaxis][0])
                         y.append(result.shown_array[mask, i_yaxis][0])
                     if i_roi >= 0:
-                        roi_suffix = f"|{get_obj_roi_title(obj, i_roi)}"
+                        roi_suffix = f"|{get_obj_roi_title(obj, int(i_roi))}"
                     self.__add_result_signal(
                         x, y, f"{title}{roi_suffix}", param.xaxis, param.yaxis
                     )
@@ -1623,7 +1675,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     for i_roi in roi_idx:  # ROI
                         roi_suffix = ""
                         if i_roi >= 0:
-                            roi_suffix = f"|{get_obj_roi_title(obj, i_roi)}"
+                            roi_suffix = f"|{get_obj_roi_title(obj, int(i_roi))}"
                         mask = result.array[:, 0] == i_roi
                         if param.xaxis == "indices":
                             x = np.arange(result.array.shape[0])[mask]
@@ -1647,6 +1699,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def delete_results(self) -> None:
         """Delete results"""
+        from datalab.services.results_manager import ResultsManager
+
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
@@ -1662,7 +1716,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if answer == QW.QMessageBox.Yes:
                 objs = self.objview.get_sel_objects(include_groups=True)
                 for obj in objs:
-                    obj.delete_results()
+                    ResultsManager.delete_results(obj)
                 self.refresh_plot("selected", True, False)
         else:
             self.__show_no_result_warning()

@@ -39,7 +39,7 @@ if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
 
     from plotpy.plot import PlotWidget
-    from sigima.objects import ResultProperties, ResultShape
+    from sigima.objects.scalar import GeometryResult, TableResult
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
@@ -327,7 +327,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     def handle_output(
         self, compout: CompOut, context: str, progress: QW.QProgressDialog
-    ) -> SignalObj | ImageObj | ResultShape | ResultProperties | None:
+    ) -> SignalObj | ImageObj | GeometryResult | TableResult | None:
         """Handle computation output: if error, display error message,
         if warning, display warning message.
 
@@ -337,7 +337,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             progress: progress dialog
 
         Returns:
-            Output object: a signal or image object, or a result shape object,
+            Output object: a signal or image object, or a geometry/table result object,
              or None if error
         """
         if compout.error_msg or compout.warning_msg:
@@ -352,7 +352,113 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             progress.setMinimumDuration(mindur)
             if compout.error_msg:
                 return None
-        return compout.result
+        result = compout.result
+
+        # Convert raw GeometryResult/TableResult to enhanced version for legacy
+        # compatibility
+        if result is not None:
+            from sigima.objects.scalar import GeometryResult, TableResult
+
+            if isinstance(result, GeometryResult):
+                from datalab.adapters_metadata.legacy import (
+                    EnhancedGeometryResult,
+                    create_geometry_result,
+                )
+
+                if not isinstance(result, EnhancedGeometryResult):
+                    # Convert raw GeometryResult to enhanced version
+                    result = create_geometry_result(
+                        title=result.title,
+                        kind=result.kind,
+                        coords=result.coords,
+                        roi_indices=result.roi_indices,
+                        attrs=result.attrs,
+                    )
+            elif isinstance(result, TableResult):
+                from datalab.adapters_metadata.legacy import (
+                    EnhancedTableResult,
+                    create_table_result,
+                )
+
+                if not isinstance(result, EnhancedTableResult):
+                    # Convert raw TableResult to enhanced version
+                    result = create_table_result(
+                        title=result.title,
+                        names=result.names,
+                        labels=result.labels,
+                        data=result.data,
+                        roi_indices=result.roi_indices,
+                        attrs=result.attrs,
+                    )
+
+        return result
+
+    def _merge_geometry_results_for_n_to_1(
+        self, result_obj: SignalObj | ImageObj, src_obj_list: list[SignalObj | ImageObj]
+    ) -> None:
+        """Merge geometry results from source objects into the result object.
+
+        This method handles geometry result merging for n_to_1 operations when
+        keep_results is enabled, providing a clean alternative to monkey patching.
+
+        Args:
+            result_obj: The result object from the computation
+            src_obj_list: The list of source objects used in the computation
+        """
+        try:
+            from sigima.config import options
+            from sigima.objects.scalar import concat_geometries
+
+            from datalab.adapters_metadata import GeometryAdapter
+        except ImportError:
+            # If imports fail, skip merging
+            return
+
+        # Only merge if keep_results is enabled and we have multiple source objects
+        if not options.keep_results.get() or len(src_obj_list) <= 1:
+            return
+
+        # Group geometry results by title for merging
+        geometry_by_title = {}
+
+        # Collect all geometry results from all source objects
+        for src_obj in src_obj_list:
+            for geom_adapter in GeometryAdapter.iterate_from_obj(src_obj):
+                title = geom_adapter.title
+                if title not in geometry_by_title:
+                    geometry_by_title[title] = []
+                geometry_by_title[title].append(geom_adapter.geometry)
+
+        # Only proceed if we have geometry results to merge
+        if not geometry_by_title:
+            return
+
+        # Remove any existing geometry results from the result object
+        result_keys_to_remove = []
+        for key in result_obj.metadata.keys():
+            if GeometryAdapter.match(key, result_obj.metadata[key]):
+                result_keys_to_remove.append(key)
+
+        for key in result_keys_to_remove:
+            base_key = key[: -len(GeometryAdapter.ARRAY_SUFFIX)]
+            result_obj.metadata.pop(key, None)
+            result_obj.metadata.pop(f"{base_key}{GeometryAdapter.TITLE_SUFFIX}", None)
+            result_obj.metadata.pop(f"{base_key}{GeometryAdapter.SHAPE_SUFFIX}", None)
+            result_obj.metadata.pop(
+                f"{base_key}{GeometryAdapter.ADDLABEL_SUFFIX}", None
+            )
+
+        # Merge and add back concatenated geometry results
+        for title, geometries in geometry_by_title.items():
+            if len(geometries) > 1:
+                # Concatenate multiple geometry results
+                merged_geometry = concat_geometries(title, geometries)
+                adapter = GeometryAdapter(merged_geometry)
+                adapter.add_to(result_obj)
+            elif len(geometries) == 1:
+                # Just one geometry result, add it
+                adapter = GeometryAdapter(geometries[0])
+                adapter.add_to(result_obj)
 
     def __exec_func(
         self,
@@ -633,7 +739,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
-    ) -> dict[str, ResultShape | ResultProperties]:
+    ) -> dict[str, GeometryResult | TableResult]:
         """Generic processing method: 1 object in → no object out.
 
         Applies a function to each selected object, returning metadata or measurement
@@ -652,7 +758,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit: Whether to open the parameter editor before execution.
 
         Returns:
-            Dictionary mapping each object UUID to a ResultShape or ResultProperties
+            Dictionary mapping each object UUID to a GeometryResult or TableResult
             instance.
 
         .. note::
@@ -671,7 +777,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            results: dict[str, ResultShape | ResultProperties] = {}
+            results: dict[str, GeometryResult | TableResult] = {}
             xlabels = None
             ylabels = []
             for idx, obj in enumerate(objs):
@@ -802,6 +908,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         break
+                    # Handle geometry result merging for n_to_1 operations (pairwise)
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
                     patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
                     self.panel.add_object(new_obj, group_id=dst_gid)
 
@@ -842,6 +951,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         break
+                    # Handle geometry result merging for n_to_1 operations
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
                     group_id = dst_gid if dst_gid is not None else src_gid
                     patch_title_with_ids(new_obj, src_obj_list, get_short_id)
                     self.panel.add_object(new_obj, group_id=group_id)
@@ -1205,7 +1317,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     @qt_try_except()
     def run_feature(
         self, key: str | Callable | ComputingFeature, *args, **kwargs
-    ) -> dict[str, ResultShape | ResultProperties] | None:
+    ) -> dict[str, GeometryResult | TableResult] | None:
         """Run a computing feature that has been previously registered.
 
         This method is a generic dispatcher for all compute methods.
