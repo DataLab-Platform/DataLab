@@ -240,13 +240,13 @@ class TableAdapter:
                 headers=headers,
                 roi_indices=roi_indices,
             )
-            return cls(table)
-        # Create empty TableResult
-        table = create_table_result(
-            title=title,
-            data=np.zeros((0, len(headers)), dtype=float),
-            headers=headers,
-        )
+        else:
+            # Create empty TableResult
+            table = create_table_result(
+                title=title,
+                data=np.zeros((0, len(headers)), dtype=float),
+                headers=headers,
+            )
         return cls(table)
 
     @classmethod

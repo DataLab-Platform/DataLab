@@ -1,3 +1,5 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
 """
 Adapters for PlotPy
 ===================
@@ -6,32 +8,49 @@ The :mod:`datalab.adapters_plotpy` package provides adapters for
 PlotPy to integrate with DataLab's data model and GUI.
 """
 
-# pylint: disable=unused-import
-# flake8: noqa
+__all__ = [
+    "GeometryPlotPyAdapter",
+    "TablePlotPyAdapter",
+    "TypePlotItem",
+    "json_to_items",
+    "items_to_json",
+    "configure_roi_item",
+    "TypeROIItem",
+    "create_adapter_from_object",
+    "plotitem_to_singleroi",
+    "singleroi_to_plotitem",
+    "CircularROIPlotPyAdapter",
+    "ImageObjPlotPyAdapter",
+    "PolygonalROIPlotPyAdapter",
+    "RectangularROIPlotPyAdapter",
+    "SegmentROIPlotPyAdapter",
+    "SignalObjPlotPyAdapter",
+    "SignalROIPlotPyAdapter",
+]
 
-from __future__ import annotations
-from datalab.adapters_plotpy.base import (
+
+from .base import (
     GeometryPlotPyAdapter,
     TablePlotPyAdapter,
     TypePlotItem,
-    json_to_items,
-    items_to_json,
-    configure_roi_item,
     TypeROIItem,
+    configure_roi_item,
+    items_to_json,
+    json_to_items,
 )
-from datalab.adapters_plotpy.image import (
+from .converters import (
+    create_adapter_from_object,
+    plotitem_to_singleroi,
+    singleroi_to_plotitem,
+)
+from .image import (
     CircularROIPlotPyAdapter,
     ImageObjPlotPyAdapter,
     PolygonalROIPlotPyAdapter,
     RectangularROIPlotPyAdapter,
 )
-from datalab.adapters_plotpy.signal import (
+from .signal import (
     SegmentROIPlotPyAdapter,
     SignalObjPlotPyAdapter,
     SignalROIPlotPyAdapter,
-)
-from datalab.adapters_plotpy.converters import (
-    create_adapter_from_object,
-    plotitem_to_singleroi,
-    singleroi_to_plotitem,
 )

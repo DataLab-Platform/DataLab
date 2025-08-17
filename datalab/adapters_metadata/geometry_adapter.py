@@ -270,39 +270,26 @@ class GeometryAdapter:
         if shape_key in obj.metadata:
             shape_value = obj.metadata[shape_key]
 
-        # Create GeometryResult from the data
-        roi_indices = array[:, 0].astype(int)
-        coords = array[:, 1:]
-
-        from datalab.adapters_metadata.legacy import create_geometry_result
-
-        geometry = create_geometry_result(
-            title=title,
-            kind=shape_value,
-            coords=coords,
-            roi_indices=roi_indices,
-        )
-
-        return cls(geometry)
         if array.size > 0:
-            # Extract ROI indices
+            # Create GeometryResult from the data
             roi_indices = array[:, 0].astype(int)
             coords = array[:, 1:]
 
-            # Create GeometryResult
+            from datalab.adapters_metadata.legacy import create_geometry_result
+
             geometry = create_geometry_result(
                 title=title,
-                kind=KindShape(shape_value),
+                kind=shape_value,
                 coords=coords,
                 roi_indices=roi_indices,
             )
-            return cls(geometry)
-        # Create empty GeometryResult
-        geometry = create_geometry_result(
-            title=title,
-            kind=KindShape(shape_value),
-            coords=np.zeros((0, 2), dtype=float),
-        )
+        else:
+            # Create empty GeometryResult
+            geometry = create_geometry_result(
+                title=title,
+                kind=KindShape(shape_value),
+                coords=np.zeros((0, 2), dtype=float),
+            )
         return cls(geometry)
 
     @classmethod

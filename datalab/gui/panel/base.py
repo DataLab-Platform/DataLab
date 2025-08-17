@@ -622,7 +622,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # First, collect all geometry metadata entries to process
         geometry_entries = []
-        for key, value in obj.metadata.items():
+        for key, _value in obj.metadata.items():
             # Check if this is a geometry result metadata entry
             if key.startswith("Geometry_") and key.endswith("_array"):
                 geometry_entries.append(key)
