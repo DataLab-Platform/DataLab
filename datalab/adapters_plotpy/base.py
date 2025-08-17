@@ -618,7 +618,7 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
 
         fmt = self.get_obj_option("format")
         lbl = self.get_obj_option("showlabel")
-        for key, value in self.obj.metadata.items():
+        for key, _value in self.obj.metadata.items():
             if key == ROI_KEY:
                 roi = self.obj.roi
                 if roi is not None:

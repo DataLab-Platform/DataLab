@@ -42,8 +42,7 @@ def apply_geometry_transform(
             # Handle operations not in the standard maps
             _apply_custom_operation(obj, operation, param_dict)
             return
-        else:
-            raise ValueError(f"'{operation}' is not a valid transformation operation.")
+        raise ValueError(f"'{operation}' is not a valid transformation operation.")
 
     # Get transformation function and parameter builder
     transform_func, param_builder = operation_map[operation]

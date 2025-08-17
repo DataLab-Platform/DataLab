@@ -141,24 +141,27 @@ class GeometryAdapter:
         kind = self.geometry.kind.value
         num_coords = self._array.shape[1] - 1  # Exclude ROI column
 
-        if kind in ["point", "marker"]:
-            return ["x", "y"][:num_coords]
-        elif kind == "segment":
-            return ["x0", "y0", "x1", "y1"][:num_coords]
-        elif kind == "rectangle":
-            return ["x0", "y0", "x1", "y1"][:num_coords]
-        elif kind == "circle":
-            return ["x", "y", "r"][:num_coords]
-        elif kind == "ellipse":
-            return ["x", "y", "a", "b", "θ"][:num_coords]
-        elif kind == "polygon":
+        # Define headers based on shape type
+        headers_map = {
+            "point": ["x", "y"],
+            "marker": ["x", "y"],
+            "segment": ["x0", "y0", "x1", "y1"],
+            "rectangle": ["x0", "y0", "x1", "y1"],
+            "circle": ["x", "y", "r"],
+            "ellipse": ["x", "y", "a", "b", "θ"],
+        }
+
+        if kind in headers_map:
+            return headers_map[kind][:num_coords]
+
+        if kind == "polygon":
             headers = []
             for i in range(0, num_coords, 2):
                 headers.extend([f"x{i // 2}", f"y{i // 2}"])
             return headers[:num_coords]
-        else:
-            # Generic headers for unknown shapes
-            return [f"coord_{i}" for i in range(num_coords)]
+
+        # Generic headers for unknown shapes
+        return [f"coord_{i}" for i in range(num_coords)]
 
     def to_dataframe(self):
         """Return DataFrame from coordinates array.
@@ -166,7 +169,7 @@ class GeometryAdapter:
         Returns:
             pandas.DataFrame with coordinates data
         """
-        import pandas as pd
+        import pandas as pd  # pylint: disable=import-outside-toplevel
 
         return pd.DataFrame(self.shown_array, columns=self.headers)
 
