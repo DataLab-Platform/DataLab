@@ -147,7 +147,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             ),
         )
         self.register_1_to_1(
-            sigima_signal.swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg"
+            sigima_signal.transpose, _("Swap X/Y axes"), icon_name="swap_x_y.svg"
         )
         self.register_1_to_1(
             sigima_signal.reverse_x,

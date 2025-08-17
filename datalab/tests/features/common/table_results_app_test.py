@@ -12,6 +12,7 @@ import numpy as np
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata import TableAdapter
+from datalab.adapters_metadata.legacy import create_table_result
 from datalab.tests import datalab_test_app_context
 
 
@@ -22,13 +23,13 @@ def create_image_with_table_results():
     # Create table results for testing
 
     # Create a table result
-    from datalab.adapters_metadata.legacy import create_table_result
 
     table = create_table_result(
         title="Statistics",
         names=["Mean", "Std", "Min", "Max"],
         labels=["Mean", "Standard Deviation", "Minimum", "Maximum"],
         data=np.array([[100.0, 15.5, 50.0, 150.0]]),
+        # roi_indices defaults to NO_ROI when not specified
     )
 
     TableAdapter(table).add_to(image)

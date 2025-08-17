@@ -321,6 +321,7 @@ def create_table_result(
         labels: Human-readable labels for each column.
         data: 2-D array of shape (N, len(names)) with scalar values.
         roi_indices: Optional 1-D array (N,) mapping rows to ROI indices.
+                    If None, defaults to NO_ROI for all rows (no ROI association).
         attrs: Optional algorithmic context.
         headers: Alias for names for legacy compatibility.
     """
@@ -339,8 +340,10 @@ def create_table_result(
         data = np.array(data)
 
     if roi_indices is None:
-        # Create roi_indices that match the number of data rows
-        roi_indices = np.arange(data.shape[0])
+        # Default to NO_ROI for all rows when no ROI indices are specified
+        from sigima.objects.scalar import NO_ROI
+
+        roi_indices = np.full(data.shape[0], NO_ROI, dtype=int)
     # Ensure roi_indices is a numpy array
     if not isinstance(roi_indices, np.ndarray):
         roi_indices = np.array(roi_indices)

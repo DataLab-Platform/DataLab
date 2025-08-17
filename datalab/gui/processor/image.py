@@ -71,17 +71,17 @@ class GeometricTransformWrapper:
         if hasattr(dst_obj, "iterate_geometry_results"):
             # Apply geometry transformation based on operation type
             if self.operation == "rotate90":
-                apply_geometry_transform(dst_obj, "rotate_90", None)
+                apply_geometry_transform(dst_obj, "rotate90", None)
             elif self.operation == "rotate270":
-                apply_geometry_transform(dst_obj, "rotate_270", None)
+                apply_geometry_transform(dst_obj, "rotate270", None)
             elif self.operation == "fliph":
-                apply_geometry_transform(dst_obj, "hflip", None)
+                apply_geometry_transform(dst_obj, "fliph", None)
             elif self.operation == "flipv":
-                apply_geometry_transform(dst_obj, "vflip", None)
+                apply_geometry_transform(dst_obj, "flipv", None)
             elif self.operation == "rotate" and param:
                 # For custom rotation, we need to apply rotation with angle
                 apply_geometry_transform(dst_obj, "rotate", {"angle": param.angle})
-            elif self.operation == "swap_axes":
+            elif self.operation == "transpose":
                 # For diagonal flip/transpose
                 apply_geometry_transform(dst_obj, "transpose", None)
 
@@ -251,7 +251,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             icon_name="flip_horizontally.svg",
         )
         self.register_1_to_1(
-            self._wrap_geometric_transform(sigima_image.swap_axes, "swap_axes"),
+            self._wrap_geometric_transform(sigima_image.transpose, "transpose"),
             _("Flip diagonally"),
             icon_name="swap_x_y.svg",
         )
@@ -318,7 +318,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             ),
         )
         self.register_1_to_1(
-            sigima_image.swap_axes,
+            sigima_image.transpose,
             _("Swap X/Y axes"),
             icon_name="swap_x_y.svg",
         )
