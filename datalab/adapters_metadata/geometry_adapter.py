@@ -194,6 +194,42 @@ class GeometryAdapter:
             for key, value in self.geometry.attrs.items():
                 obj.metadata[f"{base_key}_{key}"] = value
 
+    def remove_from(self, obj: Union[SignalObj, ImageObj]) -> None:
+        """Remove geometry result from object metadata.
+
+        Args:
+            obj: Signal or image object
+        """
+        base_key = f"{self.META_PREFIX}{self.title}"
+
+        # Remove standard metadata keys
+        keys_to_remove = [
+            f"{base_key}{self.ARRAY_SUFFIX}",
+            f"{base_key}{self.TITLE_SUFFIX}",
+            f"{base_key}{self.SHAPE_SUFFIX}",
+            f"{base_key}{self.ADDLABEL_SUFFIX}",
+        ]
+
+        # Remove any additional attribute keys
+        if self.geometry.attrs:
+            for key in self.geometry.attrs.keys():
+                keys_to_remove.append(f"{base_key}_{key}")
+
+        # Remove all keys that exist in the metadata
+        for key in keys_to_remove:
+            obj.metadata.pop(key, None)
+
+    @classmethod
+    def remove_all_from(cls, obj: Union[SignalObj, ImageObj]) -> None:
+        """Remove all geometry results from object metadata.
+
+        Args:
+            obj: Signal or image object
+        """
+        # Find all geometry results in the object and remove them
+        for adapter in cls.iterate_from_obj(obj):
+            adapter.remove_from(obj)
+
     @property
     def label_contents(self) -> tuple[tuple[int, str], ...]:
         """Return label contents for compatibility.

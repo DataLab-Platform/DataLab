@@ -32,8 +32,9 @@ DATAPATH = LOCALEPATH = ""
 #    - Automatically applied via wrapper functions in ImageProcessor
 #
 # 2. Result deletion (replaces "delete_results"):
-#    - Implemented via clean service architecture in datalab.services.results_manager
-#    - Used by data panels and processors for result management
+#    - Implemented via adapter methods in datalab.adapters_metadata
+#    - TableAdapter.remove_all_from() and GeometryAdapter.remove_all_from()
+#    - Used by data panels for result management
 #
 # 3. Geometry removal (replaces "remove_all_shapes"):
 #    - Implemented in datalab.utils.geometry_transforms.remove_all_geometry_results
