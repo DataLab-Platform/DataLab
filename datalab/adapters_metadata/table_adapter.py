@@ -212,7 +212,7 @@ class TableAdapter:
             obj: Signal or image object
         """
         # Find all table results in the object and remove them
-        for adapter in cls.iterate_from_obj(obj):
+        for adapter in list(cls.iterate_from_obj(obj)):
             adapter.remove_from(obj)
 
     @classmethod
