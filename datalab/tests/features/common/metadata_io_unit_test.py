@@ -16,11 +16,13 @@ Metadata import/export unit test:
 import os.path as osp
 
 import numpy as np
+from sigima.objects import GeometryResult
 from sigima.objects.scalar import KindShape
 from sigima.tests import data as test_data
 from sigima.tests import helpers
 from sigima.tests.helpers import compare_metadata
 
+from datalab.adapters_metadata import GeometryAdapter
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 
@@ -36,10 +38,6 @@ def test_metadata_io_unit():
                 # Create geometry results for testing
 
                 # Create a point geometry directly
-                from sigima.objects.scalar import GeometryResult
-
-                from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
-
                 point_geom = GeometryResult(
                     title="Point Test",
                     kind=KindShape.POINT,

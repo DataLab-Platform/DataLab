@@ -24,10 +24,19 @@ from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.config import options as sigima_options
-from sigima.objects import ImageObj, SignalObj, TypeROI, TypeROIParam
+from sigima.objects import (
+    GeometryResult,
+    ImageObj,
+    SignalObj,
+    TableResult,
+    TypeROI,
+    TypeROIParam,
+    concat_geometries,
+)
 from sigima.proc.decorator import is_computation_function
 
 from datalab import env
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
@@ -38,7 +47,6 @@ if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
 
     from plotpy.plot import PlotWidget
-    from sigima.objects.scalar import GeometryResult, TableResult
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
@@ -352,23 +360,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if compout.error_msg:
                 return None
         result = compout.result
-
-        # Convert raw GeometryResult/TableResult to enhanced version for legacy
-        # compatibility
         if result is not None:
-            from sigima.objects.scalar import GeometryResult, TableResult
-
             if isinstance(result, GeometryResult):
-                from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
-
-                # Create adapter for metadata management
                 result = GeometryAdapter(result)
             elif isinstance(result, TableResult):
-                from datalab.adapters_metadata.table_adapter import TableAdapter
-
-                # Create adapter for metadata management
                 result = TableAdapter(result)
-
         return result
 
     def _merge_geometry_results_for_n_to_1(
@@ -383,17 +379,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             result_obj: The result object from the computation
             src_obj_list: The list of source objects used in the computation
         """
-        try:
-            from sigima.config import options
-            from sigima.objects.scalar import concat_geometries
-
-            from datalab.adapters_metadata import GeometryAdapter
-        except ImportError:
-            # If imports fail, skip merging
-            return
-
         # Only merge if keep_results is enabled and we have multiple source objects
-        if not options.keep_results.get() or len(src_obj_list) <= 1:
+        if not sigima_options.keep_results.get() or len(src_obj_list) <= 1:
             return
 
         # Group geometry results by title for merging

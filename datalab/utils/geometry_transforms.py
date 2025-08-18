@@ -10,6 +10,7 @@ using the comprehensive Sigima transformation system.
 
 from __future__ import annotations
 
+import sigima.proc.image as sigima_image
 from sigima.objects import ImageObj, SignalObj
 from sigima.proc import scalar
 
@@ -55,8 +56,6 @@ def apply_geometry_transform(
             if param_dict:
                 # Create a parameter object if needed
                 if operation == "rotate" and "angle" in param_dict:
-                    import sigima.proc.image as sigima_image
-
                     param_obj = sigima_image.RotateParam()
                     param_obj.angle = param_dict["angle"]
                     args = param_builder(geometry, param_obj)

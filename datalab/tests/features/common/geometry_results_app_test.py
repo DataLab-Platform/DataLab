@@ -15,6 +15,7 @@ import numpy as np
 import sigima.objects
 import sigima.params
 from sigima.config import options as sigima_options
+from sigima.objects import GeometryResult
 from sigima.objects.scalar import KindShape
 from sigima.tests import data as test_data
 
@@ -36,10 +37,6 @@ def create_image_with_geometry_results() -> sigima.objects.ImageObj:
     # Create geometry results for testing
 
     # Create a point geometry directly
-    from sigima.objects.scalar import GeometryResult
-
-    from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
-
     point_geom = GeometryResult(
         title="Point Test",
         kind=KindShape.POINT,

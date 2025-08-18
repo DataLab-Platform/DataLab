@@ -56,6 +56,7 @@ from datalab.gui import actionhandler, objectview
 from datalab.gui.newobject import NewSignalParam
 from datalab.gui.roieditor import TypeROIEditor
 from datalab.objectmodel import ObjectGroup, get_short_id, get_uuid, set_uuid
+from datalab.services.results_manager import ResultsManager
 from datalab.utils.qthelpers import (
     CallbackWorker,
     create_progress_bar,
@@ -1740,8 +1741,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def delete_results(self) -> None:
         """Delete results"""
-        from datalab.services.results_manager import ResultsManager
-
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:

@@ -10,6 +10,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter
+
 if TYPE_CHECKING:
     from sigima import ImageObj, SignalObj
 
@@ -33,9 +35,6 @@ class ResultsManager:
         Note:
             This replaces the removed `delete_results` method from Sigima.
         """
-        # Import here to avoid circular imports
-        from datalab.adapters_metadata import GeometryAdapter, TableAdapter
-
         # Collect keys to remove to avoid modifying dict during iteration
         keys_to_remove = []
 
@@ -92,8 +91,6 @@ class ResultsManager:
         Returns:
             True if object has results, False otherwise
         """
-        from datalab.adapters_metadata import GeometryAdapter, TableAdapter
-
         return any(
             GeometryAdapter.match(key, None) or TableAdapter.match(key, None)
             for key in obj.metadata.keys()
@@ -110,8 +107,6 @@ class ResultsManager:
         Returns:
             Tuple of (geometry_count, table_count)
         """
-        from datalab.adapters_metadata import GeometryAdapter, TableAdapter
-
         geometry_count = len(list(GeometryAdapter.iterate_from_obj(obj)))
         table_count = len(list(TableAdapter.iterate_from_obj(obj)))
 

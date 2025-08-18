@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+import importlib
+
 import numpy as np
 import sigima.params
 import sigima.proc.base as sigima_base
@@ -17,6 +19,7 @@ from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageROI, ROI2DParam
 from sigima.objects.scalar import GeometryResult
+from sigima.proc.decorator import ComputationMetadata
 
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
@@ -124,8 +127,6 @@ class GeometricTransformWrapper:
         self.__dict__.update(state)
         # Restore function from module and name
         if "_func_module" in state and "_func_name" in state:
-            import importlib
-
             module = importlib.import_module(state["_func_module"])
             self.func = getattr(module, state["_func_name"])
 
@@ -134,9 +135,6 @@ class GeometricTransformWrapper:
         if computation_metadata_attr in state:
             metadata_dict = state[computation_metadata_attr]
             if isinstance(metadata_dict, dict):
-                # Import the ComputationMetadata class and reconstruct
-                from sigima.proc.decorator import ComputationMetadata
-
                 metadata = ComputationMetadata(**metadata_dict)
                 setattr(self, computation_metadata_attr, metadata)
 
@@ -803,12 +801,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                     delta_x0, delta_y0 = x0 - obj.x0, y0 - obj.y0
                     obj.x0 += delta_x0
                     obj.y0 += delta_y0
-
-                    # Apply translation to geometry results
-                    from datalab.utils.geometry_transforms import (
-                        apply_geometry_transform,
-                    )
-
                     apply_geometry_transform(
                         obj, "translate", {"dx": delta_x0, "dy": delta_y0}
                     )
@@ -845,12 +837,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 delta_x0, delta_y0 = x0_0 - obj.x0, y0_0 - obj.y0
                 obj.x0 += delta_x0
                 obj.y0 += delta_y0
-
-                # Apply translation to geometry results
-                from datalab.utils.geometry_transforms import (
-                    apply_geometry_transform,
-                )
-
                 apply_geometry_transform(
                     obj, "translate", {"dx": delta_x0, "dy": delta_y0}
                 )
