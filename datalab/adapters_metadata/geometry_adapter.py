@@ -14,8 +14,13 @@ from typing import (
 )
 
 import numpy as np
-from sigima.objects import ImageObj, SignalObj
-from sigima.objects.scalar import NO_ROI, GeometryResult, KindShape
+from sigima.objects import (
+    NO_ROI,
+    GeometryResult,
+    ImageObj,
+    KindShape,
+    SignalObj,
+)
 
 
 class GeometryAdapter:
@@ -226,14 +231,12 @@ class GeometryAdapter:
         Returns:
             HTML formatted text representation
         """
-        from sigima.objects.base import get_obj_roi_title
-
         text = ""
         for i_row in range(self.array.shape[0]):
             suffix = ""
             i_roi = i_row - 1
             if i_roi >= 0:
-                suffix = f"|{get_obj_roi_title(obj, i_roi)}"
+                suffix = f"|{obj.roi.get_single_roi_title(i_roi)}"
             text += f"<u>{self.title}{suffix}</u>:"
             for i_col, label in self.label_contents:
                 label = label.replace("<", "&lt;").replace(">", "&gt;")

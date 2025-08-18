@@ -45,7 +45,6 @@ from sigima.objects.base import (
     TypeROIParam,
     TypeSingleROI,
     get_generic_roi_title,
-    get_obj_roi_title,
 )
 from sigima.objects.scalar import GeometryResult, KindShape, TableResult
 from sigima.tools import coordinates
@@ -184,7 +183,7 @@ class ResultPlotPyAdapter:
             suffix = ""
             i_roi = i_row - 1
             if i_roi >= 0:
-                suffix = f"|{get_obj_roi_title(obj, i_roi)}"
+                suffix = f"|{obj.roi.get_single_roi_title(i_roi)}"
             text += f"<u>{res.title}{suffix}</u>:"
             for i_col, label in res.label_contents:
                 # "label" may contains "<" and ">" characters which are interpreted

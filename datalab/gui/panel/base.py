@@ -44,7 +44,7 @@ from sigima.objects import (
     TypeROI,
     create_signal,
 )
-from sigima.objects.base import ROI_KEY, get_obj_roi_title
+from sigima.objects.base import ROI_KEY
 
 from datalab import objectmodel
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
@@ -260,7 +260,7 @@ def create_resultdata_dict(
                 i_roi = int(result.array[i_row_res, 0])
                 roititle = ""
                 if i_roi >= 0:
-                    roititle = get_obj_roi_title(obj, i_roi)
+                    roititle = obj.roi.get_single_roi_title(i_roi)
                     ylabel += f"|{roititle}"
                 rdata.ylabels.append(ylabel)
 
@@ -276,7 +276,7 @@ def create_resultdata_dict(
                 i_roi = int(result.array[i_row_res, 0])
                 roititle = ""
                 if i_roi >= 0:
-                    roititle = get_obj_roi_title(obj, i_roi)
+                    roititle = obj.roi.get_single_roi_title(i_roi)
                     ylabel += f"|{roititle}"
                 rdata.ylabels.append(ylabel)
     return rdatadict
@@ -1702,7 +1702,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                             x.append(result.shown_array[mask, i_xaxis][0])
                         y.append(result.shown_array[mask, i_yaxis][0])
                     if i_roi >= 0:
-                        roi_suffix = f"|{get_obj_roi_title(obj, int(i_roi))}"
+                        roi_suffix = f"|{obj.roi.get_single_roi_title(int(i_roi))}"
                     self.__add_result_signal(
                         x, y, f"{title}{roi_suffix}", param.xaxis, param.yaxis
                     )
@@ -1716,7 +1716,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     for i_roi in roi_idx:  # ROI
                         roi_suffix = ""
                         if i_roi >= 0:
-                            roi_suffix = f"|{get_obj_roi_title(obj, int(i_roi))}"
+                            roi_suffix = f"|{obj.roi.get_single_roi_title(int(i_roi))}"
                         mask = result.array[:, 0] == i_roi
                         if param.xaxis == "indices":
                             x = np.arange(result.array.shape[0])[mask]
