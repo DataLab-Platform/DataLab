@@ -9,7 +9,6 @@ Result properties application test
 from __future__ import annotations
 
 import numpy as np
-from sigima.objects.scalar import NO_ROI, TableResult
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata.table_adapter import TableAdapter
@@ -19,20 +18,8 @@ from datalab.tests import datalab_test_app_context
 def create_image_with_table_results():
     """Create test image with table results"""
     image = test_data.create_multigaussian_image()
-
-    # Create table results for testing
-
-    # Create a table result directly
-    table = TableResult(
-        title="Statistics",
-        names=["Mean", "Std", "Min", "Max"],
-        labels=["Mean", "Standard Deviation", "Minimum", "Maximum"],
-        data=np.array([[100.0, 15.5, 50.0, 150.0]]),
-        roi_indices=np.array([NO_ROI], dtype=int),
-        attrs={},
-    )
-
-    TableAdapter(table).add_to(image)
+    for table in test_data.generate_table_results():
+        TableAdapter(table).add_to(image)
     return image
 
 
@@ -40,7 +27,7 @@ def test_table_results():
     """Result properties application test"""
     obj1 = test_data.create_sincos_image()
     obj2 = create_image_with_table_results()
-    with datalab_test_app_context(console=False) as win:
+    with datalab_test_app_context() as win:
         panel = win.signalpanel
         noiseparam = test_data.GaussianNoiseParam()
         for sigma in np.linspace(0.0, 0.5, 11):

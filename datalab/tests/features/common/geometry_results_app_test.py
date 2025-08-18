@@ -14,8 +14,6 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
-from sigima.objects import GeometryResult
-from sigima.objects.scalar import KindShape
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata import GeometryAdapter
@@ -23,38 +21,19 @@ from datalab.config import Conf
 from datalab.tests import datalab_test_app_context
 
 
-def create_image_with_geometry_results() -> sigima.objects.ImageObj:
+def __create_image_with_geometry_results() -> sigima.objects.ImageObj:
     """Create test image with geometry results"""
     param = sigima.objects.Gauss2DParam.create(
         height=600,
         width=600,
-        title="Test image (with result shapes)",
+        title="Test image (with geometry results)",
         dtype=sigima.objects.ImageDatatypes.UINT16,
         x0=2,
         y0=3,
     )
     image = sigima.objects.create_image_from_param(param)
-    # Create geometry results for testing
-
-    # Create a point geometry directly
-    point_geom = GeometryResult(
-        title="Point Test",
-        kind=KindShape.POINT,
-        coords=np.array([[10.0, 20.0]]),
-        roi_indices=np.array([0], dtype=int),
-        attrs={},
-    )
-    GeometryAdapter(point_geom).add_to(image)
-
-    # Create a rectangle geometry directly
-    rect_geom = GeometryResult(
-        title="Rectangle Test",
-        kind=KindShape.RECTANGLE,
-        coords=np.array([[10.0, 20.0, 30.0, 40.0]]),
-        roi_indices=np.array([0], dtype=int),
-        attrs={},
-    )
-    GeometryAdapter(rect_geom).add_to(image)
+    for geometry in test_data.generate_geometry_results():
+        GeometryAdapter(geometry).add_to(image)
     return image
 
 
@@ -108,7 +87,7 @@ def test_geometry_results() -> None:
     """Geometry results test"""
     with datalab_test_app_context() as win:
         obj1 = test_data.create_sincos_image()
-        obj2 = create_image_with_geometry_results()
+        obj2 = __create_image_with_geometry_results()
         obj2.roi = sigima.objects.create_image_roi("rectangle", [10, 10, 50, 400])
         panel = win.signalpanel
         for noised in (False, True):
