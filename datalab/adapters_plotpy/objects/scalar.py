@@ -79,6 +79,7 @@ class ResultPlotPyAdapter:
             i_roi = i_row - 1
             if i_roi >= 0:
                 roi: TypeROI = obj.roi
+                assert obj.roi is not None, "Expected ROI to be defined"
                 suffix = f"|{roi.get_single_roi_title(i_roi)}"
             text += f"<u>{ra.title}{suffix}</u>:"
             for i_col, label in ra.label_contents:
