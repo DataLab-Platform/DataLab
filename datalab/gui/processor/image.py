@@ -72,23 +72,25 @@ class GeometricTransformWrapper:
         else:
             dst_obj = self.func(src_obj)
 
-        # Apply geometry transformation to any geometry results
-        if hasattr(dst_obj, "iterate_geometry_results"):
-            # Apply geometry transformation based on operation type
-            if self.operation == "rotate90":
-                apply_geometry_transform(dst_obj, "rotate90", None)
-            elif self.operation == "rotate270":
-                apply_geometry_transform(dst_obj, "rotate270", None)
-            elif self.operation == "fliph":
-                apply_geometry_transform(dst_obj, "fliph", None)
-            elif self.operation == "flipv":
-                apply_geometry_transform(dst_obj, "flipv", None)
-            elif self.operation == "rotate" and param:
-                # For custom rotation, we need to apply rotation with angle
-                apply_geometry_transform(dst_obj, "rotate", {"angle": param.angle})
-            elif self.operation == "transpose":
-                # For diagonal flip/transpose
-                apply_geometry_transform(dst_obj, "transpose", None)
+        # Apply geometry transformation to geometry results (if any)
+        if self.operation == "rotate90":
+            apply_geometry_transform(dst_obj, "rotate90", None)
+        elif self.operation == "rotate270":
+            apply_geometry_transform(dst_obj, "rotate270", None)
+        elif self.operation == "fliph":
+            apply_geometry_transform(dst_obj, "fliph", None)
+        elif self.operation == "flipv":
+            apply_geometry_transform(dst_obj, "flipv", None)
+        elif self.operation == "rotate" and param:
+            # For custom rotation, we need to apply rotation with angle
+            apply_geometry_transform(dst_obj, "rotate", {"angle": param.angle})
+        elif self.operation == "transpose":
+            # For diagonal flip/transpose
+            apply_geometry_transform(dst_obj, "transpose", None)
+        else:
+            raise NotImplementedError(
+                f"Geometry operation '{self.operation}' is not implemented."
+            )
 
         return dst_obj
 

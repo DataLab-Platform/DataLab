@@ -49,7 +49,10 @@ def apply_geometry_transform(
     transform_func, param_builder = operation_map[operation]
 
     # Transform all geometry results in the object
-    for adapter in GeometryAdapter.iterate_from_obj(obj):
+    # Collect adapters first to avoid iterator invalidation during modification
+    adapters_to_transform = list(GeometryAdapter.iterate_from_obj(obj))
+
+    for adapter in adapters_to_transform:
         geometry = adapter.geometry
         if geometry.coords is not None and len(geometry.coords) > 0:
             # Build parameters for the transformation
@@ -67,9 +70,10 @@ def apply_geometry_transform(
             # Apply the transformation
             transformed_geometry = transform_func(*args)
 
-            # Update the geometry result in the object
-            adapter.geometry = transformed_geometry
-            adapter.add_to(obj)
+            # Remove the old geometry and add the transformed one
+            adapter.remove_from(obj)
+            transformed_adapter = GeometryAdapter(transformed_geometry)
+            transformed_adapter.add_to(obj)
 
 
 def _apply_custom_operation(
@@ -82,7 +86,10 @@ def _apply_custom_operation(
         dx = param_dict["dx"]
         dy = param_dict.get("dy", 0.0)  # Default to 0 for signals
 
-        for adapter in GeometryAdapter.iterate_from_obj(obj):
+        # Collect adapters first to avoid iterator invalidation during modification
+        adapters_to_transform = list(GeometryAdapter.iterate_from_obj(obj))
+
+        for adapter in adapters_to_transform:
             geometry = adapter.geometry
             if geometry.coords is not None and len(geometry.coords) > 0:
                 if isinstance(obj, ImageObj):
@@ -91,14 +98,19 @@ def _apply_custom_operation(
                     # For signals, only translate in X direction
                     transformed_geometry = scalar.translate_1d(geometry, dx)
 
-                adapter.geometry = transformed_geometry
-                adapter.add_to(obj)
+                # Remove the old geometry and add the transformed one
+                adapter.remove_from(obj)
+                transformed_adapter = GeometryAdapter(transformed_geometry)
+                transformed_adapter.add_to(obj)
 
     elif operation == "scale":
         if not param_dict:
             raise ValueError("scale operation requires parameters")
 
-        for adapter in GeometryAdapter.iterate_from_obj(obj):
+        # Collect adapters first to avoid iterator invalidation during modification
+        adapters_to_transform = list(GeometryAdapter.iterate_from_obj(obj))
+
+        for adapter in adapters_to_transform:
             geometry = adapter.geometry
             if geometry.coords is not None and len(geometry.coords) > 0:
                 if isinstance(obj, ImageObj):
@@ -112,5 +124,7 @@ def _apply_custom_operation(
                     center_x = param_dict.get("center_x", None)
                     transformed_geometry = scalar.scale_1d(geometry, factor, center_x)
 
-                adapter.geometry = transformed_geometry
-                adapter.add_to(obj)
+                # Remove the old geometry and add the transformed one
+                adapter.remove_from(obj)
+                transformed_adapter = GeometryAdapter(transformed_geometry)
+                transformed_adapter.add_to(obj)
