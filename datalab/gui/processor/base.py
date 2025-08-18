@@ -375,7 +375,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             src_obj_list: The list of source objects used in the computation
         """
         # Only merge if keep_results is enabled and we have multiple source objects
-        if not sigima_options.keep_results.get() or len(src_obj_list) <= 1:
+        if not Conf.proc.keep_results.get() or len(src_obj_list) <= 1:
             return
 
         # Group geometry results by title for merging
@@ -419,6 +419,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # Just one geometry result, add it
                 adapter = GeometryAdapter(geometries[0])
                 adapter.add_to(result_obj)
+
+    def _handle_keep_results(self, result_obj: SignalObj | ImageObj) -> None:
+        """Handle keep_results logic by removing all results if keep_results is False.
+
+        This method implements the logic that was previously in Sigima's dst_1_to_1,
+        dst_n_to_1, and dst_2_to_1 functions, where results were deleted from the
+        destination object when keep_results was False.
+
+        Args:
+            result_obj: The result object from the computation
+        """
+        if not Conf.proc.keep_results.get():
+            # Remove all table and geometry results when keep_results is disabled
+            TableAdapter.remove_all_from(result_obj)
+            GeometryAdapter.remove_all_from(result_obj)
 
     def __exec_func(
         self,
@@ -485,6 +500,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         continue
+
+                    # Handle keep_results logic for 1_to_1 operations
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._handle_keep_results(new_obj)
+
                     patch_title_with_ids(new_obj, [obj], get_short_id)
 
                     # Is new object a native object (i.e. a Signal object for a Signal
@@ -880,6 +900,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         break
                     # Handle geometry result merging for n_to_1 operations (pairwise)
                     if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._handle_keep_results(new_obj)
                         self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
                     patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
                     self.panel.add_object(new_obj, group_id=dst_gid)
@@ -923,6 +944,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         break
                     # Handle geometry result merging for n_to_1 operations
                     if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._handle_keep_results(new_obj)
                         self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
                     group_id = dst_gid if dst_gid is not None else src_gid
                     patch_title_with_ids(new_obj, src_obj_list, get_short_id)
@@ -1043,6 +1065,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         )
                         if new_obj is None:
                             continue
+
+                        # Handle keep_results logic for 2_to_1 operations (pairwise)
+                        if isinstance(new_obj, (SignalObj, ImageObj)):
+                            self._handle_keep_results(new_obj)
+
                         patch_title_with_ids(
                             new_obj, [src_obj1, src_obj2], get_short_id
                         )
@@ -1073,6 +1100,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         continue
+
+                    # Handle keep_results logic for 2_to_1 operations (single operand)
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._handle_keep_results(new_obj)
+
                     group_id = objmodel.get_object_group_id(obj)
                     patch_title_with_ids(new_obj, [obj, obj2], get_short_id)
                     self.panel.add_object(new_obj, group_id=group_id)

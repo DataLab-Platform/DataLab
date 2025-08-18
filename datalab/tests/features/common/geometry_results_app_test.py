@@ -14,12 +14,12 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
-from sigima.config import options as sigima_options
 from sigima.objects import GeometryResult
 from sigima.objects.scalar import KindShape
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata import GeometryAdapter
+from datalab.config import Conf
 from datalab.tests import datalab_test_app_context
 
 
@@ -76,8 +76,7 @@ def __check_geometry_results_merge(
         list(GeometryAdapter.iterate_from_obj(obj2)),
     )
     assert len(rsl2) == len(rsl1), (
-        "Merged object the same number of result shapes as original object, "
-        "but expected twice the number of result shapes for each type."
+        f"Result shapes length mismatch: {len(rsl1)} != {len(rsl2)}"
     )
     for rs1, rs2 in zip(rsl1, rsl2):
         assert rs1.array.shape[0] * 2 == rs2.array.shape[0], (
@@ -126,16 +125,23 @@ def test_geometry_results() -> None:
             panel.add_object(obj)
         panel.show_results()
         panel.plot_results()
-        with sigima_options.keep_results.context(True):
-            # Test merging result shapes (duplicate obj, then compute average):
-            for panel in (win.signalpanel, win.imagepanel):
-                panel.objview.select_objects((2,))
-                panel.duplicate_object()
-                panel.objview.select_objects((2, len(panel)))
-                panel.processor.run_feature("average")
-                __check_geometry_results_merge(panel[2], panel[len(panel)])
-                if panel is win.imagepanel:
-                    __check_roi_merge(panel[2], panel[len(panel)])
+        for keep_results in (False, True):
+            with Conf.proc.keep_results.temp(keep_results):
+                # Test merging result shapes (duplicate obj, then compute average):
+                for panel in (win.signalpanel, win.imagepanel):
+                    panel.objview.select_objects((2,))
+                    panel.duplicate_object()
+                    panel.objview.select_objects((2, len(panel)))
+                    panel.processor.run_feature("average")
+                    last_obj = panel[len(panel)]
+                    if keep_results:
+                        __check_geometry_results_merge(panel[2], last_obj)
+                        if panel is win.imagepanel:
+                            __check_roi_merge(panel[2], last_obj)
+                    else:
+                        assert (
+                            len(list(GeometryAdapter.iterate_from_obj(last_obj))) == 0
+                        )
 
 
 if __name__ == "__main__":
