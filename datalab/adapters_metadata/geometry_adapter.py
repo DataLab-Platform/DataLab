@@ -81,22 +81,13 @@ class GeometryAdapter:
         return result
 
     @property
-    def shapetype(self) -> KindShape:
-        """Get the shape type.
-
-        Returns:
-            Shape type as KindShape enum
-        """
-        return self.geometry.kind
-
-    @property
     def category(self) -> str:
         """Get the category.
 
         Returns:
             Category
         """
-        return "shape"
+        return f"shape_{self.geometry.kind.value}"
 
     @property
     def title(self) -> str:

@@ -29,10 +29,7 @@ from plotpy.items import (
     Marker,
     PolygonShape,
 )
-from sigima.objects.base import (
-    BaseObj,
-    TypeObj,
-)
+from sigima.objects.base import BaseObj, TypeObj, TypeROI
 from sigima.objects.scalar import KindShape
 from sigima.tools import coordinates
 
@@ -56,8 +53,8 @@ class ResultPlotPyAdapter:
         result: Table or geometry adapter
     """
 
-    def __init__(self, result: TableAdapter | GeometryAdapter) -> None:
-        self.result = result
+    def __init__(self, result_adapter: TableAdapter | GeometryAdapter) -> None:
+        self.result_adapter = result_adapter
         self.item_json = ""  # JSON representation of the item
 
     def update_obj_metadata_from_item(
@@ -71,28 +68,29 @@ class ResultPlotPyAdapter:
         """
         if item is not None:
             self.item_json = items_to_json([item])
-        self.result.set_obj_metadata(obj)
+        self.result_adapter.set_obj_metadata(obj)
 
     def __get_text(self, obj: TypeObj) -> str:
         """Return text representation of result"""
-        res = self.result
+        ra = self.result_adapter
         text = ""
-        for i_row in range(res.array.shape[0]):
+        for i_row in range(ra.array.shape[0]):
             suffix = ""
             i_roi = i_row - 1
             if i_roi >= 0:
-                suffix = f"|{obj.roi.get_single_roi_title(i_roi)}"
-            text += f"<u>{res.title}{suffix}</u>:"
-            for i_col, label in res.label_contents:
+                roi: TypeROI = obj.roi
+                suffix = f"|{roi.get_single_roi_title(i_roi)}"
+            text += f"<u>{ra.title}{suffix}</u>:"
+            for i_col, label in ra.label_contents:
                 # "label" may contains "<" and ">" characters which are interpreted
                 # as HTML tags by the LabelItem. We must escape them.
                 label = label.replace("<", "&lt;").replace(">", "&gt;")
                 if "%" not in label:
                     label += " = %g"
                 text += (
-                    "<br>" + label.strip().format(obj) % res.shown_array[i_row, i_col]
+                    "<br>" + label.strip().format(obj) % ra.shown_array[i_row, i_col]
                 )
-            if i_row < res.shown_array.shape[0] - 1:
+            if i_row < ra.shown_array.shape[0] - 1:
                 text += "<br><br>"
         return text
 
@@ -113,7 +111,7 @@ class ResultPlotPyAdapter:
             the signal or image units.
         """
         text = self.__get_text(obj)
-        item = make.label(text, "TL", (0, 0), "TL", title=self.result.title)
+        item = make.label(text, "TL", (0, 0), "TL", title=self.result_adapter.title)
         font = get_font(PLOTPY_CONF, "properties", "label/font")
         item.set_style("properties", "label")
         item.labelparam.font.update_param(font)
@@ -157,9 +155,9 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         AssertionError: invalid argument
     """
 
-    def __init__(self, result: GeometryAdapter) -> None:
-        assert isinstance(result, GeometryAdapter)
-        super().__init__(result)
+    def __init__(self, result_adapter: GeometryAdapter) -> None:
+        assert isinstance(result_adapter, GeometryAdapter)
+        super().__init__(result_adapter)
 
     def create_label_item(self, obj: BaseObj) -> LabelItem | None:
         """Create label item
@@ -167,7 +165,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         Returns:
             Label item
         """
-        if self.result.kind is KindShape.SEGMENT:
+        if self.result_adapter.geometry.kind is KindShape.SEGMENT:
             # Add a label item for the segment shape
             return super().create_label_item(obj)
         return None
@@ -185,7 +183,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         Yields:
             Plot item
         """
-        for coords in self.result.raw_data:
+        for coords in self.result_adapter.raw_data:
             yield self.create_shape_item(coords, fmt, lbl, option)
 
     def create_shape_item(
@@ -211,7 +209,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         Returns:
             Plot item
         """
-        if self.result.kind is KindShape.POINT:
+        if self.result_adapter.geometry.kind is KindShape.POINT:
             assert len(coords) == 2, "Coordinates must be a 2-element array"
             x0, y0 = coords
             item = AnnotatedPoint(x0, y0)
@@ -221,41 +219,49 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             sparam.sel_symbol.marker = "Ellipse"
             sparam.sel_symbol.size = 6
             aparam = item.annotationparam
-            aparam.title = self.result.title
+            aparam.title = self.result_adapter.title
             sparam.update_item(item.shape)
             aparam.update_item(item)
-        elif self.result.kind is KindShape.MARKER:
+        elif self.result_adapter.geometry.kind is KindShape.MARKER:
             assert len(coords) == 2, "Coordinates must be a 2-element array"
             x0, y0 = coords
             item = self.__make_marker_item(x0, y0, fmt)
-        elif self.result.kind is KindShape.RECTANGLE:
+        elif self.result_adapter.geometry.kind is KindShape.RECTANGLE:
             assert len(coords) == 4, "Coordinates must be a 4-element array"
             x0, y0, x1, y1 = coords
-            item = make.annotated_rectangle(x0, y0, x1, y1, title=self.result.title)
-        elif self.result.kind is KindShape.CIRCLE:
+            item = make.annotated_rectangle(
+                x0, y0, x1, y1, title=self.result_adapter.title
+            )
+        elif self.result_adapter.geometry.kind is KindShape.CIRCLE:
             assert len(coords) == 3, "Coordinates must be a 3-element array"
             xc, yc, r = coords
             x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
-            item = make.annotated_circle(x0, y0, x1, y1, title=self.result.title)
-        elif self.result.kind is KindShape.SEGMENT:
+            item = make.annotated_circle(
+                x0, y0, x1, y1, title=self.result_adapter.title
+            )
+        elif self.result_adapter.geometry.kind is KindShape.SEGMENT:
             assert len(coords) == 4, "Coordinates must be a 4-element array"
             x0, y0, x1, y1 = coords
-            item = make.annotated_segment(x0, y0, x1, y1, title=self.result.title)
-        elif self.result.kind is KindShape.ELLIPSE:
+            item = make.annotated_segment(
+                x0, y0, x1, y1, title=self.result_adapter.title
+            )
+        elif self.result_adapter.geometry.kind is KindShape.ELLIPSE:
             assert len(coords) == 5, "Coordinates must be a 5-element array"
             xc, yc, a, b, t = coords
             coords = coordinates.ellipse_to_diameters(xc, yc, a, b, t)
             x0, y0, x1, y1, x2, y2, x3, y3 = coords
             item = make.annotated_ellipse(
-                x0, y0, x1, y1, x2, y2, x3, y3, title=self.result.title
+                x0, y0, x1, y1, x2, y2, x3, y3, title=self.result_adapter.title
             )
-        elif self.result.kind is KindShape.POLYGON:
+        elif self.result_adapter.geometry.kind is KindShape.POLYGON:
             assert len(coords) >= 6, "Coordinates must be at least 6-element array"
             assert len(coords) % 2 == 0, "Coordinates must be even-length array"
             x, y = coords[::2], coords[1::2]
-            item = make.polygon(x, y, title=self.result.title, closed=False)
+            item = make.polygon(x, y, title=self.result_adapter.title, closed=False)
         else:
-            raise NotImplementedError(f"Unsupported shape kind: {self.result.kind}")
+            raise NotImplementedError(
+                f"Unsupported shape kind: {self.result_adapter.geometry.kind}"
+            )
         if isinstance(item, AnnotatedShape):
             config_annotated_shape(item, fmt, lbl, "results", option)
         set_plot_item_editable(item, False)
@@ -273,17 +279,17 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             mstyle = "-"
 
             def label(x, y):  # pylint: disable=unused-argument
-                return (self.result.title + ": " + fmt) % y
+                return (self.result_adapter.title + ": " + fmt) % y
 
         elif np.isnan(y0):
             mstyle = "|"
 
             def label(x, y):  # pylint: disable=unused-argument
-                return (self.result.title + ": " + fmt) % x
+                return (self.result_adapter.title + ": " + fmt) % x
 
         else:
             mstyle = "+"
-            txt = self.result.title + ": (" + fmt + ", " + fmt + ")"
+            txt = self.result_adapter.title + ": (" + fmt + ", " + fmt + ")"
 
             def label(x, y):
                 return txt % (x, y)
@@ -307,6 +313,6 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
         AssertionError: invalid argument
     """
 
-    def __init__(self, result: TableAdapter) -> None:
-        assert isinstance(result, TableAdapter)
-        super().__init__(result)
+    def __init__(self, result_adapter: TableAdapter) -> None:
+        assert isinstance(result_adapter, TableAdapter)
+        super().__init__(result_adapter)

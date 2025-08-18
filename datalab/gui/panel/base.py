@@ -246,33 +246,15 @@ def create_resultdata_dict(
     """
     rdatadict: dict[str, ResultData] = {}
     for obj in objs:
-        # Get geometry results (adapters for GeometryResult objects)
-        for result in list(GeometryAdapter.iterate_from_obj(obj)):
-            # Use "shape" with shapetype as category for geometry results
-            category = f"shape_{result.shapetype.value}"
-            rdata = rdatadict.setdefault(category, ResultData([], None, []))
-            rdata.results.append(result)
-            # Headers depend on the type of geometry - use actual headers from adapter
-            rdata.xlabels = result.headers
-            for i_row_res in range(result.array.shape[0]):
-                ylabel = f"{result.title}({get_short_id(obj)})"
-                i_roi = int(result.array[i_row_res, 0])
-                roititle = ""
-                if i_roi >= 0:
-                    roititle = obj.roi.get_single_roi_title(i_roi)
-                    ylabel += f"|{roititle}"
-                rdata.ylabels.append(ylabel)
-
-        # Get table results (adapters for TableResult objects)
-        for result in list(TableAdapter.iterate_from_obj(obj)):
-            # Use title as category for table results
-            category = result.title
-            rdata = rdatadict.setdefault(category, ResultData([], None, []))
-            rdata.results.append(result)
-            rdata.xlabels = result.headers if hasattr(result, "headers") else []
-            for i_row_res in range(result.array.shape[0]):
-                ylabel = f"{result.title}({get_short_id(obj)})"
-                i_roi = int(result.array[i_row_res, 0])
+        for adapter in list(GeometryAdapter.iterate_from_obj(obj)) + list(
+            TableAdapter.iterate_from_obj(obj)
+        ):
+            rdata = rdatadict.setdefault(adapter.category, ResultData([], None, []))
+            rdata.results.append(adapter)
+            rdata.xlabels = adapter.headers
+            for i_row_res in range(adapter.array.shape[0]):
+                ylabel = f"{adapter.title}({get_short_id(obj)})"
+                i_roi = int(adapter.array[i_row_res, 0])
                 roititle = ""
                 if i_roi >= 0:
                     roititle = obj.roi.get_single_roi_title(i_roi)

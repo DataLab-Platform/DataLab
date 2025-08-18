@@ -360,11 +360,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if compout.error_msg:
                 return None
         result = compout.result
-        if result is not None:
-            if isinstance(result, GeometryResult):
-                result = GeometryAdapter(result)
-            elif isinstance(result, TableResult):
-                result = TableAdapter(result)
         return result
 
     def _merge_geometry_results_for_n_to_1(
@@ -742,7 +737,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            results: dict[str, GeometryResult | TableResult] = {}
+            results: dict[str, GeometryAdapter | TableAdapter] = {}
             xlabels = None
             ylabels = []
             for idx, obj in enumerate(objs):
@@ -761,20 +756,30 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if result is None:
                     continue
 
-                # Add result shape to object's metadata
-                result.add_to(obj)
-                if param is not None:
-                    obj.metadata[f"{result.title}Param"] = str(param)
+                # Using the adapters:
+                if isinstance(result, GeometryResult):
+                    adapter = GeometryAdapter(result)
+                elif isinstance(result, TableResult):
+                    adapter = TableAdapter(result)
+                else:
+                    # For "compute 1 to 0" functions, the result is either a
+                    # GeometryResult or TableResult:
+                    raise TypeError("Unsupported result type")
 
-                results[get_uuid(obj)] = result
+                # Add result shape to object's metadata
+                adapter.add_to(obj)
+                if param is not None:
+                    obj.metadata[f"{adapter.title}Param"] = str(param)
+
+                results[get_uuid(obj)] = adapter
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
-                xlabels = result.headers
-                for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.title}({get_short_id(obj)})"
-                    i_roi = int(result.array[i_row_res, 0])
+                xlabels = adapter.headers
+                for i_row_res in range(adapter.array.shape[0]):
+                    ylabel = f"{adapter.title}({get_short_id(obj)})"
+                    i_roi = int(adapter.array[i_row_res, 0])
                     if i_roi >= 0:
                         ylabel += f"|{obj.roi.get_single_roi_title(i_roi)}"
                     ylabels.append(ylabel)
@@ -783,7 +788,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 warnings.simplefilter("ignore", RuntimeWarning)
                 dlg = ArrayEditor(self.panel.parent())
                 title = _("Results")
-                res = np.vstack([result.shown_array for result in results.values()])
+                res = np.vstack([adapter.shown_array for adapter in results.values()])
                 dlg.setup_and_check(
                     res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
                 )
