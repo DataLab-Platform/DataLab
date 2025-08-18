@@ -97,8 +97,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((1, 2))
     panel.processor.run_feature("product")
 
-    param = sigima.params.ConstantParam()
-    param.value = 2.0
+    param = sigima.params.ConstantParam.create(value=2.0)
     panel.processor.run_feature("addition_constant", param)
     panel.processor.run_feature("difference_constant", param)
     panel.processor.run_feature("product_constant", param)
@@ -165,7 +164,7 @@ def run_signal_computations(
     ):
         for method_value, _method_name in paramclass.methods:
             panel.objview.set_current_object(sig1)
-            param = paramclass.create(method=method_value)
+            param = paramclass.create(method=method_value, cut0=2.0, cut1=4.0)
             param.update_from_obj(sig1)  # Use default cut-off frequencies
             panel.processor.run_feature(filter_func_name, param)
 

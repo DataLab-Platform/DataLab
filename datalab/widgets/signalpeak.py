@@ -162,7 +162,7 @@ class SignalPeakDetectionDialog(PlotDialog):
                 color="orange",
                 markerstyle="|",
                 linewidth=1,
-                marker="NoShape",
+                marker="NoSymbol",
                 linestyle="DashLine",
             )
             for pos in self.peaks

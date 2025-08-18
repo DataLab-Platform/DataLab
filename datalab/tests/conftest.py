@@ -22,11 +22,15 @@ import qwt
 import scipy
 import sigima
 import skimage
+from guidata.config import ValidationMode, set_validation_mode
 from sigima.tests import helpers
 
 import datalab
 from datalab.env import execenv
 from datalab.plugins import PluginRegistry, get_available_plugins
+
+# Set validation mode to STRICT for all tests
+set_validation_mode(ValidationMode.STRICT)
 
 # Turn on unattended mode for executing tests without user interaction
 execenv.unattended = True
