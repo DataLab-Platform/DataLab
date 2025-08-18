@@ -44,7 +44,7 @@ from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
 from datalab import __docurl__, __homeurl__, __supporturl__, env
-from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.baseproxy import AbstractDLControl
 from datalab.config import (
     APP_DESC,

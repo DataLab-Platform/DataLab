@@ -48,8 +48,7 @@ from sigima.objects.base import ROI_KEY
 
 from datalab import objectmodel
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
-from datalab.adapters_plotpy.base import items_to_json
-from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy import create_adapter_from_object, items_to_json
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui import actionhandler, objectview

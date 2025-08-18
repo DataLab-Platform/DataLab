@@ -34,8 +34,7 @@ from sigima import ImageObj, SignalObj, create_image, create_signal
 from sigima.io.common.textreader import count_lines, read_first_n_lines
 from sigima.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
 
-from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.adapters_plotpy.signal import CURVESTYLES
+from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import _
 from datalab.utils.qthelpers import (
     CallbackWorker,

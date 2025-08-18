@@ -16,8 +16,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.tools.signal.peakdetection import peak_indices
 
-from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.adapters_plotpy.signal import CURVESTYLES
+from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import _
 
 if TYPE_CHECKING:

@@ -25,32 +25,30 @@ __all__ = [
     "RectangularROIPlotPyAdapter",
     "SegmentROIPlotPyAdapter",
     "SignalObjPlotPyAdapter",
+    "CURVESTYLES",
     "SignalROIPlotPyAdapter",
 ]
 
 
-from .base import (
-    GeometryPlotPyAdapter,
-    TablePlotPyAdapter,
-    TypePlotItem,
-    TypeROIItem,
-    configure_roi_item,
-    items_to_json,
-    json_to_items,
-)
+from .base import items_to_json, json_to_items
 from .converters import (
     create_adapter_from_object,
     plotitem_to_singleroi,
     singleroi_to_plotitem,
 )
-from .image import (
-    CircularROIPlotPyAdapter,
+from .objects.base import TypePlotItem
+from .objects.image import (
     ImageObjPlotPyAdapter,
+)
+from .objects.scalar import (
+    GeometryPlotPyAdapter,
+    TablePlotPyAdapter,
+)
+from .objects.signal import CURVESTYLES, SignalObjPlotPyAdapter
+from .roi.base import TypeROIItem, configure_roi_item
+from .roi.image import (
+    CircularROIPlotPyAdapter,
     PolygonalROIPlotPyAdapter,
     RectangularROIPlotPyAdapter,
 )
-from .signal import (
-    SegmentROIPlotPyAdapter,
-    SignalObjPlotPyAdapter,
-    SignalROIPlotPyAdapter,
-)
+from .roi.signal import SegmentROIPlotPyAdapter, SignalROIPlotPyAdapter
