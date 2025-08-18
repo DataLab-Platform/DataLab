@@ -142,7 +142,7 @@ def run_signal_computations(
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    param = sigima.objects.UniformRandomParam.create(
+    param = sigima.objects.UniformDistribution1DParam.create(
         title=_("Random function"), vmin=0, vmax=sig1.y.max() * 0.2
     )
     noiseobj1 = panel.new_object(param, edit=False)
@@ -197,7 +197,7 @@ def run_signal_computations(
     roi = sigima.objects.create_signal_roi([i1, i2], indices=True)
     panel.processor.compute_roi_extraction(roi)
 
-    sig = create_noisy_signal(sigima.objects.BaseNormalRandomParam.create(sigma=5.0))
+    sig = create_noisy_signal(sigima.objects.NormalDistributionParam.create(sigma=5.0))
     panel.add_object(sig)
     param = sigima.params.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
@@ -292,7 +292,7 @@ def run_image_computations(
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    unifparam = sigima.objects.UniformRandom2DParam()
+    unifparam = sigima.objects.UniformDistribution2DParam()
     unifparam.set_from_datatype(ima1.data.dtype)
     unifparam.vmax = int(ima1.data.max() * 0.2)
     panel.new_object(unifparam, edit=False)

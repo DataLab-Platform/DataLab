@@ -25,9 +25,9 @@ from sigima.objects import (
     create_signal,
 )
 from sigima.objects.base import (
-    BaseNormalRandomParam,
-    BasePoissonRandomParam,
-    BaseUniformRandomParam,
+    NormalDistributionParam,
+    PoissonDistributionParam,
+    UniformDistributionParam,
 )
 
 from datalab.config import _
@@ -190,17 +190,17 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.add_gaussian_noise,
             _("Add Gaussian noise"),
-            BaseNormalRandomParam,
+            NormalDistributionParam,
         )
         self.register_1_to_1(
             sigima_signal.add_poisson_noise,
             _("Add Poisson noise"),
-            BasePoissonRandomParam,
+            PoissonDistributionParam,
         )
         self.register_1_to_1(
             sigima_signal.add_uniform_noise,
             _("Add uniform noise"),
-            BaseUniformRandomParam,
+            UniformDistributionParam,
         )
         # Noise reduction
         self.register_1_to_1(

@@ -17,9 +17,9 @@ from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageROI, ResultShape, ROI2DParam
 from sigima.objects.base import (
-    BaseNormalRandomParam,
-    BasePoissonRandomParam,
-    BaseUniformRandomParam,
+    NormalDistributionParam,
+    PoissonDistributionParam,
+    UniformDistributionParam,
 )
 
 from datalab.config import APP_NAME, _
@@ -219,17 +219,17 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(
             sigima_image.add_gaussian_noise,
             _("Add Gaussian noise"),
-            BaseNormalRandomParam,
+            NormalDistributionParam,
         )
         self.register_1_to_1(
             sigima_image.add_poisson_noise,
             _("Add Poisson noise"),
-            BasePoissonRandomParam,
+            PoissonDistributionParam,
         )
         self.register_1_to_1(
             sigima_image.add_uniform_noise,
             _("Add uniform noise"),
-            BaseUniformRandomParam,
+            UniformDistributionParam,
         )
         # Noise reduction
         self.register_1_to_1(

@@ -823,9 +823,9 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions for creating new objects"""
         for label, pclass in (
             (_("Zeros"), sio.ZerosParam),
-            (_("Normal distribution"), sio.NormalRandomParam),
-            (_("Poisson distribution"), sio.PoissonRandomParam),
-            (_("Uniform distribution"), sio.UniformRandomParam),
+            (_("Normal distribution"), sio.NormalDistribution1DParam),
+            (_("Poisson distribution"), sio.PoissonDistribution1DParam),
+            (_("Uniform distribution"), sio.UniformDistribution1DParam),
             (_("Gaussian"), sio.GaussParam),
             (_("Lorentzian"), sio.LorentzParam),
             (_("Voigt"), sio.VoigtParam),
@@ -999,9 +999,9 @@ class ImageActionHandler(BaseActionHandler):
         for label, pclass in (
             (_("Zeros"), sio.Zeros2DParam),
             (_("Empty"), sio.Empty2DParam),
-            (_("Normal distribution"), sio.NormalRandom2DParam),
-            (_("Poisson distribution"), sio.PoissonRandom2DParam),
-            (_("Uniform distribution"), sio.UniformRandom2DParam),
+            (_("Normal distribution"), sio.NormalDistribution2DParam),
+            (_("Poisson distribution"), sio.PoissonDistribution2DParam),
+            (_("Uniform distribution"), sio.UniformDistribution2DParam),
             (_("Gaussian"), sio.Gauss2DParam),
             (_("Ramp"), sio.Ramp2DParam),
         ):

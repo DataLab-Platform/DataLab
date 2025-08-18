@@ -49,7 +49,7 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     qt_wait(DELAY1)
 
     panel.objview.set_current_object(sig1)
-    param = sigima.objects.UniformRandomParam.create(
+    param = sigima.objects.UniformDistribution1DParam.create(
         title=_("Random function"), vmin=0, vmax=sig1.y.max() * 0.2
     )
     sig2 = sigima.objects.create_signal_from_param(param)
@@ -102,7 +102,9 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
 
     panel.objview.set_current_object(ima1)
 
-    param = sigima.objects.UniformRandomParam.create(width=data_size, height=data_size)
+    param = sigima.objects.UniformDistribution1DParam.create(
+        width=data_size, height=data_size
+    )
     param.set_from_datatype(ima1.data.dtype)
     param.vmax = int(ima1.data.max() * 0.2)
     ima2 = sigima.objects.create_image_from_param(param)
