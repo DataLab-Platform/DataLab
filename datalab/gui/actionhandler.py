@@ -993,7 +993,6 @@ class ImageActionHandler(BaseActionHandler):
         """Create actions for creating new objects"""
         for label, pclass in (
             (_("Zeros"), sio.Zeros2DParam),
-            (_("Empty"), sio.Empty2DParam),
             (_("Random uniform distribution"), sio.UniformRandom2DParam),
             (_("Random normal distribution"), sio.NormalRandom2DParam),
             (_("Gaussian"), sio.Gauss2DParam),
