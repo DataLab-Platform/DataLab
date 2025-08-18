@@ -151,16 +151,6 @@ class TableAdapter:
         """
         self.add_to(obj)
 
-    def to_dataframe(self):
-        """Return DataFrame from table array.
-
-        Returns:
-            pandas.DataFrame with table data
-        """
-        import pandas as pd
-
-        return pd.DataFrame(self.shown_array, columns=self.headers)
-
     def add_to(self, obj: Union[SignalObj, ImageObj]) -> None:
         """Add table result to object metadata.
 

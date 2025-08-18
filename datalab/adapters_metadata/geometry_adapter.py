@@ -168,16 +168,6 @@ class GeometryAdapter:
         # Generic headers for unknown shapes
         return [f"coord_{i}" for i in range(num_coords)]
 
-    def to_dataframe(self):
-        """Return DataFrame from coordinates array.
-
-        Returns:
-            pandas.DataFrame with coordinates data
-        """
-        import pandas as pd  # pylint: disable=import-outside-toplevel
-
-        return pd.DataFrame(self.shown_array, columns=self.headers)
-
     def add_to(self, obj: Union[SignalObj, ImageObj]) -> None:
         """Add geometry result to object metadata.
 
