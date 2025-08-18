@@ -13,7 +13,6 @@ import numpy as np
 import sigima.objects
 import sigima.params
 from sigima.tests.data import (
-    GaussianNoiseParam,
     create_noisy_signal,
     create_paracetamol_signal,
     create_peak_image,
@@ -198,7 +197,7 @@ def run_signal_computations(
     roi = sigima.objects.create_signal_roi([i1, i2], indices=True)
     panel.processor.compute_roi_extraction(roi)
 
-    sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
+    sig = create_noisy_signal(sigima.objects.BaseNormalRandomParam.create(sigma=5.0))
     panel.add_object(sig)
     param = sigima.params.PolynomialFitParam()
     panel.processor.compute_polyfit(param)

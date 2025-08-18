@@ -9,7 +9,8 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 # guitest: show
 
 from guidata.qthelpers import qt_app_context
-from sigima.tests.data import GaussianNoiseParam, create_noisy_signal, get_test_signal
+from sigima.objects import BaseNormalRandomParam
+from sigima.tests.data import create_noisy_signal, get_test_signal
 from sigima.tests.helpers import get_default_test_name
 from sigima.tools.signal.peakdetection import peak_indices
 
@@ -28,7 +29,7 @@ def test_fit_dialog():
         )
 
         # Gaussian curve fitting test
-        noiseparam = GaussianNoiseParam.create(sigma=5.0)
+        noiseparam = BaseNormalRandomParam.create(sigma=5.0)
         sig = create_noisy_signal(noiseparam)
         x, y = sig.x, sig.y
         execenv.print(fdlg.gaussianfit(x, y))
