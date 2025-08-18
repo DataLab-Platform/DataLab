@@ -1,3 +1,5 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
 """
 Adapter for Sigima's GeometryResult, providing features
 for storing and retrieving those objects as metadata for DataLab's signal
