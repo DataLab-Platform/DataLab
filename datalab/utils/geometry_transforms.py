@@ -114,26 +114,3 @@ def _apply_custom_operation(
 
                 adapter.geometry = transformed_geometry
                 adapter.add_to(obj)
-
-
-def remove_all_geometry_results(obj: SignalObj | ImageObj) -> None:
-    """Remove all geometry results from an object.
-
-    This replaces the removed `remove_all_shapes` method from Sigima.
-
-    Args:
-        obj: The object to remove geometry results from
-    """
-    # Get all geometry result keys to remove
-    keys_to_remove = []
-    for key in obj.metadata.keys():
-        if GeometryAdapter.match(key, obj.metadata[key]):
-            keys_to_remove.append(key)
-
-    # Remove geometry results and related metadata
-    for key in keys_to_remove:
-        base_key = key[: -len(GeometryAdapter.ARRAY_SUFFIX)]
-        obj.metadata.pop(key, None)
-        obj.metadata.pop(f"{base_key}{GeometryAdapter.TITLE_SUFFIX}", None)
-        obj.metadata.pop(f"{base_key}{GeometryAdapter.SHAPE_SUFFIX}", None)
-        obj.metadata.pop(f"{base_key}{GeometryAdapter.ADDLABEL_SUFFIX}", None)

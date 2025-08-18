@@ -31,22 +31,3 @@ DATAPATH = LOCALEPATH = ""
 #    - Used by image geometric operations (rotate, rotate90, rotate270, fliph, flipv)
 #    - Automatically applied via wrapper functions in ImageProcessor
 #
-# 2. Result deletion (replaces "delete_results"):
-#    - Implemented via adapter methods in datalab.adapters_metadata
-#    - TableAdapter.remove_all_from() and GeometryAdapter.remove_all_from()
-#    - Used by data panels for result management and processors for keep_results logic
-#
-# 3. Geometry removal (replaces "remove_all_shapes"):
-#    - Implemented in datalab.utils.geometry_transforms.remove_all_geometry_results
-#    - Used by image distribute_on_grid and reset_positions operations
-#
-# 4. Geometry/Table result compatibility (replaces monkey-patched methods):
-#    - Implemented via adapter classes in datalab.adapters_metadata
-#    - Provides clean API for result creation and metadata management
-#
-# 5. Keep results logic (replaces dst_1_to_1/dst_n_to_1/dst_2_to_1 keep_results):
-#    - Implemented in BaseProcessor._handle_keep_results() and
-#      _merge_geometry_results_for_n_to_1()
-#    - Uses DataLab's Conf.proc.keep_results configuration (no longer depends on Sigima)
-#    - Automatically handles result deletion when keep_results=False
-#    - Merges geometry results for n_to_1 operations when keep_results=True
