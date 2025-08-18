@@ -9,8 +9,6 @@ and some actions to test DataLab functionalities.
 """
 
 import sigima.tests.data as test_data
-from sigima.objects import ImageObj, NormalRandomParam, SignalObj
-from sigima.proc.base import dst_1_to_1
 
 from datalab.config import _
 from datalab.plugins import PluginBase, PluginInfo
@@ -19,20 +17,6 @@ from datalab.plugins import PluginBase, PluginInfo
 # All computation functions must be defined as global functions, otherwise
 # they cannot be pickled and sent to the worker process
 # ------------------------------------------------------------------------------
-
-
-def add_noise_to_signal(src: SignalObj, p: test_data.GaussianNoiseParam) -> SignalObj:
-    """Add gaussian noise to signal"""
-    dst = dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
-    test_data.add_gaussian_noise_to_signal(dst, p)
-    return dst
-
-
-def add_noise_to_image(src: ImageObj, p: NormalRandomParam) -> ImageObj:
-    """Add gaussian noise to image"""
-    dst = dst_1_to_1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
-    test_data.add_gaussian_noise_to_image(dst, p)
-    return dst
 
 
 class PluginTestData(PluginBase):
@@ -45,28 +29,12 @@ class PluginTestData(PluginBase):
     )
 
     # Signal processing features ------------------------------------------------
-    def add_noise_to_signal(self) -> None:
-        """Add noise to signal"""
-        self.signalpanel.processor.compute_1_to_1(
-            add_noise_to_signal,
-            paramclass=test_data.GaussianNoiseParam,
-            title=_("Add noise"),
-        )
-
     def create_paracetamol_signal(self) -> None:
         """Create paracetamol signal"""
         obj = test_data.create_paracetamol_signal()
         self.proxy.add_object(obj)
 
     # Image processing features ------------------------------------------------
-    def add_noise_to_image(self) -> None:
-        """Add noise to image"""
-        self.imagepanel.processor.compute_1_to_1(
-            add_noise_to_image,
-            paramclass=NormalRandomParam,
-            title=_("Add noise"),
-        )
-
     def create_peak_image(self) -> None:
         """Create 2D peak image"""
         obj = self.imagepanel.new_object(add_to_panel=False)
@@ -134,7 +102,6 @@ class PluginTestData(PluginBase):
         # Signal Panel ----------------------------------------------------------
         sah = self.signalpanel.acthandler
         with sah.new_menu(_("Test data")):
-            sah.new_action(_("Add noise to signal"), triggered=self.add_noise_to_signal)
             sah.new_action(
                 _("Load spectrum of paracetamol"),
                 triggered=self.create_paracetamol_signal,
@@ -144,8 +111,6 @@ class PluginTestData(PluginBase):
         # Image Panel -----------------------------------------------------------
         iah = self.imagepanel.acthandler
         with iah.new_menu(_("Test data")):
-            iah.new_action(_("Add noise to image"), triggered=self.add_noise_to_image)
-            # with iah.new_menu(_("Data samples")):
             iah.new_action(
                 _("Create image with peaks"),
                 triggered=self.create_peak_image,
