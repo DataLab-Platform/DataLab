@@ -719,6 +719,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     icon_name="offset_correction.svg",
                     tip=_("Evaluate and subtract the offset value from the data"),
                 )
+            with self.new_menu(_("Noise addition"), icon_name="noise_addition.svg"):
+                self.action_for("add_gaussian_noise")
+                self.action_for("add_poisson_noise")
+                self.action_for("add_uniform_noise")
             with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
                 self.action_for("gaussian_filter")
                 self.action_for("moving_average")

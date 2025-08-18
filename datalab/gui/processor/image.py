@@ -16,6 +16,11 @@ from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageROI, ResultShape, ROI2DParam
+from sigima.objects.base import (
+    BaseNormalRandomParam,
+    BasePoissonRandomParam,
+    BaseUniformRandomParam,
+)
 
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
@@ -209,6 +214,22 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             ROI2DParam,
             comment=_("Evaluate and subtract the offset value from the data"),
             icon_name="offset_correction.svg",
+        )
+        # Noise addition
+        self.register_1_to_1(
+            sigima_image.add_gaussian_noise,
+            _("Add Gaussian noise"),
+            BaseNormalRandomParam,
+        )
+        self.register_1_to_1(
+            sigima_image.add_poisson_noise,
+            _("Add Poisson noise"),
+            BasePoissonRandomParam,
+        )
+        self.register_1_to_1(
+            sigima_image.add_uniform_noise,
+            _("Add uniform noise"),
+            BaseUniformRandomParam,
         )
         # Noise reduction
         self.register_1_to_1(

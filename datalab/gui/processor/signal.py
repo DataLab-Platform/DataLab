@@ -24,6 +24,11 @@ from sigima.objects import (
     SignalROI,
     create_signal,
 )
+from sigima.objects.base import (
+    BaseNormalRandomParam,
+    BasePoissonRandomParam,
+    BaseUniformRandomParam,
+)
 
 from datalab.config import _
 from datalab.gui.processor.base import BaseProcessor
@@ -180,6 +185,22 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             _("Offset correction"),
             icon_name="offset_correction.svg",
             comment=_("Evaluate and subtract the offset value from the data"),
+        )
+        # Noise addition
+        self.register_1_to_1(
+            sigima_signal.add_gaussian_noise,
+            _("Add Gaussian noise"),
+            BaseNormalRandomParam,
+        )
+        self.register_1_to_1(
+            sigima_signal.add_poisson_noise,
+            _("Add Poisson noise"),
+            BasePoissonRandomParam,
+        )
+        self.register_1_to_1(
+            sigima_signal.add_uniform_noise,
+            _("Add uniform noise"),
+            BaseUniformRandomParam,
         )
         # Noise reduction
         self.register_1_to_1(
