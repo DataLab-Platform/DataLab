@@ -228,7 +228,7 @@ class ResultData:
     """Result data associated to a shapetype"""
 
     # We now store adapted objects from the new architecture
-    results: list = None
+    results: list[GeometryAdapter | TableAdapter] = None
     xlabels: list[str] = None
     ylabels: list[str] = None
 
@@ -1596,7 +1596,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         ychoices = xchoices[1:]
 
         # Regrouping ResultShape results by their `title` attribute:
-        grouped_results = {}
+        grouped_results: dict[str, list[GeometryAdapter | TableAdapter]] = {}
         for result in rdata.results:
             grouped_results.setdefault(result.title, []).append(result)
 
