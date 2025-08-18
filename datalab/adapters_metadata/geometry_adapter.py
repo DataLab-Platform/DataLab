@@ -6,21 +6,10 @@ and image objects.
 
 from __future__ import annotations
 
-from typing import (
-    Any,
-    ClassVar,
-    Generator,
-    Union,
-)
+from typing import Any, ClassVar, Generator, Union
 
 import numpy as np
-from sigima.objects import (
-    NO_ROI,
-    GeometryResult,
-    ImageObj,
-    KindShape,
-    SignalObj,
-)
+from sigima.objects import NO_ROI, GeometryResult, ImageObj, KindShape, SignalObj
 
 
 class GeometryAdapter:
