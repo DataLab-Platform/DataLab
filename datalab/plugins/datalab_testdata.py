@@ -58,16 +58,6 @@ class PluginTestData(PluginBase):
         obj = test_data.create_paracetamol_signal()
         self.proxy.add_object(obj)
 
-    def create_noisy_signal(self) -> None:
-        """Create noisy signal"""
-        obj = self.signalpanel.new_object(add_to_panel=False)
-        if obj is not None:
-            noiseparam = test_data.GaussianNoiseParam(_("Noise"))
-            self.signalpanel.processor.update_param_defaults(noiseparam)
-            if noiseparam.edit(self.main):
-                test_data.add_gaussian_noise_to_signal(obj, noiseparam)
-                self.proxy.add_object(obj)
-
     # Image processing features ------------------------------------------------
     def add_noise_to_image(self) -> None:
         """Add noise to image"""
@@ -150,11 +140,6 @@ class PluginTestData(PluginBase):
                 triggered=self.create_paracetamol_signal,
                 select_condition="always",
                 separator=True,
-            )
-            sah.new_action(
-                _("Create noisy signal"),
-                triggered=self.create_noisy_signal,
-                select_condition="always",
             )
         # Image Panel -----------------------------------------------------------
         iah = self.imagepanel.acthandler
