@@ -16,8 +16,8 @@ from sigima.objects.scalar import NO_ROI, TableResult
 class TableAdapter:
     """Adapter for TableResult objects.
 
-    This adapter provides compatibility with the old ResultProperties interface
-    for DataLab, particularly for metadata storage and retrieval.
+    This adapter provides a unified interface for working with TableResult objects,
+    including metadata storage/retrieval and various data representations.
 
     Args:
         table: TableResult object to adapt
@@ -133,6 +133,24 @@ class TableAdapter:
         """
         return self.raw_data
 
+    @property
+    def label_contents(self) -> tuple[tuple[int, str], ...]:
+        """Return label contents for compatibility.
+
+        Returns:
+            Tuple of couples of (index, text) where index is the column
+            and text is the associated label
+        """
+        return tuple(enumerate(self.headers))
+
+    def set_obj_metadata(self, obj: Union[SignalObj, ImageObj]) -> None:
+        """Set object metadata from table result (alias for add_to).
+
+        Args:
+            obj: Signal or image object
+        """
+        self.add_to(obj)
+
     def to_dataframe(self):
         """Return DataFrame from table array.
 
@@ -231,21 +249,24 @@ class TableAdapter:
             roi_indices = array[:, 0].astype(int)
             data = array[:, 1:]
 
-            # Create TableResult
-            from datalab.adapters_metadata.legacy import create_table_result
-
-            table = create_table_result(
+            # Create TableResult directly
+            table = TableResult(
                 title=title,
+                names=headers,
+                labels=[],  # Labels not used in enhanced version
                 data=data,
-                headers=headers,
                 roi_indices=roi_indices,
+                attrs={},
             )
         else:
             # Create empty TableResult
-            table = create_table_result(
+            table = TableResult(
                 title=title,
+                names=headers,
+                labels=[],
                 data=np.zeros((0, len(headers)), dtype=float),
-                headers=headers,
+                roi_indices=np.array([], dtype=int),
+                attrs={},
             )
         return cls(table)
 

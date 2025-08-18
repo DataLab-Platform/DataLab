@@ -360,36 +360,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             from sigima.objects.scalar import GeometryResult, TableResult
 
             if isinstance(result, GeometryResult):
-                from datalab.adapters_metadata.legacy import (
-                    EnhancedGeometryResult,
-                    create_geometry_result,
-                )
+                from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
 
-                if not isinstance(result, EnhancedGeometryResult):
-                    # Convert raw GeometryResult to enhanced version
-                    result = create_geometry_result(
-                        title=result.title,
-                        kind=result.kind,
-                        coords=result.coords,
-                        roi_indices=result.roi_indices,
-                        attrs=result.attrs,
-                    )
+                # Create adapter for metadata management
+                result = GeometryAdapter(result)
             elif isinstance(result, TableResult):
-                from datalab.adapters_metadata.legacy import (
-                    EnhancedTableResult,
-                    create_table_result,
-                )
+                from datalab.adapters_metadata.table_adapter import TableAdapter
 
-                if not isinstance(result, EnhancedTableResult):
-                    # Convert raw TableResult to enhanced version
-                    result = create_table_result(
-                        title=result.title,
-                        names=result.names,
-                        labels=result.labels,
-                        data=result.data,
-                        roi_indices=result.roi_indices,
-                        attrs=result.attrs,
-                    )
+                # Create adapter for metadata management
+                result = TableAdapter(result)
 
         return result
 

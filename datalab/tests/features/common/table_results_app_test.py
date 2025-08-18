@@ -9,10 +9,10 @@ Result properties application test
 from __future__ import annotations
 
 import numpy as np
+from sigima.objects.scalar import NO_ROI, TableResult
 from sigima.tests import data as test_data
 
-from datalab.adapters_metadata import TableAdapter
-from datalab.adapters_metadata.legacy import create_table_result
+from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.tests import datalab_test_app_context
 
 
@@ -22,14 +22,14 @@ def create_image_with_table_results():
 
     # Create table results for testing
 
-    # Create a table result
-
-    table = create_table_result(
+    # Create a table result directly
+    table = TableResult(
         title="Statistics",
         names=["Mean", "Std", "Min", "Max"],
         labels=["Mean", "Standard Deviation", "Minimum", "Maximum"],
         data=np.array([[100.0, 15.5, 50.0, 150.0]]),
-        # roi_indices defaults to NO_ROI when not specified
+        roi_indices=np.array([NO_ROI], dtype=int),
+        attrs={},
     )
 
     TableAdapter(table).add_to(image)

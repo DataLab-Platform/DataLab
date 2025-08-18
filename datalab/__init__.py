@@ -40,5 +40,5 @@ DATAPATH = LOCALEPATH = ""
 #    - Used by image distribute_on_grid and reset_positions operations
 #
 # 4. Geometry/Table result compatibility (replaces monkey-patched methods):
-#    - Implemented via clean wrapper classes in datalab.adapters_metadata.legacy
-#    - Provides backward compatibility for old result APIs
+#    - Implemented via adapter classes in datalab.adapters_metadata
+#    - Provides clean API for result creation and metadata management

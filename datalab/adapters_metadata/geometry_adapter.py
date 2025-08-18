@@ -21,8 +21,8 @@ from sigima.objects.scalar import NO_ROI, GeometryResult, KindShape
 class GeometryAdapter:
     """Adapter for GeometryResult objects.
 
-    This adapter provides compatibility with the old ResultShape interface
-    for DataLab, particularly for metadata storage and retrieval.
+    This adapter provides a unified interface for working with GeometryResult objects,
+    including metadata storage/retrieval and various data representations.
 
     Args:
         geometry: GeometryResult object to adapt
@@ -199,34 +199,65 @@ class GeometryAdapter:
             for key, value in self.geometry.attrs.items():
                 obj.metadata[f"{base_key}_{key}"] = value
 
+    @property
+    def label_contents(self) -> tuple[tuple[int, str], ...]:
+        """Return label contents for compatibility.
+
+        Returns:
+            Tuple of couples of (index, text) where index is the column
+            and text is the associated label
+        """
+        return tuple(enumerate(self.headers))
+
+    def set_obj_metadata(self, obj: Union[SignalObj, ImageObj]) -> None:
+        """Set object metadata from geometry result (alias for add_to).
+
+        Args:
+            obj: Signal or image object
+        """
+        self.add_to(obj)
+
+    def get_text(self, obj: Union[SignalObj, ImageObj]) -> str:
+        """Return text representation of result.
+
+        Args:
+            obj: Signal or image object for ROI title lookup
+
+        Returns:
+            HTML formatted text representation
+        """
+        from sigima.objects.base import get_obj_roi_title
+
+        text = ""
+        for i_row in range(self.array.shape[0]):
+            suffix = ""
+            i_roi = i_row - 1
+            if i_roi >= 0:
+                suffix = f"|{get_obj_roi_title(obj, i_roi)}"
+            text += f"<u>{self.title}{suffix}</u>:"
+            for i_col, label in self.label_contents:
+                label = label.replace("<", "&lt;").replace(">", "&gt;")
+                if "%" not in label:
+                    label += " = %g"
+                value = self.shown_array[i_row, i_col]
+                text += f"<br>{label.strip().format(obj) % value}"
+            if i_row < self.shown_array.shape[0] - 1:
+                text += "<br><br>"
+        return text
+
     @staticmethod
     def add_geometry_result_to_obj(
         geometry: GeometryResult, obj: Union[SignalObj, ImageObj]
     ) -> None:
-        """Static method to add GeometryResult to object, automatically converting
-        to enhanced version if needed.
+        """Static method to add GeometryResult to object.
 
         Args:
-            geometry: GeometryResult object (raw or enhanced)
+            geometry: GeometryResult object
             obj: Signal or image object
         """
-        # Check if this is already an enhanced GeometryResult
-        from .legacy import EnhancedGeometryResult
-
-        if not isinstance(geometry, EnhancedGeometryResult):
-            # Convert raw GeometryResult to enhanced version
-            from .legacy import create_geometry_result
-
-            geometry = create_geometry_result(
-                title=geometry.title,
-                kind=geometry.kind,
-                coords=geometry.coords,
-                roi_indices=geometry.roi_indices,
-                attrs=geometry.attrs,
-            )
-
-        # Use the enhanced geometry's add_to method
-        geometry.add_to(obj)
+        # Create adapter and add to object
+        adapter = GeometryAdapter.from_geometry_result(geometry)
+        adapter.add_to(obj)
 
     @classmethod
     def match(cls, key: str, _value: Any) -> bool:
@@ -278,20 +309,50 @@ class GeometryAdapter:
             roi_indices = array[:, 0].astype(int)
             coords = array[:, 1:]
 
-            from datalab.adapters_metadata.legacy import create_geometry_result
+            # Convert shape string to KindShape
+            if isinstance(shape_value, str):
+                shape_map = {
+                    "rectangle": KindShape.RECTANGLE,
+                    "circle": KindShape.CIRCLE,
+                    "ellipse": KindShape.ELLIPSE,
+                    "segment": KindShape.SEGMENT,
+                    "marker": KindShape.MARKER,
+                    "point": KindShape.POINT,
+                    "polygon": KindShape.POLYGON,
+                }
+                kind = shape_map.get(shape_value.lower(), KindShape.POINT)
+            else:
+                kind = shape_value
 
-            geometry = create_geometry_result(
+            geometry = GeometryResult(
                 title=title,
-                kind=shape_value,
+                kind=kind,
                 coords=coords,
                 roi_indices=roi_indices,
+                attrs={},
             )
         else:
             # Create empty GeometryResult
-            geometry = create_geometry_result(
+            if isinstance(shape_value, str):
+                shape_map = {
+                    "rectangle": KindShape.RECTANGLE,
+                    "circle": KindShape.CIRCLE,
+                    "ellipse": KindShape.ELLIPSE,
+                    "segment": KindShape.SEGMENT,
+                    "marker": KindShape.MARKER,
+                    "point": KindShape.POINT,
+                    "polygon": KindShape.POLYGON,
+                }
+                kind = shape_map.get(shape_value.lower(), KindShape.POINT)
+            else:
+                kind = shape_value
+
+            geometry = GeometryResult(
                 title=title,
-                kind=KindShape(shape_value),
+                kind=kind,
                 coords=np.zeros((0, 2), dtype=float),
+                roi_indices=np.array([], dtype=int),
+                attrs={},
             )
         return cls(geometry)
 

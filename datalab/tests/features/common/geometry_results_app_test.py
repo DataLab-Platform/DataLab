@@ -35,21 +35,27 @@ def create_image_with_geometry_results() -> sigima.objects.ImageObj:
     image = sigima.objects.create_image_from_param(param)
     # Create geometry results for testing
 
-    # Create a point geometry
-    from datalab.adapters_metadata.legacy import create_geometry_result
+    # Create a point geometry directly
+    from sigima.objects.scalar import GeometryResult
 
-    point_geom = create_geometry_result(
+    from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
+
+    point_geom = GeometryResult(
         title="Point Test",
         kind=KindShape.POINT,
         coords=np.array([[10.0, 20.0]]),
+        roi_indices=np.array([0], dtype=int),
+        attrs={},
     )
     GeometryAdapter(point_geom).add_to(image)
 
-    # Create a rectangle geometry
-    rect_geom = create_geometry_result(
+    # Create a rectangle geometry directly
+    rect_geom = GeometryResult(
         title="Rectangle Test",
         kind=KindShape.RECTANGLE,
         coords=np.array([[10.0, 20.0, 30.0, 40.0]]),
+        roi_indices=np.array([0], dtype=int),
+        attrs={},
     )
     GeometryAdapter(rect_geom).add_to(image)
     return image

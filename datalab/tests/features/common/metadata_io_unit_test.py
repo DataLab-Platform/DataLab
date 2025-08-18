@@ -21,7 +21,6 @@ from sigima.tests import data as test_data
 from sigima.tests import helpers
 from sigima.tests.helpers import compare_metadata
 
-from datalab.adapters_metadata import GeometryAdapter
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 
@@ -36,13 +35,17 @@ def test_metadata_io_unit():
                 ima = test_data.create_annotated_image()
                 # Create geometry results for testing
 
-                # Create a point geometry
-                from datalab.adapters_metadata.legacy import create_geometry_result
+                # Create a point geometry directly
+                from sigima.objects.scalar import GeometryResult
 
-                point_geom = create_geometry_result(
+                from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
+
+                point_geom = GeometryResult(
                     title="Point Test",
                     kind=KindShape.POINT,
                     coords=np.array([[10.0, 20.0]]),
+                    roi_indices=np.array([0], dtype=int),
+                    attrs={},
                 )
 
                 GeometryAdapter(point_geom).add_to(ima)
