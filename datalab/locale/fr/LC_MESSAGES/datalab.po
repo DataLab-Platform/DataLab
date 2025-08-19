@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-10 07:48+0200\n"
+"POT-Creation-Date: 2025-08-19 11:33+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -188,6 +188,9 @@ msgstr "Soustraction d'offset"
 msgid "Evaluate and subtract the offset value from the data"
 msgstr "Évaluer et soustraire la valeur d'offset des données"
 
+msgid "Noise addition"
+msgstr "Addition de bruit"
+
 msgid "Noise reduction"
 msgstr "Réduction de bruit"
 
@@ -243,11 +246,17 @@ msgstr "signal"
 msgid "Zeros"
 msgstr "Zéros"
 
-msgid "Random uniform distribution"
-msgstr "Distribution uniforme aléatoire"
-
-msgid "Random normal distribution"
+#, fuzzy
+msgid "Normal distribution"
 msgstr "Distribution normale aléatoire"
+
+#, fuzzy
+msgid "Poisson distribution"
+msgstr "Distribution normale aléatoire"
+
+#, fuzzy
+msgid "Uniform distribution"
+msgstr "Distribution uniforme aléatoire"
 
 msgid "Gaussian"
 msgstr "Gaussienne"
@@ -1118,6 +1127,15 @@ msgstr "Normaliser"
 msgid "Clipping"
 msgstr "Écrêtage"
 
+msgid "Add Gaussian noise"
+msgstr "Ajouter du bruit gaussien"
+
+msgid "Add Poisson noise"
+msgstr "Ajouter du bruit de Poisson"
+
+msgid "Add uniform noise"
+msgstr "Ajouter du bruit uniforme"
+
 msgid "Gaussian filter"
 msgstr "Filtre gaussien"
 
@@ -1965,29 +1983,14 @@ msgstr "Données de test"
 msgid "Testing DataLab functionalities"
 msgstr "Tester les fonctionnalités de DataLab"
 
-msgid "Add noise"
-msgstr "Ajouter du bruit"
-
-msgid "Noise"
-msgstr "Bruit"
-
 msgid "Ring"
 msgstr "Anneau"
 
 msgid "Grid of Gaussian Images"
 msgstr "Grille d'images gaussiennes"
 
-msgid "Add noise to signal"
-msgstr "Ajouter du bruit au signal"
-
 msgid "Load spectrum of paracetamol"
 msgstr "Charger le spectre du paracétamol"
-
-msgid "Create noisy signal"
-msgstr "Créer un signal bruité"
-
-msgid "Add noise to image"
-msgstr "Ajouter du bruit à l'image"
 
 msgid "Create image with peaks"
 msgstr "Créer une image avec des pics"

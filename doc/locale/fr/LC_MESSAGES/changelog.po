@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 17:49+0200\n"
+"POT-Creation-Date: 2025-08-19 11:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,21 @@ msgstr "DataLab Version 0.21.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "New common signal/image feature:"
+msgstr "Nouvelles fonctionnalités communes signal/image :"
+
+msgid "Generate new signal or image: Poisson noise."
+msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
+
+msgid "Add noise to the selected signals or images."
+msgstr "Ajouter du bruit aux signaux ou images sélectionnés."
+
+msgid "Gaussian, Poisson or uniform noise can be added."
+msgstr "Du bruit gaussien, de Poisson ou uniforme peut être ajouté."
+
+msgid "This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
+msgstr "Ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
