@@ -511,6 +511,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 tip=_("Bulk save selected %s with naming pattern") % self.OBJECT_STR,
                 triggered=self.panel.bulk_save_dialog,
                 select_condition=SelectCond.at_least_one,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
             )
             self.new_action(
                 _("Import text file..."),
