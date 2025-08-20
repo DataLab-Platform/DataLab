@@ -274,10 +274,10 @@ class PasteMetadataParam(gds.DataSet):
     keep_other = gds.BoolItem(_("Other metadata"), default=True)
 
 
-class BulkSaveSettings(str, Enum):
-    """Bulk save settings enumeration
+class SaveToDirectorySettings(str, Enum):
+    """Save to directory settings.
 
-    This is used to define the naming scheme for bulk saving objects.
+    This is used to define the naming scheme for saving objects to a directory.
     It can be used to select between using the object title directly or a
     custom pattern.
     """
@@ -290,8 +290,8 @@ class BulkSaveSettings(str, Enum):
     PATTERN = "pattern"
 
 
-class BulkSaveParam(gds.DataSet):
-    """Bulk save parameters
+class SaveToDirectoryParam(gds.DataSet):
+    """Save to directory parameters.
 
     Fields:
         directory: Target output directory (pre-filled with last used base dir)
@@ -300,7 +300,7 @@ class BulkSaveParam(gds.DataSet):
                  Available placeholders: {n} (1-based index), {title} (object title)
         overwrite: Overwrite existing files
         preview: Read-only multiline list of generated filenames (updated by a
-                 callback provided externally – see BaseDataPanel.bulk_save_dialog)
+                 callback provided externally – see BaseDataPanel.save_to_directory)
     """
 
     # Directory pre-filled with configured base directory (updated before editing)
@@ -327,15 +327,15 @@ class BulkSaveParam(gds.DataSet):
             return
         # Build filenames using the selected naming scheme
         TITLE_PATTERN = "{title}"
-        if self.naming == BulkSaveSettings.TITLE:
+        if self.naming == SaveToDirectorySettings.TITLE:
             self.pattern = TITLE_PATTERN
 
         # update radio choice item when pattern is changed
         if _item and getattr(_item, "_name", None) == "pattern":
             if _value == TITLE_PATTERN:
-                self.naming = BulkSaveSettings.TITLE
+                self.naming = SaveToDirectorySettings.TITLE
             else:
-                self.naming = BulkSaveSettings.PATTERN
+                self.naming = SaveToDirectorySettings.PATTERN
             self.pattern = _value
 
         format_string = self.pattern or TITLE_PATTERN
@@ -362,8 +362,8 @@ class BulkSaveParam(gds.DataSet):
 
     naming = gds.ChoiceItem(
         _("File name"),
-        BulkSaveSettings,
-        default=BulkSaveSettings.TITLE,
+        SaveToDirectorySettings,
+        default=SaveToDirectorySettings.TITLE,
         help=_("Choose how to build each output file name"),
         radio=True,
     ).set_prop("display", callback=update_filenames)
@@ -1283,11 +1283,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     Conf.main.base_dir.set(filename)
                     self.__save_to_file(obj, filename)
 
-    def bulk_save_dialog(self, param: BulkSaveParam | None = None) -> None:
-        """Bulk save selected objects.
+    def save_to_directory(self, param: SaveToDirectoryParam | None = None) -> None:
+        """Save objects to directory using a filename pattern.
 
         Args:
-            param: Optional BulkSaveParam dataset. If None, a new one is created.
+            param: Optional SaveToDirectoryParam dataset. If None, a new one is created.
 
         Opens a dialog (unless a pre-filled param already edited is passed) to select
         output directory, naming mode (title or pattern) and preview filenames before
@@ -1300,9 +1300,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         created_param = False
         if param is None:
-            param = BulkSaveParam(
-                _("Bulk save"),
-                comment=_("Save all selected objects with a naming pattern."),
+            param = SaveToDirectoryParam(
+                _("Save to directory"),
+                comment=_("Save selected objects using a filename pattern."),
             )
             param.set_directory_default()
             created_param = True
@@ -1345,7 +1345,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 with qt_try_loadsave_file(self.parent(), out_path, "save"):
                     self.__save_to_file(obj, out_path)
 
-        QW.QMessageBox.information(self, APP_NAME, _("Bulk save finished."))
+        QW.QMessageBox.information(self, APP_NAME, _("Save to directory finished."))
 
     def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
         """Handle dropped files

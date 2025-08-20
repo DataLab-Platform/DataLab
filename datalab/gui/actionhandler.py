@@ -503,13 +503,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_pos=-1,
                 toolbar_pos=-1,
             )
-            # New bulk save action (multiple objects with pattern)
             self.new_action(
-                _("Bulk save..."),
+                _("Save to directory..."),
                 # icon: filesave_sig.svg or filesave_ima.svg
                 icon_name=f"filesave_{self.OBJECT_STR[:3]}.svg",
-                tip=_("Bulk save selected %s with naming pattern") % self.OBJECT_STR,
-                triggered=self.panel.bulk_save_dialog,
+                tip=_("Save selected %ss using a filename pattern") % self.OBJECT_STR,
+                triggered=self.panel.save_to_directory,
                 select_condition=SelectCond.at_least_one,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
