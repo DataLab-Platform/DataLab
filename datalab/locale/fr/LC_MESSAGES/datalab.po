@@ -29,23 +29,23 @@ msgid "Open %s..."
 msgstr "Ouvrir un objet %s..."
 
 #, python-format
-msgid "Open %s"
-msgstr "Ouvrir un objet %s"
+msgid "Open one or more %s files"
+msgstr "Ouvrir un ou plusieurs fichiers de type %s"
 
 msgid "Open from directory..."
 msgstr "Ouvrir depuis le répertoire..."
 
 #, python-format
-msgid "Open %s objects from directory"
-msgstr "Ouvrir des objets %s depuis le répertoire"
+msgid "Open all %s files from directory"
+msgstr "Ouvrir tous les fichiers de type %s dans le répertoire"
 
 #, python-format
 msgid "Save %s..."
 msgstr "Enregistrer un objet %s..."
 
 #, python-format
-msgid "Save selected %s"
-msgstr "Enregistrer l'objet %s sélectionné"
+msgid "Save selected %ss"
+msgstr "Enregistrer la sélection de type %s"
 
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
@@ -588,8 +588,8 @@ msgstr "Bienvenue dans %s !"
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-msgid "Open one or several HDF5 files"
-msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
+msgid "Open one or more HDF5 files"
+msgstr "Ouvrir un ou plusieurs fichiers HDF5"
 
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."

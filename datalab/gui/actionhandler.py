@@ -478,7 +478,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Open %s...") % self.OBJECT_STR,
                 # icon: fileopen_signal.svg or fileopen_image.svg
                 icon_name=f"fileopen_{self.__class__.__name__[:3].lower()}.svg",
-                tip=_("Open %s") % self.OBJECT_STR,
+                tip=_("Open one or more %s files") % self.OBJECT_STR,
                 triggered=self.panel.load_from_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Open),
                 select_condition=SelectCond.always,
@@ -487,7 +487,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Open from directory..."),
                 icon_name="fileopen_directory.svg",
-                tip=_("Open %s objects from directory") % self.OBJECT_STR,
+                tip=_("Open all %s files from directory") % self.OBJECT_STR,
                 triggered=self.panel.load_from_directory,
                 select_condition=SelectCond.always,
                 toolbar_pos=-1,
@@ -496,7 +496,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Save %s...") % self.OBJECT_STR,
                 # icon: filesave_signal.svg or filesave_image.svg
                 icon_name=f"filesave_{self.__class__.__name__[:3].lower()}.svg",
-                tip=_("Save selected %s") % self.OBJECT_STR,
+                tip=_("Save selected %ss") % self.OBJECT_STR,
                 triggered=self.panel.save_to_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),
                 select_condition=SelectCond.at_least_one,

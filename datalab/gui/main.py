@@ -806,7 +806,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             self,
             _("Open HDF5 files..."),
             icon=get_icon("fileopen_h5.svg"),
-            tip=_("Open one or several HDF5 files"),
+            tip=_("Open one or more HDF5 files"),
             triggered=lambda checked=False: self.open_h5_files(import_all=True),
         )
         self.saveh5_action = create_action(
