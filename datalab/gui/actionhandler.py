@@ -476,8 +476,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 self.create_new_object_actions()
             self.new_action(
                 _("Open %s...") % self.OBJECT_STR,
-                # icon: fileopen_signal.svg or fileopen_image.svg
-                icon_name=f"fileopen_{self.__class__.__name__[:3].lower()}.svg",
+                # icon: fileopen_sig.svg or fileopen_ima.svg
+                icon_name=f"fileopen_{self.OBJECT_STR[:3]}.svg",
                 tip=_("Open one or more %s files") % self.OBJECT_STR,
                 triggered=self.panel.load_from_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Open),
@@ -494,8 +494,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Save %s...") % self.OBJECT_STR,
-                # icon: filesave_signal.svg or filesave_image.svg
-                icon_name=f"filesave_{self.__class__.__name__[:3].lower()}.svg",
+                # icon: filesave_sig.svg or filesave_ima.svg
+                icon_name=f"filesave_{self.OBJECT_STR[:3]}.svg",
                 tip=_("Save selected %ss") % self.OBJECT_STR,
                 triggered=self.panel.save_to_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),
@@ -506,7 +506,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             # New bulk save action (multiple objects with pattern)
             self.new_action(
                 _("Bulk save..."),
-                icon_name=f"filesave_{self.__class__.__name__[:3].lower()}.svg",
+                # icon: filesave_sig.svg or filesave_ima.svg
+                icon_name=f"filesave_{self.OBJECT_STR[:3]}.svg",
                 tip=_("Bulk save selected %s with naming pattern") % self.OBJECT_STR,
                 triggered=self.panel.bulk_save_dialog,
                 select_condition=SelectCond.at_least_one,
