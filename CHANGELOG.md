@@ -8,8 +8,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * New common signal/image feature:
   * Added `phase` (argument) feature to extract the phase information from complex signals or images.
-  * This complements the "Absolute value" (modulus) feature.
-  * This partially implements [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
+    * This complements the "Absolute value" (modulus) feature.
+  * Added operation to create complex-valued signal/image from real and imaginary parts.
+  * Added operation to create complex-valued signal/image from magnitude and phase.
+  * This closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
 
 * New ROI (Region of Interest) management features:
   * New "ROI" menu, between "Edit" and "Operations" menus

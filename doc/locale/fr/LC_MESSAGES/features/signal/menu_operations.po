@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 08:20+0200\n"
+"POT-Creation-Date: 2025-08-21 14:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -168,6 +168,15 @@ msgstr ""
 msgid ":py:func:`sigima.proc.signal.phase`"
 msgstr ":py:func:`sigima.proc.signal.phase`"
 
+msgid "|complex_from_magnitude_phase| Complex from magnitude and phase"
+msgstr "|complex_from_magnitude_phase| Complexe à partir de la magnitude et de la phase"
+
+msgid "complex_from_magnitude_phase"
+msgstr "complex_from_magnitude_phase"
+
+msgid ":py:func:`sigima.proc.signal.complex_from_magnitude_phase`"
+msgstr ":py:func:`sigima.proc.signal.complex_from_magnitude_phase`"
+
 msgid "|re| Real part"
 msgstr "|re| Partie réelle"
 
@@ -187,6 +196,15 @@ msgstr "im"
 #, python-brace-format
 msgid ":math:`y_{k} = \\Im(y_{k-1})`"
 msgstr ":math:`y_{k} = \\Im(y_{k-1})`"
+
+msgid "|complex_from_real_imag| Complex from real and imaginary parts"
+msgstr "|complex_from_real_imag| Complexe à partir des parties réelle et imaginaire"
+
+msgid "complex_from_real_imag"
+msgstr "complex_from_real_imag"
+
+msgid ":py:func:`sigima.proc.signal.complex_from_real_imag`"
+msgstr ":py:func:`sigima.proc.signal.complex_from_real_imag`"
 
 msgid "Data type conversion"
 msgstr "Conversion du type de données"

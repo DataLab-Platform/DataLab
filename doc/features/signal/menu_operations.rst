@@ -126,10 +126,14 @@ Absolute value and complex signal operations
       - :math:`y_{k} = |y_{k-1}|`
     * - |phase| Phase (argument)
       - :py:func:`sigima.proc.signal.phase`
+    * - |complex_from_magnitude_phase| Complex from magnitude and phase
+      - :py:func:`sigima.proc.signal.complex_from_magnitude_phase`
     * - |re| Real part
       - :math:`y_{k} = \Re(y_{k-1})`
     * - |im| Imaginary part
       - :math:`y_{k} = \Im(y_{k-1})`
+    * - |complex_from_real_imag| Complex from real and imaginary parts
+      - :py:func:`sigima.proc.signal.complex_from_real_imag`
 
 .. |abs| image:: ../../../datalab/data/icons/operations/abs.svg
     :width: 24px
@@ -141,12 +145,22 @@ Absolute value and complex signal operations
     :height: 24px
     :class: dark-light no-scaled-link
 
+.. |complex_from_magnitude_phase| image:: ../../../datalab/data/icons/operations/phase.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
 .. |re| image:: ../../../datalab/data/icons/operations/re.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
 .. |im| image:: ../../../datalab/data/icons/operations/im.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |complex_from_real_imag| image:: ../../../datalab/data/icons/operations/im.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

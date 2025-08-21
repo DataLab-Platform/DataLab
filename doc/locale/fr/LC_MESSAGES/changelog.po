@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 08:12+0200\n"
+"POT-Creation-Date: 2025-08-21 14:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -39,8 +39,14 @@ msgstr "Ajout de la fonctionnalité `phase` (argument) pour extraire les informa
 msgid "This complements the \"Absolute value\" (modulus) feature."
 msgstr "Ceci complète la fonctionnalité \"Valeur absolue\" (module)."
 
-msgid "This partially implements [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
-msgstr "Ceci implémente une partie de [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+msgid "Added operation to create complex-valued signal/image from real and imaginary parts."
+msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir des parties réelle et imaginaire."
+
+msgid "Added operation to create complex-valued signal/image from magnitude and phase."
+msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir de l'amplitude et de la phase."
+
+msgid "This closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+msgstr "Ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
