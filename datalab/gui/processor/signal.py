@@ -113,15 +113,24 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             paramclass=sigima.params.PhaseParam,
             icon_name="phase.svg",
         )
+        self.register_2_to_1(
+            sigima_signal.complex_from_magnitude_phase,
+            _("Combine with phase"),
+            paramclass=sigima_base.AngleUnitParam,
+            icon_name="complex_from_magnitude_phase.svg",
+            comment=_("Create a complex-valued signal from magnitude and phase"),
+            obj2_name=_("phase"),
+        )
         self.register_1_to_1(sigima_signal.real, _("Real part"), icon_name="re.svg")
         self.register_1_to_1(
             sigima_signal.imag, _("Imaginary part"), icon_name="im.svg"
         )
         self.register_2_to_1(
-            sigima_signal.combine_to_complex,
-            _("Combine to complex"),
-            paramclass=sigima_base.CombineToComplexParam,
-            obj2_name=_("imaginary part or phase angle"),
+            sigima_signal.complex_from_real_imag,
+            _("Combine with imaginary part"),
+            icon_name="complex_from_real_imag.svg",
+            comment=_("Create a complex-valued signal from real and imaginary parts"),
+            obj2_name=_("imaginary part"),
         )
         self.register_1_to_1(
             sigima_signal.astype,

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-14 07:59+0200\n"
+"POT-Creation-Date: 2025-08-21 14:26+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1048,11 +1048,29 @@ msgstr "Valeur absolue"
 msgid "Phase"
 msgstr "Phase"
 
+msgid "Combine with phase"
+msgstr "Combiner avec la phase"
+
+msgid "Create a complex-valued image from magnitude and phase"
+msgstr "Créer une image à valeurs complexes à partir de l'amplitude et de la phase"
+
+msgid "phase"
+msgstr "phase"
+
 msgid "Real part"
 msgstr "Partie réelle"
 
 msgid "Imaginary part"
 msgstr "Partie imaginaire"
+
+msgid "Combine with imaginary part"
+msgstr "Combiner avec la partie imaginaire"
+
+msgid "Create a complex-valued image from real and imaginary parts"
+msgstr "Créer une image à valeurs complexes à partir des parties réelle et imaginaire"
+
+msgid "imaginary part"
+msgstr "partie imaginaire"
 
 msgid "Convert data type"
 msgstr "Convertir le type de données"
@@ -1381,6 +1399,12 @@ msgstr "Débruitage Top-Hat"
 
 msgid "signal to subtract"
 msgstr "signal à soustraire"
+
+msgid "Create a complex-valued signal from magnitude and phase"
+msgstr "Créer un signal à valeurs complexes à partir de l'amplitude et de la phase"
+
+msgid "Create a complex-valued signal from real and imaginary parts"
+msgstr "Créer un signal à valeurs complexes à partir des parties réelle et imaginaire"
 
 msgid "Square root"
 msgstr "Racine carrée"
@@ -2541,4 +2565,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

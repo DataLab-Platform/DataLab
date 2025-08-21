@@ -102,13 +102,22 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             paramclass=sigima.params.PhaseParam,
             icon_name="phase.svg",
         )
+        self.register_2_to_1(
+            sigima_image.complex_from_magnitude_phase,
+            _("Combine with phase"),
+            paramclass=sigima_base.AngleUnitParam,
+            icon_name="complex_from_magnitude_phase.svg",
+            comment=_("Create a complex-valued image from magnitude and phase"),
+            obj2_name=_("phase"),
+        )
         self.register_1_to_1(sigima_image.real, _("Real part"), icon_name="re.svg")
         self.register_1_to_1(sigima_image.imag, _("Imaginary part"), icon_name="im.svg")
         self.register_2_to_1(
-            sigima_image.combine_to_complex,
-            _("Combine to complex"),
-            paramclass=sigima_base.CombineToComplexParam,
-            obj2_name=_("imaginary part or phase angle"),
+            sigima_image.complex_from_real_imag,
+            _("Combine with imaginary part"),
+            icon_name="complex_from_real_imag.svg",
+            comment=_("Create a complex-valued image from real and imaginary parts"),
+            obj2_name=_("imaginary part"),
         )
         self.register_1_to_1(
             sigima_image.astype,
