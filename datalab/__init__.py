@@ -22,12 +22,3 @@ os.environ["DATALAB_VERSION"] = __version__
 # Dear (Debian, RPM, ...) package makers, please feel free to customize the
 # following path to module's data (images) and translations:
 DATAPATH = LOCALEPATH = ""
-
-
-# Compatibility implementations for removed Sigima methods:
-#
-# 1. Geometry transformations (replaces "transform_shapes"):
-#    - Implemented in datalab.utils.geometry_transforms.apply_geometry_transform
-#    - Used by image geometric operations (rotate, rotate90, rotate270, fliph, flipv)
-#    - Automatically applied via wrapper functions in ImageProcessor
-#

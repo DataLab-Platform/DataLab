@@ -15,8 +15,8 @@ from sigima.proc.transformations import transformer
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
+from datalab.gui.processor.image import apply_geometry_transform
 from datalab.tests import datalab_test_app_context
-from datalab.utils.geometry_transforms import apply_geometry_transform
 
 
 def __create_test_image() -> sio.ImageObj:

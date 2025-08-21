@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import importlib
+from typing import Literal
 
 import numpy as np
 import sigima.params
@@ -17,19 +18,81 @@ import sigima.proc.image as sigima_image
 from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
-from sigima.objects import ImageROI, ROI2DParam
+from sigima.objects import ImageObj, ImageROI, ROI2DParam
 from sigima.objects.scalar import GeometryResult
 from sigima.proc.decorator import ComputationMetadata
 from sigima.proc.transformations import transformer
 
+from datalab.adapters_metadata import GeometryAdapter
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
 from datalab.gui.profiledialog import ProfileExtractionDialog
 from datalab.gui.roigrideditor import ImageGridROIEditor
 from datalab.objectmodel import get_uuid
-from datalab.utils.geometry_transforms import apply_geometry_transform
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets import imagebackground
+
+
+def apply_geometry_transform(
+    obj: ImageObj,
+    operation: Literal[
+        "translate", "scale", "rotate90", "rotate270", "fliph", "flipv", "transpose"
+    ],
+    **kwargs,
+) -> None:
+    """Apply a geometric transformation to all geometry results in an object.
+
+    This uses the Sigima transformation system for proper geometric operations.
+    For image objects, rotations are performed around the image center to match
+    how the image data is transformed.
+
+    Args:
+        obj: The object containing geometry results to transform
+        operation: The transformation operation name
+        **kwargs: Optional parameters for the transformation (e.g., angle for rotate)
+    """
+    assert operation in [
+        "translate",
+        "scale",
+        "rotate90",
+        "rotate270",
+        "fliph",
+        "flipv",
+        "transpose",
+    ], f"Unknown operation: {operation}"
+    if operation == "translate":
+        if not kwargs or "dx" not in kwargs or "dy" not in kwargs:
+            raise ValueError("translate operation requires 'dx' and 'dy' parameters")
+        dx, dy = kwargs["dx"], kwargs["dy"]
+    elif operation == "scale":
+        if not kwargs or "sx" not in kwargs or "sy" not in kwargs:
+            raise ValueError("scale operation requires 'sx' and 'sy' parameters")
+        sx, sy = kwargs["sx"], kwargs["sy"]
+    for adapter in list(GeometryAdapter.iterate_from_obj(obj)):
+        geometry = adapter.geometry
+        assert geometry is not None, "Geometry should not be None"
+        assert len(geometry.coords) > 0, "Geometry coordinates should not be empty"
+        if operation == "translate":
+            tr_geometry = transformer.translate(geometry, dx, dy)
+        elif operation == "scale":
+            tr_geometry = transformer.scale(geometry, sx, sy, (obj.xc, obj.yc))
+        elif operation == "rotate90":
+            tr_geometry = transformer.rotate(geometry, -np.pi / 2, (obj.xc, obj.yc))
+        elif operation == "rotate270":
+            tr_geometry = transformer.rotate(geometry, np.pi / 2, (obj.xc, obj.yc))
+        elif operation == "fliph":
+            tr_geometry = transformer.fliph(geometry, obj.xc)
+        elif operation == "flipv":
+            tr_geometry = transformer.flipv(geometry, obj.yc)
+        elif operation == "transpose":
+            tr_geometry = transformer.transpose(geometry)
+        else:
+            raise ValueError(f"Unknown operation: {operation}")
+
+        # Remove the old geometry and add the transformed one
+        adapter.remove_from(obj)
+        tr_adapter = GeometryAdapter(tr_geometry)
+        tr_adapter.add_to(obj)
 
 
 class GeometricTransformWrapper:
@@ -72,24 +135,7 @@ class GeometricTransformWrapper:
             dst_obj = self.func(src_obj, param)
         else:
             dst_obj = self.func(src_obj)
-
-        # Apply geometry transformation to geometry results (if any)
-        if self.operation == "rotate90":
-            apply_geometry_transform(dst_obj, "rotate90", None)
-        elif self.operation == "rotate270":
-            apply_geometry_transform(dst_obj, "rotate270", None)
-        elif self.operation == "fliph":
-            apply_geometry_transform(dst_obj, "fliph", None)
-        elif self.operation == "flipv":
-            apply_geometry_transform(dst_obj, "flipv", None)
-        elif self.operation == "transpose":
-            # For diagonal flip/transpose
-            apply_geometry_transform(dst_obj, "transpose", None)
-        else:
-            raise NotImplementedError(
-                f"Geometry operation '{self.operation}' is not implemented."
-            )
-
+        apply_geometry_transform(dst_obj, operation=self.operation)
         return dst_obj
 
     def __getstate__(self):
@@ -786,7 +832,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             return
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         g_row, g_col, x0, y0, x0_0, y0_0 = 0, 0, 0.0, 0.0, 0.0, 0.0
-        delta_x0, delta_y0 = 0.0, 0.0
+        dx0, dy0 = 0.0, 0.0
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             for i_row, obj in enumerate(objs):
                 progress.setValue(i_row + 1)
@@ -796,15 +842,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 if i_row == 0:
                     x0_0, y0_0 = x0, y0 = obj.x0, obj.y0
                 else:
-                    delta_x0, delta_y0 = x0 - obj.x0, y0 - obj.y0
-                    obj.x0 += delta_x0
-                    obj.y0 += delta_y0
-                    apply_geometry_transform(
-                        obj, "translate", {"dx": delta_x0, "dy": delta_y0}
-                    )
-                    transformer.transform_roi(
-                        obj, "translate", dx=delta_x0, dy=delta_y0
-                    )
+                    dx0, dy0 = x0 - obj.x0, y0 - obj.y0
+                    obj.x0 += dx0
+                    obj.y0 += dy0
+                    apply_geometry_transform(obj, "translate", dx=dx0, dy=dy0)
+                    transformer.transform_roi(obj, "translate", dx=dx0, dy=dy0)
                 if param.direction == "row":
                     # Distributing images over rows
                     sign = np.sign(param.rows)
@@ -829,19 +871,17 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     def reset_positions(self) -> None:
         """Reset image positions"""
         x0_0, y0_0 = 0.0, 0.0
-        delta_x0, delta_y0 = 0.0, 0.0
+        dx0, dy0 = 0.0, 0.0
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         for i_row, obj in enumerate(objs):
             if i_row == 0:
                 x0_0, y0_0 = obj.x0, obj.y0
             else:
-                delta_x0, delta_y0 = x0_0 - obj.x0, y0_0 - obj.y0
-                obj.x0 += delta_x0
-                obj.y0 += delta_y0
-                apply_geometry_transform(
-                    obj, "translate", {"dx": delta_x0, "dy": delta_y0}
-                )
-                transformer.transform_roi(obj, "translate", dx=delta_x0, dy=delta_y0)
+                dx0, dy0 = x0_0 - obj.x0, y0_0 - obj.y0
+                obj.x0 += dx0
+                obj.y0 += dy0
+                apply_geometry_transform(obj, "translate", dx=dx0, dy=dy0)
+                transformer.transform_roi(obj, "translate", dx=dx0, dy=dy0)
         self.panel.refresh_plot("selected", True, False)
 
     # ------Image Processing
