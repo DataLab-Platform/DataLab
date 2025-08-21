@@ -10,121 +10,60 @@ using the comprehensive Sigima transformation system.
 
 from __future__ import annotations
 
-import sigima.proc.image as sigima_image
-from sigima.objects import ImageObj, SignalObj
-from sigima.proc import scalar
+import numpy as np
+from sigima.objects import ImageObj
+from sigima.proc.transformations import transformer
 
 from datalab.adapters_metadata import GeometryAdapter
 
 
 def apply_geometry_transform(
-    obj: SignalObj | ImageObj, operation: str, param_dict: dict | None = None
+    obj: ImageObj, operation: str, param_dict: dict | None = None
 ) -> None:
     """Apply a geometric transformation to all geometry results in an object.
 
     This uses the Sigima transformation system for proper geometric operations.
+    For image objects, rotations are performed around the image center to match
+    how the image data is transformed.
 
     Args:
         obj: The object containing geometry results to transform
         operation: The transformation operation name
         param_dict: Optional parameters for the transformation (e.g., angle for rotate)
     """
-    # Determine if this is an image or signal object
-    is_image = isinstance(obj, ImageObj)
-
-    # Select the appropriate mapping based on object type
-    if is_image:
-        operation_map = scalar.IMAGE_GEOMETRY_UPDATE_MAP
-    else:
-        operation_map = scalar.SIGNAL_GEOMETRY_UPDATE_MAP
-
-    if operation not in operation_map:
-        if operation in ["translate", "scale"]:
-            # Handle operations not in the standard maps
-            _apply_custom_operation(obj, operation, param_dict)
-            return
-        raise ValueError(f"'{operation}' is not a valid transformation operation.")
-
-    # Get transformation function and parameter builder
-    transform_func, param_builder = operation_map[operation]
-
-    # Transform all geometry results in the object
-    # Collect adapters first to avoid iterator invalidation during modification
-    adapters_to_transform = list(GeometryAdapter.iterate_from_obj(obj))
-
-    for adapter in adapters_to_transform:
+    for adapter in list(GeometryAdapter.iterate_from_obj(obj)):
         geometry = adapter.geometry
-        if geometry.coords is not None and len(geometry.coords) > 0:
-            # Build parameters for the transformation
-            if param_dict:
-                # Create a parameter object if needed
-                if operation == "rotate" and "angle" in param_dict:
-                    param_obj = sigima_image.RotateParam()
-                    param_obj.angle = param_dict["angle"]
-                    args = param_builder(geometry, param_obj)
-                else:
-                    args = param_builder(geometry)
-            else:
-                args = param_builder(geometry)
+        assert geometry is not None, "Geometry should not be None"
+        assert len(geometry.coords) > 0, "Geometry coordinates should not be empty"
+        if operation == "translate":
+            if not param_dict or "dx" not in param_dict or "dy" not in param_dict:
+                raise ValueError(
+                    "translate operation requires 'dx' and 'dy' parameters"
+                )
+            dx = param_dict["dx"]
+            dy = param_dict["dy"]
+            tr_geometry = transformer.translate(geometry, dx, dy)
+        elif operation == "scale":
+            if not param_dict or "sx" not in param_dict or "sy" not in param_dict:
+                raise ValueError("scale operation requires 'sx' and 'sy' parameters")
+            sx = param_dict["sx"]
+            sy = param_dict["sy"]
+            center = param_dict.get("center", (0.0, 0.0))  # Default to (0, 0)
+            tr_geometry = transformer.scale(geometry, sx, sy, center)
+        elif operation == "rotate90":
+            tr_geometry = transformer.rotate(geometry, -np.pi / 2, (obj.xc, obj.yc))
+        elif operation == "rotate270":
+            tr_geometry = transformer.rotate(geometry, np.pi / 2, (obj.xc, obj.yc))
+        elif operation == "fliph":
+            tr_geometry = transformer.fliph(geometry, obj.xc)
+        elif operation == "flipv":
+            tr_geometry = transformer.flipv(geometry, obj.yc)
+        elif operation == "transpose":
+            tr_geometry = transformer.transpose(geometry)
+        else:
+            raise ValueError(f"Unknown operation: {operation}")
 
-            # Apply the transformation
-            transformed_geometry = transform_func(*args)
-
-            # Remove the old geometry and add the transformed one
-            adapter.remove_from(obj)
-            transformed_adapter = GeometryAdapter(transformed_geometry)
-            transformed_adapter.add_to(obj)
-
-
-def _apply_custom_operation(
-    obj: SignalObj | ImageObj, operation: str, param_dict: dict | None = None
-) -> None:
-    """Apply custom operations not in the standard Sigima maps."""
-    if operation == "translate":
-        if not param_dict or "dx" not in param_dict:
-            raise ValueError("translate operation requires 'dx' parameter")
-        dx = param_dict["dx"]
-        dy = param_dict.get("dy", 0.0)  # Default to 0 for signals
-
-        # Collect adapters first to avoid iterator invalidation during modification
-        adapters_to_transform = list(GeometryAdapter.iterate_from_obj(obj))
-
-        for adapter in adapters_to_transform:
-            geometry = adapter.geometry
-            if geometry.coords is not None and len(geometry.coords) > 0:
-                if isinstance(obj, ImageObj):
-                    transformed_geometry = scalar.translate(geometry, dx, dy)
-                else:
-                    # For signals, only translate in X direction
-                    transformed_geometry = scalar.translate_1d(geometry, dx)
-
-                # Remove the old geometry and add the transformed one
-                adapter.remove_from(obj)
-                transformed_adapter = GeometryAdapter(transformed_geometry)
-                transformed_adapter.add_to(obj)
-
-    elif operation == "scale":
-        if not param_dict:
-            raise ValueError("scale operation requires parameters")
-
-        # Collect adapters first to avoid iterator invalidation during modification
-        adapters_to_transform = list(GeometryAdapter.iterate_from_obj(obj))
-
-        for adapter in adapters_to_transform:
-            geometry = adapter.geometry
-            if geometry.coords is not None and len(geometry.coords) > 0:
-                if isinstance(obj, ImageObj):
-                    sx = param_dict.get("sx", 1.0)
-                    sy = param_dict.get("sy", 1.0)
-                    center = param_dict.get("center", None)
-                    transformed_geometry = scalar.scale(geometry, sx, sy, center)
-                else:
-                    # For signals, only scale in X direction
-                    factor = param_dict.get("factor", 1.0)
-                    center_x = param_dict.get("center_x", None)
-                    transformed_geometry = scalar.scale_1d(geometry, factor, center_x)
-
-                # Remove the old geometry and add the transformed one
-                adapter.remove_from(obj)
-                transformed_adapter = GeometryAdapter(transformed_geometry)
-                transformed_adapter.add_to(obj)
+        # Remove the old geometry and add the transformed one
+        adapter.remove_from(obj)
+        tr_adapter = GeometryAdapter(tr_geometry)
+        tr_adapter.add_to(obj)

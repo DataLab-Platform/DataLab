@@ -229,9 +229,9 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             item = self.__make_marker_item(x0, y0, fmt)
         elif self.result_adapter.geometry.kind is KindShape.RECTANGLE:
             assert len(coords) == 4, "Coordinates must be a 4-element array"
-            x0, y0, x1, y1 = coords
+            x0, y0, dx, dy = coords
             item = make.annotated_rectangle(
-                x0, y0, x1, y1, title=self.result_adapter.title
+                x0, y0, x0 + dx, y0 + dy, title=self.result_adapter.title
             )
         elif self.result_adapter.geometry.kind is KindShape.CIRCLE:
             assert len(coords) == 3, "Coordinates must be a 3-element array"

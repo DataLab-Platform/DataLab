@@ -20,6 +20,7 @@ from qtpy import QtWidgets as QW
 from sigima.objects import ImageROI, ROI2DParam
 from sigima.objects.scalar import GeometryResult
 from sigima.proc.decorator import ComputationMetadata
+from sigima.proc.transformations import transformer
 
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
@@ -81,9 +82,6 @@ class GeometricTransformWrapper:
             apply_geometry_transform(dst_obj, "fliph", None)
         elif self.operation == "flipv":
             apply_geometry_transform(dst_obj, "flipv", None)
-        elif self.operation == "rotate" and param:
-            # For custom rotation, we need to apply rotation with angle
-            apply_geometry_transform(dst_obj, "rotate", {"angle": param.angle})
         elif self.operation == "transpose":
             # For diagonal flip/transpose
             apply_geometry_transform(dst_obj, "transpose", None)
@@ -269,9 +267,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             icon_name="rotate_left.svg",
         )
         self.register_1_to_1(
-            self._wrap_geometric_transform(sigima_image.rotate, "rotate"),
-            _("Rotate by..."),
-            sigima_image.RotateParam,
+            sigima_image.rotate, _("Rotate by..."), sigima_image.RotateParam
         )
         # Intensity profiles
         self.register_1_to_1(
@@ -805,6 +801,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                     obj.y0 += delta_y0
                     apply_geometry_transform(
                         obj, "translate", {"dx": delta_x0, "dy": delta_y0}
+                    )
+                    transformer.transform_roi(
+                        obj, "translate", dx=delta_x0, dy=delta_y0
                     )
                 if param.direction == "row":
                     # Distributing images over rows
