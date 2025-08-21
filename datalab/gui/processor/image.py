@@ -841,6 +841,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 apply_geometry_transform(
                     obj, "translate", {"dx": delta_x0, "dy": delta_y0}
                 )
+                transformer.transform_roi(obj, "translate", dx=delta_x0, dy=delta_y0)
         self.panel.refresh_plot("selected", True, False)
 
     # ------Image Processing
