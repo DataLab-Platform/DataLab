@@ -12,6 +12,7 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
+from sigima.proc.enums import BorderMode
 from sigima.tests.data import (
     GaussianNoiseParam,
     create_noisy_signal,
@@ -397,7 +398,9 @@ def run_image_computations(
     panel.processor.run_feature("flipv")
 
     param = sigima.params.RotateParam.create(angle=5.0)
-    for boundary in param.boundaries[:-1]:
+    for boundary in BorderMode:
+        if boundary is BorderMode.MIRROR:
+            continue
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 

@@ -17,6 +17,7 @@ import sigima.params
 import sigima.proc.image as sigima_image
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
+from sigima.proc.enums import BorderMode
 from sigima.tests.data import (
     create_multigaussian_image,
     create_paracetamol_signal,
@@ -128,7 +129,9 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     panel.processor.run_feature("flipv")
 
     param = sigima_image.RotateParam.create(angle=5.0)
-    for boundary in param.boundaries[:-1]:
+    for boundary in BorderMode:
+        if boundary is BorderMode.MIRROR:
+            continue
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 
