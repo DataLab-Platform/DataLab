@@ -405,7 +405,7 @@ class SaveToDirectoryParam(gds.DataSet):
 
     pattern = gds.StringItem(
         _("Custom pattern"),
-        default="{index:03d}_{title}",
+        default="{title}.csv",
         help=_(
             "Python format string for file naming.\n\n"
             "Available placeholders:\n"
