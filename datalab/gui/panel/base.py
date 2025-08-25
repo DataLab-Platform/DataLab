@@ -303,6 +303,54 @@ class SaveToDirectoryParam(gds.DataSet):
                  callback provided externally – see BaseDataPanel.save_to_directory)
     """
 
+    HELP_STRING = _(
+        "Pattern accepts python format string for file naming\n\n"
+        "Available placeholders:\n"
+        "{title} (title),\n"
+        "{type} ('signal' or 'image'),\n"
+        "{index} (1-based index), {i} (0-based index), {n} (total objects),\n"
+        "{xlabel}, {xunit}, {ylabel}, {yunit} (axis info for signals),\n"
+        "{metadata} (metadata mapping, e.g. {metadata[key]}).\n\n"
+        "Python modifiers are allowed, with the addition of 'u'"
+        "and 'l' for uppercase and lowercase strings..\n"
+        "Examples: \n"
+        "{index:03d} (3-digit index with leading zeros),\n"
+        "{title:20.20} (title truncated to 20 characters),\n"
+        "{title:20.20s} (title truncated to 20 characters, no unicode chars),\n"
+        "{title:20.20u} (title truncated to 20 characters, upper case),\n"
+        "{title:20.20l} (title truncated to 20 characters, upper case),\n"
+    )
+
+    def __init__(
+        self,
+        title: str | None = None,
+        icon: str = "",
+        readonly: bool = False,
+        skip_defaults: bool = False,
+        panel: BaseDataPanel | None = None,
+    ):
+        """Initialize parameters"""
+        additional_extension_help = ""
+        if panel:
+            self.set_panel(panel)
+        try:
+            filters = panel.IO_REGISTRY.get_write_filters()
+            possible_ext = re.findall(r"\.([a-zA-Z0-9]+)", filters or "")
+            possible_ext_unique = list(sorted(set(possible_ext)))
+            additional_extension_help = _(
+                "\n\nPossible file extensions (from available writers): "
+            ) + ", ".join(f".{ext}" for ext in possible_ext_unique)
+        except (AttributeError, TypeError):
+            filters = ""
+
+        super().__init__(
+            title,
+            self.HELP_STRING + additional_extension_help,
+            icon,
+            readonly,
+            skip_defaults,
+        )
+
     # Directory pre-filled with configured base directory (updated before editing)
     _naming_prop = gds.GetAttrProp("naming")
     directory = gds.DirectoryItem(_("Directory"), default=Conf.main.base_dir.get())
@@ -327,15 +375,9 @@ class SaveToDirectoryParam(gds.DataSet):
             return
         # Build filenames using the selected naming scheme
         TITLE_PATTERN = "{title}"
-        if self.naming == SaveToDirectorySettings.TITLE:
-            self.pattern = TITLE_PATTERN
 
         # update radio choice item when pattern is changed
         if _item and getattr(_item, "_name", None) == "pattern":
-            if _value == TITLE_PATTERN:
-                self.naming = SaveToDirectorySettings.TITLE
-            else:
-                self.naming = SaveToDirectorySettings.PATTERN
             self.pattern = _value
 
         format_string = self.pattern or TITLE_PATTERN
@@ -344,14 +386,15 @@ class SaveToDirectoryParam(gds.DataSet):
             filters = panel.IO_REGISTRY.get_write_filters()
         except (AttributeError, TypeError):
             filters = ""
+        possible_ext = re.findall(r"\.([a-zA-Z0-9]+)", filters or "")
         try:
             fname, ext = osp.splitext(format_string)
             if "}" in ext:
                 # dynamic extensions are not supported
                 ext = ""
                 fname = format_string
-            possible_ext = re.findall(r"\.([a-zA-Z0-9]+)", filters or "")
 
+            ext = ext.lstrip(".")
             name_ext = ext if ext and ext in possible_ext else "csv"
             self.filenames_array = format_object_names(objs, fname + "." + name_ext)
             self.preview = "\n".join(
@@ -359,14 +402,6 @@ class SaveToDirectoryParam(gds.DataSet):
             )
         except (ValueError, KeyError, TypeError, re.error) as exc:  # pragma: no cover
             self.preview = "Format error. Check the pattern.\n" + str(exc)
-
-    naming = gds.ChoiceItem(
-        _("File name"),
-        SaveToDirectorySettings,
-        default=SaveToDirectorySettings.TITLE,
-        help=_("Choose how to build each output file name"),
-        radio=True,
-    ).set_prop("display", callback=update_filenames)
 
     pattern = gds.StringItem(
         _("Custom pattern"),
@@ -393,29 +428,9 @@ class SaveToDirectoryParam(gds.DataSet):
 
     filenames_array = []
 
-    help = gds.TextItem(
-        _("Help"),
-        default=_(
-            "Python format string for file naming.\n\n"
-            "Available placeholders:\n"
-            "{title} (title), \n"
-            "{type} ('signal' or 'image'),\n"
-            "{index} (1-based index),\n"
-            "{i} (0-based index),\n"
-            "{n} (total objects),\n"
-            "{xlabel}, {xunit}, {ylabel}, {yunit} (axis info for signals),\n"
-            "{metadata} (metadata mapping, e.g. {metadata[key]}).\n\n"
-            "Python modifiers are allowed.\n"
-            "Examples: {index:03d} (3-digit index with leading zeros),\n"
-            "{title:20.20} (title truncated to 20 characters),\n"
-            "{title:20.20s} (title truncated to 20 characters, no unicode chars),\n"
-            "{title:20.20|upper} (title truncated to 20 characters, upper case),\n"
-        ),
-    ).set_prop("display", multiline=True, readonly=True)
-
     preview = (
         gds.TextItem(_("Preview"), default="")
-        .set_prop("display", multiline=True, readonly=True)
+        .set_prop("display", readonly=True)
         .set_pos(col=1)
     )
 
@@ -1302,7 +1317,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if param is None:
             param = SaveToDirectoryParam(
                 _("Save to directory"),
-                comment=_("Save selected objects using a filename pattern."),
+                panel=self,
             )
             param.set_directory_default()
             created_param = True
