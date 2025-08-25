@@ -1178,6 +1178,12 @@ msgstr "Profil moyen"
 msgid "Radial profile"
 msgstr "Profil radial"
 
+msgid "Convolution"
+msgstr "Convolution"
+
+msgid "kernel to convolve with"
+msgstr "noyau de la convolution"
+
 msgid "Deconvolution"
 msgstr "Déconvolution"
 
@@ -1506,9 +1512,6 @@ msgstr "Dérivée"
 
 msgid "Integral"
 msgstr "Intégrale"
-
-msgid "Convolution"
-msgstr "Convolution"
 
 msgid "signal to convolve with"
 msgstr "signal pour la convolution"

@@ -376,6 +376,12 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             icon_name="profile_radial.svg",
         )
         self.register_2_to_1(
+            sigima_image.convolution,
+            _("Convolution"),
+            icon_name="convolution.svg",
+            obj2_name=_("kernel to convolve with"),
+        )
+        self.register_2_to_1(
             sigima_image.deconvolution,
             _("Deconvolution"),
             icon_name="deconvolution.svg",
