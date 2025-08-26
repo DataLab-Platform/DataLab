@@ -15,7 +15,6 @@ import os
 import os.path as osp
 import re
 import warnings
-from enum import Enum
 from typing import TYPE_CHECKING, Any, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -37,6 +36,7 @@ from qtpy.compat import (
     getsavefilename,
 )
 from sigima.io import read_metadata, read_roi, write_metadata, write_roi
+from sigima.io.base import get_file_extensions
 from sigima.io.common.filename import format_object_names
 from sigima.objects import (
     ImageObj,
@@ -274,22 +274,6 @@ class PasteMetadataParam(gds.DataSet):
     keep_other = gds.BoolItem(_("Other metadata"), default=True)
 
 
-class SaveToDirectorySettings(str, Enum):
-    """Save to directory settings.
-
-    This is used to define the naming scheme for saving objects to a directory.
-    It can be used to select between using the object title directly or a
-    custom pattern.
-    """
-
-    def __str__(self) -> str:
-        """Return string representation of the enum value"""
-        return self.value
-
-    TITLE = "title"
-    PATTERN = "pattern"
-
-
 class SaveToDirectoryParam(gds.DataSet):
     """Save to directory parameters.
 
@@ -330,113 +314,67 @@ class SaveToDirectoryParam(gds.DataSet):
         panel: BaseDataPanel | None = None,
     ):
         """Initialize parameters"""
-        additional_extension_help = ""
         if panel:
             self.set_panel(panel)
-        try:
-            filters = panel.IO_REGISTRY.get_write_filters()
-            possible_ext = re.findall(r"\.([a-zA-Z0-9]+)", filters or "")
-            possible_ext_unique = list(sorted(set(possible_ext)))
-            additional_extension_help = _(
-                "\n\nPossible file extensions (from available writers): "
-            ) + ", ".join(f".{ext}" for ext in possible_ext_unique)
-        except (AttributeError, TypeError):
-            filters = ""
 
         super().__init__(
             title,
-            self.HELP_STRING + additional_extension_help,
+            self.HELP_STRING,
             icon,
             readonly,
             skip_defaults,
         )
 
-    # Directory pre-filled with configured base directory (updated before editing)
-    _naming_prop = gds.GetAttrProp("naming")
-    directory = gds.DirectoryItem(_("Directory"), default=Conf.main.base_dir.get())
-    _panel = None
+    def define_extension_selection(self, _item=None, _value=None):
+        assert self._panel is not None
+        filters = self._panel.IO_REGISTRY.get_write_filters()
+        extensions = sorted(set(get_file_extensions(filters)))
+        return [("." + extension, "." + extension, None) for extension in extensions]
+
+    def set_directory_default(self):
+        """Update directory default from current configuration (call before editing)."""
+        self.directory = Conf.main.base_dir.get()
 
     def set_panel(self, panel):
         """Attach panel reference (needed for callbacks)."""
         self._panel = panel
 
-    def update_filenames(self, _item=None, _value=None) -> None:
-        """Update filenames in the preview field"""
-        panel = getattr(self, "_panel", None)
+    def update_filenames_and_preview(self, _item=None, _value=None) -> None:
+        """Update filenames and preview."""
+        panel = self._panel
         if panel is None:
-            # Panel not yet attached: nothing to do
-            self.preview = ""
-            self.filenames_array = []
+            # Panel is not yet attached.
             return
         objs = panel.objview.get_sel_objects(include_groups=True)
         if not objs:
-            self.preview = ""
-            self.filenames_array = []
+            # No object is selected.
             return
-        # Build filenames using the selected naming scheme
-        TITLE_PATTERN = "{title}"
+        assert self.basename is not None
+        basename: str = self.basename
+        assert self.extension is not None
+        self.filenames = format_object_names(objs, basename + self.extension)
+        self.preview = "\n".join(f"{name}" for name in self.filenames)
 
-        # update radio choice item when pattern is changed
-        if _item and getattr(_item, "_name", None) == "pattern":
-            self.pattern = _value
+    _panel = None
 
-        format_string = self.pattern or TITLE_PATTERN
+    directory = gds.DirectoryItem(_("Directory"), default=Conf.main.base_dir.get())
 
-        try:
-            filters = panel.IO_REGISTRY.get_write_filters()
-        except (AttributeError, TypeError):
-            filters = ""
-        possible_ext = re.findall(r"\.([a-zA-Z0-9]+)", filters or "")
-        try:
-            fname, ext = osp.splitext(format_string)
-            if "}" in ext:
-                # dynamic extensions are not supported
-                ext = ""
-                fname = format_string
+    basename = gds.StringItem(
+        _("Basename pattern"),
+        default="{title}",
+        help=_("Python format string. See description for details."),
+    ).set_prop("display", callback=update_filenames_and_preview)
 
-            ext = ext.lstrip(".")
-            name_ext = ext if ext and ext in possible_ext else "csv"
-            self.filenames_array = format_object_names(objs, fname + "." + name_ext)
-            self.preview = "\n".join(
-                f"{i + 1:03d}: {name}" for i, name in enumerate(self.filenames_array)
-            )
-        except (ValueError, KeyError, TypeError, re.error) as exc:  # pragma: no cover
-            self.preview = "Format error. Check the pattern.\n" + str(exc)
-
-    pattern = gds.StringItem(
-        _("Custom pattern"),
-        default="{title}.csv",
-        help=_(
-            "Python format string for file naming.\n\n"
-            "Available placeholders:\n"
-            "{title} (title), {type} ('signal' or 'image'),\n"
-            "{index} (1-based index), {i} (0-based index), {n} (total objects),\n"
-            "{xlabel}, {xunit}, {ylabel}, {yunit} (axis info for signals),\n"
-            "{metadata} (metadata mapping, e.g. {metadata[key]}).\n\n"
-            "Python modifiers are allowed.\n"
-            "Examples: {index:03d} (3-digit index with leading zeros),\n"
-            "{title:20.20} (title truncated to 20 characters),\n"
-            "{title:20.20s} (title truncated to 20 characters, no unicode chars),\n"
-            "{title:20.20|upper} (title truncated to 20 characters, upper case),\n"
-        ),
-    ).set_prop(
-        "display",
-        callback=update_filenames,
-    )
+    extension = gds.ChoiceItem(
+        _("Extension"), define_extension_selection, default=".csv"
+    ).set_prop("display", callback=update_filenames_and_preview)
 
     overwrite = gds.BoolItem(_("Overwrite existing"), default=False)
 
-    filenames_array = []
-
-    preview = (
-        gds.TextItem(_("Preview"), default="")
-        .set_prop("display", readonly=True)
-        .set_pos(col=1)
+    filenames: list[str] = []
+    preview = gds.TextItem(_("Preview"), default=None).set_prop(
+        "display", readonly=True
     )
-
-    def set_directory_default(self):  # helper (optional)
-        """Update directory default from current configuration (call before editing)."""
-        self.directory = Conf.main.base_dir.get()
 
 
 class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
@@ -1321,29 +1259,22 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             param.set_directory_default()
             created_param = True
-        else:
-            # Ensure directory default if field empty
-            if not getattr(param, "directory", ""):
-                param.set_directory_default()
 
         # Attach panel reference (needed by callbacks)
         param.set_panel(self)
-
-        # Precompute filenames (initial preview)
-        param.update_filenames()
 
         if created_param:
             if not param.edit(parent=self.parent()):
                 return
             # Recompute after user edits naming/pattern
-            param.update_filenames()
+            param.update_filenames_and_preview()
 
         target_dir = param.directory
         os.makedirs(target_dir, exist_ok=True)
         Conf.main.base_dir.set(target_dir)
 
         with create_progress_bar(self, _("Saving objects"), max_=len(objs)) as progress:
-            for i, (obj, base_name) in enumerate(zip(objs, param.filenames_array)):
+            for i, (obj, base_name) in enumerate(zip(objs, param.filenames)):
                 progress.setValue(i + 1)
                 if progress.wasCanceled():
                     break
