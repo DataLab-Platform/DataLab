@@ -351,22 +351,51 @@ class SaveToDirectoryParam(gds.DataSet):
 
         text = "<br>".join(
             [
-                "Pattern accepts python format string for file naming",
-                "Python modifiers are allowed, with the addition of 'u'"
-                "and 'l' for uppercase and lowercase strings.",
+                """Pattern accepts python format string for file naming. Python
+                modifiers are allowed, with the addition of 'u' and 'l' for
+                uppercase and lowercase strings.""",
+                "",
                 "<b>Available placeholders:</b>",
-                "{title} (title),",
-                "{type} ('signal' or 'image'),",
-                "{index} (1-based index), {i} (0-based index), {n} (total objects),",
-                "{xlabel}, {xunit}, {ylabel}, {yunit} (axis info for signals),",
-                "{metadata} (metadata mapping, e.g. {metadata[key]}).",
+                """
+            <table border="1" cellspacing="0" cellpadding="4">
+                <tr><th>Keyword</th><th>Description</th></tr>
+                <tr><td>{title}</td><td>Title</td></tr>
+                <tr><td>{type}</td><td>'signal' or 'image'</td></tr>
+                <tr><td>{i}, {index}</td><td>0-based index, 1-based index</td></tr>
+                <tr><td>{n}</td><td>Total objects</td></tr>
+                <tr><td>{xlabel}, {xunit}, {ylabel}, {yunit}</td>
+                    <td>Axis info for signals</td></tr>
+                <tr><td>{metadata},{metadata[key]}</td>
+                    <td>Metadata mapping</td></tr>
+            </table>
+            """,
                 "",
                 "<b>Examples:</b>",
-                "{index:03d} (3-digit index with leading zeros),",
-                "{title:20.20} (title truncated to 20 characters),",
-                "{title:20.20s} (title truncated to 20 characters, no unicode chars),",
-                "{title:20.20u} (title truncated to 20 characters, upper case),",
-                "{title:20.20l} (title truncated to 20 characters, lower case).",
+                """
+            <table border="1" cellspacing="0" cellpadding="4">
+                <tr><th>Pattern</th><th>Description</th></tr>
+                <tr>
+                    <td>{index:03d}</td>
+                    <td>3-digit index with leading zeros</td>
+                </tr>
+                <tr>
+                    <td>{title:20.20}</td>
+                    <td>Title truncated to 20 characters</td>
+                </tr>
+                <tr>
+                    <td>{title:20.20s}</td>
+                    <td>Title truncated to 20 characters, no unicode chars</td>
+                </tr>
+                <tr>
+                    <td>{title:20.20u}</td>
+                    <td>Title truncated to 20 characters, upper case</td>
+                </tr>
+                <tr>
+                    <td>{title:20.20l}</td>
+                    <td>Title truncated to 20 characters, lower case</td>
+                </tr>
+            </table>
+            """,
             ]
         )
         self.information_selectable(parent, "Pattern help:", text)
