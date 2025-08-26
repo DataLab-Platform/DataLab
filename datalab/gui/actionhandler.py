@@ -505,8 +505,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Save to directory..."),
-                # icon: filesave_sig.svg or filesave_ima.svg
-                icon_name=f"filesave_{self.OBJECT_STR[:3]}.svg",
+                icon_name="save_to_directory.svg",
                 tip=_("Save selected %ss using a filename pattern") % self.OBJECT_STR,
                 triggered=self.panel.save_to_directory,
                 select_condition=SelectCond.at_least_one,
