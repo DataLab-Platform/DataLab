@@ -287,24 +287,6 @@ class SaveToDirectoryParam(gds.DataSet):
                  callback provided externally – see BaseDataPanel.save_to_directory)
     """
 
-    HELP_STRING = _(
-        "Pattern accepts python format string for file naming\n\n"
-        "Available placeholders:\n"
-        "{title} (title),\n"
-        "{type} ('signal' or 'image'),\n"
-        "{index} (1-based index), {i} (0-based index), {n} (total objects),\n"
-        "{xlabel}, {xunit}, {ylabel}, {yunit} (axis info for signals),\n"
-        "{metadata} (metadata mapping, e.g. {metadata[key]}).\n\n"
-        "Python modifiers are allowed, with the addition of 'u'"
-        "and 'l' for uppercase and lowercase strings..\n"
-        "Examples: \n"
-        "{index:03d} (3-digit index with leading zeros),\n"
-        "{title:20.20} (title truncated to 20 characters),\n"
-        "{title:20.20s} (title truncated to 20 characters, no unicode chars),\n"
-        "{title:20.20u} (title truncated to 20 characters, upper case),\n"
-        "{title:20.20l} (title truncated to 20 characters, upper case),\n"
-    )
-
     def __init__(
         self,
         title: str | None = None,
@@ -319,7 +301,7 @@ class SaveToDirectoryParam(gds.DataSet):
 
         super().__init__(
             title,
-            self.HELP_STRING,
+            _("Save multiple files to selected directory using a filename pattern."),
             icon,
             readonly,
             skip_defaults,
@@ -338,6 +320,56 @@ class SaveToDirectoryParam(gds.DataSet):
     def set_panel(self, panel):
         """Attach panel reference (needed for callbacks)."""
         self._panel = panel
+
+    def information_selectable(self, parent: QW.QWidget, title: str, text: str) -> int:
+        """Show an information message box with selectable text."""
+        box = QW.QMessageBox(parent)
+        box.setIcon(QW.QMessageBox.Information)
+        box.setWindowTitle(title)
+        if re.search(r"<[a-zA-Z/][^>]*>", text):
+            box.setTextFormat(QC.Qt.RichText)
+            box.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
+        else:
+            box.setTextFormat(QC.Qt.PlainText)
+            box.setTextInteractionFlags(
+                QC.Qt.TextSelectableByMouse | QC.Qt.TextSelectableByKeyboard
+            )
+        box.setText(text)
+        box.setStandardButtons(QW.QMessageBox.Close)
+        box.setWindowFlags(QC.Qt.Window)
+
+        box.setModal(False)
+        box.show()
+
+    def help_Button_cb(
+        self: SaveToDirectoryParam,
+        item: gds.ButtonItem,
+        value: None,
+        parent: QW.QWidget,
+    ) -> None:
+        """Help button callback"""
+
+        text = "<br>".join(
+            [
+                "Pattern accepts python format string for file naming",
+                "Python modifiers are allowed, with the addition of 'u'"
+                "and 'l' for uppercase and lowercase strings.",
+                "<b>Available placeholders:</b>",
+                "{title} (title),",
+                "{type} ('signal' or 'image'),",
+                "{index} (1-based index), {i} (0-based index), {n} (total objects),",
+                "{xlabel}, {xunit}, {ylabel}, {yunit} (axis info for signals),",
+                "{metadata} (metadata mapping, e.g. {metadata[key]}).",
+                "",
+                "<b>Examples:</b>",
+                "{index:03d} (3-digit index with leading zeros),",
+                "{title:20.20} (title truncated to 20 characters),",
+                "{title:20.20s} (title truncated to 20 characters, no unicode chars),",
+                "{title:20.20u} (title truncated to 20 characters, upper case),",
+                "{title:20.20l} (title truncated to 20 characters, lower case).",
+            ]
+        )
+        self.information_selectable(parent, "Pattern help:", text)
 
     def update_filenames_and_preview(self, _item=None, _value=None) -> None:
         """Update filenames and preview."""
@@ -364,6 +396,10 @@ class SaveToDirectoryParam(gds.DataSet):
         default="{title}",
         help=_("Python format string. See description for details."),
     ).set_prop("display", callback=update_filenames_and_preview)
+
+    help = gds.ButtonItem("Help", help_Button_cb, "MessageBoxInformation").set_pos(
+        col=1
+    )
 
     extension = gds.ChoiceItem(
         _("Extension"), define_extension_selection, default=".csv"
