@@ -49,9 +49,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * New signal processing features:
   * Zero padding:
-    * Enhanced to support both prepending and appending zeros.
+    * Enhanced feature to support both prepending and appending zeros.
     * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
     * Default strategy is now "Next power of 2".
+
+* New signal analysis features:
+  * Bandwidth at -3dB:
+    * Enhanced to support passband bandwidth in addition to baseband bandwidth.
 
 * New 2D ramp image generator.
   * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).

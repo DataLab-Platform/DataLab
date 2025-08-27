@@ -19,10 +19,7 @@ from sigima.tests.data import (
     create_test_signal_rois,
 )
 
-from datalab.adapters_plotpy.converters import (
-    plotitem_to_singleroi,
-)
-from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy import create_adapter_from_object, plotitem_to_singleroi
 from datalab.env import execenv
 
 

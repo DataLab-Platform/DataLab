@@ -12,6 +12,7 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
+from sigima.proc.enums import BorderMode
 from sigima.tests.data import (
     create_noisy_signal,
     create_paracetamol_signal,
@@ -55,8 +56,8 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     )
     panel.processor.run_feature("log10")
     panel.processor.run_feature("exp")
-    panel.processor.run_feature("swap_axes")
-    panel.processor.run_feature("swap_axes")
+    panel.processor.run_feature("transpose")
+    panel.processor.run_feature("transpose")
 
 
 def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
@@ -96,8 +97,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((1, 2))
     panel.processor.run_feature("product")
 
-    param = sigima.params.ConstantParam()
-    param.value = 2.0
+    param = sigima.params.ConstantParam.create(value=2.0)
     panel.processor.run_feature("addition_constant", param)
     panel.processor.run_feature("difference_constant", param)
     panel.processor.run_feature("product_constant", param)
@@ -164,7 +164,7 @@ def run_signal_computations(
     ):
         for method_value, _method_name in paramclass.methods:
             panel.objview.set_current_object(sig1)
-            param = paramclass.create(method=method_value)
+            param = paramclass.create(method=method_value, cut0=2.0, cut1=4.0)
             param.update_from_obj(sig1)  # Use default cut-off frequencies
             panel.processor.run_feature(filter_func_name, param)
 
@@ -397,7 +397,9 @@ def run_image_computations(
     panel.processor.run_feature("flipv")
 
     param = sigima.params.RotateParam.create(angle=5.0)
-    for boundary in param.boundaries[:-1]:
+    for boundary in BorderMode:
+        if boundary is BorderMode.MIRROR:
+            continue
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 

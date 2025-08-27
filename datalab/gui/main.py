@@ -44,7 +44,7 @@ from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
 from datalab import __docurl__, __homeurl__, __supporturl__, env
-from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.baseproxy import AbstractDLControl
 from datalab.config import (
     APP_DESC,
@@ -1711,7 +1711,6 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """Edit settings"""
         changed_options = edit_settings(self)
         sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
-        sigima_options.keep_results.set(Conf.proc.keep_results.get())
         for option in changed_options:
             if option == "color_mode":
                 self.__update_color_mode()

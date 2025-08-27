@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-19 11:33+0200\n"
+"POT-Creation-Date: 2025-08-10 07:48+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -246,17 +246,14 @@ msgstr "signal"
 msgid "Zeros"
 msgstr "Zéros"
 
-#, fuzzy
 msgid "Normal distribution"
-msgstr "Distribution normale aléatoire"
+msgstr "Distribution normale"
 
-#, fuzzy
 msgid "Poisson distribution"
-msgstr "Distribution normale aléatoire"
+msgstr "Distribution de Poisson"
 
-#, fuzzy
 msgid "Uniform distribution"
-msgstr "Distribution uniforme aléatoire"
+msgstr "Distribution uniforme"
 
 msgid "Gaussian"
 msgstr "Gaussienne"
@@ -397,9 +394,6 @@ msgstr ""
 
 msgid "image"
 msgstr "image"
-
-msgid "Empty"
-msgstr "Vide"
 
 msgid "Ramp"
 msgstr "Rampe"
@@ -817,11 +811,11 @@ msgstr "Propriétés"
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
 
-msgid "Result shapes"
-msgstr "Résultats graphiques"
+msgid "Geometry results"
+msgstr "Résultats géométriques"
 
-msgid "Result properties"
-msgstr "Résultats numériques"
+msgid "Table results"
+msgstr "Résultats tabulaires"
 
 msgid "Other metadata"
 msgstr "Autres métadonnées"

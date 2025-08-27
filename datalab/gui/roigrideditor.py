@@ -16,7 +16,7 @@ from sigima.objects import ImageObj, ImageROI
 from sigima.params import ROIGridParam
 from sigima.proc.image import generate_image_grid_roi
 
-from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
 from datalab.utils.qthelpers import block_signals
 

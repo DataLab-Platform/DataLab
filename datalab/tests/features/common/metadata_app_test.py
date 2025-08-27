@@ -18,7 +18,7 @@ import sigima.proc.signal as sigima_signal
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.env import execenv
-from datalab.gui.panel.base import BaseDataPanel
+from datalab.gui.panel.base import BaseDataPanel, PasteMetadataParam
 from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
 from datalab.tests import datalab_test_app_context
@@ -46,15 +46,70 @@ def __test_metadata_features(panel: BaseDataPanel):
     """Test all metadata features"""
     # Duplicate the first object
     panel.duplicate_object()
+
     # Delete metadata of the first object
     for keep_roi in (True, False):  # Test both cases (coverage test)
         panel.delete_metadata(keep_roi=keep_roi)
+
     # Select and copy metadata of the second object
     panel.objview.select_objects([2])
+    source_obj = panel.objview.get_sel_objects()[0]
+    source_metadata = source_obj.metadata.copy()
+
+    # Verify source object has geometry results
+    geometry_keys = [k for k in source_metadata.keys() if k.startswith("Geometry_")]
+    execenv.print(f"  Source object has {len(geometry_keys)} geometry metadata keys")
+    assert len(geometry_keys) > 0, "Source object should have geometry results"
+
+    # Copy metadata
     panel.copy_metadata()
+
     # Select and paste metadata to the first object
     panel.objview.select_objects([1])
-    panel.paste_metadata()
+    target_obj = panel.objview.get_sel_objects()[0]
+
+    # Verify target has no geometry metadata before paste
+    target_geo_keys_before = [
+        k for k in target_obj.metadata.keys() if k.startswith("Geometry_")
+    ]
+    execenv.print(
+        f"  Target object has {len(target_geo_keys_before)} geometry keys before paste"
+    )
+
+    # Paste metadata (with default parameters - keep everything)
+    param = PasteMetadataParam("Test paste")
+    param.keep_geometry = True
+    param.keep_tables = True
+    param.keep_other = True
+    param.keep_roi = True
+    panel.paste_metadata(param)
+
+    # Verify the paste worked
+    target_metadata_after = target_obj.metadata.copy()
+    target_geo_keys_after = [
+        k for k in target_metadata_after.keys() if k.startswith("Geometry_")
+    ]
+    execenv.print(
+        f"  Target object has {len(target_geo_keys_after)} geometry keys after paste"
+    )
+
+    # Check that geometry metadata was actually pasted
+    assert len(target_geo_keys_after) > 0, (
+        "Target object should have geometry results after paste"
+    )
+
+    # Verify that all geometry metadata types are present (array, title, shape)
+    for key in target_geo_keys_after:
+        if key.endswith("_array"):
+            base_key = key[:-6]  # Remove "_array"
+            title_key = base_key + "_title"
+            shape_key = base_key + "_shape"
+
+            assert title_key in target_metadata_after, f"Missing title key: {title_key}"
+            assert shape_key in target_metadata_after, f"Missing shape key: {shape_key}"
+            execenv.print(f"  ✓ Complete geometry entry: {base_key}")
+
+    execenv.print("  ✓ Metadata copy/paste verification passed")
 
 
 def test_metadata_app():
