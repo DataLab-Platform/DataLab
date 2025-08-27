@@ -18,10 +18,12 @@ import sigima.proc.image as sigima_image
 from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
-from sigima.objects import ImageObj, ImageROI, ROI2DParam
-from sigima.objects.base import (
+from sigima.objects import (
+    ImageObj,
+    ImageROI,
     NormalDistributionParam,
     PoissonDistributionParam,
+    ROI2DParam,
     UniformDistributionParam,
 )
 from sigima.objects.scalar import GeometryResult

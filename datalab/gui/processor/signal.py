@@ -17,15 +17,13 @@ import sigima.proc.base as sigima_base
 import sigima.proc.signal as sigima_signal
 from guidata.qthelpers import exec_dialog
 from sigima.objects import (
+    NormalDistributionParam,
+    PoissonDistributionParam,
     ROI1DParam,
     SignalObj,
     SignalROI,
-    create_signal,
-)
-from sigima.objects.base import (
-    NormalDistributionParam,
-    PoissonDistributionParam,
     UniformDistributionParam,
+    create_signal,
 )
 from sigima.objects.scalar import GeometryResult, TableResult
 
