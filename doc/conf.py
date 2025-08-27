@@ -11,6 +11,9 @@ import guidata.config as gcfg
 
 sys.path.insert(0, os.path.abspath(".."))
 
+# Importing sigima to avoid re-enabling guidata validation mode
+import sigima  # noqa
+
 import datalab
 
 os.environ["DATALAB_DOC"] = "1"

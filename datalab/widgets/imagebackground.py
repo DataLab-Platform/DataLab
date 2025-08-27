@@ -13,7 +13,7 @@ from guidata.configtools import get_icon
 from plotpy.builder import make
 from plotpy.plot import PlotDialog
 
-from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
 
 if TYPE_CHECKING:

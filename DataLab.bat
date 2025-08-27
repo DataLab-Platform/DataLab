@@ -1,15 +1,26 @@
+
 @echo off
+setlocal EnableDelayedExpansion
+
+REM Store script directory in a variable (outside IF block for batch compatibility)
+set SCRIPT_DIR=%~dp0
+
 REM Check if a Python executable path is provided as an argument
 if "%1" == "" (
-    echo Error: Python executable path must be provided as an argument.
-    echo Usage: DataLab.bat path\to\python.exe
-    exit /b 1
+    REM If not, try to use .venv\Scripts\pythonw.exe in the current directory
+    set PYTHON_EXE=!SCRIPT_DIR!.venv\Scripts\pythonw.exe
+    if not exist "!PYTHON_EXE!" (
+        echo Error: Python executable path must be provided as an argument.
+        echo Usage: DataLab.bat path\to\python.exe
+        exit /b 1
+    )
 ) else (
     REM Use the provided Python executable path
     set PYTHON_EXE=%1
 )
+
 REM Validate that the provided Python executable exists
-if not exist %PYTHON_EXE% (
+if not exist "%PYTHON_EXE%" (
     echo Error: The specified Python executable does not exist: %PYTHON_EXE%
     exit /b 2
 )
