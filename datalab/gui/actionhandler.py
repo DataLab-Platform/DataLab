@@ -709,7 +709,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Axis transformation"), icon_name="axis_transform.svg"
             ):
                 self.action_for("calibration")
-                self.action_for("swap_axes")
+                self.action_for("transpose")
             with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
                 self.action_for("normalize")
                 self.action_for("clip")
@@ -993,7 +993,6 @@ class ImageActionHandler(BaseActionHandler):
         """Create actions for creating new objects"""
         for label, pclass in (
             (_("Zeros"), sio.Zeros2DParam),
-            (_("Empty"), sio.Empty2DParam),
             (_("Random uniform distribution"), sio.UniformRandom2DParam),
             (_("Random normal distribution"), sio.NormalRandom2DParam),
             (_("Gaussian"), sio.Gauss2DParam),
@@ -1036,7 +1035,7 @@ class ImageActionHandler(BaseActionHandler):
 
             with self.new_menu(_("Flip or rotation"), icon_name="rotate_right.svg"):
                 self.action_for("fliph", context_menu_pos=-1, context_menu_sep=True)
-                self.action_for("swap_axes", context_menu_pos=-1)
+                self.action_for("transpose", context_menu_pos=-1)
                 self.action_for("flipv", context_menu_pos=-1)
                 self.action_for("rotate270", context_menu_pos=-1)
                 self.action_for("rotate90", context_menu_pos=-1)

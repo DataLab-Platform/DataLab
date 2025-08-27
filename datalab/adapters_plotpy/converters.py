@@ -25,6 +25,10 @@ from sigima.objects import (
 )
 
 from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy.roi.image import (
+    PolygonalROIPlotPyAdapter,
+    RectangularROIPlotPyAdapter,
+)
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
@@ -45,12 +49,10 @@ def plotitem_to_singleroi(
         A single ROI instance
     """
     # pylint: disable=import-outside-toplevel
-    from datalab.adapters_plotpy.image import (
+    from datalab.adapters_plotpy.roi.image import (
         CircularROIPlotPyAdapter,
-        PolygonalROIPlotPyAdapter,
-        RectangularROIPlotPyAdapter,
     )
-    from datalab.adapters_plotpy.signal import (
+    from datalab.adapters_plotpy.roi.signal import (
         SegmentROIPlotPyAdapter,
     )
 
