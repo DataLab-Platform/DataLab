@@ -17,7 +17,8 @@ from typing import TYPE_CHECKING, Any
 from datalab.env import execenv
 
 if TYPE_CHECKING:
-    from sigima.objects import ImageObj, ResultProperties, ResultShape, SignalObj
+    from sigima.objects import ImageObj, SignalObj
+    from sigima.objects.scalar import GeometryResult, TableResult
 
 
 @dataclasses.dataclass
@@ -30,7 +31,7 @@ class CompOut:
         warning_msg: warning message
     """
 
-    result: SignalObj | ImageObj | ResultShape | ResultProperties | None = None
+    result: SignalObj | ImageObj | GeometryResult | TableResult | None = None
     error_msg: str | None = None
     warning_msg: str | None = None
 

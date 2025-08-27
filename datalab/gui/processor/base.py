@@ -24,11 +24,19 @@ from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.config import options as sigima_options
-from sigima.objects import ImageObj, SignalObj, TypeROI, TypeROIParam
-from sigima.objects.base import get_obj_roi_title
+from sigima.objects import (
+    GeometryResult,
+    ImageObj,
+    SignalObj,
+    TableResult,
+    TypeROI,
+    TypeROIParam,
+    concat_geometries,
+)
 from sigima.proc.decorator import is_computation_function
 
 from datalab import env
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
@@ -39,7 +47,6 @@ if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
 
     from plotpy.plot import PlotWidget
-    from sigima.objects import ResultProperties, ResultShape
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
@@ -327,7 +334,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     def handle_output(
         self, compout: CompOut, context: str, progress: QW.QProgressDialog
-    ) -> SignalObj | ImageObj | ResultShape | ResultProperties | None:
+    ) -> SignalObj | ImageObj | GeometryResult | TableResult | None:
         """Handle computation output: if error, display error message,
         if warning, display warning message.
 
@@ -337,7 +344,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             progress: progress dialog
 
         Returns:
-            Output object: a signal or image object, or a result shape object,
+            Output object: a signal or image object, or a geometry/table result object,
              or None if error
         """
         if compout.error_msg or compout.warning_msg:
@@ -352,7 +359,81 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             progress.setMinimumDuration(mindur)
             if compout.error_msg:
                 return None
-        return compout.result
+        result = compout.result
+        return result
+
+    def _merge_geometry_results_for_n_to_1(
+        self, result_obj: SignalObj | ImageObj, src_obj_list: list[SignalObj | ImageObj]
+    ) -> None:
+        """Merge geometry results from source objects into the result object.
+
+        This method handles geometry result merging for n_to_1 operations when
+        keep_results is enabled, providing a clean alternative to monkey patching.
+
+        Args:
+            result_obj: The result object from the computation
+            src_obj_list: The list of source objects used in the computation
+        """
+        # Only merge if keep_results is enabled and we have multiple source objects
+        if not Conf.proc.keep_results.get() or len(src_obj_list) <= 1:
+            return
+
+        # Group geometry results by title for merging
+        geometry_by_title = {}
+
+        # Collect all geometry results from all source objects
+        for src_obj in src_obj_list:
+            for geom_adapter in GeometryAdapter.iterate_from_obj(src_obj):
+                title = geom_adapter.title
+                if title not in geometry_by_title:
+                    geometry_by_title[title] = []
+                geometry_by_title[title].append(geom_adapter.geometry)
+
+        # Only proceed if we have geometry results to merge
+        if not geometry_by_title:
+            return
+
+        # Remove any existing geometry results from the result object
+        result_keys_to_remove = []
+        for key in result_obj.metadata.keys():
+            if GeometryAdapter.match(key, result_obj.metadata[key]):
+                result_keys_to_remove.append(key)
+
+        for key in result_keys_to_remove:
+            base_key = key[: -len(GeometryAdapter.ARRAY_SUFFIX)]
+            result_obj.metadata.pop(key, None)
+            result_obj.metadata.pop(f"{base_key}{GeometryAdapter.TITLE_SUFFIX}", None)
+            result_obj.metadata.pop(f"{base_key}{GeometryAdapter.SHAPE_SUFFIX}", None)
+            result_obj.metadata.pop(
+                f"{base_key}{GeometryAdapter.ADDLABEL_SUFFIX}", None
+            )
+
+        # Merge and add back concatenated geometry results
+        for title, geometries in geometry_by_title.items():
+            if len(geometries) > 1:
+                # Concatenate multiple geometry results
+                merged_geometry = concat_geometries(title, geometries)
+                adapter = GeometryAdapter(merged_geometry)
+                adapter.add_to(result_obj)
+            elif len(geometries) == 1:
+                # Just one geometry result, add it
+                adapter = GeometryAdapter(geometries[0])
+                adapter.add_to(result_obj)
+
+    def _handle_keep_results(self, result_obj: SignalObj | ImageObj) -> None:
+        """Handle keep_results logic by removing all results if keep_results is False.
+
+        This method implements the logic that was previously in Sigima's dst_1_to_1,
+        dst_n_to_1, and dst_2_to_1 functions, where results were deleted from the
+        destination object when keep_results was False.
+
+        Args:
+            result_obj: The result object from the computation
+        """
+        if not Conf.proc.keep_results.get():
+            # Remove all table and geometry results when keep_results is disabled
+            TableAdapter.remove_all_from(result_obj)
+            GeometryAdapter.remove_all_from(result_obj)
 
     def __exec_func(
         self,
@@ -419,6 +500,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         continue
+
+                    # Handle keep_results logic for 1_to_1 operations
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._handle_keep_results(new_obj)
+
                     patch_title_with_ids(new_obj, [obj], get_short_id)
 
                     # Is new object a native object (i.e. a Signal object for a Signal
@@ -633,7 +719,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
-    ) -> dict[str, ResultShape | ResultProperties]:
+    ) -> dict[str, GeometryResult | TableResult]:
         """Generic processing method: 1 object in → no object out.
 
         Applies a function to each selected object, returning metadata or measurement
@@ -652,7 +738,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit: Whether to open the parameter editor before execution.
 
         Returns:
-            Dictionary mapping each object UUID to a ResultShape or ResultProperties
+            Dictionary mapping each object UUID to a GeometryResult or TableResult
             instance.
 
         .. note::
@@ -671,7 +757,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            results: dict[str, ResultShape | ResultProperties] = {}
+            results: dict[str, GeometryAdapter | TableAdapter] = {}
             xlabels = None
             ylabels = []
             for idx, obj in enumerate(objs):
@@ -690,29 +776,39 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if result is None:
                     continue
 
-                # Add result shape to object's metadata
-                result.add_to(obj)
-                if param is not None:
-                    obj.metadata[f"{result.title}Param"] = str(param)
+                # Using the adapters:
+                if isinstance(result, GeometryResult):
+                    adapter = GeometryAdapter(result)
+                elif isinstance(result, TableResult):
+                    adapter = TableAdapter(result)
+                else:
+                    # For "compute 1 to 0" functions, the result is either a
+                    # GeometryResult or TableResult:
+                    raise TypeError("Unsupported result type")
 
-                results[get_uuid(obj)] = result
+                # Add result shape to object's metadata
+                adapter.add_to(obj)
+                if param is not None:
+                    obj.metadata[f"{adapter.title}Param"] = str(param)
+
+                results[get_uuid(obj)] = adapter
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
-                xlabels = result.headers
-                for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.title}({get_short_id(obj)})"
-                    i_roi = int(result.array[i_row_res, 0])
+                xlabels = adapter.headers
+                for i_row_res in range(adapter.array.shape[0]):
+                    ylabel = f"{adapter.title}({get_short_id(obj)})"
+                    i_roi = int(adapter.array[i_row_res, 0])
                     if i_roi >= 0:
-                        ylabel += f"|{get_obj_roi_title(obj, i_roi)}"
+                        ylabel += f"|{obj.roi.get_single_roi_title(i_roi)}"
                     ylabels.append(ylabel)
         if results:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
                 dlg = ArrayEditor(self.panel.parent())
                 title = _("Results")
-                res = np.vstack([result.shown_array for result in results.values()])
+                res = np.vstack([adapter.shown_array for adapter in results.values()])
                 dlg.setup_and_check(
                     res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
                 )
@@ -802,6 +898,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         break
+                    # Handle geometry result merging for n_to_1 operations (pairwise)
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._handle_keep_results(new_obj)
+                        self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
                     patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
                     self.panel.add_object(new_obj, group_id=dst_gid)
 
@@ -842,6 +942,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         break
+                    # Handle geometry result merging for n_to_1 operations
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._handle_keep_results(new_obj)
+                        self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
                     group_id = dst_gid if dst_gid is not None else src_gid
                     patch_title_with_ids(new_obj, src_obj_list, get_short_id)
                     self.panel.add_object(new_obj, group_id=group_id)
@@ -961,6 +1065,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         )
                         if new_obj is None:
                             continue
+
+                        # Handle keep_results logic for 2_to_1 operations (pairwise)
+                        if isinstance(new_obj, (SignalObj, ImageObj)):
+                            self._handle_keep_results(new_obj)
+
                         patch_title_with_ids(
                             new_obj, [src_obj1, src_obj2], get_short_id
                         )
@@ -991,6 +1100,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         continue
+
+                    # Handle keep_results logic for 2_to_1 operations (single operand)
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        self._handle_keep_results(new_obj)
+
                     group_id = objmodel.get_object_group_id(obj)
                     patch_title_with_ids(new_obj, [obj, obj2], get_short_id)
                     self.panel.add_object(new_obj, group_id=group_id)
@@ -1205,7 +1319,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     @qt_try_except()
     def run_feature(
         self, key: str | Callable | ComputingFeature, *args, **kwargs
-    ) -> dict[str, ResultShape | ResultProperties] | None:
+    ) -> dict[str, GeometryResult | TableResult] | None:
         """Run a computing feature that has been previously registered.
 
         This method is a generic dispatcher for all compute methods.
@@ -1220,20 +1334,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             import sigima.proc.signal as sigima_signal
             import sigima.params
 
+            proc = win.signalpanel.processor  # where `win` is DataLab's main window
+
             # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
-            compute(sigima_signal.normalize)
+            proc.run_feature(sigima_signal.normalize)
             param = sigima.params.MovingAverageParam(n=3)
-            compute(sigima_signal.moving_average, param)
-            compute(computation_function, param, edit=False)
+            proc.run_feature(sigima_signal.moving_average, param)
+            proc.run_feature(computation_function, param, edit=False)
 
             # For pattern `2_to_1`:
-            compute(sigima_signal.difference, obj2)
+            proc.run_feature(sigima_signal.difference, obj2)
             param = sigima.params.InterpolationParam(method="cubic")
-            compute(sigima_signal.interpolation, obj2, param)
+            proc.run_feature(sigima_signal.interpolation, obj2, param)
 
             # For pattern `1_to_n`:
             params = roi.to_params(obj)
-            compute(sigima_signal.extract_roi, params=params)
+            proc.run_feature(sigima_signal.extract_roi, params=params)
 
         Args:
             key: The key to look up in the registry. It can be a string, a callable,

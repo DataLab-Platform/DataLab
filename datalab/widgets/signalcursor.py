@@ -16,8 +16,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.tools.signal.features import find_first_x_at_given_y_value
 
-from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.adapters_plotpy.signal import CURVESTYLES
+from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import _
 from datalab.utils.qthelpers import block_signals
 

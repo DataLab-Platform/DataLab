@@ -330,7 +330,6 @@ def initialize():
     sigima_options.fft_shift_enabled.set(True)  # Sync with sigima config
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
-    sigima_options.keep_results.set(False)  # Sync with sigima config
     Conf.proc.ignore_warnings.get(False)
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
