@@ -1245,6 +1245,8 @@ class ImageActionHandler(BaseActionHandler):
                 self.action_for("blob_log")
                 self.action_for("blob_opencv")
 
+            self.action_for("sum_pixels_along_axis", separator=True)
+
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
         with self.new_category(ActionCategory.PROCESSING):

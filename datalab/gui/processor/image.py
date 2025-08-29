@@ -663,7 +663,15 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
 
         # MARK: ANALYSIS
+        # ------Image Analysis
+        # Add "Sum image along axis" action
         self.register_1_to_0(sigima_image.stats, _("Statistics"), icon_name="stats.svg")
+        self.register_1_to_1(
+            sigima_image.sum_pixels_along_axis,
+            _("Sum pixels alog axis"),
+            paramclass=sigima_image.SumPixelsAlongAxisParam,
+        )
+
         self.register_1_to_1(
             sigima_image.histogram,
             _("Histogram"),
