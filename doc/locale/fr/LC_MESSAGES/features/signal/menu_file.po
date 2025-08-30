@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-22 16:53+0200\n"
+"POT-Creation-Date: 2025-08-19 11:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -61,6 +61,21 @@ msgstr "Zéros"
 msgid ":math:`y[i] = 0`"
 msgstr ""
 
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
+
+msgid ":math:`y[i]` is normally distributed with configurable mean and standard deviation"
+msgstr ":math:`y[i]` est normalement distribué avec une moyenne et un écart type configurables"
+
+msgid "Poisson distribution"
+msgstr "Distribution de Poisson"
+
+msgid ":math:`y[i]` is Poisson distributed with configurable mean"
+msgstr ":math:`y[i]` est distribué selon une loi de Poisson avec une moyenne configurable"
+
+msgid ":math:`y[i]` is uniformly distributed between two configurable bounds"
+msgstr ":math:`y[i]` est uniformément distribué entre deux bornes configurables"
+
 msgid "Gaussian"
 msgstr "Gaussienne"
 
@@ -83,19 +98,6 @@ msgid "Blackbody (Planck's law)"
 msgstr "Corps noir (loi de Planck)"
 
 msgid ":math:`y = \\dfrac{2 h c^2}{\\lambda^5 \\left(exp\\left(\\dfrac{h c}{\\lambda k T}\\right)-1\\right)}`"
-msgstr ""
-
-msgid "Random (uniform law)"
-msgstr "Aléatoire (loi uniforme)"
-
-msgid ":math:`y[i] \\in [-0.5, 0.5]`"
-msgstr ""
-
-msgid "Random (normal law)"
-msgstr "Aléatoire (loi normale)"
-
-#, python-brace-format
-msgid ":math:`y[i] \\sim \\mathcal{N}(-0.5, 0.5)`"
 msgstr ""
 
 msgid "Sine"

@@ -14,45 +14,48 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
-from sigima.config import options as sigima_options
 from sigima.tests import data as test_data
 
+from datalab.adapters_metadata import GeometryAdapter
+from datalab.config import Conf
 from datalab.tests import datalab_test_app_context
 
 
-def create_image_with_resultshapes() -> sigima.objects.ImageObj:
-    """Create test image with resultshapes"""
+def __create_image_with_geometry_results() -> sigima.objects.ImageObj:
+    """Create test image with geometry results"""
     param = sigima.objects.Gauss2DParam.create(
         height=600,
         width=600,
-        title="Test image (with result shapes)",
+        title="Test image (with geometry results)",
         dtype=sigima.objects.ImageDatatypes.UINT16,
         x0=2,
         y0=3,
     )
     image = sigima.objects.create_image_from_param(param)
-    for mshape in test_data.create_resultshapes():
-        mshape.add_to(image)
+    for geometry in test_data.generate_geometry_results():
+        GeometryAdapter(geometry).add_to(image)
     return image
 
 
-def __check_resultshapes_merge(
+def __check_geometry_results_merge(
     obj1: sigima.objects.SignalObj | sigima.objects.ImageObj,
     obj2: sigima.objects.SignalObj | sigima.objects.ImageObj,
 ) -> None:
-    """Check if result shapes merge properly: the scenario is to duplicate an object,
+    """Check if geometry results merge properly: the scenario is to duplicate an object,
     then compute average. We thus have to check if the second object (average) has the
-    expected result shapes (i.e. twice the number of result shapes of the original
-    object for each result shape type).
+    expected geometry results (i.e. twice the number of geometry results of the original
+    object for each geometry result type).
 
     Args:
         obj1: Original object
         obj2: Merged object
     """
-    rsl1, rsl2 = list(obj1.iterate_resultshapes()), list(obj2.iterate_resultshapes())
+    rsl1, rsl2 = (
+        list(GeometryAdapter.iterate_from_obj(obj1)),
+        list(GeometryAdapter.iterate_from_obj(obj2)),
+    )
     assert len(rsl2) == len(rsl1), (
-        "Merged object the same number of result shapes as original object, "
-        "but expected twice the number of result shapes for each type."
+        f"Result shapes length mismatch: {len(rsl1)} != {len(rsl2)}"
     )
     for rs1, rs2 in zip(rsl1, rsl2):
         assert rs1.array.shape[0] * 2 == rs2.array.shape[0], (
@@ -80,11 +83,11 @@ def __check_roi_merge(
         assert roi1.get_single_roi(0) == single_roi2
 
 
-def test_resultshapes() -> None:
-    """Result shapes test"""
-    with datalab_test_app_context(console=False) as win:
+def test_geometry_results() -> None:
+    """Geometry results test"""
+    with datalab_test_app_context() as win:
         obj1 = test_data.create_sincos_image()
-        obj2 = create_image_with_resultshapes()
+        obj2 = __create_image_with_geometry_results()
         obj2.roi = sigima.objects.create_image_roi("rectangle", [10, 10, 50, 400])
         panel = win.signalpanel
         for noised in (False, True):
@@ -101,17 +104,24 @@ def test_resultshapes() -> None:
             panel.add_object(obj)
         panel.show_results()
         panel.plot_results()
-        with sigima_options.keep_results.context(True):
-            # Test merging result shapes (duplicate obj, then compute average):
-            for panel in (win.signalpanel, win.imagepanel):
-                panel.objview.select_objects((2,))
-                panel.duplicate_object()
-                panel.objview.select_objects((2, len(panel)))
-                panel.processor.run_feature("average")
-                __check_resultshapes_merge(panel[2], panel[len(panel)])
-                if panel is win.imagepanel:
-                    __check_roi_merge(panel[2], panel[len(panel)])
+        for keep_results in (False, True):
+            with Conf.proc.keep_results.temp(keep_results):
+                # Test merging result shapes (duplicate obj, then compute average):
+                for panel in (win.signalpanel, win.imagepanel):
+                    panel.objview.select_objects((2,))
+                    panel.duplicate_object()
+                    panel.objview.select_objects((2, len(panel)))
+                    panel.processor.run_feature("average")
+                    last_obj = panel[len(panel)]
+                    if keep_results:
+                        __check_geometry_results_merge(panel[2], last_obj)
+                        if panel is win.imagepanel:
+                            __check_roi_merge(panel[2], last_obj)
+                    else:
+                        assert (
+                            len(list(GeometryAdapter.iterate_from_obj(last_obj))) == 0
+                        )
 
 
 if __name__ == "__main__":
-    test_resultshapes()
+    test_geometry_results()
