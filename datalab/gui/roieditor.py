@@ -62,11 +62,9 @@ from datalab.adapters_plotpy import (
     TypePlotItem,
     TypeROIItem,
     configure_roi_item,
-)
-from datalab.adapters_plotpy.converters import (
+    create_adapter_from_object,
     plotitem_to_singleroi,
 )
-from datalab.adapters_plotpy.factories import create_adapter_from_object
 from datalab.config import Conf, _
 from datalab.env import execenv
 

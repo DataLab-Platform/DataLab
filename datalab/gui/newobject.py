@@ -28,9 +28,10 @@ from sigima.objects import (
     ImageObj,
     NewImageParam,
     NewSignalParam,
-    NormalRandomParam,
+    NormalDistributionParam,
+    PoissonDistributionParam,
     SignalObj,
-    UniformRandomParam,
+    UniformDistributionParam,
     create_signal,
 )
 from sigima.objects import create_image_from_param as create_image_headless
@@ -162,7 +163,10 @@ def create_image_gui(
                 param.a = np.iinfo(param.dtype.value).max / 2.0
             except ValueError:
                 param.a = 10.0
-    elif isinstance(param, (UniformRandomParam, NormalRandomParam)):
+    elif isinstance(
+        param,
+        (NormalDistributionParam, PoissonDistributionParam, UniformDistributionParam),
+    ):
         param.set_from_datatype(param.dtype.value)
 
     if edit:

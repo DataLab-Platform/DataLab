@@ -9,105 +9,71 @@ PlotPy Adapter Factories
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-from sigima.objects import (
-    CircularROI,
-    ImageObj,
-    ImageROI,
-    PolygonalROI,
-    RectangularROI,
-    ResultProperties,
-    ResultShape,
-    SegmentROI,
-    SignalObj,
-    SignalROI,
-)
-
-if TYPE_CHECKING:
-    from datalab.adapters_plotpy.base import (
-        ResultPropertiesPlotPyAdapter,
-        ResultShapePlotPyAdapter,
-    )
-    from datalab.adapters_plotpy.image import (
-        CircularROIPlotPyAdapter,
-        ImageObjPlotPyAdapter,
-        PolygonalROIPlotPyAdapter,
-        RectangularROIPlotPyAdapter,
-    )
-    from datalab.adapters_plotpy.signal import (
-        SegmentROIPlotPyAdapter,
-        SignalObjPlotPyAdapter,
-        SignalROIPlotPyAdapter,
-    )
-
-
-def create_adapter_from_object(
-    object_to_adapt: ResultProperties
-    | ResultShape
-    | SignalObj
-    | SignalROI
-    | SegmentROI
-    | ImageObj
-    | RectangularROI
-    | CircularROI
-    | PolygonalROI,
-) -> (
-    ResultPropertiesPlotPyAdapter
-    | ResultShapePlotPyAdapter
-    | SignalObjPlotPyAdapter
-    | SignalROIPlotPyAdapter
-    | SegmentROIPlotPyAdapter
-    | ImageObjPlotPyAdapter
-    | RectangularROIPlotPyAdapter
-    | CircularROIPlotPyAdapter
-    | PolygonalROIPlotPyAdapter
-):
+def create_adapter_from_object(object_to_adapt):
     """Create an adapter for the given object to integrate with PlotPy
 
     Args:
-        object_to_adapt: The object to adapt (e.g., SignalObj, ImageObj)
+        object_to_adapt: The object to adapt (signal, image, ROI, or scalar result)
 
     Returns:
         An adapter instance
     """
     # pylint: disable=import-outside-toplevel
-    from datalab.adapters_plotpy.base import (
-        ResultPropertiesPlotPyAdapter,
-        ResultShapePlotPyAdapter,
-    )
-    from datalab.adapters_plotpy.image import (
-        CircularROIPlotPyAdapter,
-        ImageObjPlotPyAdapter,
-        ImageROIPlotPyAdapter,
-        PolygonalROIPlotPyAdapter,
-        RectangularROIPlotPyAdapter,
-    )
-    from datalab.adapters_plotpy.signal import (
-        SegmentROIPlotPyAdapter,
-        SignalObjPlotPyAdapter,
-        SignalROIPlotPyAdapter,
+    # Import adapters as needed to avoid circular imports
+    from sigima.objects import (
+        CircularROI,
+        ImageObj,
+        ImageROI,
+        PolygonalROI,
+        RectangularROI,
+        SegmentROI,
+        SignalObj,
+        SignalROI,
     )
 
-    if isinstance(object_to_adapt, ResultProperties):
-        adapter = ResultPropertiesPlotPyAdapter(object_to_adapt)
-    elif isinstance(object_to_adapt, ResultShape):
-        adapter = ResultShapePlotPyAdapter(object_to_adapt)
+    from datalab.adapters_metadata import GeometryAdapter, TableAdapter
+
+    if isinstance(object_to_adapt, GeometryAdapter):
+        from datalab.adapters_plotpy.objects.scalar import GeometryPlotPyAdapter
+
+        adapter = GeometryPlotPyAdapter(object_to_adapt)
+    elif isinstance(object_to_adapt, TableAdapter):
+        from datalab.adapters_plotpy.objects.scalar import TablePlotPyAdapter
+
+        adapter = TablePlotPyAdapter(object_to_adapt)
+
     elif isinstance(object_to_adapt, SignalObj):
+        from datalab.adapters_plotpy.objects.signal import SignalObjPlotPyAdapter
+
         adapter = SignalObjPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, SignalROI):
+        from datalab.adapters_plotpy.roi.signal import SignalROIPlotPyAdapter
+
         adapter = SignalROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, SegmentROI):
+        from datalab.adapters_plotpy.roi.signal import SegmentROIPlotPyAdapter
+
         adapter = SegmentROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, ImageObj):
+        from datalab.adapters_plotpy.objects.image import ImageObjPlotPyAdapter
+
         adapter = ImageObjPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, RectangularROI):
+        from datalab.adapters_plotpy.roi.image import RectangularROIPlotPyAdapter
+
         adapter = RectangularROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, CircularROI):
+        from datalab.adapters_plotpy.roi.image import CircularROIPlotPyAdapter
+
         adapter = CircularROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, PolygonalROI):
+        from datalab.adapters_plotpy.roi.image import PolygonalROIPlotPyAdapter
+
         adapter = PolygonalROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, ImageROI):
+        from datalab.adapters_plotpy.roi.image import ImageROIPlotPyAdapter
+
         adapter = ImageROIPlotPyAdapter(object_to_adapt)
     else:
         raise TypeError(f"Unsupported object type: {type(object_to_adapt)}")

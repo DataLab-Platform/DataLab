@@ -30,6 +30,21 @@ msgstr "DataLab Version 0.21.0"
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
+msgid "New common signal/image feature:"
+msgstr "Nouvelles fonctionnalités communes signal/image :"
+
+msgid "Generate new signal or image: Poisson noise."
+msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
+
+msgid "Add noise to the selected signals or images."
+msgstr "Ajouter du bruit aux signaux ou images sélectionnés."
+
+msgid "Gaussian, Poisson or uniform noise can be added."
+msgstr "Du bruit gaussien, de Poisson ou uniforme peut être ajouté."
+
+msgid "This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
+msgstr "Ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
+
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
 
@@ -152,6 +167,15 @@ msgstr "Elle est implémentée dans `sigima.proc.image.freq_fft` (nécessite Sig
 
 msgid "This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal)."
 msgstr "Ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filtres / Filtre idéal (Signal)."
+
+msgid "New signal analysis features:"
+msgstr "Nouvelles fonctionnalités d'analyse du signal :"
+
+msgid "Bandwidth at -3dB:"
+msgstr "Bande passante à -3 dB :"
+
+msgid "Enhanced to support passband bandwidth in addition to baseband bandwidth."
+msgstr "Amélioration pour prendre en charge la bande passante d'un filtre passe-bande en plus de la bande passante d'un filtre passe-bas."
 
 msgid "New 2D ramp image generator."
 msgstr "Nouveau générateur d'image de type rampe 2D."

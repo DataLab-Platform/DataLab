@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-08-05 15:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -275,6 +275,27 @@ msgstr ":math:`z_{1} = |FFT(z_{0})|^2` ou :math:`z_{1} = 10 \\log_{10}(|FFT(z_{0
 msgid "FFT and inverse FFT are performed using frequency shifting if the option is enabled in DataLab settings (see :ref:`settings`)."
 msgstr "La FFT et la FFT inverse sont effectuées avec décalage de fréquence si l'option est activée dans les paramètres de DataLab (voir :ref:`settings`)."
 
+msgid "Frequency-domain filters"
+msgstr "Filtre fréquentiels"
+
+msgid "The following frequency-domain filters are available:"
+msgstr "Les filtres fréquentiels suivants sont disponibles :"
+
+msgid "Method"
+msgstr "Méthode"
+
+msgid "Butterworth"
+msgstr "Butterworth"
+
+msgid "Butterworth filter, based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_"
+msgstr "Filtre de Butterworth, basé sur `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_"
+
+msgid "Gaussian filter in the frequency domain"
+msgstr "Filtre gaussien dans le domaine fréquentiel"
+
+msgid "Gaussian filter applied in the frequency domain"
+msgstr "Filtre gaussien appliqué dans le domaine fréquentiel"
+
 msgid "Thresholding"
 msgstr "Seuillage"
 
@@ -310,9 +331,6 @@ msgstr "Opération à appliquer (> ou <)"
 
 msgid "The following thresholding methods are available:"
 msgstr "Les méthodes de seuillage suivantes sont disponibles :"
-
-msgid "Method"
-msgstr "Méthode"
 
 msgid "Implementation"
 msgstr "Implémentation"
@@ -622,4 +640,3 @@ msgstr "Binning"
 
 msgid "Combine clusters of adjacent pixels, throughout the image, into single pixels. The result can be the sum, average, median, minimum, or maximum value of the cluster."
 msgstr "Regroupe des pixels adjacents de l'image en un seul pixel (somme, moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
-

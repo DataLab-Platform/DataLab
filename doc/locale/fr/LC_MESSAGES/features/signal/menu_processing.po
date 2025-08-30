@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-05 14:55+0200\n"
+"POT-Creation-Date: 2025-08-03 12:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -729,3 +729,4 @@ msgstr "Mode XY"
 
 msgid "Simulate the X-Y mode of an oscilloscope."
 msgstr "Simuler le mode XY d'un oscilloscope."
+
