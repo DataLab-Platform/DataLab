@@ -1138,7 +1138,7 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Apply all morphological operations"),
                 )
-            with self.new_menu(_("Edge detection"), icon_name="edges.svg"):
+            with self.new_menu(_("Edge detection"), icon_name="edge_detection.svg"):
                 self.action_for("canny")
                 self.action_for("farid", separator=True)
                 self.action_for("farid_h")
