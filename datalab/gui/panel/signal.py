@@ -22,7 +22,7 @@ from plotpy.tools import (
 from sigima.io.signal import SignalIORegistry
 from sigima.objects import SignalObj, SignalROI
 
-from datalab.adapters_plotpy.signal import CURVESTYLES
+from datalab.adapters_plotpy import CURVESTYLES
 from datalab.config import _
 from datalab.gui import roieditor
 from datalab.gui.actionhandler import SignalActionHandler

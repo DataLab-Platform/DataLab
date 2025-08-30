@@ -9,26 +9,28 @@ Result properties application test
 from __future__ import annotations
 
 import numpy as np
+from sigima.objects import NormalDistributionParam
 from sigima.tests import data as test_data
 
+from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.tests import datalab_test_app_context
 
 
-def create_image_with_resultproperties():
-    """Create test image with result properties"""
+def create_image_with_table_results():
+    """Create test image with table results"""
     image = test_data.create_multigaussian_image()
-    for prop in test_data.create_resultproperties():
-        prop.add_to(image)
+    for table in test_data.generate_table_results():
+        TableAdapter(table).add_to(image)
     return image
 
 
-def test_resultproperties():
+def test_table_results():
     """Result properties application test"""
     obj1 = test_data.create_sincos_image()
-    obj2 = create_image_with_resultproperties()
-    with datalab_test_app_context(console=False) as win:
+    obj2 = create_image_with_table_results()
+    with datalab_test_app_context() as win:
         panel = win.signalpanel
-        noiseparam = test_data.GaussianNoiseParam()
+        noiseparam = NormalDistributionParam()
         for sigma in np.linspace(0.0, 0.5, 11):
             noiseparam.sigma = sigma
             sig = test_data.create_noisy_signal(noiseparam=noiseparam)
@@ -47,4 +49,4 @@ def test_resultproperties():
 
 
 if __name__ == "__main__":
-    test_resultproperties()
+    test_table_results()

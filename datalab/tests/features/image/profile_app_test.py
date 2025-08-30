@@ -58,7 +58,7 @@ def test_profile():
             (None, 0.0, 0.0),
             ("centroid", 0.0, 0.0),
             ("center", 0.0, 0.0),
-            ("manual", 800.0, 900.0),
+            ("user", 800.0, 900.0),
         ):
             if center is None:
                 proc.compute_radial_profile()

@@ -32,8 +32,7 @@ from qtpy.compat import getopenfilename
 from sigima import ImageObj, SignalObj
 from sigima.io.common.converters import to_string
 
-from datalab.adapters_plotpy.factories import create_adapter_from_object
-from datalab.adapters_plotpy.signal import CURVESTYLES
+from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import _
 from datalab.h5 import H5Importer
 from datalab.utils.qthelpers import qt_handle_error_message

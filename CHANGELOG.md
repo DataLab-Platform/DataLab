@@ -6,6 +6,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* New common signal/image feature:
+  * Generate new signal or image: Poisson noise.
+  * Add noise to the selected signals or images.
+    * Gaussian, Poisson or uniform noise can be added.
+    * This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201).
+
 * New ROI (Region of Interest) management features:
   * New "ROI" menu, between "Edit" and "Operations" menus
   * This menu provides quick access to ROI creation, editing, and deletion tools.
@@ -26,10 +32,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
       * Preview the ROI grid before creating it
 
 * New image processing features:
-  * New "Gaussian frequency filter" feature:
-    * This feature allows to filter an image in the frequency domain using a Gaussian filter
-    * It is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)
-    * This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images
+  * New "Frequency domain Gaussian filter" feature:
+    * This feature allows to filter an image in the frequency domain using a Gaussian filter.
+    * It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function (requires Sigima v0.3).
+    * This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images.
   * New "Erase area" feature:
     * This feature allows to erase an area in an image as defined by a region of interest
     * It is implemented in the `sigima.proc.image.erase` function (requires Sigima v0.3)
@@ -43,9 +49,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * New signal processing features:
   * Zero padding:
-    * Enhanced to support both prepending and appending zeros.
+    * Enhanced feature to support both prepending and appending zeros.
     * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
     * Default strategy is now "Next power of 2".
+  * Ideal frequency domain filter ("Brick wall filter"):
+    * It is implemented in `sigima.proc.signal.frequency_filter` (requires Sigima v0.3).
+    * This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal).
+
+* New signal analysis features:
+  * Bandwidth at -3dB:
+    * Enhanced to support passband bandwidth in addition to baseband bandwidth.
 
 * New 2D ramp image generator.
   * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).

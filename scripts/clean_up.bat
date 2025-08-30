@@ -61,3 +61,6 @@ if exist wix\obj ( rmdir /s /q wix\obj )
 if exist wix\*.bmp ( del /q wix\*.bmp )
 if exist wix\*.wixpdb ( del /q wix\*.wixpdb )
 del /q wix\%LIBNAME%*.wxs 1>nul 2>&1
+
+@REM Removing .bak files
+del /s /q *.bak 1>nul 2>&1

@@ -33,6 +33,12 @@ Create a new signal from various models:
       - Equation
     * - Zeros
       - :math:`y[i] = 0`
+    * - Uniform distribution
+      - :math:`y[i]` is normally distributed with configurable mean and standard deviation
+    * - Poisson distribution
+      - :math:`y[i]` is Poisson distributed with configurable mean
+    * - Uniform distribution
+      - :math:`y[i]` is uniformly distributed between two configurable bounds
     * - Gaussian
       - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
     * - Lorentzian
@@ -41,10 +47,6 @@ Create a new signal from various models:
       - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
     * - Blackbody (Planck's law)
       - :math:`y = \dfrac{2 h c^2}{\lambda^5 \left(exp\left(\dfrac{h c}{\lambda k T}\right)-1\right)}`
-    * - Random (uniform law)
-      - :math:`y[i] \in [-0.5, 0.5]`
-    * - Random (normal law)
-      - :math:`y[i] \sim \mathcal{N}(-0.5, 0.5)`
     * - Sine
       - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
     * - Cosine
