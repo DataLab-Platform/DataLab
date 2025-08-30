@@ -1179,8 +1179,6 @@ class ImageActionHandler(BaseActionHandler):
                 separator=True,
                 tip=_("Erase area in the image as defined by a region of interest"),
             )
-            with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
-                self.action_for("freq_fft")
 
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):
