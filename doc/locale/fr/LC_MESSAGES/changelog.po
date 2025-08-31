@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 17:49+0200\n"
+"POT-Creation-Date: 2025-08-31 16:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -35,30 +35,37 @@ msgstr "Nouvelles fonctionnalités communes signal/image :"
 
 msgid "Added `phase` (argument) feature to extract the phase information from complex signals or images."
 msgstr "Ajout de la fonctionnalité `phase` (argument) pour extraire les informations de phase des signaux ou des images complexes."
-msgid "Standard deviation of the selected signals or images."
-msgstr "Écart-type des signaux ou des images de la sélection."
-msgid "Generate new signal or image: Poisson noise."
-msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
 
 msgid "This complements the \"Absolute value\" (modulus) feature."
 msgstr "Ceci complète la fonctionnalité \"Valeur absolue\" (module)."
-msgid "This complements the \"Average\" feature."
-msgstr "Ceci complète la fonctionnalité \"Moyenne\"."
-msgid "Add noise to the selected signals or images."
-msgstr "Ajouter du bruit aux signaux ou images sélectionnés."
 
 msgid "Added operation to create complex-valued signal/image from real and imaginary parts."
 msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir des parties réelle et imaginaire."
-msgid "This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
-msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
-msgid "Gaussian, Poisson or uniform noise can be added."
-msgstr "Du bruit gaussien, de Poisson ou uniforme peut être ajouté."
 
 msgid "Added operation to create complex-valued signal/image from magnitude and phase."
 msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir de l'amplitude et de la phase."
 
 msgid "This closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 msgstr "Ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+
+msgid "Standard deviation of the selected signals or images."
+msgstr "Écart-type des signaux ou des images de la sélection."
+
+msgid "This complements the \"Average\" feature."
+msgstr "Ceci complète la fonctionnalité \"Moyenne\"."
+
+msgid "This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+
+msgid "Generate new signal or image: Poisson noise."
+msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
+
+msgid "Add noise to the selected signals or images."
+msgstr "Ajouter du bruit aux signaux ou images sélectionnés."
+
+msgid "Gaussian, Poisson or uniform noise can be added."
+msgstr "Du bruit gaussien, de Poisson ou uniforme peut être ajouté."
+
 msgid "This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
 msgstr "Ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
 
@@ -119,16 +126,20 @@ msgstr "Prévisualiser la grille de ROI avant de la créer"
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"
 
-msgid "New \"Gaussian frequency filter\" feature:"
+#, fuzzy
+msgid "New \"Frequency domain Gaussian filter\" feature:"
 msgstr "Nouvelle fonctionnalité \"Filtre de fréquence gaussien\""
 
-msgid "This feature allows to filter an image in the frequency domain using a Gaussian filter"
+#, fuzzy
+msgid "This feature allows to filter an image in the frequency domain using a Gaussian filter."
 msgstr "Cette fonctionnalité permet de filtrer une image dans le domaine fréquentiel à l'aide d'un filtre gaussien."
 
-msgid "It is implemented in the `sigima.proc.image.freq_fft` function (requires Sigima v0.3)"
+#, fuzzy
+msgid "It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function (requires Sigima v0.3)."
 msgstr "Elle est implémentée dans la fonction `sigima.proc.image.freq_fft` (nécessite Sigima v0.3)"
 
-msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images"
+#, fuzzy
+msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images."
 msgstr "Ceci clôture le ticket [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images"
 
 msgid "New \"Erase area\" feature:"
@@ -167,14 +178,32 @@ msgstr "Nouvelles fonctionnalités de traitement de signal :"
 msgid "Zero padding:"
 msgstr "Complément de zéros :"
 
-msgid "Enhanced to support both prepending and appending zeros."
-msgstr "Amélioré pour prendre en charge l'ajout de zéros au début et à la fin."
+msgid "Enhanced feature to support both prepending and appending zeros."
+msgstr "Amélioration de la fonctionnalité pour prendre en charge l'ajout de zéros au début et à la fin."
 
 msgid "Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
 msgid "Default strategy is now \"Next power of 2\"."
 msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
+
+msgid "Ideal frequency domain filter (\"Brick wall filter\"):"
+msgstr "Filtre idéal dans le domaine fréquentiel (\"Filtre coupe-bande\") :"
+
+msgid "It is implemented in `sigima.proc.signal.frequency_filter` (requires Sigima v0.3)."
+msgstr "Elle est implémentée dans la fonction `sigima.proc.signal.frequency_filter` (nécessite Sigima v0.3)."
+
+msgid "This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal)."
+msgstr "Ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filtres / Filtre coupe-bande (Signal)."
+
+msgid "New signal analysis features:"
+msgstr "Nouvelles fonctionnalités d'analyse de signal :"
+
+msgid "Bandwidth at -3dB:"
+msgstr "Bande passante à -3dB :"
+
+msgid "Enhanced to support passband bandwidth in addition to baseband bandwidth."
+msgstr "Amélioration de la prise en charge de la bande passante en plus de la bande de base."
 
 msgid "New 2D ramp image generator."
 msgstr "Nouveau générateur d'image de type rampe 2D."
@@ -1042,7 +1071,7 @@ msgid "This issue only concerned basic operations (addition, subtraction, multip
 msgstr "Ce problème ne concernait que les opérations de base (addition, soustraction, multiplication, division et opérations constantes) - toutes les autres fonctionnalités fonctionnaient déjà comme prévu"
 
 msgid "This is now fixed as result output are now floating point images"
-msgstr ""
+msgstr "Cela est maintenant corrigé car les résultats sont désormais des images à virgule flottante."
 
 msgid "Unit tests have been added to prevent regressions for all these operations"
 msgstr "Des tests unitaires ont été ajoutés pour éviter les régressions pour toutes ces opérations"
@@ -1178,7 +1207,7 @@ msgid "Since version 0.16.0, many validation functions have been added to the te
 msgstr "Depuis la version 0.16.0, de nombreuses fonctions de validation ont été ajoutées à la suite de tests. Le pourcentage de fonctions de calcul validées est passé de 37 % à 84 % dans cette version."
 
 msgid "NumPy 2.0 support has been added with this release."
-msgstr ""
+msgstr "La prise en charge de NumPy 2.0 a été ajoutée avec cette version."
 
 msgid "Signal and image moving average and median filters:"
 msgstr "Filtres moyenne mobile et médiane pour les signaux et les images :"
