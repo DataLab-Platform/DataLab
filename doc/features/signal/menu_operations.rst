@@ -55,7 +55,7 @@ Basic arithmetic operations
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |standard_deviation| image:: ../../../datalab/data/icons/operations/standard_deviation.svg
+.. |standard_deviation| image:: ../../../datalab/data/icons/operations/std.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
