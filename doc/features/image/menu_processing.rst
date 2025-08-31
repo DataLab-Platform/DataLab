@@ -180,6 +180,22 @@ The following functions are available:
     FFT and inverse FFT are performed using frequency shifting if the option is enabled
     in DataLab settings (see :ref:`settings`).
 
+Frequency-domain filters
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following frequency-domain filters are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Method
+      - Description
+    * - Butterworth
+      - Butterworth filter, based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_
+    * - Gaussian filter in the frequency domain
+      - Gaussian filter applied in the frequency domain
+
 Thresholding
 ^^^^^^^^^^^^
 

@@ -21,7 +21,7 @@ from qtpy import QtWidgets as QW
 from sigima.objects import NewImageParam
 from sigima.tests.data import create_2d_random, create_noisy_gaussian_image
 
-from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.env import execenv
 
 

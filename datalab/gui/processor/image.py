@@ -8,6 +8,9 @@
 
 from __future__ import annotations
 
+import importlib
+from typing import Literal
+
 import numpy as np
 import sigima.params
 import sigima.proc.base as sigima_base
@@ -15,8 +18,19 @@ import sigima.proc.image as sigima_image
 from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
-from sigima.objects import ImageROI, ResultShape, ROI2DParam
+from sigima.objects import (
+    ImageObj,
+    ImageROI,
+    NormalDistributionParam,
+    PoissonDistributionParam,
+    ROI2DParam,
+    UniformDistributionParam,
+)
+from sigima.objects.scalar import GeometryResult
+from sigima.proc.decorator import ComputationMetadata
+from sigima.proc.transformations import transformer
 
+from datalab.adapters_metadata import GeometryAdapter
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
 from datalab.gui.profiledialog import ProfileExtractionDialog
@@ -26,10 +40,174 @@ from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets import imagebackground
 
 
+def apply_geometry_transform(
+    obj: ImageObj,
+    operation: Literal[
+        "translate", "scale", "rotate90", "rotate270", "fliph", "flipv", "transpose"
+    ],
+    **kwargs,
+) -> None:
+    """Apply a geometric transformation to all geometry results in an object.
+
+    This uses the Sigima transformation system for proper geometric operations.
+    For image objects, rotations are performed around the image center to match
+    how the image data is transformed.
+
+    Args:
+        obj: The object containing geometry results to transform
+        operation: The transformation operation name
+        **kwargs: Optional parameters for the transformation (e.g., angle for rotate)
+    """
+    assert operation in [
+        "translate",
+        "scale",
+        "rotate90",
+        "rotate270",
+        "fliph",
+        "flipv",
+        "transpose",
+    ], f"Unknown operation: {operation}"
+    if operation == "translate":
+        if not kwargs or "dx" not in kwargs or "dy" not in kwargs:
+            raise ValueError("translate operation requires 'dx' and 'dy' parameters")
+        dx, dy = kwargs["dx"], kwargs["dy"]
+    elif operation == "scale":
+        if not kwargs or "sx" not in kwargs or "sy" not in kwargs:
+            raise ValueError("scale operation requires 'sx' and 'sy' parameters")
+        sx, sy = kwargs["sx"], kwargs["sy"]
+    for adapter in list(GeometryAdapter.iterate_from_obj(obj)):
+        geometry = adapter.geometry
+        assert geometry is not None, "Geometry should not be None"
+        assert len(geometry.coords) > 0, "Geometry coordinates should not be empty"
+        if operation == "translate":
+            tr_geometry = transformer.translate(geometry, dx, dy)
+        elif operation == "scale":
+            tr_geometry = transformer.scale(geometry, sx, sy, (obj.xc, obj.yc))
+        elif operation == "rotate90":
+            tr_geometry = transformer.rotate(geometry, -np.pi / 2, (obj.xc, obj.yc))
+        elif operation == "rotate270":
+            tr_geometry = transformer.rotate(geometry, np.pi / 2, (obj.xc, obj.yc))
+        elif operation == "fliph":
+            tr_geometry = transformer.fliph(geometry, obj.xc)
+        elif operation == "flipv":
+            tr_geometry = transformer.flipv(geometry, obj.yc)
+        elif operation == "transpose":
+            tr_geometry = transformer.transpose(geometry)
+        else:
+            raise ValueError(f"Unknown operation: {operation}")
+
+        # Remove the old geometry and add the transformed one
+        adapter.remove_from(obj)
+        tr_adapter = GeometryAdapter(tr_geometry)
+        tr_adapter.add_to(obj)
+
+
+class GeometricTransformWrapper:
+    """Pickleable wrapper for geometric transformation functions.
+
+    This class creates a callable wrapper that can be pickled, unlike nested functions.
+    Instead of storing the function directly, it stores the module path and function
+    name to allow proper pickling.
+    """
+
+    def __init__(self, func, operation: str):
+        self.operation = operation
+
+        # Store function reference for execution
+        self.func = func
+
+        # Store function module and name for pickling
+        self.__module__ = func.__module__
+        self.__qualname__ = func.__qualname__
+        self.__annotations__ = getattr(func, "__annotations__", {})
+        self.__name__ = getattr(func, "__name__", str(func))
+
+        # Copy the __wrapped__ attribute if it exists (for Sigima compatibility)
+        # Note: We don't copy __wrapped__ as it may contain unpickleable references
+        # The wrapper functionality will still work without it
+
+        # Copy Sigima computation metadata (required for validation)
+        computation_metadata_attr = "__computation_function_metadata"
+        if hasattr(func, computation_metadata_attr):
+            setattr(
+                self,
+                computation_metadata_attr,
+                getattr(func, computation_metadata_attr),
+            )
+
+    def __call__(self, src_obj, param=None):
+        """Call the wrapped function and apply geometry transformations."""
+        # Call the original function
+        if param is not None:
+            dst_obj = self.func(src_obj, param)
+        else:
+            dst_obj = self.func(src_obj)
+        apply_geometry_transform(dst_obj, operation=self.operation)
+        return dst_obj
+
+    def __getstate__(self):
+        """Custom pickling: exclude the function reference."""
+        # Build state manually to avoid any problematic attributes
+        state = {
+            "operation": self.operation,
+            "__module__": self.__module__,
+            "__qualname__": self.__qualname__,
+            "__annotations__": self.__annotations__,
+            "__name__": self.__name__,
+        }
+
+        # Store function information for reconstruction
+        if hasattr(self, "func"):
+            state["_func_module"] = self.func.__module__
+            state["_func_name"] = self.func.__name__
+
+        # Note: We don't copy __wrapped__ as it may contain unpickleable references
+
+        # Copy computation metadata safely
+        computation_metadata_attr = "__computation_function_metadata"
+        if hasattr(self, computation_metadata_attr):
+            metadata = getattr(self, computation_metadata_attr)
+            # Store as a dict to avoid any pickling issues with the object itself
+            if hasattr(metadata, "__dict__"):
+                state[computation_metadata_attr] = metadata.__dict__.copy()
+            else:
+                state[computation_metadata_attr] = metadata
+
+        return state
+
+    def __setstate__(self, state):
+        """Custom unpickling: restore the function reference."""
+        self.__dict__.update(state)
+        # Restore function from module and name
+        if "_func_module" in state and "_func_name" in state:
+            module = importlib.import_module(state["_func_module"])
+            self.func = getattr(module, state["_func_name"])
+
+        # Reconstruct computation metadata if it was stored as dict
+        computation_metadata_attr = "__computation_function_metadata"
+        if computation_metadata_attr in state:
+            metadata_dict = state[computation_metadata_attr]
+            if isinstance(metadata_dict, dict):
+                metadata = ComputationMetadata(**metadata_dict)
+                setattr(self, computation_metadata_attr, metadata)
+
+
 class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     """Object handling image processing: operations, processing, analysis"""
 
     # pylint: disable=duplicate-code
+
+    def _wrap_geometric_transform(self, func, operation: str):
+        """Wrap a geometric transformation function to apply geometry transforms.
+
+        Args:
+            func: The original Sigima function
+            operation: The operation name for geometry transformation
+
+        Returns:
+            Pickleable wrapped function that applies geometry transformations
+        """
+        return GeometricTransformWrapper(func, operation)
 
     def register_computations(self) -> None:
         """Register image computations"""
@@ -122,34 +300,32 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
         # Flip or rotation
         self.register_1_to_1(
-            sigima_image.fliph,
+            self._wrap_geometric_transform(sigima_image.fliph, "fliph"),
             _("Flip horizontally"),
             icon_name="flip_horizontally.svg",
         )
         self.register_1_to_1(
-            sigima_image.swap_axes,
+            self._wrap_geometric_transform(sigima_image.transpose, "transpose"),
             _("Flip diagonally"),
             icon_name="swap_x_y.svg",
         )
         self.register_1_to_1(
-            sigima_image.flipv,
+            self._wrap_geometric_transform(sigima_image.flipv, "flipv"),
             _("Flip vertically"),
             icon_name="flip_vertically.svg",
         )
         self.register_1_to_1(
-            sigima_image.rotate270,
+            self._wrap_geometric_transform(sigima_image.rotate270, "rotate270"),
             _("Rotate %s right") % "90°",
             icon_name="rotate_right.svg",
         )
         self.register_1_to_1(
-            sigima_image.rotate90,
+            self._wrap_geometric_transform(sigima_image.rotate90, "rotate90"),
             _("Rotate %s left") % "90°",
             icon_name="rotate_left.svg",
         )
         self.register_1_to_1(
-            sigima_image.rotate,
-            _("Rotate by..."),
-            sigima_image.RotateParam,
+            sigima_image.rotate, _("Rotate by..."), sigima_image.RotateParam
         )
         # Intensity profiles
         self.register_1_to_1(
@@ -194,7 +370,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             ),
         )
         self.register_1_to_1(
-            sigima_image.swap_axes,
+            sigima_image.transpose,
             _("Swap X/Y axes"),
             icon_name="swap_x_y.svg",
         )
@@ -215,6 +391,22 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             comment=_("Evaluate and subtract the offset value from the data"),
             icon_name="offset_correction.svg",
         )
+        # Noise addition
+        self.register_1_to_1(
+            sigima_image.add_gaussian_noise,
+            _("Add Gaussian noise"),
+            NormalDistributionParam,
+        )
+        self.register_1_to_1(
+            sigima_image.add_poisson_noise,
+            _("Add Poisson noise"),
+            PoissonDistributionParam,
+        )
+        self.register_1_to_1(
+            sigima_image.add_uniform_noise,
+            _("Add uniform noise"),
+            UniformDistributionParam,
+        )
         # Noise reduction
         self.register_1_to_1(
             sigima_image.gaussian_filter,
@@ -232,11 +424,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sigima_base.MovingMedianParam,
         )
         self.register_1_to_1(sigima_image.wiener, _("Wiener filter"))
-        self.register_1_to_1(
-            sigima_image.freq_fft,
-            _("Gaussian frequency filter"),
-            sigima_image.FreqFFTParam,
-        )
         self.register_1_to_1(
             sigima_image.erase,
             _("Erase area"),
@@ -300,6 +487,17 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 "Power spectral density (PSD) is the square of the magnitude spectrum. "
                 "It is a measure of the power of the frequency components."
             ),
+        )
+        # Frequency filters
+        self.register_1_to_1(
+            sigima_image.butterworth,
+            _("Butterworth"),
+            sigima_image.ButterworthParam,
+        )
+        self.register_1_to_1(
+            sigima_image.gaussian_freq_filter,
+            _("Gaussian bandpass"),
+            sigima_image.GaussianFreqFilterParam,
         )
         # Thresholding
         self.register_1_to_1(
@@ -403,30 +601,26 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             _("Closing (disk)"),
             sigima_image.MorphologyParam,
         )
-        # Edges
-        self.register_1_to_1(sigima_image.roberts, _("Roberts filter"))
-        self.register_1_to_1(sigima_image.prewitt, _("Prewitt filter"))
-        self.register_1_to_1(sigima_image.prewitt_h, _("Prewitt filter (horizontal)"))
-        self.register_1_to_1(sigima_image.prewitt_v, _("Prewitt filter (vertical)"))
-        self.register_1_to_1(sigima_image.sobel, _("Sobel filter"))
-        self.register_1_to_1(sigima_image.sobel_h, _("Sobel filter (horizontal)"))
-        self.register_1_to_1(sigima_image.sobel_v, _("Sobel filter (vertical)"))
-        self.register_1_to_1(sigima_image.scharr, _("Scharr filter"))
-        self.register_1_to_1(sigima_image.scharr_h, _("Scharr filter (horizontal)"))
-        self.register_1_to_1(sigima_image.scharr_v, _("Scharr filter (vertical)"))
+        # Edge detection
+        self.register_1_to_1(
+            sigima_image.canny, _("Canny filter"), sigima_image.CannyParam
+        )
         self.register_1_to_1(sigima_image.farid, _("Farid filter"))
         self.register_1_to_1(sigima_image.farid_h, _("Farid filter (horizontal)"))
         self.register_1_to_1(sigima_image.farid_v, _("Farid filter (vertical)"))
         self.register_1_to_1(sigima_image.laplace, _("Laplace filter"))
-        self.register_1_to_1(
-            sigima_image.canny, _("Canny filter"), sigima_image.CannyParam
-        )
+        self.register_1_to_1(sigima_image.prewitt, _("Prewitt filter"))
+        self.register_1_to_1(sigima_image.prewitt_h, _("Prewitt filter (horizontal)"))
+        self.register_1_to_1(sigima_image.prewitt_v, _("Prewitt filter (vertical)"))
+        self.register_1_to_1(sigima_image.roberts, _("Roberts filter"))
+        self.register_1_to_1(sigima_image.scharr, _("Scharr filter"))
+        self.register_1_to_1(sigima_image.scharr_h, _("Scharr filter (horizontal)"))
+        self.register_1_to_1(sigima_image.scharr_v, _("Scharr filter (vertical)"))
+        self.register_1_to_1(sigima_image.sobel, _("Sobel filter"))
+        self.register_1_to_1(sigima_image.sobel_h, _("Sobel filter (horizontal)"))
+        self.register_1_to_1(sigima_image.sobel_v, _("Sobel filter (vertical)"))
+
         # Other processing
-        self.register_1_to_1(
-            sigima_image.butterworth,
-            _("Butterworth filter"),
-            sigima_image.ButterworthParam,
-        )
         self.register_1_to_n(sigima_image.extract_roi, "ROI", icon_name="roi.svg")
         self.register_1_to_1(
             sigima_image.resize,
@@ -668,7 +862,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             return
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         g_row, g_col, x0, y0, x0_0, y0_0 = 0, 0, 0.0, 0.0, 0.0, 0.0
-        delta_x0, delta_y0 = 0.0, 0.0
+        dx0, dy0 = 0.0, 0.0
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             for i_row, obj in enumerate(objs):
                 progress.setValue(i_row + 1)
@@ -678,17 +872,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 if i_row == 0:
                     x0_0, y0_0 = x0, y0 = obj.x0, obj.y0
                 else:
-                    delta_x0, delta_y0 = x0 - obj.x0, y0 - obj.y0
-                    obj.x0 += delta_x0
-                    obj.y0 += delta_y0
-
-                    # pylint: disable=unused-argument
-                    def translate_coords(obj, orig, coords):
-                        """Apply translation to coords"""
-                        coords[:, ::2] += delta_x0
-                        coords[:, 1::2] += delta_y0
-
-                    obj.transform_shapes(None, translate_coords)
+                    dx0, dy0 = x0 - obj.x0, y0 - obj.y0
+                    obj.x0 += dx0
+                    obj.y0 += dy0
+                    apply_geometry_transform(obj, "translate", dx=dx0, dy=dy0)
+                    transformer.transform_roi(obj, "translate", dx=dx0, dy=dy0)
                 if param.direction == "row":
                     # Distributing images over rows
                     sign = np.sign(param.rows)
@@ -713,23 +901,17 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     def reset_positions(self) -> None:
         """Reset image positions"""
         x0_0, y0_0 = 0.0, 0.0
-        delta_x0, delta_y0 = 0.0, 0.0
+        dx0, dy0 = 0.0, 0.0
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         for i_row, obj in enumerate(objs):
             if i_row == 0:
                 x0_0, y0_0 = obj.x0, obj.y0
             else:
-                delta_x0, delta_y0 = x0_0 - obj.x0, y0_0 - obj.y0
-                obj.x0 += delta_x0
-                obj.y0 += delta_y0
-
-                # pylint: disable=unused-argument
-                def translate_coords(obj, orig, coords):
-                    """Apply translation to coords"""
-                    coords[:, ::2] += delta_x0
-                    coords[:, 1::2] += delta_y0
-
-                obj.transform_shapes(None, translate_coords)
+                dx0, dy0 = x0_0 - obj.x0, y0_0 - obj.y0
+                obj.x0 += dx0
+                obj.y0 += dy0
+                apply_geometry_transform(obj, "translate", dx=dx0, dy=dy0)
+                transformer.transform_roi(obj, "translate", dx=dx0, dy=dy0)
         self.panel.refresh_plot("selected", True, False)
 
     # ------Image Processing
@@ -870,39 +1052,42 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
 
     @qt_try_except()
     def compute_all_edges(self) -> None:
-        """Compute all edges filters
-        using the following functions:
+        """Compute all edge detection algorithms.
 
-        - :py:func:`sigima.proc.image.edges.roberts`
-        - :py:func:`sigima.proc.image.edges.prewitt`
-        - :py:func:`sigima.proc.image.edges.prewitt_h`
-        - :py:func:`sigima.proc.image.edges.prewitt_v`
-        - :py:func:`sigima.proc.image.edges.sobel`
-        - :py:func:`sigima.proc.image.edges.sobel_h`
-        - :py:func:`sigima.proc.image.edges.sobel_v`
-        - :py:func:`sigima.proc.image.edges.scharr`
-        - :py:func:`sigima.proc.image.edges.scharr_h`
-        - :py:func:`sigima.proc.image.edges.scharr_v`
+        This function calls the following edge detection algorithms:
+
+        - :py:func:`sigima.proc.image.edges.canny`
         - :py:func:`sigima.proc.image.edges.farid`
         - :py:func:`sigima.proc.image.edges.farid_h`
         - :py:func:`sigima.proc.image.edges.farid_v`
         - :py:func:`sigima.proc.image.edges.laplace`
+        - :py:func:`sigima.proc.image.edges.prewitt`
+        - :py:func:`sigima.proc.image.edges.prewitt_h`
+        - :py:func:`sigima.proc.image.edges.prewitt_v`
+        - :py:func:`sigima.proc.image.edges.roberts`
+        - :py:func:`sigima.proc.image.edges.scharr`
+        - :py:func:`sigima.proc.image.edges.scharr_h`
+        - :py:func:`sigima.proc.image.edges.scharr_v`
+        - :py:func:`sigima.proc.image.edges.sobel`
+        - :py:func:`sigima.proc.image.edges.sobel_h`
+        - :py:func:`sigima.proc.image.edges.sobel_v`
         """
         funcs = [
-            sigima_image.roberts,
-            sigima_image.prewitt,
-            sigima_image.prewitt_h,
-            sigima_image.prewitt_v,
-            sigima_image.sobel,
-            sigima_image.sobel_h,
-            sigima_image.sobel_v,
-            sigima_image.scharr,
-            sigima_image.scharr_h,
-            sigima_image.scharr_v,
+            sigima_image.canny,
             sigima_image.farid,
             sigima_image.farid_h,
             sigima_image.farid_v,
             sigima_image.laplace,
+            sigima_image.prewitt,
+            sigima_image.prewitt_h,
+            sigima_image.prewitt_v,
+            sigima_image.roberts,
+            sigima_image.scharr,
+            sigima_image.scharr_h,
+            sigima_image.scharr_v,
+            sigima_image.sobel,
+            sigima_image.sobel_h,
+            sigima_image.sobel_v,
         ]
         self.compute_multiple_1_to_1(funcs, None, "Edges")
 
@@ -924,7 +1109,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
     @qt_try_except()
     def compute_peak_detection(
         self, param: sigima.params.Peak2DDetectionParam | None = None
-    ) -> dict[str, ResultShape]:
+    ) -> dict[str, GeometryResult]:
         """Compute 2D peak detection
         with :py:func:`sigima.proc.image.peak_detection`"""
         edit, param = self.init_param(

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-08-07 15:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -354,6 +354,12 @@ msgstr ""
 msgid "Bessel filter, using SciPy's `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_ function"
 msgstr "Filtre de Bessel, utilisant la fonction `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_"
 
+msgid "Brick wall"
+msgstr "Filtre idéal"
+
+msgid "Ideal (rectangular) filter in the frequency domain"
+msgstr "Filtre idéal (rectangulaire) dans le domaine de la fréquence"
+
 msgid "Butterworth"
 msgstr ""
 
@@ -493,8 +499,8 @@ msgstr ""
 msgid ":py:func:`scipy.signal.windows.bohman`"
 msgstr ""
 
-msgid "Boxcar"
-msgstr ""
+msgid "Boxcar (rectangular)"
+msgstr "Rectangulaire"
 
 msgid ":py:func:`scipy.signal.windows.boxcar`"
 msgstr ""
@@ -523,7 +529,7 @@ msgstr ""
 msgid ":py:func:`numpy.hamming`"
 msgstr ""
 
-msgid "Hanning"
+msgid "Hann"
 msgstr ""
 
 msgid ":py:func:`numpy.hanning`"
@@ -551,12 +557,6 @@ msgid "Parzen"
 msgstr ""
 
 msgid ":py:func:`scipy.signal.windows.parzen`"
-msgstr ""
-
-msgid "Rectangular"
-msgstr "Rectangulaire"
-
-msgid ":py:func:`numpy.ones`"
 msgstr ""
 
 msgid "Taylor"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-01 13:24+0200\n"
+"POT-Creation-Date: 2025-08-19 11:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -67,12 +67,20 @@ msgstr "Vide"
 msgid "Data is directly taken from memory as it is"
 msgstr "Données mémoire en l'état"
 
-msgid "Random"
-msgstr "Aléatoire"
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
 
-#, python-brace-format
-msgid ":math:`z[i] \\in [0, z_{max})` where :math:`z_{max}` is the datatype maximum value"
-msgstr ":math:`z[i] \\in [0, z_{max})` où :math:`z_{max}` est la valeur maximale correpondant au type de données"
+msgid ":math:`y[i]` is normally distributed with configurable mean and standard deviation"
+msgstr ":math:`y[i]` est normalement distribué avec une moyenne et un écart type configurables"
+
+msgid "Poisson distribution"
+msgstr "Distribution de Poisson"
+
+msgid ":math:`y[i]` is Poisson distributed with configurable mean"
+msgstr ":math:`y[i]` est distribué selon une loi de Poisson avec une moyenne configurable"
+
+msgid ":math:`y[i]` is uniformly distributed between two configurable bounds"
+msgstr ":math:`y[i]` est uniformément distribué entre deux bornes configurables"
 
 msgid "2D Gaussian"
 msgstr "Gaussienne 2D"
@@ -253,4 +261,3 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
-

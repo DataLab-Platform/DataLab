@@ -17,13 +17,15 @@ import sigima.proc.base as sigima_base
 import sigima.proc.signal as sigima_signal
 from guidata.qthelpers import exec_dialog
 from sigima.objects import (
-    ResultProperties,
-    ResultShape,
+    NormalDistributionParam,
+    PoissonDistributionParam,
     ROI1DParam,
     SignalObj,
     SignalROI,
+    UniformDistributionParam,
     create_signal,
 )
+from sigima.objects.scalar import GeometryResult, TableResult
 
 from datalab.config import _
 from datalab.gui.processor.base import BaseProcessor
@@ -153,7 +155,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             ),
         )
         self.register_1_to_1(
-            sigima_signal.swap_axes, _("Swap X/Y axes"), icon_name="swap_x_y.svg"
+            sigima_signal.transpose, _("Swap X/Y axes"), icon_name="swap_x_y.svg"
         )
         self.register_1_to_1(
             sigima_signal.reverse_x,
@@ -185,6 +187,22 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             _("Offset correction"),
             icon_name="offset_correction.svg",
             comment=_("Evaluate and subtract the offset value from the data"),
+        )
+        # Noise addition
+        self.register_1_to_1(
+            sigima_signal.add_gaussian_noise,
+            _("Add Gaussian noise"),
+            NormalDistributionParam,
+        )
+        self.register_1_to_1(
+            sigima_signal.add_poisson_noise,
+            _("Add Poisson noise"),
+            PoissonDistributionParam,
+        )
+        self.register_1_to_1(
+            sigima_signal.add_uniform_noise,
+            _("Add uniform noise"),
+            UniformDistributionParam,
         )
         # Noise reduction
         self.register_1_to_1(
@@ -303,9 +321,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             _("Windowing"),
             paramclass=sigima.params.WindowingParam,
             icon_name="windowing.svg",
-            comment=_(
-                "Apply a window function (or apodization): Hanning, Hamming, ..."
-            ),
+            comment=_("Apply a window (apodization) function: Hann, Hamming..."),
         )
         self.register_1_to_1(
             sigima_signal.detrending,
@@ -618,7 +634,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_full_width_at_y(
         self, param: sigima.params.OrdinateParam | None = None
-    ) -> dict[str, ResultShape] | None:
+    ) -> dict[str, GeometryResult] | None:
         """Compute full width at a given y
         with :py:func:`sigima.proc.signal.full_width_at_y`"""
         if param is None:
@@ -634,7 +650,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_x_at_y(
         self, param: sigima_signal.OrdinateParam | None = None
-    ) -> dict[str, ResultProperties] | None:
+    ) -> dict[str, TableResult] | None:
         """Compute x at y with :py:func:`sigima.proc.signal.x_at_y`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
@@ -651,7 +667,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_y_at_x(
         self, param: sigima_signal.AbscissaParam | None = None
-    ) -> dict[str, ResultProperties] | None:
+    ) -> dict[str, TableResult] | None:
         """Compute y at x with :py:func:`sigima.proc.signal.y_at_x`."""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]

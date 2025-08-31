@@ -35,12 +35,21 @@ msgstr "Nouvelles fonctionnalités communes signal/image :"
 
 msgid "Standard deviation of the selected signals or images."
 msgstr "Écart-type des signaux ou des images de la sélection."
+msgid "Generate new signal or image: Poisson noise."
+msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
 
 msgid "This complements the \"Average\" feature."
 msgstr "Ceci complète la fonctionnalité \"Moyenne\"."
+msgid "Add noise to the selected signals or images."
+msgstr "Ajouter du bruit aux signaux ou images sélectionnés."
 
 msgid "This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
 msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+msgid "Gaussian, Poisson or uniform noise can be added."
+msgstr "Du bruit gaussien, de Poisson ou uniforme peut être ajouté."
+
+msgid "This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
+msgstr "Ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"

@@ -71,7 +71,7 @@ Signal Image  Feature
 ✓      ..     Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF...
 ✓      ..     Interactive multigaussian fit
 ✓      ..     Frequency filters (low-pass, high-pass, band-pass, band-stop)
-✓      ..     Windowing (Hamming, Hanning...)
+✓      ..     Windowing (Hann, Hamming...)
 ..     ✓      Butterworth filter
 ..     ✓      Exposure correction (gamma, log...)
 ..     ✓      Restauration (Total Variation, Bilateral...)
