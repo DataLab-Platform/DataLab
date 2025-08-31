@@ -12,7 +12,7 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
-from sigima.proc.enums import BorderMode
+from sigima.proc.enums import BorderMode, WindowingMethod
 from sigima.tests.data import (
     create_noisy_signal,
     create_paracetamol_signal,
@@ -173,9 +173,9 @@ def run_signal_computations(
     noiseobj2 = noiseobj1.copy()
     win.add_object(noiseobj2)
     param = sigima.params.WindowingParam()
-    for method_value, _method_name in param.methods:
+    for method in WindowingMethod:
         panel.objview.set_current_object(noiseobj2)
-        param.method = method_value
+        param.method = method
         panel.processor.run_feature("apply_window", param)
 
     win.add_object(sig1.copy())
