@@ -12,8 +12,8 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
+from sigima.proc.enums import BorderMode
 from sigima.tests.data import (
-    GaussianNoiseParam,
     create_noisy_signal,
     create_paracetamol_signal,
     create_peak_image,
@@ -56,8 +56,8 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     )
     panel.processor.run_feature("log10")
     panel.processor.run_feature("exp")
-    panel.processor.run_feature("swap_axes")
-    panel.processor.run_feature("swap_axes")
+    panel.processor.run_feature("transpose")
+    panel.processor.run_feature("transpose")
 
 
 def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
@@ -97,8 +97,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((1, 2))
     panel.processor.run_feature("product")
 
-    param = sigima.params.ConstantParam()
-    param.value = 2.0
+    param = sigima.params.ConstantParam.create(value=2.0)
     panel.processor.run_feature("addition_constant", param)
     panel.processor.run_feature("difference_constant", param)
     panel.processor.run_feature("product_constant", param)
@@ -116,8 +115,9 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
 
     panel.objview.select_objects((3, 7))
     panel.processor.run_feature("division")
-    panel.objview.select_objects((1, 2, 3))
-    panel.processor.run_feature("average")
+    for feature_name in ("average", "standard_deviation"):
+        panel.objview.select_objects((1, 2, 3))
+        panel.processor.run_feature(feature_name)
 
     panel.add_label_with_title()
 
@@ -143,7 +143,7 @@ def run_signal_computations(
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    param = sigima.objects.UniformRandomParam.create(
+    param = sigima.objects.UniformDistribution1DParam.create(
         title=_("Random function"), vmin=0, vmax=sig1.y.max() * 0.2
     )
     noiseobj1 = panel.new_object(param, edit=False)
@@ -165,7 +165,7 @@ def run_signal_computations(
     ):
         for method_value, _method_name in paramclass.methods:
             panel.objview.set_current_object(sig1)
-            param = paramclass.create(method=method_value)
+            param = paramclass.create(method=method_value, cut0=2.0, cut1=4.0)
             param.update_from_obj(sig1)  # Use default cut-off frequencies
             panel.processor.run_feature(filter_func_name, param)
 
@@ -198,7 +198,7 @@ def run_signal_computations(
     roi = sigima.objects.create_signal_roi([i1, i2], indices=True)
     panel.processor.compute_roi_extraction(roi)
 
-    sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
+    sig = create_noisy_signal(sigima.objects.NormalDistributionParam.create(sigma=5.0))
     panel.add_object(sig)
     param = sigima.params.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
@@ -293,7 +293,7 @@ def run_image_computations(
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    unifparam = sigima.objects.UniformRandom2DParam()
+    unifparam = sigima.objects.UniformDistribution2DParam()
     unifparam.set_from_datatype(ima1.data.dtype)
     unifparam.vmax = int(ima1.data.max() * 0.2)
     panel.new_object(unifparam, edit=False)
@@ -398,7 +398,9 @@ def run_image_computations(
     panel.processor.run_feature("flipv")
 
     param = sigima.params.RotateParam.create(angle=5.0)
-    for boundary in param.boundaries[:-1]:
+    for boundary in BorderMode:
+        if boundary is BorderMode.MIRROR:
+            continue
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
 

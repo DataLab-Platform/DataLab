@@ -1,2 +1,2 @@
 .. automodule:: sigima.objects
-    :no-index:
+   :no-index:

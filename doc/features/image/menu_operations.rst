@@ -34,6 +34,8 @@ Basic arithmetic operations
       - :math:`z_{M} = \sum_{k=0}^{M-1}{z_{k}}`
     * - |average| Average
       - :math:`z_{M} = \dfrac{1}{M}\sum_{k=0}^{M-1}{z_{k}}`
+    * - |standard_deviation| Standard Deviation
+      - :math:`z_{M} = \sqrt{\dfrac{1}{M}\sum_{k=0}^{M-1}{(y_{k} - \bar{y})^{2}}}`
     * - |difference| Difference
       - :math:`z_{2} = z_{1} - z_{0}`
     * - |quadratic_difference| Quadratic difference
@@ -51,6 +53,11 @@ Basic arithmetic operations
     :class: dark-light no-scaled-link
 
 .. |average| image:: ../../../datalab/data/icons/operations/average.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |standard_deviation| image:: ../../../datalab/data/icons/operations/standard_deviation.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

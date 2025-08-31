@@ -49,6 +49,7 @@ Signal Image  Feature
 ✓      ✓      Sum, average, difference, product...
 ✓      ✓      Operations with a constant
 ✓      ✓      Square root, power, logarithm, exponential...
+✓      ✓      Average, standard deviation
 ✓      ..     Derivative, integral
 ✓      ✓      ROI extraction, Swap X/Y axes
 ✓      ..     Semi-automatic multi-peak detection
@@ -70,7 +71,7 @@ Signal Image  Feature
 ✓      ..     Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF...
 ✓      ..     Interactive multigaussian fit
 ✓      ..     Frequency filters (low-pass, high-pass, band-pass, band-stop)
-✓      ..     Windowing (Hamming, Hanning...)
+✓      ..     Windowing (Hann, Hamming...)
 ..     ✓      Butterworth filter
 ..     ✓      Exposure correction (gamma, log...)
 ..     ✓      Restauration (Total Variation, Bilateral...)

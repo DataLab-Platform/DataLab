@@ -685,6 +685,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.OPERATION):
             self.action_for("addition")
             self.action_for("average")
+            self.action_for("standard_deviation")
             self.action_for("difference")
             self.action_for("quadratic_difference")
             self.action_for("product")
@@ -712,7 +713,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Axis transformation"), icon_name="axis_transform.svg"
             ):
                 self.action_for("calibration")
-                self.action_for("swap_axes")
+                self.action_for("transpose")
             with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
                 self.action_for("normalize")
                 self.action_for("clip")
@@ -722,6 +723,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     icon_name="offset_correction.svg",
                     tip=_("Evaluate and subtract the offset value from the data"),
                 )
+            with self.new_menu(_("Noise addition"), icon_name="noise_addition.svg"):
+                self.action_for("add_gaussian_noise")
+                self.action_for("add_poisson_noise")
+                self.action_for("add_uniform_noise")
             with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
                 self.action_for("gaussian_filter")
                 self.action_for("moving_average")
@@ -822,8 +827,9 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions for creating new objects"""
         for label, pclass in (
             (_("Zeros"), sio.ZerosParam),
-            (_("Random uniform distribution"), sio.UniformRandomParam),
-            (_("Random normal distribution"), sio.NormalRandomParam),
+            (_("Normal distribution"), sio.NormalDistribution1DParam),
+            (_("Poisson distribution"), sio.PoissonDistribution1DParam),
+            (_("Uniform distribution"), sio.UniformDistribution1DParam),
             (_("Gaussian"), sio.GaussParam),
             (_("Lorentzian"), sio.LorentzParam),
             (_("Voigt"), sio.VoigtParam),
@@ -996,9 +1002,9 @@ class ImageActionHandler(BaseActionHandler):
         """Create actions for creating new objects"""
         for label, pclass in (
             (_("Zeros"), sio.Zeros2DParam),
-            (_("Empty"), sio.Empty2DParam),
-            (_("Random uniform distribution"), sio.UniformRandom2DParam),
-            (_("Random normal distribution"), sio.NormalRandom2DParam),
+            (_("Normal distribution"), sio.NormalDistribution2DParam),
+            (_("Poisson distribution"), sio.PoissonDistribution2DParam),
+            (_("Uniform distribution"), sio.UniformDistribution2DParam),
             (_("Gaussian"), sio.Gauss2DParam),
             (_("Ramp"), sio.Ramp2DParam),
         ):
@@ -1039,7 +1045,7 @@ class ImageActionHandler(BaseActionHandler):
 
             with self.new_menu(_("Flip or rotation"), icon_name="rotate_right.svg"):
                 self.action_for("fliph", context_menu_pos=-1, context_menu_sep=True)
-                self.action_for("swap_axes", context_menu_pos=-1)
+                self.action_for("transpose", context_menu_pos=-1)
                 self.action_for("flipv", context_menu_pos=-1)
                 self.action_for("rotate270", context_menu_pos=-1)
                 self.action_for("rotate90", context_menu_pos=-1)
@@ -1090,6 +1096,9 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: PROCESSING
         with self.new_category(ActionCategory.PROCESSING):
+            with self.new_menu(_("Frequency filters"), icon_name="noise_reduction.svg"):
+                self.action_for("butterworth")
+                self.action_for("gaussian_freq_filter")
             with self.new_menu(_("Thresholding"), icon_name="thresholding.svg"):
                 self.action_for("threshold")
                 self.action_for("threshold_isodata")
@@ -1136,11 +1145,19 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Apply all morphological operations"),
                 )
-            with self.new_menu(_("Edges"), icon_name="edges.svg"):
-                self.action_for("roberts")
+            with self.new_menu(_("Edge detection"), icon_name="edge_detection.svg"):
+                self.action_for("canny")
+                self.action_for("farid", separator=True)
+                self.action_for("farid_h")
+                self.action_for("farid_v")
+                self.action_for("laplace", separator=True)
                 self.action_for("prewitt", separator=True)
                 self.action_for("prewitt_h")
                 self.action_for("prewitt_v")
+                self.action_for("roberts", separator=True)
+                self.action_for("scharr", separator=True)
+                self.action_for("scharr_h")
+                self.action_for("scharr_v")
                 self.action_for("sobel", separator=True)
                 self.action_for("sobel_h")
                 self.action_for("sobel_v")
@@ -1152,10 +1169,10 @@ class ImageActionHandler(BaseActionHandler):
                 self.action_for("farid_v")
                 self.action_for("laplace", separator=True)
                 self.new_action(
-                    _("All edges filters") + "...",
+                    _("All edge detection filters..."),
                     triggered=self.panel.processor.compute_all_edges,
                     separator=True,
-                    tip=_("Compute all edges filters"),
+                    tip=_("Compute all edge detection filters"),
                 )
                 self.action_for("canny")
             self.action_for("butterworth")
@@ -1166,8 +1183,6 @@ class ImageActionHandler(BaseActionHandler):
                 separator=True,
                 tip=_("Erase area in the image as defined by a region of interest"),
             )
-            with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
-                self.action_for("freq_fft")
 
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-21 14:57+0200\n"
+"POT-Creation-Date: 2025-05-16 10:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -62,6 +62,15 @@ msgid "average"
 msgstr ""
 
 msgid ":math:`y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}`"
+msgstr ""
+
+msgid "|standard_deviation| Standard Deviation"
+msgstr "|standard_deviation| Écart-type"
+
+msgid "standard_deviation"
+msgstr ""
+
+msgid ":math:`y_{M} = \\sqrt{\\dfrac{1}{M}\\sum_{k=0}^{M-1}{(y_{k} - \\bar{y})^{2}}}`"
 msgstr ""
 
 msgid "|difference| Difference"
@@ -295,3 +304,4 @@ msgstr ""
 
 msgid "Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
 msgstr "Basée sur `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+

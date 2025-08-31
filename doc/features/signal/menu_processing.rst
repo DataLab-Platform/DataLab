@@ -254,6 +254,8 @@ For each filter, the following methods are available:
       - Description
     * - Bessel
       - Bessel filter, using SciPy's `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_ function
+    * - Brick wall
+      - Ideal (rectangular) filter in the frequency domain
     * - Butterworth
       - Butterworth filter, using SciPy's `scipy.signal.butter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_ function
     * - Chebyshev I
@@ -316,7 +318,7 @@ The following window functions are available:
       - :py:func:`scipy.signal.windows.blackmanharris`
     * - Bohman
       - :py:func:`scipy.signal.windows.bohman`
-    * - Boxcar
+    * - Boxcar (rectangular)
       - :py:func:`scipy.signal.windows.boxcar`
     * - Cosine
       - :py:func:`scipy.signal.windows.cosine`
@@ -328,7 +330,7 @@ The following window functions are available:
       - :py:func:`scipy.signal.windows.gaussian`
     * - Hamming
       - :py:func:`numpy.hamming`
-    * - Hanning
+    * - Hann
       - :py:func:`numpy.hanning`
     * - Kaiser
       - :py:func:`scipy.signal.windows.kaiser`
@@ -338,8 +340,6 @@ The following window functions are available:
       - :py:func:`scipy.signal.windows.nuttall`
     * - Parzen
       - :py:func:`scipy.signal.windows.parzen`
-    * - Rectangular
-      - :py:func:`numpy.ones`
     * - Taylor
       - :py:func:`scipy.signal.windows.taylor`
     * - Tukey
