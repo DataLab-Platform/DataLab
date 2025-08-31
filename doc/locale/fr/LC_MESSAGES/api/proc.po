@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-08-18 11:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -22,8 +22,8 @@ msgstr ""
 msgid "Computation (:mod:`sigima.proc`)"
 msgstr "Calculs (:mod:`sigima.proc`)"
 
-msgid "This package contains the Sigima computation functions that implement processing features for signal and image objects. These functions are designed to operate directly on :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj` objects, which are defined in the :mod:`sigima.objects` package."
-msgstr "Ce paquet contient les fonctions de calcul Sigima qui implémentent des fonctionnalités de traitement pour les objets signal et image. Ces fonctions sont conçues pour fonctionner directement sur les objets :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`, qui sont définis dans le paquet :mod:`sigima.objects`."
+msgid "This package contains the Sigima computation functions that implement processing features for signal, image and scalar objects. These functions are designed to operate directly on :class:`sigima.objects.SignalObj`, :class:`sigima.objects.ImageObj`, :class:`sigima.objects.GeometryResult` and :class:`sigima.objects.TableResult` objects, which are defined in the :mod:`sigima.objects` package."
+msgstr "Ce paquet contient les fonctions de calcul Sigima qui implémentent des fonctionnalités de traitement pour les objets signal, image et scalaire. Ces fonctions sont conçues pour fonctionner directement sur les objets :class:`sigima.objects.SignalObj`, :class:`sigima.objects.ImageObj`, :class:`sigima.objects.GeometryResult` et :class:`sigima.objects.TableResult`, qui sont définis dans le paquet :mod:`sigima.objects`."
 
 msgid "Even though these functions are primarily designed to be used in the Sigima pipeline, they can also be used independently."
 msgstr "Bien que ces fonctions soient principalement conçues pour être utilisées dans le pipeline Sigima, elles peuvent également être utilisées de manière indépendante."
@@ -48,6 +48,9 @@ msgstr ":mod:`sigima.proc.signal`: Fonctionnalités de traitement des signaux"
 
 msgid ":mod:`sigima.proc.image`: Image processing features"
 msgstr ":mod:`sigima.proc.image`: Fonctionnalités de traitement des images"
+
+msgid ":mod:`sigima.proc.scalar`: Scalar processing features"
+msgstr ":mod:`sigima.proc.scalar`: Fonctionnalités de traitement scalaire"
 
 msgid "Common processing features"
 msgstr "Fonctionnalités de traitement communes"
@@ -296,21 +299,6 @@ msgstr ""
 msgid "Output signal object"
 msgstr ""
 
-msgid "Calculate result properties by executing a computation function on a signal/image object."
-msgstr ""
-
-msgid "title of the result properties"
-msgstr ""
-
-msgid "signal or image object"
-msgstr ""
-
-msgid "dictionary of labeled computation functions. The keys are the labels of the computation functions and the values are the functions themselves (each function must take a single argument - which is the data of the ROI or the whole signal/image - and return a float)"
-msgstr ""
-
-msgid "Result properties object"
-msgstr ""
-
 msgid "Signal processing features"
 msgstr "Fonctionnalités de traitement des signaux"
 
@@ -467,7 +455,7 @@ msgstr ""
 msgid "With a parameter ``ROI1DParam`` object:"
 msgstr ""
 
-msgid "Swap axes"
+msgid "Transpose signal (swap X and Y axes)"
 msgstr ""
 
 msgid "Compute inverse with :py:data:`numpy.invert`"
@@ -545,9 +533,8 @@ msgstr ""
 msgid "New instance of :py:class:`PeakDetectionParam`."
 msgstr ""
 
-#, fuzzy
 msgid "Peak detection with"
-msgstr "Détection de contours"
+msgstr ""
 
 msgid ":py:func:`sigima.tools.signal.peakdetection.peak_indices`"
 msgstr ""
@@ -1036,9 +1023,6 @@ msgstr ""
 msgid "computation function arguments"
 msgstr ""
 
-msgid "if True, add a label item (and the geometrical shape) to plot (default to False)"
-msgstr ""
-
 msgid "Result shape object or None if no result is found"
 msgstr ""
 
@@ -1136,6 +1120,9 @@ msgid "With a parameter ``AbscissaParam`` object:"
 msgstr ""
 
 msgid "Compute statistics on a signal"
+msgstr ""
+
+msgid "Result properties object"
 msgstr ""
 
 msgid "Compute bandwidth at -3 dB with :py:func:`sigima.tools.signal.misc.bandwidth`"
@@ -1249,7 +1236,10 @@ msgstr ""
 msgid "Create a result signal object, for processing functions that take a single image object as input and return a single signal object (1-to-1-signal)."
 msgstr ""
 
-msgid "Calculate result shape by executing a computation function on an image object, taking into account the image origin (x0, y0), scale (dx, dy) and ROIs."
+msgid "Compute a geometry shape from an image object by executing a computation function on the data of the image object, for each ROI (Region Of Interest) in the image."
+msgstr ""
+
+msgid "A geometry result object or None if no result is found."
 msgstr ""
 
 msgid "Moreover, the computation function must return a single value or a NumPy array containing the result of the computation. This array contains the coordinates of points, polygons, circles or ellipses in the form [[x, y], ...], or [[x0, y0, x1, y1, ...], ...], or [[x0, y0, r], ...], or [[x0, y0, a, b, theta], ...]."
@@ -2395,7 +2385,92 @@ msgstr ""
 msgid "With a parameter ``BinningParam`` object:"
 msgstr ""
 
-msgid "Swap image axes with :py:func:`numpy.transpose`"
+msgid "Transpose image with :py:func:`numpy.transpose`"
+msgstr ""
+
+#, fuzzy
+msgid "Scalar processing features"
+msgstr "Fonctionnalités de traitement des signaux"
+
+msgid "Computation functions for scalar results (TableResult, GeometryResult)."
+msgstr ""
+
+msgid "Rotate the geometry result by a given angle around a center point."
+msgstr ""
+
+msgid "The geometry result to rotate."
+msgstr ""
+
+msgid "The angle to rotate by (in radians)."
+msgstr ""
+
+msgid "The center point to rotate around (x, y)."
+msgstr ""
+
+msgid "The rotated geometry result."
+msgstr ""
+
+msgid "Flip the geometry result horizontally around a center line."
+msgstr ""
+
+msgid "The geometry result to flip."
+msgstr ""
+
+msgid "The x-coordinate of the center line to flip around (default: center of geometry)."
+msgstr ""
+
+msgid "The flipped geometry result."
+msgstr ""
+
+msgid "Flip the geometry result vertically around a center line."
+msgstr ""
+
+msgid "The y-coordinate of the center line to flip around (default: center of geometry)."
+msgstr ""
+
+msgid "Transpose the geometry result (swap x and y coordinates)."
+msgstr ""
+
+msgid "The geometry result to transpose."
+msgstr ""
+
+msgid "The transposed geometry result."
+msgstr ""
+
+msgid "Translate the geometry result by a given offset."
+msgstr ""
+
+msgid "The geometry result to translate."
+msgstr ""
+
+msgid "The x-axis offset."
+msgstr ""
+
+msgid "The y-axis offset."
+msgstr ""
+
+msgid "The translated geometry result."
+msgstr ""
+
+msgid "Scale the geometry result by a given factor around a center point."
+msgstr ""
+
+msgid "The geometry result to scale."
+msgstr ""
+
+msgid "The scaling factor in the x direction."
+msgstr ""
+
+msgid "The scaling factor in the y direction."
+msgstr ""
+
+msgid "The center point to scale around (x, y)."
+msgstr ""
+
+msgid "The scaled geometry result."
+msgstr ""
+
+msgid "The center point to scale around (x)."
 msgstr ""
 
 msgid "Decorators and utilities"
@@ -2475,4 +2550,3 @@ msgstr ""
 
 msgid "A list of tuples, each containing the function name and the function object."
 msgstr ""
-

@@ -36,8 +36,12 @@ Create a new image from various models
       - :math:`z[i] = 0`
     * - Empty
       - Data is directly taken from memory as it is
-    * - Random
-      - :math:`z[i] \in [0, z_{max})` where :math:`z_{max}` is the datatype maximum value
+    * - Uniform distribution
+      - :math:`y[i]` is normally distributed with configurable mean and standard deviation
+    * - Poisson distribution
+      - :math:`y[i]` is Poisson distributed with configurable mean
+    * - Uniform distribution
+      - :math:`y[i]` is uniformly distributed between two configurable bounds
     * - 2D Gaussian
       - :math:`z = A.exp(-\dfrac{(\sqrt{(x-x0)^2+(y-y0)^2}-\mu)^2}{2\sigma^2})`
 

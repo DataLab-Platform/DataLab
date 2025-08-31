@@ -155,12 +155,11 @@ Compute the following dynamic parameters on selected signal:
 Bandwidth at -3 dB
 ^^^^^^^^^^^^^^^^^^
 
-Assuming the signal is a filter response, compute the bandwidth at -3 dB by finding the
-frequency range where the signal is above -3 dB.
+Determine the bandwidth at -3 dB by identifying the range of abscissa values where the signal remains greater than its maximum value minus 3 dB.
 
 .. warning::
 
-  This feature assumes that the signal is a filter response, already expressed in dB.
+  This feature requires that the signal is expressed in decibels (dB).
 
 Contrast
 ^^^^^^^^

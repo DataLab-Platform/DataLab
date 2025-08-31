@@ -254,6 +254,8 @@ For each filter, the following methods are available:
       - Description
     * - Bessel
       - Bessel filter, using SciPy's `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_ function
+    * - Brick wall
+      - Ideal (rectangular) filter in the frequency domain
     * - Butterworth
       - Butterworth filter, using SciPy's `scipy.signal.butter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_ function
     * - Chebyshev I

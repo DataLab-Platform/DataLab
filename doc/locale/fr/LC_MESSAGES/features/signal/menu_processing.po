@@ -354,6 +354,12 @@ msgstr ""
 msgid "Bessel filter, using SciPy's `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_ function"
 msgstr "Filtre de Bessel, utilisant la fonction `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_"
 
+msgid "Brick wall"
+msgstr "Filtre idéal"
+
+msgid "Ideal (rectangular) filter in the frequency domain"
+msgstr "Filtre idéal (rectangulaire) dans le domaine de la fréquence"
+
 msgid "Butterworth"
 msgstr ""
 

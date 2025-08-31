@@ -31,7 +31,7 @@ from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
-from datalab.adapters_plotpy.factories import create_adapter_from_object
+from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.gui.docks import DataLabPlotWidget
 
 

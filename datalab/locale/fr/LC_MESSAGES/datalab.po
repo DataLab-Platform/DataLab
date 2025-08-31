@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-10 07:48+0200\n"
+"POT-Creation-Date: 2025-08-30 10:42+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -188,6 +188,9 @@ msgstr "Soustraction d'offset"
 msgid "Evaluate and subtract the offset value from the data"
 msgstr "Évaluer et soustraire la valeur d'offset des données"
 
+msgid "Noise addition"
+msgstr "Addition de bruit"
+
 msgid "Noise reduction"
 msgstr "Réduction de bruit"
 
@@ -243,11 +246,14 @@ msgstr "signal"
 msgid "Zeros"
 msgstr "Zéros"
 
-msgid "Random uniform distribution"
-msgstr "Distribution uniforme aléatoire"
+msgid "Normal distribution"
+msgstr "Distribution normale"
 
-msgid "Random normal distribution"
-msgstr "Distribution normale aléatoire"
+msgid "Poisson distribution"
+msgstr "Distribution de Poisson"
+
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
 
 msgid "Gaussian"
 msgstr "Gaussienne"
@@ -389,9 +395,6 @@ msgstr ""
 msgid "image"
 msgstr "image"
 
-msgid "Empty"
-msgstr "Vide"
-
 msgid "Ramp"
 msgstr "Rampe"
 
@@ -473,13 +476,13 @@ msgstr "Toutes les opérations morphologiques"
 msgid "Apply all morphological operations"
 msgstr "Appliquer toutes les opérations morphologiques"
 
-msgid "Edges"
-msgstr "Contours"
+msgid "Edge detection"
+msgstr "Détection de contours"
 
-msgid "All edges filters"
-msgstr "Tous les filtres de contours"
+msgid "All edge detection filters..."
+msgstr "Tous les filtres de contours..."
 
-msgid "Compute all edges filters"
+msgid "Compute all edge detection filters"
 msgstr "Calcule tous les filtres de contours"
 
 msgid "Erase area"
@@ -808,11 +811,11 @@ msgstr "Propriétés"
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
 
-msgid "Result shapes"
-msgstr "Résultats graphiques"
+msgid "Geometry results"
+msgstr "Résultats géométriques"
 
-msgid "Result properties"
-msgstr "Résultats numériques"
+msgid "Table results"
+msgstr "Résultats tabulaires"
 
 msgid "Other metadata"
 msgstr "Autres métadonnées"
@@ -1118,6 +1121,15 @@ msgstr "Normaliser"
 msgid "Clipping"
 msgstr "Écrêtage"
 
+msgid "Add Gaussian noise"
+msgstr "Ajouter du bruit gaussien"
+
+msgid "Add Poisson noise"
+msgstr "Ajouter du bruit de Poisson"
+
+msgid "Add uniform noise"
+msgstr "Ajouter du bruit uniforme"
+
 msgid "Gaussian filter"
 msgstr "Filtre gaussien"
 
@@ -1129,9 +1141,6 @@ msgstr "Médiane mobile"
 
 msgid "Wiener filter"
 msgstr "Filtre de Wiener"
-
-msgid "Gaussian frequency filter"
-msgstr "Filtre fréquentiel gaussien"
 
 msgid "Zero padding"
 msgstr "Complément de zéros"
@@ -1168,6 +1177,12 @@ msgstr "Densité spectrale de puissance"
 
 msgid "Power spectral density (PSD) is the square of the magnitude spectrum. It is a measure of the power of the frequency components."
 msgstr "La densité spectrale de puissance est le carré du spectre d'amplitude. Elle mesure la puissance des composantes fréquentielles."
+
+msgid "Butterworth"
+msgstr "Butterworth"
+
+msgid "Gaussian bandpass"
+msgstr "Passe-bande gaussien"
 
 msgid "Parametric thresholding"
 msgstr "Seuillage paramétrique"
@@ -1241,35 +1256,8 @@ msgstr "Ouverture (disque)"
 msgid "Closing (disk)"
 msgstr "Fermeture (disque)"
 
-msgid "Roberts filter"
-msgstr "Filtre de Roberts"
-
-msgid "Prewitt filter"
-msgstr "Filtre de Prewitt"
-
-msgid "Prewitt filter (horizontal)"
-msgstr "Filtre de Prewitt (horizontal)"
-
-msgid "Prewitt filter (vertical)"
-msgstr "Filtre de Prewitt (vertical)"
-
-msgid "Sobel filter"
-msgstr "Filtre de Sobel"
-
-msgid "Sobel filter (horizontal)"
-msgstr "Filtre de Sobel (horizontal)"
-
-msgid "Sobel filter (vertical)"
-msgstr "Filtre de Sobel (vertical)"
-
-msgid "Scharr filter"
-msgstr "Filtre de Scharr"
-
-msgid "Scharr filter (horizontal)"
-msgstr "Filtre de Scharr (horizontal)"
-
-msgid "Scharr filter (vertical)"
-msgstr "Filtre de Scharr (vertical)"
+msgid "Canny filter"
+msgstr "Filtre de Canny"
 
 msgid "Farid filter"
 msgstr "Filtre de Farid"
@@ -1283,11 +1271,35 @@ msgstr "Filtre de Farid (vertical)"
 msgid "Laplace filter"
 msgstr "Filtre de Laplace"
 
-msgid "Canny filter"
-msgstr "Filtre de Canny"
+msgid "Prewitt filter"
+msgstr "Filtre de Prewitt"
 
-msgid "Butterworth filter"
-msgstr "Filtre de Butterworth"
+msgid "Prewitt filter (horizontal)"
+msgstr "Filtre de Prewitt (horizontal)"
+
+msgid "Prewitt filter (vertical)"
+msgstr "Filtre de Prewitt (vertical)"
+
+msgid "Roberts filter"
+msgstr "Filtre de Roberts"
+
+msgid "Scharr filter"
+msgstr "Filtre de Scharr"
+
+msgid "Scharr filter (horizontal)"
+msgstr "Filtre de Scharr (horizontal)"
+
+msgid "Scharr filter (vertical)"
+msgstr "Filtre de Scharr (vertical)"
+
+msgid "Sobel filter"
+msgstr "Filtre de Sobel"
+
+msgid "Sobel filter (horizontal)"
+msgstr "Filtre de Sobel (horizontal)"
+
+msgid "Sobel filter (vertical)"
+msgstr "Filtre de Sobel (vertical)"
 
 msgid "Statistics"
 msgstr "Statistiques"
@@ -1965,29 +1977,14 @@ msgstr "Données de test"
 msgid "Testing DataLab functionalities"
 msgstr "Tester les fonctionnalités de DataLab"
 
-msgid "Add noise"
-msgstr "Ajouter du bruit"
-
-msgid "Noise"
-msgstr "Bruit"
-
 msgid "Ring"
 msgstr "Anneau"
 
 msgid "Grid of Gaussian Images"
 msgstr "Grille d'images gaussiennes"
 
-msgid "Add noise to signal"
-msgstr "Ajouter du bruit au signal"
-
 msgid "Load spectrum of paracetamol"
 msgstr "Charger le spectre du paracétamol"
-
-msgid "Create noisy signal"
-msgstr "Créer un signal bruité"
-
-msgid "Add noise to image"
-msgstr "Ajouter du bruit à l'image"
 
 msgid "Create image with peaks"
 msgstr "Créer une image avec des pics"
