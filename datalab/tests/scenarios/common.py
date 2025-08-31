@@ -115,8 +115,9 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
 
     panel.objview.select_objects((3, 7))
     panel.processor.run_feature("division")
-    panel.objview.select_objects((1, 2, 3))
-    panel.processor.run_feature("average")
+    for feature_name in ("average", "standard_deviation"):
+        panel.objview.select_objects((1, 2, 3))
+        panel.processor.run_feature(feature_name)
 
     panel.add_label_with_title()
 
