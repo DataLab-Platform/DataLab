@@ -228,7 +228,13 @@ cython_debug/
 #  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
 #  and can be added to the global gitignore or merged into this file. However, if you prefer,
 #  you could uncomment the following to ignore the entire vscode folder
-# .vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+# Workspace files are ignored because they may contain user-specific settings and
+# committing them could interfere with branch switching for example. A workspace
+# template file is provided in the repository.
+*.code-workspace
 
 # Ruff stuff:
 .ruff_cache/

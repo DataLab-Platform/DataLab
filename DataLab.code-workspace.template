@@ -1,0 +1,19 @@
+{
+    "folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "../Sigima"
+        },
+        {
+            "path": "../PlotPy"
+        },
+        {
+            "path": "../guidata"
+        }
+    ],
+    "settings": {
+        "python.analysis.autoFormatStrings": true
+    }
+}
