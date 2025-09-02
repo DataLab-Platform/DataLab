@@ -27,7 +27,7 @@ from guidata.qthelpers import add_actions, create_action, exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
 from plotpy.tools import ActionTool
-from qtpy import QtCore as QC
+from qtpy import QtCore as QC  # type: ignore[import]
 from qtpy import QtWidgets as QW
 from qtpy.compat import (
     getexistingdirectory,
@@ -37,7 +37,7 @@ from qtpy.compat import (
 )
 from sigima.io import read_metadata, read_roi, write_metadata, write_roi
 from sigima.io.base import get_file_extensions
-from sigima.io.common.filename import format_object_names
+from sigima.io.common.basename import format_basenames
 from sigima.objects import (
     ImageObj,
     NewImageParam,
@@ -274,99 +274,80 @@ class PasteMetadataParam(gds.DataSet):
     keep_other = gds.BoolItem(_("Other metadata"), default=True)
 
 
-class SaveToDirectoryParam(gds.DataSet):
-    """Save to directory parameters.
+class NonModalInfoDialog(QW.QMessageBox):
+    """Non-modal information message box with selectable text.
 
-    Fields:
-        directory: Target output directory (pre-filled with last used base dir)
-        naming: Choose between using object title directly or a formatting pattern
-        pattern: Formatting pattern (Python str.format) when naming=='pattern'
-                 Available placeholders: {n} (1-based index), {title} (object title)
-        overwrite: Overwrite existing files
-        preview: Read-only multiline list of generated filenames (updated by a
-                 callback provided externally – see BaseDataPanel.save_to_directory)
+    This widget displays an information message in a message dialog box, allowing users
+    to select and copy the text content.
     """
 
-    def __init__(
-        self,
-        title: str | None = None,
-        icon: str = "",
-        readonly: bool = False,
-        skip_defaults: bool = False,
-        panel: BaseDataPanel | None = None,
-    ):
-        """Initialize parameters"""
-        if panel:
-            self.set_panel(panel)
+    def __init__(self, parent: QW.QWidget, title: str, text: str) -> None:
+        """Create a non-modal information message box with selectable text.
 
-        super().__init__(
-            title,
-            _("Save multiple files to selected directory using a filename pattern."),
-            icon,
-            readonly,
-            skip_defaults,
-        )
+        Args:
+            parent: The parent widget.
+            title: The title of the message box.
+            text: The text to display in the message box.
+        """
+        super().__init__(parent)
+        self.setIcon(QW.QMessageBox.Information)
+        self.setWindowTitle(title)
+        if re.search(r"<[a-zA-Z/][^>]*>", text):
+            self.setTextFormat(QC.Qt.RichText)  # type: ignore[attr-defined]
+            self.setTextInteractionFlags(
+                QC.Qt.TextBrowserInteraction  # type: ignore[attr-defined]
+            )
+        else:
+            self.setTextFormat(QC.Qt.PlainText)  # type: ignore[attr-defined]
+            self.setTextInteractionFlags(
+                QC.Qt.TextSelectableByMouse  # type: ignore[attr-defined]
+                | QC.Qt.TextSelectableByKeyboard  # type: ignore[attr-defined]
+            )
+        self.setText(text)
+        self.setStandardButtons(QW.QMessageBox.Close)
+        self.setDefaultButton(QW.QMessageBox.Close)
+        # ! Necessary only on non-Windows platforms
+        self.setWindowFlags(QC.Qt.Window)  # type: ignore[attr-defined]
+        self.setModal(False)
+
+
+class SaveToDirectoryParam(gds.DataSet):
+    """Save to directory parameters."""
 
     def define_extension_selection(self, _item=None, _value=None):
+        """Define extension selection from panel IO registry."""
         assert self._panel is not None
-        filters = self._panel.IO_REGISTRY.get_write_filters()
-        extensions = sorted(set(get_file_extensions(filters)))
+        extensions = get_file_extensions(self._panel.IO_REGISTRY.get_write_filters())
         return [("." + extension, "." + extension, None) for extension in extensions]
 
-    def set_directory_default(self):
-        """Update directory default from current configuration (call before editing)."""
-        self.directory = Conf.main.base_dir.get()
-
-    def set_panel(self, panel):
-        """Attach panel reference (needed for callbacks)."""
-        self._panel = panel
-
-    def information_selectable(self, parent: QW.QWidget, title: str, text: str) -> int:
-        """Show an information message box with selectable text."""
-        box = QW.QMessageBox(parent)
-        box.setIcon(QW.QMessageBox.Information)
-        box.setWindowTitle(title)
-        if re.search(r"<[a-zA-Z/][^>]*>", text):
-            box.setTextFormat(QC.Qt.RichText)
-            box.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
-        else:
-            box.setTextFormat(QC.Qt.PlainText)
-            box.setTextInteractionFlags(
-                QC.Qt.TextSelectableByMouse | QC.Qt.TextSelectableByKeyboard
-            )
-        box.setText(text)
-        box.setStandardButtons(QW.QMessageBox.Close)
-        box.setWindowFlags(QC.Qt.Window)
-
-        box.setModal(False)
-        box.show()
-
-    def help_Button_cb(
+    def on_button_click(
         self: SaveToDirectoryParam,
         item: gds.ButtonItem,
         value: None,
         parent: QW.QWidget,
     ) -> None:
-        """Help button callback"""
+        """Help button callback."""
+        _ = item
+        _ = value
 
         text = "<br>".join(
             [
-                """Pattern accepts python format string for file naming. Python
-                modifiers are allowed, with the addition of 'u' and 'l' for
-                uppercase and lowercase strings.""",
+                """Pattern accepts a Python format string. Standard Python format
+                specifiers apply. Two extra modifiers are supported: 'upper' for
+                uppercase and 'lower' for lowercase.""",
                 "",
                 "<b>Available placeholders:</b>",
                 """
             <table border="1" cellspacing="0" cellpadding="4">
                 <tr><th>Keyword</th><th>Description</th></tr>
                 <tr><td>{title}</td><td>Title</td></tr>
-                <tr><td>{type}</td><td>'signal' or 'image'</td></tr>
-                <tr><td>{i}, {index}</td><td>0-based index, 1-based index</td></tr>
-                <tr><td>{n}</td><td>Total objects</td></tr>
+                <tr><td>{panel}</td><td>'signal' or 'image'</td></tr>
+                <tr><td>{index}</td><td>1-based index</td></tr>
+                <tr><td>{count}</td><td>Total number of selected objects</td></tr>
                 <tr><td>{xlabel}, {xunit}, {ylabel}, {yunit}</td>
-                    <td>Axis info for signals</td></tr>
-                <tr><td>{metadata},{metadata[key]}</td>
-                    <td>Metadata mapping</td></tr>
+                    <td>Axis information for signals</td></tr>
+                <tr><td>{metadata}</td><td>All metadata</td></tr>
+                <tr><td>{metadata[key]}</td><td>Key metadata</td></tr>
             </table>
             """,
                 "",
@@ -383,22 +364,26 @@ class SaveToDirectoryParam(gds.DataSet):
                     <td>Title truncated to 20 characters</td>
                 </tr>
                 <tr>
-                    <td>{title:20.20s}</td>
-                    <td>Title truncated to 20 characters, no unicode chars</td>
-                </tr>
-                <tr>
-                    <td>{title:20.20u}</td>
+                    <td>{title:20.20upper}</td>
                     <td>Title truncated to 20 characters, upper case</td>
                 </tr>
                 <tr>
-                    <td>{title:20.20l}</td>
+                    <td>{title:20.20lower}</td>
                     <td>Title truncated to 20 characters, lower case</td>
                 </tr>
             </table>
             """,
             ]
         )
-        self.information_selectable(parent, "Pattern help:", text)
+        NonModalInfoDialog(parent, "Pattern help", text).show()
+
+    def set_panel(self, panel):
+        """Set panel reference.
+
+        Args:
+            panel: Signal or image panel.
+        """
+        self._panel = panel
 
     def update_filenames_and_preview(self, _item=None, _value=None) -> None:
         """Update filenames and preview."""
@@ -407,13 +392,25 @@ class SaveToDirectoryParam(gds.DataSet):
             # Panel is not yet attached.
             return
         objs = panel.objview.get_sel_objects(include_groups=True)
-        if not objs:
-            # No object is selected.
-            return
         assert self.basename is not None
         basename: str = self.basename
         assert self.extension is not None
-        self.filenames = format_object_names(objs, basename + self.extension)
+        self.filenames = format_basenames(objs, basename + self.extension)
+
+        # Ensure all filenames are unique.
+        used: set[str] = set()
+        for i, filename in enumerate(self.filenames):
+            root, ext = osp.splitext(filename)
+            assert self.directory is not None
+            filepath = osp.join(self.directory, filename)
+            k = 1
+            while (filename in used) or (not self.overwrite and osp.exists(filepath)):
+                filename = f"{root}_{k}{ext}"
+                filepath = osp.join(self.directory, filename)
+                k += 1
+            used.add(filename)
+            self.filenames[i] = filename
+
         self.preview = "\n".join(f"{name}" for name in self.filenames)
 
     _panel = None
@@ -426,7 +423,7 @@ class SaveToDirectoryParam(gds.DataSet):
         help=_("Python format string. See description for details."),
     ).set_prop("display", callback=update_filenames_and_preview)
 
-    help = gds.ButtonItem("Help", help_Button_cb, "MessageBoxInformation").set_pos(
+    help = gds.ButtonItem("Help", on_button_click, "MessageBoxInformation").set_pos(
         col=1
     )
 
@@ -1302,61 +1299,31 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     self.__save_to_file(obj, filename)
 
     def save_to_directory(self, param: SaveToDirectoryParam | None = None) -> None:
-        """Save objects to directory using a filename pattern.
+        """Save signals or images to directory using a filename pattern.
+
+        Opens a dialog to select the output directory, the basename pattern and the
+        extension.
 
         Args:
-            param: Optional SaveToDirectoryParam dataset. If None, a new one is created.
-
-        Opens a dialog (unless a pre-filled param already edited is passed) to select
-        output directory, naming mode (title or pattern) and preview filenames before
-        saving all selected objects.
+            param: parameters.
         """
         objs = self.objview.get_sel_objects(include_groups=True)
-        if not objs:
-            QW.QMessageBox.information(self, APP_NAME, _("No object selected"))
-            return
-
-        created_param = False
         if param is None:
-            param = SaveToDirectoryParam(
-                _("Save to directory"),
-                panel=self,
-            )
-            param.set_directory_default()
-            created_param = True
+            param = SaveToDirectoryParam()
+            param.set_panel(self)
+            if param.edit(parent=self.parentWidget()):
+                assert param.directory is not None
+                Conf.main.base_dir.set(param.directory)
 
-        # Attach panel reference (needed by callbacks)
-        param.set_panel(self)
-
-        if created_param:
-            if not param.edit(parent=self.parent()):
-                return
-            # Recompute after user edits naming/pattern
-            param.update_filenames_and_preview()
-
-        target_dir = param.directory
-        os.makedirs(target_dir, exist_ok=True)
-        Conf.main.base_dir.set(target_dir)
-
-        with create_progress_bar(self, _("Saving objects"), max_=len(objs)) as progress:
-            for i, (obj, base_name) in enumerate(zip(objs, param.filenames)):
+        with create_progress_bar(self, _("Saving..."), max_=len(objs)) as progress:
+            for i, (obj, filename) in enumerate(zip(objs, param.filenames)):
                 progress.setValue(i + 1)
                 if progress.wasCanceled():
                     break
-                out_path = osp.join(target_dir, base_name)
-
-                # Add number if file already exists
-                if not param.overwrite and osp.exists(out_path):
-                    root, ext = osp.splitext(out_path)
-                    k = 1
-                    while osp.exists(f"{root}_{k}{ext}"):
-                        k += 1
-                    out_path = f"{root}_{k}{ext}"
-
-                with qt_try_loadsave_file(self.parent(), out_path, "save"):
-                    self.__save_to_file(obj, out_path)
-
-        QW.QMessageBox.information(self, APP_NAME, _("Save to directory finished."))
+                assert param.directory is not None
+                filepath = osp.join(param.directory, filename)
+                with qt_try_loadsave_file(self.parentWidget(), filepath, "save"):
+                    self.__save_to_file(obj, filepath)
 
     def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
         """Handle dropped files
