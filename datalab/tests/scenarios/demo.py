@@ -17,7 +17,7 @@ import sigima.params
 import sigima.proc.image as sigima_image
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
-from sigima.proc.enums import BorderMode
+from sigima.enums import BorderMode
 from sigima.tests.data import (
     create_multigaussian_image,
     create_paracetamol_signal,

@@ -12,7 +12,7 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
-from sigima.proc.enums import BorderMode, WindowingMethod
+from sigima.enums import BorderMode, WindowingMethod
 from sigima.tests.data import (
     create_noisy_signal,
     create_paracetamol_signal,
