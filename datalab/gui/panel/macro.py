@@ -543,7 +543,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                     self, _("Save as"), basedir, self.FILE_FILTERS
                 )
         if filename:
-            with qt_try_loadsave_file(self.parent(), filename, "save"):
+            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
                 Conf.main.base_dir.set(filename)
                 macro.title = osp.basename(filename)
                 macro.to_file(filename)
@@ -564,7 +564,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                     self, _("Open"), basedir, self.FILE_FILTERS
                 )
         if filename:
-            with qt_try_loadsave_file(self.parent(), filename, "load"):
+            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 macro = self.add_macro()
                 macro.from_file(filename)

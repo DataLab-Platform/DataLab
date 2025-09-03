@@ -703,7 +703,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     "existing ones. <u>All other metadata will be replaced</u>."
                 ),
             )
-            if not param.edit(parent=self.parent()):
+            if not param.edit(parent=self.parentWidget()):
                 return
         metadata = {}
         if param.keep_roi and ROI_KEY in self.__metadata_clipboard:
@@ -1091,7 +1091,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
         objs = []
         for filename in filenames:
-            with qt_try_loadsave_file(self.parent(), filename, "load"):
+            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 try:
                     objs += self.__load_from_file(
@@ -1127,7 +1127,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         self, _("Save as"), basedir, filters
                     )
             if filename:
-                with qt_try_loadsave_file(self.parent(), filename, "save"):
+                with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
                     Conf.main.base_dir.set(filename)
                     self.__save_to_file(obj, filename)
 
@@ -1153,7 +1153,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def exec_import_wizard(self) -> None:
         """Execute import wizard"""
-        wizard = TextImportWizard(self.PANEL_STR_ID, parent=self.parent())
+        wizard = TextImportWizard(self.PANEL_STR_ID, parent=self.parentWidget())
         if exec_dialog(wizard):
             objs = wizard.get_objs()
             if objs:
@@ -1179,7 +1179,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     self, _("Import metadata"), basedir, "*.dlabmeta"
                 )
         if filename:
-            with qt_try_loadsave_file(self.parent(), filename, "load"):
+            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
                 obj.metadata = read_metadata(filename)
@@ -1199,7 +1199,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     self, _("Export metadata"), basedir, "*.dlabmeta"
                 )
         if filename:
-            with qt_try_loadsave_file(self.parent(), filename, "save"):
+            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
                 Conf.main.base_dir.set(filename)
                 write_metadata(filename, obj.metadata)
 
@@ -1216,7 +1216,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     self, _("Import ROI"), basedir, "*.dlabroi"
                 )
         if filename:
-            with qt_try_loadsave_file(self.parent(), filename, "load"):
+            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
                 roi = read_roi(filename)
@@ -1241,7 +1241,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     self, _("Export ROI"), basedir, "*.dlabroi"
                 )
         if filename:
-            with qt_try_loadsave_file(self.parent(), filename, "save"):
+            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
                 Conf.main.base_dir.set(filename)
                 write_roi(filename, obj.roi)
 
@@ -1434,7 +1434,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # pylint: disable=not-callable
         dlg = PlotDialog(
-            parent=self.parent(),
+            parent=self.parentWidget(),
             title=APP_NAME if title is None else f"{title} - {APP_NAME}",
             options=plot_options,
             toolbar=toolbar,
@@ -1465,7 +1465,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         roi_editor_class = self.get_roieditor_class()  # pylint: disable=not-callable
         roi_editor = roi_editor_class(
-            parent=self.parent(),
+            parent=self.parentWidget(),
             obj=obj,
             mode=mode,
             item=item,
@@ -1552,7 +1552,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
                 for category, rdata in rdatadict.items():
-                    dlg = ArrayEditor(self.parent())
+                    dlg = ArrayEditor(self.parentWidget())
                     dlg.setup_and_check(
                         np.vstack([result.shown_array for result in rdata.results]),
                         _("Results") + f" ({category})",
@@ -1645,7 +1645,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             % category
         )
         param = PlotResultParam(_("Plot results"), comment=comment)
-        if not param.edit(parent=self.parent()):
+        if not param.edit(parent=self.parentWidget()):
             return
 
         i_yaxis = rdata.xlabels.index(param.yaxis)

@@ -106,18 +106,18 @@ class Cover(QW.QWidget):
         """
         if os.name == "nt":
             QW.QApplication.processEvents()
-        self.setGeometry(self.parent().geometry())
+        self.setGeometry(self.parentWidget().geometry())
         self.__path = QG.QPainterPath()
         # Path is defined as the rectangle of the main window minus the rectangles of
         # the excluded widgets:
-        self.__path.addRect(QC.QRectF(self.parent().rect()))
+        self.__path.addRect(QC.QRectF(self.parentWidget().rect()))
         if self.__excluded_widgets is not None:
             for widget in self.__excluded_widgets:
                 widget.raise_()
                 widget.show()
                 geometry = widget.frameGeometry()
                 width, height = geometry.width(), geometry.height()
-                point = widget.mapTo(self.parent(), QC.QPoint(0, 0))
+                point = widget.mapTo(self.parentWidget(), QC.QPoint(0, 0))
                 x, y = point.x(), point.y()
                 widget_path = QG.QPainterPath()
                 widget_path.addRect(QC.QRectF(x, y, width, height))
@@ -132,7 +132,7 @@ class Cover(QW.QWidget):
             a0: Show event.
         """
         super().showEvent(a0)
-        self.setGeometry(self.parent().geometry())
+        self.setGeometry(self.parentWidget().geometry())
 
     def paintEvent(self, event: QG.QPaintEvent) -> None:
         """

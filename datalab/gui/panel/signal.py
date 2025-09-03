@@ -128,7 +128,7 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         if not self.mainwindow.confirm_memory_state():
             return None
         param = self.get_newparam_from_current(param)
-        signal = create_signal_gui(param, edit=edit, parent=self.parent())
+        signal = create_signal_gui(param, edit=edit, parent=self.parentWidget())
         if signal is None:
             return None
         if add_to_panel:

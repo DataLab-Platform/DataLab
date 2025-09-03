@@ -139,7 +139,7 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         if not self.mainwindow.confirm_memory_state():
             return None
         param = self.get_newparam_from_current(param)
-        image = create_image_gui(param, edit=edit, parent=self.parent())
+        image = create_image_gui(param, edit=edit, parent=self.parentWidget())
         if image is None:
             return None
         if add_to_panel:

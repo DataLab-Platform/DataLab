@@ -572,7 +572,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     "Pairwise mode: objects must be selected in at least two groups"
                 )
             QW.QMessageBox.warning(
-                self.panel.parent(),
+                self.panel.parentWidget(),
                 _("Warning"),
                 _(
                     "In pairwise mode, you need to select objects "
@@ -587,7 +587,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         "Pairwise mode: invalid number of objects in each group"
                     )
                 QW.QMessageBox.warning(
-                    self.panel.parent(),
+                    self.panel.parentWidget(),
                     _("Warning"),
                     _(
                         "In pairwise mode, you need to select "
@@ -633,7 +633,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if old_edit is not None:
                 edit = old_edit
         if param is not None:
-            if edit and not param.edit(parent=self.panel.parent()):
+            if edit and not param.edit(parent=self.panel.parentWidget()):
                 return
         self._compute_1_to_1_subroutine([func], [param], title)
 
@@ -669,7 +669,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             params = [None] * len(funcs)
         else:
             group = gds.DataSetGroup(params, title=_("Parameters"))
-            if edit and not group.edit(parent=self.panel.parent()):
+            if edit and not group.edit(parent=self.panel.parentWidget()):
                 return
             if len(funcs) != len(params):
                 raise ValueError("Number of functions must match number of parameters")
@@ -707,7 +707,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         assert params is not None
         if edit:
             group = gds.DataSetGroup(params, title=_("Parameters"))
-            if not group.edit(parent=self.panel.parent()):
+            if not group.edit(parent=self.panel.parentWidget()):
                 return
         self._compute_1_to_1_subroutine([func] * len(params), params, title)
 
@@ -751,7 +751,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
-            if edit and not param.edit(parent=self.panel.parent()):
+            if edit and not param.edit(parent=self.panel.parentWidget()):
                 return None
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         current_obj = self.panel.objview.get_current_object()
@@ -806,7 +806,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if results:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
-                dlg = ArrayEditor(self.panel.parent())
+                dlg = ArrayEditor(self.panel.parentWidget())
                 title = _("Results")
                 res = np.vstack([adapter.shown_array for adapter in results.values()])
                 dlg.setup_and_check(
@@ -852,7 +852,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
-            if edit and not param.edit(parent=self.panel.parent()):
+            if edit and not param.edit(parent=self.panel.parentWidget()):
                 return
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
@@ -995,7 +995,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
-            if edit and not param.edit(parent=self.panel.parent()):
+            if edit and not param.edit(parent=self.panel.parentWidget()):
                 return
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
@@ -1495,7 +1495,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if (
             env.execenv.unattended  # Unattended mode (automated unit tests)
             or edited_roi.is_empty()  # No ROI has been defined
-            or group.edit(parent=self.panel.parent())  # ROI dialog has been accepted
+            or group.edit(
+                parent=self.panel.parentWidget()
+            )  # ROI dialog has been accepted
         ):
             if modified:
                 # If ROI has been modified, save ROI (not in "extract" mode)
@@ -1537,7 +1539,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         assert obj.roi is not None, _("No ROI selected for editing.")
         params = obj.roi.to_params(obj)
         group = gds.DataSetGroup(params, title=_("Regions of Interest"))
-        if group.edit(parent=self.panel.parent()):
+        if group.edit(parent=self.panel.parentWidget()):
             edited_roi = obj.roi.__class__.from_params(
                 obj, params, singleobj=obj.roi.singleobj
             )
@@ -1557,7 +1559,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if (
             env.execenv.unattended
             or QW.QMessageBox.question(
-                self.panel.parent(),
+                self.panel.parentWidget(),
                 _("Remove all ROIs"),
                 _("Are you sure you want to remove all ROIs?"),
             )

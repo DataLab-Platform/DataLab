@@ -724,7 +724,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         if any(obj.roi is not None for obj in self.panel.objview.get_sel_objects()):
             if (
                 QW.QMessageBox.question(
-                    self.panel.parent(),
+                    self.panel.parentWidget(),
                     _("Warning"),
                     _(
                         "Creating a ROI grid will overwrite any existing ROI.<br><br>"
@@ -750,7 +750,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             # Now, we ask the user if we shall extract the freshly defined ROI:
             if (
                 QW.QMessageBox.question(
-                    self.panel.parent(),
+                    self.panel.parentWidget(),
                     _("Extract ROI"),
                     _("Do you want to extract images from the defined ROI?"),
                     QW.QMessageBox.Yes | QW.QMessageBox.No,
@@ -767,7 +767,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         for obj in self.panel.objview.get_sel_objects():
             if obj.data.shape != obj0.data.shape:
                 QW.QMessageBox.warning(
-                    self.panel.parent(),
+                    self.panel.parentWidget(),
                     APP_NAME,
                     _("Warning:")
                     + "\n"
