@@ -19,6 +19,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Add noise to the selected signals or images.
     * Gaussian, Poisson or uniform noise can be added.
     * This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201).
+  * Save to directory feature.
+    * This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227).
 
 * New ROI (Region of Interest) management features:
   * New "ROI" menu, between "Edit" and "Operations" menus

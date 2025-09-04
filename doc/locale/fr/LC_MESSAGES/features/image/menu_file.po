@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 11:25+0200\n"
+"POT-Creation-Date: 2025-09-04 18:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -200,10 +200,16 @@ msgid "If the argument is a tuple, the return value is the same object."
 msgstr ""
 
 msgid "Save image"
-msgstr "Enregister l'image"
+msgstr "Enregistrer l'image"
 
 msgid "Save current image (see \"Open image\" supported filetypes)."
 msgstr "Enregistre l'image sélectionnée dans l'un des types de fichier pris en charge :"
+
+msgid "Save to directory"
+msgstr "Enregistrer dans un répertoire"
+
+msgid "Save all selected images to a specified directory, with configurable filename pattern and image format."
+msgstr "Enregistrer toutes les images sélectionnées dans un répertoire spécifié, avec un patron de nom de fichier et un format d'image configurables."
 
 msgid "Import text file"
 msgstr "Importer un fichier texte"

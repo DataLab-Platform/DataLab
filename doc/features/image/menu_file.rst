@@ -102,6 +102,12 @@ Save image
 
 Save current image (see "Open image" supported filetypes).
 
+Save to directory
+^^^^^^^^^^^^^^^^^
+
+Save all selected images to a specified directory, with configurable filename pattern
+and image format.
+
 Import text file
 ^^^^^^^^^^^^^^^^
 

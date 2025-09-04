@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 11:25+0200\n"
+"POT-Creation-Date: 2025-09-04 18:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -225,6 +225,12 @@ msgstr "Enregistre le signal sélectionné dans l'un des types de fichier pris e
 
 msgid ".csv"
 msgstr ""
+
+msgid "Save to directory"
+msgstr "Enregistrer dans un répertoire"
+
+msgid "Save all selected signals to a specified directory, with configurable filename pattern and signal format."
+msgstr "Enregistrer tous les signaux sélectionnés dans un répertoire spécifié, avec un patron de nom de fichier et un format de signal configurables."
 
 msgid "Import text file"
 msgstr "Importer un fichier texte"

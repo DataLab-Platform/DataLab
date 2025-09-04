@@ -106,6 +106,12 @@ Save current signal to the following supported filetypes:
     * - Text files
       - .csv
 
+Save to directory
+^^^^^^^^^^^^^^^^^
+
+Save all selected signals to a specified directory, with configurable filename pattern
+and signal format.
+
 Import text file
 ^^^^^^^^^^^^^^^^
 
