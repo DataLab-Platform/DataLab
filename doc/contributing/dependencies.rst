@@ -36,21 +36,17 @@ See :ref:`installation` for more information on how to install DataLab and its d
 Development
 ^^^^^^^^^^^
 
-In development, you may also use the requirements text files to make it easier to install the dependencies in a virtual environment or container.
+In development, you may also use the requirements text file to make it easier to install the dependencies in a virtual environment or container.
 
-Two requirements files are provided:
-
-- `requirements.txt`: This file lists all the dependencies needed for the project, including both direct and optional dependencies. This is the exact list of dependencies that are defined in the `pyproject.toml` file, but formatted for use with `pip` or other package managers that support requirements files.
-- `requirements-min.txt`: This file lists the dependencies with minimum versions required to run the project. It is useful for executing the project with the maximum compatibility, ensuring that the project runs with the least restrictive versions of the dependencies. *This is the recommended file to use when developing the project.*
+The `requirements.txt` file lists all the dependencies needed for the project, including both direct and optional dependencies. This is the exact list of dependencies that are defined in the `pyproject.toml` file, but formatted for use with `pip` or other package managers that support requirements files.
 
 .. note::
 
-    The requirements files are generated from the `pyproject.toml` file using a tool provided by the `guidata` package.
+    The requirements file is generated from the `pyproject.toml` file using a tool provided by the `guidata` package.
 
     .. code-block:: console
 
         python -m guidata.utils.genreqs txt  # to generate requirements.txt
-        python -m guidata.utils.genreqs txt --min  # to generate requirements-min.txt
 
 Adding New Dependencies
 -----------------------

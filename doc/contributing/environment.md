@@ -52,7 +52,7 @@ DataLab requires the following :
 
 Installing all required packages :
 
-    pip install --upgrade -r requirements-min.txt
+    pip install --upgrade -r requirements.txt
 
 ℹ️ See [Installation](https://datalab-platform.com/en/intro/installation.html)
 for more details on reference Python and Qt versions.
@@ -75,7 +75,7 @@ The following table lists the currently officially used Python distributions:
 | 3.13           | OK           | 3.13.2.0          |
 
 ⚠ We strongly recommend using the `.dot` versions of WinPython which are lightweight
-and can be customized to your needs (using `pip install -r requirements-min.txt`).
+and can be customized to your needs (using `pip install -r requirements.txt`).
 
 ✅ We also recommend using a dedicated WinPython instance for DataLab.
 
