@@ -63,6 +63,33 @@ def setup(app):
     app.connect("builder-inited", copy_changelog)
     app.connect("build-finished", cleanup_changelog)
 
+    # Exclude detailed API documentation from gettext extraction, but keep api/index.rst
+    def exclude_api_from_gettext(app):
+        if app.builder.name == "gettext":
+            # Get all RST files in the api directory
+            api_dir = osp.join(app.srcdir, "api")
+            if osp.exists(api_dir):
+                for filename in os.listdir(api_dir):
+                    if filename.endswith(".rst") and filename != "index.rst":
+                        # Remove .rst extension and add wildcard
+                        pattern = f"api/{filename[:-4]}*"
+                        if pattern not in app.config.exclude_patterns:
+                            app.config.exclude_patterns.append(pattern)
+
+                # Also check subdirectories like api/gui/
+                for dirname in os.listdir(api_dir):
+                    subdir_path = osp.join(api_dir, dirname)
+                    if osp.isdir(subdir_path):
+                        # Exclude entire subdirectories except their index files
+                        pattern = f"api/{dirname}/*"
+                        if pattern not in app.config.exclude_patterns:
+                            app.config.exclude_patterns.append(pattern)
+
+            # Suppress warnings about excluded API documents during gettext builds
+            app.config.suppress_warnings.extend(["toc.excluded", "ref.doc"])
+
+    app.connect("builder-inited", exclude_api_from_gettext)
+
 
 # -- Project information -----------------------------------------------------
 
