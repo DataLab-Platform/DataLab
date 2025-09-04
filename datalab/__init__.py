@@ -11,7 +11,18 @@ user interfaces (thanks to `PlotPyStack`_ libraries).
 .. _PlotPyStack: https://github.com/PlotPyStack
 """
 
+import multiprocessing
 import os
+
+# Set multiprocessing start method to 'spawn' early to avoid fork-related warnings
+# on Linux systems when using Qt and multithreading. This must be done before
+# any multiprocessing.Pool is created.
+try:
+    multiprocessing.set_start_method("spawn")
+except RuntimeError:
+    # This exception is raised if the method is already set (this may happen because
+    # this module is imported more than once, e.g. when running tests)
+    pass
 
 __version__ = "0.21.0"
 __docurl__ = __homeurl__ = "https://datalab-platform.com/"
