@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-08-31 16:20+0200\n"
+"POT-Creation-Date: 2025-09-04 20:06+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -46,6 +46,14 @@ msgstr "Enregistrer un objet %s..."
 #, python-format
 msgid "Save selected %ss"
 msgstr "Enregistrer la sélection de type %s"
+
+#, fuzzy
+msgid "Save to directory..."
+msgstr "Enregistrer dans un fichier HDF5..."
+
+#, fuzzy, python-format
+msgid "Save selected %ss using a filename pattern"
+msgstr "Voir l'objet %s sélectionné dans une nouvelle fenêtre"
 
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
@@ -820,6 +828,24 @@ msgstr "Résultats tabulaires"
 msgid "Other metadata"
 msgstr "Autres métadonnées"
 
+msgid "Directory"
+msgstr "Répertoire"
+
+msgid "Basename pattern"
+msgstr "Patron de nom de base"
+
+msgid "Python format string. See description for details."
+msgstr "Chaîne de format Python. Voir la description pour plus de détails."
+
+msgid "Extension"
+msgstr "Extension"
+
+msgid "Overwrite existing"
+msgstr "Écraser l'existant"
+
+msgid "Preview"
+msgstr "Aperçu"
+
 msgid "Select what to keep from the clipboard.<br><br>Result shapes and annotations, if kept, will be merged with existing ones. <u>All other metadata will be replaced</u>."
 msgstr "Sélectionnez ce que vous souhaitez conserver dans le presse-papier.<br><br>Les formes graphiques et les annotations, si conservées, seront fusionnées avec celles existantes. <u>Toutes les autres métadonnées seront remplacées</u>."
 
@@ -862,6 +888,9 @@ msgstr "Analyse du répertoire"
 
 msgid "Save as"
 msgstr "Enregistrer sous"
+
+msgid "Saving..."
+msgstr "Enregistrement en cours..."
 
 msgid "Import ROI"
 msgstr "Importer une ROI"
@@ -2420,9 +2449,6 @@ msgstr "Type de données de l'image générée."
 
 msgid "Raw Data"
 msgstr "Données brutes"
-
-msgid "Preview"
-msgstr "Aperçu"
 
 msgid "Data Preview"
 msgstr "Aperçu des données"
