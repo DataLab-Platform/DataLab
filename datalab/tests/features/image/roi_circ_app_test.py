@@ -36,9 +36,7 @@ def create_test_image_with_roi(
     else:
         raise NotImplementedError(f"Geometry {geometry} not implemented")
     ima = sigima.objects.create_image(f"Test image with ROI/{geometry}", data)
-    ima.roi = sigima.objects.create_image_roi(
-        geometry, coords, indices=True, singleobj=False
-    )
+    ima.roi = sigima.objects.create_image_roi(geometry, coords, indices=True)
     return ima
 
 

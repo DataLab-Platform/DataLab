@@ -16,6 +16,7 @@ from sigima.objects import SignalROI, create_signal_roi
 from sigima.tests.data import create_paracetamol_signal
 from sigima.tests.helpers import print_obj_data_dimensions
 
+from datalab.config import Conf
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 
@@ -29,7 +30,7 @@ SROI1 = [26, 41]
 SROI2 = [125, 146]
 
 
-def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None):
+def __run_signal_computations(panel: SignalPanel):
     """Test all signal features related to ROI"""
     panel.processor.run_feature("fwhm", sigima_param.FWHMParam())
     panel.processor.run_feature("fw1e2")
@@ -37,7 +38,7 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
     panel.remove_object()
     obj_nb = len(panel)
     last_obj = panel[obj_nb]
-    roi = SignalROI(singleobj=singleobj)
+    roi = SignalROI()
     if execenv.unattended:
         # In unattended mode, we need to set the ROI manually.
         # On the contrary, in interactive mode, the ROI editor is opened and will
@@ -77,7 +78,7 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
         sdm = "Signal %d data mismatch"
 
         orig = last_obj.data
-        if singleobj is None or not singleobj:  # Multiple objects mode
+        if not Conf.proc.extract_roi_singleobj.get():  # Multiple objects mode
             assert len(panel) == obj_nb + 2, "Two objects expected"
             sig1, sig2 = panel[obj_nb + 1], panel[obj_nb + 2]
             assert sig1.data.size == SROI1[1] - SROI1[0], ssm % 1
@@ -112,14 +113,15 @@ def test_signal_roi_app(screenshots: bool = False) -> None:
         sig2 = create_paracetamol_signal(SIZE)
         sig2.roi = create_signal_roi([SROI1, SROI2], indices=True)
         for singleobj in (False, True):
-            sig2_i = sig2.copy()
-            panel.add_object(sig2_i)
-            print_obj_data_dimensions(sig2_i, indent=1)
-            panel.processor.edit_roi_graphically()
-            if screenshots:
-                win.statusBar().hide()
-                win.take_screenshot("s_roi_signal")
-            __run_signal_computations(panel, singleobj=singleobj)
+            with Conf.proc.extract_roi_singleobj.temp(singleobj):
+                sig2_i = sig2.copy()
+                panel.add_object(sig2_i)
+                print_obj_data_dimensions(sig2_i, indent=1)
+                panel.processor.edit_roi_graphically()
+                if screenshots:
+                    win.statusBar().hide()
+                    win.take_screenshot("s_roi_signal")
+                __run_signal_computations(panel)
 
 
 @pytest.mark.skip(reason="This test is only for manual testing")

@@ -1443,7 +1443,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         params = roi.to_params(obj)
-        if roi.singleobj and len(params) > 1:
+        if Conf.proc.extract_roi_singleobj.get() and len(params) > 1:
             # Extract multiple ROIs into a single object (remove all the ROIs),
             # if the "Extract all ROIs into a single image object"
             # option is checked and if there are more than one ROI
@@ -1509,9 +1509,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     for obj_i in objs:
                         obj_i.roi = None
                 else:
-                    edited_roi = edited_roi.__class__.from_params(
-                        obj, params, singleobj=edited_roi.singleobj
-                    )
+                    edited_roi = edited_roi.__class__.from_params(obj, params)
                     if mode == "apply":
                         # Apply ROI to all selected objects
                         for obj_i in objs:
@@ -1540,9 +1538,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         params = obj.roi.to_params(obj)
         group = gds.DataSetGroup(params, title=_("Regions of Interest"))
         if group.edit(parent=self.panel.parentWidget()):
-            edited_roi = obj.roi.__class__.from_params(
-                obj, params, singleobj=obj.roi.singleobj
-            )
+            edited_roi = obj.roi.__class__.from_params(obj, params)
             obj.roi = edited_roi
             self.SIG_ADD_SHAPE.emit(get_uuid(obj))
             self.panel.refresh_plot(

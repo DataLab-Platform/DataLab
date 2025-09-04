@@ -15,6 +15,7 @@ from sigima.objects import ImageObj, ImageROI, NewImageParam, create_image_roi
 from sigima.tests.data import create_multigaussian_image
 from sigima.tests.helpers import print_obj_data_dimensions
 
+from datalab.config import Conf
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 
@@ -31,14 +32,14 @@ IROI2 = [66, 100, 50]  # Circle
 IROI3 = [100, 100, 100, 150, 150, 133]
 
 
-def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
+def __run_image_computations(panel: ImagePanel):
     """Test all image features related to ROI"""
     panel.processor.run_feature("centroid")
     panel.processor.run_feature("histogram", sigima_param.HistogramParam())
     panel.processor.run_feature(
         "peak_detection", sigima_param.Peak2DDetectionParam.create(create_rois=False)
     )
-    roi = ImageROI(singleobj=singleobj)
+    roi = ImageROI()
     panel.processor.compute_roi_extraction(roi)
 
 
@@ -71,14 +72,15 @@ def test_image_roi_app(screenshots: bool = False):
         __run_image_computations(panel)
         ima2 = create_test_image_with_roi(param)
         for singleobj in (False, True):
-            ima2_i = ima2.copy()
-            panel.add_object(ima2_i)
-            print_obj_data_dimensions(ima2_i)
-            panel.processor.edit_roi_graphically()
-            if screenshots:
-                win.statusBar().hide()
-                win.take_screenshot("i_roi_image")
-            __run_image_computations(panel, singleobj=singleobj)
+            with Conf.proc.extract_roi_singleobj.temp(singleobj):
+                ima2_i = ima2.copy()
+                panel.add_object(ima2_i)
+                print_obj_data_dimensions(ima2_i)
+                panel.processor.edit_roi_graphically()
+                if screenshots:
+                    win.statusBar().hide()
+                    win.take_screenshot("i_roi_image")
+                __run_image_computations(panel)
 
 
 @pytest.mark.skip(reason="This test is only for manual testing")

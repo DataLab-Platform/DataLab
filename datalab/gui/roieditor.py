@@ -248,7 +248,7 @@ class BaseROIEditor(
         )
         self.editor_layout: QW.QHBoxLayout | None = None
         self.remove_all_action: QW.QAction | None = None
-        self.singleobj_btn: QW.QToolButton | None = None
+        self.singleobj_btn: QW.QCheckBox | None = None
         self.obj = obj
         self.mode = mode
         if item is None:
@@ -268,8 +268,6 @@ class BaseROIEditor(
             roi = obj.roi
         if roi is None:
             roi = self.get_obj_roi_class()()
-        if roi.singleobj is None:
-            roi.singleobj = Conf.proc.extract_roi_singleobj.get()
         self.__roi: TypeROI = roi
 
         if options is None:
@@ -343,7 +341,7 @@ class BaseROIEditor(
                 self,
             )
             self.editor_layout.addWidget(self.singleobj_btn)
-            self.singleobj_btn.setChecked(self.__roi.singleobj)
+            self.singleobj_btn.setChecked(Conf.proc.extract_roi_singleobj.get())
         self.editor_layout.addStretch()
 
     def setup_items(self) -> None:
@@ -389,9 +387,7 @@ class BaseROIEditor(
         for roi_item in self.roi_items:
             self.__roi.add_roi(plotitem_to_singleroi(roi_item))
         if self.singleobj_btn is not None:
-            singleobj = self.singleobj_btn.isChecked()
-            self.__roi.singleobj = singleobj
-            Conf.proc.extract_roi_singleobj.set(singleobj)
+            Conf.proc.extract_roi_singleobj.set(self.singleobj_btn.isChecked())
 
     def get_roieditor_results(self) -> tuple[TypeROI, bool]:
         """Get ROI editor results
