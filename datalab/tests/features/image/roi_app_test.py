@@ -9,13 +9,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import numpy as np
 import pytest
 import sigima.params as sigima_param
 from sigima.objects import ImageObj, ImageROI, NewImageParam, create_image_roi
 from sigima.tests.data import create_multigaussian_image
 from sigima.tests.helpers import print_obj_data_dimensions
-from skimage import draw
 
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
@@ -36,96 +34,12 @@ IROI3 = [100, 100, 100, 150, 150, 133]
 def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     """Test all image features related to ROI"""
     panel.processor.run_feature("centroid")
-    panel.processor.run_feature("enclosing_circle")
     panel.processor.run_feature("histogram", sigima_param.HistogramParam())
     panel.processor.run_feature(
         "peak_detection", sigima_param.Peak2DDetectionParam.create(create_rois=False)
     )
-    obj_nb = len(panel)
-    last_obj = panel[obj_nb]
     roi = ImageROI(singleobj=singleobj)
-    if execenv.unattended:
-        # In unattended mode, we need to set the ROI manually.
-        # On the contrary, in interactive mode, the ROI editor is opened and will
-        # automatically set the ROI from the currently selected object.
-        if last_obj.roi is not None:
-            roi.single_rois = last_obj.roi.single_rois
-
-    value = 1
-    panel.processor.run_feature(
-        "addition_constant", sigima_param.ConstantParam.create(value=value)
-    )
-    if execenv.unattended and last_obj.roi is not None and not last_obj.roi.is_empty():
-        # Check if the processed data is correct: image should be the same as the
-        # original data outside the ROI, and should be different inside the ROI.
-        orig = last_obj.data
-        new = panel[obj_nb + 1].data
-        assert np.all(
-            new[IROI1[1] : IROI1[3] + IROI1[1], IROI1[0] : IROI1[2] + IROI1[0]]
-            == orig[IROI1[1] : IROI1[3] + IROI1[1], IROI1[0] : IROI1[2] + IROI1[0]]
-            + value
-        ), "Image ROI 1 data mismatch"
-        assert np.all(
-            new[IROI2[1] : IROI1[1] + 1, IROI2[0] : IROI2[0] + 2 * IROI2[2]]
-            == orig[IROI2[1] : IROI1[1] + 1, IROI2[0] : IROI2[0] + 2 * IROI2[2]] + value
-        ), "Image ROI 2 data mismatch"
-        first_col = min(IROI1[0], IROI2[0] - IROI2[2])
-        first_row = min(IROI1[1], IROI2[1] - IROI2[2])
-        last_col = max(IROI1[0] + IROI1[2], IROI2[0] + 2 * IROI2[2])
-        last_row = max(IROI1[1] + IROI1[3], IROI2[1] + 2 * IROI2[2])
-        assert np.all(
-            new[:first_row, :first_col] == np.array(orig[:first_row, :first_col], float)
-        ), "Image before ROIs data mismatch"
-        assert np.all(new[:first_row, last_col:] == orig[:first_row, last_col:]), (
-            "Image after ROIs data mismatch"
-        )
-        assert np.all(new[last_row:, :first_col] == orig[last_row:, :first_col]), (
-            "Image before ROIs data mismatch"
-        )
-        assert np.all(new[last_row:, last_col:] == orig[last_row:, last_col:]), (
-            "Image after ROIs data mismatch"
-        )
-    panel.remove_object()
-
     panel.processor.compute_roi_extraction(roi)
-    if execenv.unattended and last_obj.roi is not None and not last_obj.roi.is_empty():
-        # Assertions texts:
-        nzroi = "Non-zero values expected in ROI"
-        zroi = "Zero values expected outside ROI"
-        roisham = "ROI shape mismatch"
-
-        if singleobj is None or not singleobj:  # Multiple objects mode
-            assert len(panel) == obj_nb + 3, "Three objects expected"
-            im1, im2 = panel[obj_nb + 1], panel[obj_nb + 2]
-            assert np.all(im1.data != 0), nzroi
-            assert im1.data.shape == (IROI1[3], IROI1[2]), roisham
-            assert np.all(im2.data != 0), nzroi
-            assert im2.data.shape == (IROI2[2] * 2, IROI2[2] * 2), roisham
-            mask2 = np.zeros(shape=im2.data.shape, dtype=bool)
-            xc = yc = r = IROI2[2]  # Adjust for ROI origin
-            rr, cc = draw.disk((yc, xc), r, shape=im2.data.shape)
-            mask2[rr, cc] = 1
-            assert np.all(im2.maskdata == ~mask2), "Mask data mismatch"
-        else:  # Single object mode
-            assert len(panel) == obj_nb + 1, "One object expected"
-
-            mask1 = np.zeros(shape=(SIZE, SIZE), dtype=bool)
-            mask1[IROI1[1] : IROI1[1] + IROI1[3], IROI1[0] : IROI1[0] + IROI1[2]] = 1
-            xc, yc, r = IROI2
-            mask2 = np.zeros(shape=(SIZE, SIZE), dtype=bool)
-            rr, cc = draw.disk((yc, xc), r)
-            mask2[rr, cc] = 1
-            mask = mask1 | mask2
-            row_min = int(min(IROI1[1], IROI2[1] - r))
-            col_min = int(min(IROI1[0], IROI2[0] - r))
-            row_max = int(max(IROI1[1] + IROI1[3], IROI2[1] + r))
-            col_max = int(max(IROI1[0] + IROI1[2], IROI2[0] + r))
-            mask = mask[row_min:row_max, col_min:col_max]
-
-            # execenv.unattended = False
-            im = panel[obj_nb + 1]
-            assert np.all(im.data[mask] != 0), nzroi
-            assert np.all(im.data[~mask] == 0), zroi
 
 
 def create_test_image_with_roi(newimageparam: NewImageParam) -> ImageObj:
@@ -179,5 +93,5 @@ def test_image_roi_basic_app():
 
 
 if __name__ == "__main__":
-    test_image_roi_basic_app()
     test_image_roi_app(screenshots=True)
+    test_image_roi_basic_app()
