@@ -433,7 +433,9 @@ class SaveToDirectoryParam(gds.DataSet):
         _("Extension"), define_extension_selection, default=".csv"
     ).set_prop("display", callback=update_filenames_and_preview)
 
-    overwrite = gds.BoolItem(_("Overwrite existing"), default=False)
+    overwrite = gds.BoolItem(
+        _("Overwrite"), default=False, help=_("Overwrite existing files")
+    ).set_pos(col=1)
 
     filenames: list[str] = []
     preview = gds.TextItem(_("Preview"), default=None).set_prop(

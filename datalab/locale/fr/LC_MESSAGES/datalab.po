@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-04 20:06+0200\n"
+"POT-Creation-Date: 2025-09-05 18:41+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -50,6 +50,7 @@ msgstr "Enregistrer la sélection de type %s"
 msgid "Save to directory"
 msgstr "Enregistrer dans un répertoire"
 
+#, python-format
 msgid "Save selected %ss using a filename pattern"
 msgstr "Enregistrer la sélection de type %s en utilisant un modèle de nom de fichier"
 
@@ -838,8 +839,11 @@ msgstr "Chaîne de format Python. Voir la description pour plus de détails."
 msgid "Extension"
 msgstr "Extension"
 
-msgid "Overwrite existing"
-msgstr "Écraser l'existant"
+msgid "Overwrite"
+msgstr "Écraser"
+
+msgid "Overwrite existing files"
+msgstr "Écraser les fichiers existants"
 
 msgid "Preview"
 msgstr "Aperçu"
