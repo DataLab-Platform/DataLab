@@ -322,14 +322,11 @@ class SaveToDirectoryParam(gds.DataSet):
 
     def on_button_click(
         self: SaveToDirectoryParam,
-        item: gds.ButtonItem,
-        value: None,
+        _item: gds.ButtonItem,
+        _value: None,
         parent: QW.QWidget,
     ) -> None:
         """Help button callback."""
-        _ = item
-        _ = value
-
         text = "<br>".join(
             [
                 """Pattern accepts a Python format string. Standard Python format
