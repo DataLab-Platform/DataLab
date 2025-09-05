@@ -354,7 +354,6 @@ class SaveToDirectoryParam(gds.DataSet):
             <table border="1" cellspacing="0" cellpadding="4">
                 <tr><th>Keyword</th><th>Description</th></tr>
                 <tr><td>{title}</td><td>Title</td></tr>
-                <tr><td>{panel}</td><td>'signal' or 'image'</td></tr>
                 <tr><td>{index}</td><td>1-based index</td></tr>
                 <tr><td>{count}</td><td>Total number of selected objects</td></tr>
                 <tr><td>{xlabel}, {xunit}, {ylabel}, {yunit}</td>
