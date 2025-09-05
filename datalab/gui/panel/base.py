@@ -312,7 +312,23 @@ class NonModalInfoDialog(QW.QMessageBox):
 
 
 class SaveToDirectoryParam(gds.DataSet):
-    """Save to directory parameters."""
+    """Save to directory parameters.
+
+    Args:
+        title: Dialog title
+    """
+
+    def __init__(self, title: str | None = None):
+        super().__init__(title, comment="")
+        self._panel: BaseDataPanel | None = None
+
+    def set_panel(self, panel: BaseDataPanel) -> None:
+        """Set panel reference.
+
+        Args:
+            panel: Signal or image panel.
+        """
+        self._panel = panel
 
     def define_extension_selection(self, _item=None, _value=None):
         """Define extension selection from panel IO registry."""
@@ -374,21 +390,12 @@ class SaveToDirectoryParam(gds.DataSet):
         )
         NonModalInfoDialog(parent, "Pattern help", text).show()
 
-    def set_panel(self, panel):
-        """Set panel reference.
-
-        Args:
-            panel: Signal or image panel.
-        """
-        self._panel = panel
-
     def update_filenames_and_preview(self, _item=None, _value=None) -> None:
         """Update filenames and preview."""
-        panel = self._panel
-        if panel is None:
+        if self._panel is None:
             # Panel is not yet attached.
             return
-        objs = panel.objview.get_sel_objects(include_groups=True)
+        objs = self._panel.objview.get_sel_objects(include_groups=True)
         assert self.basename is not None
         basename: str = self.basename
         assert self.extension is not None
@@ -409,8 +416,6 @@ class SaveToDirectoryParam(gds.DataSet):
             self.filenames[i] = filename
 
         self.preview = "\n".join(f"{name}" for name in self.filenames)
-
-    _panel = None
 
     directory = gds.DirectoryItem(_("Directory"), default=Conf.main.base_dir.get())
 

@@ -511,7 +511,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Save to directory..."),
+                _("Save to directory") + "...",
                 icon_name="save_to_directory.svg",
                 tip=_("Save selected %ss using a filename pattern") % self.OBJECT_STR,
                 triggered=self.panel.save_to_directory,
