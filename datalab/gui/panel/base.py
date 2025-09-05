@@ -1305,19 +1305,21 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             param: parameters.
         """
         objs = self.objview.get_sel_objects(include_groups=True)
-        if param is None:
-            param = SaveToDirectoryParam()
-            param.set_panel(self)
-            if param.edit(parent=self.parentWidget()):
-                assert param.directory is not None
-                Conf.main.base_dir.set(param.directory)
+
+        edit = param is None
+        if edit:
+            param = SaveToDirectoryParam(_("Save to directory"))
+        param.set_panel(self)
+        if edit and not param.edit(parent=self.parentWidget()):
+            return
+
+        Conf.main.base_dir.set(param.directory)
 
         with create_progress_bar(self, _("Saving..."), max_=len(objs)) as progress:
             for i, (obj, filename) in enumerate(zip(objs, param.filenames)):
                 progress.setValue(i + 1)
                 if progress.wasCanceled():
                     break
-                assert param.directory is not None
                 filepath = osp.join(param.directory, filename)
                 with qt_try_loadsave_file(self.parentWidget(), filepath, "save"):
                     self.__save_to_file(obj, filepath)

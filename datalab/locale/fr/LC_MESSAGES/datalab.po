@@ -47,13 +47,11 @@ msgstr "Enregistrer un objet %s..."
 msgid "Save selected %ss"
 msgstr "Enregistrer la sélection de type %s"
 
-#, fuzzy
-msgid "Save to directory..."
-msgstr "Enregistrer dans un fichier HDF5..."
+msgid "Save to directory"
+msgstr "Enregistrer dans un répertoire"
 
-#, fuzzy, python-format
 msgid "Save selected %ss using a filename pattern"
-msgstr "Voir l'objet %s sélectionné dans une nouvelle fenêtre"
+msgstr "Enregistrer la sélection de type %s en utilisant un modèle de nom de fichier"
 
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
