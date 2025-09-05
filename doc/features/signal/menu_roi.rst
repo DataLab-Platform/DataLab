@@ -60,7 +60,7 @@ The "ROI" menu allows you to:
     :height: 24px
     :class: dark-light
 
-.. |signal_roi| image:: ../../../datalab/data/icons/roi/signal_roi.svg
+.. |signal_roi| image:: ../../../datalab/data/icons/roi/roi_sig.svg
     :width: 24px
     :height: 24px
     :class: dark-light

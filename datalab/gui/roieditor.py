@@ -105,7 +105,7 @@ class ROISegmentTool(HRangeTool):
     """ROI segment tool"""
 
     TITLE = _("Range ROI")
-    ICON = "signal_roi.svg"
+    ICON = "roi_sig.svg"
 
     def __init__(self, manager: PlotManager, obj: SignalObj) -> None:
         super().__init__(manager, switch_to_default_tool=False, toolbar_id=None)
@@ -494,7 +494,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
          from the object)
     """
 
-    ICON_NAME = "signal_roi.svg"
+    ICON_NAME = "roi_sig.svg"
     OBJ_NAME = _("signal")
     ROI_ITEM_TYPES = (AnnotatedXRange,)
 
@@ -543,7 +543,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
         segcoord_act = create_action(
             self,
             _("Range ROI"),
-            icon=get_icon("signal_roi.svg"),
+            icon=get_icon("roi_sig.svg"),
             triggered=self.manually_add_roi,
         )
         return [segcoord_act]
@@ -571,7 +571,7 @@ class ImageROIEditor(
          from the object)
     """
 
-    ICON_NAME = "image_roi.svg"
+    ICON_NAME = "roi_ima.svg"
     OBJ_NAME = _("image")
     ROI_ITEM_TYPES = (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon)
     ADDITIONAL_OPTIONS = {"show_itemlist": True, "show_contrast": False}

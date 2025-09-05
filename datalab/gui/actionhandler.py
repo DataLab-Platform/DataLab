@@ -197,6 +197,11 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.__actions: dict[Callable, list[QW.QAction]] = {}
         self.__submenus: dict[str, QW.QMenu] = {}
 
+    @property
+    def object_suffix(self) -> str:
+        """Object suffix (e.g. "sig" for signal, "ima" for image)"""
+        return self.__class__.__name__[:3].lower()
+
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
         """Context manager for creating a new menu.
@@ -471,13 +476,15 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Create actions that are added to the menus in the first place"""
         with self.new_category(ActionCategory.FILE):
             with self.new_menu(
-                _("New %s") % self.OBJECT_STR, icon_name=f"new_{self.OBJECT_STR}.svg"
+                _("New %s") % self.OBJECT_STR,
+                # Icon name is 'new_sig.svg' or 'new_ima.svg':
+                icon_name=f"new_{self.object_suffix}.svg",
             ):
                 self.create_new_object_actions()
             self.new_action(
                 _("Open %s...") % self.OBJECT_STR,
-                # icon: fileopen_sig.svg or fileopen_ima.svg
-                icon_name=f"fileopen_{self.OBJECT_STR[:3]}.svg",
+                # Icon name is 'fileopen_sig.svg' or 'fileopen_ima.svg':
+                icon_name=f"fileopen_{self.object_suffix}.svg",
                 tip=_("Open one or more %s files") % self.OBJECT_STR,
                 triggered=self.panel.load_from_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Open),
@@ -494,8 +501,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Save %s...") % self.OBJECT_STR,
-                # icon: filesave_sig.svg or filesave_ima.svg
-                icon_name=f"filesave_{self.OBJECT_STR[:3]}.svg",
+                # Icon name is 'filesave_sig.svg' or 'filesave_ima.svg'
+                icon_name=f"filesave_{self.object_suffix}.svg",
                 tip=_("Save selected %ss") % self.OBJECT_STR,
                 triggered=self.panel.save_to_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),
@@ -760,8 +767,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Extract") + "...",
                 triggered=self.panel.processor.compute_roi_extraction,
-                # Icon name is 'signal_roi.svg' or 'image_roi.svg':
-                icon_name=f"{self.OBJECT_STR}_roi.svg",
+                # Icon name is 'roi_sig.svg' or 'roi_ima.svg':
+                icon_name=f"roi_{self.object_suffix}.svg",
                 separator=True,
             )
             self.new_action(
