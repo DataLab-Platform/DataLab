@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-05 18:41+0200\n"
+"POT-Creation-Date: 2025-09-06 14:15+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -47,8 +47,9 @@ msgstr "Enregistrer un objet %s..."
 msgid "Save selected %ss"
 msgstr "Enregistrer la sélection de type %s"
 
-msgid "Save to directory"
-msgstr "Enregistrer dans un répertoire"
+#, python-format
+msgid "Save %ss to directory..."
+msgstr "Enregistrer les %ss dans un répertoire..."
 
 #, python-format
 msgid "Save selected %ss using a filename pattern"
@@ -890,6 +891,9 @@ msgstr "Analyse du répertoire"
 
 msgid "Save as"
 msgstr "Enregistrer sous"
+
+msgid "Save to directory"
+msgstr "Enregistrer dans un répertoire"
 
 msgid "Saving..."
 msgstr "Enregistrement en cours..."

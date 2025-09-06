@@ -511,7 +511,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Save to directory") + "...",
+                _("Save %ss to directory...") % self.OBJECT_STR,
                 icon_name="save_to_directory.svg",
                 tip=_("Save selected %ss using a filename pattern") % self.OBJECT_STR,
                 triggered=self.panel.save_to_directory,
@@ -524,6 +524,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon_name="import_text.svg",
                 triggered=self.panel.exec_import_wizard,
                 select_condition=SelectCond.always,
+                separator=True,
             )
 
         with self.new_category(ActionCategory.EDIT):
