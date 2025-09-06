@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-06 14:15+0200\n"
+"POT-Creation-Date: 2025-09-06 18:26+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1360,6 +1360,9 @@ msgstr "Filtre de Sobel (horizontal)"
 msgid "Sobel filter (vertical)"
 msgstr "Filtre de Sobel (vertical)"
 
+msgid "Resampling"
+msgstr "Rééchantillonnage"
+
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -1518,9 +1521,6 @@ msgstr "Interpolation"
 
 msgid "signal for X values"
 msgstr "signal pour les valeurs X"
-
-msgid "Resampling"
-msgstr "Rééchantillonnage"
 
 msgid "Allan variance"
 msgstr "Variance d'Allan"
@@ -2597,3 +2597,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

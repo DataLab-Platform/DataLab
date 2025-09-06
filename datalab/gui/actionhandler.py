@@ -1236,4 +1236,5 @@ class ImageActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_binning,
                 icon_name="binning.svg",
             )
+            self.action_for("resampling")
         super().create_last_actions()

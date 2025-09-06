@@ -42,6 +42,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
       * Preview the ROI grid before creating it
 
 * New image processing features:
+  * New "2D resampling" feature:
+    * This feature allows to resample 2D images to a new coordinate grid using interpolation.
+    * It supports two resampling modes: pixel size and output shape.
+    * Multiple interpolation methods are available: linear, cubic, and nearest neighbor.
+    * The fill value parameter controls how out-of-bounds pixels are handled, with support for numeric values or NaN.
+    * It is implemented in the `sigima.proc.image.resampling` function (requires Sigima v0.3).
+    * This adds comprehensive 2D resampling capabilities to complement existing geometric transformation features.
+    * This closes [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208) - Add support for image resampling.
   * New "Frequency domain Gaussian filter" feature:
     * This feature allows to filter an image in the frequency domain using a Gaussian filter.
     * It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function (requires Sigima v0.3).

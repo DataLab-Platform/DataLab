@@ -655,6 +655,12 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sigima_image.BinningParam,
             icon_name="binning.svg",
         )
+        self.register_1_to_1(
+            sigima_image.resampling,
+            _("Resampling"),
+            sigima_image.Resampling2DParam,
+            icon_name="resampling2d.svg",
+        )
 
         # MARK: ANALYSIS
         self.register_1_to_0(sigima_image.stats, _("Statistics"), icon_name="stats.svg")
