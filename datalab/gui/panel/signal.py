@@ -102,7 +102,9 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         """
         curobj: SignalObj = self.objview.get_current_object()
         if newparam is None:
-            newparam = NewSignalParam.create(title=title)
+            newparam = NewSignalParam()
+        if title is not None:
+            newparam.title = title
         if curobj is not None:
             newparam.size = len(curobj.data)
             newparam.xmin = curobj.x.min()
