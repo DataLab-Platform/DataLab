@@ -47,6 +47,7 @@ from sigima.objects import (
     create_signal,
 )
 from sigima.objects.base import ROI_KEY
+from sigima.params import SaveToDirectoryParam
 
 from datalab import objectmodel
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
@@ -311,7 +312,7 @@ class NonModalInfoDialog(QW.QMessageBox):
         self.setModal(False)
 
 
-class SaveToDirectoryParam(gds.DataSet):
+class SaveToDirectoryGUIParam(gds.DataSet):
     """Save to directory parameters.
 
     Args:
@@ -326,7 +327,7 @@ class SaveToDirectoryParam(gds.DataSet):
         self.__extensions = extensions
 
     def on_button_click(
-        self: SaveToDirectoryParam,
+        self: SaveToDirectoryGUIParam,
         _item: gds.ButtonItem,
         _value: None,
         parent: QW.QWidget,
@@ -1304,12 +1305,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         objs = self.objview.get_sel_objects(include_groups=True)
 
-        edit = param is None
-        if edit:
+        if param is None:
             extensions = get_file_extensions(self.IO_REGISTRY.get_write_filters())
-            param = SaveToDirectoryParam(_("Save to directory"), objs, extensions)
-        if edit and not param.edit(parent=self.parentWidget()):
-            return
+            guiparam = SaveToDirectoryGUIParam(_("Save to directory"), objs, extensions)
+            if not guiparam.edit(parent=self.parentWidget()):
+                return
+            param = SaveToDirectoryParam()
+            update_dataset(param, guiparam)
 
         Conf.main.base_dir.set(param.directory)
 
