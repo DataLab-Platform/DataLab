@@ -2,7 +2,7 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
-## DataLab Version 0.21.0 ##
+## DataLab Version 1.0.0 ##
 
 💥 New features and enhancements:
 
