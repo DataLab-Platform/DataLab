@@ -23,6 +23,7 @@ from sigima.tests.data import (
     create_paracetamol_signal,
     get_test_fnames,
 )
+from sigima.tests.helpers import WorkdirRestoringTempDir
 
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
@@ -128,6 +129,15 @@ def __misc_unit_function(win: DLMainWindow) -> None:
     __print_test_result("Open directory (signals)")
     path = osp.dirname(get_test_fnames("curve_formats/*.*")[0])
     win.signalpanel.load_from_directory(path)
+
+    # Select all signals and save them to a temporary directory
+    __print_test_result("Select first group and save signals to a temporary directory")
+    win.signalpanel.objview.select_groups([1])
+    with WorkdirRestoringTempDir() as tmpdir:
+        param = sigima.params.SaveToDirectoryParam.create(
+            directory=tmpdir, basename="{title}_test", extension=".csv", overwrite=True
+        )
+        win.signalpanel.save_to_directory(param)
 
     # Open objects from signal panel
     __print_test_result("Open objects from signal panel")
