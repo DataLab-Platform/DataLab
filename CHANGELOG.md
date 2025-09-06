@@ -47,16 +47,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * It supports two resampling modes: pixel size and output shape.
     * Multiple interpolation methods are available: linear, cubic, and nearest neighbor.
     * The fill value parameter controls how out-of-bounds pixels are handled, with support for numeric values or NaN.
-    * It is implemented in the `sigima.proc.image.resampling` function (requires Sigima v0.3).
+    * It is implemented in the `sigima.proc.image.resampling` function.
     * This adds comprehensive 2D resampling capabilities to complement existing geometric transformation features.
     * This closes [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208) - Add support for image resampling.
   * New "Frequency domain Gaussian filter" feature:
     * This feature allows to filter an image in the frequency domain using a Gaussian filter.
-    * It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function (requires Sigima v0.3).
+    * It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function.
     * This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images.
   * New "Erase area" feature:
     * This feature allows to erase an area in an image as defined by a region of interest
-    * It is implemented in the `sigima.proc.image.erase` function (requires Sigima v0.3)
+    * It is implemented in the `sigima.proc.image.erase` function
     * This closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Add support for background subtraction and inpainting on ROI
   * Improved centroid computation:
     * New adaptive method (`get_centroid_auto`) selects the most reliable centroid estimation (Fourier or fallback) based on internal consistency checks with projected profile methods.
@@ -71,7 +71,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
     * Default strategy is now "Next power of 2".
   * Ideal frequency domain filter ("Brick wall filter"):
-    * It is implemented in `sigima.proc.signal.frequency_filter` (requires Sigima v0.3).
+    * It is implemented in `sigima.proc.signal.frequency_filter`.
     * This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal).
 
 * New signal analysis features:

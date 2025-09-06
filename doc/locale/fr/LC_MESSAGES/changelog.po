@@ -147,8 +147,8 @@ msgstr "Plusieurs méthodes d'interpolation sont disponibles : linéaire, cubiq
 msgid "The fill value parameter controls how out-of-bounds pixels are handled, with support for numeric values or NaN."
 msgstr "Le paramètre de valeur de remplissage contrôle la façon dont les pixels hors limites sont traités, avec prise en charge des valeurs numériques ou de NaN."
 
-msgid "It is implemented in the `sigima.proc.image.resampling` function (requires Sigima v0.3)."
-msgstr "Elle est implémentée dans la fonction `sigima.proc.image.resampling` (nécessite Sigima v0.3)."
+msgid "It is implemented in the `sigima.proc.image.resampling` function."
+msgstr "Elle est implémentée dans la fonction `sigima.proc.image.resampling`."
 
 msgid "This adds comprehensive 2D resampling capabilities to complement existing geometric transformation features."
 msgstr "Cela ajoute des capacités de rééchantillonnage 2D complètes pour compléter les fonctionnalités de transformation géométrique existantes."
@@ -162,8 +162,8 @@ msgstr "Nouvelle fonctionnalité \"Filtre gaussien dans le domaine fréquentiel\
 msgid "This feature allows to filter an image in the frequency domain using a Gaussian filter."
 msgstr "Cette fonctionnalité permet de filtrer une image dans le domaine fréquentiel en utilisant un filtre gaussien."
 
-msgid "It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function (requires Sigima v0.3)."
-msgstr "Elle est implémentée dans la fonction `sigima.proc.image.frequency_domain_gaussian_filter` (nécessite Sigima v0.3)."
+msgid "It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function."
+msgstr "Elle est implémentée dans la fonction `sigima.proc.image.frequency_domain_gaussian_filter`."
 
 msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images."
 msgstr "Ceci clôture [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images."
@@ -174,8 +174,8 @@ msgstr "Nouvelle fonctionnalité \"Gommer une zone\" :"
 msgid "This feature allows to erase an area in an image as defined by a region of interest"
 msgstr "Cette fonctionnalité permet d'effacer une zone d'une image telle que définie par une région d'intérêt"
 
-msgid "It is implemented in the `sigima.proc.image.erase` function (requires Sigima v0.3)"
-msgstr "Elle est implémentée dans la fonction `sigima.proc.image.erase` (nécessite Sigima v0.3)"
+msgid "It is implemented in the `sigima.proc.image.erase` function"
+msgstr "Elle est implémentée dans la fonction `sigima.proc.image.erase`"
 
 msgid "This closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Add support for background subtraction and inpainting on ROI"
 msgstr "Ceci clôture le ticket [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Ajout de la prise en charge de la soustraction d'arrière-plan et de l'inpainting sur la ROI"
@@ -216,8 +216,8 @@ msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
 msgid "Ideal frequency domain filter (\"Brick wall filter\"):"
 msgstr "Filtre idéal dans le domaine fréquentiel (\"Filtre coupe-bande\") :"
 
-msgid "It is implemented in `sigima.proc.signal.frequency_filter` (requires Sigima v0.3)."
-msgstr "Elle est implémentée dans la fonction `sigima.proc.signal.frequency_filter` (nécessite Sigima v0.3)."
+msgid "It is implemented in `sigima.proc.signal.frequency_filter`."
+msgstr "Elle est implémentée dans la fonction `sigima.proc.signal.frequency_filter`."
 
 msgid "This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal)."
 msgstr "Ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filtres / Filtre coupe-bande (Signal)."
