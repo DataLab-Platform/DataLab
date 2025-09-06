@@ -45,6 +45,14 @@ class ImageBackgroundDialog(PlotDialog):
         self.__image = image.copy()
         self.__setup_dialog()
 
+    def _test_compute_background(self) -> None:
+        """Method to test background computation."""
+        # Instead of waiting for Qt events, directly test the computation method
+        # by simulating what RangeComputation2d would do
+        x0, y0, x1, y1 = self.rectarea.get_rect()
+        x, y, z = self.imageitem.get_data(x0, y0, x1, y1)
+        self.__compute_background(x, y, z)
+
     def __compute_background(
         self,
         x: np.ndarray,  # pylint: disable=unused-argument
