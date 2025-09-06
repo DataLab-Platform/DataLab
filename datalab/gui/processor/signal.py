@@ -361,8 +361,8 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.resampling,
             _("Resampling"),
-            sigima_signal.ResamplingParam,
-            icon_name="resampling.svg",
+            sigima_signal.Resampling1DParam,
+            icon_name="resampling1d.svg",
         )
         # Stability analysis
         self.register_1_to_1(

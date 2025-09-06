@@ -12,7 +12,12 @@ from __future__ import annotations
 import numpy as np
 import sigima.objects
 import sigima.params
-from sigima.enums import BorderMode, WindowingMethod
+from sigima.enums import (
+    BorderMode,
+    Interpolation1DMethod,
+    Interpolation2DMethod,
+    WindowingMethod,
+)
 from sigima.tests.data import (
     create_noisy_signal,
     create_paracetamol_signal,
@@ -232,8 +237,7 @@ def run_signal_computations(
 
     # Test interpolation
     # pylint: disable=protected-access
-    for method_choice_tuple in sigima.params.InterpolationParam.methods:
-        method = method_choice_tuple[0]
+    for method in Interpolation1DMethod:
         for fill_value in (None, 0.0):
             panel.objview.set_current_object(sig1)
             param = sigima.params.InterpolationParam.create(
@@ -245,7 +249,7 @@ def run_signal_computations(
     xmin, xmax = x[0], x[-1]
     for mode, dx, nbpts in (("dx", 0.1, 10), ("nbpts", 0.0, 100)):
         panel.objview.set_current_object(sig1)
-        param = sigima.params.ResamplingParam.create(
+        param = sigima.params.Resampling1DParam.create(
             xmin=xmin, xmax=xmax, mode=mode, dx=dx, nbpts=nbpts
         )
         panel.processor.run_feature("resampling", param)
@@ -299,6 +303,28 @@ def run_image_computations(
     panel.new_object(unifparam, edit=False)
 
     compute_common_operations(panel)
+
+    # Test resampling
+    width, height = ima1.data.shape[1], ima1.data.shape[0]
+    for method, mode, dx, dy, width_param, height_param in (
+        (Interpolation2DMethod.NEAREST, "dxy", 0.5, 0.5, 10, 10),
+        (Interpolation2DMethod.LINEAR, "shape", 0.0, 0.0, width // 2, height // 2),
+        (Interpolation2DMethod.CUBIC, "shape", 0.0, 0.0, width * 2, height // 2),
+    ):
+        panel.objview.set_current_object(ima1)
+        param = sigima.params.Resampling2DParam.create(
+            method=method,
+            mode=mode,
+            dx=dx,
+            dy=dy,
+            width=width_param,
+            height=height_param,
+            xmin=ima1.x0,
+            xmax=ima1.x0 + ima1.width,
+            ymin=ima1.y0,
+            ymax=ima1.y0 + ima1.height,
+        )
+        panel.processor.run_feature("resampling", param)
 
     # Test denoising methods
     param = sigima.params.XYZCalibrateParam.create(axis="z", a=1.2, b=0.1)

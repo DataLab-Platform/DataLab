@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-04 18:54+0200\n"
+"POT-Creation-Date: 2025-09-06 18:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -132,21 +132,41 @@ msgstr "Prévisualiser la grille de ROI avant de la créer"
 msgid "New image processing features:"
 msgstr "Nouvelles fonctionnalités de traitement d'image :"
 
-#, fuzzy
+msgid "New \"2D resampling\" feature:"
+msgstr "Nouvelle fonctionnalité \"Rééchantillonnage 2D\""
+
+msgid "This feature allows to resample 2D images to a new coordinate grid using interpolation."
+msgstr "Cette fonctionnalité permet de rééchantillonner des images 2D sur une nouvelle grille de coordonnées en utilisant l'interpolation."
+
+msgid "It supports two resampling modes: pixel size and output shape."
+msgstr "Elle prend en charge deux modes de rééchantillonnage : la taille des pixels et la forme de sortie."
+
+msgid "Multiple interpolation methods are available: linear, cubic, and nearest neighbor."
+msgstr "Plusieurs méthodes d'interpolation sont disponibles : linéaire, cubique et plus proche voisin."
+
+msgid "The fill value parameter controls how out-of-bounds pixels are handled, with support for numeric values or NaN."
+msgstr "Le paramètre de valeur de remplissage contrôle la façon dont les pixels hors limites sont traités, avec prise en charge des valeurs numériques ou de NaN."
+
+msgid "It is implemented in the `sigima.proc.image.resampling` function (requires Sigima v0.3)."
+msgstr "Elle est implémentée dans la fonction `sigima.proc.image.resampling` (nécessite Sigima v0.3)."
+
+msgid "This adds comprehensive 2D resampling capabilities to complement existing geometric transformation features."
+msgstr "Cela ajoute des capacités de rééchantillonnage 2D complètes pour compléter les fonctionnalités de transformation géométrique existantes."
+
+msgid "This closes [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208) - Add support for image resampling."
+msgstr "Ceci clôture [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208) - Ajout de la prise en charge du rééchantillonnage d'images."
+
 msgid "New \"Frequency domain Gaussian filter\" feature:"
-msgstr "Nouvelle fonctionnalité \"Filtre de fréquence gaussien\""
+msgstr "Nouvelle fonctionnalité \"Filtre gaussien dans le domaine fréquentiel\""
 
-#, fuzzy
 msgid "This feature allows to filter an image in the frequency domain using a Gaussian filter."
-msgstr "Cette fonctionnalité permet de filtrer une image dans le domaine fréquentiel à l'aide d'un filtre gaussien."
+msgstr "Cette fonctionnalité permet de filtrer une image dans le domaine fréquentiel en utilisant un filtre gaussien."
 
-#, fuzzy
 msgid "It is implemented in the `sigima.proc.image.frequency_domain_gaussian_filter` function (requires Sigima v0.3)."
-msgstr "Elle est implémentée dans la fonction `sigima.proc.image.freq_fft` (nécessite Sigima v0.3)"
+msgstr "Elle est implémentée dans la fonction `sigima.proc.image.frequency_domain_gaussian_filter` (nécessite Sigima v0.3)."
 
-#, fuzzy
 msgid "This closes [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Add Gaussian frequency filter for images."
-msgstr "Ceci clôture le ticket [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images"
+msgstr "Ceci clôture [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images."
 
 msgid "New \"Erase area\" feature:"
 msgstr "Nouvelle fonctionnalité \"Gommer une zone\" :"
