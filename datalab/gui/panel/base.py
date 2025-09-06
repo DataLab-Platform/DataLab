@@ -15,7 +15,7 @@ import os
 import os.path as osp
 import re
 import warnings
-from typing import TYPE_CHECKING, Any, Generic, Literal, Type
+from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
@@ -316,25 +316,14 @@ class SaveToDirectoryParam(gds.DataSet):
 
     Args:
         title: Dialog title
+        objs: List of objects to be saved
+        extensions: List of available file extensions (without leading dot)
     """
 
-    def __init__(self, title: str | None = None):
+    def __init__(self, title: str, objs: list[TypeObj], extensions: list[str]):
         super().__init__(title, comment="")
-        self._panel: BaseDataPanel | None = None
-
-    def set_panel(self, panel: BaseDataPanel) -> None:
-        """Set panel reference.
-
-        Args:
-            panel: Signal or image panel.
-        """
-        self._panel = panel
-
-    def define_extension_selection(self, _item=None, _value=None):
-        """Define extension selection from panel IO registry."""
-        assert self._panel is not None
-        extensions = get_file_extensions(self._panel.IO_REGISTRY.get_write_filters())
-        return [("." + extension, "." + extension, None) for extension in extensions]
+        self.__objs = objs
+        self.__extensions = extensions
 
     def on_button_click(
         self: SaveToDirectoryParam,
@@ -389,22 +378,16 @@ class SaveToDirectoryParam(gds.DataSet):
         )
         NonModalInfoDialog(parent, "Pattern help", text).show()
 
-    def update_filenames_and_preview(self, _item=None, _value=None) -> None:
-        """Update filenames and preview."""
-        if self._panel is None:
-            # Panel is not yet attached.
-            return
-        objs = self._panel.objview.get_sel_objects(include_groups=True)
-        assert self.basename is not None
-        basename: str = self.basename
-        assert self.extension is not None
-        self.filenames = format_basenames(objs, basename + self.extension)
+    def get_extension_choices(self, _item=None, _value=None):
+        """Return list of available extensions for choice item."""
+        return [("." + ext, "." + ext, None) for ext in self.__extensions]
 
-        # Ensure all filenames are unique.
-        used: set[str] = set()
-        for i, filename in enumerate(self.filenames):
+    def build_filenames(self, objs: list[TypeObj]) -> list[str]:
+        """Build filenames according to current parameters."""
+        filenames = format_basenames(objs, self.basename + self.extension)
+        used: set[str] = set()  # Ensure all filenames are unique.
+        for i, filename in enumerate(filenames):
             root, ext = osp.splitext(filename)
-            assert self.directory is not None
             filepath = osp.join(self.directory, filename)
             k = 1
             while (filename in used) or (not self.overwrite and osp.exists(filepath)):
@@ -412,9 +395,19 @@ class SaveToDirectoryParam(gds.DataSet):
                 filepath = osp.join(self.directory, filename)
                 k += 1
             used.add(filename)
-            self.filenames[i] = filename
+            filenames[i] = filename
+        return filenames
 
-        self.preview = "\n".join(f"{name}" for name in self.filenames)
+    def generate_filepath_obj_pairs(
+        self, objs: list[TypeObj]
+    ) -> Generator[tuple[str, TypeObj], None, None]:
+        """Iterate over (filepath, object) pairs to be saved."""
+        for filename, obj in zip(self.build_filenames(objs), objs):
+            yield osp.join(self.directory, filename), obj
+
+    def update_preview(self, _item=None, _value=None) -> None:
+        """Update preview."""
+        self.preview = "\n".join(f"{fn}" for fn in self.build_filenames(self.__objs))
 
     directory = gds.DirectoryItem(_("Directory"), default=Conf.main.base_dir.get())
 
@@ -422,21 +415,20 @@ class SaveToDirectoryParam(gds.DataSet):
         _("Basename pattern"),
         default="{title}",
         help=_("Python format string. See description for details."),
-    ).set_prop("display", callback=update_filenames_and_preview)
+    ).set_prop("display", callback=update_preview)
 
     help = gds.ButtonItem("Help", on_button_click, "MessageBoxInformation").set_pos(
         col=1
     )
 
-    extension = gds.ChoiceItem(
-        _("Extension"), define_extension_selection, default=".csv"
-    ).set_prop("display", callback=update_filenames_and_preview)
+    extension = gds.ChoiceItem(_("Extension"), get_extension_choices).set_prop(
+        "display", callback=update_preview
+    )
 
     overwrite = gds.BoolItem(
         _("Overwrite"), default=False, help=_("Overwrite existing files")
     ).set_pos(col=1)
 
-    filenames: list[str] = []
     preview = gds.TextItem(_("Preview"), default=None).set_prop(
         "display", readonly=True
     )
@@ -1314,21 +1306,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         edit = param is None
         if edit:
-            param = SaveToDirectoryParam(_("Save to directory"))
-        param.set_panel(self)
+            extensions = get_file_extensions(self.IO_REGISTRY.get_write_filters())
+            param = SaveToDirectoryParam(_("Save to directory"), objs, extensions)
         if edit and not param.edit(parent=self.parentWidget()):
             return
 
         Conf.main.base_dir.set(param.directory)
 
         with create_progress_bar(self, _("Saving..."), max_=len(objs)) as progress:
-            for i, (obj, filename) in enumerate(zip(objs, param.filenames)):
+            for i, (path, obj) in enumerate(param.generate_filepath_obj_pairs(objs)):
                 progress.setValue(i + 1)
                 if progress.wasCanceled():
                     break
-                filepath = osp.join(param.directory, filename)
-                with qt_try_loadsave_file(self.parentWidget(), filepath, "save"):
-                    self.__save_to_file(obj, filepath)
+                with qt_try_loadsave_file(self.parentWidget(), path, "save"):
+                    self.__save_to_file(obj, path)
 
     def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
         """Handle dropped files
