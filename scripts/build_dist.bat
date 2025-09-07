@@ -32,8 +32,8 @@ copy %REPODIR%\%MODNAME%\data\doc\*.pdf %MODNAME%\data\doc
 popd
 
 if not exist %REPODIR%\dist ( mkdir %REPODIR%\dist )
-copy %CLONEDIR%\dist\%LIBNAME%-%DATALAB_VERSION%*.whl %REPODIR%\dist
-copy %CLONEDIR%\dist\%LIBNAME%-%DATALAB_VERSION%*.tar.gz %REPODIR%\dist
+copy %CLONEDIR%\dist\*.whl %REPODIR%\dist
+copy %CLONEDIR%\dist\*.tar.gz %REPODIR%\dist
 
 rmdir /s /q %CLONEDIR%
 call %FUNC% EndOfScript
