@@ -22,7 +22,7 @@ from sigima.objects import (
     ImageObj,
     ImageROI,
     NormalDistributionParam,
-    PoissonDistributionParam,
+    PoissonDistribution2DParam,
     ROI2DParam,
     UniformDistributionParam,
 )
@@ -421,7 +421,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(
             sigima_image.add_poisson_noise,
             _("Add Poisson noise"),
-            PoissonDistributionParam,
+            PoissonDistribution2DParam,
         )
         self.register_1_to_1(
             sigima_image.add_uniform_noise,

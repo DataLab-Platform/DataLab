@@ -18,7 +18,7 @@ import sigima.proc.signal as sigima_signal
 from guidata.qthelpers import exec_dialog
 from sigima.objects import (
     NormalDistributionParam,
-    PoissonDistributionParam,
+    PoissonDistribution1DParam,
     ROI1DParam,
     SignalObj,
     SignalROI,
@@ -218,7 +218,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.add_poisson_noise,
             _("Add Poisson noise"),
-            PoissonDistributionParam,
+            PoissonDistribution1DParam,
         )
         self.register_1_to_1(
             sigima_signal.add_uniform_noise,
