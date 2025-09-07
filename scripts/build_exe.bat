@@ -27,28 +27,28 @@ pushd %CLONEDIR%
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
 set RESPATH=%CLONEDIR%\resources
 for %%s in (16 24 32 48 128 256) do (
-  %INKSCAPE_PATH% "%RESPATH%\%LIBNAME%.svg" -o "%RESPATH%\tmp-%%s.png" -w %%s -h %%s
+  %INKSCAPE_PATH% "%RESPATH%\DataLab.svg" -o "%RESPATH%\tmp-%%s.png" -w %%s -h %%s
 )
-magick "%RESPATH%\tmp-*.png" "%RESPATH%\%LIBNAME%.ico"
+magick "%RESPATH%\tmp-*.png" "%RESPATH%\DataLab.ico"
 del "%RESPATH%\tmp-*.png"
 
 @REM Building executable
-pyinstaller %LIBNAME%.spec --noconfirm --clean
+pyinstaller DataLab.spec --noconfirm --clean
 
 @REM Windows 7 SP1 compatibility fix
-copy "%RESPATH%\api-ms-win-core-path-l1-1-0.dll" "dist\%LIBNAME%\_internal" /Y
+copy "%RESPATH%\api-ms-win-core-path-l1-1-0.dll" "dist\DataLab\_internal" /Y
 
 @REM Zipping executable
 cd dist
-set ZIPNAME=%LIBNAME%-v%VERSION%_exe.zip
-"C:\Program Files\7-Zip\7z.exe" a -mx1 "%ZIPNAME%" %LIBNAME%
+set ZIPNAME=DataLab-v%VERSION%_exe.zip
+"C:\Program Files\7-Zip\7z.exe" a -mx1 "%ZIPNAME%" DataLab
 popd
 
 if not exist %REPODIR%\dist ( mkdir %REPODIR%\dist )
 @REM Move zipped executable to dist directory
 move %CLONEDIR%\dist\%ZIPNAME% %REPODIR%\dist
 @REM Move generated folder to dist directory
-move %CLONEDIR%\dist\%LIBNAME% %REPODIR%\dist
+move %CLONEDIR%\dist\DataLab %REPODIR%\dist
 
 rmdir /s /q %CLONEDIR%
 call %FUNC% EndOfScript

@@ -24,9 +24,9 @@ magick "temp.png" bmp3:"%WIXPATH%\banner.bmp"
 del "temp.png"
 
 echo Generating .wxs file for MSI installer...
-%PYTHON% "%WIXPATH%\makewxs.py" %LIBNAME% %VERSION%
+%PYTHON% "%WIXPATH%\makewxs.py" DataLab %VERSION%
 
 echo Building MSI installer...
-wix build "%WIXPATH%\%LIBNAME%-%VERSION%.wxs" -ext WixToolset.UI.wixext
+wix build "%WIXPATH%\DataLab-%VERSION%.wxs" -ext WixToolset.UI.wixext
 
 call %FUNC% EndOfScript
