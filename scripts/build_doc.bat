@@ -25,7 +25,7 @@ for %%L in (fr en) do (
     @REM -------------------------------------------------------------------------------
     @REM Create dummy PDF file, otherwise the PDF menu entry in "?" menu
     @REM won't be visible in the automatic screenshot
-    echo Dummy PDF file > %MODNAME%\data\doc\%LIBNAME%_%%L.pdf
+    echo Dummy PDF file > %MODNAME%\data\doc\DataLab_%%L.pdf
     @REM -------------------------------------------------------------------------------
     set LANG=%%L
     %PYTHON% doc/update_screenshots.py
@@ -33,12 +33,12 @@ for %%L in (fr en) do (
     sphinx-build -b latex -D language=%%L doc build\doc
     cd build\doc
     echo Building PDF documentation for %%L...
-    pdflatex -interaction=nonstopmode -quiet %LIBNAME%.tex
+    pdflatex -interaction=nonstopmode -quiet DataLab.tex
     @REM Build again to fix table of contents (workaround)
-    pdflatex -interaction=nonstopmode -quiet %LIBNAME%.tex
+    pdflatex -interaction=nonstopmode -quiet DataLab.tex
     echo Done.
     cd ..\..
-    move /Y build\doc\%LIBNAME%.pdf %MODNAME%\data\doc\%LIBNAME%_%%L.pdf
+    move /Y build\doc\DataLab.pdf %MODNAME%\data\doc\DataLab_%%L.pdf
 )
 
 @REM explorer %MODNAME%\data\doc
