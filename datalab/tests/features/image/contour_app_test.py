@@ -7,6 +7,7 @@ Contour finding application test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+import sigima.enums
 import sigima.params
 from sigima.objects import NewImageParam
 from sigima.tests.data import create_multigaussian_image
@@ -21,7 +22,7 @@ def test_contour_app():
     newparam = NewImageParam.create(height=200, width=200)
     with datalab_test_app_context() as win:
         panel = win.imagepanel
-        for shape in ("polygon", "circle", "ellipse"):
+        for shape in sigima.enums.ContourShape:
             ima1 = create_multigaussian_image(newparam)
             ima1.set_metadata_option("colormap", "gray")
             panel.add_object(ima1)

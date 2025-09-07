@@ -7,6 +7,7 @@ Contour finding application test with Fabry-Perot images
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+import sigima.enums
 import sigima.objects
 import sigima.params
 from sigima.tests.data import get_test_image
@@ -19,7 +20,7 @@ def test_contour_app() -> None:
     with datalab_test_app_context() as win:
         panel = win.imagepanel
 
-        shape = "circle"
+        shape = sigima.enums.ContourShape.CIRCLE
 
         ima1 = get_test_image("fabry-perot1.jpg")
         ima1.set_metadata_option("colormap", "gray")
