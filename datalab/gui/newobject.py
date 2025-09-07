@@ -28,14 +28,12 @@ from sigima.objects import (
     ImageObj,
     NewImageParam,
     NewSignalParam,
-    NormalDistributionParam,
-    PoissonDistributionParam,
     SignalObj,
-    UniformDistributionParam,
     create_signal,
 )
 from sigima.objects import create_image_from_param as create_image_headless
 from sigima.objects import create_signal_from_param as create_signal_headless
+from sigima.objects.base import BaseProcParam
 from sigima.objects.signal import DEFAULT_TITLE as SIGNAL_DEFAULT_TITLE
 
 from datalab.config import _
@@ -163,10 +161,7 @@ def create_image_gui(
                 param.a = np.iinfo(param.dtype.value).max / 2.0
             except ValueError:
                 param.a = 10.0
-    elif isinstance(
-        param,
-        (NormalDistributionParam, PoissonDistributionParam, UniformDistributionParam),
-    ):
+    elif isinstance(param, BaseProcParam):
         param.set_from_datatype(param.dtype.value)
 
     if edit:
