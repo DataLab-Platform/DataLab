@@ -18,7 +18,9 @@ REM ======================================================
 
 :GetLibName
     pushd %~dp0..
-    for %%I in (.) do set %1=%%~nxI
+    powershell -Command "(Get-Content 'pyproject.toml' | Select-String '^name = ') -replace '^name = \"', '' -replace '\"$', ''" > _tmp_.txt
+    set /p %1=<_tmp_.txt
+    del _tmp_.txt
     popd
     goto:eof
 
