@@ -10,14 +10,9 @@ Scenarios common functions
 from __future__ import annotations
 
 import numpy as np
+import sigima.enums
 import sigima.objects
 import sigima.params
-from sigima.enums import (
-    BorderMode,
-    Interpolation1DMethod,
-    Interpolation2DMethod,
-    WindowingMethod,
-)
 from sigima.tests.data import (
     create_noisy_signal,
     create_paracetamol_signal,
@@ -114,8 +109,8 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.run_feature("clip", param)
 
     param = sigima.params.NormalizeParam()
-    for method_value, _method_name in param.methods:
-        param.method = method_value
+    for method in sigima.enums.NormalizationMethod:
+        param.method = method
         panel.processor.run_feature("normalize", param)
 
     panel.objview.select_objects((3, 7))
@@ -178,7 +173,7 @@ def run_signal_computations(
     noiseobj2 = noiseobj1.copy()
     win.add_object(noiseobj2)
     param = sigima.params.WindowingParam()
-    for method in WindowingMethod:
+    for method in sigima.enums.WindowingMethod:
         panel.objview.set_current_object(noiseobj2)
         param.method = method
         panel.processor.run_feature("apply_window", param)
@@ -237,7 +232,7 @@ def run_signal_computations(
 
     # Test interpolation
     # pylint: disable=protected-access
-    for method in Interpolation1DMethod:
+    for method in sigima.enums.Interpolation1DMethod:
         for fill_value in (None, 0.0):
             panel.objview.set_current_object(sig1)
             param = sigima.params.InterpolationParam.create(
@@ -305,11 +300,11 @@ def run_image_computations(
     compute_common_operations(panel)
 
     # Test resampling
-    width, height = ima1.data.shape[1], ima1.data.shape[0]
+    w, h = ima1.data.shape[1], ima1.data.shape[0]
     for method, mode, dx, dy, width_param, height_param in (
-        (Interpolation2DMethod.NEAREST, "dxy", 0.5, 0.5, 10, 10),
-        (Interpolation2DMethod.LINEAR, "shape", 0.0, 0.0, width // 2, height // 2),
-        (Interpolation2DMethod.CUBIC, "shape", 0.0, 0.0, width * 2, height // 2),
+        (sigima.enums.Interpolation2DMethod.NEAREST, "dxy", 0.5, 0.5, 10, 10),
+        (sigima.enums.Interpolation2DMethod.LINEAR, "shape", 0.0, 0.0, w // 2, h // 2),
+        (sigima.enums.Interpolation2DMethod.CUBIC, "shape", 0.0, 0.0, w * 2, h // 2),
     ):
         panel.objview.set_current_object(ima1)
         param = sigima.params.Resampling2DParam.create(
@@ -424,8 +419,8 @@ def run_image_computations(
     panel.processor.run_feature("flipv")
 
     param = sigima.params.RotateParam.create(angle=5.0)
-    for boundary in BorderMode:
-        if boundary is BorderMode.MIRROR:
+    for boundary in sigima.enums.BorderMode:
+        if boundary is sigima.enums.BorderMode.MIRROR:
             continue
         param.mode = boundary
         panel.processor.run_feature("rotate", param)
