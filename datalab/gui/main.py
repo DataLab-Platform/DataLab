@@ -682,7 +682,15 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             self.move(QC.QPoint(posx, posy))
         size = Conf.main.window_size.get(None)
         if size is None:
-            size = 1200, 700
+            sgeo = self.screen().availableGeometry()
+            sw, sh = sgeo.width(), sgeo.height()
+            w = max(1200, min(1800, int(sw * 0.8)))
+            h = max(700, min(1100, int(sh * 0.8)))
+            size = (w, h)
+            if pos is None:
+                cx = sgeo.x() + (sw - w) // 2
+                cy = sgeo.y() + (sh - h) // 2
+                self.move(QC.QPoint(cx, cy))
         width, height = size
         self.resize(QC.QSize(width, height))
         if pos is not None and size is not None:
