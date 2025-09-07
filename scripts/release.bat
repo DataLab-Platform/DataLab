@@ -8,16 +8,16 @@ call %FUNC% UsePython
 call %FUNC% GetVersion VERSION
 
 echo ===========================================================================
-echo Making %LIBNAME% v%VERSION% release with %WINPYDIRBASE%
+echo Making DataLab v%VERSION% release with %WINPYDIRBASE%
 echo ===========================================================================
 
-set destdir=releases\%LIBNAME%-v%VERSION%-release
+set destdir=releases\DataLab-v%VERSION%-release
 if exist %destdir% ( rmdir /s /q %destdir% )
 mkdir %destdir%
 move "dist\*.whl" %destdir%
 move "dist\*.gz" %destdir%
 move "dist\*.zip" %destdir%
-move "wix\%LIBNAME%-%VERSION%.msi" %destdir%
+move "wix\DataLab-%VERSION%.msi" %destdir%
 copy "CHANGELOG.md" %destdir%
 copy %MODNAME%\data\doc\*.pdf %destdir%
 explorer %destdir%
