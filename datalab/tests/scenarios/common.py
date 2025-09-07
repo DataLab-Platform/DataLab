@@ -163,9 +163,9 @@ def run_signal_computations(
         ("bandpass", sigima.params.BandPassFilterParam),
         ("bandstop", sigima.params.BandStopFilterParam),
     ):
-        for method_value, _method_name in paramclass.methods:
+        for method in sigima.enums.FrequencyFilterMethod:
             panel.objview.set_current_object(sig1)
-            param = paramclass.create(method=method_value, cut0=2.0, cut1=4.0)
+            param = paramclass.create(method=method, cut0=2.0, cut1=4.0)
             param.update_from_obj(sig1)  # Use default cut-off frequencies
             panel.processor.run_feature(filter_func_name, param)
 
