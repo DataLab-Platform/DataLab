@@ -313,18 +313,27 @@ class NonModalInfoDialog(QW.QMessageBox):
 
 
 class SaveToDirectoryGUIParam(gds.DataSet):
-    """Save to directory parameters.
+    """Save to directory parameters"""
 
-    Args:
-        title: Dialog title
-        objs: List of objects to be saved
-        extensions: List of available file extensions (without leading dot)
-    """
-
-    def __init__(self, title: str, objs: list[TypeObj], extensions: list[str]):
-        super().__init__(title, comment="")
-        self.__objs = objs
-        self.__extensions = extensions
+    def __init__(
+        self,
+        title: str | None = None,
+        comment: str | None = None,
+        icon: str = "",
+        readonly: bool = False,
+        skip_defaults: bool = False,
+        objs: list[TypeObj] | None = None,
+        extensions: list[str] | None = None,
+    ):
+        super().__init__(
+            title=title,
+            comment=comment,
+            icon=icon,
+            readonly=readonly,
+            skip_defaults=skip_defaults,
+        )
+        self.__objs = objs or []
+        self.__extensions = extensions or []
 
     def on_button_click(
         self: SaveToDirectoryGUIParam,
@@ -1307,7 +1316,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         if param is None:
             extensions = get_file_extensions(self.IO_REGISTRY.get_write_filters())
-            guiparam = SaveToDirectoryGUIParam(_("Save to directory"), objs, extensions)
+            guiparam = SaveToDirectoryGUIParam(
+                title=_("Save to directory"), objs=objs, extensions=extensions
+            )
             if not guiparam.edit(parent=self.parentWidget()):
                 return
             param = SaveToDirectoryParam()
