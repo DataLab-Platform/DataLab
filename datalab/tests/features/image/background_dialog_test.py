@@ -31,7 +31,7 @@ def test_image_background_selection() -> None:
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
         exec_dialog(dlg)
         if execenv.unattended:
-            dlg._test_compute_background()
+            dlg.test_compute_background()
         execenv.print(f"background: {dlg.get_background()}")
         execenv.print(f"rect coords: {dlg.get_rect_coords()}")
         # Check background value:
@@ -48,7 +48,7 @@ def test_image_offset_correction_with_background_dialog() -> None:
         ok = exec_dialog(dlg)
         if ok:
             if execenv.unattended:
-                dlg._test_compute_background()
+                dlg.test_compute_background()
             param = sigima.objects.ROI2DParam()
             # pylint: disable=unbalanced-tuple-unpacking
             ix0, iy0, ix1, iy1 = i1.physical_to_indices(dlg.get_rect_coords())

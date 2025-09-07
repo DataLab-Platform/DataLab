@@ -45,7 +45,7 @@ class ImageBackgroundDialog(PlotDialog):
         self.__image = image.copy()
         self.__setup_dialog()
 
-    def _test_compute_background(self) -> None:
+    def test_compute_background(self) -> None:
         """Method to test background computation."""
         # Instead of waiting for Qt events, directly test the computation method
         # by simulating what RangeComputation2d would do
