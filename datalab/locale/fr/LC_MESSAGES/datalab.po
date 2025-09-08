@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-08 21:20+0200\n"
+"POT-Creation-Date: 2025-09-09 12:43+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -528,6 +528,12 @@ msgstr "Détection automatique de pics 2D"
 
 msgid "Blob detection"
 msgstr "Détection de taches"
+
+msgid "Sum columns"
+msgstr "Sommer les colonnes"
+
+msgid "Sum rows"
+msgstr "Sommer les lignes"
 
 msgid "Resize"
 msgstr "Redimensionner"

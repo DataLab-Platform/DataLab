@@ -1244,8 +1244,15 @@ class ImageActionHandler(BaseActionHandler):
                 self.action_for("blob_doh")
                 self.action_for("blob_log")
                 self.action_for("blob_opencv")
-
-            self.action_for("sum_pixels_along_axis", separator=True)
+            self.new_action(
+                _("Sum columns"),
+                # icon_name="sum_columns.svg",
+                separator=True,
+            )
+            self.new_action(
+                _("Sum rows"),
+                # icon_name="sum_rows.svg"
+            )
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
