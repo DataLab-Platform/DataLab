@@ -476,17 +476,19 @@
         {
             "label": "🧹 Clean Up",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
             "args": [
-                "/c",
-                "clean_up.bat",
+                "scripts/run_with_env.py",
+                "${command:python.interpreterPath}",
+                "-m",
+                "guidata.utils.cleanup",
             ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}"
             },
             "group": {
                 "kind": "build",
-                "isDefault": true,
+                "isDefault": true
             },
             "presentation": {
                 "echo": true,
@@ -505,7 +507,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
-                    "RELEASE": "1",
+                    // "RELEASE": "1",
                     "UNATTENDED": "1",
                 },
                 "statusbar": {
@@ -571,7 +573,7 @@
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
-                    "RELEASE": "1",
+                    // "RELEASE": "1",
                     "UNATTENDED": "1",
                 },
                 "statusbar": {
@@ -778,7 +780,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
-                    "RELEASE": "1",
+                    // "RELEASE": "1",
                     "UNATTENDED": "1",
                 },
                 "statusbar": {
@@ -820,7 +822,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
-                    "RELEASE": "1",
+                    // "RELEASE": "1",
                     "UNATTENDED": "1",
                 },
             },

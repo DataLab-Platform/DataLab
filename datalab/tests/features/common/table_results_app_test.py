@@ -9,7 +9,7 @@ Result properties application test
 from __future__ import annotations
 
 import numpy as np
-from sigima.objects import NormalDistributionParam
+from sigima.objects import NormalDistribution1DParam
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata.table_adapter import TableAdapter
@@ -30,7 +30,7 @@ def test_table_results():
     obj2 = create_image_with_table_results()
     with datalab_test_app_context() as win:
         panel = win.signalpanel
-        noiseparam = NormalDistributionParam()
+        noiseparam = NormalDistribution1DParam()
         for sigma in np.linspace(0.0, 0.5, 11):
             noiseparam.sigma = sigma
             sig = test_data.create_noisy_signal(noiseparam=noiseparam)

@@ -36,14 +36,21 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ruff pytest
         pip install PyQt5
-        pip install .
         if [ "${{ github.ref_name }}" = "develop" ]; then
-           pip uninstall -y guidata
+           # Install development versions of key dependencies first
            pip install git+https://github.com/PlotPyStack/guidata.git@develop
-           pip uninstall -y plotpy
            pip install git+https://github.com/PlotPyStack/plotpy.git@develop
-           pip uninstall -y sigima
            pip install git+https://github.com/DataLab-Platform/Sigima.git@develop
+           # Install tomli for TOML parsing (safe if already present)
+           pip install tomli
+           # Extract dependencies and save to file, then install
+           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima'])]; open('deps.txt','w').write('\n'.join(deps))"
+           pip install -r deps.txt
+           # Install DataLab without dependencies
+           pip install --no-deps .
+        else
+           # Install from PyPI normally for main branch
+           pip install .
         fi
     - name: Lint with Ruff
       run: ruff check --output-format=github datalab

@@ -198,7 +198,9 @@ def run_signal_computations(
     roi = sigima.objects.create_signal_roi([i1, i2], indices=True)
     panel.processor.compute_roi_extraction(roi)
 
-    sig = create_noisy_signal(sigima.objects.NormalDistributionParam.create(sigma=5.0))
+    sig = create_noisy_signal(
+        sigima.objects.NormalDistribution1DParam.create(sigma=5.0)
+    )
     panel.add_object(sig)
     param = sigima.params.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
