@@ -529,6 +529,18 @@ msgstr "Détection automatique de pics 2D"
 msgid "Blob detection"
 msgstr "Détection de taches"
 
+msgid "Horizontal projection"
+msgstr "Projection horizontale"
+
+msgid "Sum pixels along vertical axis"
+msgstr "Somme des pixels le long de l'axe vertical"
+
+msgid "Vertical projection"
+msgstr "Projection verticale"
+
+msgid "Sum pixels along horizontal axis"
+msgstr "Somme des pixels le long de l'axe horizontal"
+
 msgid "Resize"
 msgstr "Redimensionner"
 

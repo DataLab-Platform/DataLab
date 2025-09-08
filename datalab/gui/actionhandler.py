@@ -1244,8 +1244,19 @@ class ImageActionHandler(BaseActionHandler):
                 self.action_for("blob_doh")
                 self.action_for("blob_log")
                 self.action_for("blob_opencv")
-
-            self.action_for("sum_pixels_along_axis", separator=True)
+            #! Note projection onto horizontal axis means summing along vertical axis.
+            self.new_action(
+                _("Horizontal projection"),
+                # icon_name="horizontal_projection.svg",
+                tip=_("Sum pixels along vertical axis"),
+                separator=True,
+            )
+            #! Note projection onto vertical axis means summing along horizontal axis.
+            self.new_action(
+                _("Vertical projection"),
+                # icon_name="vertical_projection.svg",
+                tip=_("Sum pixels along horizontal axis"),
+            )
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
