@@ -41,9 +41,11 @@ jobs:
            pip install git+https://github.com/PlotPyStack/guidata.git@develop
            pip install git+https://github.com/PlotPyStack/plotpy.git@develop
            pip install git+https://github.com/DataLab-Platform/Sigima.git@develop
-           # Install remaining dependencies (parsed from pyproject.toml, excluding PlotPyStack packages)
+           # Install tomli for TOML parsing (safe if already present)
            pip install tomli
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima'])]; print(' '.join(deps))" | xargs pip install
+           # Extract dependencies and save to file, then install
+           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima'])]; open('deps.txt','w').write('\n'.join(deps))"
+           pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
         else
