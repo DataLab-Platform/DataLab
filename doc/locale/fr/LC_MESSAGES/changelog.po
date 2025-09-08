@@ -297,6 +297,15 @@ msgstr "Bande passante à -3dB :"
 msgid "Enhanced to support passband bandwidth in addition to baseband bandwidth."
 msgstr "Amélioration de la prise en charge de la bande passante en plus de la bande de base."
 
+msgid "New image analysis features:"
+msgstr "Nouvelles fonctionnalités d'analyse de l'image :"
+
+msgid "Horizontal and vertical projections."
+msgstr "Projections horizontale et verticale."
+
+msgid "This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns."
+msgstr "Ceci clôture [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Paramètres / Somme des pixels, somme des lignes de pixels, somme des colonnes de pixels."
+
 msgid "New 2D ramp image generator."
 msgstr "Nouveau générateur d'image de type rampe 2D."
 

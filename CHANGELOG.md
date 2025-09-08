@@ -100,6 +100,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Bandwidth at -3dB:
     * Enhanced to support passband bandwidth in addition to baseband bandwidth.
 
+* New image analysis features:
+  * Horizontal and vertical projections.
+    * This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns.
+
 * New 2D ramp image generator.
   * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).
 
