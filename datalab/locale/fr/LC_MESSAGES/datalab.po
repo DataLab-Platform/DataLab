@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-06 18:26+0200\n"
+"POT-Creation-Date: 2025-09-08 21:20+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -341,6 +341,27 @@ msgstr "Ajustement Voigt"
 
 msgid "Multi-Gaussian fit"
 msgstr "Ajustement multi-gaussien"
+
+msgid "Multi-Lorentzian fit"
+msgstr "Ajustement multi-lorentzien"
+
+msgid "Planckian fit"
+msgstr "Ajustement planckien"
+
+msgid "Planckian (blackbody radiation) fitting"
+msgstr "Ajustement planckien (rayonnement du corps noir)"
+
+msgid "Two half-Gaussian fit"
+msgstr "Ajustement de deux demi-Gaussiennes"
+
+msgid "Asymmetric peak fitting with two half-Gaussians"
+msgstr "Ajustement de pics asymétriques avec deux demi-Gaussiennes"
+
+msgid "Double exponential fit"
+msgstr "Ajustement double exponentiel"
+
+msgid "Double exponential decay fitting"
+msgstr "Ajustement de double exponentielle décroissante"
 
 msgid "Exponential fit"
 msgstr "Ajustement exponentiel"
@@ -2206,6 +2227,42 @@ msgstr "Fréquence"
 msgid "Continuous component"
 msgstr "Composante continue"
 
+msgid "Peak wavelength"
+msgstr "Longueur d'onde de pic"
+
+msgid "Width factor"
+msgstr "Facteur de largeur"
+
+msgid "Left amplitude"
+msgstr "Amplitude gauche"
+
+msgid "Right amplitude"
+msgstr "Amplitude droite"
+
+msgid "Left width"
+msgstr "Largeur gauche"
+
+msgid "Right width"
+msgstr "Largeur droite"
+
+msgid "Center"
+msgstr "Centre"
+
+msgid "Left baseline"
+msgstr "Ligne de base gauche"
+
+msgid "Right baseline"
+msgstr "Ligne de base droite"
+
+msgid "Center position"
+msgstr "Position du centre"
+
+msgid "Left time constant"
+msgstr "Constante de temps gauche"
+
+msgid "Right time constant"
+msgstr "Constante de temps droite"
+
 msgid "Collapse all"
 msgstr "Replier tout"
 
@@ -2597,4 +2654,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

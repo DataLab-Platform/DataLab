@@ -66,6 +66,28 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * In interactive tools, the centroid is now computed using the `measure.centroid` function from `scikit-image`, which provides a better compromise between speed and accuracy and is suitable for real-time applications.
 
 * New signal processing features:
+  * **Enhanced curve fitting functions**: Significantly improved curve fitting capabilities with advanced parameter estimation:
+    * **Intelligent initial parameter estimation**: All curve fitting functions now use advanced algorithms from the Sigima library for automatic initial parameter estimation, resulting in:
+      * More robust convergence to optimal solutions
+      * Reduced fitting failures and improved success rates
+      * Better handling of noisy or challenging experimental data
+      * Faster convergence with fewer iterations required
+    * **Enhanced fitting algorithms**: Improved implementations for all curve fitting types:
+      * Gaussian, Lorentzian, and Voigt profile fitting with better peak detection
+      * Exponential and double exponential fitting with enhanced decay/growth parameter estimation
+      * Sinusoidal fitting with FFT-based frequency estimation for improved accuracy
+      * Planckian (blackbody) fitting with physics-correct parameter bounds
+      * Asymmetric peak fitting (two-half Gaussian) with independent left/right parameters
+      * CDF (Cumulative Distribution Function) fitting for statistical analysis
+    * **Improved user experience**: The curve fitting dialogs now provide:
+      * More reliable initial parameter guesses reducing manual adjustment needs
+      * Better parameter bounds preventing optimization failures
+      * Enhanced stability for difficult-to-fit datasets
+    * **Technical improvements**: All fitting functions benefit from:
+      * Automatic fallback to manual estimation if advanced algorithms fail
+      * Consistent error handling and parameter validation
+      * Optimized performance with reduced computation time
+      * Full integration with DataLab's signal processing workflow
   * Zero padding:
     * Enhanced feature to support both prepending and appending zeros.
     * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).

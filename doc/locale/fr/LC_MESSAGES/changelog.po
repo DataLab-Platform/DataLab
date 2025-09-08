@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 18:57+0200\n"
+"POT-Creation-Date: 2025-09-08 21:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -200,6 +200,72 @@ msgstr "Dans les outils interactifs, le barycentre est désormais calculé en ut
 
 msgid "New signal processing features:"
 msgstr "Nouvelles fonctionnalités de traitement de signal :"
+
+msgid "**Enhanced curve fitting functions**: Significantly improved curve fitting capabilities with advanced parameter estimation:"
+msgstr "**Fonctions de courbe de fitting améliorées** : Capacités de fitting de courbes considérablement améliorées avec une estimation avancée des paramètres :"
+
+msgid "**Intelligent initial parameter estimation**: All curve fitting functions now use advanced algorithms from the Sigima library for automatic initial parameter estimation, resulting in:"
+msgstr "**Estimation intelligente des paramètres initiaux** : Toutes les fonctions de fitting de courbes utilisent désormais des algorithmes avancés de la bibliothèque Sigima pour l'estimation automatique des paramètres initiaux, ce qui entraîne :"
+
+msgid "More robust convergence to optimal solutions"
+msgstr "Une convergence plus robuste vers des solutions optimales"
+
+msgid "Reduced fitting failures and improved success rates"
+msgstr "Réduction des échecs de fitting et amélioration des taux de réussite"
+
+msgid "Better handling of noisy or challenging experimental data"
+msgstr "Meilleure gestion des données expérimentales bruitées ou difficiles"
+
+msgid "Faster convergence with fewer iterations required"
+msgstr "Convergence plus rapide avec moins d'itérations requises"
+
+msgid "**Enhanced fitting algorithms**: Improved implementations for all curve fitting types:"
+msgstr "**Algorithmes de fitting améliorés** : Implémentations améliorées pour tous les types de fitting de courbes :"
+
+msgid "Gaussian, Lorentzian, and Voigt profile fitting with better peak detection"
+msgstr "Ajustement de profils gaussiens, lorentziens et Voigt avec une meilleure détection des pics"
+
+msgid "Exponential and double exponential fitting with enhanced decay/growth parameter estimation"
+msgstr "Ajustement exponentiel et double exponentiel avec une estimation améliorée des paramètres de décroissance/croissance"
+
+msgid "Sinusoidal fitting with FFT-based frequency estimation for improved accuracy"
+msgstr "Ajustement sinusoïdal avec une estimation de fréquence basée sur la FFT pour une précision améliorée"
+
+msgid "Planckian (blackbody) fitting with physics-correct parameter bounds"
+msgstr "Ajustement planckien (corps noir) avec des limites de paramètres correctes sur le plan physique"
+
+msgid "Asymmetric peak fitting (two-half Gaussian) with independent left/right parameters"
+msgstr "Ajustement de pics asymétriques (deux moitiés gaussiennes) avec des paramètres gauche/droite indépendants"
+
+msgid "CDF (Cumulative Distribution Function) fitting for statistical analysis"
+msgstr "Ajustement de la fonction de distribution cumulative (CDF) pour l'analyse statistique"
+
+msgid "**Improved user experience**: The curve fitting dialogs now provide:"
+msgstr "**Amélioration de l'expérience utilisateur** : Les boîtes de dialogue de fitting de courbes offrent désormais :"
+
+msgid "More reliable initial parameter guesses reducing manual adjustment needs"
+msgstr "Des estimations de paramètres initiaux plus fiables réduisant les besoins d'ajustement manuel"
+
+msgid "Better parameter bounds preventing optimization failures"
+msgstr "Meilleures limites de paramètres empêchant les échecs d'optimisation"
+
+msgid "Enhanced stability for difficult-to-fit datasets"
+msgstr "Stabilité améliorée pour les ensembles de données difficiles à ajuster"
+
+msgid "**Technical improvements**: All fitting functions benefit from:"
+msgstr "**Améliorations techniques** : Toutes les fonctions de fitting bénéficient de :"
+
+msgid "Automatic fallback to manual estimation if advanced algorithms fail"
+msgstr "Retour automatique à l'estimation manuelle si les algorithmes avancés échouent"
+
+msgid "Consistent error handling and parameter validation"
+msgstr "Gestion des erreurs et validation des paramètres cohérentes"
+
+msgid "Optimized performance with reduced computation time"
+msgstr "Performance optimisée avec un temps de calcul réduit"
+
+msgid "Full integration with DataLab's signal processing workflow"
+msgstr "Intégration complète avec le flux de travail de traitement du signal de DataLab"
 
 msgid "Zero padding:"
 msgstr "Complément de zéros :"
