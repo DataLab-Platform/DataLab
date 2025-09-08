@@ -146,6 +146,15 @@ Blob detection (LOG)
 Blob detection (OpenCV)
     Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_.
 
+
+Sum of rows or columns
+^^^^^^^^^^^^^^^^^^^^^^
+
+Sum the pixel values along the vertical or horizontal axis to obtain a projection
+profile. The horizontal projection is obtained by summing the pixel values along the
+vertical axis, while the vertical projection is obtained by summing the pixel values
+along the horizontal axis.
+
 Show results
 ^^^^^^^^^^^^
 

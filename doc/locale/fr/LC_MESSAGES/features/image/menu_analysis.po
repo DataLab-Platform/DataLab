@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 18:32+0200\n"
+"POT-Creation-Date: 2025-09-09 12:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -177,6 +177,12 @@ msgstr "Détection de taches (OpenCV)"
 
 msgid "Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
 msgstr "Détection de taches basée sur l'implémentation OpenCV de `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
+
+msgid "Sum of rows or columns"
+msgstr "Somme des lignes ou des colonnes"
+
+msgid "Sum the pixel values along the vertical or horizontal axis to obtain a projection profile. The horizontal projection is obtained by summing the pixel values along the vertical axis, while the vertical projection is obtained by summing the pixel values along the horizontal axis."
+msgstr "Somme les valeurs des pixels le long de l'axe horizontal ou vertical pour obtenir un profil de projection. La projection horizontale est obtenue en sommant les valeurs des pixels le long de l'axe vertical, tandis que la projection verticale est obtenue en sommant les valeurs des pixels le long de l'axe horizontal."
 
 msgid "Show results"
 msgstr "Afficher les résultats"
