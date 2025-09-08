@@ -499,8 +499,8 @@ def twohalfgaussianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     y_min = np.min(y)
 
     # Improved parameter estimation
-    # For the corrected model, amp represents peak height above baseline
-    amp_guess = dy  # Direct height estimation
+    # For the updated model with separate left/right parameters
+    amp_guess = dy  # Direct height estimation for both sides
 
     # Estimate asymmetry by analyzing peak shape
     half_max = y_min + dy * 0.5
@@ -526,7 +526,10 @@ def twohalfgaussianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     y0_guess = y_min
 
     # Parameter bounds with better ranges
-    amp = FitParam(_("Amplitude"), amp_guess, dy * 0.1, dy * 3)
+    # New model signature: func(x, amp_left, amp_right, sigma_left,
+    #                            sigma_right, x0, y0_left, y0_right)
+    amp_left = FitParam(_("Left amplitude"), amp_guess, dy * 0.1, dy * 3)
+    amp_right = FitParam(_("Right amplitude"), amp_guess, dy * 0.1, dy * 3)
     sigma_left = FitParam(
         _("Left width") + " (σL)",
         sigma_left_guess,
@@ -540,9 +543,14 @@ def twohalfgaussianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         dx * 0.5,  # Reasonable maximum
     )
     x0 = FitParam(_("Center") + " (x₀)", x0_guess, np.min(x), np.max(x))
-    y0 = FitParam(_("Base line"), y0_guess, y0_guess - 0.2 * dy, y0_guess + 0.2 * dy)
+    y0_left = FitParam(
+        _("Left baseline"), y0_guess, y0_guess - 0.2 * dy, y0_guess + 0.2 * dy
+    )
+    y0_right = FitParam(
+        _("Right baseline"), y0_guess, y0_guess - 0.2 * dy, y0_guess + 0.2 * dy
+    )
 
-    params = [amp, sigma_left, sigma_right, x0, y0]
+    params = [amp_left, amp_right, sigma_left, sigma_right, x0, y0_left, y0_right]
 
     def fitfunc(x, params):
         return fitmodels.TwoHalfGaussianModel.func(x, *params)
@@ -618,25 +626,27 @@ def doubleexponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
             pass  # Keep default estimate
 
     # Parameter bounds with more realistic ranges
-    amp1 = FitParam(_("Amplitude 1"), amp1_guess, 0.0, total_amp * 2)
-    amp2 = FitParam(_("Amplitude 2"), amp2_guess, 0.0, total_amp * 2)
-    tau1 = FitParam(
-        _("Time constant 1") + " (τ₁)",
-        tau1_guess,
-        x_range * 0.001,  # Very fast minimum
-        x_range * 2,  # Reasonable maximum
+    # New model signature: func(x, x_center, a_left, b_left, a_right, b_right, y0)
+    x_center = FitParam(_("Center position"), np.mean(x), np.min(x), np.max(x))
+    a_left = FitParam(_("Left amplitude"), amp1_guess, 0.0, total_amp * 2)
+    b_left = FitParam(
+        _("Left time constant") + " (bL)",
+        -1.0 / tau1_guess if tau1_guess > 0 else -1.0,  # Negative for decay
+        -10.0 / x_range,  # Fast decay
+        -0.001 / x_range,  # Slow decay
     )
-    tau2 = FitParam(
-        _("Time constant 2") + " (τ₂)",
-        tau2_guess,
-        x_range * 0.01,  # Fast minimum
-        x_range * 10,  # Large maximum for slow processes
+    a_right = FitParam(_("Right amplitude"), amp2_guess, 0.0, total_amp * 2)
+    b_right = FitParam(
+        _("Right time constant") + " (bR)",
+        -1.0 / tau2_guess if tau2_guess > 0 else -1.0,  # Negative for decay
+        -10.0 / x_range,  # Fast decay
+        -0.001 / x_range,  # Slow decay
     )
     y0 = FitParam(
         _("Base line"), y0_guess, y0_guess - 0.1 * y_range, y0_guess + 0.1 * y_range
     )
 
-    params = [amp1, amp2, tau1, tau2, y0]
+    params = [x_center, a_left, b_left, a_right, b_right, y0]
 
     def fitfunc(x, params):
         return fitmodels.DoubleExponentialModel.func(x, *params)
