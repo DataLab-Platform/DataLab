@@ -55,6 +55,18 @@ def test_fit_dialog():
         # CDF curve fitting test
         execenv.print(fdlg.cdffit(x, y))
 
+        # Planckian curve fitting test
+        execenv.print(fdlg.planckianfit(x, y))
+
+        # N-Lorentzian curve fitting test (needs peaks)
+        execenv.print(fdlg.nlorentzianfit(x, y, peakidx))
+
+        # Two half-Gaussian curve fitting test
+        execenv.print(fdlg.twohalfgaussianfit(x, y))
+
+        # Double exponential curve fitting test
+        execenv.print(fdlg.doubleexponentialfit(x, y))
+
 
 if __name__ == "__main__":
     test_fit_dialog()

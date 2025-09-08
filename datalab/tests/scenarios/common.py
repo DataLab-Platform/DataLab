@@ -210,6 +210,9 @@ def run_signal_computations(
         (_("Exponential fit"), fitdialog.exponentialfit),
         (_("CDF fit"), fitdialog.cdffit),
         (_("Sinusoidal fit"), fitdialog.sinusoidalfit),
+        (_("Planckian fit"), fitdialog.planckianfit),
+        (_("Two half-Gaussian fit"), fitdialog.twohalfgaussianfit),
+        (_("Double exponential fit"), fitdialog.doubleexponentialfit),
     ):
         panel.objview.set_current_object(sig)
         panel.processor.compute_fit(fittitle, fitfunc)

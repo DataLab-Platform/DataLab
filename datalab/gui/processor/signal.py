@@ -642,6 +642,25 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 self.__row_compute_fit(obj, _("Multi-Gaussian fit"), multigaussianfit)
 
     @qt_try_except()
+    def compute_multilorentzianfit(self) -> None:
+        """Compute Multi-Lorentzian fitting curve using an interactive dialog"""
+        fitdlgfunc = fitdialog.multilorentzianfit
+        for obj in self.panel.objview.get_sel_objects():
+            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
+            if exec_dialog(dlg):
+                # Computing x, y
+                peaks = dlg.get_peak_indices()
+
+                def multilorentzianfit(x, y, parent=None):
+                    """Multi-Lorentzian fit dialog function"""
+                    # pylint: disable=cell-var-from-loop
+                    return fitdlgfunc(x, y, peaks, parent=parent)
+
+                self.__row_compute_fit(
+                    obj, _("Multi-Lorentzian fit"), multilorentzianfit
+                )
+
+    @qt_try_except()
     def _extract_multiple_roi_in_single_object(self, params: list[ROI1DParam]) -> None:
         """Extract multiple Regions Of Interest (ROIs) from data in a single object"""
         # TODO: This `compute_1_to_1` call is not ideal, as it passes a list of

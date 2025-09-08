@@ -918,6 +918,29 @@ class SignalActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_multigaussianfit,
                     icon_name="multigaussfit.svg",
                 )
+                self.new_action(
+                    _("Multi-Lorentzian fit"),
+                    triggered=self.panel.processor.compute_multilorentzianfit,
+                    icon_name="lorentzfit.svg",
+                )
+                cra_fit(
+                    _("Planckian fit"),
+                    fitdialog.planckianfit,
+                    "expfit.svg",
+                    tip=_("Planckian (blackbody radiation) fitting"),
+                )
+                cra_fit(
+                    _("Two half-Gaussian fit"),
+                    fitdialog.twohalfgaussianfit,
+                    "gaussfit.svg",
+                    tip=_("Asymmetric peak fitting with two half-Gaussians"),
+                )
+                cra_fit(
+                    _("Double exponential fit"),
+                    fitdialog.doubleexponentialfit,
+                    "expfit.svg",
+                    tip=_("Double exponential decay fitting"),
+                )
                 cra_fit(_("Exponential fit"), fitdialog.exponentialfit, "expfit.svg")
                 cra_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit, "sinfit.svg")
                 cra_fit(

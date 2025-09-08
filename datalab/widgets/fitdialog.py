@@ -13,13 +13,7 @@ from scipy.optimize import curve_fit
 from scipy.special import erf  # pylint: disable=no-name-in-module
 from sigima.tests.helpers import get_default_test_name
 from sigima.tools.checks import check_1d_arrays
-from sigima.tools.signal.fitmodels import (
-    GaussianModel,
-    LorentzianModel,
-    VoigtModel,
-)
-from sigima.tools.signal.fourier import magnitude_spectrum
-from sigima.tools.signal.peakdetection import xpeak
+from sigima.tools.signal import fitmodels, fourier, peakdetection
 
 from datalab.config import _
 
@@ -118,17 +112,17 @@ def gaussianfit(x, y, parent=None, name=None):
     dx = np.max(x) - np.min(x)
     dy = np.max(y) - np.min(y)
     sigma = dx * 0.1
-    amp = GaussianModel.get_amp_from_amplitude(dy, sigma)
+    amp = fitmodels.GaussianModel.get_amp_from_amplitude(dy, sigma)
 
     a = FitParam(_("Amplitude"), amp, 0.0, amp * 1.2)
     b = FitParam(_("Base line"), np.min(y), np.min(y) - 0.1 * dy, np.max(y))
     sigma = FitParam(_("Std-dev") + " (σ)", sigma, sigma * 0.2, sigma * 10)
-    mu = FitParam(_("Mean") + " (μ)", xpeak(x, y), np.min(x), np.max(x))
+    mu = FitParam(_("Mean") + " (μ)", peakdetection.xpeak(x, y), np.min(x), np.max(x))
 
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return GaussianModel.func(x, *params)
+        return fitmodels.GaussianModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Gaussian fit"), name=name
@@ -146,17 +140,17 @@ def lorentzianfit(x, y, parent=None, name=None):
     dx = np.max(x) - np.min(x)
     dy = np.max(y) - np.min(y)
     sigma = dx * 0.1
-    amp = LorentzianModel.get_amp_from_amplitude(dy, sigma)
+    amp = fitmodels.LorentzianModel.get_amp_from_amplitude(dy, sigma)
 
     a = FitParam(_("Amplitude"), amp, 0.0, amp * 1.2)
     b = FitParam(_("Base line"), np.min(y), np.min(y) - 0.1 * dy, np.max(y))
     sigma = FitParam(_("Std-dev") + " (σ)", sigma, sigma * 0.2, sigma * 10)
-    mu = FitParam(_("Mean") + " (μ)", xpeak(x, y), np.min(x), np.max(x))
+    mu = FitParam(_("Mean") + " (μ)", peakdetection.xpeak(x, y), np.min(x), np.max(x))
 
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return LorentzianModel.func(x, *params)
+        return fitmodels.LorentzianModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Lorentzian fit"), name=name
@@ -174,17 +168,17 @@ def voigtfit(x, y, parent=None, name=None):
     dx = np.max(x) - np.min(x)
     dy = np.max(y) - np.min(y)
     sigma = dx * 0.1
-    amp = VoigtModel.get_amp_from_amplitude(dy, sigma)
+    amp = fitmodels.VoigtModel.get_amp_from_amplitude(dy, sigma)
 
     a = FitParam(_("Amplitude"), amp, 0.0, amp * 1.2)
     b = FitParam(_("Base line"), np.min(y), np.min(y) - 0.1 * dy, np.max(y))
     sigma = FitParam(_("Std-dev") + " (σ)", sigma, sigma * 0.2, sigma * 10)
-    mu = FitParam(_("Mean") + " (μ)", xpeak(x, y), np.min(x), np.max(x))
+    mu = FitParam(_("Mean") + " (μ)", peakdetection.xpeak(x, y), np.min(x), np.max(x))
 
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return VoigtModel.func(x, *params)
+        return fitmodels.VoigtModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Voigt fit"), name=name
@@ -303,7 +297,7 @@ def dominant_frequency(x: np.ndarray, y: np.ndarray) -> np.floating:
     Returns:
         Dominant frequency.
     """
-    f, spectrum = magnitude_spectrum(x, y)
+    f, spectrum = fourier.magnitude_spectrum(x, y)
     return np.abs(f[np.argmax(spectrum)])
 
 
@@ -374,6 +368,286 @@ def cdffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         params,
         parent=parent,
         wintitle=_("CDF fit"),
+        name=name,
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Planckian fitting curve --------------------------------------------------
+def planckianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute Planckian (blackbody radiation) fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+    dy = np.max(y) - np.min(y)
+
+    # Initial parameter estimates for Planckian fitting
+    x_peak = x[np.argmax(y)]
+    y_max = np.max(y)
+    y_min = np.min(y)
+    dy = y_max - y_min
+
+    # For Planckian curves, use the detected peak position as the Wien
+    # displacement parameter
+    x0_guess = x_peak  # Peak wavelength
+
+    # Amplitude estimation: should be reasonable for the corrected model
+    amp_guess = dy  # Direct scaling with intensity range
+
+    # Sigma estimation: start with 1.0 (canonical Planck curve)
+    # sigma > 1.0 gives broader curves (cooler)
+    # sigma < 1.0 gives sharper curves (hotter)
+    sigma_guess = 1.0
+
+    y0_guess = y_min
+
+    # Parameter bounds with appropriate ranges for Planckian fitting
+    amp = FitParam(_("Amplitude"), amp_guess, amp_guess * 0.01, amp_guess * 100)
+    x0 = FitParam(_("Peak wavelength"), x0_guess, np.min(x), np.max(x))
+    sigma = FitParam(_("Width factor"), sigma_guess, 0.1, 5.0)
+    y0 = FitParam(_("Base line"), y0_guess, y0_guess - 0.2 * dy, y0_guess + 0.2 * dy)
+
+    params = [amp, x0, sigma, y0]
+
+    def fitfunc(x, params):
+        return fitmodels.PlanckianModel.func(x, *params)
+
+    values = guifit(
+        x, y, fitfunc, params, parent=parent, wintitle=_("Planckian fit"), name=name
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Multi-Lorentzian fitting curve -------------------------------------------
+def multilorentzianfit(
+    x: np.ndarray, y: np.ndarray, peak_indices, parent=None, name=None
+):
+    """Compute Multi-Lorentzian fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+    params = []
+    for index, i0 in enumerate(peak_indices):
+        istart = 0
+        iend = len(x) - 1
+        if index > 0:
+            istart = (peak_indices[index - 1] + i0) // 2
+        if index < len(peak_indices) - 1:
+            iend = (peak_indices[index + 1] + i0) // 2
+        dx = 0.5 * (x[iend] - x[istart])
+        dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
+        sigma = dx * 0.1
+        amp = fitmodels.LorentzianModel.get_amp_from_amplitude(dy, sigma)
+
+        stri = f"{index + 1:02d}"
+        params += [
+            FitParam(("A") + stri, amp, 0.0, amp * 1.2),
+            FitParam("σ" + stri, sigma, sigma * 0.2, sigma * 10),
+        ]
+
+    params.append(
+        FitParam(
+            _("Y0"), np.min(y), np.min(y) - 0.1 * (np.max(y) - np.min(y)), np.max(y)
+        )
+    )
+
+    kwargs = {"a_x0": x[peak_indices]}
+
+    def nlorentzian(x, *values, **kwargs):
+        """Return a 1-dimensional multi-Lorentzian function."""
+        a_amp = values[0::2]
+        a_sigma = values[1::2]
+        y0 = values[-1]
+        a_x0 = kwargs["a_x0"]
+        y = np.zeros_like(x) + y0
+        for amp, sigma, x0 in zip(a_amp, a_sigma, a_x0):
+            y += fitmodels.LorentzianModel.func(x, amp, sigma, x0, 0)
+        return y
+
+    def fitfunc(xi, params):
+        return nlorentzian(xi, *params, **kwargs)
+
+    param_cols = 1
+    if len(params) > 8:
+        param_cols = 4
+    values = guifit(
+        x,
+        y,
+        fitfunc,
+        params,
+        param_cols=param_cols,
+        winsize=(900, 600),
+        parent=parent,
+        name=name,
+        wintitle=_("Multi-Lorentzian fit"),
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Two half-Gaussian fitting curve ------------------------------------------
+def twohalfgaussianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute two half-Gaussian fit for asymmetric peaks
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+    dx = np.max(x) - np.min(x)
+    dy = np.max(y) - np.min(y)
+    x_peak = x[np.argmax(y)]
+    y_min = np.min(y)
+
+    # Improved parameter estimation
+    # For the corrected model, amp represents peak height above baseline
+    amp_guess = dy  # Direct height estimation
+
+    # Estimate asymmetry by analyzing peak shape
+    half_max = y_min + dy * 0.5
+
+    # Find points at half maximum
+    left_points = np.where((x < x_peak) & (y >= half_max))[0]
+    right_points = np.where((x > x_peak) & (y >= half_max))[0]
+
+    # Estimate sigma values from half-width measurements
+    if len(left_points) > 0:
+        left_hw = x_peak - x[left_points[0]]
+        sigma_left_guess = left_hw / np.sqrt(2 * np.log(2))  # Convert HWHM to sigma
+    else:
+        sigma_left_guess = dx * 0.05
+
+    if len(right_points) > 0:
+        right_hw = x[right_points[-1]] - x_peak
+        sigma_right_guess = right_hw / np.sqrt(2 * np.log(2))  # Convert HWHM to sigma
+    else:
+        sigma_right_guess = dx * 0.05
+
+    x0_guess = x_peak
+    y0_guess = y_min
+
+    # Parameter bounds with better ranges
+    amp = FitParam(_("Amplitude"), amp_guess, dy * 0.1, dy * 3)
+    sigma_left = FitParam(
+        _("Left width") + " (σL)",
+        sigma_left_guess,
+        dx * 0.001,  # Very small minimum
+        dx * 0.5,  # Reasonable maximum
+    )
+    sigma_right = FitParam(
+        _("Right width") + " (σR)",
+        sigma_right_guess,
+        dx * 0.001,  # Very small minimum
+        dx * 0.5,  # Reasonable maximum
+    )
+    x0 = FitParam(_("Center") + " (x₀)", x0_guess, np.min(x), np.max(x))
+    y0 = FitParam(_("Base line"), y0_guess, y0_guess - 0.2 * dy, y0_guess + 0.2 * dy)
+
+    params = [amp, sigma_left, sigma_right, x0, y0]
+
+    def fitfunc(x, params):
+        return fitmodels.TwoHalfGaussianModel.func(x, *params)
+
+    values = guifit(
+        x,
+        y,
+        fitfunc,
+        params,
+        parent=parent,
+        wintitle=_("Two half-Gaussian fit"),
+        name=name,
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Double exponential fitting curve -----------------------------------------
+def doubleexponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute double exponential fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+
+    # Improved parameter estimation for double exponential decay
+    y_range = np.max(y) - np.min(y)
+    x_range = np.max(x) - np.min(x)
+    y_min = np.min(y)
+    y_max = np.max(y)
+
+    # Better initial estimates based on data analysis
+    # Assume the curve starts high and decays to baseline
+    initial_value = y[0] if len(y) > 0 else y_max
+    final_value = y[-1] if len(y) > 0 else y_min
+
+    # Estimate baseline from final portion of data
+    if len(y) > 10:
+        y0_guess = np.mean(
+            y[-max(5, len(y) // 10) :]
+        )  # Average of last 10% or 5 points
+    else:
+        y0_guess = final_value
+
+    # Estimate amplitudes: total amplitude split between components
+    total_amp = initial_value - y0_guess
+    amp1_guess = total_amp * 0.7  # Fast component (typically dominant)
+    amp2_guess = total_amp * 0.3  # Slow component
+
+    # Better time constant estimation based on decay behavior
+    # Look for characteristic times where signal drops to 1/e
+    target_fast = y0_guess + total_amp / np.e  # 1/e point
+    target_slow = y0_guess + total_amp * 0.5  # Half-life point
+
+    # Find approximate time constants from data
+    tau1_guess = x_range * 0.05  # Fast decay (5% of range)
+    tau2_guess = x_range * 0.3  # Slow decay (30% of range)
+
+    # Try to estimate from actual data if enough points
+    if len(x) > 20:
+        # Find where signal crosses the 1/e threshold
+        try:
+            fast_idx = np.where(y <= target_fast)[0]
+            if len(fast_idx) > 0:
+                tau1_guess = x[fast_idx[0]] * 0.7  # Adjust for double exponential
+        except (IndexError, ValueError):
+            pass  # Keep default estimate
+
+        try:
+            slow_idx = np.where(y <= target_slow)[0]
+            if len(slow_idx) > 0:
+                tau2_guess = x[slow_idx[-1]] * 0.5  # Adjust for double exponential
+        except (IndexError, ValueError):
+            pass  # Keep default estimate
+
+    # Parameter bounds with more realistic ranges
+    amp1 = FitParam(_("Amplitude 1"), amp1_guess, 0.0, total_amp * 2)
+    amp2 = FitParam(_("Amplitude 2"), amp2_guess, 0.0, total_amp * 2)
+    tau1 = FitParam(
+        _("Time constant 1") + " (τ₁)",
+        tau1_guess,
+        x_range * 0.001,  # Very fast minimum
+        x_range * 2,  # Reasonable maximum
+    )
+    tau2 = FitParam(
+        _("Time constant 2") + " (τ₂)",
+        tau2_guess,
+        x_range * 0.01,  # Fast minimum
+        x_range * 10,  # Large maximum for slow processes
+    )
+    y0 = FitParam(
+        _("Base line"), y0_guess, y0_guess - 0.1 * y_range, y0_guess + 0.1 * y_range
+    )
+
+    params = [amp1, amp2, tau1, tau2, y0]
+
+    def fitfunc(x, params):
+        return fitmodels.DoubleExponentialModel.func(x, *params)
+
+    values = guifit(
+        x,
+        y,
+        fitfunc,
+        params,
+        parent=parent,
+        wintitle=_("Double exponential fit"),
         name=name,
     )
     if values:
