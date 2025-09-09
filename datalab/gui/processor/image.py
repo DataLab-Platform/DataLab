@@ -664,7 +664,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
 
         # MARK: ANALYSIS
         self.register_1_to_0(sigima_image.stats, _("Statistics"), icon_name="stats.svg")
-        #! Note projection onto horizontal axis means summing along vertical axis.
         self.register_1_to_1(
             sigima_image.horizontal_projection, _("Sum pixels along vertical axis")
         )
