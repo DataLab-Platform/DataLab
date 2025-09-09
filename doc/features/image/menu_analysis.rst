@@ -63,6 +63,14 @@ Parameters are:
 
     Example of histogram.
 
+Horizontal and vertical projections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Compute horizontal and vertical projection profiles:
+
+- Horizontal projection: Sum the pixel values along each row (projection on the x-axis).
+- Vertical projection: Sum the pixel values along each column (projection on the y-axis).
+
 Centroid
 ^^^^^^^^
 
@@ -145,15 +153,6 @@ Blob detection (LOG)
 
 Blob detection (OpenCV)
     Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_.
-
-
-Horizontal and vertical projections
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Sum the pixel values along the vertical or horizontal axis to obtain a projection
-profile. The horizontal projection is obtained by summing the pixel values along the
-vertical axis, while the vertical projection is obtained by summing the pixel values
-along the horizontal axis.
 
 Show results
 ^^^^^^^^^^^^

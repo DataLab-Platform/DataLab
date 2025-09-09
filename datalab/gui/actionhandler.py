@@ -1226,6 +1226,8 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):
+            self.action_for("horizontal_projection", separator=True)
+            self.action_for("vertical_projection")
             self.action_for("centroid", separator=True)
             self.action_for("enclosing_circle")
             self.new_action(
@@ -1236,25 +1238,11 @@ class ImageActionHandler(BaseActionHandler):
             )
             self.action_for("contour_shape")
             self.action_for("hough_circle_peaks")
-
             with self.new_menu(_("Blob detection")):
                 self.action_for("blob_dog")
                 self.action_for("blob_doh")
                 self.action_for("blob_log")
                 self.action_for("blob_opencv")
-            #! Note projection onto horizontal axis means summing along vertical axis.
-            self.new_action(
-                _("Horizontal projection"),
-                # icon_name="horizontal_projection.svg",
-                tip=_("Sum pixels along vertical axis"),
-                separator=True,
-            )
-            #! Note projection onto vertical axis means summing along horizontal axis.
-            self.new_action(
-                _("Vertical projection"),
-                # icon_name="vertical_projection.svg",
-                tip=_("Sum pixels along horizontal axis"),
-            )
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""

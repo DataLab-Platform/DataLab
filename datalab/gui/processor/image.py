@@ -665,11 +665,22 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         # MARK: ANALYSIS
         self.register_1_to_0(sigima_image.stats, _("Statistics"), icon_name="stats.svg")
         self.register_1_to_1(
-            sigima_image.horizontal_projection, _("Sum pixels along vertical axis")
+            sigima_image.horizontal_projection,
+            _("Horizontal projection"),
+            # icon_name="horizontal_projection.svg",
+            comment=_(
+                "Compute the sum of pixel intensities along each column "
+                "(projection on the x-axis)"
+            ),
         )
-        #! Note projection onto vertical axis means summing along horizontal axis.
         self.register_1_to_1(
-            sigima_image.vertical_projection, _("Sum pixels along horizontal axis")
+            sigima_image.vertical_projection,
+            # icon_name="vertical_projection.svg",
+            _("Vertical projection"),
+            comment=_(
+                "Compute the sum of pixel intensities along each row "
+                "(projection on the y-axis)"
+            ),
         )
 
         self.register_1_to_1(
