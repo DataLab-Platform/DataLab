@@ -307,6 +307,74 @@ def multigaussianfit(x, y, peak_indices, parent=None, name=None):
         return fitfunc(x, values), params
 
 
+# --- Multi-Lorentzian fitting curve -------------------------------------------
+def multilorentzian(x, *values, **kwargs):
+    """Return a 1-dimensional multi-Lorentzian function."""
+    a_amp = values[0::2]
+    a_sigma = values[1::2]
+    y0 = values[-1]
+    a_x0 = kwargs["a_x0"]
+    y = np.zeros_like(x) + y0
+    for amp, sigma, x0 in zip(a_amp, a_sigma, a_x0):
+        y += fitmodels.LorentzianModel.func(x, amp, sigma, x0, 0)
+    return y
+
+
+def multilorentzianfit(
+    x: np.ndarray, y: np.ndarray, peak_indices, parent=None, name=None
+):
+    """Compute Multi-Lorentzian fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+    params = []
+    for index, i0 in enumerate(peak_indices):
+        istart = 0
+        iend = len(x) - 1
+        if index > 0:
+            istart = (peak_indices[index - 1] + i0) // 2
+        if index < len(peak_indices) - 1:
+            iend = (peak_indices[index + 1] + i0) // 2
+        dx = 0.5 * (x[iend] - x[istart])
+        dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
+        sigma = dx * 0.1
+        amp = fitmodels.LorentzianModel.get_amp_from_amplitude(dy, sigma)
+
+        stri = f"{index + 1:02d}"
+        params += [
+            FitParam(("A") + stri, amp, 0.0, amp * 1.2),
+            FitParam("σ" + stri, sigma, sigma * 0.2, sigma * 10),
+        ]
+
+    params.append(
+        FitParam(
+            _("Y0"), np.min(y), np.min(y) - 0.1 * (np.max(y) - np.min(y)), np.max(y)
+        )
+    )
+
+    kwargs = {"a_x0": x[peak_indices]}
+
+    def fitfunc(xi, params):
+        return multilorentzian(xi, *params, **kwargs)
+
+    param_cols = 1
+    if len(params) > 8:
+        param_cols = 4
+    values = guifit(
+        x,
+        y,
+        fitfunc,
+        params,
+        param_cols=param_cols,
+        winsize=(900, 600),
+        parent=parent,
+        name=name,
+        wintitle=_("Multi-Lorentzian fit"),
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
 # --- Exponential fitting curve ------------------------------------------------
 
 
@@ -517,73 +585,6 @@ def planckianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Planckian fit"), name=name
-    )
-    if values:
-        return fitfunc(x, values), params
-
-
-# --- Multi-Lorentzian fitting curve -------------------------------------------
-def multilorentzianfit(
-    x: np.ndarray, y: np.ndarray, peak_indices, parent=None, name=None
-):
-    """Compute Multi-Lorentzian fit
-
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters"""
-    params = []
-    for index, i0 in enumerate(peak_indices):
-        istart = 0
-        iend = len(x) - 1
-        if index > 0:
-            istart = (peak_indices[index - 1] + i0) // 2
-        if index < len(peak_indices) - 1:
-            iend = (peak_indices[index + 1] + i0) // 2
-        dx = 0.5 * (x[iend] - x[istart])
-        dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
-        sigma = dx * 0.1
-        amp = fitmodels.LorentzianModel.get_amp_from_amplitude(dy, sigma)
-
-        stri = f"{index + 1:02d}"
-        params += [
-            FitParam(("A") + stri, amp, 0.0, amp * 1.2),
-            FitParam("σ" + stri, sigma, sigma * 0.2, sigma * 10),
-        ]
-
-    params.append(
-        FitParam(
-            _("Y0"), np.min(y), np.min(y) - 0.1 * (np.max(y) - np.min(y)), np.max(y)
-        )
-    )
-
-    kwargs = {"a_x0": x[peak_indices]}
-
-    def nlorentzian(x, *values, **kwargs):
-        """Return a 1-dimensional multi-Lorentzian function."""
-        a_amp = values[0::2]
-        a_sigma = values[1::2]
-        y0 = values[-1]
-        a_x0 = kwargs["a_x0"]
-        y = np.zeros_like(x) + y0
-        for amp, sigma, x0 in zip(a_amp, a_sigma, a_x0):
-            y += fitmodels.LorentzianModel.func(x, amp, sigma, x0, 0)
-        return y
-
-    def fitfunc(xi, params):
-        return nlorentzian(xi, *params, **kwargs)
-
-    param_cols = 1
-    if len(params) > 8:
-        param_cols = 4
-    values = guifit(
-        x,
-        y,
-        fitfunc,
-        params,
-        param_cols=param_cols,
-        winsize=(900, 600),
-        parent=parent,
-        name=name,
-        wintitle=_("Multi-Lorentzian fit"),
     )
     if values:
         return fitfunc(x, values), params
