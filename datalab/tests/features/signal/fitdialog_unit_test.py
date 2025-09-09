@@ -28,23 +28,30 @@ def test_fit_dialog():
             fdlg.multigaussianfit(s.x, s.y, peakidx, name=get_default_test_name("00"))
         )
 
-        # Gaussian curve fitting test
         noiseparam = NormalDistribution1DParam.create(sigma=5.0)
         sig = create_noisy_signal(noiseparam)
         x, y = sig.x, sig.y
-        execenv.print(fdlg.gaussianfit(x, y))
-
-        # Lorentzian curve fitting test
-        execenv.print(fdlg.lorentzianfit(x, y))
-
-        # Voigt curve fitting test
-        execenv.print(fdlg.voigtfit(x, y))
 
         # Polynomial curve fitting test
         execenv.print(fdlg.polynomialfit(x, y, 4))
 
         # Linear curve fitting test
         execenv.print(fdlg.linearfit(x, y))
+
+        # Gaussian curve fitting test
+        execenv.print(fdlg.gaussianfit(x, y))
+
+        # Lorentzian curve fitting test
+        execenv.print(fdlg.lorentzianfit(x, y))
+
+        # Multi-Lorentzian curve fitting test (needs peaks)
+        execenv.print(fdlg.multigaussianfit(x, y, peakidx))
+
+        # Multi-Lorentzian curve fitting test (needs peaks)
+        execenv.print(fdlg.multilorentzianfit(x, y, peakidx))
+
+        # Voigt curve fitting test
+        execenv.print(fdlg.voigtfit(x, y))
 
         # Exponential curve fitting test
         execenv.print(fdlg.exponentialfit(x, y))
@@ -57,9 +64,6 @@ def test_fit_dialog():
 
         # Planckian curve fitting test
         execenv.print(fdlg.planckianfit(x, y))
-
-        # N-Lorentzian curve fitting test (needs peaks)
-        execenv.print(fdlg.nlorentzianfit(x, y, peakidx))
 
         # Two half-Gaussian curve fitting test
         execenv.print(fdlg.twohalfgaussianfit(x, y))
