@@ -22,54 +22,26 @@ def test_fit_dialog():
     """Test function"""
     with qt_app_context():
         # Multi-gaussian curve fitting test
-        s = get_test_signal("paracetamol.txt")
-        peakidx = peak_indices(s.y)
-        execenv.print(
-            fdlg.multigaussianfit(s.x, s.y, peakidx, name=get_default_test_name("00"))
-        )
+        s1 = get_test_signal("paracetamol.txt")
+        peakidx = peak_indices(s1.y)
+        s2 = create_noisy_signal(NormalDistribution1DParam.create(sigma=5.0))
 
-        noiseparam = NormalDistribution1DParam.create(sigma=5.0)
-        sig = create_noisy_signal(noiseparam)
-        x, y = sig.x, sig.y
+        ep = execenv.print
+        tn = get_default_test_name
 
-        # Polynomial curve fitting test
-        execenv.print(fdlg.polynomialfit(x, y, 4))
-
-        # Linear curve fitting test
-        execenv.print(fdlg.linearfit(x, y))
-
-        # Gaussian curve fitting test
-        execenv.print(fdlg.gaussianfit(x, y))
-
-        # Lorentzian curve fitting test
-        execenv.print(fdlg.lorentzianfit(x, y))
-
-        # Multi-Lorentzian curve fitting test (needs peaks)
-        execenv.print(fdlg.multigaussianfit(x, y, peakidx))
-
-        # Multi-Lorentzian curve fitting test (needs peaks)
-        execenv.print(fdlg.multilorentzianfit(x, y, peakidx))
-
-        # Voigt curve fitting test
-        execenv.print(fdlg.voigtfit(x, y))
-
-        # Exponential curve fitting test
-        execenv.print(fdlg.exponentialfit(x, y))
-
-        # Sinusoidal curve fitting test
-        execenv.print(fdlg.sinusoidalfit(x, y))
-
-        # CDF curve fitting test
-        execenv.print(fdlg.cdffit(x, y))
-
-        # Planckian curve fitting test
-        execenv.print(fdlg.planckianfit(x, y))
-
-        # Two half-Gaussian curve fitting test
-        execenv.print(fdlg.twohalfgaussianfit(x, y))
-
-        # Double exponential curve fitting test
-        execenv.print(fdlg.doubleexponentialfit(x, y))
+        ep(fdlg.polynomialfit(s2.x, s2.y, 4, name=tn("00")))
+        ep(fdlg.linearfit(s2.x, s2.y, name=tn("01")))
+        ep(fdlg.gaussianfit(s2.x, s2.y, name=tn("02")))
+        ep(fdlg.lorentzianfit(s2.x, s2.y, name=tn("03")))
+        ep(fdlg.multigaussianfit(s1.x, s1.y, peakidx, name=tn("04")))
+        ep(fdlg.multilorentzianfit(s1.x, s1.y, peakidx, name=tn("05")))
+        ep(fdlg.voigtfit(s2.x, s2.y, name=tn("06")))
+        ep(fdlg.exponentialfit(s2.x, s2.y, name=tn("07")))
+        ep(fdlg.sinusoidalfit(s2.x, s2.y, name=tn("08")))
+        ep(fdlg.cdffit(s2.x, s2.y, name=tn("09")))
+        ep(fdlg.planckianfit(s2.x, s2.y, name=tn("10")))
+        ep(fdlg.twohalfgaussianfit(s2.x, s2.y, name=tn("11")))
+        ep(fdlg.doubleexponentialfit(s2.x, s2.y, name=tn("12")))
 
 
 if __name__ == "__main__":
