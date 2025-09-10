@@ -231,6 +231,28 @@ Basic mathematical functions
 Other operations
 ----------------
 
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
+
+    * - Operation
+      - Implementation
+    * - |convolution| Convolution
+      - Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_
+    * - |deconvolution| Deconvolution
+      - Frequency domain deconvolution
+
+
+.. |convolution| image:: ../../../datalab/data/icons/operations/convolution.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |deconvolution| image:: ../../../datalab/data/icons/operations/deconvolution.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
 Flat-field correction
 ^^^^^^^^^^^^^^^^^^^^^
 

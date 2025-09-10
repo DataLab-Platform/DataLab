@@ -53,7 +53,7 @@ Signal Image  Feature
 ✓      ..     Derivative, integral
 ✓      ✓      ROI extraction, Swap X/Y axes
 ✓      ..     Semi-automatic multi-peak detection
-✓      ..     Convolution
+✓      ✓      Convolution, deconvolution
 ..     ✓      Flat-field correction
 ..     ✓      Flip, rotation, scaling...
 ..     ✓      Intensity profiles (line, average, radial)

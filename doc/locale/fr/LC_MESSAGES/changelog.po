@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 21:20+0200\n"
+"POT-Creation-Date: 2025-09-10 10:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,12 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "New image operation:"
+msgstr "Nouvelle opération d'image :"
+
+msgid "Convolution."
+msgstr "Convolution"
 
 msgid "New common signal/image feature:"
 msgstr "Nouvelles fonctionnalités communes signal/image :"
@@ -74,6 +80,13 @@ msgstr "Fonctionnalité de sauvegarde dans un répertoire."
 
 msgid "This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
 msgstr "Ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
+
+msgid "Deconvolution in the frequency domain."
+msgstr ""
+
+#, fuzzy
+msgid "This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution."
+msgstr "Ceci clôture [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208) - Ajout de la prise en charge du rééchantillonnage d'images."
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
@@ -297,14 +310,16 @@ msgstr "Bande passante à -3dB :"
 msgid "Enhanced to support passband bandwidth in addition to baseband bandwidth."
 msgstr "Amélioration de la prise en charge de la bande passante en plus de la bande de base."
 
+#, fuzzy
 msgid "New image analysis features:"
-msgstr "Nouvelles fonctionnalités d'analyse de l'image :"
+msgstr "Nouvelles fonctionnalités d'analyse de signal :"
 
 msgid "Horizontal and vertical projections."
-msgstr "Projections horizontale et verticale."
+msgstr ""
 
+#, fuzzy
 msgid "This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns."
-msgstr "Ceci clôture [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Paramètres / Somme des pixels, somme des lignes de pixels, somme des colonnes de pixels."
+msgstr "Ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filtres / Filtre coupe-bande (Signal)."
 
 msgid "New 2D ramp image generator."
 msgstr "Nouveau générateur d'image de type rampe 2D."

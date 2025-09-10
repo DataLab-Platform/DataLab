@@ -6,6 +6,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* New image operation:
+  * Convolution.
+
 * New common signal/image feature:
   * Added `phase` (argument) feature to extract the phase information from complex signals or images.
     * This complements the "Absolute value" (modulus) feature.
@@ -21,6 +24,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201).
   * Save to directory feature.
     * This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227).
+  * Deconvolution in the frequency domain.
+    * This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution.
 
 * New ROI (Region of Interest) management features:
   * New "ROI" menu, between "Edit" and "Operations" menus
