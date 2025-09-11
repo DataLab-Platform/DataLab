@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-09 15:45+0200\n"
+"POT-Creation-Date: 2025-09-11 18:36+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -323,6 +323,9 @@ msgstr "Filtres fréquentiels"
 
 msgid "Fitting"
 msgstr "Ajustement"
+
+msgid "Interactive fitting"
+msgstr "Ajustement interactif"
 
 msgid "Linear fit"
 msgstr "Ajustement linéaire"
@@ -1540,6 +1543,15 @@ msgstr "Filtre passe-bande"
 msgid "Band-stop filter"
 msgstr "Filtre coupe-bande"
 
+msgid "Two Half-Gaussians fit"
+msgstr "Ajustement de deux demi-Gaussiennes"
+
+msgid "Double Exponential fit"
+msgstr "Ajustement double exponentiel"
+
+msgid "Sigmoid fit"
+msgstr "Ajustement sigmoïde"
+
 msgid "Windowing"
 msgstr "Fenêtrage"
 
@@ -2666,4 +2678,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

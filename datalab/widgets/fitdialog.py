@@ -72,7 +72,7 @@ def guifit(
 
 
 # --- Polynomial fitting curve -------------------------------------------------
-def polynomialfit(x, y, degree, parent=None, name=None):
+def polynomial_fit(x, y, degree, parent=None, name=None):
     """Compute polynomial fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -96,17 +96,17 @@ def polynomialfit(x, y, degree, parent=None, name=None):
         return fitfunc(x, values), params
 
 
-def linearfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+def linear_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute linear fit using polynomialfit.
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters
     """
-    return polynomialfit(x, y, 1, parent=parent, name=name)
+    return polynomial_fit(x, y, 1, parent=parent, name=name)
 
 
 # --- Gaussian fitting curve ---------------------------------------------------
-def gaussianfit(x, y, parent=None, name=None):
+def gaussian_fit(x, y, parent=None, name=None):
     """Compute Gaussian fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -153,7 +153,7 @@ def gaussianfit(x, y, parent=None, name=None):
 
 
 # --- Lorentzian fitting curve -------------------------------------------------
-def lorentzianfit(x, y, parent=None, name=None):
+def lorentzian_fit(x, y, parent=None, name=None):
     """Compute Lorentzian fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -200,7 +200,7 @@ def lorentzianfit(x, y, parent=None, name=None):
 
 
 # --- Voigt fitting curve ------------------------------------------------------
-def voigtfit(x, y, parent=None, name=None):
+def voigt_fit(x, y, parent=None, name=None):
     """Compute Voigt fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -259,7 +259,7 @@ def multigaussian(x, *values, **kwargs):
     return y
 
 
-def multigaussianfit(x, y, peak_indices, parent=None, name=None):
+def multigaussian_fit(x, y, peak_indices, parent=None, name=None):
     """Compute Multi-Gaussian fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -322,7 +322,7 @@ def multilorentzian(x, *values, **kwargs):
     return y
 
 
-def multilorentzianfit(
+def multilorentzian_fit(
     x: np.ndarray, y: np.ndarray, peak_indices, parent=None, name=None
 ):
     """Compute Multi-Lorentzian fit
@@ -380,7 +380,7 @@ def multilorentzianfit(
 # --- Exponential fitting curve ------------------------------------------------
 
 
-def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+def exponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute exponential fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -439,7 +439,7 @@ def dominant_frequency(x: np.ndarray, y: np.ndarray) -> np.floating:
     return np.abs(f[np.argmax(spectrum)])
 
 
-def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+def sinusoidal_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute sinusoidal fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -485,7 +485,7 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 # --- Cumulative distribution function fitting curve -----------------------------------
 
 
-def cdffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+def cdf_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute Cumulative Distribution Function (CDF) fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -537,7 +537,7 @@ def cdffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
 
 # --- Planckian fitting curve --------------------------------------------------
-def planckianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+def planckian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute Planckian (blackbody radiation) fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -593,7 +593,7 @@ def planckianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
 
 # --- Two half-Gaussian fitting curve ------------------------------------------
-def twohalfgaussianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+def twohalfgaussian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute two half-Gaussian fit for asymmetric peaks
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -700,7 +700,7 @@ def twohalfgaussianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
 
 # --- Double exponential fitting curve -----------------------------------------
-def doubleexponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+def doubleexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute double exponential fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are

@@ -941,12 +941,12 @@ class SignalActionHandler(BaseActionHandler):
             self.action_for("derivative", separator=True)
             self.action_for("integral")
 
-        def cra_fit(title, fitdlgfunc, iconname, tip: str | None = None):
+        def cra_fit(title, fitdlgfunc, tip: str | None = None):
             """Create curve fitting action"""
             return self.new_action(
                 title,
                 triggered=lambda: self.panel.processor.compute_fit(title, fitdlgfunc),
-                icon_name=iconname,
+                icon_name=fitdlgfunc.__name__ + ".svg",
                 tip=tip,
             )
 
@@ -961,55 +961,71 @@ class SignalActionHandler(BaseActionHandler):
                 self.action_for("highpass")
                 self.action_for("bandpass")
                 self.action_for("bandstop")
-            with self.new_menu(_("Fitting"), icon_name="expfit.svg"):
-                cra_fit(_("Linear fit"), fitdialog.linearfit, "linearfit.svg")
-                self.new_action(
-                    _("Polynomial fit"),
-                    triggered=self.panel.processor.compute_polyfit,
-                    icon_name="polyfit.svg",
-                )
-                cra_fit(_("Gaussian fit"), fitdialog.gaussianfit, "gaussfit.svg")
-                cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit, "lorentzfit.svg")
-                cra_fit(_("Voigt fit"), fitdialog.voigtfit, "voigtfit.svg")
-                self.new_action(
-                    _("Multi-Gaussian fit"),
-                    triggered=self.panel.processor.compute_multigaussianfit,
-                    icon_name="multigaussfit.svg",
-                )
-                self.new_action(
-                    _("Multi-Lorentzian fit"),
-                    triggered=self.panel.processor.compute_multilorentzianfit,
-                    icon_name="lorentzfit.svg",
-                )
-                cra_fit(
-                    _("Planckian fit"),
-                    fitdialog.planckianfit,
-                    "expfit.svg",
-                    tip=_("Planckian (blackbody radiation) fitting"),
-                )
-                cra_fit(
-                    _("Two half-Gaussian fit"),
-                    fitdialog.twohalfgaussianfit,
-                    "gaussfit.svg",
-                    tip=_("Asymmetric peak fitting with two half-Gaussians"),
-                )
-                cra_fit(
-                    _("Double exponential fit"),
-                    fitdialog.doubleexponentialfit,
-                    "expfit.svg",
-                    tip=_("Double exponential decay fitting"),
-                )
-                cra_fit(_("Exponential fit"), fitdialog.exponentialfit, "expfit.svg")
-                cra_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit, "sinfit.svg")
-                cra_fit(
-                    _("CDF fit"),
-                    fitdialog.cdffit,
-                    "cdffit.svg",
-                    tip=_(
-                        "Cumulative distribution function fit, "
-                        "related to Error function (erf)"
-                    ),
-                )
+            with self.new_menu(_("Fitting"), icon_name="exponential_fit.svg"):
+                with self.new_menu(
+                    _("Interactive fitting"), icon_name="interactive_fit.svg"
+                ):
+                    cra_fit(_("Linear fit"), fitdialog.linear_fit)
+                    self.new_action(
+                        _("Polynomial fit"),
+                        triggered=self.panel.processor.compute_polyfit,
+                        icon_name="polynomial_fit.svg",
+                    )
+                    cra_fit(_("Gaussian fit"), fitdialog.gaussian_fit)
+                    cra_fit(_("Lorentzian fit"), fitdialog.lorentzian_fit)
+                    cra_fit(_("Voigt fit"), fitdialog.voigt_fit)
+                    self.new_action(
+                        _("Multi-Gaussian fit"),
+                        triggered=self.panel.processor.compute_multigaussianfit,
+                        icon_name="multigaussian_fit.svg",
+                    )
+                    self.new_action(
+                        _("Multi-Lorentzian fit"),
+                        triggered=self.panel.processor.compute_multilorentzianfit,
+                        icon_name="multilorentzian_fit.svg",
+                    )
+                    cra_fit(
+                        _("Planckian fit"),
+                        fitdialog.planckian_fit,
+                        tip=_("Planckian (blackbody radiation) fitting"),
+                    )
+                    cra_fit(
+                        _("Two half-Gaussian fit"),
+                        fitdialog.twohalfgaussian_fit,
+                        tip=_("Asymmetric peak fitting with two half-Gaussians"),
+                    )
+                    cra_fit(
+                        _("Double exponential fit"),
+                        fitdialog.doubleexponential_fit,
+                        tip=_("Double exponential decay fitting"),
+                    )
+                    cra_fit(_("Exponential fit"), fitdialog.exponential_fit)
+                    cra_fit(_("Sinusoidal fit"), fitdialog.sinusoidal_fit)
+                    cra_fit(
+                        _("CDF fit"),
+                        fitdialog.cdf_fit,
+                        tip=_(
+                            "Cumulative distribution function fit, "
+                            "related to Error function (erf)"
+                        ),
+                    )
+                separator_needed = True
+                for fit_name in (
+                    "linear_fit",
+                    "polynomial_fit",
+                    "gaussian_fit",
+                    "lorentzian_fit",
+                    "voigt_fit",
+                    "planckian_fit",
+                    "twohalfgaussian_fit",
+                    "doubleexponential_fit",
+                    "exponential_fit",
+                    "sinusoidal_fit",
+                    "cdf_fit",
+                    "sigmoid_fit",
+                ):
+                    self.action_for(fit_name, separator=separator_needed)
+                    separator_needed = False
             self.action_for("apply_window")
             self.action_for("detrending")
             self.action_for("interpolate")

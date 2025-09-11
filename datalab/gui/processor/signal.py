@@ -336,6 +336,24 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             sigima.params.BandStopFilterParam,
             "bandstop.svg",
         )
+        # Curve fitting
+        for fit_name, fit_func in [
+            (_("Linear fit"), sigima_signal.linear_fit),
+            (_("Polynomial fit"), sigima_signal.polynomial_fit),
+            (_("Gaussian fit"), sigima_signal.gaussian_fit),
+            (_("Lorentzian fit"), sigima_signal.lorentzian_fit),
+            (_("Voigt fit"), sigima_signal.voigt_fit),
+            (_("Planckian fit"), sigima_signal.planckian_fit),
+            (_("Two Half-Gaussians fit"), sigima_signal.twohalfgaussian_fit),
+            (_("Double Exponential fit"), sigima_signal.doubleexponential_fit),
+            (_("Exponential fit"), sigima_signal.exponential_fit),
+            (_("Sinusoidal fit"), sigima_signal.sinusoidal_fit),
+            (_("CDF fit"), sigima_signal.cdf_fit),
+            (_("Sigmoid fit"), sigima_signal.sigmoid_fit),
+        ]:
+            icon_name = f"{fit_func.__name__}.svg"
+            self.register_1_to_1(fit_func, fit_name, icon_name=icon_name)
+
         # Other processing
         self.register_1_to_1(
             sigima_signal.apply_window,
@@ -583,7 +601,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         txt = _("Polynomial fit")
         edit, param = self.init_param(param, sigima_signal.PolynomialFitParam, txt)
         if not edit or param.edit(self.panel.parentWidget()):
-            dlgfunc = fitdialog.polynomialfit
+            dlgfunc = fitdialog.polynomial_fit
 
             def polynomialfit(x, y, parent=None):
                 """Polynomial fit dialog function"""
@@ -627,7 +645,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:
         """Compute multi-Gaussian fitting curve using an interactive dialog"""
-        fitdlgfunc = fitdialog.multigaussianfit
+        fitdlgfunc = fitdialog.multigaussian_fit
         for obj in self.panel.objview.get_sel_objects():
             dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
             if exec_dialog(dlg):
@@ -644,7 +662,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_multilorentzianfit(self) -> None:
         """Compute Multi-Lorentzian fitting curve using an interactive dialog"""
-        fitdlgfunc = fitdialog.multilorentzianfit
+        fitdlgfunc = fitdialog.multilorentzian_fit
         for obj in self.panel.objview.get_sel_objects():
             dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
             if exec_dialog(dlg):
