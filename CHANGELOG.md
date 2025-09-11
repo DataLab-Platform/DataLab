@@ -110,6 +110,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * New signal generators: linear chirp, logistic function, Planck function.
   * This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213).
 
+* New "Extent" group box in image properties:
+  * Added computed parameters for image extent: `Xmin`, `Xmax`, `Ymin`, and `Ymax`.
+  * These parameters are automatically calculated based on the image origin, pixel spacing, and dimensions.
+  * They provide the physical coordinate boundaries of the image for enhanced spatial analysis.
+  * The parameters are displayed in a dedicated "Extent" group in the image properties panel.
+
 * New I/O features:
   * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using `\s+` instead of single space character).
   * FT-Lab signals and images:

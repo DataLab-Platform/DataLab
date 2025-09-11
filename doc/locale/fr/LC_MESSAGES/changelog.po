@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 21:20+0200\n"
+"POT-Creation-Date: 2025-09-11 10:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -317,6 +317,21 @@ msgstr "Nouveaux générateurs de signaux: chirp linéaire, fonction logistique,
 
 msgid "This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213)."
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
+
+msgid "New \"Extent\" group box in image properties:"
+msgstr "Nouvelle boîte de groupe \"Bornes\" dans les propriétés de l'image :"
+
+msgid "Added computed parameters for image extent: `Xmin`, `Xmax`, `Ymin`, and `Ymax`."
+msgstr "Ajout des paramètres calculés pour l'étendue de l'image : `Xmin`, `Xmax`, `Ymin` et `Ymax`."
+
+msgid "These parameters are automatically calculated based on the image origin, pixel spacing, and dimensions."
+msgstr "Ces paramètres sont automatiquement calculés en fonction de l'origine de l'image, de l'espacement des pixels et des dimensions."
+
+msgid "They provide the physical coordinate boundaries of the image for enhanced spatial analysis."
+msgstr "Ils fournissent les limites de coordonnées physiques de l'image pour une analyse spatiale améliorée."
+
+msgid "The parameters are displayed in a dedicated \"Extent\" group in the image properties panel."
+msgstr "Les paramètres sont affichés dans un groupe dédié \"Bornes\" dans le panneau des propriétés de l'image."
 
 msgid "New I/O features:"
 msgstr "Nouvelles fonctionnalités d'E/S :"
