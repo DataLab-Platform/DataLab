@@ -13,9 +13,11 @@ from scipy.optimize import curve_fit
 from scipy.special import erf  # pylint: disable=no-name-in-module
 from sigima.tests.helpers import get_default_test_name
 from sigima.tools.checks import check_1d_arrays
-from sigima.tools.signal import fitmodels, fitting, fourier, peakdetection
+from sigima.tools.signal import fitting, fourier, peakdetection, pulse
 
 from datalab.config import _
+
+# TODO: Use sigima.tools.signal.fitting functions for initial parameter estimates
 
 
 def guifit(
@@ -122,7 +124,7 @@ def gaussianfit(x, y, parent=None, name=None):
         dx = np.max(x) - np.min(x)
         dy = np.max(y) - np.min(y)
         sigma_guess = dx * 0.1
-        amp_guess = fitmodels.GaussianModel.get_amp_from_amplitude(dy, sigma_guess)
+        amp_guess = pulse.GaussianModel.get_amp_from_amplitude(dy, sigma_guess)
         mu_guess = peakdetection.xpeak(x, y)
         b_guess = np.min(y)
 
@@ -141,7 +143,7 @@ def gaussianfit(x, y, parent=None, name=None):
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return fitmodels.GaussianModel.func(x, *params)
+        return pulse.GaussianModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Gaussian fit"), name=name
@@ -169,7 +171,7 @@ def lorentzianfit(x, y, parent=None, name=None):
         dx = np.max(x) - np.min(x)
         dy = np.max(y) - np.min(y)
         sigma_guess = dx * 0.1
-        amp_guess = fitmodels.LorentzianModel.get_amp_from_amplitude(dy, sigma_guess)
+        amp_guess = pulse.LorentzianModel.get_amp_from_amplitude(dy, sigma_guess)
         mu_guess = peakdetection.xpeak(x, y)
         b_guess = np.min(y)
 
@@ -188,7 +190,7 @@ def lorentzianfit(x, y, parent=None, name=None):
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return fitmodels.LorentzianModel.func(x, *params)
+        return pulse.LorentzianModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Lorentzian fit"), name=name
@@ -216,7 +218,7 @@ def voigtfit(x, y, parent=None, name=None):
         dx = np.max(x) - np.min(x)
         dy = np.max(y) - np.min(y)
         sigma_guess = dx * 0.1
-        amp_guess = fitmodels.VoigtModel.get_amp_from_amplitude(dy, sigma_guess)
+        amp_guess = pulse.VoigtModel.get_amp_from_amplitude(dy, sigma_guess)
         mu_guess = peakdetection.xpeak(x, y)
         b_guess = np.min(y)
 
@@ -235,7 +237,7 @@ def voigtfit(x, y, parent=None, name=None):
     params = [a, sigma, mu, b]
 
     def fitfunc(x, params):
-        return fitmodels.VoigtModel.func(x, *params)
+        return pulse.VoigtModel.func(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Voigt fit"), name=name
@@ -316,7 +318,7 @@ def multilorentzian(x, *values, **kwargs):
     a_x0 = kwargs["a_x0"]
     y = np.zeros_like(x) + y0
     for amp, sigma, x0 in zip(a_amp, a_sigma, a_x0):
-        y += fitmodels.LorentzianModel.func(x, amp, sigma, x0, 0)
+        y += pulse.LorentzianModel.func(x, amp, sigma, x0, 0)
     return y
 
 
@@ -338,7 +340,7 @@ def multilorentzianfit(
         dx = 0.5 * (x[iend] - x[istart])
         dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
         sigma = dx * 0.1
-        amp = fitmodels.LorentzianModel.get_amp_from_amplitude(dy, sigma)
+        amp = pulse.LorentzianModel.get_amp_from_amplitude(dy, sigma)
 
         stri = f"{index + 1:02d}"
         params += [
@@ -581,7 +583,7 @@ def planckianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     params = [amp, x0, sigma, y0]
 
     def fitfunc(x, params):
-        return fitmodels.PlanckianModel.func(x, *params)
+        return fitting.PlanckianFitComputer.evaluate(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Planckian fit"), name=name
@@ -682,7 +684,7 @@ def twohalfgaussianfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     params = [amp_left, amp_right, sigma_left, sigma_right, x0, y0_left, y0_right]
 
     def fitfunc(x, params):
-        return fitmodels.TwoHalfGaussianModel.func(x, *params)
+        return fitting.TwoHalfGaussianFitComputer.evaluate(x, *params)
 
     values = guifit(
         x,
@@ -802,7 +804,7 @@ def doubleexponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     params = [x_center, a_left, b_left, a_right, b_right, y0]
 
     def fitfunc(x, params):
-        return fitmodels.DoubleExponentialModel.func(x, *params)
+        return fitting.DoubleExponentialFitComputer.evaluate(x, *params)
 
     values = guifit(
         x,
