@@ -61,6 +61,83 @@ class BaseStatus(QW.QWidget):
         raise NotImplementedError
 
 
+class ConsoleStatus(BaseStatus):
+    """Console status widget.
+
+    Shows a message if an error or warning has been logged to the console.
+    Shows a button to show the console, only if the console is hidden.
+
+    Args:
+        parent (QWidget): parent widget
+    """
+
+    SIG_SHOW_CONSOLE = QC.Signal()
+
+    def __init__(self, parent: QW.QWidget | None = None) -> None:
+        super().__init__(None, parent)
+        self.label.setText(_("Internal console"))
+        self.label.setToolTip(
+            _(
+                "Click to show the internal console.\n"
+                "The icon will turn red if an error or warning is logged."
+            )
+        )
+        self.label.setCursor(QG.QCursor(QC.Qt.PointingHandCursor))
+        self.label.mouseReleaseEvent = self.on_click
+        self.ok_icon = get_std_icon("MessageBoxInformation")
+        self.ko_icon = get_std_icon("MessageBoxWarning")
+        self.has_errors = False
+        self.update_status()
+
+    def on_click(self, event: QG.QMouseEvent) -> None:
+        """Handle mouse click event on label.
+
+        Args:
+            event: mouse event
+        """
+        if event.button() == QC.Qt.LeftButton:
+            self.SIG_SHOW_CONSOLE.emit()
+
+    def console_visibility_changed(self, visible: bool) -> None:
+        """Handle console visibility changed event.
+
+        Args:
+            visible (bool): console visibility
+        """
+        if visible:
+            # Hide this status widget when console is visible
+            self.hide()
+        else:
+            self.show()
+            self.update_status()
+
+    def exception_occurred(self) -> None:
+        """Handle exception occurred event"""
+        self.has_errors = True
+        self.update_status()
+
+    def update_status(self) -> None:
+        """Update status widget"""
+        if self.has_errors:
+            self.set_icon(self.ko_icon)
+            self.label.setStyleSheet("color: red")
+            self.label.setToolTip(
+                _(
+                    "Click to show the internal console.\n"
+                    "An error or warning has been logged."
+                )
+            )
+        else:
+            self.set_icon(self.ok_icon)
+            self.label.setStyleSheet("")
+            self.label.setToolTip(
+                _(
+                    "Click to show the internal console.\n"
+                    "No error or warning has been logged."
+                )
+            )
+
+
 class MemoryStatus(BaseStatus):
     """Memory status widget.
 

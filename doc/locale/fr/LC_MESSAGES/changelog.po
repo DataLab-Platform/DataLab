@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-12 09:16+0200\n"
+"POT-Creation-Date: 2025-09-12 13:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,18 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Internal console status indicator added to the status bar:"
+msgstr "Indicateur d'état de la console interne ajouté à la barre d'état :"
+
+msgid "The status bar now features an indicator for the internal console, visible only when the console is hidden."
+msgstr "La barre d'état dispose désormais d'un indicateur pour la console interne, visible uniquement lorsque la console est masquée."
+
+msgid "Clicking the indicator opens the internal console."
+msgstr "Cliquer sur l'indicateur ouvre la console interne."
+
+msgid "The icon turns red if an error or warning is logged, alerting the user to check the console."
+msgstr "L'icône devient rouge si une erreur ou un avertissement est enregistré, alertant l'utilisateur à vérifier la console."
 
 msgid "New common signal/image feature:"
 msgstr "Nouvelles fonctionnalités communes signal/image :"

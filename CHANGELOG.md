@@ -6,6 +6,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Internal console status indicator added to the status bar:
+  * The status bar now features an indicator for the internal console, visible only when the console is hidden.
+  * Clicking the indicator opens the internal console.
+  * The icon turns red if an error or warning is logged, alerting the user to check the console.
+
 * New common signal/image feature:
   * Added two options for signal and image creation:
     * "Use xmin and xmax bounds from current signal when creating a new signal" (default: disabled)
