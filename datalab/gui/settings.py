@@ -136,6 +136,24 @@ class ProcSettings(gds.DataSet):
         )
         % ("→", "→"),
     )
+    use_signal_bounds = gds.BoolItem(
+        "",
+        _("Use signal bounds for new signals"),
+        help=_(
+            "If enabled, when creating a new signal, the xmin and xmax values will be "
+            "initialized from the current signal's bounds.<br>"
+            "If disabled, the default values from the New Signal dialog will be used."
+        ),
+    )
+    use_image_dims = gds.BoolItem(
+        "",
+        _("Use image dimensions for new images"),
+        help=_(
+            "If enabled, when creating a new image, the width and height values will "
+            "be initialized from the current image's dimensions.<br>"
+            "If disabled, the default values from the New Image dialog will be used."
+        ),
+    )
     fft_shift_enabled = gds.BoolItem(
         "",
         _("FFT shift"),

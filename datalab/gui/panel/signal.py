@@ -10,6 +10,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Type
 
+import guidata.dataset as gds
+from guidata.config import ValidationMode, temporary_validation_mode
 from plotpy.tools import (
     HCursorTool,
     HRangeTool,
@@ -23,7 +25,7 @@ from sigima.io.signal import SignalIORegistry
 from sigima.objects import SignalObj, SignalROI
 
 from datalab.adapters_plotpy import CURVESTYLES
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.gui import roieditor
 from datalab.gui.actionhandler import SignalActionHandler
 from datalab.gui.newobject import NewSignalParam, create_signal_gui
@@ -105,10 +107,19 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
             newparam = NewSignalParam()
         if title is not None:
             newparam.title = title
-        if curobj is not None:
+        if curobj is not None and Conf.proc.use_signal_bounds.get(False):
+            # Use current signal bounds for new signal:
             newparam.size = len(curobj.data)
-            newparam.xmin = curobj.x.min()
-            newparam.xmax = curobj.x.max()
+            # try to set xmin/xmax from current signal data range
+            with temporary_validation_mode(ValidationMode.STRICT):
+                try:
+                    newparam.xmin = curobj.x.min()
+                except gds.DataItemValidationError:
+                    pass
+                try:
+                    newparam.xmax = curobj.x.max()
+                except gds.DataItemValidationError:
+                    pass
         return newparam
 
     def new_object(

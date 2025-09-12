@@ -7,6 +7,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 💥 New features and enhancements:
 
 * New common signal/image feature:
+  * Added two options for signal and image creation:
+    * "Use xmin and xmax bounds from current signal when creating a new signal" (default: disabled)
+    * "Use dimensions from current image when creating a new image" (default: enabled)
+    * If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any
   * Added `phase` (argument) feature to extract the phase information from complex signals or images.
     * This complements the "Absolute value" (modulus) feature.
   * Added operation to create complex-valued signal/image from real and imaginary parts.

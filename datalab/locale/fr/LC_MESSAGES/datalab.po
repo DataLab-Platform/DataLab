@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-11 18:36+0200\n"
+"POT-Creation-Date: 2025-09-12 09:17+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1808,6 +1808,18 @@ msgstr "Mode d'opération"
 #, python-format
 msgid "Operation mode for computations taking <i>N</i> inputs:<ul><li><b>single</b>: single operand mode</li><li><b>pairwise</b>: pairwise operation mode</li></ul><br>Computations taking <i>N</i> inputs are the ones where:<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
 msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
+
+msgid "Use signal bounds for new signals"
+msgstr "Utiliser les bornes du signal pour les nouveaux signaux"
+
+msgid "If enabled, when creating a new signal, the xmin and xmax values will be initialized from the current signal's bounds.<br>If disabled, the default values from the New Signal dialog will be used."
+msgstr "Si activé, lors de la création d'un nouveau signal, les valeurs xmin et xmax seront initialisées à partir des bornes du signal actuel.<br>Si désactivé, les valeurs par défaut de la boîte de dialogue Nouveau signal seront utilisées."
+
+msgid "Use image dimensions for new images"
+msgstr "Utiliser les dimensions de l'image pour les nouvelles images"
+
+msgid "If enabled, when creating a new image, the width and height values will be initialized from the current image's dimensions.<br>If disabled, the default values from the New Image dialog will be used."
+msgstr "Si activé, lors de la création d'une nouvelle image, les valeurs de largeur et de hauteur seront initialisées à partir des dimensions de l'image actuelle.<br>Si désactivé, les valeurs par défaut de la boîte de dialogue Nouvelle image seront utilisées."
 
 msgid "FFT shift"
 msgstr "Décalage FFT"

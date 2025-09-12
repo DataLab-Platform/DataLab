@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-11 10:39+0200\n"
+"POT-Creation-Date: 2025-09-12 09:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -32,6 +32,18 @@ msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
 msgid "New common signal/image feature:"
 msgstr "Nouvelles fonctionnalités communes signal/image :"
+
+msgid "Added two options for signal and image creation:"
+msgstr "Ajout de deux options pour la création de signaux et d'images :"
+
+msgid "\"Use xmin and xmax bounds from current signal when creating a new signal\" (default: disabled)"
+msgstr "\"Utiliser les bornes du signal pour les nouveaux signaux\" (par défaut : désactivé)"
+
+msgid "\"Use dimensions from current image when creating a new image\" (default: enabled)"
+msgstr "\"Utiliser les dimensions de l'image pour les nouvelles images\" (par défaut : activé)"
+
+msgid "If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any"
+msgstr "Si activé, le nouveau signal/image utilisera les bornes xmin/xmax ou les dimensions du signal/image actuel, le cas échéant."
 
 msgid "Added `phase` (argument) feature to extract the phase information from complex signals or images."
 msgstr "Ajout de la fonctionnalité `phase` (argument) pour extraire les informations de phase des signaux ou des images complexes."
