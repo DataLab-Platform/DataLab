@@ -209,14 +209,12 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self,
         title: str | None = None,
         size: int | None = None,
-        hide_signal_type: bool = True,
     ) -> NewSignalParam:
         """Create and edit new signal parameter dataset
 
         Args:
             title: title of the new signal
             size: size of the new signal (default: None, get from current signal)
-            hide_signal_type: hide signal type parameter (default: True)
 
         Returns:
             New signal parameter dataset (or None if canceled)
@@ -224,7 +222,6 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         newparam = self.signalpanel.get_newparam_from_current(title=title)
         if size is not None:
             newparam.size = size
-        newparam.hide_signal_type = hide_signal_type
         if newparam.edit(self.main):
             return newparam
         return None
