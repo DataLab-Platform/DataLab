@@ -100,6 +100,7 @@ def create_signal_gui(
 
     if isinstance(param, OrigCustomSignalParam) and edit:
         p_init = NewSignalParam(_("Custom signal"))
+        p_init.size = 10  # Set smaller default size for initial input
         if not p_init.edit(parent=parent):
             return None
         param.setup_array(size=p_init.size, xmin=p_init.xmin, xmax=p_init.xmax)
