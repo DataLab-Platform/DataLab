@@ -1957,4 +1957,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             create_adapter_from_object(obj).add_label_with_title(title=title)
+        if not Conf.view.ignore_title_insertion_msg.get(False):
+            answer = QW.QMessageBox.information(
+                self,
+                _("Annotation added"),
+                _(
+                    "The label has been added as an annotation. "
+                    "You can edit or remove it using the annotation editing window."
+                    "<br><br>"
+                    "Choosing to ignore this message will prevent it "
+                    "from being displayed again."
+                ),
+                QW.QMessageBox.Ok | QW.QMessageBox.Ignore,
+            )
+            if answer == QW.QMessageBox.Ignore:
+                Conf.view.ignore_title_insertion_msg.set(True)
         self.refresh_plot("selected", True, False)

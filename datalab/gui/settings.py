@@ -233,6 +233,14 @@ class ViewSettings(gds.DataSet):
             ("right", _("Right (of plot)"), "libre-gui-arrow-right.svg"),
         ),
     )
+    ignore_title_insertion_msg = gds.BoolItem(
+        "",
+        _("Ignore title insertion message"),
+        help=_(
+            "Ignore information message when inserting object title as annotation label"
+        ),
+        default=False,
+    )
     _g0 = gds.EndGroup("")
 
     g1 = gds.BeginGroup(_("Signal"))

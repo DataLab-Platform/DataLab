@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-12 13:45+0200\n"
+"POT-Creation-Date: 2025-09-13 18:49+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -137,10 +137,12 @@ msgstr "Supprimer les métadonnées"
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
-msgid "Add object title to plot"
-msgstr "Ajouter le titre de l'objet au graphique"
+#, fuzzy
+msgid "Insert object title as annotation label"
+msgstr "Ajouter le titre de l'objet comme étiquette au graphique"
 
-msgid "Add object title as a label to the plot"
+#, fuzzy
+msgid "Add the selected object's title as a label to the plot annotations"
 msgstr "Ajouter le titre de l'objet comme étiquette au graphique"
 
 msgid "Copy titles to clipboard"
@@ -973,6 +975,13 @@ msgstr "Tous les objets associés aux résultats doivent avoir les mêmes ROIs p
 
 msgid "Are you sure you want to delete all results of the selected object(s)?"
 msgstr "Êtes-vous sûr de vouloir supprimer tous les résultats des objets sélectionnés ?"
+
+msgid "Annotation added"
+msgstr "Annotation ajoutée"
+
+#, fuzzy
+msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
+msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Vous pouvez désactiver ce message dans les préférences ou en cliquant sur 'Ignorer' ci-dessous."
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
@@ -1877,6 +1886,12 @@ msgstr "Gauche (à gauche du graphique)"
 
 msgid "Right (of plot)"
 msgstr "Droite (à droite du graphique)"
+
+msgid "Ignore title insertion message"
+msgstr "Ignorer le message d'insertion du titre"
+
+msgid "Ignore information message when inserting object title as annotation label"
+msgstr "Ignorer le message d'information lors de l'insertion du titre de l'objet en tant qu'étiquette d'annotation"
 
 msgid "Signal"
 msgstr "Signal"

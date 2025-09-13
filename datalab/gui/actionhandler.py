@@ -692,10 +692,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Add object title to plot"),
+                _("Insert object title as annotation label"),
                 separator=True,
                 triggered=self.panel.add_label_with_title,
-                tip=_("Add object title as a label to the plot"),
+                tip=_(
+                    "Add the selected object's title as a label to the plot annotations"
+                ),
             )
             self.new_action(
                 _("Copy titles to clipboard"),

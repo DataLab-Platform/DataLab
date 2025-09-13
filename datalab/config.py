@@ -201,6 +201,9 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # - "right": right
     plot_toolbar_position = conf.Option()
 
+    # Ignore information message when inserting object title as annotation label:
+    ignore_title_insertion_msg = conf.Option()
+
     # String formatting for shape legends
     sig_format = conf.Option()
     ima_format = conf.Option()

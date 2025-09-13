@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 14:49+0200\n"
+"POT-Creation-Date: 2025-09-13 18:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,9 +227,6 @@ msgstr "titre du nouveau signal"
 msgid "size of the new signal (default: None, get from current signal)"
 msgstr "taille du nouveau signal (par défaut : None, obtenue à partir du signal actuel)"
 
-msgid "hide signal type parameter (default: True)"
-msgstr "masquer le paramètre de type de signal (par défaut : True)"
-
 msgid "Returns"
 msgstr "Retourne"
 
@@ -280,3 +277,4 @@ msgstr "Instancier et obtenir les plugins disponibles"
 
 msgid "List of available plugins (as instances)"
 msgstr "Liste des plugins disponibles (en tant qu'instances)"
+
