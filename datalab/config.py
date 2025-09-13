@@ -172,6 +172,12 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: do not keep analysis results (default)
     keep_results = conf.Option()
 
+    # Use xmin and xmax bounds from current signal when creating a new signal:
+    use_signal_bounds = conf.Option()
+
+    # Use dimensions from current image when creating a new image:
+    use_image_dims = conf.Option()
+
     # FFT shift enabled state for signal/image processing:
     # - True: FFT shift is enabled (default)
     # - False: FFT shift is disabled
@@ -326,6 +332,8 @@ def initialize():
         sigima_options.imageio_formats.set(iofmts)  # Sync with sigima config
     # Proc section
     Conf.proc.operation_mode.get("single")
+    Conf.proc.use_signal_bounds.get(False)
+    Conf.proc.use_image_dims.get(True)
     Conf.proc.fft_shift_enabled.get(True)
     sigima_options.fft_shift_enabled.set(True)  # Sync with sigima config
     Conf.proc.extract_roi_singleobj.get(False)

@@ -9,7 +9,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * New image operation:
   * Convolution.
 
+* Internal console status indicator added to the status bar:
+  * The status bar now features an indicator for the internal console, visible only when the console is hidden.
+  * Clicking the indicator opens the internal console.
+  * The icon turns red if an error or warning is logged, alerting the user to check the console.
+
 * New common signal/image feature:
+  * Added two options for signal and image creation:
+    * "Use xmin and xmax bounds from current signal when creating a new signal" (default: disabled)
+    * "Use dimensions from current image when creating a new image" (default: enabled)
+    * If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any
   * Added `phase` (argument) feature to extract the phase information from complex signals or images.
     * This complements the "Absolute value" (modulus) feature.
   * Added operation to create complex-valued signal/image from real and imaginary parts.
@@ -114,6 +123,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * New signal generators: linear chirp, logistic function, Planck function.
   * This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213).
+
+* New "Extent" group box in image properties:
+  * Added computed parameters for image extent: `Xmin`, `Xmax`, `Ymin`, and `Ymax`.
+  * These parameters are automatically calculated based on the image origin, pixel spacing, and dimensions.
+  * They provide the physical coordinate boundaries of the image for enhanced spatial analysis.
+  * The parameters are displayed in a dedicated "Extent" group in the image properties panel.
 
 * New I/O features:
   * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using `\s+` instead of single space character).

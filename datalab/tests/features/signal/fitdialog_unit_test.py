@@ -29,19 +29,19 @@ def test_fit_dialog():
         ep = execenv.print
         tn = get_default_test_name
 
-        ep(fdlg.polynomialfit(s2.x, s2.y, 4, name=tn("00")))
-        ep(fdlg.linearfit(s2.x, s2.y, name=tn("01")))
-        ep(fdlg.gaussianfit(s2.x, s2.y, name=tn("02")))
-        ep(fdlg.lorentzianfit(s2.x, s2.y, name=tn("03")))
-        ep(fdlg.multigaussianfit(s1.x, s1.y, peakidx, name=tn("04")))
-        ep(fdlg.multilorentzianfit(s1.x, s1.y, peakidx, name=tn("05")))
-        ep(fdlg.voigtfit(s2.x, s2.y, name=tn("06")))
-        ep(fdlg.exponentialfit(s2.x, s2.y, name=tn("07")))
-        ep(fdlg.sinusoidalfit(s2.x, s2.y, name=tn("08")))
-        ep(fdlg.cdffit(s2.x, s2.y, name=tn("09")))
-        ep(fdlg.planckianfit(s2.x, s2.y, name=tn("10")))
-        ep(fdlg.twohalfgaussianfit(s2.x, s2.y, name=tn("11")))
-        ep(fdlg.doubleexponentialfit(s2.x, s2.y, name=tn("12")))
+        ep(fdlg.polynomial_fit(s2.x, s2.y, 4, name=tn("00")))
+        ep(fdlg.linear_fit(s2.x, s2.y, name=tn("01")))
+        ep(fdlg.gaussian_fit(s2.x, s2.y, name=tn("02")))
+        ep(fdlg.lorentzian_fit(s2.x, s2.y, name=tn("03")))
+        ep(fdlg.multigaussian_fit(s1.x, s1.y, peakidx, name=tn("04")))
+        ep(fdlg.multilorentzian_fit(s1.x, s1.y, peakidx, name=tn("05")))
+        ep(fdlg.voigt_fit(s2.x, s2.y, name=tn("06")))
+        ep(fdlg.exponential_fit(s2.x, s2.y, name=tn("07")))
+        ep(fdlg.sinusoidal_fit(s2.x, s2.y, name=tn("08")))
+        ep(fdlg.cdf_fit(s2.x, s2.y, name=tn("09")))
+        ep(fdlg.planckian_fit(s2.x, s2.y, name=tn("10")))
+        ep(fdlg.twohalfgaussian_fit(s2.x, s2.y, name=tn("11")))
+        ep(fdlg.doubleexponential_fit(s2.x, s2.y, name=tn("12")))
 
 
 if __name__ == "__main__":
