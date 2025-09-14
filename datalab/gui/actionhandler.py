@@ -464,7 +464,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                         pos += 1
                     actionlist.insert(pos, None)
                 return
-            elif self.__category_in_progress is not None:
+            if self.__category_in_progress is not None:
                 category = self.__category_in_progress
             else:
                 raise ValueError("No category specified")
