@@ -1957,7 +1957,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             create_adapter_from_object(obj).add_label_with_title(title=title)
-        if not Conf.view.ignore_title_insertion_msg.get(False):
+        if (
+            not Conf.view.ignore_title_insertion_msg.get(False)
+            and not execenv.unattended
+        ):
             answer = QW.QMessageBox.information(
                 self,
                 _("Annotation added"),
