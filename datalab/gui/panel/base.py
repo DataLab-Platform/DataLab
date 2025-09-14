@@ -1157,16 +1157,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             New object or list of new objects
         """
         worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
-        objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
+        objs = qt_long_callback(self, _("Reading objects from file"), worker, True)
         group_id = None
         if len(objs) > 1 and create_group:
             # Create a new group if more than one object is loaded
             group_id = get_uuid(self.add_group(osp.basename(filename)))
-        for obj in objs:
-            if add_objects:
-                set_uuid(obj)  # In case the object UUID was serialized in the file,
-                # we need to reset it to a new UUID to avoid conflicts (e.g. HDF5 file)
-                self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
+        with create_progress_bar(
+            self, _("Adding objects to workspace"), max_=len(objs) - 1
+        ) as progress:
+            for i_obj, obj in enumerate(objs):
+                progress.setValue(i_obj + 1)
+                if progress.wasCanceled():
+                    break
+                if add_objects:
+                    set_uuid(obj)  # In case the object UUID was serialized in the file,
+                    # we need to reset it to a new UUID to avoid conflicts
+                    # (e.g. HDF5 file)
+                    self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
         self.selection_changed()
         return objs
 

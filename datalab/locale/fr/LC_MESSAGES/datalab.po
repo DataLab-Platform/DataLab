@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-13 18:49+0200\n"
+"POT-Creation-Date: 2025-09-14 14:41+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -908,6 +908,9 @@ msgstr "Nom de l'objet :"
 
 msgid "Rename group"
 msgstr "Renommer le groupe"
+
+msgid "Reading objects from file"
+msgstr "Lecture des objets depuis le fichier"
 
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
@@ -2741,4 +2744,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
