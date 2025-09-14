@@ -524,7 +524,8 @@ def planckian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     params = [amp, x0, sigma, y0]
 
-    def fitfunc(x, params):
+    def fitfunc(x, params: list[float]) -> np.ndarray:
+        """Evaluate Planckian function with given parameters."""
         return fitting.PlanckianFitComputer.evaluate(x, *params)
 
     values = guifit(
