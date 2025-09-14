@@ -345,6 +345,7 @@ def initialize():
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")
+    Conf.view.ignore_title_insertion_msg.get(False)
     Conf.view.sig_autodownsampling.get(True)
     Conf.view.sig_autodownsampling_maxpoints.get(100000)
     Conf.view.ima_aspect_ratio_1_1.get(False)
