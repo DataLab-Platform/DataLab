@@ -18,6 +18,8 @@ from sigima.tools.signal import fitting, fourier, peakdetection, pulse
 from datalab.config import _
 
 # TODO: Use sigima.tools.signal.fitting functions for initial parameter estimates
+# NOTE: DoubleExponentialFitComputer.compute_initial_params is now used for
+#       double exponential fitting
 
 
 def guifit(
@@ -705,100 +707,42 @@ def doubleexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
-    # Save bounds early to avoid any potential shadowing issues
-    x_min, x_max = float(x.min()), float(x.max())
-    y_min, y_max = float(y.min()), float(y.max())
 
-    # Get initial parameter estimates from Sigima fitting algorithm
-    try:
-        fitted_y, sigima_params = fitting.doubleexponential_fit(x, y)
-        # Convert Sigima parameters to DataLab format
-        x_center_guess = sigima_params.x_center
-        a_left_guess = sigima_params.a_left
-        b_left_guess = sigima_params.b_left
-        a_right_guess = sigima_params.a_right
-        b_right_guess = sigima_params.b_right
-        y0_guess = sigima_params.y0
-    except Exception:
-        # Fallback to manual estimation if Sigima fit fails
-        y_range = y.max() - y.min()
-        x_range = x.max() - x.min()
-        y_min = y.min()
-        y_max = y.max()
-
-        # Better initial estimates based on data analysis
-        # Assume the curve starts high and decays to baseline
-        initial_value = y[0] if len(y) > 0 else y_max
-        final_value = y[-1] if len(y) > 0 else y_min
-
-        # Estimate baseline from final portion of data
-        if len(y) > 10:
-            y0_guess = np.mean(
-                y[-max(5, len(y) // 10) :]
-            )  # Average of last 10% or 5 points
-        else:
-            y0_guess = final_value
-
-        # Estimate amplitudes: total amplitude split between components
-        total_amp = initial_value - y0_guess
-        a_left_guess = total_amp * 0.7  # Fast component (typically dominant)
-        a_right_guess = total_amp * 0.3  # Slow component
-
-        # Better time constant estimation based on decay behavior
-        # Look for characteristic times where signal drops to 1/e
-        target_fast = y0_guess + total_amp / np.e  # 1/e point
-        target_slow = y0_guess + total_amp * 0.5  # Half-life point
-
-        # Find approximate time constants from data
-        tau1_guess = x_range * 0.05  # Fast decay (5% of range)
-        tau2_guess = x_range * 0.3  # Slow decay (30% of range)
-
-        # Try to estimate from actual data if enough points
-        if len(x) > 20:
-            # Find where signal crosses the 1/e threshold
-            try:
-                fast_idx = np.where(y <= target_fast)[0]
-                if len(fast_idx) > 0:
-                    tau1_guess = x[fast_idx[0]] * 0.7  # Adjust for double exponential
-            except (IndexError, ValueError):
-                pass  # Keep default estimate
-
-            try:
-                slow_idx = np.where(y <= target_slow)[0]
-                if len(slow_idx) > 0:
-                    tau2_guess = x[slow_idx[-1]] * 0.5  # Adjust for double exponential
-            except (IndexError, ValueError):
-                pass  # Keep default estimate
-
-        # Convert time constants to coefficient form (negative for decay)
-        b_left_guess = -1.0 / tau1_guess if tau1_guess > 0 else -1.0
-        b_right_guess = -1.0 / tau2_guess if tau2_guess > 0 else -1.0
-        x_center_guess = np.mean(x)
+    # Get initial parameter estimates from Sigima DoubleExponentialFitComputer
+    computer = fitting.DoubleExponentialFitComputer(x, y)
+    initial_params = computer.compute_initial_params()
+    x_center_guess = initial_params["x_center"]
+    a_left_guess = initial_params["a_left"]
+    b_left_guess = initial_params["b_left"]
+    a_right_guess = initial_params["a_right"]
+    b_right_guess = initial_params["b_right"]
+    y0_guess = initial_params["y0"]
 
     # Create parameter bounds
-    y_range = y.max() - y.min()
-    x_range = x.max() - x.min()
-    total_amp = abs(a_left_guess) + abs(a_right_guess)
+    x_min, x_max = float(x.min()), float(x.max())
+    y_min, y_max = float(y.min()), float(y.max())
+    y_range = y_max - y_min
+    x_range = x_max - x_min
 
     # Parameter bounds with more realistic ranges
     # New model signature: func(x, x_center, a_left, b_left, a_right, b_right, y0)
     x_center = FitParam(_("Center position"), x_center_guess, x_min, x_max)
-    a_left = FitParam(_("Left amplitude"), a_left_guess, 0.0, total_amp * 2)
+    a_left = FitParam(_("Left amplitude"), a_left_guess, 0.0, a_left_guess * 10.0)
     b_left = FitParam(
         _("Left time constant") + " (bL)",
         b_left_guess,  # Already in coefficient form
-        -10.0 / x_range,  # Fast decay
-        -0.001 / x_range,  # Slow decay
+        0.001 / x_range,  # Slow decay
+        100.0 / x_range,  # Fast decay
     )
-    a_right = FitParam(_("Right amplitude"), a_right_guess, 0.0, total_amp * 2)
+    a_right = FitParam(_("Right amplitude"), a_right_guess, 0.0, a_right_guess * 10.0)
     b_right = FitParam(
         _("Right time constant") + " (bR)",
         b_right_guess,  # Already in coefficient form
-        -10.0 / x_range,  # Fast decay
+        -100.0 / x_range,  # Fast decay
         -0.001 / x_range,  # Slow decay
     )
     y0 = FitParam(
-        _("Base line"), y0_guess, y0_guess - 0.1 * y_range, y0_guess + 0.1 * y_range
+        _("Base line"), y0_guess, y0_guess - 0.2 * y_range, y0_guess + 0.2 * y_range
     )
 
     params = [x_center, a_left, b_left, a_right, b_right, y0]
