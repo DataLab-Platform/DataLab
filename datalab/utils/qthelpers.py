@@ -377,8 +377,9 @@ def qt_try_except(message=None, context=None):
                     raise
                 qt_handle_error_message(panel.parent(), msg, context)
             finally:
-                panel.SIG_STATUS_MESSAGE.emit("")
-                QW.QApplication.restoreOverrideCursor()
+                if message is not None:
+                    panel.SIG_STATUS_MESSAGE.emit("")
+                    QW.QApplication.restoreOverrideCursor()
             return output
 
         return method_wrapper
