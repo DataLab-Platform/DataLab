@@ -131,7 +131,8 @@ target-version = "py39"                        # Assume Python 3.9.
 [tool.ruff.lint]
 # all rules can be found here: https://beta.ruff.rs/docs/rules/
 select = [
-    "D202",   # Pydocstyle
+    "D202",   # No blank lines allowed after function docstring.
+    "D403",   # First word of docstring should be properly capitalized.
     "E",      # Pycodestyle error
     "F",      # Pyflakes
     "I",      # Isort
