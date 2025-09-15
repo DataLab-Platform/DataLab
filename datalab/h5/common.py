@@ -14,7 +14,7 @@ from collections.abc import Callable
 
 import h5py
 import numpy as np
-from sigima.io.common.converters import convert_array_to_standard_type, to_string
+from sigima.io.common.converters import convert_array_to_valid_dtype, to_string
 
 from datalab.config import Conf
 
@@ -155,7 +155,7 @@ class BaseNode(metaclass=abc.ABCMeta):
         data = self.data
         if data.dtype not in (float, np.complex128):
             data = np.array(data, dtype=float)
-        data = convert_array_to_standard_type(data)
+        data = convert_array_to_valid_dtype(data)
         if len(data.shape) == 1:
             obj.set_xydata(np.arange(data.size), data)
         else:
@@ -169,7 +169,7 @@ class BaseNode(metaclass=abc.ABCMeta):
             self.uint32_wng = data.max() > np.iinfo(np.int32).max
             clipped_data = data.clip(0, np.iinfo(np.int32).max)
             data = np.array(clipped_data, dtype=np.int32)
-        obj.data = convert_array_to_standard_type(data)
+        obj.data = convert_array_to_valid_dtype(data)
 
 
 class H5Importer:
