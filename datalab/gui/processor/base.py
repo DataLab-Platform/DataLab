@@ -465,13 +465,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         QW.QApplication.processEvents()
         if not progress.wasCanceled():
             if self.worker is None:
+                # No process isolation: run function directly
                 return wng_err_func(func, args)
+            # Process isolation: run function in a separate process
             self.worker.run(func, args)
             while not self.worker.is_computation_finished():
-                QW.QApplication.processEvents()
-                time.sleep(0.1)
-                if progress.wasCanceled():
-                    self.worker.restart_pool()
+                QW.QApplication.processEvents()  # Keep UI responsive
+                time.sleep(0.01)  # Avoid busy waiting, more responsive UI
+                if progress.wasCanceled():  # User canceled the operation
+                    self.worker.restart_pool()  # Terminate and recreate the pool
                     break
             if self.worker.is_computation_finished():
                 return self.worker.get_result()
