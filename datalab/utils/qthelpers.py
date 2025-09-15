@@ -246,7 +246,6 @@ class CallbackWorker(QC.QThread):
 
     def run(self) -> None:
         """Start thread"""
-
         # Initialize progress bar: setting progress to 0.0 has the effect of
         # showing the progress dialog after the `minimumDuration` time has elapsed.
         # If we don't set the progress to 0.0, the progress dialog will be shown only

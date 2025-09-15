@@ -330,7 +330,6 @@ class DLExecEnv:
 
     def parse_args(self):
         """Parse command line arguments"""
-
         # <!> WARNING <!>
         # Do not add an option '-c' to avoid any conflict with macro command
         # execution mecanism used with DataLab standalone version (see start.pyw)

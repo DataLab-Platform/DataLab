@@ -611,7 +611,6 @@ def doubleexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
-
     # Get initial parameter estimates from Sigima DoubleExponentialFitComputer
     computer = fitting.DoubleExponentialFitComputer(x, y)
     initial_params = computer.compute_initial_params()
