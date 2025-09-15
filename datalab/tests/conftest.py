@@ -110,6 +110,8 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
 
 def pytest_configure(config):
     """Add custom markers to pytest."""
+    if config.option.durations is None:
+        config.option.durations = 10  # Default to showing 10 slowest tests
     config.addinivalue_line(
         "markers",
         "validation: mark a test as a validation test (ground truth or analytical)",
