@@ -469,9 +469,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return wng_err_func(func, args)
             # Process isolation: run function in a separate process
             self.worker.run(func, args)
+            # Adaptive sleep to balance responsiveness and performance
+            sleep_duration = 0.001  # Start with 1ms
+            max_sleep = 0.01  # Cap at 10ms
+            sleep_increment = 0.001  # Increase by 1ms each iteration
             while not self.worker.is_computation_finished():
                 QW.QApplication.processEvents()  # Keep UI responsive
-                time.sleep(0.01)  # Avoid busy waiting, more responsive UI
+                time.sleep(sleep_duration)  # Adaptive sleep to avoid busy waiting
+                # Gradually increase sleep time for longer computations
+                sleep_duration = min(sleep_duration + sleep_increment, max_sleep)
                 if progress.wasCanceled():  # User canceled the operation
                     self.worker.restart_pool()  # Terminate and recreate the pool
                     break
