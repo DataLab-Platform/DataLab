@@ -496,9 +496,9 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             comment=_("Compute the ordinate at a given x value (linear interpolation)"),
         )
         self.register_1_to_0(
-            sigima_signal.get_parameters,
+            sigima_signal.get_pulse_parameters,
             _("Obtain signal parameters"),
-            paramclass=sigima_signal.ParametersParam,
+            paramclass=sigima_signal.PulseParametersParam,
             comment=_("Obtain signal parameters"),
         )
         self.register_1_to_0(
