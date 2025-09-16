@@ -9,6 +9,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * New image operation:
   * Convolution.
 
+* New image format support:
+  * **Matris text image files**: Added support for reading Matris format text files (`.txt` extension).
+    * Supports both real and complex-valued image data with optional error images.
+    * Automatically handles NaN values in the data.
+    * Reads metadata including units (X, Y, Z) and labels from file headers.
+    * This feature is provided by the underlying Sigima library.
+
 * Internal console status indicator added to the status bar:
   * The status bar now features an indicator for the internal console, visible only when the console is hidden.
   * Clicking the indicator opens the internal console.

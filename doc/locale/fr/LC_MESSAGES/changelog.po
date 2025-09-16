@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 21:20+0200\n"
+"POT-Creation-Date: 2025-09-16 15:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -32,11 +32,31 @@ msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
 msgid "New image operation:"
 msgstr "Nouvelle opération d'image :"
-msgid "Internal console status indicator added to the status bar:"
-msgstr "Indicateur d'état de la console interne ajouté à la barre d'état :"
 
 msgid "Convolution."
 msgstr "Convolution"
+
+msgid "New image format support:"
+msgstr "Nouveau support de format d'image :"
+
+msgid "**Matris text image files**: Added support for reading Matris format text files (`.txt` extension)."
+msgstr "**Fichiers image texte Matris** : Ajout du support pour la lecture des fichiers texte au format Matris (extension `.txt`)."
+
+msgid "Supports both real and complex-valued image data with optional error images."
+msgstr "Prend en charge à la fois les données d'image réelles et à valeurs complexes avec des images d'erreur facultatives."
+
+msgid "Automatically handles NaN values in the data."
+msgstr "Gère automatiquement les valeurs NaN dans les données."
+
+msgid "Reads metadata including units (X, Y, Z) and labels from file headers."
+msgstr "Lit les métadonnées, y compris les unités (X, Y, Z) et les étiquettes, à partir des en-têtes de fichiers."
+
+msgid "This feature is provided by the underlying Sigima library."
+msgstr "Cette fonctionnalité est fournie par la bibliothèque Sigima sous-jacente."
+
+msgid "Internal console status indicator added to the status bar:"
+msgstr "Indicateur d'état de la console interne ajouté à la barre d'état :"
+
 msgid "The status bar now features an indicator for the internal console, visible only when the console is hidden."
 msgstr "La barre d'état dispose désormais d'un indicateur pour la console interne, visible uniquement lorsque la console est masquée."
 
