@@ -14,6 +14,8 @@ Tests cover:
 4. Process pool restart mechanism for long-running/cancelled computations
 """
 
+# pylint: disable=protected-access
+
 import time
 from unittest.mock import Mock, patch
 
@@ -21,6 +23,7 @@ import pytest
 from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 
+import datalab.gui.processor.base as base_module
 from datalab.gui.processor.base import Worker, WorkerState, WorkerStateMachine
 from datalab.gui.processor.catcher import CompOut
 
@@ -152,8 +155,6 @@ class TestWorker:
 
     def test_worker_pool_management(self):
         """Test pool creation and termination."""
-        import datalab.gui.processor.base as base_module
-
         # Test static methods work
         Worker.terminate_pool()
         Worker.create_pool()

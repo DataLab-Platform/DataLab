@@ -241,14 +241,14 @@ class Worker:
 
         if current_state == WorkerState.IDLE:
             return  # Already idle, nothing to restart
-        elif current_state == WorkerState.STARTING:
+        if current_state == WorkerState.STARTING:
             # If we're still starting, just go back to idle
             self.asyncresult = None
         elif current_state == WorkerState.RUNNING:
             # Cancel the running computation - use restart_pool for consistency
             self.restart_pool()
             return  # restart_pool already handles state reset
-        elif current_state == WorkerState.FINISHED:
+        if current_state == WorkerState.FINISHED:
             # Clean up and go to idle
             self.asyncresult = None
 
@@ -273,11 +273,11 @@ class Worker:
 
         if current_state == WorkerState.IDLE:
             return True  # No computation has been started
-        elif current_state == WorkerState.STARTING:
+        if current_state == WorkerState.STARTING:
             return False  # Computation is starting, not finished yet
-        elif current_state == WorkerState.FINISHED:
+        if current_state == WorkerState.FINISHED:
             return True  # Already finished
-        elif current_state == WorkerState.RUNNING:
+        if current_state == WorkerState.RUNNING:
             if self.asyncresult is None:
                 return False  # Should not happen, but defensive
             finished = self.asyncresult.ready()
@@ -285,8 +285,7 @@ class Worker:
                 # Transition to finished state
                 self.state_machine.transition_to(WorkerState.FINISHED)
             return finished
-        else:
-            raise ValueError(f"Invalid worker state: {current_state}")
+        raise ValueError(f"Invalid worker state: {current_state}")
 
     def get_result(self) -> CompOut:
         """Return computation result.
