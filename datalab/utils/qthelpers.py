@@ -23,10 +23,10 @@ from typing import Any
 
 import guidata
 from guidata.configtools import get_icon
+from guidata.utils.misc import to_string
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigima.io.common.converters import to_string
 
 from datalab.config import (
     APP_NAME,

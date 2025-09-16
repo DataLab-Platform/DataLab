@@ -8,7 +8,7 @@ DataLab Generic HDF5 format support
 
 import h5py
 import numpy as np
-from sigima.io.common.converters import to_string
+from guidata.utils.misc import to_string
 from sigima.objects import create_image, create_signal
 
 from datalab.h5 import common, utils

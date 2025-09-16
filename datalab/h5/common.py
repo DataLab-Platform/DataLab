@@ -14,7 +14,8 @@ from collections.abc import Callable
 
 import h5py
 import numpy as np
-from sigima.io.common.converters import convert_array_to_valid_dtype, to_string
+from guidata.utils.misc import to_string
+from sigima.io.common.converters import convert_array_to_valid_dtype
 
 from datalab.config import Conf
 
