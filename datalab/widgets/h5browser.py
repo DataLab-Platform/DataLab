@@ -22,6 +22,7 @@ from guidata.qthelpers import (
     get_std_icon,
     win32_fix_title_bar_background,
 )
+from guidata.utils.misc import to_string
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.builder import make
 from plotpy.plot import PlotOptions, PlotWidget
@@ -30,7 +31,6 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename
 from sigima import ImageObj, SignalObj
-from sigima.io.common.converters import to_string
 
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import _
