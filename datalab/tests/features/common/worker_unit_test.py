@@ -25,7 +25,7 @@ from datalab.gui.processor.base import Worker, WorkerState, WorkerStateMachine
 from datalab.gui.processor.catcher import CompOut
 
 
-class WorkerStateMachineTests:
+class TestWorkerStateMachine:
     """Test suite for WorkerStateMachine class - independent from Worker class."""
 
     def test_initial_state(self):
@@ -130,7 +130,7 @@ def dummy_infinite_computation() -> None:
         time.sleep(0.1)  # Simulate work
 
 
-class WorkerTests:
+class TestWorker:
     """Test suite for Worker class functionality."""
 
     def setup_method(self):
