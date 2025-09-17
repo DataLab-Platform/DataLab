@@ -14,7 +14,7 @@ from plotpy.builder import make
 from plotpy.plot import PlotDialog
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigima.tools.signal.features import find_first_x_at_given_y_value
+from sigima.tools.signal.features import find_x_values_at_y
 
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import _
@@ -142,13 +142,12 @@ class SignalCursorDialog(PlotDialog):
         plot = self.get_plot()
         if self.__cursor_orientation == "horizontal" and item is self.hcursor:
             _x, y = item.get_pos()
-            x = find_first_x_at_given_y_value(sig.x, sig.y, y)
-            x = None if np.isnan(x) else x
-            if x is not None:
+            x_values = find_x_values_at_y(sig.x, sig.y, y)
+            if len(x_values) > 0:
                 with block_signals(plot):
-                    self.vcursor.set_pos(x, y)
-            self.vcursor.setVisible(x is not None)
-            self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(x is not None)
+                    self.vcursor.set_pos(x_values[0], y)
+            self.vcursor.setVisible(len(x_values) > 0)
+            self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(len(x_values) > 0)
         elif self.__cursor_orientation == "vertical" and item is self.vcursor:
             x, _y = item.get_pos()
             y_index = np.searchsorted(self.__signal.x, x)
