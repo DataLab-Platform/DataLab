@@ -36,7 +36,7 @@ class ExtractBlobs(datalab.plugins.PluginBase):
     def generate_test_image(self) -> None:
         """Generate test image"""
         newparam = self.edit_new_image_parameters(
-            title="Test image", hide_image_dtype=True, shape=(2048, 2048)
+            title="Test image", hide_dtype=True, shape=(2048, 2048)
         )
         if newparam is not None:
             # Create a NumPy array:
