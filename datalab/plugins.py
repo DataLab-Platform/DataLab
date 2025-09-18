@@ -230,18 +230,20 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self,
         title: str | None = None,
         shape: tuple[int, int] | None = None,
-        hide_image_height: bool = False,
-        hide_image_type: bool = True,
-        hide_image_dtype: bool = False,
+        hide_height: bool = False,
+        hide_width: bool = False,
+        hide_type: bool = True,
+        hide_dtype: bool = False,
     ) -> NewImageParam | None:
         """Create and edit new image parameter dataset
 
         Args:
             title: title of the new image
             shape: shape of the new image (default: None, get from current image)
-            hide_image_height: hide image heigth parameter (default: False)
-            hide_image_type: hide image type parameter (default: True)
-            hide_image_dtype: hide image data type parameter (default: False)
+            hide_height: hide image heigth parameter (default: False)
+            hide_width: hide image width parameter (default: False)
+            hide_type: hide image type parameter (default: True)
+            hide_dtype: hide image data type parameter (default: False)
 
         Returns:
             New image parameter dataset (or None if canceled)
@@ -249,9 +251,10 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         newparam = self.imagepanel.get_newparam_from_current(title=title)
         if shape is not None:
             newparam.height, newparam.width = shape
-        newparam.hide_image_height = hide_image_height
-        newparam.hide_image_type = hide_image_type
-        newparam.hide_image_dtype = hide_image_dtype
+        newparam.hide_height = hide_height
+        newparam.hide_width = hide_width
+        newparam.hide_type = hide_type
+        newparam.hide_dtype = hide_dtype
         if newparam.edit(self.main):
             return newparam
         return None

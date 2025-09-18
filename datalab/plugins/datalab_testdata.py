@@ -47,32 +47,28 @@ class PluginTestData(PluginBase):
 
     def create_sincos_image(self) -> None:
         """Create 2D sin cos image"""
-        newparam = self.edit_new_image_parameters(hide_image_type=True)
+        newparam = self.edit_new_image_parameters(hide_type=True)
         if newparam is not None:
             obj = test_data.create_sincos_image(newparam)
             self.proxy.add_object(obj)
 
     def create_noisy_gaussian_image(self) -> None:
         """Create 2D noisy gauss image"""
-        newparam = self.edit_new_image_parameters(
-            hide_image_height=True, hide_image_type=True
-        )
+        newparam = self.edit_new_image_parameters(hide_height=True, hide_type=True)
         if newparam is not None:
             obj = test_data.create_noisy_gaussian_image(newparam, add_annotations=False)
             self.proxy.add_object(obj)
 
     def create_multigaussian_image(self) -> None:
         """Create 2D multi gauss image"""
-        newparam = self.edit_new_image_parameters(
-            hide_image_height=True, hide_image_type=True
-        )
+        newparam = self.edit_new_image_parameters(hide_height=True, hide_type=True)
         if newparam is not None:
             obj = test_data.create_multigaussian_image(newparam)
             self.proxy.add_object(obj)
 
     def create_2dstep_image(self) -> None:
         """Create 2D step image"""
-        newparam = self.edit_new_image_parameters(hide_image_type=True)
+        newparam = self.edit_new_image_parameters(hide_type=True)
         if newparam is not None:
             obj = test_data.create_2dstep_image(newparam)
             self.proxy.add_object(obj)
