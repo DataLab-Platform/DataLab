@@ -57,18 +57,23 @@ class TableAdapter:
             columns
         """
         # Create array with ROI indices as the first column
-        rows = self.table.data.shape[0]
-        cols = self.table.data.shape[1] + 1  # +1 for ROI indices column
-        result = np.zeros((rows, cols), dtype=float)
+        rows = len(self.table.data)
+        cols = len(self.table.data[0]) + 1 if rows > 0 else 1  # +1 for ROI indices
+        # Use dtype=object to allow mixed types, and store all as string for metadata
+        result = np.empty((rows, cols), dtype=object)
 
-        # Set ROI indices
+        # Set ROI indices (as string)
         if self.table.roi_indices is not None:
-            result[:, 0] = self.table.roi_indices
+            for i, roi in enumerate(self.table.roi_indices):
+                result[i, 0] = str(roi)
         else:
-            result[:, 0] = NO_ROI
+            for i in range(rows):
+                result[i, 0] = str(NO_ROI)
 
-        # Set values
-        result[:, 1:] = self.table.data
+        # Set values (as string)
+        for i, row in enumerate(self.table.data):
+            for j, val in enumerate(row):
+                result[i, j + 1] = str(val)
 
         return result
 
@@ -275,7 +280,7 @@ class TableAdapter:
         if array.size > 0:
             # Extract ROI indices and values
             roi_indices = array[:, 0].astype(int)
-            data = array[:, 1:]
+            data = array[:, 1:].tolist()  # Convert to list of lists
 
             # Create TableResult directly
             table = TableResult(
@@ -283,7 +288,7 @@ class TableAdapter:
                 names=headers,
                 labels=[],  # Labels not used in enhanced version
                 data=data,
-                roi_indices=roi_indices,
+                roi_indices=roi_indices.tolist(),  # Convert to list
                 attrs={},
             )
         else:
@@ -292,8 +297,8 @@ class TableAdapter:
                 title=title,
                 names=headers,
                 labels=[],
-                data=np.zeros((0, len(headers)), dtype=float),
-                roi_indices=np.array([], dtype=int),
+                data=[],  # Empty list instead of numpy array
+                roi_indices=[],  # Empty list instead of numpy array
                 attrs={},
             )
         return cls(table)
