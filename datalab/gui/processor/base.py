@@ -1348,6 +1348,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             grp2_id = objmodel.get_object_group_id(objs2[0])
             grp2 = objmodel.get_group(grp2_id)
 
+            # Initialize pair mapping for potential interpolations
+            pair_maps = {}
+
             # Check x-array compatibility for signal processing (pairwise mode)
             if self._is_signal_panel():
                 # Check compatibility between objects from both groups
@@ -1361,12 +1364,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         ):
                             all_pairs.append((src_obj1, src_obj2))
 
-                # Check all pairs for compatibility
+                # Check all pairs for compatibility and create interpolation maps
                 for src_obj1, src_obj2 in all_pairs:
-                    if not self._check_signal_xarray_compatibility(
+                    checked_pair = self._check_signal_xarray_compatibility(
                         [src_obj1, src_obj2]
-                    ):
+                    )
+                    if checked_pair is None:
                         return  # User cancelled or error occurred
+                    # Store mapping for this specific pair
+                    pair_maps[(src_obj1, src_obj2)] = checked_pair
 
             with create_progress_bar(self.panel, title, max_=len(src_gids)) as progress:
                 for i_group, src_gid in enumerate(src_gids):
@@ -1382,6 +1388,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     dst_gid = get_uuid(self.panel.add_group(dst_gname))
                     for i_pair in range(max_i_pair):
                         src_obj1, src_obj2 = src_objs[src_gid][i_pair], objs2[i_pair]
+
+                        # Use interpolated signals if available
+                        if (src_obj1, src_obj2) in pair_maps:
+                            interpolated_pair = pair_maps[(src_obj1, src_obj2)]
+                            src_obj1 = interpolated_pair[0]
+                            src_obj2 = interpolated_pair[1]
+
                         args = [src_obj1, src_obj2]
                         if param is not None:
                             args.append(param)
@@ -1416,20 +1429,46 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     return
             obj2 = objs2[0]
 
+            # Initialize signal mapping for potential interpolations
+            signal_map = {}
+
             # Check x-array compatibility for signal processing (single operand mode)
             if self._is_signal_panel() and isinstance(obj2, SignalObj):
                 signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
                 if signal_objs:
-                    # Check compatibility between obj2 and all signal objects
-                    for obj in signal_objs:
-                        if not self._check_signal_xarray_compatibility([obj, obj2]):
-                            return  # User cancelled or error occurred
+                    # Check compatibility and get potentially interpolated signals
+                    checked_objs = self._check_signal_xarray_compatibility(
+                        signal_objs + [obj2]
+                    )
+                    if checked_objs is None:
+                        return  # User cancelled or error occurred
+
+                    # Replace obj2 with the potentially interpolated version
+                    obj2 = checked_objs[-1]  # obj2 was added last
+
+                    # Create a mapping of original to interpolated signals
+                    for orig_obj, checked_obj in zip(signal_objs, checked_objs[:-1]):
+                        signal_map[orig_obj] = checked_obj
 
             with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
                 for index, obj in enumerate(objs):
                     progress.setValue(index + 1)
                     progress.setLabelText(title)
-                    args = (obj, obj2) if param is None else (obj, obj2, param)
+
+                    # Use interpolated signal if available
+                    actual_obj = obj
+                    if (
+                        self._is_signal_panel()
+                        and isinstance(obj, SignalObj)
+                        and obj in signal_map
+                    ):
+                        actual_obj = signal_map[obj]
+
+                    args = (
+                        (actual_obj, obj2)
+                        if param is None
+                        else (actual_obj, obj2, param)
+                    )
                     result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
