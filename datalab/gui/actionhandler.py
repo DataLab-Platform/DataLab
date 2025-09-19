@@ -923,6 +923,8 @@ class SignalActionHandler(BaseActionHandler):
             (_("Exponential"), sio.ExponentialParam),
             (_("Logistic"), sio.LogisticParam),
             (_("Pulse"), sio.PulseParam),
+            (_("Step pulse"), sio.StepPulseParam),
+            (_("Square pulse"), sio.SquarePulseParam),
             (_("Polynomial"), sio.PolyParam),
             (_("Custom"), newobject.CustomSignalParam),
         ):

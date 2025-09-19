@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-19 15:48+0200\n"
+"POT-Creation-Date: 2025-09-19 18:25+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -16,6 +16,9 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+msgid "Results"
+msgstr "Résultats"
 
 msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
@@ -307,6 +310,12 @@ msgstr "Logistique"
 
 msgid "Pulse"
 msgstr "Impulsion"
+
+msgid "Step pulse"
+msgstr "Impulsion échelon"
+
+msgid "Square pulse"
+msgstr "Impulsion carrée"
 
 msgid "Polynomial"
 msgstr "Polynomial"
@@ -933,9 +942,6 @@ msgstr "Exporter une ROI"
 
 msgid "Annotations"
 msgstr "Annotations"
-
-msgid "Results"
-msgstr "Résultats"
 
 msgid "Show results obtained from previous analysis"
 msgstr "Afficher les résultats obtenus avec des analyses réalisées précédemment"
@@ -1639,6 +1645,12 @@ msgstr "Largeur à mi-hauteur"
 
 msgid "Full width at"
 msgstr "Largeur à "
+
+msgid "Extract pulse features"
+msgstr "Extraire les caractéristiques d'une impulsion"
+
+msgid "Extract pulse features (amplitude, rise time, fall time...)"
+msgstr "Extraire les caractéristiques d'une impulsion (amplitude, temps de montée, temps de descente...)"
 
 msgid "Abscissa of the minimum and maximum"
 msgstr "Abscisse du minimum et du maximum"
