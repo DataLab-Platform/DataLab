@@ -92,8 +92,8 @@ class ResultPlotPyAdapter:
         """
         text = resultadapter_to_html(self.result_adapter, obj)
         item = make.label(text, "TL", (0, 0), "TL", title=self.result_adapter.title)
-        font = get_font(PLOTPY_CONF, "properties", "label/font")
-        item.set_style("properties", "label")
+        font = get_font(PLOTPY_CONF, "results", "label/font")
+        item.set_style("results", "label")
         item.labelparam.font.update_param(font)
         item.labelparam.update_item(item)
         return item
