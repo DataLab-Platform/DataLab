@@ -21,6 +21,7 @@ from guidata.dataset import update_dataset
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.config import options as sigima_options
+from sigima.enums import Interpolation1DMethod
 from sigima.objects import (
     GeometryResult,
     ImageObj,
@@ -31,6 +32,7 @@ from sigima.objects import (
     concat_geometries,
 )
 from sigima.proc.decorator import is_computation_function
+from sigima.tools.signal.interpolation import interpolate
 
 from datalab import env
 from datalab.adapters_metadata import (
@@ -424,6 +426,129 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if self.worker is not None:
                 self.worker.terminate_pool()
                 self.worker = None
+
+    def _is_signal_panel(self) -> bool:
+        """Check if the current panel is a signal panel.
+
+        Returns:
+            True if processing signals, False if processing images
+        """
+        return self.panel.PARAMCLASS == SignalObj
+
+    def _check_signal_xarray_compatibility(
+        self, signals: list[SignalObj], progress: QW.QProgressDialog | None = None
+    ) -> list[SignalObj] | None:
+        """Check X-array compatibility for multiple signals and handle conflicts.
+
+        Args:
+            signals: List of signal objects to check
+            progress: Progress dialog (if method is called from a long-running task,
+             we need to handle the progress dialog: the dialog will show up after a
+             short delay on top of the message box if we don't handle it here)
+
+        Returns:
+            List of signals (potentially with interpolated signals) or None if
+            user canceled
+        """
+        if not self._is_signal_panel() or len(signals) <= 1:
+            return signals
+
+        initial_duration = 0
+        if progress is not None:
+            initial_duration = progress.minimumDuration()
+            # Set progress dialog minimum duration to a very high value to effectively
+            # hide it if it shows up (we handle the dialog manually here)
+            progress.setMinimumDuration(2000000)
+            QW.QApplication.processEvents()
+
+        # Get X arrays for comparison
+        x_arrays = [sig.x for sig in signals]
+
+        # Check if all X arrays are identical
+        x_arrays_identical = True
+        if len(x_arrays) > 1:
+            # Compare sizes first
+            sizes = [len(x) for x in x_arrays]
+            if len(set(sizes)) > 1:
+                x_arrays_identical = False
+            else:
+                # Same sizes - check if xmin and xmax are also the same
+                xmins = [x.min() for x in x_arrays]
+                xmaxs = [x.max() for x in x_arrays]
+                # Use relative tolerance for floating point comparison
+                if not (
+                    np.allclose(xmins, xmins[0], rtol=1e-12)
+                    and np.allclose(xmaxs, xmaxs[0], rtol=1e-12)
+                ):
+                    x_arrays_identical = False
+
+        # If X arrays are identical, proceed normally
+        if x_arrays_identical:
+            if initial_duration > 0:
+                # Restore initial progress dialog duration
+                progress.setMinimumDuration(initial_duration)
+            return signals
+
+        # X arrays differ - handle based on configuration
+        behavior = Conf.proc.xarray_compat_behavior.get("ask")
+
+        if behavior == "ask":
+            # Ask user what to do
+            reply = QW.QMessageBox.question(
+                self.panel.parentWidget(),
+                _("X-array incompatibility"),
+                _(
+                    "The selected signals have different X arrays.\n\n"
+                    "To perform the computation, signals need to be interpolated "
+                    "to match a common X array.\n\n"
+                    "Do you want to continue with automatic interpolation?"
+                ),
+                (QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No),
+                QW.QMessageBox.StandardButton.No,
+            )
+
+            if reply != QW.QMessageBox.StandardButton.Yes:
+                return None
+        elif behavior != "interpolate":
+            # Unknown behavior - should not happen
+            return None
+
+        # Perform interpolation to the smallest X array
+        sizes = [len(x) for x in x_arrays]
+        min_size_idx = np.argmin(sizes)
+        target_x = x_arrays[min_size_idx]
+
+        interpolated_signals = []
+        for i, sig in enumerate(signals):
+            if i == min_size_idx:
+                # Keep the target signal as-is
+                interpolated_signals.append(sig)
+            else:
+                # Create interpolated copy
+                interpolated_sig = sig.copy(
+                    title=f"{sig.title} (interpolated)", all_metadata=True
+                )
+                x_orig, y_orig = sig.x, sig.y
+
+                # Interpolate using linear method (safe default)
+                y_new = interpolate(
+                    x_orig,
+                    y_orig,
+                    target_x,
+                    Interpolation1DMethod.LINEAR,
+                    fill_value=None,
+                )
+
+                interpolated_sig.set_xydata(target_x, y_new)
+                interpolated_signals.append(interpolated_sig)
+
+        signals = interpolated_signals
+
+        if initial_duration > 0:
+            # Restore initial progress dialog duration
+            progress.setMinimumDuration(initial_duration)
+
+        return signals
 
     @abc.abstractmethod
     def register_operations(self) -> None:
@@ -1031,6 +1156,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     for src_gid in src_gids[1:]:
                         src_obj = src_objs[src_gid][i_pair]
                         src_objs_pair.append(src_obj)
+
+                    # Check signal x-array compatibility for n-to-1 operations
+                    checked_objs = self._check_signal_xarray_compatibility(
+                        src_objs_pair, progress=progress
+                    )
+                    if checked_objs is None:
+                        # User canceled or compatibility check failed
+                        return
+                    src_objs_pair = checked_objs
                     if param is None:
                         args = (src_objs_pair,)
                     else:
@@ -1075,6 +1209,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 progress.setValue(0)
                 progress.setLabelText(title)
                 for src_gid, src_obj_list in src_objs.items():
+                    # Check signal x-array compatibility for n-to-1 operations
+                    checked_objs = self._check_signal_xarray_compatibility(
+                        src_obj_list, progress=progress
+                    )
+                    if checked_objs is None:
+                        # User canceled or compatibility check failed
+                        return
+                    src_obj_list = checked_objs
+
                     if param is None:
                         args = (src_obj_list,)
                     else:
@@ -1185,6 +1328,33 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             )
             grp2_id = objmodel.get_object_group_id(objs2[0])
             grp2 = objmodel.get_group(grp2_id)
+
+            # Initialize pair mapping for potential interpolations
+            pair_maps = {}
+
+            # Check x-array compatibility for signal processing (pairwise mode)
+            if self._is_signal_panel():
+                # Check compatibility between objects from both groups
+                all_pairs = []
+                for src_gid in src_gids:
+                    for i_pair in range(max_i_pair):
+                        src_obj1 = src_objs[src_gid][i_pair]
+                        src_obj2 = objs2[i_pair]
+                        if isinstance(src_obj1, SignalObj) and isinstance(
+                            src_obj2, SignalObj
+                        ):
+                            all_pairs.append((src_obj1, src_obj2))
+
+                # Check all pairs for compatibility and create interpolation maps
+                for src_obj1, src_obj2 in all_pairs:
+                    checked_pair = self._check_signal_xarray_compatibility(
+                        [src_obj1, src_obj2]
+                    )
+                    if checked_pair is None:
+                        return  # User cancelled or error occurred
+                    # Store mapping for this specific pair
+                    pair_maps[(src_obj1, src_obj2)] = checked_pair
+
             with create_progress_bar(self.panel, title, max_=len(src_gids)) as progress:
                 for i_group, src_gid in enumerate(src_gids):
                     progress.setValue(i_group + 1)
@@ -1199,6 +1369,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     dst_gid = get_uuid(self.panel.add_group(dst_gname))
                     for i_pair in range(max_i_pair):
                         src_obj1, src_obj2 = src_objs[src_gid][i_pair], objs2[i_pair]
+
+                        # Use interpolated signals if available
+                        if (src_obj1, src_obj2) in pair_maps:
+                            interpolated_pair = pair_maps[(src_obj1, src_obj2)]
+                            src_obj1 = interpolated_pair[0]
+                            src_obj2 = interpolated_pair[1]
+
                         args = [src_obj1, src_obj2]
                         if param is not None:
                             args.append(param)
@@ -1232,11 +1409,47 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if objs2 is None:
                     return
             obj2 = objs2[0]
+
+            # Initialize signal mapping for potential interpolations
+            signal_map = {}
+
+            # Check x-array compatibility for signal processing (single operand mode)
+            if self._is_signal_panel() and isinstance(obj2, SignalObj):
+                signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
+                if signal_objs:
+                    # Check compatibility and get potentially interpolated signals
+                    checked_objs = self._check_signal_xarray_compatibility(
+                        signal_objs + [obj2]
+                    )
+                    if checked_objs is None:
+                        return  # User cancelled or error occurred
+
+                    # Replace obj2 with the potentially interpolated version
+                    obj2 = checked_objs[-1]  # obj2 was added last
+
+                    # Create a mapping of original to interpolated signals
+                    for orig_obj, checked_obj in zip(signal_objs, checked_objs[:-1]):
+                        signal_map[orig_obj] = checked_obj
+
             with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
                 for index, obj in enumerate(objs):
                     progress.setValue(index + 1)
                     progress.setLabelText(title)
-                    args = (obj, obj2) if param is None else (obj, obj2, param)
+
+                    # Use interpolated signal if available
+                    actual_obj = obj
+                    if (
+                        self._is_signal_panel()
+                        and isinstance(obj, SignalObj)
+                        and obj in signal_map
+                    ):
+                        actual_obj = signal_map[obj]
+
+                    args = (
+                        (actual_obj, obj2)
+                        if param is None
+                        else (actual_obj, obj2, param)
+                    )
                     result = self.__exec_func(func, args, progress)
                     if result is None:
                         break

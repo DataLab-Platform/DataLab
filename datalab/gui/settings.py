@@ -186,6 +186,15 @@ class ProcSettings(gds.DataSet):
     ignore_warnings = gds.BoolItem(
         "", _("Ignore warnings"), help=_("Ignore warnings during computations")
     )
+    xarray_compat_behavior = gds.ChoiceItem(
+        _("X-array compatibility behavior"),
+        zip(Conf.proc.xarray_compat_behavior.values, [_("Ask"), _("Interpolate")]),
+        help=_(
+            "Behavior when X arrays are incompatible in multi-signal computations:"
+            "<ul><li><b>Ask</b>: display confirmation dialog (default)</li>"
+            "<li><b>Interpolate</b>: automatically interpolate signals</li></ul>"
+        ),
+    )
     _g0 = gds.EndGroup("")
 
 

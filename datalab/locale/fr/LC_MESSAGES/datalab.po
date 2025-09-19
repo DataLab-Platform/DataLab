@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-14 14:41+0200\n"
+"POT-Creation-Date: 2025-09-19 15:48+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -137,13 +137,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
-#, fuzzy
 msgid "Insert object title as annotation label"
-msgstr "Ajouter le titre de l'objet comme étiquette au graphique"
+msgstr "Insérer le titre de l'objet sous forme d'annotation"
 
-#, fuzzy
 msgid "Add the selected object's title as a label to the plot annotations"
-msgstr "Ajouter le titre de l'objet comme étiquette au graphique"
+msgstr "Ajouter le titre de l'objet sélectionné comme étiquette aux annotations du graphique"
 
 msgid "Copy titles to clipboard"
 msgstr "Copier les titres dans le presse-papier"
@@ -982,9 +980,8 @@ msgstr "Êtes-vous sûr de vouloir supprimer tous les résultats des objets sél
 msgid "Annotation added"
 msgstr "Annotation ajoutée"
 
-#, fuzzy
 msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
-msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Vous pouvez désactiver ce message dans les préférences ou en cliquant sur 'Ignorer' ci-dessous."
+msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Ignorer ce message empêchera son affichage ultérieur."
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
@@ -1033,6 +1030,22 @@ msgstr "Création des objets graphiques"
 
 msgid "DataLab relies on various libraries to perform the computation. During the computation, errors may occur because of the data (e.g. division by zero, unexpected data type, etc.) or because of the libraries (e.g. memory error, etc.). If you encounter an error, before reporting it, please ensure that the computation is correct, by checking the data and the parameters."
 msgstr "DataLab utilise plusieurs bibliothèques pour réaliser les calculs. Lors des calculs, des erreurs peuvent survenir en raison de la nature des données (par exemple division par zéro, type de données inattendu, etc.) ou à cause de limitations ou d'erreurs dans les bibliothèques (par exemple erreur mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-vous que le calcul est correct, en vérifiant les données et les paramètres."
+
+msgid "X-array incompatibility"
+msgstr "Incompatibilité des tableaux des X"
+
+msgid ""
+"The selected signals have different X arrays.\n"
+"\n"
+"To perform the computation, signals need to be interpolated to match a common X array.\n"
+"\n"
+"Do you want to continue with automatic interpolation?"
+msgstr ""
+"Les signaux sélectionnés ont des tableaux des X différents.\n"
+"\n"
+"Pour effectuer le calcul, les signaux doivent être interpolés pour correspondre à un tableau des X commun.\n"
+"\n"
+"Souhaitez-vous continuer avec une interpolation automatique ?"
 
 #, python-format
 msgid "Computing: %s"
@@ -1868,6 +1881,18 @@ msgstr "Ignorer les avertissements"
 
 msgid "Ignore warnings during computations"
 msgstr "Ignorer les avertissements lors des calculs"
+
+msgid "X-array compatibility behavior"
+msgstr "Compatibilité des tableaux des X"
+
+msgid "Ask"
+msgstr "Demander"
+
+msgid "Interpolate"
+msgstr "Interpoler"
+
+msgid "Behavior when X arrays are incompatible in multi-signal computations:<ul><li><b>Ask</b>: display confirmation dialog (default)</li><li><b>Interpolate</b>: automatically interpolate signals</li></ul>"
+msgstr "Comportement lorsque les tableaux des X sont incompatibles dans les calculs multi-signaux :<ul><li><b>Demander</b> : afficher une boîte de confirmation (par défaut)</li><li><b>Interpoler</b> : interpoler automatiquement les signaux</li></ul>"
 
 msgid "Default image visualization settings"
 msgstr "Réglages d'affichage d'images par défaut"

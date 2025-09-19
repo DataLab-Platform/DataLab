@@ -188,6 +188,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: do not ignore warnings
     ignore_warnings = conf.Option()
 
+    # X-array compatibility behavior for multi-signal computations:
+    # - "ask": ask user for confirmation when x-arrays are incompatible (default)
+    # - "interpolate": automatically interpolate when x-arrays are incompatible
+    xarray_compat_behavior = conf.EnumOption(["ask", "interpolate"], default="ask")
+
 
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the view configuration section structure.
@@ -342,6 +347,7 @@ def initialize():
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
     Conf.proc.ignore_warnings.get(False)
+    Conf.proc.xarray_compat_behavior.get("ask")
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")

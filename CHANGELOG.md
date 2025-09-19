@@ -6,22 +6,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
-* New image operation:
-  * Convolution.
-
-* New image format support:
-  * **Matris text image files**: Added support for reading Matris format text files (`.txt` extension).
-    * Supports both real and complex-valued image data with optional error images.
-    * Automatically handles NaN values in the data.
-    * Reads metadata including units (X, Y, Z) and labels from file headers.
-    * This feature is provided by the underlying Sigima library.
-
 * Internal console status indicator added to the status bar:
   * The status bar now features an indicator for the internal console, visible only when the console is hidden.
   * Clicking the indicator opens the internal console.
   * The icon turns red if an error or warning is logged, alerting the user to check the console.
 
-* New common signal/image feature:
+* New common signal/image features:
   * Added two options for signal and image creation:
     * "Use xmin and xmax bounds from current signal when creating a new signal" (default: disabled)
     * "Use dimensions from current image when creating a new image" (default: enabled)
@@ -62,7 +52,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
       * Import/export ROI grids to/from files (JSON format)
       * Preview the ROI grid before creating it
 
-* New image processing features:
+* New image operation, processing and analysis features:
+  * New 2D ramp image generator.
+    * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).
+  * Convolution.
   * New "2D resampling" feature:
     * This feature allows to resample 2D images to a new coordinate grid using interpolation.
     * It supports two resampling modes: pixel size and output shape.
@@ -85,8 +78,27 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * GUI barycenter tool now uses the auto-adaptive method by default for better accuracy and reliability in edge cases.
     * See [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Inaccurate centroid estimation in edge cases with `get_centroid_fourier`
     * In interactive tools, the centroid is now computed using the `measure.centroid` function from `scikit-image`, which provides a better compromise between speed and accuracy and is suitable for real-time applications.
+  * Horizontal and vertical projections.
+    * This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns.
 
-* New signal processing features:
+* New signal operation, processing and analysis features:
+  * New signal generators: linear chirp, logistic function, Planck function.
+    * This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213).
+  * **X-array compatibility checking for multi-signal computations**:
+    * Added comprehensive x-array compatibility validation for all signal operations that take multiple signals as input (N>1 signals).
+    * **Consistent behavior** for all X-array incompatibilities:
+      * **Seamless processing**: When signals have identical X arrays, operations proceed normally without interruption.
+      * **User choice with interpolation**: When signals have any X-array differences (different sizes or ranges), user is presented with a dialog to either cancel or interpolate signals to match.
+      * **No blocking errors**: Operations are never blocked when interpolation can provide a technical solution.
+    * **New configuration setting**: Added `xarray_compat_behavior` setting in Processing preferences with options:
+      * "Ask user" (default): Shows dialog for user decision when X arrays differ
+      * "Interpolate automatically": Automatically interpolates signals when X arrays differ
+    * **Enhanced user experience**: Clear dialogs explain compatibility options and always offer interpolation as a solution.
+    * **Comprehensive coverage**: Affects all multi-signal operations including:
+      * N-to-1 computations (e.g., average of multiple signals, arithmetic operations)
+      * 2-to-1 computations in both pairwise and single operand modes (e.g., addition, subtraction, convolution)
+    * **Intelligent interpolation**: Uses Sigima's robust interpolation functions to ensure accurate signal matching when requested.
+    * This enhancement prevents unexpected results from operations on incompatible signal arrays while providing a consistent and user-friendly approach to handling X-array differences.
   * **Enhanced curve fitting functions**: Significantly improved curve fitting capabilities with advanced parameter estimation:
     * **Intelligent initial parameter estimation**: All curve fitting functions now use advanced algorithms from the Sigima library for automatic initial parameter estimation, resulting in:
       * More robust convergence to optimal solutions
@@ -116,20 +128,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Ideal frequency domain filter ("Brick wall filter"):
     * It is implemented in `sigima.proc.signal.frequency_filter`.
     * This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal).
-
-* New signal analysis features:
   * Bandwidth at -3dB:
     * Enhanced to support passband bandwidth in addition to baseband bandwidth.
-
-* New image analysis features:
-  * Horizontal and vertical projections.
-    * This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns.
-
-* New 2D ramp image generator.
-  * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).
-
-* New signal generators: linear chirp, logistic function, Planck function.
-  * This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213).
 
 * New "Extent" group box in image properties:
   * Added computed parameters for image extent: `Xmin`, `Xmax`, `Ymin`, and `Ymax`.
@@ -142,6 +142,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * FT-Lab signals and images:
     * Added support for CEA's FT-Lab signal and image binary formats.
     * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
+  * Matris text image files:
+    * Supports both real and complex-valued image data with optional error images.
+    * Automatically handles NaN values in the data.
+    * Reads metadata including units (X, Y, Z) and labels from file headers.
+    * This feature is provided by the underlying Sigima library.
 
 * Application settings:
   * Added new "Lock image aspect ratio to 1:1" option in the "Image" section of the "Settings" dialog box:
