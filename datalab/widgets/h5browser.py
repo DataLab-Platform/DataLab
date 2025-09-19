@@ -820,7 +820,9 @@ class H5Browser(QW.QSplitter):
         node = self.get_node()
         assert node.IS_ARRAY
         arrayeditor = ArrayEditor(self)
-        arrayeditor.setup_and_check(node.data, title=node.name, readonly=True)
+        arrayeditor.setup_and_check(
+            node.data, title=node.name, readonly=True, add_title_suffix=False
+        )
         exec_dialog(arrayeditor)
 
 

@@ -25,7 +25,7 @@ Main Branches
 Feature Branches
 ^^^^^^^^^^^^^^^^
 
-- ``develop/feature_name``: Used for the development of new features.
+- ``feature/feature_name``: Used for the development of new features.
 
   - Created from ``develop``.
   - Merged back into ``develop`` once completed.

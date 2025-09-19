@@ -188,6 +188,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: do not ignore warnings
     ignore_warnings = conf.Option()
 
+    # X-array compatibility behavior for multi-signal computations:
+    # - "ask": ask user for confirmation when x-arrays are incompatible (default)
+    # - "interpolate": automatically interpolate when x-arrays are incompatible
+    xarray_compat_behavior = conf.EnumOption(["ask", "interpolate"], default="ask")
+
 
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the view configuration section structure.
@@ -342,6 +347,7 @@ def initialize():
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
     Conf.proc.ignore_warnings.get(False)
+    Conf.proc.xarray_compat_behavior.get("ask")
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")
@@ -435,8 +441,7 @@ PLOTPY_DEFAULTS = {
         "i/sel_symbol/edgecolor": "#00aa00",
         "i/sel_symbol/facecolor": "#00ff00",
         "i/sel_symbol/alpha": 0.7,
-    },
-    "properties": {  # Style for result properties labels
+        # Style for labels:
         "label/symbol/marker": "NoSymbol",
         "label/symbol/size": 0,
         "label/symbol/edgecolor": MAIN_BG_COLOR,
@@ -453,11 +458,11 @@ PLOTPY_DEFAULTS = {
         "label/color": MAIN_FG_COLOR,
         "label/bgcolor": MAIN_BG_COLOR,
         "label/bgalpha": 0.8,
-        "label/anchor": "L",
-        "label/xc": 0,
-        "label/yc": 0,
+        "label/anchor": "TL",
+        "label/xc": 10,
+        "label/yc": 10,
         "label/abspos": True,
-        "label/absg": "L",
+        "label/absg": "TL",
         "label/xg": 0.0,
         "label/yg": 0.0,
     },
