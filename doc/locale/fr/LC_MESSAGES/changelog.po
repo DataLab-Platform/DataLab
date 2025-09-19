@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 15:03+0200\n"
+"POT-Creation-Date: 2025-09-19 15:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -42,9 +42,8 @@ msgstr "Cliquer sur l'indicateur ouvre la console interne."
 msgid "The icon turns red if an error or warning is logged, alerting the user to check the console."
 msgstr "L'icône devient rouge si une erreur ou un avertissement est enregistré, alertant l'utilisateur à vérifier la console."
 
-#, fuzzy
 msgid "New common signal/image features:"
-msgstr "Nouvelles fonctionnalités communes signal/image :"
+msgstr "Nouvelles fonctionnalités communes aux signaux et aux images :"
 
 msgid "Added two options for signal and image creation:"
 msgstr "Ajout de deux options pour la création de signaux et d'images :"
@@ -101,11 +100,10 @@ msgid "This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issu
 msgstr "Ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
 
 msgid "Deconvolution in the frequency domain."
-msgstr ""
+msgstr "Déconvolution dans le domaine fréquentiel."
 
-#, fuzzy
 msgid "This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution."
-msgstr "Ceci clôture [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208) - Ajout de la prise en charge du rééchantillonnage d'images."
+msgstr "Ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Ajout de la prise en charge de la déconvolution de Fourier."
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
@@ -120,7 +118,7 @@ msgid "New features have also been added to the \"ROI\" menu:"
 msgstr "De nouvelles fonctionnalités ont également été ajoutées au menu \"ROI\" :"
 
 msgid "\"Create ROI grid\": for images, see below"
-msgstr ""
+msgstr "\"Créer une grille de ROI\" : pour les images, voir ci-dessous"
 
 msgid "\"Copy\": copies the selected ROI to the clipboard"
 msgstr "\"Copier\": copie la ROI sélectionnée dans le presse-papiers"
@@ -161,7 +159,6 @@ msgstr "Importer/Exporter des grilles de ROI vers/depuis des fichiers (format JS
 msgid "Preview the ROI grid before creating it"
 msgstr "Prévisualiser la grille de ROI avant de la créer"
 
-#, fuzzy
 msgid "New image operation, processing and analysis features:"
 msgstr "ℹ️ Nouvelles fonctionnalités de traitement des **Images** :"
 
@@ -246,7 +243,6 @@ msgstr "Projections horizontale et verticale."
 msgid "This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns."
 msgstr "Ceci clôture [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Paramètres / Somme des pixels, somme des lignes de pixels, somme des colonnes de pixels."
 
-#, fuzzy
 msgid "New signal operation, processing and analysis features:"
 msgstr "ℹ️ Nouvelles fonctionnalités de traitement des **Signaux** :"
 
@@ -257,49 +253,49 @@ msgid "This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issu
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
 
 msgid "**X-array compatibility checking for multi-signal computations**:"
-msgstr ""
+msgstr "**Vérification de la compatibilité des tableaux X pour les calculs multi-signaux** :"
 
 msgid "Added comprehensive x-array compatibility validation for all signal operations that take multiple signals as input (N>1 signals)."
-msgstr ""
+msgstr "Ajout d'une validation complète de la compatibilité des tableaux x pour toutes les opérations de signal qui prennent plusieurs signaux en entrée (N>1 signaux)."
 
-msgid "**Automatic detection** of incompatible x-arrays with three specific behaviors:"
-msgstr ""
+msgid "**Consistent behavior** for all X-array incompatibilities:"
+msgstr "**Comportement cohérent** pour toutes les incompatibilités de tableaux X :"
 
-msgid "**Critical error**: When signals have the same size but different x-axis ranges (different xmin/xmax values), operation is blocked with clear error message."
-msgstr ""
+msgid "**Seamless processing**: When signals have identical X arrays, operations proceed normally without interruption."
+msgstr "**Traitement transparent** : Lorsque les signaux ont des tableaux X identiques, les opérations se déroulent normalement sans interruption."
 
-msgid "**User choice with interpolation**: When signals have different sizes, user is presented with a dialog to either cancel or interpolate signals to match."
-msgstr ""
+msgid "**User choice with interpolation**: When signals have any X-array differences (different sizes or ranges), user is presented with a dialog to either cancel or interpolate signals to match."
+msgstr "**Choix de l'utilisateur avec interpolation** : Lorsque les signaux présentent des différences de tableau X (tailles ou plages différentes), une boîte de dialogue est présentée à l'utilisateur pour annuler ou interpoler les signaux afin de les faire correspondre."
 
-msgid "**Seamless processing**: When signals are compatible, operations proceed normally without interruption."
-msgstr ""
+msgid "**No blocking errors**: Operations are never blocked when interpolation can provide a technical solution."
+msgstr "**Pas d'erreurs bloquantes** : Les opérations ne sont jamais bloquées lorsque l'interpolation peut fournir une solution technique."
 
 msgid "**New configuration setting**: Added `xarray_compat_behavior` setting in Processing preferences with options:"
-msgstr ""
+msgstr "**Nouvelle option de configuration** : Ajout de l'option `xarray_compat_behavior` dans les préférences de traitement avec les options :"
 
-msgid "\"Ask user\" (default): Shows dialog for user decision when size mismatch occurs"
-msgstr ""
+msgid "\"Ask user\" (default): Shows dialog for user decision when X arrays differ"
+msgstr "\"Demander à l'utilisateur\" (par défaut) : Affiche une boîte de dialogue pour la décision de l'utilisateur lorsque les tableaux X diffèrent"
 
-msgid "\"Interpolate automatically\": Automatically interpolates signals when size mismatch occurs"
-msgstr ""
+msgid "\"Interpolate automatically\": Automatically interpolates signals when X arrays differ"
+msgstr "\"Interpolation automatique\" : Interpole automatiquement les signaux lorsque les tableaux X diffèrent"
 
-msgid "**Enhanced user experience**: Clear error messages and dialogs explain compatibility issues and provide guidance."
-msgstr ""
+msgid "**Enhanced user experience**: Clear dialogs explain compatibility options and always offer interpolation as a solution."
+msgstr "**Expérience utilisateur améliorée** : Des boîtes de dialogue claires expliquent les options de compatibilité et offrent toujours l'interpolation comme solution."
 
 msgid "**Comprehensive coverage**: Affects all multi-signal operations including:"
-msgstr ""
+msgstr "**Couverture complète** : Affecte toutes les opérations multi-signaux, y compris :"
 
 msgid "N-to-1 computations (e.g., average of multiple signals, arithmetic operations)"
-msgstr ""
+msgstr "Calculs N-à-1 (par exemple, moyenne de plusieurs signaux, opérations arithmétiques)"
 
 msgid "2-to-1 computations in both pairwise and single operand modes (e.g., addition, subtraction, convolution)"
-msgstr ""
+msgstr "Calculs 2-à-1 en modes par paires et à un seul opérande (par exemple, addition, soustraction, convolution)"
 
 msgid "**Intelligent interpolation**: Uses Sigima's robust interpolation functions to ensure accurate signal matching when requested."
-msgstr ""
+msgstr "**Interpolation intelligente** : Utilise les fonctions d'interpolation robustes de Sigima pour garantir un appariement précis des signaux lorsque cela est demandé."
 
-msgid "This enhancement prevents unexpected results from operations on incompatible signal arrays and gives users full control over how to handle such situations."
-msgstr ""
+msgid "This enhancement prevents unexpected results from operations on incompatible signal arrays while providing a consistent and user-friendly approach to handling X-array differences."
+msgstr "Cette amélioration empêche les résultats inattendus des opérations sur des tableaux de signaux incompatibles tout en offrant une approche cohérente et conviviale pour gérer les différences de tableaux X."
 
 msgid "**Enhanced curve fitting functions**: Significantly improved curve fitting capabilities with advanced parameter estimation:"
 msgstr "**Fonctions de courbe de fitting améliorées** : Capacités de fitting de courbes considérablement améliorées avec une estimation avancée des paramètres :"
@@ -424,9 +420,8 @@ msgstr "Ajout de la prise en charge des formats binaires de signaux et d'images 
 msgid "This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types"
 msgstr "Ceci clôture le ticket [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Ajout de la prise en charge des types de fichiers .sig et .ima"
 
-#, fuzzy
 msgid "Matris text image files:"
-msgstr "Fichiers texte et CSV :"
+msgstr "Fichiers d'images texte Matris :"
 
 msgid "Supports both real and complex-valued image data with optional error images."
 msgstr "Prend en charge à la fois les données d'image réelles et à valeurs complexes avec des images d'erreur facultatives."
@@ -599,7 +594,6 @@ msgstr "Nouvelle fonctionnalité \"Coller\" dans la boîte de dialogue de l'édi
 msgid "The features above require guidata v3.9.0 or later"
 msgstr "Les fonctionnalités ci-dessus nécessitent guidata v3.9.0 ou une version ultérieure"
 
-#, fuzzy
 msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) and [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 msgstr "Ceci clôture les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 
@@ -2898,4 +2892,3 @@ msgstr "Symétrie (verticale/horizontale)"
 
 msgid "Console: added configurable external editor (default: VSCode) to follow the traceback links to the source code"
 msgstr "Console : ajout d'un éditeur externe configurable (par défaut : VSCode) pour suivre les liens de poursuite vers le code source"
-

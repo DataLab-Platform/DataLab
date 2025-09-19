@@ -435,12 +435,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         return self.panel.PARAMCLASS == SignalObj
 
     def _check_signal_xarray_compatibility(
-        self, signals: list[SignalObj]
+        self, signals: list[SignalObj], progress: QW.QProgressDialog | None = None
     ) -> list[SignalObj] | None:
         """Check X-array compatibility for multiple signals and handle conflicts.
 
         Args:
             signals: List of signal objects to check
+            progress: Progress dialog (if method is called from a long-running task,
+             we need to handle the progress dialog: the dialog will show up after a
+             short delay on top of the message box if we don't handle it here)
 
         Returns:
             List of signals (potentially with interpolated signals) or None if
@@ -449,88 +452,100 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if not self._is_signal_panel() or len(signals) <= 1:
             return signals
 
+        initial_duration = 0
+        if progress is not None:
+            initial_duration = progress.minimumDuration()
+            # Set progress dialog minimum duration to a very high value to effectively
+            # hide it if it shows up (we handle the dialog manually here)
+            progress.setMinimumDuration(2000000)
+            QW.QApplication.processEvents()
+
         # Get X arrays for comparison
         x_arrays = [sig.x for sig in signals]
+
+        # Check if all X arrays are identical
+        x_arrays_identical = True
+        if len(x_arrays) > 1:
+            # Compare sizes first
+            sizes = [len(x) for x in x_arrays]
+            if len(set(sizes)) > 1:
+                x_arrays_identical = False
+            else:
+                # Same sizes - check if xmin and xmax are also the same
+                xmins = [x.min() for x in x_arrays]
+                xmaxs = [x.max() for x in x_arrays]
+                # Use relative tolerance for floating point comparison
+                if not (
+                    np.allclose(xmins, xmins[0], rtol=1e-12)
+                    and np.allclose(xmaxs, xmaxs[0], rtol=1e-12)
+                ):
+                    x_arrays_identical = False
+
+        # If X arrays are identical, proceed normally
+        if x_arrays_identical:
+            if initial_duration > 0:
+                # Restore initial progress dialog duration
+                progress.setMinimumDuration(initial_duration)
+            return signals
+
+        # X arrays differ - handle based on configuration
+        behavior = Conf.proc.xarray_compat_behavior.get("ask")
+
+        if behavior == "ask":
+            # Ask user what to do
+            reply = QW.QMessageBox.question(
+                self.panel.parentWidget(),
+                _("X-array incompatibility"),
+                _(
+                    "The selected signals have different X arrays.\n\n"
+                    "To perform the computation, signals need to be interpolated "
+                    "to match a common X array.\n\n"
+                    "Do you want to continue with automatic interpolation?"
+                ),
+                (QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No),
+                QW.QMessageBox.StandardButton.No,
+            )
+
+            if reply != QW.QMessageBox.StandardButton.Yes:
+                return None
+        elif behavior != "interpolate":
+            # Unknown behavior - should not happen
+            return None
+
+        # Perform interpolation to the smallest X array
         sizes = [len(x) for x in x_arrays]
+        min_size_idx = np.argmin(sizes)
+        target_x = x_arrays[min_size_idx]
 
-        # Check if all sizes are the same
-        if len(set(sizes)) == 1:
-            # Same sizes - check if xmin and xmax are also the same
-            xmins = [x.min() for x in x_arrays]
-            xmaxs = [x.max() for x in x_arrays]
-
-            # Use relative tolerance for floating point comparison
-            if not (
-                np.allclose(xmins, xmins[0], rtol=1e-12)
-                and np.allclose(xmaxs, xmaxs[0], rtol=1e-12)
-            ):
-                QW.QMessageBox.critical(
-                    self.panel.parentWidget(),
-                    _("X-array incompatibility"),
-                    _(
-                        "The selected signals have the same number of points but "
-                        "different X ranges (xmin/xmax).\n\n"
-                        "This will produce incorrect results.\n\n"
-                        "Please ensure the signals have compatible X arrays before "
-                        "performing the computation."
-                    ),
+        interpolated_signals = []
+        for i, sig in enumerate(signals):
+            if i == min_size_idx:
+                # Keep the target signal as-is
+                interpolated_signals.append(sig)
+            else:
+                # Create interpolated copy
+                interpolated_sig = sig.copy(
+                    title=f"{sig.title} (interpolated)", all_metadata=True
                 )
-                return None
-        else:
-            # Different sizes - handle based on configuration
-            behavior = Conf.proc.xarray_compat_behavior.get("ask")
+                x_orig, y_orig = sig.x, sig.y
 
-            if behavior == "ask":
-                # Ask user what to do
-                reply = QW.QMessageBox.question(
-                    self.panel.parentWidget(),
-                    _("X-array incompatibility"),
-                    _(
-                        "The selected signals have different X array sizes.\n\n"
-                        "To perform the computation, signals need to be interpolated "
-                        "to match the signal with the smallest X array.\n\n"
-                        "Do you want to continue with automatic interpolation?"
-                    ),
-                    (
-                        QW.QMessageBox.StandardButton.Yes
-                        | QW.QMessageBox.StandardButton.No
-                    ),
-                    QW.QMessageBox.StandardButton.No,
+                # Interpolate using linear method (safe default)
+                y_new = interpolate(
+                    x_orig,
+                    y_orig,
+                    target_x,
+                    Interpolation1DMethod.LINEAR,
+                    fill_value=None,
                 )
 
-                if reply != QW.QMessageBox.StandardButton.Yes:
-                    return None
-            elif behavior != "interpolate":
-                # Unknown behavior - should not happen
-                return None
+                interpolated_sig.set_xydata(target_x, y_new)
+                interpolated_signals.append(interpolated_sig)
 
-            # Perform interpolation to the smallest X array
-            min_size_idx = np.argmin(sizes)
-            target_x = x_arrays[min_size_idx]
+        signals = interpolated_signals
 
-            interpolated_signals = []
-            for i, sig in enumerate(signals):
-                if i == min_size_idx:
-                    # Keep the target signal as-is
-                    interpolated_signals.append(sig)
-                else:
-                    # Create interpolated copy
-                    interpolated_sig = sig.copy(title=f"{sig.title} (interpolated)")
-                    x_orig, y_orig = sig.x, sig.y
-
-                    # Interpolate using linear method (safe default)
-                    y_new = interpolate(
-                        x_orig,
-                        y_orig,
-                        target_x,
-                        Interpolation1DMethod.LINEAR,
-                        fill_value=None,
-                    )
-
-                    interpolated_sig.set_xydata(target_x, y_new)
-                    interpolated_signals.append(interpolated_sig)
-
-            return interpolated_signals
+        if initial_duration > 0:
+            # Restore initial progress dialog duration
+            progress.setMinimumDuration(initial_duration)
 
         return signals
 
@@ -1163,7 +1178,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                     # Check signal x-array compatibility for n-to-1 operations
                     checked_objs = self._check_signal_xarray_compatibility(
-                        src_objs_pair
+                        src_objs_pair, progress=progress
                     )
                     if checked_objs is None:
                         # User canceled or compatibility check failed
@@ -1214,7 +1229,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 progress.setLabelText(title)
                 for src_gid, src_obj_list in src_objs.items():
                     # Check signal x-array compatibility for n-to-1 operations
-                    checked_objs = self._check_signal_xarray_compatibility(src_obj_list)
+                    checked_objs = self._check_signal_xarray_compatibility(
+                        src_obj_list, progress=progress
+                    )
                     if checked_objs is None:
                         # User canceled or compatibility check failed
                         return

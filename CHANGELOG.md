@@ -86,19 +86,19 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213).
   * **X-array compatibility checking for multi-signal computations**:
     * Added comprehensive x-array compatibility validation for all signal operations that take multiple signals as input (N>1 signals).
-    * **Automatic detection** of incompatible x-arrays with three specific behaviors:
-      * **Critical error**: When signals have the same size but different x-axis ranges (different xmin/xmax values), operation is blocked with clear error message.
-      * **User choice with interpolation**: When signals have different sizes, user is presented with a dialog to either cancel or interpolate signals to match.
-      * **Seamless processing**: When signals are compatible, operations proceed normally without interruption.
+    * **Consistent behavior** for all X-array incompatibilities:
+      * **Seamless processing**: When signals have identical X arrays, operations proceed normally without interruption.
+      * **User choice with interpolation**: When signals have any X-array differences (different sizes or ranges), user is presented with a dialog to either cancel or interpolate signals to match.
+      * **No blocking errors**: Operations are never blocked when interpolation can provide a technical solution.
     * **New configuration setting**: Added `xarray_compat_behavior` setting in Processing preferences with options:
-      * "Ask user" (default): Shows dialog for user decision when size mismatch occurs
-      * "Interpolate automatically": Automatically interpolates signals when size mismatch occurs
-    * **Enhanced user experience**: Clear error messages and dialogs explain compatibility issues and provide guidance.
+      * "Ask user" (default): Shows dialog for user decision when X arrays differ
+      * "Interpolate automatically": Automatically interpolates signals when X arrays differ
+    * **Enhanced user experience**: Clear dialogs explain compatibility options and always offer interpolation as a solution.
     * **Comprehensive coverage**: Affects all multi-signal operations including:
       * N-to-1 computations (e.g., average of multiple signals, arithmetic operations)
       * 2-to-1 computations in both pairwise and single operand modes (e.g., addition, subtraction, convolution)
     * **Intelligent interpolation**: Uses Sigima's robust interpolation functions to ensure accurate signal matching when requested.
-    * This enhancement prevents unexpected results from operations on incompatible signal arrays and gives users full control over how to handle such situations.
+    * This enhancement prevents unexpected results from operations on incompatible signal arrays while providing a consistent and user-friendly approach to handling X-array differences.
   * **Enhanced curve fitting functions**: Significantly improved curve fitting capabilities with advanced parameter estimation:
     * **Intelligent initial parameter estimation**: All curve fitting functions now use advanced algorithms from the Sigima library for automatic initial parameter estimation, resulting in:
       * More robust convergence to optimal solutions
