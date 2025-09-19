@@ -8,16 +8,18 @@ and image objects.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, ClassVar, Generator, Union
+from typing import TYPE_CHECKING, ClassVar, Union
 
 from sigima.objects import ImageObj, SignalObj
 from sigima.objects.scalar import NO_ROI, TableResult
+
+from datalab.adapters_metadata.base_adapter import BaseResultAdapter
 
 if TYPE_CHECKING:
     import pandas as pd
 
 
-class TableAdapter:
+class TableAdapter(BaseResultAdapter):
     """Adapter for TableResult objects.
 
     This adapter provides a unified interface for working with TableResult objects,
@@ -29,33 +31,11 @@ class TableAdapter:
 
     # Class constants for metadata storage
     META_PREFIX: ClassVar[str] = "Table_"
-    DATA_SUFFIX: ClassVar[str] = "_data"
+    SUFFIX: ClassVar[str] = "_data"
 
     def __init__(self, table: TableResult) -> None:
-        self.table = table
-
-    def set_applicative_attr(self, key: str, value: Any) -> None:
-        """Set an applicative attribute for the table result.
-
-        Args:
-            key: Attribute key
-            value: Attribute value
-        """
-        self.table.attrs[key] = value
-
-    def get_applicative_attr(self, key: str, default: Any = None) -> Any:
-        """Get an applicative attribute for the table result.
-
-        Args:
-            key: Attribute key
-
-        Returns:
-            Attribute value, or default if not set. If default is not None, assign it
-            to the attribute if it was not already set.
-        """
-        if key not in self.table.attrs and default is not None:
-            self.table.attrs[key] = default
-        return self.table.attrs.get(key, default)
+        super().__init__(table)
+        self.table = table  # Keep for backwards compatibility
 
     @classmethod
     def from_table_result(cls, table: TableResult) -> TableAdapter:
@@ -69,7 +49,7 @@ class TableAdapter:
         """
         return cls(table)
 
-    def to_dataframe(self) -> pd.DataFrame:
+    def to_dataframe(self) -> "pd.DataFrame":
         """Convert the table result to a pandas DataFrame.
 
         Returns:
@@ -113,46 +93,6 @@ class TableAdapter:
         """
         return list(self.table.labels)
 
-    @property
-    def label_contents(self) -> tuple[tuple[int, str], ...]:
-        """Return label contents for compatibility.
-
-        Returns:
-            Tuple of couples of (index, text) where index is the column
-            and text is the associated label
-        """
-        return tuple(enumerate(self.headers))
-
-    # DataFrame-based helper methods for modern data access
-    def get_roi_data(self, roi_index: int) -> "pd.DataFrame":
-        """Get data for a specific ROI using DataFrame operations.
-
-        Args:
-            roi_index: ROI index to filter by (use NO_ROI for non-ROI data)
-
-        Returns:
-            DataFrame containing only data for the specified ROI
-        """
-        df = self.to_dataframe()
-        if "roi_index" in df.columns:
-            return df[df["roi_index"] == roi_index].drop(columns=["roi_index"])
-        return df
-
-    def get_column_values(self, column_name: str, roi_index: int = None) -> list:
-        """Get values for a specific column, optionally filtered by ROI.
-
-        Args:
-            column_name: Name of the column to retrieve
-            roi_index: Optional ROI index to filter by
-
-        Returns:
-            List of values for the specified column
-        """
-        df = self.to_dataframe()
-        if roi_index is not None and "roi_index" in df.columns:
-            df = df[df["roi_index"] == roi_index]
-        return df[column_name].tolist()
-
     def get_unique_roi_indices(self) -> list[int]:
         """Get unique ROI indices present in the data.
 
@@ -164,63 +104,8 @@ class TableAdapter:
             return sorted(df["roi_index"].unique().tolist())
         return [NO_ROI] if len(df) > 0 else []
 
-    def set_obj_metadata(self, obj: Union[SignalObj, ImageObj]) -> None:
-        """Set object metadata from table result (alias for add_to).
-
-        Args:
-            obj: Signal or image object
-        """
-        self.add_to(obj)
-
-    def add_to(self, obj: Union[SignalObj, ImageObj]) -> None:
-        """Add table result to object metadata.
-
-        Args:
-            obj: Signal or image object
-        """
-        # Create a unique key for this result
-        key = f"{self.META_PREFIX}{self.title}{self.DATA_SUFFIX}"
-
-        # Store the complete TableResult as a dictionary for efficient recovery
-        obj.metadata[key] = self.table.to_dict()
-
-    def remove_from(self, obj: Union[SignalObj, ImageObj]) -> None:
-        """Remove table result from object metadata.
-
-        Args:
-            obj: Signal or image object
-        """
-        key = f"{self.META_PREFIX}{self.title}{self.DATA_SUFFIX}"
-        obj.metadata.pop(key, None)
-
     @classmethod
-    def remove_all_from(cls, obj: Union[SignalObj, ImageObj]) -> None:
-        """Remove all table results from object metadata.
-
-        Args:
-            obj: Signal or image object
-        """
-        # Find all table results in the object and remove them
-        for adapter in list(cls.iterate_from_obj(obj)):
-            adapter.remove_from(obj)
-
-    @classmethod
-    def match(cls, key: str, _value: Any) -> bool:
-        """Check if the key matches the pattern for a table result.
-
-        Args:
-            key: Metadata key
-            _value: Metadata value (unused)
-
-        Returns:
-            True if the key matches the pattern
-        """
-        return key.startswith(cls.META_PREFIX) and key.endswith(cls.DATA_SUFFIX)
-
-    @classmethod
-    def from_metadata_entry(
-        cls, obj: Union[SignalObj, ImageObj], key: str
-    ) -> TableAdapter:
+    def from_metadata_entry(cls, obj: Union[SignalObj, ImageObj], key: str):
         """Create a table result adapter from a metadata entry.
 
         Args:
@@ -240,23 +125,3 @@ class TableAdapter:
         table_dict = obj.metadata[key]
         table = TableResult.from_dict(table_dict)
         return cls(table)
-
-    @classmethod
-    def iterate_from_obj(
-        cls, obj: Union[SignalObj, ImageObj]
-    ) -> Generator[TableAdapter, None, None]:
-        """Iterate over table results stored in an object's metadata.
-
-        Args:
-            obj: Signal or image object
-
-        Yields:
-            TableAdapter objects
-        """
-        for key, value in obj.metadata.items():
-            if cls.match(key, value):
-                try:
-                    yield cls.from_metadata_entry(obj, key)
-                except (ValueError, TypeError):
-                    # Skip invalid entries
-                    pass

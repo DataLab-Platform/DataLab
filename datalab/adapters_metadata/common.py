@@ -15,6 +15,7 @@ from guidata.qthelpers import exec_dialog
 from guidata.widgets.dataframeeditor import DataFrameEditor
 from sigima.objects import ImageObj, SignalObj
 
+from datalab.adapters_metadata.base_adapter import BaseResultAdapter
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
 from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.config import _
@@ -30,7 +31,7 @@ class ResultData:
     """Result data associated to a shapetype"""
 
     # We now store adapted objects from the new architecture
-    results: list[GeometryAdapter | TableAdapter] | None = None
+    results: list[BaseResultAdapter] | None = None
     xlabels: list[str] | None = None
     ylabels: list[str] | None = None
 
@@ -61,9 +62,7 @@ class ResultData:
         if self.ylabels is None:
             self.ylabels = []
 
-    def append(
-        self, adapter: GeometryAdapter | TableAdapter, obj: SignalObj | ImageObj
-    ) -> None:
+    def append(self, adapter: BaseResultAdapter, obj: SignalObj | ImageObj) -> None:
         """Append a result adapter
 
         Args:
@@ -141,7 +140,7 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
 
 
 def resultadapter_to_html(
-    adapter: GeometryAdapter | TableAdapter,
+    adapter: BaseResultAdapter,
     obj: SignalObj | ImageObj,
 ) -> str:
     """Convert a result adapter to HTML format
