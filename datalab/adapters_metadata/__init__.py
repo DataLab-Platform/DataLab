@@ -6,7 +6,12 @@ for storing and retrieving those objects as metadata for DataLab's signal
 and image objects.
 """
 
-from .common import ResultData, create_resultdata_dict, show_resultdata
+from .common import (
+    ResultData,
+    create_resultdata_dict,
+    resultadapter_to_html,
+    show_resultdata,
+)
 from .geometry_adapter import GeometryAdapter
 from .table_adapter import TableAdapter
 
@@ -16,4 +21,5 @@ __all__ = [
     "ResultData",
     "create_resultdata_dict",
     "show_resultdata",
+    "resultadapter_to_html",
 ]

@@ -16,7 +16,6 @@ from collections.abc import Iterable
 from typing import TYPE_CHECKING, Literal
 
 import numpy as np
-import pandas as pd
 from guidata.configtools import get_font
 from plotpy.builder import make
 from plotpy.items import (
@@ -30,11 +29,15 @@ from plotpy.items import (
     Marker,
     PolygonShape,
 )
-from sigima.objects.base import BaseObj, TypeObj, TypeROI
+from sigima.objects.base import BaseObj
 from sigima.objects.scalar import KindShape
 from sigima.tools import coordinates
 
-from datalab.adapters_metadata import GeometryAdapter, TableAdapter
+from datalab.adapters_metadata import (
+    GeometryAdapter,
+    TableAdapter,
+    resultadapter_to_html,
+)
 from datalab.adapters_plotpy.base import (
     config_annotated_shape,
     items_to_json,
@@ -71,24 +74,6 @@ class ResultPlotPyAdapter:
             self.item_json = items_to_json([item])
         self.result_adapter.set_obj_metadata(obj)
 
-    def __get_text(self, obj: TypeObj) -> str:
-        """Return text representation of result"""
-        df = self.result_adapter.to_dataframe()
-        df = df.drop(columns=["roi_index"])
-        text = f'<u><b style="color: blue">{self.result_adapter.title}</b></u>:'
-        row_headers = []
-        for i_row in range(df.shape[0]):
-            i_roi = i_row - 1
-            header = ""
-            if i_roi >= 0:
-                roi: TypeROI = obj.roi
-                assert obj.roi is not None, "Expected ROI to be defined"
-                header = roi.get_single_roi_title(i_roi)
-            row_headers.append(header)
-        df.set_index(pd.Index(row_headers), inplace=True)
-        text += df.to_html(float_format="%.3g", border=0)
-        return text
-
     def create_label_item(self, obj: BaseObj) -> LabelItem | None:
         """Create label item
 
@@ -105,7 +90,7 @@ class ResultPlotPyAdapter:
             filled with the object properties. For instance, the label text may contain
             the signal or image units.
         """
-        text = self.__get_text(obj)
+        text = resultadapter_to_html(self.result_adapter, obj)
         item = make.label(text, "TL", (0, 0), "TL", title=self.result_adapter.title)
         font = get_font(PLOTPY_CONF, "properties", "label/font")
         item.set_style("properties", "label")

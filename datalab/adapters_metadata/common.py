@@ -22,6 +22,7 @@ from datalab.objectmodel import get_short_id
 
 if TYPE_CHECKING:
     from qtpy.QtWidgets import QWidget
+    from sigima.objects import TypeROI
 
 
 @dataclasses.dataclass
@@ -134,3 +135,33 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
             dlg.setObjectName(object_name)
         dlg.resize(750, 300)
         exec_dialog(dlg)
+
+
+def resultadapter_to_html(
+    adapter: GeometryAdapter | TableAdapter,
+    obj: SignalObj | ImageObj,
+) -> str:
+    """Convert a result adapter to HTML format
+
+    Args:
+        adapter: Adapter to convert
+        obj: Object associated to the adapter
+
+    Returns:
+        HTML representation of the adapter
+    """
+    df = adapter.to_dataframe()
+    df = df.drop(columns=["roi_index"])
+    text = f'<u><b style="color: blue">{adapter.title}</b></u>:'
+    row_headers = []
+    for i_row in range(df.shape[0]):
+        i_roi = i_row - 1
+        header = ""
+        if i_roi >= 0:
+            roi: TypeROI = obj.roi
+            assert obj.roi is not None, "Expected ROI to be defined"
+            header = roi.get_single_roi_title(i_roi)
+        row_headers.append(header)
+    df.set_index(pd.Index(row_headers), inplace=True)
+    text += df.to_html(float_format="%.3g", border=0)
+    return text
