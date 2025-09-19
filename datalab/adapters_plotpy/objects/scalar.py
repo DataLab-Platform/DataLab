@@ -75,7 +75,7 @@ class ResultPlotPyAdapter:
         """Return text representation of result"""
         df = self.result_adapter.to_dataframe()
         df = df.drop(columns=["roi_index"])
-        text = f'<b style="color: blue">{self.result_adapter.title}</b><br>'
+        text = f'<u><b style="color: blue">{self.result_adapter.title}</b></u>:'
         row_headers = []
         for i_row in range(df.shape[0]):
             i_roi = i_row - 1
