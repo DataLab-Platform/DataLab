@@ -43,8 +43,8 @@ msgstr "``develop`` : Utilisé pour le développement continu et l'intégration 
 msgid "Feature Branches"
 msgstr "Branches de fonctionnalités"
 
-msgid "``develop/feature_name``: Used for the development of new features."
-msgstr "``develop/feature_name`` : Utilisé pour le développement de nouvelles fonctionnalités."
+msgid "``feature/feature_name``: Used for the development of new features."
+msgstr "``feature/feature_name`` : Utilisé pour le développement de nouvelles fonctionnalités."
 
 msgid "Created from ``develop``."
 msgstr "Créé à partir de ``develop``."
