@@ -3,7 +3,7 @@
 """
 Metadata import/export unit test:
 
-  - Create an image with annotations and result shapes
+  - Create an image with annotations, geometry result and table results
   - Add the image to DataLab
   - Export image metadata to file (JSON)
   - Delete image metadata
@@ -15,14 +15,11 @@ Metadata import/export unit test:
 
 import os.path as osp
 
-import numpy as np
-from sigima.objects import GeometryResult
-from sigima.objects.scalar import KindShape
 from sigima.tests import data as test_data
 from sigima.tests import helpers
 from sigima.tests.helpers import compare_metadata
 
-from datalab.adapters_metadata import GeometryAdapter
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 
@@ -34,19 +31,18 @@ def test_metadata_io_unit():
             fname = osp.join(tmpdir, "test.dlabmeta")
             with datalab_test_app_context() as win:
                 panel = win.imagepanel
+
+                # Create a test image with annotations
                 ima = test_data.create_annotated_image()
-                # Create geometry results for testing
 
-                # Create a point geometry directly
-                point_geom = GeometryResult(
-                    title="Point Test",
-                    kind=KindShape.POINT,
-                    coords=np.array([[10.0, 20.0]]),
-                    roi_indices=np.array([0], dtype=int),
-                    attrs={},
-                )
+                # Add geometry results to test their serialization
+                for geometry in test_data.generate_geometry_results():
+                    GeometryAdapter(geometry).add_to(ima)
 
-                GeometryAdapter(point_geom).add_to(ima)
+                # Add table results to test their serialization
+                for table in test_data.generate_table_results():
+                    TableAdapter(table).add_to(ima)
+
                 panel.add_object(ima)
                 orig_metadata = ima.metadata.copy()
                 panel.export_metadata_from_file(fname)

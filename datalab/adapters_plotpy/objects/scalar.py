@@ -29,11 +29,15 @@ from plotpy.items import (
     Marker,
     PolygonShape,
 )
-from sigima.objects.base import BaseObj, TypeObj, TypeROI
+from sigima.objects.base import BaseObj
 from sigima.objects.scalar import KindShape
 from sigima.tools import coordinates
 
-from datalab.adapters_metadata import GeometryAdapter, TableAdapter
+from datalab.adapters_metadata import (
+    GeometryAdapter,
+    TableAdapter,
+    resultadapter_to_html,
+)
 from datalab.adapters_plotpy.base import (
     config_annotated_shape,
     items_to_json,
@@ -55,7 +59,16 @@ class ResultPlotPyAdapter:
 
     def __init__(self, result_adapter: TableAdapter | GeometryAdapter) -> None:
         self.result_adapter = result_adapter
-        self.item_json = ""  # JSON representation of the item
+
+    @property
+    def item_json(self) -> str | None:
+        """JSON representation of the item"""
+        return self.result_adapter.get_applicative_attr("item_json")
+
+    @item_json.setter
+    def item_json(self, value: str | None) -> None:
+        """Set JSON representation of the item"""
+        self.result_adapter.set_applicative_attr("item_json", value)
 
     def update_obj_metadata_from_item(
         self, obj: BaseObj, item: LabelItem | None
@@ -69,31 +82,6 @@ class ResultPlotPyAdapter:
         if item is not None:
             self.item_json = items_to_json([item])
         self.result_adapter.set_obj_metadata(obj)
-
-    def __get_text(self, obj: TypeObj) -> str:
-        """Return text representation of result"""
-        ra = self.result_adapter
-        text = ""
-        for i_row in range(ra.array.shape[0]):
-            suffix = ""
-            i_roi = i_row - 1
-            if i_roi >= 0:
-                roi: TypeROI = obj.roi
-                assert obj.roi is not None, "Expected ROI to be defined"
-                suffix = f"|{roi.get_single_roi_title(i_roi)}"
-            text += f"<u>{ra.title}{suffix}</u>:"
-            for i_col, label in ra.label_contents:
-                # "label" may contains "<" and ">" characters which are interpreted
-                # as HTML tags by the LabelItem. We must escape them.
-                label = label.replace("<", "&lt;").replace(">", "&gt;")
-                if "%" not in label:
-                    label += " = %g"
-                text += (
-                    "<br>" + label.strip().format(obj) % ra.shown_array[i_row, i_col]
-                )
-            if i_row < ra.shown_array.shape[0] - 1:
-                text += "<br><br>"
-        return text
 
     def create_label_item(self, obj: BaseObj) -> LabelItem | None:
         """Create label item
@@ -111,10 +99,10 @@ class ResultPlotPyAdapter:
             filled with the object properties. For instance, the label text may contain
             the signal or image units.
         """
-        text = self.__get_text(obj)
+        text = resultadapter_to_html(self.result_adapter, obj)
         item = make.label(text, "TL", (0, 0), "TL", title=self.result_adapter.title)
-        font = get_font(PLOTPY_CONF, "properties", "label/font")
-        item.set_style("properties", "label")
+        font = get_font(PLOTPY_CONF, "results", "label/font")
+        item.set_style("results", "label")
         item.labelparam.font.update_param(font)
         item.labelparam.update_item(item)
         return item

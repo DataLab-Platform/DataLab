@@ -11,7 +11,6 @@ from __future__ import annotations
 import abc
 import multiprocessing
 import time
-import warnings
 from dataclasses import dataclass
 from enum import Enum, auto
 from multiprocessing.pool import Pool
@@ -20,8 +19,6 @@ from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional
 import guidata.dataset as gds
 import numpy as np
 from guidata.dataset import update_dataset
-from guidata.qthelpers import exec_dialog
-from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.config import options as sigima_options
@@ -39,7 +36,12 @@ from sigima.proc.decorator import is_computation_function
 from sigima.tools.signal.interpolation import interpolate
 
 from datalab import env
-from datalab.adapters_metadata import GeometryAdapter, TableAdapter
+from datalab.adapters_metadata import (
+    GeometryAdapter,
+    ResultData,
+    TableAdapter,
+    show_resultdata,
+)
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
@@ -686,13 +688,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 result_keys_to_remove.append(key)
 
         for key in result_keys_to_remove:
-            base_key = key[: -len(GeometryAdapter.ARRAY_SUFFIX)]
             result_obj.metadata.pop(key, None)
-            result_obj.metadata.pop(f"{base_key}{GeometryAdapter.TITLE_SUFFIX}", None)
-            result_obj.metadata.pop(f"{base_key}{GeometryAdapter.SHAPE_SUFFIX}", None)
-            result_obj.metadata.pop(
-                f"{base_key}{GeometryAdapter.ADDLABEL_SUFFIX}", None
-            )
 
         # Merge and add back concatenated geometry results
         for title, geometries in geometry_by_title.items():
@@ -1046,9 +1042,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            results: dict[str, GeometryAdapter | TableAdapter] = {}
-            xlabels = None
-            ylabels = []
+            rdata = ResultData()
             for idx, obj in enumerate(objs):
                 pvalue = idx + 1
                 pvalue = 0 if pvalue == 1 else pvalue
@@ -1080,31 +1074,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if param is not None:
                     obj.metadata[f"{adapter.title}Param"] = str(param)
 
-                results[get_uuid(obj)] = adapter
+                # Append result to result data for later display
+                rdata.append(adapter, obj)
+
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
-                xlabels = adapter.headers
-                for i_row_res in range(adapter.array.shape[0]):
-                    ylabel = f"{adapter.title}({get_short_id(obj)})"
-                    i_roi = int(adapter.array[i_row_res, 0])
-                    if i_roi >= 0:
-                        ylabel += f"|{obj.roi.get_single_roi_title(i_roi)}"
-                    ylabels.append(ylabel)
-        if results:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", RuntimeWarning)
-                dlg = ArrayEditor(self.panel.parentWidget())
-                title = _("Results")
-                res = np.vstack([adapter.shown_array for adapter in results.values()])
-                dlg.setup_and_check(
-                    res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
-                )
-                dlg.setObjectName(f"{objs[0].PREFIX}_results")
-                dlg.resize(750, 300)
-                exec_dialog(dlg)
-        return results
+
+        if rdata:
+            show_resultdata(
+                self.panel.parentWidget(), rdata, f"{objs[0].PREFIX}_results"
+            )
+        return rdata
 
     def compute_n_to_1(
         self,

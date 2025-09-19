@@ -9,12 +9,10 @@
 from __future__ import annotations
 
 import abc
-import dataclasses
 import glob
 import os
 import os.path as osp
 import re
-import warnings
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -24,7 +22,6 @@ import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from guidata.qthelpers import add_actions, create_action, exec_dialog
-from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
 from plotpy.tools import ActionTool
 from qtpy import QtCore as QC  # type: ignore[import]
@@ -50,7 +47,13 @@ from sigima.objects.base import ROI_KEY
 from sigima.params import SaveToDirectoryParam
 
 from datalab import objectmodel
-from datalab.adapters_metadata import GeometryAdapter, TableAdapter
+from datalab.adapters_metadata import (
+    GeometryAdapter,
+    ResultData,
+    TableAdapter,
+    create_resultdata_dict,
+    show_resultdata,
+)
 from datalab.adapters_plotpy import create_adapter_from_object, items_to_json
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
@@ -224,46 +227,6 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     def remove_all_objects(self):
         """Remove all objects"""
         self.SIG_OBJECT_REMOVED.emit()
-
-
-@dataclasses.dataclass
-class ResultData:
-    """Result data associated to a shapetype"""
-
-    # We now store adapted objects from the new architecture
-    results: list[GeometryAdapter | TableAdapter] = None
-    xlabels: list[str] = None
-    ylabels: list[str] = None
-
-
-def create_resultdata_dict(
-    objs: list[SignalObj | ImageObj],
-) -> dict[str, ResultData]:
-    """Return result data dictionary
-
-    Args:
-        objs: List of objects
-
-    Returns:
-        Result data dictionary: keys are result categories, values are ResultData
-    """
-    rdatadict: dict[str, ResultData] = {}
-    for obj in objs:
-        for adapter in list(GeometryAdapter.iterate_from_obj(obj)) + list(
-            TableAdapter.iterate_from_obj(obj)
-        ):
-            rdata = rdatadict.setdefault(adapter.category, ResultData([], None, []))
-            rdata.results.append(adapter)
-            rdata.xlabels = adapter.headers
-            for i_row_res in range(adapter.array.shape[0]):
-                ylabel = f"{adapter.title}({get_short_id(obj)})"
-                i_roi = int(adapter.array[i_row_res, 0])
-                roititle = ""
-                if i_roi >= 0:
-                    roititle = obj.roi.get_single_roi_title(i_roi)
-                    ylabel += f"|{roititle}"
-                rdata.ylabels.append(ylabel)
-    return rdatadict
 
 
 class PasteMetadataParam(gds.DataSet):
@@ -1760,20 +1723,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", RuntimeWarning)
-                for category, rdata in rdatadict.items():
-                    dlg = ArrayEditor(self.parentWidget())
-                    dlg.setup_and_check(
-                        np.vstack([result.shown_array for result in rdata.results]),
-                        _("Results") + f" ({category})",
-                        readonly=True,
-                        xlabels=rdata.xlabels,
-                        ylabels=rdata.ylabels,
-                    )
-                    dlg.setObjectName(f"{objs[0].PREFIX}_results")
-                    dlg.resize(750, 300)
-                    exec_dialog(dlg)
+            for rdata in rdatadict.values():
+                show_resultdata(self.parentWidget(), rdata, f"{objs[0].PREFIX}_results")
         else:
             self.__show_no_result_warning()
 
@@ -1802,7 +1753,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     ) -> None:
         """Plot results for a specific category"""
         xchoices = (("indices", _("Indices")),)
-        for xlabel in rdata.xlabels:
+        for xlabel in rdata.headers:
             xchoices += ((xlabel, xlabel),)
         ychoices = xchoices[1:]
 
@@ -1827,7 +1778,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # result and the number of selected objects:
         default_kind = (
             "one_curve_per_object"
-            if any(result.array.shape[0] > 1 for result in rdata.results)
+            if any(len(result.to_dataframe()) > 1 for result in rdata.results)
             else "one_curve_per_title"
         )
 
@@ -1859,14 +1810,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not param.edit(parent=self.parentWidget()):
             return
 
-        i_yaxis = rdata.xlabels.index(param.yaxis)
         if param.kind == "one_curve_per_title":
             # One curve per ROI (if any) and per result title
             # ------------------------------------------------------------------
             # Begin by checking if all results have the same number of ROIs:
             # for simplicity, let's check the number of unique ROI indices.
             all_roi_indexes = [
-                np.unique(result.array[:, 0]) for result in rdata.results
+                result.get_unique_roi_indices() for result in rdata.results
             ]
             # Check if all roi_indexes are the same:
             if len(set(map(tuple, all_roi_indexes))) > 1:
@@ -1886,13 +1836,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 for title, results in grouped_results.items():  # title
                     x, y = [], []
                     for index, result in enumerate(results):
-                        mask = result.array[:, 0] == i_roi
                         if param.xaxis == "indices":
                             x.append(index)
                         else:
-                            i_xaxis = rdata.xlabels.index(param.xaxis)
-                            x.append(result.shown_array[mask, i_xaxis][0])
-                        y.append(result.shown_array[mask, i_yaxis][0])
+                            x.append(result.get_column_values(param.xaxis, i_roi)[0])
+                        y.append(result.get_column_values(param.yaxis, i_roi)[0])
                     if i_roi >= 0:
                         roi_suffix = f"|{obj.roi.get_single_roi_title(int(i_roi))}"
                     self.__add_result_signal(
@@ -1904,18 +1852,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             for title, results in grouped_results.items():  # title
                 for index, result in enumerate(results):  # object
                     obj = objs[index]
-                    roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
-                    for i_roi in roi_idx:  # ROI
+                    roi_indices = result.get_unique_roi_indices()
+                    for i_roi in roi_indices:  # ROI
                         roi_suffix = ""
                         if i_roi >= 0:
                             roi_suffix = f"|{obj.roi.get_single_roi_title(int(i_roi))}"
-                        mask = result.array[:, 0] == i_roi
+                        roi_data = result.get_roi_data(i_roi)
                         if param.xaxis == "indices":
-                            x = np.arange(result.array.shape[0])[mask]
+                            x = list(range(len(roi_data)))
                         else:
-                            i_xaxis = rdata.xlabels.index(param.xaxis)
-                            x = result.shown_array[mask, i_xaxis]
-                        y = result.shown_array[mask, i_yaxis]
+                            x = roi_data[param.xaxis].values
+                        y = roi_data[param.yaxis].values
                         shid = get_short_id(objs[index])
                         stitle = f"{title} ({shid}){roi_suffix}"
                         self.__add_result_signal(x, y, stitle, param.xaxis, param.yaxis)
