@@ -17,6 +17,7 @@ from multiprocessing.pool import Pool
 from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional
 
 import guidata.dataset as gds
+import numpy as np
 from guidata.dataset import update_dataset
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
