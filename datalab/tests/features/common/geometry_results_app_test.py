@@ -11,7 +11,7 @@ Result shapes application test:
 
 from __future__ import annotations
 
-import numpy as np
+import pandas as pd
 import sigima.objects
 import sigima.params
 from sigima.tests import data as test_data
@@ -58,11 +58,19 @@ def __check_geometry_results_merge(
         f"Result shapes length mismatch: {len(rsl1)} != {len(rsl2)}"
     )
     for rs1, rs2 in zip(rsl1, rsl2):
-        assert rs1.array.shape[0] * 2 == rs2.array.shape[0], (
-            f"Result shape array length mismatch: {rs1.array.shape[0]} * 2 != "
-            f"{rs2.array.shape[0]}"
+        df1 = rs1.to_dataframe()
+        df2 = rs2.to_dataframe()
+        assert len(df1) * 2 == len(df2), (
+            f"Result shape dataframe length mismatch: {len(df1)} * 2 != {len(df2)}"
         )
-        assert np.all(np.vstack([rs1.array, rs1.array])[:, 1:] == rs2.array[:, 1:])
+        # Check that the second dataframe contains double the data
+        # (original geometry result concatenated with itself)
+        coord_cols = [col for col in df1.columns if col != "roi_index"]
+        df1_doubled = pd.concat([df1, df1], ignore_index=True)
+        pd.testing.assert_frame_equal(
+            df2[coord_cols].sort_values(coord_cols[0]).reset_index(drop=True),
+            df1_doubled[coord_cols].sort_values(coord_cols[0]).reset_index(drop=True),
+        )
 
 
 def __check_roi_merge(

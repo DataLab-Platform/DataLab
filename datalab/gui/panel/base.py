@@ -1778,7 +1778,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # result and the number of selected objects:
         default_kind = (
             "one_curve_per_object"
-            if any(result.array.shape[0] > 1 for result in rdata.results)
+            if any(len(result.to_dataframe()) > 1 for result in rdata.results)
             else "one_curve_per_title"
         )
 
@@ -1810,14 +1810,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not param.edit(parent=self.parentWidget()):
             return
 
-        i_yaxis = rdata.xlabels.index(param.yaxis)
         if param.kind == "one_curve_per_title":
             # One curve per ROI (if any) and per result title
             # ------------------------------------------------------------------
             # Begin by checking if all results have the same number of ROIs:
             # for simplicity, let's check the number of unique ROI indices.
             all_roi_indexes = [
-                np.unique(result.array[:, 0]) for result in rdata.results
+                result.get_unique_roi_indices() for result in rdata.results
             ]
             # Check if all roi_indexes are the same:
             if len(set(map(tuple, all_roi_indexes))) > 1:
@@ -1837,13 +1836,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 for title, results in grouped_results.items():  # title
                     x, y = [], []
                     for index, result in enumerate(results):
-                        mask = result.array[:, 0] == i_roi
                         if param.xaxis == "indices":
                             x.append(index)
                         else:
-                            i_xaxis = rdata.xlabels.index(param.xaxis)
-                            x.append(result.shown_array[mask, i_xaxis][0])
-                        y.append(result.shown_array[mask, i_yaxis][0])
+                            x.append(result.get_column_values(param.xaxis, i_roi)[0])
+                        y.append(result.get_column_values(param.yaxis, i_roi)[0])
                     if i_roi >= 0:
                         roi_suffix = f"|{obj.roi.get_single_roi_title(int(i_roi))}"
                     self.__add_result_signal(
@@ -1855,18 +1852,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             for title, results in grouped_results.items():  # title
                 for index, result in enumerate(results):  # object
                     obj = objs[index]
-                    roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
-                    for i_roi in roi_idx:  # ROI
+                    roi_indices = result.get_unique_roi_indices()
+                    for i_roi in roi_indices:  # ROI
                         roi_suffix = ""
                         if i_roi >= 0:
                             roi_suffix = f"|{obj.roi.get_single_roi_title(int(i_roi))}"
-                        mask = result.array[:, 0] == i_roi
+                        roi_data = result.get_roi_data(i_roi)
                         if param.xaxis == "indices":
-                            x = np.arange(result.array.shape[0])[mask]
+                            x = list(range(len(roi_data)))
                         else:
-                            i_xaxis = rdata.xlabels.index(param.xaxis)
-                            x = result.shown_array[mask, i_xaxis]
-                        y = result.shown_array[mask, i_yaxis]
+                            x = roi_data[param.xaxis].values
+                        y = roi_data[param.yaxis].values
                         shid = get_short_id(objs[index])
                         stitle = f"{title} ({shid}){roi_suffix}"
                         self.__add_result_signal(x, y, stitle, param.xaxis, param.yaxis)

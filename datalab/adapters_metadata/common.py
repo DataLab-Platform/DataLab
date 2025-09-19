@@ -79,13 +79,15 @@ class ResultData:
         else:
             self.xlabels = list(adapter.headers)
         self.results.append(adapter)
-        for i_row_res in range(adapter.array.shape[0]):
+        df = adapter.to_dataframe()
+        for i_row_res in range(len(df)):
             ylabel = f"{adapter.title}({get_short_id(obj)})"
-            i_roi = int(adapter.array[i_row_res, 0])
-            roititle = ""
-            if i_roi >= 0:
-                roititle = obj.roi.get_single_roi_title(i_roi)
-                ylabel += f"|{roititle}"
+            if "roi_index" in df.columns:
+                i_roi = int(df.iloc[i_row_res]["roi_index"])
+                roititle = ""
+                if i_roi >= 0:
+                    roititle = obj.roi.get_single_roi_title(i_roi)
+                    ylabel += f"|{roititle}"
             self.ylabels.append(ylabel)
 
 
@@ -122,7 +124,8 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
         warnings.simplefilter("ignore", RuntimeWarning)
         dfs = [result.to_dataframe() for result in rdata.results]
         df = pd.concat(dfs, ignore_index=True)
-        df = df.drop(columns=["roi_index"])
+        if "roi_index" in df.columns:
+            df = df.drop(columns=["roi_index"])
         df.set_index(pd.Index(rdata.ylabels), inplace=True)
         dlg = DataFrameEditor(parent)
         dlg.setup_and_check(
@@ -151,7 +154,8 @@ def resultadapter_to_html(
         HTML representation of the adapter
     """
     df = adapter.to_dataframe()
-    df = df.drop(columns=["roi_index"])
+    if "roi_index" in df.columns:
+        df = df.drop(columns=["roi_index"])
     text = f'<u><b style="color: blue">{adapter.title}</b></u>:'
     row_headers = []
     for i_row in range(df.shape[0]):

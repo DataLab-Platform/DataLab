@@ -10,8 +10,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, ClassVar, Generator
 
-import numpy as np
-from sigima.objects import NO_ROI, GeometryResult, ImageObj, KindShape, SignalObj
+from sigima.objects import GeometryResult, ImageObj, SignalObj
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -29,15 +28,10 @@ class GeometryAdapter:
 
     # Class constants for metadata storage
     META_PREFIX: ClassVar[str] = "Geometry_"
-    ARRAY_SUFFIX: ClassVar[str] = "_array"
-    TITLE_SUFFIX: ClassVar[str] = "_title"
-    SHAPE_SUFFIX: ClassVar[str] = "_shape"
-    ADDLABEL_SUFFIX: ClassVar[str] = "_addlabel"
+    DICT_SUFFIX: ClassVar[str] = "_dict"
 
     def __init__(self, geometry: GeometryResult) -> None:
         self.geometry = geometry
-        # Convert GeometryResult data to the format expected by DataLab
-        self._array = self._prepare_array()
 
     @classmethod
     def from_geometry_result(cls, geometry: GeometryResult) -> GeometryAdapter:
@@ -59,28 +53,45 @@ class GeometryAdapter:
         """
         return self.geometry.to_dataframe()
 
-    def _prepare_array(self) -> np.ndarray:
-        """Convert GeometryResult coordinates to the format expected by DataLab.
+    def get_roi_data(self, roi_index: int) -> pd.DataFrame:
+        """Get data for a specific ROI index.
+
+        Args:
+            roi_index: ROI index to filter by
 
         Returns:
-            Array with ROI indices in the first column and coordinates in the following
-            columns
+            DataFrame containing only data for the specified ROI
         """
-        # Create array with ROI indices as the first column
-        rows = self.geometry.coords.shape[0]
-        cols = self.geometry.coords.shape[1] + 1  # +1 for ROI indices column
-        result = np.zeros((rows, cols), dtype=float)
+        df = self.to_dataframe()
+        if "roi_index" in df.columns:
+            return df[df["roi_index"] == roi_index].drop(columns=["roi_index"])
+        return df
 
-        # Set ROI indices as integers (convert to int when setting to preserve dtype)
-        if self.geometry.roi_indices is not None:
-            result[:, 0] = self.geometry.roi_indices.astype(int)
-        else:
-            result[:, 0] = NO_ROI
+    def get_column_values(self, column_name: str, roi_index: int = None) -> list:
+        """Get values for a specific column, optionally filtered by ROI.
 
-        # Set coordinates
-        result[:, 1:] = self.geometry.coords
+        Args:
+            column_name: Name of the column to retrieve
+            roi_index: Optional ROI index to filter by
 
-        return result
+        Returns:
+            List of values for the specified column
+        """
+        df = self.to_dataframe()
+        if roi_index is not None and "roi_index" in df.columns:
+            df = df[df["roi_index"] == roi_index]
+        return df[column_name].tolist()
+
+    def get_unique_roi_indices(self) -> list[int]:
+        """Get unique ROI indices present in the data.
+
+        Returns:
+            List of unique ROI indices
+        """
+        df = self.to_dataframe()
+        if "roi_index" in df.columns:
+            return sorted(df["roi_index"].unique().tolist())
+        return [] if len(df) == 0 else [0]  # Default ROI index for geometry data
 
     @property
     def category(self) -> str:
@@ -101,65 +112,16 @@ class GeometryAdapter:
         return self.geometry.title
 
     @property
-    def array(self) -> np.ndarray:
-        """Get the array with ROI indices and coordinates.
-
-        Returns:
-            Array with ROI indices in first column and coordinates in the following
-            columns
-        """
-        return self._array
-
-    @property
-    def raw_data(self) -> np.ndarray:
-        """Get raw data (coordinates without ROI indices).
-
-        Returns:
-            Array of coordinates (without ROI indices)
-        """
-        return self._array[:, 1:]
-
-    @property
-    def shown_array(self) -> np.ndarray:
-        """Get the shown array (same as raw_data for basic geometry).
-
-        Returns:
-            Array shown to the user
-        """
-        return self.raw_data
-
-    @property
     def headers(self) -> list[str]:
         """Get column headers for the coordinates.
 
         Returns:
             List of column headers
         """
-        # Create headers based on the shape type
-        kind = self.geometry.kind.value
-        num_coords = self._array.shape[1] - 1  # Exclude ROI column
-
-        # Define headers based on shape type
-        headers_map = {
-            "point": ["x", "y"],
-            "marker": ["x", "y"],
-            "segment": ["x0", "y0", "x1", "y1"],
-            "rectangle": ["x0", "y0", "x1", "y1"],
-            "circle": ["x", "y", "r"],
-            "ellipse": ["x", "y", "a", "b", "θ"],
-        }
-
-        if kind in headers_map:
-            return headers_map[kind][:num_coords]
-
-        if kind == "polygon":
-            headers = []
-            for i in range(0, num_coords, 2):
-                headers.extend([f"x{i // 2}", f"y{i // 2}"])
-            return headers[:num_coords]
-
-        # Generic headers for unknown shapes
-        return [f"coord_{i}" for i in range(num_coords)]
+        # Get headers directly from the DataFrame
+        df = self.geometry.to_dataframe()
+        # Return coordinate columns (exclude 'roi_index' if present)
+        return [col for col in df.columns if col != "roi_index"]
 
     def add_to(self, obj: SignalObj | ImageObj) -> None:
         """Add geometry result to object metadata.
@@ -167,25 +129,9 @@ class GeometryAdapter:
         Args:
             obj: Signal or image object
         """
-        # Create a unique key for this shape
-        base_key = f"{self.META_PREFIX}{self.title}"
-
-        # Store array
-        obj.metadata[f"{base_key}{self.ARRAY_SUFFIX}"] = self._array.tolist()
-
-        # Store title
-        obj.metadata[f"{base_key}{self.TITLE_SUFFIX}"] = self.title
-
-        # Store shape type
-        obj.metadata[f"{base_key}{self.SHAPE_SUFFIX}"] = self.geometry.kind.value
-
-        # Store add_label flag (defaults to False for backward compatibility)
-        obj.metadata[f"{base_key}{self.ADDLABEL_SUFFIX}"] = False
-
-        # Store any additional attributes from the GeometryResult
-        if self.geometry.attrs:
-            for key, value in self.geometry.attrs.items():
-                obj.metadata[f"{base_key}_{key}"] = value
+        # Store the geometry as a single dictionary
+        metadata_key = f"{self.META_PREFIX}{self.title}{self.DICT_SUFFIX}"
+        obj.metadata[metadata_key] = self.geometry.to_dict()
 
     def remove_from(self, obj: SignalObj | ImageObj) -> None:
         """Remove geometry result from object metadata.
@@ -193,24 +139,9 @@ class GeometryAdapter:
         Args:
             obj: Signal or image object
         """
-        base_key = f"{self.META_PREFIX}{self.title}"
-
-        # Remove standard metadata keys
-        keys_to_remove = [
-            f"{base_key}{self.ARRAY_SUFFIX}",
-            f"{base_key}{self.TITLE_SUFFIX}",
-            f"{base_key}{self.SHAPE_SUFFIX}",
-            f"{base_key}{self.ADDLABEL_SUFFIX}",
-        ]
-
-        # Remove any additional attribute keys
-        if self.geometry.attrs:
-            for key in self.geometry.attrs.keys():
-                keys_to_remove.append(f"{base_key}_{key}")
-
-        # Remove all keys that exist in the metadata
-        for key in keys_to_remove:
-            obj.metadata.pop(key, None)
+        # Remove the single metadata key
+        metadata_key = f"{self.META_PREFIX}{self.title}{self.DICT_SUFFIX}"
+        obj.metadata.pop(metadata_key, None)
 
     @classmethod
     def remove_all_from(cls, obj: SignalObj | ImageObj) -> None:
@@ -266,7 +197,7 @@ class GeometryAdapter:
         Returns:
             True if the key matches the pattern
         """
-        return key.startswith(cls.META_PREFIX) and key.endswith(cls.ARRAY_SUFFIX)
+        return key.startswith(cls.META_PREFIX) and key.endswith(cls.DICT_SUFFIX)
 
     @classmethod
     def from_metadata_entry(
@@ -284,72 +215,9 @@ class GeometryAdapter:
         Raises:
             ValueError: Invalid metadata entry
         """
-        if not cls.match(key, obj.metadata[key]):
-            raise ValueError(f"Invalid metadata key for geometry result: {key}")
-
-        base_key = key[: -len(cls.ARRAY_SUFFIX)]
-        title = base_key[len(cls.META_PREFIX) :]
-
-        # Parse the metadata entry
-        array_data = obj.metadata[key]
-        array = np.array(array_data, dtype=float)
-
-        # Get shape type
-        shape_key = f"{base_key}{cls.SHAPE_SUFFIX}"
-        shape_value = "point"  # Default for backward compatibility
-        if shape_key in obj.metadata:
-            shape_value = obj.metadata[shape_key]
-
-        if array.size > 0:
-            # Create GeometryResult from the data
-            roi_indices = array[:, 0].astype(int)
-            coords = array[:, 1:]
-
-            # Convert shape string to KindShape
-            if isinstance(shape_value, str):
-                shape_map = {
-                    "rectangle": KindShape.RECTANGLE,
-                    "circle": KindShape.CIRCLE,
-                    "ellipse": KindShape.ELLIPSE,
-                    "segment": KindShape.SEGMENT,
-                    "marker": KindShape.MARKER,
-                    "point": KindShape.POINT,
-                    "polygon": KindShape.POLYGON,
-                }
-                kind = shape_map.get(shape_value.lower(), KindShape.POINT)
-            else:
-                kind = shape_value
-
-            geometry = GeometryResult(
-                title=title,
-                kind=kind,
-                coords=coords,
-                roi_indices=roi_indices,
-                attrs={},
-            )
-        else:
-            # Create empty GeometryResult
-            if isinstance(shape_value, str):
-                shape_map = {
-                    "rectangle": KindShape.RECTANGLE,
-                    "circle": KindShape.CIRCLE,
-                    "ellipse": KindShape.ELLIPSE,
-                    "segment": KindShape.SEGMENT,
-                    "marker": KindShape.MARKER,
-                    "point": KindShape.POINT,
-                    "polygon": KindShape.POLYGON,
-                }
-                kind = shape_map.get(shape_value.lower(), KindShape.POINT)
-            else:
-                kind = shape_value
-
-            geometry = GeometryResult(
-                title=title,
-                kind=kind,
-                coords=np.zeros((0, 2), dtype=float),
-                roi_indices=np.array([], dtype=int),
-                attrs={},
-            )
+        # Load the geometry data from the dictionary
+        geometry_dict = obj.metadata[key]
+        geometry = GeometryResult.from_dict(geometry_dict)
         return cls(geometry)
 
     @classmethod

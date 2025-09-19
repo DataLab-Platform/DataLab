@@ -562,13 +562,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 result_keys_to_remove.append(key)
 
         for key in result_keys_to_remove:
-            base_key = key[: -len(GeometryAdapter.ARRAY_SUFFIX)]
             result_obj.metadata.pop(key, None)
-            result_obj.metadata.pop(f"{base_key}{GeometryAdapter.TITLE_SUFFIX}", None)
-            result_obj.metadata.pop(f"{base_key}{GeometryAdapter.SHAPE_SUFFIX}", None)
-            result_obj.metadata.pop(
-                f"{base_key}{GeometryAdapter.ADDLABEL_SUFFIX}", None
-            )
 
         # Merge and add back concatenated geometry results
         for title, geometries in geometry_by_title.items():

@@ -10,7 +10,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, ClassVar, Generator, Union
 
-import numpy as np
 from sigima.objects import ImageObj, SignalObj
 from sigima.objects.scalar import NO_ROI, TableResult
 
@@ -30,15 +29,10 @@ class TableAdapter:
 
     # Class constants for metadata storage
     META_PREFIX: ClassVar[str] = "Table_"
-    ARRAY_SUFFIX: ClassVar[str] = "_array"
-    TITLE_SUFFIX: ClassVar[str] = "_title"
-    HEADERS_SUFFIX: ClassVar[str] = "_headers"
-    LABELS_SUFFIX: ClassVar[str] = "_labels"
+    DATA_SUFFIX: ClassVar[str] = "_data"
 
     def __init__(self, table: TableResult) -> None:
         self.table = table
-        # Convert TableResult data to the format expected by DataLab
-        self._array = self._prepare_array()
 
     @classmethod
     def from_table_result(cls, table: TableResult) -> TableAdapter:
@@ -60,34 +54,6 @@ class TableAdapter:
         """
         return self.table.to_dataframe()
 
-    def _prepare_array(self) -> np.ndarray:
-        """Convert TableResult data to the format expected by DataLab.
-
-        Returns:
-            Array with ROI indices in the first column and values in the following
-            columns
-        """
-        # Create array with ROI indices as the first column
-        rows = len(self.table.data)
-        cols = len(self.table.data[0]) + 1 if rows > 0 else 1  # +1 for ROI indices
-        # Use dtype=object to allow mixed types, and store all as string for metadata
-        result = np.empty((rows, cols), dtype=object)
-
-        # Set ROI indices (as string)
-        if self.table.roi_indices is not None:
-            for i, roi in enumerate(self.table.roi_indices):
-                result[i, 0] = str(roi)
-        else:
-            for i in range(rows):
-                result[i, 0] = str(NO_ROI)
-
-        # Set values (as string)
-        for i, row in enumerate(self.table.data):
-            for j, val in enumerate(row):
-                result[i, j + 1] = str(val)
-
-        return result
-
     @property
     def title(self) -> str:
         """Get the title.
@@ -96,15 +62,6 @@ class TableAdapter:
             Title
         """
         return self.table.title
-
-    @property
-    def array(self) -> np.ndarray:
-        """Get the array with ROI indices and values.
-
-        Returns:
-            Array with ROI indices in first column and values in the following columns
-        """
-        return self._array
 
     @property
     def headers(self) -> list[str]:
@@ -134,24 +91,6 @@ class TableAdapter:
         return list(self.table.labels)
 
     @property
-    def raw_data(self) -> np.ndarray:
-        """Get raw data (values without ROI indices).
-
-        Returns:
-            Array of values (without ROI indices)
-        """
-        return self._array[:, 1:]
-
-    @property
-    def shown_array(self) -> np.ndarray:
-        """Get the shown array (same as raw_data for table results).
-
-        Returns:
-            Array shown to the user
-        """
-        return self.raw_data
-
-    @property
     def label_contents(self) -> tuple[tuple[int, str], ...]:
         """Return label contents for compatibility.
 
@@ -160,6 +99,47 @@ class TableAdapter:
             and text is the associated label
         """
         return tuple(enumerate(self.headers))
+
+    # DataFrame-based helper methods for modern data access
+    def get_roi_data(self, roi_index: int) -> "pd.DataFrame":
+        """Get data for a specific ROI using DataFrame operations.
+
+        Args:
+            roi_index: ROI index to filter by (use NO_ROI for non-ROI data)
+
+        Returns:
+            DataFrame containing only data for the specified ROI
+        """
+        df = self.to_dataframe()
+        if "roi_index" in df.columns:
+            return df[df["roi_index"] == roi_index].drop(columns=["roi_index"])
+        return df
+
+    def get_column_values(self, column_name: str, roi_index: int = None) -> list:
+        """Get values for a specific column, optionally filtered by ROI.
+
+        Args:
+            column_name: Name of the column to retrieve
+            roi_index: Optional ROI index to filter by
+
+        Returns:
+            List of values for the specified column
+        """
+        df = self.to_dataframe()
+        if roi_index is not None and "roi_index" in df.columns:
+            df = df[df["roi_index"] == roi_index]
+        return df[column_name].tolist()
+
+    def get_unique_roi_indices(self) -> list[int]:
+        """Get unique ROI indices present in the data.
+
+        Returns:
+            List of unique ROI indices
+        """
+        df = self.to_dataframe()
+        if "roi_index" in df.columns:
+            return sorted(df["roi_index"].unique().tolist())
+        return [NO_ROI] if len(df) > 0 else []
 
     def set_obj_metadata(self, obj: Union[SignalObj, ImageObj]) -> None:
         """Set object metadata from table result (alias for add_to).
@@ -176,24 +156,10 @@ class TableAdapter:
             obj: Signal or image object
         """
         # Create a unique key for this result
-        base_key = f"{self.META_PREFIX}{self.title}"
+        key = f"{self.META_PREFIX}{self.title}{self.DATA_SUFFIX}"
 
-        # Store array
-        obj.metadata[f"{base_key}{self.ARRAY_SUFFIX}"] = self._array.tolist()
-
-        # Store title
-        obj.metadata[f"{base_key}{self.TITLE_SUFFIX}"] = self.title
-
-        # Store headers
-        obj.metadata[f"{base_key}{self.HEADERS_SUFFIX}"] = self.headers
-
-        # Store labels
-        obj.metadata[f"{base_key}{self.LABELS_SUFFIX}"] = self.labels
-
-        # Store any additional attributes from the TableResult
-        if self.table.attrs:
-            for key, value in self.table.attrs.items():
-                obj.metadata[f"{base_key}_{key}"] = value
+        # Store the complete TableResult as a dictionary for efficient recovery
+        obj.metadata[key] = self.table.to_dict()
 
     def remove_from(self, obj: Union[SignalObj, ImageObj]) -> None:
         """Remove table result from object metadata.
@@ -201,24 +167,8 @@ class TableAdapter:
         Args:
             obj: Signal or image object
         """
-        base_key = f"{self.META_PREFIX}{self.title}"
-
-        # Remove standard metadata keys
-        keys_to_remove = [
-            f"{base_key}{self.ARRAY_SUFFIX}",
-            f"{base_key}{self.TITLE_SUFFIX}",
-            f"{base_key}{self.HEADERS_SUFFIX}",
-            f"{base_key}{self.LABELS_SUFFIX}",
-        ]
-
-        # Remove any additional attribute keys
-        if self.table.attrs:
-            for key in self.table.attrs.keys():
-                keys_to_remove.append(f"{base_key}_{key}")
-
-        # Remove all keys that exist in the metadata
-        for key in keys_to_remove:
-            obj.metadata.pop(key, None)
+        key = f"{self.META_PREFIX}{self.title}{self.DATA_SUFFIX}"
+        obj.metadata.pop(key, None)
 
     @classmethod
     def remove_all_from(cls, obj: Union[SignalObj, ImageObj]) -> None:
@@ -242,7 +192,7 @@ class TableAdapter:
         Returns:
             True if the key matches the pattern
         """
-        return key.startswith(cls.META_PREFIX) and key.endswith(cls.ARRAY_SUFFIX)
+        return key.startswith(cls.META_PREFIX) and key.endswith(cls.DATA_SUFFIX)
 
     @classmethod
     def from_metadata_entry(
@@ -252,7 +202,7 @@ class TableAdapter:
 
         Args:
             obj: Object containing the metadata
-            key: Metadata key for the array data
+            key: Metadata key for the table data
 
         Returns:
             TableAdapter object
@@ -263,55 +213,9 @@ class TableAdapter:
         if not cls.match(key, obj.metadata[key]):
             raise ValueError(f"Invalid metadata key for table result: {key}")
 
-        base_key = key[: -len(cls.ARRAY_SUFFIX)]
-        title = base_key[len(cls.META_PREFIX) :]
-
-        # Parse the metadata entry
-        array_data = obj.metadata[key]
-        array = np.array(array_data, dtype=float)
-
-        # Get headers and labels
-        headers_key = f"{base_key}{cls.HEADERS_SUFFIX}"
-        labels_key = f"{base_key}{cls.LABELS_SUFFIX}"
-
-        if headers_key in obj.metadata:
-            headers = obj.metadata[headers_key]
-        else:
-            # For backwards compatibility, create generic headers
-            if array.shape[1] > 1:
-                headers = [f"Column {i}" for i in range(1, array.shape[1])]
-            else:
-                headers = ["Value"]
-
-        if labels_key in obj.metadata:
-            # Labels not used in the enhanced version, keeping for potential future use
-            pass
-
-        # Create TableResult from the data
-        if array.size > 0:
-            # Extract ROI indices and values
-            roi_indices = array[:, 0].astype(int)
-            data = array[:, 1:].tolist()  # Convert to list of lists
-
-            # Create TableResult directly
-            table = TableResult(
-                title=title,
-                headers=headers,
-                labels=[],  # Labels not used in enhanced version
-                data=data,
-                roi_indices=roi_indices.tolist(),  # Convert to list
-                attrs={},
-            )
-        else:
-            # Create empty TableResult
-            table = TableResult(
-                title=title,
-                headers=headers,
-                labels=[],
-                data=[],  # Empty list instead of numpy array
-                roi_indices=[],  # Empty list instead of numpy array
-                attrs={},
-            )
+        # Parse the metadata entry as a TableResult dictionary
+        table_dict = obj.metadata[key]
+        table = TableResult.from_dict(table_dict)
         return cls(table)
 
     @classmethod
