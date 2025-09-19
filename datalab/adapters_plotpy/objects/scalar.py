@@ -83,7 +83,7 @@ class ResultPlotPyAdapter:
             if i_roi >= 0:
                 roi: TypeROI = obj.roi
                 assert obj.roi is not None, "Expected ROI to be defined"
-                header = f"|{roi.get_single_roi_title(i_roi)}"
+                header = roi.get_single_roi_title(i_roi)
             row_headers.append(header)
         df.set_index(pd.Index(row_headers), inplace=True)
         text += df.to_html(float_format="%.3g", border=0)

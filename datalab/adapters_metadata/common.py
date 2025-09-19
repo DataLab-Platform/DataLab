@@ -33,6 +33,10 @@ class ResultData:
     xlabels: list[str] | None = None
     ylabels: list[str] | None = None
 
+    def __bool__(self) -> bool:
+        """Return True if there are results stored"""
+        return bool(self.results)
+
     @property
     def category(self) -> str:
         """Return category of results"""
@@ -117,6 +121,7 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
         warnings.simplefilter("ignore", RuntimeWarning)
         dfs = [result.to_dataframe() for result in rdata.results]
         df = pd.concat(dfs, ignore_index=True)
+        df = df.drop(columns=["roi_index"])
         df.set_index(pd.Index(rdata.ylabels), inplace=True)
         dlg = DataFrameEditor(parent)
         dlg.setup_and_check(
