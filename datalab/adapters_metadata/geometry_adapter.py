@@ -8,10 +8,13 @@ and image objects.
 
 from __future__ import annotations
 
-from typing import Any, ClassVar, Generator, Union
+from typing import TYPE_CHECKING, Any, ClassVar, Generator
 
 import numpy as np
 from sigima.objects import NO_ROI, GeometryResult, ImageObj, KindShape, SignalObj
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 class GeometryAdapter:
@@ -47,6 +50,14 @@ class GeometryAdapter:
             GeometryAdapter instance
         """
         return cls(geometry)
+
+    def to_dataframe(self) -> pd.DataFrame:
+        """Convert the geometry result to a pandas DataFrame.
+
+        Returns:
+            DataFrame with columns as in self.headers, and optional 'roi_index' column.
+        """
+        return self.geometry.to_dataframe()
 
     def _prepare_array(self) -> np.ndarray:
         """Convert GeometryResult coordinates to the format expected by DataLab.
@@ -150,7 +161,7 @@ class GeometryAdapter:
         # Generic headers for unknown shapes
         return [f"coord_{i}" for i in range(num_coords)]
 
-    def add_to(self, obj: Union[SignalObj, ImageObj]) -> None:
+    def add_to(self, obj: SignalObj | ImageObj) -> None:
         """Add geometry result to object metadata.
 
         Args:
@@ -176,7 +187,7 @@ class GeometryAdapter:
             for key, value in self.geometry.attrs.items():
                 obj.metadata[f"{base_key}_{key}"] = value
 
-    def remove_from(self, obj: Union[SignalObj, ImageObj]) -> None:
+    def remove_from(self, obj: SignalObj | ImageObj) -> None:
         """Remove geometry result from object metadata.
 
         Args:
@@ -202,7 +213,7 @@ class GeometryAdapter:
             obj.metadata.pop(key, None)
 
     @classmethod
-    def remove_all_from(cls, obj: Union[SignalObj, ImageObj]) -> None:
+    def remove_all_from(cls, obj: SignalObj | ImageObj) -> None:
         """Remove all geometry results from object metadata.
 
         Args:
@@ -222,7 +233,7 @@ class GeometryAdapter:
         """
         return tuple(enumerate(self.headers))
 
-    def set_obj_metadata(self, obj: Union[SignalObj, ImageObj]) -> None:
+    def set_obj_metadata(self, obj: SignalObj | ImageObj) -> None:
         """Set object metadata from geometry result (alias for add_to).
 
         Args:
@@ -230,35 +241,9 @@ class GeometryAdapter:
         """
         self.add_to(obj)
 
-    def get_text(self, obj: Union[SignalObj, ImageObj]) -> str:
-        """Return text representation of result.
-
-        Args:
-            obj: Signal or image object for ROI title lookup
-
-        Returns:
-            HTML formatted text representation
-        """
-        text = ""
-        for i_row in range(self.array.shape[0]):
-            suffix = ""
-            i_roi = i_row - 1
-            if i_roi >= 0:
-                suffix = f"|{obj.roi.get_single_roi_title(i_roi)}"
-            text += f"<u>{self.title}{suffix}</u>:"
-            for i_col, label in self.label_contents:
-                label = label.replace("<", "&lt;").replace(">", "&gt;")
-                if "%" not in label:
-                    label += " = %g"
-                value = self.shown_array[i_row, i_col]
-                text += f"<br>{label.strip().format(obj) % value}"
-            if i_row < self.shown_array.shape[0] - 1:
-                text += "<br><br>"
-        return text
-
     @staticmethod
     def add_geometry_result_to_obj(
-        geometry: GeometryResult, obj: Union[SignalObj, ImageObj]
+        geometry: GeometryResult, obj: SignalObj | ImageObj
     ) -> None:
         """Static method to add GeometryResult to object.
 
@@ -285,7 +270,7 @@ class GeometryAdapter:
 
     @classmethod
     def from_metadata_entry(
-        cls, obj: Union[SignalObj, ImageObj], key: str
+        cls, obj: SignalObj | ImageObj, key: str
     ) -> GeometryAdapter:
         """Create a geometry result adapter from a metadata entry.
 
@@ -369,7 +354,7 @@ class GeometryAdapter:
 
     @classmethod
     def iterate_from_obj(
-        cls, obj: Union[SignalObj, ImageObj]
+        cls, obj: SignalObj | ImageObj
     ) -> Generator[GeometryAdapter, None, None]:
         """Iterate over geometry results stored in an object's metadata.
 

@@ -8,11 +8,14 @@ and image objects.
 
 from __future__ import annotations
 
-from typing import Any, ClassVar, Generator, Union
+from typing import TYPE_CHECKING, Any, ClassVar, Generator, Union
 
 import numpy as np
 from sigima.objects import ImageObj, SignalObj
 from sigima.objects.scalar import NO_ROI, TableResult
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 class TableAdapter:
@@ -48,6 +51,14 @@ class TableAdapter:
             TableAdapter instance
         """
         return cls(table)
+
+    def to_dataframe(self) -> pd.DataFrame:
+        """Convert the table result to a pandas DataFrame.
+
+        Returns:
+            DataFrame with columns as in self.headers, and optional 'roi_index' column.
+        """
+        return self.table.to_dataframe()
 
     def _prepare_array(self) -> np.ndarray:
         """Convert TableResult data to the format expected by DataLab.
@@ -102,7 +113,7 @@ class TableAdapter:
         Returns:
             Column headers
         """
-        return list(self.table.names)
+        return list(self.table.headers)
 
     @property
     def category(self) -> str:
@@ -285,7 +296,7 @@ class TableAdapter:
             # Create TableResult directly
             table = TableResult(
                 title=title,
-                names=headers,
+                headers=headers,
                 labels=[],  # Labels not used in enhanced version
                 data=data,
                 roi_indices=roi_indices.tolist(),  # Convert to list
@@ -295,7 +306,7 @@ class TableAdapter:
             # Create empty TableResult
             table = TableResult(
                 title=title,
-                names=headers,
+                headers=headers,
                 labels=[],
                 data=[],  # Empty list instead of numpy array
                 roi_indices=[],  # Empty list instead of numpy array

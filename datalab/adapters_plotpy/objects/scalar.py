@@ -16,6 +16,7 @@ from collections.abc import Iterable
 from typing import TYPE_CHECKING, Literal
 
 import numpy as np
+import pandas as pd
 from guidata.configtools import get_font
 from plotpy.builder import make
 from plotpy.items import (
@@ -72,27 +73,20 @@ class ResultPlotPyAdapter:
 
     def __get_text(self, obj: TypeObj) -> str:
         """Return text representation of result"""
-        ra = self.result_adapter
-        text = ""
-        for i_row in range(ra.array.shape[0]):
-            suffix = ""
+        df = self.result_adapter.to_dataframe()
+        df = df.drop(columns=["roi_index"])
+        text = f'<b style="color: blue">{self.result_adapter.title}</b><br>'
+        row_headers = []
+        for i_row in range(df.shape[0]):
             i_roi = i_row - 1
+            header = ""
             if i_roi >= 0:
                 roi: TypeROI = obj.roi
                 assert obj.roi is not None, "Expected ROI to be defined"
-                suffix = f"|{roi.get_single_roi_title(i_roi)}"
-            text += f"<u>{ra.title}{suffix}</u>:"
-            for i_col, label in ra.label_contents:
-                # "label" may contains "<" and ">" characters which are interpreted
-                # as HTML tags by the LabelItem. We must escape them.
-                label = label.replace("<", "&lt;").replace(">", "&gt;")
-                if "%" not in label:
-                    label += " = %g"
-                text += (
-                    "<br>" + label.strip().format(obj) % ra.shown_array[i_row, i_col]
-                )
-            if i_row < ra.shown_array.shape[0] - 1:
-                text += "<br><br>"
+                header = f"|{roi.get_single_roi_title(i_roi)}"
+            row_headers.append(header)
+        df.set_index(pd.Index(row_headers), inplace=True)
+        text += df.to_html(float_format="%.3g", border=0)
         return text
 
     def create_label_item(self, obj: BaseObj) -> LabelItem | None:
