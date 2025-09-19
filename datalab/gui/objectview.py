@@ -414,7 +414,6 @@ class ObjectView(SimpleObjectTree):
 
     def __is_drop_allowed(self, event: QG.QDropEvent | QG.QDragMoveEvent) -> bool:
         """Return True if drop is allowed"""
-
         # Yes, this method has too many return statements.
         # But it's still quite readable, so let's focus on other things and just disable
         # the pylint warning.

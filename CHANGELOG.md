@@ -6,7 +6,26 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* New image operation:
+  * Convolution.
+
+* New image format support:
+  * **Matris text image files**: Added support for reading Matris format text files (`.txt` extension).
+    * Supports both real and complex-valued image data with optional error images.
+    * Automatically handles NaN values in the data.
+    * Reads metadata including units (X, Y, Z) and labels from file headers.
+    * This feature is provided by the underlying Sigima library.
+
+* Internal console status indicator added to the status bar:
+  * The status bar now features an indicator for the internal console, visible only when the console is hidden.
+  * Clicking the indicator opens the internal console.
+  * The icon turns red if an error or warning is logged, alerting the user to check the console.
+
 * New common signal/image feature:
+  * Added two options for signal and image creation:
+    * "Use xmin and xmax bounds from current signal when creating a new signal" (default: disabled)
+    * "Use dimensions from current image when creating a new image" (default: enabled)
+    * If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any
   * Added `phase` (argument) feature to extract the phase information from complex signals or images.
     * This complements the "Absolute value" (modulus) feature.
   * Added operation to create complex-valued signal/image from real and imaginary parts.
@@ -21,6 +40,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201).
   * Save to directory feature.
     * This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227).
+  * Deconvolution in the frequency domain.
+    * This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution.
 
 * New ROI (Region of Interest) management features:
   * New "ROI" menu, between "Edit" and "Operations" menus
@@ -100,11 +121,21 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Bandwidth at -3dB:
     * Enhanced to support passband bandwidth in addition to baseband bandwidth.
 
+* New image analysis features:
+  * Horizontal and vertical projections.
+    * This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns.
+
 * New 2D ramp image generator.
   * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).
 
 * New signal generators: linear chirp, logistic function, Planck function.
   * This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213).
+
+* New "Extent" group box in image properties:
+  * Added computed parameters for image extent: `Xmin`, `Xmax`, `Ymin`, and `Ymax`.
+  * These parameters are automatically calculated based on the image origin, pixel spacing, and dimensions.
+  * They provide the physical coordinate boundaries of the image for enhanced spatial analysis.
+  * The parameters are displayed in a dedicated "Extent" group in the image properties panel.
 
 * New I/O features:
   * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using `\s+` instead of single space character).

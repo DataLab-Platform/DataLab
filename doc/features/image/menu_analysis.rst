@@ -63,6 +63,14 @@ Parameters are:
 
     Example of histogram.
 
+Horizontal and vertical projections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Compute horizontal and vertical projection profiles:
+
+- Horizontal projection: Sum the pixel values along each row (projection on the x-axis).
+- Vertical projection: Sum the pixel values along each column (projection on the y-axis).
+
 Centroid
 ^^^^^^^^
 

@@ -14,7 +14,9 @@ from collections.abc import Callable
 
 import h5py
 import numpy as np
-from sigima.io.common.converters import convert_array_to_standard_type, to_string
+from guidata.utils.misc import to_string
+from sigima.io.common.converters import convert_array_to_valid_dtype
+from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import Conf
 
@@ -150,26 +152,26 @@ class BaseNode(metaclass=abc.ABCMeta):
             title += f" ({osp.basename(self.h5file.filename)})"
         return title
 
-    def set_signal_data(self, obj):
+    def set_signal_data(self, obj: SignalObj) -> None:
         """Set signal data (handles various issues)"""
         data = self.data
         if data.dtype not in (float, np.complex128):
             data = np.array(data, dtype=float)
-        data = convert_array_to_standard_type(data)
+        data = convert_array_to_valid_dtype(data, SignalObj.VALID_DTYPES)
         if len(data.shape) == 1:
             obj.set_xydata(np.arange(data.size), data)
         else:
             x, y, dx, dy = data_to_xy(data)
             obj.set_xydata(x, y, dx, dy)
 
-    def set_image_data(self, obj):
+    def set_image_data(self, obj: ImageObj) -> None:
         """Set image data (handles various issues)"""
         data = self.data
         if data.dtype == np.uint32:
             self.uint32_wng = data.max() > np.iinfo(np.int32).max
             clipped_data = data.clip(0, np.iinfo(np.int32).max)
             data = np.array(clipped_data, dtype=np.int32)
-        obj.data = convert_array_to_standard_type(data)
+        obj.data = convert_array_to_valid_dtype(data, ImageObj.VALID_DTYPES)
 
 
 class H5Importer:

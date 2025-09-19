@@ -194,6 +194,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.operation_end_actions = None
         self.__category_in_progress: ActionCategory = None
         self.__submenu_in_progress = False
+        self.__submenu_stack: list[dict[str, any]] = []  # Stack for nested submenus
         self.__actions: dict[Callable, list[QW.QAction]] = {}
         self.__submenus: dict[str, QW.QMenu] = {}
 
@@ -231,22 +232,66 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         Yields:
             None
         """
-        key = self.__category_in_progress.name + "/" + title
+        # Create a unique key for this submenu level
+        parent_key = ""
+        if self.__submenu_stack:
+            parent_key = self.__submenu_stack[-1]["key"] + "/"
+        elif self.__category_in_progress:
+            parent_key = self.__category_in_progress.name + "/"
+
+        key = parent_key + title
         is_new = key not in self.__submenus
+
         if is_new:
             self.__submenus[key] = menu = QW.QMenu(title)
             if icon_name:
                 menu.setIcon(get_icon(icon_name))
         else:
             menu = self.__submenus[key]
+
+        # Save current submenu state and push new submenu onto stack
+        submenu_state = {
+            "key": key,
+            "menu": menu,
+            "is_new": is_new,
+            "actions": [],  # Actions for this submenu level
+        }
+        self.__submenu_stack.append(submenu_state)
         self.__submenu_in_progress = True
+
         try:
             yield
         finally:
-            self.__submenu_in_progress = False
-            add_actions(menu, self.feature_actions.pop(ActionCategory.SUBMENU))
-            if is_new:
-                self.add_to_action_list(menu)
+            # Pop the current submenu from stack
+            current_submenu = self.__submenu_stack.pop()
+
+            # Get actions for this specific submenu level
+            submenu_actions = current_submenu.get("actions", [])
+
+            # Also get any actions that were added to the generic SUBMENU category
+            # while this submenu was the active one
+            generic_submenu_actions = self.feature_actions.pop(
+                ActionCategory.SUBMENU, []
+            )
+            submenu_actions.extend(generic_submenu_actions)
+
+            add_actions(current_submenu["menu"], submenu_actions)
+
+            # Update submenu in progress status BEFORE adding to parent
+            self.__submenu_in_progress = len(self.__submenu_stack) > 0
+
+            if current_submenu["is_new"]:
+                # Add this submenu to its parent (either category or parent submenu)
+                if self.__submenu_stack:
+                    # We're in a nested submenu, add to parent submenu's actions
+                    parent_submenu = self.__submenu_stack[-1]
+                    parent_submenu["actions"].append(current_submenu["menu"])
+                else:
+                    # We're at the top level, add to category actions
+                    # Force using the current category, not SUBMENU
+                    self.add_to_action_list(
+                        current_submenu["menu"], category=self.__category_in_progress
+                    )
 
     # pylint: disable=too-many-positional-arguments
     def new_action(
@@ -404,9 +449,22 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
              (or after if pos is positive). Defaults to False.
         """
         if category is None:
-            if self.__submenu_in_progress:
-                category = ActionCategory.SUBMENU
-            elif self.__category_in_progress is not None:
+            if self.__submenu_in_progress and self.__submenu_stack:
+                # Add directly to the current submenu's action list
+                current_submenu = self.__submenu_stack[-1]
+                actionlist = current_submenu["actions"]
+                if pos is None:
+                    pos = -1
+                add_separator_after = pos >= 0
+                if pos < 0:
+                    pos = len(actionlist) + pos + 1
+                actionlist.insert(pos, action)
+                if sep:
+                    if add_separator_after:
+                        pos += 1
+                    actionlist.insert(pos, None)
+                return
+            if self.__category_in_progress is not None:
                 category = self.__category_in_progress
             else:
                 raise ValueError("No category specified")
@@ -634,10 +692,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Add object title to plot"),
+                _("Insert object title as annotation label"),
                 separator=True,
                 triggered=self.panel.add_label_with_title,
-                tip=_("Add object title as a label to the plot"),
+                tip=_(
+                    "Add the selected object's title as a label to the plot annotations"
+                ),
             )
             self.new_action(
                 _("Copy titles to clipboard"),
@@ -700,20 +760,21 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         # MARK: OPERATION
         with self.new_category(ActionCategory.OPERATION):
-            self.action_for("addition")
-            self.action_for("average")
-            self.action_for("standard_deviation")
-            self.action_for("difference")
-            self.action_for("quadratic_difference")
-            self.action_for("product")
-            self.action_for("division")
-            self.action_for("inverse")
             self.action_for("arithmetic")
             with self.new_menu(_("Constant Operations"), icon_name="constant.svg"):
                 self.action_for("addition_constant")
                 self.action_for("difference_constant")
                 self.action_for("product_constant")
                 self.action_for("division_constant")
+            self.action_for("addition")
+            self.action_for("difference")
+            self.action_for("product")
+            self.action_for("division")
+            self.action_for("inverse", separator=True)
+            self.action_for("exp")
+            self.action_for("log10")
+            self.action_for("convolution", separator=True)
+            self.action_for("deconvolution")
             self.action_for("absolute", separator=True)
             self.action_for("phase")
             self.action_for("complex_from_magnitude_phase")
@@ -721,8 +782,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.action_for("imag")
             self.action_for("complex_from_real_imag")
             self.action_for("astype", separator=True)
-            self.action_for("exp", separator=True)
-            self.action_for("log10", separator=False)
+            self.action_for("average", separator=True)
+            self.action_for("quadratic_difference")
 
         # MARK: PROCESSING
         with self.new_category(ActionCategory.PROCESSING):
@@ -881,14 +942,13 @@ class SignalActionHandler(BaseActionHandler):
             self.action_for("power", separator=True)
             self.action_for("sqrt")
             self.action_for("derivative", separator=True)
-            self.action_for("integral")
 
-        def cra_fit(title, fitdlgfunc, iconname, tip: str | None = None):
+        def cra_fit(title, fitdlgfunc, tip: str | None = None):
             """Create curve fitting action"""
             return self.new_action(
                 title,
                 triggered=lambda: self.panel.processor.compute_fit(title, fitdlgfunc),
-                icon_name=iconname,
+                icon_name=fitdlgfunc.__name__ + ".svg",
                 tip=tip,
             )
 
@@ -903,55 +963,71 @@ class SignalActionHandler(BaseActionHandler):
                 self.action_for("highpass")
                 self.action_for("bandpass")
                 self.action_for("bandstop")
-            with self.new_menu(_("Fitting"), icon_name="expfit.svg"):
-                cra_fit(_("Linear fit"), fitdialog.linearfit, "linearfit.svg")
-                self.new_action(
-                    _("Polynomial fit"),
-                    triggered=self.panel.processor.compute_polyfit,
-                    icon_name="polyfit.svg",
-                )
-                cra_fit(_("Gaussian fit"), fitdialog.gaussianfit, "gaussfit.svg")
-                cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit, "lorentzfit.svg")
-                cra_fit(_("Voigt fit"), fitdialog.voigtfit, "voigtfit.svg")
-                self.new_action(
-                    _("Multi-Gaussian fit"),
-                    triggered=self.panel.processor.compute_multigaussianfit,
-                    icon_name="multigaussfit.svg",
-                )
-                self.new_action(
-                    _("Multi-Lorentzian fit"),
-                    triggered=self.panel.processor.compute_multilorentzianfit,
-                    icon_name="lorentzfit.svg",
-                )
-                cra_fit(
-                    _("Planckian fit"),
-                    fitdialog.planckianfit,
-                    "expfit.svg",
-                    tip=_("Planckian (blackbody radiation) fitting"),
-                )
-                cra_fit(
-                    _("Two half-Gaussian fit"),
-                    fitdialog.twohalfgaussianfit,
-                    "gaussfit.svg",
-                    tip=_("Asymmetric peak fitting with two half-Gaussians"),
-                )
-                cra_fit(
-                    _("Double exponential fit"),
-                    fitdialog.doubleexponentialfit,
-                    "expfit.svg",
-                    tip=_("Double exponential decay fitting"),
-                )
-                cra_fit(_("Exponential fit"), fitdialog.exponentialfit, "expfit.svg")
-                cra_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit, "sinfit.svg")
-                cra_fit(
-                    _("CDF fit"),
-                    fitdialog.cdffit,
-                    "cdffit.svg",
-                    tip=_(
-                        "Cumulative distribution function fit, "
-                        "related to Error function (erf)"
-                    ),
-                )
+            with self.new_menu(_("Fitting"), icon_name="exponential_fit.svg"):
+                with self.new_menu(
+                    _("Interactive fitting"), icon_name="interactive_fit.svg"
+                ):
+                    cra_fit(_("Linear fit"), fitdialog.linear_fit)
+                    self.new_action(
+                        _("Polynomial fit"),
+                        triggered=self.panel.processor.compute_polyfit,
+                        icon_name="polynomial_fit.svg",
+                    )
+                    cra_fit(_("Gaussian fit"), fitdialog.gaussian_fit)
+                    cra_fit(_("Lorentzian fit"), fitdialog.lorentzian_fit)
+                    cra_fit(_("Voigt fit"), fitdialog.voigt_fit)
+                    self.new_action(
+                        _("Multi-Gaussian fit"),
+                        triggered=self.panel.processor.compute_multigaussianfit,
+                        icon_name="multigaussian_fit.svg",
+                    )
+                    self.new_action(
+                        _("Multi-Lorentzian fit"),
+                        triggered=self.panel.processor.compute_multilorentzianfit,
+                        icon_name="multilorentzian_fit.svg",
+                    )
+                    cra_fit(
+                        _("Planckian fit"),
+                        fitdialog.planckian_fit,
+                        tip=_("Planckian (blackbody radiation) fitting"),
+                    )
+                    cra_fit(
+                        _("Two half-Gaussian fit"),
+                        fitdialog.twohalfgaussian_fit,
+                        tip=_("Asymmetric peak fitting with two half-Gaussians"),
+                    )
+                    cra_fit(
+                        _("Double exponential fit"),
+                        fitdialog.doubleexponential_fit,
+                        tip=_("Double exponential decay fitting"),
+                    )
+                    cra_fit(_("Exponential fit"), fitdialog.exponential_fit)
+                    cra_fit(_("Sinusoidal fit"), fitdialog.sinusoidal_fit)
+                    cra_fit(
+                        _("CDF fit"),
+                        fitdialog.cdf_fit,
+                        tip=_(
+                            "Cumulative distribution function fit, "
+                            "related to Error function (erf)"
+                        ),
+                    )
+                separator_needed = True
+                for fit_name in (
+                    "linear_fit",
+                    "polynomial_fit",
+                    "gaussian_fit",
+                    "lorentzian_fit",
+                    "voigt_fit",
+                    "planckian_fit",
+                    "twohalfgaussian_fit",
+                    "doubleexponential_fit",
+                    "exponential_fit",
+                    "sinusoidal_fit",
+                    "cdf_fit",
+                    "sigmoid_fit",
+                ):
+                    self.action_for(fit_name, separator=separator_needed)
+                    separator_needed = False
             self.action_for("apply_window")
             self.action_for("detrending")
             self.action_for("interpolate")
@@ -1029,7 +1105,7 @@ class SignalActionHandler(BaseActionHandler):
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
         with self.new_category(ActionCategory.OPERATION):
-            self.action_for("convolution", separator=True)
+            self.action_for("integral")
         super().create_last_actions()
 
 
@@ -1226,8 +1302,8 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):
-            # TODO: [P3] Add "Create ROI grid..." action to create a regular grid
-            # or ROIs (maybe reuse/derive from `sigima.params.GridParam`)
+            self.action_for("horizontal_projection", separator=True)
+            self.action_for("vertical_projection")
             self.action_for("centroid", separator=True)
             self.action_for("enclosing_circle")
             self.new_action(
@@ -1238,7 +1314,6 @@ class ImageActionHandler(BaseActionHandler):
             )
             self.action_for("contour_shape")
             self.action_for("hough_circle_peaks")
-
             with self.new_menu(_("Blob detection")):
                 self.action_for("blob_dog")
                 self.action_for("blob_doh")

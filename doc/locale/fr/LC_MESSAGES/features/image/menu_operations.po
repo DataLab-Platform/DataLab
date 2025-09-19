@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-31 16:19+0200\n"
+"POT-Creation-Date: 2025-09-10 10:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -277,6 +277,27 @@ msgstr ""
 
 msgid "Other operations"
 msgstr "Autres opérations"
+
+msgid "Implementation"
+msgstr "Implémentation"
+
+msgid "|convolution| Convolution"
+msgstr "|convolution| Convolution"
+
+msgid "convolution"
+msgstr "convolution"
+
+msgid "Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+msgstr "Basée sur `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+
+msgid "|deconvolution| Deconvolution"
+msgstr "|deconvolution| Déconvolution"
+
+msgid "deconvolution"
+msgstr "déconvolution"
+
+msgid "Frequency domain deconvolution"
+msgstr "Déconvolution dans le domaine fréquentiel"
 
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"

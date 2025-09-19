@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 21:20+0200\n"
+"POT-Creation-Date: 2025-09-16 15:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -30,8 +30,56 @@ msgstr "DataLab Version 1.0.0"
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
+msgid "New image operation:"
+msgstr "Nouvelle opération d'image :"
+
+msgid "Convolution."
+msgstr "Convolution"
+
+msgid "New image format support:"
+msgstr "Nouveau support de format d'image :"
+
+msgid "**Matris text image files**: Added support for reading Matris format text files (`.txt` extension)."
+msgstr "**Fichiers image texte Matris** : Ajout du support pour la lecture des fichiers texte au format Matris (extension `.txt`)."
+
+msgid "Supports both real and complex-valued image data with optional error images."
+msgstr "Prend en charge à la fois les données d'image réelles et à valeurs complexes avec des images d'erreur facultatives."
+
+msgid "Automatically handles NaN values in the data."
+msgstr "Gère automatiquement les valeurs NaN dans les données."
+
+msgid "Reads metadata including units (X, Y, Z) and labels from file headers."
+msgstr "Lit les métadonnées, y compris les unités (X, Y, Z) et les étiquettes, à partir des en-têtes de fichiers."
+
+msgid "This feature is provided by the underlying Sigima library."
+msgstr "Cette fonctionnalité est fournie par la bibliothèque Sigima sous-jacente."
+
+msgid "Internal console status indicator added to the status bar:"
+msgstr "Indicateur d'état de la console interne ajouté à la barre d'état :"
+
+msgid "The status bar now features an indicator for the internal console, visible only when the console is hidden."
+msgstr "La barre d'état dispose désormais d'un indicateur pour la console interne, visible uniquement lorsque la console est masquée."
+
+msgid "Clicking the indicator opens the internal console."
+msgstr "Cliquer sur l'indicateur ouvre la console interne."
+
+msgid "The icon turns red if an error or warning is logged, alerting the user to check the console."
+msgstr "L'icône devient rouge si une erreur ou un avertissement est enregistré, alertant l'utilisateur à vérifier la console."
+
 msgid "New common signal/image feature:"
 msgstr "Nouvelles fonctionnalités communes signal/image :"
+
+msgid "Added two options for signal and image creation:"
+msgstr "Ajout de deux options pour la création de signaux et d'images :"
+
+msgid "\"Use xmin and xmax bounds from current signal when creating a new signal\" (default: disabled)"
+msgstr "\"Utiliser les bornes du signal pour les nouveaux signaux\" (par défaut : désactivé)"
+
+msgid "\"Use dimensions from current image when creating a new image\" (default: enabled)"
+msgstr "\"Utiliser les dimensions de l'image pour les nouvelles images\" (par défaut : activé)"
+
+msgid "If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any"
+msgstr "Si activé, le nouveau signal/image utilisera les bornes xmin/xmax ou les dimensions du signal/image actuel, le cas échéant."
 
 msgid "Added `phase` (argument) feature to extract the phase information from complex signals or images."
 msgstr "Ajout de la fonctionnalité `phase` (argument) pour extraire les informations de phase des signaux ou des images complexes."
@@ -74,6 +122,13 @@ msgstr "Fonctionnalité de sauvegarde dans un répertoire."
 
 msgid "This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
 msgstr "Ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
+
+msgid "Deconvolution in the frequency domain."
+msgstr ""
+
+#, fuzzy
+msgid "This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution."
+msgstr "Ceci clôture [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208) - Ajout de la prise en charge du rééchantillonnage d'images."
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
@@ -297,6 +352,15 @@ msgstr "Bande passante à -3dB :"
 msgid "Enhanced to support passband bandwidth in addition to baseband bandwidth."
 msgstr "Amélioration de la prise en charge de la bande passante en plus de la bande de base."
 
+msgid "New image analysis features:"
+msgstr "Nouvelles fonctionnalités d'analyse de l'image :"
+
+msgid "Horizontal and vertical projections."
+msgstr "Projections horizontale et verticale."
+
+msgid "This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns."
+msgstr "Ceci clôture [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Paramètres / Somme des pixels, somme des lignes de pixels, somme des colonnes de pixels."
+
 msgid "New 2D ramp image generator."
 msgstr "Nouveau générateur d'image de type rampe 2D."
 
@@ -308,6 +372,21 @@ msgstr "Nouveaux générateurs de signaux: chirp linéaire, fonction logistique,
 
 msgid "This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213)."
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
+
+msgid "New \"Extent\" group box in image properties:"
+msgstr "Nouvelle boîte de groupe \"Bornes\" dans les propriétés de l'image :"
+
+msgid "Added computed parameters for image extent: `Xmin`, `Xmax`, `Ymin`, and `Ymax`."
+msgstr "Ajout des paramètres calculés pour l'étendue de l'image : `Xmin`, `Xmax`, `Ymin` et `Ymax`."
+
+msgid "These parameters are automatically calculated based on the image origin, pixel spacing, and dimensions."
+msgstr "Ces paramètres sont automatiquement calculés en fonction de l'origine de l'image, de l'espacement des pixels et des dimensions."
+
+msgid "They provide the physical coordinate boundaries of the image for enhanced spatial analysis."
+msgstr "Ils fournissent les limites de coordonnées physiques de l'image pour une analyse spatiale améliorée."
+
+msgid "The parameters are displayed in a dedicated \"Extent\" group in the image properties panel."
+msgstr "Les paramètres sont affichés dans un groupe dédié \"Bornes\" dans le panneau des propriétés de l'image."
 
 msgid "New I/O features:"
 msgstr "Nouvelles fonctionnalités d'E/S :"

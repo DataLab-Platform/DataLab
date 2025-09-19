@@ -13,6 +13,7 @@ import multiprocessing
 import time
 import warnings
 from dataclasses import dataclass
+from enum import Enum, auto
 from multiprocessing.pool import Pool
 from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional
 
@@ -96,12 +97,81 @@ def run_with_env(func: Callable, args: tuple, env_json: str) -> CompOut:
     return wng_err_func(func, args)
 
 
+class WorkerState(Enum):
+    """Worker states for computation lifecycle."""
+
+    IDLE = auto()  # Ready to start new computation
+    STARTING = auto()  # Computation starting (prevents race conditions)
+    RUNNING = auto()  # Computation in progress
+    FINISHED = auto()  # Computation completed, result available
+
+
+class WorkerStateMachine:
+    """State machine for managing worker computation lifecycle.
+
+    This class handles state transitions for worker computations,
+    ensuring valid state flow and preventing invalid operations.
+    """
+
+    def __init__(self) -> None:
+        """Initialize the state machine in IDLE state."""
+        self._current_state = WorkerState.IDLE
+
+    @property
+    def current_state(self) -> WorkerState:
+        """Get the current state.
+
+        Returns:
+            Current WorkerState.
+        """
+        return self._current_state
+
+    def transition_to(self, target_state: WorkerState) -> None:
+        """Transition to the specified target state.
+
+        Args:
+            target_state: The state to transition to.
+
+        Raises:
+            ValueError: If the transition is not valid from the current state.
+        """
+        # Define valid state transitions
+        valid_transitions = {
+            WorkerState.IDLE: {WorkerState.STARTING},
+            WorkerState.STARTING: {WorkerState.RUNNING},
+            WorkerState.RUNNING: {WorkerState.FINISHED},
+            WorkerState.FINISHED: {WorkerState.IDLE},
+        }
+
+        # Allow transitions to the same state (no-op)
+        if target_state == self._current_state:
+            return
+
+        # Check if transition is valid
+        allowed_targets = valid_transitions.get(self._current_state, set())
+        if target_state not in allowed_targets:
+            raise ValueError(
+                f"Invalid transition from {self._current_state} to {target_state}. "
+                f"Valid transitions: {allowed_targets}"
+            )
+
+        self._current_state = target_state
+
+    def reset_to_idle(self) -> None:
+        """Reset state to IDLE unconditionally.
+
+        This is used for restart/cancel operations where we need
+        to force the state back to IDLE regardless of current state.
+        """
+        self._current_state = WorkerState.IDLE
+
+
 class Worker:
     """Multiprocessing worker, to run long-running tasks in a separate process"""
 
     def __init__(self) -> None:
         self.asyncresult: AsyncResult = None
-        self.result: Any = None
+        self.state_machine = WorkerStateMachine()
 
     @staticmethod
     def create_pool() -> None:
@@ -131,9 +201,12 @@ class Worker:
     def restart_pool(self) -> None:
         """Terminate and recreate the pool"""
         # Terminate the process and stop the timer
-        self.terminate_pool(wait=False)
+        Worker.terminate_pool(wait=False)
         # Recreate the pool for the next computation
-        self.create_pool()
+        Worker.create_pool()
+        # Reset worker state after pool restart
+        self.asyncresult = None
+        self.state_machine.reset_to_idle()
 
     def run(self, func: Callable, args: tuple[Any]) -> None:
         """Run computation.
@@ -141,11 +214,48 @@ class Worker:
         Args:
             func: function to run
             args: arguments
+
+        Raises:
+            ValueError: If not in IDLE state or pool is not available.
         """
+        # Check if we can start computation
+        if self.state_machine.current_state != WorkerState.IDLE:
+            current_state = self.state_machine.current_state
+            raise ValueError(f"Cannot start computation from {current_state} state")
+
+        # Transition to starting state
+        self.state_machine.transition_to(WorkerState.STARTING)
+
         global POOL  # pylint: disable=global-statement,global-variable-not-assigned
-        assert POOL is not None
+        if POOL is None:
+            raise ValueError("Multiprocessing pool is not available")
+
+        # Start the computation
         env_json = sigima_options.get_env()
         self.asyncresult = POOL.apply_async(run_with_env, (func, args, env_json))
+
+        # Transition to running state
+        self.state_machine.transition_to(WorkerState.RUNNING)
+
+    def restart(self) -> None:
+        """Restart/cancel current computation"""
+        current_state = self.state_machine.current_state
+
+        if current_state == WorkerState.IDLE:
+            return  # Already idle, nothing to restart
+        if current_state == WorkerState.STARTING:
+            # If we're still starting, just go back to idle
+            self.asyncresult = None
+        elif current_state == WorkerState.RUNNING:
+            # Cancel the running computation - use restart_pool for consistency
+            self.restart_pool()
+            return  # restart_pool already handles state reset
+        if current_state == WorkerState.FINISHED:
+            # Clean up and go to idle
+            self.asyncresult = None
+
+        # Let state machine handle the transition to idle
+        self.state_machine.reset_to_idle()
 
     def close(self) -> None:
         """Close worker: close pool properly and wait for all tasks to finish"""
@@ -153,7 +263,7 @@ class Worker:
         # to avoid blocking the GUI at exit (so, when wait=True, we wait for the
         # task to finish before closing the pool but there is actually no task running,
         # so the pool is closed immediately but *properly*)
-        self.terminate_pool(wait=self.asyncresult is None)
+        Worker.terminate_pool(wait=self.asyncresult is None)
 
     def is_computation_finished(self) -> bool:
         """Return True if computation is finished.
@@ -161,17 +271,57 @@ class Worker:
         Returns:
             bool: True if computation is finished
         """
-        return self.asyncresult.ready()
+        current_state = self.state_machine.current_state
+
+        if current_state == WorkerState.IDLE:
+            return True  # No computation has been started
+        if current_state == WorkerState.STARTING:
+            return False  # Computation is starting, not finished yet
+        if current_state == WorkerState.FINISHED:
+            return True  # Already finished
+        if current_state == WorkerState.RUNNING:
+            if self.asyncresult is None:
+                return False  # Should not happen, but defensive
+            finished = self.asyncresult.ready()
+            if finished:
+                # Transition to finished state
+                self.state_machine.transition_to(WorkerState.FINISHED)
+            return finished
+        raise ValueError(f"Invalid worker state: {current_state}")
 
     def get_result(self) -> CompOut:
         """Return computation result.
 
         Returns:
             CompOut: computation result
+
+        Raises:
+            ValueError: If not in FINISHED state or no result available.
         """
-        self.result = self.asyncresult.get()
-        self.asyncresult = None
-        return self.result
+        # Check if we can get result
+        if self.state_machine.current_state != WorkerState.FINISHED:
+            current_state = self.state_machine.current_state
+            raise ValueError(f"Cannot get result from {current_state} state")
+
+        if self.asyncresult is None:
+            raise ValueError("No result available")
+
+        # Get result and clean up (ensure cleanup happens even if exception occurs)
+        try:
+            result = self.asyncresult.get()
+            return result
+        finally:
+            # Always clean up, even if get() raises an exception
+            self.asyncresult = None
+            self.state_machine.transition_to(WorkerState.IDLE)
+
+    def has_result_available(self) -> bool:
+        """Check if computation finished successfully and result is available.
+
+        Returns:
+            True if computation completed successfully and result can be retrieved.
+        """
+        return self.state_machine.current_state == WorkerState.FINISHED
 
 
 def is_pairwise_mode() -> bool:
@@ -270,7 +420,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if enabled:
             if self.worker is None:
                 self.worker = Worker()
-                self.worker.create_pool()
+                Worker.create_pool()
         else:
             if self.worker is not None:
                 self.worker.terminate_pool()
@@ -385,11 +535,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         return signals
 
     @abc.abstractmethod
+    def register_operations(self) -> None:
+        """Register operations."""
+
+    @abc.abstractmethod
+    def register_processing(self) -> None:
+        """Register processing functions."""
+
+    @abc.abstractmethod
+    def register_analysis(self) -> None:
+        """Register analysis functions."""
+
     def register_computations(self) -> None:
-        """Register signal computations"""
-        # This method is used to register the computation functions in the
-        # computing registry. It is called in the constructor of the
-        # BaseProcessor class, so it must be implemented in the derived classes.
+        """Register computations."""
+        self.register_operations()
+        self.register_processing()
+        self.register_analysis()
 
     def has_param_defaults(self, paramclass: type[gds.DataSet]) -> bool:
         """Return True if parameter defaults are available.
@@ -564,15 +725,18 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         QW.QApplication.processEvents()
         if not progress.wasCanceled():
             if self.worker is None:
+                # No process isolation: run function directly
                 return wng_err_func(func, args)
+            # Process isolation: run function in a separate process
             self.worker.run(func, args)
             while not self.worker.is_computation_finished():
                 QW.QApplication.processEvents()
-                time.sleep(0.1)
-                if progress.wasCanceled():
-                    self.worker.restart_pool()
+                time.sleep(0)  # Just yields to other threads - no forced delay
+                if progress.wasCanceled():  # User canceled the operation
+                    self.worker.restart()  # Cancel computation and reset to idle
                     break
-            if self.worker.is_computation_finished():
+            # Only get result if computation actually finished (not canceled)
+            if self.worker.has_result_available():
                 return self.worker.get_result()
         return None
 

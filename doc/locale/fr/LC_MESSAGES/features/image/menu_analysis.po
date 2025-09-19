@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 18:32+0200\n"
+"POT-Creation-Date: 2025-09-09 15:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -84,6 +84,18 @@ msgstr "Limite supérieure de l'histogramme"
 
 msgid "Example of histogram."
 msgstr "Exemple d'histogramme."
+
+msgid "Horizontal and vertical projections"
+msgstr "Projections horizontale et verticale"
+
+msgid "Compute horizontal and vertical projection profiles:"
+msgstr "Calcule les profils de projection horizontale et verticale :"
+
+msgid "Horizontal projection: Sum the pixel values along each row (projection on the x-axis)."
+msgstr "Projection horizontale : somme des valeurs des pixels le long de chaque ligne (projection sur l'axe des x)."
+
+msgid "Vertical projection: Sum the pixel values along each column (projection on the y-axis)."
+msgstr "Projection verticale : somme des valeurs des pixels le long de chaque colonne (projection sur l'axe des y)."
 
 msgid "Centroid"
 msgstr "Barycentre"

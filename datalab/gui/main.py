@@ -147,6 +147,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__memory_warning = False
         self.memorystatus: status.MemoryStatus | None = None
 
+        self.consolestatus: status.ConsoleStatus | None = None
         self.console: DockableConsole | None = None
         self.macropanel: MacroPanel | None = None
 
@@ -734,7 +735,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             console: True to setup console
         """
         self.__register_plugins()
-        self.__configure_statusbar()
+        self.__configure_statusbar(console)
         self.__setup_global_actions()
         self.__add_signal_image_panels()
         self.__create_plugins_actions()
@@ -776,9 +777,17 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         with qth.try_or_log_error("Unregistering plugins"):
             PluginRegistry.unregister_all_plugins()
 
-    def __configure_statusbar(self) -> None:
-        """Configure status bar"""
+    def __configure_statusbar(self, console: bool) -> None:
+        """Configure status bar
+
+        Args:
+            console: True if console is enabled
+        """
         self.statusBar().showMessage(_("Welcome to %s!") % APP_NAME, 5000)
+        if console:
+            # Console status
+            self.consolestatus = status.ConsoleStatus()
+            self.statusBar().addPermanentWidget(self.consolestatus)
         # Plugin status
         pluginstatus = status.PluginStatus()
         self.statusBar().addPermanentWidget(pluginstatus)
@@ -1131,6 +1140,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             lambda txt: self.repopulate_panel_trees()
         )
         self.__update_console_show_mode()
+        self.console.exception_occurred.connect(self.consolestatus.exception_occurred)
+        cdock.visibilityChanged.connect(self.consolestatus.console_visibility_changed)
+        self.consolestatus.SIG_SHOW_CONSOLE.connect(self.console.show_console)
 
     def __add_macro_panel(self) -> None:
         """Add macro panel"""

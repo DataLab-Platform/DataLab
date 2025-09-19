@@ -17,12 +17,12 @@ import sigima.proc.base as sigima_base
 import sigima.proc.signal as sigima_signal
 from guidata.qthelpers import exec_dialog
 from sigima.objects import (
-    NormalDistribution1DParam,
-    PoissonDistribution1DParam,
+    NormalDistributionParam,
+    PoissonDistributionParam,
     ROI1DParam,
     SignalObj,
     SignalROI,
-    UniformDistribution1DParam,
+    UniformDistributionParam,
     create_signal,
 )
 from sigima.objects.scalar import GeometryResult, TableResult
@@ -44,9 +44,8 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
 
     # pylint: disable=duplicate-code
 
-    def register_computations(self) -> None:
-        """Register signal computations"""
-        # MARK: OPERATION
+    def register_operations(self) -> None:
+        """Register operations."""
         self.register_n_to_1(sigima_signal.addition, _("Sum"), icon_name="sum.svg")
         self.register_n_to_1(
             sigima_signal.average, _("Average"), icon_name="average.svg"
@@ -162,8 +161,15 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             icon_name="convolution.svg",
             obj2_name=_("signal to convolve with"),
         )
+        self.register_2_to_1(
+            sigima_signal.deconvolution,
+            _("Deconvolution"),
+            icon_name="deconvolution.svg",
+            obj2_name=_("signal to deconvolve with"),
+        )
 
-        # MARK: PROCESSING
+    def register_processing(self) -> None:
+        """Register processing functions."""
         # Axis transformation
         self.register_1_to_1(
             sigima_signal.calibration,
@@ -213,17 +219,17 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.add_gaussian_noise,
             _("Add Gaussian noise"),
-            NormalDistribution1DParam,
+            NormalDistributionParam,
         )
         self.register_1_to_1(
             sigima_signal.add_poisson_noise,
             _("Add Poisson noise"),
-            PoissonDistribution1DParam,
+            PoissonDistributionParam,
         )
         self.register_1_to_1(
             sigima_signal.add_uniform_noise,
             _("Add uniform noise"),
-            UniformDistribution1DParam,
+            UniformDistributionParam,
         )
         # Noise reduction
         self.register_1_to_1(
@@ -336,6 +342,24 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             sigima.params.BandStopFilterParam,
             "bandstop.svg",
         )
+        # Curve fitting
+        for fit_name, fit_func in [
+            (_("Linear fit"), sigima_signal.linear_fit),
+            (_("Polynomial fit"), sigima_signal.polynomial_fit),
+            (_("Gaussian fit"), sigima_signal.gaussian_fit),
+            (_("Lorentzian fit"), sigima_signal.lorentzian_fit),
+            (_("Voigt fit"), sigima_signal.voigt_fit),
+            (_("Planckian fit"), sigima_signal.planckian_fit),
+            (_("Two Half-Gaussians fit"), sigima_signal.twohalfgaussian_fit),
+            (_("Double Exponential fit"), sigima_signal.doubleexponential_fit),
+            (_("Exponential fit"), sigima_signal.exponential_fit),
+            (_("Sinusoidal fit"), sigima_signal.sinusoidal_fit),
+            (_("CDF fit"), sigima_signal.cdf_fit),
+            (_("Sigmoid fit"), sigima_signal.sigmoid_fit),
+        ]:
+            icon_name = f"{fit_func.__name__}.svg"
+            self.register_1_to_1(fit_func, fit_name, icon_name=icon_name)
+
         # Other processing
         self.register_1_to_1(
             sigima_signal.apply_window,
@@ -429,7 +453,8 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         )
         self.register_1_to_n(sigima_signal.extract_roi, "ROI", icon_name="roi.svg")
 
-        # MARK: ANALYSIS
+    def register_analysis(self) -> None:
+        """Register analysis functions."""
         self.register_1_to_0(
             sigima_signal.stats, _("Statistics"), icon_name="stats.svg"
         )
@@ -583,7 +608,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         txt = _("Polynomial fit")
         edit, param = self.init_param(param, sigima_signal.PolynomialFitParam, txt)
         if not edit or param.edit(self.panel.parentWidget()):
-            dlgfunc = fitdialog.polynomialfit
+            dlgfunc = fitdialog.polynomial_fit
 
             def polynomialfit(x, y, parent=None):
                 """Polynomial fit dialog function"""
@@ -627,7 +652,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:
         """Compute multi-Gaussian fitting curve using an interactive dialog"""
-        fitdlgfunc = fitdialog.multigaussianfit
+        fitdlgfunc = fitdialog.multigaussian_fit
         for obj in self.panel.objview.get_sel_objects():
             dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
             if exec_dialog(dlg):
@@ -644,7 +669,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     @qt_try_except()
     def compute_multilorentzianfit(self) -> None:
         """Compute Multi-Lorentzian fitting curve using an interactive dialog"""
-        fitdlgfunc = fitdialog.multilorentzianfit
+        fitdlgfunc = fitdialog.multilorentzian_fit
         for obj in self.panel.objview.get_sel_objects():
             dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
             if exec_dialog(dlg):

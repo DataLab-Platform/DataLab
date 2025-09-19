@@ -205,16 +205,16 @@ def run_signal_computations(
     param = sigima.params.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
     for fittitle, fitfunc in (
-        (_("Gaussian fit"), fitdialog.gaussianfit),
-        (_("Lorentzian fit"), fitdialog.lorentzianfit),
-        (_("Voigt fit"), fitdialog.voigtfit),
-        (_("Linear fit"), fitdialog.linearfit),
-        (_("Exponential fit"), fitdialog.exponentialfit),
-        (_("CDF fit"), fitdialog.cdffit),
-        (_("Sinusoidal fit"), fitdialog.sinusoidalfit),
-        (_("Planckian fit"), fitdialog.planckianfit),
-        (_("Two half-Gaussian fit"), fitdialog.twohalfgaussianfit),
-        (_("Double exponential fit"), fitdialog.doubleexponentialfit),
+        (_("Gaussian fit"), fitdialog.gaussian_fit),
+        (_("Lorentzian fit"), fitdialog.lorentzian_fit),
+        (_("Voigt fit"), fitdialog.voigt_fit),
+        (_("Linear fit"), fitdialog.linear_fit),
+        (_("Exponential fit"), fitdialog.exponential_fit),
+        (_("CDF fit"), fitdialog.cdf_fit),
+        (_("Sinusoidal fit"), fitdialog.sinusoidal_fit),
+        (_("Planckian fit"), fitdialog.planckian_fit),
+        (_("Two half-Gaussian fit"), fitdialog.twohalfgaussian_fit),
+        (_("Double exponential fit"), fitdialog.doubleexponential_fit),
     ):
         panel.objview.set_current_object(sig)
         panel.processor.compute_fit(fittitle, fitfunc)

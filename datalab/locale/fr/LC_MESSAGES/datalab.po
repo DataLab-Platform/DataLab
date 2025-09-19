@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-08 21:20+0200\n"
+"POT-Creation-Date: 2025-09-14 14:41+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -137,10 +137,12 @@ msgstr "Supprimer les métadonnées"
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
-msgid "Add object title to plot"
-msgstr "Ajouter le titre de l'objet au graphique"
+#, fuzzy
+msgid "Insert object title as annotation label"
+msgstr "Ajouter le titre de l'objet comme étiquette au graphique"
 
-msgid "Add object title as a label to the plot"
+#, fuzzy
+msgid "Add the selected object's title as a label to the plot annotations"
 msgstr "Ajouter le titre de l'objet comme étiquette au graphique"
 
 msgid "Copy titles to clipboard"
@@ -323,6 +325,9 @@ msgstr "Filtres fréquentiels"
 
 msgid "Fitting"
 msgstr "Ajustement"
+
+msgid "Interactive fitting"
+msgstr "Ajustement interactif"
 
 msgid "Linear fit"
 msgstr "Ajustement linéaire"
@@ -904,6 +909,9 @@ msgstr "Nom de l'objet :"
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
+msgid "Reading objects from file"
+msgstr "Lecture des objets depuis le fichier"
+
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
@@ -970,6 +978,13 @@ msgstr "Tous les objets associés aux résultats doivent avoir les mêmes ROIs p
 
 msgid "Are you sure you want to delete all results of the selected object(s)?"
 msgstr "Êtes-vous sûr de vouloir supprimer tous les résultats des objets sélectionnés ?"
+
+msgid "Annotation added"
+msgstr "Annotation ajoutée"
+
+#, fuzzy
+msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
+msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Vous pouvez désactiver ce message dans les préférences ou en cliquant sur 'Ignorer' ci-dessous."
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
@@ -1177,6 +1192,18 @@ msgstr "Profil moyen"
 
 msgid "Radial profile"
 msgstr "Profil radial"
+
+msgid "Convolution"
+msgstr "Convolution"
+
+msgid "kernel to convolve with"
+msgstr "noyau de la convolution"
+
+msgid "Deconvolution"
+msgstr "Déconvolution"
+
+msgid "kernel to deconvolve with"
+msgstr "noyau de la déconvolution"
 
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
@@ -1387,6 +1414,18 @@ msgstr "Rééchantillonnage"
 msgid "Statistics"
 msgstr "Statistiques"
 
+msgid "Horizontal projection"
+msgstr "Projection horizontale"
+
+msgid "Compute the sum of pixel intensities along each column (projection on the x-axis)"
+msgstr "Calcule la somme des intensités des pixels le long de chaque colonne (projection sur l'axe des x)"
+
+msgid "Vertical projection"
+msgstr "Projection verticale"
+
+msgid "Compute the sum of pixel intensities along each row (projection on the y-axis)"
+msgstr "Calcule la somme des intensités des pixels le long de chaque ligne (projection sur l'axe des y)"
+
 msgid "Histogram"
 msgstr "Histogramme"
 
@@ -1489,11 +1528,11 @@ msgstr "Dérivée"
 msgid "Integral"
 msgstr "Intégrale"
 
-msgid "Convolution"
-msgstr "Convolution"
-
 msgid "signal to convolve with"
-msgstr "signal à convoluer"
+msgstr "signal pour la convolution"
+
+msgid "signal to deconvolve with"
+msgstr "signal pour la déconvolution"
 
 msgid ""
 "Apply linear calibration to the X or Y axis:\n"
@@ -1527,6 +1566,15 @@ msgstr "Filtre passe-bande"
 
 msgid "Band-stop filter"
 msgstr "Filtre coupe-bande"
+
+msgid "Two Half-Gaussians fit"
+msgstr "Ajustement de deux demi-Gaussiennes"
+
+msgid "Double Exponential fit"
+msgstr "Ajustement double exponentiel"
+
+msgid "Sigmoid fit"
+msgstr "Ajustement sigmoïde"
 
 msgid "Windowing"
 msgstr "Fenêtrage"
@@ -1785,6 +1833,18 @@ msgstr "Mode d'opération"
 msgid "Operation mode for computations taking <i>N</i> inputs:<ul><li><b>single</b>: single operand mode</li><li><b>pairwise</b>: pairwise operation mode</li></ul><br>Computations taking <i>N</i> inputs are the ones where:<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
 msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
 
+msgid "Use signal bounds for new signals"
+msgstr "Utiliser les bornes du signal pour les nouveaux signaux"
+
+msgid "If enabled, when creating a new signal, the xmin and xmax values will be initialized from the current signal's bounds.<br>If disabled, the default values from the New Signal dialog will be used."
+msgstr "Si activé, lors de la création d'un nouveau signal, les valeurs xmin et xmax seront initialisées à partir des bornes du signal actuel.<br>Si désactivé, les valeurs par défaut de la boîte de dialogue Nouveau signal seront utilisées."
+
+msgid "Use image dimensions for new images"
+msgstr "Utiliser les dimensions de l'image pour les nouvelles images"
+
+msgid "If enabled, when creating a new image, the width and height values will be initialized from the current image's dimensions.<br>If disabled, the default values from the New Image dialog will be used."
+msgstr "Si activé, lors de la création d'une nouvelle image, les valeurs de largeur et de hauteur seront initialisées à partir des dimensions de l'image actuelle.<br>Si désactivé, les valeurs par défaut de la boîte de dialogue Nouvelle image seront utilisées."
+
 msgid "FFT shift"
 msgstr "Décalage FFT"
 
@@ -1829,6 +1889,12 @@ msgstr "Gauche (à gauche du graphique)"
 
 msgid "Right (of plot)"
 msgstr "Droite (à droite du graphique)"
+
+msgid "Ignore title insertion message"
+msgstr "Ignorer le message d'insertion du titre"
+
+msgid "Ignore information message when inserting object title as annotation label"
+msgstr "Ignorer le message d'information lors de l'insertion du titre de l'objet en tant qu'étiquette d'annotation"
 
 msgid "Signal"
 msgstr "Signal"
@@ -2382,6 +2448,30 @@ msgstr "Distance minimale :"
 
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
+
+msgid "Internal console"
+msgstr "Console interne"
+
+msgid ""
+"Click to show the internal console.\n"
+"The icon will turn red if an error or warning is logged."
+msgstr ""
+"Cliquer pour afficher la console interne.\n"
+"L'icône deviendra rouge si une erreur ou un avertissement est enregistré."
+
+msgid ""
+"Click to show the internal console.\n"
+"An error or warning has been logged."
+msgstr ""
+"Cliquer pour afficher la console interne.\n"
+"Une erreur ou un avertissement a été enregistré."
+
+msgid ""
+"Click to show the internal console.\n"
+"No error or warning has been logged."
+msgstr ""
+"Cliquer pour afficher la console interne.\n"
+"Aucune erreur ou avertissement n'a été enregistré."
 
 msgid "Memory available:"
 msgstr "Mémoire disponible :"

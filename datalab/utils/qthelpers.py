@@ -23,10 +23,10 @@ from typing import Any
 
 import guidata
 from guidata.configtools import get_icon
+from guidata.utils.misc import to_string
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigima.io.common.converters import to_string
 
 from datalab.config import (
     APP_NAME,
@@ -246,7 +246,6 @@ class CallbackWorker(QC.QThread):
 
     def run(self) -> None:
         """Start thread"""
-
         # Initialize progress bar: setting progress to 0.0 has the effect of
         # showing the progress dialog after the `minimumDuration` time has elapsed.
         # If we don't set the progress to 0.0, the progress dialog will be shown only
@@ -378,8 +377,9 @@ def qt_try_except(message=None, context=None):
                     raise
                 qt_handle_error_message(panel.parent(), msg, context)
             finally:
-                panel.SIG_STATUS_MESSAGE.emit("")
-                QW.QApplication.restoreOverrideCursor()
+                if message is not None:
+                    panel.SIG_STATUS_MESSAGE.emit("")
+                    QW.QApplication.restoreOverrideCursor()
             return output
 
         return method_wrapper

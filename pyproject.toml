@@ -130,7 +130,15 @@ target-version = "py39"                        # Assume Python 3.9.
 
 [tool.ruff.lint]
 # all rules can be found here: https://beta.ruff.rs/docs/rules/
-select = ["E", "F", "W", "I", "NPY201"]
+select = [
+    "D202",   # No blank lines allowed after function docstring.
+    "D403",   # First word of docstring should be properly capitalized.
+    "E",      # Pycodestyle error
+    "F",      # Pyflakes
+    "I",      # Isort
+    "NPY201", # Numpy-specific checks
+    "W"       # Pycodestyle warning
+]
 ignore = [
     "E203", # space before : (needed for how black formats slicing)
 ]
@@ -143,3 +151,6 @@ line-ending = "auto"              # Like Black, automatically detect the appropr
 
 [tool.ruff.lint.per-file-ignores]
 "doc/*" = ["E402"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

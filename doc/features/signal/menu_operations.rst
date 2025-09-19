@@ -241,6 +241,8 @@ Other mathematical operations
       - Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_
     * - |convolution| Convolution
       - Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_
+    * - |deconvolution| Deconvolution
+      - Frequency domain deconvolution
 
 .. |derivative| image:: ../../../datalab/data/icons/operations/derivative.svg
     :width: 24px
@@ -253,6 +255,11 @@ Other mathematical operations
     :class: dark-light no-scaled-link
 
 .. |convolution| image:: ../../../datalab/data/icons/operations/convolution.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |deconvolution| image:: ../../../datalab/data/icons/operations/deconvolution.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

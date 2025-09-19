@@ -21,10 +21,10 @@ from qtpy import QtWidgets as QW
 from sigima.objects import (
     ImageObj,
     ImageROI,
-    NormalDistribution2DParam,
-    PoissonDistribution2DParam,
+    NormalDistributionParam,
+    PoissonDistributionParam,
     ROI2DParam,
-    UniformDistribution2DParam,
+    UniformDistributionParam,
 )
 from sigima.objects.scalar import GeometryResult
 from sigima.proc.decorator import ComputationMetadata
@@ -209,9 +209,8 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """
         return GeometricTransformWrapper(func, operation)
 
-    def register_computations(self) -> None:
-        """Register image computations"""
-        # MARK: OPERATION
+    def register_operations(self) -> None:
+        """Register operations."""
         self.register_n_to_1(sigima_image.addition, _("Sum"), icon_name="sum.svg")
         self.register_n_to_1(
             sigima_image.average, _("Average"), icon_name="average.svg"
@@ -376,8 +375,21 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sigima_image.RadialProfileParam,
             icon_name="profile_radial.svg",
         )
+        self.register_2_to_1(
+            sigima_image.convolution,
+            _("Convolution"),
+            icon_name="convolution.svg",
+            obj2_name=_("kernel to convolve with"),
+        )
+        self.register_2_to_1(
+            sigima_image.deconvolution,
+            _("Deconvolution"),
+            icon_name="deconvolution.svg",
+            obj2_name=_("kernel to deconvolve with"),
+        )
 
-        # MARK: PROCESSING
+    def register_processing(self) -> None:
+        """Register processing functions."""
         # Axis transformation
         self.register_1_to_1(
             sigima_image.calibration,
@@ -416,17 +428,17 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(
             sigima_image.add_gaussian_noise,
             _("Add Gaussian noise"),
-            NormalDistribution2DParam,
+            NormalDistributionParam,
         )
         self.register_1_to_1(
             sigima_image.add_poisson_noise,
             _("Add Poisson noise"),
-            PoissonDistribution2DParam,
+            PoissonDistributionParam,
         )
         self.register_1_to_1(
             sigima_image.add_uniform_noise,
             _("Add uniform noise"),
-            UniformDistribution2DParam,
+            UniformDistributionParam,
         )
         # Noise reduction
         self.register_1_to_1(
@@ -662,8 +674,28 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             icon_name="resampling2d.svg",
         )
 
-        # MARK: ANALYSIS
+    def register_analysis(self) -> None:
+        """Register analysis functions."""
         self.register_1_to_0(sigima_image.stats, _("Statistics"), icon_name="stats.svg")
+        self.register_1_to_1(
+            sigima_image.horizontal_projection,
+            _("Horizontal projection"),
+            # icon_name="horizontal_projection.svg",
+            comment=_(
+                "Compute the sum of pixel intensities along each column "
+                "(projection on the x-axis)"
+            ),
+        )
+        self.register_1_to_1(
+            sigima_image.vertical_projection,
+            # icon_name="vertical_projection.svg",
+            _("Vertical projection"),
+            comment=_(
+                "Compute the sum of pixel intensities along each row "
+                "(projection on the y-axis)"
+            ),
+        )
+
         self.register_1_to_1(
             sigima_image.histogram,
             _("Histogram"),
