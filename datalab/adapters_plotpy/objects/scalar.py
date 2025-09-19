@@ -59,7 +59,16 @@ class ResultPlotPyAdapter:
 
     def __init__(self, result_adapter: TableAdapter | GeometryAdapter) -> None:
         self.result_adapter = result_adapter
-        self.item_json = ""  # JSON representation of the item
+
+    @property
+    def item_json(self) -> str | None:
+        """JSON representation of the item"""
+        return self.result_adapter.get_applicative_attr("item_json")
+
+    @item_json.setter
+    def item_json(self, value: str | None) -> None:
+        """Set JSON representation of the item"""
+        self.result_adapter.set_applicative_attr("item_json", value)
 
     def update_obj_metadata_from_item(
         self, obj: BaseObj, item: LabelItem | None

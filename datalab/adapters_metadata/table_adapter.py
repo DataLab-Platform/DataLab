@@ -34,6 +34,29 @@ class TableAdapter:
     def __init__(self, table: TableResult) -> None:
         self.table = table
 
+    def set_applicative_attr(self, key: str, value: Any) -> None:
+        """Set an applicative attribute for the table result.
+
+        Args:
+            key: Attribute key
+            value: Attribute value
+        """
+        self.table.attrs[key] = value
+
+    def get_applicative_attr(self, key: str, default: Any = None) -> Any:
+        """Get an applicative attribute for the table result.
+
+        Args:
+            key: Attribute key
+
+        Returns:
+            Attribute value, or default if not set. If default is not None, assign it
+            to the attribute if it was not already set.
+        """
+        if key not in self.table.attrs and default is not None:
+            self.table.attrs[key] = default
+        return self.table.attrs.get(key, default)
+
     @classmethod
     def from_table_result(cls, table: TableResult) -> TableAdapter:
         """Create TableAdapter from TableResult.

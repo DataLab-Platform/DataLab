@@ -33,6 +33,29 @@ class GeometryAdapter:
     def __init__(self, geometry: GeometryResult) -> None:
         self.geometry = geometry
 
+    def set_applicative_attr(self, key: str, value: Any) -> None:
+        """Set an applicative attribute for the geometry result.
+
+        Args:
+            key: Attribute key
+            value: Attribute value
+        """
+        self.geometry.attrs[key] = value
+
+    def get_applicative_attr(self, key: str, default: Any = None) -> Any:
+        """Get an applicative attribute for the geometry result.
+
+        Args:
+            key: Attribute key
+
+        Returns:
+            Attribute value, or default if not set. If default is not None, assign it
+            to the attribute if it was not already set.
+        """
+        if key not in self.geometry.attrs and default is not None:
+            self.geometry.attrs[key] = default
+        return self.geometry.attrs.get(key, default)
+
     @classmethod
     def from_geometry_result(cls, geometry: GeometryResult) -> GeometryAdapter:
         """Create GeometryAdapter from GeometryResult.
