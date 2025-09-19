@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 18:41+0200\n"
+"POT-Creation-Date: 2025-09-19 15:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -245,6 +245,9 @@ msgstr "dimensions de la nouvelle image (par défaut : None, obtenues à partir 
 msgid "hide image heigth parameter (default: False)"
 msgstr "masquer le paramètre de la hauteur de l'image (par défaut : False)"
 
+msgid "hide image width parameter (default: False)"
+msgstr "masquer le paramètre de la largeur de l'image (par défaut : False)"
+
 msgid "hide image type parameter (default: True)"
 msgstr "masquer le paramètre de type d'image (par défaut : True)"
 
@@ -277,4 +280,3 @@ msgstr "Instancier et obtenir les plugins disponibles"
 
 msgid "List of available plugins (as instances)"
 msgstr "Liste des plugins disponibles (en tant qu'instances)"
-

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 15:57+0200\n"
+"POT-Creation-Date: 2025-09-19 15:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -30,30 +30,6 @@ msgstr "DataLab Version 1.0.0"
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
 
-msgid "New image operation:"
-msgstr "Nouvelle opération d'image :"
-
-msgid "Convolution."
-msgstr "Convolution"
-
-msgid "New image format support:"
-msgstr "Nouveau support de format d'image :"
-
-msgid "**Matris text image files**: Added support for reading Matris format text files (`.txt` extension)."
-msgstr "**Fichiers image texte Matris** : Ajout du support pour la lecture des fichiers texte au format Matris (extension `.txt`)."
-
-msgid "Supports both real and complex-valued image data with optional error images."
-msgstr "Prend en charge à la fois les données d'image réelles et à valeurs complexes avec des images d'erreur facultatives."
-
-msgid "Automatically handles NaN values in the data."
-msgstr "Gère automatiquement les valeurs NaN dans les données."
-
-msgid "Reads metadata including units (X, Y, Z) and labels from file headers."
-msgstr "Lit les métadonnées, y compris les unités (X, Y, Z) et les étiquettes, à partir des en-têtes de fichiers."
-
-msgid "This feature is provided by the underlying Sigima library."
-msgstr "Cette fonctionnalité est fournie par la bibliothèque Sigima sous-jacente."
-
 msgid "Internal console status indicator added to the status bar:"
 msgstr "Indicateur d'état de la console interne ajouté à la barre d'état :"
 
@@ -66,7 +42,8 @@ msgstr "Cliquer sur l'indicateur ouvre la console interne."
 msgid "The icon turns red if an error or warning is logged, alerting the user to check the console."
 msgstr "L'icône devient rouge si une erreur ou un avertissement est enregistré, alertant l'utilisateur à vérifier la console."
 
-msgid "New common signal/image feature:"
+#, fuzzy
+msgid "New common signal/image features:"
 msgstr "Nouvelles fonctionnalités communes signal/image :"
 
 msgid "Added two options for signal and image creation:"
@@ -184,8 +161,18 @@ msgstr "Importer/Exporter des grilles de ROI vers/depuis des fichiers (format JS
 msgid "Preview the ROI grid before creating it"
 msgstr "Prévisualiser la grille de ROI avant de la créer"
 
-msgid "New image processing features:"
-msgstr "Nouvelles fonctionnalités de traitement d'image :"
+#, fuzzy
+msgid "New image operation, processing and analysis features:"
+msgstr "ℹ️ Nouvelles fonctionnalités de traitement des **Images** :"
+
+msgid "New 2D ramp image generator."
+msgstr "Nouveau générateur d'image de type rampe 2D."
+
+msgid "This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
+msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
+
+msgid "Convolution."
+msgstr "Convolution"
 
 msgid "New \"2D resampling\" feature:"
 msgstr "Nouvelle fonctionnalité \"Rééchantillonnage 2D\""
@@ -253,8 +240,66 @@ msgstr "Voir [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251
 msgid "In interactive tools, the centroid is now computed using the `measure.centroid` function from `scikit-image`, which provides a better compromise between speed and accuracy and is suitable for real-time applications."
 msgstr "Dans les outils interactifs, le barycentre est désormais calculé en utilisant la fonction `measure.centroid` de `scikit-image`, qui offre un meilleur compromis entre vitesse et précision et convient aux applications en temps réel."
 
-msgid "New signal processing features:"
-msgstr "Nouvelles fonctionnalités de traitement de signal :"
+msgid "Horizontal and vertical projections."
+msgstr "Projections horizontale et verticale."
+
+msgid "This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns."
+msgstr "Ceci clôture [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Paramètres / Somme des pixels, somme des lignes de pixels, somme des colonnes de pixels."
+
+#, fuzzy
+msgid "New signal operation, processing and analysis features:"
+msgstr "ℹ️ Nouvelles fonctionnalités de traitement des **Signaux** :"
+
+msgid "New signal generators: linear chirp, logistic function, Planck function."
+msgstr "Nouveaux générateurs de signaux: chirp linéaire, fonction logistique, fonction de Planck."
+
+msgid "This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213)."
+msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
+
+msgid "**X-array compatibility checking for multi-signal computations**:"
+msgstr ""
+
+msgid "Added comprehensive x-array compatibility validation for all signal operations that take multiple signals as input (N>1 signals)."
+msgstr ""
+
+msgid "**Automatic detection** of incompatible x-arrays with three specific behaviors:"
+msgstr ""
+
+msgid "**Critical error**: When signals have the same size but different x-axis ranges (different xmin/xmax values), operation is blocked with clear error message."
+msgstr ""
+
+msgid "**User choice with interpolation**: When signals have different sizes, user is presented with a dialog to either cancel or interpolate signals to match."
+msgstr ""
+
+msgid "**Seamless processing**: When signals are compatible, operations proceed normally without interruption."
+msgstr ""
+
+msgid "**New configuration setting**: Added `xarray_compat_behavior` setting in Processing preferences with options:"
+msgstr ""
+
+msgid "\"Ask user\" (default): Shows dialog for user decision when size mismatch occurs"
+msgstr ""
+
+msgid "\"Interpolate automatically\": Automatically interpolates signals when size mismatch occurs"
+msgstr ""
+
+msgid "**Enhanced user experience**: Clear error messages and dialogs explain compatibility issues and provide guidance."
+msgstr ""
+
+msgid "**Comprehensive coverage**: Affects all multi-signal operations including:"
+msgstr ""
+
+msgid "N-to-1 computations (e.g., average of multiple signals, arithmetic operations)"
+msgstr ""
+
+msgid "2-to-1 computations in both pairwise and single operand modes (e.g., addition, subtraction, convolution)"
+msgstr ""
+
+msgid "**Intelligent interpolation**: Uses Sigima's robust interpolation functions to ensure accurate signal matching when requested."
+msgstr ""
+
+msgid "This enhancement prevents unexpected results from operations on incompatible signal arrays and gives users full control over how to handle such situations."
+msgstr ""
 
 msgid "**Enhanced curve fitting functions**: Significantly improved curve fitting capabilities with advanced parameter estimation:"
 msgstr "**Fonctions de courbe de fitting améliorées** : Capacités de fitting de courbes considérablement améliorées avec une estimation avancée des paramètres :"
@@ -343,35 +388,11 @@ msgstr "Elle est implémentée dans la fonction `sigima.proc.signal.frequency_fi
 msgid "This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal)."
 msgstr "Ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filtres / Filtre coupe-bande (Signal)."
 
-msgid "New signal analysis features:"
-msgstr "Nouvelles fonctionnalités d'analyse de signal :"
-
 msgid "Bandwidth at -3dB:"
 msgstr "Bande passante à -3dB :"
 
 msgid "Enhanced to support passband bandwidth in addition to baseband bandwidth."
 msgstr "Amélioration de la prise en charge de la bande passante en plus de la bande de base."
-
-msgid "New image analysis features:"
-msgstr "Nouvelles fonctionnalités d'analyse de l'image :"
-
-msgid "Horizontal and vertical projections."
-msgstr "Projections horizontale et verticale."
-
-msgid "This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns."
-msgstr "Ceci clôture [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Paramètres / Somme des pixels, somme des lignes de pixels, somme des colonnes de pixels."
-
-msgid "New 2D ramp image generator."
-msgstr "Nouveau générateur d'image de type rampe 2D."
-
-msgid "This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
-msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
-
-msgid "New signal generators: linear chirp, logistic function, Planck function."
-msgstr "Nouveaux générateurs de signaux: chirp linéaire, fonction logistique, fonction de Planck."
-
-msgid "This closes [Issue #213](https://github.com/DataLab-Platform/DataLab/issues/213)."
-msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
 
 msgid "New \"Extent\" group box in image properties:"
 msgstr "Nouvelle boîte de groupe \"Bornes\" dans les propriétés de l'image :"
@@ -402,6 +423,22 @@ msgstr "Ajout de la prise en charge des formats binaires de signaux et d'images 
 
 msgid "This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types"
 msgstr "Ceci clôture le ticket [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Ajout de la prise en charge des types de fichiers .sig et .ima"
+
+#, fuzzy
+msgid "Matris text image files:"
+msgstr "Fichiers texte et CSV :"
+
+msgid "Supports both real and complex-valued image data with optional error images."
+msgstr "Prend en charge à la fois les données d'image réelles et à valeurs complexes avec des images d'erreur facultatives."
+
+msgid "Automatically handles NaN values in the data."
+msgstr "Gère automatiquement les valeurs NaN dans les données."
+
+msgid "Reads metadata including units (X, Y, Z) and labels from file headers."
+msgstr "Lit les métadonnées, y compris les unités (X, Y, Z) et les étiquettes, à partir des en-têtes de fichiers."
+
+msgid "This feature is provided by the underlying Sigima library."
+msgstr "Cette fonctionnalité est fournie par la bibliothèque Sigima sous-jacente."
 
 msgid "Application settings:"
 msgstr "Paramètres de l'application :"
@@ -2861,3 +2898,4 @@ msgstr "Symétrie (verticale/horizontale)"
 
 msgid "Console: added configurable external editor (default: VSCode) to follow the traceback links to the source code"
 msgstr "Console : ajout d'un éditeur externe configurable (par défaut : VSCode) pour suivre les liens de poursuite vers le code source"
+
