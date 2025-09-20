@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-09-19 18:25+0200\n"
+"POT-Creation-Date: 2025-09-20 18:36+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1052,6 +1052,9 @@ msgstr ""
 "Pour effectuer le calcul, les signaux doivent être interpolés pour correspondre à un tableau des X commun.\n"
 "\n"
 "Souhaitez-vous continuer avec une interpolation automatique ?"
+
+msgid "Yes to All"
+msgstr "Oui à tout"
 
 #, python-format
 msgid "Computing: %s"

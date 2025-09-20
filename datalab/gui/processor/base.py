@@ -438,7 +438,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     def _check_signal_xarray_compatibility(
         self, signals: list[SignalObj], progress: QW.QProgressDialog | None = None
-    ) -> list[SignalObj] | None:
+    ) -> tuple[list[SignalObj], bool] | None:
         """Check X-array compatibility for multiple signals and handle conflicts.
 
         Args:
@@ -448,11 +448,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              short delay on top of the message box if we don't handle it here)
 
         Returns:
-            List of signals (potentially with interpolated signals) or None if
-            user canceled
+            Tuple of (signals, yes_to_all_selected) where signals is the list of
+            signals (potentially with interpolated signals) and yes_to_all_selected
+            is True if user chose "Yes to All". Returns None if user canceled.
         """
         if not self._is_signal_panel() or len(signals) <= 1:
-            return signals
+            return signals, False
 
         initial_duration = 0
         if progress is not None:
@@ -488,29 +489,53 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if initial_duration > 0:
                 # Restore initial progress dialog duration
                 progress.setMinimumDuration(initial_duration)
-            return signals
+            return signals, False
 
         # X arrays differ - handle based on configuration
         behavior = Conf.proc.xarray_compat_behavior.get("ask")
+        yes_to_all_selected = False
 
         if behavior == "ask":
-            # Ask user what to do
-            reply = QW.QMessageBox.question(
-                self.panel.parentWidget(),
-                _("X-array incompatibility"),
-                _(
-                    "The selected signals have different X arrays.\n\n"
-                    "To perform the computation, signals need to be interpolated "
-                    "to match a common X array.\n\n"
-                    "Do you want to continue with automatic interpolation?"
-                ),
-                (QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No),
-                QW.QMessageBox.StandardButton.No,
-            )
+            # In unattended mode (tests), automatically interpolate
+            if env.execenv.unattended:
+                yes_to_all_selected = False
+            else:
+                # Create custom message box with "Yes to All" option
+                msg_box = QW.QMessageBox(self.panel.parentWidget())
+                msg_box.setWindowTitle(_("X-array incompatibility"))
+                msg_box.setText(
+                    _(
+                        "The selected signals have different X arrays.\n\n"
+                        "To perform the computation, signals need to be interpolated "
+                        "to match a common X array.\n\n"
+                        "Do you want to continue with automatic interpolation?"
+                    )
+                )
+                msg_box.setIcon(QW.QMessageBox.Icon.Question)
 
-            if reply != QW.QMessageBox.StandardButton.Yes:
-                return None
-        elif behavior != "interpolate":
+                # Add custom buttons
+                msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
+                yes_all_button = msg_box.addButton(
+                    _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
+                )
+                no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
+                msg_box.setDefaultButton(no_button)
+
+                # Execute dialog and get user choice
+                msg_box.exec()
+                clicked_button = msg_box.clickedButton()
+
+                if clicked_button == no_button:
+                    return None
+                elif clicked_button == yes_all_button:
+                    yes_to_all_selected = True
+                else:
+                    # User selected "Yes" button
+                    yes_to_all_selected = False
+        elif behavior == "interpolate":
+            # Automatically interpolate without asking
+            yes_to_all_selected = False
+        else:
             # Unknown behavior - should not happen
             return None
 
@@ -549,7 +574,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             # Restore initial progress dialog duration
             progress.setMinimumDuration(initial_duration)
 
-        return signals
+        return signals, yes_to_all_selected
 
     @abc.abstractmethod
     def register_operations(self) -> None:
@@ -1149,6 +1174,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             max_i_pair = min(
                 n_pairs, max(len(src_objs[get_uuid(grp)]) for grp in src_grps)
             )
+            # Track "Yes to All" choice for this compute operation
+            auto_interpolate_for_operation = False
+
             with create_progress_bar(self.panel, title, max_=n_pairs) as progress:
                 for i_pair, src_obj1 in enumerate(src_objs[src_gids[0]][:max_i_pair]):
                     progress.setValue(i_pair + 1)
@@ -1159,12 +1187,27 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         src_objs_pair.append(src_obj)
 
                     # Check signal x-array compatibility for n-to-1 operations
-                    checked_objs = self._check_signal_xarray_compatibility(
-                        src_objs_pair, progress=progress
-                    )
-                    if checked_objs is None:
+                    if auto_interpolate_for_operation:
+                        # "Yes to All" selected, automatically interpolate
+                        # by temporarily changing the configuration
+                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                            result = self._check_signal_xarray_compatibility(
+                                src_objs_pair, progress=progress
+                            )
+                    else:
+                        # Normal compatibility check with dialog
+                        result = self._check_signal_xarray_compatibility(
+                            src_objs_pair, progress=progress
+                        )
+
+                    if result is None:
                         # User canceled or compatibility check failed
                         return
+
+                    checked_objs, yes_to_all_selected = result
+                    if yes_to_all_selected:
+                        auto_interpolate_for_operation = True
+
                     src_objs_pair = checked_objs
                     if param is None:
                         args = (src_objs_pair,)
@@ -1206,17 +1249,34 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 src_gid = objmodel.get_object_group_id(src_obj)
                 src_objs.setdefault(src_gid, []).append(src_obj)
 
+            # Track "Yes to All" choice for this compute operation
+            auto_interpolate_for_operation = False
+
             with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
                 progress.setValue(0)
                 progress.setLabelText(title)
                 for src_gid, src_obj_list in src_objs.items():
                     # Check signal x-array compatibility for n-to-1 operations
-                    checked_objs = self._check_signal_xarray_compatibility(
-                        src_obj_list, progress=progress
-                    )
-                    if checked_objs is None:
+                    if auto_interpolate_for_operation:
+                        # "Yes to All" selected, automatically interpolate
+                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                            result = self._check_signal_xarray_compatibility(
+                                src_obj_list, progress=progress
+                            )
+                    else:
+                        # Normal compatibility check with dialog
+                        result = self._check_signal_xarray_compatibility(
+                            src_obj_list, progress=progress
+                        )
+
+                    if result is None:
                         # User canceled or compatibility check failed
                         return
+
+                    checked_objs, yes_to_all_selected = result
+                    if yes_to_all_selected:
+                        auto_interpolate_for_operation = True
+
                     src_obj_list = checked_objs
 
                     if param is None:
@@ -1346,13 +1406,30 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         ):
                             all_pairs.append((src_obj1, src_obj2))
 
+                # Track "Yes to All" choice for this compute operation
+                auto_interpolate_for_operation = False
+
                 # Check all pairs for compatibility and create interpolation maps
                 for src_obj1, src_obj2 in all_pairs:
-                    checked_pair = self._check_signal_xarray_compatibility(
-                        [src_obj1, src_obj2]
-                    )
-                    if checked_pair is None:
+                    if auto_interpolate_for_operation:
+                        # "Yes to All" selected, automatically interpolate
+                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                            result = self._check_signal_xarray_compatibility(
+                                [src_obj1, src_obj2]
+                            )
+                    else:
+                        # Normal compatibility check with dialog
+                        result = self._check_signal_xarray_compatibility(
+                            [src_obj1, src_obj2]
+                        )
+
+                    if result is None:
                         return  # User cancelled or error occurred
+
+                    checked_pair, yes_to_all_selected = result
+                    if yes_to_all_selected:
+                        auto_interpolate_for_operation = True
+
                     # Store mapping for this specific pair
                     pair_maps[(src_obj1, src_obj2)] = checked_pair
 
@@ -1422,11 +1499,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
                 if signal_objs:
                     # Check compatibility and get potentially interpolated signals
-                    checked_objs = self._check_signal_xarray_compatibility(
+                    result = self._check_signal_xarray_compatibility(
                         signal_objs + [obj2]
                     )
-                    if checked_objs is None:
+                    if result is None:
                         return  # User cancelled or error occurred
+
+                    checked_objs, _yes_to_all_selected = result
+                    # Note: In single operand mode, "Yes to All" doesn't apply
+                    # since there's only one compatibility check
 
                     # Replace obj2 with the potentially interpolated version
                     obj2 = checked_objs[-1]  # obj2 was added last
