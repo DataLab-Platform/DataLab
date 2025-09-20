@@ -130,6 +130,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal).
   * Bandwidth at -3dB:
     * Enhanced to support passband bandwidth in addition to baseband bandwidth.
+  * **Pulse features extraction**: New comprehensive pulse analysis feature for step and square signals:
+    * **Automated pulse shape recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis.
+    * **Signal polarity detection**: Automatically determines positive/negative pulse polarity using robust baseline comparison.
+    * **Comprehensive parameter extraction**: Measures amplitude, rise time, fall time, full width at half maximum (FWHM), timing parameters (x10, x50, x90, x100), and foot duration.
+    * **Baseline characterization**: Extracts start and end baseline ranges for accurate feature computation.
+    * **Intelligent baseline estimation**: Uses statistical methods to determine baseline levels from user-defined ranges.
+    * **Robust feature computation**: Implements advanced algorithms for timing parameter extraction with noise tolerance.
+    * **Visual feedback**: Results displayed in tabular format with pulse feature visualization on the signal plot.
+    * This feature is powered by the underlying `sigima.proc.signal.extract_pulse_features` function and supports both step and square pulse analysis.
 
 * New "Extent" group box in image properties:
   * Added computed parameters for image extent: `Xmin`, `Xmax`, `Ymin`, and `Ymax`.

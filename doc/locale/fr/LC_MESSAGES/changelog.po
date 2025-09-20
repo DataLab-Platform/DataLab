@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 15:48+0200\n"
+"POT-Creation-Date: 2025-09-20 19:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -389,6 +389,33 @@ msgstr "Bande passante à -3dB :"
 
 msgid "Enhanced to support passband bandwidth in addition to baseband bandwidth."
 msgstr "Amélioration de la prise en charge de la bande passante en plus de la bande de base."
+
+msgid "**Pulse features extraction**: New comprehensive pulse analysis feature for step and square signals:"
+msgstr "**Extraction des caractéristiques des impulsions** : Nouvelle fonctionnalité complète d'analyse des impulsions pour les signaux en escalier et carrés :"
+
+msgid "**Automated pulse shape recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis."
+msgstr "**Reconnaissance automatisée de la forme d'impulsion** : Identifie de manière heuristique le type de signal (escalier, carré ou autre) pour une analyse optimale."
+
+msgid "**Signal polarity detection**: Automatically determines positive/negative pulse polarity using robust baseline comparison."
+msgstr "**Détection de la polarité du signal** : Détermine automatiquement la polarité positive/négative de l'impulsion en utilisant une comparaison de base robuste."
+
+msgid "**Comprehensive parameter extraction**: Measures amplitude, rise time, fall time, full width at half maximum (FWHM), timing parameters (x10, x50, x90, x100), and foot duration."
+msgstr "**Extraction complète des paramètres** : Mesure l'amplitude, le temps de montée, le temps de descente, la largeur à mi-hauteur (FWHM), les paramètres temporels (x10, x50, x90, x100) et la durée du pied."
+
+msgid "**Baseline characterization**: Extracts start and end baseline ranges for accurate feature computation."
+msgstr "**Caractérisation de la ligne de base** : Extrait les plages de ligne de base de début et de fin pour un calcul précis des caractéristiques."
+
+msgid "**Intelligent baseline estimation**: Uses statistical methods to determine baseline levels from user-defined ranges."
+msgstr "**Estimation intelligente de la ligne de base** : Utilise des méthodes statistiques pour déterminer les niveaux de ligne de base à partir de plages définies par l'utilisateur."
+
+msgid "**Robust feature computation**: Implements advanced algorithms for timing parameter extraction with noise tolerance."
+msgstr "**Calcul robuste des caractéristiques** : Implémente des algorithmes avancés pour l'extraction des paramètres temporels avec tolérance au bruit."
+
+msgid "**Visual feedback**: Results displayed in tabular format with pulse feature visualization on the signal plot."
+msgstr "**Retour visuel** : Résultats affichés sous forme de tableau avec visualisation des caractéristiques des impulsions sur le tracé du signal."
+
+msgid "This feature is powered by the underlying `sigima.proc.signal.extract_pulse_features` function and supports both step and square pulse analysis."
+msgstr "Cette fonctionnalité est alimentée par la fonction sous-jacente `sigima.proc.signal.extract_pulse_features` et prend en charge l'analyse des impulsions en escalier et carrées."
 
 msgid "New \"Extent\" group box in image properties:"
 msgstr "Nouvelle boîte de groupe \"Bornes\" dans les propriétés de l'image :"
