@@ -17,16 +17,16 @@ from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 from sigima.params import XYCalibrateParam
 from sigima.tests.data import create_2d_gaussian, create_paracetamol_signal
-from sigima.tests.helpers import WorkdirRestoringTempDir, exec_script
 
 from datalab import app
 from datalab.env import execenv
 from datalab.proxy import RemoteProxy
+from datalab.tests import helpers
 
 
 def multiple_commands(remote: RemoteProxy):
     """Execute multiple XML-RPC commands"""
-    with WorkdirRestoringTempDir() as tmpdir:
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
         x, y = create_paracetamol_signal().get_data()
         remote.add_signal("tutu", x, y)
 
@@ -63,7 +63,7 @@ def test_remoteclient_unit():
     env = os.environ.copy()
     env[execenv.DO_NOT_QUIT_ENV] = "1"
     execenv.print("Launching DataLab in a separate process")
-    exec_script(app.__file__, wait=False, env=env)
+    helpers.exec_script(app.__file__, wait=False, env=env)
     remote = RemoteProxy()
     execenv.print("Executing multiple commands...", end="")
     with qt_app_context():  # needed for building plot items

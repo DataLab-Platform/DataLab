@@ -16,10 +16,9 @@ import os.path as osp
 import numpy as np
 import pandas as pd
 import pytest
-from sigima.tests.helpers import WorkdirRestoringTempDir
 
 from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 
 def create_large_random_dataframe(nrows: int, ncols: int) -> pd.DataFrame:
@@ -61,7 +60,7 @@ def create_large_random_dataframe(nrows: int, ncols: int) -> pd.DataFrame:
 @pytest.mark.parametrize("nrows, ncols", [(10000, 16)])
 def test_loadbigsignal_app(nrows: int, ncols: int) -> None:
     """Load big signal application test"""
-    with WorkdirRestoringTempDir() as tmpdir:
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
         with datalab_test_app_context() as win:
             execenv.print("Loading big signal application test:")
             execenv.print("  - Working in temporary directory:", tmpdir)

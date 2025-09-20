@@ -13,11 +13,11 @@ import os.path as osp
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from sigima.tests.helpers import get_test_fnames
 
 from datalab import app
 from datalab.config import Conf
 from datalab.env import execenv
+from datalab.tests import helpers
 from datalab.utils.conf import CONF
 from datalab.utils.qthelpers import datalab_app_context
 
@@ -153,7 +153,7 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
 def test_config():
     """Testing DataLab configuration file"""
     with execenv.context(unattended=True):
-        h5files = [get_test_fnames("*.h5")[1]]
+        h5files = [helpers.get_test_fnames("*.h5")[1]]
         execenv.print("Testing DataLab configuration settings:")
         for index, conf in enumerate(CONFIGS):
             name = f"CONFIG{index}"

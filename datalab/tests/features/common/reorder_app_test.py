@@ -15,18 +15,17 @@ Groups/signals/images reorder test:
 
 # guitest: show
 
-from sigima.tests.helpers import get_test_fnames
-
 from datalab import app
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
+from datalab.tests import helpers
 from datalab.utils.qthelpers import datalab_app_context
 
 
 def test_reorder():
     """Run signals/images reorder test scenario"""
     with datalab_app_context(exec_loop=True):
-        win = app.create(h5files=[get_test_fnames("reorder*")[0]])
+        win = app.create(h5files=[helpers.get_test_fnames("reorder*")[0]])
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
 

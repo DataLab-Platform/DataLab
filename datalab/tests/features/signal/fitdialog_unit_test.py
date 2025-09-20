@@ -11,10 +11,10 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 from guidata.qthelpers import qt_app_context
 from sigima.objects import NormalDistribution1DParam
 from sigima.tests.data import create_noisy_signal, get_test_signal
-from sigima.tests.helpers import get_default_test_name
 from sigima.tools.signal.peakdetection import peak_indices
 
 from datalab.env import execenv
+from datalab.tests import helpers
 from datalab.widgets import fitdialog as fdlg
 
 
@@ -29,7 +29,7 @@ def test_fit_dialog():
         s4 = get_test_signal("doubleexponential_fit.txt")
 
         ep = execenv.print
-        tn = get_default_test_name
+        tn = helpers.get_default_test_name
 
         ep(fdlg.polynomial_fit(s2.x, s2.y, 4, name=tn("00")))
         ep(fdlg.linear_fit(s2.x, s2.y, name=tn("01")))

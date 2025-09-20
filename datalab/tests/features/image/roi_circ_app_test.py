@@ -13,11 +13,10 @@ from typing import Literal
 
 import numpy as np
 import sigima.objects
-from sigima.tests.helpers import print_obj_data_dimensions
 from skimage import draw
 
 from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 
 def create_test_image_with_roi(
@@ -48,7 +47,7 @@ def test_roi_circ() -> None:
         for geometry in ("rectangle", "circle"):  # model.ROI2DParam.geometries:
             ima = create_test_image_with_roi(geometry)
             panel.add_object(ima)
-            print_obj_data_dimensions(ima)
+            helpers.print_obj_data_dimensions(ima)
             panel.processor.run_feature("stats")
             panel.processor.run_feature("centroid")
         # Extracting ROIs:

@@ -22,11 +22,10 @@ import os
 
 from sigima.objects import NewImageParam
 from sigima.tests.data import create_sincos_image, iterate_image_creation
-from sigima.tests.helpers import get_test_fnames
 
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 from datalab.tests.scenarios.common import compute_common_operations
 
 if os.name == "nt":
@@ -105,7 +104,9 @@ def test_gdi_count(win: DLMainWindow) -> int | None:
     test_various_image_features(win)
 
     # Import HDF5 file using the HDF5 browser
-    win.open_h5_files(get_test_fnames("*.h5")[:5], import_all=True, reset_all=False)
+    win.open_h5_files(
+        helpers.get_test_fnames("*.h5")[:5], import_all=True, reset_all=False
+    )
     for panel in (win.signalpanel, win.imagepanel):
         panel.remove_all_objects()
 

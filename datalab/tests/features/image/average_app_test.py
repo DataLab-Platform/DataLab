@@ -19,9 +19,8 @@ uint8.
 import numpy as np
 import sigima.objects
 import sigima.tests.data as ctd
-from sigima.tests.helpers import check_array_result
 
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 
 def test_image_average() -> None:
@@ -40,7 +39,7 @@ def test_image_average() -> None:
         panel.processor.run_feature("average")
         res_data = panel.objview.get_sel_objects(include_groups=True)[0].data
     exp_data = np.array(data, dtype=float)
-    check_array_result("Average", res_data, exp_data)
+    helpers.check_array_result("Average", res_data, exp_data)
 
 
 if __name__ == "__main__":

@@ -13,11 +13,9 @@ Testing all the macro-commands features.
 import os.path as osp
 import time
 
-from sigima.tests.helpers import WorkdirRestoringTempDir
-
 from datalab.gui.macroeditor import Macro
 from datalab.gui.main import DLMainWindow
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 
 def add_macro_sample(win: DLMainWindow, index: int) -> Macro:
@@ -40,7 +38,7 @@ def add_macro_sample(win: DLMainWindow, index: int) -> Macro:
 
 def test_scenario_macro() -> None:
     """Example of high-level test scenario with HDF5 file"""
-    with WorkdirRestoringTempDir() as tmpdir:
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
         with datalab_test_app_context(console=False) as win:
             win.set_current_panel("macro")
             add_macro_sample(win, 0)

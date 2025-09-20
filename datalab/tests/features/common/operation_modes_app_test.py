@@ -19,17 +19,22 @@ performed in this mode: sum, difference, product, division, ...
 
 from __future__ import annotations
 
-from sigima.tests.helpers import get_test_fnames
-
 from datalab import app
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.gui.processor.base import is_pairwise_mode
 from datalab.objectmodel import get_short_id
+from datalab.tests import helpers
 from datalab.utils.qthelpers import datalab_app_context
 
 
-def check_titles(title, titles):
+def get_h5fname() -> str:
+    """Get the HDF5 test filename"""
+    fnames = helpers.get_test_fnames("reorder*")
+    return fnames[0]
+
+
+def check_titles(title: str, titles: list[tuple[str, str]]) -> None:
     """Check that the title is one of the expected titles"""
     execenv.print(f"{title}:")
     for actual_title, expected_title in titles:
@@ -41,14 +46,15 @@ def check_titles(title, titles):
             execenv.print("✗")
 
 
-def test_single_operand_mode_compute_n1():
+def test_single_operand_mode_compute_n_to_1() -> None:
     """Run single operand mode test scenario
     with `compute_n_to_1` operation (e.g. sum)"""
+    h5fname = get_h5fname()
     original_mode = Conf.proc.operation_mode.get()
     Conf.proc.operation_mode.set("single")
 
     with datalab_app_context(exec_loop=True):
-        win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
+        win = app.create(h5files=[h5fname], console=False)
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
 
@@ -109,14 +115,15 @@ def test_single_operand_mode_compute_n1():
     Conf.proc.operation_mode.set(original_mode)
 
 
-def test_pairwise_operations_mode_compute_n1():
+def test_pairwise_operations_mode_compute_n_to_1() -> None:
     """Run pairwise operations mode test scenario
     with `compute_n_to_1` operation (e.g. sum)"""
+    h5fname = get_h5fname()
     original_mode = Conf.proc.operation_mode.get()
     Conf.proc.operation_mode.set("pairwise")
 
     with datalab_app_context(exec_loop=True):
-        win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
+        win = app.create(h5files=[h5fname], console=False)
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
 
@@ -190,14 +197,15 @@ def test_pairwise_operations_mode_compute_n1():
     Conf.proc.operation_mode.set(original_mode)
 
 
-def test_single_operand_mode_compute_n1n():
+def test_single_operand_mode_compute_2_to_1() -> None:
     """Run single operand mode test scenario
     with `compute_2_to_1` operation (e.g. difference)"""
+    h5fname = get_h5fname()
     original_mode = Conf.proc.operation_mode.get()
     Conf.proc.operation_mode.set("single")
 
     with datalab_app_context(exec_loop=True):
-        win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
+        win = app.create(h5files=[h5fname], console=False)
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
 
@@ -280,14 +288,15 @@ def test_single_operand_mode_compute_n1n():
     Conf.proc.operation_mode.set(original_mode)
 
 
-def test_pairwise_operations_mode_compute_n1n():
+def test_pairwise_operations_mode_compute_2_to_1() -> None:
     """Run pairwise operations mode test scenario
     with `compute_2_to_1` operation (e.g. difference)"""
+    h5fname = get_h5fname()
     original_mode = Conf.proc.operation_mode.get()
     Conf.proc.operation_mode.set("pairwise")
 
     with datalab_app_context(exec_loop=True):
-        win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
+        win = app.create(h5files=[h5fname], console=False)
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
 
@@ -377,7 +386,7 @@ def test_pairwise_operations_mode_compute_n1n():
 
 
 if __name__ == "__main__":
-    test_single_operand_mode_compute_n1()
-    test_pairwise_operations_mode_compute_n1()
-    test_single_operand_mode_compute_n1n()
-    test_pairwise_operations_mode_compute_n1n()
+    test_single_operand_mode_compute_n_to_1()
+    test_pairwise_operations_mode_compute_n_to_1()
+    test_single_operand_mode_compute_2_to_1()
+    test_pairwise_operations_mode_compute_2_to_1()

@@ -26,17 +26,16 @@ import os.path as osp
 
 from sigima.params import ClipParam
 from sigima.tests.data import create_noisy_gaussian_image, create_paracetamol_signal
-from sigima.tests.helpers import WorkdirRestoringTempDir
 
 from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 from datalab.tests.scenarios import scenario_mac_app_test
 from datalab.utils.strings import save_html_diff
 
 
 def test_scenario_h5():
     """Example of high-level test scenario with HDF5 file"""
-    with WorkdirRestoringTempDir() as tmpdir:
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
         with datalab_test_app_context(console=False) as win:
             # === Creating two test signals
             panel = win.signalpanel

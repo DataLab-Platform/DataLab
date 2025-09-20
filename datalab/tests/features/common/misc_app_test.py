@@ -23,11 +23,10 @@ from sigima.tests.data import (
     create_paracetamol_signal,
     get_test_fnames,
 )
-from sigima.tests.helpers import WorkdirRestoringTempDir
 
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -133,7 +132,7 @@ def __misc_unit_function(win: DLMainWindow) -> None:
     # Select all signals and save them to a temporary directory
     __print_test_result("Select first group and save signals to a temporary directory")
     win.signalpanel.objview.select_groups([1])
-    with WorkdirRestoringTempDir() as tmpdir:
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
         param = sigima.params.SaveToDirectoryParam.create(
             directory=tmpdir, basename="{title}_test", extension=".csv", overwrite=True
         )

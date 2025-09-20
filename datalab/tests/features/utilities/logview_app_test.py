@@ -6,15 +6,14 @@ Log viewer test
 
 # guitest: show
 
-from sigima.tests.helpers import exec_script
-
 from datalab.app import run
+from datalab.tests import helpers
 from datalab.tests.features.utilities import logview_error
 
 
 def test_logviewer_app():
     """Test log viewer"""
-    exec_script(logview_error.__file__)
+    helpers.exec_script(logview_error.__file__)
     run()
 
 

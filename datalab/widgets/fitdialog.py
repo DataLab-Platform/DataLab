@@ -10,7 +10,6 @@ from guidata.qthelpers import exec_dialog
 from plotpy.plot import PlotOptions
 from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.special import erf  # pylint: disable=no-name-in-module
-from sigima.tests.helpers import get_default_test_name
 from sigima.tools.checks import check_1d_arrays
 from sigima.tools.signal import fitting, fourier, pulse
 
@@ -48,8 +47,6 @@ def guifit(
         param_cols=param_cols,
         auto_fit=auto_fit,
     )
-    if name is None:
-        name = get_default_test_name()
     win.setObjectName(name)
     win.set_data(x, y, fitfunc, fitparams, fitargs, fitkwargs)
     try:

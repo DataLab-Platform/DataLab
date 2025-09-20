@@ -13,11 +13,10 @@ import pytest
 import sigima.params as sigima_param
 from sigima.objects import SignalROI, create_signal_roi
 from sigima.tests.data import create_paracetamol_signal
-from sigima.tests.helpers import print_obj_data_dimensions
 
 from datalab.config import Conf
 from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 if TYPE_CHECKING:
     from datalab.gui.panel.signal import SignalPanel
@@ -56,7 +55,7 @@ def test_signal_roi_app(screenshots: bool = False) -> None:
             with Conf.proc.extract_roi_singleobj.temp(singleobj):
                 sig2_i = sig2.copy()
                 panel.add_object(sig2_i)
-                print_obj_data_dimensions(sig2_i, indent=1)
+                helpers.print_obj_data_dimensions(sig2_i, indent=1)
                 panel.processor.edit_roi_graphically()
                 if screenshots:
                     win.statusBar().hide()

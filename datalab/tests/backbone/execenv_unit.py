@@ -14,10 +14,9 @@ from __future__ import annotations
 import os
 import sys
 
-from sigima.tests.helpers import get_script_output
-
 import datalab
 from datalab.env import VerbosityLevels, execenv
+from datalab.tests import helpers
 
 ARGV_TEST = "--execenvtest"
 
@@ -38,7 +37,7 @@ def get_subprocess_execenv_dict(args: list[str], env: dict | None = None) -> dic
     Returns:
         dict[str, str | int | bool | None]: DL execution environment dict
     """
-    output = get_script_output(__file__, args=args + [ARGV_TEST], env=env)
+    output = helpers.get_script_output(__file__, args=args + [ARGV_TEST], env=env)
     return eval(output)  # pylint: disable=eval-used
 
 
@@ -133,7 +132,7 @@ def test_cli():
     execenv.print("  Testing special arguments:")
     execenv.print("    version: ", end="")
     args = ["--version"]
-    output = get_script_output(__file__, args=args + [ARGV_TEST])
+    output = helpers.get_script_output(__file__, args=args + [ARGV_TEST])
     execenv.print(output)
     assert datalab.__version__ in output
     execenv.print("    h5 positionnal argument: ", end="")

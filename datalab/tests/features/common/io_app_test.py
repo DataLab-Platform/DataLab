@@ -16,11 +16,10 @@ import os.path as osp
 from sigima.io.base import IOAction
 from sigima.io.image import ImageIORegistry
 from sigima.io.signal import SignalIORegistry
-from sigima.tests.helpers import WorkdirRestoringTempDir, get_test_fnames
 
 from datalab.env import execenv
 from datalab.gui.panel.base import BaseDataPanel
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 
 def __testfunc(
@@ -32,9 +31,9 @@ def __testfunc(
 ) -> None:
     """Test I/O features"""
     execenv.print(f"  {title}:")
-    with WorkdirRestoringTempDir() as tmpdir:
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
         # os.startfile(tmpdir)
-        fnames = get_test_fnames(pattern, in_folder)
+        fnames = helpers.get_test_fnames(pattern, in_folder)
         execenv.print("    Opening:")
         # TODO: [P3] This test does not support formats that return multiple objects
         # (e.g. SIF files with multiple images). As a consequence, it will not test

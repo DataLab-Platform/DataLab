@@ -16,12 +16,10 @@ Metadata import/export unit test:
 import os.path as osp
 
 from sigima.tests import data as test_data
-from sigima.tests import helpers
-from sigima.tests.helpers import compare_metadata
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 
 def test_metadata_io_unit():
@@ -53,7 +51,7 @@ def test_metadata_io_unit():
 
                 panel.import_metadata_from_file(fname)
                 execenv.print("Check metadata export <--> import features:")
-                compare_metadata(orig_metadata, ima.metadata)
+                helpers.compare_metadata(orig_metadata, ima.metadata)
 
 
 if __name__ == "__main__":

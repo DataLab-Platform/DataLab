@@ -13,11 +13,10 @@ import pytest
 import sigima.params as sigima_param
 from sigima.objects import ImageObj, ImageROI, NewImageParam, create_image_roi
 from sigima.tests.data import create_multigaussian_image
-from sigima.tests.helpers import print_obj_data_dimensions
 
 from datalab.config import Conf
 from datalab.env import execenv
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 if TYPE_CHECKING:
     from datalab.gui.panel.image import ImagePanel
@@ -75,7 +74,7 @@ def test_image_roi_app(screenshots: bool = False):
             with Conf.proc.extract_roi_singleobj.temp(singleobj):
                 ima2_i = ima2.copy()
                 panel.add_object(ima2_i)
-                print_obj_data_dimensions(ima2_i)
+                helpers.print_obj_data_dimensions(ima2_i)
                 panel.processor.edit_roi_graphically()
                 if screenshots:
                     win.statusBar().hide()
