@@ -142,12 +142,14 @@ class SignalCursorDialog(PlotDialog):
         plot = self.get_plot()
         if self.__cursor_orientation == "horizontal" and item is self.hcursor:
             _x, y = item.get_pos()
+            x = None
             x_values = find_x_values_at_y(sig.x, sig.y, y)
             if len(x_values) > 0:
+                x = x_values[0]
                 with block_signals(plot):
-                    self.vcursor.set_pos(x_values[0], y)
-            self.vcursor.setVisible(len(x_values) > 0)
-            self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(len(x_values) > 0)
+                    self.vcursor.set_pos(x, y)
+            self.vcursor.setVisible(x is not None)
+            self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(x is not None)
         elif self.__cursor_orientation == "vertical" and item is self.vcursor:
             x, _y = item.get_pos()
             y_index = np.searchsorted(self.__signal.x, x)
