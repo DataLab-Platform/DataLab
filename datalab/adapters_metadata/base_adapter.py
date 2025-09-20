@@ -9,12 +9,13 @@ and image objects.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, ClassVar, Generator, Union
+from typing import TYPE_CHECKING, Any, ClassVar, Generator
 
 from sigima.objects import ImageObj, SignalObj
 
 if TYPE_CHECKING:
     import pandas as pd
+    from sigima.objects.scalar import GeometryResult, TableResult
 
 
 class BaseResultAdapter(ABC):
@@ -31,7 +32,7 @@ class BaseResultAdapter(ABC):
     META_PREFIX: ClassVar[str] = ""
     SUFFIX: ClassVar[str] = ""
 
-    def __init__(self, result: Any) -> None:
+    def __init__(self, result: TableResult | GeometryResult) -> None:
         self.result = result
 
     def set_applicative_attr(self, key: str, value: Any) -> None:
@@ -58,22 +59,14 @@ class BaseResultAdapter(ABC):
             self.result.attrs[key] = default
         return self.result.attrs.get(key, default)
 
-    @abstractmethod
-    def to_dataframe(self) -> "pd.DataFrame":
-        """Convert the result to a pandas DataFrame.
-
-        Returns:
-            DataFrame with columns as in self.headers, and optional 'roi_index' column.
-        """
-
     @property
-    @abstractmethod
     def title(self) -> str:
         """Get the title.
 
         Returns:
             Title
         """
+        return self.result.title
 
     @property
     @abstractmethod
@@ -143,7 +136,7 @@ class BaseResultAdapter(ABC):
         """
         return tuple(enumerate(self.headers))
 
-    def set_obj_metadata(self, obj: Union[SignalObj, ImageObj]) -> None:
+    def set_obj_metadata(self, obj: SignalObj | ImageObj) -> None:
         """Set object metadata from result (alias for add_to).
 
         Args:
@@ -151,7 +144,7 @@ class BaseResultAdapter(ABC):
         """
         self.add_to(obj)
 
-    def add_to(self, obj: Union[SignalObj, ImageObj]) -> None:
+    def add_to(self, obj: SignalObj | ImageObj) -> None:
         """Add result to object metadata.
 
         Args:
@@ -161,7 +154,7 @@ class BaseResultAdapter(ABC):
         metadata_key = f"{self.META_PREFIX}{self.title}{self.SUFFIX}"
         obj.metadata[metadata_key] = self.result.to_dict()
 
-    def remove_from(self, obj: Union[SignalObj, ImageObj]) -> None:
+    def remove_from(self, obj: SignalObj | ImageObj) -> None:
         """Remove result from object metadata.
 
         Args:
@@ -172,7 +165,7 @@ class BaseResultAdapter(ABC):
         obj.metadata.pop(metadata_key, None)
 
     @classmethod
-    def remove_all_from(cls, obj: Union[SignalObj, ImageObj]) -> None:
+    def remove_all_from(cls, obj: SignalObj | ImageObj) -> None:
         """Remove all results of this type from object metadata.
 
         Args:
@@ -197,7 +190,7 @@ class BaseResultAdapter(ABC):
 
     @classmethod
     @abstractmethod
-    def from_metadata_entry(cls, obj: Union[SignalObj, ImageObj], key: str):
+    def from_metadata_entry(cls, obj: SignalObj | ImageObj, key: str):
         """Create a result adapter from a metadata entry.
 
         Args:
@@ -212,7 +205,9 @@ class BaseResultAdapter(ABC):
         """
 
     @classmethod
-    def iterate_from_obj(cls, obj: Union[SignalObj, ImageObj]) -> Generator:
+    def iterate_from_obj(
+        cls, obj: SignalObj | ImageObj
+    ) -> Generator["BaseResultAdapter", None, None]:
         """Iterate over results stored in an object's metadata.
 
         Args:
@@ -228,3 +223,64 @@ class BaseResultAdapter(ABC):
                 except (ValueError, TypeError):
                     # Skip invalid entries
                     pass
+
+    def to_dataframe(self) -> "pd.DataFrame":
+        """Convert the geometry result to a pandas DataFrame.
+
+        Returns:
+            DataFrame with columns as in self.headers, and optional 'roi_index' column.
+        """
+        return self.result.to_dataframe()
+
+    def to_html(
+        self,
+        obj=None,
+        visible_headers: list[str] = None,
+        transpose_single_row: bool = True,
+        **kwargs,
+    ) -> str:
+        """Convert the result to HTML format.
+
+        Args:
+            obj: Optional SignalObj or ImageObj for ROI title extraction
+            visible_headers: Optional list of headers to show (filters columns)
+            transpose_single_row: If True, transpose the table when there's only one row
+            **kwargs: Additional arguments passed to DataFrame.to_html()
+
+        Returns:
+            HTML representation of the result
+        """
+        # Use visible headers from display preferences if not specified
+        if visible_headers is None:
+            visible_headers = self.result.get_visible_headers()
+
+        return self.result.to_html(
+            obj=obj,
+            visible_headers=visible_headers,
+            transpose_single_row=transpose_single_row,
+            **kwargs,
+        )
+
+    def get_display_preferences(self) -> dict[str, bool]:
+        """Get display preferences.
+
+        Returns:
+            Dictionary mapping header names to visibility (True=visible, False=hidden)
+        """
+        return self.result.get_display_preferences()
+
+    def set_display_preferences(self, preferences: dict[str, bool]) -> None:
+        """Set display preferences.
+
+        Args:
+            preferences: Dictionary mapping header names to visibility
+        """
+        self.result.set_display_preferences(preferences)
+
+    def get_visible_headers(self) -> list[str]:
+        """Get list of currently visible headers based on display preferences.
+
+        Returns:
+            List of header names that should be displayed
+        """
+        return self.result.get_visible_headers()

@@ -8,14 +8,11 @@ and image objects.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar
+from typing import ClassVar
 
 from sigima.objects import GeometryResult, ImageObj, SignalObj
 
 from datalab.adapters_metadata.base_adapter import BaseResultAdapter
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 
 class GeometryAdapter(BaseResultAdapter):
@@ -34,7 +31,6 @@ class GeometryAdapter(BaseResultAdapter):
 
     def __init__(self, geometry: GeometryResult) -> None:
         super().__init__(geometry)
-        self.geometry = geometry  # Keep for backwards compatibility
 
     @classmethod
     def from_geometry_result(cls, geometry: GeometryResult) -> GeometryAdapter:
@@ -48,32 +44,6 @@ class GeometryAdapter(BaseResultAdapter):
         """
         return cls(geometry)
 
-    def to_dataframe(self) -> "pd.DataFrame":
-        """Convert the geometry result to a pandas DataFrame.
-
-        Returns:
-            DataFrame with columns as in self.headers, and optional 'roi_index' column.
-        """
-        return self.geometry.to_dataframe()
-
-    @property
-    def category(self) -> str:
-        """Get the category.
-
-        Returns:
-            Category
-        """
-        return f"shape_{self.geometry.kind.value}"
-
-    @property
-    def title(self) -> str:
-        """Get the title.
-
-        Returns:
-            Title
-        """
-        return self.geometry.title
-
     @property
     def headers(self) -> list[str]:
         """Get column headers for the coordinates.
@@ -82,9 +52,18 @@ class GeometryAdapter(BaseResultAdapter):
             List of column headers
         """
         # Get headers directly from the DataFrame
-        df = self.geometry.to_dataframe()
+        df = self.result.to_dataframe()
         # Return coordinate columns (exclude 'roi_index' if present)
         return [col for col in df.columns if col != "roi_index"]
+
+    @property
+    def category(self) -> str:
+        """Get the category.
+
+        Returns:
+            Category
+        """
+        return f"shape_{self.result.kind.value}"
 
     @staticmethod
     def add_geometry_result_to_obj(

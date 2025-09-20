@@ -23,7 +23,6 @@ from datalab.objectmodel import get_short_id
 
 if TYPE_CHECKING:
     from qtpy.QtWidgets import QWidget
-    from sigima.objects import TypeROI
 
 
 @dataclasses.dataclass
@@ -142,29 +141,25 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
 def resultadapter_to_html(
     adapter: BaseResultAdapter,
     obj: SignalObj | ImageObj,
+    visible_headers: list[str] = None,
+    transpose_single_row: bool = True,
+    **kwargs,
 ) -> str:
     """Convert a result adapter to HTML format
 
     Args:
         adapter: Adapter to convert
         obj: Object associated to the adapter
+        visible_headers: Optional list of headers to show (filters columns)
+        transpose_single_row: If True, transpose the table when there's only one row
+        **kwargs: Additional arguments passed to DataFrame.to_html()
 
     Returns:
         HTML representation of the adapter
     """
-    df = adapter.to_dataframe()
-    if "roi_index" in df.columns:
-        df = df.drop(columns=["roi_index"])
-    text = f'<u><b style="color: blue">{adapter.title}</b></u>:'
-    row_headers = []
-    for i_row in range(df.shape[0]):
-        i_roi = i_row - 1
-        header = ""
-        if i_roi >= 0:
-            roi: TypeROI = obj.roi
-            assert obj.roi is not None, "Expected ROI to be defined"
-            header = roi.get_single_roi_title(i_roi)
-        row_headers.append(header)
-    df.set_index(pd.Index(row_headers), inplace=True)
-    text += df.to_html(float_format="%.3g", border=0)
-    return text
+    return adapter.to_html(
+        obj=obj,
+        visible_headers=visible_headers,
+        transpose_single_row=transpose_single_row,
+        **kwargs,
+    )
