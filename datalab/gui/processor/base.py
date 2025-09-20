@@ -1369,15 +1369,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         dst_gname = f"{name}[...]"
                     dst_gid = get_uuid(self.panel.add_group(dst_gname))
                     for i_pair in range(max_i_pair):
-                        src_obj1, src_obj2 = src_objs[src_gid][i_pair], objs2[i_pair]
+                        orig_obj1, orig_obj2 = src_objs[src_gid][i_pair], objs2[i_pair]
 
-                        # Use interpolated signals if available
-                        if (src_obj1, src_obj2) in pair_maps:
-                            interpolated_pair = pair_maps[(src_obj1, src_obj2)]
-                            src_obj1 = interpolated_pair[0]
-                            src_obj2 = interpolated_pair[1]
+                        # Use interpolated signals if available, keep original refs
+                        actual_obj1, actual_obj2 = orig_obj1, orig_obj2
+                        if (orig_obj1, orig_obj2) in pair_maps:
+                            interpolated_pair = pair_maps[(orig_obj1, orig_obj2)]
+                            actual_obj1 = interpolated_pair[0]
+                            actual_obj2 = interpolated_pair[1]
 
-                        args = [src_obj1, src_obj2]
+                        args = [actual_obj1, actual_obj2]
                         if param is not None:
                             args.append(param)
                         result = self.__exec_func(func, tuple(args), progress)
@@ -1393,8 +1394,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         if isinstance(new_obj, (SignalObj, ImageObj)):
                             self._handle_keep_results(new_obj)
 
+                        # Use original objects for title generation
                         patch_title_with_ids(
-                            new_obj, [src_obj1, src_obj2], get_short_id
+                            new_obj, [orig_obj1, orig_obj2], get_short_id
                         )
                         self.panel.add_object(new_obj, group_id=dst_gid)
 
@@ -1415,6 +1417,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             signal_map = {}
 
             # Check x-array compatibility for signal processing (single operand mode)
+            orig_obj2 = obj2  # Keep reference to original obj2 for title generation
             if self._is_signal_panel() and isinstance(obj2, SignalObj):
                 signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
                 if signal_objs:
@@ -1465,7 +1468,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._handle_keep_results(new_obj)
 
                     group_id = objmodel.get_object_group_id(obj)
-                    patch_title_with_ids(new_obj, [obj, obj2], get_short_id)
+                    # Use original objects for title generation
+                    patch_title_with_ids(new_obj, [obj, orig_obj2], get_short_id)
                     self.panel.add_object(new_obj, group_id=group_id)
 
     def register_1_to_1(
