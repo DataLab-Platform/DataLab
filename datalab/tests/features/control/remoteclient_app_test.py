@@ -23,9 +23,9 @@ from qtpy import QtWidgets as QW
 from datalab.config import _
 from datalab.env import execenv
 from datalab.proxy import RemoteProxy
+from datalab.tests import helpers
 from datalab.tests.features.control import embedded1_unit_test
 from datalab.tests.features.control.remoteclient_unit import multiple_commands
-from datalab.tests.features.utilities.logview_app_test import exec_script
 from datalab.utils.qthelpers import bring_to_front
 from datalab.widgets.connection import ConnectionDialog
 
@@ -199,7 +199,9 @@ def test_remote_client():
         # May happen when executing other tests before
         env.pop(execenv.XMLRPCPORT_ENV)
 
-    proc = exec_script("-m", args=["datalab.app"], wait=False, env=env, verbose=False)
+    proc = helpers.exec_script(
+        "-m", args=["datalab.app"], wait=False, env=env, verbose=False
+    )
     # If the process fails to start, it will raise the `AssertionError` exception
     # with the message "Unable to start DataLab application".
     # In that case, it might be useful to set `wait=True` and `verbose=True` in the
