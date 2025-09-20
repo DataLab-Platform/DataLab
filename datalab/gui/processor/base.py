@@ -700,7 +700,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 title = geom_adapter.title
                 if title not in geometry_by_title:
                     geometry_by_title[title] = []
-                geometry_by_title[title].append(geom_adapter.geometry)
+                geometry_by_title[title].append(geom_adapter.result)
 
         # Only proceed if we have geometry results to merge
         if not geometry_by_title:

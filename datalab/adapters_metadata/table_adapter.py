@@ -8,15 +8,12 @@ and image objects.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Union
+from typing import ClassVar, Union
 
 from sigima.objects import ImageObj, SignalObj
 from sigima.objects.scalar import NO_ROI, TableResult
 
 from datalab.adapters_metadata.base_adapter import BaseResultAdapter
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 
 class TableAdapter(BaseResultAdapter):
@@ -35,7 +32,6 @@ class TableAdapter(BaseResultAdapter):
 
     def __init__(self, table: TableResult) -> None:
         super().__init__(table)
-        self.table = table  # Keep for backwards compatibility
 
     @classmethod
     def from_table_result(cls, table: TableResult) -> TableAdapter:
@@ -49,23 +45,6 @@ class TableAdapter(BaseResultAdapter):
         """
         return cls(table)
 
-    def to_dataframe(self) -> "pd.DataFrame":
-        """Convert the table result to a pandas DataFrame.
-
-        Returns:
-            DataFrame with columns as in self.headers, and optional 'roi_index' column.
-        """
-        return self.table.to_dataframe()
-
-    @property
-    def title(self) -> str:
-        """Get the title.
-
-        Returns:
-            Title
-        """
-        return self.table.title
-
     @property
     def headers(self) -> list[str]:
         """Get the column headers.
@@ -73,7 +52,7 @@ class TableAdapter(BaseResultAdapter):
         Returns:
             Column headers
         """
-        return list(self.table.headers)
+        return list(self.result.headers)
 
     @property
     def category(self) -> str:
@@ -82,7 +61,7 @@ class TableAdapter(BaseResultAdapter):
         Returns:
             Category (uses the title for backward compatibility)
         """
-        return self.table.title
+        return self.result.title
 
     @property
     def labels(self) -> list[str]:
@@ -91,7 +70,7 @@ class TableAdapter(BaseResultAdapter):
         Returns:
             Column labels
         """
-        return list(self.table.labels)
+        return list(self.result.labels)
 
     def get_unique_roi_indices(self) -> list[int]:
         """Get unique ROI indices present in the data.

@@ -38,7 +38,7 @@ def __create_test_image() -> sio.ImageObj:
 
 def __get_geometries(obj: sio.ImageObj) -> list[sio.GeometryResult]:
     """Get geometries from an image object."""
-    return [ga.geometry for ga in GeometryAdapter.iterate_from_obj(obj)]
+    return [ga.result for ga in GeometryAdapter.iterate_from_obj(obj)]
 
 
 def __get_expected_geometry_result(

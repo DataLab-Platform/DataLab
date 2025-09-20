@@ -76,7 +76,7 @@ def apply_geometry_transform(
             raise ValueError("scale operation requires 'sx' and 'sy' parameters")
         sx, sy = kwargs["sx"], kwargs["sy"]
     for adapter in list(GeometryAdapter.iterate_from_obj(obj)):
-        geometry = adapter.geometry
+        geometry = adapter.result
         assert geometry is not None, "Geometry should not be None"
         assert len(geometry.coords) > 0, "Geometry coordinates should not be empty"
         if operation == "translate":
