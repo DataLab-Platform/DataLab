@@ -409,7 +409,7 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
             List of other items
         """
         items = []
-        if self.result_adapter.table.is_pulse_features():
+        if self.result_adapter.result.is_pulse_features():
             pulse_items = self.create_pulse_visualization_items(obj)
             items.extend(pulse_items)
         return items

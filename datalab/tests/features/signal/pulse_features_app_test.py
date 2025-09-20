@@ -18,7 +18,7 @@ from datalab.tests import datalab_test_app_context
 
 def test_pulse_features_app():
     """Pulse features application test."""
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(console=False) as win:
         panel = win.signalpanel
         s1 = create_signal_from_param(create_test_step_params())
         panel.add_object(s1)
