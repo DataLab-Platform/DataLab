@@ -81,7 +81,7 @@ class ResultPlotPyAdapter:
         """
         if item is not None:
             self.item_json = items_to_json([item])
-        self.result_adapter.set_obj_metadata(obj)
+        self.result_adapter.add_to(obj)
 
     def create_label_item(self, obj: BaseObj) -> LabelItem | None:
         """Create label item

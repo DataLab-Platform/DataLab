@@ -143,14 +143,6 @@ class BaseResultAdapter(ABC):
         """
         return tuple(enumerate(self.headers))
 
-    def set_obj_metadata(self, obj: Union[SignalObj, ImageObj]) -> None:
-        """Set object metadata from result (alias for add_to).
-
-        Args:
-            obj: Signal or image object
-        """
-        self.add_to(obj)
-
     def add_to(self, obj: Union[SignalObj, ImageObj]) -> None:
         """Add result to object metadata.
 
