@@ -1754,6 +1754,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Plot results for a specific category"""
         xchoices = (("indices", _("Indices")),)
         for xlabel in rdata.headers:
+            # If this column data is not numeric, we skip it:
+            if not isinstance(
+                rdata.results[0].get_column_values(xlabel)[0], (int, float, np.number)
+            ):
+                continue
             xchoices += ((xlabel, xlabel),)
         ychoices = xchoices[1:]
 
