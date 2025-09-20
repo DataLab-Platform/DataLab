@@ -174,6 +174,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                             obj, item
                         )
                     )
+                items.extend(result_adapter.get_other_items(obj))
             if items:
                 if do_autoscale:
                     self.plot.do_autoscale()

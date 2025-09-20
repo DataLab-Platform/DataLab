@@ -31,7 +31,9 @@ from plotpy.items import (
 )
 from sigima.objects.base import BaseObj
 from sigima.objects.scalar import KindShape
+from sigima.objects.signal import SignalObj
 from sigima.tools import coordinates
+from sigima.tools.signal import pulse
 
 from datalab.adapters_metadata import (
     GeometryAdapter,
@@ -132,6 +134,19 @@ class ResultPlotPyAdapter:
             assert isinstance(item, LabelItem)
             return item
         return None
+
+    def get_other_items(self, obj: BaseObj) -> list:  # pylint: disable=unused-argument
+        """Return other items associated to this result (excluding label item)
+
+        Those items are not serialized to JSON.
+
+        Args:
+            obj: object (signal/image)
+
+        Returns:
+            List of other items
+        """
+        return []
 
 
 class GeometryPlotPyAdapter(ResultPlotPyAdapter):
@@ -292,6 +307,82 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         )
 
 
+def create_pulse_segment(
+    x0: float, y0: float, x1: float, y1: float, label: str
+) -> AnnotatedSegment:
+    """Create a signal segment item for pulse visualization.
+
+    Args:
+        x0: X-coordinate of the start point
+        y0: Y-coordinate of the start point
+        x1: X-coordinate of the end point
+        y1: Y-coordinate of the end point
+        label: Label for the segment
+
+    Returns:
+        Annotated segment item styled for pulse visualization
+    """
+    item = make.annotated_segment(x0, y0, x1, y1, label, show_computations=False)
+
+    # Configure label appearance similar to Sigima's vistools
+    item.label.labelparam.bgalpha = 0.5
+    item.label.labelparam.anchor = "T"
+    item.label.labelparam.yc = 10
+    item.label.labelparam.update_item(item.label)
+
+    # Configure segment appearance
+    param = item.shape.shapeparam
+    param.line.color = "#33ff00"  # Green color for baselines/plateaus
+    param.line.width = 5
+    param.symbol.facecolor = "#26be00"
+    param.symbol.edgecolor = "#33ff00"
+    param.symbol.marker = "Ellipse"
+    param.symbol.size = 11
+    param.update_item(item.shape)
+
+    # Make non-interactive
+    item.set_movable(False)
+    item.set_resizable(False)
+    item.set_selectable(False)
+
+    return item
+
+
+def create_pulse_crossing_marker(
+    orientation: Literal["h", "v"], position: float, label: str
+) -> Marker:
+    """Create a crossing marker for pulse visualization.
+
+    Args:
+        orientation: 'h' for horizontal, 'v' for vertical cursor
+        position: Position of the cursor along the relevant axis
+        label: Label for the cursor
+
+    Returns:
+        Marker item styled for crossing visualization
+    """
+    if orientation == "h":
+        cursor = make.hcursor(position, label=label)
+    elif orientation == "v":
+        cursor = make.vcursor(position, label=label)
+    else:
+        raise ValueError("Orientation must be 'h' or 'v'")
+
+    # Configure appearance similar to Sigima's vistools
+    cursor.set_movable(False)
+    cursor.set_selectable(False)
+    cursor.markerparam.line.color = "#a7ff33"  # Light green
+    cursor.markerparam.line.width = 3
+    cursor.markerparam.symbol.marker = "NoSymbol"
+    cursor.markerparam.text.textcolor = "#ffffff"
+    cursor.markerparam.text.background_color = "#000000"
+    cursor.markerparam.text.background_alpha = 0.5
+    cursor.markerparam.text.font.bold = True
+    cursor.markerparam.update_item(cursor)
+
+    return cursor
+
+
 class TablePlotPyAdapter(ResultPlotPyAdapter):
     """Adapter for converting `sigima` table adapters to PlotPy
 
@@ -305,3 +396,55 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
     def __init__(self, result_adapter: TableAdapter) -> None:
         assert isinstance(result_adapter, TableAdapter)
         super().__init__(result_adapter)
+
+    def get_other_items(self, obj: BaseObj) -> list:
+        """Return other items associated to this result (excluding label item)
+
+        Those items are not serialized to JSON.
+
+        Args:
+            obj: object (signal/image)
+
+        Returns:
+            List of other items
+        """
+        items = []
+        if self.result_adapter.table.is_pulse_features():
+            pulse_items = self.create_pulse_visualization_items(obj)
+            items.extend(pulse_items)
+        return items
+
+    def create_pulse_visualization_items(
+        self, obj: SignalObj
+    ) -> list[AnnotatedSegment | Marker]:
+        """Create pulse visualization items from table data.
+
+        Args:
+            obj: Signal object containing the pulse data
+
+        Returns:
+            List of PlotPy items for pulse visualization
+        """
+        items = []
+        df = self.result_adapter.to_dataframe()
+        for _, row in df.iterrows():
+            # Start baseline
+            xs0, xs1 = row["xstartmin"], row["xstartmax"]
+            ys = pulse.get_range_mean_y(obj.x, obj.y, (xs0, xs1))
+            if all(v is not None for v in [xs0, xs1, ys]):
+                items.append(create_pulse_segment(xs0, ys, xs1, ys, "Start baseline"))
+            # End baseline
+            xe0, xe1 = row["xendmin"], row["xendmax"]
+            ye = pulse.get_range_mean_y(obj.x, obj.y, (xe0, xe1))
+            if all(v is not None for v in [xe0, xe1, ye]):
+                items.append(create_pulse_segment(xe0, ye, xe1, ye, "End baseline"))
+            if "xplateaumin" in row and "xplateaumax" in row:
+                xp0, xp1 = row["xplateaumin"], row["xplateaumax"]
+                yp = pulse.get_range_mean_y(obj.x, obj.y, (xp0, xp1))
+                items.append(create_pulse_segment(xp0, yp, xp1, yp, "Plateau"))
+            for metric in ("x0", "x50", "x100"):
+                if metric in row:
+                    x = row[metric]
+                    metric_str = metric.replace("x", "x|<sub>") + "%</sub>"
+                    items.append(create_pulse_crossing_marker("v", x, metric_str))
+        return items
