@@ -19,8 +19,15 @@ from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.constants import LUTAlpha
 from sigima.config import options as sigima_options
+from sigima.proc.title_formatting import (
+    PlaceholderTitleFormatter,
+    set_default_title_formatter,
+)
 
 from datalab.utils import conf
+
+# Configure Sigima to use DataLab-compatible placeholder title formatting
+set_default_title_formatter(PlaceholderTitleFormatter())
 
 CONF_VERSION = "0.3.0"
 
