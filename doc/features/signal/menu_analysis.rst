@@ -210,10 +210,8 @@ This feature provides automated pulse characterization with intelligent signal t
       - Lower X boundary for the end (final) baseline region
     * - End baseline max
       - Upper X boundary for the end (final) baseline region
-    * - Lower reference level
-      - Fraction of amplitude for rise time start measurement (default: 0.1 = 10%)
-    * - Upper reference level
-      - Fraction of amplitude for rise time end measurement (default: 0.9 = 90%)
+    * - Rise/Fall time
+      - Reference levels for rise/fall time measurement with predefined choices: 5%-95% (High precision), 10%-90% (IEEE standard), 20%-80% (Noisy signals), 25%-75% (Alternative)
 
 **Extracted Features:**
 
@@ -234,9 +232,9 @@ The analysis computes the following pulse characteristics:
     * - Offset
       - DC offset (baseline level)
     * - Rise time
-      - Time from start_ratio to stop_ratio of amplitude (e.g., 10%-90%)
+      - Time from the lower to upper reference levels during rising edge
     * - Fall time
-      - Time from stop_ratio to start_ratio during falling edge (square pulses only)
+      - Time from the lower to upper reference levels during falling edge (square pulses only)
     * - FWHM
       - Full Width at Half Maximum (square pulses only)
     * - x50

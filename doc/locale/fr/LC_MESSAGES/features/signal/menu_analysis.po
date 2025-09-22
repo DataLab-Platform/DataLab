@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 10:59+0200\n"
+"POT-Creation-Date: 2025-09-22 15:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -287,19 +287,17 @@ msgstr "Ligne de base fin max"
 msgid "Upper X boundary for the end (final) baseline region"
 msgstr "Limite X supérieure pour la région de ligne de base de fin (finale)"
 
-msgid "Lower reference level"
-msgstr "Niveau de référence bas"
+msgid "Rise/Fall time"
+msgstr "Temps de montée/descente"
 
-msgid "Fraction of amplitude for rise time start measurement (default: 0.1 = 10%)"
-msgstr "Fraction d'amplitude pour la mesure du début du temps de montée (défaut : 0,1 = 10 %)"
-
-msgid "Upper reference level"
-msgstr "Niveau de référence haut"
-
-msgstr "Rapport de fin de montée"
-
-msgid "Fraction of amplitude for rise time end measurement (default: 0.9 = 90%)"
-msgstr "Fraction d'amplitude pour la mesure de la fin du temps de montée (défaut : 0,9 = 90 %)"
+msgid ""
+"Reference levels for rise/fall time measurement with predefined choices: 5%-"
+"95% (High precision), 10%-90% (IEEE standard), 20%-80% (Noisy signals), 25%-"
+"75% (Alternative)"
+msgstr ""
+"Niveaux de référence pour la mesure du temps de montée/descente avec des "
+"choix prédéfinis : 5%-95% (Haute précision), 10%-90% (Standard IEEE), "
+"20%-80% (Signaux bruités), 25%-75% (Alternative)"
 
 msgid "**Extracted Features:**"
 msgstr "**Caractéristiques extraites :**"
@@ -334,15 +332,14 @@ msgstr "Décalage DC (niveau de ligne de base)"
 msgid "Rise time"
 msgstr "Temps de montée"
 
-#, python-format
-msgid "Time from start_ratio to stop_ratio of amplitude (e.g., 10%-90%)"
-msgstr "Temps de start_ratio à stop_ratio de l'amplitude (p. ex., 10 %-90 %)"
+msgid "Time from the lower to upper reference levels during rising edge"
+msgstr "Temps entre les niveaux de référence bas et haut pendant le front montant"
 
 msgid "Fall time"
 msgstr "Temps de descente"
 
-msgid "Time from stop_ratio to start_ratio during falling edge (square pulses only)"
-msgstr "Temps de stop_ratio à start_ratio pendant le front descendant (impulsions carrées uniquement)"
+msgid "Time from the lower to upper reference levels during falling edge (square pulses only)"
+msgstr "Temps entre les niveaux de référence haut et bas pendant le front descendant (impulsions carrées uniquement)"
 
 msgid "FWHM"
 msgstr "FWHM"
