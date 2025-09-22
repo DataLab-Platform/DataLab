@@ -54,7 +54,7 @@ print("All done! :)")
 def test_macro_editor():
     """Test dep viewer window"""
     with qt_app_context(exec_loop=True):
-        widget = macro.MacroPanel()
+        widget = macro.MacroPanel(None)
         widget.resize(800, 600)
         widget.show()
 
