@@ -164,7 +164,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     FILE_FILTERS = f"{_('Python files')} (*.py)"
 
-    def __init__(self, parent: QW.QWidget | None = None) -> None:
+    def __init__(self, parent: QW.QMainWindow) -> None:
         super().__init__(parent)
         self.setWindowTitle(self.PANEL_STR)
         self.setWindowIcon(get_icon("libre-gui-cogs.svg"))

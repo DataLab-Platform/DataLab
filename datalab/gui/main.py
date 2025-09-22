@@ -1146,7 +1146,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
-        self.macropanel = macro.MacroPanel()
+        self.macropanel = macro.MacroPanel(self)
         mdock = self.__add_dockwidget(self.macropanel, _("Macro Panel"))
         self.docks[self.macropanel] = mdock
         self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
