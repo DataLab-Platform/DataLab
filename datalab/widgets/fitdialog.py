@@ -41,7 +41,11 @@ def guifit(
         icon=None,
         toolbar=True,
         options=PlotOptions(
-            title=title, xlabel=xlabel, ylabel=ylabel, curve_antialiasing=True
+            title=title,
+            xlabel=xlabel,
+            ylabel=ylabel,
+            curve_antialiasing=True,
+            show_axes_tab=False,
         ),
         parent=parent,
         param_cols=param_cols,

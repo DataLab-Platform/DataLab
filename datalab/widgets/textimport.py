@@ -553,6 +553,7 @@ class GraphicalRepresentationPage(WizardPage):
                 show_itemlist=True,
                 show_contrast=True,
                 curve_antialiasing=True,
+                show_axes_tab=False,
             ),
         )
         plot = self.plot_widget.get_plot()

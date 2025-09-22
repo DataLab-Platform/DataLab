@@ -63,7 +63,7 @@ class ProfileExtractionDialog(PlotDialog):
         title = param.get_title()
         self.__add_initial_shape = add_initial_shape
         if options is None:
-            options = PlotOptions(show_contrast=True)
+            options = PlotOptions(show_contrast=True, show_axes_tab=False)
         options.show_xsection = options.show_ysection = True
         toolklass = {
             "line": CrossSectionTool,

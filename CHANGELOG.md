@@ -192,6 +192,9 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Plot interface improvements:
+  * Disabled PlotPy's generic "Axes" tab in parameter dialogs to prevent interference with DataLab's own axis scale management.
+  * This provides a cleaner, more focused parameter dialog interface while maintaining DataLab's specialized axis handling capabilities.
 * Fixed [Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Hard crash when trying to activate the curve stats tool on a zero signal
 * Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to "Square" after validating "Parameters…" dialog
 * Fixed [Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117) - DataLab's signal moving median crashes on Linux with `mode='mirror'`: `free(): invalid next size (normal)` (this is a bug in SciPy v1.15.0 to v1.15.2, which was fixed in SciPy v1.15.3)

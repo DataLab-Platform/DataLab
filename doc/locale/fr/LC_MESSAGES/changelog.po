@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-20 19:40+0200\n"
+"POT-Creation-Date: 2025-09-22 17:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -551,6 +551,15 @@ msgstr "Ceci corrige l'[Issue #180](https://github.com/DataLab-Platform/DataLab/
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "Plot interface improvements:"
+msgstr "Améliorations de la vue graphique :"
+
+msgid "Disabled PlotPy's generic \"Axes\" tab in parameter dialogs to prevent interference with DataLab's own axis scale management."
+msgstr "Désactivation de l'onglet générique \"Axes\" de PlotPy dans les boîtes de dialogue des paramètres pour éviter les interférences avec la gestion propre des échelles d'axe de DataLab."
+
+msgid "This provides a cleaner, more focused parameter dialog interface while maintaining DataLab's specialized axis handling capabilities."
+msgstr "Cela fournit une interface de boîte de dialogue des paramètres plus propre et plus ciblée tout en maintenant les capacités de gestion des axes spécialisées de DataLab."
 
 msgid "Fixed [Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Hard crash when trying to activate the curve stats tool on a zero signal"
 msgstr "Correction de l'[Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Plantage sévère lors de l'activation de l'outil de statistiques de courbe sur un signal nul"

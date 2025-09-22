@@ -264,7 +264,9 @@ class DataLabPlotWidget(PlotWidget):
     """
 
     def __init__(self, plot_type: PlotType) -> None:
-        super().__init__(options=PlotOptions(type=plot_type), toolbar=True)
+        super().__init__(
+            options=PlotOptions(type=plot_type, show_axes_tab=False), toolbar=True
+        )
 
     def __register_standard_tools(self) -> None:
         """Register standard tools

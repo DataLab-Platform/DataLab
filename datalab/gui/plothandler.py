@@ -480,6 +480,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             ylabel=self.plot.get_axis_title("left"),
             xunit=self.plot.get_axis_unit("bottom"),
             yunit=self.plot.get_axis_unit("left"),
+            show_axes_tab=False,
         )
 
 
