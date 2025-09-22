@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 17:22+0200\n"
+"POT-Creation-Date: 2025-09-20 19:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -485,6 +485,21 @@ msgstr "Si activé, la console sera affichée lorsqu'une erreur se produit dans 
 
 msgid "Now, the console is not shown by default on error, but it does not prevent the console from containing the error traceback as it works in the background."
 msgstr "Maintenant, la console n'est pas affichée par défaut en cas d'erreur, mais cela n'empêche pas la console de contenir la trace de l'erreur car elle fonctionne en arrière-plan."
+
+msgid "Dialog sizing improvements:"
+msgstr "Améliorations de la taille des boîtes de dialogue :"
+
+msgid "Enhanced initial sizing logic for processing dialogs (profile extraction, offset subtraction, etc.):"
+msgstr "Logique de taille initiale améliorée pour les boîtes de dialogue de traitement (extraction de profil, soustraction de décalage, etc.) :"
+
+msgid "Dialogs now intelligently resize based on parent window dimensions with proper aspect ratio handling"
+msgstr "Les boîtes de dialogue se redimensionnent désormais intelligemment en fonction des dimensions de la fenêtre parente, avec un traitement approprié du ratio d'aspect"
+
+msgid "The sizing ratio represents the percentage of parent dimensions, ensuring dialogs are never larger than their parent window"
+msgstr "Le ratio de taille représente le pourcentage des dimensions parente, garantissant que les boîtes de dialogue ne sont jamais plus grandes que leur fenêtre parente"
+
+msgid "Improved user experience with consistently appropriately-sized dialogs across different screen resolutions and window sizes"
+msgstr "Amélioration de l'expérience utilisateur avec des boîtes de dialogue de taille appropriée de manière cohérente sur différentes résolutions d'écran et tailles de fenêtre"
 
 msgid "Signal cursors:"
 msgstr "Curseurs de signal :"

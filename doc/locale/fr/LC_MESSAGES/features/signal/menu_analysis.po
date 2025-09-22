@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-12 12:39+0200\n"
+"POT-Creation-Date: 2025-09-22 15:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -227,6 +226,155 @@ msgstr ""
 
 msgid "This feature assumes that the signal is a profile from an image, where the contrast is meaningful. This justifies the optical definition of contrast."
 msgstr "Cette fonctionnalité suppose que le signal est un profil extrait d'une image, pour laquelle le contraste a un sens. Cela justifie la définition optique du contraste."
+
+msgid "Extract pulse features"
+msgstr "Extraction des caractéristiques d'impulsions"
+
+msgid "Perform comprehensive pulse analysis on selected signals, automatically extracting timing and amplitude characteristics for step and square pulse signals."
+msgstr "Effectue une analyse complète des impulsions sur les signaux sélectionnés, en extrayant automatiquement les caractéristiques temporelles et d'amplitude pour les signaux d'échelon et d'impulsions carrées."
+
+msgid "This feature provides automated pulse characterization with intelligent signal type recognition and robust parameter extraction for digital signal analysis, oscilloscope measurements, and pulse timing validation."
+msgstr "Cette fonctionnalité fournit une caractérisation automatisée des impulsions avec reconnaissance intelligente du type de signal et extraction robuste de paramètres pour l'analyse de signaux numériques, les mesures d'oscilloscope et la validation temporelle des impulsions."
+
+msgid "**Key Capabilities:**"
+msgstr "**Fonctionnalités clés :**"
+
+msgid "**Automated signal recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis"
+msgstr "**Reconnaissance automatique du signal** : Identifie de façon heuristique le type de signal (échelon, carré ou autre) pour une analyse optimale"
+
+msgid "**Polarity detection**: Automatically determines positive/negative pulse polarity using baseline comparison"
+msgstr "**Détection de polarité** : Détermine automatiquement la polarité positive/négative de l'impulsion en utilisant la comparaison de ligne de base"
+
+msgid "**Comprehensive timing measurements**: Extracts rise time, fall time, FWHM, and timing parameters at specific amplitude fractions"
+msgstr "**Mesures temporelles complètes** : Extrait le temps de montée, le temps de descente, la largeur à mi-hauteur (FWHM) et les paramètres temporels à des fractions d'amplitude spécifiques"
+
+msgid "**Baseline characterization**: Analyzes start and end baseline regions for accurate feature computation"
+msgstr "**Caractérisation de la ligne de base** : Analyse les régions de ligne de base de début et de fin pour un calcul précis des caractéristiques"
+
+msgid "**Robust algorithms**: Uses advanced statistical methods with noise tolerance and error handling"
+msgstr "**Algorithmes robustes** : Utilise des méthodes statistiques avancées avec tolérance au bruit et gestion d'erreurs"
+
+msgid "**Parameters:**"
+msgstr "**Paramètres :**"
+
+msgid "Signal shape"
+msgstr "Forme du signal"
+
+msgid "Signal type selection: Auto (automatic detection), Step, or Square"
+msgstr "Sélection du type de signal : Auto (détection automatique), Échelon ou Carré"
+
+msgid "Start baseline min"
+msgstr "Ligne de base début min"
+
+msgid "Lower X boundary for the start (initial) baseline region"
+msgstr "Limite X inférieure pour la région de ligne de base de début (initiale)"
+
+msgid "Start baseline max"
+msgstr "Ligne de base début max"
+
+msgid "Upper X boundary for the start (initial) baseline region"
+msgstr "Limite X supérieure pour la région de ligne de base de début (initiale)"
+
+msgid "End baseline min"
+msgstr "Ligne de base fin min"
+
+msgid "Lower X boundary for the end (final) baseline region"
+msgstr "Limite X inférieure pour la région de ligne de base de fin (finale)"
+
+msgid "End baseline max"
+msgstr "Ligne de base fin max"
+
+msgid "Upper X boundary for the end (final) baseline region"
+msgstr "Limite X supérieure pour la région de ligne de base de fin (finale)"
+
+msgid "Rise/Fall time"
+msgstr "Temps de montée/descente"
+
+msgid ""
+"Reference levels for rise/fall time measurement with predefined choices: 5%-"
+"95% (High precision), 10%-90% (IEEE standard), 20%-80% (Noisy signals), 25%-"
+"75% (Alternative)"
+msgstr ""
+"Niveaux de référence pour la mesure du temps de montée/descente avec des "
+"choix prédéfinis : 5%-95% (Haute précision), 10%-90% (Standard IEEE), "
+"20%-80% (Signaux bruités), 25%-75% (Alternative)"
+
+msgid "**Extracted Features:**"
+msgstr "**Caractéristiques extraites :**"
+
+msgid "The analysis computes the following pulse characteristics:"
+msgstr "L'analyse calcule les caractéristiques d'impulsion suivantes :"
+
+msgid "Feature"
+msgstr "Caractéristique"
+
+msgid "Detected signal type (STEP, SQUARE, or OTHER)"
+msgstr "Type de signal détecté (ÉCHELON, CARRÉ ou AUTRE)"
+
+msgid "Polarity"
+msgstr "Polarité"
+
+msgid "Signal polarity (+1 for positive, -1 for negative pulses)"
+msgstr "Polarité du signal (+1 pour les impulsions positives, -1 pour les négatives)"
+
+msgid "Amplitude"
+msgstr "Amplitude"
+
+msgid "Peak-to-peak amplitude of the pulse"
+msgstr "Amplitude crête-à-crête de l'impulsion"
+
+msgid "Offset"
+msgstr "Décalage"
+
+msgid "DC offset (baseline level)"
+msgstr "Décalage DC (niveau de ligne de base)"
+
+msgid "Rise time"
+msgstr "Temps de montée"
+
+msgid "Time from the lower to upper reference levels during rising edge"
+msgstr "Temps entre les niveaux de référence bas et haut pendant le front montant"
+
+msgid "Fall time"
+msgstr "Temps de descente"
+
+msgid "Time from the lower to upper reference levels during falling edge (square pulses only)"
+msgstr "Temps entre les niveaux de référence haut et bas pendant le front descendant (impulsions carrées uniquement)"
+
+msgid "FWHM"
+msgstr "FWHM"
+
+msgid "Full Width at Half Maximum (square pulses only)"
+msgstr "Largeur à mi-hauteur (impulsions carrées uniquement)"
+
+msgid "x50"
+msgstr "x50"
+
+#, python-format
+msgid "Time at which signal reaches 50% of maximum amplitude"
+msgstr "Temps auquel le signal atteint 50 % de l'amplitude maximale"
+
+msgid "x100"
+msgstr "x100"
+
+#, python-format
+msgid "Time at which signal reaches 100% of maximum amplitude (plateau start)"
+msgstr "Temps auquel le signal atteint 100 % de l'amplitude maximale (début du plateau)"
+
+msgid "Foot duration"
+msgstr "Durée du pied"
+
+msgid "Duration of flat region before pulse rise"
+msgstr "Durée de la région plate avant la montée de l'impulsion"
+
+msgid "Baseline ranges"
+msgstr "Plages de ligne de base"
+
+msgid "Extracted start and end baseline boundary coordinates"
+msgstr "Coordonnées des limites de ligne de base de début et de fin extraites"
+
+msgid "Results are displayed in a comprehensive table showing all extracted parameters, and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable and show as None. The feature works best with well-defined pulse signals that have clear baseline regions."
+msgstr "Les résultats sont affichés dans un tableau complet montrant tous les paramètres extraits, et sous forme d'annotations visuelles sur le tracé du signal. Pour les signaux d'échelon, les paramètres liés à la descente (fall_time, fwhm) ne sont pas applicables et s'affichent comme None. Cette fonctionnalité fonctionne au mieux avec des signaux d'impulsion bien définis qui ont des régions de ligne de base claires."
 
 msgid "Show results"
 msgstr "Afficher les résultats"

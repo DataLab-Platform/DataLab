@@ -375,7 +375,7 @@ def qt_try_except(message=None, context=None):
                 if is_running_tests():
                     # If we are running tests, we want to raise the exception
                     raise
-                qt_handle_error_message(panel.parent(), msg, context)
+                qt_handle_error_message(panel.parentWidget(), msg, context)
             finally:
                 if message is not None:
                     panel.SIG_STATUS_MESSAGE.emit("")
@@ -526,6 +526,73 @@ def configure_menu_about_to_show(menu: QW.QMenu, slot: Callable) -> None:
     if sys.platform == "darwin":
         menu.addAction(QW.QAction(menu))
     menu.aboutToShow.connect(slot)
+
+
+def resize_widget_to_parent(
+    widget: QW.QWidget,
+    parent: QW.QWidget | None = None,
+    ratio: float = 0.95,
+    aspect_ratio: float = 1.0,
+    min_size: int = 500,
+) -> None:
+    """Resize widget based on parent widget's dimensions
+
+    Args:
+        widget: Widget to resize
+        parent: Parent widget (if None, uses widget.parentWidget())
+        ratio: Ratio of parent size to use (0.0 to 1.0, default: 0.95 for 95%).
+         This represents the percentage of the maximum dimension with respect
+         to the widget.
+        aspect_ratio: Width/height ratio (1.0 for square, >1.0 for landscape,
+         <1.0 for portrait, default: 1.0)
+        min_size: Minimum size in pixels (default: 500)
+    """
+    if parent is None:
+        parent = widget.parentWidget()
+
+    if parent is not None:
+        parent_size = parent.size()
+        parent_width = parent_size.width()
+        parent_height = parent_size.height()
+
+        # Calculate maximum available dimensions
+        max_width = parent_width * ratio
+        max_height = parent_height * ratio
+
+        # Determine which dimension is limiting based on aspect ratio
+        # For aspect_ratio = w/h, we have: w = aspect_ratio * h
+        # Check which constraint is more restrictive
+        width_from_height = max_height * aspect_ratio
+        height_from_width = max_width / aspect_ratio
+
+        if width_from_height <= max_width:
+            # Height is the limiting factor
+            height = int(max_height)
+            width = int(width_from_height)
+        else:
+            # Width is the limiting factor
+            width = int(max_width)
+            height = int(height_from_width)
+
+        # Ensure minimum size while preserving aspect ratio
+        if width < min_size or height < min_size:
+            if aspect_ratio >= 1.0:
+                # Landscape or square: scale up from minimum width
+                width = max(width, min_size)
+                height = max(height, int(min_size / aspect_ratio))
+            else:
+                # Portrait: scale up from minimum height
+                height = max(height, min_size)
+                width = max(width, int(min_size * aspect_ratio))
+
+        # Final check: ensure we don't exceed parent dimensions
+        width = min(width, parent_width)
+        height = min(height, parent_height)
+
+        widget.resize(width, height)
+    else:
+        # Fallback: use square with min_size if no parent
+        widget.resize(min_size, min_size)
 
 
 def add_corner_menu(

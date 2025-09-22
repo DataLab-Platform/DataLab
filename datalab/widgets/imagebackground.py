@@ -15,6 +15,7 @@ from plotpy.plot import PlotDialog
 
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
+from datalab.utils.qthelpers import resize_widget_to_parent
 
 if TYPE_CHECKING:
     from plotpy.items import ImageItem, RangeComputation2d, RectangleShape
@@ -42,6 +43,8 @@ class ImageBackgroundDialog(PlotDialog):
         self.setObjectName("backgroundselection")
         if parent is None:
             self.setWindowIcon(get_icon("DataLab.svg"))
+        else:
+            resize_widget_to_parent(self, aspect_ratio=1.0)
         self.__image = image.copy()
         self.__setup_dialog()
 

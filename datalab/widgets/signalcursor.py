@@ -18,7 +18,7 @@ from sigima.tools.signal.features import find_x_values_at_y
 
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import _
-from datalab.utils.qthelpers import block_signals
+from datalab.utils.qthelpers import block_signals, resize_widget_to_parent
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker
@@ -65,6 +65,7 @@ class SignalCursorDialog(PlotDialog):
         legend = make.legend("TR")
         self.get_plot().add_item(legend)
         self.__setup_dialog()
+        resize_widget_to_parent(self, aspect_ratio=1.0)
 
     def __setup_dialog(self) -> None:
         """Setup dialog box"""

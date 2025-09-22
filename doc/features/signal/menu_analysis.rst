@@ -177,6 +177,79 @@ and minimum values:
   This feature assumes that the signal is a profile from an image, where the contrast
   is meaningful. This justifies the optical definition of contrast.
 
+Extract pulse features
+^^^^^^^^^^^^^^^^^^^^^^
+
+Perform comprehensive pulse analysis on selected signals, automatically extracting timing and amplitude characteristics for step and square pulse signals.
+
+This feature provides automated pulse characterization with intelligent signal type recognition and robust parameter extraction for digital signal analysis, oscilloscope measurements, and pulse timing validation.
+
+**Key Capabilities:**
+
+* **Automated signal recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis
+* **Polarity detection**: Automatically determines positive/negative pulse polarity using baseline comparison
+* **Comprehensive timing measurements**: Extracts rise time, fall time, FWHM, and timing parameters at specific amplitude fractions
+* **Baseline characterization**: Analyzes start and end baseline regions for accurate feature computation
+* **Robust algorithms**: Uses advanced statistical methods with noise tolerance and error handling
+
+**Parameters:**
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - Signal shape
+      - Signal type selection: Auto (automatic detection), Step, or Square
+    * - Start baseline min
+      - Lower X boundary for the start (initial) baseline region
+    * - Start baseline max
+      - Upper X boundary for the start (initial) baseline region
+    * - End baseline min
+      - Lower X boundary for the end (final) baseline region
+    * - End baseline max
+      - Upper X boundary for the end (final) baseline region
+    * - Rise/Fall time
+      - Reference levels for rise/fall time measurement with predefined choices: 5%-95% (High precision), 10%-90% (IEEE standard), 20%-80% (Noisy signals), 25%-75% (Alternative)
+
+**Extracted Features:**
+
+The analysis computes the following pulse characteristics:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Feature
+      - Description
+    * - Signal shape
+      - Detected signal type (STEP, SQUARE, or OTHER)
+    * - Polarity
+      - Signal polarity (+1 for positive, -1 for negative pulses)
+    * - Amplitude
+      - Peak-to-peak amplitude of the pulse
+    * - Offset
+      - DC offset (baseline level)
+    * - Rise time
+      - Time from the lower to upper reference levels during rising edge
+    * - Fall time
+      - Time from the lower to upper reference levels during falling edge (square pulses only)
+    * - FWHM
+      - Full Width at Half Maximum (square pulses only)
+    * - x50
+      - Time at which signal reaches 50% of maximum amplitude
+    * - x100
+      - Time at which signal reaches 100% of maximum amplitude (plateau start)
+    * - Foot duration
+      - Duration of flat region before pulse rise
+    * - Baseline ranges
+      - Extracted start and end baseline boundary coordinates
+
+.. note::
+
+    Results are displayed in a comprehensive table showing all extracted parameters, and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable and show as None. The feature works best with well-defined pulse signals that have clear baseline regions.
+
 Show results
 ^^^^^^^^^^^^
 
