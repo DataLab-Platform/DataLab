@@ -21,6 +21,7 @@ from sigima.tools.signal.pulse import full_width_at_y
 
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import _
+from datalab.utils.qthelpers import resize_widget_to_parent
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, Marker, XRangeSelection
@@ -53,6 +54,7 @@ class SignalDeltaXDialog(PlotDialog):
         legend = make.legend("TR")
         self.get_plot().add_item(legend)
         self.__setup_dialog()
+        resize_widget_to_parent(self, aspect_ratio=1.0)
 
     def __setup_dialog(self) -> None:
         """Setup dialog box"""

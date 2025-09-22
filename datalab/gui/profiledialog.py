@@ -28,6 +28,7 @@ from qtpy.QtWidgets import QWidget
 
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
+from datalab.utils.qthelpers import resize_widget_to_parent
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem
@@ -73,7 +74,7 @@ class ProfileExtractionDialog(PlotDialog):
         super().__init__(title=title, edit=True, options=options, parent=parent)
         self.setObjectName("profileextraction")
         self.setWindowIcon(get_icon("DataLab.svg"))
-        self.resize(800, 800)
+        resize_widget_to_parent(self, parent, aspect_ratio=1.0)
         mgr = self.get_manager()
         tool: (
             CrossSectionTool | LineCrossSectionTool | AverageCrossSectionTool | None

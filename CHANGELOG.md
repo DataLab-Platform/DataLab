@@ -166,6 +166,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * If enabled, the console will be shown when an error occurs in the application, allowing to see the error traceback (this was previously the default behavior)
     * Now, the console is not shown by default on error, but it does not prevent the console from containing the error traceback as it works in the background.
 
+* Dialog sizing improvements:
+  * Enhanced initial sizing logic for processing dialogs (profile extraction, offset subtraction, etc.):
+    * Dialogs now intelligently resize based on parent window dimensions with proper aspect ratio handling
+    * The sizing ratio represents the percentage of parent dimensions, ensuring dialogs are never larger than their parent window
+    * Improved user experience with consistently appropriately-sized dialogs across different screen resolutions and window sizes
+
 * Signal cursors:
   * Fixed [Issue #231](https://github.com/DataLab-Platform/DataLab/issues/231) - Add horizontal cursors to the Signal View (requires PlotPy v2.8)
   * Fixed [Issue #232](https://github.com/DataLab-Platform/DataLab/issues/232) - Add Δx measurement on curve stats tool (vertical cursors)
