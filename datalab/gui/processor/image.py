@@ -762,7 +762,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         if any(obj.roi is not None for obj in self.panel.objview.get_sel_objects()):
             if (
                 QW.QMessageBox.question(
-                    self.panel.parentWidget(),
+                    self.mainwindow,
                     _("Warning"),
                     _(
                         "Creating a ROI grid will overwrite any existing ROI.<br><br>"
@@ -788,7 +788,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             # Now, we ask the user if we shall extract the freshly defined ROI:
             if (
                 QW.QMessageBox.question(
-                    self.panel.parentWidget(),
+                    self.mainwindow,
                     _("Extract ROI"),
                     _("Do you want to extract images from the defined ROI?"),
                     QW.QMessageBox.Yes | QW.QMessageBox.No,
@@ -805,7 +805,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         for obj in self.panel.objview.get_sel_objects():
             if obj.data.shape != obj0.data.shape:
                 QW.QMessageBox.warning(
-                    self.panel.parentWidget(),
+                    self.mainwindow,
                     APP_NAME,
                     _("Warning:")
                     + "\n"
@@ -851,7 +851,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         if edit:
             options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
-                "line", param, options, self.panel.parent(), add_initial_shape
+                "line", param, options, self.mainwindow, add_initial_shape
             )
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg.set_obj(obj)
@@ -871,7 +871,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         if edit:
             options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
-                "segment", param, options, self.panel.parent(), add_initial_shape
+                "segment", param, options, self.mainwindow, add_initial_shape
             )
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg.set_obj(obj)
@@ -891,7 +891,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         if edit:
             options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
-                "rectangle", param, options, self.panel.parent(), add_initial_shape
+                "rectangle",
+                param,
+                options,
+                self.mainwindow,
+                add_initial_shape,
             )
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg.set_obj(obj)
@@ -917,7 +921,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Distribute images on a grid"""
         title = _("Distribute on grid")
         edit, param = self.init_param(param, sigima_image.GridParam, title)
-        if edit and not param.edit(parent=self.panel.parent()):
+        if edit and not param.edit(parent=self.mainwindow):
             return
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         g_row, g_col, x0, y0, x0_0, y0_0 = 0, 0, 0.0, 0.0, 0.0, 0.0
@@ -980,7 +984,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         with :py:func:`sigima.proc.image.offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
-            dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
+            dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.mainwindow)
             if exec_dialog(dlg):
                 x0, y0, x1, y1 = dlg.get_rect_coords()
                 param = ROI2DParam.create(
@@ -1097,7 +1101,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """
         if param is None:
             param = sigima_image.MorphologyParam()
-            if not param.edit(parent=self.panel.parent()):
+            if not param.edit(parent=self.mainwindow):
                 return
         funcs = [
             sigima_image.white_tophat,

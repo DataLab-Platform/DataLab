@@ -545,9 +545,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         with :py:func:`sigima.proc.signal.offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
-            dlg = signalbaseline.SignalBaselineDialog(
-                obj, parent=self.panel.parentWidget()
-            )
+            dlg = signalbaseline.SignalBaselineDialog(obj, parent=self.mainwindow)
             if exec_dialog(dlg):
                 param = ROI1DParam()
                 param.xmin, param.xmax = dlg.get_x_range()
@@ -572,7 +570,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """
         if param is None:
             param = sigima_signal.AllanVarianceParam()
-            if not param.edit(parent=self.panel.parentWidget()):
+            if not param.edit(parent=self.mainwindow):
                 return
         funcs = [
             sigima_signal.allan_variance,
@@ -598,7 +596,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             param, sigima_signal.PeakDetectionParam, _("Peak detection")
         )
         if edit:
-            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel.parent())
+            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.mainwindow)
             if exec_dialog(dlg):
                 param.threshold = int(dlg.get_threshold() * 100)
                 param.min_dist = dlg.get_min_dist()
@@ -613,7 +611,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
         edit, param = self.init_param(param, sigima_signal.PolynomialFitParam, txt)
-        if not edit or param.edit(self.panel.parentWidget()):
+        if not edit or param.edit(self.mainwindow):
             dlgfunc = fitdialog.polynomial_fit
 
             def polynomialfit(x, y, parent=None):
@@ -626,7 +624,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self, obj: SignalObj, name: str, fitdlgfunc: Callable
     ) -> None:
         """Curve fitting computing sub-method"""
-        output = fitdlgfunc(obj.x, obj.y, parent=self.panel.parent())
+        output = fitdlgfunc(obj.x, obj.y, parent=self.mainwindow)
         if output is not None:
             y, params = output
             params: list[fitdialog.FitParam]
@@ -712,7 +710,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         with :py:func:`sigima.proc.signal.full_width_at_y`"""
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
-            dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.panel.parentWidget())
+            dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.mainwindow)
             if exec_dialog(dlg):
                 param = sigima_signal.OrdinateParam()
                 param.y = dlg.get_y_value()
@@ -728,7 +726,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signalcursor.SignalCursorDialog(
-                obj, cursor_orientation="horizontal", parent=self.panel.parentWidget()
+                obj, cursor_orientation="horizontal", parent=self.mainwindow
             )
             if exec_dialog(dlg):
                 param = sigima_signal.OrdinateParam()
@@ -745,7 +743,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         if param is None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signalcursor.SignalCursorDialog(
-                obj, cursor_orientation="vertical", parent=self.panel.parentWidget()
+                obj, cursor_orientation="vertical", parent=self.mainwindow
             )
             if exec_dialog(dlg):
                 param = sigima_signal.AbscissaParam()
