@@ -461,7 +461,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sigima_signal.histogram,
             _("Histogram"),
-            paramclass=sigima_signal.HistogramParam,
+            paramclass=sigima.params.HistogramParam,
             icon_name="histogram.svg",
         )
         self.register_1_to_0(
