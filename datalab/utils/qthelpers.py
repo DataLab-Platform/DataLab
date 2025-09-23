@@ -18,7 +18,6 @@ import time
 import traceback
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
-from datetime import datetime
 from typing import Any
 
 import guidata
@@ -422,12 +421,23 @@ def grab_save_window(
     """Grab window screenshot and save it"""
     if name is None:
         name = widget.objectName()
-    widget.activateWindow()
-    widget.raise_()
-    QW.QApplication.processEvents()
-    pixmap = widget.grab()
-    suffix = datetime.now().strftime("%Y-%m-%d-%H%M%S") if name.endswith("_") else ""
-    pixmap.save(osp.join(SHOTPATH, f"{name}{suffix}.png"))
+
+    # DataLab-specific logic: determine if timestamp should be added
+    # based on name patterns and DataLab conventions
+    add_timestamp = True
+    if name.endswith("_"):
+        # Name ending with underscore always gets timestamp
+        add_timestamp = True
+    elif name[-1].isdigit() or name.startswith(("s_", "i_")):
+        # DataLab screenshot names or numbered items don't get timestamp
+        add_timestamp = False
+
+    # Use guidata's grab_save_window with DataLab-specific configuration
+    from guidata.qthelpers import grab_save_window as guidata_grab_save_window
+
+    guidata_grab_save_window(
+        widget=widget, name=name, save_dir=SHOTPATH, add_timestamp=add_timestamp
+    )
 
 
 @contextmanager
