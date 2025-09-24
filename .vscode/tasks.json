@@ -613,7 +613,7 @@
                 "sphinx",
                 "build",
                 "doc",
-                "build/doc",
+                "${workspaceFolder}/build/doc",
                 "-b",
                 "html",
                 "-W",
