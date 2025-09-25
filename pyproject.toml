@@ -121,6 +121,11 @@ version = { attr = "datalab.__version__" }
 [tool.pytest.ini_options]
 addopts = "datalab --import-mode=importlib"
 # addopts = "datalab --import-mode=importlib --show-windows"  # Disable offscreen mode
+filterwarnings = [
+    # Ignore specific user warnings from Sigima (expected behavior)
+    "ignore:Multiple crossing points found. Returning first.:UserWarning:sigima.*",
+    "ignore:Multiple crossing points found. Returning last.:UserWarning:sigima.*",
+]
 
 [tool.ruff]
 exclude = [".git", ".vscode", "build", "dist", "*.ipynb"]
