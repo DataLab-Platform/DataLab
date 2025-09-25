@@ -428,7 +428,7 @@ PLOTPY_DEFAULTS = {
         # Images:
         "i/line/style": "SolidLine",
         "i/line/color": "#ffff00",
-        "i/line/width": 1,
+        "i/line/width": 2,
         "i/fill/style": "SolidPattern",
         "i/fill/color": MAIN_BG_COLOR,
         "i/fill/alpha": 0.1,
@@ -439,7 +439,7 @@ PLOTPY_DEFAULTS = {
         "i/symbol/alpha": 1.0,
         "i/sel_line/style": "SolidLine",
         "i/sel_line/color": "#00ff00",
-        "i/sel_line/width": 1,
+        "i/sel_line/width": 2,
         "i/sel_fill/style": "SolidPattern",
         "i/sel_fill/color": MAIN_BG_COLOR,
         "i/sel_fill/alpha": 0.1,
