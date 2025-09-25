@@ -17,6 +17,7 @@ import sigima.proc.image as sigima_image
 import sigima.proc.signal as sigima_signal
 from sigima.tests.data import create_paracetamol_signal
 
+from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
 from datalab.env import execenv
 from datalab.gui.panel.base import BaseDataPanel, PasteMetadataParam
 from datalab.gui.panel.image import ImagePanel
@@ -57,7 +58,9 @@ def __test_metadata_features(panel: BaseDataPanel):
     source_metadata = source_obj.metadata.copy()
 
     # Verify source object has geometry results
-    geometry_keys = [k for k in source_metadata.keys() if k.startswith("Geometry_")]
+    geometry_keys = [
+        k for k, v in source_metadata.items() if GeometryAdapter.match(k, v)
+    ]
     execenv.print(f"  Source object has {len(geometry_keys)} geometry metadata keys")
     assert len(geometry_keys) > 0, "Source object should have geometry results"
 
@@ -70,7 +73,7 @@ def __test_metadata_features(panel: BaseDataPanel):
 
     # Verify target has no geometry metadata before paste
     target_geo_keys_before = [
-        k for k in target_obj.metadata.keys() if k.startswith("Geometry_")
+        k for k, v in target_obj.metadata.items() if GeometryAdapter.match(k, v)
     ]
     execenv.print(
         f"  Target object has {len(target_geo_keys_before)} geometry keys before paste"
@@ -87,7 +90,7 @@ def __test_metadata_features(panel: BaseDataPanel):
     # Verify the paste worked
     target_metadata_after = target_obj.metadata.copy()
     target_geo_keys_after = [
-        k for k in target_metadata_after.keys() if k.startswith("Geometry_")
+        k for k, v in target_metadata_after.items() if GeometryAdapter.match(k, v)
     ]
     execenv.print(
         f"  Target object has {len(target_geo_keys_after)} geometry keys after paste"
@@ -98,16 +101,14 @@ def __test_metadata_features(panel: BaseDataPanel):
         "Target object should have geometry results after paste"
     )
 
-    # Verify that all geometry metadata types are present (array, title, shape)
+    # Verify that all geometry metadata uses the new unified format (_dict)
     for key in target_geo_keys_after:
-        if key.endswith("_array"):
-            base_key = key[:-6]  # Remove "_array"
-            title_key = base_key + "_title"
-            shape_key = base_key + "_shape"
-
-            assert title_key in target_metadata_after, f"Missing title key: {title_key}"
-            assert shape_key in target_metadata_after, f"Missing shape key: {shape_key}"
-            execenv.print(f"  ✓ Complete geometry entry: {base_key}")
+        # Verify the geometry data is valid
+        geometry_data = target_metadata_after[key]
+        assert isinstance(geometry_data, dict), f"Geometry data should be dict: {key}"
+        assert "title" in geometry_data, f"Missing title in geometry data: {key}"
+        assert "coords" in geometry_data, f"Missing coords in geometry data: {key}"
+        execenv.print(f"  ✓ Valid geometry entry: {key}")
 
     execenv.print("  ✓ Metadata copy/paste verification passed")
 

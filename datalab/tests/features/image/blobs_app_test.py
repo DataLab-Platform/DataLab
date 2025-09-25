@@ -31,6 +31,8 @@ def test_blobs():
             (sigima.params.BlobOpenCVParam, "blob_opencv", "BlobOpenCV"),
         ):
             param = paramclass()
+            param.min_sigma = 10.0
+            param.max_sigma = 30.0
             image = create_image(name, data)
             create_adapter_from_object(image).add_label_with_title()
             panel.add_object(image)

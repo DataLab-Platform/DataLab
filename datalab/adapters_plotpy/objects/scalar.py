@@ -187,7 +187,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         Yields:
             Plot item
         """
-        for coords in self.result_adapter.raw_data:
+        for coords in self.result_adapter.result.coords:
             yield self.create_shape_item(coords, fmt, lbl, option)
 
     def create_shape_item(

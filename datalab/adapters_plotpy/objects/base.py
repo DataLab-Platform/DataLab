@@ -25,6 +25,7 @@ from sigima.objects.base import (
     TypeObj,
 )
 
+from datalab.adapters_metadata import GeometryAdapter
 from datalab.adapters_plotpy.base import (
     config_annotated_shape,
     items_to_json,
@@ -134,9 +135,7 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
                         self.obj, fmt=fmt, lbl=lbl, editable=False
                     )
             # Process geometry results from metadata (using GeometryAdapter)
-            elif key.startswith("Geometry_") and key.endswith("_array"):
-                # pylint: disable=import-outside-toplevel
-                from datalab.adapters_metadata import GeometryAdapter
+            elif GeometryAdapter.match(key, _value):
                 from datalab.adapters_plotpy.objects.scalar import GeometryPlotPyAdapter
 
                 try:
