@@ -120,7 +120,7 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         if curobj is not None and Conf.proc.use_image_dims.get(True):
             # Use current image dimensions for new image:
             newparam.height, newparam.width = curobj.data.shape
-            newparam.dtype = ImageDatatypes.from_dtype(curobj.data.dtype)
+            newparam.dtype = ImageDatatypes.from_numpy_dtype(curobj.data.dtype)
         return newparam
 
     def new_object(
