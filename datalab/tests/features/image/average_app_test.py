@@ -30,7 +30,7 @@ def test_image_average() -> None:
         N, size = 10, 256
         dtype = sigima.objects.ImageDatatypes.UINT8
         p = sigima.objects.NewImageParam.create(height=size, width=size, dtype=dtype)
-        data = ctd.create_2d_gaussian(size, np.dtype(dtype.value))
+        data = ctd.create_2d_gaussian(size, dtype.to_numpy_dtype())
         for _idx in range(N):
             obj = sigima.objects.create_image_from_param(p)
             obj.data = data

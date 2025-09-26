@@ -156,14 +156,16 @@ def create_image_gui(
         param.width = 500
     if param.dtype is None:
         param.dtype = ImageDatatypes.UINT16
+    dtype: ImageDatatypes = param.dtype
+    numpy_dtype = dtype.to_numpy_dtype()
     if isinstance(param, Gauss2DParam):
         if param.a is None:
             try:
-                param.a = np.iinfo(param.dtype.value).max / 2.0
+                param.a = np.iinfo(numpy_dtype).max / 2.0
             except ValueError:
                 param.a = 10.0
     elif isinstance(param, BaseProcParam):
-        param.set_from_datatype(param.dtype.value)
+        param.set_from_datatype(numpy_dtype)
 
     if edit:
         if not param.edit(parent=parent):
