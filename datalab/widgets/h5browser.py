@@ -221,7 +221,7 @@ class H5TreeWidget(AbstractTreeWidget):
         importer = H5Importer(fname)
         self.h5importers.append(importer)
         self.add_root_to_tree(importer)
-        for col in range(1, 4):
+        for col in range(4):
             self.resizeColumnToContents(col)
 
     def remove_root(self, fname: str) -> None:
