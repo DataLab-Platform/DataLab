@@ -10,7 +10,6 @@ executed before running any tests.
 
 import os
 import os.path as osp
-import subprocess
 
 import guidata
 import h5py
@@ -23,6 +22,7 @@ import scipy
 import sigima
 import skimage
 from guidata.config import ValidationMode, set_validation_mode
+from guidata.utils.gitreport import format_git_info_for_pytest, get_git_info_for_modules
 from sigima.tests import helpers
 
 import datalab
@@ -90,21 +90,19 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
     for test_path in helpers.get_test_paths():
         test_path = osp.abspath(test_path)
         infolist.append(f"  {test_path}")
-    sco = subprocess.check_output
-    try:
-        gitlist = ["Git information:"]
-        branch = sco(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
-        commit = sco(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
-        message = sco(["git", "log", "-1", "--pretty=%B"], text=True).strip()
-        if len(message.splitlines()) > 1:
-            message = message.splitlines()[0]
-        message = message[:60] + "[…]" if len(message) > 60 else message
-        gitlist.append(f"  Branch: {branch}")
-        gitlist.append(f"  Commit: {commit}")
-        gitlist.append(f"  Message: {message}")
-        infolist.extend(gitlist)
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        pass
+
+    # Git information for all modules using the new gitreport module
+    modules_config = [
+        ("DataLab", datalab, "."),  # DataLab uses current directory
+        ("guidata", guidata, None),
+        ("PlotPy", plotpy, None),
+        ("Sigima", sigima, None),
+    ]
+    git_repos = get_git_info_for_modules(modules_config)
+    git_info_lines = format_git_info_for_pytest(git_repos, "DataLab")
+    if git_info_lines:
+        infolist.extend(git_info_lines)
+
     return infolist
 
 
