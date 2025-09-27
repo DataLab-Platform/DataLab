@@ -19,14 +19,7 @@ from guidata.qthelpers import exec_dialog, qt_app_context
 from packaging.version import Version
 from plotpy.constants import PlotType
 from plotpy.tests.unit.utils import drag_mouse
-from plotpy.tools import CurveStatsTool, ImageStatsTool
-
-try:
-    from plotpy.tools import YRangeCursorTool
-except ImportError:
-    # YRangeCursorTool is not available in PlotPy < 2.8
-    YRangeCursorTool = None
-
+from plotpy.tools import CurveStatsTool, ImageStatsTool, YRangeCursorTool
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
@@ -49,13 +42,9 @@ def simulate_stats_tool(
     plot.set_active_item(item)
     item.unselect()
     if plot_type == PlotType.CURVE:
-        classes = [CurveStatsTool]
-        if YRangeCursorTool is not None:
-            classes.append(YRangeCursorTool)
+        classes = [CurveStatsTool, YRangeCursorTool]
     else:
-        classes = [
-            ImageStatsTool,
-        ]
+        classes = [ImageStatsTool]
     for klass in classes:
         stattool = widget.get_manager().get_tool(klass)
         stattool.activate()

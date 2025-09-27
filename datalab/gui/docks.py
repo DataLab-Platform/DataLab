@@ -45,15 +45,8 @@ from plotpy.tools import (
     RectangularSelectionTool,
     RectZoomTool,
     SelectTool,
+    YRangeCursorTool,
 )
-from skimage import measure
-
-try:
-    from plotpy.tools import YRangeCursorTool  # pylint: disable=ungrouped-imports
-except ImportError:
-    # YRangeCursorTool is not available in PlotPy < 2.8
-    YRangeCursorTool = None
-
 from plotpy.tools.image import get_stats as get_image_stats
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -61,6 +54,7 @@ from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QApplication, QMainWindow
 from sigima.objects import create_signal
 from sigima.tools.signal.pulse import fwhm
+from skimage import measure
 
 from datalab.config import APP_NAME, Conf, _
 
@@ -71,8 +65,7 @@ if TYPE_CHECKING:
 
 
 class CurveStatsToolFunctions:
-    """Statistical functions for `CurveStatsTool`
-    and `YRangeCursorTool` (if available, i.e. PlotPy >= 2.8)"""
+    """Statistical functions for `CurveStatsTool` and `YRangeCursorTool`"""
 
     @classmethod
     def set_labelfuncs(cls, statstool: CurveStatsTool) -> None:
@@ -304,9 +297,8 @@ class DataLabPlotWidget(PlotWidget):
             mgr.register_curve_tools()
             xstatstool = mgr.get_tool(CurveStatsTool)
             CurveStatsToolFunctions.set_labelfuncs(xstatstool)
-            if YRangeCursorTool is not None:
-                ystatstool = mgr.get_tool(YRangeCursorTool)
-                CurveStatsToolFunctions.set_labelfuncs(ystatstool)
+            ystatstool = mgr.get_tool(YRangeCursorTool)
+            CurveStatsToolFunctions.set_labelfuncs(ystatstool)
         else:
             mgr.register_image_tools()
             # Customizing the ImageStatsTool
