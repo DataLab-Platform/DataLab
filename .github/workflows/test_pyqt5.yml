@@ -41,7 +41,7 @@ jobs:
            cd ..
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/guidata.git
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/plotpy.git
-           git clone --depth 1 --branch develop https://github.com/DataLab-Platform/Sigima.git
+           git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git
            cd DataLab
            pip install -e ../guidata
            pip install -e ../plotpy
