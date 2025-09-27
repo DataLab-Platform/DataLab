@@ -13,9 +13,9 @@ from __future__ import annotations
 
 from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
-from sigima.tests.data import get_test_fnames
 
 from datalab.env import execenv
+from datalab.tests import helpers
 from datalab.widgets.h5browser import H5BrowserDialog
 
 
@@ -40,7 +40,7 @@ def create_h5browser_dialog(
 
 def test_h5browser() -> None:
     """Test HDF5 browser"""
-    fnames = get_test_fnames("*.h5")[-2:]
+    fnames = helpers.get_test_fnames("*.h5")[-2:]
     with qt_app_context():
         dlg = create_h5browser_dialog(fnames)
 

@@ -15,10 +15,10 @@ import time
 import numpy as np
 import psutil
 from guidata.qthelpers import qt_app_context
-from sigima.tests.data import get_test_fnames
 from sigima.tests.vistools import view_curves
 
 from datalab.env import execenv
+from datalab.tests import helpers
 from datalab.widgets.h5browser import H5BrowserDialog
 
 
@@ -26,7 +26,7 @@ def test_memoryleak(fname, iterations=20):
     """Memory leak test"""
     with qt_app_context():
         proc = psutil.Process(os.getpid())
-        fname = get_test_fnames(fname)[0]
+        fname = helpers.get_test_fnames(fname)[0]
         dlg = H5BrowserDialog(None)
         memlist = []
         for i in range(iterations):

@@ -11,9 +11,9 @@ from guidata.dataset import update_dataset
 from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
-from sigima.tests.data import get_test_fnames
 
 from datalab.env import execenv
+from datalab.tests import helpers
 from datalab.widgets.textimport import ImageParam, SignalParam, TextImportWizard
 
 
@@ -55,7 +55,7 @@ def test_import_wizard():
             ("signal", "paracetamol.txt", SignalObj),
             ("signal", "spectrum.mca", SignalObj),
         ):
-            path = get_test_fnames(fname)[0]
+            path = helpers.get_test_fnames(fname)[0]
             if not execenv.unattended:
                 # Do not test clipboard in unattended mode, would fail:
                 # - Windows: OleSetClipboard: Failed to set mime data (text/plain)
