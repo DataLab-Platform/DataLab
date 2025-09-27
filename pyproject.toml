@@ -122,6 +122,8 @@ version = { attr = "datalab.__version__" }
 addopts = "datalab --import-mode=importlib"
 # addopts = "datalab --import-mode=importlib --show-windows"  # Disable offscreen mode
 filterwarnings = [
+    # Ignore specific deprecation warnings from external libraries
+    "ignore::DeprecationWarning:pandas.*",
     # Ignore specific user warnings from Sigima (expected behavior)
     "ignore:Multiple crossing points found. Returning first.:UserWarning:sigima.*",
     "ignore:Multiple crossing points found. Returning last.:UserWarning:sigima.*",
