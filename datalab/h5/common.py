@@ -240,8 +240,16 @@ class NodeFactory:
             if name in self.__ignored_datasets:
                 return None
         for cls in self.__thirdparty_classes + self.__generic_classes:
-            if cls.match(dset):
-                return cls
+            try:
+                if cls.match(dset):
+                    return cls
+            except (UnicodeDecodeError, TypeError, ValueError, OSError) as exc:
+                # Skip classes that can't match this dataset due to various issues
+                print(
+                    f"Warning: Class {cls.__name__} can't match dataset "
+                    f"'{dset.name}': {exc}"
+                )
+                continue
         if isinstance(dset, h5py.Group):
             return GroupNode
         return None
@@ -269,14 +277,19 @@ class GroupNode(BaseNode):
     def collect_children(self, node_dict: dict[str, BaseNode]):
         """Construct tree"""
         for dset in self.dset.values():
-            child_cls = NODE_FACTORY.get(dset)
-            if child_cls is not None:
-                child = child_cls(self.h5file, dset.name)
-                node_dict[child.id] = child
-                self.children.append(child)
-                if isinstance(child, GroupNode):
-                    child.collect_children(node_dict)
-                child.collect_attributes()
+            try:
+                child_cls = NODE_FACTORY.get(dset)
+                if child_cls is not None:
+                    child = child_cls(self.h5file, dset.name)
+                    node_dict[child.id] = child
+                    self.children.append(child)
+                    if isinstance(child, GroupNode):
+                        child.collect_children(node_dict)
+                    child.collect_attributes()
+            except (UnicodeDecodeError, TypeError, ValueError, KeyError) as exc:
+                # Skip datasets that can't be processed due to various issues
+                print(f"Warning: Skipping dataset '{dset.name}' due to error: {exc}")
+                continue
 
 
 class RootNode(GroupNode):
