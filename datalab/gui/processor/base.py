@@ -349,6 +349,7 @@ class ComputingFeature:
         comment: comment
         edit: whether to edit the parameters
         obj2_name: name of the second object
+        skip_xarray_compat: whether to skip X-array compatibility check for this feature
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -359,6 +360,7 @@ class ComputingFeature:
     comment: Optional[str] = None
     edit: Optional[bool] = None
     obj2_name: Optional[str] = None
+    skip_xarray_compat: Optional[bool] = None
 
     def __post_init__(self):
         """Validate the function after initialization."""
@@ -496,49 +498,36 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         behavior = Conf.proc.xarray_compat_behavior.get("ask")
         yes_to_all_selected = False
 
-        if behavior == "ask":
-            # In unattended mode (tests), automatically interpolate
-            if env.execenv.unattended:
-                yes_to_all_selected = False
-            else:
-                # Create custom message box with "Yes to All" option
-                msg_box = QW.QMessageBox(self.mainwindow)
-                msg_box.setWindowTitle(_("X-array incompatibility"))
-                msg_box.setText(
-                    _(
-                        "The selected signals have different X arrays.\n\n"
-                        "To perform the computation, signals need to be interpolated "
-                        "to match a common X array.\n\n"
-                        "Do you want to continue with automatic interpolation?"
-                    )
+        if behavior == "ask" and not env.execenv.unattended:
+            # Create custom message box with "Yes to All" option
+            msg_box = QW.QMessageBox(self.mainwindow)
+            msg_box.setWindowTitle(_("X-array incompatibility"))
+            msg_box.setText(
+                _(
+                    "The selected signals have different X arrays.\n\n"
+                    "To perform the computation, signals need to be interpolated "
+                    "to match a common X array.\n\n"
+                    "Do you want to continue with automatic interpolation?"
                 )
-                msg_box.setIcon(QW.QMessageBox.Icon.Question)
+            )
+            msg_box.setIcon(QW.QMessageBox.Icon.Question)
 
-                # Add custom buttons
-                msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
-                yes_all_button = msg_box.addButton(
-                    _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
-                )
-                no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
-                msg_box.setDefaultButton(no_button)
+            # Add custom buttons
+            msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
+            yes_all_button = msg_box.addButton(
+                _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
+            )
+            no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
+            msg_box.setDefaultButton(no_button)
 
-                # Execute dialog and get user choice
-                msg_box.exec()
-                clicked_button = msg_box.clickedButton()
+            # Execute dialog and get user choice
+            msg_box.exec()
+            clicked_button = msg_box.clickedButton()
 
-                if clicked_button == no_button:
-                    return None
-                elif clicked_button == yes_all_button:
-                    yes_to_all_selected = True
-                else:
-                    # User selected "Yes" button
-                    yes_to_all_selected = False
-        elif behavior == "interpolate":
-            # Automatically interpolate without asking
-            yes_to_all_selected = False
-        else:
-            # Unknown behavior - should not happen
-            return None
+            if clicked_button == no_button:
+                return None
+            elif clicked_button == yes_all_button:
+                yes_to_all_selected = True
 
         # Perform interpolation to the smallest X array
         sizes = [len(x) for x in x_arrays]
@@ -1312,6 +1301,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        skip_xarray_compat: bool | None = None,
     ) -> None:
         """Generic processing method: binary operation 1+1 → 1.
 
@@ -1332,6 +1322,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
             edit: Whether to open the parameter editor before execution.
+            skip_xarray_compat: If True, skip x-array compatibility checks
+             (only for signal panels).
 
         .. note::
             With k selected objects:
@@ -1393,7 +1385,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             pair_maps = {}
 
             # Check x-array compatibility for signal processing (pairwise mode)
-            if self._is_signal_panel():
+            if self._is_signal_panel() and not skip_xarray_compat:
                 # Check compatibility between objects from both groups
                 all_pairs = []
                 for src_gid in src_gids:
@@ -1494,7 +1486,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
             # Check x-array compatibility for signal processing (single operand mode)
             orig_obj2 = obj2  # Keep reference to original obj2 for title generation
-            if self._is_signal_panel() and isinstance(obj2, SignalObj):
+            if (
+                self._is_signal_panel()
+                and isinstance(obj2, SignalObj)
+                and not skip_xarray_compat
+            ):
                 signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
                 if signal_objs:
                     # Check compatibility and get potentially interpolated signals
@@ -1702,6 +1698,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         obj2_name: str | None = None,
+        skip_xarray_compat: bool | None = None,
     ) -> ComputingFeature:
         """Register a 2-to-1 processing function.
 
@@ -1717,6 +1714,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
             obj2_name: name of the second object. Defaults to None.
+            skip_xarray_compat: whether to skip X-array compatibility check.
+             Defaults to None. Set to True for operations like interpolation where
+             different X-arrays are expected and desired.
 
         Returns:
             Registered feature.
@@ -1730,6 +1730,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             comment=comment,
             edit=edit,
             obj2_name=obj2_name,
+            skip_xarray_compat=skip_xarray_compat,
         )
         self.add_feature(feature)
         return feature
@@ -1848,6 +1849,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 title=title,
                 comment=comment,
                 edit=edit,
+                skip_xarray_compat=feature.skip_xarray_compat,
             )
         if pattern == "1_to_n":
             params = kwargs.get("params", args[0] if args else [])

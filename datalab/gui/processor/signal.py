@@ -380,6 +380,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             paramclass=sigima.params.InterpolationParam,
             obj2_name=_("signal for X values"),
             icon_name="interpolation.svg",
+            skip_xarray_compat=True,
         )
 
         self.register_1_to_1(
