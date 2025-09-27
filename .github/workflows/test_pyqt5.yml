@@ -37,10 +37,15 @@ jobs:
         python -m pip install ruff pytest
         pip install PyQt5
         if [ "${{ github.ref_name }}" = "develop" ]; then
-           # Install development versions of key dependencies first
-           pip install git+https://github.com/PlotPyStack/guidata.git@develop
-           pip install git+https://github.com/PlotPyStack/plotpy.git@develop
-           pip install git+https://github.com/DataLab-Platform/Sigima.git@develop
+           # Clone and install development versions of key dependencies with editable install
+           cd ..
+           git clone --depth 1 --branch develop https://github.com/PlotPyStack/guidata.git
+           git clone --depth 1 --branch develop https://github.com/PlotPyStack/plotpy.git
+           git clone --depth 1 --branch develop https://github.com/DataLab-Platform/Sigima.git
+           cd DataLab
+           pip install -e ../guidata
+           pip install -e ../plotpy
+           pip install -e ../sigima
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
            # Extract dependencies and save to file, then install
