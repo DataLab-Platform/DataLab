@@ -1030,13 +1030,13 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute all threshold algorithms
         using the following functions:
 
-        - :py:func:`sigima.proc.image.threshold.threshold_isodata`
-        - :py:func:`sigima.proc.image.threshold.threshold_li`
-        - :py:func:`sigima.proc.image.threshold.threshold_mean`
-        - :py:func:`sigima.proc.image.threshold.threshold_minimum`
-        - :py:func:`sigima.proc.image.threshold.threshold_otsu`
-        - :py:func:`sigima.proc.image.threshold.threshold_triangle`
-        - :py:func:`sigima.proc.image.threshold.threshold_yen`
+        - :py:func:`sigima.proc.image.threshold_isodata`
+        - :py:func:`sigima.proc.image.threshold_li`
+        - :py:func:`sigima.proc.image.threshold_mean`
+        - :py:func:`sigima.proc.image.threshold_minimum`
+        - :py:func:`sigima.proc.image.threshold_otsu`
+        - :py:func:`sigima.proc.image.threshold_triangle`
+        - :py:func:`sigima.proc.image.threshold_yen`
         """
         self.compute_multiple_1_to_1(
             [
@@ -1058,10 +1058,10 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute all denoising filters
         using the following functions:
 
-        - :py:func:`sigima.proc.image.restoration.denoise_tv`
-        - :py:func:`sigima.proc.image.restoration.denoise_bilateral`
-        - :py:func:`sigima.proc.image.restoration.denoise_wavelet`
-        - :py:func:`sigima.proc.image.restoration.denoise_tophat`
+        - :py:func:`sigima.proc.image.denoise_tv`
+        - :py:func:`sigima.proc.image.denoise_bilateral`
+        - :py:func:`sigima.proc.image.denoise_wavelet`
+        - :py:func:`sigima.proc.image.denoise_tophat`
         """
         if params is not None:
             assert len(params) == 4, "Wrong number of parameters (4 expected)"
@@ -1092,12 +1092,12 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute all morphology filters
         using the following functions:
 
-        - :py:func:`sigima.proc.image.morphology.white_tophat`
-        - :py:func:`sigima.proc.image.morphology.black_tophat`
-        - :py:func:`sigima.proc.image.morphology.erosion`
-        - :py:func:`sigima.proc.image.morphology.dilation`
-        - :py:func:`sigima.proc.image.morphology.opening`
-        - :py:func:`sigima.proc.image.morphology.closing`
+        - :py:func:`sigima.proc.image.white_tophat`
+        - :py:func:`sigima.proc.image.black_tophat`
+        - :py:func:`sigima.proc.image.erosion`
+        - :py:func:`sigima.proc.image.dilation`
+        - :py:func:`sigima.proc.image.opening`
+        - :py:func:`sigima.proc.image.closing`
         """
         if param is None:
             param = sigima_image.MorphologyParam()
@@ -1119,21 +1119,21 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
 
         This function calls the following edge detection algorithms:
 
-        - :py:func:`sigima.proc.image.edges.canny`
-        - :py:func:`sigima.proc.image.edges.farid`
-        - :py:func:`sigima.proc.image.edges.farid_h`
-        - :py:func:`sigima.proc.image.edges.farid_v`
-        - :py:func:`sigima.proc.image.edges.laplace`
-        - :py:func:`sigima.proc.image.edges.prewitt`
-        - :py:func:`sigima.proc.image.edges.prewitt_h`
-        - :py:func:`sigima.proc.image.edges.prewitt_v`
-        - :py:func:`sigima.proc.image.edges.roberts`
-        - :py:func:`sigima.proc.image.edges.scharr`
-        - :py:func:`sigima.proc.image.edges.scharr_h`
-        - :py:func:`sigima.proc.image.edges.scharr_v`
-        - :py:func:`sigima.proc.image.edges.sobel`
-        - :py:func:`sigima.proc.image.edges.sobel_h`
-        - :py:func:`sigima.proc.image.edges.sobel_v`
+        - :py:func:`sigima.proc.image.canny`
+        - :py:func:`sigima.proc.image.farid`
+        - :py:func:`sigima.proc.image.farid_h`
+        - :py:func:`sigima.proc.image.farid_v`
+        - :py:func:`sigima.proc.image.laplace`
+        - :py:func:`sigima.proc.image.prewitt`
+        - :py:func:`sigima.proc.image.prewitt_h`
+        - :py:func:`sigima.proc.image.prewitt_v`
+        - :py:func:`sigima.proc.image.roberts`
+        - :py:func:`sigima.proc.image.scharr`
+        - :py:func:`sigima.proc.image.scharr_h`
+        - :py:func:`sigima.proc.image.scharr_v`
+        - :py:func:`sigima.proc.image.sobel`
+        - :py:func:`sigima.proc.image.sobel_h`
+        - :py:func:`sigima.proc.image.sobel_v`
         """
         funcs = [
             sigima_image.canny,
