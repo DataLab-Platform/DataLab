@@ -776,7 +776,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             except (KeyError, ValueError, IndexError, TypeError):
                 # If we can't process this geometry result, leave it as is
                 continue
-                continue
 
         # Handle table results (new unified format)
         table_keys = [

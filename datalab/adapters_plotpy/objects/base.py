@@ -32,6 +32,7 @@ from datalab.adapters_plotpy.base import (
     json_to_items,
     set_plot_item_editable,
 )
+from datalab.adapters_plotpy.objects.scalar import GeometryPlotPyAdapter
 from datalab.config import Conf
 
 if TYPE_CHECKING:
@@ -136,8 +137,6 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
                     )
             # Process geometry results from metadata (using GeometryAdapter)
             elif GeometryAdapter.match(key, _value):
-                from datalab.adapters_plotpy.objects.scalar import GeometryPlotPyAdapter
-
                 try:
                     geomadapter = GeometryAdapter.from_metadata_entry(self.obj, key)
                     plot_adapter = GeometryPlotPyAdapter(geomadapter)

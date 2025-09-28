@@ -22,6 +22,7 @@ from typing import Any
 
 import guidata
 from guidata.configtools import get_icon
+from guidata.qthelpers import grab_save_window as guidata_grab_save_window
 from guidata.utils.misc import to_string
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -433,8 +434,6 @@ def grab_save_window(
         add_timestamp = False
 
     # Use guidata's grab_save_window with DataLab-specific configuration
-    from guidata.qthelpers import grab_save_window as guidata_grab_save_window
-
     guidata_grab_save_window(
         widget=widget, name=name, save_dir=SHOTPATH, add_timestamp=add_timestamp
     )

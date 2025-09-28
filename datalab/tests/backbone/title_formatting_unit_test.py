@@ -16,6 +16,7 @@ This test verifies:
 
 from __future__ import annotations
 
+import numpy as np
 import pytest
 from sigima import create_image, create_signal
 from sigima.proc.base import dst_1_to_1, dst_2_to_1, dst_n_to_1
@@ -66,9 +67,6 @@ class TestDataLabTitleFormatting:
         original_formatter = get_default_title_formatter()
         try:
             set_default_title_formatter(PlaceholderTitleFormatter())
-
-            # Create test image
-            import numpy as np
 
             data = np.random.rand(10, 10)
             image = create_image("Test Image", data=data)
@@ -245,8 +243,6 @@ class TestDataLabCompatibilityPatterns:
 
     def test_datalab_object_naming_patterns(self):
         """Test compatibility with DataLab's object naming conventions."""
-        import numpy as np
-
         formatter = PlaceholderTitleFormatter()
 
         # Create objects that simulate DataLab naming patterns

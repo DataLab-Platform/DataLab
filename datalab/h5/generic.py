@@ -41,7 +41,7 @@ def safe_decode_bytes(data, fallback="<binary data>"):
     # Final fallback with replacement characters
     try:
         return data.decode("utf-8", errors="replace")
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         return fallback
 
 
@@ -78,7 +78,7 @@ def _try_alternative_read(dset, fallback_data):
     for strategy in strategies:
         try:
             return strategy(dset)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             continue
 
     return fallback_data
@@ -108,7 +108,7 @@ def _handle_encoding_issues(data):
     if isinstance(data, np.ndarray):
         if data.dtype.kind in ["S", "a", "U"]:  # String arrays
             return _format_string_array(data)
-        elif data.dtype.names:  # Compound data
+        if data.dtype.names:  # Compound data
             return _format_compound_data(data)
 
     return f"<data with encoding issues: {type(data)}>"
@@ -119,16 +119,15 @@ def _format_string_array(data):
     try:
         if data.size == 1:
             return safe_decode_bytes(data.item())
-        else:
-            # Show first few elements
-            items = []
-            for i, item in enumerate(data.flat):
-                if i >= 5:
-                    items.append("...")
-                    break
-                items.append(safe_decode_bytes(item))
-            return f"[{', '.join(items)}]"
-    except Exception:
+        # Show first few elements
+        items = []
+        for i, item in enumerate(data.flat):
+            if i >= 5:
+                items.append("...")
+                break
+            items.append(safe_decode_bytes(item))
+        return f"[{', '.join(items)}]"
+    except Exception:  # pylint: disable=broad-except
         return f"<string array: {data.shape} {data.dtype}>"
 
 
@@ -149,7 +148,7 @@ def _format_compound_data(data):
             result_parts.append(f"{field_name}: {field_value}")
 
         return f"({', '.join(result_parts)})"
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         return f"<compound data: {data.dtype}>"
 
 
@@ -186,7 +185,7 @@ class BaseGenericNode(common.BaseNode):
                 return "unknown"
             try:
                 return str(self.data.dtype)
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 return "unknown"
 
     @property
@@ -230,7 +229,7 @@ class GenericTextNode(BaseGenericNode):
             try:
                 dtype = dset.dtype
                 return dtype.kind in ["S", "a", "U"] or "str" in str(dtype)
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 return False
         return isinstance(data, bytes) or utils.is_supported_str_dtype(data)
 
@@ -258,14 +257,13 @@ def _handle_text_encoding_issues(data):
     """Handle encoding issues specific to text nodes."""
     if isinstance(data, bytes):
         return safe_decode_bytes(data)
-    elif isinstance(data, np.ndarray) and data.dtype.kind in ["S", "a"]:
+    if isinstance(data, np.ndarray) and data.dtype.kind in ["S", "a"]:
         try:
             if data.size == 1:
                 return safe_decode_bytes(data.item())
-            else:
-                decoded = [safe_decode_bytes(item) for item in data.flat]
-                return str(decoded[:10])  # Show first 10 elements
-        except Exception:
+            decoded = [safe_decode_bytes(item) for item in data.flat]
+            return str(decoded[:10])  # Show first 10 elements
+        except Exception:  # pylint: disable=broad-except
             return f"<string data: {data.shape}>"
     return "<text with encoding issues>"
 
@@ -307,18 +305,18 @@ class GenericArrayNode(BaseGenericNode):
     def _can_convert_compound_to_numeric(cls, data):
         """Check if compound data can be converted to a supported numeric array."""
         try:
-            numeric_array = cls._extract_numeric_from_compound(data)
+            numeric_array = cls.extract_numeric_from_compound(data)
             return (
                 numeric_array is not None
                 and utils.is_supported_num_dtype(numeric_array)
                 and isinstance(numeric_array, np.ndarray)
                 and len(numeric_array.shape) in (1, 2)
             )
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return False
 
     @classmethod
-    def _extract_numeric_from_compound(cls, data):
+    def extract_numeric_from_compound(cls, data):
         """Extract a numeric array from compound data."""
         if not (hasattr(data.dtype, "names") and data.dtype.names):
             return None
@@ -359,10 +357,9 @@ class GenericArrayNode(BaseGenericNode):
                 # Stack along new axis to create 2D array
                 return np.stack(field_data, axis=-1)
 
-            return None  # Can't easily convert mixed shapes
-
-        except Exception:
-            return None
+        except Exception:  # pylint: disable=broad-except
+            pass
+        return None
 
     @classmethod
     def _has_meaningful_string_data(cls, field_data):
@@ -382,7 +379,7 @@ class GenericArrayNode(BaseGenericNode):
                 # If most entries have meaningful content, preserve it
                 return non_empty_count / field_data.size > 0.5
             return True  # Default to preserving unknown string data
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return True  # Conservative: preserve if we can't determine
 
     @property
@@ -397,7 +394,7 @@ class GenericArrayNode(BaseGenericNode):
             and hasattr(raw_data.dtype, "names")
             and raw_data.dtype.names is not None
         ):
-            numeric_data = self._extract_numeric_from_compound(raw_data)
+            numeric_data = self.extract_numeric_from_compound(raw_data)
             if numeric_data is not None:
                 return numeric_data
 
@@ -468,7 +465,7 @@ class GenericCompoundNode(BaseGenericNode):
             # Try to match based on dtype if we can't read the data
             try:
                 return dset.dtype.names is not None
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 return False
 
         # Check if it's compound data (structured array)
@@ -491,7 +488,7 @@ class GenericCompoundNode(BaseGenericNode):
         """Check if compound data can be converted to a numeric array."""
         try:
             # Try to extract numeric fields and create a pure numeric array
-            numeric_array = cls._extract_numeric_array(data)
+            numeric_array = cls.extract_numeric_array(data)
             if numeric_array is None:
                 return False
 
@@ -501,14 +498,14 @@ class GenericCompoundNode(BaseGenericNode):
                 and isinstance(numeric_array, np.ndarray)
                 and len(numeric_array.shape) in (1, 2)
             )
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return False
 
     @classmethod
-    def _extract_numeric_array(cls, data):
+    def extract_numeric_array(cls, data):
         """Try to extract a pure numeric array from compound data."""
         # Use the same logic as GenericArrayNode
-        return GenericArrayNode._extract_numeric_from_compound(data)
+        return GenericArrayNode.extract_numeric_from_compound(data)
 
     @property
     def dtype_str(self):
@@ -522,7 +519,7 @@ class GenericCompoundNode(BaseGenericNode):
                     field_info.append(f"{name}: {field_dtype}")
                 return f"compound({', '.join(field_info)})"
             return str(dtype)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return super().dtype_str
 
     @property
@@ -530,21 +527,18 @@ class GenericCompoundNode(BaseGenericNode):
         """Return formatted compound data."""
         if self.data is None:
             return "<unreadable compound data>"
-
         try:
             return self._format_compound_data()
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return f"<compound data: {self.data.shape} records>"
 
     def _format_compound_data(self):
         """Format compound data for display."""
         if not (hasattr(self.data.dtype, "names") and self.data.dtype.names):
             return super().text
-
         if self.data.size == 1:
             return self._format_single_record()
-        else:
-            return self._format_multiple_records()
+        return self._format_multiple_records()
 
     def _format_single_record(self):
         """Format a single compound record."""

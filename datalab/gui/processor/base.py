@@ -526,7 +526,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
             if clicked_button == no_button:
                 return None
-            elif clicked_button == yes_all_button:
+            if clicked_button == yes_all_button:
                 yes_to_all_selected = True
 
         # Perform interpolation to the smallest X array
