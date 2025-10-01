@@ -70,7 +70,7 @@ def metadata_to_html(metadata: dict[str, Any]) -> str:
         if not key.startswith("_"):
             vlines = str(value).splitlines()
             if vlines:
-                text = f"<b>{key}:</b> {vlines[0]}"
+                text = f"<b>{key}:</b> {vlines[0][:100]}"
                 if len(vlines) > 1:
                     text += " [...]"
                 textlines.append(text)
