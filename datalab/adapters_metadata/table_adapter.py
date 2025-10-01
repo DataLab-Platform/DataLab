@@ -63,15 +63,6 @@ class TableAdapter(BaseResultAdapter):
         """
         return self.result.title
 
-    @property
-    def labels(self) -> list[str]:
-        """Get the column labels.
-
-        Returns:
-            Column labels
-        """
-        return list(self.result.labels)
-
     def get_unique_roi_indices(self) -> list[int]:
         """Get unique ROI indices present in the data.
 
