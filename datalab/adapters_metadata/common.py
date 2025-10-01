@@ -31,7 +31,6 @@ class ResultData:
 
     # We now store adapted objects from the new architecture
     results: list[BaseResultAdapter] | None = None
-    xlabels: list[str] | None = None
     ylabels: list[str] | None = None
 
     def __bool__(self) -> bool:
@@ -50,14 +49,17 @@ class ResultData:
         """Return headers of results"""
         if not self.results:
             raise ValueError("No result available")
-        return self.results[0].headers
+        # Return the intersection of all headers
+        headers = set(self.results[0].headers)
+        if len(self.results) > 1:
+            for adapter in self.results[1:]:
+                headers.intersection_update(adapter.headers)
+        return list(headers)
 
     def __post_init__(self):
         """Check and initialize fields"""
         if self.results is None:
             self.results = []
-        if self.xlabels is None:
-            self.xlabels = []
         if self.ylabels is None:
             self.ylabels = []
 
@@ -72,10 +74,8 @@ class ResultData:
         if self.results:
             if adapter.category != self.results[0].category:
                 raise ValueError("Incompatible adapter category")
-            if list(adapter.headers) != self.xlabels:
+            if len(set(self.headers).intersection(set(adapter.headers))) == 0:
                 raise ValueError("Incompatible adapter headers")
-        else:
-            self.xlabels = list(adapter.headers)
         self.results.append(adapter)
         df = adapter.to_dataframe()
         for i_row_res in range(len(df)):
