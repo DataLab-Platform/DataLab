@@ -53,7 +53,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QApplication, QMainWindow
 from sigima.objects import create_signal
-from sigima.tools.signal.pulse import fwhm
+from sigima.tools.signal import pulse
 from skimage import measure
 
 from datalab.config import APP_NAME, Conf, _
@@ -127,9 +127,9 @@ class CurveStatsToolFunctions:
         """Return FWHM information string"""
         try:
             with warnings.catch_warnings(record=True) as w:
-                x0, _y0, x1, _y1 = fwhm(x, y, "zero-crossing")
+                x0, _y0, x1, _y1 = pulse.fwhm(x, y, "zero-crossing")
                 wstr = " ⚠️" if w else ""
-        except (ValueError, ZeroDivisionError):
+        except (ValueError, ZeroDivisionError, pulse.InvalidSignalError):
             return "🛑"
         return f"{x1 - x0:g}{wstr}"
 
