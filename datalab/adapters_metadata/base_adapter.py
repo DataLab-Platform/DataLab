@@ -126,16 +126,6 @@ class BaseResultAdapter(ABC):
             return sorted(df["roi_index"].unique().tolist())
         return [] if len(df) == 0 else [0]  # Default ROI index for result data
 
-    @property
-    def label_contents(self) -> tuple[tuple[int, str], ...]:
-        """Return label contents for compatibility.
-
-        Returns:
-            Tuple of couples of (index, text) where index is the column
-            and text is the associated label
-        """
-        return tuple(enumerate(self.headers))
-
     def add_to(self, obj: SignalObj | ImageObj) -> None:
         """Add result to object metadata.
 
