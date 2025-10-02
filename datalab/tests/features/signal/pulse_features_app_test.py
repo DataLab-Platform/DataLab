@@ -21,6 +21,7 @@ from sigima.tests.signal.pulse_unit_test import (
 )
 
 from datalab.adapters_metadata import TableAdapter
+from datalab.env import execenv
 from datalab.gui.panel.signal import SignalPanel
 from datalab.tests import datalab_test_app_context
 
@@ -50,6 +51,7 @@ def __add_signal_and_check_pulse_features(
 
 def test_pulse_features_app():
     """Pulse features application test."""
+    execenv.unattended = True
     with datalab_test_app_context(console=False) as win:
         panel = win.signalpanel
 
@@ -85,8 +87,11 @@ def test_pulse_features_app():
         panel.objview.select_objects([s1, s2])
         panel.show_results()
 
-        # Define a ROI
-        roi = create_signal_roi([[0.650227, 5.1], [1.1596, 9.09509]])
+        # Define a ROI, just to test that it works (⚠️ it makes no sense here):
+        # it tests that the "comparison rows" features work correctly with ROIs.
+        # TODO: Maybe we should test this part in a more appropriate place, like in
+        # a test for the "statistics" feature.
+        roi = create_signal_roi([[0.650227, 5.8], [1.1596, 9.09509]])
         s1.roi = roi
         s2.roi = roi.copy()
         panel.processor.run_feature("extract_pulse_features")
