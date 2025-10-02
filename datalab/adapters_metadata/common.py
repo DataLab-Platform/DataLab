@@ -79,7 +79,7 @@ class ResultData:
         self.results.append(adapter)
         df = adapter.to_dataframe()
         for i_row_res in range(len(df)):
-            ylabel = f"{adapter.title}({get_short_id(obj)})"
+            ylabel = f"{adapter.name}({get_short_id(obj)})"
             if "roi_index" in df.columns:
                 i_roi = int(df.iloc[i_row_res]["roi_index"])
                 roititle = ""

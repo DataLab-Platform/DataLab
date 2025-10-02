@@ -28,7 +28,6 @@ class TableAdapter(BaseResultAdapter):
 
     # Class constants for metadata storage
     META_PREFIX: ClassVar[str] = "Table_"
-    SUFFIX: ClassVar[str] = "_data"
 
     def __init__(self, table: TableResult) -> None:
         super().__init__(table)

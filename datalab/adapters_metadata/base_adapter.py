@@ -30,7 +30,7 @@ class BaseResultAdapter(ABC):
 
     # Class constants for metadata storage - to be overridden by subclasses
     META_PREFIX: ClassVar[str] = ""
-    SUFFIX: ClassVar[str] = ""
+    META_SUFFIX: ClassVar[str] = "_dict"
 
     def __init__(self, result: TableResult | GeometryResult) -> None:
         self.result = result
@@ -67,6 +67,16 @@ class BaseResultAdapter(ABC):
             Title
         """
         return self.result.title
+
+    @property
+    def name(self) -> str:
+        """Get the unique identifier name for this result.
+
+        Returns:
+            The string value of the kind attribute, which serves as a unique
+             name identifier for this result type.
+        """
+        return self.result.name
 
     @property
     @abstractmethod
@@ -126,15 +136,22 @@ class BaseResultAdapter(ABC):
             return sorted(df["roi_index"].unique().tolist())
         return [] if len(df) == 0 else [0]  # Default ROI index for result data
 
+    @property
+    def metadata_key(self) -> str:
+        """Get the metadata key used to store this result.
+
+        Returns:
+            Metadata key
+        """
+        return f"{self.META_PREFIX}{self.title}{self.META_SUFFIX}"
+
     def add_to(self, obj: SignalObj | ImageObj) -> None:
         """Add result to object metadata.
 
         Args:
             obj: Signal or image object
         """
-        # Store the result as a single dictionary
-        metadata_key = f"{self.META_PREFIX}{self.title}{self.SUFFIX}"
-        obj.metadata[metadata_key] = self.result.to_dict()
+        obj.metadata[self.metadata_key] = self.result.to_dict()
 
     def remove_from(self, obj: SignalObj | ImageObj) -> None:
         """Remove result from object metadata.
@@ -142,9 +159,7 @@ class BaseResultAdapter(ABC):
         Args:
             obj: Signal or image object
         """
-        # Remove the single metadata key
-        metadata_key = f"{self.META_PREFIX}{self.title}{self.SUFFIX}"
-        obj.metadata.pop(metadata_key, None)
+        obj.metadata.pop(self.metadata_key, None)
 
     @classmethod
     def remove_all_from(cls, obj: SignalObj | ImageObj) -> None:
@@ -168,7 +183,7 @@ class BaseResultAdapter(ABC):
         Returns:
             True if the key matches the pattern
         """
-        return key.startswith(cls.META_PREFIX) and key.endswith(cls.SUFFIX)
+        return key.startswith(cls.META_PREFIX) and key.endswith(cls.META_SUFFIX)
 
     @classmethod
     @abstractmethod

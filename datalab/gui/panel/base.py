@@ -745,66 +745,32 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Args:
             prefix: Prefix to add to result titles
         """
-        # Handle geometry results (new unified format)
-        geometry_keys = [
-            k
-            for k, v in self.__metadata_clipboard.items()
-            if GeometryAdapter.match(k, v)
-        ]
+        for aclass in (GeometryAdapter, TableAdapter):
+            result_keys = [
+                k for k, v in self.__metadata_clipboard.items() if aclass.match(k, v)
+            ]
+            for dict_key in result_keys:
+                try:
+                    # Get the result data
+                    result_data = self.__metadata_clipboard[dict_key]
 
-        for dict_key in geometry_keys:
-            try:
-                # Get the geometry data
-                geometry_data = self.__metadata_clipboard[dict_key]
+                    # Update the title in the result data
+                    if isinstance(result_data, dict) and "title" in result_data:
+                        result_data = result_data.copy()  # Don't modify original
+                        result_data["title"] = prefix + result_data["title"]
 
-                # Update the title in the geometry data
-                if isinstance(geometry_data, dict) and "title" in geometry_data:
-                    new_title = prefix + geometry_data["title"]
-                    geometry_data = geometry_data.copy()  # Don't modify original
-                    geometry_data["title"] = new_title
+                        # Create new key with updated title
+                        new_dict_key = dict_key.replace(
+                            aclass.META_PREFIX, aclass.META_PREFIX + prefix, 1
+                        )
 
-                    # Create new key with updated title
-                    new_dict_key = (
-                        f"{GeometryAdapter.META_PREFIX}{new_title}"
-                        f"{GeometryAdapter.SUFFIX}"
-                    )
+                        # Remove old entry and add new one
+                        del self.__metadata_clipboard[dict_key]
+                        self.__metadata_clipboard[new_dict_key] = result_data
 
-                    # Remove old entry and add new one
-                    del self.__metadata_clipboard[dict_key]
-                    self.__metadata_clipboard[new_dict_key] = geometry_data
-
-            except (KeyError, ValueError, IndexError, TypeError):
-                # If we can't process this geometry result, leave it as is
-                continue
-
-        # Handle table results (new unified format)
-        table_keys = [
-            k for k, v in self.__metadata_clipboard.items() if TableAdapter.match(k, v)
-        ]
-
-        for data_key in table_keys:
-            try:
-                # Get the table data
-                table_data = self.__metadata_clipboard[data_key]
-
-                # Update the title in the table data
-                if isinstance(table_data, dict) and "title" in table_data:
-                    new_title = prefix + table_data["title"]
-                    table_data = table_data.copy()  # Don't modify original
-                    table_data["title"] = new_title
-
-                    # Create new key with updated title
-                    new_data_key = (
-                        f"{TableAdapter.META_PREFIX}{new_title}{TableAdapter.SUFFIX}"
-                    )
-
-                    # Remove old entry and add new one
-                    del self.__metadata_clipboard[data_key]
-                    self.__metadata_clipboard[new_data_key] = table_data
-
-            except (KeyError, ValueError, IndexError, TypeError):
-                # If we can't process this table result, leave it as is
-                continue
+                except (KeyError, ValueError, IndexError, TypeError):
+                    # If we can't process this result, leave it as is
+                    continue
 
     def paste_metadata(self, param: PasteMetadataParam | None = None) -> None:
         """Paste metadata to selected object(s)"""

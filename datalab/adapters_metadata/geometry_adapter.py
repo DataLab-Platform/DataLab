@@ -27,7 +27,6 @@ class GeometryAdapter(BaseResultAdapter):
 
     # Class constants for metadata storage
     META_PREFIX: ClassVar[str] = "Geometry_"
-    SUFFIX: ClassVar[str] = "_dict"
 
     def __init__(self, geometry: GeometryResult) -> None:
         super().__init__(geometry)
