@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 import sigima.objects
 import sigima.params
-import sigima.proc.image as sigima_image
+import sigima.proc.image as sipi
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 from sigima.enums import BorderMode
@@ -130,7 +130,7 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = sigima_image.RotateParam.create(angle=5.0)
+    param = sipi.RotateParam.create(angle=5.0)
     for boundary in BorderMode:
         if boundary is BorderMode.MIRROR:
             continue

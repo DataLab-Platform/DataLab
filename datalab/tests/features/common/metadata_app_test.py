@@ -13,8 +13,8 @@ Metadata application test:
 
 import sigima.objects
 import sigima.params
-import sigima.proc.image as sigima_image
-import sigima.proc.signal as sigima_signal
+import sigima.proc.image as sipi
+import sigima.proc.signal as sips
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
@@ -29,17 +29,17 @@ from datalab.tests.features.image.roi_app_test import create_test_image_with_roi
 def __run_signal_computations(panel: SignalPanel):
     """Test all signal features related to ROI"""
     execenv.print("  Signal features")
-    panel.processor.run_feature(sigima_signal.fwhm, sigima.params.FWHMParam())
-    panel.processor.run_feature(sigima_signal.fw1e2)
+    panel.processor.run_feature(sips.fwhm, sigima.params.FWHMParam())
+    panel.processor.run_feature(sips.fw1e2)
 
 
 def __run_image_computations(panel: ImagePanel):
     """Test all image features related to ROI"""
     execenv.print("  Image features")
-    panel.processor.run_feature(sigima_image.centroid)
-    panel.processor.run_feature(sigima_image.enclosing_circle)
+    panel.processor.run_feature(sipi.centroid)
+    panel.processor.run_feature(sipi.enclosing_circle)
     panel.processor.run_feature(
-        sigima_image.peak_detection, sigima.params.Peak2DDetectionParam()
+        sipi.peak_detection, sigima.params.Peak2DDetectionParam()
     )
 
 

@@ -13,7 +13,7 @@ covered by other tests.
 import os
 
 import sigima.params
-import sigima.proc.signal as sigima_signal
+import sigima.proc.signal as sips
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.env import execenv
@@ -54,8 +54,8 @@ def test_main_app():
         # Add signals to signal panel
         sig1 = create_paracetamol_signal(500)
         panel.add_object(sig1)
-        panel.processor.run_feature(sigima_signal.derivative)
-        panel.processor.run_feature(sigima_signal.wiener)
+        panel.processor.run_feature(sips.derivative)
+        panel.processor.run_feature(sips.wiener)
 
         # Get object titles
         titles = win.get_object_titles()

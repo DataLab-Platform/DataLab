@@ -17,7 +17,7 @@ import os.path as osp
 from typing import TYPE_CHECKING, Any
 
 import sigima.params
-import sigima.proc.signal as sigima_signal
+import sigima.proc.signal as sips
 from sigima.tests.data import (
     create_2dstep_image,
     create_paracetamol_signal,
@@ -51,9 +51,9 @@ def __misc_unit_function(win: DLMainWindow) -> None:
 
     sig = create_paracetamol_signal()
     panel.add_object(sig)
-    panel.processor.run_feature(sigima_signal.derivative)
+    panel.processor.run_feature(sips.derivative)
     panel.processor.run_feature(
-        sigima_signal.moving_average, sigima.params.MovingAverageParam.create(n=5)
+        sips.moving_average, sigima.params.MovingAverageParam.create(n=5)
     )
 
     __print_test_result("`SimpleObjectTree.__str__` method", objview)

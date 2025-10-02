@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import numpy as np
 import sigima.objects
-import sigima.proc.signal as sigima_signal
+import sigima.proc.signal as sips
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests.data import create_paracetamol_signal
 from sigima.tests.vistools import view_curves
@@ -44,7 +44,7 @@ def test_signal_baseline_dialog() -> None:
         if exec_dialog(dlg):
             param = sigima.objects.ROI1DParam()
             param.xmin, param.xmax = dlg.get_x_range()
-            s2 = sigima_signal.offset_correction(s1, param)
+            s2 = sips.offset_correction(s1, param)
             view_curves([s1, s2], title="Signal offset correction")
 
 

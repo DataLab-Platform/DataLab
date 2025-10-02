@@ -1775,25 +1775,25 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         .. code-block:: python
 
-            import sigima.proc.signal as sigima_signal
+            import sigima.proc.signal as sips
             import sigima.params
 
             proc = win.signalpanel.processor  # where `win` is DataLab's main window
 
             # For patterns `1_to_1`, `1_to_0`, `n_to_1`:
-            proc.run_feature(sigima_signal.normalize)
+            proc.run_feature(sips.normalize)
             param = sigima.params.MovingAverageParam(n=3)
-            proc.run_feature(sigima_signal.moving_average, param)
+            proc.run_feature(sips.moving_average, param)
             proc.run_feature(computation_function, param, edit=False)
 
             # For pattern `2_to_1`:
-            proc.run_feature(sigima_signal.difference, obj2)
+            proc.run_feature(sips.difference, obj2)
             param = sigima.params.InterpolationParam(method="cubic")
-            proc.run_feature(sigima_signal.interpolation, obj2, param)
+            proc.run_feature(sips.interpolation, obj2, param)
 
             # For pattern `1_to_n`:
             params = roi.to_params(obj)
-            proc.run_feature(sigima_signal.extract_roi, params=params)
+            proc.run_feature(sips.extract_roi, params=params)
 
         Args:
             key: The key to look up in the registry. It can be a string, a callable,

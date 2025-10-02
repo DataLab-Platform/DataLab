@@ -11,7 +11,6 @@ import numpy as np
 import sigima.objects as sio
 import sigima.params as sip
 import sigima.proc.image as sipi
-from sigima.proc.transformations import transformer
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
@@ -58,15 +57,15 @@ def __get_expected_geometry_result(
     xc, yc = (300.0, 300.0)
 
     if operation == "rotate90":
-        exp_geom = transformer.rotate(orig_geom, -np.pi / 2, (xc, yc))
+        exp_geom = sipi.transformer.rotate(orig_geom, -np.pi / 2, (xc, yc))
     elif operation == "rotate270":
-        exp_geom = transformer.rotate(orig_geom, np.pi / 2, (xc, yc))
+        exp_geom = sipi.transformer.rotate(orig_geom, np.pi / 2, (xc, yc))
     elif operation == "fliph":
-        exp_geom = transformer.fliph(orig_geom, xc)
+        exp_geom = sipi.transformer.fliph(orig_geom, xc)
     elif operation == "flipv":
-        exp_geom = transformer.flipv(orig_geom, yc)
+        exp_geom = sipi.transformer.flipv(orig_geom, yc)
     elif operation == "transpose":
-        exp_geom = transformer.transpose(orig_geom)
+        exp_geom = sipi.transformer.transpose(orig_geom)
     elif operation == "resize":
         # Resize changes pixel resolution but keeps physical coordinates unchanged
         exp_geom = orig_geom
