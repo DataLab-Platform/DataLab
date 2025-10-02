@@ -7,7 +7,13 @@ Pulse features application test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from sigima.objects import SignalObj, TableKind, TableResult, create_signal_from_param
+from sigima.objects import (
+    SignalObj,
+    TableKind,
+    TableResult,
+    create_signal_from_param,
+    create_signal_roi,
+)
 from sigima.tests.helpers import check_scalar_result
 from sigima.tests.signal.pulse_unit_test import (
     create_test_square_params,
@@ -15,6 +21,7 @@ from sigima.tests.signal.pulse_unit_test import (
 )
 
 from datalab.adapters_metadata import TableAdapter
+from datalab.gui.panel.signal import SignalPanel
 from datalab.tests import datalab_test_app_context
 
 
@@ -27,6 +34,20 @@ def __check_table(obj: SignalObj) -> TableResult:
     return table
 
 
+def __add_signal_and_check_pulse_features(
+    panel: SignalPanel, obj: SignalObj, assertions: dict[str, float]
+) -> None:
+    """Add signal to the application and check that pulse features are extracted."""
+    panel.add_object(obj)
+    panel.processor.run_feature("extract_pulse_features")
+    table = __check_table(obj)
+    for name, expected_value in assertions.items():
+        if isinstance(expected_value, str):
+            assert table[name][0] == expected_value
+        else:
+            check_scalar_result(name, table[name][0], expected_value, rtol=1e-2)
+
+
 def test_pulse_features_app():
     """Pulse features application test."""
     with datalab_test_app_context(console=False) as win:
@@ -34,32 +55,41 @@ def test_pulse_features_app():
 
         # Add first signal and extract features
         s1 = create_signal_from_param(create_test_step_params())
-        panel.add_object(s1)
-        panel.processor.run_feature("extract_pulse_features")
-
-        # Check that features are extracted
-        table1 = __check_table(s1)
-        assert table1["signal_shape"][0] == "step"
-        assert table1["polarity"][0] == 1.0
-        for name, expected_value in (("amplitude", 4.9), ("rise_time", 1.5)):
-            check_scalar_result(name, table1[name][0], expected_value, rtol=1e-2)
+        __add_signal_and_check_pulse_features(
+            panel,
+            s1,
+            {
+                "signal_shape": "step",
+                "polarity": 1.0,
+                "amplitude": 4.9,
+                "rise_time": 1.5,
+            },
+        )
 
         # Add second signal and extract features
         s2 = create_signal_from_param(create_test_square_params())
-        panel.add_object(s2)
-        panel.processor.run_feature("extract_pulse_features")
+        __add_signal_and_check_pulse_features(
+            panel,
+            s2,
+            {
+                "signal_shape": "square",
+                "polarity": 1.0,
+                "amplitude": 4.94,
+                "rise_time": 1.60,
+                "fall_time": 3.95,
+                "fwhm": 5.49,
+            },
+        )
 
-        # Check that features are extracted
-        table2 = __check_table(s2)
-        assert table2["signal_shape"][0] == "square"
-        assert table2["polarity"][0] == 1.0
-        for name, expected_value in (
-            ("amplitude", 4.94),
-            ("rise_time", 1.60),
-            ("fall_time", 3.95),
-            ("fwhm", 5.49),
-        ):
-            check_scalar_result(name, table2[name][0], expected_value, rtol=1e-2)
+        # Select the two signals and show the results table
+        panel.objview.select_objects([s1, s2])
+        panel.show_results()
+
+        # Define a ROI
+        roi = create_signal_roi([[0.650227, 5.1], [1.1596, 9.09509]])
+        s1.roi = roi
+        s2.roi = roi.copy()
+        panel.processor.run_feature("extract_pulse_features")
 
 
 if __name__ == "__main__":
