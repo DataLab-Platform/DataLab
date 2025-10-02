@@ -14,6 +14,7 @@ from sigima.objects import (
     create_signal_from_param,
     create_signal_roi,
 )
+from sigima.params import PulseFeaturesParam
 from sigima.tests.helpers import check_scalar_result
 from sigima.tests.signal.pulse_unit_test import (
     create_test_square_params,
@@ -21,7 +22,6 @@ from sigima.tests.signal.pulse_unit_test import (
 )
 
 from datalab.adapters_metadata import TableAdapter
-from datalab.env import execenv
 from datalab.gui.panel.signal import SignalPanel
 from datalab.tests import datalab_test_app_context
 
@@ -40,7 +40,9 @@ def __add_signal_and_check_pulse_features(
 ) -> None:
     """Add signal to the application and check that pulse features are extracted."""
     panel.add_object(obj)
-    panel.processor.run_feature("extract_pulse_features")
+    param = PulseFeaturesParam()
+    param.update_from_obj(obj)
+    panel.processor.run_feature("extract_pulse_features", param)
     table = __check_table(obj)
     for name, expected_value in assertions.items():
         if isinstance(expected_value, str):
@@ -51,7 +53,6 @@ def __add_signal_and_check_pulse_features(
 
 def test_pulse_features_app():
     """Pulse features application test."""
-    execenv.unattended = True
     with datalab_test_app_context(console=False) as win:
         panel = win.signalpanel
 
