@@ -143,7 +143,7 @@ class BaseResultAdapter(ABC):
         Returns:
             Metadata key
         """
-        return f"{self.META_PREFIX}{self.title}{self.META_SUFFIX}"
+        return f"{self.META_PREFIX}{self.name}{self.META_SUFFIX}"
 
     def add_to(self, obj: SignalObj | ImageObj) -> None:
         """Add result to object metadata.
