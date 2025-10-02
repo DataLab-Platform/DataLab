@@ -141,7 +141,7 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
 def resultadapter_to_html(
     adapter: BaseResultAdapter,
     obj: SignalObj | ImageObj,
-    visible_headers: list[str] = None,
+    visible_only: bool = True,
     transpose_single_row: bool = True,
     **kwargs,
 ) -> str:
@@ -150,7 +150,8 @@ def resultadapter_to_html(
     Args:
         adapter: Adapter to convert
         obj: Object associated to the adapter
-        visible_headers: Optional list of headers to show (filters columns)
+        visible_only: If True, include only visible headers based on display
+         preferences. Default is False.
         transpose_single_row: If True, transpose the table when there's only one row
         **kwargs: Additional arguments passed to DataFrame.to_html()
 
@@ -159,7 +160,7 @@ def resultadapter_to_html(
     """
     return adapter.to_html(
         obj=obj,
-        visible_headers=visible_headers,
+        visible_only=visible_only,
         transpose_single_row=transpose_single_row,
         **kwargs,
     )

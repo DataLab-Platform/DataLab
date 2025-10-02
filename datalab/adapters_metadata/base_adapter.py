@@ -206,18 +206,23 @@ class BaseResultAdapter(ABC):
                     # Skip invalid entries
                     pass
 
-    def to_dataframe(self) -> "pd.DataFrame":
-        """Convert the geometry result to a pandas DataFrame.
+    def to_dataframe(self, visible_only: bool = False):
+        """Convert the result to a pandas DataFrame.
+
+        Args:
+            visible_only: If True, include only visible headers based on display
+             preferences. Default is False.
 
         Returns:
-            DataFrame with columns as in self.headers, and optional 'roi_index' column.
+            DataFrame with an optional 'roi_index' column.
+             If visible_only is True, only columns with visible headers are included.
         """
-        return self.result.to_dataframe()
+        return self.result.to_dataframe(visible_only=visible_only)
 
     def to_html(
         self,
         obj=None,
-        visible_headers: list[str] = None,
+        visible_only: bool = True,
         transpose_single_row: bool = True,
         **kwargs,
     ) -> str:
@@ -225,39 +230,20 @@ class BaseResultAdapter(ABC):
 
         Args:
             obj: Optional SignalObj or ImageObj for ROI title extraction
-            visible_headers: Optional list of headers to show (filters columns)
+            visible_only: If True, include only visible headers based on display
+             preferences. Default is False.
             transpose_single_row: If True, transpose the table when there's only one row
             **kwargs: Additional arguments passed to DataFrame.to_html()
 
         Returns:
             HTML representation of the result
         """
-        # Use visible headers from display preferences if not specified
-        if visible_headers is None:
-            visible_headers = self.result.get_visible_headers()
-
         return self.result.to_html(
             obj=obj,
-            visible_headers=visible_headers,
+            visible_only=visible_only,
             transpose_single_row=transpose_single_row,
             **kwargs,
         )
-
-    def get_display_preferences(self) -> dict[str, bool]:
-        """Get display preferences.
-
-        Returns:
-            Dictionary mapping header names to visibility (True=visible, False=hidden)
-        """
-        return self.result.get_display_preferences()
-
-    def set_display_preferences(self, preferences: dict[str, bool]) -> None:
-        """Set display preferences.
-
-        Args:
-            preferences: Dictionary mapping header names to visibility
-        """
-        self.result.set_display_preferences(preferences)
 
     def get_visible_headers(self) -> list[str]:
         """Get list of currently visible headers based on display preferences.
