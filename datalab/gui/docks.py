@@ -293,8 +293,22 @@ class DataLabPlotWidget(PlotWidget):
     """
 
     def __init__(self, plot_type: PlotType) -> None:
+        # Get autoscale margin from configuration based on plot type
+        if plot_type == PlotType.CURVE:
+            autoscale_margin = Conf.view.sig_autoscale_margin_percent.get()
+        elif plot_type == PlotType.IMAGE:
+            autoscale_margin = Conf.view.ima_autoscale_margin_percent.get()
+        else:
+            # For AUTO or MANUAL types, use signal margin as default
+            autoscale_margin = Conf.view.sig_autoscale_margin_percent.get()
+
         super().__init__(
-            options=PlotOptions(type=plot_type, show_axes_tab=False), toolbar=True
+            options=PlotOptions(
+                type=plot_type,
+                show_axes_tab=False,
+                autoscale_margin_percent=autoscale_margin,
+            ),
+            toolbar=True,
         )
 
     def __register_standard_tools(self) -> None:

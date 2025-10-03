@@ -165,6 +165,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Added new "Show console on error" option in the "Console" section of the "Settings" dialog box:
     * If enabled, the console will be shown when an error occurs in the application, allowing to see the error traceback (this was previously the default behavior)
     * Now, the console is not shown by default on error, but it does not prevent the console from containing the error traceback as it works in the background.
+  * Added configurable autoscale margins for signal and image plots in the "Visualization" section of the "Settings" dialog box:
+    * New "Autoscale margin" setting allows customizing the autoscale margin percentage
+    * Signal and image plots have separate margin settings for fine-tuned control
+    * Margins can be set between 0% and 50% to control the amount of whitespace around data when autoscaling plots
+    * Changes are applied immediately to all existing plot widgets without requiring application restart
+    * This feature enhances plot visualization control and replaces the previously hardcoded 0.2% margin values
 
 * Dialog sizing improvements:
   * Enhanced initial sizing logic for processing dialogs (profile extraction, offset subtraction, etc.):

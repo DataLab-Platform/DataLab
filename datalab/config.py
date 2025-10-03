@@ -228,6 +228,10 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     sig_autodownsampling = conf.Option()
     sig_autodownsampling_maxpoints = conf.Option()
 
+    # Autoscale margin settings for plots (percentage values)
+    sig_autoscale_margin_percent = conf.Option()
+    ima_autoscale_margin_percent = conf.Option()
+
     # If True, lock aspect ratio of images to 1:1 (ignore physical pixel size)
     ima_aspect_ratio_1_1 = conf.Option()
 
@@ -361,6 +365,8 @@ def initialize():
     Conf.view.ignore_title_insertion_msg.get(False)
     Conf.view.sig_autodownsampling.get(True)
     Conf.view.sig_autodownsampling_maxpoints.get(100000)
+    Conf.view.sig_autoscale_margin_percent.get(2.0)
+    Conf.view.ima_autoscale_margin_percent.get(1.0)
     Conf.view.ima_aspect_ratio_1_1.get(False)
     Conf.view.ima_ref_lut_range.get(False)
     Conf.view.ima_eliminate_outliers.get(0.1)

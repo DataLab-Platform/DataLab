@@ -33,7 +33,7 @@ from qtpy.compat import getopenfilename
 from sigima import ImageObj, SignalObj
 
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.h5 import H5Importer
 from datalab.utils.qthelpers import qt_handle_error_message
 
@@ -456,13 +456,25 @@ class PlotPreview(QW.QStackedWidget):
         self.curvewidget = PlotWidget(
             self,
             options=PlotOptions(
-                type="curve", curve_antialiasing=True, show_axes_tab=False
+                type="curve",
+                curve_antialiasing=True,
+                show_axes_tab=False,
+                autoscale_margin_percent=Conf.view.sig_autoscale_margin_percent.get(
+                    0.2
+                ),
             ),
         )
         self.addWidget(self.curvewidget)
         self.imagewidget = PlotWidget(
             self,
-            options=PlotOptions(type="image", show_contrast=True, show_axes_tab=False),
+            options=PlotOptions(
+                type="image",
+                show_contrast=True,
+                show_axes_tab=False,
+                autoscale_margin_percent=Conf.view.ima_autoscale_margin_percent.get(
+                    0.2
+                ),
+            ),
         )
         self.addWidget(self.imagewidget)
 

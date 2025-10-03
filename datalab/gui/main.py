@@ -1743,6 +1743,30 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                         widget.update_toolbar_position()
             if option.startswith("sig_autodownsampling"):
                 self.signalpanel.refresh_plot("existing", True, False)
+            if option == "sig_autoscale_margin_percent":
+                # Update signal plot widget autoscale margin
+                sig_margin = Conf.view.sig_autoscale_margin_percent.get()
+                for dock in self.docks.values():
+                    widget: DockablePlotWidget | QW.QWidget = dock.widget()
+                    if isinstance(widget, DockablePlotWidget):
+                        plot = widget.get_plot()
+                        if (
+                            hasattr(plot, "options")
+                            and plot.options.type == PlotType.CURVE
+                        ):
+                            plot.set_autoscale_margin_percent(sig_margin)
+            if option == "ima_autoscale_margin_percent":
+                # Update image plot widget autoscale margin
+                ima_margin = Conf.view.ima_autoscale_margin_percent.get()
+                for dock in self.docks.values():
+                    widget: DockablePlotWidget | QW.QWidget = dock.widget()
+                    if isinstance(widget, DockablePlotWidget):
+                        plot = widget.get_plot()
+                        if (
+                            hasattr(plot, "options")
+                            and plot.options.type == PlotType.IMAGE
+                        ):
+                            plot.set_autoscale_margin_percent(ima_margin)
             if option == "ima_defaults" and len(self.imagepanel) > 0:
                 answer = QW.QMessageBox.question(
                     self,

@@ -35,7 +35,7 @@ from sigima.io.common.textreader import count_lines, read_first_n_lines
 from sigima.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
 
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.utils.qthelpers import (
     CallbackWorker,
     create_progress_bar,
@@ -545,6 +545,11 @@ class GraphicalRepresentationPage(WizardPage):
         cb_all.stateChanged.connect(self.toggle_all)
         layout.addWidget(cb_all)
         plot_type = "curve" if destination == "signal" else "image"
+        # Get appropriate autoscale margin from configuration
+        if plot_type == "curve":
+            autoscale_margin = Conf.view.sig_autoscale_margin_percent.get()
+        else:
+            autoscale_margin = Conf.view.ima_autoscale_margin_percent.get()
         self.plot_widget = PlotWidget(
             self,
             toolbar=True,
@@ -554,6 +559,7 @@ class GraphicalRepresentationPage(WizardPage):
                 show_contrast=True,
                 curve_antialiasing=True,
                 show_axes_tab=False,
+                autoscale_margin_percent=autoscale_margin,
             ),
         )
         plot = self.plot_widget.get_plot()

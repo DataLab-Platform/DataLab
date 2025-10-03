@@ -265,6 +265,18 @@ class ViewSettings(gds.DataSet):
         min=1000,
         help=_("Maximum number of points for downsampling"),
     ).set_prop("display", active=_prop_ads)
+    sig_autoscale_margin_percent = gds.FloatItem(
+        _("Autoscale margin"),
+        unit=_("%"),
+        default=0.2,
+        min=0.0,
+        max=50.0,
+        help=_(
+            "Percentage of margin to add around data when auto-scaling signal "
+            "plots.<br>A value of 0.2% adds a small margin for better "
+            "visualization.<br>Set to 0% for no margin (exact data bounds)."
+        ),
+    )
     _g1 = gds.EndGroup("")
 
     g2 = gds.BeginGroup(_("Image"))
@@ -294,6 +306,18 @@ class ViewSettings(gds.DataSet):
         help=_(
             "Eliminate a percentage of the highest and lowest values<br>"
             "of the image histogram - <i>recommanded values are below 1%</i>"
+        ),
+    )
+    ima_autoscale_margin_percent = gds.FloatItem(
+        _("Autoscale margin"),
+        unit=_("%"),
+        default=0.2,
+        min=0.0,
+        max=50.0,
+        help=_(
+            "Percentage of margin to add around data when auto-scaling image "
+            "plots.<br>A value of 0.2% adds a small margin for better "
+            "visualization.<br>Set to 0% for no margin (exact data bounds)."
         ),
     )
     ima_defaults = gds.ButtonItem(

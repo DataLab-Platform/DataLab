@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-20 19:40+0200\n"
+"POT-Creation-Date: 2025-10-03 22:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -485,6 +485,24 @@ msgstr "Si activé, la console sera affichée lorsqu'une erreur se produit dans 
 
 msgid "Now, the console is not shown by default on error, but it does not prevent the console from containing the error traceback as it works in the background."
 msgstr "Maintenant, la console n'est pas affichée par défaut en cas d'erreur, mais cela n'empêche pas la console de contenir la trace de l'erreur car elle fonctionne en arrière-plan."
+
+msgid "Added configurable autoscale margins for signal and image plots in the \"Visualization\" section of the \"Settings\" dialog box:"
+msgstr "Ajout de marges d'autoscale configurables pour les tracés de signaux et d'images dans la section \"Visualisation\" de la boîte de dialogue \"Paramètres\" :"
+
+msgid "New \"Autoscale margin\" setting allows customizing the autoscale margin percentage"
+msgstr "Nouveau paramètre \"Marge de zoom automatique\" permet de personnaliser le pourcentage de marge de zoom automatique"
+
+msgid "Signal and image plots have separate margin settings for fine-tuned control"
+msgstr "Les graphiques de signaux et d'images ont des paramètres de marge séparés pour un contrôle précis"
+
+msgid "Margins can be set between 0% and 50% to control the amount of whitespace around data when autoscaling plots"
+msgstr "Les marges peuvent être définies entre 0 % et 50 % pour contrôler la quantité d'espace blanc autour des données lors de l'autoscaling des graphiques"
+
+msgid "Changes are applied immediately to all existing plot widgets without requiring application restart"
+msgstr "Les modifications sont appliquées immédiatement à tous les widgets de tracé existants sans nécessiter de redémarrage de l'application"
+
+msgid "This feature enhances plot visualization control and replaces the previously hardcoded 0.2% margin values"
+msgstr "Cette fonctionnalité améliore le contrôle de la visualisation des tracés et remplace les valeurs de marge de 0,2 % précédemment codées en dur"
 
 msgid "Dialog sizing improvements:"
 msgstr "Améliorations de la taille des boîtes de dialogue :"
