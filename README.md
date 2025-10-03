@@ -40,4 +40,4 @@ Spyder or any IDE):
 * Using the integrated [remote control](https://datalab-platform.com/en/features/general/remote.html)
 feature (this requires to install DataLab as a Python package)
 
-* Using the lightweight [DataLab Simple Client](https://github.com/DataLab-Platform/DataLabSimpleClient) (`pip install cdlclient`)
+* Using the lightweight client integrated in [Sigima](https://github.com/DataLab-Platform/Sigima) (`pip install sigima`)

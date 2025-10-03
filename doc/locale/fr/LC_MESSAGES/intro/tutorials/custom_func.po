@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-13 14:45+0200\n"
+"POT-Creation-Date: 2025-10-03 14:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -142,8 +142,11 @@ msgstr "Par exemple, nous pouvons utiliser l'IDE Spyder pour déboguer notre cod
 msgid "The only requirement is to install a DataLab client in Spyder's Python environment:"
 msgstr "Le seul prérequis est d'installer un client DataLab dans l'environnement Python de Spyder :"
 
-msgid "If you use the stand-alone version of DataLab or if you want or need to keep DataLab and Spyder in separate Python environments, you can install the `DataLab Simple Client <https://pypi.org/project/cdlclient/>`_ (``datalab-client``) using the ``pip`` package manager::"
-msgstr "Si vous utilisez la version autonome de DataLab ou si vous voulez ou devez garder DataLab et Spyder dans des environnements Python séparés, vous pouvez installer le `DataLab Simple Client <https://pypi.org/project/cdlclient/>`_ (``datalab-client``) en utilisant le gestionnaire de paquets ``pip`` :"
+msgid "If you use the stand-alone version of DataLab or if you want or need to keep DataLab and Spyder in separate Python environments, you can install the `Sigima <https://pypi.org/project/sigima/>`_ (``sigima``) package that provides a simple remote client for DataLab. To install it, just run:"
+msgstr "Si vous utilisez la version autonome de DataLab ou si vous souhaitez ou devez garder DataLab et Spyder dans des environnements Python séparés, vous pouvez installer le package `Sigima <https://pypi.org/project/sigima/>`_ (``sigima``) qui fournit un client distant simple pour DataLab. Pour l'installer, il suffit d'exécuter :"
+
+msgid "pip install sigima"
+msgstr "pip install sigima"
 
 msgid "Or you may also install the `DataLab Python package <https://pypi.org/project/datalab-platform/>`_ (``datalab``) which includes the client (but also other modules, so we don't recommend this method if you don't need all DataLab's features in this Python environment)::"
 msgstr "Ou vous pouvez également installer le `paquet Python DataLab <https://pypi.org/project/datalab-platform/>`_ (``datalab``) qui inclut le client (mais aussi d'autres modules, donc nous ne recommandons pas cette méthode si vous n'avez pas besoin de toutes les fonctionnalités de DataLab dans cet environnement Python) :"

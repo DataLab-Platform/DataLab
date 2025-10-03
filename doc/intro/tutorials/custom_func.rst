@@ -204,10 +204,10 @@ The only requirement is to install a DataLab client in Spyder's Python environme
 
 -   If you use the stand-alone version of DataLab or if you want or need to keep
     DataLab and Spyder in separate Python environments, you can install the
-    `DataLab Simple Client <https://pypi.org/project/cdlclient/>`_ (``datalab-client``)
-    using the ``pip`` package manager::
+    `Sigima <https://pypi.org/project/sigima/>`_ (``sigima``) package that provides a
+    simple remote client for DataLab. To install it, just run:
 
-        pip install datalab-client
+        pip install sigima
 
     Or you may also install the `DataLab Python package <https://pypi.org/project/datalab-platform/>`_
     (``datalab``) which includes the client (but also other modules, so we don't recommend

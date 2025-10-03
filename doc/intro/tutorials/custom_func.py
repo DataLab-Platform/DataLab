@@ -12,7 +12,7 @@ Created on Fri May 12 12:28:56 2023
 
 import numpy as np
 import scipy.ndimage as spi
-from cdlclient import SimpleRemoteProxy
+from sigima.client import SimpleRemoteProxy
 
 # %% Connecting to DataLab current session
 

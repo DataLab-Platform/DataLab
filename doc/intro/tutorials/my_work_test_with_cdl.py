@@ -10,7 +10,7 @@ outside DataLab (e.g. in Spyder).
 # ---- Begin of the example code ----
 # %% Connecting to DataLab current session
 
-from cdlclient import SimpleRemoteProxy
+from sigima.client import SimpleRemoteProxy
 
 proxy = SimpleRemoteProxy()
 proxy.connect()

@@ -3,10 +3,10 @@
 import numpy as np
 
 # When using this code outside of DataLab (which is possible!), you may use the
-# *Simple DataLab Client* (see https://pypi.org/project/cdlclient/), installed with
-# `pip install cdlclient`), as it's more lightweight than the full DataLab package:
+# client provided by the `Sigima` package (see https://pypi.org/project/sigima/),
+# installed with `pip install sigima`, for example, instead of the full DataLab package:
 #
-# from cdlclient import SimpleRemoteProxy as RemoteProxy
+# from sigima.client import SimpleRemoteProxy as RemoteProxy
 from datalab.proxy import RemoteProxy
 
 proxy = RemoteProxy()

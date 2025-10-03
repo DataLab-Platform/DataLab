@@ -10,7 +10,7 @@ Generate 1D data that can be used in the tutorials to represent some results.
 from __future__ import annotations
 
 import numpy as np
-from cdlclient import SimpleRemoteProxy
+from sigima.client import SimpleRemoteProxy
 
 
 def generate_1d_data(

@@ -71,8 +71,8 @@ your workflow is already set up in `Spyder`_ and you don't want to change it.
     documentation. **Note that you don't need to install DataLab in the same
     environment as Spyder.**: that's the whole point of DataLab, it is a
     stand-alone application that can be used from any environment. For this
-    tutorial, you only need to install the DataLab Simple Client
-    (``pip install cdlclient``) in the same environment as `Spyder`_.
+    tutorial, you only need to install the Sigima package (``pip install sigima``)
+    in the same environment as `Spyder`_.
 
 Testing your algorithm with DataLab
 -----------------------------------

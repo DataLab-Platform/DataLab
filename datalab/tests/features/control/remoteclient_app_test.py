@@ -12,18 +12,15 @@ Remote GUI-based client test
 from __future__ import annotations
 
 import functools
-import os
-import time
 from contextlib import contextmanager
 
-import psutil
 from guidata.qthelpers import qt_app_context, qt_wait
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.env import execenv
 from datalab.proxy import RemoteProxy
-from datalab.tests import helpers
+from datalab.tests import run_datalab_in_background
 from datalab.tests.features.control import embedded1_unit_test
 from datalab.tests.features.control.remoteclient_unit import multiple_commands
 from datalab.utils.qthelpers import bring_to_front
@@ -179,39 +176,9 @@ def qt_wait_print(dt: float, message: str, parent=None):
     execenv.print("OK")
 
 
-def is_pid_alive(pid: int) -> bool:
-    """Check if a process with the given PID is alive
-
-    Args:
-        Process ID to check
-
-    Returns:
-        True if the process is alive, False otherwise
-    """
-    return psutil.pid_exists(pid) and psutil.Process(pid).is_running()
-
-
 def test_remote_client():
     """Remote client application test"""
-    env = os.environ.copy()
-    env[execenv.DO_NOT_QUIT_ENV] = "1"
-    if execenv.XMLRPCPORT_ENV in env:
-        # May happen when executing other tests before
-        env.pop(execenv.XMLRPCPORT_ENV)
-
-    proc = helpers.exec_script(
-        "-m", args=["datalab.app"], wait=False, env=env, verbose=False
-    )
-    # If the process fails to start, it will raise the `AssertionError` exception
-    # with the message "Unable to start DataLab application".
-    # In that case, it might be useful to set `wait=True` and `verbose=True` in the
-    # `exec_script` call above, so that the script waits for the DataLab application
-    # to start and prints the output to the console. This way, you can see any
-    # error messages or logs that might help you understand why the application failed
-    # to start.
-    # If the script is executed within a pytest session, add the `-s` option to pytest.
-    time.sleep(2)
-    assert is_pid_alive(proc.pid), "Unable to start DataLab application"
+    run_datalab_in_background()
 
     with qt_app_context(exec_loop=True):
         window = HostWindow()

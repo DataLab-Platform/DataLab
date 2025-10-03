@@ -15,10 +15,11 @@ allows to access DataLab main features from a separate process.
 
     If you are looking for a lighweight alternative solution to remote control
     DataLab (i.e. without having to install the whole DataLab package and its
-    dependencies on your environment), please have a look at the
-    `DataLab Simple Client`_ package (`pip install cdlclient`).
+    dependencies on your environment), you may use the `Sigima`_ package that
+    provides a simple remote client for DataLab. To install it, just run:
+    `pip install sigima`.
 
-.. _DataLab Simple Client: https://github.com/DataLab-Platform/DataLabSimpleClient
+.. _Sigima: https://github.com/DataLab-Platform/Sigima
 
 From an IDE
 ^^^^^^^^^^^

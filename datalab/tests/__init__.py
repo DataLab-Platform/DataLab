@@ -23,9 +23,11 @@ from __future__ import annotations
 import os
 import os.path as osp
 import sys
+import time
 from contextlib import contextmanager
 from typing import Generator
 
+import psutil
 import pytest
 from guidata.guitest import run_testlauncher
 from sigima.tests import helpers
@@ -91,6 +93,56 @@ def datalab_test_app_context(
                 # Closing main window properly
                 win.set_modified(False)
                 win.close()
+
+
+def is_pid_alive(pid: int) -> bool:
+    """Check if a process with the given PID is alive
+
+    Args:
+        Process ID to check
+
+    Returns:
+        True if the process is alive, False otherwise
+    """
+    return psutil.pid_exists(pid) and psutil.Process(pid).is_running()
+
+
+def run_datalab_in_background():
+    """Run DataLab application as a service.
+
+    This function starts the DataLab application in a separate process, ensuring that
+    it runs independently of the current script. It sets the necessary environment
+    variables to prevent the application from quitting automatically (since the script
+    is executed in a non-interactive mode - the so-called "unattended" mode) and to
+    avoid port conflicts. After starting the application, it waits for a short period
+    to allow the application to initialize and then checks if the process is alive.
+
+    The main use case for this function is in testing scenarios where the DataLab
+    application needs to be running in the background while a client connects to it
+    and performs various operations.
+
+    Raises:
+        AssertionError: If the DataLab application fails to start
+    """
+    env = os.environ.copy()
+    env[execenv.DO_NOT_QUIT_ENV] = "1"
+    if execenv.XMLRPCPORT_ENV in env:
+        # May happen when executing other tests before
+        env.pop(execenv.XMLRPCPORT_ENV)
+
+    proc = helpers.exec_script(
+        "-m", args=["datalab.app"], wait=False, env=env, verbose=False
+    )
+    # If the process fails to start, it will raise the `AssertionError` exception
+    # with the message "Unable to start DataLab application".
+    # In that case, it might be useful to set `wait=True` and `verbose=True` in the
+    # `exec_script` call above, so that the script waits for the DataLab application
+    # to start and prints the output to the console. This way, you can see any
+    # error messages or logs that might help you understand why the application failed
+    # to start.
+    # If the script is executed within a pytest session, add the `-s` option to pytest.
+    time.sleep(2)
+    assert is_pid_alive(proc.pid), "Unable to start DataLab application"
 
 
 @contextmanager

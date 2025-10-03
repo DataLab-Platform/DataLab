@@ -1849,18 +1849,25 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         else:
             self.__show_no_result_warning()
 
-    def add_label_with_title(self, title: str | None = None) -> None:
+    def add_label_with_title(
+        self, title: str | None = None, ignore_msg: bool = True
+    ) -> None:
         """Add a label with object title on the associated plot
 
         Args:
             title: Label title. Defaults to None.
              If None, the title is the object title.
+            ignore_msg: If True, do not show the information message. Defaults to True.
+             If False, show a message box to inform the user that the label has been
+             added as an annotation, and that it can be edited or removed using the
+             annotation editing window.
         """
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             create_adapter_from_object(obj).add_label_with_title(title=title)
         if (
             not Conf.view.ignore_title_insertion_msg.get(False)
+            and not ignore_msg
             and not execenv.unattended
         ):
             answer = QW.QMessageBox.information(

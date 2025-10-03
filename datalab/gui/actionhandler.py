@@ -694,7 +694,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Insert object title as annotation label"),
                 separator=True,
-                triggered=self.panel.add_label_with_title,
+                triggered=lambda: self.panel.add_label_with_title(ignore_msg=False),
                 tip=_(
                     "Add the selected object's title as a label to the plot annotations"
                 ),

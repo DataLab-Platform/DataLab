@@ -10,7 +10,6 @@ Babel                         2.14.0
 beautifulsoup4                4.12.2
 build                         1.2.2.post1
 cattrs                        23.2.3
-cdlclient                     0.8.0
 certifi                       2023.11.17
 charset-normalizer            3.3.2
 click                         8.1.7

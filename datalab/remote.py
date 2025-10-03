@@ -390,10 +390,10 @@ class RemoteServer(QC.QThread):
         xdata = rpcbinary_to_array(xbinary)
         ydata = rpcbinary_to_array(ybinary)
         signal = create_signal(title, xdata, ydata)
-        signal.xunit = xunit
-        signal.yunit = yunit
-        signal.xlabel = xlabel
-        signal.ylabel = ylabel
+        signal.xunit = xunit or ""  # In case xunit is None
+        signal.yunit = yunit or ""  # In case yunit is None
+        signal.xlabel = xlabel or ""  # In case xlabel is None
+        signal.ylabel = ylabel or ""  # In case ylabel is None
         self.SIG_ADD_OBJECT.emit(signal, group_id, set_current)
         return True
 
@@ -430,12 +430,12 @@ class RemoteServer(QC.QThread):
         """
         data = rpcbinary_to_array(zbinary)
         image = create_image(title, data)
-        image.xunit = xunit
-        image.yunit = yunit
-        image.zunit = zunit
-        image.xlabel = xlabel
-        image.ylabel = ylabel
-        image.zlabel = zlabel
+        image.xunit = xunit or ""  # In case xunit is None
+        image.yunit = yunit or ""  # In case yunit is None
+        image.zunit = zunit or ""  # In case zunit is None
+        image.xlabel = xlabel or ""  # In case xlabel is None
+        image.ylabel = ylabel or ""  # In case ylabel is None
+        image.zlabel = zlabel or ""  # In case zlabel is None
         self.SIG_ADD_OBJECT.emit(image, group_id, set_current)
         return True
 
