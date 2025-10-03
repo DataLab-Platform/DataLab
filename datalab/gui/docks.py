@@ -80,7 +80,17 @@ class CurveStatsToolFunctions:
                 ("σ(y)=%g", lambda *args: cls.nan_std(args[1])),
                 ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
                 ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
-                ("FWHM = %s", cls.fwhm_info),
+                ("FWHM=%s", cls.fwhm_info),
+                ("∆x<sub>RISE 10-90</sub>=%s", cls.rise_time_info),
+                (
+                    "∆x<sub>RISE 20-80</sub>=%s",
+                    lambda x, y: cls.rise_time_info(x, y, 0.2, 0.8),
+                ),
+                ("∆x<sub>FALL 90-10</sub>=%s", cls.fall_time_info),
+                (
+                    "∆x<sub>FALL 80-20</sub>=%s",
+                    lambda x, y: cls.fall_time_info(x, y, 0.8, 0.2),
+                ),
             )
         else:  # YRangeCursorTool
             labelfuncs = (
@@ -132,6 +142,32 @@ class CurveStatsToolFunctions:
         except (ValueError, ZeroDivisionError, pulse.InvalidSignalError):
             return "🛑"
         return f"{x1 - x0:g}{wstr}"
+
+    @staticmethod
+    def rise_time_info(x, y, start_ratio=0.1, end_ratio=0.9):
+        """Return rise time information string"""
+        try:
+            with warnings.catch_warnings(record=True) as w:
+                dt = pulse.get_rise_time(x, y, start_ratio, end_ratio)
+                wstr = " ⚠️" if w else ""
+            if dt is None:
+                return "🛑"
+        except (ValueError, ZeroDivisionError, pulse.InvalidSignalError):
+            return "🛑"
+        return f"{dt:g}{wstr}"
+
+    @staticmethod
+    def fall_time_info(x, y, start_ratio=0.9, end_ratio=0.1):
+        """Return fall time information string"""
+        try:
+            with warnings.catch_warnings(record=True) as w:
+                dt = pulse.get_fall_time(x, y, start_ratio, end_ratio)
+                wstr = " ⚠️" if w else ""
+            if dt is None:
+                return "🛑"
+        except (ValueError, ZeroDivisionError, pulse.InvalidSignalError):
+            return "🛑"
+        return f"{dt:g}{wstr}"
 
 
 def get_more_image_stats(
