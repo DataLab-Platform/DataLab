@@ -139,12 +139,10 @@ class ObjectProp(QW.QWidget):
         """Set computing parameters label"""
         text = ""
         for key, value in param.metadata.items():
-            if key.endswith("Param") and isinstance(value, str):
+            if key.endswith("__param_html") and isinstance(value, str):
                 if text:
                     text += "<br><br>"
-                lines = value.splitlines(False)
-                lines[0] = f"<b>{lines[0]}</b>"
-                text += "<br>".join(lines)
+                text += value
         self.param_label.setText(text)
 
     def update_properties_from(self, param: SignalObj | ImageObj | None = None):

@@ -1087,7 +1087,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # Add result shape to object's metadata
                 adapter.add_to(obj)
                 if param is not None:
-                    obj.metadata[f"{adapter.name}Param"] = str(param)
+                    obj.metadata[f"{adapter.name}__param_str"] = str(param)
+                    obj.metadata[f"{adapter.name}__param_html"] = param.to_html()
 
                 # Append result to result data for later display
                 rdata.append(adapter, obj)
