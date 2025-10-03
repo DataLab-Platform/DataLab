@@ -36,8 +36,7 @@ The contour detection algorithm works in the following way:
     (implementation based on `skimage.measure.find_contours.find_contours <https://scikit-image.org/docs/0.8.0/api/skimage.measure.find_contours.html#find-contours>`_)
   - Then, each contour is fitted to the closest ellipse (or circle)
 
-Feature is based on ``get_contour_shapes`` function
-from ``sigima.tools`` module:
+Feature is based on ``get_contour_shapes`` function from ``sigima.tools`` module:
 
-  .. literalinclude:: ../../../../Sigima/sigima/tools/image.py
+  .. literalinclude:: ../../../../Sigima/sigima/tools/image/detection.py
      :pyobject: get_contour_shapes

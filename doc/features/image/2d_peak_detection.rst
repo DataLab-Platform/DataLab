@@ -46,8 +46,7 @@ The 2d peak detection parameters are the following:
   - "Neighborhoods size": size of the sliding window (see above)
   - "Relative threshold": detection threshold
 
-Feature is based on ``get_2d_peaks_coords`` function
-from ``sigima.tools`` module:
+Feature is based on ``get_2d_peaks_coords`` function from ``sigima.tools`` module:
 
-  .. literalinclude:: ../../../../Sigima/sigima/tools/image.py
+  .. literalinclude:: ../../../../Sigima/sigima/tools/image/detection.py
      :pyobject: get_2d_peaks_coords
