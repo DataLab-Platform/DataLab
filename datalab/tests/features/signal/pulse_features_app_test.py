@@ -95,7 +95,9 @@ def test_pulse_features_app():
         roi = create_signal_roi([[0.650227, 5.8], [1.1596, 9.09509]])
         s1.roi = roi
         s2.roi = roi.copy()
-        panel.processor.run_feature("extract_pulse_features")
+        panel.processor.run_feature("stats")
+
+        panel.show_results()
 
 
 if __name__ == "__main__":
