@@ -11,6 +11,7 @@ import numpy as np
 from plotpy.builder import make
 from plotpy.items import AnnotatedCircle, AnnotatedPolygon, AnnotatedRectangle
 from sigima.objects import CircularROI, ImageObj, ImageROI, PolygonalROI, RectangularROI
+from sigima.tools import coordinates
 
 from datalab.adapters_plotpy.roi.base import (
     BaseROIPlotPyAdapter,
@@ -156,7 +157,8 @@ class CircularROIPlotPyAdapter(
             )
 
         xc, yc, r = self.single_roi.get_physical_coords(obj)
-        item = AnnotatedCircle(xc - r, yc, xc + r, yc)
+        x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
+        item = AnnotatedCircle(x0, y0, x1, y1)
         item.set_info_callback(info_callback)
         item.annotationparam.title = self.single_roi.title
         item.annotationparam.update_item(item)
