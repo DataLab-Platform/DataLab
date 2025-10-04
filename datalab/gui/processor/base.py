@@ -2009,3 +2009,28 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if obj.roi is not None:
                     obj.roi = None
                     self.panel.selection_changed(update_items=True)
+
+    def delete_single_roi(self, roi_index: int) -> None:
+        """Delete a single ROI by index
+
+        Args:
+            roi_index: Index of the ROI to remove
+        """
+        obj = self.panel.objview.get_sel_objects()[0]
+        if obj.roi is not None and 0 <= roi_index < len(obj.roi.single_rois):
+            roi_title = obj.roi.get_single_roi_title(roi_index)
+            if (
+                env.execenv.unattended
+                or QW.QMessageBox.question(
+                    self.mainwindow,
+                    _("Remove ROI"),
+                    _("Are you sure you want to remove ROI '%s'?") % roi_title,
+                )
+                == QW.QMessageBox.Yes
+            ):
+                obj.roi.single_rois.pop(roi_index)
+                # If no ROIs left, set roi to None
+                if len(obj.roi.single_rois) == 0:
+                    obj.roi = None
+                obj.mark_roi_as_changed()
+                self.panel.selection_changed(update_items=True)

@@ -914,7 +914,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         for index, obj in enumerate(sel_objs):
             obj.reset_metadata_to_defaults()
             if not keep_roi:
-                obj.invalidate_maskdata_cache()
+                obj.mark_roi_as_changed()
             if obj in roi_backup:
                 obj.roi = roi_backup[obj]
             if index == 0:
@@ -1383,7 +1383,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         refresh plot and update object view."""
         obj = self.objview.get_current_object()
         # if obj is not None:  # XXX: Is it necessary?
-        obj.invalidate_maskdata_cache()
+        obj.mark_roi_as_changed()
         update_dataset(obj, self.objprop.properties.dataset)
         self.objview.update_item(get_uuid(obj))
         self.refresh_plot("selected", True, False)

@@ -37,6 +37,7 @@ import abc
 import enum
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
+from functools import partial
 from typing import TYPE_CHECKING
 
 import sigima.objects as sio
@@ -197,11 +198,52 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.__submenu_stack: list[dict[str, any]] = []  # Stack for nested submenus
         self.__actions: dict[Callable, list[QW.QAction]] = {}
         self.__submenus: dict[str, QW.QMenu] = {}
+        # Store reference to ROI remove submenu
+        self.roi_remove_submenu: QW.QMenu | None = None
 
     @property
     def object_suffix(self) -> str:
         """Object suffix (e.g. "sig" for signal, "ima" for image)"""
         return self.__class__.__name__[:3].lower()
+
+    def populate_roi_remove_submenu(self) -> None:
+        """Populate the ROI Remove submenu dynamically based on current selection"""
+        submenu = self.roi_remove_submenu
+        if submenu is None:
+            return
+
+        # Clear existing actions
+        submenu.clear()
+
+        # Get current selected object
+        selected_objects = self.panel.objview.get_sel_objects()
+        if not selected_objects:
+            return
+
+        obj = selected_objects[0]
+        if obj.roi is None or obj.roi.is_empty():
+            return
+
+        # Add individual ROI removal actions
+        for i in range(len(obj.roi.single_rois)):
+            roi_title = obj.roi.get_single_roi_title(i)
+            action = QW.QAction(roi_title, submenu)
+            # Use partial to avoid lambda closure issues
+            action.triggered.connect(partial(self._remove_single_roi_by_index, i))
+            submenu.addAction(action)
+
+        # Add separator and "Remove all" action
+        if len(obj.roi.single_rois) > 0:
+            submenu.addSeparator()
+            remove_all_action = QW.QAction(_("Remove all"), submenu)
+            remove_all_action.triggered.connect(
+                self.panel.processor.delete_regions_of_interest
+            )
+            submenu.addAction(remove_all_action)
+
+    def _remove_single_roi_by_index(self, roi_index: int) -> None:
+        """Helper method to remove a single ROI by index"""
+        self.panel.processor.delete_single_roi(roi_index)
 
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
@@ -514,6 +556,15 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Create all actions"""
         self.create_first_actions()
         self.create_last_actions()
+
+        # Connect ROI remove submenu signal after all actions are created
+        if self.roi_remove_submenu is not None:
+            self.roi_remove_submenu.aboutToShow.connect(
+                self.populate_roi_remove_submenu
+            )
+            # Add the submenu to the action management system with ROI condition
+            self.add_action(self.roi_remove_submenu, SelectCond.with_roi)
+
         add_actions(
             self.panel_toolbar, self.feature_actions.pop(ActionCategory.PANEL_TOOLBAR)
         )
@@ -865,14 +916,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.exactly_one_with_roi,
                 toolbar_pos=-1,
             )
-            self.new_action(
-                _("Remove all"),
-                separator=True,
-                triggered=self.panel.processor.delete_regions_of_interest,
-                icon_name="roi_delete.svg",
-                select_condition=SelectCond.with_roi,
-                context_menu_pos=-1,
-            )
+
+            # Create dynamic "Remove" submenu
+            with self.new_menu(_("Remove"), icon_name="roi_delete.svg"):
+                # Store reference to the submenu for dynamic population
+                if self.__submenu_stack:
+                    current_submenu = self.__submenu_stack[-1]
+                    self.roi_remove_submenu = current_submenu["menu"]
 
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-03 22:08+0200\n"
+"POT-Creation-Date: 2025-10-04 16:39+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -22,6 +22,9 @@ msgstr "Résultats"
 
 msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
+
+msgid "Remove all"
+msgstr "Supprimer tout"
 
 #, python-format
 msgid "New %s"
@@ -238,9 +241,6 @@ msgstr "Exporter"
 #, python-format
 msgid "Export selected %s regions of interest"
 msgstr "Exporter les régions d'intérêt de l'objet %s sélectionné"
-
-msgid "Remove all"
-msgstr "Supprimer tout"
 
 msgid "Show results"
 msgstr "Afficher les résultats"
@@ -1092,6 +1092,13 @@ msgstr "Régions d'intérêt"
 
 msgid "No ROI selected for editing."
 msgstr "Aucune ROI sélectionnée pour l'édition."
+
+msgid "Remove ROI"
+msgstr "Supprimer la ROI"
+
+#, python-format
+msgid "Are you sure you want to remove ROI '%s'?"
+msgstr "Êtes-vous sûr de vouloir supprimer la ROI '%s' ?"
 
 msgid "Sum"
 msgstr "Addition"
@@ -2795,4 +2802,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
