@@ -1341,7 +1341,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if obj.roi is None:
                     obj.roi = roi
                 else:
-                    obj.roi.combine_with(roi)
+                    obj.roi = obj.roi.combine_with(roi)
             self.selection_changed(update_items=True)
             self.refresh_plot("selected", True, False)
 
