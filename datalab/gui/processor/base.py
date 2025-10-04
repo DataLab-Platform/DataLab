@@ -1959,7 +1959,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         for obj_i in objs:
                             obj_i.roi = edited_roi
                 self.SIG_ADD_SHAPE.emit(get_uuid(obj))
-                # self.panel.selection_changed(update_items=True)
+                self.panel.selection_changed(update_items=True)
                 self.panel.refresh_plot(
                     "selected",
                     update_items=True,

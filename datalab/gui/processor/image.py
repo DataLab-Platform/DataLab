@@ -762,6 +762,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             for obj in self.panel.objview.get_sel_objects():
                 obj.roi = editor.get_roi()
             self.SIG_ADD_SHAPE.emit(get_uuid(obj0))
+            self.panel.selection_changed(update_items=True)
             self.panel.refresh_plot(
                 "selected",
                 update_items=True,

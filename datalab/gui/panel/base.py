@@ -825,6 +825,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 obj.roi = self.__roi_clipboard.copy()
             else:
                 obj.roi = obj.roi.combine_with(self.__roi_clipboard)
+        self.selection_changed(update_items=True)
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
@@ -1341,6 +1342,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     obj.roi = roi
                 else:
                     obj.roi.combine_with(roi)
+            self.selection_changed(update_items=True)
             self.refresh_plot("selected", True, False)
 
     def export_roi_to_file(self, filename: str | None = None) -> None:
