@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-03 22:08+0200\n"
+"POT-Creation-Date: 2025-10-04 16:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -108,8 +108,8 @@ msgstr "Ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/i
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
 
-msgid "New \"ROI\" menu, between \"Edit\" and \"Operations\" menus"
-msgstr "Nouveau menu \"ROI\", entre les menus \"Édition\" et \"Opérations\""
+msgid "New \"ROI\" menu, between \"Edit\" and \"Operations\" menus."
+msgstr "Nouveau menu \"ROI\", entre les menus \"Édition\" et \"Opérations\"."
 
 msgid "This menu provides quick access to ROI creation, editing, and deletion tools."
 msgstr "Ce menu fournit un accès rapide aux outils de création, de modification et de suppression des ROI."
@@ -117,47 +117,68 @@ msgstr "Ce menu fournit un accès rapide aux outils de création, de modificatio
 msgid "New features have also been added to the \"ROI\" menu:"
 msgstr "De nouvelles fonctionnalités ont également été ajoutées au menu \"ROI\" :"
 
-msgid "\"Create ROI grid\": for images, see below"
-msgstr "\"Créer une grille de ROI\" : pour les images, voir ci-dessous"
+msgid "\"Create ROI grid\": for images, see below."
+msgstr "\"Créer une grille de ROI\" : pour les images, voir ci-dessous."
 
-msgid "\"Copy\": copies the selected ROI to the clipboard"
-msgstr "\"Copier\": copie la ROI sélectionnée dans le presse-papiers"
+msgid "\"Copy\": copies the selected ROI to the clipboard."
+msgstr "\"Copier\": copie la ROI sélectionnée dans le presse-papiers."
 
-msgid "\"Paste\": pastes the ROI from the clipboard to the selected object (signal or image)"
-msgstr "\"Coller\": colle la ROI du presse-papiers dans l'objet sélectionné (signal ou image)"
+msgid "\"Paste\": pastes the ROI from the clipboard to the selected object (signal or image)."
+msgstr "\"Coller\": colle la ROI du presse-papiers dans l'objet sélectionné (signal ou image)."
 
-msgid "\"Export\": exports the selected ROI to a file (JSON format)"
-msgstr "\"Exporter\": exporte la ROI sélectionnée vers un fichier (format JSON)"
+msgid "\"Export\": exports the selected ROI to a file (JSON format)."
+msgstr "\"Exporter\": exporte la ROI sélectionnée vers un fichier (format JSON)."
 
-msgid "\"Import\": imports a ROI from a file (JSON format)"
-msgstr "\"Importer\": importe une ROI depuis un fichier (format JSON)"
+msgid "\"Import\": imports a ROI from a file (JSON format)."
+msgstr "\"Importer\": importe une ROI depuis un fichier (format JSON)."
+
+msgid "Individual ROI removal: new sub-menu \"Remove\" in the \"ROI\" menu, to remove ROIs individually instead of removing all ROIs at once."
+msgstr "Suppression individuelle des ROI : nouveau sous-menu \"Supprimer\" dans le menu \"ROI\", pour supprimer les ROI individuellement au lieu de supprimer tous les ROI en même temps."
 
 msgid "ROI editor now supports setting the ROI title:"
 msgstr "L'éditeur de ROI prend désormais en charge la définition du titre de la ROI :"
 
-msgid "When adding ROIs interactively, the user can now set a title from the object list on the right side of the ROI editor"
-msgstr "Lors de l'ajout de ROIs de manière interactive, l'utilisateur peut désormais définir un titre à partir de la liste des objets sur le côté droit de l'éditeur de ROI."
+msgid "When adding ROIs interactively, the user can now set a title from the object list on the right side of the ROI editor."
+msgstr "Lors de l'ajout de ROI de manière interactive, l'utilisateur peut désormais définir un titre à partir de la liste des objets sur le côté droit de l'éditeur de ROI."
 
-msgid "After validating the dialog, each ROI title may also be edited in the confirmation dialog"
-msgstr "Après validation de la boîte de dialogue, chaque titre de ROI peut également être modifié dans la boîte de dialogue de confirmation."
+msgid "After validating the dialog, each ROI title may also be edited in the confirmation dialog."
+msgstr "Après avoir validé la boîte de dialogue, le titre de chaque ROI peut également être modifié dans la boîte de dialogue de confirmation."
 
 msgid "New \"Create ROI grid\" feature:"
 msgstr "Nouvelle fonctionnalité \"Créer une grille de ROI\" :"
 
-msgid "This feature allows to create a grid of ROIs over an image"
-msgstr "Cette fonctionnalité permet de créer une grille de ROIs sur une image."
+msgid "This feature allows to create a grid of ROIs over an image."
+msgstr "Cette fonctionnalité permet de créer une grille de ROI sur une image."
 
 msgid "The grid is defined using a dialog that allows the user to:"
 msgstr "La grille est définie à l'aide d'une boîte de dialogue qui permet à l'utilisateur de :"
 
-msgid "Specify the number of rows and columns, as well as the spacing between the ROIs"
-msgstr "Spécifier le nombre de lignes et de colonnes, ainsi que l'espacement entre les ROIs."
+msgid "Specify the number of rows and columns, as well as the spacing between the ROIs."
+msgstr "Spécifier le nombre de lignes et de colonnes, ainsi que l'espacement entre les ROI."
 
-msgid "Import/export ROI grids to/from files (JSON format)"
-msgstr "Importer/Exporter des grilles de ROI vers/depuis des fichiers (format JSON)"
+msgid "Import/export ROI grids to/from files (JSON format)."
+msgstr "Importer/Exporter des grilles de ROI vers/depuis des fichiers (format JSON)."
 
-msgid "Preview the ROI grid before creating it"
-msgstr "Prévisualiser la grille de ROI avant de la créer"
+msgid "Preview the ROI grid before creating it."
+msgstr "Prévisualiser la grille de ROI avant de la créer."
+
+msgid "New \"Inverse ROI logic\" option for image ROIs:"
+msgstr "Nouvelle option \"Inverser la logique de la ROI\" pour les ROI d'image :"
+
+msgid "Added support for inverse region selection in image ROIs (rectangles, circles, polygons)."
+msgstr "Prise en charge de la sélection de région inversée dans les ROI d'image (rectangles, cercles, polygones)."
+
+msgid "When enabled, the ROI represents the area outside the defined shape instead of inside."
+msgstr "Lorsqu'elle est activée, la ROI représente la zone en dehors de la forme définie au lieu de l'intérieur."
+
+msgid "Available in the ROI editor dialog for all image ROI types."
+msgstr "Disponible dans la boîte de dialogue de l'éditeur de ROI pour tous les types de ROI d'image."
+
+msgid "Allows for more flexible region-based analysis and processing operations."
+msgstr "Permet des opérations d'analyse et de traitement basées sur des régions plus flexibles."
+
+msgid "Signal ROIs remain unaffected as the inverse concept applies only to 2D regions"
+msgstr "Les ROI de signal restent inchangés car le concept inverse ne s'applique qu'aux régions 2D."
 
 msgid "New image operation, processing and analysis features:"
 msgstr "ℹ️ Nouvelles fonctionnalités de traitement des **Images** :"

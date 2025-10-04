@@ -34,23 +34,30 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution.
 
 * New ROI (Region of Interest) management features:
-  * New "ROI" menu, between "Edit" and "Operations" menus
+  * New "ROI" menu, between "Edit" and "Operations" menus.
   * This menu provides quick access to ROI creation, editing, and deletion tools.
   * New features have also been added to the "ROI" menu:
-    * "Create ROI grid": for images, see below
-    * "Copy": copies the selected ROI to the clipboard
-    * "Paste": pastes the ROI from the clipboard to the selected object (signal or image)
-    * "Export": exports the selected ROI to a file (JSON format)
-    * "Import": imports a ROI from a file (JSON format)
+    * "Create ROI grid": for images, see below.
+    * "Copy": copies the selected ROI to the clipboard.
+    * "Paste": pastes the ROI from the clipboard to the selected object (signal or image).
+    * "Export": exports the selected ROI to a file (JSON format).
+    * "Import": imports a ROI from a file (JSON format).
+    * Individual ROI removal: new sub-menu "Remove" in the "ROI" menu, to remove ROIs individually instead of removing all ROIs at once.
   * ROI editor now supports setting the ROI title:
-    * When adding ROIs interactively, the user can now set a title from the object list on the right side of the ROI editor
-    * After validating the dialog, each ROI title may also be edited in the confirmation dialog
+    * When adding ROIs interactively, the user can now set a title from the object list on the right side of the ROI editor.
+    * After validating the dialog, each ROI title may also be edited in the confirmation dialog.
   * New "Create ROI grid" feature:
-    * This feature allows to create a grid of ROIs over an image
+    * This feature allows to create a grid of ROIs over an image.
     * The grid is defined using a dialog that allows the user to:
-      * Specify the number of rows and columns, as well as the spacing between the ROIs
-      * Import/export ROI grids to/from files (JSON format)
-      * Preview the ROI grid before creating it
+      * Specify the number of rows and columns, as well as the spacing between the ROIs.
+      * Import/export ROI grids to/from files (JSON format).
+      * Preview the ROI grid before creating it.
+  * New "Inverse ROI logic" option for image ROIs:
+    * Added support for inverse region selection in image ROIs (rectangles, circles, polygons).
+    * When enabled, the ROI represents the area outside the defined shape instead of inside.
+    * Available in the ROI editor dialog for all image ROI types.
+    * Allows for more flexible region-based analysis and processing operations.
+    * Signal ROIs remain unaffected as the inverse concept applies only to 2D regions
 
 * New image operation, processing and analysis features:
   * New 2D ramp image generator.
