@@ -35,8 +35,8 @@ msgstr "Si vous recherchez une solution alternative légère pour contrôler à 
 msgid "From an IDE"
 msgstr "Depuis un IDE"
 
-msgid "DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other IDE, or even a Jupyter Notebook) that runs a Python script. It allows to connect to a running DataLab instance, adds a signal and an image, and then runs calculations. This feature is exposed by the `RemoteProxy` class that is provided in module ``datalab.proxy``."
-msgstr "DataLab peut être contrôlé à distance depuis un IDE (par exemple `Spyder`_ ou tout autre IDE, ou même un Jupyter Notebook) qui exécute un script Python. Il permet de se connecter à une instance de DataLab en cours d'exécution, d'ajouter un signal et une image, puis d'exécuter des calculs. Cette fonctionnalité est exposée par la classe RemoteProxy fournie dans le module datalab.proxy."
+msgid "DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other IDE, or even a Jupyter Notebook) that runs a Python script. It allows to connect to a running DataLab instance, adds a signal and an image, and then runs calculations. This feature is exposed by the `RemoteProxy` class that is provided in module ``datalab.control.proxy``."
+msgstr "DataLab peut être contrôlé à distance depuis un IDE (par exemple `Spyder`_ ou tout autre IDE, ou même un Jupyter Notebook) qui exécute un script Python. Il permet de se connecter à une instance de DataLab en cours d'exécution, d'ajouter un signal et une image, puis d'exécuter des calculs. Cette fonctionnalité est exposée par la classe RemoteProxy fournie dans le module datalab.control.proxy."
 
 msgid "From a third-party application"
 msgstr "Depuis une application tierce"

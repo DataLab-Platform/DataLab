@@ -18,8 +18,8 @@ from guidata.qthelpers import qt_app_context, qt_wait
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
+from datalab.control.proxy import RemoteProxy
 from datalab.env import execenv
-from datalab.proxy import RemoteProxy
 from datalab.tests import run_datalab_in_background
 from datalab.tests.features.control import embedded1_unit_test
 from datalab.tests.features.control.remoteclient_unit import multiple_commands
@@ -92,7 +92,7 @@ class HostWindow(embedded1_unit_test.AbstractClientWindow):
             self.host.log("=> Already connected to DataLab")
 
     @try_send_command()
-    def close_cdl(self):
+    def close_datalab(self):
         """Close DataLab window"""
         if self.datalab is not None:
             self.datalab.close_application()
@@ -212,7 +212,7 @@ def test_remote_client():
             with qt_wait_print(dt, "Removing all objects"):
                 window.remove_all()
             with qt_wait_print(dt, "Closing DataLab"):
-                window.close_cdl()
+                window.close_datalab()
 
 
 if __name__ == "__main__":

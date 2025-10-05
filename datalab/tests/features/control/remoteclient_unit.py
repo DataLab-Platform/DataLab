@@ -19,8 +19,8 @@ from sigima.params import XYCalibrateParam
 from sigima.tests.data import create_2d_gaussian, create_paracetamol_signal
 
 from datalab import app
+from datalab.control.proxy import RemoteProxy
 from datalab.env import execenv
-from datalab.proxy import RemoteProxy
 from datalab.tests import helpers
 
 

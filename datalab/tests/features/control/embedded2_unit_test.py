@@ -27,7 +27,7 @@ class HostWindow(embedded1_unit_test.AbstractHostWindow):
             self.datalab.raise_window()
         self.host.log("=> Shown DataLab window")
 
-    def close_cdl(self) -> None:
+    def close_datalab(self) -> None:
         """Close DataLab window"""
         if self.datalab is not None:
             self.host.log("=> Closed DataLab")

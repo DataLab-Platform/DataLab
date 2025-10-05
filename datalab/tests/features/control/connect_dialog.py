@@ -9,7 +9,7 @@ DataLab Remote client connection dialog example
 from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 
-from datalab.proxy import RemoteProxy
+from datalab.control.proxy import RemoteProxy
 from datalab.widgets.connection import ConnectionDialog
 
 

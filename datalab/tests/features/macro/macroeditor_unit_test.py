@@ -35,7 +35,7 @@ def get_macro_example_path() -> str:
 
 import numpy as np
 
-from datalab.proxy import RemoteProxy
+from datalab.control.proxy import RemoteProxy
 
 proxy = RemoteProxy()
 

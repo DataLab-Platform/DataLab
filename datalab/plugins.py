@@ -38,8 +38,8 @@ from sigima.io.image.formats import ClassicsImageFormat  # noqa: F401
 from sigima.io.signal.base import SignalFormatBase  # noqa: F401
 
 from datalab.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
+from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
-from datalab.proxy import LocalProxy
 
 if TYPE_CHECKING:
     from sigima.objects import NewImageParam, NewSignalParam

@@ -1,11 +1,11 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Proxy objects (:mod:`datalab.proxy`)
-------------------------------------
+Proxy objects (:mod:`datalab.control.proxy`)
+--------------------------------------------
 
-The :mod:`datalab.proxy` module provides a way to access DataLab features from a proxy
-class.
+The :mod:`datalab.control.proxy` module provides a way to access DataLab features from
+a proxy class.
 
 Remote proxy
 ^^^^^^^^^^^^
@@ -80,8 +80,8 @@ import guidata.dataset as gds
 import numpy as np
 from sigima import ImageObj, SignalObj
 
-from datalab.baseproxy import BaseProxy
-from datalab.remote import RemoteClient
+from datalab.control.baseproxy import BaseProxy
+from datalab.control.remote import RemoteClient
 from datalab.utils import qthelpers as qth
 
 
@@ -104,7 +104,7 @@ class RemoteProxy(RemoteClient):
         Here is a simple example of how to use RemoteProxy in a Python script
         or in a Jupyter notebook:
 
-        >>> from datalab.proxy import RemoteProxy
+        >>> from datalab.control.proxy import RemoteProxy
         >>> proxy = RemoteProxy()
         Connecting to DataLab XML-RPC server...OK (port: 28867)
         >>> proxy.get_version()

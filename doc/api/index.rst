@@ -24,7 +24,7 @@ The public Application Programming Interface (API) of DataLab offers a set of fu
     * - :mod:`sigima.proc`
       - Computation functions, which operate on signal and image objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)
 
-    * - :mod:`datalab.proxy`
+    * - :mod:`datalab.control.proxy`
       - Proxy objects to access the DataLab interface from a Python script or a remote application
 
 .. toctree::

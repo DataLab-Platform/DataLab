@@ -28,7 +28,7 @@ def memory_leak_test(iterations=100):
         memlist = []
         for i in range(iterations):
             mainview.init_cdl()
-            mainview.close_cdl()
+            mainview.close_datalab()
             memdata = proc.memory_info().vms / 1024**2
             memlist.append(memdata)
             execenv.print(i + 1, ":", memdata, "MB")

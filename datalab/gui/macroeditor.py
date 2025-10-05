@@ -73,7 +73,7 @@ DataLab macro, and to store the macro's title.
 
 import numpy as np
 
-from datalab.proxy import RemoteProxy
+from datalab.control.proxy import RemoteProxy
 
 proxy = RemoteProxy()
 

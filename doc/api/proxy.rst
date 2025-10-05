@@ -1,2 +1,2 @@
-.. automodule:: datalab.proxy
+.. automodule:: datalab.control.proxy
     :no-members:

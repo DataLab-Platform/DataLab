@@ -7,7 +7,7 @@ import numpy as np
 # installed with `pip install sigima`, for example, instead of the full DataLab package:
 #
 # from sigima.client import SimpleRemoteProxy as RemoteProxy
-from datalab.proxy import RemoteProxy
+from datalab.control.proxy import RemoteProxy
 
 proxy = RemoteProxy()
 

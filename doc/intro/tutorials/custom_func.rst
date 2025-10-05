@@ -88,7 +88,7 @@ this code and replace it with our own code::
     # Import the necessary modules
     import numpy as np
     import scipy.ndimage as spi
-    from datalab.proxy import RemoteProxy
+    from datalab.control.proxy import RemoteProxy
 
     # Define our custom processing function
     def weighted_average_denoise(values: np.ndarray) -> float:

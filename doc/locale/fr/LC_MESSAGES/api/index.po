@@ -61,7 +61,7 @@ msgstr ""
 msgid "Computation functions, which operate on signal and image objects (:class:`sigima.objects.SignalObj` or :class:`sigima.objects.ImageObj`)"
 msgstr "Fonctions de calcul, qui opèrent sur des objets signaux et images (:class:`sigima.objects.SignalObj` ou :class:`sigima.objects.ImageObj`)"
 
-msgid ":mod:`datalab.proxy`"
+msgid ":mod:`datalab.control.proxy`"
 msgstr ""
 
 msgid "Proxy objects to access the DataLab interface from a Python script or a remote application"

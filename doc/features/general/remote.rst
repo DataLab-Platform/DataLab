@@ -28,7 +28,7 @@ DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other
 IDE, or even a Jupyter Notebook) that runs a Python script. It allows to
 connect to a running DataLab instance, adds a signal and an image, and then
 runs calculations. This feature is exposed by the `RemoteProxy` class that
-is provided in module ``datalab.proxy``.
+is provided in module ``datalab.control.proxy``.
 
 From a third-party application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -121,7 +121,7 @@ Example of use:
 Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: datalab.remote.RemoteClient
+.. autoclass:: datalab.control.remote.RemoteClient
     :inherited-members:
 
 

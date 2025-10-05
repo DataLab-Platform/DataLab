@@ -45,7 +45,6 @@ from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 import datalab
 from datalab import __docurl__, __homeurl__, __supporturl__, env
 from datalab.adapters_plotpy import create_adapter_from_object
-from datalab.baseproxy import AbstractDLControl
 from datalab.config import (
     APP_DESC,
     APP_NAME,
@@ -56,6 +55,8 @@ from datalab.config import (
     Conf,
     _,
 )
+from datalab.control.baseproxy import AbstractDLControl
+from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.docks import DockablePlotWidget
@@ -63,7 +64,6 @@ from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, image, macro, signal
 from datalab.gui.settings import edit_settings
 from datalab.plugins import PluginRegistry, discover_plugins
-from datalab.remote import RemoteServer
 from datalab.utils import dephash
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (

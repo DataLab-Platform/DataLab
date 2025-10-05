@@ -130,7 +130,7 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
         add_btn(
             _("Import macro from file (example)"), self.import_macro, 0, "CommandLink"
         )
-        add_btn(_("Close DataLab"), self.close_cdl, 10, "DialogCloseButton")
+        add_btn(_("Close DataLab"), self.close_datalab, 10, "DialogCloseButton")
 
     def add_additional_buttons(self):
         """Add additional buttons"""
@@ -146,7 +146,7 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
             self.host.log("=> Raised DataLab window")
 
     @abc.abstractmethod
-    def close_cdl(self):
+    def close_datalab(self):
         """Close DataLab window"""
 
     def add_object(self, obj):
@@ -277,7 +277,7 @@ class HostWindow(AbstractHostWindow):
         self.datalab = None
         self.host.log("✨DataLab window was closed by user")
 
-    def close_cdl(self):
+    def close_datalab(self):
         """Close DataLab window"""
         if self.datalab is not None:
             self.host.log("=> Closed DataLab")

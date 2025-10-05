@@ -35,8 +35,8 @@ from sigima import ImageObj, SignalObj
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
+    from datalab.control.remote import ServerProxy
     from datalab.gui.main import DLMainWindow
-    from datalab.remote import ServerProxy
 
 
 class AbstractDLControl(abc.ABC):

@@ -14,7 +14,7 @@ import sigima.objects
 import sigima.params
 from sigima.tests.data import get_test_image
 
-from datalab.proxy import proxy_context
+from datalab.control.proxy import proxy_context
 from datalab.tests import skip_if_opencv_missing
 
 
