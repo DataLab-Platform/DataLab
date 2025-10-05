@@ -13,22 +13,20 @@ The :class:`RemoteClient` class provides the main interface to DataLab XML-RPC s
 from __future__ import annotations
 
 import functools
-import importlib
 import sys
 import threading
 import time
 import warnings
 from collections.abc import Callable
-from io import BytesIO
 from typing import TYPE_CHECKING
 from xmlrpc.client import Binary, ServerProxy
 from xmlrpc.server import SimpleXMLRPCServer
 
 import guidata.dataset as gds
 import numpy as np
-from guidata.io import JSONReader, JSONWriter
 from packaging.version import Version
 from qtpy import QtCore as QC
+from sigima.client import utils
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
@@ -42,76 +40,6 @@ if TYPE_CHECKING:
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
-
-
-def array_to_rpcbinary(data: np.ndarray) -> Binary:
-    """Convert NumPy array to XML-RPC Binary object, with shape and dtype.
-
-    The array is converted to a binary string using NumPy's native binary
-    format.
-
-    Args:
-        data: NumPy array to convert
-
-    Returns:
-        XML-RPC Binary object
-    """
-    dbytes = BytesIO()
-    np.save(dbytes, data, allow_pickle=False)
-    return Binary(dbytes.getvalue())
-
-
-def rpcbinary_to_array(binary: Binary) -> np.ndarray:
-    """Convert XML-RPC binary to NumPy array.
-
-    Args:
-        binary: XML-RPC Binary object
-
-    Returns:
-        NumPy array
-    """
-    dbytes = BytesIO(binary.data)
-    return np.load(dbytes, allow_pickle=False)
-
-
-def dataset_to_json(param: gds.DataSet) -> list[str]:
-    """Convert guidata DataSet to JSON data.
-
-    The JSON data is a list of three elements:
-
-    - The first element is the module name of the DataSet class
-    - The second element is the class name of the DataSet class
-    - The third element is the JSON data of the DataSet instance
-
-    Args:
-        param: guidata DataSet to convert
-
-    Returns:
-        JSON data
-    """
-    writer = JSONWriter()
-    param.serialize(writer)
-    param_json = writer.get_json()
-    klass = param.__class__
-    return [klass.__module__, klass.__name__, param_json]
-
-
-def json_to_dataset(param_data: list[str]) -> gds.DataSet:
-    """Convert JSON data to guidata DataSet.
-
-    Args:
-        param_data: JSON data
-
-    Returns:
-        guidata DataSet
-    """
-    param_module, param_clsname, param_json = param_data
-    mod = importlib.__import__(param_module, fromlist=[param_clsname])
-    klass = getattr(mod, param_clsname)
-    param = klass()
-    reader = JSONReader(param_json)
-    param.deserialize(reader)
-    return param
 
 
 def remote_call(func: Callable) -> object:
@@ -387,8 +315,8 @@ class RemoteServer(QC.QThread):
         Returns:
             True if successful
         """
-        xdata = rpcbinary_to_array(xbinary)
-        ydata = rpcbinary_to_array(ybinary)
+        xdata = utils.rpcbinary_to_array(xbinary)
+        ydata = utils.rpcbinary_to_array(ybinary)
         signal = create_signal(title, xdata, ydata)
         signal.xunit = xunit or ""  # In case xunit is None
         signal.yunit = yunit or ""  # In case yunit is None
@@ -428,7 +356,7 @@ class RemoteServer(QC.QThread):
         Returns:
             True if successful
         """
-        data = rpcbinary_to_array(zbinary)
+        data = utils.rpcbinary_to_array(zbinary)
         image = create_image(title, data)
         image.xunit = xunit or ""  # In case xunit is None
         image.yunit = yunit or ""  # In case yunit is None
@@ -453,7 +381,7 @@ class RemoteServer(QC.QThread):
         Returns:
             True if successful
         """
-        obj = json_to_dataset(obj_data)
+        obj = utils.json_to_dataset(obj_data)
         self.SIG_ADD_OBJECT.emit(obj, group_id, set_current)
         return True
 
@@ -547,7 +475,7 @@ class RemoteServer(QC.QThread):
         if param_data is None:
             param = None
         else:
-            param = json_to_dataset(param_data)
+            param = utils.json_to_dataset(param_data)
         self.SIG_CALC.emit(name, param)
         return True
 
@@ -598,7 +526,7 @@ class RemoteServer(QC.QThread):
         obj = self.win.get_object(nb_id_title, panel)
         if obj is None:
             return None
-        return dataset_to_json(obj)
+        return utils.dataset_to_json(obj)
 
     @remote_call
     def get_object_uuids(
@@ -909,8 +837,8 @@ class RemoteClient(BaseProxy):
         obj = SignalObj()
         obj.set_xydata(xdata, ydata)
         obj.check_data()
-        xbinary = array_to_rpcbinary(xdata)
-        ybinary = array_to_rpcbinary(ydata)
+        xbinary = utils.array_to_rpcbinary(xdata)
+        ybinary = utils.array_to_rpcbinary(ydata)
         return self._datalab.add_signal(
             title, xbinary, ybinary, xunit, yunit, xlabel, ylabel, group_id, set_current
         )
@@ -951,7 +879,7 @@ class RemoteClient(BaseProxy):
         obj = ImageObj()
         obj.data = data
         obj.check_data()
-        zbinary = array_to_rpcbinary(data)
+        zbinary = utils.array_to_rpcbinary(data)
         return self._datalab.add_image(
             title,
             zbinary,
@@ -978,7 +906,7 @@ class RemoteClient(BaseProxy):
             group_id: group id in which to add the object. Defaults to ""
             set_current: if True, set the added object as current
         """
-        obj_data = dataset_to_json(obj)
+        obj_data = utils.dataset_to_json(obj)
         self._datalab.add_object(obj_data, group_id, set_current)
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
@@ -1000,7 +928,7 @@ class RemoteClient(BaseProxy):
         """
         if param is None:
             return self._datalab.calc(name)
-        return self._datalab.calc(name, dataset_to_json(param))
+        return self._datalab.calc(name, utils.dataset_to_json(param))
 
     def get_object(
         self,
@@ -1023,7 +951,7 @@ class RemoteClient(BaseProxy):
         param_data = self._datalab.get_object(nb_id_title, panel)
         if param_data is None:
             return None
-        return json_to_dataset(param_data)
+        return utils.json_to_dataset(param_data)
 
     def get_object_shapes(
         self,
