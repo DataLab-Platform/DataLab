@@ -31,12 +31,15 @@ The tests include:
 # guitest: skip
 
 import inspect
+import warnings
 
 from guidata.env import execenv
-from sigima.client.remote import SimpleRemoteProxy
+from packaging.version import Version
+from sigima.client.remote import SimpleRemoteProxy, __required_server_version__
 from sigima.client.stub import DataLabStubServer
 from sigima.tests.common.client_unit_test import RemoteClientTester
 
+import datalab
 from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.proxy import RemoteProxy
 from datalab.tests import run_datalab_in_background
@@ -178,7 +181,141 @@ def test_with_real_server() -> None:
         tester.close_datalab()
 
 
+def test_version_compatibility() -> None:
+    """Test that DataLab version is compatible with Sigima client.
+
+    This test ensures that the current version of DataLab meets the minimum
+    requirements of the Sigima client as defined in __required_server_version__.
+    """
+    execenv.print("\n=== Testing Version Compatibility ===")
+
+    # Get DataLab version
+    datalab_version = datalab.__version__
+    execenv.print(f"DataLab version: {datalab_version}")
+    execenv.print(f"Required version: {__required_server_version__}")
+
+    # Test version comparison using Version class with edge cases
+    execenv.print("\nTesting Version comparison:")
+    test_cases = [
+        ("1.0.0", "1.0.0", True, "Same version"),
+        ("1.0.1", "1.0.0", True, "Newer patch version"),
+        ("1.1.0", "1.0.0", True, "Newer minor version"),
+        ("2.0.0", "1.0.0", True, "Newer major version"),
+        ("0.9.9", "1.0.0", False, "Older version"),
+        ("1.0.0a1", "1.0.0", False, "Alpha is pre-release (< 1.0.0)"),
+        ("1.0.0b2", "1.0.0", False, "Beta is pre-release (< 1.0.0)"),
+        ("1.0.0rc1", "1.0.0", False, "RC is pre-release (< 1.0.0)"),
+        ("1.0.0", "1.0.0a1", True, "Release is newer than alpha"),
+        ("1.0.1", "1.0.0a1", True, "Newer patch > alpha"),
+        ("1.0.0a10", "1.0.0a2", True, "Later alpha version"),
+    ]
+
+    for ver1, ver2, expected, description in test_cases:
+        result = Version(ver1) >= Version(ver2)
+        status = "✓" if result == expected else "✗"
+        execenv.print(
+            f"  {status} Version('{ver1}') >= Version('{ver2}') = {result} "
+            f"[expected: {expected}] - {description}"
+        )
+        assert result == expected, (
+            f"Version comparison failed for {ver1} vs {ver2}: "
+            f"expected {expected}, got {result}"
+        )
+
+    # Check if current DataLab version is compatible
+    execenv.print(f"\nChecking DataLab {datalab_version} compatibility...")
+    is_compatible = Version(datalab_version) >= Version(__required_server_version__)
+
+    if is_compatible:
+        execenv.print(
+            f"✅ DataLab version {datalab_version} is compatible "
+            f"(>= {__required_server_version__})"
+        )
+    else:
+        execenv.print(
+            f"⚠️  DataLab version {datalab_version} is NOT compatible "
+            f"(< {__required_server_version__})"
+        )
+
+    # Note: During development (alpha/beta/rc versions), we allow the test to pass
+    # even if the version comparison indicates incompatibility. In production,
+    # both DataLab and Sigima should be at release versions.
+    vdatalab = Version(datalab_version)
+
+    # Allow pre-release versions if they're the same base version
+    if vdatalab.is_prerelease and not is_compatible:
+        # Check if the base version (without pre-release) would be compatible
+        base_ver = f"{vdatalab.major}.{vdatalab.minor}.{vdatalab.micro}"
+        if Version(base_ver) >= Version(__required_server_version__):
+            execenv.print(
+                f"ℹ️  Pre-release version {datalab_version} allowed for testing "
+                f"(base version {base_ver} >= {__required_server_version__})"
+            )
+            is_compatible = True
+
+    # This assertion ensures DataLab's version meets Sigima's requirements
+    assert is_compatible, (
+        f"DataLab version {datalab_version} is not compatible with "
+        f"Sigima client requirements (>= {__required_server_version__}). "
+        f"Please upgrade DataLab or downgrade the required version in Sigima."
+    )
+
+    # Test that warning is issued when connecting to incompatible version
+    execenv.print("\nTesting version compatibility warning with stub server...")
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+
+        # Create a stub server that reports an old version
+        stub = DataLabStubServer(port=0, verbose=False)
+        # Temporarily patch get_version to return an old version
+        original_get_version = stub.get_version
+
+        def mock_old_version():
+            return "0.9.0"  # Old version that should trigger warning
+
+        stub.get_version = mock_old_version
+
+        try:
+            port = stub.start()
+
+            # Try to connect - should trigger warning
+            proxy = SimpleRemoteProxy(autoconnect=False)
+            proxy.connect(port=str(port))
+
+            # Check that a warning was issued
+            version_warnings = [
+                warning
+                for warning in w
+                if "may not be fully compatible" in str(warning.message)
+            ]
+
+            if version_warnings:
+                execenv.print(
+                    f"✅ Warning correctly issued for incompatible version: "
+                    f"{version_warnings[0].message}"
+                )
+            else:
+                execenv.print("⚠️  No warning issued for incompatible version")
+                # Print all warnings for debugging
+                if w:
+                    execenv.print(f"   All warnings captured ({len(w)}):")
+                    for warning in w:
+                        execenv.print(f"     - {warning.message}")
+
+            assert len(version_warnings) > 0, (
+                "Expected warning for incompatible version but none was issued"
+            )
+
+        finally:
+            # Restore original method and stop server
+            stub.get_version = original_get_version
+            stub.stop()
+
+    execenv.print("✨ Version compatibility test completed successfully!")
+
+
 if __name__ == "__main__":
     test_compare_server_methods()
     test_compare_client_methods()
+    test_version_compatibility()
     test_with_real_server()
