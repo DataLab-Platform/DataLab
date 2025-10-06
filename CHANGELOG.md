@@ -6,6 +6,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* Multi-object property editing:
+  * The properties panel now supports applying property changes to multiple selected objects simultaneously.
+  * When multiple signals or images are selected, modifying and applying properties updates all selected objects, not just the current one.
+  * Only the properties that were actually modified are applied to the selected objects, preserving individual object properties that were not changed.
+  * Typical use case: changing the LUT boundaries (Z scale bounds) or colormap of multiple images at once, or adjusting display properties for a group of signals.
+  * This significantly improves workflow efficiency when working with multiple objects that need similar property adjustments.
+
 * Internal console status indicator added to the status bar:
   * The status bar now features an indicator for the internal console, visible only when the console is hidden.
   * Clicking the indicator opens the internal console.

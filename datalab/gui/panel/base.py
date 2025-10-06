@@ -20,7 +20,7 @@ import guidata.dataset.qtwidgets as gdq
 import numpy as np
 import plotpy.io
 from guidata.configtools import get_icon
-from guidata.dataset import update_dataset
+from guidata.dataset import restore_dataset, update_dataset
 from guidata.qthelpers import add_actions, create_action, exec_dialog
 from plotpy.plot import PlotDialog
 from plotpy.tools import ActionTool
@@ -96,14 +96,20 @@ def is_plot_item_serializable(item: Any) -> bool:
 
 
 class ObjectProp(QW.QWidget):
-    """Object handling panel properties"""
+    """Object handling panel properties
 
-    def __init__(self, panel: BaseDataPanel, paramclass: SignalObj | ImageObj):
+    Args:
+        panel: parent data panel
+        objclass: class of the object handled by the panel (SignalObj or ImageObj)
+    """
+
+    def __init__(self, panel: BaseDataPanel, objclass: SignalObj | ImageObj) -> None:
         super().__init__(panel)
-        self.paramclass = paramclass
-        self.properties = gdq.DataSetEditGroupBox(_("Properties"), paramclass)
+        self.objclass = objclass
+        self.properties = gdq.DataSetEditGroupBox(_("Properties"), objclass)
         self.properties.SIG_APPLY_BUTTON_CLICKED.connect(panel.properties_changed)
         self.properties.setEnabled(False)
+        self.__original_values: dict[str, Any] = {}
 
         self.add_prop_layout = QW.QHBoxLayout()
         playout: QW.QGridLayout = self.properties.edit.layout
@@ -111,50 +117,115 @@ class ObjectProp(QW.QWidget):
             self.add_prop_layout, playout.rowCount() - 1, 0, 1, 1, QC.Qt.AlignLeft
         )
 
-        self.param_label = QW.QLabel()
-        self.param_label.setTextFormat(QC.Qt.RichText)
-        self.param_label.setTextInteractionFlags(
+        self.analysis_parameter_label = QW.QLabel()
+        self.analysis_parameter_label.setTextFormat(QC.Qt.RichText)
+        self.analysis_parameter_label.setTextInteractionFlags(
             QC.Qt.TextBrowserInteraction | QC.Qt.TextSelectableByKeyboard
         )
-        self.param_label.setAlignment(QC.Qt.AlignTop)
-        param_scroll = QW.QScrollArea()
-        param_scroll.setWidgetResizable(True)
-        param_scroll.setWidget(self.param_label)
+        self.analysis_parameter_label.setAlignment(QC.Qt.AlignTop)
+        analysis_parameter_scroll = QW.QScrollArea()
+        analysis_parameter_scroll.setWidgetResizable(True)
+        analysis_parameter_scroll.setWidget(self.analysis_parameter_label)
 
         child: QW.QTabWidget = None
         for child in self.properties.children():
             if isinstance(child, QW.QTabWidget):
                 break
-        child.addTab(param_scroll, _("Analysis parameters"))
+        child.addTab(analysis_parameter_scroll, _("Analysis parameters"))
 
         vlayout = QW.QVBoxLayout()
         vlayout.addWidget(self.properties)
         self.setLayout(vlayout)
 
-    def add_button(self, button):
+    def add_button(self, button: QW.QPushButton) -> None:
         """Add additional button on bottom of properties panel"""
         self.add_prop_layout.addWidget(button)
 
-    def set_param_label(self, param: SignalObj | ImageObj):
-        """Set computing parameters label"""
+    def display_analysis_parameter(self, obj: SignalObj | ImageObj) -> None:
+        """Set analysis parameter label.
+
+        Args:
+            obj: Signal or Image object
+        """
         text = ""
-        for key, value in param.metadata.items():
+        for key, value in obj.metadata.items():
             if key.endswith("__param_html") and isinstance(value, str):
                 if text:
                     text += "<br><br>"
                 text += value
-        self.param_label.setText(text)
+        self.analysis_parameter_label.setText(text)
 
-    def update_properties_from(self, param: SignalObj | ImageObj | None = None):
-        """Update properties from signal/image dataset"""
-        self.properties.setDisabled(param is None)
-        if param is None:
-            param = self.paramclass()
-        self.properties.dataset.set_defaults()
-        update_dataset(self.properties.dataset, param)
+    def update_properties_from(self, obj: SignalObj | ImageObj | None = None) -> None:
+        """Update properties from signal/image dataset
+
+        Args:
+            obj: Signal or Image object
+        """
+        self.properties.setDisabled(obj is None)
+        if obj is None:
+            obj = self.objclass()
+        dataset: SignalObj | ImageObj = self.properties.dataset
+        dataset.set_defaults()
+        update_dataset(dataset, obj)
         self.properties.get()
-        self.set_param_label(param)
+        self.display_analysis_parameter(obj)
         self.properties.apply_button.setEnabled(False)
+
+        # Store original values to detect which properties have changed
+        # Using restore_dataset to convert the dataset to a dictionary
+        self.__original_values = {}
+        restore_dataset(dataset, self.__original_values)
+
+    def get_changed_properties(self) -> dict[str, Any]:
+        """Get dictionary of properties that have changed from original values.
+
+        Returns:
+            Dictionary mapping property names to their new values, containing only
+            the properties that were modified by the user.
+        """
+        dataset = self.properties.dataset
+        changed = {}
+
+        # Get current values as a dictionary
+        current_values = {}
+        restore_dataset(dataset, current_values)
+
+        # Compare with original values
+        for key, current_value in current_values.items():
+            original_value = self.__original_values.get(key)
+            # Check if value has changed
+            if not self._values_equal(current_value, original_value):
+                changed[key] = current_value
+        return changed
+
+    def update_original_values(self) -> None:
+        """Update the stored original values to the current dataset values.
+
+        This should be called after applying changes to reset the baseline
+        for detecting future changes.
+        """
+        dataset = self.properties.dataset
+        self.__original_values = {}
+        restore_dataset(dataset, self.__original_values)
+
+    @staticmethod
+    def _values_equal(val1: Any, val2: Any) -> bool:
+        """Compare two values, handling special cases like numpy arrays.
+
+        Args:
+            val1: first value
+            val2: second value
+
+        Returns:
+            True if values are equal
+        """
+        # Handle numpy arrays
+        if isinstance(val1, np.ndarray) or isinstance(val2, np.ndarray):
+            if not isinstance(val1, np.ndarray) or not isinstance(val2, np.ndarray):
+                return False
+            return np.array_equal(val1, val2)
+        # Handle regular comparison
+        return val1 == val2
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
@@ -1381,12 +1452,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: update object properties,
         refresh plot and update object view."""
-        obj = self.objview.get_current_object()
-        # if obj is not None:  # XXX: Is it necessary?
-        obj.mark_roi_as_changed()
-        update_dataset(obj, self.objprop.properties.dataset)
-        self.objview.update_item(get_uuid(obj))
+        # Get only the properties that have changed from the original values
+        changed_props = self.objprop.get_changed_properties()
+
+        # Apply only the changed properties to all selected objects
+        for obj in self.objview.get_sel_objects(include_groups=True):
+            obj.mark_roi_as_changed()
+            # Update only the changed properties instead of all properties
+            update_dataset(obj, changed_props)
+            self.objview.update_item(get_uuid(obj))
         self.refresh_plot("selected", True, False)
+
+        # Update the stored original values to reflect the new state
+        # This ensures subsequent changes are compared against the current values
+        self.objprop.update_original_values()
 
     # ------Plotting data in modal dialogs----------------------------------------------
     def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:

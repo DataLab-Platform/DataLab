@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-04 16:52+0200\n"
+"POT-Creation-Date: 2025-10-06 18:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,24 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Multi-object property editing:"
+msgstr "Édition des propriétés de plusieurs objets :"
+
+msgid "The properties panel now supports applying property changes to multiple selected objects simultaneously."
+msgstr "Le panneau des propriétés prend désormais en charge l'application des modifications de propriétés à plusieurs objets sélectionnés simultanément."
+
+msgid "When multiple signals or images are selected, modifying and applying properties updates all selected objects, not just the current one."
+msgstr "Lorsque plusieurs signaux ou images sont sélectionnés, la modification et l'application des propriétés mettent à jour tous les objets sélectionnés, et pas seulement le courant."
+
+msgid "Only the properties that were actually modified are applied to the selected objects, preserving individual object properties that were not changed."
+msgstr "Seules les propriétés qui ont été réellement modifiées sont appliquées aux objets sélectionnés, préservant les propriétés individuelles des objets qui n'ont pas été changées."
+
+msgid "Typical use case: changing the LUT boundaries (Z scale bounds) or colormap of multiple images at once, or adjusting display properties for a group of signals."
+msgstr "Cas d'utilisation typique : modification des limites de la LUT (bornes de l'échelle Z) ou de la carte des couleurs de plusieurs images à la fois, ou ajustement des propriétés d'affichage d'un groupe de signaux."
+
+msgid "This significantly improves workflow efficiency when working with multiple objects that need similar property adjustments."
+msgstr "Cela améliore considérablement l'efficacité du flux de travail lors de la manipulation de plusieurs objets nécessitant des ajustements de propriétés similaires."
 
 msgid "Internal console status indicator added to the status bar:"
 msgstr "Indicateur d'état de la console interne ajouté à la barre d'état :"
