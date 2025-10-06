@@ -34,6 +34,7 @@ from sigima.tests import helpers
 
 import datalab.config  # Loading icons
 from datalab.config import MOD_NAME
+from datalab.control.proxy import RemoteProxy
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.image import ImagePanel
@@ -107,7 +108,7 @@ def is_pid_alive(pid: int) -> bool:
     return psutil.pid_exists(pid) and psutil.Process(pid).is_running()
 
 
-def run_datalab_in_background():
+def run_datalab_in_background(wait_until_ready: bool = True) -> None:
     """Run DataLab application as a service.
 
     This function starts the DataLab application in a separate process, ensuring that
@@ -121,8 +122,13 @@ def run_datalab_in_background():
     application needs to be running in the background while a client connects to it
     and performs various operations.
 
+    Args:
+        wait_until_ready: If True, waits until the DataLab application is ready to
+         accept connections (default: True). Uses RemoteProxy's built-in retry logic
+         with extended timeout to handle DataLab startup time.
+
     Raises:
-        AssertionError: If the DataLab application fails to start
+        RuntimeError: If the DataLab application fails to start
     """
     env = os.environ.copy()
     env[execenv.DO_NOT_QUIT_ENV] = "1"
@@ -141,8 +147,26 @@ def run_datalab_in_background():
     # error messages or logs that might help you understand why the application failed
     # to start.
     # If the script is executed within a pytest session, add the `-s` option to pytest.
-    time.sleep(2)
-    assert is_pid_alive(proc.pid), "Unable to start DataLab application"
+
+    # Give the process a moment to actually start
+    time.sleep(1)
+    if not is_pid_alive(proc.pid):
+        raise RuntimeError("DataLab process terminated immediately after start")
+
+    if wait_until_ready:
+        # Use RemoteProxy's built-in retry mechanism with extended timeout
+        # DataLab startup: Python imports, Qt init, GUI creation, XML-RPC server
+        try:
+            proxy = RemoteProxy(autoconnect=False)
+            proxy.connect(timeout=30.0)  # 30 seconds max for DataLab to be ready
+            proxy.disconnect()
+        except ConnectionRefusedError as exc:
+            if is_pid_alive(proc.pid):
+                proc.kill()
+            raise RuntimeError(
+                "Failed to connect to DataLab application. "
+                "Process may have started but XML-RPC server is not responding."
+            ) from exc
 
 
 @contextmanager

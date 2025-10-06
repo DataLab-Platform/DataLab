@@ -753,8 +753,10 @@ class RemoteClient(BaseProxy):
         Args:
             port: XML-RPC port to connect to. If not specified,
              the port is automatically retrieved from DataLab configuration.
-            timeout: Timeout in seconds. Defaults to 5.0.
-            retries: Number of retries. Defaults to 10.
+            timeout: Maximum time to wait for connection in seconds. Defaults to 5.0.
+             This is the total maximum wait time, not per retry.
+            retries: Number of retries. Defaults to 10. This parameter is deprecated
+             and will be removed in a future version (kept for backward compatibility).
 
         Raises:
             ConnectionRefusedError: Unable to connect to DataLab
@@ -762,23 +764,39 @@ class RemoteClient(BaseProxy):
             ValueError: Invalid number of retries (must be >= 1)
         """
         timeout = 5.0 if timeout is None else timeout
-        retries = 10 if retries is None else retries
+        retries = 10 if retries is None else retries  # Kept for backward compatibility
         if timeout < 0.0:
             raise ValueError("timeout must be >= 0.0")
         if retries < 1:
             raise ValueError("retries must be >= 1")
-        self.set_port(port)
+
         execenv.print(f"Connecting to DataLab XML-RPC server... [port:{port}] ", end="")
-        for _index in range(retries):
+
+        # Use exponential backoff for more efficient retrying
+        start_time = time.time()
+        poll_interval = 0.1  # Start with 100ms
+        max_poll_interval = 1.0  # Cap at 1 second
+
+        while True:
             try:
+                # Try to set the port - this may fail if DataLab hasn't written its
+                # config file yet, so we retry it in the loop
+                self.set_port(port)
                 self.__connect_to_server()
-                break
-            except ConnectionRefusedError:
-                time.sleep(timeout / retries)
-        else:
-            execenv.print("KO")
-            raise ConnectionRefusedError("Unable to connect to DataLab")
-        execenv.print(f"OK (port: {self.port})")
+                elapsed = time.time() - start_time
+                execenv.print(f"OK (port: {self.port}, connected in {elapsed:.1f}s)")
+                return
+            except (ConnectionRefusedError, OSError):
+                # Catch both ConnectionRefusedError and OSError (includes socket errors)
+                elapsed = time.time() - start_time
+                if elapsed >= timeout:
+                    execenv.print("KO")
+                    raise ConnectionRefusedError(
+                        f"Unable to connect to DataLab after {elapsed:.1f}s"
+                    )
+                # Wait before next retry with exponential backoff
+                time.sleep(poll_interval)
+                poll_interval = min(poll_interval * 1.5, max_poll_interval)
 
     def disconnect(self) -> None:
         """Disconnect from DataLab XML-RPC server."""
