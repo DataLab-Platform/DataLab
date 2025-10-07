@@ -258,6 +258,11 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_def_alpha = conf.Option()
     ima_def_alpha_function = conf.Option()
 
+    # Datetime axis format strings for different time units
+    # Format strings use Python's strftime format codes
+    sig_datetime_format_s = conf.Option()  # Format for s, min, h
+    sig_datetime_format_ms = conf.Option()  # Format for ms, us, ns
+
     @classmethod
     def get_def_dict(cls, category: Literal["ima", "sig"]) -> dict:
         """Get default visualization settings as a dictionary
@@ -378,6 +383,9 @@ def initialize():
     Conf.view.ima_def_interpolation.get(5)
     Conf.view.ima_def_alpha.get(1.0)
     Conf.view.ima_def_alpha_function.get(LUTAlpha.NONE.value)
+    # Datetime format strings: % must be escaped as %% for ConfigParser
+    Conf.view.sig_datetime_format_s.get("%%H:%%M:%%S")
+    Conf.view.sig_datetime_format_ms.get("%%H:%%M:%%S.%%f")
 
 
 def reset():

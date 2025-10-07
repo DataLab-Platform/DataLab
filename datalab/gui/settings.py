@@ -277,6 +277,24 @@ class ViewSettings(gds.DataSet):
             "visualization.<br>Set to 0% for no margin (exact data bounds)."
         ),
     )
+    sig_datetime_format_s = gds.StringItem(
+        _("DateTime format (s/min/h)"),
+        default="%H:%M:%S",
+        help=_(
+            "Format string for datetime X-axis labels when using standard time "
+            "units (s, min, h).<br>Uses Python's strftime format codes "
+            "(e.g., %H:%M:%S for hours:minutes:seconds)."
+        ),
+    )
+    sig_datetime_format_ms = gds.StringItem(
+        _("DateTime format (ms/μs/ns)"),
+        default="%H:%M:%S.%f",
+        help=_(
+            "Format string for datetime X-axis labels when using sub-second time "
+            "units (ms, μs, ns).<br>Uses Python's strftime format codes "
+            "(e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds)."
+        ),
+    )
     _g1 = gds.EndGroup("")
 
     g2 = gds.BeginGroup(_("Image"))
@@ -347,6 +365,10 @@ def conf_to_datasets(paramdict: dict[str, gds.DataSet]) -> None:
     """Convert DataLab configuration to datasets"""
     for param, section, option in _iter_conf(paramdict):
         value = getattr(getattr(Conf, section), option).get()
+        # ConfigParser automatically unescapes %% to % when reading, but to be safe
+        # we ensure datetime format strings are properly unescaped for display
+        if option in ("sig_datetime_format_s", "sig_datetime_format_ms"):
+            value = value.replace("%%", "%")
         setattr(param, option, value)
 
 
@@ -354,6 +376,9 @@ def datasets_to_conf(paramdict: dict[str, gds.DataSet]) -> None:
     """Convert datasets to DataLab configuration"""
     for param, section, option in _iter_conf(paramdict):
         value = getattr(param, option)
+        # Escape % characters for datetime format strings (ConfigParser requirement)
+        if option in ("sig_datetime_format_s", "sig_datetime_format_ms"):
+            value = value.replace("%", "%%")
         getattr(getattr(Conf, section), option).set(value)
 
 

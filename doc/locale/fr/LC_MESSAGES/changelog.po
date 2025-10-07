@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-07 14:58+0200\n"
+"POT-Creation-Date: 2025-10-07 19:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -34,19 +34,50 @@ msgid "**DateTime signal support**: Signals can now handle time-series data with
 msgstr "**Prise en charge des signaux DateTime** : Les signaux peuvent désormais gérer des données de séries temporelles avec un axe X datetime"
 
 msgid "Automatic datetime detection when opening CSV files with timestamp columns"
-msgstr "**Détection automatique des dates lors de l'ouverture de fichiers CSV avec des colonnes horodatées**"
+msgstr "Détection automatique des dates lors de l'ouverture de fichiers CSV avec des colonnes horodatées"
 
 msgid "DataLab automatically recognizes and converts datetime values (e.g., \"2025-06-19 10:00:00\") to numeric timestamps"
-msgstr "**DataLab reconnaît et convertit automatiquement les valeurs datetime (par exemple, \"2025-06-19 10:00:00\") en horodatages numériques**"
+msgstr "DataLab reconnaît et convertit automatiquement les valeurs datetime (par exemple, \"2025-06-19 10:00:00\") en horodatages numériques"
 
 msgid "Supports common datetime formats from data loggers and measurement instruments"
-msgstr "**Prend en charge les formats datetime courants des enregistreurs de données et des instruments de mesure**"
+msgstr "Prend en charge les formats datetime courants des enregistreurs de données et des instruments de mesure"
 
 msgid "Preserves datetime context for proper display and analysis"
-msgstr "**Préserve le contexte datetime pour un affichage et une analyse appropriés**"
+msgstr "Préserve le contexte datetime pour un affichage et une analyse appropriés"
 
 msgid "Time units can be configured (seconds, milliseconds, microseconds, minutes, hours)"
-msgstr "**Les unités de temps peuvent être configurées (secondes, millisecondes, microsecondes, minutes, heures)**"
+msgstr "Les unités de temps peuvent être configurées (secondes, millisecondes, microsecondes, minutes, heures)"
+
+msgid "**Automatic datetime axis formatting**: When displaying signals with datetime X-axis, the plot automatically switches to datetime-formatted axis labels"
+msgstr "**Formatage automatique de l'axe datetime** : Lors de l'affichage de signaux avec un axe X datetime, le graphique passe automatiquement aux étiquettes d'axe au format datetime"
+
+msgid "X-axis labels show human-readable timestamps (e.g., \"10:30:45\") instead of numeric values"
+msgstr "Les étiquettes de l'axe X affichent des horodatages lisibles par l'homme (par exemple, \"10:30:45\") au lieu de valeurs numériques"
+
+msgid "Format adjusts based on signal time unit: sub-second units (ms/μs/ns) show fractional seconds"
+msgstr "Le format s'ajuste en fonction de l'unité de temps du signal : les unités sub-secondes (ms/μs/ns) affichent des secondes fractionnaires"
+
+msgid "Axis automatically reverts to standard formatting when no datetime signals are displayed"
+msgstr "L'axe revient automatiquement au format standard lorsque aucun signal datetime n'est affiché"
+
+msgid "Uses signal metadata for custom datetime formats when available"
+msgstr "Utilise les métadonnées du signal pour des formats datetime personnalisés lorsque cela est disponible"
+
+msgid "**Configurable datetime formats**: Users can customize the datetime axis label format via Settings dialog"
+msgstr "**Formats datetime configurables** : Les utilisateurs peuvent personnaliser le format des étiquettes de l'axe datetime via la boîte de dialogue des paramètres"
+
+msgid "Separate format strings for standard time units (s/min/h) and sub-second units (ms/μs/ns)"
+msgstr "Chaînes de format séparées pour les unités de temps standard (s/min/h) et les unités sub-secondes (ms/μs/ns)"
+
+msgid "Uses Python's strftime format codes for full flexibility"
+msgstr "Utilise les codes de format strftime de Python pour une flexibilité totale"
+
+msgid "Settings are persisted across sessions"
+msgstr "Les paramètres sont conservés entre les sessions"
+
+#, python-format
+msgid "Default formats: \"%H:%M:%S\" for standard units, \"%H:%M:%S.%f\" for sub-second precision"
+msgstr "Formats par défaut : \"%H:%M:%S\" pour les unités standard, \"%H:%M:%S.%f\" pour la précision sub-seconde"
 
 msgid "Enhanced signal visualization with datetime-aware axis formatting"
 msgstr "**Visualisation améliorée des signaux avec un formatage d'axe sensible au datetime**"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-04 16:39+0200\n"
+"POT-Creation-Date: 2025-10-07 19:34+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1967,6 +1967,19 @@ msgstr "%"
 #, python-format
 msgid "Percentage of margin to add around data when auto-scaling signal plots.<br>A value of 0.2% adds a small margin for better visualization.<br>Set to 0% for no margin (exact data bounds)."
 msgstr "Pourcentage de marge à ajouter autour des données lors du redimensionnement automatique des graphiques de signaux.<br>Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation.<br>Réglez sur 0 % pour aucune marge (limites exactes des données)."
+
+msgid "DateTime format (s/min/h)"
+msgstr "Format DateTime (s/min/h)"
+
+msgid "Format string for datetime X-axis labels when using standard time units (s, min, h).<br>Uses Python's strftime format codes (e.g., %H:%M:%S for hours:minutes:seconds)."
+msgstr "Chaîne de format pour les étiquettes de l'axe X datetime lors de l'utilisation d'unités de temps standard (s, min, h).<br>Utilise les codes de format strftime de Python (par exemple, %H:%M:%S pour heures:minutes:secondes)."
+
+msgid "DateTime format (ms/μs/ns)"
+msgstr "Format DateTime (ms/μs/ns)"
+
+#, python-format
+msgid "Format string for datetime X-axis labels when using sub-second time units (ms, μs, ns).<br>Uses Python's strftime format codes (e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds)."
+msgstr "Chaîne de format pour les étiquettes de l'axe X datetime lors de l'utilisation d'unités de temps sub-secondes (ms, μs, ns).<br>Utilise les codes de format strftime de Python (par exemple, %H:%M:%S.%f pour heures:minutes:secondes.microsecondes)."
 
 msgid "Image"
 msgstr "Image"

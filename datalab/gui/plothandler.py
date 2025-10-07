@@ -504,6 +504,62 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
         options.curve_antialiasing = self.plot.antialiased
         return options
 
+    def refresh_plot(
+        self,
+        what: str,
+        update_items: bool = True,
+        force: bool = False,
+        only_visible: bool = True,
+        only_existing: bool = False,
+    ) -> None:
+        """Refresh plot and configure datetime axis if needed.
+
+        This override adds automatic datetime axis configuration when at least one
+        of the displayed signals has a datetime X-axis.
+
+        Args:
+            what: string describing the objects to refresh
+            update_items: if True, update the items
+            force: if True, force refresh even if auto refresh is disabled
+            only_visible: if True, only refresh visible items
+            only_existing: if True, only refresh existing items
+        """
+        # Call parent implementation
+        super().refresh_plot(what, update_items, force, only_visible, only_existing)
+
+        # Check if any visible signal has datetime X-axis
+        has_datetime = False
+        datetime_format = None
+        for item in self:
+            if item is not None and item.isVisible():
+                obj = self.get_obj_from_item(item)
+                if obj is not None and obj.is_x_datetime():
+                    has_datetime = True
+                    # Get format from signal metadata, or use configured default
+                    if datetime_format is None:
+                        datetime_format = obj.metadata.get("x_datetime_format")
+                        if datetime_format is None:
+                            # Use configured format based on time unit
+                            unit = obj.xunit if obj.xunit else "s"
+                            if unit in ("ns", "us", "ms"):
+                                datetime_format = Conf.view.sig_datetime_format_ms.get(
+                                    "%H:%M:%S.%f"
+                                )
+                            else:
+                                datetime_format = Conf.view.sig_datetime_format_s.get(
+                                    "%H:%M:%S"
+                                )
+                    break
+
+        # Configure X-axis for datetime or restore default
+        if has_datetime and datetime_format is not None:
+            self.plot.set_axis_datetime("bottom", format=datetime_format)
+        else:
+            # Restore default scale draw (remove datetime formatting)
+            from qwt import QwtScaleDraw
+
+            self.plot.setAxisScaleDraw(self.plot.get_axis_id("bottom"), QwtScaleDraw())
+
 
 class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
     """Object handling image plot items, plot dialogs, plot options"""

@@ -12,6 +12,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Supports common datetime formats from data loggers and measurement instruments
     * Preserves datetime context for proper display and analysis
   * Time units can be configured (seconds, milliseconds, microseconds, minutes, hours)
+  * **Automatic datetime axis formatting**: When displaying signals with datetime X-axis, the plot automatically switches to datetime-formatted axis labels
+    * X-axis labels show human-readable timestamps (e.g., "10:30:45") instead of numeric values
+    * Format adjusts based on signal time unit: sub-second units (ms/μs/ns) show fractional seconds
+    * Axis automatically reverts to standard formatting when no datetime signals are displayed
+    * Uses signal metadata for custom datetime formats when available
+  * **Configurable datetime formats**: Users can customize the datetime axis label format via Settings dialog
+    * Separate format strings for standard time units (s/min/h) and sub-second units (ms/μs/ns)
+    * Uses Python's strftime format codes for full flexibility
+    * Settings are persisted across sessions
+    * Default formats: "%H:%M:%S" for standard units, "%H:%M:%S.%f" for sub-second precision
   * Enhanced signal visualization with datetime-aware axis formatting
   * CSV export maintains datetime format for easy data sharing
   * Ideal for analyzing sensor data, temperature logs, and time-series measurements
