@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 18:17+0200\n"
+"POT-Creation-Date: 2025-10-07 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,33 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**DateTime signal support**: Signals can now handle time-series data with datetime X-axis"
+msgstr "**Prise en charge des signaux DateTime** : Les signaux peuvent désormais gérer des données de séries temporelles avec un axe X datetime"
+
+msgid "Automatic datetime detection when opening CSV files with timestamp columns"
+msgstr "**Détection automatique des dates lors de l'ouverture de fichiers CSV avec des colonnes horodatées**"
+
+msgid "DataLab automatically recognizes and converts datetime values (e.g., \"2025-06-19 10:00:00\") to numeric timestamps"
+msgstr "**DataLab reconnaît et convertit automatiquement les valeurs datetime (par exemple, \"2025-06-19 10:00:00\") en horodatages numériques**"
+
+msgid "Supports common datetime formats from data loggers and measurement instruments"
+msgstr "**Prend en charge les formats datetime courants des enregistreurs de données et des instruments de mesure**"
+
+msgid "Preserves datetime context for proper display and analysis"
+msgstr "**Préserve le contexte datetime pour un affichage et une analyse appropriés**"
+
+msgid "Time units can be configured (seconds, milliseconds, microseconds, minutes, hours)"
+msgstr "**Les unités de temps peuvent être configurées (secondes, millisecondes, microsecondes, minutes, heures)**"
+
+msgid "Enhanced signal visualization with datetime-aware axis formatting"
+msgstr "**Visualisation améliorée des signaux avec un formatage d'axe sensible au datetime**"
+
+msgid "CSV export maintains datetime format for easy data sharing"
+msgstr "**L'exportation CSV préserve le format datetime pour un partage facile des données**"
+
+msgid "Ideal for analyzing sensor data, temperature logs, and time-series measurements"
+msgstr "**Idéal pour l'analyse des données de capteurs, des journaux de température et des mesures de séries temporelles**"
 
 msgid "Multi-object property editing:"
 msgstr "Édition des propriétés de plusieurs objets :"

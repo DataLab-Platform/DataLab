@@ -6,6 +6,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **DateTime signal support**: Signals can now handle time-series data with datetime X-axis
+  * Automatic datetime detection when opening CSV files with timestamp columns
+    * DataLab automatically recognizes and converts datetime values (e.g., "2025-06-19 10:00:00") to numeric timestamps
+    * Supports common datetime formats from data loggers and measurement instruments
+    * Preserves datetime context for proper display and analysis
+  * Time units can be configured (seconds, milliseconds, microseconds, minutes, hours)
+  * Enhanced signal visualization with datetime-aware axis formatting
+  * CSV export maintains datetime format for easy data sharing
+  * Ideal for analyzing sensor data, temperature logs, and time-series measurements
+
 * Multi-object property editing:
   * The properties panel now supports applying property changes to multiple selected objects simultaneously.
   * When multiple signals or images are selected, modifying and applying properties updates all selected objects, not just the current one.
