@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-07 19:34+0200\n"
+"POT-Creation-Date: 2025-10-10 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -681,6 +681,27 @@ msgstr "Ceci corrige l'[Issue #180](https://github.com/DataLab-Platform/DataLab/
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "**Enhanced HDF5 file support**: Fixed issue where users were unable to open or browse HDF5 files with custom file extensions"
+msgstr "**Prise en charge améliorée des fichiers HDF5** : Correction d'un problème où les utilisateurs ne pouvaient pas ouvrir ou parcourir les fichiers HDF5 avec des extensions de fichier personnalisées"
+
+msgid "Expanded file dialog filters: File dialogs now include \"All files (*)\" option alongside standard HDF5 extensions (`.h5`, `.hdf5`, `.hdf`, `.he5`), allowing users to select HDF5 files regardless of their extension"
+msgstr "Filtres de boîte de dialogue de fichiers étendus : Les boîtes de dialogue de fichiers incluent désormais l'option \"Tous les fichiers (*)\" aux côtés des extensions HDF5 standard (`.h5`, `.hdf5`, `.hdf`, `.he5`), permettant aux utilisateurs de sélectionner des fichiers HDF5 quelle que soit leur extension"
+
+msgid "Intelligent HDF5 file detection: Added smart file detection that can identify HDF5 files by content, not just extension"
+msgstr "Détection intelligente des fichiers HDF5 : Ajout d'une détection de fichiers intelligente qui peut identifier les fichiers HDF5 par leur contenu, et pas seulement par leur extension"
+
+msgid "Extension-based detection (fast): Used for file dialog filtering and standard workflows"
+msgstr "Détection basée sur l'extension (rapide) : Utilisée pour le filtrage des boîtes de dialogue de fichiers et les flux de travail standard"
+
+msgid "Content-based detection (thorough): Used for drag-and-drop operations to automatically detect HDF5 files with custom extensions"
+msgstr "Détection basée sur le contenu (approfondie) : Utilisée pour les opérations de glisser-déposer afin de détecter automatiquement les fichiers HDF5 avec des extensions personnalisées"
+
+msgid "Improved drag-and-drop support: Users can now drag and drop HDF5 files with any extension (e.g., `.data`, `.experiment`, `.custom`) and DataLab will automatically recognize them as HDF5 files if they contain valid HDF5 data"
+msgstr "Prise en charge améliorée du glisser-déposer : Les utilisateurs peuvent désormais glisser-déposer des fichiers HDF5 avec n'importe quelle extension (par exemple, `.data`, `.experiment`, `.custom`) et DataLab les reconnaîtra automatiquement comme des fichiers HDF5 s'ils contiennent des données HDF5 valides"
+
+msgid "Backward compatibility maintained: All existing functionality for standard HDF5 extensions continues to work exactly as before"
+msgstr "Compatibilité ascendante maintenue : Toutes les fonctionnalités existantes pour les extensions HDF5 standard continuent de fonctionner exactement comme avant"
 
 msgid "Plot interface improvements:"
 msgstr "Améliorations de la vue graphique :"

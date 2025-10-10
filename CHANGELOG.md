@@ -238,6 +238,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* **Enhanced HDF5 file support**: Fixed issue where users were unable to open or browse HDF5 files with custom file extensions
+  * Expanded file dialog filters: File dialogs now include "All files (*)" option alongside standard HDF5 extensions (`.h5`, `.hdf5`, `.hdf`, `.he5`), allowing users to select HDF5 files regardless of their extension
+  * Intelligent HDF5 file detection: Added smart file detection that can identify HDF5 files by content, not just extension
+    * Extension-based detection (fast): Used for file dialog filtering and standard workflows
+    * Content-based detection (thorough): Used for drag-and-drop operations to automatically detect HDF5 files with custom extensions
+  * Improved drag-and-drop support: Users can now drag and drop HDF5 files with any extension (e.g., `.data`, `.experiment`, `.custom`) and DataLab will automatically recognize them as HDF5 files if they contain valid HDF5 data
+  * Backward compatibility maintained: All existing functionality for standard HDF5 extensions continues to work exactly as before
 * Plot interface improvements:
   * Disabled PlotPy's generic "Axes" tab in parameter dialogs to prevent interference with DataLab's own axis scale management.
   * This provides a cleaner, more focused parameter dialog interface while maintaining DataLab's specialized axis handling capabilities.

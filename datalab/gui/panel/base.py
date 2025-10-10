@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
+import h5py
 import numpy as np
 import plotpy.io
 from guidata.configtools import get_icon
@@ -92,6 +93,36 @@ def is_plot_item_serializable(item: Any) -> bool:
         plotpy.io.item_class_from_name(item.__class__.__name__)
         return True
     except AssertionError:
+        return False
+
+
+def is_hdf5_file(filename: str, check_content: bool = False) -> bool:
+    """Return True if filename has an HDF5 extension or is an HDF5 file.
+
+    Args:
+        filename: Path to the file to check
+        check_content: If True, also attempts to open the file to verify it's a
+                      valid HDF5 file. If False, only checks the file extension.
+
+    Returns:
+        True if the file is (likely) an HDF5 file, False otherwise.
+    """
+    # First, check by extension (fast)
+    has_hdf5_extension = filename.lower().endswith((".h5", ".hdf5", ".hdf", ".he5"))
+
+    if not check_content:
+        return has_hdf5_extension
+
+    # If checking content, try to open as HDF5 file
+    if has_hdf5_extension:
+        return True  # Trust common HDF5 extensions
+
+    # For other extensions, attempt to open the file to verify it's HDF5
+    try:
+        with h5py.File(filename, "r"):
+            return True
+    except (OSError, IOError, ValueError):
+        # Not a valid HDF5 file
         return False
 
 
@@ -1329,7 +1360,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             None
         """
         dirnames = [fname for fname in filenames if osp.isdir(fname)]
-        h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
+        h5_fnames = [
+            fname for fname in filenames if is_hdf5_file(fname, check_content=True)
+        ]
         other_fnames = sorted(list(set(filenames) - set(h5_fnames) - set(dirnames)))
         if dirnames:
             for dirname in dirnames:

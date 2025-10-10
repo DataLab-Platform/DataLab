@@ -704,7 +704,10 @@ class H5FileSelector(QW.QWidget):
         """
         if fname is None:
             fname = getopenfilename(
-                self, _("Select HDF5 file"), "", _("HDF5 files (*.h5 *.hdf5)")
+                self,
+                _("Select HDF5 file"),
+                "",
+                _("HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"),
             )[0]
         if fname:
             self.SIG_ADD_FILENAME.emit(osp.abspath(fname))

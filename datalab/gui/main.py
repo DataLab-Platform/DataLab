@@ -1424,7 +1424,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         if filename is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
-                filename, _fl = getsavefilename(self, _("Save"), basedir, "HDF5 (*.h5)")
+                filename, _fl = getsavefilename(
+                    self,
+                    _("Save"),
+                    basedir,
+                    "HDF5 (*.h5 *.hdf5 *.hdf *.he5);;All files (*)",
+                )
             if not filename:
                 return
         with qth.qt_try_loadsave_file(self, filename, "save"):
@@ -1472,7 +1477,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
                 h5files, _fl = getopenfilenames(
-                    self, _("Open"), basedir, _("HDF5 files (*.h5 *.hdf5)")
+                    self,
+                    _("Open"),
+                    basedir,
+                    _("HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"),
                 )
         if not h5files:
             return
