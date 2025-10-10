@@ -39,11 +39,13 @@ jobs:
         if [ "${{ github.ref_name }}" = "develop" ]; then
            # Clone and install development versions of key dependencies with editable install
            cd ..
+           git clone --depth 1 https://github.com/PlotPyStack/PythonQwt.git
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/guidata.git
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/plotpy.git
            git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git
            cd DataLab
            pip install -e ../guidata
+           pip install -e ../PythonQwt
            pip install -e ../plotpy
            pip install -e ../sigima
            # Install tomli for TOML parsing (safe if already present)
