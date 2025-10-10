@@ -14,7 +14,7 @@ The `datalab-platform` package requires the following Python modules:
       -  >= 3.12
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
-      -  >= 2.7.4
+      -  >= 2.8.0
       - Curve and image plotting tools for Python/Qt applications
     * - Sigima
       -  >= 1.0.0a0
@@ -36,7 +36,7 @@ The `datalab-platform` package requires the following Python modules:
       - PyWavelets, wavelet transform module
     * - psutil
       -  >= 5.8
-      - Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7.
+      - Cross-platform lib for process and system monitoring.
     * - packaging
       -  >= 21.3
       - Core utilities for Python packages

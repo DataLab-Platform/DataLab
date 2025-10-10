@@ -11,12 +11,12 @@
 :py:func:`astype <sigima.proc.image.astype>`,Convert image data type,`test_image_astype <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L438>`_
 :py:func:`average <sigima.proc.image.average>`,Compute the average of images in the list and return the result image object,`test_image_average <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L67>`_
 :py:func:`average_profile <sigima.proc.image.average_profile>`,Compute horizontal or vertical average profile,`test_average_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/profile_unit_test.py#L70>`_
-:py:func:`binning <sigima.proc.image.binning>`,Binning function on data,`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/binning_unit_test.py#L74>`_
+:py:func:`binning <sigima.proc.image.binning>`,Binning: image pixel binning (or aggregation),`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/binning_unit_test.py#L74>`_
 :py:func:`black_tophat <sigima.proc.image.black_tophat>`,Compute Black Top-Hat,`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/morphology_unit_test.py#L35>`_
-:py:func:`blob_dog <sigima.proc.image.blob_dog>`,Compute blobs using Difference of Gaussian method,`test_image_blob_dog <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L107>`_
-:py:func:`blob_doh <sigima.proc.image.blob_doh>`,Compute blobs using Determinant of Hessian method,`test_image_blob_doh <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L158>`_
-:py:func:`blob_log <sigima.proc.image.blob_log>`,Compute blobs using Laplacian of Gaussian method,`test_image_blob_log <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L179>`_
-:py:func:`blob_opencv <sigima.proc.image.blob_opencv>`,Compute blobs using OpenCV,`test_image_blob_opencv <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L201>`_
+:py:func:`blob_dog <sigima.proc.image.blob_dog>`,Compute blobs using Difference of Gaussian method,`test_image_blob_dog <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L108>`_
+:py:func:`blob_doh <sigima.proc.image.blob_doh>`,Compute blobs using Determinant of Hessian method,`test_image_blob_doh <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L165>`_
+:py:func:`blob_log <sigima.proc.image.blob_log>`,Compute blobs using Laplacian of Gaussian method,`test_image_blob_log <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L186>`_
+:py:func:`blob_opencv <sigima.proc.image.blob_opencv>`,Compute blobs using OpenCV,`test_image_blob_opencv <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L208>`_
 :py:func:`butterworth <sigima.proc.image.butterworth>`,Compute Butterworth filter,`test_butterworth <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/filtering_unit_test.py#L70>`_
 :py:func:`calibration <sigima.proc.image.calibration>`,Compute linear calibration,`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/exposure_unit_test.py#L158>`_
 :py:func:`canny <sigima.proc.image.canny>`,Compute Canny filter,`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/edges_unit_test.py#L19>`_
@@ -43,8 +43,8 @@
 :py:func:`erase <sigima.proc.image.erase>`,Erase an area of the image using the mean value of the image,`test_erase <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/restoration_unit_test.py#L93>`_
 :py:func:`erosion <sigima.proc.image.erosion>`,Compute Erosion,`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/morphology_unit_test.py#L41>`_
 :py:func:`exp <sigima.proc.image.exp>`,Compute exponential with :py:data:`numpy.exp`,`test_image_exp <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L459>`_
-:py:func:`extract_roi <sigima.proc.image.extract_roi>`,Extract single ROI,`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/roi_advanced_unit_test.py#L198>`_
-:py:func:`extract_rois <sigima.proc.image.extract_rois>`,Extract multiple regions of interest from data,`test_image_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/roi_advanced_unit_test.py#L170>`_
+:py:func:`extract_roi <sigima.proc.image.extract_roi>`,Extract single ROI,`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/roi_advanced_unit_test.py#L209>`_
+:py:func:`extract_rois <sigima.proc.image.extract_rois>`,Extract multiple regions of interest from data,`test_image_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/roi_advanced_unit_test.py#L181>`_
 :py:func:`farid <sigima.proc.image.farid>`,Compute Farid filter,`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/edges_unit_test.py#L116>`_
 :py:func:`farid_h <sigima.proc.image.farid_h>`,Compute horizontal Farid filter,`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/edges_unit_test.py#L122>`_
 :py:func:`farid_v <sigima.proc.image.farid_v>`,Compute vertical Farid filter,`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/edges_unit_test.py#L128>`_
@@ -111,4 +111,4 @@
 :py:func:`vertical_projection <sigima.proc.image.vertical_projection>`,Compute the sum of pixel intensities along each row (projection on the y-axis),`test_image_vertical_projection <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/projections_unit_test.py#L68>`_
 :py:func:`white_tophat <sigima.proc.image.white_tophat>`,Compute White Top-Hat,`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/morphology_unit_test.py#L29>`_
 :py:func:`wiener <sigima.proc.image.wiener>`,Compute Wiener filter,`test_image_wiener <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/filtering_unit_test.py#L61>`_
-:py:func:`zero_padding <sigima.proc.image.zero_padding>`,,`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/fft2d_unit_test.py#L50>`_
+:py:func:`zero_padding <sigima.proc.image.zero_padding>`,Zero-padding: add zeros to image borders,`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/fft2d_unit_test.py#L50>`_

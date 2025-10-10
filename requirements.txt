@@ -1,6 +1,6 @@
 Coverage
 NumPy >= 1.22
-PlotPy >= 2.7.4
+PlotPy >= 2.8.0
 PyQt5 >= 5.15.6
 PyWavelets >= 1.2
 SciPy >= 1.10.1
