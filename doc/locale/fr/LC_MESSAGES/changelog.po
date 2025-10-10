@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-10 12:18+0200\n"
+"POT-Creation-Date: 2025-10-10 12:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -679,11 +679,8 @@ msgstr "Ces méthodes sont internes et utilisées par des développeurs avancés
 msgid "This closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationalize `BaseProcessor` method names for core processing types"
 msgstr "Ceci corrige l'[Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180) - Rationaliser les noms de méthodes `BaseProcessor` pour les types de traitement de base"
 
-msgid "🛠️ Bug fixes:"
-msgstr "🛠️ Corrections de bugs :"
-
-msgid "**Enhanced HDF5 file support**: Fixed issue where users were unable to open or browse HDF5 files with custom file extensions"
-msgstr "**Prise en charge améliorée des fichiers HDF5** : Correction d'un problème où les utilisateurs ne pouvaient pas ouvrir ou parcourir les fichiers HDF5 avec des extensions de fichier personnalisées"
+msgid "**Enhanced HDF5 file support**: Improved support for HDF5 files with custom file extensions"
+msgstr "**Prise en charge améliorée des fichiers HDF5** : Prise en charge améliorée des fichiers HDF5 avec des extensions de fichier personnalisées"
 
 msgid "Expanded file dialog filters: File dialogs now include \"All files (*)\" option alongside standard HDF5 extensions (`.h5`, `.hdf5`, `.hdf`, `.he5`), allowing users to select HDF5 files regardless of their extension"
 msgstr "Filtres de boîte de dialogue de fichiers étendus : Les boîtes de dialogue de fichiers incluent désormais l'option \"Tous les fichiers (*)\" aux côtés des extensions HDF5 standard (`.h5`, `.hdf5`, `.hdf`, `.he5`), permettant aux utilisateurs de sélectionner des fichiers HDF5 quelle que soit leur extension"
@@ -702,6 +699,9 @@ msgstr "Prise en charge améliorée du glisser-déposer : Les utilisateurs peuv
 
 msgid "Backward compatibility maintained: All existing functionality for standard HDF5 extensions continues to work exactly as before"
 msgstr "Compatibilité ascendante maintenue : Toutes les fonctionnalités existantes pour les extensions HDF5 standard continuent de fonctionner exactement comme avant"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Corrections de bugs :"
 
 msgid "Plot interface improvements:"
 msgstr "Améliorations de la vue graphique :"
