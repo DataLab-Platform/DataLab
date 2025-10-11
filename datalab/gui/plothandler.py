@@ -712,19 +712,25 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
         plot = self.plotwidget.get_plot()
         new_aspect_ratio = current_aspect_ratio = plot.get_aspect_ratio()
+        new_lock = current_lock = plot.lock_aspect_ratio
         if Conf.view.ima_aspect_ratio_1_1.get():
             # Lock aspect ratio to 1:1
             new_aspect_ratio = 1.0
+            new_lock = True
         else:
             # Use physical pixel size to set aspect ratio
             for oid in reversed(self.reduce_shown_oids(self.get_existing_oids())):
                 if self.get(oid).isVisible():
                     obj: ImageObj = self.panel.objmodel[oid]
-                    new_aspect_ratio = obj.dx / obj.dy
+                    if obj.is_uniform_coords:
+                        new_aspect_ratio = obj.dx / obj.dy
+                        new_lock = True
+                    else:
+                        new_lock = False
                     break
-        if new_aspect_ratio != current_aspect_ratio:
+        if new_aspect_ratio != current_aspect_ratio or new_lock != current_lock:
             # Update aspect ratio only if it has changed
-            plot.set_aspect_ratio(new_aspect_ratio)
+            plot.set_aspect_ratio(new_aspect_ratio, lock=new_lock)
             plot.do_autoscale()
 
     def cleanup_dataview(self) -> None:
