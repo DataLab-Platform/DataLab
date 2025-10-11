@@ -327,7 +327,7 @@ def run_image_computations(
         panel.processor.run_feature("resampling", param)
 
     # Test denoising methods
-    param = sigima.params.XYZCalibrateParam.create(axis="z", a=1.2, b=0.1)
+    param = sigima.params.XYZCalibrateParam.create(axis="z", a1=1.2, a0=0.1)
     panel.processor.run_feature("calibration", param)
     param = sigima.params.DenoiseTVParam()
     panel.processor.run_feature("denoise_tv", param)
