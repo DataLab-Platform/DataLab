@@ -6,6 +6,31 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing
+  * Image objects now support both uniform and non-uniform coordinate systems:
+    * Uniform coordinates: regular grid with constant pixel spacing (traditional mode)
+    * Non-uniform coordinates: arbitrary X and Y coordinate arrays for each pixel
+  * New "Set uniform coordinates" feature in Processing menu > Axis transformation:
+    * Converts images with non-uniform coordinates to uniform coordinate system
+    * Automatically calculates optimal uniform spacing from non-uniform arrays
+    * Useful for standardizing coordinate systems before certain operations
+  * Enhanced "Calibration" feature with polynomial support:
+    * Now supports polynomial calibration up to cubic order for all axes (X, Y, Z)
+    * Polynomial transformation: `output = a0 + a1*input + a2*input² + a3*input³`
+    * For X and Y axes: Creates non-uniform coordinates to represent polynomial transformations
+    * For Z axis: Applies polynomial transformation to pixel values
+    * Linear calibration is achieved by setting quadratic and cubic coefficients to zero
+    * Ideal for correcting non-linear distortions in imaging systems or sensors
+  * Updated image organization features to handle non-uniform coordinates:
+    * "Distribute on grid" now works with both uniform and non-uniform coordinate images
+    * "Reset image positions" maintains coordinate system type (uniform/non-uniform)
+    * Plot display automatically adapts to show correct pixel positions
+  * File I/O support:
+    * HDF5 format preserves non-uniform coordinate information
+    * Coordinated text files can store and load non-uniform coordinate arrays
+  * All image processing operations handle non-uniform coordinates appropriately
+  * Performance optimized: Operations on uniform coordinates use fast array indexing when possible
+
 * **DateTime signal support**: Signals can now handle time-series data with datetime X-axis
   * Automatic datetime detection when opening CSV files with timestamp columns
     * DataLab automatically recognizes and converts datetime values (e.g., "2025-06-19 10:00:00") to numeric timestamps

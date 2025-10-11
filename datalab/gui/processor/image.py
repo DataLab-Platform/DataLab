@@ -381,14 +381,19 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Register processing functions."""
         # Axis transformation
         self.register_1_to_1(
+            sipi.set_uniform_coords,
+            _("Set uniform coordinates"),
+            sipi.UniformCoordsParam,
+        )
+        self.register_1_to_1(
             sipi.calibration,
-            _("Linear calibration"),
+            _("Polynomial calibration"),
             sipi.XYZCalibrateParam,
             comment=_(
-                "Apply linear calibration to the X, Y or Z axis:\n"
-                "  • x' = ax + b\n"
-                "  • y' = ay + b\n"
-                "  • z' = az + b"
+                "Apply polynomial calibration to the X, Y or Z axis:\n"
+                "  • x' = a0 + a1*x + a2*x^2 + ...\n"
+                "  • y' = a0 + a1*y + a2*y^2 + ...\n"
+                "  • z' = a0 + a1*z + a2*z^2 + ..."
             ),
         )
         self.register_1_to_1(
@@ -917,31 +922,47 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 if progress.wasCanceled():
                     break
                 if i_row == 0:
-                    x0_0, y0_0 = x0, y0 = obj.x0, obj.y0
+                    if obj.is_uniform_coords:
+                        x0_0, y0_0 = x0, y0 = obj.x0, obj.y0
+                    else:
+                        x0_0, y0_0 = x0, y0 = obj.xcoords[0], obj.ycoords[0]
                 else:
-                    dx0, dy0 = x0 - obj.x0, y0 - obj.y0
-                    obj.x0 += dx0
-                    obj.y0 += dy0
+                    if obj.is_uniform_coords:
+                        dx0, dy0 = x0 - obj.x0, y0 - obj.y0
+                        obj.x0 += dx0
+                        obj.y0 += dy0
+                    else:
+                        dx0, dy0 = x0 - obj.xcoords[0], y0 - obj.ycoords[0]
+                        obj.xcoords += dx0
+                        obj.ycoords += dy0
                     apply_geometry_transform(obj, "translate", dx=dx0, dy=dy0)
                     sipi.transformer.transform_roi(obj, "translate", dx=dx0, dy=dy0)
+
+                # Get image width and height
+                if obj.is_uniform_coords:
+                    img_width, img_height = obj.width, obj.height
+                else:
+                    img_width = obj.xcoords[-1] - obj.xcoords[0]
+                    img_height = obj.ycoords[-1] - obj.ycoords[0]
+
                 if param.direction == "row":
                     # Distributing images over rows
                     sign = np.sign(param.rows)
                     g_row = (g_row + sign) % param.rows
-                    y0 += (obj.height + param.rowspac) * sign
+                    y0 += (img_height + param.rowspac) * sign
                     if g_row == 0:
                         g_col += 1
-                        x0 += obj.width + param.colspac
+                        x0 += img_width + param.colspac
                         y0 = y0_0
                 else:
                     # Distributing images over columns
                     sign = np.sign(param.cols)
                     g_col = (g_col + sign) % param.cols
-                    x0 += (obj.width + param.colspac) * sign
+                    x0 += (img_width + param.colspac) * sign
                     if g_col == 0:
                         g_row += 1
                         x0 = x0_0
-                        y0 += obj.height + param.rowspac
+                        y0 += img_height + param.rowspac
         self.panel.refresh_plot("selected", True, False)
 
     @qt_try_except()
@@ -952,11 +973,19 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         for i_row, obj in enumerate(objs):
             if i_row == 0:
-                x0_0, y0_0 = obj.x0, obj.y0
+                if obj.is_uniform_coords:
+                    x0_0, y0_0 = obj.x0, obj.y0
+                else:
+                    x0_0, y0_0 = obj.xcoords[0], obj.ycoords[0]
             else:
-                dx0, dy0 = x0_0 - obj.x0, y0_0 - obj.y0
-                obj.x0 += dx0
-                obj.y0 += dy0
+                if obj.is_uniform_coords:
+                    dx0, dy0 = x0_0 - obj.x0, y0_0 - obj.y0
+                    obj.x0 += dx0
+                    obj.y0 += dy0
+                else:
+                    dx0, dy0 = x0_0 - obj.xcoords[0], y0_0 - obj.ycoords[0]
+                    obj.xcoords += dx0
+                    obj.ycoords += dy0
                 apply_geometry_transform(obj, "translate", dx=dx0, dy=dy0)
                 sipi.transformer.transform_roi(obj, "translate", dx=dx0, dy=dy0)
         self.panel.refresh_plot("selected", True, False)

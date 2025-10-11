@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-10 12:31+0200\n"
+"POT-Creation-Date: 2025-10-11 11:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,78 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing"
+msgstr "**Prise en charge des coordonnées non uniformes pour les images** : Les images peuvent désormais avoir un espacement de pixel non uniforme"
+
+msgid "Image objects now support both uniform and non-uniform coordinate systems:"
+msgstr "Les objets image prennent désormais en charge les systèmes de coordonnées uniformes et non uniformes :"
+
+msgid "Uniform coordinates: regular grid with constant pixel spacing (traditional mode)"
+msgstr "Coordonnées uniformes : grille régulière avec espacement de pixel constant (mode traditionnel)"
+
+msgid "Non-uniform coordinates: arbitrary X and Y coordinate arrays for each pixel"
+msgstr "Coordonnées non uniformes : tableaux de coordonnées X et Y arbitraires pour chaque pixel"
+
+msgid "New \"Set uniform coordinates\" feature in Processing menu > Axis transformation:"
+msgstr "Nouvelle fonctionnalité \"Définir les coordonnées uniformes\" dans le menu Traitement > Transformation des axes :"
+
+msgid "Converts images with non-uniform coordinates to uniform coordinate system"
+msgstr "Convertit les images avec des coordonnées non uniformes en un système de coordonnées uniformes"
+
+msgid "Automatically calculates optimal uniform spacing from non-uniform arrays"
+msgstr "Calcule automatiquement l'espacement uniforme optimal à partir de tableaux non uniformes"
+
+msgid "Useful for standardizing coordinate systems before certain operations"
+msgstr "Utile pour standardiser les systèmes de coordonnées avant certaines opérations"
+
+msgid "Enhanced \"Calibration\" feature with polynomial support:"
+msgstr "Amélioration de la fonctionnalité \"Calibration\" avec prise en charge des polynômes :"
+
+msgid "Now supports polynomial calibration up to cubic order for all axes (X, Y, Z)"
+msgstr "Prend désormais en charge la calibration polynomiale jusqu'à l'ordre cubique pour tous les axes (X, Y, Z)"
+
+msgid "Polynomial transformation: `output = a0 + a1*input + a2*input² + a3*input³`"
+msgstr "Transformation polynomiale : `output = a0 + a1*input + a2*input² + a3*input³`"
+
+msgid "For X and Y axes: Creates non-uniform coordinates to represent polynomial transformations"
+msgstr "Pour les axes X et Y : Crée des coordonnées non uniformes pour représenter les transformations polynomiales"
+
+msgid "For Z axis: Applies polynomial transformation to pixel values"
+msgstr "Pour l'axe Z : Applique la transformation polynomiale aux valeurs des pixels"
+
+msgid "Linear calibration is achieved by setting quadratic and cubic coefficients to zero"
+msgstr "La calibration linéaire est obtenue en fixant les coefficients quadratiques et cubiques à zéro"
+
+msgid "Ideal for correcting non-linear distortions in imaging systems or sensors"
+msgstr "Idéal pour corriger les distorsions non linéaires dans les systèmes d'imagerie ou les capteurs"
+
+msgid "Updated image organization features to handle non-uniform coordinates:"
+msgstr "Mise à jour des fonctionnalités d'organisation des images pour gérer les coordonnées non uniformes :"
+
+msgid "\"Distribute on grid\" now works with both uniform and non-uniform coordinate images"
+msgstr "\"Distribuer sur la grille\" fonctionne désormais avec des images à coordonnées uniformes et non uniformes"
+
+msgid "\"Reset image positions\" maintains coordinate system type (uniform/non-uniform)"
+msgstr "\"Réinitialiser les positions d'image\" maintient le type de système de coordonnées (uniforme/non uniforme)"
+
+msgid "Plot display automatically adapts to show correct pixel positions"
+msgstr "L'affichage des tracés s'adapte automatiquement pour montrer les positions de pixels correctes"
+
+msgid "File I/O support:"
+msgstr "Prise en charge de l'entrée/sortie de fichiers :"
+
+msgid "HDF5 format preserves non-uniform coordinate information"
+msgstr "Le format HDF5 préserve les informations de coordonnées non uniformes"
+
+msgid "Coordinated text files can store and load non-uniform coordinate arrays"
+msgstr "Les fichiers texte coordonnés peuvent stocker et charger des tableaux de coordonnées non uniformes"
+
+msgid "All image processing operations handle non-uniform coordinates appropriately"
+msgstr "Toutes les opérations de traitement d'image gèrent les coordonnées non uniformes de manière appropriée"
+
+msgid "Performance optimized: Operations on uniform coordinates use fast array indexing when possible"
+msgstr "Performance optimisée : Les opérations sur des coordonnées uniformes utilisent un indexage de tableau rapide lorsque cela est possible"
 
 msgid "**DateTime signal support**: Signals can now handle time-series data with datetime X-axis"
 msgstr "**Prise en charge des signaux DateTime** : Les signaux peuvent désormais gérer des données de séries temporelles avec un axe X datetime"

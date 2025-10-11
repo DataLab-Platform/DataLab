@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 21:20+0200\n"
+"POT-Creation-Date: 2025-10-11 11:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -52,7 +52,7 @@ msgstr "Génération automatique d'interface graphique pour l'édition et l'affi
 msgid "PlotPy"
 msgstr ""
 
-msgid ">= 2.7.4"
+msgid ">= 2.8.0"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
@@ -118,8 +118,8 @@ msgstr ""
 msgid ">= 5.8"
 msgstr ""
 
-msgid "Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7."
-msgstr "Bibliothèque multiplateforme pour la surveillance des processus et du système en Python."
+msgid "Cross-platform lib for process and system monitoring."
+msgstr ""
 
 msgid "packaging"
 msgstr ""

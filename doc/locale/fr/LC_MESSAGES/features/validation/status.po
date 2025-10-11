@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 18:41+0200\n"
+"POT-Creation-Date: 2025-10-11 11:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -67,13 +67,13 @@ msgstr "Total"
 msgid "Number of compute functions"
 msgstr "Nombre de fonctions de calcul"
 
-msgid "92"
+msgid "93"
 msgstr ""
 
 msgid "114"
 msgstr ""
 
-msgid "206"
+msgid "207"
 msgstr ""
 
 msgid "Number of validated compute functions"
@@ -163,7 +163,7 @@ msgstr ""
 msgid "Compute Allan deviation"
 msgstr "Calculer la déviation d'Allan"
 
-msgid "`test_signal_allan_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L84>`_"
+msgid "`test_signal_allan_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L136>`_"
 msgstr ""
 
 msgid ":py:func:`allan_variance <sigima.proc.signal.allan_variance>`"
@@ -172,7 +172,7 @@ msgstr ""
 msgid "Compute Allan variance"
 msgstr ""
 
-msgid "`test_signal_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L50>`_"
+msgid "`test_signal_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L102>`_"
 msgstr ""
 
 msgid ":py:func:`apply_window <sigima.proc.signal.apply_window>`"
@@ -254,7 +254,7 @@ msgstr ""
 msgid "Compute CDF fit"
 msgstr ""
 
-msgid "`test_signal_cdf_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L448>`_"
+msgid "`test_signal_cdf_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L450>`_"
 msgstr ""
 
 msgid ":py:func:`clip <sigima.proc.signal.clip>`"
@@ -291,7 +291,7 @@ msgstr ""
 msgid "Compute contrast"
 msgstr "Fonctions de calcul"
 
-msgid "`test_signal_contrast <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L82>`_"
+msgid "`test_signal_contrast <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L83>`_"
 msgstr ""
 
 msgid ":py:func:`convolution <sigima.proc.signal.convolution>`"
@@ -405,6 +405,15 @@ msgstr "Fonctions de calcul"
 msgid "`test_signal_exponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L304>`_"
 msgstr ""
 
+msgid ":py:func:`extract_pulse_features <sigima.proc.signal.extract_pulse_features>`"
+msgstr ""
+
+msgid "Extract pulse features"
+msgstr ""
+
+msgid "`test_signal_extract_pulse_features <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/pulse_unit_test.py#L1282>`_"
+msgstr ""
+
 msgid ":py:func:`extract_roi <sigima.proc.signal.extract_roi>`"
 msgstr ""
 
@@ -483,7 +492,7 @@ msgstr ""
 msgid "Compute Hadamard variance"
 msgstr ""
 
-msgid "`test_signal_hadamard_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L217>`_"
+msgid "`test_signal_hadamard_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L269>`_"
 msgstr ""
 
 msgid ":py:func:`highpass <sigima.proc.signal.highpass>`"
@@ -604,7 +613,7 @@ msgstr ""
 msgid "Compute Modified Allan variance"
 msgstr ""
 
-msgid "`test_signal_modified_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L180>`_"
+msgid "`test_signal_modified_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L232>`_"
 msgstr ""
 
 msgid ":py:func:`moving_average <sigima.proc.signal.moving_average>`"
@@ -649,7 +658,7 @@ msgstr ""
 msgid "Compute Overlapping Allan variance"
 msgstr ""
 
-msgid "`test_signal_overlapping_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L120>`_"
+msgid "`test_signal_overlapping_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L172>`_"
 msgstr ""
 
 msgid ":py:func:`peak_detection <sigima.proc.signal.peak_detection>`"
@@ -778,7 +787,7 @@ msgstr ""
 msgid "Compute sampling rate and period"
 msgstr ""
 
-msgid "`test_signal_sampling_rate_period <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L72>`_"
+msgid "`test_signal_sampling_rate_period <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L73>`_"
 msgstr ""
 
 msgid ":py:func:`sigmoid_fit <sigima.proc.signal.sigmoid_fit>`"
@@ -834,7 +843,7 @@ msgstr ""
 msgid "Compute Time Deviation (TDEV)"
 msgstr ""
 
-msgid "`test_signal_time_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L292>`_"
+msgid "`test_signal_time_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L344>`_"
 msgstr ""
 
 msgid ":py:func:`to_cartesian <sigima.proc.signal.to_cartesian>`"
@@ -861,7 +870,7 @@ msgstr ""
 msgid "Compute Total variance"
 msgstr ""
 
-msgid "`test_signal_total_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L260>`_"
+msgid "`test_signal_total_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/stability_unit_test.py#L312>`_"
 msgstr ""
 
 msgid ":py:func:`transpose <sigima.proc.signal.transpose>`"
@@ -904,13 +913,13 @@ msgstr ""
 msgid ":py:func:`x_at_minmax <sigima.proc.signal.x_at_minmax>`"
 msgstr ""
 
-msgid "`test_signal_x_at_minmax <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L91>`_"
+msgid "`test_signal_x_at_minmax <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L92>`_"
 msgstr ""
 
 msgid ":py:func:`x_at_y <sigima.proc.signal.x_at_y>`"
 msgstr ""
 
-msgid "`test_signal_x_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L101>`_"
+msgid "`test_signal_x_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L102>`_"
 msgstr ""
 
 msgid ":py:func:`xy_mode <sigima.proc.signal.xy_mode>`"
@@ -925,7 +934,7 @@ msgstr ""
 msgid ":py:func:`y_at_x <sigima.proc.signal.y_at_x>`"
 msgstr ""
 
-msgid "`test_signal_y_at_x <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L113>`_"
+msgid "`test_signal_y_at_x <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L114>`_"
 msgstr ""
 
 msgid ":py:func:`zero_padding <sigima.proc.signal.zero_padding>`"
@@ -1059,7 +1068,7 @@ msgstr ""
 msgid ":py:func:`binning <sigima.proc.image.binning>`"
 msgstr ""
 
-msgid "Binning function on data"
+msgid "Binning: image pixel binning (or aggregation)"
 msgstr ""
 
 msgid "`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/binning_unit_test.py#L74>`_"
@@ -1080,7 +1089,7 @@ msgstr ""
 msgid "Compute blobs using Difference of Gaussian method"
 msgstr ""
 
-msgid "`test_image_blob_dog <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L107>`_"
+msgid "`test_image_blob_dog <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L108>`_"
 msgstr ""
 
 msgid ":py:func:`blob_doh <sigima.proc.image.blob_doh>`"
@@ -1089,7 +1098,7 @@ msgstr ""
 msgid "Compute blobs using Determinant of Hessian method"
 msgstr ""
 
-msgid "`test_image_blob_doh <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L158>`_"
+msgid "`test_image_blob_doh <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L165>`_"
 msgstr ""
 
 msgid ":py:func:`blob_log <sigima.proc.image.blob_log>`"
@@ -1098,7 +1107,7 @@ msgstr ""
 msgid "Compute blobs using Laplacian of Gaussian method"
 msgstr ""
 
-msgid "`test_image_blob_log <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L179>`_"
+msgid "`test_image_blob_log <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L186>`_"
 msgstr ""
 
 msgid ":py:func:`blob_opencv <sigima.proc.image.blob_opencv>`"
@@ -1107,7 +1116,7 @@ msgstr ""
 msgid "Compute blobs using OpenCV"
 msgstr ""
 
-msgid "`test_image_blob_opencv <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L201>`_"
+msgid "`test_image_blob_opencv <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/blob_detection_unit_test.py#L208>`_"
 msgstr ""
 
 msgid ":py:func:`butterworth <sigima.proc.image.butterworth>`"
@@ -1346,13 +1355,13 @@ msgstr ""
 msgid "Extract single ROI"
 msgstr ""
 
-msgid "`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/roi_advanced_unit_test.py#L198>`_"
+msgid "`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/roi_advanced_unit_test.py#L209>`_"
 msgstr ""
 
 msgid ":py:func:`extract_rois <sigima.proc.image.extract_rois>`"
 msgstr ""
 
-msgid "`test_image_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/roi_advanced_unit_test.py#L170>`_"
+msgid "`test_image_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/roi_advanced_unit_test.py#L181>`_"
 msgstr ""
 
 msgid ":py:func:`farid <sigima.proc.image.farid>`"
@@ -1921,5 +1930,9 @@ msgstr ""
 msgid ":py:func:`zero_padding <sigima.proc.image.zero_padding>`"
 msgstr ""
 
+msgid "Zero-padding: add zeros to image borders"
+msgstr ""
+
 msgid "`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/fft2d_unit_test.py#L50>`_"
 msgstr ""
+

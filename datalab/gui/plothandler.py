@@ -608,13 +608,60 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
                 # Second condition is about the image size and position
                 geom_cond = True
                 for obj in objs[:-1]:
-                    geom_cond = (
-                        geom_cond
-                        and last_obj.x0 <= obj.x0
-                        and last_obj.y0 <= obj.y0
-                        and last_obj.x0 + last_obj.width >= obj.x0 + obj.width
-                        and last_obj.y0 + last_obj.height >= obj.y0 + obj.height
-                    )
+                    # Handle both uniform and non-uniform coordinates
+                    if last_obj.is_uniform_coords and obj.is_uniform_coords:
+                        # Both have uniform coordinates, use old logic
+                        geom_cond = (
+                            geom_cond
+                            and last_obj.x0 <= obj.x0
+                            and last_obj.y0 <= obj.y0
+                            and last_obj.x0 + last_obj.width >= obj.x0 + obj.width
+                            and last_obj.y0 + last_obj.height >= obj.y0 + obj.height
+                        )
+                    else:
+                        # At least one has non-uniform coordinates,
+                        # use extent comparison
+                        last_x0 = (
+                            last_obj.x0
+                            if last_obj.is_uniform_coords
+                            else last_obj.xcoords[0]
+                        )
+                        last_y0 = (
+                            last_obj.y0
+                            if last_obj.is_uniform_coords
+                            else last_obj.ycoords[0]
+                        )
+                        last_x1 = (
+                            last_obj.x0 + last_obj.width
+                            if last_obj.is_uniform_coords
+                            else last_obj.xcoords[-1]
+                        )
+                        last_y1 = (
+                            last_obj.y0 + last_obj.height
+                            if last_obj.is_uniform_coords
+                            else last_obj.ycoords[-1]
+                        )
+
+                        obj_x0 = obj.x0 if obj.is_uniform_coords else obj.xcoords[0]
+                        obj_y0 = obj.y0 if obj.is_uniform_coords else obj.ycoords[0]
+                        obj_x1 = (
+                            obj.x0 + obj.width
+                            if obj.is_uniform_coords
+                            else obj.xcoords[-1]
+                        )
+                        obj_y1 = (
+                            obj.y0 + obj.height
+                            if obj.is_uniform_coords
+                            else obj.ycoords[-1]
+                        )
+
+                        geom_cond = (
+                            geom_cond
+                            and last_x0 <= obj_x0
+                            and last_y0 <= obj_y0
+                            and last_x1 >= obj_x1
+                            and last_y1 >= obj_y1
+                        )
                     if not geom_cond:
                         break
                 if geom_cond:

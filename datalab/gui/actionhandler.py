@@ -1186,6 +1186,12 @@ class ImageActionHandler(BaseActionHandler):
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
+        with self.new_category(ActionCategory.PROCESSING):
+            with self.new_menu(
+                _("Axis transformation"), icon_name="axis_transform.svg"
+            ):
+                self.action_for("set_uniform_coords")
+
         super().create_first_actions()
 
         with self.new_category(ActionCategory.ROI):
