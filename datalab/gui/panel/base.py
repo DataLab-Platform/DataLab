@@ -75,7 +75,7 @@ from datalab.widgets.textimport import TextImportWizard
 if TYPE_CHECKING:
     from typing import Callable
 
-    from plotpy.items import CurveItem, LabelItem, MaskedImageItem
+    from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
     from sigima.io.image import ImageIORegistry
     from sigima.io.signal import SignalIORegistry
 
@@ -557,7 +557,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     # ------AbstractPanel interface-----------------------------------------------------
     def plot_item_parameters_changed(
-        self, item: CurveItem | MaskedImageItem | LabelItem
+        self, item: CurveItem | MaskedXYImageItem | LabelItem
     ) -> None:
         """Plot items changed: update metadata of all objects from plot items"""
         # Find the object corresponding to the plot item

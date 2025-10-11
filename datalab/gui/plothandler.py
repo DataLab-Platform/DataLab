@@ -34,7 +34,7 @@ from weakref import WeakKeyDictionary
 
 import numpy as np
 from plotpy.constants import PlotType
-from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedImageItem
+from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedXYImageItem
 from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj, TypeObj
@@ -561,14 +561,14 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
             self.plot.setAxisScaleDraw(self.plot.get_axis_id("bottom"), QwtScaleDraw())
 
 
-class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedImageItem]):
+class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
     """Object handling image plot items, plot dialogs, plot options"""
 
     PLOT_TYPE = PlotType.IMAGE
 
     @staticmethod
     def update_item_according_to_ref_item(
-        item: MaskedImageItem, ref_item: MaskedImageItem
+        item: MaskedXYImageItem, ref_item: MaskedXYImageItem
     ) -> None:
         """Update plot item according to reference item"""
         if ref_item is not None and Conf.view.ima_ref_lut_range.get():

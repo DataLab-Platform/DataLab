@@ -36,12 +36,9 @@ from datalab.adapters_plotpy.objects.scalar import GeometryPlotPyAdapter
 from datalab.config import Conf
 
 if TYPE_CHECKING:
-    from plotpy.items import (
-        CurveItem,
-        MaskedImageItem,
-    )
+    from plotpy.items import CurveItem, MaskedXYImageItem
 
-TypePlotItem = TypeVar("TypePlotItem", bound="CurveItem | MaskedImageItem")
+TypePlotItem = TypeVar("TypePlotItem", bound="CurveItem | MaskedXYImageItem")
 
 
 class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):

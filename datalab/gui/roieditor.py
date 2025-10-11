@@ -36,7 +36,7 @@ from plotpy.items import (
     AnnotatedRectangle,
     AnnotatedXRange,
     CurveItem,
-    MaskedImageItem,
+    MaskedXYImageItem,
 )
 from plotpy.plot import PlotDialog, PlotManager, PlotOptions
 from plotpy.tools import CircleTool, HRangeTool, PolygonTool, RectangleTool, SelectTool
@@ -553,7 +553,7 @@ class ImageROIEditor(
     BaseROIEditor[
         ImageObj,
         ImageROI,
-        MaskedImageItem,
+        MaskedXYImageItem,
         # `Union` is mandatory here for Python 3.9-3.10 compatibility:
         Union[AnnotatedPolygon, AnnotatedRectangle, AnnotatedCircle],
     ]

@@ -44,7 +44,7 @@ from datalab.utils.qthelpers import (
 from datalab.widgets.wizard import Wizard, WizardPage
 
 if TYPE_CHECKING:
-    from plotpy.items import CurveItem, MaskedImageItem
+    from plotpy.items import CurveItem, MaskedXYImageItem
     from plotpy.plot import BasePlot
     from qtpy.QtWidgets import QWidget
 
@@ -528,7 +528,7 @@ class GraphicalRepresentationPage(WizardPage):
         super().__init__()
         self.__curve_styles: Generator[tuple[str, str], None, None] | None = None
         self.__objitmlist: list[
-            tuple[SignalObj | ImageObj, CurveItem | MaskedImageItem]
+            tuple[SignalObj | ImageObj, CurveItem | MaskedXYImageItem]
         ] = []
         self.set_title(_("Graphical Representation"))
         self.set_subtitle(_("Graphical representation of the imported data"))
