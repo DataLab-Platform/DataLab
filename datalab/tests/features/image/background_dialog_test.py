@@ -26,6 +26,9 @@ def test_image_background_selection() -> None:
     """Image background selection test."""
     with qt_app_context():
         img = create_noisy_gaussian_image()
+        # Switch to non-uniform coordinates to test the background dialog handling:
+        xcoords = np.linspace(0, 10, img.data.shape[1])
+        img.set_coords(xcoords, 0.02 * xcoords**3)
         dlg = ImageBackgroundDialog(img)
         dlg.resize(640, 480)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix

@@ -18,7 +18,7 @@ from datalab.config import _
 from datalab.utils.qthelpers import resize_widget_to_parent
 
 if TYPE_CHECKING:
-    from plotpy.items import ImageItem, RangeComputation2d, RectangleShape
+    from plotpy.items import MaskedXYImageItem, RangeComputation2d, RectangleShape
     from qtpy.QtWidgets import QWidget
     from sigima.objects import ImageObj
 
@@ -34,7 +34,7 @@ class ImageBackgroundDialog(PlotDialog):
     def __init__(self, image: ImageObj, parent: QWidget | None = None) -> None:
         self.__background: float | None = None
         self.__rect_coords: tuple[float, float, float, float] | None = None
-        self.imageitem: ImageItem | None = None
+        self.imageitem: MaskedXYImageItem | None = None
         self.rectarea: RectangleShape | None = None
         self.comput2d: RangeComputation2d | None = None
         super().__init__(
@@ -72,9 +72,15 @@ class ImageBackgroundDialog(PlotDialog):
         obj = self.__image
         self.imageitem = create_adapter_from_object(obj).make_item()
         plot = self.get_plot()
-        self.rectarea = make.rectangle(
-            obj.x0, obj.y0, obj.xc + obj.dx, obj.yc + obj.dy, _("Background area")
-        )
+        if obj.is_uniform_coords:
+            x0, y0 = obj.x0, obj.y0
+            x1, y1 = obj.xc + obj.dx, obj.yc + obj.dy
+        else:
+            x0, y0 = obj.xcoords[0], obj.ycoords[0]
+            xc = (obj.xcoords[0] + obj.xcoords[-1]) / 2
+            yc = (obj.ycoords[0] + obj.ycoords[-1]) / 2
+            x1, y1 = xc, yc
+        self.rectarea = make.rectangle(x0, y0, x1, y1, _("Background area"))
         self.comput2d = make.computation2d(
             self.rectarea,
             "TL",
