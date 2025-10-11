@@ -269,6 +269,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Improved drag-and-drop support: Users can now drag and drop HDF5 files with any extension (e.g., `.data`, `.experiment`, `.custom`) and DataLab will automatically recognize them as HDF5 files if they contain valid HDF5 data
   * Backward compatibility maintained: All existing functionality for standard HDF5 extensions continues to work exactly as before
 
+* HDF5 Browser usability improvements:
+  * Changed default tree view state from fully expanded to collapsed for better navigation of large HDF5 files
+  * When opening an HDF5 file, only the root node is expanded, keeping all groups and datasets collapsed by default
+  * Users can still expand specific nodes of interest, reducing visual clutter and improving performance
+  * This behavior matches the "Restore" action which collapses all nodes except the root level
+
 🛠️ Bug fixes:
 
 * Plot interface improvements:

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 11:30+0200\n"
+"POT-Creation-Date: 2025-10-11 18:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -771,6 +771,21 @@ msgstr "Prise en charge améliorée du glisser-déposer : Les utilisateurs peuv
 
 msgid "Backward compatibility maintained: All existing functionality for standard HDF5 extensions continues to work exactly as before"
 msgstr "Compatibilité ascendante maintenue : Toutes les fonctionnalités existantes pour les extensions HDF5 standard continuent de fonctionner exactement comme avant"
+
+msgid "HDF5 Browser usability improvements:"
+msgstr "Améliorations de l'utilisabilité de l'explorateur HDF5 :"
+
+msgid "Changed default tree view state from fully expanded to collapsed for better navigation of large HDF5 files"
+msgstr "Changement de l'état par défaut de la vue en arbre de complètement développé à réduit pour une meilleure navigation dans les grands fichiers HDF5"
+
+msgid "When opening an HDF5 file, only the root node is expanded, keeping all groups and datasets collapsed by default"
+msgstr "Lors de l'ouverture d'un fichier HDF5, seul le nœud racine est développé, maintenant tous les groupes et ensembles de données réduits par défaut"
+
+msgid "Users can still expand specific nodes of interest, reducing visual clutter and improving performance"
+msgstr "Les utilisateurs peuvent toujours développer des nœuds spécifiques d'intérêt, réduisant l'encombrement visuel et améliorant les performances"
+
+msgid "This behavior matches the \"Restore\" action which collapses all nodes except the root level"
+msgstr "Ce comportement correspond à l'action \"Restaurer\" qui réduit tous les nœuds sauf le niveau racine"
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"

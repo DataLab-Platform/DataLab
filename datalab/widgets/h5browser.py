@@ -407,7 +407,7 @@ class H5TreeWidget(AbstractTreeWidget):
         self.addTopLevelItem(rootitem)
         for node in root.children:
             self.__recursive_popfunc(rootitem, node)
-        self.expand_all_children(rootitem)
+        self.expandItem(rootitem)
 
     def toggle_show_only_checkable_items(self, state: bool) -> None:
         """Show only checkable items
