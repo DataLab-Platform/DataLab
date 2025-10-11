@@ -185,7 +185,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * FT-Lab signals and images:
     * Added support for CEA's FT-Lab signal and image binary formats.
     * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
-  * Matris text image files:
+  * Coordinated text image files (similar to the Matris image format):
     * Supports both real and complex-valued image data with optional error images.
     * Automatically handles NaN values in the data.
     * Reads metadata including units (X, Y, Z) and labels from file headers.

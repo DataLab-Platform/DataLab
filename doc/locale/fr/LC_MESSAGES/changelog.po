@@ -544,8 +544,8 @@ msgstr "Ajout de la prise en charge des formats binaires de signaux et d'images 
 msgid "This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types"
 msgstr "Ceci clôture le ticket [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Ajout de la prise en charge des types de fichiers .sig et .ima"
 
-msgid "Matris text image files:"
-msgstr "Fichiers d'images texte Matris :"
+msgid "Coordinated text image files (similar to the Matris image format):"
+msgstr "Fichiers image texte avec coordonnées (similaires au format d'image Matris) :"
 
 msgid "Supports both real and complex-valued image data with optional error images."
 msgstr "Prend en charge à la fois les données d'image réelles et à valeurs complexes avec des images d'erreur facultatives."
