@@ -411,6 +411,8 @@ PLOTPY_DEFAULTS = {
         # "shape/drag/line/color": "#00ffff",
         #
         # Overriding default plot settings from PlotPy
+        "title/font/size": 11,
+        "title/font/bold": False,
         "marker/curve/text/textcolor": "black",
         "marker/cross/text/textcolor": "black",
         "marker/cross/text/background_alpha": 0.7,
