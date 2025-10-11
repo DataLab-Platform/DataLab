@@ -12,9 +12,7 @@ from __future__ import annotations
 import numpy as np
 from guidata.dataset import update_dataset
 from plotpy.builder import make
-from plotpy.items import (
-    MaskedImageItem,
-)
+from plotpy.items import MaskedXYImageItem
 from sigima.objects import ImageObj
 
 from datalab.adapters_plotpy.objects.base import (
@@ -23,13 +21,31 @@ from datalab.adapters_plotpy.objects.base import (
 from datalab.config import Conf
 
 
-class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):
+def get_obj_coords(obj: ImageObj) -> tuple[np.ndarray, np.ndarray]:
+    """Get object coordinates
+
+    Args:
+        obj: image object
+
+    Returns:
+        x and y coordinates
+    """
+    if obj.is_uniform_coords:
+        shape = obj.data.shape
+        xcoords = np.linspace(obj.x0, obj.x0 + obj.dx * shape[1], shape[1] + 1)
+        ycoords = np.linspace(obj.y0, obj.y0 + obj.dy * shape[0], shape[0] + 1)
+    else:
+        xcoords, ycoords = obj.xcoords, obj.ycoords
+    return xcoords, ycoords
+
+
+class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedXYImageItem]):
     """Image object plot item adapter class"""
 
     CONF_FMT = Conf.view.ima_format
     DEFAULT_FMT = ".1f"
 
-    def update_plot_item_parameters(self, item: MaskedImageItem) -> None:
+    def update_plot_item_parameters(self, item: MaskedXYImageItem) -> None:
         """Update plot item parameters from object data/metadata
 
         Takes into account a subset of plot item parameters. Those parameters may
@@ -48,18 +64,7 @@ class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):
             if unit:
                 fmt = r"%.1f (" + unit + ")"
             setattr(item.param, axis + "format", fmt)
-        # Updating origin and pixel spacing
-        has_origin = o.x0 is not None and o.y0 is not None
-        has_pixelspacing = o.dx is not None and o.dy is not None
-        if has_origin or has_pixelspacing:
-            x0, y0, dx, dy = 0.0, 0.0, 1.0, 1.0
-            if has_origin:
-                x0, y0 = o.x0, o.y0
-            if has_pixelspacing:
-                dx, dy = o.dx, o.dy
-            shape = o.data.shape
-            item.param.xmin, item.param.xmax = x0, x0 + dx * shape[1]
-            item.param.ymin, item.param.ymax = y0, y0 + dy * shape[0]
+        item.set_xy(*get_obj_coords(o))
         zmin, zmax = item.get_lut_range()
         if o.zscalemin is not None or o.zscalemax is not None:
             zmin = zmin if o.zscalemin is None else o.zscalemin
@@ -67,7 +72,7 @@ class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):
             item.set_lut_range([zmin, zmax])
         super().update_plot_item_parameters(item)
 
-    def update_metadata_from_plot_item(self, item: MaskedImageItem) -> None:
+    def update_metadata_from_plot_item(self, item: MaskedXYImageItem) -> None:
         """Update metadata from plot item.
 
         Takes into account a subset of plot item parameters. Those parameters may
@@ -83,15 +88,6 @@ class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):
         o = self.obj
         # Updating the LUT range:
         o.zscalemin, o.zscalemax = item.get_lut_range()
-        # Updating origin and pixel spacing:
-        shape = o.data.shape
-        param = item.param
-        xmin, xmax, ymin, ymax = param.xmin, param.xmax, param.ymin, param.ymax
-        if xmin == 0 and ymin == 0 and xmax == shape[1] and ymax == shape[0]:
-            o.x0, o.y0, o.dx, o.dy = 0.0, 0.0, 1.0, 1.0
-        else:
-            o.x0, o.y0 = xmin, ymin
-            o.dx, o.dy = (xmax - xmin) / shape[1], (ymax - ymin) / shape[0]
 
     def __viewable_data(self) -> np.ndarray:
         """Return viewable data"""
@@ -100,7 +96,9 @@ class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):
             data = np.nan_to_num(data, posinf=0, neginf=0)
         return data
 
-    def make_item(self, update_from: MaskedImageItem | None = None) -> MaskedImageItem:
+    def make_item(
+        self, update_from: MaskedXYImageItem | None = None
+    ) -> MaskedXYImageItem:
         """Make plot item from data.
 
         Args:
@@ -110,7 +108,8 @@ class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):
             Plot item
         """
         data = self.__viewable_data()
-        item = make.maskedimage(
+        item = make.maskedxyimage(
+            *get_obj_coords(self.obj),
             data,
             self.obj.maskdata,
             title=self.obj.title,
@@ -126,7 +125,7 @@ class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedImageItem]):
             item.param.update_item(item)
         return item
 
-    def update_item(self, item: MaskedImageItem, data_changed: bool = True) -> None:
+    def update_item(self, item: MaskedXYImageItem, data_changed: bool = True) -> None:
         """Update plot item from data.
 
         Args:
