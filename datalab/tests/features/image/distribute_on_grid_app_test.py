@@ -26,8 +26,7 @@ def get_image_origin(obj):
     """
     if obj.is_uniform_coords:
         return obj.x0, obj.y0
-    else:
-        return obj.xcoords[0], obj.ycoords[0]
+    return obj.xcoords[0], obj.ycoords[0]
 
 
 def test_distribute_on_grid():

@@ -37,6 +37,7 @@ from plotpy.constants import PlotType
 from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedXYImageItem
 from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
+from qwt import QwtScaleDraw
 from sigima.objects import ImageObj, SignalObj, TypeObj
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
@@ -536,19 +537,18 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
                 if obj is not None and obj.is_x_datetime():
                     has_datetime = True
                     # Get format from signal metadata, or use configured default
+                    datetime_format = obj.metadata.get("x_datetime_format")
                     if datetime_format is None:
-                        datetime_format = obj.metadata.get("x_datetime_format")
-                        if datetime_format is None:
-                            # Use configured format based on time unit
-                            unit = obj.xunit if obj.xunit else "s"
-                            if unit in ("ns", "us", "ms"):
-                                datetime_format = Conf.view.sig_datetime_format_ms.get(
-                                    "%H:%M:%S.%f"
-                                )
-                            else:
-                                datetime_format = Conf.view.sig_datetime_format_s.get(
-                                    "%H:%M:%S"
-                                )
+                        # Use configured format based on time unit
+                        unit = obj.xunit if obj.xunit else "s"
+                        if unit in ("ns", "us", "ms"):
+                            datetime_format = Conf.view.sig_datetime_format_ms.get(
+                                "%H:%M:%S.%f"
+                            )
+                        else:
+                            datetime_format = Conf.view.sig_datetime_format_s.get(
+                                "%H:%M:%S"
+                            )
                     break
 
         # Configure X-axis for datetime or restore default
@@ -556,8 +556,6 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
             self.plot.set_axis_datetime("bottom", format=datetime_format)
         else:
             # Restore default scale draw (remove datetime formatting)
-            from qwt import QwtScaleDraw
-
             self.plot.setAxisScaleDraw(self.plot.get_axis_id("bottom"), QwtScaleDraw())
 
 

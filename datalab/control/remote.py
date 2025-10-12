@@ -786,14 +786,14 @@ class RemoteClient(BaseProxy):
                 elapsed = time.time() - start_time
                 execenv.print(f"OK (port: {self.port}, connected in {elapsed:.1f}s)")
                 return
-            except (ConnectionRefusedError, OSError):
+            except (ConnectionRefusedError, OSError) as exc:
                 # Catch both ConnectionRefusedError and OSError (includes socket errors)
                 elapsed = time.time() - start_time
                 if elapsed >= timeout:
                     execenv.print("KO")
                     raise ConnectionRefusedError(
                         f"Unable to connect to DataLab after {elapsed:.1f}s"
-                    )
+                    ) from exc
                 # Wait before next retry with exponential backoff
                 time.sleep(poll_interval)
                 poll_interval = min(poll_interval * 1.5, max_poll_interval)
