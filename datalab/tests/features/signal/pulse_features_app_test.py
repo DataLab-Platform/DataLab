@@ -16,7 +16,7 @@ from sigima.objects import (
 )
 from sigima.params import PulseFeaturesParam
 from sigima.tests.helpers import check_scalar_result
-from sigima.tests.signal.pulse_unit_test import (
+from sigima.tests.signal.pulse.pulse_unit_test import (
     create_test_square_params,
     create_test_step_params,
 )
