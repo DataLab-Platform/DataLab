@@ -193,8 +193,8 @@ The following frequency-domain filters are available:
       - Description
     * - Butterworth
       - Butterworth filter, based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_
-    * - Gaussian filter in the frequency domain
-      - Gaussian filter applied in the frequency domain
+    * - Gaussian filter
+      - Gaussian filter
 
 Thresholding
 ^^^^^^^^^^^^
