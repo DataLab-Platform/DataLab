@@ -198,13 +198,13 @@ Basic mathematical functions
     * - Function
       - Description
     * - |exp| Exponential
-      - :math:`y_{k} = \exp(y_{k-1})`
+      - :math:`y_{k} = \exp(y_{k})`
     * - |log10| Logarithm (base 10)
-      - :math:`y_{k} = \log_{10}(y_{k-1})`
+      - :math:`y_{k} = \log_{10}(y_{k})`
     * - |power| Power
-      - :math:`y_{k} = y_{k-1}^{n}`
+      - :math:`y_{k} = y_{k}^{n}`
     * - |sqrt| Square root
-      - :math:`y_{k} = \sqrt{y_{k-1}}`
+      - :math:`y_{k} = \sqrt{y_{k}}`
 
 .. |exp| image:: ../../../datalab/data/icons/operations/exp.svg
     :width: 24px
