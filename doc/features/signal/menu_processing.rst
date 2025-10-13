@@ -268,7 +268,9 @@ For each filter, the following methods are available:
 Fitting
 ^^^^^^^
 
-Open an interactive curve fitting tool in a modal dialog box.
+Permit to fit a model to each selected signal.
+this can be done using a interactive window, or,
+when possible directly on the whole signal.
 
 .. list-table::
     :header-rows: 1
@@ -277,23 +279,31 @@ Open an interactive curve fitting tool in a modal dialog box.
     * - Model
       - Equation
     * - Linear
-      - :math:`y = c_{0}+c_{1}.x`
+      - :math:`y = c_{0}+c_{1} \cdot x`
     * - Polynomial
-      - :math:`y = c_{0}+c_{1}.x+c_{2}.x^2+...+c_{n}.x^n`
+      - :math:`y = c_{0}+c_{1} \cdot x+c_{2} \cdot x^2+...+c_{n} \cdot x^n`
     * - Gaussian
-      - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
+      - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi} \cdot \sigma} \cdot \exp\left(-\dfrac{1}{2} \cdot \left(\dfrac{x-x_{0}}{\sigma}\right)^2\right)`
     * - Lorentzian
-      - :math:`y = y_{0}+\dfrac{A}{\sigma.\pi}.\dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
+      - :math:`y = y_{0}+\dfrac{A}{\sigma \cdot \pi} \cdot \dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
     * - Voigt
-      - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
+      - :math:`y = y_{0}+A \cdot \dfrac{\operatorname{Re}(\exp(-z^2) \cdot \operatorname{erfc}(-j \cdot z))}{\sqrt{2\pi} \cdot \sigma}` with :math:`z = \dfrac{x-x_{0}-j \cdot \sigma}{\sqrt{2} \cdot \sigma}`
     * - Multi-Gaussian
-      - :math:`y = y_{0}+\sum_{i=0}^{K}\dfrac{A_{i}}{\sqrt{2\pi}.\sigma_{i}}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0,i}}{\sigma_{i}})^2)`
+      - :math:`y = y_{0}+\sum_{i=0}^{K}\dfrac{A_{i}}{\sqrt{2\pi} \cdot \sigma_{i}} \cdot \exp\left(-\dfrac{1}{2} \cdot \left(\dfrac{x-x_{0,i}}{\sigma_{i}}\right)^2\right)`
+    * - Multi-Lorentzian
+      - :math:`y = y_{0}+\sum_{i=0}^{K}\dfrac{A_{i}}{\sigma_{i} \cdot \pi} \cdot \dfrac{1}{1+\left(\dfrac{x-x_{0,i}}{\sigma_{i}}\right)^2}`
+    * - Planck
+      - :math:`y = y_{0}+A\cdot \dfrac{2h \cdot c^2}{\lambda^5} \cdot \left(\exp\left(\dfrac{h \cdot c}{\lambda \cdot k \cdot T}\right)-1\right)^{-1}`
+    * - Two half Gaussians
+      - :math:`y = y_{0}+A \cdot \dfrac{1}{\sqrt{2\pi} \cdot \sigma_{0}} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x-x_{0}}{\sigma_{0}}\right)^2\right)` if :math:`x<x_{0}` else :math:`y = y_{0}+A \cdot \dfrac{1}{\sqrt{2\pi} \cdot \sigma_{1}} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x-x_{0}}{\sigma_{1}}\right)^2\right)`
+    * - Double Exponential
+      - :math:`y = y_{0}+A_{1} \cdot \exp\left(-x/\tau_{1}\right)` if :math:`x<x_{0}` else :math:`y =y_{0}+A_{2} \cdot \exp(-x/\tau_{2})`
     * - Exponential
-      - :math:`y = y_{0}+A.exp(B.x)`
+      - :math:`y = y_{0}+A \cdot \exp\left(B \cdot x\right)`
     * - Sinusoidal
-      - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
+      - :math:`y = y_{0}+A \cdot \sin\left(2\pi \cdot f \cdot x+\phi\right)`
     * - Cumulative Distribution Function (CDF)
-      - :math:`y = y_{0}+A.erf(\dfrac{x-x_{0}}{\sigma.\sqrt{2}})`
+      - :math:`y = y_{0}+A \cdot \operatorname{erf}\left(\dfrac{x-x_{0}}{\sigma \cdot \sqrt{2}}\right)`
 
 Windowing
 ^^^^^^^^^
