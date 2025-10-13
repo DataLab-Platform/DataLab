@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-11 11:30+0200\n"
+"POT-Creation-Date: 2025-10-13 10:04+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1970,8 +1970,7 @@ msgstr "Marge de zoom automatique"
 msgid "%"
 msgstr "%"
 
-#, python-format
-msgid "Percentage of margin to add around data when auto-scaling signal plots.<br>A value of 0.2% adds a small margin for better visualization.<br>Set to 0% for no margin (exact data bounds)."
+msgid "Percentage of margin to add around data when auto-scaling signal plots.<br>A value of 0.2&#37; adds a small margin for better visualization.<br>Set to 0&#37; for no margin (exact data bounds)."
 msgstr "Pourcentage de marge à ajouter autour des données lors du redimensionnement automatique des graphiques de signaux.<br>Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation.<br>Réglez sur 0 % pour aucune marge (limites exactes des données)."
 
 msgid "DateTime format (s/min/h)"
@@ -2008,8 +2007,7 @@ msgstr "Eliminer les bords"
 msgid "Eliminate a percentage of the highest and lowest values<br>of the image histogram - <i>recommanded values are below 1%</i>"
 msgstr "Eliminer un pourcentage des valeurs les plus hautes et les plus basses<br>de l'histogramme de l'image - <i>les valeurs recommandées sont inférieures à 1%</i>"
 
-#, python-format
-msgid "Percentage of margin to add around data when auto-scaling image plots.<br>A value of 0.2% adds a small margin for better visualization.<br>Set to 0% for no margin (exact data bounds)."
+msgid "Percentage of margin to add around data when auto-scaling image plots.<br>A value of 0.2&#37; adds a small margin for better visualization.<br>Set to 0&#37; for no margin (exact data bounds)."
 msgstr "Pourcentage de marge à ajouter autour des données lors du redimensionnement automatique des graphiques d'images.<br>Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation.<br>Réglez sur 0 % pour aucune marge (limites exactes des données)."
 
 msgid "Process isolation enable status"

@@ -273,8 +273,8 @@ class ViewSettings(gds.DataSet):
         max=50.0,
         help=_(
             "Percentage of margin to add around data when auto-scaling signal "
-            "plots.<br>A value of 0.2% adds a small margin for better "
-            "visualization.<br>Set to 0% for no margin (exact data bounds)."
+            "plots.<br>A value of 0.2&#37; adds a small margin for better "
+            "visualization.<br>Set to 0&#37; for no margin (exact data bounds)."
         ),
     )
     sig_datetime_format_s = gds.StringItem(
@@ -334,8 +334,8 @@ class ViewSettings(gds.DataSet):
         max=50.0,
         help=_(
             "Percentage of margin to add around data when auto-scaling image "
-            "plots.<br>A value of 0.2% adds a small margin for better "
-            "visualization.<br>Set to 0% for no margin (exact data bounds)."
+            "plots.<br>A value of 0.2&#37; adds a small margin for better "
+            "visualization.<br>Set to 0&#37; for no margin (exact data bounds)."
         ),
     )
     ima_defaults = gds.ButtonItem(
