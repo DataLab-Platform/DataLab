@@ -21,6 +21,47 @@ The "Operations" menu allows you to perform various operations on the
 selected signals, such as arithmetic operations, peak detection, or
 convolution.
 
+Operations with a constant
+--------------------------
+
+Create a new signal which is the result of a constant operation on each selected signal:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
+
+    * - Operation
+      - Description
+    * - |constant_add| Addition
+      - :math:`y_{k} = y_{k-1} + c`
+    * - |constant_subtract| Subtraction
+      - :math:`y_{k} = y_{k-1} - c`
+    * - |constant_multiply| Multiplication
+      - :math:`y_{k} = y_{k-1} \times c`
+    * - |constant_divide| Division
+      - :math:`y_{k} = \dfrac{y_{k-1}}{c}`
+
+.. |constant_add| image:: ../../../datalab/data/icons/operations/constant_add.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |constant_subtract| image:: ../../../datalab/data/icons/operations/constant_subtract.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |constant_multiply| image:: ../../../datalab/data/icons/operations/constant_multiply.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |constant_divide| image:: ../../../datalab/data/icons/operations/constant_divide.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+
 Basic arithmetic operations
 ---------------------------
 
@@ -80,45 +121,6 @@ Basic arithmetic operations
     :height: 24px
     :class: dark-light no-scaled-link
 
-Operations with a constant
---------------------------
-
-Create a new signal which is the result of a constant operation on each selected signal:
-
-.. list-table::
-    :header-rows: 1
-    :widths: 40, 60
-
-    * - Operation
-      - Description
-    * - |constant_add| Addition
-      - :math:`y_{k} = y_{k-1} + c`
-    * - |constant_subtract| Subtraction
-      - :math:`y_{k} = y_{k-1} - c`
-    * - |constant_multiply| Multiplication
-      - :math:`y_{k} = y_{k-1} \times c`
-    * - |constant_divide| Division
-      - :math:`y_{k} = \dfrac{y_{k-1}}{c}`
-
-.. |constant_add| image:: ../../../datalab/data/icons/operations/constant_add.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |constant_subtract| image:: ../../../datalab/data/icons/operations/constant_subtract.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |constant_multiply| image:: ../../../datalab/data/icons/operations/constant_multiply.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |constant_divide| image:: ../../../datalab/data/icons/operations/constant_divide.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
 
 Absolute value and complex signal operations
 --------------------------------------------
