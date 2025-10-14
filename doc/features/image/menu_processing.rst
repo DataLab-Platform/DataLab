@@ -83,6 +83,15 @@ Create a new image which is the result of offset correction on each selected ima
 This operation is performed by subtracting the image background value which is estimated
 by the mean value of a user-defined rectangular area.
 
+Noise addition
+^^^^^^^^^^^^^^^
+
+Create a new image which is the result of noise addition to each selected signal. The possible noise types are:
+
+  - Gaussian noise (normal distribution)
+  - Uniform noise (uniform distribution)
+  - Poisson noise (Poisson distribution)
+
 Noise reduction
 ^^^^^^^^^^^^^^^
 
