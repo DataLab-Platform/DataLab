@@ -83,6 +83,14 @@ large. Therefore, you may want to disable the auto-refresh feature when you are
 working with large data sets, and enable it again when you are done. This will
 avoid unnecessary refreshes.
 
+Show only first selected signal
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Toggle between showing all selected signals or only the first one.
+
+When this option is enabled, only the first selected signal is shown in the plot
+view. This can be useful when you have many signals selected and you want to
+focus on only one of them.
+
 Refresh manually
 ^^^^^^^^^^^^^^^^
 
