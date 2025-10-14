@@ -32,13 +32,13 @@ Create a new image which is the result of a constant operation on each selected 
 
     * - Operation
       - Equation
-    * - |constant_add| Addition
+    * - |constant_add| Add constant
       - :math:`z_{k} = z_{k-1} + conv(c)`
-    * - |constant_subtract| Subtraction
+    * - |constant_subtract| Subtract constant
       - :math:`z_{k} = z_{k-1} - conv(c)`
-    * - |constant_multiply| Multiplication
+    * - |constant_multiply| Multiply by constant
       - :math:`z_{k} = conv(z_{k-1} \times c)`
-    * - |constant_divide| Division
+    * - |constant_divide| Divide by constant
       - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
 
 .. |constant_add| image:: ../../../datalab/data/icons/operations/constant_add.svg
@@ -66,6 +66,7 @@ which handles data type conversion (keeping the same data type as the input imag
 
 Basic arithmetic operations
 ---------------------------
+Arithmetic operations are performed pixel by pixel between the selected images.
 
 .. list-table::
     :header-rows: 1
@@ -75,42 +76,27 @@ Basic arithmetic operations
       - Description
     * - |sum| Sum
       - :math:`z_{M} = \sum_{k=0}^{M-1}{z_{k}}`
-    * - |average| Average
-      - :math:`z_{M} = \dfrac{1}{M}\sum_{k=0}^{M-1}{z_{k}}`
-    * - |standard_deviation| Standard Deviation
-      - :math:`z_{M} = \sqrt{\dfrac{1}{M}\sum_{k=0}^{M-1}{(y_{k} - \bar{y})^{2}}}`
     * - |difference| Difference
       - :math:`z_{2} = z_{1} - z_{0}`
-    * - |quadratic_difference| Quadratic difference
-      - :math:`z_{2} = \dfrac{z_{1} - z_{0}}{\sqrt{2}}`
     * - |product| Product
       - :math:`z_{M} = \prod_{k=0}^{M-1}{z_{k}}`
     * - |division| Division
       - :math:`z_{2} = \dfrac{z_{1}}{z_{0}}`
     * - |inverse| Inverse
       - :math:`z_{2} = \dfrac{1}{z_{1}}`
+    * - |exponential| Exponential
+      - :math:`z_{2} = \exp(z_{1})`
+    * - |logarithm| Logarithm (base 10)
+      - :math:`z_{2} = \log_{10}(z_{1})`
+
 
 .. |sum| image:: ../../../datalab/data/icons/operations/sum.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |average| image:: ../../../datalab/data/icons/operations/average.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |standard_deviation| image:: ../../../datalab/data/icons/operations/std.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
 
 .. |difference| image:: ../../../datalab/data/icons/operations/difference.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |quadratic_difference| image:: ../../../datalab/data/icons/operations/quadratic_difference.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -130,6 +116,70 @@ Basic arithmetic operations
     :height: 24px
     :class: dark-light no-scaled-link
 
+.. |exponential| image:: ../../../datalab/data/icons/operations/exp.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |logarithm| image:: ../../../datalab/data/icons/operations/log10.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+
+
+
+Basic mathematical functions
+----------------------------
+
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
+
+    * - Function
+      - Description
+    * - |exp| Exponential
+      - :math:`z_{k} = \exp(z_{k})`
+    * - |log10| Logarithm (base 10)
+      - :math:`z_{k} = \log_{10}(z_{k})`
+    * - Log10(z+10)
+      - :math:`z_{k} = \log_{10}(z_{k}+n)` (useful if image background is zero)
+
+.. |exp| image:: ../../../datalab/data/icons/operations/exp.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |log10| image:: ../../../datalab/data/icons/operations/log10.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+Convolution and Deconvolution
+------------------------------
+
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
+
+    * - Operation
+      - Implementation
+    * - |convolution| Convolution
+      - Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_
+    * - |deconvolution| Deconvolution
+      - Frequency domain deconvolution
+
+
+.. |convolution| image:: ../../../datalab/data/icons/operations/convolution.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |deconvolution| image:: ../../../datalab/data/icons/operations/deconvolution.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
 Absolute value and complex image operations
 -------------------------------------------
 
@@ -143,14 +193,18 @@ Absolute value and complex image operations
       - :math:`z_{k} = |z_{k-1}|`
     * - |phase| Phase (argument)
       - :py:func:`sigima.proc.image.phase`
-    * - |complex_from_magnitude_phase| Complex from magnitude and phase
-      - :py:func:`sigima.proc.image.complex_from_magnitude_phase`
+    * - |complex_from_magnitude_phase| Combine with phase
+      - Consider current image as the module and allow to select a image
+        representing the phase to merge them in a complex image
+        :py:func:`sigima.proc.image.complex_from_magnitude_phase`
     * - |re| Real part
       - :math:`z_{k} = \Re(z_{k-1})`
     * - |im| Imaginary part
       - :math:`z_{k} = \Im(z_{k-1})`
-    * - |complex_from_real_imag| Complex from real and imaginary parts
-      - :py:func:`sigima.proc.image.complex_from_real_imag`
+    * - |complex_from_real_imag| Combine with imaginary part
+      - Consider current image as the real part and allow to select a image
+        representing the imaginary part to merge them in a complex image
+        :py:func:`sigima.proc.image.complex_from_real_imag`
 
 
 .. |abs| image:: ../../../datalab/data/icons/operations/abs.svg
@@ -183,6 +237,7 @@ Absolute value and complex image operations
     :height: 24px
     :class: dark-light no-scaled-link
 
+
 Data type conversion
 --------------------
 
@@ -202,53 +257,33 @@ For floating point data types, the conversion is straightforward.
     function which relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
-Basic mathematical functions
-----------------------------
-
-.. list-table::
-    :header-rows: 1
-    :widths: 40, 60
-
-    * - Function
-      - Description
-    * - |exp| Exponential
-      - :math:`z_{k} = \exp(z_{k})`
-    * - |log10| Logarithm (base 10)
-      - :math:`z_{k} = \log_{10}(z_{k})`
-    * - Logarithmic transformation
-      - :math:`z_{k} = \log_{10}(z_{k}+n)` (useful if image background is zero)
-
-.. |exp| image:: ../../../datalab/data/icons/operations/exp.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |log10| image:: ../../../datalab/data/icons/operations/log10.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-Other operations
-----------------
+Statistics between images
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Create a new image which is the result of a statistical operation on each pixel of the selected images:
 
 .. list-table::
     :header-rows: 1
     :widths: 40, 60
 
     * - Operation
-      - Implementation
-    * - |convolution| Convolution
-      - Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_
-    * - |deconvolution| Deconvolution
-      - Frequency domain deconvolution
-
-
-.. |convolution| image:: ../../../datalab/data/icons/operations/convolution.svg
+      - Description
+    * - |average| Average
+      - :math:`z_{M} = \dfrac{1}{M}\sum_{k=0}^{M-1}{z_{k}}`
+    * - |standard_deviation| Standard Deviation
+      - :math:`z_{M} = \sqrt{\dfrac{1}{M}\sum_{k=0}^{M-1}{(y_{k} - \bar{y})^{2}}}`
+    * - |quadratic_difference| Quadratic difference
+      - :math:`z_{2} = \dfrac{z_{1} - z_{0}}{\sqrt{2}}`
+.. |average| image:: ../../../datalab/data/icons/operations/average.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |deconvolution| image:: ../../../datalab/data/icons/operations/deconvolution.svg
+.. |standard_deviation| image:: ../../../datalab/data/icons/operations/std.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |quadratic_difference| image:: ../../../datalab/data/icons/operations/quadratic_difference.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
