@@ -449,3 +449,39 @@ Pixel binning
 Combine clusters of adjacent pixels, throughout the image,
 into single pixels. The result can be the sum, average, median, minimum,
 or maximum value of the cluster.
+
+Resampling
+^^^^^^^^^^^^
+Create a new image which is a resampled version of each selected image.
+You need to specify the following parameters:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - :math:`x_{min}`
+      - Minimum X value of the new image
+    * - :math:`x_{max}`
+      - Maximum X value of the new image
+    * - :math:`y_{min}`
+      - Minimum Y value of the new image
+    * - :math:`y_{max}`
+      - Maximum Y value of the new image
+    * - Mode
+      - Image size definition mode: 'pixel size' or 'Output shape'. The 'pixel size' mode
+        allows to define the pixel size of the new image, while the 'Output shape' mode
+        allows to define the number of pixels of the new image.
+    * - :math:`\Delta x`
+      - Pixel size in X direction (if 'pixel size' mode is selected)
+    * - :math:`\Delta y`
+      - Pixel size in Y direction (if 'pixel size' mode is selected)
+    * - Width
+      - Number of pixels in X direction (if 'Output shape' mode is selected)
+    * - Height
+      - Number of pixels in Y direction (if 'Output shape' mode is selected)
+    * - Interpolation method
+      - Interpolation method to use: 'nearest', 'linear', 'cubic'.
+    * - Fill value
+      - Value to use for points outside the boundaries of the input image.
