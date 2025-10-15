@@ -103,7 +103,7 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
 
     panel.objview.set_current_object(ima1)
 
-    param = sigima.objects.UniformDistribution1DParam.create(
+    param = sigima.objects.UniformDistribution2DParam.create(
         width=data_size, height=data_size
     )
     param.set_from_datatype(ima1.data.dtype)
@@ -119,7 +119,7 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     panel.processor.run_feature("histogram")
     qt_wait(DELAY2)
 
-    param.title = None
+    param = sigima.objects.NewImageParam.create(width=data_size, height=data_size)
     ima1 = create_sincos_image(param)
     panel.add_object(ima1)
 
