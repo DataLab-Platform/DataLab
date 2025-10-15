@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-15 18:23+0200\n"
+"POT-Creation-Date: 2025-10-15 18:34+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -2234,6 +2234,9 @@ msgstr "Grille d'images gaussiennes"
 msgid "Load spectrum of paracetamol"
 msgstr "Charger le spectre du paracétamol"
 
+msgid "Load all test signals"
+msgstr "Charger tous les signaux de test"
+
 msgid "Create image with peaks"
 msgstr "Créer une image avec des pics"
 
@@ -2257,6 +2260,9 @@ msgstr "Créer une image avec un anneau"
 
 msgid "Create image with a grid of gaussian spots"
 msgstr "Créer une image avec une grille de spots gaussiens"
+
+msgid "Load all test images"
+msgstr "Charger toutes les images de test"
 
 msgid "Host application"
 msgstr "Application hôte"

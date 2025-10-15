@@ -8,10 +8,16 @@ This plugin is an example of DataLab plugin. It provides test data samples
 and some actions to test DataLab functionalities.
 """
 
+from __future__ import annotations
+
 import sigima.tests.data as test_data
+from sigima.io.image import ImageIORegistry
+from sigima.io.signal import SignalIORegistry
+from sigima.tests import helpers
 
 from datalab.config import _
 from datalab.plugins import PluginBase, PluginInfo
+from datalab.utils.qthelpers import create_progress_bar
 
 # ------------------------------------------------------------------------------
 # All computation functions must be defined as global functions, otherwise
@@ -27,6 +33,27 @@ class PluginTestData(PluginBase):
         version="1.0.0",
         description=_("Testing DataLab functionalities"),
     )
+
+    def load_test_objs(
+        self, registry_class: type[SignalIORegistry | ImageIORegistry], title: str
+    ) -> None:
+        """Load all test objects from a given registry class
+
+        Args:
+            registry_class: Registry class (SignalIORegistry or ImageIORegistry)
+            title: Progress bar title
+
+        Returns:
+            List of (filename, object) tuples
+        """
+        test_objs = list(helpers.read_test_objects(registry_class))
+        with create_progress_bar(self.signalpanel, title, max_=len(test_objs)) as prog:
+            for i_obj, (_fname, obj) in enumerate(test_objs):
+                prog.setValue(i_obj + 1)
+                if prog.wasCanceled():
+                    break
+                if obj is not None:
+                    self.proxy.add_object(obj)
 
     # Signal processing features ------------------------------------------------
     def create_paracetamol_signal(self) -> None:
@@ -102,6 +129,12 @@ class PluginTestData(PluginBase):
                 _("Load spectrum of paracetamol"),
                 triggered=self.create_paracetamol_signal,
                 select_condition="always",
+            )
+            sah.new_action(
+                _("Load all test signals"),
+                triggered=lambda regclass=SignalIORegistry,
+                title=_("Load all test signals"): self.load_test_objs(regclass, title),
+                select_condition="always",
                 separator=True,
             )
         # Image Panel -----------------------------------------------------------
@@ -147,4 +180,11 @@ class PluginTestData(PluginBase):
                 _("Create image with a grid of gaussian spots"),
                 triggered=self.create_grid_gaussian_image,
                 select_condition="always",
+            )
+            iah.new_action(
+                _("Load all test images"),
+                triggered=lambda regclass=ImageIORegistry,
+                title=_("Load all test images"): self.load_test_objs(regclass, title),
+                select_condition="always",
+                separator=True,
             )
