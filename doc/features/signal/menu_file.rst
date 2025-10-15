@@ -92,6 +92,8 @@ Create a new signal from the following supported filetypes:
       - .npy
     * - MAT-Files
       - .mat
+    * - FT-Lab files
+      - .sig
 
 Open from directory
 ^^^^^^^^^^^^^^^^^^^

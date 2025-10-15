@@ -85,6 +85,8 @@ Create a new image from the following supported filetypes:
       - .fxd
     * - Bitmap images
       - .bmp
+    * - FT-Lab files
+      - .ima
 
 .. note::
 
