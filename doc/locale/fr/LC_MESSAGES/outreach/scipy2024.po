@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-15 09:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "DataLab presentation at SciPy 2024 conference in Tacoma, Washington"
+msgstr "Présentation de DataLab à la conférence SciPy 2024 à Tacoma, Washington"
+
+msgid "DataLab, SciPy, SciPy 2024, scientific Python, conference, Tacoma"
+msgstr "DataLab, SciPy, SciPy 2024, Python scientifique, conférence, Tacoma"
+
+msgid "SciPy 2024 - Tacoma, Washington"
+msgstr "SciPy 2024 - Tacoma, Washington"
+
+msgid "Greater Tacoma Convention Center"
+msgstr "Centre de congrès de Greater Tacoma"
+
+msgid "Greater Tacoma Convention Center, where SciPy 2024 was held"
+msgstr "Centre de congrès de Greater Tacoma, où s'est tenue la conférence SciPy 2024"
+
+msgid "Conference Overview"
+msgstr "Aperçu de la conférence"
+
+msgid "In July 2024, DataLab made its international debut at `SciPy 2024 <https://www.scipy2024.scipy.org/>`_, the largest conference in the world dedicated to the scientific Python ecosystem. Held in Tacoma, Washington (near Seattle), the conference gathered about 800 participants from industry, academia, and government."
+msgstr "En juillet 2024, DataLab a fait ses débuts internationaux à `SciPy 2024 <https://www.scipy2024.scipy.org/>`_, la plus grande conférence au monde dédiée à l'écosystème Python scientifique. Organisée à Tacoma, Washington (près de Seattle), la conférence a rassemblé environ 800 participants issus de l'industrie, du milieu universitaire et du gouvernement."
+
+msgid "SciPy is organized by the `NumFOCUS <https://numfocus.org/>`_ foundation and has been held annually for more than 20 years, bringing together people from diverse fields who share a common interest in Python and scientific computing."
+msgstr "SciPy est organisé par la fondation `NumFOCUS <https://numfocus.org/>`_ et se tient chaque année depuis plus de 20 ans, réunissant des personnes de divers domaines partageant un intérêt commun pour Python et le calcul scientifique."
+
+msgid "DataLab Presentation"
+msgstr "Présentation de DataLab"
+
+msgid "DataLab @ SciPy 2024"
+msgstr "DataLab @ SciPy 2024"
+
+msgid "Introducing DataLab at SciPy 2024"
+msgstr "Présentation de DataLab à SciPy 2024"
+
+msgid "**Talk Title:** *From Spyder to DataLab: 15 years of scientific software crafting in Python*"
+msgstr "**Titre de la présentation :** *De Spyder à DataLab : 15 ans de création de logiciels scientifiques en Python*"
+
+msgid "**Presenter:** Pierre Raybaut (Executive VP, Engineering, CODRA)"
+msgstr "**Intervenant :** Pierre Raybaut (Directeur Général Ingénierie, CODRA)"
+
+msgid "The presentation introduced DataLab as part of a broader narrative about 15 years of scientific Python software development, including the creation of Spyder (the Scientific Python IDE) and other projects like Python(x,y) and WinPython."
+msgstr "La présentation a introduit DataLab dans le cadre d'un récit plus large sur 15 ans de développement de logiciels scientifiques en Python, incluant la création de Spyder (l'IDE Python scientifique) et d'autres projets comme Python(x,y) et WinPython."
+
+msgid "Key Points Presented"
+msgstr "Points Clés Présentés"
+
+msgid "**DataLab's Unique Position**"
+msgstr "**Position Unique de DataLab :**"
+
+msgid "A platform that bridges the gap between customizable scientific processing software and industrial-grade applications."
+msgstr "Une plateforme qui comble le fossé entre les logiciels de traitement scientifique personnalisables et les applications de niveau industriel."
+
+msgid "**Three Operating Modes**"
+msgstr "**Trois Modes de Fonctionnement :**"
+
+msgid "Standalone application for data analysis"
+msgstr "Application autonome pour l'analyse de données"
+
+msgid "Python library for integration into scripts and notebooks"
+msgstr "Bibliothèque Python pour l'intégration dans des scripts et des notebooks"
+
+msgid "Remote-controlled platform for automation"
+msgstr "Plateforme contrôlée à distance pour l'automatisation"
+
+msgid "**Integration with Scientific Ecosystem**"
+msgstr "**Intégration avec l'Écosystème Scientifique :**"
+
+msgid "DataLab works seamlessly with IDEs (particularly Spyder) and Jupyter notebooks, requiring only two lines of code to connect."
+msgstr "DataLab s'intègre parfaitement avec les IDE (en particulier Spyder) et les notebooks Jupyter, nécessitant seulement deux lignes de code pour se connecter."
+
+msgid "**Validation Approach**"
+msgstr "**Approche de Validation :**"
+
+msgid "Functional validation: 200+ automated tests"
+msgstr "Validation fonctionnelle : plus de 200 tests automatisés"
+
+msgid "Scientific validation: ensuring users can trust the results"
+msgstr "Validation scientifique : garantir que les utilisateurs peuvent faire confiance aux résultats"
+
+msgid "Multi-platform testing: Windows, Linux, and macOS"
+msgstr "Tests multi-plateformes : Windows, Linux et macOS"
+
+msgid "**Industrial Adoption**"
+msgstr "**Adoption Industrielle :**"
+
+msgid "DataLab is used in production environments and has a `Debian package <https://tracker.debian.org/pkg/datalab>`_."
+msgstr "DataLab est utilisé dans des environnements de production et dispose d'un `package Debian <https://tracker.debian.org/pkg/datalab>`_."
+
+msgid "Watch the Full Presentation"
+msgstr "Regarder la Présentation Complète"
+
+msgid "Resources"
+msgstr "Ressources"
+
+msgid "`Talk page on SciPy website <https://cfp.scipy.org/2024/talk/G3MC9L/>`_"
+msgstr "`Page de la présentation sur le site de SciPy <https://cfp.scipy.org/2024/talk/G3MC9L/>`_"
+
+msgid "`DataLab Poster (PDF) <https://github.com/user-attachments/files/16123893/DataLab-Poster_SciPy2024-V6.pdf>`_"
+msgstr "`Affiche DataLab (PDF) <https://github.com/user-attachments/files/16123893/DataLab-Poster_SciPy2024-V6.pdf>`_"
+
+msgid "`Video recording on YouTube <https://www.youtube.com/watch?v=MKPUuV1LEqk>`_"
+msgstr "`Enregistrement vidéo sur YouTube <https://www.youtube.com/watch?v=MKPUuV1LEqk>`_"
+
+msgid "DataLab Poster"
+msgstr "Poster DataLab"
+
+msgid "DataLab poster presented at SciPy 2024"
+msgstr "Poster DataLab présenté à SciPy 2024"
+
+msgid "Impact on DataLab Development"
+msgstr "Impact sur le Développement de DataLab"
+
+msgid "The feedback and discussions at SciPy 2024 influenced several aspects of DataLab's development:"
+msgstr "Les retours et discussions lors de SciPy 2024 ont influencé plusieurs aspects du développement de DataLab :"
+
+msgid "Enhanced focus on documentation and tutorials for new users"
+msgstr "Accent accru sur la documentation et les tutoriels pour les nouveaux utilisateurs"
+
+msgid "Increased priority on API stability for library usage"
+msgstr "Priorité accrue à la stabilité de l'API pour l'utilisation de la bibliothèque"
+
+msgid "Validation that the three-mode approach (standalone/library/remote) resonates with users"
+msgstr "Validation que l'approche en trois modes (autonome/bibliothèque/à distance) résonne avec les utilisateurs"
+
+msgid "Confirmation of the importance of maintaining both scientific flexibility and industrial robustness"
+msgstr "Confirmation de l'importance de maintenir à la fois la flexibilité scientifique et la robustesse industrielle"
+
+msgid "Perspectives on potential collaborations with the Spyder IDE team for deeper integration"
+msgstr "Perspectives sur d'éventuelles collaborations avec l'équipe de l'IDE Spyder pour une intégration plus approfondie"
+
+msgid "The conference confirmed that DataLab fills a real need in the scientific Python ecosystem as a bridge between rapid prototyping and production-ready data processing, even if it concerns a niche audience."
+msgstr "La conférence a confirmé que DataLab répond à un besoin réel dans l'écosystème Python scientifique en tant que pont entre le prototypage rapide et le traitement des données prêt pour la production, même s'il s'agit d'un public de niche."

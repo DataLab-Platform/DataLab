@@ -1,0 +1,257 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-15 09:16+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "DataLab presentation at Open Source Experience 2024 in Paris"
+msgstr "Présentation de DataLab à l'Open Source Experience 2024 à Paris"
+
+msgid "DataLab, Open Source Experience, OSXP, open source, conference, Paris"
+msgstr "DataLab, Open Source Experience, OSXP, open source, conférence, Paris"
+
+msgid "Open Source Experience 2024"
+msgstr "Open Source Experience 2024"
+
+msgid "Conference Overview"
+msgstr "Aperçu de la conférence"
+
+msgid "In December 2024, DataLab was showcased at `Open Source Experience 2024 <https://www.opensource-experience.com/>`_ in Paris, one of Europe's largest events dedicated to open-source software and communities. This conference provided an opportunity to present DataLab to a broader audience beyond the scientific Python ecosystem."
+msgstr "En décembre 2024, DataLab a été présenté lors de l'`Open Source Experience 2024 <https://www.opensource-experience.com/>`_ à Paris, l'un des plus grands événements européens dédiés aux logiciels et aux communautés open-source. Cette conférence a permis de présenter DataLab à un public plus large au-delà de l'écosystème Python scientifique."
+
+msgid "Open Source Experience brings together developers, decision-makers, and open-source enthusiasts from various domains, creating a unique opportunity to demonstrate how scientific open-source software can bridge research and industry."
+msgstr "Open Source Experience réunit des développeurs, des décideurs et des passionnés d'open source de divers domaines, créant une opportunité unique de démontrer comment les logiciels scientifiques open source peuvent faire le lien entre la recherche et l'industrie."
+
+msgid "DataLab at OSXP 2024"
+msgstr "DataLab à OSXP 2024"
+
+msgid "**Presentation Context**"
+msgstr "**Contexte de la présentation**"
+
+msgid "Open Source Experience 2024 featured DataLab as an example of:"
+msgstr "Open Source Experience 2024 a introduit DataLab comme un exemple de :"
+
+msgid "**Open-source scientific software** that meets industrial requirements"
+msgstr "**Logiciel scientifique open-source** répondant aux exigences industrielles"
+
+msgid "**Community-driven development** backed by institutional and commercial support"
+msgstr "**Développement piloté par la communauté** soutenu par des institutions et des entreprises"
+
+msgid "**Cross-domain applicability** from research laboratories to production environments"
+msgstr "**Applicabilité interdomaines** des laboratoires de recherche aux environnements de production"
+
+msgid "**Key Messages**"
+msgstr "**Messages clés**"
+
+msgid "The presentation at OSXP 2024 emphasized:"
+msgstr "La présentation à OSXP 2024 a souligné :"
+
+msgid "**Open Source as a Bridge**"
+msgstr "**Open Source comme un pont**"
+
+msgid "How DataLab connects academic research (CEA) with industrial software development (CODRA) through open-source collaboration."
+msgstr "Comment DataLab relie la recherche académique (CEA) au développement de logiciels industriels (CODRA) grâce à la collaboration open-source."
+
+msgid "**Industrial-Grade Open Source**"
+msgstr "**Open Source de niveau industriel**"
+
+msgid "Demonstrating that open-source scientific software can achieve the reliability and robustness required for production use:"
+msgstr "Démontrer que les logiciels scientifiques open-source peuvent atteindre la fiabilité et la robustesse requises pour une utilisation en production :"
+
+msgid "Systematic testing and validation"
+msgstr "Tests et validations systématiques"
+
+msgid "Professional documentation"
+msgstr "Documentation professionnelle"
+
+msgid "Multi-platform support"
+msgstr "Support multi-plateforme"
+
+msgid "Long-term maintenance commitment"
+msgstr "Engagement de maintenance à long terme"
+
+msgid "**Ecosystem Integration**"
+msgstr "**Intégration dans l'écosystème**"
+
+msgid "DataLab's role within the broader scientific Python ecosystem, leveraging NumPy, SciPy, scikit-image, and OpenCV."
+msgstr "Le rôle de DataLab au sein du vaste écosystème Python scientifique, tirant parti de NumPy, SciPy, scikit-image et OpenCV."
+
+msgid "**Funding Diversity**"
+msgstr "**Diversité du financement**"
+
+msgid "Showcasing multiple funding sources (CEA, CODRA, NLnet/European Commission) as a model for sustainable open-source development."
+msgstr "Mise en avant de plusieurs sources de financement (CEA, CODRA, NLnet/Commission européenne) comme modèle de développement open-source durable."
+
+msgid "Resources"
+msgstr "Ressources"
+
+msgid "`Conference talk page <https://pretalx.com/pydata-paris-2024/talk/WTDVCC/>`_"
+msgstr "`Page de la conférence <https://pretalx.com/pydata-paris-2024/talk/WTDVCC/>`_"
+
+msgid "`Open Source Experience website <https://www.opensource-experience.com/>`_"
+msgstr "`Site Web de l'Open Source Experience <https://www.opensource-experience.com/>`_"
+
+msgid "Audience and Engagement"
+msgstr "Public et engagement"
+
+msgid "The OSXP audience brought a different perspective compared to scientific Python conferences:"
+msgstr "Le public d'OSXP a apporté une perspective différente par rapport aux conférences scientifiques Python :"
+
+msgid "**Diverse Background**"
+msgstr "**Contexte diversifié**"
+
+msgid "Attendees included:"
+msgstr "Les participants comprenaient :"
+
+msgid "Corporate decision-makers evaluating open-source solutions"
+msgstr "Des décideurs d'entreprise évaluant des solutions open-source"
+
+msgid "Public sector representatives interested in scientific tools"
+msgstr "Des représentants du secteur public intéressés par des outils scientifiques"
+
+msgid "Open-source advocates from various technical domains"
+msgstr "Des défenseurs de l'open-source provenant de divers domaines techniques"
+
+msgid "Students discovering scientific computing possibilities"
+msgstr "Des étudiants découvrant les possibilités de l'informatique scientifique"
+
+msgid "**Key Questions**"
+msgstr "**Questions clés**"
+
+msgid "The audience was particularly interested in:"
+msgstr "Le public était particulièrement intéressé par :"
+
+msgid "**Licensing**: BSD 3-Clause license and its implications for commercial use"
+msgstr "**Licence** : licence BSD 3-Clause et ses implications pour une utilisation commerciale"
+
+msgid "**Governance**: The DataLab Platform organization and decision-making process"
+msgstr "**Gouvernance** : L'organisation de la plateforme DataLab et le processus de prise de décision"
+
+msgid "**Sustainability**: Long-term maintenance and development plans"
+msgstr "**Durabilité** : Plans de maintenance et de développement à long terme"
+
+msgid "Broader Impact"
+msgstr "Impact plus large"
+
+msgid "Presenting at Open Source Experience helped DataLab reach new audiences:"
+msgstr "La présentation à l'Open Source Experience a aidé DataLab à atteindre de nouveaux publics :"
+
+msgid "**Enterprise Awareness**"
+msgstr "**Sensibilisation des entreprises**"
+
+msgid "Companies outside the scientific computing domain discovered DataLab as a potential solution for their data processing needs."
+msgstr "Des entreprises en dehors du domaine de l'informatique scientifique ont découvert DataLab comme une solution potentielle pour leurs besoins en traitement de données."
+
+msgid "**Public Sector Interest**"
+msgstr "**Intérêt du secteur public**"
+
+msgid "Government agencies and research institutions learned about DataLab as a validated open-source alternative to proprietary solutions."
+msgstr "Les agences gouvernementales et les institutions de recherche ont découvert DataLab comme une alternative open-source validée aux solutions propriétaires."
+
+msgid "**Education Sector**"
+msgstr "**Secteur de l'éducation**"
+
+msgid "Universities and technical schools identified DataLab as a teaching tool for signal and image processing."
+msgstr "Des universités et des écoles techniques ont identifié DataLab comme un outil d'enseignement pour le traitement des signaux et des images."
+
+msgid "**Cross-Pollination**"
+msgstr "**Pollinisation croisée**"
+
+msgid "Connections with other open-source projects opened possibilities for integration and collaboration."
+msgstr "Les connexions avec d'autres projets open-source ont ouvert des possibilités d'intégration et de collaboration."
+
+msgid "DataLab's Open Source Model"
+msgstr "Le modèle open-source de DataLab"
+
+msgid "The OSXP presentation highlighted DataLab's unique open-source model:"
+msgstr "La présentation à OSXP a mis en avant le modèle open-source unique de DataLab :"
+
+msgid "Aspect"
+msgstr "Aspect"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "**Development**"
+msgstr "**Développement**"
+
+msgid "Open development on GitHub with public roadmap and issue tracking"
+msgstr "Développement ouvert sur GitHub avec feuille de route publique et suivi des problèmes"
+
+msgid "**Funding**"
+msgstr "**Financement**"
+
+msgid "Mixed funding from public research (CEA), commercial (CODRA), and grants (NLnet)"
+msgstr "Financement mixte provenant de la recherche publique (CEA), du secteur commercial (CODRA) et de subventions (NLnet)"
+
+msgid "**License**"
+msgstr "**Licence**"
+
+msgid "BSD 3-Clause for maximum freedom and adoption"
+msgstr "BSD 3-Clause pour une liberté et une adoption maximales"
+
+msgid "**Governance**"
+msgstr "**Gouvernance**"
+
+msgid "DataLab Platform organization with contributors from multiple institutions"
+msgstr "Organisation de la plateforme DataLab avec des contributeurs de plusieurs institutions"
+
+msgid "**Support**"
+msgstr "**Soutien**"
+
+msgid "Community support via GitHub + professional support via CODRA"
+msgstr "Soutien communautaire via GitHub + soutien professionnel via CODRA"
+
+msgid "**Distribution**"
+msgstr "**Distribution**"
+
+msgid "Multiple channels: PyPI, conda-forge, Debian, Windows installers"
+msgstr "Canaux multiples : PyPI, conda-forge, Debian, installateurs Windows"
+
+msgid "This model demonstrates how scientific open-source projects can achieve sustainability while maintaining their open nature."
+msgstr "Ce modèle démontre comment les projets open-source scientifiques peuvent atteindre la durabilité tout en maintenant leur nature ouverte."
+
+msgid "Significance for DataLab"
+msgstr "Importance pour DataLab"
+
+msgid "The presence at Open Source Experience 2024 marked an important milestone:"
+msgstr "La présence à Open Source Experience 2024 a marqué une étape importante :"
+
+msgid "**Maturity Recognition**"
+msgstr "**Reconnaissance de la maturité**"
+
+msgid "Being selected for presentation at a major open-source conference validated DataLab's maturity and relevance."
+msgstr "Le fait d'être sélectionné pour une présentation lors d'une grande conférence open-source a validé la maturité et la pertinence de DataLab."
+
+msgid "**Broader Mission**"
+msgstr "**Mission plus large**"
+
+msgid "Confirmed DataLab's mission extends beyond scientific research to serve the wider open-source and industrial communities."
+msgstr "La mission de DataLab s'étend au-delà de la recherche scientifique pour servir les communautés open-source et industrielles plus larges."
+
+msgid "**European Dimension**"
+msgstr "**Dimension européenne**"
+
+msgid "Emphasized DataLab's European roots and alignment with European open-source values and funding (NLnet/EC)."
+msgstr "Mise en avant des racines européennes de DataLab et de son alignement avec les valeurs et le financement open-source européens (NLnet/EC)."
+
+msgid "**Sustainable Model**"
+msgstr "**Modèle durable**"
+
+msgid "Demonstrated a viable model for developing scientific open-source software with mixed public/private funding."
+msgstr "Démonstration d'un modèle viable pour le développement de logiciels open-source scientifiques avec un financement mixte public/privé."

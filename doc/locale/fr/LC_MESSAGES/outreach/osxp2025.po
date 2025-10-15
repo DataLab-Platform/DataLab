@@ -1,0 +1,434 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-15 09:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "DataLab advanced use case at Open Source Experience 2025 in Paris"
+msgstr "Application avancée de DataLab à Open Source Experience 2025 à Paris"
+
+msgid "DataLab, Open Source Experience, OSXP, radiography, image reconstruction, AI, scientific computing, conference, Paris, CEA, Codra"
+msgstr "DataLab, Open Source Experience, OSXP, radiographie, reconstruction d'images, IA, calcul scientifique, conférence, Paris, CEA, Codra"
+
+msgid "Open Source Experience 2025"
+msgstr "Open Source Experience 2025"
+
+msgid "Conference Overview"
+msgstr "Aperçu de la conférence"
+
+msgid "In December 2025, an advanced use case of DataLab will be presented at `Open Source Experience 2025 <https://www.opensource-experience.com/>`_ in Paris, one of Europe's largest events dedicated to open-source software and communities."
+msgstr "En décembre 2025, un cas d'utilisation avancé de DataLab sera présenté lors de l'`Open Source Experience 2025 <https://www.opensource-experience.com/>`_ à Paris, l'un des plus grands événements d'Europe dédié aux logiciels et aux communautés open-source."
+
+msgid "**Event Details:**"
+msgstr "**Détails de l'événement :**"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "December 11, 2025"
+msgstr "11 décembre 2025"
+
+msgid "Time"
+msgstr "Heure"
+
+msgid "14:15 - 14:35"
+msgstr "14h15 - 14h35"
+
+msgid "Location"
+msgstr "Lieu"
+
+msgid "Cité des Sciences, Paris"
+msgstr "Cité des Sciences, Paris"
+
+msgid "Room"
+msgstr "Salle"
+
+msgid "Salle Plénière (Plenary Hall)"
+msgstr "Salle Plénière (Plenary Hall)"
+
+msgid "Track"
+msgstr "Thématique"
+
+msgid "Artificial Intelligence and Scientific Computing"
+msgstr "Intelligence Artificielle et Calcul Scientifique"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Talk (20 minutes)"
+msgstr "Présentation (20 minutes)"
+
+msgid "Presentation"
+msgstr "Présentation"
+
+msgid "**Title (French):** *Reconstruction automatique de scènes radiographiées avec Python et DataLab*"
+msgstr "**Titre (français) :** *Reconstruction automatique de scènes radiographiées avec Python et DataLab*"
+
+msgid "**Title (English):** *Automatic Reconstruction of X-ray Scenes with Python and DataLab*"
+msgstr "**Titre (anglais) :** *Automatic Reconstruction of X-ray Scenes with Python and DataLab*"
+
+msgid "**Speakers:**"
+msgstr "**Intervenants :**"
+
+msgid "**Pierre Raybaut** - Executive VP, Engineering, CODRA"
+msgstr "**Pierre Raybaut** - Directeur Général Ingénierie, CODRA"
+
+msgid "**Marc Rabec Le Gloahec** - Research Engineer, CEA (French Alternative Energies and Atomic Energy Commission)"
+msgstr "**Marc Rabec Le Gloahec** - Chercheur-ingénieur, CEA (Commissariat à l'Énergie Atomique et aux Énergies Alternatives)"
+
+msgid "Abstract"
+msgstr "Résumé"
+
+msgid "In the field of non-destructive testing, the CEA entrusted CODRA with the specification, design, and development of software for the automatic reconstruction of radiographic images, entirely based on open-source components and contributing to the scientific Python ecosystem."
+msgstr "Dans le domaine du contrôle non destructif, le CEA a confié à CODRA la spécification, la conception et la réalisation d’un logiciel de reconstruction automatique d’images radiographiées, entièrement basé sur des briques open source et contribuant à l’écosystème Python scientifique."
+
+msgid "**Key Technical Aspects:**"
+msgstr "**Aspects Techniques Clés :**"
+
+msgid "**Geometric Pattern-Based Reconstruction**"
+msgstr "**Reconstruction Basée sur des Motifs Géométriques :**"
+
+msgid "Using a grid of geometric markers placed within the radiographed field, the algorithm automatically assembles a complete scene from partial images, without any prior external information (position, orientation, magnification)."
+msgstr "Grâce à une grille de repères géométriques placée dans le champ radiographié, l’algorithme assemble automatiquement une scène complète à partir de clichés partiels, sans aucune information externe préalable (position, orientation, grandissement)."
+
+msgid "**Complex Parametrizable Processing**"
+msgstr "**Traitement Complexe Paramétrable :**"
+
+msgid "The complex and configurable processing workflow was developed and refined using the open-source DataLab platform, remotely controlled to dynamically visualize each step of the pipeline."
+msgstr "Le traitement, complexe et paramétrable, a été développé et affiné avec la plateforme open source DataLab, pilotée à distance pour visualiser dynamiquement chaque étape du pipeline."
+
+msgid "**Real-World Application**"
+msgstr "**Application dans le Monde Réel :**"
+
+msgid "The creation of this software paves the way for new applications in the fields of industrial imaging and security."
+msgstr "La réalisation de ce logiciel ouvre la voie à de nouvelles applications dans le domaine de l’imagerie industrielle et de la sécurité."
+
+msgid "DataLab's Role in the Project"
+msgstr "Rôle de DataLab dans le Projet"
+
+msgid "This presentation showcases DataLab in a real-world industrial application, demonstrating several key capabilities:"
+msgstr "Cette présentation met en avant DataLab dans une application industrielle concrète, démontrant plusieurs capacités clés :"
+
+msgid "**Remote Control for Development**"
+msgstr "**Contrôle à Distance pour le Développement :**"
+
+msgid "DataLab was used as a remote-controlled visualization and processing platform during algorithm development, allowing developers to:"
+msgstr "DataLab a été utilisé comme plateforme de visualisation et de traitement contrôlée à distance lors du développement de l'algorithme, permettant aux développeurs de :"
+
+msgid "Visualize intermediate results at each pipeline step"
+msgstr "Visualiser les résultats intermédiaires à chaque étape du pipeline"
+
+msgid "Fine-tune parameters interactively"
+msgstr "Ajuster les paramètres de manière interactive"
+
+msgid "Debug complex image processing algorithms"
+msgstr "Déboguer des algorithmes de traitement d'image complexes"
+
+msgid "Validate processing results in real-time"
+msgstr "Valider les résultats du traitement en temps réel"
+
+msgid "**Visual Debugging**"
+msgstr "**Débogage Visuel :**"
+
+msgid "The ability to send data from the main application to DataLab for visualization proved invaluable for:"
+msgstr "La possibilité d'envoyer des données de l'application principale vers DataLab pour visualisation s'est révélée inestimable pour :"
+
+msgid "Understanding algorithm behavior"
+msgstr "Comprendre le comportement de l'algorithme"
+
+msgid "Identifying edge cases and failure modes"
+msgstr "Identifier les cas limites et les modes de défaillance"
+
+msgid "Optimizing processing parameters"
+msgstr "Optimiser les paramètres de traitement"
+
+msgid "Validating geometric transformations"
+msgstr "Valider les transformations géométriques"
+
+msgid "**Rapid Prototyping**"
+msgstr "**Prototypage Rapide :**"
+
+msgid "DataLab's ready-to-use image processing features enabled rapid prototyping of the reconstruction pipeline."
+msgstr "Les fonctionnalités de traitement d'image prêtes à l'emploi de DataLab ont permis un prototypage rapide du pipeline de reconstruction."
+
+msgid "**Production Integration**"
+msgstr "**Intégration en Production :**"
+
+msgid "The software demonstrates how DataLab can be integrated into production-grade industrial applications."
+msgstr "Le logiciel démontre comment DataLab peut être intégré dans des applications industrielles de niveau production."
+
+msgid "Technical Challenges Addressed"
+msgstr "Défis Techniques Relevés"
+
+msgid "The automatic X-ray scene reconstruction project involved several complex challenges:"
+msgstr "Le projet de reconstruction automatique de scènes par rayons X a impliqué plusieurs défis complexes :"
+
+msgid "**Geometric Calibration**"
+msgstr "**Calibration Géométrique :**"
+
+msgid "Automatic detection and analysis of geometric reference patterns in X-ray images."
+msgstr "Détection et analyse automatiques de motifs de référence géométriques dans les images par rayons X."
+
+msgid "**Image Registration**"
+msgstr "**Enregistrement d'Image :**"
+
+msgid "Aligning and stitching partial images without prior knowledge of their spatial relationship."
+msgstr "Aligner et assembler des images partielles sans connaissance préalable de leur relation spatiale."
+
+msgid "**Scale and Orientation Estimation**"
+msgstr "**Estimation de l'Échelle et de l'Orientation :**"
+
+msgid "Determining magnification factors and angular orientation from the geometric grid alone."
+msgstr "Déterminer les facteurs de grossissement et l'orientation angulaire à partir de la grille géométrique seule."
+
+msgid "**Robust Processing**"
+msgstr "**Traitement Robuste :**"
+
+msgid "Handling variations in image quality, exposure, and geometric distortions."
+msgstr "Gestion des variations de qualité d'image, d'exposition et de distorsions géométriques."
+
+msgid "**Performance Optimization**"
+msgstr "**Optimisation des Performances :**"
+
+msgid "Ensuring the reconstruction process runs efficiently for practical use."
+msgstr "Assurer que le processus de reconstruction fonctionne efficacement pour une utilisation pratique."
+
+msgid "Open Source Ecosystem Contribution"
+msgstr "Contribution à l'Écosystème Open Source"
+
+msgid "This project exemplifies how industrial applications can both benefit from and contribute to the open-source scientific Python ecosystem:"
+msgstr "Ce projet illustre comment les applications industrielles peuvent à la fois bénéficier de l'écosystème scientifique Python open-source et y contribuer :"
+
+msgid "**Leveraging Open Source**"
+msgstr "**Exploitation de l'Open Source :**"
+
+msgid "The software is built entirely on open-source components:"
+msgstr "Le logiciel est entièrement construit sur des composants open-source :"
+
+msgid "**Python** as the development platform"
+msgstr "**Python** comme plateforme de développement"
+
+msgid "**NumPy** and **SciPy** for numerical computing"
+msgstr "**NumPy** et **SciPy** pour le calcul numérique"
+
+msgid "**scikit-image** and **OpenCV** for image processing"
+msgstr "**scikit-image** et **OpenCV** pour le traitement d'image"
+
+msgid "**DataLab** for visualization and algorithm development"
+msgstr "**DataLab** pour la visualisation et le développement d'algorithmes"
+
+msgid "**Contributing Back**"
+msgstr "**Contribution au Projet :**"
+
+msgid "The project contributes to the ecosystem by:"
+msgstr "Le projet contribue à l'écosystème en :"
+
+msgid "Validating DataLab's capabilities in demanding industrial applications"
+msgstr "Validant les capacités de DataLab dans des applications industrielles exigeantes."
+
+msgid "Providing feedback for DataLab's development"
+msgstr "Fournissant des retours pour le développement de DataLab."
+
+msgid "Demonstrating real-world use cases for the community"
+msgstr "Démontrant des cas d'utilisation concrets pour la communauté."
+
+msgid "Potentially contributing algorithms or improvements back to open-source libraries"
+msgstr "Contribuant potentiellement des algorithmes ou des améliorations aux bibliothèques open-source."
+
+msgid "Industrial and Research Collaboration"
+msgstr "Collaboration entre l'Industrie et la Recherche"
+
+msgid "This presentation highlights successful collaboration between public research and private industry:"
+msgstr "Cette présentation met en lumière la collaboration réussie entre la recherche publique et l'industrie privée :"
+
+msgid "**CEA (Public Research)**"
+msgstr "**CEA (Recherche Publique)**"
+
+msgid "Defined the scientific and technical requirements"
+msgstr "Défini les exigences scientifiques et techniques."
+
+msgid "Provided domain expertise in non-destructive testing"
+msgstr "Fournissant une expertise dans le domaine des essais non destructifs."
+
+msgid "**CODRA (Technical and Scientific Software Development Company)**"
+msgstr "**CODRA (Entreprise de Développement de Logiciels Techniques et Scientifiques)**"
+
+msgid "Translated functional specifications into algorithms through mathematical modeling (e.g. homographic transformations, coordinate system conversions)"
+msgstr "Traduit les spécifications fonctionnelles en algorithmes par le biais de la modélisation mathématique (par exemple, transformations homographiques, conversions de systèmes de coordonnées)"
+
+msgid "Validated the reconstruction algorithms"
+msgstr "Validé les algorithmes de reconstruction."
+
+msgid "Designed and developed the software solution"
+msgstr "Conçu et développé la solution logicielle."
+
+msgid "Integrated open-source components"
+msgstr "Intégré des composants open-source."
+
+msgid "Ensured industrial-grade quality and robustness"
+msgstr "Assuré une qualité et une robustesse de niveau industriel."
+
+msgid "Leveraged DataLab for development"
+msgstr "Exploité DataLab pour le développement."
+
+msgid "**Benefits of Collaboration**"
+msgstr "**Avantages de la Collaboration :**"
+
+msgid "Combines research excellence with industrial rigor"
+msgstr "Combine l'excellence de la recherche avec l'ingénierie industrielle."
+
+msgid "Accelerates technology transfer from research to application"
+msgstr "Accélère le transfert de technologie de la recherche vers l'application."
+
+msgid "Ensures solutions meet both scientific and practical requirements"
+msgstr "Assure que les solutions répondent à la fois aux exigences scientifiques et pratiques."
+
+msgid "Promotes open-source adoption in industrial contexts"
+msgstr "Favorise l'adoption de l'open-source dans les contextes industriels."
+
+msgid "Applications and Impact"
+msgstr "Applications et Impact"
+
+msgid "The automatic X-ray scene reconstruction software opens new possibilities:"
+msgstr "Le logiciel de reconstruction de scènes X-ray automatique ouvre de nouvelles possibilités :"
+
+msgid "**Non-Destructive Testing**"
+msgstr "**Tests Non Destructifs :**"
+
+msgid "Improved efficiency in industrial quality control and inspection."
+msgstr "Amélioration de l'efficacité dans le contrôle qualité et l'inspection industriels."
+
+msgid "**Industrial Imaging**"
+msgstr "**Imagerie Industrielle :**"
+
+msgid "Advanced capabilities for manufacturing and production monitoring."
+msgstr "Capacités avancées pour la fabrication et le suivi de la production."
+
+msgid "**Security Applications**"
+msgstr "**Applications de Sécurité :**"
+
+msgid "Enhanced screening and inspection capabilities."
+msgstr "Amélioration des capacités de dépistage et d'inspection."
+
+msgid "**Research and Development**"
+msgstr "**Recherche et Développement :**"
+
+msgid "New tools for researchers working with X-ray imaging."
+msgstr "Nouveaux outils pour les chercheurs travaillant avec l'imagerie X."
+
+msgid "Why This Matters for DataLab"
+msgstr "Pourquoi c'est Important pour DataLab"
+
+msgid "This presentation is significant for several reasons:"
+msgstr "Cette présentation est significative pour plusieurs raisons :"
+
+msgid "**Real-World Validation**"
+msgstr "**Validation dans le Monde Réel :**"
+
+msgid "Demonstrates DataLab's capability to handle complex, production-grade applications in demanding industrial environments."
+msgstr "Démontre la capacité de DataLab à gérer des applications complexes de niveau production dans des environnements industriels exigeants."
+
+msgid "**Advanced Use Case**"
+msgstr "**Cas d'Utilisation Avancé :**"
+
+msgid "Shows DataLab beyond simple data analysis - as an integral part of sophisticated algorithm development workflows."
+msgstr "Montre DataLab au-delà de l'analyse de données simple - en tant que partie intégrante de flux de travail de développement d'algorithmes sophistiqués."
+
+msgid "**Industrial Adoption**"
+msgstr "**Adoption Industrielle :**"
+
+msgid "Validates DataLab's value proposition for industrial users, not just academic or research applications."
+msgstr "Valide la proposition de valeur de DataLab pour les utilisateurs industriels, pas seulement pour les applications académiques ou de recherche."
+
+msgid "**Remote Control Excellence**"
+msgstr "**Excellence du Contrôle à Distance :**"
+
+msgid "Highlights one of DataLab's key differentiators - the ability to be remotely controlled for dynamic visualization and debugging."
+msgstr "Met en avant l'un des principaux facteurs de différenciation de DataLab - la capacité d'être contrôlé à distance pour une visualisation et un débogage dynamiques."
+
+msgid "**CEA Partnership**"
+msgstr "**Partenariat CEA :**"
+
+msgid "Reinforces the strong relationship between DataLab and CEA, one of its major supporters."
+msgstr "Renforce la relation étroite entre DataLab et le CEA, l'un de ses principaux soutiens."
+
+msgid "Looking Forward"
+msgstr "Perspectives"
+
+msgid "This presentation at OSXP 2025 will:"
+msgstr "Cette présentation à OSXP 2025 mettra en avant :"
+
+msgid "Showcase a concrete example of open-source software solving real industrial challenges"
+msgstr "Présenter un exemple concret de logiciel open-source résolvant de réels défis industriels."
+
+msgid "Demonstrate the maturity and capabilities of the scientific Python ecosystem"
+msgstr "Démontrer la maturité et les capacités de l'écosystème Python scientifique."
+
+msgid "Illustrate how DataLab bridges the gap between research and industrial applications"
+msgstr "Illustrer comment DataLab comble le fossé entre la recherche et les applications industrielles."
+
+msgid "Inspire other organizations to adopt open-source solutions for their technical challenges"
+msgstr "Inspirer d'autres organisations à adopter des solutions open-source pour leurs défis techniques."
+
+msgid "The automatic X-ray scene reconstruction project represents exactly the kind of advanced, real-world application that DataLab was designed to support - combining scientific rigor, industrial robustness, and open-source collaboration."
+msgstr "Le projet de reconstruction de scène X-ray automatique représente exactement le type d'application avancée et concrète que DataLab a été conçu pour soutenir - alliant rigueur scientifique, robustesse industrielle et collaboration open-source."
+
+msgid "**Upcoming Event**: This presentation will take place on **December 11, 2025**. Check back after the event for presentation materials, feedback, and potentially a video recording."
+msgstr "**Événement à Venir** : Cette présentation aura lieu le **11 décembre 2025**. Revenez après l'événement pour les documents de présentation, les retours d'expérience et potentiellement un enregistrement vidéo."
+
+msgid "Conference Track"
+msgstr "Thématique de la Conférence"
+
+msgid "The presentation is part of the **Artificial Intelligence and Scientific Computing** track, reflecting the intersection of:"
+msgstr "La présentation fait partie de la thématique **Intelligence Artificielle et Calcul Scientifique**, reflétant l'intersection de :"
+
+msgid "Traditional scientific computing (image processing, geometric transformations)"
+msgstr "Calcul scientifique traditionnel (traitement d'images, transformations géométriques)"
+
+msgid "Modern AI/ML techniques (pattern recognition, potentially optimization)"
+msgstr "Techniques modernes d'IA/ML (reconnaissance de formes, optimisation potentielle)"
+
+msgid "Industrial applications of scientific software"
+msgstr "Applications industrielles de logiciels scientifiques"
+
+msgid "Open-source development methodologies"
+msgstr "Méthodologies de développement open-source"
+
+msgid "This positioning highlights DataLab's relevance in the evolving landscape where scientific computing increasingly incorporates AI/ML techniques while maintaining its foundation in classical numerical methods."
+msgstr "Ce positionnement met en évidence la pertinence de DataLab dans un paysage en évolution où le calcul scientifique intègre de plus en plus des techniques d'IA/ML tout en maintenant sa base dans des méthodes numériques classiques."
+
+msgid "Resources"
+msgstr "Ressources"
+
+msgid "`Open Source Experience 2025 website <https://www.opensource-experience.com/>`_"
+msgstr "Site Web de l'Open Source Experience 2025 <https://www.opensource-experience.com/>"
+
+msgid "Talk details and schedule to be published closer to the event"
+msgstr "Les détails de la présentation et le calendrier seront publiés à l'approche de l'événement."
+
+msgid "For more information about DataLab's use in CEA projects, see:"
+msgstr "Pour plus d'informations sur l'utilisation de DataLab dans les projets CEA, voir :"
+
+msgid ":doc:`../features/index` - DataLab's validation approach"
+msgstr ":doc:`../features/index` - Approche de validation de DataLab"
+
+msgid ":doc:`../intro/introduction` - DataLab's operating modes, including remote control"
+msgstr ":doc:`../intro/introduction` - Modes de fonctionnement de DataLab, y compris le contrôle à distance"
+
+msgid ":doc:`osxp2024` - Previous DataLab presentation at OSXP 2024"
+msgstr ":doc:`osxp2024` - Présentation précédente de DataLab à OSXP 2024"

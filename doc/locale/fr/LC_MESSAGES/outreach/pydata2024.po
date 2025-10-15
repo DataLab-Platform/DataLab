@@ -1,0 +1,207 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-15 09:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "DataLab presentation at PyData Paris 2024 conference"
+msgstr "Présentation de DataLab à la conférence PyData Paris 2024"
+
+msgid "DataLab, PyData, PyData Paris, Python, data science, conference, Paris"
+msgstr "DataLab, PyData, PyData Paris, Python, science des données, conférence, Paris"
+
+msgid "PyData Paris 2024"
+msgstr "PyData Paris 2024"
+
+msgid "Conference Overview"
+msgstr "Aperçu de la conférence"
+
+msgid "In September 2024, DataLab was presented at `PyData Paris 2024 <https://pydata.org/paris2024/>`_, a conference dedicated to Python in data science, machine learning, and analytics. This French conference provided an opportunity to present DataLab in depth to the local scientific Python community."
+msgstr "En septembre 2024, DataLab a été présenté lors de la `PyData Paris 2024 <https://pydata.org/paris2024/>`_, une conférence dédiée à Python dans la science des données, l'apprentissage automatique et l'analyse. Cette conférence française a permis de présenter DataLab en profondeur à la communauté scientifique Python locale."
+
+msgid "DataLab Presentation"
+msgstr "Présentation de DataLab"
+
+msgid "**Talk Title:** *DataLab: Bridging Scientific and Industrial Worlds for Advanced Signal and Image Processing*"
+msgstr "**Titre de la présentation :** *DataLab : Unir les mondes scientifique et industriel pour un traitement avancé des signaux et des images*"
+
+#, fuzzy
+msgid "**Presenter:** Pierre Raybaut (Executive VP, Engineering, CODRA)"
+msgstr "**Orateur :** Pierre Raybaut (CODRA/Plateforme DataLab)"
+
+msgid "This presentation offered a comprehensive look at DataLab's capabilities through practical demonstrations and use cases relevant to both scientific research and industrial applications."
+msgstr "Cette présentation a offert un aperçu complet des capacités de DataLab à travers des démonstrations pratiques et des cas d'utilisation pertinents tant pour la recherche scientifique que pour les applications industrielles."
+
+msgid "Presentation Structure"
+msgstr "Structure de la présentation"
+
+msgid "**Introduction**"
+msgstr "**Introduction**"
+
+msgid "DataLab as a tool merging scientific research and industrial applications."
+msgstr "DataLab en tant qu'outil fusionnant la recherche scientifique et les applications industrielles."
+
+msgid "**Live Demo**"
+msgstr "**Démonstration en direct**"
+
+msgid "The integrated demo showcasing:"
+msgstr "La démonstration intégrée mettant en avant :"
+
+msgid "Signal processing: basic operations, peak detection, curve fitting, FWHM measurements"
+msgstr "Traitement du signal : opérations de base, détection de pics, ajustement de courbes, mesures de FWHM"
+
+msgid "Image processing: histogram computation, rotation, ROI management, centroid computation, contour detection"
+msgstr "Traitement d'images : calcul d'histogrammes, rotation, gestion des ROI, calcul de centroïdes, détection de contours"
+
+msgid "Advanced features: intensity profiles, restoration filters, morphological filters, edge detection"
+msgstr "Fonctionnalités avancées : profils d'intensité, filtres de restauration, filtres morphologiques, détection de contours"
+
+msgid "**Getting Started**"
+msgstr "**Prise en main**"
+
+msgid "Comprehensive documentation (tutorials, API, contribution guidelines)"
+msgstr "Documentation complète (tutoriels, API, directives de contribution)"
+
+msgid "Multiple installation methods: pip, conda, Windows installer"
+msgstr "Méthodes d'installation multiples : pip, conda, installateur Windows"
+
+msgid "Wide distribution channels"
+msgstr "Canaux de distribution variés"
+
+msgid "Four Key Use Cases"
+msgstr "Quatre cas d'utilisation clés"
+
+msgid "The presentation detailed DataLab's versatility through four distinct use cases:"
+msgstr "La présentation a détaillé la polyvalence de DataLab à travers quatre cas d'utilisation distincts :"
+
+msgid "**1. Analyze Signals and Images**"
+msgstr "**1. Analyser les signaux et les images**"
+
+msgid "Using DataLab as a standalone application - a Swiss Army knife for data analysis with ready-to-use features and plugin extensibility."
+msgstr "Utiliser DataLab comme une application autonome - un couteau suisse pour l'analyse de données avec des fonctionnalités prêtes à l'emploi et une extensibilité par plugins."
+
+msgid "**2. Prototype Processing Pipelines**"
+msgstr "**2. Prototyper des pipelines de traitement**"
+
+msgid "Mixing Python code with DataLab's features by exchanging data between your IDE/notebook and DataLab, benefiting from both worlds."
+msgstr "Mélanger le code Python avec les fonctionnalités de DataLab en échangeant des données entre votre IDE/notebook et DataLab, bénéficiant des deux mondes."
+
+msgid "**3. Debug Processing Applications**"
+msgstr "**3. Déboguer des applications de traitement**"
+
+msgid "Establishing a connection between your application and DataLab to inspect data at different pipeline stages with visual feedback."
+msgstr "Établir une connexion entre votre application et DataLab pour inspecter les données à différents stades du pipeline avec un retour visuel."
+
+msgid "*Example*: Development of an automatic image stitching software for CEA, using DataLab to visualize images and results at each algorithm step."
+msgstr "*Exemple* : Développement d'un logiciel de mosaïque d'images automatique pour le CEA, utilisant DataLab pour visualiser les images et les résultats à chaque étape de l'algorithme."
+
+msgid "**4. Enhance Applications**"
+msgstr "**4. Améliorer les applications**"
+
+msgid "Using DataLab as a library or companion application to add advanced processing features."
+msgstr "Utiliser DataLab comme une bibliothèque ou une application compagnon pour ajouter des fonctionnalités de traitement avancées."
+
+msgid "*Example*: Plasma diagnostic control system for CEA - the application sends images to DataLab for visualization and computation, receiving back processed results and parameters."
+msgstr "*Exemple* : Système de contrôle de diagnostic plasma pour le CEA - l'application envoie des images à DataLab pour visualisation et calcul, recevant en retour des résultats et des paramètres traités."
+
+msgid "Validation Approach"
+msgstr "Approche de validation"
+
+msgid "The presentation highlighted DataLab's two-tier validation process:"
+msgstr "La présentation a mis en évidence le processus de validation en deux étapes de DataLab :"
+
+msgid "**Functional Validation**"
+msgstr "**Validation fonctionnelle**"
+
+#, python-format
+msgid "Classic automated testing (TDD approach, CI/CD workflows) achieving 90% code coverage - exceptional for a GUI application."
+msgstr "Tests automatisés classiques (approche TDD, workflows CI/CD) atteignant 90 % de couverture de code - exceptionnel pour une application GUI."
+
+msgid "**Technical (Scientific) Validation**"
+msgstr "**Validation technique (scientifique)**"
+
+#, python-format
+msgid "Ensuring result accuracy with 84% coverage of scientific features, with all validation status tracked and automatically documented."
+msgstr "Assurer l'exactitude des résultats avec 84 % de couverture des fonctionnalités scientifiques, avec tous les statuts de validation suivis et automatiquement documentés."
+
+msgid "Watch the Full Presentation"
+msgstr "Regarder la présentation complète"
+
+msgid "Resources"
+msgstr "Ressources"
+
+msgid "`Video recording on YouTube <https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK>`_"
+msgstr "`Enregistrement vidéo sur YouTube <https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK>`_"
+
+msgid "`PyData Paris 2024 conference website <https://pydata.org/paris2024/>`_"
+msgstr "`Site web de la conférence PyData Paris 2024 <https://pydata.org/paris2024/>`_"
+
+msgid "Key Takeaways"
+msgstr "Points clés"
+
+msgid "The PyData Paris presentation emphasized several critical aspects:"
+msgstr "La présentation PyData Paris a mis en évidence plusieurs aspects critiques :"
+
+msgid "**Companion Tool Philosophy**"
+msgstr "**Philosophie de l'outil compagnon**"
+
+msgid "DataLab doesn't replace your IDE or Jupyter notebook - it complements them by providing:"
+msgstr "DataLab ne remplace pas votre IDE ou votre notebook Jupyter - il les complète en fournissant :"
+
+msgid "Ready-to-use features for data reading, editing, and visualization"
+msgstr "Fonctionnalités prêtes à l'emploi pour la lecture, l'édition et la visualisation des données"
+
+msgid "Fine-tuning capabilities for algorithm development"
+msgstr "Capacités de réglage fin pour le développement d'algorithmes"
+
+msgid "Visual debugging support"
+msgstr "Support de débogage visuel"
+
+msgid "**Real-World Applications**"
+msgstr "**Applications du monde réel**"
+
+msgid "Concrete examples from CEA projects demonstrated DataLab's practical value in production environments."
+msgstr "Des exemples concrets de projets du CEA ont démontré la valeur pratique de DataLab dans des environnements de production."
+
+msgid "**Extensibility**"
+msgstr "**Extensibilité**"
+
+msgid "The ability to customize DataLab through plugins and macros while maintaining industrial-grade reliability."
+msgstr "La possibilité de personnaliser DataLab via des plugins et des macros tout en maintenant une fiabilité de niveau industriel."
+
+msgid "**Documentation Excellence**"
+msgstr "**Excellence de la documentation**"
+
+msgid "Automatically generated validation status documentation building trust with users."
+msgstr "Documentation de l'état de validation générée automatiquement renforçant la confiance des utilisateurs."
+
+msgid "Impact on DataLab"
+msgstr "Impact sur DataLab"
+
+msgid "The PyData Paris presentation and feedback contributed to:"
+msgstr "La présentation PyData Paris et les retours ont contribué à :"
+
+msgid "Increased focus on use case documentation"
+msgstr "Accent accru sur la documentation des cas d'utilisation"
+
+msgid "Enhanced emphasis on the \"companion tool\" positioning"
+msgstr "Accent accru sur le positionnement en tant qu'outil compagnon"
+
+msgid "Debugged issues with Conda package installation"
+msgstr "Résolution des problèmes d'installation des packages Conda"
+

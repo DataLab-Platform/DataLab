@@ -1,0 +1,104 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-15 09:16+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "DataLab conference presentations and event participation"
+msgstr "Présentations de DataLab en conférence et participation à des événements"
+
+msgid "DataLab, conferences, presentations, talks, events, SciPy, PyData, Open Source Experience"
+msgstr "DataLab, conférences, présentations, talks, événements, SciPy, PyData, Open Source Experience"
+
+msgid "Talks & Events"
+msgstr "Conférences & Événements"
+
+msgid "DataLab has been presented at various conferences and events to share its capabilities with the scientific and open-source communities. This section showcases our presence at major conferences."
+msgstr "DataLab a été présenté lors de diverses conférences et événements pour partager ses capacités avec les communautés scientifique et open-source. Cette section met en avant notre présence lors de grandes conférences."
+
+msgid "Conference Presentations"
+msgstr "Présentations en conférence"
+
+msgid "Since its public release, DataLab has been introduced at several prestigious conferences in the scientific Python and open-source ecosystems:"
+msgstr "Depuis sa sortie publique, DataLab a été présenté lors de plusieurs conférences prestigieuses dans les écosystèmes Python scientifique et open-source :"
+
+msgid "🇺🇸 SciPy 2024"
+msgstr "🇺🇸 SciPy 2024"
+
+msgid "**Tacoma, Washington, USA - July 2024**"
+msgstr "**Tacoma, Washington, États-Unis - Juillet 2024**"
+
+msgid "DataLab's international debut at the largest scientific Python conference"
+msgstr "Début international de DataLab à la plus grande conférence Python scientifique"
+
+msgid "🇫🇷 PyData Paris 2024"
+msgstr "🇫🇷 PyData Paris 2024"
+
+msgid "**Paris, France - September 2024**"
+msgstr "**Paris, France - Septembre 2024**"
+
+msgid "In-depth presentation of DataLab's capabilities and use cases"
+msgstr "Présentation approfondie des capacités et des cas d'utilisation de DataLab"
+
+msgid "🇫🇷 Open Source Experience 2024"
+msgstr "🇫🇷 Open Source Experience 2024"
+
+msgid "**Paris, France - December 2024**"
+msgstr "**Paris, France - Décembre 2024**"
+
+msgid "Showcasing DataLab in the broader open-source ecosystem"
+msgstr "Mise en avant de DataLab dans l'écosystème open-source plus large"
+
+msgid "🇫🇷 Open Source Experience 2025"
+msgstr "🇫🇷 Open Source Experience 2025"
+
+msgid "**Paris, France - December 2025**"
+msgstr "**Paris, France - Décembre 2025**"
+
+msgid "Advanced use case: Automatic X-ray scene reconstruction with DataLab"
+msgstr "Cas d'utilisation avancé : Reconstruction automatique de scènes X-ray avec DataLab"
+
+msgid "Why Present DataLab?"
+msgstr "Pourquoi présenter DataLab ?"
+
+msgid "Our conference presentations serve multiple purposes:"
+msgstr "Nos présentations en conférence servent plusieurs objectifs :"
+
+msgid "**Community Engagement**"
+msgstr "**Engagement communautaire**"
+
+msgid "Meeting users, gathering feedback, and understanding the needs of the scientific Python community."
+msgstr "Rencontrer les utilisateurs, recueillir des retours et comprendre les besoins de la communauté scientifique Python."
+
+msgid "**Knowledge Sharing**"
+msgstr "**Partage des connaissances**"
+
+msgid "Demonstrating how DataLab can help researchers, engineers, and data scientists in their daily work."
+msgstr "Démontrer comment DataLab peut aider les chercheurs, les ingénieurs et les data scientists dans leur travail quotidien."
+
+msgid "**Collaboration**"
+msgstr "**Collaboration**"
+
+msgid "Building connections with other projects in the scientific Python ecosystem and exploring integration opportunities."
+msgstr "Établir des connexions avec d'autres projets de l'écosystème Python scientifique et explorer les opportunités d'intégration."
+
+msgid "**Feedback Loop**"
+msgstr "**Retours d'expérience**"
+
+msgid "Learning from the community's questions and suggestions to improve DataLab's features and documentation."
+msgstr "Apprendre des questions et des suggestions de la communauté pour améliorer les fonctionnalités et la documentation de DataLab."

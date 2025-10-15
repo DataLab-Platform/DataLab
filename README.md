@@ -10,7 +10,7 @@ and visualization** with unique features designed to meet industrial requirement
 
 See [DataLab website](https://datalab-platform.com/) for more details.
 
-ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab Platform Developers.
+ℹ️ Created by [CODRA](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab Platform Developers.
 
 ![DataLab](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/DataLab-Screenshot.png)
 

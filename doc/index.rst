@@ -52,11 +52,11 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
             Detailed description
 
-        .. grid-item-card:: :octicon:`book;1em;sd-text-info`  API
-            :link: api/index
+        .. grid-item-card:: :octicon:`megaphone;1em;sd-text-info`  Talks & Events
+            :link: outreach/index
             :link-type: doc
 
-            Reference documentation
+            Conference presentations
 
         .. grid-item-card:: :octicon:`gear;1em;sd-text-info`  Contributing
             :link: contributing/index
@@ -95,6 +95,19 @@ DataLab has been funded, chronologically, by the following stakeholders:
     :height: 64px
     :target: https://nlnet.nl
     :class: dark-light no-scaled-link
+
+.. only:: html and not latex
+
+    .. toctree::
+        :maxdepth: 2
+        :hidden:
+
+        intro/index
+        features/index
+        api/index
+        outreach/index
+        contributing/index
+        changelog
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center

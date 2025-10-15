@@ -1,0 +1,131 @@
+Open Source Experience 2024
+===========================
+
+.. meta::
+    :description: DataLab presentation at Open Source Experience 2024 in Paris
+    :keywords: DataLab, Open Source Experience, OSXP, open source, conference, Paris
+
+Conference Overview
+-------------------
+
+In December 2024, DataLab was showcased at `Open Source Experience 2024 <https://www.opensource-experience.com/>`_ in Paris, one of Europe's largest events dedicated to open-source software and communities. This conference provided an opportunity to present DataLab to a broader audience beyond the scientific Python ecosystem.
+
+Open Source Experience brings together developers, decision-makers, and open-source enthusiasts from various domains, creating a unique opportunity to demonstrate how scientific open-source software can bridge research and industry.
+
+DataLab at OSXP 2024
+--------------------
+
+**Presentation Context**
+
+Open Source Experience 2024 featured DataLab as an example of:
+
+- **Open-source scientific software** that meets industrial requirements
+- **Community-driven development** backed by institutional and commercial support
+- **Cross-domain applicability** from research laboratories to production environments
+
+**Key Messages**
+
+The presentation at OSXP 2024 emphasized:
+
+**Open Source as a Bridge**
+    How DataLab connects academic research (CEA) with industrial software development (CODRA) through open-source collaboration.
+
+**Industrial-Grade Open Source**
+    Demonstrating that open-source scientific software can achieve the reliability and robustness required for production use:
+
+    - Systematic testing and validation
+    - Professional documentation
+    - Multi-platform support
+    - Long-term maintenance commitment
+
+**Ecosystem Integration**
+    DataLab's role within the broader scientific Python ecosystem, leveraging NumPy, SciPy, scikit-image, and OpenCV.
+
+**Funding Diversity**
+    Showcasing multiple funding sources (CEA, CODRA, NLnet/European Commission) as a model for sustainable open-source development.
+
+Resources
+---------
+
+- `Conference talk page <https://pretalx.com/pydata-paris-2024/talk/WTDVCC/>`_
+- `Open Source Experience website <https://www.opensource-experience.com/>`_
+
+Audience and Engagement
+------------------------
+
+The OSXP audience brought a different perspective compared to scientific Python conferences:
+
+**Diverse Background**
+    Attendees included:
+
+    - Corporate decision-makers evaluating open-source solutions
+    - Public sector representatives interested in scientific tools
+    - Open-source advocates from various technical domains
+    - Students discovering scientific computing possibilities
+
+**Key Questions**
+    The audience was particularly interested in:
+
+    - **Licensing**: BSD 3-Clause license and its implications for commercial use
+    - **Governance**: The DataLab Platform organization and decision-making process
+    - **Sustainability**: Long-term maintenance and development plans
+
+Broader Impact
+--------------
+
+Presenting at Open Source Experience helped DataLab reach new audiences:
+
+**Enterprise Awareness**
+    Companies outside the scientific computing domain discovered DataLab as a potential solution for their data processing needs.
+
+**Public Sector Interest**
+    Government agencies and research institutions learned about DataLab as a validated open-source alternative to proprietary solutions.
+
+**Education Sector**
+    Universities and technical schools identified DataLab as a teaching tool for signal and image processing.
+
+**Cross-Pollination**
+    Connections with other open-source projects opened possibilities for integration and collaboration.
+
+DataLab's Open Source Model
+----------------------------
+
+The OSXP presentation highlighted DataLab's unique open-source model:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Aspect
+     - Description
+   * - **Development**
+     - Open development on GitHub with public roadmap and issue tracking
+   * - **Funding**
+     - Mixed funding from public research (CEA), commercial (CODRA), and grants (NLnet)
+   * - **License**
+     - BSD 3-Clause for maximum freedom and adoption
+   * - **Governance**
+     - DataLab Platform organization with contributors from multiple institutions
+   * - **Support**
+     - Community support via GitHub + professional support via CODRA
+   * - **Distribution**
+     - Multiple channels: PyPI, conda-forge, Debian, Windows installers
+
+This model demonstrates how scientific open-source projects can achieve sustainability while maintaining their open nature.
+
+Significance for DataLab
+-------------------------
+
+The presence at Open Source Experience 2024 marked an important milestone:
+
+**Maturity Recognition**
+    Being selected for presentation at a major open-source conference validated DataLab's maturity and relevance.
+
+**Broader Mission**
+    Confirmed DataLab's mission extends beyond scientific research to serve the wider open-source and industrial communities.
+
+**European Dimension**
+    Emphasized DataLab's European roots and alignment with European open-source values and funding (NLnet/EC).
+
+**Sustainable Model**
+    Demonstrated a viable model for developing scientific open-source software with mixed public/private funding.

@@ -1,0 +1,218 @@
+Open Source Experience 2025
+===========================
+
+.. meta::
+    :description: DataLab advanced use case at Open Source Experience 2025 in Paris
+    :keywords: DataLab, Open Source Experience, OSXP, radiography, image reconstruction, AI, scientific computing, conference, Paris, CEA, Codra
+
+Conference Overview
+-------------------
+
+In December 2025, an advanced use case of DataLab will be presented at `Open Source Experience 2025 <https://www.opensource-experience.com/>`_ in Paris, one of Europe's largest events dedicated to open-source software and communities.
+
+**Event Details:**
+
+:Date: December 11, 2025
+:Time: 14:15 - 14:35
+:Location: Cité des Sciences, Paris
+:Room: Salle Plénière (Plenary Hall)
+:Track: Artificial Intelligence and Scientific Computing
+:Format: Talk (20 minutes)
+
+Presentation
+------------
+
+**Title (French):** *Reconstruction automatique de scènes radiographiées avec Python et DataLab*
+
+**Title (English):** *Automatic Reconstruction of X-ray Scenes with Python and DataLab*
+
+**Speakers:**
+
+- **Pierre Raybaut** - Executive VP, Engineering, CODRA
+- **Marc Rabec Le Gloahec** - Research Engineer, CEA (French Alternative Energies and Atomic Energy Commission)
+
+Abstract
+--------
+
+In the field of non-destructive testing, the CEA entrusted CODRA with the specification, design, and development of software for the automatic reconstruction of radiographic images, entirely based on open-source components and contributing to the scientific Python ecosystem.
+
+**Key Technical Aspects:**
+
+**Geometric Pattern-Based Reconstruction**
+    Using a grid of geometric markers placed within the radiographed field, the algorithm automatically assembles a complete scene from partial images, without any prior external information (position, orientation, magnification).
+
+**Complex Parametrizable Processing**
+    The complex and configurable processing workflow was developed and refined using the open-source DataLab platform, remotely controlled to dynamically visualize each step of the pipeline.
+
+**Real-World Application**
+    The creation of this software paves the way for new applications in the fields of industrial imaging and security.
+
+DataLab's Role in the Project
+------------------------------
+
+This presentation showcases DataLab in a real-world industrial application, demonstrating several key capabilities:
+
+**Remote Control for Development**
+    DataLab was used as a remote-controlled visualization and processing platform during algorithm development, allowing developers to:
+
+    - Visualize intermediate results at each pipeline step
+    - Fine-tune parameters interactively
+    - Debug complex image processing algorithms
+    - Validate processing results in real-time
+
+**Visual Debugging**
+    The ability to send data from the main application to DataLab for visualization proved invaluable for:
+
+    - Understanding algorithm behavior
+    - Identifying edge cases and failure modes
+    - Optimizing processing parameters
+    - Validating geometric transformations
+
+**Rapid Prototyping**
+    DataLab's ready-to-use image processing features enabled rapid prototyping of the reconstruction pipeline.
+
+**Production Integration**
+    The software demonstrates how DataLab can be integrated into production-grade industrial applications.
+
+Technical Challenges Addressed
+-------------------------------
+
+The automatic X-ray scene reconstruction project involved several complex challenges:
+
+**Geometric Calibration**
+    Automatic detection and analysis of geometric reference patterns in X-ray images.
+
+**Image Registration**
+    Aligning and stitching partial images without prior knowledge of their spatial relationship.
+
+**Scale and Orientation Estimation**
+    Determining magnification factors and angular orientation from the geometric grid alone.
+
+**Robust Processing**
+    Handling variations in image quality, exposure, and geometric distortions.
+
+**Performance Optimization**
+    Ensuring the reconstruction process runs efficiently for practical use.
+
+Open Source Ecosystem Contribution
+-----------------------------------
+
+This project exemplifies how industrial applications can both benefit from and contribute to the open-source scientific Python ecosystem:
+
+**Leveraging Open Source**
+    The software is built entirely on open-source components:
+
+    - **Python** as the development platform
+    - **NumPy** and **SciPy** for numerical computing
+    - **scikit-image** and **OpenCV** for image processing
+    - **DataLab** for visualization and algorithm development
+
+**Contributing Back**
+    The project contributes to the ecosystem by:
+
+    - Validating DataLab's capabilities in demanding industrial applications
+    - Providing feedback for DataLab's development
+    - Demonstrating real-world use cases for the community
+    - Potentially contributing algorithms or improvements back to open-source libraries
+
+Industrial and Research Collaboration
+-------------------------------------
+
+This presentation highlights successful collaboration between public research and private industry:
+
+**CEA (Public Research)**
+    - Defined the scientific and technical requirements
+    - Provided domain expertise in non-destructive testing
+
+**CODRA (Technical and Scientific Software Development Company)**
+    - Translated functional specifications into algorithms through mathematical modeling (e.g. homographic transformations, coordinate system conversions)
+    - Validated the reconstruction algorithms
+    - Designed and developed the software solution
+    - Integrated open-source components
+    - Ensured industrial-grade quality and robustness
+    - Leveraged DataLab for development
+
+**Benefits of Collaboration**
+    - Combines research excellence with industrial rigor
+    - Accelerates technology transfer from research to application
+    - Ensures solutions meet both scientific and practical requirements
+    - Promotes open-source adoption in industrial contexts
+
+Applications and Impact
+-----------------------
+
+The automatic X-ray scene reconstruction software opens new possibilities:
+
+**Non-Destructive Testing**
+    Improved efficiency in industrial quality control and inspection.
+
+**Industrial Imaging**
+    Advanced capabilities for manufacturing and production monitoring.
+
+**Security Applications**
+    Enhanced screening and inspection capabilities.
+
+**Research and Development**
+    New tools for researchers working with X-ray imaging.
+
+Why This Matters for DataLab
+----------------------------
+
+This presentation is significant for several reasons:
+
+**Real-World Validation**
+    Demonstrates DataLab's capability to handle complex, production-grade applications in demanding industrial environments.
+
+**Advanced Use Case**
+    Shows DataLab beyond simple data analysis - as an integral part of sophisticated algorithm development workflows.
+
+**Industrial Adoption**
+    Validates DataLab's value proposition for industrial users, not just academic or research applications.
+
+**Remote Control Excellence**
+    Highlights one of DataLab's key differentiators - the ability to be remotely controlled for dynamic visualization and debugging.
+
+**CEA Partnership**
+    Reinforces the strong relationship between DataLab and CEA, one of its major supporters.
+
+Looking Forward
+---------------
+
+This presentation at OSXP 2025 will:
+
+- Showcase a concrete example of open-source software solving real industrial challenges
+- Demonstrate the maturity and capabilities of the scientific Python ecosystem
+- Illustrate how DataLab bridges the gap between research and industrial applications
+- Inspire other organizations to adopt open-source solutions for their technical challenges
+
+The automatic X-ray scene reconstruction project represents exactly the kind of advanced, real-world application that DataLab was designed to support - combining scientific rigor, industrial robustness, and open-source collaboration.
+
+.. note::
+
+   **Upcoming Event**: This presentation will take place on **December 11, 2025**. Check back after the event for presentation materials, feedback, and potentially a video recording.
+
+Conference Track
+----------------
+
+The presentation is part of the **Artificial Intelligence and Scientific Computing** track, reflecting the intersection of:
+
+- Traditional scientific computing (image processing, geometric transformations)
+- Modern AI/ML techniques (pattern recognition, potentially optimization)
+- Industrial applications of scientific software
+- Open-source development methodologies
+
+This positioning highlights DataLab's relevance in the evolving landscape where scientific computing increasingly incorporates AI/ML techniques while maintaining its foundation in classical numerical methods.
+
+Resources
+---------
+
+- `Open Source Experience 2025 website <https://www.opensource-experience.com/>`_
+- Talk details and schedule to be published closer to the event
+
+.. seealso::
+
+   For more information about DataLab's use in CEA projects, see:
+
+   - :doc:`../features/index` - DataLab's validation approach
+   - :doc:`../intro/introduction` - DataLab's operating modes, including remote control
+   - :doc:`osxp2024` - Previous DataLab presentation at OSXP 2024

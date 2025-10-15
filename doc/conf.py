@@ -133,9 +133,9 @@ html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
-    ann = "DataLab a été dévoilé à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Etats-Unis) et présenté en détails à <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>, puis à <a href='https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK'>Open Source Experience 2024</a> ! 🚀"  # noqa: E501
+    ann = "DataLab a été dévoilé à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 et présenté en détails à <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>, puis à <a href='https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK'>Open Source Experience 2024</a> ! Un cas d'usage avancé de DataLab sera présenté à <a href='outreach/osxp2025.html'>OSXP 2025</a> (11 déc.) 🚀 — <a href='outreach/index.html'>En savoir plus</a>"  # noqa: E501
 else:
-    ann = "DataLab has been introduced at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Tacoma, WA) and presented thoroughly at <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
+    ann = "DataLab has been introduced at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍 (Tacoma, WA), presented at <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>, and <a href='https://www.opensource-experience.com/'>OSXP 2024</a>! An advanced use case will be presented at <a href='outreach/osxp2025.html'>OSXP 2025</a> (Dec 11) 🚀 — <a href='outreach/index.html'>Learn more</a>"  # noqa: E501
 html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
@@ -151,7 +151,7 @@ html_theme_options = {
             "attributes": {"target": "_blank"},
         },
         {
-            "name": "Codra",
+            "name": "CODRA",
             "url": "https://codra.net",
             "icon": "_static/codra.png",
             "type": "local",
