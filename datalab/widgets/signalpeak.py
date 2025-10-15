@@ -98,7 +98,7 @@ class SignalPeakDetectionDialog(PlotDialog):
         self.get_plot().add_item(legend)
         self.__signal = signal.copy()
         self.__setup_dialog()
-        resize_widget_to_parent(self, aspect_ratio=1.0)
+        resize_widget_to_parent(self, parent, aspect_ratio=1.0)
 
     def populate_plot_layout(self) -> None:  # Reimplement PlotDialog method
         """Populate the plot layout"""

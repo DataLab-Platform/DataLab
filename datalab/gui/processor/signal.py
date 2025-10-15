@@ -645,7 +645,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """Compute multi-Gaussian fitting curve using an interactive dialog"""
         fitdlgfunc = fitdialog.multigaussian_fit
         for obj in self.panel.objview.get_sel_objects():
-            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
+            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.mainwindow)
             if exec_dialog(dlg):
                 # Computing x, y
                 peaks = dlg.get_peak_indices()
@@ -662,7 +662,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """Compute Multi-Lorentzian fitting curve using an interactive dialog"""
         fitdlgfunc = fitdialog.multilorentzian_fit
         for obj in self.panel.objview.get_sel_objects():
-            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
+            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.mainwindow)
             if exec_dialog(dlg):
                 # Computing x, y
                 peaks = dlg.get_peak_indices()
