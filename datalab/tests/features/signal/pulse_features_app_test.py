@@ -24,6 +24,7 @@ from sigima.tests.signal.pulse.pulse_unit_test import (
 from datalab.adapters_metadata import TableAdapter
 from datalab.gui.panel.signal import SignalPanel
 from datalab.tests import datalab_test_app_context
+from datalab.utils import qthelpers as qth
 
 
 def __check_table(obj: SignalObj) -> TableResult:
@@ -100,5 +101,18 @@ def test_pulse_features_app():
         panel.show_results()
 
 
+def pulse_features_screenshot():
+    """Generate pulse features screenshot."""
+    with datalab_test_app_context(size=(1400, 600), console=False) as win:
+        panel = win.signalpanel
+        s1 = create_signal_from_param(create_test_step_params())
+        panel.add_object(s1)
+        param = PulseFeaturesParam()
+        param.update_from_obj(s1)
+        panel.processor.run_feature("extract_pulse_features", param)
+        qth.grab_save_window(win.signalview, "s_pulse_features")
+
+
 if __name__ == "__main__":
-    test_pulse_features_app()
+    # test_pulse_features_app()
+    pulse_features_screenshot()

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 15:15+0200\n"
+"POT-Creation-Date: 2025-10-15 16:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -236,6 +236,9 @@ msgstr "Effectue une analyse complète des impulsions sur les signaux sélection
 msgid "This feature provides automated pulse characterization with intelligent signal type recognition and robust parameter extraction for digital signal analysis, oscilloscope measurements, and pulse timing validation."
 msgstr "Cette fonctionnalité fournit une caractérisation automatisée des impulsions avec reconnaissance intelligente du type de signal et extraction robuste de paramètres pour l'analyse de signaux numériques, les mesures d'oscilloscope et la validation temporelle des impulsions."
 
+msgid "Pulse features results as displayed in the Signal View."
+msgstr "Résultats des caractéristiques d'impulsions tels qu'affichés dans la vue Signal."
+
 msgid "**Key Capabilities:**"
 msgstr "**Fonctionnalités clés :**"
 
@@ -290,14 +293,9 @@ msgstr "Limite X supérieure pour la région de ligne de base de fin (finale)"
 msgid "Rise/Fall time"
 msgstr "Temps de montée/descente"
 
-msgid ""
-"Reference levels for rise/fall time measurement with predefined choices: 5%-"
-"95% (High precision), 10%-90% (IEEE standard), 20%-80% (Noisy signals), 25%-"
-"75% (Alternative)"
-msgstr ""
-"Niveaux de référence pour la mesure du temps de montée/descente avec des "
-"choix prédéfinis : 5%-95% (Haute précision), 10%-90% (Standard IEEE), "
-"20%-80% (Signaux bruités), 25%-75% (Alternative)"
+#, python-format
+msgid "Reference levels for rise/fall time measurement with predefined choices: 5%-95% (High precision), 10%-90% (IEEE standard), 20%-80% (Noisy signals), 25%-75% (Alternative)"
+msgstr "Niveaux de référence pour la mesure du temps de montée/descente avec des choix prédéfinis : 5%-95% (Haute précision), 10%-90% (Standard IEEE), 20%-80% (Signaux bruités), 25%-75% (Alternative)"
 
 msgid "**Extracted Features:**"
 msgstr "**Caractéristiques extraites :**"

@@ -184,6 +184,10 @@ Perform comprehensive pulse analysis on selected signals, automatically extracti
 
 This feature provides automated pulse characterization with intelligent signal type recognition and robust parameter extraction for digital signal analysis, oscilloscope measurements, and pulse timing validation.
 
+.. figure:: /images/shots/s_pulse_features.png
+
+    Pulse features results as displayed in the Signal View.
+
 **Key Capabilities:**
 
 * **Automated signal recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis

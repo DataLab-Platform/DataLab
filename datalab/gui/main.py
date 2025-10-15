@@ -156,6 +156,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.imagepanel_toolbar: QW.QToolBar | None = None
         self.signalpanel: SignalPanel | None = None
         self.imagepanel: ImagePanel | None = None
+        self.signalview: DockablePlotWidget | None = None
+        self.imageview: DockablePlotWidget | None = None
         self.tabwidget: QW.QTabWidget | None = None
         self.tabmenu: QW.QMenu | None = None
         self.docks: dict[AbstractPanel | DockableConsole, QW.QDockWidget] | None = None
@@ -952,8 +954,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.tabwidget = QW.QTabWidget()
         self.tabmenu = add_corner_menu(self.tabwidget)
         configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
-        sdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Signal View"))
-        idock = self.__add_dockwidget(self.__add_image_panel(), title=_("Image View"))
+        self.signalview = self.__add_signal_panel()
+        self.imageview = self.__add_image_panel()
+        sdock = self.__add_dockwidget(self.signalview, title=_("Signal View"))
+        idock = self.__add_dockwidget(self.imageview, title=_("Image View"))
         self.tabifyDockWidget(sdock, idock)
         self.docks = {self.signalpanel: sdock, self.imagepanel: idock}
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
