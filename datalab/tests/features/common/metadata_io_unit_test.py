@@ -51,7 +51,9 @@ def test_metadata_io_unit():
 
                 panel.import_metadata_from_file(fname)
                 execenv.print("Check metadata export <--> import features:")
-                helpers.compare_metadata(orig_metadata, ima.metadata)
+                helpers.compare_metadata(
+                    orig_metadata, ima.metadata, raise_on_diff=True
+                )
 
 
 if __name__ == "__main__":

@@ -29,8 +29,8 @@ def test_dict_serialization():
                 execenv.print("Dictionary/List (de)serialization:")
                 oids = panel.objmodel.get_object_ids()
                 first_image = panel.objmodel[oids[0]]
-                assert helpers.compare_metadata(
-                    image.metadata, first_image.metadata.copy()
+                helpers.compare_metadata(
+                    image.metadata, first_image.metadata.copy(), raise_on_diff=True
                 )
 
 
