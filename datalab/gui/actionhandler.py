@@ -954,7 +954,7 @@ class SignalActionHandler(BaseActionHandler):
     def create_new_object_actions(self):
         """Create actions for creating new objects"""
         for label, pclass in (
-            (_("Zeros"), sio.ZerosParam),
+            (_("Zero"), sio.ZeroParam),
             (_("Normal distribution"), sio.NormalDistribution1DParam),
             (_("Poisson distribution"), sio.PoissonDistribution1DParam),
             (_("Uniform distribution"), sio.UniformDistribution1DParam),
@@ -1170,7 +1170,7 @@ class ImageActionHandler(BaseActionHandler):
     def create_new_object_actions(self):
         """Create actions for creating new objects"""
         for label, pclass in (
-            (_("Zeros"), sio.Zeros2DParam),
+            (_("Zero"), sio.Zero2DParam),
             (_("Normal distribution"), sio.NormalDistribution2DParam),
             (_("Poisson distribution"), sio.PoissonDistribution2DParam),
             (_("Uniform distribution"), sio.UniformDistribution2DParam),

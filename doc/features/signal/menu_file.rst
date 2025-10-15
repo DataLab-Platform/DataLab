@@ -31,7 +31,7 @@ Create a new signal from various models:
 
     * - Model
       - Equation
-    * - Zeros
+    * - Zero
       - :math:`y[i] = 0`
     * - Uniform distribution
       - :math:`y[i]` is normally distributed with configurable mean and standard deviation

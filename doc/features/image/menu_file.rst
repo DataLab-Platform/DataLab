@@ -32,7 +32,7 @@ Create a new image from various models
 
     * - Model
       - Equation
-    * - Zeros
+    * - Zero
       - :math:`z[i] = 0`
     * - Empty
       - Data is directly taken from memory as it is
