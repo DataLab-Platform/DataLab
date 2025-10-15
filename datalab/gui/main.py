@@ -1112,7 +1112,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
     def __setup_console(self) -> None:
         """Add an internal console"""
         ns = {
-            "datalab": self,
+            "dl": self,
             "np": np,
             "sps": sps,
             "spi": spi,
@@ -1121,14 +1121,14 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             "osp": osp,
             "time": time,
         }
-        msg = (
+        msg = _(
             "Welcome to DataLab console!\n"
             "---------------------------\n"
-            "You can access the main window with the 'datalab' variable.\n"
+            "You can access the main window with the 'dl' variable.\n"
             "Example:\n"
-            "  o = datalab.get_object()  # returns currently selected object\n"
-            "  o = datalab[1]  # returns object number 1\n"
-            "  o = datalab['My image']  # returns object which title is 'My image'\n"
+            "  o = dl.get_object()  # returns currently selected object\n"
+            "  o = dl[1]  # returns object number 1\n"
+            "  o = dl['My image']  # returns object which title is 'My image'\n"
             "  o.data  # returns object data\n"
             "Modules imported at startup: "
             "os, sys, os.path as osp, time, "
