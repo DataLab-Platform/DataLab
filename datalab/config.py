@@ -29,7 +29,7 @@ from datalab.utils import conf
 # Configure Sigima to use DataLab-compatible placeholder title formatting
 set_default_title_formatter(PlaceholderTitleFormatter())
 
-CONF_VERSION = "0.3.0"
+CONF_VERSION = "1.0.0"
 
 APP_NAME = "DataLab"
 MOD_NAME = "datalab"
