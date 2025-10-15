@@ -81,12 +81,10 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     panel.objview.set_current_object(sig3)
     panel.processor.compute_multigaussianfit()
 
-    param = sigima.objects.GaussParam.create(title=_("Gaussian"))
-    sig = sigima.objects.create_signal_from_param(param)
+    sig = sigima.objects.create_signal_from_param(sigima.objects.StepPulseParam())
     panel.add_object(sig)
 
-    panel.processor.run_feature("fwhm")
-    panel.processor.run_feature("fw1e2")
+    panel.processor.run_feature("extract_pulse_features")
 
     qt_wait(DELAY2)
 
