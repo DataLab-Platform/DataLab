@@ -91,7 +91,7 @@ class InstallConfigViewerWindow(QW.QDialog):
         plugins_io_contents = PluginRegistry.get_plugin_info(html=False)
         for registry in (SignalIORegistry, ImageIORegistry):
             plugins_io_contents += os.linesep + ("_" * 80) + os.linesep * 2
-            plugins_io_contents += registry.get_format_info()
+            plugins_io_contents += registry.get_format_info(mode="text")
         for title, contents, tab_icon, tab_title in (
             (
                 _("Installation configuration"),
