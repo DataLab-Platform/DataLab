@@ -93,6 +93,11 @@ Create a new signal from the following supported filetypes:
     * - MAT-Files
       - .mat
 
+Open from directory
+^^^^^^^^^^^^^^^^^^^^^
+Allow to open multiple signals from a specified directory.
+
+
 Save signal
 ^^^^^^^^^^^
 
@@ -106,8 +111,8 @@ Save current signal to the following supported filetypes:
     * - Text files
       - .csv
 
-Save to directory
-^^^^^^^^^^^^^^^^^
+Save signals to directory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Save all selected signals to a specified directory, with configurable filename pattern
 and signal format.
