@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-14 19:31+0200\n"
+"POT-Creation-Date: 2025-10-15 15:52+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -369,11 +369,11 @@ msgstr "Ajustement de deux demi-Gaussiennes"
 msgid "Asymmetric peak fitting with two half-Gaussians"
 msgstr "Ajustement de pics asymétriques avec deux demi-Gaussiennes"
 
-msgid "Double exponential fit"
-msgstr "Ajustement double exponentiel"
+msgid "Piecewise exponential (raise-decay) fit"
+msgstr "Ajustement exponentiel par morceaux (croissant-décroissant)"
 
-msgid "Double exponential decay fitting"
-msgstr "Ajustement de double exponentielle décroissante"
+msgid "Piecewise exponential fitting with raise and decay components"
+msgstr "Ajustement exponentiel par morceaux avec composantes croissante et décroissante"
 
 msgid "Exponential fit"
 msgstr "Ajustement exponentiel"
@@ -1605,9 +1605,6 @@ msgstr "Filtre coupe-bande"
 msgid "Two Half-Gaussians fit"
 msgstr "Ajustement de deux demi-Gaussiennes"
 
-msgid "Double Exponential fit"
-msgstr "Ajustement double exponentiel"
-
 msgid "Sigmoid fit"
 msgstr "Ajustement sigmoïde"
 
@@ -2299,6 +2296,9 @@ msgstr "Image d'homogénéité (Distribution uniforme)"
 
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
+
+msgid "Piecewise exponential fit"
+msgstr "Ajustement exponentiel par morceaux"
 
 msgid "Click OK to start the demo.<br><br><u>Note:</u><br>- Demo will cover a <i>selection</i> of DataLab features (for a complete list of features, please refer to the documentation).<br>- It won't require any user interaction."
 msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La démo couvre une <i>sélection</i> des fonctionnalités de DataLab (pour une liste complète des fonctionnalités, veuillez vous référer à la documentation).<br>- Elle ne nécessite aucune interaction de l'utilisateur."

@@ -339,7 +339,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             (_("Voigt fit"), sips.voigt_fit),
             (_("Planckian fit"), sips.planckian_fit),
             (_("Two Half-Gaussians fit"), sips.twohalfgaussian_fit),
-            (_("Double Exponential fit"), sips.doubleexponential_fit),
+            (_("Piecewise exponential fit"), sips.piecewiseexponential_fit),
             (_("Exponential fit"), sips.exponential_fit),
             (_("Sinusoidal fit"), sips.sinusoidal_fit),
             (_("CDF fit"), sips.cdf_fit),

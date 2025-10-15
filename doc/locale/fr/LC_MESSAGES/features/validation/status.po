@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-15 09:16+0200\n"
+"POT-Creation-Date: 2025-10-15 15:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -178,9 +178,8 @@ msgstr ""
 msgid ":py:func:`apply_window <sigima.proc.signal.apply_window>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute windowing"
-msgstr "Fonctions de calcul"
+msgstr "Calculer la fenêtrage"
 
 msgid "`test_signal_apply_window <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/processing_unit_test.py#L558>`_"
 msgstr ""
@@ -287,9 +286,8 @@ msgstr ""
 msgid ":py:func:`contrast <sigima.proc.signal.contrast>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute contrast"
-msgstr "Fonctions de calcul"
+msgstr "Calculer le contraste"
 
 msgid "`test_signal_contrast <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/analysis_unit_test.py#L83>`_"
 msgstr ""
@@ -306,9 +304,8 @@ msgstr ""
 msgid ":py:func:`deconvolution <sigima.proc.signal.deconvolution>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute deconvolution"
-msgstr "Fonctions de calcul"
+msgstr "Calculer la déconvolution"
 
 msgid "`test_signal_deconvolution <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/convolution_unit_test.py#L267>`_"
 msgstr ""
@@ -316,9 +313,8 @@ msgstr ""
 msgid ":py:func:`derivative <sigima.proc.signal.derivative>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute derivative"
-msgstr "Calculer la déviation d'Allan"
+msgstr "Calculer la dérivée"
 
 msgid "`test_signal_derivative <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/processing_unit_test.py#L205>`_"
 msgstr ""
@@ -368,13 +364,13 @@ msgstr ""
 msgid "`test_signal_division_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/operation_unit_test.py#L198>`_"
 msgstr ""
 
-msgid ":py:func:`doubleexponential_fit <sigima.proc.signal.doubleexponential_fit>`"
+msgid ":py:func:`piecewiseexponential_fit <sigima.proc.signal.piecewiseexponential_fit>`"
 msgstr ""
 
-msgid "Compute double-exponential fit"
-msgstr ""
+msgid "Compute piecewise exponential fit (raise-decay)"
+msgstr "Calculer l'ajustement exponentiel par morceaux (augmentation-décroissance)"
 
-msgid "`test_signal_doubleexponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L337>`_"
+msgid "`test_signal_piecewiseexponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L337>`_"
 msgstr ""
 
 msgid ":py:func:`dynamic_parameters <sigima.proc.signal.dynamic_parameters>`"
@@ -398,9 +394,8 @@ msgstr ""
 msgid ":py:func:`exponential_fit <sigima.proc.signal.exponential_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute exponential fit"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'ajustement exponentiel"
 
 msgid "`test_signal_exponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L304>`_"
 msgstr ""
@@ -435,9 +430,8 @@ msgstr ""
 msgid ":py:func:`fft <sigima.proc.signal.fft>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute FFT"
-msgstr "Fonctions de calcul"
+msgstr "Calculer la FFT"
 
 msgid "`test_signal_fft <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fft1d_unit_test.py#L118>`_"
 msgstr ""
@@ -460,7 +454,6 @@ msgstr ""
 msgid ":py:func:`fwhm <sigima.proc.signal.fwhm>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute FWHM"
 msgstr "Fonctions de calcul"
 
@@ -479,7 +472,6 @@ msgstr ""
 msgid ":py:func:`gaussian_fit <sigima.proc.signal.gaussian_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute Gaussian fit"
 msgstr "Calculer la déviation d'Allan"
 
@@ -507,9 +499,8 @@ msgstr ""
 msgid ":py:func:`histogram <sigima.proc.signal.histogram>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute histogram"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'histogramme"
 
 msgid "`test_signal_histogram <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/processing_unit_test.py#L388>`_"
 msgstr ""
@@ -535,9 +526,8 @@ msgstr ""
 msgid ":py:func:`integral <sigima.proc.signal.integral>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute integral"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'intégrale"
 
 msgid "`test_signal_integral <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/processing_unit_test.py#L224>`_"
 msgstr ""
@@ -563,9 +553,8 @@ msgstr ""
 msgid ":py:func:`linear_fit <sigima.proc.signal.linear_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute linear fit"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'ajustement linéaire"
 
 msgid "`test_signal_linear_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L110>`_"
 msgstr ""
@@ -582,9 +571,8 @@ msgstr ""
 msgid ":py:func:`lorentzian_fit <sigima.proc.signal.lorentzian_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute Lorentzian fit"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'ajustement lorentzien"
 
 msgid "`test_signal_lorentzian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L235>`_"
 msgstr ""
@@ -691,9 +679,8 @@ msgstr ""
 msgid ":py:func:`planckian_fit <sigima.proc.signal.planckian_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute Planckian fit"
-msgstr "Calculer la déviation d'Allan"
+msgstr "Calculer l'ajustement de Planck"
 
 msgid "`test_signal_planckian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L370>`_"
 msgstr ""
@@ -701,9 +688,8 @@ msgstr ""
 msgid ":py:func:`polynomial_fit <sigima.proc.signal.polynomial_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute polynomial fit"
-msgstr "Calculer la déviation d'Allan"
+msgstr "Calculer l'ajustement polynomial"
 
 msgid "`test_polynomial_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L144>`_"
 msgstr ""
@@ -756,9 +742,8 @@ msgstr ""
 msgid ":py:func:`real <sigima.proc.signal.real>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute real part"
-msgstr "Calculer la déviation d'Allan"
+msgstr "Calculer la partie réelle"
 
 msgid "`test_signal_real <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/operation_unit_test.py#L232>`_"
 msgstr ""
@@ -793,9 +778,8 @@ msgstr ""
 msgid ":py:func:`sigmoid_fit <sigima.proc.signal.sigmoid_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute sigmoid fit"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'ajustement sigmoïde"
 
 msgid "`test_signal_sigmoid_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L487>`_"
 msgstr ""
@@ -803,9 +787,8 @@ msgstr ""
 msgid ":py:func:`sinusoidal_fit <sigima.proc.signal.sinusoidal_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute sinusoidal fit"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'ajustement sinusoïdal"
 
 msgid "`test_sinusoidal_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L746>`_"
 msgstr ""
@@ -894,9 +877,8 @@ msgstr ""
 msgid ":py:func:`voigt_fit <sigima.proc.signal.voigt_fit>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute Voigt fit"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'ajustement de Voigt"
 
 msgid "`test_signal_voigt_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L268>`_"
 msgstr ""
@@ -1012,9 +994,8 @@ msgstr ""
 msgid ":py:func:`adjust_log <sigima.proc.image.adjust_log>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute log correction"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'ajustement logarithmique"
 
 msgid "`test_adjust_log <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/exposure_unit_test.py#L33>`_"
 msgstr ""
@@ -1022,9 +1003,8 @@ msgstr ""
 msgid ":py:func:`adjust_sigmoid <sigima.proc.image.adjust_sigmoid>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute sigmoid correction"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'ajustement sigmoïde"
 
 msgid "`test_adjust_sigmoid <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/exposure_unit_test.py#L45>`_"
 msgstr ""
@@ -1131,9 +1111,8 @@ msgstr ""
 msgid ":py:func:`calibration <sigima.proc.image.calibration>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute polynomial calibration"
-msgstr "Calculer la déviation d'Allan"
+msgstr "Calculer la calibration polynomiale"
 
 msgid "`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/geometry_unit_test.py#L541>`_"
 msgstr ""
@@ -1276,9 +1255,8 @@ msgstr ""
 msgid ":py:func:`dilation <sigima.proc.image.dilation>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute Dilation"
-msgstr "Fonctions de calcul"
+msgstr "Calculer la dilatation"
 
 msgid "`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/morphology_unit_test.py#L47>`_"
 msgstr ""
@@ -1340,9 +1318,8 @@ msgstr ""
 msgid ":py:func:`erosion <sigima.proc.image.erosion>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute Erosion"
-msgstr "Fonctions de calcul"
+msgstr "Calculer l'érosion"
 
 msgid "`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/morphology_unit_test.py#L41>`_"
 msgstr ""
@@ -1404,9 +1381,8 @@ msgstr ""
 msgid ":py:func:`flatfield <sigima.proc.image.flatfield>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute flat field correction"
-msgstr "Calculer la déviation d'Allan"
+msgstr "Calculer la correction de champ plat"
 
 msgid "`test_flatfield <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/exposure_unit_test.py#L96>`_"
 msgstr ""
@@ -1693,9 +1669,8 @@ msgstr ""
 msgid ":py:func:`resize <sigima.proc.image.resize>`"
 msgstr ""
 
-#, fuzzy
 msgid "Zooming function"
-msgstr "Fonctions de calcul"
+msgstr "Fonction de zoom"
 
 msgid "`test_image_resize <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/geometry_unit_test.py#L362>`_"
 msgstr ""
@@ -1948,4 +1923,3 @@ msgstr ""
 
 msgid "`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/fft2d_unit_test.py#L50>`_"
 msgstr ""
-

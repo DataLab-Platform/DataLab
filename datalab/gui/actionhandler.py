@@ -1049,9 +1049,12 @@ class SignalActionHandler(BaseActionHandler):
                         tip=_("Asymmetric peak fitting with two half-Gaussians"),
                     )
                     cra_fit(
-                        _("Double exponential fit"),
-                        fitdialog.doubleexponential_fit,
-                        tip=_("Double exponential decay fitting"),
+                        _("Piecewise exponential (raise-decay) fit"),
+                        fitdialog.piecewiseexponential_fit,
+                        tip=_(
+                            "Piecewise exponential fitting with raise and decay "
+                            "components"
+                        ),
                     )
                     cra_fit(_("Exponential fit"), fitdialog.exponential_fit)
                     cra_fit(_("Sinusoidal fit"), fitdialog.sinusoidal_fit)
@@ -1072,7 +1075,7 @@ class SignalActionHandler(BaseActionHandler):
                     "voigt_fit",
                     "planckian_fit",
                     "twohalfgaussian_fit",
-                    "doubleexponential_fit",
+                    "piecewiseexponential_fit",
                     "exponential_fit",
                     "sinusoidal_fit",
                     "cdf_fit",

@@ -214,7 +214,7 @@ def run_signal_computations(
         (_("Sinusoidal fit"), fitdialog.sinusoidal_fit),
         (_("Planckian fit"), fitdialog.planckian_fit),
         (_("Two half-Gaussian fit"), fitdialog.twohalfgaussian_fit),
-        (_("Double exponential fit"), fitdialog.doubleexponential_fit),
+        (_("Piecewise exponential fit"), fitdialog.piecewiseexponential_fit),
     ):
         panel.objview.set_current_object(sig)
         panel.processor.compute_fit(fittitle, fitfunc)

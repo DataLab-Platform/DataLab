@@ -607,9 +607,9 @@ def twohalfgaussian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         return fitfunc(x, values), params
 
 
-# --- Double exponential fitting curve -----------------------------------------
-def doubleexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
-    """Compute double exponential fit
+# --- Piecewise exponential (raise-decay) fitting curve ------------------------
+def piecewiseexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute piecewise exponential fit (raise-decay)
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
@@ -661,7 +661,7 @@ def doubleexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         fitfunc,
         params,
         parent=parent,
-        wintitle=_("Double exponential fit"),
+        wintitle=_("Piecewise exponential (raise-decay) fit"),
         name=name,
     )
     if values:
