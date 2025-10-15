@@ -130,14 +130,14 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
     panel.processor.run_feature("fliph")
     panel.processor.run_feature("flipv")
 
-    param = sipi.RotateParam.create(angle=5.0)
+    rotparam = sipi.RotateParam.create(angle=5.0)
     for boundary in BorderMode:
         if boundary is BorderMode.MIRROR:
             continue
-        param.mode = boundary
-        panel.processor.run_feature("rotate", param)
+        rotparam.mode = boundary
+        panel.processor.run_feature("rotate", rotparam)
 
-    param.title = None
+    param.title = _("Multi-Gaussian")
     ima1 = create_multigaussian_image(param)
     s = data_size
     roi = sigima.objects.create_image_roi(
@@ -157,7 +157,7 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
 
     qt_wait(DELAY2)
 
-    param.title = None
+    param.title = _("Peak")
     ima = create_peak_image(param)
     panel.add_object(ima)
     param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
