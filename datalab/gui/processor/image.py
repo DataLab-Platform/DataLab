@@ -302,7 +302,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(
             sipi.log10, _("Logarithm (base 10)"), icon_name="log10.svg"
         )
-        self.register_1_to_1(sipi.logp1, "Log10(z+n)")
+        self.register_1_to_1(
+            sipi.logp1, "Log10(z+n)", paramclass=sigima.params.LogP1Param
+        )
         self.register_2_to_1(
             sipi.flatfield,
             _("Flat-field correction"),
