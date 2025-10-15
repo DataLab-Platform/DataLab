@@ -155,7 +155,7 @@ def test_image_features(win: DLMainWindow, data_size: int = 512) -> None:
 
     qt_wait(DELAY2)
 
-    param.title = _("Peak")
+    param.title = _("2D Peaks with noise background")
     ima = create_peak_image(param)
     panel.add_object(ima)
     param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
