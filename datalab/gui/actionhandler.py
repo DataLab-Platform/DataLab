@@ -834,6 +834,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.action_for("complex_from_real_imag")
             self.action_for("astype", separator=True)
             self.action_for("average", separator=True)
+            self.action_for("standard_deviation")
             self.action_for("quadratic_difference")
 
         # MARK: PROCESSING
