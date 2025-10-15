@@ -187,3 +187,25 @@ intersphinx_mapping = {
     "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
     "plotpy": ("https://plotpy.readthedocs.io/en/latest/", None),
 }
+
+# -- Latex macros for math in docstrings --------------------------------
+macros = {
+    "FFT": r"\operatorname{FFT}",
+    "PSD": r"\operatorname{PSD}",
+}
+
+latex_elements = {
+    "preamble": r"""
+    \usepackage{amsmath}
+    \usepackage{amssymb}"""
+    + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items())
+    + r"""\usepackage{mathrsfs}""",
+}
+
+# -- MathJax configuration for HTML output ------------------------------
+mathjax3_config = {
+    "loader": {"load": ["[tex]/ams"]},
+    "tex": {
+        "macros": macros,
+    },
+}
