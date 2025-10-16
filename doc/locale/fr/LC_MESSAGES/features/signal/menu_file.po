@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 19:35+0200\n"
+"POT-Creation-Date: 2025-10-16 16:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -217,6 +217,12 @@ msgstr "Fichiers MAT"
 msgid ".mat"
 msgstr ""
 
+msgid "Open from directory"
+msgstr "Ouvrir depuis un répertoire"
+
+msgid "Open multiple signals from a specified directory."
+msgstr "Ouvrir plusieurs signaux depuis un répertoire spécifié."
+
 msgid "Save signal"
 msgstr "Enregistrer un signal"
 
@@ -226,8 +232,8 @@ msgstr "Enregistre le signal sélectionné dans l'un des types de fichier pris e
 msgid ".csv"
 msgstr ""
 
-msgid "Save to directory"
-msgstr "Enregistrer dans un répertoire"
+msgid "Save signals to directory"
+msgstr "Enregistrer les signaux dans un répertoire"
 
 msgid "Save all selected signals to a specified directory, with configurable filename pattern and signal format."
 msgstr "Enregistrer tous les signaux sélectionnés dans un répertoire spécifié, avec un patron de nom de fichier et un format de signal configurables."
