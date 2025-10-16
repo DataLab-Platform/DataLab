@@ -37,8 +37,8 @@ msgstr "Le menu \"Fichier\" vous permet de :"
 msgid "Create, open, save and close signals (see below)."
 msgstr "Créer, ouvrir, enregistrer et fermer des signaux (voir ci-dessous)."
 
-msgid "Save and restore the current workspace or browse HDF5 files (see :ref:`workspace`)."
-msgstr "Sauvegarder et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`workspace`)."
+msgid "Save and restore the current workspace or browse HDF5 files (see :ref:`overview`)."
+msgstr "Sauvegarder et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`overview`)."
 
 msgid "Edit DataLab preferences (see :ref:`settings`)."
 msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."

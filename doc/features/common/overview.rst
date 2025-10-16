@@ -1,10 +1,10 @@
-.. _workspace:
+.. _overview:
 
-Workspace
-=========
+Overview
+========
 
 .. meta::
-    :description: Workspace in DataLab, the open-source scientific data analysis and visualization platform
+    :description: Overview and basic concepts of DataLab, the open-source scientific data analysis and visualization platform
     :keywords: DataLab, workspace, scientific, data, analysis, visualization, platform
 
 Basic concepts

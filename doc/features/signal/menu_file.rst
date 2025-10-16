@@ -16,7 +16,7 @@ The "File" menu allows you to:
 
 - Create, open, save and close signals (see below).
 
-- Save and restore the current workspace or browse HDF5 files (see :ref:`workspace`).
+- Save and restore the current workspace or browse HDF5 files (see :ref:`overview`).
 
 - Edit DataLab preferences (see :ref:`settings`).
 

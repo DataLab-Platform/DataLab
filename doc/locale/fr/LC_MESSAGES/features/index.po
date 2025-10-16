@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Common features:"
+msgid "Overview & Common features:"
 msgstr "Fonctionnalités communes :"
 
 msgid "Signal processing:"
@@ -46,14 +46,14 @@ msgstr "Fonctionnalités"
 msgid "The following sections describe the features of DataLab, the open-source scientific data analysis and visualization platform."
 msgstr "Les paragraphes suivants décrivent les fonctionnalités de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques."
 
-msgid "Before jumping into the details of other parts of the documentation, it is recommended to start with the :ref:`workspace` page, which describes the basic concepts of DataLab."
-msgstr "Avant de plonger dans les détails des autres parties de la documentation, il est recommandé de commencer par la page :ref:`workspace`, qui décrit les concepts de base de DataLab."
+msgid "Before jumping into the details of other parts of the documentation, it is recommended to start with the :ref:`overview` page, which describes the basic concepts of DataLab."
+msgstr "Avant de plonger dans les détails des autres parties de la documentation, il est recommandé de commencer par la page :ref:`overview`, qui décrit les concepts de base de DataLab."
 
 msgid "For a synthetic overview of the features of DataLab, please refer to the :ref:`key_features` page."
 msgstr "Pour une vue d'ensemble synthétique des fonctionnalités de DataLab, veuillez vous référer à la page :ref:`key_features`."
 
-msgid "Common features"
-msgstr "Fonctionnalités communes"
+msgid "Overview & Common features"
+msgstr "Vue d'ensemble et fonctionnalités communes"
 
 msgid "DataLab main window"
 msgstr "Fenêtre principale de DataLab"

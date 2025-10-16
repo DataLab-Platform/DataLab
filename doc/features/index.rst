@@ -11,7 +11,7 @@ data analysis and visualization platform.
 .. note::
 
     Before jumping into the details of other parts of the documentation, it is
-    recommended to start with the :ref:`workspace` page, which describes the
+    recommended to start with the :ref:`overview` page, which describes the
     basic concepts of DataLab.
 
 .. seealso::
@@ -21,8 +21,8 @@ data analysis and visualization platform.
 
 .. _validation:
 
-Common features
----------------
+Overview & Common features
+--------------------------
 
 .. figure:: /images/DataLab-Screenshot.png
 
@@ -30,12 +30,11 @@ Common features
 
 .. toctree::
    :maxdepth: 1
-   :caption: Common features:
+   :caption: Overview & Common features:
 
-   common/workspace
+   common/overview
    common/settings
    common/h5browser
-   common/plugins
 
 .. raw:: latex
 
@@ -132,6 +131,7 @@ This section describes the advanced features of DataLab.
    :maxdepth: 1
    :caption: Advanced features:
 
+   advanced/plugins
    advanced/macros
    advanced/remote
    advanced/model
