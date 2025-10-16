@@ -363,6 +363,7 @@ class ObjectModel:
         """Add group to model"""
         group = ObjectGroup(title, self)
         self._groups.append(group)
+        self.reset_short_ids()
         return group
 
     def get_object_group_id(self, obj: SignalObj | ImageObj) -> str | None:

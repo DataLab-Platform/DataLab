@@ -277,6 +277,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Fixed group numbering issue: When creating a new group via "Edit > New Group", the group short ID is now correctly numbered sequentially (e.g., g002) instead of being incorrectly numbered as g000
 * Plot interface improvements:
   * Disabled PlotPy's generic "Axes" tab in parameter dialogs to prevent interference with DataLab's own axis scale management.
   * This provides a cleaner, more focused parameter dialog interface while maintaining DataLab's specialized axis handling capabilities.
@@ -289,6 +290,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)
 * Fixed [Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241) - Erroneous ifft1d x-axis computation when shift=False
 * Improved initial frequency estimate for sinusoidal curve fitting.
+* Fixed curve fitting parameter display: added default format string (`%g`) to all `FitParam` instances to ensure proper number formatting in fit dialog parameter fields, preventing display issues with very large or very small parameter values.
 * Fixed [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Incorrect shape unpacking in edit_new_image_parameters
 * Fixed [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Incorrect unpacking of image shape in get_newparam_from_current
 
