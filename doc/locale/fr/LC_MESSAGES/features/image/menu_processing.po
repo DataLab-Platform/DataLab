@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 09:42+0200\n"
+"POT-Creation-Date: 2025-10-16 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -661,3 +661,79 @@ msgstr "Binning"
 
 msgid "Combine clusters of adjacent pixels, throughout the image, into single pixels. The result can be the sum, average, median, minimum, or maximum value of the cluster."
 msgstr "Regroupe des pixels adjacents de l'image en un seul pixel (somme, moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
+
+msgid "Resampling"
+msgstr "Rééchantillonnage"
+
+msgid "Generate new images by resampling each selected image. The following parameters are available:"
+msgstr "Génère de nouvelles images en rééchantillonnant chaque image sélectionnée. Les paramètres suivants sont disponibles :"
+
+#, python-brace-format
+msgid "math:`x_{min}`"
+msgstr ""
+
+msgid "Minimum x-coordinate of the output image"
+msgstr "Coordonnée x minimale de l'image de sortie"
+
+#, python-brace-format
+msgid ":math:`x_{max}`"
+msgstr ""
+
+msgid "Maximum x-coordinate of the output image"
+msgstr "Coordonnée x maximale de l'image de sortie"
+
+#, python-brace-format
+msgid ":math:`y_{min}`"
+msgstr ""
+
+msgid "Minimum y-coordinate of the output image"
+msgstr "Coordonnée y minimale de l'image de sortie"
+
+#, python-brace-format
+msgid ":math:`y_{max}`"
+msgstr ""
+
+msgid "Maximum y-coordinate of the output image"
+msgstr "Coordonnée y maximale de l'image de sortie"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "Image size definition mode: 'Pixel size' or 'Output shape'. The 'Pixel size' mode allows to define the pixel size of the new image, while the 'Output shape' mode allows to define the number of pixels of the new image."
+msgstr "Mode de définition de la taille de l'image : 'Taille des pixels' ou 'Taille de l'image de sortie'. Le mode 'Taille des pixels' permet de définir la taille des pixels de la nouvelle image, tandis que le mode 'Taille de l'image de sortie' permet de définir le nombre de pixels de la nouvelle image."
+
+msgid "ΔX"
+msgstr ""
+
+msgid "Pixel size in x-direction (if 'Pixel size' mode is selected)"
+msgstr "Taille des pixels selon la direction x (si le mode 'Taille des pixels' est sélectionné)"
+
+msgid "ΔY"
+msgstr ""
+
+msgid "Pixel size in y-direction (if 'Pixel size' mode is selected)"
+msgstr "Taille des pixels selon la direction y (si le mode 'Taille des pixels' est sélectionné)"
+
+msgid "Width"
+msgstr "Largeur"
+
+msgid "Output image width in pixels (if 'Output shape' mode is selected)"
+msgstr "Largeur de l'image de sortie en pixels (si le mode 'Taille de l'image de sortie' est sélectionné)"
+
+msgid "Height"
+msgstr "Hauteur"
+
+msgid "Output image height in pixels (if 'Output shape' mode is selected)"
+msgstr "Hauteur de l'image de sortie en pixels (si le mode 'Taille de l'image de sortie' est sélectionné)"
+
+msgid "Interpolation method"
+msgstr "Méthode d'interpolation"
+
+msgid "Interpolation method to use: 'nearest', 'linear', 'cubic'"
+msgstr "Méthode d'interpolation à utiliser : 'nearest', 'linear', 'cubic'"
+
+msgid "Fill value"
+msgstr "Valeur de remplissage"
+
+msgid "Value to use for points outside the input image domain (if None, function uses NaN for extrapolation)"
+msgstr "Valeur à utiliser pour les points en dehors du domaine de l'image d'entrée (si None, la fonction utilise NaN pour l'extrapolation)"

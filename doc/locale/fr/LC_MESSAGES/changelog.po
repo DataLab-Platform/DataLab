@@ -347,7 +347,7 @@ msgid "This feature allows to resample 2D images to a new coordinate grid using 
 msgstr "Cette fonctionnalité permet de rééchantillonner des images 2D sur une nouvelle grille de coordonnées en utilisant l'interpolation."
 
 msgid "It supports two resampling modes: pixel size and output shape."
-msgstr "Elle prend en charge deux modes de rééchantillonnage : la taille des pixels et la forme de sortie."
+msgstr "Elle prend en charge deux modes de rééchantillonnage : la taille des pixels et la taille de l'image de sortie."
 
 msgid "Multiple interpolation methods are available: linear, cubic, and nearest neighbor."
 msgstr "Plusieurs méthodes d'interpolation sont disponibles : linéaire, cubique et plus proche voisin."

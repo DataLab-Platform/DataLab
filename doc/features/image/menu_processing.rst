@@ -451,9 +451,10 @@ into single pixels. The result can be the sum, average, median, minimum,
 or maximum value of the cluster.
 
 Resampling
-^^^^^^^^^^^^
-Create a new image which is a resampled version of each selected image.
-You need to specify the following parameters:
+^^^^^^^^^^
+
+Generate new images by resampling each selected image.
+The following parameters are available:
 
 .. list-table::
     :header-rows: 1
@@ -461,27 +462,27 @@ You need to specify the following parameters:
 
     * - Parameter
       - Description
-    * - :math:`x_{min}`
-      - Minimum X value of the new image
+    * - math:`x_{min}`
+      - Minimum x-coordinate of the output image
     * - :math:`x_{max}`
-      - Maximum X value of the new image
+      - Maximum x-coordinate of the output image
     * - :math:`y_{min}`
-      - Minimum Y value of the new image
+      - Minimum y-coordinate of the output image
     * - :math:`y_{max}`
-      - Maximum Y value of the new image
+      - Maximum y-coordinate of the output image
     * - Mode
-      - Image size definition mode: 'pixel size' or 'Output shape'. The 'pixel size' mode
+      - Image size definition mode: 'Pixel size' or 'Output shape'. The 'Pixel size' mode
         allows to define the pixel size of the new image, while the 'Output shape' mode
         allows to define the number of pixels of the new image.
-    * - :math:`\Delta x`
-      - Pixel size in X direction (if 'pixel size' mode is selected)
-    * - :math:`\Delta y`
-      - Pixel size in Y direction (if 'pixel size' mode is selected)
+    * - ΔX
+      - Pixel size in x-direction (if 'Pixel size' mode is selected)
+    * - ΔY
+      - Pixel size in y-direction (if 'Pixel size' mode is selected)
     * - Width
-      - Number of pixels in X direction (if 'Output shape' mode is selected)
+      - Output image width in pixels (if 'Output shape' mode is selected)
     * - Height
-      - Number of pixels in Y direction (if 'Output shape' mode is selected)
+      - Output image height in pixels (if 'Output shape' mode is selected)
     * - Interpolation method
-      - Interpolation method to use: 'nearest', 'linear', 'cubic'.
+      - Interpolation method to use: 'nearest', 'linear', 'cubic'
     * - Fill value
-      - Value to use for points outside the boundaries of the input image.
+      - Value to use for points outside the input image domain (if None, function uses NaN for extrapolation)
