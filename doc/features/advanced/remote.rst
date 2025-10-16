@@ -118,12 +118,11 @@ Example of use:
 
 .. literalinclude:: ../../../datalab/tests/features/control/connect_dialog.py
 
-Public API: remote client
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Public API
+^^^^^^^^^^
 
 .. autoclass:: datalab.control.remote.RemoteClient
     :inherited-members:
-
 
 .. _XML-RPC: https://docs.python.org/3/library/xmlrpc.html
 

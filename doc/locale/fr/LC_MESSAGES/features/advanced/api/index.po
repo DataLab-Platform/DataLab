@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-16 16:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "GUI"
+msgstr "IHM"
+
+msgid "The :mod:`datalab.gui` package contains functionnalities related to the graphical user interface (GUI) of the DataLab project. Those features are mostly specific to DataLab and are not intended to be used independently."
+msgstr "Le package :mod:`datalab.gui` contient des fonctionnalités liées à l'interface graphique (IHM) du projet DataLab. Ces fonctionnalités sont principalement spécifiques à DataLab et ne sont pas destinées à être utilisées de manière indépendante."
+
+msgid "The purpose of this section of the documentation is to provide an overview of the DataLab GUI architecture and to describe the main features of the modules contained in this package. It is not intended to provide a detailed description of the GUI features, but rather to provide a starting point for the reader who wants to understand the DataLab internal architecture."
+msgstr "Le but de cette section de la documentation est de fournir une vue d'ensemble de l'architecture de l'IHM de DataLab et de décrire les principales fonctionnalités des modules contenus dans ce package. Elle n'a pas pour but de fournir une description détaillée des fonctionnalités de l'IHM, mais plutôt de fournir un point de départ pour le lecteur qui souhaite comprendre l'architecture interne de DataLab."
+
+msgid "DataLab's main window is composed of several parts, each of them being handled by a specific module of this package:"
+msgstr "La fenêtre principale de DataLab est composée de plusieurs parties, chacune d'elles étant gérée par un module spécifique de ce package :"
+
+msgid "**Signal and image panels**: those panels are used to display signals and images and to provide a set of tools to manipulate them. Each data panel relies on a set of modules to handle the GUI features (:mod:`datalab.gui.actionhandler` and :mod:`datalab.gui.objectview`), the data model (:mod:`datalab.gui.objectmodel`), the data visualization (:mod:`datalab.gui.plothandler`), and the data processing (:mod:`datalab.gui.processor`)."
+msgstr "Les **panneaux de signaux et d'images** : ces panneaux sont utilisés pour afficher les signaux et les images et pour fournir un ensemble d'outils pour les manipuler. Chaque panneau de données s'appuie sur un ensemble de modules pour gérer les fonctionnalités de l'IHM (:mod:`datalab.gui.actionhandler` et :mod:`datalab.gui.objectview`), le modèle de données (:mod:`datalab.gui.objectmodel`), la visualisation des données (:mod:`datalab.gui.plothandler`) et le traitement des données (:mod:`datalab.gui.processor`)."
+
+msgid "**Macro panel**: this panel is used to display and run macros. It relies on the :mod:`datalab.gui.macroeditor` module to handle the macro edition and execution."
+msgstr "Le **panneau des macros** : ce panneau est utilisé pour afficher et exécuter des macros. Il s'appuie sur le module :mod:`datalab.gui.macroeditor` pour gérer l'édition et l'exécution des macros."
+
+msgid "**Specialized widgets**: those widgets are used to handle specific features such as ROI edition (:mod:`datalab.gui.roieditor`), Intensity profile edition (:mod:`datalab.gui.profiledialog`), etc."
+msgstr "Les **widgets spécialisés** : ces widgets sont utilisés pour gérer des fonctionnalités spécifiques telles que l'édition des ROI (:mod:`datalab.gui.roieditor`), l'édition des profils d'intensité (:mod:`datalab.gui.profiledialog`), etc."
+
+msgid "Submodule"
+msgstr "Sous-module"
+
+msgid "Purpose"
+msgstr "Périmètre"
+
+msgid ":mod:`datalab.gui.main`"
+msgstr ""
+
+msgid "DataLab main window and application"
+msgstr "Fenêtre principale et application DataLab"
+
+msgid ":mod:`datalab.gui.panel`"
+msgstr ""
+
+msgid "Signal, image and macro panels"
+msgstr "Panneaux de signaux, d'images et de macros"
+
+msgid ":mod:`datalab.gui.actionhandler`"
+msgstr ""
+
+msgid "Application actions (menus, toolbars, context menu)"
+msgstr "Actions de l'application (menus, barres d'outils, menu contextuel)"
+
+msgid ":mod:`datalab.gui.objectview`"
+msgstr ""
+
+msgid "Widgets to display object (signal/image) trees"
+msgstr "Widgets pour afficher les arbres d'objets (signal/image)"
+
+msgid ":mod:`datalab.gui.plothandler`"
+msgstr ""
+
+msgid "`PlotPy` plot items for representing signals and images"
+msgstr "Items graphiques `PlotPy` pour représenter les signaux et les images"
+
+msgid ":mod:`datalab.gui.roieditor`"
+msgstr ""
+
+msgid "ROI editor"
+msgstr "Éditeur de ROI"
+
+msgid ":mod:`datalab.gui.processor`"
+msgstr ""
+
+msgid "Processor"
+msgstr "Processeur"
+
+msgid ":mod:`datalab.gui.docks`"
+msgstr ""
+
+msgid "Dock widgets"
+msgstr "Widgets de dock"
+
+msgid ":mod:`datalab.gui.h5io`"
+msgstr ""
+
+msgid "HDF5 input/output"
+msgstr "Entrée/sortie HDF5"

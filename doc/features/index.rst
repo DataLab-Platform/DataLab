@@ -138,3 +138,4 @@ This section describes the advanced features of DataLab.
    advanced/logviewer
    advanced/instviewer
    advanced/command
+   advanced/api

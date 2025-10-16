@@ -1,0 +1,483 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-16 16:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Proxy objects (:mod:`datalab.control.proxy`)"
+msgstr ""
+
+msgid "The :mod:`datalab.control.proxy` module provides a way to access DataLab features from a proxy class."
+msgstr ""
+
+msgid "Remote proxy"
+msgstr ""
+
+msgid "The remote proxy is used when DataLab is started from a different process than the proxy. In this case, the proxy connects to DataLab XML-RPC server."
+msgstr ""
+
+msgid "DataLab remote proxy class."
+msgstr ""
+
+msgid "This class provides access to DataLab features from a proxy class. This is the remote version of proxy, which is used when DataLab is started from a different process than the proxy."
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Automatically connect to DataLab XML-RPC server."
+msgstr ""
+
+msgid "Raises"
+msgstr ""
+
+msgid "Unable to connect to DataLab"
+msgstr ""
+
+msgid "Invalid timeout (must be >= 0.0)"
+msgstr ""
+
+msgid "Invalid number of retries (must be >= 1)"
+msgstr ""
+
+msgid "Examples"
+msgstr ""
+
+msgid "Here is a simple example of how to use RemoteProxy in a Python script or in a Jupyter notebook:"
+msgstr ""
+
+msgid "Add object annotations (annotation plot items)."
+msgstr ""
+
+msgid "annotation plot items"
+msgstr ""
+
+msgid "refresh plot. Defaults to True."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
+msgstr ""
+
+msgid "Add group to DataLab."
+msgstr ""
+
+msgid "Group title"
+msgstr ""
+
+msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
+msgstr ""
+
+msgid "Select the group after creation. Defaults to False."
+msgstr ""
+
+msgid "Add image data to DataLab."
+msgstr ""
+
+msgid "Image title"
+msgstr ""
+
+msgid "Image data"
+msgstr ""
+
+msgid "X unit. Defaults to \"\""
+msgstr ""
+
+msgid "Y unit. Defaults to \"\""
+msgstr ""
+
+msgid "Z unit. Defaults to \"\""
+msgstr ""
+
+msgid "X label. Defaults to \"\""
+msgstr ""
+
+msgid "Y label. Defaults to \"\""
+msgstr ""
+
+msgid "Z label. Defaults to \"\""
+msgstr ""
+
+msgid "group id in which to add the image. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added image as current"
+msgstr ""
+
+msgid "Returns"
+msgstr ""
+
+msgid "True if image was added successfully, False otherwise"
+msgstr ""
+
+msgid "Invalid data dtype"
+msgstr ""
+
+msgid "Add a label with object title on the associated plot"
+msgstr ""
+
+msgid "Label title. Defaults to None. If None, the title is the object title."
+msgstr ""
+
+msgid "Add object to DataLab."
+msgstr ""
+
+msgid "Signal or image object"
+msgstr ""
+
+msgid "group id in which to add the object. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added object as current"
+msgstr ""
+
+msgid "Add signal data to DataLab."
+msgstr ""
+
+msgid "Signal title"
+msgstr ""
+
+msgid "X data"
+msgstr ""
+
+msgid "Y data"
+msgstr ""
+
+msgid "group id in which to add the signal. Defaults to \"\""
+msgstr ""
+
+msgid "if True, set the added signal as current"
+msgstr ""
+
+msgid "True if signal was added successfully, False otherwise"
+msgstr ""
+
+msgid "Invalid xdata dtype"
+msgstr ""
+
+msgid "Invalid ydata dtype"
+msgstr ""
+
+msgid "Call computation feature ``name``"
+msgstr ""
+
+msgid "This calls either the processor's ``compute_<name>`` method (if it exists), or the processor's ``<name>`` computation feature (if it is registered, using the ``run_feature`` method). It looks for the function in all panels, starting with the current one."
+msgstr ""
+
+msgid "Compute function name"
+msgstr ""
+
+msgid "Compute function parameter. Defaults to None."
+msgstr ""
+
+msgid "unknown function"
+msgstr ""
+
+msgid "Close DataLab application"
+msgstr ""
+
+msgid "Try to connect to DataLab XML-RPC server."
+msgstr ""
+
+msgid "XML-RPC port to connect to. If not specified, the port is automatically retrieved from DataLab configuration."
+msgstr ""
+
+msgid "Maximum time to wait for connection in seconds. Defaults to 5.0. This is the total maximum wait time, not per retry."
+msgstr ""
+
+msgid "Number of retries. Defaults to 10. This parameter is deprecated and will be removed in a future version (kept for backward compatibility)."
+msgstr ""
+
+msgid "Return a context manager to temporarily disable auto refresh."
+msgstr ""
+
+msgid "Context manager"
+msgstr ""
+
+msgid "Example"
+msgstr ""
+
+msgid "Delete metadata of selected objects"
+msgstr ""
+
+msgid "Refresh plot. Defaults to True."
+msgstr ""
+
+msgid "Keep ROI. Defaults to False."
+msgstr ""
+
+msgid "Disconnect from DataLab XML-RPC server."
+msgstr ""
+
+msgid "Return current panel name."
+msgstr ""
+
+msgid "\"signal\", \"image\", \"macro\"))"
+msgstr ""
+
+msgid "Return type"
+msgstr ""
+
+msgid "Return groups titles and lists of inner objects uuids and titles."
+msgstr ""
+
+msgid "groups titles, lists of inner objects uuids and titles"
+msgstr ""
+
+msgid "Return list of available methods."
+msgstr ""
+
+msgid "Get object (signal/image) from index."
+msgstr ""
+
+msgid "Object number, or object id, or object title. Defaults to None (current object)."
+msgstr ""
+
+msgid "Panel name. Defaults to None (current panel)."
+msgstr ""
+
+msgid "Object"
+msgstr ""
+
+msgid "if object not found"
+msgstr ""
+
+msgid "Get plot item shapes associated to object (signal/image)."
+msgstr ""
+
+msgid "List of plot item shapes"
+msgstr ""
+
+msgid "Get object (signal/image) list for current panel. Objects are sorted by group number and object index in group."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\", \"macro\"). If None, current data panel is used (i.e. signal or image panel)."
+msgstr ""
+
+msgid "List of object titles"
+msgstr ""
+
+msgid "if panel not found"
+msgstr ""
+
+msgid "Get object (signal/image) uuid list for current panel. Objects are sorted by group number and object index in group."
+msgstr ""
+
+msgid "Group number, or group id, or group title. Defaults to None (all groups)."
+msgstr ""
+
+msgid "List of object uuids"
+msgstr ""
+
+msgid "Return all public methods of the class, except itself."
+msgstr ""
+
+msgid "List of public methods"
+msgstr ""
+
+msgid "Return selected objects uuids."
+msgstr ""
+
+msgid "If True, also return objects from selected groups."
+msgstr ""
+
+msgid "List of selected objects uuids."
+msgstr ""
+
+msgid "Return DataLab public version."
+msgstr ""
+
+msgid "DataLab version"
+msgstr ""
+
+msgid "Open DataLab HDF5 browser to Import HDF5 file."
+msgstr ""
+
+msgid "HDF5 file name"
+msgstr ""
+
+msgid "Reset all application data. Defaults to None."
+msgstr ""
+
+msgid "Import macro from file"
+msgstr ""
+
+msgid "Filename."
+msgstr ""
+
+msgid "Return True if connected to DataLab XML-RPC server."
+msgstr ""
+
+msgid "Open objects from directory in current panel (signals/images)."
+msgstr ""
+
+msgid "directory path"
+msgstr ""
+
+msgid "Open objects from files in current panel (signals/images)."
+msgstr ""
+
+msgid "list of file names"
+msgstr ""
+
+msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
+msgstr ""
+
+msgid "List of HDF5 files to open. Defaults to None."
+msgstr ""
+
+msgid "Import all objects from HDF5 files. Defaults to None."
+msgstr ""
+
+msgid "Raise DataLab window"
+msgstr ""
+
+msgid "Reset all application data"
+msgstr ""
+
+msgid "Run macro."
+msgstr ""
+
+msgid "Macro number, or macro title. Defaults to None (current macro)."
+msgstr ""
+
+msgid "if macro not found"
+msgstr ""
+
+msgid "Save to a DataLab HDF5 file."
+msgstr ""
+
+msgid "Select groups in current panel."
+msgstr ""
+
+msgid "List of group numbers (1 to N), or list of group uuids, or None to select all groups. Defaults to None."
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used. Defaults to None."
+msgstr ""
+
+msgid "Select objects in current panel."
+msgstr ""
+
+msgid "List of object numbers (1 to N) or uuids to select"
+msgstr ""
+
+msgid "Switch to panel."
+msgstr ""
+
+msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
+msgstr ""
+
+msgid "Set XML-RPC port to connect to."
+msgstr ""
+
+msgid "XML-RPC port to connect to. If None, the port is automatically retrieved from DataLab configuration."
+msgstr ""
+
+msgid "Stop macro."
+msgstr ""
+
+msgid "Toggle auto refresh state."
+msgstr ""
+
+msgid "Auto refresh state"
+msgstr ""
+
+msgid "Toggle show titles state."
+msgstr ""
+
+msgid "Show titles state"
+msgstr ""
+
+msgid "Local proxy"
+msgstr ""
+
+msgid "The local proxy is used when DataLab is started from the same process as the proxy. In this case, the proxy is directly connected to DataLab main window instance. The typical use case is high-level scripting."
+msgstr ""
+
+msgid "DataLab local proxy class."
+msgstr ""
+
+msgid "This class provides access to DataLab features from a proxy class. This is the local version of proxy, which is used when DataLab is started from the same process as the proxy."
+msgstr ""
+
+msgid "DLMainWindow instance."
+msgstr ""
+
+msgid "Compute function parameter. Defaults to None"
+msgstr ""
+
+msgid "Object number, or object id, or object title. Defaults to None (current object)"
+msgstr ""
+
+msgid "Panel name. Defaults to None (current panel)"
+msgstr ""
+
+msgid "refresh plot. Defaults to True"
+msgstr ""
+
+msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used"
+msgstr ""
+
+msgid "Proxy context manager"
+msgstr ""
+
+msgid "The proxy context manager is a convenient way to handle proxy creation and destruction. It is used as follows:"
+msgstr ""
+
+msgid "The proxy type can be \"local\" or \"remote\". For remote proxy, the port can be specified as \"remote:port\"."
+msgstr ""
+
+msgid "The proxy context manager allows to use the proxy in various contexts (Python script, Jupyter notebook, etc.). It also allows to switch seamlessly between local and remote proxy, keeping the same code inside the context."
+msgstr ""
+
+msgid "Context manager handling DL proxy creation and destruction."
+msgstr ""
+
+msgid "proxy type (\"local\" or \"remote\") For remote proxy, the port can be specified as \"remote:port\""
+msgstr ""
+
+msgid "Yields"
+msgstr ""
+
+msgid "proxy"
+msgstr ""
+
+msgid "LocalProxy if what == \"local\" RemoteProxy if what == \"remote\" or \"remote:port\""
+msgstr ""
+
+msgid "with proxy_context(\"local\") as proxy:"
+msgstr ""
+
+msgid "proxy.add_signal(...)"
+msgstr ""
+
+msgid "Calling processor methods using proxy objects"
+msgstr ""
+
+msgid "All the proxy objects provide access to the DataLab computing methods exposed by the processor classes:"
+msgstr ""
+
+msgid ":class:`datalab.gui.processor.signal.SignalProcessor`"
+msgstr ""
+
+msgid ":class:`datalab.gui.processor.image.ImageProcessor`"
+msgstr ""
+
+msgid "To run a computation feature associated to a processor, you can use the :meth:`calc` method of the proxy object:"
+msgstr ""
+

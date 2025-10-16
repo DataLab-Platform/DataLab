@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 18:17+0200\n"
+"POT-Creation-Date: 2025-10-16 16:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -134,8 +134,8 @@ msgstr "Capture d'écran de la boîte de dialogue de connexion (``datalab.widget
 msgid "Example of use:"
 msgstr "Exemple d'utilisation :"
 
-msgid "Public API: remote client"
-msgstr "API publique : client distant"
+msgid "Public API"
+msgstr "API publique"
 
 msgid "Object representing a proxy/client to DataLab XML-RPC server. This object is used to call DataLab functions from a Python script."
 msgstr "Objet représentant un proxy/client vers le serveur XML-RPC de DataLab. Cet objet est utilisé pour appeler les fonctions de DataLab à partir d'un script Python."
@@ -508,4 +508,3 @@ msgstr ""
 
 msgid "Show titles state"
 msgstr ""
-

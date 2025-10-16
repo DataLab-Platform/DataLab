@@ -67,12 +67,13 @@ def setup(app):
     def exclude_api_from_gettext(app):
         if app.builder.name == "gettext":
             # Get all RST files in the api directory
-            api_dir = osp.join(app.srcdir, "api")
+            api_rel_dir = "features/advanced/api"
+            api_dir = osp.join(app.srcdir, *api_rel_dir.split("/"))
             if osp.exists(api_dir):
                 for filename in os.listdir(api_dir):
                     if filename.endswith(".rst") and filename != "index.rst":
                         # Remove .rst extension and add wildcard
-                        pattern = f"api/{filename[:-4]}*"
+                        pattern = f"{api_rel_dir}/{filename[:-4]}*"
                         if pattern not in app.config.exclude_patterns:
                             app.config.exclude_patterns.append(pattern)
 
@@ -81,7 +82,7 @@ def setup(app):
                     subdir_path = osp.join(api_dir, dirname)
                     if osp.isdir(subdir_path):
                         # Exclude entire subdirectories except their index files
-                        pattern = f"api/{dirname}/*"
+                        pattern = f"{api_rel_dir}/{dirname}/*"
                         if pattern not in app.config.exclude_patterns:
                             app.config.exclude_patterns.append(pattern)
 

@@ -104,7 +104,6 @@ DataLab has been funded, chronologically, by the following stakeholders:
 
         intro/index
         features/index
-        api/index
         outreach/index
         contributing/index
         changelog
@@ -125,7 +124,6 @@ DataLab has been funded, chronologically, by the following stakeholders:
 
         intro/index
         features/index
-        api/index
         contributing/index
         changelog
 

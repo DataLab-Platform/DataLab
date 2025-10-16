@@ -1,0 +1,35 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-16 16:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Public features:"
+msgstr "Fonctionnalités publiques :"
+
+msgid "Internal features:"
+msgstr "Fonctionnalités internes :"
+
+msgid "API"
+msgstr "API"
+
+msgid "The public Application Programming Interface (API) of DataLab offers a set of functions to access the DataLab features."
+msgstr "L'interface de programmation d'application (API) publique de DataLab offre un ensemble de fonctions pour accéder aux fonctionnalités de DataLab."
+
+msgid "For more details about the `sigima` package, please refer to the `Sigima documentation <https://sigima.readthedocs.io/en/latest/>`_. The Sigima API is especially useful to write scripts that can be run in DataLab (see :ref:`about_macros`) or to develop plugins (see :ref:`about_plugins`)."
+msgstr "Pour plus de détails sur le package `sigima`, veuillez vous référer à la `documentation de Sigima <https://sigima.readthedocs.io/en/latest/>`_. L'API de Sigima est particulièrement utile pour écrire des scripts pouvant être exécutés dans DataLab (voir :ref:`about_macros`) ou pour développer des plugins (voir :ref:`about_plugins`)."
