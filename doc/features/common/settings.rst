@@ -16,7 +16,7 @@ General
 
 The General settings tab contains main window and general feature settings:
 
-.. figure:: /images/shots/settings_general.png
+.. figure:: /images/shots/settings_main.png
 
     General settings tab
 
@@ -50,7 +50,7 @@ Processing
 
 The Processing settings tab controls computation behavior and default parameters:
 
-.. figure:: /images/shots/settings_processing.png
+.. figure:: /images/shots/settings_proc.png
 
     Processing settings tab
 
@@ -133,7 +133,7 @@ Visualization
 
 The Visualization settings tab controls how data is displayed:
 
-.. figure:: /images/shots/settings_visualization.png
+.. figure:: /images/shots/settings_view.png
 
     Visualization settings tab
 

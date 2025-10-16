@@ -29,6 +29,7 @@ def capture_settings_screenshots():
     with qt_app_context(exec_loop=False):
         paramdict = create_dataset_dict()
         params = gds.DataSetGroup(paramdict.values(), title=_("Settings"))
+        names = list(paramdict.keys())
 
         # Create the dialog manually so we can access the tab widget
         dialog = DataSetGroupEditDialog(
@@ -42,11 +43,9 @@ def capture_settings_screenshots():
             # Take a screenshot of each tab
             for i in range(tab_widget.count()):
                 tab_widget.setCurrentIndex(i)
-                tab_text = tab_widget.tabText(i)
-                tab_name = tab_text.lower().replace(" ", "_").replace("/", "")
                 dialog.show()
                 qth.grab_save_window(
-                    dialog, f"settings_{tab_name}", add_timestamp=False
+                    dialog, f"settings_{names[i]}", add_timestamp=False
                 )
 
         # Don't execute the dialog, just close it
