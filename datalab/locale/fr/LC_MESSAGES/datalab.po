@@ -278,10 +278,10 @@ msgstr "Voigt"
 msgid "Blackbody (Planck's law)"
 msgstr "Corps noir (loi de Planck)"
 
-msgid "Sinus"
+msgid "Sine"
 msgstr "Sinus"
 
-msgid "Cosinus"
+msgid "Cosine"
 msgstr "Cosinus"
 
 msgid "Sawtooth"
