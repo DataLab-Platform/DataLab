@@ -1498,7 +1498,7 @@ msgstr ""
 msgid "`test_image_log10 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L471>`_"
 msgstr ""
 
-msgid ":py:func:`logp1 <sigima.proc.image.logp1>`"
+msgid ":py:func:`log10_z_plus_n <sigima.proc.image.log10_z_plus_n>`"
 msgstr ""
 
 msgid "Compute log10(z+n) with :py:data:`numpy.log10`"

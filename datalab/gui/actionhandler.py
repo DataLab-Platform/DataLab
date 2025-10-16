@@ -1219,7 +1219,7 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: OPERATION
         with self.new_category(ActionCategory.OPERATION):
-            self.action_for("logp1")
+            self.action_for("log10_z_plus_n")
             self.action_for("flatfield", separator=True)
 
             with self.new_menu(_("Flip or rotation"), icon_name="rotate_right.svg"):
