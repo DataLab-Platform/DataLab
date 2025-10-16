@@ -212,11 +212,11 @@ Basic mathematical functions
     * - Function
       - Description
     * - |exp| Exponential
-      - :math:`z_{k} = \exp(z_{k-1})`
+      - :math:`z_{k} = \exp(z_{k})`
     * - |log10| Logarithm (base 10)
-      - :math:`z_{k} = \log_{10}(z_{k-1})`
-    * - Log10(z+n)
-      - :math:`z_{k} = \log_{10}(z_{k-1}+n)` (avoid Log10(0) on image background)
+      - :math:`z_{k} = \log_{10}(z_{k})`
+    * - Logarithmic transformation
+      - :math:`z_{k} = \log_{10}(z_{k}+n)` (useful if image background is zero)
 
 .. |exp| image:: ../../../datalab/data/icons/operations/exp.svg
     :width: 24px

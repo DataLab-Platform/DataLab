@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-10 10:01+0200\n"
+"POT-Creation-Date: 2025-10-13 12:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -240,7 +240,7 @@ msgid "exp"
 msgstr ""
 
 #, python-brace-format
-msgid ":math:`y_{k} = \\exp(y_{k-1})`"
+msgid ":math:`y_{k} = \\exp(y_{k})`"
 msgstr ""
 
 msgid "|log10| Logarithm (base 10)"
@@ -250,7 +250,7 @@ msgid "log10"
 msgstr ""
 
 #, python-brace-format
-msgid ":math:`y_{k} = \\log_{10}(y_{k-1})`"
+msgid ":math:`y_{k} = \\log_{10}(y_{k})`"
 msgstr ""
 
 msgid "|power| Power"
@@ -260,7 +260,7 @@ msgid "power"
 msgstr ""
 
 #, python-brace-format
-msgid ":math:`y_{k} = y_{k-1}^{n}`"
+msgid ":math:`y_{k} = y_{k}^{n}`"
 msgstr ""
 
 msgid "|sqrt| Square root"
@@ -269,7 +269,8 @@ msgstr "|sqrt| Racine carrée"
 msgid "sqrt"
 msgstr ""
 
-msgid ":math:`y_{k} = \\sqrt{y_{k-1}}`"
+#, python-brace-format
+msgid ":math:`y_{k} = \\sqrt{y_{k}}`"
 msgstr ""
 
 msgid "Other mathematical operations"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-31 16:19+0200\n"
+"POT-Creation-Date: 2025-10-16 09:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -147,6 +147,36 @@ msgstr "Soustraction d'offset"
 msgid "Create a new signal which is the result of offset correction of each selected signal. This operation is performed by subtracting the signal baseline which is estimated by the mean value of a user-defined range."
 msgstr "Crée un signal à partir de la soustraction d'offset de chaque signal sélectionné. Cette opération est réalisée en soustrayant la valeur moyenne d'une plage définie par l'utilisateur."
 
+msgid "Noise addition"
+msgstr "Ajout de bruit"
+
+msgid "Generate new signals by adding the same noise to each selected signal. The available noise types are:"
+msgstr "Génère de nouveaux signaux en ajoutant le même bruit à chaque signal sélectionné. Les types de bruit disponibles sont :"
+
+msgid "Noise"
+msgstr "Bruit"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Gaussian"
+msgstr "Gaussien"
+
+msgid "Normal distribution"
+msgstr "Distribution normale"
+
+msgid "Uniform"
+msgstr "Uniforme"
+
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
+
+msgid "Poisson"
+msgstr "Poisson"
+
+msgid "Poisson distribution"
+msgstr "Distribution de Poisson"
+
 msgid "Noise reduction"
 msgstr "Réduction de bruit"
 
@@ -197,9 +227,6 @@ msgstr "Crée un signal à partir du complément de zéro de chaque signal séle
 
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "Strategy"
 msgstr "Stratégie"
@@ -390,8 +417,8 @@ msgstr "Filtre elliptique, utilisant la fonction `scipy.signal.ellip <https://do
 msgid "Fitting"
 msgstr "Ajustement"
 
-msgid "Open an interactive curve fitting tool in a modal dialog box."
-msgstr "Ouvre une boîte de dialogue permettant de réaliser des ajustements de courbe de manière interactive."
+msgid "Fit a model to each selected signal. This can be done automatically or through an interactive curve fitting dialog."
+msgstr "Ajuste un modèle à chaque signal sélectionné. Cela peut être fait automatiquement ou via une boîte de dialogue d'ajustement de courbe interactive."
 
 msgid "Model"
 msgstr "Modèle"
@@ -403,58 +430,88 @@ msgid "Linear"
 msgstr "Linéaire"
 
 #, python-brace-format
-msgid ":math:`y = c_{0}+c_{1}.x`"
+msgid ":math:`y = c_{0} + c_{1} \\cdot x`"
 msgstr ""
 
 msgid "Polynomial"
 msgstr "Polynomial"
 
 #, python-brace-format
-msgid ":math:`y = c_{0}+c_{1}.x+c_{2}.x^2+...+c_{n}.x^n`"
+msgid ":math:`y = c_{0} + c_{1} \\cdot x + c_{2} \\cdot x^2 + ... + c_{n} \\cdot x^n`"
 msgstr ""
 
-msgid "Gaussian"
-msgstr "Gaussienne"
-
-msgid ":math:`y = y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
+msgid ":math:`y = y_{0} + \\dfrac{A}{\\sqrt{2 \\pi} \\sigma} \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0}}{\\sigma}\\right)^2\\right)`"
 msgstr ""
 
 msgid "Lorentzian"
-msgstr "Lorentzienne"
+msgstr "Lorentzien"
 
-msgid ":math:`y = y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
+msgid ":math:`y = y_{0} + \\dfrac{A}{\\pi \\sigma} \\cdot \\dfrac{1}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
 msgstr ""
 
 msgid "Voigt"
 msgstr "Voigt"
 
-msgid ":math:`y = y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with :math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
-msgstr ":math:`y = y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec :math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+msgid ":math:`y = y_{0} + A \\cdot \\dfrac{\\Re\\left(\\exp(-z^2) \\cdot \\operatorname{erfc}(-j \\cdot z)\\right)}{\\sqrt{2 \\pi} \\sigma}` with :math:`z = \\dfrac{x - x_{0} - j \\cdot \\sigma}{\\sqrt{2} \\sigma}`"
+msgstr ":math:`y = y_{0} + A \\cdot \\dfrac{\\Re\\left(\\exp(-z^2) \\cdot \\operatorname{erfc}(-j \\cdot z)\\right)}{\\sqrt{2 \\pi} \\sigma}` avec :math:`z = \\dfrac{x - x_{0} - j \\cdot \\sigma}{\\sqrt{2} \\sigma}`"
 
 msgid "Multi-Gaussian"
 msgstr "Multi-gaussien"
 
-msgid ":math:`y = y_{0}+\\sum_{i=0}^{K}\\dfrac{A_{i}}{\\sqrt{2\\pi}.\\sigma_{i}}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0,i}}{\\sigma_{i}})^2)`"
+msgid ":math:`y = y_{0} + \\sum_{i=0}^{N}\\dfrac{A_{i}}{\\sqrt{2 \\pi} \\sigma_{i}} \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0,i}}{\\sigma_{i}}\\right)^2\\right)`"
 msgstr ""
+
+msgid "Multi-Lorentzian"
+msgstr "Multi-lorentzien"
+
+msgid ":math:`y = y_{0} + \\sum_{i=0}^{N}\\dfrac{A_{i}}{\\pi \\sigma_{i}} \\cdot \\dfrac{1}{1 + \\left(\\dfrac{x - x_{0,i}}{\\sigma_{i}}\\right)^2}`"
+msgstr ""
+
+msgid "Planck"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y = y_{0} + A\\cdot \\dfrac{2h \\cdot c^2}{\\lambda^5} \\cdot \\left(\\exp\\left(\\dfrac{h \\cdot c}{\\lambda \\cdot k \\cdot T}\\right)-1\\right)^{-1}`"
+msgstr ""
+
+msgid "Two half Gaussians"
+msgstr "Deux demi-gaussiennes"
+
+msgid ":math:`y = y_{0} + A \\cdot \\dfrac{1}{\\sqrt{2 \\pi} \\sigma_{0}} \\cdot \\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{x - x_{0}}{\\sigma_{0}}\\right)^2\\right)` if :math:`x < x_{0}`"
+msgstr ":math:`y = y_{0} + A \\cdot \\dfrac{1}{\\sqrt{2 \\pi} \\sigma_{0}} \\cdot \\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{x - x_{0}}{\\sigma_{0}}\\right)^2\\right)` si :math:`x < x_{0}`"
+
+msgid ":math:`y = y_{0} + A \\cdot \\dfrac{1}{\\sqrt{2 \\pi} \\sigma_{1}} \\cdot \\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{x - x_{1}}{\\sigma_{1}}\\right)^2\\right)` otherwise"
+msgstr ":math:`y = y_{0} + A \\cdot \\dfrac{1}{\\sqrt{2 \\pi} \\sigma_{1}} \\cdot \\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{x - x_{1}}{\\sigma_{1}}\\right)^2\\right)` sinon"
+
+msgid "Two back-to-back exponentials"
+msgstr "Deux exponentielles dos à dos"
+
+#, python-brace-format
+msgid ":math:`y = y_{0} + A_{1} \\cdot \\exp\\left(-x/\\tau_{1}\\right)` if :math:`x < 0`"
+msgstr ":math:`y = y_{0} + A_{1} \\cdot \\exp\\left(-x/\\tau_{1}\\right)` si :math:`x < 0`"
+
+#, python-brace-format
+msgid ":math:`y = y_{0} + A_{2} \\cdot \\exp(-x/\\tau_{2})` otherwise"
+msgstr ":math:`y = y_{0} + A_{2} \\cdot \\exp(-x/\\tau_{2})` sinon"
 
 msgid "Exponential"
 msgstr "Exponentielle"
 
 #, python-brace-format
-msgid ":math:`y = y_{0}+A.exp(B.x)`"
+msgid ":math:`y = y_{0} + A \\cdot \\exp\\left(B \\cdot x\\right)`"
 msgstr ""
 
 msgid "Sinusoidal"
 msgstr "Sinusoïdal"
 
 #, python-brace-format
-msgid ":math:`y = y_{0}+A.sin(2\\pi.f.x+\\phi)`"
+msgid ":math:`y = y_{0} + A \\cdot \\sin\\left(2 \\pi f \\cdot x + \\phi\\right)`"
 msgstr ""
 
 msgid "Cumulative Distribution Function (CDF)"
 msgstr "Fonction de distribution cumulative (CDF)"
 
-msgid ":math:`y = y_{0}+A.erf(\\dfrac{x-x_{0}}{\\sigma.\\sqrt{2}})`"
+msgid ":math:`y = y_{0} + A \\cdot \\operatorname{erf}\\left(\\dfrac{x - x_{0}}{\\sqrt{2} \\sigma}\\right)`"
 msgstr ""
 
 msgid "Windowing"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-10 10:01+0200\n"
+"POT-Creation-Date: 2025-10-13 14:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -255,7 +255,7 @@ msgid "exp"
 msgstr ""
 
 #, python-brace-format
-msgid ":math:`z_{k} = \\exp(z_{k-1})`"
+msgid ":math:`z_{k} = \\exp(z_{k})`"
 msgstr ""
 
 msgid "|log10| Logarithm (base 10)"
@@ -265,15 +265,15 @@ msgid "log10"
 msgstr ""
 
 #, python-brace-format
-msgid ":math:`z_{k} = \\log_{10}(z_{k-1})`"
+msgid ":math:`z_{k} = \\log_{10}(z_{k})`"
 msgstr ""
 
-msgid "Log10(z+n)"
-msgstr ""
+msgid "Logarithmic transformation"
+msgstr "Transformation logarithmique"
 
 #, python-brace-format
-msgid ":math:`z_{k} = \\log_{10}(z_{k-1}+n)` (avoid Log10(0) on image background)"
-msgstr ""
+msgid ":math:`z_{k} = \\log_{10}(z_{k}+n)` (useful if image background is zero)"
+msgstr ":math:`z_{k} = \\log_{10}(z_{k}+n)` (utile si le fond de l'image est nul)"
 
 msgid "Other operations"
 msgstr "Autres opérations"

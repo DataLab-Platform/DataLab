@@ -83,6 +83,25 @@ Create a new image which is the result of offset correction on each selected ima
 This operation is performed by subtracting the image background value which is estimated
 by the mean value of a user-defined rectangular area.
 
+Noise addition
+^^^^^^^^^^^^^^
+
+Generate new images by adding the same noise to each selected image.
+The available noise types are:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Noise
+      - Description
+    * - Gaussian
+      - Normal distribution
+    * - Uniform
+      - Uniform distribution
+    * - Poisson
+      - Poisson distribution
+
 Noise reduction
 ^^^^^^^^^^^^^^^
 
@@ -193,8 +212,8 @@ The following frequency-domain filters are available:
       - Description
     * - Butterworth
       - Butterworth filter, based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_
-    * - Gaussian filter in the frequency domain
-      - Gaussian filter applied in the frequency domain
+    * - Gaussian filter
+      - Gaussian filter
 
 Thresholding
 ^^^^^^^^^^^^
