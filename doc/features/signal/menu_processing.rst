@@ -125,7 +125,6 @@ The available noise types are:
     * - Poisson
       - Poisson distribution
 
-
 Noise reduction
 ^^^^^^^^^^^^^^^
 
