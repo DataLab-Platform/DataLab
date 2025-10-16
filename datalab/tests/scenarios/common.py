@@ -415,7 +415,7 @@ def run_image_computations(
     ):
         panel.processor.run_feature(func_name)
 
-    param = sigima.params.LogP1Param.create(n=1)
+    param = sigima.params.Log10ZPlusNParam.create(n=1)
     panel.processor.run_feature("log10_z_plus_n", param)
 
     panel.processor.run_feature("rotate90")
