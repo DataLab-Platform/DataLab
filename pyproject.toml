@@ -64,7 +64,7 @@ datalab-tests = "datalab.tests:run"
 
 [project.optional-dependencies]
 qt = ["PyQt5 >= 5.15.6"]
-opencv = ["opencv-python-headless >= 4.5.4.60"]
+opencv = ["opencv-python-headless >= 4.8.1.78"]
 dev = [
     "build",
     "babel",

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 18:05+0200\n"
+"POT-Creation-Date: 2025-10-16 09:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -832,10 +832,29 @@ msgstr "Correction de [Issue #246](https://github.com/DataLab-Platform/DataLab/i
 msgid "Fixed [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Incorrect unpacking of image shape in get_newparam_from_current"
 msgstr "Correction de [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Déballage incorrect des dimensions de l'image dans get_newparam_from_current"
 
+msgid "🔒 Security fixes:"
+msgstr "🔒 Corrections de sécurité :"
+
+msgid "**Dependency vulnerability fix**: Fixed CVE-2023-4863 vulnerability in opencv-python-headless"
+msgstr "**Correction de vulnérabilité de dépendance** : Correction de la vulnérabilité CVE-2023-4863 dans opencv-python-headless"
+
+msgid "Updated minimum requirement from 4.5.4.60 to 4.8.1.78"
+msgstr "Mise à jour de l'exigence minimale de 4.5.4.60 à 4.8.1.78"
+
+msgid "Addresses libwebp binaries vulnerability in bundled OpenCV wheels"
+msgstr "Correction de la vulnérabilité des binaires libwebp dans les paquets Wheel OpenCV"
+
+msgid "See [DataLab security advisory](https://github.com/DataLab-Platform/DataLab/security/dependabot/1) for details"
+msgstr "Voir l'[avis de sécurité DataLab](https://github.com/DataLab-Platform/DataLab/security/dependabot/1) pour plus de détails."
+
 msgid "ℹ️ Other changes:"
 msgstr "ℹ️ Autres changements :"
 
-msgid "Updated `guidata` dependency to V3.10.0"
+msgid "Bumped minimum `plotpy` requirement to V2.8"
+msgstr ""
+
+#, fuzzy
+msgid "Bumped minimum `guidata` requirement to V3.13"
 msgstr "Dépendance `guidata` mise à jour vers V3.10.0"
 
 msgid "Using new `guidata` translation utility based on `babel`"

@@ -292,9 +292,17 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Incorrect shape unpacking in edit_new_image_parameters
 * Fixed [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Incorrect unpacking of image shape in get_newparam_from_current
 
+🔒 Security fixes:
+
+* **Dependency vulnerability fix**: Fixed CVE-2023-4863 vulnerability in opencv-python-headless
+  * Updated minimum requirement from 4.5.4.60 to 4.8.1.78
+  * Addresses libwebp binaries vulnerability in bundled OpenCV wheels
+  * See [DataLab security advisory](https://github.com/DataLab-Platform/DataLab/security/dependabot/1) for details
+
 ℹ️ Other changes:
 
-* Updated `guidata` dependency to V3.10.0
+* Bumped minimum `plotpy` requirement to V2.8
+* Bumped minimum `guidata` requirement to V3.13
 * Using new `guidata` translation utility based on `babel`
 
 ## DataLab Version 0.20.0 ##
