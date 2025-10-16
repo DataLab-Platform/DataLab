@@ -40,9 +40,8 @@ msgstr "Présentation de DataLab"
 msgid "**Talk Title:** *DataLab: Bridging Scientific and Industrial Worlds for Advanced Signal and Image Processing*"
 msgstr "**Titre de la présentation :** *DataLab : Unir les mondes scientifique et industriel pour un traitement avancé des signaux et des images*"
 
-#, fuzzy
 msgid "**Presenter:** Pierre Raybaut (Executive VP, Engineering, CODRA)"
-msgstr "**Orateur :** Pierre Raybaut (CODRA/Plateforme DataLab)"
+msgstr "**Orateur :** Pierre Raybaut (Directeur Général Ingénierie, CODRA)"
 
 msgid "This presentation offered a comprehensive look at DataLab's capabilities through practical demonstrations and use cases relevant to both scientific research and industrial applications."
 msgstr "Cette présentation a offert un aperçu complet des capacités de DataLab à travers des démonstrations pratiques et des cas d'utilisation pertinents tant pour la recherche scientifique que pour les applications industrielles."
@@ -204,4 +203,3 @@ msgstr "Accent accru sur le positionnement en tant qu'outil compagnon"
 
 msgid "Debugged issues with Conda package installation"
 msgstr "Résolution des problèmes d'installation des packages Conda"
-

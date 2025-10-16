@@ -63,6 +63,21 @@ def setup(app):
     app.connect("builder-inited", copy_changelog)
     app.connect("build-finished", cleanup_changelog)
 
+    # Exclude outreach directory from LaTeX/PDF builds
+    def exclude_outreach_from_latex(app):
+        """Exclude outreach directory from LaTeX builds to keep it HTML-only."""
+        if app.builder.format == "latex":
+            # Exclude the entire outreach directory for PDF builds
+            patterns_to_exclude = ["outreach/*"]
+            for pattern in patterns_to_exclude:
+                if pattern not in app.config.exclude_patterns:
+                    app.config.exclude_patterns.append(pattern)
+            # Suppress warnings about excluded outreach documents during latex builds
+            warnings_to_suppress = ["toc.excluded", "ref.doc"]
+            for warning_type in warnings_to_suppress:
+                if warning_type not in app.config.suppress_warnings:
+                    app.config.suppress_warnings.append(warning_type)
+
     # Exclude detailed API documentation from gettext extraction, but keep api/index.rst
     def exclude_api_from_gettext(app):
         if app.builder.name == "gettext":
@@ -89,6 +104,7 @@ def setup(app):
             # Suppress warnings about excluded API documents during gettext builds
             app.config.suppress_warnings.extend(["toc.excluded", "ref.doc"])
 
+    app.connect("builder-inited", exclude_outreach_from_latex)
     app.connect("builder-inited", exclude_api_from_gettext)
 
 

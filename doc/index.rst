@@ -96,18 +96,6 @@ DataLab has been funded, chronologically, by the following stakeholders:
     :target: https://nlnet.nl
     :class: dark-light no-scaled-link
 
-.. only:: html and not latex
-
-    .. toctree::
-        :maxdepth: 2
-        :hidden:
-
-        intro/index
-        features/index
-        outreach/index
-        contributing/index
-        changelog
-
 .. figure:: _static/plotpy-stack-powered.png
     :align: center
     :width: 300 px
@@ -116,16 +104,23 @@ DataLab has been funded, chronologically, by the following stakeholders:
     DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_,
     the scientific Python-Qt visualization and graphical user interface stack.
 
-.. only:: latex and not html
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+
+    intro/index
+    features/index
+    contributing/index
+    changelog
+
+.. only:: html and not latex
 
     .. toctree::
-        :maxdepth: 2
-        :caption: Contents
+        :hidden:
 
-        intro/index
-        features/index
-        contributing/index
-        changelog
+        outreach/index
+
+.. only:: latex and not html
 
     .. note:: DataLab was created by `CODRA`_/`Pierre Raybaut`_ in 2023. It is
             developed and maintained by DataLab Platform Developers.
