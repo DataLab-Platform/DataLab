@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-13 11:51+0200\n"
+"POT-Creation-Date: 2025-10-16 09:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -119,6 +119,36 @@ msgstr "Soustraction d'offset"
 msgid "Create a new image which is the result of offset correction on each selected image. This operation is performed by subtracting the image background value which is estimated by the mean value of a user-defined rectangular area."
 msgstr "Crée une image à partir du résultat d'une correction d'offset sur chaque image sélectionnée. Cette opération est réalisée en soustrayant la valeur de fond de l'image, qui est estimée par la valeur moyenne d'une zone rectangulaire définie par l'utilisateur."
 
+msgid "Noise addition"
+msgstr "Ajout de bruit"
+
+msgid "Generate new images by adding the same noise to each selected image. The available noise types are:"
+msgstr "Génère de nouvelles images en ajoutant le même bruit à chaque image sélectionnée. Les types de bruit disponibles sont :"
+
+msgid "Noise"
+msgstr "Bruit"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Gaussian"
+msgstr "Gaussien"
+
+msgid "Normal distribution"
+msgstr "Distribution normale"
+
+msgid "Uniform"
+msgstr "Uniforme"
+
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
+
+msgid "Poisson"
+msgstr "Poisson"
+
+msgid "Poisson distribution"
+msgstr "Distribution de Poisson"
+
 msgid "Noise reduction"
 msgstr "Réduction de bruit"
 
@@ -169,9 +199,6 @@ msgstr "Crée une image à partir du résultat d'un complément de zéros sur ch
 
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "Strategy"
 msgstr "Stratégie"
@@ -634,4 +661,3 @@ msgstr "Binning"
 
 msgid "Combine clusters of adjacent pixels, throughout the image, into single pixels. The result can be the sum, average, median, minimum, or maximum value of the cluster."
 msgstr "Regroupe des pixels adjacents de l'image en un seul pixel (somme, moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
-

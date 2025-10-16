@@ -84,13 +84,23 @@ This operation is performed by subtracting the image background value which is e
 by the mean value of a user-defined rectangular area.
 
 Noise addition
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
-Create a new image which is the result of noise addition to each selected signal. The possible noise types are:
+Generate new images by adding the same noise to each selected image.
+The available noise types are:
 
-  - Gaussian noise (normal distribution)
-  - Uniform noise (uniform distribution)
-  - Poisson noise (Poisson distribution)
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Noise
+      - Description
+    * - Gaussian
+      - Normal distribution
+    * - Uniform
+      - Uniform distribution
+    * - Poisson
+      - Poisson distribution
 
 Noise reduction
 ^^^^^^^^^^^^^^^

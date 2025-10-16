@@ -107,12 +107,23 @@ This operation is performed by subtracting the signal baseline which is estimate
 the mean value of a user-defined range.
 
 Noise addition
-^^^^^^^^^^^^^^^
-Create a new signal which is the result of noise addition to each selected signal. The possible noise types are:
+^^^^^^^^^^^^^^
 
-  - Gaussian noise (normal distribution)
-  - Uniform noise (uniform distribution)
-  - Poisson noise (Poisson distribution)
+Generate new signals by adding the same noise to each selected signal.
+The available noise types are:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Noise
+      - Description
+    * - Gaussian
+      - Normal distribution
+    * - Uniform
+      - Uniform distribution
+    * - Poisson
+      - Poisson distribution
 
 
 Noise reduction

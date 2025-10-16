@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 09:41+0200\n"
+"POT-Creation-Date: 2025-10-16 09:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -147,6 +147,36 @@ msgstr "Soustraction d'offset"
 msgid "Create a new signal which is the result of offset correction of each selected signal. This operation is performed by subtracting the signal baseline which is estimated by the mean value of a user-defined range."
 msgstr "Crée un signal à partir de la soustraction d'offset de chaque signal sélectionné. Cette opération est réalisée en soustrayant la valeur moyenne d'une plage définie par l'utilisateur."
 
+msgid "Noise addition"
+msgstr "Ajout de bruit"
+
+msgid "Generate new signals by adding the same noise to each selected signal. The available noise types are:"
+msgstr "Génère de nouveaux signaux en ajoutant le même bruit à chaque signal sélectionné. Les types de bruit disponibles sont :"
+
+msgid "Noise"
+msgstr "Bruit"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Gaussian"
+msgstr "Gaussien"
+
+msgid "Normal distribution"
+msgstr "Distribution normale"
+
+msgid "Uniform"
+msgstr "Uniforme"
+
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
+
+msgid "Poisson"
+msgstr "Poisson"
+
+msgid "Poisson distribution"
+msgstr "Distribution de Poisson"
+
 msgid "Noise reduction"
 msgstr "Réduction de bruit"
 
@@ -197,9 +227,6 @@ msgstr "Crée un signal à partir du complément de zéro de chaque signal séle
 
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "Strategy"
 msgstr "Stratégie"
@@ -413,14 +440,11 @@ msgstr "Polynomial"
 msgid ":math:`y = c_{0} + c_{1} \\cdot x + c_{2} \\cdot x^2 + ... + c_{n} \\cdot x^n`"
 msgstr ""
 
-msgid "Gaussian"
-msgstr "Gaussienne"
-
 msgid ":math:`y = y_{0} + \\dfrac{A}{\\sqrt{2 \\pi} \\sigma} \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0}}{\\sigma}\\right)^2\\right)`"
 msgstr ""
 
 msgid "Lorentzian"
-msgstr "Lorentzienne"
+msgstr "Lorentzien"
 
 msgid ":math:`y = y_{0} + \\dfrac{A}{\\pi \\sigma} \\cdot \\dfrac{1}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
 msgstr ""
