@@ -37,7 +37,7 @@ or macro (see [macro examples](https://github.com/DataLab-Platform/DataLab/tree/
 ✨ DataLab may be remotely controlled from a third-party application (such as Jupyter,
 Spyder or any IDE):
 
-* Using the integrated [remote control](https://datalab-platform.com/en/features/general/remote.html)
+* Using the integrated [remote control](https://datalab-platform.com/en/features/advanced/remote.html)
 feature (this requires to install DataLab as a Python package)
 
 * Using the lightweight client integrated in [Sigima](https://github.com/DataLab-Platform/Sigima) (`pip install sigima`)
