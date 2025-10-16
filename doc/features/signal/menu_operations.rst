@@ -61,7 +61,6 @@ Create a new signal which is the result of a constant operation on each selected
     :height: 24px
     :class: dark-light no-scaled-link
 
-
 Basic arithmetic operations
 ---------------------------
 
