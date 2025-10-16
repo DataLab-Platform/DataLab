@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 16:13+0200\n"
+"POT-Creation-Date: 2025-10-16 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -182,6 +182,12 @@ msgid "Bitmap images"
 msgstr "Images Bitmap"
 
 msgid ".bmp"
+msgstr ""
+
+msgid "FT-Lab files"
+msgstr "Fichiers FT-Lab"
+
+msgid ".ima"
 msgstr ""
 
 msgid "DataLab also supports any image format that can be read by the `imageio` library, provided that the associated plugin(s) are installed (see `imageio documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_) and that the output NumPy array data type and shape are supported by DataLab."

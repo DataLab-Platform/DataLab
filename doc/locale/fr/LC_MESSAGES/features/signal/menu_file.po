@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 16:13+0200\n"
+"POT-Creation-Date: 2025-10-16 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -215,6 +215,12 @@ msgid "MAT-Files"
 msgstr "Fichiers MAT"
 
 msgid ".mat"
+msgstr ""
+
+msgid "FT-Lab files"
+msgstr "Fichiers FT-Lab"
+
+msgid ".sig"
 msgstr ""
 
 msgid "Open from directory"
