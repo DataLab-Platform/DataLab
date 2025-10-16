@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:17+0100\n"
+"POT-Creation-Date: 2025-10-16 15:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -96,6 +96,15 @@ msgstr "Si désactivé, la visualisation n'est pas rafraîchie tant que vous ne 
 
 msgid "Even though the refresh algorithm is optimized, it may still take some time to refresh the plot view when the data changes, especially when the data set is large. Therefore, you may want to disable the auto-refresh feature when you are working with large data sets, and enable it again when you are done. This will avoid unnecessary refreshes."
 msgstr "Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du temps pour rafraîchir la visualisation quand les données changent, surtout quand le jeu de données est grand. Par conséquent, vous pouvez désactiver le rafraîchissement automatique quand vous travaillez avec des données volumineuses, et l'activer à nouveau quand vous avez terminé. Cela évitera des rafraîchissements inutiles."
+
+msgid "Show only first selected signal"
+msgstr "Afficher seulement le premier signal sélectionné"
+
+msgid "Toggle between showing all selected signals or only the first one."
+msgstr "Basculer entre l'affichage de tous les signaux sélectionnés ou seulement du premier."
+
+msgid "When this option is enabled, only the first selected signal is displayed in the plot view. This may be useful when multiple signals are selected and focusing on a single signal is (temporarily) preferred."
+msgstr "Lorsque cette option est activée, seul le premier signal sélectionné est affiché dans la vue du graphique. Cela peut être utile lorsque plusieurs signaux sont sélectionnés et qu'il est (temporairement) préférable de se concentrer sur un seul signal."
 
 msgid "Refresh manually"
 msgstr "Rafraîchir manuellement"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:12+0100\n"
+"POT-Creation-Date: 2025-10-16 15:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -96,6 +96,15 @@ msgstr "Si désactivé, la visualisation n'est pas rafraîchie tant que vous ne 
 
 msgid "Even though the refresh algorithm is optimized, it may still take some time to refresh the plot view when the data changes, especially when the data set is large. Therefore, you may want to disable the auto-refresh feature when you are working with large data sets, and enable it again when you are done. This will avoid unnecessary refreshes."
 msgstr "Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du temps pour rafraîchir la visualisation quand les données changent, surtout quand le jeu de données est grand. Par conséquent, vous pouvez désactiver le rafraîchissement automatique quand vous travaillez avec des données volumineuses, et l'activer à nouveau quand vous avez terminé. Cela évitera des rafraîchissements inutiles."
+
+msgid "Show only first selected image"
+msgstr "Afficher seulement la première image sélectionnée"
+
+msgid "Toggle between showing all selected images or only the first one."
+msgstr "Basculer entre l'affichage de toutes les images sélectionnées ou seulement de la première."
+
+msgid "When this option is enabled, only the first selected image is displayed in the plot view. This may be useful when multiple images are selected and focusing on a single image is (temporarily) preferred."
+msgstr "Lorsque cette option est activée, seule la première image sélectionnée est affichée dans la vue du graphique. Cela peut être utile lorsque plusieurs images sont sélectionnées et qu'il est (temporairement) préférable de se concentrer sur une seule image."
 
 msgid "Refresh manually"
 msgstr "Rafraîchir manuellement"
