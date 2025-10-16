@@ -63,7 +63,7 @@
 :py:func:`laplace <sigima.proc.image.laplace>`,Compute Laplace filter,`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/edges_unit_test.py#L134>`_
 :py:func:`line_profile <sigima.proc.image.line_profile>`,Compute horizontal or vertical profile,`test_line_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/profile_unit_test.py#L19>`_
 :py:func:`log10 <sigima.proc.image.log10>`,Compute log10 with :py:data:`numpy.log10`,`test_image_log10 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L471>`_
-:py:func:`log10_z_plus_n <sigima.proc.image.log10_z_plus_n>`,Compute log10(z+n) with :py:data:`numpy.log10`,`test_image_logp1 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L483>`_
+:py:func:`log10_z_plus_n <sigima.proc.image.log10_z_plus_n>`,Compute log10(z+n) with :py:data:`numpy.log10`,`test_image_log10_z_plus_n <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L483>`_
 :py:func:`magnitude_spectrum <sigima.proc.image.magnitude_spectrum>`,Compute magnitude spectrum,`test_image_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/fft2d_unit_test.py#L142>`_
 :py:func:`moving_average <sigima.proc.image.moving_average>`,Compute moving average,`test_image_moving_average <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/filtering_unit_test.py#L37>`_
 :py:func:`moving_median <sigima.proc.image.moving_median>`,Compute moving median,`test_image_moving_median <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/filtering_unit_test.py#L49>`_
