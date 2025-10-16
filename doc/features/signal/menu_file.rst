@@ -40,35 +40,35 @@ Create a new signal from various models:
     * - Uniform distribution
       - :math:`y[i]` is uniformly distributed between two configurable bounds
     * - Gaussian
-      - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
+      - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi} \cdot \sigma} \cdot \exp\left(-\dfrac{1}{2} \cdot \left(\dfrac{x-x_{0}}{\sigma}\right)^2\right)`
     * - Lorentzian
-      - :math:`y = y_{0}+\dfrac{A}{\sigma.\pi}.\dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
+      - :math:`y = y_{0}+\dfrac{A}{\sigma \cdot \pi} \cdot \dfrac{1}{1+\left(\dfrac{x-x_{0}}{\sigma}\right)^2}`
     * - Voigt
-      - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
+      - :math:`y = y_{0}+A \cdot \dfrac{\Re\left(\exp\left(-z^2\right) \cdot \erfc(-j \cdot z)\right)}{\sqrt{2\pi} \cdot \sigma}` with :math:`z = \dfrac{x-x_{0}-j \cdot \sigma}{\sqrt{2} \cdot \sigma}`
     * - Blackbody (Planck's law)
-      - :math:`y = \dfrac{2 h c^2}{\lambda^5 \left(exp\left(\dfrac{h c}{\lambda k T}\right)-1\right)}`
+      - :math:`y = \dfrac{2 h c^2}{\lambda^5 \left(\exp\left(\dfrac{h c}{\lambda k T}\right)-1\right)}`
     * - Sine
-      - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
+      - :math:`y = y_{0}+A\sin\left(2\pi \cdot f \cdot x+\phi\right)`
     * - Cosine
-      - :math:`y = y_{0}+A.cos(2\pi.f.x+\phi)`
+      - :math:`y = y_{0}+A\cos\left(2\pi \cdot f \cdot x+\phi\right)`
     * - Sawtooth
-      - :math:`y = y_{0}+A \cdot \left( 2 \left( f x + \frac{\phi}{2\pi} - \left\lfloor f x + \frac{\phi}{2\pi} + \frac{1}{2} \right\rfloor \right) \right)`
+      - :math:`y = y_{0}+A \left( 2 \left( f x + \frac{\phi}{2\pi} - \left\lfloor f x + \frac{\phi}{2\pi} + \frac{1}{2} \right\rfloor \right) \right)`
     * - Triangle
-      - :math:`y = y_{0}+A \cdot \text{sawtooth}(2 \pi f x + \phi, \text{width} = 0.5)`
+      - :math:`y = y_{0}+A \sawtooth\left(2 \pi f x + \phi, \text{width} = 0.5\right)`
     * - Square
-      - :math:`y = y_0 + A \cdot \text{sgn}\left( \sin\left( 2\pi f x + \phi \right) \right)`
+      - :math:`y = y_0 + A \sgn\left( \sin\left( 2\pi f x + \phi \right) \right)`
     * - Cardinal sine
-      - :math:`y = y_0 + A \cdot \text{sinc}\left(2\pi f x + \phi\right)`
+      - :math:`y = y_0 + A \sinc\left(2\pi f x + \phi\right)`
     * - Linear chirp
-      - :math:`y = y_{0} + A \sin(\phi_{0} + 2\pi (f_{0} x +  \frac{1}{2} c x^{2}))`
+      - :math:`y = y_{0} + A \sin\left(\phi_{0} + 2\pi \left(f_{0}\, x +  \frac{1}{2} c\, x^{2}\right)\right)`
     * - Step
-      - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x > x_{0} \\ 0 & \text{otherwise}\end{array}\right.`
+      - :math:`y = y_{0}+A \left\{\begin{array}{ll}1 & \text{if } x > x_{0} \\ 0 & \text{otherwise}\end{array}\right.`
     * - Exponential
-      - :math:`y = y_{0}+A.exp(B.x)`
+      - :math:`y = y_{0}+A \exp\left(B \cdot x\right)`
     * - Logistic
-      - :math:`y = y_{0} + \dfrac{A}{1 + exp(-k (x - x_{0}))}`
+      - :math:`y = y_{0} + \dfrac{A}{1 + \exp\left(-k \left(x - x_{0}\right)\right)}`
     * - Pulse
-      - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
+      - :math:`y = y_{0}+A \left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
     * - Step Pulse
       - | :math:`y = \left( \begin{cases} y_0 & \text{if } x < t_0 \\ y_0 + A \cdot \dfrac{x - t_0}{t_r} & \text{if } t_0 \leq x < t_0 + t_r \\ y_0 + A & \text{if } x \geq t_0 + t_r \end{cases} \right) + \mathcal{N}\left(0, \sigma_n\right)`
 
@@ -86,17 +86,16 @@ Create a new signal from various models:
         * :math:`t_0` is the pulse start time,
         * :math:`t_r` is the rise time,
         * :math:`t_f` is the fall time,
-        * :math:`t_1 = t_0 + t_r + d` is the time at which the decay starts (with :math:`d` the duration of the plateau defined below),
-        * :math:`\sigma_n` is the noise amplitude.
-
-        | The duration of the plateau :math:`d` is computed as :math:`d = t_{\mathrm{FWHM}} - \dfrac{t_r + t_f}{2}` from the full width at half maximum :math:`t_{\mathrm{FWHM}}`.
+        * :math:`t_1 = t_0 + t_r + d` is the time at which the decay starts,
+        * :math:`\sigma_n` is the noise amplitude
+        * the duration of the plateau :math:`d` is computed as :math:`d = t_{\mathrm{FWHM}} - \dfrac{t_r + t_f}{2}` from the full width at half maximum :math:`t_{\mathrm{FWHM}}`
 
         .. warning::
 
             The duration of the plateau :math:`d` should not be negative.
 
     * - Polynomial
-      - :math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`
+      - :math:`y = y_{0}+A_{0}+A_{1} \cdot x+A_{2} \cdot x^2+\ldots+A_{n} \cdot x^n`
     * - Custom
       - Manual input of X and Y values
 

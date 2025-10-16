@@ -61,15 +61,15 @@ by maximum, amplitude, sum, energy or RMS:
     * - Normalization
       - Equation
     * - Maximum
-      - :math:`z_{1} = \dfrac{z_{0}}{z_{max}}`
+      - :math:`z_{1} = \dfrac{z_{0}}{z_{\max}}`
     * - Amplitude
-      - :math:`z_{1} = \dfrac{z_{0}}{z_{max}-z_{min}}`
+      - :math:`z_{1} = \dfrac{z_{0}}{z_{\max}-z_{\min}}`
     * - Area
       - :math:`z_{1} = \dfrac{z_{0}}{\sum_{i=0}^{N-1}{z_{i}}}`
     * - Energy
-      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}|z_{0}[n]|^2}}`
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}\left|z_{0}[n]\right|^2}}`
     * - RMS
-      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|z_{0}[n]|^2}}`
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}\left|z_{0}[n]\right|^2}}`
 
 Clipping
 ~~~~~~~~
