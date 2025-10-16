@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-24 12:04+0200\n"
+"POT-Creation-Date: 2025-10-24 17:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -176,6 +175,47 @@ msgstr "Impulsion"
 
 msgid ":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x < x_{1} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
 msgstr ""
+
+msgid "Step Pulse"
+msgstr "Impulsion"
+
+#, python-brace-format
+msgid ":math:`y = \\left( \\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + A \\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\ y_0 + A & \\text{if } x \\geq t_0 + t_r \\end{cases} \\right) + \\mathcal{N}\\left(0, \\sigma_n\\right)`"
+msgstr ""
+
+msgid "where:"
+msgstr "Où :"
+
+msgid ":math:`t_0` is the pulse start time,"
+msgstr ":math:`t_0` est le temps de début de l'impulsion,"
+
+msgid ":math:`t_r` is the rise time,"
+msgstr ":math:`t_r` est le temps de montée,"
+
+msgid ":math:`\\sigma_n` is the noise amplitude"
+msgstr ":math:`\\sigma_n` est l'amplitude du bruit"
+
+msgid "Square Pulse"
+msgstr "Impulsion carrée"
+
+#, python-brace-format
+msgid ":math:`y(x) = \\left(\\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + A \\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\ y_0 + A & \\text{if } t_0 + t_r \\leq x < t_1 \\\\ y_0 + A - A \\cdot \\dfrac{x - t_1}{t_f} & \\text{if } t_1 \\leq x < t_1 + t_f \\\\ y_0 & \\text{if } x \\geq t_1 + t_f \\end{cases} \\right) + \\mathcal{N}(0, \\sigma_n)`"
+msgstr ""
+
+msgid ":math:`t_f` is the fall time,"
+msgstr ":math:`t_f` est le temps de descente,"
+
+msgid ":math:`t_1 = t_0 + t_r + d` is the time at which the decay starts (with :math:`d` the duration of the plateau defined below),"
+msgstr ":math:`t_1 = t_0 + t_r + d` est l'instant auquel commence la décroissance (avec :math:`d` la durée du plateau définie ci-dessous),"
+
+msgid ":math:`\\sigma_n` is the noise amplitude."
+msgstr ":math:`\\sigma_n` est l'amplitude du bruit."
+
+msgid "The duration of the plateau :math:`d` is computed as :math:`d = t_{\\mathrm{FWHM}} - \\dfrac{t_r + t_f}{2}` from the full width at half maximum :math:`t_{\\mathrm{FWHM}}`."
+msgstr "La durée du plateau :math:`d` est calculée comme :math:`d = t_{\\mathrm{FWHM}} - \\dfrac{t_r + t_f}{2}` à partir de la largeur à mi-hauteur :math:`t_{\\mathrm{FWHM}}`."
+
+msgid "The duration of the plateau :math:`d` should not be negative."
+msgstr "La durée du plateau :math:`d` ne doit pas être négative."
 
 msgid "Polynomial"
 msgstr "Polynomial"

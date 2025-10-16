@@ -69,6 +69,32 @@ Create a new signal from various models:
       - :math:`y = y_{0} + \dfrac{A}{1 + exp(-k (x - x_{0}))}`
     * - Pulse
       - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
+    * - Step Pulse
+      - | :math:`y = \left( \begin{cases} y_0 & \text{if } x < t_0 \\ y_0 + A \cdot \dfrac{x - t_0}{t_r} & \text{if } t_0 \leq x < t_0 + t_r \\ y_0 + A & \text{if } x \geq t_0 + t_r \end{cases} \right) + \mathcal{N}\left(0, \sigma_n\right)`
+
+        | where:
+
+        * :math:`t_0` is the pulse start time,
+        * :math:`t_r` is the rise time,
+        * :math:`\sigma_n` is the noise amplitude
+
+    * - Square Pulse
+      - | :math:`y(x) = \left(\begin{cases} y_0 & \text{if } x < t_0 \\ y_0 + A \cdot \dfrac{x - t_0}{t_r} & \text{if } t_0 \leq x < t_0 + t_r \\ y_0 + A & \text{if } t_0 + t_r \leq x < t_1 \\ y_0 + A - A \cdot \dfrac{x - t_1}{t_f} & \text{if } t_1 \leq x < t_1 + t_f \\ y_0 & \text{if } x \geq t_1 + t_f \end{cases} \right) + \mathcal{N}(0, \sigma_n)`
+
+        | where:
+
+        * :math:`t_0` is the pulse start time,
+        * :math:`t_r` is the rise time,
+        * :math:`t_f` is the fall time,
+        * :math:`t_1 = t_0 + t_r + d` is the time at which the decay starts (with :math:`d` the duration of the plateau defined below),
+        * :math:`\sigma_n` is the noise amplitude.
+
+        | The duration of the plateau :math:`d` is computed as :math:`d = t_{\mathrm{FWHM}} - \dfrac{t_r + t_f}{2}` from the full width at half maximum :math:`t_{\mathrm{FWHM}}`.
+
+        .. warning::
+
+            The duration of the plateau :math:`d` should not be negative.
+
     * - Polynomial
       - :math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`
     * - Custom
