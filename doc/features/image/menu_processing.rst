@@ -185,16 +185,16 @@ The following functions are available:
       - Inverse Fast Fourier Transform
       - `numpy.fft.ifft2 <https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft2.html>`_
     * - Magnitude spectrum
-      - Optional: get output in decibels (dB)
+      - Optional: output in decibels (dB)
       - | :math:`z_{1} = \left|\FFT\left(z_{0}\right)\right|` or
-        | :math:`z_{1} = 20 \log_{10}\left(\left|\FFT\left(z_{0}\right) \right|\right)` (dB)
+        | :math:`z_{1} = 20 \log_{10} \left(\left|\FFT\left(z_{0}\right)\right|\right)` (dB)
     * - Phase spectrum
-      -
+      - Phase of the FFT expressed in degrees, using `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_
       - :math:`z_{1} = \angle\left(\FFT\left(z_{0}\right)\right)`
     * - Power spectral density
-      - Optional: get output in decibels (dB)
+      - Optional: output in decibels (dB)
       - | :math:`z_{1} = \left|\FFT\left(z_{0}\right)\right|^2` or
-        | :math:`z_{1} = 10 \log_{10}\left(\left|\FFT\left(z_{0}\right)\right|^2\right)` (dB)
+        | :math:`z_{1} = 10 \log_{10} \left(\left|\FFT\left(z_{0}\right)\right|^2\right)` (dB)
 
 .. note::
 
