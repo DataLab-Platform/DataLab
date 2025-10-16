@@ -33,7 +33,7 @@ Create a new signal from various models:
       - Equation
     * - Zero
       - :math:`y[i] = 0`
-    * - Uniform distribution
+    * - Normal distribution
       - :math:`y[i]` is normally distributed with configurable mean and standard deviation
     * - Poisson distribution
       - :math:`y[i]` is Poisson distributed with configurable mean
