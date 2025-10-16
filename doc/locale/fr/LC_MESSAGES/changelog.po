@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 09:56+0200\n"
+"POT-Creation-Date: 2025-10-16 14:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -825,6 +825,10 @@ msgstr "Correction de [Issue #241](https://github.com/DataLab-Platform/DataLab/i
 
 msgid "Improved initial frequency estimate for sinusoidal curve fitting."
 msgstr "Amélioration de l'estimation initiale de la fréquence pour l'ajustement de courbe sinusoïdale."
+
+#, python-format
+msgid "Fixed curve fitting parameter display: added default format string (`%g`) to all `FitParam` instances to ensure proper number formatting in fit dialog parameter fields, preventing display issues with very large or very small parameter values."
+msgstr "Correction de l'affichage des paramètres de fitting de courbe : ajout d'une chaîne de format par défaut (`%g`) à toutes les instances `FitParam` pour garantir un formatage correct des nombres dans les champs de paramètres de la boîte de dialogue de fitting, évitant ainsi les problèmes d'affichage avec des valeurs de paramètres très grandes ou très petites."
 
 msgid "Fixed [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Incorrect shape unpacking in edit_new_image_parameters"
 msgstr "Correction de [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Déballage incorrect de dimensiosn dans edit_new_image_parameters"

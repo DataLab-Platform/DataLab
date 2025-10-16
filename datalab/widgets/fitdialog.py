@@ -15,6 +15,8 @@ from sigima.tools.signal import fitting, fourier, pulse
 
 from datalab.config import Conf, _
 
+DEFAULT_FORMAT = "%g"
+
 
 def guifit(
     x,
@@ -82,7 +84,13 @@ def polynomial_fit(x, y, degree, parent=None, name=None):
     for index in range(degree + 1):
         val = ivals[index]
         vmax = max(1.0, np.abs(val))
-        param = FitParam(f"c{(len(ivals) - index - 1):d}", val, -2 * vmax, 2 * vmax)
+        param = FitParam(
+            f"c{(len(ivals) - index - 1):d}",
+            val,
+            -2 * vmax,
+            2 * vmax,
+            format=DEFAULT_FORMAT,
+        )
         params.append(param)
 
     def fitfunc(x, params):
@@ -120,12 +128,20 @@ def gaussian_fit(x, y, parent=None, name=None):
 
     dy = np.max(y) - np.min(y)
     max_amp = amp_guess * 2.0 if amp_guess > 0 else dy
-    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp)
-    b = FitParam(_("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y))
-    sigma = FitParam(
-        _("Std-dev") + " (σ)", sigma_guess, sigma_guess * 0.1, sigma_guess * 10
+    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp, format=DEFAULT_FORMAT)
+    b = FitParam(
+        _("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y), format=DEFAULT_FORMAT
     )
-    mu = FitParam(_("Mean") + " (μ)", mu_guess, np.min(x), np.max(x))
+    sigma = FitParam(
+        _("Std-dev") + " (σ)",
+        sigma_guess,
+        sigma_guess * 0.1,
+        sigma_guess * 10,
+        format=DEFAULT_FORMAT,
+    )
+    mu = FitParam(
+        _("Mean") + " (μ)", mu_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
+    )
 
     params = [a, sigma, mu, b]
 
@@ -157,12 +173,20 @@ def lorentzian_fit(x, y, parent=None, name=None):
     dy = np.max(y) - np.min(y)
 
     max_amp = amp_guess * 2.0 if amp_guess > 0 else dy
-    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp)
-    b = FitParam(_("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y))
-    sigma = FitParam(
-        _("Std-dev") + " (σ)", sigma_guess, sigma_guess * 0.1, sigma_guess * 10
+    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp, format=DEFAULT_FORMAT)
+    b = FitParam(
+        _("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y), format=DEFAULT_FORMAT
     )
-    mu = FitParam(_("Mean") + " (μ)", mu_guess, np.min(x), np.max(x))
+    sigma = FitParam(
+        _("Std-dev") + " (σ)",
+        sigma_guess,
+        sigma_guess * 0.1,
+        sigma_guess * 10,
+        format=DEFAULT_FORMAT,
+    )
+    mu = FitParam(
+        _("Mean") + " (μ)", mu_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
+    )
 
     params = [a, sigma, mu, b]
 
@@ -194,12 +218,20 @@ def voigt_fit(x, y, parent=None, name=None):
     dy = np.max(y) - np.min(y)
 
     max_amp = amp_guess * 2.0 if amp_guess > 0 else dy
-    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp)
-    b = FitParam(_("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y))
-    sigma = FitParam(
-        _("Std-dev") + " (σ)", sigma_guess, sigma_guess * 0.1, sigma_guess * 10
+    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp, format=DEFAULT_FORMAT)
+    b = FitParam(
+        _("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y), format=DEFAULT_FORMAT
     )
-    mu = FitParam(_("Mean") + " (μ)", mu_guess, np.min(x), np.max(x))
+    sigma = FitParam(
+        _("Std-dev") + " (σ)",
+        sigma_guess,
+        sigma_guess * 0.1,
+        sigma_guess * 10,
+        format=DEFAULT_FORMAT,
+    )
+    mu = FitParam(
+        _("Mean") + " (μ)", mu_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
+    )
 
     params = [a, sigma, mu, b]
 
@@ -258,13 +290,25 @@ def multigaussian_fit(x, y, peak_indices, parent=None, name=None):
         dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
 
         params += [
-            FitParam(("A") + stri, amp_val, 0.0, max(dy * 2, amp_val * 2)),
-            FitParam("σ" + stri, sigma_val, dx / 100, dx),
+            FitParam(
+                ("A") + stri,
+                amp_val,
+                0.0,
+                max(dy * 2, amp_val * 2),
+                format=DEFAULT_FORMAT,
+            ),
+            FitParam("σ" + stri, sigma_val, dx / 100, dx, format=DEFAULT_FORMAT),
         ]
 
     y0_val = initial_params.get("y0", np.min(y))
     params.append(
-        FitParam(_("Y0"), y0_val, np.min(y) - 0.1 * (np.max(y) - np.min(y)), np.max(y))
+        FitParam(
+            _("Y0"),
+            y0_val,
+            np.min(y) - 0.1 * (np.max(y) - np.min(y)),
+            np.max(y),
+            format=DEFAULT_FORMAT,
+        )
     )
 
     kwargs = {"a_x0": x[peak_indices]}
@@ -333,13 +377,31 @@ def multilorentzian_fit(
         )
 
         params += [
-            FitParam(("A") + stri, amp_val, 0.0, max(amp_val * 1.2, y[i0] * 1.2)),
-            FitParam("σ" + stri, sigma_val, sigma_val * 0.2, sigma_val * 10),
+            FitParam(
+                ("A") + stri,
+                amp_val,
+                0.0,
+                max(amp_val * 1.2, y[i0] * 1.2),
+                format=DEFAULT_FORMAT,
+            ),
+            FitParam(
+                "σ" + stri,
+                sigma_val,
+                sigma_val * 0.2,
+                sigma_val * 10,
+                format=DEFAULT_FORMAT,
+            ),
         ]
 
     y0_val = initial_params.get("y0", np.min(y))
     params.append(
-        FitParam(_("Y0"), y0_val, np.min(y) - 0.1 * (np.max(y) - np.min(y)), np.max(y))
+        FitParam(
+            _("Y0"),
+            y0_val,
+            np.min(y) - 0.1 * (np.max(y) - np.min(y)),
+            np.max(y),
+            format=DEFAULT_FORMAT,
+        )
     )
 
     kwargs = {"a_x0": x[peak_indices]}
@@ -382,9 +444,11 @@ def exponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     # Create parameter bounds
     moa, mob, moc = np.maximum(1, [abs(oa), abs(ob), abs(oc)])
-    a_p = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
-    b_p = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob)
-    c_p = FitParam(_("y0 constant"), oc, -2 * moc, 2 * moc)
+    a_p = FitParam(
+        _("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True, format=DEFAULT_FORMAT
+    )
+    b_p = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob, format=DEFAULT_FORMAT)
+    c_p = FitParam(_("y0 constant"), oc, -2 * moc, 2 * moc, format=DEFAULT_FORMAT)
 
     params = [a_p, b_p, c_p]
 
@@ -435,10 +499,12 @@ def sinusoidal_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     # Create parameter bounds
     abs_values = [abs(guess_a), abs(guess_f), abs(guess_ph), abs(guess_c)]
     moa, mof, _mop, moc = np.maximum(1, abs_values)
-    a_p = FitParam(_("Amplitude"), guess_a, -2 * moa, 2 * moa)
-    f_p = FitParam(_("Frequency"), guess_f, 0, 2 * mof)
-    p_p = FitParam(_("Phase"), guess_ph, -360, 360)
-    c_p = FitParam(_("Continuous component"), guess_c, -2 * moc, 2 * moc)
+    a_p = FitParam(_("Amplitude"), guess_a, -2 * moa, 2 * moa, format=DEFAULT_FORMAT)
+    f_p = FitParam(_("Frequency"), guess_f, 0, 2 * mof, format=DEFAULT_FORMAT)
+    p_p = FitParam(_("Phase"), guess_ph, -360, 360, format=DEFAULT_FORMAT)
+    c_p = FitParam(
+        _("Continuous component"), guess_c, -2 * moc, 2 * moc, format=DEFAULT_FORMAT
+    )
 
     params = [a_p, f_p, p_p, c_p]
 
@@ -475,10 +541,20 @@ def cdf_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     dy = np.max(y) - np.min(y)
     abs_values = [abs(a_guess), abs(mu_guess), abs(sigma_guess), abs(b_guess)]
     iamp, ix0, islope, _ioff = np.maximum(1, abs_values)
-    a = FitParam(_("Amplitude"), a_guess, 0, iamp * 2.0)
-    b = FitParam(_("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y))
-    sigma = FitParam(_("Std-dev") + " (σ)", sigma_guess, islope * 0.1, islope * 2)
-    mu = FitParam(_("Mean") + " (μ)", mu_guess, ix0 * 0.2, ix0 * 2)
+    a = FitParam(_("Amplitude"), a_guess, 0, iamp * 2.0, format=DEFAULT_FORMAT)
+    b = FitParam(
+        _("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y), format=DEFAULT_FORMAT
+    )
+    sigma = FitParam(
+        _("Std-dev") + " (σ)",
+        sigma_guess,
+        islope * 0.1,
+        islope * 2,
+        format=DEFAULT_FORMAT,
+    )
+    mu = FitParam(
+        _("Mean") + " (μ)", mu_guess, ix0 * 0.2, ix0 * 2, format=DEFAULT_FORMAT
+    )
 
     params = [a, mu, sigma, b]
 
@@ -519,10 +595,24 @@ def planckian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     dy = np.max(y) - np.min(y)
 
     # Parameter bounds with appropriate ranges for Planckian fitting
-    amp = FitParam(_("Amplitude"), amp_guess, amp_guess * 0.01, amp_guess * 100)
-    x0 = FitParam(_("Peak wavelength"), x0_guess, np.min(x), np.max(x))
-    sigma = FitParam(_("Width factor"), sigma_guess, 0.1, 5.0)
-    y0 = FitParam(_("Base line"), y0_guess, y0_guess - 0.2 * dy, y0_guess + 0.2 * dy)
+    amp = FitParam(
+        _("Amplitude"),
+        amp_guess,
+        amp_guess * 0.01,
+        amp_guess * 100,
+        format=DEFAULT_FORMAT,
+    )
+    x0 = FitParam(
+        _("Peak wavelength"), x0_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
+    )
+    sigma = FitParam(_("Width factor"), sigma_guess, 0.1, 5.0, format=DEFAULT_FORMAT)
+    y0 = FitParam(
+        _("Base line"),
+        y0_guess,
+        y0_guess - 0.2 * dy,
+        y0_guess + 0.2 * dy,
+        format=DEFAULT_FORMAT,
+    )
 
     params = [amp, x0, sigma, y0]
 
@@ -561,32 +651,42 @@ def twohalfgaussian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     # Parameter bounds with better ranges
     # New model signature: func(x, amp_left, amp_right, sigma_left,
     #                            sigma_right, x0, y0_left, y0_right)
-    amp_left = FitParam(_("Left amplitude"), amp_left_guess, dy * 0.1, dy * 3)
-    amp_right = FitParam(_("Right amplitude"), amp_right_guess, dy * 0.1, dy * 3)
+    amp_left = FitParam(
+        _("Left amplitude"), amp_left_guess, dy * 0.1, dy * 3, format=DEFAULT_FORMAT
+    )
+    amp_right = FitParam(
+        _("Right amplitude"), amp_right_guess, dy * 0.1, dy * 3, format=DEFAULT_FORMAT
+    )
     sigma_left = FitParam(
         _("Left width") + " (σL)",
         sigma_left_guess,
         dx * 0.001,  # Very small minimum
         dx * 0.5,  # Reasonable maximum
+        format=DEFAULT_FORMAT,
     )
     sigma_right = FitParam(
         _("Right width") + " (σR)",
         sigma_right_guess,
         dx * 0.001,  # Very small minimum
         dx * 0.5,  # Reasonable maximum
+        format=DEFAULT_FORMAT,
     )
-    x0 = FitParam(_("Center") + " (x₀)", x0_guess, np.min(x), np.max(x))
+    x0 = FitParam(
+        _("Center") + " (x₀)", x0_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
+    )
     y0_left = FitParam(
         _("Left baseline"),
         y0_left_guess,
         y0_left_guess - 0.2 * dy,
         y0_left_guess + 0.2 * dy,
+        format=DEFAULT_FORMAT,
     )
     y0_right = FitParam(
         _("Right baseline"),
         y0_right_guess,
         y0_right_guess - 0.2 * dy,
         y0_right_guess + 0.2 * dy,
+        format=DEFAULT_FORMAT,
     )
 
     params = [amp_left, amp_right, sigma_left, sigma_right, x0, y0_left, y0_right]
@@ -631,23 +731,43 @@ def piecewiseexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=Non
 
     # Parameter bounds with more realistic ranges
     # New model signature: func(x, x_center, a_left, b_left, a_right, b_right, y0)
-    x_center = FitParam(_("Center position"), x_center_guess, x_min, x_max)
-    a_left = FitParam(_("Left amplitude"), a_left_guess, 0.0, a_left_guess * 10.0)
+    x_center = FitParam(
+        _("Center position"), x_center_guess, x_min, x_max, format=DEFAULT_FORMAT
+    )
+    a_left = FitParam(
+        _("Left amplitude"),
+        a_left_guess,
+        0.0,
+        a_left_guess * 10.0,
+        format=DEFAULT_FORMAT,
+    )
     b_left = FitParam(
         _("Left time constant") + " (bL)",
         b_left_guess,  # Already in coefficient form
         0.001 / x_range,  # Slow decay
         100.0 / x_range,  # Fast decay
+        format=DEFAULT_FORMAT,
     )
-    a_right = FitParam(_("Right amplitude"), a_right_guess, 0.0, a_right_guess * 10.0)
+    a_right = FitParam(
+        _("Right amplitude"),
+        a_right_guess,
+        0.0,
+        a_right_guess * 10.0,
+        format=DEFAULT_FORMAT,
+    )
     b_right = FitParam(
         _("Right time constant") + " (bR)",
         b_right_guess,  # Already in coefficient form
         -100.0 / x_range,  # Fast decay
         -0.001 / x_range,  # Slow decay
+        format=DEFAULT_FORMAT,
     )
     y0 = FitParam(
-        _("Base line"), y0_guess, y0_guess - 0.2 * y_range, y0_guess + 0.2 * y_range
+        _("Base line"),
+        y0_guess,
+        y0_guess - 0.2 * y_range,
+        y0_guess + 0.2 * y_range,
+        format=DEFAULT_FORMAT,
     )
 
     params = [x_center, a_left, b_left, a_right, b_right, y0]
