@@ -417,15 +417,20 @@ def qt_try_loadsave_file(
 
 
 def grab_save_window(
-    widget: QW.QWidget, name: str | None = None
+    widget: QW.QWidget, name: str | None = None, add_timestamp: bool = True
 ) -> None:  # pragma: no cover
-    """Grab window screenshot and save it"""
+    """Grab window screenshot and save it.
+
+    Args:
+        widget: Widget to grab
+        name: Screenshot name (if None, uses widget.objectName())
+        add_timestamp: Whether to add a timestamp to the screenshot name (default: True)
+    """
     if name is None:
         name = widget.objectName()
 
     # DataLab-specific logic: determine if timestamp should be added
     # based on name patterns and DataLab conventions
-    add_timestamp = True
     if name.endswith("_"):
         # Name ending with underscore always gets timestamp
         add_timestamp = True

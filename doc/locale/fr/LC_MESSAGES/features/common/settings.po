@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:21+0100\n"
+"POT-Creation-Date: 2025-10-16 17:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -28,5 +28,324 @@ msgstr "DataLab, préférences, scientifique, données, analyse, visualisation, 
 msgid "Settings"
 msgstr "Préférences"
 
-msgid "Screenshot of the \"Settings\" dialog box."
-msgstr "Capture d'écran de la boîte de dialogue \"Préférences\"."
+msgid "DataLab provides a comprehensive settings dialog to customize the application behavior, visualization defaults, and I/O operations. The settings are organized into five tabs: General, Processing, Visualization, I/O, and Console."
+msgstr "DataLab propose une boîte de dialogue de préférences complète pour personnaliser le comportement de l'application, les paramètres de visualisation par défaut et les opérations d'entrée/sortie. Les préférences sont organisées en cinq onglets : Général, Traitement, Visualisation, Entrée/sortie et Console."
+
+msgid "General"
+msgstr "Général"
+
+msgid "The General settings tab contains main window and general feature settings:"
+msgstr "L'onglet des préférences générales contient les paramètres de la fenêtre principale et les paramètres généraux :"
+
+msgid "General settings tab"
+msgstr "Onglet des préférences générales"
+
+msgid "**Color mode**"
+msgstr "**Mode couleur**"
+
+msgid "Choose the color mode for the application interface (e.g., light, dark, or auto)."
+msgstr "Choisir le mode couleur de l'interface de l'application (par exemple, clair, sombre ou automatique)."
+
+msgid "**Process isolation**"
+msgstr "**Isolation des processus**"
+
+msgid "When enabled, each computation runs in a separate process, preventing the application from freezing during long computations. This is the recommended setting for better responsiveness."
+msgstr "Si le réglage est activé, chaque calcul s'exécute dans un processus séparé, empêchant l'application de geler pendant les longs calculs. Il s'agit du paramètre recommandé pour une meilleure réactivité."
+
+msgid "**RPC server**"
+msgstr "**Serveur RPC**"
+
+msgid "Enable the RPC (Remote Procedure Call) server to communicate with external applications, such as your own scripts running in Spyder, Jupyter, or other software. This allows programmatic control of DataLab."
+msgstr "Activer le serveur RPC (Remote Procedure Call) pour communiquer avec des applications externes, telles que vos propres scripts s'exécutant dans Spyder, Jupyter ou d'autres logiciels. Cela permet un contrôle programmatique de DataLab."
+
+msgid "**Available memory threshold**"
+msgstr "**Seuil de mémoire disponible**"
+
+msgid "Set a threshold (in MB) below which a warning is displayed before loading new data. This helps prevent out-of-memory errors when working with large datasets. Set to 0 to disable the warning."
+msgstr "Définir un seuil (en Mo) en dessous duquel un avertissement est affiché avant de charger de nouvelles données. Cela permet d'éviter les erreurs de mémoire insuffisante lors du travail avec de grands ensembles de données. Mettre à 0 pour désactiver l'avertissement."
+
+msgid "**Third-party plugins**"
+msgstr "**Plugins tiers**"
+
+msgid "Enable or disable third-party plugins at startup."
+msgstr "Activer ou désactiver les plugins tiers au démarrage."
+
+msgid "**Plugins path**"
+msgstr "**Chemin des plugins**"
+
+msgid "Specify the directory path where DataLab should look for third-party plugins. DataLab will also discover plugins in your PYTHONPATH."
+msgstr "Spécifier le chemin du répertoire où DataLab doit rechercher les plugins tiers. DataLab découvrira également les plugins dans votre PYTHONPATH."
+
+msgid "Processing"
+msgstr "Traitement"
+
+msgid "The Processing settings tab controls computation behavior and default parameters:"
+msgstr "L'onglet des préférences de traitement contrôle le comportement des calculs et les paramètres par défaut :"
+
+msgid "Processing settings tab"
+msgstr "Onglet des préférences de traitement"
+
+msgid "**Operation mode**"
+msgstr "**Mode d'opération**"
+
+msgid "Choose the operation mode for computations taking N inputs:"
+msgstr "Choisir le mode d'opération pour les calculs prenant N entrées :"
+
+msgid "**Single**: single operand mode"
+msgstr "**Single** : mode opérande unique"
+
+msgid "**Pairwise**: pairwise operation mode"
+msgstr "**Pairwise** : mode opération par paire"
+
+msgid "These operation modes determine how DataLab handles computations involving multiple objects. They apply to two types of operations:"
+msgstr "Ces modes d'opération déterminent comment DataLab gère les calculs impliquant plusieurs objets. Ils s'appliquent à deux types d'opérations :"
+
+msgid "**N→1 operations**: Combine N (≥2) objects into 1 output (e.g. sum, average)"
+msgstr "**Opérations N→1** : Combiner N (≥2) objets en 1 sortie (par exemple somme, moyenne)"
+
+msgid "**N+1→N operations**: Apply an operation between N (≥1) objects and 1 operand to produce N outputs (e.g. difference, division)"
+msgstr "**Opérations N+1→N** : Appliquer une opération entre N (≥1) objets et 1 opérande pour produire N sorties (par exemple différence, division)"
+
+msgid "**Single operand mode** (default): Operations are applied independently within each group."
+msgstr "**Mode opérande unique** (par défaut) : Les opérations sont appliquées indépendamment dans chaque groupe."
+
+#, python-brace-format
+msgid "For **N→1 operations**: All objects in each group are combined into one result per group. Example with groups G1={A, B} and G2={C, D}, sum operation:"
+msgstr "Pour les **opérations N→1** : Tous les objets de chaque groupe sont combinés en un seul résultat par groupe. Exemple avec les groupes G1={A, B} et G2={C, D}, opération de somme :"
+
+msgid "Result: Σ(A,B) and Σ(C,D) (one per group)"
+msgstr "Résultat : Σ(A,B) et Σ(C,D) (un par groupe)"
+
+#, python-brace-format
+msgid "For **N+1→N operations**: Each selected object is combined with a single reference operand. Example with groups G1={A, B} and G2={C, D}, difference with reference R:"
+msgstr "Pour les **opérations N+1→N** : Chaque objet sélectionné est combiné avec un seul opérande de référence. Exemple avec les groupes G1={A, B} et G2={C, D}, différence avec la référence R :"
+
+msgid "In G1: A-R, B-R"
+msgstr "Dans G1 : A-R, B-R"
+
+msgid "In G2: C-R, D-R"
+msgstr "Dans G2 : C-R, D-R"
+
+msgid "**Pairwise operation mode**: Objects from different groups are combined at matching positions (all groups must have the same number of objects)."
+msgstr "**Mode opération par paire** : Les objets de différents groupes sont combinés aux positions correspondantes (tous les groupes doivent avoir le même nombre d'objets)."
+
+#, python-brace-format
+msgid "For **N→1 operations**: Objects at the same position in each group are combined. Example with groups G1={A, B} and G2={C, D}, sum operation:"
+msgstr "Pour les **opérations N→1** : Les objets à la même position dans chaque groupe sont combinés. Exemple avec les groupes G1={A, B} et G2={C, D}, opération de somme :"
+
+msgid "Result: A+C and B+D (pairing by position)"
+msgstr "Résultat : A+C et B+D (appariement par position)"
+
+#, python-brace-format
+msgid "For **N+1→N operations**: Objects at matching positions are combined pairwise. Example with groups G1={A, B}, G2={C, D}, difference with group G3={E, F}:"
+msgstr "Pour les **opérations N+1→N** : Les objets aux positions correspondantes sont combinés par paires. Exemple avec les groupes G1={A, B}, G2={C, D}, différence avec le groupe G3={E, F} :"
+
+msgid "New group 1: A-E, B-F"
+msgstr "Nouveau groupe 1 : A-E, B-F"
+
+msgid "New group 2: C-E, D-F"
+msgstr "Nouveau groupe 2 : C-E, D-F"
+
+msgid "**Use signal bounds for new signals**"
+msgstr "**Utiliser les bornes du signal pour les nouveaux signaux**"
+
+msgid "When enabled, the xmin and xmax values for new signals are initialized from the current signal's bounds. When disabled, default values are used."
+msgstr "Si le réglage est activé, les valeurs xmin et xmax pour les nouveaux signaux sont initialisées à partir des bornes du signal actuel. Lorsque désactivé, les valeurs par défaut sont utilisées."
+
+msgid "**Use image dimensions for new images**"
+msgstr "**Utiliser les dimensions d'image pour les nouvelles images**"
+
+msgid "When enabled, the width and height values for new images are initialized from the current image's dimensions. When disabled, default values are used."
+msgstr "Si le réglage est activé, les valeurs de largeur et de hauteur pour les nouvelles images sont initialisées à partir des dimensions de l'image actuelle. Lorsque désactivé, les valeurs par défaut sont utilisées."
+
+msgid "**FFT shift**"
+msgstr "**Décalage FFT**"
+
+msgid "Enable FFT shift to center the zero-frequency component in the frequency spectrum for easier visualization and analysis."
+msgstr "Activer le décalage FFT pour centrer la composante de fréquence nulle dans le spectre de fréquences pour une visualisation et une analyse plus faciles."
+
+msgid "**Extract ROI in single object**"
+msgstr "**Extraire les ROI dans un seul objet**"
+
+msgid "When enabled, multiple ROIs (Regions of Interest) are extracted into a single object. When disabled, each ROI is extracted into a separate object."
+msgstr "Si le réglage est activé, plusieurs ROI (Régions d'Intérêt) sont extraites dans un seul objet. Lorsque désactivé, chaque ROI est extraite dans un objet séparé."
+
+msgid "**Keep results after computation**"
+msgstr "**Conserver les résultats après calcul**"
+
+msgid "When enabled, results from previous analyses are kept in the object's metadata after computation. When disabled, results are removed. This option is disabled by default to avoid confusion from outdated results."
+msgstr "Si le réglage est activé, les résultats des analyses précédentes sont conservés dans les métadonnées de l'objet après le calcul. Lorsque désactivé, les résultats sont supprimés. Cette option est désactivée par défaut pour éviter toute confusion due à des résultats obsolètes."
+
+msgid "**Ignore warnings**"
+msgstr "**Ignorer les avertissements**"
+
+msgid "Suppress warning messages during computations."
+msgstr "Supprimer les messages d'avertissement pendant les calculs."
+
+msgid "**X-array compatibility behavior**"
+msgstr "**Comportement de compatibilité des tableaux X**"
+
+msgid "Choose the behavior when X arrays are incompatible in multi-signal computations:"
+msgstr "Choisir le comportement lorsque les tableaux X sont incompatibles dans les calculs multi-signaux :"
+
+msgid "**Ask**: display a confirmation dialog (default)"
+msgstr "**Demander** : afficher une boîte de dialogue de confirmation (par défaut)"
+
+msgid "**Interpolate**: automatically interpolate signals"
+msgstr "**Interpoler** : interpoler automatiquement les signaux"
+
+msgid "Visualization"
+msgstr "Visualisation"
+
+msgid "The Visualization settings tab controls how data is displayed:"
+msgstr "L'onglet des préférences de visualisation contrôle comment les données sont affichées :"
+
+msgid "Visualization settings tab"
+msgstr "Onglet des préférences de visualisation"
+
+msgid "Common settings"
+msgstr "Paramètres communs"
+
+msgid "**Plot toolbar position**"
+msgstr "**Position de la barre d'outils de tracé**"
+
+msgid "Choose where to position the plot toolbar (top, bottom, left, or right of the plot)."
+msgstr "Choisir où positionner la barre d'outils de tracé (en haut, en bas, à gauche ou à droite du tracé)."
+
+msgid "**Ignore title insertion message**"
+msgstr "**Ignorer le message d'insertion de titre**"
+
+msgid "Suppress the information message when inserting an object title as an annotation label."
+msgstr "Supprimer le message d'information lors de l'insertion d'un titre d'objet comme étiquette d'annotation."
+
+msgid "Signal-specific settings"
+msgstr "Paramètres spécifiques aux signaux"
+
+msgid "**Use auto downsampling**"
+msgstr "**Utiliser le sous-échantillonnage automatique**"
+
+msgid "Enable automatic downsampling for large signals to improve performance and visualization clarity."
+msgstr "Activer le sous-échantillonnage automatique pour les grands signaux afin d'améliorer les performances et la clarté de la visualisation."
+
+msgid "**Downsampling max points**"
+msgstr "**Nombre maximum de points de sous-échantillonnage**"
+
+msgid "Maximum number of points to display when downsampling is enabled (default: 10,000)."
+msgstr "Nombre maximum de points à afficher lorsque le sous-échantillonnage est activé (par défaut : 10 000)."
+
+msgid "**Autoscale margin**"
+msgstr "**Marge d'échelle automatique**"
+
+#, python-format
+msgid "Percentage of margin to add around data when auto-scaling signal plots. A value of 0.2% adds a small margin for better visualization. Set to 0% for no margin (exact data bounds)."
+msgstr "Pourcentage de marge à ajouter autour des données lors de la mise à l'échelle automatique des tracés de signaux. Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation. Mettre à 0 % pour aucune marge (bornes de données exactes)."
+
+msgid "**DateTime format (s/min/h)**"
+msgstr "**Format DateTime (s/min/h)**"
+
+msgid "Format string for datetime X-axis labels when using standard time units (s, min, h). Uses Python's strftime format codes (e.g., %H:%M:%S for hours:minutes:seconds)."
+msgstr "Chaîne de format pour les étiquettes de l'axe X datetime lors de l'utilisation d'unités de temps standard (s, min, h). Utilise les codes de format strftime de Python (par exemple, %H:%M:%S pour heures:minutes:secondes)."
+
+msgid "**DateTime format (ms/μs/ns)**"
+msgstr "**Format DateTime (ms/μs/ns)**"
+
+#, python-format
+msgid "Format string for datetime X-axis labels when using sub-second time units (ms, μs, ns). Uses Python's strftime format codes (e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds)."
+msgstr "Chaîne de format pour les étiquettes de l'axe X datetime lors de l'utilisation d'unités de temps infra-secondes (ms, μs, ns). Utilise les codes de format strftime de Python (par exemple, %H:%M:%S.%f pour heures:minutes:secondes.microsecondes)."
+
+msgid "Image-specific settings"
+msgstr "Paramètres spécifiques aux images"
+
+msgid "**Lock aspect ratio to 1:1**"
+msgstr "**Verrouiller le rapport d'aspect à 1:1**"
+
+msgid "When enabled, the aspect ratio of images is locked to 1:1. When disabled, the aspect ratio is determined by the physical pixel size (default and recommended setting)."
+msgstr "Si le réglage est activé, le rapport d'aspect des images est verrouillé à 1:1. Lorsque désactivé, le rapport d'aspect est déterminé par la taille physique du pixel (paramètre par défaut et recommandé)."
+
+msgid "**Use reference image LUT range**"
+msgstr "**Utiliser la plage LUT de l'image de référence**"
+
+msgid "When enabled, images are shown with the same LUT (Look-Up Table) range as the first selected image, allowing easier comparison."
+msgstr "Si le réglage est activé, les images sont affichées avec la même plage LUT (Look-Up Table) que la première image sélectionnée, permettant une comparaison plus facile."
+
+msgid "**Eliminate outliers**"
+msgstr "**Éliminer les valeurs aberrantes**"
+
+msgid "Percentage of the highest and lowest values to eliminate from the image histogram. Recommended values are below 1%."
+msgstr "Pourcentage des valeurs les plus élevées et les plus basses à éliminer de l'histogramme de l'image. Les valeurs recommandées sont inférieures à 1 %."
+
+#, python-format
+msgid "Percentage of margin to add around data when auto-scaling image plots. A value of 0.2% adds a small margin for better visualization. Set to 0% for no margin (exact data bounds)."
+msgstr "Pourcentage de marge à ajouter autour des données lors de la mise à l'échelle automatique des tracés d'images. Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation. Mettre à 0 % pour aucune marge (bornes de données exactes)."
+
+msgid "**Default image visualization settings**"
+msgstr "**Paramètres de visualisation d'image par défaut**"
+
+msgid "Click this button to configure default visualization settings for images (colormap, interpolation, contrast, etc.)."
+msgstr "Cliquer sur ce bouton pour configurer les paramètres de visualisation par défaut pour les images (carte de couleurs, interpolation, contraste, etc.)."
+
+msgid "I/O"
+msgstr "Entrée/sortie"
+
+msgid "The I/O settings tab controls input/output operations:"
+msgstr "L'onglet des préférences d'entrée/sortie contrôle les opérations d'entrée/sortie :"
+
+msgid "I/O settings tab"
+msgstr "Onglet des préférences d'entrée/sortie"
+
+msgid "**Clear workspace before loading HDF5 file**"
+msgstr "**Effacer l'espace de travail avant de charger le fichier HDF5**"
+
+msgid "When enabled, the workspace is cleared before loading an HDF5 file."
+msgstr "Si le réglage est activé, l'espace de travail est effacé avant de charger un fichier HDF5."
+
+msgid "**Ask before clearing workspace**"
+msgstr "**Demander avant d'effacer l'espace de travail**"
+
+msgid "When enabled, a confirmation dialog is displayed before clearing the workspace."
+msgstr "Si le réglage est activé, une boîte de dialogue de confirmation est affichée avant d'effacer l'espace de travail."
+
+msgid "**HDF5 full path in title**"
+msgstr "**Chemin complet HDF5 dans le titre**"
+
+msgid "When enabled, the full path of the HDF5 dataset is used as the title for the signal/image object. When disabled, only the dataset name is used."
+msgstr "Si le réglage est activé, le chemin complet du jeu de données HDF5 est utilisé comme titre pour l'objet signal/image. Lorsque désactivé, seul le nom du jeu de données est utilisé."
+
+msgid "**HDF5 file name in title**"
+msgstr "**Nom de fichier HDF5 dans le titre**"
+
+msgid "When enabled, the HDF5 file name is appended as a suffix to the title of the signal/image object."
+msgstr "Si le réglage est activé, le nom du fichier HDF5 est ajouté comme suffixe au titre de l'objet signal/image."
+
+msgid "Console"
+msgstr "Console"
+
+msgid "The Console settings tab configures the internal console for debugging and advanced users:"
+msgstr "L'onglet des préférences de console configure la console interne pour le débogage et les utilisateurs avancés :"
+
+msgid "Console settings tab"
+msgstr "Onglet des préférences de console"
+
+msgid "**Console enabled**"
+msgstr "**Console activée**"
+
+msgid "Enable the internal Python console for debugging and advanced scripting."
+msgstr "Activer la console Python interne pour le débogage et les scripts avancés."
+
+msgid "**Show console on error**"
+msgstr "**Afficher la console en cas d'erreur**"
+
+msgid "When enabled, the console is automatically shown when an error occurs in the application. This is useful for debugging as it allows you to see the error traceback."
+msgstr "Si le réglage est activé, la console est automatiquement affichée lorsqu'une erreur se produit dans l'application. Ceci est utile pour le débogage car cela permet de voir la trace d'erreur."
+
+msgid "**External editor path**"
+msgstr "**Chemin de l'éditeur externe**"
+
+msgid "Path to an external text editor to use for editing Python code from the console."
+msgstr "Chemin vers un éditeur de texte externe à utiliser pour éditer du code Python depuis la console."
+
+msgid "**External editor arguments**"
+msgstr "**Arguments de l'éditeur externe**"
+
+msgid "Command-line arguments to pass to the external editor."
+msgstr "Arguments de ligne de commande à passer à l'éditeur externe."

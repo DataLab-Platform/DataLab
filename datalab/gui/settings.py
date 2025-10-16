@@ -417,20 +417,26 @@ def get_all_options(paramdict: dict[str, gds.DataSet]) -> list:
     return options
 
 
+def create_dataset_dict() -> dict[str, gds.DataSet]:
+    """Create a dictionary of datasets for each settings tab, populate it from Conf."""
+    paramdict = {
+        "main": MainSettings(_("General"), icon="libre-gui-settings.svg"),
+        "proc": ProcSettings(_("Processing"), icon="libre-tech-ram.svg"),
+        "view": ViewSettings(_("Visualization"), icon="visualization.svg"),
+        "io": IOSettings(_("I/O"), icon="io.svg"),
+        "console": ConsoleSettings(_("Console"), icon="console.svg"),
+    }
+    conf_to_datasets(paramdict)
+    return paramdict
+
+
 def edit_settings(parent: QW.QWidget) -> None:
     """Edit DataLab settings
 
     Args:
         parent: Parent widget
     """
-    paramdict = {
-        "main": MainSettings(_("General")),
-        "proc": ProcSettings(_("Processing")),
-        "view": ViewSettings(_("Visualization")),
-        "io": IOSettings(_("I/O")),
-        "console": ConsoleSettings(_("Console")),
-    }
-    conf_to_datasets(paramdict)
+    paramdict = create_dataset_dict()
     before = get_restart_items_values(paramdict)
     all_values_before = get_all_values(paramdict)
     params = gds.DataSetGroup(paramdict.values(), title=_("Settings"))
