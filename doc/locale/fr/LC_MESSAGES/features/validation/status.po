@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-15 15:51+0200\n"
+"POT-Creation-Date: 2025-10-17 06:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -253,7 +253,7 @@ msgstr ""
 msgid "Compute CDF fit"
 msgstr ""
 
-msgid "`test_signal_cdf_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L450>`_"
+msgid "`test_signal_cdf_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L453>`_"
 msgstr ""
 
 msgid ":py:func:`clip <sigima.proc.signal.clip>`"
@@ -364,15 +364,6 @@ msgstr ""
 msgid "`test_signal_division_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/operation_unit_test.py#L198>`_"
 msgstr ""
 
-msgid ":py:func:`piecewiseexponential_fit <sigima.proc.signal.piecewiseexponential_fit>`"
-msgstr ""
-
-msgid "Compute piecewise exponential fit (raise-decay)"
-msgstr "Calculer l'ajustement exponentiel par morceaux (augmentation-décroissance)"
-
-msgid "`test_signal_piecewiseexponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L337>`_"
-msgstr ""
-
 msgid ":py:func:`dynamic_parameters <sigima.proc.signal.dynamic_parameters>`"
 msgstr ""
 
@@ -406,7 +397,7 @@ msgstr ""
 msgid "Extract pulse features"
 msgstr ""
 
-msgid "`test_signal_extract_pulse_features <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/pulse_unit_test.py#L1282>`_"
+msgid "`test_signal_extract_pulse_features <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/pulse/pulse_unit_test.py#L1729>`_"
 msgstr ""
 
 msgid ":py:func:`extract_roi <sigima.proc.signal.extract_roi>`"
@@ -676,13 +667,22 @@ msgstr ""
 msgid "`test_signal_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fft1d_unit_test.py#L219>`_"
 msgstr ""
 
+msgid ":py:func:`piecewiseexponential_fit <sigima.proc.signal.piecewiseexponential_fit>`"
+msgstr ""
+
+msgid "Compute piecewise exponential fit (raise-decay)"
+msgstr "Calculer l'ajustement exponentiel par morceaux (augmentation-décroissance)"
+
+msgid "`test_signal_piecewiseexponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L337>`_"
+msgstr ""
+
 msgid ":py:func:`planckian_fit <sigima.proc.signal.planckian_fit>`"
 msgstr ""
 
 msgid "Compute Planckian fit"
 msgstr "Calculer l'ajustement de Planck"
 
-msgid "`test_signal_planckian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L370>`_"
+msgid "`test_signal_planckian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L373>`_"
 msgstr ""
 
 msgid ":py:func:`polynomial_fit <sigima.proc.signal.polynomial_fit>`"
@@ -781,7 +781,7 @@ msgstr ""
 msgid "Compute sigmoid fit"
 msgstr "Calculer l'ajustement sigmoïde"
 
-msgid "`test_signal_sigmoid_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L487>`_"
+msgid "`test_signal_sigmoid_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L490>`_"
 msgstr ""
 
 msgid ":py:func:`sinusoidal_fit <sigima.proc.signal.sinusoidal_fit>`"
@@ -790,7 +790,7 @@ msgstr ""
 msgid "Compute sinusoidal fit"
 msgstr "Calculer l'ajustement sinusoïdal"
 
-msgid "`test_sinusoidal_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L746>`_"
+msgid "`test_sinusoidal_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L749>`_"
 msgstr ""
 
 msgid ":py:func:`sqrt <sigima.proc.signal.sqrt>`"
@@ -871,7 +871,7 @@ msgstr ""
 msgid "Compute two-half-Gaussian fit"
 msgstr ""
 
-msgid "`test_signal_twohalfgaussian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L523>`_"
+msgid "`test_signal_twohalfgaussian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/signal/fitting_unit_test.py#L526>`_"
 msgstr ""
 
 msgid ":py:func:`voigt_fit <sigima.proc.signal.voigt_fit>`"
@@ -1504,7 +1504,7 @@ msgstr ""
 msgid "Compute log10(z+n) with :py:data:`numpy.log10`"
 msgstr ""
 
-msgid "`test_image_logp1 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L483>`_"
+msgid "`test_image_log10_z_plus_n <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/operation_unit_test.py#L483>`_"
 msgstr ""
 
 msgid ":py:func:`magnitude_spectrum <sigima.proc.image.magnitude_spectrum>`"
@@ -1923,3 +1923,4 @@ msgstr ""
 
 msgid "`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.0.0/sigima/tests/image/fft2d_unit_test.py#L50>`_"
 msgstr ""
+
