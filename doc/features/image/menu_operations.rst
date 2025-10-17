@@ -21,6 +21,49 @@ The "Operations" menu allows you to perform various operations on the current
 image or group of images. It also allows you to extract profiles, distribute
 images on a grid, or resize images.
 
+Operations with a constant
+--------------------------
+
+Create a new image which is the result of a constant operation on each selected image:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Operation
+      - Equation
+    * - |constant_add| Addition
+      - :math:`z_{k} = z_{k-1} + conv(c)`
+    * - |constant_subtract| Subtraction
+      - :math:`z_{k} = z_{k-1} - conv(c)`
+    * - |constant_multiply| Multiplication
+      - :math:`z_{k} = conv(z_{k-1} \times c)`
+    * - |constant_divide| Division
+      - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
+
+.. |constant_add| image:: ../../../datalab/data/icons/operations/constant_add.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |constant_subtract| image:: ../../../datalab/data/icons/operations/constant_subtract.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |constant_multiply| image:: ../../../datalab/data/icons/operations/constant_multiply.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |constant_divide| image:: ../../../datalab/data/icons/operations/constant_divide.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+where :math:`c` is the constant value and :math:`conv` is the conversion function
+which handles data type conversion (keeping the same data type as the input image).
+
 Basic arithmetic operations
 ---------------------------
 
@@ -86,49 +129,6 @@ Basic arithmetic operations
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
-
-Operations with a constant
---------------------------
-
-Create a new image which is the result of a constant operation on each selected image:
-
-.. list-table::
-    :header-rows: 1
-    :widths: 25, 75
-
-    * - Operation
-      - Equation
-    * - |constant_add| Addition
-      - :math:`z_{k} = z_{k-1} + conv(c)`
-    * - |constant_subtract| Subtraction
-      - :math:`z_{k} = z_{k-1} - conv(c)`
-    * - |constant_multiply| Multiplication
-      - :math:`z_{k} = conv(z_{k-1} \times c)`
-    * - |constant_divide| Division
-      - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
-
-.. |constant_add| image:: ../../../datalab/data/icons/operations/constant_add.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |constant_subtract| image:: ../../../datalab/data/icons/operations/constant_subtract.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |constant_multiply| image:: ../../../datalab/data/icons/operations/constant_multiply.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |constant_divide| image:: ../../../datalab/data/icons/operations/constant_divide.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-where :math:`c` is the constant value and :math:`conv` is the conversion function
-which handles data type conversion (keeping the same data type as the input image).
 
 Absolute value and complex image operations
 -------------------------------------------

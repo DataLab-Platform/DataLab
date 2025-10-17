@@ -92,6 +92,13 @@ Create a new signal from the following supported filetypes:
       - .npy
     * - MAT-Files
       - .mat
+    * - FT-Lab files
+      - .sig
+
+Open from directory
+^^^^^^^^^^^^^^^^^^^
+
+Open multiple signals from a specified directory.
 
 Save signal
 ^^^^^^^^^^^
@@ -106,8 +113,8 @@ Save current signal to the following supported filetypes:
     * - Text files
       - .csv
 
-Save to directory
-^^^^^^^^^^^^^^^^^
+Save signals to directory
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Save all selected signals to a specified directory, with configurable filename pattern
 and signal format.

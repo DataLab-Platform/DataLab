@@ -185,14 +185,16 @@ The following functions are available:
       - Inverse Fast Fourier Transform
       - `numpy.fft.ifft2 <https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft2.html>`_
     * - Magnitude spectrum
-      - Optionnal: use logarithmic scale (dB)
-      - :math:`z_{1} = |FFT(z_{0})|` or :math:`z_{1} = 20 \log_{10}(|FFT(z_{0})|)` (dB)
+      - Optional: output in decibels (dB)
+      - | :math:`z_{1} = \left|\FFT\left(z_{0}\right)\right|` or
+        | :math:`z_{1} = 20 \log_{10} \left(\left|\FFT\left(z_{0}\right)\right|\right)` (dB)
     * - Phase spectrum
-      -
-      - :math:`z_{1} = \angle(FFT(z_{0}))`
+      - Phase of the FFT expressed in degrees, using `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_
+      - :math:`z_{1} = \angle\left(\FFT\left(z_{0}\right)\right)`
     * - Power spectral density
-      - Optionnal: use logarithmic scale (dB)
-      - :math:`z_{1} = |FFT(z_{0})|^2` or :math:`z_{1} = 10 \log_{10}(|FFT(z_{0})|^2)` (dB)
+      - Optional: output in decibels (dB)
+      - | :math:`z_{1} = \left|\FFT\left(z_{0}\right)\right|^2` or
+        | :math:`z_{1} = 10 \log_{10} \left(\left|\FFT\left(z_{0}\right)\right|^2\right)` (dB)
 
 .. note::
 
@@ -449,3 +451,40 @@ Pixel binning
 Combine clusters of adjacent pixels, throughout the image,
 into single pixels. The result can be the sum, average, median, minimum,
 or maximum value of the cluster.
+
+Resampling
+^^^^^^^^^^
+
+Generate new images by resampling each selected image.
+The following parameters are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - math:`x_{min}`
+      - Minimum x-coordinate of the output image
+    * - :math:`x_{max}`
+      - Maximum x-coordinate of the output image
+    * - :math:`y_{min}`
+      - Minimum y-coordinate of the output image
+    * - :math:`y_{max}`
+      - Maximum y-coordinate of the output image
+    * - Mode
+      - Image size definition mode: 'Pixel size' or 'Output shape'. The 'Pixel size' mode
+        allows to define the pixel size of the new image, while the 'Output shape' mode
+        allows to define the number of pixels of the new image.
+    * - ΔX
+      - Pixel size in x-direction (if 'Pixel size' mode is selected)
+    * - ΔY
+      - Pixel size in y-direction (if 'Pixel size' mode is selected)
+    * - Width
+      - Output image width in pixels (if 'Output shape' mode is selected)
+    * - Height
+      - Output image height in pixels (if 'Output shape' mode is selected)
+    * - Interpolation method
+      - Interpolation method to use: 'nearest', 'linear', 'cubic'
+    * - Fill value
+      - Value to use for points outside the input image domain (if None, function uses NaN for extrapolation)

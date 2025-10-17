@@ -206,15 +206,17 @@ The following functions are available:
       - Inverse Fast Fourier Transform
       - `numpy.fft.ifft <https://docs.scipy.org/doc/numpy/reference/generated/numpy.fft.ifft.html>`_
     * - Magnitude spectrum
-      - Optionnal: use logarithmic scale (dB)
-      - :math:`y_{1} = |FFT(y_{0})|` or :math:`20.log_{10}(|FFT(y_{0})|)` (dB)
+      - Optional: output in decibels (dB)
+      - | :math:`y_{1} = \left|\FFT\left(y_{0}\right)\right|` or
+        | :math:`y_{1} = 20 \log_{10} \left(\left|\FFT\left(y_{0}\right)\right|\right)` (dB)
     * - Phase spectrum
-      - Phase of the FFT expressed in degrees, using `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_ function
-      - :math:`y_{1} = \angle FFT(y_{0})`
+      - Phase of the FFT expressed in degrees, using `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_
+      - :math:`y_{1} = \angle \FFT\left(y_{0}\right)`
     * - Power spectral density (PSD)
-      - Optionnal: use logarithmic scale (dB). PSD is estimated using Welch's method
+      - Optional: output in decibels (dB). PSD is estimated using Welch's method
         (see `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)
-      - :math:`Y_{k} = PSD(y_{k})` or :math:`10.log_{10}(PSD(y_{k}))` (dB)
+      - | :math:`y_{1} = \PSD\left(y_{0}\right)` or
+        | :math:`y_{1} = 10 \log_{10} \left(\PSD\left(y_{0}\right)\right)` (dB)
 
 .. note::
 

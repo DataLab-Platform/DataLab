@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 19:35+0200\n"
+"POT-Creation-Date: 2025-10-16 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -184,6 +184,12 @@ msgstr "Images Bitmap"
 msgid ".bmp"
 msgstr ""
 
+msgid "FT-Lab files"
+msgstr "Fichiers FT-Lab"
+
+msgid ".ima"
+msgstr ""
+
 msgid "DataLab also supports any image format that can be read by the `imageio` library, provided that the associated plugin(s) are installed (see `imageio documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_) and that the output NumPy array data type and shape are supported by DataLab."
 msgstr "DataLab prend également en charge tout format d'image pouvant être lu par la bibliothèque `imageio`, à condition que le(s) plugin(s) associé(s) soient installé(s) (voir `documentation imageio <https://imageio.readthedocs.io/en/stable/formats/index.html>`_) et que le type de données et la forme du tableau NumPy de sortie soient pris en charge par DataLab."
 
@@ -199,14 +205,20 @@ msgstr ""
 msgid "If the argument is a tuple, the return value is the same object."
 msgstr ""
 
+msgid "Open from directory"
+msgstr "Ouvrir depuis un répertoire"
+
+msgid "Open multiple images from a specified directory."
+msgstr "Ouvrir plusieurs images depuis un répertoire spécifié."
+
 msgid "Save image"
 msgstr "Enregistrer l'image"
 
 msgid "Save current image (see \"Open image\" supported filetypes)."
 msgstr "Enregistre l'image sélectionnée dans l'un des types de fichier pris en charge :"
 
-msgid "Save to directory"
-msgstr "Enregistrer dans un répertoire"
+msgid "Save images to directory"
+msgstr "Enregistrer les images dans un répertoire"
 
 msgid "Save all selected images to a specified directory, with configurable filename pattern and image format."
 msgstr "Enregistrer toutes les images sélectionnées dans un répertoire spécifié, avec un patron de nom de fichier et un format d'image configurables."

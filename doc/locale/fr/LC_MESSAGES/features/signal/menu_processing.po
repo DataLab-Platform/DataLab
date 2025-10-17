@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 09:42+0200\n"
+"POT-Creation-Date: 2025-10-16 17:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -300,32 +300,40 @@ msgstr ""
 msgid "Magnitude spectrum"
 msgstr "Spectre d'amplitude"
 
-msgid "Optionnal: use logarithmic scale (dB)"
-msgstr "Optionnel : utiliser une échelle logarithmique (dB)"
+msgid "Optional: output in decibels (dB)"
+msgstr "Optionnel : sortie en décibels (dB)"
 
 #, python-brace-format
-msgid ":math:`y_{1} = |FFT(y_{0})|` or :math:`20.log_{10}(|FFT(y_{0})|)` (dB)"
-msgstr ":math:`y_{1} = |FFT(y_{0})|` ou :math:`20.log_{10}(|FFT(y_{0})|)` (dB)"
+msgid ":math:`y_{1} = \\left|\\FFT\\left(y_{0}\\right)\\right|` or"
+msgstr ":math:`y_{1} = \\left|\\FFT\\left(y_{0}\\right)\\right|` ou"
+
+#, python-brace-format
+msgid ":math:`y_{1} = 20 \\log_{10} \\left(\\left|\\FFT\\left(y_{0}\\right)\\right|\\right)` (dB)"
+msgstr ":math:`y_{1} = 20 \\log_{10} \\left(\\left|\\FFT\\left(y_{0}\\right)\\right|\\right)` (dB)"
 
 msgid "Phase spectrum"
 msgstr "Spectre de phase"
 
-msgid "Phase of the FFT expressed in degrees, using `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_ function"
+msgid "Phase of the FFT expressed in degrees, using `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_"
 msgstr "Phase de la FFT exprimée en degrés, utilisant la fonction `numpy.angle <https://docs.scipy.org/doc/numpy/reference/generated/numpy.angle.html>`_"
 
 #, python-brace-format
-msgid ":math:`y_{1} = \\angle FFT(y_{0})`"
+msgid ":math:`y_{1} = \\angle \\FFT\\left(y_{0}\\right)`"
 msgstr ""
 
 msgid "Power spectral density (PSD)"
 msgstr "Densité spectrale de puissance (PSD)"
 
-msgid "Optionnal: use logarithmic scale (dB). PSD is estimated using Welch's method (see `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
-msgstr "Optionnel : utiliser une échelle logarithmique (dB). La PSD est estimée en utilisant la méthode de Welch (voir `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
+msgid "Optional: output in decibels (dB). PSD is estimated using Welch's method (see `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
+msgstr "Optionnel : sortie en décibels (dB). La PSD est estimée en utilisant la méthode de Welch (voir `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
 
 #, python-brace-format
-msgid ":math:`Y_{k} = PSD(y_{k})` or :math:`10.log_{10}(PSD(y_{k}))` (dB)"
-msgstr ":math:`Y_{k} = PSD(y_{k})` ou :math:`10.log_{10}(PSD(y_{k}))` (dB)"
+msgid ":math:`y_{1} = \\PSD\\left(y_{0}\\right)` or"
+msgstr ":math:`y_{1} = \\PSD\\left(y_{0}\\right)` ou"
+
+#, python-brace-format
+msgid ":math:`y_{1} = 10 \\log_{10} \\left(\\PSD\\left(y_{0}\\right)\\right)` (dB)"
+msgstr ""
 
 msgid "FFT and inverse FFT are performed using frequency shifting if the option is enabled in DataLab settings (see :ref:`settings`)."
 msgstr "La FFT et la FFT inverse sont effectuées en utilisant un décalage de fréquence si l'option est activée dans les paramètres de DataLab (voir :ref:`settings`)."

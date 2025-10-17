@@ -85,6 +85,8 @@ Create a new image from the following supported filetypes:
       - .fxd
     * - Bitmap images
       - .bmp
+    * - FT-Lab files
+      - .ima
 
 .. note::
 
@@ -97,13 +99,18 @@ Create a new image from the following supported filetypes:
 
     .. autodata:: sigima.config.IMAGEIO_FORMATS
 
+Open from directory
+^^^^^^^^^^^^^^^^^^^
+
+Open multiple images from a specified directory.
+
 Save image
 ^^^^^^^^^^
 
 Save current image (see "Open image" supported filetypes).
 
-Save to directory
-^^^^^^^^^^^^^^^^^
+Save images to directory
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Save all selected images to a specified directory, with configurable filename pattern
 and image format.

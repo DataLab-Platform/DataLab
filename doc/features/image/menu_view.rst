@@ -84,6 +84,15 @@ large. Therefore, you may want to disable the auto-refresh feature when you are
 working with large data sets, and enable it again when you are done. This will
 avoid unnecessary refreshes.
 
+Show only first selected image
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Toggle between showing all selected images or only the first one.
+
+When this option is enabled, only the first selected image is displayed in the plot
+view. This may be useful when multiple images are selected and focusing on a single
+image is (temporarily) preferred.
+
 Refresh manually
 ^^^^^^^^^^^^^^^^
 
