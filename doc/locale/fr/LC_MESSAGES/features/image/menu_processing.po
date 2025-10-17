@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 17:06+0200\n"
+"POT-Creation-Date: 2025-10-17 15:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -553,64 +553,10 @@ msgstr "Contours"
 msgid "Create a new image which is the result of edge filtering on each selected image."
 msgstr "Crée une image à partir du résultat d'un filtrage de contours sur chaque image sélectionnée."
 
-msgid "Roberts filter"
-msgstr "Filtre de Roberts"
+msgid "Canny filter"
+msgstr "Filtre de Canny"
 
-msgid "`skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_"
-msgstr ""
-
-msgid "Prewitt filter"
-msgstr "Filtre de Prewitt"
-
-msgid "`skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_"
-msgstr ""
-
-msgid "Prewitt filter (horizontal)"
-msgstr "Filtre de Prewitt (horizontal)"
-
-msgid "`skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_"
-msgstr ""
-
-msgid "Prewitt filter (vertical)"
-msgstr "Filtre de Prewitt (vertical)"
-
-msgid "`skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_"
-msgstr ""
-
-msgid "Sobel filter"
-msgstr "Filtre de Sobel"
-
-msgid "`skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_"
-msgstr ""
-
-msgid "Sobel filter (horizontal)"
-msgstr "Filtre de Sobel (horizontal)"
-
-msgid "`skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_"
-msgstr ""
-
-msgid "Sobel filter (vertical)"
-msgstr "Filtre de Sobel (vertical)"
-
-msgid "`skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_"
-msgstr ""
-
-msgid "Scharr filter"
-msgstr "Filtre de Scharr"
-
-msgid "`skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_"
-msgstr ""
-
-msgid "Scharr filter (horizontal)"
-msgstr "Filtre de Scharr (horizontal)"
-
-msgid "`skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_"
-msgstr ""
-
-msgid "Scharr filter (vertical)"
-msgstr "Filtre de Scharr (vertical)"
-
-msgid "`skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_"
+msgid "`skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_"
 msgstr ""
 
 msgid "Farid filter"
@@ -637,10 +583,64 @@ msgstr "Filtre de Laplace"
 msgid "`skimage.filters.laplace <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_"
 msgstr ""
 
-msgid "Canny filter"
-msgstr "Filtre de Canny"
+msgid "Prewitt filter"
+msgstr "Filtre de Prewitt"
 
-msgid "`skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_"
+msgid "`skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_"
+msgstr ""
+
+msgid "Prewitt filter (horizontal)"
+msgstr "Filtre de Prewitt (horizontal)"
+
+msgid "`skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_"
+msgstr ""
+
+msgid "Prewitt filter (vertical)"
+msgstr "Filtre de Prewitt (vertical)"
+
+msgid "`skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_"
+msgstr ""
+
+msgid "Roberts filter"
+msgstr "Filtre de Roberts"
+
+msgid "`skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_"
+msgstr ""
+
+msgid "Scharr filter"
+msgstr "Filtre de Scharr"
+
+msgid "`skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_"
+msgstr ""
+
+msgid "Scharr filter (horizontal)"
+msgstr "Filtre de Scharr (horizontal)"
+
+msgid "`skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_"
+msgstr ""
+
+msgid "Scharr filter (vertical)"
+msgstr "Filtre de Scharr (vertical)"
+
+msgid "`skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_"
+msgstr ""
+
+msgid "Sobel filter"
+msgstr "Filtre de Sobel"
+
+msgid "`skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_"
+msgstr ""
+
+msgid "Sobel filter (horizontal)"
+msgstr "Filtre de Sobel (horizontal)"
+
+msgid "`skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_"
+msgstr ""
+
+msgid "Sobel filter (vertical)"
+msgstr "Filtre de Sobel (vertical)"
+
+msgid "`skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_"
 msgstr ""
 
 msgid "The \"All edges filters\" option allows to perform all edge filtering algorithms on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different edge filters on the same image."
