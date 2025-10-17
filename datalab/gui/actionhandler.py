@@ -1353,7 +1353,6 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Compute all edge detection filters"),
                 )
-                self.action_for("canny")
             self.new_action(
                 _("Erase area") + "...",
                 triggered=self.panel.processor.compute_erase,
