@@ -17,12 +17,12 @@ import sigima.proc.base as sigima_base
 import sigima.proc.signal as sips
 from guidata.qthelpers import exec_dialog
 from sigima.objects import (
-    NormalDistributionParam,
-    PoissonDistributionParam,
+    NormalDistribution1DParam,
+    PoissonDistribution1DParam,
     ROI1DParam,
     SignalObj,
     SignalROI,
-    UniformDistributionParam,
+    UniformDistribution1DParam,
     create_signal,
 )
 from sigima.objects.scalar import GeometryResult, TableResult
@@ -207,17 +207,17 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sips.add_gaussian_noise,
             _("Add Gaussian noise"),
-            NormalDistributionParam,
+            NormalDistribution1DParam,
         )
         self.register_1_to_1(
             sips.add_poisson_noise,
             _("Add Poisson noise"),
-            PoissonDistributionParam,
+            PoissonDistribution1DParam,
         )
         self.register_1_to_1(
             sips.add_uniform_noise,
             _("Add uniform noise"),
-            UniformDistributionParam,
+            UniformDistribution1DParam,
         )
         # Noise reduction
         self.register_1_to_1(

@@ -21,10 +21,10 @@ from qtpy import QtWidgets as QW
 from sigima.objects import (
     ImageObj,
     ImageROI,
-    NormalDistributionParam,
-    PoissonDistributionParam,
+    NormalDistribution2DParam,
+    PoissonDistribution2DParam,
     ROI2DParam,
-    UniformDistributionParam,
+    UniformDistribution2DParam,
 )
 from sigima.objects.scalar import GeometryResult
 from sigima.proc.decorator import ComputationMetadata
@@ -424,17 +424,17 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(
             sipi.add_gaussian_noise,
             _("Add Gaussian noise"),
-            NormalDistributionParam,
+            NormalDistribution2DParam,
         )
         self.register_1_to_1(
             sipi.add_poisson_noise,
             _("Add Poisson noise"),
-            PoissonDistributionParam,
+            PoissonDistribution2DParam,
         )
         self.register_1_to_1(
             sipi.add_uniform_noise,
             _("Add uniform noise"),
-            UniformDistributionParam,
+            UniformDistribution2DParam,
         )
         # Noise reduction
         self.register_1_to_1(
