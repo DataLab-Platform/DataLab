@@ -1084,6 +1084,7 @@ class SignalActionHandler(BaseActionHandler):
                 ):
                     self.action_for(fit_name, separator=separator_needed)
                     separator_needed = False
+                self.action_for("evaluate_fit", separator=True)
             self.action_for("apply_window")
             self.action_for("detrending")
             self.action_for("interpolate")

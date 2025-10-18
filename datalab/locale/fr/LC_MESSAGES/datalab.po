@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-18 12:03+0200\n"
+"POT-Creation-Date: 2025-10-18 13:47+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1593,6 +1593,15 @@ msgstr "Distribuer sur grille"
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
 
+msgid "Two Half-Gaussians fit"
+msgstr "Ajustement de deux demi-Gaussiennes"
+
+msgid "Piecewise exponential fit"
+msgstr "Ajustement exponentiel par morceaux"
+
+msgid "Sigmoid fit"
+msgstr "Ajustement sigmoïde"
+
 msgid "signal to subtract"
 msgstr "signal à soustraire"
 
@@ -1653,14 +1662,14 @@ msgstr "Filtre passe-bande"
 msgid "Band-stop filter"
 msgstr "Filtre coupe-bande"
 
-msgid "Two Half-Gaussians fit"
-msgstr "Ajustement de deux demi-Gaussiennes"
+msgid "Evaluate fit"
+msgstr "Évaluer l'ajustement"
 
-msgid "Piecewise exponential fit"
-msgstr "Ajustement exponentiel par morceaux"
+msgid "signal for X values"
+msgstr "signal pour les valeurs X"
 
-msgid "Sigmoid fit"
-msgstr "Ajustement sigmoïde"
+msgid "Evaluate a fitting curve on the x-axis of another signal"
+msgstr "Évaluer une courbe d'ajustement sur l'axe des x d'un autre signal"
 
 msgid "Windowing"
 msgstr "Fenêtrage"
@@ -1673,9 +1682,6 @@ msgstr "Elimination de tendance"
 
 msgid "Interpolation"
 msgstr "Interpolation"
-
-msgid "signal for X values"
-msgstr "signal pour les valeurs X"
 
 msgid "Allan variance"
 msgstr "Variance d'Allan"
