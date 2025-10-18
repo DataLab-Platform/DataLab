@@ -105,18 +105,18 @@ class SignalDeltaXDialog(PlotDialog):
         _x, y = item.get_pos()
 
         try:
-            with warnings.catch_warnings(record=True) as w:
+            with warnings.catch_warnings(record=True):
                 self.__coords = full_width_at_y(sig.x, sig.y, y)
                 delta_str = f"{self.__coords[2] - self.__coords[0]:g}"
-                warning_or_error = len(w) > 0
+                ok = True
                 self.delta_xrange.setVisible(True)
                 self.delta_xrange.set_range(self.__coords[0], self.__coords[2])
         except ValueError:
             delta_str = ""
-            warning_or_error = True
+            ok = False
             self.delta_xrange.setVisible(False)
 
-        self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(not warning_or_error)
+        self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(ok)
         self.deltaxlineedit.setText(delta_str)
         self.ylineedit.setText(f"{y:g}" if y is not None else "")
 
