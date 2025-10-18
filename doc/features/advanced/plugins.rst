@@ -97,6 +97,11 @@ Other examples
 
 Other examples of plugins can be found in the `plugins/examples` directory of the DataLab source code (explore `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
 
+Migrating from v0.20 to v1.0
+----------------------------
+
+If you have existing plugins written for DataLab v0.20, please refer to the :ref:`migration guide <migration_v020_to_v100>` for detailed instructions on updating your plugins to work with DataLab v1.0.
+
 Public API
 ----------
 

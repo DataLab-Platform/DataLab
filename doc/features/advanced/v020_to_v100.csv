@@ -1,0 +1,64 @@
+DataLab v0.20;DataLab v1.0
+**Module/package renames**;
+``cdl``;``datalab``
+``cdl.obj``;``sigima.objects``
+``cdl.param``;``sigima.params``
+``cdl.computation.image``;``sigima.proc.image``
+``cdl.computation.signal``;``sigima.proc.signal``
+``cdl.plugins``;``datalab.plugins``
+**Object creation and manipulation**;
+``cdl.obj.create_image()``;``sigima.objects.create_image()``
+``cdl.obj.create_signal()``;``sigima.objects.create_signal()``
+``cdl.obj.ImageObj``;``sigima.objects.ImageObj``
+``cdl.obj.SignalObj``;``sigima.objects.SignalObj``
+``cdl.obj.create_image_roi()``;``sigima.objects.create_image_roi()``
+``cdl.obj.create_signal_roi()``;``sigima.objects.create_signal_roi()``
+``cdl.obj.ImageROI``;``sigima.objects.ImageROI``
+``cdl.obj.SignalROI``;``sigima.objects.SignalROI``
+**Parameter classes**;
+``cdl.param.BinningParam``;``sigima.params.BinningParam``
+``cdl.param.MovingMedianParam``;``sigima.params.MovingMedianParam``
+``cdl.param.BlobOpenCVParam``;``sigima.params.BlobOpenCVParam``
+``cdl.param.GaussianParam``;``sigima.params.GaussianParam``
+``cdl.param.*Param``;``sigima.params.*Param``
+**Computation function wrappers**;
+``cdl.computation.image.Wrap11Func``;``sigima.proc.image.Wrap1to1Func``
+``cdl.computation.signal.Wrap11Func``;``sigima.proc.signal.Wrap1to1Func``
+``cdl.computation.image.dst_11()``;``sigima.proc.image.dst_1to1()``
+``cdl.computation.signal.dst_11()``;``sigima.proc.signal.dst_1to1()``
+**Processor methods** (`p` is a signal or image processor instance);
+``p.compute_11(...)``;``p.compute_1_to_1(...)``
+``p.compute_10(...)``;``p.compute_1_to_0(...)``
+``p.compute_n1(...)``;``p.compute_n_to_1(...)``
+``p.compute_binning(param)``;``p.run_feature("binning", param)``
+``p.compute_moving_median(param)``;``p.run_feature("moving_median", param)``
+``p.compute_blob_opencv(param)``;``p.run_feature("blob_opencv", param)``
+``p.compute_*(param)``;``p.run_feature("feature_name", param)``
+**Result objects**;
+``cdl.obj.ResultProperties``;``sigima.objects.TableResult``
+``cdl.obj.ResultShape``;``sigima.objects.GeometryResult``
+``result.add_to(obj)``;``TableAdapter(result).add_to(obj)``
+``ResultShape.from_metadata_entry()``;``GeometryAdapter.from_metadata_entry()``
+``result.to_html(obj)``;``ResultHtmlGenerator.generate_html(result, obj)``
+**Test data functions**;
+``cdl.tests.data.*``;``sigima.tests.data.*``
+``cdl.tests.data.create_paracetamol_signal()``;``sigima.tests.data.create_paracetamol_signal()``
+``cdl.tests.data.add_gaussian_noise_to_signal()``;``sigima.tests.data.add_gaussian_noise_to_signal()``
+``cdl.tests.data.create_noisygauss_image()``;``sigima.tests.data.create_noisy_gaussian_image()``
+``cdl.tests.data.create_multigauss_image()``;``sigima.tests.data.create_multigaussian_image()``
+**New image parameters**;
+``edit_new_image_parameters(hide_image_dtype=True)``;``edit_new_image_parameters(hide_dtype=True)``
+``edit_new_image_parameters(hide_image_type=True)``;``edit_new_image_parameters(hide_type=True)``
+``edit_new_image_parameters(hide_image_height=True)``;``edit_new_image_parameters(hide_height=True)``
+**I/O functions**;
+``cdl.io.image.read_image()``;``sigima.io.image.read_image()``
+``cdl.io.image.write_image()``;``sigima.io.image.write_image()``
+``cdl.io.signal.read_signal()``;``sigima.io.signal.read_signal()``
+``cdl.io.signal.write_signal()``;``sigima.io.signal.write_signal()``
+**Enumerations**;
+``cdl.obj.ImageDatatypes``;``sigima.objects.ImageDatatypes``
+``cdl.obj.ImageTypes``;``sigima.objects.ImageTypes``
+**DataLab-specific features**;
+``cdl.config._``;``datalab.config._``
+``cdl.plugins.PluginBase``;``datalab.plugins.PluginBase``
+``cdl.plugins.PluginInfo``;``datalab.plugins.PluginInfo``

@@ -1,0 +1,772 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-18 09:54+0200\n"
+"PO-Revision-Date: 2025-10-18 10:00+0200\n"
+"Last-Translator: DataLab Team\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Guide for migrating DataLab plugins from v0.20 to v1.0"
+msgstr "Guide de migration des plugins DataLab de v0.20 à v1.0"
+
+msgid "DataLab, plugin, migration, v0.20, v1.0, Sigima, API changes"
+msgstr "DataLab, plugin, migration, v0.20, v1.0, Sigima, changements API"
+
+msgid "Migrating from DataLab v0.20 to v1.0"
+msgstr "Migration de DataLab v0.20 vers v1.0"
+
+msgid "DataLab v1.0 introduces significant architectural changes compared to v0.20. The most important change is the **externalization of signal and image processing features** into a separate library called **Sigima**."
+msgstr "DataLab v1.0 introduit des changements architecturaux importants par rapport à la v0.20. Le changement le plus important est l'**externalisation des fonctionnalités de traitement du signal et de l'image** dans une bibliothèque séparée appelée **Sigima**."
+
+msgid "This architectural change improves modularity, testability, and enables the reuse of processing functions in other projects. However, it requires updates to existing plugins to adapt to the new API."
+msgstr "Ce changement architectural améliore la modularité, la testabilité et permet la réutilisation des fonctions de traitement dans d'autres projets. Cependant, cela nécessite des mises à jour des plugins existants pour s'adapter à la nouvelle API."
+
+msgid "This guide describes the steps to migrate plugins from DataLab v0.20 to v1.0."
+msgstr "Ce guide décrit les étapes pour migrer les plugins de DataLab v0.20 vers v1.0."
+
+msgid "What changed in v1.0?"
+msgstr "Qu'est-ce qui a changé dans la v1.0 ?"
+
+msgid "Major architectural changes"
+msgstr "Changements architecturaux majeurs"
+
+msgid "The most significant change in DataLab v1.0 is the creation of the **Sigima library**, which now contains:"
+msgstr "Le changement le plus significatif dans DataLab v1.0 est la création de la **bibliothèque Sigima**, qui contient désormais :"
+
+msgid "**Signal and image objects** (``SignalObj``, ``ImageObj``, ROI classes)"
+msgstr "**Objets signal et image** (``SignalObj``, ``ImageObj``, classes ROI)"
+
+msgid "**Processing parameters** (all ``*Param`` classes)"
+msgstr "**Paramètres de traitement** (toutes les classes ``*Param``)"
+
+msgid "**Processing functions** (``sigima.proc.signal`` and ``sigima.proc.image`` modules)"
+msgstr "**Fonctions de traitement** (modules ``sigima.proc.signal`` et ``sigima.proc.image``)"
+
+msgid "**Algorithms** for signal and image processing, or data type conversion, coordinates transformation, ... (``sigima.tools`` module)"
+msgstr "**Algorithmes** pour le traitement du signal et de l'image, ou conversion de types de données, transformation de coordonnées, ... (module ``sigima.tools``)"
+
+msgid "**I/O functions** (reading and writing signals/images)"
+msgstr "**Fonctions d'entrée/sortie** (lecture et écriture de signaux/images)"
+
+msgid "**Test data utilities** (test signal and image generation)"
+msgstr "**Utilitaires de données de test** (génération de signaux et d'images de test)"
+
+msgid "**Result objects** (``TableResult`` and ``GeometryResult``, replacing ``ResultProperties`` and ``ResultShape``)"
+msgstr "**Objets résultat** (``TableResult`` et ``GeometryResult``, remplaçant ``ResultProperties`` et ``ResultShape``)"
+
+msgid "What remains in DataLab:"
+msgstr "Ce qui reste dans DataLab :"
+
+msgid "**GUI components** (panels, widgets, plot integration)"
+msgstr "**Composants d'interface graphique** (panneaux, widgets, intégration de tracés)"
+
+msgid "**Plugin system** (``datalab.plugins`` module)"
+msgstr "**Système de plugins** (module ``datalab.plugins``)"
+
+msgid "**Application logic** (main window, configuration, project management)"
+msgstr "**Logique applicative** (fenêtre principale, configuration, gestion de projet)"
+
+msgid "**Result metadata adapters** (``TableAdapter``, ``GeometryAdapter`` for storing results in object metadata)"
+msgstr "**Adaptateurs de métadonnées de résultats** (``TableAdapter``, ``GeometryAdapter`` pour stocker les résultats dans les métadonnées des objets)"
+
+msgid "Package renaming"
+msgstr "Renommage du package"
+
+msgid "The DataLab package was renamed from ``cdl`` to ``datalab`` for clarity:"
+msgstr "Le package DataLab a été renommé de ``cdl`` à ``datalab`` par souci de clarté :"
+
+msgid "New result objects"
+msgstr "Nouveaux objets résultat"
+
+msgid "DataLab v1.0 introduces two new immutable result types:"
+msgstr "DataLab v1.0 introduit deux nouveaux types de résultats immuables :"
+
+msgid "**TableResult**: Replaces ``ResultProperties`` for tabular scalar results (e.g., statistics, measurements)"
+msgstr "**TableResult** : Remplace ``ResultProperties`` pour les résultats scalaires tabulaires (par exemple, statistiques, mesures)"
+
+msgid "**GeometryResult**: Replaces ``ResultShape`` for geometric results (e.g., detected features, contours)"
+msgstr "**GeometryResult** : Remplace ``ResultShape`` pour les résultats géométriques (par exemple, caractéristiques détectées, contours)"
+
+msgid "These new result types are computation-oriented and free of application-specific logic (e.g., Qt, metadata). All metadata-related behaviors have been migrated to the DataLab application layer using **adapter classes** (``TableAdapter``, ``GeometryAdapter``)."
+msgstr "Ces nouveaux types de résultats sont orientés calcul et exempts de logique spécifique à l'application (par exemple, Qt, métadonnées). Tous les comportements liés aux métadonnées ont été migrés vers la couche applicative de DataLab en utilisant des **classes d'adaptation** (``TableAdapter``, ``GeometryAdapter``)."
+
+msgid "Unified processor interface"
+msgstr "Interface processeur unifiée"
+
+msgid "The processor methods have been unified and renamed:"
+msgstr "Les méthodes du processeur ont été unifiées et renommées :"
+
+msgid "Most specific ``compute_*`` methods now use the generic ``run_feature()`` method"
+msgstr "La plupart des méthodes spécifiques ``compute_*`` utilisent désormais la méthode générique ``run_feature()``"
+
+msgid "Naming conventions updated: ``compute_11`` → ``compute_1_to_1``, ``compute_10`` → ``compute_1_to_0``, etc."
+msgstr "Conventions de nommage mises à jour : ``compute_11`` → ``compute_1_to_1``, ``compute_10`` → ``compute_1_to_0``, etc."
+
+msgid "Updating the imports"
+msgstr "Mise à jour des imports"
+
+msgid "Import path changes"
+msgstr "Changements des chemins d'import"
+
+msgid "The following table gives the equivalence between DataLab v0.20 and v1.0 imports."
+msgstr "Le tableau suivant donne l'équivalence entre les imports DataLab v0.20 et v1.0."
+
+msgid "The table below shows the mapping between DataLab v0.20 and v1.0 API. For most entries, only the import statement needs to be updated."
+msgstr "Le tableau ci-dessous présente la correspondance entre l'API DataLab v0.20 et v1.0. Pour la plupart des entrées, seule l'instruction d'import doit être mise à jour."
+
+msgid "DataLab v0.20 to v1.0 Compatibility Table"
+msgstr "Tableau de compatibilité DataLab v0.20 vers v1.0"
+
+msgid "DataLab v0.20"
+msgstr "DataLab v0.20"
+
+msgid "DataLab v1.0"
+msgstr "DataLab v1.0"
+
+msgid "**Module/package renames**"
+msgstr "**Renommages de modules/packages**"
+
+msgid "``cdl``"
+msgstr ""
+
+msgid "``datalab``"
+msgstr ""
+
+msgid "``cdl.obj``"
+msgstr ""
+
+msgid "``sigima.objects``"
+msgstr ""
+
+msgid "``cdl.param``"
+msgstr ""
+
+msgid "``sigima.params``"
+msgstr ""
+
+msgid "``cdl.computation.image``"
+msgstr ""
+
+msgid "``sigima.proc.image``"
+msgstr ""
+
+msgid "``cdl.computation.signal``"
+msgstr ""
+
+msgid "``sigima.proc.signal``"
+msgstr ""
+
+msgid "``cdl.plugins``"
+msgstr ""
+
+msgid "``datalab.plugins``"
+msgstr ""
+
+msgid "**Object creation and manipulation**"
+msgstr "**Création et manipulation d'objets**"
+
+msgid "``cdl.obj.create_image()``"
+msgstr "``cdl.obj.create_image()``"
+
+msgid "``sigima.objects.create_image()``"
+msgstr "``sigima.objects.create_image()``"
+
+msgid "``cdl.obj.create_signal()``"
+msgstr "``cdl.obj.create_signal()``"
+
+msgid "``sigima.objects.create_signal()``"
+msgstr "``sigima.objects.create_signal()``"
+
+msgid "``cdl.obj.ImageObj``"
+msgstr ""
+
+msgid "``sigima.objects.ImageObj``"
+msgstr ""
+
+msgid "``cdl.obj.SignalObj``"
+msgstr ""
+
+msgid "``sigima.objects.SignalObj``"
+msgstr ""
+
+msgid "``cdl.obj.create_image_roi()``"
+msgstr ""
+
+msgid "``sigima.objects.create_image_roi()``"
+msgstr ""
+
+msgid "``cdl.obj.create_signal_roi()``"
+msgstr ""
+
+msgid "``sigima.objects.create_signal_roi()``"
+msgstr ""
+
+msgid "``cdl.obj.ImageROI``"
+msgstr ""
+
+msgid "``sigima.objects.ImageROI``"
+msgstr ""
+
+msgid "``cdl.obj.SignalROI``"
+msgstr ""
+
+msgid "``sigima.objects.SignalROI``"
+msgstr ""
+
+msgid "**Parameter classes**"
+msgstr "**Classes de paramètres**"
+
+msgid "``cdl.param.BinningParam``"
+msgstr "``cdl.param.BinningParam``"
+
+msgid "``sigima.params.BinningParam``"
+msgstr "``sigima.params.BinningParam``"
+
+msgid "``cdl.param.MovingMedianParam``"
+msgstr ""
+
+msgid "``sigima.params.MovingMedianParam``"
+msgstr ""
+
+msgid "``cdl.param.BlobOpenCVParam``"
+msgstr ""
+
+msgid "``sigima.params.BlobOpenCVParam``"
+msgstr ""
+
+msgid "``cdl.param.GaussianParam``"
+msgstr ""
+
+msgid "``sigima.params.GaussianParam``"
+msgstr ""
+
+msgid "``cdl.param.*Param``"
+msgstr ""
+
+msgid "``sigima.params.*Param``"
+msgstr ""
+
+msgid "**Computation function wrappers**"
+msgstr "**Enveloppes de fonctions de calcul**"
+
+msgid "``cdl.computation.image.Wrap11Func``"
+msgstr "``cdl.computation.image.Wrap11Func``"
+
+msgid "``sigima.proc.image.Wrap1to1Func``"
+msgstr "``sigima.proc.image.Wrap1to1Func``"
+
+msgid "``cdl.computation.signal.Wrap11Func``"
+msgstr ""
+
+msgid "``sigima.proc.signal.Wrap1to1Func``"
+msgstr ""
+
+msgid "``cdl.computation.image.dst_11()``"
+msgstr ""
+
+msgid "``sigima.proc.image.dst_1to1()``"
+msgstr ""
+
+msgid "``cdl.computation.signal.dst_11()``"
+msgstr ""
+
+msgid "``sigima.proc.signal.dst_1to1()``"
+msgstr ""
+
+msgid "**Processor methods** (`p` is a signal or image processor instance)"
+msgstr "**Méthodes du processeur** (`p` est une instance de processeur de signal ou d'image)"
+
+msgid "``p.compute_11(...)``"
+msgstr "``p.compute_11(...)``"
+
+msgid "``p.compute_1_to_1(...)``"
+msgstr "``p.compute_1_to_1(...)``"
+
+msgid "``p.compute_10(...)``"
+msgstr ""
+
+msgid "``p.compute_1_to_0(...)``"
+msgstr ""
+
+msgid "``p.compute_n1(...)``"
+msgstr ""
+
+msgid "``p.compute_n_to_1(...)``"
+msgstr ""
+
+msgid "``p.compute_binning(param)``"
+msgstr ""
+
+msgid "``p.run_feature(\"binning\", param)``"
+msgstr ""
+
+msgid "``p.compute_moving_median(param)``"
+msgstr ""
+
+msgid "``p.run_feature(\"moving_median\", param)``"
+msgstr ""
+
+msgid "``p.compute_blob_opencv(param)``"
+msgstr ""
+
+msgid "``p.run_feature(\"blob_opencv\", param)``"
+msgstr ""
+
+msgid "``p.compute_*(param)``"
+msgstr ""
+
+msgid "``p.run_feature(\"feature_name\", param)``"
+msgstr ""
+
+msgid "**Result objects**"
+msgstr "**Objets résultat**"
+
+msgid "``cdl.obj.ResultProperties``"
+msgstr "``cdl.obj.ResultProperties``"
+
+msgid "``sigima.objects.TableResult``"
+msgstr "``sigima.objects.TableResult``"
+
+msgid "``cdl.obj.ResultShape``"
+msgstr ""
+
+msgid "``sigima.objects.GeometryResult``"
+msgstr ""
+
+msgid "``result.add_to(obj)``"
+msgstr ""
+
+msgid "``TableAdapter(result).add_to(obj)``"
+msgstr ""
+
+msgid "``ResultShape.from_metadata_entry()``"
+msgstr ""
+
+msgid "``GeometryAdapter.from_metadata_entry()``"
+msgstr ""
+
+msgid "``result.to_html(obj)``"
+msgstr ""
+
+msgid "``ResultHtmlGenerator.generate_html(result, obj)``"
+msgstr ""
+
+msgid "**Test data functions**"
+msgstr "**Fonctions de données de test**"
+
+msgid "``cdl.tests.data.*``"
+msgstr "``cdl.tests.data.*``"
+
+msgid "``sigima.tests.data.*``"
+msgstr "``sigima.tests.data.*``"
+
+msgid "``cdl.tests.data.create_paracetamol_signal()``"
+msgstr ""
+
+msgid "``sigima.tests.data.create_paracetamol_signal()``"
+msgstr ""
+
+msgid "``cdl.tests.data.add_gaussian_noise_to_signal()``"
+msgstr ""
+
+msgid "``sigima.tests.data.add_gaussian_noise_to_signal()``"
+msgstr ""
+
+msgid "``cdl.tests.data.create_noisygauss_image()``"
+msgstr ""
+
+msgid "``sigima.tests.data.create_noisy_gaussian_image()``"
+msgstr ""
+
+msgid "``cdl.tests.data.create_multigauss_image()``"
+msgstr ""
+
+msgid "``sigima.tests.data.create_multigaussian_image()``"
+msgstr ""
+
+msgid "**New image parameters**"
+msgstr "**Nouveaux paramètres d'image**"
+
+msgid "``edit_new_image_parameters(hide_image_dtype=True)``"
+msgstr "``edit_new_image_parameters(hide_image_dtype=True)``"
+
+msgid "``edit_new_image_parameters(hide_dtype=True)``"
+msgstr "``edit_new_image_parameters(hide_dtype=True)``"
+
+msgid "``edit_new_image_parameters(hide_image_type=True)``"
+msgstr ""
+
+msgid "``edit_new_image_parameters(hide_type=True)``"
+msgstr ""
+
+msgid "``edit_new_image_parameters(hide_image_height=True)``"
+msgstr ""
+
+msgid "``edit_new_image_parameters(hide_height=True)``"
+msgstr ""
+
+msgid "**I/O functions**"
+msgstr "**Fonctions d'entrée/sortie**"
+
+msgid "``cdl.io.image.read_image()``"
+msgstr "``cdl.io.image.read_image()``"
+
+msgid "``sigima.io.image.read_image()``"
+msgstr "``sigima.io.image.read_image()``"
+
+msgid "``cdl.io.image.write_image()``"
+msgstr ""
+
+msgid "``sigima.io.image.write_image()``"
+msgstr ""
+
+msgid "``cdl.io.signal.read_signal()``"
+msgstr ""
+
+msgid "``sigima.io.signal.read_signal()``"
+msgstr ""
+
+msgid "``cdl.io.signal.write_signal()``"
+msgstr ""
+
+msgid "``sigima.io.signal.write_signal()``"
+msgstr ""
+
+msgid "**Enumerations**"
+msgstr "**Énumérations**"
+
+msgid "``cdl.obj.ImageDatatypes``"
+msgstr "``cdl.obj.ImageDatatypes``"
+
+msgid "``sigima.objects.ImageDatatypes``"
+msgstr "``sigima.objects.ImageDatatypes``"
+
+msgid "``cdl.obj.ImageTypes``"
+msgstr ""
+
+msgid "``sigima.objects.ImageTypes``"
+msgstr ""
+
+msgid "**DataLab-specific features**"
+msgstr "**Fonctionnalités spécifiques à DataLab**"
+
+msgid "``cdl.config._``"
+msgstr "``cdl.config._``"
+
+msgid "``datalab.config._``"
+msgstr "``datalab.config._``"
+
+msgid "``cdl.plugins.PluginBase``"
+msgstr ""
+
+msgid "``datalab.plugins.PluginBase``"
+msgstr ""
+
+msgid "``cdl.plugins.PluginInfo``"
+msgstr ""
+
+msgid "``datalab.plugins.PluginInfo``"
+msgstr ""
+
+msgid "Migrating plugin code"
+msgstr "Migration du code des plugins"
+
+msgid "Example 1: Simple processing plugin"
+msgstr "Exemple 1 : Plugin de traitement simple"
+
+msgid "Here's how a simple custom filter plugin needs to be updated:"
+msgstr "Voici comment un plugin de filtre personnalisé simple doit être mis à jour :"
+
+msgid "**DataLab v0.20:**"
+msgstr "**DataLab v0.20 :**"
+
+msgid "**DataLab v1.0:**"
+msgstr "**DataLab v1.0 :**"
+
+msgid "**Key changes:**"
+msgstr "**Changements clés :**"
+
+msgid "``cdl.computation.image`` → ``sigima.proc.image``"
+msgstr "``cdl.computation.image`` → ``sigima.proc.image``"
+
+msgid "``cdl.plugins`` → ``datalab.plugins``"
+msgstr "``cdl.plugins`` → ``datalab.plugins``"
+
+msgid "``Wrap11Func`` → ``Wrap1to1Func``"
+msgstr "``Wrap11Func`` → ``Wrap1to1Func``"
+
+msgid "``compute_11`` → ``compute_1_to_1``"
+msgstr "``compute_11`` → ``compute_1_to_1``"
+
+msgid "Example 2: Plugin using built-in features"
+msgstr "Exemple 2 : Plugin utilisant des fonctionnalités intégrées"
+
+msgid "``cdl.param`` → ``sigima.params``"
+msgstr "``cdl.param`` → ``sigima.params``"
+
+msgid "``compute_binning(param)`` → ``run_feature(\"binning\", param)``"
+msgstr "``compute_binning(param)`` → ``run_feature(\"binning\", param)``"
+
+msgid "``compute_moving_median(param)`` → ``run_feature(\"moving_median\", param)``"
+msgstr "``compute_moving_median(param)`` → ``run_feature(\"moving_median\", param)``"
+
+msgid "``compute_blob_opencv(param)`` → ``run_feature(\"blob_opencv\", param)``"
+msgstr "``compute_blob_opencv(param)`` → ``run_feature(\"blob_opencv\", param)``"
+
+msgid "Example 3: Plugin creating objects and handling results"
+msgstr "Exemple 3 : Plugin créant des objets et gérant les résultats"
+
+msgid "``cdl.obj`` → ``sigima.objects``"
+msgstr "``cdl.obj`` → ``sigima.objects``"
+
+msgid "``cdl.tests.data`` → ``sigima.tests.data``"
+msgstr "``cdl.tests.data`` → ``sigima.tests.data``"
+
+msgid "``dst_11`` → ``dst_1to1``"
+msgstr "``dst_11`` → ``dst_1to1``"
+
+msgid "``dlo.NormalRandomParam`` → ``sigima.objects.NormalDistribution2DParam``"
+msgstr "``dlo.NormalRandomParam`` → ``sigima.objects.NormalDistribution2DParam``"
+
+msgid "``create_noisygauss_image`` → ``create_noisy_gaussian_image``"
+msgstr "``create_noisygauss_image`` → ``create_noisy_gaussian_image``"
+
+msgid "``hide_image_height`` → ``hide_height``, ``hide_image_type`` → ``hide_type``"
+msgstr "``hide_image_height`` → ``hide_height``, ``hide_image_type`` → ``hide_type``"
+
+msgid "Working with result objects"
+msgstr "Travailler avec les objets résultat"
+
+msgid "Changes to result objects"
+msgstr "Modifications des objets résultat"
+
+msgid "The result object architecture has been completely redesigned in v1.0:"
+msgstr "L'architecture des objets résultat a été complètement repensée dans la v1.0 :"
+
+msgid "**v0.20 Result Objects:**"
+msgstr "**Objets résultat v0.20 :**"
+
+msgid "``ResultProperties``: For tabular results (statistics, etc.)"
+msgstr "``ResultProperties`` : Pour les résultats tabulaires (statistiques, etc.)"
+
+msgid "``ResultShape``: For geometric results (detected features, etc.)"
+msgstr "``ResultShape`` : Pour les résultats géométriques (caractéristiques détectées, etc.)"
+
+msgid "These objects contained Qt-specific code and metadata handling logic"
+msgstr "Ces objets contenaient du code spécifique à Qt et de la logique de gestion des métadonnées"
+
+msgid "Methods like ``add_to(obj)`` and ``from_metadata_entry()`` were part of the result class"
+msgstr "Les méthodes comme ``add_to(obj)`` et ``from_metadata_entry()`` faisaient partie de la classe résultat"
+
+msgid "**v1.0 Result Objects:**"
+msgstr "**Objets résultat v1.0 :**"
+
+msgid "``TableResult``: Immutable, computation-oriented table results"
+msgstr "``TableResult`` : Résultats tabulaires immuables, orientés calcul"
+
+msgid "``GeometryResult``: Immutable, computation-oriented geometry results"
+msgstr "``GeometryResult`` : Résultats géométriques immuables, orientés calcul"
+
+msgid "No Qt or metadata dependencies"
+msgstr "Aucune dépendance Qt ou métadonnées"
+
+msgid "Metadata handling moved to DataLab adapter classes"
+msgstr "La gestion des métadonnées a été déplacée vers les classes d'adaptation DataLab"
+
+msgid "Using TableResult and GeometryResult"
+msgstr "Utilisation de TableResult et GeometryResult"
+
+msgid "In v1.0, when your plugin receives results from ``compute_1_to_0`` operations, you'll work with ``TableResult`` or ``GeometryResult`` objects."
+msgstr "Dans la v1.0, lorsque votre plugin reçoit des résultats d'opérations ``compute_1_to_0``, vous travaillerez avec des objets ``TableResult`` ou ``GeometryResult``."
+
+msgid "**Example 1: Computing signal dynamic parameters (TableResult)**"
+msgstr "**Exemple 1 : Calcul des paramètres dynamiques du signal (TableResult)**"
+
+msgid "This example shows how to compute dynamic parameters (ENOB, SINAD, THD, etc.) and work with the resulting ``TableResult``:"
+msgstr "Cet exemple montre comment calculer les paramètres dynamiques (ENOB, SINAD, THD, etc.) et travailler avec le ``TableResult`` résultant :"
+
+msgid "**Example 2: Detecting image peaks (GeometryResult)**"
+msgstr "**Exemple 2 : Détection de pics dans une image (GeometryResult)**"
+
+msgid "This example shows how to detect peaks in an image and work with the resulting ``GeometryResult``:"
+msgstr "Cet exemple montre comment détecter des pics dans une image et travailler avec le ``GeometryResult`` résultant :"
+
+msgid "**Example 3: Computing bandwidth (GeometryResult with segments)**"
+msgstr "**Exemple 3 : Calcul de la bande passante (GeometryResult avec segments)**"
+
+msgid "This example shows how to compute signal bandwidth, which returns a segment geometry:"
+msgstr "Cet exemple montre comment calculer la bande passante d'un signal, qui renvoie une géométrie de segment :"
+
+msgid "Retrieving results from metadata"
+msgstr "Récupération des résultats depuis les métadonnées"
+
+msgid "To retrieve results stored in object metadata:"
+msgstr "Pour récupérer les résultats stockés dans les métadonnées de l'objet :"
+
+msgid "Processor method changes"
+msgstr "Modifications des méthodes du processeur"
+
+msgid "The processor interface has been unified in v1.0. Most specific ``compute_*`` methods now use the generic ``run_feature()`` method."
+msgstr "L'interface du processeur a été unifiée dans la v1.0. La plupart des méthodes spécifiques ``compute_*`` utilisent désormais la méthode générique ``run_feature()``."
+
+msgid "Using run_feature()"
+msgstr "Utilisation de run_feature()"
+
+msgid "The ``run_feature()`` method is a unified interface for running processing features:"
+msgstr "La méthode ``run_feature()`` est une interface unifiée pour exécuter des fonctionnalités de traitement :"
+
+msgid "Method renaming"
+msgstr "Renommage des méthodes"
+
+msgid "Several processor methods have been renamed for consistency:"
+msgstr "Plusieurs méthodes du processeur ont été renommées par souci de cohérence :"
+
+msgid "v0.20"
+msgstr "v0.20"
+
+msgid "v1.0"
+msgstr "v1.0"
+
+msgid "``compute_11(func, ...)``"
+msgstr "``compute_11(func, ...)``"
+
+msgid "``compute_1_to_1(func, ...)``"
+msgstr "``compute_1_to_1(func, ...)``"
+
+msgid "``compute_10(func, ...)``"
+msgstr "``compute_10(func, ...)``"
+
+msgid "``compute_1_to_0(func, ...)``"
+msgstr "``compute_1_to_0(func, ...)``"
+
+msgid "``compute_n1(func, ...)``"
+msgstr "``compute_n1(func, ...)``"
+
+msgid "``compute_n_to_1(func, ...)``"
+msgstr "``compute_n_to_1(func, ...)``"
+
+msgid "``compute_1n(func, ...)``"
+msgstr "``compute_1n(func, ...)``"
+
+msgid "``compute_1_to_n(func, ...)``"
+msgstr "``compute_1_to_n(func, ...)``"
+
+msgid "``compute_21(func, ...)``"
+msgstr "``compute_21(func, ...)``"
+
+msgid "``compute_2_to_1(func, ...)``"
+msgstr "``compute_2_to_1(func, ...)``"
+
+msgid "Built-in features using run_feature"
+msgstr "Fonctionnalités intégrées utilisant run_feature"
+
+msgid "Most built-in processing features that previously had dedicated ``compute_*`` methods now use ``run_feature()``:"
+msgstr "La plupart des fonctionnalités de traitement intégrées qui avaient auparavant des méthodes dédiées ``compute_*`` utilisent désormais ``run_feature()`` :"
+
+msgid "Some complex features still have dedicated methods:"
+msgstr "Certaines fonctionnalités complexes ont toujours des méthodes dédiées :"
+
+msgid "Testing your plugin"
+msgstr "Tester votre plugin"
+
+msgid "After migration, thoroughly test your plugin:"
+msgstr "Après la migration, testez minutieusement votre plugin :"
+
+msgid "**Import checks**: Verify all imports work correctly"
+msgstr "**Vérification des imports** : Vérifiez que tous les imports fonctionnent correctement"
+
+msgid "**Parameter creation**: Check that parameter classes are correctly instantiated"
+msgstr "**Création de paramètres** : Vérifiez que les classes de paramètres sont correctement instanciées"
+
+msgid "**Object creation**: Test signal/image object creation functions"
+msgstr "**Création d'objets** : Testez les fonctions de création d'objets signal/image"
+
+msgid "**Processing operations**: Verify all processing features work as expected"
+msgstr "**Opérations de traitement** : Vérifiez que toutes les fonctionnalités de traitement fonctionnent comme prévu"
+
+msgid "**Result handling**: Check that results are correctly generated and stored"
+msgstr "**Gestion des résultats** : Vérifiez que les résultats sont correctement générés et stockés"
+
+msgid "**GUI integration**: Test that menus and actions appear correctly"
+msgstr "**Intégration de l'interface graphique** : Testez que les menus et actions apparaissent correctement"
+
+msgid "Common issues and solutions"
+msgstr "Problèmes courants et solutions"
+
+msgid "Import errors"
+msgstr "Erreurs d'import"
+
+msgid "**Problem**: ``ModuleNotFoundError: No module named 'cdl'``"
+msgstr "**Problème** : ``ModuleNotFoundError: No module named 'cdl'``"
+
+msgid "**Solution**: Update all imports from ``cdl.*`` to either ``datalab.*`` or ``sigima.*`` depending on the module."
+msgstr "**Solution** : Mettez à jour tous les imports de ``cdl.*`` vers soit ``datalab.*`` soit ``sigima.*`` selon le module."
+
+msgid "Attribute errors on processor"
+msgstr "Erreurs d'attribut sur le processeur"
+
+msgid "**Problem**: ``AttributeError: 'ImageProcessor' object has no attribute 'compute_binning'``"
+msgstr "**Problème** : ``AttributeError: 'ImageProcessor' object has no attribute 'compute_binning'``"
+
+msgid "**Solution**: Replace ``compute_*`` method calls with ``run_feature()`` calls:"
+msgstr "**Solution** : Remplacez les appels de méthode ``compute_*`` par des appels ``run_feature()`` :"
+
+msgid "Result object incompatibility"
+msgstr "Incompatibilité d'objet résultat"
+
+msgid "**Problem**: ``AttributeError: 'TableResult' object has no attribute 'add_to'``"
+msgstr "**Problème** : ``AttributeError: 'TableResult' object has no attribute 'add_to'``"
+
+msgid "**Solution**: Use adapter classes for metadata operations:"
+msgstr "**Solution** : Utilisez des classes d'adaptation pour les opérations de métadonnées :"
+
+msgid "Missing parameters"
+msgstr "Paramètres manquants"
+
+msgid "**Problem**: ``ImportError: cannot import name 'SomeParam' from 'datalab'``"
+msgstr "**Problème** : ``ImportError: cannot import name 'SomeParam' from 'datalab'``"
+
+msgid "**Solution**: Import parameters from ``sigima.params`` instead of ``cdl.param``:"
+msgstr "**Solution** : Importez les paramètres depuis ``sigima.params`` au lieu de ``cdl.param`` :"
+
+msgid "Additional resources"
+msgstr "Ressources supplémentaires"
+
+msgid "`DataLab v1.0 documentation <https://datalab-platform.com/>`_"
+msgstr "`Documentation DataLab v1.0 <https://datalab-platform.com/>`_"
+
+msgid "`Sigima documentation <https://sigima.readthedocs.io/>`_"
+msgstr "`Documentation Sigima <https://sigima.readthedocs.io/>`_"
+
+msgid "`Plugin examples <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_"
+msgstr "`Exemples de plugins <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_"
+
+msgid ":doc:`DataLab API reference <api>`"
+msgstr ":doc:`Référence de l'API DataLab <api>`"
+
+msgid "`Sigima API reference <https://sigima.readthedocs.io/en/latest/api/index.html>`_"
+msgstr "`Référence de l'API Sigima <https://sigima.readthedocs.io/en/latest/api/index.html>`_"
+
+msgid "Getting help"
+msgstr "Obtenir de l'aide"
+
+msgid "If you encounter issues during migration:"
+msgstr "Si vous rencontrez des problèmes pendant la migration :"
+
+msgid "Check the `GitHub issue tracker <https://github.com/DataLab-Platform/DataLab/issues>`_"
+msgstr "Consultez le `suivi des problèmes GitHub <https://github.com/DataLab-Platform/DataLab/issues>`_"
+
+msgid "Consult the built-in plugin examples in the ``datalab/plugins`` directory"
+msgstr "Consultez les exemples de plugins intégrés dans le répertoire ``datalab/plugins``"

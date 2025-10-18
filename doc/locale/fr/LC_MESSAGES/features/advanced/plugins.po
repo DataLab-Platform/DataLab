@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 15:03+0200\n"
+"POT-Creation-Date: 2025-10-18 09:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,6 +139,12 @@ msgstr "Autres exemples"
 
 msgid "Other examples of plugins can be found in the `plugins/examples` directory of the DataLab source code (explore `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
 msgstr "D'autres exemples de plugins peuvent être trouvés dans le répertoire `plugins/examples` du code source de DataLab (explorez `ici sur GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
+
+msgid "Migrating from v0.20 to v1.0"
+msgstr "Migration de la v0.20 à la v1.0"
+
+msgid "If you have existing plugins written for DataLab v0.20, please refer to the :ref:`migration guide <migration_v020_to_v100>` for detailed instructions on updating your plugins to work with DataLab v1.0."
+msgstr "Si vous avez des plugins existants écrits pour DataLab v0.20, veuillez consulter le :ref:`guide de migration <migration_v020_to_v100>` pour des instructions détaillées sur la mise à jour de vos plugins pour fonctionner avec DataLab v1.0."
 
 msgid "Public API"
 msgstr "API publique"
