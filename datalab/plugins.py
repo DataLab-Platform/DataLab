@@ -316,6 +316,33 @@ def discover_plugins() -> list[type[PluginBase]]:
     return []
 
 
+def discover_v020_plugins() -> list[tuple[str, str]]:
+    """Discover v0.20 plugins (with ``cdl_`` prefix) without importing them
+
+    Returns:
+        List of tuples (plugin_name, directory_path) for discovered v0.20 plugins
+    """
+    v020_plugins = []
+    if Conf.main.plugins_enabled.get():
+        for path in [
+            Conf.main.plugins_path.get(),
+            PLUGINS_DEFAULT_PATH,
+        ] + OTHER_PLUGINS_PATHLIST:
+            rpath = osp.realpath(path)
+            if rpath not in sys.path:
+                sys.path.append(rpath)
+        for finder, name, _ispkg in pkgutil.iter_modules():
+            if name.startswith("cdl_"):
+                # Get the directory path from the module finder
+                if hasattr(finder, "path"):
+                    directory_path = finder.path
+                    v020_plugins.append((name, directory_path))
+                else:
+                    # Fallback if path is not available
+                    v020_plugins.append((name, ""))
+    return v020_plugins
+
+
 def get_available_plugins() -> list[PluginBase]:
     """Instantiate and get available plugins
 

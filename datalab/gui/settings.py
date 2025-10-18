@@ -69,6 +69,14 @@ class MainSettings(gds.DataSet):
             "as well as in your PYTHONPATH."
         ),
     )
+    v020_plugins_warning_ignore = gds.BoolItem(
+        _("Ignore compatibility issues warning"),
+        _("DataLab v0.20 plugins"),
+        help=_(
+            "If enabled, DataLab will not warn you about v0.20 plugins that are "
+            "no longer compatible with v1.0."
+        ),
+    )
     _g0 = gds.EndGroup("")
 
 
@@ -137,8 +145,8 @@ class ProcSettings(gds.DataSet):
         % ("→", "→"),
     )
     use_signal_bounds = gds.BoolItem(
-        "",
-        _("Use signal bounds for new signals"),
+        _("Use current signal bounds"),
+        _("New signals"),
         help=_(
             "If enabled, when creating a new signal, the xmin and xmax values will be "
             "initialized from the current signal's bounds.<br>"
@@ -146,8 +154,8 @@ class ProcSettings(gds.DataSet):
         ),
     )
     use_image_dims = gds.BoolItem(
-        "",
-        _("Use image dimensions for new images"),
+        _("Use current image dimensions"),
+        _("New images"),
         help=_(
             "If enabled, when creating a new image, the width and height values will "
             "be initialized from the current image's dimensions.<br>"

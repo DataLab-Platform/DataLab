@@ -121,6 +121,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     plugins_enabled = conf.Option()
     plugins_path = conf.Option()
     tour_enabled = conf.Option()
+    v020_plugins_warning_ignore = conf.Option()  # True: do not warn, False: warn
 
 
 class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
@@ -341,6 +342,7 @@ def initialize():
     Conf.main.plugins_enabled.get(True)
     Conf.main.plugins_path.get(Conf.get_path("plugins"))
     Conf.main.tour_enabled.get(True)
+    Conf.main.v020_plugins_warning_ignore.get(False)
     # Console section
     Conf.console.console_enabled.get(True)
     Conf.console.show_console_on_error.get(False)
