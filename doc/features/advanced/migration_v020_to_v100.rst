@@ -7,6 +7,17 @@ Migrating from DataLab v0.20 to v1.0
     :description: Guide for migrating DataLab plugins from v0.20 to v1.0
     :keywords: DataLab, plugin, migration, v0.20, v1.0, Sigima, API changes
 
+.. warning::
+
+    **Critical compatibility notice:**
+
+    DataLab v1.0 introduces **major breaking changes** that are **not backward compatible** with v0.20.
+
+    - **Plugins** developed for v0.20 **will not work** and must be updated
+    - **API changes** require code modifications for all custom integrations
+
+    Please read this guide carefully before upgrading to v1.0.
+
 DataLab v1.0 introduces significant architectural changes compared to v0.20. The most important change is the **externalization of signal and image processing features** into a separate library called **Sigima**.
 
 This architectural change improves modularity, testability, and enables the reuse of processing functions in other projects. However, it requires updates to existing plugins to adapt to the new API.

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-18 09:54+0200\n"
+"POT-Creation-Date: 2025-10-18 10:28+0200\n"
 "PO-Revision-Date: 2025-10-18 10:00+0200\n"
 "Last-Translator: DataLab Team\n"
 "Language: fr\n"
@@ -26,6 +26,21 @@ msgstr "DataLab, plugin, migration, v0.20, v1.0, Sigima, changements API"
 
 msgid "Migrating from DataLab v0.20 to v1.0"
 msgstr "Migration de DataLab v0.20 vers v1.0"
+
+msgid "**Critical compatibility notice:**"
+msgstr "**Note de compatibilité critique :**"
+
+msgid "DataLab v1.0 introduces **major breaking changes** that are **not backward compatible** with v0.20."
+msgstr "DataLab v1.0 introduit des **changements majeurs** qui ne sont **pas rétrocompatibles** avec v0.20."
+
+msgid "**Plugins** developed for v0.20 **will not work** and must be updated"
+msgstr "**Les plugins** développés pour v0.20 **ne fonctionneront pas** et doivent être mis à jour"
+
+msgid "**API changes** require code modifications for all custom integrations"
+msgstr "**Les changements d'API** nécessitent des modifications de code pour toutes les intégrations personnalisées"
+
+msgid "Please read this guide carefully before upgrading to v1.0."
+msgstr "Veuillez lire ce guide attentivement avant de passer à la v1.0."
 
 msgid "DataLab v1.0 introduces significant architectural changes compared to v0.20. The most important change is the **externalization of signal and image processing features** into a separate library called **Sigima**."
 msgstr "DataLab v1.0 introduit des changements architecturaux importants par rapport à la v0.20. Le changement le plus important est l'**externalisation des fonctionnalités de traitement du signal et de l'image** dans une bibliothèque séparée appelée **Sigima**."
