@@ -939,7 +939,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             _("Auto-refresh"),
             icon=get_icon("refresh-auto.svg"),
             tip=_("Auto-refresh plot when object is modified, added or removed"),
-            toggled=self.toggle_auto_refresh,
+            toggled=self.handle_autorefresh_action,
         )
         self.showfirstonly_action = create_action(
             self,
@@ -1428,6 +1428,48 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             for obj in datapanel.objmodel:
                 obj.set_metadata_option("showlabel", state)
             datapanel.refresh_plot("selected", True, False)
+
+    def handle_autorefresh_action(self, state: bool) -> None:
+        """Handle auto-refresh action from UI (with confirmation dialog)
+
+        Args:
+            state: desired state
+        """
+        # If disabling auto-refresh, show confirmation dialog
+        if not state:
+            txtlist = [
+                "<b>" + _("Disable auto-refresh?") + "</b>",
+                "",
+                _(
+                    "When auto-refresh is disabled, the plot view will not "
+                    "automatically update when objects are modified, added or removed."
+                ),
+                "",
+                _(
+                    "You will need to manually click the refresh button to update "
+                    "the view."
+                ),
+                "",
+                _("Are you sure you want to disable auto-refresh?"),
+            ]
+
+            answer = QW.QMessageBox.question(
+                self,
+                APP_NAME,
+                "<br>".join(txtlist),
+                QW.QMessageBox.Yes | QW.QMessageBox.No,
+                QW.QMessageBox.No,
+            )
+
+            if answer == QW.QMessageBox.No:
+                # User cancelled, restore the action's checked state
+                self.autorefresh_action.blockSignals(True)
+                self.autorefresh_action.setChecked(True)
+                self.autorefresh_action.blockSignals(False)
+                return
+
+        # Apply the change
+        self.toggle_auto_refresh(state)
 
     @remote_controlled
     def toggle_auto_refresh(self, state: bool) -> None:

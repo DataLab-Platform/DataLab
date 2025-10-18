@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-18 11:18+0200\n"
+"POT-Creation-Date: 2025-10-18 12:03+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -802,6 +802,18 @@ msgstr "Console"
 
 msgid "Macro Panel"
 msgstr "Gestionnaire de Macros"
+
+msgid "Disable auto-refresh?"
+msgstr "Désactiver le rafraîchissement automatique ?"
+
+msgid "When auto-refresh is disabled, the plot view will not automatically update when objects are modified, added or removed."
+msgstr "Lorsque le rafraîchissement automatique est désactivé, la vue du graphique ne sera pas mise à jour automatiquement lorsque des objets sont modifiés, ajoutés ou supprimés."
+
+msgid "You will need to manually click the refresh button to update the view."
+msgstr "Vous devrez cliquer manuellement sur le bouton de rafraîchissement pour mettre à jour la vue."
+
+msgid "Are you sure you want to disable auto-refresh?"
+msgstr "Êtes-vous sûr de vouloir désactiver le rafraîchissement automatique ?"
 
 msgid "Save"
 msgstr "Enregistrer"
