@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 09:56+0200\n"
+"POT-Creation-Date: 2025-10-18 17:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -504,6 +504,30 @@ msgstr "Ajustement de pics asymétriques (deux moitiés gaussiennes) avec des pa
 
 msgid "CDF (Cumulative Distribution Function) fitting for statistical analysis"
 msgstr "Ajustement de la fonction de distribution cumulative (CDF) pour l'analyse statistique"
+
+msgid "**Locked parameter support** (requires PlotPy v2.8.0):"
+msgstr "**Prise en charge des paramètres verrouillés** (nécessite PlotPy v2.8.0) :"
+
+msgid "Added ability to lock individual fit parameters during automatic optimization"
+msgstr "Ajout de la possibilité de verrouiller des paramètres de fitting individuels pendant l'optimisation automatique"
+
+msgid "Users can manually adjust parameters and lock them to prevent changes during auto-fit"
+msgstr "Les utilisateurs peuvent ajuster manuellement les paramètres et les verrouiller pour éviter les modifications pendant le fitting automatique"
+
+msgid "Visual indicators: locked parameters show 🔒 emoji and are grayed out with disabled controls"
+msgstr "Indicateurs visuels : les paramètres verrouillés affichent l'emoji 🔒 et sont grisés avec des contrôles désactivés"
+
+msgid "Enables partial optimization workflows: fix well-determined parameters, optimize uncertain ones"
+msgstr "Permet des flux de travail d'optimisation partielle : fixer les paramètres bien déterminés, optimiser les incertains"
+
+msgid "All optimization algorithms (simplex, Powell, BFGS, L-BFGS-B, conjugate gradient, least squares) support locked parameters"
+msgstr "Tous les algorithmes d'optimisation (simplex, Powell, BFGS, L-BFGS-B, gradient conjugué, moindres carrés) prennent en charge les paramètres verrouillés"
+
+msgid "Improves fit convergence by reducing problem dimensionality"
+msgstr "Améliore la convergence du fitting en réduisant la dimensionnalité du problème"
+
+msgid "Lock/unlock parameters via the parameter settings dialog (gear icon)"
+msgstr "Verrouiller/déverrouiller les paramètres via la boîte de dialogue des paramètres (icône d'engrenage)"
 
 msgid "**Improved user experience**: The curve fitting dialogs now provide:"
 msgstr "**Amélioration de l'expérience utilisateur** : Les boîtes de dialogue de fitting de courbes offrent désormais :"

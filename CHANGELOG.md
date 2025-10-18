@@ -171,6 +171,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
       * Planckian (blackbody) fitting with physics-correct parameter bounds
       * Asymmetric peak fitting (two-half Gaussian) with independent left/right parameters
       * CDF (Cumulative Distribution Function) fitting for statistical analysis
+    * **Locked parameter support** (requires PlotPy v2.8.0):
+      * Added ability to lock individual fit parameters during automatic optimization
+      * Users can manually adjust parameters and lock them to prevent changes during auto-fit
+      * Visual indicators: locked parameters show 🔒 emoji and are grayed out with disabled controls
+      * Enables partial optimization workflows: fix well-determined parameters, optimize uncertain ones
+      * All optimization algorithms (simplex, Powell, BFGS, L-BFGS-B, conjugate gradient, least squares) support locked parameters
+      * Improves fit convergence by reducing problem dimensionality
+      * Lock/unlock parameters via the parameter settings dialog (gear icon)
     * **Improved user experience**: The curve fitting dialogs now provide:
       * More reliable initial parameter guesses reducing manual adjustment needs
       * Better parameter bounds preventing optimization failures
