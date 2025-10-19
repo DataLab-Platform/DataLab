@@ -80,7 +80,7 @@ def test_signals_to_image_app(screenshots: bool = False) -> None:
         win.set_current_panel("image")
 
         # Verify image dimensions - get objects directly from object model
-        images = win.imagepanel.objview.get_sel_objects()
+        images = win.imagepanel.objmodel.get_all_objects()
         assert len(images) == 3, f"Expected 3 images in object model, got {len(images)}"
         assert images[0].data.shape == (
             N_SIGNALS,
