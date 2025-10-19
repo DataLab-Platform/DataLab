@@ -219,6 +219,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: FFT shift is disabled
     fft_shift_enabled = conf.Option()
 
+    # Auto-normalize convolution kernel for signal/image processing:
+    # - True: automatically normalize kernel (default)
+    # - False: do not normalize kernel
+    auto_normalize_kernel = conf.Option()
+
     # Ignore warnings during computation:
     # - True: ignore warnings
     # - False: do not ignore warnings
@@ -391,6 +396,8 @@ def initialize():
     Conf.proc.use_image_dims.get(True)
     Conf.proc.fft_shift_enabled.get(True)
     sigima_options.fft_shift_enabled.set(True)  # Sync with sigima config
+    Conf.proc.auto_normalize_kernel.get(False)
+    sigima_options.auto_normalize_kernel.set(False)  # Sync with sigima config
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
     Conf.proc.ignore_warnings.get(False)

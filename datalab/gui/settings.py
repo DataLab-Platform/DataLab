@@ -170,6 +170,15 @@ class ProcSettings(gds.DataSet):
             "spectrum for easier visualization and analysis."
         ),
     )
+    auto_normalize_kernel = gds.BoolItem(
+        _("Auto-normalize convolution/deconvolution kernel"),
+        _("Convolution"),
+        help=_(
+            "If enabled, convolution and deconvolution kernels will be automatically "
+            "normalized for signal and image processing operations to preserve signal "
+            "energy and image intensity."
+        ),
+    )
     extract_roi_singleobj = gds.BoolItem(
         "",
         _("Extract ROI in single object"),

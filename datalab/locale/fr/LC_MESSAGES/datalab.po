@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-19 11:55+0200\n"
+"POT-Creation-Date: 2025-10-19 15:20+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -451,42 +451,6 @@ msgstr "Afficher le panneau de contraste"
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
-msgid "Flip or rotation"
-msgstr "Symétrie ou rotation"
-
-msgid "Intensity profiles"
-msgstr "Profils d'intensité"
-
-msgid "Line profile..."
-msgstr "Profil rectiligne..."
-
-msgid "Extract horizontal or vertical profile"
-msgstr "Extraire un profil horizontal ou vertical"
-
-msgid "Segment profile..."
-msgstr "Profil le long d'un segment..."
-
-msgid "Extract profile along a segment"
-msgstr "Extraire un profil le long d'un segment"
-
-msgid "Average profile..."
-msgstr "Profil moyen..."
-
-msgid "Extract average horizontal or vertical profile"
-msgstr "Extraire un profil moyen horizontal ou vertical"
-
-msgid "Radial profile extraction..."
-msgstr "Extraire le profil radial..."
-
-msgid "Radial profile extraction around image centroid"
-msgstr "Extraire le profil radial autour du barycentre de l'image"
-
-msgid "Distribute on a grid..."
-msgstr "Distribuer sur une grille..."
-
-msgid "Reset image positions"
-msgstr "Réinitialiser les positions des images"
-
 msgid "Thresholding"
 msgstr "Seuillage"
 
@@ -546,6 +510,42 @@ msgstr "Redimensionner"
 
 msgid "Pixel binning"
 msgstr "Binning"
+
+msgid "Flip or rotation"
+msgstr "Symétrie ou rotation"
+
+msgid "Intensity profiles"
+msgstr "Profils d'intensité"
+
+msgid "Line profile..."
+msgstr "Profil rectiligne..."
+
+msgid "Extract horizontal or vertical profile"
+msgstr "Extraire un profil horizontal ou vertical"
+
+msgid "Segment profile..."
+msgstr "Profil le long d'un segment..."
+
+msgid "Extract profile along a segment"
+msgstr "Extraire un profil le long d'un segment"
+
+msgid "Average profile..."
+msgstr "Profil moyen..."
+
+msgid "Extract average horizontal or vertical profile"
+msgstr "Extraire un profil moyen horizontal ou vertical"
+
+msgid "Radial profile extraction..."
+msgstr "Extraire le profil radial..."
+
+msgid "Radial profile extraction around image centroid"
+msgstr "Extraire le profil radial autour du barycentre de l'image"
+
+msgid "Distribute on a grid..."
+msgstr "Distribuer sur une grille..."
+
+msgid "Reset image positions"
+msgstr "Réinitialiser les positions des images"
 
 msgid "Process signal"
 msgstr "Traiter le signal"
@@ -1273,9 +1273,6 @@ msgstr "Profil moyen"
 msgid "Radial profile"
 msgstr "Profil radial"
 
-msgid "Convolution"
-msgstr "Convolution"
-
 msgid "kernel to convolve with"
 msgstr "noyau de la convolution"
 
@@ -1975,6 +1972,15 @@ msgstr "Décalage FFT"
 
 msgid "Enable FFT shift to center the zero-frequency component in the frequency spectrum for easier visualization and analysis."
 msgstr "Activer le décalage FFT pour centrer la composante de fréquence nulle dans le spectre de fréquence pour une visualisation et une analyse plus faciles."
+
+msgid "Auto-normalize convolution/deconvolution kernel"
+msgstr "Normalisation automatique du noyau de convolution/déconvolution"
+
+msgid "Convolution"
+msgstr "Convolution"
+
+msgid "If enabled, convolution and deconvolution kernels will be automatically normalized for signal and image processing operations to preserve signal energy and image intensity."
+msgstr "Si activé, les noyaux de convolution et de déconvolution seront automatiquement normalisés pour les opérations de traitement de signaux et d'images afin de préserver l'énergie du signal et l'intensité de l'image."
 
 msgid "Extract ROI in single object"
 msgstr "Extraire les ROI dans un seul objet"
