@@ -244,6 +244,10 @@ Other mathematical operations
       - Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_
     * - |deconvolution| Deconvolution
       - Frequency domain deconvolution
+    * - |signal_to_image| Combine signals into image
+      - Combine multiple signals into a 2D image.
+        Signals can be arranged as rows or columns,
+        with optional normalization.
 
 .. |derivative| image:: ../../../datalab/data/icons/operations/derivative.svg
     :width: 24px
@@ -261,6 +265,11 @@ Other mathematical operations
     :class: dark-light no-scaled-link
 
 .. |deconvolution| image:: ../../../datalab/data/icons/operations/deconvolution.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |signal_to_image| image:: ../../../datalab/data/icons/operations/signals_to_image.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
