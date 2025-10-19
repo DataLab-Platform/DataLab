@@ -63,6 +63,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Clicking the indicator opens the internal console.
   * The icon turns red if an error or warning is logged, alerting the user to check the console.
 
+* Configuration folder versioning for major version coexistence:
+  * Configuration folders are now versioned by major version to allow different major versions to coexist on the same machine without interfering with each other.
+  * Configuration folder naming:
+    * v0.x: `.DataLab` (unchanged for backward compatibility)
+    * v1.x: `.DataLab_v1` (new)
+    * v2.x: `.DataLab_v2` (future)
+  * This enables users to run both v0.20 and v1.0 simultaneously during the migration period, which is particularly useful for plugin developers who need to test their code against both versions.
+  * Each version maintains its own isolated configuration, plugins directory, and settings, preventing any conflicts or data loss.
+
 * New common signal/image features:
   * Added two options for signal and image creation:
     * "Use xmin and xmax bounds from current signal when creating a new signal" (default: disabled)

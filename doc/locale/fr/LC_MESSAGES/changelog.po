@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-18 17:02+0200\n"
+"POT-Creation-Date: 2025-10-19 11:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -190,6 +190,30 @@ msgstr "Cliquer sur l'indicateur ouvre la console interne."
 msgid "The icon turns red if an error or warning is logged, alerting the user to check the console."
 msgstr "L'icône devient rouge si une erreur ou un avertissement est enregistré, alertant l'utilisateur à vérifier la console."
 
+msgid "Configuration folder versioning for major version coexistence:"
+msgstr "Versionnage des dossiers de configuration pour la coexistence des versions majeures :"
+
+msgid "Configuration folders are now versioned by major version to allow different major versions to coexist on the same machine without interfering with each other."
+msgstr "Les dossiers de configuration sont désormais versionnés par version majeure pour permettre à différentes versions majeures de coexister sur la même machine sans interférer les unes avec les autres."
+
+msgid "Configuration folder naming:"
+msgstr "Nommage des dossiers de configuration :"
+
+msgid "v0.x: `.DataLab` (unchanged for backward compatibility)"
+msgstr "v0.x : `.DataLab` (inchangé pour la compatibilité ascendante)"
+
+msgid "v1.x: `.DataLab_v1` (new)"
+msgstr "v1.x : `.DataLab_v1` (nouveau)"
+
+msgid "v2.x: `.DataLab_v2` (future)"
+msgstr "v2.x : `.DataLab_v2` (futur)"
+
+msgid "This enables users to run both v0.20 and v1.0 simultaneously during the migration period, which is particularly useful for plugin developers who need to test their code against both versions."
+msgstr "Cela permet aux utilisateurs d'exécuter à la fois v0.20 et v1.0 simultanément pendant la période de migration, ce qui est particulièrement utile pour les développeurs de plugins qui doivent tester leur code contre les deux versions."
+
+msgid "Each version maintains its own isolated configuration, plugins directory, and settings, preventing any conflicts or data loss."
+msgstr "Chaque version maintient sa propre configuration isolée, son répertoire de plugins et ses paramètres, empêchant tout conflit ou perte de données."
+
 msgid "New common signal/image features:"
 msgstr "Nouvelles fonctionnalités communes aux signaux et aux images :"
 
@@ -214,44 +238,96 @@ msgstr "Ceci complète la fonctionnalité \"Valeur absolue\" (module)."
 msgid "Added operation to create complex-valued signal/image from real and imaginary parts."
 msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir des parties réelle et imaginaire."
 
-msgid "Added operation to create complex-valued signal/image from magnitude and phase."
-msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir de l'amplitude et de la phase."
-
-msgid "This closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+#, fuzzy
+msgid "Added operation to create complex-valued signal/image from magnitude and phase (this closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))."
 msgstr "Ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-msgid "Standard deviation of the selected signals or images."
+#, fuzzy
+msgid "Standard deviation of the selected signals or images (this closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)):"
+msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+
+#, fuzzy
+msgid "The standard deviation is calculated across the selected signals or images."
 msgstr "Écart-type des signaux ou des images de la sélection."
 
-msgid "This complements the \"Average\" feature."
+#, fuzzy
+msgid "This is a complement to the \"Average\" feature."
 msgstr "Ceci complète la fonctionnalité \"Moyenne\"."
-
-msgid "This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
-msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
 
 msgid "Generate new signal or image: Poisson noise."
 msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
 
-msgid "Add noise to the selected signals or images."
-msgstr "Ajouter du bruit aux signaux ou images sélectionnés."
+#, fuzzy
+msgid "Add noise to the selected signals or images (this closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)): Gaussian, Poisson or uniform noise can be added."
+msgstr "Ceci clôture [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images."
 
-msgid "Gaussian, Poisson or uniform noise can be added."
-msgstr "Du bruit gaussien, de Poisson ou uniforme peut être ajouté."
-
-msgid "This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
-msgstr "Ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
-
-msgid "Save to directory feature."
-msgstr "Fonctionnalité de sauvegarde dans un répertoire."
-
-msgid "This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
+#, fuzzy
+msgid "Save to directory feature (this closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
 msgstr "Ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
 
-msgid "Deconvolution in the frequency domain."
-msgstr "Déconvolution dans le domaine fréquentiel."
+#, fuzzy
+msgid "Deconvolution in the frequency domain (this closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189))."
+msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
 
-msgid "This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution."
-msgstr "Ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Ajout de la prise en charge de la déconvolution de Fourier."
+#, fuzzy
+msgid "Signals to image conversion:"
+msgstr "Fonctionnalités de signal/image :"
+
+msgid "Convert collections of signals into 2D images for visualization"
+msgstr ""
+
+msgid "Select multiple signals and use \"Combine signals into image\" operation"
+msgstr ""
+
+#, fuzzy
+msgid "Two orientation modes:"
+msgstr "Mode d'opération pairwise :"
+
+msgid "As rows: Each signal becomes a row in the resulting image (useful for spectrograms)"
+msgstr ""
+
+msgid "As columns: Each signal becomes a column in the resulting image (useful for waterfall displays)"
+msgstr ""
+
+#, fuzzy
+msgid "Optional normalization:"
+msgstr "ℹ️ Informations générales :"
+
+msgid "Normalize signals before combining using Z-score, Min-Max, or Maximum methods"
+msgstr ""
+
+msgid "Normalizes each signal independently to handle different amplitude ranges"
+msgstr ""
+
+msgid "Enables better visualization of signals with varying scales"
+msgstr ""
+
+msgid "Validates signal compatibility (all must have same size)"
+msgstr ""
+
+msgid "Resulting image automatically appears in Image panel with appropriate dimensions"
+msgstr ""
+
+msgid "Supports cross-panel operations: Images created from signals are properly routed to Image panel"
+msgstr ""
+
+msgid "Group handling: Results maintain group organization when working with signal groups"
+msgstr ""
+
+msgid "Typical use cases:"
+msgstr ""
+
+msgid "Creating heatmaps from time-series data"
+msgstr ""
+
+msgid "Building spectrograms from frequency domain signals"
+msgstr ""
+
+msgid "Generating waterfall displays for multi-channel data"
+msgstr ""
+
+msgid "Visualizing signal evolution over time or parameter sweeps"
+msgstr ""
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"

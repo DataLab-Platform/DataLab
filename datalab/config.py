@@ -33,6 +33,36 @@ CONF_VERSION = "1.0.0"
 
 APP_NAME = "DataLab"
 MOD_NAME = "datalab"
+
+
+def get_config_app_name() -> str:
+    """Get configuration application name with major version suffix.
+
+    This function returns the application name used for configuration storage.
+    Starting from v1.0, the major version is appended to allow different major
+    versions to coexist on the same machine without interfering with each other.
+
+    Returns:
+        str: Configuration application name (e.g., "DataLab" for v0.x,
+             "DataLab_v1" for v1.x)
+
+    Examples:
+        - v0.20.x → "DataLab" (configuration stored in ~/.DataLab)
+        - v1.0.x → "DataLab_v1" (configuration stored in ~/.DataLab_v1)
+        - v2.0.x → "DataLab_v2" (configuration stored in ~/.DataLab_v2)
+    """
+    # Import here to avoid circular dependency
+    from datalab import __version__
+
+    major_version = __version__.split(".")[0]
+
+    # Keep v0.x configuration folder unchanged for backward compatibility
+    if major_version == "0":
+        return APP_NAME
+
+    return f"{APP_NAME}_v{major_version}"
+
+
 _ = configtools.get_translation(MOD_NAME)
 
 APP_DESC = _("""DataLab is a generic signal and image processing platform""")
@@ -324,7 +354,8 @@ def get_old_log_fname(fname):
 
 def initialize():
     """Initialize application configuration"""
-    Conf.initialize(APP_NAME, CONF_VERSION, load=not DEBUG)
+    config_app_name = get_config_app_name()
+    Conf.initialize(config_app_name, CONF_VERSION, load=not DEBUG)
 
     # Set default values:
     # -------------------
@@ -388,6 +419,11 @@ def initialize():
     # Datetime format strings: % must be escaped as %% for ConfigParser
     Conf.view.sig_datetime_format_s.get("%%H:%%M:%%S")
     Conf.view.sig_datetime_format_ms.get("%%H:%%M:%%S.%%f")
+
+    # Initialize PlotPy configuration with versioned app name
+    PLOTPY_CONF.set_application(
+        osp.join(config_app_name, "plotpy"), CONF_VERSION, load=False
+    )
 
 
 def reset():
@@ -586,5 +622,5 @@ PLOTPY_DEFAULTS = {
     },
 }
 
+# PlotPy configuration will be initialized in initialize() function
 PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
-PLOTPY_CONF.set_application(osp.join(APP_NAME, "plotpy"), CONF_VERSION, load=False)
