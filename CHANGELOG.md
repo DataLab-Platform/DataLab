@@ -71,19 +71,33 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Added `phase` (argument) feature to extract the phase information from complex signals or images.
     * This complements the "Absolute value" (modulus) feature.
   * Added operation to create complex-valued signal/image from real and imaginary parts.
-  * Added operation to create complex-valued signal/image from magnitude and phase.
-  * This closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
-  * Standard deviation of the selected signals or images.
-    * This complements the "Average" feature.
-    * This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196).
+  * Added operation to create complex-valued signal/image from magnitude and phase (this closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)).
+  * Standard deviation of the selected signals or images (this closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)):
+    * The standard deviation is calculated across the selected signals or images.
+    * This is a complement to the "Average" feature.
   * Generate new signal or image: Poisson noise.
-  * Add noise to the selected signals or images.
-    * Gaussian, Poisson or uniform noise can be added.
-    * This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201).
-  * Save to directory feature.
-    * This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227).
-  * Deconvolution in the frequency domain.
-    * This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution.
+  * Add noise to the selected signals or images (this closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)): Gaussian, Poisson or uniform noise can be added.
+  * Save to directory feature (this closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)).
+  * Deconvolution in the frequency domain (this closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189)).
+  * Signals to image conversion:
+    * Convert collections of signals into 2D images for visualization
+    * Select multiple signals and use "Combine signals into image" operation
+    * Two orientation modes:
+      * As rows: Each signal becomes a row in the resulting image (useful for spectrograms)
+      * As columns: Each signal becomes a column in the resulting image (useful for waterfall displays)
+    * Optional normalization:
+      * Normalize signals before combining using Z-score, Min-Max, or Maximum methods
+      * Normalizes each signal independently to handle different amplitude ranges
+      * Enables better visualization of signals with varying scales
+    * Validates signal compatibility (all must have same size)
+    * Resulting image automatically appears in Image panel with appropriate dimensions
+    * Supports cross-panel operations: Images created from signals are properly routed to Image panel
+    * Group handling: Results maintain group organization when working with signal groups
+    * Typical use cases:
+      * Creating heatmaps from time-series data
+      * Building spectrograms from frequency domain signals
+      * Generating waterfall displays for multi-channel data
+      * Visualizing signal evolution over time or parameter sweeps
 
 * New ROI (Region of Interest) management features:
   * New "ROI" menu, between "Edit" and "Operations" menus.

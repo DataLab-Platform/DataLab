@@ -566,6 +566,60 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         return signals, yes_to_all_selected
 
+    def _add_object_to_appropriate_panel(
+        self,
+        new_obj: SignalObj | ImageObj,
+        group_id: str | None = None,
+        use_group_for_non_native: bool = True,
+    ) -> None:
+        """Add object to the appropriate panel based on its type.
+
+        For native objects (e.g., SignalObj in Signal panel, ImageObj in Image panel),
+        adds to the current panel. For non-native objects (e.g., ImageObj created in
+        Signal panel), adds to the target panel via mainwindow.
+
+        Args:
+            new_obj: Object to add
+            group_id: Group ID to add the object to (optional)
+            use_group_for_non_native: If True, use group_id even for non-native objects.
+             If False, non-native objects are added to default group. Set to False when
+             group_id is from the source panel and object goes to a different panel.
+        """
+        is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
+        if is_new_obj_native:
+            self.panel.add_object(new_obj, group_id=group_id)
+        else:
+            if use_group_for_non_native:
+                self.panel.mainwindow.add_object(new_obj, group_id=group_id)
+            else:
+                self.panel.mainwindow.add_object(new_obj)
+
+    def _create_group_for_result(
+        self, new_obj: SignalObj | ImageObj, group_name: str
+    ) -> str:
+        """Create a group in the appropriate panel for the result object.
+
+        For native objects, creates group in current panel. For non-native objects,
+        creates group in the target panel.
+
+        Args:
+            new_obj: Result object to determine target panel
+            group_name: Name for the new group
+
+        Returns:
+            UUID of the created group
+        """
+        is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
+        if is_new_obj_native:
+            return get_uuid(self.panel.add_group(group_name))
+        # Create group in target panel for non-native objects
+        target_panel = (
+            self.panel.mainwindow.signalpanel
+            if isinstance(new_obj, SignalObj)
+            else self.panel.mainwindow.imagepanel
+        )
+        return get_uuid(target_panel.add_group(group_name))
+
     @abc.abstractmethod
     def register_operations(self) -> None:
         """Register operations."""
@@ -1158,7 +1212,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if not group_exclusive:
                 # This is not a group exclusive selection
                 dst_gname += "[...]"
-            dst_gid = get_uuid(self.panel.add_group(dst_gname))
+            # Delay group creation until after first result to determine target panel
+            dst_gid = None
             n_pairs = len(src_objs[src_gids[0]])
             max_i_pair = min(
                 n_pairs, max(len(src_objs[get_uuid(grp)]) for grp in src_grps)
@@ -1215,7 +1270,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._handle_keep_results(new_obj)
                         self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
                     patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
-                    self.panel.add_object(new_obj, group_id=dst_gid)
+
+                    # Create destination group on first result, in appropriate panel
+                    if dst_gid is None:
+                        dst_gid = self._create_group_for_result(new_obj, dst_gname)
+
+                    self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
 
         else:
             # In single operand mode, we create a single object for all selected objects
@@ -1224,11 +1284,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             src_objs: dict[str, list[SignalObj | ImageObj]] = {}
 
             grps = self.panel.objview.get_sel_groups()
+            dst_group_name = None
             if grps:
                 # (Group exclusive selection)
                 # At least one group is selected: create a new group
                 dst_gname = f"{name}({','.join([get_uuid(grp) for grp in grps])})"
-                dst_gid = get_uuid(self.panel.add_group(dst_gname))
+                # Delay group creation until after first result
+                dst_gid = None
+                dst_group_name = dst_gname  # Store name for later use
             else:
                 # (Object exclusive selection)
                 # No group is selected: use each object's group
@@ -1286,7 +1349,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
                     group_id = dst_gid if dst_gid is not None else src_gid
                     patch_title_with_ids(new_obj, src_obj_list, get_short_id)
-                    self.panel.add_object(new_obj, group_id=group_id)
+
+                    # Create destination group on first result, in appropriate panel
+                    use_group_for_non_native = False
+                    if dst_gid is None and dst_group_name is not None:
+                        dst_gid = self._create_group_for_result(new_obj, dst_group_name)
+                        group_id = dst_gid
+                        use_group_for_non_native = True
+
+                    self._add_object_to_appropriate_panel(
+                        new_obj,
+                        group_id=group_id,
+                        use_group_for_non_native=use_group_for_non_native,
+                    )
 
         # Select newly created group, if any
         if dst_gid is not None:
@@ -1436,7 +1511,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         dst_gname = f"{name}({','.join(grp_short_ids)})|pairwise"
                     else:
                         dst_gname = f"{name}[...]"
-                    dst_gid = get_uuid(self.panel.add_group(dst_gname))
+                    # Delay group creation until after first result
+                    dst_gid = None
                     for i_pair in range(max_i_pair):
                         orig_obj1, orig_obj2 = src_objs[src_gid][i_pair], objs2[i_pair]
 
@@ -1467,7 +1543,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         patch_title_with_ids(
                             new_obj, [orig_obj1, orig_obj2], get_short_id
                         )
-                        self.panel.add_object(new_obj, group_id=dst_gid)
+
+                        # Create destination group on first result, in appropriate panel
+                        if dst_gid is None:
+                            dst_gid = self._create_group_for_result(new_obj, dst_gname)
+
+                        self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
 
         else:
             if not objs2:
@@ -1547,7 +1628,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     group_id = objmodel.get_object_group_id(obj)
                     # Use original objects for title generation
                     patch_title_with_ids(new_obj, [obj, orig_obj2], get_short_id)
-                    self.panel.add_object(new_obj, group_id=group_id)
+
+                    # group_id is from source panel, don't use for non-native objects
+                    self._add_object_to_appropriate_panel(
+                        new_obj, group_id=group_id, use_group_for_non_native=False
+                    )
 
     def register_1_to_1(
         self,

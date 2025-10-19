@@ -155,6 +155,17 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             icon_name="deconvolution.svg",
             obj2_name=_("signal to deconvolve with"),
         )
+        self.register_n_to_1(
+            sips.signals_to_image,
+            _("Combine signals into image"),
+            paramclass=sigima_base.SignalsToImageParam,
+            icon_name="signal_to_image.svg",
+            comment=_(
+                "Combine multiple signals into a 2D image.\n"
+                "Signals can be arranged as rows or columns,\n"
+                "with optional normalization."
+            ),
+        )
 
     def register_processing(self) -> None:
         """Register processing functions."""

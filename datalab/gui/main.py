@@ -219,12 +219,13 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             panel = self.signalpanel
         return panel
 
-    def __get_datapanel(self, panel: str | None) -> BaseDataPanel:
+    def __get_datapanel(
+        self, panel: Literal["signal", "image"] | None
+    ) -> BaseDataPanel:
         """Return a specific BaseDataPanel.
 
         Args:
-            panel: panel name (valid values: "signal", "image").
-             If None, current panel is used.
+            panel: panel name. If None, current panel is used.
 
         Returns:
             Panel widget
@@ -253,13 +254,15 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         return panel.objmodel.get_group_titles_with_object_info()
 
     @remote_controlled
-    def get_object_titles(self, panel: str | None = None) -> list[str]:
+    def get_object_titles(
+        self, panel: Literal["signal", "image", "macro"] | None = None
+    ) -> list[str]:
         """Get object (signal/image) list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel: panel name (valid values: "signal", "image", "macro").
-             If None, current data panel is used (i.e. signal or image panel).
+            panel: panel name. If None, current data panel is used (i.e. signal or
+             image panel).
 
         Returns:
             List of object titles
@@ -275,7 +278,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     @remote_controlled
     def get_object(
-        self, nb_id_title: int | str | None = None, panel: str | None = None
+        self,
+        nb_id_title: int | str | None = None,
+        panel: Literal["signal", "image"] | None = None,
     ) -> SignalObj | ImageObj:
         """Get object (signal/image) from index.
 
@@ -310,14 +315,15 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     @remote_controlled
     def get_object_uuids(
-        self, panel: str | None = None, group: int | str | None = None
+        self,
+        panel: Literal["signal", "image"] | None = None,
+        group: int | str | None = None,
     ) -> list[str]:
         """Get object (signal/image) uuid list for current panel.
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel: panel name (valid values: "signal", "image").
-             If None, current panel is used.
+            panel: panel name. If None, current panel is used.
             group: Group number, or group id, or group title.
              Defaults to None (all groups).
 
@@ -356,13 +362,16 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     @remote_controlled
     def add_group(
-        self, title: str, panel: str | None = None, select: bool = False
+        self,
+        title: str,
+        panel: Literal["signal", "image"] | None = None,
+        select: bool = False,
     ) -> None:
         """Add group to DataLab.
 
         Args:
             title: Group title
-            panel: Panel name (valid values: "signal", "image"). Defaults to None.
+            panel: Panel name. Defaults to None.
             select: Select the group after creation. Defaults to False.
         """
         self.__get_datapanel(panel).add_group(title, select)
@@ -371,29 +380,29 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
     def select_objects(
         self,
         selection: list[int | str],
-        panel: str | None = None,
+        panel: Literal["signal", "image"] | None = None,
     ) -> None:
         """Select objects in current panel.
 
         Args:
             selection: List of object numbers (1 to N) or uuids to select
-            panel: panel name (valid values: "signal", "image").
-             If None, current panel is used. Defaults to None.
+            panel: panel name. If None, current panel is used. Defaults to None.
         """
         panel = self.__get_datapanel(panel)
         panel.objview.select_objects(selection)
 
     @remote_controlled
     def select_groups(
-        self, selection: list[int | str] | None = None, panel: str | None = None
+        self,
+        selection: list[int | str] | None = None,
+        panel: Literal["signal", "image"] | None = None,
     ) -> None:
         """Select groups in current panel.
 
         Args:
             selection: List of group numbers (1 to N), or list of group uuids,
              or None to select all groups. Defaults to None.
-            panel: panel name (valid values: "signal", "image").
-             If None, current panel is used. Defaults to None.
+            panel: panel name. If None, current panel is used. Defaults to None.
         """
         panel = self.__get_datapanel(panel)
         panel.objview.select_groups(selection)
@@ -415,7 +424,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
     def get_object_shapes(
         self,
         nb_id_title: int | str | None = None,
-        panel: str | None = None,
+        panel: Literal["signal", "image"] | None = None,
     ) -> list:
         """Get plot item shapes associated to object (signal/image).
 
@@ -432,30 +441,31 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     @remote_controlled
     def add_annotations_from_items(
-        self, items: list, refresh_plot: bool = True, panel: str | None = None
+        self,
+        items: list,
+        refresh_plot: bool = True,
+        panel: Literal["signal", "image"] | None = None,
     ) -> None:
         """Add object annotations (annotation plot items).
 
         Args:
             items: annotation plot items
             refresh_plot: refresh plot. Defaults to True.
-            panel: panel name (valid values: "signal", "image").
-             If None, current panel is used.
+            panel: panel name. If None, current panel is used.
         """
         panel = self.__get_datapanel(panel)
         panel.add_annotations_from_items(items, refresh_plot)
 
     @remote_controlled
     def add_label_with_title(
-        self, title: str | None = None, panel: str | None = None
+        self, title: str | None = None, panel: Literal["signal", "image"] | None = None
     ) -> None:
         """Add a label with object title on the associated plot
 
         Args:
             title: Label title. Defaults to None.
              If None, the title is the object title.
-            panel: panel name (valid values: "signal", "image").
-             If None, current panel is used.
+            panel: panel name. If None, current panel is used.
         """
         self.__get_datapanel(panel).add_label_with_title(title)
 
@@ -1200,11 +1210,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         return "macro"
 
     @remote_controlled
-    def set_current_panel(self, panel: str) -> None:
+    def set_current_panel(self, panel: Literal["signal", "image", "macro"]) -> None:
         """Switch to panel.
 
         Args:
-            panel: panel name (valid values: "signal", "image", "macro")
+            panel: panel name.
 
         Raises:
             ValueError: unknown panel

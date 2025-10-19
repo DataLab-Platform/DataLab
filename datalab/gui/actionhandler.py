@@ -1163,6 +1163,7 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the end"""
         with self.new_category(ActionCategory.OPERATION):
             self.action_for("integral")
+            self.action_for("signals_to_image", separator=True)
         super().create_last_actions()
 
 
