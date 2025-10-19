@@ -174,7 +174,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             sips.signals_to_image,
             _("Combine signals into image"),
             paramclass=sigima_base.SignalsToImageParam,
-            icon_name="signal_to_image.svg",
+            icon_name="signals_to_image.svg",
             comment=_(
                 "Combine multiple signals into a 2D image.\n"
                 "Signals can be arranged as rows or columns,\n"
