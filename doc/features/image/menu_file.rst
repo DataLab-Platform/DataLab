@@ -44,6 +44,8 @@ Create a new image from various models
       - :math:`y[i]` is uniformly distributed between two configurable bounds
     * - 2D Gaussian
       - :math:`z = A.exp(-\dfrac{(\sqrt{(x-x0)^2+(y-y0)^2}-\mu)^2}{2\sigma^2})`
+    * - 2D Ramp
+      - :math:`z = A (x - x_0) + B (y - y_0) + C`
 
 .. _open_image:
 
