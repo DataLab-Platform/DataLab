@@ -63,7 +63,7 @@ from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, image, macro, signal
 from datalab.gui.settings import edit_settings
-from datalab.plugins import PluginRegistry, discover_plugins
+from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import dephash
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (
@@ -651,10 +651,64 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             if choice == QW.QMessageBox.StandardButton.Yes:
                 self.__show_logviewer()
 
+    def check_for_v020_plugins(self) -> None:  # pragma: no cover
+        """Check for v0.20 plugins and warn user if any are found"""
+        if Conf.main.v020_plugins_warning_ignore.get(False):
+            return
+
+        v020_plugins = discover_v020_plugins()
+        if execenv.unattended or not v020_plugins:
+            return
+
+        # Build plugin list with clickable directory paths
+        plugin_items = []
+        for name, directory_path in v020_plugins:
+            if directory_path:
+                # Create clickable file:// link to directory
+                dir_url = QC.QUrl.fromLocalFile(directory_path).toString()
+                plugin_items.append(
+                    f'<li>{name} (<a href="{dir_url}">{directory_path}</a>)</li>'
+                )
+            else:
+                plugin_items.append(f"<li>{name}</li>")
+        plugin_list = "<ul>" + "".join(plugin_items) + "</ul>"
+
+        txtlist = [
+            "<b>" + _("DataLab v0.20 plugins detected") + "</b>",
+            "",
+            _("The following plugins are using the old DataLab v0.20 format:"),
+            plugin_list,
+            _(
+                "These plugins will <b>not be loaded</b> in DataLab v1.0 because "
+                "they are not compatible with the new architecture."
+            ),
+            "",
+            _(
+                "To use these plugins with DataLab v1.0, you need to update them. "
+                "Please refer to the migration guide on the DataLab website "
+            )
+            + '(<a href="https://datalab-platform.com/en/features/advanced/'
+            'migration_v020_to_v100.html">Migration guide</a>)'
+            + _(" or in the PDF documentation."),
+            "",
+            _("Choosing to ignore this message will prevent it from appearing again."),
+        ]
+
+        answer = QW.QMessageBox.question(
+            self,
+            APP_NAME,
+            "<br>".join(txtlist),
+            QW.QMessageBox.Ok | QW.QMessageBox.Ignore,
+        )
+
+        if answer == QW.QMessageBox.Ignore:
+            Conf.main.v020_plugins_warning_ignore.set(True)
+
     def execute_post_show_actions(self) -> None:
         """Execute post-show actions"""
         self.check_stable_release()
         self.check_for_previous_crash()
+        self.check_for_v020_plugins()
         tour = Conf.main.tour_enabled.get()
         if tour:
             Conf.main.tour_enabled.set(False)
@@ -895,7 +949,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             _("Auto-refresh"),
             icon=get_icon("refresh-auto.svg"),
             tip=_("Auto-refresh plot when object is modified, added or removed"),
-            toggled=self.toggle_auto_refresh,
+            toggled=self.handle_autorefresh_action,
         )
         self.showfirstonly_action = create_action(
             self,
@@ -1384,6 +1438,48 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             for obj in datapanel.objmodel:
                 obj.set_metadata_option("showlabel", state)
             datapanel.refresh_plot("selected", True, False)
+
+    def handle_autorefresh_action(self, state: bool) -> None:
+        """Handle auto-refresh action from UI (with confirmation dialog)
+
+        Args:
+            state: desired state
+        """
+        # If disabling auto-refresh, show confirmation dialog
+        if not state:
+            txtlist = [
+                "<b>" + _("Disable auto-refresh?") + "</b>",
+                "",
+                _(
+                    "When auto-refresh is disabled, the plot view will not "
+                    "automatically update when objects are modified, added or removed."
+                ),
+                "",
+                _(
+                    "You will need to manually click the refresh button to update "
+                    "the view."
+                ),
+                "",
+                _("Are you sure you want to disable auto-refresh?"),
+            ]
+
+            answer = QW.QMessageBox.question(
+                self,
+                APP_NAME,
+                "<br>".join(txtlist),
+                QW.QMessageBox.Yes | QW.QMessageBox.No,
+                QW.QMessageBox.No,
+            )
+
+            if answer == QW.QMessageBox.No:
+                # User cancelled, restore the action's checked state
+                self.autorefresh_action.blockSignals(True)
+                self.autorefresh_action.setChecked(True)
+                self.autorefresh_action.blockSignals(False)
+                return
+
+        # Apply the change
+        self.toggle_auto_refresh(state)
 
     @remote_controlled
     def toggle_auto_refresh(self, state: bool) -> None:

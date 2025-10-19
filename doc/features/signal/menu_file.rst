@@ -60,13 +60,13 @@ Create a new signal from various models:
     * - Cardinal sine
       - :math:`y = y_0 + A \cdot \text{sinc}\left(2\pi f x + \phi\right)`
     * - Linear chirp
-      - :math:`y = y_{0} + a \sin(\phi_{0} + 2\pi (f_{0} x +  \frac{1}{2} c x^{2}))`
+      - :math:`y = y_{0} + A \sin(\phi_{0} + 2\pi (f_{0} x +  \frac{1}{2} c x^{2}))`
     * - Step
       - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x > x_{0} \\ 0 & \text{otherwise}\end{array}\right.`
     * - Exponential
       - :math:`y = y_{0}+A.exp(B.x)`
     * - Logistic
-      - :math:`y = y_{0} + \dfrac{a}{1 + exp(-k (x - x_{0}))}`
+      - :math:`y = y_{0} + \dfrac{A}{1 + exp(-k (x - x_{0}))}`
     * - Pulse
       - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
     * - Polynomial

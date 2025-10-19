@@ -26,7 +26,6 @@ from datalab.config import _
 from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.image import ImagePanel
 from datalab.gui.panel.signal import SignalPanel
-from datalab.widgets import fitdialog
 
 
 def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) -> None:
@@ -202,22 +201,27 @@ def run_signal_computations(
         sigima.objects.NormalDistribution1DParam.create(sigma=5.0)
     )
     panel.add_object(sig)
-    param = sigima.params.PolynomialFitParam()
-    panel.processor.compute_polyfit(param)
-    for fittitle, fitfunc in (
-        (_("Gaussian fit"), fitdialog.gaussian_fit),
-        (_("Lorentzian fit"), fitdialog.lorentzian_fit),
-        (_("Voigt fit"), fitdialog.voigt_fit),
-        (_("Linear fit"), fitdialog.linear_fit),
-        (_("Exponential fit"), fitdialog.exponential_fit),
-        (_("CDF fit"), fitdialog.cdf_fit),
-        (_("Sinusoidal fit"), fitdialog.sinusoidal_fit),
-        (_("Planckian fit"), fitdialog.planckian_fit),
-        (_("Two half-Gaussian fit"), fitdialog.twohalfgaussian_fit),
-        (_("Piecewise exponential fit"), fitdialog.piecewiseexponential_fit),
-    ):
+    for _name, fitfunc in panel.processor.FIT_FUNCTIONS:
         panel.objview.set_current_object(sig)
-        panel.processor.compute_fit(fittitle, fitfunc)
+        panel.processor.run_feature(fitfunc)
+
+    # Test evaluate_fit: evaluate a fit on another signal's x-axis
+    # First, perform a linear fit on sig
+    panel.objview.set_current_object(sig)
+    panel.processor.run_feature("linear_fit")
+    fitted_signal = panel.objview.get_current_object()
+
+    # Create a signal with different x-axis
+    x_new = np.linspace(sig.x.min() - 10, sig.x.max() + 10, 150)
+    y_new = np.zeros_like(x_new)
+    sig_new_x = sigima.objects.create_signal(
+        "New X values for fit evaluation", x_new, y_new
+    )
+    panel.add_object(sig_new_x)
+
+    # Evaluate the fit on the new signal's x-axis
+    panel.objview.set_current_object(fitted_signal)
+    panel.processor.run_feature("evaluate_fit", sig_new_x)
 
     param = sigima.objects.GaussParam.create(title=_("Gaussian"))
     sig = sigima.objects.create_signal_from_param(param)

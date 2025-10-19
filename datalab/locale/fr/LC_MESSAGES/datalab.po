@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-16 17:55+0200\n"
+"POT-Creation-Date: 2025-10-18 13:47+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -622,6 +622,24 @@ msgstr "Cela signifie que l'application n'a pas été officiellement qualifiée 
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
+msgid "DataLab v0.20 plugins detected"
+msgstr "Plugins DataLab v0.20 détectés"
+
+msgid "The following plugins are using the old DataLab v0.20 format:"
+msgstr "Les plugins suivants utilisent l'ancien format DataLab v0.20 :"
+
+msgid "These plugins will <b>not be loaded</b> in DataLab v1.0 because they are not compatible with the new architecture."
+msgstr "Ces plugins ne seront <b>pas chargés</b> dans DataLab v1.0 car ils ne sont pas compatibles avec la nouvelle architecture."
+
+msgid "To use these plugins with DataLab v1.0, you need to update them. Please refer to the migration guide on the DataLab website "
+msgstr "Pour utiliser ces plugins avec DataLab v1.0, vous devez les mettre à jour. Veuillez vous référer au guide de migration sur le site web de DataLab "
+
+msgid " or in the PDF documentation."
+msgstr " ou dans la documentation PDF."
+
+msgid "Choosing to ignore this message will prevent it from appearing again."
+msgstr "Ignorer ce message empêchera son affichage ultérieur."
+
 #, python-format
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
@@ -784,6 +802,18 @@ msgstr "Console"
 
 msgid "Macro Panel"
 msgstr "Gestionnaire de Macros"
+
+msgid "Disable auto-refresh?"
+msgstr "Désactiver le rafraîchissement automatique ?"
+
+msgid "When auto-refresh is disabled, the plot view will not automatically update when objects are modified, added or removed."
+msgstr "Lorsque le rafraîchissement automatique est désactivé, la vue du graphique ne sera pas mise à jour automatiquement lorsque des objets sont modifiés, ajoutés ou supprimés."
+
+msgid "You will need to manually click the refresh button to update the view."
+msgstr "Vous devrez cliquer manuellement sur le bouton de rafraîchissement pour mettre à jour la vue."
+
+msgid "Are you sure you want to disable auto-refresh?"
+msgstr "Êtes-vous sûr de vouloir désactiver le rafraîchissement automatique ?"
 
 msgid "Save"
 msgstr "Enregistrer"
@@ -1563,6 +1593,15 @@ msgstr "Distribuer sur grille"
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
 
+msgid "Two Half-Gaussians fit"
+msgstr "Ajustement de deux demi-Gaussiennes"
+
+msgid "Piecewise exponential fit"
+msgstr "Ajustement exponentiel par morceaux"
+
+msgid "Sigmoid fit"
+msgstr "Ajustement sigmoïde"
+
 msgid "signal to subtract"
 msgstr "signal à soustraire"
 
@@ -1623,14 +1662,14 @@ msgstr "Filtre passe-bande"
 msgid "Band-stop filter"
 msgstr "Filtre coupe-bande"
 
-msgid "Two Half-Gaussians fit"
-msgstr "Ajustement de deux demi-Gaussiennes"
+msgid "Evaluate fit"
+msgstr "Évaluer l'ajustement"
 
-msgid "Piecewise exponential fit"
-msgstr "Ajustement exponentiel par morceaux"
+msgid "signal for X values"
+msgstr "signal pour les valeurs X"
 
-msgid "Sigmoid fit"
-msgstr "Ajustement sigmoïde"
+msgid "Evaluate a fitting curve on the x-axis of another signal"
+msgstr "Évaluer une courbe d'ajustement sur l'axe des x d'un autre signal"
 
 msgid "Windowing"
 msgstr "Fenêtrage"
@@ -1643,9 +1682,6 @@ msgstr "Elimination de tendance"
 
 msgid "Interpolation"
 msgstr "Interpolation"
-
-msgid "signal for X values"
-msgstr "signal pour les valeurs X"
 
 msgid "Allan variance"
 msgstr "Variance d'Allan"
@@ -1846,6 +1882,15 @@ msgstr "Chemin des plugins"
 msgid "Path to third-party plugins.<br><br>DataLab will discover plugins in this path, as well as in your PYTHONPATH."
 msgstr "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans ce chemin, ainsi que dans votre PYTHONPATH."
 
+msgid "Ignore compatibility issues warning"
+msgstr "Ignorer l'avertissement de compatibilité"
+
+msgid "DataLab v0.20 plugins"
+msgstr "Plugins DataLab v0.20"
+
+msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
+msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
+
 msgid "Settings for internal console, used for debugging or advanced users"
 msgstr "Réglages de la console interne, utilisée pour le débogage ou les utilisateurs avancés"
 
@@ -1895,14 +1940,20 @@ msgstr "Mode d'opération"
 msgid "Operation mode for computations taking <i>N</i> inputs:<ul><li><b>single</b>: single operand mode</li><li><b>pairwise</b>: pairwise operation mode</li></ul><br>Computations taking <i>N</i> inputs are the ones where:<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
 msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
 
-msgid "Use signal bounds for new signals"
-msgstr "Utiliser les bornes du signal pour les nouveaux signaux"
+msgid "Use current signal bounds"
+msgstr "Utiliser les bornes du signal courant"
+
+msgid "New signals"
+msgstr "Nouveaux signaux"
 
 msgid "If enabled, when creating a new signal, the xmin and xmax values will be initialized from the current signal's bounds.<br>If disabled, the default values from the New Signal dialog will be used."
 msgstr "Si activé, lors de la création d'un nouveau signal, les valeurs xmin et xmax seront initialisées à partir des bornes du signal actuel.<br>Si désactivé, les valeurs par défaut de la boîte de dialogue Nouveau signal seront utilisées."
 
-msgid "Use image dimensions for new images"
-msgstr "Utiliser les dimensions de l'image pour les nouvelles images"
+msgid "Use current image dimensions"
+msgstr "Utiliser les dimensions de l'image courante"
+
+msgid "New images"
+msgstr "Nouvelles images"
 
 msgid "If enabled, when creating a new image, the width and height values will be initialized from the current image's dimensions.<br>If disabled, the default values from the New Image dialog will be used."
 msgstr "Si activé, lors de la création d'une nouvelle image, les valeurs de largeur et de hauteur seront initialisées à partir des dimensions de l'image actuelle.<br>Si désactivé, les valeurs par défaut de la boîte de dialogue Nouvelle image seront utilisées."
@@ -2852,4 +2903,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

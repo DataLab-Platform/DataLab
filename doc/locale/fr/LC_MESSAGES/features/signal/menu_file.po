@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 17:14+0200\n"
+"POT-Creation-Date: 2025-10-19 10:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -146,7 +146,7 @@ msgid "Linear chirp"
 msgstr "Modulation linéaire de fréquence"
 
 #, python-brace-format
-msgid ":math:`y = y_{0} + a \\sin(\\phi_{0} + 2\\pi (f_{0} x +  \\frac{1}{2} c x^{2}))`"
+msgid ":math:`y = y_{0} + A \\sin(\\phi_{0} + 2\\pi (f_{0} x +  \\frac{1}{2} c x^{2}))`"
 msgstr ""
 
 msgid "Step"
@@ -165,7 +165,7 @@ msgstr ""
 msgid "Logistic"
 msgstr "Logistique"
 
-msgid ":math:`y = y_{0} + \\dfrac{a}{1 + exp(-k (x - x_{0}))}`"
+msgid ":math:`y = y_{0} + \\dfrac{A}{1 + exp(-k (x - x_{0}))}`"
 msgstr ""
 
 msgid "Pulse"
@@ -303,3 +303,4 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
+
