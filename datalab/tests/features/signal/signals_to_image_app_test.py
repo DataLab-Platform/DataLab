@@ -80,17 +80,16 @@ def test_signals_to_image_app(screenshots: bool = False) -> None:
         win.set_current_panel("image")
 
         # Verify image dimensions - get objects directly from object model
-        images = win.imagepanel.objmodel.get_all_objects()
+        images = win.imagepanel.objview.get_sel_objects()
         assert len(images) == 3, f"Expected 3 images in object model, got {len(images)}"
-        img1, img2, _img3 = images
-        assert img1.data.shape == (
+        assert images[0].data.shape == (
             N_SIGNALS,
             SIZE,
-        ), f"Expected shape ({N_SIGNALS}, {SIZE}), got {img1.data.shape}"
-        assert img2.data.shape == (
+        ), f"Expected shape ({N_SIGNALS}, {SIZE}), got {images[0].data.shape}"
+        assert images[1].data.shape == (
             SIZE,
             N_SIGNALS,
-        ), f"Expected shape ({SIZE}, {N_SIGNALS}), got {img2.data.shape}"
+        ), f"Expected shape ({SIZE}, {N_SIGNALS}), got {images[1].data.shape}"
 
         execenv.print("  ✓ Signals to image conversion test passed")
 

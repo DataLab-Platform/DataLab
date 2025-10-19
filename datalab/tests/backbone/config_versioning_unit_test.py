@@ -13,7 +13,7 @@ from datalab.config import get_config_app_name
 def test_config_app_name():
     """Test configuration app name versioning."""
     config_name = get_config_app_name()
-    major_version = datalab.__version__.split(".")[0]
+    major_version = datalab.__version__.split(".", maxsplit=1)[0]
 
     print(f"DataLab version: {datalab.__version__}")
     print(f"Major version: {major_version}")

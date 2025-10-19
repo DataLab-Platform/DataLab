@@ -24,6 +24,7 @@ from sigima.proc.title_formatting import (
     set_default_title_formatter,
 )
 
+from datalab import __version__
 from datalab.utils import conf
 
 # Configure Sigima to use DataLab-compatible placeholder title formatting
@@ -51,10 +52,7 @@ def get_config_app_name() -> str:
         - v1.0.x → "DataLab_v1" (configuration stored in ~/.DataLab_v1)
         - v2.0.x → "DataLab_v2" (configuration stored in ~/.DataLab_v2)
     """
-    # Import here to avoid circular dependency
-    from datalab import __version__
-
-    major_version = __version__.split(".")[0]
+    major_version = __version__.split(".", maxsplit=1)[0]
 
     # Keep v0.x configuration folder unchanged for backward compatibility
     if major_version == "0":
