@@ -303,6 +303,7 @@ class ObjectProp(QW.QTabWidget):
 
         # Connect Apply button to recreation handler
         editor.SIG_APPLY_BUTTON_CLICKED.connect(self._apply_creation_parameters)
+        editor.set_apply_button_state(False)
 
         # Store reference to be able to retrieve it later
         self._creation_param_editor = editor
@@ -324,7 +325,6 @@ class ObjectProp(QW.QTabWidget):
         editor = self._creation_param_editor
         if editor is None or self._current_creation_obj is None:
             return
-        editor.set_apply_button_state(False)
         if isinstance(self._current_creation_obj, SignalObj):
             otext = _("Signal was modified in-place.")
         else:
