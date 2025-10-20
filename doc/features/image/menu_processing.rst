@@ -420,12 +420,6 @@ The following functions are available:
     on the same image. Combined with the "distribute on a grid" option, this allows
     to compare the different edge filters on the same image.
 
-Butterworth filter
-^^^^^^^^^^^^^^^^^^
-
-Perform Butterworth filter on an image
-(implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)
-
 Erase area
 ^^^^^^^^^^
 
@@ -438,7 +432,6 @@ Erase an area in the image as defined by a region of interest (ROI).
     Note that the ROI defined here is not bound to any object; it is used solely to
     specify the area to erase in the image. In particular, it is independent of the
     image’s ROI, if any (the latter is shown in the dialog box as a masked area).
-
 
 Resize
 ^^^^^^

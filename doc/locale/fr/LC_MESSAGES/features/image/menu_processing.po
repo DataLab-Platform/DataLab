@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-17 15:53+0200\n"
+"POT-Creation-Date: 2025-10-20 09:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -646,12 +646,6 @@ msgstr ""
 msgid "The \"All edges filters\" option allows to perform all edge filtering algorithms on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different edge filters on the same image."
 msgstr "L'option \"Tous les filtres de contours\" permet d'appliquer tous les algorithmes de filtrage de contours à la même image. Combinée avec l'option \"distribuer sur une grille\", cela permet de comparer les différents filtres de contours sur la même image."
 
-msgid "Butterworth filter"
-msgstr "Filtre de Butterworth"
-
-msgid "Perform Butterworth filter on an image (implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
-msgstr "Calcule le résultat d'un filtre de Butterworth sur l'image (implémentation basée sur `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
-
 msgid "Erase area"
 msgstr "Gommer une zone"
 
@@ -748,3 +742,4 @@ msgstr "Valeur de remplissage"
 
 msgid "Value to use for points outside the input image domain (if None, function uses NaN for extrapolation)"
 msgstr "Valeur à utiliser pour les points en dehors du domaine de l'image d'entrée (si None, la fonction utilise NaN pour l'extrapolation)"
+
