@@ -42,7 +42,9 @@ from sigima.objects import (
     SignalObj,
     TypeObj,
     TypeROI,
+    create_image_from_param,
     create_signal,
+    create_signal_from_param,
 )
 from sigima.objects.base import ROI_KEY
 from sigima.params import SaveToDirectoryParam
@@ -126,7 +128,7 @@ def is_hdf5_file(filename: str, check_content: bool = False) -> bool:
         return False
 
 
-class ObjectProp(QW.QWidget):
+class ObjectProp(QW.QTabWidget):
     """Object handling panel properties
 
     Args:
@@ -136,7 +138,17 @@ class ObjectProp(QW.QWidget):
 
     def __init__(self, panel: BaseDataPanel, objclass: SignalObj | ImageObj) -> None:
         super().__init__(panel)
+        self.setTabBarAutoHide(True)
+        self.setTabPosition(QW.QTabWidget.West)
+
+        self.panel = panel
         self.objclass = objclass
+
+        # Object creation tab
+        self._creation_param_editor: gdq.DataSetEditGroupBox | None = None
+        self._current_creation_obj: SignalObj | ImageObj | None = None
+
+        # Properties tab
         self.properties = gdq.DataSetEditGroupBox(_("Properties"), objclass)
         self.properties.SIG_APPLY_BUTTON_CLICKED.connect(panel.properties_changed)
         self.properties.setEnabled(False)
@@ -158,15 +170,21 @@ class ObjectProp(QW.QWidget):
         analysis_parameter_scroll.setWidgetResizable(True)
         analysis_parameter_scroll.setWidget(self.analysis_parameter_label)
 
-        child: QW.QTabWidget = None
+        tab_widget = self._get_properties_tab_widget()
+        tab_widget.addTab(analysis_parameter_scroll, _("Analysis parameters"))
+
+        self.addTab(self.properties, _("Properties"))
+
+    def _get_properties_tab_widget(self) -> QW.QTabWidget | None:
+        """Get the QTabWidget from properties widget.
+
+        Returns:
+            QTabWidget instance if found, None otherwise
+        """
         for child in self.properties.children():
             if isinstance(child, QW.QTabWidget):
-                break
-        child.addTab(analysis_parameter_scroll, _("Analysis parameters"))
-
-        vlayout = QW.QVBoxLayout()
-        vlayout.addWidget(self.properties)
-        self.setLayout(vlayout)
+                return child
+        return None
 
     def add_button(self, button: QW.QPushButton) -> None:
         """Add additional button on bottom of properties panel"""
@@ -206,6 +224,12 @@ class ObjectProp(QW.QWidget):
         # Using restore_dataset to convert the dataset to a dictionary
         self.__original_values = {}
         restore_dataset(dataset, self.__original_values)
+
+        # Setup the Creation tab if this object has creation parameters
+        if (obj is None or not self.setup_creation_tab(obj)) and self.count() > 1:
+            self.removeTab(0)
+            self._creation_param_editor = None
+            self._current_creation_obj = None
 
     def get_changed_properties(self) -> dict[str, Any]:
         """Get dictionary of properties that have changed from original values.
@@ -257,6 +281,92 @@ class ObjectProp(QW.QWidget):
             return np.array_equal(val1, val2)
         # Handle regular comparison
         return val1 == val2
+
+    def setup_creation_tab(self, obj: SignalObj | ImageObj) -> bool:
+        """Setup the Creation tab with parameter editor for interactive object creation.
+
+        Args:
+            obj: Signal or Image object
+
+        Returns:
+            True if Creation tab was set up, False otherwise
+        """
+        param = obj.extract_creation_param()
+        if param is None:
+            return False
+
+        # Create parameter editor widget using the actual parameter class
+        # (which is a subclass of NewSignalParam or NewImageParam)
+        param_editor = gdq.DataSetEditGroupBox(
+            _("Creation Parameters"), param.__class__
+        )
+        update_dataset(param_editor.dataset, param)
+        param_editor.get()
+
+        # Connect Apply button to recreation handler
+        param_editor.SIG_APPLY_BUTTON_CLICKED.connect(self._apply_creation_parameters)
+
+        # Store reference to be able to retrieve it later
+        self._creation_param_editor = param_editor
+        self._current_creation_obj = obj
+
+        # Set the parameter editor as the scroll area widget
+        if self.count() > 1:
+            obj_creation_scroll = self.widget(0)
+        else:
+            obj_creation_scroll = QW.QScrollArea()
+            obj_creation_scroll.setWidgetResizable(True)
+            self.insertTab(0, obj_creation_scroll, _("Creation"))
+        obj_creation_scroll.setWidget(param_editor)
+        self.setCurrentIndex(0)
+        return True
+
+    def _apply_creation_parameters(self) -> None:
+        """Apply creation parameters: recreate object with updated parameters."""
+        if self._creation_param_editor is None or self._current_creation_obj is None:
+            return
+
+        # Get updated parameters from editor
+        param = self._creation_param_editor.dataset
+
+        # Recreate object with new parameters
+        # (serialization is done automatically in create_signal/image_from_param)
+        try:
+            if isinstance(self._current_creation_obj, SignalObj):
+                new_obj = create_signal_from_param(param)
+            else:  # ImageObj
+                new_obj = create_image_from_param(param)
+        except Exception as exc:  # pylint: disable=broad-except
+            QW.QMessageBox.warning(
+                self,
+                _("Error"),
+                _("Failed to recreate object with new parameters:\n%s") % str(exc),
+            )
+            return
+
+        # Update the current object in-place
+        obj_uuid = get_uuid(self._current_creation_obj)
+        self._current_creation_obj.title = new_obj.title
+        if isinstance(self._current_creation_obj, SignalObj):
+            self._current_creation_obj.xydata = new_obj.xydata
+        else:  # ImageObj
+            self._current_creation_obj.data = new_obj.data
+        # Update metadata with new creation parameters
+        self._current_creation_obj.insert_creation_param(param)
+
+        # Update the tree view item (to show new title if it changed)
+        self.panel.objview.update_item(obj_uuid)
+
+        # Refresh only the plot, not the entire panel
+        # (avoid calling selection_changed which would trigger a full refresh
+        # of the Properties tab and could cause recursion issues)
+        self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+        # Refresh the Creation tab with the new parameters
+        # Use QTimer to defer this until after the current event is processed
+        QC.QTimer.singleShot(
+            0, lambda: self.setup_creation_tab(self._current_creation_obj)
+        )
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
@@ -1131,14 +1241,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     def new_object(
         self,
         param: NewSignalParam | NewImageParam | None = None,
-        edit: bool = True,
+        edit: bool = False,
         add_to_panel: bool = True,
     ) -> TypeObj | None:
         """Create a new object (signal/image).
 
         Args:
             param: new object parameters
-            edit: Open a dialog box to edit parameters (default: True)
+            edit: Open a dialog box to edit parameters (default: False).
+             When False, the object is created with default parameters and creation
+             parameters are stored in metadata for interactive editing.
             add_to_panel: Add object to panel (default: True)
 
         Returns:

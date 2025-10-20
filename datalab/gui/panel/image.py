@@ -126,14 +126,16 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
     def new_object(
         self,
         param: NewImageParam | None = None,
-        edit: bool = True,
+        edit: bool = False,
         add_to_panel: bool = True,
     ) -> ImageObj | None:
         """Create a new object (image).
 
         Args:
             param (guidata.dataset.DataSet): new object parameters
-            edit (bool): Open a dialog box to edit parameters (default: True)
+            edit (bool): Open a dialog box to edit parameters (default: False).
+             When False, the object is created with default parameters and creation
+             parameters are stored in metadata for interactive editing.
             add_to_panel (bool): Add the object to the panel (default: True)
 
         Returns:
