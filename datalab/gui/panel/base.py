@@ -297,17 +297,15 @@ class ObjectProp(QW.QTabWidget):
 
         # Create parameter editor widget using the actual parameter class
         # (which is a subclass of NewSignalParam or NewImageParam)
-        param_editor = gdq.DataSetEditGroupBox(
-            _("Creation Parameters"), param.__class__
-        )
-        update_dataset(param_editor.dataset, param)
-        param_editor.get()
+        editor = gdq.DataSetEditGroupBox(_("Creation Parameters"), param.__class__)
+        update_dataset(editor.dataset, param)
+        editor.get()
 
         # Connect Apply button to recreation handler
-        param_editor.SIG_APPLY_BUTTON_CLICKED.connect(self._apply_creation_parameters)
+        editor.SIG_APPLY_BUTTON_CLICKED.connect(self._apply_creation_parameters)
 
         # Store reference to be able to retrieve it later
-        self._creation_param_editor = param_editor
+        self._creation_param_editor = editor
         self._current_creation_obj = obj
 
         # Set the parameter editor as the scroll area widget
@@ -317,17 +315,29 @@ class ObjectProp(QW.QTabWidget):
             obj_creation_scroll = QW.QScrollArea()
             obj_creation_scroll.setWidgetResizable(True)
             self.insertTab(0, obj_creation_scroll, _("Creation"))
-        obj_creation_scroll.setWidget(param_editor)
+        obj_creation_scroll.setWidget(editor)
         self.setCurrentIndex(0)
         return True
 
     def _apply_creation_parameters(self) -> None:
         """Apply creation parameters: recreate object with updated parameters."""
-        if self._creation_param_editor is None or self._current_creation_obj is None:
+        editor = self._creation_param_editor
+        if editor is None or self._current_creation_obj is None:
             return
+        editor.set_apply_button_state(False)
+        if isinstance(self._current_creation_obj, SignalObj):
+            otext = _("Signal was modified in-place.")
+        else:
+            otext = _("Image was modified in-place.")
+        text = f"⚠️ {otext} ⚠️ "
+        text += _(
+            "If computation were performed based on this object, "
+            "they may need to be redone."
+        )
+        self.panel.SIG_STATUS_MESSAGE.emit(text, 20000)
 
         # Get updated parameters from editor
-        param = self._creation_param_editor.dataset
+        param = editor.dataset
 
         # Recreate object with new parameters
         # (serialization is done automatically in create_signal/image_from_param)
@@ -628,7 +638,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     MAXDIALOGSIZE = 0.95  # % of DataLab's main window size
     # Replaced by the right class in child object:
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
-    SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
+    SIG_STATUS_MESSAGE = QC.Signal(str, int)  # emitted by "qt_try_except" decorator
     SIG_REFRESH_PLOT = QC.Signal(
         str, bool, bool, bool, bool
     )  # Connected to PlotHandler.refresh_plot

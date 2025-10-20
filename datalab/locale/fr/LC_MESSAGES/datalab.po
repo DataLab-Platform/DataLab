@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-19 15:20+0200\n"
+"POT-Creation-Date: 2025-10-20 18:20+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -902,6 +902,29 @@ msgstr "Propriétés"
 
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
+
+msgid "Creation Parameters"
+msgstr "Paramètres de création"
+
+msgid "Creation"
+msgstr "Création"
+
+msgid "Signal was modified in-place."
+msgstr "Le signal a été modifié sur place."
+
+msgid "Image was modified in-place."
+msgstr "L'image a été modifiée sur place."
+
+msgid "If computation were performed based on this object, they may need to be redone."
+msgstr "Si des calculs ont été effectués sur la base de cet objet, ils devront peut-être être refaits."
+
+#, python-format
+msgid ""
+"Failed to recreate object with new parameters:\n"
+"%s"
+msgstr ""
+"Échec de la recréation de l'objet avec les nouveaux paramètres :\n"
+"%s"
 
 msgid "Geometry results"
 msgstr "Résultats géométriques"
