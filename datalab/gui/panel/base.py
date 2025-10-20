@@ -901,7 +901,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if (
                     not GeometryAdapter.match(key, value)
                     and not TableAdapter.match(key, value)
-                    and key not in (ROI_KEY,)
+                    and key not in (ROI_KEY, "__uuid")
                 ):
                     metadata[key] = value
         sel_objects = self.objview.get_sel_objects(include_groups=True)
