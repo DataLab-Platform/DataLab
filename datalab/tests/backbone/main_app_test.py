@@ -120,8 +120,12 @@ def test_main_app():
             win.view_menu,
             win.help_menu,
         ):
-            menu.popup(menu.pos())
-        win.file_menu.popup(win.mapToGlobal(win.file_menu.pos()))
+            # Just access the menu to ensure it's created and initialized
+            assert menu is not None, f"Menu {menu.title()} should exist"
+            # Trigger aboutToShow to populate dynamic menus without showing the popup
+            menu.aboutToShow.emit()
+            # Verify menu has actions (optional, but good sanity check)
+            assert len(menu.actions()) > 0, f"Menu {menu.title()} should have actions"
 
         # Open settings dialog
         win.settings_action.trigger()
