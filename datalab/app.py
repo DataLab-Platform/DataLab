@@ -82,4 +82,4 @@ def run(console=None, objects=None, h5files=None, size=None):
 
 
 if __name__ == "__main__":
-    run(console=False)
+    run()
