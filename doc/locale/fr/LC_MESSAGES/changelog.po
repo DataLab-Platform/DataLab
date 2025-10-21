@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-19 11:55+0200\n"
+"POT-Creation-Date: 2025-10-21 20:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,105 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**Interactive object creation and processing**: New interactive workflow for creating and processing objects"
+msgstr "**Création et traitement interactifs d'objets** : Nouveau flux de travail interactif pour la création et le traitement des objets"
+
+msgid "**Interactive object creation**: Signal/image creation parameters can now be modified after creation"
+msgstr "**Création d'objets interactifs** : Les paramètres de création de signaux/images peuvent désormais être modifiés après la création"
+
+msgid "When creating a new signal or image (Gaussian, sine, etc.), a new \"Creation\" tab appears in the object properties panel"
+msgstr "Lors de la création d'un nouveau signal ou d'une nouvelle image (gaussien, sinusoïdal, etc.), un nouvel onglet \"Création\" apparaît dans le panneau des propriétés de l'objet."
+
+msgid "Users can modify creation parameters (amplitude, frequency, size, etc.) and click \"Apply\" to regenerate the object in-place"
+msgstr "Les utilisateurs peuvent modifier les paramètres de création (amplitude, fréquence, taille, etc.) et cliquer sur \"Appliquer\" pour régénérer l'objet sur place."
+
+msgid "Object is updated without creating a new one, preserving any subsequent processing or analysis"
+msgstr "L'objet est mis à jour sans en créer un nouveau, préservant tout traitement ou analyse ultérieur."
+
+msgid "Only available for objects created with parameter classes (not for imported data)"
+msgstr "Disponible uniquement pour les objets créés avec des classes de paramètres (pas pour les données importées)"
+
+msgid "Useful for exploring different parameter values or fine-tuning object characteristics"
+msgstr "Utile pour explorer différentes valeurs de paramètres ou affiner les caractéristiques des objets"
+
+msgid "**Interactive 1-to-1 processing**: Processing parameters can be adjusted and reapplied after initial processing"
+msgstr "**Traitement interactif 1-vers-1** : Les paramètres de traitement peuvent être ajustés et réappliqués après le traitement initial"
+
+msgid "When applying a 1-to-1 processing operation with parameters (Gaussian filter, threshold, etc.), a new \"Processing\" tab appears"
+msgstr "Lors de l'application d'une opération de traitement 1-vers-1 avec des paramètres (filtre gaussien, seuil, etc.), un nouvel onglet \"Traitement\" apparaît."
+
+msgid "Users can modify processing parameters and click \"Apply\" to re-process the object with updated values"
+msgstr "Les utilisateurs peuvent modifier les paramètres de traitement et cliquer sur \"Appliquer\" pour re-traiter l'objet avec les valeurs mises à jour."
+
+msgid "Result object is updated in-place with new processing parameters"
+msgstr "L'objet résultant est mis à jour sur place avec les nouveaux paramètres de traitement."
+
+msgid "Processing metadata stores: parameters (JSON), source object UUID, and function name"
+msgstr "Les métadonnées de traitement stockent : les paramètres (JSON), l'UUID de l'objet source et le nom de la fonction."
+
+msgid "Source object validation: displays error message if source object was deleted"
+msgstr "Validation de l'objet source : affiche un message d'erreur si l'objet source a été supprimé."
+
+msgid "Only works for processing functions with parameter classes (filtering, morphology, etc.)"
+msgstr "Fonctionne uniquement pour les fonctions de traitement avec des classes de paramètres (filtrage, morphologie, etc.)"
+
+msgid "Not supported for processing without parameters (absolute, inverse, etc.) - these work as before"
+msgstr "Non pris en charge pour le traitement sans paramètres (absolu, inverse, etc.) - ceux-ci fonctionnent comme avant"
+
+msgid "Intentionally not supported for 2-to-1 or n-to-1 processing patterns (use cases don't benefit from interactive behavior)"
+msgstr "Non pris en charge intentionnellement pour les modèles de traitement 2-vers-1 ou n-vers-1 (les cas d'utilisation ne bénéficient pas d'un comportement interactif)"
+
+msgid "Ideal for iteratively tuning processing parameters while observing results in real-time"
+msgstr "Idéal pour ajuster itérativement les paramètres de traitement tout en observant les résultats en temps réel."
+
+msgid "**Recompute feature**: Quickly reprocess objects with their stored processing parameters"
+msgstr "**Fonction de recomposition** : Reprocessus rapide des objets avec leurs paramètres de traitement stockés."
+
+msgid "New \"Recompute\" action in Edit menu (keyboard shortcut: Ctrl+R)"
+msgstr "Nouvelle action \"Recomposer\" dans le menu Édition (raccourci clavier : Ctrl+R)"
+
+msgid "Allows reprocessing one or multiple objects that have stored 1-to-1 processing parameters"
+msgstr "Permet de re-traiter un ou plusieurs objets qui ont des paramètres de traitement 1-vers-1 stockés."
+
+msgid "When source object data changes, recompute updates the processed object(s) accordingly"
+msgstr "Lorsque les données de l'objet source changent, la recomposition met à jour l'objet (ou les objets) traité(s) en conséquence."
+
+msgid "Works with both individual objects and groups of objects"
+msgstr "Fonctionne avec des objets individuels et des groupes d'objets."
+
+msgid "Shows progress dialog for batch recomputing multiple objects"
+msgstr "Affiche une boîte de dialogue de progression pour le re-traitement par lots de plusieurs objets."
+
+msgid "Objects without recomputable parameters are automatically skipped"
+msgstr "Les objets sans paramètres recomposables sont automatiquement ignorés."
+
+msgid "Useful for updating results when input data is modified or to propagate changes through a processing chain"
+msgstr "Utile pour mettre à jour les résultats lorsque les données d'entrée sont modifiées ou pour propager les changements à travers une chaîne de traitement."
+
+msgid "**Select source objects**: Navigate to source objects used in processing"
+msgstr "**Sélectionner les objets source** : Naviguer vers les objets source utilisés dans le traitement"
+
+msgid "New \"Select source objects\" action in Edit menu"
+msgstr "Nouvelle action \"Sélectionner les objets source\" dans le menu Édition"
+
+msgid "Automatically selects the source object(s) that were used to create the currently selected processed object"
+msgstr "Sélectionne automatiquement l'objet (ou les objets) source qui ont été utilisés pour créer l'objet traité actuellement sélectionné."
+
+msgid "Works for all processing patterns (1-to-1, 2-to-1, n-to-1) by reading processing metadata"
+msgstr "Fonctionne pour tous les modèles de traitement (1-vers-1, 2-vers-1, n-vers-1) en lisant les métadonnées de traitement."
+
+msgid "Handles multiple source objects (e.g., from n-to-1 operations)"
+msgstr "Gère plusieurs objets source (par exemple, à partir d'opérations n-vers-1)"
+
+msgid "Shows informative messages if source objects no longer exist or if some are missing"
+msgstr "Affiche des messages informatifs si les objets source n'existent plus ou si certains sont manquants."
+
+msgid "Useful for understanding processing workflows and tracing data lineage"
+msgstr "Utile pour comprendre les flux de traitement et retracer la lignée des données."
+
+msgid "Helps users navigate complex processing chains by jumping back to original source data"
+msgstr "Aide les utilisateurs à naviguer dans des chaînes de traitement complexes en revenant aux données source d'origine."
 
 msgid "**Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing"
 msgstr "**Prise en charge des coordonnées non uniformes pour les images** : Les images peuvent désormais avoir un espacement de pixel non uniforme"
