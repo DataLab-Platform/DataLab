@@ -23,6 +23,22 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Not supported for processing without parameters (absolute, inverse, etc.) - these work as before
     * Intentionally not supported for 2-to-1 or n-to-1 processing patterns (use cases don't benefit from interactive behavior)
     * Ideal for iteratively tuning processing parameters while observing results in real-time
+  * **Recompute feature**: Quickly reprocess objects with their stored processing parameters
+    * New "Recompute" action in Edit menu (keyboard shortcut: Ctrl+R)
+    * Allows reprocessing one or multiple objects that have stored 1-to-1 processing parameters
+    * When source object data changes, recompute updates the processed object(s) accordingly
+    * Works with both individual objects and groups of objects
+    * Shows progress dialog for batch recomputing multiple objects
+    * Objects without recomputable parameters are automatically skipped
+    * Useful for updating results when input data is modified or to propagate changes through a processing chain
+  * **Select source objects**: Navigate to source objects used in processing
+    * New "Select source objects" action in Edit menu
+    * Automatically selects the source object(s) that were used to create the currently selected processed object
+    * Works for all processing patterns (1-to-1, 2-to-1, n-to-1) by reading processing metadata
+    * Handles multiple source objects (e.g., from n-to-1 operations)
+    * Shows informative messages if source objects no longer exist or if some are missing
+    * Useful for understanding processing workflows and tracing data lineage
+    * Helps users navigate complex processing chains by jumping back to original source data
 
 * **Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing
   * Image objects now support both uniform and non-uniform coordinate systems:
