@@ -61,7 +61,16 @@ from datalab.adapters_plotpy import create_adapter_from_object, items_to_json
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui import actionhandler, objectview
-from datalab.gui.newobject import NewSignalParam
+from datalab.gui.newobject import (
+    NewSignalParam,
+    extract_creation_parameters,
+    insert_creation_parameters,
+)
+from datalab.gui.processor.base import (
+    ProcessingParameters,
+    extract_processing_parameters,
+    insert_processing_parameters,
+)
 from datalab.gui.roieditor import TypeROIEditor
 from datalab.objectmodel import ObjectGroup, get_short_id, get_uuid, set_uuid
 from datalab.utils.qthelpers import (
@@ -148,6 +157,10 @@ class ObjectProp(QW.QTabWidget):
         self._creation_param_editor: gdq.DataSetEditGroupBox | None = None
         self._current_creation_obj: SignalObj | ImageObj | None = None
 
+        # Object processing tab
+        self._processing_param_editor: gdq.DataSetEditGroupBox | None = None
+        self._current_processing_obj: SignalObj | ImageObj | None = None
+
         # Properties tab
         self.properties = gdq.DataSetEditGroupBox(_("Properties"), objclass)
         self.properties.SIG_APPLY_BUTTON_CLICKED.connect(panel.properties_changed)
@@ -225,11 +238,23 @@ class ObjectProp(QW.QTabWidget):
         self.__original_values = {}
         restore_dataset(dataset, self.__original_values)
 
-        # Setup the Creation tab if this object has creation parameters
-        if (obj is None or not self.setup_creation_tab(obj)) and self.count() > 1:
+        # First, remove any existing Creation and Processing tabs
+        # (We'll recreate them if needed based on the current object)
+        while self.count() > 1:  # Keep only Properties tab (always last)
             self.removeTab(0)
-            self._creation_param_editor = None
-            self._current_creation_obj = None
+        self._creation_param_editor = None
+        self._current_creation_obj = None
+        self._processing_param_editor = None
+        self._current_processing_obj = None
+
+        # Now setup tabs in the correct order based on current object
+        # Setup the Creation tab if this object has creation parameters
+        if obj is not None:
+            self.setup_creation_tab(obj)
+
+        # Setup the Processing tab if this object has processing parameters
+        if obj is not None:
+            self.setup_processing_tab(obj)
 
     def get_changed_properties(self) -> dict[str, Any]:
         """Get dictionary of properties that have changed from original values.
@@ -291,7 +316,7 @@ class ObjectProp(QW.QTabWidget):
         Returns:
             True if Creation tab was set up, False otherwise
         """
-        param = obj.extract_creation_param()
+        param = extract_creation_parameters(obj)
         if param is None:
             return False
 
@@ -362,7 +387,7 @@ class ObjectProp(QW.QTabWidget):
         else:  # ImageObj
             self._current_creation_obj.data = new_obj.data
         # Update metadata with new creation parameters
-        self._current_creation_obj.insert_creation_param(param)
+        insert_creation_parameters(self._current_creation_obj, param)
 
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
@@ -377,6 +402,174 @@ class ObjectProp(QW.QTabWidget):
         QC.QTimer.singleShot(
             0, lambda: self.setup_creation_tab(self._current_creation_obj)
         )
+
+    def setup_processing_tab(self, obj: SignalObj | ImageObj) -> bool:
+        """Setup the Processing tab with parameter editor for re-processing.
+
+        Args:
+            obj: Signal or Image object
+
+        Returns:
+            True if Processing tab was set up, False otherwise
+        """
+        # Extract processing parameters
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None:
+            return False
+
+        # Check if the pattern type is 1-to-1 (only interactive pattern)
+        if proc_params.pattern != "1-to-1":
+            return False
+
+        # Check if object has processing parameter
+        param = proc_params.param
+        if param is None:
+            return False
+
+        # Create parameter editor widget
+        editor = gdq.DataSetEditGroupBox(_("Processing Parameters"), param.__class__)
+        update_dataset(editor.dataset, param)
+        editor.get()
+
+        # Connect Apply button to reprocessing handler
+        editor.SIG_APPLY_BUTTON_CLICKED.connect(self._apply_processing_parameters)
+        editor.set_apply_button_state(False)
+
+        # Store reference to be able to retrieve it later
+        self._processing_param_editor = editor
+        self._current_processing_obj = obj
+
+        # Set the parameter editor as the scroll area widget
+        # Insert after Creation tab (index 1) if it exists, otherwise at index 0
+        insert_index = 1 if self.count() > 1 else 0
+
+        # Check if Processing tab already exists at the expected position
+        if self.count() > insert_index:
+            existing_tab_text = self.tabText(insert_index)
+            if existing_tab_text == _("Processing"):
+                # Update existing tab
+                processing_scroll = self.widget(insert_index)
+            else:
+                # Create new tab
+                processing_scroll = QW.QScrollArea()
+                processing_scroll.setWidgetResizable(True)
+                self.insertTab(insert_index, processing_scroll, _("Processing"))
+        else:
+            # Create new tab
+            processing_scroll = QW.QScrollArea()
+            processing_scroll.setWidgetResizable(True)
+            self.insertTab(insert_index, processing_scroll, _("Processing"))
+
+        processing_scroll.setWidget(editor)
+        self.setCurrentIndex(insert_index)
+        return True
+
+    def _apply_processing_parameters(self) -> None:
+        """Apply processing parameters: re-run processing with updated parameters."""
+        editor = self._processing_param_editor
+        if editor is None or self._current_processing_obj is None:
+            return
+
+        obj = self._current_processing_obj
+
+        # Extract processing parameters
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None:
+            QW.QMessageBox.critical(
+                self,
+                _("Error"),
+                _("Processing metadata is incomplete."),
+            )
+            return
+
+        # Check if source object still exists
+        if proc_params.source_uuid is None:
+            QW.QMessageBox.critical(
+                self,
+                _("Error"),
+                _("Processing metadata is incomplete (missing source UUID)."),
+            )
+            return
+
+        # Find source object
+        source_obj = None
+        for panel_obj in self.panel:
+            if get_uuid(panel_obj) == proc_params.source_uuid:
+                source_obj = panel_obj
+                break
+
+        if source_obj is None:
+            QW.QMessageBox.critical(
+                self,
+                _("Error"),
+                _(
+                    "Source object no longer exists.\n\n"
+                    "The object that was used to create this processed object "
+                    "has been deleted and cannot be used for reprocessing."
+                ),
+            )
+            return
+
+        # Get updated parameters from editor
+        param = editor.dataset
+
+        # Create a clean copy of the parameter
+        param_copy = param.__class__()
+        update_dataset(param_copy, param)
+
+        # Get the processor and run the feature
+        processor = self.panel.processor
+        try:
+            # Use run_feature which will look up the function by name
+            processor.run_feature(proc_params.func_name, source_obj, param=param_copy)
+        except Exception as exc:  # pylint: disable=broad-except
+            QW.QMessageBox.warning(
+                self,
+                _("Error"),
+                _("Failed to reprocess object:\n%s") % str(exc),
+            )
+            return
+
+        # The reprocessing creates a new object, but we want to update the current one
+        # Get the last added object (the newly processed one)
+        new_objs = [o for o in self.panel if isinstance(o, type(obj))]
+        if new_objs:
+            new_obj = new_objs[-1]
+
+            # Update the current object in-place with data from new object
+            obj.title = new_obj.title
+            if isinstance(obj, SignalObj):
+                obj.xydata = new_obj.xydata
+            else:  # ImageObj
+                obj.data = new_obj.data
+
+            # Update metadata with new processing parameters
+            updated_proc_params = ProcessingParameters(
+                func_name=proc_params.func_name,
+                pattern="1-to-1",
+                param=param_copy,
+                source_uuid=proc_params.source_uuid,
+            )
+            insert_processing_parameters(obj, updated_proc_params)
+
+            # Remove the temporary new object
+            self.panel.remove_object(new_obj)
+
+            # Update the tree view item and refresh plot
+            obj_uuid = get_uuid(obj)
+            self.panel.objview.update_item(obj_uuid)
+            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+            # Refresh the Processing tab with the new parameters
+            QC.QTimer.singleShot(
+                0, lambda: self.setup_processing_tab(self._current_processing_obj)
+            )
+
+        if isinstance(obj, SignalObj):
+            otext = _("Signal was reprocessed.")
+        else:
+            otext = _("Image was reprocessed.")
+        self.panel.SIG_STATUS_MESSAGE.emit(otext, 5000)
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
@@ -824,6 +1017,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.objview.populate_tree()
         self.refresh_plot("selected", True, False)
         super().remove_all_objects()
+        # Update object properties panel to clear creation/processing tabs
+        self.selection_changed()
 
     # ---- Signal/Image Panel API ------------------------------------------------------
     def setup_panel(self) -> None:
