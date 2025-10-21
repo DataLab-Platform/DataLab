@@ -56,8 +56,9 @@ def extract_creation_parameters(obj: SignalObj | ImageObj) -> gds.DataSet | None
     Returns:
         Creation parameters or None if not found
     """
-    param_json = obj.get_metadata_option(CREATION_PARAMETERS_OPTION, None)
-    if param_json is None:
+    try:
+        param_json = obj.get_metadata_option(CREATION_PARAMETERS_OPTION)
+    except ValueError:
         return None
     return gds.json_to_dataset(param_json)
 

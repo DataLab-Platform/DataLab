@@ -130,8 +130,9 @@ def extract_processing_parameters(
     Returns:
         ProcessingParameters instance if processing metadata exists, None otherwise.
     """
-    pp_dict = obj.get_metadata_option(PROCESSING_PARAMETERS_OPTION, None)
-    if pp_dict is None:
+    try:
+        pp_dict = obj.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
+    except ValueError:
         return None
     return ProcessingParameters.from_dict(pp_dict)
 
