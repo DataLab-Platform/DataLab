@@ -638,6 +638,17 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.EDIT):
             self.new_action(
+                _("Recompute"),
+                icon_name="recompute.svg",
+                shortcut="Ctrl+R",
+                tip=_("Recompute selected %s with its processing parameters")
+                % self.OBJECT_STR,
+                triggered=self.panel.recompute_processing,
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Rename"),
                 icon_name="rename.svg",
                 shortcut="F2",
@@ -645,6 +656,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.rename_selected_object_or_group,
                 select_condition=SelectCond.exactly_one_group_or_one_object,
                 context_menu_pos=-1,
+                separator=True,
             )
             self.new_action(
                 _("New group..."),
@@ -653,7 +665,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.new_group,
                 select_condition=SelectCond.always,
                 context_menu_pos=-1,
-                toolbar_pos=-1,
             )
             self.new_action(
                 _("Move up"),

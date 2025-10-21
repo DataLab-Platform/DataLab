@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-20 18:20+0200\n"
+"POT-Creation-Date: 2025-10-21 16:23+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -63,6 +63,13 @@ msgstr "Enregistrer la sélection de type %s en utilisant un modèle de nom de f
 
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
+
+msgid "Recompute"
+msgstr ""
+
+#, python-format
+msgid "Recompute selected %s with its processing parameters"
+msgstr ""
 
 msgid "Rename"
 msgstr "Renommer"
@@ -926,6 +933,41 @@ msgstr ""
 "Échec de la recréation de l'objet avec les nouveaux paramètres :\n"
 "%s"
 
+msgid "Processing Parameters"
+msgstr "Paramètres de traitement"
+
+msgid "No processing object available."
+msgstr "Aucun objet de traitement disponible."
+
+msgid "Processing metadata is incomplete."
+msgstr "Les métadonnées de traitement sont incomplètes."
+
+msgid "Processing metadata is incomplete (missing source UUID)."
+msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
+
+msgid "Source object no longer exists."
+msgstr "L'objet source n'existe plus."
+
+msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
+msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
+
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Signal was reprocessed."
+msgstr "Le signal a été retraité."
+
+msgid "Image was reprocessed."
+msgstr "L'image a été retraitée."
+
 msgid "Geometry results"
 msgstr "Résultats géométriques"
 
@@ -1013,6 +1055,20 @@ msgstr "Importer une ROI"
 
 msgid "Export ROI"
 msgstr "Exporter une ROI"
+
+msgid "Selected object(s) do not have processing parameters that can be recomputed."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Recomputing objects"
+msgstr "Calcul en cours : %s"
+
+msgid "Failed to recompute object"
+msgstr ""
+
+#, fuzzy
+msgid "Do you want to continue with the next object?"
+msgstr "Souhaitez-vous vraiment continuer ?"
 
 msgid "Annotations"
 msgstr "Annotations"
@@ -1108,6 +1164,9 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "Failed to deserialize processing parameters from JSON."
+msgstr ""
+
 msgid "DataLab relies on various libraries to perform the computation. During the computation, errors may occur because of the data (e.g. division by zero, unexpected data type, etc.) or because of the libraries (e.g. memory error, etc.). If you encounter an error, before reporting it, please ensure that the computation is correct, by checking the data and the parameters."
 msgstr "DataLab utilise plusieurs bibliothèques pour réaliser les calculs. Lors des calculs, des erreurs peuvent survenir en raison de la nature des données (par exemple division par zéro, type de données inattendu, etc.) ou à cause de limitations ou d'erreurs dans les bibliothèques (par exemple erreur mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-vous que le calcul est correct, en vérifiant les données et les paramètres."
 
@@ -1129,6 +1188,17 @@ msgstr ""
 
 msgid "Yes to All"
 msgstr "Oui à tout"
+
+#, fuzzy, python-format
+msgid "Recomputing..."
+msgstr "Calcul en cours : %s"
+
+msgid "Processing object with updated parameters..."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Recomputing"
+msgstr "Calcul en cours : %s"
 
 #, python-format
 msgid "Computing: %s"

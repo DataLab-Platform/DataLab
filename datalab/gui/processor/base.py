@@ -912,6 +912,63 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return self.worker.get_result()
         return None
 
+    def recompute_1_to_1(
+        self,
+        func_name: str,
+        obj: SignalObj | ImageObj,
+        param: gds.DataSet | None = None,
+    ) -> SignalObj | ImageObj | None:
+        """Recompute a 1-to-1 processing operation without adding result to panel.
+
+        This method is specifically designed for the interactive re-processing feature
+        where we want to update an existing object in-place. It executes the processing
+        with full multiprocessing support (allowing cancellation) but returns the result
+        without adding it to the panel.
+
+        Args:
+            func_name: Name of the processing function
+            obj: Source object to process
+            param: Processing parameters (optional)
+
+        Returns:
+            New processed object (not added to panel), or None if cancelled or error
+
+        Raises:
+            ValueError: If function is not found in registry
+        """
+        # Get the function from the registry
+        try:
+            feature = self.get_feature(func_name)
+        except ValueError as exc:
+            raise ValueError(f"Function '{func_name}' not found in registry") from exc
+
+        func = feature.function
+
+        # Create progress dialog with short delay so it appears for long computations
+        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
+            progress.setValue(0)
+            progress.setLabelText(_("Processing object with updated parameters..."))
+
+            # Execute with multiprocessing support
+            args = (obj, param) if param is not None else (obj,)
+            comp_out = self.__exec_func(func, args, progress)
+
+            if comp_out is None:  # Cancelled by user
+                return None
+
+            # Handle the output
+            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
+
+            if new_obj is None:
+                return None
+
+            # Handle keep_results logic
+            if isinstance(new_obj, (SignalObj, ImageObj)):
+                self._handle_keep_results(new_obj)
+
+            patch_title_with_ids(new_obj, [obj], get_short_id)
+            return new_obj
+
     def _compute_1_to_1_subroutine(
         self, funcs: list[Callable], params: list, title: str
     ) -> None:
@@ -1556,7 +1613,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 self.__get_src_grps_gids_objs_nbobj_valid(min_group_nb=1)
             )
             if not valid:
-                return
+                return []
             if not objs2:
                 objs2 = self.panel.get_objects_with_dialog(
                     dlg_title,
@@ -1568,7 +1625,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     nbobj,
                 )
                 if objs2 is None:
-                    return
+                    return []
 
             n_pairs = len(src_objs[src_gids[0]])
             max_i_pair = min(
@@ -1692,7 +1749,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     ),
                 )
                 if objs2 is None:
-                    return
+                    return []
             obj2 = objs2[0]
 
             # Initialize signal mapping for potential interpolations
@@ -1992,8 +2049,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     @qt_try_except()
     def run_feature(
-        self, key: str | Callable | ComputingFeature, *args, **kwargs
-    ) -> dict[str, GeometryResult | TableResult] | None:
+        self,
+        key: str | Callable | ComputingFeature,
+        *args,
+        **kwargs,
+    ) -> (
+        dict[str, GeometryResult | TableResult]
+        | list[SignalObj | ImageObj]
+        | SignalObj
+        | ImageObj
+        | None
+    ):
         """Run a computing feature that has been previously registered.
 
         This method is a generic dispatcher for all compute methods.
