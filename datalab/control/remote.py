@@ -381,7 +381,7 @@ class RemoteServer(QC.QThread):
         Returns:
             True if successful
         """
-        obj = utils.json_to_dataset(obj_data)
+        obj = utils.rpcjson_to_dataset(obj_data)
         self.SIG_ADD_OBJECT.emit(obj, group_id, set_current)
         return True
 
@@ -475,7 +475,7 @@ class RemoteServer(QC.QThread):
         if param_data is None:
             param = None
         else:
-            param = utils.json_to_dataset(param_data)
+            param = utils.rpcjson_to_dataset(param_data)
         self.SIG_CALC.emit(name, param)
         return True
 
@@ -526,7 +526,7 @@ class RemoteServer(QC.QThread):
         obj = self.win.get_object(nb_id_title, panel)
         if obj is None:
             return None
-        return utils.dataset_to_json(obj)
+        return utils.dataset_to_rpcjson(obj)
 
     @remote_call
     def get_object_uuids(
@@ -924,7 +924,7 @@ class RemoteClient(BaseProxy):
             group_id: group id in which to add the object. Defaults to ""
             set_current: if True, set the added object as current
         """
-        obj_data = utils.dataset_to_json(obj)
+        obj_data = utils.dataset_to_rpcjson(obj)
         self._datalab.add_object(obj_data, group_id, set_current)
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
@@ -946,7 +946,7 @@ class RemoteClient(BaseProxy):
         """
         if param is None:
             return self._datalab.calc(name)
-        return self._datalab.calc(name, utils.dataset_to_json(param))
+        return self._datalab.calc(name, utils.dataset_to_rpcjson(param))
 
     def get_object(
         self,
@@ -969,7 +969,7 @@ class RemoteClient(BaseProxy):
         param_data = self._datalab.get_object(nb_id_title, panel)
         if param_data is None:
             return None
-        return utils.json_to_dataset(param_data)
+        return utils.rpcjson_to_dataset(param_data)
 
     def get_object_shapes(
         self,

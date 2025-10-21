@@ -6,6 +6,40 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **Interactive object creation and processing**: New interactive workflow for creating and processing objects
+  * **Interactive object creation**: Signal/image creation parameters can now be modified after creation
+    * When creating a new signal or image (Gaussian, sine, etc.), a new "Creation" tab appears in the object properties panel
+    * Users can modify creation parameters (amplitude, frequency, size, etc.) and click "Apply" to regenerate the object in-place
+    * Object is updated without creating a new one, preserving any subsequent processing or analysis
+    * Only available for objects created with parameter classes (not for imported data)
+    * Useful for exploring different parameter values or fine-tuning object characteristics
+  * **Interactive 1-to-1 processing**: Processing parameters can be adjusted and reapplied after initial processing
+    * When applying a 1-to-1 processing operation with parameters (Gaussian filter, threshold, etc.), a new "Processing" tab appears
+    * Users can modify processing parameters and click "Apply" to re-process the object with updated values
+    * Result object is updated in-place with new processing parameters
+    * Processing metadata stores: parameters (JSON), source object UUID, and function name
+    * Source object validation: displays error message if source object was deleted
+    * Only works for processing functions with parameter classes (filtering, morphology, etc.)
+    * Not supported for processing without parameters (absolute, inverse, etc.) - these work as before
+    * Intentionally not supported for 2-to-1 or n-to-1 processing patterns (use cases don't benefit from interactive behavior)
+    * Ideal for iteratively tuning processing parameters while observing results in real-time
+  * **Recompute feature**: Quickly reprocess objects with their stored processing parameters
+    * New "Recompute" action in Edit menu (keyboard shortcut: Ctrl+R)
+    * Allows reprocessing one or multiple objects that have stored 1-to-1 processing parameters
+    * When source object data changes, recompute updates the processed object(s) accordingly
+    * Works with both individual objects and groups of objects
+    * Shows progress dialog for batch recomputing multiple objects
+    * Objects without recomputable parameters are automatically skipped
+    * Useful for updating results when input data is modified or to propagate changes through a processing chain
+  * **Select source objects**: Navigate to source objects used in processing
+    * New "Select source objects" action in Edit menu
+    * Automatically selects the source object(s) that were used to create the currently selected processed object
+    * Works for all processing patterns (1-to-1, 2-to-1, n-to-1) by reading processing metadata
+    * Handles multiple source objects (e.g., from n-to-1 operations)
+    * Shows informative messages if source objects no longer exist or if some are missing
+    * Useful for understanding processing workflows and tracing data lineage
+    * Helps users navigate complex processing chains by jumping back to original source data
+
 * **Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing
   * Image objects now support both uniform and non-uniform coordinate systems:
     * Uniform coordinates: regular grid with constant pixel spacing (traditional mode)

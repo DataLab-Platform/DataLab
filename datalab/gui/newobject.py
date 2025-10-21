@@ -38,6 +38,30 @@ from sigima.objects.signal import DEFAULT_TITLE as SIGNAL_DEFAULT_TITLE
 
 from datalab.config import _
 
+CREATION_PARAMETERS_OPTION = "creation_param_json"
+
+
+def insert_creation_parameters(obj: SignalObj | ImageObj, param: gds.DataSet) -> None:
+    """Insert creation parameters into object metadata.
+
+    Args:
+        param: creation parameters
+    """
+    obj.set_metadata_option(CREATION_PARAMETERS_OPTION, gds.dataset_to_json(param))
+
+
+def extract_creation_parameters(obj: SignalObj | ImageObj) -> gds.DataSet | None:
+    """Extract creation parameters from object metadata.
+
+    Returns:
+        Creation parameters or None if not found
+    """
+    try:
+        param_json = obj.get_metadata_option(CREATION_PARAMETERS_OPTION)
+    except ValueError:
+        return None
+    return gds.json_to_dataset(param_json)
+
 
 class CustomSignalParam(OrigCustomSignalParam):
     """Parameters for custom signal (e.g. manually defined experimental data)"""
@@ -125,6 +149,7 @@ def create_signal_gui(
             raise ValueError(f"Error creating signal: {exc}") from exc
         signal = None
 
+    insert_creation_parameters(signal, param)
     return signal
 
 
@@ -180,4 +205,5 @@ def create_image_gui(
             raise ValueError(f"Error creating image: {exc}") from exc
         return None
 
+    insert_creation_parameters(image, param)
     return image

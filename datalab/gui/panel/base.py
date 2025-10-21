@@ -13,6 +13,7 @@ import glob
 import os
 import os.path as osp
 import re
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -42,7 +43,9 @@ from sigima.objects import (
     SignalObj,
     TypeObj,
     TypeROI,
+    create_image_from_param,
     create_signal,
+    create_signal_from_param,
 )
 from sigima.objects.base import ROI_KEY
 from sigima.params import SaveToDirectoryParam
@@ -59,7 +62,16 @@ from datalab.adapters_plotpy import create_adapter_from_object, items_to_json
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui import actionhandler, objectview
-from datalab.gui.newobject import NewSignalParam
+from datalab.gui.newobject import (
+    NewSignalParam,
+    extract_creation_parameters,
+    insert_creation_parameters,
+)
+from datalab.gui.processor.base import (
+    ProcessingParameters,
+    extract_processing_parameters,
+    insert_processing_parameters,
+)
 from datalab.gui.roieditor import TypeROIEditor
 from datalab.objectmodel import ObjectGroup, get_short_id, get_uuid, set_uuid
 from datalab.utils.qthelpers import (
@@ -126,7 +138,22 @@ def is_hdf5_file(filename: str, check_content: bool = False) -> bool:
         return False
 
 
-class ObjectProp(QW.QWidget):
+@dataclass
+class ProcessingReport:
+    """Report of processing operation
+
+    Args:
+        success: True if processing succeeded
+        obj_uuid: UUID of the processed object
+        message: Optional message (error or info)
+    """
+
+    success: bool
+    obj_uuid: str | None = None
+    message: str | None = None
+
+
+class ObjectProp(QW.QTabWidget):
     """Object handling panel properties
 
     Args:
@@ -136,7 +163,22 @@ class ObjectProp(QW.QWidget):
 
     def __init__(self, panel: BaseDataPanel, objclass: SignalObj | ImageObj) -> None:
         super().__init__(panel)
+        self.setTabBarAutoHide(True)
+        self.setTabPosition(QW.QTabWidget.West)
+
+        self.panel = panel
         self.objclass = objclass
+
+        # Object creation tab
+        self._creation_param_editor: gdq.DataSetEditGroupBox | None = None
+        self._current_creation_obj: SignalObj | ImageObj | None = None
+
+        # Object processing tab
+        self._processing_param_editor: gdq.DataSetEditGroupBox | None = None
+        self._current_processing_obj: SignalObj | ImageObj | None = None
+        self._processing_scroll: QW.QScrollArea | None = None
+
+        # Properties tab
         self.properties = gdq.DataSetEditGroupBox(_("Properties"), objclass)
         self.properties.SIG_APPLY_BUTTON_CLICKED.connect(panel.properties_changed)
         self.properties.setEnabled(False)
@@ -158,15 +200,21 @@ class ObjectProp(QW.QWidget):
         analysis_parameter_scroll.setWidgetResizable(True)
         analysis_parameter_scroll.setWidget(self.analysis_parameter_label)
 
-        child: QW.QTabWidget = None
+        tab_widget = self._get_properties_tab_widget()
+        tab_widget.addTab(analysis_parameter_scroll, _("Analysis parameters"))
+
+        self.addTab(self.properties, _("Properties"))
+
+    def _get_properties_tab_widget(self) -> QW.QTabWidget | None:
+        """Get the QTabWidget from properties widget.
+
+        Returns:
+            QTabWidget instance if found, None otherwise
+        """
         for child in self.properties.children():
             if isinstance(child, QW.QTabWidget):
-                break
-        child.addTab(analysis_parameter_scroll, _("Analysis parameters"))
-
-        vlayout = QW.QVBoxLayout()
-        vlayout.addWidget(self.properties)
-        self.setLayout(vlayout)
+                return child
+        return None
 
     def add_button(self, button: QW.QPushButton) -> None:
         """Add additional button on bottom of properties panel"""
@@ -206,6 +254,24 @@ class ObjectProp(QW.QWidget):
         # Using restore_dataset to convert the dataset to a dictionary
         self.__original_values = {}
         restore_dataset(dataset, self.__original_values)
+
+        # First, remove any existing Creation and Processing tabs
+        # (We'll recreate them if needed based on the current object)
+        while self.count() > 1:  # Keep only Properties tab (always last)
+            self.removeTab(0)
+        self._creation_param_editor = None
+        self._current_creation_obj = None
+        self._processing_param_editor = None
+        self._current_processing_obj = None
+
+        # Now setup tabs in the correct order based on current object
+        # Setup the Creation tab if this object has creation parameters
+        if obj is not None:
+            self.setup_creation_tab(obj)
+
+        # Setup the Processing tab if this object has processing parameters
+        if obj is not None:
+            self.setup_processing_tab(obj)
 
     def get_changed_properties(self) -> dict[str, Any]:
         """Get dictionary of properties that have changed from original values.
@@ -257,6 +323,271 @@ class ObjectProp(QW.QWidget):
             return np.array_equal(val1, val2)
         # Handle regular comparison
         return val1 == val2
+
+    def setup_creation_tab(self, obj: SignalObj | ImageObj) -> bool:
+        """Setup the Creation tab with parameter editor for interactive object creation.
+
+        Args:
+            obj: Signal or Image object
+
+        Returns:
+            True if Creation tab was set up, False otherwise
+        """
+        param = extract_creation_parameters(obj)
+        if param is None:
+            return False
+
+        # Create parameter editor widget using the actual parameter class
+        # (which is a subclass of NewSignalParam or NewImageParam)
+        editor = gdq.DataSetEditGroupBox(_("Creation Parameters"), param.__class__)
+        update_dataset(editor.dataset, param)
+        editor.get()
+
+        # Connect Apply button to recreation handler
+        editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_creation_parameters)
+        editor.set_apply_button_state(False)
+
+        # Store reference to be able to retrieve it later
+        self._creation_param_editor = editor
+        self._current_creation_obj = obj
+
+        # Set the parameter editor as the scroll area widget
+        if self.count() > 1:
+            obj_creation_scroll = self.widget(0)
+        else:
+            obj_creation_scroll = QW.QScrollArea()
+            obj_creation_scroll.setWidgetResizable(True)
+            self.insertTab(0, obj_creation_scroll, _("Creation"))
+        obj_creation_scroll.setWidget(editor)
+        self.setCurrentIndex(0)
+        return True
+
+    def apply_creation_parameters(self) -> None:
+        """Apply creation parameters: recreate object with updated parameters."""
+        editor = self._creation_param_editor
+        if editor is None or self._current_creation_obj is None:
+            return
+        if isinstance(self._current_creation_obj, SignalObj):
+            otext = _("Signal was modified in-place.")
+        else:
+            otext = _("Image was modified in-place.")
+        text = f"⚠️ {otext} ⚠️ "
+        text += _(
+            "If computation were performed based on this object, "
+            "they may need to be redone."
+        )
+        self.panel.SIG_STATUS_MESSAGE.emit(text, 20000)
+
+        # Recreate object with new parameters
+        # (serialization is done automatically in create_signal/image_from_param)
+        param = editor.dataset
+        try:
+            if isinstance(self._current_creation_obj, SignalObj):
+                new_obj = create_signal_from_param(param)
+            else:  # ImageObj
+                new_obj = create_image_from_param(param)
+        except Exception as exc:  # pylint: disable=broad-except
+            QW.QMessageBox.warning(
+                self,
+                _("Error"),
+                _("Failed to recreate object with new parameters:\n%s") % str(exc),
+            )
+            return
+
+        # Update the current object in-place
+        obj_uuid = get_uuid(self._current_creation_obj)
+        self._current_creation_obj.title = new_obj.title
+        if isinstance(self._current_creation_obj, SignalObj):
+            self._current_creation_obj.xydata = new_obj.xydata
+        else:  # ImageObj
+            self._current_creation_obj.data = new_obj.data
+        # Update metadata with new creation parameters
+        insert_creation_parameters(self._current_creation_obj, param)
+
+        # Update the tree view item (to show new title if it changed)
+        self.panel.objview.update_item(obj_uuid)
+
+        # Refresh only the plot, not the entire panel
+        # (avoid calling selection_changed which would trigger a full refresh
+        # of the Properties tab and could cause recursion issues)
+        self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+        # Refresh the Creation tab with the new parameters
+        # Use QTimer to defer this until after the current event is processed
+        QC.QTimer.singleShot(
+            0, lambda: self.setup_creation_tab(self._current_creation_obj)
+        )
+
+    def setup_processing_tab(self, obj: SignalObj | ImageObj) -> bool:
+        """Setup the Processing tab with parameter editor for re-processing.
+
+        Args:
+            obj: Signal or Image object
+
+        Returns:
+            True if Processing tab was set up, False otherwise
+        """
+        # Extract processing parameters
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None:
+            return False
+
+        # Check if the pattern type is 1-to-1 (only interactive pattern)
+        if proc_params.pattern != "1-to-1":
+            return False
+
+        # Store reference to be able to retrieve it later
+        self._current_processing_obj = obj
+
+        # Check if object has processing parameter
+        param = proc_params.param
+        if param is None:
+            return False
+
+        # Create parameter editor widget
+        editor = gdq.DataSetEditGroupBox(_("Processing Parameters"), param.__class__)
+        update_dataset(editor.dataset, param)
+        editor.get()
+
+        # Connect Apply button to reprocessing handler
+        editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_processing_parameters)
+        editor.set_apply_button_state(False)
+
+        # Store reference to be able to retrieve it later
+        self._processing_param_editor = editor
+
+        # Set the parameter editor as the scroll area widget
+        # Insert after Creation tab (index 1) if it exists, otherwise at index 0
+        insert_index = 1 if self.count() > 1 else 0
+
+        # Check if Processing scroll area already exists and find its index
+        processing_tab_index = None
+        if self._processing_scroll is not None:
+            # Find the index of the existing processing scroll area
+            for i in range(self.count()):
+                if self.widget(i) is self._processing_scroll:
+                    processing_tab_index = i
+                    break
+
+        if processing_tab_index is None:
+            # Create new processing scroll area and tab
+            self._processing_scroll = QW.QScrollArea()
+            self._processing_scroll.setWidgetResizable(True)
+            self.insertTab(insert_index, self._processing_scroll, _("Processing"))
+            processing_tab_index = insert_index
+
+        self._processing_scroll.setWidget(editor)
+        self.setCurrentIndex(processing_tab_index)
+        return True
+
+    def apply_processing_parameters(
+        self, obj: SignalObj | ImageObj | None = None, interactive: bool = True
+    ) -> ProcessingReport:
+        """Apply processing parameters: re-run processing with updated parameters.
+
+        Args:
+            obj: Signal or Image object to reprocess. If None, uses the current object.
+            interactive: If True, show progress and error messages in the UI.
+
+        Returns:
+            ProcessingReport with success status, object UUID, and optional message.
+        """
+        report = ProcessingReport(success=False)
+        editor = self._processing_param_editor
+        obj = obj or self._current_processing_obj
+        if obj is None:
+            report.message = _("No processing object available.")
+            return report
+
+        report.obj_uuid = get_uuid(obj)
+
+        # Extract processing parameters
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None:
+            report.message = _("Processing metadata is incomplete.")
+            if interactive:
+                QW.QMessageBox.critical(self, _("Error"), report.message)
+            return report
+
+        # Check if source object still exists
+        if proc_params.source_uuid is None:
+            report.message = _(
+                "Processing metadata is incomplete (missing source UUID)."
+            )
+            if interactive:
+                QW.QMessageBox.critical(self, _("Error"), report.message)
+            return report
+
+        # Find source object
+        try:
+            source_obj = self.panel.objmodel[proc_params.source_uuid]
+        except KeyError:
+            report.message = _("Source object no longer exists.")
+            if interactive:
+                QW.QMessageBox.critical(
+                    self,
+                    _("Error"),
+                    report.message
+                    + "\n\n"
+                    + _(
+                        "The object that was used to create this processed object "
+                        "has been deleted and cannot be used for reprocessing."
+                    ),
+                )
+            return report
+
+        # Get updated parameters from editor
+        param = editor.dataset if editor is not None else proc_params.param
+
+        # Recompute using the dedicated method (with multiprocessing support)
+        try:
+            new_obj = self.panel.processor.recompute_1_to_1(
+                proc_params.func_name, source_obj, param
+            )
+        except Exception as exc:  # pylint: disable=broad-except
+            report.message = _("Failed to reprocess object:\n%s") % str(exc)
+            if interactive:
+                QW.QMessageBox.warning(self, _("Error"), report.message)
+            return report
+
+        if new_obj is None:
+            # User cancelled the operation
+            report.message = _("Processing was cancelled.")
+
+        else:
+            report.success = True
+
+            # Update the current object in-place with data from new object
+            obj.title = new_obj.title
+            if isinstance(obj, SignalObj):
+                obj.xydata = new_obj.xydata
+            else:  # ImageObj
+                obj.data = new_obj.data
+
+            # Update metadata with new processing parameters
+            updated_proc_params = ProcessingParameters(
+                func_name=proc_params.func_name,
+                pattern=proc_params.pattern,
+                param=param,
+                source_uuid=proc_params.source_uuid,
+            )
+            insert_processing_parameters(obj, updated_proc_params)
+
+            # Update the tree view item and refresh plot
+            obj_uuid = get_uuid(obj)
+            self.panel.objview.update_item(obj_uuid)
+            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+            # Refresh the Processing tab with the new parameters
+            QC.QTimer.singleShot(0, lambda: self.setup_processing_tab(obj))
+
+            if isinstance(obj, SignalObj):
+                report.message = _("Signal was reprocessed.")
+            else:
+                report.message = _("Image was reprocessed.")
+            self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
+
+        return report
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
@@ -518,7 +849,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     MAXDIALOGSIZE = 0.95  # % of DataLab's main window size
     # Replaced by the right class in child object:
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
-    SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
+    SIG_STATUS_MESSAGE = QC.Signal(str, int)  # emitted by "qt_try_except" decorator
     SIG_REFRESH_PLOT = QC.Signal(
         str, bool, bool, bool, bool
     )  # Connected to PlotHandler.refresh_plot
@@ -704,6 +1035,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.objview.populate_tree()
         self.refresh_plot("selected", True, False)
         super().remove_all_objects()
+        # Update object properties panel to clear creation/processing tabs
+        self.selection_changed()
 
     # ---- Signal/Image Panel API ------------------------------------------------------
     def setup_panel(self) -> None:
@@ -901,7 +1234,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if (
                     not GeometryAdapter.match(key, value)
                     and not TableAdapter.match(key, value)
-                    and key not in (ROI_KEY,)
+                    and key not in (ROI_KEY, "__uuid")
                 ):
                     metadata[key] = value
         sel_objects = self.objview.get_sel_objects(include_groups=True)
@@ -1131,14 +1464,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     def new_object(
         self,
         param: NewSignalParam | NewImageParam | None = None,
-        edit: bool = True,
+        edit: bool = False,
         add_to_panel: bool = True,
     ) -> TypeObj | None:
         """Create a new object (signal/image).
 
         Args:
             param: new object parameters
-            edit: Open a dialog box to edit parameters (default: True)
+            edit: Open a dialog box to edit parameters (default: False).
+             When False, the object is created with default parameters and creation
+             parameters are stored in metadata for interactive editing.
             add_to_panel: Add object to panel (default: True)
 
         Returns:
@@ -1499,6 +1834,135 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Update the stored original values to reflect the new state
         # This ensures subsequent changes are compared against the current values
         self.objprop.update_original_values()
+
+    def recompute_processing(self) -> None:
+        """Recompute/rerun selected objects or group with stored processing parameters.
+
+        This method handles both single objects and groups. For each object, it checks
+        if it has 1-to-1 processing parameters that can be recomputed. Objects without
+        recomputable parameters are skipped.
+        """
+        # Get selected objects (handles both individual selection and groups)
+        objects = self.objview.get_sel_objects(include_groups=True)
+        if not objects:
+            return
+
+        # Filter objects that have recomputable processing parameters
+        recomputable_objects: list[SignalObj | ImageObj] = []
+        for obj in objects:
+            proc_params = extract_processing_parameters(obj)
+            if proc_params is not None and proc_params.pattern == "1-to-1":
+                recomputable_objects.append(obj)
+
+        if not recomputable_objects:
+            QW.QMessageBox.information(
+                self,
+                _("Recompute"),
+                _(
+                    "Selected object(s) do not have processing parameters "
+                    "that can be recomputed."
+                ),
+            )
+            return
+
+        # Recompute each object
+        with create_progress_bar(
+            self, _("Recomputing objects"), max_=len(recomputable_objects)
+        ) as progress:
+            for index, obj in enumerate(recomputable_objects):
+                progress.setValue(index + 1)
+                QW.QApplication.processEvents()
+                if progress.wasCanceled():
+                    break
+
+                # Temporarily set this object as current to use existing infrastructure
+                self.objview.set_current_object(obj)
+                report = self.objprop.apply_processing_parameters(
+                    obj=obj, interactive=False
+                )
+                if not report.success:
+                    failtxt = _("Failed to recompute object")
+                    if index == len(recomputable_objects) - 1:
+                        QW.QMessageBox.warning(
+                            self,
+                            _("Recompute"),
+                            f"{failtxt} '{obj.title}':\n{report.message}",
+                        )
+                    else:
+                        conttxt = _("Do you want to continue with the next object?")
+                        answer = QW.QMessageBox.warning(
+                            self,
+                            _("Recompute"),
+                            f"{failtxt} '{obj.title}':\n{report.message}\n\n{conttxt}",
+                            QW.QMessageBox.Yes | QW.QMessageBox.No,
+                        )
+                        if answer == QW.QMessageBox.No:
+                            break
+
+    def select_source_objects(self) -> None:
+        """Select source objects associated with the selected object's processing.
+
+        This method retrieves the source object UUIDs from the selected object's
+        processing parameters and selects them in the object view.
+        """
+        # Get the selected object (should be exactly one)
+        objects = self.objview.get_sel_objects(include_groups=False)
+        if len(objects) != 1:
+            return
+
+        obj = objects[0]
+
+        # Extract processing parameters
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None:
+            QW.QMessageBox.information(
+                self,
+                _("Select source objects"),
+                _("Selected object does not have processing metadata."),
+            )
+            return
+
+        # Get source UUIDs
+        source_uuids = []
+        if proc_params.source_uuid:
+            source_uuids.append(proc_params.source_uuid)
+        if proc_params.source_uuids:
+            source_uuids.extend(proc_params.source_uuids)
+
+        if not source_uuids:
+            QW.QMessageBox.information(
+                self,
+                _("Select source objects"),
+                _("Selected object does not have source object references."),
+            )
+            return
+
+        # Check if source objects still exist
+        existing_uuids = [
+            uuid for uuid in source_uuids if uuid in self.objmodel.get_object_ids()
+        ]
+        if not existing_uuids:
+            QW.QMessageBox.warning(
+                self,
+                _("Select source objects"),
+                _("Source object(s) no longer exist."),
+            )
+            return
+
+        # Select the existing source objects
+        self.objview.clearSelection()
+        for uuid in existing_uuids:
+            self.objview.set_current_item_id(uuid, extend=True)
+
+        # Show info if some sources are missing
+        missing_count = len(source_uuids) - len(existing_uuids)
+        if missing_count > 0:
+            QW.QMessageBox.information(
+                self,
+                _("Select source objects"),
+                _("Selected %d source object(s). %d source object(s) no longer exist.")
+                % (len(existing_uuids), missing_count),
+            )
 
     # ------Plotting data in modal dialogs----------------------------------------------
     def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:

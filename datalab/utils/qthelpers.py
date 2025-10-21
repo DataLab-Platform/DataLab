@@ -365,7 +365,7 @@ def qt_try_except(message=None, context=None):
             #  If "self" is a BaseProcessor, then we need to get the panel instance
             panel = getattr(self, "panel", self)
             if message is not None:
-                panel.SIG_STATUS_MESSAGE.emit(message)
+                panel.SIG_STATUS_MESSAGE.emit(message, 0)
                 QW.QApplication.setOverrideCursor(QG.QCursor(QC.Qt.WaitCursor))
                 panel.repaint()
             output = None
@@ -378,7 +378,7 @@ def qt_try_except(message=None, context=None):
                 qt_handle_error_message(panel.parentWidget(), msg, context)
             finally:
                 if message is not None:
-                    panel.SIG_STATUS_MESSAGE.emit("")
+                    panel.SIG_STATUS_MESSAGE.emit("", 0)
                     QW.QApplication.restoreOverrideCursor()
             return output
 

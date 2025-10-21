@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-19 15:20+0200\n"
+"POT-Creation-Date: 2025-10-21 17:24+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -63,6 +63,21 @@ msgstr "Enregistrer la sélection de type %s en utilisant un modèle de nom de f
 
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
+
+msgid "Recompute"
+msgstr ""
+
+#, python-format
+msgid "Recompute selected %s with its processing parameters"
+msgstr ""
+
+#, fuzzy
+msgid "Select source objects"
+msgstr "Sélectionner la source des données"
+
+#, python-format
+msgid "Select source object(s) used to create the selected %s"
+msgstr ""
 
 msgid "Rename"
 msgstr "Renommer"
@@ -903,6 +918,64 @@ msgstr "Propriétés"
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
 
+msgid "Creation Parameters"
+msgstr "Paramètres de création"
+
+msgid "Creation"
+msgstr "Création"
+
+msgid "Signal was modified in-place."
+msgstr "Le signal a été modifié sur place."
+
+msgid "Image was modified in-place."
+msgstr "L'image a été modifiée sur place."
+
+msgid "If computation were performed based on this object, they may need to be redone."
+msgstr "Si des calculs ont été effectués sur la base de cet objet, ils devront peut-être être refaits."
+
+#, python-format
+msgid ""
+"Failed to recreate object with new parameters:\n"
+"%s"
+msgstr ""
+"Échec de la recréation de l'objet avec les nouveaux paramètres :\n"
+"%s"
+
+msgid "Processing Parameters"
+msgstr "Paramètres de traitement"
+
+msgid "No processing object available."
+msgstr "Aucun objet de traitement disponible."
+
+msgid "Processing metadata is incomplete."
+msgstr "Les métadonnées de traitement sont incomplètes."
+
+msgid "Processing metadata is incomplete (missing source UUID)."
+msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
+
+msgid "Source object no longer exists."
+msgstr "L'objet source n'existe plus."
+
+msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
+msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
+
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Signal was reprocessed."
+msgstr "Le signal a été retraité."
+
+msgid "Image was reprocessed."
+msgstr "L'image a été retraitée."
+
 msgid "Geometry results"
 msgstr "Résultats géométriques"
 
@@ -990,6 +1063,31 @@ msgstr "Importer une ROI"
 
 msgid "Export ROI"
 msgstr "Exporter une ROI"
+
+msgid "Selected object(s) do not have processing parameters that can be recomputed."
+msgstr ""
+
+msgid "Recomputing objects"
+msgstr "Retraitement des objets"
+
+msgid "Failed to recompute object"
+msgstr "Échec du retraitement de l'objet"
+
+msgid "Do you want to continue with the next object?"
+msgstr "Souhaitez-vous continuer avec l'objet suivant ?"
+
+msgid "Selected object does not have processing metadata."
+msgstr "L'objet sélectionné n'a pas de métadonnées de traitement."
+
+msgid "Selected object does not have source object references."
+msgstr "L'objet sélectionné n'a pas de références d'objet source."
+
+msgid "Source object(s) no longer exist."
+msgstr "Le ou les objet(s) source n'existe(nt) plus."
+
+#, python-format
+msgid "Selected %d source object(s). %d source object(s) no longer exist."
+msgstr "Sélection de %d objet(s) source. %d objet(s) source n'existent plus."
 
 msgid "Annotations"
 msgstr "Annotations"
@@ -1085,6 +1183,9 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "Failed to deserialize processing parameters from JSON."
+msgstr ""
+
 msgid "DataLab relies on various libraries to perform the computation. During the computation, errors may occur because of the data (e.g. division by zero, unexpected data type, etc.) or because of the libraries (e.g. memory error, etc.). If you encounter an error, before reporting it, please ensure that the computation is correct, by checking the data and the parameters."
 msgstr "DataLab utilise plusieurs bibliothèques pour réaliser les calculs. Lors des calculs, des erreurs peuvent survenir en raison de la nature des données (par exemple division par zéro, type de données inattendu, etc.) ou à cause de limitations ou d'erreurs dans les bibliothèques (par exemple erreur mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-vous que le calcul est correct, en vérifiant les données et les paramètres."
 
@@ -1106,6 +1207,17 @@ msgstr ""
 
 msgid "Yes to All"
 msgstr "Oui à tout"
+
+#, fuzzy
+msgid "Recomputing..."
+msgstr "Calcul en cours : %s"
+
+msgid "Processing object with updated parameters..."
+msgstr ""
+
+#, fuzzy
+msgid "Recomputing"
+msgstr "Calcul en cours : %s"
 
 #, python-format
 msgid "Computing: %s"
