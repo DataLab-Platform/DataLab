@@ -544,11 +544,6 @@ class ObjectProp(QW.QTabWidget):
             new_obj = self.panel.processor.recompute_1_to_1(
                 proc_params.func_name, source_obj, param
             )
-        except ValueError as exc:
-            report.message = str(exc)
-            if interactive:
-                QW.QMessageBox.critical(self, _("Error"), report.message)
-            return report
         except Exception as exc:  # pylint: disable=broad-except
             report.message = _("Failed to reprocess object:\n%s") % str(exc)
             if interactive:
@@ -558,39 +553,40 @@ class ObjectProp(QW.QTabWidget):
         if new_obj is None:
             # User cancelled the operation
             report.message = _("Processing was cancelled.")
-            return report
 
-        # Update the current object in-place with data from new object
-        obj.title = new_obj.title
-        if isinstance(obj, SignalObj):
-            obj.xydata = new_obj.xydata
-        else:  # ImageObj
-            obj.data = new_obj.data
-
-        # Update metadata with new processing parameters
-        updated_proc_params = ProcessingParameters(
-            func_name=proc_params.func_name,
-            pattern=proc_params.pattern,
-            param=param,
-            source_uuid=proc_params.source_uuid,
-        )
-        insert_processing_parameters(obj, updated_proc_params)
-
-        # Update the tree view item and refresh plot
-        obj_uuid = get_uuid(obj)
-        self.panel.objview.update_item(obj_uuid)
-        self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
-
-        # Refresh the Processing tab with the new parameters
-        QC.QTimer.singleShot(0, lambda: self.setup_processing_tab(obj))
-
-        if isinstance(obj, SignalObj):
-            report.message = _("Signal was reprocessed.")
         else:
-            report.message = _("Image was reprocessed.")
-        self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
+            report.success = True
 
-        report.success = True
+            # Update the current object in-place with data from new object
+            obj.title = new_obj.title
+            if isinstance(obj, SignalObj):
+                obj.xydata = new_obj.xydata
+            else:  # ImageObj
+                obj.data = new_obj.data
+
+            # Update metadata with new processing parameters
+            updated_proc_params = ProcessingParameters(
+                func_name=proc_params.func_name,
+                pattern=proc_params.pattern,
+                param=param,
+                source_uuid=proc_params.source_uuid,
+            )
+            insert_processing_parameters(obj, updated_proc_params)
+
+            # Update the tree view item and refresh plot
+            obj_uuid = get_uuid(obj)
+            self.panel.objview.update_item(obj_uuid)
+            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+            # Refresh the Processing tab with the new parameters
+            QC.QTimer.singleShot(0, lambda: self.setup_processing_tab(obj))
+
+            if isinstance(obj, SignalObj):
+                report.message = _("Signal was reprocessed.")
+            else:
+                report.message = _("Image was reprocessed.")
+            self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
+
         return report
 
 
@@ -1942,15 +1938,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             return
 
         # Check if source objects still exist
-        existing_uuids = []
-        missing_count = 0
-        for uuid in source_uuids:
-            try:
-                self.objmodel[uuid]
-                existing_uuids.append(uuid)
-            except KeyError:
-                missing_count += 1
-
+        existing_uuids = [
+            uuid for uuid in source_uuids if uuid in self.objmodel.get_object_ids()
+        ]
         if not existing_uuids:
             QW.QMessageBox.warning(
                 self,
@@ -1965,6 +1955,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.objview.set_current_item_id(uuid, extend=True)
 
         # Show info if some sources are missing
+        missing_count = len(source_uuids) - len(existing_uuids)
         if missing_count > 0:
             QW.QMessageBox.information(
                 self,

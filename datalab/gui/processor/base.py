@@ -1613,7 +1613,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 self.__get_src_grps_gids_objs_nbobj_valid(min_group_nb=1)
             )
             if not valid:
-                return []
+                return
             if not objs2:
                 objs2 = self.panel.get_objects_with_dialog(
                     dlg_title,
@@ -1625,7 +1625,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     nbobj,
                 )
                 if objs2 is None:
-                    return []
+                    return
 
             n_pairs = len(src_objs[src_gids[0]])
             max_i_pair = min(
@@ -1749,7 +1749,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     ),
                 )
                 if objs2 is None:
-                    return []
+                    return
             obj2 = objs2[0]
 
             # Initialize signal mapping for potential interpolations
