@@ -1903,6 +1903,76 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         if answer == QW.QMessageBox.No:
                             break
 
+    def select_source_objects(self) -> None:
+        """Select source objects associated with the selected object's processing.
+
+        This method retrieves the source object UUIDs from the selected object's
+        processing parameters and selects them in the object view.
+        """
+        # Get the selected object (should be exactly one)
+        objects = self.objview.get_sel_objects(include_groups=False)
+        if len(objects) != 1:
+            return
+
+        obj = objects[0]
+
+        # Extract processing parameters
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None:
+            QW.QMessageBox.information(
+                self,
+                _("Select source objects"),
+                _("Selected object does not have processing metadata."),
+            )
+            return
+
+        # Get source UUIDs
+        source_uuids = []
+        if proc_params.source_uuid:
+            source_uuids.append(proc_params.source_uuid)
+        if proc_params.source_uuids:
+            source_uuids.extend(proc_params.source_uuids)
+
+        if not source_uuids:
+            QW.QMessageBox.information(
+                self,
+                _("Select source objects"),
+                _("Selected object does not have source object references."),
+            )
+            return
+
+        # Check if source objects still exist
+        existing_uuids = []
+        missing_count = 0
+        for uuid in source_uuids:
+            try:
+                self.objmodel[uuid]
+                existing_uuids.append(uuid)
+            except KeyError:
+                missing_count += 1
+
+        if not existing_uuids:
+            QW.QMessageBox.warning(
+                self,
+                _("Select source objects"),
+                _("Source object(s) no longer exist."),
+            )
+            return
+
+        # Select the existing source objects
+        self.objview.clearSelection()
+        for uuid in existing_uuids:
+            self.objview.set_current_item_id(uuid, extend=True)
+
+        # Show info if some sources are missing
+        if missing_count > 0:
+            QW.QMessageBox.information(
+                self,
+                _("Select source objects"),
+                _("Selected %d source object(s). %d source object(s) no longer exist.")
+                % (len(existing_uuids), missing_count),
+            )
+
     # ------Plotting data in modal dialogs----------------------------------------------
     def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:
         """Add plot items to dialog

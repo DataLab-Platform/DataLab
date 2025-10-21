@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-21 16:23+0200\n"
+"POT-Creation-Date: 2025-10-21 17:24+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -69,6 +69,14 @@ msgstr ""
 
 #, python-format
 msgid "Recompute selected %s with its processing parameters"
+msgstr ""
+
+#, fuzzy
+msgid "Select source objects"
+msgstr "Sélectionner la source des données"
+
+#, python-format
+msgid "Select source object(s) used to create the selected %s"
 msgstr ""
 
 msgid "Rename"
@@ -1059,16 +1067,27 @@ msgstr "Exporter une ROI"
 msgid "Selected object(s) do not have processing parameters that can be recomputed."
 msgstr ""
 
-#, fuzzy, python-format
 msgid "Recomputing objects"
-msgstr "Calcul en cours : %s"
+msgstr "Retraitement des objets"
 
 msgid "Failed to recompute object"
-msgstr ""
+msgstr "Échec du retraitement de l'objet"
 
-#, fuzzy
 msgid "Do you want to continue with the next object?"
-msgstr "Souhaitez-vous vraiment continuer ?"
+msgstr "Souhaitez-vous continuer avec l'objet suivant ?"
+
+msgid "Selected object does not have processing metadata."
+msgstr "L'objet sélectionné n'a pas de métadonnées de traitement."
+
+msgid "Selected object does not have source object references."
+msgstr "L'objet sélectionné n'a pas de références d'objet source."
+
+msgid "Source object(s) no longer exist."
+msgstr "Le ou les objet(s) source n'existe(nt) plus."
+
+#, python-format
+msgid "Selected %d source object(s). %d source object(s) no longer exist."
+msgstr "Sélection de %d objet(s) source. %d objet(s) source n'existent plus."
 
 msgid "Annotations"
 msgstr "Annotations"
@@ -1189,14 +1208,14 @@ msgstr ""
 msgid "Yes to All"
 msgstr "Oui à tout"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "Recomputing..."
 msgstr "Calcul en cours : %s"
 
 msgid "Processing object with updated parameters..."
 msgstr ""
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "Recomputing"
 msgstr "Calcul en cours : %s"
 

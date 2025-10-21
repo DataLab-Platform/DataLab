@@ -649,6 +649,16 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
+                _("Select source objects"),
+                icon_name="goto_source.svg",
+                tip=_("Select source object(s) used to create the selected %s")
+                % self.OBJECT_STR,
+                triggered=self.panel.select_source_objects,
+                select_condition=SelectCond.exactly_one,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Rename"),
                 icon_name="rename.svg",
                 shortcut="F2",
