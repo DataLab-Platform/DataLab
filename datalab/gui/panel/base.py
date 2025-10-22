@@ -201,32 +201,16 @@ class ObjectProp(QW.QTabWidget):
             self.add_prop_layout, playout.rowCount() - 1, 0, 1, 1, QC.Qt.AlignLeft
         )
 
-        self.analysis_parameter_label = QW.QLabel()
-        self.analysis_parameter_label.setFont(Conf.proc.small_mono_font.get_font())
-        self.analysis_parameter_label.setTextFormat(QC.Qt.RichText)
-        self.analysis_parameter_label.setTextInteractionFlags(
-            QC.Qt.TextBrowserInteraction | QC.Qt.TextSelectableByKeyboard
-        )
-        self.analysis_parameter_label.setAlignment(QC.Qt.AlignTop)
-        analysis_parameter_scroll = QW.QScrollArea()
-        analysis_parameter_scroll.setWidgetResizable(True)
-        analysis_parameter_scroll.setWidget(self.analysis_parameter_label)
-
-        self.processing_history_label = QW.QLabel()
-        self.processing_history_label.setFont(Conf.proc.small_mono_font.get_font())
-        self.processing_history_label.setTextFormat(QC.Qt.PlainText)
-        self.processing_history_label.setTextInteractionFlags(
-            QC.Qt.TextSelectableByMouse | QC.Qt.TextSelectableByKeyboard
-        )
-        self.processing_history_label.setAlignment(QC.Qt.AlignTop)
-        self.processing_history_label.setWordWrap(True)
-        processing_history_scroll = QW.QScrollArea()
-        processing_history_scroll.setWidgetResizable(True)
-        processing_history_scroll.setWidget(self.processing_history_label)
-
+        font = Conf.proc.small_mono_font.get_font()
+        self.analysis_parameter = QW.QTextEdit()
+        self.analysis_parameter.setReadOnly(True)
+        self.analysis_parameter.setFont(font)
+        self.processing_history = QW.QTextEdit()
+        self.processing_history.setReadOnly(True)
+        self.processing_history.setFont(font)
         tab_widget = self._get_properties_tab_widget()
-        tab_widget.addTab(processing_history_scroll, _("History"))
-        tab_widget.addTab(analysis_parameter_scroll, _("Analysis parameters"))
+        tab_widget.addTab(self.processing_history, _("History"))
+        tab_widget.addTab(self.analysis_parameter, _("Analysis parameters"))
 
         self.addTab(self.properties, _("Properties"))
 
@@ -257,7 +241,7 @@ class ObjectProp(QW.QTabWidget):
                 if text:
                     text += "<br><br>"
                 text += value
-        self.analysis_parameter_label.setText(text)
+        self.analysis_parameter.setText(text)
 
     def _build_processing_history(self, obj: SignalObj | ImageObj) -> str:
         """Build processing history as a simple text list.
@@ -323,7 +307,7 @@ class ObjectProp(QW.QTabWidget):
             obj: Signal or Image object
         """
         history_text = self._build_processing_history(obj)
-        self.processing_history_label.setText(history_text)
+        self.processing_history.setText(history_text)
 
     def update_properties_from(self, obj: SignalObj | ImageObj | None = None) -> None:
         """Update properties from signal/image dataset
