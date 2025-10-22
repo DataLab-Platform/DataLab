@@ -190,7 +190,7 @@ class ObjectProp(QW.QTabWidget):
         self._processing_scroll: QW.QScrollArea | None = None
 
         # Properties tab
-        self.properties = gdq.DataSetEditGroupBox(_("Properties"), objclass)
+        self.properties = gdq.DataSetEditGroupBox("", objclass)
         self.properties.SIG_APPLY_BUTTON_CLICKED.connect(panel.properties_changed)
         self.properties.setEnabled(False)
         self.__original_values: dict[str, Any] = {}
