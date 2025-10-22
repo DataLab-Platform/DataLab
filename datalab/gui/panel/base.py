@@ -181,13 +181,12 @@ class ObjectProp(QW.QTabWidget):
         self.objclass = objclass
 
         # Object creation tab
-        self._creation_param_editor: gdq.DataSetEditGroupBox | None = None
-        self._current_creation_obj: SignalObj | ImageObj | None = None
+        self.creation_param_editor: gdq.DataSetEditGroupBox | None = None
+        self.current_creation_obj: SignalObj | ImageObj | None = None
 
         # Object processing tab
-        self._processing_param_editor: gdq.DataSetEditGroupBox | None = None
-        self._current_processing_obj: SignalObj | ImageObj | None = None
-        self._processing_scroll: QW.QScrollArea | None = None
+        self.processing_param_editor: gdq.DataSetEditGroupBox | None = None
+        self.current_processing_obj: SignalObj | ImageObj | None = None
 
         # Properties tab
         self.properties = gdq.DataSetEditGroupBox("", objclass)
@@ -368,10 +367,10 @@ class ObjectProp(QW.QTabWidget):
                 break
 
         # Reset references for dynamic tabs
-        self._creation_param_editor = None
-        self._current_creation_obj = None
-        self._processing_param_editor = None
-        self._current_processing_obj = None
+        self.creation_param_editor = None
+        self.current_creation_obj = None
+        self.processing_param_editor = None
+        self.current_processing_obj = None
 
         # Setup Creation and Processing tabs (if applicable)
         if obj is not None:
@@ -458,8 +457,8 @@ class ObjectProp(QW.QTabWidget):
         editor.set_apply_button_state(False)
 
         # Store reference to be able to retrieve it later
-        self._creation_param_editor = editor
-        self._current_creation_obj = obj
+        self.creation_param_editor = editor
+        self.current_creation_obj = obj
 
         # Set the parameter editor as the scroll area widget
         # Creation tab is always at index 0 (before all other tabs)
@@ -472,10 +471,10 @@ class ObjectProp(QW.QTabWidget):
 
     def apply_creation_parameters(self) -> None:
         """Apply creation parameters: recreate object with updated parameters."""
-        editor = self._creation_param_editor
-        if editor is None or self._current_creation_obj is None:
+        editor = self.creation_param_editor
+        if editor is None or self.current_creation_obj is None:
             return
-        if isinstance(self._current_creation_obj, SignalObj):
+        if isinstance(self.current_creation_obj, SignalObj):
             otext = _("Signal was modified in-place.")
         else:
             otext = _("Image was modified in-place.")
@@ -490,7 +489,7 @@ class ObjectProp(QW.QTabWidget):
         # (serialization is done automatically in create_signal/image_from_param)
         param = editor.dataset
         try:
-            if isinstance(self._current_creation_obj, SignalObj):
+            if isinstance(self.current_creation_obj, SignalObj):
                 new_obj = create_signal_from_param(param)
             else:  # ImageObj
                 new_obj = create_image_from_param(param)
@@ -503,14 +502,14 @@ class ObjectProp(QW.QTabWidget):
             return
 
         # Update the current object in-place
-        obj_uuid = get_uuid(self._current_creation_obj)
-        self._current_creation_obj.title = new_obj.title
-        if isinstance(self._current_creation_obj, SignalObj):
-            self._current_creation_obj.xydata = new_obj.xydata
+        obj_uuid = get_uuid(self.current_creation_obj)
+        self.current_creation_obj.title = new_obj.title
+        if isinstance(self.current_creation_obj, SignalObj):
+            self.current_creation_obj.xydata = new_obj.xydata
         else:  # ImageObj
-            self._current_creation_obj.data = new_obj.data
+            self.current_creation_obj.data = new_obj.data
         # Update metadata with new creation parameters
-        insert_creation_parameters(self._current_creation_obj, param)
+        insert_creation_parameters(self.current_creation_obj, param)
 
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
@@ -523,7 +522,7 @@ class ObjectProp(QW.QTabWidget):
         # Refresh the Creation tab with the new parameters
         # Use QTimer to defer this until after the current event is processed
         QC.QTimer.singleShot(
-            0, lambda: self.setup_creation_tab(self._current_creation_obj)
+            0, lambda: self.setup_creation_tab(self.current_creation_obj)
         )
 
     def setup_processing_tab(self, obj: SignalObj | ImageObj) -> bool:
@@ -545,7 +544,7 @@ class ObjectProp(QW.QTabWidget):
             return False
 
         # Store reference to be able to retrieve it later
-        self._current_processing_obj = obj
+        self.current_processing_obj = obj
 
         # Check if object has processing parameter
         param = proc_params.param
@@ -567,7 +566,7 @@ class ObjectProp(QW.QTabWidget):
         editor.set_apply_button_state(False)
 
         # Store reference to be able to retrieve it later
-        self._processing_param_editor = editor
+        self.processing_param_editor = editor
 
         # Processing tab comes after Creation tab (if it exists)
         # Find the correct insertion index: after Creation (index 0) if it exists,
@@ -576,10 +575,10 @@ class ObjectProp(QW.QTabWidget):
         insert_index = 1 if has_creation else 0
 
         # Create new processing scroll area and tab
-        self._processing_scroll = QW.QScrollArea()
-        self._processing_scroll.setWidgetResizable(True)
-        self._processing_scroll.setWidget(editor)
-        self.insertTab(insert_index, self._processing_scroll, _("Processing"))
+        processing_scroll = QW.QScrollArea()
+        processing_scroll.setWidgetResizable(True)
+        processing_scroll.setWidget(editor)
+        self.insertTab(insert_index, processing_scroll, _("Processing"))
         self.setCurrentIndex(insert_index)
         return True
 
@@ -596,8 +595,8 @@ class ObjectProp(QW.QTabWidget):
             ProcessingReport with success status, object UUID, and optional message.
         """
         report = ProcessingReport(success=False)
-        editor = self._processing_param_editor
-        obj = obj or self._current_processing_obj
+        editor = self.processing_param_editor
+        obj = obj or self.current_processing_obj
         if obj is None:
             report.message = _("No processing object available.")
             return report
