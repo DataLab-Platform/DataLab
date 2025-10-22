@@ -63,11 +63,13 @@ from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui import actionhandler, objectview
 from datalab.gui.newobject import (
+    CREATION_PARAMETERS_OPTION,
     NewSignalParam,
     extract_creation_parameters,
     insert_creation_parameters,
 )
 from datalab.gui.processor.base import (
+    PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
     extract_processing_parameters,
     insert_processing_parameters,
@@ -97,6 +99,15 @@ if TYPE_CHECKING:
     from datalab.gui.processor.image import ImageProcessor
     from datalab.gui.processor.signal import SignalProcessor
     from datalab.h5.native import NativeH5Reader, NativeH5Writer
+
+
+# Metadata keys that should not be pasted when copying metadata between objects
+METADATA_PASTE_EXCLUSIONS = {
+    ROI_KEY,  # ROI has dedicated copy/paste operations
+    "__uuid",  # Each object must have a unique identifier
+    f"__{PROCESSING_PARAMETERS_OPTION}",  # Object-specific processing history
+    f"__{CREATION_PARAMETERS_OPTION}",  # Object-specific creation parameters
+}
 
 
 def is_plot_item_serializable(item: Any) -> bool:
@@ -1234,7 +1245,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if (
                     not GeometryAdapter.match(key, value)
                     and not TableAdapter.match(key, value)
-                    and key not in (ROI_KEY, "__uuid")
+                    and key not in METADATA_PASTE_EXCLUSIONS
                 ):
                     metadata[key] = value
         sel_objects = self.objview.get_sel_objects(include_groups=True)
