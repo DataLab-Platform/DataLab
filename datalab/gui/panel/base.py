@@ -201,29 +201,54 @@ class ObjectProp(QW.QTabWidget):
             self.add_prop_layout, playout.rowCount() - 1, 0, 1, 1, QC.Qt.AlignLeft
         )
 
+        # Create Analysis and History widgets
         font = Conf.proc.small_mono_font.get_font()
-        self.analysis_parameter = QW.QTextEdit()
-        self.analysis_parameter.setReadOnly(True)
-        self.analysis_parameter.setFont(font)
+
         self.processing_history = QW.QTextEdit()
         self.processing_history.setReadOnly(True)
         self.processing_history.setFont(font)
-        tab_widget = self._get_properties_tab_widget()
-        tab_widget.addTab(self.processing_history, _("History"))
-        tab_widget.addTab(self.analysis_parameter, _("Analysis parameters"))
 
+        self.analysis_parameter = QW.QTextEdit()
+        self.analysis_parameter.setReadOnly(True)
+        self.analysis_parameter.setFont(font)
+
+        self.addTab(self.processing_history, _("History"))
+        self.addTab(self.analysis_parameter, _("Analysis"))
         self.addTab(self.properties, _("Properties"))
 
-    def _get_properties_tab_widget(self) -> QW.QTabWidget | None:
-        """Get the QTabWidget from properties widget.
+        self.processing_history.textChanged.connect(self._update_tab_visibility)
+        self.analysis_parameter.textChanged.connect(self._update_tab_visibility)
 
-        Returns:
-            QTabWidget instance if found, None otherwise
-        """
-        for child in self.properties.children():
-            if isinstance(child, QW.QTabWidget):
-                return child
-        return None
+    def _update_tab_visibility(self) -> None:
+        """Update visibility of a tab based on its content."""
+        # Save current tab to restore it after visibility changes
+        current_index = self.currentIndex()
+        current_widget = self.widget(current_index)
+
+        for textedit in (self.processing_history, self.analysis_parameter):
+            tab_index = self.indexOf(textedit)
+            if tab_index >= 0:
+                has_content = bool(textedit.toPlainText().strip())
+                self.setTabVisible(tab_index, has_content)
+
+        # Restore the previously selected tab if it's still visible
+        # But only if we're not making History or Analysis visible
+        # (they shouldn't steal focus)
+        if current_widget is not None:
+            # Don't restore if current widget was History or Analysis
+            # that just became visible
+            if current_widget not in (
+                self.processing_history,
+                self.analysis_parameter,
+            ):
+                restored_index = self.indexOf(current_widget)
+                if restored_index >= 0 and self.isTabVisible(restored_index):
+                    self.setCurrentIndex(restored_index)
+            else:
+                # Current widget was History or Analysis - select Properties instead
+                properties_index = self.indexOf(self.properties)
+                if properties_index >= 0:
+                    self.setCurrentIndex(properties_index)
 
     def add_button(self, button: QW.QPushButton) -> None:
         """Add additional button on bottom of properties panel"""
@@ -288,8 +313,8 @@ class ObjectProp(QW.QTabWidget):
             else:
                 break
 
-        if not history_items:
-            return _("No processing history available")
+        if len(history_items) <= 1:
+            return ""  # Shows the history tab only when there is some history
 
         # Reverse to show from oldest to newest, then add indentation
         history_items.reverse()
@@ -331,23 +356,32 @@ class ObjectProp(QW.QTabWidget):
         self.__original_values = {}
         restore_dataset(dataset, self.__original_values)
 
-        # First, remove any existing Creation and Processing tabs
-        # (We'll recreate them if needed based on the current object)
-        while self.count() > 1:  # Keep only Properties tab (always last)
-            self.removeTab(0)
+        # Remove only Creation and Processing tabs (dynamic tabs)
+        # Keep History, Analysis, and Properties tabs (always present)
+        # History is always at index 0, Analysis at index 1, Properties at index 2
+        # So we need to remove tabs at index 0 and 1 if they are Creation/Processing
+        history_index = self.indexOf(self.processing_history)
+        while self.count() > history_index:
+            if self.indexOf(self.processing_history) > 0:
+                self.removeTab(0)
+            else:
+                break
+
+        # Reset references for dynamic tabs
         self._creation_param_editor = None
         self._current_creation_obj = None
         self._processing_param_editor = None
         self._current_processing_obj = None
 
-        # Now setup tabs in the correct order based on current object
-        # Setup the Creation tab if this object has creation parameters
+        # Setup Creation and Processing tabs (if applicable)
         if obj is not None:
             self.setup_creation_tab(obj)
-
-        # Setup the Processing tab if this object has processing parameters
-        if obj is not None:
             self.setup_processing_tab(obj)
+
+        # Trigger visibility update for History and Analysis tabs
+        # (will be called via textChanged signals, but we call explicitly
+        # here to ensure initial state is correct)
+        self._update_tab_visibility()
 
     def get_changed_properties(self) -> dict[str, Any]:
         """Get dictionary of properties that have changed from original values.
@@ -428,13 +462,11 @@ class ObjectProp(QW.QTabWidget):
         self._current_creation_obj = obj
 
         # Set the parameter editor as the scroll area widget
-        if self.count() > 1:
-            obj_creation_scroll = self.widget(0)
-        else:
-            obj_creation_scroll = QW.QScrollArea()
-            obj_creation_scroll.setWidgetResizable(True)
-            self.insertTab(0, obj_creation_scroll, _("Creation"))
+        # Creation tab is always at index 0 (before all other tabs)
+        obj_creation_scroll = QW.QScrollArea()
+        obj_creation_scroll.setWidgetResizable(True)
         obj_creation_scroll.setWidget(editor)
+        self.insertTab(0, obj_creation_scroll, _("Creation"))
         self.setCurrentIndex(0)
         return True
 
@@ -532,28 +564,18 @@ class ObjectProp(QW.QTabWidget):
         # Store reference to be able to retrieve it later
         self._processing_param_editor = editor
 
-        # Set the parameter editor as the scroll area widget
-        # Insert after Creation tab (index 1) if it exists, otherwise at index 0
-        insert_index = 1 if self.count() > 1 else 0
+        # Processing tab comes after Creation tab (if it exists)
+        # Find the correct insertion index: after Creation (index 0) if it exists,
+        # otherwise at index 0
+        has_creation = self.count() > 0 and self.tabText(0) == _("Creation")
+        insert_index = 1 if has_creation else 0
 
-        # Check if Processing scroll area already exists and find its index
-        processing_tab_index = None
-        if self._processing_scroll is not None:
-            # Find the index of the existing processing scroll area
-            for i in range(self.count()):
-                if self.widget(i) is self._processing_scroll:
-                    processing_tab_index = i
-                    break
-
-        if processing_tab_index is None:
-            # Create new processing scroll area and tab
-            self._processing_scroll = QW.QScrollArea()
-            self._processing_scroll.setWidgetResizable(True)
-            self.insertTab(insert_index, self._processing_scroll, _("Processing"))
-            processing_tab_index = insert_index
-
+        # Create new processing scroll area and tab
+        self._processing_scroll = QW.QScrollArea()
+        self._processing_scroll.setWidgetResizable(True)
         self._processing_scroll.setWidget(editor)
-        self.setCurrentIndex(processing_tab_index)
+        self.insertTab(insert_index, self._processing_scroll, _("Processing"))
+        self.setCurrentIndex(insert_index)
         return True
 
     def apply_processing_parameters(
