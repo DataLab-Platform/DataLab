@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-21 20:32+0200\n"
+"POT-Creation-Date: 2025-10-22 10:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -128,6 +128,33 @@ msgstr "Utile pour comprendre les flux de traitement et retracer la lignée des 
 
 msgid "Helps users navigate complex processing chains by jumping back to original source data"
 msgstr "Aide les utilisateurs à naviguer dans des chaînes de traitement complexes en revenant aux données source d'origine."
+
+msgid "**Processing history**: New \"History\" tab shows object processing lineage"
+msgstr "**Historique de traitement** : Nouvel onglet \"Historique\" affichant la lignée de traitement des objets"
+
+msgid "Appears in the Properties panel for all signal and image objects"
+msgstr "Apparaît dans le panneau des propriétés pour tous les objets signal et image"
+
+msgid "Displays a hierarchical tree showing how the object was created and processed"
+msgstr "Affiche un arbre hiérarchique montrant comment l'objet a été créé et traité."
+
+msgid "Shows processing chain from oldest (original/created object) to newest (current object)"
+msgstr "Affiche la chaîne de traitement de l'objet le plus ancien (objet d'origine/créé) à l'objet le plus récent (objet actuel)."
+
+msgid "Displays function names for each processing step in a clear, indented format"
+msgstr "Affiche les noms de fonction pour chaque étape de traitement dans un format clair et indenté."
+
+msgid "Indicates when source objects have been deleted or when multiple sources were used"
+msgstr "Indique quand les objets source ont été supprimés ou lorsque plusieurs sources ont été utilisées."
+
+msgid "Automatically updates when object selection changes"
+msgstr "Se met à jour automatiquement lorsque la sélection d'objet change."
+
+msgid "Useful for understanding complex processing workflows and documenting analysis steps"
+msgstr "Utile pour comprendre les flux de travail de traitement complexes et documenter les étapes d'analyse."
+
+msgid "Text is selectable and copyable for documentation purposes"
+msgstr "Le texte est sélectionnable et copiable à des fins de documentation."
 
 msgid "**Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing"
 msgstr "**Prise en charge des coordonnées non uniformes pour les images** : Les images peuvent désormais avoir un espacement de pixel non uniforme"

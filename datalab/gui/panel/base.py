@@ -202,6 +202,7 @@ class ObjectProp(QW.QTabWidget):
         )
 
         self.analysis_parameter_label = QW.QLabel()
+        self.analysis_parameter_label.setFont(Conf.proc.small_mono_font.get_font())
         self.analysis_parameter_label.setTextFormat(QC.Qt.RichText)
         self.analysis_parameter_label.setTextInteractionFlags(
             QC.Qt.TextBrowserInteraction | QC.Qt.TextSelectableByKeyboard
@@ -211,7 +212,20 @@ class ObjectProp(QW.QTabWidget):
         analysis_parameter_scroll.setWidgetResizable(True)
         analysis_parameter_scroll.setWidget(self.analysis_parameter_label)
 
+        self.processing_history_label = QW.QLabel()
+        self.processing_history_label.setFont(Conf.proc.small_mono_font.get_font())
+        self.processing_history_label.setTextFormat(QC.Qt.PlainText)
+        self.processing_history_label.setTextInteractionFlags(
+            QC.Qt.TextSelectableByMouse | QC.Qt.TextSelectableByKeyboard
+        )
+        self.processing_history_label.setAlignment(QC.Qt.AlignTop)
+        self.processing_history_label.setWordWrap(True)
+        processing_history_scroll = QW.QScrollArea()
+        processing_history_scroll.setWidgetResizable(True)
+        processing_history_scroll.setWidget(self.processing_history_label)
+
         tab_widget = self._get_properties_tab_widget()
+        tab_widget.addTab(processing_history_scroll, _("History"))
         tab_widget.addTab(analysis_parameter_scroll, _("Analysis parameters"))
 
         self.addTab(self.properties, _("Properties"))
@@ -245,6 +259,72 @@ class ObjectProp(QW.QTabWidget):
                 text += value
         self.analysis_parameter_label.setText(text)
 
+    def _build_processing_history(self, obj: SignalObj | ImageObj) -> str:
+        """Build processing history as a simple text list.
+
+        Args:
+            obj: Signal or Image object
+
+        Returns:
+            Processing history as text
+        """
+        history_items = []
+        current_obj = obj
+        max_depth = 20  # Prevent infinite loops
+
+        # Walk backwards through processing chain, collecting items
+        while current_obj is not None and len(history_items) < max_depth:
+            proc_params = extract_processing_parameters(current_obj)
+
+            if proc_params is None:
+                # Check for creation parameters
+                creation_params = extract_creation_parameters(current_obj)
+                if creation_params is not None:
+                    text = f"{_('Created')}: {creation_params.title}"
+                    history_items.append(text)
+                else:
+                    history_items.append(_("Original object"))
+                break
+
+            # Add current processing step
+            func_name = proc_params.func_name.replace("_", " ").title()
+            history_items.append(func_name)
+
+            # Try to find source object
+            if proc_params.source_uuid:
+                try:
+                    current_obj = self.panel.objmodel[proc_params.source_uuid]
+                except KeyError:
+                    history_items.append(_("(source deleted)"))
+                    break
+            elif proc_params.source_uuids:
+                # Multiple sources (n-to-1 or 2-to-1 pattern)
+                history_items.append(_("(multiple sources)"))
+                break
+            else:
+                break
+
+        if not history_items:
+            return _("No processing history available")
+
+        # Reverse to show from oldest to newest, then add indentation
+        history_items.reverse()
+        history_lines = []
+        for i, item in enumerate(history_items):
+            indent = "  " * i
+            history_lines.append(f"{indent}└─ {item}")
+
+        return "\n".join(history_lines)
+
+    def display_processing_history(self, obj: SignalObj | ImageObj) -> None:
+        """Display processing history.
+
+        Args:
+            obj: Signal or Image object
+        """
+        history_text = self._build_processing_history(obj)
+        self.processing_history_label.setText(history_text)
+
     def update_properties_from(self, obj: SignalObj | ImageObj | None = None) -> None:
         """Update properties from signal/image dataset
 
@@ -259,6 +339,7 @@ class ObjectProp(QW.QTabWidget):
         update_dataset(dataset, obj)
         self.properties.get()
         self.display_analysis_parameter(obj)
+        self.display_processing_history(obj)
         self.properties.apply_button.setEnabled(False)
 
         # Store original values to detect which properties have changed

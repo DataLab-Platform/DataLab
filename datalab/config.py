@@ -234,6 +234,9 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - "interpolate": automatically interpolate when x-arrays are incompatible
     xarray_compat_behavior = conf.EnumOption(["ask", "interpolate"], default="ask")
 
+    # History and analysis tabs font
+    small_mono_font = conf.FontOption()
+
 
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the view configuration section structure.
@@ -402,6 +405,7 @@ def initialize():
     Conf.proc.keep_results.get(False)
     Conf.proc.ignore_warnings.get(False)
     Conf.proc.xarray_compat_behavior.get("ask")
+    Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")

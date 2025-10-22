@@ -39,6 +39,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Shows informative messages if source objects no longer exist or if some are missing
     * Useful for understanding processing workflows and tracing data lineage
     * Helps users navigate complex processing chains by jumping back to original source data
+  * **Processing history**: New "History" tab shows object processing lineage
+    * Appears in the Properties panel for all signal and image objects
+    * Displays a hierarchical tree showing how the object was created and processed
+    * Shows processing chain from oldest (original/created object) to newest (current object)
+    * Displays function names for each processing step in a clear, indented format
+    * Indicates when source objects have been deleted or when multiple sources were used
+    * Automatically updates when object selection changes
+    * Useful for understanding complex processing workflows and documenting analysis steps
+    * Text is selectable and copyable for documentation purposes
 
 * **Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing
   * Image objects now support both uniform and non-uniform coordinate systems:

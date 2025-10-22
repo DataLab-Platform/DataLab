@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-21 17:24+0200\n"
+"POT-Creation-Date: 2025-10-22 10:06+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -915,8 +915,23 @@ msgstr "Déposer des fichiers ici pour les ouvrir"
 msgid "Properties"
 msgstr "Propriétés"
 
+msgid "History"
+msgstr "Historique"
+
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
+
+msgid "Original object"
+msgstr "Objet original"
+
+msgid "(source deleted)"
+msgstr "(source supprimée)"
+
+msgid "(multiple sources)"
+msgstr "(sources multiples)"
+
+msgid "No processing history available"
+msgstr "Aucun historique de traitement disponible"
 
 msgid "Creation Parameters"
 msgstr "Paramètres de création"
@@ -3033,3 +3048,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

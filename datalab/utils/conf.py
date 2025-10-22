@@ -11,9 +11,13 @@ import os.path as osp
 import warnings
 from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
+from guidata.configtools import MONOSPACE, get_family
 from guidata.userconfig import NoDefault, UserConfig
+
+if TYPE_CHECKING:
+    import qtpy.QtGui as QG
 
 
 class AppUserConfig(UserConfig):
@@ -109,6 +113,39 @@ class Option:
         self.set(value)
         yield
         self.set(old_value)
+
+
+class FontOption(Option):
+    """Font configuration option handler"""
+
+    def get(self, default=NoDefault) -> str:
+        """Get font name from configuration"""
+        if default is NoDefault:
+            default = (MONOSPACE, 9, False)
+        family = CONF.get(self.section, self.option + "_family", default[0])
+        size = CONF.get(self.section, self.option + "_size", default[1])
+        bold = CONF.get(self.section, self.option + "_bold", default[2])
+        return family, size, bold
+
+    def set(self, value: tuple[str | list[str], int, bool]) -> None:
+        """Set font name in configuration"""
+        assert isinstance(value, tuple), (
+            "Font value must be a tuple (family, size, bold)"
+        )
+        CONF.set(self.section, self.option + "_family", value[0])
+        CONF.set(self.section, self.option + "_size", value[1])
+        CONF.set(self.section, self.option + "_bold", value[2])
+
+    def get_font(self) -> QG.QFont:
+        """Get QFont from configuration"""
+        # Import here to avoid having to create a Qt application when
+        # just manipulating configuration files
+        from qtpy import QtGui as QG  # pylint: disable=import-outside-toplevel
+
+        family, size, bold = self.get()
+        if isinstance(family, (list, tuple)):
+            family = get_family(family)
+        return QG.QFont(family, size, QG.QFont.Bold if bold else QG.QFont.Normal)
 
 
 class ConfigPathOption(Option):
