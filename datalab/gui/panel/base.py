@@ -552,6 +552,11 @@ class ObjectProp(QW.QTabWidget):
         if param is None:
             return False
 
+        # Skip interactive processing for list of parameters
+        # (e.g., ROI extraction, erase operations)
+        if isinstance(param, list):
+            return False
+
         # Create parameter editor widget
         editor = gdq.DataSetEditGroupBox(_("Processing Parameters"), param.__class__)
         update_dataset(editor.dataset, param)

@@ -75,14 +75,19 @@ class ProcessingParameters:
     source_uuid: str | None = None
     source_uuids: list[str] | None = None
 
-    def set_param_from_json(self, param_json: str) -> None:
-        """Set the param attribute from a JSON string.
+    def set_param_from_json(self, param_json: str | list[str]) -> None:
+        """Set the param attribute from a JSON string or list of JSON strings.
 
         Args:
-            param_json: JSON string representing the parameters
+            param_json: JSON string or list of JSON strings representing the parameters
         """
         try:
-            self.param = gds.json_to_dataset(param_json)
+            if isinstance(param_json, list):
+                # Handle list of JSON strings
+                self.param = [gds.json_to_dataset(p) for p in param_json]
+            else:
+                # Handle single JSON string
+                self.param = gds.json_to_dataset(param_json)
         except Exception:  # pylint: disable=broad-except
             warnings.warn(_("Failed to deserialize processing parameters from JSON."))
             self.param = None
@@ -96,7 +101,12 @@ class ProcessingParameters:
         pp_dict = {k: v for k, v in asdict(self).items() if v is not None}
         param = pp_dict.pop("param", None)
         if param is not None:
-            pp_dict["param_json"] = gds.dataset_to_json(param)
+            if isinstance(param, list):
+                # Handle list of DataSet objects
+                pp_dict["param_json"] = [gds.dataset_to_json(p) for p in param]
+            else:
+                # Handle single DataSet object
+                pp_dict["param_json"] = gds.dataset_to_json(param)
         return pp_dict
 
     @classmethod
