@@ -144,6 +144,7 @@ select = [
     "F",      # Pyflakes
     "I",      # Isort
     "NPY201", # Numpy-specific checks
+    "RUF022", # Unsorted __all__
     "W"       # Pycodestyle warning
 ]
 ignore = [

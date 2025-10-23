@@ -9,24 +9,24 @@ PlotPy to integrate with DataLab's data model and GUI.
 """
 
 __all__ = [
-    "GeometryPlotPyAdapter",
-    "TablePlotPyAdapter",
-    "TypePlotItem",
-    "json_to_items",
-    "items_to_json",
-    "configure_roi_item",
-    "TypeROIItem",
-    "create_adapter_from_object",
-    "plotitem_to_singleroi",
-    "singleroi_to_plotitem",
+    "CURVESTYLES",
     "CircularROIPlotPyAdapter",
+    "GeometryPlotPyAdapter",
     "ImageObjPlotPyAdapter",
     "PolygonalROIPlotPyAdapter",
     "RectangularROIPlotPyAdapter",
     "SegmentROIPlotPyAdapter",
     "SignalObjPlotPyAdapter",
-    "CURVESTYLES",
     "SignalROIPlotPyAdapter",
+    "TablePlotPyAdapter",
+    "TypePlotItem",
+    "TypeROIItem",
+    "configure_roi_item",
+    "create_adapter_from_object",
+    "items_to_json",
+    "json_to_items",
+    "plotitem_to_singleroi",
+    "singleroi_to_plotitem",
 ]
 
 
