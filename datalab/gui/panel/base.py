@@ -1931,7 +1931,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Update only the changed properties instead of all properties
             update_dataset(obj, changed_props)
             self.objview.update_item(get_uuid(obj))
-        self.refresh_plot("selected", True, False)
+        # Refresh all selected items, including non-visible ones (only_visible=False)
+        # This ensures that plot items are updated for all selected objects, even if
+        # they are temporarily hidden behind other objects
+        self.refresh_plot(
+            "selected", update_items=True, force=False, only_visible=False
+        )
 
         # Update the stored original values to reflect the new state
         # This ensures subsequent changes are compared against the current values
