@@ -13,6 +13,7 @@ import glob
 import os
 import os.path as osp
 import re
+import warnings
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
@@ -853,8 +854,8 @@ class SaveToDirectoryGUIParam(gds.DataSet):
                 <tr><td>{count}</td><td>Total number of selected objects</td></tr>
                 <tr><td>{xlabel}, {xunit}, {ylabel}, {yunit}</td>
                     <td>Axis information for signals</td></tr>
-                <tr><td>{metadata}</td><td>All metadata</td></tr>
-                <tr><td>{metadata[key]}</td><td>Key metadata</td></tr>
+                <tr><td>{metadata[key]}</td><td>Specific metadata value<br>
+                    <i>(direct {metadata} use is ignored)</i></td></tr>
             </table>
             """,
                 "",
@@ -888,9 +889,11 @@ class SaveToDirectoryGUIParam(gds.DataSet):
         """Return list of available extensions for choice item."""
         return [("." + ext, "." + ext, None) for ext in self.__extensions]
 
-    def build_filenames(self, objs: list[TypeObj]) -> list[str]:
+    def build_filenames(self, objs: list[TypeObj] | None = None) -> list[str]:
         """Build filenames according to current parameters."""
-        filenames = format_basenames(objs, self.basename + self.extension)
+        objs = objs or self.__objs
+        extension = self.extension if self.extension is not None else ""
+        filenames = format_basenames(objs, self.basename + extension)
         used: set[str] = set()  # Ensure all filenames are unique.
         for i, filename in enumerate(filenames):
             root, ext = osp.splitext(filename)
@@ -913,7 +916,12 @@ class SaveToDirectoryGUIParam(gds.DataSet):
 
     def update_preview(self, _item=None, _value=None) -> None:
         """Update preview."""
-        self.preview = "\n".join(f"{fn}" for fn in self.build_filenames(self.__objs))
+        try:
+            filenames = self.build_filenames()
+            self.preview = "\n".join(f"{fn}" for fn in filenames)
+        except (ValueError, KeyError, TypeError) as exc:
+            # Handle formatting errors gracefully (e.g., incomplete format string)
+            self.preview = f"Invalid pattern:{os.linesep}{exc}"
 
     directory = gds.DirectoryItem(_("Directory"), default=Conf.main.base_dir.get())
 
@@ -935,9 +943,9 @@ class SaveToDirectoryGUIParam(gds.DataSet):
         _("Overwrite"), default=False, help=_("Overwrite existing files")
     ).set_pos(col=1)
 
-    preview = gds.TextItem(_("Preview"), default=None).set_prop(
-        "display", readonly=True
-    )
+    preview = gds.TextItem(
+        _("Preview"), default=None, regexp=r"^(?!Invalid).*"
+    ).set_prop("display", readonly=True)
 
 
 class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
@@ -1771,8 +1779,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             guiparam = SaveToDirectoryGUIParam(
                 title=_("Save to directory"), objs=objs, extensions=extensions
             )
-            if not guiparam.edit(parent=self.parentWidget()):
-                return
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
+                if not guiparam.edit(parent=self.parentWidget()):
+                    return
             param = SaveToDirectoryParam()
             update_dataset(param, guiparam)
 
