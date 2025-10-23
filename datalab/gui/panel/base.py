@@ -931,7 +931,7 @@ class SaveToDirectoryGUIParam(gds.DataSet):
         help=_("Python format string. See description for details."),
     ).set_prop("display", callback=update_preview)
 
-    help = gds.ButtonItem("Help", on_button_click, "MessageBoxInformation").set_pos(
+    help = gds.ButtonItem(_("Help"), on_button_click, "MessageBoxInformation").set_pos(
         col=1
     )
 

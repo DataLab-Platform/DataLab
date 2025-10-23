@@ -181,6 +181,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     """
 
     OBJECT_STR = ""  # e.g. "signal"
+    OBJECT_STR_PLURAL = ""  # e.g. "signals"
 
     def __init__(
         self,
@@ -612,7 +613,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Save %s...") % self.OBJECT_STR,
                 # Icon name is 'filesave_sig.svg' or 'filesave_ima.svg'
                 icon_name=f"filesave_{self.object_suffix}.svg",
-                tip=_("Save selected %ss") % self.OBJECT_STR,
+                tip=_("Save selected %s") % self.OBJECT_STR_PLURAL,
                 triggered=self.panel.save_to_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),
                 select_condition=SelectCond.at_least_one,
@@ -620,9 +621,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Save %ss to directory...") % self.OBJECT_STR,
+                _("Save %s to directory...") % self.OBJECT_STR_PLURAL,
                 icon_name="save_to_directory.svg",
-                tip=_("Save selected %ss using a filename pattern") % self.OBJECT_STR,
+                tip=_("Save selected %s using a filename pattern")
+                % self.OBJECT_STR_PLURAL,
                 triggered=self.panel.save_to_directory,
                 select_condition=SelectCond.at_least_two,
                 context_menu_pos=-1,
@@ -977,6 +979,7 @@ class SignalActionHandler(BaseActionHandler):
     """Object handling signal panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("signal")
+    OBJECT_STR_PLURAL = _("signals")
 
     def create_new_object_actions(self):
         """Create actions for creating new objects"""
@@ -1199,6 +1202,7 @@ class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
+    OBJECT_STR_PLURAL = _("images")
 
     def create_new_object_actions(self):
         """Create actions for creating new objects"""

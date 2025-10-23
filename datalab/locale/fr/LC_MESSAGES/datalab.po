@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-23 07:23+0200\n"
+"POT-Creation-Date: 2025-10-23 19:00+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -50,34 +50,33 @@ msgid "Save %s..."
 msgstr "Enregistrer un objet %s..."
 
 #, python-format
-msgid "Save selected %ss"
-msgstr "Enregistrer la sélection de type %s"
+msgid "Save selected %s"
+msgstr "Enregistrer l'objet %s sélectionné"
 
 #, python-format
-msgid "Save %ss to directory..."
-msgstr "Enregistrer les %ss dans un répertoire..."
+msgid "Save %s to directory..."
+msgstr "Enregistrer les %s dans un répertoire..."
 
 #, python-format
-msgid "Save selected %ss using a filename pattern"
-msgstr "Enregistrer la sélection de type %s en utilisant un modèle de nom de fichier"
+msgid "Save selected %s using a filename pattern"
+msgstr "Enregistrer les objets %s sélectionnés en utilisant un modèle de nom de fichier"
 
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
 
 msgid "Recompute"
-msgstr ""
+msgstr "Retraiter"
 
 #, python-format
 msgid "Recompute selected %s with its processing parameters"
-msgstr ""
+msgstr "Retraiter l'objet %s sélectionné avec ses paramètres de traitement"
 
-#, fuzzy
 msgid "Select source objects"
-msgstr "Sélectionner la source des données"
+msgstr "Sélectionner les objets source"
 
 #, python-format
 msgid "Select source object(s) used to create the selected %s"
-msgstr ""
+msgstr "Sélectionner le ou les objets source utilisés pour créer l'objet %s sélectionné"
 
 msgid "Rename"
 msgstr "Renommer"
@@ -269,6 +268,9 @@ msgstr "Supprimer les résultats"
 msgid "signal"
 msgstr "signal"
 
+msgid "signals"
+msgstr "signaux"
+
 msgid "Zero"
 msgstr "Zéro"
 
@@ -450,6 +452,9 @@ msgstr ""
 
 msgid "image"
 msgstr "image"
+
+msgid "images"
+msgstr "images"
 
 msgid "Ramp"
 msgstr "Rampe"
@@ -998,10 +1003,13 @@ msgid "Directory"
 msgstr "Répertoire"
 
 msgid "Basename pattern"
-msgstr "Patron de nom de base"
+msgstr "Nom de base"
 
 msgid "Python format string. See description for details."
 msgstr "Chaîne de format Python. Voir la description pour plus de détails."
+
+msgid "Help"
+msgstr "Aide"
 
 msgid "Extension"
 msgstr "Extension"
@@ -1074,7 +1082,7 @@ msgid "Export ROI"
 msgstr "Exporter une ROI"
 
 msgid "Selected object(s) do not have processing parameters that can be recomputed."
-msgstr ""
+msgstr "L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement pouvant être retraités."
 
 msgid "Recomputing objects"
 msgstr "Retraitement des objets"
@@ -1193,7 +1201,7 @@ msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
 msgid "Failed to deserialize processing parameters from JSON."
-msgstr ""
+msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
 
 msgid "DataLab relies on various libraries to perform the computation. During the computation, errors may occur because of the data (e.g. division by zero, unexpected data type, etc.) or because of the libraries (e.g. memory error, etc.). If you encounter an error, before reporting it, please ensure that the computation is correct, by checking the data and the parameters."
 msgstr "DataLab utilise plusieurs bibliothèques pour réaliser les calculs. Lors des calculs, des erreurs peuvent survenir en raison de la nature des données (par exemple division par zéro, type de données inattendu, etc.) ou à cause de limitations ou d'erreurs dans les bibliothèques (par exemple erreur mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-vous que le calcul est correct, en vérifiant les données et les paramètres."
@@ -1217,16 +1225,14 @@ msgstr ""
 msgid "Yes to All"
 msgstr "Oui à tout"
 
-#, fuzzy
 msgid "Recomputing..."
-msgstr "Calcul en cours : %s"
+msgstr "Retraitement en cours..."
 
 msgid "Processing object with updated parameters..."
-msgstr ""
+msgstr "Traitement de l'objet avec les paramètres mis à jour..."
 
-#, fuzzy
 msgid "Recomputing"
-msgstr "Calcul en cours : %s"
+msgstr "Retraitement"
 
 #, python-format
 msgid "Computing: %s"
@@ -2929,12 +2935,6 @@ msgstr "Représentation graphique des données importées"
 msgid "Unselect the %s that you do not want to import:"
 msgstr "Désélectionner les %s que vous ne voulez pas importer :"
 
-msgid "signals"
-msgstr "signaux"
-
-msgid "images"
-msgstr "images"
-
 msgid "Select all"
 msgstr "Tout sélectionner"
 
@@ -3036,4 +3036,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
