@@ -272,9 +272,6 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # If True, lock aspect ratio of images to 1:1 (ignore physical pixel size)
     ima_aspect_ratio_1_1 = conf.Option()
 
-    # If True, images are shown with the same LUT range as the first selected image
-    ima_ref_lut_range = conf.Option()
-
     # Default visualization settings at item creation
     # (e.g. see adapter's `make_item` methods in datalab/adapters_plotpy/*.py)
     ima_eliminate_outliers = conf.Option()
@@ -415,7 +412,6 @@ def initialize():
     Conf.view.sig_autoscale_margin_percent.get(2.0)
     Conf.view.ima_autoscale_margin_percent.get(1.0)
     Conf.view.ima_aspect_ratio_1_1.get(False)
-    Conf.view.ima_ref_lut_range.get(False)
     Conf.view.ima_eliminate_outliers.get(0.1)
     Conf.view.sig_def_shade.get(0.0)
     Conf.view.sig_def_curvestyle.get("Lines")

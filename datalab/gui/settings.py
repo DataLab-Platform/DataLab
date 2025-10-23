@@ -324,14 +324,6 @@ class ViewSettings(gds.DataSet):
             "size (this is the default and recommended setting)."
         ),
     )
-    ima_ref_lut_range = gds.BoolItem(
-        "",
-        _("Use reference image LUT range"),
-        help=_(
-            "If this setting is enabled, images are shown<br>"
-            "with the same LUT range as the first selected image"
-        ),
-    )
     ima_eliminate_outliers = gds.FloatItem(
         _("Eliminate outliers"),
         unit=_("%"),

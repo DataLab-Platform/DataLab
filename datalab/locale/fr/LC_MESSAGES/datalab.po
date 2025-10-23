@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-22 10:06+0200\n"
+"POT-Creation-Date: 2025-10-23 07:23+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -912,14 +912,11 @@ msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
-msgid "Properties"
-msgstr "Propriétés"
-
 msgid "History"
 msgstr "Historique"
 
-msgid "Analysis parameters"
-msgstr "Paramètres d'analyse"
+msgid "Properties"
+msgstr "Propriétés"
 
 msgid "Original object"
 msgstr "Objet original"
@@ -929,9 +926,6 @@ msgstr "(source supprimée)"
 
 msgid "(multiple sources)"
 msgstr "(sources multiples)"
-
-msgid "No processing history available"
-msgstr "Aucun historique de traitement disponible"
 
 msgid "Creation Parameters"
 msgstr "Paramètres de création"
@@ -2211,12 +2205,6 @@ msgstr "Verrouiller le ratio d'aspect à 1:1"
 
 msgid "If enabled, the aspect ratio of the image will be locked to 1:1.<br>If disabled, the aspect ratio will be determined by the physical pixel size (this is the default and recommended setting)."
 msgstr "Si activé, le ratio d'aspect de l'image sera verrouillé à 1:1.<br>Si désactivé, le ratio d'aspect sera déterminé par la taille des pixels physiques (c'est le paramètre par défaut et recommandé)."
-
-msgid "Use reference image LUT range"
-msgstr "Utiliser la LUT de l'image de référence"
-
-msgid "If this setting is enabled, images are shown<br>with the same LUT range as the first selected image"
-msgstr "Si cette option est activée, les images sont affichées<br>avec la même LUT que la première image sélectionnée"
 
 msgid "Eliminate outliers"
 msgstr "Eliminer les bords"

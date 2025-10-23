@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 10:06+0200\n"
+"POT-Creation-Date: 2025-10-23 07:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1015,6 +1015,36 @@ msgstr "Ce comportement correspond à l'action \"Restaurer\" qui réduit tous le
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "Removed \"Use reference image LUT range\" setting:"
+msgstr "Suppression de l'option \"Utiliser la plage de LUT de l'image de référence\" :"
+
+msgid "This feature has been removed to avoid confusion about whether LUT changes were temporary or persistent"
+msgstr "Cette fonctionnalité a été supprimée pour éviter toute confusion sur le fait que les modifications de LUT étaient temporaires ou persistantes"
+
+msgid "The feature made users think changes were view-only, but they were actually persistent modifications to image properties"
+msgstr "Cette fonctionnalité a amené les utilisateurs à penser que les modifications étaient uniquement visibles, mais il s'agissait en réalité de modifications persistantes des propriétés de l'image"
+
+msgid "**Migration strategy**: Use the new multi-selection property editing instead:"
+msgstr "**Stratégie de migration** : Utilisez plutôt le nouvel éditeur de propriétés de sélection multiple :"
+
+msgid "Select multiple images in the object list (Ctrl+click or Shift+click)"
+msgstr "Sélectionnez plusieurs images dans la liste des objets (Ctrl+clic ou Shift+clic)"
+
+msgid "Open the Properties panel"
+msgstr "Ouvrez le panneau des propriétés"
+
+msgid "Modify the LUT range (Z scale bounds) or other visualization properties"
+msgstr "Modifiez la plage de LUT (bornes de l'échelle Z) ou d'autres propriétés de visualisation"
+
+msgid "Click Apply to update all selected images simultaneously"
+msgstr "Cliquez sur Appliquer pour mettre à jour toutes les images sélectionnées simultanément"
+
+msgid "This approach is more explicit, more powerful (you choose which images to affect), and clearer about persistence"
+msgstr "Cette approche est plus explicite, plus puissante (vous choisissez quelles images affecter) et plus claire sur la persistance"
+
+msgid "The multi-selection feature allows synchronizing not just LUT ranges, but any image property across multiple objects"
+msgstr "La fonctionnalité de sélection multiple permet de synchroniser non seulement les plages de LUT, mais aussi n'importe quelle propriété d'image à travers plusieurs objets."
 
 msgid "Fixed group numbering issue: When creating a new group via \"Edit > New Group\", the group short ID is now correctly numbered sequentially (e.g., g002) instead of being incorrectly numbered as g000"
 msgstr "Correction du problème de numérotation des groupes : Lors de la création d'un nouveau groupe via \"Édition > Nouveau groupe\", l'ID court du groupe est désormais correctement numéroté de manière séquentielle (par exemple, g002) au lieu d'être incorrectement numéroté comme g000"

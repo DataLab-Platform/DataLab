@@ -351,6 +351,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Removed "Use reference image LUT range" setting:
+  * This feature has been removed to avoid confusion about whether LUT changes were temporary or persistent
+  * The feature made users think changes were view-only, but they were actually persistent modifications to image properties
+  * **Migration strategy**: Use the new multi-selection property editing instead:
+    1. Select multiple images in the object list (Ctrl+click or Shift+click)
+    2. Open the Properties panel
+    3. Modify the LUT range (Z scale bounds) or other visualization properties
+    4. Click Apply to update all selected images simultaneously
+  * This approach is more explicit, more powerful (you choose which images to affect), and clearer about persistence
+  * The multi-selection feature allows synchronizing not just LUT ranges, but any image property across multiple objects
 * Fixed group numbering issue: When creating a new group via "Edit > New Group", the group short ID is now correctly numbered sequentially (e.g., g002) instead of being incorrectly numbered as g000
 * Plot interface improvements:
   * Disabled PlotPy's generic "Axes" tab in parameter dialogs to prevent interference with DataLab's own axis scale management.

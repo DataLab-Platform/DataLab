@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 17:55+0200\n"
+"POT-Creation-Date: 2025-10-23 07:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -262,12 +262,6 @@ msgstr "**Verrouiller le rapport d'aspect à 1:1**"
 msgid "When enabled, the aspect ratio of images is locked to 1:1. When disabled, the aspect ratio is determined by the physical pixel size (default and recommended setting)."
 msgstr "Si le réglage est activé, le rapport d'aspect des images est verrouillé à 1:1. Lorsque désactivé, le rapport d'aspect est déterminé par la taille physique du pixel (paramètre par défaut et recommandé)."
 
-msgid "**Use reference image LUT range**"
-msgstr "**Utiliser la plage LUT de l'image de référence**"
-
-msgid "When enabled, images are shown with the same LUT (Look-Up Table) range as the first selected image, allowing easier comparison."
-msgstr "Si le réglage est activé, les images sont affichées avec la même plage LUT (Look-Up Table) que la première image sélectionnée, permettant une comparaison plus facile."
-
 msgid "**Eliminate outliers**"
 msgstr "**Éliminer les valeurs aberrantes**"
 
@@ -349,3 +343,4 @@ msgstr "**Arguments de l'éditeur externe**"
 
 msgid "Command-line arguments to pass to the external editor."
 msgstr "Arguments de ligne de commande à passer à l'éditeur externe."
+

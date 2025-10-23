@@ -1174,9 +1174,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              "all" (refresh all objects), "existing" (refresh existing plot items),
              or an object uuid.
             update_items: if True, update the items.
-             If False, only show the items (do not update them, except if the
-             option "Use reference item LUT range" is enabled and more than one
-             item is selected). Defaults to True.
+             If False, only show the items (do not update them).
+             Defaults to True.
             force: if True, force refresh even if auto refresh is disabled.
              Defaults to False.
             only_visible: if True, only refresh visible items. Defaults to True.
