@@ -743,6 +743,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
+                _("Add metadata") + "...",
+                icon_name="metadata_add.svg",
+                tip=_("Add a metadata item to selected %s") % self.OBJECT_STR,
+                triggered=self.panel.add_metadata,
+                select_condition=SelectCond.at_least_one,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Import metadata") + "...",
                 icon_name="metadata_import.svg",
                 tip=_("Import metadata into %s") % self.OBJECT_STR,

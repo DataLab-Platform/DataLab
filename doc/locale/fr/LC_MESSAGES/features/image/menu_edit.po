@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-10-24 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -87,6 +87,85 @@ msgstr "Lors de la suppression des métadonnées en utilisant l'action \"Supprim
 
 msgid "metadata_delete"
 msgstr ""
+
+msgid "Add metadata"
+msgstr "Ajouter des métadonnées"
+
+msgid "The \"Add metadata\" |metadata_add| action allows you to add custom metadata items to one or more selected images. This is useful for tagging images with experiment IDs, sample names, processing steps, or any other custom information."
+msgstr "L'action \"Ajouter des métadonnées\" |metadata_add| vous permet d'ajouter des éléments de métadonnées personnalisés à une ou plusieurs images sélectionnées. Cela est utile pour étiqueter les images avec des identifiants d'expérience, des noms d'échantillons, des étapes de traitement ou toute autre information personnalisée."
+
+msgid "metadata_add"
+msgstr ""
+
+msgid "Add metadata dialog."
+msgstr "Boîte de dialogue Ajouter des métadonnées."
+
+msgid "When you select \"Add metadata...\" from the Edit menu, a dialog appears where you can:"
+msgstr "Lorsque vous sélectionnez \"Ajouter des métadonnées...\" dans le menu Édition, une boîte de dialogue apparaît où vous pouvez :"
+
+msgid "**Metadata key**: Enter the name of the metadata field to add"
+msgstr "**Clé de métadonnées** : Entrez le nom du champ de métadonnées à ajouter"
+
+msgid "**Value pattern**: Define a pattern for the metadata value using Python format strings"
+msgstr "**Modèle de valeur** : Définir un modèle pour la valeur des métadonnées en utilisant des chaînes de format Python"
+
+msgid "**Conversion**: Choose how to store the value (string, float, integer, or boolean)"
+msgstr "**Conversion** : Choisissez comment stocker la valeur (chaîne, flottant, entier ou booléen)"
+
+msgid "**Preview**: See how the metadata will be added to each selected image"
+msgstr "**Aperçu** : Voir comment les métadonnées seront ajoutées à chaque image sélectionnée"
+
+msgid "The value pattern supports the following placeholders:"
+msgstr "Le modèle de valeur prend en charge les espaces réservés suivants :"
+
+#, python-brace-format
+msgid "``{title}``: Image title"
+msgstr "``{title}`` : Titre de l'image"
+
+#, python-brace-format
+msgid "``{index}``: 1-based index of the image in the selection"
+msgstr "``{index}`` : Index basé sur 1 de l'image dans la sélection"
+
+#, python-brace-format
+msgid "``{count}``: Total number of selected images"
+msgstr "``{count}`` : Nombre total d'images sélectionnées"
+
+#, python-brace-format
+msgid "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Axis labels and units"
+msgstr "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}`` : Étiquettes et unités des axes"
+
+#, python-brace-format
+msgid "``{metadata[key]}``: Access existing metadata values"
+msgstr "``{metadata[key]}`` : Accéder aux valeurs de métadonnées existantes"
+
+msgid "You can also use format modifiers:"
+msgstr "Vous pouvez également utiliser des modificateurs de format :"
+
+#, python-brace-format
+msgid "``{title:upper}``: Convert to uppercase"
+msgstr "``{title:upper}`` : Convertir en majuscules"
+
+#, python-brace-format
+msgid "``{title:lower}``: Convert to lowercase"
+msgstr "``{title:lower}`` : Convertir en minuscules"
+
+#, python-brace-format
+msgid "``{index:03d}``: Format as 3-digit number with leading zeros"
+msgstr "``{index:03d}`` : Formater en nombre à 3 chiffres avec des zéros devant"
+
+msgid "**Examples:**"
+msgstr "**Exemples :**"
+
+#, python-brace-format
+msgid "Add acquisition number: key=``acquisition``, pattern=``ACQ_{index:04d}``, conversion=string → Creates metadata like ``acquisition=\"ACQ_0001\"``"
+msgstr "Ajouter le numéro d'acquisition : clé=``acquisition``, modèle=``ACQ_{index:04d}``, conversion=chaîne → Crée des métadonnées comme ``acquisition=\"ACQ_0001\"``"
+
+#, python-brace-format
+msgid "Add exposure time: key=``exposure_ms``, pattern=``{metadata[exposure]}``, conversion=float → Copies exposure from existing metadata and converts to float"
+msgstr "Ajouter le temps d'exposition : clé=``exposure_ms``, modèle=``{metadata[exposure]}``, conversion=float → Copie l'exposition des métadonnées existantes et la convertit en float"
+
+msgid "Flag calibrated images: key=``is_calibrated``, pattern=``true``, conversion=bool → Sets ``is_calibrated=True`` for all selected images"
+msgstr "Identifier les images étalonnées : clé=``is_calibrated``, modèle=``true``, conversion=bool → Définit ``is_calibrated=True`` pour toutes les images sélectionnées."
 
 msgid "Image titles"
 msgstr "Titres des images"

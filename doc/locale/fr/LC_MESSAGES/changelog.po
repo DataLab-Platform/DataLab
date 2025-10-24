@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:23+0200\n"
+"POT-Creation-Date: 2025-10-24 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -354,6 +354,35 @@ msgstr "\"Utiliser les dimensions de l'image pour les nouvelles images\" (par d�
 
 msgid "If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any"
 msgstr "Si activé, le nouveau signal/image utilisera les bornes xmin/xmax ou les dimensions du signal/image actuel, le cas échéant."
+
+msgid "**Add metadata**: New feature to add custom metadata items to selected signals or images"
+msgstr "**Ajouter des métadonnées** : Nouvelle fonctionnalité pour ajouter des éléments de métadonnées personnalisés aux signaux ou images sélectionnés"
+
+msgid "Accessible via Edit menu → \"Add metadata...\""
+msgstr "Accessible via le menu Édition → \"Ajouter des métadonnées...\""
+
+msgid "Allows adding a metadata key-value pair to one or multiple selected objects"
+msgstr "Permet d'ajouter une paire clé-valeur de métadonnées à un ou plusieurs objets sélectionnés."
+
+#, python-brace-format
+msgid "Value pattern supports Python format strings with placeholders: `{title}`, `{index}`, `{count}`, `{xlabel}`, `{xunit}`, `{ylabel}`, `{yunit}`, `{metadata[key]}`"
+msgstr "Le modèle de valeur prend en charge les chaînes de format Python avec des espaces réservés : `{title}`, `{index}`, `{count}`, `{xlabel}`, `{xunit}`, `{ylabel}`, `{yunit}`, `{metadata[key]}`"
+
+#, python-brace-format
+msgid "Supports uppercase/lowercase modifiers (e.g., `{title:upper}`, `{title:lower}`)"
+msgstr "Prend en charge les modificateurs de casse (par exemple, `{title:upper}`, `{title:lower}`)"
+
+msgid "Automatic type conversion: string, float, integer, or boolean"
+msgstr "Conversion de type automatique : chaîne, flottant, entier ou booléen"
+
+msgid "Real-time preview showing how values will be set for each object"
+msgstr "Aperçu en temps réel montrant comment les valeurs seront définies pour chaque objet"
+
+msgid "Useful for tagging objects with experiment IDs, sample names, processing steps, etc."
+msgstr "Utile pour étiqueter les objets avec des identifiants d'expérience, des noms d'échantillons, des étapes de traitement, etc."
+
+msgid "Integrates seamlessly with existing metadata operations (copy, paste, import, export)"
+msgstr "S'intègre parfaitement aux opérations de métadonnées existantes (copier, coller, importer, exporter)"
 
 msgid "Added `phase` (argument) feature to extract the phase information from complex signals or images."
 msgstr "Ajout de la fonctionnalité `phase` (argument) pour extraire les informations de phase des signaux ou des images complexes."

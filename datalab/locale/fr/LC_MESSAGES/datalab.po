@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-23 19:00+0200\n"
+"POT-Creation-Date: 2025-10-24 10:47+0200\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -136,6 +136,13 @@ msgstr "Coller les métadonnées"
 #, python-format
 msgid "Paste metadata into selected %s"
 msgstr "Coller les métadonnées dans l'objet %s sélectionné"
+
+msgid "Add metadata"
+msgstr "Ajouter des métadonnées"
+
+#, python-format
+msgid "Add a metadata item to selected %s"
+msgstr "Ajouter un élément de métadonnée à l'objet %s sélectionné"
 
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
@@ -999,6 +1006,9 @@ msgstr "Résultats tabulaires"
 msgid "Other metadata"
 msgstr "Autres métadonnées"
 
+msgid "Save to directory"
+msgstr "Enregistrer dans un répertoire"
+
 msgid "Directory"
 msgstr "Répertoire"
 
@@ -1022,6 +1032,33 @@ msgstr "Écraser les fichiers existants"
 
 msgid "Preview"
 msgstr "Aperçu"
+
+msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
+msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
+
+msgid "String"
+msgstr "Chaîne de caractères"
+
+msgid "Float"
+msgstr "Flottant"
+
+msgid "Integer"
+msgstr "Entier"
+
+msgid "Boolean"
+msgstr "Booléen"
+
+msgid "Metadata key"
+msgstr "Clé de métadonnées"
+
+msgid "The key name for the metadata item"
+msgstr "Le nom de la clé pour l'élément de métadonnées"
+
+msgid "Value pattern"
+msgstr "Modèle de valeur"
+
+msgid "Conversion"
+msgstr "Conversion"
 
 msgid "Select what to keep from the clipboard.<br><br>Result shapes and annotations, if kept, will be merged with existing ones. <u>All other metadata will be replaced</u>."
 msgstr "Sélectionnez ce que vous souhaitez conserver dans le presse-papier.<br><br>Les formes graphiques et les annotations, si conservées, seront fusionnées avec celles existantes. <u>Toutes les autres métadonnées seront remplacées</u>."
@@ -1068,9 +1105,6 @@ msgstr "Analyse du répertoire"
 
 msgid "Save as"
 msgstr "Enregistrer sous"
-
-msgid "Save to directory"
-msgstr "Enregistrer dans un répertoire"
 
 msgid "Saving..."
 msgstr "Enregistrement en cours..."

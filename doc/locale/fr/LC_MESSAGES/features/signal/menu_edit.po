@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 12:07+0200\n"
+"POT-Creation-Date: 2025-10-24 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -82,6 +82,85 @@ msgstr "Lors de la suppression des métadonnées en utilisant l'action \"Supprim
 msgid "metadata_delete"
 msgstr ""
 
+msgid "Add metadata"
+msgstr "Ajouter des métadonnées"
+
+msgid "The \"Add metadata\" |metadata_add| action allows you to add custom metadata items to one or more selected signals. This is useful for tagging signals with experiment IDs, sample names, processing steps, or any other custom information."
+msgstr "L'action \"Ajouter des métadonnées\" |metadata_add| vous permet d'ajouter des éléments de métadonnées personnalisés à un ou plusieurs signaux sélectionnés. Cela est utile pour étiqueter les signaux avec des identifiants d'expérience, des noms d'échantillons, des étapes de traitement ou toute autre information personnalisée."
+
+msgid "metadata_add"
+msgstr ""
+
+msgid "Add metadata dialog."
+msgstr "Boîte de dialogue Ajouter des métadonnées."
+
+msgid "When you select \"Add metadata...\" from the Edit menu, a dialog appears where you can:"
+msgstr "Lorsque vous sélectionnez \"Ajouter des métadonnées...\" dans le menu Édition, une boîte de dialogue apparaît où vous pouvez :"
+
+msgid "**Metadata key**: Enter the name of the metadata field to add"
+msgstr "**Clé de métadonnées** : Entrez le nom du champ de métadonnées à ajouter"
+
+msgid "**Value pattern**: Define a pattern for the metadata value using Python format strings"
+msgstr "**Modèle de valeur** : Définissez un modèle pour la valeur des métadonnées en utilisant des chaînes de format Python"
+
+msgid "**Conversion**: Choose how to store the value (string, float, integer, or boolean)"
+msgstr "**Conversion** : Choisissez comment stocker la valeur (chaîne, flottant, entier ou booléen)"
+
+msgid "**Preview**: See how the metadata will be added to each selected signal"
+msgstr "**Aperçu** : Voir comment les métadonnées seront ajoutées à chaque signal sélectionné."
+
+msgid "The value pattern supports the following placeholders:"
+msgstr "Le modèle de valeur prend en charge les espaces réservés suivants :"
+
+#, python-brace-format
+msgid "``{title}``: Signal title"
+msgstr "``{title}``: Titre du signal"
+
+#, python-brace-format
+msgid "``{index}``: 1-based index of the signal in the selection"
+msgstr "``{index}``: Index basé sur 1 du signal dans la sélection"
+
+#, python-brace-format
+msgid "``{count}``: Total number of selected signals"
+msgstr "``{count}``: Nombre total de signaux sélectionnés"
+
+#, python-brace-format
+msgid "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Axis labels and units"
+msgstr "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Étiquettes et unités des axes"
+
+#, python-brace-format
+msgid "``{metadata[key]}``: Access existing metadata values"
+msgstr "``{metadata[key]}``: Accéder aux valeurs de métadonnées existantes"
+
+msgid "You can also use format modifiers:"
+msgstr "Vous pouvez également utiliser des modificateurs de format :"
+
+#, python-brace-format
+msgid "``{title:upper}``: Convert to uppercase"
+msgstr "``{title:upper}``: Convertir en majuscules"
+
+#, python-brace-format
+msgid "``{title:lower}``: Convert to lowercase"
+msgstr "``{title:lower}``: Convertir en minuscules"
+
+#, python-brace-format
+msgid "``{index:03d}``: Format as 3-digit number with leading zeros"
+msgstr "``{index:03d}``: Formater en nombre à 3 chiffres avec des zéros devant"
+
+msgid "**Examples:**"
+msgstr "**Exemples :**"
+
+#, python-brace-format
+msgid "Add experiment ID: key=``experiment_id``, pattern=``EXP_{index:03d}``, conversion=string → Creates metadata like ``experiment_id=\"EXP_001\"``"
+msgstr "Ajouter l'ID d'expérience : clé=``experiment_id``, modèle=``EXP_{index:03d}``, conversion=chaîne → Crée des métadonnées comme ``experiment_id=\"EXP_001\"``"
+
+#, python-brace-format
+msgid "Add sample temperature: key=``temperature``, pattern=``{metadata[temp]}``, conversion=float → Copies temperature from existing metadata and converts to float"
+msgstr "Ajouter la température de l'échantillon : clé=``temperature``, modèle=``{metadata[temp]}``, conversion=float → Copie la température des métadonnées existantes et la convertit en flottant"
+
+msgid "Mark processed signals: key=``is_processed``, pattern=``true``, conversion=bool → Sets ``is_processed=True`` for all selected signals"
+msgstr "Marquer les signaux traités : clé=``is_processed``, modèle=``true``, conversion=bool → Définit ``is_processed=True`` pour tous les signaux sélectionnés"
+
 msgid "Signal titles"
 msgstr "Titres des signaux"
 
@@ -102,4 +181,3 @@ msgstr ""
 
 msgid "Example of the content of the clipboard:"
 msgstr "Exemple du contenu du presse-papiers :"
-

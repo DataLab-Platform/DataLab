@@ -120,6 +120,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * "Use xmin and xmax bounds from current signal when creating a new signal" (default: disabled)
     * "Use dimensions from current image when creating a new image" (default: enabled)
     * If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any
+  * **Add metadata**: New feature to add custom metadata items to selected signals or images
+    * Accessible via Edit menu → "Add metadata..."
+    * Allows adding a metadata key-value pair to one or multiple selected objects
+    * Value pattern supports Python format strings with placeholders: `{title}`, `{index}`, `{count}`, `{xlabel}`, `{xunit}`, `{ylabel}`, `{yunit}`, `{metadata[key]}`
+    * Supports uppercase/lowercase modifiers (e.g., `{title:upper}`, `{title:lower}`)
+    * Automatic type conversion: string, float, integer, or boolean
+    * Real-time preview showing how values will be set for each object
+    * Useful for tagging objects with experiment IDs, sample names, processing steps, etc.
+    * Integrates seamlessly with existing metadata operations (copy, paste, import, export)
   * Added `phase` (argument) feature to extract the phase information from complex signals or images.
     * This complements the "Absolute value" (modulus) feature.
   * Added operation to create complex-valued signal/image from real and imaginary parts.

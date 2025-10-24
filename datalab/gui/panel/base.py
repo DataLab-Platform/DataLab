@@ -948,6 +948,161 @@ class SaveToDirectoryGUIParam(gds.DataSet):
     ).set_prop("display", readonly=True)
 
 
+class AddMetadataParam(
+    gds.DataSet,
+    title=_("Add metadata"),
+    comment=_(
+        "Add a new metadata item to the selected objects.<br><br>"
+        "The metadata key will be the same for all objects, "
+        "but the value can use a pattern to generate different values.<br>"
+        "Click the <b>Help</b> button for details on the pattern syntax.<br>"
+    ),
+):
+    """Add metadata parameters"""
+
+    def __init__(self, objs: list[TypeObj] | None = None) -> None:
+        super().__init__()
+        self.__objs = objs or []
+
+    def on_help_button_click(
+        self: AddMetadataParam,
+        _item: gds.ButtonItem,
+        _value: None,
+        parent: QW.QWidget,
+    ) -> None:
+        """Help button callback."""
+        text = "<br>".join(
+            [
+                """Pattern accepts a Python format string. Standard Python format
+                specifiers apply. Two extra modifiers are supported: 'upper' for
+                uppercase and 'lower' for lowercase.""",
+                "",
+                "<b>Available placeholders:</b>",
+                """
+            <table border="1" cellspacing="0" cellpadding="4">
+                <tr><th>Keyword</th><th>Description</th></tr>
+                <tr><td>{title}</td><td>Title</td></tr>
+                <tr><td>{index}</td><td>1-based index</td></tr>
+                <tr><td>{count}</td><td>Total number of selected objects</td></tr>
+                <tr><td>{xlabel}, {xunit}, {ylabel}, {yunit}</td>
+                    <td>Axis information for signals</td></tr>
+                <tr><td>{metadata[key]}</td><td>Specific metadata value<br>
+                    <i>(direct {metadata} use is ignored)</i></td></tr>
+            </table>
+            """,
+                "",
+                "<b>Examples:</b>",
+                """
+            <table border="1" cellspacing="0" cellpadding="4">
+                <tr><th>Pattern</th><th>Description</th></tr>
+                <tr>
+                    <td>{index:03d}</td>
+                    <td>3-digit index with leading zeros</td>
+                </tr>
+                <tr>
+                    <td>{title:20.20}</td>
+                    <td>Title truncated to 20 characters</td>
+                </tr>
+                <tr>
+                    <td>{title:20.20upper}</td>
+                    <td>Title truncated to 20 characters, upper case</td>
+                </tr>
+                <tr>
+                    <td>{title:20.20lower}</td>
+                    <td>Title truncated to 20 characters, lower case</td>
+                </tr>
+            </table>
+            """,
+            ]
+        )
+        NonModalInfoDialog(parent, "Pattern help", text).show()
+
+    def get_conversion_choices(self, _item=None, _value=None):
+        """Return list of available conversion choices."""
+        return [
+            ("string", _("String"), None),
+            ("float", _("Float"), None),
+            ("int", _("Integer"), None),
+            ("bool", _("Boolean"), None),
+        ]
+
+    def build_values(
+        self, objs: list[TypeObj] | None = None
+    ) -> list[str | float | int | bool]:
+        """Build values according to current parameters."""
+        objs = objs or self.__objs
+        # Generate values using the pattern
+        raw_values = format_basenames(objs, self.value_pattern)
+
+        # Convert values according to the selected conversion type
+        converted_values = []
+        for value_str in raw_values:
+            if self.conversion == "string":
+                converted_values.append(value_str)
+            elif self.conversion == "float":
+                try:
+                    converted_values.append(float(value_str))
+                except ValueError:
+                    # Keep as string if conversion fails
+                    converted_values.append(value_str)
+            elif self.conversion == "int":
+                try:
+                    converted_values.append(int(value_str))
+                except ValueError:
+                    # Keep as string if conversion fails
+                    converted_values.append(value_str)
+            elif self.conversion == "bool":
+                # Convert to boolean: "true", "1", "yes" -> True, others -> False
+                lower_val = value_str.lower()
+                converted_values.append(lower_val in ("true", "1", "yes", "on"))
+
+        return converted_values
+
+    def update_preview(self, _item=None, _value=None) -> None:
+        """Update preview."""
+        try:
+            values = self.build_values()
+            preview_lines = []
+            for i, (obj, value) in enumerate(zip(self.__objs, values), start=1):
+                # Try to get short ID if object has been added to panel
+                try:
+                    obj_id = get_short_id(obj)
+                except (ValueError, KeyError):
+                    # Fallback to simple index for objects not yet in panel
+                    obj_id = str(i)
+                preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
+            self.preview = "\n".join(preview_lines)
+        except (ValueError, KeyError, TypeError) as exc:
+            # Handle formatting errors gracefully (e.g., incomplete format string)
+            self.preview = f"Invalid pattern:{os.linesep}{exc}"
+
+    metadata_key = gds.StringItem(
+        _("Metadata key"),
+        default="custom_key",
+        notempty=True,
+        regexp=r"^[a-zA-Z_][a-zA-Z0-9_]*$",
+        help=_("The key name for the metadata item"),
+    ).set_prop("display", callback=update_preview)
+
+    value_pattern = gds.StringItem(
+        _("Value pattern"),
+        default="{index}",
+        help=_("Python format string. See description for details."),
+    ).set_prop("display", callback=update_preview)
+
+    help = gds.ButtonItem(
+        _("Help"), on_help_button_click, "MessageBoxInformation"
+    ).set_pos(col=1)
+
+    conversion = gds.ChoiceItem(
+        _("Conversion"), get_conversion_choices, default="string"
+    ).set_prop("display", callback=update_preview)
+
+    preview = gds.TextItem(
+        _("Preview"), default=None, regexp=r"^(?!Invalid).*"
+    ).set_prop("display", readonly=True)
+
+
 class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     """Object handling the item list, the selected item properties and plot"""
 
@@ -1352,6 +1507,35 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # We have to do a special refresh in order to force the plot handler to update
         # all plot items, even the ones that are not visible (otherwise, image masks
         # would not be updated after pasting the metadata: see issue #123)
+        self.refresh_plot(
+            "selected", update_items=True, only_visible=False, only_existing=True
+        )
+
+    def add_metadata(self, param: AddMetadataParam | None = None) -> None:
+        """Add metadata item to selected object(s)
+
+        Args:
+            param: Add metadata parameters
+        """
+        sel_objects = self.objview.get_sel_objects(include_groups=True)
+        if not sel_objects:
+            return
+
+        if param is None:
+            param = AddMetadataParam(sel_objects)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
+                if not param.edit(parent=self.parentWidget(), wordwrap=False):
+                    return
+
+        # Build values for all selected objects
+        values = param.build_values(sel_objects)
+
+        # Add metadata to each object
+        for obj, value in zip(sel_objects, values):
+            obj.metadata[param.metadata_key] = value
+
+        # Refresh the plot to update any changes
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
