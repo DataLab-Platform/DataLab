@@ -19,11 +19,15 @@ import os.path as osp
 import guidata.config as gcfg
 import numpy as np
 import pytest
-from sigima.objects import create_image, create_signal
+from sigima.objects import create_signal
 
 from datalab.env import execenv
 from datalab.gui.panel.base import SaveToDirectoryGUIParam
 from datalab.tests import helpers
+from datalab.tests.features.common.add_metadata_unit_test import (
+    create_test_images,
+    create_test_signals,
+)
 
 
 class TestSaveToDirectoryGUIParam:
@@ -40,90 +44,13 @@ class TestSaveToDirectoryGUIParam:
         yield
         gcfg.set_validation_mode(old_mode)
 
-    @staticmethod
-    def create_test_signals() -> list:
-        """Create a list of test signals for testing."""
-        signals = []
-
-        # Create signals with different titles and properties
-        x = np.linspace(0, 10, 100)
-
-        # Signal 1: Sine wave
-        y1 = np.sin(x)
-        signal1 = create_signal(
-            title="Sine Wave",
-            x=x,
-            y=y1,
-            metadata={"type": "sine", "frequency": "1 Hz"},
-        )
-        signals.append(signal1)
-
-        # Signal 2: Cosine wave
-        y2 = np.cos(x * 2)
-        signal2 = create_signal(
-            title="Cosine Wave",
-            x=x,
-            y=y2,
-            metadata={"type": "cosine", "frequency": "2 Hz"},
-        )
-        signals.append(signal2)
-
-        # Signal 3: Exponential decay
-        y3 = np.exp(-x / 3)
-        signal3 = create_signal(
-            title="Exponential Decay",
-            x=x,
-            y=y3,
-            metadata={"type": "exponential", "time_constant": "3 s"},
-        )
-        signals.append(signal3)
-
-        return signals
-
-    @staticmethod
-    def create_test_images() -> list:
-        """Create a list of test images for testing."""
-        images = []
-
-        # Image 1: Random noise
-        data1 = np.random.rand(50, 50)
-        image1 = create_image(
-            title="Random Noise",
-            data=data1,
-            metadata={"type": "noise", "distribution": "uniform"},
-        )
-        images.append(image1)
-
-        # Image 2: Gaussian pattern
-        x, y = np.meshgrid(np.linspace(-5, 5, 50), np.linspace(-5, 5, 50))
-        data2 = np.exp(-(x**2 + y**2) / 2)
-        image2 = create_image(
-            title="Gaussian Pattern",
-            data=data2,
-            metadata={"type": "gaussian", "sigma": "1.0"},
-        )
-        images.append(image2)
-
-        # Image 3: Checkerboard pattern
-        data3 = np.zeros((50, 50))
-        data3[::10, ::10] = 1
-        data3[5::10, 5::10] = 1
-        image3 = create_image(
-            title="Checkerboard",
-            data=data3,
-            metadata={"type": "pattern", "period": "10 px"},
-        )
-        images.append(image3)
-
-        return images
-
     def test_preview_generation(self) -> None:
         """Test preview generation feature of SaveToDirectoryGUIParam."""
         execenv.print(f"{self.test_preview_generation.__doc__}:")
 
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             # Create test objects
-            signals = self.create_test_signals()
+            signals = create_test_signals()
 
             # Define extensions
             extensions = ["csv", "txt", "h5sig"]
@@ -184,7 +111,7 @@ class TestSaveToDirectoryGUIParam:
 
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             # Create test signals with specific metadata
-            signals = self.create_test_signals()
+            signals = create_test_signals()
 
             extensions = ["csv", "txt"]
 
@@ -355,7 +282,7 @@ class TestSaveToDirectoryGUIParam:
 
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             # Create test signals
-            signals = self.create_test_signals()
+            signals = create_test_signals()
 
             extensions = ["csv"]
 
@@ -402,7 +329,7 @@ class TestSaveToDirectoryGUIParam:
 
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             # Create test images
-            images = self.create_test_images()
+            images = create_test_images()
 
             # Image extensions
             extensions = ["h5ima", "tiff", "png"]
@@ -519,7 +446,7 @@ class TestSaveToDirectoryGUIParam:
         execenv.print(f"{self.test_help_button.__doc__}:")
 
         # Create GUI parameter
-        signals = self.create_test_signals()
+        signals = create_test_signals()
         p = SaveToDirectoryGUIParam(signals, ["csv"])
 
         # The help button callback should not raise an error

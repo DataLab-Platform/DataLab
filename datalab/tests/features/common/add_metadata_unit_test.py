@@ -29,16 +29,28 @@ def create_test_signals() -> list[SignalObj]:
     """Create a list of test signals for testing."""
     # Signal 1: Sine wave
     x = np.linspace(0, 10, 100)
-    y = np.sin(x)
-    signal1 = create_signal(title="Sine Wave", x=x, y=y)
+    signal1 = create_signal(
+        title="Sine Wave",
+        x=x,
+        y=np.sin(x),
+        metadata={"type": "sine", "frequency": "1 Hz"},
+    )
 
     # Signal 2: Cosine wave
-    y = np.cos(x * 2)
-    signal2 = create_signal(title="Cosine Wave", x=x, y=y)
+    signal2 = create_signal(
+        title="Cosine Wave",
+        x=x,
+        y=np.cos(x * 2),
+        metadata={"type": "cosine", "frequency": "2 Hz"},
+    )
 
     # Signal 3: Exponential decay
-    y = np.exp(-x / 3)
-    signal3 = create_signal(title="Exponential Decay", x=x, y=y)
+    signal3 = create_signal(
+        title="Exponential Decay",
+        x=x,
+        y=np.exp(-x / 3),
+        metadata={"type": "exponential", "time_constant": "3 s"},
+    )
 
     return [signal1, signal2, signal3]
 
@@ -46,21 +58,31 @@ def create_test_signals() -> list[SignalObj]:
 def create_test_images() -> list[ImageObj]:
     """Create a list of test images for testing."""
     # Image 1: Random noise
-    data1 = np.random.rand(100, 100)
-    image1 = create_image(title="Random Noise", data=data1)
+    image1 = create_image(
+        title="Random Noise",
+        data=np.random.rand(100, 100),
+        metadata={"type": "noise", "distribution": "uniform"},
+    )
 
     # Image 2: Gaussian pattern
     x = np.linspace(-3, 3, 50)
     y = np.linspace(-3, 3, 50)
     X, Y = np.meshgrid(x, y)
-    data2 = np.exp(-(X**2 + Y**2))
-    image2 = create_image(title="Gaussian Pattern", data=data2)
+    image2 = create_image(
+        title="Gaussian Pattern",
+        data=np.exp(-(X**2 + Y**2)),
+        metadata={"type": "gaussian", "sigma": "1.0"},
+    )
 
     # Image 3: Checkerboard pattern
     data3 = np.zeros((100, 100))
     data3[::10, ::10] = 1
     data3[5::10, 5::10] = 1
-    image3 = create_image(title="Checkerboard", data=data3)
+    image3 = create_image(
+        title="Checkerboard",
+        data=data3,
+        metadata={"type": "pattern", "period": "10 px"},
+    )
 
     return [image1, image2, image3]
 
