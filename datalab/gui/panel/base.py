@@ -905,7 +905,16 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
         """Update preview."""
         try:
             filenames = self.build_filenames()
-            self.preview = "\n".join(f"{fn}" for fn in filenames)
+            preview_lines = []
+            for i, (obj, filename) in enumerate(zip(self.__objs, filenames), start=1):
+                # Try to get short ID if object has been added to panel
+                try:
+                    obj_id = get_short_id(obj)
+                except (ValueError, KeyError):
+                    # Fallback to simple index for objects not yet in panel
+                    obj_id = str(i)
+                preview_lines.append(f"{obj_id}: {filename}")
+            self.preview = "\n".join(preview_lines)
         except (ValueError, KeyError, TypeError) as exc:
             # Handle formatting errors gracefully (e.g., incomplete format string)
             self.preview = f"Invalid pattern:{os.linesep}{exc}"

@@ -68,9 +68,9 @@ class TestSaveToDirectoryGUIParam:
 
         # Check preview content
         expected_filenames = [
-            "Sine Wave.csv",
-            "Cosine Wave.csv",
-            "Exponential Decay.csv",
+            "1: Sine Wave.csv",
+            "2: Cosine Wave.csv",
+            "3: Exponential Decay.csv",
         ]
         preview_lines = p.preview.split("\n")
 
@@ -91,9 +91,9 @@ class TestSaveToDirectoryGUIParam:
         preview_lines = p.preview.split("\n")
 
         expected_filenames = [
-            "001_Sine Wave.csv",
-            "002_Cosine Wave.csv",
-            "003_Exponential Decay.csv",
+            "1: 001_Sine Wave.csv",
+            "2: 002_Cosine Wave.csv",
+            "3: 003_Exponential Decay.csv",
         ]
 
         for i, expected in enumerate(expected_filenames):
@@ -359,7 +359,13 @@ class TestSaveToDirectoryGUIParam:
             p.update_preview()
             preview_lines = p.preview.split("\n")
 
-            for i, expected in enumerate(expected_files):
+            expected_preview = [
+                "1: 01_Random Noise.png",
+                "2: 02_Gaussian Pattern.png",
+                "3: 03_Checkerboard.png",
+            ]
+
+            for i, expected in enumerate(expected_preview):
                 assert preview_lines[i] == expected, (
                     f"Expected '{expected}', got '{preview_lines[i]}'"
                 )
