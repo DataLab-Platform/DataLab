@@ -33,7 +33,7 @@ from guidata.guitest import run_testlauncher
 from sigima.tests import helpers
 
 import datalab.config  # Loading icons
-from datalab.config import MOD_NAME
+from datalab.config import MOD_NAME, SHOTPATH
 from datalab.control.proxy import RemoteProxy
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
@@ -46,6 +46,9 @@ helpers.add_test_path_from_env("DATALAB_DATA")
 
 # Add test data files and folders for the DataLab module:
 helpers.add_test_module_path(MOD_NAME, osp.join("data", "tests"))
+
+# Set default screenshot path for tests
+execenv.screenshot_path = SHOTPATH
 
 
 @contextmanager
