@@ -129,9 +129,7 @@ class TestSaveToDirectoryGUIParam:
             extensions = ["csv", "txt", "h5sig"]
 
             # Create GUI parameter instance
-            p = SaveToDirectoryGUIParam(
-                title="Test Preview", objs=signals, extensions=extensions
-            )
+            p = SaveToDirectoryGUIParam(signals, extensions)
 
         # Set parameters
         p.directory = tmpdir
@@ -222,9 +220,7 @@ class TestSaveToDirectoryGUIParam:
                 execenv.print(f"  Testing pattern: {basename_pattern}")
 
                 # Create GUI parameter
-                p = SaveToDirectoryGUIParam(
-                    title="Test Patterns", objs=signals, extensions=extensions
-                )
+                p = SaveToDirectoryGUIParam(signals, extensions)
 
                 # Configure parameters
                 p.directory = tmpdir
@@ -261,9 +257,7 @@ class TestSaveToDirectoryGUIParam:
             extensions = ["h5sig"]
 
             # Create GUI parameter
-            p = SaveToDirectoryGUIParam(
-                title="Test Collisions", objs=signals, extensions=extensions
-            )
+            p = SaveToDirectoryGUIParam(signals, extensions)
 
             # Test collision handling without overwrite
             p.directory = tmpdir
@@ -330,9 +324,7 @@ class TestSaveToDirectoryGUIParam:
             extensions = ["csv"]
 
             # Create GUI parameter
-            p = SaveToDirectoryGUIParam(
-                title="Test Metadata", objs=signals, extensions=extensions
-            )
+            p = SaveToDirectoryGUIParam(signals, extensions)
 
             # Test accessing nested metadata in basename pattern
             p.directory = tmpdir
@@ -368,9 +360,7 @@ class TestSaveToDirectoryGUIParam:
             extensions = ["csv"]
 
             # Create GUI parameter
-            p = SaveToDirectoryGUIParam(
-                title="Test Filepath Pairs", objs=signals, extensions=extensions
-            )
+            p = SaveToDirectoryGUIParam(signals, extensions)
 
             p.directory = tmpdir
             p.basename = "{title}"
@@ -418,9 +408,7 @@ class TestSaveToDirectoryGUIParam:
             extensions = ["h5ima", "tiff", "png"]
 
             # Create GUI parameter
-            p = SaveToDirectoryGUIParam(
-                title="Test Images", objs=images, extensions=extensions
-            )
+            p = SaveToDirectoryGUIParam(images, extensions)
 
             p.directory = tmpdir
             p.basename = "{index:02d}_{title}"
@@ -459,7 +447,7 @@ class TestSaveToDirectoryGUIParam:
 
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             # Test with empty objects list
-            p = SaveToDirectoryGUIParam(title="Test Empty", objs=[], extensions=["csv"])
+            p = SaveToDirectoryGUIParam([], ["csv"])
 
             p.directory = tmpdir
             p.basename = "{title}"
@@ -490,9 +478,7 @@ class TestSaveToDirectoryGUIParam:
                 signal = create_signal(title, x=x, y=y)
                 signals.append(signal)
 
-            p = SaveToDirectoryGUIParam(
-                title="Test Special Chars", objs=signals, extensions=["csv"]
-            )
+            p = SaveToDirectoryGUIParam(signals, ["csv"])
             p.directory = tmpdir
             p.basename = "{title}"
             p.extension = ".csv"
@@ -534,7 +520,7 @@ class TestSaveToDirectoryGUIParam:
 
         # Create GUI parameter
         signals = self.create_test_signals()
-        p = SaveToDirectoryGUIParam(title="Test Help", objs=signals, extensions=["csv"])
+        p = SaveToDirectoryGUIParam(signals, ["csv"])
 
         # The help button callback should not raise an error
         # Note: We can't fully test the dialog display in automated tests,

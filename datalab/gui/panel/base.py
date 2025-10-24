@@ -809,26 +809,13 @@ class NonModalInfoDialog(QW.QMessageBox):
         self.setModal(False)
 
 
-class SaveToDirectoryGUIParam(gds.DataSet):
+class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
     """Save to directory parameters"""
 
     def __init__(
-        self,
-        title: str | None = None,
-        comment: str | None = None,
-        icon: str = "",
-        readonly: bool = False,
-        skip_defaults: bool = False,
-        objs: list[TypeObj] | None = None,
-        extensions: list[str] | None = None,
-    ):
-        super().__init__(
-            title=title,
-            comment=comment,
-            icon=icon,
-            readonly=readonly,
-            skip_defaults=skip_defaults,
-        )
+        self, objs: list[TypeObj] | None = None, extensions: list[str] | None = None
+    ) -> None:
+        super().__init__()
         self.__objs = objs or []
         self.__extensions = extensions or []
 
@@ -1960,9 +1947,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         if param is None:
             extensions = get_file_extensions(self.IO_REGISTRY.get_write_filters())
-            guiparam = SaveToDirectoryGUIParam(
-                title=_("Save to directory"), objs=objs, extensions=extensions
-            )
+            guiparam = SaveToDirectoryGUIParam(objs, extensions)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
                 if not guiparam.edit(parent=self.parentWidget()):
