@@ -17,12 +17,14 @@ import warnings
 from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
-import numpy as np
-import sigima.objects
 
 from datalab.env import execenv
 from datalab.gui.panel.base import AddMetadataParam
 from datalab.tests import datalab_test_app_context
+from datalab.tests.features.common.add_metadata_unit_test import (
+    create_test_images,
+    create_test_signals,
+)
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -33,38 +35,9 @@ def __add_metadata_to_signals(win: DLMainWindow, screenshot: bool = False) -> No
     execenv.print("Add metadata signal application test:")
     panel = win.signalpanel
 
-    # Create some test signals with different characteristics
-    x = np.linspace(0, 10, 100)
-
-    # Signal 1: Sine wave
-    y1 = np.sin(x)
-    sig1 = sigima.objects.create_signal(
-        title="Sine Wave",
-        x=x,
-        y=y1,
-        metadata={"frequency": "1 Hz", "amplitude": "1.0"},
-    )
-    panel.add_object(sig1)
-
-    # Signal 2: Cosine wave
-    y2 = np.cos(x * 2)
-    sig2 = sigima.objects.create_signal(
-        title="Cosine Wave",
-        x=x,
-        y=y2,
-        metadata={"frequency": "2 Hz", "amplitude": "1.0"},
-    )
-    panel.add_object(sig2)
-
-    # Signal 3: Exponential decay
-    y3 = np.exp(-x / 3)
-    sig3 = sigima.objects.create_signal(
-        title="Exponential Decay",
-        x=x,
-        y=y3,
-        metadata={"time_constant": "3 s"},
-    )
-    panel.add_object(sig3)
+    # Add test signals to the panel
+    for sig in create_test_signals():
+        panel.add_object(sig)
 
     # Select all signals
     panel.objview.select_objects([1, 2, 3])
@@ -100,39 +73,9 @@ def __add_metadata_to_images(win: DLMainWindow, screenshot: bool = False) -> Non
     execenv.print("Add metadata image test:")
     panel = win.imagepanel
 
-    # Create some test images with different characteristics
-
-    # Image 1: Random noise
-    data1 = np.random.rand(100, 100)
-    img1 = sigima.objects.create_image(
-        title="Random Noise",
-        data=data1,
-        metadata={"type": "noise", "source": "random"},
-    )
-    panel.add_object(img1)
-
-    # Image 2: Gaussian pattern
-    x = np.linspace(-3, 3, 100)
-    y = np.linspace(-3, 3, 100)
-    X, Y = np.meshgrid(x, y)
-    data2 = np.exp(-(X**2 + Y**2))
-    img2 = sigima.objects.create_image(
-        title="Gaussian Pattern",
-        data=data2,
-        metadata={"type": "gaussian", "sigma": "1.0"},
-    )
-    panel.add_object(img2)
-
-    # Image 3: Checkerboard
-    data3 = np.zeros((100, 100))
-    data3[::10, ::10] = 1
-    data3[5::10, 5::10] = 1
-    img3 = sigima.objects.create_image(
-        title="Checkerboard",
-        data=data3,
-        metadata={"type": "pattern", "period": "10 px"},
-    )
-    panel.add_object(img3)
+    # Add test images to the panel
+    for img in create_test_images():
+        panel.add_object(img)
 
     # Select all images
     panel.objview.select_objects([1, 2, 3])

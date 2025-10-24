@@ -11,6 +11,8 @@ from `datalab.gui.panel.base`.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import guidata.config as gcfg
 import numpy as np
 import pytest
@@ -18,6 +20,49 @@ from sigima.objects import create_image, create_signal
 
 from datalab.env import execenv
 from datalab.gui.panel.base import AddMetadataParam
+
+if TYPE_CHECKING:
+    from sigima.objects import ImageObj, SignalObj
+
+
+def create_test_signals() -> list[SignalObj]:
+    """Create a list of test signals for testing."""
+    # Signal 1: Sine wave
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x)
+    signal1 = create_signal(title="Sine Wave", x=x, y=y)
+
+    # Signal 2: Cosine wave
+    y = np.cos(x * 2)
+    signal2 = create_signal(title="Cosine Wave", x=x, y=y)
+
+    # Signal 3: Exponential decay
+    y = np.exp(-x / 3)
+    signal3 = create_signal(title="Exponential Decay", x=x, y=y)
+
+    return [signal1, signal2, signal3]
+
+
+def create_test_images() -> list[ImageObj]:
+    """Create a list of test images for testing."""
+    # Image 1: Random noise
+    data1 = np.random.rand(100, 100)
+    image1 = create_image(title="Random Noise", data=data1)
+
+    # Image 2: Gaussian pattern
+    x = np.linspace(-3, 3, 50)
+    y = np.linspace(-3, 3, 50)
+    X, Y = np.meshgrid(x, y)
+    data2 = np.exp(-(X**2 + Y**2))
+    image2 = create_image(title="Gaussian Pattern", data=data2)
+
+    # Image 3: Checkerboard pattern
+    data3 = np.zeros((100, 100))
+    data3[::10, ::10] = 1
+    data3[5::10, 5::10] = 1
+    image3 = create_image(title="Checkerboard", data=data3)
+
+    return [image1, image2, image3]
 
 
 class TestAddMetadata:
@@ -31,62 +76,12 @@ class TestAddMetadata:
         yield
         gcfg.set_validation_mode(old_mode)
 
-    @staticmethod
-    def create_test_signals() -> list:
-        """Create a list of test signals for testing."""
-        signals = []
-
-        # Signal 1: Sine wave
-        x = np.linspace(0, 10, 100)
-        y = np.sin(x)
-        signal1 = create_signal(title="Sine Wave", x=x, y=y)
-        signals.append(signal1)
-
-        # Signal 2: Cosine wave
-        y = np.cos(x)
-        signal2 = create_signal(title="Cosine Wave", x=x, y=y)
-        signals.append(signal2)
-
-        # Signal 3: Exponential decay
-        y = np.exp(-x / 2)
-        signal3 = create_signal(title="Exponential Decay", x=x, y=y)
-        signals.append(signal3)
-
-        return signals
-
-    @staticmethod
-    def create_test_images() -> list:
-        """Create a list of test images for testing."""
-        images = []
-
-        # Image 1: Random noise
-        data1 = np.random.rand(50, 50)
-        image1 = create_image(title="Random Noise", data=data1)
-        images.append(image1)
-
-        # Image 2: Gaussian pattern
-        x = np.linspace(-3, 3, 50)
-        y = np.linspace(-3, 3, 50)
-        X, Y = np.meshgrid(x, y)
-        data2 = np.exp(-(X**2 + Y**2))
-        image2 = create_image(title="Gaussian Pattern", data=data2)
-        images.append(image2)
-
-        # Image 3: Checkerboard pattern
-        data3 = np.zeros((50, 50))
-        data3[::10, ::10] = 1
-        data3[5::10, 5::10] = 1
-        image3 = create_image(title="Checkerboard", data=data3)
-        images.append(image3)
-
-        return images
-
     def test_string_values(self) -> None:
         """Test adding string metadata values."""
         execenv.print(f"{self.test_string_values.__doc__}:")
 
         # Create test signals
-        signals = self.create_test_signals()
+        signals = create_test_signals()
 
         # Create parameter
         p = AddMetadataParam(signals)
@@ -113,7 +108,7 @@ class TestAddMetadata:
         execenv.print(f"{self.test_numeric_values.__doc__}:")
 
         # Create test signals
-        signals = self.create_test_signals()
+        signals = create_test_signals()
 
         # Test integer conversion
         p = AddMetadataParam(signals)
@@ -140,7 +135,7 @@ class TestAddMetadata:
         execenv.print(f"{self.test_boolean_values.__doc__}:")
 
         # Create test signals
-        signals = self.create_test_signals()
+        signals = create_test_signals()
 
         # Test boolean conversion with "true" pattern
         p = AddMetadataParam(signals)
@@ -167,7 +162,7 @@ class TestAddMetadata:
         execenv.print(f"{self.test_pattern_formatting.__doc__}:")
 
         # Create test signals
-        signals = self.create_test_signals()
+        signals = create_test_signals()
 
         # Test index with zero padding
         p = AddMetadataParam(signals)
@@ -201,7 +196,7 @@ class TestAddMetadata:
         execenv.print(f"{self.test_with_images.__doc__}:")
 
         # Create test images
-        images = self.create_test_images()
+        images = create_test_images()
 
         # Create parameter
         p = AddMetadataParam(images)
@@ -230,7 +225,7 @@ class TestAddMetadata:
         execenv.print(f"{self.test_error_handling.__doc__}:")
 
         # Create test signals
-        signals = self.create_test_signals()
+        signals = create_test_signals()
 
         # Test with invalid pattern
         p = AddMetadataParam(signals)
