@@ -1947,9 +1947,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         if param is None:
             extensions = get_file_extensions(self.IO_REGISTRY.get_write_filters())
-            guiparam = SaveToDirectoryGUIParam(objs, extensions)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
+                guiparam = SaveToDirectoryGUIParam(objs, extensions)
                 if not guiparam.edit(parent=self.parentWidget()):
                     return
             param = SaveToDirectoryParam()
