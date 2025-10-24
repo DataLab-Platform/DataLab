@@ -119,6 +119,29 @@ Save signals to directory
 Save all selected signals to a specified directory, with configurable filename pattern
 and signal format.
 
+.. figure:: /images/shots/s_save_to_directory.png
+
+    Save signals to directory dialog.
+
+When you select "Save to directory..." from the File menu, a dialog appears where you can:
+
+- **Directory**: Choose the target directory where signals will be saved
+- **Filename pattern**: Define a pattern for the filenames using Python format strings
+- **File extension**: Select the output format (.csv, .txt, etc.)
+- **Overwrite**: Choose whether to overwrite existing files
+- **Preview**: See the list of files that will be created (with object IDs)
+
+The filename pattern supports the following placeholders:
+
+- ``{title}``: Signal title
+- ``{index}``: 1-based index of the signal in the selection (with zero-padding)
+- ``{count}``: Total number of selected signals
+- ``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Axis labels and units
+- ``{metadata[key]}``: Access metadata values
+
+You can also use format modifiers, for example ``{index:03d}`` will format the index
+with 3 digits zero-padding (001, 002, 003, etc.).
+
 Import text file
 ^^^^^^^^^^^^^^^^
 

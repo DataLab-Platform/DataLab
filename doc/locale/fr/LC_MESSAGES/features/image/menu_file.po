@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-19 10:34+0200\n"
+"POT-Creation-Date: 2025-10-24 12:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -228,6 +228,54 @@ msgstr "Enregistrer les images dans un répertoire"
 
 msgid "Save all selected images to a specified directory, with configurable filename pattern and image format."
 msgstr "Enregistrer toutes les images sélectionnées dans un répertoire spécifié, avec un patron de nom de fichier et un format d'image configurables."
+
+msgid "Save images to directory dialog."
+msgstr "Boîte de dialogue Enregistrer les images dans un répertoire."
+
+msgid "When you select \"Save to directory...\" from the File menu, a dialog appears where you can:"
+msgstr "Lorsque vous sélectionnez \"Enregistrer dans un répertoire...\" dans le menu Fichier, une boîte de dialogue apparaît où vous pouvez :"
+
+msgid "**Directory**: Choose the target directory where images will be saved"
+msgstr "**Répertoire** : Choisissez le répertoire cible où les images seront enregistrées."
+
+msgid "**Filename pattern**: Define a pattern for the filenames using Python format strings"
+msgstr "**Nom de fichier** : Définissez un modèle pour les noms de fichiers en utilisant des chaînes de format Python."
+
+msgid "**File extension**: Select the output format (.png, .tiff, .h5ima, etc.)"
+msgstr "**Extension de fichier** : Sélectionnez le format de sortie (.png, .tiff, .h5ima, etc.)."
+
+msgid "**Overwrite**: Choose whether to overwrite existing files"
+msgstr "**Écraser** : Choisissez si vous souhaitez écraser les fichiers existants."
+
+msgid "**Preview**: See the list of files that will be created (with object IDs)"
+msgstr "**Aperçu** : Voir la liste des fichiers qui seront créés (avec les ID d'objet)."
+
+msgid "The filename pattern supports the following placeholders:"
+msgstr "Le modèle de nom de fichier prend en charge les espaces réservés suivants :"
+
+#, python-brace-format
+msgid "``{title}``: Image title"
+msgstr "``{title}``: Titre de l'image"
+
+#, python-brace-format
+msgid "``{index}``: 1-based index of the image in the selection (with zero-padding)"
+msgstr "``{index}``: Index de l'image dans la sélection (avec remplissage de zéros)"
+
+#, python-brace-format
+msgid "``{count}``: Total number of selected images"
+msgstr "``{count}``: Nombre total d'images sélectionnées"
+
+#, python-brace-format
+msgid "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``, ``{zlabel}``, ``{zunit}``: Axis labels and units"
+msgstr "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``, ``{zlabel}``, ``{zunit}``: Étiquettes et unités des axes"
+
+#, python-brace-format
+msgid "``{metadata[key]}``: Access metadata values"
+msgstr "``{metadata[key]}``: Accéder aux valeurs des métadonnées"
+
+#, python-brace-format
+msgid "You can also use format modifiers, for example ``{index:03d}`` will format the index with 3 digits zero-padding (001, 002, 003, etc.)."
+msgstr "Vous pouvez également utiliser des modificateurs de format, par exemple ``{index:03d}`` formatera l'index avec un remplissage de zéros sur 3 chiffres (001, 002, 003, etc.)."
 
 msgid "Import text file"
 msgstr "Importer un fichier texte"
