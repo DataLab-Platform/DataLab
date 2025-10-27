@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-13 14:13+0200\n"
+"POT-Creation-Date: 2025-10-27 18:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -37,11 +37,65 @@ msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'ou
 msgid "The \"Operations\" menu allows you to perform various operations on the current image or group of images. It also allows you to extract profiles, distribute images on a grid, or resize images."
 msgstr "Le menu \"Opérations\" permet d'effectuer diverses opérations sur l'image ou le groupe d'images courant. Il permet également d'extraire des profils, de distribuer des images sur une grille, ou de redimensionner des images."
 
-msgid "Basic arithmetic operations"
-msgstr "Opérations arithmétiques de base"
+msgid "Operations with a constant"
+msgstr "Opérations avec une constante"
+
+msgid "Create a new image which is the result of a constant operation on each selected image:"
+msgstr "Crée une image à partir d'une opération avec une constante sur chaque image sélectionnée :"
 
 msgid "Operation"
 msgstr "Opération"
+
+msgid "Equation"
+msgstr "Equation"
+
+msgid "|constant_add| Add"
+msgstr "|constant_add| Addition"
+
+msgid "constant_add"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{k} = z_{k-1} + conv(c)`"
+msgstr ""
+
+msgid "|constant_subtract| Subtract"
+msgstr "|constant_subtract| Soustraction"
+
+msgid "constant_subtract"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{k} = z_{k-1} - conv(c)`"
+msgstr ""
+
+msgid "|constant_multiply| Multiply"
+msgstr "|constant_multiply| Multiplication"
+
+msgid "constant_multiply"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{k} = conv(z_{k-1} \\times c)`"
+msgstr ""
+
+msgid "|constant_divide| Divide"
+msgstr "|constant_divide| Division"
+
+msgid "constant_divide"
+msgstr ""
+
+msgid ":math:`z_{k} = conv(\\dfrac{z_{k-1}}{c})`"
+msgstr ""
+
+msgid "where :math:`c` is the constant value and :math:`conv` is the conversion function which handles data type conversion (keeping the same data type as the input image)."
+msgstr "où :math:`c` est la valeur constante et :math:`conv` est la fonction de conversion qui gère la conversion du type de données (en conservant le même type de données que l'image d'entrée)."
+
+msgid "Basic arithmetic operations"
+msgstr "Opérations arithmétiques de base"
+
+msgid "Arithmetic operations are performed pixel by pixel between the selected images."
+msgstr "Les opérations arithmétiques sont effectuées pixel par pixel entre les images sélectionnées."
 
 msgid "Description"
 msgstr "Description"
@@ -55,24 +109,6 @@ msgstr ""
 msgid ":math:`z_{M} = \\sum_{k=0}^{M-1}{z_{k}}`"
 msgstr ""
 
-msgid "|average| Average"
-msgstr "|average| Moyenne"
-
-msgid "average"
-msgstr ""
-
-msgid ":math:`z_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{z_{k}}`"
-msgstr ""
-
-msgid "|standard_deviation| Standard Deviation"
-msgstr "|standard_deviation| Écart-type"
-
-msgid "standard_deviation"
-msgstr ""
-
-msgid ":math:`z_{M} = \\sqrt{\\dfrac{1}{M}\\sum_{k=0}^{M-1}{(y_{k} - \\bar{y})^{2}}}`"
-msgstr ""
-
 msgid "|difference| Difference"
 msgstr "|difference| Soustraction"
 
@@ -81,15 +117,6 @@ msgstr ""
 
 #, python-brace-format
 msgid ":math:`z_{2} = z_{1} - z_{0}`"
-msgstr ""
-
-msgid "|quadratic_difference| Quadratic difference"
-msgstr "|quadratic_difference| Soustraction quadratique"
-
-msgid "quadratic_difference"
-msgstr ""
-
-msgid ":math:`z_{2} = \\dfrac{z_{1} - z_{0}}{\\sqrt{2}}`"
 msgstr ""
 
 msgid "|product| Product"
@@ -119,128 +146,25 @@ msgstr ""
 msgid ":math:`z_{2} = \\dfrac{1}{z_{1}}`"
 msgstr ""
 
-msgid "Operations with a constant"
-msgstr "Opérations avec une constante"
+msgid "|exponential| Exponential"
+msgstr "|exponential| Exponentielle"
 
-msgid "Create a new image which is the result of a constant operation on each selected image:"
-msgstr "Crée une image à partir d'une opération avec une constante sur chaque image sélectionnée :"
-
-msgid "Equation"
-msgstr "Equation"
-
-msgid "|constant_add| Addition"
-msgstr "|constant_add| Addition"
-
-msgid "constant_add"
+msgid "exponential"
 msgstr ""
 
 #, python-brace-format
-msgid ":math:`z_{k} = z_{k-1} + conv(c)`"
+msgid ":math:`z_{2} = \\exp(z_{1})`"
 msgstr ""
 
-msgid "|constant_subtract| Subtraction"
-msgstr "|constant_subtract| Soustraction"
+msgid "|logarithm| Logarithm (base 10)"
+msgstr "|logarithm| Logarithme (base 10)"
 
-msgid "constant_subtract"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`z_{k} = z_{k-1} - conv(c)`"
-msgstr ""
-
-msgid "|constant_multiply| Multiplication"
-msgstr "|constant_multiply| Multiplication"
-
-msgid "constant_multiply"
+msgid "logarithm"
 msgstr ""
 
 #, python-brace-format
-msgid ":math:`z_{k} = conv(z_{k-1} \\times c)`"
+msgid ":math:`z_{2} = \\log_{10}(z_{1})`"
 msgstr ""
-
-msgid "|constant_divide| Division"
-msgstr "|constant_divide| Division"
-
-msgid "constant_divide"
-msgstr ""
-
-msgid ":math:`z_{k} = conv(\\dfrac{z_{k-1}}{c})`"
-msgstr ""
-
-msgid "where :math:`c` is the constant value and :math:`conv` is the conversion function which handles data type conversion (keeping the same data type as the input image)."
-msgstr "où :math:`c` est la valeur constante et :math:`conv` est la fonction de conversion qui gère la conversion du type de données (en conservant le même type de données que l'image d'entrée)."
-
-msgid "Absolute value and complex image operations"
-msgstr "Valeur absolue et opérations sur les images complexes"
-
-msgid "|abs| Absolute value"
-msgstr "|abs| Valeur absolue"
-
-msgid "abs"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`z_{k} = |z_{k-1}|`"
-msgstr ""
-
-msgid "|phase| Phase (argument)"
-msgstr ""
-
-msgid "phase"
-msgstr ""
-
-msgid ":py:func:`sigima.proc.image.phase`"
-msgstr ""
-
-msgid "|complex_from_magnitude_phase| Complex from magnitude and phase"
-msgstr ""
-
-msgid "complex_from_magnitude_phase"
-msgstr ""
-
-msgid ":py:func:`sigima.proc.image.complex_from_magnitude_phase`"
-msgstr ""
-
-msgid "|re| Real part"
-msgstr "|re| Partie réelle"
-
-msgid "re"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`z_{k} = \\Re(z_{k-1})`"
-msgstr ""
-
-msgid "|im| Imaginary part"
-msgstr "|im| Partie imaginaire"
-
-msgid "im"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`z_{k} = \\Im(z_{k-1})`"
-msgstr ""
-
-msgid "|complex_from_real_imag| Complex from real and imaginary parts"
-msgstr ""
-
-msgid "complex_from_real_imag"
-msgstr ""
-
-msgid ":py:func:`sigima.proc.image.complex_from_real_imag`"
-msgstr ""
-
-msgid "Data type conversion"
-msgstr "Conversion du type de données"
-
-msgid "The \"Convert data type\" |convert_dtype| action allows you to convert the data type of the selected images. For integer data types, the conversion is done by clipping the values to the new data type range before effectively converting the data type. For floating point data types, the conversion is straightforward."
-msgstr "L'action \"Convertir le type de données\" |convert_dtype| permet de convertir le type de données des images sélectionnées. Pour les types de données entiers, la conversion est effectuée en rognant les valeurs à la plage de nouveaux types de données avant de convertir effectivement le type de données. Pour les types de données à virgule flottante, la conversion est directe."
-
-msgid "convert_dtype"
-msgstr ""
-
-msgid "Data type conversion uses the :py:func:`sigima.tools.datatypes.clip_astype` function which relies on :py:func:`numpy.ndarray.astype` function with the default parameters (`casting='unsafe'`)."
-msgstr "La conversion du type de données utilise la fonction :py:func:`sigima.tools.datatypes.clip_astype` qui repose sur la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
 
 msgid "Basic mathematical functions"
 msgstr "Fonctions mathématiques de base"
@@ -268,15 +192,15 @@ msgstr ""
 msgid ":math:`z_{k} = \\log_{10}(z_{k})`"
 msgstr ""
 
-msgid "Logarithmic transformation"
-msgstr "Transformation logarithmique"
+msgid "Log10(z+10)"
+msgstr ""
 
 #, python-brace-format
 msgid ":math:`z_{k} = \\log_{10}(z_{k}+n)` (useful if image background is zero)"
 msgstr ":math:`z_{k} = \\log_{10}(z_{k}+n)` (utile si le fond de l'image est nul)"
 
-msgid "Other operations"
-msgstr "Autres opérations"
+msgid "Convolution and Deconvolution"
+msgstr "Convolution et Déconvolution"
 
 msgid "Implementation"
 msgstr "Implémentation"
@@ -298,6 +222,111 @@ msgstr "déconvolution"
 
 msgid "Frequency domain deconvolution"
 msgstr "Déconvolution dans le domaine fréquentiel"
+
+msgid "Absolute value and complex image operations"
+msgstr "Valeur absolue et opérations sur les images complexes"
+
+msgid "|abs| Absolute value"
+msgstr "|abs| Valeur absolue"
+
+msgid "abs"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{k} = |z_{k-1}|`"
+msgstr ""
+
+msgid "|phase| Phase (argument)"
+msgstr ""
+
+msgid "phase"
+msgstr ""
+
+msgid ":py:func:`sigima.proc.image.phase`"
+msgstr ""
+
+msgid "|complex_from_magnitude_phase| Combine with phase"
+msgstr "|complex_from_magnitude_phase| Combiner avec la phase"
+
+msgid "complex_from_magnitude_phase"
+msgstr ""
+
+msgid "Consider current image as the module and allow to select a image representing the phase to merge them in a complex image :py:func:`sigima.proc.image.complex_from_magnitude_phase`"
+msgstr "Considère l'image courante comme le module et permet de sélectionner une image représentant la phase pour les fusionner en une image complexe :py:func:`sigima.proc.image.complex_from_magnitude_phase`"
+
+msgid "|re| Real part"
+msgstr "|re| Partie réelle"
+
+msgid "re"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{k} = \\Re(z_{k-1})`"
+msgstr ""
+
+msgid "|im| Imaginary part"
+msgstr "|im| Partie imaginaire"
+
+msgid "im"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`z_{k} = \\Im(z_{k-1})`"
+msgstr ""
+
+msgid "|complex_from_real_imag| Combine with imaginary part"
+msgstr "|complex_from_real_imag| Combiner avec la partie imaginaire"
+
+msgid "complex_from_real_imag"
+msgstr ""
+
+msgid "Consider current image as the real part and allow to select a image representing the imaginary part to merge them in a complex image :py:func:`sigima.proc.image.complex_from_real_imag`"
+msgstr "Considère l'image courante comme la partie réelle et permet de sélectionner une image représentant la partie imaginaire pour les fusionner en une image complexe :py:func:`sigima.proc.image.complex_from_real_imag`"
+
+msgid "Data type conversion"
+msgstr "Conversion du type de données"
+
+msgid "The \"Convert data type\" |convert_dtype| action allows you to convert the data type of the selected images. For integer data types, the conversion is done by clipping the values to the new data type range before effectively converting the data type. For floating point data types, the conversion is straightforward."
+msgstr "L'action \"Convertir le type de données\" |convert_dtype| permet de convertir le type de données des images sélectionnées. Pour les types de données entiers, la conversion est effectuée en rognant les valeurs à la plage de nouveaux types de données avant de convertir effectivement le type de données. Pour les types de données à virgule flottante, la conversion est directe."
+
+msgid "convert_dtype"
+msgstr ""
+
+msgid "Data type conversion uses the :py:func:`sigima.tools.datatypes.clip_astype` function which relies on :py:func:`numpy.ndarray.astype` function with the default parameters (`casting='unsafe'`)."
+msgstr "La conversion du type de données utilise la fonction :py:func:`sigima.tools.datatypes.clip_astype` qui repose sur la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
+
+msgid "Statistics between images"
+msgstr "Statistiques entre les images"
+
+msgid "Create a new image which is the result of a statistical operation on each pixel of the selected images:"
+msgstr "Crée une nouvelle image à partir d'une opération statistique sur chaque pixel des images sélectionnées :"
+
+msgid "|average| Average"
+msgstr "|average| Moyenne"
+
+msgid "average"
+msgstr ""
+
+msgid ":math:`z_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{z_{k}}`"
+msgstr ""
+
+msgid "|standard_deviation| Standard Deviation"
+msgstr "|standard_deviation| Écart-type"
+
+msgid "standard_deviation"
+msgstr ""
+
+msgid ":math:`z_{M} = \\sqrt{\\dfrac{1}{M}\\sum_{k=0}^{M-1}{(y_{k} - \\bar{y})^{2}}}`"
+msgstr ""
+
+msgid "|quadratic_difference| Quadratic difference"
+msgstr "|quadratic_difference| Soustraction quadratique"
+
+msgid "quadratic_difference"
+msgstr ""
+
+msgid ":math:`z_{2} = \\dfrac{z_{1} - z_{0}}{\\sqrt{2}}`"
+msgstr ""
 
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"

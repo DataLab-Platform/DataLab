@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-19 15:10+0200\n"
+"POT-Creation-Date: 2025-10-27 18:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -100,24 +100,6 @@ msgstr ""
 msgid ":math:`y_{M} = \\sum_{k=0}^{M-1}{y_{k}}`"
 msgstr ""
 
-msgid "|average| Average"
-msgstr "|average| Moyenne"
-
-msgid "average"
-msgstr ""
-
-msgid ":math:`y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}`"
-msgstr ""
-
-msgid "|standard_deviation| Standard Deviation"
-msgstr "|standard_deviation| Écart-type"
-
-msgid "standard_deviation"
-msgstr ""
-
-msgid ":math:`y_{M} = \\sqrt{\\dfrac{1}{M}\\sum_{k=0}^{M-1}{(y_{k} - \\bar{y})^{2}}}`"
-msgstr ""
-
 msgid "|difference| Difference"
 msgstr "|difference| Différence"
 
@@ -155,6 +137,50 @@ msgstr ""
 msgid ":math:`y_{2} = \\dfrac{1}{y_{1}}`"
 msgstr ""
 
+msgid "|exponential| Exponential"
+msgstr "|exponential| Exponentielle"
+
+msgid "exponential"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{2} = \\exp(y_{1})`"
+msgstr ""
+
+msgid "|logarithm| Logarithm (base 10)"
+msgstr "|logarithm| Logarithme (base 10)"
+
+msgid "logarithm"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{2} = \\log_{10}(y_{1})`"
+msgstr ""
+
+msgid "Convolution and Deconvolution"
+msgstr "Convolution et Déconvolution"
+
+msgid "Implementation"
+msgstr "Implémentation"
+
+msgid "|convolution| Convolution"
+msgstr "|convolution| Convolution"
+
+msgid "convolution"
+msgstr ""
+
+msgid "Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+msgstr "Basée sur `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+
+msgid "|deconvolution| Deconvolution"
+msgstr "|deconvolution| Déconvolution"
+
+msgid "deconvolution"
+msgstr "déconvolution"
+
+msgid "Frequency domain deconvolution"
+msgstr "Déconvolution dans le domaine fréquentiel"
+
 msgid "Absolute value and complex signal operations"
 msgstr "Valeur absolue et opérations sur les signaux complexes"
 
@@ -177,14 +203,14 @@ msgstr ""
 msgid ":py:func:`sigima.proc.signal.phase`"
 msgstr ":py:func:`sigima.proc.signal.phase`"
 
-msgid "|complex_from_magnitude_phase| Complex from magnitude and phase"
-msgstr "|complex_from_magnitude_phase| Complexe à partir de la magnitude et de la phase"
+msgid "|complex_from_magnitude_phase| Combine with phase"
+msgstr "|complex_from_magnitude_phase| Combiner avec la phase"
 
 msgid "complex_from_magnitude_phase"
 msgstr "complex_from_magnitude_phase"
 
-msgid ":py:func:`sigima.proc.signal.complex_from_magnitude_phase`"
-msgstr ":py:func:`sigima.proc.signal.complex_from_magnitude_phase`"
+msgid "Consider current signal as the module and allow to select a signal representing the phase to merge them in a complex signal :py:func:`sigima.proc.signal.complex_from_magnitude_phase`"
+msgstr "Considère le signal courant comme le module et permet de sélectionner un signal représentant la phase pour les fusionner en un signal complexe :py:func:`sigima.proc.signal.complex_from_magnitude_phase`"
 
 msgid "|re| Real part"
 msgstr "|re| Partie réelle"
@@ -206,14 +232,14 @@ msgstr "im"
 msgid ":math:`y_{k} = \\Im(y_{k-1})`"
 msgstr ":math:`y_{k} = \\Im(y_{k-1})`"
 
-msgid "|complex_from_real_imag| Complex from real and imaginary parts"
-msgstr "|complex_from_real_imag| Complexe à partir des parties réelle et imaginaire"
+msgid "|complex_from_real_imag| Combine with imaginary part"
+msgstr "|complex_from_real_imag| Combiner avec la partie imaginaire"
 
 msgid "complex_from_real_imag"
 msgstr "complex_from_real_imag"
 
-msgid ":py:func:`sigima.proc.signal.complex_from_real_imag`"
-msgstr ":py:func:`sigima.proc.signal.complex_from_real_imag`"
+msgid "Consider current signal as the real part and allow to select a signal representing the imaginary part to merge them in a complex signal :py:func:`sigima.proc.signal.complex_from_real_imag`"
+msgstr "Considère le signal courant comme la partie réelle et permet de sélectionner un signal représentant la partie imaginaire pour les fusionner en un signal complexe :py:func:`sigima.proc.signal.complex_from_real_imag`"
 
 msgid "Data type conversion"
 msgstr "Conversion du type de données"
@@ -227,31 +253,35 @@ msgstr ""
 msgid "Data type conversion relies on :py:func:`numpy.ndarray.astype` function with the default parameters (`casting='unsafe'`)."
 msgstr "La conversion du type de données utilise la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
 
-msgid "Basic mathematical functions"
-msgstr "Fonctions mathématiques de base"
+msgid "Statistics between signals"
+msgstr "Statistiques entre les signaux"
+
+msgid "Create a new signal which is the result of a statistical operation on each point of the selected signals:"
+msgstr "Crée un nouveau signal à partir d'une opération statistique sur chaque point des signaux sélectionnés :"
+
+msgid "|average| Average"
+msgstr "|average| Moyenne"
+
+msgid "average"
+msgstr ""
+
+msgid ":math:`y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}`"
+msgstr ""
+
+msgid "|standard_deviation| Standard Deviation"
+msgstr "|standard_deviation| Écart-type"
+
+msgid "standard_deviation"
+msgstr ""
+
+msgid ":math:`y_{M} = \\sqrt{\\dfrac{1}{M}\\sum_{k=0}^{M-1}{(y_{k} - \\bar{y})^{2}}}`"
+msgstr ""
+
+msgid "Other mathematical functions"
+msgstr "Autres fonctions mathématiques"
 
 msgid "Function"
 msgstr "Fonction"
-
-msgid "|exp| Exponential"
-msgstr "|exp| Exponentielle"
-
-msgid "exp"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`y_{k} = \\exp(y_{k})`"
-msgstr ""
-
-msgid "|log10| Logarithm (base 10)"
-msgstr "|log10| Logarithme (base 10)"
-
-msgid "log10"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`y_{k} = \\log_{10}(y_{k})`"
-msgstr ""
 
 msgid "|power| Power"
 msgstr "|power| Puissance"
@@ -272,12 +302,6 @@ msgstr ""
 msgid ":math:`y_{k} = \\sqrt{y_{k}}`"
 msgstr ""
 
-msgid "Other mathematical operations"
-msgstr "Autres opérations mathématiques"
-
-msgid "Implementation"
-msgstr "Implémentation"
-
 msgid "|derivative| Derivative"
 msgstr "|derivative| Dérivée"
 
@@ -295,24 +319,6 @@ msgstr ""
 
 msgid "Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
 msgstr "Basée sur `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
-
-msgid "|convolution| Convolution"
-msgstr "|convolution| Convolution"
-
-msgid "convolution"
-msgstr ""
-
-msgid "Based on `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
-msgstr "Basée sur `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
-
-msgid "|deconvolution| Deconvolution"
-msgstr "|deconvolution| Déconvolution"
-
-msgid "deconvolution"
-msgstr "déconvolution"
-
-msgid "Frequency domain deconvolution"
-msgstr "Déconvolution dans le domaine fréquentiel"
 
 msgid "|signal_to_image| Combine signals into image"
 msgstr "|signal_to_image| Combiner les signaux en une image"

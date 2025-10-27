@@ -32,13 +32,13 @@ Create a new image which is the result of a constant operation on each selected 
 
     * - Operation
       - Equation
-    * - |constant_add| Add constant
+    * - |constant_add| Add
       - :math:`z_{k} = z_{k-1} + conv(c)`
-    * - |constant_subtract| Subtract constant
+    * - |constant_subtract| Subtract
       - :math:`z_{k} = z_{k-1} - conv(c)`
-    * - |constant_multiply| Multiply by constant
+    * - |constant_multiply| Multiply
       - :math:`z_{k} = conv(z_{k-1} \times c)`
-    * - |constant_divide| Divide by constant
+    * - |constant_divide| Divide
       - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
 
 .. |constant_add| image:: ../../../datalab/data/icons/operations/constant_add.svg
