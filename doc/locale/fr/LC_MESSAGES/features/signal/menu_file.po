@@ -177,7 +177,7 @@ msgid ":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x <
 msgstr ""
 
 msgid "Step Pulse"
-msgstr "Impulsion"
+msgstr "Impulsion en échelon"
 
 #, python-brace-format
 msgid ":math:`y = \\left( \\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + A \\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\ y_0 + A & \\text{if } x \\geq t_0 + t_r \\end{cases} \\right) + \\mathcal{N}\\left(0, \\sigma_n\\right)`"
@@ -187,7 +187,7 @@ msgid "where:"
 msgstr "Où :"
 
 msgid ":math:`t_0` is the pulse start time,"
-msgstr ":math:`t_0` est le temps de début de l'impulsion,"
+msgstr ":math:`t_0` est l'instant de début de l'impulsion,"
 
 msgid ":math:`t_r` is the rise time,"
 msgstr ":math:`t_r` est le temps de montée,"
