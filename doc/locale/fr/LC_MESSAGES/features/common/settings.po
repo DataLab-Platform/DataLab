@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 17:55+0200\n"
+"POT-Creation-Date: 2025-10-27 14:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -221,6 +221,12 @@ msgstr "Supprimer le message d'information lors de l'insertion d'un titre d'obje
 msgid "Signal-specific settings"
 msgstr "Paramètres spécifiques aux signaux"
 
+msgid "**Default line width**"
+msgstr "**Épaisseur par défaut**"
+
+msgid "Default line width for curves representing signals. This setting affects all signal visualizations unless overridden individually."
+msgstr "Épaisseur de ligne par défaut pour les courbes représentant des signaux. Ce paramètre affecte toutes les visualisations de signaux, sauf si elles sont remplacées individuellement."
+
 msgid "**Use auto downsampling**"
 msgstr "**Utiliser le sous-échantillonnage automatique**"
 
@@ -261,12 +267,6 @@ msgstr "**Verrouiller le rapport d'aspect à 1:1**"
 
 msgid "When enabled, the aspect ratio of images is locked to 1:1. When disabled, the aspect ratio is determined by the physical pixel size (default and recommended setting)."
 msgstr "Si le réglage est activé, le rapport d'aspect des images est verrouillé à 1:1. Lorsque désactivé, le rapport d'aspect est déterminé par la taille physique du pixel (paramètre par défaut et recommandé)."
-
-msgid "**Use reference image LUT range**"
-msgstr "**Utiliser la plage LUT de l'image de référence**"
-
-msgid "When enabled, images are shown with the same LUT (Look-Up Table) range as the first selected image, allowing easier comparison."
-msgstr "Si le réglage est activé, les images sont affichées avec la même plage LUT (Look-Up Table) que la première image sélectionnée, permettant une comparaison plus facile."
 
 msgid "**Eliminate outliers**"
 msgstr "**Éliminer les valeurs aberrantes**"

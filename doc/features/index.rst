@@ -132,6 +132,7 @@ This section describes the advanced features of DataLab.
    :caption: Advanced features:
 
    advanced/plugins
+   advanced/migration_v020_to_v100
    advanced/macros
    advanced/remote
    advanced/model

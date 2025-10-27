@@ -11,14 +11,14 @@ from __future__ import annotations
 import abc
 import multiprocessing
 import time
-from dataclasses import dataclass
+import warnings
+from dataclasses import asdict, dataclass
 from enum import Enum, auto
 from multiprocessing.pool import Pool
 from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional
 
 import guidata.dataset as gds
 import numpy as np
-from guidata.dataset import update_dataset
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.config import options as sigima_options
@@ -55,6 +55,109 @@ if TYPE_CHECKING:
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+
+
+@dataclass
+class ProcessingParameters:
+    """Processing parameters stored in object metadata.
+
+    Attributes:
+        func_name: Processing function name
+        pattern: Processing pattern ("1-to-1", "n-to-1", or "2-to-1")
+        param: Processing parameter dataset (optional, for 1-to-1 only)
+        source_uuid: Source object UUID (for 1-to-1 pattern)
+        source_uuids: Source object UUIDs (for n-to-1 and 2-to-1 patterns)
+    """
+
+    func_name: str
+    pattern: str
+    param: gds.DataSet | None = None
+    source_uuid: str | None = None
+    source_uuids: list[str] | None = None
+
+    def set_param_from_json(self, param_json: str | list[str]) -> None:
+        """Set the param attribute from a JSON string or list of JSON strings.
+
+        Args:
+            param_json: JSON string or list of JSON strings representing the parameters
+        """
+        try:
+            if isinstance(param_json, list):
+                # Handle list of JSON strings
+                self.param = [gds.json_to_dataset(p) for p in param_json]
+            else:
+                # Handle single JSON string
+                self.param = gds.json_to_dataset(param_json)
+        except Exception:  # pylint: disable=broad-except
+            warnings.warn(_("Failed to deserialize processing parameters from JSON."))
+            self.param = None
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert ProcessingParameters to a dictionary.
+
+        Returns:
+            Dictionary representation of ProcessingParameters, ignoring None values.
+        """
+        pp_dict = {k: v for k, v in asdict(self).items() if v is not None}
+        param = pp_dict.pop("param", None)
+        if param is not None:
+            if isinstance(param, list):
+                # Handle list of DataSet objects
+                pp_dict["param_json"] = [gds.dataset_to_json(p) for p in param]
+            else:
+                # Handle single DataSet object
+                pp_dict["param_json"] = gds.dataset_to_json(param)
+        return pp_dict
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> ProcessingParameters:
+        """Create ProcessingParameters from a dictionary.
+
+        Args:
+            data: Dictionary representation of ProcessingParameters
+        """
+        instance = cls("", "")  # Temporary values
+        for key, value in data.items():
+            if key == "param_json":
+                instance.set_param_from_json(value)
+            else:
+                setattr(instance, key, value)
+        return instance
+
+
+# Metadata options for storing processing parameters (DataLab-specific)
+PROCESSING_PARAMETERS_OPTION = "processing_parameters"  # All processing metadata
+
+
+def extract_processing_parameters(
+    obj: SignalObj | ImageObj,
+) -> ProcessingParameters | None:
+    """Extract processing parameters from object metadata.
+
+    Args:
+        obj: Signal or Image object
+
+    Returns:
+        ProcessingParameters instance if processing metadata exists, None otherwise.
+    """
+    try:
+        pp_dict = obj.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
+    except ValueError:
+        return None
+    return ProcessingParameters.from_dict(pp_dict)
+
+
+def insert_processing_parameters(
+    obj: SignalObj | ImageObj,
+    pp: ProcessingParameters,
+) -> None:
+    """Insert processing parameters into object metadata.
+
+    Args:
+        obj: Signal or Image object
+        proc_params: ProcessingParameters instance containing all processing metadata
+    """
+    obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
 
 
 # Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
@@ -566,6 +669,60 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         return signals, yes_to_all_selected
 
+    def _add_object_to_appropriate_panel(
+        self,
+        new_obj: SignalObj | ImageObj,
+        group_id: str | None = None,
+        use_group_for_non_native: bool = True,
+    ) -> None:
+        """Add object to the appropriate panel based on its type.
+
+        For native objects (e.g., SignalObj in Signal panel, ImageObj in Image panel),
+        adds to the current panel. For non-native objects (e.g., ImageObj created in
+        Signal panel), adds to the target panel via mainwindow.
+
+        Args:
+            new_obj: Object to add
+            group_id: Group ID to add the object to (optional)
+            use_group_for_non_native: If True, use group_id even for non-native objects.
+             If False, non-native objects are added to default group. Set to False when
+             group_id is from the source panel and object goes to a different panel.
+        """
+        is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
+        if is_new_obj_native:
+            self.panel.add_object(new_obj, group_id=group_id)
+        else:
+            if use_group_for_non_native:
+                self.panel.mainwindow.add_object(new_obj, group_id=group_id)
+            else:
+                self.panel.mainwindow.add_object(new_obj)
+
+    def _create_group_for_result(
+        self, new_obj: SignalObj | ImageObj, group_name: str
+    ) -> str:
+        """Create a group in the appropriate panel for the result object.
+
+        For native objects, creates group in current panel. For non-native objects,
+        creates group in the target panel.
+
+        Args:
+            new_obj: Result object to determine target panel
+            group_name: Name for the new group
+
+        Returns:
+            UUID of the created group
+        """
+        is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
+        if is_new_obj_native:
+            return get_uuid(self.panel.add_group(group_name))
+        # Create group in target panel for non-native objects
+        target_panel = (
+            self.panel.mainwindow.signalpanel
+            if isinstance(new_obj, SignalObj)
+            else self.panel.mainwindow.imagepanel
+        )
+        return get_uuid(target_panel.add_group(group_name))
+
     @abc.abstractmethod
     def register_operations(self) -> None:
         """Register operations."""
@@ -604,7 +761,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         key = param.__class__.__name__
         pdefaults = self.PARAM_DEFAULTS.get(key)
         if pdefaults is not None:
-            update_dataset(param, pdefaults)
+            gds.update_dataset(param, pdefaults)
         self.PARAM_DEFAULTS[key] = param
 
     def init_param(
@@ -766,6 +923,63 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return self.worker.get_result()
         return None
 
+    def recompute_1_to_1(
+        self,
+        func_name: str,
+        obj: SignalObj | ImageObj,
+        param: gds.DataSet | None = None,
+    ) -> SignalObj | ImageObj | None:
+        """Recompute a 1-to-1 processing operation without adding result to panel.
+
+        This method is specifically designed for the interactive re-processing feature
+        where we want to update an existing object in-place. It executes the processing
+        with full multiprocessing support (allowing cancellation) but returns the result
+        without adding it to the panel.
+
+        Args:
+            func_name: Name of the processing function
+            obj: Source object to process
+            param: Processing parameters (optional)
+
+        Returns:
+            New processed object (not added to panel), or None if cancelled or error
+
+        Raises:
+            ValueError: If function is not found in registry
+        """
+        # Get the function from the registry
+        try:
+            feature = self.get_feature(func_name)
+        except ValueError as exc:
+            raise ValueError(f"Function '{func_name}' not found in registry") from exc
+
+        func = feature.function
+
+        # Create progress dialog with short delay so it appears for long computations
+        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
+            progress.setValue(0)
+            progress.setLabelText(_("Processing object with updated parameters..."))
+
+            # Execute with multiprocessing support
+            args = (obj, param) if param is not None else (obj,)
+            comp_out = self.__exec_func(func, args, progress)
+
+            if comp_out is None:  # Cancelled by user
+                return None
+
+            # Handle the output
+            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
+
+            if new_obj is None:
+                return None
+
+            # Handle keep_results logic
+            if isinstance(new_obj, (SignalObj, ImageObj)):
+                self._handle_keep_results(new_obj)
+
+            patch_title_with_ids(new_obj, [obj], get_short_id)
+            return new_obj
+
     def _compute_1_to_1_subroutine(
         self, funcs: list[Callable], params: list, title: str
     ) -> None:
@@ -806,6 +1020,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._handle_keep_results(new_obj)
 
                     patch_title_with_ids(new_obj, [obj], get_short_id)
+
+                    # Store processing metadata for interactive re-processing
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        pp = ProcessingParameters(
+                            func_name=name,
+                            pattern="1-to-1",
+                            param=param,
+                            source_uuid=get_uuid(obj),
+                        )
+                        insert_processing_parameters(new_obj, pp)
 
                     # Is new object a native object (i.e. a Signal object for a Signal
                     # Panel, or an Image object for an Image Panel) ?
@@ -1158,7 +1382,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if not group_exclusive:
                 # This is not a group exclusive selection
                 dst_gname += "[...]"
-            dst_gid = get_uuid(self.panel.add_group(dst_gname))
+            # Delay group creation until after first result to determine target panel
+            dst_gid = None
             n_pairs = len(src_objs[src_gids[0]])
             max_i_pair = min(
                 n_pairs, max(len(src_objs[get_uuid(grp)]) for grp in src_grps)
@@ -1215,7 +1440,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._handle_keep_results(new_obj)
                         self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
                     patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
-                    self.panel.add_object(new_obj, group_id=dst_gid)
+
+                    # Store lightweight processing metadata (non-interactive)
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        proc_params = ProcessingParameters(
+                            func_name=name,
+                            pattern="n-to-1",
+                            source_uuids=[get_uuid(obj) for obj in src_objs_pair],
+                        )
+                        insert_processing_parameters(new_obj, proc_params)
+
+                    # Create destination group on first result, in appropriate panel
+                    if dst_gid is None:
+                        dst_gid = self._create_group_for_result(new_obj, dst_gname)
+
+                    self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
 
         else:
             # In single operand mode, we create a single object for all selected objects
@@ -1224,11 +1463,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             src_objs: dict[str, list[SignalObj | ImageObj]] = {}
 
             grps = self.panel.objview.get_sel_groups()
+            dst_group_name = None
             if grps:
                 # (Group exclusive selection)
                 # At least one group is selected: create a new group
                 dst_gname = f"{name}({','.join([get_uuid(grp) for grp in grps])})"
-                dst_gid = get_uuid(self.panel.add_group(dst_gname))
+                # Delay group creation until after first result
+                dst_gid = None
+                dst_group_name = dst_gname  # Store name for later use
             else:
                 # (Object exclusive selection)
                 # No group is selected: use each object's group
@@ -1286,7 +1528,28 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
                     group_id = dst_gid if dst_gid is not None else src_gid
                     patch_title_with_ids(new_obj, src_obj_list, get_short_id)
-                    self.panel.add_object(new_obj, group_id=group_id)
+
+                    # Store lightweight processing metadata (non-interactive)
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        proc_params = ProcessingParameters(
+                            func_name=name,
+                            pattern="n-to-1",
+                            source_uuids=[get_uuid(obj) for obj in src_obj_list],
+                        )
+                        insert_processing_parameters(new_obj, proc_params)
+
+                    # Create destination group on first result, in appropriate panel
+                    use_group_for_non_native = False
+                    if dst_gid is None and dst_group_name is not None:
+                        dst_gid = self._create_group_for_result(new_obj, dst_group_name)
+                        group_id = dst_gid
+                        use_group_for_non_native = True
+
+                    self._add_object_to_appropriate_panel(
+                        new_obj,
+                        group_id=group_id,
+                        use_group_for_non_native=use_group_for_non_native,
+                    )
 
         # Select newly created group, if any
         if dst_gid is not None:
@@ -1342,6 +1605,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode()
+        name = func.__name__
 
         if obj2 is None:
             objs2 = []
@@ -1374,7 +1638,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if objs2 is None:
                     return
 
-            name = func.__name__
             n_pairs = len(src_objs[src_gids[0]])
             max_i_pair = min(
                 n_pairs, max(len(src_objs[get_uuid(grp)]) for grp in src_grps)
@@ -1436,7 +1699,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         dst_gname = f"{name}({','.join(grp_short_ids)})|pairwise"
                     else:
                         dst_gname = f"{name}[...]"
-                    dst_gid = get_uuid(self.panel.add_group(dst_gname))
+                    # Delay group creation until after first result
+                    dst_gid = None
                     for i_pair in range(max_i_pair):
                         orig_obj1, orig_obj2 = src_objs[src_gid][i_pair], objs2[i_pair]
 
@@ -1467,7 +1731,24 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         patch_title_with_ids(
                             new_obj, [orig_obj1, orig_obj2], get_short_id
                         )
-                        self.panel.add_object(new_obj, group_id=dst_gid)
+
+                        # Store lightweight processing metadata (non-interactive)
+                        if isinstance(new_obj, (SignalObj, ImageObj)):
+                            proc_params = ProcessingParameters(
+                                func_name=name,
+                                pattern="2-to-1",
+                                source_uuids=[
+                                    get_uuid(orig_obj1),
+                                    get_uuid(orig_obj2),
+                                ],
+                            )
+                            insert_processing_parameters(new_obj, proc_params)
+
+                        # Create destination group on first result, in appropriate panel
+                        if dst_gid is None:
+                            dst_gid = self._create_group_for_result(new_obj, dst_gname)
+
+                        self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
 
         else:
             if not objs2:
@@ -1547,7 +1828,23 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     group_id = objmodel.get_object_group_id(obj)
                     # Use original objects for title generation
                     patch_title_with_ids(new_obj, [obj, orig_obj2], get_short_id)
-                    self.panel.add_object(new_obj, group_id=group_id)
+
+                    # Store lightweight processing metadata (non-interactive)
+                    if isinstance(new_obj, (SignalObj, ImageObj)):
+                        proc_params = ProcessingParameters(
+                            func_name=name,
+                            pattern="2-to-1",
+                            source_uuids=[
+                                get_uuid(obj),
+                                get_uuid(orig_obj2),
+                            ],
+                        )
+                        insert_processing_parameters(new_obj, proc_params)
+
+                    # group_id is from source panel, don't use for non-native objects
+                    self._add_object_to_appropriate_panel(
+                        new_obj, group_id=group_id, use_group_for_non_native=False
+                    )
 
     def register_1_to_1(
         self,
@@ -1763,8 +2060,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     @qt_try_except()
     def run_feature(
-        self, key: str | Callable | ComputingFeature, *args, **kwargs
-    ) -> dict[str, GeometryResult | TableResult] | None:
+        self,
+        key: str | Callable | ComputingFeature,
+        *args,
+        **kwargs,
+    ) -> (
+        dict[str, GeometryResult | TableResult]
+        | list[SignalObj | ImageObj]
+        | SignalObj
+        | ImageObj
+        | None
+    ):
         """Run a computing feature that has been previously registered.
 
         This method is a generic dispatcher for all compute methods.

@@ -181,6 +181,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     """
 
     OBJECT_STR = ""  # e.g. "signal"
+    OBJECT_STR_PLURAL = ""  # e.g. "signals"
 
     def __init__(
         self,
@@ -612,7 +613,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Save %s...") % self.OBJECT_STR,
                 # Icon name is 'filesave_sig.svg' or 'filesave_ima.svg'
                 icon_name=f"filesave_{self.object_suffix}.svg",
-                tip=_("Save selected %ss") % self.OBJECT_STR,
+                tip=_("Save selected %s") % self.OBJECT_STR_PLURAL,
                 triggered=self.panel.save_to_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),
                 select_condition=SelectCond.at_least_one,
@@ -620,9 +621,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Save %ss to directory...") % self.OBJECT_STR,
+                _("Save %s to directory...") % self.OBJECT_STR_PLURAL,
                 icon_name="save_to_directory.svg",
-                tip=_("Save selected %ss using a filename pattern") % self.OBJECT_STR,
+                tip=_("Save selected %s using a filename pattern")
+                % self.OBJECT_STR_PLURAL,
                 triggered=self.panel.save_to_directory,
                 select_condition=SelectCond.at_least_two,
                 context_menu_pos=-1,
@@ -638,6 +640,27 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.EDIT):
             self.new_action(
+                _("Recompute"),
+                icon_name="recompute.svg",
+                shortcut="Ctrl+R",
+                tip=_("Recompute selected %s with its processing parameters")
+                % self.OBJECT_STR,
+                triggered=self.panel.recompute_processing,
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Select source objects"),
+                icon_name="goto_source.svg",
+                tip=_("Select source object(s) used to create the selected %s")
+                % self.OBJECT_STR,
+                triggered=self.panel.select_source_objects,
+                select_condition=SelectCond.exactly_one,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Rename"),
                 icon_name="rename.svg",
                 shortcut="F2",
@@ -645,6 +668,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.rename_selected_object_or_group,
                 select_condition=SelectCond.exactly_one_group_or_one_object,
                 context_menu_pos=-1,
+                separator=True,
             )
             self.new_action(
                 _("New group..."),
@@ -653,7 +677,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.new_group,
                 select_condition=SelectCond.always,
                 context_menu_pos=-1,
-                toolbar_pos=-1,
             )
             self.new_action(
                 _("Move up"),
@@ -717,6 +740,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon_name="metadata_paste.svg",
                 tip=_("Paste metadata into selected %s") % self.OBJECT_STR,
                 triggered=self.panel.paste_metadata,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Add metadata") + "...",
+                icon_name="metadata_add.svg",
+                tip=_("Add a metadata item to selected %s") % self.OBJECT_STR,
+                triggered=self.panel.add_metadata,
+                select_condition=SelectCond.at_least_one,
                 toolbar_pos=-1,
             )
             self.new_action(
@@ -824,18 +855,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.action_for("inverse", separator=True)
             self.action_for("exp")
             self.action_for("log10")
-            self.action_for("convolution", separator=True)
-            self.action_for("deconvolution")
-            self.action_for("absolute", separator=True)
-            self.action_for("phase")
-            self.action_for("complex_from_magnitude_phase")
-            self.action_for("real", separator=True)
-            self.action_for("imag")
-            self.action_for("complex_from_real_imag")
-            self.action_for("astype", separator=True)
-            self.action_for("average", separator=True)
-            self.action_for("standard_deviation")
-            self.action_for("quadratic_difference")
 
         # MARK: PROCESSING
         with self.new_category(ActionCategory.PROCESSING):
@@ -877,6 +896,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
+        # MARK: ROI
         with self.new_category(ActionCategory.ROI):
             self.new_action(
                 _("Extract") + "...",
@@ -925,6 +945,22 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     current_submenu = self.__submenu_stack[-1]
                     self.roi_remove_submenu = current_submenu["menu"]
 
+        # MARK: OPERATION
+        with self.new_category(ActionCategory.OPERATION):
+            self.action_for("absolute", separator=True)
+            self.action_for("phase")
+            self.action_for("complex_from_magnitude_phase")
+            self.action_for("real", separator=True)
+            self.action_for("imag")
+            self.action_for("complex_from_real_imag")
+            self.action_for("astype", separator=True)
+            self.action_for("average", separator=True)
+            self.action_for("standard_deviation")
+            self.action_for("quadratic_difference")
+            self.action_for("convolution", separator=True)
+            self.action_for("deconvolution")
+
+        # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):
             self.new_action(
                 _("Show results") + "...",
@@ -951,6 +987,7 @@ class SignalActionHandler(BaseActionHandler):
     """Object handling signal panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("signal")
+    OBJECT_STR_PLURAL = _("signals")
 
     def create_new_object_actions(self):
         """Create actions for creating new objects"""
@@ -1084,6 +1121,7 @@ class SignalActionHandler(BaseActionHandler):
                 ):
                     self.action_for(fit_name, separator=separator_needed)
                     separator_needed = False
+                self.action_for("evaluate_fit", separator=True)
             self.action_for("apply_window")
             self.action_for("detrending")
             self.action_for("interpolate")
@@ -1164,12 +1202,15 @@ class SignalActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.OPERATION):
             self.action_for("integral")
         super().create_last_actions()
+        with self.new_category(ActionCategory.OPERATION):
+            self.action_for("signals_to_image", separator=True)
 
 
 class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
+    OBJECT_STR_PLURAL = _("images")
 
     def create_new_object_actions(self):
         """Create actions for creating new objects"""
@@ -1220,58 +1261,6 @@ class ImageActionHandler(BaseActionHandler):
         # MARK: OPERATION
         with self.new_category(ActionCategory.OPERATION):
             self.action_for("log10_z_plus_n")
-            self.action_for("flatfield", separator=True)
-
-            with self.new_menu(_("Flip or rotation"), icon_name="rotate_right.svg"):
-                self.action_for("fliph", context_menu_pos=-1, context_menu_sep=True)
-                self.action_for("transpose", context_menu_pos=-1)
-                self.action_for("flipv", context_menu_pos=-1)
-                self.action_for("rotate270", context_menu_pos=-1)
-                self.action_for("rotate90", context_menu_pos=-1)
-                self.action_for("rotate")
-
-            with self.new_menu(_("Intensity profiles"), icon_name="profile.svg"):
-                self.new_action(
-                    _("Line profile..."),
-                    triggered=self.panel.processor.compute_line_profile,
-                    icon_name="profile.svg",
-                    tip=_("Extract horizontal or vertical profile"),
-                    context_menu_pos=-1,
-                    context_menu_sep=True,
-                )
-                self.new_action(
-                    _("Segment profile..."),
-                    triggered=self.panel.processor.compute_segment_profile,
-                    icon_name="profile_segment.svg",
-                    tip=_("Extract profile along a segment"),
-                    context_menu_pos=-1,
-                )
-                self.new_action(
-                    _("Average profile..."),
-                    triggered=self.panel.processor.compute_average_profile,
-                    icon_name="profile_average.svg",
-                    tip=_("Extract average horizontal or vertical profile"),
-                    context_menu_pos=-1,
-                )
-                self.new_action(
-                    _("Radial profile extraction..."),
-                    triggered=self.panel.processor.compute_radial_profile,
-                    icon_name="profile_radial.svg",
-                    tip=_("Radial profile extraction around image centroid"),
-                )
-
-            self.new_action(
-                _("Distribute on a grid..."),
-                triggered=self.panel.processor.distribute_on_grid,
-                icon_name="distribute_on_grid.svg",
-                select_condition=SelectCond.at_least_two,
-            )
-            self.new_action(
-                _("Reset image positions"),
-                triggered=self.panel.processor.reset_positions,
-                icon_name="reset_positions.svg",
-                select_condition=SelectCond.at_least_two,
-            )
 
         # MARK: PROCESSING
         with self.new_category(ActionCategory.PROCESSING):
@@ -1353,7 +1342,6 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Compute all edge detection filters"),
                 )
-                self.action_for("canny")
             self.new_action(
                 _("Erase area") + "...",
                 triggered=self.panel.processor.compute_erase,
@@ -1384,6 +1372,7 @@ class ImageActionHandler(BaseActionHandler):
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
+        # MARK: PROCESSING
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
                 _("Resize"),
@@ -1398,3 +1387,58 @@ class ImageActionHandler(BaseActionHandler):
             )
             self.action_for("resampling")
         super().create_last_actions()
+
+        # MARK: OPERATION
+        with self.new_category(ActionCategory.OPERATION):
+            self.action_for("flatfield", separator=True)
+
+            with self.new_menu(_("Flip or rotation"), icon_name="rotate_right.svg"):
+                self.action_for("fliph", context_menu_pos=-1, context_menu_sep=True)
+                self.action_for("transpose", context_menu_pos=-1)
+                self.action_for("flipv", context_menu_pos=-1)
+                self.action_for("rotate270", context_menu_pos=-1)
+                self.action_for("rotate90", context_menu_pos=-1)
+                self.action_for("rotate")
+
+            with self.new_menu(_("Intensity profiles"), icon_name="profile.svg"):
+                self.new_action(
+                    _("Line profile..."),
+                    triggered=self.panel.processor.compute_line_profile,
+                    icon_name="profile.svg",
+                    tip=_("Extract horizontal or vertical profile"),
+                    context_menu_pos=-1,
+                    context_menu_sep=True,
+                )
+                self.new_action(
+                    _("Segment profile..."),
+                    triggered=self.panel.processor.compute_segment_profile,
+                    icon_name="profile_segment.svg",
+                    tip=_("Extract profile along a segment"),
+                    context_menu_pos=-1,
+                )
+                self.new_action(
+                    _("Average profile..."),
+                    triggered=self.panel.processor.compute_average_profile,
+                    icon_name="profile_average.svg",
+                    tip=_("Extract average horizontal or vertical profile"),
+                    context_menu_pos=-1,
+                )
+                self.new_action(
+                    _("Radial profile extraction..."),
+                    triggered=self.panel.processor.compute_radial_profile,
+                    icon_name="profile_radial.svg",
+                    tip=_("Radial profile extraction around image centroid"),
+                )
+
+            self.new_action(
+                _("Distribute on a grid..."),
+                triggered=self.panel.processor.distribute_on_grid,
+                icon_name="distribute_on_grid.svg",
+                select_condition=SelectCond.at_least_two,
+            )
+            self.new_action(
+                _("Reset image positions"),
+                triggered=self.panel.processor.reset_positions,
+                icon_name="reset_positions.svg",
+                select_condition=SelectCond.at_least_two,
+            )

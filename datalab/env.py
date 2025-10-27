@@ -136,6 +136,7 @@ class DLExecEnv:
     ACCEPT_DIALOGS_ARG = "accept_dialogs"
     VERBOSE_ARG = "verbose"
     SCREENSHOT_ARG = "screenshot"
+    SCREENSHOT_PATH_ARG = "screenshot_path"
     DELAY_ARG = "delay"
     XMLRPCPORT_ARG = "xmlrpcport"
     DO_NOT_QUIT_ENV = "DATALAB_DO_NOT_QUIT"
@@ -143,6 +144,7 @@ class DLExecEnv:
     ACCEPT_DIALOGS_ENV = GuiDataExecEnv.ACCEPT_DIALOGS_ENV
     VERBOSE_ENV = GuiDataExecEnv.VERBOSE_ENV
     SCREENSHOT_ENV = GuiDataExecEnv.SCREENSHOT_ENV
+    SCREENSHOT_PATH_ENV = GuiDataExecEnv.SCREENSHOT_PATH_ENV
     DELAY_ENV = GuiDataExecEnv.DELAY_ENV
     XMLRPCPORT_ENV = "DATALAB_XMLRPCPORT"
     CATCHER_TEST_ENV = "DATALAB_CATCHER_TEST"
@@ -290,6 +292,19 @@ class DLExecEnv:
         self.__set_mode(self.SCREENSHOT_ENV, value)
 
     @property
+    def screenshot_path(self):
+        """Get screenshot path"""
+        return os.environ.get(self.SCREENSHOT_PATH_ENV, "")
+
+    @screenshot_path.setter
+    def screenshot_path(self, value):
+        """Set screenshot path"""
+        if value:
+            os.environ[self.SCREENSHOT_PATH_ENV] = str(value)
+        elif self.SCREENSHOT_PATH_ENV in os.environ:
+            os.environ.pop(self.SCREENSHOT_PATH_ENV)
+
+    @property
     def verbose(self):
         """Get verbosity level"""
         env_val = os.environ.get(self.VERBOSE_ENV)
@@ -375,6 +390,12 @@ class DLExecEnv:
             default=None,
         )
         parser.add_argument(
+            "--" + self.SCREENSHOT_PATH_ARG,
+            type=str,
+            help="path to save screenshots",
+            default=None,
+        )
+        parser.add_argument(
             "--" + self.DELAY_ARG,
             type=int,
             default=None,
@@ -423,6 +444,7 @@ class DLExecEnv:
             self.UNATTENDED_ARG,
             self.ACCEPT_DIALOGS_ARG,
             self.SCREENSHOT_ARG,
+            self.SCREENSHOT_PATH_ARG,
             self.VERBOSE_ARG,
             self.DELAY_ARG,
             self.XMLRPCPORT_ARG,

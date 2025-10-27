@@ -24,6 +24,7 @@ from sigima.proc.title_formatting import (
     set_default_title_formatter,
 )
 
+from datalab import __version__
 from datalab.utils import conf
 
 # Configure Sigima to use DataLab-compatible placeholder title formatting
@@ -33,6 +34,33 @@ CONF_VERSION = "1.0.0"
 
 APP_NAME = "DataLab"
 MOD_NAME = "datalab"
+
+
+def get_config_app_name() -> str:
+    """Get configuration application name with major version suffix.
+
+    This function returns the application name used for configuration storage.
+    Starting from v1.0, the major version is appended to allow different major
+    versions to coexist on the same machine without interfering with each other.
+
+    Returns:
+        str: Configuration application name (e.g., "DataLab" for v0.x,
+             "DataLab_v1" for v1.x)
+
+    Examples:
+        - v0.20.x → "DataLab" (configuration stored in ~/.DataLab)
+        - v1.0.x → "DataLab_v1" (configuration stored in ~/.DataLab_v1)
+        - v2.0.x → "DataLab_v2" (configuration stored in ~/.DataLab_v2)
+    """
+    major_version = __version__.split(".", maxsplit=1)[0]
+
+    # Keep v0.x configuration folder unchanged for backward compatibility
+    if major_version == "0":
+        return APP_NAME
+
+    return f"{APP_NAME}_v{major_version}"
+
+
 _ = configtools.get_translation(MOD_NAME)
 
 APP_DESC = _("""DataLab is a generic signal and image processing platform""")
@@ -121,6 +149,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     plugins_enabled = conf.Option()
     plugins_path = conf.Option()
     tour_enabled = conf.Option()
+    v020_plugins_warning_ignore = conf.Option()  # True: do not warn, False: warn
 
 
 class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
@@ -190,6 +219,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: FFT shift is disabled
     fft_shift_enabled = conf.Option()
 
+    # Auto-normalize convolution kernel for signal/image processing:
+    # - True: automatically normalize kernel (default)
+    # - False: do not normalize kernel
+    auto_normalize_kernel = conf.Option()
+
     # Ignore warnings during computation:
     # - True: ignore warnings
     # - False: do not ignore warnings
@@ -199,6 +233,9 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - "ask": ask user for confirmation when x-arrays are incompatible (default)
     # - "interpolate": automatically interpolate when x-arrays are incompatible
     xarray_compat_behavior = conf.EnumOption(["ask", "interpolate"], default="ask")
+
+    # History and analysis tabs font
+    small_mono_font = conf.FontOption()
 
 
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
@@ -224,6 +261,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     auto_refresh = conf.Option()
     show_first_only = conf.Option()  # Show only first selected item
     show_contrast = conf.Option()
+    sig_line_width = conf.Option()
     sig_antialiasing = conf.Option()
     sig_autodownsampling = conf.Option()
     sig_autodownsampling_maxpoints = conf.Option()
@@ -234,9 +272,6 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
 
     # If True, lock aspect ratio of images to 1:1 (ignore physical pixel size)
     ima_aspect_ratio_1_1 = conf.Option()
-
-    # If True, images are shown with the same LUT range as the first selected image
-    ima_ref_lut_range = conf.Option()
 
     # Default visualization settings at item creation
     # (e.g. see adapter's `make_item` methods in datalab/adapters_plotpy/*.py)
@@ -323,7 +358,8 @@ def get_old_log_fname(fname):
 
 def initialize():
     """Initialize application configuration"""
-    Conf.initialize(APP_NAME, CONF_VERSION, load=not DEBUG)
+    config_app_name = get_config_app_name()
+    Conf.initialize(config_app_name, CONF_VERSION, load=not DEBUG)
 
     # Set default values:
     # -------------------
@@ -341,6 +377,7 @@ def initialize():
     Conf.main.plugins_enabled.get(True)
     Conf.main.plugins_path.get(Conf.get_path("plugins"))
     Conf.main.tour_enabled.get(True)
+    Conf.main.v020_plugins_warning_ignore.get(False)
     # Console section
     Conf.console.console_enabled.get(True)
     Conf.console.show_console_on_error.get(False)
@@ -360,20 +397,23 @@ def initialize():
     Conf.proc.use_image_dims.get(True)
     Conf.proc.fft_shift_enabled.get(True)
     sigima_options.fft_shift_enabled.set(True)  # Sync with sigima config
+    Conf.proc.auto_normalize_kernel.get(False)
+    sigima_options.auto_normalize_kernel.set(False)  # Sync with sigima config
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
     Conf.proc.ignore_warnings.get(False)
     Conf.proc.xarray_compat_behavior.get("ask")
+    Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")
     Conf.view.ignore_title_insertion_msg.get(False)
+    Conf.view.sig_line_width.get(1.25)
     Conf.view.sig_autodownsampling.get(True)
     Conf.view.sig_autodownsampling_maxpoints.get(100000)
     Conf.view.sig_autoscale_margin_percent.get(2.0)
     Conf.view.ima_autoscale_margin_percent.get(1.0)
     Conf.view.ima_aspect_ratio_1_1.get(False)
-    Conf.view.ima_ref_lut_range.get(False)
     Conf.view.ima_eliminate_outliers.get(0.1)
     Conf.view.sig_def_shade.get(0.0)
     Conf.view.sig_def_curvestyle.get("Lines")
@@ -386,6 +426,11 @@ def initialize():
     # Datetime format strings: % must be escaped as %% for ConfigParser
     Conf.view.sig_datetime_format_s.get("%%H:%%M:%%S")
     Conf.view.sig_datetime_format_ms.get("%%H:%%M:%%S.%%f")
+
+    # Initialize PlotPy configuration with versioned app name
+    PLOTPY_CONF.set_application(
+        osp.join(config_app_name, "plotpy"), CONF_VERSION, load=False
+    )
 
 
 def reset():
@@ -413,6 +458,11 @@ PLOTPY_DEFAULTS = {
         # Overriding default plot settings from PlotPy
         "title/font/size": 11,
         "title/font/bold": False,
+        "selected_curve_symbol/marker": "Ellipse",
+        "selected_curve_symbol/edgecolor": "#a0a0a4",
+        "selected_curve_symbol/facecolor": MAIN_FG_COLOR,
+        "selected_curve_symbol/alpha": 0.3,
+        "selected_curve_symbol/size": 5,
         "marker/curve/text/textcolor": "black",
         "marker/cross/text/textcolor": "black",
         "marker/cross/text/background_alpha": 0.7,
@@ -584,5 +634,5 @@ PLOTPY_DEFAULTS = {
     },
 }
 
+# PlotPy configuration will be initialized in initialize() function
 PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
-PLOTPY_CONF.set_application(osp.join(APP_NAME, "plotpy"), CONF_VERSION, load=False)

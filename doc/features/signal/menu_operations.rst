@@ -256,6 +256,10 @@ Other mathematical functions
       - Based on `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_
     * - |integral| Integral
       - Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_
+    * - |signal_to_image| Combine signals into image
+      - Combine multiple signals into a 2D image.
+        Signals can be arranged as rows or columns,
+        with optional normalization.
 
 
 .. |power| image:: ../../../datalab/data/icons/operations/power.svg
@@ -274,6 +278,11 @@ Other mathematical functions
     :class: dark-light no-scaled-link
 
 .. |integral| image:: ../../../datalab/data/icons/operations/integral.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |signal_to_image| image:: ../../../datalab/data/icons/operations/signals_to_image.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

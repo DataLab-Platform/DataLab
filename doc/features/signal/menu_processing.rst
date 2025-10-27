@@ -84,15 +84,15 @@ by maximum, amplitude, sum, energy or RMS:
     * - Parameter
       - Normalization
     * - Maximum
-      - :math:`y_{1}= \dfrac{y_{0}}{max(y_{0})}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\max\left(y_{0}\right)}`
     * - Amplitude
-      - :math:`y_{1}= \dfrac{y_{0}'}{max(y_{0}')}` with :math:`y_{0}'=y_{0}-min(y_{0})`
+      - :math:`y_{1}= \dfrac{y_{0}'}{\max\left(y_{0}'\right)}` with :math:`y_{0}'=y_{0}-\min\left(y_{0}\right)`
     * - Area
       - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}y_{0}[n]}`
     * - Energy
-      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}|y_{0}[n]|^2}}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}\left|y_{0}[n]\right|^2}}`
     * - RMS
-      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|y_{0}[n]|^2}}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}\left|y_{0}[n]\right|^2}}`
 
 Clipping
 ~~~~~~~~
@@ -321,11 +321,11 @@ This can be done automatically or through an interactive curve fitting dialog.
       - | :math:`y = y_{0} + A_{1} \cdot \exp\left(-x/\tau_{1}\right)` if :math:`x < 0`
         | :math:`y = y_{0} + A_{2} \cdot \exp(-x/\tau_{2})` otherwise
     * - Exponential
-      - :math:`y = y_{0} + A \cdot \exp\left(B \cdot x\right)`
+      - :math:`y = y_{0} + A \exp\left(B \cdot x\right)`
     * - Sinusoidal
-      - :math:`y = y_{0} + A \cdot \sin\left(2 \pi f \cdot x + \phi\right)`
+      - :math:`y = y_{0} + A \sin\left(2 \pi f \cdot x + \phi\right)`
     * - Cumulative Distribution Function (CDF)
-      - :math:`y = y_{0} + A \cdot \operatorname{erf}\left(\dfrac{x - x_{0}}{\sqrt{2} \sigma}\right)`
+      - :math:`y = y_{0} + A \erf\left(\dfrac{x - x_{0}}{\sqrt{2} \sigma}\right)`
 
 Windowing
 ^^^^^^^^^

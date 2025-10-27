@@ -209,6 +209,11 @@ intersphinx_mapping = {
 macros = {
     "FFT": r"\operatorname{FFT}",
     "PSD": r"\operatorname{PSD}",
+    "sgn": r"\operatorname{sgn}",
+    "sinc": r"\operatorname{sinc}",
+    "sawtooth": r"\operatorname{sawtooth}",
+    "erfc": r"\operatorname{erfc}",
+    "erf": r"\operatorname{erf}",
 }
 
 latex_elements = {

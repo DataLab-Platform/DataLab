@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 17:14+0200\n"
+"POT-Creation-Date: 2025-10-27 18:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -61,8 +60,8 @@ msgstr "Zéro"
 msgid ":math:`y[i] = 0`"
 msgstr ""
 
-msgid "Uniform distribution"
-msgstr "Distribution uniforme"
+msgid "Normal distribution"
+msgstr "Distribution normale"
 
 msgid ":math:`y[i]` is normally distributed with configurable mean and standard deviation"
 msgstr ":math:`y[i]` est normalement distribué avec une moyenne et un écart type configurables"
@@ -73,112 +72,151 @@ msgstr "Distribution de Poisson"
 msgid ":math:`y[i]` is Poisson distributed with configurable mean"
 msgstr ":math:`y[i]` est distribué selon une loi de Poisson avec une moyenne configurable"
 
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
+
 msgid ":math:`y[i]` is uniformly distributed between two configurable bounds"
 msgstr ":math:`y[i]` est uniformément distribué entre deux bornes configurables"
 
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-msgid ":math:`y = y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
+msgid ":math:`y = y_{0}+\\dfrac{A}{\\sqrt{2\\pi} \\cdot \\sigma} \\cdot \\exp\\left(-\\dfrac{1}{2} \\cdot \\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2\\right)`"
 msgstr ""
 
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
-msgid ":math:`y = y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
+msgid ":math:`y = y_{0}+\\dfrac{A}{\\sigma \\cdot \\pi} \\cdot \\dfrac{1}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
 msgstr ""
 
 msgid "Voigt"
 msgstr "Voigt"
 
-msgid ":math:`y = y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with :math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
-msgstr ":math:`y = y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec :math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+msgid ":math:`y = y_{0}+A \\cdot \\dfrac{\\Re\\left(\\exp\\left(-z^2\\right) \\cdot \\erfc(-j \\cdot z)\\right)}{\\sqrt{2\\pi} \\cdot \\sigma}` with :math:`z = \\dfrac{x-x_{0}-j \\cdot \\sigma}{\\sqrt{2} \\cdot \\sigma}`"
+msgstr ""
 
 msgid "Blackbody (Planck's law)"
 msgstr "Corps noir (loi de Planck)"
 
-msgid ":math:`y = \\dfrac{2 h c^2}{\\lambda^5 \\left(exp\\left(\\dfrac{h c}{\\lambda k T}\\right)-1\\right)}`"
+msgid ":math:`y = \\dfrac{2 h c^2}{\\lambda^5 \\left(\\exp\\left(\\dfrac{h c}{\\lambda k T}\\right)-1\\right)}`"
 msgstr ""
 
 msgid "Sine"
 msgstr "Sinus"
 
 #, python-brace-format
-msgid ":math:`y = y_{0}+A.sin(2\\pi.f.x+\\phi)`"
+msgid ":math:`y = y_{0}+A\\sin\\left(2\\pi \\cdot f \\cdot x+\\phi\\right)`"
 msgstr ""
 
 msgid "Cosine"
 msgstr "Cosinus"
 
 #, python-brace-format
-msgid ":math:`y = y_{0}+A.cos(2\\pi.f.x+\\phi)`"
+msgid ":math:`y = y_{0}+A\\cos\\left(2\\pi \\cdot f \\cdot x+\\phi\\right)`"
 msgstr ""
 
 msgid "Sawtooth"
 msgstr "Dents de scie"
 
 #, python-brace-format
-msgid ":math:`y = y_{0}+A \\cdot \\left( 2 \\left( f x + \\frac{\\phi}{2\\pi} - \\left\\lfloor f x + \\frac{\\phi}{2\\pi} + \\frac{1}{2} \\right\\rfloor \\right) \\right)`"
+msgid ":math:`y = y_{0}+A \\left( 2 \\left( f x + \\frac{\\phi}{2\\pi} - \\left\\lfloor f x + \\frac{\\phi}{2\\pi} + \\frac{1}{2} \\right\\rfloor \\right) \\right)`"
 msgstr ""
 
 msgid "Triangle"
 msgstr "Triangle"
 
 #, python-brace-format
-msgid ":math:`y = y_{0}+A \\cdot \\text{sawtooth}(2 \\pi f x + \\phi, \\text{width} = 0.5)`"
+msgid ":math:`y = y_{0}+A \\sawtooth\\left(2 \\pi f x + \\phi, \\text{width} = 0.5\\right)`"
 msgstr ""
 
 msgid "Square"
 msgstr "Carré"
 
-#, python-brace-format
-msgid ":math:`y = y_0 + A \\cdot \\text{sgn}\\left( \\sin\\left( 2\\pi f x + \\phi \\right) \\right)`"
+msgid ":math:`y = y_0 + A \\sgn\\left( \\sin\\left( 2\\pi f x + \\phi \\right) \\right)`"
 msgstr ""
 
 msgid "Cardinal sine"
 msgstr "Sinus cardinal"
 
-#, python-brace-format
-msgid ":math:`y = y_0 + A \\cdot \\text{sinc}\\left(2\\pi f x + \\phi\\right)`"
+msgid ":math:`y = y_0 + A \\sinc\\left(2\\pi f x + \\phi\\right)`"
 msgstr ""
 
 msgid "Linear chirp"
 msgstr "Modulation linéaire de fréquence"
 
 #, python-brace-format
-msgid ":math:`y = y_{0} + a \\sin(\\phi_{0} + 2\\pi (f_{0} x +  \\frac{1}{2} c x^{2}))`"
+msgid ":math:`y = y_{0} + A \\sin\\left(\\phi_{0} + 2\\pi \\left(f_{0}\\, x +  \\frac{1}{2} c\\, x^{2}\\right)\\right)`"
 msgstr ""
 
 msgid "Step"
 msgstr "Echelon"
 
-msgid ":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x > x_{0} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgid ":math:`y = y_{0}+A \\left\\{\\begin{array}{ll}1 & \\text{if } x > x_{0} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
 msgstr ""
 
 msgid "Exponential"
 msgstr "Exponentielle"
 
 #, python-brace-format
-msgid ":math:`y = y_{0}+A.exp(B.x)`"
+msgid ":math:`y = y_{0}+A \\exp\\left(B \\cdot x\\right)`"
 msgstr ""
 
 msgid "Logistic"
 msgstr "Logistique"
 
-msgid ":math:`y = y_{0} + \\dfrac{a}{1 + exp(-k (x - x_{0}))}`"
+msgid ":math:`y = y_{0} + \\dfrac{A}{1 + \\exp\\left(-k \\left(x - x_{0}\\right)\\right)}`"
 msgstr ""
 
 msgid "Pulse"
 msgstr "Impulsion"
 
-msgid ":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x < x_{1} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgid ":math:`y = y_{0}+A \\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x < x_{1} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
 msgstr ""
+
+msgid "Step Pulse"
+msgstr "Impulsion en échelon"
+
+#, python-brace-format
+msgid ":math:`y = \\left( \\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + A \\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\ y_0 + A & \\text{if } x \\geq t_0 + t_r \\end{cases} \\right) + \\mathcal{N}\\left(0, \\sigma_n\\right)`"
+msgstr ""
+
+msgid "where:"
+msgstr "Où :"
+
+msgid ":math:`t_0` is the pulse start time,"
+msgstr ":math:`t_0` est l'instant de début de l'impulsion,"
+
+msgid ":math:`t_r` is the rise time,"
+msgstr ":math:`t_r` est le temps de montée,"
+
+msgid ":math:`\\sigma_n` is the noise amplitude"
+msgstr ":math:`\\sigma_n` est l'amplitude du bruit"
+
+msgid "Square Pulse"
+msgstr "Impulsion carrée"
+
+#, python-brace-format
+msgid ":math:`y(x) = \\left(\\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + A \\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\ y_0 + A & \\text{if } t_0 + t_r \\leq x < t_1 \\\\ y_0 + A - A \\cdot \\dfrac{x - t_1}{t_f} & \\text{if } t_1 \\leq x < t_1 + t_f \\\\ y_0 & \\text{if } x \\geq t_1 + t_f \\end{cases} \\right) + \\mathcal{N}(0, \\sigma_n)`"
+msgstr ""
+
+msgid ":math:`t_f` is the fall time,"
+msgstr ":math:`t_f` est le temps de descente,"
+
+msgid ":math:`t_1 = t_0 + t_r + d` is the time at which the decay starts,"
+msgstr ":math:`t_1 = t_0 + t_r + d` est l'instant où la décroissance commence,"
+
+msgid "the duration of the plateau :math:`d` is computed as :math:`d = t_{\\mathrm{FWHM}} - \\dfrac{t_r + t_f}{2}` from the full width at half maximum :math:`t_{\\mathrm{FWHM}}`"
+msgstr "la durée du plateau :math:`d` est calculée comme :math:`d = t_{\\mathrm{FWHM}} - \\dfrac{t_r + t_f}{2}` à partir de la largeur à mi-hauteur :math:`t_{\\mathrm{FWHM}}`"
+
+msgid "The duration of the plateau :math:`d` should not be negative."
+msgstr "La durée du plateau :math:`d` ne doit pas être négative."
 
 msgid "Polynomial"
 msgstr "Polynomial"
 
 #, python-brace-format
-msgid ":math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`"
+msgid ":math:`y = y_{0}+A_{0}+A_{1} \\cdot x+A_{2} \\cdot x^2+\\ldots+A_{n} \\cdot x^n`"
 msgstr ""
 
 msgid "Custom"
@@ -243,6 +281,54 @@ msgstr "Enregistrer les signaux dans un répertoire"
 
 msgid "Save all selected signals to a specified directory, with configurable filename pattern and signal format."
 msgstr "Enregistrer tous les signaux sélectionnés dans un répertoire spécifié, avec un patron de nom de fichier et un format de signal configurables."
+
+msgid "Save signals to directory dialog."
+msgstr "Boîte de dialogue Enregistrer les signaux dans un répertoire."
+
+msgid "When you select \"Save to directory...\" from the File menu, a dialog appears where you can:"
+msgstr "Lorsque vous sélectionnez « Enregistrer dans un répertoire... » dans le menu Fichier, une boîte de dialogue apparaît où vous pouvez :"
+
+msgid "**Directory**: Choose the target directory where signals will be saved"
+msgstr "**Répertoire** : Choisissez le répertoire cible où les signaux seront enregistrés."
+
+msgid "**Filename pattern**: Define a pattern for the filenames using Python format strings"
+msgstr "**Nom de fichier** : Définissez un modèle pour les noms de fichiers en utilisant des chaînes de format Python."
+
+msgid "**File extension**: Select the output format (.csv, .txt, etc.)"
+msgstr "**Extension de fichier** : Sélectionnez le format de sortie (.csv, .txt, etc.)."
+
+msgid "**Overwrite**: Choose whether to overwrite existing files"
+msgstr "**Écraser** : Choisissez si vous souhaitez écraser les fichiers existants."
+
+msgid "**Preview**: See the list of files that will be created (with object IDs)"
+msgstr "**Aperçu** : Voir la liste des fichiers qui seront créés (avec les ID d'objet)"
+
+msgid "The filename pattern supports the following placeholders:"
+msgstr "Le modèle de nom de fichier prend en charge les espaces réservés suivants :"
+
+#, python-brace-format
+msgid "``{title}``: Signal title"
+msgstr ""
+
+#, python-brace-format
+msgid "``{index}``: 1-based index of the signal in the selection (with zero-padding)"
+msgstr ""
+
+#, python-brace-format
+msgid "``{count}``: Total number of selected signals"
+msgstr ""
+
+#, python-brace-format
+msgid "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Axis labels and units"
+msgstr ""
+
+#, python-brace-format
+msgid "``{metadata[key]}``: Access metadata values"
+msgstr ""
+
+#, python-brace-format
+msgid "You can also use format modifiers, for example ``{index:03d}`` will format the index with 3 digits zero-padding (001, 002, 003, etc.)."
+msgstr ""
 
 msgid "Import text file"
 msgstr "Importer un fichier texte"

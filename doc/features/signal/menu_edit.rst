@@ -80,6 +80,54 @@ associated with the signal will be lost.
     :height: 24px
     :class: dark-light no-scaled-link
 
+Add metadata
+------------
+
+The "Add metadata" |metadata_add| action allows you to add custom metadata items to
+one or more selected signals. This is useful for tagging signals with experiment IDs,
+sample names, processing steps, or any other custom information.
+
+.. |metadata_add| image:: ../../../datalab/data/icons/edit/metadata_add.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. figure:: /images/shots/s_add_metadata.png
+
+    Add metadata dialog.
+
+When you select "Add metadata..." from the Edit menu, a dialog appears where you can:
+
+- **Metadata key**: Enter the name of the metadata field to add
+- **Value pattern**: Define a pattern for the metadata value using Python format strings
+- **Conversion**: Choose how to store the value (string, float, integer, or boolean)
+- **Preview**: See how the metadata will be added to each selected signal
+
+The value pattern supports the following placeholders:
+
+- ``{title}``: Signal title
+- ``{index}``: 1-based index of the signal in the selection
+- ``{count}``: Total number of selected signals
+- ``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Axis labels and units
+- ``{metadata[key]}``: Access existing metadata values
+
+You can also use format modifiers:
+
+- ``{title:upper}``: Convert to uppercase
+- ``{title:lower}``: Convert to lowercase
+- ``{index:03d}``: Format as 3-digit number with leading zeros
+
+**Examples:**
+
+- Add experiment ID: key=``experiment_id``, pattern=``EXP_{index:03d}``, conversion=string
+  → Creates metadata like ``experiment_id="EXP_001"``
+
+- Add sample temperature: key=``temperature``, pattern=``{metadata[temp]}``, conversion=float
+  → Copies temperature from existing metadata and converts to float
+
+- Mark processed signals: key=``is_processed``, pattern=``true``, conversion=bool
+  → Sets ``is_processed=True`` for all selected signals
+
 Signal titles
 -------------
 

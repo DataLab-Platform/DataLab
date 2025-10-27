@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 09:56+0200\n"
+"POT-Creation-Date: 2025-10-24 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,132 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**Interactive object creation and processing**: New interactive workflow for creating and processing objects"
+msgstr "**Création et traitement interactifs d'objets** : Nouveau flux de travail interactif pour la création et le traitement des objets"
+
+msgid "**Interactive object creation**: Signal/image creation parameters can now be modified after creation"
+msgstr "**Création d'objets interactifs** : Les paramètres de création de signaux/images peuvent désormais être modifiés après la création"
+
+msgid "When creating a new signal or image (Gaussian, sine, etc.), a new \"Creation\" tab appears in the object properties panel"
+msgstr "Lors de la création d'un nouveau signal ou d'une nouvelle image (gaussien, sinusoïdal, etc.), un nouvel onglet \"Création\" apparaît dans le panneau des propriétés de l'objet."
+
+msgid "Users can modify creation parameters (amplitude, frequency, size, etc.) and click \"Apply\" to regenerate the object in-place"
+msgstr "Les utilisateurs peuvent modifier les paramètres de création (amplitude, fréquence, taille, etc.) et cliquer sur \"Appliquer\" pour régénérer l'objet sur place."
+
+msgid "Object is updated without creating a new one, preserving any subsequent processing or analysis"
+msgstr "L'objet est mis à jour sans en créer un nouveau, préservant tout traitement ou analyse ultérieur."
+
+msgid "Only available for objects created with parameter classes (not for imported data)"
+msgstr "Disponible uniquement pour les objets créés avec des classes de paramètres (pas pour les données importées)"
+
+msgid "Useful for exploring different parameter values or fine-tuning object characteristics"
+msgstr "Utile pour explorer différentes valeurs de paramètres ou affiner les caractéristiques des objets"
+
+msgid "**Interactive 1-to-1 processing**: Processing parameters can be adjusted and reapplied after initial processing"
+msgstr "**Traitement interactif 1-vers-1** : Les paramètres de traitement peuvent être ajustés et réappliqués après le traitement initial"
+
+msgid "When applying a 1-to-1 processing operation with parameters (Gaussian filter, threshold, etc.), a new \"Processing\" tab appears"
+msgstr "Lors de l'application d'une opération de traitement 1-vers-1 avec des paramètres (filtre gaussien, seuil, etc.), un nouvel onglet \"Traitement\" apparaît."
+
+msgid "Users can modify processing parameters and click \"Apply\" to re-process the object with updated values"
+msgstr "Les utilisateurs peuvent modifier les paramètres de traitement et cliquer sur \"Appliquer\" pour re-traiter l'objet avec les valeurs mises à jour."
+
+msgid "Result object is updated in-place with new processing parameters"
+msgstr "L'objet résultant est mis à jour sur place avec les nouveaux paramètres de traitement."
+
+msgid "Processing metadata stores: parameters (JSON), source object UUID, and function name"
+msgstr "Les métadonnées de traitement stockent : les paramètres (JSON), l'UUID de l'objet source et le nom de la fonction."
+
+msgid "Source object validation: displays error message if source object was deleted"
+msgstr "Validation de l'objet source : affiche un message d'erreur si l'objet source a été supprimé."
+
+msgid "Only works for processing functions with parameter classes (filtering, morphology, etc.)"
+msgstr "Fonctionne uniquement pour les fonctions de traitement avec des classes de paramètres (filtrage, morphologie, etc.)"
+
+msgid "Not supported for processing without parameters (absolute, inverse, etc.) - these work as before"
+msgstr "Non pris en charge pour le traitement sans paramètres (absolu, inverse, etc.) - ceux-ci fonctionnent comme avant"
+
+msgid "Intentionally not supported for 2-to-1 or n-to-1 processing patterns (use cases don't benefit from interactive behavior)"
+msgstr "Non pris en charge intentionnellement pour les modèles de traitement 2-vers-1 ou n-vers-1 (les cas d'utilisation ne bénéficient pas d'un comportement interactif)"
+
+msgid "Ideal for iteratively tuning processing parameters while observing results in real-time"
+msgstr "Idéal pour ajuster itérativement les paramètres de traitement tout en observant les résultats en temps réel."
+
+msgid "**Recompute feature**: Quickly reprocess objects with their stored processing parameters"
+msgstr "**Fonction de recomposition** : Reprocessus rapide des objets avec leurs paramètres de traitement stockés."
+
+msgid "New \"Recompute\" action in Edit menu (keyboard shortcut: Ctrl+R)"
+msgstr "Nouvelle action \"Recomposer\" dans le menu Édition (raccourci clavier : Ctrl+R)"
+
+msgid "Allows reprocessing one or multiple objects that have stored 1-to-1 processing parameters"
+msgstr "Permet de re-traiter un ou plusieurs objets qui ont des paramètres de traitement 1-vers-1 stockés."
+
+msgid "When source object data changes, recompute updates the processed object(s) accordingly"
+msgstr "Lorsque les données de l'objet source changent, la recomposition met à jour l'objet (ou les objets) traité(s) en conséquence."
+
+msgid "Works with both individual objects and groups of objects"
+msgstr "Fonctionne avec des objets individuels et des groupes d'objets."
+
+msgid "Shows progress dialog for batch recomputing multiple objects"
+msgstr "Affiche une boîte de dialogue de progression pour le re-traitement par lots de plusieurs objets."
+
+msgid "Objects without recomputable parameters are automatically skipped"
+msgstr "Les objets sans paramètres recomposables sont automatiquement ignorés."
+
+msgid "Useful for updating results when input data is modified or to propagate changes through a processing chain"
+msgstr "Utile pour mettre à jour les résultats lorsque les données d'entrée sont modifiées ou pour propager les changements à travers une chaîne de traitement."
+
+msgid "**Select source objects**: Navigate to source objects used in processing"
+msgstr "**Sélectionner les objets source** : Naviguer vers les objets source utilisés dans le traitement"
+
+msgid "New \"Select source objects\" action in Edit menu"
+msgstr "Nouvelle action \"Sélectionner les objets source\" dans le menu Édition"
+
+msgid "Automatically selects the source object(s) that were used to create the currently selected processed object"
+msgstr "Sélectionne automatiquement l'objet (ou les objets) source qui ont été utilisés pour créer l'objet traité actuellement sélectionné."
+
+msgid "Works for all processing patterns (1-to-1, 2-to-1, n-to-1) by reading processing metadata"
+msgstr "Fonctionne pour tous les modèles de traitement (1-vers-1, 2-vers-1, n-vers-1) en lisant les métadonnées de traitement."
+
+msgid "Handles multiple source objects (e.g., from n-to-1 operations)"
+msgstr "Gère plusieurs objets source (par exemple, à partir d'opérations n-vers-1)"
+
+msgid "Shows informative messages if source objects no longer exist or if some are missing"
+msgstr "Affiche des messages informatifs si les objets source n'existent plus ou si certains sont manquants."
+
+msgid "Useful for understanding processing workflows and tracing data lineage"
+msgstr "Utile pour comprendre les flux de traitement et retracer la lignée des données."
+
+msgid "Helps users navigate complex processing chains by jumping back to original source data"
+msgstr "Aide les utilisateurs à naviguer dans des chaînes de traitement complexes en revenant aux données source d'origine."
+
+msgid "**Processing history**: New \"History\" tab shows object processing lineage"
+msgstr "**Historique de traitement** : Nouvel onglet \"Historique\" affichant la lignée de traitement des objets"
+
+msgid "Appears in the Properties panel for all signal and image objects"
+msgstr "Apparaît dans le panneau des propriétés pour tous les objets signal et image"
+
+msgid "Displays a hierarchical tree showing how the object was created and processed"
+msgstr "Affiche un arbre hiérarchique montrant comment l'objet a été créé et traité."
+
+msgid "Shows processing chain from oldest (original/created object) to newest (current object)"
+msgstr "Affiche la chaîne de traitement de l'objet le plus ancien (objet d'origine/créé) à l'objet le plus récent (objet actuel)."
+
+msgid "Displays function names for each processing step in a clear, indented format"
+msgstr "Affiche les noms de fonction pour chaque étape de traitement dans un format clair et indenté."
+
+msgid "Indicates when source objects have been deleted or when multiple sources were used"
+msgstr "Indique quand les objets source ont été supprimés ou lorsque plusieurs sources ont été utilisées."
+
+msgid "Automatically updates when object selection changes"
+msgstr "Se met à jour automatiquement lorsque la sélection d'objet change."
+
+msgid "Useful for understanding complex processing workflows and documenting analysis steps"
+msgstr "Utile pour comprendre les flux de travail de traitement complexes et documenter les étapes d'analyse."
+
+msgid "Text is selectable and copyable for documentation purposes"
+msgstr "Le texte est sélectionnable et copiable à des fins de documentation."
 
 msgid "**Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing"
 msgstr "**Prise en charge des coordonnées non uniformes pour les images** : Les images peuvent désormais avoir un espacement de pixel non uniforme"
@@ -190,6 +316,30 @@ msgstr "Cliquer sur l'indicateur ouvre la console interne."
 msgid "The icon turns red if an error or warning is logged, alerting the user to check the console."
 msgstr "L'icône devient rouge si une erreur ou un avertissement est enregistré, alertant l'utilisateur à vérifier la console."
 
+msgid "Configuration folder versioning for major version coexistence:"
+msgstr "Versionnage des dossiers de configuration pour la coexistence des versions majeures :"
+
+msgid "Configuration folders are now versioned by major version to allow different major versions to coexist on the same machine without interfering with each other."
+msgstr "Les dossiers de configuration sont désormais versionnés par version majeure pour permettre à différentes versions majeures de coexister sur la même machine sans interférer les unes avec les autres."
+
+msgid "Configuration folder naming:"
+msgstr "Nommage des dossiers de configuration :"
+
+msgid "v0.x: `.DataLab` (unchanged for backward compatibility)"
+msgstr "v0.x : `.DataLab` (inchangé pour la compatibilité ascendante)"
+
+msgid "v1.x: `.DataLab_v1` (new)"
+msgstr "v1.x : `.DataLab_v1` (nouveau)"
+
+msgid "v2.x: `.DataLab_v2` (future)"
+msgstr "v2.x : `.DataLab_v2` (futur)"
+
+msgid "This enables users to run both v0.20 and v1.0 simultaneously during the migration period, which is particularly useful for plugin developers who need to test their code against both versions."
+msgstr "Cela permet aux utilisateurs d'exécuter à la fois v0.20 et v1.0 simultanément pendant la période de migration, ce qui est particulièrement utile pour les développeurs de plugins qui doivent tester leur code contre les deux versions."
+
+msgid "Each version maintains its own isolated configuration, plugins directory, and settings, preventing any conflicts or data loss."
+msgstr "Chaque version maintient sa propre configuration isolée, son répertoire de plugins et ses paramètres, empêchant tout conflit ou perte de données."
+
 msgid "New common signal/image features:"
 msgstr "Nouvelles fonctionnalités communes aux signaux et aux images :"
 
@@ -205,6 +355,35 @@ msgstr "\"Utiliser les dimensions de l'image pour les nouvelles images\" (par d�
 msgid "If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any"
 msgstr "Si activé, le nouveau signal/image utilisera les bornes xmin/xmax ou les dimensions du signal/image actuel, le cas échéant."
 
+msgid "**Add metadata**: New feature to add custom metadata items to selected signals or images"
+msgstr "**Ajouter des métadonnées** : Nouvelle fonctionnalité pour ajouter des éléments de métadonnées personnalisés aux signaux ou images sélectionnés"
+
+msgid "Accessible via Edit menu → \"Add metadata...\""
+msgstr "Accessible via le menu Édition → \"Ajouter des métadonnées...\""
+
+msgid "Allows adding a metadata key-value pair to one or multiple selected objects"
+msgstr "Permet d'ajouter une paire clé-valeur de métadonnées à un ou plusieurs objets sélectionnés."
+
+#, python-brace-format
+msgid "Value pattern supports Python format strings with placeholders: `{title}`, `{index}`, `{count}`, `{xlabel}`, `{xunit}`, `{ylabel}`, `{yunit}`, `{metadata[key]}`"
+msgstr "Le modèle de valeur prend en charge les chaînes de format Python avec des espaces réservés : `{title}`, `{index}`, `{count}`, `{xlabel}`, `{xunit}`, `{ylabel}`, `{yunit}`, `{metadata[key]}`"
+
+#, python-brace-format
+msgid "Supports uppercase/lowercase modifiers (e.g., `{title:upper}`, `{title:lower}`)"
+msgstr "Prend en charge les modificateurs de casse (par exemple, `{title:upper}`, `{title:lower}`)"
+
+msgid "Automatic type conversion: string, float, integer, or boolean"
+msgstr "Conversion de type automatique : chaîne, flottant, entier ou booléen"
+
+msgid "Real-time preview showing how values will be set for each object"
+msgstr "Aperçu en temps réel montrant comment les valeurs seront définies pour chaque objet"
+
+msgid "Useful for tagging objects with experiment IDs, sample names, processing steps, etc."
+msgstr "Utile pour étiqueter les objets avec des identifiants d'expérience, des noms d'échantillons, des étapes de traitement, etc."
+
+msgid "Integrates seamlessly with existing metadata operations (copy, paste, import, export)"
+msgstr "S'intègre parfaitement aux opérations de métadonnées existantes (copier, coller, importer, exporter)"
+
 msgid "Added `phase` (argument) feature to extract the phase information from complex signals or images."
 msgstr "Ajout de la fonctionnalité `phase` (argument) pour extraire les informations de phase des signaux ou des images complexes."
 
@@ -214,44 +393,96 @@ msgstr "Ceci complète la fonctionnalité \"Valeur absolue\" (module)."
 msgid "Added operation to create complex-valued signal/image from real and imaginary parts."
 msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir des parties réelle et imaginaire."
 
-msgid "Added operation to create complex-valued signal/image from magnitude and phase."
-msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir de l'amplitude et de la phase."
-
-msgid "This closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+#, fuzzy
+msgid "Added operation to create complex-valued signal/image from magnitude and phase (this closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))."
 msgstr "Ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-msgid "Standard deviation of the selected signals or images."
+#, fuzzy
+msgid "Standard deviation of the selected signals or images (this closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)):"
+msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+
+#, fuzzy
+msgid "The standard deviation is calculated across the selected signals or images."
 msgstr "Écart-type des signaux ou des images de la sélection."
 
-msgid "This complements the \"Average\" feature."
+#, fuzzy
+msgid "This is a complement to the \"Average\" feature."
 msgstr "Ceci complète la fonctionnalité \"Moyenne\"."
-
-msgid "This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
-msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
 
 msgid "Generate new signal or image: Poisson noise."
 msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
 
-msgid "Add noise to the selected signals or images."
-msgstr "Ajouter du bruit aux signaux ou images sélectionnés."
+#, fuzzy
+msgid "Add noise to the selected signals or images (this closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)): Gaussian, Poisson or uniform noise can be added."
+msgstr "Ceci clôture [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images."
 
-msgid "Gaussian, Poisson or uniform noise can be added."
-msgstr "Du bruit gaussien, de Poisson ou uniforme peut être ajouté."
-
-msgid "This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
-msgstr "Ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)."
-
-msgid "Save to directory feature."
-msgstr "Fonctionnalité de sauvegarde dans un répertoire."
-
-msgid "This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
+#, fuzzy
+msgid "Save to directory feature (this closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
 msgstr "Ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
 
-msgid "Deconvolution in the frequency domain."
-msgstr "Déconvolution dans le domaine fréquentiel."
+#, fuzzy
+msgid "Deconvolution in the frequency domain (this closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189))."
+msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
 
-msgid "This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution."
-msgstr "Ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Ajout de la prise en charge de la déconvolution de Fourier."
+#, fuzzy
+msgid "Signals to image conversion:"
+msgstr "Fonctionnalités de signal/image :"
+
+msgid "Convert collections of signals into 2D images for visualization"
+msgstr ""
+
+msgid "Select multiple signals and use \"Combine signals into image\" operation"
+msgstr ""
+
+#, fuzzy
+msgid "Two orientation modes:"
+msgstr "Mode d'opération pairwise :"
+
+msgid "As rows: Each signal becomes a row in the resulting image (useful for spectrograms)"
+msgstr ""
+
+msgid "As columns: Each signal becomes a column in the resulting image (useful for waterfall displays)"
+msgstr ""
+
+#, fuzzy
+msgid "Optional normalization:"
+msgstr "ℹ️ Informations générales :"
+
+msgid "Normalize signals before combining using Z-score, Min-Max, or Maximum methods"
+msgstr ""
+
+msgid "Normalizes each signal independently to handle different amplitude ranges"
+msgstr ""
+
+msgid "Enables better visualization of signals with varying scales"
+msgstr ""
+
+msgid "Validates signal compatibility (all must have same size)"
+msgstr ""
+
+msgid "Resulting image automatically appears in Image panel with appropriate dimensions"
+msgstr ""
+
+msgid "Supports cross-panel operations: Images created from signals are properly routed to Image panel"
+msgstr ""
+
+msgid "Group handling: Results maintain group organization when working with signal groups"
+msgstr ""
+
+msgid "Typical use cases:"
+msgstr ""
+
+msgid "Creating heatmaps from time-series data"
+msgstr ""
+
+msgid "Building spectrograms from frequency domain signals"
+msgstr ""
+
+msgid "Generating waterfall displays for multi-channel data"
+msgstr ""
+
+msgid "Visualizing signal evolution over time or parameter sweeps"
+msgstr ""
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
@@ -504,6 +735,30 @@ msgstr "Ajustement de pics asymétriques (deux moitiés gaussiennes) avec des pa
 
 msgid "CDF (Cumulative Distribution Function) fitting for statistical analysis"
 msgstr "Ajustement de la fonction de distribution cumulative (CDF) pour l'analyse statistique"
+
+msgid "**Locked parameter support** (requires PlotPy v2.8.0):"
+msgstr "**Prise en charge des paramètres verrouillés** (nécessite PlotPy v2.8.0) :"
+
+msgid "Added ability to lock individual fit parameters during automatic optimization"
+msgstr "Ajout de la possibilité de verrouiller des paramètres de fitting individuels pendant l'optimisation automatique"
+
+msgid "Users can manually adjust parameters and lock them to prevent changes during auto-fit"
+msgstr "Les utilisateurs peuvent ajuster manuellement les paramètres et les verrouiller pour éviter les modifications pendant le fitting automatique"
+
+msgid "Visual indicators: locked parameters show 🔒 emoji and are grayed out with disabled controls"
+msgstr "Indicateurs visuels : les paramètres verrouillés affichent l'emoji 🔒 et sont grisés avec des contrôles désactivés"
+
+msgid "Enables partial optimization workflows: fix well-determined parameters, optimize uncertain ones"
+msgstr "Permet des flux de travail d'optimisation partielle : fixer les paramètres bien déterminés, optimiser les incertains"
+
+msgid "All optimization algorithms (simplex, Powell, BFGS, L-BFGS-B, conjugate gradient, least squares) support locked parameters"
+msgstr "Tous les algorithmes d'optimisation (simplex, Powell, BFGS, L-BFGS-B, gradient conjugué, moindres carrés) prennent en charge les paramètres verrouillés"
+
+msgid "Improves fit convergence by reducing problem dimensionality"
+msgstr "Améliore la convergence du fitting en réduisant la dimensionnalité du problème"
+
+msgid "Lock/unlock parameters via the parameter settings dialog (gear icon)"
+msgstr "Verrouiller/déverrouiller les paramètres via la boîte de dialogue des paramètres (icône d'engrenage)"
 
 msgid "**Improved user experience**: The curve fitting dialogs now provide:"
 msgstr "**Amélioration de l'expérience utilisateur** : Les boîtes de dialogue de fitting de courbes offrent désormais :"
@@ -789,6 +1044,36 @@ msgstr "Ce comportement correspond à l'action \"Restaurer\" qui réduit tous le
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "Removed \"Use reference image LUT range\" setting:"
+msgstr "Suppression de l'option \"Utiliser la plage de LUT de l'image de référence\" :"
+
+msgid "This feature has been removed to avoid confusion about whether LUT changes were temporary or persistent"
+msgstr "Cette fonctionnalité a été supprimée pour éviter toute confusion sur le fait que les modifications de LUT étaient temporaires ou persistantes"
+
+msgid "The feature made users think changes were view-only, but they were actually persistent modifications to image properties"
+msgstr "Cette fonctionnalité a amené les utilisateurs à penser que les modifications étaient uniquement visibles, mais il s'agissait en réalité de modifications persistantes des propriétés de l'image"
+
+msgid "**Migration strategy**: Use the new multi-selection property editing instead:"
+msgstr "**Stratégie de migration** : Utilisez plutôt le nouvel éditeur de propriétés de sélection multiple :"
+
+msgid "Select multiple images in the object list (Ctrl+click or Shift+click)"
+msgstr "Sélectionnez plusieurs images dans la liste des objets (Ctrl+clic ou Shift+clic)"
+
+msgid "Open the Properties panel"
+msgstr "Ouvrez le panneau des propriétés"
+
+msgid "Modify the LUT range (Z scale bounds) or other visualization properties"
+msgstr "Modifiez la plage de LUT (bornes de l'échelle Z) ou d'autres propriétés de visualisation"
+
+msgid "Click Apply to update all selected images simultaneously"
+msgstr "Cliquez sur Appliquer pour mettre à jour toutes les images sélectionnées simultanément"
+
+msgid "This approach is more explicit, more powerful (you choose which images to affect), and clearer about persistence"
+msgstr "Cette approche est plus explicite, plus puissante (vous choisissez quelles images affecter) et plus claire sur la persistance"
+
+msgid "The multi-selection feature allows synchronizing not just LUT ranges, but any image property across multiple objects"
+msgstr "La fonctionnalité de sélection multiple permet de synchroniser non seulement les plages de LUT, mais aussi n'importe quelle propriété d'image à travers plusieurs objets."
 
 msgid "Fixed group numbering issue: When creating a new group via \"Edit > New Group\", the group short ID is now correctly numbered sequentially (e.g., g002) instead of being incorrectly numbered as g000"
 msgstr "Correction du problème de numérotation des groupes : Lors de la création d'un nouveau groupe via \"Édition > Nouveau groupe\", l'ID court du groupe est désormais correctement numéroté de manière séquentielle (par exemple, g002) au lieu d'être incorrectement numéroté comme g000"

@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Iterator
-from typing import TYPE_CHECKING, Callable, Generic, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic
 from weakref import WeakKeyDictionary
 
 import numpy as np
@@ -48,7 +48,7 @@ from datalab.utils.qthelpers import block_signals, create_progress_bar
 
 if TYPE_CHECKING:
     from plotpy.items import LabelItem
-    from plotpy.plot import BasePlot, PlotWidget
+    from plotpy.plot import PlotWidget
 
     from datalab.gui.panel.base import BaseDataPanel
 
@@ -56,9 +56,6 @@ if TYPE_CHECKING:
 def calc_data_hash(obj: SignalObj | ImageObj) -> str:
     """Calculate a hash for a SignalObj | ImageObj object's data"""
     return hashlib.sha1(np.ascontiguousarray(obj.data)).hexdigest()
-
-
-TypePlotHandler = TypeVar("TypePlotHandler", bound="BasePlotHandler")
 
 
 class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
@@ -225,16 +222,13 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.plot.add_item(item)
         return item
 
-    def __update_item_on_plot(
-        self, oid: str, ref_item: TypePlotItem, just_show: bool = False
-    ) -> None:
+    def __update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
         """Update plot item.
 
         Args:
             oid: object uuid
-            ref_item: reference item
-            just_show: if True, only show the item (do not update it, except regarding
-             the reference item). Defaults to False.
+            just_show: if True, only show the item (do not update it).
+             Defaults to False.
         """
         if not just_show:
             obj = self.panel.objmodel[oid]
@@ -244,14 +238,6 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             self.__cached_hashes[obj] = new_hash
             adapter = create_adapter_from_object(obj)
             adapter.update_item(self[oid], data_changed=data_changed)
-        self.update_item_according_to_ref_item(self[oid], ref_item)
-
-    @staticmethod
-    def update_item_according_to_ref_item(
-        item: TypePlotItem, ref_item: TypePlotItem
-    ) -> None:  # pylint: disable=unused-argument
-        """Update plot item according to reference item"""
-        #  For now, nothing to do here: it's only used for images (contrast)
 
     def set_auto_refresh(self, auto_refresh: bool) -> None:
         """Set auto refresh mode.
@@ -312,9 +298,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
              "all" (refresh all objects), "existing" (refresh existing plot items),
              or an object uuid.
             update_items: if True, update the items.
-             If False, only show the items (do not update them, except if the
-             option "Use reference item LUT range" is enabled and more than one
-             item is selected). Defaults to True.
+             If False, only show the items (do not update them).
+             Defaults to True.
             force: if True, force refresh even if auto refresh is disabled.
              Defaults to False.
             only_visible: if True, only refresh visible items. Defaults to True.
@@ -374,7 +359,6 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             if what != "existing" and only_visible:
                 # Remove hidden items from the list of objects to refresh
                 oids = self.reduce_shown_oids(oids)
-            ref_item = None
             with create_progress_bar(
                 self.panel, _("Creating plot items"), max_=len(oids)
             ) as progress:
@@ -409,11 +393,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                             continue
                         item = self.__add_item_to_plot(oid)
                     else:
-                        self.__update_item_on_plot(
-                            oid, ref_item=ref_item, just_show=not update_items
-                        )
-                        if ref_item is None:
-                            ref_item = item
+                        self.__update_item_on_plot(oid, just_show=not update_items)
                     if what != "existing" or item.isVisible():
                         self.plot.set_item_visible(item, True, replot=False)
                         self.plot.set_active_item(item)
@@ -564,16 +544,6 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
 
     PLOT_TYPE = PlotType.IMAGE
 
-    @staticmethod
-    def update_item_according_to_ref_item(
-        item: MaskedXYImageItem, ref_item: MaskedXYImageItem
-    ) -> None:
-        """Update plot item according to reference item"""
-        if ref_item is not None and Conf.view.ima_ref_lut_range.get():
-            item.set_lut_range(ref_item.get_lut_range())
-            plot: BasePlot = item.plot()
-            plot.update_colormap_axis(item)
-
     def reduce_shown_oids(self, oids: list[str]) -> list[str]:
         """Reduce the number of shown objects to visible items only. The base
         implementation is to show only the first selected item if the option
@@ -682,9 +652,8 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
              "all" (refresh all objects), "existing" (refresh existing plot items),
              or an object uuid.
             update_items: if True, update the items.
-             If False, only show the items (do not update them, except if the
-             option "Use reference item LUT range" is enabled and more than one
-             item is selected). Defaults to True.
+             If False, only show the items (do not update them).
+             Defaults to True.
             force: if True, force refresh even if auto refresh is disabled.
              Defaults to False.
             only_visible: if True, only refresh visible items. Defaults to True.

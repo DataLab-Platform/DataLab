@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-16 17:55+0200\n"
+"POT-Creation-Date: 2025-10-27 14:30+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -50,19 +50,33 @@ msgid "Save %s..."
 msgstr "Enregistrer un objet %s..."
 
 #, python-format
-msgid "Save selected %ss"
-msgstr "Enregistrer la sélection de type %s"
+msgid "Save selected %s"
+msgstr "Enregistrer l'objet %s sélectionné"
 
 #, python-format
-msgid "Save %ss to directory..."
-msgstr "Enregistrer les %ss dans un répertoire..."
+msgid "Save %s to directory..."
+msgstr "Enregistrer les %s dans un répertoire..."
 
 #, python-format
-msgid "Save selected %ss using a filename pattern"
-msgstr "Enregistrer la sélection de type %s en utilisant un modèle de nom de fichier"
+msgid "Save selected %s using a filename pattern"
+msgstr "Enregistrer les objets %s sélectionnés en utilisant un modèle de nom de fichier"
 
 msgid "Import text file..."
 msgstr "Importer un fichier texte..."
+
+msgid "Recompute"
+msgstr "Retraiter"
+
+#, python-format
+msgid "Recompute selected %s with its processing parameters"
+msgstr "Retraiter l'objet %s sélectionné avec ses paramètres de traitement"
+
+msgid "Select source objects"
+msgstr "Sélectionner les objets source"
+
+#, python-format
+msgid "Select source object(s) used to create the selected %s"
+msgstr "Sélectionner le ou les objets source utilisés pour créer l'objet %s sélectionné"
 
 msgid "Rename"
 msgstr "Renommer"
@@ -122,6 +136,13 @@ msgstr "Coller les métadonnées"
 #, python-format
 msgid "Paste metadata into selected %s"
 msgstr "Coller les métadonnées dans l'objet %s sélectionné"
+
+msgid "Add metadata"
+msgstr "Ajouter des métadonnées"
+
+#, python-format
+msgid "Add a metadata item to selected %s"
+msgstr "Ajouter un élément de métadonnée à l'objet %s sélectionné"
 
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
@@ -253,6 +274,9 @@ msgstr "Supprimer les résultats"
 
 msgid "signal"
 msgstr "signal"
+
+msgid "signals"
+msgstr "signaux"
 
 msgid "Zero"
 msgstr "Zéro"
@@ -436,6 +460,9 @@ msgstr ""
 msgid "image"
 msgstr "image"
 
+msgid "images"
+msgstr "images"
+
 msgid "Ramp"
 msgstr "Rampe"
 
@@ -450,42 +477,6 @@ msgstr "Afficher le panneau de contraste"
 
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
-
-msgid "Flip or rotation"
-msgstr "Symétrie ou rotation"
-
-msgid "Intensity profiles"
-msgstr "Profils d'intensité"
-
-msgid "Line profile..."
-msgstr "Profil rectiligne..."
-
-msgid "Extract horizontal or vertical profile"
-msgstr "Extraire un profil horizontal ou vertical"
-
-msgid "Segment profile..."
-msgstr "Profil le long d'un segment..."
-
-msgid "Extract profile along a segment"
-msgstr "Extraire un profil le long d'un segment"
-
-msgid "Average profile..."
-msgstr "Profil moyen..."
-
-msgid "Extract average horizontal or vertical profile"
-msgstr "Extraire un profil moyen horizontal ou vertical"
-
-msgid "Radial profile extraction..."
-msgstr "Extraire le profil radial..."
-
-msgid "Radial profile extraction around image centroid"
-msgstr "Extraire le profil radial autour du barycentre de l'image"
-
-msgid "Distribute on a grid..."
-msgstr "Distribuer sur une grille..."
-
-msgid "Reset image positions"
-msgstr "Réinitialiser les positions des images"
 
 msgid "Thresholding"
 msgstr "Seuillage"
@@ -546,6 +537,42 @@ msgstr "Redimensionner"
 
 msgid "Pixel binning"
 msgstr "Binning"
+
+msgid "Flip or rotation"
+msgstr "Symétrie ou rotation"
+
+msgid "Intensity profiles"
+msgstr "Profils d'intensité"
+
+msgid "Line profile..."
+msgstr "Profil rectiligne..."
+
+msgid "Extract horizontal or vertical profile"
+msgstr "Extraire un profil horizontal ou vertical"
+
+msgid "Segment profile..."
+msgstr "Profil le long d'un segment..."
+
+msgid "Extract profile along a segment"
+msgstr "Extraire un profil le long d'un segment"
+
+msgid "Average profile..."
+msgstr "Profil moyen..."
+
+msgid "Extract average horizontal or vertical profile"
+msgstr "Extraire un profil moyen horizontal ou vertical"
+
+msgid "Radial profile extraction..."
+msgstr "Extraire le profil radial..."
+
+msgid "Radial profile extraction around image centroid"
+msgstr "Extraire le profil radial autour du barycentre de l'image"
+
+msgid "Distribute on a grid..."
+msgstr "Distribuer sur une grille..."
+
+msgid "Reset image positions"
+msgstr "Réinitialiser les positions des images"
 
 msgid "Process signal"
 msgstr "Traiter le signal"
@@ -621,6 +648,24 @@ msgstr "Cela signifie que l'application n'a pas été officiellement qualifiée 
 
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
+
+msgid "DataLab v0.20 plugins detected"
+msgstr "Plugins DataLab v0.20 détectés"
+
+msgid "The following plugins are using the old DataLab v0.20 format:"
+msgstr "Les plugins suivants utilisent l'ancien format DataLab v0.20 :"
+
+msgid "These plugins will <b>not be loaded</b> in DataLab v1.0 because they are not compatible with the new architecture."
+msgstr "Ces plugins ne seront <b>pas chargés</b> dans DataLab v1.0 car ils ne sont pas compatibles avec la nouvelle architecture."
+
+msgid "To use these plugins with DataLab v1.0, you need to update them. Please refer to the migration guide on the DataLab website "
+msgstr "Pour utiliser ces plugins avec DataLab v1.0, vous devez les mettre à jour. Veuillez vous référer au guide de migration sur le site web de DataLab "
+
+msgid " or in the PDF documentation."
+msgstr " ou dans la documentation PDF."
+
+msgid "Choosing to ignore this message will prevent it from appearing again."
+msgstr "Ignorer ce message empêchera son affichage ultérieur."
 
 #, python-format
 msgid "Welcome to %s!"
@@ -785,6 +830,18 @@ msgstr "Console"
 msgid "Macro Panel"
 msgstr "Gestionnaire de Macros"
 
+msgid "Disable auto-refresh?"
+msgstr "Désactiver le rafraîchissement automatique ?"
+
+msgid "When auto-refresh is disabled, the plot view will not automatically update when objects are modified, added or removed."
+msgstr "Lorsque le rafraîchissement automatique est désactivé, la vue du graphique ne sera pas mise à jour automatiquement lorsque des objets sont modifiés, ajoutés ou supprimés."
+
+msgid "You will need to manually click the refresh button to update the view."
+msgstr "Vous devrez cliquer manuellement sur le bouton de rafraîchissement pour mettre à jour la vue."
+
+msgid "Are you sure you want to disable auto-refresh?"
+msgstr "Êtes-vous sûr de vouloir désactiver le rafraîchissement automatique ?"
+
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -867,11 +924,78 @@ msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
+msgid "History"
+msgstr "Historique"
+
 msgid "Properties"
 msgstr "Propriétés"
 
-msgid "Analysis parameters"
-msgstr "Paramètres d'analyse"
+msgid "Original object"
+msgstr "Objet original"
+
+msgid "(source deleted)"
+msgstr "(source supprimée)"
+
+msgid "(multiple sources)"
+msgstr "(sources multiples)"
+
+msgid "Creation Parameters"
+msgstr "Paramètres de création"
+
+msgid "Creation"
+msgstr "Création"
+
+msgid "Signal was modified in-place."
+msgstr "Le signal a été modifié sur place."
+
+msgid "Image was modified in-place."
+msgstr "L'image a été modifiée sur place."
+
+msgid "If computation were performed based on this object, they may need to be redone."
+msgstr "Si des calculs ont été effectués sur la base de cet objet, ils devront peut-être être refaits."
+
+#, python-format
+msgid ""
+"Failed to recreate object with new parameters:\n"
+"%s"
+msgstr ""
+"Échec de la recréation de l'objet avec les nouveaux paramètres :\n"
+"%s"
+
+msgid "Processing Parameters"
+msgstr "Paramètres de traitement"
+
+msgid "No processing object available."
+msgstr "Aucun objet de traitement disponible."
+
+msgid "Processing metadata is incomplete."
+msgstr "Les métadonnées de traitement sont incomplètes."
+
+msgid "Processing metadata is incomplete (missing source UUID)."
+msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
+
+msgid "Source object no longer exists."
+msgstr "L'objet source n'existe plus."
+
+msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
+msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
+
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Signal was reprocessed."
+msgstr "Le signal a été retraité."
+
+msgid "Image was reprocessed."
+msgstr "L'image a été retraitée."
 
 msgid "Geometry results"
 msgstr "Résultats géométriques"
@@ -882,14 +1006,20 @@ msgstr "Résultats tabulaires"
 msgid "Other metadata"
 msgstr "Autres métadonnées"
 
+msgid "Save to directory"
+msgstr "Enregistrer dans un répertoire"
+
 msgid "Directory"
 msgstr "Répertoire"
 
 msgid "Basename pattern"
-msgstr "Patron de nom de base"
+msgstr "Nom de base"
 
 msgid "Python format string. See description for details."
 msgstr "Chaîne de format Python. Voir la description pour plus de détails."
+
+msgid "Help"
+msgstr "Aide"
 
 msgid "Extension"
 msgstr "Extension"
@@ -902,6 +1032,33 @@ msgstr "Écraser les fichiers existants"
 
 msgid "Preview"
 msgstr "Aperçu"
+
+msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
+msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
+
+msgid "String"
+msgstr "Chaîne de caractères"
+
+msgid "Float"
+msgstr "Flottant"
+
+msgid "Integer"
+msgstr "Entier"
+
+msgid "Boolean"
+msgstr "Booléen"
+
+msgid "Metadata key"
+msgstr "Clé de métadonnées"
+
+msgid "The key name for the metadata item"
+msgstr "Le nom de la clé pour l'élément de métadonnées"
+
+msgid "Value pattern"
+msgstr "Modèle de valeur"
+
+msgid "Conversion"
+msgstr "Conversion"
 
 msgid "Select what to keep from the clipboard.<br><br>Result shapes and annotations, if kept, will be merged with existing ones. <u>All other metadata will be replaced</u>."
 msgstr "Sélectionnez ce que vous souhaitez conserver dans le presse-papier.<br><br>Les formes graphiques et les annotations, si conservées, seront fusionnées avec celles existantes. <u>Toutes les autres métadonnées seront remplacées</u>."
@@ -949,9 +1106,6 @@ msgstr "Analyse du répertoire"
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-msgid "Save to directory"
-msgstr "Enregistrer dans un répertoire"
-
 msgid "Saving..."
 msgstr "Enregistrement en cours..."
 
@@ -960,6 +1114,31 @@ msgstr "Importer une ROI"
 
 msgid "Export ROI"
 msgstr "Exporter une ROI"
+
+msgid "Selected object(s) do not have processing parameters that can be recomputed."
+msgstr "L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement pouvant être retraités."
+
+msgid "Recomputing objects"
+msgstr "Retraitement des objets"
+
+msgid "Failed to recompute object"
+msgstr "Échec du retraitement de l'objet"
+
+msgid "Do you want to continue with the next object?"
+msgstr "Souhaitez-vous continuer avec l'objet suivant ?"
+
+msgid "Selected object does not have processing metadata."
+msgstr "L'objet sélectionné n'a pas de métadonnées de traitement."
+
+msgid "Selected object does not have source object references."
+msgstr "L'objet sélectionné n'a pas de références d'objet source."
+
+msgid "Source object(s) no longer exist."
+msgstr "Le ou les objet(s) source n'existe(nt) plus."
+
+#, python-format
+msgid "Selected %d source object(s). %d source object(s) no longer exist."
+msgstr "Sélection de %d objet(s) source. %d objet(s) source n'existent plus."
 
 msgid "Annotations"
 msgstr "Annotations"
@@ -1055,6 +1234,9 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "Failed to deserialize processing parameters from JSON."
+msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
+
 msgid "DataLab relies on various libraries to perform the computation. During the computation, errors may occur because of the data (e.g. division by zero, unexpected data type, etc.) or because of the libraries (e.g. memory error, etc.). If you encounter an error, before reporting it, please ensure that the computation is correct, by checking the data and the parameters."
 msgstr "DataLab utilise plusieurs bibliothèques pour réaliser les calculs. Lors des calculs, des erreurs peuvent survenir en raison de la nature des données (par exemple division par zéro, type de données inattendu, etc.) ou à cause de limitations ou d'erreurs dans les bibliothèques (par exemple erreur mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-vous que le calcul est correct, en vérifiant les données et les paramètres."
 
@@ -1076,6 +1258,15 @@ msgstr ""
 
 msgid "Yes to All"
 msgstr "Oui à tout"
+
+msgid "Recomputing..."
+msgstr "Retraitement en cours..."
+
+msgid "Processing object with updated parameters..."
+msgstr "Traitement de l'objet avec les paramètres mis à jour..."
+
+msgid "Recomputing"
+msgstr "Retraitement"
 
 #, python-format
 msgid "Computing: %s"
@@ -1242,9 +1433,6 @@ msgstr "Profil moyen"
 
 msgid "Radial profile"
 msgstr "Profil radial"
-
-msgid "Convolution"
-msgstr "Convolution"
 
 msgid "kernel to convolve with"
 msgstr "noyau de la convolution"
@@ -1563,6 +1751,15 @@ msgstr "Distribuer sur grille"
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
 
+msgid "Two Half-Gaussians fit"
+msgstr "Ajustement de deux demi-Gaussiennes"
+
+msgid "Piecewise exponential fit"
+msgstr "Ajustement exponentiel par morceaux"
+
+msgid "Sigmoid fit"
+msgstr "Ajustement sigmoïde"
+
 msgid "signal to subtract"
 msgstr "signal à soustraire"
 
@@ -1586,6 +1783,18 @@ msgstr "signal pour la convolution"
 
 msgid "signal to deconvolve with"
 msgstr "signal pour la déconvolution"
+
+msgid "Combine signals into image"
+msgstr "Combiner des signaux en une image"
+
+msgid ""
+"Combine multiple signals into a 2D image.\n"
+"Signals can be arranged as rows or columns,\n"
+"with optional normalization."
+msgstr ""
+"Combine plusieurs signaux en une image 2D.\n"
+"Les signaux peuvent être disposés en lignes ou en colonnes,\n"
+"avec une normalisation optionnelle."
 
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
@@ -1623,14 +1832,14 @@ msgstr "Filtre passe-bande"
 msgid "Band-stop filter"
 msgstr "Filtre coupe-bande"
 
-msgid "Two Half-Gaussians fit"
-msgstr "Ajustement de deux demi-Gaussiennes"
+msgid "Evaluate fit"
+msgstr "Évaluer l'ajustement"
 
-msgid "Piecewise exponential fit"
-msgstr "Ajustement exponentiel par morceaux"
+msgid "signal for X values"
+msgstr "signal pour les valeurs X"
 
-msgid "Sigmoid fit"
-msgstr "Ajustement sigmoïde"
+msgid "Evaluate a fitting curve on the x-axis of another signal"
+msgstr "Évaluer une courbe d'ajustement sur l'axe des x d'un autre signal"
 
 msgid "Windowing"
 msgstr "Fenêtrage"
@@ -1643,9 +1852,6 @@ msgstr "Elimination de tendance"
 
 msgid "Interpolation"
 msgstr "Interpolation"
-
-msgid "signal for X values"
-msgstr "signal pour les valeurs X"
 
 msgid "Allan variance"
 msgstr "Variance d'Allan"
@@ -1846,6 +2052,15 @@ msgstr "Chemin des plugins"
 msgid "Path to third-party plugins.<br><br>DataLab will discover plugins in this path, as well as in your PYTHONPATH."
 msgstr "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans ce chemin, ainsi que dans votre PYTHONPATH."
 
+msgid "Ignore compatibility issues warning"
+msgstr "Ignorer l'avertissement de compatibilité"
+
+msgid "DataLab v0.20 plugins"
+msgstr "Plugins DataLab v0.20"
+
+msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
+msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
+
 msgid "Settings for internal console, used for debugging or advanced users"
 msgstr "Réglages de la console interne, utilisée pour le débogage ou les utilisateurs avancés"
 
@@ -1895,14 +2110,20 @@ msgstr "Mode d'opération"
 msgid "Operation mode for computations taking <i>N</i> inputs:<ul><li><b>single</b>: single operand mode</li><li><b>pairwise</b>: pairwise operation mode</li></ul><br>Computations taking <i>N</i> inputs are the ones where:<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
 msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
 
-msgid "Use signal bounds for new signals"
-msgstr "Utiliser les bornes du signal pour les nouveaux signaux"
+msgid "Use current signal bounds"
+msgstr "Utiliser les bornes du signal courant"
+
+msgid "New signals"
+msgstr "Nouveaux signaux"
 
 msgid "If enabled, when creating a new signal, the xmin and xmax values will be initialized from the current signal's bounds.<br>If disabled, the default values from the New Signal dialog will be used."
 msgstr "Si activé, lors de la création d'un nouveau signal, les valeurs xmin et xmax seront initialisées à partir des bornes du signal actuel.<br>Si désactivé, les valeurs par défaut de la boîte de dialogue Nouveau signal seront utilisées."
 
-msgid "Use image dimensions for new images"
-msgstr "Utiliser les dimensions de l'image pour les nouvelles images"
+msgid "Use current image dimensions"
+msgstr "Utiliser les dimensions de l'image courante"
+
+msgid "New images"
+msgstr "Nouvelles images"
 
 msgid "If enabled, when creating a new image, the width and height values will be initialized from the current image's dimensions.<br>If disabled, the default values from the New Image dialog will be used."
 msgstr "Si activé, lors de la création d'une nouvelle image, les valeurs de largeur et de hauteur seront initialisées à partir des dimensions de l'image actuelle.<br>Si désactivé, les valeurs par défaut de la boîte de dialogue Nouvelle image seront utilisées."
@@ -1912,6 +2133,15 @@ msgstr "Décalage FFT"
 
 msgid "Enable FFT shift to center the zero-frequency component in the frequency spectrum for easier visualization and analysis."
 msgstr "Activer le décalage FFT pour centrer la composante de fréquence nulle dans le spectre de fréquence pour une visualisation et une analyse plus faciles."
+
+msgid "Auto-normalize convolution/deconvolution kernel"
+msgstr "Normalisation automatique du noyau de convolution/déconvolution"
+
+msgid "Convolution"
+msgstr "Convolution"
+
+msgid "If enabled, convolution and deconvolution kernels will be automatically normalized for signal and image processing operations to preserve signal energy and image intensity."
+msgstr "Si activé, les noyaux de convolution et de déconvolution seront automatiquement normalisés pour les opérations de traitement de signaux et d'images afin de préserver l'énergie du signal et l'intensité de l'image."
 
 msgid "Extract ROI in single object"
 msgstr "Extraire les ROI dans un seul objet"
@@ -1973,6 +2203,12 @@ msgstr "Ignorer le message d'information lors de l'insertion du titre de l'objet
 msgid "Signal"
 msgstr "Signal"
 
+msgid "Default line width"
+msgstr "Épaisseur par défaut"
+
+msgid "Default line width for curves representing signals"
+msgstr "Épaisseur de trait par défaut pour les courbes représentant des signaux"
+
 msgid "Use auto downsampling"
 msgstr "Utiliser l'auto-sous-échantillonnage"
 
@@ -2015,12 +2251,6 @@ msgstr "Verrouiller le ratio d'aspect à 1:1"
 
 msgid "If enabled, the aspect ratio of the image will be locked to 1:1.<br>If disabled, the aspect ratio will be determined by the physical pixel size (this is the default and recommended setting)."
 msgstr "Si activé, le ratio d'aspect de l'image sera verrouillé à 1:1.<br>Si désactivé, le ratio d'aspect sera déterminé par la taille des pixels physiques (c'est le paramètre par défaut et recommandé)."
-
-msgid "Use reference image LUT range"
-msgstr "Utiliser la LUT de l'image de référence"
-
-msgid "If this setting is enabled, images are shown<br>with the same LUT range as the first selected image"
-msgstr "Si cette option est activée, les images sont affichées<br>avec la même LUT que la première image sélectionnée"
 
 msgid "Eliminate outliers"
 msgstr "Eliminer les bords"
@@ -2745,12 +2975,6 @@ msgstr "Représentation graphique des données importées"
 msgid "Unselect the %s that you do not want to import:"
 msgstr "Désélectionner les %s que vous ne voulez pas importer :"
 
-msgid "signals"
-msgstr "signaux"
-
-msgid "images"
-msgstr "images"
-
 msgid "Select all"
 msgstr "Tout sélectionner"
 
@@ -2852,4 +3076,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

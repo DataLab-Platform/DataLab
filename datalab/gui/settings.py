@@ -69,6 +69,14 @@ class MainSettings(gds.DataSet):
             "as well as in your PYTHONPATH."
         ),
     )
+    v020_plugins_warning_ignore = gds.BoolItem(
+        _("Ignore compatibility issues warning"),
+        _("DataLab v0.20 plugins"),
+        help=_(
+            "If enabled, DataLab will not warn you about v0.20 plugins that are "
+            "no longer compatible with v1.0."
+        ),
+    )
     _g0 = gds.EndGroup("")
 
 
@@ -137,8 +145,8 @@ class ProcSettings(gds.DataSet):
         % ("→", "→"),
     )
     use_signal_bounds = gds.BoolItem(
-        "",
-        _("Use signal bounds for new signals"),
+        _("Use current signal bounds"),
+        _("New signals"),
         help=_(
             "If enabled, when creating a new signal, the xmin and xmax values will be "
             "initialized from the current signal's bounds.<br>"
@@ -146,8 +154,8 @@ class ProcSettings(gds.DataSet):
         ),
     )
     use_image_dims = gds.BoolItem(
-        "",
-        _("Use image dimensions for new images"),
+        _("Use current image dimensions"),
+        _("New images"),
         help=_(
             "If enabled, when creating a new image, the width and height values will "
             "be initialized from the current image's dimensions.<br>"
@@ -160,6 +168,15 @@ class ProcSettings(gds.DataSet):
         help=_(
             "Enable FFT shift to center the zero-frequency component in the frequency "
             "spectrum for easier visualization and analysis."
+        ),
+    )
+    auto_normalize_kernel = gds.BoolItem(
+        _("Auto-normalize convolution/deconvolution kernel"),
+        _("Convolution"),
+        help=_(
+            "If enabled, convolution and deconvolution kernels will be automatically "
+            "normalized for signal and image processing operations to preserve signal "
+            "energy and image intensity."
         ),
     )
     extract_roi_singleobj = gds.BoolItem(
@@ -254,6 +271,12 @@ class ViewSettings(gds.DataSet):
 
     g1 = gds.BeginGroup(_("Signal"))
     _prop_ads = gds.ValueProp(False)
+    sig_line_width = gds.FloatItem(
+        _("Default line width"),
+        default=1.25,
+        min=0.1,
+        help=_("Default line width for curves representing signals"),
+    )
     sig_autodownsampling = gds.BoolItem(
         "",
         _("Use auto downsampling"),
@@ -305,14 +328,6 @@ class ViewSettings(gds.DataSet):
             "If enabled, the aspect ratio of the image will be locked to 1:1.<br>"
             "If disabled, the aspect ratio will be determined by the physical pixel "
             "size (this is the default and recommended setting)."
-        ),
-    )
-    ima_ref_lut_range = gds.BoolItem(
-        "",
-        _("Use reference image LUT range"),
-        help=_(
-            "If this setting is enabled, images are shown<br>"
-            "with the same LUT range as the first selected image"
         ),
     )
     ima_eliminate_outliers = gds.FloatItem(

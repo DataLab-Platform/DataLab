@@ -422,19 +422,13 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
         # Noise addition
         self.register_1_to_1(
-            sipi.add_gaussian_noise,
-            _("Add Gaussian noise"),
-            NormalDistributionParam,
+            sipi.add_gaussian_noise, _("Add Gaussian noise"), NormalDistributionParam
         )
         self.register_1_to_1(
-            sipi.add_poisson_noise,
-            _("Add Poisson noise"),
-            PoissonDistributionParam,
+            sipi.add_poisson_noise, _("Add Poisson noise"), PoissonDistributionParam
         )
         self.register_1_to_1(
-            sipi.add_uniform_noise,
-            _("Add uniform noise"),
-            UniformDistributionParam,
+            sipi.add_uniform_noise, _("Add uniform noise"), UniformDistributionParam
         )
         # Noise reduction
         self.register_1_to_1(

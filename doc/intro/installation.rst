@@ -17,6 +17,17 @@ Installation
 
         - |download_link1|
 
+.. warning::
+
+    **Important notice for users upgrading from DataLab v0.20 or earlier:**
+
+    DataLab v1.0 introduces **breaking changes** that are **not backward compatible** with v0.20.
+
+    - **Plugins** developed for v0.20 **must be updated** to work with v1.0
+    - **API changes** affect custom code integrations
+
+    For detailed migration information, see the :ref:`migration guide <migration_v020_to_v100>`.
+
 This section provides information on how to install DataLab on your system.
 Once installed, you can start DataLab by running the ``datalab`` command in a terminal,
 or by clicking on the DataLab shortcut in the Start menu (on Windows).

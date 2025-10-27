@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 16:17+0200\n"
+"POT-Creation-Date: 2025-10-21 16:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,3 +70,144 @@ msgstr "**Parcourir un fichier HDF5** : ouvrir le :ref:`h5browser` pour explorer
 
 msgid "Data sets may also be saved or loaded individually, using data formats such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the list of supported formats), , or `.tiff` or `.dcm` for 2D images (see :ref:`open_image` for the list of supported formats)."
 msgstr "Les jeux de données peuvent également être enregistrés ou chargés individuellement, en utilisant des formats de données tels que `.txt` ou `.npy` pour les signaux 1D (voir :ref:`open_signal` pour la liste des formats pris en charge), ou `.tiff` ou `.dcm` pour les images 2D (voir :ref:`open_image` pour la liste des formats pris en charge)."
+
+msgid "Interactive object creation and processing"
+msgstr "Création et traitement interactifs d'objets"
+
+msgid "DataLab provides an interactive workflow for creating objects and adjusting processing parameters, allowing you to fine-tune results without creating multiple objects."
+msgstr "DataLab fournit un flux de travail interactif pour créer des objets et ajuster les paramètres de traitement, vous permettant d'affiner les résultats sans créer plusieurs objets."
+
+msgid "Interactive object creation"
+msgstr "Création d'objets interactifs"
+
+msgid "When creating a new signal or image using the creation functions (e.g., Gaussian signal, 2D peak image, etc.), DataLab stores the creation parameters in the object's metadata. This enables interactive parameter adjustment after creation:"
+msgstr "Lors de la création d'un nouveau signal ou d'une nouvelle image à l'aide des fonctions de création (par exemple, signal gaussien, image de pic 2D, etc.), DataLab stocke les paramètres de création dans les métadonnées de l'objet. Cela permet d'ajuster les paramètres de manière interactive après la création :"
+
+msgid "Create a signal or image using **Operations** > **Create** menu"
+msgstr "Créer un signal ou une image en utilisant le menu **Opérations** > **Créer**"
+
+msgid "Select the created object in the list"
+msgstr "Sélectionner l'objet créé dans la liste"
+
+msgid "A **Creation** tab appears in the Properties panel (bottom-left)"
+msgstr "Un onglet **Création** apparaît dans le panneau des propriétés (en bas à gauche)"
+
+msgid "Modify any creation parameter (amplitude, frequency, size, etc.)"
+msgstr "Modifier n'importe quel paramètre de création (amplitude, fréquence, taille, etc.)"
+
+msgid "Click **Apply** to regenerate the object with new parameters"
+msgstr "Cliquer sur **Appliquer** pour régénérer l'objet avec les nouveaux paramètres"
+
+msgid "The object is updated in-place, preserving any subsequent processing or analysis results. This is particularly useful for:"
+msgstr "L'objet est mis à jour sur place, préservant tous les résultats de traitement ou d'analyse ultérieurs. Cela est particulièrement utile pour :"
+
+msgid "Exploring different parameter values without cluttering the workspace"
+msgstr "Explorer différentes valeurs de paramètres sans encombrer l'espace de travail"
+
+msgid "Fine-tuning object characteristics while observing the results"
+msgstr "Affiner les caractéristiques de l'objet tout en observant les résultats"
+
+msgid "Educational purposes to demonstrate parameter effects"
+msgstr "Objectifs pédagogiques pour démontrer les effets des paramètres"
+
+msgid "Interactive creation is only available for objects created with parameter classes (not for imported data from files)."
+msgstr "La création interactive n'est disponible que pour les objets créés avec des classes de paramètres (pas pour les données importées à partir de fichiers)."
+
+msgid "Interactive 1-to-1 processing"
+msgstr "Traitement interactif 1-vers-1"
+
+msgid "When applying a 1-to-1 processing operation that has configurable parameters (e.g., Gaussian filter, threshold, morphological operations), DataLab stores the processing metadata, enabling parameter adjustment and re-processing:"
+msgstr "Lors de l'application d'une opération de traitement 1-vers-1 qui a des paramètres configurables (par exemple, filtre gaussien, seuil, opérations morphologiques), DataLab stocke les métadonnées de traitement, permettant l'ajustement des paramètres et le re-traitement :"
+
+msgid "Apply a processing operation with parameters (e.g., **Processing** > **Filtering** > **Gaussian filter**)"
+msgstr "Appliquer une opération de traitement avec des paramètres (par exemple, **Traitement** > **Filtrage** > **Filtre gaussien**)"
+
+msgid "The result object contains processing metadata (parameters, source object, function name)"
+msgstr "L'objet résultant contient des métadonnées de traitement (paramètres, objet source, nom de la fonction)"
+
+msgid "Select the processed object in the list"
+msgstr "Sélectionner l'objet traité dans la liste"
+
+msgid "A **Processing** tab appears in the Properties panel"
+msgstr "Un onglet **Traitement** apparaît dans le panneau des propriétés"
+
+msgid "Modify processing parameters (e.g., filter sigma value)"
+msgstr "Modifier les paramètres de traitement (par exemple, valeur sigma du filtre)"
+
+msgid "Click **Apply** to re-process with updated parameters"
+msgstr "Cliquer sur **Appliquer** pour re-traiter avec les paramètres mis à jour"
+
+msgid "The processed object is updated in-place with the new results. This workflow is ideal for:"
+msgstr "L'objet traité est mis à jour sur place avec les nouveaux résultats. Ce flux de travail est idéal pour :"
+
+msgid "Iteratively tuning filter parameters while observing results in real-time"
+msgstr "Ajustement itératif des paramètres du filtre tout en observant les résultats en temps réel"
+
+msgid "Adjusting threshold values without creating multiple intermediate objects"
+msgstr "Ajustement des valeurs de seuil sans créer plusieurs objets intermédiaires"
+
+msgid "Experimenting with different morphological structure element sizes"
+msgstr "Expérimentation avec différentes tailles d'éléments de structure morphologique"
+
+msgid "Educational demonstrations of parameter effects on processing results"
+msgstr "Démonstrations éducatives des effets des paramètres sur les résultats du traitement"
+
+msgid "**Processing metadata requirements:**"
+msgstr "**Exigences en matière de métadonnées de traitement :**"
+
+msgid "Only works for 1-to-1 processing functions with parameter classes"
+msgstr "Ne fonctionne que pour les fonctions de traitement 1-vers-1 avec des classes de paramètres"
+
+msgid "Processing functions without parameters (e.g., absolute value, inverse) work as before"
+msgstr "Les fonctions de traitement sans paramètres (par exemple, valeur absolue, inverse) fonctionnent comme auparavant"
+
+msgid "Source object must still exist for re-processing (error shown if deleted)"
+msgstr "L'objet source doit toujours exister pour le re-traitement (erreur affichée s'il est supprimé)"
+
+msgid "**Not supported for:**"
+msgstr "**Non pris en charge pour :**"
+
+msgid "2-to-1 processing (operations combining two objects)"
+msgstr "Traitement 2-vers-1 (opérations combinant deux objets)"
+
+msgid "n-to-1 processing (operations aggregating multiple objects)"
+msgstr "Traitement n-vers-1 (opérations agrégeant plusieurs objets)"
+
+msgid "These patterns don't benefit significantly from interactive parameter adjustment"
+msgstr "Ces modèles ne bénéficient pas de manière significative de l'ajustement interactif des paramètres"
+
+msgid "Example workflow"
+msgstr "Exemple de flux de travail"
+
+msgid "Here's a typical workflow using interactive processing:"
+msgstr "Voici un flux de travail typique utilisant le traitement interactif :"
+
+msgid "**Create a test signal**: Operations > Create > Gaussian signal"
+msgstr "**Créer un signal de test** : Opérations > Créer > Signal gaussien"
+
+msgid "Initial parameters: amplitude=1.0, mu=50, sigma=10"
+msgstr "Paramètres initiaux : amplitude=1.0, mu=50, sigma=10"
+
+msgid "**Adjust creation parameters**: In the Creation tab, change sigma to 20, click Apply"
+msgstr "**Ajuster les paramètres de création** : Dans l'onglet Création, changer sigma à 20, cliquer sur Appliquer"
+
+msgid "Signal is regenerated with new width"
+msgstr "Le signal est régénéré avec une nouvelle largeur"
+
+msgid "**Apply Gaussian filter**: Processing > Filtering > Gaussian filter"
+msgstr "**Appliquer le filtre gaussien** : Traitement > Filtrage > Filtre gaussien"
+
+msgid "Initial sigma=2.0"
+msgstr "Sigma initial=2.0"
+
+msgid "**Fine-tune filtering**: In the Processing tab, try sigma=1.0, then sigma=5.0"
+msgstr "**Ajuster le filtrage** : Dans l'onglet Traitement, essayer sigma=1.0, puis sigma=5.0"
+
+msgid "Each Apply updates the filtered result"
+msgstr "Chaque application met à jour le résultat filtré"
+
+msgid "Compare different smoothing levels without creating multiple objects"
+msgstr "Comparer différents niveaux de lissage sans créer plusieurs objets"
+
+msgid "This interactive approach provides immediate visual feedback and keeps your workspace organized by avoiding proliferation of test objects with slightly different parameters."
+msgstr "Cette approche interactive fournit un retour visuel immédiat et garde votre espace de travail organisé en évitant la prolifération d'objets de test avec des paramètres légèrement différents."

@@ -43,7 +43,9 @@ Create a new image from various models
     * - Uniform distribution
       - :math:`y[i]` is uniformly distributed between two configurable bounds
     * - 2D Gaussian
-      - :math:`z = A.exp(-\dfrac{(\sqrt{(x-x0)^2+(y-y0)^2}-\mu)^2}{2\sigma^2})`
+      - :math:`z = A \cdot \exp\left(-\dfrac{\left(\sqrt{\left(x-x_0\right)^2+\left(y-y_0\right)^2}-\mu\right)^2}{2\sigma^2}\right)`
+    * - 2D Ramp
+      - :math:`z = A (x - x_0) + B (y - y_0) + C`
 
 .. _open_image:
 
@@ -114,6 +116,29 @@ Save images to directory
 
 Save all selected images to a specified directory, with configurable filename pattern
 and image format.
+
+.. figure:: /images/shots/i_save_to_directory.png
+
+    Save images to directory dialog.
+
+When you select "Save to directory..." from the File menu, a dialog appears where you can:
+
+- **Directory**: Choose the target directory where images will be saved
+- **Filename pattern**: Define a pattern for the filenames using Python format strings
+- **File extension**: Select the output format (.png, .tiff, .h5ima, etc.)
+- **Overwrite**: Choose whether to overwrite existing files
+- **Preview**: See the list of files that will be created (with object IDs)
+
+The filename pattern supports the following placeholders:
+
+- ``{title}``: Image title
+- ``{index}``: 1-based index of the image in the selection (with zero-padding)
+- ``{count}``: Total number of selected images
+- ``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``, ``{zlabel}``, ``{zunit}``: Axis labels and units
+- ``{metadata[key]}``: Access metadata values
+
+You can also use format modifiers, for example ``{index:03d}`` will format the index
+with 3 digits zero-padding (001, 002, 003, etc.).
 
 Import text file
 ^^^^^^^^^^^^^^^^

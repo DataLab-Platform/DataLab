@@ -6,6 +6,49 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **Interactive object creation and processing**: New interactive workflow for creating and processing objects
+  * **Interactive object creation**: Signal/image creation parameters can now be modified after creation
+    * When creating a new signal or image (Gaussian, sine, etc.), a new "Creation" tab appears in the object properties panel
+    * Users can modify creation parameters (amplitude, frequency, size, etc.) and click "Apply" to regenerate the object in-place
+    * Object is updated without creating a new one, preserving any subsequent processing or analysis
+    * Only available for objects created with parameter classes (not for imported data)
+    * Useful for exploring different parameter values or fine-tuning object characteristics
+  * **Interactive 1-to-1 processing**: Processing parameters can be adjusted and reapplied after initial processing
+    * When applying a 1-to-1 processing operation with parameters (Gaussian filter, threshold, etc.), a new "Processing" tab appears
+    * Users can modify processing parameters and click "Apply" to re-process the object with updated values
+    * Result object is updated in-place with new processing parameters
+    * Processing metadata stores: parameters (JSON), source object UUID, and function name
+    * Source object validation: displays error message if source object was deleted
+    * Only works for processing functions with parameter classes (filtering, morphology, etc.)
+    * Not supported for processing without parameters (absolute, inverse, etc.) - these work as before
+    * Intentionally not supported for 2-to-1 or n-to-1 processing patterns (use cases don't benefit from interactive behavior)
+    * Ideal for iteratively tuning processing parameters while observing results in real-time
+  * **Recompute feature**: Quickly reprocess objects with their stored processing parameters
+    * New "Recompute" action in Edit menu (keyboard shortcut: Ctrl+R)
+    * Allows reprocessing one or multiple objects that have stored 1-to-1 processing parameters
+    * When source object data changes, recompute updates the processed object(s) accordingly
+    * Works with both individual objects and groups of objects
+    * Shows progress dialog for batch recomputing multiple objects
+    * Objects without recomputable parameters are automatically skipped
+    * Useful for updating results when input data is modified or to propagate changes through a processing chain
+  * **Select source objects**: Navigate to source objects used in processing
+    * New "Select source objects" action in Edit menu
+    * Automatically selects the source object(s) that were used to create the currently selected processed object
+    * Works for all processing patterns (1-to-1, 2-to-1, n-to-1) by reading processing metadata
+    * Handles multiple source objects (e.g., from n-to-1 operations)
+    * Shows informative messages if source objects no longer exist or if some are missing
+    * Useful for understanding processing workflows and tracing data lineage
+    * Helps users navigate complex processing chains by jumping back to original source data
+  * **Processing history**: New "History" tab shows object processing lineage
+    * Appears in the Properties panel for all signal and image objects
+    * Displays a hierarchical tree showing how the object was created and processed
+    * Shows processing chain from oldest (original/created object) to newest (current object)
+    * Displays function names for each processing step in a clear, indented format
+    * Indicates when source objects have been deleted or when multiple sources were used
+    * Automatically updates when object selection changes
+    * Useful for understanding complex processing workflows and documenting analysis steps
+    * Text is selectable and copyable for documentation purposes
+
 * **Non-uniform coordinate support for images**: Images can now have non-uniform pixel spacing
   * Image objects now support both uniform and non-uniform coordinate systems:
     * Uniform coordinates: regular grid with constant pixel spacing (traditional mode)
@@ -63,27 +106,59 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Clicking the indicator opens the internal console.
   * The icon turns red if an error or warning is logged, alerting the user to check the console.
 
+* Configuration folder versioning for major version coexistence:
+  * Configuration folders are now versioned by major version to allow different major versions to coexist on the same machine without interfering with each other.
+  * Configuration folder naming:
+    * v0.x: `.DataLab` (unchanged for backward compatibility)
+    * v1.x: `.DataLab_v1` (new)
+    * v2.x: `.DataLab_v2` (future)
+  * This enables users to run both v0.20 and v1.0 simultaneously during the migration period, which is particularly useful for plugin developers who need to test their code against both versions.
+  * Each version maintains its own isolated configuration, plugins directory, and settings, preventing any conflicts or data loss.
+
 * New common signal/image features:
   * Added two options for signal and image creation:
     * "Use xmin and xmax bounds from current signal when creating a new signal" (default: disabled)
     * "Use dimensions from current image when creating a new image" (default: enabled)
     * If enabled, the new signal/image will use the xmin/xmax bounds or dimensions of the current signal/image, if any
+  * **Add metadata**: New feature to add custom metadata items to selected signals or images
+    * Accessible via Edit menu → "Add metadata..."
+    * Allows adding a metadata key-value pair to one or multiple selected objects
+    * Value pattern supports Python format strings with placeholders: `{title}`, `{index}`, `{count}`, `{xlabel}`, `{xunit}`, `{ylabel}`, `{yunit}`, `{metadata[key]}`
+    * Supports uppercase/lowercase modifiers (e.g., `{title:upper}`, `{title:lower}`)
+    * Automatic type conversion: string, float, integer, or boolean
+    * Real-time preview showing how values will be set for each object
+    * Useful for tagging objects with experiment IDs, sample names, processing steps, etc.
+    * Integrates seamlessly with existing metadata operations (copy, paste, import, export)
   * Added `phase` (argument) feature to extract the phase information from complex signals or images.
     * This complements the "Absolute value" (modulus) feature.
   * Added operation to create complex-valued signal/image from real and imaginary parts.
-  * Added operation to create complex-valued signal/image from magnitude and phase.
-  * This closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
-  * Standard deviation of the selected signals or images.
-    * This complements the "Average" feature.
-    * This closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196).
+  * Added operation to create complex-valued signal/image from magnitude and phase (this closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)).
+  * Standard deviation of the selected signals or images (this closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)):
+    * The standard deviation is calculated across the selected signals or images.
+    * This is a complement to the "Average" feature.
   * Generate new signal or image: Poisson noise.
-  * Add noise to the selected signals or images.
-    * Gaussian, Poisson or uniform noise can be added.
-    * This closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201).
-  * Save to directory feature.
-    * This closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227).
-  * Deconvolution in the frequency domain.
-    * This closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189) - Add support for Fourier Deconvolution.
+  * Add noise to the selected signals or images (this closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)): Gaussian, Poisson or uniform noise can be added.
+  * Save to directory feature (this closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)).
+  * Deconvolution in the frequency domain (this closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189)).
+  * Signals to image conversion:
+    * Convert collections of signals into 2D images for visualization
+    * Select multiple signals and use "Combine signals into image" operation
+    * Two orientation modes:
+      * As rows: Each signal becomes a row in the resulting image (useful for spectrograms)
+      * As columns: Each signal becomes a column in the resulting image (useful for waterfall displays)
+    * Optional normalization:
+      * Normalize signals before combining using Z-score, Min-Max, or Maximum methods
+      * Normalizes each signal independently to handle different amplitude ranges
+      * Enables better visualization of signals with varying scales
+    * Validates signal compatibility (all must have same size)
+    * Resulting image automatically appears in Image panel with appropriate dimensions
+    * Supports cross-panel operations: Images created from signals are properly routed to Image panel
+    * Group handling: Results maintain group organization when working with signal groups
+    * Typical use cases:
+      * Creating heatmaps from time-series data
+      * Building spectrograms from frequency domain signals
+      * Generating waterfall displays for multi-channel data
+      * Visualizing signal evolution over time or parameter sweeps
 
 * New ROI (Region of Interest) management features:
   * New "ROI" menu, between "Edit" and "Operations" menus.
@@ -171,6 +246,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
       * Planckian (blackbody) fitting with physics-correct parameter bounds
       * Asymmetric peak fitting (two-half Gaussian) with independent left/right parameters
       * CDF (Cumulative Distribution Function) fitting for statistical analysis
+    * **Locked parameter support** (requires PlotPy v2.8.0):
+      * Added ability to lock individual fit parameters during automatic optimization
+      * Users can manually adjust parameters and lock them to prevent changes during auto-fit
+      * Visual indicators: locked parameters show 🔒 emoji and are grayed out with disabled controls
+      * Enables partial optimization workflows: fix well-determined parameters, optimize uncertain ones
+      * All optimization algorithms (simplex, Powell, BFGS, L-BFGS-B, conjugate gradient, least squares) support locked parameters
+      * Improves fit convergence by reducing problem dimensionality
+      * Lock/unlock parameters via the parameter settings dialog (gear icon)
     * **Improved user experience**: The curve fitting dialogs now provide:
       * More reliable initial parameter guesses reducing manual adjustment needs
       * Better parameter bounds preventing optimization failures
@@ -277,6 +360,16 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* Removed "Use reference image LUT range" setting:
+  * This feature has been removed to avoid confusion about whether LUT changes were temporary or persistent
+  * The feature made users think changes were view-only, but they were actually persistent modifications to image properties
+  * **Migration strategy**: Use the new multi-selection property editing instead:
+    1. Select multiple images in the object list (Ctrl+click or Shift+click)
+    2. Open the Properties panel
+    3. Modify the LUT range (Z scale bounds) or other visualization properties
+    4. Click Apply to update all selected images simultaneously
+  * This approach is more explicit, more powerful (you choose which images to affect), and clearer about persistence
+  * The multi-selection feature allows synchronizing not just LUT ranges, but any image property across multiple objects
 * Fixed group numbering issue: When creating a new group via "Edit > New Group", the group short ID is now correctly numbered sequentially (e.g., g002) instead of being incorrectly numbered as g000
 * Plot interface improvements:
   * Disabled PlotPy's generic "Axes" tab in parameter dialogs to prevent interference with DataLab's own axis scale management.

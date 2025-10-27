@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-13 12:03+0200\n"
+"POT-Creation-Date: 2025-10-19 15:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -37,14 +37,59 @@ msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'o
 msgid "The \"Operations\" menu allows you to perform various operations on the selected signals, such as arithmetic operations, peak detection, or convolution."
 msgstr "Le menu \"Opérations\" permet d'effectuer diverses opérations sur les signaux sélectionnés, telles que des opérations arithmétiques, la détection de pics, ou encore la convolution."
 
-msgid "Basic arithmetic operations"
-msgstr "Opérations arithmétiques de base"
+msgid "Operations with a constant"
+msgstr "Opérations avec une constante"
+
+msgid "Create a new signal which is the result of a constant operation on each selected signal:"
+msgstr "Crée un signal à partir d'une opération avec une constante sur chaque signal sélectionné :"
 
 msgid "Operation"
 msgstr "Opération"
 
 msgid "Description"
 msgstr "Description"
+
+msgid "|constant_add| Addition"
+msgstr "|constant_add| Addition"
+
+msgid "constant_add"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = y_{k-1} + c`"
+msgstr ""
+
+msgid "|constant_subtract| Subtraction"
+msgstr "|constant_subtract| Soustraction"
+
+msgid "constant_subtract"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = y_{k-1} - c`"
+msgstr ""
+
+msgid "|constant_multiply| Multiplication"
+msgstr "|constant_multiply| Multiplication"
+
+msgid "constant_multiply"
+msgstr ""
+
+#, python-brace-format
+msgid ":math:`y_{k} = y_{k-1} \\times c`"
+msgstr ""
+
+msgid "|constant_divide| Division"
+msgstr "|constant_divide| Division"
+
+msgid "constant_divide"
+msgstr ""
+
+msgid ":math:`y_{k} = \\dfrac{y_{k-1}}{c}`"
+msgstr ""
+
+msgid "Basic arithmetic operations"
+msgstr "Opérations arithmétiques de base"
 
 msgid "|sum| Sum"
 msgstr "|sum| Somme"
@@ -108,51 +153,6 @@ msgid "inverse"
 msgstr ""
 
 msgid ":math:`y_{2} = \\dfrac{1}{y_{1}}`"
-msgstr ""
-
-msgid "Operations with a constant"
-msgstr "Opérations avec une constante"
-
-msgid "Create a new signal which is the result of a constant operation on each selected signal:"
-msgstr "Crée un signal à partir d'une opération avec une constante sur chaque signal sélectionné :"
-
-msgid "|constant_add| Addition"
-msgstr "|constant_add| Addition"
-
-msgid "constant_add"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`y_{k} = y_{k-1} + c`"
-msgstr ""
-
-msgid "|constant_subtract| Subtraction"
-msgstr "|constant_subtract| Soustraction"
-
-msgid "constant_subtract"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`y_{k} = y_{k-1} - c`"
-msgstr ""
-
-msgid "|constant_multiply| Multiplication"
-msgstr "|constant_multiply| Multiplication"
-
-msgid "constant_multiply"
-msgstr ""
-
-#, python-brace-format
-msgid ":math:`y_{k} = y_{k-1} \\times c`"
-msgstr ""
-
-msgid "|constant_divide| Division"
-msgstr "|constant_divide| Division"
-
-msgid "constant_divide"
-msgstr ""
-
-msgid ":math:`y_{k} = \\dfrac{y_{k-1}}{c}`"
 msgstr ""
 
 msgid "Absolute value and complex signal operations"
@@ -269,7 +269,6 @@ msgstr "|sqrt| Racine carrée"
 msgid "sqrt"
 msgstr ""
 
-#, python-brace-format
 msgid ":math:`y_{k} = \\sqrt{y_{k}}`"
 msgstr ""
 
@@ -314,3 +313,12 @@ msgstr "déconvolution"
 
 msgid "Frequency domain deconvolution"
 msgstr "Déconvolution dans le domaine fréquentiel"
+
+msgid "|signal_to_image| Combine signals into image"
+msgstr "|signal_to_image| Combiner les signaux en une image"
+
+msgid "signal_to_image"
+msgstr ""
+
+msgid "Combine multiple signals into a 2D image. Signals can be arranged as rows or columns, with optional normalization."
+msgstr "Combine plusieurs signaux en une image 2D. Les signaux peuvent être disposés en lignes ou en colonnes, avec une normalisation optionnelle."

@@ -76,8 +76,12 @@ class SignalDeltaXDialog(PlotDialog):
         xylayout.addWidget(ylabel)
         xylayout.addWidget(self.ylineedit)
         xylayout.addWidget(apply_button)
+        vlayout = QW.QVBoxLayout()
+        vlayout.addLayout(xylayout)
+        self.warning_label = QW.QLabel()
+        vlayout.addWidget(self.warning_label)
         apply_button.clicked.connect(self.ylineedit_editing_finished)
-        xygroup.setLayout(xylayout)
+        xygroup.setLayout(vlayout)
         self.button_layout.insertWidget(0, xygroup)
 
         obj = self.__signal
@@ -107,16 +111,22 @@ class SignalDeltaXDialog(PlotDialog):
         try:
             with warnings.catch_warnings(record=True) as w:
                 self.__coords = full_width_at_y(sig.x, sig.y, y)
+                if np.nan in self.__coords:
+                    raise ValueError("Invalid coordinates")
                 delta_str = f"{self.__coords[2] - self.__coords[0]:g}"
-                warning_or_error = len(w) > 0
+                ok = True
+                if len(w) > 0:
+                    self.warning_label.setText("⚠️ " + str(w[-1].message))
+                else:
+                    self.warning_label.setText("")
                 self.delta_xrange.setVisible(True)
                 self.delta_xrange.set_range(self.__coords[0], self.__coords[2])
         except ValueError:
             delta_str = ""
-            warning_or_error = True
+            ok = False
             self.delta_xrange.setVisible(False)
 
-        self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(not warning_or_error)
+        self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(ok)
         self.deltaxlineedit.setText(delta_str)
         self.ylineedit.setText(f"{y:g}" if y is not None else "")
 

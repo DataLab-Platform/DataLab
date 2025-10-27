@@ -61,15 +61,15 @@ by maximum, amplitude, sum, energy or RMS:
     * - Normalization
       - Equation
     * - Maximum
-      - :math:`z_{1} = \dfrac{z_{0}}{z_{max}}`
+      - :math:`z_{1} = \dfrac{z_{0}}{z_{\max}}`
     * - Amplitude
-      - :math:`z_{1} = \dfrac{z_{0}}{z_{max}-z_{min}}`
+      - :math:`z_{1} = \dfrac{z_{0}}{z_{\max}-z_{\min}}`
     * - Area
       - :math:`z_{1} = \dfrac{z_{0}}{\sum_{i=0}^{N-1}{z_{i}}}`
     * - Energy
-      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}|z_{0}[n]|^2}}`
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}\left|z_{0}[n]\right|^2}}`
     * - RMS
-      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|z_{0}[n]|^2}}`
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}\left|z_{0}[n]\right|^2}}`
 
 Clipping
 ~~~~~~~~
@@ -383,26 +383,8 @@ The following functions are available:
 
     * - Function
       - Implementation
-    * - Roberts filter
-      - `skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_
-    * - Prewitt filter
-      - `skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_
-    * - Prewitt filter (horizontal)
-      - `skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_
-    * - Prewitt filter (vertical)
-      - `skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_
-    * - Sobel filter
-      - `skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_
-    * - Sobel filter (horizontal)
-      - `skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_
-    * - Sobel filter (vertical)
-      - `skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_
-    * - Scharr filter
-      - `skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_
-    * - Scharr filter (horizontal)
-      - `skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_
-    * - Scharr filter (vertical)
-      - `skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_
+    * - Canny filter
+      - `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_
     * - Farid filter
       - `skimage.filters.farid <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters>`_
     * - Farid filter (horizontal)
@@ -411,20 +393,32 @@ The following functions are available:
       - `skimage.filters.farid_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_
     * - Laplace filter
       - `skimage.filters.laplace <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_
-    * - Canny filter
-      - `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_
+    * - Prewitt filter
+      - `skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_
+    * - Prewitt filter (horizontal)
+      - `skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_
+    * - Prewitt filter (vertical)
+      - `skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_
+    * - Roberts filter
+      - `skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_
+    * - Scharr filter
+      - `skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_
+    * - Scharr filter (horizontal)
+      - `skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_
+    * - Scharr filter (vertical)
+      - `skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_
+    * - Sobel filter
+      - `skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_
+    * - Sobel filter (horizontal)
+      - `skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_
+    * - Sobel filter (vertical)
+      - `skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_
 
 .. note::
 
     The "All edges filters" option allows to perform all edge filtering algorithms
     on the same image. Combined with the "distribute on a grid" option, this allows
     to compare the different edge filters on the same image.
-
-Butterworth filter
-^^^^^^^^^^^^^^^^^^
-
-Perform Butterworth filter on an image
-(implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)
 
 Erase area
 ^^^^^^^^^^
@@ -438,7 +432,6 @@ Erase an area in the image as defined by a region of interest (ROI).
     Note that the ROI defined here is not bound to any object; it is used solely to
     specify the area to erase in the image. In particular, it is independent of the
     image’s ROI, if any (the latter is shown in the dialog box as a masked area).
-
 
 Resize
 ^^^^^^

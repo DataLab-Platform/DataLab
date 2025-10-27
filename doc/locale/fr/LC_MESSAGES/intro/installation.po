@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 11:27+0200\n"
+"POT-Creation-Date: 2025-10-18 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,6 +34,21 @@ msgstr "Lien de téléchargement direct pour la dernière version de DataLab :"
 
 msgid "|download_link1|"
 msgstr "|download_link1|"
+
+msgid "**Important notice for users upgrading from DataLab v0.20 or earlier:**"
+msgstr "**Note importante pour les utilisateurs effectuant une mise à niveau depuis DataLab v0.20 ou une version antérieure :**"
+
+msgid "DataLab v1.0 introduces **breaking changes** that are **not backward compatible** with v0.20."
+msgstr "DataLab v1.0 introduit des **changements majeurs** qui ne sont **pas rétrocompatibles** avec v0.20."
+
+msgid "**Plugins** developed for v0.20 **must be updated** to work with v1.0"
+msgstr "**Les plugins** développés pour v0.20 **doivent être mis à jour** pour fonctionner avec v1.0."
+
+msgid "**API changes** affect custom code integrations"
+msgstr "**Les changements d'API** affectent les intégrations de code personnalisées."
+
+msgid "For detailed migration information, see the :ref:`migration guide <migration_v020_to_v100>`."
+msgstr "Pour des informations détaillées sur la migration, voir le :ref:`guide de migration <migration_v020_to_v100>`."
 
 msgid "This section provides information on how to install DataLab on your system. Once installed, you can start DataLab by running the ``datalab`` command in a terminal, or by clicking on the DataLab shortcut in the Start menu (on Windows)."
 msgstr "Cette section fournit des informations sur l'installation de DataLab sur votre système. Une fois installé, vous pouvez démarrer DataLab en exécutant la commande ``datalab`` dans un terminal, ou en cliquant sur le raccourci DataLab dans le menu Démarrer (sous Windows)."
@@ -403,4 +418,3 @@ msgstr "Plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-

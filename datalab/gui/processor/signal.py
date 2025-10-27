@@ -42,6 +42,21 @@ from datalab.widgets import (
 class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     """Object handling signal processing: operations, processing, analysis"""
 
+    FIT_FUNCTIONS = (
+        (_("Linear fit"), sips.linear_fit),
+        (_("Polynomial fit"), sips.polynomial_fit),
+        (_("Gaussian fit"), sips.gaussian_fit),
+        (_("Lorentzian fit"), sips.lorentzian_fit),
+        (_("Voigt fit"), sips.voigt_fit),
+        (_("Planckian fit"), sips.planckian_fit),
+        (_("Two Half-Gaussians fit"), sips.twohalfgaussian_fit),
+        (_("Piecewise exponential fit"), sips.piecewiseexponential_fit),
+        (_("Exponential fit"), sips.exponential_fit),
+        (_("Sinusoidal fit"), sips.sinusoidal_fit),
+        (_("CDF fit"), sips.cdf_fit),
+        (_("Sigmoid fit"), sips.sigmoid_fit),
+    )
+
     # pylint: disable=duplicate-code
 
     def register_operations(self) -> None:
@@ -155,6 +170,17 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             icon_name="deconvolution.svg",
             obj2_name=_("signal to deconvolve with"),
         )
+        self.register_n_to_1(
+            sips.signals_to_image,
+            _("Combine signals into image"),
+            paramclass=sigima_base.SignalsToImageParam,
+            icon_name="signals_to_image.svg",
+            comment=_(
+                "Combine multiple signals into a 2D image.\n"
+                "Signals can be arranged as rows or columns,\n"
+                "with optional normalization."
+            ),
+        )
 
     def register_processing(self) -> None:
         """Register processing functions."""
@@ -205,19 +231,13 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         )
         # Noise addition
         self.register_1_to_1(
-            sips.add_gaussian_noise,
-            _("Add Gaussian noise"),
-            NormalDistributionParam,
+            sips.add_gaussian_noise, _("Add Gaussian noise"), NormalDistributionParam
         )
         self.register_1_to_1(
-            sips.add_poisson_noise,
-            _("Add Poisson noise"),
-            PoissonDistributionParam,
+            sips.add_poisson_noise, _("Add Poisson noise"), PoissonDistributionParam
         )
         self.register_1_to_1(
-            sips.add_uniform_noise,
-            _("Add uniform noise"),
-            UniformDistributionParam,
+            sips.add_uniform_noise, _("Add uniform noise"), UniformDistributionParam
         )
         # Noise reduction
         self.register_1_to_1(
@@ -331,22 +351,17 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             "bandstop.svg",
         )
         # Curve fitting
-        for fit_name, fit_func in [
-            (_("Linear fit"), sips.linear_fit),
-            (_("Polynomial fit"), sips.polynomial_fit),
-            (_("Gaussian fit"), sips.gaussian_fit),
-            (_("Lorentzian fit"), sips.lorentzian_fit),
-            (_("Voigt fit"), sips.voigt_fit),
-            (_("Planckian fit"), sips.planckian_fit),
-            (_("Two Half-Gaussians fit"), sips.twohalfgaussian_fit),
-            (_("Piecewise exponential fit"), sips.piecewiseexponential_fit),
-            (_("Exponential fit"), sips.exponential_fit),
-            (_("Sinusoidal fit"), sips.sinusoidal_fit),
-            (_("CDF fit"), sips.cdf_fit),
-            (_("Sigmoid fit"), sips.sigmoid_fit),
-        ]:
+        for fit_name, fit_func in self.FIT_FUNCTIONS:
             icon_name = f"{fit_func.__name__}.svg"
             self.register_1_to_1(fit_func, fit_name, icon_name=icon_name)
+
+        # Evaluate fit on another signal's x-axis
+        self.register_2_to_1(
+            sips.evaluate_fit,
+            _("Evaluate fit"),
+            obj2_name=_("signal for X values"),
+            comment=_("Evaluate a fitting curve on the x-axis of another signal"),
+        )
 
         # Other processing
         self.register_1_to_1(

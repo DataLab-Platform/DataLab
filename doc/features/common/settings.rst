@@ -149,6 +149,10 @@ Common settings
 Signal-specific settings
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+**Default line width**
+    Default line width for curves representing signals. This setting affects all signal
+    visualizations unless overridden individually.
+
 **Use auto downsampling**
     Enable automatic downsampling for large signals to improve performance and
     visualization clarity.
@@ -175,10 +179,6 @@ Image-specific settings
 **Lock aspect ratio to 1:1**
     When enabled, the aspect ratio of images is locked to 1:1. When disabled, the aspect
     ratio is determined by the physical pixel size (default and recommended setting).
-
-**Use reference image LUT range**
-    When enabled, images are shown with the same LUT (Look-Up Table) range as the first
-    selected image, allowing easier comparison.
 
 **Eliminate outliers**
     Percentage of the highest and lowest values to eliminate from the image histogram.

@@ -67,6 +67,7 @@ class CurveStyles:
             color, linestyle = next(self.curve_style)
         param.line.color = color
         param.line.style = linestyle
+        param.line.width = Conf.view.sig_line_width.get(1.25)
         param.symbol.marker = "NoSymbol"
 
     def reset_styles(self) -> None:
