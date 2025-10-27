@@ -28,13 +28,12 @@ complementary material to the documentation and other tutorials available here.
            :link-type: doc
            :img-top: https://img.youtube.com/vi/s_z9SUegYJQ/0.jpg
 
-.. only:: latex and not html
+.. toctree::
+   :maxdepth: 1
+   :hidden:
 
-   .. toctree::
-      :maxdepth: 1
-
-      videos/p1_quick_demo
-      videos/p2_extensibility
+   videos/p1_quick_demo
+   videos/p2_extensibility
 
 
 Other Tutorials
