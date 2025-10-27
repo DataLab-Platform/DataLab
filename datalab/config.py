@@ -261,6 +261,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     auto_refresh = conf.Option()
     show_first_only = conf.Option()  # Show only first selected item
     show_contrast = conf.Option()
+    sig_line_width = conf.Option()
     sig_antialiasing = conf.Option()
     sig_autodownsampling = conf.Option()
     sig_autodownsampling_maxpoints = conf.Option()
@@ -407,6 +408,7 @@ def initialize():
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")
     Conf.view.ignore_title_insertion_msg.get(False)
+    Conf.view.sig_line_width.get(1.25)
     Conf.view.sig_autodownsampling.get(True)
     Conf.view.sig_autodownsampling_maxpoints.get(100000)
     Conf.view.sig_autoscale_margin_percent.get(2.0)
@@ -456,6 +458,11 @@ PLOTPY_DEFAULTS = {
         # Overriding default plot settings from PlotPy
         "title/font/size": 11,
         "title/font/bold": False,
+        "selected_curve_symbol/marker": "Ellipse",
+        "selected_curve_symbol/edgecolor": "#a0a0a4",
+        "selected_curve_symbol/facecolor": MAIN_FG_COLOR,
+        "selected_curve_symbol/alpha": 0.3,
+        "selected_curve_symbol/size": 5,
         "marker/curve/text/textcolor": "black",
         "marker/cross/text/textcolor": "black",
         "marker/cross/text/background_alpha": 0.7,

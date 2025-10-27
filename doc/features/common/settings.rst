@@ -149,6 +149,10 @@ Common settings
 Signal-specific settings
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+**Default line width**
+    Default line width for curves representing signals. This setting affects all signal
+    visualizations unless overridden individually.
+
 **Use auto downsampling**
     Enable automatic downsampling for large signals to improve performance and
     visualization clarity.

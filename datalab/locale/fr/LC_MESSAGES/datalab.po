@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-24 12:05+0200\n"
+"POT-Creation-Date: 2025-10-27 14:30+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -2203,6 +2203,12 @@ msgstr "Ignorer le message d'information lors de l'insertion du titre de l'objet
 msgid "Signal"
 msgstr "Signal"
 
+msgid "Default line width"
+msgstr "Épaisseur par défaut"
+
+msgid "Default line width for curves representing signals"
+msgstr "Épaisseur de trait par défaut pour les courbes représentant des signaux"
+
 msgid "Use auto downsampling"
 msgstr "Utiliser l'auto-sous-échantillonnage"
 
@@ -3070,4 +3076,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
