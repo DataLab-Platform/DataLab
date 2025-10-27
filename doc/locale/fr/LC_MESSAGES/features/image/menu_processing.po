@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-20 09:42+0200\n"
+"POT-Creation-Date: 2025-10-27 18:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -80,13 +80,13 @@ msgstr "Equation"
 msgid "Maximum"
 msgstr "Maximum"
 
-msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{max}}`"
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{\\max}}`"
 msgstr ""
 
 msgid "Amplitude"
 msgstr "Amplitude"
 
-msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{max}-z_{min}}`"
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{\\max}-z_{\\min}}`"
 msgstr ""
 
 msgid "Area"
@@ -98,13 +98,13 @@ msgstr ""
 msgid "Energy"
 msgstr "Energie"
 
-msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\sum_{n=0}^{N}|z_{0}[n]|^2}}`"
+msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\sum_{n=0}^{N}\\left|z_{0}[n]\\right|^2}}`"
 msgstr ""
 
 msgid "RMS"
 msgstr ""
 
-msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}|z_{0}[n]|^2}}`"
+msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}\\left|z_{0}[n]\\right|^2}}`"
 msgstr ""
 
 msgid "Clipping"

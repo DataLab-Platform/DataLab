@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 17:06+0200\n"
+"POT-Creation-Date: 2025-10-27 18:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -108,14 +108,15 @@ msgstr "Normalisation"
 msgid "Maximum"
 msgstr "Maximum"
 
-msgid ":math:`y_{1}= \\dfrac{y_{0}}{max(y_{0})}`"
+#, python-brace-format
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\max\\left(y_{0}\\right)}`"
 msgstr ""
 
 msgid "Amplitude"
 msgstr "Amplitude"
 
-msgid ":math:`y_{1}= \\dfrac{y_{0}'}{max(y_{0}')}` with :math:`y_{0}'=y_{0}-min(y_{0})`"
-msgstr ":math:`y_{1}= \\dfrac{y_{0}'}{max(y_{0}')}` avec :math:`y_{0}'=y_{0}-min(y_{0})`"
+msgid ":math:`y_{1}= \\dfrac{y_{0}'}{\\max\\left(y_{0}'\\right)}` with :math:`y_{0}'=y_{0}-\\min\\left(y_{0}\\right)`"
+msgstr ""
 
 msgid "Area"
 msgstr "Aire"
@@ -126,13 +127,13 @@ msgstr ""
 msgid "Energy"
 msgstr "Energie"
 
-msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\sum_{n=0}^{N}|y_{0}[n]|^2}}`"
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\sum_{n=0}^{N}\\left|y_{0}[n]\\right|^2}}`"
 msgstr ""
 
 msgid "RMS"
 msgstr ""
 
-msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}|y_{0}[n]|^2}}`"
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}\\left|y_{0}[n]\\right|^2}}`"
 msgstr ""
 
 msgid "Clipping"
@@ -506,20 +507,20 @@ msgid "Exponential"
 msgstr "Exponentielle"
 
 #, python-brace-format
-msgid ":math:`y = y_{0} + A \\cdot \\exp\\left(B \\cdot x\\right)`"
+msgid ":math:`y = y_{0} + A \\exp\\left(B \\cdot x\\right)`"
 msgstr ""
 
 msgid "Sinusoidal"
 msgstr "Sinusoïdal"
 
 #, python-brace-format
-msgid ":math:`y = y_{0} + A \\cdot \\sin\\left(2 \\pi f \\cdot x + \\phi\\right)`"
+msgid ":math:`y = y_{0} + A \\sin\\left(2 \\pi f \\cdot x + \\phi\\right)`"
 msgstr ""
 
 msgid "Cumulative Distribution Function (CDF)"
 msgstr "Fonction de distribution cumulative (CDF)"
 
-msgid ":math:`y = y_{0} + A \\cdot \\operatorname{erf}\\left(\\dfrac{x - x_{0}}{\\sqrt{2} \\sigma}\\right)`"
+msgid ":math:`y = y_{0} + A \\erf\\left(\\dfrac{x - x_{0}}{\\sqrt{2} \\sigma}\\right)`"
 msgstr ""
 
 msgid "Windowing"

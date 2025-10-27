@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-24 12:04+0200\n"
+"POT-Creation-Date: 2025-10-27 18:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -85,7 +85,7 @@ msgstr ":math:`y[i]` est uniformément distribué entre deux bornes configurable
 msgid "2D Gaussian"
 msgstr "Gaussienne 2D"
 
-msgid ":math:`z = A.exp(-\\dfrac{(\\sqrt{(x-x0)^2+(y-y0)^2}-\\mu)^2}{2\\sigma^2})`"
+msgid ":math:`z = A \\cdot \\exp\\left(-\\dfrac{\\left(\\sqrt{\\left(x-x_0\\right)^2+\\left(y-y_0\\right)^2}-\\mu\\right)^2}{2\\sigma^2}\\right)`"
 msgstr ""
 
 msgid "2D Ramp"
@@ -333,3 +333,4 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
+
