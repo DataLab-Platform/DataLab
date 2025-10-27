@@ -271,6 +271,12 @@ class ViewSettings(gds.DataSet):
 
     g1 = gds.BeginGroup(_("Signal"))
     _prop_ads = gds.ValueProp(False)
+    sig_line_width = gds.FloatItem(
+        _("Default line width"),
+        default=1.25,
+        min=0.1,
+        help=_("Default line width for curves representing signals"),
+    )
     sig_autodownsampling = gds.BoolItem(
         "",
         _("Use auto downsampling"),
