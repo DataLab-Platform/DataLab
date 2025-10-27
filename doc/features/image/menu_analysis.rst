@@ -136,6 +136,8 @@ Circle Hough transform
 Detect circular shapes using circle Hough transform
 (implementation based on `skimage.transform.hough_circle_peaks <https://scikit-image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_).
 
+.. _ima-blob-detection:
+
 Blob detection
 ^^^^^^^^^^^^^^
 
