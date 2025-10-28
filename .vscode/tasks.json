@@ -417,7 +417,7 @@
             ],
         },
         {
-            "label": "Upgrade PlotPyStack",
+            "label": "Upgrade Sigima/PlotPyStack",
             "command": "${command:python.interpreterPath}",
             "args": [
                 "scripts/run_with_env.py",
@@ -430,6 +430,7 @@
                 "PythonQwt",
                 "guidata",
                 "PlotPy",
+                "Sigima",
             ],
             "options": {
                 "cwd": "${workspaceFolder}",
@@ -844,7 +845,7 @@
             "dependsOrder": "sequence",
             "dependsOn": [
                 "🧹 Clean Up",
-                "📦 Upgrade PlotPyStack",
+                "Upgrade Sigima/PlotPyStack",
                 "📚 Compile translations",
                 "Build Python packages",
                 "Create executable",
