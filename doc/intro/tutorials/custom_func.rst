@@ -7,9 +7,9 @@
     :description: Tutorial on how to prototype a custom image processing pipeline using DataLab (macro, plugin, external IDE, Jupyter notebook)
     :keywords: DataLab, custom function, macro-command, plugin, image processing, prototype, Spyder, Jupyter
 
-For your specific application, is it possible that you will need a function that is not
+For your specific application, it is possible that you will need a function that is not
 available in DataLab by default. In this case, you can define your own function and
-integrate it in Datalab to conveniently analyse your data. Datalab has been designed
+integrate it in DataLab to conveniently analyze your data. DataLab has been designed
 to be flexible and extensible, and the goal of this tutorial is to show you how to do
 that.
 
@@ -31,7 +31,7 @@ The function that we will work on is a denoising filter that combines the ideas 
 averaging and edge detection. This filter will average the pixel values in the
 neighborhood, but with a twist: it will give less weight to pixels that are
 significantly different from the central pixel, assuming they might be part of an
-edge or noise. Once you will have understood how to implement custom processing in
+edge or noise. Once you have understood how to implement custom processing in
 DataLab, you will define your own functions adapted to your specific needs.
 
 Here is the code of the ``weighted_average_denoise`` function::
@@ -60,7 +60,7 @@ plugin example (`plugins/examples/datalab_example_imageproc.py`). Before startin
 make sure that the plugin is installed in DataLab (see the first steps of the
 tutorial :ref:`tutorial_blobs` to understand how to do it).
 
-We then reorganize the DataLab window layout to have a confortable environment for
+We then reorganize the DataLab window layout to have a comfortable environment for
 developing and testing our function: we reorganize the window layout of DataLab to have
 the "Image Panel" on the left and the "Macro Panel" on the right. To do so, you can
 simply drag and drop the panels to the desired position. If the
@@ -97,14 +97,14 @@ Create a macro-command
 A macro is a code that can be executed directly inside DataLab to automate tasks.
 Macros are written in Python, and use the DataLab API to interact with DataLab.
 
-In addition, macros the following important features:
+In addition, macros have the following important features:
 
 -   Macros are part of DataLab's **workspace**, which means that they are saved
     and restored when exporting and importing to/from an HDF5 file.
 
 -   Macros are executed in a separate process, so we need to import the necessary
     modules and initialize the proxy to DataLab. The proxy is a special object that
-    allows to communicate with DataLab.
+    allows us to communicate with DataLab.
 
 -   As a consequence, **when defining a plugin or when controlling DataLab from an
     external IDE, we can use exactly the same code as in the macro-command**. This
@@ -143,7 +143,7 @@ To edit macros, we use the "Macro Panel" that is available in DataLab. This pane
 separated in two parts: the upper part is the macro editor, where we can write and edit
 the macro code; the lower part is the console, where we can see the output of the macro.
 If the macro editor is too small to show all the buttons of the macro toolbar, some of
-them are hidden and can be accessed by clicking on the unfold button. Altrnatively, you
+them are hidden and can be accessed by clicking on the unfold button. Alternatively, you
 can resize the macro editor by dragging the splitter between the editor and the console.
 
 Let's get back to our custom function. We can create a new macro-command that will
@@ -289,10 +289,10 @@ Here we have used the script without any modification, but we could have modifie
 to test new ideas, and then use the modified script in DataLab.
 
 There is another useful application of having an external script interfaced with
-DataLab: you can imagine letting your external script acquiring the datas and adding
-them to DataLab automatically, for example in an acquisition loop.
+DataLab: you can imagine letting your external script acquire the data and add
+it to DataLab automatically, for example in an acquisition loop.
 In this way you can improve your measurement workflow with the possibility to visualize
-and analyse data directly after their acquisition.
+and analyze data directly after their acquisition.
 
 
 
@@ -313,7 +313,7 @@ The procedure is the same as for Spyder or any other IDE like Visual Studio Code
 Creating a plugin
 -----------------
 
-Now that we have a working prototype of our processing pipeline, we can choose to create
+Now that we have a working prototype of our processing pipeline, we can choose to create a
 plugin to integrate it in DataLab's GUI. To do so, we need to create a new Python
 module that will contain the plugin code. We can use the same code as in the
 macro-command, but we need to make some changes.
@@ -324,7 +324,7 @@ macro-command, but we need to make some changes.
 
 Apart from integrating the feature to DataLab's GUI which is more convenient for
 the user, the advantage of creating a plugin is that we can take benefit of the
-DataLab infrastructure, if we encapsulate our processing function in a certain
+DataLab infrastructure if we encapsulate our processing function in a certain
 way (see below):
 
 -   Our function will be executed in a separate process, so we can interrupt it if it
@@ -333,7 +333,7 @@ way (see below):
 -   Warnings and errors will be handled by DataLab, so we don't need to handle them
     ourselves.
 
-The most significant change we need to made to our code is that we need to define a
+The most significant change we need to make to our code is that we need to define a
 function that will be operating on DataLab's native image objects
 (:class:`sigima.objects.ImageObj`), instead of operating on NumPy arrays.
 So we need to find a way to call our custom function
@@ -342,7 +342,7 @@ and output. To avoid writing a lot of boilerplate code, we can use the function 
 
 Besides we need to define a class that describes our plugin, which must inherit
 from :class:`datalab.plugins.PluginBase` and name the Python script that contains the
-plugin code with a name that starts with ``datalab_`` (e.g. ``datalab_custom_func.py``), so
+plugin code with a name that starts with ``datalab_`` (e.g., ``datalab_custom_func.py``), so
 that DataLab can discover it at startup.
 
 Moreover, inside the plugin code, we want to add an entry in the "Plugins" menu, so
@@ -357,7 +357,7 @@ Here is the plugin code:
 To test it, we have to add the plugin script to one of the plugin directories that
 are discovered by DataLab at startup: you can find it under "Files > Settings"
 (see the :ref:`about_plugins` section for more details, or the :ref:`tutorial_blobs`
-for an example). We then DataLab and we can see that the plugin has been loaded.
+for an example). We then restart DataLab and we can see that the plugin has been loaded.
 
 .. figure:: ../../images/tutorials/custom_func/10.png
 
