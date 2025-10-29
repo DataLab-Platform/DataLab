@@ -254,6 +254,31 @@ class ObjectProp(QW.QTabWidget):
         """Add additional button on bottom of properties panel"""
         self.add_prop_layout.addWidget(button)
 
+    def find_object_by_uuid(
+        self, uuid: str
+    ) -> SignalObj | ImageObj | ObjectGroup | None:
+        """Find an object by UUID, searching across all panels if needed.
+
+        This method first searches in the current panel, then in other panels
+        for cross-panel computations (e.g., radial profile: ImageObj -> SignalObj).
+
+        Args:
+            uuid: UUID of the object to find
+
+        Returns:
+            The object if found, None otherwise
+        """
+        other_panel = self.panel.mainwindow.imagepanel
+        if self.panel is other_panel:
+            other_panel = self.panel.mainwindow.signalpanel
+        for panel in (self.panel, other_panel):
+            if panel is not None:
+                try:
+                    return panel.objmodel[uuid]
+                except KeyError:
+                    continue
+        return None
+
     def display_analysis_parameter(self, obj: SignalObj | ImageObj) -> None:
         """Set analysis parameter label.
 
@@ -301,9 +326,8 @@ class ObjectProp(QW.QTabWidget):
 
             # Try to find source object
             if proc_params.source_uuid:
-                try:
-                    current_obj = self.panel.objmodel[proc_params.source_uuid]
-                except KeyError:
+                current_obj = self.find_object_by_uuid(proc_params.source_uuid)
+                if current_obj is None:
                     history_items.append(_("(source deleted)"))
                     break
             elif proc_params.source_uuids:
@@ -557,6 +581,17 @@ class ObjectProp(QW.QTabWidget):
         if isinstance(param, list):
             return False
 
+        # Eventually call the `update_from_obj` method to properly initialize
+        # the parameter object from the current object state:
+        if hasattr(param, "update_from_obj"):
+            # Warning: the `update_from_obj` method takes the input object as argument,
+            # not the output object (`obj` is the processed object here):
+            # Retrieve the input object from the source UUID
+            if proc_params.source_uuid is not None:
+                source_obj = self.find_object_by_uuid(proc_params.source_uuid)
+                if source_obj is not None:
+                    param.update_from_obj(source_obj)
+
         # Create parameter editor widget
         editor = gdq.DataSetEditGroupBox(_("Processing Parameters"), param.__class__)
         update_dataset(editor.dataset, param)
@@ -622,9 +657,8 @@ class ObjectProp(QW.QTabWidget):
             return report
 
         # Find source object
-        try:
-            source_obj = self.panel.objmodel[proc_params.source_uuid]
-        except KeyError:
+        source_obj = self.find_object_by_uuid(proc_params.source_uuid)
+        if source_obj is None:
             report.message = _("Source object no longer exists.")
             if interactive:
                 QW.QMessageBox.critical(
@@ -642,9 +676,17 @@ class ObjectProp(QW.QTabWidget):
         # Get updated parameters from editor
         param = editor.dataset if editor is not None else proc_params.param
 
+        # For cross-panel computations, we need to use the processor from the panel
+        # that owns the source object (e.g., radial_profile is in ImageProcessor)
+        processor = self.panel.processor
+        if isinstance(source_obj, SignalObj):
+            processor = self.panel.mainwindow.signalpanel.processor
+        elif isinstance(source_obj, ImageObj):
+            processor = self.panel.mainwindow.imagepanel.processor
+
         # Recompute using the dedicated method (with multiprocessing support)
         try:
-            new_obj = self.panel.processor.recompute_1_to_1(
+            new_obj = processor.recompute_1_to_1(
                 proc_params.func_name, source_obj, param
             )
         except Exception as exc:  # pylint: disable=broad-except
