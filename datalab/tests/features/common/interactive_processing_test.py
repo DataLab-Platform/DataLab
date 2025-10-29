@@ -23,7 +23,7 @@ from __future__ import annotations
 import numpy as np
 from guidata.dataset import json_to_dataset
 from guidata.qthelpers import qt_app_context
-from sigima.objects import GaussParam
+from sigima.objects import Gauss2DParam, GaussParam
 from sigima.params import ConstantParam, GaussianParam, MovingAverageParam
 
 from datalab.gui.newobject import CREATION_PARAMETERS_OPTION
@@ -223,9 +223,10 @@ def test_apply_creation_parameters_image():
             panel = win.imagepanel
             objprop = panel.objprop
 
-            # Create an image using the default new_object() which creates
-            # a peak image suitable for testing parameter changes
-            panel.new_object(edit=False)
+            # Create an image with specific parameters (using a derived class
+            # of NewImageParam) to ensure creation parameters are stored in metadata
+            param = Gauss2DParam.create(x0=50.0, y0=50.0, sigma=10.0, a=100.0)
+            panel.new_object(param=param, edit=False)
             image = panel.objview.get_current_object()
             assert image is not None
 
@@ -235,9 +236,8 @@ def test_apply_creation_parameters_image():
 
             # Modify the parameters in the editor to create a visibly different image
             editor = objprop.creation_param_editor
-            # Change the image size to make it clearly different
-            editor.dataset.height *= 2
-            editor.dataset.width *= 2
+            # Change the amplitude to make it clearly different
+            editor.dataset.a = 200.0  # Double the amplitude from 100.0 to 200.0
 
             # Apply the new parameters
             objprop.apply_creation_parameters()
@@ -246,9 +246,48 @@ def test_apply_creation_parameters_image():
             updated_image = panel.objview.get_current_object()
             assert get_uuid(updated_image) == get_uuid(image)
 
-            # Verify the data has changed (different shape)
-            assert updated_image.data.shape[0] == original_data.shape[0] * 2
-            assert updated_image.data.shape[1] == original_data.shape[1] * 2
+            # Verify the data has changed (amplitude doubled)
+            assert not np.array_equal(updated_image.data, original_data)
+
+
+def test_no_creation_parameters_for_base_classes():
+    """Test that creation parameters are NOT stored for base classes
+
+    This test verifies the behavior introduced by the patch that only stores
+    creation parameters for derived classes of NewSignalParam/NewImageParam,
+    not for the base classes themselves.
+    """
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            # Test with signals
+            signal_panel = win.signalpanel
+            signal_objprop = signal_panel.objprop
+
+            # Create a signal using default new_object() (uses base NewSignalParam)
+            signal_panel.new_object(edit=False)
+            signal = signal_panel.objview.get_current_object()
+            assert signal is not None
+
+            # Verify the Creation tab was NOT set up (no creation parameters stored)
+            assert signal_objprop.creation_param_editor is None
+
+            # Verify that CREATION_PARAMETERS_OPTION is not in metadata
+            assert CREATION_PARAMETERS_OPTION not in signal.get_metadata_options()
+
+            # Test with images
+            image_panel = win.imagepanel
+            image_objprop = image_panel.objprop
+
+            # Create an image using default new_object() (uses base NewImageParam)
+            image_panel.new_object(edit=False)
+            image = image_panel.objview.get_current_object()
+            assert image is not None
+
+            # Verify the Creation tab was NOT set up (no creation parameters stored)
+            assert image_objprop.creation_param_editor is None
+
+            # Verify that CREATION_PARAMETERS_OPTION is not in metadata
+            assert CREATION_PARAMETERS_OPTION not in image.get_metadata_options()
 
 
 def test_apply_processing_parameters_signal():
@@ -424,6 +463,7 @@ if __name__ == "__main__":
     test_recompute()
     test_apply_creation_parameters_signal()
     test_apply_creation_parameters_image()
+    test_no_creation_parameters_for_base_classes()
     test_apply_processing_parameters_signal()
     test_apply_processing_parameters_image()
     test_apply_processing_parameters_missing_source()
