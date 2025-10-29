@@ -59,6 +59,10 @@ How to develop a plugin?
 
 The recommended approach to developing a plugin is to derive from an existing example and adapt it to your needs. You can explore the source code in the `datalab/plugins` folder or refer to community-contributed examples.
 
+.. note::
+
+   Most of DataLab's signal and image processing functionalities have been externalized into a dedicated library called **Sigima** (`https://sigima.readthedocs.io/en/latest/ <https://sigima.readthedocs.io/en/latest/>`_). When developing DataLab plugins, you will typically import and use many Sigima functions and features to perform data processing, analysis, and visualization tasks. Sigima provides a comprehensive set of tools for scientific data manipulation that can be leveraged directly in your plugins.
+
 To develop in your usual Python environment (e.g., with an IDE like `Spyder <https://www.spyder-ide.org/>`_), you can:
 
 1. **Install DataLab in your Python environment**, using one of the following methods:

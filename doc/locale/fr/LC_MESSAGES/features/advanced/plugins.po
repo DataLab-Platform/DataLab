@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-18 12:03+0200\n"
+"POT-Creation-Date: 2025-10-29 12:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,6 +88,9 @@ msgstr "Comment développer un plugin ?"
 
 msgid "The recommended approach to developing a plugin is to derive from an existing example and adapt it to your needs. You can explore the source code in the `datalab/plugins` folder or refer to community-contributed examples."
 msgstr "La méthode recommandée pour développer un plugin est de dériver d'un exemple existant et de l'adapter à vos besoins. Vous pouvez explorer le code source dans le dossier `datalab/plugins` ou vous référer aux exemples fournis par la communauté."
+
+msgid "Most of DataLab's signal and image processing functionalities have been externalized into a dedicated library called **Sigima** (`https://sigima.readthedocs.io/en/latest/ <https://sigima.readthedocs.io/en/latest/>`_). When developing DataLab plugins, you will typically import and use many Sigima functions and features to perform data processing, analysis, and visualization tasks. Sigima provides a comprehensive set of tools for scientific data manipulation that can be leveraged directly in your plugins."
+msgstr "La plupart des fonctionnalités de traitement des signaux et des images de DataLab ont été externalisées dans une bibliothèque dédiée appelée **Sigima** (`https://sigima.readthedocs.io/fr/latest/ <https://sigima.readthedocs.io/fr/latest/>`_). Lors du développement de plugins DataLab, vous importerez et utiliserez généralement de nombreuses fonctions et fonctionnalités de Sigima pour effectuer des tâches de traitement, d'analyse et de visualisation des données. Sigima fournit un ensemble complet d'outils pour la manipulation des données scientifiques qui peut être exploité directement dans vos plugins."
 
 msgid "To develop in your usual Python environment (e.g., with an IDE like `Spyder <https://www.spyder-ide.org/>`_), you can:"
 msgstr "Pour développer dans votre environnement Python habituel (par exemple, avec un IDE comme `Spyder <https://www.spyder-ide.org/>`_), vous pouvez :"

@@ -184,10 +184,12 @@ class ObjectProp(QW.QTabWidget):
         # Object creation tab
         self.creation_param_editor: gdq.DataSetEditGroupBox | None = None
         self.current_creation_obj: SignalObj | ImageObj | None = None
+        self.creation_scroll: QW.QScrollArea | None = None
 
         # Object processing tab
         self.processing_param_editor: gdq.DataSetEditGroupBox | None = None
         self.current_processing_obj: SignalObj | ImageObj | None = None
+        self.processing_scroll: QW.QScrollArea | None = None
 
         # Properties tab
         self.properties = gdq.DataSetEditGroupBox("", objclass)
@@ -254,6 +256,31 @@ class ObjectProp(QW.QTabWidget):
         """Add additional button on bottom of properties panel"""
         self.add_prop_layout.addWidget(button)
 
+    def find_object_by_uuid(
+        self, uuid: str
+    ) -> SignalObj | ImageObj | ObjectGroup | None:
+        """Find an object by UUID, searching across all panels if needed.
+
+        This method first searches in the current panel, then in other panels
+        for cross-panel computations (e.g., radial profile: ImageObj -> SignalObj).
+
+        Args:
+            uuid: UUID of the object to find
+
+        Returns:
+            The object if found, None otherwise
+        """
+        other_panel = self.panel.mainwindow.imagepanel
+        if self.panel is other_panel:
+            other_panel = self.panel.mainwindow.signalpanel
+        for panel in (self.panel, other_panel):
+            if panel is not None:
+                try:
+                    return panel.objmodel[uuid]
+                except KeyError:
+                    continue
+        return None
+
     def display_analysis_parameter(self, obj: SignalObj | ImageObj) -> None:
         """Set analysis parameter label.
 
@@ -301,9 +328,8 @@ class ObjectProp(QW.QTabWidget):
 
             # Try to find source object
             if proc_params.source_uuid:
-                try:
-                    current_obj = self.panel.objmodel[proc_params.source_uuid]
-                except KeyError:
+                current_obj = self.find_object_by_uuid(proc_params.source_uuid)
+                if current_obj is None:
                     history_items.append(_("(source deleted)"))
                     break
             elif proc_params.source_uuids:
@@ -357,21 +383,23 @@ class ObjectProp(QW.QTabWidget):
         restore_dataset(dataset, self.__original_values)
 
         # Remove only Creation and Processing tabs (dynamic tabs)
-        # Keep History, Analysis, and Properties tabs (always present)
-        # History is always at index 0, Analysis at index 1, Properties at index 2
-        # So we need to remove tabs at index 0 and 1 if they are Creation/Processing
-        history_index = self.indexOf(self.processing_history)
-        while self.count() > history_index:
-            if self.indexOf(self.processing_history) > 0:
-                self.removeTab(0)
-            else:
-                break
+        # Use widget references instead of text labels for reliable identification
+        if self.creation_scroll is not None:
+            index = self.indexOf(self.creation_scroll)
+            if index >= 0:
+                self.removeTab(index)
+        if self.processing_scroll is not None:
+            index = self.indexOf(self.processing_scroll)
+            if index >= 0:
+                self.removeTab(index)
 
         # Reset references for dynamic tabs
         self.creation_param_editor = None
         self.current_creation_obj = None
+        self.creation_scroll = None
         self.processing_param_editor = None
         self.current_processing_obj = None
+        self.processing_scroll = None
 
         # Setup Creation and Processing tabs (if applicable)
         if obj is not None:
@@ -463,10 +491,10 @@ class ObjectProp(QW.QTabWidget):
 
         # Set the parameter editor as the scroll area widget
         # Creation tab is always at index 0 (before all other tabs)
-        obj_creation_scroll = QW.QScrollArea()
-        obj_creation_scroll.setWidgetResizable(True)
-        obj_creation_scroll.setWidget(editor)
-        self.insertTab(0, obj_creation_scroll, _("Creation"))
+        self.creation_scroll = QW.QScrollArea()
+        self.creation_scroll.setWidgetResizable(True)
+        self.creation_scroll.setWidget(editor)
+        self.insertTab(0, self.creation_scroll, _("Creation"))
         self.setCurrentIndex(0)
         return True
 
@@ -526,11 +554,15 @@ class ObjectProp(QW.QTabWidget):
             0, lambda: self.setup_creation_tab(self.current_creation_obj)
         )
 
-    def setup_processing_tab(self, obj: SignalObj | ImageObj) -> bool:
+    def setup_processing_tab(
+        self, obj: SignalObj | ImageObj, reset_params: bool = True
+    ) -> bool:
         """Setup the Processing tab with parameter editor for re-processing.
 
         Args:
             obj: Signal or Image object
+            reset_params: If True, call update_from_obj() to reset parameters from
+                source object. If False, use parameters as stored in metadata.
 
         Returns:
             True if Processing tab was set up, False otherwise
@@ -557,6 +589,19 @@ class ObjectProp(QW.QTabWidget):
         if isinstance(param, list):
             return False
 
+        # Eventually call the `update_from_obj` method to properly initialize
+        # the parameter object from the current object state.
+        # Only do this when reset_params is True (initial setup), not when
+        # refreshing after user has modified parameters.
+        if reset_params and hasattr(param, "update_from_obj"):
+            # Warning: the `update_from_obj` method takes the input object as argument,
+            # not the output object (`obj` is the processed object here):
+            # Retrieve the input object from the source UUID
+            if proc_params.source_uuid is not None:
+                source_obj = self.find_object_by_uuid(proc_params.source_uuid)
+                if source_obj is not None:
+                    param.update_from_obj(source_obj)
+
         # Create parameter editor widget
         editor = gdq.DataSetEditGroupBox(_("Processing Parameters"), param.__class__)
         update_dataset(editor.dataset, param)
@@ -569,17 +614,25 @@ class ObjectProp(QW.QTabWidget):
         # Store reference to be able to retrieve it later
         self.processing_param_editor = editor
 
+        # Remove existing Processing tab if it exists
+        if self.processing_scroll is not None:
+            index = self.indexOf(self.processing_scroll)
+            if index >= 0:
+                self.removeTab(index)
+
         # Processing tab comes after Creation tab (if it exists)
         # Find the correct insertion index: after Creation (index 0) if it exists,
         # otherwise at index 0
-        has_creation = self.count() > 0 and self.tabText(0) == _("Creation")
+        has_creation = (
+            self.creation_scroll is not None and self.indexOf(self.creation_scroll) >= 0
+        )
         insert_index = 1 if has_creation else 0
 
         # Create new processing scroll area and tab
-        processing_scroll = QW.QScrollArea()
-        processing_scroll.setWidgetResizable(True)
-        processing_scroll.setWidget(editor)
-        self.insertTab(insert_index, processing_scroll, _("Processing"))
+        self.processing_scroll = QW.QScrollArea()
+        self.processing_scroll.setWidgetResizable(True)
+        self.processing_scroll.setWidget(editor)
+        self.insertTab(insert_index, self.processing_scroll, _("Processing"))
         self.setCurrentIndex(insert_index)
         return True
 
@@ -622,9 +675,8 @@ class ObjectProp(QW.QTabWidget):
             return report
 
         # Find source object
-        try:
-            source_obj = self.panel.objmodel[proc_params.source_uuid]
-        except KeyError:
+        source_obj = self.find_object_by_uuid(proc_params.source_uuid)
+        if source_obj is None:
             report.message = _("Source object no longer exists.")
             if interactive:
                 QW.QMessageBox.critical(
@@ -642,9 +694,17 @@ class ObjectProp(QW.QTabWidget):
         # Get updated parameters from editor
         param = editor.dataset if editor is not None else proc_params.param
 
+        # For cross-panel computations, we need to use the processor from the panel
+        # that owns the source object (e.g., radial_profile is in ImageProcessor)
+        processor = self.panel.processor
+        if isinstance(source_obj, SignalObj):
+            processor = self.panel.mainwindow.signalpanel.processor
+        elif isinstance(source_obj, ImageObj):
+            processor = self.panel.mainwindow.imagepanel.processor
+
         # Recompute using the dedicated method (with multiprocessing support)
         try:
-            new_obj = self.panel.processor.recompute_1_to_1(
+            new_obj = processor.recompute_1_to_1(
                 proc_params.func_name, source_obj, param
             )
         except Exception as exc:  # pylint: disable=broad-except
@@ -682,7 +742,10 @@ class ObjectProp(QW.QTabWidget):
             self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
 
             # Refresh the Processing tab with the new parameters
-            QC.QTimer.singleShot(0, lambda: self.setup_processing_tab(obj))
+            # Don't reset parameters from source object - keep the user's values
+            QC.QTimer.singleShot(
+                0, lambda: self.setup_processing_tab(obj, reset_params=False)
+            )
 
             if isinstance(obj, SignalObj):
                 report.message = _("Signal was reprocessed.")
