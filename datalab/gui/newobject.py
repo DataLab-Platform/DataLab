@@ -149,7 +149,10 @@ def create_signal_gui(
             raise ValueError(f"Error creating signal: {exc}") from exc
         signal = None
 
-    insert_creation_parameters(signal, param)
+    # Insert creation parameters into metadata, only if `param` is an instance of a
+    # class deriving from `NewSignalParam` (not an instance of `NewSignalParam` itself):
+    if isinstance(param, NewSignalParam) and type(param) is not NewSignalParam:
+        insert_creation_parameters(signal, param)
     return signal
 
 
@@ -205,5 +208,8 @@ def create_image_gui(
             raise ValueError(f"Error creating image: {exc}") from exc
         return None
 
-    insert_creation_parameters(image, param)
+    # Insert creation parameters into metadata, only if `param` is an instance of a
+    # class deriving from `NewImageParam` (not an instance of `NewImageParam` itself):
+    if isinstance(param, NewImageParam) and type(param) is not NewImageParam:
+        insert_creation_parameters(image, param)
     return image
