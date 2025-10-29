@@ -60,7 +60,7 @@ msgstr "La boîte de dialogue \"À propos de DataLab\" affiche la liste des plug
 msgid "Let's click on \"Extract blobs (example) > Generate test image\""
 msgstr "Cliquons sur \"Extract blobs (example) > Generate test image\""
 
-msgid "Datalab menus change between images and signals. To be able to see the \"Extract blobs (example)\" menu, make sure that the \"Images\" panel is selected (click on the \"Images\" tab on the left)."
+msgid "DataLab menus change between images and signals. To be able to see the \"Extract blobs (example)\" menu, make sure that the \"Images\" panel is selected (click on the \"Images\" tab on the left)."
 msgstr "Les menus de DataLab changent entre les images et les signaux. Pour pouvoir voir le menu \"Extract blobs (example)\", assurez-vous que le panneau \"Images\" est sélectionné (cliquez sur l'onglet \"Images\" à gauche)."
 
 msgid "A pop-up dialog appears, asking for the parameters of the test image to generate (the size of the image and its title). We can just keep the default parameters and click on \"OK\"."
@@ -78,7 +78,7 @@ msgstr "Le plugin a d'autres fonctionnalités, telles que le débruitage de l'im
 msgid "The image is a bit noisy, and also quite large. In addition, the blobs are large respect to the pixel size."
 msgstr "L'image est un peu bruitée et assez grande. De plus, les taches sont grandes par rapport à la taille des pixels."
 
-msgid "To reduce the noise there are several functions available in Datalab. Due to the consideration we just made, we can consider that a binning would reduce the noise without loosing the information we look for. Let's apply a binning the image by a factor of 2 on both axis. This will reduce the image size by a factor of 4, and the noise standard deviation by a factor of 2. Choosing to change the pixel size accordingly will keep the blobs size constant in previous unit (in this case, pixels, but in a real application we can calibrate them to respect a real physical size)."
+msgid "To reduce the noise there are several functions available in DataLab. Due to the consideration we just made, we can consider that a binning would reduce the noise without loosing the information we look for. Let's apply a binning the image by a factor of 2 on both axis. This will reduce the image size by a factor of 4, and the noise standard deviation by a factor of 2. Choosing to change the pixel size accordingly will keep the blobs size constant in previous unit (in this case, pixels, but in a real application we can calibrate them to respect a real physical size)."
 msgstr "Pour réduire le bruit, plusieurs fonctions sont disponibles dans DataLab. Compte tenu des considérations que nous venons de faire, nous pouvons considérer qu'un binning réduirait le bruit sans perdre l'information que nous recherchons. Appliquons un binning à l'image d'un facteur de 2 sur les deux axes. Cela réduira la taille de l'image d'un facteur de 4, et l'écart-type du bruit d'un facteur de 2. Le choix de modifier la taille des pixels en conséquence permettra de maintenir la taille des taches constante dans l'unité précédente (dans ce cas, les pixels, mais dans une application réelle, nous pouvons les calibrer pour respecter une taille physique réelle)."
 
 msgid "Click on \"Operations > Pixel binning\"."

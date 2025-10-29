@@ -10,7 +10,7 @@ that includes many functions. Developed in Python, it benefits from the
 richness of the associated ecosystem in terms of scientific and
 technical libraries.
 
-What are the applications for Datalab?
+What are the applications for DataLab?
 --------------------------------------
 
 Real world examples

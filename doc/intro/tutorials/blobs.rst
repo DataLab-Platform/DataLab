@@ -44,7 +44,7 @@ If we close and reopen DataLab, we can see that the plugin is now available in t
 
     Let's click on "Extract blobs (example) > Generate test image"
 
-.. note:: Datalab menus change between images and signals. To be able to see the
+.. note:: DataLab menus change between images and signals. To be able to see the
     "Extract blobs (example)" menu, make sure that the "Images" panel is selected
     (click on the "Images" tab on the left).
 

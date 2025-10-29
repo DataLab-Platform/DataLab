@@ -31,7 +31,7 @@ msgstr "Cas d'usage, principales fonctionnalités et points forts"
 msgid "DataLab is a platform for data processing and visualization (signals or images) that includes many functions. Developed in Python, it benefits from the richness of the associated ecosystem in terms of scientific and technical libraries."
 msgstr "DataLab est une plateforme de traitement et de visualisation de données (signaux ou images) qui intègre de nombreuses fonctions. Développé en Python, il bénéficie de la richesse de l'écosystème associé en termes de bibliothèques scientifiques et techniques."
 
-msgid "What are the applications for Datalab?"
+msgid "What are the applications for DataLab?"
 msgstr "Quelles sont les applications de DataLab ?"
 
 msgid "Real world examples"
