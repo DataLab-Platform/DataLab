@@ -17,11 +17,21 @@ features of DataLab:
 - Extract the intensity profile along the X axis
 - Save the workspace
 
-First, we open DataLab and load the images:
+To follow this tutorial, you need to download the two test images from the DataLab
+GitHub repository:
+`datalab/data/tutorials
+<https://github.com/DataLab-Platform/DataLab/tree/main/datalab/data/tutorials/>`_
+
+Load the images
+---------------
+
+First, we open DataLab and load the images from the menu file "File > Open Image...",
+with the |fileopen_ima| button in the toolbar or by dragging and dropping the files
+into DataLab.
 
 .. figure:: ../../images/tutorials/fabry_perot/01.png
 
-   Open the image files with "File > Open...", or with the |fileopen_ima| button in
+   Open the image files with "File > Open Image...", or with the |fileopen_ima| button in
    the toolbar, or by dragging and dropping the files into DataLab (on the panel on
    the right).
 
@@ -32,7 +42,8 @@ First, we open DataLab and load the images:
 
 .. figure:: ../../images/tutorials/fabry_perot/02.png
 
-    Select the test images "fabry_perot1.jpg" and "fabry_perot2.jpg" and click "Open".
+    Go to the folder where you placed the downloaded images, select them
+    "fabry_perot1.jpg" and "fabry_perot2.jpg" and click "Open".
 
 The selected image is displayed in the main window. We can zoom in and out by pressing
 the right mouse button and dragging the mouse up and down. We can also pan the image
@@ -40,8 +51,8 @@ by pressing the middle mouse button and dragging the mouse.
 
 .. figure:: ../../images/tutorials/fabry_perot/03.png
 
-   Zoom in and out with the right mouse button. Pan the image with the middle mouse
-   button.
+   Images loaded in DataLab. Zoom in and out with the right mouse button, pan the
+   image with the middle mouse button.
 
 .. note::
 
@@ -65,42 +76,85 @@ by pressing the middle mouse button and dragging the mouse.
     :height: 24px
     :class: dark-light no-scaled-link
 
-Then, let's define a circular region of interest (ROI) around the central fringe.
+Define circular ROIs and fit contours
+--------------------------------------
+
+Let's define a circular region of interest (ROI) around the central fringe.
+To do that, we firstly select the fist image in the "Images" panel
+(if not already selected), then we select the "Edit graphically" tool in
+the "ROI" menu.
 
 .. figure:: ../../images/tutorials/fabry_perot/04.png
 
-   Select the "Edit regions of interest" tool in the "Analysis" menu.
+   Select the "Edit graphically" tool in the "ROI" menu.
 
-.. figure:: ../../images/tutorials/fabry_perot/05.png
+This opens the "Regions of interest" dialog, that provides all the tools to define and
+edit ROIs. You can define ROIs graphically or via their coordinates.
+You can define multiple ROIs on the same image, and even combine them using
+boolean operations (union, intersection, difference).
+
+.. figure:: ../../images/tutorials/fabry_perot/05a.png
 
    The "Regions of interest" dialog opens. Click "Add ROI" and select
    a circular ROI. Resize the predefined ROI by dragging the handles. Note that you
    may change the ROI radius while keeping its center fixed by pressing the "Ctrl" key.
    Click "OK" to close the dialog.
 
+We choose to define a circular ROI graphically. To do that, we click on the "Graphical ROI"
+button, and select the circular ROI option. We can now draw the circular ROI on the image
+by clicking and dragging the mouse: the first click is on one side of the circle, and the
+dragging ends on the opposite side of the circle.
+
+.. figure:: ../../images/tutorials/fabry_perot/05b.png
+
+    The option to graphically define a circular ROI.
+
+Once created, the ROI can be selected
+using the "Selection" tool, and moved or resized by dragging the ROI or its handles.
+In addition, you can change the ROI radius while keeping its center fixed by
+pressing the "Ctrl" key while dragging a handle.
+
+.. figure:: ../../images/tutorials/fabry_perot/05c.png
+
+   The circular ROI created appears in the image.
+
+Once you are satisfied with the ROI position and size, click "OK" to close the dialog.
+A confirmation dialog opens to ask you to apply the ROI to the image, and confirm
+its parameters. Here you can also choose to invert the ROI mask (i.e. select the area
+outside the ROI instead of the area inside the ROI): we do not want to invert the ROI
+in this case, so we leave the "Invert ROI" checkbox unchecked, and click "OK". If you
+want to obtain the exact results shown in this tutorial, make sure that the ROI parameters
+are the same as in the figure.
+
 .. figure:: ../../images/tutorials/fabry_perot/06.png
 
-   Another dialog box opens, and asks you to confirm the ROI parameters. Click "OK".
+   The confirmation dialog.
+
+Once confirmed, the ROI is applied to the image. The ROI is displayed on the image,
+and the part outside the ROI is dimmed. Note that, internally, the ROI is defined by a
+binary mask, i.e., image data is represented as a NumPy masked array.
 
 .. figure:: ../../images/tutorials/fabry_perot/07.png
 
-   The ROI is displayed on the image: masked pixels are grayed out, and the ROI
-   boundary is displayed in blue (note that, internally, the ROI is defined by a
-   binary mask, i.e. image data is represented as a NumPy masked array).
+   The ROI displayed on the image.
 
-Now, let's detect the contours in the ROI and fit them to circles.
+Now, let's detect the contours in the area inside the ROI and fit them to circles. To
+do that, we select the "Contour detection" tool in the "Analysis" menu. The contour
+parameters dialog opens: we select the shape "Circle" and click "OK". Now you will see
+a "Results" dialog opening, that displays the fitted circle parameters. Click "OK" to
+close the dialog. The fitted circles are displayed on the image.
 
 .. figure:: ../../images/tutorials/fabry_perot/08.png
 
-   Select the "Contour detection" tool in the "Analysis" menu.
+   The "Contour detection" tool in the "Analysis" menu.
 
 .. figure:: ../../images/tutorials/fabry_perot/09.png
 
-    The "Contour" parameters dialog opens. Select the shape "Circle" and click "OK".
+    The "Contour" parameters dialog.
 
 .. figure:: ../../images/tutorials/fabry_perot/10.png
 
-    The "Results" dialog opens, and displays the fitted circle parameters. Click "OK".
+    The "Results" dialog.
 
 .. figure:: ../../images/tutorials/fabry_perot/11.png
 
@@ -108,9 +162,9 @@ Now, let's detect the contours in the ROI and fit them to circles.
 
 .. note::
 
-    If you want to show the analysis results again, you can select the "Show results"
-    |show_results| entry in the "Analysis" menu, or the "Show results" |show_results|
-    button, below the image list:
+    If you want to show the analysis results again, you can select the "Show Results"
+    |show_results| button in the "Analysis" menu, or the "Results" |show_results|
+    button, in the Analysis panel located below the image list:
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
@@ -121,7 +175,10 @@ Now, let's detect the contours in the ROI and fit them to circles.
 
 The images (or signals) can also be displayed in a separate window, by clicking on
 the "View in a new window" entry in the "View" menu (or the |new_window| button in
-the toolbar). This is useful to compare side by side images or signals.
+the toolbar). This is useful to compare images or signals side by side, and allows
+you to add annotations (cursors, labels, shapes, etc.) to the image or signal: the
+annotations are stored in the metadata of the image or signal, and saved together
+with the data when the workspace is saved.
 
 .. |new_window| image:: ../../../datalab/data/icons/view/new_window.svg
     :width: 24px
@@ -130,10 +187,10 @@ the toolbar). This is useful to compare side by side images or signals.
 
 .. figure:: ../../images/tutorials/fabry_perot/13.png
 
-   The image is displayed in a separate window. The ROI and the fitted circles are
+   The image displayed in a separate window. The ROI and the fitted circles are
    also displayed. Annotations can be added to the image by clicking on the buttons
    at the bottom of the window. The annotations are stored in the metadata of the
-   image, and together with the image data when the workspace is saved.
+   image, and saved together with the image data when the workspace is saved.
    Click on "OK" to close the window.
 
 .. figure:: ../../images/tutorials/fabry_perot/14.png
@@ -152,11 +209,13 @@ If you want to take a closer look at the metadata, you can open the "Metadata" d
     (in a JSON format), some style information (e.g. the colormap), and the ROI.
 
 Now, let's delete the image metadata (including the annotations) to clean up the image.
+Select the "Delete object metadata..." entry in the "Edit" menu, or the |metadata_delete|
+button in the toolbar, and answer "No" to the confirmation dialog to keep the ROI and
+delete the rest of the metadata.
 
 .. figure:: ../../images/tutorials/fabry_perot/17.png
 
-   Select the "Delete metadata" entry in the "Edit" menu, or the |metadata_delete|
-   button in the toolbar.
+   Select the "Delete object metadata" entry in the "Edit" menu.
 
 .. |metadata_delete| image:: ../../../datalab/data/icons/edit/metadata_delete.svg
     :width: 24px
@@ -165,28 +224,35 @@ Now, let's delete the image metadata (including the annotations) to clean up the
 
 .. figure:: ../../images/tutorials/fabry_perot/18.png
 
-    The "Delete metadata" dialog opens. Click "No" to keep the ROI and delete the
+    The "Delete metadata" dialog. Click "No" to keep the ROI and delete the
     rest of the metadata.
 
 If we want to define the exact same ROI on the second image, we can copy/paste the
-ROI from the first image to the second image, using the metadata.
+ROI from the first image to the second image. The best way to do that is to use
+the copy/paste option present in the "ROI" menu, or the |roi_copy| and |roi_paste|
+buttons in the toolbar: select the first image, then click on the "Copy" entry in
+the "ROI" menu (or the |roi_copy| button in the toolbar), then select the second image,
+and click on the "Paste ROI" entry in the "ROI" menu (or the |roi_paste| button in the
+toolbar).
+
+.. note::
+    Copying/pasting the metadata copies/pastes all the metadata, including the ROIs, but
+    this would have the side effect of copying/pasting the rest of the metadata as well.
 
 .. figure:: ../../images/tutorials/fabry_perot/19.png
 
-    Select the "Copy metadata" entry in the "Edit" menu, or the |metadata_copy|
-    button in the toolbar.
+    The "Copy" entry in the "ROI" menu.
 
-.. |metadata_copy| image:: ../../../datalab/data/icons/edit/metadata_copy.svg
+.. |roi_copy| image:: ../../../datalab/data/icons/roi/roi_copy.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/fabry_perot/20.png
 
-    Select the second image in the "Images" panel, then select the "Paste metadata"
-    entry in the "Edit" menu, or the |metadata_paste| button in the toolbar.
+    The "Paste" entry in the "ROI" menu, or the |roi_paste| button in the toolbar.
 
-.. |metadata_paste| image:: ../../../datalab/data/icons/edit/metadata_paste.svg
+.. |roi_paste| image:: ../../../datalab/data/icons/roi/roi_paste.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -195,16 +261,23 @@ ROI from the first image to the second image, using the metadata.
 
     The ROI is added to the second image.
 
+Select the "Contour detection" tool in the "Analysis" menu, with the same
+parameters as before (shape "Circle"). On this image, there are two fringes,
+so four circles are fitted. The "Results" dialog opens, and displays the
+fitted circle parameters. Click "OK".
+
 .. figure:: ../../images/tutorials/fabry_perot/22.png
 
-    Select the "Contour detection" tool in the "Analysis" menu, with the same
-    parameters as before (shape "Circle"). On this image, there are two fringes,
-    so four circles are fitted. The "Results" dialog opens, and displays the
-    fitted circle parameters. Click "OK".
+    The "Results" dialog for the second image.
+
 
 .. figure:: ../../images/tutorials/fabry_perot/23.png
 
     The fitted circles are displayed on the image.
+
+
+Extract intensity profiles along the X axis
+-------------------------------------------
 
 To extract the intensity profile along the X axis, we have two options:
 
@@ -221,10 +294,15 @@ To extract the intensity profile along the X axis, we have two options:
 
 .. |cross_section| image:: ../../images/tutorials/csection.png
 
-Let's try the first option, by selecting the "Line profile..." entry |profile|:
-that is the most straightforward way to extract a profile from an image, and it
+Let's try the first option: select the "Line profile..." entry |profile|.
+This is the most straightforward way to extract a profile from an image, and it
 corresponds to the ``calc("line_profile")`` computation feature of DataLab's API
-(so it can be used in a script, a plugin or a macro).
+(so it can be used in a script, a plugin or a macro). Select the "Line profile..."
+entry |profile| in the "Operations" menu and the "Line profile" dialog will open, letting you
+select the profile row (for a horizontal profile) or column (for a vertical profile)
+on the image.
+You can also enter the row/column number directly by clicking on "parameters..." in the
+"Line profile" dialog.
 
 .. figure:: ../../images/tutorials/fabry_perot/24.png
 
@@ -234,6 +312,10 @@ corresponds to the ``calc("line_profile")`` computation feature of DataLab's API
 
     The "Profile" dialog opens. Enter the row of the horizontal profile
     (or the column of the vertical profile) in the dialog box that opens. Click "OK".
+
+After clicking "OK", the intensity profile along the X axis is computed and
+displayed in the "Signals" panel. DataLab automatically switches to the "Signals"
+panel to display the profile.
 
 .. figure:: ../../images/tutorials/fabry_perot/26.png
 
@@ -247,38 +329,40 @@ entry in the "View" menu (or the |new_window| button in the toolbar).
 .. figure:: ../../images/tutorials/fabry_perot/27.png
 
     The signal is displayed in a separate window. Here, we added vertical cursors
-    and a very interesting text label. As for the images, the annotations are stored
-    in the metadata of the signal, and together with the signal data when the workspace
+    and a text label. As for the images, the annotations are stored
+    in the metadata of the signal, and saved together with the signal data when the workspace
     is saved. Click on "OK" to close the window.
 
 Now, let's try the second option for extracting the intensity profile along the X axis,
-by activating the "Cross section" tool |cross_section| in the vertical toolbar on the
+using the "Cross section" tool |cross_section| in the vertical toolbar on the
 left of the visualization panel (this tool is a
 `PlotPy <https://github.com/PlotPyStack/plotpy>`_ feature). Before being able to use
-it, we need to select the image in the visualization panel (otherwise the tool is
-grayed out). Then, we can click on the image to display the intensity profile along
-the X axis. DataLab integrates a modified version of this tool, that allows to
-transfer the profile to the "Signals" panel for further processing.
+it, we need to select the image again in the visualization panel (otherwise the tool is
+grayed out). Then, we can click on the image to display the intensity profiles along
+the X and Y axes. DataLab integrates a modified version of this tool, which allows you to
+transfer the profile to the "Signals" panel for further processing. Select the
+"Cross section" tool |cross_section| in the vertical toolbar, and click on the image to
+display the intensity profiles along the X and Y axes.
 
 .. figure:: ../../images/tutorials/fabry_perot/28.png
 
-    Switch back to the "Images" panel, and select the image *in the visualization
-    panel* (otherwise the "Cross section" |cross_section| tool is grayed out).
-    Select the "Cross section" tool |cross_section| in the vertical toolbar, and
-    click on the image to display the intensity profiles along the X and Y axes.
+    The cross section tool in the view panel. In the red circle, the button to
+    activate it. In the blue circle, the button to transfer the profile to the
+    "Signals" panel.
 
-Then, click on the "Process signal" button |to_signal| in the toolbar near the
-profile to transfer the profile to the "Signals" panel.
+
+Click on the "Process signal" button |to_signal| in the toolbar near the
+profile to transfer the profile to the "Signals" panel. The intensity profile is added
+to the "Signals" panel, and DataLab switches to this panel to display the profile.
 
 .. |to_signal| image:: ../../../datalab/data/icons/to_signal.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. figure:: ../../images/tutorials/fabry_perot/29.png
 
-    The intensity profile is added to the "Signals" panel, and DataLab switches to
-    this panel to display the profile.
+Save the workspace
+------------------
 
 Finally, we can save the workspace to a file. The workspace contains all the images
 and signals that were loaded or processed in DataLab. It also contains the analysis
