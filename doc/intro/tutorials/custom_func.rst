@@ -20,6 +20,7 @@ This example shows how to prototype a custom image processing pipeline using Dat
 -   Use the same code from an external IDE (e.g. Spyder) or a Jupyter notebook
 -   Create a plugin to integrate the function in the DataLab GUI
 
+
 Define a custom processing function
 -----------------------------------
 
@@ -51,6 +52,7 @@ Here is the code of the ``weighted_average_denoise`` function::
             return np.average(values, weights=weights)
 
         return spi.generic_filter(data, filter_func, size=5)
+
 
 Setup the test environment
 --------------------------
@@ -90,6 +92,7 @@ The plugin generates a test image and adds it to the "Image Panel".
 .. figure:: ../../images/tutorials/custom_func/04.png
 
     The generated image in the "Image Panel".
+
 
 Create a macro-command
 ----------------------
@@ -200,7 +203,6 @@ We can remove this code and replace it with our own code::
     proxy.add_image("My custom filtered data", data)
 
 
-
 Now, let's execute the macro-command by clicking on the "Run macro"
 |libre-camera-flash-on| button:
 
@@ -232,6 +234,7 @@ Now, let's execute the macro-command by clicking on the "Run macro"
     When the macro-command has finished, we can see the new image in the "Image Panel".
     Our filter has been applied to the image, and we can see that the noise has been
     reduced.
+
 
 Prototyping with an external IDE
 --------------------------------
@@ -293,7 +296,6 @@ DataLab: you can imagine letting your external script acquire the data and add
 it to DataLab automatically, for example in an acquisition loop.
 In this way you can improve your measurement workflow with the possibility to visualize
 and analyze data directly after their acquisition.
-
 
 
 Prototyping with a Jupyter notebook
