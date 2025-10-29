@@ -79,7 +79,7 @@ A web frontend would allow users to:
 * Facilitate **collaborative data analysis**, sharing sessions or results with colleagues;
 * Integrate with JupyterHub, dashboards, or lab management tools for centralized usage.
 
-This frontend could be built on top of the upcoming [Sigima](https://sigima.readthedocs.io/) library, exposing its features through a web interface — possibly leveraging tools like **JupyterLab extensions**, **Panel**, or **Dash**, depending on the chosen stack.
+This frontend could be built on top of the [Sigima](https://sigima.readthedocs.io/en/latest/) library (that was recently created from the externalization of DataLab's processing functionalities), exposing its features through a web interface — possibly leveraging tools like **JupyterLab extensions**, **Panel**, or **Dash**, depending on the chosen stack.
 
 While still exploratory, this direction would increase **accessibility and portability** of DataLab, especially in academic and industrial environments.
 

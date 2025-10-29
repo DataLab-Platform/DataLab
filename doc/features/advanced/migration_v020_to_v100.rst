@@ -739,7 +739,7 @@ Additional resources
 --------------------
 
 - `DataLab v1.0 documentation <https://datalab-platform.com/>`_
-- `Sigima documentation <https://sigima.readthedocs.io/>`_
+- `Sigima documentation <https://sigima.readthedocs.io/en/latest/>`_
 - `Plugin examples <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_
 - :doc:`DataLab API reference <api>`
 - `Sigima API reference <https://sigima.readthedocs.io/en/latest/api/index.html>`_
