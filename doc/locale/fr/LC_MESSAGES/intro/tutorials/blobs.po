@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 17:46+0100\n"
+"POT-Creation-Date: 2025-10-29 11:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -48,8 +48,8 @@ msgstr "Dans l'onglet \"Général\", nous pouvons voir le champ \"Chemin des plu
 msgid "The plugin system is described in the :ref:`about_plugins` section."
 msgstr "Le système de plugins est décrit dans la section :ref:`about_plugins`."
 
-msgid "Let's add the `datalab_example_imageproc.py` plugin to DataLab (this is an example plugin that is shipped with DataLab source package, or may be downloaded from `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
-msgstr "Ajoutons le plugin `datalab_example_imageproc.py` à DataLab (c'est un plugin d'exemple qui est livré avec le package source de DataLab, ou peut être téléchargé `ici sur GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
+msgid "Let's add the `datalab_example_imageproc.py` plugin to DataLab (this is an example plugin that is shipped with DataLab source package, or may be downloaded from `here <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
+msgstr "Ajoutons le plugin `datalab_example_imageproc.py` à DataLab (c'est un plugin d'exemple qui est fourni avec le package source de DataLab, ou peut être téléchargé `ici <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_)."
 
 msgid "If we close and reopen DataLab, we can see that the plugin is now available in the \"Plugins\" menu: there is a new \"Extract blobs (example)\" entry."
 msgstr "Si nous fermons et rouvrons DataLab, nous pouvons voir que le plugin est maintenant disponible dans le menu \"Plugins\" : il y a une nouvelle entrée \"Extract blobs (example)\"."
@@ -72,26 +72,26 @@ msgstr "Pour information, l'image est générée par le plugin en utilisant le c
 msgid "The plugin has generated a test image, and added it to the \"Images\" panel. The image shows a few blobs, with a central bigger disk, and a noisy background."
 msgstr "Le plugin a généré une image de test, et l'a ajoutée au panneau \"Images\". L'image montre quelques taches, avec un disque central plus grand, et un fond bruité."
 
-msgid "The plugin has other features, such as denoising the image, and detecting blobs on the image, but we won't cover them here: we will instead use the DataLab native features to achieve, manually, the same operations that the plugin."
-msgstr "Le plugin a d'autres fonctionnalités, telles que le débruitage de l'image et la détection de taches sur l'image, mais nous ne les couvrirons pas ici : nous utiliserons plutôt les fonctionnalités natives de DataLab pour réaliser, manuellement, les mêmes opérations que le plugin."
+msgid "The plugin has other features, such as denoising the image, and detecting blobs on the image, but we won't cover them here: we will instead use the DataLab native features to achieve, manually, the same operations as the plugin."
+msgstr "Le plugin a d'autres fonctionnalités, telles que le débruitage de l'image, et la détection de taches sur l'image, mais nous ne les aborderons pas ici : nous utiliserons plutôt les fonctionnalités natives de DataLab pour réaliser, manuellement, les mêmes opérations que le plugin."
 
-msgid "The image is a bit noisy, and also quite large. In addition, the blobs are large respect to the pixel size."
-msgstr "L'image est un peu bruitée et assez grande. De plus, les taches sont grandes par rapport à la taille des pixels."
+msgid "The image is a bit noisy, and also quite large. In addition, the blobs are large with respect to the pixel size."
+msgstr "L'image est un peu bruitée, et aussi assez grande. De plus, les taches sont grandes par rapport à la taille des pixels."
 
-msgid "To reduce the noise there are several functions available in DataLab. Due to the consideration we just made, we can consider that a binning would reduce the noise without loosing the information we look for. Let's apply a binning the image by a factor of 2 on both axis. This will reduce the image size by a factor of 4, and the noise standard deviation by a factor of 2. Choosing to change the pixel size accordingly will keep the blobs size constant in previous unit (in this case, pixels, but in a real application we can calibrate them to respect a real physical size)."
-msgstr "Pour réduire le bruit, plusieurs fonctions sont disponibles dans DataLab. Compte tenu des considérations que nous venons de faire, nous pouvons considérer qu'un binning réduirait le bruit sans perdre l'information que nous recherchons. Appliquons un binning à l'image d'un facteur de 2 sur les deux axes. Cela réduira la taille de l'image d'un facteur de 4, et l'écart-type du bruit d'un facteur de 2. Le choix de modifier la taille des pixels en conséquence permettra de maintenir la taille des taches constante dans l'unité précédente (dans ce cas, les pixels, mais dans une application réelle, nous pouvons les calibrer pour respecter une taille physique réelle)."
+msgid "To reduce the noise there are several functions available in DataLab. Due to the considerations we just made, we can consider that a binning would reduce the noise without losing the information we look for. Let's apply a binning to the image by a factor of 2 on both axes. This will reduce the image size by a factor of 4, and the noise standard deviation by a factor of 2. Choosing to change the pixel size accordingly will keep the blob size constant in the previous unit (in this case, pixels, but in a real application we can calibrate them to respect a real physical size)."
+msgstr "Pour réduire le bruit, il existe plusieurs fonctions disponibles dans DataLab. En raison des considérations que nous venons de faire, nous pouvons considérer qu'un binning réduirait le bruit sans perdre l'information que nous recherchons. Appliquons un binning à l'image par un facteur de 2 sur les deux axes. Cela réduira la taille de l'image d'un facteur de 4, et l'écart type du bruit d'un facteur de 2. Choisir de modifier la taille des pixels en conséquence maintiendra la taille des taches constante dans l'unité précédente (dans ce cas, les pixels, mais dans une application réelle, nous pouvons les calibrer pour respecter une taille physique réelle)."
 
 msgid "Click on \"Operations > Pixel binning\"."
 msgstr "Cliquons sur \"Opérations > Pixel binning\"."
 
-msgid "The \"Binning\" dialog opens, with several option. Set the binning factor to 2 for both axis, select the \"change pixel size case\" and click on \"OK\"."
-msgstr "La boîte de dialogue \"Binning\" s'ouvre, avec plusieurs options. Réglez le facteur de binning à 2 pour les deux axes, sélectionnez l'option \"modifier la taille des pixels\" et cliquez sur \"OK\"."
+msgid "The \"Binning\" dialog opens, with several options. Set the binning factor to 2 for both axes, select the \"change pixel size\" case and click on \"OK\"."
+msgstr "La boîte de dialogue \"Binning\" s'ouvre, avec plusieurs options. Réglez le facteur de binning à 2 pour les deux axes, sélectionnez la case \"changer la taille des pixels\" et cliquez sur \"OK\"."
 
 msgid "The binned image is added to the \"Images\" panel. It is now easier to see the blobs (even if they were already quite visible on the original image: this is just an example), and the image will be faster to process."
 msgstr "L'image binnée est ajoutée au panneau \"Images\". Il est maintenant plus facile de voir les taches (même si elles étaient déjà assez visibles sur l'image d'origine : c'est juste un exemple), et l'image sera plus rapide à traiter."
 
-msgid "A different approach we can take is to apply a moving median filter, to reduce the importance of the spikes. We do it with a window of 5, of curse in practice different window sizes can be tested to find the good compromise between noise reduction and resolution. Lets see how to do that."
-msgstr "Une approche différente que nous pouvons adopter consiste à appliquer un filtre médian mobile, pour réduire l'importance des pics. Nous le faisons avec une fenêtre de 5, bien sûr en pratique différentes tailles de fenêtre peuvent être testées pour trouver le bon compromis entre réduction du bruit et résolution. Voyons comment faire."
+msgid "A different approach we can take is to apply a moving median filter, to reduce the importance of the spikes. We do it with a window of 5; of course in practice different window sizes can be tested to find a good compromise between noise reduction and resolution. Let's see how to do that."
+msgstr "Une autre approche que nous pouvons adopter est d'appliquer un filtre médian mobile, pour réduire l'importance des pics. Nous le faisons avec une fenêtre de 5 ; bien sûr, en pratique, différentes tailles de fenêtre peuvent être testées pour trouver un bon compromis entre la réduction du bruit et la résolution. Voyons comment faire cela."
 
 msgid "Click on \"Processing > Noise reduction > Moving median\" entry, and set the window size to ``5``."
 msgstr "Cliquez sur l'entrée \"Traitement > Réduction du bruit > Médiane mobile\", et réglez la taille de la fenêtre sur ``5``."
@@ -99,8 +99,8 @@ msgstr "Cliquez sur l'entrée \"Traitement > Réduction du bruit > Médiane mobi
 msgid "The filtered image is added to the \"Images\" panel. Denoising is quite efficient."
 msgstr "L'image filtrée est ajoutée au panneau \"Images\". Le débruitage est assez efficace."
 
-msgid "Now, we can be satisfied by our denoising: it is visibile that the noise is smaller. We can thus move to the following step: detect the blobs on the image. To do that, we can use the \"Blob detection\" function available in the \"Analysis\" menu. Different :ref:`algorithms <ima-blob-detection>` are available, here we will use the OpenCV one."
-msgstr "Maintenant, nous pouvons être satisfaits de notre débruitage : il est visible que le bruit est plus faible. Nous pouvons donc passer à l'étape suivante : détecter les taches sur l'image. Pour ce faire, nous pouvons utiliser la fonction \"Détection de taches\" disponible dans le menu \"Analyse\". Différents :ref:`algorithmes <ima-blob-detection>` sont disponibles, ici nous utiliserons celui d'OpenCV."
+msgid "Now, we can be satisfied with our denoising: it is visible that the noise is smaller. We can thus move to the following step: detect the blobs on the image. To do that, we can use the \"Blob detection\" function available in the \"Analysis\" menu. Different :ref:`algorithms <ima-blob-detection>` are available, here we will use the OpenCV one."
+msgstr "A présent, le débruitage paraît satisfaisant : le niveau de bruit est sensiblement réduit. Nous pouvons donc passer à l'étape suivante : détecter les taches sur l'image. Pour ce faire, nous pouvons utiliser la fonction \"Détection de taches\" disponible dans le menu \"Analyse\". Différents :ref:`algorithmes <ima-blob-detection>` sont disponibles, ici nous utiliserons celui d'OpenCV."
 
 msgid "Click on \"Analysis > Blob detection > Blob detection (OpenCV)\"."
 msgstr "Cliquons sur \"Analysis > Blob detection > Blob detection (OpenCV)\"."

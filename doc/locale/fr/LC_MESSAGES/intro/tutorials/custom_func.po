@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-03 14:57+0200\n"
+"POT-Creation-Date: 2025-10-29 11:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -28,6 +28,9 @@ msgstr "DataLab, fonction personnalisée, macro-commande, plugin, traitement d'i
 msgid ":octicon:`book;1em;sd-text-info` Prototyping a custom processing pipeline"
 msgstr ":octicon:`book;1em;sd-text-info`  Prototypage d'une chaîne de traitement personnalisée"
 
+msgid "For your specific application, it is possible that you will need a function that is not available in DataLab by default. In this case, you can define your own function and integrate it in DataLab to conveniently analyze your data. DataLab has been designed to be flexible and extensible, and the goal of this tutorial is to show you how to do that."
+msgstr "Pour votre application spécifique, il est possible que vous ayez besoin d'une fonction qui n'est pas disponible dans DataLab par défaut. Dans ce cas, vous pouvez définir votre propre fonction et l'intégrer dans DataLab pour analyser vos données de manière pratique. DataLab a été conçu pour être flexible et extensible, et le but de ce tutoriel est de vous montrer comment faire cela."
+
 msgid "This example shows how to prototype a custom image processing pipeline using DataLab:"
 msgstr "Cet exemple montre comment prototyper une chaîne de traitement d'image personnalisée en utilisant DataLab :"
 
@@ -43,56 +46,62 @@ msgstr "Utiliser le même code à partir d'un IDE externe (par exemple Spyder) o
 msgid "Create a plugin to integrate the function in the DataLab GUI"
 msgstr "Créer un plugin pour intégrer la fonction dans l'interface graphique de DataLab"
 
-msgid "For illustrating the extensibility of DataLab, we will use a simple image processing function that is not available in the standard DataLab distribution, and that represents a typical use case for prototyping a custom processing pipeline."
-msgstr "Pour illustrer l'extensibilité de DataLab, nous utiliserons une fonction de traitement d'image simple qui n'est pas disponible dans la distribution standard de DataLab, et qui représente un cas d'utilisation typique pour le prototypage d'une chaîne de traitement personnalisée."
+msgid "To illustrate the extensibility of DataLab, we will use a simple image processing function that is not available in the standard DataLab distribution, and that represents a typical use case for prototyping a custom processing pipeline."
+msgstr "Pour illustrer l'extensibilité de DataLab, nous allons utiliser une fonction de traitement d'image simple qui n'est pas disponible dans la distribution standard de DataLab, et qui représente un cas d'utilisation typique pour le prototypage d'une chaîne de traitement personnalisée."
 
-msgid "The function that we will work on is a denoising filter that combines the ideas of averaging and edge detection. This filter will average the pixel values in the neighborhood, but with a twist: it will give less weight to pixels that are significantly different from the central pixel, assuming they might be part of an edge or noise."
-msgstr "La fonction sur laquelle nous allons travailler est un filtre de débruitage qui combine les idées de moyennage et de détection de contours. Ce filtre va moyenner les valeurs de pixels dans le voisinage, mais avec une particularité : il donnera moins de poids aux pixels qui sont significativement différents du pixel central, en supposant qu'ils pourraient faire partie d'un bord ou d'un bruit."
+msgid "The function that we will work on is a denoising filter that combines the ideas of averaging and edge detection. This filter will average the pixel values in the neighborhood, but with a twist: it will give less weight to pixels that are significantly different from the central pixel, assuming they might be part of an edge or noise. Once you have understood how to implement custom processing in DataLab, you will define your own functions adapted to your specific needs."
+msgstr "La fonction sur laquelle nous allons travailler est un filtre de débruitage qui combine les idées de moyenne et de détection de contours. Ce filtre va moyenner les valeurs des pixels dans le voisinage, mais avec une particularité : il donnera moins de poids aux pixels qui sont significativement différents du pixel central, en supposant qu'ils pourraient faire partie d'un contour ou du bruit. Une fois que vous aurez compris comment implémenter un traitement personnalisé dans DataLab, vous pourrez définir vos propres fonctions adaptées à vos besoins spécifiques."
 
 msgid "Here is the code of the ``weighted_average_denoise`` function::"
 msgstr "Voici le code de la fonction ``weighted_average_denoise`` :"
 
-msgid "For testing our processing function, we will use a generated image from a DataLab plugin example (`plugins/examples/datalab_example_imageproc.py`). Before starting, make sure that the plugin is installed in DataLab (see the first steps of the tutorial :ref:`tutorial_blobs`)."
-msgstr "Pour tester notre fonction de traitement, nous utiliserons une image générée à partir d'un exemple de plugin DataLab (plugins/examples/datalab_example_imageproc.py). Avant de commencer, assurez-vous que le plugin est installé dans DataLab (voir les premières étapes du tutoriel :ref:`tutorial_blobs`)."
+msgid "Setup the test environment"
+msgstr "Configurer l'environnement de test"
 
-msgid "To begin, we reorganize the window layout of DataLab to have the \"Image Panel\" on the left and the \"Macro Panel\" on the right."
-msgstr "Pour commencer, nous réorganisons la disposition de la fenêtre de DataLab pour avoir le \"Panneau Image\" à gauche et le \"Gestionnaire de Macros\" à droite."
+msgid "To test our processing function, we will use an image generated from a DataLab plugin example (`plugins/examples/datalab_example_imageproc.py`). Before starting, make sure that the plugin is installed in DataLab (see the first steps of the tutorial :ref:`tutorial_blobs` to understand how to do it)."
+msgstr "Pour tester notre fonction de traitement, nous allons utiliser une image générée à partir d'un exemple de plugin DataLab (`plugins/examples/datalab_example_imageproc.py`). Avant de commencer, assurez-vous que le plugin est installé dans DataLab (voir les premières étapes du tutoriel :ref:`tutorial_blobs` pour comprendre comment le faire)."
+
+msgid "We then reorganize the DataLab window layout to have a comfortable environment for developing and testing our function: we reorganize the window layout of DataLab to have the \"Image Panel\" on the left and the \"Macro Panel\" on the right. To do so, you can simply drag and drop the panels to the desired position. If the \"Macro Panel\" is not visible, you can enable it from the \"View > Panels > Macro Panel\"."
+msgstr "Nous réorganisons ensuite la disposition de la fenêtre de DataLab pour avoir un environnement confortable pour développer et tester notre fonction : nous réorganisons la disposition de la fenêtre de DataLab pour avoir le \"Panneau Image\" à gauche et le \"Gestionnaire de Macros\" à droite. Pour ce faire, vous pouvez simplement faire glisser et déposer les panneaux à la position souhaitée. Si le \"Gestionnaire de Macros\" n'est pas visible, vous pouvez l'activer depuis le menu \"Affichage > Panneaux > Gestionnaire de Macros\"."
+
+msgid "The window layout of DataLab reorganized to have the \"Image Panel\" on the left and the \"Macro Panel\" on the right."
+msgstr "La disposition de la fenêtre de DataLab réorganisée pour avoir le \"Panneau Image\" à gauche et le \"Gestionnaire de Macros\" à droite."
+
+msgid "We can now generate a test image using the plugin that we installed before. To do so, we click on the \"Plugins > Extract blobs (example) > Generate test image\" menu. The function we are developing is quite slow, so we choose a limited size for the image (for example 512x512 pixels)."
+msgstr "Nous pouvons maintenant générer une image de test en utilisant le plugin que nous avons installé précédemment. Pour ce faire, nous cliquons sur le menu \"Plugins > Extract blobs (example) > Generate test image\". La fonction que nous développons est assez lente, nous choisissons donc une taille limitée pour l'image (par exemple 512x512 pixels)."
 
 msgid "We generate a new image using the \"Plugins > Extract blobs (example) > Generate test image\" menu."
 msgstr "Nous générons une nouvelle image en utilisant le menu \"Plugins > Extract blobs (example) > Generate test image\"."
 
-msgid "We select a limited size for the image (e.g. 512x512 pixels) because our algorithm is quite slow, and click on \"OK\"."
-msgstr "Nous sélectionnons une taille limitée pour l'image (par exemple 512x512 pixels) car notre algorithme est assez lent, et cliquons sur \"OK\"."
+msgid "We select the size for the image and click on \"OK\"."
+msgstr "Nous sélectionnons la taille de l'image et cliquons sur \"OK\"."
 
-msgid "We can now see the generated image in the \"Image Panel\"."
-msgstr "Nous pouvons maintenant voir l'image générée dans le \"Panneau Image\"."
+msgid "The plugin generates a test image and adds it to the \"Image Panel\"."
+msgstr "Le plugin génère une image de test et l'ajoute au \"Panneau Image\"."
+
+msgid "The generated image in the \"Image Panel\"."
+msgstr "L'image générée dans le \"Panneau Image\"."
 
 msgid "Create a macro-command"
 msgstr "Créer une macro-commande"
 
-msgid "Let's get back to our custom function. We can create a new macro-command that will apply the function to the current image. To do so, we open the \"Macro Panel\" and click on the \"New macro\" |libre-gui-add| button."
-msgstr "Revenons à notre fonction personnalisée. Nous pouvons créer une nouvelle macro-commande qui appliquera la fonction à l'image actuelle. Pour ce faire, nous ouvrons le \"Gestionnaire de Macros\" et cliquons sur le bouton \"Nouvelle macro\" |libre-gui-add|."
+msgid "A macro is a code that can be executed directly inside DataLab to automate tasks. Macros are written in Python, and use the DataLab API to interact with DataLab."
+msgstr "Une macro est un code qui peut être exécuté directement dans DataLab pour automatiser des tâches. Les macros sont écrites en Python et utilisent l'API de DataLab pour interagir avec DataLab."
 
-msgid "libre-gui-add"
-msgstr ""
-
-msgid "DataLab creates a new macro-command which is not empty: it contains a sample code that shows how to create a new image and add it to the \"Image Panel\". We can remove this code and replace it with our own code::"
-msgstr "DataLab crée une nouvelle macro-commande qui n'est pas vide : elle contient un code d'exemple qui montre comment créer une nouvelle image et l'ajouter au \"Panneau Image\". Nous pouvons supprimer ce code et le remplacer par le nôtre :"
-
-msgid "In DataLab, macro-commands are simply Python scripts:"
-msgstr "Dans DataLab, les macro-commandes sont simplement des scripts Python :"
+msgid "In addition, macros have the following important features:"
+msgstr "De plus, les macros ont les caractéristiques importantes suivantes :"
 
 msgid "Macros are part of DataLab's **workspace**, which means that they are saved and restored when exporting and importing to/from an HDF5 file."
 msgstr "Les macros font partie de l'**espace de travail** de DataLab, ce qui signifie qu'elles sont sauvegardées et restaurées lors de l'exportation et de l'importation vers/depuis un fichier HDF5."
 
-msgid "Macros are executed in a separate process, so we need to import the necessary modules and initialize the proxy to DataLab. The proxy is a special object that allows to communicate with DataLab."
-msgstr "Les macros sont exécutées dans un processus séparé, nous devons donc importer les modules nécessaires et initialiser le proxy vers DataLab. Le proxy est un objet spécial qui permet de communiquer avec DataLab."
+msgid "Macros are executed in a separate process, so we need to import the necessary modules and initialize the proxy to DataLab. The proxy is a special object that allows us to communicate with DataLab."
+msgstr "Les macros sont exécutées dans un processus séparé, nous devons donc importer les modules nécessaires et initialiser le proxy vers DataLab. Le proxy est un objet spécial qui nous permet de communiquer avec DataLab."
 
 msgid "As a consequence, **when defining a plugin or when controlling DataLab from an external IDE, we can use exactly the same code as in the macro-command**. This is a very important point, because it means that we can prototype our processing pipeline in DataLab, and then use the same code in a plugin or in an external IDE to develop it further."
 msgstr "En conséquence, **lors de la définition d'un plugin ou du contrôle de DataLab à partir d'un IDE externe, nous pouvons utiliser exactement le même code que dans la macro-commande**. C'est un point très important, car cela signifie que nous pouvons prototyper notre chaîne de traitement dans DataLab, puis utiliser le même code dans un plugin ou dans un IDE externe pour le développer davantage."
 
-msgid "The macro-command is executed in DataLab's Python environment, so we can use the modules that are available in DataLab. However, we can also use our own modules, as long as they are installed in DataLab's Python environment or in a Python distribution that is compatible with DataLab's Python environment."
-msgstr "La macro-commande est exécutée dans l'environnement Python de DataLab, nous pouvons donc utiliser les modules disponibles dans DataLab. Cependant, nous pouvons également utiliser nos propres modules, tant qu'ils sont installés dans l'environnement Python de DataLab ou dans une distribution Python compatible avec l'environnement Python de DataLab."
+msgid "The macro-command is executed in DataLab's Python environment, so we can use the modules that are available in DataLab. However, we can also use our own modules, as long as they are installed in DataLab's Python environment or in a Python distribution that is compatible with DataLab's Python environment. A list of the modules that are available in your DataLab's Python environment is available in the \"? > Installation and configuration > Installation configuration\" dialog."
+msgstr "La macro-commande est exécutée dans l'environnement Python de DataLab, nous pouvons donc utiliser les modules disponibles dans DataLab. Cependant, nous pouvons également utiliser nos propres modules, tant qu'ils sont installés dans l'environnement Python de DataLab ou dans une distribution Python compatible avec l'environnement Python de DataLab. Une liste des modules disponibles dans l'environnement Python de votre DataLab est disponible dans la boîte de dialogue \"? > Installation et configuration > Configuration de l'installation\"."
 
 msgid "If your custom modules are not installed in DataLab's Python environment, and if they are compatible with DataLab's Python version, you can prepend the ``sys.path`` with the path to the Python distribution that contains your modules::"
 msgstr "Si vos modules personnalisés ne sont pas installés dans l'environnement Python de DataLab, et s'ils sont compatibles avec la version Python de DataLab, vous pouvez préfixer ``sys.path`` avec le chemin vers la distribution Python qui contient vos modules :"
@@ -102,6 +111,24 @@ msgstr "Cela vous permettra d'importer vos modules dans la macro-commande et de 
 
 msgid "If you use this method, make sure that your modules are compatible with DataLab's Python version. Otherwise, you will get errors when importing them."
 msgstr "Si vous utilisez cette méthode, assurez-vous que vos modules sont compatibles avec la version Python de DataLab. Sinon, vous obtiendrez des erreurs lors de leur importation."
+
+msgid "To edit macros, we use the \"Macro Panel\" that is available in DataLab. This panel is separated in two parts: the upper part is the macro editor, where we can write and edit the macro code; the lower part is the console, where we can see the output of the macro. If the macro editor is too small to show all the buttons of the macro toolbar, some of them are hidden and can be accessed by clicking on the unfold button. Alternatively, you can resize the macro editor by dragging the splitter between the editor and the console."
+msgstr "Pour éditer les macros, nous utilisons le \"Gestionnaire de Macros\" disponible dans DataLab. Ce panneau est divisé en deux parties : la partie supérieure est l'éditeur de macros, où nous pouvons écrire et éditer le code de la macro ; la partie inférieure est la console, où nous pouvons voir la sortie de la macro. Si l'éditeur de macros est trop petit pour afficher tous les boutons de la barre d'outils des macros, certains d'entre eux sont cachés et peuvent être accessibles en cliquant sur le bouton de dépliage. Alternativement, vous pouvez redimensionner l'éditeur de macros en faisant glisser le séparateur entre l'éditeur et la console."
+
+msgid "Let's get back to our custom function. We can create a new macro-command that will apply the function to the current image. To do so, we open the \"Macro Panel\" and click on the \"New macro\" |libre-gui-add| button."
+msgstr "Revenons à notre fonction personnalisée. Nous pouvons créer une nouvelle macro-commande qui appliquera la fonction à l'image actuelle. Pour ce faire, nous ouvrons le \"Gestionnaire de Macros\" et cliquons sur le bouton \"Nouvelle macro\" |libre-gui-add|."
+
+msgid "libre-gui-add"
+msgstr ""
+
+msgid "DataLab creates a new macro-command which is not empty: it contains a sample code that shows how to create a new image and add it to the \"Image Panel\"."
+msgstr "DataLab crée une nouvelle macro-commande qui n'est pas vide : elle contient un code d'exemple qui montre comment créer une nouvelle image et l'ajouter au \"Panneau Image\"."
+
+msgid "In this code, we can notice the presence of the ``RemoteProxy`` class that is used to communicate with DataLab. This class is part of the DataLab API, and is used to access DataLab objects and functions from a macro-command, a plugin, or an external IDE. You can find the documentation of the DataLab API in the :ref:`api` section."
+msgstr "Dans ce code, nous pouvons remarquer la présence de la classe ``RemoteProxy`` qui est utilisée pour communiquer avec DataLab. Cette classe fait partie de l'API de DataLab, et est utilisée pour accéder aux objets et fonctions de DataLab à partir d'une macro-commande, d'un plugin ou d'un IDE externe. Vous pouvez trouver la documentation de l'API de DataLab dans la section :ref:`api`."
+
+msgid "We can remove this code and replace it with our own code::"
+msgstr "Nous pouvons supprimer ce code et le remplacer par notre propre code :"
 
 msgid "Now, let's execute the macro-command by clicking on the \"Run macro\" |libre-camera-flash-on| button:"
 msgstr "Maintenant, exécutons la macro-commande en cliquant sur le bouton \"Exécuter la macro\" |libre-camera-flash-on| :"
@@ -160,11 +187,23 @@ msgstr "Une fois le client installé, nous pouvons démarrer Spyder et créer un
 msgid "We go back to DataLab and select the first image in the \"Image Panel\"."
 msgstr "Nous retournons à DataLab et sélectionnons la première image dans le \"Panneau Image\"."
 
-msgid "Then, we execute the script in Spyder, step-by-step (using the defined cells), and we can see the result in DataLab."
-msgstr "Ensuite, nous exécutons le script dans Spyder, étape par étape (en utilisant les cellules définies), et nous pouvons voir le résultat dans DataLab."
+msgid "The first image in the \"Image Panel\" selected."
+msgstr "La première image dans le \"Panneau Image\" sélectionnée."
 
-msgid "We can see in DataLab that a new image has been added to the \"Image Panel\". This image is the result of the execution of the script in Spyder. Here we have used the script without any modification, but we could have modified it to test new ideas, and then use the modified script in DataLab."
-msgstr "Nous pouvons voir dans DataLab qu'une nouvelle image a été ajoutée au \"Panneau Image\". Cette image est le résultat de l'exécution du script dans Spyder. Ici, nous avons utilisé le script sans aucune modification, mais nous aurions pu le modifier pour tester de nouvelles idées, puis utiliser le script modifié dans DataLab."
+msgid "Then, we execute the script in Spyder (or your preferred editor), step-by-step (using the defined cells), and we can see the result in DataLab."
+msgstr "Ensuite, nous exécutons le script dans Spyder (ou votre éditeur préféré), étape par étape (en utilisant les cellules définies), et nous pouvons voir le résultat dans DataLab."
+
+msgid "The Spyder editor environment with the custom processing script."
+msgstr "L'environnement de l'éditeur Spyder avec le script de traitement personnalisé."
+
+msgid "We can see in DataLab that a new image has been added to the \"Image Panel\". This image is the result of the execution of the script in Spyder."
+msgstr "Nous pouvons voir dans DataLab qu'une nouvelle image a été ajoutée au \"Panneau Image\". Cette image est le résultat de l'exécution du script dans Spyder."
+
+msgid "Here we have used the script without any modification, but we could have modified it to test new ideas, and then use the modified script in DataLab."
+msgstr "Ici, nous avons utilisé le script sans aucune modification, mais nous aurions pu le modifier pour tester de nouvelles idées, puis utiliser le script modifié dans DataLab."
+
+msgid "There is another useful application of having an external script interfaced with DataLab: you can imagine letting your external script acquire the data and add it to DataLab automatically, for example in an acquisition loop. In this way you can improve your measurement workflow with the possibility to visualize and analyze data directly after their acquisition."
+msgstr "Il existe une autre application pour laquelle l'usage d'un script externe interfacé avec DataLab est utile : vous pouvez imaginer laisser votre script externe acquérir les données et les ajouter automatiquement à DataLab, par exemple dans une boucle d'acquisition. De cette façon, vous pouvez améliorer votre flux de travail de mesure avec la possibilité de visualiser et d'analyser les données directement après leur acquisition."
 
 msgid "Prototyping with a Jupyter notebook"
 msgstr "Prototypage avec un notebook Jupyter"
@@ -172,26 +211,23 @@ msgstr "Prototypage avec un notebook Jupyter"
 msgid "We can also use a Jupyter notebook to prototype our processing pipeline. To do so, we need to install Jupyter but not necessarily in DataLab's Python environment (in the case of the stand-alone version of DataLab, it wouldn't be possible anyway)."
 msgstr "Nous pouvons également utiliser un notebook Jupyter pour prototyper notre chaîne de traitement. Pour ce faire, nous devons installer Jupyter mais pas nécessairement dans l'environnement Python de DataLab (dans le cas de la version autonome de DataLab, ce ne serait de toute façon pas possible)."
 
-msgid "The only requirement is to install a DataLab client in Jupyter's Python environment (see the previous section for more details: that is exactly the same procedure as for Spyder or any other IDE like Visual Studio Code, for example)."
-msgstr "Le seul prérequis est d'installer un client DataLab dans l'environnement Python de Jupyter (voir la section précédente pour plus de détails : c'est exactement la même procédure que pour Spyder ou tout autre IDE comme Visual Studio Code, par exemple)."
+msgid "The procedure is the same as for Spyder or any other IDE like Visual Studio Code, for example."
+msgstr "La procédure est la même que pour Spyder ou tout autre IDE comme Visual Studio Code, par exemple."
 
-msgid "Once the client is installed, we can start Jupyter and create a new notebook."
-msgstr "Une fois le client installé, nous pouvons démarrer Jupyter et créer un nouveau notebook."
-
-msgid "Then, we execute the notebook in Jupyter, step-by-step (using the defined cells), and we can see the result in DataLab. Once again, we can see in DataLab that a new image has been added to the \"Image Panel\". This image is the result of the execution of the notebook in Jupyter. As for the script in Spyder, we could have modified the notebook to test new ideas, and then use the modified notebook in DataLab."
-msgstr "Ensuite, nous exécutons le notebook dans Jupyter, étape par étape (en utilisant les cellules définies), et nous pouvons voir le résultat dans DataLab. Une fois de plus, nous pouvons voir dans DataLab qu'une nouvelle image a été ajoutée au \"Panneau Image\". Cette image est le résultat de l'exécution du notebook dans Jupyter. Comme pour le script dans Spyder, nous aurions pu modifier le notebook pour tester de nouvelles idées, puis utiliser le notebook modifié dans DataLab."
+msgid "A code interfaced with datalab written in a Jupyter notebook."
+msgstr "Un code interfacé avec DataLab écrit dans un notebook Jupyter."
 
 msgid "Creating a plugin"
 msgstr "Création d'un plugin"
 
-msgid "Now that we have a working prototype of our processing pipeline, we can create a plugin to integrate it in DataLab's GUI. To do so, we need to create a new Python module that will contain the plugin code. We can use the same code as in the macro-command, but we need to make some changes."
-msgstr "Maintenant que nous avons un prototype fonctionnel de notre chaîne de traitement, nous pouvons créer un plugin pour l'intégrer dans l'interface graphique de DataLab. Pour ce faire, nous devons créer un nouveau module Python qui contiendra le code du plugin. Nous pouvons utiliser le même code que dans la macro-commande, mais nous devons apporter quelques modifications."
+msgid "Now that we have a working prototype of our processing pipeline, we can choose to create a plugin to integrate it in DataLab's GUI. To do so, we need to create a new Python module that will contain the plugin code. We can use the same code as in the macro-command, but we need to make some changes."
+msgstr "Maintenant que nous avons un prototype fonctionnel de notre chaîne de traitement, nous pouvons choisir de créer un plugin pour l'intégrer dans l'interface graphique de DataLab. Pour ce faire, nous devons créer un nouveau module Python qui contiendra le code du plugin. Nous pouvons utiliser le même code que dans la macro-commande, mais nous devons apporter quelques modifications."
 
 msgid "The plugin system is described in the :ref:`about_plugins` section."
 msgstr "Le système de plugins est décrit dans la section :ref:`about_plugins`."
 
-msgid "Apart from integrating the feature to DataLab's GUI which is more convenient for the user, the advantage of creating a plugin is that we can take benefit of the DataLab infrastructure, if we encapsulate our processing function in a certain way (see below):"
-msgstr "Mis à part l'intégration de la fonctionnalité à l'interface graphique de DataLab qui est plus pratique pour l'utilisateur, l'avantage de créer un plugin est que nous pouvons tirer parti de l'infrastructure de DataLab, si nous encapsulons notre fonction de traitement d'une certaine manière (voir ci-dessous) :"
+msgid "Apart from integrating the feature to DataLab's GUI which is more convenient for the user, the advantage of creating a plugin is that we can take benefit of the DataLab infrastructure if we encapsulate our processing function in a certain way (see below):"
+msgstr "Outre l'intégration de la fonctionnalité dans l'interface graphique de DataLab, ce qui est plus pratique pour l'utilisateur, l'avantage de créer un plugin est que nous pouvons bénéficier de l'infrastructure de DataLab si nous encapsulons notre fonction de traitement d'une certaine manière (voir ci-dessous) :"
 
 msgid "Our function will be executed in a separate process, so we can interrupt it if it takes too long to execute."
 msgstr "Notre fonction sera exécutée dans un processus séparé, nous pouvons donc l'interrompre si elle prend trop de temps à s'exécuter."
@@ -199,12 +235,11 @@ msgstr "Notre fonction sera exécutée dans un processus séparé, nous pouvons 
 msgid "Warnings and errors will be handled by DataLab, so we don't need to handle them ourselves."
 msgstr "Les avertissements et les erreurs seront gérés par DataLab, nous n'avons donc pas besoin de les gérer nous-mêmes."
 
-#, fuzzy
-msgid "The most significant change is that we need to define a function that will be operating on DataLab's native image objects (:class:`sigima.objects.ImageObj`), instead of operating on NumPy arrays. So we need to find a way to call our custom function ``weighted_average_denoise`` with a :class:`sigima.objects.ImageObj` as input and output. To avoid writing a lot of boilerplate code, we can use the function wrapper provided by DataLab: :class:`sigima.proc.image.Wrap1to1Func`."
-msgstr "Le changement le plus significatif est que nous devons définir une fonction qui fonctionnera sur les objets d'image natifs de DataLab (:class:`sigima.objects.ImageObj`), au lieu de fonctionner sur des tableaux NumPy. Nous devons donc trouver un moyen d'appeler notre fonction personnalisée ``weighted_average_denoise`` avec un :class:`sigima.objects.ImageObj` en entrée et en sortie. Pour éviter d'écrire beaucoup de code de base, nous pouvons utiliser l'enveloppe de fonction fournie par DataLab : :class:`sigima.proc.image.Wrap11Func`."
+msgid "The most significant change we need to make to our code is that we need to define a function that will be operating on DataLab's native image objects (:class:`sigima.objects.ImageObj`), instead of operating on NumPy arrays. So we need to find a way to call our custom function ``weighted_average_denoise`` with a :class:`sigima.objects.ImageObj` as input and output. To avoid writing a lot of boilerplate code, we can use the function wrapper provided by DataLab: :class:`sigima.proc.image.Wrap1to1Func`."
+msgstr "Le changement le plus significatif que nous devons apporter à notre code est que nous devons définir une fonction qui opérera sur les objets d'image natifs de DataLab (:class:`sigima.objects.ImageObj`), au lieu d'opérer sur des tableaux NumPy. Nous devons donc trouver un moyen d'appeler notre fonction personnalisée ``weighted_average_denoise`` avec un :class:`sigima.objects.ImageObj` en entrée et en sortie. Pour éviter d'écrire beaucoup de code standard, nous pouvons utiliser le wrapper de fonction fourni par DataLab : :class:`sigima.proc.image.Wrap1to1Func`."
 
-msgid "Besides we need to define a class that describes our plugin, which must inherit from :class:`datalab.plugins.PluginBase` and name the Python script that contains the plugin code with a name that starts with ``datalab_`` (e.g. ``datalab_custom_func.py``), so that DataLab can discover it at startup."
-msgstr "Par ailleurs, nous devons définir une classe qui décrit notre plugin, qui doit hériter de :class:`datalab.plugins.PluginBase` et nommer le script Python qui contient le code du plugin avec un nom qui commence par ``datalab_`` (par exemple ``datalab_custom_func.py``), afin que DataLab puisse le découvrir au démarrage."
+msgid "Besides we need to define a class that describes our plugin, which must inherit from :class:`datalab.plugins.PluginBase` and name the Python script that contains the plugin code with a name that starts with ``datalab_`` (e.g., ``datalab_custom_func.py``), so that DataLab can discover it at startup."
+msgstr "De plus, nous devons définir une classe qui décrit notre plugin, qui doit hériter de :class:`datalab.plugins.PluginBase` et nommer le script Python qui contient le code du plugin avec un nom qui commence par ``datalab_`` (par exemple, ``datalab_custom_func.py``), afin que DataLab puisse le découvrir au démarrage."
 
 msgid "Moreover, inside the plugin code, we want to add an entry in the \"Plugins\" menu, so that the user can access our plugin from the GUI."
 msgstr "De plus, dans le code du plugin, nous voulons ajouter une entrée dans le menu \"Plugins\", afin que l'utilisateur puisse accéder à notre plugin depuis l'interface graphique."
@@ -212,11 +247,11 @@ msgstr "De plus, dans le code du plugin, nous voulons ajouter une entrée dans l
 msgid "Here is the plugin code:"
 msgstr "Voici le code du plugin :"
 
-msgid "To test it, we have to add the plugin script to one of the plugin directories that are discovered by DataLab at startup (see the :ref:`about_plugins` section for more details, or the :ref:`tutorial_blobs` for an example)."
-msgstr "Pour le tester, nous devons ajouter le script du plugin à l'un des répertoires de plugins qui sont découverts par DataLab au démarrage (voir la section :ref:`about_plugins` pour plus de détails, ou le :ref:`tutorial_blobs` pour un exemple)."
+msgid "To test it, we have to add the plugin script to one of the plugin directories that are discovered by DataLab at startup: you can find it under \"Files > Settings\" (see the :ref:`about_plugins` section for more details, or the :ref:`tutorial_blobs` for an example). We then restart DataLab and we can see that the plugin has been loaded."
+msgstr "Pour le tester, nous devons ajouter le script du plugin à l'un des répertoires de plugins qui sont découverts par DataLab au démarrage : vous pouvez le trouver sous \"Fichiers > Paramètres\" (voir la section :ref:`about_plugins` pour plus de détails, ou le :ref:`tutorial_blobs` pour un exemple). Nous redémarrons ensuite DataLab et nous pouvons voir que le plugin a été chargé."
 
-msgid "We restart DataLab and we can see that the plugin has been loaded."
-msgstr "Nous redémarrons DataLab et nous pouvons voir que le plugin a été chargé."
+msgid "At the restart we can see that the plugin has been loaded."
+msgstr "Au redémarrage, nous pouvons voir que le plugin a été chargé."
 
 msgid "We generate again our test image using (see the first steps of the tutorial), and we process it using the plugin: \"Plugins > My custom filters > Weighted average denoise\"."
 msgstr "Nous générons à nouveau notre image de test en utilisant (voir les premières étapes du tutoriel), et nous la traitons en utilisant le plugin : \"Plugins > My custom filters > Weighted average denoise\"."
