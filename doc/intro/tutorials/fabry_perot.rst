@@ -42,7 +42,7 @@ into DataLab.
 
 .. figure:: ../../images/tutorials/fabry_perot/02.png
 
-    Go to the folder where you placed the downloaded images, select them
+    Go to the folder where you placed the downloaded images, select
     "fabry_perot1.jpg" and "fabry_perot2.jpg" and click "Open".
 
 The selected image is displayed in the main window. We can zoom in and out by pressing
@@ -80,7 +80,7 @@ Define circular ROIs and fit contours
 --------------------------------------
 
 Let's define a circular region of interest (ROI) around the central fringe.
-To do that, we firstly select the fist image in the "Images" panel
+To do that, we firstly select the first image in the "Images" panel
 (if not already selected), then we select the "Edit graphically" tool in
 the "ROI" menu.
 
@@ -103,7 +103,7 @@ boolean operations (union, intersection, difference).
 We choose to define a circular ROI graphically. To do that, we click on the "Graphical ROI"
 button, and select the circular ROI option. We can now draw the circular ROI on the image
 by clicking and dragging the mouse: the first click is on one side of the circle, and the
-dragging ends on the opposite side of the circle.
+second click is on the opposite side of the circle.
 
 .. figure:: ../../images/tutorials/fabry_perot/05b.png
 
@@ -120,7 +120,7 @@ pressing the "Ctrl" key while dragging a handle.
 
 Once you are satisfied with the ROI position and size, click "OK" to close the dialog.
 A confirmation dialog opens to ask you to apply the ROI to the image, and confirm
-its parameters. Here you can also choose to invert the ROI mask (i.e. select the area
+its parameters. Here you can also choose to invert the ROI mask (i.e., select the area
 outside the ROI instead of the area inside the ROI): we do not want to invert the ROI
 in this case, so we leave the "Invert ROI" checkbox unchecked, and click "OK". If you
 want to obtain the exact results shown in this tutorial, make sure that the ROI parameters
@@ -237,7 +237,7 @@ toolbar).
 
 .. note::
     Copying/pasting the metadata copies/pastes all the metadata, including the ROIs, but
-    this would have the side effect of copying/pasting the rest of the metadata as well.
+    this would have the side effect of also copying/pasting the rest of the metadata.
 
 .. figure:: ../../images/tutorials/fabry_perot/19.png
 
@@ -263,7 +263,7 @@ toolbar).
 
 Select the "Contour detection" tool in the "Analysis" menu, with the same
 parameters as before (shape "Circle"). On this image, there are two fringes,
-so four circles are fitted. The "Results" dialog opens, and displays the
+so four circles are fitted. The "Results" dialog opens and displays the
 fitted circle parameters. Click "OK".
 
 .. figure:: ../../images/tutorials/fabry_perot/22.png
@@ -330,7 +330,7 @@ entry in the "View" menu (or the |new_window| button in the toolbar).
 
     The signal is displayed in a separate window. Here, we added vertical cursors
     and a text label. As for the images, the annotations are stored
-    in the metadata of the signal, and saved together with the signal data when the workspace
+    in the metadata of the signal and saved together with the signal data when the workspace
     is saved. Click on "OK" to close the window.
 
 Now, let's try the second option for extracting the intensity profile along the X axis,
@@ -339,9 +339,9 @@ left of the visualization panel (this tool is a
 `PlotPy <https://github.com/PlotPyStack/plotpy>`_ feature). Before being able to use
 it, we need to select the image again in the visualization panel (otherwise the tool is
 grayed out). Then, we can click on the image to display the intensity profiles along
-the X and Y axes. DataLab integrates a modified version of this tool, which allows you to
+the X and Y axes. DataLab integrates a modified version of this tool which allows you to
 transfer the profile to the "Signals" panel for further processing. Select the
-"Cross section" tool |cross_section| in the vertical toolbar, and click on the image to
+"Cross section" tool |cross_section| in the vertical toolbar and click on the image to
 display the intensity profiles along the X and Y axes.
 
 .. figure:: ../../images/tutorials/fabry_perot/28.png
