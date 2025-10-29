@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 15:38+0200\n"
+"POT-Creation-Date: 2025-10-29 19:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -55,23 +55,26 @@ msgstr "Extraire le profil d'intensité le long de l'axe X"
 msgid "Save the workspace"
 msgstr "Sauvegarder l'espace de travail"
 
-msgid "First, we open DataLab and load the images:"
-msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images :"
+msgid "Load the images"
+msgstr "Charger les images"
 
-msgid "Open the image files with \"File > Open...\", or with the |fileopen_ima| button in the toolbar, or by dragging and dropping the files into DataLab (on the panel on the right)."
-msgstr "Ouvrir les fichiers d'image avec \"Fichier > Ouvrir...\", ou avec le bouton |fileopen_ima| dans la barre d'outils, ou en faisant glisser-déposer les fichiers dans DataLab (sur le panneau de droite)."
+msgid "First, we open DataLab and load the images from the menu file \"File > Open Image...\", with the |fileopen_ima| button in the toolbar or by dragging and dropping the files into DataLab."
+msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images depuis le menu \"Fichier > Ouvrir une image...\", avec le bouton |fileopen_ima| dans la barre d'outils ou en faisant glisser-déposer les fichiers dans DataLab."
 
 msgid "fileopen_ima"
 msgstr ""
 
-msgid "Select the test images \"fabry_perot1.jpg\" and \"fabry_perot2.jpg\" and click \"Open\"."
-msgstr "Sélectionnez les images de test \"fabry_perot1.jpg\" et \"fabry_perot2.jpg\" et cliquez sur \"Ouvrir\"."
+msgid "Open the image files with \"File > Open Image...\", or with the |fileopen_ima| button in the toolbar, or by dragging and dropping the files into DataLab (on the panel on the right)."
+msgstr "Ouvrez les fichiers d'image avec \"Fichier > Ouvrir une image...\", ou avec le bouton |fileopen_ima| dans la barre d'outils, ou en faisant glisser-déposer les fichiers dans DataLab (sur le panneau de droite)."
+
+msgid "Go to the tutorial data folder in DataLab's installation directory, select \"fabry_perot1.jpg\" and \"fabry_perot2.jpg\" and click \"Open\"."
+msgstr "Allez dans le dossier de données du tutoriel dans le répertoire d'installation de DataLab, sélectionnez \"fabry_perot1.jpg\" et \"fabry_perot2.jpg\" et cliquez sur \"Ouvrir\"."
 
 msgid "The selected image is displayed in the main window. We can zoom in and out by pressing the right mouse button and dragging the mouse up and down. We can also pan the image by pressing the middle mouse button and dragging the mouse."
 msgstr "L'image sélectionnée est affichée dans la fenêtre principale. Nous pouvons zoomer en appuyant sur le bouton droit de la souris et en faisant glisser la souris vers le haut et vers le bas. Nous pouvons également déplacer l'image en appuyant sur le bouton du milieu de la souris et en faisant glisser la souris."
 
-msgid "Zoom in and out with the right mouse button. Pan the image with the middle mouse button."
-msgstr "Zoomer avec le bouton droit de la souris. Déplacer l'image avec le bouton du milieu de la souris."
+msgid "Images loaded in DataLab. Zoom in and out with the right mouse button, pan the image with the middle mouse button."
+msgstr "Images chargées dans DataLab. Zoomez avec le bouton droit de la souris, déplacez l'image avec le bouton du milieu de la souris."
 
 msgid "When working on application-specific images (e.g. X-ray radiography images, or optical microscopy images), it is often useful to change the colormap to a grayscale colormap. If you see a different image colormap than the one shown in the figure, you can change it by selecting the image in the visualization panel, and the selecting the colormap in the vertical toolbar on the left of the visualization panel."
 msgstr "Lorsque vous travaillez sur des images spécifiques à une application (par exemple des images de radiographie X, ou des images de microscopie optique), il est souvent utile de changer la palette de couleurs en une palette de couleurs en niveaux de gris. Si vous voyez une palette de couleurs d'image différente de celle affichée dans l'image, vous pouvez la modifier en sélectionnant l'image dans le panneau de visualisation, puis en sélectionnant la palette de couleurs dans la barre d'outils verticale à gauche du panneau de visualisation."
@@ -85,50 +88,74 @@ msgstr ""
 msgid "Select the \"Visualization\" tab, and select the \"gray\" colormap."
 msgstr "Sélectionnez l'onglet \"Visualisation\", et sélectionnez la palette de couleurs \"gray\"."
 
-msgid "Then, let's define a circular region of interest (ROI) around the central fringe."
-msgstr "Ensuite, définissons une région d'intérêt circulaire (ROI) autour de la frange centrale."
+msgid "Define circular ROIs and fit contours"
+msgstr "Définir des ROIs circulaires et ajuster des contours"
 
-msgid "Select the \"Edit regions of interest\" tool in the \"Analysis\" menu."
-msgstr "Sélectionnez l'outil \"Modifier les régions d'intérêt\" dans le menu Analyse\"."
+msgid "Let's define a circular region of interest (ROI) around the central fringe. To do that, we firstly select the first image in the \"Images\" panel (if not already selected), then we select the \"Edit graphically\" tool in the \"ROI\" menu."
+msgstr "Définissons une région d'intérêt circulaire (ROI) autour de la frange centrale. Pour ce faire, nous sélectionnons d'abord la première image dans le panneau \"Images\" (si elle n'est pas déjà sélectionnée), puis nous sélectionnons l'outil \"Modifier les régions d'intérêt\" dans le menu \"ROI\"."
+
+msgid "Select the \"Edit graphically\" tool in the \"ROI\" menu."
+msgstr "Sélectionnez l'outil \"Édition graphique\" dans le menu \"ROI\"."
+
+msgid "This opens the \"Regions of interest\" dialog, that provides all the tools to define and edit ROIs. You can define ROIs graphically or via their coordinates. You can define multiple ROIs on the same image, and even combine them using boolean operations (union, intersection, difference)."
+msgstr "Cela ouvre la boîte de dialogue \"Régions d'intérêt\", qui fournit tous les outils pour définir et éditer des ROIs. Vous pouvez définir des ROIs graphiquement ou via leurs coordonnées. Vous pouvez définir plusieurs ROIs sur la même image, et même les combiner en utilisant des opérations booléennes (union, intersection, différence)."
 
 msgid "The \"Regions of interest\" dialog opens. Click \"Add ROI\" and select a circular ROI. Resize the predefined ROI by dragging the handles. Note that you may change the ROI radius while keeping its center fixed by pressing the \"Ctrl\" key. Click \"OK\" to close the dialog."
 msgstr "La boîte de dialogue \"Régions d'intérêt\" s'ouvre. Cliquez sur \"Ajouter une ROI\" et sélectionnez une ROI circulaire. Redimensionnez la ROI prédéfinie en faisant glisser les poignées. Notez que vous pouvez modifier le rayon de la ROI tout en gardant son centre fixe en appuyant sur la touche \"Ctrl\". Cliquez sur \"OK\" pour fermer la boîte de dialogue."
 
-msgid "Another dialog box opens, and asks you to confirm the ROI parameters. Click \"OK\"."
-msgstr "Une autre boîte de dialogue s'ouvre et vous demande de confirmer les paramètres de la ROI. Cliquez sur \"OK\"."
+msgid "We choose to define a circular ROI graphically. To do that, we click on the \"Graphical ROI\" button, and select the circular ROI option. We can now draw the circular ROI on the image by clicking and dragging the mouse: the first click is on one side of the circle, and the second click is on the opposite side of the circle."
+msgstr "Nous choisissons de définir une ROI circulaire graphiquement. Pour ce faire, nous cliquons sur le bouton \"ROI graphique\", et sélectionnons l'option de ROI circulaire. Nous pouvons maintenant dessiner la ROI circulaire sur l'image en cliquant et en faisant glisser la souris : le premier clic est d'un côté du cercle, et le deuxième clic est du côté opposé du cercle."
 
-msgid "The ROI is displayed on the image: masked pixels are grayed out, and the ROI boundary is displayed in blue (note that, internally, the ROI is defined by a binary mask, i.e. image data is represented as a NumPy masked array)."
-msgstr "La ROI est affichée sur l'image : les pixels masqués sont grisés, et la limite de la ROI est affichée en bleu (notez que, en interne, la ROI est définie par un masque binaire, c'est-à-dire que les données d'image sont représentées sous la forme d'un tableau masqué NumPy)."
+msgid "The option to graphically define a circular ROI."
+msgstr "L'option pour définir graphiquement une ROI circulaire."
 
-msgid "Now, let's detect the contours in the ROI and fit them to circles."
-msgstr "A présent, détectons les contours dans la ROI et ajustons-les à des cercles."
+msgid "Once created, the ROI can be selected using the \"Selection\" tool, and moved or resized by dragging the ROI or its handles. In addition, you can change the ROI radius while keeping its center fixed by pressing the \"Ctrl\" key while dragging a handle."
+msgstr "Une fois créée, la ROI peut être sélectionnée à l'aide de l'outil \"Sélection\", et déplacée ou redimensionnée en faisant glisser la ROI ou ses poignées. De plus, vous pouvez modifier le rayon de la ROI tout en gardant son centre fixe en appuyant sur la touche \"Ctrl\" tout en faisant glisser une poignée."
 
-msgid "Select the \"Contour detection\" tool in the \"Analysis\" menu."
-msgstr "Sélectionnez l'outil \"Détection de contour\" dans le menu Analyse\"."
+msgid "The circular ROI created appears in the image."
+msgstr "La ROI circulaire créée apparaît dans l'image."
 
-msgid "The \"Contour\" parameters dialog opens. Select the shape \"Circle\" and click \"OK\"."
-msgstr "La boîte de dialogue \"Contour\" s'ouvre. Sélectionnez la forme \"Cercle\" et cliquez sur \"OK\"."
+msgid "Once you are satisfied with the ROI position and size, click \"OK\" to close the dialog. A confirmation dialog opens to ask you to apply the ROI to the image, and confirm its parameters. Here you can also choose to invert the ROI mask (i.e., select the area outside the ROI instead of the area inside the ROI): we do not want to invert the ROI in this case, so we leave the \"Invert ROI\" checkbox unchecked, and click \"OK\". If you want to obtain the exact results shown in this tutorial, make sure that the ROI parameters are the same as in the figure."
+msgstr "Une fois que vous êtes satisfait de la position et de la taille de la ROI, cliquez sur \"OK\" pour fermer la boîte de dialogue. Une boîte de dialogue de confirmation s'ouvre pour vous demander d'appliquer la ROI à l'image, et de confirmer ses paramètres. Ici, vous pouvez également choisir d'inverser le masque de la ROI (c'est-à-dire sélectionner la zone en dehors de la ROI au lieu de la zone à l'intérieur de la ROI) : nous ne voulons pas inverser la ROI dans ce cas, donc nous laissons la case à cocher \"Inverser la ROI\" décochée, et cliquons sur \"OK\". Si vous souhaitez obtenir les mêmes résultats que ceux présentés dans ce tutoriel, assurez-vous que les paramètres de la ROI sont les mêmes que dans l'image."
 
-msgid "The \"Results\" dialog opens, and displays the fitted circle parameters. Click \"OK\"."
-msgstr "La boîte de dialogue \"Résultats\" s'ouvre et affiche les paramètres du cercle ajusté. Cliquez sur \"OK\"."
+msgid "The confirmation dialog."
+msgstr "La boîte de dialogue de confirmation."
+
+msgid "Once confirmed, the ROI is applied to the image. The ROI is displayed on the image, and the part outside the ROI is dimmed. Note that, internally, the ROI is defined by a binary mask, i.e., image data is represented as a NumPy masked array."
+msgstr "Une fois confirmée, la ROI est appliquée à l'image. La ROI est affichée sur l'image, et la partie en dehors de la ROI est assombrie. Notez que, en interne, la ROI est définie par un masque binaire, c'est-à-dire que les données d'image sont représentées comme un tableau masqué NumPy."
+
+msgid "The ROI displayed on the image."
+msgstr "La ROI affichée sur l'image."
+
+msgid "Now, let's detect the contours in the area inside the ROI and fit them to circles. To do that, we select the \"Contour detection\" tool in the \"Analysis\" menu. The contour parameters dialog opens: we select the shape \"Circle\" and click \"OK\". Now you will see a \"Results\" dialog opening, that displays the fitted circle parameters. Click \"OK\" to close the dialog. The fitted circles are displayed on the image."
+msgstr "A présent, détectons les contours dans la zone à l'intérieur de la ROI et ajustons-les à des cercles. Pour ce faire, nous sélectionnons l'outil \"Détection de contour\" dans le menu \"Analyse\". La boîte de dialogue des paramètres de contour s'ouvre : nous sélectionnons la forme \"Cercle\" et cliquons sur \"OK\". Vous verrez maintenant une boîte de dialogue \"Résultats\" s'ouvrir, qui affiche les paramètres du cercle ajusté. Cliquez sur \"OK\" pour fermer la boîte de dialogue. Les cercles ajustés sont affichés sur l'image."
+
+msgid "The \"Contour detection\" tool in the \"Analysis\" menu."
+msgstr "L'outil \"Détection de contours\" dans le menu \"Analyse\"."
+
+msgid "The \"Contour\" parameters dialog."
+msgstr "La boîte de dialogue des paramètres de contour."
+
+msgid "The \"Results\" dialog."
+msgstr "La boîte de dialogue des résultats."
 
 msgid "The fitted circles are displayed on the image."
 msgstr "Les cercles ajustés sont affichés sur l'image."
 
-msgid "If you want to show the analysis results again, you can select the \"Show results\" |show_results| entry in the \"Analysis\" menu, or the \"Show results\" |show_results| button, below the image list:"
-msgstr "Si vous souhaitez afficher à nouveau les résultats d'analyse, vous pouvez sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le menu Analyse\", ou le bouton \"Afficher les résultats\" |show_results|, en dessous de la liste des images :"
+msgid "If you want to show the analysis results again, you can select the \"Show Results\" |show_results| button in the \"Analysis\" menu, or the \"Results\" |show_results| button, in the Analysis panel located below the image list:"
+msgstr "Si vous souhaitez afficher à nouveau les résultats de l'analyse, vous pouvez sélectionner le bouton \"Afficher les résultats\" |show_results| dans le menu \"Analyse\", ou le bouton \"Résultats\" |show_results|, dans le panneau d'analyse situé sous la liste des images :"
 
 msgid "show_results"
 msgstr ""
 
-msgid "The images (or signals) can also be displayed in a separate window, by clicking on the \"View in a new window\" entry in the \"View\" menu (or the |new_window| button in the toolbar). This is useful to compare side by side images or signals."
-msgstr "Les images (ou signaux) peuvent également être affichés dans une fenêtre séparée, en cliquant sur l'entrée \"Afficher dans une nouvelle fenêtre\" dans le menu \"Affichage\" (ou le bouton |new_window| dans la barre d'outils). Ceci est utile pour comparer côte à côte des images ou des signaux."
+msgid "The images (or signals) can also be displayed in a separate window, by clicking on the \"View in a new window\" entry in the \"View\" menu (or the |new_window| button in the toolbar). This is useful to compare images or signals side by side, and allows you to add annotations (cursors, labels, shapes, etc.) to the image or signal: the annotations are stored in the metadata of the image or signal, and saved together with the data when the workspace is saved."
+msgstr "Les images (ou signaux) peuvent également être affichées dans une fenêtre séparée, en cliquant sur l'entrée \"Afficher dans une nouvelle fenêtre\" dans le menu \"Affichage\" (ou le bouton |new_window| dans la barre d'outils). Cela est utile pour comparer des images ou des signaux côte à côte, et vous permet d'ajouter des annotations (curseurs, étiquettes, formes, etc.) à l'image ou au signal : les annotations sont stockées dans les métadonnées de l'image ou du signal, et avec les données lorsque l'espace de travail est sauvegardé."
 
 msgid "new_window"
 msgstr ""
 
-msgid "The image is displayed in a separate window. The ROI and the fitted circles are also displayed. Annotations can be added to the image by clicking on the buttons at the bottom of the window. The annotations are stored in the metadata of the image, and together with the image data when the workspace is saved. Click on \"OK\" to close the window."
-msgstr "L'image est affichée dans une fenêtre séparée. La ROI et les cercles ajustés sont également affichés. Des annotations peuvent être ajoutées à l'image en cliquant sur les boutons en bas de la fenêtre. Les annotations sont stockées dans les métadonnées de l'image, et avec les données de l'image lorsque l'espace de travail est sauvegardé. Cliquez sur \"OK\" pour fermer la fenêtre."
+msgid "The image displayed in a separate window. The ROI and the fitted circles are also displayed. Annotations can be added to the image by clicking on the buttons at the bottom of the window. The annotations are stored in the metadata of the image, and saved together with the image data when the workspace is saved. Click on \"OK\" to close the window."
+msgstr "L'image affichée dans une fenêtre séparée. La ROI et les cercles ajustés sont également affichés. Des annotations peuvent être ajoutées à l'image en cliquant sur les boutons en bas de la fenêtre. Les annotations sont stockées dans les métadonnées de l'image, et avec les données de l'image lorsque l'espace de travail est sauvegardé. Cliquez sur \"OK\" pour fermer la fenêtre."
 
 msgid "The image is displayed in the main window, together with the annotations."
 msgstr "L'image est affichée dans la fenêtre principale, avec les annotations."
@@ -142,38 +169,50 @@ msgstr "Le bouton \"Métadonnées\" est situé en dessous de la liste des images
 msgid "The \"Metadata\" dialog opens. Among other information, it displays the annotations (in a JSON format), some style information (e.g. the colormap), and the ROI."
 msgstr "La boîte de dialogue \"Métadonnées\" s'ouvre. Parmi d'autres informations, elle affiche les annotations (dans un format JSON), des informations de style (par exemple la palette de couleurs), et la ROI."
 
-msgid "Now, let's delete the image metadata (including the annotations) to clean up the image."
-msgstr "Maintenant, supprimons les métadonnées de l'image (y compris les annotations) pour nettoyer l'image."
-
-msgid "Select the \"Delete metadata\" entry in the \"Edit\" menu, or the |metadata_delete| button in the toolbar."
-msgstr "Sélectionnez l'entrée \"Supprimer les métadonnées\" dans le menu \"Edition\", ou le bouton |metadata_delete| dans la barre d'outils."
+msgid "Now, let's delete the image metadata (including the annotations) to clean up the image. Select the \"Delete object metadata...\" entry in the \"Edit\" menu, or the |metadata_delete| button in the toolbar, and answer \"No\" to the confirmation dialog to keep the ROI and delete the rest of the metadata."
+msgstr "Maintenant, supprimons les métadonnées de l'image (y compris les annotations) pour nettoyer l'image. Sélectionnez l'entrée \"Supprimer les métadonnées de l'objet...\" dans le menu \"Edition\", ou le bouton |metadata_delete| dans la barre d'outils, et répondez \"Non\" à la boîte de dialogue de confirmation pour conserver la ROI et supprimer le reste des métadonnées."
 
 msgid "metadata_delete"
 msgstr ""
 
-msgid "The \"Delete metadata\" dialog opens. Click \"No\" to keep the ROI and delete the rest of the metadata."
-msgstr "La boîte de dialogue \"Supprimer les métadonnées\" s'ouvre. Cliquez sur \"Non\" pour conserver la ROI et supprimer le reste des métadonnées."
+msgid "Select the \"Delete object metadata\" entry in the \"Edit\" menu."
+msgstr "Sélectionnez l'entrée \"Supprimer les métadonnées\" dans le menu \"Edition\"."
 
-msgid "If we want to define the exact same ROI on the second image, we can copy/paste the ROI from the first image to the second image, using the metadata."
-msgstr "Si nous voulons définir la même ROI sur la deuxième image, nous pouvons copier/coller la ROI de la première image vers la deuxième image, en utilisant les métadonnées."
+msgid "The \"Delete metadata\" dialog. Click \"No\" to keep the ROI and delete the rest of the metadata."
+msgstr "La boîte de dialogue \"Supprimer les métadonnées\". Cliquez sur \"Non\" pour conserver la ROI et supprimer le reste des métadonnées."
 
-msgid "Select the \"Copy metadata\" entry in the \"Edit\" menu, or the |metadata_copy| button in the toolbar."
-msgstr "Sélectionnez l'entrée \"Copier les métadonnées\" dans le menu \"Edition\", ou le bouton |metadata_copy| dans la barre d'outils."
+msgid "If we want to define the exact same ROI on the second image, we can copy/paste the ROI from the first image to the second image. The best way to do that is to use the copy/paste option present in the \"ROI\" menu, or the |roi_copy| and |roi_paste| buttons in the toolbar: select the first image, then click on the \"Copy\" entry in the \"ROI\" menu (or the |roi_copy| button in the toolbar), then select the second image, and click on the \"Paste ROI\" entry in the \"ROI\" menu (or the |roi_paste| button in the toolbar)."
+msgstr "Si nous voulons définir la même ROI exacte sur la deuxième image, nous pouvons copier/coller la ROI de la première image à la deuxième image. La meilleure façon de le faire est d'utiliser l'option de copier/coller présente dans le menu \"ROI\", ou les boutons |roi_copy| et |roi_paste| dans la barre d'outils : sélectionnez la première image, puis cliquez sur l'entrée \"Copier\" dans le menu \"ROI\" (ou le bouton |roi_copy| dans la barre d'outils), puis sélectionnez la deuxième image, et cliquez sur l'entrée \"Coller la ROI\" dans le menu \"ROI\" (ou le bouton |roi_paste| dans la barre d'outils)."
 
-msgid "metadata_copy"
+msgid "roi_copy"
 msgstr ""
 
-msgid "Select the second image in the \"Images\" panel, then select the \"Paste metadata\" entry in the \"Edit\" menu, or the |metadata_paste| button in the toolbar."
-msgstr "Sélectionnez la deuxième image dans le panneau \"Images\", puis sélectionnez l'entrée \"Coller les métadonnées\" dans le menu \"Edition\", ou le bouton |metadata_paste| dans la barre d'outils."
-
-msgid "metadata_paste"
+msgid "roi_paste"
 msgstr ""
+
+msgid "Copying/pasting the metadata copies/pastes all the metadata, including the ROIs, but this would have the side effect of also copying/pasting the rest of the metadata."
+msgstr "Copier/coller les métadonnées copie/colle toutes les métadonnées, y compris les ROIs, mais cela aurait pour effet secondaire de copier/coller également le reste des métadonnées."
+
+msgid "The \"Copy\" entry in the \"ROI\" menu."
+msgstr "L'entrée \"Copier\" dans le menu \"ROI\"."
+
+msgid "The \"Paste\" entry in the \"ROI\" menu, or the |roi_paste| button in the toolbar."
+msgstr "L'entrée \"Coller\" dans le menu \"ROI\", ou le bouton |roi_paste| dans la barre d'outils."
 
 msgid "The ROI is added to the second image."
 msgstr "La ROI est ajoutée à la deuxième image."
 
-msgid "Select the \"Contour detection\" tool in the \"Analysis\" menu, with the same parameters as before (shape \"Circle\"). On this image, there are two fringes, so four circles are fitted. The \"Results\" dialog opens, and displays the fitted circle parameters. Click \"OK\"."
-msgstr "Sélectionnez l'outil \"Détection de contour\" dans le menu Analyse\", avec les mêmes paramètres qu'auparavant (forme \"Cercle\"). Sur cette image, il y a deux franges, donc quatre cercles sont ajustés. La boîte de dialogue \"Résultats\" s'ouvre et affiche les paramètres du cercle ajusté. Cliquez sur \"OK\"."
+msgid "Select the \"Contour detection\" tool in the \"Analysis\" menu, with the same parameters as before (shape \"Circle\"). On this image, there are two fringes, so four circles are fitted. The \"Results\" dialog opens and displays the fitted circle parameters. Click \"OK\"."
+msgstr "Sélectionnez l'outil \"Détection de contours\" dans le menu \"Analyse\", avec les mêmes paramètres qu'auparavant (forme \"Cercle\"). Sur cette image, il y a deux franges, donc quatre cercles sont ajustés. La boîte de dialogue \"Résultats\" s'ouvre et affiche les paramètres du cercle ajusté. Cliquez sur \"OK\"."
+
+msgid "The \"Results\" dialog for the second image."
+msgstr "La boîte de dialogue \"Résultats\" pour la deuxième image."
+
+msgid "Extract intensity profiles along the X axis"
+msgstr "Extraire des profils d'intensité le long de l'axe X"
+
+msgid "For the sake of simplicity (and because we want to compare two methods of extraction), we will extract the intensity profile along the X axis at the center of the image. In a real application, you would probably want to extract the **radial intensity profile** instead, which can be done using the \"Radial profile\" entry in the \"Operations > Intensity profiles\" menu: this would be more relevant and straightforward to analyze Fabry-Perot fringes."
+msgstr "Pour des raisons de simplicité (et parce que nous voulons comparer deux méthodes d'extraction), nous allons extraire le profil d'intensité le long de l'axe X au centre de l'image. Dans une application réelle, vous voudriez probablement extraire le **profil d'intensité radial** à la place, ce qui peut être fait en utilisant l'entrée \"Profil radial\" dans le menu \"Opérations > Profils d'intensité\" : cela serait plus pertinent et plus simple pour analyser les franges de Fabry-Perot."
 
 msgid "To extract the intensity profile along the X axis, we have two options:"
 msgstr "Pour extraire le profil d'intensité le long de l'axe X, nous avons deux options :"
@@ -190,8 +229,8 @@ msgstr "Soit activer l'outil \"Profil rectiligne\" |cross_section| dans la barre
 msgid "cross_section"
 msgstr ""
 
-msgid "Let's try the first option, by selecting the \"Line profile...\" entry |profile|: that is the most straightforward way to extract a profile from an image, and it corresponds to the ``calc(\"line_profile\")`` computation feature of DataLab's API (so it can be used in a script, a plugin or a macro)."
-msgstr "Essayons la première option, en sélectionnant l'entrée \"Profil rectiligne...\" |profile| : c'est la façon la plus simple d'extraire un profil d'une image, et cela correspond à la méthode ``calc(\"line_profile\")`` de l'API de DataLab (donc elle peut être utilisée dans un script, un plugin ou une macro)."
+msgid "Let's try the first option: select the \"Line profile...\" entry |profile|. This is the most straightforward way to extract a profile from an image, and it corresponds to the ``calc(\"line_profile\")`` computation feature of DataLab's API (so it can be used in a script, a plugin or a macro). Select the \"Line profile...\" entry |profile| in the \"Operations\" menu and the \"Line profile\" dialog will open, letting you select the profile row (for a horizontal profile) or column (for a vertical profile) on the image. You can also enter the row/column number directly by clicking on \"parameters...\" in the \"Line profile\" dialog."
+msgstr "Essayons la première option : sélectionnez l'entrée \"Profil rectiligne...\" |profile|. C'est la façon la plus simple d'extraire un profil d'une image, et cela correspond à la fonctionnalité de calcul ``calc(\"line_profile\")`` de l'API de DataLab (donc elle peut être utilisée dans un script, un plugin ou une macro). Sélectionnez l'entrée \"Profil rectiligne...\" |profile| dans le menu \"Opérations\" et la boîte de dialogue \"Profil rectiligne\" s'ouvrira, vous permettant de sélectionner la ligne du profil (pour un profil horizontal) ou la colonne (pour un profil vertical) sur l'image. Vous pouvez également entrer directement le numéro de ligne/colonne en cliquant sur \"paramètres...\" dans la boîte de dialogue \"Profil rectiligne\"."
 
 msgid "Select the \"Line profile...\" entry |profile| in the \"Operations\" menu."
 msgstr "Sélectionnez l'entrée \"Profil rectiligne...\" |profile| dans le menu \"Opérations\"."
@@ -199,23 +238,26 @@ msgstr "Sélectionnez l'entrée \"Profil rectiligne...\" |profile| dans le menu 
 msgid "The \"Profile\" dialog opens. Enter the row of the horizontal profile (or the column of the vertical profile) in the dialog box that opens. Click \"OK\"."
 msgstr "La boîte de dialogue \"Profil\" s'ouvre. Entrez la ligne du profil horizontal (ou la colonne du profil vertical) dans la boîte de dialogue qui s'ouvre. Cliquez sur \"OK\"."
 
+msgid "After clicking \"OK\", the intensity profile along the X axis is computed and displayed in the \"Signals\" panel. DataLab automatically switches to the \"Signals\" panel to display the profile."
+msgstr "Après avoir cliqué sur \"OK\", le profil d'intensité le long de l'axe X est calculé et affiché dans le panneau \"Signaux\". DataLab bascule automatiquement vers le panneau \"Signaux\" pour afficher le profil."
+
 msgid "The intensity profile is added to the \"Signals\" panel, and DataLab switches to this panel to display the profile."
 msgstr "Le profil d'intensité est ajouté au panneau \"Signaux\", et DataLab bascule vers ce panneau pour afficher le profil."
 
 msgid "If you want to do some measurements on the profile, or add annotations, you can open the signal in a separate window, by clicking on the \"View in a new window\" entry in the \"View\" menu (or the |new_window| button in the toolbar)."
 msgstr "Si vous souhaitez effectuer des mesures sur le profil, ou ajouter des annotations, vous pouvez ouvrir le signal dans une fenêtre séparée, en cliquant sur l'entrée \"Afficher dans une nouvelle fenêtre\" dans le menu \"Affichage\" (ou le bouton |new_window| dans la barre d'outils)."
 
-msgid "The signal is displayed in a separate window. Here, we added vertical cursors and a very interesting text label. As for the images, the annotations are stored in the metadata of the signal, and together with the signal data when the workspace is saved. Click on \"OK\" to close the window."
+msgid "The signal is displayed in a separate window. Here, we added vertical cursors and a text label. As for the images, the annotations are stored in the metadata of the signal and saved together with the signal data when the workspace is saved. Click on \"OK\" to close the window."
 msgstr "Le signal est affiché dans une fenêtre séparée. Ici, nous avons ajouté des curseurs verticaux et une étiquette de texte très intéressante. Comme pour les images, les annotations sont stockées dans les métadonnées du signal, et avec les données du signal lorsque l'espace de travail est sauvegardé. Cliquez sur \"OK\" pour fermer la fenêtre."
 
-msgid "Now, let's try the second option for extracting the intensity profile along the X axis, by activating the \"Cross section\" tool |cross_section| in the vertical toolbar on the left of the visualization panel (this tool is a `PlotPy <https://github.com/PlotPyStack/plotpy>`_ feature). Before being able to use it, we need to select the image in the visualization panel (otherwise the tool is grayed out). Then, we can click on the image to display the intensity profile along the X axis. DataLab integrates a modified version of this tool, that allows to transfer the profile to the \"Signals\" panel for further processing."
-msgstr "Maintenant, essayons la deuxième option pour extraire le profil d'intensité le long de l'axe X, en activant l'outil \"Profil rectiligne\" |cross_section| dans la barre d'outils verticale à gauche du panneau de visualisation (cet outil est une fonctionnalité de `PlotPy <https://github.com/PlotPyStack/plotpy>`_). Avant de pouvoir l'utiliser, nous devons sélectionner l'image dans le panneau de visualisation (sinon l'outil est grisée). Ensuite, nous pouvons cliquer sur l'image pour afficher le profil d'intensité le long de l'axe X. DataLab intègre une version modifiée de cet outil, qui permet de transférer le profil vers le panneau \"Signaux\" pour un traitement ultérieur."
+msgid "Now, let's try the second option for extracting the intensity profile along the X axis, using the \"Cross section\" tool |cross_section| in the vertical toolbar on the left of the visualization panel (this tool is a `PlotPy <https://github.com/PlotPyStack/plotpy>`_ feature). Before being able to use it, we need to select the image again in the visualization panel (otherwise the tool is grayed out). Then, we can click on the image to display the intensity profiles along the X and Y axes. DataLab integrates a modified version of this tool which allows you to transfer the profile to the \"Signals\" panel for further processing. Select the \"Cross section\" tool |cross_section| in the vertical toolbar and click on the image to display the intensity profiles along the X and Y axes."
+msgstr "Essayons maintenant la deuxième option pour extraire le profil d'intensité le long de l'axe X, en utilisant l'outil \"Profil rectiligne\" |cross_section| dans la barre d'outils verticale à gauche du panneau de visualisation (cet outil est une fonctionnalité de `PlotPy <https://github.com/PlotPyStack/plotpy>`_). Avant de pouvoir l'utiliser, nous devons sélectionner l'image dans le panneau de visualisation (sinon l'outil est grisé). Ensuite, nous pouvons cliquer sur l'image pour afficher les profils d'intensité le long des axes X et Y. DataLab intègre une version modifiée de cet outil qui vous permet de transférer le profil vers le panneau \"Signaux\" pour un traitement ultérieur. Sélectionnez l'outil \"Profil rectiligne\" |cross_section| dans la barre d'outils verticale et cliquez sur l'image pour afficher les profils d'intensité le long des axes X et Y."
 
-msgid "Switch back to the \"Images\" panel, and select the image *in the visualization panel* (otherwise the \"Cross section\" |cross_section| tool is grayed out). Select the \"Cross section\" tool |cross_section| in the vertical toolbar, and click on the image to display the intensity profiles along the X and Y axes."
-msgstr "Revenez au panneau \"Images\" et sélectionnez l'image *dans le panneau de visualisation* (sinon l'outil \"Section transversale\" |cross_section| est grisée). Sélectionnez l'outil \"Section transversale\" |cross_section| dans la barre d'outils verticale, et cliquez sur l'image pour afficher les profils d'intensité le long des axes X et Y."
+msgid "The cross section tool in the view panel. In the red circle, the button to activate it. In the blue circle, the button to transfer the profile to the \"Signals\" panel."
+msgstr "L'outil de profil rectiligne dans le panneau de visualisation. Dans le cercle rouge, le bouton pour l'activer. Dans le cercle bleu, le bouton pour transférer le profil vers le panneau \"Signaux\"."
 
-msgid "Then, click on the \"Process signal\" button |to_signal| in the toolbar near the profile to transfer the profile to the \"Signals\" panel."
-msgstr "Ensuite, cliquez sur le bouton \"Traiter le signal\" |to_signal| dans la barre d'outils près du profil pour transférer le profil vers le panneau \"Signaux\"."
+msgid "Click on the \"Process signal\" button |to_signal| in the toolbar near the profile to transfer the profile to the \"Signals\" panel. The intensity profile is added to the \"Signals\" panel, and DataLab switches to this panel to display the profile."
+msgstr "Cliquez sur le bouton \"Traiter le signal\" |to_signal| dans la barre d'outils près du profil pour transférer le profil vers le panneau \"Signaux\". Le profil d'intensité est ajouté au panneau \"Signaux\", et DataLab bascule vers ce panneau pour afficher le profil."
 
 msgid "to_signal"
 msgstr ""

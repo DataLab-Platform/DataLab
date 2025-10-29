@@ -17,11 +17,6 @@ features of DataLab:
 - Extract the intensity profile along the X axis
 - Save the workspace
 
-To follow this tutorial, you need to download the two test images from the DataLab
-GitHub repository:
-`datalab/data/tutorials
-<https://github.com/DataLab-Platform/DataLab/tree/main/datalab/data/tutorials/>`_
-
 Load the images
 ---------------
 
@@ -42,8 +37,8 @@ into DataLab.
 
 .. figure:: ../../images/tutorials/fabry_perot/02.png
 
-    Go to the folder where you placed the downloaded images, select
-    "fabry_perot1.jpg" and "fabry_perot2.jpg" and click "Open".
+    Go to the tutorial data folder in DataLab's installation directory,
+    select "fabry_perot1.jpg" and "fabry_perot2.jpg" and click "Open".
 
 The selected image is displayed in the main window. We can zoom in and out by pressing
 the right mouse button and dragging the mouse up and down. We can also pan the image
@@ -278,6 +273,15 @@ fitted circle parameters. Click "OK".
 
 Extract intensity profiles along the X axis
 -------------------------------------------
+
+.. note::
+
+    For the sake of simplicity (and because we want to compare two methods of
+    extraction), we will extract the intensity profile along the X axis
+    at the center of the image. In a real application, you would probably want to
+    extract the **radial intensity profile** instead, which can be done using
+    the "Radial profile" entry in the "Operations > Intensity profiles" menu: this
+    would be more relevant and straightforward to analyze Fabry-Perot fringes.
 
 To extract the intensity profile along the X axis, we have two options:
 
