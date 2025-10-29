@@ -11,7 +11,8 @@ and also covers other features such as the plugin system:
 -   Detect blobs on an image
 -   Save the workspace to a file
 
-First, we open DataLab, and open the settings dialog (using "File > Settings...", or the |libre-gui-settings| icon in the toolbar).
+First, we open DataLab, and open the settings dialog (using "File > Settings...",
+or the |libre-gui-settings| icon in the toolbar).
 
 .. |libre-gui-settings| image:: ../../../datalab/data/icons/libre-gui-settings.svg
     :width: 24px
@@ -28,8 +29,9 @@ First, we open DataLab, and open the settings dialog (using "File > Settings..."
 
     The plugin system is described in the :ref:`about_plugins` section.
 
-Let's add the `datalab_example_imageproc.py` plugin to DataLab (this is an example plugin
-that is shipped with DataLab source package, or may be downloaded from `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
+Let's add the `datalab_example_imageproc.py` plugin to DataLab (this is an example
+plugin that is shipped with DataLab source package, or may be downloaded from
+`here <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
 
 If we close and reopen DataLab, we can see that the plugin is now available in the
 "Plugins" menu: there is a new "Extract blobs (example)" entry.
@@ -86,16 +88,17 @@ The plugin has other features, such as denoising the image, and detecting blobs 
 the image, but we won't cover them here: we will instead use the DataLab native features
 to achieve, manually, the same operations as the plugin.
 
-The image is a bit noisy, and also quite large. In addition, the blobs are large with respect
-to the pixel size.
+The image is a bit noisy, and also quite large. In addition, the blobs are large
+with respect to the pixel size.
 
 To reduce the noise there are several functions available in DataLab. Due to the
 considerations we just made, we can consider that a binning would reduce the noise
 without losing the information we look for. Let's apply a binning to the image by a
-factor of 2 on both axes. This will reduce the image size by a factor of 4, and the noise
-standard deviation by a factor of 2. Choosing to change the pixel size accordingly will
-keep the blob size constant in the previous unit (in this case, pixels, but in a real
-application we can calibrate them to respect a real physical size).
+factor of 2 on both axes.
+This will reduce the image size by a factor of 4, and the noise standard deviation
+by a factor of 2. Choosing to change the pixel size accordingly
+will keep the blob size constant in the previous unit (in this case, pixels,
+but in a real application we can calibrate them to respect a real physical size).
 
 .. figure:: ../../images/tutorials/blobs/05.png
 
