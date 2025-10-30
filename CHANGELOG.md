@@ -93,6 +93,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Enhanced signal visualization with datetime-aware axis formatting
   * CSV export maintains datetime format for easy data sharing
   * Ideal for analyzing sensor data, temperature logs, and time-series measurements
+  * This closes [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258) - Add support for CSV files with date/time X-axis
 
 * Multi-object property editing:
   * The properties panel now supports applying property changes to multiple selected objects simultaneously.

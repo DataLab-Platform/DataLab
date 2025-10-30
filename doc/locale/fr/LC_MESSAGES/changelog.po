@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 15:28+0100\n"
+"POT-Creation-Date: 2025-10-30 15:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -285,6 +285,9 @@ msgstr "**L'exportation CSV préserve le format datetime pour un partage facile 
 
 msgid "Ideal for analyzing sensor data, temperature logs, and time-series measurements"
 msgstr "**Idéal pour l'analyse des données de capteurs, des journaux de température et des mesures de séries temporelles**"
+
+msgid "This closes [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258) - Add support for CSV files with date/time X-axis"
+msgstr "Cela clôt [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258) - Ajout de la prise en charge des fichiers CSV avec un axe X de date/heure"
 
 msgid "Multi-object property editing:"
 msgstr "Édition des propriétés de plusieurs objets :"
