@@ -22,6 +22,7 @@ doc/install_requires.txt
 doc/extras_require-dev.txt
 doc/extras_require-doc.txt
 doc/locale/pot/_sphinx_design_static/
+doc/_download/
 DataLab_*.pdf
 
 # Backup files (e.g. created during merge conflicts)

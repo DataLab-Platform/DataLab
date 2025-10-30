@@ -6,6 +6,7 @@ import os
 import os.path as osp
 import shutil
 import sys
+import zipfile
 
 import guidata.config as gcfg
 
@@ -55,12 +56,48 @@ def cleanup_changelog(app, exception):
     except Exception as exc:
         print(f"Warning: failed to remove {path}: {exc}")
     finally:
-        del app.env.temp_changelog_path
+        if hasattr(app.env, "temp_changelog_path"):
+            del app.env.temp_changelog_path
+
+
+def compress_tutorials_data(app):
+    """Compress tutorials data folders to zip files in doc/_download directory."""
+    docpath = osp.abspath(osp.dirname(__file__))
+    tutorials_path = osp.join(docpath, "..", "datalab", "data", "tutorials")
+    download_dir = osp.join(docpath, "_download")
+
+    if not osp.exists(tutorials_path):
+        print(f"Warning: tutorials directory not found: {tutorials_path}")
+        return
+
+    # Create download directory if it doesn't exist
+    os.makedirs(download_dir, exist_ok=True)
+
+    # Look for folders in tutorials directory
+    try:
+        for item in os.listdir(tutorials_path):
+            item_path = osp.join(tutorials_path, item)
+            if osp.isdir(item_path):
+                zip_filename = osp.join(download_dir, f"{item}.zip")
+                print(f"Compressing tutorial folder: {item} -> {zip_filename}")
+
+                # Create zip file
+                with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED) as zipf:
+                    for root, dirs, files in os.walk(item_path):
+                        for file in files:
+                            file_path = osp.join(root, file)
+                            arcname = osp.join(item, osp.relpath(file_path, item_path))
+                            zipf.write(file_path, arcname)
+
+                print(f"Created: {zip_filename}")
+    except Exception as exc:
+        print(f"Warning: failed to compress tutorials: {exc}")
 
 
 def setup(app):
     """Setup function for Sphinx."""
     app.connect("builder-inited", copy_changelog)
+    app.connect("builder-inited", compress_tutorials_data)
     app.connect("build-finished", cleanup_changelog)
 
     # Exclude outreach directory from LaTeX/PDF builds
