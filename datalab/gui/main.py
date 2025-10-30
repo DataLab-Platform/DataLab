@@ -63,6 +63,7 @@ from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, image, macro, signal
 from datalab.gui.settings import edit_settings
+from datalab.objectmodel import ObjectGroup
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import dephash
 from datalab.utils import qthelpers as qth
@@ -312,6 +313,33 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                         f"Invalid object index, id or title: {nb_id_title}"
                     ) from exc
         raise TypeError(f"Invalid index_id_title type: {type(nb_id_title)}")
+
+    def find_object_by_uuid(
+        self, uuid: str
+    ) -> SignalObj | ImageObj | ObjectGroup | None:
+        """Find an object by UUID, searching across all panels.
+
+        This method searches for an object in both signal and image panels,
+        making it suitable for cross-panel operations (e.g., radial profile that
+        takes an ImageObj and produces a SignalObj).
+
+        Difference from get_object():
+        - get_object() requires specifying a panel and accepts number/id/title
+        - find_object_by_uuid() searches all panels automatically using only UUID
+
+        Args:
+            uuid: UUID of the object to find
+
+        Returns:
+            The object if found in any panel, None otherwise
+        """
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is not None:
+                try:
+                    return panel.objmodel[uuid]
+                except KeyError:
+                    continue
+        return None
 
     @remote_controlled
     def get_object_uuids(
@@ -1264,15 +1292,27 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         return "macro"
 
     @remote_controlled
-    def set_current_panel(self, panel: Literal["signal", "image", "macro"]) -> None:
+    def set_current_panel(
+        self, panel: Literal["signal", "image", "macro"] | BaseDataPanel
+    ) -> None:
         """Switch to panel.
 
         Args:
-            panel: panel name.
+            panel: panel name or panel instance
 
         Raises:
             ValueError: unknown panel
         """
+        if not isinstance(panel, str):
+            if panel not in self.panels:
+                raise ValueError(f"Unknown panel {panel}")
+            panel = (
+                "signal"
+                if panel is self.signalpanel
+                else "image"
+                if panel is self.imagepanel
+                else "macro"
+            )
         if self.get_current_panel() == panel:
             if panel in ("signal", "image"):
                 # Force tab index changed event to be sure that the dock associated

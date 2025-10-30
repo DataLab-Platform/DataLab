@@ -256,31 +256,6 @@ class ObjectProp(QW.QTabWidget):
         """Add additional button on bottom of properties panel"""
         self.add_prop_layout.addWidget(button)
 
-    def find_object_by_uuid(
-        self, uuid: str
-    ) -> SignalObj | ImageObj | ObjectGroup | None:
-        """Find an object by UUID, searching across all panels if needed.
-
-        This method first searches in the current panel, then in other panels
-        for cross-panel computations (e.g., radial profile: ImageObj -> SignalObj).
-
-        Args:
-            uuid: UUID of the object to find
-
-        Returns:
-            The object if found, None otherwise
-        """
-        other_panel = self.panel.mainwindow.imagepanel
-        if self.panel is other_panel:
-            other_panel = self.panel.mainwindow.signalpanel
-        for panel in (self.panel, other_panel):
-            if panel is not None:
-                try:
-                    return panel.objmodel[uuid]
-                except KeyError:
-                    continue
-        return None
-
     def display_analysis_parameter(self, obj: SignalObj | ImageObj) -> None:
         """Set analysis parameter label.
 
@@ -328,7 +303,9 @@ class ObjectProp(QW.QTabWidget):
 
             # Try to find source object
             if proc_params.source_uuid:
-                current_obj = self.find_object_by_uuid(proc_params.source_uuid)
+                current_obj = self.panel.mainwindow.find_object_by_uuid(
+                    proc_params.source_uuid
+                )
                 if current_obj is None:
                     history_items.append(_("(source deleted)"))
                     break
@@ -598,7 +575,9 @@ class ObjectProp(QW.QTabWidget):
             # not the output object (`obj` is the processed object here):
             # Retrieve the input object from the source UUID
             if proc_params.source_uuid is not None:
-                source_obj = self.find_object_by_uuid(proc_params.source_uuid)
+                source_obj = self.panel.mainwindow.find_object_by_uuid(
+                    proc_params.source_uuid
+                )
                 if source_obj is not None:
                     param.update_from_obj(source_obj)
 
@@ -675,7 +654,7 @@ class ObjectProp(QW.QTabWidget):
             return report
 
         # Find source object
-        source_obj = self.find_object_by_uuid(proc_params.source_uuid)
+        source_obj = self.panel.mainwindow.find_object_by_uuid(proc_params.source_uuid)
         if source_obj is None:
             report.message = _("Source object no longer exists.")
             if interactive:
@@ -2294,32 +2273,55 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             return
 
-        # Check if source objects still exist
-        existing_uuids = [
-            uuid for uuid in source_uuids if uuid in self.objmodel.get_object_ids()
-        ]
-        if not existing_uuids:
-            QW.QMessageBox.warning(
-                self,
-                _("Select source objects"),
-                _("Source object(s) no longer exist."),
-            )
+        # Check if source objects still exist (search across all panels)
+        existing_objs = []
+        for uuid in source_uuids:
+            obj = self.mainwindow.find_object_by_uuid(uuid)
+            if obj is not None:
+                existing_objs.append(obj)
+
+        if not existing_objs:
+            if len(source_uuids) == 1:
+                msg = _("Source object no longer exists.")
+            else:
+                msg = _("Source objects no longer exist.")
+            QW.QMessageBox.warning(self, _("Select source objects"), msg)
             return
 
-        # Select the existing source objects
-        self.objview.clearSelection()
-        for uuid in existing_uuids:
-            self.objview.set_current_item_id(uuid, extend=True)
+        # Determine which panel contains the source objects
+        # Source objects are always in the same panel (either all signals or all images)
+        if all(uuid in self.objmodel.get_object_ids() for uuid in source_uuids):
+            source_panel = self
+        elif isinstance(existing_objs[0], SignalObj):
+            source_panel = self.mainwindow.signalpanel
+        else:  # ImageObj
+            source_panel = self.mainwindow.imagepanel
 
-        # Show info if some sources are missing
-        missing_count = len(source_uuids) - len(existing_uuids)
+        # Switch to the source panel if needed
+        if source_panel is not self:
+            self.mainwindow.set_current_panel(source_panel)
+
+        # Select the existing source objects
+        # Note: Since all sources are in the same panel, all UUIDs in existing_objs
+        # are guaranteed to be in source_panel
+        source_panel.objview.clearSelection()
+        for obj in existing_objs:
+            source_panel.objview.set_current_item_id(get_uuid(obj), extend=True)
+
+        # Show info if some sources were deleted
+        missing_count = len(source_uuids) - len(existing_objs)
         if missing_count > 0:
-            QW.QMessageBox.information(
-                self,
-                _("Select source objects"),
-                _("Selected %d source object(s). %d source object(s) no longer exist.")
-                % (len(existing_uuids), missing_count),
-            )
+            if len(existing_objs) == 1:
+                msg = _("Selected a single source object")
+            else:
+                msg = _("Selected %d source objects") % len(existing_objs)
+            msg += " ("
+            if missing_count == 1:
+                msg += _("1 source object no longer exists")
+            else:
+                msg += _("%d source objects no longer exist") % missing_count
+            msg += ")"
+            QW.QMessageBox.warning(self, _("Select source objects"), msg)
 
     # ------Plotting data in modal dialogs----------------------------------------------
     def add_plot_items_to_dialog(self, dlg: PlotDialog, oids: list[str]) -> None:
