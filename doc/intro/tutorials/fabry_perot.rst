@@ -20,6 +20,10 @@ features of DataLab:
 Load the images
 ---------------
 
+.. note::
+    The images used in this tutorial "fabry_perot1.jpg" and "fabry_perot2.jpg" are available in the tutorial data folder of DataLab's installation directory (``<DataLab installation directory>/data/tutorials/``). Alternatively, you can download them from the DataLab GitHub repository `here <https://github.com/DataLab-Platform/DataLab/tree/main/datalab/data/tutorials/>`_.
+
+
 First, we open DataLab and load the images from the menu file "File > Open Image...",
 with the |fileopen_ima| button in the toolbar or by dragging and dropping the files
 into DataLab.
@@ -37,7 +41,7 @@ into DataLab.
 
 .. figure:: ../../images/tutorials/fabry_perot/02.png
 
-    Go to the tutorial data folder in DataLab's installation directory,
+    Go to the tutorial data folder in DataLab's installation directory (or the folder where you placed the images),
     select "fabry_perot1.jpg" and "fabry_perot2.jpg" and click "Open".
 
 The selected image is displayed in the main window. We can zoom in and out by pressing
