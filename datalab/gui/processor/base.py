@@ -1446,6 +1446,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         proc_params = ProcessingParameters(
                             func_name=name,
                             pattern="n-to-1",
+                            param=param,
                             source_uuids=[get_uuid(obj) for obj in src_objs_pair],
                         )
                         insert_processing_parameters(new_obj, proc_params)
@@ -1534,6 +1535,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         proc_params = ProcessingParameters(
                             func_name=name,
                             pattern="n-to-1",
+                            param=param,
                             source_uuids=[get_uuid(obj) for obj in src_obj_list],
                         )
                         insert_processing_parameters(new_obj, proc_params)
@@ -1737,6 +1739,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             proc_params = ProcessingParameters(
                                 func_name=name,
                                 pattern="2-to-1",
+                                param=param,
                                 source_uuids=[
                                     get_uuid(orig_obj1),
                                     get_uuid(orig_obj2),
@@ -1834,6 +1837,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         proc_params = ProcessingParameters(
                             func_name=name,
                             pattern="2-to-1",
+                            param=param,
                             source_uuids=[
                                 get_uuid(obj),
                                 get_uuid(orig_obj2),

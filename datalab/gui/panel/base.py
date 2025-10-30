@@ -500,11 +500,14 @@ class ObjectProp(QW.QTabWidget):
             else:  # ImageObj
                 new_obj = create_image_from_param(param)
         except Exception as exc:  # pylint: disable=broad-except
-            QW.QMessageBox.warning(
-                self,
-                _("Error"),
-                _("Failed to recreate object with new parameters:\n%s") % str(exc),
-            )
+            if execenv.unattended:
+                raise exc
+            else:
+                QW.QMessageBox.warning(
+                    self,
+                    _("Error"),
+                    _("Failed to recreate object with new parameters:\n%s") % str(exc),
+                )
             return
 
         # Update the current object in-place
@@ -627,6 +630,9 @@ class ObjectProp(QW.QTabWidget):
         Returns:
             ProcessingReport with success status, object UUID, and optional message.
         """
+        if execenv.unattended:
+            interactive = False
+
         report = ProcessingReport(success=False)
         editor = self.processing_param_editor
         obj = obj or self.current_processing_obj
@@ -1634,6 +1640,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Confirm before removing all objects"""
         if len(self) == 0:
             return
+        if execenv.unattended:
+            raise RuntimeError(
+                "This method should not be executed in unattended mode: "
+                "call remove_all_objects instead."
+            )
         answer = QW.QMessageBox.warning(
             self,
             _("Delete all"),
@@ -2191,14 +2202,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 recomputable_objects.append(obj)
 
         if not recomputable_objects:
-            QW.QMessageBox.information(
-                self,
-                _("Recompute"),
-                _(
-                    "Selected object(s) do not have processing parameters "
-                    "that can be recomputed."
-                ),
-            )
+            if not execenv.unattended:
+                QW.QMessageBox.information(
+                    self,
+                    _("Recompute"),
+                    _(
+                        "Selected object(s) do not have processing parameters "
+                        "that can be recomputed."
+                    ),
+                )
             return
 
         # Recompute each object
@@ -2216,7 +2228,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 report = self.objprop.apply_processing_parameters(
                     obj=obj, interactive=False
                 )
-                if not report.success:
+                if not report.success and not execenv.unattended:
                     failtxt = _("Failed to recompute object")
                     if index == len(recomputable_objects) - 1:
                         QW.QMessageBox.warning(
@@ -2251,11 +2263,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Extract processing parameters
         proc_params = extract_processing_parameters(obj)
         if proc_params is None:
-            QW.QMessageBox.information(
-                self,
-                _("Select source objects"),
-                _("Selected object does not have processing metadata."),
-            )
+            if not execenv.unattended:
+                QW.QMessageBox.information(
+                    self,
+                    _("Select source objects"),
+                    _("Selected object does not have processing metadata."),
+                )
             return
 
         # Get source UUIDs
@@ -2266,11 +2279,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             source_uuids.extend(proc_params.source_uuids)
 
         if not source_uuids:
-            QW.QMessageBox.information(
-                self,
-                _("Select source objects"),
-                _("Selected object does not have source object references."),
-            )
+            if not execenv.unattended:
+                QW.QMessageBox.information(
+                    self,
+                    _("Select source objects"),
+                    _("Selected object does not have source object references."),
+                )
             return
 
         # Check if source objects still exist (search across all panels)
@@ -2281,11 +2295,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 existing_objs.append(obj)
 
         if not existing_objs:
-            if len(source_uuids) == 1:
-                msg = _("Source object no longer exists.")
-            else:
-                msg = _("Source objects no longer exist.")
-            QW.QMessageBox.warning(self, _("Select source objects"), msg)
+            if not execenv.unattended:
+                if len(source_uuids) == 1:
+                    msg = _("Source object no longer exists.")
+                else:
+                    msg = _("Source objects no longer exist.")
+                QW.QMessageBox.warning(self, _("Select source objects"), msg)
             return
 
         # Determine which panel contains the source objects
@@ -2310,7 +2325,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Show info if some sources were deleted
         missing_count = len(source_uuids) - len(existing_objs)
-        if missing_count > 0:
+        if missing_count > 0 and not execenv.unattended:
             if len(existing_objs) == 1:
                 msg = _("Selected a single source object")
             else:
@@ -2596,7 +2611,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 ),
             ]
         )
-        QW.QMessageBox.information(self, APP_NAME, msg)
+        if not execenv.unattended:
+            QW.QMessageBox.information(self, APP_NAME, msg)
 
     def show_results(self) -> None:
         """Show results"""
@@ -2705,15 +2721,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             ]
             # Check if all roi_indexes are the same:
             if len(set(map(tuple, all_roi_indexes))) > 1:
-                QW.QMessageBox.warning(
-                    self,
-                    _("Plot results"),
-                    _(
-                        "All objects associated with results must have the "
-                        "same regions of interest (ROIs) to plot results "
-                        "together."
-                    ),
-                )
+                if not execenv.unattended:
+                    QW.QMessageBox.warning(
+                        self,
+                        _("Plot results"),
+                        _(
+                            "All objects associated with results must have the "
+                            "same regions of interest (ROIs) to plot results "
+                            "together."
+                        ),
+                    )
                 return
             obj = objs[0]
             for i_roi in all_roi_indexes[0]:
@@ -2767,16 +2784,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
-            answer = QW.QMessageBox.warning(
-                self,
-                _("Delete results"),
-                _(
-                    "Are you sure you want to delete all results "
-                    "of the selected object(s)?"
-                ),
-                QW.QMessageBox.Yes | QW.QMessageBox.No,
-            )
-            if answer == QW.QMessageBox.Yes:
+            if execenv.unattended:
+                confirmed = True
+            else:
+                answer = QW.QMessageBox.warning(
+                    self,
+                    _("Delete results"),
+                    _(
+                        "Are you sure you want to delete all results "
+                        "of the selected object(s)?"
+                    ),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                )
+                confirmed = answer == QW.QMessageBox.Yes
+            if confirmed:
                 objs = self.objview.get_sel_objects(include_groups=True)
                 for obj in objs:
                     # Remove all table and geometry results using adapter methods
