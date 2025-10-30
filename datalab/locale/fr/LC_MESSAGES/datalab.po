@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-27 14:30+0100\n"
+"POT-Creation-Date: 2025-10-30 15:29+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1133,12 +1133,22 @@ msgstr "L'objet sélectionné n'a pas de métadonnées de traitement."
 msgid "Selected object does not have source object references."
 msgstr "L'objet sélectionné n'a pas de références d'objet source."
 
-msgid "Source object(s) no longer exist."
-msgstr "Le ou les objet(s) source n'existe(nt) plus."
+msgid "Source objects no longer exist."
+msgstr "Les objets source n'existent plus."
+
+msgid "Selected a single source object"
+msgstr "Un seul objet source sélectionné"
 
 #, python-format
-msgid "Selected %d source object(s). %d source object(s) no longer exist."
-msgstr "Sélection de %d objet(s) source. %d objet(s) source n'existent plus."
+msgid "Selected %d source objects"
+msgstr "%d objets source sélectionnés"
+
+msgid "1 source object no longer exists"
+msgstr "1 objet source n'existe plus."
+
+#, python-format
+msgid "%d source objects no longer exist"
+msgstr "%d objets source n'existent plus."
 
 msgid "Annotations"
 msgstr "Annotations"

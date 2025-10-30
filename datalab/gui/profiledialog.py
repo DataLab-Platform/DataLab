@@ -105,6 +105,17 @@ class ProfileExtractionDialog(PlotDialog):
         splitter.addWidget(lcs_panel)
         splitter.setSizes([0, 1, 0])
         self.manager.add_panel(lcs_panel)
+        # Install event filters on cross-section plots to detect clicks
+        mgr = self.get_manager()
+        xcs_panel = mgr.get_xcs_panel()
+        ycs_panel = mgr.get_ycs_panel()
+        if xcs_panel is not None:
+            xcs_panel.cs_plot.canvas().installEventFilter(self)
+            # Store reference to know which plot was clicked
+            xcs_panel.cs_plot.canvas().setProperty("cs_direction", "horizontal")
+        if ycs_panel is not None:
+            ycs_panel.cs_plot.canvas().installEventFilter(self)
+            ycs_panel.cs_plot.canvas().setProperty("cs_direction", "vertical")
 
     def __set_curve_enable_state(self, curve: CurveItem, state: bool) -> None:
         """Set curve enable state
@@ -144,6 +155,41 @@ class ProfileExtractionDialog(PlotDialog):
         curve = self.__get_curve(cs_plot)
         if curve:
             self.__set_curve_enable_state(curve, state)
+
+    def __on_cs_plot_clicked(self, direction: str) -> None:
+        """Handle click on cross-section plot to switch direction
+
+        Args:
+            direction: "horizontal" or "vertical"
+        """
+        # Only handle clicks for line and rectangle modes
+        if self.mode not in ("line", "rectangle"):
+            return
+        # Switch direction if different
+        if self.param.direction != direction:
+            self.param.direction = direction
+            self.update_cs_panels_state()
+            self.get_plot().replot()
+
+    def eventFilter(self, obj: QC.QObject, event: QC.QEvent) -> bool:
+        """Event filter to detect clicks on cross-section plots
+
+        Args:
+            obj: Object
+            event: Event
+
+        Returns:
+            True if event was handled, False otherwise
+        """
+        # Check if this is a cross-section plot canvas
+        direction = obj.property("cs_direction")
+        if direction:
+            # Handle mouse press to switch direction
+            if event.type() == QC.QEvent.MouseButtonPress:
+                self.__on_cs_plot_clicked(direction)
+                # Consume the event to prevent curve selection
+                return True
+        return super().eventFilter(obj, event)
 
     def update_cs_panels_state(self):
         """Enable or disable X or Y cross-section panels depending on the direction

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-24 10:47+0200\n"
+"POT-Creation-Date: 2025-10-30 15:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -561,6 +561,33 @@ msgstr "Les ROI de signal restent inchangés car le concept inverse ne s'appliqu
 
 msgid "New image operation, processing and analysis features:"
 msgstr "ℹ️ Nouvelles fonctionnalités de traitement des **Images** :"
+
+msgid "**Enhanced profile extraction dialog**: Improved user interface for extracting line and average profiles"
+msgstr "**Boîte de dialogue d'extraction de profil améliorée** : Interface utilisateur améliorée pour l'extraction de profils linéaires et moyens"
+
+msgid "Click directly on the X-profile plot (bottom) to switch to horizontal profile extraction"
+msgstr "Cliquez directement sur le graphique du profil X (en bas) pour passer à l'extraction du profil horizontal"
+
+msgid "Click directly on the Y-profile plot (right) to switch to vertical profile extraction"
+msgstr "Cliquez directement sur le graphique du profil Y (à droite) pour passer à l'extraction du profil vertical"
+
+msgid "Direction switching is intuitive and immediate - no need to open parameters dialog"
+msgstr "Le changement de direction est intuitif et immédiat - pas besoin d'ouvrir la boîte de dialogue des paramètres"
+
+msgid "Mouse clicks on profile plots no longer select the curve, avoiding visual clutter"
+msgstr "Les clics de souris sur les tracés de profil ne sélectionnent plus la courbe, évitant ainsi l'encombrement visuel."
+
+msgid "Works for both \"Line profile\" and \"Average profile\" extraction modes"
+msgstr "Fonctionne pour les modes d'extraction de profil \"Profil rectiligne\" et \"Profil moyen\""
+
+msgid "Existing \"Edit profile parameters\" button still available for precise parameter control"
+msgstr "Le bouton \"Modifier les paramètres du profil\" est toujours disponible pour un contrôle précis des paramètres"
+
+msgid "Significantly improves workflow when comparing horizontal and vertical profiles"
+msgstr "Améliore considérablement le flux de travail lors de la comparaison des profils horizontal et vertical"
+
+msgid "This closes [Issue #156](https://github.com/DataLab-Platform/DataLab/issues/156) - Image/Average profile: click directly on vertical/horizontal plot to select the profile"
+msgstr "Ceci clôture [Issue #156](https://github.com/DataLab-Platform/DataLab/issues/156) - Image/Average profile : cliquez directement sur le tracé vertical/horizontal pour sélectionner le profil"
 
 msgid "New 2D ramp image generator."
 msgstr "Nouveau générateur d'image de type rampe 2D."

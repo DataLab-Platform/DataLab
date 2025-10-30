@@ -187,6 +187,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Signal ROIs remain unaffected as the inverse concept applies only to 2D regions
 
 * New image operation, processing and analysis features:
+  * **Enhanced profile extraction dialog**: Improved user interface for extracting line and average profiles
+    * Click directly on the X-profile plot (bottom) to switch to horizontal profile extraction
+    * Click directly on the Y-profile plot (right) to switch to vertical profile extraction
+    * Direction switching is intuitive and immediate - no need to open parameters dialog
+    * Mouse clicks on profile plots no longer select the curve, avoiding visual clutter
+    * Works for both "Line profile" and "Average profile" extraction modes
+    * Existing "Edit profile parameters" button still available for precise parameter control
+    * Significantly improves workflow when comparing horizontal and vertical profiles
+    * This closes [Issue #156](https://github.com/DataLab-Platform/DataLab/issues/156) - Image/Average profile: click directly on vertical/horizontal plot to select the profile
   * New 2D ramp image generator.
     * This closes [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203).
   * Convolution.
