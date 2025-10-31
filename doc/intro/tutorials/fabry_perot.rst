@@ -1,3 +1,5 @@
+.. _tutorial_fabry_perot:
+
 :octicon:`book;1em;sd-text-info` Measuring Fabry-Perot fringes
 ==============================================================
 
