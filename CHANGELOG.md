@@ -102,6 +102,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Typical use case: changing the LUT boundaries (Z scale bounds) or colormap of multiple images at once, or adjusting display properties for a group of signals.
   * This significantly improves workflow efficiency when working with multiple objects that need similar property adjustments.
 
+* Result metadata management:
+  * Deleting result labels (e.g., FWHM, statistics) from the plot now permanently removes the associated metadata.
+  * Previously, when a result label was deleted from the plot, the underlying result metadata remained in the object, causing the label to reappear when re-selecting the signal or image.
+  * Now, when a user deletes a result label via the plot interface, the associated result metadata is automatically removed from the object.
+  * This provides more intuitive behavior and gives users better control over which results are kept or discarded.
+  * Result deletion is persistent: labels do not reappear when de-selecting and re-selecting the object.
+  * This enhancement applies to all result types including geometry results (FWHM, centroid, peak detection) and table results (statistics, pulse analysis).
+
 * Internal console status indicator added to the status bar:
   * The status bar now features an indicator for the internal console, visible only when the console is hidden.
   * Clicking the indicator opens the internal console.

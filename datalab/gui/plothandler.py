@@ -84,6 +84,11 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.__result_items_mapping: WeakKeyDictionary[LabelItem, Callable] = (
             WeakKeyDictionary()
         )
+        # Mapping from result label item to (metadata adapter, object) tuple.
+        # The metadata adapter is either a GeometryAdapter or TableAdapter.
+        self.__result_label_to_adapter: WeakKeyDictionary[
+            LabelItem, tuple[GeometryAdapter | TableAdapter, SignalObj | ImageObj]
+        ] = WeakKeyDictionary()
 
     def __len__(self) -> int:
         """Return number of items"""
@@ -172,6 +177,10 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                             obj, item
                         )
                     )
+                    # Store mapping from item to (metadata adapter, object) for
+                    # deletion handling. Note: `result` is the metadata adapter
+                    # (GeometryAdapter or TableAdapter), not the PlotPy adapter
+                    self.__result_label_to_adapter[item] = (result, obj)
                 items.extend(result_adapter.get_other_items(obj))
             if items:
                 if do_autoscale:
@@ -198,6 +207,35 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         callback = self.__result_items_mapping.get(item)
         if callback is not None:
             callback(item)
+
+    def result_item_removed(self, item: LabelItem) -> None:
+        """Handle result label item removal.
+
+        When a result label is removed from the plot, also remove the associated
+        result from the object's metadata.
+
+        Args:
+            item: Label item that was removed
+        """
+        # Check if this item is a result label
+        if item not in self.__result_label_to_adapter:
+            return
+
+        # Get the metadata adapter and object associated with this label
+        metadata_adapter, obj = self.__result_label_to_adapter[item]
+
+        # Remove the result from the object's metadata
+        metadata_adapter.remove_from(obj)
+
+        # Remove from mappings
+        del self.__result_label_to_adapter[item]
+        if item in self.__result_items_mapping:
+            del self.__result_items_mapping[item]
+
+        # Refresh the object properties if this is the current object
+        if obj is self.panel.objview.get_current_object():
+            self.panel.objprop.update_properties_from(obj)
+            self.refresh_plot("selected")
 
     def remove_all_shape_items(self) -> None:
         """Remove all geometric shapes associated to result items"""

@@ -160,6 +160,9 @@ class BaseResultAdapter(ABC):
             obj: Signal or image object
         """
         obj.metadata.pop(self.metadata_key, None)
+        # Also remove associated parameter metadata if present
+        obj.metadata.pop(f"{self.name}__param_str", None)
+        obj.metadata.pop(f"{self.name}__param_html", None)
 
     @classmethod
     def remove_all_from(cls, obj: SignalObj | ImageObj) -> None:

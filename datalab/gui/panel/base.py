@@ -1353,6 +1353,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.acthandler.create_all_actions()
         self.processor.SIG_ADD_SHAPE.connect(self.plothandler.add_shapes)
         self.SIG_REFRESH_PLOT.connect(self.plothandler.refresh_plot)
+        self.plothandler.plot.SIG_ITEM_REMOVED.connect(
+            self.plothandler.result_item_removed
+        )
         self.objview.SIG_SELECTION_CHANGED.connect(self.selection_changed)
         self.objview.SIG_ITEM_DOUBLECLICKED.connect(
             lambda oid: self.open_separate_view([oid])
