@@ -481,15 +481,27 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
 
     def cleanup_dataview(self) -> None:
         """Clean up data view"""
-        # Performance optimization: using `baseplot.BasePlot.del_items` instead of
-        # `baseplot.BasePlot.del_item` (avoid emitting unnecessary signals)
-        self.plot.del_items(
-            [
-                item
-                for item in self.plot.items[:]
-                if item not in self and not isinstance(item, (LegendBoxItem, GridItem))
-            ]
-        )
+        # Find items to remove (items that are not in the handler and not special items)
+        items_to_remove = [
+            item
+            for item in self.plot.items[:]
+            if item not in self and not isinstance(item, (LegendBoxItem, GridItem))
+        ]
+        # Temporarily disconnect the signal to avoid cascading result deletions
+        # during cleanup (result labels are plot items that should be removed
+        # during cleanup, but we don't want to trigger metadata deletion)
+        self.plot.SIG_ITEM_REMOVED.disconnect(self.result_item_removed)
+        try:
+            # Delete items one by one with error handling for items already removed
+            for item in items_to_remove:
+                try:
+                    self.plot.del_item(item)
+                except ValueError:
+                    # Item was already removed (e.g., by detach())
+                    pass
+        finally:
+            # Always reconnect the signal, even if an error occurred
+            self.plot.SIG_ITEM_REMOVED.connect(self.result_item_removed)
 
     def get_plot_options(self) -> PlotOptions:
         """Return standard signal/image plot options"""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 15:41+0100\n"
+"POT-Creation-Date: 2025-10-31 16:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -306,6 +306,51 @@ msgstr "Cas d'utilisation typique : modification des limites de la LUT (bornes 
 
 msgid "This significantly improves workflow efficiency when working with multiple objects that need similar property adjustments."
 msgstr "Cela améliore considérablement l'efficacité du flux de travail lors de la manipulation de plusieurs objets nécessitant des ajustements de propriétés similaires."
+
+msgid "Result metadata management:"
+msgstr "Gestion des métadonnées des résultats :"
+
+msgid "Deleting result labels (e.g., FWHM, statistics) from the plot now permanently removes the associated metadata."
+msgstr "La suppression des étiquettes de résultats (par exemple, FWHM, statistiques) du graphique supprime désormais définitivement les métadonnées associées."
+
+msgid "Previously, when a result label was deleted from the plot, the underlying result metadata remained in the object, causing the label to reappear when re-selecting the signal or image."
+msgstr "Auparavant, lorsqu'une étiquette de résultat était supprimée du graphique, les métadonnées de résultat sous-jacentes restaient dans l'objet, ce qui faisait réapparaître l'étiquette lors de la re-sélection du signal ou de l'image."
+
+msgid "Now, when a user deletes a result label via the plot interface, the associated result metadata is automatically removed from the object."
+msgstr "Maintenant, lorsqu'un utilisateur supprime une étiquette de résultat via l'interface du graphique, les métadonnées de résultat associées sont automatiquement supprimées de l'objet."
+
+msgid "This provides more intuitive behavior and gives users better control over which results are kept or discarded."
+msgstr "Cela offre un comportement plus intuitif et donne aux utilisateurs un meilleur contrôle sur les résultats à conserver ou à supprimer."
+
+msgid "Result deletion is persistent: labels do not reappear when de-selecting and re-selecting the object."
+msgstr "La suppression des résultats est persistante : les étiquettes ne réapparaissent pas lors de la désélection et de la re-sélection de l'objet."
+
+msgid "This enhancement applies to all result types including geometry results (FWHM, centroid, peak detection) and table results (statistics, pulse analysis)."
+msgstr "Cette amélioration s'applique à tous les types de résultats, y compris les résultats géométriques (FWHM, centroïde, détection de pics) et les résultats de tableau (statistiques, analyse d'impulsions)."
+
+msgid "**Individual result deletion**: Results can now be deleted individually from the Analysis menu"
+msgstr "**Suppression individuelle des résultats** : Les résultats peuvent désormais être supprimés individuellement depuis le menu Analyse"
+
+msgid "New \"Delete results\" submenu in the Analysis menu, similar to the ROI removal feature"
+msgstr "Nouveau sous-menu \"Supprimer les résultats\" dans le menu Analyse, similaire à la fonctionnalité de suppression des ROI"
+
+msgid "Lists all individual results for the selected object(s) with their titles"
+msgstr "Liste tous les résultats individuels pour l'objet ou les objets sélectionnés avec leurs titres"
+
+msgid "Includes a separator and a \"Delete all results...\" option for bulk deletion"
+msgstr "Inclut un séparateur et une option \"Supprimer tous les résultats...\" pour la suppression en masse"
+
+msgid "When an individual result is selected for deletion, only that specific result is removed from the object"
+msgstr "Lorsqu'un résultat individuel est sélectionné pour suppression, seul ce résultat spécifique est supprimé de l'objet."
+
+msgid "Provides more granular control over result management compared to deleting all results at once"
+msgstr "Offre un contrôle plus granulaire sur la gestion des résultats par rapport à la suppression de tous les résultats en une seule fois."
+
+msgid "Useful for removing outdated or incorrect analysis results while keeping others"
+msgstr "Utile pour supprimer des résultats d'analyse obsolètes ou incorrects tout en conservant les autres."
+
+msgid "**Fixed**: Result deletion now properly removes all associated metadata including parameter metadata (`__param_str` and `__param_html` entries)"
+msgstr "**Correction** : La suppression des résultats supprime désormais correctement toutes les métadonnées associées, y compris les métadonnées de paramètres (entrées `__param_str` et `__param_html`)"
 
 msgid "Internal console status indicator added to the status bar:"
 msgstr "Indicateur d'état de la console interne ajouté à la barre d'état :"
@@ -1074,6 +1119,24 @@ msgstr "Ce comportement correspond à l'action \"Restaurer\" qui réduit tous le
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "**Plot cleanup robustness**: Fixed ValueError when deleting plot items during result removal"
+msgstr "**Robustesse du nettoyage des graphiques** : Correction de l'erreur ValueError lors de la suppression des éléments de tracé pendant la suppression des résultats"
+
+msgid "The `cleanup_dataview()` method now deletes items one by one with proper error handling"
+msgstr "La méthode `cleanup_dataview()` supprime désormais les éléments un par un avec une gestion des erreurs appropriée"
+
+msgid "Each item is checked for existence before deletion, and ValueError exceptions are caught if the item was already removed"
+msgstr "Chaque élément est vérifié pour son existence avant la suppression, et les exceptions ValueError sont interceptées si l'élément a déjà été supprimé"
+
+msgid "**Critical fix**: Result label items are now properly excluded from cleanup to prevent accidental removal"
+msgstr "**Correction critique** : Les éléments d'étiquette de résultat sont désormais correctement exclus du nettoyage pour éviter une suppression accidentelle"
+
+msgid "Previously, cleanup was removing result labels from the plot, causing all analysis results to disappear when running a second analysis"
+msgstr "Auparavant, le nettoyage supprimait les étiquettes de résultat du graphique, provoquant la disparition de tous les résultats d'analyse lors de l'exécution d'une deuxième analyse"
+
+msgid "This prevents race conditions where `item.detach()` removes an item from the internal list before the explicit removal call"
+msgstr "Cela empêche les conditions de concurrence où `item.detach()` supprime un élément de la liste interne avant l'appel explicite de suppression"
 
 msgid "Removed \"Use reference image LUT range\" setting:"
 msgstr "Suppression de l'option \"Utiliser la plage de LUT de l'image de référence\" :"

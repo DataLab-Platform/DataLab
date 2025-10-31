@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-30 15:29+0100\n"
+"POT-Creation-Date: 2025-10-31 16:25+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -25,6 +25,9 @@ msgstr "DataLab est une plateforme générique de traitement du signal et de l'i
 
 msgid "Remove all"
 msgstr "Supprimer tout"
+
+msgid "Delete all results"
+msgstr "Supprimer tous les résultats"
 
 #, python-format
 msgid "New %s"

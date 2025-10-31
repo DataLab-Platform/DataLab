@@ -54,6 +54,7 @@ from datalab.widgets import fitdialog
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
 
+    from datalab.adapters_metadata.base_adapter import BaseResultAdapter
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
     from datalab.objectmodel import ObjectGroup
@@ -201,6 +202,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.__submenus: dict[str, QW.QMenu] = {}
         # Store reference to ROI remove submenu
         self.roi_remove_submenu: QW.QMenu | None = None
+        # Store reference to results delete submenu
+        self.results_delete_submenu: QW.QMenu | None = None
 
     @property
     def object_suffix(self) -> str:
@@ -245,6 +248,71 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     def _remove_single_roi_by_index(self, roi_index: int) -> None:
         """Helper method to remove a single ROI by index"""
         self.panel.processor.delete_single_roi(roi_index)
+
+    def populate_results_delete_submenu(self) -> None:
+        """Populate the Results Delete submenu dynamically based on current selection"""
+        submenu = self.results_delete_submenu
+        if submenu is None:
+            return
+
+        # Clear existing actions
+        submenu.clear()
+
+        # Get current selected objects (including groups)
+        objs = self.panel.objview.get_sel_objects(include_groups=True)
+        if not objs:
+            submenu.setEnabled(False)
+            return
+
+        # Import here to avoid circular imports
+        from datalab.adapters_metadata import GeometryAdapter, TableAdapter
+
+        # Collect all results with their metadata keys and titles
+        result_items = []  # List of (metadata_key, title, obj, adapter)
+
+        for obj in objs:
+            # Get all adapters for this object
+            for adapter in list(GeometryAdapter.iterate_from_obj(obj)) + list(
+                TableAdapter.iterate_from_obj(obj)
+            ):
+                metadata_key = adapter.metadata_key
+                title = adapter.title
+                result_items.append((metadata_key, title, obj, adapter))
+
+        if not result_items:
+            submenu.setEnabled(False)
+            return
+
+        # Enable submenu since we have results
+        submenu.setEnabled(True)
+
+        # Add individual result deletion actions
+        for metadata_key, title, obj, adapter in result_items:
+            action = QW.QAction(title, submenu)
+            # Use partial to avoid lambda closure issues
+            action.triggered.connect(partial(self._delete_single_result, obj, adapter))
+            submenu.addAction(action)
+
+        # Add separator and "Delete all results..." action
+        if result_items:
+            submenu.addSeparator()
+            delete_all_action = QW.QAction(_("Delete all results") + "...", submenu)
+            delete_all_action.triggered.connect(self.panel.delete_results)
+            submenu.addAction(delete_all_action)
+
+    def _delete_single_result(
+        self, obj: SignalObj | ImageObj, adapter: BaseResultAdapter
+    ) -> None:
+        """Helper method to delete a single result
+
+        Args:
+            obj: Object containing the result
+            adapter: Adapter for the result to delete
+        """
+        adapter.remove_from(obj)
+        # Refresh the plot to update the display
+        # Use the same refresh pattern as delete_results() method
+        self.panel.refresh_plot("selected", True, False)
 
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
@@ -565,6 +633,17 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             # Add the submenu to the action management system with ROI condition
             self.add_action(self.roi_remove_submenu, SelectCond.with_roi)
+
+        # Connect results delete submenu signal after all actions are created
+        if self.results_delete_submenu is not None:
+            self.results_delete_submenu.aboutToShow.connect(
+                self.populate_results_delete_submenu
+            )
+            # Add the submenu to the action management system
+            self.add_action(
+                self.results_delete_submenu,
+                SelectCond.at_least_one_group_or_one_object,
+            )
 
         add_actions(
             self.panel_toolbar, self.feature_actions.pop(ActionCategory.PANEL_TOOLBAR)
@@ -975,12 +1054,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon_name="plot_results.svg",
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
-            self.new_action(
-                _("Delete results") + "...",
-                triggered=self.panel.delete_results,
-                icon_name="delete_results.svg",
-                select_condition=SelectCond.at_least_one_group_or_one_object,
-            )
+
+            # Create dynamic "Delete results" submenu
+            with self.new_menu(_("Delete results"), icon_name="delete_results.svg"):
+                # Store reference to the submenu for dynamic population
+                if self.__submenu_stack:
+                    current_submenu = self.__submenu_stack[-1]
+                    self.results_delete_submenu = current_submenu["menu"]
 
 
 class SignalActionHandler(BaseActionHandler):

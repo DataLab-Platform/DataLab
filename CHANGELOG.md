@@ -109,6 +109,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This provides more intuitive behavior and gives users better control over which results are kept or discarded.
   * Result deletion is persistent: labels do not reappear when de-selecting and re-selecting the object.
   * This enhancement applies to all result types including geometry results (FWHM, centroid, peak detection) and table results (statistics, pulse analysis).
+  * **Individual result deletion**: Results can now be deleted individually from the Analysis menu
+    * New "Delete results" submenu in the Analysis menu, similar to the ROI removal feature
+    * Lists all individual results for the selected object(s) with their titles
+    * Includes a separator and a "Delete all results..." option for bulk deletion
+    * When an individual result is selected for deletion, only that specific result is removed from the object
+    * Provides more granular control over result management compared to deleting all results at once
+    * Useful for removing outdated or incorrect analysis results while keeping others
+    * **Fixed**: Result deletion now properly removes all associated metadata including parameter metadata (`__param_str` and `__param_html` entries)
 
 * Internal console status indicator added to the status bar:
   * The status bar now features an indicator for the internal console, visible only when the console is hidden.
@@ -377,6 +385,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This behavior matches the "Restore" action which collapses all nodes except the root level
 
 🛠️ Bug fixes:
+
+* **Plot cleanup robustness**: Fixed ValueError when deleting plot items during result removal
+  * The `cleanup_dataview()` method now deletes items one by one with proper error handling
+  * Each item is checked for existence before deletion, and ValueError exceptions are caught if the item was already removed
+  * **Critical fix**: Result label items are now properly excluded from cleanup to prevent accidental removal
+  * Previously, cleanup was removing result labels from the plot, causing all analysis results to disappear when running a second analysis
+  * This prevents race conditions where `item.detach()` removes an item from the internal list before the explicit removal call
 
 * Removed "Use reference image LUT range" setting:
   * This feature has been removed to avoid confusion about whether LUT changes were temporary or persistent
