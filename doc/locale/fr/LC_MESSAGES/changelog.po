@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 16:24+0100\n"
+"POT-Creation-Date: 2025-10-31 18:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1119,6 +1119,18 @@ msgstr "Ce comportement correspond à l'action \"Restaurer\" qui réduit tous le
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "**File import ordering**: Fixed inconsistent file ordering across platforms when importing images/signals"
+msgstr "**Ordre d'importation des fichiers** : Correction de l'ordre incohérent des fichiers entre les plateformes lors de l'importation d'images/signaux"
+
+msgid "Files are now explicitly sorted alphabetically in all import methods (dialog, drag-and-drop, directory)"
+msgstr "**Les fichiers sont désormais explicitement triés par ordre alphabétique dans toutes les méthodes d'importation (dialogue, glisser-déposer, répertoire)**"
+
+msgid "Previously, the method used for opening files directly or opening whole directories returned files in filesystem-dependent order (sorted on Windows, arbitrary on Linux/WSL)"
+msgstr "Auparavant, la méthode utilisée pour ouvrir des fichiers directement ou ouvrir des répertoires entiers renvoyait les fichiers dans un ordre dépendant du système de fichiers (trié sous Windows, arbitraire sous Linux/WSL)"
+
+msgid "All import methods now use consistent lexicographic sorting for predictable, platform-independent behavior"
+msgstr "**Toutes les méthodes d'importation utilisent désormais un tri lexicographique cohérent pour un comportement prévisible et indépendant de la plateforme**"
 
 msgid "**Plot cleanup robustness**: Fixed ValueError when deleting plot items during result removal"
 msgstr "**Robustesse du nettoyage des graphiques** : Correction de l'erreur ValueError lors de la suppression des éléments de tracé pendant la suppression des résultats"

@@ -1909,11 +1909,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if progress.wasCanceled():
                     break
                 path = osp.normpath(path)
-                fnames = [
-                    osp.join(path, fname)
-                    for fname in os.listdir(path)
-                    if osp.isfile(osp.join(path, fname))
-                ]
+                fnames = sorted(
+                    [
+                        osp.join(path, fname)
+                        for fname in os.listdir(path)
+                        if osp.isfile(osp.join(path, fname))
+                    ]
+                )
                 new_objs = self.load_from_files(
                     fnames,
                     create_group=False,
@@ -1957,6 +1959,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filters = self.IO_REGISTRY.get_read_filters()
             with save_restore_stds():
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
+        # Sort filenames to ensure consistent alphabetical order across all platforms
+        filenames = sorted(filenames)
         objs = []
         for filename in filenames:
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):

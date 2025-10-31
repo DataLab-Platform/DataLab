@@ -386,6 +386,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* **File import ordering**: Fixed inconsistent file ordering across platforms when importing images/signals
+  * Files are now explicitly sorted alphabetically in all import methods (dialog, drag-and-drop, directory)
+  * Previously, the method used for opening files directly or opening whole directories returned files in filesystem-dependent order (sorted on Windows, arbitrary on Linux/WSL)
+  * All import methods now use consistent lexicographic sorting for predictable, platform-independent behavior
+
 * **Plot cleanup robustness**: Fixed ValueError when deleting plot items during result removal
   * The `cleanup_dataview()` method now deletes items one by one with proper error handling
   * Each item is checked for existence before deletion, and ValueError exceptions are caught if the item was already removed
