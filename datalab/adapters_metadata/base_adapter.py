@@ -11,6 +11,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, ClassVar, Generator
 
+import guidata.dataset as gds
 from sigima.objects import ImageObj, SignalObj
 
 if TYPE_CHECKING:
@@ -162,13 +163,35 @@ class BaseResultAdapter(ABC):
         """
         return f"{self.META_PREFIX}{self.unique_key}{self.META_SUFFIX}"
 
-    def add_to(self, obj: SignalObj | ImageObj) -> None:
+    def add_to(
+        self, obj: SignalObj | ImageObj, param: gds.DataSet | None = None
+    ) -> None:
         """Add result to object metadata.
 
         Args:
             obj: Signal or image object
+            param: Optional parameter dataset associated with this result
         """
-        obj.metadata[self.metadata_key] = self.result.to_dict()
+        result_dict = self.result.to_dict()
+        # Store parameter metadata if provided (embedded in result dict)
+        if param is not None:
+            result_dict["param_json"] = gds.dataset_to_json(param)
+        obj.metadata[self.metadata_key] = result_dict
+
+    def get_param(self, obj: SignalObj | ImageObj) -> gds.DataSet | None:
+        """Get parameter dataset associated with this result.
+
+        Args:
+            obj: Signal or image object
+
+        Returns:
+            Parameter dataset if present, None otherwise
+        """
+        result_dict = obj.metadata.get(self.metadata_key, {})
+        param_json = result_dict.get("param_json")
+        if param_json is not None:
+            return gds.json_to_dataset(param_json)
+        return None
 
     def remove_from(self, obj: SignalObj | ImageObj) -> None:
         """Remove result from object metadata.
@@ -177,9 +200,6 @@ class BaseResultAdapter(ABC):
             obj: Signal or image object
         """
         obj.metadata.pop(self.metadata_key, None)
-        # Also remove associated parameter metadata if present
-        obj.metadata.pop(f"{self.unique_key}__param_str", None)
-        obj.metadata.pop(f"{self.unique_key}__param_html", None)
 
     @classmethod
     def remove_all_from(cls, obj: SignalObj | ImageObj) -> None:

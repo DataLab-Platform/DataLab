@@ -263,11 +263,14 @@ class ObjectProp(QW.QTabWidget):
             obj: Signal or Image object
         """
         text = ""
-        for key, value in obj.metadata.items():
-            if key.endswith("__param_html") and isinstance(value, str):
-                if text:
-                    text += "<br><br>"
-                text += value
+        # Iterate through all result adapters and extract parameter info
+        for adapter_class in (GeometryAdapter, TableAdapter):
+            for adapter in adapter_class.iterate_from_obj(obj):
+                param = adapter.get_param(obj)
+                if param is not None:
+                    if text:
+                        text += "<br><br>"
+                    text += param.to_html()
         self.analysis_parameter.setText(text)
 
     def _build_processing_history(self, obj: SignalObj | ImageObj) -> str:

@@ -1309,10 +1309,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     raise TypeError("Unsupported result type")
 
                 # Add result shape to object's metadata
-                adapter.add_to(obj)
-                if param is not None:
-                    obj.metadata[f"{adapter.unique_key}__param_str"] = str(param)
-                    obj.metadata[f"{adapter.unique_key}__param_html"] = param.to_html()
+                adapter.add_to(obj, param)
 
                 # Append result to result data for later display
                 rdata.append(adapter, obj)
