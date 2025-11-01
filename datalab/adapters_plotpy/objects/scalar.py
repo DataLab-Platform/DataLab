@@ -358,28 +358,36 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
         """
         items = []
         df = self.result_adapter.to_dataframe()
+
+        # Use the full signal data for all visualizations
+        # Note: pulse features x-coordinates (xstartmin, xendmin, etc.) are stored
+        # in the full signal coordinate system, even when computed on ROIs
+        x, y = obj.x, obj.y
+
         for _, row in df.iterrows():
             # Start baseline
             xs0, xs1 = row["xstartmin"], row["xstartmax"]
-            ys = pulse.get_range_mean_y(obj.x, obj.y, (xs0, xs1))
+            ys = pulse.get_range_mean_y(x, y, (xs0, xs1))
             if are_values_valid([xs0, xs1, ys]):
                 items.append(create_pulse_segment(xs0, ys, xs1, ys, "Start baseline"))
             # End baseline
             xe0, xe1 = row["xendmin"], row["xendmax"]
-            ye = pulse.get_range_mean_y(obj.x, obj.y, (xe0, xe1))
+            ye = pulse.get_range_mean_y(x, y, (xe0, xe1))
             if are_values_valid([xe0, xe1, ye]):
                 items.append(create_pulse_segment(xe0, ye, xe1, ye, "End baseline"))
             if "xplateaumin" in row and "xplateaumax" in row:
                 xp0, xp1 = row["xplateaumin"], row["xplateaumax"]
-                yp = pulse.get_range_mean_y(obj.x, obj.y, (xp0, xp1))
+                yp = pulse.get_range_mean_y(x, y, (xp0, xp1))
                 if are_values_valid([xp0, xp1, yp]):
                     items.append(create_pulse_segment(xp0, yp, xp1, yp, "Plateau"))
             for metric in ("x0", "x50", "x100"):
                 if metric in row:
-                    x = row[metric]
+                    x_crossing = row[metric]
                     metric_str = metric.replace("x", "x|<sub>") + "%</sub>"
-                    if are_values_valid([x]):
-                        items.append(create_pulse_crossing_marker("v", x, metric_str))
+                    if are_values_valid([x_crossing]):
+                        items.append(
+                            create_pulse_crossing_marker("v", x_crossing, metric_str)
+                        )
         return items
 
 
