@@ -137,7 +137,7 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
                 try:
                     geomadapter = GeometryAdapter.from_metadata_entry(self.obj, key)
                     plot_adapter = GeometryPlotPyAdapter(geomadapter)
-                    yield from plot_adapter.iterate_plot_items(
+                    yield from plot_adapter.iterate_shape_items(
                         fmt, lbl, self.obj.PREFIX
                     )
                 except (ValueError, TypeError):

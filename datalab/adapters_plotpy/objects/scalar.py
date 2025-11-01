@@ -62,79 +62,6 @@ class ResultPlotPyAdapter:
     def __init__(self, result_adapter: TableAdapter | GeometryAdapter) -> None:
         self.result_adapter = result_adapter
 
-    @property
-    def item_json(self) -> str | None:
-        """JSON representation of the item"""
-        return self.result_adapter.get_applicative_attr("item_json")
-
-    @item_json.setter
-    def item_json(self, value: str | None) -> None:
-        """Set JSON representation of the item"""
-        self.result_adapter.set_applicative_attr("item_json", value)
-
-    def update_obj_metadata_from_item(
-        self, obj: BaseObj, item: LabelItem | None
-    ) -> None:
-        """Update object metadata with label item
-
-        Args:
-            obj: object (signal/image)
-            item: label item
-        """
-        if item is not None:
-            self.item_json = items_to_json([item])
-        self.result_adapter.add_to(obj)
-
-    def create_label_item(self, obj: BaseObj) -> LabelItem | None:
-        """Create label item
-
-        Args:
-            obj: object (signal/image)
-
-        Returns:
-            Label item
-
-        .. note::
-
-            The signal or image object is required as argument to create the label
-            item because the label text may contain format strings that need to be
-            filled with the object properties. For instance, the label text may contain
-            the signal or image units.
-        """
-        text = resultadapter_to_html(self.result_adapter, obj)
-        item = make.label(text, "TL", (0, 0), "TL", title=self.result_adapter.title)
-        font = get_font(PLOTPY_CONF, "results", "label/font")
-        item.set_style("results", "label")
-        item.labelparam.font.update_param(font)
-        item.labelparam.update_item(item)
-        return item
-
-    def get_label_item(self, obj: BaseObj) -> LabelItem | None:
-        """Return label item associated to this result
-
-        Args:
-            obj: object (signal/image)
-
-        Returns:
-            Label item
-
-        .. note::
-
-            The signal or image object is required as argument to eventually create
-            the label item if it has not been created yet.
-            See :py:meth:`create_label_item`.
-        """
-        if not self.item_json:
-            # Label item has not been created yet
-            item = self.create_label_item(obj)
-            if item is not None:
-                self.update_obj_metadata_from_item(obj, item)
-        if self.item_json:
-            item = json_to_items(self.item_json)[0]
-            assert isinstance(item, LabelItem)
-            return item
-        return None
-
     def get_other_items(self, obj: BaseObj) -> list:  # pylint: disable=unused-argument
         """Return other items associated to this result (excluding label item)
 
@@ -163,18 +90,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         assert isinstance(result_adapter, GeometryAdapter)
         super().__init__(result_adapter)
 
-    def create_label_item(self, obj: BaseObj) -> LabelItem | None:
-        """Create label item
-
-        Returns:
-            Label item
-        """
-        if self.result_adapter.result.kind is KindShape.SEGMENT:
-            # Add a label item for the segment shape
-            return super().create_label_item(obj)
-        return None
-
-    def iterate_plot_items(
+    def iterate_shape_items(
         self, fmt: str, lbl: bool, option: Literal["s", "i"]
     ) -> Iterable:
         """Iterate over metadata shape plot items.
@@ -464,4 +380,129 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
                     metric_str = metric.replace("x", "x|<sub>") + "%</sub>"
                     if are_values_valid([x]):
                         items.append(create_pulse_crossing_marker("v", x, metric_str))
+        return items
+
+
+class MergedResultPlotPyAdapter:
+    """Adapter for merging multiple result adapters into a single label.
+
+    This adapter manages a merged label that displays all results for a given object.
+    Instead of creating individual labels for each result (which causes overlapping),
+    it creates a single label with all results concatenated as HTML.
+
+    Args:
+        result_adapters: List of result adapters (GeometryAdapter or TableAdapter)
+        obj: Signal or image object associated with the results
+    """
+
+    def __init__(
+        self,
+        result_adapters: list[GeometryAdapter | TableAdapter],
+        obj: BaseObj,
+    ) -> None:
+        self.result_adapters = result_adapters
+        self.obj = obj
+        self._cached_label: LabelItem | None = None
+
+    @property
+    def item_json(self) -> str | None:
+        """JSON representation of the merged label item.
+
+        The position is stored in all result adapters so they stay in sync.
+        """
+        if self.result_adapters:
+            return self.result_adapters[0].get_applicative_attr("item_json")
+        return None
+
+    @item_json.setter
+    def item_json(self, value: str | None) -> None:
+        """Set JSON representation of the merged label item.
+
+        The position is stored in all result adapters to keep them synchronized.
+        """
+        for result_adapter in self.result_adapters:
+            result_adapter.set_applicative_attr("item_json", value)
+
+    def create_merged_label(self) -> LabelItem | None:
+        """Create a single merged label from all result adapters.
+
+        Returns:
+            Merged label item, or None if no results
+        """
+        if not self.result_adapters:
+            return None
+
+        # Create the label with merged content
+        merged_html = resultadapter_to_html(self.result_adapters, self.obj)
+        item = make.label(merged_html, "TL", (0, 0), "TL", title="Results")
+        font = get_font(PLOTPY_CONF, "results", "label/font")
+        item.set_style("results", "label")
+        item.labelparam.font.update_param(font)
+        item.labelparam.update_item(item)
+
+        # Make label read-only (user cannot delete it to remove individual results)
+        item.set_readonly(True)
+
+        self._cached_label = item
+        return item
+
+    def get_merged_label(self) -> LabelItem | None:
+        """Get the merged label, creating it if necessary or updating if it exists.
+
+        Returns:
+            Merged label item, or None if no results
+        """
+        if not self.result_adapters:
+            self._cached_label = None
+            return None
+
+        # Try to restore existing label from stored JSON position
+        if self.item_json and self._cached_label is None:
+            stored_item = json_to_items(self.item_json)[0]
+            if isinstance(stored_item, LabelItem):
+                # Update the stored item with current merged content
+                merged_html = resultadapter_to_html(self.result_adapters, self.obj)
+                stored_item.set_text(merged_html)
+                stored_item.set_readonly(True)
+                self._cached_label = stored_item
+                return stored_item
+
+        # Update existing cached label if present
+        if self._cached_label is not None:
+            merged_html = resultadapter_to_html(self.result_adapters, self.obj)
+            self._cached_label.set_text(merged_html)
+            return self._cached_label
+
+        # Create new label
+        return self.create_merged_label()
+
+    def update_obj_metadata_from_item(self, item: LabelItem) -> None:
+        """Update all result adapters' metadata with the label item position.
+
+        Args:
+            item: Merged label item (after user moved it)
+        """
+        if item is not None:
+            self.item_json = items_to_json([item])
+            # Update all result adapters in the object's metadata
+            for result_adapter in self.result_adapters:
+                result_adapter.add_to(self.obj)
+
+    def get_other_items(self) -> list:
+        """Return other items from all result adapters (e.g., geometric shapes).
+
+        Returns:
+            List of all other items from all result adapters
+        """
+        items = []
+        for result_adapter in self.result_adapters:
+            if isinstance(result_adapter, GeometryAdapter):
+                plotpy_adapter = GeometryPlotPyAdapter(result_adapter)
+            elif isinstance(result_adapter, TableAdapter):
+                plotpy_adapter = TablePlotPyAdapter(result_adapter)
+            else:
+                raise NotImplementedError(
+                    f"Unsupported result adapter type: {type(result_adapter)}"
+                )
+            items.extend(plotpy_adapter.get_other_items(self.obj))
         return items
