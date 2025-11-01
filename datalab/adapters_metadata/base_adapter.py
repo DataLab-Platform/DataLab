@@ -70,13 +70,30 @@ class BaseResultAdapter(ABC):
 
     @property
     def name(self) -> str:
-        """Get the unique identifier name for this result.
+        """Get the result kind name.
 
         Returns:
-            The string value of the kind attribute, which serves as a unique
-             name identifier for this result type.
+            The string value of the kind attribute (e.g., "segment", "circle",
+            "statistics"). This is NOT unique - multiple results can share the
+            same kind.
         """
         return self.result.name
+
+    @property
+    def unique_key(self) -> str:
+        """Get a unique key for this result based on its title.
+
+        Returns:
+            A sanitized version of the result title suitable for use in metadata keys
+        """
+        # Sanitize the title to make it a valid metadata key component
+        # Replace spaces and special characters with underscores
+        import re
+
+        sanitized = re.sub(r"[^\w]", "_", self.result.title.lower())
+        # Remove consecutive underscores and strip leading/trailing underscores
+        sanitized = re.sub(r"_+", "_", sanitized).strip("_")
+        return sanitized
 
     @property
     @abstractmethod
@@ -141,9 +158,9 @@ class BaseResultAdapter(ABC):
         """Get the metadata key used to store this result.
 
         Returns:
-            Metadata key
+            Metadata key based on the result's title
         """
-        return f"{self.META_PREFIX}{self.name}{self.META_SUFFIX}"
+        return f"{self.META_PREFIX}{self.unique_key}{self.META_SUFFIX}"
 
     def add_to(self, obj: SignalObj | ImageObj) -> None:
         """Add result to object metadata.
@@ -161,8 +178,8 @@ class BaseResultAdapter(ABC):
         """
         obj.metadata.pop(self.metadata_key, None)
         # Also remove associated parameter metadata if present
-        obj.metadata.pop(f"{self.name}__param_str", None)
-        obj.metadata.pop(f"{self.name}__param_html", None)
+        obj.metadata.pop(f"{self.unique_key}__param_str", None)
+        obj.metadata.pop(f"{self.unique_key}__param_html", None)
 
     @classmethod
     def remove_all_from(cls, obj: SignalObj | ImageObj) -> None:
