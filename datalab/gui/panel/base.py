@@ -2813,6 +2813,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     # Remove all table and geometry results using adapter methods
                     TableAdapter.remove_all_from(obj)
                     GeometryAdapter.remove_all_from(obj)
+                    if obj is self.objview.get_current_object():
+                        self.objprop.update_properties_from(obj)
                 self.refresh_plot("selected", True, False)
         else:
             self.__show_no_result_warning()

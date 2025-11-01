@@ -310,6 +310,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             adapter: Adapter for the result to delete
         """
         adapter.remove_from(obj)
+        # Update properties panel to reflect the removal
+        if obj is self.panel.objview.get_current_object():
+            self.panel.objprop.update_properties_from(obj)
         # Refresh the plot to update the display
         # Use the same refresh pattern as delete_results() method
         self.panel.refresh_plot("selected", True, False)
