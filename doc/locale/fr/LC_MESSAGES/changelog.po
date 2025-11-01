@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 18:38+0100\n"
+"POT-Creation-Date: 2025-11-01 16:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -309,6 +309,33 @@ msgstr "Cela améliore considérablement l'efficacité du flux de travail lors d
 
 msgid "Result metadata management:"
 msgstr "Gestion des métadonnées des résultats :"
+
+msgid "**Merged result labels**: All analysis results for a signal or image are now displayed in a single consolidated, read-only label"
+msgstr "**Étiquettes de résultats fusionnées** : Tous les résultats d'analyse pour un signal ou une image sont désormais affichés dans une seule étiquette consolidée en lecture seule"
+
+msgid "Previously, each analysis result (FWHM, FW1e2, centroid, etc.) created a separate editable label on the plot"
+msgstr "Auparavant, chaque résultat d'analyse (FWHM, FW1e2, centroïde, etc.) créait une étiquette éditable distincte sur le graphique"
+
+msgid "Now, all results for an object are merged into one read-only label, providing a cleaner and more organized display"
+msgstr "Maintenant, tous les résultats pour un objet sont fusionnés en une seule étiquette en lecture seule, offrant un affichage plus propre et plus organisé"
+
+msgid "The merged label automatically updates when new results are computed or existing results are removed"
+msgstr "L'étiquette fusionnée se met à jour automatiquement lorsque de nouveaux résultats sont calculés ou que des résultats existants sont supprimés"
+
+msgid "Results are visually separated within the label using horizontal dividers for clarity"
+msgstr "Les résultats sont visuellement séparés au sein de l'étiquette à l'aide de diviseurs horizontaux pour plus de clarté"
+
+msgid "The label is read-only to prevent accidental deletion; individual results can be removed via the Analysis menu"
+msgstr "L'étiquette est en lecture seule pour éviter toute suppression accidentelle ; les résultats individuels peuvent être supprimés via le menu Analyse"
+
+msgid "Significantly reduces visual clutter when multiple analysis operations are performed on the same object"
+msgstr "Réduit considérablement le désordre visuel lorsque plusieurs opérations d'analyse sont effectuées sur le même objet"
+
+msgid "Improves plot readability and makes it easier to review all computed results at a glance"
+msgstr "Améliore la lisibilité du graphique et facilite la révision de tous les résultats calculés en un coup d'œil"
+
+msgid "The merged label is automatically positioned and managed by DataLab, freeing users from label placement concerns"
+msgstr "L'étiquette fusionnée est automatiquement positionnée et gérée par DataLab, libérant les utilisateurs des préoccupations liées au placement des étiquettes."
 
 msgid "Deleting result labels (e.g., FWHM, statistics) from the plot now permanently removes the associated metadata."
 msgstr "La suppression des étiquettes de résultats (par exemple, FWHM, statistiques) du graphique supprime désormais définitivement les métadonnées associées."

@@ -103,6 +103,15 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This significantly improves workflow efficiency when working with multiple objects that need similar property adjustments.
 
 * Result metadata management:
+  * **Merged result labels**: All analysis results for a signal or image are now displayed in a single consolidated, read-only label
+    * Previously, each analysis result (FWHM, FW1e2, centroid, etc.) created a separate editable label on the plot
+    * Now, all results for an object are merged into one read-only label, providing a cleaner and more organized display
+    * The merged label automatically updates when new results are computed or existing results are removed
+    * Results are visually separated within the label using horizontal dividers for clarity
+    * The label is read-only to prevent accidental deletion; individual results can be removed via the Analysis menu
+    * Significantly reduces visual clutter when multiple analysis operations are performed on the same object
+    * Improves plot readability and makes it easier to review all computed results at a glance
+    * The merged label is automatically positioned and managed by DataLab, freeing users from label placement concerns
   * Deleting result labels (e.g., FWHM, statistics) from the plot now permanently removes the associated metadata.
   * Previously, when a result label was deleted from the plot, the underlying result metadata remained in the object, causing the label to reappear when re-selecting the signal or image.
   * Now, when a user deletes a result label via the plot interface, the associated result metadata is automatically removed from the object.

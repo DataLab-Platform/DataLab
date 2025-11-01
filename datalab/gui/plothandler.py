@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Iterator
-from typing import TYPE_CHECKING, Callable, Generic
+from typing import TYPE_CHECKING, Generic
 from weakref import WeakKeyDictionary
 
 import numpy as np
@@ -42,6 +42,7 @@ from sigima.objects import ImageObj, SignalObj, TypeObj
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.adapters_plotpy import TypePlotItem, create_adapter_from_object
+from datalab.adapters_plotpy.objects.scalar import MergedResultPlotPyAdapter
 from datalab.config import Conf, _
 from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import block_signals, create_progress_bar
@@ -81,14 +82,9 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         )
         self.__auto_refresh = False
         self.__show_first_only = False
-        self.__result_items_mapping: WeakKeyDictionary[LabelItem, Callable] = (
-            WeakKeyDictionary()
-        )
-        # Mapping from result label item to (metadata adapter, object) tuple.
-        # The metadata adapter is either a GeometryAdapter or TableAdapter.
-        self.__result_label_to_adapter: WeakKeyDictionary[
-            LabelItem, tuple[GeometryAdapter | TableAdapter, SignalObj | ImageObj]
-        ] = WeakKeyDictionary()
+        # Mapping from object UUID to merged result adapter
+        # The merged adapter consolidates all result labels for an object
+        self.__merged_result_adapters: dict[str, MergedResultPlotPyAdapter] = {}
 
     def __len__(self) -> int:
         """Return number of items"""
@@ -154,6 +150,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
     def clear(self) -> None:
         """Clear plot items"""
         self.__plotitems = {}
+        self.__merged_result_adapters = {}
         self.cleanup_dataview()
 
     def add_shapes(self, oid: str, do_autoscale: bool = False) -> None:
@@ -163,25 +160,28 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         if obj.metadata:
             obj_adapter = create_adapter_from_object(obj)
             items = list(obj_adapter.iterate_shape_items(editable=False))
+
+            # Collect all result adapters
             results = list(TableAdapter.iterate_from_obj(obj)) + list(
                 GeometryAdapter.iterate_from_obj(obj)
             )
-            for result in results:
-                result_adapter = create_adapter_from_object(result)
-                item = result_adapter.get_label_item(obj)
-                if item is not None:
-                    items.append(item)
-                    self.__result_items_mapping[item] = (
-                        lambda item,
-                        rprop=result_adapter: rprop.update_obj_metadata_from_item(
-                            obj, item
-                        )
-                    )
-                    # Store mapping from item to (metadata adapter, object) for
-                    # deletion handling. Note: `result` is the metadata adapter
-                    # (GeometryAdapter or TableAdapter), not the PlotPy adapter
-                    self.__result_label_to_adapter[item] = (result, obj)
-                items.extend(result_adapter.get_other_items(obj))
+
+            # Create or update merged result adapter
+            if results:
+                merged_adapter = MergedResultPlotPyAdapter(results, obj)
+                self.__merged_result_adapters[oid] = merged_adapter
+
+                # Get the merged label
+                merged_label = merged_adapter.get_merged_label()
+                if merged_label is not None:
+                    items.append(merged_label)
+
+                # Add other items from the merged adapter (e.g., geometric shapes)
+                items.extend(merged_adapter.get_other_items())
+            else:
+                # No results, remove any existing adapter
+                self.__merged_result_adapters.pop(oid, None)
+
             if items:
                 if do_autoscale:
                     self.plot.do_autoscale()
@@ -203,45 +203,29 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                 self.__shapeitems.append(items[-1])
 
     def update_resultproperty_from_plot_item(self, item: LabelItem) -> None:
-        """Update result property from plot item"""
-        callback = self.__result_items_mapping.get(item)
-        if callback is not None:
-            callback(item)
+        """Update result properties from merged label plot item.
 
-    def result_item_removed(self, item: LabelItem) -> None:
-        """Handle result label item removal.
-
-        When a result label is removed from the plot, also remove the associated
-        result from the object's metadata.
+        When the merged results label is moved, update the stored position
+        in the merged result adapter.
 
         Args:
-            item: Label item that was removed
+            item: Merged results label item
         """
-        # Check if this item is a result label
-        if item not in self.__result_label_to_adapter:
-            return
-
-        # Get the metadata adapter and object associated with this label
-        metadata_adapter, obj = self.__result_label_to_adapter[item]
-
-        # Remove the result from the object's metadata
-        metadata_adapter.remove_from(obj)
-
-        # Remove from mappings
-        del self.__result_label_to_adapter[item]
-        if item in self.__result_items_mapping:
-            del self.__result_items_mapping[item]
-
-        # Refresh the object properties if this is the current object
-        if obj is self.panel.objview.get_current_object():
-            self.panel.objprop.update_properties_from(obj)
-            self.refresh_plot("selected")
+        # Find the merged adapter that owns this label
+        for merged_adapter in self.__merged_result_adapters.values():
+            if merged_adapter._cached_label is item:
+                # Update the adapter's metadata with the new position
+                merged_adapter.update_obj_metadata_from_item(item)
+                break
 
     def remove_all_shape_items(self) -> None:
         """Remove all geometric shapes associated to result items"""
         if set(self.__shapeitems).issubset(set(self.plot.items)):
             self.plot.del_items(self.__shapeitems)
         self.__shapeitems = []
+        # Clear cached labels in merged result adapters since they were removed
+        for merged_adapter in self.__merged_result_adapters.values():
+            merged_adapter._cached_label = None
 
     def __add_item_to_plot(self, oid: str) -> TypePlotItem:
         """Make plot item and add it to plot.
@@ -487,21 +471,13 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             for item in self.plot.items[:]
             if item not in self and not isinstance(item, (LegendBoxItem, GridItem))
         ]
-        # Temporarily disconnect the signal to avoid cascading result deletions
-        # during cleanup (result labels are plot items that should be removed
-        # during cleanup, but we don't want to trigger metadata deletion)
-        self.plot.SIG_ITEM_REMOVED.disconnect(self.result_item_removed)
-        try:
-            # Delete items one by one with error handling for items already removed
-            for item in items_to_remove:
-                try:
-                    self.plot.del_item(item)
-                except ValueError:
-                    # Item was already removed (e.g., by detach())
-                    pass
-        finally:
-            # Always reconnect the signal, even if an error occurred
-            self.plot.SIG_ITEM_REMOVED.connect(self.result_item_removed)
+        # Delete items one by one with error handling for items already removed
+        for item in items_to_remove:
+            try:
+                self.plot.del_item(item)
+            except ValueError:
+                # Item was already removed (e.g., by detach())
+                pass
 
     def get_plot_options(self) -> PlotOptions:
         """Return standard signal/image plot options"""

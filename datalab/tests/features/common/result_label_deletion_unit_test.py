@@ -1,15 +1,16 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Result label deletion test:
+Merged result label test:
 
-Test that when a result label is deleted from the plot, the associated result
-metadata is also removed and doesn't reappear when re-selecting the signal.
+Test that multiple results are merged into a single label that displays all results.
 
-This is a regression test for the bug where:
-1. Computing FWHM adds a result label
-2. Deleting the label doesn't remove the result metadata
-3. De-selecting and re-selecting the signal makes the label reappear
+This test verifies that:
+1. Computing FWHM adds a result to the merged label
+2. Computing FW1e2 adds another result to the same merged label
+3. The merged label contains both results
+4. The merged label is read-only (cannot be deleted to remove individual results)
+5. De-selecting and re-selecting the signal maintains the merged label
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -24,8 +25,8 @@ from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 
 
-def test_result_label_deletion() -> None:
-    """Test that deleting a result label also removes the result metadata"""
+def test_merged_result_label() -> None:
+    """Test that multiple results are merged into a single label"""
     with datalab_test_app_context() as win:
         panel = win.signalpanel
 
@@ -39,48 +40,66 @@ def test_result_label_deletion() -> None:
         execenv.print("Computing FWHM...")
         panel.processor.run_feature(sips.fwhm, sigima.params.FWHMParam())
 
+        # Force refresh to ensure shapes are added
+        panel.plothandler.refresh_plot("selected", force=True)
+
         # Check that the result metadata exists
         sig = panel.objview.get_sel_objects()[0]
-        geometry_keys_before = [
-            k for k, v in sig.metadata.items() if GeometryAdapter.match(k, v)
-        ]
-        execenv.print(f"  Geometry metadata keys before: {len(geometry_keys_before)}")
-        assert len(geometry_keys_before) > 0, "Should have geometry result metadata"
+        geometry_results_1 = list(GeometryAdapter.iterate_from_obj(sig))
+        execenv.print(f"  Geometry results after FWHM: {len(geometry_results_1)}")
+        assert len(geometry_results_1) == 1, "Should have one geometry result"
 
-        # Get the plot and find the result label item
+        # Get the plot and find the merged result label item
         plot = panel.plothandler.plot
         label_items = [item for item in plot.items if hasattr(item, "labelparam")]
-        execenv.print(f"  Found {len(label_items)} label items on plot")
 
-        # Find the FWHM result label (it should be in the result_label_to_adapter)
-        result_label = None
+        # Find the merged result label - it should be on the plot
+        merged_label = None
         for item in label_items:
-            # Check if this item is tracked as a result label
-            if item in panel.plothandler._BasePlotHandler__result_label_to_adapter:
-                result_label = item
+            if hasattr(item, "is_readonly") and item.is_readonly():
+                merged_label = item
                 break
 
-        assert result_label is not None, "Should find the FWHM result label"
-        execenv.print(f"  Found result label: {result_label.title()}")
+        assert merged_label is not None, "Should find the merged result label"
+        execenv.print(f"  Found merged result label: {merged_label.title()}")
 
-        # Delete the label from the plot (simulating user action)
-        execenv.print("Deleting result label from plot...")
-        plot.del_item(result_label)
+        # Check that the label is read-only
+        assert merged_label.is_readonly(), "Merged label should be read-only"
+        execenv.print("  ✓ Merged label is read-only")
 
-        # NOTE: The SIG_ITEM_REMOVED signal is only emitted when items are removed
-        # via del_items (used in remove_all_shape_items), not via del_item.
-        # So we need to force a refresh to trigger the removal handler.
-        panel.plothandler.refresh_plot("selected")
+        # Get the label text to verify it contains FWHM result
+        label_text_1 = merged_label.text_string
+        assert "fwhm" in label_text_1.lower(), "Label should contain FWHM result"
+        execenv.print("  ✓ Label contains FWHM result")
 
-        # Check that the result metadata has been removed
+        # Compute FW1e2 (this adds another result to metadata)
+        execenv.print("Computing FW1e2...")
+        panel.processor.run_feature(sips.fw1e2)
+
+        # Check that we now have two results
         sig = panel.objview.get_sel_objects()[0]
-        geometry_keys_after_delete = [
-            k for k, v in sig.metadata.items() if GeometryAdapter.match(k, v)
+        geometry_results_2 = list(GeometryAdapter.iterate_from_obj(sig))
+        execenv.print(f"  Geometry results after FW1e2: {len(geometry_results_2)}")
+        assert len(geometry_results_2) == 2, "Should have two geometry results"
+
+        # Verify the merged label now contains both results
+        merged_labels = [
+            item
+            for item in plot.items
+            if hasattr(item, "labelparam")
+            and hasattr(item, "is_readonly")
+            and item.is_readonly()
         ]
-        execenv.print(
-            f"  Geometry metadata keys after delete: {len(geometry_keys_after_delete)}"
-        )
-        assert len(geometry_keys_after_delete) == 0, "Result metadata should be removed"
+
+        execenv.print(f"  Merged result labels on plot: {len(merged_labels)}")
+        assert len(merged_labels) == 1, "Should have exactly one merged result label"
+
+        merged_label_2 = merged_labels[0]
+        label_text_2 = merged_label_2.text_string
+        assert "fwhm" in label_text_2.lower(), "Label should contain FWHM result"
+        assert "fw1e2" in label_text_2.lower(), "Label should contain FW1e2 result"
+        assert "<hr>" in label_text_2, "Should contain separator between results"
+        execenv.print("  ✓ Merged label contains both FWHM and FW1e2 results")
 
         # Create another signal and select it (to deselect the first one)
         execenv.print("Creating second signal to deselect first...")
@@ -92,35 +111,44 @@ def test_result_label_deletion() -> None:
         execenv.print("Re-selecting first signal...")
         panel.objview.select_objects([1])
 
-        # Check that the result metadata is still absent and label doesn't reappear
+        # Check that the merged label still exists and contains both results
         sig = panel.objview.get_sel_objects()[0]
-        geometry_keys_after_reselect = [
-            k for k, v in sig.metadata.items() if GeometryAdapter.match(k, v)
-        ]
+        geometry_results_after = list(GeometryAdapter.iterate_from_obj(sig))
         execenv.print(
-            f"  Geometry metadata keys after reselect: "
-            f"{len(geometry_keys_after_reselect)}"
+            f"  Geometry results after reselect: {len(geometry_results_after)}"
         )
-        assert len(geometry_keys_after_reselect) == 0, (
-            "Result metadata should still be absent after re-selection"
+        assert len(geometry_results_after) == 2, (
+            "Should still have two geometry results after re-selection"
         )
 
-        # Check that the label doesn't reappear on the plot
-        label_items_after = [item for item in plot.items if hasattr(item, "labelparam")]
-        result_labels_after = [
+        # Check that the merged label is still present
+        merged_labels_after = [
             item
-            for item in label_items_after
-            if item in panel.plothandler._BasePlotHandler__result_items_mapping
+            for item in plot.items
+            if hasattr(item, "labelparam")
+            and hasattr(item, "is_readonly")
+            and item.is_readonly()
         ]
+
         execenv.print(
-            f"  Result labels on plot after reselect: {len(result_labels_after)}"
+            f"  Merged result labels on plot after reselect: {len(merged_labels_after)}"
         )
-        assert len(result_labels_after) == 0, (
-            "Result label should not reappear after re-selection"
+        assert len(merged_labels_after) == 1, (
+            "Should still have one merged result label after re-selection"
         )
 
-        execenv.print("✓ Test passed: Result label deletion works correctly")
+        merged_label_final = merged_labels_after[0]
+        label_text_final = merged_label_final.text_string
+        assert "fwhm" in label_text_final.lower(), (
+            "Label should still contain FWHM result"
+        )
+        assert "fw1e2" in label_text_final.lower(), (
+            "Label should still contain FW1e2 result"
+        )
+        execenv.print("  ✓ Merged label persists after re-selection")
+
+        execenv.print("✓ Test passed: Merged result label works correctly")
 
 
 if __name__ == "__main__":
-    test_result_label_deletion()
+    test_merged_result_label()

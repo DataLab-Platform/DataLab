@@ -305,7 +305,7 @@ def _create_comparison_dataframe(
 
 
 def resultadapter_to_html(
-    adapter: BaseResultAdapter,
+    adapter: BaseResultAdapter | list[BaseResultAdapter],
     obj: SignalObj | ImageObj,
     visible_only: bool = True,
     transpose_single_row: bool = True,
@@ -314,7 +314,7 @@ def resultadapter_to_html(
     """Convert a result adapter to HTML format
 
     Args:
-        adapter: Adapter to convert
+        adapter: Adapter to convert, or list of adapters to concatenate
         obj: Object associated to the adapter
         visible_only: If True, include only visible headers based on display
          preferences. Default is False.
@@ -324,9 +324,18 @@ def resultadapter_to_html(
     Returns:
         HTML representation of the adapter
     """
-    return adapter.to_html(
-        obj=obj,
-        visible_only=visible_only,
-        transpose_single_row=transpose_single_row,
-        **kwargs,
-    )
+    if not isinstance(adapter, BaseResultAdapter) and not all(
+        [isinstance(adp, BaseResultAdapter) for adp in adapter]
+    ):
+        raise ValueError(
+            "Adapter must be a BaseResultAdapter "
+            "or a list of BaseResultAdapter instances"
+        )
+    if isinstance(adapter, BaseResultAdapter):
+        return adapter.to_html(
+            obj=obj,
+            visible_only=visible_only,
+            transpose_single_row=transpose_single_row,
+            **kwargs,
+        )
+    return "<hr>".join([resultadapter_to_html(res, obj) for res in adapter])
