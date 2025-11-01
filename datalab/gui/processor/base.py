@@ -1243,13 +1243,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
-    ) -> dict[str, GeometryResult | TableResult]:
+    ) -> ResultData:
         """Generic processing method: 1 object in → no object out.
 
         Applies a function to each selected object, returning metadata or measurement
         results (e.g. peak coordinates, statistical properties) without generating
         new objects. Results are stored in the object's metadata and returned as a
-        dictionary.
+        ResultData instance.
 
         Args:
             func: Function to execute, that takes either `(obj)` or `(obj, param)` as
@@ -1262,8 +1262,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit: Whether to open the parameter editor before execution.
 
         Returns:
-            Dictionary mapping each object UUID to a GeometryResult or TableResult
-            instance.
+            ResultData instance containing the results for all processed objects.
 
         .. note::
             With k selected objects, the method performs k analyses and produces
@@ -2065,13 +2064,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         key: str | Callable | ComputingFeature,
         *args,
         **kwargs,
-    ) -> (
-        dict[str, GeometryResult | TableResult]
-        | list[SignalObj | ImageObj]
-        | SignalObj
-        | ImageObj
-        | None
-    ):
+    ) -> ResultData | list[SignalObj | ImageObj] | SignalObj | ImageObj | None:
         """Run a computing feature that has been previously registered.
 
         This method is a generic dispatcher for all compute methods.
