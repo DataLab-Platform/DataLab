@@ -97,7 +97,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 * **Enhance metadata handling by adding function name context to results**:
   * When computation functions (e.g., `full_width_at_y`, `x_at_y`) create results with parameters, the function name is now stored
-  * Analysis tab displays function name as a comment above parameter information for better context
+  * Analysis parameters tab displays function name as a comment above parameter information for better context
   * Helps distinguish identical parameter classes (e.g., `OrdinateParam`) used by different functions
   * Improves clarity when reviewing analysis results with multiple computation parameters
 

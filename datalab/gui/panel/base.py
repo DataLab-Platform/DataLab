@@ -215,7 +215,7 @@ class ObjectProp(QW.QTabWidget):
         self.analysis_parameter.setFont(font)
 
         self.addTab(self.processing_history, _("History"))
-        self.addTab(self.analysis_parameter, _("Analysis"))
+        self.addTab(self.analysis_parameter, _("Analysis parameters"))
         self.addTab(self.properties, _("Properties"))
 
         self.processing_history.textChanged.connect(self._update_tab_visibility)
@@ -234,10 +234,10 @@ class ObjectProp(QW.QTabWidget):
                 self.setTabVisible(tab_index, has_content)
 
         # Restore the previously selected tab if it's still visible
-        # But only if we're not making History or Analysis visible
+        # But only if we're not making History or Analysis parameters visible
         # (they shouldn't steal focus)
         if current_widget is not None:
-            # Don't restore if current widget was History or Analysis
+            # Don't restore if current widget was History or Analysis parameters
             # that just became visible
             if current_widget not in (
                 self.processing_history,
@@ -247,7 +247,8 @@ class ObjectProp(QW.QTabWidget):
                 if restored_index >= 0 and self.isTabVisible(restored_index):
                     self.setCurrentIndex(restored_index)
             else:
-                # Current widget was History or Analysis - select Properties instead
+                # Current widget was History or Analysis parameters
+                # Select Properties instead
                 properties_index = self.indexOf(self.properties)
                 if properties_index >= 0:
                     self.setCurrentIndex(properties_index)
@@ -393,7 +394,7 @@ class ObjectProp(QW.QTabWidget):
             self.setup_creation_tab(obj)
             self.setup_processing_tab(obj)
 
-        # Trigger visibility update for History and Analysis tabs
+        # Trigger visibility update for History and Analysis parameters tabs
         # (will be called via textChanged signals, but we call explicitly
         # here to ensure initial state is correct)
         self._update_tab_visibility()
