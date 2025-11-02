@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 10:44+0100\n"
+"POT-Creation-Date: 2025-11-02 18:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,117 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**Annotation management**: New features for managing plot annotations on signals and images"
+msgstr "**Gestion des annotations** : Nouvelles fonctionnalités pour la gestion des annotations de tracé sur les signaux et les images"
+
+msgid "New \"Annotations\" submenu in Edit menu with dedicated annotation operations"
+msgstr "Nouveau sous-menu \"Annotations\" dans le menu Édition avec des opérations d'annotation dédiées"
+
+msgid "**Copy annotations**: Copy annotations from selected object to clipboard"
+msgstr "**Copier les annotations** : Copier les annotations de l'objet sélectionné dans le presse-papiers"
+
+msgid "Only enabled when exactly one object with annotations is selected"
+msgstr "Activé uniquement lorsqu'un seul objet avec des annotations est sélectionné"
+
+msgid "**Paste annotations**: Paste annotations from clipboard to selected object(s)"
+msgstr "**Coller les annotations** : Coller les annotations du presse-papiers sur l'objet (ou les objets) sélectionné(s)"
+
+msgid "Merges pasted annotations with any existing annotations on target objects"
+msgstr "Fusionne les annotations collées avec les annotations existantes sur les objets cibles"
+
+msgid "Only enabled when annotations clipboard is not empty"
+msgstr "Activé uniquement lorsque le presse-papiers d'annotations n'est pas vide"
+
+msgid "Works with multiple selected objects for batch annotation application"
+msgstr "Fonctionne avec plusieurs objets sélectionnés pour une application d'annotation par lots"
+
+msgid "**Edit annotations**: Open annotation editor dialog for interactive annotation management"
+msgstr "**Modifier les annotations** : Ouvrir la boîte de dialogue de l'éditeur d'annotations pour une gestion interactive des annotations"
+
+msgid "Create, modify, and delete plot annotations (shapes, labels, markers, etc.)"
+msgstr "Créer, modifier et supprimer des annotations de tracé (formes, étiquettes, marqueurs, etc.)"
+
+msgid "Visual editor with same PlotPy tools as main plot view"
+msgstr "Éditeur visuel avec les mêmes outils PlotPy que la vue principale du tracé"
+
+msgid "Changes are immediately applied to selected object"
+msgstr "Les modifications sont immédiatement appliquées à l'objet sélectionné"
+
+msgid "**Import annotations**: Load annotations from .dlabann JSON files"
+msgstr "**Importer les annotations** : Charger les annotations à partir de fichiers JSON .dlabann"
+
+msgid "Merges imported annotations with existing annotations"
+msgstr "Fusionne les annotations importées avec les annotations existantes"
+
+msgid "Supports versioned annotation format for future compatibility"
+msgstr "Prend en charge le format d'annotation versionné pour une compatibilité future"
+
+msgid "**Export annotations**: Save annotations to .dlabann JSON files"
+msgstr "**Exporter les annotations** : Enregistrer les annotations dans des fichiers JSON .dlabann"
+
+msgid "Preserves all annotation properties for later reuse"
+msgstr "Préserve toutes les propriétés des annotations pour une réutilisation ultérieure"
+
+msgid "Human-readable JSON format with version information"
+msgstr "Format JSON lisible avec des informations de version"
+
+msgid "**Delete annotations**: Remove all annotations from selected object(s)"
+msgstr "**Supprimer les annotations** : Supprimer toutes les annotations de l'objet (ou des objets) sélectionné(s)"
+
+msgid "Only enabled when at least one selected object has annotations"
+msgstr "Activé uniquement lorsque au moins un objet sélectionné a des annotations"
+
+msgid "Confirmation dialog prevents accidental deletion"
+msgstr "La boîte de dialogue de confirmation empêche la suppression accidentelle"
+
+msgid "Works with multiple selected objects for batch deletion"
+msgstr "Fonctionne avec plusieurs objets sélectionnés pour une suppression par lots"
+
+msgid "Annotations are managed using Sigima 1.0 annotation API"
+msgstr "Les annotations sont gérées à l'aide de l'API d'annotation Sigima 1.0"
+
+msgid "Annotations are stored in object metadata and preserved across save/load operations"
+msgstr "Les annotations sont stockées dans les métadonnées de l'objet et préservées lors des opérations de sauvegarde/chargement"
+
+msgid "Clipboard-based workflow enables efficient annotation reuse across objects"
+msgstr "Le flux de travail basé sur le presse-papiers permet une réutilisation efficace des annotations entre les objets"
+
+msgid "Independent from ROI management - annotations and ROIs can coexist on same object"
+msgstr "Indépendant de la gestion des ROI - les annotations et les ROI peuvent coexister sur le même objet"
+
+msgid "**Metadata management improvements**: Enhanced metadata handling with clipboard-based workflow"
+msgstr "**Améliorations de la gestion des métadonnées** : Gestion des métadonnées améliorée avec un flux de travail basé sur le presse-papiers"
+
+msgid "Reorganized Edit menu with new \"Metadata\" submenu grouping all metadata operations"
+msgstr "**Menu Édition réorganisé** : Nouveau sous-menu \"Métadonnées\" regroupant toutes les opérations sur les métadonnées"
+
+msgid "**Paste metadata** action now only enabled when metadata clipboard is not empty"
+msgstr "**L'action \"Coller les métadonnées\"** est désormais activée uniquement lorsque le presse-papiers des métadonnées n'est pas vide"
+
+msgid "Prevents confusion when no metadata is available to paste"
+msgstr "Évite toute confusion lorsque aucune métadonnée n'est disponible pour le collage"
+
+msgid "Clipboard state is checked dynamically as object selection changes"
+msgstr "L'état du presse-papiers est vérifié dynamiquement lorsque la sélection d'objet change"
+
+msgid "**Bug fixes**:"
+msgstr "**Correctifs :**"
+
+msgid "**Action enable states not updated after operations**: Fixed issue where menu action states were not updated after performing annotation or metadata operations"
+msgstr "**Les états d'activation des actions ne sont pas mis à jour après les opérations** : Correction d'un problème où les états des actions de menu n'étaient pas mis à jour après l'exécution d'opérations d'annotation ou de métadonnées"
+
+msgid "After copying/pasting/deleting annotations or metadata, action states now refresh immediately"
+msgstr "Après la copie/le collage/la suppression d'annotations ou de métadonnées, les états des actions se rafraîchissent désormais immédiatement"
+
+msgid "Users no longer need to select another object to see correct action enabled/disabled states"
+msgstr "Les utilisateurs n'ont plus besoin de sélectionner un autre objet pour voir les états d'activation/désactivation des actions corrects"
+
+msgid "Examples: \"Delete annotations\" now disables immediately when annotations are deleted, \"Paste annotations\" enables immediately when annotations are copied"
+msgstr "Exemples : \"Supprimer les annotations\" se désactive désormais immédiatement lorsque les annotations sont supprimées, \"Coller les annotations\" s'active immédiatement lorsque les annotations sont copiées"
+
+msgid "Improves user experience by keeping UI state synchronized with actual object state"
+msgstr "Améliore l'expérience utilisateur en maintenant l'état de l'interface utilisateur synchronisé avec l'état réel de l'objet."
 
 msgid "**Interactive object creation and processing**: New interactive workflow for creating and processing objects"
 msgstr "**Création et traitement interactifs d'objets** : Nouveau flux de travail interactif pour la création et le traitement des objets"

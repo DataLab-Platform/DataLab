@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-24 10:47+0200\n"
+"POT-Creation-Date: 2025-11-02 18:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,11 +19,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Manipulate metadata"
-msgstr "Manipuler les métadonnées"
+msgid "Manipulate metadata and annotations"
+msgstr "Manipuler les métadonnées et les annotations"
 
-msgid "This section describes how to manipulate metadata in DataLab."
-msgstr "Cette section décrit comment manipuler les métadonnées dans DataLab."
+msgid "This section describes how to manipulate metadata and annotations in DataLab."
+msgstr "Cette section décrit comment manipuler les métadonnées et les annotations dans DataLab."
+
+msgid "Signal metadata contains various information about the signal or its representation, such as view settings, Regions Of Interest (ROIs), processing chain history, analysis results, and any other information that you may have added to the metadata of a signal (or that comes from the signal file itself)."
+msgstr "Les métadonnées du signal contiennent diverses informations sur le signal ou sa représentation, telles que les paramètres d'affichage, les régions d'intérêt (ROIs), l'historique de la chaîne de traitement, les résultats d'analyse et toute autre information que vous avez pu ajouter aux métadonnées d'un signal (ou qui provient du fichier du signal lui-même)."
 
 msgid "Screenshot of the \"Edit\" menu."
 msgstr "Capture d'écran du menu \"Édition\"."
@@ -31,8 +34,44 @@ msgstr "Capture d'écran du menu \"Édition\"."
 msgid "The \"Edit\" menu allows you to perform classic editing operations on the current signal or group of signals (create/rename group, move up/down, delete signal/group of signals, etc.)."
 msgstr "Le menu \"Édition\" vous permet d'effectuer des opérations d'édition classiques sur le signal ou le groupe de signaux actuel (créer/renommer un groupe, déplacer vers le haut/vers le bas, supprimer le signal/le groupe de signaux, etc.)."
 
-msgid "It also allows you to manipulate metadata associated with the current signal."
-msgstr "Il vous permet également de manipuler les métadonnées associées au signal actuel."
+msgid "As detailed below, it also allows you to:"
+msgstr "Comme détaillé ci-dessous, il vous permet également de :"
+
+msgid "Navigate and utilize the processing chain history through actions like \"Recompute\" and \"Select source objects\"."
+msgstr "Naviguer et utiliser l'historique de la chaîne de traitement grâce à des actions telles que \"Recalculer\" et \"Sélectionner les objets sources\"."
+
+msgid "Manipulate metadata and annotations associated with the current signal, thanks to the \"Metadata\" and \"Annotations\" submenus which provide the following features."
+msgstr "Manipuler les métadonnées et les annotations associées au signal actuel, grâce aux sous-menus \"Métadonnées\" et \"Annotations\" qui offrent les fonctionnalités suivantes."
+
+msgid "Recompute"
+msgstr "Recalculer"
+
+msgid "The \"Recompute\" |recompute| action allows you to recompute the selected signal(s) using their original processing parameters. This is useful when you want to re-execute the processing chain that was used to create a signal, for example after modifying global settings or dependencies."
+msgstr "L'action \"Recalculer\" |recompute| vous permet de recalculer le signal (ou les signaux) sélectionné(s) en utilisant leurs paramètres de traitement d'origine. Cela est utile lorsque vous souhaitez réexécuter la chaîne de traitement qui a été utilisée pour créer un signal, par exemple après avoir modifié les paramètres globaux ou les dépendances."
+
+msgid "recompute"
+msgstr ""
+
+msgid "This action is only available for signals that were created through processing operations and have stored processing parameters."
+msgstr "Cette action n'est disponible que pour les signaux qui ont été créés par des opérations de traitement et qui ont des paramètres de traitement stockés."
+
+msgid "Select source objects"
+msgstr "Sélectionner les objets sources"
+
+msgid "The \"Select source objects\" |goto_source| action allows you to select the source object(s) that were used to create the currently selected signal. This helps trace back the processing history and understand which original signals were used as input for the current result."
+msgstr "L'action \"Sélectionner les objets sources\" |goto_source| vous permet de sélectionner l'objet (ou les objets) sources qui ont été utilisés pour créer le signal actuellement sélectionné. Cela aide à retracer l'historique de traitement et à comprendre quels signaux d'origine ont été utilisés comme entrée pour le résultat actuel."
+
+msgid "goto_source"
+msgstr ""
+
+msgid "This action is only available when exactly one signal is selected and that signal has source object references."
+msgstr "Cette action n'est disponible que lorsqu'un seul signal est sélectionné et que ce signal possède des références d'objets sources."
+
+msgid "Metadata"
+msgstr "Métadonnées"
+
+msgid "Screenshot of the \"Metadata\" submenu."
+msgstr "Capture d'écran du sous-menu \"Métadonnées\"."
 
 msgid "Copy/paste metadata"
 msgstr "Copier/coller les métadonnées"
@@ -160,6 +199,78 @@ msgstr "Ajouter la température de l'échantillon : clé=``temperature``, modèl
 
 msgid "Mark processed signals: key=``is_processed``, pattern=``true``, conversion=bool → Sets ``is_processed=True`` for all selected signals"
 msgstr "Marquer les signaux traités : clé=``is_processed``, modèle=``true``, conversion=bool → Définit ``is_processed=True`` pour tous les signaux sélectionnés"
+
+msgid "Annotations"
+msgstr "Annotations"
+
+msgid "Annotations are visual elements that can be added to signals to highlight specific features, mark regions of interest, or add explanatory notes. DataLab provides a dedicated submenu in the \"Edit\" menu for managing annotations."
+msgstr "Les annotations sont des éléments visuels qui peuvent être ajoutés aux signaux pour mettre en évidence des fonctionnalités spécifiques, marquer des régions d'intérêt ou ajouter des notes explicatives. DataLab propose un sous-menu dédié dans le menu \"Édition\" pour gérer les annotations."
+
+msgid "Screenshot of the \"Annotations\" submenu."
+msgstr "Capture d'écran du sous-menu \"Annotations\"."
+
+msgid "Copy/paste annotations"
+msgstr "Copier/coller les annotations"
+
+msgid "Annotations can be copied from one signal and pasted to one or more other signals using the \"Copy annotations\" |annotations_copy| and \"Paste annotations\" |annotations_paste| actions. This is useful when you want to apply the same visual markers across multiple signals."
+msgstr "Les annotations peuvent être copiées d'un signal et collées dans un ou plusieurs autres signaux à l'aide des actions \"Copier les annotations\" |annotations_copy| et \"Coller les annotations\" |annotations_paste|. Cela est utile lorsque vous souhaitez appliquer les mêmes marqueurs visuels à plusieurs signaux."
+
+msgid "annotations_copy"
+msgstr ""
+
+msgid "annotations_paste"
+msgstr ""
+
+msgid "The \"Paste annotations\" action is only enabled when there are annotations in the clipboard (i.e., after using \"Copy annotations\")."
+msgstr "L'action \"Coller les annotations\" n'est activée que lorsqu'il y a des annotations dans le presse-papiers (c'est-à-dire après avoir utilisé \"Copier les annotations\")."
+
+msgid "Edit annotations"
+msgstr "Modifier les annotations"
+
+msgid "The \"Edit annotations\" |annotations_edit| action opens a dialog where you can view, add, modify, or remove annotations from the current signal. This provides a visual way to manage all annotations on a signal."
+msgstr "L'action \"Modifier les annotations\" |annotations_edit| ouvre une boîte de dialogue où vous pouvez afficher, ajouter, modifier ou supprimer des annotations du signal actuel. Cela fournit un moyen visuel de gérer toutes les annotations sur un signal."
+
+msgid "annotations_edit"
+msgstr ""
+
+msgid "Import/export annotations"
+msgstr "Importer/exporter les annotations"
+
+msgid "Annotations can be saved to and loaded from JSON files (.dlabann extension) using the \"Import annotations\" |annotations_import| and \"Export annotations\" |annotations_export| actions. This allows you to:"
+msgstr "Les annotations peuvent être enregistrées et chargées à partir de fichiers JSON (extension .dlabann) à l'aide des actions \"Importer les annotations\" |annotations_import| et \"Exporter les annotations\" |annotations_export|. Cela vous permet de :"
+
+msgid "annotations_import"
+msgstr ""
+
+msgid "annotations_export"
+msgstr ""
+
+msgid "Save annotation sets for later reuse"
+msgstr "Enregistrer les ensembles d'annotations pour une réutilisation ultérieure"
+
+msgid "Share annotations with colleagues"
+msgstr "Partager les annotations avec des collègues"
+
+msgid "Archive annotations separately from signal data"
+msgstr "Archiver les annotations séparément des données du signal"
+
+msgid "Apply the same annotations to different signals across sessions"
+msgstr "Appliquer les mêmes annotations à différents signaux au cours des sessions"
+
+msgid "The \"Export annotations\" action is only available when the selected signal has annotations."
+msgstr "L'action \"Exporter les annotations\" n'est disponible que lorsque le signal sélectionné a des annotations."
+
+msgid "Delete annotations"
+msgstr "Supprimer les annotations"
+
+msgid "The \"Delete annotations\" |annotations_delete| action removes all annotations from the selected signal(s). This action is only enabled when the selected signal(s) have annotations."
+msgstr "L'action \"Supprimer les annotations\" |annotations_delete| supprime toutes les annotations des signaux sélectionnés. Cette action n'est activée que lorsque les signaux sélectionnés ont des annotations."
+
+msgid "annotations_delete"
+msgstr ""
+
+msgid "Annotations are stored separately from metadata and analysis results. Deleting annotations does not affect ROIs or other metadata items."
+msgstr "Les annotations sont stockées séparément des métadonnées et des résultats d'analyse. La suppression des annotations n'affecte pas les ROIs ou d'autres éléments de métadonnées."
 
 msgid "Signal titles"
 msgstr "Titres des signaux"

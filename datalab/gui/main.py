@@ -767,6 +767,16 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                     menu.popup(self.pos())
                     qth.grab_save_window(menu, f"{panel.objectName()}_{name}")
                     menu.close()
+                if panel in (self.signalpanel, self.imagepanel):
+                    panel: BaseDataPanel
+                    # Take screenshots of Edit menu submenus (Metadata and Annotations)
+                    for submenu, suffix in (
+                        (panel.acthandler.metadata_submenu, "_edit_metadata"),
+                        (panel.acthandler.annotations_submenu, "_edit_annotations"),
+                    ):
+                        submenu.popup(self.pos())
+                        qth.grab_save_window(submenu, f"{panel.objectName()}{suffix}")
+                        submenu.close()
 
     # ------GUI setup
     def __restore_pos_and_size(self) -> None:

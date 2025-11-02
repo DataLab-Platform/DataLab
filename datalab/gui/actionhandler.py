@@ -154,6 +154,28 @@ class SelectCond:
             and selected_objects[0].roi is not None
         )
 
+    @staticmethod
+    # pylint: disable=unused-argument
+    def exactly_one_with_annotations(
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalObj | ImageObj],
+    ) -> bool:
+        """Exactly one signal or image has annotations"""
+        return (
+            len(selected_groups) == 0
+            and len(selected_objects) == 1
+            and selected_objects[0].has_annotations()
+        )
+
+    @staticmethod
+    # pylint: disable=unused-argument
+    def with_annotations(
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalObj | ImageObj],
+    ) -> bool:
+        """At least one signal or image has annotations"""
+        return any(obj.has_annotations() for obj in selected_objects)
+
 
 class ActionCategory(enum.Enum):
     """Action categories"""
@@ -204,6 +226,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.roi_remove_submenu: QW.QMenu | None = None
         # Store reference to results delete submenu
         self.results_delete_submenu: QW.QMenu | None = None
+        # Store reference to metadata and annotations submenus (for screenshots)
+        self.metadata_submenu: QW.QMenu | None = None
+        self.annotations_submenu: QW.QMenu | None = None
 
     @property
     def object_suffix(self) -> str:
@@ -248,6 +273,24 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     def _remove_single_roi_by_index(self, roi_index: int) -> None:
         """Helper method to remove a single ROI by index"""
         self.panel.processor.delete_single_roi(roi_index)
+
+    def has_metadata_in_clipboard(
+        self,
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalObj | ImageObj],
+    ) -> bool:
+        """Check if metadata clipboard is not empty"""
+        # pylint: disable=unused-argument
+        return bool(self.panel.metadata_clipboard)
+
+    def has_annotations_in_clipboard(
+        self,
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalObj | ImageObj],
+    ) -> bool:
+        """Check if annotations clipboard is not empty"""
+        # pylint: disable=unused-argument
+        return bool(self.panel.annotations_clipboard)
 
     def populate_results_delete_submenu(self) -> None:
         """Populate the Results Delete submenu dynamically based on current selection"""
@@ -335,13 +378,18 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     @contextmanager
     def new_menu(
-        self, title: str, icon_name: str | None = None
+        self,
+        title: str,
+        icon_name: str | None = None,
+        store_ref: str | None = None,
     ) -> Generator[None, None, None]:
         """Context manager for creating a new menu.
 
         Args:
             title: Menu title
             icon_name: Menu icon name. Defaults to None.
+            store_ref: Optional attribute name to store menu reference.
+             Defaults to None.
 
         Yields:
             None
@@ -360,6 +408,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.__submenus[key] = menu = QW.QMenu(title)
             if icon_name:
                 menu.setIcon(get_icon(icon_name))
+            # Store reference to menu if requested
+            if store_ref is not None:
+                setattr(self, store_ref, menu)
         else:
             menu = self.__submenus[key]
 
@@ -808,53 +859,109 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.delete_all_objects,
                 toolbar_pos=-1,
             )
-            self.new_action(
-                _("Copy metadata"),
-                separator=True,
-                icon_name="metadata_copy.svg",
-                tip=_("Copy metadata from selected %s") % self.OBJECT_STR,
-                triggered=self.panel.copy_metadata,
-                select_condition=SelectCond.exactly_one,
-                toolbar_pos=-1,
-            )
-            self.new_action(
-                _("Paste metadata"),
-                icon_name="metadata_paste.svg",
-                tip=_("Paste metadata into selected %s") % self.OBJECT_STR,
-                triggered=self.panel.paste_metadata,
-                toolbar_pos=-1,
-            )
-            self.new_action(
-                _("Add metadata") + "...",
-                icon_name="metadata_add.svg",
-                tip=_("Add a metadata item to selected %s") % self.OBJECT_STR,
-                triggered=self.panel.add_metadata,
-                select_condition=SelectCond.at_least_one,
-                toolbar_pos=-1,
-            )
-            self.new_action(
-                _("Import metadata") + "...",
-                icon_name="metadata_import.svg",
-                tip=_("Import metadata into %s") % self.OBJECT_STR,
-                triggered=self.panel.import_metadata_from_file,
-                select_condition=SelectCond.exactly_one,
-                toolbar_pos=-1,
-            )
-            self.new_action(
-                _("Export metadata") + "...",
-                icon_name="metadata_export.svg",
-                tip=_("Export selected %s metadata") % self.OBJECT_STR,
-                triggered=self.panel.export_metadata_from_file,
-                select_condition=SelectCond.exactly_one,
-                toolbar_pos=-1,
-            )
-            self.new_action(
-                _("Delete object metadata"),
-                icon_name="metadata_delete.svg",
-                tip=_("Delete all that is contained in object metadata"),
-                triggered=self.panel.delete_metadata,
-                toolbar_pos=-1,
-            )
+            with self.new_menu(
+                _("Metadata"), icon_name="metadata.svg", store_ref="metadata_submenu"
+            ):
+                self.new_action(
+                    _("Copy metadata"),
+                    icon_name="metadata_copy.svg",
+                    tip=_("Copy metadata from selected %s") % self.OBJECT_STR,
+                    triggered=self.panel.copy_metadata,
+                    select_condition=SelectCond.exactly_one,
+                    toolbar_pos=-1,
+                )
+                self.new_action(
+                    _("Paste metadata"),
+                    icon_name="metadata_paste.svg",
+                    tip=_("Paste metadata into selected %s") % self.OBJECT_STR,
+                    triggered=self.panel.paste_metadata,
+                    select_condition=self.has_metadata_in_clipboard,
+                    toolbar_pos=-1,
+                )
+                self.new_action(
+                    _("Add metadata") + "...",
+                    separator=True,
+                    icon_name="metadata_add.svg",
+                    tip=_("Add a metadata item to selected %s") % self.OBJECT_STR,
+                    triggered=self.panel.add_metadata,
+                    select_condition=SelectCond.at_least_one,
+                    toolbar_pos=-1,
+                )
+                self.new_action(
+                    _("Import metadata") + "...",
+                    icon_name="metadata_import.svg",
+                    tip=_("Import metadata into %s") % self.OBJECT_STR,
+                    triggered=self.panel.import_metadata_from_file,
+                    select_condition=SelectCond.exactly_one,
+                    toolbar_pos=-1,
+                )
+                self.new_action(
+                    _("Export metadata") + "...",
+                    icon_name="metadata_export.svg",
+                    tip=_("Export selected %s metadata") % self.OBJECT_STR,
+                    triggered=self.panel.export_metadata_from_file,
+                    select_condition=SelectCond.exactly_one,
+                    toolbar_pos=-1,
+                )
+                self.new_action(
+                    _("Delete object metadata"),
+                    separator=True,
+                    icon_name="metadata_delete.svg",
+                    tip=_("Delete all that is contained in object metadata"),
+                    triggered=self.panel.delete_metadata,
+                    toolbar_pos=-1,
+                )
+            with self.new_menu(
+                _("Annotations"),
+                icon_name="annotations.svg",
+                store_ref="annotations_submenu",
+            ):
+                self.new_action(
+                    _("Copy annotations"),
+                    icon_name="annotations_copy.svg",
+                    tip=_("Copy annotations from selected %s") % self.OBJECT_STR,
+                    triggered=self.panel.copy_annotations,
+                    select_condition=SelectCond.exactly_one_with_annotations,
+                )
+                self.new_action(
+                    _("Paste annotations"),
+                    icon_name="annotations_paste.svg",
+                    tip=_("Paste annotations into selected %s") % self.OBJECT_STR,
+                    triggered=self.panel.paste_annotations,
+                    select_condition=self.has_annotations_in_clipboard,
+                )
+                self.new_action(
+                    _("Edit annotations") + "...",
+                    separator=True,
+                    icon_name="annotations_edit.svg",
+                    tip=_("Edit annotations of selected %s") % self.OBJECT_STR,
+                    triggered=lambda: self.panel.open_separate_view(
+                        edit_annotations=True
+                    ),
+                    select_condition=SelectCond.exactly_one,
+                )
+                self.new_action(
+                    _("Import annotations") + "...",
+                    icon_name="annotations_import.svg",
+                    tip=_("Import annotations into %s") % self.OBJECT_STR,
+                    triggered=self.panel.import_annotations_from_file,
+                    select_condition=SelectCond.exactly_one,
+                )
+                self.new_action(
+                    _("Export annotations") + "...",
+                    icon_name="annotations_export.svg",
+                    tip=_("Export selected %s annotations") % self.OBJECT_STR,
+                    triggered=self.panel.export_annotations_from_file,
+                    select_condition=SelectCond.exactly_one_with_annotations,
+                )
+                self.new_action(
+                    _("Delete annotations"),
+                    separator=True,
+                    icon_name="annotations_delete.svg",
+                    tip=_("Delete all annotations from selected %s") % self.OBJECT_STR,
+                    triggered=self.panel.delete_annotations,
+                    select_condition=SelectCond.with_annotations,
+                )
             self.new_action(
                 _("Insert object title as annotation label"),
                 separator=True,

@@ -8,7 +8,6 @@ PlotPy Adapter Base Object Module
 from __future__ import annotations
 
 import abc
-import json
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -26,10 +25,9 @@ from sigima.objects.base import (
 )
 
 from datalab.adapters_metadata import GeometryAdapter
+from datalab.adapters_plotpy.annotations import PlotPyAnnotationAdapter
 from datalab.adapters_plotpy.base import (
     config_annotated_shape,
-    items_to_json,
-    json_to_items,
     set_plot_item_editable,
 )
 from datalab.adapters_plotpy.objects.scalar import GeometryPlotPyAdapter
@@ -58,6 +56,7 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
             "format": "%" + self.CONF_FMT.get(self.DEFAULT_FMT),
             "showlabel": Conf.view.show_label.get(False),
         }
+        self.annotation_adapter = PlotPyAnnotationAdapter(obj)
 
     def get_obj_option(self, name: str) -> Any:
         """Get object option value.
@@ -96,10 +95,17 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
         Args:
             items: annotation plot items
         """
-        ann_items = json_to_items(self.obj.annotations)
-        ann_items.extend(items)
-        if ann_items:
-            self.obj.annotations = items_to_json(ann_items)
+        # Use the new annotation adapter
+        self.annotation_adapter.add_items(items)
+
+    def set_annotations_from_items(self, items: list) -> None:
+        """Set object annotations (annotation plot items), replacing any existing ones.
+
+        Args:
+            items: annotation plot items
+        """
+        # Use the new annotation adapter
+        self.annotation_adapter.set_items(items)
 
     @abc.abstractmethod
     def add_label_with_title(self, title: str | None = None) -> None:
@@ -143,15 +149,13 @@ class BaseObjPlotPyAdapter(Generic[TypeObj, TypePlotItem]):
                 except (ValueError, TypeError):
                     # Skip invalid entries
                     pass
-        if self.obj.annotations:
-            try:
-                for item in json_to_items(self.obj.annotations):
-                    if isinstance(item, AnnotatedShape):
-                        config_annotated_shape(item, fmt, lbl)
-                    set_plot_item_editable(item, editable)
-                    yield item
-            except json.decoder.JSONDecodeError:
-                pass
+        # Use the new annotation adapter to get items
+        if self.obj.has_annotations():
+            for item in self.annotation_adapter.get_items():
+                if isinstance(item, AnnotatedShape):
+                    config_annotated_shape(item, fmt, lbl)
+                set_plot_item_editable(item, editable)
+                yield item
 
     def update_plot_item_parameters(self, item: TypePlotItem) -> None:
         """Update plot item parameters from object data/metadata

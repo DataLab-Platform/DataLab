@@ -6,6 +6,48 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **Annotation management**: New features for managing plot annotations on signals and images
+  * New "Annotations" submenu in Edit menu with dedicated annotation operations
+  * **Copy annotations**: Copy annotations from selected object to clipboard
+    * Only enabled when exactly one object with annotations is selected
+  * **Paste annotations**: Paste annotations from clipboard to selected object(s)
+    * Merges pasted annotations with any existing annotations on target objects
+    * Only enabled when annotations clipboard is not empty
+    * Works with multiple selected objects for batch annotation application
+  * **Edit annotations**: Open annotation editor dialog for interactive annotation management
+    * Create, modify, and delete plot annotations (shapes, labels, markers, etc.)
+    * Visual editor with same PlotPy tools as main plot view
+    * Changes are immediately applied to selected object
+  * **Import annotations**: Load annotations from .dlabann JSON files
+    * Merges imported annotations with existing annotations
+    * Supports versioned annotation format for future compatibility
+  * **Export annotations**: Save annotations to .dlabann JSON files
+    * Preserves all annotation properties for later reuse
+    * Human-readable JSON format with version information
+  * **Delete annotations**: Remove all annotations from selected object(s)
+    * Only enabled when at least one selected object has annotations
+    * Confirmation dialog prevents accidental deletion
+    * Works with multiple selected objects for batch deletion
+  * Annotations are managed using Sigima 1.0 annotation API
+  * Annotations are stored in object metadata and preserved across save/load operations
+  * Clipboard-based workflow enables efficient annotation reuse across objects
+  * Independent from ROI management - annotations and ROIs can coexist on same object
+
+* **Metadata management improvements**: Enhanced metadata handling with clipboard-based workflow
+  * Reorganized Edit menu with new "Metadata" submenu grouping all metadata operations
+  * **Paste metadata** action now only enabled when metadata clipboard is not empty
+    * Prevents confusion when no metadata is available to paste
+    * Clipboard state is checked dynamically as object selection changes
+
+* **Bug fixes**:
+  * **Action enable states not updated after operations**: Fixed issue where menu action states
+    were not updated after performing annotation or metadata operations
+    * After copying/pasting/deleting annotations or metadata, action states now refresh immediately
+    * Users no longer need to select another object to see correct action enabled/disabled states
+    * Examples: "Delete annotations" now disables immediately when annotations are deleted,
+      "Paste annotations" enables immediately when annotations are copied
+    * Improves user experience by keeping UI state synchronized with actual object state
+
 * **Interactive object creation and processing**: New interactive workflow for creating and processing objects
   * **Interactive object creation**: Signal/image creation parameters can now be modified after creation
     * When creating a new signal or image (Gaussian, sine, etc.), a new "Creation" tab appears in the object properties panel

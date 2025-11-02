@@ -1,14 +1,14 @@
 .. _ima-menu-edit:
 
-Manipulate metadata
-===================
+Manipulate metadata and annotations
+===================================
 
-This section describes how to manipulate metadata in DataLab.
+This section describes how to manipulate metadata and annotations in DataLab.
 
 Image metadata contains various information about the image or its representation,
-such as view settings, Regions Of Interest (ROIs), analysis results, and any other
-information that you may have added to the metadata of an image (or that comes from
-the image file itself).
+such as view settings, Regions Of Interest (ROIs), processing chain history,
+analysis results, and any other information that you may have added to the metadata
+of an image (or that comes from the image file itself).
 
 .. seealso::
 
@@ -22,10 +22,58 @@ The "Edit" menu allows you to perform classic editing operations on the current 
 or group of images (create/rename group, move up/down, delete image/group of images,
 etc.).
 
-It also allows you to manipulate metadata associated with the current image.
+As detailed below, it also allows you to:
+
+- Navigate and utilize the processing chain history through actions like "Recompute"
+  and "Select source objects".
+- Manipulate metadata and annotations associated with the current image, thanks to the
+  "Metadata" and "Annotations" submenus which provide the following features.
+
+Recompute
+---------
+
+The "Recompute" |recompute| action allows you to recompute the selected image(s) using
+their original processing parameters. This is useful when you want to re-execute the
+processing chain that was used to create an image, for example after modifying global
+settings or dependencies.
+
+.. |recompute| image:: ../../../datalab/data/icons/edit/recompute.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. note::
+
+    This action is only available for images that were created through processing
+    operations and have stored processing parameters.
+
+Select source objects
+---------------------
+
+The "Select source objects" |goto_source| action allows you to select the source
+object(s) that were used to create the currently selected image. This helps trace
+back the processing history and understand which original images were used as input
+for the current result.
+
+.. |goto_source| image:: ../../../datalab/data/icons/edit/goto_source.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. note::
+
+    This action is only available when exactly one image is selected and that image
+    has source object references.
+
+Metadata
+--------
+
+.. figure:: /images/shots/i_edit_metadata.png
+
+    Screenshot of the "Metadata" submenu.
 
 Copy/paste metadata
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 As metadata contains useful information about the image, it can be copied and pasted
 from one image to another by selecting the "Copy metadata" |metadata_copy| and
@@ -58,7 +106,7 @@ This feature allows you to tranfer those information from one image to another:
     or simply add the metadata keys that are not present in the destination image.
 
 Import/export metadata
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 Metadata can also be imported and exported from/to a JSON file using the "Import
 metadata" |metadata_import| and "Export metadata" |metadata_export| actions in the
@@ -77,7 +125,7 @@ metadata to a file and then import it back later.
     :class: dark-light no-scaled-link
 
 Delete metadata
----------------
+^^^^^^^^^^^^^^^
 
 When deleting metadata using the "Delete metadata" |metadata_delete| action in the
 "Edit" menu, you will be prompted to confirm the deletion of Region of Interests (ROIs)
@@ -91,7 +139,7 @@ associated with the image will be lost.
     :class: dark-light no-scaled-link
 
 Add metadata
-------------
+^^^^^^^^^^^^
 
 The "Add metadata" |metadata_add| action allows you to add custom metadata items to
 one or more selected images. This is useful for tagging images with experiment IDs,
@@ -137,6 +185,92 @@ You can also use format modifiers:
 
 - Flag calibrated images: key=``is_calibrated``, pattern=``true``, conversion=bool
   → Sets ``is_calibrated=True`` for all selected images
+
+Annotations
+-----------
+
+Annotations are visual elements that can be added to images to highlight specific
+features, mark regions of interest, or add explanatory notes. DataLab provides a
+dedicated submenu in the "Edit" menu for managing annotations.
+
+.. figure:: /images/shots/i_edit_annotations.png
+
+    Screenshot of the "Annotations" submenu.
+
+Copy/paste annotations
+^^^^^^^^^^^^^^^^^^^^^^
+
+Annotations can be copied from one image and pasted to one or more other images
+using the "Copy annotations" |annotations_copy| and "Paste annotations" |annotations_paste|
+actions. This is useful when you want to apply the same visual markers across multiple
+images.
+
+.. |annotations_copy| image:: ../../../datalab/data/icons/edit/annotations_copy.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |annotations_paste| image:: ../../../datalab/data/icons/edit/annotations_paste.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+The "Paste annotations" action is only enabled when there are annotations in the
+clipboard (i.e., after using "Copy annotations").
+
+Edit annotations
+^^^^^^^^^^^^^^^^
+
+The "Edit annotations" |annotations_edit| action opens a dialog where you can view,
+add, modify, or remove annotations from the current image. This provides a visual
+way to manage all annotations on an image.
+
+.. |annotations_edit| image:: ../../../datalab/data/icons/edit/annotations_edit.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+Import/export annotations
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Annotations can be saved to and loaded from JSON files (.dlabann extension) using
+the "Import annotations" |annotations_import| and "Export annotations" |annotations_export|
+actions. This allows you to:
+
+- Save annotation sets for later reuse
+- Share annotations with colleagues
+- Archive annotations separately from image data
+- Apply the same annotations to different images across sessions
+
+.. |annotations_import| image:: ../../../datalab/data/icons/edit/annotations_import.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |annotations_export| image:: ../../../datalab/data/icons/edit/annotations_export.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+The "Export annotations" action is only available when the selected image has
+annotations.
+
+Delete annotations
+^^^^^^^^^^^^^^^^^^
+
+The "Delete annotations" |annotations_delete| action removes all annotations from the
+selected image(s). This action is only enabled when the selected image(s) have
+annotations.
+
+.. |annotations_delete| image:: ../../../datalab/data/icons/edit/annotations_delete.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. note::
+
+    Annotations are stored separately from metadata and analysis results. Deleting
+    annotations does not affect ROIs or other metadata items.
 
 Image titles
 ------------

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-02 10:44+0100\n"
+"POT-Creation-Date: 2025-11-02 16:19+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -126,6 +126,9 @@ msgstr "Supprimer tout"
 msgid "Delete all groups and objects"
 msgstr "Supprimer tous les groupes et objets"
 
+msgid "Metadata"
+msgstr "Métadonnées"
+
 msgid "Copy metadata"
 msgstr "Copier les métadonnées"
 
@@ -167,6 +170,51 @@ msgstr "Supprimer les métadonnées"
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
+msgid "Annotations"
+msgstr "Annotations"
+
+msgid "Copy annotations"
+msgstr "Copier les annotations"
+
+#, python-format
+msgid "Copy annotations from selected %s"
+msgstr "Copier les annotations de l'objet %s sélectionné"
+
+msgid "Paste annotations"
+msgstr "Coller les annotations"
+
+#, python-format
+msgid "Paste annotations into selected %s"
+msgstr "Coller les annotations dans l'objet %s sélectionné"
+
+msgid "Edit annotations"
+msgstr "Modifier les annotations"
+
+#, python-format
+msgid "Edit annotations of selected %s"
+msgstr "Modifier les annotations de l'objet %s sélectionné"
+
+msgid "Import annotations"
+msgstr "Importer les annotations"
+
+#, python-format
+msgid "Import annotations into %s"
+msgstr "Importer les annotations dans l'objet %s"
+
+msgid "Export annotations"
+msgstr "Exporter les annotations"
+
+#, python-format
+msgid "Export selected %s annotations"
+msgstr "Exporter les annotations de l'objet %s sélectionné"
+
+msgid "Delete annotations"
+msgstr "Supprimer les annotations"
+
+#, python-format
+msgid "Delete all annotations from selected %s"
+msgstr "Supprimer toutes les annotations de l'objet %s sélectionné"
+
 msgid "Insert object title as annotation label"
 msgstr "Insérer le titre de l'objet sous forme d'annotation"
 
@@ -197,13 +245,6 @@ msgstr "Voir dans une nouvelle fenêtre"
 #, python-format
 msgid "View selected %s in a new window"
 msgstr "Voir l'objet %s sélectionné dans une nouvelle fenêtre"
-
-msgid "Edit annotations"
-msgstr "Modifier les annotations"
-
-#, python-format
-msgid "Edit annotations of selected %s"
-msgstr "Modifier les annotations de l'objet %s sélectionné"
 
 msgid "Refresh manually"
 msgstr "Rafraîchir manuellement"
@@ -1159,9 +1200,6 @@ msgstr "1 objet source n'existe plus."
 #, python-format
 msgid "%d source objects no longer exist"
 msgstr "%d objets source n'existent plus."
-
-msgid "Annotations"
-msgstr "Annotations"
 
 msgid "Show results obtained from previous analysis"
 msgstr "Afficher les résultats obtenus avec des analyses réalisées précédemment"
@@ -3105,4 +3143,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

@@ -35,7 +35,14 @@ from qtpy.compat import (
     getopenfilenames,
     getsavefilename,
 )
-from sigima.io import read_metadata, read_roi, write_metadata, write_roi
+from sigima.io import (
+    read_annotations,
+    read_metadata,
+    read_roi,
+    write_annotations,
+    write_metadata,
+    write_roi,
+)
 from sigima.io.base import get_file_extensions
 from sigima.io.common.basename import format_basenames
 from sigima.objects import (
@@ -59,7 +66,7 @@ from datalab.adapters_metadata import (
     create_resultdata_dict,
     show_resultdata,
 )
-from datalab.adapters_plotpy import create_adapter_from_object, items_to_json
+from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui import actionhandler, objectview
@@ -1196,7 +1203,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.plothandler: SignalPlotHandler | ImagePlotHandler = None
         self.processor: SignalProcessor | ImageProcessor = None
         self.acthandler: actionhandler.BaseActionHandler = None
-        self.__metadata_clipboard = {}
+        self.metadata_clipboard = {}
+        self.annotations_clipboard: list[dict[str, Any]] = []
         self.__roi_clipboard: TypeROI | None = None
         self.context_menu = QW.QMenu()
         self.__separate_views: dict[QW.QDialog, TypeObj] = {}
@@ -1485,11 +1493,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     def copy_metadata(self) -> None:
         """Copy object metadata"""
         obj = self.objview.get_sel_objects()[0]
-        self.__metadata_clipboard = obj.metadata.copy()
+        self.metadata_clipboard = obj.metadata.copy()
 
         # Rename geometry results to avoid conflicts when pasting to same object type
         new_pref = get_short_id(obj) + "_"
         self._rename_results_in_clipboard(new_pref)
+
+        # Update action states (e.g., "Paste metadata" should now be enabled)
+        self.selection_changed()
 
     def _rename_results_in_clipboard(self, prefix: str) -> None:
         """Rename geometry and table results in clipboard to avoid conflicts.
@@ -1499,12 +1510,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         for aclass in (GeometryAdapter, TableAdapter):
             result_keys = [
-                k for k, v in self.__metadata_clipboard.items() if aclass.match(k, v)
+                k for k, v in self.metadata_clipboard.items() if aclass.match(k, v)
             ]
             for dict_key in result_keys:
                 try:
                     # Get the result data
-                    result_data = self.__metadata_clipboard[dict_key]
+                    result_data = self.metadata_clipboard[dict_key]
 
                     # Update the title in the result data
                     if isinstance(result_data, dict) and "title" in result_data:
@@ -1517,8 +1528,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         )
 
                         # Remove old entry and add new one
-                        del self.__metadata_clipboard[dict_key]
-                        self.__metadata_clipboard[new_dict_key] = result_data
+                        del self.metadata_clipboard[dict_key]
+                        self.metadata_clipboard[new_dict_key] = result_data
 
                 except (KeyError, ValueError, IndexError, TypeError):
                     # If we can't process this result, leave it as is
@@ -1538,18 +1549,18 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if not param.edit(parent=self.parentWidget()):
                 return
         metadata = {}
-        if param.keep_roi and ROI_KEY in self.__metadata_clipboard:
-            metadata[ROI_KEY] = self.__metadata_clipboard[ROI_KEY]
+        if param.keep_roi and ROI_KEY in self.metadata_clipboard:
+            metadata[ROI_KEY] = self.metadata_clipboard[ROI_KEY]
         if param.keep_geometry:
-            for key, value in self.__metadata_clipboard.items():
+            for key, value in self.metadata_clipboard.items():
                 if GeometryAdapter.match(key, value):
                     metadata[key] = value
         if param.keep_tables:
-            for key, value in self.__metadata_clipboard.items():
+            for key, value in self.metadata_clipboard.items():
                 if TableAdapter.match(key, value):
                     metadata[key] = value
         if param.keep_other:
-            for key, value in self.__metadata_clipboard.items():
+            for key, value in self.metadata_clipboard.items():
                 if (
                     not GeometryAdapter.match(key, value)
                     and not TableAdapter.match(key, value)
@@ -2117,6 +2128,74 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 Conf.main.base_dir.set(filename)
                 write_metadata(filename, obj.metadata)
 
+    def copy_annotations(self) -> None:
+        """Copy annotations from selected object"""
+        obj = self.objview.get_sel_objects(include_groups=True)[0]
+        self.annotations_clipboard = obj.get_annotations()
+        # Update action states (e.g., "Paste annotations" should now be enabled)
+        self.selection_changed()
+
+    def paste_annotations(self) -> None:
+        """Paste annotations to selected object(s)"""
+        if not self.annotations_clipboard:
+            return
+        sel_objects = self.objview.get_sel_objects(include_groups=True)
+        for obj in sel_objects:
+            obj.set_annotations(self.annotations_clipboard)
+        self.refresh_plot("selected", True, False)
+        # Update action states (e.g., annotation-related actions should now be enabled)
+        self.selection_changed()
+
+    def import_annotations_from_file(self, filename: str | None = None) -> None:
+        """Import annotations from file (JSON).
+
+        Args:
+            filename: File name
+        """
+        if filename is None:  # pragma: no cover
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                filename, _filter = getopenfilename(
+                    self, _("Import annotations"), basedir, "*.dlabann"
+                )
+        if filename:
+            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
+                Conf.main.base_dir.set(filename)
+                obj = self.objview.get_sel_objects(include_groups=True)[0]
+                annotations = read_annotations(filename)
+                obj.set_annotations(annotations)
+            self.refresh_plot("selected", True, False)
+            # Update action states (annotation-related actions should now be enabled)
+            self.selection_changed()
+
+    def export_annotations_from_file(self, filename: str | None = None) -> None:
+        """Export annotations to file (JSON).
+
+        Args:
+            filename: File name
+        """
+        obj = self.objview.get_sel_objects(include_groups=True)[0]
+        if filename is None:  # pragma: no cover
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                filename, _filt = getsavefilename(
+                    self, _("Export annotations"), basedir, "*.dlabann"
+                )
+        if filename:
+            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
+                Conf.main.base_dir.set(filename)
+                annotations = obj.get_annotations()
+                write_annotations(filename, annotations)
+
+    def delete_annotations(self) -> None:
+        """Delete all annotations from selected object(s)"""
+        sel_objects = self.objview.get_sel_objects(include_groups=True)
+        for obj in sel_objects:
+            obj.clear_annotations()
+        self.refresh_plot("selected", True, False)
+        # Update action states (annotation-related actions should now be disabled)
+        self.selection_changed()
+
     def import_roi_from_file(self, filename: str | None = None) -> None:
         """Import regions of interest from file (JSON).
 
@@ -2477,7 +2556,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if not item.is_readonly() and is_plot_item_serializable(item):
                     rw_items.append(item)
             obj = self.__separate_views[dlg]
-            obj.annotations = items_to_json(rw_items)
+            # Use the annotation adapter to set annotations in the new format
+            adapter = create_adapter_from_object(obj)
+            adapter.set_annotations_from_items(rw_items)
             self.selection_changed(update_items=True)
         self.__separate_views.pop(dlg)
         dlg.deleteLater()
