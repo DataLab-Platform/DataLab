@@ -95,6 +95,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Ideal for analyzing sensor data, temperature logs, and time-series measurements
   * This closes [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258) - Add support for CSV files with date/time X-axis
 
+* **Enhance metadata handling by adding function name context to results**:
+  * When computation functions (e.g., `full_width_at_y`, `x_at_y`) create results with parameters, the function name is now stored
+  * Analysis tab displays function name as a comment above parameter information for better context
+  * Helps distinguish identical parameter classes (e.g., `OrdinateParam`) used by different functions
+  * Improves clarity when reviewing analysis results with multiple computation parameters
+
 * Multi-object property editing:
   * The properties panel now supports applying property changes to multiple selected objects simultaneously.
   * When multiple signals or images are selected, modifying and applying properties updates all selected objects, not just the current one.

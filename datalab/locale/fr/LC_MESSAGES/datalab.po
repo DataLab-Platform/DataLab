@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-10-31 16:25+0100\n"
+"POT-Creation-Date: 2025-11-02 10:38+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -932,6 +932,10 @@ msgstr "Historique"
 
 msgid "Properties"
 msgstr "Propriétés"
+
+#, python-format
+msgid "Parameters for function `%s`"
+msgstr "Paramètres pour la fonction `%s`"
 
 msgid "Original object"
 msgstr "Objet original"
@@ -1937,6 +1941,15 @@ msgstr "Contraste"
 
 msgid "Compute contrast of a signal, i.e. (max-min)/(max+min), e.g. for an image profile"
 msgstr "Calcule le contraste d'un signal, c'est-à-dire (max-min)/(max+min), p.ex. pour un profil d'image"
+
+msgid "Full width at y"
+msgstr "Largeur à y=..."
+
+msgid "Abscissa at y"
+msgstr "Abscisse à y=..."
+
+msgid "Ordinate at x"
+msgstr "Ordonnée à x=..."
 
 msgid "Edit profile parameters"
 msgstr "Modifier les paramètres du profil"

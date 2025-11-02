@@ -270,6 +270,13 @@ class ObjectProp(QW.QTabWidget):
                 if param is not None:
                     if text:
                         text += "<br><br>"
+                    # Get function name for context
+                    func_name = adapter.get_func_name()
+                    if func_name:
+                        # Add function name as a header for better context
+                        param.set_comment(
+                            "(" + _("Parameters for function `%s`") % func_name + ")"
+                        )
                     text += param.to_html()
         self.analysis_parameter.setText(text)
 

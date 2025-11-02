@@ -164,17 +164,25 @@ class BaseResultAdapter(ABC):
         return f"{self.META_PREFIX}{self.unique_key}{self.META_SUFFIX}"
 
     def add_to(
-        self, obj: SignalObj | ImageObj, param: gds.DataSet | None = None
+        self,
+        obj: SignalObj | ImageObj,
+        param: gds.DataSet | None = None,
+        func_name: str | None = None,
     ) -> None:
         """Add result to object metadata.
 
         Args:
             obj: Signal or image object
             param: Optional parameter dataset associated with this result
+            func_name: Optional name of the computation function that produced
+             this result (used to provide context when displaying parameters)
         """
         # Store parameter in result attrs (will be serialized with result)
         if param is not None:
             self.result.attrs["param_json"] = gds.dataset_to_json(param)
+        # Store function name for context when displaying parameters
+        if func_name is not None:
+            self.result.attrs["func_name"] = func_name
         obj.metadata[self.metadata_key] = self.result.to_dict()
 
     def get_param(self, obj: SignalObj | ImageObj) -> gds.DataSet | None:
@@ -190,6 +198,14 @@ class BaseResultAdapter(ABC):
         if param_json is not None:
             return gds.json_to_dataset(param_json)
         return None
+
+    def get_func_name(self) -> str | None:
+        """Get the computation function name associated with this result.
+
+        Returns:
+            Function name if present, None otherwise
+        """
+        return self.result.attrs.get("func_name")
 
     def remove_from(self, obj: SignalObj | ImageObj) -> None:
         """Remove result from object metadata.

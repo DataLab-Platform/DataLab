@@ -1308,7 +1308,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     raise TypeError("Unsupported result type")
 
                 # Add result shape to object's metadata
-                adapter.add_to(obj, param)
+                # Pass function name for better parameter context in the Analysis tab
+                adapter.add_to(obj, param, func_name=func.__name__)
 
                 # Append result to result data for later display
                 rdata.append(adapter, obj)

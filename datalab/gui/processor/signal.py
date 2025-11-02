@@ -714,7 +714,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             dlg = signaldeltax.SignalDeltaXDialog(obj, parent=self.mainwindow)
             if exec_dialog(dlg):
-                param = sips.OrdinateParam()
+                param = sips.OrdinateParam(_("Full width at y"))
                 param.y = dlg.get_y_value()
             else:
                 return None
@@ -731,7 +731,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 obj, cursor_orientation="horizontal", parent=self.mainwindow
             )
             if exec_dialog(dlg):
-                param = sips.OrdinateParam()
+                param = sips.OrdinateParam(_("Abscissa at y"))
                 param.y = dlg.get_y_value()
             else:
                 return None
@@ -748,7 +748,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 obj, cursor_orientation="vertical", parent=self.mainwindow
             )
             if exec_dialog(dlg):
-                param = sips.AbscissaParam()
+                param = sips.AbscissaParam(_("Ordinate at x"))
                 param.x = dlg.get_x_value()
             else:
                 return None
