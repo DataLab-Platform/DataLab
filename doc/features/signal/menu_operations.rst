@@ -256,9 +256,8 @@ Other mathematical functions
       - Based on `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_
     * - |integral| Integral
       - Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_
-    * - |signal_to_image| Combine signals into image
-      - Combine multiple signals into a 2D image.
-        Signals can be arranged as rows or columns,
+    * - |signal_to_image| Assemble signals into image
+      - Create a 2D image by assembling selected 1D signals as rows or columns,
         with optional normalization.
 
 

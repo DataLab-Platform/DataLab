@@ -172,12 +172,12 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         )
         self.register_n_to_1(
             sips.signals_to_image,
-            _("Combine signals into image"),
+            _("Assemble signals into image"),
             paramclass=sigima_base.SignalsToImageParam,
             icon_name="signals_to_image.svg",
             comment=_(
-                "Combine multiple signals into a 2D image.\n"
-                "Signals can be arranged as rows or columns,\n"
+                "Assemble multiple signals into a 2D image.\n"
+                "Signals can be stacked as rows or columns, "
                 "with optional normalization."
             ),
         )
