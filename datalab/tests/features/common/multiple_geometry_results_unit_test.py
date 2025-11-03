@@ -79,6 +79,7 @@ def test_replace_same_title():
         kind=KindShape.SEGMENT,
         coords=np.array([[3.5, 0.6, 6.5, 0.6]]),
         roi_indices=None,
+        func_name="fwhm",
         attrs={"method": "zero-crossing"},
     )
 
@@ -88,6 +89,7 @@ def test_replace_same_title():
         kind=KindShape.SEGMENT,
         coords=np.array([[3.6, 0.6, 6.6, 0.6]]),  # Slightly different
         roi_indices=None,
+        func_name="fwhm",
         attrs={"method": "gaussian"},
     )
 
