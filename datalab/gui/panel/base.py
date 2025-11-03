@@ -2740,10 +2740,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         self.mainwindow.signalpanel.add_object(obj)
 
-    def __plot_result(
-        self, category: str, rdata: ResultData, objs: list[SignalObj | ImageObj]
-    ) -> None:
-        """Plot results for a specific category"""
+    def __create_plot_result_param_class(self, rdata: ResultData) -> type[gds.DataSet]:
+        """Create PlotResultParam class dynamically based on result data.
+
+        Args:
+            rdata: Result data
+
+        Returns:
+            PlotResultParam class
+        """
+        # Build X and Y choices from result data headers
         xchoices = (("indices", _("Indices")),)
         for xlabel in rdata.headers:
             # If this column data is not numeric, we skip it:
@@ -2754,25 +2760,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             xchoices += ((xlabel, xlabel),)
         ychoices = xchoices[1:]
 
-        # Regrouping ResultShape results by their `title` attribute:
-        grouped_results: dict[str, list[GeometryAdapter | TableAdapter]] = {}
-        for result in rdata.results:
-            grouped_results.setdefault(result.title, []).append(result)
-
-        # From here, results are already grouped by their `category` attribute,
-        # and then by their `title` attribute. We can now plot them.
-        #
-        # Now, we have two common use cases:
-        # 1. Plotting one curve per object (signal/image) and per `title`
-        #    attribute, if each selected object contains a result object
-        #    with multiple values (e.g. from a blob detection feature).
-        # 2. Plotting one curve per `title` attribute, if each selected object
-        #    contains a result object with a single value (e.g. from a FHWM
-        #    feature) - in that case, we select only the first value of each
-        #    result object.
-
-        # The default kind of plot depends on the number of values in each
-        # result and the number of selected objects:
+        # Determine default plot kind based on result data
         default_kind = (
             "one_curve_per_object"
             if any(len(result.to_dataframe()) > 1 for result in rdata.results)
@@ -2796,16 +2784,53 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indices")
             yaxis = gds.ChoiceItem(_("Y axis"), ychoices, default=ychoices[0][0])
 
-        comment = (
-            _(
-                "Plot results obtained from previous analyses.<br><br>"
-                "This plot is based on results associated with '%s' prefix."
+        return PlotResultParam
+
+    def __plot_result(
+        self,
+        category: str,
+        rdata: ResultData,
+        objs: list[SignalObj | ImageObj],
+        param: gds.DataSet | None = None,
+    ) -> None:
+        """Plot results for a specific category
+
+        Args:
+            category: Result category
+            rdata: Result data
+            objs: List of objects
+            param: Plot result parameters. If None, show dialog to get parameters.
+        """
+        # Regrouping ResultShape results by their `title` attribute:
+        grouped_results: dict[str, list[GeometryAdapter | TableAdapter]] = {}
+        for result in rdata.results:
+            grouped_results.setdefault(result.title, []).append(result)
+
+        # From here, results are already grouped by their `category` attribute,
+        # and then by their `title` attribute. We can now plot them.
+        #
+        # Now, we have two common use cases:
+        # 1. Plotting one curve per object (signal/image) and per `title`
+        #    attribute, if each selected object contains a result object
+        #    with multiple values (e.g. from a blob detection feature).
+        # 2. Plotting one curve per `title` attribute, if each selected object
+        #    contains a result object with a single value (e.g. from a FHWM
+        #    feature) - in that case, we select only the first value of each
+        #    result object.
+
+        if param is None:
+            # Create parameter class and show dialog
+            PlotResultParam = self.__create_plot_result_param_class(rdata)
+            comment = (
+                _(
+                    "Plot results obtained from previous analyses.<br><br>"
+                    "This plot is based on results associated with '%s' prefix."
+                )
+                % category
             )
-            % category
-        )
-        param = PlotResultParam(_("Plot results"), comment=comment)
-        if not param.edit(parent=self.parentWidget()):
-            return
+            param = PlotResultParam(_("Plot results"), comment=comment)
+            if not param.edit(parent=self.parentWidget()):
+                return
 
         if param.kind == "one_curve_per_title":
             # One curve per ROI (if any) and per result title
@@ -2865,13 +2890,34 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         stitle = f"{title} ({shid}){roi_suffix}"
                         self.__add_result_signal(x, y, stitle, param.xaxis, param.yaxis)
 
-    def plot_results(self) -> None:
-        """Plot results"""
+    def plot_results(
+        self,
+        kind: str | None = None,
+        xaxis: str | None = None,
+        yaxis: str | None = None,
+    ) -> None:
+        """Plot results
+
+        Args:
+            kind: Plot kind. Either "one_curve_per_object" or "one_curve_per_title".
+             If None, show dialog to get parameters.
+            xaxis: X axis column name. If None, show dialog to get parameters.
+            yaxis: Y axis column name. If None, show dialog to get parameters.
+        """
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
             for category, rdata in rdatadict.items():
-                self.__plot_result(category, rdata, objs)
+                param = None
+                if kind is not None and xaxis is not None and yaxis is not None:
+                    # Create parameter object programmatically
+                    PlotResultParam = self.__create_plot_result_param_class(rdata)
+                    param = PlotResultParam()
+                    param.kind = kind
+                    param.xaxis = xaxis
+                    param.yaxis = yaxis
+
+                self.__plot_result(category, rdata, objs, param)
         else:
             self.__show_no_result_warning()
 
