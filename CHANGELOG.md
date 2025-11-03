@@ -39,14 +39,8 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Prevents confusion when no metadata is available to paste
     * Clipboard state is checked dynamically as object selection changes
 
-* **Bug fixes**:
-  * **Action enable states not updated after operations**: Fixed issue where menu action states
-    were not updated after performing annotation or metadata operations
-    * After copying/pasting/deleting annotations or metadata, action states now refresh immediately
-    * Users no longer need to select another object to see correct action enabled/disabled states
-    * Examples: "Delete annotations" now disables immediately when annotations are deleted,
-      "Paste annotations" enables immediately when annotations are copied
-    * Improves user experience by keeping UI state synchronized with actual object state
+* **2D peak detection enhancements**: Added an option to choose the ROI geometry around detected peaks
+  (either rectangular or circular).
 
 * **Interactive object creation and processing**: New interactive workflow for creating and processing objects
   * **Interactive object creation**: Signal/image creation parameters can now be modified after creation
@@ -442,6 +436,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * This behavior matches the "Restore" action which collapses all nodes except the root level
 
 🛠️ Bug fixes:
+
+* **Action enable states not updated after operations**: Fixed issue where menu action states
+  were not updated after performing annotation or metadata operations
+  * After copying/pasting/deleting annotations or metadata, action states now refresh immediately
+  * Users no longer need to select another object to see correct action enabled/disabled states
+  * Examples: "Delete annotations" now disables immediately when annotations are deleted,
+    "Paste annotations" enables immediately when annotations are copied
+  * Improves user experience by keeping UI state synchronized with actual object state
 
 * **File import ordering**: Fixed inconsistent file ordering across platforms when importing images/signals
   * Files are now explicitly sorted alphabetically in all import methods (dialog, drag-and-drop, directory)

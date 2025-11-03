@@ -25,6 +25,7 @@ from sigima.objects import (
     PoissonDistributionParam,
     ROI2DParam,
     UniformDistributionParam,
+    create_image_roi_around_points,
 )
 from sigima.objects.scalar import GeometryResult
 from sigima.proc.decorator import ComputationMetadata
@@ -1191,5 +1192,29 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             data = self.panel.objview.get_sel_objects(include_groups=True)[0].data
             param.size = max(min(data.shape) // 40, 50)
 
+        # Get selected objects before processing
+        objs = self.panel.objview.get_sel_objects(include_groups=True)
+
+        # Run peak detection
         results = self.run_feature("peak_detection", param, edit=edit)
+
+        # Create ROIs around detected peaks if requested
+        if results and param.create_rois:
+            for obj, adapter in zip(objs, results.results):
+                obj: ImageObj
+                adapter: GeometryAdapter
+                try:
+                    obj.roi = create_image_roi_around_points(
+                        adapter.result.coords, geometry=param.roi_geometry
+                    )
+                except ValueError:
+                    continue
+            # Refresh plot to show new ROIs
+            self.panel.refresh_plot(
+                "selected",
+                update_items=True,
+                only_visible=False,
+                only_existing=True,
+            )
+
         return results

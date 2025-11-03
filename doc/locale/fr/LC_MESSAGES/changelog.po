@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 18:00+0100\n"
+"POT-Creation-Date: 2025-11-03 15:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -123,23 +123,8 @@ msgstr "Évite toute confusion lorsque aucune métadonnée n'est disponible pour
 msgid "Clipboard state is checked dynamically as object selection changes"
 msgstr "L'état du presse-papiers est vérifié dynamiquement lorsque la sélection d'objet change"
 
-msgid "**Bug fixes**:"
-msgstr "**Correctifs :**"
-
-msgid "**Action enable states not updated after operations**: Fixed issue where menu action states were not updated after performing annotation or metadata operations"
-msgstr "**Les états d'activation des actions ne sont pas mis à jour après les opérations** : Correction d'un problème où les états des actions de menu n'étaient pas mis à jour après l'exécution d'opérations d'annotation ou de métadonnées"
-
-msgid "After copying/pasting/deleting annotations or metadata, action states now refresh immediately"
-msgstr "Après la copie/le collage/la suppression d'annotations ou de métadonnées, les états des actions se rafraîchissent désormais immédiatement"
-
-msgid "Users no longer need to select another object to see correct action enabled/disabled states"
-msgstr "Les utilisateurs n'ont plus besoin de sélectionner un autre objet pour voir les états d'activation/désactivation des actions corrects"
-
-msgid "Examples: \"Delete annotations\" now disables immediately when annotations are deleted, \"Paste annotations\" enables immediately when annotations are copied"
-msgstr "Exemples : \"Supprimer les annotations\" se désactive désormais immédiatement lorsque les annotations sont supprimées, \"Coller les annotations\" s'active immédiatement lorsque les annotations sont copiées"
-
-msgid "Improves user experience by keeping UI state synchronized with actual object state"
-msgstr "Améliore l'expérience utilisateur en maintenant l'état de l'interface utilisateur synchronisé avec l'état réel de l'objet."
+msgid "**2D peak detection enhancements**: Added an option to choose the ROI geometry around detected peaks (either rectangular or circular)."
+msgstr "**Améliorations de la détection de pics 2D** : Ajout d'une option pour choisir la géométrie de la ROI autour des pics détectés (soit rectangulaire, soit circulaire)."
 
 msgid "**Interactive object creation and processing**: New interactive workflow for creating and processing objects"
 msgstr "**Création et traitement interactifs d'objets** : Nouveau flux de travail interactif pour la création et le traitement des objets"
@@ -1272,6 +1257,21 @@ msgstr "Ce comportement correspond à l'action \"Restaurer\" qui réduit tous le
 
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
+
+msgid "**Action enable states not updated after operations**: Fixed issue where menu action states were not updated after performing annotation or metadata operations"
+msgstr "**Les états d'activation des actions ne sont pas mis à jour après les opérations** : Correction d'un problème où les états des actions de menu n'étaient pas mis à jour après l'exécution d'opérations d'annotation ou de métadonnées"
+
+msgid "After copying/pasting/deleting annotations or metadata, action states now refresh immediately"
+msgstr "Après la copie/le collage/la suppression d'annotations ou de métadonnées, les états des actions se rafraîchissent désormais immédiatement"
+
+msgid "Users no longer need to select another object to see correct action enabled/disabled states"
+msgstr "Les utilisateurs n'ont plus besoin de sélectionner un autre objet pour voir les états d'activation/désactivation des actions corrects"
+
+msgid "Examples: \"Delete annotations\" now disables immediately when annotations are deleted, \"Paste annotations\" enables immediately when annotations are copied"
+msgstr "Exemples : \"Supprimer les annotations\" se désactive désormais immédiatement lorsque les annotations sont supprimées, \"Coller les annotations\" s'active immédiatement lorsque les annotations sont copiées"
+
+msgid "Improves user experience by keeping UI state synchronized with actual object state"
+msgstr "Améliore l'expérience utilisateur en maintenant l'état de l'interface utilisateur synchronisé avec l'état réel de l'objet."
 
 msgid "**File import ordering**: Fixed inconsistent file ordering across platforms when importing images/signals"
 msgstr "**Ordre d'importation des fichiers** : Correction de l'ordre incohérent des fichiers entre les plateformes lors de l'importation d'images/signaux"

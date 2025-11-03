@@ -16,16 +16,37 @@ from sigima.tests.data import create_peak_image
 from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
 
 
-def test_peak2d():
+def test_peak2d(screenshot: bool = False) -> None:
     """Run 2D peak detection scenario"""
     with datalab_test_app_context() as win:
         panel = win.imagepanel
         ima = create_peak_image()
         panel.add_object(ima)
+
+        # Test with ROI creation enabled (default)
         param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
-        panel.processor.run_feature("peak_detection", param)
+        results = panel.processor.compute_peak_detection(param)
+        assert results is not None, "Peak detection should return results"
+
+        # Get the processed image object
+        obj = panel.objview.get_current_object()
+        assert obj.roi is not None, "ROI should be created when create_rois=True"
+        assert not obj.roi.is_empty(), "ROI should not be empty"
+
+        # Test with ROI creation disabled
+        ima2 = create_peak_image()
+        panel.add_object(ima2)
+        param2 = sigima.params.Peak2DDetectionParam.create(create_rois=False)
+        panel.processor.compute_peak_detection(param2)
+
+        obj2 = panel.objview.get_current_object()
+        assert obj2.roi is None or obj2.roi.is_empty(), (
+            "ROI should not be created when create_rois=False"
+        )
+
         win.toggle_show_titles(False)
-        take_plotwidget_screenshot(panel, "peak2d_test")
+        if screenshot:
+            take_plotwidget_screenshot(panel, "peak2d_test")
 
 
 if __name__ == "__main__":
