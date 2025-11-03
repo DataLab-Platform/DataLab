@@ -131,20 +131,18 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
         # Use the object-level visible_only parameter for cleaner implementation
         dfs = [result.to_dataframe(visible_only=True) for result in rdata.results]
 
-        # Add comparison rows if we have multiple results of the same kind
-        if len(dfs) > 1:
-            dfs, updated_ylabels = _add_comparison_rows_to_dataframes(dfs, rdata)
-        else:
-            updated_ylabels = rdata.ylabels
-
+        # Combine all dataframes
         df = pd.concat(dfs, ignore_index=True)
+
+        # Add comparison columns if we have multiple results of the same kind
+        if len(dfs) > 1:
+            df = _add_comparison_columns_to_dataframe(df, rdata)
 
         # Remove roi_index column for display (not needed in the GUI)
         if "roi_index" in df.columns:
             df = df.drop(columns=["roi_index"])
 
-        # Use updated ylabels that account for comparison rows
-        df.set_index(pd.Index(updated_ylabels), inplace=True)
+        df.set_index(pd.Index(rdata.ylabels), inplace=True)
         dlg = DataFrameEditor(parent)
         dlg.setup_and_check(
             df,
@@ -158,24 +156,21 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
         exec_dialog(dlg)
 
 
-def _add_comparison_rows_to_dataframes(
-    dfs: list[pd.DataFrame], rdata: ResultData
-) -> tuple[list[pd.DataFrame], list[str]]:
-    """Add comparison rows between multiple dataframes with ROI-aware grouping.
+def _add_comparison_columns_to_dataframe(
+    df: pd.DataFrame, rdata: ResultData
+) -> pd.DataFrame:
+    """Add comparison columns to dataframe with ROI-aware grouping.
 
-    This function groups rows by signal/image object (using object ID from ylabels),
-    then adds comparison rows after each signal/image group.
+    For each original column, adds one comparison column showing the difference
+    between the current row and the corresponding reference row.
 
     Args:
-        dfs: List of DataFrames to add comparison rows to
+        df: Combined DataFrame with all results
         rdata: ResultData containing ylabels and short_ids
 
     Returns:
-        Tuple of (modified DataFrames list, modified ylabels list)
+        DataFrame with comparison columns added (one Δ column per original column)
     """
-    if len(dfs) <= 1:
-        return dfs, rdata.ylabels
-
     # Build signal/image groups:
     # list of (object_id, start_row, end_row) for each signal/image
     obj_groups = []
@@ -197,111 +192,98 @@ def _add_comparison_rows_to_dataframes(
 
     # If we only have one signal group, no need for comparisons
     if len(obj_groups) <= 1:
-        return dfs, rdata.ylabels
+        return df
 
     # Use the first signal group as reference
     reference_group = obj_groups[0]
-    reference_start, reference_end = reference_group[1], reference_group[2]
+    _ref_obj_id, reference_start, reference_end = reference_group
 
-    # Collect rows for reference signal (used for all comparisons)
-    combined_df = pd.concat(dfs, ignore_index=True)
-    reference_rows = combined_df.iloc[reference_start : reference_end + 1]
+    # Get columns to compare (exclude roi_index)
+    cols_to_compare = [col for col in df.columns if col != "roi_index"]
 
-    # Build result DataFrames and ylabels by processing each signal group
-    result_dfs = []
-    result_ylabels = []
+    # Create new dataframe with original columns plus one comparison column per
+    # original column
+    result_df = df.copy()
 
-    for group_idx, (obj_id, start, end) in enumerate(obj_groups):
-        # Add the signal group rows
-        group_rows = combined_df.iloc[start : end + 1]
-        group_df = pd.DataFrame(group_rows.values, columns=group_rows.columns)
-        result_dfs.append(group_df)
+    # Add comparison columns - one per original column
+    for col in cols_to_compare:
+        comparison_col_name = f"Δ({col})"
+        comparison_values = []
 
-        # Add corresponding ylabels
-        result_ylabels.extend(rdata.ylabels[start : end + 1])
+        # For each row in the entire dataframe
+        for row_idx in range(len(df)):
+            # Find which group this row belongs to
+            row_group_idx = None
+            for group_idx, (obj_id, start, end) in enumerate(obj_groups):
+                if start <= row_idx <= end:
+                    row_group_idx = group_idx
+                    break
 
-        # Add comparison rows (except for the reference signal)
-        if group_idx > 0:
-            comparison_df = _create_comparison_dataframe(reference_rows, group_rows)
-            result_dfs.append(comparison_df)
+            if row_group_idx == 0:
+                # Reference group - no comparison needed
+                comparison_values.append("")
+            elif row_group_idx is not None:
+                # Non-reference group - calculate comparison with corresponding
+                # reference row
+                group_start = obj_groups[row_group_idx][1]
+                ref_row_idx = reference_start + (row_idx - group_start)
+                if ref_row_idx <= reference_end:
+                    ref_val = df.iloc[ref_row_idx][col]
+                    curr_val = df.iloc[row_idx][col]
+                    comparison_values.append(
+                        _compute_comparison_value(ref_val, curr_val)
+                    )
+                else:
+                    comparison_values.append("")
+            else:
+                # Should not happen, but handle gracefully
+                comparison_values.append("")
 
-            # Add comparison ylabels
-            for i in range(len(comparison_df)):
-                # Use the same object ID as the current signal group
-                base_ylabel = rdata.ylabels[start + i]
-                ref_id = rdata.short_ids[reference_start]
-                comparison_ylabel = f"Δ vs {ref_id}: {base_ylabel}"
-                result_ylabels.append(comparison_ylabel)
+        # Insert comparison column right after the original column
+        col_idx = result_df.columns.get_loc(col)
+        result_df.insert(col_idx + 1, comparison_col_name, comparison_values)
 
-    return result_dfs, result_ylabels
+    return result_df
 
 
-def _create_comparison_dataframe(
-    reference_df: pd.DataFrame, current_df: pd.DataFrame
-) -> pd.DataFrame:
-    """Create a comparison dataframe showing differences between reference and current.
+def _compute_comparison_value(ref_val, curr_val) -> str:
+    """Compute a comparison value between reference and current values.
 
     Args:
-        reference_df: Reference dataframe (first result)
-        current_df: Current dataframe to compare against reference
+        ref_val: Reference value
+        curr_val: Current value to compare
 
     Returns:
-        DataFrame with comparison values
+        String representation of the comparison
     """
-    # Create comparison dataframe with same structure
-    comparison_data = []
+    # Handle different data types
+    if pd.isna(ref_val) or pd.isna(curr_val):
+        return "N/A"
+    elif isinstance(ref_val, str) or isinstance(curr_val, str):
+        # String comparison
+        return "=" if str(ref_val) == str(curr_val) else "≠"
+    elif isinstance(ref_val, (int, float, np.integer, np.floating)) and isinstance(
+        curr_val, (int, float, np.integer, np.floating)
+    ):
+        # Numeric comparison - show difference
+        diff = curr_val - ref_val
+        # For integers, check exact equality; for floats, use small tolerance
+        if isinstance(ref_val, (int, np.integer)) and isinstance(
+            curr_val, (int, np.integer)
+        ):
+            tolerance = 0
+        else:
+            tolerance = 1e-10
 
-    # Compare row by row
-    min_rows = min(len(reference_df), len(current_df))
-    for row_idx in range(min_rows):
-        ref_row = reference_df.iloc[row_idx]
-        curr_row = current_df.iloc[row_idx]
-        comparison_row = {}
-
-        for col in reference_df.columns:
-            if col == "roi_index":
-                comparison_row[col] = -999  # Special marker for comparison rows
-                continue
-
-            if col not in current_df.columns:
-                comparison_row[col] = "N/A"
-                continue
-
-            ref_val = ref_row[col]
-            curr_val = curr_row[col]
-
-            # Handle different data types
-            if pd.isna(ref_val) or pd.isna(curr_val):
-                comparison_row[col] = "N/A"
-            elif isinstance(ref_val, str) or isinstance(curr_val, str):
-                # String comparison
-                comparison_row[col] = "=" if str(ref_val) == str(curr_val) else "≠"
-            elif isinstance(
-                ref_val, (int, float, np.integer, np.floating)
-            ) and isinstance(curr_val, (int, float, np.integer, np.floating)):
-                # Numeric comparison - show difference
-                diff = curr_val - ref_val
-                # For integers, check exact equality; for floats, use small tolerance
-                if isinstance(ref_val, (int, np.integer)) and isinstance(
-                    curr_val, (int, np.integer)
-                ):
-                    tolerance = 0
-                else:
-                    tolerance = 1e-10
-
-                if abs(diff) <= tolerance:
-                    comparison_row[col] = "="
-                else:
-                    # Format the difference with appropriate sign
-                    sign = "+" if diff > 0 else ""
-                    comparison_row[col] = f"{sign}{diff:.4g}"
-            else:
-                # Default comparison
-                comparison_row[col] = "=" if ref_val == curr_val else "≠"
-
-        comparison_data.append(comparison_row)
-
-    return pd.DataFrame(comparison_data, columns=reference_df.columns)
+        if abs(diff) <= tolerance:
+            return "="
+        else:
+            # Format the difference with appropriate sign
+            sign = "+" if diff > 0 else ""
+            return f"{sign}{diff:.4g}"
+    else:
+        # Default comparison
+        return "=" if ref_val == curr_val else "≠"
 
 
 def resultadapter_to_html(
