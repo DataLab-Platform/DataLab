@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-03 11:53+0100\n"
+"POT-Creation-Date: 2025-11-03 16:57+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -246,12 +246,6 @@ msgstr "Voir dans une nouvelle fenêtre"
 msgid "View selected %s in a new window"
 msgstr "Voir l'objet %s sélectionné dans une nouvelle fenêtre"
 
-msgid "Refresh manually"
-msgstr "Rafraîchir manuellement"
-
-msgid "Refresh plot, even if auto-refresh is enabled"
-msgstr "Rafraîchit le graphique, même si le rafraîchissement automatique est activé"
-
 msgid "Constant Operations"
 msgstr "Opérations avec une constante"
 
@@ -315,6 +309,12 @@ msgstr "Tracer les résultats"
 
 msgid "Delete results"
 msgstr "Supprimer les résultats"
+
+msgid "Refresh manually"
+msgstr "Rafraîchir manuellement"
+
+msgid "Refresh plot, even if auto-refresh is enabled"
+msgstr "Rafraîchit le graphique, même si le rafraîchissement automatique est activé"
 
 msgid "signal"
 msgstr "signal"
@@ -516,12 +516,6 @@ msgstr "Créer une grille de ROI"
 msgid "Create a grid of regions of interest"
 msgstr "Créer une grille de régions d'intérêt"
 
-msgid "Show contrast panel"
-msgstr "Afficher le panneau de contraste"
-
-msgid "Show or hide contrast adjustment panel"
-msgstr "Afficher ou cacher le panneau de réglage du contraste"
-
 msgid "Thresholding"
 msgstr "Seuillage"
 
@@ -582,6 +576,13 @@ msgstr "Redimensionner"
 msgid "Pixel binning"
 msgstr "Binning"
 
+msgid "View images side-by-side"
+msgstr "Voir les images côte à côte"
+
+#, python-format
+msgid "View selected images side-by-side in a new window"
+msgstr "Voir les images sélectionnées côte à côte dans une nouvelle fenêtre"
+
 msgid "Flip or rotation"
 msgstr "Symétrie ou rotation"
 
@@ -617,6 +618,12 @@ msgstr "Distribuer sur une grille..."
 
 msgid "Reset image positions"
 msgstr "Réinitialiser les positions des images"
+
+msgid "Show contrast panel"
+msgstr "Afficher le panneau de contraste"
+
+msgid "Show or hide contrast adjustment panel"
+msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
 msgid "Process signal"
 msgstr "Traiter le signal"

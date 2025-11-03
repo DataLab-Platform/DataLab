@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 15:31+0200\n"
+"POT-Creation-Date: 2025-11-03 16:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -42,6 +42,15 @@ msgstr "Cette option permet d'afficher les images sélectionnées dans une nouve
 
 msgid "When you click on the button \"Annotations\" in the toolbar of the new window, the annotation editing mode is activated (see the section \"Edit annotations\" below)."
 msgstr "Lorsque vous cliquez sur le bouton \"Annotations\" dans la barre d'outils de la nouvelle fenêtre, le mode d'édition des annotations est activé (voir la section \"Modifier les annotations\" ci-dessous)."
+
+msgid "View images side-by-side"
+msgstr "Voir les images côte à côte"
+
+msgid "Open a new window to visualize the selected images side-by-side."
+msgstr "Ouvre une nouvelle fenêtre pour visualiser les images sélectionnées côte à côte."
+
+msgid "This option allows you to show the selected images in a separate window, arranged in a grid layout, with synchronized zooming and panning. This is useful to compare multiple images simultaneously."
+msgstr "Cette option permet d'afficher les images sélectionnées dans une nouvelle fenêtre, disposées en grille, avec un zoom et un panoramique synchronisés. Cela est utile pour comparer plusieurs images simultanément."
 
 msgid "Edit annotations"
 msgstr "Modifier les annotations"

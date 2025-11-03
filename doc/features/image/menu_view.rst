@@ -26,6 +26,15 @@ window) as well as to add or edit annotations.
 When you click on the button "Annotations" in the toolbar of the new window,
 the annotation editing mode is activated (see the section "Edit annotations" below).
 
+View images side-by-side
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Open a new window to visualize the selected images side-by-side.
+
+This option allows you to show the selected images in a separate window,
+arranged in a grid layout, with synchronized zooming and panning.
+This is useful to compare multiple images simultaneously.
+
 Edit annotations
 ^^^^^^^^^^^^^^^^
 

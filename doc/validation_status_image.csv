@@ -70,7 +70,7 @@
 :py:func:`normalize <sigima.proc.image.normalize>`,,`test_image_normalize <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/exposure_unit_test.py#L122>`_
 :py:func:`offset_correction <sigima.proc.image.offset_correction>`,Apply offset correction,`test_image_offset_correction <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/exposure_unit_test.py#L199>`_
 :py:func:`opening <sigima.proc.image.opening>`,Compute morphological opening,`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L53>`_
-:py:func:`peak_detection <sigima.proc.image.peak_detection>`,Compute 2D peak detection,`test_image_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/peak2d_unit_test.py#L85>`_
+:py:func:`peak_detection <sigima.proc.image.peak_detection>`,Compute 2D peak detection,`test_image_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/peak2d_unit_test.py#L86>`_
 :py:func:`phase <sigima.proc.image.phase>`,Compute the phase (argument) of a complex image,`test_image_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/operation_unit_test.py#L334>`_
 :py:func:`phase_spectrum <sigima.proc.image.phase_spectrum>`,Compute phase spectrum,`test_image_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/fft2d_unit_test.py#L157>`_
 :py:func:`prewitt <sigima.proc.image.prewitt>`,Compute Prewitt filter,`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L62>`_

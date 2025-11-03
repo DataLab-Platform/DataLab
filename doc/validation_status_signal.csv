@@ -35,9 +35,9 @@
 :py:func:`extract_roi <sigima.proc.signal.extract_roi>`,Extract single region of interest from data,`test_signal_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/roi_advanced_unit_test.py#L176>`_
 :py:func:`extract_rois <sigima.proc.signal.extract_rois>`,Extract multiple regions of interest from data,`test_signal_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/roi_advanced_unit_test.py#L152>`_
 :py:func:`fft <sigima.proc.signal.fft>`,Compute FFT,`test_signal_fft <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L118>`_
-:py:func:`full_width_at_y <sigima.proc.signal.full_width_at_y>`,,`test_signal_full_width_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fwhm_unit_test.py#L96>`_
-:py:func:`fw1e2 <sigima.proc.signal.fw1e2>`,Compute FW at 1/e²,`test_signal_fw1e2 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fwhm_unit_test.py#L86>`_
-:py:func:`fwhm <sigima.proc.signal.fwhm>`,Compute FWHM,`test_signal_fwhm <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fwhm_unit_test.py#L62>`_
+:py:func:`full_width_at_y <sigima.proc.signal.full_width_at_y>`,,`test_signal_full_width_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fwhm_unit_test.py#L145>`_
+:py:func:`fw1e2 <sigima.proc.signal.fw1e2>`,Compute FW at 1/e²,`test_signal_fw1e2 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fwhm_unit_test.py#L135>`_
+:py:func:`fwhm <sigima.proc.signal.fwhm>`,Compute FWHM,`test_signal_fwhm <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fwhm_unit_test.py#L63>`_
 :py:func:`gaussian_filter <sigima.proc.signal.gaussian_filter>`,Compute gaussian filter,`test_signal_gaussian_filter <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/processing_unit_test.py#L271>`_
 :py:func:`gaussian_fit <sigima.proc.signal.gaussian_fit>`,Compute Gaussian fit,`test_signal_gaussian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fitting_unit_test.py#L193>`_
 :py:func:`hadamard_variance <sigima.proc.signal.hadamard_variance>`,Compute Hadamard variance,`test_signal_hadamard_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/stability_unit_test.py#L301>`_

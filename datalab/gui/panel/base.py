@@ -25,7 +25,7 @@ import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset, update_dataset
 from guidata.qthelpers import add_actions, create_action, exec_dialog
-from plotpy.plot import PlotDialog
+from plotpy.plot import BasePlot, BasePlotOptions, PlotDialog, SyncPlotDialog
 from plotpy.tools import ActionTool
 from qtpy import QtCore as QC  # type: ignore[import]
 from qtpy import QtWidgets as QW
@@ -2562,6 +2562,60 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.selection_changed(update_items=True)
         self.__separate_views.pop(dlg)
         dlg.deleteLater()
+
+    def view_images_side_by_side(self, oids: list[str] | None = None) -> None:
+        """
+        View selected images side-by-side in a grid layout
+
+        Args:
+            oids: Object IDs (default: None, uses selected objects)
+        """
+        if oids is None:
+            oids = self.objview.get_sel_object_uuids(include_groups=True)
+
+        if len(oids) < 2:
+            return
+
+        objs = self.objmodel.get_objects(oids)
+
+        # Compute grid dimensions
+        max_cols = 4
+        num_cols = min(len(objs), max_cols)
+        num_rows = (len(objs) + num_cols - 1) // num_cols
+
+        # Create dialog with synchronized plots
+        dlg = SyncPlotDialog(title=_("View images side-by-side"), toolbar=False)
+        dlg.setObjectName(f"{self.PANEL_STR_ID}_side_by_side")
+
+        # Add each image to the grid
+        for idx, obj in enumerate(objs):
+            row = idx // num_cols
+            col = idx % num_cols
+
+            # Create plot with title
+            plot = BasePlot(options=BasePlotOptions(title=obj.title, type="image"))
+
+            # Create plot item from object
+            adapter = create_adapter_from_object(obj)
+            item = adapter.make_item()
+            item.set_readonly(True)
+            plot.add_item(item, z=0)
+
+            # Add ROI items if available
+            if obj.roi is not None:
+                for roi_item in adapter.iterate_roi_items(editable=False):
+                    plot.add_item(roi_item)
+
+            # Add to synchronized dialog
+            dlg.add_plot(row, col, plot, sync=True)
+
+        # Finalize and show dialog
+        dlg.finalize_configuration()
+
+        # Set explicit size for proper display
+        dlg.resize(20 + 440 * num_cols, 20 + 400 * num_rows)
+
+        exec_dialog(dlg)
 
     def get_dialog_size(self) -> tuple[int, int]:
         """Get dialog size (minimum and maximum)"""

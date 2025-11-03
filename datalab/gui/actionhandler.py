@@ -977,6 +977,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.copy_titles_to_clipboard,
             )
 
+        # MARK: ROI
         with self.new_category(ActionCategory.ROI):
             self.new_action(
                 _("Edit graphically") + "...",
@@ -995,6 +996,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 tip=_("Edit regions of interest numerically"),
             )
 
+        # MARK: VIEW
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
                 _("View in a new window") + "...",
@@ -1005,29 +1007,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_sep=True,
                 toolbar_pos=0,
             )
-            self.new_action(
-                _("Edit annotations") + "...",
-                icon_name="annotations.svg",
-                tip=_("Edit annotations of selected %s") % self.OBJECT_STR,
-                triggered=lambda: self.panel.open_separate_view(edit_annotations=True),
-                context_menu_pos=1,
-                toolbar_pos=-1,
-            )
-            main = self.panel.mainwindow
-            for cat in (ActionCategory.VIEW, ActionCategory.VIEW_TOOLBAR):
-                for act in (main.autorefresh_action, main.showfirstonly_action):
-                    self.add_to_action_list(act, cat, -1)
-            self.new_action(
-                _("Refresh manually"),
-                icon_name="refresh-manual.svg",
-                tip=_("Refresh plot, even if auto-refresh is enabled"),
-                shortcut=QG.QKeySequence(QG.QKeySequence.Refresh),
-                triggered=self.panel.manual_refresh,
-                select_condition=SelectCond.always,
-                toolbar_pos=-1,
-            )
-            for cat in (ActionCategory.VIEW, ActionCategory.VIEW_TOOLBAR):
-                self.add_to_action_list(main.showlabel_action, cat, -1)
 
         # MARK: OPERATION
         with self.new_category(ActionCategory.OPERATION):
@@ -1171,6 +1150,32 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 if self.__submenu_stack:
                     current_submenu = self.__submenu_stack[-1]
                     self.results_delete_submenu = current_submenu["menu"]
+
+        # MARK: VIEW
+        with self.new_category(ActionCategory.VIEW):
+            self.new_action(
+                _("Edit annotations") + "...",
+                icon_name="annotations.svg",
+                tip=_("Edit annotations of selected %s") % self.OBJECT_STR,
+                triggered=lambda: self.panel.open_separate_view(edit_annotations=True),
+                context_menu_pos=1,
+                toolbar_pos=-1,
+            )
+            main = self.panel.mainwindow
+            for cat in (ActionCategory.VIEW, ActionCategory.VIEW_TOOLBAR):
+                for act in (main.autorefresh_action, main.showfirstonly_action):
+                    self.add_to_action_list(act, cat, -1)
+            self.new_action(
+                _("Refresh manually"),
+                icon_name="refresh-manual.svg",
+                tip=_("Refresh plot, even if auto-refresh is enabled"),
+                shortcut=QG.QKeySequence(QG.QKeySequence.Refresh),
+                triggered=self.panel.manual_refresh,
+                select_condition=SelectCond.always,
+                toolbar_pos=-1,
+            )
+            for cat in (ActionCategory.VIEW, ActionCategory.VIEW_TOOLBAR):
+                self.add_to_action_list(main.showlabel_action, cat, -1)
 
 
 class SignalActionHandler(BaseActionHandler):
@@ -1366,6 +1371,14 @@ class SignalActionHandler(BaseActionHandler):
             self.action_for("bandwidth_3db", context_menu_pos=-1)
             self.action_for("contrast")
 
+    def create_last_actions(self):
+        """Create actions that are added to the menus in the end"""
+        with self.new_category(ActionCategory.OPERATION):
+            self.action_for("integral")
+        super().create_last_actions()
+        with self.new_category(ActionCategory.OPERATION):
+            self.action_for("signals_to_image", separator=True)
+
         with self.new_category(ActionCategory.VIEW):
             antialiasing_action = self.new_action(
                 _("Curve anti-aliasing"),
@@ -1386,14 +1399,6 @@ class SignalActionHandler(BaseActionHandler):
                 ),
                 toolbar_pos=-1,
             )
-
-    def create_last_actions(self):
-        """Create actions that are added to the menus in the end"""
-        with self.new_category(ActionCategory.OPERATION):
-            self.action_for("integral")
-        super().create_last_actions()
-        with self.new_category(ActionCategory.OPERATION):
-            self.action_for("signals_to_image", separator=True)
 
 
 class ImageActionHandler(BaseActionHandler):
@@ -1436,17 +1441,6 @@ class ImageActionHandler(BaseActionHandler):
                 icon_name="roi_grid.svg",
                 tip=_("Create a grid of regions of interest"),
             )
-
-        with self.new_category(ActionCategory.VIEW):
-            showcontrast_action = self.new_action(
-                _("Show contrast panel"),
-                icon_name="contrast.png",
-                tip=_("Show or hide contrast adjustment panel"),
-                select_condition=SelectCond.always,
-                toggled=self.panel.toggle_show_contrast,
-                toolbar_pos=-1,
-            )
-            showcontrast_action.setChecked(Conf.view.show_contrast.get(True))
 
         # MARK: OPERATION
         with self.new_category(ActionCategory.OPERATION):
@@ -1576,6 +1570,18 @@ class ImageActionHandler(BaseActionHandler):
                 icon_name="binning.svg",
             )
             self.action_for("resampling")
+
+        # MARK: VIEW
+        with self.new_category(ActionCategory.VIEW):
+            self.new_action(
+                _("View images side-by-side") + "...",
+                icon_name="new_window.svg",
+                tip=_("View selected images side-by-side in a new window"),
+                triggered=self.panel.view_images_side_by_side,
+                select_condition=SelectCond.at_least_two,
+                context_menu_pos=-1,
+            )
+
         super().create_last_actions()
 
         # MARK: OPERATION
@@ -1625,6 +1631,7 @@ class ImageActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.distribute_on_grid,
                 icon_name="distribute_on_grid.svg",
                 select_condition=SelectCond.at_least_two,
+                separator=True,
             )
             self.new_action(
                 _("Reset image positions"),
@@ -1632,3 +1639,15 @@ class ImageActionHandler(BaseActionHandler):
                 icon_name="reset_positions.svg",
                 select_condition=SelectCond.at_least_two,
             )
+
+        # MARK: VIEW
+        with self.new_category(ActionCategory.VIEW):
+            showcontrast_action = self.new_action(
+                _("Show contrast panel"),
+                icon_name="contrast.png",
+                tip=_("Show or hide contrast adjustment panel"),
+                select_condition=SelectCond.always,
+                toggled=self.panel.toggle_show_contrast,
+                toolbar_pos=-1,
+            )
+            showcontrast_action.setChecked(Conf.view.show_contrast.get(True))
