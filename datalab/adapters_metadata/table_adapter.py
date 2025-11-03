@@ -32,18 +32,6 @@ class TableAdapter(BaseResultAdapter):
     def __init__(self, table: TableResult) -> None:
         super().__init__(table)
 
-    @classmethod
-    def from_table_result(cls, table: TableResult) -> TableAdapter:
-        """Create TableAdapter from TableResult.
-
-        Args:
-            table: TableResult object
-
-        Returns:
-            TableAdapter instance
-        """
-        return cls(table)
-
     @property
     def headers(self) -> list[str]:
         """Get the column headers.
