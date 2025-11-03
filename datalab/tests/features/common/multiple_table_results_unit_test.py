@@ -27,6 +27,7 @@ def test_multiple_table_results():
     # Create two different table results (simulating different statistics)
     stats1 = TableResult(
         title="basic_stats",
+        func_name="basic_stats",
         headers=["Mean", "Std", "Min", "Max"],
         data=[[5.0, 1.5, 0.0, 10.0]],
         roi_indices=None,
@@ -35,6 +36,7 @@ def test_multiple_table_results():
 
     stats2 = TableResult(
         title="advanced_stats",
+        func_name="advanced_stats",
         headers=["Median", "Q1", "Q3", "IQR"],
         data=[[5.0, 3.5, 6.5, 3.0]],
         roi_indices=None,

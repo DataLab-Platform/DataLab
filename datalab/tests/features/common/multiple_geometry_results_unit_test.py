@@ -27,6 +27,7 @@ def test_multiple_segment_results():
     # Create two different segment results (simulating FWHM and FW1e2)
     fwhm_result = GeometryResult(
         title="fwhm",
+        func_name="fwhm",
         kind=KindShape.SEGMENT,
         coords=np.array([[3.5, 0.6, 6.5, 0.6]]),  # x0, y0, x1, y1
         roi_indices=None,
@@ -35,6 +36,7 @@ def test_multiple_segment_results():
 
     fw1e2_result = GeometryResult(
         title="fw1e2",
+        func_name="fw1e2",
         kind=KindShape.SEGMENT,
         coords=np.array([[3.0, 0.37, 7.0, 0.37]]),  # Different coordinates
         roi_indices=None,

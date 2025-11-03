@@ -279,7 +279,7 @@ class ObjectProp(QW.QTabWidget):
                     if text:
                         text += "<br><br>"
                     # Get function name for context
-                    func_name = adapter.get_func_name()
+                    func_name = adapter.func_name
                     if func_name:
                         # Add function name as a header for better context
                         param.set_comment(
