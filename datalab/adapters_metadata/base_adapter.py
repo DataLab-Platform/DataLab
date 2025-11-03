@@ -87,14 +87,7 @@ class BaseResultAdapter(ABC):
         Returns:
             A sanitized version of the result title suitable for use in metadata keys
         """
-        # Sanitize the title to make it a valid metadata key component
-        # Replace spaces and special characters with underscores
-        import re
-
-        sanitized = re.sub(r"[^\w]", "_", self.result.title.lower())
-        # Remove consecutive underscores and strip leading/trailing underscores
-        sanitized = re.sub(r"_+", "_", sanitized).strip("_")
-        return sanitized
+        return self.get_func_name() or self.name
 
     @property
     @abstractmethod
