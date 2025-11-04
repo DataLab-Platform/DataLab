@@ -13,95 +13,110 @@ This example shows how to process a spectrum with DataLab:
 -   Fit a model to the spectrum
 -   Save the workspace to a file
 
-First, we open DataLab and read the spectrum from a file.
+Datalab menus changes depending on the context.
+A spectrum is a 1D signal that represents the intensity of a signal as a function
+of energy (or wavelength, frequency, etc.): in order to open it we need fistly to
+select the Signal Panel.
 
-.. figure:: ../../images/tutorials/spectrum/01.png
 
-   Open the spectrum file with "File > Open..." , or with the |fileopen_sig| button in
-   the toolbar, or by dragging and dropping the file into DataLab (on the panel on
-   the right).
+In standard application we first open DataLab and read the spectrum from a file, with
+"File > Open..." , or with the |fileopen_sig| button in the toolbar, or by dragging and
+dropping the file into DataLab (on the panel on the right). Anyway, for this tutorial,
+we will use the "Plugins > Test data > Load spectrum of paracetamol" feature to
+generate a test spectrum. This is convenient to generate test data for this tutorial.
+
 
 .. |fileopen_sig| image:: ../../../datalab/data/icons/io/fileopen_sig.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-Here, we are actually generating the signal from a test data file
-(using "Plugins > Test data > Load spectrum of paracetamol"), but the
-principle is the same.
+.. figure:: ../../images/tutorials/spectrum/01.png
+
+   The "File > Open..." menu to open a spectrum file.
 
 .. figure:: ../../images/tutorials/spectrum/02.png
 
-    Using the "Test data" plugin is a convenient way to generate test
-    data for tutorials, but you can use any file containing a spectrum,
-    such as a spectrum from a real experiment.
+    The "Plugins > Test data > Load spectrum of paracetamol" plugin to generate the
+    test spectrum for this tutorial.
 
-The spectrum is displayed in the main window.
+One opened, the spectrum is displayed in the main window. It is a 1D signal, so it is
+displayed as a curve. The horizontal axis is the energy axis, and the vertical axis
+is the intensity axis.
 
 .. figure:: ../../images/tutorials/spectrum/03.png
 
-   The spectrum is a 1D signal, so it is displayed as a curve. The horizontal axis is
-   the energy axis, and the vertical axis is the intensity axis.
+   The spectrum displayed on the "Signal View" panel.
 
-Now, let's process this spectrum by applying a filter to it. We will use a Wiener
-filter, which is a filter that can be used to remove noise from a signal, even if
-this is not absolutely necessary in this case.
+The signal is quite clean. Anyway, to illustrate the filtering capabilities
+of DataLab, we apply a Wiener filter to reduce any residual noise while
+preserving the spectral features: this is available under
+"Processing > Noise Reduction > Wiener filter".
 
 .. figure:: ../../images/tutorials/spectrum/04.png
 
-    Open the filter window with "Processing > Wiener filter".
+    The "Processing > Noise Reduction > Wiener filter" menu option.
 
 .. figure:: ../../images/tutorials/spectrum/05.png
 
-    The result of the filter is displayed in the main window.
+    The result displayed in the main window.
 
-If we want to analyze a specific region of the spectrum, we can extract it from the
-spectrum using the "ROI extraction" feature from the "Operations" menu.
+We fistly focus our analysis on one of the peaks of interest. To to that,
+we define a region of interest (ROI) around the feature we want to analyze.
+We use the "ROI > Extract..." menu to define the region of interest and extract it.
+The "Regions of interest" dialog box is displayed. Select an area and click on "OK":
+a confirmation window is displayed, click on "Yes" to extract the region of interest.
+The signal containing the ROI is created and displayed in the main window.
 
 .. figure:: ../../images/tutorials/spectrum/06.png
 
-    Open the ROI extraction window with "Operations > ROI extraction".
+    The "Operations > ROI extraction" menu.
 
 .. figure:: ../../images/tutorials/spectrum/07.png
 
-    The "Regions of interest" dialog box is displayed. Click on "Add ROI"
-    and resize the horizontal window to select the area. Then, click on "OK".
+    The "Regions of interest" dialog box displayed.
 
 .. figure:: ../../images/tutorials/spectrum/08.png
 
-    The region of interest is displayed in the main window.
-
-Let's try to fit a model to the spectrum. We will use a Gaussian model, which is a model
-that can be used to fit a peak in a spectrum.
+    The region of interest displayed in the main window.
 
 .. figure:: ../../images/tutorials/spectrum/09.png
 
     Open the model fitting window with "Processing > Fitting > Gaussian fit".
 
-.. figure:: ../../images/tutorials/spectrum/10.png
-
-    The "Gaussian fit" dialog box is displayed. An automatic fit is performed by
-    default. Click on "OK" (or eventually try to fit the model manually by adjusting
-    the parameters or the sliders, or try to change the automatic fitting parameters).
 
 .. figure:: ../../images/tutorials/spectrum/11.png
 
-    The result of the fit is displayed in the main window. Here we selected both the
-    spectrum and the fit in the "Signals" panel on the right, so both are displayed
-    in the visualization panel on the left.
+    The result of the fit displayed in the main window.
 
 .. figure:: ../../images/tutorials/spectrum/12.png
 
-    We may also select the full spectrum and the fit in the "Signals" panel on the
-    right, so that both are displayed in the visualization panel on the left, if this
-    has a sense for the analysis we want to perform. Note that the full spectrum
-    visualization also contains the region of interest we extracted previously.
+    Both the full spectrum and the fit in the "Signals" panel selected, so that both are displayed in the visualization panel on the left, if this
+    has a sense for the analysis we want to perform.
 
-To demonstrate another processing feature, we can also try to detrend the spectrum.
+Linear detrending
+-----------------
+
+After fitting the main peak, we may want to remove any baseline drift
+present in the entire spectrum.
+The detrending function of DataLab performs a linear fit on the whole signal,
+including the peaks. In our signal peaks take a large part of the signal itself,
+witch is enough for signals where the peak are symmetrically distributed around the
+center, with more or less the same amplitude. This is not the case here, and we cannot
+expect this function to work well. It is however an interesting example to illustrate
+how DataLab functions can be combined to perform a more advanced analysis.
+
+In order to visualize the limitation cited above, we apply the detrending
+function directly on the filtered signal. It's important to remembre that we setted
+a ROI on the signal to focus the analysis on the main peak. We need to remove
+this ROI constraint to perform the detrending on the full signal.
+We execute the "Processing > Detrending" feature to perform the detrending, we choose
+a linear detrending method, and we click on "OK". The result of the detrending is
+displayed in the main window.
 
 .. figure:: ../../images/tutorials/spectrum/13.png
 
-    Execute the "Processing > Detrending" feature.
+    The "Processing > Detrending" feature.
 
 .. figure:: ../../images/tutorials/spectrum/14.png
 
@@ -109,13 +124,64 @@ To demonstrate another processing feature, we can also try to detrend the spectr
 
 .. figure:: ../../images/tutorials/spectrum/15.png
 
-    The result of the detrending is displayed in the main window (in that specific
-    case, the detrending may not be appropriate, but it is just to demonstrate the
-    feature).
+    The result of the detrending displayed in the main window.
 
-When analyzing a spectrum, it can be useful to try to identify the peaks in the
-spectrum. We can do this by fitting a multi-Gaussian model to the spectrum, using
-the "Processing > Fitting > Multi-Gaussian fit" feature.
+The comparison between the filtered and the detrended Signal shows, as expected,
+that the detrending function does not work well on this signal.
+This, as explained before, is due to the alogirithm used, which performs a linear fit
+on the whole signal, including the peaks. This effect is clearly visible on the plot:
+the peaks on the left, that are higher than the ones on the right, starts after the
+detrending at an intensity value lower than the ones on the right, and all peaks has
+a baseline under the zero.
+
+Improved detrending with peak exclusion
+-----------------------------------------
+
+An idea to overcome the limitation of the detrending function is suggested from the
+behavior of the detrended signal: we already identified the problem, which is that the
+linear fit is not performed on the baseline only, but also on the peaks.
+
+To perform a better detrending, we can first thus exclude the peaks and then perform
+a linear fit only on the non-peak regions. We reasonably expect this approach to
+provide a more accurate baseline estimation and a better detrended signal.
+
+This is illustrated in the following steps:
+
+.. figure:: ../../images/tutorials/spectrum/15b.png
+
+    We select the regions corresponding to the regions without peaks.
+
+.. figure:: ../../images/tutorials/spectrum/15c.png
+
+    A linear fit is performed only on the selected regions.
+
+.. figure:: ../../images/tutorials/spectrum/15d.png
+
+    The linear baseline obtained from the fit is shown.
+
+.. figure:: ../../images/tutorials/spectrum/15e.png
+
+    We delete the rois to apply the detrending on the whole signal.
+
+.. figure:: ../../images/tutorials/spectrum/15f.png
+
+    We use the "difference" operation to subtract the baseline from the original signal.
+
+.. figure:: ../../images/tutorials/spectrum/15g.png
+
+    We select the linear baseline to perform the subtraction.
+
+.. figure:: ../../images/tutorials/spectrum/15h.png
+
+    The resulting detrended signal is shown, now with a correct baseline.
+
+
+Automatic peak detection
+-------------------------
+We can use the  "Multi-Gaussian fit" function of Datalab to automatically identify
+and fit multiple peaks in the spectrum.
+We can do this  using
+the "Processing > Fitting > Multi-Gaussian fit" entry in the menu.
 
 .. figure:: ../../images/tutorials/spectrum/16.png
 
@@ -136,19 +202,24 @@ the "Processing > Fitting > Multi-Gaussian fit" feature.
     spectrum and the fit in the "Signals" panel on the right, so both are displayed
     in the visualization panel on the left.
 
-We also could have used the "Peak detection" feature from the "Operations" menu to
-detect the peaks in the spectrum.
+We also could have used the "Peak detection" feature from the "Analysis" menu to
+detect the peaks in the spectrum. This is the first step of the "Multi-Gaussian fit"
+function, and it can be used alone to detect the peaks without performing any fit, and
+create a signal with a delta for each detected peak.
 
 .. figure:: ../../images/tutorials/spectrum/19.png
 
-    Open the "Peak detection" window with "Operations > Peak detection".
+    Open the "Peak detection" window with "Analysis > Peak detection".
 
-.. figure:: ../../images/tutorials/spectrum/20.png
+.. figure:: ../../images/tutorials/spectrum/21.png
 
     After having adjusted the parameters of the peak detection dialog (same dialog as
     the one used for the multi-Gaussian fit), click on "OK". Then, we select the
     "peak_detection" and the original spectrum in the "Signals" panel on the right,
     so that both are displayed in the visualization panel on the left.
+
+Saving the workspace
+--------------------
 
 Finally, we can save the workspace to a file. The workspace contains all the signals
 that were loaded in DataLab, as well as the processing results. It also contains the
