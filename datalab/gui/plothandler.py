@@ -213,7 +213,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         """
         # Find the merged adapter that owns this label
         for merged_adapter in self.__merged_result_adapters.values():
-            if merged_adapter._cached_label is item:
+            if merged_adapter.get_cached_label() is item:
                 # Update the adapter's metadata with the new position
                 merged_adapter.update_obj_metadata_from_item(item)
                 break
@@ -225,7 +225,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.__shapeitems = []
         # Clear cached labels in merged result adapters since they were removed
         for merged_adapter in self.__merged_result_adapters.values():
-            merged_adapter._cached_label = None
+            merged_adapter.invalidate_cached_label()
 
     def __add_item_to_plot(self, oid: str) -> TypePlotItem:
         """Make plot item and add it to plot.

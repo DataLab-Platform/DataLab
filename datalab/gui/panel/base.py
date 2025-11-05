@@ -520,12 +520,11 @@ class ObjectProp(QW.QTabWidget):
         except Exception as exc:  # pylint: disable=broad-except
             if execenv.unattended:
                 raise exc
-            else:
-                QW.QMessageBox.warning(
-                    self,
-                    _("Error"),
-                    _("Failed to recreate object with new parameters:\n%s") % str(exc),
-                )
+            QW.QMessageBox.warning(
+                self,
+                _("Error"),
+                _("Failed to recreate object with new parameters:\n%s") % str(exc),
+            )
             return
 
         # Update the current object in-place

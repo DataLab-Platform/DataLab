@@ -404,6 +404,18 @@ class MergedResultPlotPyAdapter:
         self.obj = obj
         self._cached_label: LabelItem | None = None
 
+    def get_cached_label(self) -> LabelItem | None:
+        """Get the cached merged label item, if it exists.
+
+        Returns:
+            Merged label item, or None if not cached
+        """
+        return self._cached_label
+
+    def invalidate_cached_label(self) -> None:
+        """Invalidate the cached merged label item."""
+        self._cached_label = None
+
     @property
     def item_json(self) -> str | None:
         """JSON representation of the merged label item.

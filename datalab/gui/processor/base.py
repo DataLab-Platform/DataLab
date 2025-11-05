@@ -741,6 +741,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.register_processing()
         self.register_analysis()
 
+    # pylint: disable=unused-argument
     def postprocess_1_to_0_result(
         self, obj: SignalObj | ImageObj, result: GeometryResult | TableResult
     ) -> bool:

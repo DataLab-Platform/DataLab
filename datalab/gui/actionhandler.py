@@ -47,6 +47,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.config import Conf, _
 from datalab.gui import newobject
 from datalab.widgets import fitdialog
@@ -54,7 +55,6 @@ from datalab.widgets import fitdialog
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
 
-    from datalab.adapters_metadata.base_adapter import BaseResultAdapter
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
     from datalab.objectmodel import ObjectGroup
@@ -307,9 +307,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             submenu.setEnabled(False)
             return
 
-        # Import here to avoid circular imports
-        from datalab.adapters_metadata import GeometryAdapter, TableAdapter
-
         # Collect all results with their metadata keys and titles
         result_items = []  # List of (metadata_key, title, obj, adapter)
 
@@ -344,7 +341,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             submenu.addAction(delete_all_action)
 
     def _delete_single_result(
-        self, obj: SignalObj | ImageObj, adapter: BaseResultAdapter
+        self, obj: SignalObj | ImageObj, adapter: GeometryAdapter | TableAdapter
     ) -> None:
         """Helper method to delete a single result
 

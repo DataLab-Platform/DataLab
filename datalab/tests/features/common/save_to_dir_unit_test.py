@@ -388,7 +388,7 @@ class TestSaveToDirectoryGUIParam:
 
             # Should handle empty list gracefully
             filenames = p.build_filenames([])
-            assert filenames == [], f"Expected empty list, got {filenames}"
+            assert not filenames, f"Expected empty list, got {filenames}"
             execenv.print("  ✓ Handled empty objects list")
 
             # Update preview with empty list

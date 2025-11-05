@@ -27,7 +27,7 @@ def temp_html_file():
         yield os.path.join(tmpdir, "test_diff.html")
 
 
-def test_save_html_diff_basic(temp_html_file):
+def test_save_html_diff_basic(temp_html_file):  # pylint: disable=W0621
     """Test that save_html_diff creates a valid HTML file with diff content."""
     text1 = "Line 1\nLine 2\nLine 3"
     text2 = "Line 1\nModified Line 2\nLine 3"
@@ -43,7 +43,7 @@ def test_save_html_diff_basic(temp_html_file):
     assert "After" in content
 
 
-def test_save_html_diff_edge_cases(temp_html_file):
+def test_save_html_diff_edge_cases(temp_html_file):  # pylint: disable=W0621
     """Test save_html_diff with edge cases: empty strings and Unicode."""
     # Test with empty string
     with patch("webbrowser.open"):

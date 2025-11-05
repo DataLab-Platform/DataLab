@@ -30,6 +30,7 @@ from sigima.params import (
     MovingAverageParam,
     SignalsToImageParam,
 )
+from sigima.proc.image import RadialProfileParam
 
 from datalab.gui.newobject import CREATION_PARAMETERS_OPTION
 from datalab.gui.processor.base import PROCESSING_PARAMETERS_OPTION
@@ -479,8 +480,6 @@ def test_cross_panel_image_to_signal():
             image_uuid = get_uuid(image)
 
             # Apply radial_profile (Image → Signal cross-panel computation)
-            from sigima.proc.image import RadialProfileParam
-
             profile_param = RadialProfileParam.create(x0=50, y0=50)
             image_processor.run_feature("radial_profile", param=profile_param)
 
@@ -642,8 +641,6 @@ def test_select_source_objects_cross_panel():
             image_uuid = get_uuid(image)
 
             # Apply radial_profile (Image → Signal)
-            from sigima.proc.image import RadialProfileParam
-
             profile_param = RadialProfileParam.create(x0=50, y0=50)
             image_processor.run_feature("radial_profile", param=profile_param)
 
@@ -680,7 +677,7 @@ def test_select_source_objects_multiple_sources():
             # Create multiple source signals
             n_signals = 3
             source_uuids = []
-            for i in range(n_signals):
+            for _i in range(n_signals):
                 panel.new_object(edit=False)
                 signal = panel.objview.get_current_object()
                 source_uuids.append(get_uuid(signal))

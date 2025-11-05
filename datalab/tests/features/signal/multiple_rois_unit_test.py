@@ -81,7 +81,7 @@ def test_multiple_results_with_multiple_rois():
         )
 
         print(f"\n{adapter.title.upper()} measurements:")
-        for i, (coords, roi_idx) in enumerate(zip(adapter.result.coords, roi_indices)):
+        for coords, roi_idx in zip(adapter.result.coords, roi_indices):
             width = abs(coords[2] - coords[0])
             print(f"  ROI {roi_idx}: width = {width:.4f}")
 
