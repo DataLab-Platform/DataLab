@@ -1205,7 +1205,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 adapter: GeometryAdapter
                 try:
                     obj.roi = create_image_roi_around_points(
-                        adapter.result.coords, geometry=param.roi_geometry
+                        adapter.result.coords, roi_geometry=param.roi_geometry
                     )
                 except ValueError:
                     continue
