@@ -156,6 +156,21 @@ Blob detection (LOG)
 Blob detection (OpenCV)
     Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_.
 
+.. note::
+    **Automatic ROI creation for detection features**
+
+    All detection features (2D peak detection, contour detection, circle Hough
+    transform, and blob detection) support automatic ROI creation around detected
+    objects. This feature:
+
+    - Creates rectangular or circular ROIs around each detected feature
+    - Automatically sizes ROIs based on minimum distance between detections
+    - Requires at least 2 detected objects to determine appropriate ROI size
+    - Enables subsequent processing on individual detected regions
+
+    To use this feature, enable "Create regions of interest" in the detection
+    parameters dialog and choose the desired ROI geometry.
+
 Show results
 ^^^^^^^^^^^^
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-03 15:52+0100\n"
+"POT-Creation-Date: 2025-11-05 12:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -125,6 +125,48 @@ msgstr "L'état du presse-papiers est vérifié dynamiquement lorsque la sélect
 
 msgid "**2D peak detection enhancements**: Added an option to choose the ROI geometry around detected peaks (either rectangular or circular)."
 msgstr "**Améliorations de la détection de pics 2D** : Ajout d'une option pour choisir la géométrie de la ROI autour des pics détectés (soit rectangulaire, soit circulaire)."
+
+msgid "**Detection features with ROI creation**: All image detection functions now support automatic ROI creation"
+msgstr "**Fonctions de détection avec création de ROI** : Toutes les fonctions de détection d'images prennent désormais en charge la création automatique de ROI"
+
+msgid "ROI creation option available for 7 detection algorithms:"
+msgstr "Option de création de ROI disponible pour 7 algorithmes de détection :"
+
+msgid "Peak detection (`peak_detection`)"
+msgstr "Détection de pics (`peak_detection`)"
+
+msgid "Contour shape detection (`contour_shape`)"
+msgstr "Détection de formes de contour (`contour_shape`)"
+
+msgid "Blob detection - DOG method (`blob_dog`)"
+msgstr "Détection de taches - Méthode DOG (`blob_dog`)"
+
+msgid "Blob detection - DOH method (`blob_doh`)"
+msgstr "Détection de taches - Méthode DOH (`blob_doh`)"
+
+msgid "Blob detection - LOG method (`blob_log`)"
+msgstr "Détection de taches - Méthode LOG (`blob_log`)"
+
+msgid "Blob detection - OpenCV method (`blob_opencv`)"
+msgstr "Détection de taches - Méthode OpenCV (`blob_opencv`)"
+
+msgid "Hough circle detection (`hough_circle_peaks`)"
+msgstr "Détection de cercles de Hough (`hough_circle_peaks`)"
+
+msgid "Each detection function provides two parameters:"
+msgstr "Chaque fonction de détection fournit deux paramètres :"
+
+msgid "\"Create ROIs around detected features\": Enable/disable automatic ROI creation"
+msgstr "\"Créer des ROI autour des caractéristiques détectées\": Activer/désactiver la création automatique de ROI"
+
+msgid "\"ROI geometry\": Choose between rectangular or circular ROIs"
+msgstr "\"Géométrie de la ROI\": Choisir entre des ROI rectangulaires ou circulaires"
+
+msgid "ROIs are automatically created after detection completes"
+msgstr "Les ROI sont automatiquement créées après la détection."
+
+msgid "ROI size is optimized based on feature spacing and image bounds"
+msgstr "La taille de la ROI est optimisée en fonction de l'espacement des caractéristiques et des limites de l'image."
 
 msgid "**Interactive object creation and processing**: New interactive workflow for creating and processing objects"
 msgstr "**Création et traitement interactifs d'objets** : Nouveau flux de travail interactif pour la création et le traitement des objets"

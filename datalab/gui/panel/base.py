@@ -274,7 +274,7 @@ class ObjectProp(QW.QTabWidget):
         # Iterate through all result adapters and extract parameter info
         for adapter_class in (GeometryAdapter, TableAdapter):
             for adapter in adapter_class.iterate_from_obj(obj):
-                param = adapter.get_param(obj)
+                param = adapter.get_param()
                 if param is not None:
                     if text:
                         text += "<br><br>"
@@ -520,12 +520,11 @@ class ObjectProp(QW.QTabWidget):
         except Exception as exc:  # pylint: disable=broad-except
             if execenv.unattended:
                 raise exc
-            else:
-                QW.QMessageBox.warning(
-                    self,
-                    _("Error"),
-                    _("Failed to recreate object with new parameters:\n%s") % str(exc),
-                )
+            QW.QMessageBox.warning(
+                self,
+                _("Error"),
+                _("Failed to recreate object with new parameters:\n%s") % str(exc),
+            )
             return
 
         # Update the current object in-place

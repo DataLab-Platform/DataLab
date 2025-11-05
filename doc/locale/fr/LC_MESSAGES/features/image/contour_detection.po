@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:12+0100\n"
+"POT-Creation-Date: 2025-11-05 14:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,21 @@ msgstr "Sélectionner \"Détection de contours\" dans le menu Analyse\""
 
 msgid "Enter parameter \"Shape\" (\"Ellipse\", \"Circle\" or \"Polygon\")"
 msgstr "Saisir le paramètre \"Forme\" (\"Ellipse\", \"Cercle\" ou \"Polygone\")"
+
+msgid "Optionally, enable \"Create regions of interest\" to automatically create ROIs around each detected contour:"
+msgstr "Optionnellement, activer \"Créer des régions d'intérêt\" pour créer automatiquement des ROIs autour de chaque contour détecté :"
+
+msgid "Choose ROI geometry: \"Rectangle\" or \"Circle\""
+msgstr "Choisir la géométrie de la ROI : \"Rectangle\" ou \"Cercle\""
+
+msgid "ROI size is automatically calculated based on the minimum distance between detected contours (to avoid overlap)"
+msgstr "La taille de la ROI est automatiquement calculée en fonction de la distance minimale entre les contours détectés (pour éviter le chevauchement)"
+
+msgid "This feature requires at least 2 detected contours"
+msgstr "Cette fonctionnalité nécessite au moins 2 contours détectés"
+
+msgid "Created ROIs can be useful for subsequent processing on each contour area"
+msgstr "Les ROIs créées peuvent être utiles pour le traitement ultérieur de chaque zone de contour (par exemple, détection de pics, mesures, etc.)"
 
 msgid "Contour detection results (see test \"contour_app.py\")"
 msgstr "Résultats de la détection de contours (cf. test \"contour_app.py\")"

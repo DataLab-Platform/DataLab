@@ -741,6 +741,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.register_processing()
         self.register_analysis()
 
+    # pylint: disable=unused-argument
+    def postprocess_1_to_0_result(
+        self, obj: SignalObj | ImageObj, result: GeometryResult | TableResult
+    ) -> bool:
+        """Post-process results from 1-to-0 operations (hook method).
+
+        This method is called after a 1-to-0 computation function has been executed
+        and the result has been added to the object's metadata. Subclasses can
+        override this method to perform additional processing on the result.
+
+        Args:
+            obj: The object that was analyzed
+            result: The analysis result (GeometryResult or TableResult)
+
+        Returns:
+            True if the object was modified and needs a plot refresh, False otherwise
+        """
+        # Default implementation does nothing and needs no refresh
+        return False
+
     def has_param_defaults(self, paramclass: type[gds.DataSet]) -> bool:
         """Return True if parameter defaults are available.
 
@@ -1279,6 +1299,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
+        refresh_needed = False
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             rdata = ResultData()
             for idx, obj in enumerate(objs):
@@ -1311,6 +1332,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # Pass function name for better parameter context in the Analysis tab
                 adapter.add_to(obj, param)
 
+                # Apply processor-specific post-processing on the result
+                refresh_needed |= self.postprocess_1_to_0_result(obj, result)
+
                 # Append result to result data for later display
                 rdata.append(adapter, obj)
 
@@ -1318,6 +1342,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
+
+        # Refresh plot if post-processing modified any objects (e.g., ROI creation)
+        if refresh_needed:
+            self.panel.refresh_plot("selected", only_visible=False, only_existing=True)
 
         if rdata:
             show_resultdata(self.mainwindow, rdata, f"{objs[0].PREFIX}_results")

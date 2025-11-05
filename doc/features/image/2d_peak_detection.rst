@@ -14,9 +14,15 @@ How to use the feature:
   - Create or open an image in DataLab workspace
   - Select "2d peak detection" in "Analysis" menu
   - Enter parameters "Neighborhoods size" and "Relative threhold"
-  - Check "Create regions of interest" if you want a ROI defined for each
-    detected peak (this may become useful when using another computation
-    afterwards on each area around peaks, e.g. contour detection)
+  - Optionally, enable "Create regions of interest" to automatically create
+    ROIs around each detected peak:
+
+    * Choose ROI geometry: "Rectangle" or "Circle"
+    * ROI size is automatically calculated based on the minimum distance
+      between detected peaks (to avoid overlap)
+    * This feature requires at least 2 detected peaks
+    * Created ROIs can be useful for subsequent processing on each peak area
+      (e.g., contour detection, measurements, etc.)
 
 .. figure:: /images/2d_peak_detection/peak2d_app_results.png
 
@@ -45,6 +51,9 @@ The 2d peak detection algorithm works in the following way:
 The 2d peak detection parameters are the following:
   - "Neighborhoods size": size of the sliding window (see above)
   - "Relative threshold": detection threshold
+  - "Create regions of interest": if enabled, automatically creates ROIs around
+    each detected peak (requires at least 2 peaks)
+  - "ROI geometry": shape of the ROIs ("Rectangle" or "Circle")
 
 Feature is based on ``get_2d_peaks_coords`` function from ``sigima.tools`` module:
 

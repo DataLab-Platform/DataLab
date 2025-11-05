@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:12+0100\n"
+"POT-Creation-Date: 2025-11-05 14:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,8 +38,20 @@ msgstr "Sélectionner \"Détection de pics 2D\" dans le menu Analyse\""
 msgid "Enter parameters \"Neighborhoods size\" and \"Relative threhold\""
 msgstr "Saisir les paramètres \"Taille de voisinage\" et \"Seuil relatif\""
 
-msgid "Check \"Create regions of interest\" if you want a ROI defined for each detected peak (this may become useful when using another computation afterwards on each area around peaks, e.g. contour detection)"
-msgstr "Cocher \"Créer des régions d'intérêt\" si vous souhaitez que des ROI soient définies pour chaque pic détecté (ce qui peut s'avérer utile en cas de calcul ultérieur sur chaque pic détecté, tel que par exemple une détection de contour)."
+msgid "Optionally, enable \"Create regions of interest\" to automatically create ROIs around each detected peak:"
+msgstr "Optionnellement, activer \"Créer des régions d'intérêt\" pour créer automatiquement des ROIs autour de chaque pic détecté :"
+
+msgid "Choose ROI geometry: \"Rectangle\" or \"Circle\""
+msgstr "Choisir la géométrie de la ROI : \"Rectangle\" ou \"Cercle\""
+
+msgid "ROI size is automatically calculated based on the minimum distance between detected peaks (to avoid overlap)"
+msgstr "La taille de la ROI est automatiquement calculée en fonction de la distance minimale entre les pics détectés (pour éviter le chevauchement)"
+
+msgid "This feature requires at least 2 detected peaks"
+msgstr "Cette fonctionnalité nécessite au moins 2 pics détectés"
+
+msgid "Created ROIs can be useful for subsequent processing on each peak area (e.g., contour detection, measurements, etc.)"
+msgstr "Les ROIs créées peuvent être utiles pour le traitement ultérieur de chaque zone de pic (par exemple, détection de contours, mesures, etc.)"
 
 msgid "2d peak detection results (see test \"peak2d_app.py\")"
 msgstr "Résultats d'une détection de pics 2D (voir le test \"peak2d_app.py\")"
@@ -85,6 +97,12 @@ msgstr "\"Taille de voisinage\": taille de la fenêtre glissante (cf. plus haut)
 
 msgid "\"Relative threshold\": detection threshold"
 msgstr "\"Seuil relatif\": seuil de détection"
+
+msgid "\"Create regions of interest\": if enabled, automatically creates ROIs around each detected peak (requires at least 2 peaks)"
+msgstr "\"Créer des régions d'intérêt\": si activé, crée automatiquement des ROIs autour de chaque pic détecté (nécessite au moins 2 pics)"
+
+msgid "\"ROI geometry\": shape of the ROIs (\"Rectangle\" or \"Circle\")"
+msgstr "\"Géométrie de la ROI\": forme des ROIs (\"Rectangle\" ou \"Cercle\")"
 
 msgid "Feature is based on ``get_2d_peaks_coords`` function from ``sigima.tools`` module:"
 msgstr "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du module ``sigima.tools`` :"

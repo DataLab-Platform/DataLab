@@ -259,10 +259,10 @@ def _compute_comparison_value(ref_val, curr_val) -> str:
     # Handle different data types
     if pd.isna(ref_val) or pd.isna(curr_val):
         return "N/A"
-    elif isinstance(ref_val, str) or isinstance(curr_val, str):
+    if isinstance(ref_val, str) or isinstance(curr_val, str):
         # String comparison
         return "=" if str(ref_val) == str(curr_val) else "≠"
-    elif isinstance(ref_val, (int, float, np.integer, np.floating)) and isinstance(
+    if isinstance(ref_val, (int, float, np.integer, np.floating)) and isinstance(
         curr_val, (int, float, np.integer, np.floating)
     ):
         # Numeric comparison - show difference
@@ -277,13 +277,13 @@ def _compute_comparison_value(ref_val, curr_val) -> str:
 
         if abs(diff) <= tolerance:
             return "="
-        else:
-            # Format the difference with appropriate sign
-            sign = "+" if diff > 0 else ""
-            return f"{sign}{diff:.4g}"
-    else:
-        # Default comparison
-        return "=" if ref_val == curr_val else "≠"
+
+        # Format the difference with appropriate sign
+        sign = "+" if diff > 0 else ""
+        return f"{sign}{diff:.4g}"
+
+    # Default comparison
+    return "=" if ref_val == curr_val else "≠"
 
 
 def resultadapter_to_html(
@@ -307,7 +307,7 @@ def resultadapter_to_html(
         HTML representation of the adapter
     """
     if not isinstance(adapter, BaseResultAdapter) and not all(
-        [isinstance(adp, BaseResultAdapter) for adp in adapter]
+        isinstance(adp, BaseResultAdapter) for adp in adapter
     ):
         raise ValueError(
             "Adapter must be a BaseResultAdapter "
