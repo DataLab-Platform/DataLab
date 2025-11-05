@@ -23,7 +23,20 @@ Load the images
 ---------------
 
 .. note::
-    The images used in this tutorial "fabry_perot1.jpg" and "fabry_perot2.jpg" are available in the tutorial data folder of DataLab's installation directory (``<DataLab installation directory>/data/tutorials/``). Alternatively, you can download them from :download:`here </_download/fabry_perot.zip>` and extract to the folder of your choice.
+
+    The images used in this tutorial "fabry_perot1.jpg" and "fabry_perot2.jpg" are
+    available in the tutorial data folder of DataLab's installation directory
+    (``<DataLab installation directory>/data/tutorials/``).
+
+    .. only:: html
+
+       Alternatively, you can download them from :download:`here </_download/fabry_perot.zip>`
+       and extract to the folder of your choice.
+
+    .. only:: latex
+
+       Alternatively, they can be downloaded from the online documentation at
+       https://datalab-platform.com.
 
 
 First, we open DataLab and load the images from the menu file "File > Open Image...",

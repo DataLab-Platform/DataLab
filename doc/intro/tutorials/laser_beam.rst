@@ -20,11 +20,22 @@ axis using DataLab:
 
 Load the images
 ---------------
+
 .. note::
+
     The images used in this tutorial "TEM00_z_*.jpg" are available in the tutorial data
-    folder of DataLab's installation directory (``<DataLab installation directory>/data/tutorials/``). Alternatively, you can download them from
-    :download:`here </_download/laser_beam.zip>` and extract to the folder of
-    your choice.
+    folder of DataLab's installation directory
+    (``<DataLab installation directory>/data/tutorials/``).
+
+    .. only:: html
+
+       Alternatively, you can download them from :download:`here </_download/laser_beam.zip>`
+       and extract to the folder of your choice.
+
+    .. only:: latex
+
+       Alternatively, they can be downloaded from the online documentation at
+       https://datalab-platform.com.
 
 
 First, we open DataLab and load the images: there are several ways to do so, but the most
