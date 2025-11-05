@@ -25,9 +25,8 @@ from sigima.objects import (
     PoissonDistributionParam,
     ROI2DParam,
     UniformDistributionParam,
-    create_image_roi_around_points,
 )
-from sigima.objects.scalar import GeometryResult
+from sigima.objects.scalar import GeometryResult, TableResult
 from sigima.proc.decorator import ComputationMetadata
 
 from datalab.adapters_metadata import GeometryAdapter
@@ -208,6 +207,25 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             Pickleable wrapped function that applies geometry transformations
         """
         return GeometricTransformWrapper(func, operation)
+
+    def postprocess_1_to_0_result(
+        self, obj: ImageObj, result: GeometryResult | TableResult
+    ) -> bool:
+        """Post-process results from 1-to-0 operations for images.
+
+        For image objects with geometry results, applies detection ROIs if requested
+        in the result metadata (via DetectionROIParam).
+
+        Args:
+            obj: The image object that was analyzed
+            result: The analysis result (GeometryResult or TableResult)
+
+        Returns:
+            True if the object was modified and needs refresh, False otherwise
+        """
+        if isinstance(result, GeometryResult):
+            return sipi.apply_detection_rois(obj, result)
+        return False
 
     def register_operations(self) -> None:
         """Register operations."""
@@ -1192,29 +1210,5 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             data = self.panel.objview.get_sel_objects(include_groups=True)[0].data
             param.size = max(min(data.shape) // 40, 50)
 
-        # Get selected objects before processing
-        objs = self.panel.objview.get_sel_objects(include_groups=True)
-
-        # Run peak detection
-        results = self.run_feature("peak_detection", param, edit=edit)
-
-        # Create ROIs around detected peaks if requested
-        if results and param.create_rois:
-            for obj, adapter in zip(objs, results.results):
-                obj: ImageObj
-                adapter: GeometryAdapter
-                try:
-                    obj.roi = create_image_roi_around_points(
-                        adapter.result.coords, roi_geometry=param.roi_geometry
-                    )
-                except ValueError:
-                    continue
-            # Refresh plot to show new ROIs
-            self.panel.refresh_plot(
-                "selected",
-                update_items=True,
-                only_visible=False,
-                only_existing=True,
-            )
-
-        return results
+        # Run peak detection (ROI creation is handled automatically by base class)
+        return self.run_feature("peak_detection", param, edit=edit)

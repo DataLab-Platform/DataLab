@@ -42,6 +42,21 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * **2D peak detection enhancements**: Added an option to choose the ROI geometry around detected peaks
   (either rectangular or circular).
 
+* **Detection features with ROI creation**: All image detection functions now support automatic ROI creation
+  * ROI creation option available for 7 detection algorithms:
+    * Peak detection (`peak_detection`)
+    * Contour shape detection (`contour_shape`)
+    * Blob detection - DOG method (`blob_dog`)
+    * Blob detection - DOH method (`blob_doh`)
+    * Blob detection - LOG method (`blob_log`)
+    * Blob detection - OpenCV method (`blob_opencv`)
+    * Hough circle detection (`hough_circle_peaks`)
+  * Each detection function provides two parameters:
+    * "Create ROIs around detected features": Enable/disable automatic ROI creation
+    * "ROI geometry": Choose between rectangular or circular ROIs
+  * ROIs are automatically created after detection completes
+  * ROI size is optimized based on feature spacing and image bounds
+
 * **Interactive object creation and processing**: New interactive workflow for creating and processing objects
   * **Interactive object creation**: Signal/image creation parameters can now be modified after creation
     * When creating a new signal or image (Gaussian, sine, etc.), a new "Creation" tab appears in the object properties panel

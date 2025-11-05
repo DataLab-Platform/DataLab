@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-03 16:57+0100\n"
+"POT-Creation-Date: 2025-11-05 14:24+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -579,7 +579,6 @@ msgstr "Binning"
 msgid "View images side-by-side"
 msgstr "Voir les images côte à côte"
 
-#, python-format
 msgid "View selected images side-by-side in a new window"
 msgstr "Voir les images sélectionnées côte à côte dans une nouvelle fenêtre"
 
@@ -3148,3 +3147,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

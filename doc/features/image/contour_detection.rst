@@ -15,6 +15,14 @@ How to use the feature:
   - Eventually create a ROI around the target area
   - Select "Contour detection" in "Analysis" menu
   - Enter parameter "Shape" ("Ellipse", "Circle" or "Polygon")
+  - Optionally, enable "Create regions of interest" to automatically create
+    ROIs around each detected contour:
+
+    * Choose ROI geometry: "Rectangle" or "Circle"
+    * ROI size is automatically calculated based on the minimum distance
+      between detected contours (to avoid overlap)
+    * This feature requires at least 2 detected contours
+    * Created ROIs can be useful for subsequent processing on each contour area
 
 .. figure:: /images/contour_detection/contour_app_results.png
 

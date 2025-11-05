@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 15:45+0200\n"
+"POT-Creation-Date: 2025-11-05 14:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -189,6 +189,27 @@ msgstr "Détection de taches (OpenCV)"
 
 msgid "Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
 msgstr "Détection de taches basée sur l'implémentation OpenCV de `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
+
+msgid "**Automatic ROI creation for detection features**"
+msgstr "**Création automatique de ROIs pour les fonctionnalités de détection**"
+
+msgid "All detection features (2D peak detection, contour detection, circle Hough transform, and blob detection) support automatic ROI creation around detected objects. This feature:"
+msgstr "Toutes les fonctionnalités de détection (détection de pics 2D, détection de contours, transformée de Hough circulaire et détection de taches) prennent en charge la création automatique de ROIs autour des objets détectés. Cette fonctionnalité :"
+
+msgid "Creates rectangular or circular ROIs around each detected feature"
+msgstr "Crée des ROIs rectangulaires ou circulaires autour de chaque objet détecté"
+
+msgid "Automatically sizes ROIs based on minimum distance between detections"
+msgstr "Dimensionne automatiquement les ROIs en fonction de la distance minimale entre les détections"
+
+msgid "Requires at least 2 detected objects to determine appropriate ROI size"
+msgstr "Nécessite au moins 2 objets détectés pour déterminer la taille appropriée de la ROI"
+
+msgid "Enables subsequent processing on individual detected regions"
+msgstr "Permet le traitement ultérieur des régions détectées individuellement"
+
+msgid "To use this feature, enable \"Create regions of interest\" in the detection parameters dialog and choose the desired ROI geometry."
+msgstr "Pour utiliser cette fonctionnalité, activez \"Créer des régions d'intérêt\" dans la boîte de dialogue des paramètres de détection et choisissez la géométrie de ROI souhaitée."
 
 msgid "Show results"
 msgstr "Afficher les résultats"
