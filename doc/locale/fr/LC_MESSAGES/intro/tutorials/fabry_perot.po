@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 12:32+0100\n"
+"POT-Creation-Date: 2025-11-05 18:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -58,14 +58,20 @@ msgstr "Sauvegarder l'espace de travail"
 msgid "Load the images"
 msgstr "Charger les images"
 
-msgid "The images used in this tutorial \"fabry_perot1.jpg\" and \"fabry_perot2.jpg\" are available in the tutorial data folder of DataLab's installation directory (``<DataLab installation directory>/data/tutorials/``). Alternatively, you can download them from :download:`here </_download/fabry_perot.zip>` and extract to the folder of your choice."
-msgstr "Les images utilisées dans ce tutoriel \"fabry_perot1.jpg\" et \"fabry_perot2.jpg\" sont disponibles dans le dossier de données du tutoriel du répertoire d'installation de DataLab (``<Répertoire d'installation de DataLab>/data/tutorials/``). Vous pouvez également les télécharger :download:`ici </_download/fabry_perot.zip>` et les extraire dans le dossier de votre choix."
+msgid "The images used in this tutorial \"fabry_perot1.jpg\" and \"fabry_perot2.jpg\" are available in the tutorial data folder of DataLab's installation directory (``<DataLab installation directory>/data/tutorials/``)."
+msgstr "Les images utilisées dans ce tutoriel \"fabry_perot1.jpg\" et \"fabry_perot2.jpg\" sont disponibles dans le dossier de données du tutoriel du répertoire d'installation de DataLab (``<Répertoire d'installation de DataLab>/data/tutorials/``)."
+
+msgid "Alternatively, you can download them from :download:`here </_download/fabry_perot.zip>` and extract to the folder of your choice."
+msgstr "Alternativement, vous pouvez les télécharger depuis :download:`ici </_download/fabry_perot.zip>` et les extraire dans le dossier de votre choix."
+
+msgid "Alternatively, they can be downloaded from the online documentation at https://datalab-platform.com."
+msgstr "Alternativement, elles peuvent être téléchargées depuis la documentation en ligne à l'adresse https://datalab-platform.com."
 
 msgid "First, we open DataLab and load the images from the menu file \"File > Open Image...\", with the |fileopen_ima| button in the toolbar or by dragging and dropping the files into DataLab."
 msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images depuis le menu \"Fichier > Ouvrir une image...\", avec le bouton |fileopen_ima| dans la barre d'outils ou en faisant glisser-déposer les fichiers dans DataLab."
 
 msgid "fileopen_ima"
-msgstr ""
+msgstr "fileopen_ima"
 
 msgid "Open the image files with \"File > Open Image...\", or with the |fileopen_ima| button in the toolbar, or by dragging and dropping the files into DataLab (on the panel on the right)."
 msgstr "Ouvrez les fichiers d'image avec \"Fichier > Ouvrir une image...\", ou avec le bouton |fileopen_ima| dans la barre d'outils, ou en faisant glisser-déposer les fichiers dans DataLab (sur le panneau de droite)."
@@ -86,7 +92,7 @@ msgid "Or, even better, you can change the default colormap in the DataLab setti
 msgstr "Ou, encore mieux, vous pouvez modifier la palette de couleurs par défaut dans les paramètres de DataLab en sélectionnant \"Edition > Paramètres...\" dans le menu, ou le bouton |libre-gui-settings| dans la barre d'outils."
 
 msgid "libre-gui-settings"
-msgstr ""
+msgstr "libre-gui-settings"
 
 msgid "Select the \"Visualization\" tab, and select the \"gray\" colormap."
 msgstr "Sélectionnez l'onglet \"Visualisation\", et sélectionnez la palette de couleurs \"gray\"."
@@ -176,10 +182,10 @@ msgid "Now, let's delete the image metadata (including the annotations) to clean
 msgstr "Maintenant, supprimons les métadonnées de l'image (y compris les annotations) pour nettoyer l'image. Sélectionnez l'entrée \"Supprimer les métadonnées de l'objet...\" dans le menu \"Edition\", ou le bouton |metadata_delete| dans la barre d'outils, et répondez \"Non\" à la boîte de dialogue de confirmation pour conserver la ROI et supprimer le reste des métadonnées."
 
 msgid "metadata_delete"
-msgstr ""
+msgstr "metadata_delete"
 
 msgid "Select the \"Delete object metadata\" entry in the \"Edit\" menu."
-msgstr "Sélectionnez l'entrée \"Supprimer les métadonnées\" dans le menu \"Edition\"."
+msgstr "Sélectionnez l'entrée \"Supprimer les métadonnées de l'objet\" dans le menu \"Édition\"."
 
 msgid "The \"Delete metadata\" dialog. Click \"No\" to keep the ROI and delete the rest of the metadata."
 msgstr "La boîte de dialogue \"Supprimer les métadonnées\". Cliquez sur \"Non\" pour conserver la ROI et supprimer le reste des métadonnées."
@@ -188,10 +194,10 @@ msgid "If we want to define the exact same ROI on the second image, we can copy/
 msgstr "Si nous voulons définir la même ROI exacte sur la deuxième image, nous pouvons copier/coller la ROI de la première image à la deuxième image. La meilleure façon de le faire est d'utiliser l'option de copier/coller présente dans le menu \"ROI\", ou les boutons |roi_copy| et |roi_paste| dans la barre d'outils : sélectionnez la première image, puis cliquez sur l'entrée \"Copier\" dans le menu \"ROI\" (ou le bouton |roi_copy| dans la barre d'outils), puis sélectionnez la deuxième image, et cliquez sur l'entrée \"Coller la ROI\" dans le menu \"ROI\" (ou le bouton |roi_paste| dans la barre d'outils)."
 
 msgid "roi_copy"
-msgstr ""
+msgstr "roi_copy"
 
 msgid "roi_paste"
-msgstr ""
+msgstr "roi_paste"
 
 msgid "Copying/pasting the metadata copies/pastes all the metadata, including the ROIs, but this would have the side effect of also copying/pasting the rest of the metadata."
 msgstr "Copier/coller les métadonnées copie/colle toutes les métadonnées, y compris les ROIs, mais cela aurait pour effet secondaire de copier/coller également le reste des métadonnées."
@@ -224,13 +230,13 @@ msgid "Either select the \"Line profile...\" entry |profile| in the \"Operations
 msgstr "Soit sélectionner l'entrée \"Profil rectiligne...\" |profile| dans le menu \"Opérations > Profils d'intensité\"."
 
 msgid "profile"
-msgstr ""
+msgstr "profile"
 
 msgid "Or activate the \"Cross section\" tool |cross_section| in the vertical toolbar on the left of the visualization panel."
 msgstr "Soit activer l'outil \"Profil rectiligne\" |cross_section| dans la barre d'outils verticale à gauche du panneau de visualisation."
 
 msgid "cross_section"
-msgstr ""
+msgstr "cross_section"
 
 msgid "Let's try the first option: select the \"Line profile...\" entry |profile|. This is the most straightforward way to extract a profile from an image, and it corresponds to the ``calc(\"line_profile\")`` computation feature of DataLab's API (so it can be used in a script, a plugin or a macro). Select the \"Line profile...\" entry |profile| in the \"Operations\" menu and the \"Line profile\" dialog will open, letting you select the profile row (for a horizontal profile) or column (for a vertical profile) on the image. You can also enter the row/column number directly by clicking on \"parameters...\" in the \"Line profile\" dialog."
 msgstr "Essayons la première option : sélectionnez l'entrée \"Profil rectiligne...\" |profile|. C'est la façon la plus simple d'extraire un profil d'une image, et cela correspond à la fonctionnalité de calcul ``calc(\"line_profile\")`` de l'API de DataLab (donc elle peut être utilisée dans un script, un plugin ou une macro). Sélectionnez l'entrée \"Profil rectiligne...\" |profile| dans le menu \"Opérations\" et la boîte de dialogue \"Profil rectiligne\" s'ouvrira, vous permettant de sélectionner la ligne du profil (pour un profil horizontal) ou la colonne (pour un profil vertical) sur l'image. Vous pouvez également entrer directement le numéro de ligne/colonne en cliquant sur \"paramètres...\" dans la boîte de dialogue \"Profil rectiligne\"."
@@ -263,7 +269,7 @@ msgid "Click on the \"Process signal\" button |to_signal| in the toolbar near th
 msgstr "Cliquez sur le bouton \"Traiter le signal\" |to_signal| dans la barre d'outils près du profil pour transférer le profil vers le panneau \"Signaux\". Le profil d'intensité est ajouté au panneau \"Signaux\", et DataLab bascule vers ce panneau pour afficher le profil."
 
 msgid "to_signal"
-msgstr ""
+msgstr "to_signal"
 
 msgid "Finally, we can save the workspace to a file. The workspace contains all the images and signals that were loaded or processed in DataLab. It also contains the analysis results, the visualization settings (colormaps, contrast, etc.), the metadata, and the annotations."
 msgstr "Enfin, nous pouvons sauvegarder l'espace de travail dans un fichier. L'espace de travail contient toutes les images et signaux qui ont été chargés ou traités dans DataLab. Il contient également les résultats d'analyse, les paramètres de visualisation (colormaps, contraste, etc.), les métadonnées et les annotations."
@@ -272,14 +278,13 @@ msgid "Save the workspace to a file with \"File > Save to HDF5 file...\", or the
 msgstr "Sauvegardez l'espace de travail dans un fichier avec \"Fichier > Sauvegarder dans un fichier HDF5...\", ou le bouton |filesave_h5| dans la barre d'outils."
 
 msgid "filesave_h5"
-msgstr ""
+msgstr "filesave_h5"
 
 msgid "If you want to load the workspace again, you can use the \"File > Open HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the \"File > Browse HDF5 file...\" (or the |h5browser| button in the toolbar) to load only a selection of data sets from the workspace."
 msgstr "Si vous souhaitez charger à nouveau l'espace de travail, vous pouvez utiliser \"Fichier > Ouvrir un fichier HDF5...\" (ou le bouton |fileopen_h5| dans la barre d'outils) pour charger l'ensemble de l'espace de travail, ou \"Fichier > Parcourir un fichier HDF5...\" (ou le bouton |h5browser| dans la barre d'outils) pour charger uniquement une sélection d'ensembles de données de l'espace de travail."
 
 msgid "fileopen_h5"
-msgstr ""
+msgstr "fileopen_h5"
 
 msgid "h5browser"
-msgstr ""
-
+msgstr "h5browser"

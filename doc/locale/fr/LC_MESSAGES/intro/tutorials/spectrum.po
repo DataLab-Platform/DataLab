@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:09+0100\n"
+"POT-Creation-Date: 2025-11-05 19:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -46,107 +46,152 @@ msgstr "Ajuster un modèle au spectre"
 msgid "Save the workspace to a file"
 msgstr "Sauvegarder l'espace de travail dans un fichier"
 
-msgid "First, we open DataLab and read the spectrum from a file."
-msgstr "Tout d'abord, nous ouvrons DataLab et lisons le spectre à partir d'un fichier."
+msgid "DataLab menus change depending on the context. Since we are going to work with a spectrum, a 1D signal, we need to select the Signal Panel before proceeding."
+msgstr "Les menus de DataLab changent en fonction du contexte. Comme nous allons travailler avec un spectre, un signal 1D, nous devons sélectionner le panneau Signal avant de continuer."
 
-msgid "Open the spectrum file with \"File > Open...\" , or with the |fileopen_sig| button in the toolbar, or by dragging and dropping the file into DataLab (on the panel on the right)."
-msgstr "Ouvrir le fichier de spectre avec \"Fichier > Ouvrir...\", ou avec le bouton |fileopen_sig| dans la barre d'outils, ou en faisant glisser et déposer le fichier dans DataLab (sur le panneau de droite)."
+msgid "In a typical workflow, we would open DataLab and read the spectrum from a file using \"File > Open...\", the |fileopen_sig| button in the toolbar, or by dragging and dropping the file into the panel on the right. However, for this tutorial, we will use the \"Plugins > Test data > Load spectrum of paracetamol\" feature to generate a test spectrum, which is convenient for demonstration purposes."
+msgstr "Dans un flux de travail typique, nous ouvririons DataLab et lirions le spectre à partir d'un fichier en utilisant \"Fichier > Ouvrir...\", le bouton |fileopen_sig| dans la barre d'outils, ou en faisant glisser-déposer le fichier dans le panneau de droite. Cependant, pour ce tutoriel, nous utiliserons la fonction \"Plugins > Données de test > Charger le spectre de paracétamol\" pour générer un spectre de test, ce qui est pratique à des fins de démonstration."
 
 msgid "fileopen_sig"
-msgstr ""
+msgstr "fileopen_sig"
 
-msgid "Here, we are actually generating the signal from a test data file (using \"Plugins > Test data > Load spectrum of paracetamol\"), but the principle is the same."
-msgstr "Ici, nous générons en fait le signal à partir d'un fichier de données de test (en utilisant \"Plugins > Test data > Load spectrum of paracetamol\"), mais le principe est le même."
+msgid "The \"File > Open...\" menu to open a spectrum file."
+msgstr "Le menu \"Fichier > Ouvrir...\" pour ouvrir un fichier de spectre."
 
-msgid "Using the \"Test data\" plugin is a convenient way to generate test data for tutorials, but you can use any file containing a spectrum, such as a spectrum from a real experiment."
-msgstr "Utiliser le plugin \"Données de test\" est un moyen pratique de générer des données de test pour les tutoriels, mais vous pouvez utiliser n'importe quel fichier contenant un spectre, comme un spectre provenant d'une véritable expérience."
+msgid "The \"Plugins > Test data > Load spectrum of paracetamol\" plugin to generate the test spectrum for this tutorial."
+msgstr "Le plugin \"Plugins > Données de test > Charger le spectre de paracétamol\" pour générer le spectre de test pour ce tutoriel."
 
-msgid "The spectrum is displayed in the main window."
-msgstr "Le spectre est affiché dans la fenêtre principale."
+msgid "Once opened, the spectrum is displayed in the main window. It is a 1D signal, so it is displayed as a curve. The horizontal axis is the energy axis, and the vertical axis is the intensity axis."
+msgstr "Une fois ouvert, le spectre est affiché dans la fenêtre principale. C'est un signal 1D, il est donc affiché sous forme de courbe. L'axe horizontal est l'axe de l'énergie et l'axe vertical est l'axe de l'intensité."
 
-msgid "The spectrum is a 1D signal, so it is displayed as a curve. The horizontal axis is the energy axis, and the vertical axis is the intensity axis."
-msgstr "Le spectre est un signal 1D, il est donc affiché sous forme de courbe. L'axe horizontal est l'axe de l'énergie et l'axe vertical est l'axe de l'intensité."
+msgid "The spectrum displayed on the \"Signal View\" panel."
+msgstr "Le spectre affiché dans le panneau \"Vue Signal\"."
 
-msgid "Now, let's process this spectrum by applying a filter to it. We will use a Wiener filter, which is a filter that can be used to remove noise from a signal, even if this is not absolutely necessary in this case."
-msgstr "A présent, traitons ce spectre en lui appliquant un filtre. Nous utiliserons un filtre de Wiener, qui est un filtre qui peut être utilisé pour supprimer le bruit d'un signal, même si cela paraît superflu dans le cas présent."
+msgid "The signal is quite clean. However, to demonstrate DataLab's filtering capabilities, we will apply a Wiener filter to reduce any residual noise while preserving the spectral features. This is available under \"Processing > Noise Reduction > Wiener filter\"."
+msgstr "Le signal est assez propre. Cependant, pour démontrer les capacités de filtrage de DataLab, nous allons appliquer un filtre de Wiener pour réduire tout bruit résiduel tout en préservant les caractéristiques spectrales. Ceci est disponible sous \"Traitement > Réduction du bruit > Filtre de Wiener\"."
 
-msgid "Open the filter window with \"Processing > Wiener filter\"."
-msgstr "Ouvrir la fenêtre de filtre avec \"Traitement > Filtre de Wiener\"."
+msgid "The \"Processing > Noise Reduction > Wiener filter\" menu option."
+msgstr "L'option de menu \"Traitement > Réduction du bruit > Filtre de Wiener\"."
 
-msgid "The result of the filter is displayed in the main window."
-msgstr "Le résultat du filtre est affiché dans la fenêtre principale."
+msgid "The result displayed in the main window."
+msgstr "Le résultat affiché dans la fenêtre principale."
 
-msgid "If we want to analyze a specific region of the spectrum, we can extract it from the spectrum using the \"ROI extraction\" feature from the \"Operations\" menu."
-msgstr "Si nous voulons analyser une région spécifique du spectre, nous pouvons l'extraire du spectre en utilisant la fonction \"Extraction de ROI\" du menu \"Opérations\"."
+msgid "Let's focus our analysis on one of the peaks of interest. To do that, we define a region of interest (ROI) around the feature we want to analyze and use the \"ROI > Extract...\" menu to extract it. The \"Regions of interest\" dialog box will be displayed. Select an area and click \"OK\". A confirmation window will appear—click \"Yes\" to extract the region of interest. A new signal containing the ROI will be created and displayed in the main window."
+msgstr "Concentrons notre analyse sur l'un des pics d'intérêt. Pour ce faire, nous définissons une région d'intérêt (ROI) autour de la caractéristique que nous voulons analyser et utilisons le menu \"ROI > Extraire...\" pour l'extraire. La boîte de dialogue \"Régions d'intérêt\" sera affichée. Sélectionnez une zone et cliquez sur \"OK\". Une fenêtre de confirmation apparaîtra—cliquez sur \"Oui\" pour extraire la région d'intérêt. Un nouveau signal contenant la ROI sera créé et affiché dans la fenêtre principale."
 
-msgid "Open the ROI extraction window with \"Operations > ROI extraction\"."
-msgstr "Ouvrir la fenêtre d'extraction de ROI avec \"Opérations > Extraction de ROI\"."
+msgid "The \"Operations > ROI extraction\" menu."
+msgstr "Le menu \"Opérations > Extraction de ROI\"."
 
-msgid "The \"Regions of interest\" dialog box is displayed. Click on \"Add ROI\" and resize the horizontal window to select the area. Then, click on \"OK\"."
-msgstr "La boîte de dialogue \"Régions d'intérêt\" est affichée. Cliquez sur \"Ajouter une ROI\" et redimensionnez la fenêtre horizontale pour sélectionner la zone. Ensuite, cliquez sur \"OK\"."
+msgid "The \"Regions of interest\" dialog box displayed."
+msgstr "La boîte de dialogue \"Régions d'intérêt\" affichée."
 
-msgid "The region of interest is displayed in the main window."
-msgstr "La région d'intérêt est affichée dans la fenêtre principale."
-
-msgid "Let's try to fit a model to the spectrum. We will use a Gaussian model, which is a model that can be used to fit a peak in a spectrum."
-msgstr "Essayons d'ajuster un modèle au spectre. Nous utiliserons un modèle gaussien, qui est un modèle typiquement utilisé pour ajuster un pic dans un spectre."
+msgid "The region of interest displayed in the main window."
+msgstr "La région d'intérêt affichée dans la fenêtre principale."
 
 msgid "Open the model fitting window with \"Processing > Fitting > Gaussian fit\"."
 msgstr "Ouvrir la fenêtre d'ajustement du modèle avec \"Traitement > Ajustement > Ajustement gaussien\"."
 
-msgid "The \"Gaussian fit\" dialog box is displayed. An automatic fit is performed by default. Click on \"OK\" (or eventually try to fit the model manually by adjusting the parameters or the sliders, or try to change the automatic fitting parameters)."
-msgstr "La boîte de dialogue \"Ajustement gaussien\" est affichée. Un ajustement automatique est effectué par défaut. Cliquez sur \"OK\" (ou essayez éventuellement d'ajuster le modèle manuellement en ajustant les paramètres ou les curseurs, ou essayez de modifier les paramètres d'ajustement automatique)."
+msgid "The result of the fit displayed in the main window."
+msgstr "Le résultat de l'ajustement affiché dans la fenêtre principale."
 
-msgid "The result of the fit is displayed in the main window. Here we selected both the spectrum and the fit in the \"Signals\" panel on the right, so both are displayed in the visualization panel on the left."
-msgstr "Le résultat de l'ajustement est affiché dans la fenêtre principale. Ici, nous avons sélectionné à la fois le spectre et l'ajustement dans le panneau \"Signaux\" à droite, donc les deux sont affichés dans le panneau de visualisation à gauche."
+msgid "Both the full spectrum and the fit are selected in the \"Signals\" panel, so that both are displayed in the visualization panel on the left. This allows for easy visual comparison if needed for the analysis."
+msgstr "Le spectre complet et l'ajustement sont tous deux sélectionnés dans le panneau \"Signaux\", de sorte que les deux sont affichés dans le panneau de visualisation à gauche. Cela permet une comparaison visuelle facile si nécessaire pour l'analyse."
 
-msgid "We may also select the full spectrum and the fit in the \"Signals\" panel on the right, so that both are displayed in the visualization panel on the left, if this has a sense for the analysis we want to perform. Note that the full spectrum visualization also contains the region of interest we extracted previously."
-msgstr "Nous pouvons également sélectionner le spectre complet et l'ajustement dans le panneau \"Signaux\" à droite, de sorte que les deux soient affichés dans le panneau de visualisation à gauche, si cela a un sens pour l'analyse que nous voulons effectuer. Notez que la visualisation du spectre complet contient également la région d'intérêt que nous avons extraite précédemment."
+msgid "Linear detrending"
+msgstr "Élimination de tendance linéaire"
 
-msgid "To demonstrate another processing feature, we can also try to detrend the spectrum."
-msgstr "Pour faire la démonstration d'une autre fonction de traitement, nous pouvons également essayer la fonctionnalité d'élimination de tendance."
+msgid "After fitting the main peak, we may want to remove any baseline drift present in the entire spectrum. The detrending function in DataLab performs a linear fit across the entire signal, including the peaks. In our signal, the peaks occupy a large portion of the data, which is acceptable for signals where peaks are symmetrically distributed around the center with similar amplitudes. However, this is not the case here, so we cannot expect this function to work well. Nevertheless, this example illustrates how DataLab functions can be combined to perform more advanced analyses."
+msgstr "Après avoir ajusté le pic principal, nous pouvons vouloir éliminer toute dérive de ligne de base présente dans l'ensemble du spectre. La fonction d'élimination de tendance dans DataLab effectue un ajustement linéaire sur l'ensemble du signal, y compris les pics. Dans notre signal, les pics occupent une grande partie des données, ce qui est acceptable pour les signaux où les pics sont distribués symétriquement autour du centre avec des amplitudes similaires. Cependant, ce n'est pas le cas ici, nous ne pouvons donc pas nous attendre à ce que cette fonction fonctionne bien. Néanmoins, cet exemple illustre comment les fonctions DataLab peuvent être combinées pour effectuer des analyses plus avancées."
 
-msgid "Execute the \"Processing > Detrending\" feature."
-msgstr "Exécutez la fonction \"Traitement > Elimination de tendance\"."
+msgid "To visualize the limitation mentioned above, we will apply the detrending function directly to the filtered signal. It's important to remember that we previously set a ROI on the signal to focus on the main peak. We need to remove this ROI constraint to perform detrending on the full signal. To execute the detrending, we use \"Processing > Detrending\", choose the linear detrending method, and click \"OK\". The result will be displayed in the main window."
+msgstr "Pour visualiser la limitation mentionnée ci-dessus, nous appliquerons la fonction d'élimination de tendance directement au signal filtré. Il est important de se rappeler que nous avons précédemment défini une ROI sur le signal pour nous concentrer sur le pic principal. Nous devons supprimer cette contrainte de ROI pour effectuer l'élimination de tendance sur le signal complet. Pour exécuter l'élimination de tendance, nous utilisons \"Traitement > Élimination de tendance\", choisissons la méthode d'élimination de tendance linéaire et cliquons sur \"OK\". Le résultat sera affiché dans la fenêtre principale."
+
+msgid "The \"Processing > Detrending\" feature."
+msgstr "La fonction \"Traitement > Élimination de tendance\"."
 
 msgid "We choose a linear detrending method, and we click on \"OK\"."
 msgstr "Nous choisissons une méthode d'élimination de tendance linéaire, et nous cliquons sur \"OK\"."
 
-msgid "The result of the detrending is displayed in the main window (in that specific case, the detrending may not be appropriate, but it is just to demonstrate the feature)."
-msgstr "Le résultat du traitement est affiché dans la fenêtre principale (dans ce cas précis, l'élimination de tendance n'est pas nécessairement appropriée, mais c'est juste pour démontrer la fonctionnalité)."
+msgid "The result of the detrending displayed in the main window."
+msgstr "Le résultat de l'élimination de tendance affiché dans la fenêtre principale."
 
-msgid "When analyzing a spectrum, it can be useful to try to identify the peaks in the spectrum. We can do this by fitting a multi-Gaussian model to the spectrum, using the \"Processing > Fitting > Multi-Gaussian fit\" feature."
-msgstr "Lors de l'analyse d'un spectre, il peut être utile d'essayer d'identifier les pics dans le spectre. Nous pouvons le faire en ajustant un modèle multi-gaussien au spectre, en utilisant la fonction \"Traitement > Ajustement > Ajustement multi-gaussien\"."
+msgid "Comparing the filtered and detrended signals shows, as expected, that the detrending function does not work well on this signal. As explained earlier, this is because the algorithm performs a linear fit across the entire signal, including the peaks. The effect is clearly visible in the plot: the higher peaks on the left start at an intensity value lower than those on the right after detrending, and all peaks have a baseline below zero."
+msgstr "La comparaison des signaux filtrés et sans tendance montre, comme prévu, que la fonction d'élimination de tendance ne fonctionne pas bien sur ce signal. Comme expliqué précédemment, c'est parce que l'algorithme effectue un ajustement linéaire sur l'ensemble du signal, y compris les pics. L'effet est clairement visible dans le tracé : les pics les plus élevés à gauche commencent à une valeur d'intensité inférieure à ceux de droite après l'élimination de tendance, et tous les pics ont une ligne de base en dessous de zéro."
 
-msgid "First, a \"Signal peak detection\" dialog box is displayed. We can adjust the the vertical cursor position to select the threshold for the peak detection, as well as the minimum distance between two peaks. Then, we click on \"OK\"."
-msgstr "Tout d'abord, une boîte de dialogue \"Détection de pics de signal\" est affichée. Nous pouvons ajuster la position du curseur vertical pour sélectionner le seuil de détection des pics, ainsi que la distance minimale entre deux pics. Ensuite, nous cliquons sur \"OK\"."
+msgid "Improved detrending with peak exclusion"
+msgstr "Élimination de tendance améliorée avec exclusion des pics"
 
-msgid "The \"Multi-Gaussian fit\" dialog box is displayed. An automatic fit is performed by default. Click on \"OK\" (or eventually try to fit the model manually by adjusting the parameters or the sliders, or try to change the automatic fitting parameters)."
-msgstr "La boîte de dialogue \"Ajustement multi-gaussien\" est affichée. Un ajustement automatique est effectué par défaut. Cliquez sur \"OK\" (ou essayez éventuellement d'ajuster le modèle manuellement en ajustant les paramètres ou les curseurs, ou essayez de modifier les paramètres d'ajustement automatique)."
+msgid "To overcome the detrending function's limitation, we can draw inspiration from the behavior of the detrended signal. We've already identified the problem: the linear fit includes both the baseline and the peaks."
+msgstr "Pour surmonter la limitation de la fonction d'élimination de tendance, nous pouvons nous inspirer du comportement du signal sans tendance. Nous avons déjà identifié le problème : l'ajustement linéaire inclut à la fois la ligne de base et les pics."
 
-msgid "We also could have used the \"Peak detection\" feature from the \"Operations\" menu to detect the peaks in the spectrum."
-msgstr "Nous aurions également pu utiliser la fonction \"Détection de pics\" du menu \"Opérations\" pour détecter les pics dans le spectre."
+msgid "For better detrending, we can first exclude the peaks and then perform a linear fit only on the non-peak regions. We can reasonably expect this approach to provide a more accurate baseline estimation and a better detrended signal."
+msgstr "Pour une meilleure élimination de tendance, nous pouvons d'abord exclure les pics puis effectuer un ajustement linéaire uniquement sur les régions sans pics. Nous pouvons raisonnablement nous attendre à ce que cette approche fournisse une estimation de ligne de base plus précise et un signal sans tendance de meilleure qualité."
 
-msgid "Open the \"Peak detection\" window with \"Operations > Peak detection\"."
-msgstr "Ouvrir la fenêtre \"Détection de pics\" avec \"Opérations > Détection de pics\"."
+msgid "This is illustrated in the following steps:"
+msgstr "Ceci est illustré dans les étapes suivantes :"
 
-msgid "After having adjusted the parameters of the peak detection dialog (same dialog as the one used for the multi-Gaussian fit), click on \"OK\". Then, we select the \"peak_detection\" and the original spectrum in the \"Signals\" panel on the right, so that both are displayed in the visualization panel on the left."
-msgstr "Après avoir ajusté les paramètres de la boîte de dialogue de détection de pics (même boîte de dialogue que celle utilisée pour l'ajustement multi-gaussien), cliquez sur \"OK\". Ensuite, nous sélectionnons la \"détection_de_pics\" et le spectre d'origine dans le panneau \"Signaux\" à droite, de sorte que les deux soient affichés dans le panneau de visualisation à gauche."
+msgid "We select the regions corresponding to the regions without peaks."
+msgstr "Nous sélectionnons les régions correspondant aux régions sans pics."
 
-msgid "Finally, we can save the workspace to a file. The workspace contains all the signals that were loaded in DataLab, as well as the processing results. It also contains the visualization settings (curve colors, etc.)."
-msgstr "Enfin, nous pouvons sauvegarder l'espace de travail dans un fichier. L'espace de travail contient tous les signaux qui ont été chargés dans DataLab, ainsi que les résultats du traitement. Il contient également les paramètres de visualisation (couleurs de courbe, etc.)."
+msgid "A linear fit is performed only on the selected regions."
+msgstr "Un ajustement linéaire est effectué uniquement sur les régions sélectionnées."
+
+msgid "The linear baseline obtained from the fit is shown."
+msgstr "La ligne de base linéaire obtenue à partir de l'ajustement est affichée."
+
+msgid "We delete the rois to apply the detrending on the whole signal."
+msgstr "Nous supprimons les ROIs pour appliquer l'élimination de tendance sur l'ensemble du signal."
+
+msgid "We use the \"difference\" operation to subtract the baseline from the original signal."
+msgstr "Nous utilisons l'opération \"différence\" pour soustraire la ligne de base du signal d'origine."
+
+msgid "We select the linear baseline to perform the subtraction."
+msgstr "Nous sélectionnons la ligne de base linéaire pour effectuer la soustraction."
+
+msgid "The resulting detrended signal is shown, now with a correct baseline."
+msgstr "Le signal sans tendance résultant est affiché, maintenant avec une ligne de base correcte."
+
+msgid "Automatic peak detection"
+msgstr "Détection automatique des pics"
+
+msgid "We can use DataLab's \"Multi-Gaussian fit\" function to automatically identify and fit multiple peaks in the spectrum by selecting \"Processing > Fitting > Multi-Gaussian fit\" from the menu."
+msgstr "Nous pouvons utiliser la fonction \"Ajustement multi-gaussien\" de DataLab pour identifier et ajuster automatiquement plusieurs pics dans le spectre en sélectionnant \"Traitement > Ajustement > Ajustement multi-gaussien\" dans le menu."
+
+msgid "First, the \"Signal peak detection\" dialog box appears. You can adjust the vertical cursor position to set the threshold for peak detection and specify the minimum distance between peaks. Then click \"OK\"."
+msgstr "Tout d'abord, la boîte de dialogue \"Détection de pics de signal\" apparaît. Vous pouvez ajuster la position du curseur vertical pour définir le seuil de détection des pics et spécifier la distance minimale entre les pics. Ensuite, cliquez sur \"OK\"."
+
+msgid "The \"Multi-Gaussian fit\" dialog box appears. An automatic fit is performed by default. Click \"OK\" (or optionally adjust the parameters manually using the sliders, or modify the automatic fitting parameters)."
+msgstr "La boîte de dialogue \"Ajustement multi-gaussien\" apparaît. Un ajustement automatique est effectué par défaut. Cliquez sur \"OK\" (ou ajustez éventuellement les paramètres manuellement à l'aide des curseurs, ou modifiez les paramètres d'ajustement automatique)."
+
+msgid "The result of the fit is displayed in the main window. Here we selected both the spectrum and the fit in the \"Signals\" panel on the right, so both are displayed in the visualization panel on the left."
+msgstr "Le résultat de l'ajustement est affiché dans la fenêtre principale. Ici, nous avons sélectionné à la fois le spectre et l'ajustement dans le panneau \"Signaux\" à droite, donc les deux sont affichés dans le panneau de visualisation à gauche."
+
+msgid "Alternatively, we could use the \"Peak detection\" feature from the \"Analysis\" menu to detect peaks in the spectrum. This is the first step of the \"Multi-Gaussian fit\" function and can be used independently to detect peaks without performing a fit, creating a signal with a delta function at each detected peak position."
+msgstr "Alternativement, nous pourrions utiliser la fonction \"Détection de pics\" du menu \"Analyse\" pour détecter les pics dans le spectre. Il s'agit de la première étape de la fonction \"Ajustement multi-gaussien\" et peut être utilisée indépendamment pour détecter les pics sans effectuer d'ajustement, créant un signal avec une fonction delta à chaque position de pic détectée."
+
+msgid "Open the \"Peak detection\" window with \"Analysis > Peak detection\"."
+msgstr "Ouvrir la fenêtre \"Détection de pics\" avec \"Analyse > Détection de pics\"."
+
+msgid "After adjusting the peak detection parameters (using the same dialog as for the multi-Gaussian fit), click \"OK\". Then select both the \"peak_detection\" result and the original spectrum in the \"Signals\" panel to display them together in the visualization panel on the left."
+msgstr "Après avoir ajusté les paramètres de détection de pics (en utilisant la même boîte de dialogue que pour l'ajustement multi-gaussien), cliquez sur \"OK\". Ensuite, sélectionnez à la fois le résultat \"détection_de_pics\" et le spectre d'origine dans le panneau \"Signaux\" pour les afficher ensemble dans le panneau de visualisation à gauche."
+
+msgid "Saving the workspace"
+msgstr "Sauvegarde de l'espace de travail"
+
+msgid "Finally, we can save the workspace to a file. The workspace contains all signals loaded or created in DataLab, along with processing results and visualization settings (such as curve colors)."
+msgstr "Enfin, nous pouvons sauvegarder l'espace de travail dans un fichier. L'espace de travail contient tous les signaux chargés ou créés dans DataLab, ainsi que les résultats de traitement et les paramètres de visualisation (tels que les couleurs de courbe)."
 
 msgid "Save the workspace to a file with \"File > Save to HDF5 file...\", or the |filesave_h5| button in the toolbar."
 msgstr "Sauvegarder l'espace de travail dans un fichier avec \"Fichier > Sauvegarder dans un fichier HDF5...\", ou le bouton |filesave_h5| dans la barre d'outils."
 
 msgid "filesave_h5"
-msgstr ""
+msgstr "filesave_h5"
 
 msgid "If you want to load the workspace again, you can use the \"File > Open HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the \"File > Browse HDF5 file...\" (or the |h5browser| button in the toolbar) to load only a selection of data sets from the workspace."
 msgstr "Si vous voulez charger à nouveau l'espace de travail, vous pouvez utiliser le \"Fichier > Ouvrir un fichier HDF5...\" (ou le bouton |fileopen_h5| dans la barre d'outils) pour charger l'ensemble de l'espace de travail, ou le \"Fichier > Parcourir un fichier HDF5...\" (ou le bouton |h5browser| dans la barre d'outils) pour charger uniquement une sélection d'ensembles de données de l'espace de travail."
 
 msgid "fileopen_h5"
-msgstr ""
+msgstr "fileopen_h5"
 
 msgid "h5browser"
-msgstr ""
+msgstr "h5browser"

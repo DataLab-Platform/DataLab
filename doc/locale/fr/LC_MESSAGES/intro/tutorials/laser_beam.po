@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:09+0100\n"
+"POT-Creation-Date: 2025-11-05 19:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -28,8 +28,8 @@ msgstr "DataLab, tutoriel, faisceau laser, taille, FWHM, ajustement gaussien, pr
 msgid ":octicon:`book;1em;sd-text-info` Measuring Laser Beam Size"
 msgstr ":octicon:`book;1em;sd-text-info` Mesurer la taille d'un faisceau laser"
 
-msgid "This example shows how to measure the size of a laser beam along the propagation axis, using using DataLab:"
-msgstr "Cet exemple montre comment mesurer la taille d'un faisceau laser le long de l'axe de propagation, en utilisant DataLab :"
+msgid "This example shows how to measure the size of a laser beam along the propagation axis using DataLab:"
+msgstr "Cet exemple montre comment mesurer la taille d'un faisceau laser le long de l'axe de propagation en utilisant DataLab :"
 
 msgid "Load all the images in a folder"
 msgstr "Ouvrir toutes les images d'un dossier"
@@ -58,134 +58,197 @@ msgstr "Effectuer la même analyse sur une pile d'images et sur les profils rés
 msgid "Plot the beam size as a function of the position along the propagation axis"
 msgstr "Tracer la taille du faisceau en fonction de la position le long de l'axe de propagation"
 
-msgid "First, we open DataLab and load the images:"
-msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images :"
+msgid "Load the images"
+msgstr "Charger les images"
 
-msgid "Open the image files with \"File > Open...\", or with the |fileopen_ima| button in the toolbar, or by dragging and dropping the files into DataLab (on the panel on the right)."
-msgstr "Ouvrir les fichiers d'images avec \"Fichier > Ouvrir...\", ou avec le bouton |fileopen_ima| dans la barre d'outils, ou en faisant glisser et déposer les fichiers dans DataLab (sur le panneau de droite)."
+msgid "The images used in this tutorial \"TEM00_z_*.jpg\" are available in the tutorial data folder of DataLab's installation directory (``<DataLab installation directory>/data/tutorials/``)."
+msgstr "Les images utilisées dans ce tutoriel \"TEM00_z_*.jpg\" sont disponibles dans le dossier de données du tutoriel du répertoire d'installation de DataLab (``<Répertoire d'installation de DataLab>/data/tutorials/``)."
 
-msgid "fileopen_ima"
-msgstr ""
+msgid "Alternatively, you can download them from :download:`here </_download/laser_beam.zip>` and extract to the folder of your choice."
+msgstr "Alternativement, vous pouvez les télécharger depuis :download:`ici </_download/laser_beam.zip>` et les extraire dans le dossier de votre choix."
 
-msgid "Select the test images \"TEM00_z_*.jpg\" and click \"Open\"."
-msgstr "Sélectionnez les images de test \"TEM00_z_*.jpg\" et cliquez sur \"Ouvrir\"."
+msgid "Alternatively, they can be downloaded from the online documentation at https://datalab-platform.com."
+msgstr "Alternativement, elles peuvent être téléchargées depuis la documentation en ligne à l'adresse https://datalab-platform.com."
 
-msgid "The selected images are loaded in the \"Images\" panel. The last image is displayed in the main window. On each image, we can zoom in and out by pressing the right mouse button and dragging the mouse up and down. We can also pan the image by pressing the middle mouse button and dragging the mouse."
-msgstr "Les images sélectionnées sont chargées dans le panneau \"Images\". La dernière image est affichée dans la fenêtre principale. Sur chaque image, nous pouvons zoomer en appuyant sur le bouton droit de la souris et en faisant glisser la souris vers le haut et vers le bas. Nous pouvons également déplacer l'image en appuyant sur le bouton du milieu de la souris et en faisant glisser la souris."
+msgid "First, we open DataLab and load the images. When working with multiple images, the most efficient approach is to use the \"Open from directory...\" option from the \"File\" menu (or click the |fileopen_dir| button in the toolbar). This feature loads all images from a selected directory at once."
+msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images. Lorsque vous travaillez avec plusieurs images, l'approche la plus efficace consiste à utiliser l'option \"Ouvrir depuis un répertoire...\" du menu \"Fichier\" (ou cliquer sur le bouton |fileopen_dir| dans la barre d'outils). Cette fonction charge toutes les images d'un répertoire sélectionné en une seule fois."
+
+msgid "fileopen_dir"
+msgstr "fileopen_dir"
+
+msgid "The \"File > Open Image...\" menu"
+msgstr "Le menu \"Fichier > Ouvrir une image...\""
+
+msgid "Select the folder containing the images and click \"Choose\"."
+msgstr "Sélectionnez le dossier contenant les images et cliquez sur \"Choisir\"."
+
+msgid "The images are now loaded in the \"Image panel\". You can zoom in and out by right-clicking and dragging the mouse vertically. To pan the image, use the middle mouse button while dragging."
+msgstr "Les images sont maintenant chargées dans le panneau \"Images\". Vous pouvez zoomer en cliquant avec le bouton droit et en faisant glisser la souris verticalement. Pour déplacer l'image, utilisez le bouton du milieu de la souris tout en faisant glisser."
 
 msgid "Zoom in and out with the right mouse button. Pan the image with the middle mouse button."
 msgstr "Zoomer avec le bouton droit de la souris. Déplacer l'image avec le bouton du milieu de la souris."
 
-msgid "If we want to display the images side by side, we can select the \"Distribute on a grid\" entry |distribute_on_grid| in the \"Operations\" menu."
-msgstr "Si nous voulons afficher les images côte à côte, nous pouvons sélectionner l'entrée \"Distribuer sur une grille\" |distribute_on_grid| dans le menu \"Opérations\"."
+msgid "To view multiple images simultaneously, select the image group and choose \"View images side-by-side\" from the \"View\" menu."
+msgstr "Pour voir plusieurs images simultanément, sélectionnez le groupe d'images et choisissez \"Afficher les images côte à côte\" dans le menu \"Affichage\"."
+
+msgid "Viewing images side by side."
+msgstr "Affichage des images côte à côte."
+
+msgid "The \"Operations\" menu includes a \"Distribute on a grid\" option |distribute_on_grid|. This feature repositions the images by applying offsets to their X and Y coordinates, arranging them in a grid layout for side-by-side viewing. Note that this operation modifies the image coordinates."
+msgstr "Le menu \"Opérations\" inclut une option \"Distribuer sur une grille\" |distribute_on_grid|. Cette fonction repositionne les images en appliquant des décalages à leurs coordonnées X et Y, les organisant dans une disposition en grille pour une visualisation côte à côte. Notez que cette opération modifie les coordonnées de l'image."
 
 msgid "distribute_on_grid"
-msgstr ""
+msgstr "distribute_on_grid"
 
-msgid "Images distributed on a 4 rows grid"
-msgstr "Images distribuées sur une grille de 4 lignes"
+msgid "Images distributed on 4 columns grid."
+msgstr "Images distribuées sur une grille de 4 colonnes."
 
-msgid "But, let's go back to the initial display by selecting the \"Reset image positions\" entry in the \"Operations\" menu."
-msgstr "Mais, revenons à l'affichage initial en sélectionnant l'entrée \"Réinitialiser les positions des images\" dans le menu \"Opérations\"."
+msgid "To restore the original image positions, use the \"Reset image positions\" option |reset_positions| from the \"Operations\" menu. Note that this operation sets all image origins to match the first image's origin, which means any initial differences in image origins will be lost."
+msgstr "Pour restaurer les positions d'image d'origine, utilisez l'option \"Réinitialiser les positions des images\" |reset_positions| du menu \"Opérations\". Notez que cette opération définit toutes les origines d'image pour qu'elles correspondent à l'origine de la première image, ce qui signifie que toutes les différences initiales dans les origines d'image seront perdues."
 
-msgid "If we select on of the images, we can see that there is background noise, so it might be useful to apply a threshold to the images."
-msgstr "Si nous sélectionnons l'une des images, nous pouvons voir qu'il y a du bruit de fond, il peut donc être utile d'appliquer un seuillage aux images."
+msgid "reset_positions"
+msgstr "reset_positions"
 
-msgid "Select one of the images in the \"Images\" panel, select the associated image in the visualization panel, and enable the \"Cross section\" tool |cross_section| in the vertical toolbar on the left of the visualization panel (this tool is a `PlotPy <https://github.com/PlotPyStack/plotpy>`_ feature). On this figure, we can see that the background noise is around 30 lsb (to show the curve marker, we had to select the profile curve and right-click on it to display the context menu, and select \"Markers > Bound to active item\")."
-msgstr "Sélectionnez l'une des images dans le panneau \"Images\", sélectionnez l'image associée dans le panneau de visualisation, et activez l'outil \"Section transversale\" |cross_section| dans la barre d'outils verticale à gauche du panneau de visualisation (cet outil est une fonctionnalité `PlotPy <https://github.com/PlotPyStack/plotpy>`_). Sur cette figure, nous pouvons voir que le bruit de fond est d'environ 30 lsb (pour afficher le marqueur de courbe, nous avons dû sélectionner la courbe de profil et cliquer avec le bouton droit de la souris dessus pour afficher le menu contextuel, puis sélectionner \"Marqueurs > Lié à l'élément actif\")."
+msgid "Remove background noise"
+msgstr "Supprimer le bruit de fond"
+
+msgid "When we select one of the images, we notice the presence of background noise, making it beneficial to apply a threshold to the images. Several methods are available to estimate the background noise level."
+msgstr "Lorsque nous sélectionnons l'une des images, nous remarquons la présence de bruit de fond, ce qui rend utile l'application d'un seuillage aux images. Plusieurs méthodes sont disponibles pour estimer le niveau de bruit de fond."
+
+msgid "One approach utilizes the \"Cross section\" tool, which is provided by the `PlotPy <https://github.com/PlotPyStack/plotpy>` library that DataLab uses for signal and image visualization. Select an image from the \"Image panel\", choose the corresponding image in the visualization panel, and activate the \"Cross section\" tool |cross_section| from the vertical toolbar on the left side of the visualization panel. This reveals that the background noise level is approximately 30 lsb."
+msgstr "Une approche utilise l'outil \"Profil rectiligne\", qui est fourni par la bibliothèque `PlotPy <https://github.com/PlotPyStack/plotpy>` que DataLab utilise pour la visualisation de signaux et d'images. Sélectionnez une image dans le panneau \"Images\", choisissez l'image correspondante dans le panneau de visualisation, et activez l'outil \"Profil rectiligne\" |cross_section| depuis la barre d'outils verticale sur le côté gauche du panneau de visualisation. Cela révèle que le niveau de bruit de fond est d'environ 30 lsb."
 
 msgid "cross_section"
-msgstr ""
+msgstr "cross_section"
 
-msgid "Another way to measure the background noise is to use the \"Image statistics\" tool |imagestats| in the vertical toolbar on the left of the visualization panel. It displays statistics on a the rectangular area defined by dragging the mouse on the image. This confirms that the background noise is around 30 lsb."
-msgstr "Une autre façon de mesurer le bruit de fond est d'utiliser l'outil \"Statistiques de l'image\" |imagestats| dans la barre d'outils verticale à gauche du panneau de visualisation. Il affiche des statistiques sur une zone rectangulaire définie en faisant glisser la souris sur l'image. Cela confirme que le bruit de fond est d'environ 30 lsb."
+msgid "An image from the \"Image panel\". To display the curve marker, select the profile curve and right-click to open the context menu, then choose \"Markers > Bound to active item\"."
+msgstr "Une image du panneau \"Images\". Pour afficher le marqueur de courbe, sélectionnez la courbe de profil et cliquez avec le bouton droit pour ouvrir le menu contextuel, puis choisissez \"Marqueurs > Lié à l'élément actif\"."
+
+msgid "Another method for measuring background noise, also provided by `PlotPy <https://github.com/PlotPyStack/plotpy>`, involves using the \"Image statistics\" tool |imagestats| from the vertical toolbar on the left side of the visualization panel. This tool displays statistical information for a rectangular region that you define by dragging the mouse across the image. This analysis confirms that the background noise level is approximately 30 lsb."
+msgstr "Une autre méthode pour mesurer le bruit de fond, également fournie par `PlotPy <https://github.com/PlotPyStack/plotpy>`, consiste à utiliser l'outil \"Statistiques de l'image\" |imagestats| de la barre d'outils verticale sur le côté gauche du panneau de visualisation. Cet outil affiche des informations statistiques pour une région rectangulaire que vous définissez en faisant glisser la souris sur l'image. Cette analyse confirme que le niveau de bruit de fond est d'environ 30 lsb."
 
 msgid "imagestats"
-msgstr ""
+msgstr "imagestats"
 
-msgid "After applying a threshold at 35 lsb (with \"Processing > Thresholding...\"), we can compute a more accurate position of the beam center using \"Analysis > Centroid\"."
-msgstr "Après avoir appliqué un seuil à 35 lsb (avec \"Traitement > Seuillage...\"), nous pouvons calculer une position plus précise du centre du faisceau en utilisant Analyse > Centre de gravité\"."
+msgid "The \"Image statistics\" tool |imagestats| in the vertical toolbar."
+msgstr "L'outil \"Statistiques de l'image\" |imagestats| dans la barre d'outils verticale."
 
-msgid "Then we can extract a line profile along the horizontal axis with \"Operations > Intensity profiles > Line profile\". We set the row position to the centroid position computed previously (i.e. 668)."
-msgstr "Ensuite, nous pouvons extraire un profil de ligne le long de l'axe horizontal avec \"Opérations > Profils d'intensité > Profil de ligne\". Nous définissons la position de la ligne sur la position du centre de gravité calculée précédemment (c'est-à-dire 668)."
+msgid "Note that these tools are not persistent: the analysis results disappear when you select another image, they are intended to provide a fast insight on the image data."
+msgstr "Notez que ces outils ne sont pas persistants : les résultats d'analyse disparaissent lorsque vous sélectionnez une autre image, ils sont destinés à fournir un aperçu rapide des données d'image."
 
-msgid "The intensity profile is displayed in the \"Signals\" panel. We can fit the profile to a Gaussian function with \"Processing > Fitting > Gaussian fit\". Here we have selected both signals."
-msgstr "Le profil d'intensité est affiché dans le panneau \"Signaux\". Nous pouvons ajuster le profil à une fonction gaussienne avec \"Traitement > Ajustement > Ajustement gaussien\". Ici, nous avons sélectionné les deux signaux."
+msgid "Now we can clip the image at 35 lsb to remove the background noise using the \"Processing > Level Adjustment > Clipping...\" menu."
+msgstr "Nous pouvons maintenant écrêter l'image à 35 lsb pour supprimer le bruit de fond en utilisant le menu \"Traitement > Ajustement de niveau > Écrêtage...\"."
 
-msgid "If we go back to the first signal, the intensity profile, we can also directly compute the FWHM with \"Analysis > Full width at half maximum\". The \"Results\" dialog displays a lot of information about the computation, including the FWHM value (that is the `L` column, \"L\" for \"Length\" because the result shape is a segment and FWHM is the length of the segment)."
-msgstr "Si nous revenons au premier signal, le profil d'intensité, nous pouvons également calculer directement la FWHM avec Analyse > Largeur à mi-hauteur\". La boîte de dialogue \"Résultats\" affiche beaucoup d'informations sur le calcul, y compris la valeur FWHM (qui est la colonne `L`, \"L\" pour \"Longueur\" car la forme du résultat est un segment et FWHM est la longueur du segment)."
+msgid "The two original and the clipped images are displayed side by side in the \"Image view\" (using the \"Distribute on a grid\" feature seen previously)."
+msgstr "Les deux images d'origine et l'image écrêtée sont affichées côte à côte dans la \"Vue Image\" (en utilisant la fonction \"Distribuer sur une grille\" vue précédemment)."
 
-msgid "The FWHM is also displayed on the curve, with an optional label (here, the title of this measurement has been displayed with \"View > Show graphical object titles\" or the |show_titles| button in the toolbar)."
-msgstr "La largeur à mi-hauteur est également affichée sur la courbe, avec une étiquette optionnelle (ici, le titre de cette mesure a été affiché avec \"Affichage > Afficher les titres des objets graphiques\" ou le bouton |show_titles| dans la barre d'outils)."
+msgid "Beam size measurement"
+msgstr "Mesure de la taille du faisceau"
 
-msgid "show_titles"
-msgstr ""
+msgid "We can now compute the centroid of the beam—that is, the position of its center of mass. To do this, select \"Analysis > Centroid\" from the menu."
+msgstr "Nous pouvons maintenant calculer le centroïde du faisceau—c'est-à-dire la position de son centre de masse. Pour ce faire, sélectionnez \"Analyse > Centroïde\" dans le menu."
 
-msgid "Now, let's try another method to measure the beam size."
-msgstr "Maintenant, essayons une autre méthode pour mesurer la taille du faisceau."
+msgid "The centroid position is displayed on the image."
+msgstr "La position du centroïde est affichée sur l'image."
 
-msgid "From the \"Images\" panel, we can extract the radial intensity profile with \"Operations > Intensity profiles > Radial profile\"."
-msgstr "À partir du panneau \"Images\", nous pouvons extraire le profil d'intensité radial avec \"Opérations > Profils d'intensité > Profil radial\"."
+msgid "Next, we can extract a line profile along the horizontal axis using \"Operations > Intensity profiles > Line profile\". Set the row position to the previously computed centroid position (i.e., 668) using the \"Set Parameters\" button. See :ref:`tutorial_fabry_perot` for more details on intensity profile extraction."
+msgstr "Ensuite, nous pouvons extraire un profil de ligne le long de l'axe horizontal en utilisant \"Opérations > Profils d'intensité > Profil rectiligne\". Définissez la position de la ligne sur la position du centroïde calculée précédemment (c'est-à-dire 668) en utilisant le bouton \"Définir les paramètres\". Voir :ref:`tutorial_fabry_perot` pour plus de détails sur l'extraction de profil d'intensité."
 
-msgid "The radial intensity profile may be computed around the centroid position, or around the center of the image, or around a user-defined position. Here we have selected the centroid position."
-msgstr "Le profil d'intensité radial peut être calculé autour de la position du centre de gravité, ou autour du centre de l'image, ou autour d'une position définie par l'utilisateur. Ici, nous avons sélectionné la position du centre de gravité."
+msgid "The intensity profile will be displayed in the \"Signal panel\". We can then fit the profile to a Gaussian function using \"Processing > Fitting > Gaussian fit\". Here we have selected both signals for comparison."
+msgstr "Le profil d'intensité sera affiché dans le panneau \"Signaux\". Nous pouvons ensuite ajuster le profil à une fonction gaussienne en utilisant \"Traitement > Ajustement > Ajustement gaussien\". Ici, nous avons sélectionné les deux signaux pour comparaison."
 
-msgid "The radial intensity profile is displayed in the \"Signals\" panel. It is smoother than the line profile, because it is computed from a larger number of pixels, thus averaging the noise."
-msgstr "Le profil d'intensité radial est affiché dans le panneau \"Signaux\". Il est plus lisse que le profil de ligne, car il est calculé à partir d'un plus grand nombre de pixels, ce qui permet de lisser le bruit."
+msgid "The intensity profile fitted to a Gaussian function. Here both signals are selected."
+msgstr "Le profil d'intensité ajusté à une fonction gaussienne. Ici, les deux signaux sont sélectionnés."
 
-msgid "All these operations and computations that we have performed on a single image can be applied to all the images in the \"Images\" panel."
-msgstr "Toutes ces opérations et calculs que nous avons effectués sur une seule image peuvent être appliqués à toutes les images du panneau \"Images\"."
+msgid "Now let's explore another method to compute the FWHM. Returning to the intensity profile signal, we can directly compute the FWHM using \"Analysis > Full width at half maximum\". You can choose the estimation method based on your curve characteristics and optionally specify the interval to consider for this computation. Once complete, the results window will display the FWHM value, which is stored in the metadata and shown on the curve."
+msgstr "Explorons maintenant une autre méthode pour calculer la FWHM. En revenant au signal de profil d'intensité, nous pouvons calculer directement la FWHM en utilisant \"Analyse > Largeur à mi-hauteur\". Vous pouvez choisir la méthode d'estimation en fonction des caractéristiques de votre courbe et spécifier éventuellement l'intervalle à considérer pour ce calcul. Une fois terminé, la fenêtre de résultats affichera la valeur FWHM, qui est stockée dans les métadonnées et affichée sur la courbe."
 
-msgid "To do that, we begin by cleaning the \"Signals\" panel (with \"Edit > Delete all\" or the |delete_all| button in the toolbar). We alse clean the intermediate results in the \"Images\" panel by selecting the images obtained during our prototyping and deleting them individually (with \"Edit > Remove\" or the |delete| button)."
-msgstr "Pour ce faire, nous commençons par nettoyer le panneau \"Signaux\" (avec \"Édition > Tout supprimer\" ou le bouton |delete_all| dans la barre d'outils). Nous nettoyons également les résultats intermédiaires dans le panneau \"Images\" en sélectionnant les images obtenues lors de notre prototypage et en les supprimant individuellement (avec \"Édition > Supprimer\" ou le bouton |delete|)."
+msgid "The popup that allows to choose the method to estimate the FWHM."
+msgstr "La fenêtre contextuelle qui permet de choisir la méthode pour estimer la FWHM."
+
+msgid "The FWHM result shown in the popup and over the curve."
+msgstr "Le résultat de la FWHM affiché dans la fenêtre contextuelle et sur la courbe."
+
+msgid "Let's also try another method to measure the beam size by returning to the image."
+msgstr "Essayons également une autre méthode pour mesurer la taille du faisceau en revenant à l'image."
+
+msgid "From the \"Image panel\", we can extract the radial intensity profile using \"Operations > Intensity profiles > Radial profile\". The radial intensity profile can be computed around the centroid position, the center of the image, or a user-defined position, depending on your data. For our data, which appears to have radial symmetry with a center not necessarily identical to the image center, the best option is the centroid position."
+msgstr "Depuis le panneau \"Images\", nous pouvons extraire le profil d'intensité radial en utilisant \"Opérations > Profils d'intensité > Profil radial\". Le profil d'intensité radial peut être calculé autour de la position du centroïde, du centre de l'image ou d'une position définie par l'utilisateur, selon vos données. Pour nos données, qui semblent avoir une symétrie radiale avec un centre pas nécessairement identique au centre de l'image, la meilleure option est la position du centroïde."
+
+msgid "The options available for the Radial Profile computation."
+msgstr "Les options disponibles pour le calcul du profil radial."
+
+msgid "The radial intensity profile displayed in the \"Signal panel\". It is smoother than the line profile, because it is computed from a larger number of pixels, thus averaging the noise."
+msgstr "Le profil d'intensité radial affiché dans le panneau \"Signaux\". Il est plus lisse que le profil de ligne, car il est calculé à partir d'un plus grand nombre de pixels, ce qui permet de moyenner le bruit."
+
+msgid "Apply these operations to all the images"
+msgstr "Appliquer ces opérations à toutes les images"
+
+msgid "All the operations and computations performed on a single image can be applied to all images in the \"Image panel\"."
+msgstr "Toutes les opérations et calculs effectués sur une seule image peuvent être appliqués à toutes les images du panneau \"Images\"."
+
+msgid "To begin, clean the \"Signal panel\" using \"Edit > Delete all\" or the |delete_all| button in the toolbar. Also remove intermediate results from the \"Image panel\" by selecting the images created during prototyping and deleting them individually using \"Edit > Remove\" or the |delete| button."
+msgstr "Pour commencer, nettoyez le panneau \"Signaux\" en utilisant \"Édition > Tout supprimer\" ou le bouton |delete_all| dans la barre d'outils. Supprimez également les résultats intermédiaires du panneau \"Images\" en sélectionnant les images créées lors du prototypage et en les supprimant individuellement en utilisant \"Édition > Supprimer\" ou le bouton |delete|."
 
 msgid "delete_all"
-msgstr ""
+msgstr "delete_all"
 
 msgid "delete"
-msgstr ""
+msgstr "delete"
 
-msgid "Then, we select all the images in the \"Images\" panel (individually, or by selecting the whole group \"g001\")."
-msgstr "Ensuite, nous sélectionnons toutes les images dans le panneau \"Images\" (individuellement, ou en sélectionnant l'ensemble du groupe \"g001\")."
+msgid "Next, select all images in the \"Image panel\" (individually or by selecting the entire group \"g001\")."
+msgstr "Ensuite, sélectionnez toutes les images dans le panneau \"Images\" (individuellement ou en sélectionnant l'ensemble du groupe \"g001\")."
 
-msgid "We apply the threshold to all the images, and the we extract the radial intensity profile for all the images (after selecting the whole group \"g002\" - it should be automatically selected if you had selected \"g001\" before applying the threshold)."
-msgstr "Nous appliquons le seuil à toutes les images, puis nous extrayons le profil d'intensité radial pour toutes les images (après avoir sélectionné l'ensemble du groupe \"g002\" - il devrait être automatiquement sélectionné si vous aviez sélectionné \"g001\" avant d'appliquer le seuil)."
+msgid "Apply the clipping operation to all images, then extract the radial intensity profiles for all images (after selecting the entire group \"g002\"—it should be automatically selected if you had \"g001\" selected before applying the threshold)."
+msgstr "Appliquez l'opération d'écrêtage à toutes les images, puis extrayez les profils d'intensité radiaux pour toutes les images (après avoir sélectionné l'ensemble du groupe \"g002\"—il devrait être automatiquement sélectionné si vous aviez \"g001\" sélectionné avant d'appliquer le seuil)."
 
-msgid "The \"Signals\" panel now contains all the radial intensity profiles."
+msgid "The clipping applies to all images of the group."
+msgstr "L'écrêtage s'applique à toutes les images du groupe."
+
+msgid "The \"Signal panel\" now contains all the radial intensity profiles."
 msgstr "Le panneau \"Signaux\" contient maintenant tous les profils d'intensité radiaux."
 
-msgid "We can compute the FWHM of all the radial intensity profiles: the \"Results\" dialog displays the FWHM values for all the profiles."
-msgstr "Nous pouvons calculer la FWHM de tous les profils d'intensité radiaux : la boîte de dialogue \"Résultats\" affiche les valeurs FWHM pour tous les profils."
+msgid "We can now compute the FWHM for all radial intensity profiles. The \"Results\" dialog will display the FWHM values for all profiles."
+msgstr "Nous pouvons maintenant calculer la FWHM pour tous les profils d'intensité radiaux. La boîte de dialogue \"Résultats\" affichera les valeurs FWHM pour tous les profils."
 
-msgid "If you want to show the analysis results again, you can select the \"Show results\" |show_results| entry in the \"Analysis\" menu, or the \"Show results\" |show_results| button, below the image list:"
-msgstr "Si vous souhaitez afficher à nouveau les résultats d'analyse, vous pouvez sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le menu Analyse\", ou le bouton \"Afficher les résultats\" |show_results|, en dessous de la liste des images :"
+msgid "The \"Results\" dialog displays the FWHM values for all the profiles."
+msgstr "La boîte de dialogue \"Résultats\" affiche les valeurs FWHM pour tous les profils."
+
+msgid "To display the analysis results again, select \"Show results\" |show_results| from the \"Analysis\" menu, or click the \"Show results\" |show_results| button below the image list:"
+msgstr "Pour afficher à nouveau les résultats d'analyse, sélectionnez \"Afficher les résultats\" |show_results| dans le menu \"Analyse\", ou cliquez sur le bouton \"Afficher les résultats\" |show_results| en dessous de la liste des images :"
 
 msgid "show_results"
-msgstr ""
+msgstr "show_results"
 
-msgid "Finally, we can plot the beam size as a function of the position along the propagation axis. To do that, we use the \"Plot results\" feature |plot_results| in the \"Analysis\" menu. This feature allows to plot result data sets by choosing the x and y axes among the result columns. Here, we choose the to plot the FWHM values (`L`) as a function of the image index (`Indices`)."
-msgstr "Enfin, nous pouvons tracer la taille du faisceau en fonction de la position le long de l'axe de propagation. Pour ce faire, nous utilisons la fonction \"Tracer les résultats\" |plot_results| dans le menu Analyse\". Cette fonction permet de tracer les ensembles de données de résultats en choisissant les axes x et y parmi les colonnes de résultats. Ici, nous choisissons de tracer les valeurs FWHM (`L`) en fonction de l'index de l'image (`Indices`)."
+msgid "Finally, we can plot the beam size as a function of position along the propagation axis using the \"Plot results\" feature |plot_results| from the \"Analysis\" menu. This feature allows you to plot result datasets by selecting the x and y axes from the available result columns. Here, we will plot the FWHM values (`L`) as a function of the image index (`Indices`)."
+msgstr "Enfin, nous pouvons tracer la taille du faisceau en fonction de la position le long de l'axe de propagation en utilisant la fonction \"Tracer les résultats\" |plot_results| du menu \"Analyse\". Cette fonction vous permet de tracer des ensembles de données de résultats en sélectionnant les axes x et y parmi les colonnes de résultats disponibles. Ici, nous allons tracer les valeurs FWHM (`L`) en fonction de l'index de l'image (`Indices`)."
 
 msgid "plot_results"
-msgstr ""
+msgstr "plot_results"
 
-msgid "The plot is displayed in the \"Signals\" panel and shows that the beam size increases with the position along the propagation axis (the position is here in arbitrary units, the image index)."
-msgstr "Le tracé est affiché dans le panneau \"Signaux\" et montre que la taille du faisceau augmente avec la position le long de l'axe de propagation (la position est ici en unités arbitraires, l'index de l'image)."
+msgid "The \"Plot results\" feature |plot_results| in the \"Analysis\" menu."
+msgstr "La fonction \"Tracer les résultats\" |plot_results| dans le menu \"Analyse\"."
 
-msgid "We can also calibrate the X and Y axis using \"Processing > Linear calibration\". Here we have set the X axis to the position in mm (and entered the title and unit in the \"Properties\" group box)."
-msgstr "Nous pouvons également étalonner les axes X et Y en utilisant \"Traitement > Étalonnage linéaire\". Ici, nous avons réglé l'axe X sur la position en mm (et entré le titre et l'unité dans le groupe de boîtes \"Propriétés\")."
+msgid "The beam size as a function of position along the propagation axis (the position is in arbitrary units—the image index)."
+msgstr "La taille du faisceau en fonction de la position le long de l'axe de propagation (la position est en unités arbitraires—l'index de l'image)."
+
+msgid "We can also calibrate the X and Y axes using \"Processing > Linear calibration\". Here we set the X axis to the position in mm (entering the title and unit in the \"Properties\" group box) using the formula: :math:`X[\\textrm{mm}] = 0.5 \\cdot i + 10` where :math:`i` is the image index."
+msgstr "Nous pouvons également étalonner les axes X et Y en utilisant \"Traitement > Étalonnage linéaire\". Ici, nous définissons l'axe X sur la position en mm (en entrant le titre et l'unité dans le groupe \"Propriétés\") en utilisant la formule : :math:`X[\\textrm{mm}] = 0.5 \\cdot i + 10` où :math:`i` est l'index de l'image."
+
+msgid "The calibrated beam size as a function of the position along the propagation axis (the position is now in mm)."
+msgstr "La taille du faisceau étalonné en fonction de la position le long de l'axe de propagation (la position est maintenant en mm)."
 
 msgid "Finally, we can save the workspace to a file |filesave_h5|. The workspace contains all the images and signals that were loaded or processed in DataLab. It also contains the analysis results, the visualization settings (colormaps, contrast, etc.), the metadata, and the annotations."
 msgstr "Enfin, nous pouvons enregistrer l'espace de travail dans un fichier |filesave_h5|. L'espace de travail contient toutes les images et signaux qui ont été chargés ou traités dans DataLab. Il contient également les résultats d'analyse, les paramètres de visualisation (cartes de couleurs, contraste, etc.), les métadonnées et les annotations."
 
 msgid "filesave_h5"
-msgstr ""
+msgstr "filesave_h5"
 
 msgid "If you want to load the workspace again, you can use the \"File > Open HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the \"File > Browse HDF5 file...\" (or the |h5browser| button in the toolbar) to load only a selection of data sets from the workspace."
 msgstr "Si vous souhaitez charger à nouveau l'espace de travail, vous pouvez utiliser \"Fichier > Ouvrir un fichier HDF5...\" (ou le bouton |fileopen_h5| dans la barre d'outils) pour charger l'ensemble de l'espace de travail, ou \"Fichier > Parcourir un fichier HDF5...\" (ou le bouton |h5browser| dans la barre d'outils) pour charger uniquement une sélection d'ensembles de données de l'espace de travail."
 
 msgid "fileopen_h5"
-msgstr ""
+msgstr "fileopen_h5"
 
 msgid "h5browser"
-msgstr ""
+msgstr "h5browser"
