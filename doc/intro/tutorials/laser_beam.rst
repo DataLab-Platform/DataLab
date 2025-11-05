@@ -38,10 +38,10 @@ Load the images
        https://datalab-platform.com.
 
 
-First, we open DataLab and load the images: there are several ways to do so, but the most
-convenient to use with several images is to use the "Open from directory..." feature
-in the "File" menu (or the |fileopen_dir| button in the toolbar): this will open
-all the images in a selected directory.
+First, we open DataLab and load the images. When working with multiple images, the most
+efficient approach is to use the "Open from directory..." option
+from the "File" menu (or click the |fileopen_dir| button in the toolbar). This feature
+loads all images from a selected directory at once.
 
 .. figure:: ../../images/tutorials/laser_beam/00.png
 
@@ -56,10 +56,9 @@ all the images in a selected directory.
 
     Select the folder containing the images and click "Choose".
 
-The selected images are loaded in the "Images" panel. On each image,
-we can zoom in and out by pressing the right
-mouse button and dragging the mouse up and down. We can also pan the image by
-pressing the middle mouse button and dragging the mouse.
+The images are now loaded in the "Image panel". You can zoom in and out by
+right-clicking and dragging the mouse vertically.
+To pan the image, use the middle mouse button while dragging.
 
 .. figure:: ../../images/tutorials/laser_beam/02.png
 
@@ -68,28 +67,29 @@ pressing the middle mouse button and dragging the mouse.
 
 .. note::
 
-    If we want to display the images side by side, we can select the group of images
-    and select "view images side by side" in the "view" window.
+    To view multiple images simultaneously, select the image group and choose
+    "View images side-by-side" from the "View" menu.
 
     .. figure:: ../../images/tutorials/laser_beam/03b.png
 
-        Images side by side.
+        Viewing images side by side.
 
     .. warning::
-        In the "Operations" menu, there is a "Distribute on a grid" entry
-        |distribute_on_grid|. This will change the position of the images
-        adding an offset to their X and Y coordinates, so that they are displayed
-        side by side in a grid layout. This will modify your images.
+
+        The "Operations" menu includes a "Distribute on a grid" option
+        |distribute_on_grid|. This feature repositions the images by applying
+        offsets to their X and Y coordinates, arranging them in a grid layout
+        for side-by-side viewing. Note that this operation modifies the image
+        coordinates.
 
         .. figure:: ../../images/tutorials/laser_beam/03.png
 
         Images distributed on 4 columns grid.
 
-        You can usually go back to the initial position by selecting the
-        "Reset image positions" entry |reset_positions| in the "Operations" menu.
-        Anyway, this set the origin of the images to the first image origin,
-        so if the images had at the beginning different origins, this information
-        will be lost.
+        To restore the original image positions, use the "Reset image positions"
+        option |reset_positions| from the "Operations" menu. Note that this
+        operation sets all image origins to match the first image's origin,
+        which means any initial differences in image origins will be lost.
 
 .. |distribute_on_grid| image:: ../../../datalab/data/icons/operations/distribute_on_grid.svg
     :width: 24px
@@ -104,29 +104,29 @@ pressing the middle mouse button and dragging the mouse.
 Remove background noise
 -----------------------
 
-If we select one of the images, we can see that there is background noise, so it
-might be useful to apply a threshold to the images.
-There are several ways to estimate the background noise level.
+When we select one of the images, we notice the presence of background noise, making
+it beneficial to apply a threshold to the images.
+Several methods are available to estimate the background noise level.
 
-The first one takes advantage of the "Cross section" tool, that is provided by the
-`PlotPy <https://github.com/PlotPyStack/plotpy>` library used by DataLab for signal and image visualization.
-We select one of the images in the "Images" panel, select the associated image
-in the visualization panel, and enable the "Cross section" tool |cross_section| in
-the vertical toolbar on the left of the visualization panel. We
-can see that the background noise is around 30 lsb.
+One approach utilizes the "Cross section" tool, which is provided by the
+`PlotPy <https://github.com/PlotPyStack/plotpy>` library that DataLab uses for signal and image visualization.
+Select an image from the "Image panel", choose the corresponding image
+in the visualization panel, and activate the "Cross section" tool |cross_section| from
+the vertical toolbar on the left side of the visualization panel. This
+reveals that the background noise level is approximately 30 lsb.
 
 .. |cross_section| image:: ../../images/tutorials/csection.png
 
 .. figure:: ../../images/tutorials/laser_beam/04.png
 
-    One of the images in the "Images" panel. To show the curve marker,
-    select the profile curve and right-click on it to display the context
-    menu, and select "Markers > Bound to active item".
+    An image from the "Image panel". To display the curve marker,
+    select the profile curve and right-click to open the context
+    menu, then choose "Markers > Bound to active item".
 
-Another way to measure the background noise, still provided by `PlotPy <https://github.com/PlotPyStack/plotpy>`, is to use the "Image statistics" tool
-|imagestats| in the vertical toolbar on the left of the visualization panel.
-It displays statistics on a the rectangular area defined by dragging the mouse
-on the image. This confirms that the background noise is around 30 lsb.
+Another method for measuring background noise, also provided by `PlotPy <https://github.com/PlotPyStack/plotpy>`, involves using the "Image statistics" tool
+|imagestats| from the vertical toolbar on the left side of the visualization panel.
+This tool displays statistical information for a rectangular region that you define by dragging the mouse
+across the image. This analysis confirms that the background noise level is approximately 30 lsb.
 
 .. figure:: ../../images/tutorials/laser_beam/05.png
 
@@ -138,43 +138,44 @@ on the image. This confirms that the background noise is around 30 lsb.
 Note that these tools are not persistent: the analysis results disappear when you select
 another image, they are intended to provide a fast insight on the image data.
 
-Now we can
-clip the image at 35 lsb to remove the background noise using the "Processing > Level Adjustment > Clipping..." menu.
+Now we can clip the image at 35 lsb to remove the background noise
+using the "Processing > Level Adjustment > Clipping..." menu.
 
 .. figure:: ../../images/tutorials/laser_beam/05b.png
 
     The two original and the clipped images are displayed side by side in the
-    visualization panel (using the "Distribute on a grid" feature seen previously).
+    "Image view" (using the "Distribute on a grid" feature seen previously).
 
 Beam size measurement
-----------------------
+---------------------
 
-We can now compute the centroid of the beam, that is the position of its center of mass.
-To do that, we use the "Analysis > Centroid" menu.
+We can now compute the centroid of the beam—that is, the position of its center of mass.
+To do this, select "Analysis > Centroid" from the menu.
 
 .. figure:: ../../images/tutorials/laser_beam/06.png
 
     The centroid position is displayed on the image.
 
-Then we can extract a line profile along the horizontal axis with
-"Operations > Intensity profiles > Line profile". We set the row position to the
-centroid position computed previously (i.e. 668), using the "Set Parameters" button.
-See :ref:`tutorial_fabry_perot` for details on intensity profile extraction.
+Next, we can extract a line profile along the horizontal axis using
+"Operations > Intensity profiles > Line profile". Set the row position to the
+previously computed centroid position (i.e., 668) using the "Set Parameters" button.
+See :ref:`tutorial_fabry_perot` for more details on intensity profile extraction.
 
-The intensity profile is displayed in the "Signals" panel. We can fit the profile
-to a Gaussian function with "Processing > Fitting > Gaussian fit". Here we have
-selected both signals.
+The intensity profile will be displayed in the "Signal panel". We can then fit the profile
+to a Gaussian function using "Processing > Fitting > Gaussian fit". Here we have
+selected both signals for comparison.
 
 .. figure:: ../../images/tutorials/laser_beam/08.png
 
     The intensity profile fitted to a Gaussian function. Here both signals are
     selected.
 
-Now let's see another method to compute the FWHM. If we go back to the first signal, the intensity profile, we can also directly compute the FWHM with "Analysis > Full width
-at half maximum". We can choose the method to estimate the FWHM, depending on our
-curve and, eventually, the interval to consider for this computation: once done,
-the result window will show the FWHM, stored in the metadata and it will be
-displayed also on the curve.
+Now let's explore another method to compute the FWHM. Returning to the intensity profile signal,
+we can directly compute the FWHM using "Analysis > Full width at half maximum".
+You can choose the estimation method based on your curve characteristics
+and optionally specify the interval to consider for this computation. Once complete,
+the results window will display the FWHM value, which is stored in the metadata and
+shown on the curve.
 
 .. figure:: ../../images/tutorials/laser_beam/09.png
 
@@ -189,12 +190,14 @@ displayed also on the curve.
     :height: 24px
     :class: dark-light no-scaled-link
 
-We can also try another method to measure the beam size. Let's go back to the image.
+Let's also try another method to measure the beam size by returning to the image.
 
-From the "Images" panel, we can extract the radial intensity profile with
-"Operations > Intensity profiles > Radial profile". The radial intensity profile may be computed around the centroid position, or around the center of the image, or around a user-defined position: this depends on the data.
-For our data, that appears to have a radial symmetry with a center not necessarily
-identical to the center of the image, the best option is the centroid position.
+From the "Image panel", we can extract the radial intensity profile using
+"Operations > Intensity profiles > Radial profile". The radial intensity profile
+can be computed around the centroid position, the center of the image,
+or a user-defined position, depending on your data.
+For our data, which appears to have radial symmetry with a center not necessarily
+identical to the image center, the best option is the centroid position.
 
 .. figure:: ../../images/tutorials/laser_beam/11.png
 
@@ -202,20 +205,20 @@ identical to the center of the image, the best option is the centroid position.
 
 .. figure:: ../../images/tutorials/laser_beam/12.png
 
-    The radial intensity profile displayed in the "Signals" panel. It is smoother
+    The radial intensity profile displayed in the "Signal panel". It is smoother
     than the line profile, because it is computed from a larger number of pixels,
     thus averaging the noise.
 
 Apply these operations to all the images
 ----------------------------------------
 
-All these operations and computations that we have performed on a single image can
-be applied to all the images in the "Images" panel.
+All the operations and computations performed on a single image can
+be applied to all images in the "Image panel".
 
-To do that, we begin by cleaning the "Signals" panel (with "Edit > Delete all" or
-the |delete_all| button in the toolbar). We also clean the intermediate results
-in the "Images" panel by selecting the images obtained during our prototyping
-and deleting them individually (with "Edit > Remove" or the |delete| button).
+To begin, clean the "Signal panel" using "Edit > Delete all" or
+the |delete_all| button in the toolbar. Also remove intermediate results
+from the "Image panel" by selecting the images created during prototyping
+and deleting them individually using "Edit > Remove" or the |delete| button.
 
 .. |delete_all| image:: ../../../datalab/data/icons/edit/delete_all.svg
     :width: 24px
@@ -227,12 +230,12 @@ and deleting them individually (with "Edit > Remove" or the |delete| button).
     :height: 24px
     :class: dark-light no-scaled-link
 
-Then, we select all the images in the "Images" panel (individually, or by selecting
-the whole group "g001").
+Next, select all images in the "Image panel" (individually or by selecting
+the entire group "g001").
 
-We apply the clip to all the images, and then we extract the radial intensity
-profile for all the images (after selecting the whole group "g002" - it should be
-automatically selected if you had selected "g001" before applying the threshold).
+Apply the clipping operation to all images, then extract the radial intensity
+profiles for all images (after selecting the entire group "g002"—it should be
+automatically selected if you had "g001" selected before applying the threshold).
 
 .. figure:: ../../images/tutorials/laser_beam/13.png
 
@@ -240,10 +243,10 @@ automatically selected if you had selected "g001" before applying the threshold)
 
 .. figure:: ../../images/tutorials/laser_beam/14.png
 
-    The "Signals" panel now contains all the radial intensity profiles.
+    The "Signal panel" now contains all the radial intensity profiles.
 
-We can now compute the FWHM of all the radial intensity profiles: the "Results" dialog
-displays the FWHM values for all the profiles.
+We can now compute the FWHM for all radial intensity profiles. The "Results" dialog
+will display the FWHM values for all profiles.
 
 .. figure:: ../../images/tutorials/laser_beam/15.png
 
@@ -251,9 +254,9 @@ displays the FWHM values for all the profiles.
 
 .. note::
 
-    If you want to show the analysis results again, you can select the "Show results"
-    |show_results| entry in the "Analysis" menu, or the "Show results" |show_results|
-    button, below the image list:
+    To display the analysis results again, select "Show results"
+    |show_results| from the "Analysis" menu, or click the "Show results" |show_results|
+    button below the image list:
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
@@ -262,11 +265,11 @@ displays the FWHM values for all the profiles.
     :height: 24px
     :class: dark-light no-scaled-link
 
-Finally, we can plot the beam size as a function of the position along the
-propagation axis. To do that, we use the "Plot results" feature |plot_results|
-in the "Analysis" menu. This feature allows to plot result data sets by
-choosing the x and y axes among the result columns. Here, we choose the
-to plot the FWHM values (`L`) as a function of the image index (`Indices`).
+Finally, we can plot the beam size as a function of position along the
+propagation axis using the "Plot results" feature |plot_results|
+from the "Analysis" menu. This feature allows you to plot result datasets by
+selecting the x and y axes from the available result columns. Here, we will
+plot the FWHM values (`L`) as a function of the image index (`Indices`).
 
 .. figure:: ../../images/tutorials/laser_beam/16.png
 
@@ -280,12 +283,11 @@ to plot the FWHM values (`L`) as a function of the image index (`Indices`).
 
 .. figure:: ../../images/tutorials/laser_beam/17.png
 
-    The beam size as a function of the position along the
-    propagation axis (the position is
-    here in arbitrary units, the image index).
+    The beam size as a function of position along the
+    propagation axis (the position is in arbitrary units—the image index).
 
-We can also calibrate the X and Y axis using "Processing > Linear calibration".
-Here we have set the X axis to the position in mm (and entered the title and
+We can also calibrate the X and Y axes using "Processing > Linear calibration".
+Here we set the X axis to the position in mm (entering the title and
 unit in the "Properties" group box) using the formula:
 :math:`X[\textrm{mm}] = 0.5 \cdot i + 10` where :math:`i` is the image index.
 
