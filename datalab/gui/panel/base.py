@@ -274,7 +274,7 @@ class ObjectProp(QW.QTabWidget):
         # Iterate through all result adapters and extract parameter info
         for adapter_class in (GeometryAdapter, TableAdapter):
             for adapter in adapter_class.iterate_from_obj(obj):
-                param = adapter.get_param(obj)
+                param = adapter.get_param()
                 if param is not None:
                     if text:
                         text += "<br><br>"

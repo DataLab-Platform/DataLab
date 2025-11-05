@@ -171,11 +171,8 @@ class BaseResultAdapter(ABC):
             self.result.attrs["param_json"] = gds.dataset_to_json(param)
         obj.metadata[self.metadata_key] = self.result.to_dict()
 
-    def get_param(self, obj: SignalObj | ImageObj) -> gds.DataSet | None:
+    def get_param(self) -> gds.DataSet | None:
         """Get parameter dataset associated with this result.
-
-        Args:
-            obj: Signal or image object
 
         Returns:
             Parameter dataset if present, None otherwise
