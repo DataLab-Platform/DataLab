@@ -17,10 +17,16 @@
     .. image:: https://img.youtube.com/vi/MBMes_MlQQ4/0.jpg
         :target: https://www.youtube.com/watch?v=MBMes_MlQQ4
 
+.. warning::
+
+    This video shows an older version of DataLab. Some features may have changed
+    since then. Please refer to the documentation for the most up-to-date
+    information.
+
 In this first video, we will quickly go through the main features of DataLab,
 and show how to do some basic signal and image processing.
 
-.. warning::
+.. note::
 
     This video is intentionally short and does not cover all the features of
     DataLab. It is meant to give you a quick overview of the software. For a

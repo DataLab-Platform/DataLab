@@ -19,6 +19,12 @@
     .. image:: https://img.youtube.com/vi/s_z9SUegYJQ/0.jpg
         :target: https://www.youtube.com/watch?v=s_z9SUegYJQ
 
+.. warning::
+
+    This video shows an older version of DataLab. Some features may have changed
+    since then. Please refer to the documentation for the most up-to-date
+    information.
+
 In this tutorial, we will show how to add your own features to DataLab using three
 different approaches:
 

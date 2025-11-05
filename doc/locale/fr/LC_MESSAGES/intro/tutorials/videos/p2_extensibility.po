@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 16:11+0100\n"
+"POT-Creation-Date: 2025-11-05 20:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -27,6 +27,9 @@ msgstr "DataLab, analyse de données scientifiques, Python, macro-commandes, con
 
 msgid ":octicon:`video;1em;sd-text-info` Add your own features"
 msgstr ":octicon:`video;1em;sd-text-info` Ajouter vos propres fonctionnalités"
+
+msgid "This video shows an older version of DataLab. Some features may have changed since then. Please refer to the documentation for the most up-to-date information."
+msgstr "Cette vidéo montre une version plus ancienne de DataLab. Certaines fonctionnalités ont peut-être changé depuis. Veuillez vous référer à la documentation pour les informations les plus à jour."
 
 msgid "In this tutorial, we will show how to add your own features to DataLab using three different approaches:"
 msgstr "Dans ce tutoriel, nous allons montrer comment ajouter vos propres fonctionnalités à DataLab en utilisant trois approches différentes :"
