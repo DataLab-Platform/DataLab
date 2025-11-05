@@ -12,11 +12,13 @@ can be extended with your Python code through :bdg-ref-success-line:`Plugins <ab
 or directly from :ref:`your IDE <use_cases>` or :ref:`your Jupyter notebooks <use_cases>`.
 Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
-.. warning::
+.. only:: html and not latex
 
-    **Notice for users upgrading from DataLab v0.20:**
+    .. dropdown:: Notice for users upgrading from DataLab v0.20
+        :animate: fade-in
+        :icon: alert
 
-    DataLab v1.0 introduces breaking changes. Plugins must be updated to work with the new version. See the :ref:`migration guide <migration_v020_to_v100>` for details.
+        DataLab v1.0 introduces breaking changes. Plugins must be updated to work with the new version. See the :ref:`migration guide <migration_v020_to_v100>` for details.
 
 .. only:: html and not latex
 
