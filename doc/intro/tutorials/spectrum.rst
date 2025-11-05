@@ -13,9 +13,9 @@ This example shows how to process a spectrum with DataLab:
 -   Fit a model to the spectrum
 -   Save the workspace to a file
 
-Datalab menus changes depending on the context.
+DataLab menus change depending on the context.
 A spectrum is a 1D signal that represents the intensity of a signal as a function
-of energy (or wavelength, frequency, etc.): in order to open it we need fistly to
+of energy (or wavelength, frequency, etc.): in order to open it we need firstly to
 select the Signal Panel.
 
 
@@ -40,7 +40,7 @@ generate a test spectrum. This is convenient to generate test data for this tuto
     The "Plugins > Test data > Load spectrum of paracetamol" plugin to generate the
     test spectrum for this tutorial.
 
-One opened, the spectrum is displayed in the main window. It is a 1D signal, so it is
+Once opened, the spectrum is displayed in the main window. It is a 1D signal, so it is
 displayed as a curve. The horizontal axis is the energy axis, and the vertical axis
 is the intensity axis.
 
@@ -61,7 +61,7 @@ preserving the spectral features: this is available under
 
     The result displayed in the main window.
 
-We fistly focus our analysis on one of the peaks of interest. To to that,
+We firstly focus our analysis on one of the peaks of interest. To do that,
 we define a region of interest (ROI) around the feature we want to analyze.
 We use the "ROI > Extract..." menu to define the region of interest and extract it.
 The "Regions of interest" dialog box is displayed. Select an area and click on "OK":
@@ -100,14 +100,14 @@ Linear detrending
 After fitting the main peak, we may want to remove any baseline drift
 present in the entire spectrum.
 The detrending function of DataLab performs a linear fit on the whole signal,
-including the peaks. In our signal peaks take a large part of the signal itself,
-witch is enough for signals where the peak are symmetrically distributed around the
+including the peaks. In our signal, peaks take a large part of the signal itself,
+which is enough for signals where the peaks are symmetrically distributed around the
 center, with more or less the same amplitude. This is not the case here, and we cannot
 expect this function to work well. It is however an interesting example to illustrate
 how DataLab functions can be combined to perform a more advanced analysis.
 
 In order to visualize the limitation cited above, we apply the detrending
-function directly on the filtered signal. It's important to remembre that we setted
+function directly on the filtered signal. It's important to remember that we set
 a ROI on the signal to focus the analysis on the main peak. We need to remove
 this ROI constraint to perform the detrending on the full signal.
 We execute the "Processing > Detrending" feature to perform the detrending, we choose
@@ -126,22 +126,22 @@ displayed in the main window.
 
     The result of the detrending displayed in the main window.
 
-The comparison between the filtered and the detrended Signal shows, as expected,
+The comparison between the filtered and the detrended signal shows, as expected,
 that the detrending function does not work well on this signal.
-This, as explained before, is due to the alogirithm used, which performs a linear fit
+This, as explained before, is due to the algorithm used, which performs a linear fit
 on the whole signal, including the peaks. This effect is clearly visible on the plot:
-the peaks on the left, that are higher than the ones on the right, starts after the
-detrending at an intensity value lower than the ones on the right, and all peaks has
+the peaks on the left, that are higher than the ones on the right, start after the
+detrending at an intensity value lower than the ones on the right, and all peaks have
 a baseline under the zero.
 
 Improved detrending with peak exclusion
 -----------------------------------------
 
-An idea to overcome the limitation of the detrending function is suggested from the
+An idea to overcome the limitation of the detrending function is suggested by the
 behavior of the detrended signal: we already identified the problem, which is that the
 linear fit is not performed on the baseline only, but also on the peaks.
 
-To perform a better detrending, we can first thus exclude the peaks and then perform
+To perform a better detrending, we can thus first exclude the peaks and then perform
 a linear fit only on the non-peak regions. We reasonably expect this approach to
 provide a more accurate baseline estimation and a better detrended signal.
 
@@ -178,9 +178,9 @@ This is illustrated in the following steps:
 
 Automatic peak detection
 -------------------------
-We can use the  "Multi-Gaussian fit" function of Datalab to automatically identify
+We can use the "Multi-Gaussian fit" function of DataLab to automatically identify
 and fit multiple peaks in the spectrum.
-We can do this  using
+We can do this using
 the "Processing > Fitting > Multi-Gaussian fit" entry in the menu.
 
 .. figure:: ../../images/tutorials/spectrum/16.png

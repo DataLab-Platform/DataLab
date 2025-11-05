@@ -6,7 +6,7 @@
     :keywords: DataLab, tutorial, laser beam, size, FWHM, Gaussian fit, radial profile, line profile, thresholding, centroid, image statistics, linear calibration, HDF5, workspace
 
 This example shows how to measure the size of a laser beam along the propagation
-axis, using using DataLab:
+axis using DataLab:
 
 - Load all the images in a folder
 - Apply a threshold to the images
@@ -27,8 +27,8 @@ Load the images
     your choice.
 
 
-First, we open DataLab and load the images: there are several way to do so, but the most
-convinient to use with several images is to use the "Open from directory..." feature
+First, we open DataLab and load the images: there are several ways to do so, but the most
+convenient to use with several images is to use the "Open from directory..." feature
 in the "File" menu (or the |fileopen_dir| button in the toolbar): this will open
 all the images in a selected directory.
 
@@ -95,9 +95,9 @@ Remove background noise
 
 If we select one of the images, we can see that there is background noise, so it
 might be useful to apply a threshold to the images.
-There are several ways to measure the estimate the background noise level.
+There are several ways to estimate the background noise level.
 
-The fist one take advantage of the "Cross section" tool, that is provided by the
+The first one takes advantage of the "Cross section" tool, that is provided by the
 `PlotPy <https://github.com/PlotPyStack/plotpy>` library used by DataLab for signal and image visualization.
 We select one of the images in the "Images" panel, select the associated image
 in the visualization panel, and enable the "Cross section" tool |cross_section| in
@@ -125,7 +125,7 @@ on the image. This confirms that the background noise is around 30 lsb.
 .. |imagestats| image:: ../../images/tutorials/imagestats.png
 
 Note that these tools are not persistent: the analysis results disappear when you select
-another image, they are indented to provide a fast insight on the image data.
+another image, they are intended to provide a fast insight on the image data.
 
 Now we can
 clip the image at 35 lsb to remove the background noise using the "Processing > Level Adjustment > Clipping..." menu.
@@ -159,10 +159,10 @@ selected both signals.
     The intensity profile fitted to a Gaussian function. Here both signals are
     selected.
 
-Now lets see another method to compute the FWHM. If we go back to the first signal, the intensity profile, we can also directly compute the FWHM with "Analysis > Full width
+Now let's see another method to compute the FWHM. If we go back to the first signal, the intensity profile, we can also directly compute the FWHM with "Analysis > Full width
 at half maximum". We can choose the method to estimate the FWHM, depending on our
-courbe and, eventually, the interval to consider for this coputation: once done,
-the result window will show the FWHM, stored in the metadata and it will,
+curve and, eventually, the interval to consider for this computation: once done,
+the result window will show the FWHM, stored in the metadata and it will be
 displayed also on the curve.
 
 .. figure:: ../../images/tutorials/laser_beam/09.png
@@ -182,8 +182,8 @@ We can also try another method to measure the beam size. Let's go back to the im
 
 From the "Images" panel, we can extract the radial intensity profile with
 "Operations > Intensity profiles > Radial profile". The radial intensity profile may be computed around the centroid position, or around the center of the image, or around a user-defined position: this depends on the data.
-For our datas, that appears to have a radial symmetry with a center not necessary
-identical to the center of the image, the best option is the the centroid position.
+For our data, that appears to have a radial symmetry with a center not necessarily
+identical to the center of the image, the best option is the centroid position.
 
 .. figure:: ../../images/tutorials/laser_beam/11.png
 
@@ -219,7 +219,7 @@ and deleting them individually (with "Edit > Remove" or the |delete| button).
 Then, we select all the images in the "Images" panel (individually, or by selecting
 the whole group "g001").
 
-We apply the clip to all the images, and the we extract the radial intensity
+We apply the clip to all the images, and then we extract the radial intensity
 profile for all the images (after selecting the whole group "g002" - it should be
 automatically selected if you had selected "g001" before applying the threshold).
 
