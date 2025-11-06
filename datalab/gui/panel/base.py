@@ -602,7 +602,9 @@ class ObjectProp(QW.QTabWidget):
                     param.update_from_obj(source_obj)
 
         # Create parameter editor widget
-        editor = gdq.DataSetEditGroupBox(_("Processing Parameters"), param.__class__)
+        editor = gdq.DataSetEditGroupBox(
+            _("Processing Parameters"), param.__class__, wordwrap=True
+        )
         update_dataset(editor.dataset, param)
         editor.get()
 
@@ -630,6 +632,11 @@ class ObjectProp(QW.QTabWidget):
         # Create new processing scroll area and tab
         self.processing_scroll = QW.QScrollArea()
         self.processing_scroll.setWidgetResizable(True)
+        self.processing_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+        self.processing_scroll.setSizePolicy(
+            QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
+        )
+
         self.processing_scroll.setWidget(editor)
         self.insertTab(insert_index, self.processing_scroll, _("Processing"))
         self.setCurrentIndex(insert_index)
