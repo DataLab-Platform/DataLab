@@ -468,7 +468,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * **Plot cleanup robustness**: Fixed ValueError when deleting plot items during result removal
   * The `cleanup_dataview()` method now deletes items one by one with proper error handling
   * Each item is checked for existence before deletion, and ValueError exceptions are caught if the item was already removed
-  * **Critical fix**: Result label items are now properly excluded from cleanup to prevent accidental removal
+
+* **Polygon rendering performance**: Fixed severe slowdown when drawing contour detection results with many polygons
+  * Filter out NaN coordinates in `GeometryPlotPyAdapter` before creating polygon plot items
+  * Polygons are padded with NaN values to create regular arrays, but these padding values were being unnecessarily processed during rendering
+  * Achieved 5.4x speedup when drawing 50 polygons (from 1560ms to 288ms)
+
+* **Critical fix**: Result label items are now properly excluded from cleanup to prevent accidental removal
   * Previously, cleanup was removing result labels from the plot, causing all analysis results to disappear when running a second analysis
   * This prevents race conditions where `item.detach()` removes an item from the internal list before the explicit removal call
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 12:51+0100\n"
+"POT-Creation-Date: 2025-11-07 10:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1335,6 +1335,18 @@ msgstr "La méthode `cleanup_dataview()` supprime désormais les éléments un p
 
 msgid "Each item is checked for existence before deletion, and ValueError exceptions are caught if the item was already removed"
 msgstr "Chaque élément est vérifié pour son existence avant la suppression, et les exceptions ValueError sont interceptées si l'élément a déjà été supprimé"
+
+msgid "**Polygon rendering performance**: Fixed severe slowdown when drawing contour detection results with many polygons"
+msgstr "**Performance de rendu des polygones** : Correction d'un ralentissement sévère lors du dessin des résultats de détection de contours avec de nombreux polygones"
+
+msgid "Filter out NaN coordinates in `GeometryPlotPyAdapter` before creating polygon plot items"
+msgstr "Filtrage des coordonnées NaN dans `GeometryPlotPyAdapter` avant de créer des éléments de tracé de polygone"
+
+msgid "Polygons are padded with NaN values to create regular arrays, but these padding values were being unnecessarily processed during rendering"
+msgstr "Les polygones sont complétés par des valeurs NaN pour créer des tableaux réguliers, mais ces valeurs de remplissage étaient traitées inutilement lors du rendu."
+
+msgid "Achieved 5.4x speedup when drawing 50 polygons (from 1560ms to 288ms)"
+msgstr "Amélioration de la vitesse de 5,4 fois lors du dessin de 50 polygones (de 1560 ms à 288 ms)"
 
 msgid "**Critical fix**: Result label items are now properly excluded from cleanup to prevent accidental removal"
 msgstr "**Correction critique** : Les éléments d'étiquette de résultat sont désormais correctement exclus du nettoyage pour éviter une suppression accidentelle"

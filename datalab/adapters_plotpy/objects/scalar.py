@@ -177,6 +177,11 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             assert len(coords) >= 6, "Coordinates must be at least 6-element array"
             assert len(coords) % 2 == 0, "Coordinates must be even-length array"
             x, y = coords[::2], coords[1::2]
+            # Filter out NaN coordinates to avoid performance issues
+            # Polygons are padded with NaNs to create regular arrays, but we only
+            # need to draw the valid coordinates
+            valid_mask = ~(np.isnan(x) | np.isnan(y))
+            x, y = x[valid_mask], y[valid_mask]
             item = make.polygon(x, y, title=self.result_adapter.title, closed=False)
         else:
             raise NotImplementedError(
