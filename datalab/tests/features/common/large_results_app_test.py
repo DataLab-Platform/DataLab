@@ -1,6 +1,11 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-""" """
+"""
+Large Results Application Test Module
+
+This module contains tests for verifying that DataLab handles large result datasets
+efficiently and correctly.
+"""
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show,skip
