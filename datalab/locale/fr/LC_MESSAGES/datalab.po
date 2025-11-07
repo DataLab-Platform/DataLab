@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-07 13:24+0100\n"
+"POT-Creation-Date: 2025-11-07 18:27+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -2245,23 +2245,26 @@ msgstr "Extraction de ROI"
 msgid "If enabled, multiple ROIs will be extracted into a single object.<br>If disabled, each ROI will be extracted into a separate object."
 msgstr "Si activé, plusieurs ROI seront extraites dans un seul objet.<br>Si désactivé, chaque ROI sera extraite dans un objet séparé."
 
-msgid "Ignore warnings"
-msgstr "Ignorer les avertissements"
-
 msgid "Ignore warnings during computations"
 msgstr "Ignorer les avertissements lors des calculs"
 
-msgid "X-array compatibility behavior"
-msgstr "Compatibilité des tableaux des X"
+msgid "Warnings"
+msgstr "Avertissements"
 
-msgid "Ask"
-msgstr "Demander"
+msgid "If enabled, warnings during computations will be ignored."
+msgstr "Si activé, les avertissements lors des calculs seront ignorés."
 
-msgid "Interpolate"
-msgstr "Interpoler"
+msgid "X-axis"
+msgstr "Axe des X"
 
-msgid "Behavior when X arrays are incompatible in multi-signal computations:<ul><li><b>Ask</b>: display confirmation dialog (default)</li><li><b>Interpolate</b>: automatically interpolate signals</li></ul>"
-msgstr "Comportement lorsque les tableaux des X sont incompatibles dans les calculs multi-signaux :<ul><li><b>Demander</b> : afficher une boîte de confirmation (par défaut)</li><li><b>Interpoler</b> : interpoler automatiquement les signaux</li></ul>"
+msgid "Ask before interpolation"
+msgstr "Demander avant d'interpoler"
+
+msgid "Interpolate systematically"
+msgstr "Interpoler systématiquement"
+
+msgid "Behavior when X-axis arrays are incompatible in multi-signal computations:<ul><li><b>Ask</b>: display confirmation dialog (default)</li><li><b>Interpolate</b>: automatically interpolate signals</li></ul>"
+msgstr "Comportement lorsque les tableaux des X sont incompatibles dans les calculs multi-signaux :<ul><li><b>Demander</b> : afficher une boîte de dialogue de confirmation (par défaut)</li><li><b>Interpoler</b> : interpoler automatiquement les signaux</li></ul>"
 
 msgid "Settings for results management"
 msgstr "Réglages de la gestion des résultats"
@@ -3214,3 +3217,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
