@@ -466,10 +466,15 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
     def cleanup_dataview(self) -> None:
         """Clean up data view"""
         # Find items to remove (items that are not in the handler and not special items)
+        # Skip shape items since they're managed separately and checking membership
+        # for many items is expensive
+        shape_items_set = set(self.__shapeitems)
         items_to_remove = [
             item
             for item in self.plot.items[:]
-            if item not in self and not isinstance(item, (LegendBoxItem, GridItem))
+            if item not in shape_items_set
+            and item not in self
+            and not isinstance(item, (LegendBoxItem, GridItem))
         ]
         # Delete items one by one with error handling for items already removed
         for item in items_to_remove:

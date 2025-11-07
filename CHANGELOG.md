@@ -299,11 +299,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * It is implemented in the `sigima.proc.image.erase` function
     * This closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204) - Add support for background subtraction and inpainting on ROI
   * Improved centroid computation:
-    * New adaptive method (`get_centroid_auto`) selects the most reliable centroid estimation (Fourier or fallback) based on internal consistency checks with projected profile methods.
-    * Projected profile-based centroid (`get_projected_profile_centroid`) now available for robust, fast, and noise-tolerant estimation — performs well in truncated or asymmetric images.
-    * GUI barycenter tool now uses the auto-adaptive method by default for better accuracy and reliability in edge cases.
-    * See [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Inaccurate centroid estimation in edge cases with `get_centroid_fourier`
-    * In interactive tools, the centroid is now computed using the `measure.centroid` function from `scikit-image`, which provides a better compromise between speed and accuracy and is suitable for real-time applications.
+    * Centroid estimation is now more accurate and reliable, especially in challenging cases like truncated or asymmetric images
+    * The barycenter tool now automatically selects the best estimation method for better results
+    * Interactive centroid display during shape editing is now faster and more responsive
+    * See [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Inaccurate centroid estimation in edge cases
   * Horizontal and vertical projections.
     * This closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209) - Parameters / Sum of pixels, sum of pixel rows, sum of pixel columns.
 
@@ -323,56 +322,48 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * **Comprehensive coverage**: Affects all multi-signal operations including:
       * N-to-1 computations (e.g., average of multiple signals, arithmetic operations)
       * 2-to-1 computations in both pairwise and single operand modes (e.g., addition, subtraction, convolution)
-    * **Intelligent interpolation**: Uses Sigima's robust interpolation functions to ensure accurate signal matching when requested.
+    * **Intelligent interpolation**: Automatically interpolates signals to match when needed, ensuring accurate results
     * This enhancement prevents unexpected results from operations on incompatible signal arrays while providing a consistent and user-friendly approach to handling X-array differences.
-  * **Enhanced curve fitting functions**: Significantly improved curve fitting capabilities with advanced parameter estimation:
-    * **Intelligent initial parameter estimation**: All curve fitting functions now use advanced algorithms from the Sigima library for automatic initial parameter estimation, resulting in:
+  * **Enhanced curve fitting functions**: Significantly improved curve fitting capabilities:
+    * **Smarter initial parameter estimation**: Curve fitting now automatically provides better starting values for parameters, resulting in:
       * More robust convergence to optimal solutions
       * Reduced fitting failures and improved success rates
       * Better handling of noisy or challenging experimental data
       * Faster convergence with fewer iterations required
-    * **Enhanced fitting algorithms**: Improved implementations for all curve fitting types:
+    * **Improved fitting for all curve types**:
       * Gaussian, Lorentzian, and Voigt profile fitting with better peak detection
       * Exponential and double exponential fitting with enhanced decay/growth parameter estimation
-      * Sinusoidal fitting with FFT-based frequency estimation for improved accuracy
+      * Sinusoidal fitting with frequency estimation for improved accuracy
       * Planckian (blackbody) fitting with physics-correct parameter bounds
       * Asymmetric peak fitting (two-half Gaussian) with independent left/right parameters
       * CDF (Cumulative Distribution Function) fitting for statistical analysis
     * **Locked parameter support** (requires PlotPy v2.8.0):
-      * Added ability to lock individual fit parameters during automatic optimization
-      * Users can manually adjust parameters and lock them to prevent changes during auto-fit
-      * Visual indicators: locked parameters show 🔒 emoji and are grayed out with disabled controls
-      * Enables partial optimization workflows: fix well-determined parameters, optimize uncertain ones
-      * All optimization algorithms (simplex, Powell, BFGS, L-BFGS-B, conjugate gradient, least squares) support locked parameters
-      * Improves fit convergence by reducing problem dimensionality
+      * You can now lock individual fit parameters during automatic optimization
+      * Manually adjust certain parameters and lock them to prevent changes during auto-fit
+      * Visual indicators: locked parameters show 🔒 emoji and are grayed out
+      * Enables partial optimization: fix well-determined parameters, optimize uncertain ones
+      * Improves fit convergence by focusing on parameters that need adjustment
       * Lock/unlock parameters via the parameter settings dialog (gear icon)
     * **Improved user experience**: The curve fitting dialogs now provide:
       * More reliable initial parameter guesses reducing manual adjustment needs
       * Better parameter bounds preventing optimization failures
       * Enhanced stability for difficult-to-fit datasets
-    * **Technical improvements**: All fitting functions benefit from:
-      * Automatic fallback to manual estimation if advanced algorithms fail
-      * Consistent error handling and parameter validation
-      * Optimized performance with reduced computation time
-      * Full integration with DataLab's signal processing workflow
   * Zero padding:
     * Enhanced feature to support both prepending and appending zeros.
     * Partial implementation of [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216).
     * Default strategy is now "Next power of 2".
   * Ideal frequency domain filter ("Brick wall filter"):
-    * It is implemented in `sigima.proc.signal.frequency_filter`.
     * This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal).
   * Bandwidth at -3dB:
     * Enhanced to support passband bandwidth in addition to baseband bandwidth.
   * **Pulse features extraction**: New comprehensive pulse analysis feature for step and square signals:
-    * **Automated pulse shape recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis.
-    * **Signal polarity detection**: Automatically determines positive/negative pulse polarity using robust baseline comparison.
-    * **Comprehensive parameter extraction**: Measures amplitude, rise time, fall time, full width at half maximum (FWHM), timing parameters (x10, x50, x90, x100), and foot duration.
-    * **Baseline characterization**: Extracts start and end baseline ranges for accurate feature computation.
-    * **Intelligent baseline estimation**: Uses statistical methods to determine baseline levels from user-defined ranges.
-    * **Robust feature computation**: Implements advanced algorithms for timing parameter extraction with noise tolerance.
-    * **Visual feedback**: Results displayed in tabular format with pulse feature visualization on the signal plot.
-    * This feature is powered by the underlying `sigima.proc.signal.extract_pulse_features` function and supports both step and square pulse analysis.
+    * **Automated pulse shape recognition**: Automatically identifies signal type (step, square, or other) for optimal analysis
+    * **Signal polarity detection**: Automatically determines positive/negative pulse polarity
+    * **Comprehensive parameter extraction**: Measures amplitude, rise time, fall time, full width at half maximum (FWHM), timing parameters (x10, x50, x90, x100), and foot duration
+    * **Baseline characterization**: Extracts start and end baseline ranges for accurate feature computation
+    * **Intelligent baseline estimation**: Determines baseline levels from user-defined ranges
+    * **Visual feedback**: Results displayed in tabular format with pulse feature visualization on the signal plot
+    * Supports both step and square pulse analysis
 
 * New "Extent" group box in image properties:
   * Added computed parameters for image extent: `Xmin`, `Xmax`, `Ymin`, and `Ymax`.
@@ -381,7 +372,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * The parameters are displayed in a dedicated "Extent" group in the image properties panel.
 
 * New I/O features:
-  * Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using `\s+` instead of single space character).
+  * Improved delimiter handling in CSV reading (signals) to better support files with various whitespace separators
   * FT-Lab signals and images:
     * Added support for CEA's FT-Lab signal and image binary formats.
     * This closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211) - Add support for .sig and .ima file types
@@ -404,12 +395,10 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Signal and image plots have separate margin settings for fine-tuned control
     * Margins can be set between 0% and 50% to control the amount of whitespace around data when autoscaling plots
     * Changes are applied immediately to all existing plot widgets without requiring application restart
-    * This feature enhances plot visualization control and replaces the previously hardcoded 0.2% margin values
 
 * Dialog sizing improvements:
-  * Enhanced initial sizing logic for processing dialogs (profile extraction, offset subtraction, etc.):
-    * Dialogs now intelligently resize based on parent window dimensions with proper aspect ratio handling
-    * The sizing ratio represents the percentage of parent dimensions, ensuring dialogs are never larger than their parent window
+  * Processing dialogs (profile extraction, offset subtraction, etc.) now intelligently resize based on the main window size
+  * Dialogs are automatically sized appropriately for your screen resolution while never exceeding the main window size
     * Improved user experience with consistently appropriately-sized dialogs across different screen resolutions and window sizes
 
 * Signal cursors:
@@ -452,6 +441,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 🛠️ Bug fixes:
 
+* **Improved responsiveness when switching between images with many analysis results**: Fixed performance issue when navigating between images that have hundreds of geometric shapes from contour detection or other analysis operations
+  * When switching away from an image with many analysis results (e.g., 710 detected contours), the application now responds immediately instead of freezing for over a minute
+  * The responsiveness improvement is dramatic: operations that took 66 seconds now complete in under 1 millisecond
+  * Users can now work smoothly with images containing extensive analysis results without performance degradation
+  * This enhancement particularly benefits workflows involving blob detection, contour analysis, or peak detection that generate many geometric shapes
+
 * **Action enable states not updated after operations**: Fixed issue where menu action states
   were not updated after performing annotation or metadata operations
   * After copying/pasting/deleting annotations or metadata, action states now refresh immediately
@@ -465,14 +460,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Previously, the method used for opening files directly or opening whole directories returned files in filesystem-dependent order (sorted on Windows, arbitrary on Linux/WSL)
   * All import methods now use consistent lexicographic sorting for predictable, platform-independent behavior
 
-* **Plot cleanup robustness**: Fixed ValueError when deleting plot items during result removal
-  * The `cleanup_dataview()` method now deletes items one by one with proper error handling
-  * Each item is checked for existence before deletion, and ValueError exceptions are caught if the item was already removed
+* **Plot cleanup robustness**: Fixed occasional errors when removing analysis results from plots
+  * Analysis result labels and shapes are now removed more reliably without triggering internal errors
+  * Improved handling of cases where plot items might be removed by multiple operations simultaneously
 
-* **Polygon rendering performance**: Fixed severe slowdown when drawing contour detection results with many polygons
-  * Filter out NaN coordinates in `GeometryPlotPyAdapter` before creating polygon plot items
-  * Polygons are padded with NaN values to create regular arrays, but these padding values were being unnecessarily processed during rendering
-  * Achieved 5.4x speedup when drawing 50 polygons (from 1560ms to 288ms)
+* **Faster rendering of contour detection results**: Significantly improved performance when displaying images with contour detection results
+  * Drawing contour polygons is now over 5 times faster, especially beneficial when displaying many contours
+  * Users will notice smoother interaction when working with contour detection on complex images
+  * Example: Drawing 50 contour polygons now takes 288ms instead of 1560ms
 
 * **Critical fix**: Result label items are now properly excluded from cleanup to prevent accidental removal
   * Previously, cleanup was removing result labels from the plot, causing all analysis results to disappear when running a second analysis

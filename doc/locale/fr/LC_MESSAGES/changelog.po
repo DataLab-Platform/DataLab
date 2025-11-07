@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 10:19+0100\n"
+"POT-Creation-Date: 2025-11-07 11:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -877,20 +877,17 @@ msgstr "Ceci clôture le ticket [Issue #204](https://github.com/DataLab-Platform
 msgid "Improved centroid computation:"
 msgstr "Amélioration du calcul du barycentre :"
 
-msgid "New adaptive method (`get_centroid_auto`) selects the most reliable centroid estimation (Fourier or fallback) based on internal consistency checks with projected profile methods."
-msgstr "Nouvelle méthode adaptative (`get_centroid_auto`) sélectionne l'estimation de barycentre la plus fiable (Fourier ou de secours) basée sur des vérifications de cohérence interne avec les méthodes de profil projeté."
+msgid "Centroid estimation is now more accurate and reliable, especially in challenging cases like truncated or asymmetric images"
+msgstr "L'estimation du barycentre est désormais plus précise et fiable, en particulier dans les cas difficiles tels que les images tronquées ou asymétriques."
 
-msgid "Projected profile-based centroid (`get_projected_profile_centroid`) now available for robust, fast, and noise-tolerant estimation — performs well in truncated or asymmetric images."
-msgstr "Le barycentre basé sur le profil projeté (`get_projected_profile_centroid`) est maintenant disponible pour une estimation robuste, rapide et tolérante au bruit — il fonctionne bien dans les images tronquées ou asymétriques."
+msgid "The barycenter tool now automatically selects the best estimation method for better results"
+msgstr "L'outil de calcul du barycentre sélectionne désormais automatiquement la meilleure méthode d'estimation pour de meilleurs résultats."
 
-msgid "GUI barycenter tool now uses the auto-adaptive method by default for better accuracy and reliability in edge cases."
-msgstr "L'outil de barycentre de l'interface graphique utilise désormais la méthode auto-adaptative par défaut pour une meilleure précision et fiabilité dans les cas limites."
+msgid "Interactive centroid display during shape editing is now faster and more responsive"
+msgstr "L'affichage interactif du barycentre lors de l'édition de forme est désormais plus rapide et plus réactif."
 
-msgid "See [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Inaccurate centroid estimation in edge cases with `get_centroid_fourier`"
-msgstr "Voir [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Estimation inexacte du barycentre dans les cas limites avec `get_centroid_fourier`"
-
-msgid "In interactive tools, the centroid is now computed using the `measure.centroid` function from `scikit-image`, which provides a better compromise between speed and accuracy and is suitable for real-time applications."
-msgstr "Dans les outils interactifs, le barycentre est désormais calculé en utilisant la fonction `measure.centroid` de `scikit-image`, qui offre un meilleur compromis entre vitesse et précision et convient aux applications en temps réel."
+msgid "See [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Inaccurate centroid estimation in edge cases"
+msgstr "Voir [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251) - Estimation inexacte du barycentre dans les cas limites"
 
 msgid "Horizontal and vertical projections."
 msgstr "Projections horizontale et verticale."
@@ -946,17 +943,17 @@ msgstr "Calculs N-à-1 (par exemple, moyenne de plusieurs signaux, opérations a
 msgid "2-to-1 computations in both pairwise and single operand modes (e.g., addition, subtraction, convolution)"
 msgstr "Calculs 2-à-1 en modes par paires et à un seul opérande (par exemple, addition, soustraction, convolution)"
 
-msgid "**Intelligent interpolation**: Uses Sigima's robust interpolation functions to ensure accurate signal matching when requested."
-msgstr "**Interpolation intelligente** : Utilise les fonctions d'interpolation robustes de Sigima pour garantir un appariement précis des signaux lorsque cela est demandé."
+msgid "**Intelligent interpolation**: Automatically interpolates signals to match when needed, ensuring accurate results"
+msgstr "**Interpolation intelligente** : Interpole automatiquement les signaux pour qu'ils soient compatibles lorsque cela est nécessaire, garantissant des résultats précis"
 
 msgid "This enhancement prevents unexpected results from operations on incompatible signal arrays while providing a consistent and user-friendly approach to handling X-array differences."
 msgstr "Cette amélioration empêche les résultats inattendus des opérations sur des tableaux de signaux incompatibles tout en offrant une approche cohérente et conviviale pour gérer les différences de tableaux X."
 
-msgid "**Enhanced curve fitting functions**: Significantly improved curve fitting capabilities with advanced parameter estimation:"
-msgstr "**Fonctions de courbe de fitting améliorées** : Capacités de fitting de courbes considérablement améliorées avec une estimation avancée des paramètres :"
+msgid "**Enhanced curve fitting functions**: Significantly improved curve fitting capabilities:"
+msgstr "**Fonctions de fitting de courbes améliorées** : Capacités de fitting de courbes considérablement améliorées :"
 
-msgid "**Intelligent initial parameter estimation**: All curve fitting functions now use advanced algorithms from the Sigima library for automatic initial parameter estimation, resulting in:"
-msgstr "**Estimation intelligente des paramètres initiaux** : Toutes les fonctions de fitting de courbes utilisent désormais des algorithmes avancés de la bibliothèque Sigima pour l'estimation automatique des paramètres initiaux, ce qui entraîne :"
+msgid "**Smarter initial parameter estimation**: Curve fitting now automatically provides better starting values for parameters, resulting in:"
+msgstr "**Estimation initiale des paramètres plus intelligente** : Le fitting de courbes fournit désormais automatiquement de meilleures valeurs de départ pour les paramètres, ce qui entraîne :"
 
 msgid "More robust convergence to optimal solutions"
 msgstr "Une convergence plus robuste vers des solutions optimales"
@@ -970,8 +967,8 @@ msgstr "Meilleure gestion des données expérimentales bruitées ou difficiles"
 msgid "Faster convergence with fewer iterations required"
 msgstr "Convergence plus rapide avec moins d'itérations requises"
 
-msgid "**Enhanced fitting algorithms**: Improved implementations for all curve fitting types:"
-msgstr "**Algorithmes de fitting améliorés** : Implémentations améliorées pour tous les types de fitting de courbes :"
+msgid "**Improved fitting for all curve types**:"
+msgstr "**Ajustement amélioré pour tous les types de courbes** :"
 
 msgid "Gaussian, Lorentzian, and Voigt profile fitting with better peak detection"
 msgstr "Ajustement de profils gaussiens, lorentziens et Voigt avec une meilleure détection des pics"
@@ -979,8 +976,8 @@ msgstr "Ajustement de profils gaussiens, lorentziens et Voigt avec une meilleure
 msgid "Exponential and double exponential fitting with enhanced decay/growth parameter estimation"
 msgstr "Ajustement exponentiel et double exponentiel avec une estimation améliorée des paramètres de décroissance/croissance"
 
-msgid "Sinusoidal fitting with FFT-based frequency estimation for improved accuracy"
-msgstr "Ajustement sinusoïdal avec une estimation de fréquence basée sur la FFT pour une précision améliorée"
+msgid "Sinusoidal fitting with frequency estimation for improved accuracy"
+msgstr "Ajustement sinusoïdal avec estimation de la fréquence pour une meilleure précision"
 
 msgid "Planckian (blackbody) fitting with physics-correct parameter bounds"
 msgstr "Ajustement planckien (corps noir) avec des limites de paramètres correctes sur le plan physique"
@@ -994,23 +991,20 @@ msgstr "Ajustement de la fonction de distribution cumulative (CDF) pour l'analys
 msgid "**Locked parameter support** (requires PlotPy v2.8.0):"
 msgstr "**Prise en charge des paramètres verrouillés** (nécessite PlotPy v2.8.0) :"
 
-msgid "Added ability to lock individual fit parameters during automatic optimization"
-msgstr "Ajout de la possibilité de verrouiller des paramètres de fitting individuels pendant l'optimisation automatique"
+msgid "You can now lock individual fit parameters during automatic optimization"
+msgstr "Vous pouvez désormais verrouiller des paramètres d'ajustement individuels pendant l'optimisation automatique"
 
-msgid "Users can manually adjust parameters and lock them to prevent changes during auto-fit"
-msgstr "Les utilisateurs peuvent ajuster manuellement les paramètres et les verrouiller pour éviter les modifications pendant le fitting automatique"
+msgid "Manually adjust certain parameters and lock them to prevent changes during auto-fit"
+msgstr "Ajustez manuellement certains paramètres et verrouillez-les pour empêcher les modifications lors de l'ajustement automatique"
 
-msgid "Visual indicators: locked parameters show 🔒 emoji and are grayed out with disabled controls"
-msgstr "Indicateurs visuels : les paramètres verrouillés affichent l'emoji 🔒 et sont grisés avec des contrôles désactivés"
+msgid "Visual indicators: locked parameters show 🔒 emoji and are grayed out"
+msgstr "Indicateurs visuels : les paramètres verrouillés affichent l'emoji 🔒 et sont grisés"
 
-msgid "Enables partial optimization workflows: fix well-determined parameters, optimize uncertain ones"
-msgstr "Permet des flux de travail d'optimisation partielle : fixer les paramètres bien déterminés, optimiser les incertains"
+msgid "Enables partial optimization: fix well-determined parameters, optimize uncertain ones"
+msgstr "Permet une optimisation partielle : fixer les paramètres bien déterminés, optimiser ceux incertains"
 
-msgid "All optimization algorithms (simplex, Powell, BFGS, L-BFGS-B, conjugate gradient, least squares) support locked parameters"
-msgstr "Tous les algorithmes d'optimisation (simplex, Powell, BFGS, L-BFGS-B, gradient conjugué, moindres carrés) prennent en charge les paramètres verrouillés"
-
-msgid "Improves fit convergence by reducing problem dimensionality"
-msgstr "Améliore la convergence du fitting en réduisant la dimensionnalité du problème"
+msgid "Improves fit convergence by focusing on parameters that need adjustment"
+msgstr "Améliore la convergence de l'ajustement en se concentrant sur les paramètres qui nécessitent un ajustement"
 
 msgid "Lock/unlock parameters via the parameter settings dialog (gear icon)"
 msgstr "Verrouiller/déverrouiller les paramètres via la boîte de dialogue des paramètres (icône d'engrenage)"
@@ -1027,21 +1021,6 @@ msgstr "Meilleures limites de paramètres empêchant les échecs d'optimisation"
 msgid "Enhanced stability for difficult-to-fit datasets"
 msgstr "Stabilité améliorée pour les ensembles de données difficiles à ajuster"
 
-msgid "**Technical improvements**: All fitting functions benefit from:"
-msgstr "**Améliorations techniques** : Toutes les fonctions de fitting bénéficient de :"
-
-msgid "Automatic fallback to manual estimation if advanced algorithms fail"
-msgstr "Retour automatique à l'estimation manuelle si les algorithmes avancés échouent"
-
-msgid "Consistent error handling and parameter validation"
-msgstr "Gestion des erreurs et validation des paramètres cohérentes"
-
-msgid "Optimized performance with reduced computation time"
-msgstr "Performance optimisée avec un temps de calcul réduit"
-
-msgid "Full integration with DataLab's signal processing workflow"
-msgstr "Intégration complète avec le flux de travail de traitement du signal de DataLab"
-
 msgid "Zero padding:"
 msgstr "Complément de zéros :"
 
@@ -1057,9 +1036,6 @@ msgstr "La stratégie par défaut est maintenant \"Prochain puissance de 2\"."
 msgid "Ideal frequency domain filter (\"Brick wall filter\"):"
 msgstr "Filtre idéal dans le domaine fréquentiel (\"Filtre coupe-bande\") :"
 
-msgid "It is implemented in `sigima.proc.signal.frequency_filter`."
-msgstr "Elle est implémentée dans la fonction `sigima.proc.signal.frequency_filter`."
-
 msgid "This closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filters / Brickwall filter (Signal)."
 msgstr "Ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215) - Filtres / Filtre coupe-bande (Signal)."
 
@@ -1072,29 +1048,26 @@ msgstr "Amélioration de la prise en charge de la bande passante en plus de la b
 msgid "**Pulse features extraction**: New comprehensive pulse analysis feature for step and square signals:"
 msgstr "**Extraction des caractéristiques des impulsions** : Nouvelle fonctionnalité complète d'analyse des impulsions pour les signaux en escalier et carrés :"
 
-msgid "**Automated pulse shape recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis."
-msgstr "**Reconnaissance automatisée de la forme d'impulsion** : Identifie de manière heuristique le type de signal (escalier, carré ou autre) pour une analyse optimale."
+msgid "**Automated pulse shape recognition**: Automatically identifies signal type (step, square, or other) for optimal analysis"
+msgstr "**Reconnaissance automatisée de la forme d'impulsion** : Identifie automatiquement le type de signal (escalier, carré ou autre) pour une analyse optimale."
 
-msgid "**Signal polarity detection**: Automatically determines positive/negative pulse polarity using robust baseline comparison."
-msgstr "**Détection de la polarité du signal** : Détermine automatiquement la polarité positive/négative de l'impulsion en utilisant une comparaison de base robuste."
+msgid "**Signal polarity detection**: Automatically determines positive/negative pulse polarity"
+msgstr "**Détection de la polarité du signal** : Détermine automatiquement la polarité positive/négative de l'impulsion."
 
-msgid "**Comprehensive parameter extraction**: Measures amplitude, rise time, fall time, full width at half maximum (FWHM), timing parameters (x10, x50, x90, x100), and foot duration."
+msgid "**Comprehensive parameter extraction**: Measures amplitude, rise time, fall time, full width at half maximum (FWHM), timing parameters (x10, x50, x90, x100), and foot duration"
 msgstr "**Extraction complète des paramètres** : Mesure l'amplitude, le temps de montée, le temps de descente, la largeur à mi-hauteur (FWHM), les paramètres temporels (x10, x50, x90, x100) et la durée du pied."
 
-msgid "**Baseline characterization**: Extracts start and end baseline ranges for accurate feature computation."
+msgid "**Baseline characterization**: Extracts start and end baseline ranges for accurate feature computation"
 msgstr "**Caractérisation de la ligne de base** : Extrait les plages de ligne de base de début et de fin pour un calcul précis des caractéristiques."
 
-msgid "**Intelligent baseline estimation**: Uses statistical methods to determine baseline levels from user-defined ranges."
-msgstr "**Estimation intelligente de la ligne de base** : Utilise des méthodes statistiques pour déterminer les niveaux de ligne de base à partir de plages définies par l'utilisateur."
+msgid "**Intelligent baseline estimation**: Determines baseline levels from user-defined ranges"
+msgstr "**Estimation intelligente de la ligne de base** : Détermine les niveaux de ligne de base à partir de plages définies par l'utilisateur."
 
-msgid "**Robust feature computation**: Implements advanced algorithms for timing parameter extraction with noise tolerance."
-msgstr "**Calcul robuste des caractéristiques** : Implémente des algorithmes avancés pour l'extraction des paramètres temporels avec tolérance au bruit."
+msgid "**Visual feedback**: Results displayed in tabular format with pulse feature visualization on the signal plot"
+msgstr "**Retour visuel** : Résultats affichés au format tabulaire avec visualisation des caractéristiques des impulsions sur le tracé du signal."
 
-msgid "**Visual feedback**: Results displayed in tabular format with pulse feature visualization on the signal plot."
-msgstr "**Retour visuel** : Résultats affichés sous forme de tableau avec visualisation des caractéristiques des impulsions sur le tracé du signal."
-
-msgid "This feature is powered by the underlying `sigima.proc.signal.extract_pulse_features` function and supports both step and square pulse analysis."
-msgstr "Cette fonctionnalité est alimentée par la fonction sous-jacente `sigima.proc.signal.extract_pulse_features` et prend en charge l'analyse des impulsions en escalier et carrées."
+msgid "Supports both step and square pulse analysis"
+msgstr "Prend en charge l'analyse des impulsions en escalier et carrées"
 
 msgid "New \"Extent\" group box in image properties:"
 msgstr "Nouvelle boîte de groupe \"Bornes\" dans les propriétés de l'image :"
@@ -1114,8 +1087,8 @@ msgstr "Les paramètres sont affichés dans un groupe dédié \"Bornes\" dans le
 msgid "New I/O features:"
 msgstr "Nouvelles fonctionnalités d'E/S :"
 
-msgid "Improved delimiter handling in CSV reading (signals) to better support files with variable whitespace separators (now using `\\s+` instead of single space character)."
-msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec des séparateurs d'espaces variables (utilisation désormais de `\\s+` au lieu du caractère espace simple)."
+msgid "Improved delimiter handling in CSV reading (signals) to better support files with various whitespace separators"
+msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec divers séparateurs d'espaces."
 
 msgid "FT-Lab signals and images:"
 msgstr "Signaux et images FT-Lab :"
@@ -1180,20 +1153,14 @@ msgstr "Les marges peuvent être définies entre 0 % et 50 % pour contrôler l
 msgid "Changes are applied immediately to all existing plot widgets without requiring application restart"
 msgstr "Les modifications sont appliquées immédiatement à tous les widgets de tracé existants sans nécessiter de redémarrage de l'application"
 
-msgid "This feature enhances plot visualization control and replaces the previously hardcoded 0.2% margin values"
-msgstr "Cette fonctionnalité améliore le contrôle de la visualisation des tracés et remplace les valeurs de marge de 0,2 % précédemment codées en dur"
-
 msgid "Dialog sizing improvements:"
 msgstr "Améliorations de la taille des boîtes de dialogue :"
 
-msgid "Enhanced initial sizing logic for processing dialogs (profile extraction, offset subtraction, etc.):"
-msgstr "Logique de taille initiale améliorée pour les boîtes de dialogue de traitement (extraction de profil, soustraction de décalage, etc.) :"
+msgid "Processing dialogs (profile extraction, offset subtraction, etc.) now intelligently resize based on the main window size"
+msgstr "Les boîtes de dialogue de traitement (extraction de profil, soustraction de décalage, etc.) redimensionnent désormais intelligemment en fonction de la taille de la fenêtre principale"
 
-msgid "Dialogs now intelligently resize based on parent window dimensions with proper aspect ratio handling"
-msgstr "Les boîtes de dialogue se redimensionnent désormais intelligemment en fonction des dimensions de la fenêtre parente, avec un traitement approprié du ratio d'aspect"
-
-msgid "The sizing ratio represents the percentage of parent dimensions, ensuring dialogs are never larger than their parent window"
-msgstr "Le ratio de taille représente le pourcentage des dimensions parente, garantissant que les boîtes de dialogue ne sont jamais plus grandes que leur fenêtre parente"
+msgid "Dialogs are automatically sized appropriately for your screen resolution while never exceeding the main window size"
+msgstr "Les boîtes de dialogue sont automatiquement redimensionnées de manière appropriée en fonction de votre résolution d'écran tout en ne dépassant jamais la taille de la fenêtre principale"
 
 msgid "Improved user experience with consistently appropriately-sized dialogs across different screen resolutions and window sizes"
 msgstr "Amélioration de l'expérience utilisateur avec des boîtes de dialogue de taille appropriée de manière cohérente sur différentes résolutions d'écran et tailles de fenêtre"
@@ -1300,6 +1267,21 @@ msgstr "Ce comportement correspond à l'action \"Restaurer\" qui réduit tous le
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
 
+msgid "**Improved responsiveness when switching between images with many analysis results**: Fixed performance issue when navigating between images that have hundreds of geometric shapes from contour detection or other analysis operations"
+msgstr "**Amélioration de la réactivité lors du changement entre des images avec de nombreux résultats d'analyse** : Correction d'un problème de performance lors de la navigation entre des images contenant des centaines de formes géométriques issues de la détection de contours ou d'autres opérations d'analyse"
+
+msgid "When switching away from an image with many analysis results (e.g., 710 detected contours), the application now responds immediately instead of freezing for over a minute"
+msgstr "Lors du changement d'une image avec de nombreux résultats d'analyse (par exemple, 710 contours détectés), l'application répond désormais immédiatement au lieu de se figer pendant plus d'une minute."
+
+msgid "The responsiveness improvement is dramatic: operations that took 66 seconds now complete in under 1 millisecond"
+msgstr "L'amélioration de la réactivité est spectaculaire : les opérations qui prenaient 66 secondes se terminent désormais en moins d'une milliseconde."
+
+msgid "Users can now work smoothly with images containing extensive analysis results without performance degradation"
+msgstr "Les utilisateurs peuvent désormais travailler sans problème avec des images contenant des résultats d'analyse étendus sans dégradation des performances."
+
+msgid "This enhancement particularly benefits workflows involving blob detection, contour analysis, or peak detection that generate many geometric shapes"
+msgstr "Cette amélioration bénéficie particulièrement aux flux de travail impliquant la détection de blobs, l'analyse de contours ou la détection de pics qui génèrent de nombreuses formes géométriques."
+
 msgid "**Action enable states not updated after operations**: Fixed issue where menu action states were not updated after performing annotation or metadata operations"
 msgstr "**Les états d'activation des actions ne sont pas mis à jour après les opérations** : Correction d'un problème où les états des actions de menu n'étaient pas mis à jour après l'exécution d'opérations d'annotation ou de métadonnées"
 
@@ -1327,26 +1309,26 @@ msgstr "Auparavant, la méthode utilisée pour ouvrir des fichiers directement o
 msgid "All import methods now use consistent lexicographic sorting for predictable, platform-independent behavior"
 msgstr "**Toutes les méthodes d'importation utilisent désormais un tri lexicographique cohérent pour un comportement prévisible et indépendant de la plateforme**"
 
-msgid "**Plot cleanup robustness**: Fixed ValueError when deleting plot items during result removal"
-msgstr "**Robustesse du nettoyage des graphiques** : Correction de l'erreur ValueError lors de la suppression des éléments de tracé pendant la suppression des résultats"
+msgid "**Plot cleanup robustness**: Fixed occasional errors when removing analysis results from plots"
+msgstr "**Robustesse du nettoyage des graphiques** : Correction d'erreurs occasionnelles lors de la suppression des résultats d'analyse des graphiques"
 
-msgid "The `cleanup_dataview()` method now deletes items one by one with proper error handling"
-msgstr "La méthode `cleanup_dataview()` supprime désormais les éléments un par un avec une gestion des erreurs appropriée"
+msgid "Analysis result labels and shapes are now removed more reliably without triggering internal errors"
+msgstr "Les étiquettes et formes des résultats d'analyse sont désormais supprimées de manière plus fiable sans déclencher d'erreurs internes"
 
-msgid "Each item is checked for existence before deletion, and ValueError exceptions are caught if the item was already removed"
-msgstr "Chaque élément est vérifié pour son existence avant la suppression, et les exceptions ValueError sont interceptées si l'élément a déjà été supprimé"
+msgid "Improved handling of cases where plot items might be removed by multiple operations simultaneously"
+msgstr "Amélioration de la gestion des cas où les éléments de tracé pourraient être supprimés par plusieurs opérations simultanément"
 
-msgid "**Polygon rendering performance**: Fixed severe slowdown when drawing contour detection results with many polygons"
-msgstr "**Performance de rendu des polygones** : Correction d'un ralentissement sévère lors du dessin des résultats de détection de contours avec de nombreux polygones"
+msgid "**Faster rendering of contour detection results**: Significantly improved performance when displaying images with contour detection results"
+msgstr "**Rendu plus rapide des résultats de détection de contours** : Amélioration significative des performances lors de l'affichage d'images avec des résultats de détection de contours"
 
-msgid "Filter out NaN coordinates in `GeometryPlotPyAdapter` before creating polygon plot items"
-msgstr "Filtrage des coordonnées NaN dans `GeometryPlotPyAdapter` avant de créer des éléments de tracé de polygone"
+msgid "Drawing contour polygons is now over 5 times faster, especially beneficial when displaying many contours"
+msgstr "Le dessin de polygones de contours est désormais plus de 5 fois plus rapide, ce qui est particulièrement bénéfique lors de l'affichage de nombreux contours"
 
-msgid "Polygons are padded with NaN values to create regular arrays, but these padding values were being unnecessarily processed during rendering"
-msgstr "Les polygones sont complétés par des valeurs NaN pour créer des tableaux réguliers, mais ces valeurs de remplissage étaient traitées inutilement lors du rendu."
+msgid "Users will notice smoother interaction when working with contour detection on complex images"
+msgstr "Les utilisateurs remarqueront une interaction plus fluide lors de l'utilisation de la détection de contours sur des images complexes"
 
-msgid "Achieved 5.4x speedup when drawing 50 polygons (from 1560ms to 288ms)"
-msgstr "Amélioration de la vitesse de 5,4 fois lors du dessin de 50 polygones (de 1560 ms à 288 ms)"
+msgid "Example: Drawing 50 contour polygons now takes 288ms instead of 1560ms"
+msgstr "Exemple : Le dessin de 50 polygones de contours prend désormais 288 ms au lieu de 1560 ms"
 
 msgid "**Critical fix**: Result label items are now properly excluded from cleanup to prevent accidental removal"
 msgstr "**Correction critique** : Les éléments d'étiquette de résultat sont désormais correctement exclus du nettoyage pour éviter une suppression accidentelle"
