@@ -323,16 +323,7 @@ def resultadapter_to_html(
         max_cells = Conf.view.max_cells_in_label.get(100)
 
     if isinstance(adapter, BaseResultAdapter):
-        # Get the base HTML
-        html = adapter.to_html(
-            obj=obj,
-            visible_only=visible_only,
-            transpose_single_row=transpose_single_row,
-            **kwargs,
-        )
-
-        # Check if truncation is needed
-        num_rows = len(adapter.result)
+        # Get the dataframe FIRST to check truncation needs
         df = adapter.to_dataframe(visible_only=visible_only)
 
         # Remove roi_index column for display calculations
@@ -348,19 +339,27 @@ def resultadapter_to_html(
             num_cols = max_display_cols
 
         # Calculate number of cells (rows × columns)
+        num_rows = len(adapter.result)
         num_cells = num_rows * num_cols
 
+        # Check if truncation is needed BEFORE calling to_html()
         if num_cells > max_cells or cols_truncated:
             # Calculate how many rows we can display given max_cells
             max_rows = max(1, max_cells // num_cols) if num_cols > 0 else num_rows
 
-            # Truncate to max_rows
-            df_truncated = display_df.head(max_rows)
+            # Truncate to max_rows and make a copy to avoid SettingWithCopyWarning
+            df_truncated = display_df.head(max_rows).copy()
 
-            # Use pandas' built-in float_format for efficient HTML generation
-            # This is much faster than manually formatting cells with .apply() or .map()
-            html_kwargs = {"border": 0, "float_format": lambda x: f"{x:.3g}"}
+            # Generate HTML directly from truncated DataFrame for performance
+            # This is MUCH faster than calling adapter.to_html() on full data
+            html_kwargs = {"border": 0}
             html_kwargs.update(kwargs)
+
+            # Format numeric columns efficiently
+            for col in df_truncated.select_dtypes(include=["number"]).columns:
+                df_truncated[col] = df_truncated[col].map(
+                    lambda x: f"{x:.3g}" if pd.notna(x) else x
+                )
 
             text = f'<u><b style="color: #5294e2">{adapter.result.title}</b></u>:'
             text += df_truncated.to_html(**html_kwargs)
@@ -378,7 +377,13 @@ def resultadapter_to_html(
 
             return text
 
-        return html
+        # No truncation needed, use the standard adapter.to_html() method
+        return adapter.to_html(
+            obj=obj,
+            visible_only=visible_only,
+            transpose_single_row=transpose_single_row,
+            **kwargs,
+        )
 
     # For lists of adapters, recursively process each one
     return "<hr>".join(
