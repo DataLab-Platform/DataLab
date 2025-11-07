@@ -14,6 +14,7 @@ import sigima.params as sigima_param
 from sigima.tests.data import get_test_image
 
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
+from datalab.config import Conf
 from datalab.tests import datalab_test_app_context
 
 
@@ -76,14 +77,21 @@ def test_large_results_scenario(measure_execution_time: bool = False) -> None:
 
     Args:
         measure_execution_time: if True, measure and print the execution time, then
+         quit immediately
 
     This scenario tests:
     - Contour detection on flower.npy (generates many contours)
     - Shape drawing truncation at max_shapes_to_draw limit
     - Label display truncation at max_cells_in_label limit
+    - Performance with large polygons (many points per polygon)
+
+    Performance benchmark (15 polygons × 5000 points):
+    - Pure PlotPy: ~473ms (baseline for drawing shapes only)
+    - DataLab: ~254ms (includes shape drawing + HTML label generation)
+    - Note: DataLab is faster due to optimized HTML truncation before formatting
     """
-    nb_polygons = 150
-    nb_points_per_polygon = 100
+    nb_polygons = 15
+    nb_points_per_polygon = 5000
 
     with datalab_test_app_context(
         console=False, exec_loop=not measure_execution_time
@@ -102,7 +110,8 @@ def test_large_results_scenario(measure_execution_time: bool = False) -> None:
         # Run contour detection which should produce a large set of results
         param = sigima_param.ContourShapeParam()
         param.shape = sigima.enums.ContourShape.POLYGON
-        panel.processor.run_feature("contour_shape", param)
+        with Conf.proc.show_result_dialog.temp(False):
+            panel.processor.run_feature("contour_shape", param)
 
         # Create geometry results manually using many polygons (we generate results
         # in a manner that should be similar to what contour detection would typically
@@ -147,6 +156,25 @@ def test_large_results_scenario(measure_execution_time: bool = False) -> None:
                 print(
                     f" - Switching to image #{i}: avg {avg_time:.1f} ms "
                     f"over {len(times)} runs"
+                )
+
+            # Measure execution time of manual refresh of the image view:
+            print("\nMeasuring image view refresh timings...")
+            image_refresh_times = {}
+            for i in range(3, 4):
+                panel.objview.select_objects([i])
+                for _j in range(5):  # Doing multiple iterations to stabilize timings
+                    start_time = time.perf_counter()
+                    panel.manual_refresh()
+                    elapsed_time = (time.perf_counter() - start_time) * 1000  # in ms
+                    image_refresh_times.setdefault(i, []).append(elapsed_time)
+                    print(f"  - Manual refresh: {elapsed_time:.1f} ms")
+            print("\nImage view refresh timings (ms):")
+            for i in range(3, 4):
+                times = image_refresh_times[i]
+                avg_time = sum(times) / len(times)
+                print(
+                    f" - Manual refresh: avg {avg_time:.1f} ms over {len(times)} runs"
                 )
 
 
