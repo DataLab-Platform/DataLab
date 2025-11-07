@@ -70,7 +70,7 @@ def datalab_test_app_context(
         exec_loop: whether to execute Qt event loop (default: True)
     """
     if size is None:
-        size = 950, 600
+        size = 1200, 700
     with qth.datalab_app_context(exec_loop=exec_loop):
         win: DLMainWindow | None = None
         try:
