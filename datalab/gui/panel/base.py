@@ -1202,6 +1202,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         super().__init__(parent)
         self.mainwindow: DLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
+        self.show_label_checkbox: QW.QCheckBox | None = None
         self.objmodel = objectmodel.ObjectModel()
         self.objview = objectview.ObjectView(self, self.objmodel)
         self.objview.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
@@ -2746,6 +2747,22 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             _("Show results obtained from previous analysis"),
             self.show_results,
         )
+
+        # Add checkbox to toggle result label visibility
+        self.show_label_checkbox = QW.QCheckBox(_("Show result label"), self)
+        self.show_label_checkbox.setToolTip(
+            _("Show or hide the merged result label on the plot")
+        )
+        self.show_label_checkbox.setChecked(Conf.view.show_result_label.get())
+        self.show_label_checkbox.stateChanged.connect(
+            self.toggle_result_label_visibility
+        )
+        self.objprop.add_button(self.show_label_checkbox)
+        self.acthandler.add_action(
+            self.show_label_checkbox,
+            select_condition=actionhandler.SelectCond.at_least_one,
+        )
+
         self.__new_objprop_button(
             _("Annotations"),
             "annotations.svg",
@@ -2779,6 +2796,18 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 show_resultdata(self.parentWidget(), rdata, f"{objs[0].PREFIX}_results")
         else:
             self.__show_no_result_warning()
+
+    def toggle_result_label_visibility(self, state: int) -> None:
+        """Toggle the visibility of the merged result label on the plot.
+
+        Args:
+            state: Checkbox state (Qt.Checked or Qt.Unchecked)
+        """
+        show_label = state == QC.Qt.Checked
+        # Update the configuration
+        Conf.view.show_result_label.set(show_label)
+        # Refresh the plot to show/hide the label
+        self.plothandler.toggle_result_label_visibility(show_label)
 
     def __add_result_signal(
         self,

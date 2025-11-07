@@ -394,6 +394,15 @@ class ViewSettings(gds.DataSet):
         min=1,
         help=_("Maximum number of columns to display in merged result label."),
     )
+    show_result_label = gds.BoolItem(
+        _("Show the merged result label by default"),
+        _("Result label"),
+        default=True,
+        help=_(
+            "Show the merged result label on the plot by default. "
+            "Can be toggled per-object using the checkbox in the Properties panel."
+        ),
+    )
     _g3 = gds.EndGroup("")
 
 

@@ -315,6 +315,9 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # for results with many columns (e.g., polygon coordinates: x0, y0, x1, y1...)
     max_cols_in_label = conf.Option()
 
+    # Show merged result label on plot by default
+    show_result_label = conf.Option()
+
     @classmethod
     def get_def_dict(cls, category: Literal["ima", "sig"]) -> dict:
         """Get default visualization settings as a dictionary
@@ -449,6 +452,7 @@ def initialize():
     Conf.view.max_shapes_to_draw.get(1000)
     Conf.view.max_cells_in_label.get(100)
     Conf.view.max_cols_in_label.get(15)
+    Conf.view.show_result_label.get(True)
 
     # Initialize PlotPy configuration with versioned app name
     PLOTPY_CONF.set_application(

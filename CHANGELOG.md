@@ -18,6 +18,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * All limits are configurable through Settings dialog (Visualization → Results display limits)
   * Settings documented in user manual with explanations of performance implications
 
+* **Result label visibility control**: Added option to show/hide merged result labels on plots
+  * New checkbox in Properties panel (between Results and Annotations buttons) to toggle result label visibility
+  * Labels are always added to the plot but can be shown/hidden with a single click
+  * Default visibility configurable in Settings (Visualization → Results display limits → "Show result label by default")
+  * Setting is persisted across sessions and applies to all new analysis results
+  * Useful for decluttering plots when working with multiple results or when labels overlap with data
+
 * **Annotation management**: New features for managing plot annotations on signals and images
   * New "Annotations" submenu in Edit menu with dedicated annotation operations
   * **Copy annotations**: Copy annotations from selected object to clipboard

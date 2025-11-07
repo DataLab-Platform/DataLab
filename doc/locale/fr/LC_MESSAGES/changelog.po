@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 13:28+0100\n"
+"POT-Creation-Date: 2025-11-07 18:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -45,7 +45,6 @@ msgstr "`max_cells_in_label` (par défaut : 100) : Nombre maximum de cellules 
 msgid "`max_cols_in_label` (default: 15): Maximum columns displayed in merged result labels"
 msgstr "`max_cols_in_label` (par défaut : 15) : Nombre maximum de colonnes affichées dans les étiquettes de résultats fusionnées"
 
-
 msgid "When limits are exceeded:"
 msgstr "Lorsque les limites sont dépassées :"
 
@@ -55,7 +54,6 @@ msgstr "Dessin des formes : Seules les N premières formes sont dessinées, ave
 msgid "Result labels: Tables truncated with notice showing omitted rows/columns"
 msgstr "Étiquettes de résultats : Tables tronquées avec un avis indiquant les lignes/colonnes omises"
 
-
 msgid "Prevents application freezing when processing operations produce large result sets (e.g., contour detection finding 1000+ polygons)"
 msgstr "Empêche le gel de l'application lorsque les opérations de traitement produisent de grands ensembles de résultats (par exemple, la détection de contours trouvant plus de 1000 polygones)"
 
@@ -64,6 +62,24 @@ msgstr "Toutes les limites sont configurables via la boîte de dialogue des para
 
 msgid "Settings documented in user manual with explanations of performance implications"
 msgstr "Paramètres documentés dans le manuel utilisateur avec explications des implications sur les performances"
+
+msgid "**Result label visibility control**: Added option to show/hide merged result labels on plots"
+msgstr "**Contrôle de la visibilité des étiquettes de résultats** : Ajout d'une option pour afficher/masquer les étiquettes de résultats fusionnées sur les graphiques"
+
+msgid "New checkbox in Properties panel (between Results and Annotations buttons) to toggle result label visibility"
+msgstr "Nouvelle case à cocher dans le panneau des propriétés (entre les boutons Résultats et Annotations) pour basculer la visibilité de l'étiquette de résultat"
+
+msgid "Labels are always added to the plot but can be shown/hidden with a single click"
+msgstr "Les étiquettes sont toujours ajoutées au graphique mais peuvent être affichées/masquées d'un simple clic"
+
+msgid "Default visibility configurable in Settings (Visualization → Results display limits → \"Show result label by default\")"
+msgstr "La visibilité par défaut est configurable dans les paramètres (Visualisation → Limites d'affichage des résultats → \"Afficher l'étiquette de résultat par défaut\")"
+
+msgid "Setting is persisted across sessions and applies to all new analysis results"
+msgstr "Le paramètre est conservé entre les sessions et s'applique à tous les nouveaux résultats d'analyse"
+
+msgid "Useful for decluttering plots when working with multiple results or when labels overlap with data"
+msgstr "Utile pour désencombrer les graphiques lors du travail avec plusieurs résultats ou lorsque les étiquettes se chevauchent avec les données"
 
 msgid "**Annotation management**: New features for managing plot annotations on signals and images"
 msgstr "**Gestion des annotations** : Nouvelles fonctionnalités pour la gestion des annotations de tracé sur les signaux et les images"

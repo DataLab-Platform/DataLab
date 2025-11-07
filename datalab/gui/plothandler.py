@@ -175,6 +175,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                 # Get the merged label
                 merged_label = merged_adapter.get_merged_label()
                 if merged_label is not None:
+                    # Set initial visibility based on configuration
+                    merged_label.setVisible(Conf.view.show_result_label.get())
                     items.append(merged_label)
 
                 # Add other items from the merged adapter (e.g., geometric shapes)
@@ -230,6 +232,18 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         # Clear cached labels in merged result adapters since they were removed
         for merged_adapter in self.__merged_result_adapters.values():
             merged_adapter.invalidate_cached_label()
+
+    def toggle_result_label_visibility(self, show: bool) -> None:
+        """Toggle the visibility of all merged result labels on the plot.
+
+        Args:
+            show: True to show the labels, False to hide them
+        """
+        for merged_adapter in self.__merged_result_adapters.values():
+            label = merged_adapter.get_cached_label()
+            if label is not None:
+                label.setVisible(show)
+        self.plot.replot()
 
     def __add_item_to_plot(self, oid: str) -> TypePlotItem:
         """Make plot item and add it to plot.

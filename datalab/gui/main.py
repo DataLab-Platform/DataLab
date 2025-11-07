@@ -1908,6 +1908,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             ):
                 for panel in (self.signalpanel, self.imagepanel):
                     panel.manual_refresh()
+            if option == "show_result_label":
+                for panel in (self.signalpanel, self.imagepanel):
+                    panel.show_label_checkbox.setChecked(
+                        Conf.view.show_result_label.get()
+                    )
             if option == "color_mode":
                 self.__update_color_mode()
             if option == "show_console_on_error":
