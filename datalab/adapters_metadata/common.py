@@ -14,12 +14,14 @@ import numpy as np
 import pandas as pd
 from guidata.qthelpers import exec_dialog
 from guidata.widgets.dataframeeditor import DataFrameEditor
+from qtpy.QtWidgets import QMessageBox
 from sigima.objects import ImageObj, SignalObj
 
 from datalab.adapters_metadata.base_adapter import BaseResultAdapter
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
 from datalab.adapters_metadata.table_adapter import TableAdapter
-from datalab.config import _
+from datalab.config import Conf, _
+from datalab.env import execenv
 from datalab.objectmodel import get_short_id
 
 if TYPE_CHECKING:
@@ -133,6 +135,32 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
 
         # Combine all dataframes
         df = pd.concat(dfs, ignore_index=True)
+
+        # Check if the dataframe is too large and warn the user
+        max_cells = Conf.proc.max_cells_in_dialog.get()
+        num_rows = len(df)
+        num_cols = len(df.columns)
+        num_cells = num_rows * num_cols
+
+        if num_cells > max_cells:
+            msg = _(
+                "Results contain %d cells (%d rows × %d columns), "
+                "which exceeds the recommended limit of %d cells.\n\n"
+                "Displaying large result tables may be slow.\n\n"
+                "Do you want to continue?"
+            ) % (num_cells, num_rows, num_cols, max_cells)
+            if execenv.unattended:
+                # In unattended mode, we do not show dialogs
+                return
+            reply = QMessageBox.warning(
+                parent,
+                _("Large Result Set"),
+                msg,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            if reply == QMessageBox.StandardButton.No:
+                return
 
         # Add comparison columns if we have multiple results of the same kind
         if len(dfs) > 1:
@@ -291,6 +319,7 @@ def resultadapter_to_html(
     obj: SignalObj | ImageObj,
     visible_only: bool = True,
     transpose_single_row: bool = True,
+    max_cells: int | None = None,
     **kwargs,
 ) -> str:
     """Convert a result adapter to HTML format
@@ -301,6 +330,9 @@ def resultadapter_to_html(
         visible_only: If True, include only visible headers based on display
          preferences. Default is False.
         transpose_single_row: If True, transpose the table when there's only one row
+        max_cells: Maximum number of table cells (rows × columns) to display per
+         result. If None, use the configuration value. If a result has more cells,
+         it will be truncated with a notice.
         **kwargs: Additional arguments passed to DataFrame.to_html()
 
     Returns:
@@ -313,11 +345,75 @@ def resultadapter_to_html(
             "Adapter must be a BaseResultAdapter "
             "or a list of BaseResultAdapter instances"
         )
+
+    # Get max_cells from config if not provided
+    if max_cells is None:
+        max_cells = Conf.view.max_cells_in_label.get(100)
+
     if isinstance(adapter, BaseResultAdapter):
-        return adapter.to_html(
+        # Get the base HTML
+        html = adapter.to_html(
             obj=obj,
             visible_only=visible_only,
             transpose_single_row=transpose_single_row,
             **kwargs,
         )
-    return "<hr>".join([resultadapter_to_html(res, obj) for res in adapter])
+
+        # Check if truncation is needed
+        num_rows = len(adapter.result)
+        df = adapter.to_dataframe(visible_only=visible_only)
+
+        # Remove roi_index column for display calculations
+        display_df = df.drop(columns=["roi_index"]) if "roi_index" in df.columns else df
+
+        # For merged labels, limit display columns for readability
+        max_display_cols = Conf.view.max_cols_in_label.get(20)
+        num_cols = len(display_df.columns)
+        cols_truncated = num_cols > max_display_cols
+
+        if cols_truncated:
+            display_df = display_df.iloc[:, :max_display_cols]
+            num_cols = max_display_cols
+
+        # Calculate number of cells (rows × columns)
+        num_cells = num_rows * num_cols
+
+        if num_cells > max_cells or cols_truncated:
+            # Calculate how many rows we can display given max_cells
+            max_rows = max(1, max_cells // num_cols) if num_cols > 0 else num_rows
+
+            # Truncate to max_rows
+            df_truncated = display_df.head(max_rows)
+
+            # Use pandas' built-in float_format for efficient HTML generation
+            # This is much faster than manually formatting cells with .apply() or .map()
+            html_kwargs = {"border": 0, "float_format": lambda x: f"{x:.3g}"}
+            html_kwargs.update(kwargs)
+
+            text = f'<u><b style="color: #5294e2">{adapter.result.title}</b></u>:'
+            text += df_truncated.to_html(**html_kwargs)
+
+            # Add truncation notice
+            omitted_parts = []
+            if num_rows > max_rows:
+                omitted_parts.append(_("%d more rows") % (num_rows - max_rows))
+            if cols_truncated:
+                num_omitted_cols = len(df.columns) - max_display_cols
+                omitted_parts.append(_("%d more columns") % num_omitted_cols)
+            if omitted_parts:
+                omitted_str = _("%s omitted") % ", ".join(omitted_parts)
+                text += f"<p><i>... ({omitted_str})</i></p>"
+
+            return text
+
+        return html
+
+    # For lists of adapters, recursively process each one
+    return "<hr>".join(
+        [
+            resultadapter_to_html(
+                res, obj, visible_only, transpose_single_row, max_cells
+            )
+            for res in adapter
+        ]
+    )

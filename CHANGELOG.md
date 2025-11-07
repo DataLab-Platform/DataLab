@@ -6,6 +6,20 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **Performance optimizations for large result sets**: Added configurable display limits to prevent UI freezing with large analysis results
+  * New configuration options to control result display behavior:
+    * `max_shapes_to_draw` (default: 1,000): Maximum number of geometry shapes drawn on plots
+    * `max_cells_in_label` (default: 100): Maximum table cells displayed in merged result labels
+    * `max_cols_in_label` (default: 15): Maximum columns displayed in merged result labels
+    * `max_cells_in_dialog` (default: 50,000): Threshold for warning dialog when viewing large result tables
+  * When limits are exceeded:
+    * Shape drawing: Only first N shapes drawn, with warning label on plot
+    * Result labels: Tables truncated with notice showing omitted rows/columns
+    * Result dialog: Warning displayed with option to cancel or continue
+  * Prevents application freezing when processing operations produce large result sets (e.g., contour detection finding 1000+ polygons)
+  * All limits are configurable through Settings dialog (Visualization → Results display limits)
+  * Settings documented in user manual with explanations of performance implications
+
 * **Annotation management**: New features for managing plot annotations on signals and images
   * New "Annotations" submenu in Edit menu with dedicated annotation operations
   * **Copy annotations**: Copy annotations from selected object to clipboard

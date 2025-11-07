@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-07 12:11+0100\n"
+"POT-Creation-Date: 2025-11-07 13:24+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -17,27 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
+#, python-format
 msgid ""
-"which exceeds the storage limit.\n"
+"Results contain %d cells (%d rows × %d columns), which exceeds the recommended limit of %d cells.\n"
 "\n"
-"and will be displayed.\n"
-"\n"
-"You can increase the limit in the configuration (Processing → Max result rows)."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "Displaying large result tables may be slow.\n"
 "\n"
 "Do you want to continue?"
-msgstr "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous néanmoins continuer ?"
+msgstr ""
+"Les résultats contiennent %d cellules (%d lignes × %d colonnes), ce qui dépasse la limite recommandée de %d cellules.\n"
+"\n"
+"Afficher de grandes tables de résultats peut être lent.\n"
+"\n"
+"Voulez-vous continuer ?"
 
-#, fuzzy
 msgid "Large Result Set"
-msgstr "Résultats tabulaires"
+msgstr "Résultats volumineux"
 
 msgid "Results"
 msgstr "Résultats"
+
+#, python-format
+msgid "%d more rows"
+msgstr "%d lignes supplémentaires"
+
+#, python-format
+msgid "%d more columns"
+msgstr "%d colonnes supplémentaires"
+
+#, python-format
+msgid "%s omitted"
+msgstr "%s non affichés"
+
+#, python-format
+msgid "Only %d out of %d shapes are displayed"
+msgstr "Seules %d sur %d formes sont affichées"
 
 msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
@@ -2365,6 +2379,27 @@ msgstr "Eliminer un pourcentage des valeurs les plus hautes et les plus basses<b
 
 msgid "Percentage of margin to add around data when auto-scaling image plots.<br>A value of 0.2&#37; adds a small margin for better visualization.<br>Set to 0&#37; for no margin (exact data bounds)."
 msgstr "Pourcentage de marge à ajouter autour des données lors du redimensionnement automatique des graphiques d'images.<br>Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation.<br>Réglez sur 0 % pour aucune marge (limites exactes des données)."
+
+msgid "Results display limits"
+msgstr "Limites d'affichage des résultats"
+
+msgid "Maximum shapes to draw"
+msgstr "Nombre maximum de formes à dessiner"
+
+msgid "Maximum number of geometry shapes to draw on plot."
+msgstr "Nombre maximum de formes géométriques à dessiner sur le graphique."
+
+msgid "Maximum cells in label"
+msgstr "Nombre maximum de cellules dans l'étiquette"
+
+msgid "Maximum number of table cells (rows × columns) to display in merged result label on plot."
+msgstr "Nombre maximum de cellules de tableau (lignes × colonnes) à afficher dans l'étiquette de résultat fusionnée sur le graphique."
+
+msgid "Maximum columns in label"
+msgstr "Nombre maximum de colonnes dans l'étiquette"
+
+msgid "Maximum number of columns to display in merged result label."
+msgstr "Nombre maximum de colonnes à afficher dans l'étiquette de résultat fusionnée."
 
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"

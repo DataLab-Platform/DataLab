@@ -372,6 +372,30 @@ class ViewSettings(gds.DataSet):
     )
     _g2 = gds.EndGroup("")
 
+    g3 = gds.BeginGroup(_("Results display limits"))
+    max_shapes_to_draw = gds.IntItem(
+        _("Maximum shapes to draw"),
+        default=1000,
+        min=1,
+        help=_("Maximum number of geometry shapes to draw on plot."),
+    )
+    max_cells_in_label = gds.IntItem(
+        _("Maximum cells in label"),
+        default=100,
+        min=1,
+        help=_(
+            "Maximum number of table cells (rows × columns) to display "
+            "in merged result label on plot."
+        ),
+    )
+    max_cols_in_label = gds.IntItem(
+        _("Maximum columns in label"),
+        default=15,
+        min=1,
+        help=_("Maximum number of columns to display in merged result label."),
+    )
+    _g3 = gds.EndGroup("")
+
 
 # Generator yielding (param, section, option) tuples from configuration dictionary
 def _iter_conf(

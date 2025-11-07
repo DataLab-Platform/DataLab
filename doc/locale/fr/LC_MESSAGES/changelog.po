@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 11:48+0100\n"
+"POT-Creation-Date: 2025-11-07 13:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,45 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**Performance optimizations for large result sets**: Added configurable display limits to prevent UI freezing with large analysis results"
+msgstr "**Optimisations des performances pour les grands ensembles de résultats** : Ajout de limites d'affichage configurables pour éviter le gel de l'interface utilisateur avec de grands résultats d'analyse"
+
+msgid "New configuration options to control result display behavior:"
+msgstr "Nouvelles options de configuration pour contrôler le comportement d'affichage des résultats :"
+
+msgid "`max_shapes_to_draw` (default: 1,000): Maximum number of geometry shapes drawn on plots"
+msgstr "`max_shapes_to_draw` (par défaut : 1 000) : Nombre maximum de formes géométriques dessinées sur les graphiques"
+
+msgid "`max_cells_in_label` (default: 100): Maximum table cells displayed in merged result labels"
+msgstr "`max_cells_in_label` (par défaut : 100) : Nombre maximum de cellules de tableau affichées dans les étiquettes de résultats fusionnées"
+
+msgid "`max_cols_in_label` (default: 15): Maximum columns displayed in merged result labels"
+msgstr "`max_cols_in_label` (par défaut : 15) : Nombre maximum de colonnes affichées dans les étiquettes de résultats fusionnées"
+
+msgid "`max_cells_in_dialog` (default: 50,000): Threshold for warning dialog when viewing large result tables"
+msgstr "`max_cells_in_dialog` (par défaut : 50 000) : Seuil pour la boîte de dialogue d'avertissement lors de l'affichage de grandes tables de résultats"
+
+msgid "When limits are exceeded:"
+msgstr "Lorsque les limites sont dépassées :"
+
+msgid "Shape drawing: Only first N shapes drawn, with warning label on plot"
+msgstr "Dessin des formes : Seules les N premières formes sont dessinées, avec une étiquette d'avertissement sur le graphique"
+
+msgid "Result labels: Tables truncated with notice showing omitted rows/columns"
+msgstr "Étiquettes de résultats : Tables tronquées avec un avis indiquant les lignes/colonnes omises"
+
+msgid "Result dialog: Warning displayed with option to cancel or continue"
+msgstr "Boîte de dialogue de résultats : Avertissement affiché avec option d'annuler ou de continuer"
+
+msgid "Prevents application freezing when processing operations produce large result sets (e.g., contour detection finding 1000+ polygons)"
+msgstr "Empêche le gel de l'application lorsque les opérations de traitement produisent de grands ensembles de résultats (par exemple, la détection de contours trouvant plus de 1000 polygones)"
+
+msgid "All limits are configurable through Settings dialog (Visualization → Results display limits)"
+msgstr "Toutes les limites sont configurables via la boîte de dialogue des paramètres (Visualisation → Limites d'affichage des résultats)"
+
+msgid "Settings documented in user manual with explanations of performance implications"
+msgstr "Paramètres documentés dans le manuel utilisateur avec explications des implications sur les performances"
 
 msgid "**Annotation management**: New features for managing plot annotations on signals and images"
 msgstr "**Gestion des annotations** : Nouvelles fonctionnalités pour la gestion des annotations de tracé sur les signaux et les images"

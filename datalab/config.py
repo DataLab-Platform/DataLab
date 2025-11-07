@@ -240,6 +240,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # History and analysis tabs font
     small_mono_font = conf.FontOption()
 
+    # Maximum number of table cells (rows × columns) to display in result dialog
+    # without warning. If exceeded, user is warned and given options to continue,
+    # export, or cancel. This prevents slowdown with large result sets.
+    max_cells_in_dialog = conf.Option()
+
 
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the view configuration section structure.
@@ -300,6 +305,20 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # Format strings use Python's strftime format codes
     sig_datetime_format_s = conf.Option()  # Format for s, min, h
     sig_datetime_format_ms = conf.Option()  # Format for ms, us, ns
+
+    # Maximum number of geometry shapes to draw on plot
+    # Even if more results are stored, only the first N shapes are drawn
+    max_shapes_to_draw = conf.Option()
+
+    # Maximum number of table cells (rows × columns) to display in merged result
+    # label on plot. If exceeded, rows are truncated to stay within this limit.
+    # This prevents slowdown with results that have many columns (e.g., polygons)
+    max_cells_in_label = conf.Option()
+
+    # Maximum number of columns to display in merged result label
+    # If exceeded, only the first N columns are shown. This ensures readability
+    # for results with many columns (e.g., polygon coordinates: x0, y0, x1, y1...)
+    max_cols_in_label = conf.Option()
 
     @classmethod
     def get_def_dict(cls, category: Literal["ima", "sig"]) -> dict:
@@ -408,6 +427,7 @@ def initialize():
     Conf.proc.ignore_warnings.get(False)
     Conf.proc.xarray_compat_behavior.get("ask")
     Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))
+    Conf.proc.max_cells_in_dialog.get(50000)
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")
@@ -427,9 +447,14 @@ def initialize():
     Conf.view.ima_def_interpolation.get(5)
     Conf.view.ima_def_alpha.get(1.0)
     Conf.view.ima_def_alpha_function.get(LUTAlpha.NONE.value)
+
     # Datetime format strings: % must be escaped as %% for ConfigParser
     Conf.view.sig_datetime_format_s.get("%%H:%%M:%%S")
     Conf.view.sig_datetime_format_ms.get("%%H:%%M:%%S.%%f")
+
+    Conf.view.max_shapes_to_draw.get(1000)
+    Conf.view.max_cells_in_label.get(100)
+    Conf.view.max_cols_in_label.get(15)
 
     # Initialize PlotPy configuration with versioned app name
     PLOTPY_CONF.set_application(

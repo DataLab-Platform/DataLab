@@ -46,7 +46,7 @@ from datalab.adapters_plotpy.base import (
     json_to_items,
     set_plot_item_editable,
 )
-from datalab.config import PLOTPY_CONF
+from datalab.config import PLOTPY_CONF, Conf, _
 
 if TYPE_CHECKING:
     from plotpy.styles import ShapeParam
@@ -103,8 +103,30 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         Yields:
             Plot item
         """
-        for coords in self.result_adapter.result.coords:
+        max_shapes = Conf.view.max_shapes_to_draw.get(200)
+        total_coords = len(self.result_adapter.result.coords)
+
+        # Yield shapes up to the maximum limit
+        for idx, coords in enumerate(self.result_adapter.result.coords):
+            if idx >= max_shapes:
+                break
             yield self.create_shape_item(coords, fmt, lbl, option)
+
+        # If shapes were truncated, create a warning label
+        if total_coords > max_shapes:
+            warning_text = "⚠ " + _("Only %d out of %d shapes are displayed") % (
+                max_shapes,
+                total_coords,
+            )
+            warning_label = make.label(warning_text, "BR", (0, 0), "BR")
+            warning_label.labelparam.font.bold = True
+            warning_label.labelparam.font.size = 10
+            warning_label.labelparam.bgalpha = 0.8
+            warning_label.labelparam.bgcolor = "#ff9800"  # Orange background
+            warning_label.labelparam.textcolor = "#000000"  # Black text
+            warning_label.labelparam.update_item(warning_label)
+            warning_label.set_readonly(True)
+            yield warning_label
 
     def create_shape_item(
         self, coords: np.ndarray, fmt: str, lbl: bool, option: Literal["s", "i"]
@@ -363,7 +385,7 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
         """
         items = []
         df = self.result_adapter.to_dataframe()
-        for _, row in df.iterrows():
+        for _index, row in df.iterrows():
             # Start baseline
             xs0, xs1 = row["xstartmin"], row["xstartmax"]
             ys = pulse.get_range_mean_y(obj.x, obj.y, (xs0, xs1))

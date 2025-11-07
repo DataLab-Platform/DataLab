@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 12:16+0100\n"
+"POT-Creation-Date: 2025-11-07 12:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -176,6 +176,18 @@ msgstr "**Ignorer les avertissements**"
 msgid "Suppress warning messages during computations."
 msgstr "Supprimer les messages d'avertissement pendant les calculs."
 
+msgid "**X-array compatibility behavior**"
+msgstr "**Comportement de compatibilité des tableaux X**"
+
+msgid "Choose the behavior when X arrays are incompatible in multi-signal computations:"
+msgstr "Choisir le comportement lorsque les tableaux X sont incompatibles dans les calculs multi-signaux :"
+
+msgid "**Ask**: display a confirmation dialog (default)"
+msgstr "**Demander** : afficher une boîte de dialogue de confirmation (par défaut)"
+
+msgid "**Interpolate**: automatically interpolate signals"
+msgstr "**Interpoler** : interpoler automatiquement les signaux"
+
 msgid "Result management"
 msgstr "Gestion des résultats"
 
@@ -190,18 +202,6 @@ msgstr "**Afficher automatiquement la boîte de dialogue des résultats après l
 
 msgid "When enabled, the results dialog is shown automatically after each processing operation producing results. When disabled, the results dialog is not shown automatically but results can still be viewed using the dedicated button or menu option."
 msgstr "Si le réglage est activé, la boîte de dialogue des résultats est affichée automatiquement après chaque opération de traitement produisant des résultats. Lorsque désactivé, la boîte de dialogue des résultats n'est pas affichée automatiquement, mais les résultats peuvent toujours être consultés à l'aide du bouton ou de l'option de menu dédiée."
-
-msgid "**X-array compatibility behavior**"
-msgstr "**Comportement de compatibilité des tableaux X**"
-
-msgid "Choose the behavior when X arrays are incompatible in multi-signal computations:"
-msgstr "Choisir le comportement lorsque les tableaux X sont incompatibles dans les calculs multi-signaux :"
-
-msgid "**Ask**: display a confirmation dialog (default)"
-msgstr "**Demander** : afficher une boîte de dialogue de confirmation (par défaut)"
-
-msgid "**Interpolate**: automatically interpolate signals"
-msgstr "**Interpoler** : interpoler automatiquement les signaux"
 
 msgid "Visualization"
 msgstr "Visualisation"
@@ -292,6 +292,33 @@ msgstr "**Paramètres de visualisation d'image par défaut**"
 
 msgid "Click this button to configure default visualization settings for images (colormap, interpolation, contrast, etc.)."
 msgstr "Cliquer sur ce bouton pour configurer les paramètres de visualisation par défaut pour les images (carte de couleurs, interpolation, contraste, etc.)."
+
+msgid "Results display limits"
+msgstr "Limites d'affichage des résultats"
+
+msgid "These settings control how analysis results are displayed on plots to prevent performance issues with large datasets:"
+msgstr "Ces paramètres contrôlent la façon dont les résultats d'analyse sont affichés sur les graphiques afin de limiter les problèmes de performance avec de grands ensembles de données :"
+
+msgid "**Maximum shapes to draw**"
+msgstr "**Nombre maximum de formes à dessiner**"
+
+msgid "Maximum number of geometry shapes to draw on the plot (default: 1,000). When the number of shapes exceeds this limit, only the first N shapes are drawn and a warning label is displayed."
+msgstr "Nombre maximum de formes géométriques à dessiner sur le graphique (par défaut : 1 000). Lorsque le nombre de formes dépasse cette limite, seules les N premières formes sont dessinées et une étiquette d'avertissement est affichée."
+
+msgid "**Maximum cells in label**"
+msgstr "**Nombre maximum de cellules dans l'étiquette**"
+
+msgid "Maximum number of table cells (rows × columns) to display in merged result labels on plots (default: 100). When the number of cells exceeds this limit, the table is truncated."
+msgstr "Nombre maximum de cellules de tableau (lignes × colonnes) à afficher dans les étiquettes de résultats fusionnés sur les graphiques (par défaut : 100). Lorsque le nombre de cellules dépasse cette limite, le tableau est tronqué."
+
+msgid "**Maximum columns in label**"
+msgstr "**Nombre maximum de colonnes dans l'étiquette**"
+
+msgid "Maximum number of columns to display in merged result labels (default: 15). When the number of columns exceeds this limit, only the first N columns are displayed."
+msgstr "Nombre maximum de colonnes à afficher dans les étiquettes de résultats fusionnés (par défaut : 15). Lorsque le nombre de colonnes dépasse cette limite, seules les N premières colonnes sont affichées."
+
+msgid "These settings affect only the visualization of results on plots. They do not affect the actual computation or storage of results in metadata."
+msgstr "Ces paramètres n'affectent que la visualisation des résultats sur les graphiques. Ils n'affectent pas le calcul réel ou le stockage des résultats dans les métadonnées."
 
 msgid "I/O"
 msgstr "Entrée/sortie"

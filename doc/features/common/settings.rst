@@ -201,6 +201,32 @@ Image-specific settings
     Click this button to configure default visualization settings for images (colormap,
     interpolation, contrast, etc.).
 
+Results display limits
+^^^^^^^^^^^^^^^^^^^^^^
+
+These settings control how analysis results are displayed on plots to prevent
+performance issues with large datasets:
+
+**Maximum shapes to draw**
+    Maximum number of geometry shapes to draw on the plot (default: 1,000). When
+    the number of shapes exceeds this limit, only the first N shapes are drawn
+    and a warning label is displayed.
+
+**Maximum cells in label**
+    Maximum number of table cells (rows × columns) to display in merged result
+    labels on plots (default: 100). When the number of cells exceeds this limit,
+    the table is truncated.
+
+**Maximum columns in label**
+    Maximum number of columns to display in merged result labels (default: 15).
+    When the number of columns exceeds this limit, only the first N columns are
+    displayed.
+
+.. note::
+
+    These settings affect only the visualization of results on plots. They do not
+    affect the actual computation or storage of results in metadata.
+
 I/O
 ---
 
