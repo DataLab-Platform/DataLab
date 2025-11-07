@@ -110,14 +110,9 @@ The Processing settings tab controls computation behavior and default parameters
     Enable FFT shift to center the zero-frequency component in the frequency spectrum
     for easier visualization and analysis.
 
-**Extract ROI in single object**
+**Extract multiple ROIs in a single object**
     When enabled, multiple ROIs (Regions of Interest) are extracted into a single object.
     When disabled, each ROI is extracted into a separate object.
-
-**Keep results after computation**
-    When enabled, results from previous analyses are kept in the object's metadata after
-    computation. When disabled, results are removed. This option is disabled by default
-    to avoid confusion from outdated results.
 
 **Ignore warnings**
     Suppress warning messages during computations.
@@ -127,6 +122,19 @@ The Processing settings tab controls computation behavior and default parameters
 
     - **Ask**: display a confirmation dialog (default)
     - **Interpolate**: automatically interpolate signals
+
+Result management
+^^^^^^^^^^^^^^^^^
+
+**Keep results in metadata after computation**
+    When enabled, results from previous analyses are kept in the object's metadata after
+    computation. When disabled, results are removed. This option is disabled by default
+    to avoid confusion from outdated results.
+
+**Show results dialog automatically after processing**
+    When enabled, the results dialog is shown automatically after each processing operation
+    producing results. When disabled, the results dialog is not shown automatically but
+    results can still be viewed using the dedicated button or menu option.
 
 Visualization
 -------------

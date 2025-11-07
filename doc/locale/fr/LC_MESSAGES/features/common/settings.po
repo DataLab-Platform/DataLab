@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 14:30+0100\n"
+"POT-Creation-Date: 2025-11-07 12:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -164,23 +164,32 @@ msgstr "**Décalage FFT**"
 msgid "Enable FFT shift to center the zero-frequency component in the frequency spectrum for easier visualization and analysis."
 msgstr "Activer le décalage FFT pour centrer la composante de fréquence nulle dans le spectre de fréquences pour une visualisation et une analyse plus faciles."
 
-msgid "**Extract ROI in single object**"
-msgstr "**Extraire les ROI dans un seul objet**"
+msgid "**Extract multiple ROIs in a single object**"
+msgstr "**Extraire plusieurs ROI dans un seul objet**"
 
 msgid "When enabled, multiple ROIs (Regions of Interest) are extracted into a single object. When disabled, each ROI is extracted into a separate object."
 msgstr "Si le réglage est activé, plusieurs ROI (Régions d'Intérêt) sont extraites dans un seul objet. Lorsque désactivé, chaque ROI est extraite dans un objet séparé."
-
-msgid "**Keep results after computation**"
-msgstr "**Conserver les résultats après calcul**"
-
-msgid "When enabled, results from previous analyses are kept in the object's metadata after computation. When disabled, results are removed. This option is disabled by default to avoid confusion from outdated results."
-msgstr "Si le réglage est activé, les résultats des analyses précédentes sont conservés dans les métadonnées de l'objet après le calcul. Lorsque désactivé, les résultats sont supprimés. Cette option est désactivée par défaut pour éviter toute confusion due à des résultats obsolètes."
 
 msgid "**Ignore warnings**"
 msgstr "**Ignorer les avertissements**"
 
 msgid "Suppress warning messages during computations."
 msgstr "Supprimer les messages d'avertissement pendant les calculs."
+
+msgid "Result management"
+msgstr "Gestion des résultats"
+
+msgid "**Keep results in metadata after computation**"
+msgstr "**Conserver les résultats dans les métadonnées après le calcul**"
+
+msgid "When enabled, results from previous analyses are kept in the object's metadata after computation. When disabled, results are removed. This option is disabled by default to avoid confusion from outdated results."
+msgstr "Si le réglage est activé, les résultats des analyses précédentes sont conservés dans les métadonnées de l'objet après le calcul. Lorsque désactivé, les résultats sont supprimés. Cette option est désactivée par défaut pour éviter toute confusion due à des résultats obsolètes."
+
+msgid "**Show results dialog automatically after processing**"
+msgstr "**Afficher automatiquement la boîte de dialogue des résultats après le traitement**"
+
+msgid "When enabled, the results dialog is shown automatically after each processing operation producing results. When disabled, the results dialog is not shown automatically but results can still be viewed using the dedicated button or menu option."
+msgstr "Si le réglage est activé, la boîte de dialogue des résultats est affichée automatiquement après chaque opération de traitement produisant des résultats. Lorsque désactivé, la boîte de dialogue des résultats n'est pas affichée automatiquement, mais les résultats peuvent toujours être consultés à l'aide du bouton ou de l'option de menu dédiée."
 
 msgid "**X-array compatibility behavior**"
 msgstr "**Comportement de compatibilité des tableaux X**"

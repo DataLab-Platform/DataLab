@@ -180,24 +180,11 @@ class ProcSettings(gds.DataSet):
         ),
     )
     extract_roi_singleobj = gds.BoolItem(
-        "",
-        _("Extract ROI in single object"),
+        _("Extract multiple ROIs in a single object"),
+        _("ROI extraction"),
         help=_(
             "If enabled, multiple ROIs will be extracted into a single object.<br>"
             "If disabled, each ROI will be extracted into a separate object."
-        ),
-    )
-    keep_results = gds.BoolItem(
-        "",
-        _("Keep results after computation"),
-        help=_(
-            "If enabled, the results of a previous analysis will be kept in object's "
-            "metadata after the computation.<br>"
-            "If disabled, the results will be removed from the object's metadata."
-            "<br><br>"
-            "This option is disabled by default because keeping analysis results may "
-            "be confusing as those results could be outdated following the "
-            "computation."
         ),
     )
     ignore_warnings = gds.BoolItem(
@@ -213,6 +200,30 @@ class ProcSettings(gds.DataSet):
         ),
     )
     _g0 = gds.EndGroup("")
+    g1 = gds.BeginGroup(_("Settings for results management"))
+    keep_results = gds.BoolItem(
+        _("Keep results in metadata after computation"),
+        _("Keep results"),
+        help=_(
+            "If enabled, the results of a previous analysis will be kept in object's "
+            "metadata after the computation.<br>"
+            "If disabled, the results will be removed from the object's metadata."
+            "<br><br>"
+            "This option is disabled by default because keeping analysis results may "
+            "be confusing as those results could be outdated following the "
+            "computation."
+        ),
+    )
+    show_result_dialog = gds.BoolItem(
+        _("Show results dialog automatically after processing"),
+        _("Show results"),
+        help=_(
+            "If enabled, the results dialog will be shown automatically after each "
+            "processing operation producing results.<br>"
+            "If disabled, the results dialog will not be shown automatically."
+        ),
+    )
+    _g1 = gds.EndGroup("")
 
 
 class ImageDefaultSettings(BaseImageParam):

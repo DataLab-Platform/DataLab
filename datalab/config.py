@@ -208,6 +208,9 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: do not keep analysis results (default)
     keep_results = conf.Option()
 
+    # Show systematically result dialog after processing:
+    show_result_dialog = conf.Option()
+
     # Use xmin and xmax bounds from current signal when creating a new signal:
     use_signal_bounds = conf.Option()
 
@@ -401,6 +404,7 @@ def initialize():
     sigima_options.auto_normalize_kernel.set(False)  # Sync with sigima config
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.keep_results.get(False)
+    Conf.proc.show_result_dialog.get(True)
     Conf.proc.ignore_warnings.get(False)
     Conf.proc.xarray_compat_behavior.get("ask")
     Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))

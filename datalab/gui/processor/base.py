@@ -1347,7 +1347,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if refresh_needed:
             self.panel.refresh_plot("selected", only_visible=False, only_existing=True)
 
-        if rdata:
+        if rdata and Conf.proc.show_result_dialog.get():
             show_resultdata(self.mainwindow, rdata, f"{objs[0].PREFIX}_results")
         return rdata
 

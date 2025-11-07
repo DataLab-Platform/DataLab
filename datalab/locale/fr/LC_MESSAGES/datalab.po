@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-05 14:24+0100\n"
+"POT-Creation-Date: 2025-11-07 12:11+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -16,6 +16,25 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+msgid ""
+"which exceeds the storage limit.\n"
+"\n"
+"and will be displayed.\n"
+"\n"
+"You can increase the limit in the configuration (Processing → Max result rows)."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Displaying large result tables may be slow.\n"
+"\n"
+"Do you want to continue?"
+msgstr "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous néanmoins continuer ?"
+
+#, fuzzy
+msgid "Large Result Set"
+msgstr "Résultats tabulaires"
 
 msgid "Results"
 msgstr "Résultats"
@@ -2214,17 +2233,14 @@ msgstr "Convolution"
 msgid "If enabled, convolution and deconvolution kernels will be automatically normalized for signal and image processing operations to preserve signal energy and image intensity."
 msgstr "Si activé, les noyaux de convolution et de déconvolution seront automatiquement normalisés pour les opérations de traitement de signaux et d'images afin de préserver l'énergie du signal et l'intensité de l'image."
 
-msgid "Extract ROI in single object"
-msgstr "Extraire les ROI dans un seul objet"
+msgid "Extract multiple ROIs in a single object"
+msgstr "Extraire plusieurs ROI dans un seul objet"
+
+msgid "ROI extraction"
+msgstr "Extraction de ROI"
 
 msgid "If enabled, multiple ROIs will be extracted into a single object.<br>If disabled, each ROI will be extracted into a separate object."
 msgstr "Si activé, plusieurs ROI seront extraites dans un seul objet.<br>Si désactivé, chaque ROI sera extraite dans un objet séparé."
-
-msgid "Keep results after computation"
-msgstr "Conserver les résultats après le calcul"
-
-msgid "If enabled, the results of a previous analysis will be kept in object's metadata after the computation.<br>If disabled, the results will be removed from the object's metadata.<br><br>This option is disabled by default because keeping analysis results may be confusing as those results could be outdated following the computation."
-msgstr "Si activé, les résultats d'une analyse précédente seront conservés dans les métadonnées de l'objet après le calcul.<br>Si désactivé, les résultats seront supprimés des métadonnées de l'objet.<br><br>Cette option est désactivée par défaut car la conservation des résultats d'analyse peut prêter à confusion, car ces résultats pourraient être obsolètes suite au calcul."
 
 msgid "Ignore warnings"
 msgstr "Ignorer les avertissements"
@@ -2243,6 +2259,24 @@ msgstr "Interpoler"
 
 msgid "Behavior when X arrays are incompatible in multi-signal computations:<ul><li><b>Ask</b>: display confirmation dialog (default)</li><li><b>Interpolate</b>: automatically interpolate signals</li></ul>"
 msgstr "Comportement lorsque les tableaux des X sont incompatibles dans les calculs multi-signaux :<ul><li><b>Demander</b> : afficher une boîte de confirmation (par défaut)</li><li><b>Interpoler</b> : interpoler automatiquement les signaux</li></ul>"
+
+msgid "Settings for results management"
+msgstr "Réglages de la gestion des résultats"
+
+msgid "Keep results in metadata after computation"
+msgstr "Conserver les résultats dans les métadonnées après le calcul"
+
+msgid "Keep results"
+msgstr "Conserver les résultats"
+
+msgid "If enabled, the results of a previous analysis will be kept in object's metadata after the computation.<br>If disabled, the results will be removed from the object's metadata.<br><br>This option is disabled by default because keeping analysis results may be confusing as those results could be outdated following the computation."
+msgstr "Si activé, les résultats d'une analyse précédente seront conservés dans les métadonnées de l'objet après le calcul.<br>Si désactivé, les résultats seront supprimés des métadonnées de l'objet.<br><br>Cette option est désactivée par défaut car la conservation des résultats d'analyse peut prêter à confusion, car ces résultats pourraient être obsolètes suite au calcul."
+
+msgid "Show results dialog automatically after processing"
+msgstr "Afficher automatiquement la boîte de dialogue des résultats après le traitement"
+
+msgid "If enabled, the results dialog will be shown automatically after each processing operation producing results.<br>If disabled, the results dialog will not be shown automatically."
+msgstr "Si activé, la boîte de dialogue des résultats sera affichée automatiquement après chaque opération de traitement produisant des résultats.<br>Si désactivé, la boîte de dialogue des résultats ne sera pas affichée automatiquement."
 
 msgid "Default image visualization settings"
 msgstr "Réglages d'affichage d'images par défaut"
@@ -3147,4 +3181,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
