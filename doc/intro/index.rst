@@ -43,6 +43,7 @@ DataLab integrates seemlessly into your workflow thanks to three main operating 
 DataLab leverages the power of Python and its scientific ecosystem, through the use of
 the following libraries:
 
+- `Sigima <https://github.com/DataLab-Platform/Sigima>`_ for signal and image processing (part of the DataLab Platform)
 - `NumPy <https://numpy.org/>`_ for numerical computing (arrays, linear algebra, etc.)
 - `SciPy <https://www.scipy.org/>`_ for scientific computing (interpolation, special functions, etc.)
 - `scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ for image processing

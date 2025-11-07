@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 20:30+0100\n"
+"POT-Creation-Date: 2025-11-07 20:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,8 +21,8 @@ msgstr ""
 msgid "Home of DataLab, the open-source platform for scientific and technical data processing and visualization"
 msgstr "Site de DataLab, la plateforme open-source de traitement et de visualisation de données scientifiques et techniques"
 
-msgid "DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, CODRA, Pierre Raybaut"
-msgstr "DataLab, scientifique, données, traitement, visualisation, open-source, plateforme, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, CODRA, Pierre Raybaut"
+msgid "DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut"
+msgstr "DataLab, scientifique, données, traitement, visualisation, open-source, plateforme, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut"
 
 msgid "DataLab"
 msgstr "DataLab"
@@ -112,11 +112,14 @@ msgstr "`NLnet Foundation <https://nlnet.nl>`_, dans le cadre du NGI0 Commons Fu
 msgid "DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_, the scientific Python-Qt visualization and graphical user interface stack."
 msgstr "DataLab est propulsé par `PlotPyStack <https://github.com/PlotPyStack>`_, les outils de visualisation et d'interface graphique scientifiques Python-Qt."
 
+msgid "DataLab processing features are based on `Sigima <https://github.com/DataLab-Platform/Sigima>`_, the open-source signal and image processing library (part of the DataLab Platform)."
+msgstr "Les fonctionnalités de traitement de DataLab sont basées sur `Sigima <https://github.com/DataLab-Platform/Sigima>`_, la bibliothèque open-source de traitement du signal et de l'image (faisant partie de la plateforme DataLab)."
+
 msgid "DataLab was created by `CODRA`_/`Pierre Raybaut`_ in 2023. It is developed and maintained by DataLab Platform Developers."
 msgstr "DataLab a été créé par `CODRA`_/`Pierre Raybaut`_ en 2023. Il est développé et maintenu par l'équipe de développement de la plateforme DataLab."
 
 msgid "Footnotes"
 msgstr "Notes de bas de page"
 
-msgid "DataLab processing features are mainly based on `NumPy`_, `SciPy`_, `scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab visualization capabilities are based on `PlotPyStack`_ toolkit, a set of Python libraries for building scientific applications with Qt graphical user interfaces."
-msgstr "Les fonctionnalités de traitement de DataLab sont principalement basées sur les bibliothèques `NumPy`_, `SciPy`_, `scikit-image`_, `OpenCV`_ et `PyWavelets`_. Les capacités de visualisation de DataLab sont basées sur la boîte à outils `PlotPyStack`_, un ensemble de bibliothèques Python pour la réalisation d'applications scientifiques avec des interfaces graphiques Qt."
+msgid "DataLab processing primitives are mainly based on `Sigima`_, `NumPy`_, `SciPy`_, `scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab visualization capabilities are based on `PlotPyStack`_ toolkit, a set of Python libraries for building scientific applications with Qt graphical user interfaces."
+msgstr "Les primitives de traitement de DataLab sont principalement basées sur les bibliothèques `Sigima`_, `NumPy`_, `SciPy`_, `scikit-image`_, `OpenCV`_ et `PyWavelets`_. Les capacités de visualisation de DataLab reposent sur l'outil `PlotPyStack`_, un ensemble de bibliothèques Python pour la création d'applications scientifiques avec des interfaces graphiques Qt."

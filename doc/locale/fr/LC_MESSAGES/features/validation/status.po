@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 12:48+0100\n"
+"POT-Creation-Date: 2025-11-07 20:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Add normal noise to the input signal"
 msgstr ""
 
-msgid "`test_add_gaussian_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/noise_unit_test.py#L21>`_"
+msgid "`test_signal_add_gaussian_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/noise_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`add_poisson_noise <sigima.proc.signal.add_poisson_noise>`"
@@ -127,7 +127,7 @@ msgstr ""
 msgid "Add Poisson noise to the input signal"
 msgstr ""
 
-msgid "`test_add_poisson_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/noise_unit_test.py#L54>`_"
+msgid "`test_signal_add_poisson_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/noise_unit_test.py#L54>`_"
 msgstr ""
 
 msgid ":py:func:`add_uniform_noise <sigima.proc.signal.add_uniform_noise>`"
@@ -136,7 +136,7 @@ msgstr ""
 msgid "Add uniform noise to the input signal"
 msgstr ""
 
-msgid "`test_add_uniform_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/noise_unit_test.py#L88>`_"
+msgid "`test_signal_add_uniform_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/noise_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`addition <sigima.proc.signal.addition>`"
@@ -181,7 +181,7 @@ msgstr ""
 msgid "Compute windowing"
 msgstr "Calculer la fenêtrage"
 
-msgid "`test_signal_apply_window <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/processing_unit_test.py#L558>`_"
+msgid "`test_signal_apply_window <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/processing_unit_test.py#L564>`_"
 msgstr ""
 
 msgid ":py:func:`arithmetic <sigima.proc.signal.arithmetic>`"
@@ -415,7 +415,7 @@ msgstr ""
 msgid "Extract single region of interest from data"
 msgstr ""
 
-msgid "`test_signal_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/roi_advanced_unit_test.py#L176>`_"
+msgid "`test_signal_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/roi_advanced_unit_test.py#L198>`_"
 msgstr ""
 
 msgid ":py:func:`extract_rois <sigima.proc.signal.extract_rois>`"
@@ -424,7 +424,7 @@ msgstr ""
 msgid "Extract multiple regions of interest from data"
 msgstr ""
 
-msgid "`test_signal_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/roi_advanced_unit_test.py#L152>`_"
+msgid "`test_signal_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/roi_advanced_unit_test.py#L169>`_"
 msgstr ""
 
 msgid ":py:func:`fft <sigima.proc.signal.fft>`"
@@ -433,7 +433,7 @@ msgstr ""
 msgid "Compute FFT"
 msgstr "Calculer la FFT"
 
-msgid "`test_signal_fft <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L118>`_"
+msgid "`test_signal_fft <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L138>`_"
 msgstr ""
 
 msgid ":py:func:`full_width_at_y <sigima.proc.signal.full_width_at_y>`"
@@ -511,7 +511,7 @@ msgstr ""
 msgid "Compute the inverse FFT"
 msgstr ""
 
-msgid "`test_signal_ifft <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L138>`_"
+msgid "`test_signal_ifft <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L158>`_"
 msgstr ""
 
 msgid ":py:func:`imag <sigima.proc.signal.imag>`"
@@ -592,7 +592,7 @@ msgstr ""
 msgid "Compute magnitude spectrum"
 msgstr ""
 
-msgid "`test_signal_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L178>`_"
+msgid "`test_signal_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L203>`_"
 msgstr ""
 
 msgid ":py:func:`modified_allan_variance <sigima.proc.signal.modified_allan_variance>`"
@@ -673,7 +673,7 @@ msgstr ""
 msgid "Compute phase spectrum"
 msgstr ""
 
-msgid "`test_signal_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L219>`_"
+msgid "`test_signal_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L244>`_"
 msgstr ""
 
 msgid ":py:func:`piecewiseexponential_fit <sigima.proc.signal.piecewiseexponential_fit>`"
@@ -736,7 +736,7 @@ msgstr ""
 msgid "Compute power spectral density"
 msgstr ""
 
-msgid "`test_signal_psd <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L245>`_"
+msgid "`test_signal_psd <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/signal/fft1d_unit_test.py#L270>`_"
 msgstr ""
 
 msgid ":py:func:`quadratic_difference <sigima.proc.signal.quadratic_difference>`"
@@ -967,7 +967,7 @@ msgstr ""
 msgid "Add Gaussian (normal) noise to the input image"
 msgstr ""
 
-msgid "`test_image_add_gaussian_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/noise_unit_test.py#L17>`_"
+msgid "`test_image_add_gaussian_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/noise_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`add_poisson_noise <sigima.proc.image.add_poisson_noise>`"
@@ -976,10 +976,16 @@ msgstr ""
 msgid "Add Poisson noise to the input image"
 msgstr ""
 
+msgid "`test_image_add_poisson_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/noise_unit_test.py#L59>`_"
+msgstr ""
+
 msgid ":py:func:`add_uniform_noise <sigima.proc.image.add_uniform_noise>`"
 msgstr ""
 
 msgid "Add uniform noise to the input image"
+msgstr ""
+
+msgid "`test_image_add_uniform_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/noise_unit_test.py#L97>`_"
 msgstr ""
 
 msgid ":py:func:`addition <sigima.proc.image.addition>`"
@@ -1078,7 +1084,7 @@ msgstr ""
 msgid "Compute Black Top-Hat"
 msgstr ""
 
-msgid "`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L35>`_"
+msgid "`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L43>`_"
 msgstr ""
 
 msgid ":py:func:`blob_dog <sigima.proc.image.blob_dog>`"
@@ -1087,7 +1093,7 @@ msgstr ""
 msgid "Compute blobs using Difference of Gaussian method"
 msgstr ""
 
-msgid "`test_image_blob_dog <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/blob_detection_unit_test.py#L108>`_"
+msgid "`test_image_blob_dog <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/blob_detection_unit_test.py#L110>`_"
 msgstr ""
 
 msgid ":py:func:`blob_doh <sigima.proc.image.blob_doh>`"
@@ -1096,7 +1102,7 @@ msgstr ""
 msgid "Compute blobs using Determinant of Hessian method"
 msgstr ""
 
-msgid "`test_image_blob_doh <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/blob_detection_unit_test.py#L165>`_"
+msgid "`test_image_blob_doh <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/blob_detection_unit_test.py#L187>`_"
 msgstr ""
 
 msgid ":py:func:`blob_log <sigima.proc.image.blob_log>`"
@@ -1105,7 +1111,7 @@ msgstr ""
 msgid "Compute blobs using Laplacian of Gaussian method"
 msgstr ""
 
-msgid "`test_image_blob_log <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/blob_detection_unit_test.py#L186>`_"
+msgid "`test_image_blob_log <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/blob_detection_unit_test.py#L226>`_"
 msgstr ""
 
 msgid ":py:func:`blob_opencv <sigima.proc.image.blob_opencv>`"
@@ -1114,7 +1120,7 @@ msgstr ""
 msgid "Compute blobs using OpenCV"
 msgstr ""
 
-msgid "`test_image_blob_opencv <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/blob_detection_unit_test.py#L208>`_"
+msgid "`test_image_blob_opencv <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/blob_detection_unit_test.py#L266>`_"
 msgstr ""
 
 msgid ":py:func:`butterworth <sigima.proc.image.butterworth>`"
@@ -1132,7 +1138,7 @@ msgstr ""
 msgid "Compute polynomial calibration"
 msgstr "Calculer la calibration polynomiale"
 
-msgid "`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L541>`_"
+msgid "`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L548>`_"
 msgstr ""
 
 msgid ":py:func:`canny <sigima.proc.image.canny>`"
@@ -1141,7 +1147,7 @@ msgstr ""
 msgid "Compute Canny filter"
 msgstr ""
 
-msgid "`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L19>`_"
+msgid "`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`centroid <sigima.proc.image.centroid>`"
@@ -1168,7 +1174,7 @@ msgstr ""
 msgid "Compute morphological closing"
 msgstr ""
 
-msgid "`test_closing <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L59>`_"
+msgid "`test_closing <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L67>`_"
 msgstr ""
 
 msgid ":py:func:`complex_from_magnitude_phase <sigima.proc.image.complex_from_magnitude_phase>`"
@@ -1196,7 +1202,7 @@ msgstr ""
 msgid "Compute contour shape"
 msgstr "Calculer le contraste"
 
-msgid "`test_contour_shape <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/contour_unit_test.py#L85>`_"
+msgid "`test_contour_shape <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/contour_unit_test.py#L93>`_"
 msgstr ""
 
 msgid ":py:func:`convolution <sigima.proc.image.convolution>`"
@@ -1205,7 +1211,7 @@ msgstr ""
 msgid "Convolve an image with a kernel"
 msgstr ""
 
-msgid "`test_image_convolution <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/convolution_unit_test.py#L105>`_"
+msgid "`test_image_convolution <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/convolution_unit_test.py#L107>`_"
 msgstr ""
 
 msgid ":py:func:`deconvolution <sigima.proc.image.deconvolution>`"
@@ -1214,7 +1220,7 @@ msgstr ""
 msgid "Deconvolve a kernel from an image using Fast Fourier Transform (FFT)"
 msgstr ""
 
-msgid "`test_image_deconvolution <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/convolution_unit_test.py#L133>`_"
+msgid "`test_image_deconvolution <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/convolution_unit_test.py#L139>`_"
 msgstr ""
 
 msgid ":py:func:`denoise_bilateral <sigima.proc.image.denoise_bilateral>`"
@@ -1277,7 +1283,7 @@ msgstr ""
 msgid "Compute Dilation"
 msgstr "Calculer la dilatation"
 
-msgid "`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L47>`_"
+msgid "`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L55>`_"
 msgstr ""
 
 msgid ":py:func:`division <sigima.proc.image.division>`"
@@ -1340,7 +1346,7 @@ msgstr ""
 msgid "Compute Erosion"
 msgstr "Calculer l'érosion"
 
-msgid "`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L41>`_"
+msgid "`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L49>`_"
 msgstr ""
 
 msgid ":py:func:`exp <sigima.proc.image.exp>`"
@@ -1355,13 +1361,13 @@ msgstr ""
 msgid "Extract single ROI"
 msgstr ""
 
-msgid "`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/roi_advanced_unit_test.py#L211>`_"
+msgid "`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/roi_advanced_unit_test.py#L231>`_"
 msgstr ""
 
 msgid ":py:func:`extract_rois <sigima.proc.image.extract_rois>`"
 msgstr ""
 
-msgid "`test_image_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/roi_advanced_unit_test.py#L181>`_"
+msgid "`test_image_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/roi_advanced_unit_test.py#L201>`_"
 msgstr ""
 
 msgid ":py:func:`farid <sigima.proc.image.farid>`"
@@ -1370,7 +1376,7 @@ msgstr ""
 msgid "Compute Farid filter"
 msgstr ""
 
-msgid "`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L116>`_"
+msgid "`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L118>`_"
 msgstr ""
 
 msgid ":py:func:`farid_h <sigima.proc.image.farid_h>`"
@@ -1379,7 +1385,7 @@ msgstr ""
 msgid "Compute horizontal Farid filter"
 msgstr ""
 
-msgid "`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L122>`_"
+msgid "`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L124>`_"
 msgstr ""
 
 msgid ":py:func:`farid_v <sigima.proc.image.farid_v>`"
@@ -1388,7 +1394,7 @@ msgstr ""
 msgid "Compute vertical Farid filter"
 msgstr ""
 
-msgid "`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L128>`_"
+msgid "`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L130>`_"
 msgstr ""
 
 msgid ":py:func:`fft <sigima.proc.image.fft>`"
@@ -1412,7 +1418,7 @@ msgstr ""
 msgid "Flip data horizontally"
 msgstr ""
 
-msgid "`test_image_fliph <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L45>`_"
+msgid "`test_image_fliph <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L48>`_"
 msgstr ""
 
 msgid ":py:func:`flipv <sigima.proc.image.flipv>`"
@@ -1421,7 +1427,7 @@ msgstr ""
 msgid "Flip data vertically"
 msgstr ""
 
-msgid "`test_image_flipv <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L51>`_"
+msgid "`test_image_flipv <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L54>`_"
 msgstr ""
 
 msgid ":py:func:`gaussian_filter <sigima.proc.image.gaussian_filter>`"
@@ -1463,7 +1469,7 @@ msgstr ""
 msgid "Compute Hough circles"
 msgstr ""
 
-msgid "`test_image_hough_circle_peaks <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/hough_circle_unit_test.py#L66>`_"
+msgid "`test_image_hough_circle_peaks <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/hough_circle_unit_test.py#L67>`_"
 msgstr ""
 
 msgid ":py:func:`ifft <sigima.proc.image.ifft>`"
@@ -1496,7 +1502,7 @@ msgstr ""
 msgid "Compute Laplace filter"
 msgstr ""
 
-msgid "`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L134>`_"
+msgid "`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L136>`_"
 msgstr ""
 
 msgid ":py:func:`line_profile <sigima.proc.image.line_profile>`"
@@ -1529,7 +1535,7 @@ msgstr ""
 msgid ":py:func:`magnitude_spectrum <sigima.proc.image.magnitude_spectrum>`"
 msgstr ""
 
-msgid "`test_image_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/fft2d_unit_test.py#L142>`_"
+msgid "`test_image_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/fft2d_unit_test.py#L143>`_"
 msgstr ""
 
 msgid ":py:func:`moving_average <sigima.proc.image.moving_average>`"
@@ -1565,7 +1571,7 @@ msgstr ""
 msgid "Compute morphological opening"
 msgstr ""
 
-msgid "`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L53>`_"
+msgid "`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L61>`_"
 msgstr ""
 
 msgid ":py:func:`peak_detection <sigima.proc.image.peak_detection>`"
@@ -1589,7 +1595,7 @@ msgstr ""
 msgid ":py:func:`phase_spectrum <sigima.proc.image.phase_spectrum>`"
 msgstr ""
 
-msgid "`test_image_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/fft2d_unit_test.py#L157>`_"
+msgid "`test_image_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/fft2d_unit_test.py#L158>`_"
 msgstr ""
 
 msgid ":py:func:`prewitt <sigima.proc.image.prewitt>`"
@@ -1598,7 +1604,7 @@ msgstr ""
 msgid "Compute Prewitt filter"
 msgstr ""
 
-msgid "`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L62>`_"
+msgid "`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L64>`_"
 msgstr ""
 
 msgid ":py:func:`prewitt_h <sigima.proc.image.prewitt_h>`"
@@ -1607,7 +1613,7 @@ msgstr ""
 msgid "Compute horizontal Prewitt filter"
 msgstr ""
 
-msgid "`test_prewitt_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L68>`_"
+msgid "`test_prewitt_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L70>`_"
 msgstr ""
 
 msgid ":py:func:`prewitt_v <sigima.proc.image.prewitt_v>`"
@@ -1616,7 +1622,7 @@ msgstr ""
 msgid "Compute vertical Prewitt filter"
 msgstr ""
 
-msgid "`test_prewitt_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L74>`_"
+msgid "`test_prewitt_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L76>`_"
 msgstr ""
 
 msgid ":py:func:`product <sigima.proc.image.product>`"
@@ -1640,7 +1646,7 @@ msgstr ""
 msgid ":py:func:`psd <sigima.proc.image.psd>`"
 msgstr ""
 
-msgid "`test_image_psd <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/fft2d_unit_test.py#L169>`_"
+msgid "`test_image_psd <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/fft2d_unit_test.py#L170>`_"
 msgstr ""
 
 msgid ":py:func:`quadratic_difference <sigima.proc.image.quadratic_difference>`"
@@ -1673,7 +1679,7 @@ msgstr ""
 msgid "Resample image to new coordinate grid using interpolation"
 msgstr ""
 
-msgid "`test_image_resampling <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L179>`_"
+msgid "`test_image_resampling <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L185>`_"
 msgstr ""
 
 msgid ":py:func:`rescale_intensity <sigima.proc.image.rescale_intensity>`"
@@ -1691,7 +1697,7 @@ msgstr ""
 msgid "Zooming function"
 msgstr "Fonction de zoom"
 
-msgid "`test_image_resize <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L362>`_"
+msgid "`test_image_resize <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L369>`_"
 msgstr ""
 
 msgid ":py:func:`roberts <sigima.proc.image.roberts>`"
@@ -1700,7 +1706,7 @@ msgstr ""
 msgid "Compute Roberts filter"
 msgstr ""
 
-msgid "`test_roberts <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L56>`_"
+msgid "`test_roberts <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L58>`_"
 msgstr ""
 
 msgid ":py:func:`rotate <sigima.proc.image.rotate>`"
@@ -1709,7 +1715,7 @@ msgstr ""
 msgid "Rotate data"
 msgstr ""
 
-msgid "`test_image_rotate <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L156>`_"
+msgid "`test_image_rotate <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L162>`_"
 msgstr ""
 
 msgid ":py:func:`rotate270 <sigima.proc.image.rotate270>`"
@@ -1718,7 +1724,7 @@ msgstr ""
 msgid "Rotate data 270°"
 msgstr ""
 
-msgid "`test_image_rotate270 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L74>`_"
+msgid "`test_image_rotate270 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L80>`_"
 msgstr ""
 
 msgid ":py:func:`rotate90 <sigima.proc.image.rotate90>`"
@@ -1727,7 +1733,7 @@ msgstr ""
 msgid "Rotate data 90°"
 msgstr ""
 
-msgid "`test_image_rotate90 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L68>`_"
+msgid "`test_image_rotate90 <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L74>`_"
 msgstr ""
 
 msgid ":py:func:`scharr <sigima.proc.image.scharr>`"
@@ -1736,7 +1742,7 @@ msgstr ""
 msgid "Compute Scharr filter"
 msgstr ""
 
-msgid "`test_scharr <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L98>`_"
+msgid "`test_scharr <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L100>`_"
 msgstr ""
 
 msgid ":py:func:`scharr_h <sigima.proc.image.scharr_h>`"
@@ -1745,7 +1751,7 @@ msgstr ""
 msgid "Compute horizontal Scharr filter"
 msgstr ""
 
-msgid "`test_scharr_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L104>`_"
+msgid "`test_scharr_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L106>`_"
 msgstr ""
 
 msgid ":py:func:`scharr_v <sigima.proc.image.scharr_v>`"
@@ -1754,7 +1760,7 @@ msgstr ""
 msgid "Compute vertical Scharr filter"
 msgstr ""
 
-msgid "`test_scharr_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L110>`_"
+msgid "`test_scharr_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L112>`_"
 msgstr ""
 
 msgid ":py:func:`segment_profile <sigima.proc.image.segment_profile>`"
@@ -1772,7 +1778,7 @@ msgstr ""
 msgid "Convert image to uniform coordinate system"
 msgstr ""
 
-msgid "`test_set_uniform_coords <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L466>`_"
+msgid "`test_set_uniform_coords <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L473>`_"
 msgstr ""
 
 msgid ":py:func:`sobel <sigima.proc.image.sobel>`"
@@ -1781,7 +1787,7 @@ msgstr ""
 msgid "Compute Sobel filter"
 msgstr ""
 
-msgid "`test_sobel <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L80>`_"
+msgid "`test_sobel <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L82>`_"
 msgstr ""
 
 msgid ":py:func:`sobel_h <sigima.proc.image.sobel_h>`"
@@ -1790,7 +1796,7 @@ msgstr ""
 msgid "Compute horizontal Sobel filter"
 msgstr ""
 
-msgid "`test_sobel_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L86>`_"
+msgid "`test_sobel_h <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`sobel_v <sigima.proc.image.sobel_v>`"
@@ -1799,7 +1805,7 @@ msgstr ""
 msgid "Compute vertical Sobel filter"
 msgstr ""
 
-msgid "`test_sobel_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L92>`_"
+msgid "`test_sobel_v <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/edges_unit_test.py#L94>`_"
 msgstr ""
 
 msgid ":py:func:`standard_deviation <sigima.proc.image.standard_deviation>`"
@@ -1826,7 +1832,7 @@ msgstr ""
 msgid "Compute the threshold, using one of the available algorithms"
 msgstr ""
 
-msgid "`test_threshold <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L18>`_"
+msgid "`test_threshold <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_isodata <sigima.proc.image.threshold_isodata>`"
@@ -1835,7 +1841,7 @@ msgstr ""
 msgid "Compute the threshold using the Isodata algorithm with default parameters"
 msgstr ""
 
-msgid "`test_threshold_isodata <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L41>`_"
+msgid "`test_threshold_isodata <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L52>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_li <sigima.proc.image.threshold_li>`"
@@ -1844,7 +1850,7 @@ msgstr ""
 msgid "Compute the threshold using the Li algorithm with default parameters"
 msgstr ""
 
-msgid "`test_threshold_li <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L47>`_"
+msgid "`test_threshold_li <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L58>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_mean <sigima.proc.image.threshold_mean>`"
@@ -1853,7 +1859,7 @@ msgstr ""
 msgid "Compute the threshold using the Mean algorithm"
 msgstr ""
 
-msgid "`test_threshold_mean <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L53>`_"
+msgid "`test_threshold_mean <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L64>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_minimum <sigima.proc.image.threshold_minimum>`"
@@ -1862,7 +1868,7 @@ msgstr ""
 msgid "Compute the threshold using the Minimum algorithm with default parameters"
 msgstr ""
 
-msgid "`test_threshold_minimum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L59>`_"
+msgid "`test_threshold_minimum <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L70>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_otsu <sigima.proc.image.threshold_otsu>`"
@@ -1871,7 +1877,7 @@ msgstr ""
 msgid "Compute the threshold using the Otsu algorithm with default parameters"
 msgstr ""
 
-msgid "`test_threshold_otsu <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L65>`_"
+msgid "`test_threshold_otsu <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L76>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_triangle <sigima.proc.image.threshold_triangle>`"
@@ -1880,7 +1886,7 @@ msgstr ""
 msgid "Compute the threshold using the Triangle algorithm with default parameters"
 msgstr ""
 
-msgid "`test_threshold_triangle <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L71>`_"
+msgid "`test_threshold_triangle <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L82>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_yen <sigima.proc.image.threshold_yen>`"
@@ -1889,7 +1895,7 @@ msgstr ""
 msgid "Compute the threshold using the Yen algorithm with default parameters"
 msgstr ""
 
-msgid "`test_threshold_yen <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L77>`_"
+msgid "`test_threshold_yen <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/threshold_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`translate <sigima.proc.image.translate>`"
@@ -1898,7 +1904,7 @@ msgstr ""
 msgid "Translate data"
 msgstr ""
 
-msgid "`test_image_translate <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L22>`_"
+msgid "`test_image_translate <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L25>`_"
 msgstr ""
 
 msgid ":py:func:`transpose <sigima.proc.image.transpose>`"
@@ -1907,7 +1913,7 @@ msgstr ""
 msgid "Transpose image"
 msgstr ""
 
-msgid "`test_image_transpose <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L170>`_"
+msgid "`test_image_transpose <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/geometry_unit_test.py#L176>`_"
 msgstr ""
 
 msgid ":py:func:`vertical_projection <sigima.proc.image.vertical_projection>`"
@@ -1925,7 +1931,7 @@ msgstr ""
 msgid "Compute White Top-Hat"
 msgstr ""
 
-msgid "`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L29>`_"
+msgid "`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.0.1/sigima/tests/image/morphology_unit_test.py#L37>`_"
 msgstr ""
 
 msgid ":py:func:`wiener <sigima.proc.image.wiener>`"

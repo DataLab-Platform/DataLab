@@ -3,7 +3,7 @@ DataLab
 
 .. meta::
     :description: Home of DataLab, the open-source platform for scientific and technical data processing and visualization
-    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, CODRA, Pierre Raybaut
+    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut
 
 DataLab is an **open-source platform for signal and image processing and visualization**
 for research, education and industry. Leveraging the richness of the scientific Python
@@ -112,6 +112,14 @@ DataLab has been funded, chronologically, by the following stakeholders:
     DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_,
     the scientific Python-Qt visualization and graphical user interface stack.
 
+.. figure:: images/logos/Sigima-Banner.png
+    :align: center
+    :width: 200 px
+    :class: dark-light no-scaled-link
+
+    DataLab processing features are based on `Sigima <https://github.com/DataLab-Platform/Sigima>`_,
+    the open-source signal and image processing library (part of the DataLab Platform).
+
 .. toctree::
     :maxdepth: 2
     :hidden:
@@ -135,11 +143,12 @@ DataLab has been funded, chronologically, by the following stakeholders:
 
 .. rubric:: Footnotes
 
-.. [#f1] DataLab processing features are mainly based on `NumPy`_, `SciPy`_,
+.. [#f1] DataLab processing primitives are mainly based on `Sigima`_, `NumPy`_, `SciPy`_,
    `scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab visualization
    capabilities are based on `PlotPyStack`_ toolkit, a set of Python libraries
    for building scientific applications with Qt graphical user interfaces.
 
+.. _Sigima: https://github.com/DataLab-Platform/Sigima
 .. _NumPy: https://numpy.org/
 .. _SciPy: https://www.scipy.org/
 .. _scikit-image: https://scikit-image.org/

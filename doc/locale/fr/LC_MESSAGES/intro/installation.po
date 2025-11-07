@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-18 10:28+0200\n"
+"POT-Creation-Date: 2025-11-07 20:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,7 +209,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.12"
+msgid ">= 3.13.2"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -218,7 +218,7 @@ msgstr "Génération automatique d'interfaces graphiques pour l'édition et l'af
 msgid "PlotPy"
 msgstr ""
 
-msgid ">= 2.8.0"
+msgid ">= 2.8.1"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
@@ -227,7 +227,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.0.0a0"
+msgid ">= 1.0.1"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
@@ -418,3 +418,4 @@ msgstr "Plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
+
