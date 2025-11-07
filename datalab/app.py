@@ -6,6 +6,8 @@ DataLab launcher module
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from guidata.configtools import get_image_file_path
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -16,13 +18,16 @@ from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
 from datalab.utils.qthelpers import datalab_app_context
 
+if TYPE_CHECKING:
+    from sigima.objects import ImageObj, SignalObj
+
 
 def create(
     splash: bool = True,
     console: bool | None = None,
-    objects=None,
-    h5files=None,
-    size=None,
+    objects: list[ImageObj | SignalObj] | None = None,
+    h5files: list[str] | None = None,
+    size: tuple[int, int] | None = None,
 ) -> DLMainWindow:
     """Create DataLab application and return mainwindow instance
 
@@ -32,6 +37,9 @@ def create(
         objects: list of objects to add to the mainwindow
         h5files: list of h5files to open
         size: mainwindow size (width, height)
+
+    Returns:
+        Main window instance
     """
     if splash:
         # Showing splash screen
@@ -58,7 +66,12 @@ def create(
     return window
 
 
-def run(console=None, objects=None, h5files=None, size=None):
+def run(
+    console: bool | None = None,
+    objects: list[ImageObj | SignalObj] | None = None,
+    h5files: list[str] | None = None,
+    size: tuple[int, int] | None = None,
+) -> None:
     """Run the DataLab application
 
     Note: this function is an entry point in `setup.py` and therefore
