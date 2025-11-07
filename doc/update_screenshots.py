@@ -15,5 +15,6 @@ if __name__ == "__main__":
     launcher1_app_test.test_launcher1(screenshots=True)
     config.reset()
     beautiful_app.run_beautiful_scenario(screenshots=True)
+    beautiful_app.run_blob_detection_on_flower_image(screenshots=True)
     settings_unit_test.capture_settings_screenshots()
     print("done.")

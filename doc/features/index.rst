@@ -24,7 +24,7 @@ data analysis and visualization platform.
 Overview & Common features
 --------------------------
 
-.. figure:: /images/DataLab-Screenshot.png
+.. figure:: /images/shots/i_blob_detection_flower.png
 
     DataLab main window
 

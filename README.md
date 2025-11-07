@@ -12,7 +12,7 @@ See [DataLab website](https://datalab-platform.com/) for more details.
 
 ℹ️ Created by [CODRA](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab Platform Developers.
 
-![DataLab](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/DataLab-Screenshot.png)
+![DataLab](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/shots/i_blob_detection_flower.png)
 
 ℹ️ DataLab is powered by [PlotPyStack](https://github.com/PlotPyStack) 🚀.
 
