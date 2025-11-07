@@ -1901,6 +1901,13 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
         sigima_options.auto_normalize_kernel.set(Conf.proc.auto_normalize_kernel.get())
         for option in changed_options:
+            if option in (
+                "max_shapes_to_draw",
+                "max_cells_in_label",
+                "max_cols_in_label",
+            ):
+                for panel in (self.signalpanel, self.imagepanel):
+                    panel.manual_refresh()
             if option == "color_mode":
                 self.__update_color_mode()
             if option == "show_console_on_error":
