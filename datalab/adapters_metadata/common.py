@@ -14,14 +14,12 @@ import numpy as np
 import pandas as pd
 from guidata.qthelpers import exec_dialog
 from guidata.widgets.dataframeeditor import DataFrameEditor
-from qtpy.QtWidgets import QMessageBox
 from sigima.objects import ImageObj, SignalObj
 
 from datalab.adapters_metadata.base_adapter import BaseResultAdapter
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
 from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.config import Conf, _
-from datalab.env import execenv
 from datalab.objectmodel import get_short_id
 
 if TYPE_CHECKING:
@@ -135,32 +133,6 @@ def show_resultdata(parent: QWidget, rdata: ResultData, object_name: str = "") -
 
         # Combine all dataframes
         df = pd.concat(dfs, ignore_index=True)
-
-        # Check if the dataframe is too large and warn the user
-        max_cells = Conf.proc.max_cells_in_dialog.get()
-        num_rows = len(df)
-        num_cols = len(df.columns)
-        num_cells = num_rows * num_cols
-
-        if num_cells > max_cells:
-            msg = _(
-                "Results contain %d cells (%d rows × %d columns), "
-                "which exceeds the recommended limit of %d cells.\n\n"
-                "Displaying large result tables may be slow.\n\n"
-                "Do you want to continue?"
-            ) % (num_cells, num_rows, num_cols, max_cells)
-            if execenv.unattended:
-                # In unattended mode, we do not show dialogs
-                return
-            reply = QMessageBox.warning(
-                parent,
-                _("Large Result Set"),
-                msg,
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                QMessageBox.StandardButton.No,
-            )
-            if reply == QMessageBox.StandardButton.No:
-                return
 
         # Add comparison columns if we have multiple results of the same kind
         if len(dfs) > 1:

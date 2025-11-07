@@ -17,23 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#, python-format
-msgid ""
-"Results contain %d cells (%d rows × %d columns), which exceeds the recommended limit of %d cells.\n"
-"\n"
-"Displaying large result tables may be slow.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Les résultats contiennent %d cellules (%d lignes × %d colonnes), ce qui dépasse la limite recommandée de %d cellules.\n"
-"\n"
-"Afficher de grandes tables de résultats peut être lent.\n"
-"\n"
-"Voulez-vous continuer ?"
-
-msgid "Large Result Set"
-msgstr "Résultats volumineux"
-
 msgid "Results"
 msgstr "Résultats"
 

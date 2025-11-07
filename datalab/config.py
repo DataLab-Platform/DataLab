@@ -240,11 +240,6 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # History and analysis tabs font
     small_mono_font = conf.FontOption()
 
-    # Maximum number of table cells (rows × columns) to display in result dialog
-    # without warning. If exceeded, user is warned and given options to continue,
-    # export, or cancel. This prevents slowdown with large result sets.
-    max_cells_in_dialog = conf.Option()
-
 
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the view configuration section structure.
@@ -427,7 +422,6 @@ def initialize():
     Conf.proc.ignore_warnings.get(False)
     Conf.proc.xarray_compat_behavior.get("ask")
     Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))
-    Conf.proc.max_cells_in_dialog.get(50000)
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")

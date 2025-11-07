@@ -79,10 +79,8 @@ def test_large_results_scenario(measure_execution_time: bool = False) -> None:
 
     This scenario tests:
     - Contour detection on flower.npy (generates many contours)
-    - Result truncation at max_result_rows limit
     - Shape drawing truncation at max_shapes_to_draw limit
     - Label display truncation at max_cells_in_label limit
-    - Warning dialog when displaying large result sets
     """
     nb_polygons = 150
     nb_points_per_polygon = 100
@@ -101,15 +99,14 @@ def test_large_results_scenario(measure_execution_time: bool = False) -> None:
         # Apply Roberts filter for edge detection
         panel.processor.run_feature("roberts")
 
-        # Run contour detection which should trigger the limits
-        # This will detect many contours and test our safety mechanisms
-        print("\nRunning contour detection on flower.npy...")
-        print("This should trigger result truncation and shape drawing limits.")
+        # Run contour detection which should produce a large set of results
         param = sigima_param.ContourShapeParam()
         param.shape = sigima.enums.ContourShape.POLYGON
         panel.processor.run_feature("contour_shape", param)
 
-        # Create geometry results manually using many polygons:
+        # Create geometry results manually using many polygons (we generate results
+        # in a manner that should be similar to what contour detection would typically
+        # produce but in a way that we can control precisely here)
         vertices = create_random_polygons(
             size=ima.data.shape[0],
             nb_polygons=nb_polygons,

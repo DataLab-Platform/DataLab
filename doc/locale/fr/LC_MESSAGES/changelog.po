@@ -45,8 +45,6 @@ msgstr "`max_cells_in_label` (par défaut : 100) : Nombre maximum de cellules 
 msgid "`max_cols_in_label` (default: 15): Maximum columns displayed in merged result labels"
 msgstr "`max_cols_in_label` (par défaut : 15) : Nombre maximum de colonnes affichées dans les étiquettes de résultats fusionnées"
 
-msgid "`max_cells_in_dialog` (default: 50,000): Threshold for warning dialog when viewing large result tables"
-msgstr "`max_cells_in_dialog` (par défaut : 50 000) : Seuil pour la boîte de dialogue d'avertissement lors de l'affichage de grandes tables de résultats"
 
 msgid "When limits are exceeded:"
 msgstr "Lorsque les limites sont dépassées :"
@@ -57,8 +55,6 @@ msgstr "Dessin des formes : Seules les N premières formes sont dessinées, ave
 msgid "Result labels: Tables truncated with notice showing omitted rows/columns"
 msgstr "Étiquettes de résultats : Tables tronquées avec un avis indiquant les lignes/colonnes omises"
 
-msgid "Result dialog: Warning displayed with option to cancel or continue"
-msgstr "Boîte de dialogue de résultats : Avertissement affiché avec option d'annuler ou de continuer"
 
 msgid "Prevents application freezing when processing operations produce large result sets (e.g., contour detection finding 1000+ polygons)"
 msgstr "Empêche le gel de l'application lorsque les opérations de traitement produisent de grands ensembles de résultats (par exemple, la détection de contours trouvant plus de 1000 polygones)"
