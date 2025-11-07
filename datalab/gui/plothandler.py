@@ -199,7 +199,10 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                                 break
                             self.plot.add_item(item)
                             self.__shapeitems.append(item)
-                            QW.QApplication.processEvents()
+                            # Only process events every 10 items to keep UI responsive
+                            # without killing performance
+                            if (i_item + 1) % 10 == 0:
+                                QW.QApplication.processEvents()
                 self.plot.add_item(items[-1])
                 self.__shapeitems.append(items[-1])
 
