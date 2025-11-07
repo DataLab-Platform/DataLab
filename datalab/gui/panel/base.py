@@ -217,58 +217,37 @@ class ObjectProp(QW.QTabWidget):
         self.processing_history.setReadOnly(True)
         self.processing_history.setFont(font)
 
-        self.analysis_parameter = QW.QTextEdit()
-        self.analysis_parameter.setReadOnly(True)
-        self.analysis_parameter.setFont(font)
+        self.analysis_parameters = QW.QTextEdit()
+        self.analysis_parameters.setReadOnly(True)
+        self.analysis_parameters.setFont(font)
 
         self.addTab(self.processing_history, _("History"))
-        self.addTab(self.analysis_parameter, _("Analysis parameters"))
+        self.addTab(self.analysis_parameters, _("Analysis parameters"))
         self.addTab(self.properties, _("Properties"))
 
         self.processing_history.textChanged.connect(self._update_tab_visibility)
-        self.analysis_parameter.textChanged.connect(self._update_tab_visibility)
+        self.analysis_parameters.textChanged.connect(self._update_tab_visibility)
 
     def _update_tab_visibility(self) -> None:
-        """Update visibility of a tab based on its content."""
-        # Save current tab to restore it after visibility changes
-        current_index = self.currentIndex()
-        current_widget = self.widget(current_index)
-
-        for textedit in (self.processing_history, self.analysis_parameter):
+        """Update visibility of tabs based on their content."""
+        for textedit in (self.processing_history, self.analysis_parameters):
             tab_index = self.indexOf(textedit)
             if tab_index >= 0:
                 has_content = bool(textedit.toPlainText().strip())
                 self.setTabVisible(tab_index, has_content)
 
-        # Restore the previously selected tab if it's still visible
-        # But only if we're not making History or Analysis parameters visible
-        # (they shouldn't steal focus)
-        if current_widget is not None:
-            # Don't restore if current widget was History or Analysis parameters
-            # that just became visible
-            if current_widget not in (
-                self.processing_history,
-                self.analysis_parameter,
-            ):
-                restored_index = self.indexOf(current_widget)
-                if restored_index >= 0 and self.isTabVisible(restored_index):
-                    self.setCurrentIndex(restored_index)
-            else:
-                # Current widget was History or Analysis parameters
-                # Select Properties instead
-                properties_index = self.indexOf(self.properties)
-                if properties_index >= 0:
-                    self.setCurrentIndex(properties_index)
-
     def add_button(self, button: QW.QPushButton) -> None:
         """Add additional button on bottom of properties panel"""
         self.add_prop_layout.addWidget(button)
 
-    def display_analysis_parameter(self, obj: SignalObj | ImageObj) -> None:
+    def display_analysis_parameters(self, obj: SignalObj | ImageObj) -> bool:
         """Set analysis parameter label.
 
         Args:
             obj: Signal or Image object
+
+        Returns:
+            True if analysis parameters were found and displayed, False otherwise.
         """
         text = ""
         # Iterate through all result adapters and extract parameter info
@@ -286,7 +265,8 @@ class ObjectProp(QW.QTabWidget):
                             "(" + _("Parameters for function `%s`") % func_name + ")"
                         )
                     text += param.to_html()
-        self.analysis_parameter.setText(text)
+        self.analysis_parameters.setText(text)
+        return bool(text)
 
     def _build_processing_history(self, obj: SignalObj | ImageObj) -> str:
         """Build processing history as a simple text list.
@@ -346,14 +326,18 @@ class ObjectProp(QW.QTabWidget):
 
         return "\n".join(history_lines)
 
-    def display_processing_history(self, obj: SignalObj | ImageObj) -> None:
+    def display_processing_history(self, obj: SignalObj | ImageObj) -> bool:
         """Display processing history.
 
         Args:
             obj: Signal or Image object
+
+        Returns:
+            True if processing history was found and displayed, False otherwise.
         """
         history_text = self._build_processing_history(obj)
         self.processing_history.setText(history_text)
+        return bool(history_text)
 
     def update_properties_from(self, obj: SignalObj | ImageObj | None = None) -> None:
         """Update properties from signal/image dataset
@@ -368,7 +352,7 @@ class ObjectProp(QW.QTabWidget):
         dataset.set_defaults()
         update_dataset(dataset, obj)
         self.properties.get()
-        self.display_analysis_parameter(obj)
+        has_analysis_parameters = self.display_analysis_parameters(obj)
         self.display_processing_history(obj)
         self.properties.apply_button.setEnabled(False)
 
@@ -397,14 +381,29 @@ class ObjectProp(QW.QTabWidget):
         self.processing_scroll = None
 
         # Setup Creation and Processing tabs (if applicable)
+        has_creation_tab = has_processing_tab = False
         if obj is not None:
-            self.setup_creation_tab(obj)
-            self.setup_processing_tab(obj)
+            has_creation_tab = self.setup_creation_tab(obj)
+            has_processing_tab = self.setup_processing_tab(obj)
 
         # Trigger visibility update for History and Analysis parameters tabs
         # (will be called via textChanged signals, but we call explicitly
         # here to ensure initial state is correct)
         self._update_tab_visibility()
+
+        # Handle priority regarding the tab to set as current:
+        # 1. Analysis parameters if content exists
+        # 2. Creation tab if it exists
+        # 3. Processing tab if it exists
+        # 4. Properties tab
+        if has_analysis_parameters:
+            self.setCurrentWidget(self.analysis_parameters)
+        elif has_creation_tab:
+            self.setCurrentWidget(self.creation_scroll)
+        elif has_processing_tab:
+            self.setCurrentWidget(self.processing_scroll)
+        else:
+            self.setCurrentWidget(self.properties)
 
     def get_changed_properties(self) -> dict[str, Any]:
         """Get dictionary of properties that have changed from original values.
@@ -490,7 +489,6 @@ class ObjectProp(QW.QTabWidget):
         self.creation_scroll.setWidgetResizable(True)
         self.creation_scroll.setWidget(editor)
         self.insertTab(0, self.creation_scroll, _("Creation"))
-        self.setCurrentIndex(0)
         return True
 
     def apply_creation_parameters(self) -> None:
@@ -639,7 +637,6 @@ class ObjectProp(QW.QTabWidget):
 
         self.processing_scroll.setWidget(editor)
         self.insertTab(insert_index, self.processing_scroll, _("Processing"))
-        self.setCurrentIndex(insert_index)
         return True
 
     def apply_processing_parameters(
