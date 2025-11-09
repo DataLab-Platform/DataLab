@@ -486,6 +486,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Users can now work smoothly with images containing extensive analysis results without performance degradation
   * This enhancement particularly benefits workflows involving blob detection, contour analysis, or peak detection that generate many geometric shapes
 
+* **Cross-panel computation group handling**: Fixed inconsistent behavior when running cross-panel computations (image to signal) on groups of objects
+  * When applying operations like "Analysis > Histogram" or "Operations > Intensity profiles > Radial profile" to a group of images, results are now organized in a new signal group (as expected)
+  * Previously, results were incorrectly added to the current signal group instead of creating a dedicated group
+  * This fix ensures consistent behavior between same-panel operations (e.g., signal → signal) and cross-panel operations (e.g., image → signal)
+  * Group creation now works uniformly for all 1-to-1 processing patterns regardless of whether results are native or non-native objects
+
 * **Action enable states not updated after operations**: Fixed issue where menu action states
   were not updated after performing annotation or metadata operations
   * After copying/pasting/deleting annotations or metadata, action states now refresh immediately

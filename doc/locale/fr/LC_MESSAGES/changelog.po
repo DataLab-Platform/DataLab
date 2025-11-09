@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-09 12:20+0100\n"
+"POT-Creation-Date: 2025-11-09 18:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1386,6 +1386,21 @@ msgstr "Les utilisateurs peuvent désormais travailler sans problème avec des i
 
 msgid "This enhancement particularly benefits workflows involving blob detection, contour analysis, or peak detection that generate many geometric shapes"
 msgstr "Cette amélioration bénéficie particulièrement aux flux de travail impliquant la détection de blobs, l'analyse de contours ou la détection de pics qui génèrent de nombreuses formes géométriques."
+
+msgid "**Cross-panel computation group handling**: Fixed inconsistent behavior when running cross-panel computations (image to signal) on groups of objects"
+msgstr "**Gestion des groupes de calcul inter-panneaux** : Correction d'un comportement incohérent lors de l'exécution de calculs inter-panneaux (image vers signal) sur des groupes d'objets"
+
+msgid "When applying operations like \"Analysis > Histogram\" or \"Operations > Intensity profiles > Radial profile\" to a group of images, results are now organized in a new signal group (as expected)"
+msgstr "Lors de l'application d'opérations telles que \"Analyse > Histogramme\" ou \"Opérations > Profils d'intensité > Profil radial\" à un groupe d'images, les résultats sont désormais organisés dans un nouveau groupe de signaux (comme prévu)."
+
+msgid "Previously, results were incorrectly added to the current signal group instead of creating a dedicated group"
+msgstr "Auparavant, les résultats étaient incorrectement ajoutés au groupe de signaux actuel au lieu de créer un groupe dédié."
+
+msgid "This fix ensures consistent behavior between same-panel operations (e.g., signal → signal) and cross-panel operations (e.g., image → signal)"
+msgstr "Cette correction garantit un comportement cohérent entre les opérations dans le même panneau (par exemple, signal → signal) et les opérations inter-panneaux (par exemple, image → signal)."
+
+msgid "Group creation now works uniformly for all 1-to-1 processing patterns regardless of whether results are native or non-native objects"
+msgstr "La création de groupes fonctionne désormais de manière uniforme pour tous les modèles de traitement 1-à-1, qu'il s'agisse d'objets natifs ou non natifs."
 
 msgid "**Action enable states not updated after operations**: Fixed issue where menu action states were not updated after performing annotation or metadata operations"
 msgstr "**Les états d'activation des actions ne sont pas mis à jour après les opérations** : Correction d'un problème où les états des actions de menu n'étaient pas mis à jour après l'exécution d'opérations d'annotation ou de métadonnées"
@@ -3876,4 +3891,3 @@ msgstr "Symétrie (verticale/horizontale)"
 
 msgid "Console: added configurable external editor (default: VSCode) to follow the traceback links to the source code"
 msgstr "Console : ajout d'un éditeur externe configurable (par défaut : VSCode) pour suivre les liens de poursuite vers le code source"
-

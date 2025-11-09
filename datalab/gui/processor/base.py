@@ -1051,13 +1051,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         )
                         insert_processing_parameters(new_obj, pp)
 
-                    # Is new object a native object (i.e. a Signal object for a Signal
-                    # Panel, or an Image object for an Image Panel) ?
-                    # (example of non-native object use case: image profile extraction)
-                    is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
-
                     new_gid = None
-                    if grps and is_new_obj_native:
+                    if grps:
                         # If groups are selected, then it means that there is no
                         # individual object selected: we work on groups only
                         old_gid = self.panel.objmodel.get_object_group_id(obj)
@@ -1065,14 +1060,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         if new_gid is None:
                             # Create a new group for each selected group
                             old_g = self.panel.objmodel.get_group(old_gid)
-                            new_g = self.panel.add_group(
-                                f"{name}({get_short_id(old_g)})"
+                            new_gid = self._create_group_for_result(
+                                new_obj, f"{name}({get_short_id(old_g)})"
                             )
-                            new_gids[old_gid] = new_gid = get_uuid(new_g)
-                    if is_new_obj_native:
-                        self.panel.add_object(new_obj, group_id=new_gid)
-                    else:
-                        self.panel.mainwindow.add_object(new_obj)
+                            new_gids[old_gid] = new_gid
+                    self._add_object_to_appropriate_panel(
+                        new_obj, group_id=new_gid, use_group_for_non_native=True
+                    )
         # Select newly created groups, if any
         for group_id in new_gids.values():
             self.panel.objview.set_current_item_id(group_id, extend=True)

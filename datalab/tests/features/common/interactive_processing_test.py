@@ -535,6 +535,64 @@ def test_cross_panel_image_to_signal():
             assert not np.allclose(signal.y, original_signal_data)
 
 
+def test_cross_panel_image_to_signal_group():
+    """Test cross-panel processing with groups: Image group → Signal group"""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            image_panel = win.imagepanel
+            signal_panel = win.signalpanel
+            image_processor = image_panel.processor
+
+            # Create a group of test images
+            group_name = "Test Images"
+            group = image_panel.add_group(group_name)
+            group_id = get_uuid(group)
+
+            # Create multiple test images in the group
+            n_images = 3
+            for i in range(n_images):
+                image_param = Gauss2DParam.create(
+                    x0=50.0 + i * 5,
+                    y0=50.0 + i * 5,
+                    sigma=10.0,
+                    a=100.0,
+                    height=100,
+                    width=100,
+                )
+                image_panel.new_object(param=image_param, edit=False)
+                # The new objects are automatically added to the current group
+
+            # Select the entire group
+            image_panel.objview.set_current_item_id(group_id, extend=False)
+
+            # Get the initial number of groups in signal panel
+            signal_groups_before = len(signal_panel.objmodel.get_groups())
+
+            # Apply radial_profile to the entire group (Image → Signal cross-panel)
+            profile_param = RadialProfileParam.create(x0=50, y0=50)
+            image_processor.run_feature("radial_profile", param=profile_param)
+
+            # Verify a NEW group was created in the signal panel
+            signal_groups_after = len(signal_panel.objmodel.get_groups())
+            assert signal_groups_after == signal_groups_before + 1, (
+                "Expected a new group to be created for cross-panel computation results"
+            )
+
+            # Verify that the new group contains the correct number of signals
+            signal_groups = signal_panel.objmodel.get_groups()
+            new_group = signal_groups[-1]  # Get the last (newly created) group
+            signals_in_group = new_group.get_objects()
+            assert len(signals_in_group) == n_images, (
+                f"Expected {n_images} signals in new group, got {len(signals_in_group)}"
+            )
+
+            # Verify the group name follows the expected pattern
+            assert "radial_profile" in new_group.title.lower(), (
+                f"Expected group name to contain 'radial_profile', "
+                f"got '{new_group.title}'"
+            )
+
+
 def test_cross_panel_signal_to_image():
     """Test cross-panel processing: Signal → Image (combine signals into image)"""
     with qt_app_context():
@@ -756,6 +814,7 @@ if __name__ == "__main__":
     test_apply_processing_parameters_image()
     test_apply_processing_parameters_missing_source()
     test_cross_panel_image_to_signal()
+    test_cross_panel_image_to_signal_group()
     test_cross_panel_signal_to_image()
     test_select_source_objects_same_panel()
     test_select_source_objects_cross_panel()
