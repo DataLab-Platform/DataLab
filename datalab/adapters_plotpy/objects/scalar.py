@@ -241,13 +241,21 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             def label(x, y):
                 return txt % (x, y)
 
-        return make.marker(
+        marker = make.marker(
             position=(x0, y0),
             markerstyle=mstyle,
             label_cb=label,
             linestyle="DashLine",
-            color="yellow",
+            color="#ffff00",
         )
+        param = marker.markerparam
+        param.symbol.marker = "Diamond"
+        param.symbol.size = 9
+        param.symbol.edgecolor = "#ffff00"
+        param.symbol.facecolor = "#ffff00"
+        param.symbol.alpha = 0.7
+        param.update_item(marker)
+        return marker
 
 
 def create_pulse_segment(
