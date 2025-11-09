@@ -1074,7 +1074,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     def __setup_central_widget(self) -> None:
         """Setup central widget (main panel)"""
-        self.tabwidget.setMaximumWidth(500)
+        self.tabwidget.setMaximumWidth(600)
         self.tabwidget.addTab(
             self.signalpanel, get_icon("signal.svg"), _("Signal Panel")
         )
