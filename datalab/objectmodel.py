@@ -78,6 +78,8 @@ def set_uuid(obj: SignalObj | ImageObj | ObjectGroup) -> None:
 
 def get_short_id(obj: SignalObj | ImageObj | ObjectGroup) -> str:
     """Short object ID"""
+    if isinstance(obj, ObjectGroup):
+        return f"{obj.prefix}{get_number(obj):03d}"
     return f"{obj.PREFIX}{get_number(obj):03d}"
 
 
@@ -114,12 +116,12 @@ class ObjectGroup:
     Args:
         title: group title
         model: object model
+        prefix: prefix for short ID ("gs" for signal groups, "gi" for image groups)
     """
 
-    PREFIX = "g"
-
-    def __init__(self, title: str, model: ObjectModel) -> None:
+    def __init__(self, title: str, model: ObjectModel, prefix: str) -> None:
         self.model = model
+        self.prefix = prefix  # Instance-specific prefix
         self.uuid: str = str(uuid4())  # Group uuid
         self.number: int = 0  # Group number (used for short ID)
         self.__objects: list[str] = []  # list of object uuids
@@ -193,7 +195,13 @@ class ObjectGroup:
 class ObjectModel:
     """Represents a DataLab object model (groups of signals/images)"""
 
-    def __init__(self) -> None:
+    def __init__(self, group_prefix: str) -> None:
+        """Initialize object model
+
+        Args:
+            group_prefix: prefix for group short IDs ("gs" for signal, "gi" for image)
+        """
+        self._group_prefix = group_prefix
         # dict of objects, key is object uuid:
         self._objects: dict[str, SignalObj | ImageObj] = {}
         # list of groups:
@@ -360,8 +368,15 @@ class ObjectModel:
         return [group for group in self._groups if get_uuid(group) in uuids]
 
     def add_group(self, title: str) -> ObjectGroup:
-        """Add group to model"""
-        group = ObjectGroup(title, self)
+        """Add group to model
+
+        Args:
+            title: group title
+
+        Returns:
+            Created group object
+        """
+        group = ObjectGroup(title, self, self._group_prefix)
         self._groups.append(group)
         self.reset_short_ids()
         return group

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-09 18:55+0100\n"
+"POT-Creation-Date: 2025-11-09 19:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,21 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**Group short IDs now distinguish between panels**: Group identifiers are now panel-specific to avoid ambiguity in cross-panel operations"
+msgstr "**Les identifiants courts de groupe distinguent désormais les panneaux** : Les identifiants de groupe sont désormais spécifiques au panneau afin d'éviter toute ambiguïté dans les opérations inter-panneaux"
+
+msgid "Signal Panel groups use `gs` prefix (e.g., `gs001`, `gs002`, ...)"
+msgstr "**Les groupes du panneau de signal utilisent le préfixe `gs` (par exemple, `gs001`, `gs002`, ...)**"
+
+msgid "Image Panel groups use `gi` prefix (e.g., `gi001`, `gi002`, ...)"
+msgstr "**Les groupes du panneau d'image utilisent le préfixe `gi` (par exemple, `gi001`, `gi002`, ...)**"
+
+msgid "Cross-panel operation results now clearly indicate source panel (e.g., `radial_profile(gi001)` vs `radial_profile(gs001)`)"
+msgstr "**Les résultats des opérations inter-panneaux indiquent désormais clairement le panneau source (par exemple, `radial_profile(gi001)` contre `radial_profile(gs001)`)**"
+
+msgid "Improves clarity when working with groups across both Signal and Image panels"
+msgstr "**Améliore la clarté lors du travail avec des groupes à travers les panneaux de signal et d'image**"
 
 msgid "**Performance optimizations for large result sets**: Added configurable display limits to prevent UI freezing with large analysis results"
 msgstr "**Optimisations des performances pour les grands ensembles de résultats** : Ajout de limites d'affichage configurables pour éviter le gel de l'interface utilisateur avec de grands résultats d'analyse"

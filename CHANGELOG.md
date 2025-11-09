@@ -6,6 +6,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **Group short IDs now distinguish between panels**: Group identifiers are now panel-specific to avoid ambiguity in cross-panel operations
+  * Signal Panel groups use `gs` prefix (e.g., `gs001`, `gs002`, ...)
+  * Image Panel groups use `gi` prefix (e.g., `gi001`, `gi002`, ...)
+  * Cross-panel operation results now clearly indicate source panel (e.g., `radial_profile(gi001)` vs `radial_profile(gs001)`)
+  * Improves clarity when working with groups across both Signal and Image panels
+
 * **Performance optimizations for large result sets**: Added configurable display limits to prevent UI freezing with large analysis results
   * New configuration options to control result display behavior:
     * `max_shapes_to_draw` (default: 1,000): Maximum number of geometry shapes drawn on plots

@@ -1200,7 +1200,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.mainwindow: DLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
         self.show_label_checkbox: QW.QCheckBox | None = None
-        self.objmodel = objectmodel.ObjectModel()
+        self.objmodel = objectmodel.ObjectModel(f"g{self.PARAMCLASS.PREFIX}")
         self.objview = objectview.ObjectView(self, self.objmodel)
         self.objview.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
         self.objview.populate_tree()
