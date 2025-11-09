@@ -2813,8 +2813,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         title: str,
         xaxis: str,
         yaxis: str,
+        group_id: str | None = None,
     ) -> None:
-        """Add result signal"""
+        """Add result signal
+
+        Args:
+            x: X data
+            y: Y data
+            title: Signal title
+            xaxis: X axis label
+            yaxis: Y axis label
+            group_id: UUID of the group to add the signal to. If None, add to
+             current group.
+        """
         xdata = np.array(x, dtype=float)
         ydata = np.array(y, dtype=float)
 
@@ -2824,7 +2835,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             y=ydata,
             labels=[xaxis, yaxis],
         )
-        self.mainwindow.signalpanel.add_object(obj)
+        self.mainwindow.signalpanel.add_object(obj, group_id=group_id)
 
     def __create_plot_result_param_class(self, rdata: ResultData) -> type[gds.DataSet]:
         """Create PlotResultParam class dynamically based on result data.
@@ -2878,6 +2889,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         rdata: ResultData,
         objs: list[SignalObj | ImageObj],
         param: gds.DataSet | None = None,
+        result_group_id: str | None = None,
     ) -> None:
         """Plot results for a specific category
 
@@ -2886,6 +2898,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             rdata: Result data
             objs: List of objects
             param: Plot result parameters. If None, show dialog to get parameters.
+            result_group_id: UUID of the group to add result signals to. If None,
+             add to current group.
         """
         # Regrouping ResultShape results by their `title` attribute:
         grouped_results: dict[str, list[GeometryAdapter | TableAdapter]] = {}
@@ -2940,6 +2954,18 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     )
                 return
             obj = objs[0]
+            # Build a string with source object short IDs (max 3, then use "...")
+            max_ids_to_show = 3
+            short_ids = [get_short_id(obj) for obj in objs]
+            if len(short_ids) <= max_ids_to_show:
+                source_ids = ", ".join(short_ids)
+            else:
+                # Show first 2, "...", then last one: "s001, s002, ..., s010"
+                source_ids = (
+                    ", ".join(short_ids[: max_ids_to_show - 1])
+                    + ", ..., "
+                    + short_ids[-1]
+                )
             for i_roi in all_roi_indexes[0]:
                 roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
                 for title, results in grouped_results.items():  # title
@@ -2953,7 +2979,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     if i_roi >= 0:
                         roi_suffix = f"|{obj.roi.get_single_roi_title(int(i_roi))}"
                     self.__add_result_signal(
-                        x, y, f"{title}{roi_suffix}", param.xaxis, param.yaxis
+                        x,
+                        y,
+                        f"{title} ({source_ids}){roi_suffix}",
+                        param.xaxis,
+                        param.yaxis,
+                        result_group_id,
                     )
         else:
             # One curve per result title, per object and per ROI
@@ -2974,7 +3005,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         y = roi_data[param.yaxis].values
                         shid = get_short_id(objs[index])
                         stitle = f"{title} ({shid}){roi_suffix}"
-                        self.__add_result_signal(x, y, stitle, param.xaxis, param.yaxis)
+                        self.__add_result_signal(
+                            x, y, stitle, param.xaxis, param.yaxis, result_group_id
+                        )
 
     def plot_results(
         self,
@@ -2993,6 +3026,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
+            # Always use or create a "Results" group for all plot results
+            rgroup_title = _("Results")
+            target_panel = self.mainwindow.signalpanel
+            try:
+                # Check if a "Results" group already exists in the signal panel
+                rgroup = target_panel.objmodel.get_group_from_title(rgroup_title)
+            except KeyError:
+                # Create the group if it doesn't exist
+                rgroup = target_panel.add_group(rgroup_title)
+            result_group_id = get_uuid(rgroup)
+
             for category, rdata in rdatadict.items():
                 param = None
                 if kind is not None and xaxis is not None and yaxis is not None:
@@ -3003,7 +3047,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     param.xaxis = xaxis
                     param.yaxis = yaxis
 
-                self.__plot_result(category, rdata, objs, param)
+                self.__plot_result(category, rdata, objs, param, result_group_id)
         else:
             self.__show_no_result_warning()
 

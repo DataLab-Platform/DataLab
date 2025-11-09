@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 18:27+0100\n"
+"POT-Creation-Date: 2025-11-09 09:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -158,6 +158,39 @@ msgstr "Le flux de travail basé sur le presse-papiers permet une réutilisation
 
 msgid "Independent from ROI management - annotations and ROIs can coexist on same object"
 msgstr "Indépendant de la gestion des ROI - les annotations et les ROI peuvent coexister sur le même objet"
+
+msgid "**Plot results improvements**: Enhanced result plotting with better organization and informative titles"
+msgstr "**Améliorations du tracé des résultats** : Tracé des résultats amélioré avec une meilleure organisation et des titres informatifs"
+
+msgid "**Results group creation**: All plot results operations now automatically organize results in a dedicated \"Results\" group"
+msgstr "**Création de groupe de résultats** : Toutes les opérations de tracé des résultats organisent désormais automatiquement les résultats dans un groupe \"Résultats\" dédié"
+
+msgid "First time plotting results creates a new \"Results\" group in the signal panel"
+msgstr "La première fois que les résultats sont tracés, un nouveau groupe \"Résultats\" est créé dans le panneau des signaux"
+
+msgid "Subsequent result plots reuse the same \"Results\" group for better organization"
+msgstr "Les tracés de résultats suivants réutilisent le même groupe \"Résultats\" pour une meilleure organisation"
+
+msgid "Keeps workspace clean by consolidating all results in one well-defined location"
+msgstr "Garde l'espace de travail propre en consolidant tous les résultats en un seul endroit bien défini"
+
+msgid "Consistent behavior regardless of whether groups or individual objects are selected"
+msgstr "Comportement cohérent, que des groupes ou des objets individuels soient sélectionnés"
+
+msgid "**Comprehensive result titles**: Result signal titles now include source object identifiers"
+msgstr "**Titres de résultats complets** : Les titres des signaux de résultats incluent désormais les identifiants des objets source"
+
+msgid "For \"one curve per title\" mode: titles include all source object short IDs (e.g., \"FWHM (s001, s002, s003): Δx = f(indices)\")"
+msgstr "Pour le mode \"une courbe par titre\" : les titres incluent tous les identifiants courts des objets source (par exemple, \"FWHM (s001, s002, s003): Δx = f(indices)\")"
+
+msgid "For many source objects (>3): uses compact format showing first 2 IDs, \"...\", then last ID (e.g., \"FWHM (s001, s002, ..., s010): Δx = f(indices)\")"
+msgstr "Pour de nombreux objets source (>3) : utilise un format compact montrant les 2 premiers identifiants, \"...\", puis le dernier identifiant (par exemple, \"FWHM (s001, s002, ..., s010): Δx = f(indices)\")"
+
+msgid "Makes it easy to identify which objects contributed to plotted results"
+msgstr "Facilite l'identification des objets ayant contribué aux résultats tracés"
+
+msgid "Maintains consistency with \"one curve per object\" mode which already included IDs"
+msgstr "Maintient la cohérence avec le mode \"une courbe par objet\" qui incluait déjà des identifiants"
 
 msgid "**Metadata management improvements**: Enhanced metadata handling with clipboard-based workflow"
 msgstr "**Améliorations de la gestion des métadonnées** : Gestion des métadonnées améliorée avec un flux de travail basé sur le presse-papiers"

@@ -52,6 +52,18 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Clipboard-based workflow enables efficient annotation reuse across objects
   * Independent from ROI management - annotations and ROIs can coexist on same object
 
+* **Plot results improvements**: Enhanced result plotting with better organization and informative titles
+  * **Results group creation**: All plot results operations now automatically organize results in a dedicated "Results" group
+    * First time plotting results creates a new "Results" group in the signal panel
+    * Subsequent result plots reuse the same "Results" group for better organization
+    * Keeps workspace clean by consolidating all results in one well-defined location
+    * Consistent behavior regardless of whether groups or individual objects are selected
+  * **Comprehensive result titles**: Result signal titles now include source object identifiers
+    * For "one curve per title" mode: titles include all source object short IDs (e.g., "FWHM (s001, s002, s003): Δx = f(indices)")
+    * For many source objects (>3): uses compact format showing first 2 IDs, "...", then last ID (e.g., "FWHM (s001, s002, ..., s010): Δx = f(indices)")
+    * Makes it easy to identify which objects contributed to plotted results
+    * Maintains consistency with "one curve per object" mode which already included IDs
+
 * **Metadata management improvements**: Enhanced metadata handling with clipboard-based workflow
   * Reorganized Edit menu with new "Metadata" submenu grouping all metadata operations
   * **Paste metadata** action now only enabled when metadata clipboard is not empty
