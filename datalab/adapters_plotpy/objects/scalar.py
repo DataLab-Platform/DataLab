@@ -151,7 +151,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         Returns:
             Plot item
         """
-        if self.result_adapter.result.kind is KindShape.POINT:
+        if self.result_adapter.result.kind == KindShape.POINT:
             assert len(coords) == 2, "Coordinates must be a 2-element array"
             x0, y0 = coords
             item = AnnotatedPoint(x0, y0)
@@ -164,30 +164,30 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             aparam.title = self.result_adapter.title
             sparam.update_item(item.shape)
             aparam.update_item(item)
-        elif self.result_adapter.result.kind is KindShape.MARKER:
+        elif self.result_adapter.result.kind == KindShape.MARKER:
             assert len(coords) == 2, "Coordinates must be a 2-element array"
             x0, y0 = coords
             item = self.__make_marker_item(x0, y0, fmt)
-        elif self.result_adapter.result.kind is KindShape.RECTANGLE:
+        elif self.result_adapter.result.kind == KindShape.RECTANGLE:
             assert len(coords) == 4, "Coordinates must be a 4-element array"
             x0, y0, dx, dy = coords
             item = make.annotated_rectangle(
                 x0, y0, x0 + dx, y0 + dy, title=self.result_adapter.title
             )
-        elif self.result_adapter.result.kind is KindShape.CIRCLE:
+        elif self.result_adapter.result.kind == KindShape.CIRCLE:
             assert len(coords) == 3, "Coordinates must be a 3-element array"
             xc, yc, r = coords
             x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
             item = make.annotated_circle(
                 x0, y0, x1, y1, title=self.result_adapter.title
             )
-        elif self.result_adapter.result.kind is KindShape.SEGMENT:
+        elif self.result_adapter.result.kind == KindShape.SEGMENT:
             assert len(coords) == 4, "Coordinates must be a 4-element array"
             x0, y0, x1, y1 = coords
             item = make.annotated_segment(
                 x0, y0, x1, y1, title=self.result_adapter.title
             )
-        elif self.result_adapter.result.kind is KindShape.ELLIPSE:
+        elif self.result_adapter.result.kind == KindShape.ELLIPSE:
             assert len(coords) == 5, "Coordinates must be a 5-element array"
             xc, yc, a, b, t = coords
             coords = coordinates.ellipse_to_diameters(xc, yc, a, b, t)
@@ -195,7 +195,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             item = make.annotated_ellipse(
                 x0, y0, x1, y1, x2, y2, x3, y3, title=self.result_adapter.title
             )
-        elif self.result_adapter.result.kind is KindShape.POLYGON:
+        elif self.result_adapter.result.kind == KindShape.POLYGON:
             assert len(coords) >= 6, "Coordinates must be at least 6-element array"
             assert len(coords) % 2 == 0, "Coordinates must be even-length array"
             x, y = coords[::2], coords[1::2]
