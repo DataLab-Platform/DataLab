@@ -231,6 +231,24 @@ class BaseResultAdapter(ABC):
         """
 
     @classmethod
+    def from_obj(
+        cls, obj: SignalObj | ImageObj, func_name: str
+    ) -> BaseResultAdapter | None:
+        """Create a result adapter from an object's metadata entry.
+
+        Args:
+            obj: Signal or image object
+            func_name: Function name to look for
+
+        Returns:
+            Adapter object if found, None otherwise
+        """
+        for adapter in cls.iterate_from_obj(obj):
+            if adapter.func_name == func_name:
+                return adapter
+        return None
+
+    @classmethod
     def iterate_from_obj(
         cls, obj: SignalObj | ImageObj
     ) -> Generator["BaseResultAdapter", None, None]:

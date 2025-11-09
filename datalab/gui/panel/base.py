@@ -2345,6 +2345,49 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         if answer == QW.QMessageBox.No:
                             break
 
+    @qt_try_except()
+    def auto_recompute_after_roi_change(self, obj: SignalObj | ImageObj) -> None:
+        """Automatically recompute analysis (1-to-0) operations after ROI changes.
+
+        This method checks if the object has 1-to-0 processing parameters (analysis
+        operations like statistics, measurements, etc.) and automatically recomputes
+        the analysis to update the results based on the modified ROI.
+
+        This method should be called explicitly after ROI modifications, not during
+        selection changes, to avoid interfering with the ROI change detection mechanism
+        used by the mask refresh system.
+
+        Args:
+            obj: The object whose ROI was modified
+        """
+        # Check if object has 1-to-0 processing parameters (analysis operations)
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None or proc_params.pattern != "1-to-0":
+            return
+
+        # Silently recompute the analysis with the new ROI
+        # Use the processor's compute_1_to_0 method directly
+        if isinstance(obj, SignalObj):
+            processor = self.mainwindow.signalpanel.processor
+        else:  # ImageObj
+            assert isinstance(obj, ImageObj), "Unexpected object type"
+            processor = self.mainwindow.imagepanel.processor
+
+        # Get the parameter from processing parameters
+        param = proc_params.param
+
+        # Get the actual function from the function name
+        feature = processor.get_feature(proc_params.func_name)
+
+        # Recompute the analysis operation
+        with Conf.proc.show_result_dialog.temp(False):
+            processor.compute_1_to_0(feature.function, param, edit=False)
+
+        # Update the view
+        obj_uuid = get_uuid(obj)
+        self.objview.update_item(obj_uuid)
+        self.refresh_plot(obj_uuid, update_items=True, force=True)
+
     def select_source_objects(self) -> None:
         """Select source objects associated with the selected object's processing.
 

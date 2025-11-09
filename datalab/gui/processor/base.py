@@ -1332,6 +1332,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # Pass function name for better parameter context in the Analysis tab
                 adapter.add_to(obj, param)
 
+                # Store processing parameters for auto-recompute on ROI change
+                # This enables automatic recalculation when ROI is modified
+                pp = ProcessingParameters(
+                    func_name=func.__name__,
+                    pattern="1-to-0",
+                    param=param,
+                    source_uuid=get_uuid(obj),
+                )
+                insert_processing_parameters(obj, pp)
+
                 # Apply processor-specific post-processing on the result
                 refresh_needed |= self.postprocess_1_to_0_result(obj, result)
 
@@ -2295,6 +2305,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     only_visible=False,
                     only_existing=True,
                 )
+                # Auto-recompute analysis operations for objects with modified ROIs
+                if mode == "apply":
+                    for obj_i in objs:
+                        self.panel.auto_recompute_after_roi_change(obj_i)
         return edited_roi
 
     def edit_roi_numerically(self) -> TypeROI:
@@ -2320,6 +2334,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 only_visible=False,
                 only_existing=True,
             )
+            # Auto-recompute analysis operations after ROI modification
+            self.panel.auto_recompute_after_roi_change(obj)
             return edited_roi
         return obj.roi
 
@@ -2334,10 +2350,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             )
             == QW.QMessageBox.Yes
         ):
+            modified_objs = []
             for obj in self.panel.objview.get_sel_objects():
                 if obj.roi is not None:
                     obj.roi = None
+                    modified_objs.append(obj)
                     self.panel.selection_changed(update_items=True)
+            # Auto-recompute analysis operations after ROI deletion
+            for obj in modified_objs:
+                self.panel.auto_recompute_after_roi_change(obj)
 
     def delete_single_roi(self, roi_index: int) -> None:
         """Delete a single ROI by index
@@ -2362,4 +2383,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if len(obj.roi.single_rois) == 0:
                     obj.roi = None
                 obj.mark_roi_as_changed()
+                # Auto-recompute analysis operations after ROI modification
+                # (must be done BEFORE selection_changed to avoid stale results)
+                self.panel.auto_recompute_after_roi_change(obj)
                 self.panel.selection_changed(update_items=True)

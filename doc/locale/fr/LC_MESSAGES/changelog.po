@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-09 09:59+0100\n"
+"POT-Creation-Date: 2025-11-09 12:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -326,6 +326,27 @@ msgstr "Les objets sans paramètres recomposables sont automatiquement ignorés.
 
 msgid "Useful for updating results when input data is modified or to propagate changes through a processing chain"
 msgstr "Utile pour mettre à jour les résultats lorsque les données d'entrée sont modifiées ou pour propager les changements à travers une chaîne de traitement."
+
+msgid "**Automatic analysis recomputation on ROI changes**: Analysis results (1-to-0 operations) now automatically update when ROI is modified"
+msgstr ""
+
+msgid "Applies to all analysis operations including both parametric (e.g., statistics with custom settings) and parameterless (e.g., centroid) computations"
+msgstr ""
+
+msgid "When ROI is modified through any method (graphical editor, numerical editor, deletion), analysis results are automatically recalculated"
+msgstr ""
+
+msgid "Works for single and multiple ROI modifications, ensuring results stay synchronized with current ROI definitions"
+msgstr ""
+
+msgid "Recomputation happens silently in the background without user intervention"
+msgstr ""
+
+msgid "Processing parameters are stored for 1-to-0 operations to enable automatic recomputation"
+msgstr ""
+
+msgid "Useful for iterative ROI refinement workflows where immediate visual feedback is important"
+msgstr ""
 
 msgid "**Select source objects**: Navigate to source objects used in processing"
 msgstr "**Sélectionner les objets source** : Naviguer vers les objets source utilisés dans le traitement"
@@ -3855,3 +3876,4 @@ msgstr "Symétrie (verticale/horizontale)"
 
 msgid "Console: added configurable external editor (default: VSCode) to follow the traceback links to the source code"
 msgstr "Console : ajout d'un éditeur externe configurable (par défaut : VSCode) pour suivre les liens de poursuite vers le code source"
+

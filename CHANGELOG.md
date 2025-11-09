@@ -113,6 +113,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
     * Shows progress dialog for batch recomputing multiple objects
     * Objects without recomputable parameters are automatically skipped
     * Useful for updating results when input data is modified or to propagate changes through a processing chain
+  * **Automatic analysis recomputation on ROI changes**: Analysis results (1-to-0 operations) now automatically update when ROI is modified
+    * Applies to all analysis operations including both parametric (e.g., statistics with custom settings) and parameterless (e.g., centroid) computations
+    * When ROI is modified through any method (graphical editor, numerical editor, deletion), analysis results are automatically recalculated
+    * Works for single and multiple ROI modifications, ensuring results stay synchronized with current ROI definitions
+    * Recomputation happens silently in the background without user intervention
+    * Processing parameters are stored for 1-to-0 operations to enable automatic recomputation
+    * Useful for iterative ROI refinement workflows where immediate visual feedback is important
   * **Select source objects**: Navigate to source objects used in processing
     * New "Select source objects" action in Edit menu
     * Automatically selects the source object(s) that were used to create the currently selected processed object
