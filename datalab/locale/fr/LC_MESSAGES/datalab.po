@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-07 20:43+0100\n"
+"POT-Creation-Date: 2025-11-10 10:38+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -812,6 +812,12 @@ msgstr "Panneau Signal"
 msgid "Image Panel"
 msgstr "Panneau Image"
 
+msgid "1D Signals: Manage and process one-dimensional data"
+msgstr "Signaux 1D : Gérer et traiter des données unidimensionnelles"
+
+msgid "2D Images: Manage and process two-dimensional data"
+msgstr "Images 2D : Gérer et traiter des données bidimensionnelles"
+
 msgid "File"
 msgstr "Fichier"
 
@@ -989,6 +995,20 @@ msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
+
+msgid ""
+"Working with 2D images?\n"
+"Switch to the Image Panel using the tab above."
+msgstr ""
+"Vous souhaitez travailler avec des images 2D ?\n"
+"Passez au panneau Image en utilisant l'onglet ci-dessus."
+
+msgid ""
+"Working with 1D signals?\n"
+"Switch to the Signal Panel using the tab above."
+msgstr ""
+"Vous souhaitez travailler avec des signaux 1D ?\n"
+"Passez au panneau Signal en utilisant l'onglet ci-dessus."
 
 msgid "History"
 msgstr "Historique"
@@ -3217,4 +3237,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

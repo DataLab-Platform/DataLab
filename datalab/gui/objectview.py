@@ -361,7 +361,7 @@ class ObjectView(SimpleObjectTree):
     SIG_SELECTION_CHANGED = QC.Signal()
     SIG_IMPORT_FILES = QC.Signal(list)
 
-    def __init__(self, parent: QW.QWidget, objmodel: ObjectModel) -> None:
+    def __init__(self, parent: BaseDataPanel, objmodel: ObjectModel) -> None:
         super().__init__(parent, objmodel)
         self.setSelectionMode(QW.QAbstractItemView.ExtendedSelection)
         self.setAcceptDrops(True)
@@ -377,8 +377,45 @@ class ObjectView(SimpleObjectTree):
         super().paintEvent(event)
         if len(self.objmodel) > 0:
             return
+
+        # Draw empty state message with contextual hints
         painter = QG.QPainter(self.viewport())
-        painter.drawText(self.rect(), QC.Qt.AlignCenter, _("Drag files here to open"))
+        rect = self.rect()
+
+        # Set font for main message
+        font = painter.font()
+        font.setPointSize(11)
+        painter.setFont(font)
+
+        # Main message
+        main_msg = _("Drag files here to open")
+        main_rect = QC.QRect(rect)
+        main_rect.setHeight(rect.height() // 2)
+        painter.drawText(main_rect, QC.Qt.AlignCenter, main_msg)
+
+        # Contextual hint
+        hint_rect = QC.QRect(rect)
+        hint_rect.setTop(rect.height() // 2)
+        font.setPointSize(9)
+        font.setItalic(True)
+        painter.setFont(font)
+        painter.setPen(QG.QColor(128, 128, 128))  # Gray color
+
+        # Avoid circular import:
+        # pylint: disable=import-outside-toplevel
+        from datalab.gui.panel.signal import SignalPanel
+
+        if isinstance(self.parent(), SignalPanel):
+            hint = _(
+                "Working with 2D images?\n"
+                "Switch to the Image Panel using the tab above."
+            )
+        else:
+            hint = _(
+                "Working with 1D signals?\n"
+                "Switch to the Signal Panel using the tab above."
+            )
+        painter.drawText(hint_rect, QC.Qt.AlignCenter, hint)
 
     # pylint: disable=unused-argument
     def dragEnterEvent(self, event: QG.QDragEnterEvent) -> None:

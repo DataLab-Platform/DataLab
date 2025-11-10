@@ -1075,11 +1075,36 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
     def __setup_central_widget(self) -> None:
         """Setup central widget (main panel)"""
         self.tabwidget.setMaximumWidth(600)
-        self.tabwidget.addTab(
+        s_idx = self.tabwidget.addTab(
             self.signalpanel, get_icon("signal.svg"), _("Signal Panel")
         )
-        self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Image Panel"))
+        i_idx = self.tabwidget.addTab(
+            self.imagepanel, get_icon("image.svg"), _("Image Panel")
+        )
+        self.tabwidget.setTabToolTip(
+            s_idx, _("1D Signals: Manage and process one-dimensional data")
+        )
+        self.tabwidget.setTabToolTip(
+            i_idx, _("2D Images: Manage and process two-dimensional data")
+        )
+
+        # Apply enhanced tab bar styling
+        tab_bar = self.tabwidget.tabBar()
+        font = tab_bar.font()
+        font.setPointSize(10)
+        tab_bar.setFont(font)
+        # Use QTimer to ensure tab bar is properly sized first
+        QC.QTimer.singleShot(0, self.__update_tab_icon_size)
+
         self.setCentralWidget(self.tabwidget)
+
+    def __update_tab_icon_size(self) -> None:
+        """Update tab icon size based on tab bar height"""
+        tab_bar = self.tabwidget.tabBar()
+        if tab_bar.height() > 0:
+            # Use approximately 80% of tab height for icon size
+            icon_size = int(tab_bar.height() * 0.8)
+            self.tabwidget.setIconSize(QC.QSize(icon_size, icon_size))
 
     @staticmethod
     def __get_local_doc_path() -> str | None:
