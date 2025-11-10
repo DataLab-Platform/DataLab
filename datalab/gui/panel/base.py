@@ -483,6 +483,12 @@ class ObjectProp(QW.QTabWidget):
         self.creation_param_editor = editor
         self.current_creation_obj = obj
 
+        # Remove existing Creation tab if it exists
+        if self.creation_scroll is not None:
+            index = self.indexOf(self.creation_scroll)
+            if index >= 0:
+                self.removeTab(index)
+
         # Set the parameter editor as the scroll area widget
         # Creation tab is always at index 0 (before all other tabs)
         self.creation_scroll = QW.QScrollArea()

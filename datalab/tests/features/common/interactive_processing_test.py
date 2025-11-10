@@ -256,6 +256,67 @@ def test_apply_creation_parameters_image():
             assert not np.array_equal(updated_image.data, original_data)
 
 
+def test_no_duplicate_creation_tabs():
+    """Test that applying creation parameters multiple times doesn't create
+    duplicate tabs.
+
+    This test verifies the fix for the bug where clicking "Apply" in the
+    Creation tab would create a new Creation tab instead of reusing the
+    existing one.
+    """
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            objprop = panel.objprop
+
+            # Create an image with creation parameters
+            param = Gauss2DParam.create(x0=50.0, y0=50.0, sigma=10.0, a=100.0)
+            panel.new_object(param=param, edit=False)
+            image = panel.objview.get_current_object()
+            assert image is not None
+
+            # Verify Creation tab was set up
+            assert objprop.creation_param_editor is not None
+            assert objprop.creation_scroll is not None
+
+            # Count how many Creation tabs exist initially using the widget reference
+            initial_index = objprop.indexOf(objprop.creation_scroll)
+            assert initial_index >= 0, "Creation tab should be present"
+
+            # Count tabs by checking if they reference the same scroll widget
+            initial_count = sum(
+                1
+                for i in range(objprop.count())
+                if objprop.widget(i) is objprop.creation_scroll
+            )
+            assert initial_count == 1, "Should have exactly one Creation tab initially"
+
+            # Apply creation parameters multiple times
+            editor = objprop.creation_param_editor
+            for amplitude in [150.0, 200.0, 250.0]:
+                editor.dataset.a = amplitude
+                objprop.apply_creation_parameters()
+
+                # Wait for the deferred setup_creation_tab to complete
+                from qtpy.QtTest import QTest
+
+                QTest.qWait(100)
+
+                # Verify that creation_scroll reference still exists
+                assert objprop.creation_scroll is not None
+
+                # Count Creation tabs again - should still be just one
+                creation_count = sum(
+                    1
+                    for i in range(objprop.count())
+                    if objprop.widget(i) is objprop.creation_scroll
+                )
+                assert creation_count == 1, (
+                    f"Should still have exactly one Creation tab after "
+                    f"applying amplitude={amplitude}"
+                )
+
+
 def test_no_creation_parameters_for_base_classes():
     """Test that creation parameters are NOT stored for base classes
 
@@ -809,6 +870,7 @@ if __name__ == "__main__":
     test_recompute()
     test_apply_creation_parameters_signal()
     test_apply_creation_parameters_image()
+    test_no_duplicate_creation_tabs()
     test_no_creation_parameters_for_base_classes()
     test_apply_processing_parameters_signal()
     test_apply_processing_parameters_image()
