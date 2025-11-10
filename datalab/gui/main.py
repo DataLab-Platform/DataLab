@@ -1925,14 +1925,14 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         changed_options = edit_settings(self)
         sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
         sigima_options.auto_normalize_kernel.set(Conf.proc.auto_normalize_kernel.get())
+        refresh_signal_panel = refresh_image_panel = False
         for option in changed_options:
             if option in (
                 "max_shapes_to_draw",
                 "max_cells_in_label",
                 "max_cols_in_label",
             ):
-                for panel in (self.signalpanel, self.imagepanel):
-                    panel.manual_refresh()
+                refresh_signal_panel = refresh_image_panel = True
             if option == "show_result_label":
                 for panel in (self.signalpanel, self.imagepanel):
                     panel.show_label_checkbox.setChecked(
@@ -1948,7 +1948,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                     if isinstance(widget, DockablePlotWidget):
                         widget.update_toolbar_position()
             if option.startswith("sig_autodownsampling"):
-                self.signalpanel.refresh_plot("existing", True, False)
+                refresh_signal_panel = True
             if option == "sig_autoscale_margin_percent":
                 # Update signal plot widget autoscale margin
                 sig_margin = Conf.view.sig_autoscale_margin_percent.get()
@@ -1986,6 +1986,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 )
                 if answer == QW.QMessageBox.Yes:
                     self.imagepanel.update_metadata_view_settings()
+            if option == "ima_aspect_ratio_1_1":
+                refresh_image_panel = True
+        if refresh_signal_panel:
+            self.signalpanel.manual_refresh()
+        if refresh_image_panel:
+            self.imagepanel.manual_refresh()
 
     def __show_logviewer(self) -> None:
         """Show error logs"""
