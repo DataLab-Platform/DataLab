@@ -456,11 +456,14 @@ class ObjectProp(QW.QTabWidget):
         # Handle regular comparison
         return val1 == val2
 
-    def setup_creation_tab(self, obj: SignalObj | ImageObj) -> bool:
+    def setup_creation_tab(
+        self, obj: SignalObj | ImageObj, set_current: bool = False
+    ) -> bool:
         """Setup the Creation tab with parameter editor for interactive object creation.
 
         Args:
             obj: Signal or Image object
+            set_current: If True, set the Creation tab as current after creation
 
         Returns:
             True if Creation tab was set up, False otherwise
@@ -495,6 +498,11 @@ class ObjectProp(QW.QTabWidget):
         self.creation_scroll.setWidgetResizable(True)
         self.creation_scroll.setWidget(editor)
         self.insertTab(0, self.creation_scroll, _("Creation"))
+
+        # Set as current tab if requested
+        if set_current:
+            self.setCurrentWidget(self.creation_scroll)
+
         return True
 
     def apply_creation_parameters(self) -> None:
@@ -551,12 +559,19 @@ class ObjectProp(QW.QTabWidget):
 
         # Refresh the Creation tab with the new parameters
         # Use QTimer to defer this until after the current event is processed
+        # Set the Creation tab as current to keep it visible after refresh
         QC.QTimer.singleShot(
-            0, lambda: self.setup_creation_tab(self.current_creation_obj)
+            0,
+            lambda: self.setup_creation_tab(
+                self.current_creation_obj, set_current=True
+            ),
         )
 
     def setup_processing_tab(
-        self, obj: SignalObj | ImageObj, reset_params: bool = True
+        self,
+        obj: SignalObj | ImageObj,
+        reset_params: bool = True,
+        set_current: bool = False,
     ) -> bool:
         """Setup the Processing tab with parameter editor for re-processing.
 
@@ -564,6 +579,7 @@ class ObjectProp(QW.QTabWidget):
             obj: Signal or Image object
             reset_params: If True, call update_from_obj() to reset parameters from
                 source object. If False, use parameters as stored in metadata.
+            set_current: If True, set the Processing tab as current after creation
 
         Returns:
             True if Processing tab was set up, False otherwise
@@ -643,6 +659,11 @@ class ObjectProp(QW.QTabWidget):
 
         self.processing_scroll.setWidget(editor)
         self.insertTab(insert_index, self.processing_scroll, _("Processing"))
+
+        # Set as current tab if requested
+        if set_current:
+            self.setCurrentWidget(self.processing_scroll)
+
         return True
 
     def apply_processing_parameters(
@@ -755,8 +776,12 @@ class ObjectProp(QW.QTabWidget):
 
             # Refresh the Processing tab with the new parameters
             # Don't reset parameters from source object - keep the user's values
+            # Set the Processing tab as current to keep it visible after refresh
             QC.QTimer.singleShot(
-                0, lambda: self.setup_processing_tab(obj, reset_params=False)
+                0,
+                lambda: self.setup_processing_tab(
+                    obj, reset_params=False, set_current=True
+                ),
             )
 
             if isinstance(obj, SignalObj):

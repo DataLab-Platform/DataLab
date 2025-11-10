@@ -262,7 +262,8 @@ def test_no_duplicate_creation_tabs():
 
     This test verifies the fix for the bug where clicking "Apply" in the
     Creation tab would create a new Creation tab instead of reusing the
-    existing one.
+    existing one. It also verifies that the Creation tab remains current
+    after applying changes.
     """
     with qt_app_context():
         with datalab_test_app_context() as win:
@@ -313,6 +314,12 @@ def test_no_duplicate_creation_tabs():
                 )
                 assert creation_count == 1, (
                     f"Should still have exactly one Creation tab after "
+                    f"applying amplitude={amplitude}"
+                )
+
+                # Verify that the Creation tab is the current tab
+                assert objprop.currentWidget() is objprop.creation_scroll, (
+                    f"Creation tab should remain current after "
                     f"applying amplitude={amplitude}"
                 )
 
@@ -478,6 +485,87 @@ def test_apply_processing_parameters_image():
             # Verify the parameter was updated
             stored_param = json_to_dataset(pp_dict["param_json"])
             assert stored_param.value == v1
+
+
+def test_no_duplicate_processing_tabs():
+    """Test that applying processing parameters multiple times doesn't create
+    duplicate tabs.
+
+    This test verifies the fix for the bug where clicking "Apply" in the
+    Processing tab would create a new Processing tab instead of reusing the
+    existing one. It also verifies that the Processing tab remains current
+    after applying changes.
+    """
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            processor = panel.processor
+            objprop = panel.objprop
+
+            # Create a default test image
+            panel.new_object(edit=False)
+            image = panel.objview.get_current_object()
+            assert image is not None
+
+            # Apply addition_constant with initial value
+            v0 = 7.0
+            processor.run_feature("addition_constant", ConstantParam.create(value=v0))
+
+            # Get the processed image
+            processed_ima = panel.objview.get_current_object()
+            assert processed_ima is not None
+
+            # Select the processed image to trigger setup_processing_tab
+            panel.objview.set_current_object(processed_ima)
+
+            # Verify Processing tab was set up
+            assert objprop.processing_param_editor is not None
+            assert objprop.processing_scroll is not None
+
+            # Count how many Processing tabs exist initially
+            initial_index = objprop.indexOf(objprop.processing_scroll)
+            assert initial_index >= 0, "Processing tab should be present"
+
+            # Count tabs by checking if they reference the same scroll widget
+            initial_count = sum(
+                1
+                for i in range(objprop.count())
+                if objprop.widget(i) is objprop.processing_scroll
+            )
+            assert initial_count == 1, (
+                "Should have exactly one Processing tab initially"
+            )
+
+            # Apply processing parameters multiple times
+            editor = objprop.processing_param_editor
+            for value in [10.0, 15.0, 20.0]:
+                editor.dataset.value = value
+                report = objprop.apply_processing_parameters()
+                assert report.success
+
+                # Wait for the deferred setup_processing_tab to complete
+                from qtpy.QtTest import QTest
+
+                QTest.qWait(100)
+
+                # Verify that processing_scroll reference still exists
+                assert objprop.processing_scroll is not None
+
+                # Count Processing tabs again - should still be just one
+                processing_count = sum(
+                    1
+                    for i in range(objprop.count())
+                    if objprop.widget(i) is objprop.processing_scroll
+                )
+                assert processing_count == 1, (
+                    f"Should still have exactly one Processing tab after "
+                    f"applying value={value}"
+                )
+
+                # Verify that the Processing tab is the current tab
+                assert objprop.currentWidget() is objprop.processing_scroll, (
+                    f"Processing tab should remain current after applying value={value}"
+                )
 
 
 def test_apply_processing_parameters_missing_source():
@@ -874,6 +962,7 @@ if __name__ == "__main__":
     test_no_creation_parameters_for_base_classes()
     test_apply_processing_parameters_signal()
     test_apply_processing_parameters_image()
+    test_no_duplicate_processing_tabs()
     test_apply_processing_parameters_missing_source()
     test_cross_panel_image_to_signal()
     test_cross_panel_image_to_signal_group()
