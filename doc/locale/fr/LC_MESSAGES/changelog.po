@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 10:53+0100\n"
+"POT-Creation-Date: 2025-11-10 17:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1570,6 +1570,9 @@ msgstr "Correction de [Issue #246](https://github.com/DataLab-Platform/DataLab/i
 
 msgid "Fixed [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Incorrect unpacking of image shape in get_newparam_from_current"
 msgstr "Correction de [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Déballage incorrect des dimensions de l'image dans get_newparam_from_current"
+
+msgid "Fixed aspect ratio not updating when switching between images with different pixel spacings: when selecting an image after viewing another with a different aspect ratio (e.g., dx=2.0), the plot now correctly updates to display the newly selected image's aspect ratio instead of retaining the previous value"
+msgstr "Correction du ratio d'aspect ne se mettant pas à jour lors du changement entre des images avec des espacements de pixels différents : lors de la sélection d'une image après en avoir visualisé une autre avec un ratio d'aspect différent (par exemple, dx=2.0), le graphique met désormais correctement à jour l'affichage du ratio d'aspect de l'image nouvellement sélectionnée au lieu de conserver la valeur précédente"
 
 msgid "🔒 Security fixes:"
 msgstr "🔒 Corrections de sécurité :"

@@ -557,6 +557,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed curve fitting parameter display: added default format string (`%g`) to all `FitParam` instances to ensure proper number formatting in fit dialog parameter fields, preventing display issues with very large or very small parameter values.
 * Fixed [Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246) - Incorrect shape unpacking in edit_new_image_parameters
 * Fixed [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247) - Incorrect unpacking of image shape in get_newparam_from_current
+* Fixed aspect ratio not updating when switching between images with different pixel spacings: when selecting an image after viewing another with a different aspect ratio (e.g., dx=2.0), the plot now correctly updates to display the newly selected image's aspect ratio instead of retaining the previous value
 
 🔒 Security fixes:
 

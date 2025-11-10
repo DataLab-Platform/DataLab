@@ -735,8 +735,23 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
             new_lock = True
         else:
             # Use physical pixel size to set aspect ratio
-            for oid in reversed(self.reduce_shown_oids(self.get_existing_oids())):
-                if self.get(oid).isVisible():
+            # Determine which objects to check based on the 'what' parameter
+            if what == "selected":
+                # Use selected objects to determine aspect ratio
+                oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
+            elif what == "existing":
+                # Use existing objects
+                oids = self.get_existing_oids()
+            elif what == "all":
+                # Use all objects
+                oids = self.panel.objmodel.get_object_ids()
+            else:
+                # Single object by uuid
+                oids = [what]
+
+            # Reduce to visible items and check aspect ratio
+            for oid in reversed(self.reduce_shown_oids(oids)):
+                if oid in self.get_existing_oids() and self.get(oid).isVisible():
                     obj: ImageObj = self.panel.objmodel[oid]
                     if obj.is_uniform_coords:
                         new_aspect_ratio = obj.dx / obj.dy
