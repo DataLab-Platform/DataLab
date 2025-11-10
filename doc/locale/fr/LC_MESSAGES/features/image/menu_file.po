@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 18:12+0100\n"
+"POT-Creation-Date: 2025-11-10 10:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -67,20 +67,23 @@ msgstr "Vide"
 msgid "Data is directly taken from memory as it is"
 msgstr "Données mémoire en l'état"
 
-msgid "Uniform distribution"
-msgstr "Distribution uniforme"
+msgid "Normal distribution"
+msgstr "Distribution normale"
 
-msgid ":math:`y[i]` is normally distributed with configurable mean and standard deviation"
-msgstr ":math:`y[i]` est normalement distribué avec une moyenne et un écart type configurables"
+msgid ":math:`z[i]` is normally distributed with configurable mean and standard deviation"
+msgstr ":math:`z[i]` est distribué normalement avec une moyenne et un écart type configurables"
 
 msgid "Poisson distribution"
 msgstr "Distribution de Poisson"
 
-msgid ":math:`y[i]` is Poisson distributed with configurable mean"
-msgstr ":math:`y[i]` est distribué selon une loi de Poisson avec une moyenne configurable"
+msgid ":math:`z[i]` is Poisson distributed with configurable mean"
+msgstr ":math:`z[i]` est distribué selon Poisson avec une moyenne configurable"
 
-msgid ":math:`y[i]` is uniformly distributed between two configurable bounds"
-msgstr ":math:`y[i]` est uniformément distribué entre deux bornes configurables"
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
+
+msgid ":math:`z[i]` is uniformly distributed between two configurable bounds"
+msgstr ":math:`z[i]` est uniformément distribué entre deux limites configurables"
 
 msgid "2D Gaussian"
 msgstr "Gaussienne 2D"
@@ -92,6 +95,36 @@ msgid "2D Ramp"
 msgstr "Rampe 2D"
 
 msgid ":math:`z = A (x - x_0) + B (y - y_0) + C`"
+msgstr ""
+
+msgid "Checkerboard"
+msgstr "Damier"
+
+msgid "Alternating square pattern for calibration and spatial frequency analysis"
+msgstr "Motif carré alterné pour l'étalonnage et l'analyse de fréquence spatiale"
+
+msgid "Sinusoidal grating"
+msgstr "Réseau sinusoïdal"
+
+msgid ":math:`z = A \\sin(2\\pi(f_x \\cdot x + f_y \\cdot y) + \\varphi) + C`"
+msgstr ""
+
+msgid "Ring pattern"
+msgstr "Motif en anneau"
+
+msgid "Concentric circular rings for radial analysis"
+msgstr "Anneaux circulaires concentriques pour l'analyse radiale"
+
+msgid "Siemens star"
+msgstr "Étoile de Siemens"
+
+msgid "Radial spoke pattern for resolution testing"
+msgstr "Motif en rayons pour les tests de résolution"
+
+msgid "2D sinc"
+msgstr "Sinc 2D"
+
+msgid ":math:`z = A \\cdot \\mathrm{sinc}\\left(\\dfrac{\\sqrt{(x-x_0)^2+(y-y_0)^2}}{\\sigma}\\right) + C`"
 msgstr ""
 
 msgid "Open image"
@@ -333,4 +366,3 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
-

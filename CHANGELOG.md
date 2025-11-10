@@ -6,6 +6,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **New parametric image types**: Added five new parametric image generation options in the "New image" menu
+  * **Checkerboard**: Alternating square pattern ideal for camera calibration, spatial frequency analysis, and MTF testing. Configure square size, offset position, and light/dark values
+  * **Sinusoidal grating**: Frequency response testing pattern with independent spatial frequencies in X and Y directions, adjustable phase, amplitude, and DC offset. Essential for optical testing and MTF measurements
+  * **Ring pattern**: Concentric circular rings for radial analysis and PSF testing. Adjustable ring period, width, center position, and amplitude range
+  * **Siemens star**: Resolution testing pattern with radial spokes for angular frequency analysis. Configure number of spokes (spoke pairs), inner/outer radius to create hole or solid center, and intensity range
+  * **2D sinc**: Cardinal sine function for PSF modeling and diffraction pattern simulation. Parameters include amplitude, center position, scale factor (sigma), and DC offset
+
 * **Group short IDs now distinguish between panels**: Group identifiers are now panel-specific to avoid ambiguity in cross-panel operations
   * Signal Panel groups use `gs` prefix (e.g., `gs001`, `gs002`, ...)
   * Image Panel groups use `gi` prefix (e.g., `gi001`, `gi002`, ...)

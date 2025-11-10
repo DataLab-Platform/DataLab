@@ -1413,6 +1413,11 @@ class ImageActionHandler(BaseActionHandler):
             (_("Uniform distribution"), sio.UniformDistribution2DParam),
             (_("Gaussian"), sio.Gauss2DParam),
             (_("Ramp"), sio.Ramp2DParam),
+            (_("Checkerboard"), sio.Checkerboard2DParam),
+            (_("Sinusoidal grating"), sio.SinusoidalGrating2DParam),
+            (_("Ring pattern"), sio.Ring2DParam),
+            (_("Siemens star"), sio.SiemensStar2DParam),
+            (_("2D sinc"), sio.Sinc2DParam),
         ):
             self.new_action(
                 label,

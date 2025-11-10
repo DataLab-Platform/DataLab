@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-09 19:35+0100\n"
+"POT-Creation-Date: 2025-11-10 10:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,24 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**New parametric image types**: Added five new parametric image generation options in the \"New image\" menu"
+msgstr "**Nouveaux types d'images paramétriques** : Ajout de cinq nouvelles options de génération d'images paramétriques dans le menu \"Nouvelle image\""
+
+msgid "**Checkerboard**: Alternating square pattern ideal for camera calibration, spatial frequency analysis, and MTF testing. Configure square size, offset position, and light/dark values"
+msgstr "**Damier** : Motif carré alterné idéal pour la calibration de la caméra, l'analyse de la fréquence spatiale et les tests MTF. Configurez la taille des carrés, la position de décalage et les valeurs claires/sombres."
+
+msgid "**Sinusoidal grating**: Frequency response testing pattern with independent spatial frequencies in X and Y directions, adjustable phase, amplitude, and DC offset. Essential for optical testing and MTF measurements"
+msgstr "**Grille sinusoïdale** : Motif de test de réponse en fréquence avec des fréquences spatiales indépendantes dans les directions X et Y, phase, amplitude et décalage DC réglables. Essentiel pour les tests optiques et les mesures MTF."
+
+msgid "**Ring pattern**: Concentric circular rings for radial analysis and PSF testing. Adjustable ring period, width, center position, and amplitude range"
+msgstr "**Motif en anneau** : Anneaux circulaires concentriques pour l'analyse radiale et les tests PSF. Période d'anneau, largeur, position centrale et plage d'amplitude réglables."
+
+msgid "**Siemens star**: Resolution testing pattern with radial spokes for angular frequency analysis. Configure number of spokes (spoke pairs), inner/outer radius to create hole or solid center, and intensity range"
+msgstr "**Étoile de Siemens** : Motif de test de résolution avec des rayons radiaux pour l'analyse de la fréquence angulaire. Configurez le nombre de rayons (paires de rayons), le rayon intérieur/extérieur pour créer un centre vide ou plein, et la plage d'intensité."
+
+msgid "**2D sinc**: Cardinal sine function for PSF modeling and diffraction pattern simulation. Parameters include amplitude, center position, scale factor (sigma), and DC offset"
+msgstr "**Sinc 2D** : Fonction sinus cardinal pour la modélisation de la PSF et la simulation de motifs de diffraction. Les paramètres incluent l'amplitude, la position centrale, le facteur d'échelle (sigma) et le décalage DC."
 
 msgid "**Group short IDs now distinguish between panels**: Group identifiers are now panel-specific to avoid ambiguity in cross-panel operations"
 msgstr "**Les identifiants courts de groupe distinguent désormais les panneaux** : Les identifiants de groupe sont désormais spécifiques au panneau afin d'éviter toute ambiguïté dans les opérations inter-panneaux"

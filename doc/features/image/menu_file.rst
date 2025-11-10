@@ -36,16 +36,26 @@ Create a new image from various models
       - :math:`z[i] = 0`
     * - Empty
       - Data is directly taken from memory as it is
-    * - Uniform distribution
-      - :math:`y[i]` is normally distributed with configurable mean and standard deviation
+    * - Normal distribution
+      - :math:`z[i]` is normally distributed with configurable mean and standard deviation
     * - Poisson distribution
-      - :math:`y[i]` is Poisson distributed with configurable mean
+      - :math:`z[i]` is Poisson distributed with configurable mean
     * - Uniform distribution
-      - :math:`y[i]` is uniformly distributed between two configurable bounds
+      - :math:`z[i]` is uniformly distributed between two configurable bounds
     * - 2D Gaussian
       - :math:`z = A \cdot \exp\left(-\dfrac{\left(\sqrt{\left(x-x_0\right)^2+\left(y-y_0\right)^2}-\mu\right)^2}{2\sigma^2}\right)`
     * - 2D Ramp
       - :math:`z = A (x - x_0) + B (y - y_0) + C`
+    * - Checkerboard
+      - Alternating square pattern for calibration and spatial frequency analysis
+    * - Sinusoidal grating
+      - :math:`z = A \sin(2\pi(f_x \cdot x + f_y \cdot y) + \varphi) + C`
+    * - Ring pattern
+      - Concentric circular rings for radial analysis
+    * - Siemens star
+      - Radial spoke pattern for resolution testing
+    * - 2D sinc
+      - :math:`z = A \cdot \mathrm{sinc}\left(\dfrac{\sqrt{(x-x_0)^2+(y-y_0)^2}}{\sigma}\right) + C`
 
 .. _open_image:
 

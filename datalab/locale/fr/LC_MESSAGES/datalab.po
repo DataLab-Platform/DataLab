@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-10 10:38+0100\n"
+"POT-Creation-Date: 2025-11-10 10:57+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -525,6 +525,21 @@ msgstr "images"
 
 msgid "Ramp"
 msgstr "Rampe"
+
+msgid "Checkerboard"
+msgstr "Damier"
+
+msgid "Sinusoidal grating"
+msgstr "Réseau sinusoïdal"
+
+msgid "Ring pattern"
+msgstr "Motif en anneau"
+
+msgid "Siemens star"
+msgstr "Étoile de Siemens"
+
+msgid "2D sinc"
+msgstr "Sinc 2D"
 
 msgid "Create ROI grid"
 msgstr "Créer une grille de ROI"
