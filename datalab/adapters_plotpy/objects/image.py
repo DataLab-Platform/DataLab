@@ -133,7 +133,11 @@ class ImageObjPlotPyAdapter(BaseObjPlotPyAdapter[ImageObj, MaskedXYImageItem]):
             data_changed: if True, data has changed
         """
         if data_changed:
-            item.set_data(self.__viewable_data(), lut_range=[item.min, item.max])
+            # When data changes, let set_data() auto-calculate the LUT range from the
+            # new data (by not passing lut_range parameter). The subsequent call to
+            # update_plot_item_parameters() will override it if zscalemin/zscalemax
+            # are explicitly set in the object's metadata.
+            item.set_data(self.__viewable_data())
         item.set_mask(self.obj.maskdata)
         item.param.label = self.obj.title
         self.update_plot_item_parameters(item)
