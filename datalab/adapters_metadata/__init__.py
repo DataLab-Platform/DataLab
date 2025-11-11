@@ -24,8 +24,8 @@ __all__ = [
     "ResultData",
     "TableAdapter",
     "create_resultdata_dict",
-    "have_results",
     "have_geometry_results",
+    "have_results",
     "resultadapter_to_html",
     "show_resultdata",
 ]

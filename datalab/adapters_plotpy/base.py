@@ -12,21 +12,17 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-import guidata.dataset as gds
 from guidata.io import JSONReader, JSONWriter
 from plotpy.io import load_items, save_items
 from plotpy.items import (
     AbstractLabelItem,
-    AnnotatedPoint,
     AnnotatedSegment,
     AnnotatedShape,
 )
 
-from datalab.config import Conf
-
 if TYPE_CHECKING:
     from plotpy.items import AbstractShape
-    from plotpy.styles import AnnotationParam, ShapeParam
+    from plotpy.styles import AnnotationParam
 
 
 def config_annotated_shape(
