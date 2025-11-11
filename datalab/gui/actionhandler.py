@@ -47,7 +47,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.adapters_metadata import GeometryAdapter, TableAdapter
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter, have_results
 from datalab.config import Conf, _
 from datalab.gui import newobject
 from datalab.widgets import fitdialog
@@ -175,6 +175,15 @@ class SelectCond:
     ) -> bool:
         """At least one signal or image has annotations"""
         return any(obj.has_annotations() for obj in selected_objects)
+
+    @staticmethod
+    # pylint: disable=unused-argument
+    def with_results(
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalObj | ImageObj],
+    ) -> bool:
+        """At least one signal or image has results"""
+        return have_results(selected_objects)
 
 
 class ActionCategory(enum.Enum):
@@ -353,6 +362,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         # Update properties panel to reflect the removal
         if obj is self.panel.objview.get_current_object():
             self.panel.objprop.update_properties_from(obj)
+        # Update action states to reflect the removal
+        selected_groups = self.panel.objview.get_sel_groups()
+        selected_objects = self.panel.objview.get_sel_objects(include_groups=True)
+        self.selected_objects_changed(selected_groups, selected_objects)
         # Refresh the plot to update the display
         # Use the same refresh pattern as delete_results() method
         self.panel.refresh_plot("selected", True, False)

@@ -2797,16 +2797,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         return None
 
     def __new_objprop_button(
-        self, title: str, icon: str, tooltip: str, callback: Callable
+        self,
+        title: str,
+        icon: str,
+        tooltip: str,
+        callback: Callable,
+        select_condition: Callable = None,
     ) -> QW.QPushButton:
         """Create new object property button"""
         btn = QW.QPushButton(get_icon(icon), title, self)
         btn.setToolTip(tooltip)
         self.objprop.add_button(btn)
         btn.clicked.connect(callback)
+        if select_condition is None:
+            select_condition = actionhandler.SelectCond.at_least_one
         self.acthandler.add_action(
             btn,
-            select_condition=actionhandler.SelectCond.at_least_one,
+            select_condition=select_condition,
         )
         return btn
 
@@ -2817,6 +2824,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             "show_results.svg",
             _("Show results obtained from previous analysis"),
             self.show_results,
+            select_condition=actionhandler.SelectCond.with_results,
         )
 
         # Add checkbox to toggle result label visibility
@@ -3151,6 +3159,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     GeometryAdapter.remove_all_from(obj)
                     if obj is self.objview.get_current_object():
                         self.objprop.update_properties_from(obj)
+                # Update action states to reflect the removal
+                selected_groups = self.objview.get_sel_groups()
+                self.acthandler.selected_objects_changed(selected_groups, objs)
                 self.refresh_plot("selected", True, False)
         else:
             self.__show_no_result_warning()

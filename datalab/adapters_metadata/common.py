@@ -104,10 +104,9 @@ def have_results(objs: list[SignalObj | ImageObj]) -> bool:
     Returns:
         True if any object has results, False otherwise
     """
-    return bool(
-        any(GeometryAdapter.iterate_from_obj(obj) for obj in objs)
-        or any(TableAdapter.iterate_from_obj(obj) for obj in objs)
-    )
+    return any(
+        item for obj in objs for item in GeometryAdapter.iterate_from_obj(obj)
+    ) or any(item for obj in objs for item in TableAdapter.iterate_from_obj(obj))
 
 
 def have_geometry_results(objs: list[SignalObj | ImageObj]) -> bool:
@@ -119,7 +118,7 @@ def have_geometry_results(objs: list[SignalObj | ImageObj]) -> bool:
     Returns:
         True if any object has geometry results, False otherwise
     """
-    return bool(any(GeometryAdapter.iterate_from_obj(obj) for obj in objs))
+    return any(item for obj in objs for item in GeometryAdapter.iterate_from_obj(obj))
 
 
 def create_resultdata_dict(
