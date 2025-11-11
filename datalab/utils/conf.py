@@ -13,6 +13,7 @@ from collections.abc import Generator
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any
 
+import guidata.dataset as gds
 from guidata.configtools import MONOSPACE, get_family
 from guidata.userconfig import NoDefault, UserConfig
 
@@ -213,6 +214,50 @@ class EnumOption(Option):
                 f"expected {self.values}"
             )
         super().set(value)
+
+
+class DataSetOption(Option):
+    """DataSet option handler"""
+
+    def __init__(self, default_instance: gds.DataSet | None = None) -> None:
+        super().__init__()
+        self.default_instance = default_instance
+
+    def set_default_instance(self, default_instance: gds.DataSet) -> None:
+        """Set the default instance (for lazy initialization)"""
+        self.default_instance = default_instance
+
+    def get(self, default: Any = NoDefault) -> gds.DataSet:
+        """Get configuration option value"""
+        try:
+            json_str = super().get(default)
+        except RuntimeError:
+            # Option not yet registered in CONF - register it with default instance
+            if self.default_instance is None:
+                raise ValueError(
+                    f"No default instance set for option '{self.option}' "
+                    f"in section '{self.section}'"
+                )
+            # Register the default value in CONF (writes to config file)
+            self.set(self.default_instance)
+            return self.default_instance
+        if json_str is NoDefault or not json_str:
+            if self.default_instance is None:
+                raise ValueError(
+                    f"No default instance set for option '{self.option}' "
+                    f"in section '{self.section}'"
+                )
+            return self.default_instance
+        # Unescape percent signs that were escaped for ConfigParser
+        json_str = json_str.replace("%%", "%")
+        return gds.json_to_dataset(json_str)
+
+    def set(self, value: gds.DataSet) -> None:
+        """Set configuration option value"""
+        json_str = gds.dataset_to_json(value)
+        # Escape percent signs for ConfigParser (which uses % for interpolation)
+        json_str = json_str.replace("%", "%%")
+        super().set(json_str)
 
 
 class SectionMeta(type):

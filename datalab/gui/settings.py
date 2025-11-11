@@ -262,6 +262,27 @@ def edit_default_image_settings(
     return False
 
 
+#  pylint:disable=unused-argument
+def edit_dataset_settings(
+    dataset: gds.DataSet, item: gds.DataItem, param: gds.DataSet, parent: QW.QWidget
+) -> gds.DataSet:
+    """Edit dataset-like settings
+
+    Args:
+        dataset: dataset
+        item: Data item
+        param: The DataSet instance from config, or None if not set
+        parent: Parent widget
+
+    Returns:
+        The modified dataset, or None if cancelled
+    """
+    assert param is not None, "Should not be None"
+    param.set_title(_("Visualization settings"))
+    param.edit(parent=parent)
+    return param
+
+
 class ViewSettings(gds.DataSet):
     """DataLab Visualization settings"""
 
@@ -334,6 +355,10 @@ class ViewSettings(gds.DataSet):
             "(e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds)."
         ),
     )
+    sig_shape_param = gds.ButtonItem(_("Results / Shape style"), edit_dataset_settings)
+    sig_marker_param = gds.ButtonItem(
+        _("Results / Marker style"), edit_dataset_settings
+    ).set_pos(col=1)
     _g1 = gds.EndGroup("")
 
     g2 = gds.BeginGroup(_("Image"))
@@ -375,6 +400,10 @@ class ViewSettings(gds.DataSet):
         icon="image.svg",
         default=False,
     )
+    ima_shape_param = gds.ButtonItem(_("Results / Shape style"), edit_dataset_settings)
+    ima_marker_param = gds.ButtonItem(
+        _("Results / Marker style"), edit_dataset_settings
+    ).set_pos(col=1)
     _g2 = gds.EndGroup("")
 
     g3 = gds.BeginGroup(_("Results display limits"))
@@ -469,7 +498,11 @@ def get_all_values(paramdict: dict[str, gds.DataSet]) -> list:
     """Get all values"""
     values = []
     for param, _section, _option in _iter_conf(paramdict):
-        values.append(getattr(param, _option))
+        value = getattr(param, _option)
+        if isinstance(value, gds.DataSet):
+            # For dataset-like options, get a serializable representation
+            value = gds.dataset_to_json(value)
+        values.append(value)
     return values
 
 
@@ -494,15 +527,19 @@ def create_dataset_dict() -> dict[str, gds.DataSet]:
     return paramdict
 
 
-def edit_settings(parent: QW.QWidget) -> None:
+def edit_settings(parent: QW.QWidget) -> list[str]:
     """Edit DataLab settings
 
     Args:
         parent: Parent widget
+
+    Returns:
+        List of changed option names
     """
     paramdict = create_dataset_dict()
     before = get_restart_items_values(paramdict)
     all_values_before = get_all_values(paramdict)
+
     params = gds.DataSetGroup(paramdict.values(), title=_("Settings"))
     changed_options = []
     if params.edit(parent=parent):
@@ -534,6 +571,8 @@ def edit_settings(parent: QW.QWidget) -> None:
                 for option, value in zip(all_options, all_values_before)
                 if value != all_values_after[all_options.index(option)]
             ]
+
+        # Check for image default settings changes
         for vis_defaults in ("ima_defaults",):
             if getattr(paramdict["view"], vis_defaults):
                 changed_options.append(vis_defaults)

@@ -201,6 +201,45 @@ Image-specific settings
     Click this button to configure default visualization settings for images (colormap,
     interpolation, contrast, etc.).
 
+Results / Shape and marker styles
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+DataLab allows you to customize the visual appearance of annotation shapes and
+markers used for displaying analysis results on plots. These settings are accessible
+through button controls in the Visualization tab:
+
+**Shape style for signals**
+    Click this button to configure the visual style for annotation shapes
+    (rectangles, circles, segments, etc.) displayed on signal plots. This includes:
+
+    - Line style, color, and width
+    - Fill pattern, color, and transparency
+    - Symbol shape, size, and colors
+
+    These settings apply to all result shapes drawn on signal plots (e.g., peak markers,
+    FWHM indicators, feature detection results).
+
+**Marker style for signals**
+    Click this button to configure the visual style for cursor markers on
+    signal plots. This includes:
+
+    - Line style, color, and width
+    - Symbol appearance
+    - Text label formatting and positioning
+    - Background transparency
+
+    These settings apply to cursor-type markers used in signal analysis results.
+
+**Shape style for images**
+    Click this button to configure the visual style for annotation shapes
+    displayed on image plots. Parameters are similar to signal shapes but optimized
+    for image visualization (e.g., different colors for better visibility
+    on images).
+
+**Marker style for images**
+    Click this button to configure the visual style for cursor markers on
+    image plots.
+
 Results display limits
 ^^^^^^^^^^^^^^^^^^^^^^
 

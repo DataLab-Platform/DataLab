@@ -95,6 +95,33 @@ class ResultData:
             self.short_ids.append(sid)
 
 
+def have_results(objs: list[SignalObj | ImageObj]) -> bool:
+    """Return True if any object has results
+
+    Args:
+        objs: List of objects
+
+    Returns:
+        True if any object has results, False otherwise
+    """
+    return bool(
+        any(GeometryAdapter.iterate_from_obj(obj) for obj in objs)
+        or any(TableAdapter.iterate_from_obj(obj) for obj in objs)
+    )
+
+
+def have_geometry_results(objs: list[SignalObj | ImageObj]) -> bool:
+    """Return True if any object has geometry results
+
+    Args:
+        objs: List of objects
+
+    Returns:
+        True if any object has geometry results, False otherwise
+    """
+    return bool(any(GeometryAdapter.iterate_from_obj(obj) for obj in objs))
+
+
 def create_resultdata_dict(
     objs: list[SignalObj | ImageObj],
 ) -> dict[str, ResultData]:

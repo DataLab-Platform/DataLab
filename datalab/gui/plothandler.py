@@ -233,6 +233,28 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         for merged_adapter in self.__merged_result_adapters.values():
             merged_adapter.invalidate_cached_label()
 
+    def refresh_all_shape_items(self) -> None:
+        """Refresh all geometric shapes to apply new style parameters.
+
+        This method is called when shape/marker visualization settings
+        are changed in the Settings dialog. It removes and recreates all shape
+        items to apply the new parameters.
+        """
+        # Get all object IDs that have shape items
+        oids_with_shapes = list(self.__merged_result_adapters.keys())
+
+        if not oids_with_shapes:
+            return
+
+        # Remove all existing shape items
+        self.remove_all_shape_items()
+
+        # Recreate shape items for all objects with the new settings
+        for oid in oids_with_shapes:
+            self.add_shapes(oid, do_autoscale=False)
+
+        self.plot.replot()
+
     def toggle_result_label_visibility(self, show: bool) -> None:
         """Toggle the visibility of all merged result labels on the plot.
 

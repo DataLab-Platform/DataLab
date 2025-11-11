@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 17:33+0100\n"
+"POT-Creation-Date: 2025-11-11 14:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -564,6 +564,57 @@ msgstr "**Idéal pour l'analyse des données de capteurs, des journaux de tempé
 
 msgid "This closes [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258) - Add support for CSV files with date/time X-axis"
 msgstr "Cela clôt [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258) - Ajout de la prise en charge des fichiers CSV avec un axe X de date/heure"
+
+msgid "**Customizable result shape and marker styles**: New settings to configure visual appearance of result shapes and markers"
+msgstr "**Styles personnalisables pour les formes et les marqueurs de résultats** : Nouveaux paramètres pour configurer l'apparence visuelle des formes et des marqueurs de résultats"
+
+msgid "Added four new button controls in the Settings dialog (Visualization tab) to customize styles:"
+msgstr "Ajout de quatre nouveaux contrôles de bouton dans la boîte de dialogue des paramètres (onglet Visualisation) pour personnaliser les styles :"
+
+msgid "**Shape style for signals**: Configure line style, color, width, fill pattern, symbol appearance, and selection styles for annotation shapes on signal plots"
+msgstr "**Style de forme pour les signaux** : Configurez le style de ligne, la couleur, la largeur, le motif de remplissage, l'apparence du symbole et les styles de sélection pour les formes d'annotation sur les graphiques de signaux"
+
+msgid "**Marker style for signals**: Configure cursor marker appearance including line style, symbol, text labels, and background transparency for signal analysis results"
+msgstr "**Style de marqueur pour les signaux** : Configurez l'apparence du marqueur de curseur, y compris le style de ligne, le symbole, les étiquettes de texte et la transparence de l'arrière-plan pour les résultats d'analyse des signaux"
+
+msgid "**Shape style for images**: Configure annotation shape appearance for image plots optimized for image visualization"
+msgstr "**Style de forme pour les images** : Configurez l'apparence des formes d'annotation pour les graphiques d'images optimisés pour la visualisation d'images"
+
+msgid "**Marker style for images**: Configure cursor marker styles for image analysis results"
+msgstr "**Style de marqueur pour les images** : Configurez les styles de marqueur de curseur pour les résultats d'analyse d'images"
+
+msgid "**Editable through PlotPy's shape parameter dialog**: Clicking each button opens an interactive editor with comprehensive style options including:"
+msgstr "**Éditable via la boîte de dialogue des paramètres de forme de PlotPy** : Cliquer sur chaque bouton ouvre un éditeur interactif avec des options de style complètes, y compris :"
+
+msgid "Line properties: style (solid, dashed, dotted), color, width"
+msgstr "Propriétés de la ligne : style (solide, en pointillés, en pointillés), couleur, largeur"
+
+msgid "Fill properties: pattern, color, transparency"
+msgstr "Propriétés de remplissage : motif, couleur, transparence"
+
+msgid "Symbol properties: marker type, size, edge and face colors"
+msgstr "Propriétés du symbole : type de marqueur, taille, couleurs de bord et de surface"
+
+msgid "Selection appearance: different styles when shapes are selected"
+msgstr "Apparence de sélection : styles différents lorsque les formes sont sélectionnées"
+
+msgid "Text formatting for marker labels"
+msgstr "Mise en forme du texte pour les étiquettes de marqueurs"
+
+msgid "**Persistent configuration**: All style settings are saved in the user configuration file and preserved across sessions"
+msgstr "**Configuration persistante** : Tous les paramètres de style sont enregistrés dans le fichier de configuration de l'utilisateur et préservés entre les sessions."
+
+msgid "**Applied to all result shapes and markers**: Styles are applied to all result shapes and markers from analysis operations (peak detection, FWHM, centroid, statistics, etc.)"
+msgstr "**Appliqué à toutes les formes et tous les marqueurs de résultats** : Les styles sont appliqués à toutes les formes et tous les marqueurs de résultats des opérations d'analyse (détection de pics, FWHM, centroïde, statistiques, etc.)"
+
+msgid "**Shape refresh on settings change**: When shape/marker parameters are modified in Settings, users are prompted to refresh existing result shapes on visible plots to apply the new styles"
+msgstr "**Rafraîchissement des formes lors du changement de paramètres** : Lorsque les paramètres de forme/marqueur sont modifiés dans les paramètres, les utilisateurs sont invités à rafraîchir les formes de résultats existantes sur les graphiques visibles pour appliquer les nouveaux styles."
+
+msgid "Improves workflow flexibility by allowing users to establish consistent visual styling for their analysis results"
+msgstr "Améliore la flexibilité du flux de travail en permettant aux utilisateurs d'établir un style visuel cohérent pour leurs résultats d'analyse."
+
+msgid "Particularly useful for creating presentation-ready plots with custom color schemes or for adapting to different display environments"
+msgstr "Particulièrement utile pour créer des graphiques prêts pour la présentation avec des schémas de couleurs personnalisés ou pour s'adapter à différents environnements d'affichage."
 
 msgid "**Enhance metadata handling by adding function name context to results**:"
 msgstr "**Amélioration de la gestion des métadonnées en ajoutant le contexte du nom de la fonction aux résultats** :"

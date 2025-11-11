@@ -44,6 +44,7 @@ from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
 from datalab import __docurl__, __homeurl__, __supporturl__, env
+from datalab.adapters_metadata.common import have_geometry_results
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import (
     APP_DESC,
@@ -1926,6 +1927,40 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
         sigima_options.auto_normalize_kernel.set(Conf.proc.auto_normalize_kernel.get())
         refresh_signal_panel = refresh_image_panel = False
+
+        # Handling changes to shape/marker parameters
+        s_view_result_param = (
+            "sig_shape_param" in changed_options
+            or "sig_marker_param" in changed_options
+        ) and have_geometry_results(
+            [obj for obj in self.signalpanel.objview.get_sel_objects(True)]
+        )
+        i_view_result_param = (
+            "ima_shape_param" in changed_options
+            or "ima_marker_param" in changed_options
+        ) and have_geometry_results(
+            [obj for obj in self.imagepanel.objview.get_sel_objects(True)]
+        )
+        if (s_view_result_param or i_view_result_param) and (
+            QW.QMessageBox.question(
+                self,
+                _("Apply settings to existing results?"),
+                _(
+                    "Visualization settings for annotated shapes and "
+                    "markers have been modified.\n\n"
+                    "Do you want to apply these settings to existing results "
+                    "in the workspace?"
+                ),
+                QW.QMessageBox.Yes | QW.QMessageBox.No,
+                QW.QMessageBox.No,
+            )
+            == QW.QMessageBox.Yes
+        ):
+            if s_view_result_param:
+                self.signalpanel.plothandler.refresh_all_shape_items()
+            if i_view_result_param:
+                self.imagepanel.plothandler.refresh_all_shape_items()
+
         for option in changed_options:
             if option in (
                 "max_shapes_to_draw",

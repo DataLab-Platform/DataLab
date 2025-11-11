@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-10 10:57+0100\n"
+"POT-Creation-Date: 2025-11-11 15:07+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -979,6 +979,19 @@ msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
 msgid "About"
 msgstr "À propos de"
+
+msgid "Apply settings to existing results?"
+msgstr "Appliquer les réglages aux résultats existants ?"
+
+#, fuzzy
+msgid ""
+"Visualization settings for annotated shapes and markers have been modified.\n"
+"\n"
+"Do you want to apply these settings to existing results in the workspace?"
+msgstr ""
+"Les réglages d'affichage par défaut pour les formes annotées et les marqueurs ont été modifiés.\n"
+"\n"
+"Souhaitez-vous appliquer ces réglages aux résultats existants dans l'espace de travail "
 
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
@@ -2388,6 +2401,12 @@ msgstr "Format DateTime (ms/μs/ns)"
 #, python-format
 msgid "Format string for datetime X-axis labels when using sub-second time units (ms, μs, ns).<br>Uses Python's strftime format codes (e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds)."
 msgstr "Chaîne de format pour les étiquettes de l'axe X datetime lors de l'utilisation d'unités de temps sub-secondes (ms, μs, ns).<br>Utilise les codes de format strftime de Python (par exemple, %H:%M:%S.%f pour heures:minutes:secondes.microsecondes)."
+
+msgid "Results / Shape style"
+msgstr "Résultats / Formes géométriques"
+
+msgid "Results / Marker style"
+msgstr "Résultats / Style de marqueur"
 
 msgid "Image"
 msgstr "Image"

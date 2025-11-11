@@ -15,6 +15,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Literal
 
+import guidata.dataset as gds
 import numpy as np
 from guidata.configtools import get_font
 from plotpy.builder import make
@@ -91,14 +92,14 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         super().__init__(result_adapter)
 
     def iterate_shape_items(
-        self, fmt: str, lbl: bool, option: Literal["s", "i"]
+        self, fmt: str, lbl: bool, prefix: Literal["s", "i"]
     ) -> Iterable:
         """Iterate over metadata shape plot items.
 
         Args:
             fmt: numeric format (e.g. "%.3f")
             lbl: if True, show shape labels
-            option: shape style option ("s" for signal, "i" for image)
+            prefix: "s" for signal, "i" for image
 
         Yields:
             Plot item
@@ -110,7 +111,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         for idx, coords in enumerate(self.result_adapter.result.coords):
             if idx >= max_shapes:
                 break
-            yield self.create_shape_item(coords, fmt, lbl, option)
+            yield self.create_shape_item(coords, fmt, lbl, prefix)
 
         # If shapes were truncated, create a warning label
         if total_coords > max_shapes:
@@ -129,7 +130,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             yield warning_label
 
     def create_shape_item(
-        self, coords: np.ndarray, fmt: str, lbl: bool, option: Literal["s", "i"]
+        self, coords: np.ndarray, fmt: str, lbl: bool, prefix: Literal["s", "i"]
     ) -> (
         AnnotatedPoint
         | Marker
@@ -146,7 +147,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             coords: coordinate array
             fmt: numeric format (e.g. "%.3f")
             lbl: if True, show shape labels
-            option: shape style option ("s" for signal, "i" for image)
+            prefix: "s" for signal, "i" for image
 
         Returns:
             Plot item
@@ -209,8 +210,30 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             raise NotImplementedError(
                 f"Unsupported shape kind: {self.result_adapter.result.kind}"
             )
+
         if isinstance(item, AnnotatedShape):
-            config_annotated_shape(item, fmt, lbl, "results", option)
+            config_annotated_shape(item, fmt, lbl, "results", f"{prefix}/annotation")
+            # Apply settings for annotated shapes (except AnnotatedPoint)
+            if not isinstance(item, AnnotatedPoint):
+                if prefix == "s":
+                    config_param = Conf.view.sig_shape_param.get()
+                else:
+                    config_param = Conf.view.ima_shape_param.get()
+                shape_param: ShapeParam = item.shape.shapeparam
+                gds.update_dataset(shape_param, config_param)
+                shape_param.update_item(item.shape)
+
+        if isinstance(item, Marker):
+            item.set_style("results", f"{prefix}/marker")
+            # Apply cursor/marker settings from config
+            if prefix == "s":
+                config_param = Conf.view.sig_marker_param.get()
+            else:
+                config_param = Conf.view.ima_marker_param.get()
+            param = item.markerparam
+            gds.update_dataset(param, config_param)
+            param.update_item(item)
+
         set_plot_item_editable(item, False)
         return item
 
@@ -241,20 +264,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             def label(x, y):
                 return txt % (x, y)
 
-        marker = make.marker(
-            position=(x0, y0),
-            markerstyle=mstyle,
-            label_cb=label,
-            linestyle="DashLine",
-            color="#ffff00",
-        )
-        param = marker.markerparam
-        param.symbol.marker = "Diamond"
-        param.symbol.size = 9
-        param.symbol.edgecolor = "#ffff00"
-        param.symbol.facecolor = "#ffff00"
-        param.symbol.alpha = 0.7
-        param.update_item(marker)
+        marker = make.marker(position=(x0, y0), markerstyle=mstyle, label_cb=label)
         return marker
 
 

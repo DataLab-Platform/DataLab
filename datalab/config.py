@@ -18,6 +18,7 @@ from guidata import configtools
 from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.constants import LUTAlpha
+from plotpy.styles import MarkerParam, ShapeParam
 from sigima.config import options as sigima_options
 from sigima.proc.title_formatting import (
     PlaceholderTitleFormatter,
@@ -296,6 +297,14 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_def_alpha = conf.Option()
     ima_def_alpha_function = conf.Option()
 
+    # Annotated shape and marker visualization settings for signals
+    sig_shape_param = conf.DataSetOption()
+    sig_marker_param = conf.DataSetOption()
+
+    # Annotated shape and marker visualization settings for images
+    ima_shape_param = conf.DataSetOption()
+    ima_marker_param = conf.DataSetOption()
+
     # Datetime axis format strings for different time units
     # Format strings use Python's strftime format codes
     sig_datetime_format_s = conf.Option()  # Format for s, min, h
@@ -510,7 +519,6 @@ PLOTPY_DEFAULTS = {
         "marker/cursor/sel_symbol/edgecolor": MAIN_BG_COLOR,
         "marker/cursor/sel_symbol/facecolor": "#A11818",
         "marker/cursor/sel_symbol/alpha": 0.8,
-        # Cursor text style
         "marker/cursor/text/font/size": 9,
         "marker/cursor/text/font/family": "default",
         "marker/cursor/text/font/bold": False,
@@ -526,53 +534,119 @@ PLOTPY_DEFAULTS = {
         "marker/cursor/sel_text/background_color": "#ffffff",
         "marker/cursor/sel_text/background_alpha": 0.7,
     },
-    "results": {  # Annotated shape style for result shapes
-        # Signals:
-        "s/line/style": "SolidLine",
-        "s/line/color": MAIN_FG_COLOR,
-        "s/line/width": 1,
-        "s/fill/style": "SolidPattern",
-        "s/fill/color": MAIN_BG_COLOR,
-        "s/fill/alpha": 0.1,
-        "s/symbol/marker": "XCross",
-        "s/symbol/size": 7,
-        "s/symbol/edgecolor": MAIN_FG_COLOR,
-        "s/symbol/facecolor": MAIN_FG_COLOR,
-        "s/symbol/alpha": 1.0,
-        "s/sel_line/style": "SolidLine",
-        "s/sel_line/color": "#00ff00",
-        "s/sel_line/width": 1,
-        "s/sel_fill/style": "SolidPattern",
-        "s/sel_fill/color": MAIN_BG_COLOR,
-        "s/sel_fill/alpha": 0.1,
-        "s/sel_symbol/marker": "Rect",
-        "s/sel_symbol/size": 9,
-        "s/sel_symbol/edgecolor": "#00aa00",
-        "s/sel_symbol/facecolor": "#00ff00",
-        "s/sel_symbol/alpha": 0.7,
-        # Images:
-        "i/line/style": "SolidLine",
-        "i/line/color": "#ffff00",
-        "i/line/width": 2,
-        "i/fill/style": "SolidPattern",
-        "i/fill/color": MAIN_BG_COLOR,
-        "i/fill/alpha": 0.1,
-        "i/symbol/marker": "Rect",
-        "i/symbol/size": 3,
-        "i/symbol/edgecolor": "#ffff00",
-        "i/symbol/facecolor": "#ffff00",
-        "i/symbol/alpha": 1.0,
-        "i/sel_line/style": "SolidLine",
-        "i/sel_line/color": "#00ff00",
-        "i/sel_line/width": 2,
-        "i/sel_fill/style": "SolidPattern",
-        "i/sel_fill/color": MAIN_BG_COLOR,
-        "i/sel_fill/alpha": 0.1,
-        "i/sel_symbol/marker": "Rect",
-        "i/sel_symbol/size": 9,
-        "i/sel_symbol/edgecolor": "#00aa00",
-        "i/sel_symbol/facecolor": "#00ff00",
-        "i/sel_symbol/alpha": 0.7,
+    "results": {
+        # Annotated shape style for result shapes:
+        #   Signals:
+        "s/annotation/line/style": "SolidLine",
+        "s/annotation/line/color": MAIN_FG_COLOR,
+        "s/annotation/line/width": 1,
+        "s/annotation/fill/style": "SolidPattern",
+        "s/annotation/fill/color": MAIN_BG_COLOR,
+        "s/annotation/fill/alpha": 0.1,
+        "s/annotation/symbol/marker": "XCross",
+        "s/annotation/symbol/size": 7,
+        "s/annotation/symbol/edgecolor": MAIN_FG_COLOR,
+        "s/annotation/symbol/facecolor": MAIN_FG_COLOR,
+        "s/annotation/symbol/alpha": 1.0,
+        "s/annotation/sel_line/style": "DashLine",
+        "s/annotation/sel_line/color": "#00ff00",
+        "s/annotation/sel_line/width": 1,
+        "s/annotation/sel_fill/style": "SolidPattern",
+        "s/annotation/sel_fill/color": MAIN_BG_COLOR,
+        "s/annotation/sel_fill/alpha": 0.1,
+        "s/annotation/sel_symbol/marker": "Rect",
+        "s/annotation/sel_symbol/size": 9,
+        "s/annotation/sel_symbol/edgecolor": "#00aa00",
+        "s/annotation/sel_symbol/facecolor": "#00ff00",
+        "s/annotation/sel_symbol/alpha": 0.7,
+        #   Images:
+        "i/annotation/line/style": "SolidLine",
+        "i/annotation/line/color": "#ffff00",
+        "i/annotation/line/width": 2,
+        "i/annotation/fill/style": "SolidPattern",
+        "i/annotation/fill/color": MAIN_BG_COLOR,
+        "i/annotation/fill/alpha": 0.1,
+        "i/annotation/symbol/marker": "Rect",
+        "i/annotation/symbol/size": 3,
+        "i/annotation/symbol/edgecolor": "#ffff00",
+        "i/annotation/symbol/facecolor": "#ffff00",
+        "i/annotation/symbol/alpha": 1.0,
+        "i/annotation/sel_line/style": "SolidLine",
+        "i/annotation/sel_line/color": "#00ff00",
+        "i/annotation/sel_line/width": 2,
+        "i/annotation/sel_fill/style": "SolidPattern",
+        "i/annotation/sel_fill/color": MAIN_BG_COLOR,
+        "i/annotation/sel_fill/alpha": 0.1,
+        "i/annotation/sel_symbol/marker": "Rect",
+        "i/annotation/sel_symbol/size": 9,
+        "i/annotation/sel_symbol/edgecolor": "#00aa00",
+        "i/annotation/sel_symbol/facecolor": "#00ff00",
+        "i/annotation/sel_symbol/alpha": 0.7,
+        # Marker styles for results:
+        #   Signals:
+        "s/marker/cursor/line/style": "DashLine",
+        "s/marker/cursor/line/color": "#ffff00",
+        "s/marker/cursor/line/width": 1.0,
+        "s/marker/cursor/symbol/marker": "Ellipse",
+        "s/marker/cursor/symbol/size": 11,
+        "s/marker/cursor/symbol/edgecolor": MAIN_BG_COLOR,
+        "s/marker/cursor/symbol/facecolor": "#ffff00",
+        "s/marker/cursor/symbol/alpha": 0.7,
+        "s/marker/cursor/sel_line/style": "DashLine",
+        "s/marker/cursor/sel_line/color": "#ffff00",
+        "s/marker/cursor/sel_line/width": 2.0,
+        "s/marker/cursor/sel_symbol/marker": "Ellipse",
+        "s/marker/cursor/sel_symbol/size": 11,
+        "s/marker/cursor/sel_symbol/edgecolor": "#ffff00",
+        "s/marker/cursor/sel_symbol/facecolor": "#ffff00",
+        "s/marker/cursor/sel_symbol/alpha": 0.7,
+        "s/marker/cursor/text/font/size": 9,
+        "s/marker/cursor/text/font/family": "default",
+        "s/marker/cursor/text/font/bold": False,
+        "s/marker/cursor/text/font/italic": False,
+        "s/marker/cursor/text/textcolor": "#440909",
+        "s/marker/cursor/text/background_color": "#ffffff",
+        "s/marker/cursor/text/background_alpha": 0.7,
+        "s/marker/cursor/sel_text/font/size": 9,
+        "s/marker/cursor/sel_text/font/family": "default",
+        "s/marker/cursor/sel_text/font/bold": False,
+        "s/marker/cursor/sel_text/font/italic": False,
+        "s/marker/cursor/sel_text/textcolor": "#440909",
+        "s/marker/cursor/sel_text/background_color": "#ffffff",
+        "s/marker/cursor/sel_text/background_alpha": 0.7,
+        "s/marker/cursor/markerstyle": "Cross",
+        #   Images:
+        "i/marker/cursor/line/style": "DashLine",
+        "i/marker/cursor/line/color": "#ffff00",
+        "i/marker/cursor/line/width": 1.0,
+        "i/marker/cursor/symbol/marker": "Diamond",
+        "i/marker/cursor/symbol/size": 11,
+        "i/marker/cursor/symbol/edgecolor": "#ffff00",
+        "i/marker/cursor/symbol/facecolor": "#ffff00",
+        "i/marker/cursor/symbol/alpha": 0.7,
+        "i/marker/cursor/sel_line/style": "DashLine",
+        "i/marker/cursor/sel_line/color": "#ffff00",
+        "i/marker/cursor/sel_line/width": 2.0,
+        "i/marker/cursor/sel_symbol/marker": "Diamond",
+        "i/marker/cursor/sel_symbol/size": 11,
+        "i/marker/cursor/sel_symbol/edgecolor": "#ffff00",
+        "i/marker/cursor/sel_symbol/facecolor": "#ffff00",
+        "i/marker/cursor/sel_symbol/alpha": 0.7,
+        "i/marker/cursor/text/font/size": 9,
+        "i/marker/cursor/text/font/family": "default",
+        "i/marker/cursor/text/font/bold": False,
+        "i/marker/cursor/text/font/italic": False,
+        "i/marker/cursor/text/textcolor": "#440909",
+        "i/marker/cursor/text/background_color": "#ffffff",
+        "i/marker/cursor/text/background_alpha": 0.7,
+        "i/marker/cursor/sel_text/font/size": 9,
+        "i/marker/cursor/sel_text/font/family": "default",
+        "i/marker/cursor/sel_text/font/bold": False,
+        "i/marker/cursor/sel_text/font/italic": False,
+        "i/marker/cursor/sel_text/textcolor": "#440909",
+        "i/marker/cursor/sel_text/background_color": "#ffffff",
+        "i/marker/cursor/sel_text/background_alpha": 0.7,
+        "i/marker/cursor/markerstyle": "Cross",
         # Style for labels:
         "label/symbol/marker": "NoSymbol",
         "label/symbol/size": 0,
@@ -695,3 +769,30 @@ PLOTPY_DEFAULTS = {
 
 # PlotPy configuration will be initialized in initialize() function
 PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
+
+
+def initialize_default_plotpy_instances():
+    """Initialize default PlotPy instances for DataLab configuration options"""
+    # Initialize default instances for DataSetOptions now that PLOTPY_DEFAULTS exists
+    _sig_shapeparam = ShapeParam()
+    _sig_shapeparam.read_config(PLOTPY_CONF, "results", "s/annotation")
+    Conf.view.sig_shape_param.set_default_instance(_sig_shapeparam)
+    Conf.view.sig_shape_param.get()
+
+    _sig_markerparam = MarkerParam()
+    _sig_markerparam.read_config(PLOTPY_CONF, "results", "s/marker/cursor")
+    Conf.view.sig_marker_param.set_default_instance(_sig_markerparam)
+    Conf.view.sig_marker_param.get()
+
+    _ima_shapeparam = ShapeParam()
+    _ima_shapeparam.read_config(PLOTPY_CONF, "results", "i/annotation")
+    Conf.view.ima_shape_param.set_default_instance(_ima_shapeparam)
+    Conf.view.ima_shape_param.get()
+
+    _ima_markerparam = MarkerParam()
+    _ima_markerparam.read_config(PLOTPY_CONF, "results", "i/marker/cursor")
+    Conf.view.ima_marker_param.set_default_instance(_ima_markerparam)
+    Conf.view.ima_marker_param.get()
+
+
+initialize_default_plotpy_instances()

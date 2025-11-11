@@ -198,6 +198,24 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
   * Ideal for analyzing sensor data, temperature logs, and time-series measurements
   * This closes [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258) - Add support for CSV files with date/time X-axis
 
+* **Customizable result shape and marker styles**: New settings to configure visual appearance of result shapes and markers
+  * Added four new button controls in the Settings dialog (Visualization tab) to customize styles:
+    * **Shape style for signals**: Configure line style, color, width, fill pattern, symbol appearance, and selection styles for annotation shapes on signal plots
+    * **Marker style for signals**: Configure cursor marker appearance including line style, symbol, text labels, and background transparency for signal analysis results
+    * **Shape style for images**: Configure annotation shape appearance for image plots optimized for image visualization
+    * **Marker style for images**: Configure cursor marker styles for image analysis results
+  * **Editable through PlotPy's shape parameter dialog**: Clicking each button opens an interactive editor with comprehensive style options including:
+    * Line properties: style (solid, dashed, dotted), color, width
+    * Fill properties: pattern, color, transparency
+    * Symbol properties: marker type, size, edge and face colors
+    * Selection appearance: different styles when shapes are selected
+    * Text formatting for marker labels
+  * **Persistent configuration**: All style settings are saved in the user configuration file and preserved across sessions
+  * **Applied to all result shapes and markers**: Styles are applied to all result shapes and markers from analysis operations (peak detection, FWHM, centroid, statistics, etc.)
+  * **Shape refresh on settings change**: When shape/marker parameters are modified in Settings, users are prompted to refresh existing result shapes on visible plots to apply the new styles
+  * Improves workflow flexibility by allowing users to establish consistent visual styling for their analysis results
+  * Particularly useful for creating presentation-ready plots with custom color schemes or for adapting to different display environments
+
 * **Enhance metadata handling by adding function name context to results**:
   * When computation functions (e.g., `full_width_at_y`, `x_at_y`) create results with parameters, the function name is now stored
   * Analysis parameters tab displays function name as a comment above parameter information for better context

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 12:31+0100\n"
+"POT-Creation-Date: 2025-11-11 15:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -292,6 +292,60 @@ msgstr "**Paramètres de visualisation d'image par défaut**"
 
 msgid "Click this button to configure default visualization settings for images (colormap, interpolation, contrast, etc.)."
 msgstr "Cliquer sur ce bouton pour configurer les paramètres de visualisation par défaut pour les images (carte de couleurs, interpolation, contraste, etc.)."
+
+msgid "Results / Shape and marker styles"
+msgstr "Résultats / Styles de forme et de marqueur"
+
+msgid "DataLab allows you to customize the visual appearance of annotation shapes and markers used for displaying analysis results on plots. These settings are accessible through button controls in the Visualization tab:"
+msgstr "DataLab vous permet de personnaliser l'apparence visuelle des formes d'annotation et des marqueurs utilisés pour afficher les résultats d'analyse sur les tracés. Ces paramètres sont accessibles via des contrôles de bouton dans l'onglet Visualisation."
+
+msgid "**Shape style for signals**"
+msgstr "**Style de forme pour les signaux**"
+
+msgid "Click this button to configure the visual style for annotation shapes (rectangles, circles, segments, etc.) displayed on signal plots. This includes:"
+msgstr "Cliquer sur ce bouton pour configurer le style visuel des formes d'annotation (rectangles, cercles, segments, etc.) affichées sur les tracés de signaux. Cela inclut :"
+
+msgid "Line style, color, and width"
+msgstr "Style de ligne, couleur et largeur"
+
+msgid "Fill pattern, color, and transparency"
+msgstr "Motif de remplissage, couleur et transparence"
+
+msgid "Symbol shape, size, and colors"
+msgstr "Forme du symbole, taille et couleurs"
+
+msgid "These settings apply to all result shapes drawn on signal plots (e.g., peak markers, FWHM indicators, feature detection results)."
+msgstr "Ces paramètres s'appliquent à toutes les formes de résultats dessinées sur les tracés de signaux (par exemple, les marqueurs de pics, les indicateurs FWHM, les résultats de détection de caractéristiques)."
+
+msgid "**Marker style for signals**"
+msgstr "**Style de marqueur pour les signaux**"
+
+msgid "Click this button to configure the visual style for cursor markers on signal plots. This includes:"
+msgstr "Cliquer sur ce bouton pour configurer le style visuel des marqueurs de curseur sur les tracés de signaux. Cela inclut :"
+
+msgid "Symbol appearance"
+msgstr "Apparence du symbole"
+
+msgid "Text label formatting and positioning"
+msgstr "Formatage et positionnement des étiquettes de texte"
+
+msgid "Background transparency"
+msgstr "Transparence de l'arrière-plan"
+
+msgid "These settings apply to cursor-type markers used in signal analysis results."
+msgstr "Ces paramètres s'appliquent aux marqueurs de type curseur utilisés dans les résultats d'analyse de signaux."
+
+msgid "**Shape style for images**"
+msgstr "**Style de forme pour les images**"
+
+msgid "Click this button to configure the visual style for annotation shapes displayed on image plots. Parameters are similar to signal shapes but optimized for image visualization (e.g., different colors for better visibility on images)."
+msgstr "Cliquer sur ce bouton pour configurer le style visuel des formes d'annotation affichées sur les tracés d'images. Les paramètres sont similaires à ceux des formes de signaux mais optimisés pour la visualisation d'images (par exemple, différentes couleurs pour une meilleure visibilité sur les images)."
+
+msgid "**Marker style for images**"
+msgstr "**Style de marqueur pour les images**"
+
+msgid "Click this button to configure the visual style for cursor markers on image plots."
+msgstr "Cliquer sur ce bouton pour configurer le style visuel des marqueurs de curseur sur les tracés d'images."
 
 msgid "Results display limits"
 msgstr "Limites d'affichage des résultats"
