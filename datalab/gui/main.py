@@ -745,9 +745,15 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     def take_screenshot(self, name: str) -> None:  # pragma: no cover
         """Take main window screenshot"""
+        # For esthetic reasons, we set the central widget width to a lower value:
+        old_width = self.tabwidget.maximumWidth()
+        self.tabwidget.setMaximumWidth(500)
+        # To avoid having screenshot depending on memory status, we set demo mode ON:
         self.memorystatus.set_demo_mode(True)
         qth.grab_save_window(self, f"{name}")
+        # Restore previous state:
         self.memorystatus.set_demo_mode(False)
+        self.tabwidget.setMaximumWidth(old_width)
 
     def take_menu_screenshots(self) -> None:  # pragma: no cover
         """Take menu screenshots"""
