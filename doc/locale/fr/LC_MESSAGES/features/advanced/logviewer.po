@@ -39,7 +39,7 @@ msgid "\"Faulthandler log\", for system failures (e.g. Qt-related crash)"
 msgstr "\"Faulthandler log\", pour les erreurs système (p.ex. crash lié à Qt)"
 
 msgid "The log viewer is accessible from the \"?\" menu in the main window."
-msgstr ""
+msgstr "Le visualiseur de journaux de bord est accessible depuis le menu \"?\" dans la fenêtre principale."
 
 msgid "DataLab log viewer (see \"?\" menu)"
 msgstr "Journaux de bord DataLab (voir le menu \"?\")"

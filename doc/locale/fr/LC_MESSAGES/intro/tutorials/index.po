@@ -20,10 +20,10 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 msgid "Tutorials to learn how to use DataLab, the open-source scientific data analysis and visualization platform"
-msgstr ""
+msgstr "Tutoriels pour apprendre à utiliser DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
 
 msgid "DataLab, tutorials, scientific data analysis, visualization, open-source"
-msgstr ""
+msgstr "DataLab, tutoriels, analyse de données scientifiques, visualisation, open-source"
 
 msgid "Tutorials"
 msgstr "Tutoriels"

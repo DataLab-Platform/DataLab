@@ -810,96 +810,86 @@ msgstr "Ceci complète la fonctionnalité \"Valeur absolue\" (module)."
 msgid "Added operation to create complex-valued signal/image from real and imaginary parts."
 msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir des parties réelle et imaginaire."
 
-#, fuzzy
 msgid "Added operation to create complex-valued signal/image from magnitude and phase (this closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))."
-msgstr "Ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
+msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir de la magnitude et de la phase (ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))."
 
-#, fuzzy
 msgid "Standard deviation of the selected signals or images (this closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)):"
-msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+msgstr "Écart-type des signaux ou des images sélectionnés (ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))."
 
-#, fuzzy
 msgid "The standard deviation is calculated across the selected signals or images."
-msgstr "Écart-type des signaux ou des images de la sélection."
+msgstr "L'écart-type est calculé à travers les signaux ou les images sélectionnés."
 
-#, fuzzy
 msgid "This is a complement to the \"Average\" feature."
 msgstr "Ceci complète la fonctionnalité \"Moyenne\"."
 
 msgid "Generate new signal or image: Poisson noise."
 msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
 
-#, fuzzy
 msgid "Add noise to the selected signals or images (this closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)): Gaussian, Poisson or uniform noise can be added."
-msgstr "Ceci clôture [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205) - Ajout du filtre de fréquence gaussien pour les images."
+msgstr "Ajout de bruit aux signaux ou images sélectionnés (ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201)) : du bruit gaussien, de Poisson ou uniforme peut être ajouté."
 
-#, fuzzy
 msgid "Save to directory feature (this closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
-msgstr "Ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227)."
+msgstr "Fonctionnalité d'enregistrement dans un répertoire (ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
 
-#, fuzzy
 msgid "Deconvolution in the frequency domain (this closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189))."
-msgstr "Ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196)."
+msgstr "Déconvolution dans le domaine fréquentiel (ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189))."
 
-#, fuzzy
 msgid "Signals to image conversion:"
-msgstr "Fonctionnalités de signal/image :"
+msgstr "Conversion de signaux en images :"
 
 msgid "Convert collections of signals into 2D images for visualization"
-msgstr ""
+msgstr "Convertit des collections de signaux en images 2D pour la visualisation"
 
 msgid "Select multiple signals and use \"Combine signals into image\" operation"
-msgstr ""
+msgstr "Sélectionnez plusieurs signaux et utilisez l'opération \"Combiner les signaux en image\""
 
-#, fuzzy
 msgid "Two orientation modes:"
-msgstr "Mode d'opération pairwise :"
+msgstr "Deux modes d'orientation :"
 
 msgid "As rows: Each signal becomes a row in the resulting image (useful for spectrograms)"
-msgstr ""
+msgstr "Comme des lignes : Chaque signal devient une ligne dans l'image résultante (utile pour les spectrogrammes)"
 
 msgid "As columns: Each signal becomes a column in the resulting image (useful for waterfall displays)"
-msgstr ""
+msgstr "Comme des colonnes : Chaque signal devient une colonne dans l'image résultante (utile pour les affichages en cascade)"
 
-#, fuzzy
 msgid "Optional normalization:"
-msgstr "ℹ️ Informations générales :"
+msgstr "Normalisation optionnelle :"
 
 msgid "Normalize signals before combining using Z-score, Min-Max, or Maximum methods"
-msgstr ""
+msgstr "Normaliser les signaux avant de les combiner en utilisant les méthodes Z-score, Min-Max ou Maximum"
 
 msgid "Normalizes each signal independently to handle different amplitude ranges"
-msgstr ""
+msgstr "Normalise chaque signal indépendamment pour gérer différentes plages d'amplitude"
 
 msgid "Enables better visualization of signals with varying scales"
-msgstr ""
+msgstr "Permet une meilleure visualisation des signaux avec des échelles variables"
 
 msgid "Validates signal compatibility (all must have same size)"
-msgstr ""
+msgstr "Valide la compatibilité des signaux (tous doivent avoir la même taille)"
 
 msgid "Resulting image automatically appears in Image panel with appropriate dimensions"
-msgstr ""
+msgstr "L'image résultante apparaît automatiquement dans le panneau Image avec des dimensions appropriées"
 
 msgid "Supports cross-panel operations: Images created from signals are properly routed to Image panel"
-msgstr ""
+msgstr "Prend en charge les opérations inter-panneaux : les images créées à partir de signaux sont correctement acheminées vers le panneau Image"
 
 msgid "Group handling: Results maintain group organization when working with signal groups"
-msgstr ""
+msgstr "Gestion de groupe : les résultats conservent l'organisation du groupe lors du travail avec des groupes de signaux"
 
 msgid "Typical use cases:"
-msgstr ""
+msgstr "Cas d'utilisation typiques :"
 
 msgid "Creating heatmaps from time-series data"
-msgstr ""
+msgstr "Créer des cartes thermiques à partir de données de séries temporelles"
 
 msgid "Building spectrograms from frequency domain signals"
-msgstr ""
+msgstr "Construire des spectrogrammes à partir de signaux dans le domaine fréquentiel"
 
 msgid "Generating waterfall displays for multi-channel data"
-msgstr ""
+msgstr "Générer des affichages en cascade pour des données multicanaux"
 
 msgid "Visualizing signal evolution over time or parameter sweeps"
-msgstr ""
+msgstr "Visualiser l'évolution du signal au fil du temps ou des balayages de paramètres"
 
 msgid "New ROI (Region of Interest) management features:"
 msgstr "Nouvelles fonctionnalités de gestion des ROI (Région d'Intérêt) :"
@@ -1644,11 +1634,10 @@ msgid "ℹ️ Other changes:"
 msgstr "ℹ️ Autres changements :"
 
 msgid "Bumped minimum `plotpy` requirement to V2.8"
-msgstr ""
+msgstr "Dépendance `plotpy` mise à jour vers V2.8.0"
 
-#, fuzzy
 msgid "Bumped minimum `guidata` requirement to V3.13"
-msgstr "Dépendance `guidata` mise à jour vers V3.10.0"
+msgstr "Dépendance `guidata` mise à jour vers V3.13.0"
 
 msgid "Using new `guidata` translation utility based on `babel`"
 msgstr "Utilisation du nouvel utilitaire de traduction `guidata` basé sur `babel`"

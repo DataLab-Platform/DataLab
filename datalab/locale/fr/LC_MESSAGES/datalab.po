@@ -983,7 +983,6 @@ msgstr "À propos de"
 msgid "Apply settings to existing results?"
 msgstr "Appliquer les réglages aux résultats existants ?"
 
-#, fuzzy
 msgid ""
 "Visualization settings for annotated shapes and markers have been modified.\n"
 "\n"
@@ -991,7 +990,7 @@ msgid ""
 msgstr ""
 "Les réglages d'affichage par défaut pour les formes annotées et les marqueurs ont été modifiés.\n"
 "\n"
-"Souhaitez-vous appliquer ces réglages aux résultats existants dans l'espace de travail "
+"Souhaitez-vous appliquer ces réglages aux résultats existants dans l'espace de travail ?"
 
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
