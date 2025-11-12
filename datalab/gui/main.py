@@ -1648,6 +1648,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                     _(
                         "Do you want to clear current workspace (signals and images) "
                         "before importing data from HDF5 files?<br><br>"
+                        "<b>Note:</b> If you choose <b>No</b>, the imported objects' "
+                        "processing history will be lost (features like 'Show source' "
+                        "and 'Recompute' will not work) because object identifiers "
+                        "will be regenerated to avoid conflicts.<br><br>"
                         "Choosing to ignore this message will prevent it "
                         "from being displayed again, and will use the "
                         "current setting (%s)."

@@ -872,12 +872,25 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         with writer.group(self.get_serializable_name(obj)):
             obj.serialize(writer)
 
-    def deserialize_object_from_hdf5(self, reader: NativeH5Reader, name: str) -> ObjItf:
-        """Deserialize object from a HDF5 file"""
+    def deserialize_object_from_hdf5(
+        self, reader: NativeH5Reader, name: str, reset_all: bool = False
+    ) -> ObjItf:
+        """Deserialize object from a HDF5 file
+
+        Args:
+            reader: HDF5 reader
+            name: Object name in HDF5 file
+            reset_all: If True, preserve original UUIDs (workspace reload).
+                      If False, regenerate UUIDs (importing objects).
+        """
         with reader.group(name):
             obj = self.create_object()
             obj.deserialize(reader)
-            if isinstance(obj, (SignalObj, ImageObj, ObjectGroup)):
+            # Only regenerate UUIDs when importing objects (reset_all=False).
+            # When reopening a workspace (reset_all=True), preserve original UUIDs
+            # so that processing parameter references (source_uuid, source_uuids)
+            # remain valid and features like "Show source" and "Recompute" work.
+            if not reset_all and isinstance(obj, (SignalObj, ImageObj, ObjectGroup)):
                 set_uuid(obj)
         return obj
 
@@ -886,8 +899,16 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         """Serialize whole panel to a HDF5 file"""
 
     @abc.abstractmethod
-    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
-        """Deserialize whole panel from a HDF5 file"""
+    def deserialize_from_hdf5(
+        self, reader: NativeH5Reader, reset_all: bool = False
+    ) -> None:
+        """Deserialize whole panel from a HDF5 file
+
+        Args:
+            reader: HDF5 reader
+            reset_all: If True, preserve original UUIDs (workspace reload).
+                      If False, regenerate UUIDs (importing objects).
+        """
 
     @abc.abstractmethod
     def create_object(self) -> ObjItf:
@@ -1350,8 +1371,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     for obj in group.get_objects():
                         self.serialize_object_to_hdf5(obj, writer)
 
-    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
-        """Deserialize whole panel from a HDF5 file"""
+    def deserialize_from_hdf5(
+        self, reader: NativeH5Reader, reset_all: bool = False
+    ) -> None:
+        """Deserialize whole panel from a HDF5 file
+
+        Args:
+            reader: HDF5 reader
+            reset_all: If True, preserve original UUIDs (workspace reload).
+                      If False, regenerate UUIDs (importing objects).
+        """
         with reader.group(self.H5_PREFIX):
             for name in reader.h5.get(self.H5_PREFIX, []):
                 with reader.group(name):
@@ -1359,7 +1388,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     with reader.group("title"):
                         group.title = reader.read_str()
                     for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
-                        obj = self.deserialize_object_from_hdf5(reader, obj_name)
+                        obj = self.deserialize_object_from_hdf5(
+                            reader, obj_name, reset_all
+                        )
                         self.add_object(obj, get_uuid(group), set_current=False)
                     self.selection_changed()
 

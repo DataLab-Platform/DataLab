@@ -236,17 +236,21 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             for obj in self.__macros:
                 self.serialize_object_to_hdf5(obj, writer)
 
-    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
+    def deserialize_from_hdf5(
+        self, reader: NativeH5Reader, reset_all: bool = False
+    ) -> None:
         """Deserialize whole panel from a HDF5 file
 
         Args:
             reader: HDF5 reader
+            reset_all: If True, preserve original UUIDs (workspace reload).
+                      If False, regenerate UUIDs (importing objects).
         """
         with reader.group(self.H5_PREFIX):
             for name in reader.h5.get(self.H5_PREFIX, []):
                 #  Contrary to signal or image panels, macros are not stored
                 #  in a group but directly in the root of the HDF5 file
-                obj = self.deserialize_object_from_hdf5(reader, name)
+                obj = self.deserialize_object_from_hdf5(reader, name, reset_all)
                 self.add_object(obj)
 
     def __len__(self) -> int:

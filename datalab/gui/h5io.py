@@ -67,7 +67,7 @@ class H5InputOutput:
                 for idx, panel in enumerate(self.mainwindow.panels):
                     progress.setValue(idx + 1)
                     QW.QApplication.processEvents()
-                    panel.deserialize_from_hdf5(reader)
+                    panel.deserialize_from_hdf5(reader, reset_all)
                     if progress.wasCanceled():
                         break
             reader.close()
