@@ -1,20 +1,19 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Unit test for automatic recomputation of 1-to-0 analysis operations after ROI changes.
+Unit test for automatic recomputation of 1-to-0 analysis operations.
 
 This test verifies that analysis results (like centroid) are automatically updated
-when ROI is modified through various methods:
-- Programmatically setting a new ROI (simulating edit_roi_graphically)
-- Adding multiple ROIs at once
-- Deleting a single ROI using delete_single_roi
-- Deleting all ROIs using delete_regions_of_interest
+when data changes through various methods:
+- ROI modifications (adding, deleting ROIs)
+- Data transformations via recompute_1_to_1 (modifying processing parameters)
 
-The test creates a Gaussian image, computes its centroid, then verifies that:
+The tests create a Gaussian image, compute its centroid, then verify that:
 1. The centroid changes when a ROI is added to restrict the calculation region
 2. Two centroid rows are generated when two ROIs are added
 3. One centroid row remains after deleting the first ROI
 4. The centroid returns to the original value when all ROIs are deleted
+5. The centroid is recomputed when processing parameters are modified
 """
 
 # guitest: show
@@ -23,6 +22,7 @@ from __future__ import annotations
 
 import numpy as np
 from sigima.objects import Gauss2DParam, create_image_from_param, create_image_roi
+from sigima.params import RotateParam
 
 from datalab.adapters_metadata import GeometryAdapter
 from datalab.config import Conf
@@ -45,7 +45,7 @@ def get_centroid_coords(obj) -> tuple[float, float] | None:
     return None
 
 
-def test_roi_auto_recompute():
+def test_analysis_recompute_after_roi_change():
     """Test automatic recomputation of analysis results when ROI changes."""
     with datalab_test_app_context(console=False) as win:
         panel = win.imagepanel
@@ -147,5 +147,94 @@ def test_roi_auto_recompute():
         print("\n✓ All ROI auto-recompute tests passed!")
 
 
+def test_analysis_recompute_after_recompute_1_to_1():
+    """Test automatic recomputation of analysis after processing parameter changes."""
+    with datalab_test_app_context(console=False) as win:
+        panel = win.imagepanel
+
+        # Create a Gaussian image offset from center
+        SIZE = 200
+        # In Gauss2DParam, x0 and y0 are the center coordinates with Xmin=-10.0,
+        # Ymin=-10.0, Xmax=10.0, Ymax=10.0 by default.
+        # The centroid position should be at (49.75, 99.5).
+        # After a 45° rotation, it should move closer to (64.32, 134.68).
+        # Or after a 90° rotation, it should move to (99.5, 149.2).
+        param = Gauss2DParam.create(height=SIZE, width=SIZE, x0=-5.0)
+        img = create_image_from_param(param)
+        panel.add_object(img)
+
+        # Apply a rotation transformation with 45° angle
+        rot_param = RotateParam.create(angle=45.0)
+        with Conf.proc.show_result_dialog.temp(False):
+            panel.processor.run_feature("rotate", rot_param)
+
+        # Get the rotated image
+        img_rotated = panel.objview.get_sel_objects()[0]
+        print(f"\nRotated image title: {img_rotated.title}")
+
+        # Compute centroid on the rotated image
+        with Conf.proc.show_result_dialog.temp(False):
+            panel.processor.run_feature("centroid")
+
+        # Get initial centroid (after 45° rotation)
+        centroid = get_centroid_coords(img_rotated)
+        assert centroid is not None, "Centroid should be computed"
+        x0, y0 = centroid
+        print(f"Initial centroid (45° rotation): ({x0:.1f}, {y0:.1f})")
+        expected_x0 = 64.32
+        expected_y0 = 134.68
+        assert np.isclose(x0, expected_x0, atol=0.2), (
+            f"X centroid should be near {expected_x0:.1f}, got {x0:.1f}"
+        )
+        assert np.isclose(y0, expected_y0, atol=0.2), (
+            f"Y centroid should be near {expected_y0:.1f}, got {y0:.1f}"
+        )
+
+        # Now modify the rotation angle to 90° via the Processing tab
+        # The rotated object is already selected, just ensure we're accessing it
+        panel.objview.select_objects([img_rotated])
+
+        # Get the processing parameter editor and change the angle
+        assert panel.objprop.processing_param_editor is not None
+        editor = panel.objprop.processing_param_editor
+        editor.dataset.angle = 90.0  # Change from 45° to 90°
+
+        # Apply the modified parameters (this triggers recompute_1_to_1)
+        report = panel.objprop.apply_processing_parameters(interactive=False)
+
+        assert report.success, f"Recompute failed: {report.message}"
+        print("Processing parameters recomputed with new angle (90°)")
+
+        # Verify centroid was automatically recomputed
+        centroid = get_centroid_coords(img_rotated)
+        assert centroid is not None, "Centroid should still exist after recompute"
+        x1, y1 = centroid
+        print(f"Centroid after recompute (90° rotation): ({x1:.1f}, {y1:.1f})")
+
+        # After 90° rotation: the Gaussian blob that was at upper-right (after 45°)
+        # moves toward the center-right area
+        # Empirical measurements show approximately (99.5, 149.2)
+        expected_x1 = 99.5
+        expected_y1 = 149.2
+        assert np.isclose(x1, expected_x1, atol=0.2), (
+            f"X centroid should be near {expected_x1:.1f}, got {x1:.1f}"
+        )
+        assert np.isclose(y1, expected_y1, atol=0.2), (
+            f"Y centroid should be near {expected_y1:.1f}, got {y1:.1f}"
+        )
+
+        # Most importantly, verify the centroid changed from 90° rotation
+        centroid_changed = not (
+            np.isclose(x1, x0, atol=5.0) and np.isclose(y1, y0, atol=5.0)
+        )
+        assert centroid_changed, (
+            f"Centroid should have changed from ({x0:.1f}, {y0:.1f}) "
+            f"to ({x1:.1f}, {y1:.1f}) after changing rotation angle"
+        )
+
+        print("\n✓ Recompute_1_to_1 auto-analysis test passed!")
+
+
 if __name__ == "__main__":
-    test_roi_auto_recompute()
+    test_analysis_recompute_after_roi_change()
+    test_analysis_recompute_after_recompute_1_to_1()
