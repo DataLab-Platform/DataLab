@@ -40,9 +40,9 @@ classifiers = [
 ]
 requires-python = ">=3.9, <4"
 dependencies = [
-    "guidata >= 3.13.2",
-    "PlotPy >= 2.8.1",
-    "Sigima >= 1.0.1",
+    "guidata >= 3.13.3",
+    "PlotPy >= 2.8.2",
+    "Sigima >= 1.0.2",
     "NumPy >= 1.22",
     "SciPy >= 1.10.1",
     "scikit-image >= 0.19.2",
