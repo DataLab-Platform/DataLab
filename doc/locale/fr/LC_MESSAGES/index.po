@@ -112,8 +112,8 @@ msgstr "`NLnet Foundation <https://nlnet.nl>`_, dans le cadre du NGI0 Commons Fu
 msgid "DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_, the scientific Python-Qt visualization and graphical user interface stack."
 msgstr "DataLab est propulsé par `PlotPyStack <https://github.com/PlotPyStack>`_, les outils de visualisation et d'interface graphique scientifiques Python-Qt."
 
-msgid "DataLab processing features are based on `Sigima <https://github.com/DataLab-Platform/Sigima>`_, the open-source signal and image processing library (part of the DataLab Platform)."
-msgstr "Les fonctionnalités de traitement de DataLab sont basées sur `Sigima <https://github.com/DataLab-Platform/Sigima>`_, la bibliothèque open-source de traitement du signal et de l'image (faisant partie de la plateforme DataLab)."
+msgid "DataLab processing features are based on `Sigima <https://sigima.readthedocs.io/>`_, the open-source signal and image processing library (part of the DataLab Platform)."
+msgstr "Les fonctionnalités de traitement de DataLab sont basées sur `Sigima <https://sigima.readthedocs.io/fr/>`_, la bibliothèque open-source de traitement du signal et de l'image (faisant partie de la plateforme DataLab)."
 
 msgid "DataLab was created by `CODRA`_/`Pierre Raybaut`_ in 2023. It is developed and maintained by DataLab Platform Developers."
 msgstr "DataLab a été créé par `CODRA`_/`Pierre Raybaut`_ en 2023. Il est développé et maintenu par l'équipe de développement de la plateforme DataLab."

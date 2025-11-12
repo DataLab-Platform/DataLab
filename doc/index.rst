@@ -117,7 +117,7 @@ DataLab has been funded, chronologically, by the following stakeholders:
     :width: 200 px
     :class: dark-light no-scaled-link
 
-    DataLab processing features are based on `Sigima <https://github.com/DataLab-Platform/Sigima>`_,
+    DataLab processing features are based on `Sigima <https://sigima.readthedocs.io/>`_,
     the open-source signal and image processing library (part of the DataLab Platform).
 
 .. toctree::
