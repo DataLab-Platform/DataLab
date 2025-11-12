@@ -1126,27 +1126,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         continue
+                    assert isinstance(new_obj, (SignalObj, ImageObj))
 
                     patch_title_with_ids(new_obj, [obj], get_short_id)
 
-                    # Handle Signal/Image specific operations
-                    if isinstance(new_obj, (SignalObj, ImageObj)):
-                        # Handle keep_results logic for 1_to_1 operations
-                        self._handle_keep_results(new_obj)
+                    # Handle keep_results logic for 1_to_1 operations
+                    self._handle_keep_results(new_obj)
 
-                        # Store processing metadata for interactive re-processing
-                        pp = ProcessingParameters(
-                            func_name=name,
-                            pattern="1-to-1",
-                            param=param,
-                            source_uuid=get_uuid(obj),
-                        )
-                        insert_processing_parameters(new_obj, pp)
+                    # Store processing metadata for interactive re-processing
+                    pp = ProcessingParameters(
+                        func_name=name,
+                        pattern="1-to-1",
+                        param=param,
+                        source_uuid=get_uuid(obj),
+                    )
+                    insert_processing_parameters(new_obj, pp)
 
-                        # Auto-recompute analysis if the source had analysis parameters
-                        # Since the new object has different data, any analysis results
-                        # inherited from the source are now invalid and must be updated
-                        self._auto_recompute_analysis_if_needed(new_obj)
+                    # Auto-recompute analysis if the source had analysis parameters
+                    # Since the new object has different data, any analysis results
+                    # inherited from the source are now invalid and must be updated
+                    self._auto_recompute_analysis_if_needed(new_obj)
 
                     new_gid = None
                     if grps:
@@ -1564,23 +1563,25 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         break
-                    # Handle geometry result merging for n_to_1 operations (pairwise)
-                    if isinstance(new_obj, (SignalObj, ImageObj)):
-                        self._handle_keep_results(new_obj)
-                        self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
+                    assert isinstance(new_obj, (SignalObj, ImageObj))
+
                     patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
 
+                    # Handle keep_results and geometry result merging
+                    self._handle_keep_results(new_obj)
+                    self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
+
                     # Store lightweight processing metadata (non-interactive)
-                    if isinstance(new_obj, (SignalObj, ImageObj)):
-                        proc_params = ProcessingParameters(
-                            func_name=name,
-                            pattern="n-to-1",
-                            param=param,
-                            source_uuids=[get_uuid(obj) for obj in src_objs_pair],
-                        )
-                        insert_processing_parameters(new_obj, proc_params)
-                        # Auto-recompute analysis if inherited from source
-                        self._auto_recompute_analysis_if_needed(new_obj)
+                    proc_params = ProcessingParameters(
+                        func_name=name,
+                        pattern="n-to-1",
+                        param=param,
+                        source_uuids=[get_uuid(obj) for obj in src_objs_pair],
+                    )
+                    insert_processing_parameters(new_obj, proc_params)
+
+                    # Auto-recompute analysis if inherited from source
+                    self._auto_recompute_analysis_if_needed(new_obj)
 
                     # Create destination group on first result, in appropriate panel
                     if dst_gid is None:
@@ -1654,24 +1655,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         break
-                    # Handle geometry result merging for n_to_1 operations
-                    if isinstance(new_obj, (SignalObj, ImageObj)):
-                        self._handle_keep_results(new_obj)
-                        self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
+                    assert isinstance(new_obj, (SignalObj, ImageObj))
+
                     group_id = dst_gid if dst_gid is not None else src_gid
                     patch_title_with_ids(new_obj, src_obj_list, get_short_id)
 
+                    # Handle keep_results and geometry result merging
+                    self._handle_keep_results(new_obj)
+                    self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
+
                     # Store lightweight processing metadata (non-interactive)
-                    if isinstance(new_obj, (SignalObj, ImageObj)):
-                        proc_params = ProcessingParameters(
-                            func_name=name,
-                            pattern="n-to-1",
-                            param=param,
-                            source_uuids=[get_uuid(obj) for obj in src_obj_list],
-                        )
-                        insert_processing_parameters(new_obj, proc_params)
-                        # Auto-recompute analysis if inherited from source
-                        self._auto_recompute_analysis_if_needed(new_obj)
+                    proc_params = ProcessingParameters(
+                        func_name=name,
+                        pattern="n-to-1",
+                        param=param,
+                        source_uuids=[get_uuid(obj) for obj in src_obj_list],
+                    )
+                    insert_processing_parameters(new_obj, proc_params)
+
+                    # Auto-recompute analysis if inherited from source
+                    self._auto_recompute_analysis_if_needed(new_obj)
 
                     # Create destination group on first result, in appropriate panel
                     use_group_for_non_native = False
@@ -1857,30 +1860,30 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         )
                         if new_obj is None:
                             continue
-
-                        # Handle keep_results logic for 2_to_1 operations (pairwise)
-                        if isinstance(new_obj, (SignalObj, ImageObj)):
-                            self._handle_keep_results(new_obj)
+                        assert isinstance(new_obj, (SignalObj, ImageObj))
 
                         # Use original objects for title generation
                         patch_title_with_ids(
                             new_obj, [orig_obj1, orig_obj2], get_short_id
                         )
 
+                        # Handle keep_results logic for 2_to_1 operations
+                        self._handle_keep_results(new_obj)
+
                         # Store lightweight processing metadata (non-interactive)
-                        if isinstance(new_obj, (SignalObj, ImageObj)):
-                            proc_params = ProcessingParameters(
-                                func_name=name,
-                                pattern="2-to-1",
-                                param=param,
-                                source_uuids=[
-                                    get_uuid(orig_obj1),
-                                    get_uuid(orig_obj2),
-                                ],
-                            )
-                            insert_processing_parameters(new_obj, proc_params)
-                            # Auto-recompute analysis if inherited from source
-                            self._auto_recompute_analysis_if_needed(new_obj)
+                        proc_params = ProcessingParameters(
+                            func_name=name,
+                            pattern="2-to-1",
+                            param=param,
+                            source_uuids=[
+                                get_uuid(orig_obj1),
+                                get_uuid(orig_obj2),
+                            ],
+                        )
+                        insert_processing_parameters(new_obj, proc_params)
+
+                        # Auto-recompute analysis if inherited from source
+                        self._auto_recompute_analysis_if_needed(new_obj)
 
                         # Create destination group on first result, in appropriate panel
                         if dst_gid is None:
@@ -1958,29 +1961,29 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     if new_obj is None:
                         continue
-
-                    # Handle keep_results logic for 2_to_1 operations (single operand)
-                    if isinstance(new_obj, (SignalObj, ImageObj)):
-                        self._handle_keep_results(new_obj)
+                    assert isinstance(new_obj, (SignalObj, ImageObj))
 
                     group_id = objmodel.get_object_group_id(obj)
                     # Use original objects for title generation
                     patch_title_with_ids(new_obj, [obj, orig_obj2], get_short_id)
 
+                    # Handle keep_results logic for 2_to_1 operations
+                    self._handle_keep_results(new_obj)
+
                     # Store lightweight processing metadata (non-interactive)
-                    if isinstance(new_obj, (SignalObj, ImageObj)):
-                        proc_params = ProcessingParameters(
-                            func_name=name,
-                            pattern="2-to-1",
-                            param=param,
-                            source_uuids=[
-                                get_uuid(obj),
-                                get_uuid(orig_obj2),
-                            ],
-                        )
-                        insert_processing_parameters(new_obj, proc_params)
-                        # Auto-recompute analysis if inherited from source
-                        self._auto_recompute_analysis_if_needed(new_obj)
+                    proc_params = ProcessingParameters(
+                        func_name=name,
+                        pattern="2-to-1",
+                        param=param,
+                        source_uuids=[
+                            get_uuid(obj),
+                            get_uuid(orig_obj2),
+                        ],
+                    )
+                    insert_processing_parameters(new_obj, proc_params)
+
+                    # Auto-recompute analysis if inherited from source
+                    self._auto_recompute_analysis_if_needed(new_obj)
 
                     # group_id is from source panel, don't use for non-native objects
                     self._add_object_to_appropriate_panel(
