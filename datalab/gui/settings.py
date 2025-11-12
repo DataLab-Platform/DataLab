@@ -357,10 +357,12 @@ class ViewSettings(gds.DataSet):
             "(e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds)."
         ),
     )
-    sig_shape_param = gds.ButtonItem(_("Results / Shape style"), edit_dataset_settings)
+    sig_shape_param = gds.ButtonItem(
+        _("Results: edit shape styles"), edit_dataset_settings, icon="shapes.svg"
+    )
     sig_marker_param = gds.ButtonItem(
-        _("Results / Marker style"), edit_dataset_settings
-    ).set_pos(col=1)
+        _("Results: edit marker styles"), edit_dataset_settings, icon="markers.svg"
+    )
     _g1 = gds.EndGroup("")
 
     g2 = gds.BeginGroup(_("Images")).set_prop("display", icon="image.svg")
@@ -402,10 +404,12 @@ class ViewSettings(gds.DataSet):
         icon="image.svg",
         default=False,
     )
-    ima_shape_param = gds.ButtonItem(_("Results / Shape style"), edit_dataset_settings)
+    ima_shape_param = gds.ButtonItem(
+        _("Results: edit shape styles"), edit_dataset_settings, icon="shapes.svg"
+    )
     ima_marker_param = gds.ButtonItem(
-        _("Results / Marker style"), edit_dataset_settings
-    ).set_pos(col=1)
+        _("Results: edit marker styles"), edit_dataset_settings, icon="markers.svg"
+    )
     _g2 = gds.EndGroup("")
 
     g3 = gds.BeginGroup(_("Results")).set_prop("display", icon="show_results.svg")
