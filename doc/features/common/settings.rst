@@ -190,7 +190,7 @@ The Signals sub-tab contains settings specific to signal visualizations:
     Format string for datetime X-axis labels when using sub-second time units (ms, μs, ns).
     Uses Python's strftime format codes (e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds).
 
-**Results / Shape style**
+**Results: edit shape styles**
     Click this button to configure the visual style for annotation shapes
     (rectangles, circles, segments, etc.) displayed on signal plots. This includes:
 
@@ -201,7 +201,7 @@ The Signals sub-tab contains settings specific to signal visualizations:
     These settings apply to all result shapes drawn on signal plots (e.g., peak markers,
     FWHM indicators, feature detection results).
 
-**Results / Marker style**
+**Results: edit marker styles**
     Click this button to configure the visual style for cursor markers on
     signal plots. This includes:
 
@@ -238,13 +238,13 @@ The Images sub-tab contains settings specific to image visualizations:
     Click this button to configure default visualization settings for images (colormap,
     interpolation, contrast, etc.).
 
-**Results / Shape style**
+**Results: edit shape styles**
     Click this button to configure the visual style for annotation shapes
     displayed on image plots. Parameters are similar to signal shapes but optimized
     for image visualization (e.g., different colors for better visibility
     on images).
 
-**Results / Marker style**
+**Results: edit marker styles**
     Click this button to configure the visual style for cursor markers on
     image plots.
 

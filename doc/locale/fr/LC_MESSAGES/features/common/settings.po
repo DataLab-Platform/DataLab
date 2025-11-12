@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-11 15:06+0100\n"
+"POT-Creation-Date: 2025-11-12 16:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -206,14 +205,17 @@ msgstr "Si le réglage est activé, la boîte de dialogue des résultats est aff
 msgid "Visualization"
 msgstr "Visualisation"
 
-msgid "The Visualization settings tab controls how data is displayed:"
-msgstr "L'onglet des préférences de visualisation contrôle comment les données sont affichées :"
-
-msgid "Visualization settings tab"
-msgstr "Onglet des préférences de visualisation"
+msgid "The Visualization settings tab controls how data is displayed. This tab is organized into four sub-tabs: Common, Signals, Images, and Results."
+msgstr "L'onglet des préférences de visualisation contrôle comment les données sont affichées. Cet onglet est organisé en quatre sous-onglets : Commun, Signaux, Images et Résultats."
 
 msgid "Common settings"
 msgstr "Paramètres communs"
+
+msgid "The Common sub-tab contains settings that apply to all visualizations:"
+msgstr "Le sous-onglet Commun contient des paramètres qui s'appliquent à toutes les visualisations :"
+
+msgid "Visualization settings - Common sub-tab"
+msgstr "Préférences de visualisation - Sous-onglet Commun"
 
 msgid "**Plot toolbar position**"
 msgstr "**Position de la barre d'outils de tracé**"
@@ -227,8 +229,14 @@ msgstr "**Ignorer le message d'insertion de titre**"
 msgid "Suppress the information message when inserting an object title as an annotation label."
 msgstr "Supprimer le message d'information lors de l'insertion d'un titre d'objet comme étiquette d'annotation."
 
-msgid "Signal-specific settings"
-msgstr "Paramètres spécifiques aux signaux"
+msgid "Signals"
+msgstr "Signaux"
+
+msgid "The Signals sub-tab contains settings specific to signal visualizations:"
+msgstr "Le sous-onglet Signaux contient des paramètres spécifiques aux visualisations de signaux :"
+
+msgid "Visualization settings - Signals sub-tab"
+msgstr "Préférences de visualisation - Sous-onglet Signaux"
 
 msgid "**Default line width**"
 msgstr "**Épaisseur par défaut**"
@@ -268,8 +276,50 @@ msgstr "**Format DateTime (ms/μs/ns)**"
 msgid "Format string for datetime X-axis labels when using sub-second time units (ms, μs, ns). Uses Python's strftime format codes (e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds)."
 msgstr "Chaîne de format pour les étiquettes de l'axe X datetime lors de l'utilisation d'unités de temps infra-secondes (ms, μs, ns). Utilise les codes de format strftime de Python (par exemple, %H:%M:%S.%f pour heures:minutes:secondes.microsecondes)."
 
-msgid "Image-specific settings"
-msgstr "Paramètres spécifiques aux images"
+msgid "**Results: edit shape styles**"
+msgstr "**Résultats : modifier les styles de forme**"
+
+msgid "Click this button to configure the visual style for annotation shapes (rectangles, circles, segments, etc.) displayed on signal plots. This includes:"
+msgstr "Cliquer sur ce bouton pour configurer le style visuel des formes d'annotation (rectangles, cercles, segments, etc.) affichées sur les tracés de signaux. Cela inclut :"
+
+msgid "Line style, color, and width"
+msgstr "Style de ligne, couleur et largeur"
+
+msgid "Fill pattern, color, and transparency"
+msgstr "Motif de remplissage, couleur et transparence"
+
+msgid "Symbol shape, size, and colors"
+msgstr "Forme du symbole, taille et couleurs"
+
+msgid "These settings apply to all result shapes drawn on signal plots (e.g., peak markers, FWHM indicators, feature detection results)."
+msgstr "Ces paramètres s'appliquent à toutes les formes de résultats dessinées sur les tracés de signaux (par exemple, les marqueurs de pics, les indicateurs FWHM, les résultats de détection de caractéristiques)."
+
+msgid "**Results: edit marker styles**"
+msgstr "**Résultats : modifier les styles de marqueur**"
+
+msgid "Click this button to configure the visual style for cursor markers on signal plots. This includes:"
+msgstr "Cliquer sur ce bouton pour configurer le style visuel des marqueurs de curseur sur les tracés de signaux. Cela inclut :"
+
+msgid "Symbol appearance"
+msgstr "Apparence du symbole"
+
+msgid "Text label formatting and positioning"
+msgstr "Formatage et positionnement des étiquettes de texte"
+
+msgid "Background transparency"
+msgstr "Transparence de l'arrière-plan"
+
+msgid "These settings apply to cursor-type markers used in signal analysis results."
+msgstr "Ces paramètres s'appliquent aux marqueurs de type curseur utilisés dans les résultats d'analyse de signaux."
+
+msgid "Images"
+msgstr "Images"
+
+msgid "The Images sub-tab contains settings specific to image visualizations:"
+msgstr "Le sous-onglet Images contient des paramètres spécifiques aux visualisations d'images :"
+
+msgid "Visualization settings - Images sub-tab"
+msgstr "Préférences de visualisation - Sous-onglet Images"
 
 msgid "**Lock aspect ratio to 1:1**"
 msgstr "**Verrouiller le rapport d'aspect à 1:1**"
@@ -293,62 +343,20 @@ msgstr "**Paramètres de visualisation d'image par défaut**"
 msgid "Click this button to configure default visualization settings for images (colormap, interpolation, contrast, etc.)."
 msgstr "Cliquer sur ce bouton pour configurer les paramètres de visualisation par défaut pour les images (carte de couleurs, interpolation, contraste, etc.)."
 
-msgid "Results / Shape and marker styles"
-msgstr "Résultats / Styles de forme et de marqueur"
-
-msgid "DataLab allows you to customize the visual appearance of annotation shapes and markers used for displaying analysis results on plots. These settings are accessible through button controls in the Visualization tab:"
-msgstr "DataLab vous permet de personnaliser l'apparence visuelle des formes d'annotation et des marqueurs utilisés pour afficher les résultats d'analyse sur les tracés. Ces paramètres sont accessibles via des contrôles de bouton dans l'onglet Visualisation."
-
-msgid "**Shape style for signals**"
-msgstr "**Style de forme pour les signaux**"
-
-msgid "Click this button to configure the visual style for annotation shapes (rectangles, circles, segments, etc.) displayed on signal plots. This includes:"
-msgstr "Cliquer sur ce bouton pour configurer le style visuel des formes d'annotation (rectangles, cercles, segments, etc.) affichées sur les tracés de signaux. Cela inclut :"
-
-msgid "Line style, color, and width"
-msgstr "Style de ligne, couleur et largeur"
-
-msgid "Fill pattern, color, and transparency"
-msgstr "Motif de remplissage, couleur et transparence"
-
-msgid "Symbol shape, size, and colors"
-msgstr "Forme du symbole, taille et couleurs"
-
-msgid "These settings apply to all result shapes drawn on signal plots (e.g., peak markers, FWHM indicators, feature detection results)."
-msgstr "Ces paramètres s'appliquent à toutes les formes de résultats dessinées sur les tracés de signaux (par exemple, les marqueurs de pics, les indicateurs FWHM, les résultats de détection de caractéristiques)."
-
-msgid "**Marker style for signals**"
-msgstr "**Style de marqueur pour les signaux**"
-
-msgid "Click this button to configure the visual style for cursor markers on signal plots. This includes:"
-msgstr "Cliquer sur ce bouton pour configurer le style visuel des marqueurs de curseur sur les tracés de signaux. Cela inclut :"
-
-msgid "Symbol appearance"
-msgstr "Apparence du symbole"
-
-msgid "Text label formatting and positioning"
-msgstr "Formatage et positionnement des étiquettes de texte"
-
-msgid "Background transparency"
-msgstr "Transparence de l'arrière-plan"
-
-msgid "These settings apply to cursor-type markers used in signal analysis results."
-msgstr "Ces paramètres s'appliquent aux marqueurs de type curseur utilisés dans les résultats d'analyse de signaux."
-
-msgid "**Shape style for images**"
-msgstr "**Style de forme pour les images**"
-
 msgid "Click this button to configure the visual style for annotation shapes displayed on image plots. Parameters are similar to signal shapes but optimized for image visualization (e.g., different colors for better visibility on images)."
 msgstr "Cliquer sur ce bouton pour configurer le style visuel des formes d'annotation affichées sur les tracés d'images. Les paramètres sont similaires à ceux des formes de signaux mais optimisés pour la visualisation d'images (par exemple, différentes couleurs pour une meilleure visibilité sur les images)."
-
-msgid "**Marker style for images**"
-msgstr "**Style de marqueur pour les images**"
 
 msgid "Click this button to configure the visual style for cursor markers on image plots."
 msgstr "Cliquer sur ce bouton pour configurer le style visuel des marqueurs de curseur sur les tracés d'images."
 
-msgid "Results display limits"
-msgstr "Limites d'affichage des résultats"
+msgid "Results"
+msgstr "Résultats"
+
+msgid "The Results sub-tab contains settings for displaying analysis results on plots:"
+msgstr "L'onglet des préférences de résultats contient des paramètres pour l'affichage des résultats d'analyse sur les graphiques :"
+
+msgid "Visualization settings - Results sub-tab"
+msgstr "Préférences de visualisation - Sous-onglet Résultats"
 
 msgid "These settings control how analysis results are displayed on plots to prevent performance issues with large datasets:"
 msgstr "Ces paramètres contrôlent la façon dont les résultats d'analyse sont affichés sur les graphiques afin de limiter les problèmes de performance avec de grands ensembles de données :"
@@ -370,6 +378,12 @@ msgstr "**Nombre maximum de colonnes dans l'étiquette**"
 
 msgid "Maximum number of columns to display in merged result labels (default: 15). When the number of columns exceeds this limit, only the first N columns are displayed."
 msgstr "Nombre maximum de colonnes à afficher dans les étiquettes de résultats fusionnés (par défaut : 15). Lorsque le nombre de colonnes dépasse cette limite, seules les N premières colonnes sont affichées."
+
+msgid "**Show the merged result label by default**"
+msgstr "**Afficher l'étiquette de résultat fusionné par défaut**"
+
+msgid "When enabled, the merged result label is shown on the plot by default for new objects. This setting can be toggled per-object using the checkbox in the Properties panel."
+msgstr "Si le réglage est activé, l'étiquette de résultat fusionné est affichée sur le graphique par défaut pour les nouveaux objets. Ce paramètre peut être basculé par objet à l'aide de la case à cocher dans le panneau Propriétés."
 
 msgid "These settings affect only the visualization of results on plots. They do not affect the actual computation or storage of results in metadata."
 msgstr "Ces paramètres n'affectent que la visualisation des résultats sur les graphiques. Ils n'affectent pas le calcul réel ou le stockage des résultats dans les métadonnées."
