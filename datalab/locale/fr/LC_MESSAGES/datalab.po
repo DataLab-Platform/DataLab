@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-12 16:07+0100\n"
+"POT-Creation-Date: 2025-11-12 18:35+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -2224,6 +2224,14 @@ msgstr "Réglages des opérations d'entrée/sortie"
 
 msgid "Clear workspace before loading HDF5 file"
 msgstr "Effacer l'espace de travail avant de charger un fichier HDF5"
+
+#, python-format
+msgid ""
+"If enabled, the current workspace will be cleared before loading a new HDF5 file.\n"
+"If disabled, imported objects' processing history will be lost (features like 'Show source' and 'Recompute' will not work) because object identifiers will be regenerated to avoid conflicts."
+msgstr ""
+"Si activé, l'espace de travail actuel sera effacé avant de charger un nouveau fichier HDF5.\n"
+"Si désactivé, l'historique de traitement des objets importés sera perdu (des fonctionnalités telles que 'Afficher la source' et 'Recalculer' ne fonctionneront pas) car les identifiants d'objet seront régénérés pour éviter les conflits."
 
 msgid "Ask before clearing workspace"
 msgstr "Demander avant d'effacer l'espace de travail"

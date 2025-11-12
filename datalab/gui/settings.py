@@ -105,7 +105,17 @@ class IOSettings(gds.DataSet):
     """DataLab I/O settings"""
 
     g0 = gds.BeginGroup(_("Settings for I/O operations"))
-    h5_clear_workspace = gds.BoolItem("", _("Clear workspace before loading HDF5 file"))
+    h5_clear_workspace = gds.BoolItem(
+        "",
+        _("Clear workspace before loading HDF5 file"),
+        help=_(
+            "If enabled, the current workspace will be cleared before loading a "
+            "new HDF5 file.\n"
+            "If disabled, imported objects' processing history will "
+            "be lost (features like 'Show source' and 'Recompute' will not work) "
+            "because object identifiers will be regenerated to avoid conflicts."
+        ),
+    )
     h5_clear_workspace_ask = gds.BoolItem("", _("Ask before clearing workspace"))
     h5_fullpath_in_title = gds.BoolItem(
         "",

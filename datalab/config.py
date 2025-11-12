@@ -413,7 +413,7 @@ def initialize():
     Conf.console.external_editor_path.get("code")
     Conf.console.external_editor_args.get("-g {path}:{line_number}")
     # IO section
-    Conf.io.h5_clear_workspace.get(False)
+    Conf.io.h5_clear_workspace.get(True)  # Default to avoid objects UUID reset
     Conf.io.h5_clear_workspace_ask.get(True)
     Conf.io.h5_fullpath_in_title.get(False)
     Conf.io.h5_fname_in_title.get(True)
