@@ -943,64 +943,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             TableAdapter.remove_all_from(result_obj)
             GeometryAdapter.remove_all_from(result_obj)
 
-    def _auto_recompute_analysis_if_needed(
-        self, result_obj: SignalObj | ImageObj
-    ) -> None:
-        """Automatically recompute analysis (1-to-0) if needed.
-
-        When creating a new object through transformation (1-to-1, n-to-1, 2-to-1),
-        the new object inherits all metadata from the source, including analysis
-        parameters. Since the data has changed, any inherited analysis results are
-        invalid and must be recomputed.
-
-        Args:
-            result_obj: The newly created object that may have inherited analysis
-        """
-        analysis_params = extract_analysis_parameters(result_obj)
-        if analysis_params is None:
-            return
-
-        # Get the analysis function
-        try:
-            feature = self.get_feature(analysis_params.func_name)
-        except KeyError:
-            # Feature not found, remove invalid analysis parameters
-            result_obj.metadata.pop(f"__{ANALYSIS_PARAMETERS_OPTION}", None)
-            return
-
-        # Recompute the analysis silently
-        param = analysis_params.param
-        args = (result_obj,) if param is None else (result_obj, param)
-
-        # Execute the analysis function directly without showing results
-        compout = wng_err_func(feature.function, args)
-        if compout is None:
-            return
-
-        result = self.handle_output(compout, "", None)
-        if result is None:
-            return
-
-        # Update the metadata with the new analysis results
-        if isinstance(result, GeometryResult):
-            adapter = GeometryAdapter(result)
-        elif isinstance(result, TableResult):
-            adapter = TableAdapter(result)
-        else:
-            return
-
-        adapter.add_to(result_obj, param)
-
-        # Update the analysis parameters (they're already correct, this just ensures
-        # consistency)
-        pp = ProcessingParameters(
-            func_name=feature.function.__name__,
-            pattern="1-to-0",
-            param=param,
-            source_uuid=get_uuid(result_obj),
-        )
-        insert_processing_parameters(result_obj, pp)
-
     def __exec_func(
         self,
         func: Callable,
@@ -1141,11 +1083,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         source_uuid=get_uuid(obj),
                     )
                     insert_processing_parameters(new_obj, pp)
-
-                    # Auto-recompute analysis if the source had analysis parameters
-                    # Since the new object has different data, any analysis results
-                    # inherited from the source are now invalid and must be updated
-                    self._auto_recompute_analysis_if_needed(new_obj)
 
                     new_gid = None
                     if grps:
@@ -1580,9 +1517,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     insert_processing_parameters(new_obj, proc_params)
 
-                    # Auto-recompute analysis if inherited from source
-                    self._auto_recompute_analysis_if_needed(new_obj)
-
                     # Create destination group on first result, in appropriate panel
                     if dst_gid is None:
                         dst_gid = self._create_group_for_result(new_obj, dst_gname)
@@ -1672,9 +1606,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         source_uuids=[get_uuid(obj) for obj in src_obj_list],
                     )
                     insert_processing_parameters(new_obj, proc_params)
-
-                    # Auto-recompute analysis if inherited from source
-                    self._auto_recompute_analysis_if_needed(new_obj)
 
                     # Create destination group on first result, in appropriate panel
                     use_group_for_non_native = False
@@ -1882,9 +1813,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         )
                         insert_processing_parameters(new_obj, proc_params)
 
-                        # Auto-recompute analysis if inherited from source
-                        self._auto_recompute_analysis_if_needed(new_obj)
-
                         # Create destination group on first result, in appropriate panel
                         if dst_gid is None:
                             dst_gid = self._create_group_for_result(new_obj, dst_gname)
@@ -1981,9 +1909,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         ],
                     )
                     insert_processing_parameters(new_obj, proc_params)
-
-                    # Auto-recompute analysis if inherited from source
-                    self._auto_recompute_analysis_if_needed(new_obj)
 
                     # group_id is from source panel, don't use for non-native objects
                     self._add_object_to_appropriate_panel(
