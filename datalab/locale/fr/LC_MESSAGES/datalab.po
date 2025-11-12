@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-12 13:53+0100\n"
+"POT-Creation-Date: 2025-11-12 14:09+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -932,6 +932,7 @@ msgstr "Êtes-vous sûr de vouloir désactiver le rafraîchissement automatique 
 msgid "Save"
 msgstr "Enregistrer"
 
+#, python-format
 msgid "Do you want to clear current workspace (signals and images) before importing data from HDF5 files?<br><br><b>Note:</b> If you choose <b>No</b>, the imported objects' processing history will be lost (features like 'Show source' and 'Recompute' will not work) because object identifiers will be regenerated to avoid conflicts.<br><br>Choosing to ignore this message will prevent it from being displayed again, and will use the current setting (%s)."
 msgstr "Souhaitez-vous effacer l'espace de travail actuel (signaux et images) avant d'importer des données depuis des fichiers HDF5 ?<br><br><b>Remarque :</b> Si vous choisissez <b>Non</b>, l'historique de traitement des objets importés sera perdu (des fonctionnalités telles que 'Afficher la source' et 'Recalculer' ne fonctionneront pas) car les identifiants d'objet seront régénérés pour éviter les conflits.<br><br>Choisir d'ignorer ce message empêchera son affichage ultérieur et utilisera le réglage actuel (%s)."
 
@@ -3270,3 +3271,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

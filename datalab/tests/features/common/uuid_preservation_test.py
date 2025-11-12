@@ -216,8 +216,66 @@ def test_uuid_regeneration_on_import():
                 )
 
 
+def test_uuid_preservation_empty_workspace():
+    """Test that UUIDs are preserved when opening HDF5 in empty workspace"""
+    with qt_app_context():
+        with helpers.WorkdirRestoringTempDir() as tmpdir:
+            # Create and save a workspace with processing history
+            with datalab_test_app_context(console=False) as win1:
+                panel = win1.signalpanel
+                processor = panel.processor
+
+                # Create signal and apply processing
+                panel.new_object()
+                signal = panel.objview.get_current_object()
+                original_uuid = get_uuid(signal)
+
+                param = GaussianParam.create(sigma=2.0)
+                processor.compute_1_to_1(
+                    processor.get_feature("gaussian_filter").function,
+                    param=param,
+                    title="Gaussian filter",
+                )
+
+                filtered_sig = panel.objview.get_current_object()
+                original_filtered_uuid = get_uuid(filtered_sig)
+
+                # Save workspace
+                fname = osp.join(tmpdir, "test_empty_workspace.h5")
+                win1.save_to_h5_file(fname)
+
+            # Open the file in a NEW empty workspace (simulating startup)
+            with datalab_test_app_context(console=False) as win2:
+                panel = win2.signalpanel
+
+                # Workspace is empty - UUIDs should be preserved (reset_all=True)
+                # Note: reset_all is None, so it should auto-detect empty workspace
+                win2.open_h5_files([fname], import_all=True, reset_all=None)
+
+                # Verify UUIDs are preserved
+                signal_loaded = panel.objmodel.get_object_from_number(1)
+                filtered_loaded = panel.objmodel.get_object_from_number(2)
+
+                assert get_uuid(signal_loaded) == original_uuid, (
+                    "Signal UUID should be preserved when opening in empty workspace"
+                )
+                assert get_uuid(filtered_loaded) == original_filtered_uuid, (
+                    "Filtered signal UUID should be preserved "
+                    "when opening in empty workspace"
+                )
+
+                # Verify processing parameters still work
+                option_dict = filtered_loaded.get_metadata_option(
+                    PROCESSING_PARAMETERS_OPTION
+                )
+                assert option_dict["source_uuid"] == get_uuid(signal_loaded)
+                source_obj = win2.find_object_by_uuid(option_dict["source_uuid"])
+                assert source_obj is signal_loaded
+
+
 if __name__ == "__main__":
     test_uuid_preservation_signals()
     test_uuid_preservation_images()
     test_uuid_regeneration_on_import()
+    test_uuid_preservation_empty_workspace()
     print("All UUID preservation tests passed!")

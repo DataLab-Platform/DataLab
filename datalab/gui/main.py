@@ -1640,29 +1640,36 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         if not self.confirm_memory_state():
             return
         if reset_all is None:
-            reset_all = Conf.io.h5_clear_workspace.get()
-            if self.has_objects() and Conf.io.h5_clear_workspace_ask.get():
-                answer = QW.QMessageBox.question(
-                    self,
-                    _("Warning"),
-                    _(
-                        "Do you want to clear current workspace (signals and images) "
-                        "before importing data from HDF5 files?<br><br>"
-                        "<b>Note:</b> If you choose <b>No</b>, the imported objects' "
-                        "processing history will be lost (features like 'Show source' "
-                        "and 'Recompute' will not work) because object identifiers "
-                        "will be regenerated to avoid conflicts.<br><br>"
-                        "Choosing to ignore this message will prevent it "
-                        "from being displayed again, and will use the "
-                        "current setting (%s)."
+            # When workspace is empty, always preserve UUIDs (reset_all=True)
+            # since there's no risk of conflicts
+            if not self.has_objects():
+                reset_all = True
+            else:
+                reset_all = Conf.io.h5_clear_workspace.get()
+                if Conf.io.h5_clear_workspace_ask.get():
+                    answer = QW.QMessageBox.question(
+                        self,
+                        _("Warning"),
+                        _(
+                            "Do you want to clear current workspace "
+                            "(signals and images) before importing data from "
+                            "HDF5 files?<br><br>"
+                            "<b>Note:</b> If you choose <b>No</b>, the imported "
+                            "objects' processing history will be lost "
+                            "(features like 'Show source' and 'Recompute' will not "
+                            "work) because object identifiers will be regenerated "
+                            "to avoid conflicts.<br><br>"
+                            "Choosing to ignore this message will prevent it "
+                            "from being displayed again, and will use the "
+                            "current setting (%s)."
+                        )
+                        % (_("Yes") if reset_all else _("No")),
+                        QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Ignore,
                     )
-                    % (_("Yes") if reset_all else _("No")),
-                    QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Ignore,
-                )
-                if answer == QW.QMessageBox.Yes:
-                    reset_all = True
-                elif answer == QW.QMessageBox.Ignore:
-                    Conf.io.h5_clear_workspace_ask.set(False)
+                    if answer == QW.QMessageBox.Yes:
+                        reset_all = True
+                    elif answer == QW.QMessageBox.Ignore:
+                        Conf.io.h5_clear_workspace_ask.set(False)
         if h5files is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
