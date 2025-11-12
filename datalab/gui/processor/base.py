@@ -1328,11 +1328,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                 # Store processing parameters for auto-recompute on ROI change
                 # This enables automatic recalculation when ROI is modified
+                # Note: We don't store source_uuid for 1-to-0 operations because
+                # they don't create new objects, they analyze existing ones.
+                # Storing source_uuid would create a circular reference where the
+                # object points to itself, causing infinite loops in history display.
                 pp = ProcessingParameters(
                     func_name=func.__name__,
                     pattern="1-to-0",
                     param=param,
-                    source_uuid=get_uuid(obj),
                 )
                 insert_processing_parameters(obj, pp)
 

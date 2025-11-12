@@ -297,6 +297,20 @@ class ObjectProp(QW.QTabWidget):
                     history_items.append(_("Original object"))
                 break
 
+            # Skip 1-to-0 operations (analysis) as they don't transform the object
+            # They just add metadata, so they shouldn't appear in processing history
+            if proc_params.pattern == "1-to-0":
+                # For 1-to-0 operations, there's no processing history to show
+                # (they analyze but don't transform the object)
+                # Check if there's any earlier processing
+                creation_params = extract_creation_parameters(current_obj)
+                if creation_params is not None:
+                    text = f"{_('Created')}: {creation_params.title}"
+                    history_items.append(text)
+                else:
+                    history_items.append(_("Original object"))
+                break
+
             # Add current processing step
             func_name = proc_params.func_name.replace("_", " ").title()
             history_items.append(func_name)
