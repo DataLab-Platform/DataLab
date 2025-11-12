@@ -126,13 +126,17 @@ class ProcessingParameters:
 
 
 # Metadata options for storing processing parameters (DataLab-specific)
-PROCESSING_PARAMETERS_OPTION = "processing_parameters"  # All processing metadata
+PROCESSING_PARAMETERS_OPTION = "processing_parameters"  # Transformation history
+ANALYSIS_PARAMETERS_OPTION = "analysis_parameters"  # Analysis operation (1-to-0)
 
 
 def extract_processing_parameters(
     obj: SignalObj | ImageObj,
 ) -> ProcessingParameters | None:
     """Extract processing parameters from object metadata.
+
+    This extracts transformation history (1-to-1, n-to-1, 2-to-1, 1-to-n operations).
+    For analysis operations (1-to-0), use extract_analysis_parameters instead.
 
     Args:
         obj: Signal or Image object
@@ -147,17 +151,47 @@ def extract_processing_parameters(
     return ProcessingParameters.from_dict(pp_dict)
 
 
+def extract_analysis_parameters(
+    obj: SignalObj | ImageObj,
+) -> ProcessingParameters | None:
+    """Extract analysis parameters from object metadata.
+
+    This extracts analysis operation parameters (1-to-0 pattern only).
+    For transformation history, use extract_processing_parameters instead.
+
+    Args:
+        obj: Signal or Image object
+
+    Returns:
+        ProcessingParameters instance if analysis metadata exists, None otherwise.
+    """
+    try:
+        pp_dict = obj.get_metadata_option(ANALYSIS_PARAMETERS_OPTION)
+    except ValueError:
+        return None
+    return ProcessingParameters.from_dict(pp_dict)
+
+
 def insert_processing_parameters(
     obj: SignalObj | ImageObj,
     pp: ProcessingParameters,
 ) -> None:
     """Insert processing parameters into object metadata.
 
+    This stores transformation history (1-to-1, n-to-1, 2-to-1, 1-to-n) or
+    analysis parameters (1-to-0) in separate metadata options to avoid overwriting
+    transformation history when performing analysis operations.
+
     Args:
         obj: Signal or Image object
-        proc_params: ProcessingParameters instance containing all processing metadata
+        pp: ProcessingParameters instance containing all processing metadata
     """
-    obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
+    if pp.pattern == "1-to-0":
+        # Store analysis parameters separately to preserve transformation history
+        obj.set_metadata_option(ANALYSIS_PARAMETERS_OPTION, pp.to_dict())
+    else:
+        # Store transformation history
+        obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
 
 
 # Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
@@ -1328,14 +1362,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                 # Store processing parameters for auto-recompute on ROI change
                 # This enables automatic recalculation when ROI is modified
-                # Note: We don't store source_uuid for 1-to-0 operations because
-                # they don't create new objects, they analyze existing ones.
-                # Storing source_uuid would create a circular reference where the
-                # object points to itself, causing infinite loops in history display.
+                # Analysis parameters (1-to-0) are stored separately from
+                # transformation history to avoid overwriting the processing chain
+                # when analyzing objects.
                 pp = ProcessingParameters(
                     func_name=func.__name__,
                     pattern="1-to-0",
                     param=param,
+                    source_uuid=get_uuid(obj),
                 )
                 insert_processing_parameters(obj, pp)
 

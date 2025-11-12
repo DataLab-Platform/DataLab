@@ -79,6 +79,7 @@ from datalab.gui.newobject import (
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
+    extract_analysis_parameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -2402,7 +2403,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     def auto_recompute_after_roi_change(self, obj: SignalObj | ImageObj) -> None:
         """Automatically recompute analysis (1-to-0) operations after ROI changes.
 
-        This method checks if the object has 1-to-0 processing parameters (analysis
+        This method checks if the object has 1-to-0 analysis parameters (analysis
         operations like statistics, measurements, etc.) and automatically recomputes
         the analysis to update the results based on the modified ROI.
 
@@ -2413,8 +2414,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Args:
             obj: The object whose ROI was modified
         """
-        # Check if object has 1-to-0 processing parameters (analysis operations)
-        proc_params = extract_processing_parameters(obj)
+        # Check if object has 1-to-0 analysis parameters (analysis operations)
+        proc_params = extract_analysis_parameters(obj)
         if proc_params is None or proc_params.pattern != "1-to-0":
             return
 
