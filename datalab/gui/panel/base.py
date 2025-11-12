@@ -221,9 +221,11 @@ class ObjectProp(QW.QTabWidget):
         self.analysis_parameters.setReadOnly(True)
         self.analysis_parameters.setFont(font)
 
-        self.addTab(self.processing_history, _("History"))
-        self.addTab(self.analysis_parameters, _("Analysis parameters"))
-        self.addTab(self.properties, _("Properties"))
+        self.addTab(self.processing_history, get_icon("history.svg"), _("History"))
+        self.addTab(
+            self.analysis_parameters, get_icon("analysis.svg"), _("Analysis parameters")
+        )
+        self.addTab(self.properties, get_icon("properties.svg"), _("Properties"))
 
         self.processing_history.textChanged.connect(self._update_tab_visibility)
         self.analysis_parameters.textChanged.connect(self._update_tab_visibility)
@@ -497,7 +499,8 @@ class ObjectProp(QW.QTabWidget):
         self.creation_scroll = QW.QScrollArea()
         self.creation_scroll.setWidgetResizable(True)
         self.creation_scroll.setWidget(editor)
-        self.insertTab(0, self.creation_scroll, _("Creation"))
+        icon_name = "new_sig.svg" if isinstance(obj, SignalObj) else "new_ima.svg"
+        self.insertTab(0, self.creation_scroll, get_icon(icon_name), _("Creation"))
 
         # Set as current tab if requested
         if set_current:
@@ -658,7 +661,12 @@ class ObjectProp(QW.QTabWidget):
         )
 
         self.processing_scroll.setWidget(editor)
-        self.insertTab(insert_index, self.processing_scroll, _("Processing"))
+        self.insertTab(
+            insert_index,
+            self.processing_scroll,
+            get_icon("libre-tech-ram.svg"),
+            _("Processing"),
+        )
 
         # Set as current tab if requested
         if set_current:
