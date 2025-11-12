@@ -143,12 +143,12 @@ DataLab has been funded, chronologically, by the following stakeholders:
 
 .. rubric:: Footnotes
 
-.. [#f1] DataLab processing primitives are mainly based on `Sigima`_, `NumPy`_, `SciPy`_,
+.. [#f1] DataLab processing primitives are mainly based on
+   `Sigima <https://sigima.readthedocs.io/>`_, `NumPy`_, `SciPy`_,
    `scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab visualization
    capabilities are based on `PlotPyStack`_ toolkit, a set of Python libraries
    for building scientific applications with Qt graphical user interfaces.
 
-.. _Sigima: https://github.com/DataLab-Platform/Sigima
 .. _NumPy: https://numpy.org/
 .. _SciPy: https://www.scipy.org/
 .. _scikit-image: https://scikit-image.org/
