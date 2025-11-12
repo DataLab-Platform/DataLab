@@ -79,7 +79,6 @@ from datalab.gui.newobject import (
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
-    extract_analysis_parameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -689,6 +688,22 @@ class ObjectProp(QW.QTabWidget):
 
         return True
 
+    def __get_processor_associated_to(
+        self, obj: SignalObj | ImageObj
+    ) -> SignalProcessor | ImageProcessor:
+        """Get the processor associated to the given object type.
+
+        Args:
+            obj: Signal or Image object
+
+        Returns:
+            Processor associated to the object's type
+        """
+        assert isinstance(obj, (SignalObj, ImageObj))
+        if isinstance(obj, SignalObj):
+            return self.panel.mainwindow.signalpanel.processor
+        return self.panel.mainwindow.imagepanel.processor
+
     def apply_processing_parameters(
         self, obj: SignalObj | ImageObj | None = None, interactive: bool = True
     ) -> ProcessingReport:
@@ -752,15 +767,11 @@ class ObjectProp(QW.QTabWidget):
 
         # For cross-panel computations, we need to use the processor from the panel
         # that owns the source object (e.g., radial_profile is in ImageProcessor)
-        processor = self.panel.processor
-        if isinstance(source_obj, SignalObj):
-            processor = self.panel.mainwindow.signalpanel.processor
-        elif isinstance(source_obj, ImageObj):
-            processor = self.panel.mainwindow.imagepanel.processor
+        source_processor = self.__get_processor_associated_to(source_obj)
 
         # Recompute using the dedicated method (with multiprocessing support)
         try:
-            new_obj = processor.recompute_1_to_1(
+            new_obj = source_processor.recompute_1_to_1(
                 proc_params.func_name, source_obj, param
             )
         except Exception as exc:  # pylint: disable=broad-except
@@ -791,6 +802,12 @@ class ObjectProp(QW.QTabWidget):
                 source_uuid=proc_params.source_uuid,
             )
             insert_processing_parameters(obj, updated_proc_params)
+
+            # Auto-recompute analysis if the object had analysis parameters
+            # Since the data has changed, any analysis results are now invalid
+            # Use the processor for the current object's type (not source object's type)
+            obj_processor = self.__get_processor_associated_to(obj)
+            obj_processor.auto_recompute_analysis(obj)
 
             # Update the tree view item and refresh plot
             obj_uuid = get_uuid(obj)
@@ -2398,49 +2415,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         )
                         if answer == QW.QMessageBox.No:
                             break
-
-    @qt_try_except()
-    def auto_recompute_after_roi_change(self, obj: SignalObj | ImageObj) -> None:
-        """Automatically recompute analysis (1-to-0) operations after ROI changes.
-
-        This method checks if the object has 1-to-0 analysis parameters (analysis
-        operations like statistics, measurements, etc.) and automatically recomputes
-        the analysis to update the results based on the modified ROI.
-
-        This method should be called explicitly after ROI modifications, not during
-        selection changes, to avoid interfering with the ROI change detection mechanism
-        used by the mask refresh system.
-
-        Args:
-            obj: The object whose ROI was modified
-        """
-        # Check if object has 1-to-0 analysis parameters (analysis operations)
-        proc_params = extract_analysis_parameters(obj)
-        if proc_params is None or proc_params.pattern != "1-to-0":
-            return
-
-        # Silently recompute the analysis with the new ROI
-        # Use the processor's compute_1_to_0 method directly
-        if isinstance(obj, SignalObj):
-            processor = self.mainwindow.signalpanel.processor
-        else:  # ImageObj
-            assert isinstance(obj, ImageObj), "Unexpected object type"
-            processor = self.mainwindow.imagepanel.processor
-
-        # Get the parameter from processing parameters
-        param = proc_params.param
-
-        # Get the actual function from the function name
-        feature = processor.get_feature(proc_params.func_name)
-
-        # Recompute the analysis operation
-        with Conf.proc.show_result_dialog.temp(False):
-            processor.compute_1_to_0(feature.function, param, edit=False)
-
-        # Update the view
-        obj_uuid = get_uuid(obj)
-        self.objview.update_item(obj_uuid)
-        self.refresh_plot(obj_uuid, update_items=True, force=True)
 
     def select_source_objects(self) -> None:
         """Select source objects associated with the selected object's processing.

@@ -70,7 +70,7 @@ def test_roi_auto_recompute():
         img.roi = roi
         panel.refresh_plot("selected", update_items=True)
         # Trigger auto-recompute by simulating ROI modification
-        panel.auto_recompute_after_roi_change(img)
+        panel.processor.auto_recompute_analysis(img)
 
         # Verify centroid was updated
         centroid = get_centroid_coords(img)
@@ -93,7 +93,7 @@ def test_roi_auto_recompute():
         roi1.add_roi(roi2)  # Combine both ROIs
         img.roi = roi1
         panel.refresh_plot("selected", update_items=True)
-        panel.auto_recompute_after_roi_change(img)
+        panel.processor.auto_recompute_analysis(img)
 
         # Verify centroid now has TWO rows (one for each ROI)
         adapter = GeometryAdapter.from_obj(img, "centroid")

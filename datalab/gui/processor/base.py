@@ -943,6 +943,44 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             TableAdapter.remove_all_from(result_obj)
             GeometryAdapter.remove_all_from(result_obj)
 
+    def auto_recompute_analysis(self, obj: SignalObj | ImageObj) -> None:
+        """Automatically recompute analysis (1-to-0) operations after data changes.
+
+        This method checks if the object has 1-to-0 analysis parameters (analysis
+        operations like statistics, measurements, etc.) and automatically recomputes
+        the analysis to update the results based on the modified data.
+
+        This should be called after:
+        - ROI modifications (which change the data to be analyzed)
+        - Data transformations via recompute_1_to_1 (which modify data in-place)
+
+        Note: Should be called explicitly after ROI modifications, not during
+        selection changes, to avoid interfering with the ROI change detection
+        mechanism used by the mask refresh system.
+
+        Args:
+            obj: The object whose data was modified
+        """
+        # Check if object has 1-to-0 analysis parameters (analysis operations)
+        proc_params = extract_analysis_parameters(obj)
+        if proc_params is None or proc_params.pattern != "1-to-0":
+            return
+
+        # Get the parameter from processing parameters
+        param = proc_params.param
+
+        # Get the actual function from the function name
+        feature = self.get_feature(proc_params.func_name)
+
+        # Recompute the analysis operation silently
+        with Conf.proc.show_result_dialog.temp(False):
+            self.compute_1_to_0(feature.function, param, edit=False)
+
+        # Update the view
+        obj_uuid = get_uuid(obj)
+        self.panel.objview.update_item(obj_uuid)
+        self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
     def __exec_func(
         self,
         func: Callable,
@@ -2338,7 +2376,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # Auto-recompute analysis operations for objects with modified ROIs
                 if mode == "apply":
                     for obj_i in objs:
-                        self.panel.auto_recompute_after_roi_change(obj_i)
+                        self.auto_recompute_analysis(obj_i)
         return edited_roi
 
     def edit_roi_numerically(self) -> TypeROI:
@@ -2365,7 +2403,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 only_existing=True,
             )
             # Auto-recompute analysis operations after ROI modification
-            self.panel.auto_recompute_after_roi_change(obj)
+            self.auto_recompute_analysis(obj)
             return edited_roi
         return obj.roi
 
@@ -2388,7 +2426,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self.panel.selection_changed(update_items=True)
             # Auto-recompute analysis operations after ROI deletion
             for obj in modified_objs:
-                self.panel.auto_recompute_after_roi_change(obj)
+                self.auto_recompute_analysis(obj)
 
     def delete_single_roi(self, roi_index: int) -> None:
         """Delete a single ROI by index
@@ -2415,5 +2453,5 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 obj.mark_roi_as_changed()
                 # Auto-recompute analysis operations after ROI modification
                 # (must be done BEFORE selection_changed to avoid stale results)
-                self.panel.auto_recompute_after_roi_change(obj)
+                self.auto_recompute_analysis(obj)
                 self.panel.selection_changed(update_items=True)
