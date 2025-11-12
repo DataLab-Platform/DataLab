@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-12 14:09+0100\n"
+"POT-Creation-Date: 2025-11-12 14:33+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -2359,8 +2359,8 @@ msgstr "Ignorer le message d'insertion du titre"
 msgid "Ignore information message when inserting object title as annotation label"
 msgstr "Ignorer le message d'information lors de l'insertion du titre de l'objet en tant qu'étiquette d'annotation"
 
-msgid "Signal"
-msgstr "Signal"
+msgid "Signals"
+msgstr "Signaux"
 
 msgid "Default line width"
 msgstr "Épaisseur par défaut"
@@ -2408,8 +2408,8 @@ msgstr "Résultats / Formes géométriques"
 msgid "Results / Marker style"
 msgstr "Résultats / Style de marqueur"
 
-msgid "Image"
-msgstr "Image"
+msgid "Images"
+msgstr "Images"
 
 msgid "Lock aspect ratio to 1:1"
 msgstr "Verrouiller le ratio d'aspect à 1:1"
@@ -2425,9 +2425,6 @@ msgstr "Eliminer un pourcentage des valeurs les plus hautes et les plus basses<b
 
 msgid "Percentage of margin to add around data when auto-scaling image plots.<br>A value of 0.2&#37; adds a small margin for better visualization.<br>Set to 0&#37; for no margin (exact data bounds)."
 msgstr "Pourcentage de marge à ajouter autour des données lors du redimensionnement automatique des graphiques d'images.<br>Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation.<br>Réglez sur 0 % pour aucune marge (limites exactes des données)."
-
-msgid "Results display limits"
-msgstr "Limites d'affichage des résultats"
 
 msgid "Maximum shapes to draw"
 msgstr "Nombre maximum de formes à dessiner"
@@ -3271,4 +3268,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

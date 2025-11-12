@@ -139,14 +139,17 @@ Result management
 Visualization
 -------------
 
-The Visualization settings tab controls how data is displayed:
-
-.. figure:: /images/shots/settings_view.png
-
-    Visualization settings tab
+The Visualization settings tab controls how data is displayed. This tab is organized
+into four sub-tabs: Common, Signals, Images, and Results.
 
 Common settings
 ^^^^^^^^^^^^^^^
+
+The Common sub-tab contains settings that apply to all visualizations:
+
+.. figure:: /images/shots/settings_view_common.png
+
+    Visualization settings - Common sub-tab
 
 **Plot toolbar position**
     Choose where to position the plot toolbar (top, bottom, left, or right of the plot).
@@ -154,8 +157,14 @@ Common settings
 **Ignore title insertion message**
     Suppress the information message when inserting an object title as an annotation label.
 
-Signal-specific settings
-^^^^^^^^^^^^^^^^^^^^^^^^
+Signals
+^^^^^^^
+
+The Signals sub-tab contains settings specific to signal visualizations:
+
+.. figure:: /images/shots/settings_view_signals.png
+
+    Visualization settings - Signals sub-tab
 
 **Default line width**
     Default line width for curves representing signals. This setting affects all signal
@@ -181,8 +190,36 @@ Signal-specific settings
     Format string for datetime X-axis labels when using sub-second time units (ms, μs, ns).
     Uses Python's strftime format codes (e.g., %H:%M:%S.%f for hours:minutes:seconds.microseconds).
 
-Image-specific settings
-^^^^^^^^^^^^^^^^^^^^^^^
+**Results / Shape style**
+    Click this button to configure the visual style for annotation shapes
+    (rectangles, circles, segments, etc.) displayed on signal plots. This includes:
+
+    - Line style, color, and width
+    - Fill pattern, color, and transparency
+    - Symbol shape, size, and colors
+
+    These settings apply to all result shapes drawn on signal plots (e.g., peak markers,
+    FWHM indicators, feature detection results).
+
+**Results / Marker style**
+    Click this button to configure the visual style for cursor markers on
+    signal plots. This includes:
+
+    - Line style, color, and width
+    - Symbol appearance
+    - Text label formatting and positioning
+    - Background transparency
+
+    These settings apply to cursor-type markers used in signal analysis results.
+
+Images
+^^^^^^
+
+The Images sub-tab contains settings specific to image visualizations:
+
+.. figure:: /images/shots/settings_view_images.png
+
+    Visualization settings - Images sub-tab
 
 **Lock aspect ratio to 1:1**
     When enabled, the aspect ratio of images is locked to 1:1. When disabled, the aspect
@@ -201,47 +238,24 @@ Image-specific settings
     Click this button to configure default visualization settings for images (colormap,
     interpolation, contrast, etc.).
 
-Results / Shape and marker styles
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-DataLab allows you to customize the visual appearance of annotation shapes and
-markers used for displaying analysis results on plots. These settings are accessible
-through button controls in the Visualization tab:
-
-**Shape style for signals**
-    Click this button to configure the visual style for annotation shapes
-    (rectangles, circles, segments, etc.) displayed on signal plots. This includes:
-
-    - Line style, color, and width
-    - Fill pattern, color, and transparency
-    - Symbol shape, size, and colors
-
-    These settings apply to all result shapes drawn on signal plots (e.g., peak markers,
-    FWHM indicators, feature detection results).
-
-**Marker style for signals**
-    Click this button to configure the visual style for cursor markers on
-    signal plots. This includes:
-
-    - Line style, color, and width
-    - Symbol appearance
-    - Text label formatting and positioning
-    - Background transparency
-
-    These settings apply to cursor-type markers used in signal analysis results.
-
-**Shape style for images**
+**Results / Shape style**
     Click this button to configure the visual style for annotation shapes
     displayed on image plots. Parameters are similar to signal shapes but optimized
     for image visualization (e.g., different colors for better visibility
     on images).
 
-**Marker style for images**
+**Results / Marker style**
     Click this button to configure the visual style for cursor markers on
     image plots.
 
-Results display limits
-^^^^^^^^^^^^^^^^^^^^^^
+Results
+^^^^^^^
+
+The Results sub-tab contains settings for displaying analysis results on plots:
+
+.. figure:: /images/shots/settings_view_results.png
+
+    Visualization settings - Results sub-tab
 
 These settings control how analysis results are displayed on plots to prevent
 performance issues with large datasets:
@@ -260,6 +274,11 @@ performance issues with large datasets:
     Maximum number of columns to display in merged result labels (default: 15).
     When the number of columns exceeds this limit, only the first N columns are
     displayed.
+
+**Show the merged result label by default**
+    When enabled, the merged result label is shown on the plot by default for new
+    objects. This setting can be toggled per-object using the checkbox in the
+    Properties panel.
 
 .. note::
 

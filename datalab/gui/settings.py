@@ -286,6 +286,8 @@ def edit_dataset_settings(
 class ViewSettings(gds.DataSet):
     """DataLab Visualization settings"""
 
+    _view_tabs = gds.BeginTabGroup("")
+
     g0 = gds.BeginGroup(_("Common"))
     plot_toolbar_position = gds.ImageChoiceItem(
         _("Plot toolbar position"),
@@ -306,7 +308,7 @@ class ViewSettings(gds.DataSet):
     )
     _g0 = gds.EndGroup("")
 
-    g1 = gds.BeginGroup(_("Signal"))
+    g1 = gds.BeginGroup(_("Signals")).set_prop("display", icon="signal.svg")
     _prop_ads = gds.ValueProp(False)
     sig_line_width = gds.FloatItem(
         _("Default line width"),
@@ -361,7 +363,7 @@ class ViewSettings(gds.DataSet):
     ).set_pos(col=1)
     _g1 = gds.EndGroup("")
 
-    g2 = gds.BeginGroup(_("Image"))
+    g2 = gds.BeginGroup(_("Images")).set_prop("display", icon="image.svg")
     ima_aspect_ratio_1_1 = gds.BoolItem(
         "",
         _("Lock aspect ratio to 1:1"),
@@ -406,7 +408,7 @@ class ViewSettings(gds.DataSet):
     ).set_pos(col=1)
     _g2 = gds.EndGroup("")
 
-    g3 = gds.BeginGroup(_("Results display limits"))
+    g3 = gds.BeginGroup(_("Results")).set_prop("display", icon="show_results.svg")
     max_shapes_to_draw = gds.IntItem(
         _("Maximum shapes to draw"),
         default=1000,
@@ -438,6 +440,8 @@ class ViewSettings(gds.DataSet):
         ),
     )
     _g3 = gds.EndGroup("")
+
+    _end_view_tabs = gds.EndTabGroup("")
 
 
 # Generator yielding (param, section, option) tuples from configuration dictionary
