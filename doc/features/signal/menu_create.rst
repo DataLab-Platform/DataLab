@@ -21,50 +21,91 @@ Create a new signal from various models:
 
 .. list-table::
     :header-rows: 1
-    :widths: 20, 80
+    :widths: 10, 20, 70
     :class: longtable
 
-    * - Model
+    * - Icon
+      - Model
       - Equation
-    * - Zero
+    * - .. image:: ../../../datalab/data/icons/create/1d-zero.svg
+           :width: 30px
+      - Zero
       - :math:`y[i] = 0`
-    * - Normal distribution
+    * - .. image:: ../../../datalab/data/icons/create/1d-normal.svg
+           :width: 30px
+      - Normal distribution
       - :math:`y[i]` is normally distributed with configurable mean and standard deviation
-    * - Poisson distribution
+    * - .. image:: ../../../datalab/data/icons/create/1d-poisson.svg
+           :width: 30px
+      - Poisson distribution
       - :math:`y[i]` is Poisson distributed with configurable mean
-    * - Uniform distribution
+    * - .. image:: ../../../datalab/data/icons/create/1d-uniform.svg
+           :width: 30px
+      - Uniform distribution
       - :math:`y[i]` is uniformly distributed between two configurable bounds
-    * - Gaussian
+    * - .. image:: ../../../datalab/data/icons/create/gaussian.svg
+           :width: 30px
+      - Gaussian
       - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi} \cdot \sigma} \cdot \exp\left(-\dfrac{1}{2} \cdot \left(\dfrac{x-x_{0}}{\sigma}\right)^2\right)`
-    * - Lorentzian
+    * - .. image:: ../../../datalab/data/icons/create/lorentzian.svg
+           :width: 30px
+      - Lorentzian
       - :math:`y = y_{0}+\dfrac{A}{\sigma \cdot \pi} \cdot \dfrac{1}{1+\left(\dfrac{x-x_{0}}{\sigma}\right)^2}`
-    * - Voigt
+    * - .. image:: ../../../datalab/data/icons/create/voigt.svg
+           :width: 30px
+      - Voigt
       - :math:`y = y_{0}+A \cdot \dfrac{\Re\left(\exp\left(-z^2\right) \cdot \erfc(-j \cdot z)\right)}{\sqrt{2\pi} \cdot \sigma}` with :math:`z = \dfrac{x-x_{0}-j \cdot \sigma}{\sqrt{2} \cdot \sigma}`
-    * - Blackbody (Planck's law)
+    * - .. image:: ../../../datalab/data/icons/create/planck.svg
+           :width: 30px
+      - Blackbody (Planck's law)
       - :math:`y = \dfrac{2 h c^2}{\lambda^5 \left(\exp\left(\dfrac{h c}{\lambda k T}\right)-1\right)}`
-    * - Sine
+    * - .. image:: ../../../datalab/data/icons/create/sine.svg
+           :width: 30px
+      - Sine
       - :math:`y = y_{0}+A\sin\left(2\pi \cdot f \cdot x+\phi\right)`
-    * - Cosine
+    * - .. image:: ../../../datalab/data/icons/create/cosine.svg
+           :width: 30px
+      - Cosine
       - :math:`y = y_{0}+A\cos\left(2\pi \cdot f \cdot x+\phi\right)`
-    * - Sawtooth
+    * - .. image:: ../../../datalab/data/icons/create/sawtooth.svg
+           :width: 30px
+      - Sawtooth
       - :math:`y = y_{0}+A \left( 2 \left( f x + \frac{\phi}{2\pi} - \left\lfloor f x + \frac{\phi}{2\pi} + \frac{1}{2} \right\rfloor \right) \right)`
-    * - Triangle
+    * - .. image:: ../../../datalab/data/icons/create/triangle.svg
+           :width: 30px
+      - Triangle
       - :math:`y = y_{0}+A \sawtooth\left(2 \pi f x + \phi, \text{width} = 0.5\right)`
-    * - Square
+    * - .. image:: ../../../datalab/data/icons/create/square.svg
+           :width: 30px
+      - Square
       - :math:`y = y_0 + A \sgn\left( \sin\left( 2\pi f x + \phi \right) \right)`
-    * - Cardinal sine
+    * - .. image:: ../../../datalab/data/icons/create/sinc.svg
+           :width: 30px
+      - Cardinal sine
       - :math:`y = y_0 + A \sinc\left(2\pi f x + \phi\right)`
-    * - Linear chirp
+    * - .. image:: ../../../datalab/data/icons/create/linear_chirp.svg
+           :width: 30px
+      - Linear chirp
       - :math:`y = y_{0} + A \sin\left(\phi_{0} + 2\pi \left(f_{0}\, x +  \frac{1}{2} c\, x^{2}\right)\right)`
-    * - Step
+    * - .. image:: ../../../datalab/data/icons/create/step.svg
+           :width: 30px
+      - Step
       - :math:`y = y_{0}+A \left\{\begin{array}{ll}1 & \text{if } x > x_{0} \\ 0 & \text{otherwise}\end{array}\right.`
-    * - Exponential
+    * - .. image:: ../../../datalab/data/icons/create/exponential.svg
+           :width: 30px
+      - Exponential
       - :math:`y = y_{0}+A \exp\left(B \cdot x\right)`
-    * - Logistic
+    * - .. image:: ../../../datalab/data/icons/create/logistic.svg
+           :width: 30px
+      - Logistic
       - :math:`y = y_{0} + \dfrac{A}{1 + \exp\left(-k \left(x - x_{0}\right)\right)}`
-    * - Pulse
+    * - .. image:: ../../../datalab/data/icons/create/pulse.svg
+           :width: 30px
+      - Pulse
       - :math:`y = y_{0}+A \left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
-    * - Step Pulse
+    * - .. image:: ../../../datalab/data/icons/create/step_pulse.svg
+           :width: 30px
+      - Step Pulse
       - | :math:`y = \left( \begin{cases} y_0 & \text{if } x < t_0 \\ y_0 + A \cdot \dfrac{x - t_0}{t_r} & \text{if } t_0 \leq x < t_0 + t_r \\ y_0 + A & \text{if } x \geq t_0 + t_r \end{cases} \right) + \mathcal{N}\left(0, \sigma_n\right)`
 
         | where:
@@ -73,7 +114,9 @@ Create a new signal from various models:
         * :math:`t_r` is the rise time,
         * :math:`\sigma_n` is the noise amplitude
 
-    * - Square Pulse
+    * - .. image:: ../../../datalab/data/icons/create/square_pulse.svg
+           :width: 30px
+      - Square Pulse
       - | :math:`y(x) = \left(\begin{cases} y_0 & \text{if } x < t_0 \\ y_0 + A \cdot \dfrac{x - t_0}{t_r} & \text{if } t_0 \leq x < t_0 + t_r \\ y_0 + A & \text{if } t_0 + t_r \leq x < t_1 \\ y_0 + A - A \cdot \dfrac{x - t_1}{t_f} & \text{if } t_1 \leq x < t_1 + t_f \\ y_0 & \text{if } x \geq t_1 + t_f \end{cases} \right) + \mathcal{N}(0, \sigma_n)`
 
         | where:
@@ -89,7 +132,10 @@ Create a new signal from various models:
 
             The duration of the plateau :math:`d` should not be negative.
 
-    * - Polynomial
+    * - .. image:: ../../../datalab/data/icons/create/polynomial.svg
+           :width: 30px
+      - Polynomial
       - :math:`y = y_{0}+A_{0}+A_{1} \cdot x+A_{2} \cdot x^2+\ldots+A_{n} \cdot x^n`
-    * - Custom
+    * -
+      - Custom
       - Manual input of X and Y values
