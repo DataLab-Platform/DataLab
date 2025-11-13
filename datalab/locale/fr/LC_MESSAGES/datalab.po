@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-12 18:35+0100\n"
+"POT-Creation-Date: 2025-11-13 10:07+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -72,9 +72,8 @@ msgstr "Enregistrer un objet %s..."
 msgid "Save selected %s"
 msgstr "Enregistrer l'objet %s sélectionné"
 
-#, python-format
-msgid "Save %s to directory..."
-msgstr "Enregistrer les %s dans un répertoire..."
+msgid "Save to directory..."
+msgstr "Enregistrer dans un répertoire..."
 
 #, python-format
 msgid "Save selected %s using a filename pattern"
@@ -2225,7 +2224,6 @@ msgstr "Réglages des opérations d'entrée/sortie"
 msgid "Clear workspace before loading HDF5 file"
 msgstr "Effacer l'espace de travail avant de charger un fichier HDF5"
 
-#, python-format
 msgid ""
 "If enabled, the current workspace will be cleared before loading a new HDF5 file.\n"
 "If disabled, imported objects' processing history will be lost (features like 'Show source' and 'Recompute' will not work) because object identifiers will be regenerated to avoid conflicts."
@@ -3275,3 +3273,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

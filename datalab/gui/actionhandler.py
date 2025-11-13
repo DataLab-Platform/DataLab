@@ -764,7 +764,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Save %s to directory...") % self.OBJECT_STR_PLURAL,
+                _("Save to directory..."),
                 icon_name="save_to_directory.svg",
                 tip=_("Save selected %s using a filename pattern")
                 % self.OBJECT_STR_PLURAL,
