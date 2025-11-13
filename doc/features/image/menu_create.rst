@@ -29,8 +29,6 @@ Create a new image from various models
       - Equation
     * - Zero
       - :math:`z[i] = 0`
-    * - Empty
-      - Data is directly taken from memory as it is
     * - Normal distribution
       - :math:`z[i]` is normally distributed with configurable mean and standard deviation
     * - Poisson distribution

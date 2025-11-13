@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="14" height="14" viewBox="0 0 14 14" version="1.1" id="svg24" sodipodi:docname="2d-uniform.svg" inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:svg="http://www.w3.org/2000/svg">
+    <defs id="defs24" />
+    <sodipodi:namedview id="namedview24" pagecolor="#505050" bordercolor="#ffffff" borderopacity="1" inkscape:showpageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="1" inkscape:deskcolor="#505050" inkscape:zoom="57.642857" inkscape:cx="6.5662949" inkscape:cy="7.7980174" inkscape:window-width="1920" inkscape:window-height="1009" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg24" />
+    <rect style="fill:#440154;fill-opacity:1;stroke:none;stroke-width:1.2228;stroke-dasharray:none" id="rect3" width="10.5" height="10.5" x="1.75" y="1.75" />
+    <!-- Gray axes -->
+    <line x1="7" y1="1" x2="7" y2="13" stroke="#696969" stroke-width="0.53" id="line1" />
+    <line x1="1" y1="7" x2="13" y2="7" stroke="#696969" stroke-width="0.53" id="line2" />
+    <!-- Uniform noise pattern (2D - evenly distributed) -->
+    <path id="circle2" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 2.82,3.1 A 0.22,0.22 0 0 1 2.6,3.32 0.22,0.22 0 0 1 2.38,3.1 0.22,0.22 0 0 1 2.6,2.88 0.22,0.22 0 0 1 2.82,3.1 Z" />
+    <path id="circle3" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 3.32,9.6 A 0.22,0.22 0 0 1 3.1,9.82 0.22,0.22 0 0 1 2.88,9.6 0.22,0.22 0 0 1 3.1,9.38 0.22,0.22 0 0 1 3.32,9.6 Z" />
+    <path id="circle4" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 3.82,6.1 A 0.22,0.22 0 0 1 3.6,6.32 0.22,0.22 0 0 1 3.38,6.1 0.22,0.22 0 0 1 3.6,5.88 0.22,0.22 0 0 1 3.82,6.1 Z" />
+    <path id="circle5" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 4.32,11.1 A 0.22,0.22 0 0 1 4.1,11.32 0.22,0.22 0 0 1 3.88,11.1 0.22,0.22 0 0 1 4.1,10.88 0.22,0.22 0 0 1 4.32,11.1 Z" />
+    <path id="circle6" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 4.82,4.6 A 0.22,0.22 0 0 1 4.6,4.82 0.22,0.22 0 0 1 4.38,4.6 0.22,0.22 0 0 1 4.6,4.38 0.22,0.22 0 0 1 4.82,4.6 Z" />
+    <path id="circle7" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 5.32,8.1 A 0.22,0.22 0 0 1 5.1,8.32 0.22,0.22 0 0 1 4.88,8.1 0.22,0.22 0 0 1 5.1,7.88 0.22,0.22 0 0 1 5.32,8.1 Z" />
+    <path id="circle8" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 5.82,5.6 A 0.22,0.22 0 0 1 5.6,5.82 0.22,0.22 0 0 1 5.38,5.6 0.22,0.22 0 0 1 5.6,5.38 0.22,0.22 0 0 1 5.82,5.6 Z" />
+    <path id="circle9" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 6.32,10.1 A 0.22,0.22 0 0 1 6.1,10.32 0.22,0.22 0 0 1 5.88,10.1 0.22,0.22 0 0 1 6.1,9.88 0.22,0.22 0 0 1 6.32,10.1 Z" />
+    <path id="circle10" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 6.82,3.6 A 0.22,0.22 0 0 1 6.6,3.82 0.22,0.22 0 0 1 6.38,3.6 0.22,0.22 0 0 1 6.6,3.38 0.22,0.22 0 0 1 6.82,3.6 Z" />
+    <path id="circle11" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 7.82,8.6 A 0.22,0.22 0 0 1 7.6,8.82 0.22,0.22 0 0 1 7.38,8.6 0.22,0.22 0 0 1 7.6,8.38 0.22,0.22 0 0 1 7.82,8.6 Z" />
+    <path id="circle12" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 8.32,5.1 A 0.22,0.22 0 0 1 8.1,5.32 0.22,0.22 0 0 1 7.88,5.1 0.22,0.22 0 0 1 8.1,4.88 0.22,0.22 0 0 1 8.32,5.1 Z" />
+    <path id="circle13" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 8.82,10.6 A 0.22,0.22 0 0 1 8.6,10.82 0.22,0.22 0 0 1 8.38,10.6 0.22,0.22 0 0 1 8.6,10.38 0.22,0.22 0 0 1 8.82,10.6 Z" />
+    <path id="circle14" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 9.32,6.6 A 0.22,0.22 0 0 1 9.1,6.82 0.22,0.22 0 0 1 8.88,6.6 0.22,0.22 0 0 1 9.1,6.38 0.22,0.22 0 0 1 9.32,6.6 Z" />
+    <path id="circle15" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 9.82,4.1 A 0.22,0.22 0 0 1 9.6,4.32 0.22,0.22 0 0 1 9.38,4.1 0.22,0.22 0 0 1 9.6,3.88 0.22,0.22 0 0 1 9.82,4.1 Z" />
+    <path id="circle16" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 10.32,9.1 A 0.22,0.22 0 0 1 10.1,9.32 0.22,0.22 0 0 1 9.88,9.1 0.22,0.22 0 0 1 10.1,8.88 0.22,0.22 0 0 1 10.32,9.1 Z" />
+    <path id="circle17" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 10.82,7.1 A 0.22,0.22 0 0 1 10.6,7.32 0.22,0.22 0 0 1 10.38,7.1 0.22,0.22 0 0 1 10.6,6.88 0.22,0.22 0 0 1 10.82,7.1 Z" />
+    <path id="circle18" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 11.32,11.6 A 0.22,0.22 0 0 1 11.1,11.82 0.22,0.22 0 0 1 10.88,11.6 0.22,0.22 0 0 1 11.1,11.38 0.22,0.22 0 0 1 11.32,11.6 Z" />
+    <path id="circle19" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 11.82,5.6 A 0.22,0.22 0 0 1 11.6,5.82 0.22,0.22 0 0 1 11.38,5.6 0.22,0.22 0 0 1 11.6,5.38 0.22,0.22 0 0 1 11.82,5.6 Z" />
+    <!-- Additional even distribution -->
+    <path id="circle20" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 3.82,8.6 A 0.22,0.22 0 0 1 3.6,8.82 0.22,0.22 0 0 1 3.38,8.6 0.22,0.22 0 0 1 3.6,8.38 0.22,0.22 0 0 1 3.82,8.6 Z" />
+    <path id="circle21" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 5.82,11.6 A 0.22,0.22 0 0 1 5.6,11.82 0.22,0.22 0 0 1 5.38,11.6 0.22,0.22 0 0 1 5.6,11.38 0.22,0.22 0 0 1 5.82,11.6 Z" />
+    <path id="circle22" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 7.32,4.6 A 0.22,0.22 0 0 1 7.1,4.82 0.22,0.22 0 0 1 6.88,4.6 0.22,0.22 0 0 1 7.1,4.38 0.22,0.22 0 0 1 7.32,4.6 Z" />
+    <path id="circle23" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 9.32,9.6 A 0.22,0.22 0 0 1 9.1,9.82 0.22,0.22 0 0 1 8.88,9.6 0.22,0.22 0 0 1 9.1,9.38 0.22,0.22 0 0 1 9.32,9.6 Z" />
+    <path id="circle24" style="opacity:1;fill:#a8db34;stroke-width:1.83332;paint-order:stroke fill markers" d="M 11.32,3.1 A 0.22,0.22 0 0 1 11.1,3.32 0.22,0.22 0 0 1 10.88,3.1 0.22,0.22 0 0 1 11.1,2.88 0.22,0.22 0 0 1 11.32,3.1 Z" />
+</svg>

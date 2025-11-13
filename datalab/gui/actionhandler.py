@@ -1191,35 +1191,48 @@ class SignalActionHandler(BaseActionHandler):
 
         # MARK: CREATE
         with self.new_category(ActionCategory.CREATE):
-            for label, pclass in (
-                (_("Zero"), sio.ZeroParam),
-                (_("Normal distribution"), sio.NormalDistribution1DParam),
-                (_("Poisson distribution"), sio.PoissonDistribution1DParam),
-                (_("Uniform distribution"), sio.UniformDistribution1DParam),
-                (_("Gaussian"), sio.GaussParam),
-                (_("Lorentzian"), sio.LorentzParam),
-                (_("Voigt"), sio.VoigtParam),
-                (_("Blackbody (Planck's law)"), sio.PlanckParam),
-                (_("Sine"), sio.SineParam),
-                (_("Cosine"), sio.CosineParam),
-                (_("Sawtooth"), sio.SawtoothParam),
-                (_("Triangle"), sio.TriangleParam),
-                (_("Square"), sio.SquareParam),
-                (_("Cardinal sine"), sio.SincParam),
-                (_("Linear chirp"), sio.LinearChirpParam),
-                (_("Step"), sio.StepParam),
-                (_("Exponential"), sio.ExponentialParam),
-                (_("Logistic"), sio.LogisticParam),
-                (_("Pulse"), sio.PulseParam),
-                (_("Step pulse"), sio.StepPulseParam),
-                (_("Square pulse"), sio.SquarePulseParam),
-                (_("Polynomial"), sio.PolyParam),
-                (_("Custom"), newobject.CustomSignalParam),
+            for label, pclass, icon_name in (
+                (_("Zero"), sio.ZeroParam, "1d-zero.svg"),
+                (
+                    _("Normal distribution"),
+                    sio.NormalDistribution1DParam,
+                    "1d-normal.svg",
+                ),
+                (
+                    _("Poisson distribution"),
+                    sio.PoissonDistribution1DParam,
+                    "1d-poisson.svg",
+                ),
+                (
+                    _("Uniform distribution"),
+                    sio.UniformDistribution1DParam,
+                    "1d-uniform.svg",
+                ),
+                (_("Gaussian"), sio.GaussParam, "gaussian.svg"),
+                (_("Lorentzian"), sio.LorentzParam, "lorentzian.svg"),
+                (_("Voigt"), sio.VoigtParam, "voigt.svg"),
+                (_("Blackbody (Planck's law)"), sio.PlanckParam, "planck.svg"),
+                (_("Sine"), sio.SineParam, "sine.svg"),
+                (_("Cosine"), sio.CosineParam, "cosine.svg"),
+                (_("Sawtooth"), sio.SawtoothParam, "sawtooth.svg"),
+                (_("Triangle"), sio.TriangleParam, "triangle.svg"),
+                (_("Square"), sio.SquareParam, "square.svg"),
+                (_("Cardinal sine"), sio.SincParam, "sinc.svg"),
+                (_("Linear chirp"), sio.LinearChirpParam, "linear_chirp.svg"),
+                (_("Step"), sio.StepParam, "step.svg"),
+                (_("Exponential"), sio.ExponentialParam, "exponential.svg"),
+                (_("Logistic"), sio.LogisticParam, "logistic.svg"),
+                (_("Pulse"), sio.PulseParam, "pulse.svg"),
+                (_("Step pulse"), sio.StepPulseParam, "step_pulse.svg"),
+                (_("Square pulse"), sio.SquarePulseParam, "square_pulse.svg"),
+                (_("Polynomial"), sio.PolyParam, "polynomial.svg"),
+                (_("Custom"), newobject.CustomSignalParam, None),
             ):
                 self.new_action(
                     label,
                     tip=_("Create new %s") % label,
                     triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
+                    icon_name=icon_name,
                     select_condition=SelectCond.always,
                 )
 
@@ -1421,23 +1434,36 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: CREATE
         with self.new_category(ActionCategory.CREATE):
-            for label, pclass in (
-                (_("Zero"), sio.Zero2DParam),
-                (_("Normal distribution"), sio.NormalDistribution2DParam),
-                (_("Poisson distribution"), sio.PoissonDistribution2DParam),
-                (_("Uniform distribution"), sio.UniformDistribution2DParam),
-                (_("Gaussian"), sio.Gauss2DParam),
-                (_("Ramp"), sio.Ramp2DParam),
-                (_("Checkerboard"), sio.Checkerboard2DParam),
-                (_("Sinusoidal grating"), sio.SinusoidalGrating2DParam),
-                (_("Ring pattern"), sio.Ring2DParam),
-                (_("Siemens star"), sio.SiemensStar2DParam),
-                (_("2D sinc"), sio.Sinc2DParam),
+            for label, pclass, icon_name in (
+                (_("Zero"), sio.Zero2DParam, "2d-zero.svg"),
+                (
+                    _("Normal distribution"),
+                    sio.NormalDistribution2DParam,
+                    "2d-normal.svg",
+                ),
+                (
+                    _("Poisson distribution"),
+                    sio.PoissonDistribution2DParam,
+                    "2d-poisson.svg",
+                ),
+                (
+                    _("Uniform distribution"),
+                    sio.UniformDistribution2DParam,
+                    "2d-uniform.svg",
+                ),
+                (_("Gaussian"), sio.Gauss2DParam, "2d-gaussian.svg"),
+                (_("Ramp"), sio.Ramp2DParam, "2d-ramp.svg"),
+                (_("Checkerboard"), sio.Checkerboard2DParam, "checkerboard.svg"),
+                (_("Sinusoidal grating"), sio.SinusoidalGrating2DParam, "grating.svg"),
+                (_("Ring pattern"), sio.Ring2DParam, "ring.svg"),
+                (_("Siemens star"), sio.SiemensStar2DParam, "siemens.svg"),
+                (_("2D sinc"), sio.Sinc2DParam, "2d-sinc.svg"),
             ):
                 self.new_action(
                     label,
                     tip=_("Create new %s") % label,
                     triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
+                    icon_name=icon_name,
                     select_condition=SelectCond.always,
                 )
 
