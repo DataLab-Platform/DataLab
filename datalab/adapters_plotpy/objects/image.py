@@ -28,12 +28,14 @@ def get_obj_coords(obj: ImageObj) -> tuple[np.ndarray, np.ndarray]:
         obj: image object
 
     Returns:
-        x and y coordinates
+        x and y coordinates (pixel centers, not edges)
     """
     if obj.is_uniform_coords:
         shape = obj.data.shape
-        xcoords = np.linspace(obj.x0, obj.x0 + obj.dx * shape[1], shape[1] + 1)
-        ycoords = np.linspace(obj.y0, obj.y0 + obj.dy * shape[0], shape[0] + 1)
+        # Generate coordinates for pixel centers, not edges
+        # For N pixels: centers are at x0, x0+dx, x0+2*dx, ..., x0+(N-1)*dx
+        xcoords = np.linspace(obj.x0, obj.x0 + obj.dx * (shape[1] - 1), shape[1])
+        ycoords = np.linspace(obj.y0, obj.y0 + obj.dy * (shape[0] - 1), shape[0])
     else:
         xcoords, ycoords = obj.xcoords, obj.ycoords
     return xcoords, ycoords
