@@ -18,9 +18,9 @@
      id="namedview14"
      pagecolor="#ffffff"
      bordercolor="#000000"
-     borderopacity="0.25"
+     borderopacity="1"
      inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="1"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
@@ -34,14 +34,14 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="svg12" />
   <rect
-     style="fill:#696969;fill-opacity:0.817241;stroke-width:0.547874"
+     style="fill:#696969;fill-opacity:1;stroke-width:0.547874"
      id="rect28089"
      width="0.53186357"
      height="12.584304"
      x="6.7340684"
      y="0.70784807" />
   <rect
-     style="fill:#696969;fill-opacity:0.817241;stroke-width:0.54642"
+     style="fill:#696969;fill-opacity:1;stroke-width:0.54642"
      id="rect28089-7"
      width="0.53186357"
      height="12.5176"

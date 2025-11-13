@@ -63,7 +63,7 @@
      fill="none"
      stroke="#bcbd22"
      stroke-width="0.35"
-     opacity="0.8"
+     opacity="1"
      id="circle2"
      style="stroke:#45c06f;stroke-opacity:1;fill:#45c06f;fill-opacity:1" />
   <circle
@@ -73,7 +73,7 @@
      fill="none"
      stroke="#bcbd22"
      stroke-width="0.35"
-     opacity="0.7"
+     opacity="1"
      id="circle3"
      style="fill:#2b748e;fill-opacity:1;stroke:#2b748e;stroke-opacity:1" />
   <circle
@@ -83,7 +83,7 @@
      fill="none"
      stroke="#bcbd22"
      stroke-width="0.35"
-     opacity="0.6"
+     opacity="1"
      id="circle4"
      style="stroke:#45c06f;stroke-opacity:1;fill:#45c06f;fill-opacity:1" />
   <circle
@@ -93,7 +93,7 @@
      fill="none"
      stroke="#bcbd22"
      stroke-width="0.35"
-     opacity="0.5"
+     opacity="1"
      id="circle5"
      style="stroke:#eee51c;stroke-opacity:1;fill:#eee51c;fill-opacity:1" />
   <!-- Inner cross pattern to show oscillation -->
