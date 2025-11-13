@@ -1,9 +1,13 @@
 .. _ima-menu-file:
 
-Create, open and save Images
-============================
+Open and save Images
+====================
 
-This section describes how to create, open and save images (and workspaces).
+This section describes how to open and save images (and workspaces).
+
+.. note::
+
+    For creating new images from mathematical models, see :ref:`ima-menu-create`.
 
 .. figure:: /images/shots/i_file.png
 
@@ -14,48 +18,11 @@ provide image-related actions.
 
 The "File" menu allows you to:
 
-- Create, open, save and close images (see below).
+- Open, save and close images (see below).
 
 - Save and restore the current workspace or browse HDF5 files (see :ref:`overview`).
 
 - Edit DataLab preferences (see :ref:`settings`).
-
-New image
-^^^^^^^^^
-
-Create a new image from various models
-(supported datatypes: uint8, uint16, int16, float32, float64):
-
-.. list-table::
-    :header-rows: 1
-    :widths: 20, 80
-
-    * - Model
-      - Equation
-    * - Zero
-      - :math:`z[i] = 0`
-    * - Empty
-      - Data is directly taken from memory as it is
-    * - Normal distribution
-      - :math:`z[i]` is normally distributed with configurable mean and standard deviation
-    * - Poisson distribution
-      - :math:`z[i]` is Poisson distributed with configurable mean
-    * - Uniform distribution
-      - :math:`z[i]` is uniformly distributed between two configurable bounds
-    * - 2D Gaussian
-      - :math:`z = A \cdot \exp\left(-\dfrac{\left(\sqrt{\left(x-x_0\right)^2+\left(y-y_0\right)^2}-\mu\right)^2}{2\sigma^2}\right)`
-    * - 2D Ramp
-      - :math:`z = A (x - x_0) + B (y - y_0) + C`
-    * - Checkerboard
-      - Alternating square pattern for calibration and spatial frequency analysis
-    * - Sinusoidal grating
-      - :math:`z = A \sin(2\pi(f_x \cdot x + f_y \cdot y) + \varphi) + C`
-    * - Ring pattern
-      - Concentric circular rings for radial analysis
-    * - Siemens star
-      - Radial spoke pattern for resolution testing
-    * - 2D sinc
-      - :math:`z = A \cdot \mathrm{sinc}\left(\dfrac{\sqrt{(x-x_0)^2+(y-y_0)^2}}{\sigma}\right) + C`
 
 .. _open_image:
 

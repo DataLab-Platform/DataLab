@@ -6,6 +6,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **New "Create" menu**: Separated object creation functionality into dedicated menu between "File" and "Edit" menus
+  * The "Create" menu now contains all signal and image creation actions previously in "File > New [...]"
+  * Provides clearer organization by separating creation from file operations (open/save)
+  * **Migration note**: Users accustomed to "File > New [...]" will now find these actions in the "Create" menu
+
 * **New parametric image types**: Added five new parametric image generation options in the "New image" menu
   * **Checkerboard**: Alternating square pattern ideal for camera calibration, spatial frequency analysis, and MTF testing. Configure square size, offset position, and light/dark values
   * **Sinusoidal grating**: Frequency response testing pattern with independent spatial frequencies in X and Y directions, adjustable phase, amplitude, and DC offset. Essential for optical testing and MTF measurements

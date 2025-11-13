@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-11 14:56+0100\n"
+"POT-Creation-Date: 2025-11-13 10:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,18 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**New \"Create\" menu**: Separated object creation functionality into dedicated menu between \"File\" and \"Edit\" menus"
+msgstr "**Nouveau menu \"Création\"** : Fonctionnalité de création d'objets séparée dans un menu dédié entre les menus \"Fichier\" et \"Édition\""
+
+msgid "The \"Create\" menu now contains all signal and image creation actions previously in \"File > New [...]\""
+msgstr "Le menu \"Création\" contient désormais toutes les actions de création de signaux et d'images précédemment dans \"Fichier > Nouveau [...]\""
+
+msgid "Provides clearer organization by separating creation from file operations (open/save)"
+msgstr "Offre une organisation plus claire en séparant la création des opérations de fichiers (ouvrir/enregistrer)"
+
+msgid "**Migration note**: Users accustomed to \"File > New [...]\" will now find these actions in the \"Create\" menu"
+msgstr "**Note de migration** : Les utilisateurs habitués à \"Fichier > Nouveau [...]\" trouveront désormais ces actions dans le menu \"Création\""
 
 msgid "**New parametric image types**: Added five new parametric image generation options in the \"New image\" menu"
 msgstr "**Nouveaux types d'images paramétriques** : Ajout de cinq nouvelles options de génération d'images paramétriques dans le menu \"Nouvelle image\""

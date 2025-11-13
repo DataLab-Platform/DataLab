@@ -190,6 +190,7 @@ class ActionCategory(enum.Enum):
     """Action categories"""
 
     FILE = enum.auto()
+    CREATE = enum.auto()
     EDIT = enum.auto()
     VIEW = enum.auto()
     ROI = enum.auto()
@@ -721,19 +722,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 self.view_toolbar.insertAction(before, action)
         self.view_toolbar.insertSeparator(before)
 
-    @abc.abstractmethod
-    def create_new_object_actions(self):
-        """Create actions for creating new objects"""
-
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
         with self.new_category(ActionCategory.FILE):
-            with self.new_menu(
-                _("New %s") % self.OBJECT_STR,
-                # Icon name is 'new_sig.svg' or 'new_ima.svg':
-                icon_name=f"new_{self.object_suffix}.svg",
-            ):
-                self.create_new_object_actions()
             self.new_action(
                 _("Open %s...") % self.OBJECT_STR,
                 # Icon name is 'fileopen_sig.svg' or 'fileopen_ima.svg':
@@ -1194,43 +1185,43 @@ class SignalActionHandler(BaseActionHandler):
     OBJECT_STR = _("signal")
     OBJECT_STR_PLURAL = _("signals")
 
-    def create_new_object_actions(self):
-        """Create actions for creating new objects"""
-        for label, pclass in (
-            (_("Zero"), sio.ZeroParam),
-            (_("Normal distribution"), sio.NormalDistribution1DParam),
-            (_("Poisson distribution"), sio.PoissonDistribution1DParam),
-            (_("Uniform distribution"), sio.UniformDistribution1DParam),
-            (_("Gaussian"), sio.GaussParam),
-            (_("Lorentzian"), sio.LorentzParam),
-            (_("Voigt"), sio.VoigtParam),
-            (_("Blackbody (Planck's law)"), sio.PlanckParam),
-            (_("Sine"), sio.SineParam),
-            (_("Cosine"), sio.CosineParam),
-            (_("Sawtooth"), sio.SawtoothParam),
-            (_("Triangle"), sio.TriangleParam),
-            (_("Square"), sio.SquareParam),
-            (_("Cardinal sine"), sio.SincParam),
-            (_("Linear chirp"), sio.LinearChirpParam),
-            (_("Step"), sio.StepParam),
-            (_("Exponential"), sio.ExponentialParam),
-            (_("Logistic"), sio.LogisticParam),
-            (_("Pulse"), sio.PulseParam),
-            (_("Step pulse"), sio.StepPulseParam),
-            (_("Square pulse"), sio.SquarePulseParam),
-            (_("Polynomial"), sio.PolyParam),
-            (_("Custom"), newobject.CustomSignalParam),
-        ):
-            self.new_action(
-                label,
-                tip=_("Create new %s") % label,
-                triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
-                select_condition=SelectCond.always,
-            )
-
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
         super().create_first_actions()
+
+        # MARK: CREATE
+        with self.new_category(ActionCategory.CREATE):
+            for label, pclass in (
+                (_("Zero"), sio.ZeroParam),
+                (_("Normal distribution"), sio.NormalDistribution1DParam),
+                (_("Poisson distribution"), sio.PoissonDistribution1DParam),
+                (_("Uniform distribution"), sio.UniformDistribution1DParam),
+                (_("Gaussian"), sio.GaussParam),
+                (_("Lorentzian"), sio.LorentzParam),
+                (_("Voigt"), sio.VoigtParam),
+                (_("Blackbody (Planck's law)"), sio.PlanckParam),
+                (_("Sine"), sio.SineParam),
+                (_("Cosine"), sio.CosineParam),
+                (_("Sawtooth"), sio.SawtoothParam),
+                (_("Triangle"), sio.TriangleParam),
+                (_("Square"), sio.SquareParam),
+                (_("Cardinal sine"), sio.SincParam),
+                (_("Linear chirp"), sio.LinearChirpParam),
+                (_("Step"), sio.StepParam),
+                (_("Exponential"), sio.ExponentialParam),
+                (_("Logistic"), sio.LogisticParam),
+                (_("Pulse"), sio.PulseParam),
+                (_("Step pulse"), sio.StepPulseParam),
+                (_("Square pulse"), sio.SquarePulseParam),
+                (_("Polynomial"), sio.PolyParam),
+                (_("Custom"), newobject.CustomSignalParam),
+            ):
+                self.new_action(
+                    label,
+                    tip=_("Create new %s") % label,
+                    triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
+                    select_condition=SelectCond.always,
+                )
 
         # MARK: OPERATION
         with self.new_category(ActionCategory.OPERATION):
@@ -1417,30 +1408,9 @@ class ImageActionHandler(BaseActionHandler):
     OBJECT_STR = _("image")
     OBJECT_STR_PLURAL = _("images")
 
-    def create_new_object_actions(self):
-        """Create actions for creating new objects"""
-        for label, pclass in (
-            (_("Zero"), sio.Zero2DParam),
-            (_("Normal distribution"), sio.NormalDistribution2DParam),
-            (_("Poisson distribution"), sio.PoissonDistribution2DParam),
-            (_("Uniform distribution"), sio.UniformDistribution2DParam),
-            (_("Gaussian"), sio.Gauss2DParam),
-            (_("Ramp"), sio.Ramp2DParam),
-            (_("Checkerboard"), sio.Checkerboard2DParam),
-            (_("Sinusoidal grating"), sio.SinusoidalGrating2DParam),
-            (_("Ring pattern"), sio.Ring2DParam),
-            (_("Siemens star"), sio.SiemensStar2DParam),
-            (_("2D sinc"), sio.Sinc2DParam),
-        ):
-            self.new_action(
-                label,
-                tip=_("Create new %s") % label,
-                triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
-                select_condition=SelectCond.always,
-            )
-
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
+        # MARK: PROCESSING (1/2)
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(
                 _("Axis transformation"), icon_name="axis_transform.svg"
@@ -1449,6 +1419,29 @@ class ImageActionHandler(BaseActionHandler):
 
         super().create_first_actions()
 
+        # MARK: CREATE
+        with self.new_category(ActionCategory.CREATE):
+            for label, pclass in (
+                (_("Zero"), sio.Zero2DParam),
+                (_("Normal distribution"), sio.NormalDistribution2DParam),
+                (_("Poisson distribution"), sio.PoissonDistribution2DParam),
+                (_("Uniform distribution"), sio.UniformDistribution2DParam),
+                (_("Gaussian"), sio.Gauss2DParam),
+                (_("Ramp"), sio.Ramp2DParam),
+                (_("Checkerboard"), sio.Checkerboard2DParam),
+                (_("Sinusoidal grating"), sio.SinusoidalGrating2DParam),
+                (_("Ring pattern"), sio.Ring2DParam),
+                (_("Siemens star"), sio.SiemensStar2DParam),
+                (_("2D sinc"), sio.Sinc2DParam),
+            ):
+                self.new_action(
+                    label,
+                    tip=_("Create new %s") % label,
+                    triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
+                    select_condition=SelectCond.always,
+                )
+
+        # MARK: ROI
         with self.new_category(ActionCategory.ROI):
             self.new_action(
                 _("Create ROI grid") + "...",
@@ -1461,7 +1454,7 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.OPERATION):
             self.action_for("log10_z_plus_n")
 
-        # MARK: PROCESSING
+        # MARK: PROCESSING (2/2)
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Frequency filters"), icon_name="noise_reduction.svg"):
                 self.action_for("butterworth")

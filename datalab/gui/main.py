@@ -762,6 +762,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 self.tabwidget.setCurrentWidget(panel)
                 for name in (
                     "file",
+                    "create",
                     "edit",
                     "roi",
                     "view",
@@ -1125,8 +1126,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     def __add_menus(self) -> None:
         """Adding menus"""
-        self.file_menu = self.menuBar().addMenu(_("File"))
+        self.file_menu = self.menuBar().addMenu(_("&File"))
         configure_menu_about_to_show(self.file_menu, self.__update_file_menu)
+        self.create_menu = self.menuBar().addMenu(_("&Create"))
         self.edit_menu = self.menuBar().addMenu(_("&Edit"))
         self.roi_menu = self.menuBar().addMenu(_("ROI"))
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
@@ -1137,6 +1139,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         configure_menu_about_to_show(self.view_menu, self.__update_view_menu)
         self.help_menu = self.menuBar().addMenu("?")
         for menu in (
+            self.create_menu,
             self.edit_menu,
             self.roi_menu,
             self.operation_menu,
@@ -1474,6 +1477,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         panel = self.tabwidget.currentWidget()
         category = {
             self.file_menu: ActionCategory.FILE,
+            self.create_menu: ActionCategory.CREATE,
             self.edit_menu: ActionCategory.EDIT,
             self.roi_menu: ActionCategory.ROI,
             self.view_menu: ActionCategory.VIEW,

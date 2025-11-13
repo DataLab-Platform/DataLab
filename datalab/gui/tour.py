@@ -710,9 +710,19 @@ class Tour(BaseTour):
             [win.docks[win.signalpanel]],
         )
         self.add_step(
+            _("Signal Panel") + " – " + _("Create menu"),
+            _(
+                "The <b>Create</b> menu contains actions to create new signals "
+                "from various models (Gaussian, sine, etc.)."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.create_menu),
+            lambda win: win.create_menu.hide(),
+        )
+        self.add_step(
             _("Signal Panel") + " – " + _("File menu"),
             _(
-                "The <b>File</b> menu contains actions to create new signals, "
+                "The <b>File</b> menu contains actions to "
                 "import and export signals individually (various formats) or "
                 "to save or restore the whole workspace (HDF5 files)."
             ),
@@ -789,9 +799,19 @@ class Tour(BaseTour):
             [win.docks[win.imagepanel]],
         )
         self.add_step(
+            _("Image Panel") + " – " + _("Create menu"),
+            _(
+                "The <b>Create</b> menu contains actions to create new images "
+                "from various models (Gaussian, checkerboard, etc.)."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.create_menu),
+            lambda win: win.create_menu.hide(),
+        )
+        self.add_step(
             _("Image Panel") + " – " + _("File menu"),
             _(
-                "The <b>File</b> menu contains actions to create new images, "
+                "The <b>File</b> menu contains actions to "
                 "import and export images individually (various formats) or "
                 "to save or restore the whole workspace (HDF5 files)."
             ),

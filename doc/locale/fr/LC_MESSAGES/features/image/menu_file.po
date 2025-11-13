@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 10:53+0100\n"
+"POT-Creation-Date: 2025-11-13 10:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,11 +19,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Create, open and save Images"
-msgstr "Créer, ouvrir et enregistrer des images"
+msgid "Open and save Images"
+msgstr "Ouvrir et enregistrer des images"
 
-msgid "This section describes how to create, open and save images (and workspaces)."
-msgstr "Cette section décrit comment créer, ouvrir et enregistrer des images (et des espaces de travail)."
+msgid "This section describes how to open and save images (and workspaces)."
+msgstr "Cette section décrit comment ouvrir et enregistrer des images (et des espaces de travail)."
+
+msgid "For creating new images from mathematical models, see :ref:`ima-menu-create`."
+msgstr "Pour créer de nouvelles images à partir de modèles mathématiques, voir :ref:`ima-menu-create`."
 
 msgid "Screenshot of the \"File\" menu."
 msgstr "Capture d'écran du menu \"Fichier\"."
@@ -34,98 +37,14 @@ msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'ou
 msgid "The \"File\" menu allows you to:"
 msgstr "Le menu \"Fichier\" vous permet de :"
 
-msgid "Create, open, save and close images (see below)."
-msgstr "Créer, ouvrir, enregistrer et fermer des images (voir ci-dessous)."
+msgid "Open, save and close images (see below)."
+msgstr "Ouvrir, enregistrer et fermer des images (voir ci-dessous)."
 
 msgid "Save and restore the current workspace or browse HDF5 files (see :ref:`overview`)."
 msgstr "Enregistrer et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`overview`)."
 
 msgid "Edit DataLab preferences (see :ref:`settings`)."
 msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
-
-msgid "New image"
-msgstr "Nouvelle image"
-
-msgid "Create a new image from various models (supported datatypes: uint8, uint16, int16, float32, float64):"
-msgstr "Crée une image à partir de différents modèles (types de données pris en charge : uint8, uint16, int16, float32, float64) :"
-
-msgid "Model"
-msgstr "Modèle"
-
-msgid "Equation"
-msgstr "Equation"
-
-msgid "Zero"
-msgstr "Zéro"
-
-msgid ":math:`z[i] = 0`"
-msgstr ""
-
-msgid "Empty"
-msgstr "Vide"
-
-msgid "Data is directly taken from memory as it is"
-msgstr "Données mémoire en l'état"
-
-msgid "Normal distribution"
-msgstr "Distribution normale"
-
-msgid ":math:`z[i]` is normally distributed with configurable mean and standard deviation"
-msgstr ":math:`z[i]` est distribué normalement avec une moyenne et un écart type configurables"
-
-msgid "Poisson distribution"
-msgstr "Distribution de Poisson"
-
-msgid ":math:`z[i]` is Poisson distributed with configurable mean"
-msgstr ":math:`z[i]` est distribué selon Poisson avec une moyenne configurable"
-
-msgid "Uniform distribution"
-msgstr "Distribution uniforme"
-
-msgid ":math:`z[i]` is uniformly distributed between two configurable bounds"
-msgstr ":math:`z[i]` est uniformément distribué entre deux limites configurables"
-
-msgid "2D Gaussian"
-msgstr "Gaussienne 2D"
-
-msgid ":math:`z = A \\cdot \\exp\\left(-\\dfrac{\\left(\\sqrt{\\left(x-x_0\\right)^2+\\left(y-y_0\\right)^2}-\\mu\\right)^2}{2\\sigma^2}\\right)`"
-msgstr ""
-
-msgid "2D Ramp"
-msgstr "Rampe 2D"
-
-msgid ":math:`z = A (x - x_0) + B (y - y_0) + C`"
-msgstr ""
-
-msgid "Checkerboard"
-msgstr "Damier"
-
-msgid "Alternating square pattern for calibration and spatial frequency analysis"
-msgstr "Motif carré alterné pour l'étalonnage et l'analyse de fréquence spatiale"
-
-msgid "Sinusoidal grating"
-msgstr "Réseau sinusoïdal"
-
-msgid ":math:`z = A \\sin(2\\pi(f_x \\cdot x + f_y \\cdot y) + \\varphi) + C`"
-msgstr ""
-
-msgid "Ring pattern"
-msgstr "Motif en anneau"
-
-msgid "Concentric circular rings for radial analysis"
-msgstr "Anneaux circulaires concentriques pour l'analyse radiale"
-
-msgid "Siemens star"
-msgstr "Étoile de Siemens"
-
-msgid "Radial spoke pattern for resolution testing"
-msgstr "Motif en rayons pour les tests de résolution"
-
-msgid "2D sinc"
-msgstr "Sinc 2D"
-
-msgid ":math:`z = A \\cdot \\mathrm{sinc}\\left(\\dfrac{\\sqrt{(x-x_0)^2+(y-y_0)^2}}{\\sigma}\\right) + C`"
-msgstr ""
 
 msgid "Open image"
 msgstr "Ouvrir une image"

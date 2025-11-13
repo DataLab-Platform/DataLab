@@ -112,6 +112,7 @@ def test_main_app():
         # Force application menus to pop-up
         for menu in (
             win.file_menu,
+            win.create_menu,
             win.edit_menu,
             win.roi_menu,
             win.operation_menu,

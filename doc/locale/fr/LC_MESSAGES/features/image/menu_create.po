@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-13 10:34+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Create Images"
+msgstr "Créer des images"
+
+msgid ""
+"This section describes how to create new images from various mathematical"
+" models."
+msgstr ""
+"Cette section décrit comment créer de nouvelles images à partir de divers "
+"modèles mathématiques."
+
+msgid "Screenshot of the \"Create\" menu."
+msgstr "Capture d'écran du menu \"Création\"."
+
+msgid ""
+"When the \"Image Panel\" is selected, the menus and toolbars are updated "
+"to provide image-related actions."
+msgstr ""
+"Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'outils "
+"sont mis à jour pour fournir les actions relatives aux images."
+
+msgid ""
+"The \"Create\" menu allows you to create new images from various models "
+"(see below)."
+msgstr ""
+"Le menu \"Création\" permet de créer de nouvelles images à partir de divers "
+"modèles (voir ci-dessous)."
+
+msgid "New image"
+msgstr "Nouvelle image"
+
+msgid ""
+"Create a new image from various models (supported datatypes: uint8, "
+"uint16, int16, float32, float64):"
+msgstr ""
+"Créer une nouvelle image à partir de divers modèles (types de données supportés : uint8, "
+"uint16, int16, float32, float64) :"
+
+msgid "Model"
+msgstr "Modèle"
+
+msgid "Equation"
+msgstr "Équation"
+
+msgid "Zero"
+msgstr "Zéro"
+
+msgid ":math:`z[i] = 0`"
+msgstr ":math:`z[i] = 0`"
+
+msgid "Empty"
+msgstr "Vide"
+
+msgid "Data is directly taken from memory as it is"
+msgstr "Les données sont directement prises de la mémoire telles quelles"
+
+msgid "Normal distribution"
+msgstr "Distribution normale"
+
+msgid ""
+":math:`z[i]` is normally distributed with configurable mean and standard "
+"deviation"
+msgstr ""
+":math:`z[i]` suit une distribution normale avec moyenne et écart-type "
+"configurables"
+
+msgid "Poisson distribution"
+msgstr "Distribution de Poisson"
+
+msgid ":math:`z[i]` is Poisson distributed with configurable mean"
+msgstr ":math:`z[i]` suit une distribution de Poisson avec moyenne configurable"
+
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
+
+msgid ":math:`z[i]` is uniformly distributed between two configurable bounds"
+msgstr ":math:`z[i]` suit une distribution uniforme entre deux bornes configurables"
+
+msgid "2D Gaussian"
+msgstr "Gaussienne 2D"
+
+msgid ""
+":math:`z = A \\cdot "
+"\\exp\\left(-\\dfrac{\\left(\\sqrt{\\left(x-x_0\\right)^2+\\left(y-y_0\\right)^2}-\\mu\\right)^2}{2\\sigma^2}\\right)`"
+msgstr ""
+":math:`z = A \\cdot "
+"\\exp\\left(-\\dfrac{\\left(\\sqrt{\\left(x-x_0\\right)^2+\\left(y-y_0\\right)^2}-\\mu\\right)^2}{2\\sigma^2}\\right)`"
+
+msgid "2D Ramp"
+msgstr "Rampe 2D"
+
+msgid ":math:`z = A (x - x_0) + B (y - y_0) + C`"
+msgstr ":math:`z = A (x - x_0) + B (y - y_0) + C`"
+
+msgid "Checkerboard"
+msgstr "Échiquier"
+
+msgid "Alternating square pattern for calibration and spatial frequency analysis"
+msgstr "Motif de carrés alternés pour l'étalonnage et l'analyse de fréquence spatiale"
+
+msgid "Sinusoidal grating"
+msgstr "Réseau sinusoïdal"
+
+msgid ":math:`z = A \\sin(2\\pi(f_x \\cdot x + f_y \\cdot y) + \\varphi) + C`"
+msgstr ":math:`z = A \\sin(2\\pi(f_x \\cdot x + f_y \\cdot y) + \\varphi) + C`"
+
+msgid "Ring pattern"
+msgstr "Motif d'anneaux"
+
+msgid "Concentric circular rings for radial analysis"
+msgstr "Anneaux circulaires concentriques pour l'analyse radiale"
+
+msgid "Siemens star"
+msgstr "Étoile de Siemens"
+
+msgid "Radial spoke pattern for resolution testing"
+msgstr "Motif de rayons radiaux pour tester la résolution"
+
+msgid "2D sinc"
+msgstr "Sinc 2D"
+
+msgid ""
+":math:`z = A \\cdot "
+"\\mathrm{sinc}\\left(\\dfrac{\\sqrt{(x-x_0)^2+(y-y_0)^2}}{\\sigma}\\right)"
+" + C`"
+msgstr ""
+":math:`z = A \\cdot "
+"\\mathrm{sinc}\\left(\\dfrac{\\sqrt{(x-x_0)^2+(y-y_0)^2}}{\\sigma}\\right)"
+" + C`"

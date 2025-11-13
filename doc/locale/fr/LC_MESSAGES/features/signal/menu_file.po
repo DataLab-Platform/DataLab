@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 18:12+0100\n"
+"POT-Creation-Date: 2025-11-13 10:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -18,11 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "Create, open and save Signals"
-msgstr "Créer, ouvrir et enregistrer des signaux"
+msgid "Open and save Signals"
+msgstr "Ouvrir et enregistrer des signaux"
 
-msgid "This section describes how to create, open and save signals (and workspaces)."
-msgstr "Cette section décrit comment créer, ouvrir et enregistrer des signaux (et des espaces de travail)."
+msgid "This section describes how to open and save signals (and workspaces)."
+msgstr "Cette section décrit comment ouvrir et enregistrer des signaux (et des espaces de travail)."
+
+msgid "For creating new signals from mathematical models, see :ref:`sig-menu-create`."
+msgstr "Pour créer de nouveaux signaux à partir de modèles mathématiques, voir :ref:`sig-menu-create`."
 
 msgid "Screenshot of the \"File\" menu."
 msgstr "Capture d'écran du menu \"Fichier\"."
@@ -33,197 +36,14 @@ msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'o
 msgid "The \"File\" menu allows you to:"
 msgstr "Le menu \"Fichier\" vous permet de :"
 
-msgid "Create, open, save and close signals (see below)."
-msgstr "Créer, ouvrir, enregistrer et fermer des signaux (voir ci-dessous)."
+msgid "Open, save and close signals (see below)."
+msgstr "Ouvrir, enregistrer et fermer des signaux (voir ci-dessous)."
 
 msgid "Save and restore the current workspace or browse HDF5 files (see :ref:`overview`)."
 msgstr "Sauvegarder et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`overview`)."
 
 msgid "Edit DataLab preferences (see :ref:`settings`)."
 msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
-
-msgid "New signal"
-msgstr "Nouveau signal"
-
-msgid "Create a new signal from various models:"
-msgstr "Crée un nouveau signal depuis différents modèles :"
-
-msgid "Model"
-msgstr "Modèle"
-
-msgid "Equation"
-msgstr "Equation"
-
-msgid "Zero"
-msgstr "Zéro"
-
-msgid ":math:`y[i] = 0`"
-msgstr ""
-
-msgid "Normal distribution"
-msgstr "Distribution normale"
-
-msgid ":math:`y[i]` is normally distributed with configurable mean and standard deviation"
-msgstr ":math:`y[i]` est normalement distribué avec une moyenne et un écart type configurables"
-
-msgid "Poisson distribution"
-msgstr "Distribution de Poisson"
-
-msgid ":math:`y[i]` is Poisson distributed with configurable mean"
-msgstr ":math:`y[i]` est distribué selon une loi de Poisson avec une moyenne configurable"
-
-msgid "Uniform distribution"
-msgstr "Distribution uniforme"
-
-msgid ":math:`y[i]` is uniformly distributed between two configurable bounds"
-msgstr ":math:`y[i]` est uniformément distribué entre deux bornes configurables"
-
-msgid "Gaussian"
-msgstr "Gaussienne"
-
-msgid ":math:`y = y_{0}+\\dfrac{A}{\\sqrt{2\\pi} \\cdot \\sigma} \\cdot \\exp\\left(-\\dfrac{1}{2} \\cdot \\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2\\right)`"
-msgstr ""
-
-msgid "Lorentzian"
-msgstr "Lorentzienne"
-
-msgid ":math:`y = y_{0}+\\dfrac{A}{\\sigma \\cdot \\pi} \\cdot \\dfrac{1}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
-msgstr ""
-
-msgid "Voigt"
-msgstr "Voigt"
-
-msgid ":math:`y = y_{0}+A \\cdot \\dfrac{\\Re\\left(\\exp\\left(-z^2\\right) \\cdot \\erfc(-j \\cdot z)\\right)}{\\sqrt{2\\pi} \\cdot \\sigma}` with :math:`z = \\dfrac{x-x_{0}-j \\cdot \\sigma}{\\sqrt{2} \\cdot \\sigma}`"
-msgstr ""
-
-msgid "Blackbody (Planck's law)"
-msgstr "Corps noir (loi de Planck)"
-
-msgid ":math:`y = \\dfrac{2 h c^2}{\\lambda^5 \\left(\\exp\\left(\\dfrac{h c}{\\lambda k T}\\right)-1\\right)}`"
-msgstr ""
-
-msgid "Sine"
-msgstr "Sinus"
-
-#, python-brace-format
-msgid ":math:`y = y_{0}+A\\sin\\left(2\\pi \\cdot f \\cdot x+\\phi\\right)`"
-msgstr ""
-
-msgid "Cosine"
-msgstr "Cosinus"
-
-#, python-brace-format
-msgid ":math:`y = y_{0}+A\\cos\\left(2\\pi \\cdot f \\cdot x+\\phi\\right)`"
-msgstr ""
-
-msgid "Sawtooth"
-msgstr "Dents de scie"
-
-#, python-brace-format
-msgid ":math:`y = y_{0}+A \\left( 2 \\left( f x + \\frac{\\phi}{2\\pi} - \\left\\lfloor f x + \\frac{\\phi}{2\\pi} + \\frac{1}{2} \\right\\rfloor \\right) \\right)`"
-msgstr ""
-
-msgid "Triangle"
-msgstr "Triangle"
-
-#, python-brace-format
-msgid ":math:`y = y_{0}+A \\sawtooth\\left(2 \\pi f x + \\phi, \\text{width} = 0.5\\right)`"
-msgstr ""
-
-msgid "Square"
-msgstr "Carré"
-
-msgid ":math:`y = y_0 + A \\sgn\\left( \\sin\\left( 2\\pi f x + \\phi \\right) \\right)`"
-msgstr ""
-
-msgid "Cardinal sine"
-msgstr "Sinus cardinal"
-
-msgid ":math:`y = y_0 + A \\sinc\\left(2\\pi f x + \\phi\\right)`"
-msgstr ""
-
-msgid "Linear chirp"
-msgstr "Modulation linéaire de fréquence"
-
-#, python-brace-format
-msgid ":math:`y = y_{0} + A \\sin\\left(\\phi_{0} + 2\\pi \\left(f_{0}\\, x +  \\frac{1}{2} c\\, x^{2}\\right)\\right)`"
-msgstr ""
-
-msgid "Step"
-msgstr "Echelon"
-
-msgid ":math:`y = y_{0}+A \\left\\{\\begin{array}{ll}1 & \\text{if } x > x_{0} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
-msgstr ""
-
-msgid "Exponential"
-msgstr "Exponentielle"
-
-#, python-brace-format
-msgid ":math:`y = y_{0}+A \\exp\\left(B \\cdot x\\right)`"
-msgstr ""
-
-msgid "Logistic"
-msgstr "Logistique"
-
-msgid ":math:`y = y_{0} + \\dfrac{A}{1 + \\exp\\left(-k \\left(x - x_{0}\\right)\\right)}`"
-msgstr ""
-
-msgid "Pulse"
-msgstr "Impulsion"
-
-msgid ":math:`y = y_{0}+A \\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x < x_{1} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
-msgstr ""
-
-msgid "Step Pulse"
-msgstr "Impulsion en échelon"
-
-#, python-brace-format
-msgid ":math:`y = \\left( \\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + A \\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\ y_0 + A & \\text{if } x \\geq t_0 + t_r \\end{cases} \\right) + \\mathcal{N}\\left(0, \\sigma_n\\right)`"
-msgstr ""
-
-msgid "where:"
-msgstr "Où :"
-
-msgid ":math:`t_0` is the pulse start time,"
-msgstr ":math:`t_0` est l'instant de début de l'impulsion,"
-
-msgid ":math:`t_r` is the rise time,"
-msgstr ":math:`t_r` est le temps de montée,"
-
-msgid ":math:`\\sigma_n` is the noise amplitude"
-msgstr ":math:`\\sigma_n` est l'amplitude du bruit"
-
-msgid "Square Pulse"
-msgstr "Impulsion carrée"
-
-#, python-brace-format
-msgid ":math:`y(x) = \\left(\\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + A \\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\ y_0 + A & \\text{if } t_0 + t_r \\leq x < t_1 \\\\ y_0 + A - A \\cdot \\dfrac{x - t_1}{t_f} & \\text{if } t_1 \\leq x < t_1 + t_f \\\\ y_0 & \\text{if } x \\geq t_1 + t_f \\end{cases} \\right) + \\mathcal{N}(0, \\sigma_n)`"
-msgstr ""
-
-msgid ":math:`t_f` is the fall time,"
-msgstr ":math:`t_f` est le temps de descente,"
-
-msgid ":math:`t_1 = t_0 + t_r + d` is the time at which the decay starts,"
-msgstr ":math:`t_1 = t_0 + t_r + d` est l'instant où la décroissance commence,"
-
-msgid "the duration of the plateau :math:`d` is computed as :math:`d = t_{\\mathrm{FWHM}} - \\dfrac{t_r + t_f}{2}` from the full width at half maximum :math:`t_{\\mathrm{FWHM}}`"
-msgstr "la durée du plateau :math:`d` est calculée comme :math:`d = t_{\\mathrm{FWHM}} - \\dfrac{t_r + t_f}{2}` à partir de la largeur à mi-hauteur :math:`t_{\\mathrm{FWHM}}`"
-
-msgid "The duration of the plateau :math:`d` should not be negative."
-msgstr "La durée du plateau :math:`d` ne doit pas être négative."
-
-msgid "Polynomial"
-msgstr "Polynomial"
-
-#, python-brace-format
-msgid ":math:`y = y_{0}+A_{0}+A_{1} \\cdot x+A_{2} \\cdot x^2+\\ldots+A_{n} \\cdot x^n`"
-msgstr ""
-
-msgid "Custom"
-msgstr "Personnalisé"
-
-msgid "Manual input of X and Y values"
-msgstr "Saisie manuelle des valeurs X et Y"
 
 msgid "Open signal"
 msgstr "Ouvrir un signal"

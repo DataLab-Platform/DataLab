@@ -1,0 +1,313 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-13 10:34+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Create Signals"
+msgstr "Créer des signaux"
+
+msgid ""
+"This section describes how to create new signals from various "
+"mathematical models."
+msgstr ""
+"Cette section décrit comment créer de nouveaux signaux à partir de divers "
+"modèles mathématiques."
+
+msgid "Screenshot of the \"Create\" menu."
+msgstr "Capture d'écran du menu \"Création\"."
+
+msgid ""
+"When the \"Signal Panel\" is selected, the menus and toolbars are updated"
+" to provide signal-related actions."
+msgstr ""
+"Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'outils "
+"sont mis à jour pour fournir les actions relatives aux signaux."
+
+msgid ""
+"The \"Create\" menu allows you to create new signals from various models "
+"(see below)."
+msgstr ""
+"Le menu \"Création\" permet de créer de nouveaux signaux à partir de divers "
+"modèles (voir ci-dessous)."
+
+msgid "New signal"
+msgstr "Nouveau signal"
+
+msgid "Create a new signal from various models:"
+msgstr "Créer un nouveau signal à partir de divers modèles :"
+
+msgid "Model"
+msgstr "Modèle"
+
+msgid "Equation"
+msgstr "Équation"
+
+msgid "Zero"
+msgstr "Zéro"
+
+msgid ":math:`y[i] = 0`"
+msgstr ":math:`y[i] = 0`"
+
+msgid "Normal distribution"
+msgstr "Distribution normale"
+
+msgid ""
+":math:`y[i]` is normally distributed with configurable mean and standard "
+"deviation"
+msgstr ""
+":math:`y[i]` suit une distribution normale avec moyenne et écart-type "
+"configurables"
+
+msgid "Poisson distribution"
+msgstr "Distribution de Poisson"
+
+msgid ":math:`y[i]` is Poisson distributed with configurable mean"
+msgstr ":math:`y[i]` suit une distribution de Poisson avec moyenne configurable"
+
+msgid "Uniform distribution"
+msgstr "Distribution uniforme"
+
+msgid ":math:`y[i]` is uniformly distributed between two configurable bounds"
+msgstr ":math:`y[i]` suit une distribution uniforme entre deux bornes configurables"
+
+msgid "Gaussian"
+msgstr "Gaussienne"
+
+msgid ""
+":math:`y = y_{0}+\\dfrac{A}{\\sqrt{2\\pi} \\cdot \\sigma} \\cdot "
+"\\exp\\left(-\\dfrac{1}{2} \\cdot "
+"\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2\\right)`"
+msgstr ""
+":math:`y = y_{0}+\\dfrac{A}{\\sqrt{2\\pi} \\cdot \\sigma} \\cdot "
+"\\exp\\left(-\\dfrac{1}{2} \\cdot "
+"\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2\\right)`"
+
+msgid "Lorentzian"
+msgstr "Lorentzienne"
+
+msgid ""
+":math:`y = y_{0}+\\dfrac{A}{\\sigma \\cdot \\pi} \\cdot "
+"\\dfrac{1}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
+msgstr ""
+":math:`y = y_{0}+\\dfrac{A}{\\sigma \\cdot \\pi} \\cdot "
+"\\dfrac{1}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
+
+msgid "Voigt"
+msgstr "Voigt"
+
+msgid ""
+":math:`y = y_{0}+A \\cdot \\dfrac{\\Re\\left(\\exp\\left(-z^2\\right) "
+"\\cdot \\erfc(-j \\cdot z)\\right)}{\\sqrt{2\\pi} \\cdot \\sigma}` with "
+":math:`z = \\dfrac{x-x_{0}-j \\cdot \\sigma}{\\sqrt{2} \\cdot \\sigma}`"
+msgstr ""
+":math:`y = y_{0}+A \\cdot \\dfrac{\\Re\\left(\\exp\\left(-z^2\\right) "
+"\\cdot \\erfc(-j \\cdot z)\\right)}{\\sqrt{2\\pi} \\cdot \\sigma}` avec "
+":math:`z = \\dfrac{x-x_{0}-j \\cdot \\sigma}{\\sqrt{2} \\cdot \\sigma}`"
+
+msgid "Blackbody (Planck's law)"
+msgstr "Corps noir (loi de Planck)"
+
+msgid ""
+":math:`y = \\dfrac{2 h c^2}{\\lambda^5 \\left(\\exp\\left(\\dfrac{h "
+"c}{\\lambda k T}\\right)-1\\right)}`"
+msgstr ""
+":math:`y = \\dfrac{2 h c^2}{\\lambda^5 \\left(\\exp\\left(\\dfrac{h "
+"c}{\\lambda k T}\\right)-1\\right)}`"
+
+msgid "Sine"
+msgstr "Sinus"
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A\\sin\\left(2\\pi \\cdot f \\cdot x+\\phi\\right)`"
+msgstr ":math:`y = y_{0}+A\\sin\\left(2\\pi \\cdot f \\cdot x+\\phi\\right)`"
+
+msgid "Cosine"
+msgstr "Cosinus"
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A\\cos\\left(2\\pi \\cdot f \\cdot x+\\phi\\right)`"
+msgstr ":math:`y = y_{0}+A\\cos\\left(2\\pi \\cdot f \\cdot x+\\phi\\right)`"
+
+msgid "Sawtooth"
+msgstr "Dent de scie"
+
+#, python-brace-format
+msgid ""
+":math:`y = y_{0}+A \\left( 2 \\left( f x + \\frac{\\phi}{2\\pi} - "
+"\\left\\lfloor f x + \\frac{\\phi}{2\\pi} + \\frac{1}{2} \\right\\rfloor "
+"\\right) \\right)`"
+msgstr ""
+":math:`y = y_{0}+A \\left( 2 \\left( f x + \\frac{\\phi}{2\\pi} - "
+"\\left\\lfloor f x + \\frac{\\phi}{2\\pi} + \\frac{1}{2} \\right\\rfloor "
+"\\right) \\right)`"
+
+msgid "Triangle"
+msgstr "Triangle"
+
+#, python-brace-format
+msgid ""
+":math:`y = y_{0}+A \\sawtooth\\left(2 \\pi f x + \\phi, \\text{width} = "
+"0.5\\right)`"
+msgstr ""
+":math:`y = y_{0}+A \\sawtooth\\left(2 \\pi f x + \\phi, \\text{width} = "
+"0.5\\right)`"
+
+msgid "Square"
+msgstr "Carré"
+
+msgid ""
+":math:`y = y_0 + A \\sgn\\left( \\sin\\left( 2\\pi f x + \\phi \\right) "
+"\\right)`"
+msgstr ""
+":math:`y = y_0 + A \\sgn\\left( \\sin\\left( 2\\pi f x + \\phi \\right) "
+"\\right)`"
+
+msgid "Cardinal sine"
+msgstr "Sinus cardinal"
+
+msgid ":math:`y = y_0 + A \\sinc\\left(2\\pi f x + \\phi\\right)`"
+msgstr ":math:`y = y_0 + A \\sinc\\left(2\\pi f x + \\phi\\right)`"
+
+msgid "Linear chirp"
+msgstr "Balayage linéaire"
+
+#, python-brace-format
+msgid ""
+":math:`y = y_{0} + A \\sin\\left(\\phi_{0} + 2\\pi \\left(f_{0}\\, x +  "
+"\\frac{1}{2} c\\, x^{2}\\right)\\right)`"
+msgstr ""
+":math:`y = y_{0} + A \\sin\\left(\\phi_{0} + 2\\pi \\left(f_{0}\\, x +  "
+"\\frac{1}{2} c\\, x^{2}\\right)\\right)`"
+
+msgid "Step"
+msgstr "Échelon"
+
+msgid ""
+":math:`y = y_{0}+A \\left\\{\\begin{array}{ll}1 & \\text{if } x > x_{0} "
+"\\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgstr ""
+":math:`y = y_{0}+A \\left\\{\\begin{array}{ll}1 & \\text{si } x > x_{0} "
+"\\\\ 0 & \\text{sinon}\\end{array}\\right.`"
+
+msgid "Exponential"
+msgstr "Exponentielle"
+
+#, python-brace-format
+msgid ":math:`y = y_{0}+A \\exp\\left(B \\cdot x\\right)`"
+msgstr ":math:`y = y_{0}+A \\exp\\left(B \\cdot x\\right)`"
+
+msgid "Logistic"
+msgstr "Logistique"
+
+msgid ""
+":math:`y = y_{0} + \\dfrac{A}{1 + \\exp\\left(-k \\left(x - "
+"x_{0}\\right)\\right)}`"
+msgstr ""
+":math:`y = y_{0} + \\dfrac{A}{1 + \\exp\\left(-k \\left(x - "
+"x_{0}\\right)\\right)}`"
+
+msgid "Pulse"
+msgstr "Impulsion"
+
+msgid ""
+":math:`y = y_{0}+A \\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x <"
+" x_{1} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgstr ""
+":math:`y = y_{0}+A \\left\\{\\begin{array}{ll}1 & \\text{si } x_{0} < x <"
+" x_{1} \\\\ 0 & \\text{sinon}\\end{array}\\right.`"
+
+msgid "Step Pulse"
+msgstr "Impulsion à front monté"
+
+#, python-brace-format
+msgid ""
+":math:`y = \\left( \\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + A "
+"\\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\ "
+"y_0 + A & \\text{if } x \\geq t_0 + t_r \\end{cases} \\right) + "
+"\\mathcal{N}\\left(0, \\sigma_n\\right)`"
+msgstr ""
+":math:`y = \\left( \\begin{cases} y_0 & \\text{si } x < t_0 \\\\ y_0 + A "
+"\\cdot \\dfrac{x - t_0}{t_r} & \\text{si } t_0 \\leq x < t_0 + t_r \\\\ "
+"y_0 + A & \\text{si } x \\geq t_0 + t_r \\end{cases} \\right) + "
+"\\mathcal{N}\\left(0, \\sigma_n\\right)`"
+
+msgid "where:"
+msgstr "où :"
+
+msgid ":math:`t_0` is the pulse start time,"
+msgstr ":math:`t_0` est le temps de début de l'impulsion,"
+
+msgid ":math:`t_r` is the rise time,"
+msgstr ":math:`t_r` est le temps de montée,"
+
+msgid ":math:`\\sigma_n` is the noise amplitude"
+msgstr ":math:`\\sigma_n` est l'amplitude du bruit"
+
+msgid "Square Pulse"
+msgstr "Impulsion carrée"
+
+#, python-brace-format
+msgid ""
+":math:`y(x) = \\left(\\begin{cases} y_0 & \\text{if } x < t_0 \\\\ y_0 + "
+"A \\cdot \\dfrac{x - t_0}{t_r} & \\text{if } t_0 \\leq x < t_0 + t_r \\\\"
+" y_0 + A & \\text{if } t_0 + t_r \\leq x < t_1 \\\\ y_0 + A - A \\cdot "
+"\\dfrac{x - t_1}{t_f} & \\text{if } t_1 \\leq x < t_1 + t_f \\\\ y_0 & "
+"\\text{if } x \\geq t_1 + t_f \\end{cases} \\right) + \\mathcal{N}(0, "
+"\\sigma_n)`"
+msgstr ""
+":math:`y(x) = \\left(\\begin{cases} y_0 & \\text{si } x < t_0 \\\\ y_0 + "
+"A \\cdot \\dfrac{x - t_0}{t_r} & \\text{si } t_0 \\leq x < t_0 + t_r \\\\"
+" y_0 + A & \\text{si } t_0 + t_r \\leq x < t_1 \\\\ y_0 + A - A \\cdot "
+"\\dfrac{x - t_1}{t_f} & \\text{si } t_1 \\leq x < t_1 + t_f \\\\ y_0 & "
+"\\text{si } x \\geq t_1 + t_f \\end{cases} \\right) + \\mathcal{N}(0, "
+"\\sigma_n)`"
+
+msgid ":math:`t_f` is the fall time,"
+msgstr ":math:`t_f` est le temps de descente,"
+
+msgid ":math:`t_1 = t_0 + t_r + d` is the time at which the decay starts,"
+msgstr ":math:`t_1 = t_0 + t_r + d` est le temps auquel la décroissance commence,"
+
+msgid ""
+"the duration of the plateau :math:`d` is computed as :math:`d = "
+"t_{\\mathrm{FWHM}} - \\dfrac{t_r + t_f}{2}` from the full width at half "
+"maximum :math:`t_{\\mathrm{FWHM}}`"
+msgstr ""
+"la durée du plateau :math:`d` est calculée par :math:`d = "
+"t_{\\mathrm{FWHM}} - \\dfrac{t_r + t_f}{2}` à partir de la largeur à mi-hauteur "
+":math:`t_{\\mathrm{FWHM}}`"
+
+msgid "The duration of the plateau :math:`d` should not be negative."
+msgstr "La durée du plateau :math:`d` ne doit pas être négative."
+
+msgid "Polynomial"
+msgstr "Polynôme"
+
+#, python-brace-format
+msgid ""
+":math:`y = y_{0}+A_{0}+A_{1} \\cdot x+A_{2} \\cdot x^2+\\ldots+A_{n} "
+"\\cdot x^n`"
+msgstr ""
+":math:`y = y_{0}+A_{0}+A_{1} \\cdot x+A_{2} \\cdot x^2+\\ldots+A_{n} "
+"\\cdot x^n`"
+
+msgid "Custom"
+msgstr "Personnalisé"
+
+msgid "Manual input of X and Y values"
+msgstr "Saisie manuelle des valeurs X et Y"
