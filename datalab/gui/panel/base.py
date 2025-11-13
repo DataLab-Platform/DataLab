@@ -601,6 +601,12 @@ class ObjectProp(QW.QWidget):
         # Update metadata with new creation parameters
         insert_creation_parameters(self.current_creation_obj, param)
 
+        # Auto-recompute analysis if the object had analysis parameters
+        # Since the data has changed, any analysis results are now invalid
+        # Use the processor for the current object's type
+        obj_processor = self.__get_processor_associated_to(self.current_creation_obj)
+        obj_processor.auto_recompute_analysis(self.current_creation_obj)
+
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
 
