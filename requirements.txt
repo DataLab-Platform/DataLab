@@ -1,13 +1,13 @@
 Coverage
 NumPy >= 1.22
-PlotPy >= 2.8.1
+PlotPy >= 2.8.2
 PyQt5 >= 5.15.6
 PyWavelets >= 1.2
 SciPy >= 1.10.1
-Sigima >= 1.0.1
+Sigima >= 1.0.2
 babel
 build
-guidata >= 3.13.2
+guidata >= 3.13.3
 myst_parser
 opencv-python-headless >= 4.8.1.78
 packaging >= 21.3

@@ -11,13 +11,13 @@ The `datalab-platform` package requires the following Python modules:
       - >=3.9, <4
       - Python programming language
     * - guidata
-      - >= 3.13.2
+      - >= 3.13.3
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
-      - >= 2.8.1
+      - >= 2.8.2
       - Curve and image plotting tools for Python/Qt applications
     * - Sigima
-      - >= 1.0.1
+      - >= 1.0.2
       - Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform.
     * - NumPy
       - >= 1.22
