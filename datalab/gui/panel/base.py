@@ -2878,7 +2878,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
 
         # Add checkbox to toggle result label visibility
-        self.show_label_checkbox = QW.QCheckBox(_("Show result label"), self)
+        self.show_label_checkbox = QW.QCheckBox(_("Show results label"), self)
         self.show_label_checkbox.setToolTip(
             _("Show or hide the merged result label on the plot")
         )

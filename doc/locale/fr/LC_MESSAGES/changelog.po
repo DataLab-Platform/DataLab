@@ -105,7 +105,7 @@ msgstr "Nouvelle case à cocher dans le panneau des propriétés (entre les bout
 msgid "Labels are always added to the plot but can be shown/hidden with a single click"
 msgstr "Les étiquettes sont toujours ajoutées au graphique mais peuvent être affichées/masquées d'un simple clic"
 
-msgid "Default visibility configurable in Settings (Visualization → Results display limits → \"Show result label by default\")"
+msgid "Default visibility configurable in Settings (Visualization → Results display limits → \"Show results label by default\")"
 msgstr "La visibilité par défaut est configurable dans les paramètres (Visualisation → Limites d'affichage des résultats → \"Afficher l'étiquette de résultat par défaut\")"
 
 msgid "Setting is persisted across sessions and applies to all new analysis results"

@@ -34,7 +34,7 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * **Result label visibility control**: Added option to show/hide merged result labels on plots
   * New checkbox in Properties panel (between Results and Annotations buttons) to toggle result label visibility
   * Labels are always added to the plot but can be shown/hidden with a single click
-  * Default visibility configurable in Settings (Visualization → Results display limits → "Show result label by default")
+  * Default visibility configurable in Settings (Visualization → Results display limits → "Show results label by default")
   * Setting is persisted across sessions and applies to all new analysis results
   * Useful for decluttering plots when working with multiple results or when labels overlap with data
 

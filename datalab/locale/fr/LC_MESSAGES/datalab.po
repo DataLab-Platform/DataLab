@@ -1273,7 +1273,7 @@ msgstr "%d objets source n'existent plus."
 msgid "Show results obtained from previous analysis"
 msgstr "Afficher les résultats obtenus avec des analyses réalisées précédemment"
 
-msgid "Show result label"
+msgid "Show results label"
 msgstr "Afficher l'étiquette des résultats"
 
 msgid "Show or hide the merged result label on the plot"
