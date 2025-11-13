@@ -679,6 +679,8 @@ PLOTPY_DEFAULTS = {
     "roi": {  # Shape style for ROI
         # Signals:
         # - Editable ROI (ROI editor):
+        "s/editable/fill": "#ffff00",
+        "s/editable/shade": 0.10,
         "s/editable/line/style": "SolidLine",
         "s/editable/line/color": "#ffff00",
         "s/editable/line/width": 1,
@@ -709,7 +711,7 @@ PLOTPY_DEFAULTS = {
         "s/readonly/sel_line/color": ROI_SEL_LINE_COLOR,
         "s/readonly/sel_line/width": 2,
         "s/readonly/fill": ROI_LINE_COLOR,
-        "s/readonly/shade": 0.15,
+        "s/readonly/shade": 0.10,
         "s/readonly/symbol/marker": "Ellipse",
         "s/readonly/symbol/size": 7,
         "s/readonly/symbol/edgecolor": MAIN_BG_COLOR,
