@@ -951,6 +951,149 @@ def test_select_source_objects_deleted_source():
             assert get_uuid(filtered_signal) in selected_uuids
 
 
+def test_roi_mask_invalidation_on_size_change():
+    """Test that ROI masks are invalidated when image size changes.
+
+    This test verifies the fix for the bug where modifying creation parameters
+    that change the image dimensions doesn't invalidate the ROI mask cache,
+    resulting in corrupted ROI display.
+
+    Reproduction steps:
+    1. Create a 2D gaussian image
+    2. Add a rectangular ROI
+    3. Change the size of the image (increase width by 50%)
+    4. Verify that the ROI mask is properly invalidated and recomputed
+    """
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            objprop = panel.objprop
+
+            # Step 1: Create a 2D gaussian image with specific dimensions
+            param = Gauss2DParam.create(
+                height=100, width=100, x0=50.0, y0=50.0, sigma=10.0, a=100.0
+            )
+            panel.new_object(param=param, edit=False)
+            image = panel.objview.get_current_object()
+            assert image is not None
+            assert image.data.shape == (100, 100)
+
+            # Step 2: Add a rectangular ROI
+            from sigima.objects import create_image_roi
+
+            roi = create_image_roi("rectangle", [20, 20, 40, 40])
+            image.roi = roi
+
+            # Verify the ROI mask is created and cached
+            mask_before = image.maskdata
+            assert mask_before is not None
+            assert mask_before.shape == (100, 100)
+
+            # Step 3: Change the image dimensions (increase width by 50%)
+            editor = objprop.creation_param_editor
+            assert editor is not None
+            editor.dataset.width = 150  # Change from 100 to 150
+
+            # Apply the new parameters
+            objprop.apply_creation_parameters()
+
+            # Step 4: Verify the image was resized
+            updated_image = panel.objview.get_current_object()
+            assert get_uuid(updated_image) == get_uuid(image)
+            assert updated_image.data.shape == (100, 150)
+
+            # Step 5: Verify the ROI mask was invalidated and will be recomputed
+            # with the new dimensions
+            mask_after = updated_image.maskdata
+            assert mask_after is not None
+            assert mask_after.shape == (100, 150), (
+                f"ROI mask shape {mask_after.shape} doesn't match "
+                f"new image shape {updated_image.data.shape}"
+            )
+
+            # The mask should be different from before (different shape)
+            assert mask_before.shape != mask_after.shape
+
+
+def test_roi_mask_invalidation_on_processing_change():
+    """Test that ROI masks are invalidated when processing changes image dimensions.
+
+    This test verifies the fix for the bug where reprocessing with parameters
+    that change image dimensions doesn't invalidate the ROI mask cache,
+    resulting in corrupted ROI display.
+
+    Scenario:
+    1. Create a source image
+    2. Apply binning (reduces dimensions)
+    3. Add ROI to the binned image
+    4. Change binning factor (changes dimensions again)
+    5. Verify ROI mask is properly recomputed
+    """
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            objprop = panel.objprop
+
+            # Step 1: Create a source image
+            param = Gauss2DParam.create(
+                height=100, width=100, x0=50.0, y0=50.0, sigma=10.0, a=100.0
+            )
+            panel.new_object(param=param, edit=False)
+            source_image = panel.objview.get_current_object()
+            assert source_image is not None
+
+            # Step 2: Apply binning to reduce dimensions
+            from sigima.params import BinningParam
+
+            binning_param = BinningParam.create(sx=2, sy=2)  # 100x100 -> 50x50
+
+            # Use the processor's run_feature method with edit=False
+            panel.processor.run_feature("binning", binning_param, edit=False)
+
+            # Get the binned result (last object in the list)
+            binned = panel.objview.get_sel_objects()[-1]
+            assert binned.data.shape == (50, 50)
+
+            # Step 3: Add a rectangular ROI to the binned image
+            from sigima.objects import create_image_roi
+
+            roi = create_image_roi("rectangle", [10, 10, 20, 20])
+            binned.roi = roi
+
+            # Verify the ROI mask is created and cached
+            mask_before = binned.maskdata
+            assert mask_before is not None
+            assert mask_before.shape == (50, 50)
+
+            # Step 4: Change binning factor via Processing tab
+            assert objprop.setup_processing_tab(binned)
+            editor = objprop.processing_param_editor
+            assert editor is not None
+
+            # Change binning factor from 2x2 to 4x4 (50x50 -> 25x25)
+            editor.dataset.sx = 4
+            editor.dataset.sy = 4
+
+            # Apply the new processing parameters
+            report = objprop.apply_processing_parameters(binned)
+            assert report.success
+
+            # Step 5: Verify the image was resized
+            assert binned.data.shape == (25, 25)
+
+            # Step 6: Verify the ROI mask was invalidated and will be recomputed
+            # with the new dimensions
+            mask_after = binned.maskdata
+            assert mask_after is not None
+            assert mask_after.shape == (25, 25), (
+                f"ROI mask shape {mask_after.shape} doesn't match "
+                f"new image shape {binned.data.shape}"
+            )
+
+            # The mask should be different from before (different shape)
+            assert mask_before.shape != mask_after.shape
+
+
 if __name__ == "__main__":
     test_signal_interactive_processing()
     test_image_interactive_processing()
@@ -971,3 +1114,5 @@ if __name__ == "__main__":
     test_select_source_objects_cross_panel()
     test_select_source_objects_multiple_sources()
     test_select_source_objects_deleted_source()
+    test_roi_mask_invalidation_on_size_change()
+    test_roi_mask_invalidation_on_processing_change()

@@ -595,6 +595,9 @@ class ObjectProp(QW.QWidget):
             self.current_creation_obj.xydata = new_obj.xydata
         else:  # ImageObj
             self.current_creation_obj.data = new_obj.data
+            # Invalidate ROI mask cache when image dimensions change
+            # (the mask is computed based on image shape, so it must be recomputed)
+            self.current_creation_obj.invalidate_maskdata_cache()
         # Update metadata with new creation parameters
         insert_creation_parameters(self.current_creation_obj, param)
 
@@ -830,6 +833,9 @@ class ObjectProp(QW.QWidget):
                 obj.xydata = new_obj.xydata
             else:  # ImageObj
                 obj.data = new_obj.data
+                # Invalidate ROI mask cache when image dimensions may have changed
+                # (the mask is computed based on image shape, so it must be recomputed)
+                obj.invalidate_maskdata_cache()
 
             # Update metadata with new processing parameters
             updated_proc_params = ProcessingParameters(
