@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-13 10:23+0100\n"
+"POT-Creation-Date: 2025-11-13 11:07+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -44,10 +44,6 @@ msgstr "Supprimer tout"
 
 msgid "Delete all results"
 msgstr "Supprimer tous les résultats"
-
-#, python-format
-msgid "New %s"
-msgstr "Nouvel objet %s"
 
 #, python-format
 msgid "Open %s..."
@@ -2173,14 +2169,14 @@ msgstr "Serveur XML-RPC"
 msgid "RPC server is used to communicate with external applications,<br>like your own scripts (e.g. from Spyder or Jupyter) or other software."
 msgstr "Le serveur XML-RPC est utilisé pour communiquer avec des applications externes,<br>comme vos propres scripts (par exemple depuis Spyder ou Jupyter) ou d'autres logiciels."
 
-msgid "Available memory threshold"
-msgstr "Seuil de mémoire disponible"
+msgid "Memory threshold"
+msgstr "Seuil de mémoire"
 
 msgid "MB"
 msgstr "Mo"
 
-msgid "Threshold below which a warning is displayed before loading any new data"
-msgstr "Seuil en dessous duquel un avertissement est affiché avant de charger toute nouvelle donnée"
+msgid "Memory threshold below which a warning is displayed before loading any new data"
+msgstr "Seuil de mémoire en dessous duquel un avertissement est affiché avant de charger de nouvelles données"
 
 msgid "Third-party plugins"
 msgstr "Plugins tiers"
@@ -3288,3 +3284,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

@@ -57,8 +57,8 @@ msgstr "**Serveur RPC**"
 msgid "Enable the RPC (Remote Procedure Call) server to communicate with external applications, such as your own scripts running in Spyder, Jupyter, or other software. This allows programmatic control of DataLab."
 msgstr "Activer le serveur RPC (Remote Procedure Call) pour communiquer avec des applications externes, telles que vos propres scripts s'exécutant dans Spyder, Jupyter ou d'autres logiciels. Cela permet un contrôle programmatique de DataLab."
 
-msgid "**Available memory threshold**"
-msgstr "**Seuil de mémoire disponible**"
+msgid "**Memory threshold**"
+msgstr "**Seuil de mémoire**"
 
 msgid "Set a threshold (in MB) below which a warning is displayed before loading new data. This helps prevent out-of-memory errors when working with large datasets. Set to 0 to disable the warning."
 msgstr "Définir un seuil (en Mo) en dessous duquel un avertissement est affiché avant de charger de nouvelles données. Cela permet d'éviter les erreurs de mémoire insuffisante lors du travail avec de grands ensembles de données. Mettre à 0 pour désactiver l'avertissement."

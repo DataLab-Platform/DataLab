@@ -43,9 +43,6 @@ def run_beautiful_scenario(screenshots: bool = False) -> None:
         panel.processor.run_feature("gaussian_filter", sigima.params.GaussianParam())
         panel.processor.run_feature("fft")
         panel.processor.run_feature("derivative")
-        if screenshots:
-            win.statusBar().hide()
-            win.take_screenshot("s_beautiful")
         # Beautiful screenshot of an image
         panel = win.imagepanel
         param = sigima.objects.Gauss2DParam.create(height=data_size, width=data_size)
@@ -68,8 +65,11 @@ def run_beautiful_scenario(screenshots: bool = False) -> None:
         )
         panel.processor.compute_roi_extraction(roi)
         if screenshots:
+            win.statusBar().hide()
             win.take_screenshot("i_beautiful")
             win.take_menu_screenshots()
+            win.set_current_panel(win.signalpanel)
+            win.take_screenshot("s_beautiful")
 
 
 def run_blob_detection_on_flower_image(screenshots: bool = False) -> None:

@@ -48,11 +48,12 @@ class MainSettings(gds.DataSet):
         ),
     )
     available_memory_threshold = gds.IntItem(
-        _("Available memory threshold"),
+        _("Memory threshold"),
         default=0,
         unit=_("MB"),
         help=_(
-            "Threshold below which a warning is displayed before loading any new data"
+            "Memory threshold below which a warning is displayed "
+            "before loading any new data"
         ),
     )
     plugins_enabled = gds.BoolItem(

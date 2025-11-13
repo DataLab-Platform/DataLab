@@ -33,7 +33,7 @@ The General settings tab contains main window and general feature settings:
     such as your own scripts running in Spyder, Jupyter, or other software. This allows
     programmatic control of DataLab.
 
-**Available memory threshold**
+**Memory threshold**
     Set a threshold (in MB) below which a warning is displayed before loading new data.
     This helps prevent out-of-memory errors when working with large datasets. Set to 0
     to disable the warning.
