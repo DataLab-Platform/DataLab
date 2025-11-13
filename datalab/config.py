@@ -188,6 +188,10 @@ class IOSection(conf.Section, metaclass=conf.SectionMeta):
     # ImageIO supported file formats:
     imageio_formats = conf.Option()
 
+    # Dialog settings persistence (JSON-serialized datasets):
+    save_to_directory_settings = conf.DataSetOption()
+    add_metadata_settings = conf.DataSetOption()
+
 
 class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the Processing configuration section structure.

@@ -1717,10 +1717,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         if param is None:
             param = AddMetadataParam(sel_objects)
+            # Restore settings from config
+            saved_param = Conf.io.add_metadata_settings.get(default=AddMetadataParam())
+            update_dataset(param, saved_param)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
                 if not param.edit(parent=self.parentWidget(), wordwrap=False):
                     return
+            # Save settings to config
+            Conf.io.add_metadata_settings.set(param)
 
         # Build values for all selected objects
         values = param.build_values(sel_objects)
@@ -2166,10 +2171,25 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
                 guiparam = SaveToDirectoryGUIParam(objs, extensions)
+                # Restore settings from config
+                saved_param = Conf.io.save_to_directory_settings.get(
+                    default=SaveToDirectoryParam()
+                )
+                update_dataset(guiparam, saved_param)
+                # Validate extension: set to first if None or not in available list
+                # Note: extensions list has no dots, but guiparam.extension has dot
+                extensions_with_dot = ["." + ext for ext in extensions]
+                if (
+                    guiparam.extension is None
+                    or guiparam.extension not in extensions_with_dot
+                ):
+                    guiparam.extension = extensions_with_dot[0] if extensions else ""
                 if not guiparam.edit(parent=self.parentWidget()):
                     return
             param = SaveToDirectoryParam()
             update_dataset(param, guiparam)
+            # Save settings to config
+            Conf.io.save_to_directory_settings.set(guiparam)
 
         Conf.main.base_dir.set(param.directory)
 

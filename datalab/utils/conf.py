@@ -229,28 +229,45 @@ class DataSetOption(Option):
 
     def get(self, default: Any = NoDefault) -> gds.DataSet:
         """Get configuration option value"""
+        # Use provided default or fall back to default_instance
+        effective_default = (
+            default if default is not NoDefault else self.default_instance
+        )
         try:
             json_str = super().get(default)
         except RuntimeError:
-            # Option not yet registered in CONF - register it with default instance
-            if self.default_instance is None:
+            # Option not yet registered in CONF - register it with default
+            if effective_default is None:
                 raise ValueError(
                     f"No default instance set for option '{self.option}' "
                     f"in section '{self.section}'"
                 )
             # Register the default value in CONF (writes to config file)
-            self.set(self.default_instance)
-            return self.default_instance
+            self.set(effective_default)
+            return effective_default
+        # If the option doesn't exist, super().get() returns the default parameter
+        if not isinstance(json_str, str):
+            return json_str
         if json_str is NoDefault or not json_str:
-            if self.default_instance is None:
+            if effective_default is None:
                 raise ValueError(
                     f"No default instance set for option '{self.option}' "
                     f"in section '{self.section}'"
                 )
-            return self.default_instance
+            return effective_default
         # Unescape percent signs that were escaped for ConfigParser
         json_str = json_str.replace("%%", "%")
-        return gds.json_to_dataset(json_str)
+        try:
+            return gds.json_to_dataset(json_str)
+        except Exception:  # pylint: disable=broad-except
+            # Corrupted JSON: remove the option and return default
+            self.remove()
+            if effective_default is None:
+                raise ValueError(
+                    f"No default instance set for option '{self.option}' "
+                    f"in section '{self.section}'"
+                )
+            return effective_default
 
     def set(self, value: gds.DataSet) -> None:
         """Set configuration option value"""
