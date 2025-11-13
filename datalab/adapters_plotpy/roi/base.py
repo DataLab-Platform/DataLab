@@ -69,7 +69,7 @@ class BaseSingleROIPlotPyAdapter(Generic[TypeSingleROI, TypeROIItem], abc.ABC):
 
 
 def configure_roi_item(
-    item,
+    item: TypeROIItem,
     fmt: str,
     lbl: bool,
     editable: bool,
