@@ -172,7 +172,7 @@ class ProcessingReport:
     message: str | None = None
 
 
-class ObjectProp(QW.QTabWidget):
+class ObjectProp(QW.QWidget):
     """Object handling panel properties
 
     Args:
@@ -182,8 +182,16 @@ class ObjectProp(QW.QTabWidget):
 
     def __init__(self, panel: BaseDataPanel, objclass: SignalObj | ImageObj) -> None:
         super().__init__(panel)
-        self.setTabBarAutoHide(True)
-        self.setTabPosition(QW.QTabWidget.West)
+
+        # Create vertical layout for the container
+        layout = QW.QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        # Create the tab widget
+        self.tabwidget = QW.QTabWidget(self)
+        self.tabwidget.setTabBarAutoHide(True)
+        self.tabwidget.setTabPosition(QW.QTabWidget.West)
 
         self.panel = panel
         self.objclass = objclass
@@ -204,12 +212,6 @@ class ObjectProp(QW.QTabWidget):
         self.properties.setEnabled(False)
         self.__original_values: dict[str, Any] = {}
 
-        self.add_prop_layout = QW.QHBoxLayout()
-        playout: QW.QGridLayout = self.properties.edit.layout
-        playout.addLayout(
-            self.add_prop_layout, playout.rowCount() - 1, 0, 1, 1, QC.Qt.AlignLeft
-        )
-
         # Create Analysis and History widgets
         font = Conf.proc.small_mono_font.get_font()
 
@@ -221,25 +223,42 @@ class ObjectProp(QW.QTabWidget):
         self.analysis_parameters.setReadOnly(True)
         self.analysis_parameters.setFont(font)
 
-        self.addTab(self.processing_history, get_icon("history.svg"), _("History"))
-        self.addTab(
+        self.tabwidget.addTab(
+            self.processing_history, get_icon("history.svg"), _("History")
+        )
+        self.tabwidget.addTab(
             self.analysis_parameters, get_icon("analysis.svg"), _("Analysis parameters")
         )
-        self.addTab(self.properties, get_icon("properties.svg"), _("Properties"))
+        self.tabwidget.addTab(
+            self.properties, get_icon("properties.svg"), _("Properties")
+        )
 
         self.processing_history.textChanged.connect(self._update_tab_visibility)
         self.analysis_parameters.textChanged.connect(self._update_tab_visibility)
 
+        # Create a permanent button area at the bottom, always visible regardless of tab
+        self.add_prop_layout = QW.QHBoxLayout()
+        self.add_prop_layout.setContentsMargins(5, 5, 5, 5)
+        self.add_prop_layout.setSpacing(10)
+        self.add_prop_layout.addStretch()
+
+        # Add tab widget and button area to main layout
+        layout.addWidget(self.tabwidget)
+        layout.addLayout(self.add_prop_layout)
+
     def _update_tab_visibility(self) -> None:
         """Update visibility of tabs based on their content."""
         for textedit in (self.processing_history, self.analysis_parameters):
-            tab_index = self.indexOf(textedit)
+            tab_index = self.tabwidget.indexOf(textedit)
             if tab_index >= 0:
                 has_content = bool(textedit.toPlainText().strip())
-                self.setTabVisible(tab_index, has_content)
+                self.tabwidget.setTabVisible(tab_index, has_content)
 
     def add_button(self, button: QW.QPushButton) -> None:
-        """Add additional button on bottom of properties panel"""
+        """Add additional button to the permanent action bar.
+
+        Buttons added here are always visible regardless of which tab is active.
+        """
         self.add_prop_layout.addWidget(button)
 
     def display_analysis_parameters(self, obj: SignalObj | ImageObj) -> bool:
@@ -380,13 +399,13 @@ class ObjectProp(QW.QTabWidget):
         # Remove only Creation and Processing tabs (dynamic tabs)
         # Use widget references instead of text labels for reliable identification
         if self.creation_scroll is not None:
-            index = self.indexOf(self.creation_scroll)
+            index = self.tabwidget.indexOf(self.creation_scroll)
             if index >= 0:
-                self.removeTab(index)
+                self.tabwidget.removeTab(index)
         if self.processing_scroll is not None:
-            index = self.indexOf(self.processing_scroll)
+            index = self.tabwidget.indexOf(self.processing_scroll)
             if index >= 0:
-                self.removeTab(index)
+                self.tabwidget.removeTab(index)
 
         # Reset references for dynamic tabs
         self.creation_param_editor = None
@@ -413,13 +432,13 @@ class ObjectProp(QW.QTabWidget):
         # 3. Processing tab if it exists
         # 4. Properties tab
         if has_analysis_parameters:
-            self.setCurrentWidget(self.analysis_parameters)
+            self.tabwidget.setCurrentWidget(self.analysis_parameters)
         elif has_creation_tab:
-            self.setCurrentWidget(self.creation_scroll)
+            self.tabwidget.setCurrentWidget(self.creation_scroll)
         elif has_processing_tab:
-            self.setCurrentWidget(self.processing_scroll)
+            self.tabwidget.setCurrentWidget(self.processing_scroll)
         else:
-            self.setCurrentWidget(self.properties)
+            self.tabwidget.setCurrentWidget(self.properties)
 
     def get_changed_properties(self) -> dict[str, Any]:
         """Get dictionary of properties that have changed from original values.
@@ -504,9 +523,9 @@ class ObjectProp(QW.QTabWidget):
 
         # Remove existing Creation tab if it exists
         if self.creation_scroll is not None:
-            index = self.indexOf(self.creation_scroll)
+            index = self.tabwidget.indexOf(self.creation_scroll)
             if index >= 0:
-                self.removeTab(index)
+                self.tabwidget.removeTab(index)
 
         # Set the parameter editor as the scroll area widget
         # Creation tab is always at index 0 (before all other tabs)
@@ -514,11 +533,13 @@ class ObjectProp(QW.QTabWidget):
         self.creation_scroll.setWidgetResizable(True)
         self.creation_scroll.setWidget(editor)
         icon_name = "new_sig.svg" if isinstance(obj, SignalObj) else "new_ima.svg"
-        self.insertTab(0, self.creation_scroll, get_icon(icon_name), _("Creation"))
+        self.tabwidget.insertTab(
+            0, self.creation_scroll, get_icon(icon_name), _("Creation")
+        )
 
         # Set as current tab if requested
         if set_current:
-            self.setCurrentWidget(self.creation_scroll)
+            self.tabwidget.setCurrentWidget(self.creation_scroll)
 
         return True
 
@@ -654,15 +675,16 @@ class ObjectProp(QW.QTabWidget):
 
         # Remove existing Processing tab if it exists
         if self.processing_scroll is not None:
-            index = self.indexOf(self.processing_scroll)
+            index = self.tabwidget.indexOf(self.processing_scroll)
             if index >= 0:
-                self.removeTab(index)
+                self.tabwidget.removeTab(index)
 
         # Processing tab comes after Creation tab (if it exists)
         # Find the correct insertion index: after Creation (index 0) if it exists,
         # otherwise at index 0
         has_creation = (
-            self.creation_scroll is not None and self.indexOf(self.creation_scroll) >= 0
+            self.creation_scroll is not None
+            and self.tabwidget.indexOf(self.creation_scroll) >= 0
         )
         insert_index = 1 if has_creation else 0
 
@@ -675,7 +697,7 @@ class ObjectProp(QW.QTabWidget):
         )
 
         self.processing_scroll.setWidget(editor)
-        self.insertTab(
+        self.tabwidget.insertTab(
             insert_index,
             self.processing_scroll,
             get_icon("libre-tech-ram.svg"),
@@ -684,7 +706,7 @@ class ObjectProp(QW.QTabWidget):
 
         # Set as current tab if requested
         if set_current:
-            self.setCurrentWidget(self.processing_scroll)
+            self.tabwidget.setCurrentWidget(self.processing_scroll)
 
         return True
 

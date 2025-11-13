@@ -281,14 +281,14 @@ def test_no_duplicate_creation_tabs():
             assert objprop.creation_scroll is not None
 
             # Count how many Creation tabs exist initially using the widget reference
-            initial_index = objprop.indexOf(objprop.creation_scroll)
+            initial_index = objprop.tabwidget.indexOf(objprop.creation_scroll)
             assert initial_index >= 0, "Creation tab should be present"
 
             # Count tabs by checking if they reference the same scroll widget
             initial_count = sum(
                 1
-                for i in range(objprop.count())
-                if objprop.widget(i) is objprop.creation_scroll
+                for i in range(objprop.tabwidget.count())
+                if objprop.tabwidget.widget(i) is objprop.creation_scroll
             )
             assert initial_count == 1, "Should have exactly one Creation tab initially"
 
@@ -309,8 +309,8 @@ def test_no_duplicate_creation_tabs():
                 # Count Creation tabs again - should still be just one
                 creation_count = sum(
                     1
-                    for i in range(objprop.count())
-                    if objprop.widget(i) is objprop.creation_scroll
+                    for i in range(objprop.tabwidget.count())
+                    if objprop.tabwidget.widget(i) is objprop.creation_scroll
                 )
                 assert creation_count == 1, (
                     f"Should still have exactly one Creation tab after "
@@ -318,7 +318,7 @@ def test_no_duplicate_creation_tabs():
                 )
 
                 # Verify that the Creation tab is the current tab
-                assert objprop.currentWidget() is objprop.creation_scroll, (
+                assert objprop.tabwidget.currentWidget() is objprop.creation_scroll, (
                     f"Creation tab should remain current after "
                     f"applying amplitude={amplitude}"
                 )
@@ -523,14 +523,14 @@ def test_no_duplicate_processing_tabs():
             assert objprop.processing_scroll is not None
 
             # Count how many Processing tabs exist initially
-            initial_index = objprop.indexOf(objprop.processing_scroll)
+            initial_index = objprop.tabwidget.indexOf(objprop.processing_scroll)
             assert initial_index >= 0, "Processing tab should be present"
 
             # Count tabs by checking if they reference the same scroll widget
             initial_count = sum(
                 1
-                for i in range(objprop.count())
-                if objprop.widget(i) is objprop.processing_scroll
+                for i in range(objprop.tabwidget.count())
+                if objprop.tabwidget.widget(i) is objprop.processing_scroll
             )
             assert initial_count == 1, (
                 "Should have exactly one Processing tab initially"
@@ -554,8 +554,8 @@ def test_no_duplicate_processing_tabs():
                 # Count Processing tabs again - should still be just one
                 processing_count = sum(
                     1
-                    for i in range(objprop.count())
-                    if objprop.widget(i) is objprop.processing_scroll
+                    for i in range(objprop.tabwidget.count())
+                    if objprop.tabwidget.widget(i) is objprop.processing_scroll
                 )
                 assert processing_count == 1, (
                     f"Should still have exactly one Processing tab after "
@@ -563,7 +563,7 @@ def test_no_duplicate_processing_tabs():
                 )
 
                 # Verify that the Processing tab is the current tab
-                assert objprop.currentWidget() is objprop.processing_scroll, (
+                assert objprop.tabwidget.currentWidget() is objprop.processing_scroll, (
                     f"Processing tab should remain current after applying value={value}"
                 )
 
