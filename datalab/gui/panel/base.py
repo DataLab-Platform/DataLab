@@ -2889,7 +2889,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.objprop.add_button(self.show_label_checkbox)
         self.acthandler.add_action(
             self.show_label_checkbox,
-            select_condition=actionhandler.SelectCond.at_least_one,
+            select_condition=actionhandler.SelectCond.with_results,
         )
 
         self.__new_objprop_button(
