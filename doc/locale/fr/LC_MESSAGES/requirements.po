@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 20:43+0100\n"
+"POT-Creation-Date: 2025-11-13 16:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -43,7 +43,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.13.2"
+msgid ">= 3.13.3"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -52,7 +52,7 @@ msgstr "Génération automatique d'interface graphique pour l'édition et l'affi
 msgid "PlotPy"
 msgstr ""
 
-msgid ">= 2.8.1"
+msgid ">= 2.8.2"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
@@ -61,7 +61,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.0.1"
+msgid ">= 1.0.2"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."

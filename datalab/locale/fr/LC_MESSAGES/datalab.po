@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-13 11:07+0100\n"
+"POT-Creation-Date: 2025-11-13 16:03+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -2549,17 +2549,17 @@ msgstr "Vue"
 msgid "Signals are plotted in the <b>Signal View</b>.<br><br>Curves may be customized using context menus or the vertical toolbar on the left (appearance settings are saved in the signal metadata)."
 msgstr "Les signaux sont tracés dans la <b>Vues Signal</b>.<br><br>Les courbes peuvent être personnalisées en utilisant les menus contextuels ou la barre d'outils verticale à gauche (ces réglages d'apparence sont enregistrés dans les métadonnées du signal)."
 
-msgid "Create menu"
-msgstr "Menu Création"
-
-msgid "The <b>Create</b> menu contains actions to create new signals from various models (Gaussian, sine, etc.)."
-msgstr "Le menu <b>Création</b> contient des actions pour créer de nouveaux signaux à partir de différents modèles (Gaussien, sinusoïde, etc.)."
-
 msgid "File menu"
 msgstr "Menu Fichier"
 
 msgid "The <b>File</b> menu contains actions to import and export signals individually (various formats) or to save or restore the whole workspace (HDF5 files)."
 msgstr "Le menu <b>Fichier</b> contient les actions pour importer et exporter des signaux individuellement (divers formats) ou pour enregistrer ou restaurer l'ensemble de l'espace de travail (fichiers HDF5)."
+
+msgid "Create menu"
+msgstr "Menu Création"
+
+msgid "The <b>Create</b> menu contains actions to create new signals from various models (Gaussian, sine, etc.)."
+msgstr "Le menu <b>Création</b> contient des actions pour créer de nouveaux signaux à partir de différents modèles (Gaussien, sinusoïde, etc.)."
 
 msgid "Edit menu"
 msgstr "Menu Edition"
@@ -2594,11 +2594,11 @@ msgstr "Dans la zone surlignée, les images sont listées en haut, et leurs prop
 msgid "Images are shown in the <b>Image View</b>.<br><br>The displayed images may be customized using context menus or the vertical toolbar on the left (appearance settings are saved in the image metadata)."
 msgstr "Les images sont affichées dans la <b>Vues Image</b>.<br><br>Les images affichées peuvent être personnalisées en utilisant les menus contextuels ou la barre d'outils verticale à gauche (ces réglages d'apparence sont enregistrés dans les métadonnées de l'image)."
 
-msgid "The <b>Create</b> menu contains actions to create new images from various models (Gaussian, checkerboard, etc.)."
-msgstr "Le menu <b>Création</b> contient des actions pour créer de nouvelles images à partir de différents modèles (Gaussien, damier, etc.)."
-
 msgid "The <b>File</b> menu contains actions to import and export images individually (various formats) or to save or restore the whole workspace (HDF5 files)."
 msgstr "Le menu <b>Fichier</b> contient les actions pour importer et exporter des images individuellement (divers formats) ou pour enregistrer ou restaurer l'ensemble de l'espace de travail (fichiers HDF5)."
+
+msgid "The <b>Create</b> menu contains actions to create new images from various models (Gaussian, checkerboard, etc.)."
+msgstr "Le menu <b>Création</b> contient des actions pour créer de nouvelles images à partir de différents modèles (Gaussien, damier, etc.)."
 
 msgid "The <b>Edit</b> menu contains actions to edit images individually or in groups."
 msgstr "Le menu <b>Edition</b> contient les actions pour éditer des images individuellement ou en groupes."
