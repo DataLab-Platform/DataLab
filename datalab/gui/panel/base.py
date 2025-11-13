@@ -374,8 +374,20 @@ class ObjectProp(QW.QWidget):
         self.processing_history.setText(history_text)
         return bool(history_text)
 
+    def __update_properties_dataset(self, obj: SignalObj | ImageObj) -> None:
+        """Update properties dataset from signal/image dataset
+
+        Args:
+            obj: Signal or Image object
+        """
+        dataset: SignalObj | ImageObj = self.properties.dataset
+        dataset.set_defaults()
+        update_dataset(dataset, obj)
+        self.properties.get()
+        self.properties.apply_button.setEnabled(False)
+
     def update_properties_from(self, obj: SignalObj | ImageObj | None = None) -> None:
-        """Update properties from signal/image dataset
+        """Update properties panel (properties, creation, processing) from object.
 
         Args:
             obj: Signal or Image object
@@ -383,18 +395,17 @@ class ObjectProp(QW.QWidget):
         self.properties.setDisabled(obj is None)
         if obj is None:
             obj = self.objclass()
-        dataset: SignalObj | ImageObj = self.properties.dataset
-        dataset.set_defaults()
-        update_dataset(dataset, obj)
-        self.properties.get()
+
+        # Update the properties dataset
+        self.__update_properties_dataset(obj)
+        # Store original values to detect which properties have changed
+        # (using `restore_dataset` to convert the dataset to a dictionary)
+        self.__original_values = {}
+        restore_dataset(self.properties.dataset, self.__original_values)
+
+        # Display analysis parameters and processing history
         has_analysis_parameters = self.display_analysis_parameters(obj)
         self.display_processing_history(obj)
-        self.properties.apply_button.setEnabled(False)
-
-        # Store original values to detect which properties have changed
-        # Using restore_dataset to convert the dataset to a dictionary
-        self.__original_values = {}
-        restore_dataset(dataset, self.__original_values)
 
         # Remove only Creation and Processing tabs (dynamic tabs)
         # Use widget references instead of text labels for reliable identification
@@ -594,6 +605,10 @@ class ObjectProp(QW.QWidget):
         # (avoid calling selection_changed which would trigger a full refresh
         # of the Properties tab and could cause recursion issues)
         self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+        # Update the Properties tab to reflect the new object properties
+        # (e.g., data type, dimensions, etc.)
+        self.__update_properties_dataset(self.current_creation_obj)
 
         # Refresh the Creation tab with the new parameters
         # Use QTimer to defer this until after the current event is processed
@@ -835,6 +850,10 @@ class ObjectProp(QW.QWidget):
             obj_uuid = get_uuid(obj)
             self.panel.objview.update_item(obj_uuid)
             self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+            # Update the Properties tab to reflect the new object properties
+            # (e.g., data type, dimensions, etc.)
+            self.__update_properties_dataset(obj)
 
             # Refresh the Processing tab with the new parameters
             # Don't reset parameters from source object - keep the user's values
