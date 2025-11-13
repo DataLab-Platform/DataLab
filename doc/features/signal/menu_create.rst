@@ -22,6 +22,7 @@ Create a new signal from various models:
 .. list-table::
     :header-rows: 1
     :widths: 20, 80
+    :class: longtable
 
     * - Model
       - Equation
