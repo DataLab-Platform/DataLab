@@ -1208,28 +1208,34 @@ class AddMetadataParam(
     def build_values(
         self, objs: list[TypeObj] | None = None
     ) -> list[str | float | int | bool]:
-        """Build values according to current parameters."""
+        """Build values according to current parameters.
+
+        Raises:
+            ValueError: If a value cannot be converted to the target type.
+        """
         objs = objs or self.__objs
         # Generate values using the pattern
         raw_values = format_basenames(objs, self.value_pattern)
 
         # Convert values according to the selected conversion type
         converted_values = []
-        for value_str in raw_values:
+        for i, value_str in enumerate(raw_values, start=1):
             if self.conversion == "string":
                 converted_values.append(value_str)
             elif self.conversion == "float":
                 try:
                     converted_values.append(float(value_str))
-                except ValueError:
-                    # Keep as string if conversion fails
-                    converted_values.append(value_str)
+                except ValueError as exc:
+                    raise ValueError(
+                        f"Cannot convert value at index {i} to float: '{value_str}'"
+                    ) from exc
             elif self.conversion == "int":
                 try:
                     converted_values.append(int(value_str))
-                except ValueError:
-                    # Keep as string if conversion fails
-                    converted_values.append(value_str)
+                except ValueError as exc:
+                    raise ValueError(
+                        f"Cannot convert value at index {i} to integer: '{value_str}'"
+                    ) from exc
             elif self.conversion == "bool":
                 # Convert to boolean: "true", "1", "yes" -> True, others -> False
                 lower_val = value_str.lower()
@@ -1251,8 +1257,11 @@ class AddMetadataParam(
                     obj_id = str(i)
                 preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
             self.preview = "\n".join(preview_lines)
-        except (ValueError, KeyError, TypeError) as exc:
-            # Handle formatting errors gracefully (e.g., incomplete format string)
+        except ValueError as exc:
+            # Handle conversion errors
+            self.preview = f"Invalid conversion:{os.linesep}{exc}"
+        except (KeyError, TypeError) as exc:
+            # Handle formatting errors (e.g., incomplete format string)
             self.preview = f"Invalid pattern:{os.linesep}{exc}"
 
     metadata_key = gds.StringItem(
