@@ -1277,9 +1277,9 @@ class AddMetadataParam(
         _("Conversion"), get_conversion_choices, default="string"
     ).set_prop("display", callback=update_preview)
 
-    preview = gds.TextItem(
-        _("Preview"), default=None, regexp=r"^(?!Invalid).*"
-    ).set_prop("display", readonly=True)
+    preview = gds.TextItem(_("Preview"), default="", regexp=r"^(?!Invalid).*").set_prop(
+        "display", readonly=True
+    )
 
 
 class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
