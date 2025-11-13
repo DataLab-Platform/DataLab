@@ -777,10 +777,21 @@ PLOTPY_DEFAULTS = {
 PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
 
 
+class DataLabShapeParam(ShapeParam):
+    """ShapeParam subclass with internal items hidden from settings dialog"""
+
+    def __init__(self):
+        super().__init__()
+        # Hide internal items that should not appear in settings dialog
+        for item in self._items:
+            if item._name in ("label", "readonly", "private"):
+                item.set_prop("display", hide=True)
+
+
 def initialize_default_plotpy_instances():
     """Initialize default PlotPy instances for DataLab configuration options"""
     # Initialize default instances for DataSetOptions now that PLOTPY_DEFAULTS exists
-    _sig_shapeparam = ShapeParam()
+    _sig_shapeparam = DataLabShapeParam()
     _sig_shapeparam.read_config(PLOTPY_CONF, "results", "s/annotation")
     Conf.view.sig_shape_param.set_default_instance(_sig_shapeparam)
     Conf.view.sig_shape_param.get()
@@ -790,7 +801,7 @@ def initialize_default_plotpy_instances():
     Conf.view.sig_marker_param.set_default_instance(_sig_markerparam)
     Conf.view.sig_marker_param.get()
 
-    _ima_shapeparam = ShapeParam()
+    _ima_shapeparam = DataLabShapeParam()
     _ima_shapeparam.read_config(PLOTPY_CONF, "results", "i/annotation")
     Conf.view.ima_shape_param.set_default_instance(_ima_shapeparam)
     Conf.view.ima_shape_param.get()
