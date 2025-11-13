@@ -2453,6 +2453,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Update only the changed properties instead of all properties
             update_dataset(obj, changed_props)
             self.objview.update_item(get_uuid(obj))
+
+            # Auto-recompute analysis if the object had analysis parameters
+            # Since properties have changed, any analysis results may now be invalid
+            self.processor.auto_recompute_analysis(obj)
+
         # Refresh all selected items, including non-visible ones (only_visible=False)
         # This ensures that plot items are updated for all selected objects, even if
         # they are temporarily hidden behind other objects
