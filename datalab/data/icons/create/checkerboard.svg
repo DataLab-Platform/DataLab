@@ -11,29 +11,29 @@
     <line x1="7" y1="1" x2="7" y2="13" stroke="#696969" stroke-width="0.53" id="line1" />
     <line x1="1" y1="7" x2="13" y2="7" stroke="#696969" stroke-width="0.53" id="line2" />
     <!-- Checkerboard pattern (8x8 grid) -->
-    <rect x="1.75" y="1.75" width="1.5" height="1.5" fill="#d62728" id="rect2" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="4.75" y="1.75" width="1.5" height="1.5" fill="#d62728" id="rect3" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="7.75" y="1.75" width="1.5" height="1.5" fill="#d62728" id="rect4" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="10.75" y="1.75" width="1.5" height="1.5" fill="#d62728" id="rect5" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="3.25" y="3.25" width="1.5" height="1.5" fill="#d62728" id="rect6" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="6.25" y="3.25" width="1.5" height="1.5" fill="#d62728" id="rect7" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="9.25" y="3.25" width="1.5" height="1.5" fill="#d62728" id="rect8" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="1.75" y="4.75" width="1.5" height="1.5" fill="#d62728" id="rect9" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="4.75" y="4.75" width="1.5" height="1.5" fill="#d62728" id="rect10" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="7.75" y="4.75" width="1.5" height="1.5" fill="#d62728" id="rect11" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="10.75" y="4.75" width="1.5" height="1.5" fill="#d62728" id="rect12" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="3.25" y="6.25" width="1.5" height="1.5" fill="#d62728" id="rect13" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="6.25" y="6.25" width="1.5" height="1.5" fill="#d62728" id="rect14" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="9.25" y="6.25" width="1.5" height="1.5" fill="#d62728" id="rect15" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="1.75" y="7.75" width="1.5" height="1.5" fill="#d62728" id="rect16" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="4.75" y="7.75" width="1.5" height="1.5" fill="#d62728" id="rect17" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="7.75" y="7.75" width="1.5" height="1.5" fill="#d62728" id="rect18" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="10.75" y="7.75" width="1.5" height="1.5" fill="#d62728" id="rect19" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="3.25" y="9.25" width="1.5" height="1.5" fill="#d62728" id="rect6-7" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="6.25" y="9.25" width="1.5" height="1.5" fill="#d62728" id="rect7-6" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="9.25" y="9.25" width="1.5" height="1.5" fill="#d62728" id="rect8-1" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="1.75" y="10.75" width="1.5" height="1.5" fill="#d62728" id="rect9-8" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="4.75" y="10.75" width="1.5" height="1.5" fill="#d62728" id="rect10-9" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="7.75" y="10.75" width="1.5" height="1.5" fill="#d62728" id="rect11-2" style="fill:#a8db34;fill-opacity:1" />
-    <rect x="10.75" y="10.75" width="1.5" height="1.5" fill="#d62728" id="rect12-7" style="fill:#a8db34;fill-opacity:1" />
+    <rect x="1.75" y="1.75" width="1.5" height="1.5" id="rect2"  fill="#a8db34" fill-opacity="1" />
+    <rect x="4.75" y="1.75" width="1.5" height="1.5" id="rect3"  fill="#a8db34" fill-opacity="1" />
+    <rect x="7.75" y="1.75" width="1.5" height="1.5" id="rect4"  fill="#a8db34" fill-opacity="1" />
+    <rect x="10.75" y="1.75" width="1.5" height="1.5" id="rect5"  fill="#a8db34" fill-opacity="1" />
+    <rect x="3.25" y="3.25" width="1.5" height="1.5" id="rect6"  fill="#a8db34" fill-opacity="1" />
+    <rect x="6.25" y="3.25" width="1.5" height="1.5" id="rect7"  fill="#a8db34" fill-opacity="1" />
+    <rect x="9.25" y="3.25" width="1.5" height="1.5" id="rect8"  fill="#a8db34" fill-opacity="1" />
+    <rect x="1.75" y="4.75" width="1.5" height="1.5" id="rect9"  fill="#a8db34" fill-opacity="1" />
+    <rect x="4.75" y="4.75" width="1.5" height="1.5" id="rect10"  fill="#a8db34" fill-opacity="1" />
+    <rect x="7.75" y="4.75" width="1.5" height="1.5" id="rect11"  fill="#a8db34" fill-opacity="1" />
+    <rect x="10.75" y="4.75" width="1.5" height="1.5" id="rect12"  fill="#a8db34" fill-opacity="1" />
+    <rect x="3.25" y="6.25" width="1.5" height="1.5" id="rect13"  fill="#a8db34" fill-opacity="1" />
+    <rect x="6.25" y="6.25" width="1.5" height="1.5" id="rect14"  fill="#a8db34" fill-opacity="1" />
+    <rect x="9.25" y="6.25" width="1.5" height="1.5" id="rect15"  fill="#a8db34" fill-opacity="1" />
+    <rect x="1.75" y="7.75" width="1.5" height="1.5" id="rect16"  fill="#a8db34" fill-opacity="1" />
+    <rect x="4.75" y="7.75" width="1.5" height="1.5" id="rect17"  fill="#a8db34" fill-opacity="1" />
+    <rect x="7.75" y="7.75" width="1.5" height="1.5" id="rect18"  fill="#a8db34" fill-opacity="1" />
+    <rect x="10.75" y="7.75" width="1.5" height="1.5" id="rect19"  fill="#a8db34" fill-opacity="1" />
+    <rect x="3.25" y="9.25" width="1.5" height="1.5" id="rect6-7"  fill="#a8db34" fill-opacity="1" />
+    <rect x="6.25" y="9.25" width="1.5" height="1.5" id="rect7-6"  fill="#a8db34" fill-opacity="1" />
+    <rect x="9.25" y="9.25" width="1.5" height="1.5" id="rect8-1"  fill="#a8db34" fill-opacity="1" />
+    <rect x="1.75" y="10.75" width="1.5" height="1.5" id="rect9-8"  fill="#a8db34" fill-opacity="1" />
+    <rect x="4.75" y="10.75" width="1.5" height="1.5" id="rect10-9"  fill="#a8db34" fill-opacity="1" />
+    <rect x="7.75" y="10.75" width="1.5" height="1.5" id="rect11-2"  fill="#a8db34" fill-opacity="1" />
+    <rect x="10.75" y="10.75" width="1.5" height="1.5" id="rect12-7"  fill="#a8db34" fill-opacity="1" />
 </svg>
