@@ -95,8 +95,6 @@ from datalab.utils.qthelpers import (
 from datalab.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
-    from typing import Callable
-
     from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
     from sigima.io.image import ImageIORegistry
     from sigima.io.signal import SignalIORegistry
@@ -183,11 +181,6 @@ class ObjectProp(QW.QWidget):
     def __init__(self, panel: BaseDataPanel, objclass: SignalObj | ImageObj) -> None:
         super().__init__(panel)
 
-        # Create vertical layout for the container
-        layout = QW.QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-
         # Create the tab widget
         self.tabwidget = QW.QTabWidget(self)
         self.tabwidget.setTabBarAutoHide(True)
@@ -236,15 +229,14 @@ class ObjectProp(QW.QWidget):
         self.processing_history.textChanged.connect(self._update_tab_visibility)
         self.analysis_parameters.textChanged.connect(self._update_tab_visibility)
 
-        # Create a permanent button area at the bottom, always visible regardless of tab
-        self.add_prop_layout = QW.QHBoxLayout()
-        self.add_prop_layout.setContentsMargins(5, 5, 5, 5)
-        self.add_prop_layout.setSpacing(10)
-        self.add_prop_layout.addStretch()
-
+        # Create vertical layout for the container
+        layout = QW.QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         # Add tab widget and button area to main layout
         layout.addWidget(self.tabwidget)
-        layout.addLayout(self.add_prop_layout)
+        # Here we could add another widget or layout if needed (in DataLab v0.20, we
+        # had a permanent button area here, but it was removed to avoid clutter)
 
     def _update_tab_visibility(self) -> None:
         """Update visibility of tabs based on their content."""
@@ -253,13 +245,6 @@ class ObjectProp(QW.QWidget):
             if tab_index >= 0:
                 has_content = bool(textedit.toPlainText().strip())
                 self.tabwidget.setTabVisible(tab_index, has_content)
-
-    def add_button(self, button: QW.QPushButton) -> None:
-        """Add additional button to the permanent action bar.
-
-        Buttons added here are always visible regardless of which tab is active.
-        """
-        self.add_prop_layout.addWidget(button)
 
     def display_analysis_parameters(self, obj: SignalObj | ImageObj) -> bool:
         """Set analysis parameter label.
@@ -1549,7 +1534,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         self.addWidget(self.objview)
         self.addWidget(self.objprop)
-        self.add_objprop_buttons()
 
     def refresh_plot(
         self,
@@ -2909,44 +2893,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if exec_dialog(dlg):
             return dlg.get_selected_objects()
         return None
-
-    def __new_objprop_button(
-        self,
-        title: str,
-        icon: str,
-        tooltip: str,
-        callback: Callable,
-        select_condition: Callable = None,
-    ) -> QW.QPushButton:
-        """Create new object property button"""
-        btn = QW.QPushButton(get_icon(icon), title, self)
-        btn.setToolTip(tooltip)
-        self.objprop.add_button(btn)
-        btn.clicked.connect(callback)
-        if select_condition is None:
-            select_condition = actionhandler.SelectCond.at_least_one
-        self.acthandler.add_action(
-            btn,
-            select_condition=select_condition,
-        )
-        return btn
-
-    def add_objprop_buttons(self) -> None:
-        """Insert additional buttons in object properties panel"""
-        self.__new_objprop_button(
-            _("Results"),
-            "show_results.svg",
-            _("Show results obtained from previous analysis"),
-            self.show_results,
-            select_condition=actionhandler.SelectCond.with_results,
-        )
-
-        self.__new_objprop_button(
-            _("Annotations"),
-            "annotations.svg",
-            _("Open a dialog to edit annotations"),
-            lambda: self.open_separate_view(edit_annotations=True),
-        )
 
     def __show_no_result_warning(self):
         """Show no result warning"""
