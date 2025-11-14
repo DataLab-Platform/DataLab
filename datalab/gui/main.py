@@ -175,6 +175,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.showlabel_action: QW.QAction | None = None
 
         self.file_menu: QW.QMenu | None = None
+        self.create_menu: QW.QMenu | None = None
         self.edit_menu: QW.QMenu | None = None
         self.roi_menu: QW.QMenu | None = None
         self.operation_menu: QW.QMenu | None = None
@@ -1953,15 +1954,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         s_view_result_param = (
             "sig_shape_param" in changed_options
             or "sig_marker_param" in changed_options
-        ) and have_geometry_results(
-            [obj for obj in self.signalpanel.objview.get_sel_objects(True)]
-        )
+        ) and have_geometry_results(self.signalpanel.objview.get_sel_objects(True))
         i_view_result_param = (
             "ima_shape_param" in changed_options
             or "ima_marker_param" in changed_options
-        ) and have_geometry_results(
-            [obj for obj in self.imagepanel.objview.get_sel_objects(True)]
-        )
+        ) and have_geometry_results(self.imagepanel.objview.get_sel_objects(True))
         if (s_view_result_param or i_view_result_param) and (
             QW.QMessageBox.question(
                 self,

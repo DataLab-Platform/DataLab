@@ -22,7 +22,7 @@ import sigima.objects
 import sigima.params
 from sigima.tests import data as test_data
 
-from datalab.config import _ as translate
+from datalab.config import _
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
@@ -82,9 +82,7 @@ def test_plot_results_signals_one_curve_per_title():
             )
 
             # Verify the new group is named "Results"
-            from datalab.config import _ as translate
-
-            expected_title = translate("Results")
+            expected_title = _("Results")
             result_group = groups_after[-1]
             assert result_group.title == expected_title, (
                 f"Expected last group to be '{expected_title}', "
@@ -166,7 +164,9 @@ def test_plot_results_with_group_selection():
             panel.add_group("Test Group")
 
             # Add signals and compute FWHM
-            for i, (sig, _) in enumerate(iterate_noisy_signals(3, a=10.0, sigma=0.01)):
+            for i, (sig, _fwhm) in enumerate(
+                iterate_noisy_signals(3, a=10.0, sigma=0.01)
+            ):
                 sig.title = f"Signal_{i + 1}"
                 panel.add_object(sig)
                 panel.processor.run_feature("fwhm", sigima.params.FWHMParam())
@@ -193,7 +193,7 @@ def test_plot_results_with_group_selection():
             )
 
             # Check that the new group is named "Results" (or its translation)
-            expected_title = translate("Results")
+            expected_title = _("Results")
             result_group = groups_after[-1]  # Last group should be Results
             assert result_group.title == expected_title, (
                 f"Expected last group to be '{expected_title}', "
@@ -217,7 +217,9 @@ def test_plot_results_with_group_selection():
             # Test that the group is reused: create another group and plot results
             test_group_2 = panel.add_group("Test Group 2")
             test_group_2_id = get_uuid(test_group_2)
-            for i, (sig, _) in enumerate(iterate_noisy_signals(2, a=10.0, sigma=0.01)):
+            for i, (sig, _fwhm) in enumerate(
+                iterate_noisy_signals(2, a=10.0, sigma=0.01)
+            ):
                 sig.title = f"Signal2_{i + 1}"
                 panel.add_object(sig, group_id=test_group_2_id)
                 panel.processor.run_feature("fwhm", sigima.params.FWHMParam())
@@ -243,7 +245,9 @@ def test_plot_results_with_group_selection():
             # Test with many objects (more than 3) to verify "..." is used
             test_group_3 = panel.add_group("Test Group 3")
             test_group_3_id = get_uuid(test_group_3)
-            for i, (sig, _) in enumerate(iterate_noisy_signals(5, a=10.0, sigma=0.01)):
+            for i, (sig, _fwhm) in enumerate(
+                iterate_noisy_signals(5, a=10.0, sigma=0.01)
+            ):
                 sig.title = f"Signal3_{i + 1}"
                 panel.add_object(sig, group_id=test_group_3_id)
                 panel.processor.run_feature("fwhm", sigima.params.FWHMParam())

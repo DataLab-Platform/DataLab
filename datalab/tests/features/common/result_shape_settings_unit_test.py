@@ -14,7 +14,7 @@ settings and verify they're applied to new results.
 
 from __future__ import annotations
 
-from plotpy.items import AnnotatedCircle
+from plotpy.items import AnnotatedCircle, Marker
 from plotpy.styles import MarkerParam, ShapeParam
 from sigima.objects import Gauss2DParam, create_image_from_param
 
@@ -32,8 +32,8 @@ def test_ima_shape_param():
         panel = win.imagepanel
 
         # Create a Gaussian image for testing (simple peak for enclosing circle)
-        SIZE = 200
-        param = Gauss2DParam.create(height=SIZE, width=SIZE, sigma=20)
+        size = 200
+        param = Gauss2DParam.create(height=size, width=size, sigma=20)
         img = create_image_from_param(param)
         img.title = "Test Gaussian"
         panel.add_object(img)
@@ -93,8 +93,8 @@ def test_ima_marker_param():
         panel = win.imagepanel
 
         # Create a 2D Gaussian image for testing
-        SIZE = 200
-        param = Gauss2DParam.create(height=SIZE, width=SIZE, sigma=20)
+        size = 200
+        param = Gauss2DParam.create(height=size, width=size, sigma=20)
         img = create_image_from_param(param)
         img.title = "Test Gaussian"
         panel.add_object(img)
@@ -128,7 +128,6 @@ def test_ima_marker_param():
 
             # Verify we got a marker
             assert len(items) > 0, "Should have at least one marker"
-            from plotpy.items import Marker
 
             marker = items[0]
             assert isinstance(marker, Marker), f"Expected Marker, got {type(marker)}"
@@ -166,8 +165,8 @@ def test_refresh_shape_items_after_settings_change():
         panel = win.imagepanel
 
         # Create a Gaussian image with a result
-        SIZE = 200
-        param = Gauss2DParam.create(height=SIZE, width=SIZE, sigma=20)
+        size = 200
+        param = Gauss2DParam.create(height=size, width=size, sigma=20)
         img = create_image_from_param(param)
         img.title = "Test Gaussian"
         panel.add_object(img)

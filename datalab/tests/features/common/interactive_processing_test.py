@@ -22,9 +22,10 @@ from __future__ import annotations
 
 import numpy as np
 from guidata.dataset import json_to_dataset
-from guidata.qthelpers import qt_app_context
-from sigima.objects import Gauss2DParam, GaussParam
+from guidata.qthelpers import qt_app_context, qt_wait
+from sigima.objects import Gauss2DParam, GaussParam, create_image_roi
 from sigima.params import (
+    BinningParam,
     ConstantParam,
     GaussianParam,
     MovingAverageParam,
@@ -299,9 +300,7 @@ def test_no_duplicate_creation_tabs():
                 objprop.apply_creation_parameters()
 
                 # Wait for the deferred setup_creation_tab to complete
-                from qtpy.QtTest import QTest
-
-                QTest.qWait(100)
+                qt_wait(0.1)
 
                 # Verify that creation_scroll reference still exists
                 assert objprop.creation_scroll is not None
@@ -544,9 +543,7 @@ def test_no_duplicate_processing_tabs():
                 assert report.success
 
                 # Wait for the deferred setup_processing_tab to complete
-                from qtpy.QtTest import QTest
-
-                QTest.qWait(100)
+                qt_wait(0.1)
 
                 # Verify that processing_scroll reference still exists
                 assert objprop.processing_scroll is not None
@@ -979,8 +976,6 @@ def test_roi_mask_invalidation_on_size_change():
             assert image.data.shape == (100, 100)
 
             # Step 2: Add a rectangular ROI
-            from sigima.objects import create_image_roi
-
             roi = create_image_roi("rectangle", [20, 20, 40, 40])
             image.roi = roi
 
@@ -1043,8 +1038,6 @@ def test_roi_mask_invalidation_on_processing_change():
             assert source_image is not None
 
             # Step 2: Apply binning to reduce dimensions
-            from sigima.params import BinningParam
-
             binning_param = BinningParam.create(sx=2, sy=2)  # 100x100 -> 50x50
 
             # Use the processor's run_feature method with edit=False
@@ -1055,8 +1048,6 @@ def test_roi_mask_invalidation_on_processing_change():
             assert binned.data.shape == (50, 50)
 
             # Step 3: Add a rectangular ROI to the binned image
-            from sigima.objects import create_image_roi
-
             roi = create_image_roi("rectangle", [10, 10, 20, 20])
             binned.roi = roi
 

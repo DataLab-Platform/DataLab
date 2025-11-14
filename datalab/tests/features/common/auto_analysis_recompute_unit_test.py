@@ -51,8 +51,8 @@ def test_analysis_recompute_after_roi_change():
         panel = win.imagepanel
 
         # Create a 2D Gaussian image in a 200x200 image
-        SIZE = 200
-        param = Gauss2DParam.create(height=SIZE, width=SIZE, sigma=20)
+        size = 200
+        param = Gauss2DParam.create(height=size, width=size, sigma=20)
         img = create_image_from_param(param)
         panel.add_object(img)
 
@@ -153,13 +153,13 @@ def test_analysis_recompute_after_recompute_1_to_1():
         panel = win.imagepanel
 
         # Create a Gaussian image offset from center
-        SIZE = 200
+        size = 200
         # In Gauss2DParam, x0 and y0 are the center coordinates with Xmin=-10.0,
         # Ymin=-10.0, Xmax=10.0, Ymax=10.0 by default.
         # The centroid position should be at (49.75, 99.5).
         # After a 45° rotation, it should move closer to (64.32, 134.68).
         # Or after a 90° rotation, it should move to (99.5, 149.2).
-        param = Gauss2DParam.create(height=SIZE, width=SIZE, x0=-5.0)
+        param = Gauss2DParam.create(height=size, width=size, x0=-5.0)
         img = create_image_from_param(param)
         panel.add_object(img)
 

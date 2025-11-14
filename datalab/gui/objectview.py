@@ -401,11 +401,8 @@ class ObjectView(SimpleObjectTree):
         painter.setFont(font)
         painter.setPen(QG.QColor(128, 128, 128))  # Gray color
 
-        # Avoid circular import:
-        # pylint: disable=import-outside-toplevel
-        from datalab.gui.panel.signal import SignalPanel
-
-        if isinstance(self.parent(), SignalPanel):
+        panel: BaseDataPanel = self.parent()
+        if panel.PANEL_STR_ID == "signal":
             hint = _(
                 "Working with 2D images?\n"
                 "Switch to the Image Panel using the tab above."

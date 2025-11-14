@@ -327,11 +327,10 @@ class ObjectProp(QW.QWidget):
                 if current_obj is None:
                     history_items.append(_("(source deleted)"))
                     break
-            elif proc_params.source_uuids:
-                # Multiple sources (n-to-1 or 2-to-1 pattern)
-                history_items.append(_("(multiple sources)"))
-                break
             else:
+                if proc_params.source_uuids:
+                    # Multiple sources (n-to-1 or 2-to-1 pattern)
+                    history_items.append(_("(multiple sources)"))
                 break
 
         if len(history_items) <= 1:
@@ -563,7 +562,7 @@ class ObjectProp(QW.QWidget):
                 new_obj = create_signal_from_param(param)
             else:  # ImageObj
                 new_obj = create_image_from_param(param)
-        except Exception as exc:  # pylint: disable=broad-except
+        except Exception as exc:  # pylint: disable=broad-exception-caught
             if execenv.unattended:
                 raise exc
             QW.QMessageBox.warning(
@@ -805,7 +804,7 @@ class ObjectProp(QW.QWidget):
             new_obj = source_processor.recompute_1_to_1(
                 proc_params.func_name, source_obj, param
             )
-        except Exception as exc:  # pylint: disable=broad-except
+        except Exception as exc:  # pylint: disable=broad-exception-caught
             report.message = _("Failed to reprocess object:\n%s") % str(exc)
             if interactive:
                 QW.QMessageBox.warning(self, _("Error"), report.message)
@@ -1375,13 +1374,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 self.objprop.update_properties_from(obj)
         self.plothandler.update_resultproperty_from_plot_item(item)
 
+    # pylint: disable=unused-argument
     def plot_item_moved(
-        self,
-        item: LabelItem,
-        x0: float,  # pylint: disable=unused-argument
-        y0: float,  # pylint: disable=unused-argument
-        x1: float,  # pylint: disable=unused-argument
-        y1: float,  # pylint: disable=unused-argument
+        self, item: LabelItem, x0: float, y0: float, x1: float, y1: float
     ) -> None:
         """Plot item moved: update metadata of all objects from plot items
 
@@ -2144,7 +2139,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     objs += self.__load_from_file(
                         filename, create_group=create_group, add_objects=add_objects
                     )
-                except Exception as exc:  # pylint: disable=broad-except
+                except Exception as exc:  # pylint: disable=broad-exception-caught
                     if ignore_errors:
                         # Ignore unknown file types
                         pass

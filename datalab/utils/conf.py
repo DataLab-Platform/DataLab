@@ -235,13 +235,13 @@ class DataSetOption(Option):
         )
         try:
             json_str = super().get(default)
-        except RuntimeError:
+        except RuntimeError as exc:
             # Option not yet registered in CONF - register it with default
             if effective_default is None:
                 raise ValueError(
                     f"No default instance set for option '{self.option}' "
                     f"in section '{self.section}'"
-                )
+                ) from exc
             # Register the default value in CONF (writes to config file)
             self.set(effective_default)
             return effective_default
@@ -259,14 +259,14 @@ class DataSetOption(Option):
         json_str = json_str.replace("%%", "%")
         try:
             return gds.json_to_dataset(json_str)
-        except Exception:  # pylint: disable=broad-except
+        except Exception as exc:  # pylint: disable=broad-except
             # Corrupted JSON: remove the option and return default
             self.remove()
             if effective_default is None:
                 raise ValueError(
                     f"No default instance set for option '{self.option}' "
                     f"in section '{self.section}'"
-                )
+                ) from exc
             return effective_default
 
     def set(self, value: gds.DataSet) -> None:
