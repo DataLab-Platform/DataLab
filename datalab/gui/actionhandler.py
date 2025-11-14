@@ -724,6 +724,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
+        # MARK: FILE
         with self.new_category(ActionCategory.FILE):
             self.new_action(
                 _("Open %s...") % self.OBJECT_STR,
@@ -769,9 +770,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon_name="import_text.svg",
                 triggered=self.panel.exec_import_wizard,
                 select_condition=SelectCond.always,
-                separator=True,
             )
 
+        # MARK: EDIT
         with self.new_category(ActionCategory.EDIT):
             self.new_action(
                 _("Recompute"),
@@ -1031,7 +1032,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Axis transformation"), icon_name="axis_transform.svg"
             ):
                 self.action_for("calibration")
-                self.action_for("transpose")
             with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
                 self.action_for("normalize")
                 self.action_for("clip")
@@ -1191,42 +1191,45 @@ class SignalActionHandler(BaseActionHandler):
 
         # MARK: CREATE
         with self.new_category(ActionCategory.CREATE):
-            for label, pclass, icon_name in (
-                (_("Zero"), sio.ZeroParam, "1d-zero.svg"),
+            for label, pclass, icon_name, separator in (
+                (_("Zero"), sio.ZeroParam, "1d-zero.svg", False),
                 (
                     _("Normal distribution"),
                     sio.NormalDistribution1DParam,
                     "1d-normal.svg",
+                    False,
                 ),
                 (
                     _("Poisson distribution"),
                     sio.PoissonDistribution1DParam,
                     "1d-poisson.svg",
+                    False,
                 ),
                 (
                     _("Uniform distribution"),
                     sio.UniformDistribution1DParam,
                     "1d-uniform.svg",
+                    False,
                 ),
-                (_("Gaussian"), sio.GaussParam, "gaussian.svg"),
-                (_("Lorentzian"), sio.LorentzParam, "lorentzian.svg"),
-                (_("Voigt"), sio.VoigtParam, "voigt.svg"),
-                (_("Blackbody (Planck's law)"), sio.PlanckParam, "planck.svg"),
-                (_("Sine"), sio.SineParam, "sine.svg"),
-                (_("Cosine"), sio.CosineParam, "cosine.svg"),
-                (_("Sawtooth"), sio.SawtoothParam, "sawtooth.svg"),
-                (_("Triangle"), sio.TriangleParam, "triangle.svg"),
-                (_("Square"), sio.SquareParam, "square.svg"),
-                (_("Cardinal sine"), sio.SincParam, "sinc.svg"),
-                (_("Linear chirp"), sio.LinearChirpParam, "linear_chirp.svg"),
-                (_("Step"), sio.StepParam, "step.svg"),
-                (_("Exponential"), sio.ExponentialParam, "exponential.svg"),
-                (_("Logistic"), sio.LogisticParam, "logistic.svg"),
-                (_("Pulse"), sio.PulseParam, "pulse.svg"),
-                (_("Step pulse"), sio.StepPulseParam, "step_pulse.svg"),
-                (_("Square pulse"), sio.SquarePulseParam, "square_pulse.svg"),
-                (_("Polynomial"), sio.PolyParam, "polynomial.svg"),
-                (_("Custom"), newobject.CustomSignalParam, None),
+                (_("Gaussian"), sio.GaussParam, "gaussian.svg", True),
+                (_("Lorentzian"), sio.LorentzParam, "lorentzian.svg", False),
+                (_("Voigt"), sio.VoigtParam, "voigt.svg", False),
+                (_("Blackbody (Planck's law)"), sio.PlanckParam, "planck.svg", False),
+                (_("Sine"), sio.SineParam, "sine.svg", True),
+                (_("Cosine"), sio.CosineParam, "cosine.svg", False),
+                (_("Sawtooth"), sio.SawtoothParam, "sawtooth.svg", False),
+                (_("Triangle"), sio.TriangleParam, "triangle.svg", False),
+                (_("Square"), sio.SquareParam, "square.svg", False),
+                (_("Cardinal sine"), sio.SincParam, "sinc.svg", False),
+                (_("Linear chirp"), sio.LinearChirpParam, "linear_chirp.svg", False),
+                (_("Step"), sio.StepParam, "step.svg", True),
+                (_("Exponential"), sio.ExponentialParam, "exponential.svg", False),
+                (_("Logistic"), sio.LogisticParam, "logistic.svg", False),
+                (_("Pulse"), sio.PulseParam, "pulse.svg", False),
+                (_("Step pulse"), sio.StepPulseParam, "step_pulse.svg", False),
+                (_("Square pulse"), sio.SquarePulseParam, "square_pulse.svg", False),
+                (_("Polynomial"), sio.PolyParam, "polynomial.svg", True),
+                (_("Custom"), newobject.CustomSignalParam, None, False),
             ):
                 self.new_action(
                     label,
@@ -1234,13 +1237,13 @@ class SignalActionHandler(BaseActionHandler):
                     triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
                     icon_name=icon_name,
                     select_condition=SelectCond.always,
+                    separator=separator,
                 )
 
         # MARK: OPERATION
         with self.new_category(ActionCategory.OPERATION):
             self.action_for("power", separator=True)
             self.action_for("sqrt")
-            self.action_for("derivative", separator=True)
 
         def cra_fit(title, fitdlgfunc, tip: str | None = None):
             """Create curve fitting action"""
@@ -1254,6 +1257,7 @@ class SignalActionHandler(BaseActionHandler):
         # MARK: PROCESSING
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Axis transformation")):
+                self.action_for("transpose")
                 self.action_for("reverse_x")
                 self.action_for("to_cartesian")
                 self.action_for("to_polar")
@@ -1331,7 +1335,9 @@ class SignalActionHandler(BaseActionHandler):
                     self.action_for(fit_name, separator=separator_needed)
                     separator_needed = False
                 self.action_for("evaluate_fit", separator=True)
-            self.action_for("apply_window")
+            self.action_for("derivative", separator=True)
+            self.action_for("integral")
+            self.action_for("apply_window", separator=True)
             self.action_for("detrending")
             self.action_for("interpolate")
             self.action_for("resampling")
@@ -1387,8 +1393,6 @@ class SignalActionHandler(BaseActionHandler):
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
-        with self.new_category(ActionCategory.OPERATION):
-            self.action_for("integral")
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):
             self.action_for("signals_to_image", separator=True)
@@ -1425,6 +1429,27 @@ class ImageActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the first place"""
         # MARK: PROCESSING (1/2)
         with self.new_category(ActionCategory.PROCESSING):
+            with self.new_menu(_("Geometry"), icon_name="rotate_right.svg"):
+                self.action_for("fliph", context_menu_pos=-1, context_menu_sep=True)
+                self.action_for("transpose", context_menu_pos=-1)
+                self.action_for("flipv", context_menu_pos=-1)
+                self.action_for("rotate270", context_menu_pos=-1)
+                self.action_for("rotate90", context_menu_pos=-1)
+                self.action_for("rotate")
+                self.new_action(
+                    _("Distribute on a grid..."),
+                    triggered=self.panel.processor.distribute_on_grid,
+                    icon_name="distribute_on_grid.svg",
+                    select_condition=SelectCond.at_least_two,
+                    separator=True,
+                )
+                self.new_action(
+                    _("Reset image positions"),
+                    triggered=self.panel.processor.reset_positions,
+                    icon_name="reset_positions.svg",
+                    select_condition=SelectCond.at_least_two,
+                )
+
             with self.new_menu(
                 _("Axis transformation"), icon_name="axis_transform.svg"
             ):
@@ -1434,30 +1459,38 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: CREATE
         with self.new_category(ActionCategory.CREATE):
-            for label, pclass, icon_name in (
-                (_("Zero"), sio.Zero2DParam, "2d-zero.svg"),
+            for label, pclass, icon_name, separator in (
+                (_("Zero"), sio.Zero2DParam, "2d-zero.svg", False),
                 (
                     _("Normal distribution"),
                     sio.NormalDistribution2DParam,
                     "2d-normal.svg",
+                    False,
                 ),
                 (
                     _("Poisson distribution"),
                     sio.PoissonDistribution2DParam,
                     "2d-poisson.svg",
+                    False,
                 ),
                 (
                     _("Uniform distribution"),
                     sio.UniformDistribution2DParam,
                     "2d-uniform.svg",
+                    False,
                 ),
-                (_("Gaussian"), sio.Gauss2DParam, "2d-gaussian.svg"),
-                (_("Ramp"), sio.Ramp2DParam, "2d-ramp.svg"),
-                (_("Checkerboard"), sio.Checkerboard2DParam, "checkerboard.svg"),
-                (_("Sinusoidal grating"), sio.SinusoidalGrating2DParam, "grating.svg"),
-                (_("Ring pattern"), sio.Ring2DParam, "ring.svg"),
-                (_("Siemens star"), sio.SiemensStar2DParam, "siemens.svg"),
-                (_("2D sinc"), sio.Sinc2DParam, "2d-sinc.svg"),
+                (_("Gaussian"), sio.Gauss2DParam, "2d-gaussian.svg", True),
+                (_("2D sinc"), sio.Sinc2DParam, "2d-sinc.svg", False),
+                (_("Ring pattern"), sio.Ring2DParam, "ring.svg", True),
+                (_("Ramp"), sio.Ramp2DParam, "2d-ramp.svg", False),
+                (_("Checkerboard"), sio.Checkerboard2DParam, "checkerboard.svg", False),
+                (
+                    _("Sinusoidal grating"),
+                    sio.SinusoidalGrating2DParam,
+                    "grating.svg",
+                    False,
+                ),
+                (_("Siemens star"), sio.SiemensStar2DParam, "siemens.svg", False),
             ):
                 self.new_action(
                     label,
@@ -1465,6 +1498,7 @@ class ImageActionHandler(BaseActionHandler):
                     triggered=lambda pclass=pclass: self.panel.new_object(pclass()),
                     icon_name=icon_name,
                     select_condition=SelectCond.always,
+                    separator=separator,
                 )
 
         # MARK: ROI
@@ -1547,13 +1581,6 @@ class ImageActionHandler(BaseActionHandler):
                 self.action_for("sobel", separator=True)
                 self.action_for("sobel_h")
                 self.action_for("sobel_v")
-                self.action_for("scharr", separator=True)
-                self.action_for("scharr_h")
-                self.action_for("scharr_v")
-                self.action_for("farid", separator=True)
-                self.action_for("farid_h")
-                self.action_for("farid_v")
-                self.action_for("laplace", separator=True)
                 self.new_action(
                     _("All edge detection filters..."),
                     triggered=self.panel.processor.compute_all_edges,
@@ -1570,66 +1597,6 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):
-            self.action_for("horizontal_projection", separator=True)
-            self.action_for("vertical_projection")
-            self.action_for("centroid", separator=True)
-            self.action_for("enclosing_circle")
-            self.new_action(
-                _("2D peak detection"),
-                separator=True,
-                triggered=self.panel.processor.compute_peak_detection,
-                tip=_("Compute automatic 2D peak detection"),
-            )
-            self.action_for("contour_shape")
-            self.action_for("hough_circle_peaks")
-            with self.new_menu(_("Blob detection")):
-                self.action_for("blob_dog")
-                self.action_for("blob_doh")
-                self.action_for("blob_log")
-                self.action_for("blob_opencv")
-
-    def create_last_actions(self):
-        """Create actions that are added to the menus in the end"""
-        # MARK: PROCESSING
-        with self.new_category(ActionCategory.PROCESSING):
-            self.new_action(
-                _("Resize"),
-                triggered=self.panel.processor.compute_resize,
-                icon_name="resize.svg",
-                separator=True,
-            )
-            self.new_action(
-                _("Pixel binning"),
-                triggered=self.panel.processor.compute_binning,
-                icon_name="binning.svg",
-            )
-            self.action_for("resampling")
-
-        # MARK: VIEW
-        with self.new_category(ActionCategory.VIEW):
-            self.new_action(
-                _("View images side-by-side") + "...",
-                icon_name="new_window.svg",
-                tip=_("View selected images side-by-side in a new window"),
-                triggered=self.panel.view_images_side_by_side,
-                select_condition=SelectCond.at_least_two,
-                context_menu_pos=-1,
-            )
-
-        super().create_last_actions()
-
-        # MARK: OPERATION
-        with self.new_category(ActionCategory.OPERATION):
-            self.action_for("flatfield", separator=True)
-
-            with self.new_menu(_("Flip or rotation"), icon_name="rotate_right.svg"):
-                self.action_for("fliph", context_menu_pos=-1, context_menu_sep=True)
-                self.action_for("transpose", context_menu_pos=-1)
-                self.action_for("flipv", context_menu_pos=-1)
-                self.action_for("rotate270", context_menu_pos=-1)
-                self.action_for("rotate90", context_menu_pos=-1)
-                self.action_for("rotate")
-
             with self.new_menu(_("Intensity profiles"), icon_name="profile.svg"):
                 self.new_action(
                     _("Line profile..."),
@@ -1659,20 +1626,57 @@ class ImageActionHandler(BaseActionHandler):
                     icon_name="profile_radial.svg",
                     tip=_("Radial profile extraction around image centroid"),
                 )
-
+            self.action_for("horizontal_projection", separator=True)
+            self.action_for("vertical_projection")
+            self.action_for("centroid", separator=True)
+            self.action_for("enclosing_circle")
             self.new_action(
-                _("Distribute on a grid..."),
-                triggered=self.panel.processor.distribute_on_grid,
-                icon_name="distribute_on_grid.svg",
-                select_condition=SelectCond.at_least_two,
+                _("2D peak detection"),
+                separator=True,
+                triggered=self.panel.processor.compute_peak_detection,
+                tip=_("Compute automatic 2D peak detection"),
+            )
+            self.action_for("contour_shape")
+            self.action_for("hough_circle_peaks")
+            with self.new_menu(_("Blob detection")):
+                self.action_for("blob_dog")
+                self.action_for("blob_doh")
+                self.action_for("blob_log")
+                self.action_for("blob_opencv")
+
+    def create_last_actions(self):
+        """Create actions that are added to the menus in the end"""
+        # MARK: PROCESSING
+        with self.new_category(ActionCategory.PROCESSING):
+            self.new_action(
+                _("Resize") + "...",
+                triggered=self.panel.processor.compute_resize,
+                icon_name="resize.svg",
                 separator=True,
             )
             self.new_action(
-                _("Reset image positions"),
-                triggered=self.panel.processor.reset_positions,
-                icon_name="reset_positions.svg",
-                select_condition=SelectCond.at_least_two,
+                _("Pixel binning") + "...",
+                triggered=self.panel.processor.compute_binning,
+                icon_name="binning.svg",
             )
+            self.action_for("resampling")
+
+        # MARK: VIEW
+        with self.new_category(ActionCategory.VIEW):
+            self.new_action(
+                _("View images side-by-side") + "...",
+                icon_name="new_window.svg",
+                tip=_("View selected images side-by-side in a new window"),
+                triggered=self.panel.view_images_side_by_side,
+                select_condition=SelectCond.at_least_two,
+                context_menu_pos=-1,
+            )
+
+        super().create_last_actions()
+
+        # MARK: OPERATION
+        with self.new_category(ActionCategory.OPERATION):
+            self.action_for("flatfield", separator=True)
 
         # MARK: VIEW
         with self.new_category(ActionCategory.VIEW):

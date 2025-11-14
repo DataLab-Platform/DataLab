@@ -94,8 +94,8 @@ msgstr "Pour voir plusieurs images simultanément, sélectionnez le groupe d'ima
 msgid "Viewing images side by side."
 msgstr "Affichage des images côte à côte."
 
-msgid "The \"Operations\" menu includes a \"Distribute on a grid\" option |distribute_on_grid|. This feature repositions the images by applying offsets to their X and Y coordinates, arranging them in a grid layout for side-by-side viewing. Note that this operation modifies the image coordinates."
-msgstr "Le menu \"Opérations\" inclut une option \"Distribuer sur une grille\" |distribute_on_grid|. Cette fonction repositionne les images en appliquant des décalages à leurs coordonnées X et Y, les organisant dans une disposition en grille pour une visualisation côte à côte. Notez que cette opération modifie les coordonnées de l'image."
+msgid "The \"Processing > Geometry\" menu includes a \"Distribute on a grid\" option |distribute_on_grid|. This feature repositions the images by applying offsets to their X and Y coordinates, arranging them in a grid layout for side-by-side viewing. Note that this operation modifies the image coordinates."
+msgstr "Le menu \"Traitement > Géométrie\" inclut une option \"Distribuer sur une grille\" |distribute_on_grid|. Cette fonction repositionne les images en appliquant des décalages à leurs coordonnées X et Y, les organisant dans une disposition en grille pour une visualisation côte à côte. Notez que cette opération modifie les coordonnées de l'image."
 
 msgid "distribute_on_grid"
 msgstr "distribute_on_grid"
@@ -103,8 +103,8 @@ msgstr "distribute_on_grid"
 msgid "Images distributed on 4 columns grid."
 msgstr "Images distribuées sur une grille de 4 colonnes."
 
-msgid "To restore the original image positions, use the \"Reset image positions\" option |reset_positions| from the \"Operations\" menu. Note that this operation sets all image origins to match the first image's origin, which means any initial differences in image origins will be lost."
-msgstr "Pour restaurer les positions d'image d'origine, utilisez l'option \"Réinitialiser les positions des images\" |reset_positions| du menu \"Opérations\". Notez que cette opération définit toutes les origines d'image pour qu'elles correspondent à l'origine de la première image, ce qui signifie que toutes les différences initiales dans les origines d'image seront perdues."
+msgid "To restore the original image positions, use the \"Reset image positions\" option |reset_positions| from the \"Processing > Geometry\" menu. Note that this operation sets all image origins to match the first image's origin, which means any initial differences in image origins will be lost."
+msgstr "Pour restaurer les positions d'image d'origine, utilisez l'option \"Réinitialiser les positions des images\" |reset_positions| du menu \"Traitement > Géométrie\". Notez que cette opération définit toutes les origines d'image pour qu'elles correspondent à l'origine de la première image, ce qui signifie que toutes les différences initiales dans les origines d'image seront perdues."
 
 msgid "reset_positions"
 msgstr "reset_positions"
@@ -151,7 +151,7 @@ msgstr "Nous pouvons maintenant calculer le centroïde du faisceau—c'est-à-di
 msgid "The centroid position is displayed on the image."
 msgstr "La position du centroïde est affichée sur l'image."
 
-msgid "Next, we can extract a line profile along the horizontal axis using \"Operations > Intensity profiles > Line profile\". Set the row position to the previously computed centroid position (i.e., 668) using the \"Set Parameters\" button. See :ref:`tutorial_fabry_perot` for more details on intensity profile extraction."
+msgid "Next, we can extract a line profile along the horizontal axis using \"Analysis > Intensity profiles > Line profile\". Set the row position to the previously computed centroid position (i.e., 668) using the \"Set Parameters\" button. See :ref:`tutorial_fabry_perot` for more details on intensity profile extraction."
 msgstr "Ensuite, nous pouvons extraire un profil de ligne le long de l'axe horizontal en utilisant \"Opérations > Profils d'intensité > Profil rectiligne\". Définissez la position de la ligne sur la position du centroïde calculée précédemment (c'est-à-dire 668) en utilisant le bouton \"Définir les paramètres\". Voir :ref:`tutorial_fabry_perot` pour plus de détails sur l'extraction de profil d'intensité."
 
 msgid "The intensity profile will be displayed in the \"Signal panel\". We can then fit the profile to a Gaussian function using \"Processing > Fitting > Gaussian fit\". Here we have selected both signals for comparison."
@@ -172,7 +172,7 @@ msgstr "Le résultat de la FWHM affiché dans la fenêtre contextuelle et sur la
 msgid "Let's also try another method to measure the beam size by returning to the image."
 msgstr "Essayons également une autre méthode pour mesurer la taille du faisceau en revenant à l'image."
 
-msgid "From the \"Image panel\", we can extract the radial intensity profile using \"Operations > Intensity profiles > Radial profile\". The radial intensity profile can be computed around the centroid position, the center of the image, or a user-defined position, depending on your data. For our data, which appears to have radial symmetry with a center not necessarily identical to the image center, the best option is the centroid position."
+msgid "From the \"Image panel\", we can extract the radial intensity profile using \"Analysis > Intensity profiles > Radial profile\". The radial intensity profile can be computed around the centroid position, the center of the image, or a user-defined position, depending on your data. For our data, which appears to have radial symmetry with a center not necessarily identical to the image center, the best option is the centroid position."
 msgstr "Depuis le panneau \"Images\", nous pouvons extraire le profil d'intensité radial en utilisant \"Opérations > Profils d'intensité > Profil radial\". Le profil d'intensité radial peut être calculé autour de la position du centroïde, du centre de l'image ou d'une position définie par l'utilisateur, selon vos données. Pour nos données, qui semblent avoir une symétrie radiale avec un centre pas nécessairement identique au centre de l'image, la meilleure option est la position du centroïde."
 
 msgid "The options available for the Radial Profile computation."

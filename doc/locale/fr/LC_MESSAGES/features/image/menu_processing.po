@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 18:12+0100\n"
+"POT-Creation-Date: 2025-11-14 18:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -37,30 +37,98 @@ msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'ou
 msgid "The \"Processing\" menu allows you to perform various processing on the current image or group of images: it allows you to apply filters, to perform exposure correction, to perform denoising, to perform morphological operations, and so on."
 msgstr "Le menu \"Traitement\" permet d'effectuer divers traitements sur l'image ou le groupe d'images courant : il permet d'appliquer des filtres, de corriger l'exposition, de réduire le bruit, d'effectuer des opérations morphologiques, etc."
 
+msgid "Geometry"
+msgstr "Géométrie"
+
+msgid "Flip and rotation"
+msgstr "Symétrie et rotation"
+
+msgid "Create a new image by flipping or rotating the data of the selected image. The image may be flipped horizontally, vertically, or diagonally (transposition). It may be rotated by 90°, 270° or any user-defined value."
+msgstr "Crée une nouvelle image en effectuant une symétrie axiale ou une rotation des données de l'image sélectionnée. L'image peut être transformée par symétrie axiale horizontale, verticale ou diagonale (transposition)."
+
+msgid "Operation"
+msgstr "Opération"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Flip horizontally"
+msgstr "Symétrie horizontale"
+
+msgid "Mirror image along the vertical axis"
+msgstr "Effet miroir le long de l'axe vertical"
+
+msgid "Flip diagonally"
+msgstr "Symétrie diagonale"
+
+msgid "Transpose the image (swap X/Y axes)"
+msgstr "Transposer l'image (permuter les axes X/Y)"
+
+msgid "Flip vertically"
+msgstr "Symétrie verticale"
+
+msgid "Mirror image along the horizontal axis"
+msgstr "Effet miroir le long de l'axe horizontal"
+
+msgid "Rotate 90° right"
+msgstr "Rotation de 90° à droite"
+
+msgid "Rotate image 90° clockwise"
+msgstr "Rotation de l'image de 90° dans le sens horaire"
+
+msgid "Rotate 90° left"
+msgstr "Rotation de 90° à gauche"
+
+msgid "Rotate image 90° counter-clockwise"
+msgstr "Rotation de l'image de 90° dans le sens antihoraire"
+
+msgid "Rotate by..."
+msgstr "Rotation de..."
+
+msgid "Rotate image by any angle (user-defined)"
+msgstr "Rotation de l'image d'un angle quelconque (défini par l'utilisateur)"
+
+msgid "Distribute images along a grid"
+msgstr "Distribuer les images sur une grille"
+
+msgid "Feature"
+msgstr "Fonctionnalité"
+
+msgid "|distribute_on_grid| Distribute on a grid"
+msgstr "|distribute_on_grid| Distribuer sur une grille"
+
+msgid "distribute_on_grid"
+msgstr ""
+
+msgid "Distribute selected images on a regular grid"
+msgstr "Distribuer les images sélectionnées sur une grille régulière"
+
+msgid "|reset_positions| Reset image positions"
+msgstr "|reset_positions| Réinitialiser les positions"
+
+msgid "reset_positions"
+msgstr ""
+
+msgid "Reset the positions of the selected images to first image (x0, y0) coordinates"
+msgstr "Réinitialiser les positions des images sélectionnées aux coordonnées de la première image (x0, y0)"
+
 msgid "Axis transformation"
 msgstr "Transformation des axes"
 
-msgid "Linear calibration"
-msgstr "Étalonnage linéaire"
+msgid "Set uniform coordinates"
+msgstr "Définir des coordonnées uniformes"
 
-msgid "Create a new image which is a linear calibration of each selected image with respect to Z axis:"
-msgstr "Crée une image à partir de l'étalonnage linéaire (par rapport à l'axe des Z) de chaque image sélectionnée."
+msgid "Create a new image with uniform coordinates (i.e., with a constant pixel size in both X and Y directions)."
+msgstr "Crée une nouvelle image avec des coordonnées uniformes (c'est-à-dire avec une taille de pixel constante dans les directions X et Y)."
 
-msgid "Parameter"
-msgstr "Paramètre"
+msgid "Polynomial calibration"
+msgstr "Étalonnage polynomial"
 
-msgid "Z-axis"
-msgstr "Axe des Z"
+msgid "Create a new image which is a polynomial calibration of each selected image with respect to Z axis."
+msgstr "Crée une image à partir de l'étalonnage polynomial (par rapport à l'axe des Z) de chaque image sélectionnée."
 
-#, python-brace-format
-msgid ":math:`z_{1} = a.z_{0} + b`"
-msgstr ""
-
-msgid "Swap X/Y axes"
-msgstr "Permuter les axes X/Y"
-
-msgid "Create a new image which is the result of swapping X/Y data."
-msgstr "Créee une image à partir des données inversées X/Y de l'image sélectionnée."
+msgid "Linear calibration was removed from the UI as it is a special case of polynomial calibration with degree 1."
+msgstr "L'étalonnage linéaire a été supprimé de l'interface utilisateur car il s'agit d'un cas particulier d'étalonnage polynomial de degré 1."
 
 msgid "Level adjustment"
 msgstr "Ajustement des niveaux"
@@ -127,9 +195,6 @@ msgstr "Génère de nouvelles images en ajoutant le même bruit à chaque image 
 
 msgid "Noise"
 msgstr "Bruit"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "Gaussian"
 msgstr "Gaussien"
@@ -199,6 +264,9 @@ msgstr "Crée une image à partir du résultat d'un complément de zéros sur ch
 
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
+
+msgid "Parameter"
+msgstr "Paramètre"
 
 msgid "Strategy"
 msgstr "Stratégie"
@@ -354,9 +422,6 @@ msgstr "Valeur"
 
 msgid "Threshold value"
 msgstr "Valeur de seuil"
-
-msgid "Operation"
-msgstr "Opération"
 
 msgid "Operation to apply (> or <)"
 msgstr "Opération à appliquer (> ou <)"
@@ -742,4 +807,3 @@ msgstr "Valeur de remplissage"
 
 msgid "Value to use for points outside the input image domain (if None, function uses NaN for extrapolation)"
 msgstr "Valeur à utiliser pour les points en dehors du domaine de l'image d'entrée (si None, la fonction utilise NaN pour l'extrapolation)"
-

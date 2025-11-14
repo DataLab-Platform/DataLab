@@ -220,13 +220,13 @@ msgstr "La boîte de dialogue \"Résultats\" pour la deuxième image."
 msgid "Extract intensity profiles along the X axis"
 msgstr "Extraire des profils d'intensité le long de l'axe X"
 
-msgid "For the sake of simplicity (and because we want to compare two methods of extraction), we will extract the intensity profile along the X axis at the center of the image. In a real application, you would probably want to extract the **radial intensity profile** instead, which can be done using the \"Radial profile\" entry in the \"Operations > Intensity profiles\" menu: this would be more relevant and straightforward to analyze Fabry-Perot fringes."
+msgid "For the sake of simplicity (and because we want to compare two methods of extraction), we will extract the intensity profile along the X axis at the center of the image. In a real application, you would probably want to extract the **radial intensity profile** instead, which can be done using the \"Radial profile\" entry in the \"Analysis > Intensity profiles\" menu: this would be more relevant and straightforward to analyze Fabry-Perot fringes."
 msgstr "Pour des raisons de simplicité (et parce que nous voulons comparer deux méthodes d'extraction), nous allons extraire le profil d'intensité le long de l'axe X au centre de l'image. Dans une application réelle, vous voudriez probablement extraire le **profil d'intensité radial** à la place, ce qui peut être fait en utilisant l'entrée \"Profil radial\" dans le menu \"Opérations > Profils d'intensité\" : cela serait plus pertinent et plus simple pour analyser les franges de Fabry-Perot."
 
 msgid "To extract the intensity profile along the X axis, we have two options:"
 msgstr "Pour extraire le profil d'intensité le long de l'axe X, nous avons deux options :"
 
-msgid "Either select the \"Line profile...\" entry |profile| in the \"Operations > Intensity profiles\" menu."
+msgid "Either select the \"Line profile...\" entry |profile| in the \"Analysis > Intensity profiles\" menu."
 msgstr "Soit sélectionner l'entrée \"Profil rectiligne...\" |profile| dans le menu \"Opérations > Profils d'intensité\"."
 
 msgid "profile"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-13 16:03+0100\n"
+"POT-Creation-Date: 2025-11-14 17:48+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -518,6 +518,21 @@ msgstr "image"
 msgid "images"
 msgstr "images"
 
+msgid "Geometry"
+msgstr "Géométrie"
+
+msgid "Distribute on a grid..."
+msgstr "Distribuer sur une grille..."
+
+msgid "Reset image positions"
+msgstr "Réinitialiser les positions des images"
+
+msgid "2D sinc"
+msgstr "Sinc 2D"
+
+msgid "Ring pattern"
+msgstr "Motif en anneau"
+
 msgid "Ramp"
 msgstr "Rampe"
 
@@ -527,14 +542,8 @@ msgstr "Damier"
 msgid "Sinusoidal grating"
 msgstr "Réseau sinusoïdal"
 
-msgid "Ring pattern"
-msgstr "Motif en anneau"
-
 msgid "Siemens star"
 msgstr "Étoile de Siemens"
-
-msgid "2D sinc"
-msgstr "Sinc 2D"
 
 msgid "Create ROI grid"
 msgstr "Créer une grille de ROI"
@@ -587,30 +596,6 @@ msgstr "Gommer une zone"
 msgid "Erase area in the image as defined by a region of interest"
 msgstr "Gomme une zone de l'image définie par une région d'intérêt (ROI)."
 
-msgid "2D peak detection"
-msgstr "Détection de pics 2D"
-
-msgid "Compute automatic 2D peak detection"
-msgstr "Détection automatique de pics 2D"
-
-msgid "Blob detection"
-msgstr "Détection de taches"
-
-msgid "Resize"
-msgstr "Redimensionner"
-
-msgid "Pixel binning"
-msgstr "Binning"
-
-msgid "View images side-by-side"
-msgstr "Voir les images côte à côte"
-
-msgid "View selected images side-by-side in a new window"
-msgstr "Voir les images sélectionnées côte à côte dans une nouvelle fenêtre"
-
-msgid "Flip or rotation"
-msgstr "Symétrie ou rotation"
-
 msgid "Intensity profiles"
 msgstr "Profils d'intensité"
 
@@ -638,11 +623,26 @@ msgstr "Extraire le profil radial..."
 msgid "Radial profile extraction around image centroid"
 msgstr "Extraire le profil radial autour du barycentre de l'image"
 
-msgid "Distribute on a grid..."
-msgstr "Distribuer sur une grille..."
+msgid "2D peak detection"
+msgstr "Détection de pics 2D"
 
-msgid "Reset image positions"
-msgstr "Réinitialiser les positions des images"
+msgid "Compute automatic 2D peak detection"
+msgstr "Détection automatique de pics 2D"
+
+msgid "Blob detection"
+msgstr "Détection de taches"
+
+msgid "Resize"
+msgstr "Redimensionner"
+
+msgid "Pixel binning"
+msgstr "Binning"
+
+msgid "View images side-by-side"
+msgstr "Voir les images côte à côte"
+
+msgid "View selected images side-by-side in a new window"
+msgstr "Voir les images sélectionnées côte à côte dans une nouvelle fenêtre"
 
 msgid "Show contrast panel"
 msgstr "Afficher le panneau de contraste"
@@ -1550,8 +1550,8 @@ msgstr "Rotation directe de %s"
 msgid "Rotate %s left"
 msgstr "Rotation inverse de %s"
 
-msgid "Rotate by..."
-msgstr "Rotation de..."
+msgid "Rotate by"
+msgstr "Rotation de"
 
 msgid "Line profile"
 msgstr "Profil rectiligne"
@@ -1687,6 +1687,9 @@ msgstr "Seuillage Otsu"
 msgid "Triangle thresholding"
 msgstr "Seuillage Triangle"
 
+msgid "Yen thresholding"
+msgstr "Seuillage Yen"
+
 msgid "Gamma correction"
 msgstr "Correction gamma"
 
@@ -1714,7 +1717,7 @@ msgstr "Filtrage bilatéral (débruitage)"
 msgid "Wavelet denoising"
 msgstr "Débruitage par ondelettes"
 
-msgid "White Top-hat denoising"
+msgid "White Top-Hat denoising"
 msgstr "Débruitage Top-Hat"
 
 msgid "White Top-Hat (disk)"
@@ -3284,4 +3287,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

@@ -22,28 +22,76 @@ The "Processing" menu allows you to perform various processing on the current
 image or group of images: it allows you to apply filters, to perform exposure
 correction, to perform denoising, to perform morphological operations, and so on.
 
-Axis transformation
-^^^^^^^^^^^^^^^^^^^
+Geometry
+^^^^^^^^
 
-Linear calibration
-~~~~~~~~~~~~~~~~~~
+Flip and rotation
+~~~~~~~~~~~~~~~~~
 
-Create a new image which is a linear calibration
-of each selected image with respect to Z axis:
+Create a new image by flipping or rotating the data of the selected image.
+The image may be flipped horizontally, vertically, or diagonally (transposition).
+It may be rotated by 90°, 270° or any user-defined value.
 
 .. list-table::
     :header-rows: 1
     :widths: 40, 60
 
-    * - Parameter
-      - Linear calibration
-    * - Z-axis
-      - :math:`z_{1} = a.z_{0} + b`
+    * - Operation
+      - Description
+    * - Flip horizontally
+      - Mirror image along the vertical axis
+    * - Flip diagonally
+      - Transpose the image (swap X/Y axes)
+    * - Flip vertically
+      - Mirror image along the horizontal axis
+    * - Rotate 90° right
+      - Rotate image 90° clockwise
+    * - Rotate 90° left
+      - Rotate image 90° counter-clockwise
+    * - Rotate by...
+      - Rotate image by any angle (user-defined)
 
-Swap X/Y axes
-~~~~~~~~~~~~~
+Distribute images along a grid
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create a new image which is the result of swapping X/Y data.
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
+
+    * - Feature
+      - Description
+    * - |distribute_on_grid| Distribute on a grid
+      - Distribute selected images on a regular grid
+    * - |reset_positions| Reset image positions
+      - Reset the positions of the selected images to first image (x0, y0) coordinates
+
+.. |distribute_on_grid| image:: ../../../datalab/data/icons/processing/distribute_on_grid.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |reset_positions| image:: ../../../datalab/data/icons/processing/reset_positions.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+Axis transformation
+^^^^^^^^^^^^^^^^^^^
+
+Set uniform coordinates
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new image with uniform coordinates (i.e., with a constant pixel size in both X and Y directions).
+
+Polynomial calibration
+~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new image which is a polynomial calibration
+of each selected image with respect to Z axis.
+
+.. note::
+
+    Linear calibration was removed from the UI as it is a special case of polynomial calibration with degree 1.
 
 Level adjustment
 ^^^^^^^^^^^^^^^^

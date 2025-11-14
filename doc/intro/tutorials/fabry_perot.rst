@@ -299,13 +299,13 @@ Extract intensity profiles along the X axis
     extraction), we will extract the intensity profile along the X axis
     at the center of the image. In a real application, you would probably want to
     extract the **radial intensity profile** instead, which can be done using
-    the "Radial profile" entry in the "Operations > Intensity profiles" menu: this
+    the "Radial profile" entry in the "Analysis > Intensity profiles" menu: this
     would be more relevant and straightforward to analyze Fabry-Perot fringes.
 
 To extract the intensity profile along the X axis, we have two options:
 
 - Either select the "Line profile..." entry |profile| in the
-  "Operations > Intensity profiles" menu.
+  "Analysis > Intensity profiles" menu.
 
 - Or activate the "Cross section" tool |cross_section| in the vertical toolbar
   on the left of the visualization panel.

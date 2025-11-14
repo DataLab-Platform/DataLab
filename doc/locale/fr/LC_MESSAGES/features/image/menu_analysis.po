@@ -85,6 +85,63 @@ msgstr "Limite supérieure de l'histogramme"
 msgid "Example of histogram."
 msgstr "Exemple d'histogramme."
 
+msgid "Intensity profiles"
+msgstr "Profils d'intensité"
+
+msgid "Line profile"
+msgstr "Profil rectiligne"
+
+msgid "Extract an horizontal or vertical profile from each selected image, and create new signals from these profiles."
+msgstr "Extraire un profil horizontal ou vertical de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils."
+
+msgid "Line profile dialog. Parameters may also be set manually (\"Edit profile parameters\" button)."
+msgstr "Boîte de dialogue d'extraction de profil. Les paramètres peuvent être également définis manuellement (bouton \"Editer les paramètres du profil\")."
+
+msgid "Segment profile"
+msgstr "Profil le long d'un segment"
+
+msgid "Extract a segment profile from each selected image, and create new signals from these profiles."
+msgstr "Extraire un profil le long d'un segment de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils."
+
+msgid "Average profile"
+msgstr "Profil moyen"
+
+msgid "Extract an horizontal or vertical profile averaged over a rectangular area, from each selected image, and create new signals from these profiles."
+msgstr "Extraire un profil horizontal ou vertical moyenné sur une zone rectangulaire de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils."
+
+msgid "Average profile dialog: the area is defined by a rectangle shape. Parameters may also be set manually (\"Edit profile parameters\" button)."
+msgstr "Boîte de dialogue d'extraction de profil moyen : la zone est définie par un rectangle. Les paramètres peuvent être également définis manuellement (bouton \"Editer les paramètres du profil\")."
+
+msgid "Radial profile extraction"
+msgstr "Extraire un profil radial"
+
+msgid "Extract a radial profile from each selected image, and create new signals from these profiles."
+msgstr "Extraire un profil radial de chaque image sélectionnée et créer un nouveau signal à partir de ces profils."
+
+msgid "The following parameters are available:"
+msgstr "Les paramètres suivants sont disponibles :"
+
+msgid "Parameter"
+msgstr "Paramètre"
+
+msgid "Center"
+msgstr "Centre"
+
+msgid "Center around which the radial profile is computed: centroid, image center, or user-defined"
+msgstr "Centre autour duquel le profil radial est calculé : centre de masse, centre de l'image, ou défini par l'utilisateur"
+
+msgid "X"
+msgstr "X"
+
+msgid "X coordinate of the center (if user-defined), in pixels"
+msgstr "Coordonnée X du centre (si défini par l'utilisateur), en pixels"
+
+msgid "Y"
+msgstr "Y"
+
+msgid "Y coordinate of the center (if user-defined), in pixels"
+msgstr "Coordonnée Y du centre (si défini par l'utilisateur), en pixels"
+
 msgid "Horizontal and vertical projections"
 msgstr "Projections horizontale et verticale"
 

@@ -282,7 +282,7 @@ The "Edit" menu allows you to:
 
 - "Add object title to plot": this action will add a label on top of the image
   with its title, which might be useful in combination with the "Distribute on a grid"
-  operation (see :ref:`ima-menu-operations`) to easily identify the images.
+  operation (see :ref:`ima-menu-processing`) to easily identify the images.
 
 - "Copy titles to clipboard" |copy_titles|: this action will copy the titles of the
   selected images to the clipboard, which might be useful to paste them in a text

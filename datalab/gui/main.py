@@ -1505,7 +1505,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             ],
         )
         if self.quit_action is not None:
-            add_actions(self.file_menu, [None, self.quit_action])
+            add_actions(self.file_menu, [self.quit_action])
 
     def __update_view_menu(self) -> None:
         """Update view menu before showing up"""

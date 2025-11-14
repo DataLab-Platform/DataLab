@@ -63,6 +63,58 @@ Parameters are:
 
     Example of histogram.
 
+Intensity profiles
+^^^^^^^^^^^^^^^^^^
+
+Line profile
+~~~~~~~~~~~~
+
+Extract an horizontal or vertical profile from each selected image, and create
+new signals from these profiles.
+
+.. figure:: /images/shots/i_profile.png
+
+    Line profile dialog. Parameters may also be set manually
+    ("Edit profile parameters" button).
+
+Segment profile
+~~~~~~~~~~~~~~~
+
+Extract a segment profile from each selected image, and create new signals
+from these profiles.
+
+Average profile
+~~~~~~~~~~~~~~~
+
+Extract an horizontal or vertical profile averaged over a rectangular area, from
+each selected image, and create new signals from these profiles.
+
+.. figure:: /images/shots/i_profile_average.png
+
+    Average profile dialog: the area is defined by a rectangle shape.
+    Parameters may also be set manually ("Edit profile parameters" button).
+
+Radial profile extraction
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Extract a radial profile from each selected image, and create new signals from
+these profiles.
+
+The following parameters are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - Center
+      - Center around which the radial profile is computed: centroid, image center, or user-defined
+    * - X
+      - X coordinate of the center (if user-defined), in pixels
+    * - Y
+      - Y coordinate of the center (if user-defined), in pixels
+
 Horizontal and vertical projections
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+import os.path as osp
+
 import sigima.objects
 
 from datalab.gui.main import DLMainWindow
@@ -47,10 +49,10 @@ def parse_menu_as_text(win: DLMainWindow) -> str:
             "create",
             "edit",
             "roi",
-            "view",
             "operation",
             "processing",
             "analysis",
+            "view",
             "help",
         ):
             menu = getattr(win, f"{name}_menu")
@@ -76,7 +78,17 @@ def print_datalab_menus() -> None:
         param = sigima.objects.Gauss2DParam.create(height=100, width=100)
         ima = sigima.objects.create_image_from_param(param)
         win.imagepanel.add_object(ima)
-        print(parse_menu_as_text(win))
+        txt = parse_menu_as_text(win)
+        count = txt.count("......")
+        if count > 0:
+            raise RuntimeError(
+                f"Double ellipsis found in menu text output ({count} occurrences)."
+            )
+        print(txt)
+        output_path = osp.join(osp.dirname(__file__), "datalab_menus.txt")
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(txt)
+        print(f"Menu text output saved to {output_path}")
 
 
 if __name__ == "__main__":

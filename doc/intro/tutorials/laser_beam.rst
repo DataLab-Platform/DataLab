@@ -76,7 +76,7 @@ To pan the image, use the middle mouse button while dragging.
 
     .. warning::
 
-        The "Operations" menu includes a "Distribute on a grid" option
+        The "Processing > Geometry" menu includes a "Distribute on a grid" option
         |distribute_on_grid|. This feature repositions the images by applying
         offsets to their X and Y coordinates, arranging them in a grid layout
         for side-by-side viewing. Note that this operation modifies the image
@@ -87,16 +87,16 @@ To pan the image, use the middle mouse button while dragging.
         Images distributed on 4 columns grid.
 
         To restore the original image positions, use the "Reset image positions"
-        option |reset_positions| from the "Operations" menu. Note that this
+        option |reset_positions| from the "Processing > Geometry" menu. Note that this
         operation sets all image origins to match the first image's origin,
         which means any initial differences in image origins will be lost.
 
-.. |distribute_on_grid| image:: ../../../datalab/data/icons/operations/distribute_on_grid.svg
+.. |distribute_on_grid| image:: ../../../datalab/data/icons/processing/distribute_on_grid.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |reset_positions| image:: ../../../datalab/data/icons/operations/reset_positions.svg
+.. |reset_positions| image:: ../../../datalab/data/icons/processing/reset_positions.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -157,7 +157,7 @@ To do this, select "Analysis > Centroid" from the menu.
     The centroid position is displayed on the image.
 
 Next, we can extract a line profile along the horizontal axis using
-"Operations > Intensity profiles > Line profile". Set the row position to the
+"Analysis > Intensity profiles > Line profile". Set the row position to the
 previously computed centroid position (i.e., 668) using the "Set Parameters" button.
 See :ref:`tutorial_fabry_perot` for more details on intensity profile extraction.
 
@@ -193,7 +193,7 @@ shown on the curve.
 Let's also try another method to measure the beam size by returning to the image.
 
 From the "Image panel", we can extract the radial intensity profile using
-"Operations > Intensity profiles > Radial profile". The radial intensity profile
+"Analysis > Intensity profiles > Radial profile". The radial intensity profile
 can be computed around the centroid position, the center of the image,
 or a user-defined position, depending on your data.
 For our data, which appears to have radial symmetry with a center not necessarily

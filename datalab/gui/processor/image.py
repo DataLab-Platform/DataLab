@@ -358,7 +358,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             _("Rotate %s left") % "90°",
             icon_name="rotate_left.svg",
         )
-        self.register_1_to_1(sipi.rotate, _("Rotate by..."), sipi.RotateParam)
+        self.register_1_to_1(sipi.rotate, _("Rotate by"), sipi.RotateParam)
         # Intensity profiles
         self.register_1_to_1(
             sipi.line_profile,
@@ -468,7 +468,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(sipi.wiener, _("Wiener filter"))
         self.register_1_to_1(
             sipi.erase,
-            _("Erase area"),
+            _("Erase area") + "...",
             ROI2DParam,
             comment=_("Erase area in the image as defined by a region of interest"),
             icon_name="erase.svg",
@@ -557,7 +557,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(sipi.threshold_minimum, _("Minimum thresholding"))
         self.register_1_to_1(sipi.threshold_otsu, _("Otsu thresholding"))
         self.register_1_to_1(sipi.threshold_triangle, _("Triangle thresholding"))
-        self.register_1_to_1(sipi.threshold_yen, _("Li thresholding"))
+        self.register_1_to_1(sipi.threshold_yen, _("Yen thresholding"))
         # Exposure
         self.register_1_to_1(
             sipi.adjust_gamma,
@@ -607,7 +607,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         )
         self.register_1_to_1(
             sipi.denoise_tophat,
-            _("White Top-hat denoising"),
+            _("White Top-Hat denoising"),
             sipi.MorphologyParam,
         )
         # Morphology
