@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
 """Fix SVG icons by removing conflicting fill attributes.
 
 This script automatically finds and fixes SVG icons that have conflicting
