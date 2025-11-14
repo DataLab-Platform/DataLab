@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 14:23+0100\n"
+"POT-Creation-Date: 2025-11-14 18:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -120,9 +120,6 @@ msgstr "Extraire un profil radial de chaque image sélectionnée et créer un no
 
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
-
-msgid "Parameter"
-msgstr "Paramètre"
 
 msgid "Center"
 msgstr "Centre"
@@ -273,6 +270,15 @@ msgstr "Afficher les résultats"
 
 msgid "Show the results of all analyses performed on the selected images. This shows the same table as the one shown after having performed a computation."
 msgstr "Affiche les résultats de toutes les analyses effectuées sur les images sélectionnées. Cela affiche le même tableau que celui affiché après avoir effectué un calcul."
+
+msgid "Results label"
+msgstr "Étiquette des résultats"
+
+msgid "Toggle the visibility of result labels on the plot. When enabled, this checkable menu item displays result annotations (such as centroid markers, detected contours, blob circles, or other analysis shapes) directly on the image plot."
+msgstr "Active ou désactive la visibilité des étiquettes de résultats sur le graphique. Lorsqu'il est activé, cet élément de menu cochable affiche les annotations des résultats (telles que les marqueurs de centroïde, les contours détectés, les cercles de taches ou d'autres formes d'analyse) directement sur le graphique de l'image."
+
+msgid "This option is synchronized between Signal and Image panels and persists across sessions. It is only enabled when results are available for the selected image."
+msgstr "Cette option est synchronisée entre les panneaux Signal et Image et persiste entre les sessions. Elle n'est activée que lorsque des résultats sont disponibles pour l'image sélectionnée."
 
 msgid "Plot results"
 msgstr "Tracer les résultats"

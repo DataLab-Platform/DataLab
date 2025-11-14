@@ -239,6 +239,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         # Store reference to metadata and annotations submenus (for screenshots)
         self.metadata_submenu: QW.QMenu | None = None
         self.annotations_submenu: QW.QMenu | None = None
+        # Store reference to show label action (for settings dialog)
+        self.show_label_action: QW.QAction | None = None
 
     @property
     def object_suffix(self) -> str:
@@ -1138,6 +1140,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
+            self.show_label_action = self.new_action(
+                _("Results label"),
+                toggled=self.panel.toggle_result_label_visibility,
+                tip=_("Show or hide the merged result label on the plot"),
+                select_condition=SelectCond.with_results,
+            )
+            self.show_label_action.setCheckable(True)
+            self.show_label_action.setChecked(Conf.view.show_result_label.get())
             self.new_action(
                 _("Plot results") + "...",
                 triggered=self.panel.plot_results,

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-14 17:48+0100\n"
+"POT-Creation-Date: 2025-11-14 18:51+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -314,6 +314,12 @@ msgstr "Exporter les régions d'intérêt de l'objet %s sélectionné"
 
 msgid "Show results"
 msgstr "Afficher les résultats"
+
+msgid "Results label"
+msgstr "Etiquette des résultats"
+
+msgid "Show or hide the merged result label on the plot"
+msgstr "Afficher ou masquer l'étiquette de résultat fusionnée sur le graphique"
 
 msgid "Plot results"
 msgstr "Tracer les résultats"
@@ -1270,12 +1276,6 @@ msgstr "%d objets source n'existent plus."
 
 msgid "Show results obtained from previous analysis"
 msgstr "Afficher les résultats obtenus avec des analyses réalisées précédemment"
-
-msgid "Show results label"
-msgstr "Afficher l'étiquette des résultats"
-
-msgid "Show or hide the merged result label on the plot"
-msgstr "Afficher ou masquer l'étiquette de résultat fusionnée sur le graphique"
 
 msgid "Open a dialog to edit annotations"
 msgstr "Ouvrir une boîte de dialogue pour éditer les annotations"
@@ -2458,7 +2458,7 @@ msgid "Result label"
 msgstr "Étiquette des résultats"
 
 msgid "Show the merged result label on the plot by default. Can be toggled per-object using the checkbox in the Properties panel."
-msgstr "Afficher l'étiquette des résultats fusionnés sur le graphique par défaut. Peut être activée ou désactivée par objet à l'aide de la case à cocher dans le panneau des propriétés."
+msgstr "Etiquette des résultats fusionnés sur le graphique par défaut. Peut être activée ou désactivée par objet à l'aide de la case à cocher dans le panneau des propriétés."
 
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"
@@ -3287,3 +3287,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

@@ -1353,7 +1353,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         super().__init__(parent)
         self.mainwindow: DLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
-        self.show_label_checkbox: QW.QCheckBox | None = None
         self.objmodel = objectmodel.ObjectModel(f"g{self.PARAMCLASS.PREFIX}")
         self.objview = objectview.ObjectView(self, self.objmodel)
         self.objview.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
@@ -2942,21 +2941,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             select_condition=actionhandler.SelectCond.with_results,
         )
 
-        # Add checkbox to toggle result label visibility
-        self.show_label_checkbox = QW.QCheckBox(_("Show results label"), self)
-        self.show_label_checkbox.setToolTip(
-            _("Show or hide the merged result label on the plot")
-        )
-        self.show_label_checkbox.setChecked(Conf.view.show_result_label.get())
-        self.show_label_checkbox.stateChanged.connect(
-            self.toggle_result_label_visibility
-        )
-        self.objprop.add_button(self.show_label_checkbox)
-        self.acthandler.add_action(
-            self.show_label_checkbox,
-            select_condition=actionhandler.SelectCond.with_results,
-        )
-
         self.__new_objprop_button(
             _("Annotations"),
             "annotations.svg",
@@ -2991,15 +2975,21 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         else:
             self.__show_no_result_warning()
 
-    def toggle_result_label_visibility(self, state: int) -> None:
+    def toggle_result_label_visibility(self, state: bool) -> None:
         """Toggle the visibility of the merged result label on the plot.
 
         Args:
-            state: Checkbox state (Qt.Checked or Qt.Unchecked)
+            state: True to show the label, False to hide it
         """
-        show_label = state == QC.Qt.Checked
+        show_label = state
         # Update the configuration
         Conf.view.show_result_label.set(show_label)
+        # Synchronize the other panel's action state
+        for panel in (self.mainwindow.signalpanel, self.mainwindow.imagepanel):
+            if panel is not self and panel.acthandler.show_label_action is not None:
+                panel.acthandler.show_label_action.blockSignals(True)
+                panel.acthandler.show_label_action.setChecked(show_label)
+                panel.acthandler.show_label_action.blockSignals(False)
         # Refresh the plot to show/hide the label
         self.plothandler.toggle_result_label_visibility(show_label)
 

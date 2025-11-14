@@ -1991,7 +1991,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 refresh_signal_panel = refresh_image_panel = True
             if option == "show_result_label":
                 for panel in (self.signalpanel, self.imagepanel):
-                    panel.show_label_checkbox.setChecked(
+                    panel.acthandler.show_label_action.setChecked(
                         Conf.view.show_result_label.get()
                     )
             if option == "color_mode":

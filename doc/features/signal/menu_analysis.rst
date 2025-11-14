@@ -260,6 +260,16 @@ Show results
 Show the results of all analyses performed on the selected signals. This shows the
 same table as the one shown after having performed a computation.
 
+Results label
+^^^^^^^^^^^^^
+
+Toggle the visibility of result labels on the plot. When enabled, this checkable
+menu item displays result annotations (such as FWHM, peak positions, or other
+analysis markers) directly on the signal plot.
+
+This option is synchronized between Signal and Image panels and persists across
+sessions. It is only enabled when results are available for the selected signal.
+
 Plot results
 ^^^^^^^^^^^^
 
