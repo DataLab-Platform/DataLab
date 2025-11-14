@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-  <svg
- role="img"
- focusable="false"
- aria-hidden="true"
- viewBox="0 0 14 14"
- version="1.1"
- id="svg4"
- xmlns="http://www.w3.org/2000/svg">
+<svg
+   role="img"
+   focusable="false"
+   aria-hidden="true"
+   viewBox="0 0 14 14"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="libre-gui-close.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="61.642857"
+     inkscape:cx="5.9455388"
+     inkscape:cy="6.9918888"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
   <path
- d="M12 10.047142q0 .3367-.235692.572383l-1.144783 1.144783Q10.383842 12 10.047142 12q-.3367003 0-.572392-.235692L7 9.289558l-2.47475 2.47475Q4.2895583 12 3.9528583 12q-.3367 0-.5723833-.235692l-1.1447833-1.144783Q2 10.383842 2 10.047142t.2356917-.572392L4.7104417 7l-2.47475-2.47475Q2 4.2895583 2 3.9528583q0-.3367.2356917-.5723833L3.380475 2.2356917Q3.6161583 2 3.9528583 2t.5723917.2356917L7 4.7104417l2.47475-2.47475Q9.7104417 2 10.047142 2q.3367 0 .572383.2356917l1.144783 1.1447833Q12 3.6161583 12 3.9528583t-.235692.5723917L9.2895583 7l2.4747497 2.47475Q12 9.710442 12 10.047142z"
- id="path2" fill="#333333" />
+     d="M12 10.047142q0 .3367-.235692.572383l-1.144783 1.144783Q10.383842 12 10.047142 12q-.3367003 0-.572392-.235692L7 9.289558l-2.47475 2.47475Q4.2895583 12 3.9528583 12q-.3367 0-.5723833-.235692l-1.1447833-1.144783Q2 10.383842 2 10.047142t.2356917-.572392L4.7104417 7l-2.47475-2.47475Q2 4.2895583 2 3.9528583q0-.3367.2356917-.5723833L3.380475 2.2356917Q3.6161583 2 3.9528583 2t.5723917.2356917L7 4.7104417l2.47475-2.47475Q9.7104417 2 10.047142 2q.3367 0 .572383.2356917l1.144783 1.1447833Q12 3.6161583 12 3.9528583t-.235692.5723917L9.2895583 7l2.4747497 2.47475Q12 9.710442 12 10.047142z"
+     id="path2"
+     style="fill:#333333" />
 </svg>
