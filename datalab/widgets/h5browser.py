@@ -751,6 +751,9 @@ class H5Browser(QW.QSplitter):
         selectorandtree = QW.QFrame(self)
         selectorandtree.setLayout(QW.QVBoxLayout())
         selectorandtree.layout().addWidget(self.selector)
+        # Add toolbar with tree actions
+        toolbar = self.__create_toolbar()
+        selectorandtree.layout().addWidget(toolbar)
         selectorandtree.layout().addWidget(self.tree)
         selectorandtree.layout().setContentsMargins(0, 0, 0, 0)
         self.addWidget(selectorandtree)
@@ -762,6 +765,24 @@ class H5Browser(QW.QSplitter):
         self.groupandattrs = GroupAndAttributes(self, self.show_array)
         preview.addWidget(self.groupandattrs)
         preview.setSizes([int(self.size().height() / 2)] * 2)
+
+    def __create_toolbar(self) -> QW.QToolBar:
+        """Create toolbar with tree actions
+
+        Returns:
+            Toolbar widget
+        """
+        toolbar = QW.QToolBar(self)
+        toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextBesideIcon)
+        toolbar.setIconSize(QC.QSize(16, 16))
+        toolbar.setStyleSheet("QToolBar { padding: 2px; spacing: 2px; }")
+        toolbar.addAction(self.tree.expand_all_action)
+        toolbar.addAction(self.tree.collapse_all_action)
+        toolbar.addAction(self.tree.restore_action)
+        toolbar.addSeparator()
+        toolbar.addAction(self.tree.expand_selection_action)
+        toolbar.addAction(self.tree.collapse_selection_action)
+        return toolbar
 
     def open_file(self, fname: str) -> None:
         """Open HDF5 file
