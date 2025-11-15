@@ -35,7 +35,7 @@ from sigima import ImageObj, SignalObj
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import Conf, _
 from datalab.h5 import H5Importer
-from datalab.utils.qthelpers import qt_handle_error_message
+from datalab.utils.qthelpers import block_signals, qt_handle_error_message
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot
@@ -851,7 +851,13 @@ class H5Browser(QW.QSplitter):
             self.plotpreview.update_plot_preview(node)
         self.groupandattrs.update_from_node(node)
         # Update the file selector combo box
-        self.selector.set_current_fname(node.h5file.filename)
+        with block_signals(self.selector.combo):
+            # Avoid triggering current file changed signal, which would result in
+            # loosing the current selection on the tree (side effect: "Show array"
+            # button would still be enabled if the previous node was an array, except
+            # that now the current node is not an array, thus causing an error if
+            # the user clicks on the button).
+            self.selector.set_current_fname(node.h5file.filename)
 
     def __selector_current_file_changed(self, fname: str) -> None:
         """Selector current file changed
