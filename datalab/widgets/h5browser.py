@@ -221,8 +221,15 @@ class H5TreeWidget(AbstractTreeWidget):
         importer = H5Importer(fname)
         self.h5importers.append(importer)
         self.add_root_to_tree(importer)
+        # Temporarily expand all items to calculate proper column widths
+        rootitem = self.topLevelItem(self.topLevelItemCount() - 1)
+        self.expand_all_children(rootitem)
         for col in range(4):
             self.resizeColumnToContents(col)
+        # Restore to default state (only root and its immediate children expanded)
+        for index in range(rootitem.childCount()):
+            child = rootitem.child(index)
+            self.collapseItem(child)
 
     def remove_root(self, fname: str) -> None:
         """Remove HDF5 root
