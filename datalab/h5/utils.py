@@ -20,7 +20,7 @@ def fix_ldata(fuzzy):
             fuzzy = to_string(fuzzy)
         if isinstance(fuzzy, str):
             return fuzzy
-    return None
+    return ""
 
 
 def fix_ndata(fuzzy):
@@ -56,7 +56,7 @@ def process_label(dset, name):
     try:
         ldata = dset[name][()]
         if ldata is not None:
-            xldata, yldata, zldata = None, None, None
+            xldata, yldata, zldata = "", "", ""
             if len(ldata) == 2:
                 xldata, yldata = ldata
             elif len(ldata) == 3:
@@ -64,7 +64,7 @@ def process_label(dset, name):
             return fix_ldata(xldata), fix_ldata(yldata), fix_ldata(zldata)
     except KeyError:
         pass
-    return None, None, None
+    return "", "", ""
 
 
 def process_xy_values(dset, name):
