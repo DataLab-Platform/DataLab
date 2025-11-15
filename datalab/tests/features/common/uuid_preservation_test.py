@@ -163,7 +163,7 @@ def test_uuid_preservation_images():
 
 
 def test_uuid_regeneration_on_import():
-    """Test that UUIDs are regenerated when importing (not resetting workspace)"""
+    """Test that UUIDs are regenerated only when conflicts exist during import"""
     with qt_app_context():
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             with datalab_test_app_context(console=False) as win:
@@ -178,7 +178,7 @@ def test_uuid_regeneration_on_import():
                 win.save_to_h5_file(fname)
 
                 # Step 2: Import the same file (reset_all=False, import_all=True)
-                # This should regenerate UUIDs to avoid conflicts
+                # This should regenerate UUID only for the conflicting object
                 win.open_h5_files([fname], import_all=True, reset_all=False)
 
                 # Step 3: Verify we now have 2 signals with different UUIDs

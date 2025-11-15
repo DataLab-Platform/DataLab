@@ -247,6 +247,17 @@ class ObjectModel:
         """Return True if obj is in model"""
         return get_uuid(obj) in self._objects
 
+    def has_uuid(self, uuid: str) -> bool:
+        """Check if an object with the given UUID exists in the model
+
+        Args:
+            uuid: UUID string to check
+
+        Returns:
+            True if an object with this UUID exists, False otherwise
+        """
+        return uuid in self._objects
+
     def clear(self) -> None:
         """Clear model"""
         self._objects.clear()

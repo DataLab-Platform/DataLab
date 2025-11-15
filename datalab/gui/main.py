@@ -1658,23 +1658,32 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             else:
                 reset_all = Conf.io.h5_clear_workspace.get()
                 if Conf.io.h5_clear_workspace_ask.get():
+                    # Build message with optional note for native workspace import
+                    msg = _(
+                        "Do you want to clear current workspace "
+                        "(signals and images) before importing data from "
+                        "HDF5 files?"
+                    )
+                    # Only show the UUID conflict note when importing native DataLab
+                    # workspace files (import_all=True), not when using HDF5 browser
+                    if import_all:
+                        msg += "<br><br>" + _(
+                            "<u>Note:</u> If you choose <i>No</i>, when importing "
+                            "DataLab workspace files, objects with conflicting "
+                            "identifiers will have their processing history lost "
+                            "(features like 'Show source' and 'Recompute' will not "
+                            "work for those objects). Non-conflicting objects will "
+                            "preserve their processing history."
+                        )
+                    msg += "<br><br>" + _(
+                        "Choosing to ignore this message will prevent it "
+                        "from being displayed again, and will use the "
+                        "current setting (%s)."
+                    ) % (_("Yes") if reset_all else _("No"))
                     answer = QW.QMessageBox.question(
                         self,
                         _("Warning"),
-                        _(
-                            "Do you want to clear current workspace "
-                            "(signals and images) before importing data from "
-                            "HDF5 files?<br><br>"
-                            "<b>Note:</b> If you choose <b>No</b>, the imported "
-                            "objects' processing history will be lost "
-                            "(features like 'Show source' and 'Recompute' will not "
-                            "work) because object identifiers will be regenerated "
-                            "to avoid conflicts.<br><br>"
-                            "Choosing to ignore this message will prevent it "
-                            "from being displayed again, and will use the "
-                            "current setting (%s)."
-                        )
-                        % (_("Yes") if reset_all else _("No")),
+                        msg,
                         QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Ignore,
                     )
                     if answer == QW.QMessageBox.Yes:

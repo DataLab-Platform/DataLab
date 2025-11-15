@@ -112,9 +112,10 @@ class IOSettings(gds.DataSet):
         help=_(
             "If enabled, the current workspace will be cleared before loading a "
             "new HDF5 file.\n"
-            "If disabled, imported objects' processing history will "
-            "be lost (features like 'Show source' and 'Recompute' will not work) "
-            "because object identifiers will be regenerated to avoid conflicts."
+            "If disabled, when importing DataLab workspace files, only objects with "
+            "conflicting identifiers will have their processing history lost "
+            "(features like 'Show source' and 'Recompute' will not work for those "
+            "objects). Non-conflicting objects will preserve their processing history."
         ),
     )
     h5_clear_workspace_ask = gds.BoolItem("", _("Ask before clearing workspace"))

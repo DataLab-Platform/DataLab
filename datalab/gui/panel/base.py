@@ -927,8 +927,10 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
             # When reopening a workspace (reset_all=True), preserve original UUIDs
             # so that processing parameter references (source_uuid, source_uuids)
             # remain valid and features like "Show source" and "Recompute" work.
+            # When importing, only regenerate UUID if it conflicts with an existing one.
             if not reset_all and isinstance(obj, (SignalObj, ImageObj, ObjectGroup)):
-                set_uuid(obj)
+                if self.objmodel.has_uuid(get_uuid(obj)):
+                    set_uuid(obj)
         return obj
 
     @abc.abstractmethod
