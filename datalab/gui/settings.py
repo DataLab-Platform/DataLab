@@ -321,11 +321,23 @@ class ViewSettings(gds.DataSet):
 
     g1 = gds.BeginGroup(_("Signals")).set_prop("display", icon="signal.svg")
     _prop_ads = gds.ValueProp(False)
-    sig_line_width = gds.FloatItem(
+    sig_linewidth = gds.FloatItem(
         _("Default line width"),
-        default=1.25,
+        default=1.0,
         min=0.1,
         help=_("Default line width for curves representing signals"),
+    )
+    sig_linewidth_perfs_threshold = gds.IntItem(
+        _("Performance threshold"),
+        default=1000,
+        min=100,
+        help=_(
+            "Number of points threshold for line width limitation.\n"
+            "For signals with more than this number of points, "
+            "line width is automatically limited to 1.0 for performance reasons.\n\n"
+            "That's because the Qt raster engine experiences significant rendering "
+            "slowdowns with thick lines on large datasets."
+        ),
     )
     sig_autodownsampling = gds.BoolItem(
         "",

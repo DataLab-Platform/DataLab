@@ -10,7 +10,7 @@ PlotPy Adapter Signal Module
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Generator
+from typing import Generator
 
 import numpy as np
 from guidata.dataset import restore_dataset, update_dataset
@@ -22,9 +22,6 @@ from datalab.adapters_plotpy.objects.base import (
     BaseObjPlotPyAdapter,
 )
 from datalab.config import Conf
-
-if TYPE_CHECKING:
-    from plotpy.styles import CurveParam
 
 
 class CurveStyles:
@@ -58,17 +55,22 @@ class CurveStyles:
                 for color in CurveStyles.COLORS:
                     yield (color, linestyle)
 
-    def apply_style(self, param: CurveParam) -> None:
-        """Apply style to curve"""
+    def apply_style(self, item: CurveItem) -> None:
+        """Apply style to curve
+
+        Args:
+            item: curve item
+        """
         if self.__suspend:
             # Suspend mode: always apply the first style
             color, linestyle = CurveStyles.COLORS[0], CurveStyles.LINESTYLES[0]
         else:
             color, linestyle = next(self.curve_style)
-        param.line.color = color
-        param.line.style = linestyle
-        param.line.width = Conf.view.sig_line_width.get(1.25)
-        param.symbol.marker = "NoSymbol"
+        item.param.line.color = color
+        item.param.line.style = linestyle
+        item.param.symbol.marker = "NoSymbol"
+        # Note: line width is set separately via apply_line_width()
+        # to ensure it's always recalculated based on current data size and settings
 
     def reset_styles(self) -> None:
         """Reset styles"""
@@ -93,6 +95,28 @@ class CurveStyles:
 
 
 CURVESTYLES = CurveStyles()  # This is the unique instance of the CurveStyles class
+
+
+def apply_line_width(item: CurveItem) -> None:
+    """Apply line width to curve item with smart clamping for large datasets
+
+    Args:
+        item: curve item
+    """
+    # Get data size
+    data_size = item.get_data()[0].size
+
+    # Get configured line width
+    line_width = Conf.view.sig_linewidth.get()
+
+    # For large datasets, clamp linewidth to 1.0 for performance
+    # (thick lines cause ~10x rendering slowdown due to Qt raster engine)
+    threshold = Conf.view.sig_linewidth_perfs_threshold.get()
+    if data_size > threshold and line_width > 1.0:
+        line_width = 1.0
+
+    # Apply the line width
+    item.param.line.width = line_width
 
 
 def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
@@ -177,8 +201,11 @@ class SignalObjPlotPyAdapter(BaseObjPlotPyAdapter[SignalObj, CurveItem]):
                 else:  # x, y, dx, dy error bar signal with x error
                     dy = np.zeros_like(y) if dy is None else dy
                     item = make.merror(x.real, y.real, dx.real, dy.real, label=o.title)
-            CURVESTYLES.apply_style(item.param)
+            # Apply style (without linewidth, will be set separately)
+            CURVESTYLES.apply_style(item)
             apply_downsampling(item, do_not_update=True)
+            # Apply linewidth with smart clamping based on actual data size
+            apply_line_width(item)
         else:
             raise RuntimeError("data not supported")
         if update_from is None:
@@ -221,6 +248,8 @@ class SignalObjPlotPyAdapter(BaseObjPlotPyAdapter[SignalObj, CurveItem]):
                 item.set_data(x.real, y.real, dx.real, dy.real)
         item.param.label = o.title
         apply_downsampling(item)
+        # Reapply linewidth with smart clamping (data size may have changed)
+        apply_line_width(item)
         self.update_plot_item_parameters(item)
 
     def add_label_with_title(self, title: str | None = None) -> None:

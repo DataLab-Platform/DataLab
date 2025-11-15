@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-13 10:57+0100\n"
+"POT-Creation-Date: 2025-11-15 17:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,24 @@ msgstr "DataLab Version 1.0.0"
 
 msgid "💥 New features and enhancements:"
 msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "**Signal rendering performance optimization**: Added smart linewidth clamping for large datasets"
+msgstr "**Optimisation des performances de rendu des signaux** : Ajout d'un plafonnement intelligent de l'épaisseur de trait pour les grands ensembles de données"
+
+msgid "New setting: \"Line width performance threshold\" (default: 1,000 points) in Signals visualization settings"
+msgstr "Nouveau paramètre : « Seuil de performance de l'épaisseur de trait » (par défaut : 1 000 points) dans les paramètres de visualisation des signaux"
+
+msgid "For signals with more points than the threshold, line width is automatically limited to 1.0 to prevent 10x rendering slowdown"
+msgstr "Pour les signaux comportant plus de points que le seuil, l'épaisseur de trait est automatiquement limitée à 1,0 pour éviter un ralentissement du rendu par un facteur 10"
+
+msgid "For smaller signals, the configured default line width applies normally (user-configurable)"
+msgstr "Pour les signaux plus petits, l'épaisseur de trait par défaut configurée s'applique normalement (configurable par l'utilisateur)"
+
+msgid "Performance optimization is transparent - no warnings, just automatic adjustment based on dataset size"
+msgstr "L'optimisation des performances est transparente - pas d'avertissements, juste un ajustement automatique basé sur la taille de l'ensemble de données"
+
+msgid "Addresses Qt raster engine limitation where thick lines (width > 1.0) cause significant rendering performance degradation on large datasets"
+msgstr "Traite la limitation du moteur raster Qt où les lignes épaisses (largeur > 1,0) entraînent une dégradation significative des performances de rendu sur de grands ensembles de données"
 
 msgid "**New \"Create\" menu**: Separated object creation functionality into dedicated menu between \"File\" and \"Edit\" menus"
 msgstr "**Nouveau menu \"Création\"** : Fonctionnalité de création d'objets séparée dans un menu dédié entre les menus \"Fichier\" et \"Édition\""

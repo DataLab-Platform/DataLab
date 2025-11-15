@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-14 18:51+0100\n"
+"POT-Creation-Date: 2025-11-15 17:20+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1274,12 +1274,6 @@ msgstr "1 objet source n'existe plus."
 msgid "%d source objects no longer exist"
 msgstr "%d objets source n'existent plus."
 
-msgid "Show results obtained from previous analysis"
-msgstr "Afficher les résultats obtenus avec des analyses réalisées précédemment"
-
-msgid "Open a dialog to edit annotations"
-msgstr "Ouvrir une boîte de dialogue pour éditer les annotations"
-
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
@@ -2375,6 +2369,20 @@ msgstr "Épaisseur par défaut"
 msgid "Default line width for curves representing signals"
 msgstr "Épaisseur de trait par défaut pour les courbes représentant des signaux"
 
+msgid "Performance threshold"
+msgstr "Seuil de performance"
+
+msgid ""
+"Number of points threshold for line width limitation.\n"
+"For signals with more than this number of points, line width is automatically limited to 1.0 for performance reasons.\n"
+"\n"
+"That's because the Qt raster engine experiences significant rendering slowdowns with thick lines on large datasets."
+msgstr ""
+"Seuil du nombre de points pour la limitation de l'épaisseur de trait.\n"
+"Pour les signaux comportant plus de ce nombre de points, l'épaisseur de trait est automatiquement limitée à 1,0 pour des raisons de performance.\n"
+"\n"
+"Cela est dû au fait que le moteur de rendu Qt subit des ralentissements importants lors du rendu de lignes épaisses sur de grands ensembles de données."
+
 msgid "Use auto downsampling"
 msgstr "Utiliser l'auto-sous-échantillonnage"
 
@@ -3287,4 +3295,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

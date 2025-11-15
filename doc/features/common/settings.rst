@@ -168,7 +168,16 @@ The Signals sub-tab contains settings specific to signal visualizations:
 
 **Default line width**
     Default line width for curves representing signals. This setting affects all signal
-    visualizations unless overridden individually.
+    visualizations unless overridden individually. Note: for signals exceeding the line
+    width performance threshold (see below), the line width is automatically clamped to
+    1.0 for optimal rendering performance.
+
+**Line width performance threshold**
+    For signals with more than this number of points (default: 1,000), line width is
+    automatically limited to 1.0 for performance reasons. This prevents the ~10x rendering
+    slowdown caused by Qt's raster engine when drawing thick lines (width > 1.0) on large
+    datasets. For smaller signals, the configured default line width applies normally.
+    This optimization is transparent and requires no user intervention.
 
 **Use auto downsampling**
     Enable automatic downsampling for large signals to improve performance and

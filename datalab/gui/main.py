@@ -2000,7 +2000,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                     widget = dock.widget()
                     if isinstance(widget, DockablePlotWidget):
                         widget.update_toolbar_position()
-            if option.startswith("sig_autodownsampling"):
+            if option.startswith(("sig_autodownsampling", "sig_linewidth")):
                 refresh_signal_panel = True
             if option == "sig_autoscale_margin_percent":
                 # Update signal plot widget autoscale margin

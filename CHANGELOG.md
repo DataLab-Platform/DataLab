@@ -6,6 +6,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 💥 New features and enhancements:
 
+* **Signal rendering performance optimization**: Added smart linewidth clamping for large datasets
+  * New setting: "Line width performance threshold" (default: 1,000 points) in Signals visualization settings
+  * For signals with more points than the threshold, line width is automatically limited to 1.0 to prevent 10x rendering slowdown
+  * For smaller signals, the configured default line width applies normally (user-configurable)
+  * Performance optimization is transparent - no warnings, just automatic adjustment based on dataset size
+  * Addresses Qt raster engine limitation where thick lines (width > 1.0) cause significant rendering performance degradation on large datasets
+
 * **New "Create" menu**: Separated object creation functionality into dedicated menu between "File" and "Edit" menus
   * The "Create" menu now contains all signal and image creation actions previously in "File > New [...]"
   * Provides clearer organization by separating creation from file operations (open/save)
