@@ -1085,17 +1085,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         assert len(funcs) == len(params)
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         grps = self.panel.objview.get_sel_groups()
+        n_glob = len(objs) * len(params)
         new_gids = {}
-        with create_progress_bar(
-            self.panel, title, max_=len(objs) * len(params)
-        ) as progress:
+        with create_progress_bar(self.panel, title, max_=n_glob) as progress:
             for i_row, obj in enumerate(objs):
                 for i_param, (param, func) in enumerate(zip(params, funcs)):
                     name = func.__name__
-                    i_title = f"{title} ({i_row + 1}/{len(objs)})"
-                    progress.setLabelText(i_title)
                     pvalue = (i_row + 1) * (i_param + 1)
                     pvalue = 0 if pvalue == 1 else pvalue
+                    i_title = f"{title} ({pvalue}/{n_glob})"
+                    progress.setLabelText(i_title)
                     progress.setValue(pvalue)
                     args = (obj,) if param is None else (obj, param)
                     result = self.__exec_func(func, args, progress)
