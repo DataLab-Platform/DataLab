@@ -66,7 +66,10 @@ datalab-tests = "datalab.tests:run"
 qt = ["PyQt5 >= 5.15.6"]
 opencv = ["opencv-python-headless >= 4.8.1.78"]
 exe = [
-    "pyinstaller >= 6.0",
+    # This section is used to build the standalone executable with PyInstaller for the
+    # official stand-alone releases of DataLab.
+    # For reproducibility, the PyInstaller version is pinned for each DataLab release.
+    "pyinstaller == 6.16.0",  # DataLab 1.0
     "opencv-python-headless >= 4.8.1.78",
     "PyQt5 >= 5.15.6",
 ]
