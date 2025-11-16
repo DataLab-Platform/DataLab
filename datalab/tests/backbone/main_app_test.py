@@ -54,6 +54,7 @@ def test_main_app():
         # Add signals to signal panel
         sig1 = create_paracetamol_signal(500)
         panel.add_object(sig1)
+        panel.rename_selected_object_or_group("Paracetamol Signal 1")
         panel.processor.run_feature(sips.derivative)
         panel.processor.run_feature(sips.wiener)
 
