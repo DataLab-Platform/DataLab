@@ -1744,8 +1744,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
                 if not param.edit(parent=self.parentWidget(), wordwrap=False):
                     return
-            # Save settings to config
-            Conf.io.add_metadata_settings.set(param)
+
+        # Save settings to config
+        Conf.io.add_metadata_settings.set(param)
 
         # Build values for all selected objects
         values = param.build_values(sel_objects)
@@ -2208,8 +2209,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     return
             param = SaveToDirectoryParam()
             update_dataset(param, guiparam)
-            # Save settings to config
-            Conf.io.save_to_directory_settings.set(guiparam)
+
+        # Save settings to config
+        Conf.io.save_to_directory_settings.set(param)
 
         Conf.main.base_dir.set(param.directory)
 
