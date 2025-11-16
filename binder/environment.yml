@@ -9,10 +9,10 @@ dependencies:
       - PyQt5
       - guidata
       - PlotPy
+      - sigima
       - PythonQwt
       - scikit-image
       - opencv-python-headless
       - PyWavelets
       - psutil
-      - cdlclient
-      - cdl
+      - datalab
