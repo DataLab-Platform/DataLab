@@ -10,7 +10,7 @@ import locale
 import os
 import platform
 import sys
-from subprocess import PIPE, Popen
+from importlib.metadata import distributions
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
@@ -32,12 +32,24 @@ def decode_fs_string(string: bytes) -> str:
     return string.decode(charset)
 
 
-def get_pip_list() -> str:
-    """Get pip list result"""
-    command = " ".join([sys.executable, "-m", "pip list"])
-    with Popen(command, shell=True, stdout=PIPE, stderr=PIPE) as proc:
-        output = proc.stdout.read()
-    return decode_fs_string(output)
+def get_installed_package_info() -> str:
+    """Get the list of installed packages with their versions"""
+    packages = [(dist.metadata["Name"], dist.version) for dist in distributions()]
+
+    # Sort alphabetically by package name
+    packages.sort(key=lambda x: x[0].lower())
+
+    # Determine column widths
+    name_width = max(len(name) for name, _ in packages)
+    version_width = max(len(version) for _, version in packages)
+
+    header = f"{'Package':{name_width}}   {'Version':{version_width}}"
+    separator = f"{'-' * name_width}   {'-' * version_width}"
+    result_lines = [header, separator]
+    for name, version in packages:
+        result_lines.append(f"{name:{name_width}}   {version:{version_width}}")
+
+    return os.linesep.join(result_lines)
 
 
 def get_install_info() -> str:
@@ -49,8 +61,8 @@ def get_install_info() -> str:
     if IS_FROZEN:
         #  Stand-alone version
         more_info = "This is the Stand-alone version of DataLab."
-    else:
-        more_info = get_pip_list()
+        more_info += os.linesep * 2
+    more_info = get_installed_package_info()
     info = os.linesep.join(
         [
             f"DataLab v{datalab.__version__}",
