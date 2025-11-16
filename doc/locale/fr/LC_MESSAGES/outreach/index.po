@@ -26,7 +26,7 @@ msgid "DataLab, conferences, presentations, talks, events, SciPy, PyData, Open S
 msgstr "DataLab, conférences, présentations, talks, événements, SciPy, PyData, Open Source Experience"
 
 msgid "Talks & Events"
-msgstr "Conférences & Événements"
+msgstr "Événements"
 
 msgid "DataLab has been presented at various conferences and events to share its capabilities with the scientific and open-source communities. This section showcases our presence at major conferences."
 msgstr "DataLab a été présenté lors de diverses conférences et événements pour partager ses capacités avec les communautés scientifique et open-source. Cette section met en avant notre présence lors de grandes conférences."

@@ -19,7 +19,7 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 msgid "Release notes"
-msgstr "Notes de version"
+msgstr "Versions"
 
 msgid "See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones."
 msgstr "Voir la page de la [feuille de route](https://datalab-platform.com/fr/contributing/roadmap.html) de DataLab pour les jalons futurs et passés."
@@ -30,964 +30,808 @@ msgstr "DataLab Version 1.0.0"
 msgid "This major release represents a significant milestone for DataLab with numerous enhancements across all areas. The changes are organized by category for easier navigation."
 msgstr "Cette version majeure représente une étape importante pour DataLab avec de nombreuses améliorations dans tous les domaines. Les changements sont organisés par catégorie pour une navigation plus facile."
 
-#, fuzzy
 msgid "🎨 User Interface & Workflow"
-msgstr "Refonte majeure de l'interface utilisateur :"
+msgstr "🎨 Interface utilisateur et flux de travail"
 
 msgid "**Menu reorganization:**"
 msgstr "**Réorganisation des menus :**"
 
-#, fuzzy
 msgid "**New \"Create\" menu**: Separated object creation functionality from the \"File\" menu, placed between \"File\" and \"Edit\" menus for clearer organization"
-msgstr "**Nouveau menu \"Création\"** : Fonctionnalité de création d'objets séparée dans un menu dédié entre les menus \"Fichier\" et \"Édition\""
+msgstr "**Nouveau menu \"Création\"** : La fonctionnalité de création d'objets a été séparée du menu \"Fichier\" et placée entre les menus \"Fichier\" et \"Édition\" pour une organisation plus claire"
 
 msgid "All \"File > New [...]\" actions moved to \"Create\" menu"
-msgstr ""
+msgstr "Toutes les actions \"Fichier > Nouveau [...]\" ont été déplacées vers le menu \"Création\""
 
 msgid "**Migration note**: Find signal/image creation actions in the new \"Create\" menu"
-msgstr ""
+msgstr "**Note de migration** : Les actions de création de signaux/images se trouvent désormais dans le nouveau menu \"Création\""
 
-#, fuzzy
 msgid "**New \"ROI\" menu**: Dedicated menu for Region of Interest management, positioned between \"Edit\" and \"Operations\" menus"
-msgstr "Nouveau menu \"ROI\", entre les menus \"Édition\" et \"Opérations\"."
+msgstr "**Nouveau menu \"ROI\"** : Menu dédié à la gestion des régions d'intérêt, placé entre les menus \"Édition\" et \"Opérations\""
 
-#, fuzzy
 msgid "**New \"Annotations\" submenu**: Consolidated annotation operations in the \"Edit\" menu"
-msgstr "Nouveau sous-menu \"Annotations\" dans le menu Édition avec des opérations d'annotation dédiées"
+msgstr "**Nouveau sous-menu \"Annotations\"** : Regroupement des opérations d'annotation dans le menu \"Édition\""
 
-#, fuzzy
 msgid "**New \"Metadata\" submenu**: Grouped all metadata operations in the \"Edit\" menu"
-msgstr "**Menu Édition réorganisé** : Nouveau sous-menu \"Métadonnées\" regroupant toutes les opérations sur les métadonnées"
+msgstr "**Nouveau sous-menu \"Métadonnées\"** : Regroupement de toutes les opérations de métadonnées dans le menu \"Édition\""
 
 msgid "**Interactive object editing:**"
 msgstr "**Édition interactive d'objets :**"
 
-#, fuzzy
 msgid "**Interactive object creation**: Creation parameters can be modified after object creation via new \"Creation\" tab in properties panel"
-msgstr "**Création d'objets interactifs** : Les paramètres de création de signaux/images peuvent désormais être modifiés après la création"
+msgstr "**Création interactive d'objets** : Les paramètres de création peuvent être modifiés après la création de l'objet via le nouvel onglet \"Création\" dans le panneau des propriétés"
 
-#, fuzzy
 msgid "Apply changes without creating new objects, preserving subsequent processing"
-msgstr "L'objet est mis à jour sans en créer un nouveau, préservant tout traitement ou analyse ultérieur."
+msgstr "Appliquer les modifications sans créer de nouveaux objets, en préservant le traitement ultérieur"
 
 msgid "Available for parametric generators (Gaussian, sine, etc.)"
-msgstr ""
+msgstr "Disponible pour les générateurs paramétriques (Gaussien, sinusoïdal, etc.)"
 
-#, fuzzy
 msgid "**Interactive 1-to-1 processing**: Processing parameters can be adjusted and reapplied via new \"Processing\" tab"
 msgstr "**Traitement interactif 1-vers-1** : Les paramètres de traitement peuvent être ajustés et réappliqués après le traitement initial"
 
-#, fuzzy
 msgid "Update result objects in-place with modified parameters"
-msgstr "L'objet résultant est mis à jour sur place avec les nouveaux paramètres de traitement."
+msgstr "Mise à jour sur place des objets résultats avec les paramètres modifiés"
 
-#, fuzzy
 msgid "Only for parametric operations (filters, morphology, etc.)"
-msgstr "Fonctionne uniquement pour les fonctions de traitement avec des classes de paramètres (filtrage, morphologie, etc.)"
+msgstr "Uniquement pour les opérations paramétriques (filtres, morphologie, etc.)"
 
-#, fuzzy
 msgid "**Recompute feature**: New \"Recompute\" action (Ctrl+R) to quickly reprocess objects with stored parameters"
-msgstr "**Fonction de recomposition** : Reprocessus rapide des objets avec leurs paramètres de traitement stockés."
+msgstr "**Fonction de recalcul** : Nouvelle action \"Recalculer\" (Ctrl+R) pour retraiter rapidement les objets avec les paramètres stockés"
 
 msgid "Works with single or multiple objects"
-msgstr ""
+msgstr "Fonctionne avec un ou plusieurs objets"
 
-#, fuzzy
 msgid "Automatically updates results when source data changes"
-msgstr "Se met à jour automatiquement lorsque la sélection d'objet change."
+msgstr "Met à jour automatiquement les résultats lorsque les données sources changent"
 
 msgid "**Automatic ROI analysis update**: Analysis results automatically recalculate when ROI is modified"
-msgstr ""
+msgstr "**Mise à jour automatique de l'analyse ROI** : Les résultats d'analyse sont automatiquement recalculés lorsque le ROI est modifié"
 
 msgid "Works for all analysis operations (statistics, centroid, etc.)"
-msgstr ""
+msgstr "Fonctionne pour toutes les opérations d'analyse (statistiques, centroïde, etc.)"
 
 msgid "Silent background recomputation for immediate feedback"
-msgstr ""
+msgstr "Recalcul silencieux en arrière-plan pour un retour immédiat"
 
-#, fuzzy
 msgid "**Select source objects**: Navigate to source objects used in processing via new \"Edit\" menu action"
-msgstr "**Sélectionner les objets source** : Naviguer vers les objets source utilisés dans le traitement"
+msgstr "**Sélectionner les objets source** : Naviguer vers les objets source utilisés dans le traitement via une nouvelle action du menu \"Édition\""
 
-#, fuzzy
 msgid "Handles all processing patterns (1-to-1, 2-to-1, n-to-1)"
-msgstr "Fonctionne pour tous les modèles de traitement (1-vers-1, 2-vers-1, n-vers-1) en lisant les métadonnées de traitement."
+msgstr "Gère tous les modèles de traitement (1-vers-1, 2-vers-1, n-vers-1)"
 
-#, fuzzy
 msgid "Shows informative messages if sources no longer exist"
-msgstr "Affiche des messages informatifs si les objets source n'existent plus ou si certains sont manquants."
+msgstr "Affiche des messages informatifs si les sources n'existent plus"
 
-#, fuzzy
 msgid "**Processing history**: New \"History\" tab displays object processing lineage as hierarchical tree"
 msgstr "**Historique de traitement** : Nouvel onglet \"Historique\" affichant la lignée de traitement des objets"
 
-#, fuzzy
 msgid "Shows complete processing chain from creation to current state"
-msgstr "Affiche la chaîne de traitement de l'objet le plus ancien (objet d'origine/créé) à l'objet le plus récent (objet actuel)."
+msgstr "Affiche la chaîne de traitement complète depuis la création jusqu'à l'état actuel"
 
-#, fuzzy
 msgid "Selectable text for documentation purposes"
-msgstr "Le texte est sélectionnable et copiable à des fins de documentation."
+msgstr "Texte sélectionnable à des fins de documentation"
 
-#, fuzzy
 msgid "**Multi-object property editing:**"
 msgstr "Édition des propriétés de plusieurs objets :"
 
-#, fuzzy
 msgid "Apply property changes to multiple selected objects simultaneously"
-msgstr "Le panneau des propriétés prend désormais en charge l'application des modifications de propriétés à plusieurs objets sélectionnés simultanément."
+msgstr "Appliquer les modifications de propriétés à plusieurs objets sélectionnés simultanément"
 
 msgid "Only modified properties are applied, preserving unchanged individual settings"
-msgstr ""
+msgstr "Seules les propriétés modifiées sont appliquées, préservant les paramètres individuels inchangés"
 
-#, fuzzy
 msgid "Typical use case: Adjust LUT boundaries or colormap for multiple images at once"
 msgstr "Cas d'utilisation typique : modification des limites de la LUT (bornes de l'échelle Z) ou de la carte des couleurs de plusieurs images à la fois, ou ajustement des propriétés d'affichage d'un groupe de signaux."
 
-#, fuzzy
 msgid "**Dialog sizing improvements:**"
 msgstr "Améliorations de la taille des boîtes de dialogue :"
 
-#, fuzzy
 msgid "Processing dialogs now intelligently resize based on main window size"
-msgstr "Les boîtes de dialogue de traitement (extraction de profil, soustraction de décalage, etc.) redimensionnent désormais intelligemment en fonction de la taille de la fenêtre principale"
+msgstr "Les boîtes de dialogue de traitement se redimensionnent désormais intelligemment en fonction de la taille de la fenêtre principale"
 
 msgid "Never exceed main window dimensions for better user experience"
-msgstr ""
+msgstr "Ne dépasse jamais les dimensions de la fenêtre principale pour une meilleure expérience utilisateur"
 
-#, fuzzy
 msgid "**Internal console indicator:**"
 msgstr "Indicateur d'état de la console interne ajouté à la barre d'état :"
 
 msgid "Status bar indicator shows console status when hidden"
-msgstr ""
+msgstr "L'indicateur de la barre d'état affiche l'état de la console lorsqu'elle est masquée"
 
 msgid "Turns red on errors/warnings to alert users"
-msgstr ""
+msgstr "Devient rouge en cas d'erreurs/avertissements pour alerter les utilisateurs"
 
 msgid "Click to open console"
-msgstr ""
+msgstr "Cliquer pour ouvrir la console"
 
-#, fuzzy
 msgid "🎬 New Object Creation Features"
-msgstr "Nouvelle fonctionnalité de mode d'opération :"
+msgstr "🎬 Nouvelles fonctionnalités de création d'objets"
 
 msgid "**Parametric signal generators:**"
 msgstr "**Générateurs de signaux paramétriques :**"
 
-#, fuzzy
 msgid "Linear chirp, logistic function, Planck function"
-msgstr "Nouveaux générateurs de signaux: chirp linéaire, fonction logistique, fonction de Planck."
+msgstr "Chirp linéaire, fonction logistique, fonction de Planck"
 
-#, fuzzy
 msgid "Generate signals with Poisson noise"
-msgstr "Générer un nouveau signal ou une nouvelle image : bruit de Poisson."
+msgstr "Générer des signaux avec bruit de Poisson"
 
 msgid "**Parametric image generators:**"
 msgstr "**Générateurs d'images paramétriques :**"
 
 msgid "**Checkerboard**: Calibration pattern with configurable square size and light/dark values"
-msgstr ""
+msgstr "**Damier** : Motif de calibration avec taille de carrés et valeurs claires/sombres configurables"
 
 msgid "**Sinusoidal grating**: Frequency response testing with independent X/Y spatial frequencies"
-msgstr ""
+msgstr "**Réseau sinusoïdal** : Test de réponse en fréquence avec fréquences spatiales X/Y indépendantes"
 
-#, fuzzy
 msgid "**Ring pattern**: Concentric circular rings for radial analysis and PSF testing"
 msgstr "**Motif en anneau** : Anneaux circulaires concentriques pour l'analyse radiale et les tests PSF. Période d'anneau, largeur, position centrale et plage d'amplitude réglables."
 
 msgid "**Siemens star**: Resolution testing with radial spokes and configurable radius"
-msgstr ""
+msgstr "**Étoile de Siemens** : Test de résolution avec rayons radiaux et rayon configurable"
 
-#, fuzzy
 msgid "**2D sinc**: Cardinal sine function for PSF modeling and diffraction simulation"
 msgstr "**Sinc 2D** : Fonction sinus cardinal pour la modélisation de la PSF et la simulation de motifs de diffraction. Les paramètres incluent l'amplitude, la position centrale, le facteur d'échelle (sigma) et le décalage DC."
 
-#, fuzzy
 msgid "**2D ramp**: New ramp image generator"
-msgstr "Nouveau générateur d'image de type rampe 2D."
+msgstr "**Rampe 2D** : Nouveau générateur d'image de rampe"
 
 msgid "**Poisson noise**: Generate images with Poisson noise distribution"
-msgstr ""
+msgstr "**Bruit de Poisson** : Générer des images avec distribution de bruit de Poisson"
 
-#, fuzzy
 msgid "**Signal/image creation from operations:**"
 msgstr "Fonctionnalités de signal/image :"
 
-#, fuzzy
 msgid "Create complex-valued signal/image from real and imaginary parts"
-msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir des parties réelle et imaginaire."
+msgstr "Créer un signal/image à valeurs complexes à partir des parties réelle et imaginaire"
 
-#, fuzzy
 msgid "Create complex-valued signal/image from magnitude and phase (closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))"
-msgstr "Ajout de l'opération pour créer un signal/image à valeurs complexes à partir de la magnitude et de la phase (ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))."
+msgstr "Créer un signal/image à valeurs complexes à partir de la magnitude et de la phase (ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))"
 
-#, fuzzy
 msgid "Extract phase (argument) information from complex signals or images"
-msgstr "Ajout de la fonctionnalité `phase` (argument) pour extraire les informations de phase des signaux ou des images complexes."
+msgstr "Extraire l'information de phase (argument) des signaux ou images complexes"
 
 msgid "🔬 Data Processing & Analysis"
-msgstr ""
+msgstr "🔬 Traitement et analyse de données"
 
-#, fuzzy
 msgid "**Signal processing:**"
-msgstr "Traitement de signal :"
+msgstr "Traitement du signal :"
 
 msgid "**Enhanced curve fitting**: Significantly improved parameter estimation for all curve types (Gaussian, Lorentzian, Voigt, exponential, sinusoidal, Planckian, asymmetric peaks, CDF)"
-msgstr ""
+msgstr "**Ajustement de courbes amélioré** : Estimation des paramètres considérablement améliorée pour tous les types de courbes (Gaussienne, Lorentzienne, Voigt, exponentielle, sinusoïdale, Planckienne, pics asymétriques, CDF)"
 
-#, fuzzy
 msgid "Smarter initial parameter guesses for robust convergence"
-msgstr "Des estimations de paramètres initiaux plus fiables réduisant les besoins d'ajustement manuel"
+msgstr "Estimations initiales des paramètres plus intelligentes pour une convergence robuste"
 
-#, fuzzy
 msgid "**Locked parameter support**: Lock individual parameters during optimization (requires PlotPy v2.8.0)"
 msgstr "**Prise en charge des paramètres verrouillés** (nécessite PlotPy v2.8.0) :"
 
-#, fuzzy
 msgid "**X-array compatibility checking**: Comprehensive validation for multi-signal operations with automatic interpolation options"
 msgstr "**Vérification de la compatibilité des tableaux X pour les calculs multi-signaux** :"
 
 msgid "New configuration setting: Ask user or interpolate automatically"
-msgstr ""
+msgstr "Nouveau paramètre de configuration : Demander à l'utilisateur ou interpoler automatiquement"
 
 msgid "Prevents unexpected results from incompatible signal arrays"
-msgstr ""
+msgstr "Empêche les résultats inattendus dus à des tableaux de signaux incompatibles"
 
 msgid "**Zero padding enhancements**: Support for prepending and appending zeros, default strategy now \"Next power of 2\""
-msgstr ""
+msgstr "**Améliorations du zero padding** : Prise en charge de l'ajout de zéros au début et à la fin, stratégie par défaut désormais \"Prochaine puissance de 2\""
 
-#, fuzzy
 msgid "**Ideal frequency domain filter**: \"Brick wall filter\" for signals (closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215))"
-msgstr "Déconvolution dans le domaine fréquentiel (ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189))."
+msgstr "**Filtre idéal dans le domaine fréquentiel** : \"Filtre en brique\" pour les signaux (ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215))"
 
 msgid "**Bandwidth at -3dB**: Enhanced to support passband bandwidth"
-msgstr ""
+msgstr "**Bande passante à -3dB** : Améliorée pour prendre en charge la bande passante"
 
-#, fuzzy
 msgid "**Pulse features extraction**: Comprehensive pulse analysis for step and square signals"
 msgstr "**Extraction des caractéristiques des impulsions** : Nouvelle fonctionnalité complète d'analyse des impulsions pour les signaux en escalier et carrés :"
 
 msgid "Automated shape recognition and polarity detection"
-msgstr ""
+msgstr "Reconnaissance automatique de la forme et détection de la polarité"
 
 msgid "Measures amplitude, rise/fall time, FWHM, timing parameters, baseline ranges"
-msgstr ""
+msgstr "Mesure l'amplitude, le temps de montée/descente, la FWHM, les paramètres temporels, les plages de référence"
 
-#, fuzzy
 msgid "**Frequency domain filters**: Deconvolution and Gaussian filter (closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189), [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205))"
-msgstr "Ceci clôture les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
+msgstr "**Filtres dans le domaine fréquentiel** : Déconvolution et filtre Gaussien (ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189), [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205))"
 
-#, fuzzy
 msgid "**Coordinate transformations**: Convert to Cartesian/polar coordinates"
-msgstr "Nouvelle fonctionnalité \"Convertir en coordonnées cartésiennes\""
+msgstr "**Transformations de coordonnées** : Conversion en coordonnées cartésiennes/polaires"
 
 msgid "**X-Y mode**: Simulate oscilloscope X-Y mode (plot one signal vs. another)"
-msgstr ""
+msgstr "**Mode X-Y** : Simule le mode X-Y d'un oscilloscope (trace un signal par rapport à un autre)"
 
 msgid "**Find operations**: First abscissa at y=..., ordinate at x=..., full width at y=..."
-msgstr ""
+msgstr "**Opérations de recherche** : Première abscisse à y=..., ordonnée à x=..., largeur totale à y=..."
 
 msgid "**`1/x` operation**: Reciprocal operation with NaN handling for zero denominators"
-msgstr ""
+msgstr "**Opération `1/x`** : Opération réciproque avec gestion des NaN pour les dénominateurs nuls"
 
-#, fuzzy
 msgid "**Image processing:**"
 msgstr "Traitement d'image :"
 
-#, fuzzy
 msgid "**2D resampling**: Resample images to new coordinate grids with multiple interpolation methods (closes [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208))"
-msgstr "Fonctionnalité d'enregistrement dans un répertoire (ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
+msgstr "**Rééchantillonnage 2D** : Rééchantillonner les images vers de nouvelles grilles de coordonnées avec plusieurs méthodes d'interpolation (ceci clôture [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208))"
 
 msgid "**Convolution**: 2D convolution operation"
-msgstr ""
+msgstr "**Convolution** : Opération de convolution 2D"
 
-#, fuzzy
 msgid "**Erase area**: Erase image areas defined by ROI (closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204))"
-msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
+msgstr "**Effacer une zone** : Effacer les zones d'image définies par ROI (ceci clôture [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204))"
 
-#, fuzzy
 msgid "**Horizontal/vertical projections**: Sum of pixels along axes (closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209))"
-msgstr "Fonctionnalité d'enregistrement dans un répertoire (ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
+msgstr "**Projections horizontales/verticales** : Somme des pixels le long des axes (ceci clôture [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209))"
 
-#, fuzzy
 msgid "**Improved centroid computation**: More accurate in challenging cases (truncated/asymmetric images) (see [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251))"
-msgstr "Écart-type des signaux ou des images sélectionnés (ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))."
+msgstr "**Calcul du centroïde amélioré** : Plus précis dans les cas difficiles (images tronquées/asymétriques) (voir [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251))"
 
 msgid "**Flip diagonally**: New geometric transformation"
-msgstr ""
+msgstr "**Retourner en diagonale** : Nouvelle transformation géométrique"
 
 msgid "**`1/x` operation**: Reciprocal operation for images"
-msgstr ""
+msgstr "**Opération `1/x`** : Opération réciproque pour les images"
 
 msgid "**Cross-panel operations:**"
-msgstr ""
+msgstr "**Opérations inter-panneaux :**"
 
 msgid "**Signals to image conversion**: Combine multiple signals into 2D images"
-msgstr ""
+msgstr "**Conversion signaux vers image** : Combiner plusieurs signaux en images 2D"
 
 msgid "Two orientation modes: as rows (spectrograms) or columns (waterfall displays)"
-msgstr ""
+msgstr "Deux modes d'orientation : en lignes (spectrogrammes) ou en colonnes (affichages en cascade)"
 
-#, fuzzy
 msgid "Optional normalization (Z-score, Min-Max, Maximum)"
 msgstr "Normalisation optionnelle :"
 
 msgid "Typical use cases: heatmaps, spectrograms, multi-channel data visualization"
-msgstr ""
+msgstr "Cas d'utilisation typiques : cartes de chaleur, spectrogrammes, visualisation de données multi-canaux"
 
-#, fuzzy
 msgid "**Common features:**"
 msgstr "Nouvelles fonctionnalités :"
 
-#, fuzzy
 msgid "**Standard deviation**: Calculate across multiple signals/images (closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))"
-msgstr "Écart-type des signaux ou des images sélectionnés (ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))."
+msgstr "**Écart-type** : Calculer sur plusieurs signaux/images (ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))"
 
-#, fuzzy
 msgid "**Add noise**: Add Gaussian, Poisson, or uniform noise (closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201))"
-msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
+msgstr "**Ajouter du bruit** : Ajouter du bruit gaussien, de Poisson ou uniforme (ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201))"
 
 #, python-brace-format
 msgid "**Add metadata**: Add custom metadata with pattern support (`{title}`, `{index}`, etc.) and type conversion"
-msgstr ""
+msgstr "**Ajouter des métadonnées** : Ajouter des métadonnées personnalisées avec prise en charge des motifs (`{title}`, `{index}`, etc.) et conversion de type"
 
 msgid "📐 ROI & Annotation Management"
-msgstr ""
+msgstr "📐 Gestion des ROI et annotations"
 
-#, fuzzy
 msgid "**ROI features:**"
 msgstr "Fonctionnalités d'E/S :"
 
 msgid "**ROI clipboard operations**: Copy/paste ROIs between objects"
-msgstr ""
+msgstr "**Opérations de presse-papiers ROI** : Copier/coller les ROI entre objets"
 
-#, fuzzy
 msgid "**ROI import/export**: Save/load ROIs as JSON files"
 msgstr "**Importer les annotations** : Charger les annotations à partir de fichiers JSON .dlabann"
 
 msgid "**Individual ROI removal**: Remove ROIs selectively via \"Remove\" submenu"
-msgstr ""
+msgstr "**Suppression individuelle de ROI** : Supprimer les ROI sélectivement via le sous-menu \"Supprimer\""
 
 msgid "**ROI title editing**: Set titles during interactive creation and in confirmation dialog"
-msgstr ""
+msgstr "**Édition des titres de ROI** : Définir les titres pendant la création interactive et dans la boîte de dialogue de confirmation"
 
 msgid "**Create ROI grid**: Generate grid of ROIs with configurable rows, columns, and spacing"
-msgstr ""
+msgstr "**Créer une grille de ROI** : Générer une grille de ROI avec lignes, colonnes et espacement configurables"
 
-#, fuzzy
 msgid "Import/export grid configurations"
 msgstr "Réinitialisation de la configuration de DataLab :"
 
-#, fuzzy
 msgid "Preview before creation"
-msgstr "Prévisualiser la grille de ROI avant de la créer."
+msgstr "Aperçu avant création"
 
 msgid "**Inverse ROI logic**: Select area outside defined shapes (images only)"
-msgstr ""
+msgstr "**Logique ROI inverse** : Sélectionner la zone en dehors des formes définies (images uniquement)"
 
 msgid "**Coordinate-based ROI creation**: Manual input of coordinates for rectangular and circular ROIs"
-msgstr ""
+msgstr "**Création de ROI par coordonnées** : Saisie manuelle des coordonnées pour les ROI rectangulaires et circulaires"
 
 msgid "**Multi-object ROI editing**: Edit ROIs on multiple objects simultaneously"
-msgstr ""
+msgstr "**Édition de ROI multi-objets** : Éditer les ROI sur plusieurs objets simultanément"
 
-#, fuzzy
 msgid "**Annotation features:**"
 msgstr "Nouvelles fonctionnalités d'interpolation 1D :"
 
-#, fuzzy
 msgid "**Annotation clipboard**: Copy/paste annotations between objects"
 msgstr "**Coller les annotations** : Coller les annotations du presse-papiers sur l'objet (ou les objets) sélectionné(s)"
 
 msgid "**Edit annotations**: Interactive editor dialog with PlotPy tools"
-msgstr ""
+msgstr "**Éditer les annotations** : Boîte de dialogue d'éditeur interactif avec outils PlotPy"
 
-#, fuzzy
 msgid "**Import/export annotations**: Save/load as .dlabann JSON files with versioning"
 msgstr "**Exporter les annotations** : Enregistrer les annotations dans des fichiers JSON .dlabann"
 
-#, fuzzy
 msgid "**Delete annotations**: Remove from single or multiple objects with confirmation"
 msgstr "**Supprimer les annotations** : Supprimer toutes les annotations de l'objet (ou des objets) sélectionné(s)"
 
-#, fuzzy
 msgid "**Annotations independent from ROI**: Can coexist on same object"
 msgstr "Indépendant de la gestion des ROI - les annotations et les ROI peuvent coexister sur le même objet"
 
 msgid "**Detection with ROI creation:**"
-msgstr ""
+msgstr "**Détection avec création de ROI :**"
 
-#, fuzzy
 msgid "All 7 detection algorithms now support automatic ROI creation:"
 msgstr "**Fonctions de détection avec création de ROI** : Toutes les fonctions de détection d'images prennent désormais en charge la création automatique de ROI"
 
 msgid "Peak detection, contour shape, blob detection (DOG/DOH/LOG/OpenCV), Hough circle"
-msgstr ""
+msgstr "Détection de pics, forme de contour, détection de blobs (DOG/DOH/LOG/OpenCV), cercle de Hough"
 
-#, fuzzy
 msgid "**ROI geometry choice**: Rectangular or circular ROIs"
-msgstr "\"Géométrie de la ROI\": Choisir entre des ROI rectangulaires ou circulaires"
+msgstr "**Choix de géométrie de ROI** : ROI rectangulaires ou circulaires"
 
 msgid "**2D peak detection**: Option to choose ROI geometry (closes related requirements)"
-msgstr ""
+msgstr "**Détection de pics 2D** : Option pour choisir la géométrie de ROI (ceci clôture les exigences associées)"
 
-#, fuzzy
 msgid "📊 Visualization & Display"
-msgstr "Paramètres de visualisation"
+msgstr "📊 Visualisation et affichage"
 
 msgid "**Performance & display limits:**"
-msgstr ""
+msgstr "**Performances et limites d'affichage :**"
 
-#, fuzzy
 msgid "**Configurable result display limits**: Prevent UI freezing with large result sets"
 msgstr "**Optimisations des performances pour les grands ensembles de résultats** : Ajout de limites d'affichage configurables pour éviter le gel de l'interface utilisateur avec de grands résultats d'analyse"
 
 msgid "`max_shapes_to_draw` (default: 1,000), `max_cells_in_label` (default: 100), `max_cols_in_label` (default: 15)"
-msgstr ""
+msgstr "`max_shapes_to_draw` (par défaut : 1 000), `max_cells_in_label` (par défaut : 100), `max_cols_in_label` (par défaut : 15)"
 
-#, fuzzy
 msgid "Settings documented with performance implications"
-msgstr "Paramètres documentés dans le manuel utilisateur avec explications des implications sur les performances"
+msgstr "Paramètres documentés avec implications sur les performances"
 
 msgid "**Faster contour rendering**: Over 5x performance improvement for contour display"
-msgstr ""
+msgstr "**Rendu de contours plus rapide** : Amélioration des performances de plus de 5x pour l'affichage des contours"
 
-#, fuzzy
 msgid "**Signal rendering optimization**: Smart linewidth clamping for large datasets"
 msgstr "**Optimisation des performances de rendu des signaux** : Ajout d'un plafonnement intelligent de l'épaisseur de trait pour les grands ensembles de données"
 
-#, fuzzy
 msgid "New setting: \"Line width performance threshold\" (default: 1,000 points)"
 msgstr "Nouveau paramètre : « Seuil de performance de l'épaisseur de trait » (par défaut : 1 000 points) dans les paramètres de visualisation des signaux"
 
 msgid "Prevents 10x slowdown from Qt raster engine limitation"
-msgstr ""
+msgstr "Empêche un ralentissement de 10x dû à la limitation du moteur raster de Qt"
 
 msgid "**Result visualization:**"
-msgstr ""
+msgstr "**Visualisation des résultats :**"
 
-#, fuzzy
 msgid "**Merged result labels**: All analysis results consolidated in single read-only label"
 msgstr "**Étiquettes de résultats fusionnées** : Tous les résultats d'analyse pour un signal ou une image sont désormais affichés dans une seule étiquette consolidée en lecture seule"
 
 msgid "Reduces visual clutter, auto-updates, horizontally divided results"
-msgstr ""
+msgstr "Réduit l'encombrement visuel, mises à jour automatiques, résultats divisés horizontalement"
 
 msgid "**Result label visibility control**: Toggle visibility via Properties panel checkbox"
-msgstr ""
+msgstr "**Contrôle de visibilité de l'étiquette de résultats** : Basculer la visibilité via la case à cocher du panneau de propriétés"
 
 msgid "Default visibility configurable in Settings"
-msgstr ""
+msgstr "Visibilité par défaut configurable dans les paramètres"
 
-#, fuzzy
 msgid "**Results group organization**: Plot results automatically organized in dedicated \"Results\" group"
 msgstr "**Création de groupe de résultats** : Toutes les opérations de tracé des résultats organisent désormais automatiquement les résultats dans un groupe \"Résultats\" dédié"
 
-#, fuzzy
 msgid "**Comprehensive result titles**: Include source object identifiers (e.g., \"FWHM (s001, s002, s003)\")"
 msgstr "**Titres de résultats complets** : Les titres des signaux de résultats incluent désormais les identifiants des objets source"
 
-#, fuzzy
 msgid "**Individual result deletion**: Remove results selectively via Analysis menu"
-msgstr "**Suppression individuelle des résultats** : Les résultats peuvent désormais être supprimés individuellement depuis le menu Analyse"
+msgstr "**Suppression individuelle de résultats** : Supprimer les résultats sélectivement via le menu Analyse"
 
 msgid "**Customizable shape/marker styles**: Four new style configuration buttons in Settings"
-msgstr ""
+msgstr "**Styles de formes/marqueurs personnalisables** : Quatre nouveaux boutons de configuration de style dans les paramètres"
 
-#, fuzzy
 msgid "Separate styles for signals and images"
 msgstr "Fonctionnalités communes aux signaux et aux images :"
 
 msgid "Interactive editor with comprehensive options"
-msgstr ""
+msgstr "Éditeur interactif avec options complètes"
 
 msgid "Persistent configuration with refresh on change"
-msgstr ""
+msgstr "Configuration persistante avec rafraîchissement au changement"
 
-#, fuzzy
 msgid "**Enhanced profile extraction:**"
 msgstr "Fonctionnalité d'extraction de profil d'intensité :"
 
-#, fuzzy
 msgid "Click directly on X/Y profile plots to switch extraction direction"
-msgstr "Cliquez directement sur le graphique du profil Y (à droite) pour passer à l'extraction du profil vertical"
+msgstr "Cliquer directement sur les tracés de profils X/Y pour changer la direction d'extraction"
 
 msgid "No need to open parameters dialog for direction changes"
-msgstr ""
+msgstr "Pas besoin d'ouvrir la boîte de dialogue des paramètres pour les changements de direction"
 
-#, fuzzy
 msgid "Improves workflow efficiency (closes [Issue #156](https://github.com/DataLab-Platform/DataLab/issues/156))"
-msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+msgstr "Améliore l'efficacité du flux de travail (ceci clôture [Issue #156](https://github.com/DataLab-Platform/DataLab/issues/156))"
 
 msgid "**DateTime signal support:**"
-msgstr ""
+msgstr "**Prise en charge des signaux DateTime :**"
 
-#, fuzzy
 msgid "Automatic datetime detection in CSV files"
-msgstr "Détection automatique des dates lors de l'ouverture de fichiers CSV avec des colonnes horodatées"
+msgstr "Détection automatique des dates dans les fichiers CSV"
 
 msgid "**Datetime axis formatting**: Human-readable timestamps on X-axis"
-msgstr ""
+msgstr "**Formatage de l'axe datetime** : Horodatages lisibles sur l'axe X"
 
-#, fuzzy
 msgid "**Configurable formats**: Separate formats for standard and sub-second units"
-msgstr "Chaînes de format séparées pour les unités de temps standard (s/min/h) et les unités sub-secondes (ms/μs/ns)"
+msgstr "**Formats configurables** : Formats séparés pour les unités standard et sub-secondes"
 
-#, fuzzy
 msgid "Supports various time units (seconds, milliseconds, microseconds, minutes, hours)"
-msgstr "Les unités de temps peuvent être configurées (secondes, millisecondes, microsecondes, minutes, heures)"
+msgstr "Prend en charge diverses unités de temps (secondes, millisecondes, microsecondes, minutes, heures)"
 
-#, fuzzy
 msgid "Closes [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258)"
-msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+msgstr "Ceci clôture [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258)"
 
 msgid "**Settings:**"
-msgstr ""
+msgstr "**Paramètres :**"
 
 msgid "**Autoscale margins**: Configurable margins (0-50%) for signal/image plots"
-msgstr ""
+msgstr "**Marges d'auto-échelle** : Marges configurables (0-50%) pour les tracés de signaux/images"
 
-#, fuzzy
 msgid "**Lock image aspect ratio**: Option for 1:1 aspect ratio (default: use physical pixel size) (closes [Issue #244](https://github.com/DataLab-Platform/DataLab/issues/244))"
-msgstr "Fonctionnalité d'enregistrement dans un répertoire (ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
+msgstr "**Verrouiller le rapport d'aspect de l'image** : Option pour un rapport d'aspect 1:1 (par défaut : utiliser la taille de pixel physique) (ceci clôture [Issue #244](https://github.com/DataLab-Platform/DataLab/issues/244))"
 
 msgid "**Show console on error**: Configurable behavior (default: off)"
-msgstr ""
+msgstr "**Afficher la console en cas d'erreur** : Comportement configurable (par défaut : désactivé)"
 
 msgid "**Image extent parameters:**"
-msgstr ""
+msgstr "**Paramètres d'étendue de l'image :**"
 
 msgid "New \"Extent\" group box showing computed Xmin, Xmax, Ymin, Ymax"
-msgstr ""
+msgstr "Nouvelle boîte de groupe « Étendue » affichant les Xmin, Xmax, Ymin, Ymax calculés"
 
-#, fuzzy
 msgid "Automatically calculated from origin, pixel spacing, and dimensions"
-msgstr "Ces paramètres sont automatiquement calculés en fonction de l'origine de l'image, de l'espacement des pixels et des dimensions."
+msgstr "Calculé automatiquement à partir de l'origine, de l'espacement des pixels et des dimensions"
 
 msgid "📁 Import/Export & File Handling"
-msgstr ""
+msgstr "📁 Import/Export et gestion des fichiers"
 
-#, fuzzy
 msgid "**New file format support:**"
 msgstr "Prise en charge de l'entrée/sortie de fichiers :"
 
-#, fuzzy
 msgid "**FT-Lab signals and images**: CEA binary formats (.sig, .ima) (closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211))"
-msgstr "Fonctionnalité d'enregistrement dans un répertoire (ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
+msgstr "**Signaux et images FT-Lab** : Formats binaires CEA (.sig, .ima) (ceci clôture [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211))"
 
-#, fuzzy
 msgid "**Coordinated text files**: Real and complex-valued images with error images (similar to Matris format)"
 msgstr "Fichiers image texte avec coordonnées (similaires au format d'image Matris) :"
 
 msgid "Automatic NaN handling, metadata with units and labels"
-msgstr ""
+msgstr "Gestion automatique des NaN, métadonnées avec unités et étiquettes"
 
 msgid "**Enhanced HDF5 support:**"
-msgstr ""
+msgstr "**Prise en charge HDF5 améliorée :**"
 
 msgid "**Custom file extensions**: Intelligent HDF5 detection by content (not just extension)"
-msgstr ""
+msgstr "**Extensions de fichiers personnalisées** : Détection intelligente HDF5 par contenu (pas seulement l'extension)"
 
 msgid "Extension-based detection for dialogs, content-based for drag-and-drop"
-msgstr ""
+msgstr "Détection basée sur l'extension pour les boîtes de dialogue, basée sur le contenu pour le glisser-déposer"
 
 msgid "\"All files (*)\" option in file dialogs"
-msgstr ""
+msgstr "Option \"Tous les fichiers (*)\" dans les boîtes de dialogue de fichiers"
 
 msgid "**HDF5 Browser improvements**: Default collapsed tree view for better navigation"
-msgstr ""
+msgstr "**Améliorations du navigateur HDF5** : Vue arboresc ente réduite par défaut pour une meilleure navigation"
 
-#, fuzzy
 msgid "**Workspace clearing options**: Configurable behavior with \"Ignore\" option (closes [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "**Text file improvements:**"
 msgstr "Améliorations de la vue graphique :"
 
-#, fuzzy
 msgid "**CSV delimiter handling**: Better support for various whitespace separators"
 msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec divers séparateurs d'espaces."
 
-#, fuzzy
 msgid "**Locale decimal separator**: Support for comma as decimal separator (closes [Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124))"
 msgstr "Fonctionnalité d'enregistrement dans un répertoire (ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
 
 msgid "**Encoding error tolerance**: Ignore errors for files with special characters"
-msgstr ""
+msgstr "**Tolérance aux erreurs d'encodage** : Ignorer les erreurs pour les fichiers avec des caractères spéciaux"
 
 msgid "**Header detection**: Automatic detection and skipping of data headers"
-msgstr ""
+msgstr "**Détection d'en-tête** : Détection et saut automatiques des en-têtes de données"
 
-#, fuzzy
 msgid "**Other I/O features:**"
 msgstr "Nouvelles fonctionnalités d'E/S :"
 
-#, fuzzy
 msgid "**Save to directory**: New feature (closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))"
 msgstr "Fonctionnalité d'enregistrement dans un répertoire (ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
 
 msgid "**Open from directory**: Recursively open multiple files with folder drag-and-drop support"
-msgstr ""
+msgstr "**Ouvrir depuis un répertoire** : Ouvrir récursivement plusieurs fichiers avec prise en charge du glisser-déposer de dossiers"
 
-#, fuzzy
 msgid "**File ordering**: Consistent alphabetical sorting across platforms"
 msgstr "**Ordre d'importation des fichiers** : Correction de l'ordre incohérent des fichiers entre les plateformes lors de l'importation d'images/signaux"
 
-#, fuzzy
 msgid "🔧 Advanced Features"
 msgstr "💥 Nouvelles fonctionnalités :"
 
 msgid "**Non-uniform coordinate support:**"
-msgstr ""
+msgstr "**Prise en charge des coordonnées non uniformes :**"
 
 msgid "Images now support non-uniform pixel spacing"
-msgstr ""
+msgstr "Les images prennent désormais en charge l'espacement de pixels non uniforme"
 
-#, fuzzy
 msgid "\"Set uniform coordinates\" feature for conversion"
 msgstr "Nouvelle fonctionnalité \"Définir les coordonnées uniformes\" dans le menu Traitement > Transformation des axes :"
 
-#, fuzzy
 msgid "**Polynomial calibration**: Up to cubic order for X, Y, Z axes"
 msgstr "Prend désormais en charge la calibration polynomiale jusqu'à l'ordre cubique pour tous les axes (X, Y, Z)"
 
-#, fuzzy
 msgid "Creates non-uniform coordinates for X/Y, transforms values for Z"
 msgstr "Pour les axes X et Y : Crée des coordonnées non uniformes pour représenter les transformations polynomiales"
 
-#, fuzzy
 msgid "HDF5 and text file formats preserve non-uniform information"
 msgstr "Le format HDF5 préserve les informations de coordonnées non uniformes"
 
 msgid "**Group management:**"
-msgstr ""
+msgstr "**Gestion des groupes :**"
 
 msgid "**Panel-specific short IDs**: `gs` prefix for signals, `gi` prefix for images"
-msgstr ""
+msgstr "**ID courts spécifiques au panneau** : Préfixe `gs` pour les signaux, préfixe `gi` pour les images"
 
 msgid "Avoids ambiguity in cross-panel operations"
-msgstr ""
+msgstr "Évite l'ambiguïté dans les opérations inter-panneaux"
 
 msgid "Fixed group numbering for new groups"
-msgstr ""
+msgstr "Numérotation de groupe fixe pour les nouveaux groupes"
 
-#, fuzzy
 msgid "**Configuration:**"
 msgstr "Réinitialisation de la configuration de DataLab :"
 
 msgid "**Version-specific folders**: Major version coexistence (`.DataLab_v1`, `.DataLab_v2`, etc.)"
-msgstr ""
+msgstr "**Dossiers spécifiques à la version** : Coexistence des versions majeures (`.DataLab_v1`, `.DataLab_v2`, etc.)"
 
 msgid "Allows v0.x and v1.x to run simultaneously"
-msgstr ""
+msgstr "Permet à v0.x et v1.x de s'exécuter simultanément"
 
-#, fuzzy
 msgid "**Public API & Remote Control:**"
 msgstr "API publique (locale ou distante) :"
 
-#, fuzzy
 msgid "Enhanced metadata handling with function name context"
 msgstr "**Amélioration de la gestion des métadonnées en ajoutant le contexte du nom de la fonction aux résultats** :"
 
 msgid "`add_group`, `add_signal`, `add_image` methods with `group_id` and `set_current` arguments"
-msgstr ""
+msgstr "Méthodes `add_group`, `add_signal`, `add_image` avec arguments `group_id` et `set_current`"
 
 msgid "`get_object_uuids` with optional `group` filter"
-msgstr ""
+msgstr "`get_object_uuids` avec filtre `group` optionnel"
 
 msgid "Multiple API improvements for better programmability"
-msgstr ""
+msgstr "Plusieurs améliorations de l'API pour une meilleure programmabilité"
 
 msgid "**Processing infrastructure (for developers):**"
-msgstr ""
+msgstr "**Infrastructure de traitement (pour les développeurs) :**"
 
-#, fuzzy
 msgid "New `@computation_function` decorator for computation functions"
 msgstr "Ajout d'un nouveau décorateur `@computation_function` pour marquer et enregistrer les fonctions de calcul"
 
-#, fuzzy
 msgid "Renamed computation functions (removed \"compute_\" prefix)"
 msgstr "Renommé les fonctions de calcul pour supprimer le préfixe redondant \"compute_\" (par exemple, `compute_fft` ➝ `fft`)"
 
 msgid "Refactored `BaseProcessor` methods with clear naming:"
-msgstr ""
+msgstr "Méthodes `BaseProcessor` refactorisées avec des noms clairs :"
 
 msgid "`compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, `compute_2_to_1`"
-msgstr ""
+msgstr "`compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, `compute_2_to_1`"
 
-#, fuzzy
 msgid "**No backward compatibility maintained** for these internal changes (closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))"
 msgstr "Écart-type des signaux ou des images sélectionnés (ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))."
 
-#, fuzzy
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Corrections de bugs :"
 
 msgid "**Performance fixes:**"
-msgstr ""
+msgstr "**Corrections de performances :**"
 
 msgid "**Switching between images with many results**: Dramatic improvement (66s → <1ms) when navigating images with hundreds of shapes"
-msgstr ""
+msgstr "**Passage entre images avec de nombreux résultats** : Amélioration spectaculaire (66s → <1ms) lors de la navigation entre des images avec des centaines de formes"
 
-#, fuzzy
 msgid "**Plot cleanup robustness**: Fixed errors when removing analysis results"
 msgstr "**Robustesse du nettoyage des graphiques** : Correction d'erreurs occasionnelles lors de la suppression des résultats d'analyse des graphiques"
 
-#, fuzzy
 msgid "**Critical fix**: Result labels now properly excluded from cleanup to prevent disappearance"
 msgstr "**Correction critique** : Les éléments d'étiquette de résultat sont désormais correctement exclus du nettoyage pour éviter une suppression accidentelle"
 
 msgid "**Cross-panel & group handling:**"
-msgstr ""
+msgstr "**Gestion inter-panneaux et des groupes :**"
 
 msgid "**Cross-panel computation groups**: Fixed inconsistent group organization for image-to-signal operations"
-msgstr ""
+msgstr "**Groupes de calculs inter-panneaux** : Correction de l'organisation incohérente des groupes pour les opérations image vers signal"
 
-#, fuzzy
 msgid "**File import ordering**: Consistent alphabetical sorting across all platforms"
 msgstr "**Ordre d'importation des fichiers** : Correction de l'ordre incohérent des fichiers entre les plateformes lors de l'importation d'images/signaux"
 
 msgid "**Action state updates:**"
-msgstr ""
+msgstr "**Mises à jour de l'état des actions :**"
 
 msgid "Fixed action enable states not updating after annotation/metadata operations"
-msgstr ""
+msgstr "Correction des états d'activation des actions ne se mettant pas à jour après les opérations d'annotation/métadonnées"
 
 msgid "UI now immediately reflects current object state"
-msgstr ""
+msgstr "L'interface utilisateur reflète désormais immédiatement l'état actuel de l'objet"
 
-#, fuzzy
 msgid "**Result management:**"
 msgstr "Gestion des métadonnées des résultats :"
 
-#, fuzzy
 msgid "Fixed result label deletion to permanently remove associated metadata"
 msgstr "La suppression des étiquettes de résultats (par exemple, FWHM, statistiques) du graphique supprime désormais définitivement les métadonnées associées."
 
 msgid "Fixed duplicate results parameter metadata cleanup"
-msgstr ""
+msgstr "Correction du nettoyage des métadonnées de paramètres de résultats en double"
 
-#, fuzzy
 msgid "**Result coordinate fixes**: Corrected shifted results on images with ROIs and shifted origin ([Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106))"
 msgstr "Écart-type des signaux ou des images sélectionnés (ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))."
 
-#, fuzzy
 msgid "**Profile extraction indices**: Fixed wrong indices with ROI ([Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107))"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
 msgid "**ROI-related fixes:**"
-msgstr ""
+msgstr "**Corrections liées aux ROI :**"
 
-#, fuzzy
 msgid "Fixed multi-image ROI extraction not saving ROI in first object ([Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "Fixed AttributeError when extracting multiple ROIs on single image with multiple selections ([Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "Fixed mask refresh issues ([Issue #122](https://github.com/DataLab-Platform/DataLab/issues/122), [Issue #123](https://github.com/DataLab-Platform/DataLab/issues/123))"
 msgstr "Ceci clôture les tickets [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) et [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
 
-#, fuzzy
 msgid "Fixed ROI editor on multiple signals/images ([Issue #135](https://github.com/DataLab-Platform/DataLab/issues/135))"
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
 
-#, fuzzy
 msgid "Fixed ROI clearing affecting only first image ([Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160))"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
-#, fuzzy
 msgid "Fixed ROI editor showing first instead of last image ([Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158))"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
 msgid "**Text Import Wizard:**"
-msgstr ""
+msgstr "**Assistant d'importation de texte :**"
 
-#, fuzzy
 msgid "Fixed preservation of user-defined titles and units ([Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239))"
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
 
-#, fuzzy
 msgid "Fixed preservation of data types ([Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240))"
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/203)."
 
-#, fuzzy
 msgid "Fixed comma decimal separator support ([Issue #186](https://github.com/DataLab-Platform/DataLab/issues/186))"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
-#, fuzzy
 msgid "Fixed trailing delimiter issue ([Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238))"
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
 
-#, fuzzy
 msgid "**Curve fitting & analysis:**"
 msgstr "**Ajustement amélioré pour tous les types de courbes** :"
 
-#, fuzzy
 msgid "Improved initial frequency estimate for sinusoidal fitting"
 msgstr "Amélioration de l'estimation initiale de la fréquence pour l'ajustement de courbe sinusoïdale."
 
 msgid "Fixed parameter display formatting for extreme values"
-msgstr ""
+msgstr "Correction du formatage d'affichage des paramètres pour les valeurs extrêmes"
 
 msgid "Fixed FWHM computation exception handling"
-msgstr ""
+msgstr "Correction de la gestion des exceptions de calcul FWHM"
 
-#, fuzzy
 msgid "Fixed curve marker style changing unexpectedly ([Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184))"
 msgstr "Ce problème est lié à l'[Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)"
 
-#, fuzzy
 msgid "Fixed hard crash on zero signal with curve stats tool ([Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "**Image handling:**"
 msgstr "Gestion du format CSV :"
 
 msgid "Fixed aspect ratio not updating when switching images"
-msgstr ""
+msgstr "Correction du rapport d'aspect ne se mettant pas à jour lors du changement d'images"
 
-#, fuzzy
 msgid "Fixed shape unpacking issues ([Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246), [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247))"
 msgstr "Fonctionnalité d'enregistrement dans un répertoire (ceci clôture le ticket [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))."
 
-#, fuzzy
 msgid "Fixed colormaps not stored in metadata (PlotPy v2.6.3+ issue) ([Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138))"
 msgstr "Déconvolution dans le domaine fréquentiel (ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189))."
 
 msgid "Fixed amplitude calculation for non-integer data types"
-msgstr ""
+msgstr "Correction du calcul d'amplitude pour les types de données non entiers"
 
-#, fuzzy
 msgid "Fixed ifft1d x-axis computation when shift=False ([Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241))"
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
 
-#, fuzzy
 msgid "Fixed moving median crash on Linux with mirror mode ([Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117)) - SciPy bug"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
-#, fuzzy
 msgid "Fixed magnitude spectrum with logarithmic scale ([Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169))"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
-#, fuzzy
 msgid "Fixed pairwise operation mode for asymmetric functions ([Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "**Analysis & results:**"
 msgstr "Résultats d'analyse 2D :"
 
-#, fuzzy
 msgid "Fixed NaN value handling in statistics and normalization ([Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141), [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152), [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153))"
 msgstr "Ceci clôture les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
 
-#, fuzzy
 msgid "Fixed analysis results kept from original after processing ([Issue #136](https://github.com/DataLab-Platform/DataLab/issues/136))"
 msgstr "Ce problème est lié à l'[Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)"
 
-#, fuzzy
 msgid "Fixed duplicate results with no ROI defined"
 msgstr "Fonctionnalités d'analyse de signal : correction des résultats en double lorsqu'aucune ROI n'est définie"
 
-#, fuzzy
 msgid "Fixed \"One curve per result title\" mode ignoring ROIs ([Issue #132](https://github.com/DataLab-Platform/DataLab/issues/132))"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
-#, fuzzy
 msgid "Added result validation for array-like results"
 msgstr "Amélioration de la validation des résultats de type tableau en vérifiant le type de données du résultat"
 
 msgid "**Plot & visualization:**"
-msgstr ""
+msgstr "**Graphique et visualisation :**"
 
-#, fuzzy
 msgid "Fixed profile plots not refreshing when moving/resizing ([Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172)) - PlotPy fix"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
-#, fuzzy
 msgid "Fixed empty average profile display outside image area ([Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168)) - PlotPy fix"
 msgstr "Ce problème est lié à l'[Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)"
 
-#, fuzzy
 msgid "Fixed average profile extraction ValueError with oversized rectangle ([Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
 msgid "Disabled generic \"Axes\" tab in parameter dialogs"
-msgstr ""
+msgstr "Désactivation de l'onglet générique \"Axes\" dans les boîtes de dialogue de paramètres"
 
 msgid "**Other fixes:**"
-msgstr ""
+msgstr "**Autres corrections :**"
 
-#, fuzzy
 msgid "Fixed proxy `add_object` method not supporting metadata ([Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "Fixed RemoteClient method calls without optional arguments ([Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113))"
 msgstr "Ceci clôture [Issue #203](https://github.com/DataLab-Platform/DataLab/issues/213)."
 
-#, fuzzy
 msgid "Fixed KeyError when removing group after opening HDF5 ([Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "Fixed KeyError in \"View in new window\" with multiple images after HDF5 open ([Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159))"
 msgstr "Ce problème est lié à l'[Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)"
 
-#, fuzzy
 msgid "Fixed long object titles display ([Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128))"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
-#, fuzzy
 msgid "Fixed file name titles showing relative paths ([Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165))"
 msgstr "Ce problème est lié à l'[Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)"
 
-#, fuzzy
 msgid "Fixed unexpected group names in \"Open from directory\" ([Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177))"
 msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
 
-#, fuzzy
 msgid "Fixed one group per folder expectation ([Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "Fixed unsupported files in recursive loading ([Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164))"
 msgstr "Implémentation partielle de l'[Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216)."
 
-#, fuzzy
 msgid "**Removed features:**"
 msgstr "Nouvelles fonctionnalités :"
 
-#, fuzzy
 msgid "Removed \"Use reference image LUT range\" setting (confusing behavior)"
 msgstr "Suppression de l'option \"Utiliser la plage de LUT de l'image de référence\" :"
 
-#, fuzzy
 msgid "**Migration**: Use multi-selection property editing instead"
 msgstr "**Stratégie de migration** : Utilisez plutôt le nouvel éditeur de propriétés de sélection multiple :"
 
-#, fuzzy
 msgid "🔒 Security Fixes"
 msgstr "🔒 Corrections de sécurité :"
 
-#, fuzzy
 msgid "**CVE-2023-4863**: Fixed vulnerability in opencv-python-headless"
 msgstr "**Correction de vulnérabilité de dépendance** : Correction de la vulnérabilité CVE-2023-4863 dans opencv-python-headless"
 
 msgid "Updated minimum requirement from 4.5.4.60 to 4.8.1.78"
 msgstr "Mise à jour de l'exigence minimale de 4.5.4.60 à 4.8.1.78"
 
-#, fuzzy
 msgid "See [DataLab security advisory](https://github.com/DataLab-Platform/DataLab/security/dependabot/1)"
 msgstr "Voir l'[avis de sécurité DataLab](https://github.com/DataLab-Platform/DataLab/security/dependabot/1) pour plus de détails."
 
-#, fuzzy
 msgid "ℹ️ Other Changes"
 msgstr "ℹ️ Autres changements :"
 
@@ -1001,7 +845,7 @@ msgid "Using new `guidata` translation utility based on `babel`"
 msgstr "Utilisation du nouvel utilitaire de traduction `guidata` basé sur `babel`"
 
 msgid "Python 3.13 now supported (via scikit-image V0.25)"
-msgstr ""
+msgstr "Python 3.13 désormais pris en charge (via scikit-image V0.25)"
 
 msgid "DataLab Version 0.20.0"
 msgstr "DataLab Version 0.20.0"
