@@ -51,6 +51,9 @@ del "%RESPATH%\tmp-*.png"
 @REM Building executable
 %PYTHON% -m PyInstaller DataLab.spec --noconfirm --clean
 
+@REM Copy manifest to executable root directory
+copy "manifest.json" "dist\DataLab\manifest.json" /Y
+
 @REM Windows 7 SP1 compatibility fix
 copy "%RESPATH%\api-ms-win-core-path-l1-1-0.dll" "dist\DataLab\_internal" /Y
 

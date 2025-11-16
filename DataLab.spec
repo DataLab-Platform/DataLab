@@ -9,7 +9,6 @@ datas = collect_data_files('datalab') + [('datalab\\plugins', 'datalab\\plugins'
 datas += collect_data_files('guidata') + collect_data_files('plotpy')
 datas += collect_data_files('sigima')
 datas += copy_metadata('imageio')
-datas += [('manifest.json', '.')]
 
 a = Analysis(
     ['datalab\\start.pyw'],
