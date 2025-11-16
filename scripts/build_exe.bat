@@ -45,6 +45,9 @@ for %%s in (16 24 32 48 128 256) do (
 magick "%RESPATH%\tmp-*.png" "%RESPATH%\DataLab.ico"
 del "%RESPATH%\tmp-*.png"
 
+@REM Generate build manifest
+%PYTHON% scripts\generate_manifest.py
+
 @REM Building executable
 %PYTHON% -m PyInstaller DataLab.spec --noconfirm --clean
 

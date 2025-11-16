@@ -6,11 +6,13 @@ Module providing DataLab Installation configuration widget
 
 from __future__ import annotations
 
+import json
 import locale
 import os
 import platform
 import sys
 from importlib.metadata import distributions
+from pathlib import Path
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
@@ -52,6 +54,45 @@ def get_installed_package_info() -> str:
     return os.linesep.join(result_lines)
 
 
+def get_manifest_package_info(manifest_path: Path) -> str:
+    """Get the list of packages from the build manifest file
+
+    Args:
+        manifest_path: Path to the manifest.json file
+
+    Returns:
+        Formatted string with package list and build information
+    """
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+
+        packages = list(manifest["packages"].items())
+        packages.sort(key=lambda x: x[0].lower())
+
+        # Determine column widths
+        name_width = max(len(name) for name, _ in packages)
+        version_width = max(len(version) for _, version in packages)
+
+        header = f"{'Package':{name_width}}   {'Version':{version_width}}"
+        separator = f"{'-' * name_width}   {'-' * version_width}"
+        result_lines = [
+            f"Build time: {manifest['build_time']}",
+            f"Python version: {manifest['python_version']}",
+            f"Build system: {manifest['system']} {manifest['release']}",
+            f"Architecture: {manifest['architecture']}",
+            "",
+            header,
+            separator,
+        ]
+        for name, version in packages:
+            result_lines.append(f"{name:{name_width}}   {version:{version_width}}")
+
+        return os.linesep.join(result_lines)
+    except Exception as e:
+        return f"Error reading manifest file: {e}"
+
+
 def get_install_info() -> str:
     """Get DataLab installation informations
 
@@ -62,7 +103,15 @@ def get_install_info() -> str:
         #  Stand-alone version
         more_info = "This is the Stand-alone version of DataLab."
         more_info += os.linesep * 2
-    more_info = get_installed_package_info()
+
+        # Try to read manifest file from executable root directory
+        manifest_path = Path(sys.executable).parent / "manifest.json"
+        if manifest_path.exists():
+            more_info += get_manifest_package_info(manifest_path)
+        else:
+            more_info += "Manifest file not found."
+    else:
+        more_info = get_installed_package_info()
     info = os.linesep.join(
         [
             f"DataLab v{datalab.__version__}",
