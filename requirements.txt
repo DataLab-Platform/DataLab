@@ -15,7 +15,7 @@ pandas >= 1.4
 pre-commit
 psutil >= 5.8
 pydata-sphinx-theme
-pyinstaller >= 6.0
+pyinstaller == 6.16.0
 pylint
 pytest
 pytest-xvfb
