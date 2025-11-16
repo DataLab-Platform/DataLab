@@ -23,6 +23,19 @@ if exist %CLONEDIR% ( rmdir /s /q %CLONEDIR% )
 git clone -l -s . %CLONEDIR%
 pushd %CLONEDIR%
 
+@REM Backup PYTHONPATH
+set OLD_PYTHONPATH=%PYTHONPATH%
+@REM Make a new virtual environment for building the executable
+set VENV_DIR=%REPODIR%\..\%LIBNAME%-temp-venv
+if exist %VENV_DIR% ( rmdir /s /q %VENV_DIR% )
+%PYTHON% -m venv %VENV_DIR%
+set PYTHON=%VENV_DIR%\Scripts\python.exe
+set PYTHONPATH=%CLONEDIR%
+@REM Install required packages in the virtual environment
+%PYTHON% -m pip install --upgrade pip setuptools wheel
+@REM Install DataLab and its dependencies
+%PYTHON% -m pip install .[exe]
+
 @REM Generating icon
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
 set RESPATH=%CLONEDIR%\resources
@@ -33,7 +46,7 @@ magick "%RESPATH%\tmp-*.png" "%RESPATH%\DataLab.ico"
 del "%RESPATH%\tmp-*.png"
 
 @REM Building executable
-pyinstaller DataLab.spec --noconfirm --clean
+%PYTHON% -m PyInstaller DataLab.spec --noconfirm --clean
 
 @REM Windows 7 SP1 compatibility fix
 copy "%RESPATH%\api-ms-win-core-path-l1-1-0.dll" "dist\DataLab\_internal" /Y
@@ -50,5 +63,10 @@ move %CLONEDIR%\dist\%ZIPNAME% %REPODIR%\dist
 @REM Move generated folder to dist directory
 move %CLONEDIR%\dist\DataLab %REPODIR%\dist
 
+@REM Cleanup temporary directories
 rmdir /s /q %CLONEDIR%
+rmdir /s /q %VENV_DIR%
+@REM Restore PYTHONPATH
+set PYTHONPATH=%OLD_PYTHONPATH%
+
 call %FUNC% EndOfScript
