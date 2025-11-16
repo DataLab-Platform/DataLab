@@ -864,6 +864,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
+                    "RELEASE": "0",
                     "PYTHON": "${command:python.interpreterPath}",
                 },
                 "statusbar": {

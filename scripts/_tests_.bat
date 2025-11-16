@@ -17,5 +17,10 @@ echo Modname=%MODNAME%
 echo LibName=%LIBNAME%
 echo LibVersion=%VERSION%
 echo DLModulePath=%DATALAB_MODULE_PATH%
+echo ===========================================================================
+echo Python=%PYTHON%
+echo WINPYDIRBASE=%WINPYDIRBASE%
+echo PYTHONPATH=%PYTHONPATH%
+echo ===========================================================================
 
 call %FUNC% EndOfScript
