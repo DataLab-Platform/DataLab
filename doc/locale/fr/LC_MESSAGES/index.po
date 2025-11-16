@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-12 16:10+0100\n"
+"POT-Creation-Date: 2025-11-16 14:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,6 +117,9 @@ msgstr "Les fonctionnalités de traitement de DataLab sont basées sur `Sigima <
 
 msgid "DataLab was created by `CODRA`_/`Pierre Raybaut`_ in 2023. It is developed and maintained by DataLab Platform Developers."
 msgstr "DataLab a été créé par `CODRA`_/`Pierre Raybaut`_ en 2023. Il est développé et maintenu par l'équipe de développement de la plateforme DataLab."
+
+msgid "This project (DataLab Platform) should not be confused with the `datalab-org <https://datalab-org.io/>`_ project, which is a separate and unrelated initiative focused on materials science databases and computational tools."
+msgstr "Ce projet (DataLab Platform) ne doit pas être confondu avec le projet `datalab-org <https://datalab-org.io/>`_, qui est une initiative distincte et sans lien, axée sur les bases de données de science des matériaux et les outils de calcul."
 
 msgid "Footnotes"
 msgstr "Notes de bas de page"
