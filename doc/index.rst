@@ -12,6 +12,11 @@ can be extended with your Python code through :bdg-ref-success-line:`Plugins <ab
 or directly from :ref:`your IDE <use_cases>` or :ref:`your Jupyter notebooks <use_cases>`.
 Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
+.. note::
+
+    This project (DataLab Platform) should not be confused with the `datalab-org <https://datalab-org.io/>`_
+    project, which is a separate and unrelated initiative focused on materials science databases and computational tools.
+
 .. only:: html and not latex
 
     .. dropdown:: Notice for users upgrading from DataLab v0.20
