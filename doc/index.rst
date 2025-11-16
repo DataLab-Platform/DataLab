@@ -12,11 +12,6 @@ can be extended with your Python code through :bdg-ref-success-line:`Plugins <ab
 or directly from :ref:`your IDE <use_cases>` or :ref:`your Jupyter notebooks <use_cases>`.
 Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
-.. note::
-
-    This project (DataLab Platform) should not be confused with the `datalab-org <https://datalab-org.io/>`_
-    project, which is a separate and unrelated initiative focused on materials science databases and computational tools.
-
 .. only:: html and not latex
 
     .. dropdown:: Notice for users upgrading from DataLab v0.20
@@ -145,6 +140,11 @@ DataLab has been funded, chronologically, by the following stakeholders:
 
     .. note:: DataLab was created by `CODRA`_/`Pierre Raybaut`_ in 2023. It is
             developed and maintained by DataLab Platform Developers.
+
+.. note::
+
+    This project (DataLab Platform) should not be confused with the `datalab-org <https://datalab-org.io/>`_
+    project, which is a separate and unrelated initiative focused on materials science databases and computational tools.
 
 .. rubric:: Footnotes
 
