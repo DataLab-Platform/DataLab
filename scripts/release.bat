@@ -8,7 +8,7 @@ call %FUNC% UsePython
 call %FUNC% GetVersion VERSION
 
 echo ===========================================================================
-echo Making DataLab v%VERSION% release with %WINPYDIRBASE%
+echo Making DataLab v%VERSION% release with %PYTHON%
 echo ===========================================================================
 
 set destdir=releases\DataLab-v%VERSION%-release
