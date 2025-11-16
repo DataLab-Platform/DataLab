@@ -16,13 +16,17 @@ See [DataLab website](https://datalab-platform.com/) for more details.
 
 ![DataLab](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/shots/i_blob_detection_flower.png)
 
-ℹ️ DataLab is powered by [PlotPyStack](https://github.com/PlotPyStack) 🚀.
+🧮 DataLab's processing power comes from the advanced algorithms of the object-oriented signal and image processing library [Sigima](https://github.com/DataLab-Platform/Sigima) 🚀 which is part of the DataLab Platform.
+
+![Sigima](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/Sigima-Power.png)
+
+ℹ️ DataLab is powered by [PlotPyStack](https://github.com/PlotPyStack) 🚀 for curve plotting and fast image visualization.
 
 ![PlotPyStack](https://raw.githubusercontent.com/PlotPyStack/.github/main/data/plotpy-stack-powered.png)
 
 ℹ️ DataLab is built on Python and scientific libraries.
 
-![Python](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/Python.png) ![NumPy](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/NumPy.png) ![SciPy](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/SciPy.png) ![scikit-image](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/scikit-image.png) ![OpenCV](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/OpenCV.png) ![PlotPyStack](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/plotpystack.png)
+![Python](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/Python.png) ![NumPy](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/NumPy.png) ![SciPy](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/SciPy.png) ![scikit-image](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/scikit-image.png) ![OpenCV](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/OpenCV.png) ![PlotPyStack](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/plotpystack.png) ![Sigima](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/logos/Sigima.png)
 
 ----
 
