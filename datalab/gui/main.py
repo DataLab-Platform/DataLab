@@ -51,7 +51,6 @@ from datalab.config import (
     APP_NAME,
     DATAPATH,
     DEBUG,
-    IS_FROZEN,
     TEST_SEGFAULT_ERROR,
     Conf,
     _,
@@ -66,7 +65,6 @@ from datalab.gui.panel import base, image, macro, signal
 from datalab.gui.settings import edit_settings
 from datalab.objectmodel import ObjectGroup
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
-from datalab.utils import dephash
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (
     add_corner_menu,
@@ -595,70 +593,6 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             QW.QMessageBox.warning(
                 self, APP_NAME, "<br>".join(txtlist), QW.QMessageBox.Ok
             )
-
-    def __check_dependencies(self) -> None:  # pragma: no cover
-        """Check dependencies"""
-        if IS_FROZEN or execenv.unattended:
-            # No need to check dependencies if DataLab has been frozen, or if
-            # the user has chosen to ignore this check, or if we are in unattended mode
-            # (i.e. running automated tests)
-
-            if IS_FROZEN:
-                QW.QMessageBox.information(
-                    self,
-                    _("Information"),
-                    _(
-                        "The dependency check feature is not relevant for the "
-                        "standalone version of DataLab."
-                    ),
-                    QW.QMessageBox.Ok,
-                )
-            return
-        try:
-            state = dephash.check_dependencies_hash(DATAPATH)
-            bad_deps = [name for name in state if not state[name]]
-            if not bad_deps:
-                # Everything is OK
-                QW.QMessageBox.information(
-                    self,
-                    _("Information"),
-                    _(
-                        "All critical dependencies of DataLab have been qualified "
-                        "on this operating system."
-                    ),
-                    QW.QMessageBox.Ok,
-                )
-                return
-        except IOError:
-            bad_deps = None
-        txt0 = _("Non-compliant dependency:")
-        if bad_deps is None or len(bad_deps) > 1:
-            txt0 = _("Non-compliant dependencies:")
-        if bad_deps is None:
-            txtlist = [
-                _("DataLab has not yet been qualified on your operating system."),
-            ]
-        else:
-            txtlist = [
-                "<u>" + txt0 + "</u> " + ", ".join(bad_deps),
-                "",
-                _(
-                    "At least one dependency does not comply with DataLab "
-                    "qualification standard reference (wrong dependency version "
-                    "has been installed, or dependency source code has been "
-                    "modified, or the application has not yet been qualified "
-                    "on your operating system)."
-                ),
-            ]
-        txtlist += [
-            "",
-            _(
-                "This means that the application has not been officially qualified "
-                "in this context and may not behave as expected."
-            ),
-        ]
-        txt = "<br>".join(txtlist)
-        QW.QMessageBox.warning(self, APP_NAME, txt, QW.QMessageBox.Ok)
 
     def check_for_previous_crash(self) -> None:  # pragma: no cover
         """Check for previous crash"""
@@ -1217,11 +1151,6 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 _("Bug report or feature request"),
                 icon=get_icon("libre-gui-globe.svg"),
                 triggered=lambda: webbrowser.open(__supporturl__),
-            ),
-            create_action(
-                self,
-                _("Check critical dependencies..."),
-                triggered=self.__check_dependencies,
             ),
             create_action(
                 self,

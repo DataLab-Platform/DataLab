@@ -22,7 +22,6 @@ if exist %CLONEDIR% ( rmdir /s /q %CLONEDIR% )
 git clone -l -s . %CLONEDIR%
 
 pushd %CLONEDIR%
-%PYTHON% create_dephash.py
 @REM Build source package
 %PYTHON% -m build --sdist
 @REM Build wheel package with PDF documentation embedded
