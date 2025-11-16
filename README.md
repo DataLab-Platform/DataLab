@@ -10,6 +10,8 @@ and visualization** with unique features designed to meet industrial requirement
 
 See [DataLab website](https://datalab-platform.com/) for more details.
 
+> **Note:** This project (DataLab Platform) should not be confused with the [datalab-org](https://datalab-org.io/) project, which is a separate and unrelated initiative focused on materials science databases and computational tools.
+
 ℹ️ Created by [CODRA](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab Platform Developers.
 
 ![DataLab](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/shots/i_blob_detection_flower.png)
