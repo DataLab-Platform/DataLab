@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-13 16:03+0100\n"
+"POT-Creation-Date: 2025-11-16 14:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -328,15 +328,6 @@ msgstr ""
 
 msgid "Code coverage measurement for Python"
 msgstr "Mesure de la couverture de code pour Python"
-
-msgid "pyinstaller"
-msgstr ""
-
-msgid ">= 6.0"
-msgstr ""
-
-msgid "PyInstaller bundles a Python application and all its dependencies into a single package."
-msgstr "PyInstaller permet de créer un exécutable unique à partir d'une application Python et de ses dépendances."
 
 msgid "pylint"
 msgstr ""
