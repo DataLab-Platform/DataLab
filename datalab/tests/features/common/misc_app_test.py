@@ -192,6 +192,29 @@ def __misc_unit_function(win: DLMainWindow) -> None:
         set_current=False,
     )
 
+    # Get selected object UUIDs
+    __print_test_result("Get selected object UUIDs")
+    uuids = win.get_sel_object_uuids()
+    execenv.print(uuids)
+
+    # Select objects by UUIDs
+    __print_test_result("Select objects by UUIDs")
+    win.select_objects(uuids)
+
+    # Get object shapes
+    __print_test_result("Get object shapes")
+    win.get_object_shapes(uuids[0])
+
+    # Select groups by UUIDs
+    __print_test_result("Select groups by UUIDs")
+    win.select_groups([1])
+    uuids = win.get_sel_object_uuids()
+    win.select_groups(uuids)
+
+    # Delete metadata
+    __print_test_result("Delete metadata")
+    win.delete_metadata()
+
     # Close application
     __print_test_result("Close application")
     win.close_application()
