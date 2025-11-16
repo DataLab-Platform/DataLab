@@ -15,4 +15,4 @@ dependencies:
       - opencv-python-headless
       - PyWavelets
       - psutil
-      - datalab
+      - datalab-platform
