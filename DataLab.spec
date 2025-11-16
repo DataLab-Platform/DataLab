@@ -3,11 +3,12 @@
 # Initial command:
 # pyinstaller -y --clean -n DataLab -i resources\DataLab.ico datalab\start.pyw
 
-from PyInstaller.utils.hooks import collect_submodules, collect_data_files
+from PyInstaller.utils.hooks import collect_submodules, collect_data_files, copy_metadata
 all_hidden_imports = collect_submodules('datalab')
 datas = collect_data_files('datalab') + [('datalab\\plugins', 'datalab\\plugins')]
 datas += collect_data_files('guidata') + collect_data_files('plotpy')
 datas += collect_data_files('sigima')
+datas += copy_metadata('imageio')
 
 a = Analysis(
     ['datalab\\start.pyw'],
