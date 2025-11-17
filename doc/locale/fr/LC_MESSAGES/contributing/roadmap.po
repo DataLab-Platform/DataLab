@@ -24,7 +24,7 @@ msgid "This document outlines the current and future development plans for DataL
 msgstr "Ce document décrit les plans de développement actuels et futurs de DataLab :"
 
 msgid "It includes information about [funding sources](#funding), and [future evolution](#future-milestones)."
-msgstr "Il contient des informations sur les [sources de financement](#funding), les [jalons prévus](#planned-milestones) et l'[évolution future](#future-milestones)."
+msgstr "Il contient des informations sur les [sources de financement](#funding) et les [jalons futurs](#future-milestones)."
 
 msgid "It also provides a summary of [past milestones](#past-milestones) to give context to the project's evolution."
 msgstr "Il fournit également un résumé des [jalons passés](#past-milestones) pour donner un contexte à l'évolution du projet."
