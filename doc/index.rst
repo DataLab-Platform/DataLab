@@ -153,6 +153,8 @@ DataLab has been funded, chronologically, by the following stakeholders:
    `scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab visualization
    capabilities are based on `PlotPyStack`_ toolkit, a set of Python libraries
    for building scientific applications with Qt graphical user interfaces.
+   DataLab advanced and specialized processing features are based on `Sigima <https://sigima.readthedocs.io/>`_,
+   the open-source signal and image processing library (part of the DataLab Platform).
 
 .. _NumPy: https://numpy.org/
 .. _SciPy: https://www.scipy.org/
