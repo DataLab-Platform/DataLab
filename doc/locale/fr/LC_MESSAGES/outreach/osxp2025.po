@@ -194,7 +194,7 @@ msgid "**Scale and Orientation Estimation**"
 msgstr "**Estimation de l'Échelle et de l'Orientation :**"
 
 msgid "Determining magnification factors and angular orientation from the geometric grid alone."
-msgstr "Déterminer les facteurs de grossissement et l'orientation angulaire à partir de la grille géométrique seule."
+msgstr "Déterminer les facteurs de grandissement et l'orientation angulaire à partir de la grille géométrique seule."
 
 msgid "**Robust Processing**"
 msgstr "**Traitement Robuste :**"
