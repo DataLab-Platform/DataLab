@@ -36,7 +36,7 @@ Try DataLab online, without installing anything, using Binder:
 
 ----
 
-✨ Add features to DataLab by writing your own [plugin](https://datalab-platform.com/en/features/general/plugins.html)
+✨ Add features to DataLab by writing your own [plugin](https://datalab-platform.com/en/features/advanced/plugins.html)
 (see [plugin examples](https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples))
 or macro (see [macro examples](https://github.com/DataLab-Platform/DataLab/tree/main/macros/examples))
 
