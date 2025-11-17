@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-29 12:10+0100\n"
+"POT-Creation-Date: 2025-11-17 13:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr "Feuille de route"
 msgid "This document outlines the current and future development plans for DataLab:"
 msgstr "Ce document décrit les plans de développement actuels et futurs de DataLab :"
 
-msgid "It includes information about [funding sources](#funding), [planned milestones](#planned-milestones), and [future evolution](#future-milestones)."
+msgid "It includes information about [funding sources](#funding), and [future evolution](#future-milestones)."
 msgstr "Il contient des informations sur les [sources de financement](#funding), les [jalons prévus](#planned-milestones) et l'[évolution future](#future-milestones)."
 
 msgid "It also provides a summary of [past milestones](#past-milestones) to give context to the project's evolution."
@@ -61,45 +61,6 @@ msgstr ""
 
 msgid "[NLnet Foundation](https://nlnet.nl/), as part of the NGI0 Commons Fund backed by the European Commission, funded the [redesign of DataLab’s core architecture](https://nlnet.nl/project/DataLab/) — a major overhaul scheduled for inclusion in the 2.0 release (December 2025):<br>• The goal is to decouple the data model, computation, and I/O from the UI<br>• This will enable DataLab to be used as a library in other software"
 msgstr "La [Fondation NLnet](https://nlnet.nl/), dans le cadre du NGI0 Commons Fund soutenu par la Commission européenne, a financé la [refonte de l'architecture de base de DataLab](https://nlnet.nl/project/DataLab/) - une refonte majeure prévue pour la version 2.0 (décembre 2025) :<br>• L'objectif est de découpler le modèle de données, le calcul et l'E/S de l'interface utilisateur<br>• Cela permettra à DataLab d'être utilisé comme bibliothèque dans d'autres logiciels"
-
-msgid "🚀 Planned Milestones"
-msgstr "🚀 Jalons planifiés"
-
-msgid "ℹ️ The following tasks are planned for future releases of DataLab. The timeline and specific details may change based on user feedback, funding availability, and other factors."
-msgstr "ℹ️ Les tâches suivantes sont prévues pour les futures versions de DataLab. Le calendrier et les détails spécifiques peuvent changer en fonction des retours des utilisateurs, de la disponibilité du financement et d'autres facteurs."
-
-msgid "This section outlines the planned features and enhancements for DataLab, along with their expected release dates."
-msgstr "Cette section décrit les fonctionnalités et améliorations prévues pour DataLab, ainsi que leurs dates de sortie prévues."
-
-msgid "Those features and enhancements are funded by the following organizations (see [Funding](#funding) for more details):"
-msgstr "Ces fonctionnalités et améliorations sont financées par les organisations suivantes (voir [Financement](#funding) pour plus de détails) :"
-
-msgid "[CEA](https://www.cea.fr/): French Alternative Energies and Atomic Energy Commission"
-msgstr "[CEA](https://www.cea.fr/): Commissariat à l'énergie atomique et aux énergies alternatives"
-
-msgid "[CODRA](https://codra.net/en/): software engineering company and software publisher"
-msgstr "[CODRA](https://codra.net/en/): société d'ingénierie en informatique et éditeur de logiciels"
-
-msgid "[NLnet](https://nlnet.nl/): NLnet Foundation, as part of the NGI0 Commons Fund"
-msgstr "[NLnet](https://nlnet.nl/): Fondation NLnet, dans le cadre du NGI0 Commons Fund"
-
-msgid "⚠️ *Note: The milestones and dates presented below are indicative and subject to change.*"
-msgstr "⚠️ *Remarque : Les jalons et dates présentés ci-dessous sont indicatifs et susceptibles de changer.*"
-
-msgid "Milestone"
-msgstr "Jalon"
-
-msgid "📅 [2.0](https://github.com/DataLab-Platform/DataLab/milestone/12) 2025/12"
-msgstr ""
-
-msgid "This release introduces the [redesign of DataLab’s core architecture](https://nlnet.nl/project/DataLab/):<br>• Core: decoupling data model, computation & I/O from UI<br>• Validation: full migration of test infra, automated & manual testing<br>• Docs & Training: installation guides, API docs, user manuals, onboarding materials"
-msgstr "Cette version introduit la [refonte de l'architecture de base de DataLab](https://nlnet.nl/project/DataLab/) :<br>• Noyau : découplage du modèle de données, du calcul et de l'E/S de l'interface utilisateur<br>• Validation : migration complète de l'infrastructure de test, tests automatisés et manuels<br>• Documentation et formation : guides d'installation, documentation API, manuels d'utilisation, matériel d'intégration"
-
-msgid "📅 [1.0](https://github.com/DataLab-Platform/DataLab/milestone/1)<br>2025/09"
-msgstr ""
-
-msgid "This release consolidates the features introduced in the V0.x series, and also integrates:<br>• Common: Fourier tools, noise generation, multi-file saving, ...<br>• Image: background subtraction, local smoothing , filtering, sub-image extraction, resampling, ...<br>• Signal: new formats (.SIG, .IMA), signal generators, curve fitting, advanced filtering, ..."
-msgstr "Cette version consolide les fonctionnalités introduites dans la série V0.x, et intègre également :<br>• Commun : outils de Fourier, génération de bruit, sauvegarde multi-fichiers, ...<br>• Image : soustraction de fond, lissage local, filtrage, extraction de sous-image, rééchantillonnage, ...<br>• Signal : nouveaux formats (.SIG, .IMA), générateurs de signaux, ajustement de courbes, filtrage avancé, ..."
 
 msgid "🏗️ Future Milestones"
 msgstr "🏗️ Jalons futurs"
@@ -374,14 +335,38 @@ msgstr "Cette tâche est tracée par l'[Issue #26](https://github.com/DataLab-Pl
 msgid "🏆 Past Milestones"
 msgstr "🏆 Jalons passés"
 
-msgid "From version 0.9 to 0.19, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images."
-msgstr "De la version 0.9 à 0.19, DataLab a connu un développement et des améliorations significatifs. Le projet a évolué d'un simple outil d'analyse de données à une plateforme puissante pour le traitement et la visualisation des signaux et des images."
+msgid "From version 0.9 to 1.0, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images."
+msgstr "De la version 0.9 à 1.0, DataLab a connu un développement et des améliorations significatifs. Le projet a évolué d'un simple outil d'analyse de données à une plateforme puissante pour le traitement et la visualisation des signaux et des images."
 
 msgid "Those enhancements have been made possible thanks to the support of the following organizations (see [Funding](#funding) for more details):"
 msgstr "Ces améliorations ont été rendues possibles grâce au soutien des organisations suivantes (voir [Financement](#funding) pour plus de détails) :"
 
+msgid "[CEA](https://www.cea.fr/): French Alternative Energies and Atomic Energy Commission"
+msgstr "[CEA](https://www.cea.fr/): Commissariat à l'énergie atomique et aux énergies alternatives"
+
+msgid "[CODRA](https://codra.net/en/): software engineering company and software publisher"
+msgstr "[CODRA](https://codra.net/en/): société d'ingénierie en informatique et éditeur de logiciels"
+
+msgid "[NLnet](https://nlnet.nl/): NLnet Foundation, as part of the NGI0 Commons Fund"
+msgstr "[NLnet](https://nlnet.nl/): Fondation NLnet, dans le cadre du NGI0 Commons Fund"
+
 msgid "The following table summarizes the major past milestones of DataLab, including the release dates and a brief description of the features or enhancements introduced in each version."
 msgstr "Le tableau suivant résume les principaux jalons passés de DataLab, y compris les dates de publication et une brève description des fonctionnalités ou améliorations introduites dans chaque version."
+
+msgid "Milestone"
+msgstr "Jalon"
+
+msgid "[1.0](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.0.0)<br>2025/11"
+msgstr ""
+
+msgid "• Interactive object editing: modify creation/processing parameters and recompute objects<br>• New object creation: parametric signal/image generators, Poisson noise, complex-valued objects<br>• Enhanced processing: pulse features, ideal filters, 2D resampling, convolution, projections<br>• ROI & annotations: copy/paste, import/export, grid creation, inverse ROI logic<br>• Visualization: merged result labels, datetime support, performance optimizations<br>• File formats: FT-Lab (.sig, .ima), coordinated text files, improved HDF5 support<br>• Non-uniform coordinates and polynomial calibration<br>• Public API enhancements for programmability"
+msgstr "• Édition interactive des objets : modifier les paramètres de création/de traitement et recalculer les objets<br>• Nouvelle création d'objets : générateurs de signaux/images paramétriques, bruit de Poisson, objets à valeurs complexes<br>• Traitement amélioré : fonctionnalités d'impulsion, filtres idéaux, rééchantillonnage 2D, convolution, projections<br>• ROI et annotations : copier/coller, importer/exporter, création de grille, logique ROI inverse<br>• Visualisation : étiquettes de résultats fusionnées, prise en charge des dates et heures, optimisations des performances<br>• Formats de fichiers : FT-Lab (.sig, .ima), fichiers texte coordonnés, prise en charge améliorée de HDF5<br>• Coordonnées non uniformes et étalonnage polynomial<br>• Améliorations de l'API publique pour la programmabilité"
+
+msgid "[0.20](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.20.0)<br>2025/04"
+msgstr ""
+
+msgid "• ANDOR SIF images: add support for background images<br>• Array editor: new copy all, export, and paste features<br>• Fourier analysis: new zero padding feature for signals and images<br>• ROI editor: ROI selection tool now active by default<br>• Signal processing: X-Y mode, abscissa/ordinate find features, full width at y=...<br>• Public API: add `group_id` and `set_current` arguments to add methods"
+msgstr "• Images ANDOR SIF : ajouter la prise en charge des images de fond<br>• Éditeur de tableau : nouvelles fonctionnalités de copie, d'exportation et de collage<br>• Analyse de Fourier : nouvelle fonctionnalité de remplissage nul pour les signaux et les images<br>• Éditeur de ROI : l'outil de sélection de ROI est désormais actif par défaut<br>• Traitement du signal : mode X-Y, fonctionnalités de recherche d'abscisse/ordonnée, largeur complète à y=...<br>• API publique : ajouter les arguments `group_id` et `set_current` aux méthodes d'ajout"
 
 msgid "[0.19](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.19.0)<br>2025/04"
 msgstr ""

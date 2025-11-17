@@ -2,7 +2,7 @@
 
 This document outlines the current and future development plans for DataLab:
 
-* It includes information about [funding sources](#funding), [planned milestones](#planned-milestones), and [future evolution](#future-milestones).
+* It includes information about [funding sources](#funding), and [future evolution](#future-milestones).
 * It also provides a summary of [past milestones](#past-milestones) to give context to the project's evolution.
 
 (funding)=
@@ -18,27 +18,6 @@ From the project’s inception in 2023, the development of DataLab has been fund
 | <a href="https://www.cea.fr/" target="_blank"><img src="../_images/cea.svg" alt="CEA" width="50"/></a> | [CEA](https://www.cea.fr/) - French Alternative Energies and Atomic Energy Commission:<br>• DataLab was initially created for analyzing data from CEA's Laser Megajoule (LMJ) facility<br>• Interfaced with the LMJ control system, DataLab is used to process and visualize signals and images acquired with plasma diagnostics (devices such as cameras, digitizers, spectrometers, etc.)<br>• It is also used for R&D activities around the LMJ facility (e.g., metrology, data analysis, etc.)<br>• CEA is the major investor in DataLab and the main contributor to the project: CEA scientists and engineers are actively involved in the roadmap |
 | <a href="https://codra.net/en/offer/software-engineering/datalab/" target="_blank"><img src="../_images/codra.svg" alt="CODRA" width="50"/></a> | [CODRA](https://codra.net/), a software engineering company and software publisher, has supported DataLab’s open-source journey since its inception:<br>• Open-source project management and communication (social media, website, etc.)<br>• Conferences and events: [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), [Open Source Experience 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), etc.<br>• Documentation: tutorials, videos, and more |
 | <a href="https://nlnet.nl/" target="_blank"><img src="../_images/nlnet.svg" alt="NLnet" width="50"/></a> | [NLnet Foundation](https://nlnet.nl/), as part of the NGI0 Commons Fund backed by the European Commission, funded the [redesign of DataLab’s core architecture](https://nlnet.nl/project/DataLab/) — a major overhaul scheduled for inclusion in the 2.0 release (December 2025):<br>• The goal is to decouple the data model, computation, and I/O from the UI<br>• This will enable DataLab to be used as a library in other software |
-
-(planned-milestones)=
-
-## 🚀 Planned Milestones
-
-> ℹ️ The following tasks are planned for future releases of DataLab. The timeline and specific details may change based on user feedback, funding availability, and other factors.
-
-This section outlines the planned features and enhancements for DataLab, along with their expected release dates.
-
-Those features and enhancements are funded by the following organizations (see [Funding](#funding) for more details):
-
-* [CEA](https://www.cea.fr/): French Alternative Energies and Atomic Energy Commission
-* [CODRA](https://codra.net/en/): software engineering company and software publisher
-* [NLnet](https://nlnet.nl/): NLnet Foundation, as part of the NGI0 Commons Fund
-
-> ⚠️ *Note: The milestones and dates presented below are indicative and subject to change.*
-
-| Milestone | Description                             |
-|-----------|-----------------------------------------|
-| 📅 [2.0](https://github.com/DataLab-Platform/DataLab/milestone/12) 2025/12  | This release introduces the [redesign of DataLab’s core architecture](https://nlnet.nl/project/DataLab/):<br>• Core: decoupling data model, computation & I/O from UI<br>• Validation: full migration of test infra, automated & manual testing<br>• Docs & Training: installation guides, API docs, user manuals, onboarding materials |
-| 📅 [1.0](https://github.com/DataLab-Platform/DataLab/milestone/1)<br>2025/09 | This release consolidates the features introduced in the V0.x series, and also integrates:<br>• Common: Fourier tools, noise generation, multi-file saving, ...<br>• Image: background subtraction, local smoothing , filtering, sub-image extraction, resampling, ...<br>• Signal: new formats (.SIG, .IMA), signal generators, curve fitting, advanced filtering, ... |
 
 (future-milestones)=
 
@@ -197,17 +176,20 @@ The task is tracked in [Issue #26](https://github.com/DataLab-Platform/DataLab/i
 
 ## 🏆 Past Milestones
 
-From version 0.9 to 0.19, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images.
+From version 0.9 to 1.0, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images.
 
 Those enhancements have been made possible thanks to the support of the following organizations (see [Funding](#funding) for more details):
 
 * [CEA](https://www.cea.fr/): French Alternative Energies and Atomic Energy Commission
 * [CODRA](https://codra.net/en/): software engineering company and software publisher
+* [NLnet](https://nlnet.nl/): NLnet Foundation, as part of the NGI0 Commons Fund
 
 The following table summarizes the major past milestones of DataLab, including the release dates and a brief description of the features or enhancements introduced in each version.
 
 | Milestone | Description                                                                 |
 |-----------|-----------------------------------------------------------------------------|
+| [1.0](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.0.0)<br>2025/11 | • Interactive object editing: modify creation/processing parameters and recompute objects<br>• New object creation: parametric signal/image generators, Poisson noise, complex-valued objects<br>• Enhanced processing: pulse features, ideal filters, 2D resampling, convolution, projections<br>• ROI & annotations: copy/paste, import/export, grid creation, inverse ROI logic<br>• Visualization: merged result labels, datetime support, performance optimizations<br>• File formats: FT-Lab (.sig, .ima), coordinated text files, improved HDF5 support<br>• Non-uniform coordinates and polynomial calibration<br>• Public API enhancements for programmability |
+| [0.20](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.20.0)<br>2025/04 | • ANDOR SIF images: add support for background images<br>• Array editor: new copy all, export, and paste features<br>• Fourier analysis: new zero padding feature for signals and images<br>• ROI editor: ROI selection tool now active by default<br>• Signal processing: X-Y mode, abscissa/ordinate find features, full width at y=...<br>• Public API: add `group_id` and `set_current` arguments to add methods |
 | [0.19](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.19.0)<br>2025/04 | • Open all signals or images from a folder (recursively)<br>• ROI editor: add options to create ROIs from coordinates |
 | [0.18](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.18.0)<br>2024/11 | • New pairwise operand mode (the operation is done on each pair of signals/images)<br>• New polygonal ROI feature<br>• Support Windows 7 SP1 to Windows 11 with a single installer |
 | [0.17](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.17.0)<br>2024/08 | • Introduce ROI support across all processing features<br>• Add arithmetic operations on signals and images<br>• New Ubuntu package for native installation on Linux<br>• New Conda package for all platforms (Windows, Linux, MacOS) |
