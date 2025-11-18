@@ -76,7 +76,7 @@ Watch the Full Presentation
 
    <div style="max-width: 800px; margin: 2em auto;">
    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-   <iframe src="https://www.youtube.com/embed/lBEu-DeHyz0"
+   <iframe src="https://www.youtube.com/embed/yn1bR-BVfn8"
    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
    frameborder="0" allowfullscreen></iframe>
    </div>
@@ -85,7 +85,7 @@ Watch the Full Presentation
 Resources
 ---------
 
-- `Video recording on YouTube <https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK>`_
+- `Video recording on YouTube <https://www.youtube.com/watch?v=yn1bR-BVfn8&list=PLGVZCDnMOq0pKya8gksd00ennKuyoH7v7>`_
 - `PyData Paris 2024 conference website <https://pydata.org/paris2024/>`_
 
 Key Takeaways

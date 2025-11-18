@@ -12,7 +12,7 @@ Conference Presentations
 
 Since its public release, DataLab has been introduced at several prestigious conferences in the scientific Python and open-source ecosystems:
 
-.. grid:: 1 1 2 3
+.. grid:: 1 1 2 2
     :gutter: 2
 
     .. grid-item-card:: 🇺🇸 SciPy 2024

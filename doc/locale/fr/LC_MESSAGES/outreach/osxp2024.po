@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-15 09:16+0200\n"
+"POT-Creation-Date: 2025-11-18 10:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -97,11 +97,11 @@ msgstr "**Diversité du financement**"
 msgid "Showcasing multiple funding sources (CEA, CODRA, NLnet/European Commission) as a model for sustainable open-source development."
 msgstr "Mise en avant de plusieurs sources de financement (CEA, CODRA, NLnet/Commission européenne) comme modèle de développement open-source durable."
 
+msgid "Watch the Full Presentation"
+msgstr "Regardez la présentation complète"
+
 msgid "Resources"
 msgstr "Ressources"
-
-msgid "`Conference talk page <https://pretalx.com/pydata-paris-2024/talk/WTDVCC/>`_"
-msgstr "`Page de la conférence <https://pretalx.com/pydata-paris-2024/talk/WTDVCC/>`_"
 
 msgid "`Open Source Experience website <https://www.opensource-experience.com/>`_"
 msgstr "`Site Web de l'Open Source Experience <https://www.opensource-experience.com/>`_"

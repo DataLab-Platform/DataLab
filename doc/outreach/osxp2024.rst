@@ -44,10 +44,22 @@ The presentation at OSXP 2024 emphasized:
 **Funding Diversity**
     Showcasing multiple funding sources (CEA, CODRA, NLnet/European Commission) as a model for sustainable open-source development.
 
+Watch the Full Presentation
+---------------------------
+
+.. raw:: html
+
+   <div style="max-width: 800px; margin: 2em auto;">
+   <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+   <iframe src="https://www.youtube.com/embed/lBEu-DeHyz0"
+   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+   frameborder="0" allowfullscreen></iframe>
+   </div>
+   </div>
+
 Resources
 ---------
 
-- `Conference talk page <https://pretalx.com/pydata-paris-2024/talk/WTDVCC/>`_
 - `Open Source Experience website <https://www.opensource-experience.com/>`_
 
 Audience and Engagement
