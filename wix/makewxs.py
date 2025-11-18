@@ -74,6 +74,14 @@ def make_wxs(product_name: str, version: str) -> None:
     # User-friendly folder name: "DataLab 1.0"
     display_folder_name = f"{product_name} {major_minor}"
 
+    # Generate a deterministic ProductCode based on MAJOR version only
+    # All versions with the same major version (e.g., 1.0.0, 1.0.1, 1.1.0) will have
+    # the same ProductCode, preventing installation of multiple v1.x versions.
+    # Different major versions (v1.x vs v2.x) will have different ProductCodes,
+    # allowing them to be installed side-by-side.
+    upgrade_code = uuid.UUID("e7a3f5c1-9d84-4b2a-a6f1-2c5d8e9b7a31")
+    product_code = str(uuid.uuid5(upgrade_code, f"v{major_version}"))
+
     wix_dir = osp.abspath(osp.dirname(__file__))
     proj_dir = osp.join(wix_dir, os.pardir)
     dist_dir = osp.join(proj_dir, "dist", product_name)
@@ -162,6 +170,7 @@ def make_wxs(product_name: str, version: str) -> None:
     wxs = insert_text_after(dir_str, "<!-- Automatically inserted directories -->", wxs)
     wxs = insert_text_after(comp_str, "<!-- Automatically inserted components -->", wxs)
     wxs = wxs.replace("{version}", version_msi)
+    wxs = wxs.replace("{product_code}", product_code)
     wxs = wxs.replace("{install_folder_name}", install_folder_name)
     wxs = wxs.replace("{display_folder_name}", display_folder_name)
     with open(output_path, "w", encoding="utf-8") as fd:
