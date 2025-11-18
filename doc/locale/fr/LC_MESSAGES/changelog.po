@@ -2837,11 +2837,11 @@ msgstr "Ceci est maintenant corrigé (voir [Issue #11](https://github.com/DataLa
 msgid "Fixed [Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`"
 msgstr "Correction de l'[Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) - Enregistrer/Réouvrir le projet HDF5 sans nettoyage entraîne une `ValueError`"
 
-msgid "Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install datalab` error - 2. Missing menus:"
-msgstr "Correction de l'[Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS : 1. Erreur `pip install datalab` - 2. Menus manquants :"
+msgid "Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. Missing menus:"
+msgstr "Correction de l'[Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS : 1. Erreur `pip install cdl` - 2. Menus manquants :"
 
-msgid "Part 1: `pip install datalab` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard"
-msgstr "Partie 1 : l'erreur `pip install datalab` sur MacOS était en fait un problème de **PlotPy** (voir [ce problème]"
+msgid "Part 1: `pip install cdl` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard"
+msgstr "Partie 1 : l'erreur `pip install cdl` sur MacOS était en fait un problème de **PlotPy** (voir [ce problème]"
 
 msgid "Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding dynamic menus"
 msgstr "Partie 2 : les menus manquants sur MacOS étaient dus à un bogue PyQt/MacOS concernant les menus dynamiques"

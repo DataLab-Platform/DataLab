@@ -1232,8 +1232,8 @@ NumPy 2.0 support has been added with this release.
   * The "Show graphical object titles" and "Auto-refresh" actions were only working on the active signal/image panel, and not on all panels.
   * This is now fixed (see [Issue #11](https://github.com/DataLab-Platform/DataLab/issues/11) - "Show graphical object titles" and "Auto-refresh" actions were working only on current signal/image panel)
 * Fixed [Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`
-* Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install datalab` error - 2. Missing menus:
-  * Part 1: `pip install datalab` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard
+* Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. Missing menus:
+  * Part 1: `pip install cdl` error on MacOS was actually an issue from **PlotPy** (see [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard
   * Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding dynamic menus
 * HDF5 file format: when importing an HDF5 dataset as a signal or an image, the dataset attributes were systematically copied to signal/image metadata: we now only copy the attributes which match standard data types (integers, floats, strings) to avoid errors when serializing/deserializing the signal/image object
 * Installation/configuration viewer: improved readability (removed syntax highlighting)
