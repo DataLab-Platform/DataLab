@@ -2,9 +2,11 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
-## DataLab Version 1.0.0 ##
+## DataLab Version 1.0.1 ##
 
 This major release represents a significant milestone for DataLab with numerous enhancements across all areas. The changes are organized by category for easier navigation.
+
+> **Note**: Version 1.0.1 is a patch release that addresses Windows installer limitations in version 1.0.0, where it was not possible to install DataLab V1.0 alongside earlier major versions (V0.20 and earlier) despite the intended coexistence support. This release contains no new features or functional changes.
 
 ### 🎨 User Interface & Workflow ###
 
