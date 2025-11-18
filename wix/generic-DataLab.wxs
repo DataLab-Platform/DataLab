@@ -46,8 +46,9 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="ProductComponents">
-            <Component Id="PC_Files" Directory="INSTALLFOLDER">
+            <Component Id="PC_Files" Directory="INSTALLFOLDER" Guid="a1b2c3d4-e5f6-4789-a012-3456789abcde">
                 <File Source=".\dist\DataLab\DataLab.exe" KeyPath="yes" />
+                <File Source=".\dist\DataLab\manifest.json" />
             </Component>
             <!-- Automatically inserted components -->
             <Component Id="PC_Shortcuts" Directory="ApplicationProgramsFolder" Guid="858c3c36-978e-4edb-a2c3-cf5c91588bcf">
