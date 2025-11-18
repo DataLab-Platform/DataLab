@@ -64,6 +64,16 @@ def make_wxs(product_name: str, version: str) -> None:
     version_msi = re.sub(r"\.dev\d+$", ".0", version_msi)
     version_msi = re.sub(r"(rc|a|b)\d+$", ".0", version_msi)
 
+    # Generate version-based names for folders
+    # Extract major.minor version (e.g., "1.0" from "1.0.0")
+    major_minor = ".".join(version_msi.split(".")[:2])
+    # Extract major version for technical folder name (e.g., "1" from "1.0.0")
+    major_version = version_msi.split(".")[0]
+    # Technical folder name: "DataLab_v1"
+    install_folder_name = f"{product_name}_v{major_version}"
+    # User-friendly folder name: "DataLab 1.0"
+    display_folder_name = f"{product_name} {major_minor}"
+
     wix_dir = osp.abspath(osp.dirname(__file__))
     proj_dir = osp.join(wix_dir, os.pardir)
     dist_dir = osp.join(proj_dir, "dist", product_name)
@@ -152,6 +162,8 @@ def make_wxs(product_name: str, version: str) -> None:
     wxs = insert_text_after(dir_str, "<!-- Automatically inserted directories -->", wxs)
     wxs = insert_text_after(comp_str, "<!-- Automatically inserted components -->", wxs)
     wxs = wxs.replace("{version}", version_msi)
+    wxs = wxs.replace("{install_folder_name}", install_folder_name)
+    wxs = wxs.replace("{display_folder_name}", display_folder_name)
     with open(output_path, "w", encoding="utf-8") as fd:
         fd.write(wxs)
     print("Successfully created:", output_path)

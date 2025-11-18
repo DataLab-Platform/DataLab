@@ -1,8 +1,16 @@
 ﻿<!-- Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file. -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-    <Package Name="DataLab" ProductCode="4ad79deb-5cf7-481c-a242-28c66b8a53ef" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="538c2966-2bcd-4bd4-b20a-9acb161a1614" InstallerVersion="200" Scope="perUserOrMachine">
-        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <Package Name="DataLab" ProductCode="b9f2e8d4-7c3a-4f1b-9e6d-5a8c2f1b4e9a" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="e7a3f5c1-9d84-4b2a-a6f1-2c5d8e9b7a31" InstallerVersion="200" Scope="perUserOrMachine">
+        <Upgrade Id="e7a3f5c1-9d84-4b2a-a6f1-2c5d8e9b7a31">
+            <UpgradeVersion Minimum="1.0.0" Maximum="{version}" IncludeMinimum="yes" IncludeMaximum="no" OnlyDetect="no" Property="PREVIOUSVERSIONSINSTALLED" />
+            <UpgradeVersion Minimum="{version}" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
+        </Upgrade>
+        <CustomAction Id="PreventDowngrade" Error="A newer version of [ProductName] is already installed." />
+        <InstallExecuteSequence>
+            <Custom Action="PreventDowngrade" After="FindRelatedProducts" Condition="NEWERVERSIONDETECTED" />
+            <RemoveExistingProducts After="InstallInitialize" />
+        </InstallExecuteSequence>
         <Icon Id="DataLab.exe" SourceFile=".\resources\DataLab.ico" />
         <Icon Id="DataLabResetIcon" SourceFile=".\resources\DataLab-Reset.ico" />
         <WixVariable Id="WixUILicenseRtf" Value=".\wix\license.rtf" />
@@ -28,12 +36,12 @@
             <Custom Action="PreviousVersionFoundMsg" After="CostInitialize" Condition="NSIS_UNINSTALL_STRING" />
         </InstallUISequence>
         <StandardDirectory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLFOLDER" Name="DataLab">
+            <Directory Id="INSTALLFOLDER" Name="{install_folder_name}">
                 <!-- Automatically inserted directories -->
             </Directory>
         </StandardDirectory>
         <StandardDirectory Id="ProgramMenuFolder">
-            <Directory Id="ApplicationProgramsFolder" Name="DataLab" />
+            <Directory Id="ApplicationProgramsFolder" Name="{display_folder_name}" />
         </StandardDirectory>
     </Fragment>
     <Fragment>
@@ -43,11 +51,11 @@
             </Component>
             <!-- Automatically inserted components -->
             <Component Id="PC_Shortcuts" Directory="ApplicationProgramsFolder" Guid="858c3c36-978e-4edb-a2c3-cf5c91588bcf">
-                <Shortcut Id="ApplicationStartMenuShortcut" Name="DataLab" Description="DataLab" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" />
-                <Shortcut Id="ResetApplicationStartMenuShortcut" Name="Reset DataLab" Description="Resets DataLab configuration" Target="[INSTALLFOLDER]\DataLab.exe" Arguments="--reset" WorkingDirectory="INSTALLFOLDER" Icon="DataLabResetIcon" />
-                <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" />
+                <Shortcut Id="ApplicationStartMenuShortcut" Name="{display_folder_name}" Description="{display_folder_name}" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" />
+                <Shortcut Id="ResetApplicationStartMenuShortcut" Name="Reset {display_folder_name}" Description="Resets {display_folder_name} configuration" Target="[INSTALLFOLDER]\DataLab.exe" Arguments="--reset" WorkingDirectory="INSTALLFOLDER" Icon="DataLabResetIcon" />
+                <Shortcut Id="UninstallProductShortcut" Name="Uninstall {display_folder_name}" Description="Uninstalls {display_folder_name}" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" />
                 <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
-                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\DataLab" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\{install_folder_name}" Name="installed" Type="integer" Value="1" KeyPath="yes" />
             </Component>
         </ComponentGroup>
     </Fragment>
