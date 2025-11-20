@@ -164,6 +164,12 @@ distribution for other purposes than running DataLab, and you may also extend it
 with additional packages. On the downside, it is also *much bigger* than the
 all-in-one installer because it includes a full Python distribution.
 
+.. note::
+
+    DataLab-WinPython includes `Spyder <https://www.spyder-ide.org/>`_,
+    a powerful IDE for scientific programming in Python,
+    as well as `Jupyter Notebook <https://jupyter.org/>`_ for interactive computing.
+
 .. figure:: /images/shots/wpcp.png
 
     DataLab-WinPython Control Panel
