@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-16 14:44+0100\n"
+"POT-Creation-Date: 2025-11-20 11:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,6 +56,9 @@ msgstr "Cette section fournit des informations sur l'installation de DataLab sur
 msgid "For more details on how to execute DataLab and its command-line options, see :ref:`ref-to-command-line-features`."
 msgstr "Pour plus de détails sur l'exécution de DataLab et ses options en ligne de commande, voir :ref:`ref-to-command-line-features`."
 
+msgid "For installation on systems without internet access, see the :ref:`offline installation guide <installation_offline>`."
+msgstr "Pour l'installation sur des systèmes sans accès à Internet, voir le :ref:`guide d'installation hors ligne <installation_offline>`."
+
 msgid "How to install"
 msgstr "Modes d'installation"
 
@@ -95,8 +98,8 @@ msgstr "Pour installer le paquet ``datalab`` depuis le canal ``conda-forge`` (ht
 msgid "Package manager ``pip``"
 msgstr "Gestionnaire de paquets ``pip``"
 
-msgid "DataLab's package ``datalab`` is available on the Python Package Index (PyPI) on the following URL: https://pypi.python.org/pypi/datalab-platform."
-msgstr "Le paquet ``datalab`` de DataLab est disponible sur l'index des paquets Python (PyPI) à l'adresse suivante : https://pypi.python.org/pypi/datalab-platform."
+msgid "DataLab's package ``datalab-platform`` is available on the Python Package Index (PyPI) on the following URL: https://pypi.python.org/pypi/datalab-platform."
+msgstr "Le paquet ``datalab-platform`` de DataLab est disponible sur le Python Package Index (PyPI) à l'adresse suivante : https://pypi.python.org/pypi/datalab-platform."
 
 msgid "Installing DataLab from PyPI with Qt is as simple as running this command (you may need to use ``pip3`` instead of ``pip`` on some systems):"
 msgstr "L'installation de DataLab depuis PyPI avec Qt est aussi simple que d'exécuter cette commande (vous devrez peut-être utiliser ``pip3`` au lieu de ``pip`` sur certains systèmes) :"
@@ -409,4 +412,3 @@ msgstr "Plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-

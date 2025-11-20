@@ -61,6 +61,12 @@ the following libraries:
 
             How to install DataLab on your computer
 
+        .. grid-item-card:: :octicon:`download;1em;sd-text-info`  Offline Installation
+            :link: installation_offline
+            :link-type: doc
+
+            Install DataLab without internet access
+
         .. grid-item-card:: :octicon:`gift;1em;sd-text-info`  Introduction
             :link: introduction
             :link-type: doc
@@ -84,6 +90,7 @@ the following libraries:
    :caption: Contents:
 
    installation
+   installation_offline
    introduction
    keyfeatures
    tutorials/index

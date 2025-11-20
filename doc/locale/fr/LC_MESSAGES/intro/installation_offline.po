@@ -1,0 +1,361 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-20 11:42+0100\n"
+"PO-Revision-Date: 2025-11-20 12:00+0100\n"
+"Last-Translator: Pierre Raybaut <pierre.raybaut@gmail.com>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Offline installation guide for DataLab on systems without internet access"
+msgstr "Guide d'installation hors ligne de DataLab sur des systèmes sans accès Internet"
+
+msgid "DataLab, offline, installation, Python, pip, wheel, no internet, Windows, Linux, macOS"
+msgstr "DataLab, hors ligne, installation, Python, pip, wheel, sans internet, Windows, Linux, macOS"
+
+msgid "Offline Installation"
+msgstr "Installation hors ligne"
+
+msgid "This guide explains how to install DataLab on a system **without internet access**."
+msgstr "Ce guide explique comment installer DataLab sur un système **sans accès Internet**."
+
+msgid "This page focuses on **offline installation using pip** (Python package manager). For other offline installation methods, see the :ref:`installation_offline_alternatives` section below."
+msgstr "Cette page se concentre sur **l'installation hors ligne avec pip** (gestionnaire de paquets Python). Pour les autres méthodes d'installation hors ligne, consultez la section :ref:`installation_offline_alternatives` ci-dessous."
+
+msgid "Offline installation via pip"
+msgstr "Installation hors ligne via pip"
+
+msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`"
+msgstr ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`"
+
+msgid "This method works on **any operating system** with **Python 3.9 to 3.14**. It assumes you have an online machine available to download packages, and a separate offline machine where DataLab will be installed."
+msgstr "Cette méthode fonctionne sur **tout système d'exploitation** avec **Python 3.9 à 3.14**. Elle suppose que vous disposez d'une machine en ligne pour télécharger les paquets, et d'une machine hors ligne distincte où DataLab sera installé."
+
+msgid "Requirements"
+msgstr "Prérequis"
+
+msgid "Offline machine"
+msgstr "Machine hors ligne"
+
+msgid "GNU/Linux, Windows, or macOS"
+msgstr "GNU/Linux, Windows ou macOS"
+
+msgid "Python 3.9 to 3.14 installed with the **same major version** as the online machine"
+msgstr "Python 3.9 à 3.14 installé avec la **même version majeure** que la machine en ligne"
+
+msgid "No assumptions regarding installed packages"
+msgstr "Aucune hypothèse concernant les paquets installés"
+
+msgid "**Version compatibility is critical:**"
+msgstr "**La compatibilité des versions est critique :**"
+
+msgid "✅ **Allowed:** Python 3.10.2 ↔ Python 3.10.11 (same major version)"
+msgstr "✅ **Autorisé :** Python 3.10.2 ↔ Python 3.10.11 (même version majeure)"
+
+msgid "❌ **Not allowed:** Python 3.10.x ↔ Python 3.11.x (different major versions)"
+msgstr "❌ **Non autorisé :** Python 3.10.x ↔ Python 3.11.x (versions majeures différentes)"
+
+msgid "SciPy, NumPy, and scikit-image are highly dependent on the Python major version. Both machines must use the same major Python version for reliable offline installation."
+msgstr "SciPy, NumPy et scikit-image dépendent fortement de la version majeure de Python. Les deux machines doivent utiliser la même version majeure de Python pour une installation hors ligne fiable."
+
+msgid "To check your Python version, run:"
+msgstr "Pour vérifier votre version de Python, exécutez :"
+
+msgid "Online machine"
+msgstr "Machine en ligne"
+
+msgid "Windows, Linux, or macOS"
+msgstr "Windows, Linux ou macOS"
+
+msgid "Python with the **same major version** as the offline machine"
+msgstr "Python avec la **même version majeure** que la machine hors ligne"
+
+msgid "``pip`` installed"
+msgstr "``pip`` installé"
+
+msgid "Preparing packages (online machine)"
+msgstr "Préparation des paquets (machine en ligne)"
+
+msgid "Download all required **Wheel packages** for offline installation."
+msgstr "Téléchargez tous les **paquets Wheel** nécessaires pour l'installation hors ligne."
+
+msgid "Create a folder for packages"
+msgstr "Créer un dossier pour les paquets"
+
+msgid "Windows"
+msgstr "Windows"
+
+msgid "GNU/Linux / macOS"
+msgstr "GNU/Linux / macOS"
+
+msgid "Download DataLab and dependencies"
+msgstr "Télécharger DataLab et ses dépendances"
+
+msgid "This command downloads:"
+msgstr "Cette commande télécharge :"
+
+msgid "``datalab-platform``"
+msgstr "``datalab-platform``"
+
+msgid "``sigima``"
+msgstr "``sigima``"
+
+msgid "``plotpy``"
+msgstr "``plotpy``"
+
+msgid "``guidata``"
+msgstr "``guidata``"
+
+msgid "``pythonqwt``"
+msgstr "``pythonqwt``"
+
+msgid "``numpy``, ``scipy``, ``scikit-image``, and other dependencies"
+msgstr "``numpy``, ``scipy``, ``scikit-image`` et d'autres dépendances"
+
+msgid "Expected folder structure"
+msgstr "Structure de dossier attendue"
+
+msgid "After downloading, your folder should contain files similar to:"
+msgstr "Après le téléchargement, votre dossier devrait contenir des fichiers similaires à :"
+
+msgid "The ``[platform]`` suffix in the wheel filenames will vary depending on your system: ``win_amd64`` (Windows), ``manylinux`` (Linux), ``macosx`` (macOS)."
+msgstr "Le suffixe ``[platform]`` dans les noms de fichiers wheel variera en fonction de votre système : ``win_amd64`` (Windows), ``manylinux`` (Linux), ``macosx`` (macOS)."
+
+msgid "Transfer to offline machine"
+msgstr "Transfert vers la machine hors ligne"
+
+msgid "Transfer the ``datalab-offline`` folder to your offline machine using:"
+msgstr "Transférez le dossier ``datalab-offline`` vers votre machine hors ligne en utilisant :"
+
+msgid "USB drive"
+msgstr "Clé USB"
+
+msgid "Network share"
+msgstr "Partage réseau"
+
+msgid "Any other approved method in your organization"
+msgstr "Toute autre méthode approuvée dans votre organisation"
+
+msgid "Offline installation"
+msgstr "Installation hors ligne"
+
+msgid "On the offline machine, navigate to the folder and install DataLab."
+msgstr "Sur la machine hors ligne, naviguez vers le dossier et installez DataLab."
+
+msgid "Navigate to the folder"
+msgstr "Naviguer vers le dossier"
+
+msgid "Install DataLab offline"
+msgstr "Installer DataLab hors ligne"
+
+msgid "The ``--no-index`` option tells pip not to connect to the internet, and ``--find-links .`` tells pip to look for packages in the current directory."
+msgstr "L'option ``--no-index`` indique à pip de ne pas se connecter à Internet, et ``--find-links .`` indique à pip de rechercher les paquets dans le répertoire courant."
+
+msgid "Verification"
+msgstr "Vérification"
+
+msgid "To verify that DataLab is installed correctly, run:"
+msgstr "Pour vérifier que DataLab est correctement installé, exécutez :"
+
+msgid "This should launch the DataLab application."
+msgstr "Cela devrait lancer l'application DataLab."
+
+msgid "Optional: Virtual environment"
+msgstr "Optionnel : Environnement virtuel"
+
+msgid "It is recommended to install DataLab in a virtual environment to avoid conflicts with other Python packages."
+msgstr "Il est recommandé d'installer DataLab dans un environnement virtuel pour éviter les conflits avec d'autres paquets Python."
+
+msgid "Create and activate a virtual environment"
+msgstr "Créer et activer un environnement virtuel"
+
+msgid "Install DataLab in the virtual environment"
+msgstr "Installer DataLab dans l'environnement virtuel"
+
+msgid "Launch DataLab"
+msgstr "Lancer DataLab"
+
+msgid "WinPython for offline usage"
+msgstr "WinPython pour une utilisation hors ligne"
+
+msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Windows`"
+msgstr ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Windows`"
+
+msgid "`WinPython <https://winpython.github.io/>`_ is particularly well-suited for offline installations as it provides a portable, self-contained Python environment."
+msgstr "`WinPython <https://winpython.github.io/>`_ est particulièrement adapté aux installations hors ligne car il fournit un environnement Python portable et autonome."
+
+msgid "Prepare on online machine"
+msgstr "Préparation sur la machine en ligne"
+
+msgid "Download WinPython with the **same major Python version** as your target system"
+msgstr "Téléchargez WinPython avec la **même version majeure de Python** que votre système cible"
+
+msgid "Install WinPython"
+msgstr "Installez WinPython"
+
+msgid "Open the *WinPython Command Prompt*"
+msgstr "Ouvrez l'*invite de commandes WinPython*"
+
+msgid "Download packages:"
+msgstr "Téléchargez les paquets :"
+
+msgid "Install on offline machine"
+msgstr "Installation sur la machine hors ligne"
+
+msgid "Transfer WinPython and the ``datalab-offline`` folder to the offline machine"
+msgstr "Transférez WinPython et le dossier ``datalab-offline`` vers la machine hors ligne"
+
+msgid "Install DataLab:"
+msgstr "Installez DataLab :"
+
+msgid "Benefits of WinPython"
+msgstr "Avantages de WinPython"
+
+msgid "**Portable:** No installation required, can run from USB drive"
+msgstr "**Portable :** Aucune installation requise, peut fonctionner depuis une clé USB"
+
+msgid "**Self-contained:** All dependencies included"
+msgstr "**Autonome :** Toutes les dépendances incluses"
+
+msgid "**Ideal for restricted environments:** No admin rights needed"
+msgstr "**Idéal pour les environnements restreints :** Aucun droit administrateur nécessaire"
+
+msgid "**Multiple versions:** Can have multiple Python versions side by side"
+msgstr "**Versions multiples :** Peut avoir plusieurs versions de Python côte à côte"
+
+msgid "Quick summary"
+msgstr "Résumé rapide"
+
+msgid "The complete workflow in four steps:"
+msgstr "Le flux de travail complet en quatre étapes :"
+
+msgid "**On online machine:** Download packages"
+msgstr "**Sur la machine en ligne :** Télécharger les paquets"
+
+msgid "**Transfer:** Copy the ``datalab-offline`` folder to the offline machine"
+msgstr "**Transfert :** Copier le dossier ``datalab-offline`` vers la machine hors ligne"
+
+msgid "**On offline machine:** Install offline"
+msgstr "**Sur la machine hors ligne :** Installer hors ligne"
+
+msgid "**Verify:** Launch DataLab"
+msgstr "**Vérification :** Lancer DataLab"
+
+msgid "Other offline installation methods"
+msgstr "Autres méthodes d'installation hors ligne"
+
+msgid "While this guide focuses on pip-based offline installation, DataLab can also be installed offline using other methods:"
+msgstr "Bien que ce guide se concentre sur l'installation hors ligne avec pip, DataLab peut également être installé hors ligne en utilisant d'autres méthodes :"
+
+msgid "Stand-alone installer (Windows)"
+msgstr "Installateur autonome (Windows)"
+
+msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Windows` **Recommended for offline installation**"
+msgstr ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Windows` **Recommandé pour l'installation hors ligne**"
+
+msgid "The **all-in-one installer** is the simplest way to install DataLab offline on Windows. It does not require any Python distribution or internet connection on the target machine."
+msgstr "L'**installateur tout-en-un** est le moyen le plus simple d'installer DataLab hors ligne sur Windows. Il ne nécessite aucune distribution Python ni connexion Internet sur la machine cible."
+
+msgid "**Advantages:**"
+msgstr "**Avantages :**"
+
+msgid "No Python installation required"
+msgstr "Aucune installation Python requise"
+
+msgid "Single executable file"
+msgstr "Fichier exécutable unique"
+
+msgid "Self-contained with all dependencies"
+msgstr "Autonome avec toutes les dépendances"
+
+msgid "No internet connection needed during installation"
+msgstr "Aucune connexion Internet nécessaire pendant l'installation"
+
+msgid "Works on air-gapped systems"
+msgstr "Fonctionne sur des systèmes isolés"
+
+msgid "**How to use:**"
+msgstr "**Comment l'utiliser :**"
+
+msgid "On a machine with internet access, download the installer from the `DataLab Releases <https://github.com/DataLab-Platform/DataLab/releases>`_ page"
+msgstr "Sur une machine avec accès Internet, téléchargez l'installateur depuis la page `DataLab Releases <https://github.com/DataLab-Platform/DataLab/releases>`_"
+
+msgid "Transfer the installer executable to the offline machine (USB drive, network share, etc.)"
+msgstr "Transférez l'exécutable de l'installateur vers la machine hors ligne (clé USB, partage réseau, etc.)"
+
+msgid "Run the installer on the offline machine"
+msgstr "Exécutez l'installateur sur la machine hors ligne"
+
+msgid "For more information, see :ref:`install_aioinstaller`."
+msgstr "Pour plus d'informations, consultez :ref:`install_aioinstaller`."
+
+msgid "WinPython distribution (Windows)"
+msgstr "Distribution WinPython (Windows)"
+
+msgid "`DataLab-WinPython <https://github.com/DataLab-Platform/DataLab-WinPython>`_ is a portable Python distribution that includes DataLab and all its dependencies."
+msgstr "`DataLab-WinPython <https://github.com/DataLab-Platform/DataLab-WinPython>`_ est une distribution Python portable qui inclut DataLab et toutes ses dépendances."
+
+msgid "Portable (can run from USB drive)"
+msgstr "Portable (peut fonctionner depuis une clé USB)"
+
+msgid "No installation required"
+msgstr "Aucune installation requise"
+
+msgid "Includes full Python environment"
+msgstr "Inclut un environnement Python complet"
+
+msgid "Can be extended with additional packages"
+msgstr "Peut être étendu avec des paquets supplémentaires"
+
+msgid "Ideal for restricted environments"
+msgstr "Idéal pour les environnements restreints"
+
+msgid "Download DataLab-WinPython from the `releases page <https://github.com/DataLab-Platform/DataLab-WinPython/releases>`_"
+msgstr "Téléchargez DataLab-WinPython depuis la `page des versions <https://github.com/DataLab-Platform/DataLab-WinPython/releases>`_"
+
+msgid "Transfer to the offline machine"
+msgstr "Transférez vers la machine hors ligne"
+
+msgid "Extract and run"
+msgstr "Extrayez et exécutez"
+
+msgid "For more information, see :ref:`install_winpython`."
+msgstr "Pour plus d'informations, consultez :ref:`install_winpython`."
+
+msgid "Conda offline installation"
+msgstr "Installation hors ligne avec Conda"
+
+msgid "Conda packages can also be installed offline using a similar approach to pip:"
+msgstr "Les paquets Conda peuvent également être installés hors ligne en utilisant une approche similaire à pip :"
+
+msgid "**On online machine:** Download the conda package and dependencies:"
+msgstr "**Sur la machine en ligne :** Téléchargez le paquet conda et ses dépendances :"
+
+msgid "Or use ``conda list --explicit`` to create a specification file."
+msgstr "Ou utilisez ``conda list --explicit`` pour créer un fichier de spécification."
+
+msgid "**Transfer** the downloaded packages to the offline machine"
+msgstr "**Transférez** les paquets téléchargés vers la machine hors ligne"
+
+msgid "**On offline machine:** Install from the local packages:"
+msgstr "**Sur la machine hors ligne :** Installez à partir des paquets locaux :"
+
+msgid "For more information about offline conda installation, see the `Conda documentation <https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html#installing-packages-offline>`_."
+msgstr "Pour plus d'informations sur l'installation hors ligne avec conda, consultez la `documentation Conda <https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html#installing-packages-offline>`_."
+
+msgid "For standard online installation, see :ref:`install_conda`."
+msgstr "Pour l'installation en ligne standard, consultez :ref:`install_conda`."
+
+msgid "For standard online installation methods, see :ref:`installation`."
+msgstr "Pour les méthodes d'installation en ligne standard, consultez :ref:`installation`."

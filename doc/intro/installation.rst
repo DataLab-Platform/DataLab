@@ -37,6 +37,9 @@ or by clicking on the DataLab shortcut in the Start menu (on Windows).
     For more details on how to execute DataLab and its command-line options,
     see :ref:`ref-to-command-line-features`.
 
+    For installation on systems without internet access, see the
+    :ref:`offline installation guide <installation_offline>`.
+
 How to install
 --------------
 
