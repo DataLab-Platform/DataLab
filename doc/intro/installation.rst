@@ -185,7 +185,7 @@ install DataLab on an existing Python distribution:
 
 .. code-block:: console
 
-    $ pip install --upgrade DataLab-0.11.1-py2.py3-none-any.whl
+    $ pip install --upgrade DataLab-1.0.1-py2.py3-none-any.whl
 
 .. _install_source:
 
@@ -198,7 +198,7 @@ Installing DataLab directly from the source package may be done using ``pip``:
 
 .. code-block:: console
 
-    $ pip install --upgrade datalab-0.11.1.tar.gz
+    $ pip install --upgrade datalab-1.0.1.tar.gz
 
 Or, if you prefer, you can install it manually by running the following command
 from the root directory of the source package:
@@ -215,7 +215,7 @@ by running the following command from the root directory of the source package
 
     $ pip install build wheel  # Install build and wheel packages (if needed)
     $ python -m build  # Build the wheel package
-    $ pip install --upgrade dist/datalab-0.11.1-py2.py3-none-any.whl  # Install the wheel package
+    $ pip install --upgrade dist/datalab-1.0.1-py2.py3-none-any.whl  # Install the wheel package
 
 .. _install_development:
 
