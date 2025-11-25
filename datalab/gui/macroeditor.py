@@ -93,6 +93,7 @@ print("All done!")
         self.set_code(self.MACRO_SAMPLE)
         self.editor.modificationChanged.connect(self.modification_changed)
         self.process = None
+        self.__last_exit_code = None
 
     @property
     def title(self) -> str:
@@ -259,7 +260,14 @@ print("All done!")
         self.process = QC.QProcess()
         code = self.get_code().replace('"', "'")
         datalab_path = osp.abspath(osp.join(osp.dirname(datalab.__file__), os.pardir))
-        code = f"import sys; sys.path.append(r'{datalab_path}'){os.linesep}{code}"
+        # Reconfigure stdout/stderr to use UTF-8 encoding to avoid UnicodeEncodeError
+        # on Windows with locales that don't support all Unicode characters
+        # (e.g., cp1252)
+        code = (
+            f"import sys; sys.path.append(r'{datalab_path}'); "
+            f"sys.stdout.reconfigure(encoding='utf-8'); "
+            f"sys.stderr.reconfigure(encoding='utf-8'){os.linesep}{code}"
+        )
         env = QC.QProcessEnvironment()
         env.insert(execenv.XMLRPCPORT_ENV, str(execenv.xmlrpcport))
         sysenv = env.systemEnvironment()
@@ -305,6 +313,15 @@ print("All done!")
             exit_code: Exit code
             exit_status: Exit status
         """
+        self.__last_exit_code = exit_code
         self.print(_("# <== '%s' macro has finished") % self.title, eol_before=False)
         self.FINISHED.emit()
         self.process = None
+
+    def get_exit_code(self) -> int | None:
+        """Return last exit code of the macro process
+
+        Returns:
+            Last exit code or None if process has not finished yet
+        """
+        return self.__last_exit_code

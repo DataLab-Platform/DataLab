@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-18 16:32+0100\n"
+"POT-Creation-Date: 2025-11-25 14:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -23,6 +23,21 @@ msgstr "Versions"
 
 msgid "See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones."
 msgstr "Voir la page de la [feuille de route](https://datalab-platform.com/fr/contributing/roadmap.html) de DataLab pour les jalons futurs et passés."
+
+msgid "DataLab Version 1.0.2 (unreleased)"
+msgstr "DataLab Version 1.0.2 (non publiée)"
+
+msgid "🛠️ Bug Fixes"
+msgstr "🛠️ Correctifs"
+
+msgid "**Macro execution:**"
+msgstr "**Exécution des macros :**"
+
+msgid "Fixed `UnicodeEncodeError` when executing macros that print Unicode characters (e.g., arrows `→`) on Windows systems with certain locales, e.g. cp1252 (closes [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"
+msgstr "Correction de l'erreur `UnicodeEncodeError` lors de l'exécution de macros qui impriment des caractères Unicode (par exemple, des flèches `→`) sur les systèmes Windows avec certaines locales, par exemple cp1252 (ceci clôture [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"
+
+msgid "The macro subprocess now automatically uses UTF-8 encoding for stdout and stderr, eliminating the need to manually add `sys.stdout.reconfigure(encoding='utf-8')` at the beginning of each macro."
+msgstr "Le sous-processus de la macro utilise désormais automatiquement l'encodage UTF-8 pour stdout et stderr, éliminant ainsi la nécessité d'ajouter manuellement `sys.stdout.reconfigure(encoding='utf-8')` au début de chaque macro."
 
 msgid "DataLab Version 1.0.1"
 msgstr "DataLab Version 1.0.1"
@@ -621,9 +636,6 @@ msgstr "`compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, 
 
 msgid "**No backward compatibility maintained** for these internal changes (closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))"
 msgstr "**Aucune compatibilité ascendante n'est maintenue** pour ces modifications internes (ceci clôture [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))"
-
-msgid "🛠️ Bug Fixes"
-msgstr "🛠️ Corrections de bugs :"
 
 msgid "**Performance fixes:**"
 msgstr "**Corrections de performances :**"
