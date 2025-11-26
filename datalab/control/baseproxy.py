@@ -128,6 +128,14 @@ class AbstractDLControl(abc.ABC):
         """Reset all application data"""
 
     @abc.abstractmethod
+    def remove_object(self, force: bool = False) -> None:
+        """Remove current object from current panel.
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
+
+    @abc.abstractmethod
     def toggle_auto_refresh(self, state: bool) -> None:
         """Toggle auto refresh state.
 
@@ -558,6 +566,14 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
     def reset_all(self) -> None:
         """Reset all application data"""
         self._datalab.reset_all()
+
+    def remove_object(self, force: bool = False) -> None:
+        """Remove current object from current panel.
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
+        self._datalab.remove_object(force)
 
     def toggle_auto_refresh(self, state: bool) -> None:
         """Toggle auto refresh state.

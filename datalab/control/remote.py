@@ -81,6 +81,7 @@ class RemoteServer(QC.QThread):
     SIG_TOGGLE_AUTO_REFRESH = QC.Signal(bool)
     SIG_TOGGLE_SHOW_TITLES = QC.Signal(bool)
     SIG_RESET_ALL = QC.Signal()
+    SIG_REMOVE_OBJECT = QC.Signal(bool)
     SIG_SAVE_TO_H5 = QC.Signal(str)
     SIG_OPEN_H5 = QC.Signal(list, bool, bool)
     SIG_IMPORT_H5 = QC.Signal(str, bool)
@@ -111,6 +112,7 @@ class RemoteServer(QC.QThread):
         self.SIG_TOGGLE_AUTO_REFRESH.connect(win.toggle_auto_refresh)
         self.SIG_TOGGLE_SHOW_TITLES.connect(win.toggle_show_titles)
         self.SIG_RESET_ALL.connect(win.reset_all)
+        self.SIG_REMOVE_OBJECT.connect(win.remove_object)
         self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
         self.SIG_OPEN_H5.connect(win.open_h5_files)
         self.SIG_IMPORT_H5.connect(win.import_h5_file)
@@ -229,6 +231,15 @@ class RemoteServer(QC.QThread):
     def reset_all(self) -> None:
         """Reset all application data"""
         self.SIG_RESET_ALL.emit()
+
+    @remote_call
+    def remove_object(self, force: bool = False) -> None:
+        """Remove current object from current panel.
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
+        self.SIG_REMOVE_OBJECT.emit(force)
 
     @remote_call
     def save_to_h5_file(self, filename: str) -> None:

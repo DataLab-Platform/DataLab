@@ -1527,6 +1527,16 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             if panel is not None:
                 panel.remove_all_objects()
 
+    @remote_controlled
+    def remove_object(self, force: bool = False) -> None:
+        """Remove current object from current panel.
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
+        panel = self.__get_current_basedatapanel()
+        panel.remove_object(force)
+
     @staticmethod
     def __check_h5file(filename: str, operation: str) -> str:
         """Check HDF5 filename"""
