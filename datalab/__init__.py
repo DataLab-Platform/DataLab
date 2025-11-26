@@ -24,7 +24,7 @@ except RuntimeError:
     # this module is imported more than once, e.g. when running tests)
     pass
 
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 __docurl__ = __homeurl__ = "https://datalab-platform.com/"
 __supporturl__ = "https://github.com/DataLab-Platform/DataLab/issues/new/choose"
 
