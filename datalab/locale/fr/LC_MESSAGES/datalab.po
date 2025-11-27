@@ -1554,7 +1554,7 @@ msgid "Set uniform coordinates"
 msgstr "Convertir en coordonnées uniformes"
 
 msgid "Polynomial calibration"
-msgstr "Étalonnage polynomiale"
+msgstr "Étalonnage polynomial"
 
 msgid ""
 "Apply polynomial calibration to the X, Y or Z axis:\n"
@@ -1562,7 +1562,7 @@ msgid ""
 "  • y' = a0 + a1*y + a2*y^2 + ...\n"
 "  • z' = a0 + a1*z + a2*z^2 + ..."
 msgstr ""
-"Appliquer un étalonnage polynomiale à l'axe X, Y ou Z :\n"
+"Appliquer un étalonnage polynomial à l'axe X, Y ou Z :\n"
 "  • x' = a0 + a1*x + a2*x^2 + ...\n"
 "  • y' = a0 + a1*y + a2*y^2 + ...\n"
 "  • z' = a0 + a1*z + a2*z^2 + ..."
@@ -3277,4 +3277,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

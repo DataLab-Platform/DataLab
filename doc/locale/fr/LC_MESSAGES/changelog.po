@@ -575,7 +575,7 @@ msgid "\"Set uniform coordinates\" feature for conversion"
 msgstr "Nouvelle fonctionnalité \"Définir les coordonnées uniformes\" dans le menu Traitement > Transformation des axes :"
 
 msgid "**Polynomial calibration**: Up to cubic order for X, Y, Z axes"
-msgstr "Prend désormais en charge la calibration polynomiale jusqu'à l'ordre cubique pour tous les axes (X, Y, Z)"
+msgstr "Prend désormais en charge l'étalonnage polynomial jusqu'à l'ordre cubique pour tous les axes (X, Y, Z)"
 
 msgid "Creates non-uniform coordinates for X/Y, transforms values for Z"
 msgstr "Pour les axes X et Y : Crée des coordonnées non uniformes pour représenter les transformations polynomiales"
