@@ -78,6 +78,29 @@ DataLab v1.0 introduces two new immutable result types:
 
 These new result types are computation-oriented and free of application-specific logic (e.g., Qt, metadata). All metadata-related behaviors have been migrated to the DataLab application layer using **adapter classes** (``TableAdapter``, ``GeometryAdapter``).
 
+Object UUID access
+^^^^^^^^^^^^^^^^^^
+
+The way to access an object's UUID has changed:
+
+.. code-block:: python
+
+   # v0.20 - Direct attribute access
+   obj_uuid = obj.uuid
+
+   # v1.0 - Use helper function from datalab.objectmodel
+   from datalab.objectmodel import get_uuid
+   obj_uuid = get_uuid(obj)
+
+   # Alternative in v1.0 - Access metadata directly
+   obj_uuid = obj.get_metadata_option("uuid")
+
+This change applies to both ``SignalObj`` and ``ImageObj`` objects. The UUID is now stored in the object's metadata rather than as a direct attribute.
+
+.. note::
+
+   The ``get_uuid()`` function is defined in ``datalab.objectmodel``, not as a method on the object itself. Import it before use: ``from datalab.objectmodel import get_uuid``.
+
 Unified processor interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
