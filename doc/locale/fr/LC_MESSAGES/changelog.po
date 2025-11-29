@@ -39,6 +39,15 @@ msgstr "Correction de l'erreur `UnicodeEncodeError` lors de l'exécution de macr
 msgid "The macro subprocess now automatically uses UTF-8 encoding for stdout and stderr, eliminating the need to manually add `sys.stdout.reconfigure(encoding='utf-8')` at the beginning of each macro."
 msgstr "Le sous-processus de la macro utilise désormais automatiquement l'encodage UTF-8 pour stdout et stderr, éliminant ainsi la nécessité d'ajouter manuellement `sys.stdout.reconfigure(encoding='utf-8')` au début de chaque macro."
 
+msgid "**Polygonal ROI handling:**"
+msgstr "**Gestion des ROI polygonales :**"
+
+msgid "Fixed `ValueError: Buffer has wrong number of dimensions` error when creating masks from polygonal ROIs in the ROI editor"
+msgstr "Correction de l'erreur `ValueError: Buffer has wrong number of dimensions` lors de la création de masques à partir de ROI polygonales dans l'éditeur de ROI"
+
+msgid "The PolygonalTool was incorrectly initializing ROI coordinates as a nested list instead of a flat list, causing mask computation to fail"
+msgstr "Le PolygonalTool initialisait incorrectement les coordonnées des ROI sous forme de liste imbriquée au lieu d'une liste plate, ce qui provoquait l'échec du calcul du masque"
+
 msgid "DataLab Version 1.0.1"
 msgstr "DataLab Version 1.0.1"
 
