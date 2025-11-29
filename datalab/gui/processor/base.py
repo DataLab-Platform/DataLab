@@ -42,6 +42,7 @@ from datalab.adapters_metadata import (
     TableAdapter,
     show_resultdata,
 )
+from datalab.adapters_plotpy import coordutils
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
@@ -2390,6 +2391,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         obj = self.panel.objview.get_sel_objects()[0]
         assert obj.roi is not None, _("No ROI selected for editing.")
         params = obj.roi.to_params(obj)
+        # Round coordinates to appropriate precision before displaying
+        for param in params:
+            if isinstance(obj, SignalObj):
+                coordutils.round_signal_roi_param(obj, param)
+            elif isinstance(obj, ImageObj):
+                coordutils.round_image_roi_param(obj, param)
         group = gds.DataSetGroup(params, title=_("Regions of Interest"))
         if group.edit(parent=self.mainwindow):
             edited_roi = obj.roi.__class__.from_params(obj, params)

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-25 14:51+0100\n"
+"POT-Creation-Date: 2025-11-29 16:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -38,6 +38,15 @@ msgstr "Correction de l'erreur `UnicodeEncodeError` lors de l'exécution de macr
 
 msgid "The macro subprocess now automatically uses UTF-8 encoding for stdout and stderr, eliminating the need to manually add `sys.stdout.reconfigure(encoding='utf-8')` at the beginning of each macro."
 msgstr "Le sous-processus de la macro utilise désormais automatiquement l'encodage UTF-8 pour stdout et stderr, éliminant ainsi la nécessité d'ajouter manuellement `sys.stdout.reconfigure(encoding='utf-8')` au début de chaque macro."
+
+msgid "**ROI coordinate precision:**"
+msgstr "**Prise en charge des coordonnées non uniformes :**"
+
+msgid "ROI coordinates are now automatically rounded to appropriate precision when defining ROIs interactively from geometrical shapes, avoiding excessive decimal places while maintaining reasonable precision relative to data sampling (1/10th of sampling period for signals, 1/10th of pixel spacing for images)"
+msgstr "Les coordonnées des ROI sont désormais automatiquement arrondies à une précision appropriée lors de la définition interactive des ROI à partir de formes géométriques, évitant ainsi des décimales excessives tout en maintenant une précision raisonnable par rapport à l'échantillonnage des données (1/10e de la période d'échantillonnage pour les signaux, 1/10e de l'espacement des pixels pour les images)"
+
+msgid "This closes [Issue #266](https://github.com/datalab-platform/datalab/issues/266) - Excessive decimal places in ROI coordinates"
+msgstr "Ceci clôture [Issue #266](https://github.com/datalab-platform/datalab/issues/266) - Décimales excessives dans les coordonnées des ROI"
 
 msgid "**Polygonal ROI handling:**"
 msgstr "**Gestion des ROI polygonales :**"
