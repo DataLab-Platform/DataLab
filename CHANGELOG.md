@@ -22,6 +22,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Fixed `ValueError: Buffer has wrong number of dimensions` error when creating masks from polygonal ROIs in the ROI editor
 * The PolygonalTool was incorrectly initializing ROI coordinates as a nested list instead of a flat list, causing mask computation to fail
 
+**HDF5 file opening dialog:**
+
+* Fixed bug where user's choice in the "clear workspace" confirmation dialog was ignored when opening HDF5 files
+* When the user clicked "No" in the dialog, the default configuration setting was applied instead of respecting the user's choice
+* This closes [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - HDF5 file opening dialog ignores user's choice
+
 ## DataLab Version 1.0.1 ##
 
 This major release represents a significant milestone for DataLab with numerous enhancements across all areas. The changes are organized by category for easier navigation.

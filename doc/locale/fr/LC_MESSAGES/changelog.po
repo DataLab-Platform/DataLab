@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 16:48+0100\n"
+"POT-Creation-Date: 2025-11-29 17:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -45,6 +45,9 @@ msgstr "**Prise en charge des coordonnées non uniformes :**"
 msgid "ROI coordinates are now automatically rounded to appropriate precision when defining ROIs interactively from geometrical shapes, avoiding excessive decimal places while maintaining reasonable precision relative to data sampling (1/10th of sampling period for signals, 1/10th of pixel spacing for images)"
 msgstr "Les coordonnées des ROI sont désormais automatiquement arrondies à une précision appropriée lors de la définition interactive des ROI à partir de formes géométriques, évitant ainsi des décimales excessives tout en maintenant une précision raisonnable par rapport à l'échantillonnage des données (1/10e de la période d'échantillonnage pour les signaux, 1/10e de l'espacement des pixels pour les images)"
 
+msgid "ROI coordinates are also rounded when displaying them in the \"Edit numerically\" dialog, preventing floating-point arithmetic errors from showing excessive decimal places (e.g., 172.29999999999995 is now displayed as 172.3)"
+msgstr "Les coordonnées des ROI sont également arrondies lors de leur affichage dans la boîte de dialogue \"Éditer numériquement\", empêchant les erreurs d'arithmétique en virgule flottante d'afficher des décimales excessives (par exemple, 172.29999999999995 est désormais affiché sous forme de 172.3)"
+
 msgid "This closes [Issue #266](https://github.com/datalab-platform/datalab/issues/266) - Excessive decimal places in ROI coordinates"
 msgstr "Ceci clôture [Issue #266](https://github.com/datalab-platform/datalab/issues/266) - Décimales excessives dans les coordonnées des ROI"
 
@@ -56,6 +59,18 @@ msgstr "Correction de l'erreur `ValueError: Buffer has wrong number of dimension
 
 msgid "The PolygonalTool was incorrectly initializing ROI coordinates as a nested list instead of a flat list, causing mask computation to fail"
 msgstr "Le PolygonalTool initialisait incorrectement les coordonnées des ROI sous forme de liste imbriquée au lieu d'une liste plate, ce qui provoquait l'échec du calcul du masque"
+
+msgid "**HDF5 file opening dialog:**"
+msgstr "**Boîte de dialogue d'ouverture de fichiers HDF5 :**"
+
+msgid "Fixed bug where user's choice in the \"clear workspace\" confirmation dialog was ignored when opening HDF5 files"
+msgstr "Correction du bug où le choix de l'utilisateur dans la boîte de dialogue de confirmation \"effacer l'espace de travail\" était ignoré lors de l'ouverture de fichiers HDF5"
+
+msgid "When the user clicked \"No\" in the dialog, the default configuration setting was applied instead of respecting the user's choice"
+msgstr "Lorsque l'utilisateur cliquait sur \"Non\" dans la boîte de dialogue, le paramètre de configuration par défaut était appliqué au lieu de respecter le choix de l'utilisateur"
+
+msgid "This closes [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - HDF5 file opening dialog ignores user's choice"
+msgstr "Ceci clôture [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - La boîte de dialogue d'ouverture de fichiers HDF5 ignore le choix de l'utilisateur"
 
 msgid "DataLab Version 1.0.1"
 msgstr "DataLab Version 1.0.1"
