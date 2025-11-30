@@ -53,6 +53,14 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * ROI bounding boxes are now properly clipped to image boundaries, and fully out-of-bounds ROIs return NaN statistics values
 * This fix is implemented in Sigima library (see [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` when computing statistics on ROI extending beyond image boundaries)
 
+**Object property panel tab selection:**
+
+* Fixed tab selection behavior in object properties panel to be more predictable and user-friendly
+* Properties tab is now always shown by default when switching between objects, providing consistent navigation
+* Creation, Processing, and Analysis tabs now appear automatically only once after their respective triggering events (object creation, 1-to-1 processing, or analysis computation), then revert to Properties tab for subsequent selections
+* This eliminates the confusing behavior where the tab would arbitrarily persist or change based on previous selections
+* This closes [Issue #271](https://github.com/datalab-platform/datalab/issues/271) - Improve object property panel tab selection behavior
+
 ## DataLab Version 1.0.1 ##
 
 This major release represents a significant milestone for DataLab with numerous enhancements across all areas. The changes are organized by category for easier navigation.

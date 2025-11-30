@@ -1122,6 +1122,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     )
                     insert_processing_parameters(new_obj, pp)
 
+                    # Mark object as freshly processed to show Processing tab
+                    self.panel.objprop.mark_as_freshly_processed(new_obj)
+
                     new_gid = None
                     if grps:
                         # If groups are selected, then it means that there is no
@@ -1417,6 +1420,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 rdata.append(adapter, obj)
 
                 if obj is current_obj:
+                    # Mark object as having fresh analysis results to show Analysis tab
+                    self.panel.objprop.mark_as_fresh_analysis(obj)
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)

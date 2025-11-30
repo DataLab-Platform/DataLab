@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-30 12:33+0100\n"
+"POT-Creation-Date: 2025-11-30 15:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -122,6 +122,24 @@ msgstr "Les boîtes englobantes des ROI sont désormais correctement limitées a
 
 msgid "This fix is implemented in Sigima library (see [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` when computing statistics on ROI extending beyond image boundaries)"
 msgstr "Cette correction est implémentée dans la bibliothèque Sigima (voir [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` lors du calcul des statistiques sur ROI s'étendant au-delà des limites de l'image)"
+
+msgid "**Object property panel tab selection:**"
+msgstr "**Sélection des onglets du panneau des propriétés des objets :**"
+
+msgid "Fixed tab selection behavior in object properties panel to be more predictable and user-friendly"
+msgstr "Correction du comportement de sélection des onglets dans le panneau des propriétés des objets pour le rendre plus prévisible et convivial"
+
+msgid "Properties tab is now always shown by default when switching between objects, providing consistent navigation"
+msgstr "L'onglet Propriétés est désormais toujours affiché par défaut lors du changement d'objet, offrant une navigation cohérente"
+
+msgid "Creation, Processing, and Analysis tabs now appear automatically only once after their respective triggering events (object creation, 1-to-1 processing, or analysis computation), then revert to Properties tab for subsequent selections"
+msgstr "Les onglets Création, Traitement et Analyse apparaissent désormais automatiquement une seule fois après leurs événements déclencheurs respectifs (création d'objet, traitement 1-vers-1 ou calcul d'analyse), puis reviennent à l'onglet Propriétés pour les sélections ultérieures"
+
+msgid "This eliminates the confusing behavior where the tab would arbitrarily persist or change based on previous selections"
+msgstr "Cela élimine le comportement déroutant où l'onglet persistait ou changeait arbitrairement en fonction des sélections précédentes"
+
+msgid "This closes [Issue #271](https://github.com/datalab-platform/datalab/issues/271) - Improve object property panel tab selection behavior"
+msgstr "Ceci clôture [Issue #271](https://github.com/datalab-platform/datalab/issues/271) - Amélioration du comportement de sélection des onglets du panneau des propriétés des objets"
 
 msgid "DataLab Version 1.0.1"
 msgstr "DataLab Version 1.0.1"
