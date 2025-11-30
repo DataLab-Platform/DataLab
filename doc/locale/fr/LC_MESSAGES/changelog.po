@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 17:18+0100\n"
+"POT-Creation-Date: 2025-11-30 10:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -71,6 +71,21 @@ msgstr "Lorsque l'utilisateur cliquait sur \"Non\" dans la boîte de dialogue, l
 
 msgid "This closes [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - HDF5 file opening dialog ignores user's choice"
 msgstr "Ceci clôture [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - La boîte de dialogue d'ouverture de fichiers HDF5 ignore le choix de l'utilisateur"
+
+msgid "**Creation tab axis update:**"
+msgstr "**Mise à jour de l'axe dans l'onglet Création :**"
+
+msgid "Fixed plot not updating when modifying only xmin/xmax parameters for distribution signals (Zero, Normal, Poisson, Uniform) in the Creation tab"
+msgstr "Correction du graphique ne se mettant pas à jour lors de la modification uniquement des paramètres xmin/xmax pour les signaux de distribution (Zéro, Normal, Poisson, Uniforme) dans l'onglet Création"
+
+msgid "The issue occurred because the data hash calculation only considered Y values, so changes to X axis bounds were not detected"
+msgstr "Le problème est survenu parce que le calcul du hash des données ne prenait en compte que les valeurs Y, de sorte que les modifications des limites de l'axe X n'étaient pas détectées"
+
+msgid "Plot now properly refreshes when any axis parameter changes, even if Y values remain identical"
+msgstr "Le graphique se rafraîchit désormais correctement lorsque n'importe quel paramètre d'axe change, même si les valeurs Y restent identiques"
+
+msgid "This closes [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - Creation tab axis not updating for distribution signals"
+msgstr "Ceci clôture [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - L'axe de l'onglet Création ne se met pas à jour pour les signaux de distribution"
 
 msgid "DataLab Version 1.0.1"
 msgstr "DataLab Version 1.0.1"

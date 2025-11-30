@@ -28,6 +28,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * When the user clicked "No" in the dialog, the default configuration setting was applied instead of respecting the user's choice
 * This closes [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - HDF5 file opening dialog ignores user's choice
 
+**Creation tab axis update:**
+
+* Fixed plot not updating when modifying only xmin/xmax parameters for distribution signals (Zero, Normal, Poisson, Uniform) in the Creation tab
+* The issue occurred because the data hash calculation only considered Y values, so changes to X axis bounds were not detected
+* Plot now properly refreshes when any axis parameter changes, even if Y values remain identical
+* This closes [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - Creation tab axis not updating for distribution signals
+
 ## DataLab Version 1.0.1 ##
 
 This major release represents a significant milestone for DataLab with numerous enhancements across all areas. The changes are organized by category for easier navigation.
