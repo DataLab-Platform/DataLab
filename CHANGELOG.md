@@ -6,6 +6,12 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ### 🛠️ Bug Fixes ###
 
+**Lock LUT setting persistence:**
+
+* Fixed "Lock LUT range when updating data" setting not persisting in Settings > Visualization > Images > Default Image visualization settings
+* The `keep_lut_range` parameter was not being saved to configuration, causing the checkbox to systematically uncheck itself after validation (added missing `ima_def_keep_lut_range` option in configuration)
+* This closes [Issue #270](https://github.com/datalab-platform/datalab/issues/270) - Lock LUT setting not persisting in image visualization defaults
+
 **Custom signal creation:**
 
 * Fixed `AttributeError: 'NoneType' object has no attribute 'T'` error when creating a custom signal from the menu

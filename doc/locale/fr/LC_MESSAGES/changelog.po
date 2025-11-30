@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-30 12:22+0100\n"
+"POT-Creation-Date: 2025-11-30 12:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,18 @@ msgstr "DataLab Version 1.0.2 (non publiée)"
 
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Correctifs"
+
+msgid "**Lock LUT setting persistence:**"
+msgstr "**Persistance du paramètre de verrouillage de la LUT :**"
+
+msgid "Fixed \"Lock LUT range when updating data\" setting not persisting in Settings > Visualization > Images > Default Image visualization settings"
+msgstr "Correction du paramètre \"Verrouiller la LUT lors de la mise à jour des données\" ne persistant pas dans Paramètres > Visualisation > Images > Paramètres de visualisation d'image par défaut"
+
+msgid "The `keep_lut_range` parameter was not being saved to configuration, causing the checkbox to systematically uncheck itself after validation (added missing `ima_def_keep_lut_range` option in configuration)"
+msgstr "Le paramètre `keep_lut_range` n'était pas enregistré dans la configuration, ce qui faisait que la case à cocher se décochait systématiquement après validation (ajout de l'option manquante `ima_def_keep_lut_range` dans la configuration)"
+
+msgid "This closes [Issue #270](https://github.com/datalab-platform/datalab/issues/270) - Lock LUT setting not persisting in image visualization defaults"
+msgstr "Ceci clôture [Issue #270](https://github.com/datalab-platform/datalab/issues/270) - Persistance du paramètre de verrouillage de la LUT dans les paramètres de visualisation d'image par défaut"
 
 msgid "**Custom signal creation:**"
 msgstr "**Création de signaux personnalisés :**"
