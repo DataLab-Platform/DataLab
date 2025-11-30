@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-30 11:51+0100\n"
+"POT-Creation-Date: 2025-11-30 12:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,15 @@ msgstr "DataLab Version 1.0.2 (non publiée)"
 
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Correctifs"
+
+msgid "**Custom signal creation:**"
+msgstr "**Création de signaux personnalisés :**"
+
+msgid "Fixed `AttributeError: 'NoneType' object has no attribute 'T'` error when creating a custom signal from the menu"
+msgstr "Correction de l'erreur `AttributeError: 'NoneType' object has no attribute 'T'` lors de la création d'un signal personnalisé à partir du menu"
+
+msgid "This closes [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Custom Signal Creation: `AttributeError` when creating signal from menu"
+msgstr "Ceci clôture [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Création de signaux personnalisés : `AttributeError` lors de la création d'un signal à partir du menu"
 
 msgid "**Macro execution:**"
 msgstr "**Exécution des macros :**"

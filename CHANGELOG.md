@@ -6,6 +6,11 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ### 🛠️ Bug Fixes ###
 
+**Custom signal creation:**
+
+* Fixed `AttributeError: 'NoneType' object has no attribute 'T'` error when creating a custom signal from the menu
+* This closes [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Custom Signal Creation: `AttributeError` when creating signal from menu
+
 **Macro execution:**
 
 * Fixed `UnicodeEncodeError` when executing macros that print Unicode characters (e.g., arrows `→`) on Windows systems with certain locales, e.g. cp1252 (closes [Issue #263](https://github.com/datalab-platform/datalab/issues/263))
