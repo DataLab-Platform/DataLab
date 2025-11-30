@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-30 10:51+0100\n"
+"POT-Creation-Date: 2025-11-30 11:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -86,6 +86,21 @@ msgstr "Le graphique se rafraîchit désormais correctement lorsque n'importe qu
 
 msgid "This closes [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - Creation tab axis not updating for distribution signals"
 msgstr "Ceci clôture [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - L'axe de l'onglet Création ne se met pas à jour pour les signaux de distribution"
+
+msgid "**ROI statistics with out-of-bounds ROI:**"
+msgstr "**Statistiques ROI avec ROI hors limites :**"
+
+msgid "Fixed `ValueError: zero-size array to reduction operation minimum which has no identity` error when computing statistics on images with ROI extending beyond canvas boundaries"
+msgstr "Correction de l'erreur `ValueError: zero-size array to reduction operation minimum which has no identity` lors du calcul des statistiques sur des images avec ROI s'étendant au-delà des limites de la zone de dessin"
+
+msgid "The issue occurred when a ROI partially or completely extended outside the image bounds, resulting in empty array slices during statistics computation"
+msgstr "Le problème est survenu lorsqu'un ROI s'étendait partiellement ou complètement en dehors des limites de l'image, ce qui entraînait des tranches de tableau vides lors du calcul des statistiques"
+
+msgid "ROI bounding boxes are now properly clipped to image boundaries, and fully out-of-bounds ROIs return NaN statistics values"
+msgstr "Les boîtes englobantes des ROI sont désormais correctement limitées aux limites de l'image, et les ROI complètement hors limites renvoient des valeurs statistiques NaN"
+
+msgid "This fix is implemented in Sigima library (see [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` when computing statistics on ROI extending beyond image boundaries)"
+msgstr "Cette correction est implémentée dans la bibliothèque Sigima (voir [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` lors du calcul des statistiques sur ROI s'étendant au-delà des limites de l'image)"
 
 msgid "DataLab Version 1.0.1"
 msgstr "DataLab Version 1.0.1"

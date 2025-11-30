@@ -35,6 +35,13 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 * Plot now properly refreshes when any axis parameter changes, even if Y values remain identical
 * This closes [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - Creation tab axis not updating for distribution signals
 
+**ROI statistics with out-of-bounds ROI:**
+
+* Fixed `ValueError: zero-size array to reduction operation minimum which has no identity` error when computing statistics on images with ROI extending beyond canvas boundaries
+* The issue occurred when a ROI partially or completely extended outside the image bounds, resulting in empty array slices during statistics computation
+* ROI bounding boxes are now properly clipped to image boundaries, and fully out-of-bounds ROIs return NaN statistics values
+* This fix is implemented in Sigima library (see [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` when computing statistics on ROI extending beyond image boundaries)
+
 ## DataLab Version 1.0.1 ##
 
 This major release represents a significant milestone for DataLab with numerous enhancements across all areas. The changes are organized by category for easier navigation.
