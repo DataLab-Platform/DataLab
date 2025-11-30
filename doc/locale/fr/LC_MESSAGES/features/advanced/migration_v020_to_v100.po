@@ -102,6 +102,33 @@ msgstr "Renommage du package"
 msgid "The DataLab package was renamed from ``cdl`` to ``datalab`` for clarity:"
 msgstr "Le package DataLab a été renommé de ``cdl`` à ``datalab`` par souci de clarté :"
 
+msgid "Plugin file naming convention"
+msgstr "Convention de nommage des fichiers de plugin"
+
+msgid "Plugin filenames must follow the new naming convention:"
+msgstr "Les noms de fichiers de plugin doivent suivre la nouvelle convention de nommage :"
+
+msgid "Plugin files must be renamed from ``cdl_*.py`` to ``datalab_*.py``."
+msgstr "Les fichiers de plugin doivent être renommés de ``cdl_*.py`` en ``datalab_*.py``."
+
+msgid "**Examples:**"
+msgstr "**Exemples :**"
+
+msgid "``cdl_myplugin.py`` → ``datalab_myplugin.py``"
+msgstr "``cdl_myplugin.py`` → ``datalab_myplugin.py``"
+
+msgid "``cdl_custom_filters.py`` → ``datalab_custom_filters.py``"
+msgstr "``cdl_custom_filters.py`` → ``datalab_custom_filters.py``"
+
+msgid "``cdl_example.py`` → ``datalab_example.py``"
+msgstr "``cdl_example.py`` → ``datalab_example.py``"
+
+msgid "This naming convention is required for DataLab to automatically discover and load plugins at startup. Plugins that don't follow this naming pattern will not be loaded."
+msgstr "Cette convention de nommage est requise pour que DataLab découvre et charge automatiquement les plugins au démarrage. Les plugins qui ne suivent pas ce schéma de nommage ne seront pas chargés."
+
+msgid "The plugin discovery mechanism looks for Python files matching the pattern ``datalab_*.py`` in the plugins directory. Make sure to update your plugin filenames accordingly."
+msgstr "Le mécanisme de découverte des plugins recherche les fichiers Python correspondant au motif ``datalab_*.py`` dans le répertoire des plugins. Assurez-vous de mettre à jour les noms de fichiers de vos plugins en conséquence."
+
 msgid "New result objects"
 msgstr "Nouveaux objets résultat"
 

@@ -68,6 +68,27 @@ The DataLab package was renamed from ``cdl`` to ``datalab`` for clarity:
    import sigima.params
    from datalab.plugins import PluginBase
 
+Plugin file naming convention
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Plugin filenames must follow the new naming convention:
+
+.. important::
+
+   Plugin files must be renamed from ``cdl_*.py`` to ``datalab_*.py``.
+
+**Examples:**
+
+- ``cdl_myplugin.py`` → ``datalab_myplugin.py``
+- ``cdl_custom_filters.py`` → ``datalab_custom_filters.py``
+- ``cdl_example.py`` → ``datalab_example.py``
+
+This naming convention is required for DataLab to automatically discover and load plugins at startup. Plugins that don't follow this naming pattern will not be loaded.
+
+.. note::
+
+   The plugin discovery mechanism looks for Python files matching the pattern ``datalab_*.py`` in the plugins directory. Make sure to update your plugin filenames accordingly.
+
 New result objects
 ^^^^^^^^^^^^^^^^^^
 
