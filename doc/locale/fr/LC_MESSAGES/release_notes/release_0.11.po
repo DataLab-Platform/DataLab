@@ -1,0 +1,352 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Version 0.11"
+msgstr ""
+
+msgid "DataLab Version 0.11.0 (2024-01-23)"
+msgstr "DataLab Version 0.11.0 (23/01/2024)"
+
+msgid "💥 New features:"
+msgstr "💥 Nouvelles fonctionnalités :"
+
+msgid "Signals and images may now be reordered in the tree view:"
+msgstr "Les signaux et les images peuvent maintenant être réorganisés dans la vue arborescente :"
+
+msgid "Using the new \"Move up\" and \"Move down\" actions in the \"Edit\" menu (or using the corresponding toolbar buttons):"
+msgstr "En utilisant les nouvelles actions \"Monter\" et \"Descendre\" dans le menu \"Édition\" (ou en utilisant les boutons de la barre d'outils correspondants) :"
+
+msgid "This fixes [Issue #22](https://github.com/DataLab-Platform/DataLab/issues/22) - Add \"move up/down\" actions in \"Edit\" menu, for signals/images and groups"
+msgstr "Ceci corrige l'[Issue #22](https://github.com/DataLab-Platform/DataLab/issues/22) - Ajout des actions \"monter/descendre\" dans le menu \"Édition\", pour les signaux/images et les groupes"
+
+msgid "Signals and images may also be reordered using drag and drop:"
+msgstr "Les signaux et les images peuvent également être réorganisés par glisser-déposer :"
+
+msgid "Signals and images can be dragged and dropped inside their own panel to change their order"
+msgstr "Les signaux et les images peuvent être déplacés et déposés dans leur propre panneau pour changer leur ordre"
+
+msgid "Groups can also be dragged and dropped inside their panel"
+msgstr "Les groupes peuvent également être déplacés et déposés dans leur panneau"
+
+msgid "The feature also supports multi-selection (using the standard Ctrl and Shift modifiers), so that multiple signals/images/groups can be moved at once, not necessarily with contiguous positions"
+msgstr "La fonctionnalité prend également en charge la sélection multiple (en utilisant les modificateurs standard Ctrl et Shift), de sorte que plusieurs signaux/images/groupes peuvent être déplacés à la fois, pas nécessairement avec des positions contiguës"
+
+msgid "This fixes [Issue #17](https://github.com/DataLab-Platform/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images tree views"
+msgstr "Ceci corrige l'[Issue #17](https://github.com/DataLab-Platform/DataLab/issues/17) - Ajout de la fonctionnalité de glisser-déposer aux vues arborescentes des signaux/images"
+
+msgid "New 1D interpolation features:"
+msgstr "Nouvelles fonctionnalités d'interpolation 1D :"
+
+msgid "Added \"Interpolation\" feature to signal panel's \"Processing\" menu"
+msgstr "Ajout de la fonctionnalité \"Interpolation\" au menu \"Traitement\" du panneau de signal"
+
+msgid "Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP"
+msgstr "Méthodes disponibles : linéaire, spline, quadratique, cubique, barycentrique et PCHIP"
+
+msgid "Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the contribution to spline interpolation"
+msgstr "Merci à [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) pour sa contribution à l'interpolation spline"
+
+msgid "This fixes [Issue #20](https://github.com/DataLab-Platform/DataLab/issues/20) - Add 1D interpolation features"
+msgstr "Ceci corrige l'[Issue #20](https://github.com/DataLab-Platform/DataLab/issues/20) - Ajout des fonctionnalités d'interpolation 1D"
+
+msgid "New 1D resampling feature:"
+msgstr "Nouvelle fonctionnalité de rééchantillonnage 1D :"
+
+msgid "Added \"Resampling\" feature to signal panel's \"Processing\" menu"
+msgstr "Ajout de la fonctionnalité \"Rééchantillonnage\" au menu \"Traitement\" du panneau de signal"
+
+msgid "Same interpolation methods as for the \"Interpolation\" feature"
+msgstr "Mêmes méthodes d'interpolation que pour la fonctionnalité \"Interpolation\""
+
+msgid "Possibility to specify the resampling step or the number of points"
+msgstr "Possibilité de spécifier le pas de rééchantillonnage ou le nombre de points"
+
+msgid "This fixes [Issue #21](https://github.com/DataLab-Platform/DataLab/issues/21) - Add 1D resampling feature"
+msgstr "Ceci corrige l'[Issue #21](https://github.com/DataLab-Platform/DataLab/issues/21) - Ajout de la fonctionnalité de rééchantillonnage 1D"
+
+msgid "New 1D convolution feature:"
+msgstr "Nouvelle fonctionnalité de convolution 1D :"
+
+msgid "Added \"Convolution\" feature to signal panel's \"Operation\" menu"
+msgstr "Ajout de la fonctionnalité \"Convolution\" au menu \"Opération\" du panneau de signal"
+
+msgid "This fixes [Issue #23](https://github.com/DataLab-Platform/DataLab/issues/23) - Add 1D convolution feature"
+msgstr "Ceci corrige l'[Issue #23](https://github.com/DataLab-Platform/DataLab/issues/23) - Ajout de la fonctionnalité de convolution 1D"
+
+msgid "New 1D detrending feature:"
+msgstr "Nouvelle fonctionnalité de d'élimination de tendance 1D :"
+
+msgid "Added \"Detrending\" feature to signal panel's \"Processing\" menu"
+msgstr "Ajout de la fonctionnalité \"Élimination de tendance\" au menu \"Traitement\" du panneau de signal"
+
+msgid "Methods available: linear or constant"
+msgstr "Méthodes disponibles : linéaire ou constante"
+
+msgid "This fixes [Issue #24](https://github.com/DataLab-Platform/DataLab/issues/24) - Add 1D detrending feature"
+msgstr "Ceci corrige l'[Issue #24](https://github.com/DataLab-Platform/DataLab/issues/24) - Ajout de la fonctionnalité d'élimination de tendance 1D"
+
+msgid "2D analysis results:"
+msgstr "Résultats d'analyse 2D :"
+
+msgid "Before this release, 2D analysis results such as contours, blobs, etc. were stored in image metadata dictionary as coordinates (x0, y0, x1, y1, ...) even for circles and ellipses (i.e. the coordinates of the bounding rectangles)."
+msgstr "Avant cette version, les résultats d'analyse 2D tels que les contours, les blobs, etc. étaient stockés dans le dictionnaire de métadonnées de l'image sous forme de coordonnées (x0, y0, x1, y1, ...) même pour les cercles et les ellipses (c'est-à-dire les coordonnées des rectangles englobants)."
+
+msgid "For convenience, the circle and ellipse coordinates are now stored in image metadata dictionary as (x0, y0, radius) and (x0, y0, a, b, theta) respectively."
+msgstr "Par souci de commodité, les coordonnées du cercle et de l'ellipse sont désormais stockées dans le dictionnaire de métadonnées de l'image sous la forme (x0, y0, rayon) et (x0, y0, a, b, theta) respectivement."
+
+msgid "These results are also shown as such in the \"Results\" dialog box (either at the end of the computing process or when clicking on the \"Show results\" button)."
+msgstr "Ces résultats sont également affichés comme tels dans la boîte de dialogue \"Résultats\" (à la fin du processus de calcul ou en cliquant sur le bouton \"Afficher les résultats\")."
+
+msgid "This fixes [Issue #32](https://github.com/DataLab-Platform/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`"
+msgstr "Cette correction corrige l'[Issue #32](https://github.com/DataLab-Platform/DataLab/issues/32) - Détection des contours : afficher le cercle `(x, y, r)` et l'ellipse `(x, y, a, b, theta)` au lieu de `(x0, y0, x1, x1, ...)`"
+
+msgid "1D and 2D analysis results:"
+msgstr "Résultats d'analyse 1D et 2D :"
+
+msgid "Additionnaly to the previous enhancement, more analysis results are now shown in the \"Results\" dialog box"
+msgstr "En complément de l'amélioration précédente, plus de résultats d'analyse sont désormais affichés dans la boîte de dialogue \"Résultats\""
+
+msgid "This concerns both 1D (FHWM...) and 2D analysis results (contours, blobs...):"
+msgstr "Cela concerne à la fois les résultats d'analyse 1D (FHWM...) et 2D (contours, blobs...) :"
+
+msgid "Segment results now also show length (L) and center coordinates (Xc, Yc)"
+msgstr "Les résultats de type segment affichent désormais également la longueur (L) et les coordonnées du centre (Xc, Yc)"
+
+msgid "Circle and ellipse results now also show area (A)"
+msgstr "Les résultats de type cercle et ellipse affichent désormais également l'aire (A)"
+
+msgid "Added \"Plot results\" entry in \"Analysis\" menu:"
+msgstr "Ajout de l'entrée \"Tracer les résultats\" dans le menu Analyse\" :"
+
+msgid "This feature allows to plot analysis results (1D or 2D)"
+msgstr "Cette fonctionnalité permet de tracer les résultats d'analyse (1D ou 2D)"
+
+msgid "It creates a new signal with X and Y axes corresponding to user-defined parameters (e.g. X = indices and Y = radius for circle results)"
+msgstr "Cela crée un nouveau signal avec des axes X et Y correspondant à des paramètres définis par l'utilisateur (par exemple X = index et Y = rayon pour les résultats de cercle)"
+
+msgid "Increased default width of the object selection dialog box:"
+msgstr "Augmentation de la largeur par défaut de la boîte de dialogue de sélection d'objet :"
+
+msgid "The object selection dialog box is now wider by default, so that the full signal/image/group titles may be more easily readable"
+msgstr "La boîte de dialogue de sélection d'objet est désormais plus large par défaut, de sorte que les titres complets des signaux/images/groupes soient plus facilement lisibles"
+
+msgid "Delete metadata feature:"
+msgstr "Fonctionnalité de suppression de métadonnées :"
+
+msgid "Before this release, the feature was deleting all metadata, including the Regions Of Interest (ROI) metadata, if any."
+msgstr "Avant cette version, la fonctionnalité supprimait toutes les métadonnées, y compris les métadonnées des régions d'intérêt (ROI), le cas échéant."
+
+msgid "Now a confirmation dialog box is shown to the user before deleting all metadata if the signal/image has ROI metadata: this allows to keep the ROI metadata if needed."
+msgstr "A présent, une boîte de dialogue de confirmation est affichée à l'utilisateur avant de supprimer toutes les métadonnées si le signal/l'image a des métadonnées ROI : cela permet de conserver les métadonnées ROI si nécessaire."
+
+msgid "Image profile extraction feature: added support for masked images (when defining regions of interest, the areas outside the ROIs are masked, and the profile is extracted only on the unmasked areas, or averaged on the unmasked areas in the case of average profile extraction)"
+msgstr "Extraction de profil d'image : ajout de la prise en charge des images masquées (lors de la définition des régions d'intérêt, les zones en dehors des ROI sont masquées, et le profil est extrait uniquement sur les zones non masquées, ou moyenné sur les zones non masquées dans le cas de l'extraction du profil moyen)"
+
+msgid "Curve style: added \"Reset curve styles\" in \"View\" menu. This feature allows to reset the curve style cycle to its initial state."
+msgstr "Style de courbe : ajout de \"Réinitialiser les styles de courbe\" dans le menu \"Affichage\". Cette fonctionnalité permet de réinitialiser le cycle de style de courbe à son état initial."
+
+msgid "Plugin base classe `PluginBase`:"
+msgstr "Classe de base des plugins `PluginBase` :"
+
+msgid "Added `edit_new_signal_parameters` method for showing a dialog box to edit parameters for a new signal"
+msgstr "Ajout de la méthode `edit_new_signal_parameters` pour afficher une boîte de dialogue pour éditer les paramètres d'un nouveau signal"
+
+msgid "Added `edit_new_image_parameters` method for showing a dialog box to edit parameters for a new image (updated the *datalab_testdata.py* plugin accordingly)"
+msgstr "Ajout de la méthode `edit_new_image_parameters` pour afficher une boîte de dialogue pour éditer les paramètres d'une nouvelle image (mise à jour du plugin *datalab_testdata.py* en conséquence)"
+
+msgid "Signal and image computations API (`datalab.computations`):"
+msgstr "API de calculs sur les signaux et les images (`datalab.computations`) :"
+
+msgid "Added wrappers for signal and image 1 -> 1 computations"
+msgstr "Ajout de wrappers pour les calculs 1 -> 1 sur les signaux et les images"
+
+msgid "These wrappers aim at simplifying the creation of a basic computation function operating on DataLab's native objects (`SignalObj` and `ImageObj`) from a function operating on NumPy arrays"
+msgstr "Ces wrappers visent à simplifier la création d'une fonction de calcul de base opérant sur les objets natifs de DataLab (`SignalObj` et `ImageObj`) à partir d'une fonction opérant sur des tableaux NumPy"
+
+msgid "This simplifies DataLab's internals and makes it easier to create new computing features inside plugins"
+msgstr "Cela simplifie les fonctionnalités internes de DataLab et facilite la création de nouvelles fonctionnalités de calcul dans les plugins"
+
+msgid "See the *datalab_custom_func.py* example plugin for a practical use case"
+msgstr "Voir le plugin d'exemple *datalab_custom_func.py* pour un cas d'utilisation pratique"
+
+msgid "Added \"Radial profile extraction\" feature to image panel's \"Operation\" menu:"
+msgstr "Ajout de la fonctionnalité \"Extraction du profil radial\" au menu \"Opération\" du panneau d'image :"
+
+msgid "This feature allows to extract a radially averaged profile from an image"
+msgstr "Cette fonctionnalité permet d'extraire un profil moyenné radialement à partir d'une image"
+
+msgid "The profile is extracted around a user-defined center (x0, y0)"
+msgstr "Le profil est extrait autour d'un centre défini par l'utilisateur (x0, y0)"
+
+msgid "The center may also be computed (centroid or image center)"
+msgstr "Le centre peut également être calculé (centre de gravité ou centre de l'image)"
+
+msgid "Automated test suite:"
+msgstr "Suite de tests automatisés :"
+
+msgid "Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method to toggle the \"Auto-refresh\" feature. This feature may be useful to improve performance during the execution of test scripts"
+msgstr "Depuis la version 0.10, l'objet proxy de DataLab dispose d'une méthode `toggle_auto_refresh` pour activer/désactiver la fonctionnalité \"Auto-refresh\". Cette fonctionnalité peut être utile pour améliorer les performances lors de l'exécution de scripts de test"
+
+msgid "Test scenarios on signals and images are now using this feature to improve performance"
+msgstr "Les scénarios de test sur les signaux et les images utilisent désormais cette fonctionnalité pour améliorer les performances"
+
+msgid "Signal and image metadata:"
+msgstr "Métadonnées des signaux et des images :"
+
+msgid "Added \"source\" entry to the metadata dictionary, to store the source file path when importing a signal or an image from a file"
+msgstr "Ajout de l'entrée \"source\" dans le dictionnaire de métadonnées, pour stocker le chemin du fichier source lors de l'importation d'un signal ou d'une image à partir d'un fichier"
+
+msgid "This field is kept while processing the signal/image, in order to keep track of the source file path"
+msgstr "Ce champ est conservé lors du traitement du signal/image, afin de garder une trace du chemin du fichier source"
+
+msgid "📚 Documentation:"
+msgstr "📚 Documentation :"
+
+msgid "New [Tutorial section](https://datalab-platform.com/en/intro/tutorials/index.html) in the documentation:"
+msgstr "Nouvelle [section Tutoriels](https://datalab-platform.com/fr/intro/tutorials/index.html) dans la documentation :"
+
+msgid "This section provides a set of tutorials to learn how to use DataLab"
+msgstr "Cette section fournit un ensemble de tutoriels pour apprendre à utiliser DataLab"
+
+msgid "The following video tutorials are available:"
+msgstr "Les tutoriels vidéo suivants sont disponibles :"
+
+msgid "Quick demo"
+msgstr "Démo rapide"
+
+msgid "Adding your own features"
+msgstr "Ajout de vos propres fonctionnalités"
+
+msgid "The following text tutorials are available:"
+msgstr "Les tutoriels textuels suivants sont disponibles :"
+
+msgid "Processing a spectrum"
+msgstr "Traitement d'un spectre"
+
+msgid "Detecting blobs on an image"
+msgstr "Détection de taches sur une image"
+
+msgid "Measuring Fabry-Perot fringes"
+msgstr "Mesure de franges Fabry-Perot"
+
+msgid "Prototyping a custom processing pipeline"
+msgstr "Prototypage d'un pipeline de traitement personnalisé"
+
+msgid "New [API section](https://datalab-platform.com/en/api/index.html) in the documentation:"
+msgstr "Nouvelle [section API](https://datalab-platform.com/fr/api/index.html) dans la documentation :"
+
+msgid "This section explains how to use DataLab as a Python library, by covering the following topics:"
+msgstr "Cette section explique comment utiliser DataLab comme une bibliothèque Python, en abordant les sujets suivants :"
+
+msgid "How to use DataLab algorithms on NumPy arrays"
+msgstr "Comment utiliser les algorithmes DataLab sur les tableaux NumPy"
+
+msgid "How to use DataLab computation features on DataLab objects (signals and images)"
+msgstr "Comment utiliser les fonctionnalités de calcul de DataLab sur les objets DataLab (signaux et images)"
+
+msgid "How to use DataLab I/O features"
+msgstr "Comment utiliser les fonctionnalités d'entrée/sortie de DataLab"
+
+msgid "How to use proxy objects to control DataLab remotely"
+msgstr "Comment utiliser les objets proxy pour contrôler DataLab à distance"
+
+msgid "This section also provides a complete API reference for DataLab objects and features"
+msgstr "Cette section fournit également une référence complète de l'API pour les objets et les fonctionnalités de DataLab"
+
+msgid "This fixes [Issue #19](https://github.com/DataLab-Platform/DataLab/issues/19) - Add API documentation (data model, functions on arrays or signal/image objects, ...)"
+msgstr "Ceci corrige l'[Issue #19](https://github.com/DataLab-Platform/DataLab/issues/19) - Ajout de la documentation de l'API (modèle de données, fonctions sur les tableaux ou les objets de signaux/images, ...)"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Correctifs :"
+
+msgid "Fixed [Issue #29](https://github.com/DataLab-Platform/DataLab/issues/29) - Polynomial fit error: `QDialog [...] argument 1 has an unexpected type 'SignalProcessor'`"
+msgstr "Ceci corrige l'[Issue #29](https://github.com/DataLab-Platform/DataLab/issues/29) - Erreur d'ajustement polynomial : `QDialog [...] argument 1 has an unexpected type 'SignalProcessor'`"
+
+msgid "Image ROI extraction feature:"
+msgstr "Fonctionnalité d'extraction de ROI d'image :"
+
+msgid "Before this release, when extracting a single circular ROI from an image with the \"Extract all ROIs into a single image object\" option enabled, the result was a single image without the ROI mask (the ROI mask was only available when extracting ROI with the option disabled)"
+msgstr "Avant cette version, lors de l'extraction d'une seule ROI circulaire d'une image avec l'option \"Extraire toutes les ROI dans un seul objet d'image\" activée, le résultat était une seule image sans le masque de ROI (le masque de ROI n'était disponible que lors de l'extraction de ROI avec l'option désactivée)"
+
+msgid "This was leading to an unexpected behavior, because one could interpret the result (a square image without the ROI mask) as the result of a single rectangular ROI"
+msgstr "Cela conduisait à un comportement inattendu, car on pouvait interpréter le résultat (une image carrée sans le masque de ROI) comme le résultat d'une seule ROI rectangulaire"
+
+msgid "Now, when extracting a single circular ROI from an image with the \"Extract all ROIs into a single image object\" option enabled, the result is a single image with the ROI mask (as if the option was disabled)"
+msgstr "A présent, lors de l'extraction d'une seule ROI circulaire d'une image avec l'option \"Extraire toutes les ROI dans un seul objet d'image\" activée, le résultat est une seule image avec le masque de ROI (comme si l'option était désactivée)"
+
+msgid "This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `compute_extract_roi` function"
+msgstr "Ceci corrige l'[Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Extraction d'une seule ROI circulaire : bascule automatique vers la fonction `compute_extract_roi`"
+
+msgid "Analysis on circular ROI:"
+msgstr "Analyse sur ROI circulaire :"
+
+msgid "Before this release, when running computations on a circular ROI, the results were unexpected in terms of coordinates (results seemed to be computed in a region located above the actual ROI)."
+msgstr "Avant cette version, lors de l'exécution de calculs sur une ROI circulaire, les résultats étaient inattendus en termes de coordonnées (les résultats semblaient être calculés dans une région située au-dessus de la ROI réelle)."
+
+msgid "This was due to a regression introduced in an earlier release."
+msgstr "Cela était dû à une régression introduite dans une version antérieure."
+
+msgid "Now, when defining a circular ROI and running computations on it, the results are computed on the actual ROI"
+msgstr "A présent, lors de la définition d'une ROI circulaire et de l'exécution de calculs sur celle-ci, les résultats sont calculés sur la ROI réelle"
+
+msgid "This fixes [Issue #33](https://github.com/DataLab-Platform/DataLab/issues/33) - Analysis on circular ROI: unexpected results"
+msgstr "Ceci corrige l'[Issue #33](https://github.com/DataLab-Platform/DataLab/issues/33) - Analyse sur ROI circulaire : résultats inattendus"
+
+msgid "Contour detection on ROI:"
+msgstr "Détection des contours sur ROI :"
+
+msgid "Before this release, when running contour detection on a ROI, some contours were detected outside the ROI (it may be due to a limitation of the scikit-image `find_contours` function)."
+msgstr "Avant cette version, lors de l'exécution de la détection des contours sur une ROI, certains contours étaient détectés en dehors de la ROI (cela peut être dû à une limitation de la fonction `find_contours` de scikit-image)."
+
+msgid "Now, thanks a workaround, the erroneous contours are filtered out."
+msgstr "A présent, grâce à une solution de contournement, les contours erronés sont filtrés."
+
+msgid "A new test module `datalab.tests.features.images.contour_fabryperot_app` has been added to test the contour detection feature on a Fabry-Perot image (thanks to [@emarin2642](https://github.com/emarin2642) for the contribution)"
+msgstr "Un nouveau module de test `datalab.tests.features.images.contour_fabryperot_app` a été ajouté pour tester la fonctionnalité de détection des contours sur une image Fabry-Perot (merci à [@emarin2642](https://github.com/emarin2642) pour sa contribution)"
+
+msgid "This fixes [Issue #34](https://github.com/DataLab-Platform/DataLab/issues/34) - Contour detection: unexpected results outside ROI"
+msgstr "Ceci corrige l'[Issue #34](https://github.com/DataLab-Platform/DataLab/issues/34) - Détection des contours : résultats inattendus en dehors de la ROI"
+
+msgid "Analysis result merging:"
+msgstr "Fusion des résultats d'analyse :"
+
+msgid "Before this release, when doing a `1->N` computation (sum, average, product) on a group of signals/images, the analysis results associated to each signal/image were merged into a single result, but only the type of result present in the first signal/image was kept."
+msgstr "Avant cette version, lors d'un calcul `1->N` (somme, moyenne, produit) sur un groupe de signaux/images, les résultats d'analyse associés à chaque signal/image étaient fusionnés en un seul résultat, mais seul le type de résultat présent dans le premier signal/image était conservé."
+
+msgid "Now, the analysis results associated to each signal/image are merged into a single result, whatever the type of result is."
+msgstr "A présent, les résultats d'analyse associés à chaque signal/image sont fusionnés en un seul résultat, quel que soit le type de résultat."
+
+msgid "Fixed [Issue #36](https://github.com/DataLab-Platform/DataLab/issues/36) - \"Delete all\" action enable state is sometimes not refreshed"
+msgstr "Ceci corrige l'[Issue #36](https://github.com/DataLab-Platform/DataLab/issues/36) - L'état d'activation de l'action \"Tout supprimer\" n'est parfois pas rafraîchi"
+
+msgid "Image X/Y swap: when swapping X and Y axes, the regions of interest (ROI) were not removed and not swapped either (ROI are now removed, until we implement the swap feature, if requested)"
+msgstr "Inversion X/Y de l'image : lors de l'inversion des axes X et Y, les régions d'intérêt (ROI) n'étaient ni supprimées ni inversées (les ROI sont désormais supprimées, jusqu'à ce que nous implémentions la fonction d'inversion, si demandé)"
+
+msgid "\"Properties\" group box: the \"Apply\" button was enabled by default, even when no property was modified, which was confusing for the user (the \"Apply\" button is now disabled by default, and is enabled only when a property is modified)"
+msgstr "Groupe \"Propriétés\" : le bouton \"Appliquer\" était activé par défaut, même lorsqu'aucune propriété n'avait été modifiée, ce qui était déroutant pour l'utilisateur (le bouton \"Appliquer\" est désormais désactivé par défaut, et n'est activé que lorsqu'une propriété est modifiée)"
+
+msgid "Fixed proxy `get_object` method when there is no object to return (`None` is returned instead of an exception)"
+msgstr "Correction de la méthode `get_object` du proxy lorsqu'il n'y a pas d'objet à retourner (`None` est retourné au lieu d'une exception)"
+
+msgid "Fixed `IndexError: list index out of range` when performing some operations or computations on groups of signals/images (e.g. \"ROI extraction\", \"Peak detection\", \"Resize\", etc.)"
+msgstr "Correction de `IndexError: list index out of range` lors de certaines opérations ou calculs sur des groupes de signaux/images (par exemple \"Extraction de ROI\", \"Détection de pics\", \"Redimensionnement\", etc.)"
+
+msgid "Drag and drop from a file manager: filenames are now sorted alphabetically"
+msgstr "Glisser-déposer depuis un gestionnaire de fichiers : les noms de fichiers sont désormais triés par ordre alphabétique"

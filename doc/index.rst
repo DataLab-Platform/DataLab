@@ -127,7 +127,7 @@ DataLab has been funded, chronologically, by the following stakeholders:
     intro/index
     features/index
     contributing/index
-    changelog
+    release_notes/index
 
 .. only:: html and not latex
 

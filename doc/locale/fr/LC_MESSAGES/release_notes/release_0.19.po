@@ -1,0 +1,229 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Version 0.19"
+msgstr ""
+
+msgid "DataLab Version 0.19.2 (2025-04-28)"
+msgstr "DataLab Version 0.19.2 (28/04/2025)"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Correctifs :"
+
+msgid "Fixed [Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172) - Image profiles: when moving/resizing image, profile plots are not refreshed (fixed in PlotPy v2.7.4)"
+msgstr "Correction de l'[Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172) - Profils d'image : lors du déplacement/redimensionnement de l'image, les graphiques de profil ne sont pas actualisés (corrigé dans PlotPy v2.7.4)"
+
+msgid "Fixed [Issue #173](https://github.com/DataLab-Platform/DataLab/issues/173) - Phase spectrum: add unit (degree) and function reference (`numpy.angle`) to the documentation"
+msgstr "Correction de l'[Issue #173](https://github.com/DataLab-Platform/DataLab/issues/173) - Spectre de phase : ajouter l'unité (degré) et la référence de fonction (`numpy.angle`) à la documentation"
+
+msgid "Fixed [Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177) - \"Open from directory\" feature: unexpected group name (a group named \".\" is created instead of the root folder name)"
+msgstr "Correction de l'[Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177) - Fonctionnalité \"Ouvrir depuis le répertoire\" : nom de groupe inattendu (un groupe nommé \".\" est créé au lieu du nom du dossier racine)"
+
+msgid "Fixed [Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Signal / Fourier analysis: magnitude spectrum feature does not work as expected with logarithmic scale enabled"
+msgstr "Correction de l'[Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169) - Analyse de signal / Fourier : la fonction de spectre de magnitude ne fonctionne pas comme prévu avec l'échelle logarithmique activée"
+
+msgid "Fixed [Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Average profile visualization: empty profile is displayed when the target rectangular area is outside the image area (this has been fixed upstream, in PlotPy v2.7.4, and so requires the latest version of PlotPy)"
+msgstr "Correction de l'[Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168) - Visualisation du profil moyen : le profil vide est affiché lorsque la zone rectangulaire cible est en dehors de la zone de l'image (ceci a été corrigé en amont, dans PlotPy v2.7.4, et nécessite donc la dernière version de PlotPy)"
+
+msgid "DataLab Version 0.19.1 (2025-04-08)"
+msgstr "DataLab Version 0.19.1 (08/04/2025)"
+
+msgid "Pairwise operation mode:"
+msgstr "Mode d'opération pairwise :"
+
+msgid "Fixed an unexpected behavior when using the pairwise operation mode with functions that take a single second operand (e.g. for images: difference, division, arithmetic operations, and flatfield correction)"
+msgstr "Correction d'un comportement inattendu lors de l'utilisation du mode d'opération pairwise avec des fonctions qui prennent un seul second opérande (par exemple pour les images : différence, division, opérations arithmétiques et correction de champ plat)"
+
+msgid "If only one set of operands was selected in a single group, a warning message was displayed \"In pairwise mode, you need to select objects in at least two groups.\", which is correct for functions that are symmetric (e.g. addition, multiplication, etc.), but not for functions that are not symmetric (e.g. difference, division, etc.)."
+msgstr "Si un seul ensemble d'opérandes était sélectionné dans un seul groupe, un message d'avertissement était affiché \"En mode pairwise, vous devez sélectionner des objets dans au moins deux groupes. \", ce qui est correct pour les fonctions qui sont symétriques (par exemple addition, multiplication, etc.), mais pas pour les fonctions qui ne le sont pas (par exemple différence, division, etc.)."
+
+msgid "This is now fixed: the warning message is only displayed for functions that are symmetric (e.g. addition, multiplication, etc.)."
+msgstr "Ceci est maintenant corrigé : le message d'avertissement n'est affiché que pour les fonctions qui sont symétriques (par exemple addition, multiplication, etc.)."
+
+msgid "This closes [Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157) - Pairwise operation mode: unexpected behavior with functions that take a single second operand"
+msgstr "Ceci corrige l'[Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157) - Mode d'opération pairwise : comportement inattendu avec des fonctions qui prennent un seul second opérande"
+
+msgid "Fixed [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignore `nan` values for image normalization, flatfield correction, offset correction, and centroid computation"
+msgstr "Correction de l'[Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152) - Ignorer les valeurs `nan` pour la normalisation d'image, la correction de champ plat, la correction de décalage et le calcul du centroïde"
+
+msgid "Fixed [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignore `nan` values for signal normalization and statistics computations (both analysis result and interactive tool)"
+msgstr "Correction de l'[Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153) - Ignorer les valeurs `nan` pour la normalisation du signal et les calculs de statistiques (à la fois le résultat d'analyse et l'outil interactif)"
+
+msgid "Fixed [Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - When editing ROI of a list of images, the first image of the selection is shown (instead of the last as in the image panel)"
+msgstr "Correction de l'[Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158) - Lors de l'édition de la ROI d'une liste d'images, la première image de la sélection est affichée (au lieu de la dernière comme dans le panneau d'image)"
+
+msgid "Fixed [Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - When selecting multiple images just after opening an HDF5 file, the \"View in a new window\" feature does not work (`KeyError` exception)"
+msgstr "Correction de l'[Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159) - Lors de la sélection de plusieurs images juste après l'ouverture d'un fichier HDF5, la fonctionnalité \"Afficher dans une nouvelle fenêtre\" ne fonctionne pas (exception `KeyError`)"
+
+msgid "Fixed [Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - When selecting multiple images and clearing ROI in ROI editor, only the first image is affected"
+msgstr "Correction de l'[Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160) - Lors de la sélection de plusieurs images et de l'effacement de la ROI dans l'éditeur de ROI, seule la première image est affectée"
+
+msgid "Fixed [Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Refresh image items only if necessary (when editing ROI, pasting/deleting metadata)"
+msgstr "Correction de l'[Issue #161](https://github.com/DataLab-Platform/DataLab/issues/161) - Rafraîchir les items d'image uniquement si nécessaire (lors de l'édition de la ROI, du collage/de la suppression de métadonnées)"
+
+msgid "Fixed [Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - View in a new window: when displaying multiple images, the item list panel should be visible"
+msgstr "Correction de l'[Issue #162](https://github.com/DataLab-Platform/DataLab/issues/162) - Afficher dans une nouvelle fenêtre : lors de l'affichage de plusieurs images, le panneau de liste d'items doit être visible"
+
+msgid "Fixed [Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Open from directory: expected one group per folder when loading multiple files"
+msgstr "Ceci corrige l'[Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163) - Ouvrir depuis le répertoire : un groupe par dossier attendu lors du chargement de plusieurs fichiers"
+
+msgid "Fixed [Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164) - Open from directory: unsupported files should be ignored when loading files recursively, to avoid warning popup dialog boxes"
+msgstr "Ceci corrige l'[Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164) - Ouvrir depuis le répertoire : les fichiers non pris en charge doivent être ignorés lors du chargement de fichiers de manière récursive, pour éviter les boîtes de dialogue d'avertissement"
+
+msgid "Fixed [Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165) - When opening a file, the default signal/image title must be set to the file name, instead of the relative path to the file name"
+msgstr "Correction de l'[Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165) - Lors de l'ouverture d'un fichier, le titre par défaut du signal/image doit être défini sur le nom du fichier, au lieu du chemin relatif au nom du fichier"
+
+msgid "DataLab Version 0.19.0 (2025-03-31)"
+msgstr "DataLab Version 0.19.0 (31/03/2025)"
+
+msgid "💥 New features and enhancements:"
+msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Image operation features (\"Operations\" menu):"
+msgstr "Fonctionnalités d'opération sur les images (menu \"Opérations\") :"
+
+msgid "Renamed \"Rotation\" submenu to \"Flip or rotation\""
+msgstr "Renommage du sous-menu \"Rotation\" en \"Symétrie ou rotation\""
+
+msgid "New \"Flip diagonally\" feature"
+msgstr "Nouvelle fonctionnalité \"Symétrie diagonale\""
+
+msgid "Signal processing features (\"Processing\" menu):"
+msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
+
+msgid "New \"Convert to Cartesian coordinates\" feature"
+msgstr "Nouvelle fonctionnalité \"Convertir en coordonnées cartésiennes\""
+
+msgid "New \"Convert to polar coordinates\" feature"
+msgstr "Nouvelle fonctionnalité \"Convertir en coordonnées polaires\""
+
+msgid "Signal analysis features (\"Analysis\" menu):"
+msgstr "Fonctionnalités d'analyse du signal (menu \"Analyse\") :"
+
+msgid "Renamed \"X values at min/max\" to \"Abscissa of the minimum and maximum\""
+msgstr "Renommage de \"Valeurs X au min/max\" en \"Abscisse du minimum et du maximum\""
+
+msgid "New \"Abscissa at y=...\" feature"
+msgstr "Nouvelle fonctionnalité \"Abscisse à y=...\""
+
+msgid "New \"Open from directory\" feature:"
+msgstr "Nouvelle fonctionnalité \"Ouvrir depuis le répertoire\" :"
+
+msgid "This feature allows to open multiple files from a directory at once, recursively (only the files with the supported extensions by the current panel are opened)"
+msgstr "Cette fonctionnalité permet d'ouvrir plusieurs fichiers d'un répertoire à la fois, de manière récursive (seuls les fichiers avec les extensions prises en charge par le panneau actuel sont ouverts)"
+
+msgid "Add \"Open from directory\" action to the \"File\" menu for both Signal and Image panels"
+msgstr "Ajout de l'action \"Ouvrir depuis le répertoire\" au menu \"Fichier\" pour les panneaux Signal et Image"
+
+msgid "Add support for folders when dropping files in the Signal and Image panels"
+msgstr "Ajout de la prise en charge des dossiers lors du glisser-déposer de fichiers dans les panneaux Signal et Image"
+
+msgid "Add `1/x` operation to the \"Operations\" menu for both Signal and Image panels:"
+msgstr "Ajout de l'opération `1/x` au menu \"Opérations\" pour les panneaux Signal et Image :"
+
+msgid "This feature relies on the `numpy.reciprocal` function, and handles the case where the denominator is zero by catching warnings and replacing the `np.inf` values with `np.nan` values"
+msgstr "Cette fonctionnalité repose sur la fonction `numpy.reciprocal`, et gère le cas où le dénominateur est zéro en interceptant les avertissements et en remplaçant les valeurs `np.inf` par des valeurs `np.nan`"
+
+msgid "Add `compute_inverse` method for image and signal processors"
+msgstr "Ajout de la méthode `compute_inverse` pour les processeurs d'image et de signal"
+
+msgid "This closes [Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - New feature: `1/x` for signals and images"
+msgstr "Ceci corrige l'[Issue #143](https://github.com/DataLab-Platform/DataLab/issues/143) - Nouvelle fonctionnalité : `1/x` pour les signaux et les images"
+
+msgid "Public API (local or remote):"
+msgstr "API publique (locale ou distante) :"
+
+msgid "Add `add_group` method with `title` and `select` arguments to create a new group in a data panel (e.g. Signal or Image panel) and eventually select it after creation:"
+msgstr "Ajout de la méthode `add_group` avec les arguments `title` et `select` pour créer un nouveau groupe dans un panneau de données (par exemple, panneau Signal ou Image) et éventuellement le sélectionner après sa création :"
+
+msgid "Method was added to the following classes: `AbstractDLControl`, `BaseDataPanel` and `RemoteClient`"
+msgstr "Cette méthode a été ajoutée aux classes suivantes : `AbstractDLControl`, `BaseDataPanel` et `RemoteClient`"
+
+msgid "This closes the following issues:"
+msgstr "Cette fonctionnalité clôture les tickets suivants :"
+
+msgid "[Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `BaseDataPanel.add_group`: add `select` argument"
+msgstr "[Issue #131](https://github.com/DataLab-Platform/DataLab/issues/131) - `BaseDataPanel.add_group` : ajout de l'argument `select`"
+
+msgid "[Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Remote proxy / Public API: add `add_group` method"
+msgstr "[Issue #47](https://github.com/DataLab-Platform/DataLab/issues/47) - Proxy distant / API publique : ajout de la méthode `add_group`"
+
+msgid "`AbstractDLControl.get_object_uuids`: add an optional `group` argument (group ID, title or number) to eventually filter the objects by group (this closes [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
+msgstr "`AbstractDLControl.get_object_uuids` : ajout d'un argument optionnel `group` (identifiant, titre ou numéro du groupe) pour éventuellement filtrer les objets par groupe (ceci clôture le ticket [Issue #130](https://github.com/DataLab-Platform/DataLab/issues/130))"
+
+msgid "When opening an HDF5 file, the confirmation dialog box asking if current workspace should be cleared has a new possible answer \"Ignore\":"
+msgstr "Lors de l'ouverture d'un fichier HDF5, la boîte de dialogue de confirmation demandant si l'espace de travail actuel doit être effacé a une nouvelle réponse possible \"Ignorer\" :"
+
+msgid "Choosing \"Ignore\" will prevent the confirmation dialog box from being displayed again, and will choose the current setting (i.e. clear or not the workspace) for all subsequent file openings"
+msgstr "Choisir \"Ignorer\" empêchera la boîte de dialogue de confirmation d'être affichée à nouveau, et choisira le paramètre actuel (c'est-à-dire effacer ou non l'espace de travail) pour toutes les ouvertures de fichiers suivantes"
+
+msgid "Added a new \"Clear workspace before loading HDF5 file\" option in the \"Settings\" dialog box, to allow the user to change the current setting (i.e. clear or not the workspace) for all subsequent file openings"
+msgstr "Ajout d'une nouvelle option \"Effacer l'espace de travail avant de charger le fichier HDF5\" dans la boîte de dialogue \"Paramètres\", pour permettre à l'utilisateur de changer le paramètre actuel (c'est-à-dire effacer ou non l'espace de travail) pour toutes les ouvertures de fichiers suivantes"
+
+msgid "Added a new \"Ask before clearing workspace\" option in the \"Settings\" dialog box, to allow the user to disable or re-enable the confirmation dialog box asking if current workspace should be cleared when opening an HDF5 file"
+msgstr "Ajout d'une nouvelle option \"Demander avant d'effacer l'espace de travail\" dans la boîte de dialogue \"Paramètres\", pour permettre à l'utilisateur de désactiver ou de réactiver la boîte de dialogue de confirmation demandant si l'espace de travail actuel doit être effacé lors de l'ouverture d'un fichier HDF5"
+
+msgid "This closes [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146) - Ask before clearing workspace when opening HDF5 file: add \"Ignore\" option to prevent dialog from being displayed again"
+msgstr "Ceci clôture le ticket [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146) - Demander avant d'effacer l'espace de travail lors de l'ouverture d'un fichier HDF5 : ajouter l'option \"Ignorer\" pour empêcher la boîte de dialogue d'être affichée à nouveau"
+
+msgid "Object and group title renaming:"
+msgstr "Renommage du titre des objets et des groupes :"
+
+msgid "Removed \"Rename group\" feature from the \"Edit\" menu and context menu"
+msgstr "Suppression de la fonctionnalité \"Renommer le groupe\" du menu \"Édition\" et du menu contextuel"
+
+msgid "Added \"Rename object\" feature to the \"Edit\" menu and context menu, with F2 shortcut, to rename the title of the selected object or group"
+msgstr "Ajout de la fonctionnalité \"Renommer l'objet\" au menu \"Édition\" et au menu contextuel, avec le raccourci F2, pour renommer le titre de l'objet ou du groupe sélectionné"
+
+msgid "This closes [Issue #148](https://github.com/DataLab-Platform/DataLab/issues/148) - Rename signal/image/group title by pressing F2"
+msgstr "Ceci corrige l'[Issue #148](https://github.com/DataLab-Platform/DataLab/issues/148) - Renommer le titre du signal/image/groupe en appuyant sur F2"
+
+msgid "Region of Interest editor:"
+msgstr "Éditeur de région d'intérêt :"
+
+msgid "Regrouped the graphical actions (new rectangular ROI, new circular ROI, new polygonal ROI) in a single menu \"Graphical ROI\""
+msgstr "Regroupement des actions graphiques (nouvelle ROI rectangulaire, nouvelle ROI circulaire, nouvelle ROI polygonale) dans un seul menu \"ROI graphique\""
+
+msgid "Added new \"Coordinate-based ROI\" menu to create a ROI using manual input of the coordinates:"
+msgstr "Ajout d'un nouveau menu \"ROI par coordonnées\" pour créer une ROI en utilisant la saisie manuelle des coordonnées :"
+
+msgid "For signals, the ROI is defined by the start and end coordinates"
+msgstr "Pour les signaux, la ROI est définie par les coordonnées de début et de fin"
+
+msgid "For images:"
+msgstr "Pour les images :"
+
+msgid "The rectangular ROI is defined by the top-left and bottom-right coordinates"
+msgstr "La ROI rectangulaire est définie par les coordonnées du coin supérieur gauche et du coin inférieur droit"
+
+msgid "The circular ROI is defined by the center and radius coordinates"
+msgstr "La ROI circulaire est définie par les coordonnées du centre et du rayon"
+
+msgid "The polygonal ROI is not supported yet"
+msgstr "La ROI polygonale n'est pas encore prise en charge"
+
+msgid "This closes [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - ROI editor: add manual input of the coordinates"
+msgstr "Ceci clôture le ticket [Issue #145](https://github.com/DataLab-Platform/DataLab/issues/145) - Éditeur de ROI : ajouter la saisie manuelle des coordonnées"
+
+msgid "Fixed [Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Image analysis: mask `nan` values when computing statistics, for example"
+msgstr "Correction de l'[Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141) - Analyse d'image : masque des valeurs `nan` lors du calcul des statistiques, par exemple"
+
+msgid "Fixed [Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144) - Average profile extraction: `ValueError` when selection rectangle is larger than the image"
+msgstr "Correction de l'[Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144) - Extraction du profil moyen : `ValueError` lorsque le rectangle de sélection est plus grand que l'image"
